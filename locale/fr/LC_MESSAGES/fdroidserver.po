@@ -15,13 +15,14 @@
 # Coucouf <coucouf@coucouf.fr>, 2020.
 # Alexandre Hô <xandrex_weblate@m4x.org>, 2020.
 # Yldun <contact@norcet.info>, 2020.
+# Renaud Perrai <contact@renaudperrai.fr>, 2020.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2020-10-01 12:22+0200\n"
-"PO-Revision-Date: 2020-10-06 08:26+0000\n"
-"Last-Translator: Yldun <contact@norcet.info>\n"
+"PO-Revision-Date: 2020-10-08 15:24+0000\n"
+"Last-Translator: Renaud Perrai <contact@renaudperrai.fr>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/f-droid/fdroidserver/fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
@@ -40,9 +41,9 @@ msgid ""
 "        "
 msgstr ""
 "\n"
-"        Ceci est un dépôt d’apps à utiliser avec FDroid. Les applications publiées\n"
-"        dans ce dépôt sont soit les binaires officiels construits par les développeurs\n"
-"        de ces applications, soit des binaires construits par f-droid.org à partir des\n"
+"        Ceci est un dépôt d’applications à utiliser avec FDroid. Les applications publiées\n"
+"        dans ce dépôt sont soit celles compilées par les développeurs\n"
+"        de ces applications, soit celles compilées par f-droid.org à partir des\n"
 "        sources en utilisant les outils disponibles sur https://gitlab.com/fdroid.\n"
 "        "
 
@@ -353,7 +354,7 @@ msgstr "Branche « {branch} » utilisée comme commit dans le build « {versionN
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "Branch '{branch}' used as commit in srclib '{srclib}'"
-msgstr "Branche « {branch} » utilisée comme commit dans srclib « {srclib} »"
+msgstr "La branche « {branch} » est utilisée comme commit dans srclib « {srclib} »"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -420,7 +421,7 @@ msgstr "Impossible d'utiliser --list et --to en même temps"
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Cannot write \"{path}\", not an accepted format, use: {formats}"
-msgstr "Impossible d'écrire « {path} », format non accepté. Merci d'utiliser : {formats}"
+msgstr "Impossible d'écrire \"{path}\", le format n'est pas accepté. Merci d'utiliser : {formats}"
 
 #: ../fdroidserver/lint.py
 #, python-format
@@ -476,7 +477,7 @@ msgstr "Conflit d'arguments : '--verbose' et '--quiet' ne peuvent être choisis 
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Could not find '{command}' on your system"
-msgstr "Impossible de trouver « {command} » sur votre système"
+msgstr "Impossible de trouver '{command}' sur votre système"
 
 #: ../fdroidserver/import.py
 msgid "Could not find latest version code"
@@ -489,7 +490,7 @@ msgstr "Impossible de trouver le nom de la dernière version"
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Could not find {path} to remove it"
-msgstr "Chemin {path} non trouvé pour suppression"
+msgstr "Chemin {path} introuvable pour sa suppression"
 
 #: ../fdroidserver/update.py
 msgid "Could not open apk file for analysis"
@@ -879,9 +880,9 @@ msgid "Found non-file at %s"
 msgstr "Aucun fichier trouvée a %s"
 
 #: ../fdroidserver/server.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Found {apkfilename} at {url}"
-msgstr "Traitement de {apkfilename}"
+msgstr "{apkfilename} trouvé à {url}"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -906,9 +907,9 @@ msgid "Git remote set-head failed"
 msgstr "Set-head distant du Git à échouer"
 
 #: ../fdroidserver/common.py
-#, fuzzy, python-format
+#, python-format
 msgid "Git remote set-head failed: \"%s\""
-msgstr "Set-head distant du Git à échouer"
+msgstr "Impossible de définir la branche par défaut du Git distant : \"%s\""
 
 #: ../fdroidserver/common.py
 msgid "Git reset failed"
@@ -943,7 +944,7 @@ msgstr "Ignore '{field}' dans les métadonnées '{metapath}' parce que c'est dé
 #: ../fdroidserver/update.py
 #, python-format
 msgid "Ignoring FUNDING.yml entry longer than 2048: %s"
-msgstr "Ignore l'entrée FUNDING.yml si elle excède 2048: %s"
+msgstr "Ignorer l'entrée FUNDING.yml supérieure à 2048 : %s"
 
 #: ../fdroidserver/index.py
 msgid "Ignoring package without metadata: "
@@ -1021,10 +1022,9 @@ msgid "Invalid VercodeOperation: {field}"
 msgstr "VercodeOperation non valide : {field}"
 
 #: ../fdroidserver/common.py
-#, fuzzy, python-brace-format
-#| msgid "Invalid VercodeOperation: {field}"
+#, python-brace-format
 msgid "Invalid application ID {appid}"
-msgstr "VercodeOperation non valide : {field}"
+msgstr "ID de l'application invalide {appid}"
 
 #: ../fdroidserver/metadata.py
 #, python-format
@@ -1141,7 +1141,7 @@ msgstr "Le dernier archivage utiliser '{commit}' ressemble a une balise, mais le
 
 #: ../fdroidserver/lint.py
 msgid "Liberapay donation methods belong in the Liberapay: field"
-msgstr "Les méthodes de don via Liberapay font parties de Liberapay: field"
+msgstr "Les méthodes de don via Liberapay font partie de Liberapay : field"
 
 #: ../fdroidserver/lint.py
 msgid "Liberapay donation methods belong in the LiberapayID flag"
@@ -1169,7 +1169,7 @@ msgstr "serverwebroot malformer en ligne :"
 
 #: ../fdroidserver/mirror.py
 msgid "Mirror the full repo and archive, all file types."
-msgstr ""
+msgstr "Cloner entièrement le repo et les archives, tous les fichiers."
 
 #: ../fdroidserver/gpgsign.py
 msgid "Missing output directory"
@@ -1265,7 +1265,7 @@ msgstr "Aucun dossier signée - rien n'est a faire"
 
 #: ../fdroidserver/common.py
 msgid "Not a valid size definition: \"{}\""
-msgstr ""
+msgstr "Définition de la taille invalide : \"{}\""
 
 #: ../fdroidserver/signindex.py
 msgid "Nothing to do"
@@ -2139,9 +2139,9 @@ msgid "can't open '%s': %s"
 msgstr "Impossible d'ouvrir %s : %s"
 
 #: ../fdroidserver/build.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "cannot find required srclibs: \"{path}\""
-msgstr "Impossible de trouver un appid pour {path} !"
+msgstr "Impossible de trouver srclibs : \"{path}\""
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py
@@ -2686,29 +2686,29 @@ msgstr ""
 #: ../fdroidserver/server.py
 #, python-brace-format
 msgid "{path} more than 200MB, manually upload: {url}"
-msgstr ""
+msgstr "{path} supérieur à 200MB, envoi manuel : {url}"
 
 #: ../fdroidserver/mirror.py
 #, python-brace-format
 msgid "{url} does not end with \"fdroid\", check the URL path!"
-msgstr ""
+msgstr "{url} ne fini pas par \"fdroid\", vérifiez l'URL !"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "{url} does not start with \"http\"!"
-msgstr ""
+msgstr "{url} ne commence pas par \"http\" !"
 
 #: ../fdroidserver/build.py
 msgid "{} build failed"
 msgid_plural "{} builds failed"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{} compilation échouée"
+msgstr[1] "{} compilations échouées"
 
 #: ../fdroidserver/build.py
 msgid "{} build succeeded"
 msgid_plural "{} builds succeeded"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{} compilation réussie"
+msgstr[1] "{} compilations réussies"
 
 #~ msgid "Cannot find a packageName for {path}!"
 #~ msgstr "Impossible de trouver un packageName pour {path} !"
