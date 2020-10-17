@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: fdroidserver 1.0.0-95-gd7af22b\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2020-10-01 12:22+0200\n"
-"PO-Revision-Date: 2020-10-06 08:26+0000\n"
+"PO-Revision-Date: 2020-10-14 09:28+0000\n"
 "Last-Translator: WaldiS <sto@tutanota.de>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/f-droid/fdroidserver/pl/>\n"
 "Language: pl\n"
@@ -339,7 +339,7 @@ msgstr "Gałąź '{branch}' używana jako commit w srclib '{srclib}'"
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Broken symlink: {path}"
-msgstr ""
+msgstr "Uszkodzone dowiązanie symboliczne: {path}"
 
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Build a package from source"
@@ -385,15 +385,14 @@ msgstr "Nie można odczytać \"{path}\"!"
 
 #. Translators: https://developer.android.com/studio/build/application-id
 #: ../fdroidserver/metadata.py
-#, fuzzy, python-brace-format
-#| msgid "Cannot resolve app id {appid}"
+#, python-brace-format
 msgid "Cannot resolve application ID {appid}"
 msgstr "Nie można rozpoznać identyfikatora aplikacji {appid}"
 
 #: ../fdroidserver/rewritemeta.py
 #, fuzzy, python-brace-format
 msgid "Cannot rewrite \"{path}\""
-msgstr "Nie można odczytać \"{path}\"!"
+msgstr "Nie można odczytać \"{path}\""
 
 #: ../fdroidserver/rewritemeta.py
 msgid "Cannot use --list and --to at the same time"
