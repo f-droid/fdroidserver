@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2020-10-01 12:22+0200\n"
-"PO-Revision-Date: 2020-10-02 19:15+0000\n"
+"PO-Revision-Date: 2020-10-08 06:06+0000\n"
 "Last-Translator: ihor_ck <igor_ck@outlook.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/f-droid/fdroidserver/uk/>\n"
 "Language: uk\n"
@@ -392,8 +392,7 @@ msgstr "Неправильно вказано шлях \"{path}\"!"
 
 #. Translators: https://developer.android.com/studio/build/application-id
 #: ../fdroidserver/metadata.py
-#, fuzzy, python-brace-format
-#| msgid "Cannot resolve app id {appid}"
+#, python-brace-format
 msgid "Cannot resolve application ID {appid}"
 msgstr "Неможливо розв'язати id застосунку {appid}"
 
@@ -1010,10 +1009,9 @@ msgid "Invalid VercodeOperation: {field}"
 msgstr "Недійсна VercodeOperation: {field}"
 
 #: ../fdroidserver/common.py
-#, fuzzy, python-brace-format
-#| msgid "Invalid VercodeOperation: {field}"
+#, python-brace-format
 msgid "Invalid application ID {appid}"
-msgstr "Недійсна VercodeOperation: {field}"
+msgstr "Недійсний ID застосунку {appid}"
 
 #: ../fdroidserver/metadata.py
 #, python-format
@@ -1123,8 +1121,7 @@ msgid "Keystore for signing key:\t"
 msgstr "Шлях до сховища ключів для ключа підпису сховища\t"
 
 #: ../fdroidserver/lint.py
-#, fuzzy, python-brace-format
-#| msgid "Last used commit '{commit}' looks like a tag, but Update Check Mode is '{ucm}'"
+#, python-brace-format
 msgid "Last used commit '{commit}' looks like a tag, but UpdateCheckMode is '{ucm}'"
 msgstr "Останнє подання '{commit}' виглядає як мітка, але в режимі перевірки оновлення '{ucm}'"
 
@@ -1885,10 +1882,8 @@ msgstr "Невикористаний шлях scanignore: %s"
 
 #. Translators: https://developer.android.com/studio/build/application-id
 #: ../fdroidserver/lint.py
-#, fuzzy
-#| msgid "Update Check Name is set to the known app id - it can be removed"
 msgid "UpdateCheckName is set to the known application ID - it can be removed"
-msgstr "Назву застосунку для перевірки оновлень встановлено на відомий id застосунку - його можна буде вилучити"
+msgstr "Назву застосунку для перевірки оновлень встановлено на відомий ID застосунку — його можна буде вилучити"
 
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Update repo information for new packages"
@@ -1922,10 +1917,8 @@ msgid "UpdateCheckData not a valid URL: {url}"
 msgstr "UpdateCheckData не є дійсною URL-адресою: {url}"
 
 #: ../fdroidserver/lint.py
-#, fuzzy
-#| msgid "Update Check Name is set to the known app id - it can be removed"
 msgid "UpdateCheckName is set to the known application ID, it can be removed"
-msgstr "Назву застосунку для перевірки оновлень встановлено на відомий id застосунку - його можна буде вилучити"
+msgstr "Назву застосунку для перевірки оновлень встановлено на відомий ID застосунку — його можна буде вилучити"
 
 #: ../fdroidserver/server.py
 #, python-brace-format
@@ -2075,18 +2068,14 @@ msgstr "apksigner не знайдено, це потрібно для підпи
 
 #: ../fdroidserver/lint.py ../fdroidserver/rewritemeta.py
 #: ../fdroidserver/checkupdates.py
-#, fuzzy
-#| msgid "applicationId to check for updates"
 msgid "application ID of file to operate on"
-msgstr "applicationId для перевірки наявності оновлень"
+msgstr "application ID файлу застосунку для роботи на"
 
 #: ../fdroidserver/verify.py ../fdroidserver/publish.py
 #: ../fdroidserver/build.py ../fdroidserver/scanner.py
 #: ../fdroidserver/install.py
-#, fuzzy
-#| msgid "applicationId with optional versionCode in the form APPID[:VERCODE]"
 msgid "application ID with optional versionCode in the form APPID[:VERCODE]"
-msgstr "applicationId з необов'язковим versionCode у формі APPID[:VERCODE]"
+msgstr "ID застосунку з необов'язковим versionCode у формі APPID[:VERCODE]"
 
 #: ../fdroidserver/lint.py ../fdroidserver/rewritemeta.py
 msgid "applicationId in the form APPID"
@@ -2585,10 +2574,9 @@ msgid "{apkfilename}'s AndroidManifest.xml has a bad date: "
 msgstr "AndroidManifest.xml застосунка {apkfilename} має неправильну дату: "
 
 #: ../fdroidserver/update.py
-#, fuzzy, python-brace-format
-#| msgid "{appid} does not have a name! Using package name instead."
+#, python-brace-format
 msgid "{appid} does not have a name! Using application ID instead."
-msgstr "{appid} не має назви! Використовуватимуться назви пакунку."
+msgstr "{appid} не має назви! Застосовуватиметься ID застосунку."
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -2601,10 +2589,9 @@ msgid "{appid} from {path} is not a valid Android Package Name!"
 msgstr "{appid} з {path} є недійсною назвою пакунка Android!"
 
 #: ../fdroidserver/update.py
-#, fuzzy, python-brace-format
-#| msgid "{appid} from {path} is not a valid Android Package Name!"
+#, python-brace-format
 msgid "{appid} from {path} is not a valid Android application ID!"
-msgstr "{appid} з {path} є недійсною назвою пакунка Android!"
+msgstr "{appid} з {path} є недійсним ID застосунку Android!"
 
 #: ../fdroidserver/metadata.py ../fdroidserver/update.py
 #, python-brace-format
