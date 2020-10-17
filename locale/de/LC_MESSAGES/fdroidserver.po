@@ -2,13 +2,14 @@
 # Copyright (C) YEAR Free Software Foundation, Inc.
 # Oliver <websites@posteo.de>, 2020.
 # Fynn Godau <fynngodau@mailbox.org>, 2020.
+# melusine <melusine@mailbox.org>, 2020.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2020-10-01 12:34+0200\n"
-"PO-Revision-Date: 2020-09-23 14:57+0000\n"
-"Last-Translator: Fynn Godau <fynngodau@mailbox.org>\n"
+"PO-Revision-Date: 2020-10-02 19:15+0000\n"
+"Last-Translator: melusine <melusine@mailbox.org>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/f-droid/fdroidserver/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -26,6 +27,13 @@ msgid ""
 "        tools on https://gitlab.com/fdroid.\n"
 "        "
 msgstr ""
+"\n"
+"        Dies ist eine Paketquelle für Anwendungen, die für die Benutzung\n"
+"        zusammen mit F-Droid gedacht ist. Die darin enthaltenen\n"
+"        Anwendungen sind entweder offizielle von den Entwicklern erstellte\n"
+"        Binärdateien oder werden von f-droid.org mithilfe des Werkzeugs auf\n"
+"        https://gitlab.com/fdroid aus dem Quellcode erstellt.\n"
+"        "
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -91,7 +99,7 @@ msgstr "\"{path}\" ist kein akzeptiertes Format, umwandeln in: {formats}"
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "\"{url}\" is not a valid URL!"
-msgstr ""
+msgstr "\"{url}\" ist keine gültige URL!"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 #: /usr/lib/python3.7/optparse.py
@@ -267,11 +275,11 @@ msgstr "Auch vor Formatierungsfehler warnen, wie etwa \"rewritemeta -l\""
 
 #: ../fdroidserver/scanner.py
 msgid "Android AAR library"
-msgstr ""
+msgstr "Android AAR-Bibliothek"
 
 #: ../fdroidserver/scanner.py
 msgid "Android APK file"
-msgstr ""
+msgstr "Android APK-Datei"
 
 #: ../fdroidserver/scanner.py
 #, fuzzy
@@ -341,7 +349,7 @@ msgstr "Zweig „{branch}” wird als Bestätigung in srclib verwendet „{srcli
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Broken symlink: {path}"
-msgstr ""
+msgstr "Kaputter Symlink: {path}"
 
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Build a package from source"
@@ -462,7 +470,7 @@ msgstr "Änderungen übergeben"
 
 #: ../fdroidserver/__main__.py
 msgid "Conflicting arguments: '--verbose' and '--quiet' can not be specified at the same time."
-msgstr ""
+msgstr "Widersprüchliche Argumente: '--verbose' und '--quiet' können nicht gleichzeitig angegeben werden."
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -491,7 +499,7 @@ msgstr "Konnte APK-Datei nicht für Analyse öffnen"
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Could not parse size \"{size}\", wrong type \"{type}\""
-msgstr ""
+msgstr "Konnte Größe \"{size}\" nicht parsen, falscher Typ \"{type}\""
 
 #: ../fdroidserver/import.py
 #, fuzzy
@@ -574,9 +582,9 @@ msgid "Delete APKs and/or OBBs without metadata from the repo"
 msgstr "APKs und/oder OBBs ohne Metadaten aus dem Repository löschen"
 
 #: ../fdroidserver/server.py
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Deleting archive, repo is too big ({size} max {limit})"
-msgstr ""
+msgstr "Archiv löschen, Repo ist zu groß ({size} max {limit})"
 
 #: ../fdroidserver/server.py
 #, python-brace-format
@@ -925,9 +933,9 @@ msgid "If a git mirror gets to big, allow the archive to be deleted"
 msgstr ""
 
 #: ../fdroidserver/server.py
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "If this upload fails, try manually uploading to {url}"
-msgstr ""
+msgstr "Wenn dieser Upload fehlschlägt, versuchen Sie ihn manuell auf {url} hochzuladen."
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
@@ -1098,7 +1106,7 @@ msgstr "JAR-Signatur verifiziert: {path}"
 
 #: ../fdroidserver/scanner.py
 msgid "Java JAR file"
-msgstr ""
+msgstr "Java JAR-Datei"
 
 #: ../fdroidserver/publish.py ../fdroidserver/update.py
 #: ../fdroidserver/mirror.py
@@ -1107,7 +1115,7 @@ msgstr "Java JDK nicht gefunden! Installieren Sie es in einem Standardordner ode
 
 #: ../fdroidserver/scanner.py
 msgid "Java compiled class"
-msgstr ""
+msgstr "Java-kompilierte Klasse"
 
 #: ../fdroidserver/signindex.py
 msgid "Java jarsigner not found! Install in standard location or set java_paths!"
@@ -1253,7 +1261,7 @@ msgstr "Kein unsigniertes Verzeichnis - nichts zu tun"
 
 #: ../fdroidserver/common.py
 msgid "Not a valid size definition: \"{}\""
-msgstr ""
+msgstr "Keine gültige Größendefinition: \"{}\""
 
 #: ../fdroidserver/signindex.py
 msgid "Nothing to do"
@@ -1326,7 +1334,7 @@ msgstr ""
 #: ../fdroidserver/update.py ../fdroidserver/signindex.py
 #: ../fdroidserver/checkupdates.py
 msgid "Outputting JSON"
-msgstr ""
+msgstr "JSON ausgeben"
 
 #: ../fdroidserver/import.py
 msgid "Overall license of the project."
@@ -1344,7 +1352,7 @@ msgstr "Überschreiben von leeren Versionsnamen in {apkfilename} aus Metadaten: 
 #: ../fdroidserver/import.py
 #, python-brace-format
 msgid "Package \"{appid}\" already exists"
-msgstr ""
+msgstr "Paket \"{appid}\" existiert bereits"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
