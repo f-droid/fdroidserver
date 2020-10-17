@@ -3731,6 +3731,7 @@ def is_repo_file(filename):
     return os.path.isfile(filename) \
         and not filename.endswith(b'.asc') \
         and not filename.endswith(b'.sig') \
+        and not filename.endswith(b'.idsig') \
         and not filename.endswith(b'.log.gz') \
         and os.path.basename(filename) not in [
             b'index.jar',
