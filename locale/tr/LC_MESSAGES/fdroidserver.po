@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2020-10-01 12:22+0200\n"
-"PO-Revision-Date: 2020-10-06 08:26+0000\n"
+"PO-Revision-Date: 2020-10-08 06:06+0000\n"
 "Last-Translator: Oğuz Ersen <oguzersen@protonmail.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/f-droid/fdroidserver/tr/>\n"
 "Language: tr\n"
@@ -389,10 +389,9 @@ msgstr "\"{path}\" okunamıyor!"
 
 #. Translators: https://developer.android.com/studio/build/application-id
 #: ../fdroidserver/metadata.py
-#, fuzzy, python-brace-format
-#| msgid "Cannot resolve app id {appid}"
+#, python-brace-format
 msgid "Cannot resolve application ID {appid}"
-msgstr "App id {appid} çözülemiyor"
+msgstr "Uygulama kimliği {appid} çözümlenemiyor"
 
 #: ../fdroidserver/rewritemeta.py
 #, python-brace-format
@@ -1007,10 +1006,9 @@ msgid "Invalid VercodeOperation: {field}"
 msgstr "Geçersiz Vercode İşlemi: {field}"
 
 #: ../fdroidserver/common.py
-#, fuzzy, python-brace-format
-#| msgid "Invalid VercodeOperation: {field}"
+#, python-brace-format
 msgid "Invalid application ID {appid}"
-msgstr "Geçersiz Vercode İşlemi: {field}"
+msgstr "Geçersiz uygulama kimliği {appid}"
 
 #: ../fdroidserver/metadata.py
 #, python-format
@@ -1120,10 +1118,9 @@ msgid "Keystore for signing key:\t"
 msgstr "İmzalama için anahtar deposu:\t"
 
 #: ../fdroidserver/lint.py
-#, fuzzy, python-brace-format
-#| msgid "Last used commit '{commit}' looks like a tag, but Update Check Mode is '{ucm}'"
+#, python-brace-format
 msgid "Last used commit '{commit}' looks like a tag, but UpdateCheckMode is '{ucm}'"
-msgstr "Son kullanılan işleme '{commit}' bir etiket gibi görünüyor, ama güncelleme denetleme kipi '{ucm}'"
+msgstr "Son kullanılan işleme '{commit}' bir etiket gibi görünüyor, ama UpdateCheckMode '{ucm}'"
 
 #: ../fdroidserver/lint.py
 msgid "Liberapay donation methods belong in the Liberapay: field"
@@ -1881,10 +1878,8 @@ msgstr "Kullanılmayan scanignore yolu: %s"
 
 #. Translators: https://developer.android.com/studio/build/application-id
 #: ../fdroidserver/lint.py
-#, fuzzy
-#| msgid "Update Check Name is set to the known app id - it can be removed"
 msgid "UpdateCheckName is set to the known application ID - it can be removed"
-msgstr "Update Check Name bilinen app id'ye ayarlı - kaldırılabilir"
+msgstr "UpdateCheckName bilinen uygulama kimliğine ayarlı - kaldırılabilir"
 
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Update repo information for new packages"
@@ -1918,10 +1913,8 @@ msgid "UpdateCheckData not a valid URL: {url}"
 msgstr "UpdateCheckData geçerli bir URL değil: {url}"
 
 #: ../fdroidserver/lint.py
-#, fuzzy
-#| msgid "Update Check Name is set to the known app id - it can be removed"
 msgid "UpdateCheckName is set to the known application ID, it can be removed"
-msgstr "Update Check Name bilinen app id'ye ayarlı - kaldırılabilir"
+msgstr "UpdateCheckName bilinen uygulama kimliğine ayarlı - kaldırılabilir"
 
 #: ../fdroidserver/server.py
 #, python-brace-format
@@ -2071,18 +2064,14 @@ msgstr "apksigner bulunamadı, imzalamak için gereklidir!"
 
 #: ../fdroidserver/lint.py ../fdroidserver/rewritemeta.py
 #: ../fdroidserver/checkupdates.py
-#, fuzzy
-#| msgid "applicationId to check for updates"
 msgid "application ID of file to operate on"
-msgstr "Güncellemeleri denetlemek için applicationId"
+msgstr "üzerinde işlem yapılacak dosyanın uygulama kimliği"
 
 #: ../fdroidserver/verify.py ../fdroidserver/publish.py
 #: ../fdroidserver/build.py ../fdroidserver/scanner.py
 #: ../fdroidserver/install.py
-#, fuzzy
-#| msgid "applicationId with optional versionCode in the form APPID[:VERCODE]"
 msgid "application ID with optional versionCode in the form APPID[:VERCODE]"
-msgstr "APPID[:VERCODE] biçiminde applicationId, isteğe bağlı versionCode ile"
+msgstr "UYGULAMA_KİMLİĞİ[:SÜRÜM_KODU] biçiminde isteğe bağlı versionCode ile uygulama kimliği"
 
 #: ../fdroidserver/lint.py ../fdroidserver/rewritemeta.py
 msgid "applicationId in the form APPID"
@@ -2578,10 +2567,9 @@ msgid "{apkfilename}'s AndroidManifest.xml has a bad date: "
 msgstr "{apkfilename} içindeki AndroidManifest.xml tarihi bozuk: "
 
 #: ../fdroidserver/update.py
-#, fuzzy, python-brace-format
-#| msgid "{appid} does not have a name! Using package name instead."
+#, python-brace-format
 msgid "{appid} does not have a name! Using application ID instead."
-msgstr "{appid} adsız! Onun yerine paket adı kullanılıyor."
+msgstr "{appid} bir ada sahip değil! Bunun yerine uygulama kimliği kullanılıyor."
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -2594,10 +2582,9 @@ msgid "{appid} from {path} is not a valid Android Package Name!"
 msgstr "{path}'den {appid} geçerli bir Android Paket Adı değil!"
 
 #: ../fdroidserver/update.py
-#, fuzzy, python-brace-format
-#| msgid "{appid} from {path} is not a valid Android Package Name!"
+#, python-brace-format
 msgid "{appid} from {path} is not a valid Android application ID!"
-msgstr "{path}'den {appid} geçerli bir Android Paket Adı değil!"
+msgstr "{path}'den {appid} geçerli bir Android uygulama kimliği değil!"
 
 #: ../fdroidserver/metadata.py ../fdroidserver/update.py
 #, python-brace-format
