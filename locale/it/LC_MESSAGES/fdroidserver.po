@@ -10,8 +10,8 @@ msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2020-10-01 12:22+0200\n"
-"PO-Revision-Date: 2020-10-14 09:28+0000\n"
-"Last-Translator: random r <epsilin@yopmail.com>\n"
+"PO-Revision-Date: 2020-10-15 17:12+0000\n"
+"Last-Translator: IvanDan <ivandanza@gmail.com>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/f-droid/fdroidserver/it/>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
@@ -393,10 +393,9 @@ msgstr "Impossibile leggere \"{path}\"!"
 
 #. Translators: https://developer.android.com/studio/build/application-id
 #: ../fdroidserver/metadata.py
-#, fuzzy, python-brace-format
-#| msgid "Cannot resolve app id {appid}"
+#, python-brace-format
 msgid "Cannot resolve application ID {appid}"
-msgstr "Impossibile trovare l'app id {appid}"
+msgstr "Impossibile trovare l’ID dell’applicazione {appid}"
 
 #: ../fdroidserver/rewritemeta.py
 #, python-brace-format
@@ -461,7 +460,7 @@ msgstr "Cambiamenti del commit"
 
 #: ../fdroidserver/__main__.py
 msgid "Conflicting arguments: '--verbose' and '--quiet' can not be specified at the same time."
-msgstr ""
+msgstr "Argomenti in conflitto: '--verbose' e '--quiet' non possono essere specificati contemporaneamente."
 
 #: ../fdroidserver/common.py
 #, python-brace-format
