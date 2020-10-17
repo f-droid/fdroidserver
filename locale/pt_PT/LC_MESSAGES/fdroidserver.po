@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2020-10-01 12:22+0200\n"
-"PO-Revision-Date: 2020-10-06 08:26+0000\n"
+"PO-Revision-Date: 2020-10-14 09:28+0000\n"
 "Last-Translator: ssantos <ssantos@web.de>\n"
 "Language-Team: Portuguese (Portugal) <https://hosted.weblate.org/projects/f-droid/fdroidserver/pt_PT/>\n"
 "Language: pt_PT\n"
@@ -392,10 +392,9 @@ msgstr "Não é possível ler \"{path}\"!"
 
 #. Translators: https://developer.android.com/studio/build/application-id
 #: ../fdroidserver/metadata.py
-#, fuzzy, python-brace-format
-#| msgid "Cannot resolve app id {appid}"
+#, python-brace-format
 msgid "Cannot resolve application ID {appid}"
-msgstr "Não é possível resolver o ID da app {appid}"
+msgstr "Não é possível resolver o ID da applicação {appid}"
 
 #: ../fdroidserver/rewritemeta.py
 #, python-brace-format
@@ -1010,10 +1009,9 @@ msgid "Invalid VercodeOperation: {field}"
 msgstr "VercodeOperation inválido: {field}"
 
 #: ../fdroidserver/common.py
-#, fuzzy, python-brace-format
-#| msgid "Invalid VercodeOperation: {field}"
+#, python-brace-format
 msgid "Invalid application ID {appid}"
-msgstr "VercodeOperation inválido: {field}"
+msgstr "ID da aplicação {appid} inválido"
 
 #: ../fdroidserver/metadata.py
 #, python-format
@@ -1123,10 +1121,9 @@ msgid "Keystore for signing key:\t"
 msgstr "Armazenamento de chaves de assinatura:\t"
 
 #: ../fdroidserver/lint.py
-#, fuzzy, python-brace-format
-#| msgid "Last used commit '{commit}' looks like a tag, but Update Check Mode is '{ucm}'"
+#, python-brace-format
 msgid "Last used commit '{commit}' looks like a tag, but UpdateCheckMode is '{ucm}'"
-msgstr "O último commit usado '{commit}' parece-se com uma tag, mas o modo de verificação de atualização é '{ucm}'"
+msgstr "O último commit usado '{commit}' parece-se com uma tag, mas o UpdateCheckMode (modo de verificação de atualização) é '{ucm}'"
 
 #: ../fdroidserver/lint.py
 msgid "Liberapay donation methods belong in the Liberapay: field"
@@ -1884,10 +1881,8 @@ msgstr "O caminho de scanignore não é usado: %s"
 
 #. Translators: https://developer.android.com/studio/build/application-id
 #: ../fdroidserver/lint.py
-#, fuzzy
-#| msgid "Update Check Name is set to the known app id - it can be removed"
 msgid "UpdateCheckName is set to the known application ID - it can be removed"
-msgstr "O nome da verificação de atualização (Update Check Name) é definido como o ID comun do app - pode ser removido"
+msgstr "UpdateCheckName (o nome da verificação de atualização) é definido como o ID comum da aplicação - pode ser removido"
 
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Update repo information for new packages"
@@ -1921,10 +1916,8 @@ msgid "UpdateCheckData not a valid URL: {url}"
 msgstr "UpdateCheckData não é uma URL válida: {url}"
 
 #: ../fdroidserver/lint.py
-#, fuzzy
-#| msgid "Update Check Name is set to the known app id - it can be removed"
 msgid "UpdateCheckName is set to the known application ID, it can be removed"
-msgstr "O nome da verificação de atualização (Update Check Name) é definido como o ID comun do app - pode ser removido"
+msgstr "UpdateCheckName (o nome da verificação de atualização) é definido como o ID comun da aplicação - pode ser removido"
 
 #: ../fdroidserver/server.py
 #, python-brace-format
@@ -2074,18 +2067,14 @@ msgstr "Nenhum apksigner encontrado, é necessário para assinar!"
 
 #: ../fdroidserver/lint.py ../fdroidserver/rewritemeta.py
 #: ../fdroidserver/checkupdates.py
-#, fuzzy
-#| msgid "applicationId to check for updates"
 msgid "application ID of file to operate on"
-msgstr "applicationId para verificar se há atualizações"
+msgstr "ID de aplicação do ficheiro para operar"
 
 #: ../fdroidserver/verify.py ../fdroidserver/publish.py
 #: ../fdroidserver/build.py ../fdroidserver/scanner.py
 #: ../fdroidserver/install.py
-#, fuzzy
-#| msgid "applicationId with optional versionCode in the form APPID[:VERCODE]"
 msgid "application ID with optional versionCode in the form APPID[:VERCODE]"
-msgstr "applicationId com versionCode opcional na forma APPID[:VERCODE]"
+msgstr "applicationID com versionCode opcional na forma APPID[:VERCODE]"
 
 #: ../fdroidserver/lint.py ../fdroidserver/rewritemeta.py
 msgid "applicationId in the form APPID"
@@ -2581,10 +2570,9 @@ msgid "{apkfilename}'s AndroidManifest.xml has a bad date: "
 msgstr "AndroidManifest.xml do {apkfilename} tem uma data má: "
 
 #: ../fdroidserver/update.py
-#, fuzzy, python-brace-format
-#| msgid "{appid} does not have a name! Using package name instead."
+#, python-brace-format
 msgid "{appid} does not have a name! Using application ID instead."
-msgstr "{appid} não tem um nome! Usando o nome do pacote em vez disso."
+msgstr "{appid} não tem um nome! A usar o ID da aplicação em vez disso."
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -2597,10 +2585,9 @@ msgid "{appid} from {path} is not a valid Android Package Name!"
 msgstr "{appid} from {path} não é um nome de pacote Android válido!"
 
 #: ../fdroidserver/update.py
-#, fuzzy, python-brace-format
-#| msgid "{appid} from {path} is not a valid Android Package Name!"
+#, python-brace-format
 msgid "{appid} from {path} is not a valid Android application ID!"
-msgstr "{appid} from {path} não é um nome de pacote Android válido!"
+msgstr "{appid} de {path} não é um ID de aplicação Android válido!"
 
 #: ../fdroidserver/metadata.py ../fdroidserver/update.py
 #, python-brace-format
