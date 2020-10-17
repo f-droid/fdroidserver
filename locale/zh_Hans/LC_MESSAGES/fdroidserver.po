@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2020-10-01 12:34+0200\n"
-"PO-Revision-Date: 2020-07-16 09:41+0000\n"
+"PO-Revision-Date: 2020-10-02 19:15+0000\n"
 "Last-Translator: Eric <spice2wolf@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/f-droid/fdroidserver/zh_Hans/>\n"
 "Language: zh_Hans\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.2-dev\n"
+"X-Generator: Weblate 4.3-dev\n"
 
 #: ../fdroidserver/common.py
 msgid ""
@@ -39,13 +39,12 @@ msgstr ""
 "SSH 公钥被用来作为布署密钥："
 
 #: ../fdroidserver/nightly.py
-#, fuzzy
 msgid ""
 "\n"
 "SSH public key to be used as deploy key:"
 msgstr ""
 "\n"
-"SSH 公钥被用来作为布署密钥："
+"SSH 公钥将被用作布署密钥："
 
 #: ../fdroidserver/nightly.py
 #, python-brace-format
@@ -62,7 +61,7 @@ msgid "\"%s/\" has no matching metadata file!"
 msgstr "\"%s/\" 没有匹配的元数据文件!"
 
 #: ../fdroidserver/install.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "\"{apkfilename}\" is already installed on {dev}."
 msgstr "'{apkfilename}'已安装在{dev}上。"
 
@@ -82,9 +81,9 @@ msgid "\"{path}\" exists but s3cmd is not installed!"
 msgstr "\"{path}\"存在，但未安装 s3cmd！"
 
 #: ../fdroidserver/lint.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "\"{path}\" is not a supported file format (use: metadata/*.yml)"
-msgstr "\"{path}\" 不是可接受的格式, 需转换成 : {formats}"
+msgstr "\"{path}\"不是可接受的文件格式 （使用：metadata/*.yml）"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
@@ -276,9 +275,8 @@ msgid "Android APK file"
 msgstr ""
 
 #: ../fdroidserver/scanner.py
-#, fuzzy
 msgid "Android DEX code"
-msgstr "未找到 Android SDK！"
+msgstr "安卓DEX代码"
 
 #: ../fdroidserver/common.py ../fdroidserver/build.py
 #, python-brace-format
@@ -471,14 +469,12 @@ msgid "Could not find '{command}' on your system"
 msgstr ""
 
 #: ../fdroidserver/import.py
-#, fuzzy
 msgid "Could not find latest version code"
-msgstr "仅编译每个包的最新版本"
+msgstr "找不到最新版本代码"
 
 #: ../fdroidserver/import.py
-#, fuzzy
 msgid "Could not find latest version name"
-msgstr "仅编译每个包的最新版本"
+msgstr "找不到最新的版本名"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -495,9 +491,8 @@ msgid "Could not parse size \"{size}\", wrong type \"{type}\""
 msgstr ""
 
 #: ../fdroidserver/import.py
-#, fuzzy
 msgid "Couldn't find Application ID"
-msgstr "未能匹配应用程序"
+msgstr "找不到应用程序ID"
 
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
 #: ../fdroidserver/import.py
@@ -1063,9 +1058,9 @@ msgid "Invalid redirect to non-HTTPS: {before} -> {after} "
 msgstr ""
 
 #: ../fdroidserver/metadata.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Invalid scrlib metadata: '{file}' does not exist"
-msgstr "读取全部元数据文件并退出"
+msgstr "无效的scrlib元数据：'{file}'不存在"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
@@ -1783,9 +1778,9 @@ msgid "Unknown metadata format: {path}"
 msgstr "未知元数据格式：{path}"
 
 #: ../fdroidserver/metadata.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Unknown metadata format: {path} (use: *.yml)"
-msgstr "未知元数据格式：{path}"
+msgstr "未知元数据格式：{path} (使用:*.yml)"
 
 #: ../fdroidserver/common.py
 msgid "Unknown version of aapt, might cause problems: "
@@ -1980,7 +1975,7 @@ msgstr ""
 #: ../fdroidserver/server.py ../fdroidserver/upload.py
 #, python-brace-format
 msgid "Using s3cmd to sync with: {url}"
-msgstr ""
+msgstr "正使用 s3cmd 与 {url} 同步"
 
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Valid commands are:"
@@ -1988,7 +1983,7 @@ msgstr "有效的命令为："
 
 #: ../fdroidserver/verify.py
 msgid "Verify against locally cached copy rather than redownloading."
-msgstr ""
+msgstr "和本地缓存的副本进行验证，而不是重新下载。"
 
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Verify the integrity of downloaded packages"
@@ -1996,7 +1991,7 @@ msgstr "验证已下载包的完整性"
 
 #: ../fdroidserver/index.py
 msgid "Verifying index signature:"
-msgstr ""
+msgstr "验证目录签名中："
 
 #: ../fdroidserver/server.py
 #, python-brace-format
@@ -2402,7 +2397,7 @@ msgstr "可用参数"
 #: ../fdroidserver/nightly.py
 #, python-brace-format
 msgid "overwriting existing {path}"
-msgstr ""
+msgstr "正在覆盖现有{path}"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py
