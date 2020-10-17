@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fdroidserver 0.8-74-ga380b9f\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2020-10-01 12:22+0200\n"
-"PO-Revision-Date: 2020-10-02 19:15+0000\n"
+"PO-Revision-Date: 2020-10-14 09:28+0000\n"
 "Last-Translator: Allan Nordhøy <epost@anotheragency.no>\n"
 "Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects/f-droid/fdroidserver/nb_NO/>\n"
 "Language: nb_NO\n"
@@ -80,9 +80,9 @@ msgid "\"{path}\" exists but s3cmd is not installed!"
 msgstr "\"{path}\" finnes, men s3cmd er ikke installert!"
 
 #: ../fdroidserver/lint.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "\"{path}\" is not a supported file format (use: metadata/*.yml)"
-msgstr "\"{path}\" er ikke et godtatt format, konverter til: {formats}"
+msgstr "\"{path}\" er ikke et støttet filformat. (bruk: metadata/*.yml)"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
@@ -887,9 +887,9 @@ msgid "Found non-file at %s"
 msgstr "Fant ikke-fil i %s"
 
 #: ../fdroidserver/server.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Found {apkfilename} at {url}"
-msgstr "kopierer {apkfilename} inn i {path}"
+msgstr "Fant {apkfilename} i {url}"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -917,7 +917,7 @@ msgstr "Git set-head annensteds hen mislyktes"
 #: ../fdroidserver/common.py
 #, fuzzy, python-format
 msgid "Git remote set-head failed: \"%s\""
-msgstr "Git set-head annensteds hen mislyktes"
+msgstr "Git set-head annensteds hen mislyktes: «%s»"
 
 #: ../fdroidserver/common.py
 msgid "Git reset failed"
@@ -1032,10 +1032,9 @@ msgid "Invalid VercodeOperation: {field}"
 msgstr "Ugyldig VercodeOperation: {field}"
 
 #: ../fdroidserver/common.py
-#, fuzzy, python-brace-format
-#| msgid "Invalid VercodeOperation: {field}"
+#, python-brace-format
 msgid "Invalid application ID {appid}"
-msgstr "Ugyldig VercodeOperation: {field}"
+msgstr "Ugyldig program-ID {appid}"
 
 #: ../fdroidserver/metadata.py
 #, fuzzy, python-format
@@ -1091,9 +1090,9 @@ msgid "Invalid redirect to non-HTTPS: {before} -> {after} "
 msgstr "Ugyldig videresending til ikke-HTTPS: {before} → {after} "
 
 #: ../fdroidserver/metadata.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Invalid scrlib metadata: '{file}' does not exist"
-msgstr "Les alle metadatafilene og avslutt"
+msgstr "Ugyldig scrlib-metadata: «{file}» finnes ikke"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
