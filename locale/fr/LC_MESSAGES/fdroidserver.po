@@ -19,7 +19,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2020-10-01 12:34+0200\n"
+"POT-Creation-Date: 2020-10-01 12:22+0200\n"
 "PO-Revision-Date: 2020-10-06 08:26+0000\n"
 "Last-Translator: Yldun <contact@norcet.info>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/f-droid/fdroidserver/fr/>\n"
@@ -396,24 +396,16 @@ msgid_plural "Can't build due to {} errors while scanning"
 msgstr[0] "Build impossible à cause de l'erreur lors de l'analyse"
 msgstr[1] "Build impossible à cause des {} erreurs lors de l'analyse"
 
-#: ../fdroidserver/metadata.py
-#, python-brace-format
-msgid "Cannot find a packageName for {path}!"
-msgstr "Impossible de trouver un packageName pour {path} !"
-
-#: ../fdroidserver/metadata.py
-#, python-brace-format
-msgid "Cannot find an appid for {path}!"
-msgstr "Impossible de trouver un appid pour {path} !"
-
 #: ../fdroidserver/vmtools.py
 #, python-brace-format
 msgid "Cannot read \"{path}\"!"
 msgstr "Impossible de lire \"{path}\" !"
 
+#. Translators: https://developer.android.com/studio/build/application-id
 #: ../fdroidserver/metadata.py
-#, python-brace-format
-msgid "Cannot resolve app id {appid}"
+#, fuzzy, python-brace-format
+#| msgid "Cannot resolve app id {appid}"
+msgid "Cannot resolve application ID {appid}"
 msgstr "Impossible de résoudre l'identifiant de l'application {appid}"
 
 #: ../fdroidserver/rewritemeta.py
@@ -508,6 +500,7 @@ msgstr "Impossible d'ouvrir le fichier apk pour analyse"
 msgid "Could not parse size \"{size}\", wrong type \"{type}\""
 msgstr "Impossible de récupérer la taille \"{size}\", mauvais type \"{type}\""
 
+#. Translators: https://developer.android.com/studio/build/application-id
 #: ../fdroidserver/import.py
 msgid "Couldn't find Application ID"
 msgstr "Impossible de trouver l'ID de l'application"
@@ -1027,6 +1020,12 @@ msgstr "APK invalide"
 msgid "Invalid VercodeOperation: {field}"
 msgstr "VercodeOperation non valide : {field}"
 
+#: ../fdroidserver/common.py
+#, fuzzy, python-brace-format
+#| msgid "Invalid VercodeOperation: {field}"
+msgid "Invalid application ID {appid}"
+msgstr "VercodeOperation non valide : {field}"
+
 #: ../fdroidserver/metadata.py
 #, python-format
 msgid "Invalid boolean '%s'"
@@ -1135,8 +1134,9 @@ msgid "Keystore for signing key:\t"
 msgstr "Stockage des clés signée :\t"
 
 #: ../fdroidserver/lint.py
-#, python-brace-format
-msgid "Last used commit '{commit}' looks like a tag, but Update Check Mode is '{ucm}'"
+#, fuzzy, python-brace-format
+#| msgid "Last used commit '{commit}' looks like a tag, but Update Check Mode is '{ucm}'"
+msgid "Last used commit '{commit}' looks like a tag, but UpdateCheckMode is '{ucm}'"
 msgstr "Le dernier archivage utiliser '{commit}' ressemble a une balise, mais le Mode De Vérification Des Mise A Jour est '{ucm}'"
 
 #: ../fdroidserver/lint.py
@@ -1897,8 +1897,9 @@ msgstr ""
 msgid "Unused scanignore path: %s"
 msgstr ""
 
+#. Translators: https://developer.android.com/studio/build/application-id
 #: ../fdroidserver/lint.py
-msgid "Update Check Name is set to the known app id - it can be removed"
+msgid "UpdateCheckName is set to the known application ID - it can be removed"
 msgstr ""
 
 #: ../fdroid ../fdroidserver/__main__.py
@@ -1930,6 +1931,10 @@ msgstr ""
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "UpdateCheckData not a valid URL: {url}"
+msgstr ""
+
+#: ../fdroidserver/lint.py
+msgid "UpdateCheckName is set to the known application ID, it can be removed"
 msgstr ""
 
 #: ../fdroidserver/server.py
@@ -2077,6 +2082,21 @@ msgstr "option ambiguë : %s (%s?)"
 #: ../fdroidserver/common.py
 msgid "apksigner not found, it's required for signing!"
 msgstr ""
+
+#: ../fdroidserver/lint.py ../fdroidserver/rewritemeta.py
+#: ../fdroidserver/checkupdates.py
+#, fuzzy
+#| msgid "applicationId to check for updates"
+msgid "application ID of file to operate on"
+msgstr "applicationId pour vérifier les mises à jour"
+
+#: ../fdroidserver/verify.py ../fdroidserver/publish.py
+#: ../fdroidserver/build.py ../fdroidserver/scanner.py
+#: ../fdroidserver/install.py
+#, fuzzy
+#| msgid "applicationId with optional versionCode in the form APPID[:VERCODE]"
+msgid "application ID with optional versionCode in the form APPID[:VERCODE]"
+msgstr "applicationId avec le versionCode optionnel sous la forme APPID[:VERCODE]"
 
 #: ../fdroidserver/lint.py ../fdroidserver/rewritemeta.py
 msgid "applicationId in the form APPID"
@@ -2574,12 +2594,22 @@ msgstr ""
 
 #: ../fdroidserver/update.py
 #, python-brace-format
+msgid "{appid} does not have a name! Using application ID instead."
+msgstr ""
+
+#: ../fdroidserver/update.py
+#, python-brace-format
 msgid "{appid} does not have a name! Using package name instead."
 msgstr ""
 
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "{appid} from {path} is not a valid Android Package Name!"
+msgstr ""
+
+#: ../fdroidserver/update.py
+#, python-brace-format
+msgid "{appid} from {path} is not a valid Android application ID!"
 msgstr ""
 
 #: ../fdroidserver/metadata.py ../fdroidserver/update.py
@@ -2679,6 +2709,12 @@ msgid "{} build succeeded"
 msgid_plural "{} builds succeeded"
 msgstr[0] ""
 msgstr[1] ""
+
+#~ msgid "Cannot find a packageName for {path}!"
+#~ msgstr "Impossible de trouver un packageName pour {path} !"
+
+#~ msgid "Cannot find an appid for {path}!"
+#~ msgstr "Impossible de trouver un appid pour {path} !"
 
 #, fuzzy
 #~ msgid "Add PGP signatures for packages in repo using GnuPG"

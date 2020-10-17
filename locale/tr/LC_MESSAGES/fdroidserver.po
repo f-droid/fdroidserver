@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2020-10-01 12:34+0200\n"
+"POT-Creation-Date: 2020-10-01 12:22+0200\n"
 "PO-Revision-Date: 2020-10-06 08:26+0000\n"
 "Last-Translator: Oğuz Ersen <oguzersen@protonmail.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/f-droid/fdroidserver/tr/>\n"
@@ -382,24 +382,16 @@ msgid_plural "Can't build due to {} errors while scanning"
 msgstr[0] "Tarama sırasında {} hata nedeniyle inşa edilemiyor"
 msgstr[1] "Tarama sırasında {} hata nedeniyle inşa edilemiyor"
 
-#: ../fdroidserver/metadata.py
-#, python-brace-format
-msgid "Cannot find a packageName for {path}!"
-msgstr "{path} için bir packageName bulunamıyor!"
-
-#: ../fdroidserver/metadata.py
-#, python-brace-format
-msgid "Cannot find an appid for {path}!"
-msgstr "{path} için bir appid bulunamıyor!"
-
 #: ../fdroidserver/vmtools.py
 #, python-brace-format
 msgid "Cannot read \"{path}\"!"
 msgstr "\"{path}\" okunamıyor!"
 
+#. Translators: https://developer.android.com/studio/build/application-id
 #: ../fdroidserver/metadata.py
-#, python-brace-format
-msgid "Cannot resolve app id {appid}"
+#, fuzzy, python-brace-format
+#| msgid "Cannot resolve app id {appid}"
+msgid "Cannot resolve application ID {appid}"
 msgstr "App id {appid} çözülemiyor"
 
 #: ../fdroidserver/rewritemeta.py
@@ -494,6 +486,7 @@ msgstr "İnceleme için apk dosyası açılamadı"
 msgid "Could not parse size \"{size}\", wrong type \"{type}\""
 msgstr "\"{size}\" boyutu ayrıştırılamadı, yanlış tür \"{type}\""
 
+#. Translators: https://developer.android.com/studio/build/application-id
 #: ../fdroidserver/import.py
 msgid "Couldn't find Application ID"
 msgstr "Uygulama kimliği bulunamadı"
@@ -1013,6 +1006,12 @@ msgstr "Geçersiz APK"
 msgid "Invalid VercodeOperation: {field}"
 msgstr "Geçersiz Vercode İşlemi: {field}"
 
+#: ../fdroidserver/common.py
+#, fuzzy, python-brace-format
+#| msgid "Invalid VercodeOperation: {field}"
+msgid "Invalid application ID {appid}"
+msgstr "Geçersiz Vercode İşlemi: {field}"
+
 #: ../fdroidserver/metadata.py
 #, python-format
 msgid "Invalid boolean '%s'"
@@ -1121,8 +1120,9 @@ msgid "Keystore for signing key:\t"
 msgstr "İmzalama için anahtar deposu:\t"
 
 #: ../fdroidserver/lint.py
-#, python-brace-format
-msgid "Last used commit '{commit}' looks like a tag, but Update Check Mode is '{ucm}'"
+#, fuzzy, python-brace-format
+#| msgid "Last used commit '{commit}' looks like a tag, but Update Check Mode is '{ucm}'"
+msgid "Last used commit '{commit}' looks like a tag, but UpdateCheckMode is '{ucm}'"
 msgstr "Son kullanılan işleme '{commit}' bir etiket gibi görünüyor, ama güncelleme denetleme kipi '{ucm}'"
 
 #: ../fdroidserver/lint.py
@@ -1879,8 +1879,11 @@ msgstr "Kullanılmayan scandelete yolu: %s"
 msgid "Unused scanignore path: %s"
 msgstr "Kullanılmayan scanignore yolu: %s"
 
+#. Translators: https://developer.android.com/studio/build/application-id
 #: ../fdroidserver/lint.py
-msgid "Update Check Name is set to the known app id - it can be removed"
+#, fuzzy
+#| msgid "Update Check Name is set to the known app id - it can be removed"
+msgid "UpdateCheckName is set to the known application ID - it can be removed"
 msgstr "Update Check Name bilinen app id'ye ayarlı - kaldırılabilir"
 
 #: ../fdroid ../fdroidserver/__main__.py
@@ -1913,6 +1916,12 @@ msgstr "UpdateCheckData, HTTPS URL'sini kullanmalıdır: {url}"
 #, python-brace-format
 msgid "UpdateCheckData not a valid URL: {url}"
 msgstr "UpdateCheckData geçerli bir URL değil: {url}"
+
+#: ../fdroidserver/lint.py
+#, fuzzy
+#| msgid "Update Check Name is set to the known app id - it can be removed"
+msgid "UpdateCheckName is set to the known application ID, it can be removed"
+msgstr "Update Check Name bilinen app id'ye ayarlı - kaldırılabilir"
 
 #: ../fdroidserver/server.py
 #, python-brace-format
@@ -2059,6 +2068,21 @@ msgstr "belirsiz şeçenek: %s (%s?)"
 #: ../fdroidserver/common.py
 msgid "apksigner not found, it's required for signing!"
 msgstr "apksigner bulunamadı, imzalamak için gereklidir!"
+
+#: ../fdroidserver/lint.py ../fdroidserver/rewritemeta.py
+#: ../fdroidserver/checkupdates.py
+#, fuzzy
+#| msgid "applicationId to check for updates"
+msgid "application ID of file to operate on"
+msgstr "Güncellemeleri denetlemek için applicationId"
+
+#: ../fdroidserver/verify.py ../fdroidserver/publish.py
+#: ../fdroidserver/build.py ../fdroidserver/scanner.py
+#: ../fdroidserver/install.py
+#, fuzzy
+#| msgid "applicationId with optional versionCode in the form APPID[:VERCODE]"
+msgid "application ID with optional versionCode in the form APPID[:VERCODE]"
+msgstr "APPID[:VERCODE] biçiminde applicationId, isteğe bağlı versionCode ile"
 
 #: ../fdroidserver/lint.py ../fdroidserver/rewritemeta.py
 msgid "applicationId in the form APPID"
@@ -2554,6 +2578,12 @@ msgid "{apkfilename}'s AndroidManifest.xml has a bad date: "
 msgstr "{apkfilename} içindeki AndroidManifest.xml tarihi bozuk: "
 
 #: ../fdroidserver/update.py
+#, fuzzy, python-brace-format
+#| msgid "{appid} does not have a name! Using package name instead."
+msgid "{appid} does not have a name! Using application ID instead."
+msgstr "{appid} adsız! Onun yerine paket adı kullanılıyor."
+
+#: ../fdroidserver/update.py
 #, python-brace-format
 msgid "{appid} does not have a name! Using package name instead."
 msgstr "{appid} adsız! Onun yerine paket adı kullanılıyor."
@@ -2561,6 +2591,12 @@ msgstr "{appid} adsız! Onun yerine paket adı kullanılıyor."
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "{appid} from {path} is not a valid Android Package Name!"
+msgstr "{path}'den {appid} geçerli bir Android Paket Adı değil!"
+
+#: ../fdroidserver/update.py
+#, fuzzy, python-brace-format
+#| msgid "{appid} from {path} is not a valid Android Package Name!"
+msgid "{appid} from {path} is not a valid Android application ID!"
 msgstr "{path}'den {appid} geçerli bir Android Paket Adı değil!"
 
 #: ../fdroidserver/metadata.py ../fdroidserver/update.py
@@ -2660,6 +2696,12 @@ msgid "{} build succeeded"
 msgid_plural "{} builds succeeded"
 msgstr[0] "{} inşa başarılı"
 msgstr[1] "{} inşa başarılı"
+
+#~ msgid "Cannot find a packageName for {path}!"
+#~ msgstr "{path} için bir packageName bulunamıyor!"
+
+#~ msgid "Cannot find an appid for {path}!"
+#~ msgstr "{path} için bir appid bulunamıyor!"
 
 #, fuzzy
 #~ msgid "Add PGP signatures for packages in repo using GnuPG"

@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 1.0.0-95-gd7af22b\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2020-10-01 12:34+0200\n"
+"POT-Creation-Date: 2020-10-01 12:22+0200\n"
 "PO-Revision-Date: 2020-10-06 08:26+0000\n"
 "Last-Translator: WaldiS <sto@tutanota.de>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/f-droid/fdroidserver/pl/>\n"
@@ -378,24 +378,16 @@ msgstr[0] "Nie można zbudować z powodu błędu {} podczas skanowania"
 msgstr[1] "Nie można zbudować z powodu błędów {} podczas skanowania"
 msgstr[2] "Nie można zbudować z powodu błędów {} podczas skanowania"
 
-#: ../fdroidserver/metadata.py
-#, python-brace-format
-msgid "Cannot find a packageName for {path}!"
-msgstr "Nie można znaleźć nazwy pakietu dla {path}!"
-
-#: ../fdroidserver/metadata.py
-#, python-brace-format
-msgid "Cannot find an appid for {path}!"
-msgstr "Nie można znaleźć załącznika dla {path}!"
-
 #: ../fdroidserver/vmtools.py
 #, python-brace-format
 msgid "Cannot read \"{path}\"!"
 msgstr "Nie można odczytać \"{path}\"!"
 
+#. Translators: https://developer.android.com/studio/build/application-id
 #: ../fdroidserver/metadata.py
-#, python-brace-format
-msgid "Cannot resolve app id {appid}"
+#, fuzzy, python-brace-format
+#| msgid "Cannot resolve app id {appid}"
+msgid "Cannot resolve application ID {appid}"
 msgstr "Nie można rozpoznać identyfikatora aplikacji {appid}"
 
 #: ../fdroidserver/rewritemeta.py
@@ -492,6 +484,7 @@ msgstr "Nie można otworzyć pliku APK do analizy"
 msgid "Could not parse size \"{size}\", wrong type \"{type}\""
 msgstr ""
 
+#. Translators: https://developer.android.com/studio/build/application-id
 #: ../fdroidserver/import.py
 #, fuzzy
 msgid "Couldn't find Application ID"
@@ -1013,6 +1006,12 @@ msgstr "Nieprawidłowy plik APK"
 msgid "Invalid VercodeOperation: {field}"
 msgstr "Nieprawidłowa VercodeOperation: {field}"
 
+#: ../fdroidserver/common.py
+#, fuzzy, python-brace-format
+#| msgid "Invalid VercodeOperation: {field}"
+msgid "Invalid application ID {appid}"
+msgstr "Nieprawidłowa VercodeOperation: {field}"
+
 #: ../fdroidserver/metadata.py
 #, python-format
 msgid "Invalid boolean '%s'"
@@ -1121,8 +1120,9 @@ msgid "Keystore for signing key:\t"
 msgstr "Magazyn kluczy do podpisywania klucza:\t"
 
 #: ../fdroidserver/lint.py
-#, python-brace-format
-msgid "Last used commit '{commit}' looks like a tag, but Update Check Mode is '{ucm}'"
+#, fuzzy, python-brace-format
+#| msgid "Last used commit '{commit}' looks like a tag, but Update Check Mode is '{ucm}'"
+msgid "Last used commit '{commit}' looks like a tag, but UpdateCheckMode is '{ucm}'"
 msgstr "Ostatnio używany commit '{commit}' wygląda jak tag, ale tryb sprawdzania aktualizacji to '{ucm}'"
 
 #: ../fdroidserver/lint.py
@@ -1884,8 +1884,11 @@ msgstr "Plik UNUSED, o %s"
 msgid "Unused scanignore path: %s"
 msgstr "Plik UNUSED, o %s"
 
+#. Translators: https://developer.android.com/studio/build/application-id
 #: ../fdroidserver/lint.py
-msgid "Update Check Name is set to the known app id - it can be removed"
+#, fuzzy
+#| msgid "Update Check Name is set to the known app id - it can be removed"
+msgid "UpdateCheckName is set to the known application ID - it can be removed"
 msgstr "Aktualizacja Check Name jest ustawiona na znany identyfikator aplikacji - można go usunąć"
 
 #: ../fdroid ../fdroidserver/__main__.py
@@ -1918,6 +1921,12 @@ msgstr "UpdateCheckData musi używać adresu URL HTTPS: {url}"
 #, python-brace-format
 msgid "UpdateCheckData not a valid URL: {url}"
 msgstr "UpdateCheckData nie jest prawidłowym adresem URL: {url}"
+
+#: ../fdroidserver/lint.py
+#, fuzzy
+#| msgid "Update Check Name is set to the known app id - it can be removed"
+msgid "UpdateCheckName is set to the known application ID, it can be removed"
+msgstr "Aktualizacja Check Name jest ustawiona na znany identyfikator aplikacji - można go usunąć"
 
 #: ../fdroidserver/server.py
 #, python-brace-format
@@ -2064,6 +2073,21 @@ msgstr "niejednoznaczna opcja: %s (%s?)"
 #: ../fdroidserver/common.py
 msgid "apksigner not found, it's required for signing!"
 msgstr ""
+
+#: ../fdroidserver/lint.py ../fdroidserver/rewritemeta.py
+#: ../fdroidserver/checkupdates.py
+#, fuzzy
+#| msgid "applicationId to check for updates"
+msgid "application ID of file to operate on"
+msgstr "applicationId, aby sprawdzić dostępność aktualizacji"
+
+#: ../fdroidserver/verify.py ../fdroidserver/publish.py
+#: ../fdroidserver/build.py ../fdroidserver/scanner.py
+#: ../fdroidserver/install.py
+#, fuzzy
+#| msgid "applicationId with optional versionCode in the form APPID[:VERCODE]"
+msgid "application ID with optional versionCode in the form APPID[:VERCODE]"
+msgstr "applicationId z opcjonalnym versionCode w postaci APPID [:VERCODE]"
 
 #: ../fdroidserver/lint.py ../fdroidserver/rewritemeta.py
 msgid "applicationId in the form APPID"
@@ -2563,6 +2587,12 @@ msgid "{apkfilename}'s AndroidManifest.xml has a bad date: "
 msgstr "{apkfilename} AndroidManifest.xml ma złą datę: "
 
 #: ../fdroidserver/update.py
+#, fuzzy, python-brace-format
+#| msgid "{appid} does not have a name! Using package name instead."
+msgid "{appid} does not have a name! Using application ID instead."
+msgstr "{appid} nie ma nazwy! Zamiast tego użyj nazwy pakietu."
+
+#: ../fdroidserver/update.py
 #, python-brace-format
 msgid "{appid} does not have a name! Using package name instead."
 msgstr "{appid} nie ma nazwy! Zamiast tego użyj nazwy pakietu."
@@ -2570,6 +2600,12 @@ msgstr "{appid} nie ma nazwy! Zamiast tego użyj nazwy pakietu."
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "{appid} from {path} is not a valid Android Package Name!"
+msgstr "{appid} z {path} nie jest prawidłową nazwą pakietu Android!"
+
+#: ../fdroidserver/update.py
+#, fuzzy, python-brace-format
+#| msgid "{appid} from {path} is not a valid Android Package Name!"
+msgid "{appid} from {path} is not a valid Android application ID!"
 msgstr "{appid} z {path} nie jest prawidłową nazwą pakietu Android!"
 
 #: ../fdroidserver/metadata.py ../fdroidserver/update.py
@@ -2671,6 +2707,12 @@ msgid_plural "{} builds succeeded"
 msgstr[0] "{} kompilacja powiodła się"
 msgstr[1] "{} kompilacji powiodło się"
 msgstr[2] "{} kompilacje powiodły się"
+
+#~ msgid "Cannot find a packageName for {path}!"
+#~ msgstr "Nie można znaleźć nazwy pakietu dla {path}!"
+
+#~ msgid "Cannot find an appid for {path}!"
+#~ msgstr "Nie można znaleźć załącznika dla {path}!"
 
 #~ msgid "Interactively ask about things that need updating."
 #~ msgstr "Interaktywnie pytaj o rzeczy, które wymagają aktualizacji."
