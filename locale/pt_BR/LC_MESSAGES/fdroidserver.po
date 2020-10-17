@@ -4,13 +4,14 @@
 # André Marcelo Alvarenga <andrealvarenga@gmx.net>, 2020.
 # Hans-Christoph Steiner <hans@guardianproject.info>, 2020.
 # Rafael Fontenelle <rafaelff@gnome.org>, 2020.
+# ssantos <ssantos@web.de>, 2020.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2020-10-01 12:34+0200\n"
-"PO-Revision-Date: 2020-10-02 19:15+0000\n"
-"Last-Translator: Wellington Terumi Uemura <wellingtonuemura@gmail.com>\n"
+"PO-Revision-Date: 2020-10-03 14:48+0000\n"
+"Last-Translator: ssantos <ssantos@web.de>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/f-droid/fdroidserver/pt_BR/>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
@@ -2036,7 +2037,7 @@ msgstr "Você pode usar ANDROID_HOME para definir o caminho para o seu SDK, ou s
 
 #: ../fdroidserver/scanner.py
 msgid "ZIP file archive"
-msgstr "Arquivo ZIP"
+msgstr "Arquivo de ficheiros ZIP"
 
 #: ../fdroidserver/nightly.py
 #, python-brace-format
