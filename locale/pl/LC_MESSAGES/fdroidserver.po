@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: fdroidserver 1.0.0-95-gd7af22b\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2020-10-01 12:34+0200\n"
-"PO-Revision-Date: 2020-07-02 20:41+0000\n"
+"PO-Revision-Date: 2020-10-06 08:26+0000\n"
 "Last-Translator: WaldiS <sto@tutanota.de>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/f-droid/fdroidserver/pl/>\n"
 "Language: pl\n"
@@ -14,7 +14,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.2-dev\n"
+"X-Generator: Weblate 4.3-dev\n"
 
 #: ../fdroidserver/common.py
 msgid ""
@@ -35,13 +35,12 @@ msgstr ""
 "Klucz publiczny SSH do użycia jako klucz wdrażania:"
 
 #: ../fdroidserver/nightly.py
-#, fuzzy
 msgid ""
 "\n"
 "SSH public key to be used as deploy key:"
 msgstr ""
 "\n"
-"Klucz publiczny SSH do użycia jako klucz wdrażania:"
+"Klucz publiczny SSH, który ma być używany jako klucz wdrażania:"
 
 #: ../fdroidserver/nightly.py
 #, python-brace-format
@@ -58,9 +57,9 @@ msgid "\"%s/\" has no matching metadata file!"
 msgstr "\"%s/\" nie ma pasującego pliku metadanych!"
 
 #: ../fdroidserver/install.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "\"{apkfilename}\" is already installed on {dev}."
-msgstr "'{apkfilename}' jest już zainstalowany na {dev}."
+msgstr "\"{apkfilename}\" jest już zainstalowany na {dev}."
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -78,9 +77,9 @@ msgid "\"{path}\" exists but s3cmd is not installed!"
 msgstr "\"{path}\" istnieje, ale s3cmd nie jest zainstalowany!"
 
 #: ../fdroidserver/lint.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "\"{path}\" is not a supported file format (use: metadata/*.yml)"
-msgstr "\"{path}\" nie jest akceptowanym formatem, zamień na: {formats}"
+msgstr "„{path}” nie jest obsługiwanym formatem pliku (użyj: metadata/*.yml)"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
@@ -90,7 +89,7 @@ msgstr "\"{path}\" nie jest akceptowanym formatem, zamień na: {formats}"
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "\"{url}\" is not a valid URL!"
-msgstr ""
+msgstr "\"{url}\" nie jest prawidłowym adresem URL!"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 #: /usr/lib/python3.7/optparse.py
@@ -267,16 +266,15 @@ msgstr "Ostrzeż także o problemach z formatowaniem, takich jak rewritemeta -l"
 
 #: ../fdroidserver/scanner.py
 msgid "Android AAR library"
-msgstr ""
+msgstr "Biblioteka AAR systemu Android"
 
 #: ../fdroidserver/scanner.py
 msgid "Android APK file"
-msgstr ""
+msgstr "Plik APK systemu Android"
 
 #: ../fdroidserver/scanner.py
-#, fuzzy
 msgid "Android DEX code"
-msgstr "Nie znaleziono pakietu SDK Androida!"
+msgstr "Kod DEX Android"
 
 #: ../fdroidserver/common.py ../fdroidserver/build.py
 #, python-brace-format
