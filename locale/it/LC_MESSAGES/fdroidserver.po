@@ -10,8 +10,8 @@ msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2020-10-01 12:22+0200\n"
-"PO-Revision-Date: 2020-10-01 11:26+0000\n"
-"Last-Translator: Massimiliano Caniparoli <massic80@gmail.com>\n"
+"PO-Revision-Date: 2020-10-14 09:28+0000\n"
+"Last-Translator: random r <epsilin@yopmail.com>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/f-droid/fdroidserver/it/>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
@@ -282,9 +282,8 @@ msgid "Android APK file"
 msgstr ""
 
 #: ../fdroidserver/scanner.py
-#, fuzzy
 msgid "Android DEX code"
-msgstr "Android SDK non trovato!"
+msgstr "Codice DEX Android"
 
 #: ../fdroidserver/common.py ../fdroidserver/build.py
 #, python-brace-format
@@ -400,9 +399,9 @@ msgid "Cannot resolve application ID {appid}"
 msgstr "Impossibile trovare l'app id {appid}"
 
 #: ../fdroidserver/rewritemeta.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Cannot rewrite \"{path}\""
-msgstr "Impossibile leggere \"{path}\"!"
+msgstr "Impossibile riscrivere \"{path}\""
 
 #: ../fdroidserver/rewritemeta.py
 msgid "Cannot use --list and --to at the same time"
@@ -992,9 +991,9 @@ msgid "Installing %s…"
 msgstr ""
 
 #: ../fdroidserver/install.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Installing '{apkfilename}' on {dev}..."
-msgstr "Impossibile installare '{apkfilename}' su {dev}: {error}"
+msgstr "Installazione di '{apkfilename}' su {dev}..."
 
 #: ../fdroidserver/install.py
 #, python-brace-format
@@ -1072,9 +1071,9 @@ msgid "Invalid redirect to non-HTTPS: {before} -> {after} "
 msgstr ""
 
 #: ../fdroidserver/metadata.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Invalid scrlib metadata: '{file}' does not exist"
-msgstr "Leggi tutti i file di metadata ed esci"
+msgstr "Metadati scrlib non validi: '{file}' non esiste"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
@@ -1663,9 +1662,9 @@ msgid "Striping mystery signature from {apkfilename}"
 msgstr ""
 
 #: ../fdroidserver/nightly.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Stripping mystery signature from {apkfilename}"
-msgstr "Impossibile recuperare le firme per '{apkfilename}': {error}"
+msgstr "Riduzione della firma misteriosa da {apkfilename}"
 
 #: ../fdroidserver/lint.py
 #, python-format
@@ -2122,9 +2121,9 @@ msgid "can't open '%s': %s"
 msgstr "impossibile aprire \"%s\": %s"
 
 #: ../fdroidserver/build.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "cannot find required srclibs: \"{path}\""
-msgstr "Impossibile trovare un appid per {path}!"
+msgstr "impossibile trovare srclibs richiesto: \"{path}\""
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py
