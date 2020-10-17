@@ -13,13 +13,14 @@
 # Renaud Perrai <renaud.perrai@protonmail.com>, 2020.
 # rational <rationaldecay@gmail.com>, 2020.
 # Coucouf <coucouf@coucouf.fr>, 2020.
+# Alexandre Hô <xandrex_weblate@m4x.org>, 2020.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2020-10-01 12:34+0200\n"
 "PO-Revision-Date: 2020-10-06 08:26+0000\n"
-"Last-Translator: Coucouf <coucouf@coucouf.fr>\n"
+"Last-Translator: Alexandre Hô <xandrex_weblate@m4x.org>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/f-droid/fdroidserver/fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
@@ -839,7 +840,7 @@ msgstr "Arrêt forcer de la construction après {0} secondes de délai d'attente
 
 #: ../fdroidserver/scanner.py
 msgid "Force scan of disabled apps and builds."
-msgstr ""
+msgstr "Forcer le scan d'applications et versions désactivées."
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -975,7 +976,7 @@ msgstr "Inclure des fichiers APK signés avec algorithmes désactivés comme MD5
 
 #: ../fdroidserver/mirror.py
 msgid "Include the PGP signature .asc files in the mirror"
-msgstr ""
+msgstr "Inclure au miroir les fichiers .asc de signature PGP"
 
 #: ../fdroidserver/mirror.py
 msgid "Include the build logs in the mirror"
@@ -983,7 +984,7 @@ msgstr ""
 
 #: ../fdroidserver/mirror.py
 msgid "Include the source tarballs in the mirror"
-msgstr ""
+msgstr "Inclure au miroir les tarballs de source"
 
 #: ../fdroidserver/common.py
 msgid "Initialising submodules"
