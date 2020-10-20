@@ -309,10 +309,6 @@ The repository of older versions of applications from the main demo repository.
 # --server option on dedicated secure build server hosts.
 # build_server_always = True
 
-# By default, fdroid will use YAML .yml and the custom .txt metadata formats. It
-# is also possible to have metadata in JSON by adding 'json'.
-# accepted_formats = ('txt', 'yml')
-
 # Limit in number of characters that fields can take up
 # Only the fields listed here are supported, defaults shown
 # char_limits = {
