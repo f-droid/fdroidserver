@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2020-10-01 12:22+0200\n"
+"POT-Creation-Date: 2020-10-21 18:05+0200\n"
 "PO-Revision-Date: 2020-10-01 10:31+0000\n"
 "Last-Translator: riveravaldez <riveravaldezmail@gmail.com>\n"
 "Language-Team: Spanish (Argentina) <https://hosted.weblate.org/projects/f-droid/fdroidserver/es_AR/>\n"
@@ -67,7 +67,7 @@ msgstr ""
 msgid "\"{path}\" contains recent {name} ({version})"
 msgstr ""
 
-#: ../fdroidserver/server.py ../fdroidserver/upload.py
+#: ../fdroidserver/deploy.py ../fdroidserver/upload.py
 #, python-brace-format
 msgid "\"{path}\" exists but s3cmd is not installed!"
 msgstr ""
@@ -514,12 +514,12 @@ msgstr "Crear una llave de firmado en un almacén de llaves para el repositorio"
 msgid "Create skeleton metadata files that are missing"
 msgstr "Crear plantilla de metadatos de los archivos faltantes"
 
-#: ../fdroidserver/server.py ../fdroidserver/upload.py
+#: ../fdroidserver/deploy.py ../fdroidserver/upload.py
 #, python-brace-format
 msgid "Created new container \"{name}\""
 msgstr ""
 
-#: ../fdroidserver/server.py ../fdroidserver/upload.py
+#: ../fdroidserver/deploy.py ../fdroidserver/upload.py
 #, python-brace-format
 msgid "Creating \"{path}\" for configuring s3cmd."
 msgstr ""
@@ -528,7 +528,7 @@ msgstr ""
 msgid "Creating log directory"
 msgstr ""
 
-#: ../fdroidserver/server.py ../fdroidserver/upload.py
+#: ../fdroidserver/deploy.py ../fdroidserver/upload.py
 #, python-brace-format
 msgid "Creating new S3 bucket: {url}"
 msgstr ""
@@ -563,12 +563,12 @@ msgstr ""
 msgid "Delete APKs and/or OBBs without metadata from the repo"
 msgstr "Borrar archivos APK y/o OBBs sin metadatos del repositorio"
 
-#: ../fdroidserver/server.py
+#: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "Deleting archive, repo is too big ({size} max {limit})"
 msgstr ""
 
-#: ../fdroidserver/server.py
+#: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "Deleting git-mirror history, repo is too big ({size} max {limit})"
 msgstr ""
@@ -631,7 +631,7 @@ msgstr "No hacer nada que refiera a los registros"
 msgid "Don't refresh the repository, useful when testing a build with no internet connection"
 msgstr "No refrescar el repositorio, útil cuando se esta probando la construcción y no se tiene conexión a Internet"
 
-#: ../fdroidserver/server.py ../fdroidserver/nightly.py
+#: ../fdroidserver/deploy.py ../fdroidserver/nightly.py
 #: ../fdroidserver/upload.py
 msgid "Don't use rsync checksums"
 msgstr "No usar sumas de validación de rsync"
@@ -667,6 +667,10 @@ msgstr ""
 msgid "Dynamically scan APKs post build"
 msgstr "Escanear dinámicamente APKs después de compilar"
 
+#: ../fdroidserver/__main__.py
+msgid "ERROR: The \"server\" subcommand has been removed, use \"deploy\"!"
+msgstr ""
+
 #: ../fdroidserver/mirror.py
 msgid ""
 "ERROR: this command should never be used to mirror f-droid.org!\n"
@@ -694,7 +698,7 @@ msgid ""
 "> "
 msgstr ""
 
-#: ../fdroidserver/server.py ../fdroidserver/checkupdates.py
+#: ../fdroidserver/deploy.py ../fdroidserver/checkupdates.py
 #: ../fdroidserver/upload.py
 #, python-format
 msgid "Error while attempting to publish log: %s"
@@ -733,7 +737,7 @@ msgstr ""
 msgid "Failed to align application"
 msgstr "Construir todas las aplicaciones disponibles"
 
-#: ../fdroidserver/server.py ../fdroidserver/upload.py
+#: ../fdroidserver/deploy.py ../fdroidserver/upload.py
 #, python-brace-format
 msgid "Failed to create S3 bucket: {url}"
 msgstr ""
@@ -860,7 +864,7 @@ msgstr ""
 msgid "Found non-file at %s"
 msgstr ""
 
-#: ../fdroidserver/server.py
+#: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "Found {apkfilename} at {url}"
 msgstr ""
@@ -908,11 +912,11 @@ msgstr ""
 msgid "HTTPS must be used with Subversion URLs!"
 msgstr ""
 
-#: ../fdroidserver/server.py
+#: ../fdroidserver/deploy.py
 msgid "If a git mirror gets to big, allow the archive to be deleted"
 msgstr ""
 
-#: ../fdroidserver/server.py
+#: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "If this upload fails, try manually uploading to {url}"
 msgstr ""
@@ -1144,7 +1148,7 @@ msgstr "Parar esta construccion cuando haya excepciones"
 msgid "Malformed repository mirrors."
 msgstr ""
 
-#: ../fdroidserver/server.py
+#: ../fdroidserver/deploy.py
 msgid "Malformed serverwebroot line:"
 msgstr ""
 
@@ -1206,7 +1210,7 @@ msgstr ""
 msgid "No need to specify that the app is for Android"
 msgstr ""
 
-#: ../fdroidserver/server.py
+#: ../fdroidserver/deploy.py
 msgid "No option set! Edit your config.py to set at least one of these:"
 msgstr ""
 
@@ -1272,6 +1276,10 @@ msgstr ""
 
 #: ../fdroidserver/update.py
 msgid "OBB's packagename does not match a supported APK:"
+msgstr ""
+
+#: ../fdroidserver/deploy.py
+msgid "Offline machine, skipping git mirror generation until `fdroid deploy`"
 msgstr ""
 
 #: ../fdroidserver/common.py
@@ -1422,12 +1430,12 @@ msgstr ""
 msgid "Push the log to this git remote repository"
 msgstr "Subir el registro al repositorio remoto de git"
 
-#: ../fdroidserver/server.py ../fdroidserver/upload.py
+#: ../fdroidserver/deploy.py ../fdroidserver/upload.py
 #, python-brace-format
 msgid "Pushing binary transparency log to {url}"
 msgstr "Actualizar el registro de transparencia binario de {url}"
 
-#: ../fdroidserver/server.py ../fdroidserver/upload.py
+#: ../fdroidserver/deploy.py ../fdroidserver/upload.py
 #, python-brace-format
 msgid "Pushing to {url}"
 msgstr ""
@@ -1523,7 +1531,7 @@ msgstr ""
 msgid "Run rewritemeta to fix formatting"
 msgstr ""
 
-#: ../fdroidserver/server.py ../fdroidserver/upload.py
+#: ../fdroidserver/deploy.py ../fdroidserver/upload.py
 msgid "Running first pass with MD5 checking disabled"
 msgstr ""
 
@@ -1631,11 +1639,11 @@ msgstr ""
 msgid "Skipping {appid}: no builds specified"
 msgstr ""
 
-#: ../fdroidserver/server.py ../fdroidserver/upload.py
+#: ../fdroidserver/deploy.py ../fdroidserver/upload.py
 msgid "Specify a local folder to sync the repo to"
 msgstr "Especificar un directorio local donde sincronizar el repositorio"
 
-#: ../fdroidserver/server.py ../fdroidserver/upload.py
+#: ../fdroidserver/deploy.py ../fdroidserver/upload.py
 #, fuzzy
 msgid "Specify an identity file to provide to SSH for rsyncing"
 msgstr "Especifique una archivo de identificación para la resincronización vía SSH"
@@ -1699,7 +1707,7 @@ msgstr ""
 msgid "The file to be included in the repo (path or glob)"
 msgstr ""
 
-#: ../fdroidserver/server.py
+#: ../fdroidserver/deploy.py
 #, fuzzy
 msgid "The only commands currently supported are 'init' and 'update'"
 msgstr "comando a ejecutar, ya sea 'iniciar' o 'actualizar'"
@@ -1712,7 +1720,7 @@ msgstr ""
 msgid "The repository's index could not be verified."
 msgstr ""
 
-#: ../fdroidserver/server.py
+#: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "The root dir for local_copy_dir \"{path}\" does not exist!"
 msgstr ""
@@ -1730,12 +1738,8 @@ msgstr ""
 msgid "This repo already has local metadata: %s"
 msgstr ""
 
-#: ../fdroidserver/server.py ../fdroidserver/upload.py
+#: ../fdroidserver/deploy.py ../fdroidserver/upload.py
 msgid "To use awsbucket, awssecretkey and awsaccesskeyid must also be set in config.py!"
-msgstr ""
-
-#: ../fdroidserver/lint.py
-msgid "UpdateCheckMode is set but it looks like checkupdates hasn't been run yet"
 msgstr ""
 
 #: ../fdroidserver/lint.py
@@ -1881,11 +1885,6 @@ msgstr ""
 msgid "Unused scanignore path: %s"
 msgstr ""
 
-#. Translators: https://developer.android.com/studio/build/application-id
-#: ../fdroidserver/lint.py
-msgid "UpdateCheckName is set to the known application ID - it can be removed"
-msgstr ""
-
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Update repo information for new packages"
 msgstr "Actualizar información del repositorio para paquetes nuevos"
@@ -1918,15 +1917,24 @@ msgid "UpdateCheckData not a valid URL: {url}"
 msgstr ""
 
 #: ../fdroidserver/lint.py
+msgid "UpdateCheckMode is set but it looks like checkupdates hasn't been run yet"
+msgstr ""
+
+#. Translators: https://developer.android.com/studio/build/application-id
+#: ../fdroidserver/lint.py
+msgid "UpdateCheckName is set to the known application ID - it can be removed"
+msgstr ""
+
+#: ../fdroidserver/lint.py
 msgid "UpdateCheckName is set to the known application ID, it can be removed"
 msgstr ""
 
-#: ../fdroidserver/server.py
+#: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "Uploading {apkfilename} to androidobservatory.org"
 msgstr ""
 
-#: ../fdroidserver/server.py
+#: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "Uploading {apkfilename} to virustotal"
 msgstr ""
@@ -1962,7 +1970,7 @@ msgstr "Utilizar la fecha del apk en vez de la actual para los apks nuevos que s
 msgid "Use date from apk instead of current time for newly added apks"
 msgstr "Utilizar la fecha del apk en vez de la actual para los apks nuevos que se agreguen"
 
-#: ../fdroidserver/server.py ../fdroidserver/upload.py
+#: ../fdroidserver/deploy.py ../fdroidserver/upload.py
 #, python-brace-format
 msgid "Using \"{path}\" for configuring s3cmd."
 msgstr ""
@@ -1989,7 +1997,7 @@ msgstr ""
 msgid "Using existing keystore \"{path}\""
 msgstr ""
 
-#: ../fdroidserver/server.py ../fdroidserver/upload.py
+#: ../fdroidserver/deploy.py ../fdroidserver/upload.py
 #, python-brace-format
 msgid "Using s3cmd to sync with: {url}"
 msgstr ""
@@ -2010,7 +2018,7 @@ msgstr "Verificar la integridad de los paquetes descargados"
 msgid "Verifying index signature:"
 msgstr ""
 
-#: ../fdroidserver/server.py
+#: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "VirusTotal API key cannot upload files larger than 32MB, use {url} to upload {path}."
 msgstr ""
@@ -2149,7 +2157,7 @@ msgstr ""
 msgid "cloning {url}"
 msgstr ""
 
-#: ../fdroidserver/server.py
+#: ../fdroidserver/deploy.py
 msgid "command to execute, either 'init' or 'update'"
 msgstr "comando a ejecutar, ya sea 'iniciar' o 'actualizar'"
 
@@ -2316,17 +2324,17 @@ msgstr ""
 msgid "invalid option string %(option)r: must start with a character %(prefix_chars)r"
 msgstr ""
 
-#: ../fdroidserver/server.py
+#: ../fdroidserver/deploy.py
 #, fuzzy, python-brace-format
 msgid "local_copy_dir does not end with \"fdroid\", perhaps you meant: \"{path}\""
 msgstr "directorio_copia_local no termina en \"fdroid\", quizá quiso escribir: \"{ruta}\""
 
-#: ../fdroidserver/server.py
+#: ../fdroidserver/deploy.py
 #, fuzzy
 msgid "local_copy_dir must be an absolute path!"
 msgstr "directorio_copia_local ¡tiene que ser una ruta absoluta!"
 
-#: ../fdroidserver/server.py
+#: ../fdroidserver/deploy.py
 msgid "local_copy_dir must be directory, not a file!"
 msgstr "directorio_copia_local tiene que ser un directorio, ¡no un archivo!"
 
@@ -2459,11 +2467,16 @@ msgstr ""
 msgid "refuse downloading via insecure http connection (use https or specify --no-https-check): {apkfilename}"
 msgstr ""
 
+#: ../fdroidserver/index.py
+#, python-format
+msgid "repo_icon %s does not exist, generating placeholder."
+msgstr ""
+
 #: ../fdroidserver/metadata.py
 msgid "ruamel.yaml not installed, can not write metadata."
 msgstr ""
 
-#: ../fdroidserver/server.py ../fdroidserver/upload.py
+#: ../fdroidserver/deploy.py ../fdroidserver/upload.py
 #, python-brace-format
 msgid "s3cmd sync indexes {path} to {url} and delete"
 msgstr ""
@@ -2551,13 +2564,17 @@ msgstr ""
 msgid "usage: fdroid [-h|--help|--version] <command> [<args>]"
 msgstr "uso: fdroid [-h|--help|--version] <comando> [<args>]"
 
-#: ../fdroidserver/server.py ../fdroidserver/upload.py
+#: ../fdroidserver/deploy.py ../fdroidserver/upload.py
 #, python-brace-format
 msgid "using Apache libcloud to sync with {url}"
 msgstr "usando libcloud de Apache para sincronizar con {url}"
 
-#: ../fdroidserver/server.py
+#: ../fdroidserver/deploy.py
 msgid "virustotal.com is rate limiting, waiting to retry..."
+msgstr ""
+
+#: ../fdroidserver/update.py
+msgid "wiki support is deprecated and will be removed in the next release!"
 msgstr ""
 
 #: ../fdroidserver/publish.py
@@ -2673,7 +2690,7 @@ msgstr ""
 msgid "{path} is zero size!"
 msgstr ""
 
-#: ../fdroidserver/server.py
+#: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "{path} more than 200MB, manually upload: {url}"
 msgstr ""
