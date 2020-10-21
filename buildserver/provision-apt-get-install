@@ -49,6 +49,7 @@ apt-get upgrade --download-only
 apt-get upgrade
 
 packages="
+ androguard/stretch-backports
  ant
  asn1c
  ant-contrib
@@ -99,6 +100,7 @@ packages="
  python-magic
  python-pip
  python-setuptools
+ python3-asn1crypto/stretch-backports
  python3-defusedxml
  python3-git
  python3-gitdb

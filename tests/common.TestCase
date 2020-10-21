@@ -746,16 +746,15 @@ class CommonTest(unittest.TestCase):
             ('repo/urzip-; Рахма́, [rɐxˈmanʲɪnəf] سيرجي_رخمانينوف 谢·.apk', 'info.guardianproject.urzip', '100', '0.1'),
         ]
         for apkfilename, appid, versionCode, versionName in testcases:
+            a, vc, vn = fdroidserver.common.get_apk_id(apkfilename)
+            self.assertEqual(appid, a, 'androguard appid parsing failed for ' + apkfilename)
+            self.assertEqual(versionName, vn, 'androguard versionName parsing failed for ' + apkfilename)
+            self.assertEqual(versionCode, vc, 'androguard versionCode parsing failed for ' + apkfilename)
             if 'aapt' in config:
                 a, vc, vn = fdroidserver.common.get_apk_id_aapt(apkfilename)
                 self.assertEqual(appid, a, 'aapt appid parsing failed for ' + apkfilename)
                 self.assertEqual(versionCode, vc, 'aapt versionCode parsing failed for ' + apkfilename)
                 self.assertEqual(versionName, vn, 'aapt versionName parsing failed for ' + apkfilename)
-            if fdroidserver.common.use_androguard():
-                a, vc, vn = fdroidserver.common.get_apk_id(apkfilename)
-                self.assertEqual(appid, a, 'androguard appid parsing failed for ' + apkfilename)
-                self.assertEqual(versionName, vn, 'androguard versionName parsing failed for ' + apkfilename)
-                self.assertEqual(versionCode, vc, 'androguard versionCode parsing failed for ' + apkfilename)
 
         with self.assertRaises(FDroidException):
             fdroidserver.common.get_apk_id('nope')
