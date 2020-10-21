@@ -5,20 +5,21 @@
 # anonymous <noreply@weblate.org>, 2020.
 # Andrey <andrey@mailbox.org>, 2020.
 # gardenapple <gardenapple@posteo.net>, 2020.
+# Boris Timofeev <mashin87@gmail.com>, 2020.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 1.0.0-95-gd7af22b\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2020-10-01 12:34+0200\n"
-"PO-Revision-Date: 2020-07-08 21:41+0000\n"
-"Last-Translator: gardenapple <gardenapple@posteo.net>\n"
+"POT-Creation-Date: 2020-10-01 12:22+0200\n"
+"PO-Revision-Date: 2020-10-05 12:34+0000\n"
+"Last-Translator: Boris Timofeev <mashin87@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/f-droid/fdroidserver/ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.2-dev\n"
+"X-Generator: Weblate 4.3-dev\n"
 
 #: ../fdroidserver/common.py
 msgid ""
@@ -82,9 +83,9 @@ msgid "\"{path}\" exists but s3cmd is not installed!"
 msgstr "путь \"{path}\" существует, но s3cmd клиент не установлен!"
 
 #: ../fdroidserver/lint.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "\"{path}\" is not a supported file format (use: metadata/*.yml)"
-msgstr "формат пути \"{path}\" не принимается, преобразуйте в другой доступный: {formats}"
+msgstr "\"{path}\" не поддерживаемый формат файла (используйте: metadata/*.yml)"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
@@ -94,7 +95,7 @@ msgstr "формат пути \"{path}\" не принимается, преоб
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "\"{url}\" is not a valid URL!"
-msgstr ""
+msgstr "\"{url}\" не действительный URL!"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 #: /usr/lib/python3.7/optparse.py
@@ -278,9 +279,8 @@ msgid "Android APK file"
 msgstr ""
 
 #: ../fdroidserver/scanner.py
-#, fuzzy
 msgid "Android DEX code"
-msgstr "Android SDK не обнаружена!"
+msgstr "Android DEX код"
 
 #: ../fdroidserver/common.py ../fdroidserver/build.py
 #, python-brace-format
@@ -345,7 +345,7 @@ msgstr "Ветка '{branch}' вошла в библиотеку '{srclib}' ка
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Broken symlink: {path}"
-msgstr ""
+msgstr "Неработающая символическая ссылка: {path}"
 
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Build a package from source"
@@ -384,30 +384,22 @@ msgstr[0] "Запустить сборку невозможно из-за {} о�
 msgstr[1] "Запустить сборку невозможно из-за {} ошибок во время сканирования данных"
 msgstr[2] "Запустить сборку невозможно из-за {} ошибок во время сканирования данных"
 
-#: ../fdroidserver/metadata.py
-#, python-brace-format
-msgid "Cannot find a packageName for {path}!"
-msgstr "По указанному пути {path} не удалось найти packageName!"
-
-#: ../fdroidserver/metadata.py
-#, python-brace-format
-msgid "Cannot find an appid for {path}!"
-msgstr "По указанному пути {path} не удалось найти appid!"
-
 #: ../fdroidserver/vmtools.py
 #, python-brace-format
 msgid "Cannot read \"{path}\"!"
 msgstr "Неправильно указан путь \"{path}\"!"
 
+#. Translators: https://developer.android.com/studio/build/application-id
 #: ../fdroidserver/metadata.py
-#, python-brace-format
-msgid "Cannot resolve app id {appid}"
+#, fuzzy, python-brace-format
+#| msgid "Cannot resolve app id {appid}"
+msgid "Cannot resolve application ID {appid}"
 msgstr "Не удалось разобрать app id {appid}"
 
 #: ../fdroidserver/rewritemeta.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Cannot rewrite \"{path}\""
-msgstr "Неправильно указан путь \"{path}\"!"
+msgstr "Невозможно переписать \"{path}\""
 
 #: ../fdroidserver/rewritemeta.py
 msgid "Cannot use --list and --to at the same time"
@@ -467,7 +459,7 @@ msgstr "Сохранить изменения (commit)"
 
 #: ../fdroidserver/__main__.py
 msgid "Conflicting arguments: '--verbose' and '--quiet' can not be specified at the same time."
-msgstr ""
+msgstr "Противоречивые аргументы: '--verbose' и '--quiet' нельзя указывать одновременно."
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -475,14 +467,12 @@ msgid "Could not find '{command}' on your system"
 msgstr "В вашей системе недоступна команда '{command}'"
 
 #: ../fdroidserver/import.py
-#, fuzzy
 msgid "Could not find latest version code"
-msgstr "Не удалось найти внутреннюю версию приложения (versionCode)"
+msgstr "Не удалось найти последнюю версию приложения (versionCode)"
 
 #: ../fdroidserver/import.py
-#, fuzzy
 msgid "Could not find latest version name"
-msgstr "Не удалось найти публичную версию приложения (versionName)"
+msgstr "Не удалось найти название последней версии"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -498,10 +488,10 @@ msgstr "Не удалось открыть и проанализировать �
 msgid "Could not parse size \"{size}\", wrong type \"{type}\""
 msgstr ""
 
+#. Translators: https://developer.android.com/studio/build/application-id
 #: ../fdroidserver/import.py
-#, fuzzy
 msgid "Couldn't find Application ID"
-msgstr "Не удалось найти package ID"
+msgstr "Не удалось найти Application ID"
 
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
 #: ../fdroidserver/import.py
@@ -727,9 +717,9 @@ msgid "Extract signatures from APKs"
 msgstr "Извлечь подписи из APK файлов"
 
 #: ../fdroidserver/update.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Failed copying {path}: {error}"
-msgstr "Не удалось распознать {path}: {error}"
+msgstr "Не удалось скопировать {path}: {error}"
 
 #: ../fdroidserver/signatures.py
 #, python-brace-format
@@ -795,7 +785,7 @@ msgstr "Получены подписи для '{apkfilename}' -> '{sigdir}'"
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "File disappeared while processing it: {path}"
-msgstr ""
+msgstr "Файл исчез во время обработки: {path}"
 
 #: ../fdroidserver/verify.py ../fdroidserver/stats.py ../fdroidserver/update.py
 #: ../fdroidserver/rewritemeta.py ../fdroidserver/build.py
@@ -827,8 +817,9 @@ msgid "Force halting build after {0} sec timeout!"
 msgstr "Принудительно останавливать сборку, если тайм-аут больше {0} секунд!"
 
 #: ../fdroidserver/scanner.py
+#, fuzzy
 msgid "Force scan of disabled apps and builds."
-msgstr ""
+msgstr "Принудительное сканирование отключенных приложений и сборок."
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -836,9 +827,9 @@ msgid "Found \"{path}\" graphic without metadata for app \"{name}\"!"
 msgstr "В \"{path}\" обнаружены изображения без метаданных для приложения \"{name}\"!"
 
 #: ../fdroidserver/update.py
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Found bad funding file \"{path}\" for \"{name}\":"
-msgstr ""
+msgstr "Обнаружен неверный файл финансирования \"{path}\" для \"{name}\":"
 
 #: ../fdroidserver/common.py
 msgid "Found invalid appids in arguments"
@@ -880,7 +871,7 @@ msgstr "Это не похоже на файл: %s"
 #: ../fdroidserver/server.py
 #, fuzzy, python-brace-format
 msgid "Found {apkfilename} at {url}"
-msgstr "копирование {apkfilename} в {path}"
+msgstr "Найдено {apkfilename} в {url}"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -907,7 +898,7 @@ msgstr "Не удалось настроить HEAD для удаленного 
 #: ../fdroidserver/common.py
 #, fuzzy, python-format
 msgid "Git remote set-head failed: \"%s\""
-msgstr "Не удалось настроить HEAD для удаленного репозитория (git remote set-head)"
+msgstr "Не удалось настроить HEAD для удаленного репозитория (git remote set-head): \"%s\""
 
 #: ../fdroidserver/common.py
 msgid "Git reset failed"
@@ -926,13 +917,14 @@ msgid "HTTPS must be used with Subversion URLs!"
 msgstr "URL-адреса для Subversion должны начинаться с HTTPS!"
 
 #: ../fdroidserver/server.py
+#, fuzzy
 msgid "If a git mirror gets to big, allow the archive to be deleted"
-msgstr ""
+msgstr "Если git-зеркало станет большим, разрешите удалить архив."
 
 #: ../fdroidserver/server.py
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "If this upload fails, try manually uploading to {url}"
-msgstr ""
+msgstr "Если эта загрузка не удалась, попробуйте вручную загрузить в {url}."
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
@@ -1017,6 +1009,12 @@ msgstr "Непригодный файл APK"
 #: ../fdroidserver/lint.py ../fdroidserver/checkupdates.py
 #, python-brace-format
 msgid "Invalid VercodeOperation: {field}"
+msgstr "Расхождение версий приложения в метаданных: {field}"
+
+#: ../fdroidserver/common.py
+#, fuzzy, python-brace-format
+#| msgid "Invalid VercodeOperation: {field}"
+msgid "Invalid application ID {appid}"
 msgstr "Расхождение версий приложения в метаданных: {field}"
 
 #: ../fdroidserver/metadata.py
@@ -1127,8 +1125,9 @@ msgid "Keystore for signing key:\t"
 msgstr "Хранилище ключа для подписывания:→\t"
 
 #: ../fdroidserver/lint.py
-#, python-brace-format
-msgid "Last used commit '{commit}' looks like a tag, but Update Check Mode is '{ucm}'"
+#, fuzzy, python-brace-format
+#| msgid "Last used commit '{commit}' looks like a tag, but Update Check Mode is '{ucm}'"
+msgid "Last used commit '{commit}' looks like a tag, but UpdateCheckMode is '{ucm}'"
 msgstr "Последний наложенный коммит '{commit}' похож на метку (tag), но режим проверки обновлений (Update Check Mode) — '{ucm}'"
 
 #: ../fdroidserver/lint.py
@@ -1890,8 +1889,11 @@ msgstr "Файл не ипользуется %s"
 msgid "Unused scanignore path: %s"
 msgstr "Файл не ипользуется %s"
 
+#. Translators: https://developer.android.com/studio/build/application-id
 #: ../fdroidserver/lint.py
-msgid "Update Check Name is set to the known app id - it can be removed"
+#, fuzzy
+#| msgid "Update Check Name is set to the known app id - it can be removed"
+msgid "UpdateCheckName is set to the known application ID - it can be removed"
 msgstr "Имя приложения для проверки обновлений (Update Check Name) соответствует app id. Это поле можно удалить"
 
 #: ../fdroid ../fdroidserver/__main__.py
@@ -1924,6 +1926,12 @@ msgstr "URL-адрес в UpdateCheckData должен начинаться с H
 #, python-brace-format
 msgid "UpdateCheckData not a valid URL: {url}"
 msgstr "UpdateCheckData содержит некорректный URL-адрес: {url}"
+
+#: ../fdroidserver/lint.py
+#, fuzzy
+#| msgid "Update Check Name is set to the known app id - it can be removed"
+msgid "UpdateCheckName is set to the known application ID, it can be removed"
+msgstr "Имя приложения для проверки обновлений (Update Check Name) соответствует app id. Это поле можно удалить"
 
 #: ../fdroidserver/server.py
 #, python-brace-format
@@ -2070,6 +2078,21 @@ msgstr "неоднозначный выбор: %s (%s?)"
 #: ../fdroidserver/common.py
 msgid "apksigner not found, it's required for signing!"
 msgstr ""
+
+#: ../fdroidserver/lint.py ../fdroidserver/rewritemeta.py
+#: ../fdroidserver/checkupdates.py
+#, fuzzy
+#| msgid "applicationId to check for updates"
+msgid "application ID of file to operate on"
+msgstr "applicationId для проверки обновлений"
+
+#: ../fdroidserver/verify.py ../fdroidserver/publish.py
+#: ../fdroidserver/build.py ../fdroidserver/scanner.py
+#: ../fdroidserver/install.py
+#, fuzzy
+#| msgid "applicationId with optional versionCode in the form APPID[:VERCODE]"
+msgid "application ID with optional versionCode in the form APPID[:VERCODE]"
+msgstr "applicationId и внутренняя версия приложения (versionCode) в виде APPID[:VERCODE]"
 
 #: ../fdroidserver/lint.py ../fdroidserver/rewritemeta.py
 msgid "applicationId in the form APPID"
@@ -2569,6 +2592,12 @@ msgid "{apkfilename}'s AndroidManifest.xml has a bad date: "
 msgstr "AndroidManifest.xml приложения {apkfilename} содержит неверную дату: "
 
 #: ../fdroidserver/update.py
+#, fuzzy, python-brace-format
+#| msgid "{appid} does not have a name! Using package name instead."
+msgid "{appid} does not have a name! Using application ID instead."
+msgstr "У {appid} нет имени! Будет использовано имя пакета."
+
+#: ../fdroidserver/update.py
 #, python-brace-format
 msgid "{appid} does not have a name! Using package name instead."
 msgstr "У {appid} нет имени! Будет использовано имя пакета."
@@ -2576,6 +2605,12 @@ msgstr "У {appid} нет имени! Будет использовано имя
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "{appid} from {path} is not a valid Android Package Name!"
+msgstr "{appid} из {path} не годится в качестве имени пакета Android!"
+
+#: ../fdroidserver/update.py
+#, fuzzy, python-brace-format
+#| msgid "{appid} from {path} is not a valid Android Package Name!"
+msgid "{appid} from {path} is not a valid Android application ID!"
 msgstr "{appid} из {path} не годится в качестве имени пакета Android!"
 
 #: ../fdroidserver/metadata.py ../fdroidserver/update.py
@@ -2677,3 +2712,9 @@ msgid_plural "{} builds succeeded"
 msgstr[0] "{} успешная сборка"
 msgstr[1] "{} успешные сборки"
 msgstr[2] "{} успешных сборок"
+
+#~ msgid "Cannot find a packageName for {path}!"
+#~ msgstr "По указанному пути {path} не удалось найти packageName!"
+
+#~ msgid "Cannot find an appid for {path}!"
+#~ msgstr "По указанному пути {path} не удалось найти appid!"

@@ -1,20 +1,19 @@
 # SOME DESCRIPTIVE TITLE.
 # This file is put in the public domain.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
+# Hakim Oubouali <hakim.oubouali.skr@gmail.com>, 2020.
 msgid ""
 msgstr ""
-"Project-Id-Version: fdroidserver 1.0.6-70-g54bc858\n"
+"Project-Id-Version: fdroidserver 1.1-681-gc19e8952\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2020-10-01 12:22+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
-"Language: bn\n"
+"Language: tzm\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"Plural-Forms: nplurals=2; plural=n >= 2 && (n < 11 || n > 99);\n"
 
 #: ../fdroidserver/common.py
 msgid ""

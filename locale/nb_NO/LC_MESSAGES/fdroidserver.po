@@ -6,9 +6,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.8-74-ga380b9f\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2020-10-01 12:34+0200\n"
-"PO-Revision-Date: 2020-10-01 09:00+0000\n"
-"Last-Translator: Hans-Christoph Steiner <hans@guardianproject.info>\n"
+"POT-Creation-Date: 2020-10-01 12:22+0200\n"
+"PO-Revision-Date: 2020-10-14 09:28+0000\n"
+"Last-Translator: Allan Nordhøy <epost@anotheragency.no>\n"
 "Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects/f-droid/fdroidserver/nb_NO/>\n"
 "Language: nb_NO\n"
 "MIME-Version: 1.0\n"
@@ -80,9 +80,9 @@ msgid "\"{path}\" exists but s3cmd is not installed!"
 msgstr "\"{path}\" finnes, men s3cmd er ikke installert!"
 
 #: ../fdroidserver/lint.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "\"{path}\" is not a supported file format (use: metadata/*.yml)"
-msgstr "\"{path}\" er ikke et godtatt format, konverter til: {formats}"
+msgstr "\"{path}\" er ikke et støttet filformat. (bruk: metadata/*.yml)"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
@@ -92,7 +92,7 @@ msgstr "\"{path}\" er ikke et godtatt format, konverter til: {formats}"
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "\"{url}\" is not a valid URL!"
-msgstr ""
+msgstr "\"{url}\" er ikke en gyldig nettadresse."
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 #: /usr/lib/python3.7/optparse.py
@@ -270,11 +270,11 @@ msgstr "Advar også om formateringsproblemer, som rewritemeta -l"
 
 #: ../fdroidserver/scanner.py
 msgid "Android AAR library"
-msgstr ""
+msgstr "AAR-bibliotek for Android"
 
 #: ../fdroidserver/scanner.py
 msgid "Android APK file"
-msgstr ""
+msgstr "APK-fil for Android"
 
 #: ../fdroidserver/scanner.py
 #, fuzzy
@@ -384,24 +384,15 @@ msgid_plural "Can't build due to {} errors while scanning"
 msgstr[0] "Kan ikke bygge som følge av {} feil under skanning"
 msgstr[1] "Kan ikke bygge som følge av {} feiler under skanning"
 
-#: ../fdroidserver/metadata.py
-#, fuzzy, python-brace-format
-msgid "Cannot find a packageName for {path}!"
-msgstr "Fant ikke packageName for {path}."
-
-#: ../fdroidserver/metadata.py
-#, fuzzy, python-brace-format
-msgid "Cannot find an appid for {path}!"
-msgstr "Finner ikke AppID for {path}."
-
 #: ../fdroidserver/vmtools.py
 #, fuzzy, python-brace-format
 msgid "Cannot read \"{path}\"!"
 msgstr "Kan ikke lese \"{path}\"."
 
+#. Translators: https://developer.android.com/studio/build/application-id
 #: ../fdroidserver/metadata.py
 #, fuzzy, python-brace-format
-msgid "Cannot resolve app id {appid}"
+msgid "Cannot resolve application ID {appid}"
 msgstr "Kan ikke fortolke program-ID {appid}"
 
 #: ../fdroidserver/rewritemeta.py
@@ -467,7 +458,7 @@ msgstr "Send inn endringer"
 
 #: ../fdroidserver/__main__.py
 msgid "Conflicting arguments: '--verbose' and '--quiet' can not be specified at the same time."
-msgstr ""
+msgstr "Argumenter i konflikt: '--verbose' og '--quiet' kan ikke angis samtidig."
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -497,8 +488,9 @@ msgstr "Kunne ikke åpne APK-fil for analyse"
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Could not parse size \"{size}\", wrong type \"{type}\""
-msgstr ""
+msgstr "Kunne ikke fortolke størrelse \"{size}\", feil type \"{type}\""
 
+#. Translators: https://developer.android.com/studio/build/application-id
 #: ../fdroidserver/import.py
 #, fuzzy
 msgid "Couldn't find Application ID"
@@ -582,14 +574,14 @@ msgid "Delete APKs and/or OBBs without metadata from the repo"
 msgstr "Slett APK-er og/eller OBB-er uten metadata fra pakkebrønnen"
 
 #: ../fdroidserver/server.py
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Deleting archive, repo is too big ({size} max {limit})"
-msgstr ""
+msgstr "Sletter arkiv, pakkebrønnen er for stor ({size} maks. {limit})"
 
 #: ../fdroidserver/server.py
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Deleting git-mirror history, repo is too big ({size} max {limit})"
-msgstr ""
+msgstr "Sletter historikk for git-mirror, pakkebrønnen er for stor ({size} maks. {limit})"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -895,9 +887,9 @@ msgid "Found non-file at %s"
 msgstr "Fant ikke-fil i %s"
 
 #: ../fdroidserver/server.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Found {apkfilename} at {url}"
-msgstr "kopierer {apkfilename} inn i {path}"
+msgstr "Fant {apkfilename} i {url}"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -925,7 +917,7 @@ msgstr "Git set-head annensteds hen mislyktes"
 #: ../fdroidserver/common.py
 #, fuzzy, python-format
 msgid "Git remote set-head failed: \"%s\""
-msgstr "Git set-head annensteds hen mislyktes"
+msgstr "Git set-head annensteds hen mislyktes: «%s»"
 
 #: ../fdroidserver/common.py
 msgid "Git reset failed"
@@ -1039,6 +1031,11 @@ msgstr "Ugyldig APK"
 msgid "Invalid VercodeOperation: {field}"
 msgstr "Ugyldig VercodeOperation: {field}"
 
+#: ../fdroidserver/common.py
+#, python-brace-format
+msgid "Invalid application ID {appid}"
+msgstr "Ugyldig program-ID {appid}"
+
 #: ../fdroidserver/metadata.py
 #, fuzzy, python-format
 msgid "Invalid boolean '%s'"
@@ -1093,9 +1090,9 @@ msgid "Invalid redirect to non-HTTPS: {before} -> {after} "
 msgstr "Ugyldig videresending til ikke-HTTPS: {before} → {after} "
 
 #: ../fdroidserver/metadata.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Invalid scrlib metadata: '{file}' does not exist"
-msgstr "Les alle metadatafilene og avslutt"
+msgstr "Ugyldig scrlib-metadata: «{file}» finnes ikke"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
@@ -1124,7 +1121,7 @@ msgstr "JAR-signatur bekreftet: {path}"
 
 #: ../fdroidserver/scanner.py
 msgid "Java JAR file"
-msgstr ""
+msgstr "JAR-fil for Java"
 
 #: ../fdroidserver/publish.py ../fdroidserver/update.py
 #: ../fdroidserver/mirror.py
@@ -1134,7 +1131,7 @@ msgstr "Fant ingen Java JDK. Installer på vanlig plass, eller sett java_paths."
 
 #: ../fdroidserver/scanner.py
 msgid "Java compiled class"
-msgstr ""
+msgstr "Java-kompilert klasse"
 
 #: ../fdroidserver/signindex.py
 #, fuzzy
@@ -1152,7 +1149,7 @@ msgstr "Nøkkellager for signeringsnøkkel:\t"
 
 #: ../fdroidserver/lint.py
 #, fuzzy, python-brace-format
-msgid "Last used commit '{commit}' looks like a tag, but Update Check Mode is '{ucm}'"
+msgid "Last used commit '{commit}' looks like a tag, but UpdateCheckMode is '{ucm}'"
 msgstr "Sist brukte innsendelse \"{commit}\" ser ut som en tagg, men oppdateringssjekkingsmodus er på \"{ucm}\"."
 
 #: ../fdroidserver/lint.py
@@ -1188,7 +1185,7 @@ msgstr "Feilaktig innskrevet serverwebroot-linje:"
 
 #: ../fdroidserver/mirror.py
 msgid "Mirror the full repo and archive, all file types."
-msgstr ""
+msgstr "Avspeil hele pakkebrønnen og arkivet, alle filtyper."
 
 #: ../fdroidserver/gpgsign.py
 msgid "Missing output directory"
@@ -1354,7 +1351,7 @@ msgstr "Skriv ut JSON-rapport til fil navngitt etter APK-en."
 
 #: ../fdroidserver/scanner.py
 msgid "Output JSON to stdout."
-msgstr ""
+msgstr "Send utdata-JSON til stdout."
 
 #: ../fdroidserver/gpgsign.py ../fdroidserver/publish.py
 #: ../fdroidserver/update.py ../fdroidserver/signindex.py
@@ -1792,7 +1789,7 @@ msgstr "UpdateCheckMode er satt, men det ser ut til at checkupdates ikke har bli
 
 #: ../fdroidserver/lint.py
 msgid "URL must start with https:// or http://"
-msgstr ""
+msgstr "Nettadressen må starte med https:// eller http://"
 
 #: ../fdroidserver/lint.py
 #, fuzzy
@@ -1936,9 +1933,10 @@ msgstr "Ubrukt fil i %s"
 msgid "Unused scanignore path: %s"
 msgstr "Ubrukt fil i %s"
 
+#. Translators: https://developer.android.com/studio/build/application-id
 #: ../fdroidserver/lint.py
 #, fuzzy
-msgid "Update Check Name is set to the known app id - it can be removed"
+msgid "UpdateCheckName is set to the known application ID - it can be removed"
 msgstr "\"Update Check Name\" er satt til den kjente App-ID-en - den kan fjernes."
 
 #: ../fdroid ../fdroidserver/__main__.py
@@ -1971,6 +1969,11 @@ msgstr "UpdateCheckData må bruke HTTPS-nettadresse: {url}"
 #, fuzzy, python-brace-format
 msgid "UpdateCheckData not a valid URL: {url}"
 msgstr "UpdateCheckData er ikke en gyldig nettadresse: {url}"
+
+#: ../fdroidserver/lint.py
+#, fuzzy
+msgid "UpdateCheckName is set to the known application ID, it can be removed"
+msgstr "\"Update Check Name\" er satt til den kjente App-ID-en - den kan fjernes."
 
 #: ../fdroidserver/server.py
 #, python-brace-format
@@ -2019,12 +2022,14 @@ msgid "Using \"{path}\" for configuring s3cmd."
 msgstr "Bruker \"{path}\" for oppsett av s3cmd."
 
 #: ../fdroidserver/common.py
+#, fuzzy
 msgid "Using APK Signature v2"
-msgstr ""
+msgstr "Bruker APK Signature v2"
 
 #: ../fdroidserver/common.py
+#, fuzzy
 msgid "Using APK Signature v3"
-msgstr ""
+msgstr "Bruker APK Signature v3"
 
 #: ../fdroidserver/common.py
 #, fuzzy
@@ -2094,7 +2099,7 @@ msgstr "Du kan bruke ANDROID_HOME til å sette stien til din SDK, f.eks:"
 
 #: ../fdroidserver/scanner.py
 msgid "ZIP file archive"
-msgstr ""
+msgstr "ZIP-filarkiv"
 
 #: ../fdroidserver/nightly.py
 #, fuzzy, python-brace-format
@@ -2120,7 +2125,22 @@ msgstr "tvetydig valg: %s (%s?)"
 
 #: ../fdroidserver/common.py
 msgid "apksigner not found, it's required for signing!"
-msgstr ""
+msgstr "fant ikke apksigner (som kreves for signering)."
+
+#: ../fdroidserver/lint.py ../fdroidserver/rewritemeta.py
+#: ../fdroidserver/checkupdates.py
+#, fuzzy
+#| msgid "applicationId to check for updates"
+msgid "application ID of file to operate on"
+msgstr "App-ID å sjekke for oppdateringer"
+
+#: ../fdroidserver/verify.py ../fdroidserver/publish.py
+#: ../fdroidserver/build.py ../fdroidserver/scanner.py
+#: ../fdroidserver/install.py
+#, fuzzy
+#| msgid "applicationId with optional versionCode in the form APPID[:VERCODE]"
+msgid "application ID with optional versionCode in the form APPID[:VERCODE]"
+msgstr "App-ID med valgfri versionCode, i formen APPID[:VERCODE]"
 
 #: ../fdroidserver/lint.py ../fdroidserver/rewritemeta.py
 #, fuzzy
@@ -2220,7 +2240,7 @@ msgstr "kopierer {apkfilename} inn i {path}"
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "could not parse '{path}'"
-msgstr ""
+msgstr "kunne ikke tolke'{path}'"
 
 #: ../fdroidserver/common.py
 msgid "could not parse srclib spec (no ref specified): '{}'"
@@ -2258,7 +2278,7 @@ msgstr "dest= er påkrevd for valg som %r"
 
 #: ../fdroidserver/scanner.py
 msgid "executable binary, possibly code"
-msgstr ""
+msgstr "kjørbar binærfil, muligens kode"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py
@@ -2513,7 +2533,7 @@ msgstr "s3cmd synkroniserer indekser {path} til {url} og sletter"
 
 #: ../fdroidserver/scanner.py
 msgid "shared library"
-msgstr ""
+msgstr "delt bibliotek"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 #: /usr/lib/python3.7/optparse.py
@@ -2552,7 +2572,7 @@ msgstr "srclibs mangler navn og/eller @"
 
 #: ../fdroidserver/scanner.py
 msgid "static library"
-msgstr ""
+msgstr "statisk bibliotek"
 
 #: ../fdroidserver/common.py
 #, fuzzy, python-brace-format
@@ -2629,6 +2649,12 @@ msgid "{apkfilename}'s AndroidManifest.xml has a bad date: "
 msgstr "{apkfilename} sin AndroidManifest.xml har en feilaktig dato: "
 
 #: ../fdroidserver/update.py
+#, fuzzy, python-brace-format
+#| msgid "{appid} does not have a name! Using package name instead."
+msgid "{appid} does not have a name! Using application ID instead."
+msgstr "{appid} mangler navn. Bruker pakkenavn istedenfor."
+
+#: ../fdroidserver/update.py
 #, python-brace-format
 msgid "{appid} does not have a name! Using package name instead."
 msgstr "{appid} mangler navn. Bruker pakkenavn istedenfor."
@@ -2636,6 +2662,12 @@ msgstr "{appid} mangler navn. Bruker pakkenavn istedenfor."
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "{appid} from {path} is not a valid Android Package Name!"
+msgstr "{appid} fra {path} er ikke et gyldig Android-pakkenavn!"
+
+#: ../fdroidserver/update.py
+#, fuzzy, python-brace-format
+#| msgid "{appid} from {path} is not a valid Android Package Name!"
+msgid "{appid} from {path} is not a valid Android application ID!"
 msgstr "{appid} fra {path} er ikke et gyldig Android-pakkenavn!"
 
 #: ../fdroidserver/metadata.py ../fdroidserver/update.py
@@ -2672,7 +2704,7 @@ msgstr "{appid}: {field} må være en '{type}', men er ikke et '{fieldtype}'!"
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "{build_flag} must be an integer, found: {value}"
-msgstr ""
+msgstr "{build_flag} må være et heltall, fant: {value}"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
@@ -2682,7 +2714,7 @@ msgstr "{field} ikke terminert i {name}."
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "{file} is blank or corrupt!"
-msgstr ""
+msgstr "{file} er tom eller skadet!"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -2692,7 +2724,7 @@ msgstr "{name} \"{path}\" finnes ikke. Rett det i config.py."
 #: ../fdroidserver/import.py
 #, python-brace-format
 msgid "{path} already exists, ignoring import results!"
-msgstr ""
+msgstr "{path} finnes allerede, ignorerer importeringsresultater."
 
 #: ../fdroidserver/nightly.py
 #, fuzzy, python-brace-format
@@ -2710,9 +2742,9 @@ msgid "{path} is zero size!"
 msgstr "{path} er null størrelse."
 
 #: ../fdroidserver/server.py
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "{path} more than 200MB, manually upload: {url}"
-msgstr ""
+msgstr "{path} er mer enn 200MB, last opp manuelt: {url}"
 
 #: ../fdroidserver/mirror.py
 #, fuzzy, python-brace-format
@@ -2735,6 +2767,14 @@ msgid "{} build succeeded"
 msgid_plural "{} builds succeeded"
 msgstr[0] "{} bygg fullført"
 msgstr[1] "{} bygg fullført"
+
+#, fuzzy
+#~ msgid "Cannot find a packageName for {path}!"
+#~ msgstr "Fant ikke packageName for {path}."
+
+#, fuzzy
+#~ msgid "Cannot find an appid for {path}!"
+#~ msgstr "Finner ikke AppID for {path}."
 
 #~ msgid "Add PGP signatures for packages in repo using GnuPG"
 #~ msgstr "Legg til PGP-signaturer for pakker i pakkebrønnen ved bruk av GnuPG"

@@ -4,12 +4,13 @@
 # random r <epsilin@yopmail.com>, 2020.
 # Luca Zambarda <luke.zambarda@gmail.com>, 2020.
 # IvanDan <ivandanza@gmail.com>, 2020.
+# Massimiliano Caniparoli <massic80@gmail.com>, 2020.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2020-10-01 12:34+0200\n"
-"PO-Revision-Date: 2020-09-19 17:03+0000\n"
+"POT-Creation-Date: 2020-10-01 12:22+0200\n"
+"PO-Revision-Date: 2020-10-15 17:12+0000\n"
 "Last-Translator: IvanDan <ivandanza@gmail.com>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/f-droid/fdroidserver/it/>\n"
 "Language: it\n"
@@ -28,6 +29,12 @@ msgid ""
 "        tools on https://gitlab.com/fdroid.\n"
 "        "
 msgstr ""
+"\n"
+"        Questo è un repository di app da  usare con FDroid. Le applicazioni in questo\n"
+"        repository sono binari ufficiali compilati dagli sviluppatori originali \n"
+"        dell'applicazione, oppure sono binari compilati dai sorgenti da f-droid.org\n"
+"         usando i tool su https://gitlab.com/fdroid.\n"
+"        "
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -38,7 +45,6 @@ msgstr ""
 "Chiave pubblica SSH da usare come chiave di deploy:"
 
 #: ../fdroidserver/nightly.py
-#, fuzzy
 msgid ""
 "\n"
 "SSH public key to be used as deploy key:"
@@ -61,7 +67,7 @@ msgid "\"%s/\" has no matching metadata file!"
 msgstr "\"%s/\" non ha un file di metadata corrispondente!"
 
 #: ../fdroidserver/install.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "\"{apkfilename}\" is already installed on {dev}."
 msgstr "\"{apkfilename}\" è già installato su {dev}."
 
@@ -81,9 +87,9 @@ msgid "\"{path}\" exists but s3cmd is not installed!"
 msgstr "\"{path}\" esiste ma s3cmd non è installato!"
 
 #: ../fdroidserver/lint.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "\"{path}\" is not a supported file format (use: metadata/*.yml)"
-msgstr "\"{path}\" non è un formato accettato, convertire a: {formats}"
+msgstr "\"{path}\" non è un formato accettato (usa: metadata/*.yml)"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
@@ -93,7 +99,7 @@ msgstr "\"{path}\" non è un formato accettato, convertire a: {formats}"
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "\"{url}\" is not a valid URL!"
-msgstr ""
+msgstr "\"{url}\" non è un URL valido!"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 #: /usr/lib/python3.7/optparse.py
@@ -276,9 +282,8 @@ msgid "Android APK file"
 msgstr ""
 
 #: ../fdroidserver/scanner.py
-#, fuzzy
 msgid "Android DEX code"
-msgstr "Android SDK non trovato!"
+msgstr "Codice DEX Android"
 
 #: ../fdroidserver/common.py ../fdroidserver/build.py
 #, python-brace-format
@@ -381,30 +386,21 @@ msgid_plural "Can't build due to {} errors while scanning"
 msgstr[0] "Impossibile costruire a causa di un errore con {} durante la scansione"
 msgstr[1] "Impossibile costruire a causa di errori con {} durante la scansione"
 
-#: ../fdroidserver/metadata.py
-#, python-brace-format
-msgid "Cannot find a packageName for {path}!"
-msgstr "Impossibile trovare un packageName per {path}!"
-
-#: ../fdroidserver/metadata.py
-#, python-brace-format
-msgid "Cannot find an appid for {path}!"
-msgstr "Impossibile trovare un appid per {path}!"
-
 #: ../fdroidserver/vmtools.py
 #, python-brace-format
 msgid "Cannot read \"{path}\"!"
 msgstr "Impossibile leggere \"{path}\"!"
 
+#. Translators: https://developer.android.com/studio/build/application-id
 #: ../fdroidserver/metadata.py
 #, python-brace-format
-msgid "Cannot resolve app id {appid}"
-msgstr "Impossibile trovare l'app id {appid}"
+msgid "Cannot resolve application ID {appid}"
+msgstr "Impossibile trovare l’ID dell’applicazione {appid}"
 
 #: ../fdroidserver/rewritemeta.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Cannot rewrite \"{path}\""
-msgstr "Impossibile leggere \"{path}\"!"
+msgstr "Impossibile riscrivere \"{path}\""
 
 #: ../fdroidserver/rewritemeta.py
 msgid "Cannot use --list and --to at the same time"
@@ -464,7 +460,7 @@ msgstr "Cambiamenti del commit"
 
 #: ../fdroidserver/__main__.py
 msgid "Conflicting arguments: '--verbose' and '--quiet' can not be specified at the same time."
-msgstr ""
+msgstr "Argomenti in conflitto: '--verbose' e '--quiet' non possono essere specificati contemporaneamente."
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -495,6 +491,7 @@ msgstr "Impossibile aprire il file apk per l'analisi"
 msgid "Could not parse size \"{size}\", wrong type \"{type}\""
 msgstr ""
 
+#. Translators: https://developer.android.com/studio/build/application-id
 #: ../fdroidserver/import.py
 #, fuzzy
 msgid "Couldn't find Application ID"
@@ -993,9 +990,9 @@ msgid "Installing %s…"
 msgstr ""
 
 #: ../fdroidserver/install.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Installing '{apkfilename}' on {dev}..."
-msgstr "Impossibile installare '{apkfilename}' su {dev}: {error}"
+msgstr "Installazione di '{apkfilename}' su {dev}..."
 
 #: ../fdroidserver/install.py
 #, python-brace-format
@@ -1013,6 +1010,11 @@ msgstr "APK non valido"
 #: ../fdroidserver/lint.py ../fdroidserver/checkupdates.py
 #, python-brace-format
 msgid "Invalid VercodeOperation: {field}"
+msgstr ""
+
+#: ../fdroidserver/common.py
+#, python-brace-format
+msgid "Invalid application ID {appid}"
 msgstr ""
 
 #: ../fdroidserver/metadata.py
@@ -1068,9 +1070,9 @@ msgid "Invalid redirect to non-HTTPS: {before} -> {after} "
 msgstr ""
 
 #: ../fdroidserver/metadata.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Invalid scrlib metadata: '{file}' does not exist"
-msgstr "Leggi tutti i file di metadata ed esci"
+msgstr "Metadati scrlib non validi: '{file}' non esiste"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
@@ -1124,7 +1126,7 @@ msgstr ""
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
-msgid "Last used commit '{commit}' looks like a tag, but Update Check Mode is '{ucm}'"
+msgid "Last used commit '{commit}' looks like a tag, but UpdateCheckMode is '{ucm}'"
 msgstr ""
 
 #: ../fdroidserver/lint.py
@@ -1659,9 +1661,9 @@ msgid "Striping mystery signature from {apkfilename}"
 msgstr ""
 
 #: ../fdroidserver/nightly.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Stripping mystery signature from {apkfilename}"
-msgstr "Impossibile recuperare le firme per '{apkfilename}': {error}"
+msgstr "Riduzione della firma misteriosa da {apkfilename}"
 
 #: ../fdroidserver/lint.py
 #, python-format
@@ -1881,8 +1883,9 @@ msgstr ""
 msgid "Unused scanignore path: %s"
 msgstr ""
 
+#. Translators: https://developer.android.com/studio/build/application-id
 #: ../fdroidserver/lint.py
-msgid "Update Check Name is set to the known app id - it can be removed"
+msgid "UpdateCheckName is set to the known application ID - it can be removed"
 msgstr ""
 
 #: ../fdroid ../fdroidserver/__main__.py
@@ -1914,6 +1917,10 @@ msgstr ""
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "UpdateCheckData not a valid URL: {url}"
+msgstr ""
+
+#: ../fdroidserver/lint.py
+msgid "UpdateCheckName is set to the known application ID, it can be removed"
 msgstr ""
 
 #: ../fdroidserver/server.py
@@ -2063,6 +2070,17 @@ msgid "apksigner not found, it's required for signing!"
 msgstr ""
 
 #: ../fdroidserver/lint.py ../fdroidserver/rewritemeta.py
+#: ../fdroidserver/checkupdates.py
+msgid "application ID of file to operate on"
+msgstr ""
+
+#: ../fdroidserver/verify.py ../fdroidserver/publish.py
+#: ../fdroidserver/build.py ../fdroidserver/scanner.py
+#: ../fdroidserver/install.py
+msgid "application ID with optional versionCode in the form APPID[:VERCODE]"
+msgstr ""
+
+#: ../fdroidserver/lint.py ../fdroidserver/rewritemeta.py
 msgid "applicationId in the form APPID"
 msgstr ""
 
@@ -2102,9 +2120,9 @@ msgid "can't open '%s': %s"
 msgstr "impossibile aprire \"%s\": %s"
 
 #: ../fdroidserver/build.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "cannot find required srclibs: \"{path}\""
-msgstr "Impossibile trovare un appid per {path}!"
+msgstr "impossibile trovare srclibs richiesto: \"{path}\""
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py
@@ -2557,12 +2575,22 @@ msgstr "L'AndroidManifest.xml di {apkfilename} ha una data non corretta: "
 
 #: ../fdroidserver/update.py
 #, python-brace-format
+msgid "{appid} does not have a name! Using application ID instead."
+msgstr ""
+
+#: ../fdroidserver/update.py
+#, python-brace-format
 msgid "{appid} does not have a name! Using package name instead."
 msgstr ""
 
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "{appid} from {path} is not a valid Android Package Name!"
+msgstr ""
+
+#: ../fdroidserver/update.py
+#, python-brace-format
+msgid "{appid} from {path} is not a valid Android application ID!"
 msgstr ""
 
 #: ../fdroidserver/metadata.py ../fdroidserver/update.py
@@ -2662,6 +2690,12 @@ msgid "{} build succeeded"
 msgid_plural "{} builds succeeded"
 msgstr[0] ""
 msgstr[1] ""
+
+#~ msgid "Cannot find a packageName for {path}!"
+#~ msgstr "Impossibile trovare un packageName per {path}!"
+
+#~ msgid "Cannot find an appid for {path}!"
+#~ msgstr "Impossibile trovare un appid per {path}!"
 
 #~ msgid "Interactively ask about things that need updating."
 #~ msgstr "Chiedi interattivamente riguardo a ciò che deve essere aggiornato."

@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 1.0.6-349-g907c04ea\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2020-10-01 12:34+0200\n"
+"POT-Creation-Date: 2020-10-01 12:22+0200\n"
 "PO-Revision-Date: 2020-04-26 19:11+0000\n"
 "Last-Translator: Besnik Bleta <besnik@programeshqip.org>\n"
 "Language-Team: Albanian <https://hosted.weblate.org/projects/f-droid/fdroidserver/sq/>\n"
@@ -378,24 +378,16 @@ msgid_plural "Can't build due to {} errors while scanning"
 msgstr[0] "S’montohet dot, për shkak të {} gabimi teksa skanohej"
 msgstr[1] "S’montohet dot, për shkak të {} gabimeve teksa skanohej"
 
-#: ../fdroidserver/metadata.py
-#, python-brace-format
-msgid "Cannot find a packageName for {path}!"
-msgstr "S’gjendet dot një packageName për {path}!"
-
-#: ../fdroidserver/metadata.py
-#, python-brace-format
-msgid "Cannot find an appid for {path}!"
-msgstr "S’gjendet dot një appid për {path}!"
-
 #: ../fdroidserver/vmtools.py
 #, python-brace-format
 msgid "Cannot read \"{path}\"!"
 msgstr "S’lexohet dot \"${path}\"!"
 
+#. Translators: https://developer.android.com/studio/build/application-id
 #: ../fdroidserver/metadata.py
-#, python-brace-format
-msgid "Cannot resolve app id {appid}"
+#, fuzzy, python-brace-format
+#| msgid "Cannot resolve app id {appid}"
+msgid "Cannot resolve application ID {appid}"
 msgstr "S’ftillohet dot ID aplikacioni {appid}"
 
 #: ../fdroidserver/rewritemeta.py
@@ -492,6 +484,7 @@ msgstr "S’u hap dot kartela apk për analizim"
 msgid "Could not parse size \"{size}\", wrong type \"{type}\""
 msgstr ""
 
+#. Translators: https://developer.android.com/studio/build/application-id
 #: ../fdroidserver/import.py
 #, fuzzy
 msgid "Couldn't find Application ID"
@@ -1013,6 +1006,12 @@ msgstr "APK e pavlefshme"
 msgid "Invalid VercodeOperation: {field}"
 msgstr "VercodeOperationi pavlefshëm: {field}"
 
+#: ../fdroidserver/common.py
+#, fuzzy, python-brace-format
+#| msgid "Invalid VercodeOperation: {field}"
+msgid "Invalid application ID {appid}"
+msgstr "VercodeOperationi pavlefshëm: {field}"
+
 #: ../fdroidserver/metadata.py
 #, python-format
 msgid "Invalid boolean '%s'"
@@ -1121,8 +1120,9 @@ msgid "Keystore for signing key:\t"
 msgstr "Depo kyçesh për kyç nënshkrimi:\t"
 
 #: ../fdroidserver/lint.py
-#, python-brace-format
-msgid "Last used commit '{commit}' looks like a tag, but Update Check Mode is '{ucm}'"
+#, fuzzy, python-brace-format
+#| msgid "Last used commit '{commit}' looks like a tag, but Update Check Mode is '{ucm}'"
+msgid "Last used commit '{commit}' looks like a tag, but UpdateCheckMode is '{ucm}'"
 msgstr "Parashtrimi '{commit}' i përdorur së fundi duket si etiketë, por si Mënyrë Kontrolli Përditësimesh është '{ucm}'"
 
 #: ../fdroidserver/lint.py
@@ -1883,8 +1883,11 @@ msgstr "Kartelë e papërdorur te %s"
 msgid "Unused scanignore path: %s"
 msgstr "Kartelë e papërdorur te %s"
 
+#. Translators: https://developer.android.com/studio/build/application-id
 #: ../fdroidserver/lint.py
-msgid "Update Check Name is set to the known app id - it can be removed"
+#, fuzzy
+#| msgid "Update Check Name is set to the known app id - it can be removed"
+msgid "UpdateCheckName is set to the known application ID - it can be removed"
 msgstr "Si Emër Kontrolli Përditësimesh është caktuar ID aplikacioni i njohur - s’mund të hiqet"
 
 #: ../fdroid ../fdroidserver/__main__.py
@@ -1917,6 +1920,12 @@ msgstr "UpdateCheckData duhet të përdorë URL HTTPS: {url}"
 #, python-brace-format
 msgid "UpdateCheckData not a valid URL: {url}"
 msgstr "UpdateCheckData s’është URL e vlefshme: {url}"
+
+#: ../fdroidserver/lint.py
+#, fuzzy
+#| msgid "Update Check Name is set to the known app id - it can be removed"
+msgid "UpdateCheckName is set to the known application ID, it can be removed"
+msgstr "Si Emër Kontrolli Përditësimesh është caktuar ID aplikacioni i njohur - s’mund të hiqet"
 
 #: ../fdroidserver/server.py
 #, python-brace-format
@@ -2063,6 +2072,21 @@ msgstr "mundësi e dykuptimtë: %s (%s?)"
 #: ../fdroidserver/common.py
 msgid "apksigner not found, it's required for signing!"
 msgstr ""
+
+#: ../fdroidserver/lint.py ../fdroidserver/rewritemeta.py
+#: ../fdroidserver/checkupdates.py
+#, fuzzy
+#| msgid "applicationId to check for updates"
+msgid "application ID of file to operate on"
+msgstr "applicationId për të cilin të kontrollohet për përditësime"
+
+#: ../fdroidserver/verify.py ../fdroidserver/publish.py
+#: ../fdroidserver/build.py ../fdroidserver/scanner.py
+#: ../fdroidserver/install.py
+#, fuzzy
+#| msgid "applicationId with optional versionCode in the form APPID[:VERCODE]"
+msgid "application ID with optional versionCode in the form APPID[:VERCODE]"
+msgstr "applicationId me versionCode opsional në formën APPID[:VERCODE]"
 
 #: ../fdroidserver/lint.py ../fdroidserver/rewritemeta.py
 msgid "applicationId in the form APPID"
@@ -2559,6 +2583,12 @@ msgid "{apkfilename}'s AndroidManifest.xml has a bad date: "
 msgstr "AndroidManifest.xml e {apkfilename} ka një datë të gabuar: "
 
 #: ../fdroidserver/update.py
+#, fuzzy, python-brace-format
+#| msgid "{appid} does not have a name! Using package name instead."
+msgid "{appid} does not have a name! Using application ID instead."
+msgstr "{appid} s’ka emër! Në vend të tij po përdoret emër pakete."
+
+#: ../fdroidserver/update.py
 #, python-brace-format
 msgid "{appid} does not have a name! Using package name instead."
 msgstr "{appid} s’ka emër! Në vend të tij po përdoret emër pakete."
@@ -2566,6 +2596,12 @@ msgstr "{appid} s’ka emër! Në vend të tij po përdoret emër pakete."
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "{appid} from {path} is not a valid Android Package Name!"
+msgstr "{appid} prej {path} s’është Emër i vlefshëm Pakete Android!"
+
+#: ../fdroidserver/update.py
+#, fuzzy, python-brace-format
+#| msgid "{appid} from {path} is not a valid Android Package Name!"
+msgid "{appid} from {path} is not a valid Android application ID!"
 msgstr "{appid} prej {path} s’është Emër i vlefshëm Pakete Android!"
 
 #: ../fdroidserver/metadata.py ../fdroidserver/update.py
@@ -2665,3 +2701,9 @@ msgid "{} build succeeded"
 msgid_plural "{} builds succeeded"
 msgstr[0] "{} doli me sukses"
 msgstr[1] "{} dolën me sukses"
+
+#~ msgid "Cannot find a packageName for {path}!"
+#~ msgstr "S’gjendet dot një packageName për {path}!"
+
+#~ msgid "Cannot find an appid for {path}!"
+#~ msgstr "S’gjendet dot një appid për {path}!"
