@@ -48,7 +48,6 @@ COMMANDS = OrderedDict([
     ("lint", _("Warn about possible metadata errors")),
     ("scanner", _("Scan the source code of a package")),
     ("stats", _("Update the stats of the repo")),
-    ("server", _("Old, deprecated name for fdroid deploy")),
     ("signindex", _("Sign indexes created using update --nosign")),
     ("btlog", _("Update the binary transparency log for a URL")),
     ("signatures", _("Extract signatures from APKs")),
@@ -137,6 +136,9 @@ def main():
         if command in ('-h', '--help'):
             print_help(available_plugins=available_plugins)
             sys.exit(0)
+        elif command == 'server':
+            print(_("""ERROR: The "server" subcommand has been removed, use "deploy"!"""))
+            sys.exit(1)
         elif command == '--version':
             output = _('no version info found!')
             cmddir = os.path.realpath(os.path.dirname(os.path.dirname(__file__)))
@@ -186,11 +188,6 @@ def main():
         logging.critical(_("Conflicting arguments: '--verbose' and '--quiet' "
                            "can not be specified at the same time."))
         sys.exit(1)
-
-    # temporary workaround until server.py becomes deploy.py
-    if command == 'deploy':
-        command = 'server'
-        sys.argv.insert(2, 'update')
 
     # Trick optparse into displaying the right usage when --help is used.
     sys.argv[0] += ' ' + command

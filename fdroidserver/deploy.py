@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 #
-# server.py - part of the FDroid server tools
+# deploy.py - part of the FDroid server tools
 # Copyright (C) 2010-15, Ciaran Gultnieks, ciaran@ciarang.com
 #
 # This program is free software: you can redistribute it and/or modify
@@ -41,7 +41,7 @@ start_timestamp = time.gmtime()
 
 BINARY_TRANSPARENCY_DIR = 'binary_transparency'
 
-AUTO_S3CFG = '.fdroid-server-update-s3cfg'
+AUTO_S3CFG = '.fdroid-deploy-s3cfg'
 USER_S3CFG = 's3cfg'
 REMOTE_HOSTNAME_REGEX = re.compile(r'\W*\w+\W+(\w+).*')
 
@@ -344,7 +344,7 @@ def update_servergitmirrors(servergitmirrors, repo_section):
     from clint.textui import progress
     if config.get('local_copy_dir') \
        and not config.get('sync_from_local_copy_dir'):
-        logging.debug('Offline machine, skipping git mirror generation until `fdroid server update`')
+        logging.debug(_('Offline machine, skipping git mirror generation until `fdroid deploy`'))
         return
 
     # right now we support only 'repo' git-mirroring
@@ -697,10 +697,8 @@ def update_wiki():
 def main():
     global config, options
 
-    # Parse command line...
     parser = ArgumentParser()
     common.setup_global_opts(parser)
-    parser.add_argument("command", help=_("command to execute, either 'init' or 'update'"))
     parser.add_argument("-i", "--identity-file", default=None,
                         help=_("Specify an identity file to provide to SSH for rsyncing"))
     parser.add_argument("--local-copy-dir", default=None,
@@ -710,12 +708,7 @@ def main():
     parser.add_argument("--no-keep-git-mirror-archive", action="store_true", default=False,
                         help=_("If a git mirror gets to big, allow the archive to be deleted"))
     options = parser.parse_args()
-
     config = common.read_config(options)
-
-    if options.command != 'update':
-        logging.critical(_("The only command currently supported is 'update'"))
-        sys.exit(1)
 
     if config.get('nonstandardwebroot') is True:
         standardwebroot = False

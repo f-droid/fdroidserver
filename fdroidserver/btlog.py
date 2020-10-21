@@ -42,7 +42,7 @@ from argparse import ArgumentParser
 
 from . import _
 from . import common
-from . import server
+from . import deploy
 from .exception import FDroidException
 
 
@@ -219,7 +219,7 @@ def main():
         os.chdir(tempdirbase)
         make_binary_transparency_log(repodirs, options.git_repo, options.url, 'fdroid btlog')
     if options.git_remote:
-        server.push_binary_transparency(options.git_repo, options.git_remote)
+        deploy.push_binary_transparency(options.git_repo, options.git_remote)
     shutil.rmtree(tempdirbase, ignore_errors=True)
 
 

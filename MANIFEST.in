@@ -537,6 +537,7 @@ include tests/check-fdroid-apk
 include tests/common.TestCase
 include tests/complete-ci-tests
 include tests/config.py
+include tests/deploy.TestCase
 include tests/description-parsing.py
 include tests/dummy-keystore.jks
 include tests/dump_internal_metadata_format.py
@@ -667,7 +668,6 @@ include tests/repo/urzip-*.apk
 include tests/repo/v1.v2.sig_1020.apk
 include tests/run-tests
 include tests/scanner.TestCase
-include tests/server.TestCase
 include tests/signatures.TestCase
 include tests/signindex/guardianproject.jar
 include tests/signindex/guardianproject-v1.jar

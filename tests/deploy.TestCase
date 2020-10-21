@@ -15,29 +15,29 @@ if localmodule not in sys.path:
     sys.path.insert(0, localmodule)
 
 import fdroidserver.common
-import fdroidserver.server
+import fdroidserver.deploy
 from testcommon import TmpCwd
 
 
-class ServerTest(unittest.TestCase):
-    '''fdroidserver/server.py'''
+class DeployTest(unittest.TestCase):
+    '''fdroidserver/deploy.py'''
 
     def setUp(self):
         logging.basicConfig(level=logging.DEBUG)
         self.basedir = os.path.join(localmodule, 'tests')
 
-        fdroidserver.server.options = mock.Mock()
-        fdroidserver.server.config = {}
+        fdroidserver.deploy.options = mock.Mock()
+        fdroidserver.deploy.config = {}
 
     def test_update_serverwebroot_make_cur_version_link(self):
 
         # setup parameters for this test run
-        fdroidserver.server.options.no_chcksum = True
-        fdroidserver.server.options.identity_file = None
-        fdroidserver.server.options.verbose = False
-        fdroidserver.server.options.quiet = True
-        fdroidserver.server.options.identity_file = None
-        fdroidserver.server.config['make_current_version_link'] = True
+        fdroidserver.deploy.options.no_chcksum = True
+        fdroidserver.deploy.options.identity_file = None
+        fdroidserver.deploy.options.verbose = False
+        fdroidserver.deploy.options.quiet = True
+        fdroidserver.deploy.options.identity_file = None
+        fdroidserver.deploy.config['make_current_version_link'] = True
         serverwebroot = "example.com:/var/www/fdroid"
         repo_section = 'repo'
 
@@ -86,19 +86,19 @@ class ServerTest(unittest.TestCase):
             os.symlink('repo/com.example.sym.apk.asc', 'Sym.apk.asc')
             os.symlink('repo/com.example.sym.apk.sig', 'Sym.apk.sig')
             with mock.patch('subprocess.call', side_effect=update_server_webroot_call):
-                fdroidserver.server.update_serverwebroot(serverwebroot,
+                fdroidserver.deploy.update_serverwebroot(serverwebroot,
                                                          repo_section)
         self.assertEqual(call_iteration, 3, 'expected 3 invocations of subprocess.call')
 
     def test_update_serverwebroot_with_id_file(self):
 
         # setup parameters for this test run
-        fdroidserver.server.options.no_chcksum = False
-        fdroidserver.server.options.verbose = True
-        fdroidserver.server.options.quiet = False
-        fdroidserver.server.options.identity_file = None
-        fdroidserver.server.config['identity_file'] = './id_rsa'
-        fdroidserver.server.config['make_current_version_link'] = False
+        fdroidserver.deploy.options.no_chcksum = False
+        fdroidserver.deploy.options.verbose = True
+        fdroidserver.deploy.options.quiet = False
+        fdroidserver.deploy.options.identity_file = None
+        fdroidserver.deploy.config['identity_file'] = './id_rsa'
+        fdroidserver.deploy.config['make_current_version_link'] = False
         serverwebroot = "example.com:/var/www/fdroid"
         repo_section = 'archive'
 
@@ -115,7 +115,7 @@ class ServerTest(unittest.TestCase):
                                            '--verbose',
                                            '-e',
                                            'ssh -oBatchMode=yes -oIdentitiesOnly=yes -i '
-                                           + fdroidserver.server.config['identity_file'],
+                                           + fdroidserver.deploy.config['identity_file'],
                                            '--exclude', 'archive/index.xml',
                                            '--exclude', 'archive/index.jar',
                                            '--exclude', 'archive/index-v1.jar',
@@ -129,7 +129,7 @@ class ServerTest(unittest.TestCase):
                                            '--verbose',
                                            '-e',
                                            'ssh -oBatchMode=yes -oIdentitiesOnly=yes -i '
-                                           + fdroidserver.server.config['identity_file'],
+                                           + fdroidserver.deploy.config['identity_file'],
                                            'archive',
                                            serverwebroot])
             else:
@@ -138,15 +138,15 @@ class ServerTest(unittest.TestCase):
             return 0
 
         with mock.patch('subprocess.call', side_effect=update_server_webroot_call):
-            fdroidserver.server.update_serverwebroot(serverwebroot,
+            fdroidserver.deploy.update_serverwebroot(serverwebroot,
                                                      repo_section)
         self.assertEqual(call_iteration, 2, 'expected 2 invocations of subprocess.call')
 
     @unittest.skipIf(not os.getenv('VIRUSTOTAL_API_KEY'), 'VIRUSTOTAL_API_KEY is not set')
     def test_upload_to_virustotal(self):
-        fdroidserver.server.options.verbose = True
+        fdroidserver.deploy.options.verbose = True
         virustotal_apikey = os.getenv('VIRUSTOTAL_API_KEY')
-        fdroidserver.server.upload_to_virustotal('repo', virustotal_apikey)
+        fdroidserver.deploy.upload_to_virustotal('repo', virustotal_apikey)
 
     def test_remote_hostname_regex(self):
         for remote_url, name in (
@@ -158,7 +158,7 @@ class ServerTest(unittest.TestCase):
         ):
             self.assertEqual(
                 name,
-                fdroidserver.server.REMOTE_HOSTNAME_REGEX.sub(r'\1', remote_url)
+                fdroidserver.deploy.REMOTE_HOSTNAME_REGEX.sub(r'\1', remote_url)
             )
 
 
@@ -171,5 +171,5 @@ if __name__ == "__main__":
     (fdroidserver.common.options, args) = parser.parse_args(['--verbose'])
 
     newSuite = unittest.TestSuite()
-    newSuite.addTest(unittest.makeSuite(ServerTest))
+    newSuite.addTest(unittest.makeSuite(DeployTest))
     unittest.main(failfast=False)

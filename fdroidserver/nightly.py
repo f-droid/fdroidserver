@@ -301,7 +301,7 @@ Last updated: {date}'''.format(repo_git_base=repo_git_base,
 
         if not options.no_deploy:
             try:
-                cmd = ['fdroid', 'server', 'update', '--verbose', '--no-keep-git-mirror-archive']
+                cmd = ['fdroid', 'deploy', '--verbose', '--no-keep-git-mirror-archive']
                 subprocess.check_call(cmd, cwd=repo_basedir)
             except subprocess.CalledProcessError:
                 logging.error(_('cannot publish update, did you set the deploy key?')

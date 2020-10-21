@@ -48,7 +48,7 @@ process_apk  # NOQA: B101
 process_apks  # NOQA: B101
 scan_apk  # NOQA: B101
 scan_repo_files  # NOQA: B101
-from fdroidserver.server import (update_awsbucket,
+from fdroidserver.deploy import (update_awsbucket,
                                  update_servergitmirrors,
                                  update_serverwebroot)  # NOQA: E402
 update_awsbucket  # NOQA: B101
