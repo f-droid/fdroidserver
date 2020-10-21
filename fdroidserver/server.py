@@ -21,8 +21,6 @@ import glob
 import hashlib
 import json
 import os
-import paramiko
-import pwd
 import re
 import subprocess
 import time
@@ -715,8 +713,8 @@ def main():
 
     config = common.read_config(options)
 
-    if options.command != 'init' and options.command != 'update':
-        logging.critical(_("The only commands currently supported are 'init' and 'update'"))
+    if options.command != 'update':
+        logging.critical(_("The only command currently supported is 'update'"))
         sys.exit(1)
 
     if config.get('nonstandardwebroot') is True:
@@ -792,52 +790,29 @@ def main():
     if config['per_app_repos']:
         repo_sections += common.get_per_app_repos()
 
-    if options.command == 'init':
-        ssh = paramiko.SSHClient()
-        ssh.load_system_host_keys()
-        for serverwebroot in config.get('serverwebroot', []):
-            sshstr, remotepath = serverwebroot.rstrip('/').split(':')
-            if sshstr.find('@') >= 0:
-                username, hostname = sshstr.split('@')
+    for repo_section in repo_sections:
+        if local_copy_dir is not None:
+            if config['sync_from_local_copy_dir']:
+                sync_from_localcopy(repo_section, local_copy_dir)
             else:
-                username = pwd.getpwuid(os.getuid())[0]  # get effective uid
-                hostname = sshstr
-            ssh.connect(hostname, username=username)
-            sftp = ssh.open_sftp()
-            if os.path.basename(remotepath) \
-                    not in sftp.listdir(os.path.dirname(remotepath)):
-                sftp.mkdir(remotepath, mode=0o755)
-            for repo_section in repo_sections:
-                repo_path = os.path.join(remotepath, repo_section)
-                if os.path.basename(repo_path) \
-                        not in sftp.listdir(remotepath):
-                    sftp.mkdir(repo_path, mode=0o755)
-            sftp.close()
-            ssh.close()
-    elif options.command == 'update':
-        for repo_section in repo_sections:
-            if local_copy_dir is not None:
-                if config['sync_from_local_copy_dir']:
-                    sync_from_localcopy(repo_section, local_copy_dir)
-                else:
-                    update_localcopy(repo_section, local_copy_dir)
-            for serverwebroot in config.get('serverwebroot', []):
-                update_serverwebroot(serverwebroot, repo_section)
-            if config.get('servergitmirrors', []):
-                # update_servergitmirrors will take care of multiple mirrors so don't need a foreach
-                servergitmirrors = config.get('servergitmirrors', [])
-                update_servergitmirrors(servergitmirrors, repo_section)
-            if config.get('awsbucket'):
-                update_awsbucket(repo_section)
-            if config.get('androidobservatory'):
-                upload_to_android_observatory(repo_section)
-            if config.get('virustotal_apikey'):
-                upload_to_virustotal(repo_section, config.get('virustotal_apikey'))
+                update_localcopy(repo_section, local_copy_dir)
+        for serverwebroot in config.get('serverwebroot', []):
+            update_serverwebroot(serverwebroot, repo_section)
+        if config.get('servergitmirrors', []):
+            # update_servergitmirrors will take care of multiple mirrors so don't need a foreach
+            servergitmirrors = config.get('servergitmirrors', [])
+            update_servergitmirrors(servergitmirrors, repo_section)
+        if config.get('awsbucket'):
+            update_awsbucket(repo_section)
+        if config.get('androidobservatory'):
+            upload_to_android_observatory(repo_section)
+        if config.get('virustotal_apikey'):
+            upload_to_virustotal(repo_section, config.get('virustotal_apikey'))
 
-            binary_transparency_remote = config.get('binary_transparency_remote')
-            if binary_transparency_remote:
-                push_binary_transparency(BINARY_TRANSPARENCY_DIR,
-                                         binary_transparency_remote)
+        binary_transparency_remote = config.get('binary_transparency_remote')
+        if binary_transparency_remote:
+            push_binary_transparency(BINARY_TRANSPARENCY_DIR,
+                                     binary_transparency_remote)
 
     if config.get('wiki_server') and config.get('wiki_path'):
         update_wiki()
