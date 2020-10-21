@@ -222,9 +222,9 @@ The repository of older versions of applications from the main demo repository.
 
 # If you are running the repo signing process on a completely offline machine,
 # which provides the best security, then you can specify a folder to sync the
-# repo to when running `fdroid server update`. This is most likely going to
+# repo to when running `fdroid deploy`. This is most likely going to
 # be a USB thumb drive, SD Card, or some other kind of removable media. Make
-# sure it is mounted before running `fdroid server update`. Using the
+# sure it is mounted before running `fdroid deploy`. Using the
 # standard folder called 'fdroid' as the specified folder is recommended, like
 # with serverwebroot.
 #

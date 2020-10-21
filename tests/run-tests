@@ -691,7 +691,7 @@ $fdroid lint
 $fdroid readmeta
 $fdroid rewritemeta fake
 $fdroid deploy
-$fdroid server update
+$fdroid deploy
 $fdroid scanner
 
 # run these to get their output, but the are not setup, so don't fail
@@ -725,26 +725,26 @@ cd $REPOROOT
 $fdroid init
 $fdroid update --create-metadata --verbose
 $fdroid readmeta
-$fdroid server update --local-copy-dir=/tmp/fdroid
+$fdroid deploy --local-copy-dir=/tmp/fdroid
 $fdroid deploy --local-copy-dir=/tmp/fdroid --verbose
 
 # now test the errors work
 set +e
-$fdroid server update --local-copy-dir=thisisnotanabsolutepath
+$fdroid deploy --local-copy-dir=thisisnotanabsolutepath
 if [ $? -eq 0 ]; then
     echo "This should have failed because thisisnotanabsolutepath is not an absolute path!"
     exit 1
 else
     echo "testing absolute path checker passed"
 fi
-$fdroid server update --local-copy-dir=/tmp/IReallyDoubtThisPathExistsasdfasdf
+$fdroid deploy --local-copy-dir=/tmp/IReallyDoubtThisPathExistsasdfasdf
 if [ $? -eq 0 ]; then
     echo "This should have failed because the path does not end with 'fdroid'!"
     exit 1
 else
     echo "testing dirname exists checker passed"
 fi
-$fdroid server update --local-copy-dir=/tmp/IReallyDoubtThisPathExistsasdfasdf/fdroid
+$fdroid deploy --local-copy-dir=/tmp/IReallyDoubtThisPathExistsasdfasdf/fdroid
 if [ $? -eq 0 ]; then
     echo "This should have failed because the dirname path does not exist!"
     exit 1
@@ -766,12 +766,12 @@ $fdroid readmeta
 grep -F '<application id=' repo/index.xml > /dev/null
 
 LOCALCOPYDIR=`create_test_dir`/fdroid
-$fdroid server update --local-copy-dir=$LOCALCOPYDIR
+$fdroid deploy --local-copy-dir=$LOCALCOPYDIR
 NEWREPOROOT=`create_test_dir`
 cd $NEWREPOROOT
 fdroid_init_with_prebuilt_keystore
 echo "sync_from_local_copy_dir = True" >> config.py
-$fdroid server update --local-copy-dir=$LOCALCOPYDIR
+$fdroid deploy --local-copy-dir=$LOCALCOPYDIR
 
 
 #------------------------------------------------------------------------------#
@@ -1045,7 +1045,7 @@ cp -a $WORKSPACE/tests/metadata $WORKSPACE/tests/repo $WORKSPACE/tests/stats $RE
 echo "binary_transparency_remote = '$GIT_REMOTE'" >> config.py
 $fdroid update --verbose
 if have_git_2_3; then
-    $fdroid server update --verbose
+    $fdroid deploy --verbose
     test -e repo/index.xml
     test -e repo/index.jar
     test -e repo/index-v1.jar
@@ -1204,7 +1204,7 @@ if have_git_2_3; then
     cd binary_transparency
     [ `git rev-list --count HEAD` == "1" ]
     cd ..
-    $fdroid server update --verbose
+    $fdroid deploy --verbose
     grep -F '<application id=' $LOCAL_COPY_DIR/repo/index.xml > /dev/null
     cd $ONLINE_ROOT
     echo "local_copy_dir = '$LOCAL_COPY_DIR'" >> config.py
@@ -1213,7 +1213,7 @@ if have_git_2_3; then
     echo "servergitmirrors = '$SERVER_GIT_MIRROR'" >> config.py
     echo "local_copy_dir = '$LOCAL_COPY_DIR'" >> config.py
     echo "binary_transparency_remote = '$BINARY_TRANSPARENCY_REMOTE'" >> config.py
-    $fdroid server update --verbose
+    $fdroid deploy --verbose
     cd $BINARY_TRANSPARENCY_REMOTE
     [ `git rev-list --count HEAD` == "1" ]
     cd $SERVER_GIT_MIRROR

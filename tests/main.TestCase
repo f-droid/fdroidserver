@@ -42,7 +42,6 @@ class MainTest(unittest.TestCase):
                               'lint',
                               'scanner',
                               'stats',
-                              'server',
                               'signindex',
                               'btlog',
                               'signatures',
@@ -63,7 +62,7 @@ class MainTest(unittest.TestCase):
     def test_call_deploy(self):
         co = mock.Mock()
         with mock.patch('sys.argv', ['', 'deploy', '-h']):
-            with mock.patch('fdroidserver.server.main', co):
+            with mock.patch('fdroidserver.deploy.main', co):
                 with mock.patch('sys.exit') as exit_mock:
                     fdroidserver.__main__.main()
                     # note: this is sloppy, if `deploy` changes
