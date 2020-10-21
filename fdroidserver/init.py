@@ -162,6 +162,10 @@ def main():
     # now that we have a local config.py, read configuration...
     config = common.read_config(options)
 
+    # enable apksigner by default so v2/v3 APK signatures validate
+    if common.find_apksigner() is not None:
+        test_config['apksigner'] = common.find_apksigner()
+
     # the NDK is optional and there may be multiple versions of it, so it's
     # left for the user to configure
 
