@@ -3552,19 +3552,24 @@ def load_stats_fdroid_signing_key_fingerprints():
 
 
 def write_to_config(thisconfig, key, value=None, config_file=None):
-    '''write a key/value to the local config.py
+    '''write a key/value to the local config.yml or config.py
 
     NOTE: only supports writing string variables.
 
     :param thisconfig: config dictionary
-    :param key: variable name in config.py to be overwritten/added
+    :param key: variable name in config to be overwritten/added
     :param value: optional value to be written, instead of fetched
         from 'thisconfig' dictionary.
     '''
     if value is None:
         origkey = key + '_orig'
         value = thisconfig[origkey] if origkey in thisconfig else thisconfig[key]
-    cfg = config_file if config_file else 'config.py'
+    if config_file:
+        cfg = config_file
+    elif os.path.exists('config.py') and not os.path.exists('config.yml'):
+        cfg = 'config.py'
+    else:
+        cfg = 'config.yml'
 
     # load config file, create one if it doesn't exist
     if not os.path.exists(cfg):
@@ -3580,10 +3585,17 @@ def write_to_config(thisconfig, key, value=None, config_file=None):
 
     # regex for finding and replacing python string variable
     # definitions/initializations
-    pattern = re.compile(r'^[\s#]*' + key + r'\s*=\s*"[^"]*"')
-    repl = key + ' = "' + value + '"'
-    pattern2 = re.compile(r'^[\s#]*' + key + r"\s*=\s*'[^']*'")
-    repl2 = key + " = '" + value + "'"
+    if cfg.endswith('.py'):
+        pattern = re.compile(r'^[\s#]*' + key + r'\s*=\s*"[^"]*"')
+        repl = key + ' = "' + value + '"'
+        pattern2 = re.compile(r'^[\s#]*' + key + r"\s*=\s*'[^']*'")
+        repl2 = key + " = '" + value + "'"
+    else:
+        # assume .yml as default
+        pattern = re.compile(r'^[\s#]*' + key + r':.*')
+        repl = yaml.dump({key: value}, default_flow_style=False)
+        pattern2 = pattern
+        repl2 = repl
 
     # If we replaced this line once, we make sure won't be a
     # second instance of this line for this key in the document.

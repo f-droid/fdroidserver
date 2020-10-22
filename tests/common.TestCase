@@ -1485,6 +1485,37 @@ class CommonTest(unittest.TestCase):
         config = fdroidserver.common.read_config(fdroidserver.common.options)
         self.assertEqual('yml', config.get('apksigner'))
 
+    def test_write_to_config_yml(self):
+        testdir = tempfile.mkdtemp(prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir)
+        os.chdir(testdir)
+        with open('config.yml', 'w') as fp:
+            fp.write('apksigner: yml')
+        self.assertTrue(os.path.exists(fp.name))
+        self.assertFalse(os.path.exists('config.py'))
+        config = fdroidserver.common.read_config(fdroidserver.common.options)
+        self.assertFalse('keypass' in config)
+        self.assertEqual('yml', config.get('apksigner'))
+        fdroidserver.common.write_to_config(config, 'keypass', 'mysecretpassword')
+        with open(fp.name) as fp:
+            print(fp.read())
+        fdroidserver.common.config = None
+        config = fdroidserver.common.read_config(fdroidserver.common.options)
+        self.assertEqual('mysecretpassword', config['keypass'])
+
+    def test_write_to_config_py(self):
+        testdir = tempfile.mkdtemp(prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir)
+        os.chdir(testdir)
+        with open('config.py', 'w') as fp:
+            fp.write('apksigner = "py"')
+        self.assertTrue(os.path.exists(fp.name))
+        self.assertFalse(os.path.exists('config.yml'))
+        config = fdroidserver.common.read_config(fdroidserver.common.options)
+        self.assertFalse('keypass' in config)
+        self.assertEqual('py', config.get('apksigner'))
+        fdroidserver.common.write_to_config(config, 'keypass', 'mysecretpassword')
+        fdroidserver.common.config = None
+        config = fdroidserver.common.read_config(fdroidserver.common.options)
+        self.assertEqual('mysecretpassword', config['keypass'])
 
 
 if __name__ == "__main__":
