@@ -141,8 +141,8 @@ def build_server(app, build, vcs, build_dir, output_dir, log_dir, force):
         ftp.chdir(homedir)
 
         ftp.put(os.path.join(serverpath, '..', 'buildserver',
-                             'config.buildserver.py'), 'config.py')
-        ftp.chmod('config.py', 0o600)
+                             'config.buildserver.yml'), 'config.yml')
+        ftp.chmod('config.yml', 0o600)
 
         # Copy over the ID (head commit hash) of the fdroidserver in use...
         with open(os.path.join(os.getcwd(), 'tmp', 'fdroidserverid'), 'wb') as fp:

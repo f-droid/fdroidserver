@@ -1,0 +1,62 @@
+#!/usr/bin/env python3
+
+# http://www.drdobbs.com/testing/unit-testing-with-python/240165163
+
+import inspect
+import logging
+import os
+import optparse
+import sys
+import tempfile
+import unittest
+
+
+localmodule = os.path.realpath(
+    os.path.join(os.path.dirname(inspect.getfile(inspect.currentframe())), '..'))
+print('localmodule: ' + localmodule)
+if localmodule not in sys.path:
+    sys.path.insert(0, localmodule)
+
+import fdroidserver.init
+
+
+class InitTest(unittest.TestCase):
+    '''fdroidserver/init.py'''
+
+    def setUp(self):
+        logging.basicConfig(level=logging.DEBUG)
+        self.basedir = os.path.join(localmodule, 'tests')
+        self.tmpdir = os.path.abspath(os.path.join(self.basedir, '..', '.testfiles'))
+        if not os.path.exists(self.tmpdir):
+            os.makedirs(self.tmpdir)
+        os.chdir(self.basedir)
+        fdroidserver.init.config = None
+
+    def test_disable_in_config(self):
+        testdir = tempfile.mkdtemp(prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir)
+        os.chdir(testdir)
+        with open('config.yml', 'w') as fp:
+            fp.write('keystore: NONE\n')
+            fp.write('keypass: mysupersecrets\n')
+        config = fdroidserver.common.read_config(fdroidserver.common.options)
+        self.assertEqual('NONE', config['keystore'])
+        self.assertEqual('mysupersecrets', config['keypass'])
+        fdroidserver.init.disable_in_config('keypass', 'comment')
+        with open(fp.name) as fp:
+            self.assertTrue('#keypass:' in fp.read())
+        fdroidserver.common.config = None
+        config = fdroidserver.common.read_config(fdroidserver.common.options)
+        self.assertIsNone(config.get('keypass'))
+
+
+if __name__ == "__main__":
+    os.chdir(os.path.dirname(__file__))
+
+    parser = optparse.OptionParser()
+    parser.add_option("-v", "--verbose", action="store_true", default=False,
+                      help="Spew out even more information than normal")
+    (fdroidserver.init.options, args) = parser.parse_args(['--verbose'])
+
+    newSuite = unittest.TestSuite()
+    newSuite.addTest(unittest.makeSuite(InitTest))
+    unittest.main(failfast=False)

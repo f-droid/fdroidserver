@@ -8,11 +8,12 @@ exec 1>&2
 
 files=`git diff-index --cached HEAD 2>&1 | sed 's/^:.*     //' | uniq | cut -b100-500`
 if [ -z "$files" ]; then
-    PY_FILES="fdroid makebuildserver setup.py examples/*.py buildserver/*.py fdroidserver/*.py"
+    PY_FILES="fdroid makebuildserver setup.py fdroidserver/*.py"
     PY_TEST_FILES="tests/*.TestCase"
     SH_FILES="hooks/pre-commit"
     BASH_FILES="gradlew-fdroid jenkins-build-all jenkins-setup-build-environment jenkins-test completion/bash-completion buildserver/provision-*"
     RB_FILES="buildserver/Vagrantfile"
+    YML_FILES="buildserver/*.yml examples/*.yml"
 else
     # if actually committing right now, then only run on the files
     # that are going to be committed at this moment
@@ -21,6 +22,7 @@ else
     SH_FILES=
     BASH_FILES=
     RB_FILES=
+    YML_FILES=
 
     for f in $files; do
         test -e $f || continue
@@ -33,6 +35,9 @@ else
                 ;;
             *.rb)
                 RB_FILES+=" $f"
+                ;;
+            *.yml)
+                YML_FILES+=" $f"
                 ;;
             *)
                 if head -1 $f | grep '^#!/bin/sh' > /dev/null 2>&1; then
@@ -89,6 +94,7 @@ DASH=$(find_command dash)
 PYFLAKES=$(find_command pyflakes)
 PEP8=$(find_command pycodestyle pep8)
 RUBY=$(find_command ruby)
+YAMLLINT=$(find_command yamllint)
 
 if [ "$PY_FILES $PY_TEST_FILES" != " " ]; then
     if ! $PYFLAKES $PY_FILES $PY_TEST_FILES; then
@@ -126,6 +132,12 @@ done
 for f in $RB_FILES; do
 	if ! $RUBY -c $f 1>/dev/null; then
 		err "ruby tests failed!"
+	fi
+done
+
+for f in $YML_FILES; do
+	if ! $YAMLLINT $f 1>/dev/null; then
+		err ".yml tests failed on $f!"
 	fi
 done
 

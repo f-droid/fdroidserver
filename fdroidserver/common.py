@@ -324,7 +324,7 @@ def read_config(opts):
             code = compile(fp.read(), old_config_file, 'exec')
             exec(code, None, config)  # nosec TODO automatically migrate
     else:
-        logging.warning(_("No 'config.py' found, using defaults."))
+        logging.warning(_("No config.yml found, using defaults."))
 
     for k in ('mirrors', 'install_list', 'uninstall_list', 'serverwebroot', 'servergitroot'):
         if k in config:
@@ -389,16 +389,25 @@ def read_config(opts):
         config['git_mirror_size_limit'] = parse_human_readable_size(limit)
 
     for configname, dictvalue in config.items():
-        if isinstance(dictvalue, dict) \
-           and configname not in ('ndk_paths', 'java_paths', 'char_limits', 'keyaliases'):
+        if configname == 'java_paths':
+            new = dict()
+            for k, v in dictvalue.items():
+                new[str(k)] = v
+            config[configname] = new
+        elif configname in ('ndk_paths', 'java_paths', 'char_limits', 'keyaliases'):
+            continue
+        elif isinstance(dictvalue, dict):
             for k, v in dictvalue.items():
                 if k == 'env':
                     env = os.getenv(v)
-                    config[configname] = env
-                    if not env:
+                    if env:
+                        config[configname] = env
+                    else:
+                        del(config[configname])
                         logging.error(_('Environment variable {var} from {configname} is not set!')
                                       .format(var=k, configname=configname))
                 else:
+                    del(config[configname])
                     logging.error(_('Unknown entry {key} in {configname}')
                                   .format(key=k, configname=configname))
 
@@ -430,10 +439,10 @@ def assert_config_keystore(config):
     nosigningkey = False
     if 'repo_keyalias' not in config:
         nosigningkey = True
-        logging.critical(_("'repo_keyalias' not found in config.py!"))
+        logging.critical(_("'repo_keyalias' not found in config.yml!"))
     if 'keystore' not in config:
         nosigningkey = True
-        logging.critical(_("'keystore' not found in config.py!"))
+        logging.critical(_("'keystore' not found in config.yml!"))
     elif config['keystore'] == 'NONE':
         if not config.get('smartcardoptions'):
             nosigningkey = True
@@ -443,10 +452,10 @@ def assert_config_keystore(config):
         logging.critical("'" + config['keystore'] + "' does not exist!")
     if 'keystorepass' not in config:
         nosigningkey = True
-        logging.critical(_("'keystorepass' not found in config.py!"))
+        logging.critical(_("'keystorepass' not found in config.yml!"))
     if 'keypass' not in config and config.get('keystore') != 'NONE':
         nosigningkey = True
-        logging.critical(_("'keypass' not found in config.py!"))
+        logging.critical(_("'keypass' not found in config.yml!"))
     if nosigningkey:
         raise FDroidException("This command requires a signing key, "
                               + "you can create one using: fdroid update --create-key")
@@ -547,7 +556,7 @@ def test_sdk_exists(thisconfig):
             test_aapt_version(thisconfig['aapt'])
             return True
         else:
-            logging.error(_("'sdk_path' not set in 'config.py'!"))
+            logging.error(_("'sdk_path' not set in config.yml!"))
             return False
     if thisconfig['sdk_path'] == default_config['sdk_path']:
         logging.error(_('No Android SDK found!'))

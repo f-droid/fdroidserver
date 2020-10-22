@@ -36,13 +36,14 @@ options = None
 
 
 def disable_in_config(key, value):
-    '''write a key/value to the local config.py, then comment it out'''
-    with open('config.py', 'r') as f:
+    '''write a key/value to the local config.yml, then comment it out'''
+    import yaml
+    with open('config.yml') as f:
         data = f.read()
-    pattern = r'\n[\s#]*' + key + r'\s*=\s*"[^"]*"'
-    repl = '\n#' + key + ' = "' + value + '"'
+    pattern = r'\n[\s#]*' + key + r':.*'
+    repl = '\n#' + yaml.dump({key: value}, default_flow_style=False)
     data = re.sub(pattern, repl, data)
-    with open('config.py', 'w') as f:
+    with open('config.yml', 'w') as f:
         f.writelines(data)
 
 
@@ -114,13 +115,13 @@ def main():
         raise FDroidException(_("Android SDK not found at {path}!")
                               .format(path=test_config['sdk_path']))
 
-    if not os.path.exists('config.py'):
+    if not os.path.exists('config.yml') and not os.path.exists('config.py'):
         # 'metadata' and 'tmp' are created in fdroid
         if not os.path.exists('repo'):
             os.mkdir('repo')
         shutil.copy(os.path.join(examplesdir, 'fdroid-icon.png'), fdroiddir)
-        shutil.copyfile(os.path.join(examplesdir, 'config.py'), 'config.py')
-        os.chmod('config.py', 0o0600)
+        shutil.copyfile(os.path.join(examplesdir, 'config.yml'), 'config.yml')
+        os.chmod('config.yml', 0o0600)
         # If android_home is None, test_config['sdk_path'] will be used and
         # "$ANDROID_HOME" may be used if the env var is set up correctly.
         # If android_home is not None, the path given from the command line
@@ -132,7 +133,7 @@ def main():
         logging.info('Try running `fdroid init` in an empty directory.')
         raise FDroidException('Repository already exists.')
 
-    # now that we have a local config.py, read configuration...
+    # now that we have a local config.yml, read configuration...
     config = common.read_config(options)
 
     # enable apksigner by default so v2/v3 APK signatures validate
@@ -143,7 +144,7 @@ def main():
     # left for the user to configure
 
     # find or generate the keystore for the repo signing key. First try the
-    # path written in the default config.py.  Then check if the user has
+    # path written in the default config.yml.  Then check if the user has
     # specified a path from the command line, which will trump all others.
     # Otherwise, create ~/.local/share/fdroidserver and stick it in there.  If
     # keystore is set to NONE, that means that Java will look for keys in a
@@ -192,7 +193,7 @@ def main():
                 f.write('name = OpenSC\nlibrary = ')
                 f.write(opensc_so)
                 f.write('\n')
-        logging.info("Repo setup using a smartcard HSM. Please edit keystorepass and repo_keyalias in config.py.")
+        logging.info("Repo setup using a smartcard HSM. Please edit keystorepass and repo_keyalias in config.yml.")
         logging.info("If you want to generate a new repo signing key in the HSM you can do that with 'fdroid update "
                      "--create-key'.")
     elif os.path.exists(keystore):
@@ -202,7 +203,7 @@ def main():
         if keydname:
             to_set.remove('keydname')
         logging.warning('\n' + _('Using existing keystore "{path}"').format(path=keystore)
-                        + '\n' + _('Now set these in config.py:') + ' '
+                        + '\n' + _('Now set these in config.yml:') + ' '
                         + ', '.join(to_set) + '\n')
     else:
         password = common.genpassword()
@@ -228,7 +229,7 @@ def main():
         msg += '\n  Alias for key in store:\t' + repo_keyalias
     msg += '\n\n' + '''To complete the setup, add your APKs to "%s"
 then run "fdroid update -c; fdroid update".  You might also want to edit
-"config.py" to set the URL, repo name, and more.  You should also set up
+"config.yml" to set the URL, repo name, and more.  You should also set up
 a signing key (a temporary one might have been automatically generated).
 
 For more info: https://f-droid.org/docs/Setup_an_F-Droid_App_Repo

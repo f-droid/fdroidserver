@@ -1517,6 +1517,25 @@ class CommonTest(unittest.TestCase):
         config = fdroidserver.common.read_config(fdroidserver.common.options)
         self.assertEqual('mysecretpassword', config['keypass'])
 
+    def test_config_dict_with_int_keys(self):
+        testdir = tempfile.mkdtemp(prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir)
+        os.chdir(testdir)
+        with open('config.yml', 'w') as fp:
+            fp.write('java_paths:\n  8: /usr/lib/jvm/java-8-openjdk\n')
+        self.assertTrue(os.path.exists(fp.name))
+        self.assertFalse(os.path.exists('config.py'))
+        config = fdroidserver.common.read_config(fdroidserver.common.options)
+        self.assertEqual('/usr/lib/jvm/java-8-openjdk', config.get('java_paths', {}).get('8'))
+
+    def test_loading_config_buildserver_yml(self):
+        """Smoke check to make sure this file is properly parsed"""
+        testdir = tempfile.mkdtemp(prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir)
+        os.chdir(testdir)
+        shutil.copy(os.path.join(self.basedir, '..', 'buildserver', 'config.buildserver.yml'),
+                    'config.yml')
+        self.assertFalse(os.path.exists('config.py'))
+        fdroidserver.common.read_config(fdroidserver.common.options)
+
 
 if __name__ == "__main__":
     os.chdir(os.path.dirname(__file__))
