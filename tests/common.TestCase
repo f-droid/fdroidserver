@@ -1431,6 +1431,18 @@ class CommonTest(unittest.TestCase):
         config = fdroidserver.common.read_config(fdroidserver.common.options)
         self.assertEqual('yml', config.get('apksigner'))
 
+    def test_with_config_yml_with_env_var(self):
+        """Make sure it is possible to use config.yml alone."""
+        testdir = tempfile.mkdtemp(prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir)
+        os.chdir(testdir)
+        os.environ['SECRET'] = 'mysecretpassword'
+        with open('config.yml', 'w') as fp:
+            fp.write("""keypass: {'env': 'SECRET'}""")
+        self.assertTrue(os.path.exists('config.yml'))
+        self.assertFalse(os.path.exists('config.py'))
+        config = fdroidserver.common.read_config(fdroidserver.common.options)
+        self.assertEqual(os.getenv('SECRET', 'fail'), config.get('keypass'))
+
     def test_with_config_py(self):
         """Make sure it is still possible to use config.py alone."""
         testdir = tempfile.mkdtemp(prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir)

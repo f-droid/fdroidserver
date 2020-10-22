@@ -388,6 +388,20 @@ def read_config(opts):
         limit = config['git_mirror_size_limit']
         config['git_mirror_size_limit'] = parse_human_readable_size(limit)
 
+    for configname, dictvalue in config.items():
+        if isinstance(dictvalue, dict) \
+           and configname not in ('ndk_paths', 'java_paths', 'char_limits', 'keyaliases'):
+            for k, v in dictvalue.items():
+                if k == 'env':
+                    env = os.getenv(v)
+                    config[configname] = env
+                    if not env:
+                        logging.error(_('Environment variable {var} from {configname} is not set!')
+                                      .format(var=k, configname=configname))
+                else:
+                    logging.error(_('Unknown entry {key} in {configname}')
+                                  .format(key=k, configname=configname))
+
     return config
 
 
