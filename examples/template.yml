@@ -6,7 +6,7 @@ Donate: null
 
 License: Unknown
 Categories:
-- Internet
+  - Internet
 
 IssueTracker: ''
 SourceCode: ''
@@ -15,7 +15,7 @@ Changelog: ''
 Name: .
 Summary: .
 Description: |
-    .
+  .
 
 ArchivePolicy: 2 versions
-RequiresRoot: No
+RequiresRoot: false
