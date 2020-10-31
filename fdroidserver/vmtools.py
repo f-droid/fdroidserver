@@ -33,7 +33,7 @@ import threading
 lock = threading.Lock()
 
 
-def get_clean_builder(serverdir, reset=False):
+def get_clean_builder(serverdir):
     if not os.path.isdir(serverdir):
         if os.path.islink(serverdir):
             os.unlink(serverdir)
@@ -51,26 +51,9 @@ def get_clean_builder(serverdir, reset=False):
                 end
                 """))
     vm = get_build_vm(serverdir)
-    if reset:
-        logging.info('resetting buildserver by request')
-    elif not vm.vagrant_uuid_okay():
-        logging.info('resetting buildserver, because vagrant vm is not okay.')
-        reset = True
-    elif not vm.snapshot_exists('fdroidclean'):
-        logging.info("resetting buildserver, because snapshot 'fdroidclean' is not present.")
-        reset = True
-
-    if reset:
-        vm.destroy()
-    vm.up()
-    vm.suspend()
-
-    if reset:
-        logging.info('buildserver recreated: taking a clean snapshot')
-        vm.snapshot_create('fdroidclean')
-    else:
-        logging.info('builserver ok: reverting to clean snapshot')
-        vm.snapshot_revert('fdroidclean')
+    logging.info('destroying buildserver before build')
+    vm.destroy()
+    logging.info('starting buildserver')
     vm.up()
 
     try:
