@@ -74,7 +74,7 @@ def build_server(app, build, vcs, build_dir, output_dir, log_dir, force):
     else:
         logging.getLogger("paramiko").setLevel(logging.WARN)
 
-    sshinfo = vmtools.get_clean_builder('builder', options.reset_server)
+    sshinfo = vmtools.get_clean_builder('builder')
 
     output = None
     try:
@@ -295,7 +295,8 @@ def build_server(app, build, vcs, build_dir, output_dir, log_dir, force):
     finally:
         # Suspend the build server.
         vm = vmtools.get_build_vm('builder')
-        vm.suspend()
+        logging.info('destroying buildserver after build')
+        vm.destroy()
 
         # deploy logfile to repository web server
         if output:
