@@ -72,7 +72,7 @@ packages="
  git-core
  git-svn
  gperf
- gpg/stretch-backports
+ gpg/stretch-backports-sloppy
  javacc
  libarchive-zip-perl
  libexpat1-dev
