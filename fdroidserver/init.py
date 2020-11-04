@@ -75,46 +75,44 @@ def main():
     # in ANDROID_HOME if that exists, otherwise None
     if options.android_home is not None:
         test_config['sdk_path'] = options.android_home
-    elif common.use_androguard():
-        pass
     elif not common.test_sdk_exists(test_config):
-        if os.path.isfile('/usr/bin/aapt'):
-            # remove sdk_path and build_tools, they are not required
-            test_config.pop('sdk_path', None)
-            test_config.pop('build_tools', None)
-            # make sure at least aapt is found, since this can't do anything without it
-            test_config['aapt'] = common.find_sdk_tools_cmd('aapt')
+        # if neither --android-home nor the default sdk_path
+        # exist, prompt the user using platform-specific default
+        # and if the user leaves it blank, ignore and move on.
+        default_sdk_path = ''
+        if sys.platform == 'win32' or sys.platform == 'cygwin':
+            p = os.path.join(os.getenv('USERPROFILE'),
+                             'AppData', 'Local', 'Android', 'android-sdk')
+        elif sys.platform == 'darwin':
+            # on OSX, Homebrew is common and has an easy path to detect
+            p = '/usr/local/opt/android-sdk'
+        elif os.path.isdir('/usr/lib/android-sdk'):
+            # if the Debian packages are installed, suggest them
+            p = '/usr/lib/android-sdk'
         else:
-            # if neither --android-home nor the default sdk_path
-            # exist, prompt the user using platform-specific default
-            default_sdk_path = '/opt/android-sdk'
-            if sys.platform == 'win32' or sys.platform == 'cygwin':
-                p = os.path.join(os.getenv('USERPROFILE'),
-                                 'AppData', 'Local', 'Android', 'android-sdk')
-            elif sys.platform == 'darwin':
-                # on OSX, Homebrew is common and has an easy path to detect
-                p = '/usr/local/opt/android-sdk'
-            else:
-                # if the Debian packages are installed, suggest them
-                p = '/usr/lib/android-sdk'
-            if os.path.exists(p):
-                default_sdk_path = p
+            p = '/opt/android-sdk'
+        if os.path.exists(p):
+            default_sdk_path = p
 
-            while not options.no_prompt:
-                try:
-                    s = input(_('Enter the path to the Android SDK (%s) here:\n> ') % default_sdk_path)
-                except KeyboardInterrupt:
-                    print('')
-                    sys.exit(1)
-                if re.match(r'^\s*$', s) is not None:
-                    test_config['sdk_path'] = default_sdk_path
-                else:
-                    test_config['sdk_path'] = s
-                if common.test_sdk_exists(test_config):
-                    break
-    if (options.android_home is not None or not common.use_androguard()) \
-       and not common.test_sdk_exists(test_config):
-        raise FDroidException("Android SDK not found.")
+        while not options.no_prompt:
+            try:
+                s = input(_('Enter the path to the Android SDK (%s) here:\n> ') % default_sdk_path)
+            except KeyboardInterrupt:
+                print('')
+                sys.exit(1)
+            if re.match(r'^\s*$', s) is not None:
+                test_config['sdk_path'] = default_sdk_path
+            else:
+                test_config['sdk_path'] = s
+            if not default_sdk_path:
+                del(test_config['sdk_path'])
+                break
+            if common.test_sdk_exists(test_config):
+                break
+
+    if test_config.get('sdk_path') and not common.test_sdk_exists(test_config):
+        raise FDroidException(_("Android SDK not found at {path}!")
+                              .format(path=test_config['sdk_path']))
 
     if not os.path.exists('config.py'):
         # 'metadata' and 'tmp' are created in fdroid
@@ -134,33 +132,12 @@ def main():
         logging.info('Try running `fdroid init` in an empty directory.')
         raise FDroidException('Repository already exists.')
 
-    if common.use_androguard():
-        pass
-    elif 'aapt' not in test_config or not os.path.isfile(test_config['aapt']):
-        # try to find a working aapt, in all the recent possible paths
-        build_tools = os.path.join(test_config['sdk_path'], 'build-tools')
-        aaptdirs = []
-        aaptdirs.append(os.path.join(build_tools, test_config['build_tools']))
-        aaptdirs.append(build_tools)
-        for f in os.listdir(build_tools):
-            if os.path.isdir(os.path.join(build_tools, f)):
-                aaptdirs.append(os.path.join(build_tools, f))
-        for d in sorted(aaptdirs, reverse=True):
-            if os.path.isfile(os.path.join(d, 'aapt')):
-                aapt = os.path.join(d, 'aapt')
-                break
-        if aapt and os.path.isfile(aapt):
-            dirname = os.path.basename(os.path.dirname(aapt))
-            if dirname == 'build-tools':
-                # this is the old layout, before versioned build-tools
-                test_config['build_tools'] = ''
-            else:
-                test_config['build_tools'] = dirname
-            common.write_to_config(test_config, 'build_tools')
-        common.ensure_build_tools_exists(test_config)
-
     # now that we have a local config.py, read configuration...
     config = common.read_config(options)
+
+    # enable apksigner by default so v2/v3 APK signatures validate
+    if common.find_apksigner() is not None:
+        test_config['apksigner'] = common.find_apksigner()
 
     # the NDK is optional and there may be multiple versions of it, so it's
     # left for the user to configure

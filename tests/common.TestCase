@@ -78,7 +78,7 @@ class CommonTest(unittest.TestCase):
             for f in sorted(os.listdir(build_tools), reverse=True):
                 versioned = os.path.join(build_tools, f)
                 if os.path.isdir(versioned) \
-                        and os.path.isfile(os.path.join(versioned, 'aapt')):
+                        and os.path.isfile(os.path.join(versioned, 'apksigner')):
                     fdroidserver.common.config['build_tools'] = versioned
                     break
             return True
@@ -148,11 +148,6 @@ class CommonTest(unittest.TestCase):
         config = dict()
         fdroidserver.common.fill_config_defaults(config)
         fdroidserver.common.config = config
-        self._set_build_tools()
-        try:
-            config['aapt'] = fdroidserver.common.find_sdk_tools_cmd('aapt')
-        except fdroidserver.exception.FDroidException:
-            pass  # aapt is not required if androguard is present
 
         # these are set debuggable
         testfiles = []
@@ -160,15 +155,8 @@ class CommonTest(unittest.TestCase):
         testfiles.append(os.path.join(self.basedir, 'urzip-badsig.apk'))
         testfiles.append(os.path.join(self.basedir, 'urzip-badcert.apk'))
         for apkfile in testfiles:
-            debuggable = fdroidserver.common.is_apk_and_debuggable(apkfile)
-            self.assertTrue(debuggable,
+            self.assertTrue(fdroidserver.common.is_apk_and_debuggable(apkfile),
                             "debuggable APK state was not properly parsed!")
-            if 'aapt' in config:
-                self.assertTrue(fdroidserver.common.is_apk_and_debuggable_aapt(apkfile),
-                                'aapt parsing missed <application android:debuggable="">!')
-            if fdroidserver.common.use_androguard():
-                self.assertTrue(fdroidserver.common.is_apk_and_debuggable_androguard(apkfile),
-                                'androguard missed <application android:debuggable="">!')
 
         # these are set NOT debuggable
         testfiles = []
@@ -176,15 +164,8 @@ class CommonTest(unittest.TestCase):
         testfiles.append(os.path.join(self.basedir, 'urzip-release-unsigned.apk'))
         testfiles.append(os.path.join(self.basedir, 'v2.only.sig_2.apk'))
         for apkfile in testfiles:
-            debuggable = fdroidserver.common.is_apk_and_debuggable(apkfile)
-            self.assertFalse(debuggable,
+            self.assertFalse(fdroidserver.common.is_apk_and_debuggable(apkfile),
                              "debuggable APK state was not properly parsed!")
-            if 'aapt' in config:
-                self.assertFalse(fdroidserver.common.is_apk_and_debuggable_aapt(apkfile),
-                                 'aapt parsing missed <application android:debuggable="">!')
-            if fdroidserver.common.use_androguard():
-                self.assertFalse(fdroidserver.common.is_apk_and_debuggable_androguard(apkfile),
-                                 'androguard missed <application android:debuggable="">!')
 
     VALID_STRICT_PACKAGE_NAMES = [
         "An.stop",
@@ -765,16 +746,15 @@ class CommonTest(unittest.TestCase):
             ('repo/urzip-; Рахма́, [rɐxˈmanʲɪnəf] سيرجي_رخمانينوف 谢·.apk', 'info.guardianproject.urzip', '100', '0.1'),
         ]
         for apkfilename, appid, versionCode, versionName in testcases:
+            a, vc, vn = fdroidserver.common.get_apk_id(apkfilename)
+            self.assertEqual(appid, a, 'androguard appid parsing failed for ' + apkfilename)
+            self.assertEqual(versionName, vn, 'androguard versionName parsing failed for ' + apkfilename)
+            self.assertEqual(versionCode, vc, 'androguard versionCode parsing failed for ' + apkfilename)
             if 'aapt' in config:
                 a, vc, vn = fdroidserver.common.get_apk_id_aapt(apkfilename)
                 self.assertEqual(appid, a, 'aapt appid parsing failed for ' + apkfilename)
                 self.assertEqual(versionCode, vc, 'aapt versionCode parsing failed for ' + apkfilename)
                 self.assertEqual(versionName, vn, 'aapt versionName parsing failed for ' + apkfilename)
-            if fdroidserver.common.use_androguard():
-                a, vc, vn = fdroidserver.common.get_apk_id(apkfilename)
-                self.assertEqual(appid, a, 'androguard appid parsing failed for ' + apkfilename)
-                self.assertEqual(versionName, vn, 'androguard versionName parsing failed for ' + apkfilename)
-                self.assertEqual(versionCode, vc, 'androguard versionCode parsing failed for ' + apkfilename)
 
         with self.assertRaises(FDroidException):
             fdroidserver.common.get_apk_id('nope')

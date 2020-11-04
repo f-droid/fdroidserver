@@ -114,7 +114,7 @@ default_config = {
         'r16b': None,
     },
     'cachedir': os.path.join(os.getenv('HOME'), '.cache', 'fdroidserver'),
-    'build_tools': MINIMUM_AAPT_BUILD_TOOLS_VERSION,
+    'build_tools': MINIMUM_APKSIGNER_BUILD_TOOLS_VERSION,
     'java_paths': None,
     'scan_binary': False,
     'ant': "ant",
@@ -423,7 +423,8 @@ def find_apksigner():
     Returns the best version of apksigner following this algorithm:
     * use config['apksigner'] if set
     * try to find apksigner in path
-    * find apksigner in build-tools starting from newest installed going down to MINIMUM_APKSIGNER_BUILD_TOOLS_VERSION
+    * find apksigner in build-tools starting from newest installed
+      going down to MINIMUM_APKSIGNER_BUILD_TOOLS_VERSION
     :return: path to apksigner or None if no version is found
     """
     if set_command_in_config('apksigner'):
@@ -434,7 +435,7 @@ def find_apksigner():
     for f in sorted(os.listdir(build_tools_path), reverse=True):
         if not os.path.isdir(os.path.join(build_tools_path, f)):
             continue
-        if LooseVersion(f) < LooseVersion(MINIMUM_AAPT_BUILD_TOOLS_VERSION):
+        if LooseVersion(f) < LooseVersion(MINIMUM_APKSIGNER_BUILD_TOOLS_VERSION):
             return None
         if os.path.exists(os.path.join(build_tools_path, f, 'apksigner')):
             apksigner = os.path.join(build_tools_path, f, 'apksigner')
@@ -507,6 +508,7 @@ def test_aapt_version(aapt):
 
 def test_sdk_exists(thisconfig):
     if 'sdk_path' not in thisconfig:
+        # TODO convert this to apksigner once it is required
         if 'aapt' in thisconfig and os.path.isfile(thisconfig['aapt']):
             test_aapt_version(thisconfig['aapt'])
             return True
@@ -2388,19 +2390,15 @@ def ensure_final_value(packageName, arsc, value):
     return ''
 
 
-def is_apk_and_debuggable_aapt(apkfile):
-    p = SdkToolsPopen(['aapt', 'dump', 'xmltree', apkfile, 'AndroidManifest.xml'],
-                      output=False)
-    if p.returncode != 0:
-        raise FDroidException(_("Failed to get APK manifest information"))
-    for line in p.output.splitlines():
-        if 'android:debuggable' in line and not line.endswith('0x0'):
-            return True
-    return False
+def is_apk_and_debuggable(apkfile):
+    """Returns True if the given file is an APK and is debuggable
 
+    Parse only <application android:debuggable=""> from the APK.
 
-def is_apk_and_debuggable_androguard(apkfile):
-    """Parse only <application android:debuggable=""> from the APK"""
+    :param apkfile: full path to the apk to check"""
+
+    if get_file_extension(apkfile) != 'apk':
+        return False
     from androguard.core.bytecodes.axml import AXMLParser, format_value, START_TAG
     with ZipFile(apkfile) as apk:
         with apk.open('AndroidManifest.xml') as manifest:
@@ -2422,20 +2420,6 @@ def is_apk_and_debuggable_androguard(apkfile):
     return False
 
 
-def is_apk_and_debuggable(apkfile):
-    """Returns True if the given file is an APK and is debuggable
-
-    :param apkfile: full path to the apk to check"""
-
-    if get_file_extension(apkfile) != 'apk':
-        return False
-
-    if use_androguard():
-        return is_apk_and_debuggable_androguard(apkfile)
-    else:
-        return is_apk_and_debuggable_aapt(apkfile)
-
-
 def get_apk_id(apkfile):
     """Extract identification information from APK.
 
@@ -2448,15 +2432,12 @@ def get_apk_id(apkfile):
     :returns: triplet (appid, version code, version name)
 
     """
-    if use_androguard():
-        try:
-            return get_apk_id_androguard(apkfile)
-        except zipfile.BadZipFile as e:
-            logging.error(apkfile + ': ' + str(e))
-            if 'aapt' in config:
-                return get_apk_id_aapt(apkfile)
-    else:
-        return get_apk_id_aapt(apkfile)
+    try:
+        return get_apk_id_androguard(apkfile)
+    except zipfile.BadZipFile as e:
+        logging.error(apkfile + ': ' + str(e))
+        if 'aapt' in config:
+            return get_apk_id_aapt(apkfile)
 
 
 def get_apk_id_androguard(apkfile):

@@ -14,6 +14,7 @@ icons_src:
   '160': res/drawable-mdpi-v4/icon_launcher.png
   '240': res/drawable-hdpi-v4/icon_launcher.png
 minSdkVersion: 7
+name: Compass Keyboard
 nativecode:
 - arm64-v8a
 - armeabi

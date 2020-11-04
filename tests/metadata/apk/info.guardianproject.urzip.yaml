@@ -10,6 +10,7 @@ icons_src:
   '-1': res/drawable/ic_launcher.png
   '160': res/drawable/ic_launcher.png
 minSdkVersion: 4
+name: urzip
 packageName: info.guardianproject.urzip
 sig: e0ecb5fc2d63088e4a07ae410a127722
 signer: 7eabd8c15de883d1e82b5df2fd4f7f769e498078e9ad6dc901f0e96db77ceac3
