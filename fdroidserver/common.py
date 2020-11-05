@@ -39,6 +39,7 @@ import socket
 import base64
 import urllib.parse
 import urllib.request
+import yaml
 import zipfile
 import tempfile
 import json
@@ -284,13 +285,17 @@ def regsub_file(pattern, repl, path):
         f.write(text)
 
 
-def read_config(opts, config_file='config.py'):
+def read_config(opts):
     """Read the repository config
 
     The config is read from config_file, which is in the current
     directory when any of the repo management commands are used. If
-    there is a local metadata file in the git repo, then config.py is
+    there is a local metadata file in the git repo, then the config is
     not required, just use defaults.
+
+    config.yml is the preferred form because no code is executed when
+    reading it.  config.py is deprecated and supported for backwards
+    compatibility.
 
     """
     global config, options
@@ -301,14 +306,25 @@ def read_config(opts, config_file='config.py'):
     options = opts
 
     config = {}
+    config_file = 'config.yml'
+    old_config_file = 'config.py'
 
-    if os.path.isfile(config_file):
+    if os.path.exists(config_file) and os.path.exists(old_config_file):
+        logging.error(_("""Conflicting config files! Using {newfile}, ignoring {oldfile}!""")
+                      .format(oldfile=old_config_file, newfile=config_file))
+
+    if os.path.exists(config_file):
         logging.debug(_("Reading '{config_file}'").format(config_file=config_file))
-        with io.open(config_file, "rb") as f:
-            code = compile(f.read(), config_file, 'exec')
-            exec(code, None, config)  # nosec TODO switch to YAML file
+        with open(config_file) as fp:
+            config = yaml.safe_load(fp)
+    elif os.path.exists(old_config_file):
+        logging.warning(_("""{oldfile} is deprecated, use {newfile}""")
+                        .format(oldfile=old_config_file, newfile=config_file))
+        with io.open(old_config_file, "rb") as fp:
+            code = compile(fp.read(), old_config_file, 'exec')
+            exec(code, None, config)  # nosec TODO automatically migrate
     else:
-        logging.warning(_("No 'config.py' found, using defaults."))
+        logging.warning(_("No config.yml found, using defaults."))
 
     for k in ('mirrors', 'install_list', 'uninstall_list', 'serverwebroot', 'servergitroot'):
         if k in config:
@@ -329,10 +345,14 @@ def read_config(opts, config_file='config.py'):
                                       '-providerArg', 'opensc-fdroid.cfg']
 
     if any(k in config for k in ["keystore", "keystorepass", "keypass"]):
-        st = os.stat(config_file)
+        if os.path.exists(config_file):
+            f = config_file
+        elif os.path.exists(old_config_file):
+            f = old_config_file
+        st = os.stat(f)
         if st.st_mode & stat.S_IRWXG or st.st_mode & stat.S_IRWXO:
             logging.warning(_("unsafe permissions on '{config_file}' (should be 0600)!")
-                            .format(config_file=config_file))
+                            .format(config_file=f))
 
     fill_config_defaults(config)
 
@@ -368,6 +388,29 @@ def read_config(opts, config_file='config.py'):
         limit = config['git_mirror_size_limit']
         config['git_mirror_size_limit'] = parse_human_readable_size(limit)
 
+    for configname, dictvalue in config.items():
+        if configname == 'java_paths':
+            new = dict()
+            for k, v in dictvalue.items():
+                new[str(k)] = v
+            config[configname] = new
+        elif configname in ('ndk_paths', 'java_paths', 'char_limits', 'keyaliases'):
+            continue
+        elif isinstance(dictvalue, dict):
+            for k, v in dictvalue.items():
+                if k == 'env':
+                    env = os.getenv(v)
+                    if env:
+                        config[configname] = env
+                    else:
+                        del(config[configname])
+                        logging.error(_('Environment variable {var} from {configname} is not set!')
+                                      .format(var=k, configname=configname))
+                else:
+                    del(config[configname])
+                    logging.error(_('Unknown entry {key} in {configname}')
+                                  .format(key=k, configname=configname))
+
     return config
 
 
@@ -396,10 +439,10 @@ def assert_config_keystore(config):
     nosigningkey = False
     if 'repo_keyalias' not in config:
         nosigningkey = True
-        logging.critical(_("'repo_keyalias' not found in config.py!"))
+        logging.critical(_("'repo_keyalias' not found in config.yml!"))
     if 'keystore' not in config:
         nosigningkey = True
-        logging.critical(_("'keystore' not found in config.py!"))
+        logging.critical(_("'keystore' not found in config.yml!"))
     elif config['keystore'] == 'NONE':
         if not config.get('smartcardoptions'):
             nosigningkey = True
@@ -409,10 +452,10 @@ def assert_config_keystore(config):
         logging.critical("'" + config['keystore'] + "' does not exist!")
     if 'keystorepass' not in config:
         nosigningkey = True
-        logging.critical(_("'keystorepass' not found in config.py!"))
+        logging.critical(_("'keystorepass' not found in config.yml!"))
     if 'keypass' not in config and config.get('keystore') != 'NONE':
         nosigningkey = True
-        logging.critical(_("'keypass' not found in config.py!"))
+        logging.critical(_("'keypass' not found in config.yml!"))
     if nosigningkey:
         raise FDroidException("This command requires a signing key, "
                               + "you can create one using: fdroid update --create-key")
@@ -513,7 +556,7 @@ def test_sdk_exists(thisconfig):
             test_aapt_version(thisconfig['aapt'])
             return True
         else:
-            logging.error(_("'sdk_path' not set in 'config.py'!"))
+            logging.error(_("'sdk_path' not set in config.yml!"))
             return False
     if thisconfig['sdk_path'] == default_config['sdk_path']:
         logging.error(_('No Android SDK found!'))
@@ -3518,19 +3561,24 @@ def load_stats_fdroid_signing_key_fingerprints():
 
 
 def write_to_config(thisconfig, key, value=None, config_file=None):
-    '''write a key/value to the local config.py
+    '''write a key/value to the local config.yml or config.py
 
     NOTE: only supports writing string variables.
 
     :param thisconfig: config dictionary
-    :param key: variable name in config.py to be overwritten/added
+    :param key: variable name in config to be overwritten/added
     :param value: optional value to be written, instead of fetched
         from 'thisconfig' dictionary.
     '''
     if value is None:
         origkey = key + '_orig'
         value = thisconfig[origkey] if origkey in thisconfig else thisconfig[key]
-    cfg = config_file if config_file else 'config.py'
+    if config_file:
+        cfg = config_file
+    elif os.path.exists('config.py') and not os.path.exists('config.yml'):
+        cfg = 'config.py'
+    else:
+        cfg = 'config.yml'
 
     # load config file, create one if it doesn't exist
     if not os.path.exists(cfg):
@@ -3546,10 +3594,17 @@ def write_to_config(thisconfig, key, value=None, config_file=None):
 
     # regex for finding and replacing python string variable
     # definitions/initializations
-    pattern = re.compile(r'^[\s#]*' + key + r'\s*=\s*"[^"]*"')
-    repl = key + ' = "' + value + '"'
-    pattern2 = re.compile(r'^[\s#]*' + key + r"\s*=\s*'[^']*'")
-    repl2 = key + " = '" + value + "'"
+    if cfg.endswith('.py'):
+        pattern = re.compile(r'^[\s#]*' + key + r'\s*=\s*"[^"]*"')
+        repl = key + ' = "' + value + '"'
+        pattern2 = re.compile(r'^[\s#]*' + key + r"\s*=\s*'[^']*'")
+        repl2 = key + " = '" + value + "'"
+    else:
+        # assume .yml as default
+        pattern = re.compile(r'^[\s#]*' + key + r':.*')
+        repl = yaml.dump({key: value}, default_flow_style=False)
+        pattern2 = pattern
+        repl2 = repl
 
     # If we replaced this line once, we make sure won't be a
     # second instance of this line for this key in the document.

@@ -1,5 +1,3 @@
-/config.py
-/makebs.config.py
 *~
 *.pyc
 *.class
@@ -28,9 +26,11 @@ tmp/
 
 # files used in manual testing
 /config.py
+/config.yml
 /tmp/
 /logs/
 /metadata/
+/makebs.config.py
 makebuildserver.config.py
 /tests/.fdroid.keypass.txt
 /tests/.fdroid.keystorepass.txt

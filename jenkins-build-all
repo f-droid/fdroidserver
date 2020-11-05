@@ -81,18 +81,18 @@ else
     cd fdroiddata
 fi
 
-echo "build_server_always = True" > config.py
-echo "deploy_process_logs = True" >> config.py
+echo "build_server_always: true" > config.yml
+echo "deploy_process_logs: true" >> config.yml
 # if the local mediawiki is available, then use it
 if nc -z -w1 localhost 32445; then
     wikiflag="--wiki"
-    echo "wiki_protocol = 'http'" >> config.py
-    echo "wiki_server = 'localhost:32445'" >> config.py
-    echo "wiki_path = '/mediawiki/'" >> config.py
-    echo "wiki_user = 'fdroid'" >> config.py
-    echo "wiki_password = 'update.TestCase'" >> config.py
+    echo "wiki_protocol: http" >> config.yml
+    echo "wiki_server: localhost:32445" >> config.yml
+    echo "wiki_path: /mediawiki/" >> config.yml
+    echo "wiki_user: fdroid" >> config.yml
+    echo "wiki_password: update.TestCase" >> config.yml
 else
-    sed -i '/^wiki_/d' config.py
+    sed -i '/^wiki_/d' config.yml
 fi
 
 $WORKSPACE/fdroid build --verbose --latest --no-tarball --all $wikiflag

@@ -40,7 +40,7 @@ def get_data_files():
         data = fp.read()
 
     data_files.append((data_prefix + '/share/doc/fdroidserver/examples',
-                       ['buildserver/config.buildserver.py', ]
+                       ['buildserver/config.buildserver.yml', ]
                        + re.findall(r'include (examples/.*)', data)))
 
     for f in re.findall(r'include (locale/[a-z][a-z][a-zA-Z_]*/LC_MESSAGES/fdroidserver.mo)', data):

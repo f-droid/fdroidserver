@@ -52,7 +52,7 @@ def update_awsbucket(repo_section):
     subdirectories) to the AWS S3 "bucket". The contents of that subdir of the
     bucket will first be deleted.
 
-    Requires AWS credentials set in config.py: awsaccesskeyid, awssecretkey
+    Requires AWS credentials set in config.yml: awsaccesskeyid, awssecretkey
     '''
 
     logging.debug('Syncing "' + repo_section + '" to Amazon S3 bucket "'
@@ -160,7 +160,7 @@ def update_awsbucket_libcloud(repo_section):
 
     if not config.get('awsaccesskeyid') or not config.get('awssecretkey'):
         raise FDroidException(
-            _('To use awsbucket, awssecretkey and awsaccesskeyid must also be set in config.py!'))
+            _('To use awsbucket, awssecretkey and awsaccesskeyid must also be set in config.yml!'))
     awsbucket = config['awsbucket']
 
     if os.path.exists(USER_S3CFG):

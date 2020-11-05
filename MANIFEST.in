@@ -1,4 +1,4 @@
-include buildserver/config.buildserver.py
+include buildserver/config.buildserver.yml
 include buildserver/provision-android-ndk
 include buildserver/provision-android-sdk
 include buildserver/provision-apt-get-install
@@ -8,7 +8,7 @@ include buildserver/setup-env-vars
 include buildserver/Vagrantfile
 include CHANGELOG.md
 include completion/bash-completion
-include examples/config.py
+include examples/config.yml
 include examples/fdroid-icon.png
 include examples/makebuildserver.config.py
 include examples/opensc-fdroid.cfg

@@ -98,7 +98,7 @@ else
 fi
 
 cd fdroiddata
-echo "build_server_always = True" > config.py
+echo "build_server_always: true" > config.yml
 
 if [ -z $ANDROID_HOME ]; then
     if [ -e ~/.android/bashrc ]; then

@@ -1,82 +1,78 @@
-#!/usr/bin/env python3
-
-# Copy this file to config.py, then amend the settings below according to
+---
+# Copy this file to config.yml, then amend the settings below according to
 # your system configuration.
 
 # Custom path to the Android SDK, defaults to $ANDROID_HOME
-# sdk_path = "$ANDROID_HOME"
+# sdk_path: $ANDROID_HOME
 
 # Custom paths to various versions of the Android NDK, defaults to 'r12b' set
 # to $ANDROID_NDK. Most users will have the latest at $ANDROID_NDK, which is
 # used by default. If a version is missing or assigned to None, it is assumed
 # not installed.
-# ndk_paths = {
-#     'r10e': None,
-#     'r11c': None,
-#     'r12b': "$ANDROID_NDK",
-#     'r13b': None,
-#     'r14b': None,
-#     'r15c': None,
-#     'r16b': None,
-#     'r17c': None,
-#     'r18b': None,
-#     'r19c': None,
-#     'r20b': None,
-#     'r21d': None,
-# }
+# ndk_paths:
+#   r10e: None
+#   r11c: None
+#   r12b: $ANDROID_NDK
+#   r13b: None
+#   r14b: None
+#   r15c: None
+#   r16b: None
+#   r17c: None
+#   r18b: None
+#   r19c: None
+#   r20b: None
+#   r21d: None
 
 # Directory to store downloaded tools in (i.e. gradle versions)
 # By default, these are stored in ~/.cache/fdroidserver
-# cachedir = cache
+# cachedir: cache
 
-# java_paths = {
-#     '8': "/usr/lib/jvm/java-8-openjdk",
-# }
+# Specify paths to each major Java release that you want to support
+# java_paths:
+#   8: /usr/lib/jvm/java-8-openjdk
 
 # Build tools version to be used
-# build_tools = "28.0.3"
+# build_tools: 28.0.3
 
 # Command or path to binary for running Ant
-# ant = "ant"
+# ant: ant
 
 # Command or path to binary for running maven 3
-# mvn3 = "mvn"
+# mvn3: mvn
 
 # Command or path to binary for running Gradle
 # Defaults to using an internal gradle wrapper (gradlew-fdroid).
-# gradle = "gradle"
+# gradle: gradle
 
 # Always scan the APKs produced by `fdroid build` for known non-free classes
-# scan_binary = True
+# scan_binary: true
 
 # Set the maximum age (in days) of an index that a client should accept from
 # this repo. Setting it to 0 or not setting it at all disables this
 # functionality. If you do set this to a non-zero value, you need to ensure
 # that your index is updated much more frequently than the specified interval.
 # The same policy is applied to the archive repo, if there is one.
-# repo_maxage = 0
+# repo_maxage: 0
 
-repo_url = "https://MyFirstFDroidRepo.org/fdroid/repo"
-repo_name = "My First F-Droid Repo Demo"
-repo_icon = "fdroid-icon.png"
-repo_description = """
-This is a repository of apps to be used with F-Droid. Applications in this
-repository are either official binaries built by the original application
-developers, or are binaries built from source by the admin of f-droid.org
-using the tools on https://gitlab.com/u/fdroid.
-"""
+repo_url: https://MyFirstFDroidRepo.org/fdroid/repo
+repo_name: My First F-Droid Repo Demo
+repo_icon: fdroid-icon.png
+repo_description: |
+  This is a repository of apps to be used with F-Droid. Applications in this
+  repository are either official binaries built by the original application
+  developers, or are binaries built from source by the admin of f-droid.org
+  using the tools on https://gitlab.com/u/fdroid.
 
 # As above, but for the archive repo.
 # archive_older sets the number of versions kept in the main repo, with all
 # older ones going to the archive. Set it to 0, and there will be no archive
 # repository, and no need to define the other archive_ values.
-archive_older = 3
-archive_url = "https://f-droid.org/archive"
-archive_name = "My First F-Droid Archive Demo"
-archive_icon = "fdroid-icon.png"
-archive_description = """
-The repository of older versions of applications from the main demo repository.
-"""
+archive_older: 3
+archive_url: https://f-droid.org/archive
+archive_name: My First F-Droid Archive Demo
+archive_icon: fdroid-icon.png
+archive_description: |
+  The repository of older versions of packages from the main demo repository.
 
 # This allows a specific kind of insecure APK to be included in the
 # 'repo' section.  Since April 2017, APK signatures that use MD5 are
@@ -85,77 +81,82 @@ The repository of older versions of applications from the main demo repository.
 # disabled signatures to the archive.  This option stops that
 # behavior, and lets those APKs stay part of 'repo'.
 #
-# allow_disabled_algorithms = True
+# allow_disabled_algorithms: true
 
 # Normally, all apps are collected into a single app repository, like on
 # https://f-droid.org. For certain situations, it is better to make a repo
 # that is made up of APKs only from a single app. For example, an automated
 # build server that publishes nightly builds.
-# per_app_repos = True
+# per_app_repos: true
 
 # `fdroid update` will create a link to the current version of a given app.
 # This provides a static path to the current APK. To disable the creation of
 # this link, uncomment this:
-# make_current_version_link = False
+# make_current_version_link: false
 
 # By default, the "current version" link will be based on the "Name" of the
 # app from the metadata. You can change it to use a different field from the
 # metadata here:
-# current_version_name_source = 'packageName'
+# current_version_name_source: packageName
 
 # Optionally, override home directory for gpg
-# gpghome = '/home/fdroid/somewhere/else/.gnupg'
+# gpghome: /home/fdroid/somewhere/else/.gnupg
 
 # The ID of a GPG key for making detached signatures for apks. Optional.
-# gpgkey = '1DBA2E89'
+# gpgkey: 1DBA2E89
 
 # The key (from the keystore defined below) to be used for signing the
 # repository itself. This is the same name you would give to keytool or
 # jarsigner using -alias. (Not needed in an unsigned repository).
-# repo_keyalias = "fdroidrepo"
+# repo_keyalias: fdroidrepo
 
 # Optionally, the public key for the key defined by repo_keyalias above can
 # be specified here. There is no need to do this, as the public key can and
 # will be retrieved from the keystore when needed. However, specifying it
 # manually can allow some processing to take place without access to the
 # keystore.
-# repo_pubkey = "..."
+# repo_pubkey: ...
 
 # The keystore to use for release keys when building. This needs to be
 # somewhere safe and secure, and backed up!  The best way to manage these
 # sensitive keys is to use a "smartcard" (aka Hardware Security Module). To
 # configure F-Droid to use a smartcard, set the keystore file using the keyword
-# "NONE" (i.e. keystore = "NONE"). That makes Java find the keystore on the
+# "NONE" (i.e. keystore: "NONE"). That makes Java find the keystore on the
 # smartcard based on 'smartcardoptions' below.
-# keystore = "~/.local/share/fdroidserver/keystore.jks"
+# keystore: ~/.local/share/fdroidserver/keystore.jks
 
 # You should not need to change these at all, unless you have a very
 # customized setup for using smartcards in Java with keytool/jarsigner
-# smartcardoptions = "-storetype PKCS11 -providerName SunPKCS11-OpenSC \
-#    -providerClass sun.security.pkcs11.SunPKCS11 \
-#    -providerArg opensc-fdroid.cfg"
+# smartcardoptions: |
+#   -storetype PKCS11 -providerName SunPKCS11-OpenSC
+#   -providerClass sun.security.pkcs11.SunPKCS11
+#   -providerArg opensc-fdroid.cfg
 
 # The password for the keystore (at least 6 characters). If this password is
 # different than the keypass below, it can be OK to store the password in this
 # file for real use. But in general, sensitive passwords should not be stored
 # in text files!
-# keystorepass = "password1"
+# keystorepass: password1
 
 # The password for keys - the same is used for each auto-generated key as well
 # as for the repository key. You should not normally store this password in a
 # file since it is a sensitive password.
-# keypass = "password2"
+# keypass: password2
 
 # The distinguished name used for all keys.
-# keydname = "CN=Birdman, OU=Cell, O=Alcatraz, L=Alcatraz, S=California, C=US"
+# keydname: CN=Birdman, OU=Cell, O=Alcatraz, L=Alcatraz, S=California, C=US
 
 # Use this to override the auto-generated key aliases with specific ones
 # for particular applications. Normally, just leave it empty.
-# keyaliases = {}
-# keyaliases['com.example.app'] = 'example'
+#
+# keyaliases:
+#   com.example.app: example
+#
 # You can also force an app to use the same key alias as another one, using
 # the @ prefix.
-# keyaliases['com.example.another.plugin'] = '@com.example.another'
+#
+# keyaliases:
+#   com.example.another.plugin: "@com.example.another"
 
 
 # The full path to the root of the repository. It must be specified in
@@ -166,11 +167,11 @@ The repository of older versions of applications from the main demo repository.
 # multiple servers to sync to by wrapping the whole thing in {} or [], and
 # including the serverwebroot strings in a comma-separated list.
 #
-# serverwebroot = 'user@example:/var/www/fdroid'
-# serverwebroot = {
-#     'foo.com:/usr/share/nginx/www/fdroid',
-#     'bar.info:/var/www/fdroid',
-#     }
+# serverwebroot: user@example:/var/www/fdroid
+# serverwebroot:
+#   - foo.com:/usr/share/nginx/www/fdroid
+#   - bar.info:/var/www/fdroid
+
 
 # When running fdroid processes on a remote server, it is possible to
 # publish extra information about the status.  Each fdroid sub-command
@@ -181,25 +182,24 @@ The repository of older versions of applications from the main demo repository.
 # .../repo/$APPID_$VERCODE.log.gz.  These files are also pushed to all
 # servers configured in 'serverwebroot'.
 #
-# deploy_process_logs = True
+# deploy_process_logs: true
 
 # The full URL to a git remote repository. You can include
 # multiple servers to mirror to by wrapping the whole thing in {} or [], and
 # including the servergitmirrors strings in a comma-separated list.
 # Servers listed here will also be automatically inserted in the mirrors list.
 #
-# servergitmirrors = 'https://github.com/user/repo'
-# servergitmirrors = {
-#     'https://github.com/user/repo',
-#     'https://gitlab.com/user/repo',
-#     }
+# servergitmirrors: https://github.com/user/repo
+# servergitmirrors:
+#   - https://github.com/user/repo
+#   - https://gitlab.com/user/repo
 
 # Most git hosting services have hard size limits for each git repo.
 # `fdroid deploy` will delete the git history when the git mirror repo
 # approaches this limit to ensure that the repo will still fit when
 # pushed.  GitHub recommends 1GB, gitlab.com recommends 10GB.
 #
-# git_mirror_size_limit = '10GB'
+# git_mirror_size_limit: 10GB
 
 # Any mirrors of this repo, for example all of the servers declared in
 # serverwebroot and all the servers declared in servergitmirrors,
@@ -210,14 +210,13 @@ The repository of older versions of applications from the main demo repository.
 # and the archive, if it is enabled.  So these URLs should end in the
 # 'fdroid' base of the F-Droid part of the web server like serverwebroot.
 #
-# mirrors = (
-#     'https://foo.bar/fdroid',
-#     'http://foobarfoobarfoobar.onion/fdroid',
-# )
+# mirrors:
+#   - https://foo.bar/fdroid
+#   - http://foobarfoobarfoobar.onion/fdroid
 
 # optionally specify which identity file to use when using rsync or git over SSH
 #
-# identity_file = '~/.ssh/fdroid_id_rsa'
+# identity_file: ~/.ssh/fdroid_id_rsa
 
 
 # If you are running the repo signing process on a completely offline machine,
@@ -228,7 +227,7 @@ The repository of older versions of applications from the main demo repository.
 # standard folder called 'fdroid' as the specified folder is recommended, like
 # with serverwebroot.
 #
-# local_copy_dir = '/media/MyUSBThumbDrive/fdroid'
+# local_copy_dir: /media/MyUSBThumbDrive/fdroid
 
 
 # If you are using local_copy_dir on an offline build/signing server, once the
@@ -236,19 +235,21 @@ The repository of older versions of applications from the main demo repository.
 # synced to the copy on the online machine. To make that happen
 # automatically, set sync_from_local_copy_dir to True:
 #
-# sync_from_local_copy_dir = True
+# sync_from_local_copy_dir: true
 
 
 # To upload the repo to an Amazon S3 bucket using `fdroid server
 # update`.  Warning, this deletes and recreates the whole fdroid/
 # directory each time. This prefers s3cmd, but can also use
 # apache-libcloud.  To customize how s3cmd interacts with the cloud
-# provider, create a 's3cfg' file next to this file (config.py), and
+# provider, create a 's3cfg' file next to this file (config.yml), and
 # those settings will be used instead of any 'aws' variable below.
+# Secrets can be fetched from environment variables to ensure that
+# they are not leaked as part of this file.
 #
-# awsbucket = 'myawsfdroid'
-# awsaccesskeyid = 'SEE0CHAITHEIMAUR2USA'
-# awssecretkey = 'yourverysecretkeywordpassphraserighthere'
+# awsbucket: myawsfdroid
+# awsaccesskeyid: SEE0CHAITHEIMAUR2USA
+# awssecretkey: {env: awssecretkey}
 
 
 # If you want to force 'fdroid server' to use a non-standard serverwebroot.
@@ -256,69 +257,72 @@ The repository of older versions of applications from the main demo repository.
 # '/fdroid'. (Please note that some client features expect repository URLs
 # to end in '/fdroid/repo'.)
 #
-# nonstandardwebroot = False
+# nonstandardwebroot: false
 
 
 # If you want to upload the release apk file to androidobservatory.org
 #
-# androidobservatory = False
+# androidobservatory: false
 
 
 # If you want to upload the release apk file to virustotal.com
 # You have to enter your profile apikey to enable the upload.
 #
-# virustotal_apikey = "virustotal_apikey"
+# virustotal_apikey: 9872987234982734
+#
+# Or get it from an environment variable:
+#
+# virustotal_apikey: {env: virustotal_apikey}
 
 
 # The build logs can be posted to a mediawiki instance, like on f-droid.org.
-# wiki_protocol = "http"
-# wiki_server = "server"
-# wiki_path = "/wiki/"
-# wiki_user = "login"
-# wiki_password = "1234"
+# wiki_protocol: http
+# wiki_server: server
+# wiki_path: /wiki/
+# wiki_user: login
+# wiki_password: 1234
 
 # Keep a log of all generated index files in a git repo to provide a
 # "binary transparency" log for anyone to check the history of the
 # binaries that are published.  This is in the form of a "git remote",
 # which this machine where `fdroid update` is run has already been
 # configured to allow push access (e.g. ssh key, username/password, etc)
-# binary_transparency_remote = "git@gitlab.com:fdroid/binary-transparency-log.git"
+# binary_transparency_remote: git@gitlab.com:fdroid/binary-transparency-log.git
 
 # Only set this to true when running a repository where you want to generate
 # stats, and only then on the master build servers, not a development
 # machine. If you want to keep the "added" and "last updated" dates for each
 # app and APK in your repo, then you should enable this.
-# update_stats = True
+# update_stats: true
 
 # When used with stats, this is a list of IP addresses that are ignored for
 # calculation purposes.
-# stats_ignore = []
+# stats_ignore: []
 
 # Server stats logs are retrieved from. Required when update_stats is True.
-# stats_server = "example.com"
+# stats_server: example.com
 
 # User stats logs are retrieved from. Required when update_stats is True.
-# stats_user = "bob"
+# stats_user: bob
 
 # Use the following to push stats to a Carbon instance:
-# stats_to_carbon = False
-# carbon_host = '0.0.0.0'
-# carbon_port = 2003
+# stats_to_carbon: false
+# carbon_host: 0.0.0.0
+# carbon_port: 2003
 
 # Set this to true to always use a build server. This saves specifying the
 # --server option on dedicated secure build server hosts.
-# build_server_always = True
+# build_server_always: true
 
 # Limit in number of characters that fields can take up
 # Only the fields listed here are supported, defaults shown
-# char_limits = {
-#     'author': 256,
-#     'name': 50,
-#     'summary': 80,
-#     'description': 4000,
-#     'video': 256,
-#     'whatsNew': 500,
-# }
+# char_limits:
+#   author: 256
+#   name: 50
+#   summary: 80
+#   description: 4000
+#   video: 256
+#   whatsNew: 500
 
 # It is possible for the server operator to specify lists of apps that
 # must be installed or uninstalled on the client (aka "push installs).
@@ -327,16 +331,14 @@ The repository of older versions of applications from the main demo repository.
 # the packageNames listed.  This is protected by the same signing key
 # as the app index metadata.
 #
-# install_list = (
-#     'at.bitfire.davdroid',
-#     'com.fsck.k9',
-#     'us.replicant',
-# )
+# install_list:
+#   - at.bitfire.davdroid
+#   - com.fsck.k9
+#   - us.replicant
 #
-# uninstall_list = (
-#     'com.facebook.orca',
-#     'com.android.vending',
-# )
+# uninstall_list:
+#   - com.facebook.orca
+#   - com.android.vending
 
 # `fdroid lint` checks licenses in metadata against a built white list.  By
 # default we will require license metadata to be present and only allow
@@ -350,7 +352,6 @@ The repository of older versions of applications from the main demo repository.
 # Just supply a custom list of licene names you would like to allow. Setting
 # this to `None` disables this lint check.
 #
-# lint_licenses = (
-#     'Custom-License-A',
-#     'Another-License',
-# )
+# lint_licenses:
+#   - Custom-License-A
+#   - Another-License
