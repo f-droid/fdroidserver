@@ -243,3 +243,19 @@ gradle:
     - python3 -m ensurepip
     - $pip install beautifulsoup4 requests
     - ./tests/gradle-release-checksums.py
+
+# this tests the basic setup of the 'fdroid build' CI job in fdroiddata
+fdroiddata fdroid build:
+  image: registry.gitlab.com/fdroid/ci-images-client:latest
+  only:
+    changes:
+      - buildserver/provision-apt-get-install
+  script:
+    - bash buildserver/provision-apt-get-install http://deb.debian.org/debian
+    - apt-get dist-upgrade
+    - apt-get install -t stretch-backports
+         fdroidserver
+         python3-asn1crypto
+         python3-ruamel.yaml
+         yamllint
+    - apt-get purge fdroidserver
