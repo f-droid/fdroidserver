@@ -73,6 +73,9 @@ packages="
  git-svn
  gperf
  gpg/stretch-backports-sloppy
+ gpgconf/stretch-backports-sloppy
+ libassuan0/stretch-backports
+ libgpg-error0/stretch-backports
  javacc
  libarchive-zip-perl
  libexpat1-dev
