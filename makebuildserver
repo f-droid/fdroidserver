@@ -213,6 +213,8 @@ CACHE_FILES = [
      '8452dbbf9668a428abb243c4f02a943b7aa83af3cca627629a15c4c09f28e7bd'),
     ('https://dl.google.com/android/repository/platform-29_r05.zip',
      '951da8bf175254da74626824f919bd28def64f8828f29dd3b124a535cf4049d8'),
+    ('https://dl.google.com/android/repository/platform-30_r03.zip',
+     'f3f5b75744dbf6ee6ed3e8174a71e513bfee502d0bc3463ea97e517bff68d84e'),
     ('https://dl.google.com/android/repository/build-tools_r19.1-linux.zip',
      '3833b409f78c002a83244e220be380ea6fa44d604e0d47de4b7e5daefe7cd3f4'),
     ('https://dl.google.com/android/repository/build-tools_r20-linux.zip',
