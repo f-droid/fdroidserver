@@ -247,9 +247,13 @@ gradle:
 # this tests the basic setup of the 'fdroid build' CI job in fdroiddata
 fdroiddata fdroid build:
   image: registry.gitlab.com/fdroid/ci-images-client:latest
-  only:
-    changes:
-      - buildserver/provision-apt-get-install
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_BRANCH
+      changes:
+        - buildserver/provision-apt-get-install
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+      changes:
+        - buildserver/provision-apt-get-install
   script:
     - bash buildserver/provision-apt-get-install http://deb.debian.org/debian
     - apt-get dist-upgrade
