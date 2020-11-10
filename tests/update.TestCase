@@ -18,6 +18,7 @@ import yaml
 import zipfile
 import textwrap
 from binascii import unhexlify
+from datetime import datetime
 from distutils.version import LooseVersion
 from testcommon import TmpCwd
 
@@ -55,6 +56,12 @@ DONATION_FIELDS = (
     'Liberapay',
     'OpenCollective',
 )
+
+
+class Options:
+    allow_disabled_algorithms = False
+    clean = False
+    rename_apks = False
 
 
 class UpdateTest(unittest.TestCase):
@@ -452,6 +459,56 @@ class UpdateTest(unittest.TestCase):
         reset = fdroidserver.update.get_cache()
         self.assertEqual(2, len(reset))
 
+    def test_scan_repo_files(self):
+        config = dict()
+        fdroidserver.common.fill_config_defaults(config)
+        fdroidserver.common.config = config
+        fdroidserver.update.config = config
+
+        testdir = tempfile.mkdtemp(prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir)
+        os.chdir(testdir)
+        os.mkdir('repo')
+        os.mkdir('stats')
+        with open(os.path.join('stats', 'known_apks.txt'), 'w') as fp:
+            fp.write('se.manyver_30.apk se.manyver 2018-10-10\n')
+        filename = 'Virgin-islands-british_centralamerica_2.obf.zip'
+        shutil.copy(os.path.join(self.basedir, filename), 'repo')
+        knownapks = fdroidserver.common.KnownApks()
+        files, fcachechanged = fdroidserver.update.scan_repo_files(dict(), 'repo', knownapks, False)
+        knownapks.writeifchanged()
+        self.assertTrue(fcachechanged)
+
+        info = files[0]
+        self.assertEqual(filename, info['apkName'])
+        self.assertEqual(datetime, type(info['added']))
+        self.assertEqual(os.path.getsize(os.path.join('repo', filename)), info['size'])
+        self.assertEqual('402ee0799d5da535276b5a3672fb049d6df3e1727cfb35369c8962c4a42cac3d',
+                         info['packageName'])
+
+    def test_read_added_date_from_all_apks(self):
+        config = dict()
+        fdroidserver.common.fill_config_defaults(config)
+        fdroidserver.common.config = config
+        fdroidserver.update.config = config
+        fdroidserver.update.options = Options
+        os.chdir(os.path.join(localmodule, 'tests'))
+        apps = fdroidserver.metadata.read_metadata()
+        knownapks = fdroidserver.common.KnownApks()
+        apks, cachechanged = fdroidserver.update.process_apks({}, 'repo', knownapks)
+        fdroidserver.update.read_added_date_from_all_apks(apps, apks)
+
+    def test_apply_info_from_latest_apk(self):
+        config = dict()
+        fdroidserver.common.fill_config_defaults(config)
+        fdroidserver.common.config = config
+        fdroidserver.update.config = config
+        fdroidserver.update.options = Options
+        os.chdir(os.path.join(localmodule, 'tests'))
+        apps = fdroidserver.metadata.read_metadata()
+        knownapks = fdroidserver.common.KnownApks()
+        apks, cachechanged = fdroidserver.update.process_apks({}, 'repo', knownapks)
+        fdroidserver.update.apply_info_from_latest_apk(apps, apks)
+
     def test_scan_apk(self):
         config = dict()
         fdroidserver.common.fill_config_defaults(config)
@@ -599,6 +656,7 @@ class UpdateTest(unittest.TestCase):
             _, apk, cachechanged = fdroidserver.update.process_apk({}, apkName, 'repo', knownapks,
                                                                    False)
             # Don't care about the date added to the repo and relative apkName
+            self.assertEqual(datetime, type(apk['added']))
             del apk['added']
             del apk['apkName']
 

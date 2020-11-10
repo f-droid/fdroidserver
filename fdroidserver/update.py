@@ -1891,7 +1891,7 @@ def apply_info_from_latest_apk(apps, apks):
                     bestver = apk['versionCode']
                     bestapk = apk
 
-                if app['NoSourceSince']:
+                if app.get('NoSourceSince'):
                     apk['antiFeatures'].add('NoSourceSince')
 
         if not app['added']:
@@ -1901,12 +1901,12 @@ def apply_info_from_latest_apk(apps, apks):
 
         if bestver == UNSET_VERSION_CODE:
 
-            if app['Name'] is None:
+            if app.get('Name') is None:
                 app['Name'] = app['AutoName'] or appid
             app['icon'] = None
             logging.debug("Application " + appid + " has no packages")
         else:
-            if app['Name'] is None:
+            if app.get('Name') is None:
                 app['Name'] = bestapk['name']
             app['icon'] = bestapk['icon'] if 'icon' in bestapk else None
             if app['CurrentVersionCode'] is None:
@@ -2095,10 +2095,10 @@ def read_added_date_from_all_apks(apps, apks):
         for apk in apks:
             if apk['packageName'] == appid:
                 if 'added' in apk:
-                    if not app.added or apk['added'] < app.added:
-                        app.added = apk['added']
-                    if not app.lastUpdated or apk['added'] > app.lastUpdated:
-                        app.lastUpdated = apk['added']
+                    if not app.get('added') or apk['added'] < app['added']:
+                        app['added'] = apk['added']
+                    if not app.get('lastUpdated') or apk['added'] > app['lastUpdated']:
+                        app['lastUpdated'] = apk['added']
 
 
 def read_names_from_apks(apps, apks):
