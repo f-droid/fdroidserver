@@ -94,22 +94,23 @@ def main():
             p = '/opt/android-sdk'
         if os.path.exists(p):
             default_sdk_path = p
+            test_config['sdk_path'] = default_sdk_path
 
-        while not options.no_prompt:
-            try:
-                s = input(_('Enter the path to the Android SDK (%s) here:\n> ') % default_sdk_path)
-            except KeyboardInterrupt:
-                print('')
-                sys.exit(1)
-            if re.match(r'^\s*$', s) is not None:
-                test_config['sdk_path'] = default_sdk_path
-            else:
-                test_config['sdk_path'] = s
-            if not default_sdk_path:
-                del(test_config['sdk_path'])
-                break
-            if common.test_sdk_exists(test_config):
-                break
+        if not common.test_sdk_exists(test_config):
+            del(test_config['sdk_path'])
+            while not options.no_prompt:
+                try:
+                    s = input(_('Enter the path to the Android SDK (%s) here:\n> ') % default_sdk_path)
+                except KeyboardInterrupt:
+                    print('')
+                    sys.exit(1)
+                if re.match(r'^\s*$', s) is not None:
+                    test_config['sdk_path'] = default_sdk_path
+                else:
+                    test_config['sdk_path'] = s
+                if common.test_sdk_exists(test_config):
+                    break
+                default_sdk_path = ''
 
     if test_config.get('sdk_path') and not common.test_sdk_exists(test_config):
         raise FDroidException(_("Android SDK not found at {path}!")
