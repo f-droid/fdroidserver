@@ -388,6 +388,7 @@ def read_config(opts):
         limit = config['git_mirror_size_limit']
         config['git_mirror_size_limit'] = parse_human_readable_size(limit)
 
+    confignames_to_delete = set()
     for configname, dictvalue in config.items():
         if configname == 'java_paths':
             new = dict()
@@ -403,13 +404,16 @@ def read_config(opts):
                     if env:
                         config[configname] = env
                     else:
-                        del(config[configname])
+                        confignames_to_delete.add(configname)
                         logging.error(_('Environment variable {var} from {configname} is not set!')
                                       .format(var=k, configname=configname))
                 else:
-                    del(config[configname])
+                    confignames_to_delete.add(configname)
                     logging.error(_('Unknown entry {key} in {configname}')
                                   .format(key=k, configname=configname))
+
+    for configname in confignames_to_delete:
+        del(config[configname])
 
     return config
 
