@@ -358,7 +358,7 @@ def make_v0(apps, apks, repodir, repodict, requestsdict, fdroid_signing_key_fing
     for appid, appdict in apps.items():
         app = metadata.App(appdict)
 
-        if app.Disabled is not None:
+        if app.get('Disabled') is not None:
             continue
 
         # Get a list of the apks for this app...

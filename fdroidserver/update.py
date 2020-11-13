@@ -247,13 +247,13 @@ def update_wiki(apps, apks):
         buildfails = False
         for apk in apks:
             if apk['packageName'] == appid:
-                if str(apk['versionCode']) == app.CurrentVersionCode:
+                if str(apk['versionCode']) == app.get('CurrentVersionCode'):
                     gotcurrentver = True
                 apklist.append(apk)
         # Include ones we can't build, as a special case...
         for build in app.get('Builds', []):
             if build.disable:
-                if build.versionCode == app.CurrentVersionCode:
+                if build.versionCode == app.get('CurrentVersionCode'):
                     cantupdate = True
                 # TODO: Nasty: vercode is a string in the build, and an int elsewhere
                 apklist.append({'versionCode': int(build.versionCode),
@@ -272,7 +272,7 @@ def update_wiki(apps, apks):
                                     'versionName': build.versionName,
                                     'buildproblem': "The build for this version appears to have failed. Check the [[{0}/lastbuild_{1}|build log]].".format(appid, build.versionCode),
                                     })
-        if app.CurrentVersionCode == '0':
+        if app.get('CurrentVersionCode') == '0':
             cantupdate = True
         # Sort with most recent first...
         apklist = sorted(apklist, key=lambda apk: apk['versionCode'], reverse=True)
@@ -1912,7 +1912,7 @@ def apply_info_from_latest_apk(apps, apks):
             if app.get('Name') is None:
                 app['Name'] = bestapk['name']
             app['icon'] = bestapk['icon'] if 'icon' in bestapk else None
-            if app['CurrentVersionCode'] is None:
+            if app.get('CurrentVersionCode') is None:
                 app['CurrentVersionCode'] = str(bestver)
 
 
@@ -1931,8 +1931,8 @@ def archive_old_apks(apps, apks, archapks, repodir, archivedir, defaultkeepversi
         currentVersionApk = None
         for apk in apk_list:
             if apk['packageName'] == appid:
-                if app.CurrentVersionCode is not None:
-                    if apk['versionCode'] == common.version_code_string_to_int(app.CurrentVersionCode):
+                if app.get('CurrentVersionCode') is not None:
+                    if apk['versionCode'] == common.version_code_string_to_int(app['CurrentVersionCode']):
                         currentVersionApk = apk
                         continue
                 apkList.append(apk)
@@ -1946,8 +1946,8 @@ def archive_old_apks(apps, apks, archapks, repodir, archivedir, defaultkeepversi
 
     for appid, app in apps.items():
 
-        if app.ArchivePolicy:
-            keepversions = int(app.ArchivePolicy[:-9])
+        if app.get('ArchivePolicy'):
+            keepversions = int(app['ArchivePolicy'][:-9])
         else:
             keepversions = defaultkeepversions
 
