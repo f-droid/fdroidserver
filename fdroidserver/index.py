@@ -405,7 +405,7 @@ def make_v0(apps, apks, repodir, repodict, requestsdict, fdroid_signing_key_fing
             addElement('icon', app.icon, doc, apel)
 
         addElementCheckLocalized('desc', app, 'Description', doc, apel,
-                                 '<p>No description available</p>')
+                                 'No description available')
 
         addElement('license', app.License, doc, apel)
         if app.Categories:

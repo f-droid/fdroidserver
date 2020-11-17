@@ -205,7 +205,7 @@ class UpdateTest(unittest.TestCase):
         fdroidserver.update.options = fdroidserver.common.options
         os.chdir(tmptestsdir)
 
-        apps = fdroidserver.metadata.read_metadata(xref=True)
+        apps = fdroidserver.metadata.read_metadata()
         fdroidserver.update.copy_triple_t_store_metadata(apps)
 
         # TODO ideally, this would compare the whole dict like in metadata.TestCase's test_read_metadata()
@@ -236,7 +236,7 @@ class UpdateTest(unittest.TestCase):
         fdroidserver.update.config = config
         fdroidserver.update.options = fdroidserver.common.options
 
-        apps = fdroidserver.metadata.read_metadata(xref=True)
+        apps = fdroidserver.metadata.read_metadata()
         self.assertTrue(packageName in apps)
         fdroidserver.update.copy_triple_t_store_metadata(apps)
         correctlocales = ['de-DE', 'en-US', 'fr-FR', 'kn-IN']
@@ -382,7 +382,7 @@ class UpdateTest(unittest.TestCase):
         fdroidserver.update.options.rename_apks = False
         fdroidserver.update.options.allow_disabled_algorithms = False
 
-        apps = fdroidserver.metadata.read_metadata(xref=True)
+        apps = fdroidserver.metadata.read_metadata()
         knownapks = fdroidserver.common.KnownApks()
         apks, cachechanged = fdroidserver.update.process_apks({}, 'repo', knownapks, False)
         self.assertEqual(len(apks), 17)
@@ -439,7 +439,7 @@ class UpdateTest(unittest.TestCase):
         fdroidserver.update.options.rename_apks = False
         fdroidserver.update.options.allow_disabled_algorithms = False
 
-        fdroidserver.metadata.read_metadata(xref=True)
+        fdroidserver.metadata.read_metadata()
         knownapks = fdroidserver.common.KnownApks()
         apkcache = fdroidserver.update.get_cache()
         self.assertEqual(2, len(apkcache))
@@ -817,7 +817,7 @@ class UpdateTest(unittest.TestCase):
         fdroidserver.update.options.rename_apks = False
         fdroidserver.update.options.allow_disabled_algorithms = False
 
-        apps = fdroidserver.metadata.read_metadata(xref=True)
+        apps = fdroidserver.metadata.read_metadata()
         knownapks = fdroidserver.common.KnownApks()
         apks, cachechanged = fdroidserver.update.process_apks({}, 'repo', knownapks, False)
         fdroidserver.update.translate_per_build_anti_features(apps, apks)
@@ -860,16 +860,16 @@ class UpdateTest(unittest.TestCase):
         testfile = 'metadata/info.guardianproject.urzip.yml'
         # create empty 0 byte .yml file, run read_metadata, it should work
         open(testfile, 'a').close()
-        apps = fdroidserver.metadata.read_metadata(xref=True)
+        apps = fdroidserver.metadata.read_metadata()
         self.assertEqual(1, len(apps))
         os.remove(testfile)
 
         # test using internal template
-        apps = fdroidserver.metadata.read_metadata(xref=True)
+        apps = fdroidserver.metadata.read_metadata()
         self.assertEqual(0, len(apps))
         fdroidserver.update.create_metadata_from_template(apk)
         self.assertTrue(os.path.exists(testfile))
-        apps = fdroidserver.metadata.read_metadata(xref=True)
+        apps = fdroidserver.metadata.read_metadata()
         self.assertEqual(1, len(apps))
         for app in apps.values():
             self.assertEqual('urzip', app['Name'])
@@ -882,7 +882,7 @@ class UpdateTest(unittest.TestCase):
         shutil.copy(os.path.join(localmodule, 'examples', 'template.yml'), tmptestsdir)
         fdroidserver.update.create_metadata_from_template(apk)
         self.assertTrue(os.path.exists(testfile))
-        apps = fdroidserver.metadata.read_metadata(xref=True)
+        apps = fdroidserver.metadata.read_metadata()
         self.assertEqual(1, len(apps))
         for app in apps.values():
             self.assertEqual('urzip', app['Name'])

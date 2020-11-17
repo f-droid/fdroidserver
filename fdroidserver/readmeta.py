@@ -32,7 +32,7 @@ def main():
     metadata.warnings_action = options.W
     common.read_config(None)
 
-    metadata.read_metadata(xref=True)
+    metadata.read_metadata()
 
 
 if __name__ == "__main__":
