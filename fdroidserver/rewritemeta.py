@@ -61,7 +61,7 @@ def main():
     config = common.read_config(options)
 
     # Get all apps...
-    allapps = metadata.read_metadata()
+    allapps = metadata.read_metadata(options.appid)
     apps = common.read_app_args(options.appid, allapps, False)
 
     for appid, app in apps.items():

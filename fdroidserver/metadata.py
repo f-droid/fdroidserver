@@ -541,7 +541,7 @@ def read_srclibs():
         srclibs[srclibname] = parse_yaml_srclib(metadatapath)
 
 
-def read_metadata(check_vcs=[], refresh=True, sort_by_time=False):
+def read_metadata(appids=None, check_vcs=[], refresh=True, sort_by_time=False):
     """Return a list of App instances sorted newest first
 
     This reads all of the metadata files in a 'data' repository, then
@@ -563,8 +563,22 @@ def read_metadata(check_vcs=[], refresh=True, sort_by_time=False):
         if not os.path.exists(basedir):
             os.makedirs(basedir)
 
-    metadatafiles = (glob.glob(os.path.join('metadata', '*.yml'))
-                     + glob.glob('.fdroid.yml'))
+    if appids:
+        vercodes = fdroidserver.common.read_pkg_args(appids)
+        found_invalid = False
+        metadatafiles = []
+        for appid in vercodes.keys():
+            f = os.path.join('metadata', '%s.yml' % appid)
+            if os.path.exists(f):
+                metadatafiles.append(f)
+            else:
+                found_invalid = True
+                logging.critical(_("No such package: %s") % appid)
+        if found_invalid:
+            raise FDroidException(_("Found invalid appids in arguments"))
+    else:
+        metadatafiles = (glob.glob(os.path.join('metadata', '*.yml'))
+                         + glob.glob('.fdroid.yml'))
 
     if sort_by_time:
         entries = ((os.stat(path).st_mtime, path) for path in metadatafiles)
