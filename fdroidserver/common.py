@@ -3628,6 +3628,26 @@ def version_code_string_to_int(vercode):
         return int(vercode)
 
 
+def get_app_display_name(app):
+    """get a human readable name for the app for logging and sorting
+
+    When trying to find a localized name, this first tries en-US since
+    that his the historical language used for sorting.
+
+    """
+    if app.get('Name'):
+        return app['Name']
+    if app.get('localized'):
+        localized = app['localized'].get('en-US')
+        if not localized:
+            for v in app['localized'].values():
+                localized = v
+                break
+        if localized.get('name'):
+            return localized['name']
+    return app.get('AutoName') or app['id']
+
+
 def local_rsync(options, fromdir, todir):
     '''Rsync method for local to local copying of things
 

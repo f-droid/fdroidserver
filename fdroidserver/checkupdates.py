@@ -326,7 +326,7 @@ def try_init_submodules(app, last_build, vcs):
         try:
             vcs.initsubmodules()
         except NoSubmodulesException:
-            logging.info("No submodules present for {}".format(app.Name))
+            logging.info("No submodules present for {}".format(_getappname(app)))
 
 
 # Return all directories under startdir that contain any of the manifest
@@ -359,11 +359,7 @@ def possible_subdirs(app):
 
 
 def _getappname(app):
-    if app.Name:
-        return app.Name
-    if app.AutoName:
-        return app.AutoName
-    return app.id
+    return common.get_app_display_name(app)
 
 
 def _getcvname(app):

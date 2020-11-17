@@ -207,9 +207,12 @@ def update_wiki(apps, apks):
             requiresroot = 'Yes'
         else:
             requiresroot = 'No'
+
+        apppagename = common.get_app_display_name(app)
+
         wikidata += '{{App|id=%s|name=%s|added=%s|lastupdated=%s|source=%s|tracker=%s|web=%s|changelog=%s|donate=%s|flattr=%s|liberapay=%s|bitcoin=%s|litecoin=%s|license=%s|root=%s|author=%s|email=%s}}\n' % (
             appid,
-            app.Name,
+            apppagename,
             app.added.strftime('%Y-%m-%d') if app.added else '',
             app.lastUpdated.strftime('%Y-%m-%d') if app.lastUpdated else '',
             app.SourceCode,
@@ -338,7 +341,6 @@ def update_wiki(apps, apks):
         # Make a redirect from the name to the ID too, unless there's
         # already an existing page with the name and it isn't a redirect.
         noclobber = False
-        apppagename = app.Name
         for ch in '_{}:[]|':
             apppagename = apppagename.replace(ch, ' ')
         # Drop double spaces caused mostly by replacing ':' above
@@ -2116,7 +2118,7 @@ def read_names_from_apks(apps, apks):
 
         if bestver == UNSET_VERSION_CODE:
             if app.Name is None:
-                app.Name = app.AutoName or appid
+                app.Name = common.get_app_display_name(app)
             app.icon = None
         else:
             if app.Name is None:

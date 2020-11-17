@@ -337,7 +337,7 @@ def check_duplicates(app):
         else:
             links_seen.add(v)
 
-    name = app.Name or app.AutoName
+    name = common.get_app_display_name(app)
     if app.Summary and name:
         if app.Summary.lower() == name.lower():
             yield _("Summary '%s' is just the app's name") % app.Summary
