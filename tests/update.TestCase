@@ -471,7 +471,7 @@ class UpdateTest(unittest.TestCase):
         os.mkdir('stats')
         with open(os.path.join('stats', 'known_apks.txt'), 'w') as fp:
             fp.write('se.manyver_30.apk se.manyver 2018-10-10\n')
-        filename = 'Virgin-islands-british_centralamerica_2.obf.zip'
+        filename = 'Norway_bouvet_europe_2.obf.zip'
         shutil.copy(os.path.join(self.basedir, filename), 'repo')
         knownapks = fdroidserver.common.KnownApks()
         files, fcachechanged = fdroidserver.update.scan_repo_files(dict(), 'repo', knownapks, False)
@@ -482,8 +482,8 @@ class UpdateTest(unittest.TestCase):
         self.assertEqual(filename, info['apkName'])
         self.assertEqual(datetime, type(info['added']))
         self.assertEqual(os.path.getsize(os.path.join('repo', filename)), info['size'])
-        self.assertEqual('402ee0799d5da535276b5a3672fb049d6df3e1727cfb35369c8962c4a42cac3d',
-                         info['packageName'])
+        self.assertEqual('531190bdbc07e77d5577249949106f32dac7f62d38d66d66c3ae058be53a729d',
+                         info['hash'])
 
     def test_read_added_date_from_all_apks(self):
         config = dict()

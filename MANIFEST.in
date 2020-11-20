@@ -800,7 +800,7 @@ include tests/v2.only.sig_2.apk
 include tests/valid-package-names/random-package-names
 include tests/valid-package-names/RandomPackageNames.java
 include tests/valid-package-names/test.py
-include tests/Virgin-islands-british_centralamerica_2.obf.zip
+include tests/Norway_bouvet_europe_2.obf.zip
 include tests/xref/metadata/aarddict.android.yml
 include tests/xref/metadata/org.coolreader.yml
 include tests/xref/metadata/org.geometerplus.zlibrary.ui.android.yml
