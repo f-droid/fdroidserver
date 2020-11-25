@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: fdroidserver 1.1-680-ge1d3de71\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2020-10-21 18:05+0200\n"
-"PO-Revision-Date: 2020-10-14 09:28+0000\n"
+"PO-Revision-Date: 2020-10-26 07:26+0000\n"
 "Last-Translator: ssantos <ssantos@web.de>\n"
 "Language-Team: Portuguese <https://hosted.weblate.org/projects/f-droid/fdroidserver/pt/>\n"
 "Language: pt\n"
@@ -14,7 +14,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.3-dev\n"
+"X-Generator: Weblate 4.3.2-dev\n"
 
 #: ../fdroidserver/common.py
 msgid ""
@@ -670,7 +670,7 @@ msgstr "Analise dinâmica dos APKs após a compilação"
 
 #: ../fdroidserver/__main__.py
 msgid "ERROR: The \"server\" subcommand has been removed, use \"deploy\"!"
-msgstr ""
+msgstr "ERRO: o subcomando \"server\" foi removido, use \"deploy\"!"
 
 #: ../fdroidserver/mirror.py
 msgid ""
@@ -1282,7 +1282,7 @@ msgstr "O packagename do OBB não corresponde a um APK suportado:"
 
 #: ../fdroidserver/deploy.py
 msgid "Offline machine, skipping git mirror generation until `fdroid deploy`"
-msgstr ""
+msgstr "A máquina está offline, a saltar a geração de espelhos de git até o `fdroid deploy'"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -2454,7 +2454,7 @@ msgstr "Recusado o download via conexão http insegura (use https ou especifique
 #: ../fdroidserver/index.py
 #, python-format
 msgid "repo_icon %s does not exist, generating placeholder."
-msgstr ""
+msgstr "repo_icon %s não existe, a gerar um espaço reservado."
 
 #: ../fdroidserver/metadata.py
 msgid "ruamel.yaml not installed, can not write metadata."
@@ -2559,7 +2559,7 @@ msgstr "o virustotal.com está a limitar a taxa, à espera para voltar a tentar.
 
 #: ../fdroidserver/update.py
 msgid "wiki support is deprecated and will be removed in the next release!"
-msgstr ""
+msgstr "O suporte do wiki é depreciado e será removido no próximo lançamento!"
 
 #: ../fdroidserver/publish.py
 #, python-brace-format
