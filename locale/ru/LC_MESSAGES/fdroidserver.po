@@ -7,13 +7,14 @@
 # gardenapple <gardenapple@posteo.net>, 2020.
 # Boris Timofeev <mashin87@gmail.com>, 2020.
 # Hans-Christoph Steiner <hans@guardianproject.info>, 2020.
+# Roman <WT_Roma@mail.ru>, 2020.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 1.0.0-95-gd7af22b\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2020-10-21 18:05+0200\n"
-"PO-Revision-Date: 2020-11-10 16:21+0000\n"
-"Last-Translator: Hans-Christoph Steiner <hans@guardianproject.info>\n"
+"PO-Revision-Date: 2020-11-18 17:28+0000\n"
+"Last-Translator: Roman <WT_Roma@mail.ru>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/f-droid/fdroidserver/ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
@@ -2496,7 +2497,7 @@ msgstr "показать номер версии программы и выйт�
 #: /usr/lib/python3.6/argparse.py /usr/lib/python3.6/optparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.7/optparse.py
 msgid "show this help message and exit"
-msgstr "показать справочное сообщение и выйти"
+msgstr "показать это справочное сообщение и выйти"
 
 #: ../fdroidserver/signatures.py
 msgid "signed APK, either a file-path or HTTPS URL."
@@ -2573,7 +2574,7 @@ msgstr "Аpache libcloud: синхронизация с {url}"
 
 #: ../fdroidserver/deploy.py
 msgid "virustotal.com is rate limiting, waiting to retry..."
-msgstr ""
+msgstr "virustotal.com ограничивает траффик, ждем повторной попытки..."
 
 #: ../fdroidserver/update.py
 msgid "wiki support is deprecated and will be removed in the next release!"
