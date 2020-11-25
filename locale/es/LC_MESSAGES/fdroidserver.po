@@ -4,13 +4,14 @@
 # Maximiliano Castañón <maximi89@gmail.com>, 2020.
 # Jo <joaquinfc@protonmail.com>, 2020.
 # Hans-Christoph Steiner <hans@guardianproject.info>, 2020.
+# Alvaro <alvaro@null.net>, 2020.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2020-10-21 18:05+0200\n"
-"PO-Revision-Date: 2020-11-10 16:20+0000\n"
-"Last-Translator: Hans-Christoph Steiner <hans@guardianproject.info>\n"
+"PO-Revision-Date: 2020-11-20 23:28+0000\n"
+"Last-Translator: Alvaro <alvaro@null.net>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/f-droid/fdroidserver/es/>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
@@ -280,7 +281,7 @@ msgstr ""
 
 #: ../fdroidserver/scanner.py
 msgid "Android APK file"
-msgstr ""
+msgstr "Fichero APK de Android"
 
 #: ../fdroidserver/scanner.py
 #, fuzzy
