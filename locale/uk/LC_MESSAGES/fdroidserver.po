@@ -2,20 +2,21 @@
 # Copyright (C) YEAR Free Software Foundation, Inc.
 # Hans-Christoph Steiner <hans@guardianproject.info>, 2020.
 # ihor_ck <igor_ck@outlook.com>, 2020.
+# Ihor Hordiichuk <igor_ck@outlook.com>, 2020.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2020-10-21 18:05+0200\n"
-"PO-Revision-Date: 2020-10-08 06:06+0000\n"
-"Last-Translator: ihor_ck <igor_ck@outlook.com>\n"
+"PO-Revision-Date: 2020-10-22 17:26+0000\n"
+"Last-Translator: Ihor Hordiichuk <igor_ck@outlook.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/f-droid/fdroidserver/uk/>\n"
 "Language: uk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.3-dev\n"
+"X-Generator: Weblate 4.3.1\n"
 
 #: ../fdroidserver/common.py
 msgid ""
@@ -673,7 +674,7 @@ msgstr "Динамічно сканувати створення білдово�
 
 #: ../fdroidserver/__main__.py
 msgid "ERROR: The \"server\" subcommand has been removed, use \"deploy\"!"
-msgstr ""
+msgstr "ПОМИЛКА: Підкоманду \"server\" вилучено, використовуйте \"deploy\"!"
 
 #: ../fdroidserver/mirror.py
 msgid ""
@@ -1285,7 +1286,7 @@ msgstr "Назва пакунку OBB не відповідає підтриму
 
 #: ../fdroidserver/deploy.py
 msgid "Offline machine, skipping git mirror generation until `fdroid deploy`"
-msgstr ""
+msgstr "Автономна машина, пропускання генерації дзеркал git до `fdroid deploy`"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -2460,7 +2461,7 @@ msgstr "відмовитись від завантаження через нез
 #: ../fdroidserver/index.py
 #, python-format
 msgid "repo_icon %s does not exist, generating placeholder."
-msgstr ""
+msgstr "repo_icon %s не існує, створення заповнювача."
 
 #: ../fdroidserver/metadata.py
 msgid "ruamel.yaml not installed, can not write metadata."
@@ -2565,7 +2566,7 @@ msgstr "virustotal.com обмежує швидкість, очікування �
 
 #: ../fdroidserver/update.py
 msgid "wiki support is deprecated and will be removed in the next release!"
-msgstr ""
+msgstr "підтримка wiki застаріла і буде вилучена у наступному випуску!"
 
 #: ../fdroidserver/publish.py
 #, python-brace-format
