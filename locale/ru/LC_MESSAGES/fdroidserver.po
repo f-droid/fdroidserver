@@ -6,20 +6,21 @@
 # Andrey <andrey@mailbox.org>, 2020.
 # gardenapple <gardenapple@posteo.net>, 2020.
 # Boris Timofeev <mashin87@gmail.com>, 2020.
+# Hans-Christoph Steiner <hans@guardianproject.info>, 2020.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 1.0.0-95-gd7af22b\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2020-10-21 18:05+0200\n"
-"PO-Revision-Date: 2020-10-05 12:34+0000\n"
-"Last-Translator: Boris Timofeev <mashin87@gmail.com>\n"
+"PO-Revision-Date: 2020-11-10 16:21+0000\n"
+"Last-Translator: Hans-Christoph Steiner <hans@guardianproject.info>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/f-droid/fdroidserver/ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.3-dev\n"
+"X-Generator: Weblate 4.4-dev\n"
 
 #: ../fdroidserver/common.py
 msgid ""
@@ -1015,9 +1016,9 @@ msgid "Invalid VercodeOperation: {field}"
 msgstr "Расхождение версий приложения в метаданных: {field}"
 
 #: ../fdroidserver/common.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Invalid application ID {appid}"
-msgstr "Расхождение версий приложения в метаданных: {field}"
+msgstr ""
 
 #: ../fdroidserver/metadata.py
 #, python-format
@@ -1072,9 +1073,9 @@ msgid "Invalid redirect to non-HTTPS: {before} -> {after} "
 msgstr "Неверное перенаправление (не HTTPS): {before} -> {after} "
 
 #: ../fdroidserver/metadata.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Invalid scrlib metadata: '{file}' does not exist"
-msgstr "Прочесть все метаданные и выйти"
+msgstr ""
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format

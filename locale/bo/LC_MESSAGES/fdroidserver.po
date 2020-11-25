@@ -1,13 +1,12 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR Free Software Foundation, Inc.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
+# Hans-Christoph Steiner <hans@guardianproject.info>, 2020.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2020-10-21 18:05+0200\n"
-"PO-Revision-Date: 2018-02-13 08:41+0000\n"
+"PO-Revision-Date: 2020-11-10 16:20+0000\n"
 "Last-Translator: Hans-Christoph Steiner <hans@guardianproject.info>\n"
 "Language-Team: Tibetan <https://hosted.weblate.org/projects/f-droid/fdroidserver/bo/>\n"
 "Language: bo\n"
@@ -15,7 +14,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 2.19-dev\n"
+"X-Generator: Weblate 4.4-dev\n"
 
 #: ../fdroidserver/common.py
 msgid ""
@@ -79,9 +78,9 @@ msgid "\"{path}\" exists but s3cmd is not installed!"
 msgstr ""
 
 #: ../fdroidserver/lint.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "\"{path}\" is not a supported file format (use: metadata/*.yml)"
-msgstr "\"{path}སྒྲིག་བཀོད་འདི་ངོས་ལེན་བྱེད་ཐུབ་ཀྱི་མིན་འདུག:{formats}"
+msgstr ""
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
@@ -176,9 +175,9 @@ msgid "'{aapt}' is too old, fdroid requires build-tools-23.0.0 or newer!"
 msgstr "'{aapt}1' འདི་ཧ་ཅང་གི་རྙིང་པ་རེད་འདུག, ཨེཕ་རོཌ་ལ་བཟོ་སྐྲུན་མ་ལག-23.0.0 དང་ཡང་ན་དེ་ལས་གསར་བ་དགོས།!"
 
 #: ../fdroidserver/common.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "'{aapt}' is too old, fdroid requires build-tools-{version} or newer!"
-msgstr "'{aapt}1' འདི་ཧ་ཅང་གི་རྙིང་པ་རེད་འདུག, ཨེཕ་རོཌ་ལ་བཟོ་སྐྲུན་མ་ལག-23.0.0 དང་ཡང་ན་དེ་ལས་གསར་བ་དགོས།!"
+msgstr ""
 
 #: ../fdroidserver/install.py
 #, python-brace-format
@@ -379,9 +378,9 @@ msgid_plural "Can't build due to {} errors while scanning"
 msgstr[0] "ཚགས་རྒྱབ་པའི་སྐབས་སུ་ནོར་སྐྱོན་ {} ཤོར་བས་བཟོ་སྐྲུན་བྱེད་ཐུབ་མེད།"
 
 #: ../fdroidserver/vmtools.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Cannot read \"{path}\"!"
-msgstr "{appid} app idཐག་ཆོད་ཐུབ་མ་སོང་།"
+msgstr ""
 
 #. Translators: https://developer.android.com/studio/build/application-id
 #: ../fdroidserver/metadata.py
@@ -390,9 +389,9 @@ msgid "Cannot resolve application ID {appid}"
 msgstr "{appid} app idཐག་ཆོད་ཐུབ་མ་སོང་།"
 
 #: ../fdroidserver/rewritemeta.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Cannot rewrite \"{path}\""
-msgstr "{appid} app idཐག་ཆོད་ཐུབ་མ་སོང་།"
+msgstr ""
 
 #: ../fdroidserver/rewritemeta.py
 msgid "Cannot use --list and --to at the same time"
@@ -867,9 +866,9 @@ msgid "Found non-file at %s"
 msgstr "འདི་ལ་%s 1 ཡིག་ཆ་མིན་པ་རྙེད་སོང་།"
 
 #: ../fdroidserver/deploy.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Found {apkfilename} at {url}"
-msgstr "{path} ནང་ལ་ {apkfilename}ཤུས་བཞིན་པ།"
+msgstr "{url} ནང་ལ་ {apkfilename}ཤུས་བཞིན་པ།"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -894,9 +893,9 @@ msgid "Git remote set-head failed"
 msgstr "གིཊ་རྒྱང་ཐག་སྒྲིག་འགོ་ཐུབ་མ་སོང་།"
 
 #: ../fdroidserver/common.py
-#, fuzzy, python-format
+#, python-format
 msgid "Git remote set-head failed: \"%s\""
-msgstr "གིཊ་རྒྱང་ཐག་སྒྲིག་འགོ་ཐུབ་མ་སོང་།"
+msgstr ""
 
 #: ../fdroidserver/common.py
 msgid "Git reset failed"
@@ -1066,9 +1065,9 @@ msgid "Invalid redirect to non-HTTPS: {before} -> {after} "
 msgstr ""
 
 #: ../fdroidserver/metadata.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Invalid scrlib metadata: '{file}' does not exist"
-msgstr "ཡིག་ཚགས་ཀྱི་རྒྱབ་ལྗོངས་ལོ་རྒྱུས་ཀློག་ནས་ཕྱིར་ཐོན།"
+msgstr ""
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
@@ -1555,14 +1554,14 @@ msgid "Scan the source code of a package"
 msgstr "ཐུམ་སྒྲིལ་བྱས་པའི་འབྱུང་ཁུངས་ཨང་རྟགས་འཚག་རྒྱབ"
 
 #: ../fdroidserver/scanner.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Scanner found {count} problems in {appid}:"
-msgstr "འཚག་རྒྱབ་ལ་སྐྱོན་རྙེད་པ།"
+msgstr ""
 
 #: ../fdroidserver/scanner.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Scanner found {count} problems in {appid}:{versionCode}:"
-msgstr "འཚག་རྒྱབ་ལ་སྐྱོན་རྙེད་པ།"
+msgstr ""
 
 #: ../fdroidserver/build.py
 msgid "Scanner found {} problem"
@@ -1813,18 +1812,18 @@ msgid "Unnecessary trailing space"
 msgstr "དགོས་མེད་ཀྱི་རྫེས་ཤུལ་བར་མཚམས།"
 
 #: ../fdroidserver/metadata.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Unrecognised app field '{fieldname}' in '{path}'"
-msgstr "{linedesc}ནང་ངོས་འཛིན་མ་ཐུབ་པའི་རྭ་བ།{field}"
+msgstr ""
 
 #: ../fdroidserver/metadata.py
 msgid "Unrecognised app field: "
 msgstr "ངོས་འཛིན་མ་ཐུབ་པའི་མཉེན་ཆས་རྭ་བ།: "
 
 #: ../fdroidserver/metadata.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Unrecognised build flag '{build_flag}' in '{path}'"
-msgstr "{linedesc}ནང་ངོས་འཛིན་མ་ཐུབ་པའི་རྭ་བ།{field}"
+msgstr ""
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
@@ -2588,9 +2587,9 @@ msgid "{apkfilename} has multiple {name} files, looks like Master Key exploit!"
 msgstr ""
 
 #: ../fdroidserver/update.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{apkfilename}'s AndroidManifest.xml has a bad date: "
-msgstr "AndroidManifest.xmlལ་ཟླ་ཚེས་མིན་འདུག"
+msgstr ""
 
 #: ../fdroidserver/update.py
 #, fuzzy, python-brace-format
@@ -2669,9 +2668,9 @@ msgid "{path} already exists, ignoring import results!"
 msgstr ""
 
 #: ../fdroidserver/nightly.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{path} does not exist!  Create it by running:"
-msgstr "{name} \"{path}\" མིན་འདུག! config.py.ནོར་བཅོས་བྱེད།"
+msgstr ""
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -2689,14 +2688,14 @@ msgid "{path} more than 200MB, manually upload: {url}"
 msgstr ""
 
 #: ../fdroidserver/mirror.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{url} does not end with \"fdroid\", check the URL path!"
-msgstr "local_copy_dir  \"fdroid\"གིས་མཇུག་སྐྱོང་མིན་འདུག་ : \"{path}1\""
+msgstr ""
 
 #: ../fdroidserver/common.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{url} does not start with \"http\"!"
-msgstr "local_copy_dir  \"fdroid\"གིས་མཇུག་སྐྱོང་མིན་འདུག་ : \"{path}1\""
+msgstr ""
 
 #: ../fdroidserver/build.py
 msgid "{} build failed"

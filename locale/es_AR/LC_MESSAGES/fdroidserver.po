@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2020-10-21 18:05+0200\n"
-"PO-Revision-Date: 2020-10-01 10:31+0000\n"
-"Last-Translator: riveravaldez <riveravaldezmail@gmail.com>\n"
+"PO-Revision-Date: 2020-11-10 16:20+0000\n"
+"Last-Translator: Hans-Christoph Steiner <hans@guardianproject.info>\n"
 "Language-Team: Spanish (Argentina) <https://hosted.weblate.org/projects/f-droid/fdroidserver/es_AR/>\n"
 "Language: es_AR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.3-dev\n"
+"X-Generator: Weblate 4.4-dev\n"
 
 #: ../fdroidserver/common.py
 msgid ""
@@ -1064,9 +1064,9 @@ msgid "Invalid redirect to non-HTTPS: {before} -> {after} "
 msgstr ""
 
 #: ../fdroidserver/metadata.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Invalid scrlib metadata: '{file}' does not exist"
-msgstr "Leer todos los archivos de metadatos y salir"
+msgstr ""
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
@@ -2327,7 +2327,7 @@ msgstr ""
 #: ../fdroidserver/deploy.py
 #, fuzzy, python-brace-format
 msgid "local_copy_dir does not end with \"fdroid\", perhaps you meant: \"{path}\""
-msgstr "directorio_copia_local no termina en \"fdroid\", quizá quiso escribir: \"{ruta}\""
+msgstr "local_copy_dir no termina en \"fdroid\", quizá quiso escribir: \"{path}\""
 
 #: ../fdroidserver/deploy.py
 #, fuzzy

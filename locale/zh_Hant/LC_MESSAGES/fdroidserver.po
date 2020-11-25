@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2020-10-21 18:05+0200\n"
-"PO-Revision-Date: 2020-11-03 22:53+0000\n"
-"Last-Translator: NightFeather <ss900328@gmail.com>\n"
+"PO-Revision-Date: 2020-11-10 16:20+0000\n"
+"Last-Translator: Hans-Christoph Steiner <hans@guardianproject.info>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/f-droid/fdroidserver/zh_Hant/>\n"
 "Language: zh_Hant\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.3.2-dev\n"
+"X-Generator: Weblate 4.4-dev\n"
 
 #: ../fdroidserver/common.py
 msgid ""
@@ -80,9 +80,9 @@ msgid "\"{path}\" exists but s3cmd is not installed!"
 msgstr "有 \"{path}\" 存在，但是沒有安裝 s3cmd！"
 
 #: ../fdroidserver/lint.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "\"{path}\" is not a supported file format (use: metadata/*.yml)"
-msgstr "\"{path}\" 不是可接受的格式，轉換成： {formats}"
+msgstr "\"{path}\" 不是可接受的格式，轉換成： metadata/*.yml"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
@@ -868,9 +868,9 @@ msgid "Found non-file at %s"
 msgstr "%s 中找到 non-file"
 
 #: ../fdroidserver/deploy.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Found {apkfilename} at {url}"
-msgstr "複製 {apkfilename} 到 {path}"
+msgstr ""
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -895,9 +895,9 @@ msgid "Git remote set-head failed"
 msgstr "Git 遠端 set-head 失敗"
 
 #: ../fdroidserver/common.py
-#, fuzzy, python-format
+#, python-format
 msgid "Git remote set-head failed: \"%s\""
-msgstr "Git 遠端 set-head 失敗"
+msgstr "Git 遠端 set-head 失敗: \"%s\""
 
 #: ../fdroidserver/common.py
 msgid "Git reset failed"
@@ -1010,9 +1010,9 @@ msgid "Invalid VercodeOperation: {field}"
 msgstr "無效的 VercodeOperation：{field}"
 
 #: ../fdroidserver/common.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Invalid application ID {appid}"
-msgstr "無效的 VercodeOperation：{field}"
+msgstr ""
 
 #: ../fdroidserver/metadata.py
 #, python-format
@@ -1067,9 +1067,9 @@ msgid "Invalid redirect to non-HTTPS: {before} -> {after} "
 msgstr "無效的重新導向到非 HTTPS：{before}->{after}。 "
 
 #: ../fdroidserver/metadata.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Invalid scrlib metadata: '{file}' does not exist"
-msgstr "讀取所有的中介資料檔案並退出"
+msgstr ""
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format

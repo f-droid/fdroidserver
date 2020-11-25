@@ -4,20 +4,21 @@
 # Fynn Godau <fynngodau@mailbox.org>, 2020.
 # melusine <melusine@mailbox.org>, 2020.
 # marzzzello <anmeldezeugs@top-email.net>, 2020.
+# Hans-Christoph Steiner <hans@guardianproject.info>, 2020.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2020-10-21 18:05+0200\n"
-"PO-Revision-Date: 2020-10-15 17:12+0000\n"
-"Last-Translator: marzzzello <anmeldezeugs@top-email.net>\n"
+"PO-Revision-Date: 2020-11-10 16:20+0000\n"
+"Last-Translator: Hans-Christoph Steiner <hans@guardianproject.info>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/f-droid/fdroidserver/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.3-dev\n"
+"X-Generator: Weblate 4.4-dev\n"
 
 #: ../fdroidserver/common.py
 msgid ""
@@ -88,9 +89,9 @@ msgid "\"{path}\" exists but s3cmd is not installed!"
 msgstr "„{path}” vorhanden, aber S3cmd ist nicht installiert!"
 
 #: ../fdroidserver/lint.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "\"{path}\" is not a supported file format (use: metadata/*.yml)"
-msgstr "\"{path}\" ist kein akzeptiertes Format, umwandeln in: {formats}"
+msgstr "\"{path}\" ist kein akzeptiertes Format, umwandeln in metadata/*.yml"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
@@ -878,9 +879,9 @@ msgid "Found non-file at %s"
 msgstr "Eine Nicht-Datei gefunden bei %s"
 
 #: ../fdroidserver/deploy.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Found {apkfilename} at {url}"
-msgstr "Kopiere {apkfilename} nach {path}"
+msgstr ""
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -905,9 +906,9 @@ msgid "Git remote set-head failed"
 msgstr "Git remote set-head fehlgeschlagen"
 
 #: ../fdroidserver/common.py
-#, fuzzy, python-format
+#, python-format
 msgid "Git remote set-head failed: \"%s\""
-msgstr "Git remote set-head fehlgeschlagen"
+msgstr "Git remote set-head fehlgeschlagen: \"%s\""
 
 #: ../fdroidserver/common.py
 msgid "Git reset failed"
@@ -1021,9 +1022,9 @@ msgid "Invalid VercodeOperation: {field}"
 msgstr "Ungültige VercodeOperation: {field}"
 
 #: ../fdroidserver/common.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Invalid application ID {appid}"
-msgstr "Ungültige VercodeOperation: {field}"
+msgstr ""
 
 #: ../fdroidserver/metadata.py
 #, python-format
@@ -1078,9 +1079,9 @@ msgid "Invalid redirect to non-HTTPS: {before} -> {after} "
 msgstr "Ungültige Umleitung auf Nicht-HTTTPS: {before} -> {after} "
 
 #: ../fdroidserver/metadata.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Invalid scrlib metadata: '{file}' does not exist"
-msgstr "Alle Metadaten-Dateien betrachten und beenden"
+msgstr ""
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
