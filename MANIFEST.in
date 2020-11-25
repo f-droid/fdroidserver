@@ -603,6 +603,7 @@ include tests/metadata-rewrite-yml/fake.ota.update.yml
 include tests/metadata-rewrite-yml/org.fdroid.fdroid.yml
 include tests/metadata/souch.smsbypass.yml
 include tests/metadata.TestCase
+include tests/minimal_targetsdk_30_unsigned.apk
 include tests/openssl-version-check-test.py
 include tests/org.bitbucket.tickytacky.mirrormirror_1.apk
 include tests/org.bitbucket.tickytacky.mirrormirror_2.apk
