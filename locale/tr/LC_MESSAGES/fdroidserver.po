@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2020-10-21 18:05+0200\n"
-"PO-Revision-Date: 2020-10-08 06:06+0000\n"
+"PO-Revision-Date: 2020-10-22 17:26+0000\n"
 "Last-Translator: Oğuz Ersen <oguzersen@protonmail.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/f-droid/fdroidserver/tr/>\n"
 "Language: tr\n"
@@ -14,7 +14,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.3-dev\n"
+"X-Generator: Weblate 4.3.1\n"
 
 #: ../fdroidserver/common.py
 msgid ""
@@ -670,7 +670,7 @@ msgstr "İnşa sonrası APKları dinamik olarak tara"
 
 #: ../fdroidserver/__main__.py
 msgid "ERROR: The \"server\" subcommand has been removed, use \"deploy\"!"
-msgstr ""
+msgstr "HATA: \"server\" alt komutu kaldırıldı, \"deploy\" kullanın!"
 
 #: ../fdroidserver/mirror.py
 msgid ""
@@ -1282,7 +1282,7 @@ msgstr "OBB'ın packagename değeri desteklenen APK ile eşleşmiyor:"
 
 #: ../fdroidserver/deploy.py
 msgid "Offline machine, skipping git mirror generation until `fdroid deploy`"
-msgstr ""
+msgstr "Çevrim dışı makine, `fdroid deploy` komutuna kadar git yansı oluşturma atlanıyor"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -2454,7 +2454,7 @@ msgstr "güvensiz http bağlantısı ile indirmeyi reddet (https kullanın veya 
 #: ../fdroidserver/index.py
 #, python-format
 msgid "repo_icon %s does not exist, generating placeholder."
-msgstr ""
+msgstr "repo_icon %s mevcut değil, yer tutucu oluşturuyor."
 
 #: ../fdroidserver/metadata.py
 msgid "ruamel.yaml not installed, can not write metadata."
@@ -2559,7 +2559,7 @@ msgstr "virustotal.com hızı sınırlıyor, yeniden deneme bekleniyor..."
 
 #: ../fdroidserver/update.py
 msgid "wiki support is deprecated and will be removed in the next release!"
-msgstr ""
+msgstr "wiki desteği kullanımdan kaldırıldı ve bir sonraki sürümde kaldırılacak!"
 
 #: ../fdroidserver/publish.py
 #, python-brace-format
