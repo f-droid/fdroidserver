@@ -604,6 +604,7 @@ include tests/metadata-rewrite-yml/org.fdroid.fdroid.yml
 include tests/metadata/souch.smsbypass.yml
 include tests/metadata.TestCase
 include tests/minimal_targetsdk_30_unsigned.apk
+include tests/no_targetsdk_minsdk1_unsigned.apk
 include tests/openssl-version-check-test.py
 include tests/org.bitbucket.tickytacky.mirrormirror_1.apk
 include tests/org.bitbucket.tickytacky.mirrormirror_2.apk
@@ -675,6 +676,7 @@ include tests/signindex/guardianproject-v1.jar
 include tests/signindex/testy.jar
 include tests/signindex/unsigned.jar
 include tests/source-files/at.bitfire.davdroid/build.gradle
+include tests/source-files/cn.wildfirechat.chat
 include tests/source-files/com.kunzisoft.testcase/build.gradle
 include tests/source-files/com.nextcloud.client/build.gradle
 include tests/source-files/com.nextcloud.client.dev/src/generic/fastlane/metadata/android/en-US/full_description.txt
