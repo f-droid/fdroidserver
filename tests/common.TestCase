@@ -1043,6 +1043,19 @@ class CommonTest(unittest.TestCase):
         self.assertEqual(('1.0-free', '1', 'com.kunzisoft.fdroidtest.applicationidsuffix'),
                          fdroidserver.common.parse_androidmanifests(paths, app))
 
+        app = fdroidserver.metadata.App()
+        build = fdroidserver.metadata.Build()
+        build.gradle = ['underscore']
+        app.builds = [build]
+        app.id = 'com.kunzisoft.fdroidtest.applicationidsuffix.underscore'
+        paths = [
+            os.path.join('source-files', 'com.kunzisoft.testcase', 'build.gradle'),
+        ]
+        for path in paths:
+            self.assertTrue(os.path.isfile(path))
+        self.assertEqual(('20180430-underscore', '2018_04_30', 'com.kunzisoft.fdroidtest.applicationidsuffix.underscore'),
+                         fdroidserver.common.parse_androidmanifests(paths, app))
+
     def test_get_all_gradle_and_manifests(self):
         a = fdroidserver.common.get_all_gradle_and_manifests(os.path.join('source-files', 'cn.wildfirechat.chat'))
         paths = [

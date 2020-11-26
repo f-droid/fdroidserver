@@ -49,6 +49,16 @@ android {
             // Version code : 1
             // Version name : 1.0-free
         }
+        underscore {
+            applicationIdSuffix = ".underscore"
+            versionCode 2018_04_30
+            versionName "20180430-underscore"
+            buildConfigField "boolean", "FULL_VERSION", "true"
+            buildConfigField "boolean", "CLOSED_STORE", "true"
+            // ApplicationId : com.kunzisoft.fdroidtest.applicationidsuffix.underscore
+            // Version code : 2018_04_30
+            // Version name : 20180430-underscore
+        }
     }
 }
 
