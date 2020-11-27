@@ -715,10 +715,9 @@ class CommonTest(unittest.TestCase):
         fdroidserver.common.fill_config_defaults(config)
         fdroidserver.common.config = config
         self._set_build_tools()
-        try:
+        aapt = fdroidserver.common.find_sdk_tools_cmd('aapt')
+        if aapt:
             config['aapt'] = fdroidserver.common.find_sdk_tools_cmd('aapt')
-        except fdroidserver.exception.FDroidException:
-            pass  # aapt is not required if androguard is present
 
         testcases = [
             ('repo/obb.main.twoversions_1101613.apk', 'obb.main.twoversions', '1101613', '0.1'),
