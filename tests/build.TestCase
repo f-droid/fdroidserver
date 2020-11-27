@@ -28,23 +28,10 @@ import fdroidserver.scanner
 class BuildTest(unittest.TestCase):
     '''fdroidserver/build.py'''
 
-    def _set_build_tools(self):
-        build_tools = os.path.join(fdroidserver.common.config['sdk_path'], 'build-tools')
-        if os.path.exists(build_tools):
-            fdroidserver.common.config['build_tools'] = ''
-            for f in sorted(os.listdir(build_tools), reverse=True):
-                versioned = os.path.join(build_tools, f)
-                if os.path.isdir(versioned) \
-                        and os.path.isfile(os.path.join(versioned, 'aapt')):
-                    fdroidserver.common.config['build_tools'] = versioned
-                    break
-            return True
-        else:
-            print('no build-tools found: ' + build_tools)
-            return False
-
     def setUp(self):
         logging.basicConfig(level=logging.DEBUG)
+        logger = logging.getLogger('androguard.axml')
+        logger.setLevel(logging.INFO)  # tame the axml debug messages
         self.basedir = os.path.join(localmodule, 'tests')
         self.tmpdir = os.path.abspath(os.path.join(self.basedir, '..', '.testfiles'))
         if not os.path.exists(self.tmpdir):
@@ -56,7 +43,6 @@ class BuildTest(unittest.TestCase):
         fdroidserver.common.fill_config_defaults(config)
         fdroidserver.common.config = config
         fdroidserver.build.config = config
-        self._set_build_tools()
         try:
             config['aapt'] = fdroidserver.common.find_sdk_tools_cmd('aapt')
         except fdroidserver.exception.FDroidException:
@@ -183,7 +169,6 @@ class BuildTest(unittest.TestCase):
         config = dict()
         config['sdk_path'] = os.getenv('ANDROID_HOME')
         config['ndk_paths'] = {'r10d': os.getenv('ANDROID_NDK_HOME')}
-        config['build_tools'] = 'FAKE_BUILD_TOOLS_VERSION'
         fdroidserver.common.config = config
         app = fdroidserver.metadata.App()
         app.id = 'com.gpl.rpg.AndorsTrail'

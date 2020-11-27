@@ -42,6 +42,8 @@ class CommonTest(unittest.TestCase):
 
     def setUp(self):
         logging.basicConfig(level=logging.DEBUG)
+        logger = logging.getLogger('androguard.axml')
+        logger.setLevel(logging.INFO)  # tame the axml debug messages
         self.basedir = os.path.join(localmodule, 'tests')
         self.tmpdir = os.path.abspath(os.path.join(self.basedir, '..', '.testfiles'))
         if not os.path.exists(self.tmpdir):
@@ -75,12 +77,10 @@ class CommonTest(unittest.TestCase):
     def _set_build_tools(self):
         build_tools = os.path.join(fdroidserver.common.config['sdk_path'], 'build-tools')
         if os.path.exists(build_tools):
-            fdroidserver.common.config['build_tools'] = ''
             for f in sorted(os.listdir(build_tools), reverse=True):
                 versioned = os.path.join(build_tools, f)
                 if os.path.isdir(versioned) \
                         and os.path.isfile(os.path.join(versioned, 'apksigner')):
-                    fdroidserver.common.config['build_tools'] = versioned
                     break
             return True
         else:
@@ -235,7 +235,6 @@ class CommonTest(unittest.TestCase):
         config = dict()
         config['sdk_path'] = os.getenv('ANDROID_HOME')
         config['ndk_paths'] = {'r10d': os.getenv('ANDROID_NDK_HOME')}
-        config['build_tools'] = 'FAKE_BUILD_TOOLS_VERSION'
         fdroidserver.common.config = config
         app = fdroidserver.metadata.App()
         app.id = 'org.fdroid.froid'
