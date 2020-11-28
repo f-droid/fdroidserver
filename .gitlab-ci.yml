@@ -113,24 +113,12 @@ ubuntu_lts_ppa:
 ubuntu_xenial_pip:
   image: ubuntu:xenial
   <<: *apt-template
-  only:
-    - master@fdroid/fdroidserver
   script:
     - apt-get install git default-jdk-headless python3-pip python3-venv rsync zipalign libarchive13
     - rm -rf env
     - pyvenv env
     - . env/bin/activate
     - $pip install --upgrade babel pip setuptools
-    - $pip install -e .
-    - ./setup.py compile_catalog
-    - ./tests/run-tests
-
-pip_install:
-  image: archlinux/base
-  only:
-    - master@fdroid/fdroidserver
-  script:
-    - pacman --sync --sysupgrade --refresh --noconfirm git grep python-pip python-virtualenv tar
     # setup venv to act as release build machine
     - python -m venv sdist-env
     - . sdist-env/bin/activate
@@ -138,8 +126,16 @@ pip_install:
     - deactivate
     - tar tzf dist/fdroidserver-*.tar.gz | grep locale/de/LC_MESSAGES/fdroidserver.mo
     # back to bare machine to act as user's install machine
-    - pip install dist/fdroidserver-*.tar.gz
+    - $pip install --upgrade pip setuptools
+    - $pip install dist/fdroidserver-*.tar.gz
     - test -e /usr/share/locale/de/LC_MESSAGES/fdroidserver.mo
+    - ./tests/run-tests
+
+pip_install:
+  image: archlinux/base
+  script:
+    - pacman --sync --sysupgrade --refresh --noconfirm git grep python-pip python-virtualenv tar
+    - pip install -e .
     - fdroid
     - fdroid readmeta
     - fdroid update --help
