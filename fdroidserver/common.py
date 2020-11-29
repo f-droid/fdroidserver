@@ -480,7 +480,7 @@ def find_apksigner():
     if not os.path.isdir(build_tools_path):
         return None
     for f in sorted(os.listdir(build_tools_path), reverse=True):
-        if not os.path.isdir(os.path.join(build_tools_path, f)) or not isinstance(LooseVersion(f), int):
+        if not os.path.isdir(os.path.join(build_tools_path, f)):
             continue
         if LooseVersion(f) < LooseVersion(MINIMUM_APKSIGNER_BUILD_TOOLS_VERSION):
             return None
