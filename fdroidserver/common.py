@@ -498,9 +498,10 @@ def find_sdk_tools_cmd(cmd):
     if config is not None and 'sdk_path' in config and os.path.exists(config['sdk_path']):
         # try to find a working path to this command, in all the recent possible paths
         build_tools = os.path.join(config['sdk_path'], 'build-tools')
-        for f in sorted(os.listdir(build_tools), reverse=True):
-            if os.path.isdir(os.path.join(build_tools, f)):
-                tooldirs.append(os.path.join(build_tools, f))
+        if os.path.isdir(build_tools):
+            for f in sorted(os.listdir(build_tools), reverse=True):
+                if os.path.isdir(os.path.join(build_tools, f)):
+                    tooldirs.append(os.path.join(build_tools, f))
         sdk_tools = os.path.join(config['sdk_path'], 'tools')
         if os.path.exists(sdk_tools):
             tooldirs.append(sdk_tools)
