@@ -78,16 +78,14 @@ debian_testing:
         python3-defusedxml
         python3-setuptools
         zipalign
-    # Debian has apksigner depend on binfmt support which isn't very docker friendly
-    # We create a shell wrapper instead
-    - echo -e '#!/bin/sh\njava -jar /usr/lib/android-sdk/build-tools/debian/apksigner.jar "$@"' > /usr/local/bin/apksigner
-    - chmod +x /usr/local/bin/apksigner
     - python3 -c 'import fdroidserver'
     - python3 -c 'import androguard'
     - cd tests
     - ./run-tests
 
-# test using LTS set up with the PPA, including Recommends
+# Test using latest LTS set up with the PPA, including Recommends.
+# bionic's apksigner, which comes from Recommends:, requires binfmt
+# support in the kernel.
 ubuntu_lts_ppa:
   image: ubuntu:latest
   <<: *apt-template
@@ -109,7 +107,6 @@ ubuntu_lts_ppa:
     - ./run-tests
 
 # test using Xenial LTS with all depends from pypi
-# apksigner is recommended, but requires binfmt support in the kernel
 ubuntu_xenial_pip:
   image: ubuntu:xenial
   <<: *apt-template
