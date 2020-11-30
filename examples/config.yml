@@ -31,9 +31,6 @@
 # java_paths:
 #   8: /usr/lib/jvm/java-8-openjdk
 
-# Build tools version to be used
-# build_tools: 28.0.3
-
 # Command or path to binary for running Ant
 # ant: ant
 

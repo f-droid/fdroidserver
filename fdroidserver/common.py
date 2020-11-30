@@ -115,7 +115,6 @@ default_config = {
         'r16b': None,
     },
     'cachedir': os.path.join(os.getenv('HOME'), '.cache', 'fdroidserver'),
-    'build_tools': MINIMUM_APKSIGNER_BUILD_TOOLS_VERSION,
     'java_paths': None,
     'scan_binary': False,
     'ant': "ant",
@@ -501,18 +500,11 @@ def find_sdk_tools_cmd(cmd):
     tooldirs = []
     if config is not None and 'sdk_path' in config and os.path.exists(config['sdk_path']):
         # try to find a working path to this command, in all the recent possible paths
-        if 'build_tools' in config:
-            build_tools = os.path.join(config['sdk_path'], 'build-tools')
-            # if 'build_tools' was manually set and exists, check only that one
-            configed_build_tools = os.path.join(build_tools, config['build_tools'])
-            if os.path.exists(configed_build_tools):
-                tooldirs.append(configed_build_tools)
-            else:
-                # no configed version, so hunt known paths for it
-                for f in sorted(os.listdir(build_tools), reverse=True):
-                    if os.path.isdir(os.path.join(build_tools, f)):
-                        tooldirs.append(os.path.join(build_tools, f))
-                tooldirs.append(build_tools)
+        build_tools = os.path.join(config['sdk_path'], 'build-tools')
+        if os.path.isdir(build_tools):
+            for f in sorted(os.listdir(build_tools), reverse=True):
+                if os.path.isdir(os.path.join(build_tools, f)):
+                    tooldirs.append(os.path.join(build_tools, f))
         sdk_tools = os.path.join(config['sdk_path'], 'tools')
         if os.path.exists(sdk_tools):
             tooldirs.append(sdk_tools)
@@ -528,7 +520,8 @@ def find_sdk_tools_cmd(cmd):
                 test_aapt_version(path)
             return path
     # did not find the command, exit with error message
-    ensure_build_tools_exists(config)
+    if not test_sdk_exists(config):
+        raise FDroidException(_("Android SDK not found!"))
 
 
 def test_aapt_version(aapt):
@@ -579,17 +572,6 @@ def test_sdk_exists(thisconfig):
                          .format(path=thisconfig['sdk_path']))
         return False
     return True
-
-
-def ensure_build_tools_exists(thisconfig):
-    if not test_sdk_exists(thisconfig):
-        raise FDroidException(_("Android SDK not found!"))
-    build_tools = os.path.join(thisconfig['sdk_path'], 'build-tools')
-    versioned_build_tools = os.path.join(build_tools, thisconfig['build_tools'])
-    if not os.path.isdir(versioned_build_tools):
-        raise FDroidException(
-            _("Android build-tools path '{path}' does not exist!")
-            .format(path=versioned_build_tools))
 
 
 def get_local_metadata_files():
