@@ -87,7 +87,8 @@ def main():
 
         def _get_index(section, etag=None):
             url = _append_to_url_path(section)
-            return index.download_repo_index(url, etag=etag)
+            data, etag = index.download_repo_index(url, etag=etag)
+            return data, etag, _append_to_url_path(section, 'index-v1.jar')
     else:
         def _get_index(section, etag=None):
             import io
@@ -99,7 +100,7 @@ def main():
             with zipfile.ZipFile(io.BytesIO(content)) as zip:
                 jsoncontents = zip.open('index-v1.json').read()
             data = json.loads(jsoncontents.decode('utf-8'))
-            return data, etag
+            return data, etag, None  # no verified index file to return
 
     ip = None
     try:
@@ -138,14 +139,16 @@ def main():
     for section in sections:
         sectiondir = os.path.join(basedir, section)
 
-        data, etag = _get_index(section)
+        urls = []
+        data, etag, index_url = _get_index(section)
+        if index_url:
+            urls.append(index_url)
 
         os.makedirs(sectiondir, exist_ok=True)
         os.chdir(sectiondir)
         for icondir in icondirs:
             os.makedirs(os.path.join(sectiondir, icondir), exist_ok=True)
 
-        urls = []
         for packageName, packageList in data['packages'].items():
             for package in packageList:
                 to_fetch = []

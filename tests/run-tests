@@ -1255,6 +1255,39 @@ fi
 
 
 #------------------------------------------------------------------------------#
+echo_header 'test mirroring a repo'
+
+if which wget; then
+    REPOROOT=`create_test_dir`
+    cd $WORKSPACE/tests
+    test -d archive || mkdir archive
+    cp repo/index-v1.json $REPOROOT/
+    $fdroid signindex
+    mv $REPOROOT/index-v1.json repo/index-v1.json
+
+    port=321${RANDOM:3}
+    timeout 5m python3 -m http.server $port --bind 127.0.0.1 > http.server.log 2>&1 &
+    http_server_pid=$!
+
+    cd $REPOROOT
+    http_proxy= HTTP_PROXY= $fdroid mirror http://127.0.0.1:${port}/
+    test -e 127.0.0.1\:${port}/repo/souch.smsbypass_9.apk
+    test -e 127.0.0.1\:${port}/repo/icons-640/souch.smsbypass.9.png
+    # the index shouldn't be saved unless it was verified
+    ! test -e 127.0.0.1\:${port}/repo/index-v1.jar
+    ! http_proxy= HTTP_PROXY= $fdroid mirror "http://127.0.0.1:${port}/?fingerprint=asdfasdf"
+    ! test -e 127.0.0.1\:${port}/repo/index-v1.jar
+    http_proxy= HTTP_PROXY= $fdroid mirror "http://127.0.0.1:${port}/?fingerprint=F49AF3F11EFDDF20DFFD70F5E3117B9976674167ADCA280E6B1932A0601B26F6"
+    test -e 127.0.0.1\:${port}/repo/index-v1.jar
+
+    # clean up
+    kill -9 $http_server_pid
+    rm -f 127.0.0.1\:${port}/repo/*.apk 127.0.0.1\:${port}/repo/*/*/*/*.png
+else
+    echo "WARNING: wget not installed, skipping"
+fi
+
+#------------------------------------------------------------------------------#
 
 # remove this to prevent git conflicts and complaining
 rm -rf $WORKSPACE/fdroidserver.egg-info/
