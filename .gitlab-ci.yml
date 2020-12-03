@@ -106,7 +106,11 @@ ubuntu_lts_ppa:
     - cd tests
     - ./run-tests
 
-# test using Xenial LTS with all depends from pypi
+# Test using Xenial LTS with all depends from pypi.  The venv is used
+# to isolate the dist tarball generation environment from the clean
+# install environment.  Xenial's pip is too old to install all the
+# dependencies, so this has to uppgrade pip and setuptools in order to
+# run the install.
 ubuntu_xenial_pip:
   image: ubuntu:xenial
   <<: *apt-template
@@ -128,8 +132,11 @@ ubuntu_xenial_pip:
     - test -e /usr/share/locale/de/LC_MESSAGES/fdroidserver.mo
     - ./tests/run-tests
 
-pip_install:
+# test install process on a bleeding edge distro with pip
+arch_pip_install:
   image: archlinux/base
+  only:
+    - master@fdroid/fdroidserver
   script:
     - pacman --sync --sysupgrade --refresh --noconfirm git grep python-pip python-virtualenv tar
     - pip install -e .
