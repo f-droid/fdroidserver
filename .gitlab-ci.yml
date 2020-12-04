@@ -6,7 +6,7 @@ variables:
 
 
 test:
-  image: registry.gitlab.com/fdroid/ci-images-server:latest
+  image: registry.gitlab.com/fdroid/ci-images-base
   script:
     - $pip install -e .[test]
     # the `fdroid build` test in tests/run-tests needs android-23
@@ -22,7 +22,7 @@ test:
 # The COMMIT_ID should be bumped after each release, so that the list
 # of sed hacks needed does not continuously grow.
 metadata_v0:
-  image: registry.gitlab.com/fdroid/ci-images-server:latest
+  image: registry.gitlab.com/fdroid/ci-images-base
   variables:
     GIT_DEPTH: 1000
     RELEASE_COMMIT_ID: 37f37ebd88e79ebe93239b72ed5503d5bde13f4b  # 2.0a~
