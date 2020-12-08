@@ -247,6 +247,26 @@ class IndexTest(unittest.TestCase):
                                                     fdroidserver.common.default_config['repo_icon'])))
         self.assertTrue(os.path.exists(os.path.join('repo', 'index.xml')))
 
+    def test_get_mirror_service_urls(self):
+        for url in [
+                'git@github.com:foo/bar',
+                'git@github.com:foo/bar.git',
+                'https://github.com/foo/bar',
+                'https://github.com/foo/bar.git',
+        ]:
+            self.assertEqual(['https://raw.githubusercontent.com/foo/bar/master/fdroid'],
+                             fdroidserver.index.get_mirror_service_urls(url))
+
+        for url in [
+                'git@gitlab.com:group/project',
+                'git@gitlab.com:group/project.git',
+                'https://gitlab.com/group/project',
+                'https://gitlab.com/group/project.git',
+        ]:
+            self.assertEqual(['https://group.gitlab.io/project/fdroid',
+                              'https://gitlab.com/group/project/-/raw/master/fdroid'],
+                             fdroidserver.index.get_mirror_service_urls(url))
+
 
 if __name__ == "__main__":
     os.chdir(os.path.dirname(__file__))

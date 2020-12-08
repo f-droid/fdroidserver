@@ -648,7 +648,7 @@ def get_mirror_service_urls(url):
     '''
 
     if url.startswith('git@'):
-        url = re.sub(r'^git@(.*):(.*)', r'https://\1/\2', url)
+        url = re.sub(r'^git@([^:]+):(.+)', r'https://\1/\2', url)
 
     segments = url.split("/")
 
@@ -676,10 +676,9 @@ def get_mirror_service_urls(url):
         # Gitlab-like Pages segments "https://user.gitlab.io/repo/folder"
         gitlab_pages = ["https:", "", user + ".gitlab.io", repo, folder]
         urls.append('/'.join(gitlab_pages))
-        # Gitlab Raw "https://gitlab.com/user/repo/raw/branch/folder"
-        gitlab_raw = segments + ['raw', branch, folder]
+        # GitLab Raw "https://gitlab.com/user/repo/-/raw/branch/folder"
+        gitlab_raw = segments + ['-', 'raw', branch, folder]
         urls.append('/'.join(gitlab_raw))
-        return urls
 
     return urls
 
