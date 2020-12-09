@@ -940,6 +940,8 @@ def write_yaml(mf, app):
     def _builds_to_yaml(app):
         builds = ruamel.yaml.comments.CommentedSeq()
         for build in app.get('Builds', []):
+            if not isinstance(build, Build):
+                build = Build(build)
             b = ruamel.yaml.comments.CommentedMap()
             for field in build_flags:
                 value = getattr(build, field)
