@@ -116,15 +116,15 @@ class UpdateTest(unittest.TestCase):
 
         buildnextcloudclient = fdroidserver.metadata.Build()
         buildnextcloudclient.gradle = ['generic']
-        apps['com.nextcloud.client']['builds'] = [buildnextcloudclient]
+        apps['com.nextcloud.client']['Builds'] = [buildnextcloudclient]
 
         buildnextclouddevclient = fdroidserver.metadata.Build()
         buildnextclouddevclient.gradle = ['versionDev']
-        apps['com.nextcloud.client.dev']['builds'] = [buildnextclouddevclient]
+        apps['com.nextcloud.client.dev']['Builds'] = [buildnextclouddevclient]
 
         build_conversations = fdroidserver.metadata.Build()
         build_conversations.gradle = ['free']
-        apps['eu.siacs.conversations']['builds'] = [build_conversations]
+        apps['eu.siacs.conversations']['Builds'] = [build_conversations]
 
         fdroidserver.update.insert_localized_app_metadata(apps)
 

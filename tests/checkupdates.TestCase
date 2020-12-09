@@ -49,13 +49,13 @@ class CheckupdatesTest(unittest.TestCase):
         build = fdroidserver.metadata.Build()
         build.versionCode = app.CurrentVersionCode
         build.versionName = app.CurrentVersion
-        app.builds.append(build)
+        app['Builds'].append(build)
 
         with mock.patch('fdroidserver.checkupdates.check_http', lambda app: ('1.1.9', 10109)):
             with mock.patch('fdroidserver.metadata.write_metadata', mock.Mock()):
                 with mock.patch('subprocess.call', lambda cmd: 0):
                     fdroidserver.checkupdates.checkupdates_app(app)
-                build = app.builds[-1]
+                build = app['Builds'][-1]
                 self.assertEqual(build.versionName, '1.1.9')
                 self.assertEqual(build.commit, '1.1.9')
 
@@ -75,13 +75,13 @@ class CheckupdatesTest(unittest.TestCase):
         build = fdroidserver.metadata.Build()
         build.versionCode = app.CurrentVersionCode
         build.versionName = app.CurrentVersion
-        app.builds.append(build)
+        app['Builds'].append(build)
 
         with mock.patch('fdroidserver.checkupdates.check_http', lambda app: ('1.1.9', 10109)):
             with mock.patch('fdroidserver.metadata.write_metadata', mock.Mock()):
                 with mock.patch('subprocess.call', lambda cmd: 0):
                     fdroidserver.checkupdates.checkupdates_app(app)
-                build = app.builds[-1]
+                build = app['Builds'][-1]
                 self.assertEqual(build.versionName, '1.1.9.10109-fdroid')
                 self.assertEqual(build.commit, 'v1.1.9_10109')
 

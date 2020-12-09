@@ -943,7 +943,7 @@ class CommonTest(unittest.TestCase):
         app = fdroidserver.metadata.App()
         build = fdroidserver.metadata.Build()
         build.gradle = ['devVersion']
-        app.builds = [build]
+        app['Builds'] = [build]
         app.id = 'org.fdroid.fdroid.dev'
         paths = [
             os.path.join('source-files', 'fdroid', 'fdroidclient', 'AndroidManifest.xml'),
@@ -957,7 +957,7 @@ class CommonTest(unittest.TestCase):
         app = fdroidserver.metadata.App()
         build = fdroidserver.metadata.Build()
         build.gradle = ['free']
-        app.builds = [build]
+        app['Builds'] = [build]
         app.id = 'eu.siacs.conversations'
         paths = [
             os.path.join('source-files', 'eu.siacs.conversations', 'build.gradle'),
@@ -970,7 +970,7 @@ class CommonTest(unittest.TestCase):
         app = fdroidserver.metadata.App()
         build = fdroidserver.metadata.Build()
         build.gradle = ['generic']
-        app.builds = [build]
+        app['Builds'] = [build]
         app.id = 'com.nextcloud.client'
         paths = [
             os.path.join('source-files', 'com.nextcloud.client', 'build.gradle'),
@@ -983,7 +983,7 @@ class CommonTest(unittest.TestCase):
         app = fdroidserver.metadata.App()
         build = fdroidserver.metadata.Build()
         build.gradle = ['versionDev']
-        app.builds = [build]
+        app['Builds'] = [build]
         app.id = 'com.nextcloud.android.beta'
         paths = [
             os.path.join('source-files', 'com.nextcloud.client', 'build.gradle'),
@@ -996,7 +996,7 @@ class CommonTest(unittest.TestCase):
         app = fdroidserver.metadata.App()
         build = fdroidserver.metadata.Build()
         build.gradle = ['standard']
-        app.builds = [build]
+        app['Builds'] = [build]
         app.id = 'at.bitfire.davdroid'
         paths = [
             os.path.join('source-files', 'at.bitfire.davdroid', 'build.gradle'),
@@ -1009,7 +1009,7 @@ class CommonTest(unittest.TestCase):
         app = fdroidserver.metadata.App()
         build = fdroidserver.metadata.Build()
         build.gradle = ['libre']
-        app.builds = [build]
+        app['Builds'] = [build]
         app.id = 'com.kunzisoft.fdroidtest.applicationidsuffix.libre'
         paths = [
             os.path.join('source-files', 'com.kunzisoft.testcase', 'build.gradle'),
@@ -1022,7 +1022,7 @@ class CommonTest(unittest.TestCase):
         app = fdroidserver.metadata.App()
         build = fdroidserver.metadata.Build()
         build.gradle = ['pro']
-        app.builds = [build]
+        app['Builds'] = [build]
         app.id = 'com.kunzisoft.fdroidtest.applicationidsuffix.pro'
         paths = [
             os.path.join('source-files', 'com.kunzisoft.testcase', 'build.gradle'),
@@ -1035,7 +1035,7 @@ class CommonTest(unittest.TestCase):
         app = fdroidserver.metadata.App()
         build = fdroidserver.metadata.Build()
         build.gradle = ['free']
-        app.builds = [build]
+        app['Builds'] = [build]
         app.id = 'com.kunzisoft.fdroidtest.applicationidsuffix'
         paths = [
             os.path.join('source-files', 'com.kunzisoft.testcase', 'build.gradle'),
@@ -1048,7 +1048,7 @@ class CommonTest(unittest.TestCase):
         app = fdroidserver.metadata.App()
         build = fdroidserver.metadata.Build()
         build.gradle = ['underscore']
-        app.builds = [build]
+        app['Builds'] = [build]
         app.id = 'com.kunzisoft.fdroidtest.applicationidsuffix.underscore'
         paths = [
             os.path.join('source-files', 'com.kunzisoft.testcase', 'build.gradle'),

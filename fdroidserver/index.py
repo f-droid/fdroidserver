@@ -158,7 +158,7 @@ def make_v1(apps, packages, repodir, repodict, requestsdict, fdroid_signing_key_
         for k, v in sorted(appdict.items()):
             if not v:
                 continue
-            if k in ('builds', 'comments', 'metadatapath',
+            if k in ('Builds', 'comments', 'metadatapath',
                      'ArchivePolicy', 'AutoUpdateMode', 'MaintainerNotes',
                      'Provides', 'Repo', 'RepoType', 'RequiresRoot',
                      'UpdateCheckData', 'UpdateCheckIgnore', 'UpdateCheckMode',
@@ -201,7 +201,7 @@ def make_v1(apps, packages, repodir, repodict, requestsdict, fdroid_signing_key_
         if not package.get('versionName'):
             app = apps[packageName]
             versionCodeStr = str(package['versionCode'])  # TODO build.versionCode should be int!
-            for build in app['builds']:
+            for build in app.get('Builds', []):
                 if build['versionCode'] == versionCodeStr:
                     versionName = build.get('versionName')
                     logging.info(_('Overriding blank versionName in {apkfilename} from metadata: {version}')
@@ -477,7 +477,7 @@ def make_v0(apps, apks, repodir, repodict, requestsdict, fdroid_signing_key_fing
             versionName = apk.get('versionName')
             if not versionName:
                 versionCodeStr = str(apk['versionCode'])  # TODO build.versionCode should be int!
-                for build in app.builds:
+                for build in app.get('Builds', []):
                     if build['versionCode'] == versionCodeStr and 'versionName' in build:
                         versionName = build['versionName']
                         break

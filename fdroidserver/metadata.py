@@ -158,7 +158,7 @@ class App(dict):
 
         self.id = None
         self.metadatapath = None
-        self.builds = []
+        self.Builds = []
         self.comments = {}
         self.added = None
         self.lastUpdated = None
@@ -179,8 +179,8 @@ class App(dict):
             raise AttributeError("No such attribute: " + name)
 
     def get_last_build(self):
-        if len(self.builds) > 0:
-            return self.builds[-1]
+        if len(self.Builds) > 0:
+            return self.Builds[-1]
         else:
             return Build()
 
@@ -633,9 +633,6 @@ def post_metadata_parse(app):
         if type(v) in (float, int):
             app[k] = str(v)
 
-    if 'Builds' in app:
-        app['builds'] = app.pop('Builds')
-
     if 'flavours' in app and app['flavours'] == [True]:
         app['flavours'] = 'yes'
 
@@ -664,8 +661,8 @@ def post_metadata_parse(app):
     _bool_allowed = ('maven', 'buildozer')
 
     builds = []
-    if 'builds' in app:
-        for build in app['builds']:
+    if 'Builds' in app:
+        for build in app.get('Builds', []):
             if not isinstance(build, Build):
                 build = Build(build)
             for k, v in build.items():
@@ -693,7 +690,7 @@ def post_metadata_parse(app):
                                 build[k] = str(v)
             builds.append(build)
 
-    app.builds = sorted_builds(builds)
+    app['Builds'] = sorted_builds(builds)
 
 
 # Parse metadata for a single application.
@@ -710,8 +707,6 @@ def post_metadata_parse(app):
 #
 # Known keys not originating from the metadata are:
 #
-#  'builds'           - a list of dictionaries containing build information
-#                       for each defined build
 #  'comments'         - a list of comments from the metadata file. Each is
 #                       a list of the form [field, comment] where field is
 #                       the name of the field it preceded in the metadata
@@ -771,8 +766,8 @@ def parse_metadata(metadatapath, check_vcs=False, refresh=True):
     post_metadata_parse(app)
 
     if not app.id:
-        if app.builds:
-            build = app.builds[-1]
+        if app.get('Builds'):
+            build = app['Builds'][-1]
             if build.subdir:
                 root_dir = build.subdir
             else:
@@ -925,9 +920,8 @@ def write_yaml(mf, app):
                 insert_newline = True
             else:
                 if app.get(field) or field == 'Builds':
-                    # .txt called it 'builds' internally, everywhere else its 'Builds'
                     if field == 'Builds':
-                        if app.get('builds'):
+                        if app.get('Builds'):
                             cm.update({field: _builds_to_yaml(app)})
                     elif field == 'CurrentVersionCode':
                         cm.update({field: _field_to_yaml(TYPE_INT, getattr(app, field))})
@@ -945,7 +939,7 @@ def write_yaml(mf, app):
 
     def _builds_to_yaml(app):
         builds = ruamel.yaml.comments.CommentedSeq()
-        for build in app.builds:
+        for build in app.get('Builds', []):
             b = ruamel.yaml.comments.CommentedMap()
             for field in build_flags:
                 value = getattr(build, field)

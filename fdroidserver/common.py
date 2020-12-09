@@ -641,10 +641,10 @@ def read_app_args(appid_versionCode_pairs, allapps, allow_vercodes=False):
         vc = vercodes[appid]
         if not vc:
             continue
-        app.builds = [b for b in app.builds if b.versionCode in vc]
-        if len(app.builds) != len(vercodes[appid]):
+        app['Builds'] = [b for b in app.get('Builds', []) if b.versionCode in vc]
+        if len(app.get('Builds', [])) != len(vercodes[appid]):
             error = True
-            allvcs = [b.versionCode for b in app.builds]
+            allvcs = [b.versionCode for b in app.get('Builds', [])]
             for v in vercodes[appid]:
                 if v not in allvcs:
                     logging.critical(_("No such versionCode {versionCode} for app {appid}")
@@ -1538,8 +1538,8 @@ def parse_androidmanifests(paths, app):
         flavour = None
         temp_app_id = None
         temp_version_name = None
-        if app.builds and 'gradle' in app.builds[-1] and app.builds[-1].gradle:
-            flavour = app.builds[-1].gradle[-1]
+        if len(app.get('Builds', [])) > 0 and 'gradle' in app['Builds'][-1] and app['Builds'][-1].gradle:
+            flavour = app['Builds'][-1].gradle[-1]
 
         if path.endswith('.gradle') or path.endswith('.gradle.kts'):
             with open(path, 'r') as f:

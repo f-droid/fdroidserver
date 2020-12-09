@@ -238,7 +238,7 @@ def main():
 
     metadata.post_metadata_parse(app)
 
-    app.builds.append(build)
+    app['Builds'].append(build)
 
     if write_local_file:
         metadata.write_metadata('.fdroid.yml', app)

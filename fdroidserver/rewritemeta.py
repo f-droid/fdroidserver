@@ -78,7 +78,7 @@ def main():
             continue
 
         newbuilds = []
-        for build in app.builds:
+        for build in app.get('Builds', []):
             new = metadata.Build()
             for k in metadata.build_flags:
                 v = build[k]
@@ -86,7 +86,7 @@ def main():
                     continue
                 new[k] = v
             newbuilds.append(new)
-        app.builds = newbuilds
+        app['Builds'] = newbuilds
 
         # rewrite to temporary file before overwriting existsing
         # file in case there's a bug in write_metadata

@@ -221,8 +221,8 @@ def check_repomanifest(app, branch=None):
             vcs.gotorevision(None)
 
         last_build = metadata.Build()
-        if len(app.builds) > 0:
-            last_build = app.builds[-1]
+        if len(app.get('Builds', [])) > 0:
+            last_build = app.get('Builds', [])[-1]
 
         try_init_submodules(app, last_build, vcs)
 
@@ -506,7 +506,7 @@ def checkupdates_app(app):
 
             gotcur = False
             latest = None
-            for build in app.builds:
+            for build in app.get('Builds', []):
                 if int(build.versionCode) >= int(app.CurrentVersionCode):
                     gotcur = True
                 if not latest or int(build.versionCode) > int(latest.versionCode):
@@ -524,7 +524,7 @@ def checkupdates_app(app):
                 commit = pattern.replace('%v', app.CurrentVersion)
                 commit = commit.replace('%c', newbuild.versionCode)
                 newbuild.commit = commit
-                app.builds.append(newbuild)
+                app['Builds'].append(newbuild)
                 name = _getappname(app)
                 ver = _getcvname(app)
                 commitmsg = "Update %s to %s" % (name, ver)

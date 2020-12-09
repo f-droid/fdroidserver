@@ -157,9 +157,8 @@ def status_update_json(apps, apks):
         for apk in apks:
             if apk['packageName'] == appid:
                 apklist.append(apk)
-        builds = app.get('builds', [])
         validapks = 0
-        for build in builds:
+        for build in app.get('Builds', []):
             if not build.get('disable'):
                 builtit = False
                 for apk in apklist:
@@ -252,7 +251,7 @@ def update_wiki(apps, apks):
                     gotcurrentver = True
                 apklist.append(apk)
         # Include ones we can't build, as a special case...
-        for build in app.builds:
+        for build in app.get('Builds', []):
             if build.disable:
                 if build.versionCode == app.CurrentVersionCode:
                     cantupdate = True
@@ -411,7 +410,7 @@ def delete_disabled_builds(apps, apkcache, repodirs):
     :param repodirs: the repo directories to process
     """
     for appid, app in apps.items():
-        for build in app['builds']:
+        for build in app.get('Builds', []):
             if not build.disable:
                 continue
             apkfilename = common.get_release_filename(app, build)
@@ -742,7 +741,7 @@ def translate_per_build_anti_features(apps, apks):
     antiFeatures = dict()
     for packageName, app in apps.items():
         d = dict()
-        for build in app['builds']:
+        for build in app.get('Builds', []):
             afl = build.get('antifeatures')
             if afl:
                 d[int(build.versionCode)] = afl
@@ -1022,8 +1021,8 @@ def copy_triple_t_store_metadata(apps):
                         if os.path.exists(p):
                             gradle_subdirs.add(p)
                         flavors = set()
-                        if app.builds:
-                            flavors = app.builds[0].gradle
+                        if app.get('Builds'):
+                            flavors = app['Builds'][0].gradle
                         for flavor in flavors:
                             if flavor not in ('yes', 'no'):
                                 p = os.path.join('build', packageName, gradle_path, 'src', flavor, 'play')
@@ -1148,9 +1147,12 @@ def insert_localized_app_metadata(apps):
 
             # flavours specified in build receipt
             build_flavours = ""
-            if apps[packageName] and 'builds' in apps[packageName] and len(apps[packageName].builds) > 0\
-                    and 'gradle' in apps[packageName].builds[-1]:
-                build_flavours = apps[packageName].builds[-1].gradle
+            if (
+                apps[packageName]
+                and len(apps[packageName].get('Builds', [])) > 0
+                and 'gradle' in apps[packageName]['Builds'][-1]
+            ):
+                build_flavours = apps[packageName]['Builds'][-1]['gradle']
 
             if len(segments) >= 5 and segments[4] == "fastlane" and segments[3] not in build_flavours:
                 logging.debug("ignoring due to wrong flavour")
