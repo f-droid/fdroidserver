@@ -541,7 +541,7 @@ def read_srclibs():
         srclibs[srclibname] = parse_yaml_srclib(metadatapath)
 
 
-def read_metadata(appids=None, check_vcs=[], refresh=True, sort_by_time=False):
+def read_metadata(appids={}, refresh=True, sort_by_time=False):
     """Return a list of App instances sorted newest first
 
     This reads all of the metadata files in a 'data' repository, then
@@ -549,7 +549,7 @@ def read_metadata(appids=None, check_vcs=[], refresh=True, sort_by_time=False):
     sorted based on creation time, newest first.  Most of the time,
     the newer files are the most interesting.
 
-    check_vcs is the list of appids to check for .fdroid.yml in source
+    appids is a dict with appids a keys and versionCodes as values.
 
     """
 
@@ -597,7 +597,7 @@ def read_metadata(appids=None, check_vcs=[], refresh=True, sort_by_time=False):
         if appid in apps:
             _warn_or_exception(_("Found multiple metadata files for {appid}")
                                .format(appid=appid))
-        app = parse_metadata(metadatapath, appid in check_vcs, refresh)
+        app = parse_metadata(metadatapath, appid in appids, refresh)
         check_metadata(app)
         apps[app.id] = app
 
