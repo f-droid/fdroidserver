@@ -21,10 +21,7 @@
 import os
 import re
 import glob
-import html
 import logging
-import textwrap
-import io
 import yaml
 try:
     from yaml import CSafeLoader as SafeLoader
@@ -467,196 +464,6 @@ def check_metadata(app):
             v.check(app[k], app.id)
 
 
-# Formatter for descriptions. Create an instance, and call parseline() with
-# each line of the description source from the metadata. At the end, call
-# end() and then text_txt and text_html will contain the result.
-class DescriptionFormatter:
-
-    stNONE = 0
-    stPARA = 1
-    stUL = 2
-    stOL = 3
-
-    def __init__(self, linkres):
-        self.bold = False
-        self.ital = False
-        self.state = self.stNONE
-        self.laststate = self.stNONE
-        self.text_html = ''
-        self.text_txt = ''
-        self.html = io.StringIO()
-        self.text = io.StringIO()
-        self.para_lines = []
-        self.linkResolver = None
-        self.linkResolver = linkres
-
-    def endcur(self, notstates=None):
-        if notstates and self.state in notstates:
-            return
-        if self.state == self.stPARA:
-            self.endpara()
-        elif self.state == self.stUL:
-            self.endul()
-        elif self.state == self.stOL:
-            self.endol()
-
-    def endpara(self):
-        self.laststate = self.state
-        self.state = self.stNONE
-        whole_para = ' '.join(self.para_lines)
-        self.addtext(whole_para)
-        wrapped = textwrap.fill(whole_para, 80,
-                                break_long_words=False,
-                                break_on_hyphens=False)
-        self.text.write(wrapped)
-        self.html.write('</p>')
-        del self.para_lines[:]
-
-    def endul(self):
-        self.html.write('</ul>')
-        self.laststate = self.state
-        self.state = self.stNONE
-
-    def endol(self):
-        self.html.write('</ol>')
-        self.laststate = self.state
-        self.state = self.stNONE
-
-    def formatted(self, txt, htmlbody):
-        res = ''
-        if htmlbody:
-            txt = html.escape(txt, quote=False)
-        while True:
-            index = txt.find("''")
-            if index == -1:
-                return res + txt
-            res += txt[:index]
-            txt = txt[index:]
-            if txt.startswith("'''"):
-                if htmlbody:
-                    if self.bold:
-                        res += '</b>'
-                    else:
-                        res += '<b>'
-                self.bold = not self.bold
-                txt = txt[3:]
-            else:
-                if htmlbody:
-                    if self.ital:
-                        res += '</i>'
-                    else:
-                        res += '<i>'
-                self.ital = not self.ital
-                txt = txt[2:]
-
-    def linkify(self, txt):
-        res_plain = ''
-        res_html = ''
-        while True:
-            index = txt.find("[")
-            if index == -1:
-                return (res_plain + self.formatted(txt, False), res_html + self.formatted(txt, True))
-            res_plain += self.formatted(txt[:index], False)
-            res_html += self.formatted(txt[:index], True)
-            txt = txt[index:]
-            if txt.startswith("[["):
-                index = txt.find("]]")
-                if index == -1:
-                    _warn_or_exception(_("Unterminated ]]"))
-                url = txt[2:index]
-                if self.linkResolver:
-                    url, urltext = self.linkResolver.resolve_description_link(url)
-                else:
-                    urltext = url
-                res_html += '<a href="' + url + '">' + html.escape(urltext, quote=False) + '</a>'
-                res_plain += urltext
-                txt = txt[index + 2:]
-            else:
-                index = txt.find("]")
-                if index == -1:
-                    _warn_or_exception(_("Unterminated ]"))
-                url = txt[1:index]
-                index2 = url.find(' ')
-                if index2 == -1:
-                    urltxt = url
-                else:
-                    urltxt = url[index2 + 1:]
-                    url = url[:index2]
-                    if url == urltxt:
-                        _warn_or_exception(_("URL title is just the URL, use brackets: [URL]"))
-                res_html += '<a href="' + url + '">' + html.escape(urltxt, quote=False) + '</a>'
-                res_plain += urltxt
-                if urltxt != url:
-                    res_plain += ' (' + url + ')'
-                txt = txt[index + 1:]
-
-    def addtext(self, txt):
-        p, h = self.linkify(txt)
-        self.html.write(h)
-
-    def parseline(self, line):
-        if not line:
-            self.endcur()
-        elif line.startswith('* '):
-            self.endcur([self.stUL])
-            if self.state != self.stUL:
-                self.html.write('<ul>')
-                self.state = self.stUL
-                if self.laststate != self.stNONE:
-                    self.text.write('\n\n')
-            else:
-                self.text.write('\n')
-            self.text.write(line)
-            self.html.write('<li>')
-            self.addtext(line[1:])
-            self.html.write('</li>')
-        elif line.startswith('# '):
-            self.endcur([self.stOL])
-            if self.state != self.stOL:
-                self.html.write('<ol>')
-                self.state = self.stOL
-                if self.laststate != self.stNONE:
-                    self.text.write('\n\n')
-            else:
-                self.text.write('\n')
-            self.text.write(line)
-            self.html.write('<li>')
-            self.addtext(line[1:])
-            self.html.write('</li>')
-        else:
-            self.para_lines.append(line)
-            self.endcur([self.stPARA])
-            if self.state == self.stNONE:
-                self.state = self.stPARA
-                if self.laststate != self.stNONE:
-                    self.text.write('\n\n')
-                self.html.write('<p>')
-
-    def end(self):
-        self.endcur()
-        self.text_txt = self.text.getvalue()
-        self.text_html = self.html.getvalue()
-        self.text.close()
-        self.html.close()
-
-
-# Parse multiple lines of description as written in a metadata file, returning
-# a single string in wiki format. Used for the Maintainer Notes field as well,
-# because it's the same format.
-def description_wiki(s):
-    return s
-
-
-# Parse multiple lines of description as written in a metadata file, returning
-# a single string in HTML format.
-def description_html(s, linkres):
-    ps = DescriptionFormatter(linkres)
-    for line in s.splitlines():
-        ps.parseline(line)
-    ps.end()
-    return ps.text_html
-
-
 def parse_yaml_srclib(metadatapath):
 
     thisinfo = {'RepoType': '',
@@ -734,7 +541,7 @@ def read_srclibs():
         srclibs[srclibname] = parse_yaml_srclib(metadatapath)
 
 
-def read_metadata(xref=True, check_vcs=[], refresh=True, sort_by_time=False):
+def read_metadata(appids=None, check_vcs=[], refresh=True, sort_by_time=False):
     """Return a list of App instances sorted newest first
 
     This reads all of the metadata files in a 'data' repository, then
@@ -756,8 +563,22 @@ def read_metadata(xref=True, check_vcs=[], refresh=True, sort_by_time=False):
         if not os.path.exists(basedir):
             os.makedirs(basedir)
 
-    metadatafiles = (glob.glob(os.path.join('metadata', '*.yml'))
-                     + glob.glob('.fdroid.yml'))
+    if appids:
+        vercodes = fdroidserver.common.read_pkg_args(appids)
+        found_invalid = False
+        metadatafiles = []
+        for appid in vercodes.keys():
+            f = os.path.join('metadata', '%s.yml' % appid)
+            if os.path.exists(f):
+                metadatafiles.append(f)
+            else:
+                found_invalid = True
+                logging.critical(_("No such package: %s") % appid)
+        if found_invalid:
+            raise FDroidException(_("Found invalid appids in arguments"))
+    else:
+        metadatafiles = (glob.glob(os.path.join('metadata', '*.yml'))
+                         + glob.glob('.fdroid.yml'))
 
     if sort_by_time:
         entries = ((os.stat(path).st_mtime, path) for path in metadatafiles)
@@ -779,16 +600,6 @@ def read_metadata(xref=True, check_vcs=[], refresh=True, sort_by_time=False):
         app = parse_metadata(metadatapath, appid in check_vcs, refresh)
         check_metadata(app)
         apps[app.id] = app
-
-    if xref:
-        # Parse all descriptions at load time, just to ensure cross-referencing
-        # errors are caught early rather than when they hit the build server.
-        for appid, app in apps.items():
-            try:
-                description_html(app.Description, DummyDescriptionResolver(apps))
-            except MetaDataException as e:
-                _warn_or_exception(_("Problem with description of {appid}: {error}")
-                                   .format(appid=appid, error=str(e)))
 
     return apps
 
@@ -1179,23 +990,3 @@ def add_metadata_arguments(parser):
     '''add common command line flags related to metadata processing'''
     parser.add_argument("-W", choices=['error', 'warn', 'ignore'], default='error',
                         help=_("force metadata errors (default) to be warnings, or to be ignored."))
-
-
-class DescriptionResolver:
-    def __init__(self, apps):
-        self.apps = apps
-
-    def resolve_description_link(self, appid):
-        if appid in self.apps:
-            if self.apps[appid].Name:
-                return "fdroid.app:" + appid, self.apps[appid].Name
-        raise MetaDataException(_('Cannot resolve application ID {appid}')
-                                .format(appid=appid))
-
-
-class DummyDescriptionResolver(DescriptionResolver):
-    def resolve_description_link(self, appid):
-        if appid in self.apps:
-            return "fdroid.app:" + appid, "Dummy name - don't know yet"
-        _warn_or_exception(_('Cannot resolve application ID {appid}')
-                           .format(appid=appid))

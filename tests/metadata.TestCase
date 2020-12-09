@@ -133,7 +133,7 @@ class MetadataTest(unittest.TestCase):
         fdroidserver.common.config = config
         fdroidserver.metadata.warnings_action = None
 
-        apps = fdroidserver.metadata.read_metadata(xref=True)
+        apps = fdroidserver.metadata.read_metadata()
         for appid in ('org.smssecure.smssecure', 'org.adaway',
                       'org.videolan.vlc', 'com.politedroid'):
             savepath = os.path.join('metadata', 'dump', appid + '.yaml')
@@ -154,7 +154,7 @@ class MetadataTest(unittest.TestCase):
         fdroidserver.metadata.warnings_action = None
 
         # rewrite metadata
-        allapps = fdroidserver.metadata.read_metadata(xref=True)
+        allapps = fdroidserver.metadata.read_metadata()
         for appid, app in allapps.items():
             if appid == 'fake.ota.update':
                 fdroidserver.metadata.write_metadata(os.path.join(testdir, appid + '.yml'), app)
@@ -170,7 +170,7 @@ class MetadataTest(unittest.TestCase):
         fdroidserver.common.config = {'accepted_formats': ['yml']}
 
         # rewrite metadata
-        allapps = fdroidserver.metadata.read_metadata(xref=True)
+        allapps = fdroidserver.metadata.read_metadata()
         for appid, app in allapps.items():
             if appid == 'org.fdroid.fdroid':
                 fdroidserver.metadata.write_metadata(os.path.join(testdir, appid + '.yml'), app)
@@ -185,7 +185,7 @@ class MetadataTest(unittest.TestCase):
         testdir = tempfile.mkdtemp(prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir)
 
         # rewrite metadata
-        allapps = fdroidserver.metadata.read_metadata(xref=True)
+        allapps = fdroidserver.metadata.read_metadata()
         for appid, app in allapps.items():
             if appid == 'app.with.special.build.params':
                 fdroidserver.metadata.write_metadata(os.path.join(testdir, appid + '.yml'), app)
@@ -258,7 +258,7 @@ class MetadataTest(unittest.TestCase):
             randomlist = [os.path.basename(f)[:-4]] + randomlist
             i += 1
         os.chdir(testdir)
-        allapps = fdroidserver.metadata.read_metadata(xref=True, sort_by_time=True)
+        allapps = fdroidserver.metadata.read_metadata(sort_by_time=True)
         allappids = []
         for appid, app in allapps.items():
             allappids.append(appid)
@@ -827,13 +827,6 @@ class MetadataTest(unittest.TestCase):
                                          'Repo': 'https://git.host/repo.git',
                                          'Subdir': None,
                                          'Prepare': None}})
-
-    def test_read_xref_metadata(self):
-        os.chdir('xref')
-        fdroidserver.metadata.warnings_action = 'error'
-        apps = fdroidserver.metadata.read_metadata(xref=True)
-        self.assertListEqual(list(apps.keys()),
-                             ['aarddict.android', 'org.coolreader', 'org.geometerplus.zlibrary.ui.android'])
 
 
 if __name__ == "__main__":

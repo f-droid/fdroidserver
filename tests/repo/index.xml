@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <fdroid>
 	<repo icon="fdroid-icon.png" name="My First F-Droid Repo Demo" pubkey="308204e1308202c9a003020102020434597643300d06092a864886f70d01010b050030213110300e060355040b1307462d44726f6964310d300b06035504031304736f7661301e170d3136303931333230313930395a170d3434303133303230313930395a30213110300e060355040b1307462d44726f6964310d300b06035504031304736f766130820222300d06092a864886f70d01010105000382020f003082020a028202010086ef94b5aacf2ba4f38c875f4194b44f5644392e3715575d7c92828577e692c352b567172823851c8c72347fbc9d99684cd7ca3e1db3e4cca126382c53f2a5869fb4c19bdec989b2930501af3e758ff40588915fe96b10076ce3346a193a0277d79e83e30fd8657c20e35260dd085aa32eac7c4b85786ffefbf1555cafe2bc928443430cdbba48cfbe701e12ae86e676477932730d4fc7c00af820aef85038a5b4df084cf6470d110dc4c49ea1b749b80b34709d199b3db516b223625c5de4501e861f7d261b3838f8f616aa78831d618d41d25872dc810c9b2087b5a9e146ca95be740316dcdbcb77314e23ab87d4487913b800b1113c0603ea2294188b71d3e49875df097b56f9151211fc6832f9790c5c83d17481f14ad37915fd164f4fd713f6732a15f4245714b84cd665bdbd085660ea33ad7d7095dcc414f09e3903604a40facc2314a115c0045bb50e9df38efb57e1b8e7cc105f340a26eeb46aba0fa6672953eee7f1f92dcb408e561909bbd4bdf4a4948c4d57c467d21aa238c34ba43be050398be963191fa2b49828bc1e4eeed224b40dbe9dc3e570890a71a974a2f4527edb1b07105071755105edcb2af2f269facfb89180903a572a99b46456e80d4a01685a80b233278805f2c876678e731f4ec4f52075aeef6b2b023efbb8a3637ef507c4c37c27e428152ec1817fcba640ad601cb09f72f0fbe2d274a2410203010001a321301f301d0603551d0e04160414c28bf33dd5a9a17338e5b1d1a6edd8c7d141ed0b300d06092a864886f70d01010b0500038202010084e20458b2aafd7fc27146b0986f9324f4260f244920417a77c9bf15e2e2d22d2725bdd8093ec261c3779c3ca03312516506f9410075b90595b41345956d8eb2786fb5994f195611382c2b99dba13381b0100a30bc9e6e47248bf4325e2f6eec9d789216dc7536e753bf1f4be603d9fa2e6f5e192b4eb988b8cdb0bb1e8668a9225426f7d4636479f73ed24ad1d2657c31e63c93d9679b9080171b3bd1bf10a3b92b80bd790fbf62d3644900cd08eae8b9bf9c2567be98dc8cdd2ae19a8d57a3e3e2de899f81f1279f578989e6af906f80c8c2b67651730ee7e568c1af5bcb845b6d685dc55332a9984aeceaea3b7e883447edf1c76b155d95253e39b9710eaa22efa6c81468829702b5dce7126538f3ca70c2f0ad9a5795435fdb1f715f20d60359ef9a9926c7050116e802df651727447848827815f70bd82af3cedd08783156102d2d8ce995c4c43b8e47e91a3e6927f3505a5d395e6bebb84542c570903eeab4382a1c2151f1471c7a06a34dc4d268d8fa72e93bdcd2dccc4302ecac47b9e7e3d8bc9b46d21cd097874a24d529548018dc190ff568c6aa428f0a5eedff1a347730931c74f19277538e49647a4ad7254f4c1ec7d4da12cce9e1fad9607534e66ab40a56b473d9d7e3d563fd03cad2052bad365c5a29f8ae54f09b60dbca3ea768d7767cbe1c133ca08ce725c1c1370f4aab8e5b6e286f52dc0be8d0982b5a" timestamp="1480431575" url="https://MyFirstFDroidRepo.org/fdroid/repo" version="21">
-		<description>This is a repository of apps to be used with F-Droid. Applications in this repository are either official binaries built by the original application developers, or are binaries built from source by the admin of f-droid.org using the tools on https://gitlab.com/u/fdroid. </description>
+		<description>This is a repository of apps to be used with F-Droid. Applications in this repository are either official binaries built by the original application developers, or are binaries built from source by the admin of f-droid.org using the tools on https://gitlab.com/u/fdroid.</description>
 		<mirror>http://foobarfoobarfoobar.onion/fdroid/repo</mirror>
 		<mirror>https://foo.bar/fdroid/repo</mirror>
 	</repo>
@@ -15,7 +15,15 @@
 		<name>Battery level</name>
 		<summary>Filter SMS and show them in a fake app</summary>
 		<icon>souch.smsbypass.9.png</icon>
-		<desc>&lt;p&gt;In order to keep away curious eyes, SMS-bypass filters incoming SMS messages before they reach your inbox. Based on bughunter2.smsfilter.&lt;/p&gt;&lt;p&gt;Features:&lt;/p&gt;&lt;ul&gt;&lt;li&gt; Discrete fake app &quot;Battery level&quot;: Long tap on Battery percentage will show SMS.&lt;/li&gt;&lt;li&gt; Filter incoming SMS specified address: redirect the SMS to SMS-bypass messages list; remove SMS arrival sound or vibration; show a discreet notification icon (battery level); vibrate if checked in settings&lt;/li&gt;&lt;li&gt; Add contact from contact list&lt;/li&gt;&lt;li&gt; Export messages to a text file&lt;/li&gt;&lt;/ul&gt;</desc>
+		<desc>In order to keep away curious eyes, SMS-bypass filters incoming SMS messages
+before they reach your inbox. Based on bughunter2.smsfilter.
+
+Features:
+
+* Discrete fake app &quot;Battery level&quot;: Long tap on Battery percentage will show SMS.
+* Filter incoming SMS specified address: redirect the SMS to SMS-bypass messages list; remove SMS arrival sound or vibration; show a discreet notification icon (battery level); vibrate if checked in settings
+* Add contact from contact list
+* Export messages to a text file</desc>
 		<license>GPL-3.0-only</license>
 		<categories>Phone &amp; SMS</categories>
 		<category>Phone &amp; SMS</category>
@@ -46,7 +54,7 @@
 		<name>Caffeine Tile</name>
 		<summary>Test app for extracting icons when an XML one is default</summary>
 		<icon>info.zwanenburg.caffeinetile.4.xml</icon>
-		<desc>&lt;p&gt;No description available&lt;/p&gt;</desc>
+		<desc>No description available</desc>
 		<license>Unknown</license>
 		<categories>Development</categories>
 		<category>Development</category>
@@ -75,7 +83,7 @@
 		<name>Duplicate Permisssions</name>
 		<summary>Test app for all possible &lt;uses-permissions&gt;</summary>
 		<icon>duplicate.permisssions.9999999.png</icon>
-		<desc>&lt;p&gt;No description available&lt;/p&gt;</desc>
+		<desc>No description available</desc>
 		<license>Unknown</license>
 		<categories>tests</categories>
 		<category>tests</category>
@@ -105,7 +113,24 @@
 		<lastupdated>2016-03-10</lastupdated>
 		<name>fake.ota.update_1234</name>
 		<summary>Tests whether OTA ZIP files are being include</summary>
-		<desc>&lt;p&gt;F-Droid can make use of system privileges or permissions to install, update and remove applications on its own. The only way to obtain those privileges is to become a system app.&lt;/p&gt;&lt;p&gt;This is where the Privileged Extension comes in - being a separate app and much smaller, it can be installed as a system app and communicate with the main app via AIDL IPC.&lt;/p&gt;&lt;p&gt;This has several advantages:&lt;/p&gt;&lt;ul&gt;&lt;li&gt; Reduced disk usage in the system partition&lt;/li&gt;&lt;li&gt; System updates don't remove F-Droid&lt;/li&gt;&lt;li&gt; The process of installing into system via root is safer&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;This is packaged as an OTA (Over-The-Air) update ZIP file.  It must be installed using TWRP or other Android recovery that can flash updates to the system from the /data/data/org.fdroid.fdroid folder on the /data partition. The standalone APK is called F-Droid Privileged Extension.&lt;/p&gt;</desc>
+		<desc>F-Droid can make use of system privileges or permissions to
+install, update and remove applications on its own. The only way to obtain those
+privileges is to become a system app.
+
+This is where the Privileged Extension comes in - being a separate app and much
+smaller, it can be installed as a system app and communicate with the main app
+via AIDL IPC.
+
+This has several advantages:
+
+* Reduced disk usage in the system partition
+* System updates don't remove F-Droid
+* The process of installing into system via root is safer
+
+This is packaged as an OTA (Over-The-Air) update ZIP file.  It must be installed
+using TWRP or other Android recovery that can flash updates to the system from
+the /data/data/org.fdroid.fdroid folder on the /data partition. The standalone
+APK is called F-Droid Privileged Extension.</desc>
 		<license>Apache-2.0</license>
 		<categories>System</categories>
 		<category>System</category>
@@ -131,7 +156,7 @@
 		<name>No minSdkVersion or targetSdkVersion</name>
 		<summary>An APK without any &lt;uses-sdk&gt; block in AndroidManifest.xml</summary>
 		<icon>no.min.target.sdk.987.png</icon>
-		<desc>&lt;p&gt;No description available&lt;/p&gt;</desc>
+		<desc>No description available</desc>
 		<license>Unknown</license>
 		<categories>Development</categories>
 		<category>Development</category>
@@ -159,7 +184,7 @@
 		<name>OBB Main Old Version</name>
 		<summary></summary>
 		<icon>obb.main.oldversion.1444412523.png</icon>
-		<desc>&lt;p&gt;No description available&lt;/p&gt;</desc>
+		<desc>No description available</desc>
 		<license>GPL-3.0-only</license>
 		<categories>Development</categories>
 		<category>Development</category>
@@ -194,7 +219,7 @@
 		<name>OBB Main Two Versions</name>
 		<summary></summary>
 		<icon>obb.main.twoversions.1101617.png</icon>
-		<desc>&lt;p&gt;No description available&lt;/p&gt;</desc>
+		<desc>No description available</desc>
 		<license>GPL-3.0-only</license>
 		<categories>Development</categories>
 		<category>Development</category>
@@ -252,7 +277,7 @@
 		<name>OBB Main/Patch Current</name>
 		<summary></summary>
 		<icon>obb.mainpatch.current.1619.png</icon>
-		<desc>&lt;p&gt;No description available&lt;/p&gt;</desc>
+		<desc>No description available</desc>
 		<license>GPL-3.0-only</license>
 		<categories>Development</categories>
 		<category>Development</category>
@@ -285,7 +310,7 @@
 		<name>Polite Droid</name>
 		<summary>Calendar tool</summary>
 		<icon>com.politedroid.6.png</icon>
-		<desc>&lt;p&gt;Activates silent mode during calendar events.&lt;/p&gt;</desc>
+		<desc>Activates silent mode during calendar events.</desc>
 		<license>GPL-3.0-only</license>
 		<categories>Time</categories>
 		<category>Time</category>
@@ -349,7 +374,14 @@
 		<name>urzip-πÇÇπÇÇ现代汉语通用字-български-عربي1234</name>
 		<summary>一个实用工具，获取已安装在您的设备上的应用的有关信息</summary>
 		<icon>info.guardianproject.urzip.100.png</icon>
-		<desc>&lt;p&gt;It’s Urzip 是一个获得已安装 APK 相关信息的实用工具。它从您的设备上已安装的所有应用开始，一键触摸即可显示 APK 的指纹，并且提供到达 virustotal.com 和 androidobservatory.org 的快捷链接，让您方便地了解特定 APK 的档案。它还可以让您导出签名证书和生成 ApkSignaturePin Pin 文件供 TrustedIntents 库使用。&lt;/p&gt;&lt;p&gt;★ Urzip 支持下列语言： Deutsch, English, español, suomi, 日本語, 한국어, Norsk, português (Portugal), Русский, Slovenščina, Türkçe 没看到您的语言？帮忙翻译本应用吧： https://www.transifex.com/projects/p/urzip&lt;/p&gt;&lt;p&gt;★ 致用户：我们还缺少你喜欢的功能？发现了一个 bug？请告诉我们！我们乐于听取您的意见。请发送电子邮件至: support@guardianproject.info 或者加入我们的聊天室 https://guardianproject.info/contact&lt;/p&gt;</desc>
+		<desc>It’s Urzip 是一个获得已安装 APK 相关信息的实用工具。它从您的设备上已安装的所有应用开始，一键触摸即可显示 APK 的指纹，并且提供到达 virustotal.com 和 androidobservatory.org 的快捷链接，让您方便地了解特定 APK 的档案。它还可以让您导出签名证书和生成 ApkSignaturePin Pin 文件供 TrustedIntents 库使用。
+
+★ Urzip 支持下列语言： Deutsch, English, español, suomi, 日本語, 한국어, Norsk, português (Portugal), Русский, Slovenščina, Türkçe
+没看到您的语言？帮忙翻译本应用吧：
+https://www.transifex.com/projects/p/urzip
+
+★ 致用户：我们还缺少你喜欢的功能？发现了一个 bug？请告诉我们！我们乐于听取您的意见。请发送电子邮件至: support@guardianproject.info 或者加入我们的聊天室 https://guardianproject.info/contact
+</desc>
 		<license>GPL-3.0-only</license>
 		<categories>Development,GuardianProject,1,2.0</categories>
 		<category>Development</category>

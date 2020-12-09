@@ -234,11 +234,11 @@ def update_wiki(apps, apks):
         wikidata += " - [https://f-droid.org/repository/browse/?fdid=" + appid + " view in repository]\n\n"
 
         wikidata += "=Description=\n"
-        wikidata += metadata.description_wiki(app.Description) + "\n"
+        wikidata += app.Description + "\n"
 
         wikidata += "=Maintainer Notes=\n"
         if app.MaintainerNotes:
-            wikidata += metadata.description_wiki(app.MaintainerNotes) + "\n"
+            wikidata += app.MaintainerNotes + "\n"
         wikidata += "\nMetadata: [https://gitlab.com/fdroid/fdroiddata/blob/master/metadata/{0}.yml current] [https://gitlab.com/fdroid/fdroiddata/commits/master/metadata/{0}.yml history]\n".format(appid)
 
         # Get a list of all packages for this application...
@@ -2120,16 +2120,6 @@ def read_names_from_apks(apps, apks):
                 app.Name = bestapk['name']
 
 
-def render_app_descriptions(apps, all_apps):
-    """
-    Renders the app html description.
-    For resolving inter-app links it needs the full list of apps, even if they end up in
-    separate repos (i.e. archive or per app repos).
-    """
-    for app in apps.values():
-        app['Description'] = metadata.description_html(app['Description'], metadata.DescriptionResolver(all_apps))
-
-
 def get_apps_with_packages(apps, apks):
     """Returns a deepcopy of that subset apps that actually has any associated packages. Skips disabled apps."""
     appsWithPackages = collections.OrderedDict()
@@ -2157,7 +2147,6 @@ def prepare_apps(apps, apks, repodir):
     """
     apps_with_packages = get_apps_with_packages(apps, apks)
     apply_info_from_latest_apk(apps_with_packages, apks)
-    render_app_descriptions(apps_with_packages, apps)
     insert_funding_yml_donation_links(apps)
     # This is only currently done for /repo because doing it for the archive
     # will take a lot of time and bloat the archive mirrors and index

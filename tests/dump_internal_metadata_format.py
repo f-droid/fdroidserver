@@ -84,7 +84,7 @@ savedir = os.path.join('metadata', 'dump_' + repo.git.describe())
 if not os.path.isdir(savedir):
     os.mkdir(savedir)
 
-apps = fdroidserver.metadata.read_metadata(xref=True)
+apps = fdroidserver.metadata.read_metadata()
 for appid, app in apps.items():
     savepath = os.path.join(savedir, appid + '.yaml')
     if hasattr(app, 'attr_to_field'):

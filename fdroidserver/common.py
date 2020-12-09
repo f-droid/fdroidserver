@@ -355,10 +355,6 @@ def read_config(opts):
 
     fill_config_defaults(config)
 
-    for k in ["repo_description", "archive_description"]:
-        if k in config:
-            config[k] = clean_description(config[k])
-
     if 'serverwebroot' in config:
         if isinstance(config['serverwebroot'], str):
             roots = [config['serverwebroot']]
@@ -669,19 +665,6 @@ def get_extension(filename):
 
 
 publish_name_regex = re.compile(r"^(.+)_([0-9]+)\.(apk|zip)$")
-
-
-def clean_description(description):
-    'Remove unneeded newlines and spaces from a block of description text'
-    returnstring = ''
-    # this is split up by paragraph to make removing the newlines easier
-    for paragraph in re.split(r'\n\n', description):
-        paragraph = re.sub('\r', '', paragraph)
-        paragraph = re.sub('\n', ' ', paragraph)
-        paragraph = re.sub(' {2,}', ' ', paragraph)
-        paragraph = re.sub(r'^\s*(\w)', r'\1', paragraph)
-        returnstring += paragraph + '\n\n'
-    return returnstring.rstrip('\n')
 
 
 def publishednameinfo(filename):
