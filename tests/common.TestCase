@@ -92,10 +92,12 @@ class CommonTest(unittest.TestCase):
         if os.path.exists(os.path.join(os.getenv('ANDROID_HOME'), 'tools', 'android')):
             tools.append('android')
         for cmd in tools:
-            path = fdroidserver.common.find_sdk_tools_cmd(cmd)
-            if path is not None:
+            try:
+                path = fdroidserver.common.find_sdk_tools_cmd(cmd)
                 self.assertTrue(os.path.exists(path))
                 self.assertTrue(os.path.isfile(path))
+            except fdroidserver.exception.FDroidException:
+                pass
 
     def test_find_sdk_tools_cmd(self):
         fdroidserver.common.config = dict()
