@@ -244,22 +244,50 @@ gradle:
     - $pip install beautifulsoup4 requests
     - ./tests/gradle-release-checksums.py
 
-# this tests the basic setup of the 'fdroid build' CI job in fdroiddata
-fdroiddata fdroid build:
+fdroid build:
   image: registry.gitlab.com/fdroid/ci-images-client
   only:
     refs:
       - branches
       - pipelines
-      - web
     changes:
+      - .gitlab-ci.yml
       - buildserver/provision-apt-get-install
+      - fdroidserver/build.py
+      - fdroidserver/common.py
+      - fdroidserver/exception.py
+      - fdroidserver/metadata.py
+      - fdroidserver/net.py
+      - fdroidserver/scanner.py
+      - fdroidserver/vmtools.py
+  cache:
+    key: "$CI_JOB_NAME"
+    paths:
+      - .gradle
   script:
     - bash buildserver/provision-apt-get-install http://deb.debian.org/debian
     - apt-get dist-upgrade
     - apt-get install -t stretch-backports
-         fdroidserver
          python3-asn1crypto
+         python3-pip
          python3-ruamel.yaml
-         yamllint
+         python3-setuptools
+         python3-venv
     - apt-get purge fdroidserver
+    - pyvenv env --system-site-packages
+    - . env/bin/activate
+    - $pip install -e .
+    - export PATH="$CI_PROJECT_DIR:$PATH"
+    - export PYTHONPATH=$CI_PROJECT_DIR
+    - export PYTHONUNBUFFERED=true
+
+    - git clone https://gitlab.com/fdroid/fdroiddata.git --depth 1
+    - cd fdroiddata
+    - test -d build || mkdir build
+
+    - export GRADLE_USER_HOME=$CI_PROJECT_DIR/.gradle
+    # try a user build first
+    - fdroid build --verbose --latest org.fdroid.fdroid.privileged
+    # each `fdroid build --on-server` run expects sudo, then uninstalls it
+    - apt-get install sudo
+    - fdroid build --verbose --on-server --no-tarball --latest org.fdroid.fdroid
