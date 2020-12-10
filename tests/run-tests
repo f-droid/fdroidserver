@@ -1266,7 +1266,7 @@ if which wget; then
     mv $REPOROOT/index-v1.json repo/index-v1.json
 
     port=321${RANDOM:3}
-    timeout 5m python3 -m http.server $port --bind 127.0.0.1 > http.server.log 2>&1 &
+    timeout 5m python3 -m http.server $port --bind 127.0.0.1 > $REPOROOT/http.server.log 2>&1 &
     http_server_pid=$!
 
     cd $REPOROOT
