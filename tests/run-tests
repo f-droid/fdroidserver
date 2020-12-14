@@ -1265,7 +1265,7 @@ if which wget; then
     $fdroid signindex
     mv $REPOROOT/index-v1.json repo/index-v1.json
 
-    port=3210${RANDOM:3}
+    port=321${RANDOM:3}
     test $(printf $port | wc --chars) -le 3 && port=52734 # when $RANDOM doesn't work
     timeout 5m python3 -m http.server $port --bind 127.0.0.1 > $REPOROOT/http.server.log 2>&1 &
     http_server_pid=$!
