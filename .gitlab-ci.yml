@@ -291,3 +291,40 @@ fdroid build:
     # each `fdroid build --on-server` run expects sudo, then uninstalls it
     - apt-get install sudo
     - fdroid build --verbose --on-server --no-tarball --latest org.fdroid.fdroid
+
+
+# test a full update and deploy cycle to gitlab.com
+servergitmirrors:
+  image: debian
+  <<: *apt-template
+  only:
+    - master@fdroid/fdroidserver
+  script:
+    - apt-get install
+        default-jdk-headless
+        git
+        openssh-client
+        openssl
+        python3-pip
+        python3-venv
+        rsync
+        wget
+    - python3 -m venv env
+    - . env/bin/activate
+    - export PYTHONPATH=`pwd`
+    - $pip install -e .
+    - mkdir /root/.ssh/
+    - ./tests/key-tricks.py
+    - ssh-keyscan gitlab.com >> /root/.ssh/known_hosts
+    - test -d /tmp/fdroid/repo || mkdir -p /tmp/fdroid/repo
+    - cp tests/config.py tests/keystore.jks /tmp/fdroid/
+    - cp tests/repo/com.politedroid_6.apk /tmp/fdroid/repo/
+    - cd /tmp/fdroid
+    - touch fdroid-icon.png
+    - printf "\nservergitmirrors = 'git@gitlab.com:fdroid/ci-test-servergitmirrors-repo.git'\n" >> config.py
+    - $PYTHONPATH/fdroid update --verbose --create-metadata
+    - $PYTHONPATH/fdroid deploy --verbose
+    - export DLURL=`grep -Eo 'https://gitlab.com/fdroid/ci-test-servergitmirrors-repo[^"]+' repo/index-v1.json`
+    - echo $DLURL
+    - wget $DLURL/index-v1.jar
+    - diff repo/index-v1.jar index-v1.jar

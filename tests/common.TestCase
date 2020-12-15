@@ -3,6 +3,7 @@
 # http://www.drdobbs.com/testing/unit-testing-with-python/240165163
 
 import difflib
+import git
 import glob
 import inspect
 import json
@@ -1549,6 +1550,67 @@ class CommonTest(unittest.TestCase):
                     'config.yml')
         self.assertFalse(os.path.exists('config.py'))
         fdroidserver.common.read_config(fdroidserver.common.options)
+
+    def test_setup_status_output(self):
+        testdir = tempfile.mkdtemp(prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir)
+        print(testdir)
+        os.chdir(testdir)
+        start_timestamp = time.gmtime()
+        subcommand = 'test'
+
+        fakecmd = ['fdroid ' + subcommand, '--option']
+        sys.argv = fakecmd
+        fdroidserver.common.config = dict()
+        fdroidserver.common.setup_status_output(start_timestamp)
+        with open(os.path.join('repo', 'status', 'running.json')) as fp:
+            data = json.load(fp)
+        self.assertFalse(os.path.exists('.git'))
+        self.assertFalse('fdroiddata' in data)
+        self.assertEqual(fakecmd, data['commandLine'])
+        self.assertEqual(subcommand, data['subcommand'])
+
+    def test_setup_status_output_in_git_repo(self):
+        testdir = tempfile.mkdtemp(prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir)
+        os.chdir(testdir)
+
+        logging.getLogger('git.cmd').setLevel(logging.INFO)
+        git_repo = git.Repo.init(testdir)
+        file_in_git = 'README.md'
+        with open(file_in_git, 'w') as fp:
+            fp.write('this is just a test')
+        git_repo.git.add(all=True)
+        git_repo.index.commit("update README")
+
+        start_timestamp = time.gmtime()
+        fakecmd = ['fdroid test2', '--option']
+        sys.argv = fakecmd
+        fdroidserver.common.config = dict()
+        fdroidserver.common.setup_status_output(start_timestamp)
+        with open(os.path.join('repo', 'status', 'running.json')) as fp:
+            data = json.load(fp)
+        self.assertTrue(os.path.exists('.git'))
+        self.assertIsNotNone(re.match(r'[0-9a-f]{40}', data['fdroiddata']['commitId']),
+                             'Must be a valid git SHA1 commit ID!')
+        self.assertFalse(data['fdroiddata']['isDirty'])
+        self.assertEqual(fakecmd, data['commandLine'])
+
+        self.assertEqual([],
+                         data['fdroiddata']['untrackedFiles'])
+        dirtyfile = 'dirtyfile'
+        with open(dirtyfile, 'w') as fp:
+            fp.write('this is just a test')
+        with open(file_in_git, 'a') as fp:
+            fp.write('\nappend some stuff')
+        self.assertEqual([],
+                         data['fdroiddata']['modifiedFiles'])
+        fdroidserver.common.setup_status_output(start_timestamp)
+        with open(os.path.join('repo', 'status', 'running.json')) as fp:
+            data = json.load(fp)
+        self.assertTrue(data['fdroiddata']['isDirty'])
+        self.assertEqual([file_in_git],
+                         data['fdroiddata']['modifiedFiles'])
+        self.assertEqual([dirtyfile, 'repo/status/running.json'],
+                         data['fdroiddata']['untrackedFiles'])
 
 
 if __name__ == "__main__":

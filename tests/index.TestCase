@@ -54,6 +54,10 @@ class IndexTest(unittest.TestCase):
         fdroidserver.common.config = config
         fdroidserver.signindex.config = config
 
+        if not os.path.exists('repo/index-v1.jar'):
+            fdroidserver.signindex.sign_index_v1(os.path.join(self.basedir, 'repo'),
+                                                 'index-v1.json')
+
     def test_get_public_key_from_jar_succeeds(self):
         source_dir = os.path.join(self.basedir, 'signindex')
         for f in ('testy.jar', 'guardianproject.jar'):
@@ -82,6 +86,25 @@ class IndexTest(unittest.TestCase):
     def test_download_repo_index_no_jar(self):
         with self.assertRaises(requests.exceptions.RequestException):
             fdroidserver.index.download_repo_index("http://example.org?fingerprint=nope")
+
+    def test_get_repo_key_fingerprint(self):
+        pubkey, fingerprint = fdroidserver.index.extract_pubkey()
+        data, public_key, public_key_fingerprint = \
+            fdroidserver.index.get_index_from_jar('repo/index-v1.jar', fingerprint)
+        self.assertIsNotNone(data)
+        self.assertIsNotNone(public_key)
+        self.assertIsNotNone(public_key_fingerprint)
+
+    def test_get_index_from_jar_with_bad_fingerprint(self):
+        pubkey, fingerprint = fdroidserver.index.extract_pubkey()
+        fingerprint = fingerprint[:-1] + 'G'
+        with self.assertRaises(fdroidserver.exception.VerificationException):
+            fdroidserver.index.get_index_from_jar('repo/index-v1.jar', fingerprint)
+
+    def test_get_index_from_jar_with_chars_to_be_stripped(self):
+        fingerprint = 'NOOOO F4 9A F3 F1 1E FD DF 20 DF FD 70 F5 E3 11 7B 99 76 67 41 67 AD CA 28 0E 6B 19 32 A0 60 1B 26 F6'
+        data, public_key, public_key_fingerprint = \
+            fdroidserver.index.get_index_from_jar('repo/index-v1.jar', fingerprint)
 
     @patch('requests.head')
     def test_download_repo_index_same_etag(self, head):
@@ -246,6 +269,26 @@ class IndexTest(unittest.TestCase):
         self.assertTrue(os.path.exists(os.path.join(repo_icons_dir,
                                                     fdroidserver.common.default_config['repo_icon'])))
         self.assertTrue(os.path.exists(os.path.join('repo', 'index.xml')))
+
+    def test_get_mirror_service_urls(self):
+        for url in [
+                'git@github.com:foo/bar',
+                'git@github.com:foo/bar.git',
+                'https://github.com/foo/bar',
+                'https://github.com/foo/bar.git',
+        ]:
+            self.assertEqual(['https://raw.githubusercontent.com/foo/bar/master/fdroid'],
+                             fdroidserver.index.get_mirror_service_urls(url))
+
+        for url in [
+                'git@gitlab.com:group/project',
+                'git@gitlab.com:group/project.git',
+                'https://gitlab.com/group/project',
+                'https://gitlab.com/group/project.git',
+        ]:
+            self.assertEqual(['https://group.gitlab.io/project/fdroid',
+                              'https://gitlab.com/group/project/-/raw/master/fdroid'],
+                             fdroidserver.index.get_mirror_service_urls(url))
 
 
 if __name__ == "__main__":

@@ -625,6 +625,20 @@ class UpdateTest(unittest.TestCase):
         with self.assertRaises(fdroidserver.exception.BuildException):
             fdroidserver.update.scan_apk('urzip-release-unsigned.apk')
 
+    def test_scan_apk_bad_zip(self):
+        config = dict()
+        fdroidserver.common.fill_config_defaults(config)
+        fdroidserver.common.config = config
+        fdroidserver.update.config = config
+        testdir = tempfile.mkdtemp(prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir)
+        os.chdir(testdir)
+        os.mkdir('repo')
+        apkfile = 'repo/badzip_1.apk'
+        with open(apkfile, 'w') as fp:
+            fp.write('this is not a zip file')
+        with self.assertRaises(fdroidserver.exception.BuildException):
+            fdroidserver.update.scan_apk(apkfile)
+
     def test_process_apk(self):
 
         def _build_yaml_representer(dumper, data):

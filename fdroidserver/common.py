@@ -746,6 +746,8 @@ def setup_status_output(start_timestamp):
         output['fdroiddata'] = {
             'commitId': get_head_commit_id(git_repo),
             'isDirty': git_repo.is_dirty(),
+            'modifiedFiles': git_repo.git().ls_files(modified=True).split(),
+            'untrackedFiles': git_repo.untracked_files,
         }
     fdroidserver_dir = os.path.dirname(sys.argv[0])
     if os.path.isdir(os.path.join(fdroidserver_dir, '.git')):
@@ -753,6 +755,8 @@ def setup_status_output(start_timestamp):
         output['fdroidserver'] = {
             'commitId': get_head_commit_id(git_repo),
             'isDirty': git_repo.is_dirty(),
+            'modifiedFiles': git_repo.git().ls_files(modified=True).split(),
+            'untrackedFiles': git_repo.untracked_files,
         }
     write_running_status_json(output)
     return output

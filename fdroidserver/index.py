@@ -648,7 +648,7 @@ def get_mirror_service_urls(url):
     '''
 
     if url.startswith('git@'):
-        url = re.sub(r'^git@(.*):(.*)', r'https://\1/\2', url)
+        url = re.sub(r'^git@([^:]+):(.+)', r'https://\1/\2', url)
 
     segments = url.split("/")
 
@@ -676,10 +676,9 @@ def get_mirror_service_urls(url):
         # Gitlab-like Pages segments "https://user.gitlab.io/repo/folder"
         gitlab_pages = ["https:", "", user + ".gitlab.io", repo, folder]
         urls.append('/'.join(gitlab_pages))
-        # Gitlab Raw "https://gitlab.com/user/repo/raw/branch/folder"
-        gitlab_raw = segments + ['raw', branch, folder]
+        # GitLab Raw "https://gitlab.com/user/repo/-/raw/branch/folder"
+        gitlab_raw = segments + ['-', 'raw', branch, folder]
         urls.append('/'.join(gitlab_raw))
-        return urls
 
     return urls
 
@@ -726,7 +725,11 @@ def download_repo_index(url_str, etag=None, verify_fingerprint=True, timeout=600
 def get_index_from_jar(jarfile, fingerprint=None):
     """Returns the data, public key, and fingerprint from index-v1.jar
 
+    :param fingerprint is the SHA-256 fingerprint of signing key. Only
+           hex digits count, all other chars will can be discarded.
+
     :raises: VerificationException() if the repository could not be verified
+
     """
 
     logging.debug(_('Verifying index signature:'))
@@ -734,7 +737,8 @@ def get_index_from_jar(jarfile, fingerprint=None):
     with zipfile.ZipFile(jarfile) as jar:
         public_key, public_key_fingerprint = get_public_key_from_jar(jar)
         if fingerprint is not None:
-            if fingerprint.upper() != public_key_fingerprint:
+            fingerprint = re.sub(r'[^0-9A-F]', r'', fingerprint.upper())
+            if fingerprint != public_key_fingerprint:
                 raise VerificationException(_("The repository's fingerprint does not match."))
         data = json.loads(jar.read('index-v1.json').decode())
         return data, public_key, public_key_fingerprint

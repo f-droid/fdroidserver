@@ -1448,8 +1448,9 @@ def scan_apk_androguard(apk, apkfile):
                 logging.error(_("Failed to get apk information, skipping {path}")
                               .format(path=apkfile))
             raise BuildException(_("Invalid APK"))
-    except FileNotFoundError:
-        logging.error(_("Could not open apk file for analysis"))
+    except (FileNotFoundError, zipfile.BadZipFile) as e:
+        logging.error(_("Could not open APK {path} for analysis: ").format(path=apkfile)
+                      + str(e))
         raise BuildException(_("Invalid APK"))
 
     apk['packageName'] = apkobject.get_package()
@@ -2199,6 +2200,7 @@ def main():
 
     config = common.read_config(options)
 
+    common.use_androguard()
     if not (('jarsigner' in config or 'apksigner' in config)
             and 'keytool' in config):
         raise FDroidException(_('Java JDK not found! Install in standard location or set java_paths!'))
