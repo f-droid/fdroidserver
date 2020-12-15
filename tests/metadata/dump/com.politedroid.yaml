@@ -7,39 +7,7 @@ AutoName: Polite Droid
 AutoUpdateMode: Version v%v
 Binaries: null
 Bitcoin: null
-Categories:
-- Time
-Changelog: ''
-CurrentVersion: '1.5'
-CurrentVersionCode: '6'
-Description: Activates silent mode during calendar events.
-Disabled: null
-Donate: null
-FlattrID: null
-IssueTracker: https://github.com/miguelvps/PoliteDroid/issues
-Liberapay: null
-LiberapayID: null
-License: GPL-3.0-only
-Litecoin: null
-MaintainerNotes: ''
-Name: null
-NoSourceSince: '1.5'
-OpenCollective: null
-Provides: null
-Repo: https://github.com/miguelvps/PoliteDroid.git
-RepoType: git
-RequiresRoot: false
-SourceCode: https://github.com/miguelvps/PoliteDroid
-Summary: Calendar tool
-Translation: ''
-UpdateCheckData: null
-UpdateCheckIgnore: null
-UpdateCheckMode: Tags
-UpdateCheckName: null
-VercodeOperation: null
-WebSite: ''
-added: null
-builds:
+Builds:
 - androidupdate: []
   antcommands: []
   antifeatures:
@@ -180,6 +148,38 @@ builds:
   timeout: null
   versionCode: '6'
   versionName: '1.5'
+Categories:
+- Time
+Changelog: ''
+CurrentVersion: '1.5'
+CurrentVersionCode: '6'
+Description: Activates silent mode during calendar events.
+Disabled: null
+Donate: null
+FlattrID: null
+IssueTracker: https://github.com/miguelvps/PoliteDroid/issues
+Liberapay: null
+LiberapayID: null
+License: GPL-3.0-only
+Litecoin: null
+MaintainerNotes: ''
+Name: null
+NoSourceSince: '1.5'
+OpenCollective: null
+Provides: null
+Repo: https://github.com/miguelvps/PoliteDroid.git
+RepoType: git
+RequiresRoot: false
+SourceCode: https://github.com/miguelvps/PoliteDroid
+Summary: Calendar tool
+Translation: ''
+UpdateCheckData: null
+UpdateCheckIgnore: null
+UpdateCheckMode: Tags
+UpdateCheckName: null
+VercodeOperation: null
+WebSite: ''
+added: null
 comments: {}
 id: com.politedroid
 lastUpdated: null

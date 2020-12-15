@@ -1017,7 +1017,7 @@ def main():
     apps = common.read_app_args(options.appid, allapps, True)
 
     for appid, app in list(apps.items()):
-        if (app.Disabled and not options.force) or not app.RepoType or not app.builds:
+        if (app.get('Disabled') and not options.force) or not app.get('RepoType') or not app.get('Builds', []):
             del apps[appid]
 
     if not apps:
@@ -1038,10 +1038,10 @@ def main():
 
     if options.latest:
         for app in apps.values():
-            for build in reversed(app.builds):
+            for build in reversed(app.get('Builds', [])):
                 if build.disable and not options.force:
                     continue
-                app.builds = [build]
+                app['Builds'] = [build]
                 break
 
     if options.wiki:
@@ -1062,7 +1062,7 @@ def main():
 
         first = True
 
-        for build in app.builds:
+        for build in app.get('Builds', []):
             if time.time() > endtime:
                 max_build_time_reached = True
                 break

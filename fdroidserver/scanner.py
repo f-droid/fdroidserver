@@ -420,7 +420,7 @@ def main():
             else:
                 build_dir = os.path.join('build', appid)
 
-            if app.builds:
+            if app.get('Builds'):
                 logging.info(_("Processing {appid}").format(appid=appid))
                 # Set up vcs interface and make sure we have the latest code...
                 vcs = common.getvcs(app.RepoType, app.Repo, build_dir)
@@ -434,9 +434,9 @@ def main():
                     logging.warning(_('Scanner found {count} problems in {appid}:')
                                     .format(count=count, appid=appid))
                     probcount += count
-                app.builds = []
+                app['Builds'] = []
 
-            for build in app.builds:
+            for build in app.get('Builds', []):
                 json_per_build = DEFAULT_JSON_PER_BUILD
                 json_per_appid[build.versionCode] = json_per_build
 

@@ -7,62 +7,7 @@ AutoName: AdAway
 AutoUpdateMode: Version v%v
 Binaries: null
 Bitcoin: null
-Categories:
-- System
-- Security
-Changelog: ''
-CurrentVersion: '3.0'
-CurrentVersionCode: '52'
-Description: 'An ad blocker that uses the hosts file. The hosts file
-
-  contains a list of mappings between hostnames and IP addresses. When
-
-  an app requests an ad, that request is directed to 127.0.0.1 which does
-
-  nothing. There are options to run a web server
-
-  to respond to blocked hostnames and to direct requests to the IP
-
-  address of your choosing. You can download hosts files from the
-
-  app but it is possible to use your own and to add certain sites
-
-  to the white- and black-lists.
-
-
-  [https://github.com/dschuermann/ad-away/raw/HEAD/CHANGELOG Changelog]
-
-
-  Requires root: Yes. The hosts files is located in /system which is normally
-
-  read-only.'
-Disabled: null
-Donate: http://sufficientlysecure.org/index.php/adaway
-FlattrID: '369138'
-IssueTracker: https://github.com/dschuermann/ad-away/issues
-Liberapay: null
-LiberapayID: '1234567890'
-License: GPL-3.0-only
-Litecoin: null
-MaintainerNotes: ''
-Name: null
-NoSourceSince: ''
-OpenCollective: null
-Provides: null
-Repo: https://github.com/dschuermann/ad-away.git
-RepoType: git
-RequiresRoot: false
-SourceCode: https://github.com/dschuermann/ad-away
-Summary: Block advertisements
-Translation: https://www.transifex.com/dominikschuermann/adaway
-UpdateCheckData: null
-UpdateCheckIgnore: null
-UpdateCheckMode: Tags
-UpdateCheckName: null
-VercodeOperation: null
-WebSite: http://sufficientlysecure.org/index.php/adaway
-added: null
-builds:
+Builds:
 - androidupdate: []
   antcommands: []
   antifeatures: []
@@ -1086,6 +1031,61 @@ builds:
   timeout: null
   versionCode: '52'
   versionName: '3.0'
+Categories:
+- System
+- Security
+Changelog: ''
+CurrentVersion: '3.0'
+CurrentVersionCode: '52'
+Description: 'An ad blocker that uses the hosts file. The hosts file
+
+  contains a list of mappings between hostnames and IP addresses. When
+
+  an app requests an ad, that request is directed to 127.0.0.1 which does
+
+  nothing. There are options to run a web server
+
+  to respond to blocked hostnames and to direct requests to the IP
+
+  address of your choosing. You can download hosts files from the
+
+  app but it is possible to use your own and to add certain sites
+
+  to the white- and black-lists.
+
+
+  [https://github.com/dschuermann/ad-away/raw/HEAD/CHANGELOG Changelog]
+
+
+  Requires root: Yes. The hosts files is located in /system which is normally
+
+  read-only.'
+Disabled: null
+Donate: http://sufficientlysecure.org/index.php/adaway
+FlattrID: '369138'
+IssueTracker: https://github.com/dschuermann/ad-away/issues
+Liberapay: null
+LiberapayID: '1234567890'
+License: GPL-3.0-only
+Litecoin: null
+MaintainerNotes: ''
+Name: null
+NoSourceSince: ''
+OpenCollective: null
+Provides: null
+Repo: https://github.com/dschuermann/ad-away.git
+RepoType: git
+RequiresRoot: false
+SourceCode: https://github.com/dschuermann/ad-away
+Summary: Block advertisements
+Translation: https://www.transifex.com/dominikschuermann/adaway
+UpdateCheckData: null
+UpdateCheckIgnore: null
+UpdateCheckMode: Tags
+UpdateCheckName: null
+VercodeOperation: null
+WebSite: http://sufficientlysecure.org/index.php/adaway
+added: null
 comments: {}
 id: org.adaway
 lastUpdated: null

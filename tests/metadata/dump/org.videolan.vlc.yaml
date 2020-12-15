@@ -7,61 +7,7 @@ AutoName: VLC
 AutoUpdateMode: None
 Binaries: null
 Bitcoin: null
-Categories:
-- Multimedia
-Changelog: ''
-CurrentVersion: 1.2.6
-CurrentVersionCode: '1030005'
-Description: 'Video and audio player that supports a wide range of formats,
-
-  for both local and remote playback.
-
-
-  [http://git.videolan.org/?p=vlc-ports/android.git;a=blob_plain;f=NEWS NEWS]
-
-  '
-Disabled: null
-Donate: http://www.videolan.org/contribute.html#money
-FlattrID: null
-IssueTracker: http://www.videolan.org/support/index.html#bugs
-Liberapay: null
-LiberapayID: null
-License: GPL-3.0-only
-Litecoin: null
-MaintainerNotes: 'Instructions and dependencies here: http://wiki.videolan.org/AndroidCompile
-
-  see http://buildbot.videolan.org/builders/ for version code scheme
-
-  The VLC srclib commit can be found out from TESTED_HASH value in compile.sh
-
-
-  On new releases remove the updatecheck and force the CV to the last working
-
-  build. This will make sure users don''t get notified about the update until
-
-  the final build from the BS has been reviewed and tested. Once done, undo
-
-  those changes.
-
-  '
-Name: null
-NoSourceSince: ''
-OpenCollective: null
-Provides: null
-Repo: git://git.videolan.org/vlc-ports/android.git
-RepoType: git
-RequiresRoot: false
-SourceCode: http://git.videolan.org/?p=vlc-ports/android.git;a=summary
-Summary: Media player
-Translation: ''
-UpdateCheckData: null
-UpdateCheckIgnore: null
-UpdateCheckMode: Tags
-UpdateCheckName: null
-VercodeOperation: '%c + 5'
-WebSite: http://www.videolan.org/vlc/download-android.html
-added: null
-builds:
+Builds:
 - androidupdate:
   - .
   - ../java-libs/SlidingMenu
@@ -2444,6 +2390,60 @@ builds:
   timeout: null
   versionCode: '1030005'
   versionName: 1.2.6
+Categories:
+- Multimedia
+Changelog: ''
+CurrentVersion: 1.2.6
+CurrentVersionCode: '1030005'
+Description: 'Video and audio player that supports a wide range of formats,
+
+  for both local and remote playback.
+
+
+  [http://git.videolan.org/?p=vlc-ports/android.git;a=blob_plain;f=NEWS NEWS]
+
+  '
+Disabled: null
+Donate: http://www.videolan.org/contribute.html#money
+FlattrID: null
+IssueTracker: http://www.videolan.org/support/index.html#bugs
+Liberapay: null
+LiberapayID: null
+License: GPL-3.0-only
+Litecoin: null
+MaintainerNotes: 'Instructions and dependencies here: http://wiki.videolan.org/AndroidCompile
+
+  see http://buildbot.videolan.org/builders/ for version code scheme
+
+  The VLC srclib commit can be found out from TESTED_HASH value in compile.sh
+
+
+  On new releases remove the updatecheck and force the CV to the last working
+
+  build. This will make sure users don''t get notified about the update until
+
+  the final build from the BS has been reviewed and tested. Once done, undo
+
+  those changes.
+
+  '
+Name: null
+NoSourceSince: ''
+OpenCollective: null
+Provides: null
+Repo: git://git.videolan.org/vlc-ports/android.git
+RepoType: git
+RequiresRoot: false
+SourceCode: http://git.videolan.org/?p=vlc-ports/android.git;a=summary
+Summary: Media player
+Translation: ''
+UpdateCheckData: null
+UpdateCheckIgnore: null
+UpdateCheckMode: Tags
+UpdateCheckName: null
+VercodeOperation: '%c + 5'
+WebSite: http://www.videolan.org/vlc/download-android.html
+added: null
 comments: {}
 id: org.videolan.vlc
 lastUpdated: null

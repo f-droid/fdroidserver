@@ -7,59 +7,7 @@ AutoName: SMSSecure
 AutoUpdateMode: Version v%v
 Binaries: null
 Bitcoin: null
-Categories:
-- Phone & SMS
-Changelog: ''
-CurrentVersion: 0.6.0
-CurrentVersionCode: '102'
-Description: 'SMSSecure is an SMS/MMS application that allows you to protect your
-  privacy while communicating with friends.
-
-  Using SMSSecure, you can send SMS messages and share media or attachments with complete
-  privacy.
-
-
-  * Easy. SMSSecure works like any other SMS application. There''s nothing to sign
-  up for and no new service your friends need to join.
-
-  * Reliable. SMSSecure communicates using encrypted SMS messages. No servers or internet
-  connection required.
-
-  * Private. SMSSecure uses the TextSecure encryption protocol to provide privacy
-  for every message, every time.
-
-  * Safe. All messages are encrypted locally, so if your phone is lost or stolen,
-  your messages are protected.
-
-  * Open Source. SMSSecure is Free and Open Source, enabling anyone to verify its
-  security by auditing the code.'
-Disabled: null
-Donate: null
-FlattrID: null
-IssueTracker: https://github.com/SMSSecure/SMSSecure/issues
-Liberapay: null
-LiberapayID: null
-License: GPL-3.0-only
-Litecoin: null
-MaintainerNotes: ''
-Name: null
-NoSourceSince: ''
-OpenCollective: null
-Provides: null
-Repo: https://github.com/SMSSecure/SMSSecure
-RepoType: git
-RequiresRoot: false
-SourceCode: https://github.com/SMSSecure/SMSSecure
-Summary: Send encrypted text messages (SMS)
-Translation: https://www.transifex.com/silence/silence
-UpdateCheckData: null
-UpdateCheckIgnore: null
-UpdateCheckMode: Tags
-UpdateCheckName: null
-VercodeOperation: null
-WebSite: http://www.smssecure.org
-added: null
-builds:
+Builds:
 - androidupdate: []
   antcommands: []
   antifeatures: []
@@ -362,6 +310,58 @@ builds:
   timeout: null
   versionCode: '102'
   versionName: 0.6.0
+Categories:
+- Phone & SMS
+Changelog: ''
+CurrentVersion: 0.6.0
+CurrentVersionCode: '102'
+Description: 'SMSSecure is an SMS/MMS application that allows you to protect your
+  privacy while communicating with friends.
+
+  Using SMSSecure, you can send SMS messages and share media or attachments with complete
+  privacy.
+
+
+  * Easy. SMSSecure works like any other SMS application. There''s nothing to sign
+  up for and no new service your friends need to join.
+
+  * Reliable. SMSSecure communicates using encrypted SMS messages. No servers or internet
+  connection required.
+
+  * Private. SMSSecure uses the TextSecure encryption protocol to provide privacy
+  for every message, every time.
+
+  * Safe. All messages are encrypted locally, so if your phone is lost or stolen,
+  your messages are protected.
+
+  * Open Source. SMSSecure is Free and Open Source, enabling anyone to verify its
+  security by auditing the code.'
+Disabled: null
+Donate: null
+FlattrID: null
+IssueTracker: https://github.com/SMSSecure/SMSSecure/issues
+Liberapay: null
+LiberapayID: null
+License: GPL-3.0-only
+Litecoin: null
+MaintainerNotes: ''
+Name: null
+NoSourceSince: ''
+OpenCollective: null
+Provides: null
+Repo: https://github.com/SMSSecure/SMSSecure
+RepoType: git
+RequiresRoot: false
+SourceCode: https://github.com/SMSSecure/SMSSecure
+Summary: Send encrypted text messages (SMS)
+Translation: https://www.transifex.com/silence/silence
+UpdateCheckData: null
+UpdateCheckIgnore: null
+UpdateCheckMode: Tags
+UpdateCheckName: null
+VercodeOperation: null
+WebSite: http://www.smssecure.org
+added: null
 comments: {}
 id: org.smssecure.smssecure
 lastUpdated: null

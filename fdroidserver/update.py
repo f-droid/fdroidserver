@@ -157,9 +157,8 @@ def status_update_json(apps, apks):
         for apk in apks:
             if apk['packageName'] == appid:
                 apklist.append(apk)
-        builds = app.get('builds', [])
         validapks = 0
-        for build in builds:
+        for build in app.get('Builds', []):
             if not build.get('disable'):
                 builtit = False
                 for apk in apklist:
@@ -248,13 +247,13 @@ def update_wiki(apps, apks):
         buildfails = False
         for apk in apks:
             if apk['packageName'] == appid:
-                if str(apk['versionCode']) == app.CurrentVersionCode:
+                if str(apk['versionCode']) == app.get('CurrentVersionCode'):
                     gotcurrentver = True
                 apklist.append(apk)
         # Include ones we can't build, as a special case...
-        for build in app.builds:
+        for build in app.get('Builds', []):
             if build.disable:
-                if build.versionCode == app.CurrentVersionCode:
+                if build.versionCode == app.get('CurrentVersionCode'):
                     cantupdate = True
                 # TODO: Nasty: vercode is a string in the build, and an int elsewhere
                 apklist.append({'versionCode': int(build.versionCode),
@@ -273,7 +272,7 @@ def update_wiki(apps, apks):
                                     'versionName': build.versionName,
                                     'buildproblem': "The build for this version appears to have failed. Check the [[{0}/lastbuild_{1}|build log]].".format(appid, build.versionCode),
                                     })
-        if app.CurrentVersionCode == '0':
+        if app.get('CurrentVersionCode') == '0':
             cantupdate = True
         # Sort with most recent first...
         apklist = sorted(apklist, key=lambda apk: apk['versionCode'], reverse=True)
@@ -411,7 +410,7 @@ def delete_disabled_builds(apps, apkcache, repodirs):
     :param repodirs: the repo directories to process
     """
     for appid, app in apps.items():
-        for build in app['builds']:
+        for build in app.get('Builds', []):
             if not build.disable:
                 continue
             apkfilename = common.get_release_filename(app, build)
@@ -742,7 +741,7 @@ def translate_per_build_anti_features(apps, apks):
     antiFeatures = dict()
     for packageName, app in apps.items():
         d = dict()
-        for build in app['builds']:
+        for build in app.get('Builds', []):
             afl = build.get('antifeatures')
             if afl:
                 d[int(build.versionCode)] = afl
@@ -1022,8 +1021,8 @@ def copy_triple_t_store_metadata(apps):
                         if os.path.exists(p):
                             gradle_subdirs.add(p)
                         flavors = set()
-                        if app.builds:
-                            flavors = app.builds[0].gradle
+                        if app.get('Builds'):
+                            flavors = app['Builds'][0].gradle
                         for flavor in flavors:
                             if flavor not in ('yes', 'no'):
                                 p = os.path.join('build', packageName, gradle_path, 'src', flavor, 'play')
@@ -1148,9 +1147,12 @@ def insert_localized_app_metadata(apps):
 
             # flavours specified in build receipt
             build_flavours = ""
-            if apps[packageName] and 'builds' in apps[packageName] and len(apps[packageName].builds) > 0\
-                    and 'gradle' in apps[packageName].builds[-1]:
-                build_flavours = apps[packageName].builds[-1].gradle
+            if (
+                apps[packageName]
+                and len(apps[packageName].get('Builds', [])) > 0
+                and 'gradle' in apps[packageName]['Builds'][-1]
+            ):
+                build_flavours = apps[packageName]['Builds'][-1]['gradle']
 
             if len(segments) >= 5 and segments[4] == "fastlane" and segments[3] not in build_flavours:
                 logging.debug("ignoring due to wrong flavour")
@@ -1910,7 +1912,7 @@ def apply_info_from_latest_apk(apps, apks):
             if app.get('Name') is None:
                 app['Name'] = bestapk['name']
             app['icon'] = bestapk['icon'] if 'icon' in bestapk else None
-            if app['CurrentVersionCode'] is None:
+            if app.get('CurrentVersionCode') is None:
                 app['CurrentVersionCode'] = str(bestver)
 
 
@@ -1929,8 +1931,8 @@ def archive_old_apks(apps, apks, archapks, repodir, archivedir, defaultkeepversi
         currentVersionApk = None
         for apk in apk_list:
             if apk['packageName'] == appid:
-                if app.CurrentVersionCode is not None:
-                    if apk['versionCode'] == common.version_code_string_to_int(app.CurrentVersionCode):
+                if app.get('CurrentVersionCode') is not None:
+                    if apk['versionCode'] == common.version_code_string_to_int(app['CurrentVersionCode']):
                         currentVersionApk = apk
                         continue
                 apkList.append(apk)
@@ -1944,8 +1946,8 @@ def archive_old_apks(apps, apks, archapks, repodir, archivedir, defaultkeepversi
 
     for appid, app in apps.items():
 
-        if app.ArchivePolicy:
-            keepversions = int(app.ArchivePolicy[:-9])
+        if app.get('ArchivePolicy'):
+            keepversions = int(app['ArchivePolicy'][:-9])
         else:
             keepversions = defaultkeepversions
 
