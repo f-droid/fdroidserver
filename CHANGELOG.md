@@ -5,19 +5,51 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 
 ## [Unreleased]
+
+For a more complete overview, see the [2.0
+milestone](https://gitlab.com/fdroid/fdroidserver/-/milestones/10)
+
 ### Added
-* makebuildserver: added ndk r20
+* `fdroid update` inserts donation links based on upstream's _FUNDING.yml_
+  ([!754](https://gitlab.com/fdroid/fdroidserver/merge_requests/754))
+* Stable, public API for most useful functions
+  ([!798](https://gitlab.com/fdroid/fdroidserver/merge_requests/798))
+* Load with any YAML lib and use with the API, no more custom parser needed
+  ([!826](https://gitlab.com/fdroid/fdroidserver/merge_requests/826))
+  ([!838](https://gitlab.com/fdroid/fdroidserver/merge_requests/838))
+* _config.yml_ for a safe, easy, standard configuration format
   ([!663](https://gitlab.com/fdroid/fdroidserver/merge_requests/663))
-* added support for gradle 5.5.1
-  ([!656](https://gitlab.com/fdroid/fdroidserver/merge_requests/656))
-* add SHA256 to filename of repo graphics
+* Config options can be set from environment variables using this syntax:
+  `keystorepass: {env: keystorepass}`
   ([!669](https://gitlab.com/fdroid/fdroidserver/merge_requests/669))
-* support for srclibs metadata in YAML format
+* Add SHA256 to filename of repo graphics
+  ([!669](https://gitlab.com/fdroid/fdroidserver/merge_requests/669))
+* Support for srclibs metadata in YAML format
   ([!700](https://gitlab.com/fdroid/fdroidserver/merge_requests/700))
-* check srclibs and app-metadata files with yamllint
+* Check srclibs and app-metadata files with yamllint
   ([!721](https://gitlab.com/fdroid/fdroidserver/merge_requests/721))
+* Added plugin system for adding subcommands to `fdroid`
+  ([!709](https://gitlab.com/fdroid/fdroidserver/merge_requests/709))
+* `fdroid update`, `fdroid publish`, and `fdroid signindex` now work
+  with SmartCard HSMs, specifically the NitroKey HSM
+  ([!779](https://gitlab.com/fdroid/fdroidserver/merge_requests/779))
+  ([!782](https://gitlab.com/fdroid/fdroidserver/merge_requests/782))
+* `fdroid update` support for Triple-T Gradle Play Publisher v2.x
+  ([!683](https://gitlab.com/fdroid/fdroidserver/merge_requests/683))
 
 ### Fixed
+* Smoother process for signing APKs with `apksigner`
+  ([!736](https://gitlab.com/fdroid/fdroidserver/merge_requests/736))
+  ([!821](https://gitlab.com/fdroid/fdroidserver/merge_requests/821))
+* All parts except _build_ and _publish_ work without the Android SDK
+  ([!821](https://gitlab.com/fdroid/fdroidserver/merge_requests/821))
+* Description: is now passed to clients unchanged, no HTML conversion
+  ([!828](https://gitlab.com/fdroid/fdroidserver/merge_requests/828))
+* Lots of improvements for scanning for proprietary code and trackers
+  ([!748](https://gitlab.com/fdroid/fdroidserver/merge_requests/748))
+  ([!REPLACE](https://gitlab.com/fdroid/fdroidserver/merge_requests/REPLACE))
+  ([!844](https://gitlab.com/fdroid/fdroidserver/merge_requests/844))
+* `fdroid mirror` now generates complete, working local mirror repos
 * fix build-logs dissapearing when deploying
   ([!685](https://gitlab.com/fdroid/fdroidserver/merge_requests/685))
 * do not crash when system encoding can not be retrieved
@@ -33,11 +65,30 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
   ([!651](https://gitlab.com/fdroid/fdroidserver/merge_requests/651))
 * `fdroid init` generates PKCS12 keystores, drop Java < 8 support
   ([!801](https://gitlab.com/fdroid/fdroidserver/-/merge_requests/801))
+* Parse Version Codes specified in hex
+  ([!692](https://gitlab.com/fdroid/fdroidserver/-/merge_requests/692))
+* Major refactoring on core parts of code to be more Pythonic
+  ([!756](https://gitlab.com/fdroid/fdroidserver/-/merge_requests/756))
 
 ### Removed
-* removed support for txt and json metadata
+* Removed all support for _.txt_ and _.json_ metadata
   ([!772](https://gitlab.com/fdroid/fdroidserver/-/merge_requests/772))
+* dropped support for Debian 8 _jessie_ and 9 _stretch_
+* dropped support for Ubuntu releases older than bionic 18.04
+* dropped `fdroid server update` and `fdroid server init`,
+  use `fdroid deploy`
+* `fdroid dscanner` was removed.
+  ([!711](https://gitlab.com/fdroid/fdroidserver/-/merge_requests/711))
 * `make_current_version_link` is now off by default
+* Dropped `force_build_tools` config option
+  ([!797](https://gitlab.com/fdroid/fdroidserver/-/merge_requests/797))
+* Dropped `accepted_formats` config option, there is only _.yml_ now
+  ([!818](https://gitlab.com/fdroid/fdroidserver/-/merge_requests/818))
+* `Provides:` was removed as a metadata field
+  ([!654](https://gitlab.com/fdroid/fdroidserver/-/merge_requests/654))
+* Remove unused `latestapps.dat`
+  ([!794](https://gitlab.com/fdroid/fdroidserver/-/merge_requests/794))
+
 
 ## [1.1.4] - 2019-08-15
 ### Fixed
