@@ -279,6 +279,8 @@ CACHE_FILES = [
      '560eace2cc6ca16011fbb97c92c39aa0441d54dbfc13837dfbdb4a6bdf9c9da8'),
     ('https://dl.google.com/android/repository/build-tools_r30.0.2-linux.zip',
      '565af786dc0cc1941002174fb945122eabd080b222cd4c7c3d9a2ae0fabf5dc4'),
+    ('https://dl.google.com/android/repository/build-tools_r30.0.3-linux.zip',
+     '24593500aa95d2f99fb4f10658aae7e65cb519be6cd33fa164f15f27f3c4a2d6'),
     ('https://services.gradle.org/distributions/gradle-2.2.1-bin.zip',
      '420aa50738299327b611c10b8304b749e8d3a579407ee9e755b15921d95ff418'),
     ('https://services.gradle.org/distributions/gradle-2.3-bin.zip',
@@ -423,6 +425,8 @@ CACHE_FILES = [
      '8381c440fe61fcbb01e209211ac01b519cd6adf51ab1c2281d5daad6ca4c8c8c'),
     ('https://dl.google.com/android/repository/android-ndk-r21d-linux-x86_64.zip',
      'dd6dc090b6e2580206c64bcee499bc16509a5d017c6952dcd2bed9072af67cbd'),
+    ('https://dl.google.com/android/repository/android-ndk-r22-linux-x86_64.zip',
+     'd37fc69cd81e5660234a686e20adef39bc0244086e4d66525a40af771c020718'),
 ]
 
 
