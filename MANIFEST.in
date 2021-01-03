@@ -538,7 +538,6 @@ include tests/common.TestCase
 include tests/complete-ci-tests
 include tests/config.py
 include tests/deploy.TestCase
-include tests/description-parsing.py
 include tests/dummy-keystore.jks
 include tests/dump_internal_metadata_format.py
 include tests/exception.TestCase
@@ -806,6 +805,3 @@ include tests/v2.only.sig_2.apk
 include tests/valid-package-names/random-package-names
 include tests/valid-package-names/RandomPackageNames.java
 include tests/valid-package-names/test.py
-include tests/xref/metadata/aarddict.android.yml
-include tests/xref/metadata/org.coolreader.yml
-include tests/xref/metadata/org.geometerplus.zlibrary.ui.android.yml
