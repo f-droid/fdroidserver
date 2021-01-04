@@ -534,9 +534,11 @@ include tests/build-tools/28.0.3/aapt-output-obb.main.twoversions_1101617.txt
 include tests/build-tools/28.0.3/aapt-output-souch.smsbypass_9.txt
 include tests/build-tools/generate.sh
 include tests/check-fdroid-apk
+include tests/checkupdates.TestCase
 include tests/common.TestCase
 include tests/complete-ci-tests
 include tests/config.py
+include tests/corrupt-featureGraphic.png
 include tests/deploy.TestCase
 include tests/dummy-keystore.jks
 include tests/dump_internal_metadata_format.py
@@ -551,14 +553,18 @@ include tests/gnupghome/random_seed
 include tests/gnupghome/secring.gpg
 include tests/gnupghome/trustdb.gpg
 include tests/gradle-maven-blocks.yaml
+include tests/gradle-release-checksums.py
 include tests/import_proxy.py
 include tests/import.TestCase
 include tests/index.TestCase
+include tests/init.TestCase
 include tests/install.TestCase
 include tests/IsMD5Disabled.java
 include tests/janus.apk
 include tests/keystore.jks
+include tests/key-tricks.py
 include tests/lint.TestCase
+include tests/main.TestCase
 include tests/metadata/apk/info.guardianproject.urzip.yaml
 include tests/metadata/apk/org.dyndns.fules.ck.yaml
 include tests/metadata/app.with.special.build.params.yml
@@ -671,6 +677,7 @@ include tests/repo/patch.1619.obb.mainpatch.current.obb
 include tests/repo/souch.smsbypass_9.apk
 include tests/repo/urzip-*.apk
 include tests/repo/v1.v2.sig_1020.apk
+include tests/rewritemeta.TestCase
 include tests/run-tests
 include tests/scanner.TestCase
 include tests/signatures.TestCase
@@ -760,6 +767,7 @@ include tests/source-files/Zillode/syncthing-silk/build.gradle
 include tests/SpeedoMeterApp.main_1.apk
 include tests/stats/known_apks.txt
 include tests/testcommon.py
+include tests/test-gradlew-fdroid
 include tests/triple-t-2/build/org.piwigo.android/app/build.gradle
 include tests/triple-t-2/build/org.piwigo.android/app/.gitignore
 include tests/triple-t-2/build/org.piwigo.android/app/src/debug/res/values/constants.xml
@@ -805,3 +813,4 @@ include tests/v2.only.sig_2.apk
 include tests/valid-package-names/random-package-names
 include tests/valid-package-names/RandomPackageNames.java
 include tests/valid-package-names/test.py
+include tests/vcs.TestCase
