@@ -50,6 +50,7 @@ CODE_SIGNATURES = {
     exp: re.compile(r'.[\s]*d[\s]*[0-9]*[\s]*[0-9*][\s]*[0-9]*[\s]*' + exp, re.IGNORECASE) for exp in [
         r'(com\.google\.firebase[^\s]*)',
         r'(com\.google\.android\.gms[^\s]*)',
+        r'(com\.google\.android\.play\.core[^\s]*)',
         r'(com\.google\.tagmanager[^\s]*)',
         r'(com\.google\.analytics[^\s]*)',
         r'(com\.android\.billing[^\s]*)',
@@ -65,6 +66,7 @@ NON_FREE_GRADLE_LINES = {
         r'google.*ad.*view',
         r'google.*admob',
         r'google.*play.*services',
+        r'com.google.android.play:core.*',
         r'crittercism',
         r'heyzap',
         r'jpct.*ae',
