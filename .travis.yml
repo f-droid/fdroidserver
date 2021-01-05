@@ -42,8 +42,9 @@ install:
   - brew uninstall java --force || true
   - brew cask uninstall java --force || true
   - brew tap adoptopenjdk/openjdk
-  - travis_retry brew cask install adoptopenjdk8
-  - travis_retry brew cask install android-sdk
+  - travis_retry brew install --cask adoptopenjdk8
+  - export JAVA_HOME=`/usr/libexec/java_home -v 1.8`
+  - travis_retry brew install --cask android-sdk
 
   - export AAPT_VERSION=`sed -n "s,^MINIMUM_APKSIGNER_BUILD_TOOLS_VERSION\s*=\s*['\"]\(.*\)[['\"],\1,p" fdroidserver/common.py`
   - mkdir -p "$ANDROID_HOME/licenses"
