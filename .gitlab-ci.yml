@@ -247,9 +247,6 @@ gradle:
 fdroid build:
   image: registry.gitlab.com/fdroid/ci-images-client
   only:
-    refs:
-      - branches
-      - pipelines
     changes:
       - .gitlab-ci.yml
       - buildserver/provision-apt-get-install
@@ -297,9 +294,6 @@ plugin_fetchsrclibs:
   image: debian:buster
   <<: *apt-template
   only:
-    refs:
-      - branches
-      - pipelines
     changes:
       - .gitlab-ci.yml
       - examples/fdroid_fetchsrclibs.py
