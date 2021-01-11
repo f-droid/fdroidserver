@@ -15,7 +15,6 @@ fdroid_summary = 'prepare the srclibs for `fdroid build --on-server`'
 
 def main():
     common.config = {
-        'accepted_formats': 'yml',
         'sdk_path': os.getenv('ANDROID_HOME'),
     }
     common.fill_config_defaults(common.config)
