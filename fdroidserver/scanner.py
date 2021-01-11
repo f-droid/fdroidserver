@@ -67,6 +67,7 @@ NON_FREE_GRADLE_LINES = {
         r'google.*admob',
         r'google.*play.*services',
         r'com.google.android.play:core.*',
+        r'androidx.work:work-gcm',
         r'crittercism',
         r'heyzap',
         r'jpct.*ae',
