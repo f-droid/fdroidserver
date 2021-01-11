@@ -14,10 +14,6 @@ fdroid_summary = 'prepare the srclibs for `fdroid build --on-server`'
 
 
 def main():
-    common.config = {
-        'sdk_path': os.getenv('ANDROID_HOME'),
-    }
-    common.fill_config_defaults(common.config)
     parser = argparse.ArgumentParser(usage="%(prog)s [options] [APPID[:VERCODE] [APPID[:VERCODE] ...]]")
     common.setup_global_opts(parser)
     parser.add_argument("appid", nargs='*', help=_("applicationId with optional versionCode in the form APPID[:VERCODE]"))

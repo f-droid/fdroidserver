@@ -2741,10 +2741,12 @@ def set_FDroidPopen_env(build=None):
     if env is None:
         env = os.environ
         orig_path = env['PATH']
-        for n in ['ANDROID_HOME', 'ANDROID_SDK']:
-            env[n] = config['sdk_path']
-        for k, v in config['java_paths'].items():
-            env['JAVA%s_HOME' % k] = v
+        if config:
+            if config.get('sdk_path'):
+                for n in ['ANDROID_HOME', 'ANDROID_SDK']:
+                    env[n] = config['sdk_path']
+            for k, v in config.get('java_paths', {}).items():
+                env['JAVA%s_HOME' % k] = v
 
     missinglocale = True
     for k, v in env.items():
