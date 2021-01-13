@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2020-10-21 18:05+0200\n"
-"PO-Revision-Date: 2020-10-22 17:26+0000\n"
+"PO-Revision-Date: 2020-12-08 12:29+0000\n"
 "Last-Translator: Ihor Hordiichuk <igor_ck@outlook.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/f-droid/fdroidserver/uk/>\n"
 "Language: uk\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.3.1\n"
+"X-Generator: Weblate 4.4-dev\n"
 
 #: ../fdroidserver/common.py
 msgid ""
@@ -2574,7 +2574,7 @@ msgid "{0} app, {1} key aliases"
 msgid_plural "{0} apps, {1} key aliases"
 msgstr[0] "{0} застосунок, {1} alias ключів"
 msgstr[1] "{0} застосунки, {1} alias ключів"
-msgstr[2] "{0} застосунків, {1} {1} alias ключів"
+msgstr[2] "{0} застосунків, {1} alias ключів"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
