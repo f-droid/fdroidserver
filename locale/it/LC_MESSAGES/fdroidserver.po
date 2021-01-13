@@ -6,13 +6,14 @@
 # IvanDan <ivandanza@gmail.com>, 2020.
 # Massimiliano Caniparoli <massic80@gmail.com>, 2020.
 # x <hardwired1.0@protonmail.com>, 2020.
+# Hans-Christoph Steiner <hans@guardianproject.info>, 2020.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2020-10-21 18:05+0200\n"
-"PO-Revision-Date: 2020-11-25 16:30+0000\n"
-"Last-Translator: x <hardwired1.0@protonmail.com>\n"
+"PO-Revision-Date: 2020-11-25 16:40+0000\n"
+"Last-Translator: Hans-Christoph Steiner <hans@guardianproject.info>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/f-droid/fdroidserver/it/>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
@@ -153,9 +154,8 @@ msgid "'keypass' not found in config.py!"
 msgstr "\"keypass\" non trovato in config.py!"
 
 #: ../fdroidserver/common.py
-#, fuzzy
 msgid "'keystore' is NONE and 'smartcardoptions' is blank!"
-msgstr "\"keystore\" è NESSUNO e \"smartcardoptions\" è vuoto!"
+msgstr "\"keystore\" è NONE e \"smartcardoptions\" è vuoto!"
 
 #: ../fdroidserver/index.py ../fdroidserver/common.py
 msgid "'keystore' not found in config.py!"
