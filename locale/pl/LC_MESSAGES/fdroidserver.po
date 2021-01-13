@@ -7,15 +7,15 @@ msgstr ""
 "Project-Id-Version: fdroidserver 1.0.0-95-gd7af22b\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2020-10-21 18:05+0200\n"
-"PO-Revision-Date: 2020-11-20 23:28+0000\n"
-"Last-Translator: Michal L <michalrmsmi@wp.pl>\n"
+"PO-Revision-Date: 2020-12-29 19:29+0000\n"
+"Last-Translator: WaldiS <sto@tutanota.de>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/f-droid/fdroidserver/pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.4-dev\n"
+"X-Generator: Weblate 4.4.1-dev\n"
 
 #: ../fdroidserver/common.py
 msgid ""
@@ -26,6 +26,12 @@ msgid ""
 "        tools on https://gitlab.com/fdroid.\n"
 "        "
 msgstr ""
+"\n"
+"        To jest repozytorium aplikacji, które mają być używane z FDroid. Aplikacje w tym\n"
+"        repozytorium są oficjalnymi plikami binarnymi  utworzonymi przez oryginalnych\n"
+"        programistów lub są to pliki binarne utworzone ze źródła przez f-droid.org\n"
+"        przy użyciu narzędzi na https://gitlab.com/fdroid.\n"
+"        "
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -391,7 +397,7 @@ msgid "Cannot resolve application ID {appid}"
 msgstr "Nie można rozpoznać identyfikatora aplikacji {appid}"
 
 #: ../fdroidserver/rewritemeta.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Cannot rewrite \"{path}\""
 msgstr "Nie można odczytać \"{path}\""
 
@@ -461,14 +467,12 @@ msgid "Could not find '{command}' on your system"
 msgstr "Nie można znaleźć '{command}' w twoim systemie"
 
 #: ../fdroidserver/import.py
-#, fuzzy
 msgid "Could not find latest version code"
 msgstr "Nie można znaleźć najnowszej wersji kodu"
 
 #: ../fdroidserver/import.py
-#, fuzzy
 msgid "Could not find latest version name"
-msgstr "Nie można znaleźć najnowszej wersji nazwy"
+msgstr "Nie można odnaleźć nazwy najnowszej wersji"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -486,9 +490,8 @@ msgstr ""
 
 #. Translators: https://developer.android.com/studio/build/application-id
 #: ../fdroidserver/import.py
-#, fuzzy
 msgid "Couldn't find Application ID"
-msgstr "Nie można znaleźć identyfikatora pakietu"
+msgstr "Nie można odnaleźć identyfikatora aplikacji"
 
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
 #: ../fdroidserver/import.py
@@ -601,7 +604,7 @@ msgstr "Opis długości {length} przekracza limit {limit} char"
 
 #: ../fdroidserver/import.py
 msgid "Do not add 'disable:' to the generated build entries"
-msgstr ""
+msgstr "Nie dodawaj „wyłącz:” do wygenerowanych wpisów kompilacji"
 
 #: ../fdroidserver/nightly.py
 msgid "Do not deploy the new files to the repo"
@@ -670,7 +673,7 @@ msgstr "Dynamicznie skanuj kompilację postów APK"
 
 #: ../fdroidserver/__main__.py
 msgid "ERROR: The \"server\" subcommand has been removed, use \"deploy\"!"
-msgstr ""
+msgstr "BŁĄD: podkomenda „serwer” została usunięta, użyj polecenia „deploy”!"
 
 #: ../fdroidserver/mirror.py
 msgid ""
@@ -786,7 +789,7 @@ msgstr "Pobrane podpisy dla '{apkfilename}' -> '{sigdir}'"
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "File disappeared while processing it: {path}"
-msgstr ""
+msgstr "Plik zniknął podczas przetwarzania go: {path}"
 
 #: ../fdroidserver/verify.py ../fdroidserver/stats.py ../fdroidserver/update.py
 #: ../fdroidserver/rewritemeta.py ../fdroidserver/build.py
@@ -819,7 +822,7 @@ msgstr "Wymuś zatrzymanie kompilacji po {0} upływie limitu czasu!"
 
 #: ../fdroidserver/scanner.py
 msgid "Force scan of disabled apps and builds."
-msgstr ""
+msgstr "Wymuś skanowanie wyłączonych aplikacji i kompilacji."
 
 #: ../fdroidserver/update.py
 #, python-brace-format
