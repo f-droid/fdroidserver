@@ -2310,6 +2310,10 @@ def main():
     # This will be done again (as part of apply_info_from_latest_apk) for repo and archive
     # separately later on, but it's fairly cheap anyway.
     read_names_from_apks(apps, apks + archapks)
+
+    if cachechanged:
+        write_cache(apkcache)
+
     # The added date currently comes from the oldest apk which might be in the archive.
     # So we need this populated at app level before continuing with only processing /repo
     # or /archive
@@ -2348,9 +2352,6 @@ def main():
     if config['update_stats']:
         # Update known apks info...
         knownapks.writeifchanged()
-
-    if cachechanged:
-        write_cache(apkcache)
 
     # Update the wiki...
     if options.wiki:
