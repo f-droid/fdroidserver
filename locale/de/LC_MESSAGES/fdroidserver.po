@@ -5,20 +5,21 @@
 # melusine <melusine@mailbox.org>, 2020.
 # marzzzello <anmeldezeugs@top-email.net>, 2020.
 # Hans-Christoph Steiner <hans@guardianproject.info>, 2020.
+# Predatorix Phoenix <predatorix@web.de>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2020-10-21 18:05+0200\n"
-"PO-Revision-Date: 2020-12-14 11:05+0000\n"
-"Last-Translator: melusine <melusine@mailbox.org>\n"
+"PO-Revision-Date: 2021-01-10 02:32+0000\n"
+"Last-Translator: Predatorix Phoenix <predatorix@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/f-droid/fdroidserver/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.4-dev\n"
+"X-Generator: Weblate 4.4.1-dev\n"
 
 #: ../fdroidserver/common.py
 msgid ""
@@ -611,7 +612,7 @@ msgstr "Beschreibung der Länge {length} ist über dem {limit}-Zeichen Limit"
 
 #: ../fdroidserver/import.py
 msgid "Do not add 'disable:' to the generated build entries"
-msgstr ""
+msgstr "Nicht 'disable:' zu den erzeugten Erstellungseinträgen hinzufügen"
 
 #: ../fdroidserver/nightly.py
 msgid "Do not deploy the new files to the repo"
@@ -680,7 +681,7 @@ msgstr "APKs nach Erstellung dynamisch durchsuchen"
 
 #: ../fdroidserver/__main__.py
 msgid "ERROR: The \"server\" subcommand has been removed, use \"deploy\"!"
-msgstr ""
+msgstr "FEHLER: Der \"server\"-Unterbefehl wurde entfernt, verwende \"deploy\"!"
 
 #: ../fdroidserver/mirror.py
 msgid ""
@@ -881,7 +882,7 @@ msgstr "Eine Nicht-Datei gefunden bei %s"
 #: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "Found {apkfilename} at {url}"
-msgstr ""
+msgstr "{apkfilename} unter {url} gefunden"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -966,15 +967,15 @@ msgstr "APKs einschliessen, die mit deaktivierten Algorithmen wie MD5 signiert s
 
 #: ../fdroidserver/mirror.py
 msgid "Include the PGP signature .asc files in the mirror"
-msgstr ""
+msgstr "Die .asc-PGP-Signaturdateien in den Spiegel aufnehmen"
 
 #: ../fdroidserver/mirror.py
 msgid "Include the build logs in the mirror"
-msgstr ""
+msgstr "Erstellungsprotokolle in den Spiegel aufnehmen"
 
 #: ../fdroidserver/mirror.py
 msgid "Include the source tarballs in the mirror"
-msgstr ""
+msgstr "Quellen-Tarballs in den Spiegel aufnehmen"
 
 #: ../fdroidserver/common.py
 msgid "Initialising submodules"
@@ -1024,7 +1025,7 @@ msgstr "Ungültige VercodeOperation: {field}"
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Invalid application ID {appid}"
-msgstr ""
+msgstr "Ungültige Anwendungs-ID {appid}"
 
 #: ../fdroidserver/metadata.py
 #, python-format
@@ -1081,7 +1082,7 @@ msgstr "Ungültige Umleitung auf Nicht-HTTTPS: {before} -> {after} "
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Invalid scrlib metadata: '{file}' does not exist"
-msgstr ""
+msgstr "Ungültige scrlib-Metadaten: '{file}' ist nicht vorhanden"
 
 #: ../fdroidserver/metadata.py
 #, fuzzy, python-brace-format
@@ -1169,7 +1170,7 @@ msgstr "Fehlerhafte serverwebroot Zeile:"
 
 #: ../fdroidserver/mirror.py
 msgid "Mirror the full repo and archive, all file types."
-msgstr ""
+msgstr "Das vollständige Repo und Archiv spiegeln, alle Dateitypen."
 
 #: ../fdroidserver/gpgsign.py
 msgid "Missing output directory"
@@ -1296,7 +1297,7 @@ msgstr "Der OBB-Packetname stimmt mit keinem unterstützten APK überein:"
 
 #: ../fdroidserver/deploy.py
 msgid "Offline machine, skipping git mirror generation until `fdroid deploy`"
-msgstr ""
+msgstr "Maschine offline, überspringe git-Spiegelgeneration bis `fdroid deploy`"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -1587,7 +1588,7 @@ msgstr "Einstellen der Uhr auf diese Zeit mit:"
 
 #: ../fdroidserver/nightly.py
 msgid "Set maximum releases in repo before older ones are archived"
-msgstr ""
+msgstr "Setze maximale Veröffentlichungen im Repo bevor ältere archiviert werden"
 
 #: ../fdroidserver/build.py
 #, python-brace-format
@@ -1776,7 +1777,7 @@ msgstr "Ungültiges Lizenz-Tag \"%s\"! Verwenden Sie nur Tags von https://spdx.o
 
 #: ../fdroidserver/lint.py
 msgid "Unexpected license tag \"{}\"! Only use license tags configured in your config file"
-msgstr ""
+msgstr "Unerwartetes Lizenz-Tag \"{}\"! Nur Lizenz-Tags verwenden, die in deiner config-Datei eingerichtet sind"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
@@ -1945,7 +1946,7 @@ msgstr "Update Check Name ist auf die bekannte App-ID gesetzt - sie kann entfern
 #: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "Uploading {apkfilename} to androidobservatory.org"
-msgstr ""
+msgstr "Lade {apkfilename} auf androidobservatory.org hoch"
 
 #: ../fdroidserver/deploy.py
 #, fuzzy, python-brace-format
@@ -1989,11 +1990,11 @@ msgstr "Verwende {path} zur Konfiguration von s3cmd."
 
 #: ../fdroidserver/common.py
 msgid "Using APK Signature v2"
-msgstr ""
+msgstr "Verwende APK-Signatur v2"
 
 #: ../fdroidserver/common.py
 msgid "Using APK Signature v3"
-msgstr ""
+msgstr "Verwende APK-Signatur v3"
 
 #: ../fdroidserver/common.py
 msgid "Using Java's jarsigner, not recommended for verifying APKs! Use apksigner"
@@ -2033,7 +2034,7 @@ msgstr "Überprüfe die Index-Signatur:"
 #: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "VirusTotal API key cannot upload files larger than 32MB, use {url} to upload {path}."
-msgstr ""
+msgstr "VirusTotal-API-Schlüssel kann nicht Dateien größer 32MB hochladen, verwende {url} um {path} hochzuladen."
 
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Warn about possible metadata errors"
@@ -2045,7 +2046,7 @@ msgstr "Bei einer Konfiguration mit signierten Indizes, in dieser Phase nur unsi
 
 #: ../fdroidserver/lint.py
 msgid "When linting the entire repository yamllint is disabled by default. This option forces yamllint regardless."
-msgstr ""
+msgstr "Beim Linting des gesamten Repositoriums wird yamllint standardmäßig deaktiviert. Diese Option erzwingt yamllint ungeachtet dessen."
 
 msgid "X.509 'Distiguished Name' used when generating keys"
 msgstr "X.509 'Angesehener Name' wenn Schlüssel generiert werden"
@@ -2060,7 +2061,7 @@ msgstr "Sie können ANDROID_HOME verwenden, um den Pfad zu Ihrem SDK zu setzen, 
 
 #: ../fdroidserver/scanner.py
 msgid "ZIP file archive"
-msgstr ""
+msgstr "ZIP-Dateiarchiv"
 
 #: ../fdroidserver/nightly.py
 #, python-brace-format
@@ -2086,7 +2087,7 @@ msgstr "Mehrdeutige Option: %s (%s?)"
 
 #: ../fdroidserver/common.py
 msgid "apksigner not found, it's required for signing!"
-msgstr ""
+msgstr "apksigner nicht gefunden, er wird zum Signieren benötigt!"
 
 #: ../fdroidserver/lint.py ../fdroidserver/rewritemeta.py
 #: ../fdroidserver/checkupdates.py
@@ -2133,7 +2134,7 @@ msgstr "Versuch einer reinen ssh-Verbindung, um den Deployment-Key zu testen:"
 
 #: ../fdroidserver/common.py
 msgid "can not parse scrlib spec (not a string): '{}'"
-msgstr ""
+msgstr "kann scrlib-Spezifikation nicht parsen (keine Zeichenkette): '{}'"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py
@@ -2172,7 +2173,7 @@ msgstr "Ausführungsbefehl, entweder 'init' oder 'update'"
 
 #: ../fdroidserver/__main__.py
 msgid "commands from plugin modules:"
-msgstr ""
+msgstr "Befehle aus den PlugIn-Modulen:"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 #: /usr/lib/python3.7/optparse.py
@@ -2195,15 +2196,15 @@ msgstr "Kopiere {apkfilename} nach {path}"
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "could not parse '{path}'"
-msgstr ""
+msgstr "konnte '{path}' nicht parsen"
 
 #: ../fdroidserver/common.py
 msgid "could not parse srclib spec (no ref specified): '{}'"
-msgstr ""
+msgstr "konnte srclib-Spezifikation nicht parsen (keine ref angegeben): '{}'"
 
 #: ../fdroidserver/common.py
 msgid "could not parse srclib spec (too many '@' signs): '{}'"
-msgstr ""
+msgstr "konnte srclib-Spezifikation nicht parsen (zu viele '@'-Zeichen): '{}'"
 
 #: ../fdroidserver/nightly.py
 #, python-brace-format
@@ -2223,7 +2224,7 @@ msgstr "Build Logs deployed zu {path}"
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "deployed process log {path} to {dest}"
-msgstr ""
+msgstr "Verarbeitungsprotokoll {path} unter {dest} bereitgestellt"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py
@@ -2233,7 +2234,7 @@ msgstr "dest= wird benötigt für Optionen wie %r"
 
 #: ../fdroidserver/scanner.py
 msgid "executable binary, possibly code"
-msgstr ""
+msgstr "ausführbare Binärdatei, vermutlich Code"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py
