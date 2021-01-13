@@ -13,15 +13,15 @@ msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2020-10-21 18:05+0200\n"
-"PO-Revision-Date: 2020-12-01 21:43+0000\n"
-"Last-Translator: Francesco Saltori <francescosaltori@gmail.com>\n"
+"PO-Revision-Date: 2020-12-31 08:12+0000\n"
+"Last-Translator: random r <epsilin@yopmail.com>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/f-droid/fdroidserver/it/>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.4-dev\n"
+"X-Generator: Weblate 4.4.1-dev\n"
 
 #: ../fdroidserver/common.py
 msgid ""
@@ -1138,7 +1138,6 @@ msgid "Liberapay donation methods belong in the Liberapay: field"
 msgstr "I metodi di donazione di Liberapay appartengono al campo Liberapay"
 
 #: ../fdroidserver/lint.py
-#, fuzzy
 msgid "Liberapay donation methods belong in the LiberapayID flag"
 msgstr "I metodi di donazione di Liberapay appartengono alla bandiera LiberapayID"
 
@@ -1155,12 +1154,10 @@ msgid "Make the build stop on exceptions"
 msgstr "Interrompere la compilazione sulle eccezioni"
 
 #: ../fdroidserver/index.py
-#, fuzzy
 msgid "Malformed repository mirrors."
 msgstr "Mirror del repository malformati."
 
 #: ../fdroidserver/deploy.py
-#, fuzzy
 msgid "Malformed serverwebroot line:"
 msgstr "Riga del serverwebroot malformata:"
 
@@ -1199,7 +1196,6 @@ msgid "No commit specified for {versionName} in {linedesc}"
 msgstr "Nessun commit specificato per {versionName} in {linedesc}"
 
 #: ../fdroidserver/index.py
-#, fuzzy
 msgid "No fingerprint in URL."
 msgstr "Nessuna impronta digitale nell'URL."
 
@@ -1208,7 +1204,6 @@ msgid "No git submodules available"
 msgstr "Nessun sottomodulo git disponibile"
 
 #: ../fdroidserver/import.py
-#, fuzzy
 msgid "No gradle project could be found. Specify --subdir?"
 msgstr "Nessun progetto gradle è stato trovato. Specificare --subdir?"
 
@@ -1225,7 +1220,6 @@ msgid "No need to specify that the app is for Android"
 msgstr "Non c'è bisogno di specificare che l'applicazione è per Android"
 
 #: ../fdroidserver/deploy.py
-#, fuzzy
 msgid "No option set! Edit your config.py to set at least one of these:"
 msgstr "Nessuna opzione impostata! Modifica il tuo config.py per impostare almeno uno di questi:"
 
@@ -1312,7 +1306,6 @@ msgid "Only PNG and JPEG are supported for graphics, found: {path}"
 msgstr "Solo PNG e JPEG sono supportati per la grafica, trovati: {path}"
 
 #: ../fdroidserver/checkupdates.py
-#, fuzzy
 msgid "Only print differences with the Play Store"
 msgstr "Stampa solo le differenze con il Play Store"
 
@@ -1321,7 +1314,6 @@ msgid "Only process apps with auto-updates"
 msgstr "Elabora solo app con aggiornamenti automatici"
 
 #: ../fdroidserver/lint.py
-#, fuzzy
 msgid "OpenCollective donation methods belong in the OpenCollective: field"
 msgstr "I metodi di donazione di OpenCollective appartengono al campo OpenCollective"
 
@@ -1353,12 +1345,12 @@ msgid "Override path for repo APKs (default: ./repo)"
 msgstr "Sostituisci il percorso per gli APK del repository (impostazione predefinita: ./repo)"
 
 #: ../fdroidserver/index.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Overriding blank versionName in {apkfilename} from metadata: {version}"
 msgstr "Sostituzione di versionName vuoto in {apkfilename} dai metadati: {version}"
 
 #: ../fdroidserver/import.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Package \"{appid}\" already exists"
 msgstr "Pacchetto \"{appid}\" già esistente"
 
@@ -1368,7 +1360,6 @@ msgid "Parsing manifest at '{path}'"
 msgstr "Analisi del manifesto in '{path}'"
 
 #: ../fdroidserver/common.py
-#, fuzzy
 msgid "Password required with username"
 msgstr "Password richiesta con nome utente"
 
@@ -1388,7 +1379,6 @@ msgid "Path to the git repo to use as the log"
 msgstr "Percorso del repository git da utilizzare come registro"
 
 #: ../fdroidserver/init.py
-#, fuzzy
 msgid "Path to the keystore for the repo signing key"
 msgstr "Percorso del keystore per la chiave di firma del repository"
 
