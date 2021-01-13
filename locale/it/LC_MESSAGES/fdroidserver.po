@@ -7,13 +7,14 @@
 # Massimiliano Caniparoli <massic80@gmail.com>, 2020.
 # x <hardwired1.0@protonmail.com>, 2020.
 # Hans-Christoph Steiner <hans@guardianproject.info>, 2020.
+# Francesco Saltori <francescosaltori@gmail.com>, 2020.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2020-10-21 18:05+0200\n"
-"PO-Revision-Date: 2020-11-30 08:39+0000\n"
-"Last-Translator: x <hardwired1.0@protonmail.com>\n"
+"PO-Revision-Date: 2020-12-01 21:43+0000\n"
+"Last-Translator: Francesco Saltori <francescosaltori@gmail.com>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/f-droid/fdroidserver/it/>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
@@ -66,7 +67,7 @@ msgstr ""
 #: ../fdroidserver/lint.py
 #, python-format
 msgid "\"%s/\" has no matching metadata file!"
-msgstr "\"%s/\" non ha un file di metadata corrispondente!"
+msgstr "\"%s/\" non ha un file di metadati corrispondente!"
 
 #: ../fdroidserver/install.py
 #, python-brace-format
@@ -520,7 +521,7 @@ msgstr "Crea una chiave di firma del repository in un keystore"
 
 #: ../fdroidserver/update.py
 msgid "Create skeleton metadata files that are missing"
-msgstr "Crea i file scheletro di metadata che mancano"
+msgstr "Crea i file di metadati scheletro mancanti"
 
 #: ../fdroidserver/deploy.py ../fdroidserver/upload.py
 #, python-brace-format
@@ -569,7 +570,7 @@ msgstr "DEBUG_KEYSTORE non impostato o il valore è incompleto"
 
 #: ../fdroidserver/update.py
 msgid "Delete APKs and/or OBBs without metadata from the repo"
-msgstr "Cancella gli APK e/o OBB senza metadata dal repository"
+msgstr "Cancella gli APK e/o OBB senza metadati dal repository"
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
@@ -1462,7 +1463,7 @@ msgstr "Crea velocemente un nuovo repository"
 
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Read all the metadata files and exit"
-msgstr "Leggi tutti i file di metadata ed esci"
+msgstr "Leggi tutti i file di metadati ed esci"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -1521,7 +1522,7 @@ msgstr ""
 
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Rewrite all the metadata files"
-msgstr "Riscrivi tutti i file di metadata"
+msgstr "Riscrivi tutti i file di metadati"
 
 #: ../fdroidserver/rewritemeta.py
 msgid "Rewrite to a specific format: "
@@ -2035,7 +2036,7 @@ msgstr ""
 
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Warn about possible metadata errors"
-msgstr "Avvisa riguardo possibili errori metadata"
+msgstr "Avvisa riguardo possibili errori nei metadati"
 
 #: ../fdroidserver/update.py
 msgid "When configured for signed indexes, create only unsigned indexes at this stage"
