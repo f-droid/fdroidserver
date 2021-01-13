@@ -1,14 +1,14 @@
 # SOME DESCRIPTIVE TITLE.
 # This file is put in the public domain.
 # WaldiS <sto@tutanota.de>, 2020.
-# Michal L <michalrmsmi@wp.pl>, 2020.
+# Michal L <michalrmsmi@wp.pl>, 2020, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 1.0.0-95-gd7af22b\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2020-10-21 18:05+0200\n"
-"PO-Revision-Date: 2020-12-29 19:29+0000\n"
-"Last-Translator: WaldiS <sto@tutanota.de>\n"
+"PO-Revision-Date: 2021-01-13 04:41+0000\n"
+"Last-Translator: Michal L <michalrmsmi@wp.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/f-droid/fdroidserver/pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
@@ -1101,9 +1101,8 @@ msgid "JAR signature verified: {path}"
 msgstr "Podpis JAR potwierdzony: {path}"
 
 #: ../fdroidserver/scanner.py
-#, fuzzy
 msgid "Java JAR file"
-msgstr "Plik JAR Java"
+msgstr "Plik Java JAR"
 
 #: ../fdroidserver/publish.py ../fdroidserver/update.py
 #: ../fdroidserver/mirror.py
@@ -2691,9 +2690,9 @@ msgid "{path} is zero size!"
 msgstr "{path} ma zerowy rozmiar!"
 
 #: ../fdroidserver/deploy.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{path} more than 200MB, manually upload: {url}"
-msgstr "{path} więcej niż 200MB, załadowane ręcznie: {url}"
+msgstr "{path} więcej niż 200MB, przesłane ręcznie: {url}"
 
 #: ../fdroidserver/mirror.py
 #, python-brace-format
