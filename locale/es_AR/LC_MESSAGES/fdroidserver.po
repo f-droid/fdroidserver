@@ -3,13 +3,14 @@
 # This file is distributed under the same license as the PACKAGE package.
 # Hans-Christoph Steiner <hans@guardianproject.info>, 2020.
 # riveravaldez <riveravaldezmail@gmail.com>, 2020.
+# Eduardo Rodrigues <edu.rodrigues2580@gmail.com>, 2020.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2020-10-21 18:05+0200\n"
-"PO-Revision-Date: 2020-11-10 16:20+0000\n"
-"Last-Translator: Hans-Christoph Steiner <hans@guardianproject.info>\n"
+"PO-Revision-Date: 2020-12-12 06:36+0000\n"
+"Last-Translator: Eduardo Rodrigues <edu.rodrigues2580@gmail.com>\n"
 "Language-Team: Spanish (Argentina) <https://hosted.weblate.org/projects/f-droid/fdroidserver/es_AR/>\n"
 "Language: es_AR\n"
 "MIME-Version: 1.0\n"
@@ -104,7 +105,7 @@ msgstr ""
 #: /usr/lib/python3.7/argparse.py
 #, python-format
 msgid "%(prog)s: error: %(message)s\n"
-msgstr ""
+msgstr "%(prog)s: error: %(message)s\n"
 
 #: ../fdroidserver/scanner.py
 #, python-format
@@ -114,13 +115,13 @@ msgstr ""
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 #: /usr/lib/python3.7/optparse.py
 msgid "%prog [options]"
-msgstr ""
+msgstr "%prog [opciones]"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py
 #, python-format
 msgid "%r is not callable"
-msgstr ""
+msgstr "no se puede llamar a %r"
 
 #: ../fdroidserver/lint.py
 #, python-format
@@ -208,7 +209,7 @@ msgstr ""
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py
 msgid ".__call__() not defined"
-msgstr ""
+msgstr ".__call__() no definida"
 
 #: ../fdroidserver/metadata.py
 msgid ".fdroid.txt is not supported!  Convert to .fdroid.yml or .fdroid.json."
@@ -623,9 +624,8 @@ msgid "Don't create a source tarball, useful when testing a build"
 msgstr "No crear el tarbal de codigo fuente, útil cuando se esta probando la construcción"
 
 #: ../fdroidserver/stats.py
-#, fuzzy
 msgid "Don't do anything logs-related"
-msgstr "No hacer nada que refiera a los registros"
+msgstr "No hacer nada que refiera a los registros relacionados"
 
 #: ../fdroidserver/build.py
 msgid "Don't refresh the repository, useful when testing a build with no internet connection"
@@ -1471,9 +1471,8 @@ msgid "Reading {apkfilename} from cache"
 msgstr ""
 
 #: ../fdroidserver/stats.py
-#, fuzzy
 msgid "Recalculate aggregate stats - use when changes have been made that would invalidate old cached data."
-msgstr "Recalcular las agregaciones - usar cuando haya cambios"
+msgstr "Recalcular agregación de estados - usar cuando se hacen cambios que invalidarían los datos antiguos cacheados."
 
 #: ../fdroidserver/common.py
 msgid "Removing specified files"
@@ -1488,9 +1487,8 @@ msgid "Report on build data status"
 msgstr "Reportar el estado de la construcción"
 
 #: ../fdroidserver/build.py
-#, fuzzy
 msgid "Reset and create a brand new build server, even if the existing one appears to be ok."
-msgstr "Resetear y crear un nuevo servidor de construcción, incluso si el existente parece estar bien."
+msgstr "Restablecer y crear un nuevo servidor de compilación, incluso si el existente parece estar bien."
 
 #: ../fdroidserver/nightly.py
 #, python-brace-format
@@ -1644,9 +1642,8 @@ msgid "Specify a local folder to sync the repo to"
 msgstr "Especificar un directorio local donde sincronizar el repositorio"
 
 #: ../fdroidserver/deploy.py ../fdroidserver/upload.py
-#, fuzzy
 msgid "Specify an identity file to provide to SSH for rsyncing"
-msgstr "Especifique una archivo de identificación para la resincronización vía SSH"
+msgstr "Especifique un fichero de identidad que ofrezca SSH para rsync"
 
 #: ../fdroidserver/build.py
 msgid "Specify that we're running on the build server"
@@ -2065,13 +2062,13 @@ msgstr ""
 #: /usr/lib/python3.7/argparse.py
 #, python-format
 msgid "ambiguous option: %(option)s could match %(matches)s"
-msgstr ""
+msgstr "opción ambigua: %(option)s podría corresponderse con %(matches)s"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 #: /usr/lib/python3.7/optparse.py
 #, python-format
 msgid "ambiguous option: %s (%s?)"
-msgstr ""
+msgstr "opción ambigua: %s (%s?)"
 
 #: ../fdroidserver/common.py
 msgid "apksigner not found, it's required for signing!"
@@ -2130,7 +2127,7 @@ msgstr ""
 #: /usr/lib/python3.7/argparse.py
 #, python-format
 msgid "can't open '%s': %s"
-msgstr ""
+msgstr "no se puede abrir '%s': %s"
 
 #: ../fdroidserver/build.py
 #, python-brace-format
@@ -2361,7 +2358,7 @@ msgstr ""
 #: /usr/lib/python3.7/optparse.py
 #, python-format
 msgid "no such option: %s"
-msgstr ""
+msgstr "no hay tal opción: %s"
 
 #: ../fdroid ../fdroidserver/__main__.py
 #, fuzzy
@@ -2411,19 +2408,19 @@ msgstr "No se reconoce el comando \"%s\""
 #: /usr/lib/python3.7/getopt.py
 #, python-format
 msgid "option -%s requires argument"
-msgstr ""
+msgstr "opción -%s requiere un argumento"
 
 #: /usr/lib/python3.5/getopt.py /usr/lib/python3.6/getopt.py
 #: /usr/lib/python3.7/getopt.py
 #, python-format
 msgid "option --%s must not have an argument"
-msgstr ""
+msgstr "opción --%s no puede llevar argumento"
 
 #: /usr/lib/python3.5/getopt.py /usr/lib/python3.6/getopt.py
 #: /usr/lib/python3.7/getopt.py
 #, python-format
 msgid "option --%s not a unique prefix"
-msgstr ""
+msgstr "opción --%s no es un prefijo único"
 
 #: /usr/lib/python3.5/getopt.py /usr/lib/python3.6/getopt.py
 #: /usr/lib/python3.7/getopt.py
@@ -2435,12 +2432,12 @@ msgstr "No se reconoce el comando --\"%s\""
 #: /usr/lib/python3.7/getopt.py
 #, python-format
 msgid "option --%s requires argument"
-msgstr ""
+msgstr "opción --%s requiere un argumento"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py
 msgid "optional arguments"
-msgstr ""
+msgstr "argumentos opcionales"
 
 #: ../fdroidserver/nightly.py
 #, python-brace-format
@@ -2450,7 +2447,7 @@ msgstr ""
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py
 msgid "positional arguments"
-msgstr ""
+msgstr "argumentos posicionales"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -2488,13 +2485,13 @@ msgstr ""
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 #: /usr/lib/python3.7/optparse.py
 msgid "show program's version number and exit"
-msgstr ""
+msgstr "mostrar el número de versión del programa y salir"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.5/optparse.py
 #: /usr/lib/python3.6/argparse.py /usr/lib/python3.6/optparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.7/optparse.py
 msgid "show this help message and exit"
-msgstr ""
+msgstr "mostrar este mensaje de ayuda y salir"
 
 #: ../fdroidserver/signatures.py
 msgid "signed APK, either a file-path or HTTPS URL."
@@ -2530,7 +2527,7 @@ msgstr ""
 #: /usr/lib/python3.7/argparse.py
 #, python-format
 msgid "the following arguments are required: %s"
-msgstr ""
+msgstr "se requieren los siguientes argumentos: %s"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py
@@ -2558,7 +2555,7 @@ msgstr ""
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py ../fdroid
 #: /usr/lib/python3.7/argparse.py ../fdroidserver/__main__.py
 msgid "usage: "
-msgstr ""
+msgstr "uso: "
 
 #: ../fdroid
 msgid "usage: fdroid [-h|--help|--version] <command> [<args>]"
