@@ -1,13 +1,13 @@
 # SOME DESCRIPTIVE TITLE.
 # This file is put in the public domain.
-# Besnik Bleta <besnik@programeshqip.org>, 2020.
+# Besnik Bleta <besnik@programeshqip.org>, 2020, 2021.
 # Hans-Christoph Steiner <hans@guardianproject.info>, 2020.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 1.0.6-349-g907c04ea\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2020-10-21 18:05+0200\n"
-"PO-Revision-Date: 2020-11-14 21:55+0000\n"
+"PO-Revision-Date: 2021-01-13 04:41+0000\n"
 "Last-Translator: Besnik Bleta <besnik@programeshqip.org>\n"
 "Language-Team: Albanian <https://hosted.weblate.org/projects/f-droid/fdroidserver/sq/>\n"
 "Language: sq\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.4-dev\n"
+"X-Generator: Weblate 4.4.1-dev\n"
 
 #: ../fdroidserver/common.py
 msgid ""
@@ -27,7 +27,7 @@ msgid ""
 "        "
 msgstr ""
 "\n"
-"        Kjo është një depo aplikacionesh për t’u përdorur me FDroid. Applikacionet\n"
+"        Kjo është një depo aplikacionesh për t’u përdorur me FDroid. Aplikacionet\n"
 "        në këtë depo ose janë dyorë zyrtarë të montuar nga zhvilluesit e aplikacionit\n"
 "        origjinal, ose janë dyorë të montuar nga burimi prej f-droid.org duke përdorur\n"
 "        mjetet në https://gitlab.com/fdroid.\n"
