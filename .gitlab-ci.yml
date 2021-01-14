@@ -247,9 +247,6 @@ gradle:
 fdroid build:
   image: registry.gitlab.com/fdroid/ci-images-client
   only:
-    refs:
-      - branches
-      - pipelines
     changes:
       - .gitlab-ci.yml
       - buildserver/provision-apt-get-install
@@ -291,6 +288,41 @@ fdroid build:
     # each `fdroid build --on-server` run expects sudo, then uninstalls it
     - apt-get install sudo
     - fdroid build --verbose --on-server --no-tarball --latest org.fdroid.fdroid
+
+
+plugin_fetchsrclibs:
+  image: debian:buster
+  <<: *apt-template
+  only:
+    changes:
+      - .gitlab-ci.yml
+      - examples/fdroid_fetchsrclibs.py
+      - fdroidserver/__main__.py
+  script:
+    - apt-get install
+        curl
+        git
+        python3-pip
+        python3-venv
+    - python3 -m venv env
+    - . env/bin/activate
+    - export PATH="$CI_PROJECT_DIR:$PATH"
+    - export PYTHONPATH="$CI_PROJECT_DIR/examples"
+    - $pip install wheel # to make this go away: "error: invalid command 'bdist_wheel'"
+    - $pip install -e .
+    - fdroid | grep fetchsrclibs
+
+    - mkdir fdroiddata
+    - curl https://gitlab.com/fdroid/fdroiddata/repository/b9e9a077d720c86ff6fff4dbb341254cc4370b1a/archive.tar.gz
+          | tar -xz --directory=fdroiddata --strip-components=1
+    - cd fdroiddata
+    - fdroid fetchsrclibs freemap.opentrail:9 --verbose
+    - test -d build/freemap.opentrail/.git
+    - test -d build/srclib/andromaps/.git
+    - test -d build/srclib/freemaplib/.git
+    - test -d build/srclib/freemaplibProj/.git
+    - test -d build/srclib/JCoord/.git
+    - test -d build/srclib/javaproj/.git
 
 
 # test a full update and deploy cycle to gitlab.com
