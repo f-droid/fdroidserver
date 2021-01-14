@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2020-10-21 18:05+0200\n"
+"POT-Creation-Date: 2021-01-14 14:55+0100\n"
 "PO-Revision-Date: 2020-11-10 16:20+0000\n"
 "Last-Translator: Hans-Christoph Steiner <hans@guardianproject.info>\n"
 "Language-Team: Tibetan <https://hosted.weblate.org/projects/f-droid/fdroidserver/bo/>\n"
@@ -142,6 +142,11 @@ msgid "'keypass' not found in config.py!"
 msgstr "'keypass' འདི་config.py ནང་རྙེད་མ་སོང་།!"
 
 #: ../fdroidserver/common.py
+#, fuzzy
+msgid "'keypass' not found in config.yml!"
+msgstr "'keypass' འདི་config.py ནང་རྙེད་མ་སོང་།!"
+
+#: ../fdroidserver/common.py
 msgid "'keystore' is NONE and 'smartcardoptions' is blank!"
 msgstr ""
 
@@ -149,12 +154,27 @@ msgstr ""
 msgid "'keystore' not found in config.py!"
 msgstr "'keystore' འདི་ config.py ནང་རྙེད་མ་སོང་།!"
 
+#: ../fdroidserver/common.py
+#, fuzzy
+msgid "'keystore' not found in config.yml!"
+msgstr "'keystore' འདི་ config.py ནང་རྙེད་མ་སོང་།!"
+
 #: ../fdroidserver/index.py ../fdroidserver/common.py
 msgid "'keystorepass' not found in config.py!"
 msgstr "'keystorepass' འདི་ config.py ནང་རྙེད་མ་སོང་།!"
 
+#: ../fdroidserver/common.py
+#, fuzzy
+msgid "'keystorepass' not found in config.yml!"
+msgstr "'keystorepass' འདི་ config.py ནང་རྙེད་མ་སོང་།!"
+
 #: ../fdroidserver/index.py ../fdroidserver/common.py
 msgid "'repo_keyalias' not found in config.py!"
+msgstr "'repo_keyalias' འདི་ config.py ནང་རྙེད་མ་སོང་།!"
+
+#: ../fdroidserver/common.py
+#, fuzzy
+msgid "'repo_keyalias' not found in config.yml!"
 msgstr "'repo_keyalias' འདི་ config.py ནང་རྙེད་མ་སོང་།!"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
@@ -164,6 +184,11 @@ msgstr "'དགསོ་མཁོ།' ནི་གནས་སྟངས་འད
 
 #: ../fdroidserver/common.py
 msgid "'sdk_path' not set in 'config.py'!"
+msgstr "'sdk_path' འདི་ 'config.py' ནང་སྒྲིག་ཐུབ་མ་སོང་།!"
+
+#: ../fdroidserver/common.py
+#, fuzzy
+msgid "'sdk_path' not set in config.yml!"
 msgstr "'sdk_path' འདི་ 'config.py' ནང་སྒྲིག་ཐུབ་མ་སོང་།!"
 
 #. Translators: "build-tools" is the file name of a package from
@@ -282,6 +307,11 @@ msgstr "ཨེན་ཀྲོཌ་ SDK རྙེད་མ་སོང་།!"
 msgid "Android SDK '{path}' does not have '{dirname}' installed!"
 msgstr "ཨེན་ཀྲོཌ་SDK '{path}1{dirname}' '{dirname}'སྒྲིག་བཅུག་མིན་འདུག!"
 
+#: ../fdroidserver/init.py
+#, fuzzy, python-brace-format
+msgid "Android SDK not found at {path}!"
+msgstr "ཨེན་ཀྲོཌ་ SDK རྙེད་སོན་བྱུང་མ་སོང་།!"
+
 #: ../fdroidserver/common.py
 msgid "Android SDK not found!"
 msgstr "ཨེན་ཀྲོཌ་ SDK རྙེད་སོན་བྱུང་མ་སོང་།!"
@@ -295,6 +325,11 @@ msgstr "ཨེན་ཀྲོཌ་SDK ཐབས་ལམ་ '{path}'མིན�
 #, python-brace-format
 msgid "Android SDK path '{path}' is not a directory!"
 msgstr "ཨེན་ཀྲོཌSDKཐབས་ལམ་ '{path}1' ཡིག་ཆ་གསོག་ཉར་རེད་མིན་འདུག!"
+
+#: ../fdroidserver/common.py
+#, fuzzy, python-brace-format
+msgid "Android SDK tool {cmd} found!"
+msgstr "ཨེན་ཀྲོཌ་ SDK རྙེད་སོན་བྱུང་མ་སོང་།!"
 
 #. Translators: "build-tools" is the file name of a package from
 #. Google, it is part of the Android SDK. So it probably shouldn't be
@@ -455,6 +490,11 @@ msgstr ""
 
 #: ../fdroidserver/common.py
 #, python-brace-format
+msgid "Conflicting config files! Using {newfile}, ignoring {oldfile}!"
+msgstr ""
+
+#: ../fdroidserver/common.py
+#, python-brace-format
 msgid "Could not find '{command}' on your system"
 msgstr "ཁྱེད་རང་གི་མ་ལག་སྒང་ལ་'{command}1' རྙེད་མ་སོང་།"
 
@@ -472,6 +512,11 @@ msgstr "ཐོན་རིམ་གསར་ཤོས་འདིའི་མི
 #, python-brace-format
 msgid "Could not find {path} to remove it"
 msgstr "{path}མེད་པ་བཟོས་པ་ལ་རྙེད་མ་སོང་།"
+
+#: ../fdroidserver/update.py
+#, fuzzy, python-brace-format
+msgid "Could not open APK {path} for analysis: "
+msgstr "དཔྱད་ཞིབ་ཀྱི་ཆེད་དུ་apk ཡིག་ཆ་ཁ་ཕྱེས་ཐུབ་ཀྱི་མིན་འདུག"
 
 #: ../fdroidserver/update.py
 msgid "Could not open apk file for analysis"
@@ -699,6 +744,11 @@ msgstr ""
 "ཨེན་ཀྲོཌ་SDKགྱི་ལམ་འདིར་ཡོད་པས་ནང་འཛུལ་བྱེད། (%s) :\n"
 "> "
 
+#: ../fdroidserver/common.py
+#, python-brace-format
+msgid "Environment variable {var} from {configname} is not set!"
+msgstr ""
+
 #: ../fdroidserver/deploy.py ../fdroidserver/checkupdates.py
 #: ../fdroidserver/upload.py
 #, fuzzy, python-format
@@ -828,7 +878,7 @@ msgstr "\"{name}\" བརྐོད་རིས་མེད་པའི་མཉ�
 msgid "Found bad funding file \"{path}\" for \"{name}\":"
 msgstr ""
 
-#: ../fdroidserver/common.py
+#: ../fdroidserver/common.py ../fdroidserver/metadata.py
 msgid "Found invalid appids in arguments"
 msgstr "རྩོད་པའི་ནང་ཁུངས་ལྡན་མིན་པའི་appids རྙེད་འདུག"
 
@@ -1188,6 +1238,11 @@ msgstr "ཟུར་སྣོན་ཡོ་བྱད་རྙེད་མ་ས
 msgid "No commit specified for {versionName} in {linedesc}"
 msgstr "{linedesc} ནང་གྱི་ {versionName}འདིའི་ཆེད་དུ་ཁས་ལེན་དམིགས་བསལ་གང་ཡང་མིན་འདུག"
 
+#: ../fdroidserver/common.py
+#, fuzzy
+msgid "No config.yml found, using defaults."
+msgstr "'config.py' རྙེད་མ་སོང་།, སོར་བཞག་བེད་སྤྱོད་བྱེད་བཞིན་པ།."
+
 #: ../fdroidserver/index.py
 msgid "No fingerprint in URL."
 msgstr "URL ནང་ལག་མཐིལ་པར་ཤུས་རྙེད་མ་སོང་།."
@@ -1235,7 +1290,7 @@ msgstr "མིང་རྟགས་མ་བཀོད་པའི་ཕྱོག
 msgid "No signing certificates found in {path}"
 msgstr "{path}མིང་རྟགས་བཀོད་པའི་ཆོག་མཆན་ལག་ཁྱེར་འདིའི་ནང་རྙེད་མ་སོང་།"
 
-#: ../fdroidserver/common.py
+#: ../fdroidserver/common.py ../fdroidserver/metadata.py
 #, python-format
 msgid "No such package: %s"
 msgstr "ཐུམ་སྒྲིལ་དེ་འདྲ་མིན་འདུག: %s 1"
@@ -1266,6 +1321,11 @@ msgstr "{appid} ཆེད་དུ་བྱ་རྒྱུ་གང་ཡང་�
 #: ../fdroidserver/init.py
 #, fuzzy
 msgid "Now set these in config.py:"
+msgstr "'sdk_path' འདི་ 'config.py' ནང་སྒྲིག་ཐུབ་མ་སོང་།!"
+
+#: ../fdroidserver/init.py
+#, fuzzy
+msgid "Now set these in config.yml:"
 msgstr "'sdk_path' འདི་ 'config.py' ནང་སྒྲིག་ཐུབ་མ་སོང་།!"
 
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
@@ -1739,6 +1799,11 @@ msgstr "རེ་པོ་འདི་ལ་སྔོན་ཚོད་ནས་
 msgid "To use awsbucket, awssecretkey and awsaccesskeyid must also be set in config.py!"
 msgstr "awsbucket, awssecretkey དང་། awsaccesskeyid བེད་སྤྱོད་བྱེད་པའི་ཆེད་དུ་ config.py ནང་དུ་ངེས་པར་དུ་སྒྲིག་དགོས།!"
 
+#: ../fdroidserver/deploy.py
+#, fuzzy
+msgid "To use awsbucket, awssecretkey and awsaccesskeyid must also be set in config.yml!"
+msgstr "awsbucket, awssecretkey དང་། awsaccesskeyid བེད་སྤྱོད་བྱེད་པའི་ཆེད་དུ་ config.py ནང་དུ་ངེས་པར་དུ་སྒྲིག་དགོས།!"
+
 #: ../fdroidserver/lint.py
 msgid "URL must start with https:// or http://"
 msgstr ""
@@ -1769,6 +1834,11 @@ msgstr ""
 #, python-brace-format
 msgid "Unexpected text on same line as {field} in {linedesc}"
 msgstr "{linedesc}ནང་། {field}་ཁ་ཕྱོགས་དེ་ག་རང་ནང་རེ་བ་མ་བྱས་པའི་ཡིག་ཚགས་"
+
+#: ../fdroidserver/common.py
+#, python-brace-format
+msgid "Unknown entry {key} in {configname}"
+msgstr ""
 
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Unknown exception found!"
@@ -2661,6 +2731,11 @@ msgstr ""
 #, python-brace-format
 msgid "{name} \"{path}\" does not exist! Correct it in config.py."
 msgstr "{name} \"{path}\" མིན་འདུག! config.pyནོར་བཅོས་བྱེད།."
+
+#: ../fdroidserver/common.py
+#, python-brace-format
+msgid "{oldfile} is deprecated, use {newfile}"
+msgstr ""
 
 #: ../fdroidserver/import.py
 #, python-brace-format

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2020-10-21 18:05+0200\n"
+"POT-Creation-Date: 2021-01-14 14:55+0100\n"
 "PO-Revision-Date: 2020-11-10 16:20+0000\n"
 "Last-Translator: Hans-Christoph Steiner <hans@guardianproject.info>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/f-droid/fdroidserver/zh_Hant/>\n"
@@ -144,6 +144,11 @@ msgid "'keypass' not found in config.py!"
 msgstr "config.py 找不到 'keypass'！"
 
 #: ../fdroidserver/common.py
+#, fuzzy
+msgid "'keypass' not found in config.yml!"
+msgstr "config.py 找不到 'keypass'！"
+
+#: ../fdroidserver/common.py
 msgid "'keystore' is NONE and 'smartcardoptions' is blank!"
 msgstr ""
 
@@ -151,12 +156,27 @@ msgstr ""
 msgid "'keystore' not found in config.py!"
 msgstr "config.py 找不到 'keystore'！"
 
+#: ../fdroidserver/common.py
+#, fuzzy
+msgid "'keystore' not found in config.yml!"
+msgstr "config.py 找不到 'keystore'！"
+
 #: ../fdroidserver/index.py ../fdroidserver/common.py
 msgid "'keystorepass' not found in config.py!"
 msgstr "config.py 找不到 'keystorepass'！"
 
+#: ../fdroidserver/common.py
+#, fuzzy
+msgid "'keystorepass' not found in config.yml!"
+msgstr "config.py 找不到 'keystorepass'！"
+
 #: ../fdroidserver/index.py ../fdroidserver/common.py
 msgid "'repo_keyalias' not found in config.py!"
+msgstr "config.py 找不到 'repo_keyalias'！"
+
+#: ../fdroidserver/common.py
+#, fuzzy
+msgid "'repo_keyalias' not found in config.yml!"
 msgstr "config.py 找不到 'repo_keyalias'！"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
@@ -166,6 +186,11 @@ msgstr "這些地方的 '必填' 為無效引數"
 
 #: ../fdroidserver/common.py
 msgid "'sdk_path' not set in 'config.py'!"
+msgstr "'config.py' 未設定 'sdk_path'！"
+
+#: ../fdroidserver/common.py
+#, fuzzy
+msgid "'sdk_path' not set in config.yml!"
 msgstr "'config.py' 未設定 'sdk_path'！"
 
 #. Translators: "build-tools" is the file name of a package from
@@ -283,6 +308,11 @@ msgstr "未找到 Android SDK！"
 msgid "Android SDK '{path}' does not have '{dirname}' installed!"
 msgstr "Android SDK '{path}' 並未安裝 '{dirname}'！"
 
+#: ../fdroidserver/init.py
+#, fuzzy, python-brace-format
+msgid "Android SDK not found at {path}!"
+msgstr "找不到 Android SDK！"
+
 #: ../fdroidserver/common.py
 msgid "Android SDK not found!"
 msgstr "找不到 Android SDK！"
@@ -296,6 +326,11 @@ msgstr "Android SDK 路徑 '{path}' 不存在！"
 #, python-brace-format
 msgid "Android SDK path '{path}' is not a directory!"
 msgstr "Android SDK 路徑 '{path}' 不是目錄資料夾！"
+
+#: ../fdroidserver/common.py
+#, fuzzy, python-brace-format
+msgid "Android SDK tool {cmd} found!"
+msgstr "找不到 Android SDK！"
 
 #. Translators: "build-tools" is the file name of a package from
 #. Google, it is part of the Android SDK. So it probably shouldn't be
@@ -456,6 +491,11 @@ msgstr ""
 
 #: ../fdroidserver/common.py
 #, python-brace-format
+msgid "Conflicting config files! Using {newfile}, ignoring {oldfile}!"
+msgstr ""
+
+#: ../fdroidserver/common.py
+#, python-brace-format
 msgid "Could not find '{command}' on your system"
 msgstr "在您的系統上找不到 '{command}'"
 
@@ -473,6 +513,11 @@ msgstr "找不到最新版本名稱"
 #, python-brace-format
 msgid "Could not find {path} to remove it"
 msgstr "無法找到 {path} 來移除"
+
+#: ../fdroidserver/update.py
+#, fuzzy, python-brace-format
+msgid "Could not open APK {path} for analysis: "
+msgstr "無法開啟 apk 檔案作分析"
 
 #: ../fdroidserver/update.py
 msgid "Could not open apk file for analysis"
@@ -702,6 +747,11 @@ msgstr ""
 "請在此輸入 Android SDK (%s) 的路徑：\n"
 "> "
 
+#: ../fdroidserver/common.py
+#, python-brace-format
+msgid "Environment variable {var} from {configname} is not set!"
+msgstr ""
+
 #: ../fdroidserver/deploy.py ../fdroidserver/checkupdates.py
 #: ../fdroidserver/upload.py
 #, python-format
@@ -830,7 +880,7 @@ msgstr "找到 \"{path}\" 圖像不包含 \"{name}\" 應用的中介資料！"
 msgid "Found bad funding file \"{path}\" for \"{name}\":"
 msgstr ""
 
-#: ../fdroidserver/common.py
+#: ../fdroidserver/common.py ../fdroidserver/metadata.py
 msgid "Found invalid appids in arguments"
 msgstr "引數中找到無效的 appids"
 
@@ -1189,6 +1239,11 @@ msgstr "查無附加的設備"
 msgid "No commit specified for {versionName} in {linedesc}"
 msgstr "{linedesc} 沒有指定給 {versionName} 的提交"
 
+#: ../fdroidserver/common.py
+#, fuzzy
+msgid "No config.yml found, using defaults."
+msgstr "找不到 'config.py'，使用預設。"
+
 #: ../fdroidserver/index.py
 msgid "No fingerprint in URL."
 msgstr "在 URL 無指紋。"
@@ -1236,7 +1291,7 @@ msgstr "輸出目錄無簽署 - 無須採取動作"
 msgid "No signing certificates found in {path}"
 msgstr "{path} 找不到簽署證書"
 
-#: ../fdroidserver/common.py
+#: ../fdroidserver/common.py ../fdroidserver/metadata.py
 #, python-format
 msgid "No such package: %s"
 msgstr "無此套件包：%s"
@@ -1266,6 +1321,11 @@ msgstr "{appid} 無須採取行動."
 
 #: ../fdroidserver/init.py
 msgid "Now set these in config.py:"
+msgstr "現在設定這些在 config.py 中："
+
+#: ../fdroidserver/init.py
+#, fuzzy
+msgid "Now set these in config.yml:"
 msgstr "現在設定這些在 config.py 中："
 
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
@@ -1739,6 +1799,11 @@ msgstr "這個軟體庫已有本地的中介資料：%s"
 msgid "To use awsbucket, awssecretkey and awsaccesskeyid must also be set in config.py!"
 msgstr "要使用 awsbucket, awssecretkey 與 awsaccesskeyid 必須在 config.py 進行設定！"
 
+#: ../fdroidserver/deploy.py
+#, fuzzy
+msgid "To use awsbucket, awssecretkey and awsaccesskeyid must also be set in config.yml!"
+msgstr "要使用 awsbucket, awssecretkey 與 awsaccesskeyid 必須在 config.py 進行設定！"
+
 #: ../fdroidserver/lint.py
 msgid "URL must start with https:// or http://"
 msgstr ""
@@ -1769,6 +1834,11 @@ msgstr ""
 #, python-brace-format
 msgid "Unexpected text on same line as {field} in {linedesc}"
 msgstr "在 {linedesc} 在同一行的 {field} 出現未預期的文字"
+
+#: ../fdroidserver/common.py
+#, python-brace-format
+msgid "Unknown entry {key} in {configname}"
+msgstr ""
 
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Unknown exception found!"
@@ -2658,6 +2728,11 @@ msgstr ""
 #, python-brace-format
 msgid "{name} \"{path}\" does not exist! Correct it in config.py."
 msgstr "{name} \"{path}\" 不存在! 請更正 config.py."
+
+#: ../fdroidserver/common.py
+#, python-brace-format
+msgid "{oldfile} is deprecated, use {newfile}"
+msgstr ""
 
 #: ../fdroidserver/import.py
 #, python-brace-format
