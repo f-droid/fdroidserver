@@ -466,10 +466,10 @@ def make_v0(apps, apks, repodir, repodict, requestsdict, fdroid_signing_key_fing
         for apk in apklist:
             file_extension = common.get_file_extension(apk['apkName'])
             # find the APK for the "Current Version"
-            if current_version_code < apk['versionCode']:
-                current_version_code = apk['versionCode']
             if current_version_code < int(app.CurrentVersionCode):
                 current_version_file = apk['apkName']
+            if current_version_code < apk['versionCode']:
+                current_version_code = apk['versionCode']
 
             apkel = doc.createElement("package")
             apel.appendChild(apkel)
