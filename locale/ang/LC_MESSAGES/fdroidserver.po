@@ -1,21 +1,19 @@
 # SOME DESCRIPTIVE TITLE.
 # This file is put in the public domain.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
+# Jennifer Kitts <kittsjennifer44@gmail.com>, 2021.
 msgid ""
 msgstr ""
-"Project-Id-Version: fdroidserver 1.0.0-95-gd7af22b\n"
+"Project-Id-Version: fdroidserver 2.0a0-62-gc63c4b3d\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2021-01-14 14:55+0100\n"
-"PO-Revision-Date: 2018-06-08 03:44+0000\n"
-"Last-Translator: ۋولقان <nureliosman@gmail.com>\n"
-"Language-Team: Uyghur <https://hosted.weblate.org/projects/f-droid/fdroidserver/ug/>\n"
-"Language: ug\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Automatically generated\n"
+"Language-Team: none\n"
+"Language: ang\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 3.0\n"
 
 #: ../fdroidserver/common.py
 msgid ""
@@ -367,7 +365,7 @@ msgstr ""
 
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Build a package from source"
-msgstr "مەنبەدىن بىر بوغچا قۇرۇش"
+msgstr ""
 
 #: ../fdroidserver/build.py
 msgid "Build all applications available"
@@ -427,13 +425,13 @@ msgid "Cannot write \"{path}\", not an accepted format, use: {formats}"
 msgstr ""
 
 #: ../fdroidserver/lint.py
-#, fuzzy, python-format
+#, python-format
 msgid "Categories '%s' is not valid"
-msgstr "تۈرلەر قۇرۇلمىغان '%s'"
+msgstr ""
 
 #: ../fdroidserver/lint.py
 msgid "Categories are not set"
-msgstr "تۈرلەر قۇرۇلمىغان"
+msgstr ""
 
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Check for updates to applications"
@@ -1040,9 +1038,9 @@ msgid "Invalid VercodeOperation: {field}"
 msgstr ""
 
 #: ../fdroidserver/common.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Invalid application ID {appid}"
-msgstr "{appid} ئىچىدە \"سىنبەلگە\" تېپىلمىدى"
+msgstr ""
 
 #: ../fdroidserver/metadata.py
 #, python-format
@@ -2383,11 +2381,11 @@ msgstr ""
 #: ../fdroidserver/mirror.py
 #, python-brace-format
 msgid "no \"icon\" in {appid}"
-msgstr "{appid} ئىچىدە \"سىنبەلگە\" تېپىلمىدى"
+msgstr ""
 
 #: ../fdroidserver/signatures.py
 msgid "no APK supplied"
-msgstr "ھېچقانداق APK تەمىنلەنمىگەن"
+msgstr ""
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 #: /usr/lib/python3.7/optparse.py
@@ -2397,7 +2395,7 @@ msgstr ""
 
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "no version info found!"
-msgstr "نەشىر ئۇچۇرى تېپىلمىدى!"
+msgstr ""
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py

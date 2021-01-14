@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.8-135-g16dd6d28\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2020-10-21 18:05+0200\n"
+"POT-Creation-Date: 2021-01-14 14:55+0100\n"
 "PO-Revision-Date: 2020-11-10 16:20+0000\n"
 "Last-Translator: Hans-Christoph Steiner <hans@guardianproject.info>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/f-droid/fdroidserver/ko/>\n"
@@ -142,6 +142,11 @@ msgid "'keypass' not found in config.py!"
 msgstr "'keypass'를 config.py에서 찾을 수 없습니다!"
 
 #: ../fdroidserver/common.py
+#, fuzzy
+msgid "'keypass' not found in config.yml!"
+msgstr "'keypass'를 config.py에서 찾을 수 없습니다!"
+
+#: ../fdroidserver/common.py
 msgid "'keystore' is NONE and 'smartcardoptions' is blank!"
 msgstr ""
 
@@ -149,12 +154,27 @@ msgstr ""
 msgid "'keystore' not found in config.py!"
 msgstr "'keystore'를 config.py에서 찾을 수 없습니다!"
 
+#: ../fdroidserver/common.py
+#, fuzzy
+msgid "'keystore' not found in config.yml!"
+msgstr "'keystore'를 config.py에서 찾을 수 없습니다!"
+
 #: ../fdroidserver/index.py ../fdroidserver/common.py
 msgid "'keystorepass' not found in config.py!"
 msgstr "'keystorepass'를 config.py에서 찾을 수 없습니다!"
 
+#: ../fdroidserver/common.py
+#, fuzzy
+msgid "'keystorepass' not found in config.yml!"
+msgstr "'keystorepass'를 config.py에서 찾을 수 없습니다!"
+
 #: ../fdroidserver/index.py ../fdroidserver/common.py
 msgid "'repo_keyalias' not found in config.py!"
+msgstr "'repo_keyalias'를 config.py에서 찾을 수 없습니다!"
+
+#: ../fdroidserver/common.py
+#, fuzzy
+msgid "'repo_keyalias' not found in config.yml!"
 msgstr "'repo_keyalias'를 config.py에서 찾을 수 없습니다!"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
@@ -164,6 +184,11 @@ msgstr "'required'는 고정적을 위한 잘못된 인수입니다"
 
 #: ../fdroidserver/common.py
 msgid "'sdk_path' not set in 'config.py'!"
+msgstr "'sdk_path'를 'config.py'에서 설정할 수 없습니다!"
+
+#: ../fdroidserver/common.py
+#, fuzzy
+msgid "'sdk_path' not set in config.yml!"
 msgstr "'sdk_path'를 'config.py'에서 설정할 수 없습니다!"
 
 #. Translators: "build-tools" is the file name of a package from
@@ -281,6 +306,11 @@ msgstr "Android SDK를 찾을 수 없습니다!"
 msgid "Android SDK '{path}' does not have '{dirname}' installed!"
 msgstr "Android SDK '{path}'는 설치된 '{dirname}'가 없습니다!"
 
+#: ../fdroidserver/init.py
+#, fuzzy, python-brace-format
+msgid "Android SDK not found at {path}!"
+msgstr "Android SDK를 찾을 수 없습니다!"
+
 #: ../fdroidserver/common.py
 msgid "Android SDK not found!"
 msgstr "Android SDK를 찾을 수 없습니다!"
@@ -294,6 +324,11 @@ msgstr "Android SDK 경로 '{path}'는 존재하지 않습니다!"
 #, python-brace-format
 msgid "Android SDK path '{path}' is not a directory!"
 msgstr "Android SDK 경로 '{path}'는 디렉터리가 아닙니다!"
+
+#: ../fdroidserver/common.py
+#, fuzzy, python-brace-format
+msgid "Android SDK tool {cmd} found!"
+msgstr "Android SDK를 찾을 수 없습니다!"
 
 #. Translators: "build-tools" is the file name of a package from
 #. Google, it is part of the Android SDK. So it probably shouldn't be
@@ -454,6 +489,11 @@ msgstr ""
 
 #: ../fdroidserver/common.py
 #, python-brace-format
+msgid "Conflicting config files! Using {newfile}, ignoring {oldfile}!"
+msgstr ""
+
+#: ../fdroidserver/common.py
+#, python-brace-format
 msgid "Could not find '{command}' on your system"
 msgstr ""
 
@@ -468,6 +508,11 @@ msgstr ""
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Could not find {path} to remove it"
+msgstr ""
+
+#: ../fdroidserver/update.py
+#, python-brace-format
+msgid "Could not open APK {path} for analysis: "
 msgstr ""
 
 #: ../fdroidserver/update.py
@@ -693,6 +738,11 @@ msgid ""
 "> "
 msgstr ""
 
+#: ../fdroidserver/common.py
+#, python-brace-format
+msgid "Environment variable {var} from {configname} is not set!"
+msgstr ""
+
 #: ../fdroidserver/deploy.py ../fdroidserver/checkupdates.py
 #: ../fdroidserver/upload.py
 #, python-format
@@ -820,7 +870,7 @@ msgstr "앱 \"{name}\"를 위한 메타데이터가 없이 \"{path}\" 그래픽�
 msgid "Found bad funding file \"{path}\" for \"{name}\":"
 msgstr ""
 
-#: ../fdroidserver/common.py
+#: ../fdroidserver/common.py ../fdroidserver/metadata.py
 msgid "Found invalid appids in arguments"
 msgstr ""
 
@@ -1178,6 +1228,10 @@ msgstr ""
 msgid "No commit specified for {versionName} in {linedesc}"
 msgstr ""
 
+#: ../fdroidserver/common.py
+msgid "No config.yml found, using defaults."
+msgstr ""
+
 #: ../fdroidserver/index.py
 msgid "No fingerprint in URL."
 msgstr ""
@@ -1224,7 +1278,7 @@ msgstr ""
 msgid "No signing certificates found in {path}"
 msgstr ""
 
-#: ../fdroidserver/common.py
+#: ../fdroidserver/common.py ../fdroidserver/metadata.py
 #, python-format
 msgid "No such package: %s"
 msgstr ""
@@ -1254,6 +1308,10 @@ msgstr ""
 
 #: ../fdroidserver/init.py
 msgid "Now set these in config.py:"
+msgstr ""
+
+#: ../fdroidserver/init.py
+msgid "Now set these in config.yml:"
 msgstr ""
 
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
@@ -1726,6 +1784,10 @@ msgstr ""
 msgid "To use awsbucket, awssecretkey and awsaccesskeyid must also be set in config.py!"
 msgstr ""
 
+#: ../fdroidserver/deploy.py
+msgid "To use awsbucket, awssecretkey and awsaccesskeyid must also be set in config.yml!"
+msgstr ""
+
 #: ../fdroidserver/lint.py
 msgid "URL must start with https:// or http://"
 msgstr ""
@@ -1755,6 +1817,11 @@ msgstr ""
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Unexpected text on same line as {field} in {linedesc}"
+msgstr ""
+
+#: ../fdroidserver/common.py
+#, python-brace-format
+msgid "Unknown entry {key} in {configname}"
 msgstr ""
 
 #: ../fdroid ../fdroidserver/__main__.py
@@ -2642,6 +2709,11 @@ msgstr ""
 #, python-brace-format
 msgid "{name} \"{path}\" does not exist! Correct it in config.py."
 msgstr "{name} \"{path}\"는 존재하지 않습니다! config.py에서 그것을 고치세요."
+
+#: ../fdroidserver/common.py
+#, python-brace-format
+msgid "{oldfile} is deprecated, use {newfile}"
+msgstr ""
 
 #: ../fdroidserver/import.py
 #, python-brace-format

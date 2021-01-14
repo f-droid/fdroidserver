@@ -1,21 +1,21 @@
 # SOME DESCRIPTIVE TITLE.
 # This file is put in the public domain.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
+# THANOS SIOURDAKIS <siourdakisthanos@gmail.com>, 2020.
+# fresh <fresh190@protonmail.com>, 2020, 2021.
 msgid ""
 msgstr ""
-"Project-Id-Version: fdroidserver 1.0.0-95-gd7af22b\n"
+"Project-Id-Version: fdroidserver 2.0a0-62-gc63c4b3d\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2021-01-14 14:55+0100\n"
-"PO-Revision-Date: 2018-06-08 03:44+0000\n"
-"Last-Translator: ۋولقان <nureliosman@gmail.com>\n"
-"Language-Team: Uyghur <https://hosted.weblate.org/projects/f-droid/fdroidserver/ug/>\n"
-"Language: ug\n"
+"PO-Revision-Date: 2021-01-04 15:47+0000\n"
+"Last-Translator: fresh <fresh190@protonmail.com>\n"
+"Language-Team: Greek <https://hosted.weblate.org/projects/f-droid/fdroidserver/el/>\n"
+"Language: el\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 3.0\n"
+"X-Generator: Weblate 4.4.1-dev\n"
 
 #: ../fdroidserver/common.py
 msgid ""
@@ -103,7 +103,7 @@ msgstr ""
 #: /usr/lib/python3.7/argparse.py
 #, python-format
 msgid "%(prog)s: error: %(message)s\n"
-msgstr ""
+msgstr "%(prog)s: σφάλμα: %(message)s\n"
 
 #: ../fdroidserver/scanner.py
 #, python-format
@@ -113,7 +113,7 @@ msgstr ""
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 #: /usr/lib/python3.7/optparse.py
 msgid "%prog [options]"
-msgstr ""
+msgstr "%prog [επιλογές]"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py
@@ -247,7 +247,7 @@ msgstr ""
 
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Add a new application from its source code"
-msgstr ""
+msgstr "Προσθήκη μίας νέας εφαρμογής από τον πηγαίο κώδικα"
 
 #: ../fdroidserver/update.py
 msgid "Add a repo signing key to an unsigned repo"
@@ -367,7 +367,7 @@ msgstr ""
 
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Build a package from source"
-msgstr "مەنبەدىن بىر بوغچا قۇرۇش"
+msgstr "Δημιουργήστε ένα πακέτο από τον πηγαίο κώδικα"
 
 #: ../fdroidserver/build.py
 msgid "Build all applications available"
@@ -427,17 +427,17 @@ msgid "Cannot write \"{path}\", not an accepted format, use: {formats}"
 msgstr ""
 
 #: ../fdroidserver/lint.py
-#, fuzzy, python-format
+#, python-format
 msgid "Categories '%s' is not valid"
-msgstr "تۈرلەر قۇرۇلمىغان '%s'"
+msgstr ""
 
 #: ../fdroidserver/lint.py
 msgid "Categories are not set"
-msgstr "تۈرلەر قۇرۇلمىغان"
+msgstr ""
 
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Check for updates to applications"
-msgstr ""
+msgstr "Έλεγχος για ενημερώσεις εφαρμογών"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -467,7 +467,7 @@ msgstr ""
 #: ../fdroid ../fdroidserver/__main__.py
 #, c-format, python-format
 msgid "Command '%s' not recognised.\n"
-msgstr ""
+msgstr "Η εντολή «%s» δεν αναγνωρίζεται.\n"
 
 #: ../fdroidserver/checkupdates.py
 msgid "Commit changes"
@@ -1040,9 +1040,9 @@ msgid "Invalid VercodeOperation: {field}"
 msgstr ""
 
 #: ../fdroidserver/common.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Invalid application ID {appid}"
-msgstr "{appid} ئىچىدە \"سىنبەلگە\" تېپىلمىدى"
+msgstr ""
 
 #: ../fdroidserver/metadata.py
 #, python-format
@@ -1351,7 +1351,7 @@ msgstr ""
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 #: /usr/lib/python3.7/optparse.py
 msgid "Options"
-msgstr ""
+msgstr "Επιλογές"
 
 #: ../fdroidserver/verify.py
 msgid "Output JSON report to file named after APK."
@@ -1454,7 +1454,7 @@ msgstr ""
 
 #: ../fdroidserver/update.py
 msgid "Produce human-readable index.xml"
-msgstr ""
+msgstr "Δημιούργησε index.xml αναγνώσιμο από τον άνθρωπο"
 
 #: ../fdroidserver/import.py
 msgid "Project URL to import from."
@@ -1480,11 +1480,11 @@ msgstr ""
 
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Quickly start a new repository"
-msgstr ""
+msgstr "Γρήγορη εκκίνηση νέου αποθετηρίου"
 
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Read all the metadata files and exit"
-msgstr ""
+msgstr "Ανάγνωση όλων των αρχείων μεταδεδομένων κι έξοδος"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -1518,7 +1518,7 @@ msgstr ""
 
 #: ../fdroidserver/update.py
 msgid "Rename APK files that do not match package.name_123.apk"
-msgstr ""
+msgstr "Μετονομασία αρχείων APK που δεν αντιστοιχούν με «όνομα.πακέτου_123.apk»"
 
 #: ../fdroidserver/update.py
 msgid "Report on build data status"
@@ -1586,7 +1586,7 @@ msgstr ""
 
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Scan the source code of a package"
-msgstr ""
+msgstr "Έλεγχος του πηγαίου κώδικα ενός πακέτου"
 
 #: ../fdroidserver/scanner.py
 #, python-brace-format
@@ -1816,7 +1816,7 @@ msgstr ""
 
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Unknown exception found!"
-msgstr ""
+msgstr "Βρέθηκε άγνωστη εξαίρεση!"
 
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vname
 #: ../fdroidserver/lint.py
@@ -1872,30 +1872,30 @@ msgstr ""
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Unrecognised field '{field}' in {linedesc}"
-msgstr ""
+msgstr "Μη αναγνωρίσιμος τομέας«{field}» σε {linedesc}"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Unsupported file type \"{extension}\" for repo graphic"
-msgstr ""
+msgstr "Μη υποστηριζόμενος τύπος αρχείου «{extension}» για αποθήκευση γραφικών"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Unsupported graphics file found: {path}"
-msgstr ""
+msgstr "Βρέθηκε μη υποστηριζόμενο γραφικό αρχείο: {path}"
 
 #: ../fdroidserver/rewritemeta.py
 #, python-brace-format
 msgid "Unsupported metadata format, use: --to [{supported}]"
-msgstr ""
+msgstr "Μη υποστηριζόμενη μορφή μεταδεδομένων, χρησιμοποίησε: --to [{supported}]"
 
 #: ../fdroidserver/metadata.py
 msgid "Unterminated ]"
-msgstr ""
+msgstr "Ημιτελής ]"
 
 #: ../fdroidserver/metadata.py
 msgid "Unterminated ]]"
-msgstr ""
+msgstr "Ημιτελής ]]"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
@@ -1984,13 +1984,13 @@ msgstr ""
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 #: /usr/lib/python3.7/optparse.py
 msgid "Usage"
-msgstr ""
+msgstr "Χρήση"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 #: /usr/lib/python3.7/optparse.py
 #, python-format
 msgid "Usage: %s\n"
-msgstr ""
+msgstr "Χρήση: %s\n"
 
 #: ../fdroidserver/lint.py
 msgid "Use /HEAD instead of /master to point at a file in the default branch"
@@ -2045,7 +2045,7 @@ msgstr ""
 
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Valid commands are:"
-msgstr ""
+msgstr "Οι έγκυρες εντολές είναι οι εξής:"
 
 #: ../fdroidserver/verify.py
 msgid "Verify against locally cached copy rather than redownloading."
@@ -2383,11 +2383,11 @@ msgstr ""
 #: ../fdroidserver/mirror.py
 #, python-brace-format
 msgid "no \"icon\" in {appid}"
-msgstr "{appid} ئىچىدە \"سىنبەلگە\" تېپىلمىدى"
+msgstr ""
 
 #: ../fdroidserver/signatures.py
 msgid "no APK supplied"
-msgstr "ھېچقانداق APK تەمىنلەنمىگەن"
+msgstr ""
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 #: /usr/lib/python3.7/optparse.py
@@ -2397,7 +2397,7 @@ msgstr ""
 
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "no version info found!"
-msgstr "نەشىر ئۇچۇرى تېپىلمىدى!"
+msgstr ""
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py
@@ -2436,13 +2436,13 @@ msgstr ""
 #: /usr/lib/python3.7/getopt.py
 #, python-format
 msgid "option -%s not recognized"
-msgstr ""
+msgstr "επιλογή -%s δεν αναγνωρίζεται"
 
 #: /usr/lib/python3.5/getopt.py /usr/lib/python3.6/getopt.py
 #: /usr/lib/python3.7/getopt.py
 #, python-format
 msgid "option -%s requires argument"
-msgstr ""
+msgstr "η επιλογή -%s απαιτεί επιχείρημα"
 
 #: /usr/lib/python3.5/getopt.py /usr/lib/python3.6/getopt.py
 #: /usr/lib/python3.7/getopt.py
@@ -2460,7 +2460,7 @@ msgstr ""
 #: /usr/lib/python3.7/getopt.py
 #, python-format
 msgid "option --%s not recognized"
-msgstr ""
+msgstr "η επιλογή --%s δεν αναγνωρίζεται"
 
 #: /usr/lib/python3.5/getopt.py /usr/lib/python3.6/getopt.py
 #: /usr/lib/python3.7/getopt.py
@@ -2471,7 +2471,7 @@ msgstr ""
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py
 msgid "optional arguments"
-msgstr ""
+msgstr "προεραιτικά επιχειρήματα"
 
 #: ../fdroidserver/nightly.py
 #, python-brace-format
@@ -2519,13 +2519,13 @@ msgstr ""
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 #: /usr/lib/python3.7/optparse.py
 msgid "show program's version number and exit"
-msgstr ""
+msgstr "εμφάνιση έκδοσης του προγράμματος κι έξοδος"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.5/optparse.py
 #: /usr/lib/python3.6/argparse.py /usr/lib/python3.6/optparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.7/optparse.py
 msgid "show this help message and exit"
-msgstr ""
+msgstr "εμφάνιση αυτού του βοηθητικού μηνύματος κι έξοδος"
 
 #: ../fdroidserver/signatures.py
 msgid "signed APK, either a file-path or HTTPS URL."
@@ -2550,7 +2550,7 @@ msgstr ""
 
 #: ../fdroidserver/scanner.py
 msgid "static library"
-msgstr ""
+msgstr "στατική βιβλιοθήκη"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -2573,7 +2573,7 @@ msgstr ""
 #: /usr/lib/python3.7/argparse.py
 #, python-format
 msgid "unknown parser %(parser_name)r (choices: %(choices)s)"
-msgstr ""
+msgstr "άγνωστος συντακτικός αναλυτής %(parser_name)r (επιλογές: %(choices)s)"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py
@@ -2589,7 +2589,7 @@ msgstr ""
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py ../fdroid
 #: /usr/lib/python3.7/argparse.py ../fdroidserver/__main__.py
 msgid "usage: "
-msgstr ""
+msgstr "χρήση: "
 
 #: ../fdroid
 msgid "usage: fdroid [-h|--help|--version] <command> [<args>]"
@@ -2598,7 +2598,7 @@ msgstr ""
 #: ../fdroidserver/deploy.py ../fdroidserver/upload.py
 #, python-brace-format
 msgid "using Apache libcloud to sync with {url}"
-msgstr ""
+msgstr "χρήση Apache libcloud για συγχρονισμό με {url}"
 
 #: ../fdroidserver/deploy.py
 msgid "virustotal.com is rate limiting, waiting to retry..."
