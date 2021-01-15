@@ -581,9 +581,11 @@ include tests/metadata/dump/org.videolan.vlc.yaml
 include tests/metadata/duplicate.permisssions.yml
 include tests/metadata/fake.ota.update.yml
 include tests/metadata/info.guardianproject.checkey/en-US/description.txt
+include tests/metadata/info.guardianproject.checkey/en-US/name.txt
 include tests/metadata/info.guardianproject.checkey/en-US/phoneScreenshots/checkey-phone.png
 include tests/metadata/info.guardianproject.checkey/en-US/phoneScreenshots/checkey.png
 include tests/metadata/info.guardianproject.checkey/en-US/summary.txt
+include tests/metadata/info.guardianproject.checkey/ja-JP/name.txt
 include tests/metadata/info.guardianproject.checkey.yml
 include tests/metadata/info.guardianproject.urzip/en-US/changelogs/100.txt
 include tests/metadata/info.guardianproject.urzip/en-US/full_description.txt
