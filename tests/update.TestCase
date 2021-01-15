@@ -2,6 +2,7 @@
 
 # http://www.drdobbs.com/testing/unit-testing-with-python/240165163
 
+import copy
 import git
 import glob
 import inspect
@@ -69,6 +70,10 @@ class UpdateTest(unittest.TestCase):
 
     def setUp(self):
         logging.basicConfig(level=logging.INFO)
+        logging.getLogger('androguard.axml').setLevel(logging.INFO)
+        logging.getLogger('androguard.core.api_specific_resources').setLevel(logging.INFO)
+        from PIL import PngImagePlugin
+        logging.getLogger(PngImagePlugin.__name__).setLevel(logging.INFO)
         self.basedir = os.path.join(localmodule, 'tests')
         self.tmpdir = os.path.abspath(os.path.join(self.basedir, '..', '.testfiles'))
         if not os.path.exists(self.tmpdir):
@@ -173,6 +178,140 @@ class UpdateTest(unittest.TestCase):
                 self.assertEqual(78, len(app['localized']['en-US']['summary']))
             elif packageName == 'eu.siacs.conversations':
                 self.assertEqual('Conversations', app['localized']['en-US']['name'])
+
+    def test_name_title_scraping(self):
+        """metadata file --> fdroiddata localized files --> fastlane/triple-t in app source --> APK"""
+        config = dict()
+        fdroidserver.common.fill_config_defaults(config)
+        fdroidserver.common.config = config
+        fdroidserver.update.config = config
+        os.chdir(os.path.join(localmodule, 'tests'))
+        fdroidserver.update.options = type('', (), {})()
+        fdroidserver.update.options.clean = True
+        fdroidserver.update.options.delete_unknown = True
+        fdroidserver.update.options.rename_apks = False
+        fdroidserver.update.options.allow_disabled_algorithms = False
+
+        apps = fdroidserver.metadata.read_metadata()
+        knownapks = fdroidserver.common.KnownApks()
+        apks, cachechanged = fdroidserver.update.process_apks({}, 'repo', knownapks, False)
+        fdroidserver.update.insert_localized_app_metadata(apps)
+        fdroidserver.update.apply_info_from_latest_apk(apps, apks)
+        app = apps['info.guardianproject.urzip']
+        self.assertIsNone(app.Name)
+        self.assertTrue('localized' in app)
+        self.assertEqual('title', app['localized']['en-US']['name'])
+        app = apps['org.videolan.vlc']
+        self.assertIsNone(app.Name)
+        self.assertTrue('localized' in app)
+        self.assertFalse('name' in app['localized']['en-US'])
+        app = apps['info.guardianproject.checkey']
+        self.assertEqual('Checkey the app!', app.Name)
+        self.assertTrue('localized' in app)
+        self.assertEqual('Checkey: info on local apps', app['localized']['en-US']['name'])
+        self.assertEqual('Checkey: ローカルアプリの情報', app['localized']['ja-JP']['name'])
+        app = apps['org.adaway']
+        self.assertIsNone(app.Name)
+        self.assertFalse('localized' in app)
+        app = apps['obb.main.twoversions']
+        self.assertIsNone(app.Name)
+        self.assertFalse('localized' in app)
+
+    def test_insert_missing_app_names_from_apks(self):
+        """en-US serves as the final, default, fallback value with index-v1"""
+        testvalue = 'TESTVALUE!'
+        apps = {
+            'none': {},
+            'name': {'Name': testvalue},
+            'onlyapk': {'Name': None},
+            'autoname': {'AutoName': 'autoname', 'Name': None},
+            'onlylocalized': {'localized': {'en-US': {'name': testvalue}}},
+            'non_en_us_localized': {'localized': {'de-AT': {'name': 'leiwand'}}},
+            'apks': {},
+        }
+        apks = [
+            {'packageName': 'none', 'name': '', 'versionCode': 1},
+            {'packageName': 'name', 'name': 'fromapk', 'versionCode': 1},
+            {'packageName': 'onlyapk', 'name': testvalue, 'versionCode': 1},
+            {'packageName': 'autoname', 'name': testvalue, 'versionCode': 1},
+            {'packageName': 'onlylocalized', 'name': 'fromapk', 'versionCode': 1},
+            {'packageName': 'non_en_us_localized', 'name': testvalue, 'versionCode': 0xcafe},
+            {'packageName': 'apks', 'name': 'fromapk1', 'versionCode': 1},
+            {'packageName': 'apks', 'name': 'fromapk2', 'versionCode': 2},
+            {'packageName': 'apks', 'name': testvalue, 'versionCode': 3},
+        ]
+        fdroidserver.update.insert_missing_app_names_from_apks(apps, apks)
+        for appid, app in apps.items():
+            if appid == 'none':
+                self.assertIsNone(app.get('Name'))
+                self.assertIsNone(app.get('localized'))
+            elif appid == 'onlyapk':
+                self.assertIsNone(app.get('Name'))
+                self.assertEqual(testvalue, app['localized']['en-US']['name'])
+            elif appid == 'autoname':
+                self.assertIsNone(app.get('Name'))
+                self.assertEqual(testvalue, app['localized']['en-US']['name'])
+            elif appid == 'onlylocalized':
+                self.assertIsNone(app.get('Name'))
+                self.assertEqual(testvalue, app['localized']['en-US']['name'])
+            elif appid == 'non_en_us_localized':
+                self.assertIsNone(app.get('Name'))
+                self.assertEqual(testvalue, app['localized']['en-US']['name'])
+            elif appid == 'name':
+                self.assertEqual(testvalue, app['Name'])
+                self.assertIsNone(app.get('localized'))
+            elif appid == 'apks':
+                self.assertIsNone(app.get('Name'))
+                self.assertEqual(testvalue, app['localized']['en-US']['name'])
+
+    def test_insert_missing_app_names_from_apks_from_repo(self):
+        config = dict()
+        fdroidserver.common.fill_config_defaults(config)
+        fdroidserver.common.config = config
+        fdroidserver.update.config = config
+        fdroidserver.update.options = type('', (), {})()
+        fdroidserver.update.options.clean = True
+        fdroidserver.update.options.delete_unknown = True
+        fdroidserver.update.options.rename_apks = False
+        fdroidserver.update.options.allow_disabled_algorithms = False
+
+        apps = fdroidserver.metadata.read_metadata()
+        knownapks = fdroidserver.common.KnownApks()
+        apks, cachechanged = fdroidserver.update.process_apks({}, 'repo', knownapks, False)
+
+        appid = 'info.guardianproject.checkey'
+        testapps = {appid: copy.copy(apps[appid])}
+        self.assertEqual('Checkey the app!', testapps[appid]['Name'])
+        del(testapps[appid]['Name'])
+        fdroidserver.update.insert_missing_app_names_from_apks(testapps, apks)
+        self.assertIsNone(testapps[appid].get('Name'))
+
+        repoapps = fdroidserver.update.prepare_apps(apps, apks, 'repo')
+        fdroidserver.update.insert_missing_app_names_from_apks(repoapps, apks)
+        self.assertIsNone(repoapps['com.politedroid']['Name'])
+        self.assertEqual('Polite Droid',
+                         repoapps['com.politedroid']['localized']['en-US']['name'])
+        self.assertEqual('Duplicate Permisssions', repoapps['duplicate.permisssions']['Name'])
+        self.assertEqual('Caffeine Tile', repoapps['info.zwanenburg.caffeinetile']['Name'])
+        self.assertEqual('No minSdkVersion or targetSdkVersion', repoapps['no.min.target.sdk']['Name'])
+        self.assertIsNone(repoapps['obb.main.oldversion'].get('Name'))
+        self.assertEqual('OBB Main Old Version',
+                         repoapps['obb.main.oldversion']['localized']['en-US']['name'])
+        self.assertIsNone(repoapps['obb.main.twoversions'].get('Name'))
+        self.assertEqual('OBB Main Two Versions',
+                         repoapps['obb.main.twoversions']['localized']['en-US']['name'])
+        self.assertIsNone(repoapps['souch.smsbypass'].get('Name'))
+        self.assertEqual('Battery level',
+                         repoapps['souch.smsbypass']['localized']['en-US']['name'])
+        self.assertIsNone(repoapps['info.guardianproject.urzip'].get('Name'))
+        self.assertEqual('title',
+                         repoapps['info.guardianproject.urzip']['localized']['en-US']['name'])
+        self.assertIsNone(repoapps['obb.mainpatch.current'].get('Name'))
+
+        del(repoapps['info.guardianproject.urzip']['localized'])
+        fdroidserver.update.insert_missing_app_names_from_apks(repoapps, apks)
+        self.assertEqual('urzip-πÇÇπÇÇ现代汉语通用字-български-عربي1234',
+                         repoapps['info.guardianproject.urzip']['localized']['en-US']['name'])
 
     def test_insert_triple_t_metadata(self):
         importer = os.path.join(self.basedir, 'tmp', 'importer')

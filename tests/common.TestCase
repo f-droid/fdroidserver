@@ -1612,6 +1612,21 @@ class CommonTest(unittest.TestCase):
         self.assertEqual([dirtyfile, 'repo/status/running.json'],
                          data['fdroiddata']['untrackedFiles'])
 
+    def test_get_app_display_name(self):
+        testvalue = 'WIN!'
+        for app in [
+                {'Name': testvalue},
+                {'AutoName': testvalue},
+                {'id': testvalue},
+                {'id': 'a', 'localized': {'de-AT': {'name': testvalue}}},
+                {'id': 'a', 'localized': {
+                    'de-AT': {'name': 'nope'},
+                    'en-US': {'name': testvalue},
+                }},
+                {'AutoName': 'ignore me', 'Name': testvalue, 'id': 'nope'},
+                {'AutoName': testvalue, 'id': 'nope'}]:
+            self.assertEqual(testvalue, fdroidserver.common.get_app_display_name(app))
+
 
 if __name__ == "__main__":
     os.chdir(os.path.dirname(__file__))
