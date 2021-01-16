@@ -130,6 +130,8 @@ ubuntu_xenial_pip:
     - $pip install --upgrade pip setuptools
     - $pip install dist/fdroidserver-*.tar.gz
     - test -e /usr/share/locale/de/LC_MESSAGES/fdroidserver.mo
+    - tar xzf dist/fdroidserver-*.tar.gz
+    - cd fdroidserver-*
     - ./tests/run-tests
 
 # test install process on a bleeding edge distro with pip
