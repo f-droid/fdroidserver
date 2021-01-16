@@ -4,22 +4,22 @@
 # Fynn Godau <fynngodau@mailbox.org>, 2020.
 # melusine <melusine@mailbox.org>, 2020.
 # marzzzello <anmeldezeugs@top-email.net>, 2020.
-# Hans-Christoph Steiner <hans@guardianproject.info>, 2020.
+# Hans-Christoph Steiner <hans@guardianproject.info>, 2020, 2021.
 # Predatorix Phoenix <predatorix@web.de>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2021-01-14 14:55+0100\n"
-"PO-Revision-Date: 2021-01-10 02:32+0000\n"
-"Last-Translator: Predatorix Phoenix <predatorix@web.de>\n"
+"POT-Creation-Date: 2020-10-21 18:05+0200\n"
+"PO-Revision-Date: 2021-01-14 14:58+0000\n"
+"Last-Translator: Hans-Christoph Steiner <hans@guardianproject.info>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/f-droid/fdroidserver/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.4.1-dev\n"
+"X-Generator: Weblate 4.5-dev\n"
 
 #: ../fdroidserver/common.py
 msgid ""
@@ -310,9 +310,8 @@ msgid "Android APK file"
 msgstr "Android APK-Datei"
 
 #: ../fdroidserver/scanner.py
-#, fuzzy
 msgid "Android DEX code"
-msgstr "Keine Android SDK gefunden!"
+msgstr ""
 
 #: ../fdroidserver/common.py ../fdroidserver/build.py
 #, python-brace-format
@@ -437,9 +436,9 @@ msgid "Cannot resolve application ID {appid}"
 msgstr "AppID {appid} konnte nicht aufgelöst werden"
 
 #: ../fdroidserver/rewritemeta.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Cannot rewrite \"{path}\""
-msgstr "„{path}” konnte nicht gelesen werden!"
+msgstr ""
 
 #: ../fdroidserver/rewritemeta.py
 msgid "Cannot use --list and --to at the same time"
@@ -2213,9 +2212,9 @@ msgid "can't open '%s': %s"
 msgstr "„%s” konnte nicht geöffnet werden: %s"
 
 #: ../fdroidserver/build.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "cannot find required srclibs: \"{path}\""
-msgstr "AppID für {path} konnte nicht gefunden werden!"
+msgstr ""
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py

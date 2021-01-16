@@ -3,22 +3,22 @@
 # This file is distributed under the same license as the PACKAGE package.
 # Maximiliano Castañón <maximi89@gmail.com>, 2020.
 # Jo <joaquinfc@protonmail.com>, 2020.
-# Hans-Christoph Steiner <hans@guardianproject.info>, 2020.
+# Hans-Christoph Steiner <hans@guardianproject.info>, 2020, 2021.
 # Alvaro <alvaro@null.net>, 2020.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2021-01-14 14:55+0100\n"
-"PO-Revision-Date: 2020-11-20 23:28+0000\n"
-"Last-Translator: Alvaro <alvaro@null.net>\n"
+"POT-Creation-Date: 2020-10-21 18:05+0200\n"
+"PO-Revision-Date: 2021-01-14 14:58+0000\n"
+"Last-Translator: Hans-Christoph Steiner <hans@guardianproject.info>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/f-droid/fdroidserver/es/>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.4-dev\n"
+"X-Generator: Weblate 4.5-dev\n"
 
 #: ../fdroidserver/common.py
 #, fuzzy
@@ -224,7 +224,7 @@ msgstr "'{apkfilename}' ya está instalado en {dev}."
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "'{field}' in {linedesc} is obsolete, see docs for current fields:"
-msgstr ""
+msgstr "'{field}' en {linedesc} está obsoleto, vea la documentación para los campos actualizados:"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -309,9 +309,8 @@ msgid "Android APK file"
 msgstr "Fichero APK de Android"
 
 #: ../fdroidserver/scanner.py
-#, fuzzy
 msgid "Android DEX code"
-msgstr "¡No se encontró Android SDK!"
+msgstr ""
 
 #: ../fdroidserver/common.py ../fdroidserver/build.py
 #, python-brace-format
@@ -402,7 +401,7 @@ msgstr "Build generada por `fdroid import` - Eliminar \"disable line\" cuando es
 
 #: ../fdroidserver/checkupdates.py
 msgid "Build metadata git repo has uncommited changes!"
-msgstr ""
+msgstr "¡El repositorio git de la compilación de metadatos tiene cambios pendientes!"
 
 #: ../fdroidserver/build.py
 msgid "Build only the latest version of each package"
@@ -436,9 +435,9 @@ msgid "Cannot resolve application ID {appid}"
 msgstr "No se puede resolver el identificador de aplicación {appid}"
 
 #: ../fdroidserver/rewritemeta.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Cannot rewrite \"{path}\""
-msgstr "¡No se puede leer \"{path}\"!"
+msgstr ""
 
 #: ../fdroidserver/rewritemeta.py
 msgid "Cannot use --list and --to at the same time"
@@ -610,7 +609,7 @@ msgstr "Creando índice no firmado, en preparación de la firma"
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "CurrentVersionCode {cv} is less than oldest build entry {versionCode}"
-msgstr ""
+msgstr "CurrentVersionCode {cv} es menor que la compilación más antigua registrada {versionCode}"
 
 #: ../fdroidserver/nightly.py
 msgid "DEBUG_KEYSTORE is not set or the value is incomplete"
@@ -660,7 +659,7 @@ msgstr ""
 
 #: ../fdroidserver/nightly.py
 msgid "Do not deploy the new files to the repo"
-msgstr ""
+msgstr "No desplegar los ficheros nuevos en el repositorio"
 
 #: ../fdroidserver/mirror.py
 #, python-brace-format
@@ -712,7 +711,7 @@ msgstr "La descarga de {url} falló. {error}"
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Duplicate build recipe found for versionCode {versionCode} in {linedesc}"
-msgstr ""
+msgstr "Receta de compilación duplicada para versionCode {versionCode} en {linedesc}"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
@@ -804,7 +803,7 @@ msgstr "Fallo al alinear aplicación"
 #: ../fdroidserver/deploy.py ../fdroidserver/upload.py
 #, python-brace-format
 msgid "Failed to create S3 bucket: {url}"
-msgstr ""
+msgstr "Fallo al crear bucket S3 : {url}"
 
 #: ../fdroidserver/common.py
 msgid "Failed to get APK manifest information"
@@ -836,12 +835,12 @@ msgstr "Fallo al aplicar zipalign para alinear aplicación"
 #: ../fdroidserver/build.py
 #, python-brace-format
 msgid "Fetched buildserverid from VM: {buildserverid}"
-msgstr ""
+msgstr "Buildserverid obtenido de la VM: {buildserverid}"
 
 #: ../fdroidserver/signatures.py
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Fetched signatures for '{apkfilename}' -> '{sigdir}'"
-msgstr ""
+msgstr "Firmas obtenidas para '{apkfilename}'-> '{sigdir}'"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -857,7 +856,7 @@ msgstr "Terminado"
 
 #: ../fdroidserver/lint.py
 msgid "Flattr donation methods belong in the FlattrID flag"
-msgstr ""
+msgstr "Los métodos de donación de Flattr deben ir en el flag FlattrID"
 
 #: ../fdroidserver/lint.py
 #, fuzzy
@@ -1128,9 +1127,9 @@ msgid "Invalid redirect to non-HTTPS: {before} -> {after} "
 msgstr "Redirección no válida a no HTTPS: {before} -> {after} "
 
 #: ../fdroidserver/metadata.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Invalid scrlib metadata: '{file}' does not exist"
-msgstr "Leer todos los archivos de metadatos y salir"
+msgstr ""
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
@@ -1736,9 +1735,9 @@ msgid "Striping mystery signature from {apkfilename}"
 msgstr ""
 
 #: ../fdroidserver/nightly.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Stripping mystery signature from {apkfilename}"
-msgstr "Fallo al obtener firmas para '{apkfilename}': {error}"
+msgstr ""
 
 #: ../fdroidserver/lint.py
 #, python-format
@@ -1767,7 +1766,7 @@ msgstr ""
 
 #: ../fdroidserver/btlog.py
 msgid "The base URL for the repo to log (default: https://f-droid.org)"
-msgstr "El URL base para  el registro del repositorio  (por defecto: https://f-droid.org)"
+msgstr "El URL base para el registro del repositorio (por defecto: https://f-droid.org)"
 
 #: ../fdroidserver/mirror.py
 msgid "The directory to write the mirror to"
@@ -2206,9 +2205,9 @@ msgid "can't open '%s': %s"
 msgstr "no se puede abrir '%s': %s"
 
 #: ../fdroidserver/build.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "cannot find required srclibs: \"{path}\""
-msgstr "¡No se puede encontrar un appid para {path}!"
+msgstr ""
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py

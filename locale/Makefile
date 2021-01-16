@@ -5,7 +5,7 @@ FILES = ../fdroid $(wildcard ../fdroidserver/*.py) \
 	$(wildcard /usr/lib/python3.*/getopt.py)
 
 # these are the supported languages
-ALL_LINGUAS = bo de es fr hu it ko nb_NO pl pt_BR pt_PT ru tr uk zh_Hans zh_Hant
+ALL_LINGUAS = $(shell sed -En 's,include locale/([^/]+)/.*,\1,p' ../MANIFEST.in)
 POFILES = $(wildcard */LC_MESSAGES/fdroidserver.po)
 MOFILES = $(ALL_LINGUAS:=/LC_MESSAGES/fdroidserver.mo)
 
