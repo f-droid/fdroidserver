@@ -1,12 +1,12 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR Free Software Foundation, Inc.
-# Hans-Christoph Steiner <hans@guardianproject.info>, 2020.
+# Hans-Christoph Steiner <hans@guardianproject.info>, 2020, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2021-01-14 14:55+0100\n"
-"PO-Revision-Date: 2020-11-10 16:20+0000\n"
+"POT-Creation-Date: 2020-10-21 18:05+0200\n"
+"PO-Revision-Date: 2021-01-14 14:58+0000\n"
 "Last-Translator: Hans-Christoph Steiner <hans@guardianproject.info>\n"
 "Language-Team: Tibetan <https://hosted.weblate.org/projects/f-droid/fdroidserver/bo/>\n"
 "Language: bo\n"
@@ -14,7 +14,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.4-dev\n"
+"X-Generator: Weblate 4.5-dev\n"
 
 #: ../fdroidserver/common.py
 msgid ""
@@ -113,7 +113,7 @@ msgstr "%(prog)s: ནོར་སྐྱོན: %(message)s\n"
 #: ../fdroidserver/scanner.py
 #, python-format
 msgid "%d problems found"
-msgstr "%d  དཀའ་རྙོག་ཐོན་སོང་།"
+msgstr "%d དཀའ་རྙོག་ཐོན་སོང་།"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 #: /usr/lib/python3.7/optparse.py
@@ -237,7 +237,7 @@ msgstr "...{appid} གྱི་ཆེད་དུ་གསར་བསྒྱུ�
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py
 msgid ".__call__() not defined"
-msgstr ".__call__()  ངོས་འཛིན་ཐུབ་མེད།"
+msgstr ".__call__() ངོས་འཛིན་ཐུབ་མེད།"
 
 #: ../fdroidserver/metadata.py
 msgid ".fdroid.txt is not supported!  Convert to .fdroid.yml or .fdroid.json."
@@ -250,7 +250,7 @@ msgstr "/གནས་དོན་བོར་བརླག་སོང་འད�
 #: ../fdroidserver/mirror.py
 #, fuzzy
 msgid "A URL is required as an argument!"
-msgstr "གདམ་ཀ།  -%s 1 རྩོད་དགོས།"
+msgstr "གདམ་ཀ། -%s 1 རྩོད་དགོས།"
 
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Add PGP signatures using GnuPG for packages in repo"
@@ -370,7 +370,7 @@ msgstr "ཡན་ལག '{branch}1' བཟོ་སྐྲུན་ནང་བ�
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "Branch '{branch}' used as commit in srclib '{srclib}'"
-msgstr "ཡན་ལག '{branch}1''  srclib ནང་བེད་སྤྱོད་བྱེད་རྒྱུ་ཁས་ལེན་ཡོད་།'{srclib}'"
+msgstr "ཡན་ལག '{branch}1'' srclib ནང་བེད་སྤྱོད་བྱེད་རྒྱུ་ཁས་ལེན་ཡོད་།'{srclib}'"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -626,7 +626,7 @@ msgstr "ངོས་འཛིན་མི་ཐུབ་པའི་ཡིག་
 #: ../fdroidserver/lint.py
 #, python-format
 msgid "Description '%s' is just the app's summary"
-msgstr "འགྲེལ་བཤད་'%s 1'  ནི་མཉེན་ཆས་མདོར་བསྡུས་ཤིག་རེད།"
+msgstr "འགྲེལ་བཤད་'%s 1' ནི་མཉེན་ཆས་མདོར་བསྡུས་ཤིག་རེད།"
 
 #: ../fdroidserver/lint.py
 msgid "Description has a duplicate line"
@@ -635,12 +635,12 @@ msgstr "འགྲེལ་བཤད་འདི་ལ་རིམ་པ་རྫ
 #: ../fdroidserver/lint.py
 #, python-format
 msgid "Description has a list (%s) but it isn't bulleted (*) nor numbered (#)"
-msgstr "འགྲེལ་བཤད་འདི་ལ་ཐོ་གཞུང་ཡོད། (%s 1)  འོན་ཀྱང་འདི་ལ་ཚགས་རྒྱབ་མིན་འདུག(*)གྲངས་ཀྱང་མེད། (#)"
+msgstr "འགྲེལ་བཤད་འདི་ལ་ཐོ་གཞུང་ཡོད། (%s 1) འོན་ཀྱང་འདི་ལ་ཚགས་རྒྱབ་མིན་འདུག(*)གྲངས་ཀྱང་མེད། (#)"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "Description of length {length} is over the {limit} char limit"
-msgstr "རིང་ཐུང་གི་འགྲེལ་བཤད་ {length}  {limit} ལས་བརྒལ་འདུག char limit"
+msgstr "རིང་ཐུང་གི་འགྲེལ་བཤད་ {length} {limit} ལས་བརྒལ་འདུག char limit"
 
 #: ../fdroidserver/import.py
 msgid "Do not add 'disable:' to the generated build entries"
@@ -1088,7 +1088,7 @@ msgstr "ཁུངས་ལྡན་མིན་པའི་ཆོག་མཆན
 
 #: ../fdroidserver/lint.py
 msgid "Invalid link - use [http://foo.bar Link title] or [http://foo.bar]"
-msgstr "ཁུངས་ལྡན་མིན་པའི་སྦྲེལ་མཐུད།  - [http://foo.bar Link title] or [http://foo.bar]བེད་སྤྱོད་བྱེད།"
+msgstr "ཁུངས་ལྡན་མིན་པའི་སྦྲེལ་མཐུད། - [http://foo.bar Link title] or [http://foo.bar]བེད་སྤྱོད་བྱེད།"
 
 #: ../fdroidserver/metadata.py
 #, python-format
@@ -1215,7 +1215,7 @@ msgstr "ཕྱོགས་དེབ་ཐོན་སྐྱེད་བོར་
 #: ../fdroidserver/lint.py
 #, python-format
 msgid "Name '%s' is just the auto name - remove it"
-msgstr "མིང་། '%s 1'  ནི་རང་མིང་ཁོ་ན་རེད་། - མེད་པ་བཟོས།"
+msgstr "མིང་། '%s 1' ནི་རང་མིང་ཁོ་ན་རེད་། - མེད་པ་བཟོས།"
 
 #: ../fdroidserver/common.py
 msgid "No 'config.py' found, using defaults."
@@ -1299,7 +1299,7 @@ msgstr "ཐུམ་སྒྲིལ་དེ་འདྲ་མིན་འདུ
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "No such versionCode {versionCode} for app {appid}"
-msgstr "ཐོན་རིམ་ཨང་རྟགས་དེ་འདྲ་མིན་འདུག {versionCode}  མཉེན་ཆས་ཆེད་དུ།{appid}"
+msgstr "ཐོན་རིམ་ཨང་རྟགས་དེ་འདྲ་མིན་འདུག {versionCode} མཉེན་ཆས་ཆེད་དུ།{appid}"
 
 #: ../fdroidserver/verify.py ../fdroidserver/publish.py
 msgid "No unsigned directory - nothing to do"
@@ -1319,9 +1319,8 @@ msgid "Nothing to do for {appid}."
 msgstr "{appid} ཆེད་དུ་བྱ་རྒྱུ་གང་ཡང་མེད་།."
 
 #: ../fdroidserver/init.py
-#, fuzzy
 msgid "Now set these in config.py:"
-msgstr "'sdk_path' འདི་ 'config.py' ནང་སྒྲིག་ཐུབ་མ་སོང་།!"
+msgstr ""
 
 #: ../fdroidserver/init.py
 #, fuzzy
@@ -1736,7 +1735,7 @@ msgstr "སྙིང་བསྔུས་ '%s 1' ནི་མཉེན་ཆས�
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "Summary of length {length} is over the {limit} char limit"
-msgstr "སྙིང་བསྔུས་ཀྱི་རིང་ཐུང་། {length}  charཚད་{limit} ལས་བརྒལ་འདུག"
+msgstr "སྙིང་བསྔུས་ཀྱི་རིང་ཐུང་། {length} charཚད་{limit} ལས་བརྒལ་འདུག"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -2133,7 +2132,7 @@ msgstr "{name}ལ་ཁ་སྣོན་བྱེད།: {path}"
 #: /usr/lib/python3.7/argparse.py
 #, python-format
 msgid "ambiguous option: %(option)s could match %(matches)s"
-msgstr "གསལ་ཁ་མེད་པའི་གདམ་ཀ: %(option)s  མཐུན་མི་སོང་།%(matches)s"
+msgstr "གསལ་ཁ་མེད་པའི་གདམ་ཀ: %(option)s མཐུན་མི་སོང་།%(matches)s"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 #: /usr/lib/python3.7/optparse.py
@@ -2375,7 +2374,7 @@ msgstr "ཁུངས་ལྡན་མིན་པ་ %(type)s value: %(value)r"
 #: /usr/lib/python3.7/argparse.py
 #, python-format
 msgid "invalid choice: %(value)r (choose from %(choices)s)"
-msgstr "ཁུངས་ལྡན་མིན་པའི་གདམ་ཀ: %(value)r  (དེ་ནས་གདམ་ཀ་%(choices)s)"
+msgstr "ཁུངས་ལྡན་མིན་པའི་གདམ་ཀ: %(value)r (དེ་ནས་གདམ་ཀ་%(choices)s)"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py
@@ -2392,7 +2391,7 @@ msgstr "ཁུངས་ལྡན་མིན་པའི་ཚིག་སྒྲ
 #: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "local_copy_dir does not end with \"fdroid\", perhaps you meant: \"{path}\""
-msgstr "local_copy_dir  \"fdroid\"གིས་མཇུག་སྐྱོང་མིན་འདུག་ : \"{path}1\""
+msgstr "local_copy_dir \"fdroid\"གིས་མཇུག་སྐྱོང་མིན་འདུག་ : \"{path}1\""
 
 #: ../fdroidserver/deploy.py
 msgid "local_copy_dir must be an absolute path!"
@@ -2405,7 +2404,7 @@ msgstr "local_copy_dir ངེས་པར་ཕྱོགས་དེབ་ཡི
 #: ../fdroidserver/index.py
 #, python-format
 msgid "mirror '%s' does not end with 'fdroid'!"
-msgstr "མེ་ལོང་། '%s 1'  'fdroid'དང་མཉམ་དུ་མཇུག་སྐྱོང་མི་ཐུབ།!"
+msgstr "མེ་ལོང་། '%s 1' 'fdroid'དང་མཉམ་དུ་མཇུག་སྐྱོང་མི་ཐུབ།!"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py
@@ -2456,7 +2455,7 @@ msgstr "གདམ་ཀ %s 1: གལ་ཏེ་ཁྱེད་ཀྱིས་�
 #: /usr/lib/python3.7/optparse.py
 #, python-format
 msgid "option %s: invalid %s value: %r"
-msgstr "གདམ་ཀ %s 1: ཁུངས་ལྡན་མིན་པ་ %s 2  རིན་ཐང་།: %r 3"
+msgstr "གདམ་ཀ %s 1: ཁུངས་ལྡན་མིན་པ་ %s 2 རིན་ཐང་།: %r 3"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 #: /usr/lib/python3.7/optparse.py
@@ -2474,7 +2473,7 @@ msgstr "གདམ་ཀ། '%s 1'ངོས་འཛིན་ཐུབ་མ་�
 #: /usr/lib/python3.7/getopt.py
 #, python-format
 msgid "option -%s requires argument"
-msgstr "གདམ་ཀ།  -%s 1 རྩོད་དགོས།"
+msgstr "གདམ་ཀ། -%s 1 རྩོད་དགོས།"
 
 #: /usr/lib/python3.5/getopt.py /usr/lib/python3.6/getopt.py
 #: /usr/lib/python3.7/getopt.py
@@ -2528,7 +2527,7 @@ msgstr "བདེ་ཆགས་མེད་པའི་HTTPMམཐུད་ཀ�
 #: ../fdroidserver/signatures.py
 #, python-brace-format
 msgid "refuse downloading via insecure http connection (use https or specify --no-https-check): {apkfilename}"
-msgstr "བེད་ཆགས་མེད་པའི་དྲྭ་རྒྱའི་ཁ་བྱང་http ནས་ཕབ་ལེན་བཀག།  (use https or specify --no-https-check): {apkfilename}"
+msgstr "བེད་ཆགས་མེད་པའི་དྲྭ་རྒྱའི་ཁ་བྱང་http ནས་ཕབ་ལེན་བཀག། (use https or specify --no-https-check): {apkfilename}"
 
 #: ../fdroidserver/index.py
 #, python-format
@@ -2561,7 +2560,7 @@ msgstr "རོགས་པ་བྱེད་པའི་འཕྲིན་ཐུ
 
 #: ../fdroidserver/signatures.py
 msgid "signed APK, either a file-path or HTTPS URL."
-msgstr "APK མིང་རྟགས་, ཡིག་ཆའི་འགྲོ་ལམ་མམ་ཡང་ན།  HTTPS URL."
+msgstr "APK མིང་རྟགས་, ཡིག་ཆའི་འགྲོ་ལམ་མམ་ཡང་ན། HTTPS URL."
 
 #: ../fdroidserver/common.py
 msgid "skip deploying full build logs: log content is empty"
@@ -2644,7 +2643,7 @@ msgstr ""
 #, python-brace-format
 msgid "{0} app, {1} key aliases"
 msgid_plural "{0} apps, {1} key aliases"
-msgstr[0] "{0}  མཉེས་ཆས་, {1} key aliases"
+msgstr[0] "{0} མཉེས་ཆས་, {1} key aliases"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -2695,7 +2694,7 @@ msgstr ""
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "{appid}: Unknown extlib {path} in build '{versionName}'"
-msgstr "{appid}1: ངོས་འཛིན་མི་ཐུབ་པའི་ extlib {path}2  བཟོ་སྐྲུན་ནང་ལ '{versionName}3'"
+msgstr "{appid}1: ངོས་འཛིན་མི་ཐུབ་པའི་ extlib {path}2 བཟོ་སྐྲུན་ནང་ལ '{versionName}3'"
 
 #: ../fdroidserver/scanner.py
 #, python-brace-format

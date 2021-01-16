@@ -1,14 +1,14 @@
 # SOME DESCRIPTIVE TITLE.
 # This file is put in the public domain.
 # Besnik Bleta <besnik@programeshqip.org>, 2020, 2021.
-# Hans-Christoph Steiner <hans@guardianproject.info>, 2020.
+# Hans-Christoph Steiner <hans@guardianproject.info>, 2020, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 1.0.6-349-g907c04ea\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2020-10-21 18:05+0200\n"
 "PO-Revision-Date: 2021-01-14 14:58+0000\n"
-"Last-Translator: Besnik Bleta <besnik@programeshqip.org>\n"
+"Last-Translator: Hans-Christoph Steiner <hans@guardianproject.info>\n"
 "Language-Team: Albanian <https://hosted.weblate.org/projects/f-droid/fdroidserver/sq/>\n"
 "Language: sq\n"
 "MIME-Version: 1.0\n"
@@ -1725,7 +1725,7 @@ msgstr "Po hiqet nënshkrim misterioz nga {apkfilename}"
 #: ../fdroidserver/nightly.py
 #, python-brace-format
 msgid "Stripping mystery signature from {apkfilename}"
-msgstr "Stripping mystery signature from {apkfilename}"
+msgstr ""
 
 #: ../fdroidserver/lint.py
 #, python-format

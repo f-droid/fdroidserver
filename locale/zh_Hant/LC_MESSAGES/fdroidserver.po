@@ -1,14 +1,14 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR Free Software Foundation, Inc.
 # Jeff Huang <s8321414@gmail.com>, 2020.
-# Hans-Christoph Steiner <hans@guardianproject.info>, 2020.
+# Hans-Christoph Steiner <hans@guardianproject.info>, 2020, 2021.
 # NightFeather <ss900328@gmail.com>, 2020.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2021-01-14 14:55+0100\n"
-"PO-Revision-Date: 2020-11-10 16:20+0000\n"
+"POT-Creation-Date: 2020-10-21 18:05+0200\n"
+"PO-Revision-Date: 2021-01-14 14:58+0000\n"
 "Last-Translator: Hans-Christoph Steiner <hans@guardianproject.info>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/f-droid/fdroidserver/zh_Hant/>\n"
 "Language: zh_Hant\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.4-dev\n"
+"X-Generator: Weblate 4.5-dev\n"
 
 #: ../fdroidserver/common.py
 msgid ""
@@ -299,9 +299,8 @@ msgid "Android APK file"
 msgstr ""
 
 #: ../fdroidserver/scanner.py
-#, fuzzy
 msgid "Android DEX code"
-msgstr "未找到 Android SDK！"
+msgstr ""
 
 #: ../fdroidserver/common.py ../fdroidserver/build.py
 #, python-brace-format
@@ -425,9 +424,9 @@ msgid "Cannot resolve application ID {appid}"
 msgstr "無法解析 {appid} id"
 
 #: ../fdroidserver/rewritemeta.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Cannot rewrite \"{path}\""
-msgstr "無法讀取 \"{path}\"！"
+msgstr ""
 
 #: ../fdroidserver/rewritemeta.py
 msgid "Cannot use --list and --to at the same time"
@@ -2199,9 +2198,9 @@ msgid "can't open '%s': %s"
 msgstr "無法打開 '%s'：%s"
 
 #: ../fdroidserver/build.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "cannot find required srclibs: \"{path}\""
-msgstr "找不到 {path} 的 appid！"
+msgstr ""
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py
