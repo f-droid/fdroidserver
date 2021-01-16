@@ -6,6 +6,7 @@ import json
 import os
 import re
 import requests
+import subprocess
 import sys
 
 
@@ -51,4 +52,4 @@ with open(manifest_file, 'a') as fp:
         if line:
             fp.write(line)
 
-os.system('sort -u -o %s %s' % (manifest_file, manifest_file))
+subprocess.run(['sort', '-u', '-o', manifest_file, manifest_file])
