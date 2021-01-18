@@ -129,7 +129,47 @@ def make(apps, apks, repodir, archive):
             fdroid_signing_key_fingerprints)
     make_v1(sortedapps, apks, repodir, repodict, requestsdict,
             fdroid_signing_key_fingerprints)
+    make_website(sortedapps, repodir, repodict)
 
+def make_website(apps, repodir, repodict):
+    website_dir = os.path.join(repodir, "www")
+    if not os.path.exists(website_dir):
+        os.makedirs(website_dir)
+    html_name = 'index.html'
+
+    html_file = os.path.join(website_dir, html_name)
+    with open(html_file, 'w') as f:
+        name = repodict["name"]
+        description = repodict["description"]
+        f.write("""<!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01 Transitional//EN'>
+<HTML><HEAD>
+  <META HTTP-EQUIV='Content-Type' CONTENT='text/html; charset=UTF-8'/>
+  <META NAME="viewport" CONTENT="width=device-width; initial-scale=1.0; minimum-scale=0.5; maximum-scale=2.0; user-scalable=1;" />
+  <TITLE>{name}</TITLE>
+  <BASE HREF='/fdroid/index.html'/>
+  <!--<LINK REL='stylesheet' TYPE='text/css' HREF='templates/main.css' />-->
+  <LINK REL='icon' HREF='icons/fdroid-icon.png' TYPE='image/png' />
+  <LINK REL='shortcut icon' HREF='icons/fdroid-icon.png' TYPE='image/png' />
+  <META property="og:site_name" content="{name}" />
+  <META property="og:title" content="{name}" />
+  <META property="og:determiner" content="" />
+  <META property="og:description" content="{description}" />
+  <META NAME='robots' CONTENT='index,nofollow'/>
+</HEAD><BODY>
+<h2>{name}</h2>
+<div id='intro'>
+<p style='margin-bottom:.2em;'><span style='float:right;width:50px;margin-left:.5em;'>
+<a href='images/fdroid_repo_qr.png' title='QR: {name}'><img src='images/fdroid_repo_qr.png' alt='QR: {name}' width='50'></a>
+</span>
+{description}<br/>
+{details}</p>
+<code style="color:#000000;font-weight:bold;">{link}</code>
+</div>
+</BODY>""".format(name=name,
+description=description,
+details="Currently it serves {} apps. To add it to your F-Droid client, scan the QR code (click it to enlarge) or use this URL:".format(len(apps)),
+link=repodict["address"]
+))
 
 def make_v1(apps, packages, repodir, repodict, requestsdict, fdroid_signing_key_fingerprints):
 
@@ -229,41 +269,6 @@ def make_v1(apps, packages, repodir, repodict, requestsdict, fdroid_signing_key_
             json.dump(output, fp, default=_index_encoder_default, indent=2)
         else:
             json.dump(output, fp, default=_index_encoder_default)
-
-    html_name = 'index.html'
-    html_file = os.path.join(repodir, html_name)
-    with open(html_file, 'w') as f:
-        name = repodict["name"]
-        description = repodict["description"]
-        f.write("""<!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01 Transitional//EN'>
-<HTML><HEAD>
-  <META HTTP-EQUIV='Content-Type' CONTENT='text/html; charset=UTF-8'/>
-  <META NAME="viewport" CONTENT="width=device-width; initial-scale=1.0; minimum-scale=0.5; maximum-scale=2.0; user-scalable=1;" />
-  <TITLE>{name}</TITLE>
-  <BASE HREF='/fdroid/index.html'/>
-  <!--<LINK REL='stylesheet' TYPE='text/css' HREF='templates/main.css' />-->
-  <LINK REL='icon' HREF='icons/fdroid-icon.png' TYPE='image/png' />
-  <LINK REL='shortcut icon' HREF='icons/fdroid-icon.png' TYPE='image/png' />
-  <META property="og:site_name" content="{name}" />
-  <META property="og:title" content="{name}" />
-  <META property="og:determiner" content="" />
-  <META property="og:description" content="{description}" />
-  <META NAME='robots' CONTENT='index,nofollow'/>
-</HEAD><BODY>
-<h2>{name}</h2>
-<div id='intro'>
-<p style='margin-bottom:.2em;'><span style='float:right;width:50px;margin-left:.5em;'>
-<a href='images/fdroid_repo_qr.png' title='QR: {name}'><img src='images/fdroid_repo_qr.png' alt='QR: {name}' width='50'></a>
-</span>
-{description}<br/>
-{details}</p>
-<code style="color:#000000;font-weight:bold;">{link}</code>
-</div>
-</BODY>""".format(name=name,
-description=description,
-details="Currently it serves {} apps. To add it to your F-Droid client, scan the QR code (click it to enlarge) or use this URL:".format(len(output['apps'])),
-link=repodict["address"]
-))
 
     if common.options.nosign:
         logging.debug(_('index-v1 must have a signature, use `fdroid signindex` to create it!'))
