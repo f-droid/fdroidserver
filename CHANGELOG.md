@@ -69,6 +69,7 @@ milestone](https://gitlab.com/fdroid/fdroidserver/-/milestones/10)
   ([!692](https://gitlab.com/fdroid/fdroidserver/-/merge_requests/692))
 * Major refactoring on core parts of code to be more Pythonic
   ([!756](https://gitlab.com/fdroid/fdroidserver/-/merge_requests/756))
+* `fdroid init` now works when installed with pip
 
 ### Removed
 * Removed all support for _.txt_ and _.json_ metadata

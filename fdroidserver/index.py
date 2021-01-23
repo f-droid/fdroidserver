@@ -76,9 +76,10 @@ def make(apps, apks, repodir, archive):
     if archive:
         repodict['name'] = common.config['archive_name']
         repodict['icon'] = common.config.get('archive_icon', common.default_config['repo_icon'])
-        repodict['address'] = common.config['archive_url']
         repodict['description'] = common.config['archive_description']
-        urlbasepath = os.path.basename(urllib.parse.urlparse(common.config['archive_url']).path)
+        archive_url = common.config.get('archive_url', common.config['repo_url'][:-4] + 'archive')
+        repodict['address'] = archive_url
+        urlbasepath = os.path.basename(urllib.parse.urlparse(archive_url).path)
     else:
         repodict['name'] = common.config['repo_name']
         repodict['icon'] = common.config.get('repo_icon', common.default_config['repo_icon'])
