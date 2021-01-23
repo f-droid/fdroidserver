@@ -830,8 +830,17 @@ class UpdateTest(unittest.TestCase):
             #     yaml.add_representer(fdroidserver.metadata.Build, _build_yaml_representer)
             #     yaml.dump(apk, f, default_flow_style=False)
 
+            # CFullLoader doesn't always work
+            # https://github.com/yaml/pyyaml/issues/266#issuecomment-559116876
+            TestLoader = FullLoader
+            try:
+                testyaml = '- !!python/object/new:fdroidserver.update.UsesPermission\n  - test\n  - null'
+                from_yaml = yaml.load(testyaml, Loader=TestLoader)
+            except yaml.constructor.ConstructorError:
+                from yaml import UnsafeLoader as TestLoader
+
             with open(savepath, 'r') as f:
-                from_yaml = yaml.load(f, Loader=FullLoader)
+                from_yaml = yaml.load(f, Loader=TestLoader)
             self.maxDiff = None
             self.assertEqual(apk, from_yaml)
 

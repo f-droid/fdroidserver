@@ -129,7 +129,7 @@ ubuntu_bionic_pip:
     - $pip install dist/fdroidserver-*.tar.gz
     - tar xzf dist/fdroidserver-*.tar.gz
     - cd fdroidserver-*
-    - ./tests/run-tests
+    - fdroid=`which fdroid` ./tests/run-tests
 
 # test install process on a bleeding edge distro with pip
 arch_pip_install:
