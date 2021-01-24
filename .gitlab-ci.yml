@@ -231,11 +231,12 @@ gradle:
     LANG: C.UTF-8
   script:
     - apk add --no-cache ca-certificates git python3
-    # if this is a merge request fork, then only check if makebuildserver changed
+    # if this is a merge request fork, then only check if makebuildserver or gradlew-fdroid changed
     - if [ "$CI_PROJECT_NAMESPACE" != "fdroid" ]; then
         git fetch https://gitlab.com/fdroid/fdroidserver.git;
         for f in `git diff --name-only --diff-filter=d FETCH_HEAD...HEAD`; do
            test "$f" == "makebuildserver" && export CHANGED="yes";
+           test "$f" == "gradlew-fdroid" && export CHANGED="yes";
         done;
         test -z "$CHANGED" && exit;
       fi
