@@ -3,9 +3,9 @@
     "timestamp": 1502845383782,
     "version": 20000,
     "name": "My First F-Droid Repo Demo",
-    "icon": "fdroid-icon.png",
+    "icon": "icon.png",
     "address": "https://MyFirstFDroidRepo.org/fdroid/repo",
-    "description": "This is a repository of apps to be used with F-Droid. Applications in this repository are either official binaries built by the original application developers, or are binaries built from source by the admin of f-droid.org using the tools on https://gitlab.com/u/fdroid.",
+    "description": "This is a repository of apps to be used with F-Droid. Applications in this repository are either official binaries built by the original application developers, or are binaries built from source by the admin of f-droid.org using the tools on https://gitlab.com/fdroid.",
     "mirrors": [
       "http://foobarfoobarfoobar.onion/fdroid/repo",
       "https://foo.bar/fdroid/repo"

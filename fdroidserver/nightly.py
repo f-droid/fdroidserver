@@ -192,7 +192,7 @@ def main():
         readme = '''
 # {repo_git_base}
 
-[![{repo_url}](icon.png)]({repo_url})
+[![{repo_url}]({repo_url}/icons/icon.png)]({repo_url})
 
 Last updated: {date}'''.format(repo_git_base=repo_git_base,
                                repo_url=repo_url,
@@ -202,16 +202,8 @@ Last updated: {date}'''.format(repo_git_base=repo_git_base,
         mirror_git_repo.git.add(all=True)
         mirror_git_repo.index.commit("update README")
 
-        icon_path = os.path.join(git_mirror_path, 'icon.png')
-        try:
-            import qrcode
-            qrcode.make(repo_url).save(icon_path)
-        except Exception:
-            exampleicon = os.path.join(common.get_examples_dir(), 'fdroid-icon.png')
-            shutil.copy(exampleicon, icon_path)
         mirror_git_repo.git.add(all=True)
         mirror_git_repo.index.commit("update repo/website icon")
-        shutil.copy(icon_path, repo_basedir)
 
         os.chdir(repo_basedir)
         if os.path.isdir(git_mirror_repodir):
@@ -234,11 +226,9 @@ Last updated: {date}'''.format(repo_git_base=repo_git_base,
         config += "identity_file = '%s'\n" % ssh_private_key_file
         config += "repo_name = '%s'\n" % repo_git_base
         config += "repo_url = '%s'\n" % repo_url
-        config += "repo_icon = 'icon.png'\n"
         config += "repo_description = 'Nightly builds from %s'\n" % git_user_email
         config += "archive_name = '%s'\n" % (repo_git_base + ' archive')
         config += "archive_url = '%s'\n" % (repo_base + '/archive')
-        config += "archive_icon = 'icon.png'\n"
         config += "archive_description = 'Old nightly builds that have been archived.'\n"
         config += "archive_older = %i\n" % options.archive_older
         config += "servergitmirrors = '%s'\n" % servergitmirror

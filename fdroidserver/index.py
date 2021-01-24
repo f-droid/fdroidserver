@@ -75,13 +75,14 @@ def make(apps, apks, repodir, archive):
 
     if archive:
         repodict['name'] = common.config['archive_name']
-        repodict['icon'] = os.path.basename(common.config['archive_icon'])
-        repodict['address'] = common.config['archive_url']
+        repodict['icon'] = common.config.get('archive_icon', common.default_config['repo_icon'])
         repodict['description'] = common.config['archive_description']
-        urlbasepath = os.path.basename(urllib.parse.urlparse(common.config['archive_url']).path)
+        archive_url = common.config.get('archive_url', common.config['repo_url'][:-4] + 'archive')
+        repodict['address'] = archive_url
+        urlbasepath = os.path.basename(urllib.parse.urlparse(archive_url).path)
     else:
         repodict['name'] = common.config['repo_name']
-        repodict['icon'] = os.path.basename(common.config['repo_icon'])
+        repodict['icon'] = common.config.get('repo_icon', common.default_config['repo_icon'])
         repodict['address'] = common.config['repo_url']
         repodict['description'] = common.config['repo_description']
         urlbasepath = os.path.basename(urllib.parse.urlparse(common.config['repo_url']).path)
@@ -331,7 +332,7 @@ def make_v0(apps, apks, repodir, repodict, requestsdict, fdroid_signing_key_fing
     doc.appendChild(root)
 
     repoel = doc.createElement("repo")
-    repoel.setAttribute("icon", os.path.basename(repodict['icon']))
+    repoel.setAttribute("icon", repodict['icon'])
     if 'maxage' in repodict:
         repoel.setAttribute("maxage", str(repodict['maxage']))
     repoel.setAttribute("name", repodict['name'])
@@ -604,7 +605,7 @@ def make_v0(apps, apks, repodir, repodict, requestsdict, fdroid_signing_key_fing
     if os.path.exists(repo_icon):
         shutil.copyfile(common.config['repo_icon'], iconfilename)
     else:
-        logging.warning(_('repo_icon %s does not exist, generating placeholder.')
+        logging.warning(_('repo_icon "repo/icons/%s" does not exist, generating placeholder.')
                         % repo_icon)
         os.makedirs(os.path.dirname(iconfilename), exist_ok=True)
         try:

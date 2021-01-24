@@ -228,7 +228,6 @@ echo_header 'copy git import and run "fdroid scanner" on it'
 
 REPOROOT=`create_test_dir`
 cd $REPOROOT
-cp $WORKSPACE/examples/fdroid-icon.png $REPOROOT/
 mkdir metadata
 echo "AutoName: Just A Test" > metadata/org.fdroid.ci.test.app.yml
 echo "WebSite: " >> metadata/org.fdroid.ci.test.app.yml
@@ -310,7 +309,7 @@ cp $WORKSPACE/tests/urzip.apk \
    $WORKSPACE/tests/repo/com.politedroid_[0-9].apk \
    $WORKSPACE/tests/repo/obb.main.twoversions_110161[357].apk \
    repo/
-$sed -i.tmp 's,archive_older: [0-9],archive_older: 3,' config.yml
+printf '\narchive_older: 3\n' >> config.yml
 
 $fdroid update --pretty --nosign
 if which apksigner; then
@@ -333,7 +332,7 @@ if ! which apksigner; then
     cp $WORKSPACE/tests/metadata/com.politedroid.yml metadata/
     test -d repo || mkdir repo
     cp $WORKSPACE/tests/repo/com.politedroid_[0-9].apk repo/
-    $sed -i.tmp 's,archive_older: [0-9],archive_older: 3,' config.yml
+    printf '\narchive_older: 3\n' >> config.yml
 
     $fdroid update --pretty --nosign
     test `grep '<package>' archive/index.xml | wc -l` -eq 0
@@ -419,7 +418,7 @@ cp $WORKSPACE/tests/metadata/com.politedroid.yml metadata/
 $sed -i.tmp '/ArchivePolicy:/d' metadata/com.politedroid.yml
 test -d repo || mkdir repo
 cp $WORKSPACE/tests/repo/com.politedroid_[0-9].apk repo/
-$sed -i.tmp 's,archive_older: [0-9],archive_older: 3,' config.yml
+printf '\narchive_older: 3\n' >> config.yml
 
 $fdroid update --pretty --nosign
 test `grep '<package>' archive/index.xml | wc -l` -eq 1
@@ -495,7 +494,7 @@ REPOROOT=`create_test_dir`
 cd $REPOROOT
 fdroid_init_with_prebuilt_keystore
 echo 'allow_disabled_algorithms: true' >> config.yml
-$sed -i.tmp 's,archive_older: [0-9],archive_older: 3,' config.yml
+printf '\narchive_older: 3\n' >> config.yml
 test -d metadata || mkdir metadata
 cp $WORKSPACE/tests/metadata/com.politedroid.yml metadata/
 echo 'Summary: good test version of urzip' > metadata/info.guardianproject.urzip.yml
@@ -616,6 +615,7 @@ echo_header "test for added date being set correctly for repo and archive"
 REPOROOT=`create_test_dir`
 cd $REPOROOT
 fdroid_init_with_prebuilt_keystore
+printf '\narchive_older: 3\n' >> config.yml
 mkdir -p {repo,archive,metadata,stats}
 cp $WORKSPACE/tests/repo/com.politedroid_5.apk archive
 cp $WORKSPACE/tests/repo/com.politedroid_6.apk repo
@@ -942,7 +942,6 @@ echo_header "setup a new repo manually and generate a keystore"
 REPOROOT=`create_test_dir`
 KEYSTORE=$REPOROOT/keystore.p12
 cd $REPOROOT
-cp $WORKSPACE/examples/fdroid-icon.png $REPOROOT/
 ! test -e $KEYSTORE
 set +e
 $fdroid update
@@ -1127,6 +1126,7 @@ REPOROOT=`create_test_dir`
 GIT_MIRROR=$REPOROOT/git-mirror
 cd $REPOROOT
 fdroid_init_with_prebuilt_keystore
+printf '\narchive_older: 3\n' >> config.yml
 echo "servergitmirrors: $SERVER_GIT_MIRROR" >> config.yml
 
 cp $WORKSPACE/tests/repo/com.politedroid_[345].apk repo/
@@ -1195,6 +1195,7 @@ if have_git_2_3; then
 
     cd $OFFLINE_ROOT
     fdroid_init_with_prebuilt_keystore
+    printf '\narchive_older: 3\n' >> config.yml
     cp -a $WORKSPACE/tests/metadata $WORKSPACE/tests/repo $WORKSPACE/tests/stats $OFFLINE_ROOT/
 
     echo "mirrors: ['http://foo.bar/fdroid', 'http://asdflkdsfjafdsdfhkjh.onion/fdroid']" >> config.yml
@@ -1284,6 +1285,7 @@ if which wget; then
     # clean up
     kill -9 $http_server_pid
     rm -f 127.0.0.1\:${port}/repo/*.apk 127.0.0.1\:${port}/repo/*/*/*/*.png
+    sleep 1  # wait for webserver thread to quit
 else
     echo "WARNING: wget not installed, skipping"
 fi

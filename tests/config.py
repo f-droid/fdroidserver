@@ -1,7 +1,6 @@
 
 repo_url = "https://MyFirstFDroidRepo.org/fdroid/repo"
 repo_name = "My First F-Droid Repo Demo"
-repo_icon = "fdroid-icon.png"
 repo_description = """
 This is a repository of apps to be used with F-Droid. Applications in this
 repository are either official binaries built by the original application
@@ -12,7 +11,6 @@ using the tools on https://gitlab.com/u/fdroid.
 archive_older = 3
 archive_url = "https://f-droid.org/archive"
 archive_name = "My First F-Droid Archive Demo"
-archive_icon = "fdroid-icon.png"
 archive_description = """
 The repository of older versions of applications from the main demo repository.
 """

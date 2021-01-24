@@ -2244,9 +2244,8 @@ def main():
     for k in ['repo_icon', 'archive_icon']:
         if k in config:
             if not os.path.exists(config[k]):
-                logging.critical(_('{name} "{path}" does not exist! Correct it in config.py.')
-                                 .format(name=k, path=config[k]))
-                sys.exit(1)
+                logging.warning(_('{name} "{section}/icons/{path}" does not exist! Check "config.yml".')
+                                .format(name=k, section=k.split('_')[0], path=config[k]))
 
     # if the user asks to create a keystore, do it now, reusing whatever it can
     if options.create_key:

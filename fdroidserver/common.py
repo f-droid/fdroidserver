@@ -146,14 +146,10 @@ default_config = {
     },
     'keyaliases': {},
     'repo_url': "https://MyFirstFDroidRepo.org/fdroid/repo",
-    'repo_name': "My First FDroid Repo Demo",
-    'repo_icon': "fdroid-icon.png",
-    'repo_description': _('''
-        This is a repository of apps to be used with FDroid. Applications in this
-        repository are either official binaries built by the original application
-        developers, or are binaries built from source by f-droid.org using the
-        tools on https://gitlab.com/fdroid.
-        '''),
+    'repo_name': "My First F-Droid Repo Demo",
+    'repo_icon': "icon.png",
+    'repo_description': _("""This is a repository of apps to be used with F-Droid. Applications in this repository are either official binaries built by the original application developers, or are binaries built from source by the admin of f-droid.org using the tools on https://gitlab.com/fdroid."""),
+    'archive_name': 'My First F-Droid Archive Demo',
     'archive_description': _('These are the apps that have been archived from the main repo.'),
     'archive_older': 0,
     'lint_licenses': fdroidserver.lint.APPROVED_LICENSES,
@@ -228,7 +224,7 @@ def fill_config_defaults(thisconfig):
             return None
         return path
 
-    for k in ['sdk_path', 'ant', 'mvn3', 'gradle', 'keystore', 'repo_icon']:
+    for k in ['sdk_path', 'ant', 'mvn3', 'gradle', 'keystore']:
         v = thisconfig[k]
         exp = expand_path(v)
         if exp is not None:
