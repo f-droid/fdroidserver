@@ -226,21 +226,27 @@ fedora_latest:
         "cd `pwd`; export ANDROID_HOME=$ANDROID_HOME; fdroid=~testuser/.local/bin/fdroid ./run-tests"
 
 gradle:
-  image: alpine:3.7
-  variables:
-    LANG: C.UTF-8
+  image: debian:bullseye
+  <<: *apt-template
   script:
-    - apk add --no-cache ca-certificates git python3
-    # if this is a merge request fork, then only check if makebuildserver changed
+    - apt-get install
+          ca-certificates
+          git
+          openssh-client
+          python3-bs4
+          python3-colorama
+          python3-git
+          python3-gitlab
+          python3-requests
+    # if this is a merge request fork, then only check if makebuildserver or gradlew-fdroid changed
     - if [ "$CI_PROJECT_NAMESPACE" != "fdroid" ]; then
         git fetch https://gitlab.com/fdroid/fdroidserver.git;
         for f in `git diff --name-only --diff-filter=d FETCH_HEAD...HEAD`; do
            test "$f" == "makebuildserver" && export CHANGED="yes";
+           test "$f" == "gradlew-fdroid" && export CHANGED="yes";
         done;
         test -z "$CHANGED" && exit;
       fi
-    - python3 -m ensurepip
-    - $pip install beautifulsoup4 requests
     - ./tests/gradle-release-checksums.py
 
 fdroid build:
