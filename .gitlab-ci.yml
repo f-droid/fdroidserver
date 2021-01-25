@@ -228,6 +228,8 @@ fedora_latest:
 gradle:
   image: debian:bullseye
   <<: *apt-template
+  variables:
+    GIT_DEPTH: 1000
   script:
     - apt-get install
           ca-certificates
