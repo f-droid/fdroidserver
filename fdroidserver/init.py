@@ -148,7 +148,9 @@ def main():
 
     # enable apksigner by default so v2/v3 APK signatures validate
     if common.find_apksigner() is not None:
-        test_config['apksigner'] = common.find_apksigner()
+        apksigner = common.find_apksigner()
+        test_config['apksigner'] = apksigner
+        common.write_to_config(test_config, 'apksigner', apksigner)
 
     # the NDK is optional and there may be multiple versions of it, so it's
     # left for the user to configure

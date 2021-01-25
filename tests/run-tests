@@ -75,6 +75,10 @@ is_MD5_disabled() {
     return $?
 }
 
+use_apksigner() {
+    test -x "`sed -En 's,^ *apksigner: +,,p' config.yml`"
+}
+
 #------------------------------------------------------------------------------#
 # "main"
 
@@ -312,7 +316,7 @@ cp $WORKSPACE/tests/urzip.apk \
 printf '\narchive_older: 3\n' >> config.yml
 
 $fdroid update --pretty --nosign
-if which apksigner; then
+if use_apksigner; then
     test `grep '<package>' archive/index.xml | wc -l` -eq 2
     test `grep '<package>' repo/index.xml | wc -l` -eq 10
 else
@@ -529,6 +533,7 @@ test -e repo/org.bitbucket.tickytacky.mirrormirror_3.apk
 test -e repo/org.bitbucket.tickytacky.mirrormirror_4.apk
 test -e archive/urzip-badsig.apk
 
+sed -i.tmp '/apksigner:/d' config.yml
 if ! which apksigner; then
     $sed -i.tmp '/allow_disabled_algorithms/d' config.yml
     $fdroid update --pretty --nosign

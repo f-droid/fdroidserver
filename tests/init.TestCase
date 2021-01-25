@@ -9,6 +9,7 @@ import optparse
 import sys
 import tempfile
 import unittest
+import yaml
 
 
 localmodule = os.path.realpath(
@@ -30,6 +31,7 @@ class InitTest(unittest.TestCase):
         if not os.path.exists(self.tmpdir):
             os.makedirs(self.tmpdir)
         os.chdir(self.basedir)
+        fdroidserver.common.config = None
         fdroidserver.init.config = None
 
     def test_disable_in_config(self):
@@ -38,6 +40,7 @@ class InitTest(unittest.TestCase):
         with open('config.yml', 'w') as fp:
             fp.write('keystore: NONE\n')
             fp.write('keypass: mysupersecrets\n')
+        os.chmod('config.yml', 0o600)
         config = fdroidserver.common.read_config(fdroidserver.common.options)
         self.assertEqual('NONE', config['keystore'])
         self.assertEqual('mysupersecrets', config['keypass'])
@@ -47,6 +50,25 @@ class InitTest(unittest.TestCase):
         fdroidserver.common.config = None
         config = fdroidserver.common.read_config(fdroidserver.common.options)
         self.assertIsNone(config.get('keypass'))
+
+    def test_main_in_empty_dir(self):
+        testdir = tempfile.mkdtemp(prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir)
+        os.chdir(testdir)
+
+        bindir = os.path.join(os.getcwd(), 'bin')
+        os.mkdir(bindir)
+        apksigner = os.path.join(bindir, 'apksigner')
+        open(apksigner, 'w').close()
+        os.chmod(apksigner, 0o755)
+        os.environ['PATH'] = bindir
+
+        sys.argv = ['fdroid init']
+        fdroidserver.init.main()
+        with open('config.yml') as fp:
+            config = yaml.safe_load(fp)
+        self.assertTrue(os.path.exists(config['keystore']))
+        self.assertTrue(os.path.exists(config['apksigner']))
+        self.assertEqual(apksigner, config['apksigner'])
 
 
 if __name__ == "__main__":
