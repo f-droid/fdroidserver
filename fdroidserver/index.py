@@ -134,48 +134,66 @@ def make(apps, apks, repodir, archive):
 
 
 def make_website(apps, repodir, repodict):
+    _, repo_pubkey_fingerprint = extract_pubkey()
+    repo_pubkey_fingerprint_stripped = repo_pubkey_fingerprint.replace(" ", "")
+    link = repodict["address"]
+    link_fingerprinted = "{link}?fingerprint={fingerprint}".format(link=link, fingerprint=repo_pubkey_fingerprint_stripped)
+
     if not os.path.exists(repodir):
         os.makedirs(repodir)
     html_name = 'index.html'
-
-    link = repodict["address"]
 
     html_file = os.path.join(repodir, html_name)
     with open(html_file, 'w') as f:
         name = repodict["name"]
         description = repodict["description"]
         f.write("""<!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01 Transitional//EN'>
-<HTML><HEAD>
-  <META HTTP-EQUIV='Content-Type' CONTENT='text/html; charset=UTF-8'/>
-  <META NAME="viewport" CONTENT="width=device-width; initial-scale=1.0; minimum-scale=0.5; maximum-scale=2.0; user-scalable=1;" />
-  <TITLE>{name}</TITLE>
-  <BASE HREF='index.html'/>
-  <LINK REL='stylesheet' TYPE='text/css' HREF='index.css' />
-  <LINK REL='icon' HREF='icons/fdroid-icon.png' TYPE='image/png' />
-  <LINK REL='shortcut icon' HREF='icons/fdroid-icon.png' TYPE='image/png' />
-  <META property="og:site_name" content="{name}" />
-  <META property="og:title" content="{name}" />
-  <META property="og:determiner" content="" />
-  <META property="og:description" content="{description}" />
-  <META NAME='robots' CONTENT='index,nofollow'/>
-</HEAD><BODY>
-<h2>{name}</h2>
-<div id='intro'>
-<p style='margin-bottom:.2em;'><span style='float:right;width:100px;margin-left:.5em;'>
-<a href='images/fdroid_repo_qr.png' title='QR: {name}'><img src='images/fdroid_repo_qr.png' alt='QR: {name}' width='100'></a>
-</span>
-{description}<br/>
-{details}</p>
-<p class="center" style="margin-top:.5em">
-<a href="{link}">
-<code style="color:#000000;font-weight:bold;">{link}</code>
-</a>
-</p>
-</div>
-</BODY>""".format(name=name,
+<HTML>
+    <HEAD>
+        <META HTTP-EQUIV='Content-Type' CONTENT='text/html; charset=UTF-8'/>
+        <META NAME="viewport" CONTENT="width=device-width; initial-scale=1.0; minimum-scale=0.5; maximum-scale=2.0; user-scalable=1;" />
+        <TITLE>{name}</TITLE>
+        <BASE HREF='index.html'/>
+        <LINK REL='stylesheet' TYPE='text/css' HREF='index.css' />
+        <LINK REL='icon' HREF='icons/fdroid-icon.png' TYPE='image/png' />
+        <LINK REL='shortcut icon' HREF='icons/fdroid-icon.png' TYPE='image/png' />
+        <META property="og:site_name" content="{name}" />
+        <META property="og:title" content="{name}" />
+        <META property="og:determiner" content="" />
+        <META property="og:description" content="{description}" />
+        <META NAME='robots' CONTENT='index,nofollow'/>
+    </HEAD>
+    <BODY>
+        <h2>{name}</h2>
+        <div id='intro'>
+            <p style='margin-bottom:.2em;'>
+                <span style='float:right;width:100px;margin-left:.5em;'>
+                    <a href='index.png' title='QR: {name}'><img src='index.png' alt='QR: {name}' width='100'></a>
+                </span>
+                {description}
+                <br/>
+                <br/>
+                {details}
+            </p>
+            <p class="center" style="margin-top:.5em">
+                <a href="{link_fingerprinted}">
+                    <code style="color:#000000;font-weight:bold;">
+                        {link}
+                    </code>
+                </a>
+            </p>
+            <p>If you would like to manually verify the fingerprint (SHA-256) of the repository signing key, here it is:<br/>
+                <blockcode style="color:#000000;font-weight:bold;">
+                    {fingerprint}
+                </blockcode>
+            </p>
+        </div>
+    </BODY>""".format(name=name,
                 description=description,
                 details="Currently it serves <kbd>{}</kbd> apps. To add it to your F-Droid client, scan the QR code (click it to enlarge) or use this URL:".format(len(apps)),
-                link=link))
+                fingerprint=repo_pubkey_fingerprint,
+                link=link,
+                link_fingerprinted=link_fingerprinted))
 
         css_file = os.path.join(repodir, "index.css")
         with open(css_file, "w") as f:
@@ -290,10 +308,7 @@ fieldset select, fieldset input, #reposelect select, #reposelect input { font-si
  .appdetailcell { display:block; float:left; line-height:1.5em; }
 }""")
 
-        images_dir = os.path.join(repodir, "images")
-        if not os.path.exists(images_dir):
-            os.makedirs(images_dir)
-        qrcode.make(link).save(os.path.join(images_dir, "fdroid_repo_qr.png"))
+        qrcode.make(link_fingerprinted).save(os.path.join(repodir, "index.png"))
 
 
 def make_v1(apps, packages, repodir, repodict, requestsdict, fdroid_signing_key_fingerprints):
