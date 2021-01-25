@@ -86,11 +86,12 @@ plugin_v_pat = re.compile(r'\nplugin_v=\(([0-9. ]+)\)')
 with open('gradlew-fdroid', 'w') as fp:
     fp.write(plugin_v_pat.sub('\nplugin_v=(%s)' % plugin_v, gradlew_fdroid))
 
-if os.getenv('CI_PROJECT_NAMESPACE') != 'fdroid-bot':
+if os.getenv('CI_PROJECT_NAMESPACE') != 'fdroid':
     p = subprocess.run(['git', '--no-pager', 'diff'])
     print(p.stdout)
     exit(errors)
 
+# This only runs after commits are pushed to fdroid/fdroidserver
 git_repo = git.repo.Repo('.')
 modified = git_repo.git().ls_files(modified=True).split()
 if git_repo.is_dirty() and ('gradlew-fdroid' in modified or 'makebuildserver' in modified):
