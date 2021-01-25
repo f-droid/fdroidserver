@@ -6,7 +6,6 @@ import os
 import re
 import requests
 import subprocess
-from bs4 import BeautifulSoup
 from colorama import Fore, Style
 from distutils.version import LooseVersion
 
@@ -15,9 +14,9 @@ checksums = None
 versions = dict()
 
 while not checksums:
-   r = requests.get('https://gitlab.com/fdroid/gradle-transparency-log/-/raw/master/checksums.json')
-   if r.status_code == 200:
-       checksums = r.json()
+    r = requests.get('https://gitlab.com/fdroid/gradle-transparency-log/-/raw/master/checksums.json')
+    if r.status_code == 200:
+        checksums = r.json()
 
 gradle_bin_pat = re.compile(r'gradle-([0-9][0-9.]+[0-9])-bin.zip')
 for url, d in checksums.items():
@@ -87,15 +86,15 @@ plugin_v_pat = re.compile(r'\nplugin_v=\(([0-9. ]+)\)')
 with open('gradlew-fdroid', 'w') as fp:
     fp.write(plugin_v_pat.sub('\nplugin_v=(%s)' % plugin_v, gradlew_fdroid))
 
-if os.getenv('CI_PROJECT_NAMESPACE') != 'fdroid-bot':
+if os.getenv('CI_PROJECT_NAMESPACE') != 'fdroid':
     p = subprocess.run(['git', '--no-pager', 'diff'])
     print(p.stdout)
     exit(errors)
 
+# This only runs after commits are pushed to fdroid/fdroidserver
 git_repo = git.repo.Repo('.')
 modified = git_repo.git().ls_files(modified=True).split()
-if (git_repo.is_dirty()
-    and ('gradlew-fdroid' in modified or 'makebuildserver' in modified)):
+if git_repo.is_dirty() and ('gradlew-fdroid' in modified or 'makebuildserver' in modified):
     branch = git_repo.create_head(os.path.basename(__file__), force=True)
     branch.checkout()
     git_repo.index.add(['gradlew-fdroid', 'makebuildserver'])
@@ -118,7 +117,7 @@ if (git_repo.is_dirty()
         print(Fore.RED
               + 'ERROR: GitLab Token not found in PERSONAL_ACCESS_TOKEN!'
               + Style.RESET_ALL)
-        sys.exit(1)
+        exit(1)
     gl = gitlab.Gitlab(os.getenv('CI_SERVER_URL'), api_version=4,
                        private_token=private_token)
     project = gl.projects.get(project_path, lazy=True)
