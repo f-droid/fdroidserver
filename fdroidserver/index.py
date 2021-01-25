@@ -132,12 +132,13 @@ def make(apps, apks, repodir, archive):
             fdroid_signing_key_fingerprints)
     make_website(sortedapps, repodir, repodict)
 
+
 def make_website(apps, repodir, repodict):
     if not os.path.exists(repodir):
         os.makedirs(repodir)
     html_name = 'index.html'
 
-    link=repodict["address"]
+    link = repodict["address"]
 
     html_file = os.path.join(repodir, html_name)
     with open(html_file, 'w') as f:
@@ -172,9 +173,9 @@ def make_website(apps, repodir, repodict):
 </p>
 </div>
 </BODY>""".format(name=name,
-description=description,
-details="Currently it serves <kbd>{}</kbd> apps. To add it to your F-Droid client, scan the QR code (click it to enlarge) or use this URL:".format(len(apps)),
-link=link))
+                description=description,
+                details="Currently it serves <kbd>{}</kbd> apps. To add it to your F-Droid client, scan the QR code (click it to enlarge) or use this URL:".format(len(apps)),
+                link=link))
 
         css_file = os.path.join(repodir, "index.css")
         with open(css_file, "w") as f:
@@ -287,8 +288,7 @@ fieldset select, fieldset input, #reposelect select, #reposelect input { font-si
  .repoapplist { display:block; }
  .appdetailinner, .appdetailrow { display:block; }
  .appdetailcell { display:block; float:left; line-height:1.5em; }
-}        
-            """)
+}""")
 
         images_dir = os.path.join(repodir, "images")
         if not os.path.exists(images_dir):
