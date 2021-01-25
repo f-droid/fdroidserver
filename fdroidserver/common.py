@@ -3764,6 +3764,7 @@ def is_repo_file(filename):
         and not filename.endswith(b'.idsig') \
         and not filename.endswith(b'.log.gz') \
         and os.path.basename(filename) not in [
+            b'index.css',
             b'index.jar',
             b'index_unsigned.jar',
             b'index.xml',
