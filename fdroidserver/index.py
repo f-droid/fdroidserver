@@ -133,21 +133,36 @@ def make(apps, apks, repodir, archive):
     make_website(sortedapps, repodir, repodict)
 
 
+def _should_file_be_generated(path, magic_string):
+    if os.path.exists(path):
+        with open(path) as f:
+            if not magic_string in f.readline(): # if the magic_string is not in the first line the file should be overwritten
+                return False
+    return True
+
+
 def make_website(apps, repodir, repodict):
     _, repo_pubkey_fingerprint = extract_pubkey()
     repo_pubkey_fingerprint_stripped = repo_pubkey_fingerprint.replace(" ", "")
     link = repodict["address"]
     link_fingerprinted = "{link}?fingerprint={fingerprint}".format(link=link, fingerprint=repo_pubkey_fingerprint_stripped)
+    autogenerate_comment = "auto-generated - fdroid index updates will overwrite this file" # do not change this string, as it will break the updates for existing files with older versions of this string
 
     if not os.path.exists(repodir):
         os.makedirs(repodir)
-    html_name = 'index.html'
+    
+    qrcode.make(link_fingerprinted).save(os.path.join(repodir, "index.png"))
 
+    html_name = 'index.html'
     html_file = os.path.join(repodir, html_name)
-    with open(html_file, 'w') as f:
-        name = repodict["name"]
-        description = repodict["description"]
-        f.write("""<!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01 Transitional//EN'>
+
+    if _should_file_be_generated(html_file, autogenerate_comment):
+        with open(html_file, 'w') as f:
+            name = repodict["name"]
+            description = repodict["description"]
+            icon = repodict["icon"]
+            f.write("""<!-- {autogenerate_comment} -->
+<!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01 Transitional//EN'>
 <HTML>
     <HEAD>
         <META HTTP-EQUIV='Content-Type' CONTENT='text/html; charset=UTF-8'/>
@@ -155,8 +170,8 @@ def make_website(apps, repodir, repodict):
         <TITLE>{name}</TITLE>
         <BASE HREF='index.html'/>
         <LINK REL='stylesheet' TYPE='text/css' HREF='index.css' />
-        <LINK REL='icon' HREF='icons/fdroid-icon.png' TYPE='image/png' />
-        <LINK REL='shortcut icon' HREF='icons/fdroid-icon.png' TYPE='image/png' />
+        <LINK REL='icon' HREF='icons/{icon}' TYPE='image/png' />
+        <LINK REL='shortcut icon' HREF='icons/{icon}' TYPE='image/png' />
         <META property="og:site_name" content="{name}" />
         <META property="og:title" content="{name}" />
         <META property="og:determiner" content="" />
@@ -188,16 +203,20 @@ def make_website(apps, repodir, repodict):
                 </blockcode>
             </p>
         </div>
-    </BODY>""".format(name=name,
+    </BODY>""".format(autogenerate_comment=autogenerate_comment,
                 description=description,
                 details="Currently it serves <kbd>{}</kbd> apps. To add it to your F-Droid client, scan the QR code (click it to enlarge) or use this URL:".format(len(apps)),
                 fingerprint=repo_pubkey_fingerprint,
+                icon=icon,
                 link=link,
-                link_fingerprinted=link_fingerprinted))
+                link_fingerprinted=link_fingerprinted,
+                name=name))
 
-        css_file = os.path.join(repodir, "index.css")
+    css_file = os.path.join(repodir, "index.css")
+    if _should_file_be_generated(css_file, autogenerate_comment):
         with open(css_file, "w") as f:
-            f.write("""
+            # this auto generated comment was not included via .format(), as python seems to have problems with css files in combination with .format()
+            f.write("""/* auto-generated - fdroid index updates will overwrite this file */
 BODY {
  font-family: Arial, Helvetica, Sans-Serif;
  color: #0000ee;
@@ -307,8 +326,6 @@ fieldset select, fieldset input, #reposelect select, #reposelect input { font-si
  .appdetailinner, .appdetailrow { display:block; }
  .appdetailcell { display:block; float:left; line-height:1.5em; }
 }""")
-
-        qrcode.make(link_fingerprinted).save(os.path.join(repodir, "index.png"))
 
 
 def make_v1(apps, packages, repodir, repodict, requestsdict, fdroid_signing_key_fingerprints):
