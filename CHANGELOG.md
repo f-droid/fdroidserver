@@ -41,6 +41,7 @@ milestone](https://gitlab.com/fdroid/fdroidserver/-/milestones/10)
 * Smoother process for signing APKs with `apksigner`
   ([!736](https://gitlab.com/fdroid/fdroidserver/merge_requests/736))
   ([!821](https://gitlab.com/fdroid/fdroidserver/merge_requests/821))
+* `apksigner` is used by default on new repos
 * All parts except _build_ and _publish_ work without the Android SDK
   ([!821](https://gitlab.com/fdroid/fdroidserver/merge_requests/821))
 * Description: is now passed to clients unchanged, no HTML conversion
