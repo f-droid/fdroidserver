@@ -2719,6 +2719,3 @@ msgid_plural "{} builds succeeded"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
-
-#~ msgid "Clean after all scans have finished"
-#~ msgstr "Po dokončení všech skenů vyčistit"

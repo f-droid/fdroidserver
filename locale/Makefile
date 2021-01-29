@@ -44,6 +44,7 @@ $(TEMPLATE): $(FILES)
 	sed -i 's,CHARSET,UTF-8,' $(TEMPLATE)
 
 %.po: $(TEMPLATE)
+	msgattrib $(OPTS) --no-obsolete --output-file=$@ $@
 	msguniq $(OPTS) --use-first --output-file=$@ $@
 	msgmerge $(OPTS) --update $@ $(TEMPLATE)
 
