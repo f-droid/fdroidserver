@@ -459,8 +459,8 @@ msgstr "Buscar actualizaciones de aplicaciones"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
-msgid "Checking archiving for {appid} - apks:{integer}, keepversions:{keep}, archapks:{arch}"
-msgstr "Comprobando la operación de archivo para {appid} - apks:{integer}, keepversions:{keep}, archapks:{arch}"
+msgid "Checking archiving for {appid} - APKs:{integer}, keepversions:{keep}, archapks:{arch}"
+msgstr "Comprobando la operación de archivo para {appid} - APKs:{integer}, keepversions:{keep}, archapks:{arch}"
 
 #: ../fdroidserver/dscanner.py
 msgid "Clean after all scans have finished"
@@ -521,11 +521,11 @@ msgstr "No se pudo encontrar {path} para eliminarlo"
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Could not open APK {path} for analysis: "
-msgstr "No se pudo abrir el archivo apk {path} para analizarlo: "
+msgstr "No se pudo abrir el archivo APK {path} para analizarlo: "
 
 #: ../fdroidserver/update.py
-msgid "Could not open apk file for analysis"
-msgstr "No se ha podido abrir el archivo apk para analizarlo"
+msgid "Could not open APK file for analysis"
+msgstr "No se ha podido abrir el archivo APK para analizarlo"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -804,13 +804,13 @@ msgstr "Fallo al obtener la información de manifiesto APK"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
-msgid "Failed to get apk information, deleting {path}"
-msgstr "Fallo al obtener la información de apk, borrando {path}"
+msgid "Failed to get APK information, deleting {path}"
+msgstr "Fallo al obtener la información de APK, borrando {path}"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
-msgid "Failed to get apk information, skipping {path}"
-msgstr "Fallo al obtener la información de apk, omitiendo {path}"
+msgid "Failed to get APK information, skipping {path}"
+msgstr "Fallo al obtener la información de APK, omitiendo {path}"
 
 #: ../fdroidserver/install.py
 #, python-brace-format
@@ -1278,8 +1278,8 @@ msgstr "No se han especificado paquetes"
 
 #: ../fdroidserver/install.py
 #, python-format
-msgid "No signed apk available for %s"
-msgstr "No hay apk firmado disponible para %s"
+msgid "No signed APK available for %s"
+msgstr "No hay APK firmado disponible para %s"
 
 #: ../fdroidserver/install.py
 msgid "No signed output directory - nothing to do"
@@ -1656,7 +1656,7 @@ msgstr "Estableciendo un máximo de {0} segundos para esta compilación"
 msgid "Setup an emulator, install the APK on it and perform a Drozer scan"
 msgstr "Establecer un emulador, instalar la APK en el y realizar un escaneo con \"Drozer\""
 
-msgid "Setup an emulator, install the apk on it and perform a drozer scan"
+msgid "Setup an emulator, install the APK on it and perform a drozer scan"
 msgstr "Configurar un emulador, instalar la aplicación APK en él y realizar una \"Drozer\" scan"
 
 #: ../fdroid ../fdroidserver/__main__.py
@@ -2030,8 +2030,8 @@ msgstr "Use un servidor de compilación"
 msgid "Use date from APK instead of current time for newly added APKs"
 msgstr "Use la fecha del APK en vez de la fecha actual para los nuevos APK añadidos"
 
-msgid "Use date from apk instead of current time for newly added apks"
-msgstr "Use la fecha del «apk» en vez de la fecha actual para los nuevos «apk» añadidos"
+msgid "Use date from APK instead of current time for newly added APKs"
+msgstr "Use la fecha del «APK» en vez de la fecha actual para los nuevos «APK» añadidos"
 
 #: ../fdroidserver/deploy.py ../fdroidserver/upload.py
 #, python-brace-format
@@ -2788,7 +2788,7 @@ msgstr[1] "compilaciones con éxito {}"
 #~ msgid "Cannot find an appid for {path}!"
 #~ msgstr "¡No se puede encontrar un appid para {path}!"
 
-#~ msgid "Clean update - don't uses caches, reprocess all apks"
+#~ msgid "Clean update - don't uses caches, reprocess all APKs"
 #~ msgstr "Actualización limpia, no usa caché, reprocesa todas las aplicaciones  APK"
 
 #~ msgid "Interactively ask about things that need updating."

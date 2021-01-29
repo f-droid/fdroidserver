@@ -452,8 +452,8 @@ msgstr "Uygulama güncellemelerini denetle"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
-msgid "Checking archiving for {appid} - apks:{integer}, keepversions:{keep}, archapks:{arch}"
-msgstr "{appid} için arşivleme denetleniyor - apks:{integer}, keepversions:{keep}, archapks:{arch}"
+msgid "Checking archiving for {appid} - APKs:{integer}, keepversions:{keep}, archapks:{arch}"
+msgstr "{appid} için arşivleme denetleniyor - APKs:{integer}, keepversions:{keep}, archapks:{arch}"
 
 #: ../fdroidserver/dscanner.py
 msgid "Clean after all scans have finished"
@@ -517,8 +517,8 @@ msgid "Could not open APK {path} for analysis: "
 msgstr "İnceleme için APK {path} açılamadı: "
 
 #: ../fdroidserver/update.py
-msgid "Could not open apk file for analysis"
-msgstr "İnceleme için apk dosyası açılamadı"
+msgid "Could not open APK file for analysis"
+msgstr "İnceleme için APK dosyası açılamadı"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -797,12 +797,12 @@ msgstr "APK bildirim bilgileri alınamadı"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
-msgid "Failed to get apk information, deleting {path}"
+msgid "Failed to get APK information, deleting {path}"
 msgstr "APK bilgisi alınamadı, {path} siliniyor"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
-msgid "Failed to get apk information, skipping {path}"
+msgid "Failed to get APK information, skipping {path}"
 msgstr "APK bilgisi alınamadı, {path} atlanıyor"
 
 #: ../fdroidserver/install.py
@@ -1271,7 +1271,7 @@ msgstr "Belirtilen paket yok"
 
 #: ../fdroidserver/install.py
 #, python-format
-msgid "No signed apk available for %s"
+msgid "No signed APK available for %s"
 msgstr "%s için kullanılabilir imzalanmış APK yok"
 
 #: ../fdroidserver/install.py
@@ -1649,7 +1649,7 @@ msgstr "Bu inşa için {0} sn zaman aşımı ayarlanıyor"
 msgid "Setup an emulator, install the APK on it and perform a Drozer scan"
 msgstr "Bir emülatör kur, APKyı ona kur ve bir Drozer taraması yap"
 
-msgid "Setup an emulator, install the apk on it and perform a drozer scan"
+msgid "Setup an emulator, install the APK on it and perform a drozer scan"
 msgstr "Bir emülatör kur, APKyı ona kur ve bir Drozer taraması yap"
 
 #: ../fdroid ../fdroidserver/__main__.py
@@ -2023,7 +2023,7 @@ msgstr "İnşa sunucusu kullan"
 msgid "Use date from APK instead of current time for newly added APKs"
 msgstr "Yeni eklenen APKlar için o anki zaman yerine APK'daki tarihi kullan"
 
-msgid "Use date from apk instead of current time for newly added apks"
+msgid "Use date from APK instead of current time for newly added APKs"
 msgstr "Yeni eklenen APKlar için o anki zaman yerine APK tarihini kullan"
 
 #: ../fdroidserver/deploy.py ../fdroidserver/upload.py
@@ -2784,7 +2784,7 @@ msgstr[1] "{} inşa başarılı"
 #~ msgid "Cannot find an appid for {path}!"
 #~ msgstr "{path} için bir appid bulunamıyor!"
 
-#~ msgid "Clean update - don't uses caches, reprocess all apks"
+#~ msgid "Clean update - don't uses caches, reprocess all APKs"
 #~ msgstr "Temiz güncelleme - önbellekleri kullanmaz, tüm APKları yeniden işler"
 
 #~ msgid "Interactively ask about things that need updating."

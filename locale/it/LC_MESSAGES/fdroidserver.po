@@ -460,8 +460,8 @@ msgstr "Cerca gli aggiornamenti delle applicazioni"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
-msgid "Checking archiving for {appid} - apks:{integer}, keepversions:{keep}, archapks:{arch}"
-msgstr "Controllando l'archiviazione per {appid} - apk:{integer}, keepversions:{keep}, archapks:{arch}"
+msgid "Checking archiving for {appid} - APKs:{integer}, keepversions:{keep}, archapks:{arch}"
+msgstr "Controllando l'archiviazione per {appid} - APK:{integer}, keepversions:{keep}, archapks:{arch}"
 
 #: ../fdroidserver/dscanner.py
 msgid "Clean after all scans have finished"
@@ -525,8 +525,8 @@ msgid "Could not open APK {path} for analysis: "
 msgstr "Impossibile aprire il file APK {path} per l'analisi: "
 
 #: ../fdroidserver/update.py
-msgid "Could not open apk file for analysis"
-msgstr "Impossibile aprire il file apk per l'analisi"
+msgid "Could not open APK file for analysis"
+msgstr "Impossibile aprire il file APK per l'analisi"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -805,13 +805,13 @@ msgstr "Impossibile ottenere informazioni del manifest dell’APK"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
-msgid "Failed to get apk information, deleting {path}"
-msgstr "Impossibile ottenere informazioni dell’apk, eliminando {path}"
+msgid "Failed to get APK information, deleting {path}"
+msgstr "Impossibile ottenere informazioni dell’APK, eliminando {path}"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
-msgid "Failed to get apk information, skipping {path}"
-msgstr "Impossibile ottenere informazioni dell’apk, saltando {path}"
+msgid "Failed to get APK information, skipping {path}"
+msgstr "Impossibile ottenere informazioni dell’APK, saltando {path}"
 
 #: ../fdroidserver/install.py
 #, python-brace-format
@@ -1279,8 +1279,8 @@ msgstr "Nessun pacchetto specificato"
 
 #: ../fdroidserver/install.py
 #, python-format
-msgid "No signed apk available for %s"
-msgstr "Nessun apk firmato disponibile per %s"
+msgid "No signed APK available for %s"
+msgstr "Nessun APK firmato disponibile per %s"
 
 #: ../fdroidserver/install.py
 msgid "No signed output directory - nothing to do"
@@ -1657,7 +1657,7 @@ msgstr ""
 msgid "Setup an emulator, install the APK on it and perform a Drozer scan"
 msgstr ""
 
-msgid "Setup an emulator, install the apk on it and perform a drozer scan"
+msgid "Setup an emulator, install the APK on it and perform a drozer scan"
 msgstr ""
 
 #: ../fdroid ../fdroidserver/__main__.py
@@ -2031,7 +2031,7 @@ msgstr ""
 msgid "Use date from APK instead of current time for newly added APKs"
 msgstr ""
 
-msgid "Use date from apk instead of current time for newly added apks"
+msgid "Use date from APK instead of current time for newly added APKs"
 msgstr ""
 
 #: ../fdroidserver/deploy.py ../fdroidserver/upload.py

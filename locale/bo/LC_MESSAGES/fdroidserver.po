@@ -452,8 +452,8 @@ msgstr "མཉེན་ཆས་རྣམས་གསར་བསྒྱུར་
 
 #: ../fdroidserver/update.py
 #, python-brace-format
-msgid "Checking archiving for {appid} - apks:{integer}, keepversions:{keep}, archapks:{arch}"
-msgstr "མཛོད་ཁང་ཚོད་ལྟའི་ཆེད་དུ།{appid} - apks:{integer},ཐོན་རིམ་ཉར་ཚགས།:{keep},archapks:{arch}"
+msgid "Checking archiving for {appid} - APKs:{integer}, keepversions:{keep}, archapks:{arch}"
+msgstr "མཛོད་ཁང་ཚོད་ལྟའི་ཆེད་དུ།{appid} - APKs:{integer},ཐོན་རིམ་ཉར་ཚགས།:{keep},archapks:{arch}"
 
 #: ../fdroidserver/dscanner.py
 msgid "Clean after all scans have finished"
@@ -469,7 +469,7 @@ msgstr "སྣོད་ཆ་ཚང་གཙང་མ་བཟོས་ནས་
 
 #: ../fdroidserver/update.py
 msgid "Clean update - don't uses caches, reprocess all APKs"
-msgstr "གསར་བསྒྱུར་གཙང་བཟོ།-ཡིག་ཆ་གསོག་ཉར་བེད་སྤྱོ་མ་བྱེད། apks ཚང་མ་སྐྱར་སྤྱོད་བྱེད།"
+msgstr "གསར་བསྒྱུར་གཙང་བཟོ།-ཡིག་ཆ་གསོག་ཉར་བེད་སྤྱོ་མ་བྱེད། APKs ཚང་མ་སྐྱར་སྤྱོད་བྱེད།"
 
 #: ../fdroidserver/import.py
 msgid "Comma separated list of categories."
@@ -516,11 +516,11 @@ msgstr "{path}མེད་པ་བཟོས་པ་ལ་རྙེད་མ་
 #: ../fdroidserver/update.py
 #, fuzzy, python-brace-format
 msgid "Could not open APK {path} for analysis: "
-msgstr "དཔྱད་ཞིབ་ཀྱི་ཆེད་དུ་apk ཡིག་ཆ་ཁ་ཕྱེས་ཐུབ་ཀྱི་མིན་འདུག"
+msgstr "དཔྱད་ཞིབ་ཀྱི་ཆེད་དུ་APK ཡིག་ཆ་ཁ་ཕྱེས་ཐུབ་ཀྱི་མིན་འདུག"
 
 #: ../fdroidserver/update.py
-msgid "Could not open apk file for analysis"
-msgstr "དཔྱད་ཞིབ་ཀྱི་ཆེད་དུ་apk ཡིག་ཆ་ཁ་ཕྱེས་ཐུབ་ཀྱི་མིན་འདུག"
+msgid "Could not open APK file for analysis"
+msgstr "དཔྱད་ཞིབ་ཀྱི་ཆེད་དུ་APK ཡིག་ཆ་ཁ་ཕྱེས་ཐུབ་ཀྱི་མིན་འདུག"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -798,13 +798,13 @@ msgstr "APKནང་གསལ་བའི་གནས་ཚུལ་རྣམས
 
 #: ../fdroidserver/update.py
 #, python-brace-format
-msgid "Failed to get apk information, deleting {path}"
-msgstr "apk གནས་ཚུལ་རག་གི་མིན་འདུག {path}སུབ་བཞིན་པ།"
+msgid "Failed to get APK information, deleting {path}"
+msgstr "APK གནས་ཚུལ་རག་གི་མིན་འདུག {path}སུབ་བཞིན་པ།"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
-msgid "Failed to get apk information, skipping {path}"
-msgstr "apk གནས་ཚུལ་རག་གི་མིན་འདུག {path}མཆོང་།"
+msgid "Failed to get APK information, skipping {path}"
+msgstr "APK གནས་ཚུལ་རག་གི་མིན་འདུག {path}མཆོང་།"
 
 #: ../fdroidserver/install.py
 #, python-brace-format
@@ -1278,8 +1278,8 @@ msgstr "ཐུམ་སྒྲིལ་དམིགས་སྟོན་བྱེ
 
 #: ../fdroidserver/install.py
 #, python-format
-msgid "No signed apk available for %s"
-msgstr "%s 1ཆེད་དུ་མིང་རྟགས་བཀོད་པའི་ apk མེད།"
+msgid "No signed APK available for %s"
+msgstr "%s 1ཆེད་དུ་མིང་རྟགས་བཀོད་པའི་ APK མེད།"
 
 #: ../fdroidserver/install.py
 msgid "No signed output directory - nothing to do"
@@ -1657,8 +1657,8 @@ msgstr ""
 msgid "Setup an emulator, install the APK on it and perform a Drozer scan"
 msgstr "གློག་ཀླད་ལད་མོ་མཁན་ཞིག་སྒྲིག འདིའི་སྒང་ལ་ APK ནང་འགྲིག་བཅུག་བྱེད་དུ་བཅུག་ནས་ཌོ་ཛར་འཚག་རྒྱབ་འགོ་བཙུགས་བྱེད།"
 
-msgid "Setup an emulator, install the apk on it and perform a drozer scan"
-msgstr "གློག་ཀླད་ལད་མོ་མཁན་ཞིག་སྒྲིག འདིའི་སྒང་ལ་apk ནང་འགྲིག་བཅུག་བྱེད་དུ་བཅུག་ནས་ཌོ་ཛར་འཚག་རྒྱབ་འགོ་བཙུགས་བྱེད།"
+msgid "Setup an emulator, install the APK on it and perform a drozer scan"
+msgstr "གློག་ཀླད་ལད་མོ་མཁན་ཞིག་སྒྲིག འདིའི་སྒང་ལ་APK ནང་འགྲིག་བཅུག་བྱེད་དུ་བཅུག་ནས་ཌོ་ཛར་འཚག་རྒྱབ་འགོ་བཙུགས་བྱེད།"
 
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Sign and place packages in the repo"
@@ -2035,8 +2035,8 @@ msgstr "ཐོན་སྐྱེད་ཞབས་ཞུ་འཕྲུལ་ཆ
 msgid "Use date from APK instead of current time for newly added APKs"
 msgstr "APK རང་གི་ཚེས་གྲངས་དེ་བེད་སྤྱོད་བྱས་པ་ལས་ཁ་སྣོན་བྱས་པའི་ APKs གསར་པའི་དུས་ཚོས་བེད་སྤྱོད་མ་བྱེད།"
 
-msgid "Use date from apk instead of current time for newly added apks"
-msgstr "apk རང་གི་ཚེས་གྲངས་དེ་བེད་སྤྱོད་བྱས་པ་ལས་ཁ་སྣོན་བྱས་པའི་apk གསར་པའི་དུས་ཚོས་བེད་སྤྱོད་མ་བྱེད།"
+msgid "Use date from APK instead of current time for newly added APKs"
+msgstr "APK རང་གི་ཚེས་གྲངས་དེ་བེད་སྤྱོད་བྱས་པ་ལས་ཁ་སྣོན་བྱས་པའི་APK གསར་པའི་དུས་ཚོས་བེད་སྤྱོད་མ་བྱེད།"
 
 #: ../fdroidserver/deploy.py ../fdroidserver/upload.py
 #, python-brace-format
@@ -2791,8 +2791,8 @@ msgstr[0] "{} བཟོ་སྐྲུན་ལེགས་སྒྲུབ།"
 #~ msgid "Cannot find an appid for {path}!"
 #~ msgstr "{path}!གྱི་ཆེད་དུ་ཐུམ་སྒྲིལ་གྱི་མིང་རྙེད་མ་སོང་།"
 
-#~ msgid "Clean update - don't uses caches, reprocess all apks"
-#~ msgstr "གསར་བསྒྱུར་གཙང་བཟོ།-ཡིག་ཆ་གསོག་ཉར་བེད་སྤྱོ་མ་བྱེད། apks ཚང་མ་སྐྱར་སྤྱོད་བྱེད།"
+#~ msgid "Clean update - don't uses caches, reprocess all APKs"
+#~ msgstr "གསར་བསྒྱུར་གཙང་བཟོ།-ཡིག་ཆ་གསོག་ཉར་བེད་སྤྱོ་མ་བྱེད། APKs ཚང་མ་སྐྱར་སྤྱོད་བྱེད།"
 
 #~ msgid "Interactively ask about things that need updating."
 #~ msgstr "གསར་བསྒྱུར་བྱེད་དགོས་པའི་རིགས་ལ་སྦས་གསང་མེད་པའི་ཐོག་ནས་གསུངས་རོགས།."

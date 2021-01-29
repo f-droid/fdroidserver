@@ -1442,14 +1442,14 @@ def scan_apk_androguard(apk, apkfile):
         else:
             if options.delete_unknown:
                 if os.path.exists(apkfile):
-                    logging.error(_("Failed to get apk information, deleting {path}")
+                    logging.error(_("Failed to get APK information, deleting {path}")
                                   .format(path=apkfile))
                     os.remove(apkfile)
                 else:
                     logging.error(_("Could not find {path} to remove it")
                                   .format(path=apkfile))
             else:
-                logging.error(_("Failed to get apk information, skipping {path}")
+                logging.error(_("Failed to get APK information, skipping {path}")
                               .format(path=apkfile))
             raise BuildException(_("Invalid APK"))
     except (FileNotFoundError, zipfile.BadZipFile) as e:

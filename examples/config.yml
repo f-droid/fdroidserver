@@ -111,7 +111,7 @@
 # Optionally, override home directory for gpg
 # gpghome: /home/fdroid/somewhere/else/.gnupg
 
-# The ID of a GPG key for making detached signatures for apks. Optional.
+# The ID of a GPG key for making detached signatures for APKs. Optional.
 # gpgkey: 1DBA2E89
 
 # The key (from the keystore defined below) to be used for signing the
@@ -269,12 +269,12 @@
 # nonstandardwebroot: false
 
 
-# If you want to upload the release apk file to androidobservatory.org
+# If you want to upload the release APK file to androidobservatory.org
 #
 # androidobservatory: false
 
 
-# If you want to upload the release apk file to virustotal.com
+# If you want to upload the release APK file to virustotal.com
 # You have to enter your profile apikey to enable the upload.
 #
 # virustotal_apikey: 9872987234982734

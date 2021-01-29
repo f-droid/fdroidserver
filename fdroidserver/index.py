@@ -444,7 +444,7 @@ def make_v0(apps, apks, repodir, repodict, requestsdict, fdroid_signing_key_fing
         if app.RequiresRoot:
             addElement('requirements', 'root', doc, apel)
 
-        # Sort the apk list into version order, just so the web site
+        # Sort the APK list into version order, just so the web site
         # doesn't have to do any work by default...
         apklist = sorted(apklist, key=lambda apk: apk['versionCode'], reverse=True)
 

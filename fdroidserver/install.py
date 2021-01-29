@@ -70,7 +70,7 @@ def main():
         vercodes = common.read_pkg_args(options.appid, True)
         apks = {appid: None for appid in vercodes}
 
-        # Get the signed apk with the highest vercode
+        # Get the signed APK with the highest vercode
         for apkfile in sorted(glob.glob(os.path.join(output_dir, '*.apk'))):
 
             try:
@@ -85,7 +85,7 @@ def main():
 
         for appid, apk in apks.items():
             if not apk:
-                raise FDroidException(_("No signed apk available for %s") % appid)
+                raise FDroidException(_("No signed APK available for %s") % appid)
 
     else:
 

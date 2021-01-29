@@ -474,8 +474,8 @@ msgstr "Vérifier les mises à jour pour les applications"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
-msgid "Checking archiving for {appid} - apks:{integer}, keepversions:{keep}, archapks:{arch}"
-msgstr "Vérification de l'archivage pour {appid} - apks : {integer}, keepversions : {keep}, archapks : {arch}"
+msgid "Checking archiving for {appid} - APKs:{integer}, keepversions:{keep}, archapks:{arch}"
+msgstr "Vérification de l'archivage pour {appid} - APKs : {integer}, keepversions : {keep}, archapks : {arch}"
 
 #: ../fdroidserver/dscanner.py
 msgid "Clean after all scans have finished"
@@ -536,11 +536,11 @@ msgstr "Chemin {path} introuvable pour sa suppression"
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Could not open APK {path} for analysis: "
-msgstr "Impossible d'ouvrir le fichier apk {path} pour analyse : "
+msgstr "Impossible d'ouvrir le fichier APK {path} pour analyse : "
 
 #: ../fdroidserver/update.py
-msgid "Could not open apk file for analysis"
-msgstr "Impossible d'ouvrir le fichier apk pour analyse"
+msgid "Could not open APK file for analysis"
+msgstr "Impossible d'ouvrir le fichier APK pour analyse"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -819,12 +819,12 @@ msgstr "Échoument lors de la récupération de l'information manifest de l'APK"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
-msgid "Failed to get apk information, deleting {path}"
+msgid "Failed to get APK information, deleting {path}"
 msgstr "Impossible d'obtenir les informations de l'APK, suppression {path}"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
-msgid "Failed to get apk information, skipping {path}"
+msgid "Failed to get APK information, skipping {path}"
 msgstr "Échoument lors de la récupération des informations de l'APK, saut de {path}"
 
 #: ../fdroidserver/install.py
@@ -1293,8 +1293,8 @@ msgstr "Aucun packet spécifier"
 
 #: ../fdroidserver/install.py
 #, python-format
-msgid "No signed apk available for %s"
-msgstr "Aucun apk signée dispognible pour %s"
+msgid "No signed APK available for %s"
+msgstr "Aucun APK signée dispognible pour %s"
 
 #: ../fdroidserver/install.py
 msgid "No signed output directory - nothing to do"
@@ -1671,7 +1671,7 @@ msgstr "Définir une timeout de {0} secondes pour cette construction"
 msgid "Setup an emulator, install the APK on it and perform a Drozer scan"
 msgstr "Installez un émulateur, installez l'APK dessus et effectuez un scan Drozer"
 
-msgid "Setup an emulator, install the apk on it and perform a drozer scan"
+msgid "Setup an emulator, install the APK on it and perform a drozer scan"
 msgstr "Met en place un émulateur, y installe l’APK et réalise un scan drozer"
 
 #: ../fdroid ../fdroidserver/__main__.py
@@ -2045,7 +2045,7 @@ msgstr "Utiliser le serveur de build"
 msgid "Use date from APK instead of current time for newly added APKs"
 msgstr "Utiliser la date de l'APK plutôt que la date courante pour les APKs nouvellement ajoutés"
 
-msgid "Use date from apk instead of current time for newly added apks"
+msgid "Use date from APK instead of current time for newly added APKs"
 msgstr "Utiliser la date de l'APK plutôt que la date courante pour les APKs nouvellement ajoutés"
 
 #: ../fdroidserver/deploy.py ../fdroidserver/upload.py
@@ -2810,7 +2810,7 @@ msgstr[1] "{} compilations réussies"
 #~ msgid "Cannot find an appid for {path}!"
 #~ msgstr "Impossible de trouver un appid pour {path} !"
 
-#~ msgid "Clean update - don't uses caches, reprocess all apks"
+#~ msgid "Clean update - don't uses caches, reprocess all APKs"
 #~ msgstr "Mise à jour propre - n'utilise pas les caches, ré-exécute tous les APKs"
 
 #~ msgid "Interactively ask about things that need updating."

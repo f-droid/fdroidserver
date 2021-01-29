@@ -458,7 +458,7 @@ msgstr "Verifica se existem atualizações para os aplicativos"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
-msgid "Checking archiving for {appid} - apks:{integer}, keepversions:{keep}, archapks:{arch}"
+msgid "Checking archiving for {appid} - APKs:{integer}, keepversions:{keep}, archapks:{arch}"
 msgstr "Verificar o arquivamento de {appid} - APKs: {integer}, Versões Mantidas: {keep}, Arcos de APKs: {arch}"
 
 #: ../fdroidserver/dscanner.py
@@ -523,7 +523,7 @@ msgid "Could not open APK {path} for analysis: "
 msgstr "Impossível abrir o APK {path} para análise: "
 
 #: ../fdroidserver/update.py
-msgid "Could not open apk file for analysis"
+msgid "Could not open APK file for analysis"
 msgstr "Impossível abrir o arquivo de APK para analisá-lo"
 
 #: ../fdroidserver/common.py
@@ -803,12 +803,12 @@ msgstr "Falha ao obter informações de manifesto do APK"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
-msgid "Failed to get apk information, deleting {path}"
+msgid "Failed to get APK information, deleting {path}"
 msgstr "Falha ao obter informações do APK, excluindo {path}"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
-msgid "Failed to get apk information, skipping {path}"
+msgid "Failed to get APK information, skipping {path}"
 msgstr "Falha ao obter informações do APK, ignorando {path}"
 
 #: ../fdroidserver/install.py
@@ -1277,7 +1277,7 @@ msgstr "Nenhum pacote especificado"
 
 #: ../fdroidserver/install.py
 #, python-format
-msgid "No signed apk available for %s"
+msgid "No signed APK available for %s"
 msgstr "Não há APK assinado disponível para %s"
 
 #: ../fdroidserver/install.py
@@ -1653,10 +1653,10 @@ msgstr "Definindo {0} segundos como tempo limite de para esta compilação"
 
 #: ../fdroidserver/build.py
 msgid "Setup an emulator, install the APK on it and perform a Drozer scan"
-msgstr "Configurar um emulador, instalar o apk nele e escanear com o Drozer"
+msgstr "Configurar um emulador, instalar o APK nele e escanear com o Drozer"
 
-msgid "Setup an emulator, install the apk on it and perform a drozer scan"
-msgstr "Configurar um emulador, instalar o apk nele e escanear com o drozer"
+msgid "Setup an emulator, install the APK on it and perform a drozer scan"
+msgstr "Configurar um emulador, instalar o APK nele e escanear com o drozer"
 
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Sign and place packages in the repo"
@@ -2027,10 +2027,10 @@ msgstr "Usar servidor de compilação"
 
 #: ../fdroidserver/update.py
 msgid "Use date from APK instead of current time for newly added APKs"
-msgstr "Usar a data do apk ao invés do horário atual para APKs recentemente adicionados"
+msgstr "Usar a data do APK ao invés do horário atual para APKs recentemente adicionados"
 
-msgid "Use date from apk instead of current time for newly added apks"
-msgstr "Usar a data do apk ao invés do horário atual para APKs recentemente adicionados"
+msgid "Use date from APK instead of current time for newly added APKs"
+msgstr "Usar a data do APK ao invés do horário atual para APKs recentemente adicionados"
 
 #: ../fdroidserver/deploy.py ../fdroidserver/upload.py
 #, python-brace-format
@@ -2787,7 +2787,7 @@ msgstr[1] "{} compilações foram bem sucedidas"
 #~ msgid "Cannot find an appid for {path}!"
 #~ msgstr "Não é possível encontrar um appid para {path} 1!"
 
-#~ msgid "Clean update - don't uses caches, reprocess all apks"
+#~ msgid "Clean update - don't uses caches, reprocess all APKs"
 #~ msgstr "Atualização limpa - não usa cache, reprocessa todos os APKs"
 
 #~ msgid "Interactively ask about things that need updating."

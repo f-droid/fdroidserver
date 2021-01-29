@@ -452,8 +452,8 @@ msgstr "檢查應用程式更新"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
-msgid "Checking archiving for {appid} - apks:{integer}, keepversions:{keep}, archapks:{arch}"
-msgstr "檢查 {appid} 的歸檔 - apks:{integer}，keepversions:{keep}，archapks:{arch}"
+msgid "Checking archiving for {appid} - APKs:{integer}, keepversions:{keep}, archapks:{arch}"
+msgstr "檢查 {appid} 的歸檔 - APKs:{integer}，keepversions:{keep}，archapks:{arch}"
 
 #: ../fdroidserver/dscanner.py
 msgid "Clean after all scans have finished"
@@ -519,8 +519,8 @@ msgid "Could not open APK {path} for analysis: "
 msgstr "無法開啟 APK 檔{path}案作分析 : "
 
 #: ../fdroidserver/update.py
-msgid "Could not open apk file for analysis"
-msgstr "無法開啟 apk 檔案作分析"
+msgid "Could not open APK file for analysis"
+msgstr "無法開啟 APK 檔案作分析"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -800,13 +800,13 @@ msgstr "無法取得 APK 單號資訊"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
-msgid "Failed to get apk information, deleting {path}"
-msgstr "無法取得 apk 資訊，刪除 {path}"
+msgid "Failed to get APK information, deleting {path}"
+msgstr "無法取得 APK 資訊，刪除 {path}"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
-msgid "Failed to get apk information, skipping {path}"
-msgstr "無法取得 apk 資訊，略過 {path}"
+msgid "Failed to get APK information, skipping {path}"
+msgstr "無法取得 APK 資訊，略過 {path}"
 
 #: ../fdroidserver/install.py
 #, python-brace-format
@@ -1278,8 +1278,8 @@ msgstr "未指定套件"
 
 #: ../fdroidserver/install.py
 #, python-format
-msgid "No signed apk available for %s"
-msgstr "%s 沒有已簽署的 apk"
+msgid "No signed APK available for %s"
+msgstr "%s 沒有已簽署的 APK"
 
 #: ../fdroidserver/install.py
 msgid "No signed output directory - nothing to do"
@@ -1379,7 +1379,7 @@ msgstr "選項"
 
 #: ../fdroidserver/verify.py
 msgid "Output JSON report to file named after APK."
-msgstr "將 json 報告輸出到以 apk 命名的檔案。"
+msgstr "將 json 報告輸出到以 APK 命名的檔案。"
 
 #: ../fdroidserver/scanner.py
 msgid "Output JSON to stdout."
@@ -1657,8 +1657,8 @@ msgstr "為此構建設定 {0} 秒後超時"
 msgid "Setup an emulator, install the APK on it and perform a Drozer scan"
 msgstr "設置一個模擬器，在其上安裝 APK 並執行 drozer 掃描"
 
-msgid "Setup an emulator, install the apk on it and perform a drozer scan"
-msgstr "設置一個模擬器，在其上安裝 apk 並執行 drozer 掃描"
+msgid "Setup an emulator, install the APK on it and perform a drozer scan"
+msgstr "設置一個模擬器，在其上安裝 APK 並執行 drozer 掃描"
 
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Sign and place packages in the repo"
@@ -2035,8 +2035,8 @@ msgstr "使用構建伺服器"
 msgid "Use date from APK instead of current time for newly added APKs"
 msgstr "使用來自 APK 的日期，而不是新增之 APK 目前的時間"
 
-msgid "Use date from apk instead of current time for newly added apks"
-msgstr "新增的 apk 使用日期，來自 apk 而不是目前時間"
+msgid "Use date from APK instead of current time for newly added APKs"
+msgstr "新增的 APK 使用日期，來自 APK 而不是目前時間"
 
 #: ../fdroidserver/deploy.py ../fdroidserver/upload.py
 #, python-brace-format
@@ -2791,8 +2791,8 @@ msgstr[0] "{} 編譯成功"
 #~ msgid "Cannot find an appid for {path}!"
 #~ msgstr "找不到 {path} 的 appid！"
 
-#~ msgid "Clean update - don't uses caches, reprocess all apks"
-#~ msgstr "清除更新 - 不使用快取，重新處理全部的 apk"
+#~ msgid "Clean update - don't uses caches, reprocess all APKs"
+#~ msgstr "清除更新 - 不使用快取，重新處理全部的 APK"
 
 #~ msgid "Interactively ask about things that need updating."
 #~ msgstr "以對話方式詢問需要更新的內容。"

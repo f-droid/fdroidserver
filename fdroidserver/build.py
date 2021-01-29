@@ -659,7 +659,7 @@ def build_local(app, build, vcs, build_dir, output_dir, log_dir, srclib_dir, ext
 
         # expected to fail.
         # Signing will fail if not set by environnment vars (cf. p4a docs).
-        # But the unsigned apk will be ok.
+        # But the unsigned APK will be ok.
         p.returncode = 0
 
     elif bmethod == 'gradle':
@@ -748,7 +748,7 @@ def build_local(app, build, vcs, build_dir, output_dir, log_dir, srclib_dir, ext
             # really old path
             os.path.join(root_dir, 'build', 'apk'),
             ]
-        # If we build with gradle flavours with gradle plugin >= 3.0 the apk will be in
+        # If we build with gradle flavours with gradle plugin >= 3.0 the APK will be in
         # a subdirectory corresponding to the flavour command used, but with different
         # capitalization.
         if flavours_cmd:
@@ -790,10 +790,10 @@ def build_local(app, build, vcs, build_dir, output_dir, log_dir, srclib_dir, ext
         raise BuildException("APK is debuggable")
 
     # By way of a sanity check, make sure the version and version
-    # code in our new apk match what we expect...
+    # code in our new APK match what we expect...
     logging.debug("Checking " + src)
     if not os.path.exists(src):
-        raise BuildException("Unsigned apk is not at expected location of " + src)
+        raise BuildException("Unsigned APK is not at expected location of " + src)
 
     if common.get_file_extension(src) == 'apk':
         vercode, version = get_metadata_from_apk(app, build, src)
@@ -807,7 +807,7 @@ def build_local(app, build, vcs, build_dir, output_dir, log_dir, srclib_dir, ext
             if scanner.scan_binary(src):
                 raise BuildException("Found blacklisted packages in final apk!")
 
-    # Copy the unsigned apk to our destination directory for further
+    # Copy the unsigned APK to our destination directory for further
     # processing (by publish.py)...
     dest = os.path.join(output_dir, common.get_release_filename(app, build))
     shutil.copyfile(src, dest)
@@ -1111,7 +1111,7 @@ def main():
 
                     if app.Binaries is not None:
                         # This is an app where we build from source, and
-                        # verify the apk contents against a developer's
+                        # verify the APK contents against a developer's
                         # binary. We get that binary now, and save it
                         # alongside our built one in the 'unsigend'
                         # directory.

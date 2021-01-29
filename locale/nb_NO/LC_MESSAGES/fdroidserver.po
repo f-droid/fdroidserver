@@ -459,7 +459,7 @@ msgstr "Se etter programoppdateringer"
 
 #: ../fdroidserver/update.py
 #, fuzzy, python-brace-format
-msgid "Checking archiving for {appid} - apks:{integer}, keepversions:{keep}, archapks:{arch}"
+msgid "Checking archiving for {appid} - APKs:{integer}, keepversions:{keep}, archapks:{arch}"
 msgstr "Sjekker arkivering for {appid} - APK-er:{integer}, keepversions:{keep}, archapks:{arch}"
 
 #: ../fdroidserver/dscanner.py
@@ -527,7 +527,7 @@ msgstr "Kunne ikke åpne APK-fil for analyse"
 
 #: ../fdroidserver/update.py
 #, fuzzy
-msgid "Could not open apk file for analysis"
+msgid "Could not open APK file for analysis"
 msgstr "Kunne ikke åpne APK-fil for analyse"
 
 #: ../fdroidserver/common.py
@@ -820,12 +820,12 @@ msgstr "Klarte ikke å hente APK-manifestinfo"
 
 #: ../fdroidserver/update.py
 #, fuzzy, python-brace-format
-msgid "Failed to get apk information, deleting {path}"
+msgid "Failed to get APK information, deleting {path}"
 msgstr "Klarte ikke å hente APK-info, sletter {path}"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
-msgid "Failed to get apk information, skipping {path}"
+msgid "Failed to get APK information, skipping {path}"
 msgstr "Klarte ikke å hente APK-info, hopper over {path}"
 
 #: ../fdroidserver/install.py
@@ -1312,7 +1312,7 @@ msgstr "Ingen pakker angitt"
 
 #: ../fdroidserver/install.py
 #, fuzzy, python-format
-msgid "No signed apk available for %s"
+msgid "No signed APK available for %s"
 msgstr "Ingen signert APK tilgjengelig for %s"
 
 #: ../fdroidserver/install.py
@@ -1704,7 +1704,7 @@ msgid "Setup an emulator, install the APK on it and perform a Drozer scan"
 msgstr "Sett opp en emulator, installer APK-en på den og utfør en Drozer-skanning"
 
 #, fuzzy
-msgid "Setup an emulator, install the apk on it and perform a drozer scan"
+msgid "Setup an emulator, install the APK on it and perform a drozer scan"
 msgstr "Sett opp en emulator, installer APK-en på den og utfør en Drozer-skanning"
 
 #: ../fdroid ../fdroidserver/__main__.py
@@ -2090,7 +2090,7 @@ msgstr "Bruk byggtjener"
 msgid "Use date from APK instead of current time for newly added APKs"
 msgstr "Bruk dato fra APK istedenfor nåværende tid for nylig tillagte APK-er."
 
-msgid "Use date from apk instead of current time for newly added apks"
+msgid "Use date from APK instead of current time for newly added APKs"
 msgstr "Bruk dato fra APK istedenfor nåværende tid for nylig tillagte APK-er"
 
 #: ../fdroidserver/deploy.py ../fdroidserver/upload.py

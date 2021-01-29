@@ -447,7 +447,7 @@ msgstr "Buscar actualizaciones de las aplicaciones"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
-msgid "Checking archiving for {appid} - apks:{integer}, keepversions:{keep}, archapks:{arch}"
+msgid "Checking archiving for {appid} - APKs:{integer}, keepversions:{keep}, archapks:{arch}"
 msgstr ""
 
 #: ../fdroidserver/dscanner.py
@@ -515,7 +515,7 @@ msgid "Could not open APK {path} for analysis: "
 msgstr ""
 
 #: ../fdroidserver/update.py
-msgid "Could not open apk file for analysis"
+msgid "Could not open APK file for analysis"
 msgstr ""
 
 #: ../fdroidserver/common.py
@@ -794,12 +794,12 @@ msgstr ""
 
 #: ../fdroidserver/update.py
 #, python-brace-format
-msgid "Failed to get apk information, deleting {path}"
+msgid "Failed to get APK information, deleting {path}"
 msgstr ""
 
 #: ../fdroidserver/update.py
 #, python-brace-format
-msgid "Failed to get apk information, skipping {path}"
+msgid "Failed to get APK information, skipping {path}"
 msgstr ""
 
 #: ../fdroidserver/install.py
@@ -1270,7 +1270,7 @@ msgstr ""
 
 #: ../fdroidserver/install.py
 #, python-format
-msgid "No signed apk available for %s"
+msgid "No signed APK available for %s"
 msgstr ""
 
 #: ../fdroidserver/install.py
@@ -1649,10 +1649,10 @@ msgstr ""
 #: ../fdroidserver/build.py
 #, fuzzy
 msgid "Setup an emulator, install the APK on it and perform a Drozer scan"
-msgstr "Configurar un emulador, instalarle el apk y realizar el escaneo de barrido"
+msgstr "Configurar un emulador, instalarle el APK y realizar el escaneo de barrido"
 
-msgid "Setup an emulator, install the apk on it and perform a drozer scan"
-msgstr "Configurar un emulador, instalarle el apk y realizar el escaneo de barrido"
+msgid "Setup an emulator, install the APK on it and perform a drozer scan"
+msgstr "Configurar un emulador, instalarle el APK y realizar el escaneo de barrido"
 
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Sign and place packages in the repo"
@@ -2025,10 +2025,10 @@ msgstr "Usar servidor de construccion"
 #: ../fdroidserver/update.py
 #, fuzzy
 msgid "Use date from APK instead of current time for newly added APKs"
-msgstr "Utilizar la fecha del apk en vez de la actual para los apks nuevos que se agreguen"
+msgstr "Utilizar la fecha del APK en vez de la actual para los APKs nuevos que se agreguen"
 
-msgid "Use date from apk instead of current time for newly added apks"
-msgstr "Utilizar la fecha del apk en vez de la actual para los apks nuevos que se agreguen"
+msgid "Use date from APK instead of current time for newly added APKs"
+msgstr "Utilizar la fecha del APK en vez de la actual para los APKs nuevos que se agreguen"
 
 #: ../fdroidserver/deploy.py ../fdroidserver/upload.py
 #, python-brace-format
@@ -2789,7 +2789,7 @@ msgstr[1] ""
 #~ msgid "Add gpg signatures for packages in repo"
 #~ msgstr "Agregar firmas GPG a paquetes en el repositorio"
 
-#~ msgid "Clean update - don't uses caches, reprocess all apks"
+#~ msgid "Clean update - don't uses caches, reprocess all APKs"
 #~ msgstr "Limpiar actualización - no utiliza cachés, reprocesa todos los APK's"
 
 #~ msgid "Interactively ask about things that need updating."

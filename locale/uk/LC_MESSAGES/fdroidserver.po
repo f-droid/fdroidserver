@@ -456,8 +456,8 @@ msgstr "Перевірте наявність оновлень для засто
 
 #: ../fdroidserver/update.py
 #, python-brace-format
-msgid "Checking archiving for {appid} - apks:{integer}, keepversions:{keep}, archapks:{arch}"
-msgstr "Перевірка архівації на {appid} - apks:{integer}, keepversions:{keep}, archapks:{arch}"
+msgid "Checking archiving for {appid} - APKs:{integer}, keepversions:{keep}, archapks:{arch}"
+msgstr "Перевірка архівації на {appid} - APKs:{integer}, keepversions:{keep}, archapks:{arch}"
 
 #: ../fdroidserver/dscanner.py
 msgid "Clean after all scans have finished"
@@ -521,8 +521,8 @@ msgid "Could not open APK {path} for analysis: "
 msgstr "Не вдалося відкрити файл APK {path} для аналізу: "
 
 #: ../fdroidserver/update.py
-msgid "Could not open apk file for analysis"
-msgstr "Не вдалося відкрити файл apk для аналізу"
+msgid "Could not open APK file for analysis"
+msgstr "Не вдалося відкрити файл APK для аналізу"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -801,13 +801,13 @@ msgstr "Не вдалося отримати подробиці про APK"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
-msgid "Failed to get apk information, deleting {path}"
-msgstr "Не вдалося отримати подробиці про apk, {path} буде видалено"
+msgid "Failed to get APK information, deleting {path}"
+msgstr "Не вдалося отримати подробиці про APK, {path} буде видалено"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
-msgid "Failed to get apk information, skipping {path}"
-msgstr "Не вдалося отримати подробиці про apk, {path} буде пропущено"
+msgid "Failed to get APK information, skipping {path}"
+msgstr "Не вдалося отримати подробиці про APK, {path} буде пропущено"
 
 #: ../fdroidserver/install.py
 #, python-brace-format
@@ -1275,8 +1275,8 @@ msgstr "Пакунків не вказано"
 
 #: ../fdroidserver/install.py
 #, python-format
-msgid "No signed apk available for %s"
-msgstr "Немає підписаних apk для %s"
+msgid "No signed APK available for %s"
+msgstr "Немає підписаних APK для %s"
 
 #: ../fdroidserver/install.py
 msgid "No signed output directory - nothing to do"
@@ -1654,8 +1654,8 @@ msgstr "Час очікування для цієї збірки станови�
 msgid "Setup an emulator, install the APK on it and perform a Drozer scan"
 msgstr "Налаштуйте емулятор, встановіть на нього APK та виконайте сканування з Drozer"
 
-msgid "Setup an emulator, install the apk on it and perform a drozer scan"
-msgstr "Налаштуйте емулятор, встановіть apk на нього та виконайте drozer сканування"
+msgid "Setup an emulator, install the APK on it and perform a drozer scan"
+msgstr "Налаштуйте емулятор, встановіть APK на нього та виконайте drozer сканування"
 
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Sign and place packages in the repo"
@@ -2028,8 +2028,8 @@ msgstr "Використовуйте сервер створення"
 msgid "Use date from APK instead of current time for newly added APKs"
 msgstr "Використовуйте дату з APK замість поточного часу для нових доданих APK"
 
-msgid "Use date from apk instead of current time for newly added apks"
-msgstr "Використовуйте дату з apk, замість поточного часу для нових доданих apks"
+msgid "Use date from APK instead of current time for newly added APKs"
+msgstr "Використовуйте дату з APK, замість поточного часу для нових доданих APKs"
 
 #: ../fdroidserver/deploy.py ../fdroidserver/upload.py
 #, python-brace-format
@@ -2794,8 +2794,8 @@ msgstr[2] "{} зібрано успішно"
 #~ msgid "Cannot find an appid for {path}!"
 #~ msgstr "Не вдається знайти appid за шляхом {path}!"
 
-#~ msgid "Clean update - don't uses caches, reprocess all apks"
-#~ msgstr "Очистити оновлення - не використовує кеш, повторно обробляє всі apks"
+#~ msgid "Clean update - don't uses caches, reprocess all APKs"
+#~ msgstr "Очистити оновлення - не використовує кеш, повторно обробляє всі APKs"
 
 #~ msgid "Interactively ask about things that need updating."
 #~ msgstr "Інтерактивно запитайте про речі, які потребують оновлення."

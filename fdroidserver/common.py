@@ -2312,7 +2312,7 @@ class KnownApks:
 
     def recordapk(self, apkName, app, default_date=None):
         '''
-        Record an apk (if it's new, otherwise does nothing)
+        Record an APK (if it's new, otherwise does nothing)
         Returns the date it was added as a datetime instance
         '''
         if apkName not in self.apks:
@@ -2410,7 +2410,7 @@ def is_apk_and_debuggable(apkfile):
 
     Parse only <application android:debuggable=""> from the APK.
 
-    :param apkfile: full path to the apk to check"""
+    :param apkfile: full path to the APK to check"""
 
     if get_file_extension(apkfile) != 'apk':
         return False
@@ -2968,7 +2968,7 @@ def metadata_find_developer_signing_files(appid, vercode):
 def apk_strip_v1_signatures(signed_apk, strip_manifest=False):
     """Removes signatures from APK.
 
-    :param signed_apk: path to apk file.
+    :param signed_apk: path to APK file.
     :param strip_manifest: when set to True also the manifest file will
         be removed from the APK.
     """
@@ -3049,7 +3049,7 @@ def get_min_sdk_version(apk):
     """
     This wraps the androguard function to always return and int and fall back to 1
     if we can't get a valid minsdk version
-    :param apk: androguard apk object
+    :param apk: androguard APK object
     :return: minsdk as int
     """
     try:
@@ -3144,12 +3144,12 @@ def verify_apks(signed_apk, unsigned_apk, tmp_dir):
 
     One of the inputs is signed, the other is unsigned. The signature metadata
     is transferred from the signed to the unsigned apk, and then jarsigner is
-    used to verify that the signature from the signed apk is also valid for
+    used to verify that the signature from the signed APK is also valid for
     the unsigned one.  If the APK given as unsigned actually does have a
     signature, it will be stripped out and ignored.
 
-    :param signed_apk: Path to a signed apk file
-    :param unsigned_apk: Path to an unsigned apk file expected to match it
+    :param signed_apk: Path to a signed APK file
+    :param unsigned_apk: Path to an unsigned APK file expected to match it
     :param tmp_dir: Path to directory for temporary files
     :returns: None if the verification is successful, otherwise a string
               describing what went wrong.
@@ -3312,7 +3312,7 @@ apk_badchars = re.compile('''[/ :;'"]''')
 def compare_apks(apk1, apk2, tmp_dir, log_dir=None):
     """Compare two apks
 
-    Returns None if the apk content is the same (apart from the signing key),
+    Returns None if the APK content is the same (apart from the signing key),
     otherwise a string describing what's different, or what went wrong when
     trying to do the comparison.
     """

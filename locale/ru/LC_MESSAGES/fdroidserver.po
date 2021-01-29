@@ -462,8 +462,8 @@ msgstr "Проверить обновления для приложений"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
-msgid "Checking archiving for {appid} - apks:{integer}, keepversions:{keep}, archapks:{arch}"
-msgstr "Проверка перед помещением в архив для {appid}. apks:{integer}, keepversions:{keep}, archapks:{arch}"
+msgid "Checking archiving for {appid} - APKs:{integer}, keepversions:{keep}, archapks:{arch}"
+msgstr "Проверка перед помещением в архив для {appid}. APKs:{integer}, keepversions:{keep}, archapks:{arch}"
 
 #: ../fdroidserver/dscanner.py
 msgid "Clean after all scans have finished"
@@ -527,7 +527,7 @@ msgid "Could not open APK {path} for analysis: "
 msgstr "Не удалось открыть и проанализировать файл APK {path}: "
 
 #: ../fdroidserver/update.py
-msgid "Could not open apk file for analysis"
+msgid "Could not open APK file for analysis"
 msgstr "Не удалось открыть и проанализировать файл APK"
 
 #: ../fdroidserver/common.py
@@ -807,12 +807,12 @@ msgstr "Извлечь информацию из APK манифеста не п�
 
 #: ../fdroidserver/update.py
 #, python-brace-format
-msgid "Failed to get apk information, deleting {path}"
+msgid "Failed to get APK information, deleting {path}"
 msgstr "Не удалось получить информацию об APK файле, {path} будет удален"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
-msgid "Failed to get apk information, skipping {path}"
+msgid "Failed to get APK information, skipping {path}"
 msgstr "Не удалось получить информацию об APK файле, {path} будет пропущен"
 
 #: ../fdroidserver/install.py
@@ -1281,8 +1281,8 @@ msgstr "Не выбраны пакеты"
 
 #: ../fdroidserver/install.py
 #, python-format
-msgid "No signed apk available for %s"
-msgstr "Для %s нет подписанного apk"
+msgid "No signed APK available for %s"
+msgstr "Для %s нет подписанного APK"
 
 #: ../fdroidserver/install.py
 msgid "No signed output directory - nothing to do"
@@ -1660,7 +1660,7 @@ msgstr "Время ожидания для этой сборки выставл�
 msgid "Setup an emulator, install the APK on it and perform a Drozer scan"
 msgstr "Настроить эмулятор, установить в него APK и запустить сканирование Drozer"
 
-msgid "Setup an emulator, install the apk on it and perform a drozer scan"
+msgid "Setup an emulator, install the APK on it and perform a drozer scan"
 msgstr "Настроить эмулятор, установить в него APK и запустить сканирование Drozer"
 
 #: ../fdroid ../fdroidserver/__main__.py
@@ -2034,7 +2034,7 @@ msgstr "Использовать сервер сборки"
 msgid "Use date from APK instead of current time for newly added APKs"
 msgstr "Использовать время date из APK вместо текущего при добавлении новых APK"
 
-msgid "Use date from apk instead of current time for newly added apks"
+msgid "Use date from APK instead of current time for newly added APKs"
 msgstr "Использовать время date из APK вместо текущего при добавлении новых APK"
 
 #: ../fdroidserver/deploy.py ../fdroidserver/upload.py

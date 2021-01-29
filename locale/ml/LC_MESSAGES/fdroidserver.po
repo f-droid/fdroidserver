@@ -453,7 +453,7 @@ msgstr ""
 
 #: ../fdroidserver/update.py
 #, python-brace-format
-msgid "Checking archiving for {appid} - apks:{integer}, keepversions:{keep}, archapks:{arch}"
+msgid "Checking archiving for {appid} - APKs:{integer}, keepversions:{keep}, archapks:{arch}"
 msgstr ""
 
 #: ../fdroidserver/dscanner.py
@@ -518,7 +518,7 @@ msgid "Could not open APK {path} for analysis: "
 msgstr ""
 
 #: ../fdroidserver/update.py
-msgid "Could not open apk file for analysis"
+msgid "Could not open APK file for analysis"
 msgstr ""
 
 #: ../fdroidserver/common.py
@@ -794,12 +794,12 @@ msgstr ""
 
 #: ../fdroidserver/update.py
 #, python-brace-format
-msgid "Failed to get apk information, deleting {path}"
+msgid "Failed to get APK information, deleting {path}"
 msgstr ""
 
 #: ../fdroidserver/update.py
 #, python-brace-format
-msgid "Failed to get apk information, skipping {path}"
+msgid "Failed to get APK information, skipping {path}"
 msgstr ""
 
 #: ../fdroidserver/install.py
@@ -1268,7 +1268,7 @@ msgstr ""
 
 #: ../fdroidserver/install.py
 #, python-format
-msgid "No signed apk available for %s"
+msgid "No signed APK available for %s"
 msgstr ""
 
 #: ../fdroidserver/install.py
@@ -1646,7 +1646,7 @@ msgstr ""
 msgid "Setup an emulator, install the APK on it and perform a Drozer scan"
 msgstr ""
 
-msgid "Setup an emulator, install the apk on it and perform a drozer scan"
+msgid "Setup an emulator, install the APK on it and perform a drozer scan"
 msgstr ""
 
 #: ../fdroid ../fdroidserver/__main__.py
@@ -2020,7 +2020,7 @@ msgstr ""
 msgid "Use date from APK instead of current time for newly added APKs"
 msgstr ""
 
-msgid "Use date from apk instead of current time for newly added apks"
+msgid "Use date from APK instead of current time for newly added APKs"
 msgstr ""
 
 #: ../fdroidserver/deploy.py ../fdroidserver/upload.py
