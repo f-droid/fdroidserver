@@ -29,7 +29,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2021-01-14 14:55+0100\n"
 "PO-Revision-Date: 2021-01-27 00:33+0000\n"
-"Last-Translator: gub <gub.gub@laposte.net>\n"
+"Last-Translator: hilariousperson <gobelpepite+github@gmail.com>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/f-droid/fdroidserver/fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
@@ -1886,11 +1886,11 @@ msgstr ""
 
 #: ../fdroidserver/lint.py
 msgid "Unnecessary leading space"
-msgstr ""
+msgstr "Espace non nécessaire au début"
 
 #: ../fdroidserver/lint.py
 msgid "Unnecessary trailing space"
-msgstr ""
+msgstr "Espace non-nécessaire à la fin"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
