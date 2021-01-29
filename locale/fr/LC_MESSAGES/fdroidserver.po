@@ -8,7 +8,7 @@
 # Virgile L. <virgilelefevre313@gmail.com>, 2020.
 # Lucas Brizzi <lucas.brizzi@hotmail.fr>, 2020.
 # Jose <mail.jose.n@gmail.com>, 2020.
-# DGO <d@geon.fr>, 2020.
+# DGO <d@geon.fr>, 2020, 2021.
 # Yannick A. <yannick.armand@protonmail.com>, 2020.
 # Renaud Perrai <renaud.perrai@protonmail.com>, 2020.
 # rational <rationaldecay@gmail.com>, 2020.
@@ -24,7 +24,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2021-01-14 14:55+0100\n"
 "PO-Revision-Date: 2021-01-14 19:53+0000\n"
-"Last-Translator: hilariousperson <gobelpepite+github@gmail.com>\n"
+"Last-Translator: DGO <d@geon.fr>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/f-droid/fdroidserver/fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
@@ -1660,7 +1660,7 @@ msgstr "Définir la limite d'échec du nombre de fichiers ouvert : "
 #: ../fdroidserver/build.py
 #, python-brace-format
 msgid "Setting {0} sec timeout for this build"
-msgstr ""
+msgstr "Définir une timeout de {0} secondes pour cette construction"
 
 #: ../fdroidserver/build.py
 msgid "Setup an emulator, install the APK on it and perform a Drozer scan"
