@@ -24,7 +24,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2021-01-14 14:55+0100\n"
 "PO-Revision-Date: 2021-01-14 20:25+0000\n"
-"Last-Translator: hilariousperson <gobelpepite+github@gmail.com>\n"
+"Last-Translator: Éfrit <efrit@posteo.net>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/f-droid/fdroidserver/fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
@@ -902,9 +902,9 @@ msgid "Found invalid versionCodes for some apps"
 msgstr "Code de version invalide trouvée pour certaines application"
 
 #: ../fdroidserver/common.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Found multiple JAR Signature Block Files in {path}"
-msgstr "Plusieurs certificats signés trouvée dans {path}"
+msgstr "Plusieurs fichiers de bloc de signature JAR trouvé à {path}"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
@@ -1642,7 +1642,7 @@ msgstr "Réglez l'horloge à cette heure à l'aide de :"
 
 #: ../fdroidserver/nightly.py
 msgid "Set maximum releases in repo before older ones are archived"
-msgstr ""
+msgstr "Régler le maximum de versions dans le dépôt avant que les plus anciennes soient archivées"
 
 #: ../fdroidserver/build.py
 #, python-brace-format
@@ -1667,7 +1667,7 @@ msgid "Setup an emulator, install the APK on it and perform a Drozer scan"
 msgstr "Installez un émulateur, installez l'APK dessus et effectuez un scan Drozer"
 
 msgid "Setup an emulator, install the apk on it and perform a drozer scan"
-msgstr ""
+msgstr "Met en place un émulateur, y installe l’APK et réalise un scan drozer"
 
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Sign and place packages in the repo"
@@ -1704,11 +1704,11 @@ msgstr "Omission de {appid} : désactivé"
 #: ../fdroidserver/scanner.py
 #, python-brace-format
 msgid "Skipping {appid}: no builds specified"
-msgstr ""
+msgstr "Annulation de {appid} : aucun exécutable spécifié"
 
 #: ../fdroidserver/deploy.py ../fdroidserver/upload.py
 msgid "Specify a local folder to sync the repo to"
-msgstr ""
+msgstr "Spécifier un dossier local à synchroniser avec le dépôt"
 
 #: ../fdroidserver/deploy.py ../fdroidserver/upload.py
 msgid "Specify an identity file to provide to SSH for rsyncing"
@@ -1720,7 +1720,7 @@ msgstr "Spécifier que l'on tourne sur le serveur de construction"
 
 #: ../fdroidserver/nightly.py
 msgid "Specify which debug keystore file to use."
-msgstr ""
+msgstr "Spécifier le fichier de magasin de clés de débogage à utiliser."
 
 #: ../fdroidserver/common.py
 msgid "Spew out even more information than normal"
@@ -1729,7 +1729,7 @@ msgstr "Fournir encore plus d'information que d'habitude"
 #: ../fdroidserver/nightly.py
 #, python-brace-format
 msgid "Striping mystery signature from {apkfilename}"
-msgstr ""
+msgstr "Suppression de la signature mystère de {apkfilename}"
 
 #: ../fdroidserver/nightly.py
 #, python-brace-format
