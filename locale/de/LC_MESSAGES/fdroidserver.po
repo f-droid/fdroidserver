@@ -10,13 +10,14 @@
 # Aleph Null <atzeje@web.de>, 2021.
 # nautilusx <translate@disroot.org>, 2021.
 # forght <forght@posteo.de>, 2021.
+# TobiGr <tobigr@mail.de>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2021-01-14 14:55+0100\n"
-"PO-Revision-Date: 2021-01-17 07:47+0000\n"
-"Last-Translator: forght <forght@posteo.de>\n"
+"PO-Revision-Date: 2021-01-20 16:32+0000\n"
+"Last-Translator: TobiGr <tobigr@mail.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/f-droid/fdroidserver/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -618,9 +619,9 @@ msgid "Delete APKs and/or OBBs without metadata from the repo"
 msgstr "APKs und/oder OBBs ohne Metadaten aus dem Repository löschen"
 
 #: ../fdroidserver/deploy.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Deleting archive, repo is too big ({size} max {limit})"
-msgstr "Archiv löschen, Repo ist zu groß ({size} max {limit})"
+msgstr "Lösche Archiv, Repository ist zu groß ({size} max {limit})"
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
@@ -1035,9 +1036,9 @@ msgid "Install built packages on devices"
 msgstr "Erstellte Programmpakete auf Geräten installieren"
 
 #: ../fdroidserver/install.py
-#, fuzzy, python-format
+#, python-format
 msgid "Installing %s..."
-msgstr "%s installieren …"
+msgstr "Installiere %s…"
 
 #: ../fdroidserver/install.py
 #, python-format
@@ -1248,9 +1249,8 @@ msgid "No commit specified for {versionName} in {linedesc}"
 msgstr "Kein Commit angegeben für {versionName} in {linedesc}"
 
 #: ../fdroidserver/common.py
-#, fuzzy
 msgid "No config.yml found, using defaults."
-msgstr "Keine 'config.py' gefunden, nutze Standardeinstellungen."
+msgstr "Keine config.yml gefunden, nutze Standardeinstellungen."
 
 #: ../fdroidserver/index.py
 msgid "No fingerprint in URL."
@@ -1261,9 +1261,8 @@ msgid "No git submodules available"
 msgstr "Keine Git-Submodule verfügbar"
 
 #: ../fdroidserver/import.py
-#, fuzzy
 msgid "No gradle project could be found. Specify --subdir?"
-msgstr "Es konnte kein Android- oder Kivy-Projekt gefunden werden. --subdir angeben?"
+msgstr "Es konnte kein Gradle-Projekt gefunden werden. \"--subdir\" angeben?"
 
 #: ../fdroidserver/import.py ../fdroidserver/common.py
 msgid "No information found."
@@ -1332,9 +1331,8 @@ msgid "Now set these in config.py:"
 msgstr "Legen Sie diese nun in der config.py fest:"
 
 #: ../fdroidserver/init.py
-#, fuzzy
 msgid "Now set these in config.yml:"
-msgstr "Legen Sie diese nun in der config.py fest:"
+msgstr "Legen Sie diese nun in der config.yml fest:"
 
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
 #: ../fdroidserver/update.py
@@ -1809,9 +1807,8 @@ msgid "To use awsbucket, awssecretkey and awsaccesskeyid must also be set in con
 msgstr "Um awsbucket zu benutzen, müssen awssecretkey und awsaccesskeyid auch in der config.py gesetzt sein!"
 
 #: ../fdroidserver/deploy.py
-#, fuzzy
 msgid "To use awsbucket, awssecretkey and awsaccesskeyid must also be set in config.yml!"
-msgstr "Um awsbucket zu benutzen, müssen awssecretkey und awsaccesskeyid auch in der config.py gesetzt sein!"
+msgstr "Um awsbucket zu benutzen, müssen awssecretkey und awsaccesskeyid auch in der config.yml gesetzt sein!"
 
 #: ../fdroidserver/lint.py
 msgid "URL must start with https:// or http://"
@@ -1870,9 +1867,9 @@ msgid "Unknown metadata format: {path}"
 msgstr "Unbekanntes Metadaten-Format: {path}"
 
 #: ../fdroidserver/metadata.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Unknown metadata format: {path} (use: *.yml)"
-msgstr "Unbekanntes Metadaten-Format: {path}"
+msgstr "Unbekanntes Metadaten-Format: {path} (benutze: *.yml)"
 
 #: ../fdroidserver/common.py
 msgid "Unknown version of aapt, might cause problems: "
@@ -2210,7 +2207,7 @@ msgstr "„%s” konnte nicht geöffnet werden: %s"
 #: ../fdroidserver/build.py
 #, python-brace-format
 msgid "cannot find required srclibs: \"{path}\""
-msgstr ""
+msgstr "Konnte die benötigten srclibs nicht finden: \"{path}\""
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py
@@ -2356,7 +2353,7 @@ msgstr "git svn Klonen fehlgeschlagen"
 
 #: ../fdroidserver/scanner.py
 msgid "gzip file archive"
-msgstr ""
+msgstr "gzip Dateiarchiv"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py
@@ -2541,11 +2538,11 @@ msgstr "Download über ungesicherte HTTP-Verbindung verweigert (verwenden Sie HT
 #: ../fdroidserver/index.py
 #, python-format
 msgid "repo_icon %s does not exist, generating placeholder."
-msgstr ""
+msgstr "repo_icon %s existiert nicht, erzeuge Platzhalter."
 
 #: ../fdroidserver/metadata.py
 msgid "ruamel.yaml not installed, can not write metadata."
-msgstr ""
+msgstr "ruamel.yaml ist nicht installiert, kann Metadaten nicht schreiben"
 
 #: ../fdroidserver/deploy.py ../fdroidserver/upload.py
 #, python-brace-format
@@ -2590,7 +2587,7 @@ msgstr "Srclibs-Name fehlt und/oder @"
 
 #: ../fdroidserver/scanner.py
 msgid "static library"
-msgstr ""
+msgstr "statische Bibliothek"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -2646,7 +2643,7 @@ msgstr ""
 
 #: ../fdroidserver/update.py
 msgid "wiki support is deprecated and will be removed in the next release!"
-msgstr ""
+msgstr "Die wiki-Unterstützung ist veraltet und wird in der nächsten Version entfernt!"
 
 #: ../fdroidserver/publish.py
 #, python-brace-format
@@ -2724,7 +2721,7 @@ msgstr "{appid}: {field} muss ein '{type}' sein, ist aber ein '{fieldtype}'!"
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "{build_flag} must be an integer, found: {value}"
-msgstr ""
+msgstr "{build_flag} muss ein Integer sein: {value}"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
@@ -2734,7 +2731,7 @@ msgstr "{field} nicht in {name} beendet"
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "{file} is blank or corrupt!"
-msgstr ""
+msgstr "{file} ist leer oder beschädigt!"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -2744,12 +2741,12 @@ msgstr "{name} \"{path}\" existiert nicht! Korrigieren Sie es in der config.py."
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "{oldfile} is deprecated, use {newfile}"
-msgstr ""
+msgstr "{oldfile} ist veraltet, benutze {newfile}"
 
 #: ../fdroidserver/import.py
 #, python-brace-format
 msgid "{path} already exists, ignoring import results!"
-msgstr ""
+msgstr "{path} existiert schon, importierte Ergebnisse werden nicht berücksichtigt!"
 
 #: ../fdroidserver/nightly.py
 #, python-brace-format
@@ -2769,7 +2766,7 @@ msgstr "{path} hat Dateigröße Null!"
 #: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "{path} more than 200MB, manually upload: {url}"
-msgstr ""
+msgstr "{path} ist größer als 200MB und muss manuell zu {url} hochgeladen werden"
 
 #: ../fdroidserver/mirror.py
 #, python-brace-format
@@ -2777,9 +2774,9 @@ msgid "{url} does not end with \"fdroid\", check the URL path!"
 msgstr "{url} endet nicht mit \"fdroid\", überprüfen Sie den URL-Pfad!"
 
 #: ../fdroidserver/common.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{url} does not start with \"http\"!"
-msgstr "{url} endet nicht mit \"fdroid\", überprüfen Sie den URL-Pfad!"
+msgstr "{url} beginnt nicht mit \"http\"!"
 
 #: ../fdroidserver/build.py
 msgid "{} build failed"
