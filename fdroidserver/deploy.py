@@ -147,7 +147,7 @@ def update_awsbucket_libcloud(repo_section):
     subdirectories) to the AWS S3 "bucket". The contents of that subdir of the
     bucket will first be deleted.
 
-    Requires AWS credentials set in config.py: awsaccesskeyid, awssecretkey
+    Requires AWS credentials set in config.yml: awsaccesskeyid, awssecretkey
     '''
 
     logging.debug(_('using Apache libcloud to sync with {url}')
@@ -770,7 +770,7 @@ def main():
             and not config.get('binary_transparency_remote') \
             and not config.get('virustotal_apikey') \
             and local_copy_dir is None:
-        logging.warning(_('No option set! Edit your config.py to set at least one of these:')
+        logging.warning(_('No option set! Edit your config.yml to set at least one of these:')
                         + '\nserverwebroot, servergitmirrors, local_copy_dir, awsbucket, '
                         + 'virustotal_apikey, androidobservatory, or binary_transparency_remote')
         sys.exit(1)

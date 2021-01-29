@@ -151,8 +151,8 @@ msgid "%s option does not take a value"
 msgstr "la opción %s no toma un valor"
 
 #: ../fdroidserver/index.py ../fdroidserver/common.py
-msgid "'keypass' not found in config.py!"
-msgstr "¡'keypass' no encontrado en config.py!"
+msgid "'keypass' not found in config.yml!"
+msgstr "¡'keypass' no encontrado en config.yml!"
 
 #: ../fdroidserver/common.py
 msgid "'keypass' not found in config.yml!"
@@ -163,24 +163,24 @@ msgid "'keystore' is NONE and 'smartcardoptions' is blank!"
 msgstr "¡\"keystore\" es NONE y \"smartcardoptions\" está vacío!"
 
 #: ../fdroidserver/index.py ../fdroidserver/common.py
-msgid "'keystore' not found in config.py!"
-msgstr "¡'keystore' no encontrado en config.py!"
+msgid "'keystore' not found in config.yml!"
+msgstr "¡'keystore' no encontrado en config.yml!"
 
 #: ../fdroidserver/common.py
 msgid "'keystore' not found in config.yml!"
 msgstr "¡'keystore' no encontrado en config.yml!"
 
 #: ../fdroidserver/index.py ../fdroidserver/common.py
-msgid "'keystorepass' not found in config.py!"
-msgstr "¡'keystorepass' no encontrado en config.py!"
+msgid "'keystorepass' not found in config.yml!"
+msgstr "¡'keystorepass' no encontrado en config.yml!"
 
 #: ../fdroidserver/common.py
 msgid "'keystorepass' not found in config.yml!"
 msgstr "¡'keystorepass' no encontrado en config.yml!"
 
 #: ../fdroidserver/index.py ../fdroidserver/common.py
-msgid "'repo_keyalias' not found in config.py!"
-msgstr "¡'repo_keyalias' no encontrado en config.py!"
+msgid "'repo_keyalias' not found in config.yml!"
+msgstr "¡'repo_keyalias' no encontrado en config.yml!"
 
 #: ../fdroidserver/common.py
 msgid "'repo_keyalias' not found in config.yml!"
@@ -192,8 +192,8 @@ msgid "'required' is an invalid argument for positionals"
 msgstr "'required' es un argumento inválido para posicionales"
 
 #: ../fdroidserver/common.py
-msgid "'sdk_path' not set in 'config.py'!"
-msgstr "¡'sdk_path' no establecido en 'config.py'!"
+msgid "'sdk_path' not set in 'config.yml'!"
+msgstr "¡'sdk_path' no establecido en 'config.yml'!"
 
 #: ../fdroidserver/common.py
 msgid "'sdk_path' not set in config.yml!"
@@ -1220,8 +1220,8 @@ msgid "Name '%s' is just the auto name - remove it"
 msgstr "El nombre '%s' es simplemente el nombre automático - elimínelo"
 
 #: ../fdroidserver/common.py
-msgid "No 'config.py' found, using defaults."
-msgstr "No se encontró 'config.py', se usarán los valores predeterminados."
+msgid "No 'config.yml' found, using defaults."
+msgstr "No se encontró 'config.yml', se usarán los valores predeterminados."
 
 #: ../fdroidserver/common.py
 msgid "No Android SDK found!"
@@ -1269,8 +1269,8 @@ msgid "No need to specify that the app is for Android"
 msgstr "No hay necesidad de especificar que la aplicación es para Android"
 
 #: ../fdroidserver/deploy.py
-msgid "No option set! Edit your config.py to set at least one of these:"
-msgstr "No hay opción establecida! Edita tu config.py para establecer al menos una de estas opciones:"
+msgid "No option set! Edit your config.yml to set at least one of these:"
+msgstr "No hay opción establecida! Edita tu config.yml para establecer al menos una de estas opciones:"
 
 #: ../fdroidserver/common.py
 msgid "No packages specified"
@@ -1319,8 +1319,8 @@ msgid "Nothing to do for {appid}."
 msgstr "Nada que hacer para {appid}."
 
 #: ../fdroidserver/init.py
-msgid "Now set these in config.py:"
-msgstr "Ahora establezca lo siguiente en config.py:"
+msgid "Now set these in config.yml:"
+msgstr "Ahora establezca lo siguiente en config.yml:"
 
 #: ../fdroidserver/init.py
 msgid "Now set these in config.yml:"
@@ -1794,8 +1794,8 @@ msgid "This repo already has local metadata: %s"
 msgstr "Este repo ya tiene metadatos locales: %s"
 
 #: ../fdroidserver/deploy.py ../fdroidserver/upload.py
-msgid "To use awsbucket, awssecretkey and awsaccesskeyid must also be set in config.py!"
-msgstr "¡Para usar awsbucket hay que configurar también awssecretkey y awsaccesskeyid en config.py!"
+msgid "To use awsbucket, awssecretkey and awsaccesskeyid must also be set in config.yml!"
+msgstr "¡Para usar awsbucket hay que configurar también awssecretkey y awsaccesskeyid en config.yml!"
 
 #: ../fdroidserver/deploy.py
 msgid "To use awsbucket, awssecretkey and awsaccesskeyid must also be set in config.yml!"
@@ -2720,8 +2720,8 @@ msgstr "¡{file} está vacío o corrupto!"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
-msgid "{name} \"{path}\" does not exist! Correct it in config.py."
-msgstr "¡{name} \"{path}\" no existe! Corrijalo en config.py."
+msgid "{name} \"{path}\" does not exist! Correct it in config.yml."
+msgstr "¡{name} \"{path}\" no existe! Corrijalo en config.yml."
 
 #: ../fdroidserver/common.py
 #, python-brace-format

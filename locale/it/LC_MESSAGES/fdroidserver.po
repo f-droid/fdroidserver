@@ -152,8 +152,8 @@ msgid "%s option does not take a value"
 msgstr "l'opzione %s non accetta un valore"
 
 #: ../fdroidserver/index.py ../fdroidserver/common.py
-msgid "'keypass' not found in config.py!"
-msgstr "\"keypass\" non trovato in config.py!"
+msgid "'keypass' not found in config.yml!"
+msgstr "\"keypass\" non trovato in config.yml!"
 
 #: ../fdroidserver/common.py
 msgid "'keypass' not found in config.yml!"
@@ -164,24 +164,24 @@ msgid "'keystore' is NONE and 'smartcardoptions' is blank!"
 msgstr "'keystore' è NONE e 'smartcardoptions' è vuoto!"
 
 #: ../fdroidserver/index.py ../fdroidserver/common.py
-msgid "'keystore' not found in config.py!"
-msgstr "\"keystore\" non trovato in config.py!"
+msgid "'keystore' not found in config.yml!"
+msgstr "\"keystore\" non trovato in config.yml!"
 
 #: ../fdroidserver/common.py
 msgid "'keystore' not found in config.yml!"
 msgstr "\"keystore\" non trovato in config.yml!"
 
 #: ../fdroidserver/index.py ../fdroidserver/common.py
-msgid "'keystorepass' not found in config.py!"
-msgstr "\"keystorepass\" non trovato in config.py!"
+msgid "'keystorepass' not found in config.yml!"
+msgstr "\"keystorepass\" non trovato in config.yml!"
 
 #: ../fdroidserver/common.py
 msgid "'keystorepass' not found in config.yml!"
 msgstr "\"keystorepass\" non trovato in config.yml!"
 
 #: ../fdroidserver/index.py ../fdroidserver/common.py
-msgid "'repo_keyalias' not found in config.py!"
-msgstr "\"repo_keyalias\" non trovato in config.py!"
+msgid "'repo_keyalias' not found in config.yml!"
+msgstr "\"repo_keyalias\" non trovato in config.yml!"
 
 #: ../fdroidserver/common.py
 msgid "'repo_keyalias' not found in config.yml!"
@@ -193,8 +193,8 @@ msgid "'required' is an invalid argument for positionals"
 msgstr "\"required\" è un argomento invalido per i posizionali"
 
 #: ../fdroidserver/common.py
-msgid "'sdk_path' not set in 'config.py'!"
-msgstr "\"sdk_path\" non impostato in \"config.py\"!"
+msgid "'sdk_path' not set in 'config.yml'!"
+msgstr "\"sdk_path\" non impostato in \"config.yml\"!"
 
 #: ../fdroidserver/common.py
 msgid "'sdk_path' not set in config.yml!"
@@ -1221,8 +1221,8 @@ msgid "Name '%s' is just the auto name - remove it"
 msgstr "Il nome '%s' è solo il nome automatico - rimuovilo"
 
 #: ../fdroidserver/common.py
-msgid "No 'config.py' found, using defaults."
-msgstr "Nessun 'config.py' trovato, utilizzando i valori predefiniti."
+msgid "No 'config.yml' found, using defaults."
+msgstr "Nessun 'config.yml' trovato, utilizzando i valori predefiniti."
 
 #: ../fdroidserver/common.py
 msgid "No Android SDK found!"
@@ -1270,8 +1270,8 @@ msgid "No need to specify that the app is for Android"
 msgstr "Non c'è bisogno di specificare che l'applicazione è per Android"
 
 #: ../fdroidserver/deploy.py
-msgid "No option set! Edit your config.py to set at least one of these:"
-msgstr "Nessuna opzione impostata! Modifica il tuo config.py per impostare almeno uno di questi:"
+msgid "No option set! Edit your config.yml to set at least one of these:"
+msgstr "Nessuna opzione impostata! Modifica il tuo config.yml per impostare almeno uno di questi:"
 
 #: ../fdroidserver/common.py
 msgid "No packages specified"
@@ -1320,8 +1320,8 @@ msgid "Nothing to do for {appid}."
 msgstr "Niente da fare per {appid}."
 
 #: ../fdroidserver/init.py
-msgid "Now set these in config.py:"
-msgstr "Ora imposta i seguenti campi in config.py:"
+msgid "Now set these in config.yml:"
+msgstr "Ora imposta i seguenti campi in config.yml:"
 
 #: ../fdroidserver/init.py
 msgid "Now set these in config.yml:"
@@ -1795,7 +1795,7 @@ msgid "This repo already has local metadata: %s"
 msgstr ""
 
 #: ../fdroidserver/deploy.py ../fdroidserver/upload.py
-msgid "To use awsbucket, awssecretkey and awsaccesskeyid must also be set in config.py!"
+msgid "To use awsbucket, awssecretkey and awsaccesskeyid must also be set in config.yml!"
 msgstr ""
 
 #: ../fdroidserver/deploy.py
@@ -2721,7 +2721,7 @@ msgstr ""
 
 #: ../fdroidserver/update.py
 #, python-brace-format
-msgid "{name} \"{path}\" does not exist! Correct it in config.py."
+msgid "{name} \"{path}\" does not exist! Correct it in config.yml."
 msgstr ""
 
 #: ../fdroidserver/common.py

@@ -134,8 +134,8 @@ msgid "%s option does not take a value"
 msgstr ""
 
 #: ../fdroidserver/index.py ../fdroidserver/common.py
-msgid "'keypass' not found in config.py!"
-msgstr "'keypass' ulac-it di config.py!"
+msgid "'keypass' not found in config.yml!"
+msgstr "'keypass' ulac-it di config.yml!"
 
 #: ../fdroidserver/common.py
 msgid "'keypass' not found in config.yml!"
@@ -146,24 +146,24 @@ msgid "'keystore' is NONE and 'smartcardoptions' is blank!"
 msgstr ""
 
 #: ../fdroidserver/index.py ../fdroidserver/common.py
-msgid "'keystore' not found in config.py!"
-msgstr "'keystore' ulac-it di config.py!"
+msgid "'keystore' not found in config.yml!"
+msgstr "'keystore' ulac-it di config.yml!"
 
 #: ../fdroidserver/common.py
 msgid "'keystore' not found in config.yml!"
 msgstr "'keystore' ulac-it di config.yml!"
 
 #: ../fdroidserver/index.py ../fdroidserver/common.py
-msgid "'keystorepass' not found in config.py!"
-msgstr "'keystorepass' ulac-it di config.py!"
+msgid "'keystorepass' not found in config.yml!"
+msgstr "'keystorepass' ulac-it di config.yml!"
 
 #: ../fdroidserver/common.py
 msgid "'keystorepass' not found in config.yml!"
 msgstr "'keystorepass' ulac-it di config.yml!"
 
 #: ../fdroidserver/index.py ../fdroidserver/common.py
-msgid "'repo_keyalias' not found in config.py!"
-msgstr "'repo_keyalias' ulac-it deg config.py!"
+msgid "'repo_keyalias' not found in config.yml!"
+msgstr "'repo_keyalias' ulac-it deg config.yml!"
 
 #: ../fdroidserver/common.py
 msgid "'repo_keyalias' not found in config.yml!"
@@ -175,8 +175,8 @@ msgid "'required' is an invalid argument for positionals"
 msgstr "'required' d taɣiret ur iṣeḥḥan ara i usideg"
 
 #: ../fdroidserver/common.py
-msgid "'sdk_path' not set in 'config.py'!"
-msgstr "'sdk_path' ur yettwasbadu ara 'config.py'!"
+msgid "'sdk_path' not set in 'config.yml'!"
+msgstr "'sdk_path' ur yettwasbadu ara 'config.yml'!"
 
 #: ../fdroidserver/common.py
 msgid "'sdk_path' not set in config.yml!"
@@ -1199,7 +1199,7 @@ msgid "Name '%s' is just the auto name - remove it"
 msgstr "Isem '%s' d isem awurman kan - kkes-it"
 
 #: ../fdroidserver/common.py
-msgid "No 'config.py' found, using defaults."
+msgid "No 'config.yml' found, using defaults."
 msgstr ""
 
 #: ../fdroidserver/common.py
@@ -1248,7 +1248,7 @@ msgid "No need to specify that the app is for Android"
 msgstr ""
 
 #: ../fdroidserver/deploy.py
-msgid "No option set! Edit your config.py to set at least one of these:"
+msgid "No option set! Edit your config.yml to set at least one of these:"
 msgstr ""
 
 #: ../fdroidserver/common.py
@@ -1298,7 +1298,7 @@ msgid "Nothing to do for {appid}."
 msgstr ""
 
 #: ../fdroidserver/init.py
-msgid "Now set these in config.py:"
+msgid "Now set these in config.yml:"
 msgstr ""
 
 #: ../fdroidserver/init.py
@@ -1773,7 +1773,7 @@ msgid "This repo already has local metadata: %s"
 msgstr ""
 
 #: ../fdroidserver/deploy.py ../fdroidserver/upload.py
-msgid "To use awsbucket, awssecretkey and awsaccesskeyid must also be set in config.py!"
+msgid "To use awsbucket, awssecretkey and awsaccesskeyid must also be set in config.yml!"
 msgstr ""
 
 #: ../fdroidserver/deploy.py
@@ -2699,7 +2699,7 @@ msgstr ""
 
 #: ../fdroidserver/update.py
 #, python-brace-format
-msgid "{name} \"{path}\" does not exist! Correct it in config.py."
+msgid "{name} \"{path}\" does not exist! Correct it in config.yml."
 msgstr ""
 
 #: ../fdroidserver/common.py

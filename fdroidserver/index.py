@@ -59,7 +59,7 @@ def make(apps, apks, repodir, archive):
 
     if hasattr(common.options, 'nosign') and common.options.nosign:
         if 'keystore' not in common.config and 'repo_pubkey' not in common.config:
-            raise FDroidException(_('"repo_pubkey" must be present in config.py when using --nosign!'))
+            raise FDroidException(_('"repo_pubkey" must be present in config.yml when using --nosign!'))
     else:
         common.assert_config_keystore(common.config)
 

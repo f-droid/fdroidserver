@@ -141,44 +141,44 @@ msgid "%s option does not take a value"
 msgstr "%s-valget tar ikke en verdi"
 
 #: ../fdroidserver/index.py ../fdroidserver/common.py
-msgid "'keypass' not found in config.py!"
-msgstr "'keypass' ble ikke funnet i config.py!"
+msgid "'keypass' not found in config.yml!"
+msgstr "'keypass' ble ikke funnet i config.yml!"
 
 #: ../fdroidserver/common.py
 #, fuzzy
 msgid "'keypass' not found in config.yml!"
-msgstr "'keypass' ble ikke funnet i config.py!"
+msgstr "'keypass' ble ikke funnet i config.yml!"
 
 #: ../fdroidserver/common.py
 msgid "'keystore' is NONE and 'smartcardoptions' is blank!"
 msgstr ""
 
 #: ../fdroidserver/index.py ../fdroidserver/common.py
-msgid "'keystore' not found in config.py!"
-msgstr "'keystore' ble ikke funnet i config.py!"
+msgid "'keystore' not found in config.yml!"
+msgstr "'keystore' ble ikke funnet i config.yml!"
 
 #: ../fdroidserver/common.py
 #, fuzzy
 msgid "'keystore' not found in config.yml!"
-msgstr "'keystore' ble ikke funnet i config.py!"
+msgstr "'keystore' ble ikke funnet i config.yml!"
 
 #: ../fdroidserver/index.py ../fdroidserver/common.py
-msgid "'keystorepass' not found in config.py!"
-msgstr "'keystorepass' ble ikke funnet i config.py!"
+msgid "'keystorepass' not found in config.yml!"
+msgstr "'keystorepass' ble ikke funnet i config.yml!"
 
 #: ../fdroidserver/common.py
 #, fuzzy
 msgid "'keystorepass' not found in config.yml!"
-msgstr "'keystorepass' ble ikke funnet i config.py!"
+msgstr "'keystorepass' ble ikke funnet i config.yml!"
 
 #: ../fdroidserver/index.py ../fdroidserver/common.py
-msgid "'repo_keyalias' not found in config.py!"
-msgstr "'repo_keyalias' ble ikke funnet i config.py!"
+msgid "'repo_keyalias' not found in config.yml!"
+msgstr "'repo_keyalias' ble ikke funnet i config.yml!"
 
 #: ../fdroidserver/common.py
 #, fuzzy
 msgid "'repo_keyalias' not found in config.yml!"
-msgstr "'repo_keyalias' ble ikke funnet i config.py!"
+msgstr "'repo_keyalias' ble ikke funnet i config.yml!"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py
@@ -187,13 +187,13 @@ msgid "'required' is an invalid argument for positionals"
 msgstr "'required' er et ugyldig argument for posisjonsinfo"
 
 #: ../fdroidserver/common.py
-msgid "'sdk_path' not set in 'config.py'!"
-msgstr "'sdk_path' ble ikke funnet i config.py!"
+msgid "'sdk_path' not set in 'config.yml'!"
+msgstr "'sdk_path' ble ikke funnet i config.yml!"
 
 #: ../fdroidserver/common.py
 #, fuzzy
 msgid "'sdk_path' not set in config.yml!"
-msgstr "'sdk_path' ble ikke funnet i config.py!"
+msgstr "'sdk_path' ble ikke funnet i config.yml!"
 
 #. Translators: "build-tools" is the file name of a package from
 #. Google, it is part of the Android SDK. So it probably shouldn't be
@@ -1251,8 +1251,8 @@ msgid "Name '%s' is just the auto name - remove it"
 msgstr "Navnet \"%s\" er kun det forvalgte navnet, fjern det."
 
 #: ../fdroidserver/common.py
-msgid "No 'config.py' found, using defaults."
-msgstr "Fant ingen 'config.py' , bruker forvalg."
+msgid "No 'config.yml' found, using defaults."
+msgstr "Fant ingen 'config.yml' , bruker forvalg."
 
 #: ../fdroidserver/common.py
 msgid "No Android SDK found!"
@@ -1274,7 +1274,7 @@ msgstr "Ingen innsendelse angitt for {versionName} i {linedesc}."
 #: ../fdroidserver/common.py
 #, fuzzy
 msgid "No config.yml found, using defaults."
-msgstr "Fant ingen 'config.py' , bruker forvalg."
+msgstr "Fant ingen 'config.yml' , bruker forvalg."
 
 #: ../fdroidserver/index.py
 msgid "No fingerprint in URL."
@@ -1303,8 +1303,8 @@ msgid "No need to specify that the app is for Android"
 msgstr "Inget behov for å spesifisere at programmet er for Android"
 
 #: ../fdroidserver/deploy.py
-msgid "No option set! Edit your config.py to set at least one of these:"
-msgstr "Inget valg satt. Rediger din config.py og sett minst én av disse:"
+msgid "No option set! Edit your config.yml to set at least one of these:"
+msgstr "Inget valg satt. Rediger din config.yml og sett minst én av disse:"
 
 #: ../fdroidserver/common.py
 msgid "No packages specified"
@@ -1353,7 +1353,7 @@ msgid "Nothing to do for {appid}."
 msgstr "Ingenting å gjøre for {appid}."
 
 #: ../fdroidserver/init.py
-msgid "Now set these in config.py:"
+msgid "Now set these in config.yml:"
 msgstr ""
 
 #: ../fdroidserver/init.py
@@ -1847,13 +1847,13 @@ msgstr "Denne pakkebrønnen har allerede lokal metadata: %s"
 
 #: ../fdroidserver/deploy.py ../fdroidserver/upload.py
 #, fuzzy
-msgid "To use awsbucket, awssecretkey and awsaccesskeyid must also be set in config.py!"
-msgstr "For å bruke AWS-spann, må \"awssecretkey\" og \"awsaccesskeyid\" også være satt i config.py."
+msgid "To use awsbucket, awssecretkey and awsaccesskeyid must also be set in config.yml!"
+msgstr "For å bruke AWS-spann, må \"awssecretkey\" og \"awsaccesskeyid\" også være satt i config.yml."
 
 #: ../fdroidserver/deploy.py
 #, fuzzy
 msgid "To use awsbucket, awssecretkey and awsaccesskeyid must also be set in config.yml!"
-msgstr "For å bruke AWS-spann, må \"awssecretkey\" og \"awsaccesskeyid\" også være satt i config.py."
+msgstr "For å bruke AWS-spann, må \"awssecretkey\" og \"awsaccesskeyid\" også være satt i config.yml."
 
 #: ../fdroidserver/lint.py
 msgid "URL must start with https:// or http://"
@@ -2800,8 +2800,8 @@ msgstr "{file} er tom eller skadet!"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
-msgid "{name} \"{path}\" does not exist! Correct it in config.py."
-msgstr "{name} \"{path}\" finnes ikke. Rett det i config.py."
+msgid "{name} \"{path}\" does not exist! Correct it in config.yml."
+msgstr "{name} \"{path}\" finnes ikke. Rett det i config.yml."
 
 #: ../fdroidserver/common.py
 #, python-brace-format

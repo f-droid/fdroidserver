@@ -140,44 +140,44 @@ msgid "%s option does not take a value"
 msgstr "%s 選項不帶值"
 
 #: ../fdroidserver/index.py ../fdroidserver/common.py
-msgid "'keypass' not found in config.py!"
-msgstr "config.py 找不到 'keypass'！"
+msgid "'keypass' not found in config.yml!"
+msgstr "config.yml 找不到 'keypass'！"
 
 #: ../fdroidserver/common.py
 #, fuzzy
 msgid "'keypass' not found in config.yml!"
-msgstr "config.py 找不到 'keypass'！"
+msgstr "config.yml 找不到 'keypass'！"
 
 #: ../fdroidserver/common.py
 msgid "'keystore' is NONE and 'smartcardoptions' is blank!"
 msgstr ""
 
 #: ../fdroidserver/index.py ../fdroidserver/common.py
-msgid "'keystore' not found in config.py!"
-msgstr "config.py 找不到 'keystore'！"
+msgid "'keystore' not found in config.yml!"
+msgstr "config.yml 找不到 'keystore'！"
 
 #: ../fdroidserver/common.py
 #, fuzzy
 msgid "'keystore' not found in config.yml!"
-msgstr "config.py 找不到 'keystore'！"
+msgstr "config.yml 找不到 'keystore'！"
 
 #: ../fdroidserver/index.py ../fdroidserver/common.py
-msgid "'keystorepass' not found in config.py!"
-msgstr "config.py 找不到 'keystorepass'！"
+msgid "'keystorepass' not found in config.yml!"
+msgstr "config.yml 找不到 'keystorepass'！"
 
 #: ../fdroidserver/common.py
 #, fuzzy
 msgid "'keystorepass' not found in config.yml!"
-msgstr "config.py 找不到 'keystorepass'！"
+msgstr "config.yml 找不到 'keystorepass'！"
 
 #: ../fdroidserver/index.py ../fdroidserver/common.py
-msgid "'repo_keyalias' not found in config.py!"
-msgstr "config.py 找不到 'repo_keyalias'！"
+msgid "'repo_keyalias' not found in config.yml!"
+msgstr "config.yml 找不到 'repo_keyalias'！"
 
 #: ../fdroidserver/common.py
 #, fuzzy
 msgid "'repo_keyalias' not found in config.yml!"
-msgstr "config.py 找不到 'repo_keyalias'！"
+msgstr "config.yml 找不到 'repo_keyalias'！"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py
@@ -185,13 +185,13 @@ msgid "'required' is an invalid argument for positionals"
 msgstr "這些地方的 '必填' 為無效引數"
 
 #: ../fdroidserver/common.py
-msgid "'sdk_path' not set in 'config.py'!"
-msgstr "'config.py' 未設定 'sdk_path'！"
+msgid "'sdk_path' not set in 'config.yml'!"
+msgstr "'config.yml' 未設定 'sdk_path'！"
 
 #: ../fdroidserver/common.py
 #, fuzzy
 msgid "'sdk_path' not set in config.yml!"
-msgstr "'config.py' 未設定 'sdk_path'！"
+msgstr "'config.yml' 未設定 'sdk_path'！"
 
 #. Translators: "build-tools" is the file name of a package from
 #. Google, it is part of the Android SDK. So it probably shouldn't be
@@ -1218,8 +1218,8 @@ msgid "Name '%s' is just the auto name - remove it"
 msgstr "名稱 '%s' 為自動產生 - 請移除它"
 
 #: ../fdroidserver/common.py
-msgid "No 'config.py' found, using defaults."
-msgstr "找不到 'config.py'，使用預設。"
+msgid "No 'config.yml' found, using defaults."
+msgstr "找不到 'config.yml'，使用預設。"
 
 #: ../fdroidserver/common.py
 msgid "No Android SDK found!"
@@ -1241,7 +1241,7 @@ msgstr "{linedesc} 沒有指定給 {versionName} 的提交"
 #: ../fdroidserver/common.py
 #, fuzzy
 msgid "No config.yml found, using defaults."
-msgstr "找不到 'config.py'，使用預設。"
+msgstr "找不到 'config.yml'，使用預設。"
 
 #: ../fdroidserver/index.py
 msgid "No fingerprint in URL."
@@ -1269,8 +1269,8 @@ msgid "No need to specify that the app is for Android"
 msgstr "不必指明該應用為 Android 版本"
 
 #: ../fdroidserver/deploy.py
-msgid "No option set! Edit your config.py to set at least one of these:"
-msgstr "未設定選項！編輯 config.py 檔，其中至少要設定一個："
+msgid "No option set! Edit your config.yml to set at least one of these:"
+msgstr "未設定選項！編輯 config.yml 檔，其中至少要設定一個："
 
 #: ../fdroidserver/common.py
 msgid "No packages specified"
@@ -1319,13 +1319,13 @@ msgid "Nothing to do for {appid}."
 msgstr "{appid} 無須採取行動."
 
 #: ../fdroidserver/init.py
-msgid "Now set these in config.py:"
-msgstr "現在設定這些在 config.py 中："
+msgid "Now set these in config.yml:"
+msgstr "現在設定這些在 config.yml 中："
 
 #: ../fdroidserver/init.py
 #, fuzzy
 msgid "Now set these in config.yml:"
-msgstr "現在設定這些在 config.py 中："
+msgstr "現在設定這些在 config.yml 中："
 
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
 #: ../fdroidserver/update.py
@@ -1795,13 +1795,13 @@ msgid "This repo already has local metadata: %s"
 msgstr "這個軟體庫已有本地的中介資料：%s"
 
 #: ../fdroidserver/deploy.py ../fdroidserver/upload.py
-msgid "To use awsbucket, awssecretkey and awsaccesskeyid must also be set in config.py!"
-msgstr "要使用 awsbucket, awssecretkey 與 awsaccesskeyid 必須在 config.py 進行設定！"
+msgid "To use awsbucket, awssecretkey and awsaccesskeyid must also be set in config.yml!"
+msgstr "要使用 awsbucket, awssecretkey 與 awsaccesskeyid 必須在 config.yml 進行設定！"
 
 #: ../fdroidserver/deploy.py
 #, fuzzy
 msgid "To use awsbucket, awssecretkey and awsaccesskeyid must also be set in config.yml!"
-msgstr "要使用 awsbucket, awssecretkey 與 awsaccesskeyid 必須在 config.py 進行設定！"
+msgstr "要使用 awsbucket, awssecretkey 與 awsaccesskeyid 必須在 config.yml 進行設定！"
 
 #: ../fdroidserver/lint.py
 msgid "URL must start with https:// or http://"
@@ -2725,8 +2725,8 @@ msgstr ""
 
 #: ../fdroidserver/update.py
 #, python-brace-format
-msgid "{name} \"{path}\" does not exist! Correct it in config.py."
-msgstr "{name} \"{path}\" 不存在! 請更正 config.py."
+msgid "{name} \"{path}\" does not exist! Correct it in config.yml."
+msgstr "{name} \"{path}\" 不存在! 請更正 config.yml."
 
 #: ../fdroidserver/common.py
 #, python-brace-format

@@ -3372,7 +3372,7 @@ def compare_apks(apk1, apk2, tmp_dir, log_dir=None):
 
 def set_command_in_config(command):
     '''Try to find specified command in the path, if it hasn't been
-    manually set in config.py.  If found, it is added to the config
+    manually set in config.yml.  If found, it is added to the config
     dict.  The return value says whether the command is available.
 
     '''
@@ -3524,9 +3524,9 @@ def load_stats_fdroid_signing_key_fingerprints():
     repo_key_sig = config.get('repo_key_sha256')
     if repo_key_sig:
         if jar_sigkey != repo_key_sig:
-            raise FDroidException("Signature key fingerprint of file '{}' does not match repo_key_sha256 in config.py (found fingerprint: '{}')".format(jar_file, jar_sigkey))
+            raise FDroidException("Signature key fingerprint of file '{}' does not match repo_key_sha256 in config.yml (found fingerprint: '{}')".format(jar_file, jar_sigkey))
     else:
-        logging.warning("repo_key_sha256 not in config.py, setting it to the signature key fingerprint of '{}'".format(jar_file))
+        logging.warning("repo_key_sha256 not in config.yml, setting it to the signature key fingerprint of '{}'".format(jar_file))
         config['repo_key_sha256'] = jar_sigkey
         write_to_config(config, 'repo_key_sha256')
 

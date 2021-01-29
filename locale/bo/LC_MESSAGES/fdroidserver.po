@@ -138,44 +138,44 @@ msgid "%s option does not take a value"
 msgstr "%sགདམ་ཀ་ནུས་མེད་རེད་འདུག"
 
 #: ../fdroidserver/index.py ../fdroidserver/common.py
-msgid "'keypass' not found in config.py!"
-msgstr "'keypass' འདི་config.py ནང་རྙེད་མ་སོང་།!"
+msgid "'keypass' not found in config.yml!"
+msgstr "'keypass' འདི་config.yml ནང་རྙེད་མ་སོང་།!"
 
 #: ../fdroidserver/common.py
 #, fuzzy
 msgid "'keypass' not found in config.yml!"
-msgstr "'keypass' འདི་config.py ནང་རྙེད་མ་སོང་།!"
+msgstr "'keypass' འདི་config.yml ནང་རྙེད་མ་སོང་།!"
 
 #: ../fdroidserver/common.py
 msgid "'keystore' is NONE and 'smartcardoptions' is blank!"
 msgstr ""
 
 #: ../fdroidserver/index.py ../fdroidserver/common.py
-msgid "'keystore' not found in config.py!"
-msgstr "'keystore' འདི་ config.py ནང་རྙེད་མ་སོང་།!"
+msgid "'keystore' not found in config.yml!"
+msgstr "'keystore' འདི་ config.yml ནང་རྙེད་མ་སོང་།!"
 
 #: ../fdroidserver/common.py
 #, fuzzy
 msgid "'keystore' not found in config.yml!"
-msgstr "'keystore' འདི་ config.py ནང་རྙེད་མ་སོང་།!"
+msgstr "'keystore' འདི་ config.yml ནང་རྙེད་མ་སོང་།!"
 
 #: ../fdroidserver/index.py ../fdroidserver/common.py
-msgid "'keystorepass' not found in config.py!"
-msgstr "'keystorepass' འདི་ config.py ནང་རྙེད་མ་སོང་།!"
+msgid "'keystorepass' not found in config.yml!"
+msgstr "'keystorepass' འདི་ config.yml ནང་རྙེད་མ་སོང་།!"
 
 #: ../fdroidserver/common.py
 #, fuzzy
 msgid "'keystorepass' not found in config.yml!"
-msgstr "'keystorepass' འདི་ config.py ནང་རྙེད་མ་སོང་།!"
+msgstr "'keystorepass' འདི་ config.yml ནང་རྙེད་མ་སོང་།!"
 
 #: ../fdroidserver/index.py ../fdroidserver/common.py
-msgid "'repo_keyalias' not found in config.py!"
-msgstr "'repo_keyalias' འདི་ config.py ནང་རྙེད་མ་སོང་།!"
+msgid "'repo_keyalias' not found in config.yml!"
+msgstr "'repo_keyalias' འདི་ config.yml ནང་རྙེད་མ་སོང་།!"
 
 #: ../fdroidserver/common.py
 #, fuzzy
 msgid "'repo_keyalias' not found in config.yml!"
-msgstr "'repo_keyalias' འདི་ config.py ནང་རྙེད་མ་སོང་།!"
+msgstr "'repo_keyalias' འདི་ config.yml ནང་རྙེད་མ་སོང་།!"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py
@@ -183,13 +183,13 @@ msgid "'required' is an invalid argument for positionals"
 msgstr "'དགསོ་མཁོ།' ནི་གནས་སྟངས་འདི་ལ་ཁུངས་ལྡན་གྱི་རྩོད་པ་རེད་མིན་འདུག"
 
 #: ../fdroidserver/common.py
-msgid "'sdk_path' not set in 'config.py'!"
-msgstr "'sdk_path' འདི་ 'config.py' ནང་སྒྲིག་ཐུབ་མ་སོང་།!"
+msgid "'sdk_path' not set in 'config.yml'!"
+msgstr "'sdk_path' འདི་ 'config.yml' ནང་སྒྲིག་ཐུབ་མ་སོང་།!"
 
 #: ../fdroidserver/common.py
 #, fuzzy
 msgid "'sdk_path' not set in config.yml!"
-msgstr "'sdk_path' འདི་ 'config.py' ནང་སྒྲིག་ཐུབ་མ་སོང་།!"
+msgstr "'sdk_path' འདི་ 'config.yml' ནང་སྒྲིག་ཐུབ་མ་སོང་།!"
 
 #. Translators: "build-tools" is the file name of a package from
 #. Google, it is part of the Android SDK. So it probably shouldn't be
@@ -1218,8 +1218,8 @@ msgid "Name '%s' is just the auto name - remove it"
 msgstr "མིང་། '%s 1' ནི་རང་མིང་ཁོ་ན་རེད་། - མེད་པ་བཟོས།"
 
 #: ../fdroidserver/common.py
-msgid "No 'config.py' found, using defaults."
-msgstr "'config.py' རྙེད་མ་སོང་།, སོར་བཞག་བེད་སྤྱོད་བྱེད་བཞིན་པ།."
+msgid "No 'config.yml' found, using defaults."
+msgstr "'config.yml' རྙེད་མ་སོང་།, སོར་བཞག་བེད་སྤྱོད་བྱེད་བཞིན་པ།."
 
 #: ../fdroidserver/common.py
 msgid "No Android SDK found!"
@@ -1241,7 +1241,7 @@ msgstr "{linedesc} ནང་གྱི་ {versionName}འདིའི་ཆེ�
 #: ../fdroidserver/common.py
 #, fuzzy
 msgid "No config.yml found, using defaults."
-msgstr "'config.py' རྙེད་མ་སོང་།, སོར་བཞག་བེད་སྤྱོད་བྱེད་བཞིན་པ།."
+msgstr "'config.yml' རྙེད་མ་སོང་།, སོར་བཞག་བེད་སྤྱོད་བྱེད་བཞིན་པ།."
 
 #: ../fdroidserver/index.py
 msgid "No fingerprint in URL."
@@ -1269,8 +1269,8 @@ msgid "No need to specify that the app is for Android"
 msgstr "མཉེན་ཆས་འདི་ཨེན་ཀྲོཌ་ཆེད་དུ་ཡིན་པ་དམིགས་སྟོན་བྱེད་དགོས་དོན་མེད།"
 
 #: ../fdroidserver/deploy.py
-msgid "No option set! Edit your config.py to set at least one of these:"
-msgstr "གདམ་ཀ་མེད་པ་སྒྲིག།! ཁྱེད་རང་གི་config.py འདིའི་ནང་ནས་མ་མཐའ་ཡིན་ཡང་གང་རུང་ཞིག་རྩོམ་སྒྲིག་བྱེད་:"
+msgid "No option set! Edit your config.yml to set at least one of these:"
+msgstr "གདམ་ཀ་མེད་པ་སྒྲིག།! ཁྱེད་རང་གི་config.yml འདིའི་ནང་ནས་མ་མཐའ་ཡིན་ཡང་གང་རུང་ཞིག་རྩོམ་སྒྲིག་བྱེད་:"
 
 #: ../fdroidserver/common.py
 msgid "No packages specified"
@@ -1319,13 +1319,13 @@ msgid "Nothing to do for {appid}."
 msgstr "{appid} ཆེད་དུ་བྱ་རྒྱུ་གང་ཡང་མེད་།."
 
 #: ../fdroidserver/init.py
-msgid "Now set these in config.py:"
+msgid "Now set these in config.yml:"
 msgstr ""
 
 #: ../fdroidserver/init.py
 #, fuzzy
 msgid "Now set these in config.yml:"
-msgstr "'sdk_path' འདི་ 'config.py' ནང་སྒྲིག་ཐུབ་མ་སོང་།!"
+msgstr "'sdk_path' འདི་ 'config.yml' ནང་སྒྲིག་ཐུབ་མ་སོང་།!"
 
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
 #: ../fdroidserver/update.py
@@ -1795,13 +1795,13 @@ msgid "This repo already has local metadata: %s"
 msgstr "རེ་པོ་འདི་ལ་སྔོན་ཚོད་ནས་ས་གནས་ཀྱི་རྒྱབ་ལྗོངས་ཡིག་ཆ་འདུག: %s 1"
 
 #: ../fdroidserver/deploy.py ../fdroidserver/upload.py
-msgid "To use awsbucket, awssecretkey and awsaccesskeyid must also be set in config.py!"
-msgstr "awsbucket, awssecretkey དང་། awsaccesskeyid བེད་སྤྱོད་བྱེད་པའི་ཆེད་དུ་ config.py ནང་དུ་ངེས་པར་དུ་སྒྲིག་དགོས།!"
+msgid "To use awsbucket, awssecretkey and awsaccesskeyid must also be set in config.yml!"
+msgstr "awsbucket, awssecretkey དང་། awsaccesskeyid བེད་སྤྱོད་བྱེད་པའི་ཆེད་དུ་ config.yml ནང་དུ་ངེས་པར་དུ་སྒྲིག་དགོས།!"
 
 #: ../fdroidserver/deploy.py
 #, fuzzy
 msgid "To use awsbucket, awssecretkey and awsaccesskeyid must also be set in config.yml!"
-msgstr "awsbucket, awssecretkey དང་། awsaccesskeyid བེད་སྤྱོད་བྱེད་པའི་ཆེད་དུ་ config.py ནང་དུ་ངེས་པར་དུ་སྒྲིག་དགོས།!"
+msgstr "awsbucket, awssecretkey དང་། awsaccesskeyid བེད་སྤྱོད་བྱེད་པའི་ཆེད་དུ་ config.yml ནང་དུ་ངེས་པར་དུ་སྒྲིག་དགོས།!"
 
 #: ../fdroidserver/lint.py
 msgid "URL must start with https:// or http://"
@@ -2728,8 +2728,8 @@ msgstr ""
 
 #: ../fdroidserver/update.py
 #, python-brace-format
-msgid "{name} \"{path}\" does not exist! Correct it in config.py."
-msgstr "{name} \"{path}\" མིན་འདུག! config.pyནོར་བཅོས་བྱེད།."
+msgid "{name} \"{path}\" does not exist! Correct it in config.yml."
+msgstr "{name} \"{path}\" མིན་འདུག! config.ymlནོར་བཅོས་བྱེད།."
 
 #: ../fdroidserver/common.py
 #, python-brace-format
