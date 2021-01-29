@@ -302,7 +302,6 @@ btlog \
 build \
 checkupdates \
 deploy \
-dscanner \
 gpgsign \
 import \
 init \

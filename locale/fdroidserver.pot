@@ -444,18 +444,6 @@ msgstr ""
 msgid "Checking archiving for {appid} - APKs:{integer}, keepversions:{keep}, archapks:{arch}"
 msgstr ""
 
-#: ../fdroidserver/dscanner.py
-msgid "Clean after all scans have finished"
-msgstr ""
-
-#: ../fdroidserver/dscanner.py
-msgid "Clean before the scans start and rebuild the container"
-msgstr ""
-
-#: ../fdroidserver/dscanner.py
-msgid "Clean up all containers and then exit"
-msgstr ""
-
 #: ../fdroidserver/update.py
 msgid "Clean update - don't uses caches, reprocess all APKs"
 msgstr ""
@@ -503,10 +491,6 @@ msgstr ""
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Could not open APK {path} for analysis: "
-msgstr ""
-
-#: ../fdroidserver/update.py
-msgid "Could not open apk file for analysis"
 msgstr ""
 
 #: ../fdroidserver/common.py
@@ -1371,10 +1355,6 @@ msgstr ""
 msgid "Overall license of the project."
 msgstr ""
 
-#: ../fdroidserver/dscanner.py
-msgid "Override path for repo APKs (default: ./repo)"
-msgstr ""
-
 #: ../fdroidserver/index.py
 #, python-brace-format
 msgid "Overriding blank versionName in {apkfilename} from metadata: {version}"
@@ -1411,13 +1391,6 @@ msgstr ""
 
 #: ../fdroidserver/init.py
 msgid "Path to the keystore for the repo signing key"
-msgstr ""
-
-#: ../fdroidserver/dscanner.py
-msgid "Prepare Drozer to run a scan"
-msgstr ""
-
-msgid "Prepare drozer to run a scan"
 msgstr ""
 
 #: ../fdroidserver/nightly.py
@@ -1576,10 +1549,6 @@ msgstr ""
 msgid "Running wget in {path}"
 msgstr ""
 
-#: ../fdroidserver/dscanner.py
-msgid "Scan only the latest version of each package"
-msgstr ""
-
 #: ../fdroidserver/build.py
 msgid "Scan the resulting APK(s) for known non-free classes."
 msgstr ""
@@ -1628,13 +1597,6 @@ msgstr ""
 #: ../fdroidserver/build.py
 #, python-brace-format
 msgid "Setting {0} sec timeout for this build"
-msgstr ""
-
-#: ../fdroidserver/build.py
-msgid "Setup an emulator, install the APK on it and perform a Drozer scan"
-msgstr ""
-
-msgid "Setup an emulator, install the apk on it and perform a drozer scan"
 msgstr ""
 
 #: ../fdroid ../fdroidserver/__main__.py
@@ -2138,7 +2100,7 @@ msgstr ""
 
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
 #: ../fdroidserver/verify.py ../fdroidserver/publish.py
-#: ../fdroidserver/dscanner.py ../fdroidserver/build.py
+#: ../fdroidserver/build.py
 #: ../fdroidserver/scanner.py ../fdroidserver/install.py
 msgid "applicationId with optional versionCode in the form APPID[:VERCODE]"
 msgstr ""
