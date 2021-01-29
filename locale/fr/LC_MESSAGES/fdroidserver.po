@@ -16,13 +16,14 @@
 # Alexandre Hô <xandrex_weblate@m4x.org>, 2020.
 # Yldun <contact@norcet.info>, 2020.
 # Renaud Perrai <contact@renaudperrai.fr>, 2020.
+# Éfrit <efrit@posteo.net>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2021-01-14 14:55+0100\n"
-"PO-Revision-Date: 2021-01-14 14:58+0000\n"
-"Last-Translator: Hans-Christoph Steiner <hans@guardianproject.info>\n"
+"PO-Revision-Date: 2021-01-14 19:53+0000\n"
+"Last-Translator: Éfrit <efrit@posteo.net>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/f-droid/fdroidserver/fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
@@ -893,7 +894,7 @@ msgstr "« {path} » graphique trouvée sans métadonnées pour l'applicatio
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Found bad funding file \"{path}\" for \"{name}\":"
-msgstr ""
+msgstr "Mauvais fichier de financement « {path} » trouvé pour « {name} » :"
 
 #: ../fdroidserver/common.py ../fdroidserver/metadata.py
 msgid "Found invalid appids in arguments"
