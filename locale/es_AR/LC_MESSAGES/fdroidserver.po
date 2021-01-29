@@ -4,20 +4,21 @@
 # Hans-Christoph Steiner <hans@guardianproject.info>, 2020.
 # riveravaldez <riveravaldezmail@gmail.com>, 2020.
 # Eduardo Rodrigues <edu.rodrigues2580@gmail.com>, 2020.
+# Lilian Sosa <liliancsosa@gmail.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2021-01-14 14:55+0100\n"
-"PO-Revision-Date: 2020-12-12 06:36+0000\n"
-"Last-Translator: Eduardo Rodrigues <edu.rodrigues2580@gmail.com>\n"
+"PO-Revision-Date: 2021-01-15 13:24+0000\n"
+"Last-Translator: Lilian Sosa <liliancsosa@gmail.com>\n"
 "Language-Team: Spanish (Argentina) <https://hosted.weblate.org/projects/f-droid/fdroidserver/es_AR/>\n"
 "Language: es_AR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.4-dev\n"
+"X-Generator: Weblate 4.5-dev\n"
 
 #: ../fdroidserver/common.py
 msgid ""
@@ -307,12 +308,12 @@ msgstr ""
 
 #: ../fdroidserver/common.py
 msgid "Android SDK not found!"
-msgstr ""
+msgstr "No se encontró Android SDK!"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Android SDK path '{path}' does not exist!"
-msgstr ""
+msgstr "No existe ruta '{path}' Android SDK!"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -334,12 +335,12 @@ msgstr ""
 
 #: ../fdroidserver/update.py
 msgid "AndroidManifest.xml has no date"
-msgstr ""
+msgstr "AndroidManifest.xml no tiene fecha"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "App is in '{repo}' but has a link to {url}"
-msgstr ""
+msgstr "La aplicación está en '{repo}' pero no tiene enlace a {url}"
 
 #: ../fdroidserver/lint.py
 msgid "Appending .git is not necessary"
@@ -348,7 +349,7 @@ msgstr ""
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Archiving {apkfilename} with invalid signature!"
-msgstr ""
+msgstr "Archivando {apkfilename} con una firma invalida!"
 
 #: ../fdroidserver/mirror.py
 msgid "Base URL to mirror, can include the index signing key using the query string: ?fingerprint="
@@ -358,7 +359,7 @@ msgstr ""
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "Branch '{branch}' used as commit in build '{versionName}'"
-msgstr ""
+msgstr "Rama {branch} fue publicada en la versión {versionName}"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
@@ -398,38 +399,38 @@ msgstr ""
 #: ../fdroidserver/init.py
 #, python-format
 msgid "Built repo based in \"%s\" with this config:"
-msgstr ""
+msgstr "Empaquetar repositorio basado en %s con esta configuración:"
 
 #: ../fdroidserver/build.py
 msgid "Can't build due to {} error while scanning"
 msgid_plural "Can't build due to {} errors while scanning"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "No se pudo empaquetar debido al {} error mientras se escaneaba"
+msgstr[1] "No se pudo empaquetar debido a los {} errores mientras se escaneaba"
 
 #: ../fdroidserver/vmtools.py
 #, python-brace-format
 msgid "Cannot read \"{path}\"!"
-msgstr ""
+msgstr "No se encuentra \"{path}\"!"
 
 #. Translators: https://developer.android.com/studio/build/application-id
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Cannot resolve application ID {appid}"
-msgstr ""
+msgstr "No se puede resolver el ID de la aplicación {appid}"
 
 #: ../fdroidserver/rewritemeta.py
 #, python-brace-format
 msgid "Cannot rewrite \"{path}\""
-msgstr ""
+msgstr "No se puede reescribir \"{path}\""
 
 #: ../fdroidserver/rewritemeta.py
 msgid "Cannot use --list and --to at the same time"
-msgstr ""
+msgstr "No se puede usar --list y --to al mismo tiempo"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Cannot write \"{path}\", not an accepted format, use: {formats}"
-msgstr ""
+msgstr "No se puede escribir \"{path}\", no es un formato aceptado, use: {formats}"
 
 #: ../fdroidserver/lint.py
 #, python-format
@@ -2621,7 +2622,7 @@ msgstr "uso: "
 
 #: ../fdroid
 msgid "usage: fdroid [-h|--help|--version] <command> [<args>]"
-msgstr "uso: fdroid [-h|--help|--version] <comando> [<args>]"
+msgstr "usar: fdroid [-h|--help|--version] <comando> [<args>]"
 
 #: ../fdroidserver/deploy.py ../fdroidserver/upload.py
 #, python-brace-format
