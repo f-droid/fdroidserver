@@ -4,15 +4,15 @@
 # ERDwaYbR <weblate.uu@vvvvv5.uu.me>, 2020.
 # Trey Yang <stevsfy@gmail.com>, 2020.
 # taiyuan <1006333969@qq.com>, 2020.
-# Eric <spice2wolf@gmail.com>, 2020.
+# Eric <spice2wolf@gmail.com>, 2020, 2021.
 # Carlos <linghao.zhang@protonmail.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2021-01-14 14:55+0100\n"
-"PO-Revision-Date: 2021-01-14 21:33+0000\n"
-"Last-Translator: Carlos <linghao.zhang@protonmail.com>\n"
+"PO-Revision-Date: 2021-01-15 13:24+0000\n"
+"Last-Translator: Eric <spice2wolf@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/f-droid/fdroidserver/zh_Hans/>\n"
 "Language: zh_Hans\n"
 "MIME-Version: 1.0\n"
@@ -22,7 +22,6 @@ msgstr ""
 "X-Generator: Weblate 4.5-dev\n"
 
 #: ../fdroidserver/common.py
-#, fuzzy
 msgid ""
 "\n"
 "        This is a repository of apps to be used with FDroid. Applications in this\n"
@@ -32,7 +31,10 @@ msgid ""
 "        "
 msgstr ""
 "\n"
-"        这是一个用于 FDroid 的应用储存库。该库中的应用是由原始应用开发者构建的官方二进制文件，或者是由 f-droid.org 使用 https://gitlab.com/fdroid 上的工具从源头构建的二进制文件。\n"
+"        这是一个与FDroid一起使用的应用程序的仓库。这个仓库中的应用程序\n"
+"        要么是原应用程序开发者构建的官方二进制文件，要么是f-droid.org使用\n"
+"        https://gitlab.com/fdroid上的工具从源代码构建而来的\n"
+"        二进制文件。\n"
 "        "
 
 #: ../fdroidserver/nightly.py
@@ -150,9 +152,8 @@ msgid "'keypass' not found in config.py!"
 msgstr "config.py中找不到'keypass'！"
 
 #: ../fdroidserver/common.py
-#, fuzzy
 msgid "'keypass' not found in config.yml!"
-msgstr "config.py中找不到'keypass'！"
+msgstr "config.yml 中找不到 'keypass'！"
 
 #: ../fdroidserver/common.py
 msgid "'keystore' is NONE and 'smartcardoptions' is blank!"
@@ -163,27 +164,24 @@ msgid "'keystore' not found in config.py!"
 msgstr "config.py中找不到'keypass'！"
 
 #: ../fdroidserver/common.py
-#, fuzzy
 msgid "'keystore' not found in config.yml!"
-msgstr "config.py中找不到'keypass'！"
+msgstr "config.yml 中找不到'keystore'！"
 
 #: ../fdroidserver/index.py ../fdroidserver/common.py
 msgid "'keystorepass' not found in config.py!"
 msgstr "config.py中找不到'keystorepass'！"
 
 #: ../fdroidserver/common.py
-#, fuzzy
 msgid "'keystorepass' not found in config.yml!"
-msgstr "config.py中找不到'keystorepass'！"
+msgstr "config.yml 中找不到 'keystorepass'！"
 
 #: ../fdroidserver/index.py ../fdroidserver/common.py
 msgid "'repo_keyalias' not found in config.py!"
 msgstr "config.py中找不到'repo_keyalias'！"
 
 #: ../fdroidserver/common.py
-#, fuzzy
 msgid "'repo_keyalias' not found in config.yml!"
-msgstr "config.py中找不到'repo_keyalias'！"
+msgstr "config.yml 中找不到'repo_keyalias'！"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py
@@ -195,9 +193,8 @@ msgid "'sdk_path' not set in 'config.py'!"
 msgstr "未在“ config.py”中设置“ sdk_path”！"
 
 #: ../fdroidserver/common.py
-#, fuzzy
 msgid "'sdk_path' not set in config.yml!"
-msgstr "未在“ config.py”中设置“ sdk_path”！"
+msgstr "config.yml 中未设置'sdk_path'！"
 
 #. Translators: "build-tools" is the file name of a package from
 #. Google, it is part of the Android SDK. So it probably shouldn't be
@@ -314,9 +311,9 @@ msgid "Android SDK '{path}' does not have '{dirname}' installed!"
 msgstr "Android SDK‘{path}’未安装‘{dirname}’！"
 
 #: ../fdroidserver/init.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Android SDK not found at {path}!"
-msgstr "未找到 Android SDK！"
+msgstr "未在 {path} 中找到 Android SDK！"
 
 #: ../fdroidserver/common.py
 msgid "Android SDK not found!"
@@ -333,9 +330,9 @@ msgid "Android SDK path '{path}' is not a directory!"
 msgstr "Android SDK路径'{path}'不是目录！"
 
 #: ../fdroidserver/common.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Android SDK tool {cmd} found!"
-msgstr "未找到 Android SDK！"
+msgstr "找到了 Android SDK 工具{cmd}！"
 
 #. Translators: "build-tools" is the file name of a package from
 #. Google, it is part of the Android SDK. So it probably shouldn't be
@@ -409,15 +406,14 @@ msgid "Build should have comma-separated versionName and versionCode, not \"{val
 msgstr ""
 
 #: ../fdroidserver/init.py
-#, fuzzy, python-format
+#, python-format
 msgid "Built repo based in \"%s\" with this config:"
-msgstr "使用此配置并基于 \"%s\" 的构建储存库："
+msgstr ""
 
 #: ../fdroidserver/build.py
-#, fuzzy
 msgid "Can't build due to {} error while scanning"
 msgid_plural "Can't build due to {} errors while scanning"
-msgstr[0] "在扫描时因 {} 错误而无法构建"
+msgstr[0] "因扫描时的{}错误而无法构建"
 
 #: ../fdroidserver/vmtools.py
 #, python-brace-format
