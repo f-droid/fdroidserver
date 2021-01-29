@@ -18,13 +18,14 @@
 # Renaud Perrai <contact@renaudperrai.fr>, 2020.
 # Éfrit <efrit@posteo.net>, 2021.
 # hilariousperson <gobelpepite+github@gmail.com>, 2021.
+# Madeorsk <madeorsk@protonmail.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2021-01-14 14:55+0100\n"
-"PO-Revision-Date: 2021-01-14 21:33+0000\n"
-"Last-Translator: Éfrit <efrit@posteo.net>\n"
+"PO-Revision-Date: 2021-01-15 13:25+0000\n"
+"Last-Translator: Madeorsk <madeorsk@protonmail.com>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/f-droid/fdroidserver/fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
@@ -2080,8 +2081,9 @@ msgid "Valid commands are:"
 msgstr "Les commandes valides sont les suivantes :"
 
 #: ../fdroidserver/verify.py
+#, fuzzy
 msgid "Verify against locally cached copy rather than redownloading."
-msgstr ""
+msgstr "Vérifier dans le cache plutôt que de retélécharger."
 
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Verify the integrity of downloaded packages"
@@ -2092,9 +2094,9 @@ msgid "Verifying index signature:"
 msgstr "Vérification de la signature d'index :"
 
 #: ../fdroidserver/deploy.py
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "VirusTotal API key cannot upload files larger than 32MB, use {url} to upload {path}."
-msgstr ""
+msgstr "L'API de VirusTotal ne permet pas d'envoyer des fichiers plus grands que 32Mo, utilisez {url} pour envoyer {path}."
 
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Warn about possible metadata errors"
@@ -2120,8 +2122,9 @@ msgid "You can use ANDROID_HOME to set the path to your SDK, i.e.:"
 msgstr "Vous pouvez utiliser ANDROID_HOME pour définir le chemin de votre SDK, ex. :"
 
 #: ../fdroidserver/scanner.py
+#, fuzzy
 msgid "ZIP file archive"
-msgstr ""
+msgstr "Archive ZIP"
 
 #: ../fdroidserver/nightly.py
 #, python-brace-format
@@ -2146,8 +2149,9 @@ msgid "ambiguous option: %s (%s?)"
 msgstr "option ambiguë : %s (%s?)"
 
 #: ../fdroidserver/common.py
+#, fuzzy
 msgid "apksigner not found, it's required for signing!"
-msgstr ""
+msgstr "apksigner n'a pas été trouvé, alors que c'est nécessaire pour signer !"
 
 #: ../fdroidserver/lint.py ../fdroidserver/rewritemeta.py
 #: ../fdroidserver/checkupdates.py
@@ -2214,13 +2218,13 @@ msgstr ""
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py
-#, python-format
+#, fuzzy, python-format
 msgid "cannot merge actions - two groups are named %r"
-msgstr ""
+msgstr "impossible de fusionner les actions - deux groupes sont appelés %r"
 
 #: ../fdroidserver/nightly.py
 msgid "cannot publish update, did you set the deploy key?"
-msgstr ""
+msgstr "impossible de publier la mise à jour, avez-vous affecté la clé de déploiement ?"
 
 #: ../fdroidserver/nightly.py
 #, python-brace-format
@@ -2237,8 +2241,9 @@ msgstr ""
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 #: /usr/lib/python3.7/optparse.py
+#, fuzzy
 msgid "complex"
-msgstr ""
+msgstr "complexe"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py
@@ -2249,14 +2254,14 @@ msgstr[0] ""
 msgstr[1] ""
 
 #: ../fdroidserver/nightly.py
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "copying {apkfilename} into {path}"
-msgstr ""
+msgstr "copie de {apkfilename} dans {path} en cours"
 
 #: ../fdroidserver/metadata.py
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "could not parse '{path}'"
-msgstr ""
+msgstr "impossible de lire '{path}'"
 
 #: ../fdroidserver/common.py
 msgid "could not parse srclib spec (no ref specified): '{}'"
@@ -2269,12 +2274,12 @@ msgstr ""
 #: ../fdroidserver/nightly.py
 #, python-brace-format
 msgid "created {path}"
-msgstr ""
+msgstr "{path} a été créé"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "deleting: repo/{apkfilename}"
-msgstr ""
+msgstr "suppression : repo/{apkfilename}"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -2307,22 +2312,22 @@ msgstr[1] ""
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py
 msgid "expected at least one argument"
-msgstr ""
+msgstr "au moins un argument est attendu"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py
 msgid "expected at most one argument"
-msgstr ""
+msgstr "un seul argument au plus est attendu"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py
 msgid "expected one argument"
-msgstr ""
+msgstr "un seul argument est attendu"
 
 #: ../fdroidserver/common.py
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "failed deploying build logs to '{path}'"
-msgstr ""
+msgstr "le journal de construction n'a pas pu être déployé sur '{path}'"
 
 #: ../fdroid
 msgid "fdroid [-h|--help|--version] <command> [<args>]"
@@ -2347,11 +2352,11 @@ msgstr "forcer les erreurs (par défaut) sur les métadonnées à être des aver
 
 #: ../fdroidserver/common.py
 msgid "git svn clone failed"
-msgstr ""
+msgstr "git svn clone a échoué"
 
 #: ../fdroidserver/scanner.py
 msgid "gzip file archive"
-msgstr ""
+msgstr "archive GZIP"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py
@@ -2366,7 +2371,7 @@ msgstr ""
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 #: /usr/lib/python3.7/optparse.py
 msgid "integer"
-msgstr ""
+msgstr "entier"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py
@@ -2549,7 +2554,7 @@ msgstr ""
 
 #: ../fdroidserver/scanner.py
 msgid "shared library"
-msgstr ""
+msgstr "bibliothèque partagée"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 #: /usr/lib/python3.7/optparse.py
