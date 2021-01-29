@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2021-01-14 14:55+0100\n"
-"PO-Revision-Date: 2021-01-14 21:33+0000\n"
+"PO-Revision-Date: 2021-01-27 00:33+0000\n"
 "Last-Translator: Ihor Hordiichuk <igor_ck@outlook.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/f-droid/fdroidserver/uk/>\n"
 "Language: uk\n"
@@ -941,12 +941,12 @@ msgstr "Git вибірка не вдалася"
 
 #: ../fdroidserver/common.py
 msgid "Git remote set-head failed"
-msgstr "Не вдалося встановити пульт дистанційного керування Git"
+msgstr "Не вдалося налаштувати remote set-head для Git"
 
 #: ../fdroidserver/common.py
 #, python-format
 msgid "Git remote set-head failed: \"%s\""
-msgstr "Помилка зовнішнього налаштування Git: \"%s\""
+msgstr "Помилка налаштування remote set-head для Git: «%s»"
 
 #: ../fdroidserver/common.py
 msgid "Git reset failed"
@@ -1485,7 +1485,7 @@ msgstr "Слід уникати пунктуації"
 
 #: ../fdroidserver/btlog.py
 msgid "Push the log to this git remote repository"
-msgstr "Натисніть вхід цього віддаленого сховища git"
+msgstr "Надіслати журнал цього віддаленого репозиторію git"
 
 #: ../fdroidserver/deploy.py ../fdroidserver/upload.py
 #, python-brace-format
