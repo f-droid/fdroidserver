@@ -6,13 +6,14 @@
 # marzzzello <anmeldezeugs@top-email.net>, 2020.
 # Hans-Christoph Steiner <hans@guardianproject.info>, 2020, 2021.
 # Predatorix Phoenix <predatorix@web.de>, 2021.
+# cheese1 <cheese@nosuchhost.net>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2021-01-14 14:55+0100\n"
-"PO-Revision-Date: 2021-01-14 14:58+0000\n"
-"Last-Translator: Hans-Christoph Steiner <hans@guardianproject.info>\n"
+"PO-Revision-Date: 2021-01-14 21:33+0000\n"
+"Last-Translator: cheese1 <cheese@nosuchhost.net>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/f-droid/fdroidserver/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -70,7 +71,7 @@ msgid "\"%s/\" has no matching metadata file!"
 msgstr "\"%s/\" besitzt keine zugehörige Metadaten-Datei!"
 
 #: ../fdroidserver/install.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "\"{apkfilename}\" is already installed on {dev}."
 msgstr "'{apkfilename}' ist auf {dev} bereits installiert."
 
@@ -155,9 +156,8 @@ msgid "'keypass' not found in config.py!"
 msgstr "„keypass” nicht in config.py vorhanden!"
 
 #: ../fdroidserver/common.py
-#, fuzzy
 msgid "'keypass' not found in config.yml!"
-msgstr "„keypass” nicht in config.py vorhanden!"
+msgstr "„keypass” nicht in config.yml vorhanden!"
 
 #: ../fdroidserver/common.py
 msgid "'keystore' is NONE and 'smartcardoptions' is blank!"
@@ -168,27 +168,24 @@ msgid "'keystore' not found in config.py!"
 msgstr "„keystore” nicht in config.py vorhanden!"
 
 #: ../fdroidserver/common.py
-#, fuzzy
 msgid "'keystore' not found in config.yml!"
-msgstr "„keystore” nicht in config.py vorhanden!"
+msgstr "„keystore” nicht in config.yml vorhanden!"
 
 #: ../fdroidserver/index.py ../fdroidserver/common.py
 msgid "'keystorepass' not found in config.py!"
 msgstr "„keystorepass” nicht in config.py vorhanden!"
 
 #: ../fdroidserver/common.py
-#, fuzzy
 msgid "'keystorepass' not found in config.yml!"
-msgstr "„keystorepass” nicht in config.py vorhanden!"
+msgstr "„keystorepass” nicht in config.yml vorhanden!"
 
 #: ../fdroidserver/index.py ../fdroidserver/common.py
 msgid "'repo_keyalias' not found in config.py!"
 msgstr "„repo_keyalias” nicht in config.py vorhanden!"
 
 #: ../fdroidserver/common.py
-#, fuzzy
 msgid "'repo_keyalias' not found in config.yml!"
-msgstr "„repo_keyalias” nicht in config.py vorhanden!"
+msgstr "„repo_keyalias” nicht in config.yml vorhanden!"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py
@@ -200,9 +197,8 @@ msgid "'sdk_path' not set in 'config.py'!"
 msgstr "Kein 'sdk_path' in 'config.py' festgelegt!"
 
 #: ../fdroidserver/common.py
-#, fuzzy
 msgid "'sdk_path' not set in config.yml!"
-msgstr "Kein 'sdk_path' in 'config.py' festgelegt!"
+msgstr "Kein 'sdk_path' in 'config.yml' festgelegt!"
 
 #. Translators: "build-tools" is the file name of a package from
 #. Google, it is part of the Android SDK. So it probably shouldn't be
@@ -503,7 +499,7 @@ msgstr "Widersprüchliche Argumente: '--verbose' und '--quiet' können nicht gle
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Conflicting config files! Using {newfile}, ignoring {oldfile}!"
-msgstr ""
+msgstr "Konflikt in der Konfiguration. Verwende {newfile}, ignoriere {oldfile}!"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -526,9 +522,9 @@ msgid "Could not find {path} to remove it"
 msgstr "{path} konnte nicht gefunden werden, um ihn zu entfernen"
 
 #: ../fdroidserver/update.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Could not open APK {path} for analysis: "
-msgstr "Konnte APK-Datei nicht für Analyse öffnen"
+msgstr "Konnte APK-Datei {path} nicht für Analyse öffnen "
 
 #: ../fdroidserver/update.py
 msgid "Could not open apk file for analysis"
