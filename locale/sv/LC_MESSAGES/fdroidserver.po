@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 1.0.0-95-gd7af22b\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2021-01-14 14:55+0100\n"
+"POT-Creation-Date: 2021-01-29 16:12+0100\n"
 "PO-Revision-Date: 2021-01-15 13:25+0000\n"
 "Last-Translator: Elias Mårtenson <elias@dhsdevelopments.com>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/f-droid/fdroidserver/sv/>\n"
@@ -49,6 +49,10 @@ msgstr ""
 #: ../fdroidserver/lint.py
 #, python-format
 msgid "\"%s/\" has no matching metadata file!"
+msgstr ""
+
+#: ../fdroidserver/index.py
+msgid "\"repo_pubkey\" must be present in config.yml when using --nosign!"
 msgstr ""
 
 #: ../fdroidserver/install.py
@@ -137,10 +141,6 @@ msgid "'keypass' not found in config.yml!"
 msgstr ""
 
 #: ../fdroidserver/common.py
-msgid "'keypass' not found in config.yml!"
-msgstr ""
-
-#: ../fdroidserver/common.py
 msgid "'keystore' is NONE and 'smartcardoptions' is blank!"
 msgstr ""
 
@@ -148,23 +148,11 @@ msgstr ""
 msgid "'keystore' not found in config.yml!"
 msgstr ""
 
-#: ../fdroidserver/common.py
-msgid "'keystore' not found in config.yml!"
-msgstr ""
-
 #: ../fdroidserver/index.py ../fdroidserver/common.py
 msgid "'keystorepass' not found in config.yml!"
 msgstr ""
 
-#: ../fdroidserver/common.py
-msgid "'keystorepass' not found in config.yml!"
-msgstr ""
-
 #: ../fdroidserver/index.py ../fdroidserver/common.py
-msgid "'repo_keyalias' not found in config.yml!"
-msgstr ""
-
-#: ../fdroidserver/common.py
 msgid "'repo_keyalias' not found in config.yml!"
 msgstr ""
 
@@ -444,16 +432,9 @@ msgstr "Kontrollera efter uppdateringar av appar"
 msgid "Checking archiving for {appid} - APKs:{integer}, keepversions:{keep}, archapks:{arch}"
 msgstr ""
 
-#: ../fdroidserver/dscanner.py
-msgid "Clean after all scans have finished"
-msgstr ""
-
-#: ../fdroidserver/dscanner.py
-msgid "Clean before the scans start and rebuild the container"
-msgstr ""
-
-#: ../fdroidserver/dscanner.py
-msgid "Clean up all containers and then exit"
+#: ../fdroidserver/update.py
+#, python-brace-format
+msgid "Checking archiving for {appid} - apks:{integer}, keepversions:{keep}, archapks:{arch}"
 msgstr ""
 
 #: ../fdroidserver/update.py
@@ -503,10 +484,6 @@ msgstr ""
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Could not open APK {path} for analysis: "
-msgstr ""
-
-#: ../fdroidserver/update.py
-msgid "Could not open APK file for analysis"
 msgstr ""
 
 #: ../fdroidserver/common.py
@@ -777,10 +754,6 @@ msgstr ""
 msgid "Failed to create S3 bucket: {url}"
 msgstr ""
 
-#: ../fdroidserver/common.py
-msgid "Failed to get APK manifest information"
-msgstr ""
-
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Failed to get APK information, deleting {path}"
@@ -789,6 +762,10 @@ msgstr ""
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Failed to get APK information, skipping {path}"
+msgstr ""
+
+#: ../fdroidserver/common.py
+msgid "Failed to get APK manifest information"
 msgstr ""
 
 #: ../fdroidserver/install.py
@@ -1301,10 +1278,6 @@ msgstr ""
 msgid "Now set these in config.yml:"
 msgstr ""
 
-#: ../fdroidserver/init.py
-msgid "Now set these in config.yml:"
-msgstr ""
-
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -1372,10 +1345,6 @@ msgstr ""
 msgid "Overall license of the project."
 msgstr ""
 
-#: ../fdroidserver/dscanner.py
-msgid "Override path for repo APKs (default: ./repo)"
-msgstr ""
-
 #: ../fdroidserver/index.py
 #, python-brace-format
 msgid "Overriding blank versionName in {apkfilename} from metadata: {version}"
@@ -1412,13 +1381,6 @@ msgstr ""
 
 #: ../fdroidserver/init.py
 msgid "Path to the keystore for the repo signing key"
-msgstr ""
-
-#: ../fdroidserver/dscanner.py
-msgid "Prepare Drozer to run a scan"
-msgstr ""
-
-msgid "Prepare drozer to run a scan"
 msgstr ""
 
 #: ../fdroidserver/nightly.py
@@ -1577,10 +1539,6 @@ msgstr ""
 msgid "Running wget in {path}"
 msgstr ""
 
-#: ../fdroidserver/dscanner.py
-msgid "Scan only the latest version of each package"
-msgstr ""
-
 #: ../fdroidserver/build.py
 msgid "Scan the resulting APK(s) for known non-free classes."
 msgstr ""
@@ -1629,13 +1587,6 @@ msgstr ""
 #: ../fdroidserver/build.py
 #, python-brace-format
 msgid "Setting {0} sec timeout for this build"
-msgstr ""
-
-#: ../fdroidserver/build.py
-msgid "Setup an emulator, install the APK on it and perform a Drozer scan"
-msgstr ""
-
-msgid "Setup an emulator, install the APK on it and perform a drozer scan"
 msgstr ""
 
 #: ../fdroid ../fdroidserver/__main__.py
@@ -1767,16 +1718,16 @@ msgstr ""
 msgid "These are the apps that have been archived from the main repo."
 msgstr ""
 
+#: ../fdroidserver/common.py
+msgid "This is a repository of apps to be used with F-Droid. Applications in this repository are either official binaries built by the original application developers, or are binaries built from source by the admin of f-droid.org using the tools on https://gitlab.com/fdroid."
+msgstr ""
+
 #: ../fdroidserver/import.py
 #, python-format
 msgid "This repo already has local metadata: %s"
 msgstr ""
 
 #: ../fdroidserver/deploy.py ../fdroidserver/upload.py
-msgid "To use awsbucket, awssecretkey and awsaccesskeyid must also be set in config.yml!"
-msgstr ""
-
-#: ../fdroidserver/deploy.py
 msgid "To use awsbucket, awssecretkey and awsaccesskeyid must also be set in config.yml!"
 msgstr ""
 
@@ -2009,9 +1960,6 @@ msgstr ""
 msgid "Use date from APK instead of current time for newly added APKs"
 msgstr ""
 
-msgid "Use date from APK instead of current time for newly added APKs"
-msgstr ""
-
 #: ../fdroidserver/deploy.py ../fdroidserver/upload.py
 #, python-brace-format
 msgid "Using \"{path}\" for configuring s3cmd."
@@ -2139,8 +2087,8 @@ msgstr ""
 
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
 #: ../fdroidserver/verify.py ../fdroidserver/publish.py
-#: ../fdroidserver/dscanner.py ../fdroidserver/build.py
-#: ../fdroidserver/scanner.py ../fdroidserver/install.py
+#: ../fdroidserver/build.py ../fdroidserver/scanner.py
+#: ../fdroidserver/install.py
 msgid "applicationId with optional versionCode in the form APPID[:VERCODE]"
 msgstr ""
 
@@ -2501,6 +2449,11 @@ msgstr ""
 
 #: ../fdroidserver/index.py
 #, python-format
+msgid "repo_icon \"repo/icons/%s\" does not exist, generating placeholder."
+msgstr ""
+
+#: ../fdroidserver/index.py
+#, python-format
 msgid "repo_icon %s does not exist, generating placeholder."
 msgstr ""
 
@@ -2700,6 +2653,11 @@ msgstr ""
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "{name} \"{path}\" does not exist! Correct it in config.yml."
+msgstr ""
+
+#: ../fdroidserver/update.py
+#, python-brace-format
+msgid "{name} \"{section}/icons/{path}\" does not exist! Check \"config.yml\"."
 msgstr ""
 
 #: ../fdroidserver/common.py

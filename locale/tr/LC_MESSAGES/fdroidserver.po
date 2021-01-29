@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2021-01-14 14:55+0100\n"
+"POT-Creation-Date: 2021-01-29 16:12+0100\n"
 "PO-Revision-Date: 2021-01-14 21:33+0000\n"
 "Last-Translator: Oğuz Ersen <oguzersen@protonmail.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/f-droid/fdroidserver/tr/>\n"
@@ -61,6 +61,10 @@ msgstr ""
 #, python-format
 msgid "\"%s/\" has no matching metadata file!"
 msgstr "\"%s/\" eşleşen üst veri dosyasına sahip değil!"
+
+#: ../fdroidserver/index.py
+msgid "\"repo_pubkey\" must be present in config.yml when using --nosign!"
+msgstr ""
 
 #: ../fdroidserver/install.py
 #, python-brace-format
@@ -148,10 +152,6 @@ msgid "'keypass' not found in config.yml!"
 msgstr "'keypass' config.yml içinde bulunamadı!"
 
 #: ../fdroidserver/common.py
-msgid "'keypass' not found in config.yml!"
-msgstr "'keypass' config.yml içinde bulunamadı!"
-
-#: ../fdroidserver/common.py
 msgid "'keystore' is NONE and 'smartcardoptions' is blank!"
 msgstr "'keystore' seçeneği NONE ve 'smartcardoptions' seçeneği boş!"
 
@@ -159,23 +159,11 @@ msgstr "'keystore' seçeneği NONE ve 'smartcardoptions' seçeneği boş!"
 msgid "'keystore' not found in config.yml!"
 msgstr "'keystore' config.yml içinde bulunamadı!"
 
-#: ../fdroidserver/common.py
-msgid "'keystore' not found in config.yml!"
-msgstr "'keystore' config.yml içinde bulunamadı!"
-
 #: ../fdroidserver/index.py ../fdroidserver/common.py
 msgid "'keystorepass' not found in config.yml!"
 msgstr "'keystorepass' config.yml içinde bulunamadı!"
 
-#: ../fdroidserver/common.py
-msgid "'keystorepass' not found in config.yml!"
-msgstr "'keystorepass' config.yml içinde bulunamadı!"
-
 #: ../fdroidserver/index.py ../fdroidserver/common.py
-msgid "'repo_keyalias' not found in config.yml!"
-msgstr "'repo_keyalias' config.yml içinde bulunamadı!"
-
-#: ../fdroidserver/common.py
 msgid "'repo_keyalias' not found in config.yml!"
 msgstr "'repo_keyalias' config.yml içinde bulunamadı!"
 
@@ -455,17 +443,10 @@ msgstr "Uygulama güncellemelerini denetle"
 msgid "Checking archiving for {appid} - APKs:{integer}, keepversions:{keep}, archapks:{arch}"
 msgstr "{appid} için arşivleme denetleniyor - APKs:{integer}, keepversions:{keep}, archapks:{arch}"
 
-#: ../fdroidserver/dscanner.py
-msgid "Clean after all scans have finished"
-msgstr "Tüm taramalar bitince temizle"
-
-#: ../fdroidserver/dscanner.py
-msgid "Clean before the scans start and rebuild the container"
-msgstr "Taramalar başlamadan önce temizle ve kapsayıcıyı yeniden inşa et"
-
-#: ../fdroidserver/dscanner.py
-msgid "Clean up all containers and then exit"
-msgstr "Bütün kapsayıcılar temizle ve sonra çık"
+#: ../fdroidserver/update.py
+#, fuzzy, python-brace-format
+msgid "Checking archiving for {appid} - apks:{integer}, keepversions:{keep}, archapks:{arch}"
+msgstr "{appid} için arşivleme denetleniyor - APKs:{integer}, keepversions:{keep}, archapks:{arch}"
 
 #: ../fdroidserver/update.py
 msgid "Clean update - don't uses caches, reprocess all APKs"
@@ -515,10 +496,6 @@ msgstr "Kaldırmak için {path} bulunamadı"
 #, python-brace-format
 msgid "Could not open APK {path} for analysis: "
 msgstr "İnceleme için APK {path} açılamadı: "
-
-#: ../fdroidserver/update.py
-msgid "Could not open APK file for analysis"
-msgstr "İnceleme için APK dosyası açılamadı"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -791,10 +768,6 @@ msgstr "Uygulama hizalama başarısız oldu"
 msgid "Failed to create S3 bucket: {url}"
 msgstr "S3 kovası oluşturulamadı: {url}"
 
-#: ../fdroidserver/common.py
-msgid "Failed to get APK manifest information"
-msgstr "APK bildirim bilgileri alınamadı"
-
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Failed to get APK information, deleting {path}"
@@ -804,6 +777,10 @@ msgstr "APK bilgisi alınamadı, {path} siliniyor"
 #, python-brace-format
 msgid "Failed to get APK information, skipping {path}"
 msgstr "APK bilgisi alınamadı, {path} atlanıyor"
+
+#: ../fdroidserver/common.py
+msgid "Failed to get APK manifest information"
+msgstr "APK bildirim bilgileri alınamadı"
 
 #: ../fdroidserver/install.py
 #, python-brace-format
@@ -1315,10 +1292,6 @@ msgstr "{appid} için yapılacak işlem yok."
 msgid "Now set these in config.yml:"
 msgstr "Şimdi bunları config.yml içinde ayarlayın:"
 
-#: ../fdroidserver/init.py
-msgid "Now set these in config.yml:"
-msgstr "Şimdi bunları config.yml içinde ayarlayın:"
-
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -1386,10 +1359,6 @@ msgstr "JSON yazdırılıyor"
 msgid "Overall license of the project."
 msgstr "Projenin genel lisansı."
 
-#: ../fdroidserver/dscanner.py
-msgid "Override path for repo APKs (default: ./repo)"
-msgstr "Depo APK'ları için konumu geçersiz kıl (öntanımlı olarak: ./repo)"
-
 #: ../fdroidserver/index.py
 #, python-brace-format
 msgid "Overriding blank versionName in {apkfilename} from metadata: {version}"
@@ -1427,13 +1396,6 @@ msgstr "Günlük olarak kullanılacak git deposunun konumu"
 #: ../fdroidserver/init.py
 msgid "Path to the keystore for the repo signing key"
 msgstr "Depo imzalama anahtarı için anahtar deposunun konumu"
-
-#: ../fdroidserver/dscanner.py
-msgid "Prepare Drozer to run a scan"
-msgstr "Drozer'i bir tarama çalıştırmak için hazırla"
-
-msgid "Prepare drozer to run a scan"
-msgstr "Drozer'i bir tarama çalıştırmak için hazırla"
 
 #: ../fdroidserver/nightly.py
 msgid "Print the secret variable to the terminal for easy copy/paste"
@@ -1591,10 +1553,6 @@ msgstr "İlk geçiş MD5 doğrulama olmadan çalıştırılıyor"
 msgid "Running wget in {path}"
 msgstr "{path} konumunda wget çalıştırılıyor"
 
-#: ../fdroidserver/dscanner.py
-msgid "Scan only the latest version of each package"
-msgstr "Her paketin sadece en son sürümünü tara"
-
 #: ../fdroidserver/build.py
 msgid "Scan the resulting APK(s) for known non-free classes."
 msgstr "Bilinen özgür olmayan sınıflar için ortaya çıkan APK'leri tara."
@@ -1644,13 +1602,6 @@ msgstr "Açık dosya sınırı ayarı başarısız: "
 #, python-brace-format
 msgid "Setting {0} sec timeout for this build"
 msgstr "Bu inşa için {0} sn zaman aşımı ayarlanıyor"
-
-#: ../fdroidserver/build.py
-msgid "Setup an emulator, install the APK on it and perform a Drozer scan"
-msgstr "Bir emülatör kur, APKyı ona kur ve bir Drozer taraması yap"
-
-msgid "Setup an emulator, install the APK on it and perform a drozer scan"
-msgstr "Bir emülatör kur, APKyı ona kur ve bir Drozer taraması yap"
 
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Sign and place packages in the repo"
@@ -1781,16 +1732,23 @@ msgstr "Bir keyalias çakışması var - yayımlama durdu"
 msgid "These are the apps that have been archived from the main repo."
 msgstr "Bunlar ana depodan arşivlenmiş uygulamalardır."
 
+#: ../fdroidserver/common.py
+#, fuzzy
+msgid "This is a repository of apps to be used with F-Droid. Applications in this repository are either official binaries built by the original application developers, or are binaries built from source by the admin of f-droid.org using the tools on https://gitlab.com/fdroid."
+msgstr ""
+"\n"
+"        Bu, FDroid ile kullanılacak uygulamaların bir deposudur. Bu depodaki\n"
+"        uygulamalar ya gerçek uygulama geliştiricileri tarafından oluşturulan\n"
+"        resmi ikili dosyalardır ya da https://gitlab.com/fdroid adresindeki araçlar\n"
+"        kullanılarak f-droid.org tarafından kaynaktan oluşturulan ikili dosyalardır.\n"
+"        "
+
 #: ../fdroidserver/import.py
 #, python-format
 msgid "This repo already has local metadata: %s"
 msgstr "Bu deponun zaten yerel üst verisi var: %s"
 
 #: ../fdroidserver/deploy.py ../fdroidserver/upload.py
-msgid "To use awsbucket, awssecretkey and awsaccesskeyid must also be set in config.yml!"
-msgstr "Awsbucket kullanmak için, awssecretkey ve awsaccesskeyid de config.yml içinde ayarlanmalı!"
-
-#: ../fdroidserver/deploy.py
 msgid "To use awsbucket, awssecretkey and awsaccesskeyid must also be set in config.yml!"
 msgstr "Awsbucket kullanmak için, awssecretkey ve awsaccesskeyid de config.yml içinde ayarlanmalı!"
 
@@ -2023,9 +1981,6 @@ msgstr "İnşa sunucusu kullan"
 msgid "Use date from APK instead of current time for newly added APKs"
 msgstr "Yeni eklenen APKlar için o anki zaman yerine APK'daki tarihi kullan"
 
-msgid "Use date from APK instead of current time for newly added APKs"
-msgstr "Yeni eklenen APKlar için o anki zaman yerine APK tarihini kullan"
-
 #: ../fdroidserver/deploy.py ../fdroidserver/upload.py
 #, python-brace-format
 msgid "Using \"{path}\" for configuring s3cmd."
@@ -2153,8 +2108,8 @@ msgstr "Güncellemeleri denetlemek için applicationId"
 
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
 #: ../fdroidserver/verify.py ../fdroidserver/publish.py
-#: ../fdroidserver/dscanner.py ../fdroidserver/build.py
-#: ../fdroidserver/scanner.py ../fdroidserver/install.py
+#: ../fdroidserver/build.py ../fdroidserver/scanner.py
+#: ../fdroidserver/install.py
 msgid "applicationId with optional versionCode in the form APPID[:VERCODE]"
 msgstr "APPID[:VERCODE] biçiminde applicationId, isteğe bağlı versionCode ile"
 
@@ -2514,6 +2469,11 @@ msgid "refuse downloading via insecure http connection (use https or specify --n
 msgstr "güvensiz http bağlantısı ile indirmeyi reddet (https kullanın veya --no-https-check belirtin): {apkfilename}"
 
 #: ../fdroidserver/index.py
+#, fuzzy, python-format
+msgid "repo_icon \"repo/icons/%s\" does not exist, generating placeholder."
+msgstr "repo_icon %s mevcut değil, yer tutucu oluşturuyor."
+
+#: ../fdroidserver/index.py
 #, python-format
 msgid "repo_icon %s does not exist, generating placeholder."
 msgstr "repo_icon %s mevcut değil, yer tutucu oluşturuyor."
@@ -2716,6 +2676,11 @@ msgstr "{file} boş veya bozuk!"
 msgid "{name} \"{path}\" does not exist! Correct it in config.yml."
 msgstr "{name} \"{path}\" yok! config.yml içinde düzeltin."
 
+#: ../fdroidserver/update.py
+#, fuzzy, python-brace-format
+msgid "{name} \"{section}/icons/{path}\" does not exist! Check \"config.yml\"."
+msgstr "{name} \"{path}\" yok! config.yml içinde düzeltin."
+
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "{oldfile} is deprecated, use {newfile}"
@@ -2784,11 +2749,38 @@ msgstr[1] "{} inşa başarılı"
 #~ msgid "Cannot find an appid for {path}!"
 #~ msgstr "{path} için bir appid bulunamıyor!"
 
-#~ msgid "Clean update - don't uses caches, reprocess all APKs"
-#~ msgstr "Temiz güncelleme - önbellekleri kullanmaz, tüm APKları yeniden işler"
+#~ msgid "Clean after all scans have finished"
+#~ msgstr "Tüm taramalar bitince temizle"
+
+#~ msgid "Clean before the scans start and rebuild the container"
+#~ msgstr "Taramalar başlamadan önce temizle ve kapsayıcıyı yeniden inşa et"
+
+#~ msgid "Clean up all containers and then exit"
+#~ msgstr "Bütün kapsayıcılar temizle ve sonra çık"
+
+#~ msgid "Could not open APK file for analysis"
+#~ msgstr "İnceleme için APK dosyası açılamadı"
 
 #~ msgid "Interactively ask about things that need updating."
 #~ msgstr "Güncelleme gerektiren şeyler hakkında etkileşimli olarak sor."
+
+#~ msgid "Override path for repo APKs (default: ./repo)"
+#~ msgstr "Depo APK'ları için konumu geçersiz kıl (öntanımlı olarak: ./repo)"
+
+#~ msgid "Prepare Drozer to run a scan"
+#~ msgstr "Drozer'i bir tarama çalıştırmak için hazırla"
+
+#~ msgid "Prepare drozer to run a scan"
+#~ msgstr "Drozer'i bir tarama çalıştırmak için hazırla"
+
+#~ msgid "Scan only the latest version of each package"
+#~ msgstr "Her paketin sadece en son sürümünü tara"
+
+#~ msgid "Setup an emulator, install the APK on it and perform a Drozer scan"
+#~ msgstr "Bir emülatör kur, APKyı ona kur ve bir Drozer taraması yap"
+
+#~ msgid "Setup an emulator, install the APK on it and perform a drozer scan"
+#~ msgstr "Bir emülatör kur, APKyı ona kur ve bir Drozer taraması yap"
 
 #~ msgid "Specify editor to use in interactive mode. Default "
 #~ msgstr "Etkileşimli kipte kullanılacak editörü belirtin. Öntanımlı "

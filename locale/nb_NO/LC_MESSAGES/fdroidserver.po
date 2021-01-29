@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.8-74-ga380b9f\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2021-01-14 14:55+0100\n"
+"POT-Creation-Date: 2021-01-29 16:12+0100\n"
 "PO-Revision-Date: 2020-10-14 09:28+0000\n"
 "Last-Translator: Allan Nordhøy <epost@anotheragency.no>\n"
 "Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects/f-droid/fdroidserver/nb_NO/>\n"
@@ -58,6 +58,10 @@ msgstr ""
 #, python-format
 msgid "\"%s/\" has no matching metadata file!"
 msgstr "\"%s/\" har ingen samsvarende metadatafil!"
+
+#: ../fdroidserver/index.py
+msgid "\"repo_pubkey\" must be present in config.yml when using --nosign!"
+msgstr ""
 
 #: ../fdroidserver/install.py
 #, fuzzy, python-brace-format
@@ -145,11 +149,6 @@ msgid "'keypass' not found in config.yml!"
 msgstr "'keypass' ble ikke funnet i config.yml!"
 
 #: ../fdroidserver/common.py
-#, fuzzy
-msgid "'keypass' not found in config.yml!"
-msgstr "'keypass' ble ikke funnet i config.yml!"
-
-#: ../fdroidserver/common.py
 msgid "'keystore' is NONE and 'smartcardoptions' is blank!"
 msgstr ""
 
@@ -157,26 +156,11 @@ msgstr ""
 msgid "'keystore' not found in config.yml!"
 msgstr "'keystore' ble ikke funnet i config.yml!"
 
-#: ../fdroidserver/common.py
-#, fuzzy
-msgid "'keystore' not found in config.yml!"
-msgstr "'keystore' ble ikke funnet i config.yml!"
-
 #: ../fdroidserver/index.py ../fdroidserver/common.py
 msgid "'keystorepass' not found in config.yml!"
 msgstr "'keystorepass' ble ikke funnet i config.yml!"
 
-#: ../fdroidserver/common.py
-#, fuzzy
-msgid "'keystorepass' not found in config.yml!"
-msgstr "'keystorepass' ble ikke funnet i config.yml!"
-
 #: ../fdroidserver/index.py ../fdroidserver/common.py
-msgid "'repo_keyalias' not found in config.yml!"
-msgstr "'repo_keyalias' ble ikke funnet i config.yml!"
-
-#: ../fdroidserver/common.py
-#, fuzzy
 msgid "'repo_keyalias' not found in config.yml!"
 msgstr "'repo_keyalias' ble ikke funnet i config.yml!"
 
@@ -462,17 +446,10 @@ msgstr "Se etter programoppdateringer"
 msgid "Checking archiving for {appid} - APKs:{integer}, keepversions:{keep}, archapks:{arch}"
 msgstr "Sjekker arkivering for {appid} - APK-er:{integer}, keepversions:{keep}, archapks:{arch}"
 
-#: ../fdroidserver/dscanner.py
-msgid "Clean after all scans have finished"
-msgstr "Rydd opp etter at alle skanninger er fullførte"
-
-#: ../fdroidserver/dscanner.py
-msgid "Clean before the scans start and rebuild the container"
-msgstr "Tøm før skanninger starter og bygg beholderen på ny"
-
-#: ../fdroidserver/dscanner.py
-msgid "Clean up all containers and then exit"
-msgstr "Tøm alle beholdere og avslutt"
+#: ../fdroidserver/update.py
+#, fuzzy, python-brace-format
+msgid "Checking archiving for {appid} - apks:{integer}, keepversions:{keep}, archapks:{arch}"
+msgstr "Sjekker arkivering for {appid} - APK-er:{integer}, keepversions:{keep}, archapks:{arch}"
 
 #: ../fdroidserver/update.py
 msgid "Clean update - don't uses caches, reprocess all APKs"
@@ -523,11 +500,6 @@ msgstr "Fant ikke \"{path}\" for fjerning derav"
 #: ../fdroidserver/update.py
 #, fuzzy, python-brace-format
 msgid "Could not open APK {path} for analysis: "
-msgstr "Kunne ikke åpne APK-fil for analyse"
-
-#: ../fdroidserver/update.py
-#, fuzzy
-msgid "Could not open APK file for analysis"
 msgstr "Kunne ikke åpne APK-fil for analyse"
 
 #: ../fdroidserver/common.py
@@ -813,11 +785,6 @@ msgstr "Klarte ikke å justere program"
 msgid "Failed to create S3 bucket: {url}"
 msgstr "Klarte ikke å opprette S3-spann: {url}"
 
-#: ../fdroidserver/common.py
-#, fuzzy
-msgid "Failed to get APK manifest information"
-msgstr "Klarte ikke å hente APK-manifestinfo"
-
 #: ../fdroidserver/update.py
 #, fuzzy, python-brace-format
 msgid "Failed to get APK information, deleting {path}"
@@ -827,6 +794,11 @@ msgstr "Klarte ikke å hente APK-info, sletter {path}"
 #, python-brace-format
 msgid "Failed to get APK information, skipping {path}"
 msgstr "Klarte ikke å hente APK-info, hopper over {path}"
+
+#: ../fdroidserver/common.py
+#, fuzzy
+msgid "Failed to get APK manifest information"
+msgstr "Klarte ikke å hente APK-manifestinfo"
 
 #: ../fdroidserver/install.py
 #, python-brace-format
@@ -1356,10 +1328,6 @@ msgstr "Ingenting å gjøre for {appid}."
 msgid "Now set these in config.yml:"
 msgstr ""
 
-#: ../fdroidserver/init.py
-msgid "Now set these in config.yml:"
-msgstr ""
-
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
 #: ../fdroidserver/update.py
 #, fuzzy, python-brace-format
@@ -1430,10 +1398,6 @@ msgstr ""
 msgid "Overall license of the project."
 msgstr "Overnevnt lisens for prosjektet."
 
-#: ../fdroidserver/dscanner.py
-msgid "Override path for repo APKs (default: ./repo)"
-msgstr "Overskriv sti for pakkebrønns-APK-er (forvalg: ./repo)"
-
 #: ../fdroidserver/index.py
 #, python-brace-format
 msgid "Overriding blank versionName in {apkfilename} from metadata: {version}"
@@ -1474,13 +1438,6 @@ msgstr "Sti til Git-pakkebrønn å bruke som logg"
 #: ../fdroidserver/init.py
 msgid "Path to the keystore for the repo signing key"
 msgstr "Sti til nøkkellager for pakkebrønnssigneringsnøkkel"
-
-#: ../fdroidserver/dscanner.py
-msgid "Prepare Drozer to run a scan"
-msgstr "Forbered Drozer på kjøring av skanning"
-
-msgid "Prepare drozer to run a scan"
-msgstr "Forbered Drozer på kjøring av skanning"
 
 #: ../fdroidserver/nightly.py
 #, fuzzy
@@ -1643,10 +1600,6 @@ msgstr "Kjører første passering med MD5-sjekking avskrudd"
 msgid "Running wget in {path}"
 msgstr "Kjører wget i {path}."
 
-#: ../fdroidserver/dscanner.py
-msgid "Scan only the latest version of each package"
-msgstr "Skann kun siste versjon av hver pakke"
-
 #: ../fdroidserver/build.py
 msgid "Scan the resulting APK(s) for known non-free classes."
 msgstr ""
@@ -1697,15 +1650,6 @@ msgstr "Kunne ikke sette åpen filgrense: "
 #, fuzzy, python-brace-format
 msgid "Setting {0} sec timeout for this build"
 msgstr "Setter {0} sek. tidsavbrudd for dette bygget"
-
-#: ../fdroidserver/build.py
-#, fuzzy
-msgid "Setup an emulator, install the APK on it and perform a Drozer scan"
-msgstr "Sett opp en emulator, installer APK-en på den og utfør en Drozer-skanning"
-
-#, fuzzy
-msgid "Setup an emulator, install the APK on it and perform a drozer scan"
-msgstr "Sett opp en emulator, installer APK-en på den og utfør en Drozer-skanning"
 
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Sign and place packages in the repo"
@@ -1840,17 +1784,16 @@ msgstr "Nøkkelaliaskollisjon - offentliggjøring stanset"
 msgid "These are the apps that have been archived from the main repo."
 msgstr ""
 
+#: ../fdroidserver/common.py
+msgid "This is a repository of apps to be used with F-Droid. Applications in this repository are either official binaries built by the original application developers, or are binaries built from source by the admin of f-droid.org using the tools on https://gitlab.com/fdroid."
+msgstr ""
+
 #: ../fdroidserver/import.py
 #, python-format
 msgid "This repo already has local metadata: %s"
 msgstr "Denne pakkebrønnen har allerede lokal metadata: %s"
 
 #: ../fdroidserver/deploy.py ../fdroidserver/upload.py
-#, fuzzy
-msgid "To use awsbucket, awssecretkey and awsaccesskeyid must also be set in config.yml!"
-msgstr "For å bruke AWS-spann, må \"awssecretkey\" og \"awsaccesskeyid\" også være satt i config.yml."
-
-#: ../fdroidserver/deploy.py
 #, fuzzy
 msgid "To use awsbucket, awssecretkey and awsaccesskeyid must also be set in config.yml!"
 msgstr "For å bruke AWS-spann, må \"awssecretkey\" og \"awsaccesskeyid\" også være satt i config.yml."
@@ -2086,10 +2029,6 @@ msgid "Use build server"
 msgstr "Bruk byggtjener"
 
 #: ../fdroidserver/update.py
-#, fuzzy
-msgid "Use date from APK instead of current time for newly added APKs"
-msgstr "Bruk dato fra APK istedenfor nåværende tid for nylig tillagte APK-er."
-
 msgid "Use date from APK instead of current time for newly added APKs"
 msgstr "Bruk dato fra APK istedenfor nåværende tid for nylig tillagte APK-er"
 
@@ -2228,8 +2167,8 @@ msgstr "App-ID å sjekke for oppdateringer"
 
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
 #: ../fdroidserver/verify.py ../fdroidserver/publish.py
-#: ../fdroidserver/dscanner.py ../fdroidserver/build.py
-#: ../fdroidserver/scanner.py ../fdroidserver/install.py
+#: ../fdroidserver/build.py ../fdroidserver/scanner.py
+#: ../fdroidserver/install.py
 msgid "applicationId with optional versionCode in the form APPID[:VERCODE]"
 msgstr "App-ID med valgfri versionCode, i formen APPID[:VERCODE]"
 
@@ -2599,6 +2538,11 @@ msgstr "nekt nedlasting via usikker HTTP-tilkobling (bruk HTTPS eller angi --no-
 
 #: ../fdroidserver/index.py
 #, python-format
+msgid "repo_icon \"repo/icons/%s\" does not exist, generating placeholder."
+msgstr ""
+
+#: ../fdroidserver/index.py
+#, python-format
 msgid "repo_icon %s does not exist, generating placeholder."
 msgstr ""
 
@@ -2803,6 +2747,11 @@ msgstr "{file} er tom eller skadet!"
 msgid "{name} \"{path}\" does not exist! Correct it in config.yml."
 msgstr "{name} \"{path}\" finnes ikke. Rett det i config.yml."
 
+#: ../fdroidserver/update.py
+#, fuzzy, python-brace-format
+msgid "{name} \"{section}/icons/{path}\" does not exist! Check \"config.yml\"."
+msgstr "{name} \"{path}\" finnes ikke. Rett det i config.yml."
+
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "{oldfile} is deprecated, use {newfile}"
@@ -2865,3 +2814,36 @@ msgstr[1] "{} bygg fullført"
 #, fuzzy
 #~ msgid "Cannot find an appid for {path}!"
 #~ msgstr "Finner ikke AppID for {path}."
+
+#~ msgid "Clean after all scans have finished"
+#~ msgstr "Rydd opp etter at alle skanninger er fullførte"
+
+#~ msgid "Clean before the scans start and rebuild the container"
+#~ msgstr "Tøm før skanninger starter og bygg beholderen på ny"
+
+#~ msgid "Clean up all containers and then exit"
+#~ msgstr "Tøm alle beholdere og avslutt"
+
+#, fuzzy
+#~ msgid "Could not open APK file for analysis"
+#~ msgstr "Kunne ikke åpne APK-fil for analyse"
+
+#~ msgid "Override path for repo APKs (default: ./repo)"
+#~ msgstr "Overskriv sti for pakkebrønns-APK-er (forvalg: ./repo)"
+
+#~ msgid "Prepare Drozer to run a scan"
+#~ msgstr "Forbered Drozer på kjøring av skanning"
+
+#~ msgid "Prepare drozer to run a scan"
+#~ msgstr "Forbered Drozer på kjøring av skanning"
+
+#~ msgid "Scan only the latest version of each package"
+#~ msgstr "Skann kun siste versjon av hver pakke"
+
+#, fuzzy
+#~ msgid "Setup an emulator, install the APK on it and perform a Drozer scan"
+#~ msgstr "Sett opp en emulator, installer APK-en på den og utfør en Drozer-skanning"
+
+#, fuzzy
+#~ msgid "Setup an emulator, install the APK on it and perform a drozer scan"
+#~ msgstr "Sett opp en emulator, installer APK-en på den og utfør en Drozer-skanning"

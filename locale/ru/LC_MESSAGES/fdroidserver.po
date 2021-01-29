@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 1.0.0-95-gd7af22b\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2021-01-14 14:55+0100\n"
+"POT-Creation-Date: 2021-01-29 16:12+0100\n"
 "PO-Revision-Date: 2021-01-14 21:33+0000\n"
 "Last-Translator: Golubev Alexander <fatzer2@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/f-droid/fdroidserver/ru/>\n"
@@ -69,6 +69,10 @@ msgstr ""
 #, python-format
 msgid "\"%s/\" has no matching metadata file!"
 msgstr "У \"%s/\" нет соответствующего файла метаданных!"
+
+#: ../fdroidserver/index.py
+msgid "\"repo_pubkey\" must be present in config.yml when using --nosign!"
+msgstr ""
 
 #: ../fdroidserver/install.py
 #, python-brace-format
@@ -157,10 +161,6 @@ msgid "'keypass' not found in config.yml!"
 msgstr "В config.yml нет переменной 'keypass'!"
 
 #: ../fdroidserver/common.py
-msgid "'keypass' not found in config.yml!"
-msgstr "'keypass' не найден в config.yml!"
-
-#: ../fdroidserver/common.py
 msgid "'keystore' is NONE and 'smartcardoptions' is blank!"
 msgstr "Значение 'keystore` — NONE, но 'smartcardoptions' не задан!"
 
@@ -168,25 +168,13 @@ msgstr "Значение 'keystore` — NONE, но 'smartcardoptions' не за�
 msgid "'keystore' not found in config.yml!"
 msgstr "В config.yml нет переменной 'keystore'!"
 
-#: ../fdroidserver/common.py
-msgid "'keystore' not found in config.yml!"
-msgstr "'keystore' не найден в config.yml!"
-
 #: ../fdroidserver/index.py ../fdroidserver/common.py
 msgid "'keystorepass' not found in config.yml!"
 msgstr "В config.yml нет переменной 'keystorepass'!"
 
-#: ../fdroidserver/common.py
-msgid "'keystorepass' not found in config.yml!"
-msgstr "'keystorepass' не найден в config.yml!"
-
 #: ../fdroidserver/index.py ../fdroidserver/common.py
 msgid "'repo_keyalias' not found in config.yml!"
 msgstr "В config.yml нет переменной 'repo_ keyalias'!"
-
-#: ../fdroidserver/common.py
-msgid "'repo_keyalias' not found in config.yml!"
-msgstr "'repo_keyalias' не найден в config.yml!"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py
@@ -465,17 +453,10 @@ msgstr "Проверить обновления для приложений"
 msgid "Checking archiving for {appid} - APKs:{integer}, keepversions:{keep}, archapks:{arch}"
 msgstr "Проверка перед помещением в архив для {appid}. APKs:{integer}, keepversions:{keep}, archapks:{arch}"
 
-#: ../fdroidserver/dscanner.py
-msgid "Clean after all scans have finished"
-msgstr "Очистить после завершения сканирования"
-
-#: ../fdroidserver/dscanner.py
-msgid "Clean before the scans start and rebuild the container"
-msgstr "Очистить до начала сканирования и пересоздать контейнер"
-
-#: ../fdroidserver/dscanner.py
-msgid "Clean up all containers and then exit"
-msgstr "Очистить все контейнеры и выйти"
+#: ../fdroidserver/update.py
+#, fuzzy, python-brace-format
+msgid "Checking archiving for {appid} - apks:{integer}, keepversions:{keep}, archapks:{arch}"
+msgstr "Проверка перед помещением в архив для {appid}. APKs:{integer}, keepversions:{keep}, archapks:{arch}"
 
 #: ../fdroidserver/update.py
 msgid "Clean update - don't uses caches, reprocess all APKs"
@@ -525,10 +506,6 @@ msgstr "Указанный для удаления {path} не найден"
 #, python-brace-format
 msgid "Could not open APK {path} for analysis: "
 msgstr "Не удалось открыть и проанализировать файл APK {path}: "
-
-#: ../fdroidserver/update.py
-msgid "Could not open APK file for analysis"
-msgstr "Не удалось открыть и проанализировать файл APK"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -801,10 +778,6 @@ msgstr "Оптимизировать (align) приложение не удал�
 msgid "Failed to create S3 bucket: {url}"
 msgstr "Создать S3 объект (S3 bucket) не получилось: {url}"
 
-#: ../fdroidserver/common.py
-msgid "Failed to get APK manifest information"
-msgstr "Извлечь информацию из APK манифеста не получилось"
-
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Failed to get APK information, deleting {path}"
@@ -814,6 +787,10 @@ msgstr "Не удалось получить информацию об APK фа�
 #, python-brace-format
 msgid "Failed to get APK information, skipping {path}"
 msgstr "Не удалось получить информацию об APK файле, {path} будет пропущен"
+
+#: ../fdroidserver/common.py
+msgid "Failed to get APK manifest information"
+msgstr "Извлечь информацию из APK манифеста не получилось"
 
 #: ../fdroidserver/install.py
 #, python-brace-format
@@ -1325,10 +1302,6 @@ msgstr "Автоматические обновления для {appid} нед�
 msgid "Now set these in config.yml:"
 msgstr "Определите эти переменные в config.yml:"
 
-#: ../fdroidserver/init.py
-msgid "Now set these in config.yml:"
-msgstr "Определите эти переменные в config.yml:"
-
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -1396,10 +1369,6 @@ msgstr "Выводится JSON"
 msgid "Overall license of the project."
 msgstr "Основная лицензия проекта."
 
-#: ../fdroidserver/dscanner.py
-msgid "Override path for repo APKs (default: ./repo)"
-msgstr "Переопределить путь к APK файлам репозитория (по умолчанию это ./repo)"
-
 #: ../fdroidserver/index.py
 #, python-brace-format
 msgid "Overriding blank versionName in {apkfilename} from metadata: {version}"
@@ -1437,13 +1406,6 @@ msgstr "Путь к репозиторию git, который будет ото
 #: ../fdroidserver/init.py
 msgid "Path to the keystore for the repo signing key"
 msgstr "Путь к хранилищу с ключом для подписывания"
-
-#: ../fdroidserver/dscanner.py
-msgid "Prepare Drozer to run a scan"
-msgstr "Подготовка Drozer к сканированию репозитория"
-
-msgid "Prepare drozer to run a scan"
-msgstr "Подготовка к сканированию Drozer"
 
 #: ../fdroidserver/nightly.py
 msgid "Print the secret variable to the terminal for easy copy/paste"
@@ -1601,10 +1563,6 @@ msgstr "Первая попытка загрузить данные (выпол�
 msgid "Running wget in {path}"
 msgstr "Выполняется wget в {path}"
 
-#: ../fdroidserver/dscanner.py
-msgid "Scan only the latest version of each package"
-msgstr "Сканировать только самую свежую версию каждого пакета"
-
 #: ../fdroidserver/build.py
 msgid "Scan the resulting APK(s) for known non-free classes."
 msgstr "Проскандировать получившиеся APK на известные несвободные классы."
@@ -1655,13 +1613,6 @@ msgstr "Не удалось настроить ограничение для к�
 #, python-brace-format
 msgid "Setting {0} sec timeout for this build"
 msgstr "Время ожидания для этой сборки выставляется в {0} секунд"
-
-#: ../fdroidserver/build.py
-msgid "Setup an emulator, install the APK on it and perform a Drozer scan"
-msgstr "Настроить эмулятор, установить в него APK и запустить сканирование Drozer"
-
-msgid "Setup an emulator, install the APK on it and perform a drozer scan"
-msgstr "Настроить эмулятор, установить в него APK и запустить сканирование Drozer"
 
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Sign and place packages in the repo"
@@ -1792,6 +1743,18 @@ msgstr "Есть расхождения в алиасах ключей для п
 msgid "These are the apps that have been archived from the main repo."
 msgstr "Это те приложения, которые были заархивированы из основного репозитория."
 
+#: ../fdroidserver/common.py
+#, fuzzy
+msgid "This is a repository of apps to be used with F-Droid. Applications in this repository are either official binaries built by the original application developers, or are binaries built from source by the admin of f-droid.org using the tools on https://gitlab.com/fdroid."
+msgstr ""
+"\n"
+"        Это репозиторий приложений, предназначенных для использования в FDroid.\n"
+"        Приложения в этом репозитории являются либо официальными бинарными файлами,\n"
+"        созданными разработчиками оригинального приложения, либо бинарными файлами,\n"
+"        созданными f-droid.org из исходного кода с помощью инструментов\n"
+"        на https://gitlab.com/fdroid.\n"
+"        "
+
 #: ../fdroidserver/import.py
 #, python-format
 msgid "This repo already has local metadata: %s"
@@ -1800,10 +1763,6 @@ msgstr "Локальная копия метаданных репозитори�
 #: ../fdroidserver/deploy.py ../fdroidserver/upload.py
 msgid "To use awsbucket, awssecretkey and awsaccesskeyid must also be set in config.yml!"
 msgstr "Необходимо определить переменные awsbucket, awssecretkey и awsaccesskeyid в config.yml!"
-
-#: ../fdroidserver/deploy.py
-msgid "To use awsbucket, awssecretkey and awsaccesskeyid must also be set in config.yml!"
-msgstr "Чтобы использовать awsbucket необходимо определить awssecretkey и awsaccesskeyid в config.yml!"
 
 #: ../fdroidserver/lint.py
 msgid "URL must start with https:// or http://"
@@ -2034,9 +1993,6 @@ msgstr "Использовать сервер сборки"
 msgid "Use date from APK instead of current time for newly added APKs"
 msgstr "Использовать время date из APK вместо текущего при добавлении новых APK"
 
-msgid "Use date from APK instead of current time for newly added APKs"
-msgstr "Использовать время date из APK вместо текущего при добавлении новых APK"
-
 #: ../fdroidserver/deploy.py ../fdroidserver/upload.py
 #, python-brace-format
 msgid "Using \"{path}\" for configuring s3cmd."
@@ -2164,8 +2120,8 @@ msgstr "applicationId для проверки обновлений"
 
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
 #: ../fdroidserver/verify.py ../fdroidserver/publish.py
-#: ../fdroidserver/dscanner.py ../fdroidserver/build.py
-#: ../fdroidserver/scanner.py ../fdroidserver/install.py
+#: ../fdroidserver/build.py ../fdroidserver/scanner.py
+#: ../fdroidserver/install.py
 msgid "applicationId with optional versionCode in the form APPID[:VERCODE]"
 msgstr "applicationId и внутренняя версия приложения (versionCode) в виде APPID[:VERCODE]"
 
@@ -2527,6 +2483,11 @@ msgid "refuse downloading via insecure http connection (use https or specify --n
 msgstr "использовать для загрузки небезопасное HTTP-соединение не стоит (пользуйтесь HTTPS или укажите --no-https-check): {apkfilename}"
 
 #: ../fdroidserver/index.py
+#, fuzzy, python-format
+msgid "repo_icon \"repo/icons/%s\" does not exist, generating placeholder."
+msgstr "значок репозитория (repo_icon) '%s' не существует, генерируется суррогат."
+
+#: ../fdroidserver/index.py
 #, python-format
 msgid "repo_icon %s does not exist, generating placeholder."
 msgstr "значок репозитория (repo_icon) '%s' не существует, генерируется суррогат."
@@ -2730,6 +2691,11 @@ msgstr "{file} пустой или повреждённый!"
 msgid "{name} \"{path}\" does not exist! Correct it in config.yml."
 msgstr "{name}: неверный путь \"{path}\"! Поправьте его в config.yml."
 
+#: ../fdroidserver/update.py
+#, fuzzy, python-brace-format
+msgid "{name} \"{section}/icons/{path}\" does not exist! Check \"config.yml\"."
+msgstr "{name}: неверный путь \"{path}\"! Поправьте его в config.yml."
+
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "{oldfile} is deprecated, use {newfile}"
@@ -2789,3 +2755,33 @@ msgstr[2] "{} успешных сборок"
 
 #~ msgid "Cannot find an appid for {path}!"
 #~ msgstr "По указанному пути {path} не удалось найти appid!"
+
+#~ msgid "Clean after all scans have finished"
+#~ msgstr "Очистить после завершения сканирования"
+
+#~ msgid "Clean before the scans start and rebuild the container"
+#~ msgstr "Очистить до начала сканирования и пересоздать контейнер"
+
+#~ msgid "Clean up all containers and then exit"
+#~ msgstr "Очистить все контейнеры и выйти"
+
+#~ msgid "Could not open APK file for analysis"
+#~ msgstr "Не удалось открыть и проанализировать файл APK"
+
+#~ msgid "Override path for repo APKs (default: ./repo)"
+#~ msgstr "Переопределить путь к APK файлам репозитория (по умолчанию это ./repo)"
+
+#~ msgid "Prepare Drozer to run a scan"
+#~ msgstr "Подготовка Drozer к сканированию репозитория"
+
+#~ msgid "Prepare drozer to run a scan"
+#~ msgstr "Подготовка к сканированию Drozer"
+
+#~ msgid "Scan only the latest version of each package"
+#~ msgstr "Сканировать только самую свежую версию каждого пакета"
+
+#~ msgid "Setup an emulator, install the APK on it and perform a Drozer scan"
+#~ msgstr "Настроить эмулятор, установить в него APK и запустить сканирование Drozer"
+
+#~ msgid "Setup an emulator, install the APK on it and perform a drozer scan"
+#~ msgstr "Настроить эмулятор, установить в него APK и запустить сканирование Drozer"

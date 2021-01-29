@@ -13,6 +13,8 @@ TEMPLATE = fdroidserver.pot
 
 VERSION = $(shell git describe)
 
+OPTS = --no-wrap --sort-output --add-location=file
+
 default:
 	@printf "Build the translation files using: ./setup.py compile_catalog\n\n"
 
@@ -32,15 +34,18 @@ clean:
 $(TEMPLATE): $(FILES)
 	xgettext --join-existing --from-code=UTF-8 \
 		--language=Python --keyword=_ \
-		--no-wrap --sort-output --add-location=file --output=$(TEMPLATE) \
+		$(OPTS) --output=$(TEMPLATE) \
 		--package-name="fdroidserver" --package-version=$(VERSION) \
 		--foreign-user \
 		--msgid-bugs-address=https://gitlab.com/fdroid/fdroidserver/issues \
 		$(FILES)
+	msguniq $(OPTS) --use-first \
+		--output-file=$(TEMPLATE) $(TEMPLATE)
 	sed -i 's,CHARSET,UTF-8,' $(TEMPLATE)
 
 %.po: $(TEMPLATE)
-	msgmerge --no-wrap --sort-output --add-location=file --update $@ $(TEMPLATE)
+	msguniq $(OPTS) --use-first --output-file=$@ $@
+	msgmerge $(OPTS) --update $@ $(TEMPLATE)
 
 %/LC_MESSAGES/fdroidserver.mo: %/LC_MESSAGES/fdroidserver.po
 	msgfmt --check -o $@ $(@:mo=po)
