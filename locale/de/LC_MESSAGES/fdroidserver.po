@@ -9,13 +9,14 @@
 # cheese1 <cheese@nosuchhost.net>, 2021.
 # Aleph Null <atzeje@web.de>, 2021.
 # nautilusx <translate@disroot.org>, 2021.
+# forght <forght@posteo.de>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2021-01-14 14:55+0100\n"
-"PO-Revision-Date: 2021-01-16 09:19+0000\n"
-"Last-Translator: nautilusx <translate@disroot.org>\n"
+"PO-Revision-Date: 2021-01-17 07:47+0000\n"
+"Last-Translator: forght <forght@posteo.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/f-droid/fdroidserver/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -757,7 +758,7 @@ msgstr ""
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Environment variable {var} from {configname} is not set!"
-msgstr ""
+msgstr "Umgebungsvariable {var} von {configname} ist nicht gesetzt!"
 
 #: ../fdroidserver/deploy.py ../fdroidserver/checkupdates.py
 #: ../fdroidserver/upload.py
@@ -774,9 +775,9 @@ msgid "Extract signatures from APKs"
 msgstr "Signaturen aus APKs extrahieren"
 
 #: ../fdroidserver/update.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Failed copying {path}: {error}"
-msgstr "Lesen von {path} fehlgeschlagen: {error}"
+msgstr "Kopieren von {path} fehlgeschlagen: {error}"
 
 #: ../fdroidserver/signatures.py
 #, python-brace-format
@@ -856,9 +857,8 @@ msgid "Flattr donation methods belong in the FlattrID flag"
 msgstr "Flattr-Spendenmethoden gehören in die FlattrID-Flagge"
 
 #: ../fdroidserver/lint.py
-#, fuzzy
 msgid "Flattr donation methods belong in the FlattrID: field"
-msgstr "Flattr-Spendenmethoden gehören in die FlattrID-Flagge"
+msgstr "Flattr-Spendenmethoden gehören in das FlattrID-Feld"
 
 #: ../fdroidserver/lint.py
 msgid "Forbidden HTML tags"
@@ -1045,7 +1045,7 @@ msgid "Installing %s…"
 msgstr "%s installieren …"
 
 #: ../fdroidserver/install.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Installing '{apkfilename}' on {dev}..."
 msgstr "Installiere '{apkfilename}' auf {dev}.…"
 
