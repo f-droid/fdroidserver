@@ -6,13 +6,14 @@
 # Hans-Christoph Steiner <hans@guardianproject.info>, 2020, 2021.
 # Alvaro <alvaro@null.net>, 2020.
 # Fioddor Superconcentrado <fioddor@gmail.com>, 2021.
+# Adolfo Jayme Barrientos <fitojb@ubuntu.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2021-01-14 14:55+0100\n"
-"PO-Revision-Date: 2021-01-15 13:24+0000\n"
-"Last-Translator: Fioddor Superconcentrado <fioddor@gmail.com>\n"
+"PO-Revision-Date: 2021-01-24 08:48+0000\n"
+"Last-Translator: Adolfo Jayme Barrientos <fitojb@ubuntu.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/f-droid/fdroidserver/es/>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
@@ -484,7 +485,7 @@ msgstr "Lista de categorías separadas por comas."
 #: ../fdroid ../fdroidserver/__main__.py
 #, c-format, python-format
 msgid "Command '%s' not recognised.\n"
-msgstr "Comando %s no reconocido\n"
+msgstr "No se reconoció la orden «%s».\n"
 
 #: ../fdroidserver/checkupdates.py
 msgid "Commit changes"
@@ -712,7 +713,7 @@ msgstr "Enlace duplicado en '{field}': {url}"
 
 #: ../fdroid
 msgid "Dynamically scan APKs post build"
-msgstr "Ejecutar Fdroid dscanner de una aplicación APK, previamente construída,"
+msgstr "Escanear dinámicamente  los APKs después de ser construidos"
 
 #: ../fdroidserver/__main__.py
 msgid "ERROR: The \"server\" subcommand has been removed, use \"deploy\"!"
