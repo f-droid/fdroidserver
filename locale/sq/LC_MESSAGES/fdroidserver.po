@@ -7,8 +7,8 @@ msgstr ""
 "Project-Id-Version: fdroidserver 1.0.6-349-g907c04ea\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2021-01-14 14:55+0100\n"
-"PO-Revision-Date: 2021-01-28 22:09+0000\n"
-"Last-Translator: Hans-Christoph Steiner <hans@guardianproject.info>\n"
+"PO-Revision-Date: 2021-01-29 10:51+0000\n"
+"Last-Translator: Besnik Bleta <besnik@programeshqip.org>\n"
 "Language-Team: Albanian <https://hosted.weblate.org/projects/f-droid/fdroidserver/sq/>\n"
 "Language: sq\n"
 "MIME-Version: 1.0\n"
@@ -149,9 +149,8 @@ msgid "'keypass' not found in config.py!"
 msgstr "S’u gjet 'keypass' në config.py!"
 
 #: ../fdroidserver/common.py
-#, fuzzy
 msgid "'keypass' not found in config.yml!"
-msgstr "S’u gjet 'keypass' në config.py!"
+msgstr "S’u gjet 'keypass' në config.yml!"
 
 #: ../fdroidserver/common.py
 msgid "'keystore' is NONE and 'smartcardoptions' is blank!"
@@ -162,27 +161,24 @@ msgid "'keystore' not found in config.py!"
 msgstr "S’u gjet 'keystore' në config.py!"
 
 #: ../fdroidserver/common.py
-#, fuzzy
 msgid "'keystore' not found in config.yml!"
-msgstr "S’u gjet 'keystore' në config.py!"
+msgstr "S’u gjet 'keystore' në config.yml!"
 
 #: ../fdroidserver/index.py ../fdroidserver/common.py
 msgid "'keystorepass' not found in config.py!"
 msgstr "S’u gjet 'keystorepass' te config.py!"
 
 #: ../fdroidserver/common.py
-#, fuzzy
 msgid "'keystorepass' not found in config.yml!"
-msgstr "S’u gjet 'keystorepass' te config.py!"
+msgstr "S’u gjet 'keystorepass' te config.yml!"
 
 #: ../fdroidserver/index.py ../fdroidserver/common.py
 msgid "'repo_keyalias' not found in config.py!"
 msgstr "S’u gjet 'repo_keyalias' te config.py!"
 
 #: ../fdroidserver/common.py
-#, fuzzy
 msgid "'repo_keyalias' not found in config.yml!"
-msgstr "S’u gjet 'repo_keyalias' te config.py!"
+msgstr "S’u gjet 'repo_keyalias' te config.yml!"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py
@@ -194,9 +190,8 @@ msgid "'sdk_path' not set in 'config.py'!"
 msgstr "'sdk_path' te 'config.py' s’është ujdisur!"
 
 #: ../fdroidserver/common.py
-#, fuzzy
 msgid "'sdk_path' not set in config.yml!"
-msgstr "'sdk_path' te 'config.py' s’është ujdisur!"
+msgstr "'sdk_path' te 'config.yml' s’është ujdisur!"
 
 #. Translators: "build-tools" is the file name of a package from
 #. Google, it is part of the Android SDK. So it probably shouldn't be
@@ -334,7 +329,7 @@ msgstr "Shtegu Android SDK '{path}' s’është drejtori!"
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Android SDK tool {cmd} found!"
-msgstr ""
+msgstr "U gjet {cmd} mjeti SDK-je Android!"
 
 #. Translators: "build-tools" is the file name of a package from
 #. Google, it is part of the Android SDK. So it probably shouldn't be
@@ -342,7 +337,7 @@ msgstr ""
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Android build-tools path '{path}' does not exist!"
-msgstr "Shtegu për build-tools Android '{path}' s’ekziston!"
+msgstr "Shtegu për build-tools '{path}' s’ekziston!"
 
 #: ../fdroidserver/update.py
 msgid "AndroidManifest.xml has no date"
@@ -520,7 +515,7 @@ msgstr "S’u gjet dot {path} për ta hequr"
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Could not open APK {path} for analysis: "
-msgstr "S’u hap dot kartela APK {path} për analizim "
+msgstr "S’u hap dot kartela APK {path} për analizim : "
 
 #: ../fdroidserver/update.py
 msgid "Could not open apk file for analysis"
