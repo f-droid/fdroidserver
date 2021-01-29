@@ -2739,7 +2739,7 @@ def set_FDroidPopen_env(build=None):
         orig_path = env['PATH']
         if config:
             if config.get('sdk_path'):
-                for n in ['ANDROID_HOME', 'ANDROID_SDK']:
+                for n in ['ANDROID_HOME', 'ANDROID_SDK', 'ANDROID_SDK_ROOT']:
                     env[n] = config['sdk_path']
             for k, v in config.get('java_paths', {}).items():
                 env['JAVA%s_HOME' % k] = v
