@@ -8,13 +8,14 @@
 # Predatorix Phoenix <predatorix@web.de>, 2021.
 # cheese1 <cheese@nosuchhost.net>, 2021.
 # Aleph Null <atzeje@web.de>, 2021.
+# nautilusx <translate@disroot.org>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2021-01-14 14:55+0100\n"
 "PO-Revision-Date: 2021-01-16 09:19+0000\n"
-"Last-Translator: Aleph Null <atzeje@web.de>\n"
+"Last-Translator: nautilusx <translate@disroot.org>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/f-droid/fdroidserver/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -335,9 +336,9 @@ msgid "Android SDK path '{path}' is not a directory!"
 msgstr "Android-SDK-Pfad »{path}« ist kein Verzeichnis!"
 
 #: ../fdroidserver/common.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Android SDK tool {cmd} found!"
-msgstr "Android-SDK nicht gefunden!"
+msgstr "Android-SDK-Tool {cmd} nicht gefunden!"
 
 #. Translators: "build-tools" is the file name of a package from
 #. Google, it is part of the Android SDK. So it probably shouldn't be
@@ -428,7 +429,7 @@ msgstr "„{path}” konnte nicht gelesen werden!"
 
 #. Translators: https://developer.android.com/studio/build/application-id
 #: ../fdroidserver/metadata.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Cannot resolve application ID {appid}"
 msgstr "AppID {appid} konnte nicht aufgelöst werden"
 
@@ -508,12 +509,10 @@ msgid "Could not find '{command}' on your system"
 msgstr "„{command}” konnte auf Ihrem System nicht gefunden werden"
 
 #: ../fdroidserver/import.py
-#, fuzzy
 msgid "Could not find latest version code"
 msgstr "Neuester Versionscode konnte nicht gefunden werden"
 
 #: ../fdroidserver/import.py
-#, fuzzy
 msgid "Could not find latest version name"
 msgstr "Neuester Versionsname konnte nicht gefunden werden"
 
