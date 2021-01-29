@@ -1,6 +1,6 @@
 # SOME DESCRIPTIVE TITLE.
 # This file is put in the public domain.
-# WaldiS <sto@tutanota.de>, 2020.
+# WaldiS <sto@tutanota.de>, 2020, 2021.
 # Michal L <michalrmsmi@wp.pl>, 2020, 2021.
 # mondstern <mondstern@snopyta.org>, 2021.
 msgid ""
@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: fdroidserver 1.0.0-95-gd7af22b\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2021-01-14 14:55+0100\n"
-"PO-Revision-Date: 2021-01-14 14:58+0000\n"
-"Last-Translator: mondstern <mondstern@snopyta.org>\n"
+"PO-Revision-Date: 2021-01-28 21:24+0000\n"
+"Last-Translator: WaldiS <sto@tutanota.de>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/f-droid/fdroidserver/pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
@@ -151,9 +151,8 @@ msgid "'keypass' not found in config.py!"
 msgstr "'keypass' nie znaleziono w config.py!"
 
 #: ../fdroidserver/common.py
-#, fuzzy
 msgid "'keypass' not found in config.yml!"
-msgstr "'keypass' nie znaleziono w config.py!"
+msgstr "'keypass' nie znaleziono w config.yml!"
 
 #: ../fdroidserver/common.py
 msgid "'keystore' is NONE and 'smartcardoptions' is blank!"
@@ -164,27 +163,24 @@ msgid "'keystore' not found in config.py!"
 msgstr "'Plik kluczy' nie został znaleziony w pliku config.py!"
 
 #: ../fdroidserver/common.py
-#, fuzzy
 msgid "'keystore' not found in config.yml!"
-msgstr "'Plik kluczy' nie został znaleziony w pliku config.py!"
+msgstr "'keystore' nie znaleziono w config.yml!"
 
 #: ../fdroidserver/index.py ../fdroidserver/common.py
 msgid "'keystorepass' not found in config.py!"
 msgstr "'keystorepass' nie znaleziono w config.py!"
 
 #: ../fdroidserver/common.py
-#, fuzzy
 msgid "'keystorepass' not found in config.yml!"
-msgstr "'keystorepass' nie znaleziono w config.py!"
+msgstr "'keystorepass' nie znaleziono w config.yml!"
 
 #: ../fdroidserver/index.py ../fdroidserver/common.py
 msgid "'repo_keyalias' not found in config.py!"
 msgstr "'repo_keyalias' nie znaleziono w config.py!"
 
 #: ../fdroidserver/common.py
-#, fuzzy
 msgid "'repo_keyalias' not found in config.yml!"
-msgstr "'repo_keyalias' nie znaleziono w config.py!"
+msgstr "'repo_keyalias' nie znaleziono w config.yml!"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py
@@ -196,9 +192,8 @@ msgid "'sdk_path' not set in 'config.py'!"
 msgstr "'sdk_path' nie jest ustawiony w 'config.py'!"
 
 #: ../fdroidserver/common.py
-#, fuzzy
 msgid "'sdk_path' not set in config.yml!"
-msgstr "'sdk_path' nie jest ustawiony w 'config.py'!"
+msgstr "'sdk_path' nie jest ustawiony w config.yml!"
 
 #. Translators: "build-tools" is the file name of a package from
 #. Google, it is part of the Android SDK. So it probably shouldn't be
@@ -315,9 +310,9 @@ msgid "Android SDK '{path}' does not have '{dirname}' installed!"
 msgstr "Android SDK '{path}' nie jest '{dirname}' zainstalowany!"
 
 #: ../fdroidserver/init.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Android SDK not found at {path}!"
-msgstr "Nie znaleziono Android SDK!"
+msgstr "Nie znaleziono zestawu SDK systemu Android pod adresem {path}!"
 
 #: ../fdroidserver/common.py
 msgid "Android SDK not found!"
@@ -334,9 +329,9 @@ msgid "Android SDK path '{path}' is not a directory!"
 msgstr "Android SDK ścieżka '{path}' nie jest katalogiem!"
 
 #: ../fdroidserver/common.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Android SDK tool {cmd} found!"
-msgstr "Nie znaleziono Android SDK!"
+msgstr "Android SDK narzędzie {cmd} znaleziono!"
 
 #. Translators: "build-tools" is the file name of a package from
 #. Google, it is part of the Android SDK. So it probably shouldn't be
@@ -500,7 +495,7 @@ msgstr "Sprzeczne argumenty: '--verbose' i '--quiet' nie mogą być podane w tym
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Conflicting config files! Using {newfile}, ignoring {oldfile}!"
-msgstr ""
+msgstr "Pliki konfiguracyjne powodujące konflikt! Używając {newfile}, ignoruje {oldfile}!"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -521,9 +516,9 @@ msgid "Could not find {path} to remove it"
 msgstr "Nie można znaleźć pliku {path}, aby go usunąć"
 
 #: ../fdroidserver/update.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Could not open APK {path} for analysis: "
-msgstr "Nie można otworzyć pliku APK do analizy"
+msgstr "Nie można otworzyć pliku APK {path} do analizy: "
 
 #: ../fdroidserver/update.py
 msgid "Could not open apk file for analysis"
@@ -532,7 +527,7 @@ msgstr "Nie można otworzyć pliku APK do analizy"
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Could not parse size \"{size}\", wrong type \"{type}\""
-msgstr ""
+msgstr "Nie można przeanalizować rozmiaru \"{size}\", nieprawidłowy typ \"{type}\""
 
 #. Translators: https://developer.android.com/studio/build/application-id
 #: ../fdroidserver/import.py
@@ -741,7 +736,7 @@ msgstr "Opróżnij flagę kompilacji na {linedesc}"
 #: ../fdroidserver/__main__.py
 #, python-brace-format
 msgid "Encoding is set to '{enc}' fdroid might run into encoding issues. Please set it to 'UTF-8' for best results."
-msgstr ""
+msgstr "Kodowanie jest ustawione na '{enc}'. Fdroid może napotkać problemy z kodowaniem. Aby uzyskać najlepsze wyniki, ustaw go na 'UTF-8'."
 
 #: ../fdroidserver/init.py
 #, python-format
@@ -755,7 +750,7 @@ msgstr ""
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Environment variable {var} from {configname} is not set!"
-msgstr ""
+msgstr "Zmienna środowiskowa {var} z {configname} nie jest ustawiona!"
 
 #: ../fdroidserver/deploy.py ../fdroidserver/checkupdates.py
 #: ../fdroidserver/upload.py
@@ -856,7 +851,7 @@ msgstr "Metody flattr donation należą do flagi FlattrID"
 #: ../fdroidserver/lint.py
 #, fuzzy
 msgid "Flattr donation methods belong in the FlattrID: field"
-msgstr "Metody flattr donation należą do flagi FlattrID"
+msgstr "Metody darowizn Flattr należą do FlattrID: field"
 
 #: ../fdroidserver/lint.py
 msgid "Forbidden HTML tags"
@@ -883,7 +878,7 @@ msgstr "Znaleziono \"{path}\" grafiki bez metadanych dla aplikacji \"{name}\"!"
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Found bad funding file \"{path}\" for \"{name}\":"
-msgstr ""
+msgstr "Znaleziono zły plik finansowania \"{path}\" dla \"{name}\":"
 
 #: ../fdroidserver/common.py ../fdroidserver/metadata.py
 msgid "Found invalid appids in arguments"
@@ -895,9 +890,9 @@ msgid "Found invalid versionCodes for some apps"
 msgstr "Znaleziono nieprawidłowe kody wersji dla niektórych aplikacji"
 
 #: ../fdroidserver/common.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Found multiple JAR Signature Block Files in {path}"
-msgstr "Znaleziono wiele certyfikatów do podpisywania w {path}"
+msgstr "Znaleziono wiele plików bloków podpisów JAR w {path}"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
@@ -950,9 +945,9 @@ msgid "Git remote set-head failed"
 msgstr "Git remote set-head nie powiódł się"
 
 #: ../fdroidserver/common.py
-#, fuzzy, python-format
+#, python-format
 msgid "Git remote set-head failed: \"%s\""
-msgstr "Operacja Git remote set-head nie powiodła się: \"%s\""
+msgstr "Błąd zdalnego ustawiania Git: \"%s\""
 
 #: ../fdroidserver/common.py
 msgid "Git reset failed"
@@ -987,7 +982,7 @@ msgstr "Ignorowanie metadanych '{field}' w '{metapath}' ponieważ są one przest
 #: ../fdroidserver/update.py
 #, python-format
 msgid "Ignoring FUNDING.yml entry longer than 2048: %s"
-msgstr ""
+msgstr "Ignorowanie wpisu FUNDING.yml dłuższego niż 2048: %s"
 
 #: ../fdroidserver/index.py
 msgid "Ignoring package without metadata: "
@@ -1177,14 +1172,14 @@ msgid "Keystore for signing key:\t"
 msgstr "Magazyn kluczy do podpisywania klucza:\t"
 
 #: ../fdroidserver/lint.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Last used commit '{commit}' looks like a tag, but UpdateCheckMode is '{ucm}'"
-msgstr "Ostatnio używany commit '{commit}' wygląda jak tag, ale tryb sprawdzania aktualizacji to '{ucm}'"
+msgstr "Ostatnio używane zatwierdzenie '{commit}' wygląda jak tag, ale UpdateCheckMode to '{ucm}'"
 
 #: ../fdroidserver/lint.py
 #, fuzzy
 msgid "Liberapay donation methods belong in the Liberapay: field"
-msgstr "Metody darowizny Liberapay należą do flagi LiberapayID"
+msgstr "Metody darowizny Liberapay należą do liberapay: field"
 
 #: ../fdroidserver/lint.py
 msgid "Liberapay donation methods belong in the LiberapayID flag"
@@ -1245,9 +1240,8 @@ msgid "No commit specified for {versionName} in {linedesc}"
 msgstr "Nie określono zatwierdzenia dla {versionName} w {linedesc}"
 
 #: ../fdroidserver/common.py
-#, fuzzy
 msgid "No config.yml found, using defaults."
-msgstr "Nie znaleziono pliku 'config.py', używając wartości domyślnych."
+msgstr "Nie znaleziono pliku config.yml, przy użyciu wartości domyślnych."
 
 #: ../fdroidserver/index.py
 msgid "No fingerprint in URL."
@@ -1328,9 +1322,8 @@ msgid "Now set these in config.py:"
 msgstr "Teraz ustaw je w config.py:"
 
 #: ../fdroidserver/init.py
-#, fuzzy
 msgid "Now set these in config.yml:"
-msgstr "Teraz ustaw je w config.py:"
+msgstr "Teraz ustaw je w config.yml:"
 
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
 #: ../fdroidserver/update.py
@@ -1375,7 +1368,7 @@ msgstr "Przetwarzaj tylko aplikacje z automatycznymi aktualizacjami"
 #: ../fdroidserver/lint.py
 #, fuzzy
 msgid "OpenCollective donation methods belong in the OpenCollective: field"
-msgstr "Metody flattr donation należą do flagi FlattrID"
+msgstr "Metody darowizn OpenCollective należą do OpenCollective: field"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 #: /usr/lib/python3.7/optparse.py
@@ -1730,9 +1723,9 @@ msgid "Striping mystery signature from {apkfilename}"
 msgstr "Odrysowywanie tajemniczego podpisu od {apkfilename}"
 
 #: ../fdroidserver/nightly.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Stripping mystery signature from {apkfilename}"
-msgstr "Odrysowywanie tajemniczego podpisu od {apkfilename}"
+msgstr "Usuwanie tajemniczego podpisu z {apkfilename}"
 
 #: ../fdroidserver/lint.py
 #, python-format
@@ -1806,9 +1799,8 @@ msgid "To use awsbucket, awssecretkey and awsaccesskeyid must also be set in con
 msgstr "Aby użyć awsbucket, awssecretkey i awsaccesskeyid muszą być również ustawione w config.py!"
 
 #: ../fdroidserver/deploy.py
-#, fuzzy
 msgid "To use awsbucket, awssecretkey and awsaccesskeyid must also be set in config.yml!"
-msgstr "Aby użyć awsbucket, awssecretkey i awsaccesskeyid muszą być również ustawione w config.py!"
+msgstr "Aby użyć awsbucket, awssecretkey i awsaccesskeyid muszą być również ustawione w config.yml!"
 
 #: ../fdroidserver/lint.py
 msgid "URL must start with https:// or http://"
@@ -1843,7 +1835,7 @@ msgstr "Nieoczekiwany tekst w tej samej linii co {field} w {linedesc}"
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Unknown entry {key} in {configname}"
-msgstr ""
+msgstr "Nieznany wpis {key} w {configname}"
 
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Unknown exception found!"
@@ -1995,14 +1987,12 @@ msgstr "UpdateCheckMode jest ustawione, ale wygląda na to, że checkupdates nie
 
 #. Translators: https://developer.android.com/studio/build/application-id
 #: ../fdroidserver/lint.py
-#, fuzzy
 msgid "UpdateCheckName is set to the known application ID - it can be removed"
-msgstr "UpdateCheckName (Nazwa sprawdzania aktualizacji) jest ustawiona na znany identyfikator aplikacji - można go usunąć"
+msgstr "UpdateCheckName jest ustawiony na znany identyfikator aplikacji - można go usunąć"
 
 #: ../fdroidserver/lint.py
-#, fuzzy
 msgid "UpdateCheckName is set to the known application ID, it can be removed"
-msgstr "UpdateCheckName (Nazwa sprawdzania aktualizacji) jest ustawiona na znany identyfikator aplikacji, można go usunąć"
+msgstr "UpdateCheckName jest ustawiony na znany identyfikator aplikacji, można go usunąć"
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
@@ -2095,7 +2085,7 @@ msgstr "Weryfikowanie podpisu indeksu:"
 #: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "VirusTotal API key cannot upload files larger than 32MB, use {url} to upload {path}."
-msgstr ""
+msgstr "Klucz VirusTotal API nie może przesyłać plików większych niż 32 MB, użyj {url}, aby przesłać {path}."
 
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Warn about possible metadata errors"
@@ -2152,16 +2142,14 @@ msgstr "apksigner nie znaleziono, jest wymagane do podpisania!"
 
 #: ../fdroidserver/lint.py ../fdroidserver/rewritemeta.py
 #: ../fdroidserver/checkupdates.py
-#, fuzzy
 msgid "application ID of file to operate on"
-msgstr "applicationId, aby sprawdzić dostępność aktualizacji"
+msgstr "Identyfikator aplikacji, na której ma działać"
 
 #: ../fdroidserver/verify.py ../fdroidserver/publish.py
 #: ../fdroidserver/build.py ../fdroidserver/scanner.py
 #: ../fdroidserver/install.py
-#, fuzzy
 msgid "application ID with optional versionCode in the form APPID[:VERCODE]"
-msgstr "applicationId z opcjonalnym versionCode w postaci APPID [:VERCODE]"
+msgstr "identyfikator aplikacji z opcjonalnym kodem wersji w postaci APPID [: VERCODE]"
 
 #: ../fdroidserver/lint.py ../fdroidserver/rewritemeta.py
 msgid "applicationId in the form APPID"
@@ -2185,9 +2173,8 @@ msgid "argument \"-\" with mode %r"
 msgstr "argument \"-\" w trybie %r"
 
 #: ../fdroidserver/nightly.py
-#, fuzzy
 msgid "attempting bare SSH connection to test deploy key:"
-msgstr "próbując odsłoniętego połączenia ssh, aby przetestować klucz wdrożenia:"
+msgstr "próba połączenia odsłoniętego SSH w celu przetestowania klucza wdrożenia:"
 
 #: ../fdroidserver/nightly.py
 msgid "attempting bare ssh connection to test deploy key:"
@@ -2258,7 +2245,7 @@ msgstr "kopiowanie {apkfilename} na {path}"
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "could not parse '{path}'"
-msgstr ""
+msgstr "nie można przeanalizować '{path}'"
 
 #: ../fdroidserver/common.py
 msgid "could not parse srclib spec (no ref specified): '{}'"
@@ -2266,7 +2253,7 @@ msgstr "could not parse srclib spec (no ref specified):' {}'"
 
 #: ../fdroidserver/common.py
 msgid "could not parse srclib spec (too many '@' signs): '{}'"
-msgstr ""
+msgstr "nie można przeanalizować specyfikacji srclib (za dużo znaków '@'): '{}'"
 
 #: ../fdroidserver/nightly.py
 #, python-brace-format
@@ -2286,7 +2273,7 @@ msgstr "wdrożone dzienniki kompilacji do '{path}'"
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "deployed process log {path} to {dest}"
-msgstr ""
+msgstr "wdrożony dziennik procesów {path} do {dest}"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py
@@ -2524,7 +2511,7 @@ msgstr "argumenty pozycyjne"
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "process log deploy {path} to {dest} failed!"
-msgstr ""
+msgstr "proces wdrażania dziennika {path} do {dest} nie powiódł się!"
 
 #: ../fdroidserver/signatures.py
 #, python-brace-format
@@ -2539,7 +2526,7 @@ msgstr "odmów pobierania przez niezabezpieczone połączenie http (użyj https 
 #: ../fdroidserver/index.py
 #, python-format
 msgid "repo_icon %s does not exist, generating placeholder."
-msgstr ""
+msgstr "repo_icon %s nie istnieje, generuje symbol zastępczy."
 
 #: ../fdroidserver/metadata.py
 msgid "ruamel.yaml not installed, can not write metadata."
@@ -2670,9 +2657,9 @@ msgid "{apkfilename}'s AndroidManifest.xml has a bad date: "
 msgstr "{apkfilename} AndroidManifest.xml ma złą datę: "
 
 #: ../fdroidserver/update.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{appid} does not have a name! Using application ID instead."
-msgstr "{appid} nie ma nazwy! Zamiast tego użyj nazwy pakietu."
+msgstr "{appid} nie ma nazwy! Zamiast tego używam identyfikatora aplikacji."
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -2685,9 +2672,9 @@ msgid "{appid} from {path} is not a valid Android Package Name!"
 msgstr "{appid} z {path} nie jest prawidłową nazwą pakietu Android!"
 
 #: ../fdroidserver/update.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{appid} from {path} is not a valid Android application ID!"
-msgstr "{appid} z {path} nie jest prawidłową nazwą pakietu Android!"
+msgstr "{appid} z {path} nie jest prawidłowym identyfikatorem aplikacji na system Android!"
 
 #: ../fdroidserver/metadata.py ../fdroidserver/update.py
 #, python-brace-format
@@ -2723,7 +2710,7 @@ msgstr "{appid}: {field} musi być '{type}', ale to jest '{fieldtype}'!"
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "{build_flag} must be an integer, found: {value}"
-msgstr ""
+msgstr "{build_flag} musi być liczbą całkowitą, znaleziono: {value}"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
@@ -2743,7 +2730,7 @@ msgstr "{name} \"{path}\" nie istnieje! Popraw go w config.py."
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "{oldfile} is deprecated, use {newfile}"
-msgstr ""
+msgstr "{oldfile} jest przestarzałe, użyj {newfile}"
 
 #: ../fdroidserver/import.py
 #, python-brace-format
