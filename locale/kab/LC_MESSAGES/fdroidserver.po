@@ -2,13 +2,14 @@
 # Copyright (C) YEAR Free Software Foundation, Inc.
 # Hans-Christoph Steiner <hans@guardianproject.info>, 2020, 2021.
 # Kahina Messaoudi <messaoudikahina02@gmail.com>, 2020.
+# R_SACI <rgebbid@gmail.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2021-01-14 14:55+0100\n"
-"PO-Revision-Date: 2021-01-14 14:58+0000\n"
-"Last-Translator: Hans-Christoph Steiner <hans@guardianproject.info>\n"
+"PO-Revision-Date: 2021-01-15 13:25+0000\n"
+"Last-Translator: R_SACI <rgebbid@gmail.com>\n"
 "Language-Team: Kabyle <https://hosted.weblate.org/projects/f-droid/fdroidserver/kab/>\n"
 "Language: kab\n"
 "MIME-Version: 1.0\n"
@@ -52,9 +53,9 @@ msgid "\"%s/\" has no matching metadata file!"
 msgstr ""
 
 #: ../fdroidserver/install.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "\"{apkfilename}\" is already installed on {dev}."
-msgstr "'{apkfilename}' yebded yakan ɣef {dev}."
+msgstr "\"{apkfilename}\" yebded yakan ɣef {dev}."
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -103,7 +104,7 @@ msgstr ""
 #: /usr/lib/python3.7/argparse.py
 #, python-format
 msgid "%(prog)s: error: %(message)s\n"
-msgstr ""
+msgstr "%(prog)s: tuccḍa: %(message)s\n"
 
 #: ../fdroidserver/scanner.py
 #, python-format
@@ -113,7 +114,7 @@ msgstr "%d n wuguren ttwafen"
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 #: /usr/lib/python3.7/optparse.py
 msgid "%prog [options]"
-msgstr ""
+msgstr "%prog [d afrayan]"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py
@@ -137,9 +138,8 @@ msgid "'keypass' not found in config.py!"
 msgstr "'keypass' ulac-it di config.py!"
 
 #: ../fdroidserver/common.py
-#, fuzzy
 msgid "'keypass' not found in config.yml!"
-msgstr "'keypass' ulac-it di config.py!"
+msgstr "'keypass' ulac-it di config.yml!"
 
 #: ../fdroidserver/common.py
 msgid "'keystore' is NONE and 'smartcardoptions' is blank!"
@@ -150,27 +150,24 @@ msgid "'keystore' not found in config.py!"
 msgstr "'keystore' ulac-it di config.py!"
 
 #: ../fdroidserver/common.py
-#, fuzzy
 msgid "'keystore' not found in config.yml!"
-msgstr "'keystore' ulac-it di config.py!"
+msgstr "'keystore' ulac-it di config.yml!"
 
 #: ../fdroidserver/index.py ../fdroidserver/common.py
 msgid "'keystorepass' not found in config.py!"
 msgstr "'keystorepass' ulac-it di config.py!"
 
 #: ../fdroidserver/common.py
-#, fuzzy
 msgid "'keystorepass' not found in config.yml!"
-msgstr "'keystorepass' ulac-it di config.py!"
+msgstr "'keystorepass' ulac-it di config.yml!"
 
 #: ../fdroidserver/index.py ../fdroidserver/common.py
 msgid "'repo_keyalias' not found in config.py!"
 msgstr "'repo_keyalias' ulac-it deg config.py!"
 
 #: ../fdroidserver/common.py
-#, fuzzy
 msgid "'repo_keyalias' not found in config.yml!"
-msgstr "'repo_keyalias' ulac-it deg config.py!"
+msgstr "'repo_keyalias' ulac-it deg config.yml!"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py
@@ -182,9 +179,8 @@ msgid "'sdk_path' not set in 'config.py'!"
 msgstr "'sdk_path' ur yettwasbadu ara 'config.py'!"
 
 #: ../fdroidserver/common.py
-#, fuzzy
 msgid "'sdk_path' not set in config.yml!"
-msgstr "'sdk_path' ur yettwasbadu ara 'config.py'!"
+msgstr "'sdk_path' ur yettwasbadu ara 'config.yml'!"
 
 #. Translators: "build-tools" is the file name of a package from
 #. Google, it is part of the Android SDK. So it probably shouldn't be
@@ -472,7 +468,7 @@ msgstr "Tabdart n taggayin i yebḍan s ticcert."
 #: ../fdroid ../fdroidserver/__main__.py
 #, c-format, python-format
 msgid "Command '%s' not recognised.\n"
-msgstr ""
+msgstr "Taladna '%s' ur tettwassen ara.\n"
 
 #: ../fdroidserver/checkupdates.py
 msgid "Commit changes"
@@ -506,9 +502,9 @@ msgid "Could not find {path} to remove it"
 msgstr ""
 
 #: ../fdroidserver/update.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Could not open APK {path} for analysis: "
-msgstr "Ur yezmir ara a d-ildi afaylu apk i tesleḍt"
+msgstr "Ur yezmir ara ad d-yeldi afaylu apk {path} i tesleḍt: "
 
 #: ../fdroidserver/update.py
 msgid "Could not open apk file for analysis"
@@ -1012,7 +1008,7 @@ msgid "Install built packages on devices"
 msgstr ""
 
 #: ../fdroidserver/install.py
-#, fuzzy, python-format
+#, python-format
 msgid "Installing %s..."
 msgstr "Asbeddi n %s…"
 
@@ -1045,9 +1041,9 @@ msgid "Invalid VercodeOperation: {field}"
 msgstr ""
 
 #: ../fdroidserver/common.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Invalid application ID {appid}"
-msgstr "ulac \"tignit\" deg {appid}"
+msgstr "Asulay n usnas d arameɣtu {appid}"
 
 #: ../fdroidserver/metadata.py
 #, python-format
@@ -1356,7 +1352,7 @@ msgstr ""
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 #: /usr/lib/python3.7/optparse.py
 msgid "Options"
-msgstr "Iɣewwaren"
+msgstr "Tixtiṛiyin"
 
 #: ../fdroidserver/verify.py
 msgid "Output JSON report to file named after APK."
@@ -1821,7 +1817,7 @@ msgstr ""
 
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Unknown exception found!"
-msgstr ""
+msgstr "Tettwaf tsureft d tarussint!"
 
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vname
 #: ../fdroidserver/lint.py
@@ -1995,7 +1991,7 @@ msgstr "Aseqdec"
 #: /usr/lib/python3.7/optparse.py
 #, python-format
 msgid "Usage: %s\n"
-msgstr ""
+msgstr "Aseqdec: %s\n"
 
 #: ../fdroidserver/lint.py
 msgid "Use /HEAD instead of /master to point at a file in the default branch"
@@ -2441,13 +2437,13 @@ msgstr ""
 #: /usr/lib/python3.7/getopt.py
 #, python-format
 msgid "option -%s not recognized"
-msgstr ""
+msgstr "Taxtiṛt -%s ur tettwassen ara"
 
 #: /usr/lib/python3.5/getopt.py /usr/lib/python3.6/getopt.py
 #: /usr/lib/python3.7/getopt.py
 #, python-format
 msgid "option -%s requires argument"
-msgstr ""
+msgstr "Taxtiṛt -%s yesra afakul"
 
 #: /usr/lib/python3.5/getopt.py /usr/lib/python3.6/getopt.py
 #: /usr/lib/python3.7/getopt.py
