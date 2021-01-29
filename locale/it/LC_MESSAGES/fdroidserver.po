@@ -8,20 +8,21 @@
 # x <hardwired1.0@protonmail.com>, 2020.
 # Hans-Christoph Steiner <hans@guardianproject.info>, 2020.
 # Francesco Saltori <francescosaltori@gmail.com>, 2020.
+# Francesco Esposito <email@francescoesposito.org>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2021-01-14 14:55+0100\n"
-"PO-Revision-Date: 2020-12-31 08:12+0000\n"
-"Last-Translator: random r <epsilin@yopmail.com>\n"
+"PO-Revision-Date: 2021-01-14 21:33+0000\n"
+"Last-Translator: Francesco Esposito <email@francescoesposito.org>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/f-droid/fdroidserver/it/>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.4.1-dev\n"
+"X-Generator: Weblate 4.5-dev\n"
 
 #: ../fdroidserver/common.py
 msgid ""
@@ -155,9 +156,8 @@ msgid "'keypass' not found in config.py!"
 msgstr "\"keypass\" non trovato in config.py!"
 
 #: ../fdroidserver/common.py
-#, fuzzy
 msgid "'keypass' not found in config.yml!"
-msgstr "\"keypass\" non trovato in config.py!"
+msgstr "\"keypass\" non trovato in config.yml!"
 
 #: ../fdroidserver/common.py
 msgid "'keystore' is NONE and 'smartcardoptions' is blank!"
@@ -168,27 +168,24 @@ msgid "'keystore' not found in config.py!"
 msgstr "\"keystore\" non trovato in config.py!"
 
 #: ../fdroidserver/common.py
-#, fuzzy
 msgid "'keystore' not found in config.yml!"
-msgstr "\"keystore\" non trovato in config.py!"
+msgstr "\"keystore\" non trovato in config.yml!"
 
 #: ../fdroidserver/index.py ../fdroidserver/common.py
 msgid "'keystorepass' not found in config.py!"
 msgstr "\"keystorepass\" non trovato in config.py!"
 
 #: ../fdroidserver/common.py
-#, fuzzy
 msgid "'keystorepass' not found in config.yml!"
-msgstr "\"keystorepass\" non trovato in config.py!"
+msgstr "\"keystorepass\" non trovato in config.yml!"
 
 #: ../fdroidserver/index.py ../fdroidserver/common.py
 msgid "'repo_keyalias' not found in config.py!"
 msgstr "\"repo_keyalias\" non trovato in config.py!"
 
 #: ../fdroidserver/common.py
-#, fuzzy
 msgid "'repo_keyalias' not found in config.yml!"
-msgstr "\"repo_keyalias\" non trovato in config.py!"
+msgstr "\"repo_keyalias\" non trovato in config.yml!"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py
@@ -200,9 +197,8 @@ msgid "'sdk_path' not set in 'config.py'!"
 msgstr "\"sdk_path\" non impostato in \"config.py\"!"
 
 #: ../fdroidserver/common.py
-#, fuzzy
 msgid "'sdk_path' not set in config.yml!"
-msgstr "\"sdk_path\" non impostato in \"config.py\"!"
+msgstr "\"sdk_path\" non impostato in config.yml!"
 
 #. Translators: "build-tools" is the file name of a package from
 #. Google, it is part of the Android SDK. So it probably shouldn't be
@@ -319,9 +315,9 @@ msgid "Android SDK '{path}' does not have '{dirname}' installed!"
 msgstr "\"{path}\" dell'Android SDK non ha \"{dirname}\" installato!"
 
 #: ../fdroidserver/init.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Android SDK not found at {path}!"
-msgstr "Android SDK non trovato!"
+msgstr "Android SDK non trovato in {path}!"
 
 #: ../fdroidserver/common.py
 msgid "Android SDK not found!"
@@ -338,9 +334,9 @@ msgid "Android SDK path '{path}' is not a directory!"
 msgstr "Il path di Android SDK \"{path}\" non è una directory!"
 
 #: ../fdroidserver/common.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Android SDK tool {cmd} found!"
-msgstr "Android SDK non trovato!"
+msgstr "Android SDK tool {cmd} trovato!"
 
 #. Translators: "build-tools" is the file name of a package from
 #. Google, it is part of the Android SDK. So it probably shouldn't be
@@ -503,7 +499,7 @@ msgstr "Argomenti in conflitto: '--verbose' e '--quiet' non possono essere speci
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Conflicting config files! Using {newfile}, ignoring {oldfile}!"
-msgstr ""
+msgstr "File di configurazione in conflitto! Utilizzando {newfile}, ignorando {oldfile}!"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -524,9 +520,9 @@ msgid "Could not find {path} to remove it"
 msgstr "Impossibile trovare {path} da rimuovere"
 
 #: ../fdroidserver/update.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Could not open APK {path} for analysis: "
-msgstr "Impossibile aprire il file apk per l'analisi"
+msgstr "Impossibile aprire il file APK {path} per l'analisi: "
 
 #: ../fdroidserver/update.py
 msgid "Could not open apk file for analysis"
@@ -758,7 +754,7 @@ msgstr ""
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Environment variable {var} from {configname} is not set!"
-msgstr ""
+msgstr "La variabile d'ambiente {var} da {configname} non è impostata!"
 
 #: ../fdroidserver/deploy.py ../fdroidserver/checkupdates.py
 #: ../fdroidserver/upload.py
@@ -1246,9 +1242,8 @@ msgid "No commit specified for {versionName} in {linedesc}"
 msgstr "Nessun commit specificato per {versionName} in {linedesc}"
 
 #: ../fdroidserver/common.py
-#, fuzzy
 msgid "No config.yml found, using defaults."
-msgstr "Nessun 'config.py' trovato, utilizzando i valori predefiniti."
+msgstr "Nessun config.yml trovato, utilizzando i valori predefiniti."
 
 #: ../fdroidserver/index.py
 msgid "No fingerprint in URL."
@@ -1329,9 +1324,8 @@ msgid "Now set these in config.py:"
 msgstr "Ora imposta i seguenti campi in config.py:"
 
 #: ../fdroidserver/init.py
-#, fuzzy
 msgid "Now set these in config.yml:"
-msgstr "Ora imposta i seguenti campi in config.py:"
+msgstr "Ora imposta i seguenti campi in config.yml:"
 
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
 #: ../fdroidserver/update.py
@@ -1388,7 +1382,7 @@ msgstr ""
 
 #: ../fdroidserver/scanner.py
 msgid "Output JSON to stdout."
-msgstr ""
+msgstr "Invia l'output del JSON allo stdout."
 
 #: ../fdroidserver/gpgsign.py ../fdroidserver/publish.py
 #: ../fdroidserver/update.py ../fdroidserver/signindex.py
@@ -1539,11 +1533,11 @@ msgstr "Lettura di {apkfilename} dalla cache"
 
 #: ../fdroidserver/stats.py
 msgid "Recalculate aggregate stats - use when changes have been made that would invalidate old cached data."
-msgstr ""
+msgstr "Ricalcola statistiche aggregate: da utilizzare quando sono state apportate modifiche che invaliderebbero i vecchi dati memorizzati nella cache."
 
 #: ../fdroidserver/common.py
 msgid "Removing specified files"
-msgstr ""
+msgstr "Rimozione dei file specificati"
 
 #: ../fdroidserver/update.py
 msgid "Rename APK files that do not match package.name_123.apk"
@@ -1551,11 +1545,11 @@ msgstr "Rinomina i file APK che non corrispondono a package.name_123.apk"
 
 #: ../fdroidserver/update.py
 msgid "Report on build data status"
-msgstr ""
+msgstr "Report sullo stato dei dati di compilazione"
 
 #: ../fdroidserver/build.py
 msgid "Reset and create a brand new build server, even if the existing one appears to be ok."
-msgstr ""
+msgstr "Reimposta e crea un nuovo server di compilazione, anche se quello esistente sembra essere ok."
 
 #: ../fdroidserver/nightly.py
 #, python-brace-format
@@ -1564,11 +1558,11 @@ msgstr "Firmando di nuovo {apkfilename} con il debug.keystore fornito"
 
 #: ../fdroidserver/update.py
 msgid "Resize all the icons exceeding the max pixel size and exit"
-msgstr ""
+msgstr "Ridimensiona tutte le icone che superano la dimensione massima dei pixel ed esci"
 
 #: ../fdroidserver/common.py
 msgid "Restrict output to warnings and errors"
-msgstr ""
+msgstr "Limita l'output ad avvisi ed errori"
 
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Rewrite all the metadata files"
@@ -1576,38 +1570,38 @@ msgstr "Riscrivi tutti i file di metadati"
 
 #: ../fdroidserver/rewritemeta.py
 msgid "Rewrite to a specific format: "
-msgstr ""
+msgstr "Riscrivi in un formato specifico: "
 
 #: ../fdroidserver/rewritemeta.py
 #, python-brace-format
 msgid "Rewriting '{appid}'"
-msgstr ""
+msgstr "Riscrittura di \"{appid}\""
 
 #: ../fdroidserver/rewritemeta.py
 #, python-brace-format
 msgid "Rewriting '{appid}' to '{path}'"
-msgstr ""
+msgstr "Riscrittura di '{appid}' in '{path}'"
 
 #: ../fdroidserver/checkupdates.py
 msgid "Run on git repo that has uncommitted changes"
-msgstr ""
+msgstr "Esegui su repository git con modifiche non salvate"
 
 #: ../fdroidserver/lint.py
 msgid "Run rewritemeta to fix formatting"
-msgstr ""
+msgstr "Esegui rewritemeta per correggere la formattazione"
 
 #: ../fdroidserver/deploy.py ../fdroidserver/upload.py
 msgid "Running first pass with MD5 checking disabled"
-msgstr ""
+msgstr "Esecuzione del primo passaggio con controllo MD5 disabilitato"
 
 #: ../fdroidserver/mirror.py
 #, python-brace-format
 msgid "Running wget in {path}"
-msgstr ""
+msgstr "Esecuzione di wget in {path}"
 
 #: ../fdroidserver/dscanner.py
 msgid "Scan only the latest version of each package"
-msgstr ""
+msgstr "Scansiona solo l'ultima versione di ogni pacchetto"
 
 #: ../fdroidserver/build.py
 msgid "Scan the resulting APK(s) for known non-free classes."
