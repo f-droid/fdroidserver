@@ -36,6 +36,8 @@ milestone](https://gitlab.com/fdroid/fdroidserver/-/milestones/10)
   ([!782](https://gitlab.com/fdroid/fdroidserver/merge_requests/782))
 * `fdroid update` support for Triple-T Gradle Play Publisher v2.x
   ([!683](https://gitlab.com/fdroid/fdroidserver/merge_requests/683))
+* Translated into: bo de es fr hu it ko nb_NO pl pt pt_BR pt_PT ru sq tr uk
+  zh_Hans zh_Hant
 
 ### Fixed
 * Smoother process for signing APKs with `apksigner`

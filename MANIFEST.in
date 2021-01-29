@@ -30,6 +30,7 @@ include locale/it/LC_MESSAGES/fdroidserver.mo
 include locale/ko/LC_MESSAGES/fdroidserver.mo
 include locale/nb_NO/LC_MESSAGES/fdroidserver.mo
 include locale/pl/LC_MESSAGES/fdroidserver.mo
+include locale/pt/LC_MESSAGES/fdroidserver.mo
 include locale/pt_BR/LC_MESSAGES/fdroidserver.mo
 include locale/pt_PT/LC_MESSAGES/fdroidserver.mo
 include locale/ru/LC_MESSAGES/fdroidserver.mo
