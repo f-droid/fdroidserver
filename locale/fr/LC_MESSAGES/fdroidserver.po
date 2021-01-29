@@ -22,13 +22,14 @@
 # Adrien le Maire <adrien@alemaire.be>, 2021.
 # gub <gub.gub@laposte.net>, 2021.
 # ButterflyOfFire <ButterflyOfFire@protonmail.com>, 2021.
+# Vincent Finance <linuxmario@linuxmario.net>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2021-01-14 14:55+0100\n"
-"PO-Revision-Date: 2021-01-15 22:57+0000\n"
-"Last-Translator: ButterflyOfFire <ButterflyOfFire@protonmail.com>\n"
+"PO-Revision-Date: 2021-01-27 00:33+0000\n"
+"Last-Translator: Vincent Finance <linuxmario@linuxmario.net>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/f-droid/fdroidserver/fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
@@ -62,7 +63,6 @@ msgstr ""
 "Clé Publique SSH à utiliser comme Clé de Déploiement :"
 
 #: ../fdroidserver/nightly.py
-#, fuzzy
 msgid ""
 "\n"
 "SSH public key to be used as deploy key:"
@@ -105,7 +105,7 @@ msgid "\"{path}\" exists but s3cmd is not installed!"
 msgstr "\"{path}\" existe mais s3cmd n'est pas installé !"
 
 #: ../fdroidserver/lint.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "\"{path}\" is not a supported file format (use: metadata/*.yml)"
 msgstr "\"{path}\" n'est pas un format supporté (utiliser : metadata/*.yml)"
 
@@ -2085,9 +2085,8 @@ msgid "Valid commands are:"
 msgstr "Les commandes valides sont les suivantes :"
 
 #: ../fdroidserver/verify.py
-#, fuzzy
 msgid "Verify against locally cached copy rather than redownloading."
-msgstr "Vérifier dans le cache plutôt que de retélécharger."
+msgstr "Vérifier dans le cache plutôt que de télécharger à nouveau."
 
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Verify the integrity of downloaded packages"
@@ -2126,7 +2125,6 @@ msgid "You can use ANDROID_HOME to set the path to your SDK, i.e.:"
 msgstr "Vous pouvez utiliser ANDROID_HOME pour définir le chemin de votre SDK, ex. :"
 
 #: ../fdroidserver/scanner.py
-#, fuzzy
 msgid "ZIP file archive"
 msgstr "Archive ZIP"
 
@@ -2244,7 +2242,6 @@ msgstr "commandes des modules d'extension :"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 #: /usr/lib/python3.7/optparse.py
-#, fuzzy
 msgid "complex"
 msgstr "complexe"
 
@@ -2257,12 +2254,12 @@ msgstr[0] ""
 msgstr[1] ""
 
 #: ../fdroidserver/nightly.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "copying {apkfilename} into {path}"
 msgstr "copie de {apkfilename} dans {path} en cours"
 
 #: ../fdroidserver/metadata.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "could not parse '{path}'"
 msgstr "impossible de lire '{path}'"
 
@@ -2429,7 +2426,6 @@ msgid "no \"icon\" in {appid}"
 msgstr "aucune \"icon\" dans {appid}"
 
 #: ../fdroidserver/signatures.py
-#, fuzzy
 msgid "no APK supplied"
 msgstr "aucun APK n’est fourni"
 
