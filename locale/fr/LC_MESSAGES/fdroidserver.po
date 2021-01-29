@@ -23,8 +23,8 @@ msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2021-01-14 14:55+0100\n"
-"PO-Revision-Date: 2021-01-14 20:25+0000\n"
-"Last-Translator: Éfrit <efrit@posteo.net>\n"
+"PO-Revision-Date: 2021-01-14 20:26+0000\n"
+"Last-Translator: hilariousperson <gobelpepite+github@gmail.com>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/f-droid/fdroidserver/fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
@@ -1767,7 +1767,7 @@ msgstr "URL de base du dépôt à journaliser (par défaut : https://f-droid.org
 
 #: ../fdroidserver/mirror.py
 msgid "The directory to write the mirror to"
-msgstr ""
+msgstr "Le dossier où écrire le miroir"
 
 #: ../fdroidserver/nightly.py
 msgid "The file to be included in the repo (path or glob)"
