@@ -2,20 +2,21 @@
 # This file is put in the public domain.
 # WaldiS <sto@tutanota.de>, 2020.
 # Michal L <michalrmsmi@wp.pl>, 2020, 2021.
+# mondstern <mondstern@snopyta.org>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 1.0.0-95-gd7af22b\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2021-01-14 14:55+0100\n"
-"PO-Revision-Date: 2021-01-13 04:41+0000\n"
-"Last-Translator: Michal L <michalrmsmi@wp.pl>\n"
+"POT-Creation-Date: 2020-10-21 18:05+0200\n"
+"PO-Revision-Date: 2021-01-14 14:58+0000\n"
+"Last-Translator: mondstern <mondstern@snopyta.org>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/f-droid/fdroidserver/pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.4.1-dev\n"
+"X-Generator: Weblate 4.5-dev\n"
 
 #: ../fdroidserver/common.py
 msgid ""
@@ -156,7 +157,7 @@ msgstr "'keypass' nie znaleziono w config.py!"
 
 #: ../fdroidserver/common.py
 msgid "'keystore' is NONE and 'smartcardoptions' is blank!"
-msgstr ""
+msgstr "\"keystore\" nie ma, a \"smartcardoptions\" jest puste!"
 
 #: ../fdroidserver/index.py ../fdroidserver/common.py
 msgid "'keystore' not found in config.py!"
@@ -971,7 +972,7 @@ msgstr "HTTPS musi być używany z adresami URL Subversion!"
 
 #: ../fdroidserver/deploy.py
 msgid "If a git mirror gets to big, allow the archive to be deleted"
-msgstr ""
+msgstr "Jeśli serwer lustrzany git stanie się Duży, Zezwól na usunięcie archiwum"
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
@@ -1008,15 +1009,15 @@ msgstr "Dołącz pliki APK, które są podpisane przy użyciu wyłączonych algo
 
 #: ../fdroidserver/mirror.py
 msgid "Include the PGP signature .asc files in the mirror"
-msgstr ""
+msgstr "Dołącz podpis PGP .pliki asc w lustrze"
 
 #: ../fdroidserver/mirror.py
 msgid "Include the build logs in the mirror"
-msgstr ""
+msgstr "Dołącz dzienniki budowy do lustra"
 
 #: ../fdroidserver/mirror.py
 msgid "Include the source tarballs in the mirror"
-msgstr ""
+msgstr "Dołącz źródło tarballs w lustrze"
 
 #: ../fdroidserver/common.py
 msgid "Initialising submodules"
@@ -1161,7 +1162,7 @@ msgstr "Nie znaleziono Java JDK! Zainstaluj w standardowej lokalizacji lub ustaw
 
 #: ../fdroidserver/scanner.py
 msgid "Java compiled class"
-msgstr ""
+msgstr "Klasa skompilowana Java"
 
 #: ../fdroidserver/signindex.py
 msgid "Java jarsigner not found! Install in standard location or set java_paths!"
@@ -1211,7 +1212,7 @@ msgstr "Nieprawidłowy wiersz serverwebroot:"
 
 #: ../fdroidserver/mirror.py
 msgid "Mirror the full repo and archive, all file types."
-msgstr ""
+msgstr "Mirror pełnego repo i archiwum, wszystkie typy plików."
 
 #: ../fdroidserver/gpgsign.py
 msgid "Missing output directory"
@@ -1311,7 +1312,7 @@ msgstr "Brak katalogu bez podpisu - nic nie można zrobić"
 
 #: ../fdroidserver/common.py
 msgid "Not a valid size definition: \"{}\""
-msgstr ""
+msgstr "Nieprawidłowa definicja rozmiaru: \"{}\""
 
 #: ../fdroidserver/signindex.py
 msgid "Nothing to do"
@@ -1347,7 +1348,7 @@ msgstr "Nazwa pakietu OBB nie jest zgodna z obsługiwanym pakietem APK:"
 
 #: ../fdroidserver/deploy.py
 msgid "Offline machine, skipping git mirror generation until `fdroid deploy`"
-msgstr ""
+msgstr "Maszyna Offline, pomijając generowanie git mirror aż do ' fdroid deploy`"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -1387,13 +1388,13 @@ msgstr "Wyjście raportu JSON do pliku o nazwie po APK."
 
 #: ../fdroidserver/scanner.py
 msgid "Output JSON to stdout."
-msgstr ""
+msgstr "Wyjście JSON na stdout."
 
 #: ../fdroidserver/gpgsign.py ../fdroidserver/publish.py
 #: ../fdroidserver/update.py ../fdroidserver/signindex.py
 #: ../fdroidserver/checkupdates.py
 msgid "Outputting JSON"
-msgstr ""
+msgstr "Wyprowadzanie JSON"
 
 #: ../fdroidserver/import.py
 msgid "Overall license of the project."
@@ -1610,7 +1611,7 @@ msgstr "Skanuj tylko najnowszą wersję każdego pakietu"
 
 #: ../fdroidserver/build.py
 msgid "Scan the resulting APK(s) for known non-free classes."
-msgstr ""
+msgstr "Przeskanuj otrzymany plik APK w poszukiwaniu znanych niewolnych klas."
 
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Scan the source code of a package"
@@ -1639,7 +1640,7 @@ msgstr "Ustaw zegar na ten czas, używając:"
 
 #: ../fdroidserver/nightly.py
 msgid "Set maximum releases in repo before older ones are archived"
-msgstr ""
+msgstr "Ustaw maksymalne wydania w repo przed archiwizacją starszych"
 
 #: ../fdroidserver/build.py
 #, python-brace-format
@@ -2106,7 +2107,7 @@ msgstr "Po skonfigurowaniu dla indeksów podpisanych utwórz na tym etapie tylko
 
 #: ../fdroidserver/lint.py
 msgid "When linting the entire repository yamllint is disabled by default. This option forces yamllint regardless."
-msgstr ""
+msgstr "Podczas linkowania całego repozytorium yamllint jest domyślnie wyłączony. Ta opcja wymusza yamllint niezależnie od tego."
 
 msgid "X.509 'Distiguished Name' used when generating keys"
 msgstr "X.509 'Distiguished Name' używana podczas generowania kluczy"
@@ -2147,7 +2148,7 @@ msgstr "niejednoznaczna opcja: %s (%s?)"
 
 #: ../fdroidserver/common.py
 msgid "apksigner not found, it's required for signing!"
-msgstr ""
+msgstr "apksigner nie znaleziono, jest wymagane do podpisania!"
 
 #: ../fdroidserver/lint.py ../fdroidserver/rewritemeta.py
 #: ../fdroidserver/checkupdates.py
@@ -2194,7 +2195,7 @@ msgstr "próbując odsłoniętego połączenia ssh, aby przetestować klucz wdro
 
 #: ../fdroidserver/common.py
 msgid "can not parse scrlib spec (not a string): '{}'"
-msgstr ""
+msgstr "can not parse scrlib spec (not a string):' {}'"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py
@@ -2233,7 +2234,7 @@ msgstr "polecenie do wykonania, 'init' lub 'update'"
 
 #: ../fdroidserver/__main__.py
 msgid "commands from plugin modules:"
-msgstr ""
+msgstr "polecenia z modułów plugin:"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 #: /usr/lib/python3.7/optparse.py
@@ -2261,7 +2262,7 @@ msgstr ""
 
 #: ../fdroidserver/common.py
 msgid "could not parse srclib spec (no ref specified): '{}'"
-msgstr ""
+msgstr "could not parse srclib spec (no ref specified):' {}'"
 
 #: ../fdroidserver/common.py
 msgid "could not parse srclib spec (too many '@' signs): '{}'"
@@ -2295,7 +2296,7 @@ msgstr "dest = jest wymagany dla opcji takich jak %r"
 
 #: ../fdroidserver/scanner.py
 msgid "executable binary, possibly code"
-msgstr ""
+msgstr "wykonywalny binarny, ewentualnie kod"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py
@@ -2551,7 +2552,7 @@ msgstr "s3cmd zsynchronizuj indeksy {path} do {url} i usuń"
 
 #: ../fdroidserver/scanner.py
 msgid "shared library"
-msgstr ""
+msgstr "biblioteka współdzielona"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 #: /usr/lib/python3.7/optparse.py
@@ -2587,7 +2588,7 @@ msgstr "brak nazwy srclibs i/lub @"
 
 #: ../fdroidserver/scanner.py
 msgid "static library"
-msgstr ""
+msgstr "biblioteka statyczna"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -2639,11 +2640,11 @@ msgstr "używając Apache libcloud do zsynchronizowania z {url}"
 
 #: ../fdroidserver/deploy.py
 msgid "virustotal.com is rate limiting, waiting to retry..."
-msgstr ""
+msgstr "virustotal.com jest ograniczenie stawki, czeka na ponowną próbę..."
 
 #: ../fdroidserver/update.py
 msgid "wiki support is deprecated and will be removed in the next release!"
-msgstr ""
+msgstr "wsparcie wiki jest przestarzałe i zostanie usunięte w następnym wydaniu!"
 
 #: ../fdroidserver/publish.py
 #, python-brace-format
