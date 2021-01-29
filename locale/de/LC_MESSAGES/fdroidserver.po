@@ -7,13 +7,14 @@
 # Hans-Christoph Steiner <hans@guardianproject.info>, 2020, 2021.
 # Predatorix Phoenix <predatorix@web.de>, 2021.
 # cheese1 <cheese@nosuchhost.net>, 2021.
+# Aleph Null <atzeje@web.de>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2021-01-14 14:55+0100\n"
-"PO-Revision-Date: 2021-01-14 21:33+0000\n"
-"Last-Translator: cheese1 <cheese@nosuchhost.net>\n"
+"PO-Revision-Date: 2021-01-16 09:19+0000\n"
+"Last-Translator: Aleph Null <atzeje@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/f-droid/fdroidserver/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -315,9 +316,9 @@ msgid "Android SDK '{path}' does not have '{dirname}' installed!"
 msgstr "Im „{path}” der Android SDK wurde „{dirname}” nicht installiert!"
 
 #: ../fdroidserver/init.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Android SDK not found at {path}!"
-msgstr "Android-SDK nicht gefunden!"
+msgstr "Android-SDK nicht unter {path} gefunden!"
 
 #: ../fdroidserver/common.py
 msgid "Android SDK not found!"
