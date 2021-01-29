@@ -6,13 +6,14 @@
 # taiyuan <1006333969@qq.com>, 2020.
 # Eric <spice2wolf@gmail.com>, 2020, 2021.
 # Carlos <linghao.zhang@protonmail.com>, 2021.
+# Hans-Christoph Steiner <hans@guardianproject.info>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2021-01-14 14:55+0100\n"
-"PO-Revision-Date: 2021-01-15 13:24+0000\n"
-"Last-Translator: Eric <spice2wolf@gmail.com>\n"
+"PO-Revision-Date: 2021-01-28 22:09+0000\n"
+"Last-Translator: Hans-Christoph Steiner <hans@guardianproject.info>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/f-droid/fdroidserver/zh_Hans/>\n"
 "Language: zh_Hans\n"
 "MIME-Version: 1.0\n"
@@ -408,7 +409,7 @@ msgstr ""
 #: ../fdroidserver/init.py
 #, python-format
 msgid "Built repo based in \"%s\" with this config:"
-msgstr ""
+msgstr "使用此配置并基于 \"%s\" 的构建储存库："
 
 #: ../fdroidserver/build.py
 msgid "Can't build due to {} error while scanning"

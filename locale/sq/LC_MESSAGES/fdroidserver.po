@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fdroidserver 1.0.6-349-g907c04ea\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2021-01-14 14:55+0100\n"
-"PO-Revision-Date: 2021-01-14 14:58+0000\n"
+"PO-Revision-Date: 2021-01-28 22:09+0000\n"
 "Last-Translator: Hans-Christoph Steiner <hans@guardianproject.info>\n"
 "Language-Team: Albanian <https://hosted.weblate.org/projects/f-droid/fdroidserver/sq/>\n"
 "Language: sq\n"
@@ -313,9 +313,9 @@ msgid "Android SDK '{path}' does not have '{dirname}' installed!"
 msgstr "Android SDK '{path}' s’ka '{dirname}' të instaluar!"
 
 #: ../fdroidserver/init.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Android SDK not found at {path}!"
-msgstr "S’u gjet SDK Android-i!"
+msgstr "S’u gjet SDK Android-i në {path}!"
 
 #: ../fdroidserver/common.py
 msgid "Android SDK not found!"
@@ -332,9 +332,9 @@ msgid "Android SDK path '{path}' is not a directory!"
 msgstr "Shtegu Android SDK '{path}' s’është drejtori!"
 
 #: ../fdroidserver/common.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Android SDK tool {cmd} found!"
-msgstr "S’u gjet SDK Android-i!"
+msgstr ""
 
 #. Translators: "build-tools" is the file name of a package from
 #. Google, it is part of the Android SDK. So it probably shouldn't be
@@ -518,9 +518,9 @@ msgid "Could not find {path} to remove it"
 msgstr "S’u gjet dot {path} për ta hequr"
 
 #: ../fdroidserver/update.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Could not open APK {path} for analysis: "
-msgstr "S’u hap dot kartela apk për analizim"
+msgstr "S’u hap dot kartela APK {path} për analizim "
 
 #: ../fdroidserver/update.py
 msgid "Could not open apk file for analysis"

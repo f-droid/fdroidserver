@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2021-01-14 14:55+0100\n"
-"PO-Revision-Date: 2021-01-14 14:58+0000\n"
+"PO-Revision-Date: 2021-01-28 22:09+0000\n"
 "Last-Translator: Hans-Christoph Steiner <hans@guardianproject.info>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/f-droid/fdroidserver/zh_Hant/>\n"
 "Language: zh_Hant\n"
@@ -308,9 +308,9 @@ msgid "Android SDK '{path}' does not have '{dirname}' installed!"
 msgstr "Android SDK '{path}' 並未安裝 '{dirname}'！"
 
 #: ../fdroidserver/init.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Android SDK not found at {path}!"
-msgstr "找不到 Android SDK！"
+msgstr "在{path}找不到Android SDK！"
 
 #: ../fdroidserver/common.py
 msgid "Android SDK not found!"
@@ -327,9 +327,9 @@ msgid "Android SDK path '{path}' is not a directory!"
 msgstr "Android SDK 路徑 '{path}' 不是目錄資料夾！"
 
 #: ../fdroidserver/common.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Android SDK tool {cmd} found!"
-msgstr "找不到 Android SDK！"
+msgstr ""
 
 #. Translators: "build-tools" is the file name of a package from
 #. Google, it is part of the Android SDK. So it probably shouldn't be
@@ -514,9 +514,9 @@ msgid "Could not find {path} to remove it"
 msgstr "無法找到 {path} 來移除"
 
 #: ../fdroidserver/update.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Could not open APK {path} for analysis: "
-msgstr "無法開啟 apk 檔案作分析"
+msgstr "無法開啟 APK 檔{path}案作分析 : "
 
 #: ../fdroidserver/update.py
 msgid "Could not open apk file for analysis"
