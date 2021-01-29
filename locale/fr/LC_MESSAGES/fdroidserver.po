@@ -20,13 +20,14 @@
 # hilariousperson <gobelpepite+github@gmail.com>, 2021.
 # Madeorsk <madeorsk@protonmail.com>, 2021.
 # Adrien le Maire <adrien@alemaire.be>, 2021.
+# gub <gub.gub@laposte.net>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2021-01-14 14:55+0100\n"
-"PO-Revision-Date: 2021-01-15 13:25+0000\n"
-"Last-Translator: Adrien le Maire <adrien@alemaire.be>\n"
+"PO-Revision-Date: 2021-01-15 22:57+0000\n"
+"Last-Translator: gub <gub.gub@laposte.net>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/f-droid/fdroidserver/fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
@@ -60,12 +61,13 @@ msgstr ""
 "Clé Publique SSH à utiliser comme Clé de Déploiement :"
 
 #: ../fdroidserver/nightly.py
+#, fuzzy
 msgid ""
 "\n"
 "SSH public key to be used as deploy key:"
 msgstr ""
 "\n"
-"Clé publique SSH à utiliser comme clé de déploiement :"
+"Clé SSH publique à utiliser comme clé de déploiement :"
 
 #: ../fdroidserver/nightly.py
 #, python-brace-format
@@ -102,9 +104,9 @@ msgid "\"{path}\" exists but s3cmd is not installed!"
 msgstr "\"{path}\" existe mais s3cmd n'est pas installé !"
 
 #: ../fdroidserver/lint.py
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "\"{path}\" is not a supported file format (use: metadata/*.yml)"
-msgstr "\"{path}\" n'est pas un format autorisé (utiliser : metadata/*.yml)"
+msgstr "\"{path}\" n'est pas un format supporté (utiliser : metadata/*.yml)"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
@@ -2199,7 +2201,7 @@ msgstr "tentative de connexion ssh simple pour tester la clé de déploiement :"
 
 #: ../fdroidserver/common.py
 msgid "can not parse scrlib spec (not a string): '{}'"
-msgstr ""
+msgstr "Impossible de parcourir la spécification de scrlib (pas une chaîne de caractères): '{}'"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py
