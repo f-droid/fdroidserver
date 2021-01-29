@@ -19,13 +19,14 @@
 # Éfrit <efrit@posteo.net>, 2021.
 # hilariousperson <gobelpepite+github@gmail.com>, 2021.
 # Madeorsk <madeorsk@protonmail.com>, 2021.
+# Adrien le Maire <adrien@alemaire.be>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2021-01-14 14:55+0100\n"
 "PO-Revision-Date: 2021-01-15 13:25+0000\n"
-"Last-Translator: hilariousperson <gobelpepite+github@gmail.com>\n"
+"Last-Translator: Adrien le Maire <adrien@alemaire.be>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/f-droid/fdroidserver/fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
@@ -1827,7 +1828,7 @@ msgstr "Le titre de l'URL est juste l'URL, utilisez des crochets : [URL]"
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "URL {url} in Description: {error}"
-msgstr ""
+msgstr "URL {url} en Description : {error}"
 
 #: ../fdroidserver/lint.py
 msgid "Unexpected license tag \"{}\"! Only use FSF or OSI approved tags from https://spdx.org/license-list"
