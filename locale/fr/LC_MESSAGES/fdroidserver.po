@@ -25,7 +25,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2021-01-14 14:55+0100\n"
 "PO-Revision-Date: 2021-01-15 13:25+0000\n"
-"Last-Translator: Madeorsk <madeorsk@protonmail.com>\n"
+"Last-Translator: hilariousperson <gobelpepite+github@gmail.com>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/f-droid/fdroidserver/fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
@@ -1840,7 +1840,7 @@ msgstr "Balise de licence non valide \"{}\" ! Utilisez uniquement des balises 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Unexpected text on same line as {field} in {linedesc}"
-msgstr ""
+msgstr "Texte inattendu dans la même ligne que {field} dans {linedesc}"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
