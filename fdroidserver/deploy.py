@@ -783,6 +783,10 @@ def main():
     if config['per_app_repos']:
         repo_sections += common.get_per_app_repos()
 
+    if os.path.isdir('unsigned') or (local_copy_dir is not None
+                                     and os.path.isdir(os.path.join(local_copy_dir, 'unsigned'))):
+        repo_sections.append('unsigned')
+
     for repo_section in repo_sections:
         if local_copy_dir is not None:
             if config['sync_from_local_copy_dir']:
