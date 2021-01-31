@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2021-01-29 16:12+0100\n"
-"PO-Revision-Date: 2021-01-14 21:33+0000\n"
+"PO-Revision-Date: 2021-01-31 22:07+0000\n"
 "Last-Translator: Oğuz Ersen <oguzersen@protonmail.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/f-droid/fdroidserver/tr/>\n"
 "Language: tr\n"
@@ -64,7 +64,7 @@ msgstr "\"%s/\" eşleşen üst veri dosyasına sahip değil!"
 
 #: ../fdroidserver/index.py
 msgid "\"repo_pubkey\" must be present in config.yml when using --nosign!"
-msgstr ""
+msgstr "--nosign kullanılırken \"repo_pubkey\" config.yml içinde bulunmalı!"
 
 #: ../fdroidserver/install.py
 #, python-brace-format
@@ -324,7 +324,7 @@ msgstr "Android SDK aracı {cmd} bulundu!"
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Android build-tools path '{path}' does not exist!"
-msgstr "Android oluşturma araçları yolu '{path}' mevcut değil!"
+msgstr "Android oluşturma araçları yolu '{path}' yok!"
 
 #: ../fdroidserver/update.py
 msgid "AndroidManifest.xml has no date"
@@ -444,9 +444,9 @@ msgid "Checking archiving for {appid} - APKs:{integer}, keepversions:{keep}, arc
 msgstr "{appid} için arşivleme denetleniyor - APKs:{integer}, keepversions:{keep}, archapks:{arch}"
 
 #: ../fdroidserver/update.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Checking archiving for {appid} - apks:{integer}, keepversions:{keep}, archapks:{arch}"
-msgstr "{appid} için arşivleme denetleniyor - APKs:{integer}, keepversions:{keep}, archapks:{arch}"
+msgstr "{appid} için arşivleme denetleniyor - apks:{integer}, keepversions:{keep}, archapks:{arch}"
 
 #: ../fdroidserver/update.py
 msgid "Clean update - don't uses caches, reprocess all APKs"
@@ -1733,15 +1733,8 @@ msgid "These are the apps that have been archived from the main repo."
 msgstr "Bunlar ana depodan arşivlenmiş uygulamalardır."
 
 #: ../fdroidserver/common.py
-#, fuzzy
 msgid "This is a repository of apps to be used with F-Droid. Applications in this repository are either official binaries built by the original application developers, or are binaries built from source by the admin of f-droid.org using the tools on https://gitlab.com/fdroid."
-msgstr ""
-"\n"
-"        Bu, FDroid ile kullanılacak uygulamaların bir deposudur. Bu depodaki\n"
-"        uygulamalar ya gerçek uygulama geliştiricileri tarafından oluşturulan\n"
-"        resmi ikili dosyalardır ya da https://gitlab.com/fdroid adresindeki araçlar\n"
-"        kullanılarak f-droid.org tarafından kaynaktan oluşturulan ikili dosyalardır.\n"
-"        "
+msgstr "Bu, F-Droid ile kullanılacak uygulamaların bir deposudur. Bu depodaki uygulamalar ya gerçek uygulama geliştiricileri tarafından oluşturulan resmi ikili dosyalardır ya da https://gitlab.com/fdroid adresindeki araçlar kullanılarak f-droid.org yöneticisi tarafından kaynaktan oluşturulan ikili dosyalardır."
 
 #: ../fdroidserver/import.py
 #, python-format
@@ -2469,14 +2462,14 @@ msgid "refuse downloading via insecure http connection (use https or specify --n
 msgstr "güvensiz http bağlantısı ile indirmeyi reddet (https kullanın veya --no-https-check belirtin): {apkfilename}"
 
 #: ../fdroidserver/index.py
-#, fuzzy, python-format
+#, python-format
 msgid "repo_icon \"repo/icons/%s\" does not exist, generating placeholder."
-msgstr "repo_icon %s mevcut değil, yer tutucu oluşturuyor."
+msgstr "repo_icon \"repo/icons/%s\" yok, yer tutucu oluşturuyor."
 
 #: ../fdroidserver/index.py
 #, python-format
 msgid "repo_icon %s does not exist, generating placeholder."
-msgstr "repo_icon %s mevcut değil, yer tutucu oluşturuyor."
+msgstr "repo_icon %s yok, yer tutucu oluşturuyor."
 
 #: ../fdroidserver/metadata.py
 msgid "ruamel.yaml not installed, can not write metadata."
@@ -2677,9 +2670,9 @@ msgid "{name} \"{path}\" does not exist! Correct it in config.yml."
 msgstr "{name} \"{path}\" yok! config.yml içinde düzeltin."
 
 #: ../fdroidserver/update.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{name} \"{section}/icons/{path}\" does not exist! Check \"config.yml\"."
-msgstr "{name} \"{path}\" yok! config.yml içinde düzeltin."
+msgstr "{name} \"{section}/icons/{path}\" yok! config.yml içinde düzeltin."
 
 #: ../fdroidserver/common.py
 #, python-brace-format
