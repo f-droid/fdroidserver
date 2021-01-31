@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: fdroidserver 1.0.0-95-gd7af22b\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2021-01-29 16:12+0100\n"
-"PO-Revision-Date: 2021-01-14 21:33+0000\n"
+"PO-Revision-Date: 2021-01-31 22:07+0000\n"
 "Last-Translator: Golubev Alexander <fatzer2@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/f-droid/fdroidserver/ru/>\n"
 "Language: ru\n"
@@ -72,7 +72,7 @@ msgstr "У \"%s/\" нет соответствующего файла метад
 
 #: ../fdroidserver/index.py
 msgid "\"repo_pubkey\" must be present in config.yml when using --nosign!"
-msgstr ""
+msgstr "При использовании --nosign в config.yml должен быть задан \"repo_pubkey\"!"
 
 #: ../fdroidserver/install.py
 #, python-brace-format
@@ -259,11 +259,11 @@ msgstr "Добавить новое приложение из исходного
 
 #: ../fdroidserver/update.py
 msgid "Add a repo signing key to an unsigned repo"
-msgstr "Добавить ключ для подписи в неподписанный репозиторий"
+msgstr "Добавлять ключ для подписи в неподписанный репозиторий"
 
 #: ../fdroidserver/update.py
 msgid "Add skeleton metadata files for APKs that are missing them"
-msgstr "Добавить основные отсутствующие файлы метаданных для нуждающихся в них APK"
+msgstr "Добавлять основные файлы метаданных в APK, если они там отсутствуют"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -280,7 +280,7 @@ msgstr "Позволяет выбрать разные ревизии или в�
 
 #: ../fdroidserver/mirror.py
 msgid "Also mirror the full archive section"
-msgstr "Дополнительно создать полную копию раздела архива"
+msgstr "Дополнительно создавать полную копию раздела архива"
 
 #: ../fdroidserver/lint.py
 msgid "Also warn about formatting issues, like rewritemeta -l"
@@ -454,9 +454,9 @@ msgid "Checking archiving for {appid} - APKs:{integer}, keepversions:{keep}, arc
 msgstr "Проверка перед помещением в архив для {appid}. APKs:{integer}, keepversions:{keep}, archapks:{arch}"
 
 #: ../fdroidserver/update.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Checking archiving for {appid} - apks:{integer}, keepversions:{keep}, archapks:{arch}"
-msgstr "Проверка перед помещением в архив для {appid}. APKs:{integer}, keepversions:{keep}, archapks:{arch}"
+msgstr "Проверка перед помещением в архив для {appid}. apks:{integer}, keepversions:{keep}, archapks:{arch}"
 
 #: ../fdroidserver/update.py
 msgid "Clean update - don't uses caches, reprocess all APKs"
@@ -1744,16 +1744,8 @@ msgid "These are the apps that have been archived from the main repo."
 msgstr "Это те приложения, которые были заархивированы из основного репозитория."
 
 #: ../fdroidserver/common.py
-#, fuzzy
 msgid "This is a repository of apps to be used with F-Droid. Applications in this repository are either official binaries built by the original application developers, or are binaries built from source by the admin of f-droid.org using the tools on https://gitlab.com/fdroid."
-msgstr ""
-"\n"
-"        Это репозиторий приложений, предназначенных для использования в FDroid.\n"
-"        Приложения в этом репозитории являются либо официальными бинарными файлами,\n"
-"        созданными разработчиками оригинального приложения, либо бинарными файлами,\n"
-"        созданными f-droid.org из исходного кода с помощью инструментов\n"
-"        на https://gitlab.com/fdroid.\n"
-"        "
+msgstr "Это репозиторий приложений, предназначенных для использования в FDroid. Приложения в этом репозитории являются либо официальными бинарными файлами, созданными разработчиками оригинального приложения, либо бинарными файлами, созданными f-droid.org из исходного кода с помощью инструментов на https://gitlab.com/fdroid."
 
 #: ../fdroidserver/import.py
 #, python-format
@@ -2483,9 +2475,9 @@ msgid "refuse downloading via insecure http connection (use https or specify --n
 msgstr "использовать для загрузки небезопасное HTTP-соединение не стоит (пользуйтесь HTTPS или укажите --no-https-check): {apkfilename}"
 
 #: ../fdroidserver/index.py
-#, fuzzy, python-format
+#, python-format
 msgid "repo_icon \"repo/icons/%s\" does not exist, generating placeholder."
-msgstr "значок репозитория (repo_icon) '%s' не существует, генерируется суррогат."
+msgstr "значок репозитория (repo_icon) 'repo/icons/%s' не существует, генерируется суррогат."
 
 #: ../fdroidserver/index.py
 #, python-format
@@ -2692,9 +2684,9 @@ msgid "{name} \"{path}\" does not exist! Correct it in config.yml."
 msgstr "{name}: неверный путь \"{path}\"! Поправьте его в config.yml."
 
 #: ../fdroidserver/update.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{name} \"{section}/icons/{path}\" does not exist! Check \"config.yml\"."
-msgstr "{name}: неверный путь \"{path}\"! Поправьте его в config.yml."
+msgstr "{name}: \"{section}/icons/{path}\" не существует! Поправьте свой \"config.yml\"."
 
 #: ../fdroidserver/common.py
 #, python-brace-format
