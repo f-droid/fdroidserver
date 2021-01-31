@@ -12,8 +12,8 @@ msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2021-01-29 16:12+0100\n"
-"PO-Revision-Date: 2021-01-28 22:09+0000\n"
-"Last-Translator: Hans-Christoph Steiner <hans@guardianproject.info>\n"
+"PO-Revision-Date: 2021-01-31 22:07+0000\n"
+"Last-Translator: Eric <spice2wolf@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/f-droid/fdroidserver/zh_Hans/>\n"
 "Language: zh_Hans\n"
 "MIME-Version: 1.0\n"
@@ -1732,15 +1732,8 @@ msgid "These are the apps that have been archived from the main repo."
 msgstr ""
 
 #: ../fdroidserver/common.py
-#, fuzzy
 msgid "This is a repository of apps to be used with F-Droid. Applications in this repository are either official binaries built by the original application developers, or are binaries built from source by the admin of f-droid.org using the tools on https://gitlab.com/fdroid."
-msgstr ""
-"\n"
-"        这是一个与FDroid一起使用的应用程序的仓库。这个仓库中的应用程序\n"
-"        要么是原应用程序开发者构建的官方二进制文件，要么是f-droid.org使用\n"
-"        https://gitlab.com/fdroid上的工具从源代码构建而来的\n"
-"        二进制文件。\n"
-"        "
+msgstr "这是一个与F-Droid一起使用的应用程序的仓库。这个仓库中的应用程序要么是原应用程序开发者构建的官方二进制文件，要么是 f-droid.org 的管理员使用 https://gitlab.com/fdroid 上的工具从源代码构建而来的二进制文件。"
 
 #: ../fdroidserver/import.py
 #, python-format
