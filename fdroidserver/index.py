@@ -136,7 +136,7 @@ def make(apps, apks, repodir, archive):
 def _should_file_be_generated(path, magic_string):
     if os.path.exists(path):
         with open(path) as f:
-            if not magic_string in f.readline(): # if the magic_string is not in the first line the file should be overwritten
+            if magic_string not in f.readline():  # if the magic_string is not in the first line the file should be overwritten
                 return False
     return True
 
@@ -146,11 +146,11 @@ def make_website(apps, repodir, repodict):
     repo_pubkey_fingerprint_stripped = repo_pubkey_fingerprint.replace(" ", "")
     link = repodict["address"]
     link_fingerprinted = "{link}?fingerprint={fingerprint}".format(link=link, fingerprint=repo_pubkey_fingerprint_stripped)
-    autogenerate_comment = "auto-generated - fdroid index updates will overwrite this file" # do not change this string, as it will break the updates for existing files with older versions of this string
+    autogenerate_comment = "auto-generated - fdroid index updates will overwrite this file"  # do not change this string, as it will break the updates for existing files with older versions of this string
 
     if not os.path.exists(repodir):
         os.makedirs(repodir)
-    
+
     qrcode.make(link_fingerprinted).save(os.path.join(repodir, "index.png"))
 
     html_name = 'index.html'
@@ -204,13 +204,13 @@ def make_website(apps, repodir, repodict):
             </p>
         </div>
     </BODY>""".format(autogenerate_comment=autogenerate_comment,
-                description=description,
-                details="Currently it serves <kbd>{}</kbd> apps. To add it to your F-Droid client, scan the QR code (click it to enlarge) or use this URL:".format(len(apps)),
-                fingerprint=repo_pubkey_fingerprint,
-                icon=icon,
-                link=link,
-                link_fingerprinted=link_fingerprinted,
-                name=name))
+                    description=description,
+                    details="Currently it serves <kbd>{}</kbd> apps. To add it to your F-Droid client, scan the QR code (click it to enlarge) or use this URL:".format(len(apps)),
+                    fingerprint=repo_pubkey_fingerprint,
+                    icon=icon,
+                    link=link,
+                    link_fingerprinted=link_fingerprinted,
+                    name=name))
 
     css_file = os.path.join(repodir, "index.css")
     if _should_file_be_generated(css_file, autogenerate_comment):
