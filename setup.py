@@ -88,7 +88,10 @@ setup(name='fdroidserver',
           'yamllint',
       ],
       extras_require={
-          'test': ['pyjks'],
+          'test': [
+              'pyjks',
+              'html5print'
+              ],
       },
       classifiers=[
           'Development Status :: 4 - Beta',
