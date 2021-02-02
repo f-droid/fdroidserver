@@ -35,6 +35,7 @@ import urllib.parse
 from . import _
 from . import common
 from . import metadata
+from . import net
 from .exception import VCSException, NoSubmodulesException, FDroidException, MetaDataException
 
 
@@ -63,7 +64,7 @@ def check_http(app):
         vercode = None
         if len(urlcode) > 0:
             logging.debug("...requesting {0}".format(urlcode))
-            req = urllib.request.Request(urlcode, None)
+            req = urllib.request.Request(urlcode, None, headers=net.HEADERS)
             resp = urllib.request.urlopen(req, None, 20)  # nosec B310 scheme is filtered above
             page = resp.read().decode('utf-8')
 
