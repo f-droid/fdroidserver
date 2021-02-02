@@ -802,10 +802,10 @@ def main():
         if config.get('virustotal_apikey'):
             upload_to_virustotal(repo_section, config.get('virustotal_apikey'))
 
-        binary_transparency_remote = config.get('binary_transparency_remote')
-        if binary_transparency_remote:
-            push_binary_transparency(BINARY_TRANSPARENCY_DIR,
-                                     binary_transparency_remote)
+    binary_transparency_remote = config.get('binary_transparency_remote')
+    if binary_transparency_remote:
+        push_binary_transparency(BINARY_TRANSPARENCY_DIR,
+                                 binary_transparency_remote)
 
     if config.get('wiki_server') and config.get('wiki_path'):
         update_wiki()
