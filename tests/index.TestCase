@@ -13,7 +13,6 @@ import requests
 import tempfile
 import json
 import shutil
-from html5print import CSSBeautifier, HTMLBeautifier
 
 localmodule = os.path.realpath(
     os.path.join(os.path.dirname(inspect.getfile(inspect.currentframe())), '..'))
@@ -377,6 +376,12 @@ class IndexTest(unittest.TestCase):
         self.assertTrue(os.path.exists(os.path.join('repo', 'index.html')))
         self.assertTrue(os.path.exists(os.path.join('repo', 'index.css')))
         self.assertTrue(os.path.exists(os.path.join('repo', 'index.png')))
+
+        try:
+            from html5print import CSSBeautifier, HTMLBeautifier
+        except ImportError:
+            print('WARNING: skipping rest of test since androguard is missing!')
+            return
 
         with open(os.path.join("repo", "index.html")) as f:
             html = f.read()

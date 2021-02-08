@@ -138,7 +138,7 @@ arch_pip_install:
     - master@fdroid/fdroidserver
   script:
     - pacman --sync --sysupgrade --refresh --noconfirm git grep python-pip python-virtualenv tar
-    - pip install -e .
+    - pip install -e .[test]
     - fdroid
     - fdroid readmeta
     - fdroid update --help
