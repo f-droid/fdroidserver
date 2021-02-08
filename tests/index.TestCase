@@ -354,6 +354,47 @@ class IndexTest(unittest.TestCase):
                               'https://gitlab.com/group/project/-/raw/master/fdroid'],
                              fdroidserver.index.get_mirror_service_urls(url))
 
+    def test_make_website(self):
+        tmptestsdir = tempfile.mkdtemp(prefix=inspect.currentframe().f_code.co_name,
+                                       dir=self.tmpdir)
+        os.chdir(tmptestsdir)
+        os.mkdir('metadata')
+        os.mkdir('repo')
+
+        repodict = {
+            'address': 'https://example.com/fdroid/repo',
+            'description': 'This is just a test',
+            'icon': 'blahblah',
+            'name': 'test',
+            'timestamp': datetime.datetime.now(),
+            'version': 12,
+        }
+
+        fdroidserver.common.config['repo_pubkey'] = 'ffffffffffffffffffffffffffffffffff'
+
+        fdroidserver.index.make_website([], "repo", repodict)
+        self.assertTrue(os.path.exists(os.path.join('repo', 'index.html')))
+        self.assertTrue(os.path.exists(os.path.join('repo', 'index.css')))
+        self.assertTrue(os.path.exists(os.path.join('repo', 'index.png')))
+
+        try:
+            from html5print import CSSBeautifier, HTMLBeautifier
+        except ImportError:
+            print('WARNING: skipping rest of test since html5print is missing!')
+            return
+
+        with open(os.path.join("repo", "index.html")) as f:
+            html = f.read()
+            pretty_html = HTMLBeautifier.beautify(html)
+            self.maxDiff = None
+            self.assertEquals(html, pretty_html)
+
+        with open(os.path.join("repo", "index.css")) as f:
+            css = f.read()
+            pretty_css = CSSBeautifier.beautify(css)
+            self.maxDiff = None
+            self.assertEquals(css, pretty_css)
+
 
 if __name__ == "__main__":
     os.chdir(os.path.dirname(__file__))

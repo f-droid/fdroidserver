@@ -30,6 +30,7 @@ import tempfile
 import urllib.parse
 import zipfile
 import calendar
+import qrcode
 from binascii import hexlify, unhexlify
 from datetime import datetime, timezone
 from xml.dom.minidom import Document
@@ -129,6 +130,334 @@ def make(apps, apks, repodir, archive):
             fdroid_signing_key_fingerprints)
     make_v1(sortedapps, apks, repodir, repodict, requestsdict,
             fdroid_signing_key_fingerprints)
+    make_website(sortedapps, repodir, repodict)
+
+
+def _should_file_be_generated(path, magic_string):
+    if os.path.exists(path):
+        with open(path) as f:
+            if magic_string not in f.readline():  # if the magic_string is not in the first line the file should be overwritten
+                return False
+    return True
+
+
+def make_website(apps, repodir, repodict):
+    _, repo_pubkey_fingerprint = extract_pubkey()
+    repo_pubkey_fingerprint_stripped = repo_pubkey_fingerprint.replace(" ", "")
+    link = repodict["address"]
+    link_fingerprinted = "{link}?fingerprint={fingerprint}".format(link=link, fingerprint=repo_pubkey_fingerprint_stripped)
+    autogenerate_comment = "auto-generated - fdroid index updates will overwrite this file"  # do not change this string, as it will break the updates for existing files with older versions of this string
+
+    if not os.path.exists(repodir):
+        os.makedirs(repodir)
+
+    qrcode.make(link_fingerprinted).save(os.path.join(repodir, "index.png"))
+
+    html_name = 'index.html'
+    html_file = os.path.join(repodir, html_name)
+
+    if _should_file_be_generated(html_file, autogenerate_comment):
+        with open(html_file, 'w') as f:
+            name = repodict["name"]
+            description = repodict["description"]
+            icon = repodict["icon"]
+            f.write("""<!-- {autogenerate_comment} -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+    <meta content="width=device-width; initial-scale=1.0; minimum-scale=0.5; maximum-scale=2.0; user-scalable=1;" name="viewport">
+    <title>
+   {name}
+    </title>
+    <base href="index.html">
+    <link href="index.css" rel="stylesheet" type="text/css">
+    <link href="icons/{icon}" rel="icon" type="image/png">
+    <link href="icons/{icon}" rel="shortcut icon" type="image/png">
+    <meta content="{name}" property="og:site_name">
+    <meta content="{name}" property="og:title">
+    <meta content="" property="og:determiner">
+    <meta content="{description}" property="og:description">
+    <meta content="index,nofollow" name="robots">
+  </head>
+  <body>
+    <h2>
+      {name}
+    </h2>
+    <div id="intro">
+      <p style="margin-bottom:.2em;">
+        <span style="float:right;width:100px;margin-left:.5em;">
+          <a href="index.png" title="QR: test">
+            <img alt="QR: test" src="index.png" width="100">
+          </a>
+        </span>
+        {description}
+        <br>
+        <br>
+        Currently it serves
+        <kbd>
+          {number_of_apps}
+        </kbd>
+        apps. To add it to your F-Droid client, scan the QR code (click it to enlarge) or use this URL:
+      </p>
+      <p class="center" style="margin-top:.5em">
+        <a href="{link_fingerprinted}">
+          <code style="color:#000000;font-weight:bold;">
+            {link}
+          </code>
+        </a>
+      </p>
+      <p>
+        If you would like to manually verify the fingerprint (SHA-256) of the repository signing key, here it is:
+        <br>
+        <blockcode style="color:#000000;font-weight:bold;">
+          {fingerprint}
+        </blockcode>
+      </p>
+    </div>
+  </body>
+</html>
+""".format(autogenerate_comment=autogenerate_comment,
+                    description=description,
+                    fingerprint=repo_pubkey_fingerprint,
+                    icon=icon,
+                    link=link,
+                    link_fingerprinted=link_fingerprinted,
+                    name=name,
+                    number_of_apps=str(len(apps))))
+
+    css_file = os.path.join(repodir, "index.css")
+    if _should_file_be_generated(css_file, autogenerate_comment):
+        with open(css_file, "w") as f:
+            # this auto generated comment was not included via .format(), as python seems to have problems with css files in combination with .format()
+            f.write("""/* auto-generated - fdroid index updates will overwrite this file */
+BODY {
+  font-family         : Arial, Helvetica, Sans-Serif;
+  color               : #0000ee;
+  background-color    : #ffffff;
+}
+p {
+  text-align          : justify;
+}
+p.center {
+  text-align          : center;
+}
+TD {
+  font-family         : Arial, Helvetica, Sans-Serif;
+  color               : #0000ee;
+}
+body,td {
+  font-size           : 14px;
+}
+TH {
+  font-family         : Arial, Helvetica, Sans-Serif;
+  color               : #0000ee;
+  background-color    : #F5EAD4;
+}
+a:link {
+  color               : #bb0000;
+}
+a:visited {
+  color               : #ff0000;
+}
+.zitat {
+  margin-left         : 1cm;
+  margin-right        : 1cm;
+  font-style          : italic;
+}
+#intro {
+  border-spacing      : 1em;
+  border              : 1px solid gray;
+  border-radius       : 0.5em;
+  box-shadow          : 10px 10px 5px #888;
+  margin              : 1.5em;
+  font-size           : .9em;
+  width               : 600px;
+  max-width           : 90%;
+  display             : table;
+  margin-left         : auto;
+  margin-right        : auto;
+  font-size           : .8em;
+  color               : #555555;
+}
+#intro > p {
+  margin-top          : 0;
+}
+#intro p:last-child {
+  margin-bottom       : 0;
+}
+.last {
+  border-bottom       : 1px solid black;
+  padding-bottom      : .5em;
+  text-align          : center;
+}
+table {
+  border-collapse     : collapse;
+}
+h2 {
+  text-align          : center;
+}
+.perms {
+  font-family         : monospace;
+  font-size           : .8em;
+}
+.repoapplist {
+  display             : table;
+  border-collapse     : collapse;
+  margin-left         : auto;
+  margin-right        : auto;
+  width               : 600px;
+  max-width           : 90%;
+}
+.approw, appdetailrow {
+  display             : table-row;
+}
+.appdetailrow {
+  display             : flex;
+  padding             : .5em;
+}
+.appiconbig, .appdetailblock, .appdetailcell {
+  display             : table-cell
+}
+.appiconbig {
+  vertical-align      : middle;
+  text-align          : center;
+}
+.appdetailinner {
+  width               : 100%;
+}
+.applinkcell {
+  text-align          : center;
+  float               : right;
+  width               : 100%;
+  margin-bottom       : .1em;
+}
+.paddedlink {
+  margin              : 1em;
+}
+.approw {
+  border-spacing      : 1em;
+  border              : 1px solid gray;
+  border-radius       : 0.5em;
+  padding             : 0.5em;
+  margin              : 1.5em;
+}
+.appdetailinner .appdetailrow:first-child {
+  background-color    : #d5d5d5;
+}
+.appdetailinner .appdetailrow:first-child .appdetailcell {
+  min-width           : 33%;
+  flex                : 1 33%;
+  text-align          : center;
+}
+.appdetailinner .appdetailrow:first-child .appdetailcell:first-child {
+  text-align          : left;
+}
+.appdetailinner .appdetailrow:first-child .appdetailcell:last-child {
+  float               : none;
+  text-align          : right;
+}
+.minor-details {
+  font-size           : .8em;
+  color               : #555555;
+}
+.boldname {
+  font-weight         : bold;
+}
+#appcount {
+  text-align          : center;
+  margin-bottom       : .5em;
+}
+kbd {
+  padding             : 0.1em 0.6em;
+  border              : 1px solid #CCC;
+  background-color    : #F7F7F7;
+  color               : #333;
+  box-shadow          : 0px 1px 0px rgba(0, 0, 0, 0.2), 0px 0px 0px 2px #FFF inset;
+  border-radius       : 3px;
+  display             : inline-block;
+  margin              : 0px 0.1em;
+  text-shadow         : 0px 1px 0px #FFF;
+  white-space         : nowrap;
+}
+div.filterline, div.repoline {
+  display             : table;
+  margin-left         : auto;
+  margin-right        : auto;
+  margin-bottom       : 1em;
+  vertical-align      : middle;
+  display             : table;
+  font-size           : .8em;
+}
+.filterline form {
+  display             : table-row;
+}
+.filterline .filtercell {
+  display             : table-cell;
+  vertical-align      : middle;
+}
+fieldset {
+  float               : left;
+}
+fieldset select, fieldset input, #reposelect select, #reposelect input {
+  font-size           : .9em;
+}
+.pager {
+  display             : table;
+  margin-left         : auto;
+  margin-right        : auto;
+  width               : 600px;
+  max-width           : 90%;
+  padding-top         : .6em;
+}
+/* should correspond to .repoapplist */
+.pagerrow {
+  display             : table-row;
+}
+.pagercell {
+  display             : table-cell;
+}
+.pagercell.left {
+  text-align          : left;
+  padding-right       : 1em;
+}
+.pagercell.middle {
+  text-align          : center;
+  font-size           : .9em;
+  color               : #555;
+}
+.pagercell.right {
+  text-align          : right;
+  padding-left        : 1em;
+}
+.anti {
+  color               : peru;
+}
+.antibold {
+  color               : crimson;
+}
+#footer {
+  text-align          : center;
+  margin-top          : 1em;
+  font-size           : 11px;
+  color               : #555;
+}
+#footer img {
+  vertical-align      : middle;
+}
+@media (max-width: 600px) {
+  .repoapplist {
+    display             : block;
+  }
+  .appdetailinner, .appdetailrow {
+    display             : block;
+  }
+  .appdetailcell {
+    display             : block;
+    float               : left;
+    line-height         : 1.5em;
+  }
+}""")
 
 
 def make_v1(apps, packages, repodir, repodict, requestsdict, fdroid_signing_key_fingerprints):
