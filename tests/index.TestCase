@@ -380,7 +380,7 @@ class IndexTest(unittest.TestCase):
         try:
             from html5print import CSSBeautifier, HTMLBeautifier
         except ImportError:
-            print('WARNING: skipping rest of test since androguard is missing!')
+            print('WARNING: skipping rest of test since html5print is missing!')
             return
 
         with open(os.path.join("repo", "index.html")) as f:
