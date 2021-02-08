@@ -335,7 +335,7 @@ plugin_fetchsrclibs:
 
 # test a full update and deploy cycle to gitlab.com
 servergitmirrors:
-  image: debian
+  image: debian:buster
   <<: *apt-template
   only:
     - master@fdroid/fdroidserver
@@ -345,11 +345,12 @@ servergitmirrors:
         git
         openssh-client
         openssl
+        python3-cryptography
         python3-pip
         python3-venv
         rsync
         wget
-    - python3 -m venv env
+    - python3 -m venv --system-site-packages env
     - . env/bin/activate
     - export PYTHONPATH=`pwd`
     - $pip install -e .
