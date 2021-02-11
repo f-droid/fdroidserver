@@ -1181,7 +1181,7 @@ if have_git_2_3; then
     LOCAL_COPY_DIR=`create_test_dir`/fdroid
     mkdir $LOCAL_COPY_DIR
     ONLINE_ROOT=`create_test_dir`
-    SERVERWEBROOT=`create_test_dir`
+    SERVERWEBROOT=`create_test_dir`/fdroid
 
     # create offline binary transparency log
     cd $OFFLINE_ROOT
@@ -1223,9 +1223,8 @@ if have_git_2_3; then
     cd $ONLINE_ROOT
     echo "local_copy_dir: $LOCAL_COPY_DIR" >> config.yml
     echo "sync_from_local_copy_dir: True" >> config.yml
-    echo "serverwebroots: $SERVERWEBROOT" >> config.yml
+    echo "serverwebroot: $SERVERWEBROOT" >> config.yml
     echo "servergitmirrors: $SERVER_GIT_MIRROR" >> config.yml
-    echo "local_copy_dir: $LOCAL_COPY_DIR" >> config.yml
     echo "binary_transparency_remote: $BINARY_TRANSPARENCY_REMOTE" >> config.yml
     $fdroid deploy --verbose
     test -e $ONLINE_ROOT/unsigned/urzip-release-unsigned.apk
