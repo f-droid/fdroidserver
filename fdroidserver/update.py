@@ -768,23 +768,41 @@ def _get_localized_dict(app, locale):
 
 
 def _set_localized_text_entry(app, locale, key, f):
-    limit = config['char_limits'][key]
-    localized = _get_localized_dict(app, locale)
-    with open(f, errors='replace') as fp:
-        text = fp.read()[:limit]
-        if len(text) > 0:
-            if key in ('name', 'summary', 'video'):  # hardcoded as a single line
-                localized[key] = text.strip('\n')
-            else:
-                localized[key] = text
+    """Read a fastlane/triple-t metadata file and add an entry to the app
+
+    This reads more than the limit, in case there is leading or
+    trailing whitespace to be stripped
+
+    """
+    try:
+        limit = config['char_limits'][key]
+        localized = _get_localized_dict(app, locale)
+        with open(f, errors='replace') as fp:
+            text = fp.read(limit * 2)
+            if len(text) > 0:
+                if key in ('name', 'summary', 'video'):  # hardcoded as a single line
+                    localized[key] = text.strip('\n')[:limit]
+                else:
+                    localized[key] = text[:limit]
+    except Exception as e:
+        logging.error(_('{path}: {error}').format(path=f, error=str(e)))
 
 
 def _set_author_entry(app, key, f):
-    limit = config['char_limits']['author']
-    with open(f, errors='replace') as fp:
-        text = fp.read()[:limit]
-        if len(text) > 0:
-            app[key] = text.strip()
+    """read a fastlane/triple-t author file and add the entry to the app
+
+    This reads more than the limit, in case there is leading or
+    trailing whitespace to be stripped
+
+    """
+    try:
+        limit = config['char_limits']['author']
+        with open(f, errors='replace') as fp:
+            text = fp.read(limit * 2)
+            if len(text) > 0:
+                app[key] = text.strip()[:limit]
+    except Exception as e:
+        logging.error(_('{path}: {error}').format(path=f, error=str(e)))
 
 
 def _strip_and_copy_image(in_file, outpath):
