@@ -11,6 +11,7 @@ import optparse
 import os
 import random
 import shutil
+import string
 import subprocess
 import sys
 import tempfile
@@ -1308,6 +1309,73 @@ class UpdateTest(unittest.TestCase):
         self.assertIsNotNone(fdroidserver.update.sanitize_funding_yml_entry(5.0))
         self.assertIsNotNone(fdroidserver.update.sanitize_funding_yml_entry(' WhyIncludeWhitespace '))
         self.assertIsNotNone(fdroidserver.update.sanitize_funding_yml_entry(['first', 'second']))
+
+    def test_set_localized_text_entry(self):
+        tmptestsdir = tempfile.mkdtemp(prefix=inspect.currentframe().f_code.co_name,
+                                       dir=self.tmpdir)
+        os.chdir(tmptestsdir)
+        config = dict()
+        fdroidserver.common.fill_config_defaults(config)
+        fdroidserver.update.config = config
+        fdroidserver.update.options = fdroidserver.common.options
+
+        files = {
+            'full-description.txt': 'description',
+            'short-description.txt': 'summary',
+            'title.txt': 'name',
+            'video-url.txt': 'video',
+        }
+
+        for f, key in files.items():
+            limit = config['char_limits'][key]
+            with open(f, 'w') as fp:
+                fp.write(''.join(random.choice(string.ascii_letters) for i in range(limit + 100)))
+            locale = 'ru_US'
+            app = dict()
+            fdroidserver.update._set_localized_text_entry(app, locale, key, f)
+            self.assertEqual(limit, len(app['localized'][locale][key]))
+
+            f = 'badlink-' + f
+            os.symlink('/path/to/nowhere', f)
+            app = dict()
+            fdroidserver.update._set_localized_text_entry(app, locale, key, f)
+            self.assertIsNone(app['localized'].get(locale, {}).get(key))
+
+    def test_set_author_entry(self):
+        tmptestsdir = tempfile.mkdtemp(prefix=inspect.currentframe().f_code.co_name,
+                                       dir=self.tmpdir)
+        os.chdir(tmptestsdir)
+        config = dict()
+        fdroidserver.common.fill_config_defaults(config)
+        fdroidserver.update.config = config
+        fdroidserver.update.options = fdroidserver.common.options
+
+        f = 'contact-website.txt'
+        key = 'author'
+        url = 'https://f-droid.org/'
+        limit = config['char_limits']['author']
+        with open(f, 'w') as fp:
+            fp.write(url)
+            fp.write('\n')
+        app = dict()
+        fdroidserver.update._set_author_entry(app, key, f)
+        self.assertEqual(url, app[key])
+
+        f = 'limits.txt'
+        key = 'author'
+        limit = config['char_limits']['author']
+        for key in ('authorEmail', 'authorPhone', 'authorWebSite'):
+            with open(f, 'w') as fp:
+                fp.write(''.join(random.choice(string.ascii_letters) for i in range(limit + 100)))
+            app = dict()
+            fdroidserver.update._set_author_entry(app, key, f)
+            self.assertEqual(limit, len(app[key]))
+
+        f = 'badlink.txt'
+        os.symlink('/path/to/nowhere', f)
+        app = dict()
+        fdroidserver.update._set_author_entry(app, key, f)
+        self.assertIsNone(app.get(key))
 
 
 if __name__ == "__main__":
