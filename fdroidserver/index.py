@@ -136,7 +136,8 @@ def make(apps, apks, repodir, archive):
 def _should_file_be_generated(path, magic_string):
     if os.path.exists(path):
         with open(path) as f:
-            if magic_string not in f.readline():  # if the magic_string is not in the first line the file should be overwritten
+            # if the magic_string is not in the first line the file should be overwritten
+            if magic_string not in f.readline():
                 return False
     return True
 
@@ -145,8 +146,10 @@ def make_website(apps, repodir, repodict):
     _ignored, repo_pubkey_fingerprint = extract_pubkey()
     repo_pubkey_fingerprint_stripped = repo_pubkey_fingerprint.replace(" ", "")
     link = repodict["address"]
-    link_fingerprinted = "{link}?fingerprint={fingerprint}".format(link=link, fingerprint=repo_pubkey_fingerprint_stripped)
-    autogenerate_comment = "auto-generated - fdroid index updates will overwrite this file"  # do not change this string, as it will break the updates for existing files with older versions of this string
+    link_fingerprinted = ('{link}?fingerprint={fingerprint}'
+                          .format(link=link, fingerprint=repo_pubkey_fingerprint_stripped))
+    # do not change this string, as it will break updates for files with older versions of this string
+    autogenerate_comment = "auto-generated - fdroid index updates will overwrite this file"
 
     if not os.path.exists(repodir):
         os.makedirs(repodir)
