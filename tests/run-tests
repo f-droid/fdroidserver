@@ -1181,7 +1181,7 @@ if have_git_2_3; then
     LOCAL_COPY_DIR=`create_test_dir`/fdroid
     mkdir $LOCAL_COPY_DIR
     ONLINE_ROOT=`create_test_dir`
-    SERVERWEBROOT=`create_test_dir`
+    SERVERWEBROOT=`create_test_dir`/fdroid
 
     # create offline binary transparency log
     cd $OFFLINE_ROOT
@@ -1202,6 +1202,8 @@ if have_git_2_3; then
     fdroid_init_with_prebuilt_keystore
     printf '\narchive_older: 3\n' >> config.yml
     cp -a $WORKSPACE/tests/metadata $WORKSPACE/tests/repo $WORKSPACE/tests/stats $OFFLINE_ROOT/
+    mkdir $OFFLINE_ROOT/unsigned
+    cp $WORKSPACE/tests/urzip-release-unsigned.apk $OFFLINE_ROOT/unsigned
 
     echo "mirrors: ['http://foo.bar/fdroid', 'http://asdflkdsfjafdsdfhkjh.onion/fdroid']" >> config.yml
     echo "servergitmirrors: $SERVER_GIT_MIRROR" >> config.yml
@@ -1216,15 +1218,17 @@ if have_git_2_3; then
     [ `git rev-list --count HEAD` == "1" ]
     cd ..
     $fdroid deploy --verbose
+    test -e $LOCAL_COPY_DIR/unsigned/urzip-release-unsigned.apk
     grep -F '<application id=' $LOCAL_COPY_DIR/repo/index.xml > /dev/null
     cd $ONLINE_ROOT
     echo "local_copy_dir: $LOCAL_COPY_DIR" >> config.yml
     echo "sync_from_local_copy_dir: True" >> config.yml
-    echo "serverwebroots: $SERVERWEBROOT" >> config.yml
+    echo "serverwebroot: $SERVERWEBROOT" >> config.yml
     echo "servergitmirrors: $SERVER_GIT_MIRROR" >> config.yml
-    echo "local_copy_dir: $LOCAL_COPY_DIR" >> config.yml
     echo "binary_transparency_remote: $BINARY_TRANSPARENCY_REMOTE" >> config.yml
     $fdroid deploy --verbose
+    test -e $ONLINE_ROOT/unsigned/urzip-release-unsigned.apk
+    test -e $SERVERWEBROOT/unsigned/urzip-release-unsigned.apk
     cd $BINARY_TRANSPARENCY_REMOTE
     [ `git rev-list --count HEAD` == "1" ]
     cd $SERVER_GIT_MIRROR
