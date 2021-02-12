@@ -111,6 +111,7 @@ packages="
  python3-pip
  python3-pyasn1
  python3-pyasn1-modules
+ python3-qrcode
  python3-requests
  python3-setuptools
  python3-smmap
