@@ -142,7 +142,7 @@ def _should_file_be_generated(path, magic_string):
 
 
 def make_website(apps, repodir, repodict):
-    _, repo_pubkey_fingerprint = extract_pubkey()
+    _ignored, repo_pubkey_fingerprint = extract_pubkey()
     repo_pubkey_fingerprint_stripped = repo_pubkey_fingerprint.replace(" ", "")
     link = repodict["address"]
     link_fingerprinted = "{link}?fingerprint={fingerprint}".format(link=link, fingerprint=repo_pubkey_fingerprint_stripped)
