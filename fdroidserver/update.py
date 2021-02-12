@@ -142,6 +142,8 @@ def status_update_json(apps, apks):
     output['disabled'] = []
     output['failedBuilds'] = dict()
     output['noPackages'] = []
+    output['needsUpdate'] = []
+    output['noUpdateCheck'] = []
 
     for appid in apps:
         app = apps[appid]
@@ -154,8 +156,11 @@ def status_update_json(apps, apks):
             antiFeatures[af]['apps'].add(appid)
 
         apklist = []
+        gotcurrentver = False
         for apk in apks:
             if apk['packageName'] == appid:
+                if str(apk['versionCode']) == app.get('CurrentVersionCode'):
+                    gotcurrentver = True
                 apklist.append(apk)
         validapks = 0
         for build in app.get('Builds', []):
@@ -175,6 +180,10 @@ def status_update_json(apps, apks):
             output['noPackages'].append(appid)
         if app.get('Disabled'):
             output['disabled'].append(appid)
+        if not gotcurrentver:
+            output['needsUpdate'].append(appid)
+        if app.get('UpdateCheckMode') == 'None' and not app.get('Disabled'):
+            output['noUpdateCheck'].append(appid)
     common.write_status_json(output, options.pretty)
 
 
