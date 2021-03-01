@@ -407,6 +407,8 @@ CACHE_FILES = [
      'fd591a34af7385730970399f473afabdb8b28d57fd97d6625c388d090039d6fd'),
     ('https://services.gradle.org/distributions/gradle-6.8.2-bin.zip',
      '8de6efc274ab52332a9c820366dd5cf5fc9d35ec7078fd70c8ec6913431ee610'),
+    ('https://services.gradle.org/distributions/gradle-6.8.3-bin.zip',
+     '7faa7198769f872826c8ef4f1450f839ec27f0b4d5d1e51bade63667cbccd205'),
     ('https://dl.google.com/android/ndk/android-ndk-r10e-linux-x86_64.bin',
      '102d6723f67ff1384330d12c45854315d6452d6510286f4e5891e00a5a8f1d5a'),
     ('https://dl.google.com/android/repository/android-ndk-r11c-linux-x86_64.zip',
