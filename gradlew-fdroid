@@ -8,8 +8,11 @@ if [ -z "$GRADLE_VERSION_DIR" ]; then
 else
     gradle_version_dir="$GRADLE_VERSION_DIR"
 fi
+BUILDSERVER_CACHEDIR=/vagrant/cache
 if [ -n "$CACHEDIR" ]; then
     cachedir="$CACHEDIR"
+elif [ -d $BUILDSERVER_CACHEDIR ]; then
+    cachedir=$BUILDSERVER_CACHEDIR
 fi
 args=("$@")
 
@@ -34,11 +37,12 @@ download_gradle() {
         gradle_zip="${cachedir}/gradle-$1-bin.zip"
     else
         echo "Downloading missing gradle version $1"
-        if [ -n "${cachedir}" ]; then
+        echo cachedir $cachedir
+        if [[ -n "${cachedir}" && ! -d "${cachedir}" ]]; then
+            mkdir -p "${cachedir}"
+        fi
+        if [[ -n "${cachedir}" && -d "${cachedir}" && -w "${cachedir}" ]]; then
             tmpdir="${cachedir}"
-            if [ ! -d ${tmpdir} ]; then
-                mkdir -p "${cachedir}"
-            fi
         else
             tmpdir=$(mktemp -d)
         fi

@@ -143,6 +143,20 @@ arch_pip_install:
     - fdroid readmeta
     - fdroid update --help
 
+
+gradlew-fdroid:
+  image: debian:bullseye
+  <<: *apt-template
+  only:
+    changes:
+      - .gitlab-ci.yml
+      - gradlew-fdroid
+      - tests/test-gradlew-fdroid
+  script:
+    - apt-get install ca-certificates curl default-jdk-headless unzip
+    - ./tests/test-gradlew-fdroid
+
+
 lint_format_safety_bandit_checks:
   image: alpine:3.10 # cannot upgrade until bandit supports Python 3.8
   variables:
@@ -154,7 +168,6 @@ lint_format_safety_bandit_checks:
     - export EXITVALUE=0
     - function set_error() { export EXITVALUE=1; printf "\x1b[31mERROR `history|tail -2|head -1|cut -b 6-500`\x1b[0m\n"; }
     - ./hooks/pre-commit || set_error
-    - ./tests/test-gradlew-fdroid || set_error
     - bandit
         -ii
         -s B110,B322,B404,B408,B410,B603,B607

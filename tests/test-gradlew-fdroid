@@ -1,15 +1,29 @@
 #!/bin/bash
 
+red='\033[0;31m'
+green='\033[0;32m'
+nocolor='\033[0m'
+
+TEST_VALUE='HELLO WORLD!'
+
 run_test() {
-    red='\033[0;31m'
-    green='\033[0;32m'
-    nocolor='\033[0m'
     cd $source_files/$1
     printf "\n${1}:\n"
     if ($basedir/gradlew-fdroid 2>/dev/null || true) | grep -Fo "$2"; then
 	printf "${green}passed: $1\n"
     else
 	printf "${red}ERROR: $2 not found in $1\n"
+	((exit_value++))
+    fi
+    printf $nocolor
+}
+
+download_cache_test() {
+    if $basedir/gradlew-fdroid helloWorld 2>/dev/null | grep -F "$TEST_VALUE"; then
+	printf "${green}passed: $1\n"
+    else
+	printf "${red}ERROR: \n"
+	$basedir/gradlew-fdroid helloWorld
 	((exit_value++))
     fi
     printf $nocolor
@@ -38,5 +52,24 @@ source_files=$tmpdir
 
 run_test yuriykulikov/AlarmClock 5.1.1
 run_test osmandapp/osmand 2.2.1
+
+cd $tmpdir
+mkdir -p download_cache_test/gradle/wrapper
+cd download_cache_test
+echo 'distributionUrl=https\://services.gradle.org/distributions/gradle-0.7-bin.zip' \
+     > gradle/wrapper/gradle-wrapper.properties
+printf "task helloWorld {\n\tdoLast {\n\t\tprintln '$TEST_VALUE'\n\t}\n}" > build.gradle
+
+export GRADLE_VERSION_DIR=$tmpdir/gradle/versions
+mkdir -p $GRADLE_VERSION_DIR
+
+unset https_proxy
+printf "download, unpack, and run: "
+download_cache_test 0.7
+printf "unpack and run: "
+rm -rf $GRADLE_VERSION_DIR/0.7/
+download_cache_test 0.7
+printf "just run: "
+download_cache_test 0.7
 
 exit $exit_value
