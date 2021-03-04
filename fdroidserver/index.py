@@ -590,7 +590,6 @@ def v1_sort_packages(packages, fdroid_signing_key_fingerprints):
 
     :param packages: list of packages which need to be sorted before but into index file.
     """
-
     GROUP_DEV_SIGNED = 1
     GROUP_FDROID_SIGNED = 2
     GROUP_OTHER_SIGNED = 3
@@ -598,22 +597,22 @@ def v1_sort_packages(packages, fdroid_signing_key_fingerprints):
     def v1_sort_keys(package):
         packageName = package.get('packageName', None)
 
-        sig = package.get('signer', None)
+        signer = package.get('signer', None)
 
-        dev_sig = common.metadata_find_developer_signature(packageName)
+        dev_signer = common.metadata_find_developer_signature(packageName)
         group = GROUP_OTHER_SIGNED
-        if dev_sig and dev_sig == sig:
+        if dev_signer and dev_signer == signer:
             group = GROUP_DEV_SIGNED
         else:
-            fdroidsig = fdroid_signing_key_fingerprints.get(packageName, {}).get('signer')
-            if fdroidsig and fdroidsig == sig:
+            fdroid_signer = fdroid_signing_key_fingerprints.get(packageName, {}).get('signer')
+            if fdroid_signer and fdroid_signer == signer:
                 group = GROUP_FDROID_SIGNED
 
         versionCode = None
         if package.get('versionCode', None):
             versionCode = -int(package['versionCode'])
 
-        return(packageName, group, sig, versionCode)
+        return(packageName, group, signer, versionCode)
 
     packages.sort(key=v1_sort_keys)
 
@@ -718,11 +717,11 @@ def make_v0(apps, apks, repodir, repodict, requestsdict, fdroid_signing_key_fing
                 if name_from_apk is None:
                     name_from_apk = apk.get('name')
         for versionCode, apksforver in apksbyversion.items():
-            fdroidsig = fdroid_signing_key_fingerprints.get(appid, {}).get('signer')
+            fdroid_signer = fdroid_signing_key_fingerprints.get(appid, {}).get('signer')
             fdroid_signed_apk = None
             name_match_apk = None
             for x in apksforver:
-                if fdroidsig and x.get('signer', None) == fdroidsig:
+                if fdroid_signer and x.get('signer', None) == fdroid_signer:
                     fdroid_signed_apk = x
                 if common.apk_release_filename.match(x.get('apkName', '')):
                     name_match_apk = x
