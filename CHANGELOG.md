@@ -4,6 +4,20 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 
+## [2.0.1] - 2020-03-09
+
+### Fixed
+
+* metadata: stop setting up source repo when running lint/rewritemeta
+* scanner: show error if scan_binary fails to run apkanalyzer
+* common: properly parse version from NDK's source.properties
+* update: stop extracting and storing XML icons, they're useless
+* index: raise error rather than crash on bad repo file
+* update: handle large, corrupt, or inaccessible fastlane/triple-t files
+* Update SPDX License List
+* checkupdates: set User-Agent to make gitlab.com happy
+* Run push_binary_transparency only once
+
 ## [2.0] - 2020-01-31
 
 For a more complete overview, see the [2.0
