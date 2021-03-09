@@ -541,7 +541,7 @@ def read_srclibs():
         srclibs[srclibname] = parse_yaml_srclib(metadatapath)
 
 
-def read_metadata(appids={}, refresh=True, sort_by_time=False):
+def read_metadata(appids={}, refresh=True, sort_by_time=False, check_vcs=False):
     """Return a list of App instances sorted newest first
 
     This reads all of the metadata files in a 'data' repository, then
@@ -597,7 +597,7 @@ def read_metadata(appids={}, refresh=True, sort_by_time=False):
         if appid in apps:
             _warn_or_exception(_("Found multiple metadata files for {appid}")
                                .format(appid=appid))
-        app = parse_metadata(metadatapath, appid in appids, refresh)
+        app = parse_metadata(metadatapath, check_vcs, refresh)
         check_metadata(app)
         apps[app.id] = app
 
