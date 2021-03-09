@@ -21,7 +21,7 @@ def main():
     options = parser.parse_args()
     common.options = options
     pkgs = common.read_pkg_args(options.appid, True)
-    allapps = metadata.read_metadata(pkgs)
+    allapps = metadata.read_metadata(pkgs, check_vcs=True)
     apps = common.read_app_args(options.appid, allapps, True)
     srclib_dir = os.path.join('build', 'srclib')
     os.makedirs(srclib_dir, exist_ok=True)

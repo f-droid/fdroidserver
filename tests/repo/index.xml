@@ -53,7 +53,6 @@ Features:
 		<lastupdated>2018-10-10</lastupdated>
 		<name>Caffeine Tile</name>
 		<summary>Test app for extracting icons when an XML one is default</summary>
-		<icon>info.zwanenburg.caffeinetile.4.xml</icon>
 		<desc>No description available</desc>
 		<license>Unknown</license>
 		<categories>Development</categories>

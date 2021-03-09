@@ -83,7 +83,6 @@ def build_server(app, build, vcs, build_dir, output_dir, log_dir, force):
                 buildserverid = subprocess.check_output(['vagrant', 'ssh', '-c',
                                                          'cat /home/vagrant/buildserverid'],
                                                         cwd='builder').strip().decode()
-                status_output['buildserverid'] = buildserverid
                 logging.debug(_('Fetched buildserverid from VM: {buildserverid}')
                               .format(buildserverid=buildserverid))
             except Exception as e:
@@ -1013,7 +1012,7 @@ def main():
 
     # Read all app and srclib metadata
     pkgs = common.read_pkg_args(options.appid, True)
-    allapps = metadata.read_metadata(pkgs, options.refresh, sort_by_time=True)
+    allapps = metadata.read_metadata(pkgs, options.refresh, sort_by_time=True, check_vcs=True)
     apps = common.read_app_args(options.appid, allapps, True)
 
     for appid, app in list(apps.items()):
@@ -1266,12 +1265,14 @@ def main():
                     .format(id=fdroidserverid))
         if os.cpu_count():
             txt += "* host processors: %d\n" % os.cpu_count()
+            status_output['hostOsCpuCount'] = os.cpu_count()
         if os.path.isfile('/proc/meminfo') and os.access('/proc/meminfo', os.R_OK):
             with open('/proc/meminfo') as fp:
                 for line in fp:
                     m = re.search(r'MemTotal:\s*([0-9].*)', line)
                     if m:
                         txt += "* host RAM: %s\n" % m.group(1)
+                        status_output['hostProcMeminfoMemTotal'] = m.group(1)
                         break
         fdroid_path = os.path.realpath(os.path.join(os.path.dirname(__file__), '..'))
         buildserver_config = os.path.join(fdroid_path, 'makebuildserver.config.py')
@@ -1281,15 +1282,20 @@ def main():
                     m = re.search(r'cpus\s*=\s*([0-9].*)', line)
                     if m:
                         txt += "* guest processors: %s\n" % m.group(1)
+                        status_output['guestVagrantVmCpus'] = m.group(1)
                     m = re.search(r'memory\s*=\s*([0-9].*)', line)
                     if m:
                         txt += "* guest RAM: %s MB\n" % m.group(1)
+                        status_output['guestVagrantVmMemory'] = m.group(1)
         txt += "* successful builds: %d\n" % len(build_succeeded)
         txt += "* failed builds: %d\n" % len(failed_builds)
         txt += "\n\n"
         newpage.save(txt, summary='Run log')
         newpage = site.Pages['build']
         newpage.save('#REDIRECT [[' + wiki_page_path + ']]', summary='Update redirect')
+
+    if buildserverid:
+        status_output['buildserver'] = {'commitId': buildserverid}
 
     if not options.onserver:
         common.write_status_json(status_output)
