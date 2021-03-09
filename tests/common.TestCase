@@ -1627,6 +1627,21 @@ class CommonTest(unittest.TestCase):
                 {'AutoName': testvalue, 'id': 'nope'}]:
             self.assertEqual(testvalue, fdroidserver.common.get_app_display_name(app))
 
+    def test_get_android_tools_versions(self):
+        sdk_path = os.path.join(self.basedir, 'get_android_tools_versions')
+        fdroidserver.common.config = {'sdk_path': sdk_path}
+        components = fdroidserver.common.get_android_tools_versions()
+        expected = (
+            ('android-ndk/android-ndk-r21d', '21.3.6528147'),
+            ('android-ndk/r11c', '11.2.2725575'),
+            ('android-ndk/r17c', '17.2.4988734'),
+            ('android-sdk/patcher/v4', '1'),
+            ('android-sdk/platforms/android-30', '3'),
+            ('android-sdk/skiaparser/1', '6'),
+            ('android-sdk/tools', '26.1.1'),
+        )
+        self.assertSequenceEqual(expected, sorted(components))
+
 
 if __name__ == "__main__":
     os.chdir(os.path.dirname(__file__))
