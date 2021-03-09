@@ -106,6 +106,9 @@ def scan_binary(apkfile):
     logging.info("Scanning APK for known non-free classes.")
     result = common.SdkToolsPopen(["apkanalyzer", "dex", "packages", "--defined-only", apkfile], output=False)
     problems = 0
+    if result.returncode != 0:
+        problems += 1
+        logging.error(result.output)
     for suspect, regexp in CODE_SIGNATURES.items():
         matches = regexp.findall(result.output)
         if matches:
