@@ -1012,7 +1012,7 @@ def main():
 
     # Read all app and srclib metadata
     pkgs = common.read_pkg_args(options.appid, True)
-    allapps = metadata.read_metadata(pkgs, options.refresh, sort_by_time=True)
+    allapps = metadata.read_metadata(pkgs, options.refresh, sort_by_time=True, check_vcs=True)
     apps = common.read_app_args(options.appid, allapps, True)
 
     for appid, app in list(apps.items()):
