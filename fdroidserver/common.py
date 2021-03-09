@@ -3819,7 +3819,7 @@ def get_android_tools_versions(ndk_path=None):
             with open(ndk_release_txt, 'r') as fp:
                 components.append((os.path.basename(ndk_path), fp.read()[:-1]))
 
-    pattern = re.compile('^Pkg.Revision=(.+)', re.MULTILINE)
+    pattern = re.compile(r'^Pkg.Revision *= *(.+)', re.MULTILINE)
     for root, dirs, files in os.walk(sdk_path):
         if 'source.properties' in files:
             source_properties = os.path.join(root, 'source.properties')
