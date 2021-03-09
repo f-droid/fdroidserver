@@ -735,8 +735,9 @@ cd $REPOROOT
 $fdroid init
 $fdroid update --create-metadata --verbose
 $fdroid readmeta
-$fdroid deploy --local-copy-dir=/tmp/fdroid
-$fdroid deploy --local-copy-dir=/tmp/fdroid --verbose
+LOCAL_COPY_DIR=`create_test_dir`/fdroid
+$fdroid deploy --local-copy-dir=$LOCAL_COPY_DIR
+$fdroid deploy --local-copy-dir=$LOCAL_COPY_DIR --verbose
 
 # now test the errors work
 set +e
