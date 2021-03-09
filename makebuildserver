@@ -52,7 +52,7 @@ BASEBOX_CHECKSUMS = {
             'metadata.json': '9b5f62362ce3cd25c50881d8ae124879fc21ed4fdb16cc78d57058f116680f25',
             'Vagrantfile': '4435901624f21dad201c3bd7f0d8d4ece842bc9fbbb70e312eee54f07173f24e',
         },
-        'vritualbox': {
+        'virtualbox': {
             'box-disk1.vmdk': '6b536f26dcee137aca9a3f5f6f20aef795193ef2e8c387a0ffbdb7c5fe2ec0fb',
             'box.ovf': 'cbdd6315187d4ce8ff15ed5a00a2c8b0d33abe6b0356439ce4d8d9ac3724f875',
             'metadata.json': '098439524f76cafe026140b787ca419297a055a3f6006b9d60e6d5326d18ba99',
