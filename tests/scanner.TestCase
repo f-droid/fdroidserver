@@ -48,6 +48,7 @@ class ScannerTest(unittest.TestCase):
             'org.mozilla.rocket': 3,
             'realm': 1,
             'se.manyver': 2,
+            'com.jens.automation2': 2,
         }
         for d in glob.glob(os.path.join(source_files, '*')):
             build = fdroidserver.metadata.Build()
@@ -69,6 +70,7 @@ class ScannerTest(unittest.TestCase):
             ('source-files/osmandapp/osmand/build.gradle', 'free', 5),
             ('source-files/eu.siacs.conversations/build.gradle', 'free', 23),
             ('source-files/org.mozilla.rocket/app/build.gradle', 'focus', 42),
+            ('source-files/com.jens.automation2/app/build.gradle', 'fdroidFlavor', 8),
         ]
 
         for f, flavor, count in test_files:
