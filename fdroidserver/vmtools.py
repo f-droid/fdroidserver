@@ -41,7 +41,7 @@ def get_clean_builder(serverdir):
         os.makedirs(serverdir)
     vagrantfile = os.path.join(serverdir, 'Vagrantfile')
     if not os.path.isfile(vagrantfile):
-        with open(os.path.join('builder', 'Vagrantfile'), 'w') as f:
+        with open(vagrantfile, 'w') as f:
             f.write(textwrap.dedent("""\
                 # generated file, do not change.
 
