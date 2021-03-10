@@ -11,7 +11,7 @@ ndk_paths:
   r18b: /home/vagrant/android-ndk/r18b
   r19c: /home/vagrant/android-ndk/r19c
   r20b: /home/vagrant/android-ndk/r20b
-  r21d: /home/vagrant/android-ndk/r21d
+  r21e: /home/vagrant/android-ndk/r21e
   r22: /home/vagrant/android-ndk/r22
 
 java_paths:
