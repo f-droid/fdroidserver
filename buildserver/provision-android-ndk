@@ -15,7 +15,7 @@ if [ ! -e $NDK_BASE/r10e ]; then
     mv android-ndk-r10e r10e
 fi
 
-for version in r11c r12b r13b r14b r15c r16b r17c r18b r19c r20b r21d r22; do
+for version in r11c r12b r13b r14b r15c r16b r17c r18b r19c r20b r21e r22; do
     if [ ! -e ${NDK_BASE}/${version} ]; then
         unzip /vagrant/cache/android-ndk-${version}-linux-x86_64.zip > /dev/null
         mv android-ndk-${version} ${version}
