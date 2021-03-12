@@ -188,6 +188,13 @@ lint_format_safety_bandit_checks:
     - pybabel compile --domain=fdroidserver --directory locale 2>&1 | (grep -F "error:" && exit 1) || true
     - exit $EXITVALUE
 
+lint_mypy:
+  image: python:3.9-buster
+  script:
+    - pip install mypy
+    - pip install -e .[test]
+    - mypy
+
 fedora_latest:
   image: fedora:latest
   only:

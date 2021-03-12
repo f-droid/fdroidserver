@@ -148,11 +148,11 @@ default_config = {
     'repo_url': "https://MyFirstFDroidRepo.org/fdroid/repo",
     'repo_name': "My First F-Droid Repo Demo",
     'repo_icon': "icon.png",
-    'repo_description': _("""This is a repository of apps to be used with F-Droid. Applications in this repository are either official binaries built by the original application developers, or are binaries built from source by the admin of f-droid.org using the tools on https://gitlab.com/fdroid."""),
+    'repo_description': _("""This is a repository of apps to be used with F-Droid. Applications in this repository are either official binaries built by the original application developers, or are binaries built from source by the admin of f-droid.org using the tools on https://gitlab.com/fdroid."""),  # type: ignore
     'archive_name': 'My First F-Droid Archive Demo',
-    'archive_description': _('These are the apps that have been archived from the main repo.'),
+    'archive_description': _('These are the apps that have been archived from the main repo.'),  # type: ignore
     'archive_older': 0,
-    'lint_licenses': fdroidserver.lint.APPROVED_LICENSES,
+    'lint_licenses': fdroidserver.lint.APPROVED_LICENSES,  # type: ignore
     'git_mirror_size_limit': 10000000000,
 }
 
@@ -2389,7 +2389,7 @@ def use_androguard():
         return False
 
 
-use_androguard.show_path = True
+use_androguard.show_path = True  # type: ignore
 
 
 def _get_androguard_APK(apkfile):
