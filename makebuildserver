@@ -569,6 +569,8 @@ def main():
 
         for d in ('.m2', '.gradle/caches', '.gradle/wrapper', '.pip_download_cache'):
             fullpath = os.path.join(os.getenv('HOME'), d)
+            os.system('date')
+            print('rsyncing', fullpath, 'into VM')
             if os.path.isdir(fullpath):
                 ssh_command = ' '.join(('ssh -i {0} -p {1}'.format(key, port),
                                         '-o StrictHostKeyChecking=no',
