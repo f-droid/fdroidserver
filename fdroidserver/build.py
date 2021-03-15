@@ -1052,8 +1052,10 @@ def main():
     # Build applications...
     failed_builds = []
     build_succeeded = []
+    build_succeeded_ids = []
     status_output['failedBuilds'] = failed_builds
     status_output['successfulBuilds'] = build_succeeded
+    status_output['successfulBuildIds'] = build_succeeded_ids
     # Only build for 72 hours, then stop gracefully.
     endtime = time.time() + 72 * 60 * 60
     max_build_time_reached = False
@@ -1167,6 +1169,7 @@ def main():
                                              'successfully')
 
                     build_succeeded.append(app)
+                    build_succeeded_ids.append([app['id'], build.versionCode])
                     wikilog = "Build succeeded"
 
             except VCSException as vcse:
