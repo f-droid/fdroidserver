@@ -103,12 +103,20 @@ def get_gradle_compile_commands(build):
 
 
 def scan_binary(apkfile):
-    logging.info("Scanning APK for known non-free classes.")
+    """Scan output of apkanalyzer for known non-free classes
+
+    apkanalyzer produces useful output when it can run, but it does
+    not support all recent JDK versions, and also some DEX versions,
+    so this cannot count on it to always produce useful output or even
+    to run without exiting with an error.
+
+    """
+
+    logging.info(_('Scanning APK with apkanalyzer for known non-free classes.'))
     result = common.SdkToolsPopen(["apkanalyzer", "dex", "packages", "--defined-only", apkfile], output=False)
-    problems = 0
     if result.returncode != 0:
-        problems += 1
-        logging.error(result.output)
+        logging.warning(_('scanner not cleanly run apkanalyzer: %s') % result.output)
+    problems = 0
     for suspect, regexp in CODE_SIGNATURES.items():
         matches = regexp.findall(result.output)
         if matches:
