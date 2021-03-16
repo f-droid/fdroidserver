@@ -18,6 +18,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import git
 import os
 import re
 import glob
@@ -541,7 +542,7 @@ def read_srclibs():
         srclibs[srclibname] = parse_yaml_srclib(metadatapath)
 
 
-def read_metadata(appids={}, refresh=True, sort_by_time=False, check_vcs=False):
+def read_metadata(appids={}, sort_by_time=False):
     """Return a list of App instances sorted newest first
 
     This reads all of the metadata files in a 'data' repository, then
@@ -597,7 +598,7 @@ def read_metadata(appids={}, refresh=True, sort_by_time=False, check_vcs=False):
         if appid in apps:
             _warn_or_exception(_("Found multiple metadata files for {appid}")
                                .format(appid=appid))
-        app = parse_metadata(metadatapath, check_vcs, refresh)
+        app = parse_metadata(metadatapath)
         check_metadata(app)
         apps[app.id] = app
 
@@ -730,15 +731,22 @@ def _decode_bool(s):
     _warn_or_exception(_("Invalid boolean '%s'") % s)
 
 
-def parse_metadata(metadatapath, check_vcs=False, refresh=True):
-    '''parse metadata file, optionally checking the git repo for metadata first'''
+def parse_metadata(metadatapath):
+    """parse metadata file, also checking the source repo for .fdroid.yml
+
+    If this is a metadata file from fdroiddata, it will first load the
+    source repo type and URL from fdroiddata, then read .fdroid.yml if
+    it exists, then include the rest of the metadata as specified in
+    fdroiddata, so that fdroiddata has precedence over the metadata in
+    the source code.
+
+    """
 
     app = App()
     app.metadatapath = metadatapath
-    name, _ignored = fdroidserver.common.get_extension(os.path.basename(metadatapath))
-    if name == '.fdroid':
-        check_vcs = False
-    else:
+    metadata_file = os.path.basename(metadatapath)
+    name, _ignored = fdroidserver.common.get_extension(metadata_file)
+    if name != '.fdroid':
         app.id = name
 
     if metadatapath.endswith('.yml'):
@@ -748,16 +756,15 @@ def parse_metadata(metadatapath, check_vcs=False, refresh=True):
         _warn_or_exception(_('Unknown metadata format: {path} (use: *.yml)')
                            .format(path=metadatapath))
 
-    if check_vcs and app.Repo:
+    if metadata_file != '.fdroid.yml' and app.Repo:
         build_dir = fdroidserver.common.get_build_dir(app)
         metadata_in_repo = os.path.join(build_dir, '.fdroid.yml')
-        if not os.path.isfile(metadata_in_repo):
-            vcs, build_dir = fdroidserver.common.setup_vcs(app)
-            if isinstance(vcs, fdroidserver.common.vcs_git):
-                vcs.gotorevision('HEAD', refresh)  # HEAD since we can't know where else to go
         if os.path.isfile(metadata_in_repo):
-            logging.debug('Including metadata from ' + metadata_in_repo)
-            # do not include fields already provided by main metadata file
+            try:
+                commit_id = fdroidserver.common.get_head_commit_id(git.repo.Repo(build_dir))
+                logging.debug(_('Including metadata from %s@%s') % (metadata_in_repo, commit_id))
+            except git.exc.InvalidGitRepositoryError:
+                logging.debug(_('Including metadata from {path}').format(metadata_in_repo))
             app_in_repo = parse_metadata(metadata_in_repo)
             for k, v in app_in_repo.items():
                 if k not in app:
@@ -779,6 +786,17 @@ def parse_metadata(metadatapath, check_vcs=False, refresh=True):
 
 
 def parse_yaml_metadata(mf, app):
+    """Parse the .yml file and post-process it
+
+    Clean metadata .yml files can be used directly, but in order to
+    make a better user experience for people editing .yml files, there
+    is post processing.  .fdroid.yml is embedded in the app's source
+    repo, so it is "user-generated".  That means that it can have
+    weird things in it that need to be removed so they don't break the
+    overall process.
+
+    """
+
     try:
         yamldata = yaml.load(mf, Loader=SafeLoader)
     except yaml.YAMLError as e:
@@ -791,13 +809,15 @@ def parse_yaml_metadata(mf, app):
     deprecated_in_yaml = ['Provides']
 
     if yamldata:
-        for field in yamldata:
-            if field not in yaml_app_fields:
-                if field not in deprecated_in_yaml:
-                    _warn_or_exception(_("Unrecognised app field "
-                                         "'{fieldname}' in '{path}'")
-                                       .format(fieldname=field,
-                                               path=mf.name))
+        for field in tuple(yamldata.keys()):
+            if field not in yaml_app_fields + deprecated_in_yaml:
+                msg = (_("Unrecognised app field '{fieldname}' in '{path}'")
+                       .format(fieldname=field, path=mf.name))
+                if os.path.basename(mf.name) == '.fdroid.yml':
+                    logging.error(msg)
+                    del yamldata[field]
+                else:
+                    _warn_or_exception(msg)
 
         for deprecated_field in deprecated_in_yaml:
             if deprecated_field in yamldata:

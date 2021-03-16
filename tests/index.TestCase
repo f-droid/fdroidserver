@@ -289,7 +289,7 @@ class IndexTest(unittest.TestCase):
             'timestamp': datetime.datetime.now(),
             'version': 12,
         }
-        app = fdroidserver.metadata.parse_metadata(metadatafile, False, False)
+        app = fdroidserver.metadata.parse_metadata(metadatafile)
         app['icon'] = 'info.zwanenburg.caffeinetile.4.xml'
         app['CurrentVersionCode'] = '4'
         apps = {app.id: app}
