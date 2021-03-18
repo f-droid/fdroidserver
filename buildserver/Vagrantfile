@@ -48,7 +48,8 @@ Vagrant.configure("2") do |config|
     else
       synced_folder_type = '9p'
     end
-    config.vm.synced_folder './', '/vagrant', type: synced_folder_type
+    config.vm.synced_folder './', '/vagrant', type: synced_folder_type,
+                            SharedFoldersEnableSymlinksCreate: false
   else
     abort("No supported VM Provider found, set vm_provider in Vagrantfile.yaml!")
   end
