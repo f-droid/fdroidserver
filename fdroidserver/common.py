@@ -285,7 +285,7 @@ def regsub_file(pattern, repl, path):
         f.write(text)
 
 
-def read_config(opts):
+def read_config(opts=None):
     """Read the repository config
 
     The config is read from config_file, which is in the current
@@ -489,14 +489,15 @@ def find_apksigner(config):
             continue
         try:
             if LooseVersion(f) < LooseVersion(MINIMUM_APKSIGNER_BUILD_TOOLS_VERSION):
+                logging.debug("Local Android SDK only has outdated apksigner versions")
                 return
         except TypeError:
             continue
         if os.path.exists(os.path.join(build_tools_path, f, 'apksigner')):
             apksigner = os.path.join(build_tools_path, f, 'apksigner')
             logging.info("Using %s " % apksigner)
-            # memoize result
             config['apksigner'] = apksigner
+            return
 
 
 def find_sdk_tools_cmd(cmd):

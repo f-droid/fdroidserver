@@ -51,6 +51,13 @@ class CommonTest(unittest.TestCase):
             os.makedirs(self.tmpdir)
         os.chdir(self.basedir)
         fdroidserver.common.config = None
+        self.path = os.environ['PATH']
+        self.android_home = os.environ.get('ANDROID_HOME')
+
+    def tearDown(self):
+        os.environ['PATH'] = self.path
+        if self.android_home:
+            os.environ['ANDROID_HOME'] = self.android_home
 
     def test_parse_human_readable_size(self):
         for k, v in ((9827, 9827), (123.456, 123), ('123b', 123), ('1.2', 1),
@@ -366,7 +373,6 @@ class CommonTest(unittest.TestCase):
         self.assertEqual(p.output, 'stdout message\n')
 
     def test_signjar(self):
-        fdroidserver.common.config = None
         config = fdroidserver.common.read_config(fdroidserver.common.options)
         config['jarsigner'] = fdroidserver.common.find_sdk_tools_cmd('jarsigner')
         fdroidserver.common.config = config
@@ -383,9 +389,7 @@ class CommonTest(unittest.TestCase):
             self.assertNotEqual(open(sourcefile, 'rb').read(), open(testfile, 'rb').read())
 
     def test_verify_apk_signature(self):
-        fdroidserver.common.config = None
         config = fdroidserver.common.read_config(fdroidserver.common.options)
-        config['jarsigner'] = fdroidserver.common.find_sdk_tools_cmd('jarsigner')
         fdroidserver.common.config = config
 
         self.assertTrue(fdroidserver.common.verify_apk_signature('bad-unicode-πÇÇ现代通用字-български-عربي1.apk'))
@@ -407,7 +411,6 @@ class CommonTest(unittest.TestCase):
         self.assertFalse(fdroidserver.common.verify_apk_signature('urzip-release-unsigned.apk'))
 
     def test_verify_old_apk_signature(self):
-        fdroidserver.common.config = None
         config = fdroidserver.common.read_config(fdroidserver.common.options)
         config['jarsigner'] = fdroidserver.common.find_sdk_tools_cmd('jarsigner')
         fdroidserver.common.config = config
@@ -425,9 +428,7 @@ class CommonTest(unittest.TestCase):
         self.assertFalse(fdroidserver.common.verify_old_apk_signature('urzip-release-unsigned.apk'))
 
     def test_verify_jar_signature_succeeds(self):
-        fdroidserver.common.config = None
         config = fdroidserver.common.read_config(fdroidserver.common.options)
-        config['jarsigner'] = fdroidserver.common.find_sdk_tools_cmd('jarsigner')
         fdroidserver.common.config = config
         source_dir = os.path.join(self.basedir, 'signindex')
         for f in ('testy.jar', 'guardianproject.jar'):
@@ -435,7 +436,6 @@ class CommonTest(unittest.TestCase):
             fdroidserver.common.verify_jar_signature(testfile)
 
     def test_verify_jar_signature_fails(self):
-        fdroidserver.common.config = None
         config = fdroidserver.common.read_config(fdroidserver.common.options)
         config['jarsigner'] = fdroidserver.common.find_sdk_tools_cmd('jarsigner')
         fdroidserver.common.config = config
@@ -445,9 +445,7 @@ class CommonTest(unittest.TestCase):
             fdroidserver.common.verify_jar_signature(testfile)
 
     def test_verify_apks(self):
-        fdroidserver.common.config = None
         config = fdroidserver.common.read_config(fdroidserver.common.options)
-        config['jarsigner'] = fdroidserver.common.find_sdk_tools_cmd('jarsigner')
         fdroidserver.common.config = config
 
         sourceapk = os.path.join(self.basedir, 'urzip.apk')
@@ -616,8 +614,95 @@ class CommonTest(unittest.TestCase):
             self.assertEqual(keytoolcertfingerprint,
                              fdroidserver.common.apk_signer_fingerprint_short(apkfile))
 
+    def test_find_apksigner_system_package_default_path(self):
+        """apksigner should be automatically used from the PATH"""
+        usr_bin_apksigner = '/usr/bin/apksigner'
+        if not os.path.isfile(usr_bin_apksigner):
+            self.skipTest('SKIPPING since %s is not installed!' % usr_bin_apksigner)
+        os.environ['PATH'] = '/usr/local/bin:/usr/bin:/bin'
+        config = {}
+        fdroidserver.common.find_apksigner(config)
+        self.assertEqual(usr_bin_apksigner, config.get('apksigner'))
+
+    def test_find_apksigner_config_overrides(self):
+        """apksigner should come from config before any auto-detection"""
+        testdir = tempfile.mkdtemp(prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir)
+        os.chdir(testdir)
+        android_home = os.path.join(testdir, 'ANDROID_HOME')
+        do_not_use = os.path.join(android_home, 'build-tools', '30.0.3', 'apksigner')
+        os.makedirs(os.path.dirname(do_not_use))
+        with open(do_not_use, 'w') as fp:
+            fp.write('#!/bin/sh\ndate\n')
+        os.chmod(do_not_use, 0o0755)
+        apksigner = os.path.join(testdir, 'apksigner')
+        config = {'apksigner': apksigner}
+        os.environ['ANDROID_HOME'] = android_home
+        os.environ['PATH'] = '%s:/usr/local/bin:/usr/bin:/bin' % android_home
+        fdroidserver.common.find_apksigner(config)
+        self.assertEqual(apksigner, config.get('apksigner'))
+
+    def test_find_apksigner_prefer_path(self):
+        """apksigner should come from PATH before ANDROID_HOME"""
+        testdir = tempfile.mkdtemp(prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir)
+        os.chdir(testdir)
+
+        apksigner = os.path.join(testdir, 'apksigner')
+        with open(apksigner, 'w') as fp:
+            fp.write('#!/bin/sh\ndate\n')
+        os.chmod(apksigner, 0o0755)
+
+        android_home = os.path.join(testdir, 'ANDROID_HOME')
+        do_not_use = os.path.join(android_home, 'build-tools', '30.0.3', 'apksigner')
+        os.makedirs(os.path.dirname(do_not_use))
+        with open(do_not_use, 'w') as fp:
+            fp.write('#!/bin/sh\ndate\n')
+        os.chmod(do_not_use, 0o0755)
+
+        config = {'sdk_path': android_home}
+        os.environ['ANDROID_HOME'] = android_home
+        os.environ['PATH'] = '%s:/usr/local/bin:/usr/bin:/bin' % os.path.dirname(apksigner)
+        fdroidserver.common.find_apksigner(config)
+        self.assertEqual(apksigner, config.get('apksigner'))
+
+    def test_find_apksigner_prefer_newest(self):
+        """apksigner should be the newest available in ANDROID_HOME"""
+        testdir = tempfile.mkdtemp(prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir)
+        os.chdir(testdir)
+        android_home = os.path.join(testdir, 'ANDROID_HOME')
+
+        apksigner = os.path.join(android_home, 'build-tools', '30.0.3', 'apksigner')
+        os.makedirs(os.path.dirname(apksigner))
+        with open(apksigner, 'w') as fp:
+            fp.write('#!/bin/sh\necho 30.0.3\n')
+        os.chmod(apksigner, 0o0755)
+
+        do_not_use = os.path.join(android_home, 'build-tools', '29.0.3', 'apksigner')
+        os.makedirs(os.path.dirname(do_not_use))
+        with open(do_not_use, 'w') as fp:
+            fp.write('#!/bin/sh\necho 29.0.3\n')
+        os.chmod(do_not_use, 0o0755)
+
+        config = {'sdk_path': android_home}
+        os.environ['PATH'] = '/fake/path/to/avoid/conflicts'
+        fdroidserver.common.find_apksigner(config)
+        self.assertEqual(apksigner, config.get('apksigner'))
+
+    def test_find_apksigner_system_package_android_home(self):
+        testdir = tempfile.mkdtemp(prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir)
+        os.chdir(testdir)
+        android_home = os.getenv('ANDROID_HOME')
+        if not android_home or not os.path.isdir(android_home):
+            self.skipTest('SKIPPING since ANDROID_HOME (%s) is not a dir!' % android_home)
+        fdroidserver.common.config = {'sdk_path': android_home}
+        os.environ['PATH'] = '/fake/path/to/avoid/conflicts'
+        config = fdroidserver.common.read_config()
+        fdroidserver.common.find_apksigner(config)
+        self.assertEqual(
+            os.path.join(android_home, 'build-tools'),
+            os.path.dirname(os.path.dirname(config.get('apksigner'))),
+        )
+
     def test_sign_apk(self):
-        fdroidserver.common.config = None
         config = fdroidserver.common.read_config(fdroidserver.common.options)
         if 'apksigner' not in config:
             self.skipTest('SKIPPING test_sign_apk, apksigner not installed!')
