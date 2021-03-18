@@ -73,9 +73,7 @@ def main():
             sigpath = os.path.join(output_dir, sigfilename)
 
             if not os.path.exists(sigpath):
-                gpgargs = ['gpg', '-a',
-                           '--output', sigpath,
-                           '--detach-sig']
+                gpgargs = ['gpg', '-a', '--output', sigpath, '--detach-sig']
                 if 'gpghome' in config:
                     gpgargs.extend(['--homedir', config['gpghome']])
                 if 'gpgkey' in config:

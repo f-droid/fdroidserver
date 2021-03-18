@@ -99,7 +99,8 @@ def main():
 
     if 'jarsigner' not in config:
         raise FDroidException(
-            _('Java jarsigner not found! Install in standard location or set java_paths!'))
+            _('Java jarsigner not found! Install in standard location or set java_paths!')
+        )
 
     repodirs = ['repo']
     if config['archive_older'] != 0:

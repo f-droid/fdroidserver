@@ -49,9 +49,9 @@ from .exception import FDroidException
 options = None
 
 
-def make_binary_transparency_log(repodirs, btrepo='binary_transparency',
-                                 url=None,
-                                 commit_title='fdroid update'):
+def make_binary_transparency_log(
+    repodirs, btrepo='binary_transparency', url=None, commit_title='fdroid update'
+):
     '''Log the indexes in a standalone git repo to serve as a "binary
     transparency" log.
 
@@ -103,7 +103,7 @@ For more info on this idea:
                     output = json.load(fp, object_pairs_hook=collections.OrderedDict)
                 with open(dest, 'w') as fp:
                     json.dump(output, fp, indent=2)
-            gitrepo.index.add([repof, ])
+            gitrepo.index.add([repof])
         for f in ('index.jar', 'index-v1.jar'):
             repof = os.path.join(repodir, f)
             if not os.path.exists(repof):
@@ -116,7 +116,7 @@ For more info on this idea:
                     jarout.writestr(info, jarin.read(info.filename))
             jarout.close()
             jarin.close()
-            gitrepo.index.add([repof, ])
+            gitrepo.index.add([repof])
 
         output_files = []
         for root, dirs, files in os.walk(repodir):
@@ -137,10 +137,10 @@ For more info on this idea:
         fslogfile = os.path.join(cpdir, 'filesystemlog.json')
         with open(fslogfile, 'w') as fp:
             json.dump(output, fp, indent=2)
-        gitrepo.index.add([os.path.join(repodir, 'filesystemlog.json'), ])
+        gitrepo.index.add([os.path.join(repodir, 'filesystemlog.json')])
 
         for f in glob.glob(os.path.join(cpdir, '*.HTTP-headers.json')):
-            gitrepo.index.add([os.path.join(repodir, os.path.basename(f)), ])
+            gitrepo.index.add([os.path.join(repodir, os.path.basename(f))])
 
     gitrepo.index.commit(commit_title)
 
@@ -168,7 +168,8 @@ def main():
 
     if not os.path.exists(options.git_repo):
         raise FDroidException(
-            '"%s" does not exist! Create it, or use --git-repo' % options.git_repo)
+            '"%s" does not exist! Create it, or use --git-repo' % options.git_repo
+        )
 
     session = requests.Session()
 
@@ -186,9 +187,7 @@ def main():
             dlurl = options.url + '/' + repodir + '/' + f
             http_headers_file = os.path.join(gitrepodir, f + '.HTTP-headers.json')
 
-            headers = {
-                'User-Agent': 'F-Droid 0.102.3'
-            }
+            headers = {'User-Agent': 'F-Droid 0.102.3'}
             etag = None
             if os.path.exists(http_headers_file):
                 with open(http_headers_file) as fp:
@@ -196,7 +195,9 @@ def main():
 
             r = session.head(dlurl, headers=headers, allow_redirects=False)
             if r.status_code != 200:
-                logging.debug('HTTP Response (' + str(r.status_code) + '), did not download ' + dlurl)
+                logging.debug(
+                    'HTTP Response (' + str(r.status_code) + '), did not download ' + dlurl
+                )
                 continue
             if etag and etag == r.headers.get('ETag'):
                 logging.debug('ETag matches, did not download ' + dlurl)

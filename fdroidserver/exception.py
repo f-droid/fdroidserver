@@ -1,5 +1,4 @@
 class FDroidException(Exception):
-
     def __init__(self, value=None, detail=None):
         self.value = value
         self.detail = detail
@@ -22,12 +21,14 @@ class FDroidException(Exception):
         else:
             ret = str(self.value)
         if self.detail:
-            ret += "\n==== detail begin ====\n%s\n==== detail end ====" % ''.join(self.detail).strip()
+            ret += (
+                "\n==== detail begin ====\n%s\n==== detail end ===="
+                % ''.join(self.detail).strip()
+            )
         return ret
 
 
 class MetaDataException(Exception):
-
     def __init__(self, value):
         self.value = value
 

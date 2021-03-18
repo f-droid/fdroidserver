@@ -33,6 +33,7 @@ import threading
 
 class Tail(object):
     ''' Represents a tail command. '''
+
     def __init__(self, tailed_file):
         ''' Initiate a Tail instance.
             Check for file validity, assigns callback function to standard out.
@@ -95,7 +96,6 @@ class Tail(object):
 
 
 class TailError(Exception):
-
     def __init__(self, msg):
         self.message = msg
 
