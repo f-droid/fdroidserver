@@ -767,6 +767,10 @@ def setup_status_output(start_timestamp):
             'modifiedFiles': git_repo.git().ls_files(modified=True).split(),
             'untrackedFiles': git_repo.untracked_files,
         }
+    etc_issue_net = '/etc/issue.net'
+    if os.path.exists(etc_issue_net):
+        with open(etc_issue_net) as fp:
+            output[etc_issue_net] = fp.read(100).strip()
     write_running_status_json(output)
     return output
 
