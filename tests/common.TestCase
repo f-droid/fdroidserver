@@ -926,6 +926,16 @@ class CommonTest(unittest.TestCase):
         self.assertEqual(('1.9.0', '170521', 'com.integreight.onesheeld'),
                          fdroidserver.common.parse_androidmanifests(paths, app))
 
+        app = fdroidserver.metadata.App()
+        app.id = 'dev.patrickgold.florisboard'
+        paths = [
+            os.path.join('source-files', 'dev.patrickgold.florisboard', 'app', 'build.gradle.kts'),
+        ]
+        for path in paths:
+            self.assertTrue(os.path.isfile(path))
+        self.assertEqual(('0.3.10', '29', 'dev.patrickgold.florisboard'),
+                         fdroidserver.common.parse_androidmanifests(paths, app))
+
     def test_parse_androidmanifests_ignore(self):
         app = fdroidserver.metadata.App()
         app.id = 'org.fdroid.fdroid'
