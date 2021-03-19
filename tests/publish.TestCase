@@ -11,6 +11,7 @@
 #
 
 import inspect
+import json
 import logging
 import optparse
 import os
@@ -220,6 +221,34 @@ class PublishTest(unittest.TestCase):
             pk.decrypt(publish.config['keypass'])
             self.assertTrue(pk.is_decrypted())
             self.assertEqual(jks.util.RSA_ENCRYPTION_OID, pk.algorithm_oid)
+
+    def test_status_update_json(self):
+        common.config = {}
+        publish.config = {}
+        with tempfile.TemporaryDirectory() as tmpdir:
+            os.chdir(tmpdir)
+            with mock.patch('sys.argv', ['fdroid publish', '']):
+                publish.status_update_json([], [])
+                with open('repo/status/publish.json') as fp:
+                    data = json.load(fp)
+                self.assertTrue('apksigner' in data)
+
+                publish.config = {
+                    'apksigner': 'apksigner',
+                }
+                publish.status_update_json([], [])
+                with open('repo/status/publish.json') as fp:
+                    data = json.load(fp)
+                self.assertEqual(shutil.which(publish.config['apksigner']), data['apksigner'])
+
+                publish.config = {}
+                common.fill_config_defaults(publish.config)
+                publish.status_update_json([], [])
+                with open('repo/status/publish.json') as fp:
+                    data = json.load(fp)
+                self.assertEqual(publish.config.get('apksigner'), data['apksigner'])
+                self.assertEqual(publish.config['jarsigner'], data['jarsigner'])
+                self.assertEqual(publish.config['keytool'], data['keytool'])
 
 
 if __name__ == "__main__":

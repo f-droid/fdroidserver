@@ -144,6 +144,9 @@ def status_update_json(apps, apks):
     output['noPackages'] = []
     output['needsUpdate'] = []
     output['noUpdateCheck'] = []
+    output['apksigner'] = shutil.which(config.get('apksigner', ''))
+    output['jarsigner'] = shutil.which(config.get('jarsigner', ''))
+    output['keytool'] = shutil.which(config.get('keytool', ''))
 
     for appid in apps:
         app = apps[appid]
