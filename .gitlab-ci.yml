@@ -9,8 +9,6 @@ test:
   image: registry.gitlab.com/fdroid/ci-images-base
   script:
     - $pip install -e .[test]
-    # the `fdroid build` test in tests/run-tests needs android-23
-    - echo y | $ANDROID_HOME/tools/bin/sdkmanager "platforms;android-23" > /dev/null
     - cd tests
     - ./complete-ci-tests
 

@@ -220,20 +220,6 @@ $fdroid update
 
 
 #------------------------------------------------------------------------------#
-echo_header 'run "fdroid build" in fresh git checkout from import.TestCase'
-
-cd $WORKSPACE/tests/tmp/importer
-git remote update -p
-git clean -fdx
-# stick with known working commit, in case future commits break things for this code
-git reset --hard fea54e1161d5eb9eb1a54e26253ef84d3ab63705
-if [ -d $ANDROID_HOME/platforms/android-23 && -d $ANDROID_HOME/build-tools/23.0.3 ]; then
-    $fdroid build --verbose org.fdroid.ci.test.app:300
-else
-    echo 'WARNING: Skipping "fdroid build" test since android-23 is missing!'
-fi
-
-#------------------------------------------------------------------------------#
 echo_header 'copy git import and run "fdroid scanner" on it'
 
 REPOROOT=`create_test_dir`
