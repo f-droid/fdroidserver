@@ -619,12 +619,9 @@ class CommonTest(unittest.TestCase):
     def test_sign_apk(self):
         fdroidserver.common.config = None
         config = fdroidserver.common.read_config(fdroidserver.common.options)
-        try:
-            fdroidserver.common.find_sdk_tools_cmd('zipalign')
-        except fdroidserver.exception.FDroidException:
-            self.skipTest('SKIPPING test_sign_apk, zipalign not installed!')
+        if 'apksigner' not in config:
+            self.skipTest('SKIPPING test_sign_apk, apksigner not installed!')
 
-        config['jarsigner'] = fdroidserver.common.find_sdk_tools_cmd('jarsigner')
         config['keyalias'] = 'sova'
         config['keystorepass'] = 'r9aquRHYoI8+dYz6jKrLntQ5/NJNASFBacJh7Jv2BlI='
         config['keypass'] = 'r9aquRHYoI8+dYz6jKrLntQ5/NJNASFBacJh7Jv2BlI='
@@ -656,18 +653,6 @@ class CommonTest(unittest.TestCase):
         self.assertTrue(fdroidserver.common.verify_apk_signature(signed))
         self.assertEqual('18', fdroidserver.common._get_androguard_APK(signed).get_min_sdk_version())
 
-    def test_sign_apk_targetsdk_30(self):
-        fdroidserver.common.config = None
-        config = fdroidserver.common.read_config(fdroidserver.common.options)
-        if not fdroidserver.common.find_apksigner():
-            self.skipTest('SKIPPING as apksigner is not installed!')
-        config['jarsigner'] = fdroidserver.common.find_sdk_tools_cmd('jarsigner')
-        config['keyalias'] = 'sova'
-        config['keystorepass'] = 'r9aquRHYoI8+dYz6jKrLntQ5/NJNASFBacJh7Jv2BlI='
-        config['keypass'] = 'r9aquRHYoI8+dYz6jKrLntQ5/NJNASFBacJh7Jv2BlI='
-        config['keystore'] = os.path.join(self.basedir, 'keystore.jks')
-        testdir = tempfile.mkdtemp(prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir)
-
         shutil.copy(os.path.join(self.basedir, 'minimal_targetsdk_30_unsigned.apk'), testdir)
         unsigned = os.path.join(testdir, 'minimal_targetsdk_30_unsigned.apk')
         signed = os.path.join(testdir, 'minimal_targetsdk_30.apk')
@@ -680,18 +665,6 @@ class CommonTest(unittest.TestCase):
         self.assertTrue(fdroidserver.common.verify_apk_signature(signed))
         # verify it has a v2 signature
         self.assertTrue(fdroidserver.common._get_androguard_APK(signed).is_signed_v2())
-
-    def test_sign_no_targetsdk(self):
-        fdroidserver.common.config = None
-        config = fdroidserver.common.read_config(fdroidserver.common.options)
-        if not fdroidserver.common.find_apksigner():
-            self.skipTest('SKIPPING as apksigner is not installed!')
-        config['jarsigner'] = fdroidserver.common.find_sdk_tools_cmd('jarsigner')
-        config['keyalias'] = 'sova'
-        config['keystorepass'] = 'r9aquRHYoI8+dYz6jKrLntQ5/NJNASFBacJh7Jv2BlI='
-        config['keypass'] = 'r9aquRHYoI8+dYz6jKrLntQ5/NJNASFBacJh7Jv2BlI='
-        config['keystore'] = os.path.join(self.basedir, 'keystore.jks')
-        testdir = tempfile.mkdtemp(prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir)
 
         shutil.copy(os.path.join(self.basedir, 'no_targetsdk_minsdk30_unsigned.apk'), testdir)
         unsigned = os.path.join(testdir, 'no_targetsdk_minsdk30_unsigned.apk')
@@ -1442,7 +1415,7 @@ class CommonTest(unittest.TestCase):
         self.assertFalse(os.path.exists('config.yml'))
         self.assertFalse(os.path.exists('config.py'))
         config = fdroidserver.common.read_config(fdroidserver.common.options)
-        self.assertEqual(None, config.get('apksigner'))
+        self.assertIsNone(config.get('stats_server'))
         self.assertIsNotNone(config.get('char_limits'))
 
     def test_with_config_yml(self):

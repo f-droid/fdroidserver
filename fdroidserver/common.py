@@ -262,6 +262,11 @@ def fill_config_defaults(thisconfig):
     if 'keytool' not in thisconfig and shutil.which('keytool'):
         thisconfig['keytool'] = shutil.which('keytool')
 
+    # enable apksigner by default so v2/v3 APK signatures validate
+    find_apksigner(thisconfig)
+    if not thisconfig.get('apksigner'):
+        logging.warning(_('apksigner not found! Cannot sign or verify modern APKs'))
+
     for k in ['ndk_paths', 'java_paths']:
         d = thisconfig[k]
         for k2 in d.copy():
@@ -456,26 +461,35 @@ def assert_config_keystore(config):
                               + "you can create one using: fdroid update --create-key")
 
 
-def find_apksigner():
-    """
+def find_apksigner(config):
+    """Searches for the best version apksigner and adds it to the config
+
     Returns the best version of apksigner following this algorithm:
     * use config['apksigner'] if set
     * try to find apksigner in path
     * find apksigner in build-tools starting from newest installed
       going down to MINIMUM_APKSIGNER_BUILD_TOOLS_VERSION
     :return: path to apksigner or None if no version is found
+
     """
-    if set_command_in_config('apksigner'):
-        return config['apksigner']
-    build_tools_path = os.path.join(config['sdk_path'], 'build-tools')
+    command = 'apksigner'
+    if command in config:
+        return
+
+    tmp = find_command(command)
+    if tmp is not None:
+        config[command] = tmp
+        return
+
+    build_tools_path = os.path.join(config.get('sdk_path', ''), 'build-tools')
     if not os.path.isdir(build_tools_path):
-        return None
+        return
     for f in sorted(os.listdir(build_tools_path), reverse=True):
         if not os.path.isdir(os.path.join(build_tools_path, f)):
             continue
         try:
             if LooseVersion(f) < LooseVersion(MINIMUM_APKSIGNER_BUILD_TOOLS_VERSION):
-                return None
+                return
         except TypeError:
             continue
         if os.path.exists(os.path.join(build_tools_path, f, 'apksigner')):
@@ -483,7 +497,6 @@ def find_apksigner():
             logging.info("Using %s " % apksigner)
             # memoize result
             config['apksigner'] = apksigner
-            return config['apksigner']
 
 
 def find_sdk_tools_cmd(cmd):
@@ -3087,9 +3100,10 @@ def sign_apk(unsigned_path, signed_path, keyalias):
         signing_args = [replacements.get(n, n) for n in apksigner_smartcardoptions]
     else:
         signing_args = ['--key-pass', 'env:FDROID_KEY_PASS']
-    if not find_apksigner():
+    apksigner = config.get('apksigner', '')
+    if not shutil.which(apksigner):
         raise BuildException(_("apksigner not found, it's required for signing!"))
-    cmd = [find_apksigner(), 'sign',
+    cmd = [apksigner, 'sign',
            '--ks', config['keystore'],
            '--ks-pass', 'env:FDROID_KEY_STORE_PASS']
     cmd += signing_args

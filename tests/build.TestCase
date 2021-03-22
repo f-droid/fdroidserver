@@ -37,6 +37,8 @@ class BuildTest(unittest.TestCase):
         if not os.path.exists(self.tmpdir):
             os.makedirs(self.tmpdir)
         os.chdir(self.basedir)
+        fdroidserver.common.config = None
+        fdroidserver.build.config = None
 
     def test_get_apk_metadata(self):
         config = dict()

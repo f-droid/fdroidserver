@@ -656,9 +656,7 @@ class UpdateTest(unittest.TestCase):
         fdroidserver.update.config = config
         os.chdir(os.path.join(localmodule, 'tests'))
 
-        apksigner = fdroidserver.common.find_apksigner()
-        if apksigner:
-            config['apksigner'] = apksigner
+        if 'apksigner' in config:
             apk_info = fdroidserver.update.scan_apk('v2.only.sig_2.apk')
             self.assertIsNone(apk_info.get('maxSdkVersion'))
             self.assertEqual(apk_info.get('versionName'), 'v2-only')
