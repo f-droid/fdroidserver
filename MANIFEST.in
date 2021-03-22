@@ -542,7 +542,6 @@ include tests/build-tools/generate.sh
 include tests/check-fdroid-apk
 include tests/checkupdates.TestCase
 include tests/common.TestCase
-include tests/complete-ci-tests
 include tests/config.py
 include tests/corrupt-featureGraphic.png
 include tests/deploy.TestCase

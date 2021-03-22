@@ -146,6 +146,9 @@ def status_update_json(generatedKeys, signedApks):
 
     logging.debug(_('Outputting JSON'))
     output = common.setup_status_output(start_timestamp)
+    output['apksigner'] = shutil.which(config.get('apksigner', ''))
+    output['jarsigner'] = shutil.which(config.get('jarsigner', ''))
+    output['keytool'] = shutil.which(config.get('keytool', ''))
     if generatedKeys:
         output['generatedKeys'] = generatedKeys
     if signedApks:

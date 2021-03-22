@@ -72,11 +72,17 @@ have_git_2_3() {
 
 is_MD5_disabled() {
     javac $WORKSPACE/tests/IsMD5Disabled.java && java -cp $WORKSPACE/tests IsMD5Disabled
-    return $?
 }
 
 use_apksigner() {
-    test -x "`sed -En 's,^ *apksigner: +,,p' config.yml`"
+    python3 -c "
+import sys
+sys.path.insert(0, '$WORKSPACE')
+from fdroidserver import common
+c = {'sdk_path': '$ANDROID_HOME'}
+common.find_apksigner(c)
+exit(c.get('apksigner') is None)
+"
 }
 
 #------------------------------------------------------------------------------#
@@ -169,7 +175,7 @@ $fdroid --version
 #------------------------------------------------------------------------------#
 echo_header 'run process when building and signing are on separate machines'
 
-if which zipalign || ls -1 $ANDROID_HOME/build-tools/*/zipalign; then
+if use_apksigner; then
     REPOROOT=`create_test_dir`
     cd $REPOROOT
     cp $WORKSPACE/tests/keystore.jks $REPOROOT/
@@ -212,20 +218,6 @@ cp $WORKSPACE/tests/metadata/info.guardianproject.urzip.yml metadata/
 $fdroid readmeta
 $fdroid update
 
-
-#------------------------------------------------------------------------------#
-echo_header 'run "fdroid build" in fresh git checkout from import.TestCase'
-
-cd $WORKSPACE/tests/tmp/importer
-git remote update -p
-git clean -fdx
-# stick with known working commit, in case future commits break things for this code
-git reset --hard fea54e1161d5eb9eb1a54e26253ef84d3ab63705
-if [ -d $ANDROID_HOME/platforms/android-23 && -d $ANDROID_HOME/build-tools/23.0.3 ]; then
-    $fdroid build --verbose org.fdroid.ci.test.app:300
-else
-    echo 'WARNING: Skipping "fdroid build" test since android-23 is missing!'
-fi
 
 #------------------------------------------------------------------------------#
 echo_header 'copy git import and run "fdroid scanner" on it'
@@ -325,8 +317,9 @@ else
     test `grep '<package>' repo/index.xml | wc -l` -eq 7
 fi
 
+
 #------------------------------------------------------------------------------#
-if ! which apksigner; then
+if ! use_apksigner; then
     echo_header 'test per-app "Archive Policy"'
 
     REPOROOT=`create_test_dir`
@@ -534,7 +527,7 @@ test -e repo/org.bitbucket.tickytacky.mirrormirror_4.apk
 test -e archive/urzip-badsig.apk
 
 sed -i.tmp '/apksigner:/d' config.yml
-if ! which apksigner; then
+if ! use_apksigner; then
     $sed -i.tmp '/allow_disabled_algorithms/d' config.yml
     $fdroid update --pretty --nosign
     test `grep '<package>' archive/index.xml | wc -l` -eq 5
@@ -1240,28 +1233,30 @@ fi
 #------------------------------------------------------------------------------#
 echo_header 'test extracting and publishing with developer signature'
 
-REPOROOT=`create_test_dir`
-cd $REPOROOT
-fdroid_init_with_prebuilt_keystore
-echo 'keydname: "CN=Birdman, OU=Cell, O=Alcatraz, L=Alcatraz, S=California, C=US"' >> config.yml
-test -d metadata || mkdir metadata
-cp $WORKSPACE/tests/metadata/com.politedroid.yml metadata/
-test -d repo || mkdir repo
-test -d unsigned || mkdir unsigned
-cp $WORKSPACE/tests/repo/com.politedroid_6.apk unsigned/
-$fdroid signatures unsigned/com.politedroid_6.apk
-test -d metadata/com.politedroid/signatures/6
-test -f metadata/com.politedroid/signatures/6/MANIFEST.MF
-test -f metadata/com.politedroid/signatures/6/RELEASE.RSA
-test -f metadata/com.politedroid/signatures/6/RELEASE.SF
-! test -f repo/com.politedroid_6.apk
-$fdroid publish
-test -f repo/com.politedroid_6.apk
-if which jarsigner; then
-    jarsigner -verify repo/com.politedroid_6.apk
-fi
-if which apksigner; then
-    apksigner verify repo/com.politedroid_6.apk
+if use_apksigner; then
+    REPOROOT=`create_test_dir`
+    cd $REPOROOT
+    fdroid_init_with_prebuilt_keystore
+    echo 'keydname: "CN=Birdman, OU=Cell, O=Alcatraz, L=Alcatraz, S=California, C=US"' >> config.yml
+    test -d metadata || mkdir metadata
+    cp $WORKSPACE/tests/metadata/com.politedroid.yml metadata/
+    test -d repo || mkdir repo
+    test -d unsigned || mkdir unsigned
+    cp $WORKSPACE/tests/repo/com.politedroid_6.apk unsigned/
+    $fdroid signatures unsigned/com.politedroid_6.apk
+    test -d metadata/com.politedroid/signatures/6
+    test -f metadata/com.politedroid/signatures/6/MANIFEST.MF
+    test -f metadata/com.politedroid/signatures/6/RELEASE.RSA
+    test -f metadata/com.politedroid/signatures/6/RELEASE.SF
+    ! test -f repo/com.politedroid_6.apk
+    $fdroid publish
+    test -f repo/com.politedroid_6.apk
+    if which apksigner; then
+	apksigner verify repo/com.politedroid_6.apk
+    fi
+    if which jarsigner; then
+	jarsigner -verify repo/com.politedroid_6.apk
+    fi
 fi
 
 

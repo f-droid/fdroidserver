@@ -144,6 +144,9 @@ def status_update_json(apps, apks):
     output['noPackages'] = []
     output['needsUpdate'] = []
     output['noUpdateCheck'] = []
+    output['apksigner'] = shutil.which(config.get('apksigner', ''))
+    output['jarsigner'] = shutil.which(config.get('jarsigner', ''))
+    output['keytool'] = shutil.which(config.get('keytool', ''))
 
     for appid in apps:
         app = apps[appid]
@@ -1395,17 +1398,17 @@ def scan_apk(apk_file):
     logging.debug('Getting signature of {0}'.format(os.path.basename(apk_file)))
     apk['sig'] = getsig(apk_file)
     if not apk['sig']:
-        raise BuildException("Failed to get apk signature")
+        raise BuildException(_("Failed to get APK signing key fingerprint"))
     apk['signer'] = common.apk_signer_fingerprint(os.path.join(os.getcwd(),
                                                                apk_file))
     if not apk.get('signer'):
-        raise BuildException("Failed to get apk signing key fingerprint")
+        raise BuildException(_("Failed to get APK signing key fingerprint"))
 
     # Get size of the APK
     apk['size'] = os.path.getsize(apk_file)
 
     if 'minSdkVersion' not in apk:
-        logging.warning("No SDK version information found in {0}".format(apk_file))
+        logging.warning(_("No minimum SDK version found in {0}, using default (3).").format(apk_file))
         apk['minSdkVersion'] = 3  # aapt defaults to 3 as the min
 
     # Check for known vulnerabilities
@@ -1524,13 +1527,16 @@ def scan_apk_androguard(apk, apkfile):
     icon_id_str = apkobject.get_element("application", "icon")
     if icon_id_str:
         icon_id = int(icon_id_str.replace("@", "0x"), 16)
-        resource_id = arsc.get_id(apk['packageName'], icon_id)
-        if resource_id:
-            icon_name = arsc.get_id(apk['packageName'], icon_id)[1]
-        else:
-            # don't use 'anydpi' aka 0xFFFE aka 65534 since it is XML
-            icon_name = os.path.splitext(os.path.basename(apkobject.get_app_icon(max_dpi=65534 - 1)))[0]
-        apk['icons_src'] = _get_apk_icons_src(apkfile, icon_name)
+        try:
+            resource_id = arsc.get_id(apk['packageName'], icon_id)
+            if resource_id:
+                icon_name = arsc.get_id(apk['packageName'], icon_id)[1]
+            else:
+                # don't use 'anydpi' aka 0xFFFE aka 65534 since it is XML
+                icon_name = os.path.splitext(os.path.basename(apkobject.get_app_icon(max_dpi=65534 - 1)))[0]
+            apk['icons_src'] = _get_apk_icons_src(apkfile, icon_name)
+        except Exception as e:
+            logging.error("Cannot fetch icon from %s: %s" % (apkfile, str(e)))
 
     arch_re = re.compile("^lib/(.*)/.*$")
     arch = set([arch_re.match(file).group(1) for file in apkobject.get_files() if arch_re.match(file)])

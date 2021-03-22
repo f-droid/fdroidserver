@@ -6,6 +6,7 @@ import copy
 import git
 import glob
 import inspect
+import json
 import logging
 import optparse
 import os
@@ -23,6 +24,7 @@ from binascii import unhexlify
 from datetime import datetime
 from distutils.version import LooseVersion
 from testcommon import TmpCwd
+from unittest import mock
 
 try:
     from yaml import CSafeLoader as SafeLoader
@@ -63,6 +65,7 @@ DONATION_FIELDS = (
 class Options:
     allow_disabled_algorithms = False
     clean = False
+    pretty = True
     rename_apks = False
 
 
@@ -656,9 +659,7 @@ class UpdateTest(unittest.TestCase):
         fdroidserver.update.config = config
         os.chdir(os.path.join(localmodule, 'tests'))
 
-        apksigner = fdroidserver.common.find_apksigner()
-        if apksigner:
-            config['apksigner'] = apksigner
+        if 'apksigner' in config:
             apk_info = fdroidserver.update.scan_apk('v2.only.sig_2.apk')
             self.assertIsNone(apk_info.get('maxSdkVersion'))
             self.assertEqual(apk_info.get('versionName'), 'v2-only')
@@ -1375,6 +1376,35 @@ class UpdateTest(unittest.TestCase):
         app = dict()
         fdroidserver.update._set_author_entry(app, key, f)
         self.assertIsNone(app.get(key))
+
+    def test_status_update_json(self):
+        fdroidserver.common.config = {}
+        fdroidserver.update.config = {}
+        fdroidserver.update.options = Options
+        with tempfile.TemporaryDirectory() as tmpdir:
+            os.chdir(tmpdir)
+            with mock.patch('sys.argv', ['fdroid update', '']):
+                fdroidserver.update.status_update_json([], [])
+                with open('repo/status/update.json') as fp:
+                    data = json.load(fp)
+                self.assertTrue('apksigner' in data)
+
+                fdroidserver.update.config = {
+                    'apksigner': 'apksigner',
+                }
+                fdroidserver.update.status_update_json([], [])
+                with open('repo/status/update.json') as fp:
+                    data = json.load(fp)
+                self.assertEqual(shutil.which(fdroidserver.update.config['apksigner']), data['apksigner'])
+
+                fdroidserver.update.config = {}
+                fdroidserver.common.fill_config_defaults(fdroidserver.update.config)
+                fdroidserver.update.status_update_json([], [])
+                with open('repo/status/update.json') as fp:
+                    data = json.load(fp)
+                self.assertEqual(fdroidserver.update.config.get('apksigner'), data['apksigner'])
+                self.assertEqual(fdroidserver.update.config['jarsigner'], data['jarsigner'])
+                self.assertEqual(fdroidserver.update.config['keytool'], data['keytool'])
 
 
 if __name__ == "__main__":

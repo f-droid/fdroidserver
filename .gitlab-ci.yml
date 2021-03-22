@@ -5,14 +5,19 @@ variables:
   GIT_DEPTH: 1
 
 
-test:
+ci-images-base run-tests:
   image: registry.gitlab.com/fdroid/ci-images-base
   script:
     - $pip install -e .[test]
-    # the `fdroid build` test in tests/run-tests needs android-23
-    - echo y | $ANDROID_HOME/tools/bin/sdkmanager "platforms;android-23" > /dev/null
-    - cd tests
-    - ./complete-ci-tests
+    - ./tests/run-tests
+    # make sure that translations do not cause stacktraces
+    - cd $CI_PROJECT_DIR/locale
+    - for locale in *; do
+          test -d $locale || continue;
+          for cmd in `sed -n 's/.*("\(.*\)", *_.*/\1/p' $CI_PROJECT_DIR/fdroid`; do
+              LANGUAGE=$locale $CI_PROJECT_DIR/fdroid $cmd --help > /dev/null;
+          done
+      done
 
 # Test that the parsing of the .yml metadata format didn't change from last
 # released version. This uses the commit ID of the release tags,

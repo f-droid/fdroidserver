@@ -262,6 +262,11 @@ def fill_config_defaults(thisconfig):
     if 'keytool' not in thisconfig and shutil.which('keytool'):
         thisconfig['keytool'] = shutil.which('keytool')
 
+    # enable apksigner by default so v2/v3 APK signatures validate
+    find_apksigner(thisconfig)
+    if not thisconfig.get('apksigner'):
+        logging.warning(_('apksigner not found! Cannot sign or verify modern APKs'))
+
     for k in ['ndk_paths', 'java_paths']:
         d = thisconfig[k]
         for k2 in d.copy():
@@ -456,26 +461,35 @@ def assert_config_keystore(config):
                               + "you can create one using: fdroid update --create-key")
 
 
-def find_apksigner():
-    """
+def find_apksigner(config):
+    """Searches for the best version apksigner and adds it to the config
+
     Returns the best version of apksigner following this algorithm:
     * use config['apksigner'] if set
     * try to find apksigner in path
     * find apksigner in build-tools starting from newest installed
       going down to MINIMUM_APKSIGNER_BUILD_TOOLS_VERSION
     :return: path to apksigner or None if no version is found
+
     """
-    if set_command_in_config('apksigner'):
-        return config['apksigner']
-    build_tools_path = os.path.join(config['sdk_path'], 'build-tools')
+    command = 'apksigner'
+    if command in config:
+        return
+
+    tmp = find_command(command)
+    if tmp is not None:
+        config[command] = tmp
+        return
+
+    build_tools_path = os.path.join(config.get('sdk_path', ''), 'build-tools')
     if not os.path.isdir(build_tools_path):
-        return None
+        return
     for f in sorted(os.listdir(build_tools_path), reverse=True):
         if not os.path.isdir(os.path.join(build_tools_path, f)):
             continue
         try:
             if LooseVersion(f) < LooseVersion(MINIMUM_APKSIGNER_BUILD_TOOLS_VERSION):
-                return None
+                return
         except TypeError:
             continue
         if os.path.exists(os.path.join(build_tools_path, f, 'apksigner')):
@@ -483,7 +497,6 @@ def find_apksigner():
             logging.info("Using %s " % apksigner)
             # memoize result
             config['apksigner'] = apksigner
-            return config['apksigner']
 
 
 def find_sdk_tools_cmd(cmd):
@@ -3001,7 +3014,7 @@ def _zipalign(unsigned_apk, aligned_apk):
 
 
 def apk_implant_signatures(apkpath, signaturefile, signedfile, manifest):
-    """Implats a signature from metadata into an APK.
+    """Implants a signature from metadata into an APK.
 
     Note: this changes there supplied APK in place. So copy it if you
     need the original to be preserved.
@@ -3061,82 +3074,48 @@ def get_min_sdk_version(apk):
 def sign_apk(unsigned_path, signed_path, keyalias):
     """Sign and zipalign an unsigned APK, then save to a new file, deleting the unsigned
 
-    Use apksigner for making v2 and v3 signature for apks with targetSDK >=30 as
-    otherwise they won't be installable on Android 11/R.
+    NONE is a Java keyword used to configure smartcards as the
+    keystore.  Otherwise, the keystore is a local file.
+    https://docs.oracle.com/javase/7/docs/technotes/guides/security/p11guide.html#KeyToolJarSigner
 
-    Otherwise use jarsigner for v1 only signatures until we have apksig v2/v3
-    signature transplantig support.
-
-    When using jarsigner we need to manually select the hash algorithm,
-    apksigner does this automatically. Apksigner also does the zipalign for us.
-
-    SHA-256 support was added in android-18 (4.3), before then, the only options were MD5
-    and SHA1. This aims to use SHA-256 when the APK does not target
-    older Android versions, and is therefore safe to do so.
-
-    https://issuetracker.google.com/issues/36956587
-    https://android-review.googlesource.com/c/platform/libcore/+/44491
+    When using smartcards, apksigner does not use the same options has
+    Java/keytool/jarsigner (-providerName, -providerClass,
+    -providerArg, -storetype).  apksigner documents the options as
+    --ks-provider-class and --ks-provider-arg.  Those seem to be
+    accepted but fail when actually making a signature with weird
+    internal exceptions. We use the options that actually work.  From:
+    https://geoffreymetais.github.io/code/key-signing/#scripting
 
     """
-    apk = _get_androguard_APK(unsigned_path)
-    if apk.get_effective_target_sdk_version() >= 30:
-        if config['keystore'] == 'NONE':
-            # NOTE: apksigner doesn't like -providerName/--provider-name at all, don't use that.
-            #       apksigner documents the options as --ks-provider-class and --ks-provider-arg
-            #       those seem to be accepted but fail when actually making a signature with
-            #       weird internal exceptions. Those options actually work.
-            #       From: https://geoffreymetais.github.io/code/key-signing/#scripting
-            apksigner_smartcardoptions = config['smartcardoptions'].copy()
-            if '-providerName' in apksigner_smartcardoptions:
-                pos = config['smartcardoptions'].index('-providerName')
-                # remove -providerName and it's argument
-                del apksigner_smartcardoptions[pos]
-                del apksigner_smartcardoptions[pos]
-            replacements = {'-storetype': '--ks-type',
-                            '-providerClass': '--provider-class',
-                            '-providerArg': '--provider-arg'}
-            signing_args = [replacements.get(n, n) for n in apksigner_smartcardoptions]
-        else:
-            signing_args = ['--key-pass', 'env:FDROID_KEY_PASS']
-        if not find_apksigner():
-            raise BuildException(_("apksigner not found, it's required for signing!"))
-        cmd = [find_apksigner(), 'sign',
-               '--ks', config['keystore'],
-               '--ks-pass', 'env:FDROID_KEY_STORE_PASS']
-        cmd += signing_args
-        cmd += ['--ks-key-alias', keyalias,
-                '--in', unsigned_path,
-                '--out', signed_path]
-        p = FDroidPopen(cmd, envs={
-            'FDROID_KEY_STORE_PASS': config['keystorepass'],
-            'FDROID_KEY_PASS': config.get('keypass', "")})
-        if p.returncode != 0:
-            raise BuildException(_("Failed to sign application"), p.output)
-        os.remove(unsigned_path)
+    if config['keystore'] == 'NONE':
+        apksigner_smartcardoptions = config['smartcardoptions'].copy()
+        if '-providerName' in apksigner_smartcardoptions:
+            pos = config['smartcardoptions'].index('-providerName')
+            # remove -providerName and it's argument
+            del apksigner_smartcardoptions[pos]
+            del apksigner_smartcardoptions[pos]
+        replacements = {'-storetype': '--ks-type',
+                        '-providerClass': '--provider-class',
+                        '-providerArg': '--provider-arg'}
+        signing_args = [replacements.get(n, n) for n in apksigner_smartcardoptions]
     else:
-
-        if get_min_sdk_version(apk) < 18:
-            signature_algorithm = ['-sigalg', 'SHA1withRSA', '-digestalg', 'SHA1']
-        else:
-            signature_algorithm = ['-sigalg', 'SHA256withRSA', '-digestalg', 'SHA-256']
-        if config['keystore'] == 'NONE':
-            signing_args = config['smartcardoptions']
-        else:
-            signing_args = ['-keypass:env', 'FDROID_KEY_PASS']
-
-        cmd = [config['jarsigner'], '-keystore', config['keystore'],
-               '-storepass:env', 'FDROID_KEY_STORE_PASS']
-        cmd += signing_args
-        cmd += signature_algorithm
-        cmd += [unsigned_path, keyalias]
-        p = FDroidPopen(cmd, envs={
-            'FDROID_KEY_STORE_PASS': config['keystorepass'],
-            'FDROID_KEY_PASS': config.get('keypass', "")})
-        if p.returncode != 0:
-            raise BuildException(_("Failed to sign application"), p.output)
-
-        _zipalign(unsigned_path, signed_path)
-        os.remove(unsigned_path)
+        signing_args = ['--key-pass', 'env:FDROID_KEY_PASS']
+    apksigner = config.get('apksigner', '')
+    if not shutil.which(apksigner):
+        raise BuildException(_("apksigner not found, it's required for signing!"))
+    cmd = [apksigner, 'sign',
+           '--ks', config['keystore'],
+           '--ks-pass', 'env:FDROID_KEY_STORE_PASS']
+    cmd += signing_args
+    cmd += ['--ks-key-alias', keyalias,
+            '--in', unsigned_path,
+            '--out', signed_path]
+    p = FDroidPopen(cmd, envs={
+        'FDROID_KEY_STORE_PASS': config['keystorepass'],
+        'FDROID_KEY_PASS': config.get('keypass', "")})
+    if p.returncode != 0:
+        raise BuildException(_("Failed to sign application"), p.output)
+    os.remove(unsigned_path)
 
 
 def verify_apks(signed_apk, unsigned_apk, tmp_dir):

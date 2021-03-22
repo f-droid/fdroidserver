@@ -10,7 +10,6 @@ import shutil
 import sys
 import tempfile
 import unittest
-import yaml
 
 
 localmodule = os.path.realpath(
@@ -68,11 +67,7 @@ class InitTest(unittest.TestCase):
 
         sys.argv = ['fdroid init', '--keystore', 'keystore.jks', '--repo-keyalias=sova']
         fdroidserver.init.main()
-        with open('config.yml') as fp:
-            config = yaml.safe_load(fp)
-        self.assertTrue(os.path.exists(config['keystore']))
-        self.assertTrue(os.path.exists(config['apksigner']))
-        self.assertEqual(apksigner, config['apksigner'])
+        self.assertEqual(apksigner, fdroidserver.init.config.get('apksigner'))
 
 
 if __name__ == "__main__":
