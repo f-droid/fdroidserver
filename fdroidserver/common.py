@@ -1488,8 +1488,8 @@ def remove_debuggable_flags(root_dir):
                         os.path.join(root, 'AndroidManifest.xml'))
 
 
-vcsearch_g = re.compile(r'''\b[Vv]ersionCode\s*=?\s*["']*([0-9_]+)["']*''').search
-vnsearch_g = re.compile(r'''\b[Vv]ersionName\s*=?\s*(["'])((?:(?=(\\?))\3.)*?)\1''').search
+vcsearch_g = re.compile(r'''\b[Vv]ersionCode\s*=?\s*["'(]*([0-9_]+)["')]*''').search
+vnsearch_g = re.compile(r'''\b[Vv]ersionName\s*=?\s*\(?(["'])((?:(?=(\\?))\3.)*?)\1''').search
 vnssearch_g = re.compile(r'''\b[Vv]ersionNameSuffix\s*=?\s*(["'])((?:(?=(\\?))\3.)*?)\1''').search
 psearch_g = re.compile(r'''\b(packageName|applicationId)\s*=*\s*["']([^"']+)["']''').search
 fsearch_g = re.compile(r'''\b(applicationIdSuffix)\s*=*\s*["']([^"']+)["']''').search
