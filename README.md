@@ -56,11 +56,10 @@ The test suite for all of the `fdroid` commands is in the _tests/_
 subdir.  _.gitlab-ci.yml_ and _.travis.yml_ run this test suite on
 various configurations.
 
-* _tests/complete-ci-tests_ runs _pylint_ and all tests on two
-  different pyvenvs
 * _tests/run-tests_ runs the whole test suite
 * _tests/*.TestCase_ are individual unit tests for all of the `fdroid`
   commands, which can be run separately, e.g. `./update.TestCase`.
+* run one test: `tests/common.TestCase CommonTest.test_get_apk_id`
 
 
 #### Additional tests for different linux distributions
