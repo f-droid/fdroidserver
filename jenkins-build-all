@@ -96,7 +96,8 @@ else
 fi
 
 # force global timeout to 6 hours
-sed -Ei 's,^(\s+endtime\s*=\s*time\.time\(\))\s*.*,\1 + 6 * 60 * 60  # 6 hours,' fdroidserver/build.py
+sed -Ei 's,^(\s+endtime\s*=\s*time\.time\(\))\s*.*,\1 + 6 * 60 * 60  # 6 hours,' \
+    $WORKSPACE/fdroidserver/build.py
 
 $WORKSPACE/fdroid build --verbose --latest --no-tarball --all $wikiflag
 
