@@ -285,7 +285,7 @@ def regsub_file(pattern, repl, path):
         f.write(text)
 
 
-def read_config(opts):
+def read_config(opts=None):
     """Read the repository config
 
     The config is read from config_file, which is in the current
@@ -489,14 +489,15 @@ def find_apksigner(config):
             continue
         try:
             if LooseVersion(f) < LooseVersion(MINIMUM_APKSIGNER_BUILD_TOOLS_VERSION):
+                logging.debug("Local Android SDK only has outdated apksigner versions")
                 return
         except TypeError:
             continue
         if os.path.exists(os.path.join(build_tools_path, f, 'apksigner')):
             apksigner = os.path.join(build_tools_path, f, 'apksigner')
             logging.info("Using %s " % apksigner)
-            # memoize result
             config['apksigner'] = apksigner
+            return
 
 
 def find_sdk_tools_cmd(cmd):
@@ -767,6 +768,10 @@ def setup_status_output(start_timestamp):
             'modifiedFiles': git_repo.git().ls_files(modified=True).split(),
             'untrackedFiles': git_repo.untracked_files,
         }
+    etc_issue_net = '/etc/issue.net'
+    if os.path.exists(etc_issue_net):
+        with open(etc_issue_net) as fp:
+            output[etc_issue_net] = fp.read(100).strip()
     write_running_status_json(output)
     return output
 

@@ -40,7 +40,11 @@ class hashabledict(OrderedDict):
         return tuple((k, self[k]) for k in sorted(self))
 
     def __hash__(self):
-        return hash(self.__key())
+        try:
+            return hash(self.__key())
+        except TypeError as e:
+            print(self.__key())
+            raise e
 
     def __eq__(self, other):
         return self.__key() == other.__key()
@@ -64,6 +68,49 @@ class Decoder(json.JSONDecoder):
         return set(values), end
 
 
+def _add_diffoscope_info(d):
+    """Add diffoscope setup metadata to provided dict under 'diffoscope' key
+
+    The imports are broken out at stages since various versions of
+    diffoscope support various parts of these.
+
+    """
+    try:
+        import diffoscope
+        d['diffoscope'] = hashabledict()
+        d['diffoscope']['VERSION'] = diffoscope.VERSION
+
+        from diffoscope.comparators import ComparatorManager
+        ComparatorManager().reload()
+
+        from diffoscope.tools import tool_check_installed, tool_required
+        external_tools = sorted(tool_required.all)
+        external_tools = [
+            tool
+            for tool in external_tools
+            if not tool_check_installed(tool)
+        ]
+        d['diffoscope']['External-Tools-Required'] = tuple(external_tools)
+
+        from diffoscope.tools import OS_NAMES, get_current_os
+        from diffoscope.external_tools import EXTERNAL_TOOLS
+        current_os = get_current_os()
+        os_list = [current_os] if (current_os in OS_NAMES) else iter(OS_NAMES)
+        for os_ in os_list:
+            tools = set()
+            for x in external_tools:
+                try:
+                    tools.add(EXTERNAL_TOOLS[x][os_])
+                except KeyError:
+                    pass
+            d['diffoscope']['Available-in-{}-packages'.format(OS_NAMES[os_])] = tuple(sorted(tools))
+
+        from diffoscope.tools import python_module_missing
+        d['diffoscope']['Missing-Python-Modules'] = tuple(sorted(python_module_missing.modules))
+    except ImportError:
+        pass
+
+
 def write_json_report(url, remote_apk, unsigned_apk, compare_result):
     """write out the results of the verify run to JSON
 
@@ -81,6 +128,7 @@ def write_json_report(url, remote_apk, unsigned_apk, compare_result):
     else:
         data = OrderedDict()
     output = hashabledict()
+    _add_diffoscope_info(output)
     output['url'] = url
     for key, filename in (('local', unsigned_apk), ('remote', remote_apk)):
         d = hashabledict()
