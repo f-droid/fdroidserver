@@ -693,6 +693,8 @@ class CommonTest(unittest.TestCase):
         android_home = os.getenv('ANDROID_HOME')
         if not android_home or not os.path.isdir(android_home):
             self.skipTest('SKIPPING since ANDROID_HOME (%s) is not a dir!' % android_home)
+        if not glob.glob(os.path.join(android_home, 'build-tools', '*', 'apksigner')):
+            self.skipTest('SKIPPING since ANDROID_HOME (%s) build-tools has no apksigner!' % android_home)
         fdroidserver.common.config = {'sdk_path': android_home}
         os.environ['PATH'] = '/fake/path/to/avoid/conflicts'
         config = fdroidserver.common.read_config()
