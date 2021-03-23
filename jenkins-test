@@ -76,5 +76,3 @@ echo "repo_pubkey: 308204e1308202c9a003020102020434597643300d06092a864886f70d010
 sed -i '/^repo_pubkey: /d' config.yml
 # when everything is copied over to run on SIGN machine
 ../fdroid signindex --verbose
-
-../fdroid checkupdates --auto --autoonly --commit
