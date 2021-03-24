@@ -89,8 +89,6 @@ debian_testing:
     - ./run-tests
 
 # Test using latest LTS set up with the PPA, including Recommends.
-# focal's apksigner, which comes from Recommends:, requires binfmt
-# support in the kernel.
 ubuntu_lts_ppa:
   image: ubuntu:latest
   <<: *apt-template
@@ -104,10 +102,7 @@ ubuntu_lts_ppa:
     - echo "deb http://ppa.launchpad.net/fdroid/fdroidserver/ubuntu $RELEASE main" >> /etc/apt/sources.list
     - apt-get update
     - apt-get dist-upgrade
-    - mount | grep binfmt_misc || mount -t binfmt_misc binfmt_misc /proc/sys/fs/binfmt_misc
-    - apt-get install --install-recommends binfmt-support fdroidserver git python3-defusedxml python3-setuptools
-    - ls -l /proc/sys/fs/binfmt_misc || true
-    - test -e /proc/sys/fs/binfmt_misc/jarwrapper || apt -qy purge apksigner
+    - apt-get install --install-recommends fdroidserver git python3-setuptools
     - cd tests
     - ./run-tests
 
