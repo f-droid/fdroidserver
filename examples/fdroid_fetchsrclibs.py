@@ -23,6 +23,7 @@ def main():
     pkgs = common.read_pkg_args(options.appid, True)
     allapps = metadata.read_metadata(pkgs)
     apps = common.read_app_args(options.appid, allapps, True)
+    common.read_config(options)
     srclib_dir = os.path.join('build', 'srclib')
     os.makedirs(srclib_dir, exist_ok=True)
     srclibpaths = []
