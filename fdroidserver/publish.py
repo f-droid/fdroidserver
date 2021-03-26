@@ -346,9 +346,9 @@ def main():
                 # metadata. This means we're going to prepare both a locally
                 # signed APK and a version signed with the developers key.
 
-                signaturefile, signedfile, manifest, v2_files = signingfiles
+                signature_file, _ignored, manifest, v2_files = signingfiles
 
-                with open(signaturefile, 'rb') as f:
+                with open(signature_file, 'rb') as f:
                     devfp = common.signer_fingerprint_short(common.get_certificate(f.read()))
                 devsigned = '{}_{}_{}.apk'.format(appid, vercode, devfp)
                 devsignedtmp = os.path.join(tmp_dir, devsigned)

@@ -2943,13 +2943,13 @@ def apk_signer_fingerprint_short(apk_path):
 def metadata_get_sigdir(appid, vercode=None):
     """Get signature directory for app"""
     if vercode:
-        return os.path.join('metadata', appid, 'signatures', vercode)
+        return os.path.join('metadata', appid, 'signatures', str(vercode))
     else:
         return os.path.join('metadata', appid, 'signatures')
 
 
 def metadata_find_developer_signature(appid, vercode=None):
-    """Tires to find the developer signature for given appid.
+    """Tries to find the developer signature for given appid.
 
     This picks the first signature file found in metadata an returns its
     signature.
@@ -2971,52 +2971,63 @@ def metadata_find_developer_signature(appid, vercode=None):
                     appversigdirs.append(appversigdir)
 
     for sigdir in appversigdirs:
-        sigs = glob.glob(os.path.join(sigdir, '*.DSA')) + \
-            glob.glob(os.path.join(sigdir, '*.EC')) + \
-            glob.glob(os.path.join(sigdir, '*.RSA'))
-        if len(sigs) > 1:
+        signature_block_files = (
+            glob.glob(os.path.join(sigdir, '*.DSA'))
+            + glob.glob(os.path.join(sigdir, '*.EC'))
+            + glob.glob(os.path.join(sigdir, '*.RSA'))
+        )
+        if len(signature_block_files) > 1:
             raise FDroidException('ambiguous signatures, please make sure there is only one signature in \'{}\'. (The signature has to be the App maintainers signature for version of the APK.)'.format(sigdir))
-        for sig in sigs:
-            with open(sig, 'rb') as f:
+        for signature_block_file in signature_block_files:
+            with open(signature_block_file, 'rb') as f:
                 return signer_fingerprint(get_certificate(f.read()))
     return None
 
 
 def metadata_find_signing_files(appid, vercode):
-    """Gets a list of singed manifests and signatures.
+    """Gets a list of signed manifests and signatures.
+
+    https://docs.oracle.com/javase/tutorial/deployment/jar/intro.html
+    https://source.android.com/security/apksigning/v2
+    https://source.android.com/security/apksigning/v3
 
     :param appid: app id string
     :param vercode: app version code
     :returns: a list of 4-tuples for each signing key with following paths:
-        (signature_file, singed_file, manifest_file, v2_files), where v2_files
-        is either a (sb_offset_file, sb_file) pair or None
+        (signature_file, signature_block_file, manifest, v2_files), where v2_files
+        is either a (apk_signing_block_offset_file, apk_signing_block_file) pair or None
+
     """
     ret = []
     sigdir = metadata_get_sigdir(appid, vercode)
-    sigs = glob.glob(os.path.join(sigdir, '*.DSA')) + \
-        glob.glob(os.path.join(sigdir, '*.EC')) + \
-        glob.glob(os.path.join(sigdir, '*.RSA'))
-    extre = re.compile(r'(\.DSA|\.EC|\.RSA)$')
-    apk_sb = os.path.isfile(os.path.join(sigdir, "APKSigningBlock"))
-    apk_sbo = os.path.isfile(os.path.join(sigdir, "APKSigningBlockOffset"))
-    if os.path.isfile(apk_sb) and os.path.isfile(apk_sbo):
-        v2_files = apk_sb, apk_sbo
+    signature_block_files = (
+        glob.glob(os.path.join(sigdir, '*.DSA'))
+        + glob.glob(os.path.join(sigdir, '*.EC'))
+        + glob.glob(os.path.join(sigdir, '*.RSA'))
+    )
+    signature_block_pat = re.compile(r'(\.DSA|\.EC|\.RSA)$')
+    apk_signing_block = os.path.isfile(os.path.join(sigdir, "APKSigningBlock"))
+    apk_signing_block_offset = os.path.isfile(os.path.join(sigdir, "APKSigningBlockOffset"))
+    if os.path.isfile(apk_signing_block) and os.path.isfile(apk_signing_block_offset):
+        v2_files = apk_signing_block, apk_signing_block_offset
     else:
         v2_files = None
-    for sig in sigs:
-        sf = extre.sub('.SF', sig)
-        if os.path.isfile(sf):
-            mf = os.path.join(sigdir, 'MANIFEST.MF')
-            if os.path.isfile(mf):
-                ret.append((sig, sf, mf, v2_files))
+    for signature_block_file in signature_block_files:
+        signature_file = signature_block_pat.sub('.SF', signature_block_file)
+        if os.path.isfile(signature_file):
+            manifest = os.path.join(sigdir, 'MANIFEST.MF')
+            if os.path.isfile(manifest):
+                ret.append((signature_block_file, signature_file, manifest, v2_files))
     return ret
 
 
 def metadata_find_developer_signing_files(appid, vercode):
     """Get developer signature files for specified app from metadata.
 
-    :returns: A triplet of paths for signing files from metadata:
-        (signature_file, singed_file, manifest_file)
+    :returns: a list of 4-tuples for each signing key with following paths:
+        (signature_file, signature_block_file, manifest, v2_files), where v2_files
+        is either a (apk_signing_block_offset_file, apk_signing_block_file) pair or None
+
     """
     allsigningfiles = metadata_find_signing_files(appid, vercode)
     if allsigningfiles and len(allsigningfiles) == 1:
@@ -3093,6 +3104,13 @@ def _zipalign(unsigned_apk, aligned_apk):
 def apk_implant_signatures(apkpath, outpath, manifest):
     """Implants a signature from metadata into an APK.
 
+    Note: this changes there supplied APK in place. So copy it if you
+    need the original to be preserved.
+
+    https://docs.oracle.com/javase/tutorial/deployment/jar/intro.html
+    https://source.android.com/security/apksigning/v2
+    https://source.android.com/security/apksigning/v3
+
     :param apkpath: location of the unsigned apk
     :param outpath: location of the output apk
     """
@@ -3103,6 +3121,10 @@ def apk_implant_signatures(apkpath, outpath, manifest):
 
 def apk_extract_signatures(apkpath, outdir):
     """Extracts a signature files from APK and puts them into target directory.
+
+    https://docs.oracle.com/javase/tutorial/deployment/jar/intro.html
+    https://source.android.com/security/apksigning/v2
+    https://source.android.com/security/apksigning/v3
 
     :param apkpath: location of the apk
     :param outdir: folder where the extracted signature files will be stored
