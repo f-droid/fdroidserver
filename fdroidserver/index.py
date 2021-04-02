@@ -1072,7 +1072,12 @@ def download_repo_index(url_str, etag=None, verify_fingerprint=True, timeout=600
             raise VerificationException(_("No fingerprint in URL."))
         fingerprint = query['fingerprint'][0]
 
-    url = urllib.parse.SplitResult(url.scheme, url.netloc, url.path + '/index-v1.jar', '', '')
+    if url.path.endswith('/index-v1.jar'):
+        path = url.path[:-13].rstrip('/')
+    else:
+        path = url.path.rstrip('/')
+
+    url = urllib.parse.SplitResult(url.scheme, url.netloc, path + '/index-v1.jar', '', '')
     download, new_etag = net.http_get(url.geturl(), etag, timeout)
 
     if download is None:
