@@ -34,7 +34,7 @@ from .exception import BuildException, VCSException
 config = None
 options = None
 
-DEFAULT_JSON_PER_BUILD = {'errors': [], 'warnings': [], 'infos': []}
+DEFAULT_JSON_PER_BUILD = {'errors': [], 'warnings': [], 'infos': []}  # type: ignore
 json_per_build = DEFAULT_JSON_PER_BUILD
 
 MAVEN_URL_REGEX = re.compile(r"""\smaven\s*{.*?(?:setUrl|url)\s*=?\s*(?:uri)?\(?\s*["']?([^\s"']+)["']?[^}]*}""",
