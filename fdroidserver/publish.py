@@ -268,6 +268,7 @@ def main():
 
     allapps = metadata.read_metadata()
     vercodes = common.read_pkg_args(options.appid, True)
+    common.get_metadata_files(vercodes)     # only check appids
     signed_apks = dict()
     generated_keys = dict()
     allaliases = check_for_key_collisions(allapps)

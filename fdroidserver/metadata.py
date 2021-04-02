@@ -566,17 +566,7 @@ def read_metadata(appids={}, sort_by_time=False):
 
     if appids:
         vercodes = fdroidserver.common.read_pkg_args(appids)
-        found_invalid = False
-        metadatafiles = []
-        for appid in vercodes.keys():
-            f = os.path.join('metadata', '%s.yml' % appid)
-            if os.path.exists(f):
-                metadatafiles.append(f)
-            else:
-                found_invalid = True
-                logging.critical(_("No such package: %s") % appid)
-        if found_invalid:
-            raise FDroidException(_("Found invalid appids in arguments"))
+        metadatafiles = fdroidserver.common.get_metadata_files(vercodes)
     else:
         metadatafiles = (glob.glob(os.path.join('metadata', '*.yml'))
                          + glob.glob('.fdroid.yml'))
