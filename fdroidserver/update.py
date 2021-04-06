@@ -166,23 +166,24 @@ def status_update_json(apps, apks):
                     gotcurrentver = True
                 apklist.append(apk)
         validapks = 0
-        for build in app.get('Builds', []):
-            if not build.get('disable'):
-                builtit = False
-                for apk in apklist:
-                    if apk['versionCode'] == int(build.versionCode):
-                        builtit = True
-                        validapks += 1
-                        break
-                if not builtit:
-                    failedBuilds = output['failedBuilds']
-                    if appid not in failedBuilds:
-                        failedBuilds[appid] = []
-                    failedBuilds[appid].append(build.versionCode)
-        if validapks == 0:
-            output['noPackages'].append(appid)
         if app.get('Disabled'):
             output['disabled'].append(appid)
+        else:
+            for build in app.get('Builds', []):
+                if not build.get('disable'):
+                    builtit = False
+                    for apk in apklist:
+                        if apk['versionCode'] == int(build.versionCode):
+                            builtit = True
+                            validapks += 1
+                            break
+                    if not builtit:
+                        failedBuilds = output['failedBuilds']
+                        if appid not in failedBuilds:
+                            failedBuilds[appid] = []
+                        failedBuilds[appid].append(build.versionCode)
+        if validapks == 0:
+            output['noPackages'].append(appid)
         if not gotcurrentver:
             output['needsUpdate'].append(appid)
         if app.get('UpdateCheckMode') == 'None' and not app.get('Disabled'):
