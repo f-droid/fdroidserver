@@ -1181,6 +1181,7 @@ def main():
                     common.force_exit(1)
                 add_failed_builds_entry(failed_builds, appid, build, vcse)
                 wikilog = str(vcse)
+                common.deploy_build_log_with_rsync(appid, build.versionCode, str(vcse))
             except FDroidException as e:
                 with open(os.path.join(log_dir, appid + '.log'), 'a+') as f:
                     f.write('\n\n============================================================\n')
