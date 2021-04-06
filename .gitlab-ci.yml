@@ -5,6 +5,7 @@ variables:
   GIT_DEPTH: 1
 
 
+# Run the whole test suite in an environment that is like the buildserver guest VM.
 ci-images-base run-tests:
   image: registry.gitlab.com/fdroid/ci-images-base
   script:
@@ -67,6 +68,11 @@ metadata_v0:
     - apt-get update
     - apt-get dist-upgrade
 
+
+# Since F-Droid uses Debian as its default platform, from production
+# servers to CI to contributor machines, it is important to know when
+# changes in Debian break our stuff.  This tests against the latest
+# dependencies as they are included in Debian.
 debian_testing:
   image: debian:testing
   <<: *apt-template
@@ -88,6 +94,7 @@ debian_testing:
     - cd tests
     - ./run-tests
 
+
 # Test using latest LTS set up with the PPA, including Recommends.
 ubuntu_lts_ppa:
   image: ubuntu:latest
@@ -105,6 +112,7 @@ ubuntu_lts_ppa:
     - apt-get install --install-recommends fdroidserver git python3-setuptools
     - cd tests
     - ./run-tests
+
 
 # Test using Ubuntu/bionic LTS (supported til 2022) with all depends
 # from pypi.  The venv is used to isolate the dist tarball generation
@@ -131,6 +139,7 @@ ubuntu_bionic_pip:
     - cd fdroidserver-*
     - fdroid=`which fdroid` ./tests/run-tests
 
+
 # test install process on a bleeding edge distro with pip
 arch_pip_install:
   image: archlinux/base
@@ -144,6 +153,8 @@ arch_pip_install:
     - fdroid update --help
 
 
+# The gradlew-fdroid tests are isolated from the rest of the test
+# suite, so they run as their own job.
 gradlew-fdroid:
   image: debian:bullseye
   <<: *apt-template
@@ -157,6 +168,7 @@ gradlew-fdroid:
     - ./tests/test-gradlew-fdroid
 
 
+# Run all the various linters and static analysis tools.
 lint_format_safety_bandit_checks:
   image: alpine:3.10 # cannot upgrade until bandit supports Python 3.8
   variables:
@@ -188,6 +200,7 @@ lint_format_safety_bandit_checks:
     - pybabel compile --domain=fdroidserver --directory locale 2>&1 | (grep -F "error:" && exit 1) || true
     - exit $EXITVALUE
 
+
 lint_mypy:
   image: python:3.9-buster
   script:
@@ -195,6 +208,7 @@ lint_mypy:
     - pip install -e .[test]
     # exclude vendored file
     - mypy --exclude fdroidserver/apksigcopier.py
+
 
 fedora_latest:
   image: fedora:latest
@@ -246,6 +260,7 @@ fedora_latest:
     - su testuser --login --command
         "cd `pwd`; export ANDROID_HOME=$ANDROID_HOME; fdroid=~testuser/.local/bin/fdroid ./run-tests"
 
+
 gradle:
   image: debian:bullseye
   <<: *apt-template
@@ -272,6 +287,8 @@ gradle:
       fi
     - ./tests/gradle-release-checksums.py
 
+
+# Run an actual build in a simple, faked version of the buildserver guest VM.
 fdroid build:
   image: registry.gitlab.com/fdroid/ci-images-client
   only:
@@ -318,6 +335,10 @@ fdroid build:
     - fdroid build --verbose --on-server --no-tarball --latest org.fdroid.fdroid
 
 
+# test the plugin API and specifically the fetchsrclibs plugin, which
+# is used by the `fdroid build` job.  This uses a fixed commit from
+# fdroiddata because that one is known to work, and this is a CI job,
+# so it should be isolated from the normal churn of fdroiddata.
 plugin_fetchsrclibs:
   image: debian:buster
   <<: *apt-template
