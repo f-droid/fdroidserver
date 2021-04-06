@@ -8,7 +8,7 @@ variables:
 ci-images-base run-tests:
   image: registry.gitlab.com/fdroid/ci-images-base
   script:
-    - $pip install -e .[test]
+    - $pip install -e .
     - ./tests/run-tests
     # make sure that translations do not cause stacktraces
     - cd $CI_PROJECT_DIR/locale
