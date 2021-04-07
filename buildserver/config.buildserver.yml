@@ -12,7 +12,7 @@ ndk_paths:
   r19c: /home/vagrant/android-ndk/r19c
   r20b: /home/vagrant/android-ndk/r20b
   r21e: /home/vagrant/android-ndk/r21e
-  r22: /home/vagrant/android-ndk/r22
+  r22b: /home/vagrant/android-ndk/r22b
 
 java_paths:
   8: /usr/lib/jvm/java-8-openjdk-amd64
