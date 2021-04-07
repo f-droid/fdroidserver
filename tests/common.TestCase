@@ -1129,6 +1129,7 @@ class CommonTest(unittest.TestCase):
                          fdroidserver.common.parse_androidmanifests(paths, app))
 
     def test_get_all_gradle_and_manifests(self):
+        """Test whether the function works with relative and absolute paths"""
         a = fdroidserver.common.get_all_gradle_and_manifests(os.path.join('source-files', 'cn.wildfirechat.chat'))
         paths = [
             os.path.join('source-files', 'cn.wildfirechat.chat', 'avenginekit', 'build.gradle'),
@@ -1144,6 +1145,11 @@ class CommonTest(unittest.TestCase):
             os.path.join('source-files', 'cn.wildfirechat.chat', 'settings.gradle'),
         ]
         self.assertEqual(sorted(paths), sorted(a))
+
+        abspath = os.path.join(self.basedir, 'source-files', 'realm')
+        p = fdroidserver.common.get_all_gradle_and_manifests(abspath)
+        self.assertEqual(1, len(p))
+        self.assertTrue(p[0].startswith(abspath))
 
     def test_get_gradle_subdir(self):
         subdirs = {
