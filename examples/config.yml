@@ -22,7 +22,7 @@
 #   r19c: None
 #   r20b: None
 #   r21e: None
-#   r22: None
+#   r22b: None
 
 # Directory to store downloaded tools in (i.e. gradle versions)
 # By default, these are stored in ~/.cache/fdroidserver
