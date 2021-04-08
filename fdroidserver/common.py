@@ -618,13 +618,35 @@ def read_pkg_args(appid_versionCode_pairs, allow_vercodes=False):
     return vercodes
 
 
+def get_metadata_files(vercodes):
+    """
+    Build a list of metadata files and raise an exception for invalid appids.
+
+    :param vercodes: version codes as returned by read_pkg_args()
+    :returns: a list of corresponding metadata/*.yml files
+    """
+    found_invalid = False
+    metadatafiles = []
+    for appid in vercodes.keys():
+        f = os.path.join('metadata', '%s.yml' % appid)
+        if os.path.exists(f):
+            metadatafiles.append(f)
+        else:
+            found_invalid = True
+            logging.critical(_("No such package: %s") % appid)
+    if found_invalid:
+        raise FDroidException(_("Found invalid appids in arguments"))
+    return metadatafiles
+
+
 def read_app_args(appid_versionCode_pairs, allapps, allow_vercodes=False):
     """Build a list of App instances for processing
 
     On top of what read_pkg_args does, this returns the whole app
     metadata, but limiting the builds list to the builds matching the
-    appid_versionCode_pairs and vercodes specified.  If no appid_versionCode_pairs are specified, then
-    all App and Build instances are returned.
+    appid_versionCode_pairs and vercodes specified.  If no
+    appid_versionCode_pairs are specified, then all App and Build instances are
+    returned.
 
     """
 

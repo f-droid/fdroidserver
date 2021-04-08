@@ -188,6 +188,7 @@ def main():
         logging.error(_("No unsigned directory - nothing to do"))
         sys.exit(0)
 
+    processed = set()
     verified = 0
     notverified = 0
 
@@ -203,6 +204,8 @@ def main():
             continue
         if vercodes[appid] and vercode not in vercodes[appid]:
             continue
+
+        processed.add(appid)
 
         try:
 
@@ -234,6 +237,12 @@ def main():
 
         except FDroidException as e:
             logging.info("...NOT verified - {0}".format(e))
+            notverified += 1
+
+    for appid in options.appid:
+        package = appid.split(":")[0]
+        if package not in processed:
+            logging.critical(_("No APK for package: %s") % package)
             notverified += 1
 
     if verified > 0:
