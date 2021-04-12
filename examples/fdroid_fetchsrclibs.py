@@ -32,7 +32,7 @@ def main():
         vcs.gotorevision('HEAD', refresh=False)
         for build in app.get('Builds', []):
             for lib in build.srclibs:
-                srclibpaths.append(common.getsrclib(lib, srclib_dir, build=build))
+                srclibpaths.append(common.getsrclib(lib, srclib_dir, prepare=False, build=build))
     print('Set up srclibs:')
     pprint.pprint(srclibpaths)
 
