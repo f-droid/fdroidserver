@@ -1126,7 +1126,7 @@ def main():
                         url = url.replace('%v', build.versionName)
                         url = url.replace('%c', str(build.versionCode))
                         logging.info("...retrieving " + url)
-                        of = re.sub(r'.apk$', '.binary.apk', common.get_release_filename(app, build))
+                        of = re.sub(r'\.apk$', '.binary.apk', common.get_release_filename(app, build))
                         of = os.path.join(binaries_dir, of)
                         try:
                             net.download_file(url, local_filename=of)
