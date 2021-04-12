@@ -1712,6 +1712,48 @@ class CommonTest(unittest.TestCase):
         )
         self.assertSequenceEqual(expected, sorted(components))
 
+    def test_read_pkg_args(self):
+        allow_vercodes = False
+        self.assertEqual(
+            {'org.fdroid.fdroid': []},
+            fdroidserver.common.read_pkg_args(['org.fdroid.fdroid'], allow_vercodes)
+        )
+        self.assertNotEqual(
+            {'com.example': ['123456']},
+            fdroidserver.common.read_pkg_args(['com.example:123456'], allow_vercodes)
+        )
+
+        allow_vercodes = True
+        self.assertEqual(
+            {'org.fdroid.fdroid': []},
+            fdroidserver.common.read_pkg_args(['org.fdroid.fdroid'], allow_vercodes)
+        )
+        self.assertEqual(
+            {'com.example': ['123456']},
+            fdroidserver.common.read_pkg_args(['com.example:123456'], allow_vercodes)
+        )
+        self.assertEqual(
+            {'org.debian_kit': ['6']},
+            fdroidserver.common.read_pkg_args(['org.debian_kit_6.apk'], allow_vercodes)
+        )
+        appid_versionCode_pairs = (
+            'org.fdroid.fdroid:1',
+            'com.example:12345',
+            'com.example:67890',
+        )
+        self.assertEqual(
+            {'com.example': ['12345', '67890'], 'org.fdroid.fdroid': ['1']},
+            fdroidserver.common.read_pkg_args(appid_versionCode_pairs, allow_vercodes)
+        )
+        appid_versionCode_pairs = (
+            'com.example:67890',
+            'org.c_base.c_beam_29.apk',
+        )
+        self.assertEqual(
+            {'com.example': ['67890'], 'org.c_base.c_beam': ['29']},
+            fdroidserver.common.read_pkg_args(appid_versionCode_pairs, allow_vercodes)
+        )
+
 
 if __name__ == "__main__":
     os.chdir(os.path.dirname(__file__))
