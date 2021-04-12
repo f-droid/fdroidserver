@@ -599,7 +599,9 @@ def read_pkg_args(appid_versionCode_pairs, allow_vercodes=False):
     if not appid_versionCode_pairs:
         return vercodes
 
+    apk_regex = re.compile(r'_(\d+)\.apk$')
     for p in appid_versionCode_pairs:
+        p = apk_regex.sub(r':\1', p)
         if allow_vercodes and ':' in p:
             package, vercode = p.split(':')
             try:
