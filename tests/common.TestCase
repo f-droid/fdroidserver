@@ -1754,6 +1754,13 @@ class CommonTest(unittest.TestCase):
             fdroidserver.common.read_pkg_args(appid_versionCode_pairs, allow_vercodes)
         )
 
+    def test_apk_strip_v1_signatures(self):
+        testdir = tempfile.mkdtemp(prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir)
+        before = os.path.join(self.basedir, 'no_targetsdk_minsdk1_unsigned.apk')
+        after = os.path.join(testdir, 'after.apk')
+        shutil.copy(before, after)
+        fdroidserver.common.apk_strip_v1_signatures(after, strip_manifest=False)
+
 
 if __name__ == "__main__":
     os.chdir(os.path.dirname(__file__))

@@ -3,6 +3,7 @@
 # common.py - part of the FDroid server tools
 # Copyright (C) 2010-13, Ciaran Gultnieks, ciaran@ciarang.com
 # Copyright (C) 2013-2014 Daniel Martí <mvdan@mvdan.cc>
+# Copyright (C) 2021 Felix C. Stegerman <flx@obfusk.net>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as published by
@@ -3007,6 +3008,27 @@ def metadata_find_developer_signing_files(appid, vercode):
         return None
 
 
+class ClonedZipInfo(zipfile.ZipInfo):
+    """Hack to allow fully cloning ZipInfo instances
+
+    The zipfile library has some bugs that prevent it from fully
+    cloning ZipInfo entries.  https://bugs.python.org/issue43547
+
+    """
+    def __init__(self, zinfo):
+        self.original = zinfo
+        for k in self.__slots__:
+            try:
+                setattr(self, k, getattr(zinfo, k))
+            except AttributeError:
+                pass
+
+    def __getattribute__(self, name):
+        if name in ("date_time", "external_attr", "flag_bits"):
+            return getattr(self.original, name)
+        return object.__getattribute__(self, name)
+
+
 def apk_strip_v1_signatures(signed_apk, strip_manifest=False):
     """Removes signatures from APK.
 
@@ -3024,10 +3046,10 @@ def apk_strip_v1_signatures(signed_apk, strip_manifest=False):
                         if strip_manifest:
                             if info.filename != 'META-INF/MANIFEST.MF':
                                 buf = in_apk.read(info.filename)
-                                out_apk.writestr(info, buf)
+                                out_apk.writestr(ClonedZipInfo(info), buf)
                         else:
                             buf = in_apk.read(info.filename)
-                            out_apk.writestr(info, buf)
+                            out_apk.writestr(ClonedZipInfo(info), buf)
 
 
 def _zipalign(unsigned_apk, aligned_apk):
