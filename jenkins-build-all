@@ -95,10 +95,25 @@ else
     sed -i '/^wiki_/d' config.yml
 fi
 
+printf '\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\nbuild all with reproducible signatures\n'
+for f in metadata/*/signatures/*; do
+    appid=$(basename $(dirname $(dirname $f)))
+    versionCode=$(basename $f)
+    rm -f repo/${appid}_* archive/${appid}_* unsigned/${appid}_*
+    $WORKSPACE/fdroid build --verbose --latest --no-tarball ${appid}:$versionCode
+done
+
+printf '\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\nbuild all with Binaries:\n'
+for appid in `grep '^Binaries: ' metadata/*.yml --files-with-match | sed 's,^metadata/\(.*\)\.yml$,\1,'`; do
+    rm -f repo/${appid}_* archive/${appid}_* unsigned/${appid}_*
+    $WORKSPACE/fdroid build --verbose --latest --no-tarball ${appid}
+done
+
 # force global timeout to 6 hours
 sed -Ei 's,^(\s+endtime\s*=\s*time\.time\(\))\s*.*,\1 + 6 * 60 * 60  # 6 hours,' \
     $WORKSPACE/fdroidserver/build.py
 
+printf '\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\nbuild all\n'
 $WORKSPACE/fdroid build --verbose --latest --no-tarball --all $wikiflag
 
 vagrant global-status
