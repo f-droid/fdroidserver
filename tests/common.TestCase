@@ -473,7 +473,7 @@ class CommonTest(unittest.TestCase):
                 for info in apk.infolist():
                     testapk.writestr(info, apk.read(info.filename))
                     if info.filename.startswith('META-INF/'):
-                        testapk.writestr(info, otherapk.read(info.filename))
+                        testapk.writestr(info.filename, otherapk.read(info.filename))
         otherapk.close()
         self.assertFalse(fdroidserver.common.verify_apk_signature(twosigapk))
         self.assertIsNone(fdroidserver.common.verify_apks(sourceapk, twosigapk, self.tmpdir))
@@ -1752,6 +1752,42 @@ class CommonTest(unittest.TestCase):
         self.assertEqual(
             {'com.example': ['67890'], 'org.c_base.c_beam': ['29']},
             fdroidserver.common.read_pkg_args(appid_versionCode_pairs, allow_vercodes)
+        )
+
+    def test_apk_strip_v1_signatures(self):
+        testdir = tempfile.mkdtemp(prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir)
+        before = os.path.join(self.basedir, 'no_targetsdk_minsdk1_unsigned.apk')
+        after = os.path.join(testdir, 'after.apk')
+        shutil.copy(before, after)
+        fdroidserver.common.apk_strip_v1_signatures(after, strip_manifest=False)
+
+    def test_metadata_find_developer_signing_files(self):
+        appid = 'org.smssecure.smssecure'
+
+        self.assertIsNone(
+            fdroidserver.common.metadata_find_developer_signing_files(appid, 133)
+        )
+
+        vc = '135'
+        self.assertEqual(
+            (
+                os.path.join('metadata', appid, 'signatures', vc, '28969C09.RSA'),
+                os.path.join('metadata', appid, 'signatures', vc, '28969C09.SF'),
+                os.path.join('metadata', appid, 'signatures', vc, 'MANIFEST.MF'),
+                None
+            ),
+            fdroidserver.common.metadata_find_developer_signing_files(appid, vc)
+        )
+
+        vc = '134'
+        self.assertEqual(
+            (
+                os.path.join('metadata', appid, 'signatures', vc, '28969C09.RSA'),
+                os.path.join('metadata', appid, 'signatures', vc, '28969C09.SF'),
+                os.path.join('metadata', appid, 'signatures', vc, 'MANIFEST.MF'),
+                None
+            ),
+            fdroidserver.common.metadata_find_developer_signing_files(appid, vc)
         )
 
 

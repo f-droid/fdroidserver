@@ -3,6 +3,7 @@
 # publish.py - part of the FDroid server tools
 # Copyright (C) 2010-13, Ciaran Gultnieks, ciaran@ciarang.com
 # Copyright (C) 2013-2014 Daniel Martí <mvdan@mvdan.cc>
+# Copyright (C) 2021 Felix C. Stegerman <flx@obfusk.net>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as published by
@@ -345,16 +346,14 @@ def main():
                 # metadata. This means we're going to prepare both a locally
                 # signed APK and a version signed with the developers key.
 
-                signaturefile, signedfile, manifest = signingfiles
+                signature_file, _ignored, manifest, v2_files = signingfiles
 
-                with open(signaturefile, 'rb') as f:
+                with open(signature_file, 'rb') as f:
                     devfp = common.signer_fingerprint_short(common.get_certificate(f.read()))
                 devsigned = '{}_{}_{}.apk'.format(appid, vercode, devfp)
                 devsignedtmp = os.path.join(tmp_dir, devsigned)
-                shutil.copy(apkfile, devsignedtmp)
 
-                common.apk_implant_signatures(devsignedtmp, signaturefile,
-                                              signedfile, manifest)
+                common.apk_implant_signatures(apkfile, devsignedtmp, manifest=manifest)
                 if common.verify_apk_signature(devsignedtmp):
                     shutil.move(devsignedtmp, os.path.join(output_dir, devsigned))
                 else:
