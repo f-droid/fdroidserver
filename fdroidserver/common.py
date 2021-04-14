@@ -68,6 +68,9 @@ from fdroidserver.exception import FDroidException, VCSException, NoSubmodulesEx
     BuildException, VerificationException, MetaDataException
 from .asynchronousfilereader import AsynchronousFileReader
 
+from . import apksigcopier
+apksigcopier.exclude_all_meta = True    # remove v1 signatures too
+
 # The path to this fdroidserver distribution
 FDROID_PATH = os.path.realpath(os.path.join(os.path.dirname(__file__), '..'))
 
@@ -2977,8 +2980,9 @@ def metadata_find_signing_files(appid, vercode):
 
     :param appid: app id string
     :param vercode: app version code
-    :returns: a list of triplets for each signing key with following paths:
-        (signature_file, singed_file, manifest_file)
+    :returns: a list of 4-tuples for each signing key with following paths:
+        (signature_file, singed_file, manifest_file, v2_files), where v2_files
+        is either a (sb_offset_file, sb_file) pair or None
     """
     ret = []
     sigdir = metadata_get_sigdir(appid, vercode)
@@ -2986,12 +2990,18 @@ def metadata_find_signing_files(appid, vercode):
         glob.glob(os.path.join(sigdir, '*.EC')) + \
         glob.glob(os.path.join(sigdir, '*.RSA'))
     extre = re.compile(r'(\.DSA|\.EC|\.RSA)$')
+    apk_sb = os.path.isfile(os.path.join(sigdir, "APKSigningBlock"))
+    apk_sbo = os.path.isfile(os.path.join(sigdir, "APKSigningBlockOffset"))
+    if os.path.isfile(apk_sb) and os.path.isfile(apk_sbo):
+        v2_files = apk_sb, apk_sbo
+    else:
+        v2_files = None
     for sig in sigs:
         sf = extre.sub('.SF', sig)
         if os.path.isfile(sf):
             mf = os.path.join(sigdir, 'MANIFEST.MF')
             if os.path.isfile(mf):
-                ret.append((sig, sf, mf))
+                ret.append((sig, sf, mf, v2_files))
     return ret
 
 
@@ -3029,6 +3039,15 @@ class ClonedZipInfo(zipfile.ZipInfo):
         return object.__getattribute__(self, name)
 
 
+def apk_has_v1_signatures(apkfile):
+    """Test whether an APK has v1 signature files."""
+    with ZipFile(apkfile, 'r') as apk:
+        for info in apk.infolist():
+            if APK_SIGNATURE_FILES.match(info.filename):
+                return True
+    return False
+
+
 def apk_strip_v1_signatures(signed_apk, strip_manifest=False):
     """Removes signatures from APK.
 
@@ -3064,49 +3083,26 @@ def _zipalign(unsigned_apk, aligned_apk):
         raise BuildException("Failed to align application")
 
 
-def apk_implant_signatures(apkpath, signaturefile, signedfile, manifest):
+def apk_implant_signatures(apkpath, outpath, manifest, v2_files):
     """Implants a signature from metadata into an APK.
 
-    Note: this changes there supplied APK in place. So copy it if you
-    need the original to be preserved.
-
-    :param apkpath: location of the apk
+    :param apkpath: location of the unsigned apk
+    :param outpath: location of the output apk
     """
-    # get list of available signature files in metadata
-    with tempfile.TemporaryDirectory() as tmpdir:
-        apkwithnewsig = os.path.join(tmpdir, 'newsig.apk')
-        with ZipFile(apkpath, 'r') as in_apk:
-            with ZipFile(apkwithnewsig, 'w') as out_apk:
-                for sig_file in [signaturefile, signedfile, manifest]:
-                    with open(sig_file, 'rb') as fp:
-                        buf = fp.read()
-                    info = zipfile.ZipInfo('META-INF/' + os.path.basename(sig_file))
-                    info.compress_type = zipfile.ZIP_DEFLATED
-                    info.create_system = 0  # "Windows" aka "FAT", what Android SDK uses
-                    out_apk.writestr(info, buf)
-                for info in in_apk.infolist():
-                    if not APK_SIGNATURE_FILES.match(info.filename):
-                        if info.filename != 'META-INF/MANIFEST.MF':
-                            buf = in_apk.read(info.filename)
-                            out_apk.writestr(info, buf)
-        os.remove(apkpath)
-        _zipalign(apkwithnewsig, apkpath)
+
+    sigdir = os.path.dirname(manifest)  # FIXME
+    apksigcopier.do_patch(sigdir, apkpath, outpath, v1_only=v2_files is None)
 
 
-def apk_extract_signatures(apkpath, outdir, manifest=True):
+def apk_extract_signatures(apkpath, outdir, v1_only=None):
     """Extracts a signature files from APK and puts them into target directory.
 
     :param apkpath: location of the apk
     :param outdir: folder where the extracted signature files will be stored
-    :param manifest: (optionally) disable extracting manifest file
+    :param v1_only: True for v1-only signatures, False for v1 and v2 signatures,
+                    or None for autodetection
     """
-    with ZipFile(apkpath, 'r') as in_apk:
-        for f in in_apk.infolist():
-            if APK_SIGNATURE_FILES.match(f.filename) or \
-                    (manifest and f.filename == 'META-INF/MANIFEST.MF'):
-                newpath = os.path.join(outdir, os.path.basename(f.filename))
-                with open(newpath, 'wb') as out_file:
-                    out_file.write(in_apk.read(f.filename))
+    apksigcopier.do_extract(apkpath, outdir, v1_only=v1_only)
 
 
 def get_min_sdk_version(apk):
@@ -3169,11 +3165,11 @@ def sign_apk(unsigned_path, signed_path, keyalias):
     os.remove(unsigned_path)
 
 
-def verify_apks(signed_apk, unsigned_apk, tmp_dir):
+def verify_apks(signed_apk, unsigned_apk, tmp_dir, v1_only=None):
     """Verify that two apks are the same
 
     One of the inputs is signed, the other is unsigned. The signature metadata
-    is transferred from the signed to the unsigned apk, and then jarsigner is
+    is transferred from the signed to the unsigned apk, and then apksigner is
     used to verify that the signature from the signed APK is also valid for
     the unsigned one.  If the APK given as unsigned actually does have a
     signature, it will be stripped out and ignored.
@@ -3181,53 +3177,38 @@ def verify_apks(signed_apk, unsigned_apk, tmp_dir):
     :param signed_apk: Path to a signed APK file
     :param unsigned_apk: Path to an unsigned APK file expected to match it
     :param tmp_dir: Path to directory for temporary files
+    :param v1_only: True for v1-only signatures, False for v1 and v2 signatures,
+                    or None for autodetection
     :returns: None if the verification is successful, otherwise a string
               describing what went wrong.
     """
 
+    if not verify_apk_signature(signed_apk):
+        logging.info('...NOT verified - {0}'.format(signed_apk))
+        return 'verification of signed APK failed'
+
     if not os.path.isfile(signed_apk):
         return 'can not verify: file does not exists: {}'.format(signed_apk)
-
     if not os.path.isfile(unsigned_apk):
         return 'can not verify: file does not exists: {}'.format(unsigned_apk)
 
-    with ZipFile(signed_apk, 'r') as signed:
-        meta_inf_files = ['META-INF/MANIFEST.MF']
-        for f in signed.namelist():
-            if APK_SIGNATURE_FILES.match(f):
-                meta_inf_files.append(f)
-        if len(meta_inf_files) < 3:
-            return "Signature files missing from {0}".format(signed_apk)
+    tmp_apk = os.path.join(tmp_dir, 'sigcp_' + os.path.basename(unsigned_apk))
 
-        tmp_apk = os.path.join(tmp_dir, 'sigcp_' + os.path.basename(unsigned_apk))
-        with ZipFile(unsigned_apk, 'r') as unsigned:
-            # only read the signature from the signed APK, everything else from unsigned
-            with ZipFile(tmp_apk, 'w') as tmp:
-                for filename in meta_inf_files:
-                    tmp.writestr(signed.getinfo(filename), signed.read(filename))
-                for info in unsigned.infolist():
-                    if info.filename in meta_inf_files:
-                        logging.warning('Ignoring %s from %s', info.filename, unsigned_apk)
-                        continue
-                    if info.filename in tmp.namelist():
-                        return "duplicate filename found: " + info.filename
-                    tmp.writestr(info, unsigned.read(info.filename))
-
-    # Use jarsigner to verify the v1 signature on the reproduced APK, as
-    # apksigner will reject the reproduced APK if the original also had a v2
-    # signature
     try:
-        verify_jar_signature(tmp_apk)
-        verified = True
-    except Exception:
-        verified = False
+        apksigcopier.do_copy(signed_apk, unsigned_apk, tmp_apk, v1_only=v1_only)
+    except apksigcopier.APKSigCopierError as e:
+        logging.info('...NOT verified - {0}'.format(tmp_apk))
+        return 'signature copying failed: {}'.format(str(e))
 
-    if not verified:
-        logging.info("...NOT verified - {0}".format(tmp_apk))
-        return compare_apks(signed_apk, tmp_apk, tmp_dir,
-                            os.path.dirname(unsigned_apk))
+    if not verify_apk_signature(tmp_apk):
+        logging.info('...NOT verified - {0}'.format(tmp_apk))
+        result = compare_apks(signed_apk, tmp_apk, tmp_dir,
+                              os.path.dirname(unsigned_apk))
+        if result is not None:
+            return result
+        return 'verification of APK with copied signature failed'
 
-    logging.info("...successfully verified")
+    logging.info('...successfully verified')
     return None
 
 

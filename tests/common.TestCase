@@ -473,7 +473,7 @@ class CommonTest(unittest.TestCase):
                 for info in apk.infolist():
                     testapk.writestr(info, apk.read(info.filename))
                     if info.filename.startswith('META-INF/'):
-                        testapk.writestr(info, otherapk.read(info.filename))
+                        testapk.writestr(info.filename, otherapk.read(info.filename))
         otherapk.close()
         self.assertFalse(fdroidserver.common.verify_apk_signature(twosigapk))
         self.assertIsNone(fdroidserver.common.verify_apks(sourceapk, twosigapk, self.tmpdir))
