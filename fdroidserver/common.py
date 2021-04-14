@@ -69,7 +69,7 @@ from fdroidserver.exception import FDroidException, VCSException, NoSubmodulesEx
 from .asynchronousfilereader import AsynchronousFileReader
 
 from . import apksigcopier
-apksigcopier.exclude_all_meta = True    # remove v1 signatures too
+
 
 # The path to this fdroidserver distribution
 FDROID_PATH = os.path.realpath(os.path.join(os.path.dirname(__file__), '..'))

@@ -73,7 +73,6 @@ DATETIMEZERO = (1980, 0, 0, 0, 0, 0)
 
 ZipData = namedtuple("ZipData", ("cd_offset", "eocd_offset", "cd_and_eocd"))
 
-exclude_all_meta = False    # exclude all metadata files in copy_apk()
 copy_extra_bytes = False    # copy extra bytes after data in copy_apk()
 
 
@@ -163,14 +162,8 @@ def is_meta(filename):
 
 
 def exclude_from_copying(filename):
-    """
-    Returns whether to exclude a file during copy_apk().
-
-    Excludes filenames in COPY_EXCLUDE (i.e. MANIFEST.MF) by default; when
-    exclude_all_meta is set to True instead, excludes all metadata files as
-    matched by is_meta().
-    """
-    return is_meta(filename) if exclude_all_meta else filename in COPY_EXCLUDE
+    """fdroidserver always wants JAR Signature files to be excluded"""
+    return is_meta(filename)
 
 
 ################################################################################
