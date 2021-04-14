@@ -11,6 +11,7 @@ import sys
 import tempfile
 import textwrap
 import unittest
+import yaml
 from unittest import mock
 
 localmodule = os.path.realpath(
@@ -39,6 +40,11 @@ class BuildTest(unittest.TestCase):
         os.chdir(self.basedir)
         fdroidserver.common.config = None
         fdroidserver.build.config = None
+
+    def create_fake_android_home(self, d):
+        os.makedirs(os.path.join(d, 'build-tools'), exist_ok=True)
+        os.makedirs(os.path.join(d, 'platform-tools'), exist_ok=True)
+        os.makedirs(os.path.join(d, 'tools'), exist_ok=True)
 
     def test_get_apk_metadata(self):
         config = dict()
@@ -205,6 +211,102 @@ class BuildTest(unittest.TestCase):
                                            "build", "ignore", "extlib")
         count = fdroidserver.scanner.scan_source("build", build)
         self.assertEqual(0, count, "Shouldn't error on jar from extlib")
+
+    def test_failed_verifies_are_not_in_unsigned(self):
+
+        class FakeProcess:
+            output = 'fake output'
+            returncode = 0
+
+            def __init__(self, args, **kwargs):
+                print('FakeFDroidPopen', args, kwargs)
+
+        testdir = tempfile.mkdtemp(prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir)
+        os.chdir(testdir)
+        sdk_path = os.path.join(testdir, 'android-sdk')
+        self.create_fake_android_home(sdk_path)
+        with open('config.yml', 'w') as fp:
+            yaml.dump({'sdk_path': sdk_path}, fp)
+        os.chmod('config.yml', 0o600)
+        fdroidserver.common.build = fdroidserver.common.read_config()
+
+        os.mkdir('metadata')
+        appid = 'info.guardianproject.checkey'
+        metadata_file = os.path.join('metadata', appid + '.yml')
+        shutil.copy(os.path.join(self.basedir, metadata_file),
+                    'metadata')
+        with open(metadata_file) as fp:
+            app = fdroidserver.metadata.App(yaml.safe_load(fp))
+        app['RepoType'] = 'git'
+        app['Binaries'] = 'https://example.com/fdroid/repo/info.guardianproject.checkey_%v.apk'
+        build = fdroidserver.metadata.Build({
+            'versionCode': 123,
+            'versionName': '1.2.3',
+            'commit': '1.2.3',
+            'disable': False,
+        })
+        app['Builds'] = [build]
+        fdroidserver.metadata.write_metadata(metadata_file, app)
+
+        os.makedirs(os.path.join('unsigned', 'binaries'))
+        production_result = os.path.join('unsigned', '%s_%d.apk' % (appid, build['versionCode']))
+        production_compare_file = os.path.join('unsigned', 'binaries',
+                                               '%s_%d.binary.apk' % (appid, build['versionCode']))
+        os.makedirs(os.path.join('tmp', 'binaries'))
+        test_result = os.path.join('tmp', '%s_%d.apk' % (appid, build['versionCode']))
+        test_compare_file = os.path.join(
+            'tmp', 'binaries', '%s_%d.binary.apk' % (appid, build['versionCode'])
+        )
+        with mock.patch(
+            'fdroidserver.common.force_exit', lambda *args: None
+        ) as a, mock.patch(
+            'fdroidserver.common.get_android_tools_version_log', lambda s: 'fake'
+        ) as b, mock.patch(
+            'fdroidserver.common.FDroidPopen', FakeProcess
+        ) as c, mock.patch(
+            'fdroidserver.build.FDroidPopen', FakeProcess
+        ) as d, mock.patch(
+            'fdroidserver.build.trybuild', lambda *args: True
+        ) as e, mock.patch(
+            'fdroidserver.net.download_file', lambda *args, **kwargs: None
+        ) as f:
+            a, b, c, d, e, f  # silence linters' "unused" warnings
+
+            with mock.patch('sys.argv', ['fdroid build', appid]):
+                # successful comparison
+                open(production_result, 'w').close()
+                open(production_compare_file, 'w').close()
+                with mock.patch('fdroidserver.common.verify_apks', lambda *args: None):
+                    fdroidserver.build.main()
+                self.assertTrue(os.path.exists(production_result))
+                self.assertTrue(os.path.exists(production_compare_file))
+                # failed comparison
+                open(production_result, 'w').close()
+                open(production_compare_file, 'w').close()
+                with mock.patch('fdroidserver.common.verify_apks', lambda *args: 'failed'):
+                    fdroidserver.build.main()
+                self.assertFalse(os.path.exists(production_result))
+                self.assertFalse(os.path.exists(production_compare_file))
+
+            with mock.patch('sys.argv', ['fdroid build', '--test', appid]):
+                # successful comparison
+                open(test_result, 'w').close()
+                open(test_compare_file, 'w').close()
+                with mock.patch('fdroidserver.common.verify_apks', lambda *args: None):
+                    fdroidserver.build.main()
+                self.assertTrue(os.path.exists(test_result))
+                self.assertTrue(os.path.exists(test_compare_file))
+                self.assertFalse(os.path.exists(production_result))
+                self.assertFalse(os.path.exists(production_compare_file))
+                # failed comparison
+                open(test_result, 'w').close()
+                open(test_compare_file, 'w').close()
+                with mock.patch('fdroidserver.common.verify_apks', lambda *args: 'failed'):
+                    fdroidserver.build.main()
+                self.assertTrue(os.path.exists(test_result))
+                self.assertFalse(os.path.exists(test_compare_file))
+                self.assertFalse(os.path.exists(production_result))
+                self.assertFalse(os.path.exists(production_compare_file))
 
 
 if __name__ == "__main__":

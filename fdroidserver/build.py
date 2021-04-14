@@ -1146,8 +1146,12 @@ def main():
                             compare_result = \
                                 common.verify_apks(of, unsigned_apk, tmpdir)
                             if compare_result:
-                                logging.debug('removing %s', unsigned_apk)
-                                os.remove(unsigned_apk)
+                                if options.test:
+                                    logging.warning(_('Keeping failed build "{apkfilename}"')
+                                                    .format(apkfilename=unsigned_apk))
+                                else:
+                                    logging.debug('removing %s', unsigned_apk)
+                                    os.remove(unsigned_apk)
                                 logging.debug('removing %s', of)
                                 os.remove(of)
                                 compare_result = compare_result.split('\n')
