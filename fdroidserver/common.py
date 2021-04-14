@@ -3083,7 +3083,7 @@ def _zipalign(unsigned_apk, aligned_apk):
         raise BuildException("Failed to align application")
 
 
-def apk_implant_signatures(apkpath, outpath, manifest, v2_files):
+def apk_implant_signatures(apkpath, outpath, manifest):
     """Implants a signature from metadata into an APK.
 
     :param apkpath: location of the unsigned apk
@@ -3091,18 +3091,17 @@ def apk_implant_signatures(apkpath, outpath, manifest, v2_files):
     """
 
     sigdir = os.path.dirname(manifest)  # FIXME
-    apksigcopier.do_patch(sigdir, apkpath, outpath, v1_only=v2_files is None)
+    apksigcopier.do_patch(sigdir, apkpath, outpath, v1_only=None)
 
 
-def apk_extract_signatures(apkpath, outdir, v1_only=None):
+def apk_extract_signatures(apkpath, outdir):
     """Extracts a signature files from APK and puts them into target directory.
 
     :param apkpath: location of the apk
     :param outdir: folder where the extracted signature files will be stored
-    :param v1_only: True for v1-only signatures, False for v1 and v2 signatures,
-                    or None for autodetection
+
     """
-    apksigcopier.do_extract(apkpath, outdir, v1_only=v1_only)
+    apksigcopier.do_extract(apkpath, outdir, v1_only=None)
 
 
 def get_min_sdk_version(apk):

@@ -353,8 +353,7 @@ def main():
                 devsigned = '{}_{}_{}.apk'.format(appid, vercode, devfp)
                 devsignedtmp = os.path.join(tmp_dir, devsigned)
 
-                common.apk_implant_signatures(apkfile, devsignedtmp, manifest=manifest,
-                                              v2_files=v2_files)
+                common.apk_implant_signatures(apkfile, devsignedtmp, manifest=manifest)
                 if common.verify_apk_signature(devsignedtmp):
                     shutil.move(devsignedtmp, os.path.join(output_dir, devsigned))
                 else:
