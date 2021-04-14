@@ -30,6 +30,8 @@ if localmodule not in sys.path:
 
 from fdroidserver import publish
 from fdroidserver import common
+from fdroidserver import metadata
+from fdroidserver import signatures
 from fdroidserver.exception import FDroidException
 
 
@@ -249,6 +251,71 @@ class PublishTest(unittest.TestCase):
                 self.assertEqual(publish.config.get('apksigner'), data['apksigner'])
                 self.assertEqual(publish.config['jarsigner'], data['jarsigner'])
                 self.assertEqual(publish.config['keytool'], data['keytool'])
+
+    def test_sign_then_implant_signature(self):
+
+        class Options:
+            verbose = False
+
+        testdir = tempfile.mkdtemp(prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir)
+        os.chdir(testdir)
+
+        config = common.read_config(Options)
+        if 'apksigner' not in config:
+            self.skipTest('SKIPPING test_sign_then_implant_signature, apksigner not installed!')
+        config['repo_keyalias'] = 'sova'
+        config['keystorepass'] = 'r9aquRHYoI8+dYz6jKrLntQ5/NJNASFBacJh7Jv2BlI='
+        config['keypass'] = 'r9aquRHYoI8+dYz6jKrLntQ5/NJNASFBacJh7Jv2BlI='
+        shutil.copy(os.path.join(self.basedir, 'keystore.jks'), testdir)
+        config['keystore'] = 'keystore.jks'
+        config['keydname'] = 'CN=Birdman, OU=Cell, O=Alcatraz, L=Alcatraz, S=California, C=US'
+        publish.config = config
+        common.config = config
+
+        app = metadata.App()
+        app.id = 'org.fdroid.ci'
+        versionCode = 1
+        build = metadata.Build(
+            {
+                'versionCode': versionCode,
+                'versionName': '1.0',
+            }
+        )
+        app.Builds = [build]
+        os.mkdir('metadata')
+        metadata.write_metadata(os.path.join('metadata', '%s.yml' % app.id), app)
+
+        os.mkdir('unsigned')
+        testapk = os.path.join(self.basedir, 'no_targetsdk_minsdk1_unsigned.apk')
+        unsigned = os.path.join('unsigned', common.get_release_filename(app, build))
+        signed = os.path.join('repo', common.get_release_filename(app, build))
+        shutil.copy(testapk, unsigned)
+
+        # sign the unsigned APK
+        self.assertTrue(os.path.exists(unsigned))
+        self.assertFalse(os.path.exists(signed))
+        with mock.patch('sys.argv', ['fdroid publish', '%s:%d' % (app.id, versionCode)]):
+            publish.main()
+        self.assertFalse(os.path.exists(unsigned))
+        self.assertTrue(os.path.exists(signed))
+
+        with mock.patch('sys.argv', ['fdroid signatures', signed]):
+            signatures.main()
+        self.assertTrue(
+            os.path.exists(
+                os.path.join('metadata', 'org.fdroid.ci', 'signatures', '1', 'MANIFEST.MF')
+            )
+        )
+        os.remove(signed)
+
+        # implant the signature into the unsigned APK
+        shutil.copy(testapk, unsigned)
+        self.assertTrue(os.path.exists(unsigned))
+        self.assertFalse(os.path.exists(signed))
+        with mock.patch('sys.argv', ['fdroid publish', '%s:%d' % (app.id, versionCode)]):
+            publish.main()
+        self.assertFalse(os.path.exists(unsigned))
+        self.assertTrue(os.path.exists(signed))
 
 
 if __name__ == "__main__":
