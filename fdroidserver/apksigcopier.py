@@ -96,7 +96,7 @@ class ZipError(APKSigCopierError):
 class ReproducibleZipInfo(zipfile.ZipInfo):
     """Reproducible ZipInfo hack."""
 
-    _override = {}  # type: Dict[str, Any]
+    _override = {}
 
     def __init__(self, zinfo, **override):
         if override:

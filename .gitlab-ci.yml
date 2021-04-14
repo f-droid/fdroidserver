@@ -193,7 +193,8 @@ lint_mypy:
   script:
     - pip install mypy
     - pip install -e .[test]
-    - mypy
+    # exclude vendored file
+    - mypy --exclude fdroidserver/apksigcopier.py
 
 fedora_latest:
   image: fedora:latest
