@@ -3006,8 +3006,8 @@ def metadata_find_signing_files(appid, vercode):
         + glob.glob(os.path.join(sigdir, '*.RSA'))
     )
     signature_block_pat = re.compile(r'(\.DSA|\.EC|\.RSA)$')
-    apk_signing_block = os.path.isfile(os.path.join(sigdir, "APKSigningBlock"))
-    apk_signing_block_offset = os.path.isfile(os.path.join(sigdir, "APKSigningBlockOffset"))
+    apk_signing_block = os.path.join(sigdir, "APKSigningBlock")
+    apk_signing_block_offset = os.path.join(sigdir, "APKSigningBlockOffset")
     if os.path.isfile(apk_signing_block) and os.path.isfile(apk_signing_block_offset):
         v2_files = apk_signing_block, apk_signing_block_offset
     else:
