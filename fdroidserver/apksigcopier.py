@@ -60,7 +60,6 @@ import zipfile
 import zlib
 
 from collections import namedtuple
-from typing import Any, Dict
 
 __version__ = "0.4.0"
 NAME = "apksigcopier"
@@ -518,80 +517,5 @@ def do_copy(signed_apk, unsigned_apk, output_apk, v1_only=NO):
     else:
         extracted_v2_sig = extract_v2_sig(signed_apk, expected=v1_only == NO)
     patch_apk(extracted_meta, extracted_v2_sig, unsigned_apk, output_apk)
-
-
-def main():
-    """CLI; requires click."""
-
-    global exclude_all_meta, copy_extra_bytes
-    exclude_all_meta = os.environ.get("APKSIGCOPIER_EXCLUDE_ALL_META") in ("1", "yes", "true")
-    copy_extra_bytes = os.environ.get("APKSIGCOPIER_COPY_EXTRA_BYTES") in ("1", "yes", "true")
-
-    import click
-
-    NAY = click.Choice(NOAUTOYES)
-
-    @click.group(help="""
-        apksigcopier - copy/extract/patch apk signatures
-    """)
-    @click.version_option(__version__)
-    def cli():
-        pass
-
-    @cli.command(help="""
-        Extract APK signatures from signed APK.
-    """)
-    @click.option("--v1-only", type=NAY, default=NO, show_default=True,
-                  envvar="APKSIGCOPIER_V1_ONLY")
-    @click.argument("signed_apk", type=click.Path(exists=True, dir_okay=False))
-    @click.argument("output_dir", type=click.Path(exists=True, file_okay=False))
-    def extract(*args, **kwargs):
-        do_extract(*args, **kwargs)
-
-    @cli.command(help="""
-        Patch extracted APK signatures onto unsigned APK.
-    """)
-    @click.option("--v1-only", type=NAY, default=NO, show_default=True,
-                  envvar="APKSIGCOPIER_V1_ONLY")
-    @click.argument("metadata_dir", type=click.Path(exists=True, file_okay=False))
-    @click.argument("unsigned_apk", type=click.Path(exists=True, dir_okay=False))
-    @click.argument("output_apk", type=click.Path(dir_okay=False))
-    def patch(*args, **kwargs):
-        do_patch(*args, **kwargs)
-
-    @cli.command(help="""
-        Copy (extract & patch) signatures from signed to unsigned APK.
-    """)
-    @click.option("--v1-only", type=NAY, default=NO, show_default=True,
-                  envvar="APKSIGCOPIER_V1_ONLY")
-    @click.argument("signed_apk", type=click.Path(exists=True, dir_okay=False))
-    @click.argument("unsigned_apk", type=click.Path(exists=True, dir_okay=False))
-    @click.argument("output_apk", type=click.Path(dir_okay=False))
-    def copy(*args, **kwargs):
-        do_copy(*args, **kwargs)
-
-    # FIXME
-    if click.__version__.startswith("7."):
-        def autocomplete_path(ctx=None, args=(), incomplete=""):  # pylint: disable=W0613
-            head, tail = os.path.split(incomplete)
-            return sorted(
-                (e.path if head else e.path[2:]) + ("/" if e.is_dir() else "")
-                for e in os.scandir(head or ".") if e.name.startswith(tail)
-            )
-
-        for command in cli.commands.values():
-            for param in command.params:
-                if isinstance(param.type, click.Path):
-                    param.autocompletion = autocomplete_path
-
-    try:
-        cli(prog_name=NAME)
-    except APKSigCopierError as e:
-        click.echo("Error: {}.".format(e), err=True)
-        sys.exit(1)
-
-
-if __name__ == "__main__":
-    main()
 
 # vim: set tw=80 sw=4 sts=4 et fdm=marker :
