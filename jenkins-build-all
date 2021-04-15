@@ -99,13 +99,13 @@ printf '\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\nbuild all with reproducible signatures
 for f in metadata/*/signatures/*; do
     appid=$(basename $(dirname $(dirname $f)))
     versionCode=$(basename $f)
-    rm -f repo/${appid}_* archive/${appid}_* unsigned/${appid}_*
+    rm -f repo/${appid}_*.* archive/${appid}_*.* unsigned/${appid}_*.*
     $WORKSPACE/fdroid build --verbose --latest --no-tarball ${appid}:$versionCode
 done
 
 printf '\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\nbuild all with Binaries:\n'
 for appid in `grep '^Binaries: ' metadata/*.yml --files-with-match | sed 's,^metadata/\(.*\)\.yml$,\1,'`; do
-    rm -f repo/${appid}_* archive/${appid}_* unsigned/${appid}_*
+    rm -f repo/${appid}_*.* archive/${appid}_*.* unsigned/${appid}_*.*
     $WORKSPACE/fdroid build --verbose --latest --no-tarball ${appid}
 done
 
