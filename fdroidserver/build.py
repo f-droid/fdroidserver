@@ -1126,7 +1126,7 @@ def main():
                         url = url.replace('%v', build.versionName)
                         url = url.replace('%c', str(build.versionCode))
                         logging.info("...retrieving " + url)
-                        of = re.sub(r'.apk$', '.binary.apk', common.get_release_filename(app, build))
+                        of = re.sub(r'\.apk$', '.binary.apk', common.get_release_filename(app, build))
                         of = os.path.join(binaries_dir, of)
                         try:
                             net.download_file(url, local_filename=of)
@@ -1146,8 +1146,12 @@ def main():
                             compare_result = \
                                 common.verify_apks(of, unsigned_apk, tmpdir)
                             if compare_result:
-                                logging.debug('removing %s', unsigned_apk)
-                                os.remove(unsigned_apk)
+                                if options.test:
+                                    logging.warning(_('Keeping failed build "{apkfilename}"')
+                                                    .format(apkfilename=unsigned_apk))
+                                else:
+                                    logging.debug('removing %s', unsigned_apk)
+                                    os.remove(unsigned_apk)
                                 logging.debug('removing %s', of)
                                 os.remove(of)
                                 compare_result = compare_result.split('\n')
