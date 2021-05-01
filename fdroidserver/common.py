@@ -1425,7 +1425,11 @@ def unescape_string(string):
 
 def retrieve_string(app_dir, string, xmlfiles=None):
 
-    if not string.startswith('@string/'):
+    if string.startswith('@string/'):
+        name = string[len('@string/'):]
+    elif string.startswith('${'):
+        return ''  # Gradle variable
+    else:
         return unescape_string(string)
 
     if xmlfiles is None:
@@ -1437,8 +1441,6 @@ def retrieve_string(app_dir, string, xmlfiles=None):
             for root, dirs, files in os.walk(res_dir):
                 if os.path.basename(root) == 'values':
                     xmlfiles += [os.path.join(root, x) for x in files if x.endswith('.xml')]
-
-    name = string[len('@string/'):]
 
     def element_content(element):
         if element.text is None:
