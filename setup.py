@@ -92,6 +92,11 @@ setup(name='fdroidserver',
               'pyjks',
               'html5print'
               ],
+          'docs': [
+              'sphinx',
+              'numpydoc',
+              'pydata_sphinx_theme',
+          ]
       },
       classifiers=[
           'Development Status :: 4 - Beta',
