@@ -412,3 +412,27 @@ servergitmirrors:
     - echo $DLURL
     - wget $DLURL/index-v1.jar
     - diff repo/index-v1.jar index-v1.jar
+
+Build documentation:
+  image: python:3.9-buster
+  script:
+    - pip install -e .[docs]
+    - cd docs
+    - sphinx-apidoc -o ./source ../fdroidserver -M -e
+    - sphinx-autogen -o generated source/*.rst   
+    - make html
+  artifacts:
+    paths:
+      - docs/build/html/
+
+pages:
+  image: alpine:latest
+  stage: deploy
+  script:
+    - cp docs/build/html public -r # GL Pages needs the files in a directory named "public"
+  artifacts:
+    paths:
+      - public
+  needs: ["Build documentation"]
+  rules:
+    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH' # only publish pages on default (master) branch
