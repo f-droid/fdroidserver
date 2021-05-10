@@ -7,7 +7,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 ## [Unreleased]
 
 
-## [2.0.1] - 2020-03-09
+## [2.0.1] - 2021-03-09
 
 ### Fixed
 
@@ -21,7 +21,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 * checkupdates: set User-Agent to make gitlab.com happy
 * Run push_binary_transparency only once
 
-## [2.0] - 2020-01-31
+## [2.0] - 2021-01-31
 
 For a more complete overview, see the [2.0
 milestone](https://gitlab.com/fdroid/fdroidserver/-/milestones/10)
