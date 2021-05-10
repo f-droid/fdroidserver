@@ -424,3 +424,15 @@ Build documentation:
   artifacts:
     paths:
       - docs/build/html/
+
+pages:
+  image: alpine:latest
+  stage: deploy
+  script:
+    - cp docs/build/html public -r # GL Pages needs the files in a directory named "public"
+  artifats:
+    paths:
+      - public
+  needs: ["Build documentation"]
+  #rules: # TODO: activate before merge
+  #  - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH' # only publish pages on default (master) branch
