@@ -430,7 +430,7 @@ pages:
   stage: deploy
   script:
     - cp docs/build/html public -r # GL Pages needs the files in a directory named "public"
-  artifats:
+  artifacts:
     paths:
       - public
   needs: ["Build documentation"]
