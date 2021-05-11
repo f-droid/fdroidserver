@@ -890,10 +890,6 @@ def write_yaml(mf, app):
     _yaml_bools_plus_lists.extend(_yaml_bools_false)
     _yaml_bools_plus_lists.extend([[x] for x in _yaml_bools_false])
 
-    def _class_as_dict_representer(dumper, data):
-        '''Creates a YAML representation of a App/Build instance'''
-        return dumper.represent_dict(data)
-
     def _field_to_yaml(typ, value):
         if typ is TYPE_STRING:
             if value in _yaml_bools_plus_lists:

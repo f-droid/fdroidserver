@@ -2067,7 +2067,6 @@ def create_metadata_from_template(apk):
     template: field sort order, empty field value, formatting, etc.
     '''
 
-    import yaml
     if os.path.exists('template.yml'):
         with open('template.yml') as f:
             metatxt = f.read()

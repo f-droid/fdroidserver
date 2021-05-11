@@ -66,7 +66,6 @@ def main():
                         help=_("Do not prompt for Android SDK path, just fail"))
     options = parser.parse_args()
 
-    aapt = None
     fdroiddir = os.getcwd()
     test_config = dict()
     examplesdir = common.get_examples_dir()
@@ -227,8 +226,6 @@ def main():
     msg = '\n'
     msg += _('Built repo based in "%s" with this config:') % fdroiddir
     msg += '\n\n  Android SDK:\t\t\t' + config['sdk_path']
-    if aapt:
-        msg += '\n  Android SDK Build Tools:\t' + os.path.dirname(aapt)
     msg += '\n  Android NDK r12b (optional):\t$ANDROID_NDK'
     msg += '\n  ' + _('Keystore for signing key:\t') + keystore
     if repo_keyalias is not None:
