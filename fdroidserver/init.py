@@ -226,7 +226,6 @@ def main():
     msg = '\n'
     msg += _('Built repo based in "%s" with this config:') % fdroiddir
     msg += '\n\n  Android SDK:\t\t\t' + config['sdk_path']
-    msg += '\n  Android NDK r12b (optional):\t$ANDROID_NDK'
     msg += '\n  ' + _('Keystore for signing key:\t') + keystore
     if repo_keyalias is not None:
         msg += '\n  Alias for key in store:\t' + repo_keyalias

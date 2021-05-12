@@ -118,15 +118,7 @@ orig_path = None
 
 default_config = {
     'sdk_path': "$ANDROID_HOME",
-    'ndk_paths': {
-        'r10e': None,
-        'r11c': None,
-        'r12b': "$ANDROID_NDK",
-        'r13b': None,
-        'r14b': None,
-        'r15c': None,
-        'r16b': None,
-    },
+    'ndk_paths': {},
     'cachedir': os.path.join(os.getenv('HOME'), '.cache', 'fdroidserver'),
     'java_paths': None,
     'scan_binary': False,
