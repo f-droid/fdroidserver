@@ -58,6 +58,7 @@ try:
 except ImportError:
     import xml.etree.ElementTree as XMLElementTree  # nosec this is a fallback only
 
+from base64 import urlsafe_b64encode
 from binascii import hexlify
 from datetime import datetime, timedelta, timezone
 from distutils.version import LooseVersion
@@ -3964,3 +3965,27 @@ def run_yamllint(path, indent=0):
     for problem in problems:
         result.append(' ' * indent + path + ':' + str(problem.line) + ': ' + problem.message)
     return '\n'.join(result)
+
+
+def sha256sum(filename):
+    '''Calculate the sha256 of the given file'''
+    sha = hashlib.sha256()
+    with open(filename, 'rb') as f:
+        while True:
+            t = f.read(16384)
+            if len(t) == 0:
+                break
+            sha.update(t)
+    return sha.hexdigest()
+
+
+def sha256base64(filename):
+    '''Calculate the sha256 of the given file as URL-safe base64'''
+    hasher = hashlib.sha256()
+    with open(filename, 'rb') as f:
+        while True:
+            t = f.read(16384)
+            if len(t) == 0:
+                break
+            hasher.update(t)
+    return urlsafe_b64encode(hasher.digest()).decode()
