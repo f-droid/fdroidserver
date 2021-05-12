@@ -69,6 +69,7 @@ from pyasn1.codec.der import decoder, encoder
 from pyasn1_modules import rfc2315
 from pyasn1.error import PyAsn1Error
 
+from . import net
 import fdroidserver.metadata
 import fdroidserver.lint
 from fdroidserver import _
@@ -3989,3 +3990,264 @@ def sha256base64(filename):
                 break
             hasher.update(t)
     return urlsafe_b64encode(hasher.digest()).decode()
+
+
+def get_ndk_version(ndk_path):
+    source_properties = os.path.join(ndk_path, 'source.properties')
+    if os.path.exists(source_properties):
+        with open(source_properties) as fp:
+            m = re.search(r'^Pkg.Revision *= *(.+)', fp.read(), flags=re.MULTILINE)
+            if m:
+                return m.group(1)
+
+
+def auto_install_ndk(build):
+    """auto-install the NDK in the build, this assumes its in a buildserver guest VM
+
+    Download, verify, and install the NDK version as specified via the
+    "ndk:" field in the build entry.  As it uncompresses the zipball,
+    this forces the permissions to work for all users, since this
+    might uncompress as root and then be used from a different user.
+
+    This needs to be able to install multiple versions of the NDK,
+    since this is also used in CI builds, where multiple `fdroid build
+    --onserver` calls can run in a single session.  The production
+    buildserver is reset between every build.
+
+    The default ANDROID_HOME base dir of /home/vagrant/android-sdk is
+    hard-coded in buildserver/Vagrantfile.  The "ndk" subdir is where
+    Android Studio will install the NDK into versioned subdirs.
+    https://developer.android.com/studio/projects/configure-agp-ndk#agp_version_41
+
+    Also, r10e and older cannot be handled via this mechanism because
+    they are packaged differently.
+
+    """
+    global config
+    if build.get('disable'):
+        return
+    ndk = build.get('ndk')
+    if not ndk:
+        return
+    ndk_path = config.get(ndk)
+    if ndk_path and os.path.isdir(ndk_path):
+        return
+    for ndkdict in NDKS:
+        if ndk == ndkdict['release']:
+            url = ndkdict['url']
+            sha256 = ndkdict['sha256']
+            break
+    ndk_base = os.path.join(config['sdk_path'], 'ndk')
+    logging.info(_('Downloading %s') % url)
+    zipball = os.path.join(
+        tempfile.mkdtemp(prefix='android-ndk-'),
+        os.path.basename(url)
+    )
+    net.download_file(url, zipball)
+    if sha256 != sha256sum(zipball):
+        raise FDroidException('SHA-256 %s does not match expected for %s' % (sha256, url))
+    logging.info(_('Unzipping to %s') % ndk_base)
+    with zipfile.ZipFile(zipball) as zipfp:
+        for info in zipfp.infolist():
+            permbits = info.external_attr >> 16
+            if stat.S_ISDIR(permbits) or stat.S_IXUSR & permbits:
+                zipfp.extract(info.filename, path=ndk_base)
+                os.chmod(os.path.join(ndk_base, info.filename), 0o755)  # nosec bandit B103
+            else:
+                zipfp.extract(info.filename, path=ndk_base)
+                os.chmod(os.path.join(ndk_base, info.filename), 0o644)  # nosec bandit B103
+    os.remove(zipball)
+    extracted = glob.glob(os.path.join(ndk_base, '*'))[0]
+    version = get_ndk_version(extracted)
+    ndk_dir = os.path.join(ndk_base, version)
+    os.rename(extracted, ndk_dir)
+    if 'ndk_paths' not in config:
+        config['ndk_paths'] = dict()
+    config['ndk_paths'][ndk] = ndk_dir
+    logging.info(_('Set NDK {release} ({version}) up')
+                 .format(release=ndk, version=version))
+
+
+"""Derived from https://gitlab.com/fdroid/android-sdk-transparency-log/-/blob/master/checksums.json"""
+NDKS = [
+    {
+        "release": "r11",
+        "revision": "11.0.2655954",
+        "sha256": "59ab44f7ee6201df4381844736fdc456134c7f7660151003944a3017a0dcce97",
+        "url": "https://dl.google.com/android/repository/android-ndk-r11-linux-x86_64.zip"
+    },
+    {
+        "release": "r11b",
+        "revision": "11.1.2683735",
+        "sha256": "51d429bfda8bbe038683ed7ae7acc03b39604b84711901b555fe18c698867e53",
+        "url": "https://dl.google.com/android/repository/android-ndk-r11b-linux-x86_64.zip"
+    },
+    {
+        "release": "r11c",
+        "revision": "11.2.2725575",
+        "sha256": "ba85dbe4d370e4de567222f73a3e034d85fc3011b3cbd90697f3e8dcace3ad94",
+        "url": "https://dl.google.com/android/repository/android-ndk-r11c-linux-x86_64.zip"
+    },
+    {
+        "release": "r12",
+        "revision": "12.0.2931149",
+        "sha256": "7876e3b99f3596a3215ecf4e9f152d24b82dfdf2bbe7d3a38c423ae6a3edee79",
+        "url": "https://dl.google.com/android/repository/android-ndk-r12-linux-x86_64.zip"
+    },
+    {
+        "release": "r12b",
+        "revision": "12.1.2977051",
+        "sha256": "eafae2d614e5475a3bcfd7c5f201db5b963cc1290ee3e8ae791ff0c66757781e",
+        "url": "https://dl.google.com/android/repository/android-ndk-r12b-linux-x86_64.zip"
+    },
+    {
+        "release": "r13",
+        "revision": "13.0.3315539",
+        "sha256": "0a1dbd216386399e2979c17a48f65b962bf7ddc0c2311ef35d902b90c298c400",
+        "url": "https://dl.google.com/android/repository/android-ndk-r13-linux-x86_64.zip"
+    },
+    {
+        "release": "r13b",
+        "revision": "13.1.3345770",
+        "sha256": "3524d7f8fca6dc0d8e7073a7ab7f76888780a22841a6641927123146c3ffd29c",
+        "url": "https://dl.google.com/android/repository/android-ndk-r13b-linux-x86_64.zip"
+    },
+    {
+        "release": "r14",
+        "revision": "14.0.3770861",
+        "sha256": "3e622c2c9943964ea44cd56317d0769ed4c811bb4b40dc45b1f6965e4db9aa44",
+        "url": "https://dl.google.com/android/repository/android-ndk-r14-linux-x86_64.zip"
+    },
+    {
+        "release": "r14b",
+        "revision": "14.1.3816874",
+        "sha256": "0ecc2017802924cf81fffc0f51d342e3e69de6343da892ac9fa1cd79bc106024",
+        "url": "https://dl.google.com/android/repository/android-ndk-r14b-linux-x86_64.zip"
+    },
+    {
+        "release": "r15",
+        "revision": "15.0.4075724",
+        "sha256": "078eb7d28c3fcf45841f5baf6e6582e7fd5b73d8e8c4e0101df490f51abd37b6",
+        "url": "https://dl.google.com/android/repository/android-ndk-r15-linux-x86_64.zip"
+    },
+    {
+        "release": "r15b",
+        "revision": "15.1.4119039",
+        "sha256": "d1ce63f68cd806b5a992d4e5aa60defde131c243bf523cdfc5b67990ef0ee0d3",
+        "url": "https://dl.google.com/android/repository/android-ndk-r15b-linux-x86_64.zip"
+    },
+    {
+        "release": "r15c",
+        "revision": "15.2.4203891",
+        "sha256": "f01788946733bf6294a36727b99366a18369904eb068a599dde8cca2c1d2ba3c",
+        "url": "https://dl.google.com/android/repository/android-ndk-r15c-linux-x86_64.zip"
+    },
+    {
+        "release": "r16",
+        "revision": "16.0.4442984",
+        "sha256": "a8550b81771c67cc6ab7b479a6918d29aa78de3482901762b4f9e0132cd9672e",
+        "url": "https://dl.google.com/android/repository/android-ndk-r16-linux-x86_64.zip"
+    },
+    {
+        "release": "r16b",
+        "revision": "16.1.4479499",
+        "sha256": "bcdea4f5353773b2ffa85b5a9a2ae35544ce88ec5b507301d8cf6a76b765d901",
+        "url": "https://dl.google.com/android/repository/android-ndk-r16b-linux-x86_64.zip"
+    },
+    {
+        "release": "r17",
+        "revision": "17.0.4754217",
+        "sha256": "ba3d813b47de75bc32a2f3de087f72599c6cb36fdc9686b96f517f5492ff43ca",
+        "url": "https://dl.google.com/android/repository/android-ndk-r17-linux-x86_64.zip"
+    },
+    {
+        "release": "r17b",
+        "revision": "17.1.4828580",
+        "sha256": "5dfbbdc2d3ba859fed90d0e978af87c71a91a5be1f6e1c40ba697503d48ccecd",
+        "url": "https://dl.google.com/android/repository/android-ndk-r17b-linux-x86_64.zip"
+    },
+    {
+        "release": "r17c",
+        "revision": "17.2.4988734",
+        "sha256": "3f541adbd0330a9205ba12697f6d04ec90752c53d6b622101a2a8a856e816589",
+        "url": "https://dl.google.com/android/repository/android-ndk-r17c-linux-x86_64.zip"
+    },
+    {
+        "release": "r18b",
+        "revision": "18.1.5063045",
+        "sha256": "4f61cbe4bbf6406aa5ef2ae871def78010eed6271af72de83f8bd0b07a9fd3fd",
+        "url": "https://dl.google.com/android/repository/android-ndk-r18b-linux-x86_64.zip"
+    },
+    {
+        "release": "r19",
+        "revision": "19.0.5232133",
+        "sha256": "c0a2425206191252197b97ea5fcc7eab9f693a576e69ef4773a9ed1690feed53",
+        "url": "https://dl.google.com/android/repository/android-ndk-r19-linux-x86_64.zip"
+    },
+    {
+        "release": "r19b",
+        "revision": "19.1.5304403",
+        "sha256": "0fbb1645d0f1de4dde90a4ff79ca5ec4899c835e729d692f433fda501623257a",
+        "url": "https://dl.google.com/android/repository/android-ndk-r19b-linux-x86_64.zip"
+    },
+    {
+        "release": "r19c",
+        "revision": "19.2.5345600",
+        "sha256": "4c62514ec9c2309315fd84da6d52465651cdb68605058f231f1e480fcf2692e1",
+        "url": "https://dl.google.com/android/repository/android-ndk-r19c-linux-x86_64.zip"
+    },
+    {
+        "release": "r20",
+        "revision": "20.0.5594570",
+        "sha256": "57435158f109162f41f2f43d5563d2164e4d5d0364783a9a6fab3ef12cb06ce0",
+        "url": "https://dl.google.com/android/repository/android-ndk-r20-linux-x86_64.zip"
+    },
+    {
+        "release": "r20b",
+        "revision": "20.1.5948944",
+        "sha256": "8381c440fe61fcbb01e209211ac01b519cd6adf51ab1c2281d5daad6ca4c8c8c",
+        "url": "https://dl.google.com/android/repository/android-ndk-r20b-linux-x86_64.zip"
+    },
+    {
+        "release": "r21",
+        "revision": "21.0.6113669",
+        "sha256": "b65ea2d5c5b68fb603626adcbcea6e4d12c68eb8a73e373bbb9d23c252fc647b",
+        "url": "https://dl.google.com/android/repository/android-ndk-r21-linux-x86_64.zip"
+    },
+    {
+        "release": "r21b",
+        "revision": "21.1.6352462",
+        "sha256": "0c7af5dd23c5d2564915194e71b1053578438ac992958904703161c7672cbed7",
+        "url": "https://dl.google.com/android/repository/android-ndk-r21b-linux-x86_64.zip"
+    },
+    {
+        "release": "r21c",
+        "revision": "21.2.6472646",
+        "sha256": "214ebfcfa5108ba78f5b2cc8db4d575068f9c973ac7f27d2fa1987dfdb76c9e7",
+        "url": "https://dl.google.com/android/repository/android-ndk-r21c-linux-x86_64.zip"
+    },
+    {
+        "release": "r21d",
+        "revision": "21.3.6528147",
+        "sha256": "dd6dc090b6e2580206c64bcee499bc16509a5d017c6952dcd2bed9072af67cbd",
+        "url": "https://dl.google.com/android/repository/android-ndk-r21d-linux-x86_64.zip"
+    },
+    {
+        "release": "r21e",
+        "revision": "21.4.7075529",
+        "sha256": "ad7ce5467e18d40050dc51b8e7affc3e635c85bd8c59be62de32352328ed467e",
+        "url": "https://dl.google.com/android/repository/android-ndk-r21e-linux-x86_64.zip"
+    },
+    {
+        "release": "r22",
+        "revision": "22.0.7026061",
+        "sha256": "d37fc69cd81e5660234a686e20adef39bc0244086e4d66525a40af771c020718",
+        "url": "https://dl.google.com/android/repository/android-ndk-r22-linux-x86_64.zip"
+    },
+    {
+        "release": "r22b",
+        "revision": "22.1.7171670",
+        "sha256": "ac3a0421e76f71dd330d0cd55f9d99b9ac864c4c034fc67e0d671d022d4e806b",
+        "url": "https://dl.google.com/android/repository/android-ndk-r22b-linux-x86_64.zip"
+    }
+]

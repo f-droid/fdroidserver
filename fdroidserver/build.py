@@ -367,7 +367,10 @@ def build_local(app, build, vcs, build_dir, output_dir, log_dir, srclib_dir, ext
                 if k.endswith("_orig"):
                     continue
                 logging.critical("  %s: %s" % (k, v))
-            raise FDroidException()
+            if onserver:
+                common.auto_install_ndk(build)
+            else:
+                raise FDroidException()
         elif not os.path.isdir(ndk_path):
             logging.critical("Android NDK '%s' is not a directory!" % ndk_path)
             raise FDroidException()
