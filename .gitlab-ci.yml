@@ -261,7 +261,7 @@ fedora_latest:
         "cd `pwd`; export ANDROID_HOME=$ANDROID_HOME; fdroid=~testuser/.local/bin/fdroid ./run-tests"
 
 
-gradle:
+gradle/ndk:
   image: debian:bullseye
   <<: *apt-template
   variables:
@@ -276,16 +276,18 @@ gradle:
           python3-git
           python3-gitlab
           python3-requests
-    # if this is a merge request fork, then only check if makebuildserver or gradlew-fdroid changed
+    # if this is a merge request fork, then only check if relevant files changed
     - if [ "$CI_PROJECT_NAMESPACE" != "fdroid" ]; then
         git fetch https://gitlab.com/fdroid/fdroidserver.git;
         for f in `git diff --name-only --diff-filter=d FETCH_HEAD...HEAD`; do
            test "$f" == "makebuildserver" && export CHANGED="yes";
            test "$f" == "gradlew-fdroid" && export CHANGED="yes";
+           test "$f" == "fdroidserver/common.py" && export CHANGED="yes";
         done;
         test -z "$CHANGED" && exit;
       fi
     - ./tests/gradle-release-checksums.py
+    - ./tests/ndk-release-checksums.py
 
 
 # Run an actual build in a simple, faked version of the buildserver guest VM.
