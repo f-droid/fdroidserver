@@ -142,7 +142,7 @@ ubuntu_bionic_pip:
 
 # test install process on a bleeding edge distro with pip
 arch_pip_install:
-  image: archlinux/base
+  image: archlinux
   only:
     - master@fdroid/fdroidserver
   script:
