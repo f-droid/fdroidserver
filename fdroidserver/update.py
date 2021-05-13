@@ -140,6 +140,7 @@ def status_update_json(apps, apks):
     output = common.setup_status_output(start_timestamp)
     output['antiFeatures'] = dict()
     output['disabled'] = []
+    output['archivePolicy0'] = []
     output['failedBuilds'] = dict()
     output['noPackages'] = []
     output['needsUpdate'] = []
@@ -168,6 +169,8 @@ def status_update_json(apps, apks):
         validapks = 0
         if app.get('Disabled'):
             output['disabled'].append(appid)
+        elif app.get("ArchivePolicy") and int(app["ArchivePolicy"][:-9]) == 0:
+            output['archivePolicy0'].append(appid)
         else:
             for build in app.get('Builds', []):
                 if not build.get('disable'):
@@ -182,12 +185,12 @@ def status_update_json(apps, apks):
                         if appid not in failedBuilds:
                             failedBuilds[appid] = []
                         failedBuilds[appid].append(build.versionCode)
-        if validapks == 0:
-            output['noPackages'].append(appid)
-        if not gotcurrentver:
-            output['needsUpdate'].append(appid)
-        if app.get('UpdateCheckMode') == 'None' and not app.get('Disabled'):
-            output['noUpdateCheck'].append(appid)
+            if validapks == 0:
+                output['noPackages'].append(appid)
+            if not gotcurrentver:
+                output['needsUpdate'].append(appid)
+            if app.get('UpdateCheckMode') == 'None':
+                output['noUpdateCheck'].append(appid)
     common.write_status_json(output, options.pretty)
 
 
