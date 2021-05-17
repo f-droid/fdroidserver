@@ -54,12 +54,18 @@ except ImportError:
 def build_server(app, build, vcs, build_dir, output_dir, log_dir, force):
     """Do a build on the builder vm.
 
-    :param app: app metadata dict
-    :param build:
-    :param vcs: version control system controller object
-    :param build_dir: local source-code checkout of app
-    :param output_dir: target folder for the build result
-    :param force:
+    Parameters
+    ----------
+    app
+        app metadata dict
+    build
+    vcs
+        version control system controller object
+    build_dir
+        local source-code checkout of app
+    output_dir
+        target folder for the build result
+    force
     """
 
     global buildserverid
@@ -830,18 +836,26 @@ def trybuild(app, build, build_dir, output_dir, log_dir, also_check_dir,
     """
     Build a particular version of an application, if it needs building.
 
-    :param output_dir: The directory where the build output will go. Usually
-       this is the 'unsigned' directory.
-    :param repo_dir: The repo directory - used for checking if the build is
-       necessary.
-    :param also_check_dir: An additional location for checking if the build
-       is necessary (usually the archive repo)
-    :param test: True if building in test mode, in which case the build will
-       always happen, even if the output already exists. In test mode, the
-       output directory should be a temporary location, not any of the real
-       ones.
+    Parameters
+    ----------
+    output_dir
+        The directory where the build output will go. 
+        Usually this is the 'unsigned' directory.
+    repo_dir
+        The repo directory - used for checking if the build is necessary.
+    also_check_dir
+        An additional location for checking if the build
+        is necessary (usually the archive repo)
+    test
+        True if building in test mode, in which case the build will
+        always happen, even if the output already exists. In test mode, the
+        output directory should be a temporary location, not any of the real
+        ones.
 
-    :returns: True if the build was done, False if it wasn't necessary.
+    Returns
+    -------
+    Boolean
+        True if the build was done, False if it wasn't necessary.
     """
 
     dest_file = common.get_release_filename(app, build)

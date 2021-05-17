@@ -84,10 +84,32 @@ RAM. These test scripts are in the root of the project, all starting
 with _jenkins-_ since they are run on https://jenkins.debian.net.
 
 
-## Translation
+### Translation
 
 Everything can be translated.  See
 [Translation and Localization](https://f-droid.org/docs/Translation_and_Localization)
 for more info.  
 
 [![translation status](https://hosted.weblate.org/widgets/f-droid/-/fdroidserver/multi-auto.svg)](https://hosted.weblate.org/engage/f-droid/?utm_source=widget)
+
+
+### Documentation
+
+The API documentation based on the docstrings gets automatically published [here](http://fdroid.gitlab.io/fdroidserver/) on every commit on the `master` branch.
+
+It can be built locally via
+
+```bash
+pip install -e .[docs]
+cd docs
+sphinx-apidoc -o ./source ../fdroidserver -M -e
+sphinx-autogen -o generated source/*.rst   
+make html
+```
+
+To additionally lint the code call
+```bash
+pydocstyle fdroidserver --count
+```
+
+When writing docstrings you should follow the [numpy style guide](https://numpydoc.readthedocs.io/en/latest/format.html).

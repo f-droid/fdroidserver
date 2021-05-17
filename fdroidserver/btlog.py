@@ -52,13 +52,13 @@ options = None
 def make_binary_transparency_log(
     repodirs, btrepo='binary_transparency', url=None, commit_title='fdroid update'
 ):
-    '''Log the indexes in a standalone git repo to serve as a "binary
-    transparency" log.
+    """Log the indexes in a standalone git repo to serve as a "binary transparency" log.
 
-    see: https://www.eff.org/deeplinks/2014/02/open-letter-to-tech-companies
+    References
+    ----------
+    https://www.eff.org/deeplinks/2014/02/open-letter-to-tech-companies
 
-    '''
-
+    """
     logging.info('Committing indexes to ' + btrepo)
     if os.path.exists(os.path.join(btrepo, '.git')):
         gitrepo = git.Repo(btrepo)

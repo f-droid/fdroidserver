@@ -372,7 +372,9 @@ def zip_data(apkfile, count=1024):
     """
     Extract central directory, EOCD, and offsets from ZIP.
 
-    Returns ZipData.
+    Returns 
+    -------
+    ZipData
     """
     with open(apkfile, "rb") as fh:
         fh.seek(-count, os.SEEK_END)
@@ -424,6 +426,7 @@ def do_extract(signed_apk, output_dir, v1_only=NO):
 
     The v1_only parameter controls whether the absence of a v1 signature is
     considered an error or not:
+
     * use v1_only=NO (or v1_only=False) to only accept (v1+)v2/v3 signatures;
     * use v1_only=AUTO (or v1_only=None) to automatically detect v2/v3 signatures;
     * use v1_only=YES (or v1_only=True) to ignore any v2/v3 signatures.
@@ -459,6 +462,7 @@ def do_patch(metadata_dir, unsigned_apk, output_apk, v1_only=NO):
 
     The v1_only parameter controls whether the absence of a v1 signature is
     considered an error or not:
+
     * use v1_only=NO (or v1_only=False) to only accept (v1+)v2/v3 signatures;
     * use v1_only=AUTO (or v1_only=None) to automatically detect v2/v3 signatures;
     * use v1_only=YES (or v1_only=True) to ignore any v2/v3 signatures.
@@ -499,6 +503,7 @@ def do_copy(signed_apk, unsigned_apk, output_apk, v1_only=NO):
 
     The v1_only parameter controls whether the absence of a v1 signature is
     considered an error or not:
+
     * use v1_only=NO (or v1_only=False) to only accept (v1+)v2/v3 signatures;
     * use v1_only=AUTO (or v1_only=None) to automatically detect v2/v3 signatures;
     * use v1_only=YES (or v1_only=True) to ignore any v2/v3 signatures.

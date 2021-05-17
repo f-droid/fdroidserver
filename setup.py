@@ -96,6 +96,7 @@ setup(name='fdroidserver',
               'sphinx',
               'numpydoc',
               'pydata_sphinx_theme',
+              'pydocstyle',
           ]
       },
       classifiers=[
