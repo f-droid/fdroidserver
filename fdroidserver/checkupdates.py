@@ -158,21 +158,51 @@ def check_tags(app, pattern):
             logging.debug("Check tag: '{0}'".format(tag))
             vcs.gotorevision(tag)
 
-            for subdir in possible_subdirs(app):
-                if subdir == '.':
-                    root_dir = build_dir
-                else:
-                    root_dir = os.path.join(build_dir, subdir)
-                paths = common.manifest_paths(root_dir, last_build.gradle)
-                version, vercode, package = common.parse_androidmanifests(paths, app)
-                if vercode:
-                    logging.debug("Manifest exists in subdir '{0}'. Found version {1} ({2})"
-                                  .format(subdir, version, vercode))
-                    i_vercode = common.version_code_string_to_int(vercode)
-                    if i_vercode > common.version_code_string_to_int(hcode):
-                        htag = tag
-                        hcode = str(i_vercode)
-                        hver = version
+            if app.UpdateCheckData:
+                filecode, codeex, filever, verex = app.UpdateCheckData.split('|')
+                vercode = None
+                if len(filecode) > 0:
+                    filecontent = open(os.path.join(build_dir, filecode)).read()
+
+                    m = re.search(codeex, filecontent)
+                    if not m:
+                        raise FDroidException("No RE match for version code")
+                    vercode = m.group(1).strip()
+
+                version = "??"
+                if len(filever) > 0:
+                    if filever != '.':
+                        filecontent = open(os.path.join(build_dir, filever)).read()
+
+                    m = re.search(verex, filecontent)
+                    if not m:
+                        raise FDroidException("No RE match for version")
+                    version = m.group(1)
+
+                    if vercode:
+                        logging.debug("UpdateCheckData found version {0} ({1})"
+                                      .format(version, vercode))
+                        i_vercode = common.version_code_string_to_int(vercode)
+                        if i_vercode > common.version_code_string_to_int(hcode):
+                            htag = tag
+                            hcode = str(i_vercode)
+                            hver = version
+            else:
+                for subdir in possible_subdirs(app):
+                    if subdir == '.':
+                        root_dir = build_dir
+                    else:
+                        root_dir = os.path.join(build_dir, subdir)
+                    paths = common.manifest_paths(root_dir, last_build.gradle)
+                    version, vercode, package = common.parse_androidmanifests(paths, app)
+                    if vercode:
+                        logging.debug("Manifest exists in subdir '{0}'. Found version {1} ({2})"
+                                      .format(subdir, version, vercode))
+                        i_vercode = common.version_code_string_to_int(vercode)
+                        if i_vercode > common.version_code_string_to_int(hcode):
+                            htag = tag
+                            hcode = str(i_vercode)
+                            hver = version
 
         if hver:
             return (hver, hcode, htag)

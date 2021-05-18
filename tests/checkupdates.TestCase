@@ -186,6 +186,27 @@ class CheckupdatesTest(unittest.TestCase):
             self.assertEqual(vername, None)
             self.assertEqual(vercode, 'Version 1.1.9-beta is ignored')
 
+    def test_check_tags_data(self):
+        fdroidserver.checkupdates.options = mock.Mock()
+
+        app = fdroidserver.metadata.App()
+        app.id = 'loop.starts.shooting'
+        app.metadatapath = 'metadata/' + app.id + '.yml'
+        app.RepoType = 'git'
+        app.CurrentVersionCode = 10108
+        app.UpdateCheckMode = 'Tags'
+        app.UpdateCheckData = 'b.txt|c(.*)|e.txt|v(.*)'
+
+        vcs = mock.Mock()
+        vcs.latesttags.return_value = ['1.1.8', '1.1.9']
+        with mock.patch(
+            'builtins.open', mock.mock_open(read_data='v1.1.9\nc10109')
+        ) as _ignored, mock.patch('fdroidserver.common.getvcs', return_value=vcs):
+            _ignored  # silence the linters
+            vername, vercode, tag = fdroidserver.checkupdates.check_tags(app, None)
+            self.assertEqual(vername, '1.1.9')
+            self.assertEqual(vercode, '10109')
+
 
 if __name__ == "__main__":
     os.chdir(os.path.dirname(__file__))
