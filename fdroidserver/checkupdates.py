@@ -130,7 +130,6 @@ def check_tags(app, pattern):
 
         try_init_submodules(app, last_build, vcs)
 
-        hpak = None
         htag = None
         hver = None
         hcode = "0"
@@ -171,13 +170,10 @@ def check_tags(app, pattern):
                                   .format(subdir, version, vercode))
                     i_vercode = common.version_code_string_to_int(vercode)
                     if i_vercode > common.version_code_string_to_int(hcode):
-                        hpak = package
                         htag = tag
                         hcode = str(i_vercode)
                         hver = version
 
-        if not hpak:
-            return (None, "Couldn't find package ID", None)
         if hver:
             return (hver, hcode, htag)
         return (None, "Couldn't find any version information", None)
