@@ -957,7 +957,6 @@ def make_v0(apps, apks, repodir, repodict, requestsdict, fdroid_signing_key_fing
                         % repo_icon)
         os.makedirs(os.path.dirname(iconfilename), exist_ok=True)
         try:
-            import qrcode
             qrcode.make(common.config['repo_url']).save(iconfilename)
         except Exception:
             exampleicon = os.path.join(common.get_examples_dir(),

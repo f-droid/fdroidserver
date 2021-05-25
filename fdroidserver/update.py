@@ -36,7 +36,6 @@ import yaml
 import copy
 from datetime import datetime
 from argparse import ArgumentParser
-from base64 import urlsafe_b64encode
 try:
     from yaml import CSafeLoader as SafeLoader
 except ImportError:
@@ -590,30 +589,6 @@ def get_icon_bytes(apkzip, iconsrc):
         return apkzip.read(iconsrc.encode('utf-8').decode('cp437'))
 
 
-def sha256sum(filename):
-    '''Calculate the sha256 of the given file'''
-    sha = hashlib.sha256()
-    with open(filename, 'rb') as f:
-        while True:
-            t = f.read(16384)
-            if len(t) == 0:
-                break
-            sha.update(t)
-    return sha.hexdigest()
-
-
-def sha256base64(filename):
-    '''Calculate the sha256 of the given file as URL-safe base64'''
-    hasher = hashlib.sha256()
-    with open(filename, 'rb') as f:
-        while True:
-            t = f.read(16384)
-            if len(t) == 0:
-                break
-            hasher.update(t)
-    return urlsafe_b64encode(hasher.digest()).decode()
-
-
 def has_known_vulnerability(filename):
     """checks for known vulnerabilities in the APK
 
@@ -723,7 +698,7 @@ def insert_obbs(repodir, apps, apks):
             obbWarnDelete(f, _('OBB file has newer versionCode({integer}) than any APK:')
                           .format(integer=str(versionCode)))
             continue
-        obbsha256 = sha256sum(f)
+        obbsha256 = common.sha256sum(f)
         obbs.append((packagename, versionCode, obbfile, obbsha256))
 
     for apk in apks:
@@ -1267,7 +1242,7 @@ def insert_localized_app_metadata(apps):
                     if not os.path.samefile(f, basepath):
                         os.unlink(f)
                 else:
-                    sha256 = sha256base64(f)
+                    sha256 = common.sha256base64(f)
                     filename = base + '_' + sha256 + '.' + extension
                     index_file = os.path.join(os.path.dirname(f), filename)
                     if not os.path.exists(index_file):
@@ -1313,7 +1288,7 @@ def scan_repo_files(apkcache, repodir, knownapks, use_date_from_file=False):
             raise FDroidException(_('{path} is zero size!')
                                   .format(path=filename))
 
-        shasum = sha256sum(filename)
+        shasum = common.sha256sum(filename)
         usecache = False
         if name_utf8 in apkcache:
             repo_file = apkcache[name_utf8]
@@ -1378,7 +1353,7 @@ def scan_apk(apk_file):
     :return A dict containing APK metadata
     """
     apk = {
-        'hash': sha256sum(apk_file),
+        'hash': common.sha256sum(apk_file),
         'hashType': 'sha256',
         'uses-permission': [],
         'uses-permission-sdk-23': [],
@@ -1613,7 +1588,7 @@ def process_apk(apkcache, apkfilename, repodir, knownapks, use_date_from_apk=Fal
     usecache = False
     if apkfilename in apkcache:
         apk = apkcache[apkfilename]
-        if apk.get('hash') == sha256sum(apkfile):
+        if apk.get('hash') == common.sha256sum(apkfile):
             logging.debug(_("Reading {apkfilename} from cache")
                           .format(apkfilename=apkfilename))
             usecache = True
@@ -2067,7 +2042,6 @@ def create_metadata_from_template(apk):
     template: field sort order, empty field value, formatting, etc.
     '''
 
-    import yaml
     if os.path.exists('template.yml'):
         with open('template.yml') as f:
             metatxt = f.read()

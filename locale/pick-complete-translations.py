@@ -7,7 +7,6 @@ import os
 import re
 import requests
 import subprocess
-import sys
 
 
 projectbasedir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))

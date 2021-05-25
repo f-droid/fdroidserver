@@ -326,13 +326,7 @@ class Build(dict):
         return 'ant'
 
     def ndk_path(self):
-        version = self.ndk
-        if not version:
-            version = 'r12b'  # falls back to latest
-        paths = fdroidserver.common.config['ndk_paths']
-        if version not in paths:
-            return ''
-        return paths[version]
+        return fdroidserver.common.config['ndk_paths'].get(self.ndk, '')
 
 
 flagtypes = {
@@ -889,10 +883,6 @@ def write_yaml(mf, app):
     _yaml_bools_plus_lists.extend([[x] for x in _yaml_bools_true])
     _yaml_bools_plus_lists.extend(_yaml_bools_false)
     _yaml_bools_plus_lists.extend([[x] for x in _yaml_bools_false])
-
-    def _class_as_dict_representer(dumper, data):
-        '''Creates a YAML representation of a App/Build instance'''
-        return dumper.represent_dict(data)
 
     def _field_to_yaml(typ, value):
         if typ is TYPE_STRING:
