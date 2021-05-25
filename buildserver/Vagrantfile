@@ -84,7 +84,7 @@ Vagrant.configure("2") do |config|
     args: [configfile['debian_mirror']]
   config.vm.provision "shell", path: "provision-android-sdk"
   config.vm.provision "shell", path: "provision-android-ndk",
-    args: ["/home/vagrant/android-ndk"]
+    args: ["/opt/android-sdk/ndk"]
   config.vm.provision "shell", path: "provision-gradle"
 
 end

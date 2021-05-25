@@ -4006,9 +4006,9 @@ def auto_install_ndk(build):
     --onserver` calls can run in a single session.  The production
     buildserver is reset between every build.
 
-    The default ANDROID_HOME base dir of /home/vagrant/android-sdk is
-    hard-coded in buildserver/Vagrantfile.  The "ndk" subdir is where
-    Android Studio will install the NDK into versioned subdirs.
+    The default ANDROID_SDK_ROOT base dir of /opt/android-sdk is hard-coded in
+    buildserver/Vagrantfile.  The $ANDROID_HOME/ndk subdir is where Android
+    Studio will install the NDK into versioned subdirs.
     https://developer.android.com/studio/projects/configure-agp-ndk#agp_version_41
 
     Also, r10e and older cannot be handled via this mechanism because
