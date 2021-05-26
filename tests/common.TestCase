@@ -1796,6 +1796,42 @@ class CommonTest(unittest.TestCase):
             fdroidserver.common.metadata_find_developer_signing_files(appid, vc)
         )
 
+    def test_auto_install_ndk(self):
+        """Test all possible field data types for build.ndk"""
+        build = fdroidserver.metadata.Build()
+
+        none_entry = mock.Mock()
+        with mock.patch('fdroidserver.common._install_ndk', none_entry):
+            fdroidserver.common.auto_install_ndk(build)
+            none_entry.assert_not_called()
+
+        empty_list = mock.Mock()
+        build.ndk = []
+        with mock.patch('fdroidserver.common._install_ndk', empty_list):
+            fdroidserver.common.auto_install_ndk(build)
+            empty_list.assert_not_called()
+
+        release_entry = mock.Mock()
+        build.ndk = 'r21e'
+        with mock.patch('fdroidserver.common._install_ndk', release_entry):
+            fdroidserver.common.auto_install_ndk(build)
+            release_entry.assert_called_once_with('r21e')
+
+        revision_entry = mock.Mock()
+        build.ndk = '21.4.7075529'
+        with mock.patch('fdroidserver.common._install_ndk', revision_entry):
+            fdroidserver.common.auto_install_ndk(build)
+            revision_entry.assert_called_once_with('21.4.7075529')
+
+        list_entry = mock.Mock()
+        calls = []
+        build.ndk = ['11.0.2655954', 'r12b', 'r21e']
+        for n in build.ndk:
+            calls.append(mock.call(n))
+        with mock.patch('fdroidserver.common._install_ndk', list_entry):
+            fdroidserver.common.auto_install_ndk(build)
+            list_entry.assert_has_calls(calls)
+
 
 if __name__ == "__main__":
     os.chdir(os.path.dirname(__file__))

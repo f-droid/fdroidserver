@@ -4021,6 +4021,32 @@ def auto_install_ndk(build):
     ndk = build.get('ndk')
     if not ndk:
         return
+    if isinstance(ndk, str):
+        _install_ndk(ndk)
+    elif isinstance(ndk, list):
+        for n in ndk:
+            _install_ndk(n)
+    else:
+        BuildException(_('Invalid ndk: entry in build: "{ndk}"')
+                       .format(ndk=str(ndk)))
+
+
+def _install_ndk(ndk):
+    """Install specified NDK if it is not already installed
+
+    Parameters
+    ----------
+
+    ndk
+        The NDK version to install, either in "release" form (r21e) or
+        "revision" form (21.4.7075529).
+    """
+    if re.match(r'[1-9][0-9.]+[0-9]', ndk):
+        for ndkdict in NDKS:
+            if ndk == ndkdict['revision']:
+                ndk = ndkdict['release']
+                break
+
     ndk_path = config.get(ndk)
     if ndk_path and os.path.isdir(ndk_path):
         return

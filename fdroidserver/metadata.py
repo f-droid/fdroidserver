@@ -326,7 +326,11 @@ class Build(dict):
         return 'ant'
 
     def ndk_path(self):
-        return fdroidserver.common.config['ndk_paths'].get(self.ndk, '')
+        """Returns the path to the first configured NDK or an empty string"""
+        ndk = self.ndk
+        if isinstance(ndk, list):
+            ndk = self.ndk[0]
+        return fdroidserver.common.config['ndk_paths'].get(ndk, '')
 
 
 flagtypes = {
