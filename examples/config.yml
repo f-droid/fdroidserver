@@ -5,24 +5,20 @@
 # Custom path to the Android SDK, defaults to $ANDROID_HOME
 # sdk_path: $ANDROID_HOME
 
-# Paths to various installed versions of the Android NDK.  If a
-# required version is missing in the buildserver VM, it will be
-# automatically downloaded and installed into a temporary dir.
+# Paths to installed versions of the Android NDK.  This will be
+# automatically filled out from well known sources like
+# $ANDROID_HOME/ndk-bundle and $ANDROID_HOME/ndk/*.  If a required
+# version is missing in the buildserver VM, it will be automatically
+# downloaded and installed into the standard $ANDROID_HOME/ndk/
+# directory.  Manually setting it here will override the auto-detected
+# values.  The keys can either be the "release" (e.g. r21e) or the
+# "revision" (e.g. 21.4.7075529).
 #
 # ndk_paths:
-#   r10e: None
-#   r11c: None
-#   r12b: None
-#   r13b: None
-#   r14b: None
-#   r15c: None
-#   r16b: None
-#   r17c: None
-#   r18b: None
-#   r19c: None
-#   r20b: None
-#   r21e: None
-#   r22b: None
+#   r10e: $ANDROID_HOME/android-ndk-r10e
+#   r17: ""
+#   21.4.7075529: ~/Android/Ndk
+#   r22b: null
 
 # Directory to store downloaded tools in (i.e. gradle versions)
 # By default, these are stored in ~/.cache/fdroidserver

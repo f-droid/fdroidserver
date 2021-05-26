@@ -1,8 +1,4 @@
 sdk_path: /opt/android-sdk
-ndk_paths:
-  r10e: /opt/android-sdk/ndk/r10e
-  r21e: /opt/android-sdk/ndk/21.4.7075529
-  r22b: /opt/android-sdk/ndk/22.0.7026061
 
 java_paths:
   8: /usr/lib/jvm/java-8-openjdk-amd64

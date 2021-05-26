@@ -214,6 +214,14 @@ def _add_java_paths_to_config(pathlist, thisconfig):
 
 
 def fill_config_defaults(thisconfig):
+    """Fill in the global config dict with relevant defaults
+
+    For config values that have a path that can be expanded, e.g. an
+    env var or a ~/, this will store the original value using "_orig"
+    appended to the key name so that if the config gets written out,
+    it will preserve the original, unexpanded string.
+
+    """
     for k, v in default_config.items():
         if k not in thisconfig:
             thisconfig[k] = v
@@ -280,6 +288,28 @@ def fill_config_defaults(thisconfig):
             if exp is not None:
                 thisconfig[k][k2] = exp
                 thisconfig[k][k2 + '_orig'] = v
+
+    ndk_paths = thisconfig.get('ndk_paths', {})
+
+    ndk_bundle = os.path.join(thisconfig['sdk_path'], 'ndk-bundle')
+    if os.path.exists(ndk_bundle):
+        version = get_ndk_version(ndk_bundle)
+        if version not in ndk_paths:
+            ndk_paths[version] = ndk_bundle
+
+    ndk_dir = os.path.join(thisconfig['sdk_path'], 'ndk')
+    if os.path.exists(ndk_dir):
+        for ndk in glob.glob(os.path.join(ndk_dir, '*')):
+            version = get_ndk_version(ndk)
+            if version not in ndk_paths:
+                ndk_paths[version] = ndk
+
+    for k in list(ndk_paths.keys()):
+        if not re.match(r'r[1-9][0-9]*[a-z]?', k):
+            for ndkdict in NDKS:
+                if k == ndkdict['revision']:
+                    ndk_paths[ndkdict['release']] = ndk_paths.pop(k)
+                    break
 
 
 def regsub_file(pattern, repl, path):

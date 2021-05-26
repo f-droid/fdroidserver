@@ -1832,6 +1832,28 @@ class CommonTest(unittest.TestCase):
             fdroidserver.common.auto_install_ndk(build)
             list_entry.assert_has_calls(calls)
 
+    def test_fill_config_defaults(self):
+        """Test the auto-detection of NDKs installed in standard paths"""
+        sdk_path = tempfile.mkdtemp(
+            prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir
+        )
+
+        ndk_bundle = os.path.join(sdk_path, 'ndk-bundle')
+        os.makedirs(ndk_bundle)
+        with open(os.path.join(ndk_bundle, 'source.properties'), 'w') as fp:
+            fp.write('Pkg.Desc = Android NDK\nPkg.Revision = 17.2.4988734\n')
+        config = {'sdk_path': sdk_path}
+        fdroidserver.common.fill_config_defaults(config)
+        self.assertEqual({'r17c': ndk_bundle}, config['ndk_paths'])
+
+        r21e = os.path.join(sdk_path, 'ndk', '21.4.7075529')
+        os.makedirs(r21e)
+        with open(os.path.join(r21e, 'source.properties'), 'w') as fp:
+            fp.write('Pkg.Desc = Android NDK\nPkg.Revision = 21.4.7075529\n')
+        config = {'sdk_path': sdk_path}
+        fdroidserver.common.fill_config_defaults(config)
+        self.assertEqual({'r17c': ndk_bundle, 'r21e': r21e}, config['ndk_paths'])
+
 
 if __name__ == "__main__":
     os.chdir(os.path.dirname(__file__))
