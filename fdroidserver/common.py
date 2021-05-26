@@ -307,7 +307,7 @@ def fill_config_defaults(thisconfig):
     for k in list(ndk_paths.keys()):
         if not re.match(r'r[1-9][0-9]*[a-z]?', k):
             for ndkdict in NDKS:
-                if k == ndkdict['revision']:
+                if k == ndkdict.get('revision'):
                     ndk_paths[ndkdict['release']] = ndk_paths.pop(k)
                     break
 
@@ -4015,12 +4015,23 @@ def sha256base64(filename):
 
 
 def get_ndk_version(ndk_path):
+    """Get the version info from the metadata in the NDK package
+
+    Since r11, the info is nice and easy to find in
+    sources.properties.  Before, there was a kludgey format in
+    RELEASE.txt.  This is only needed for r10e.
+
+    """
     source_properties = os.path.join(ndk_path, 'source.properties')
+    release_txt = os.path.join(ndk_path, 'RELEASE.TXT')
     if os.path.exists(source_properties):
         with open(source_properties) as fp:
             m = re.search(r'^Pkg.Revision *= *(.+)', fp.read(), flags=re.MULTILINE)
             if m:
                 return m.group(1)
+    elif os.path.exists(release_txt):
+        with open(release_txt) as fp:
+            return fp.read().split('-')[0]
 
 
 def auto_install_ndk(build):
@@ -4118,6 +4129,11 @@ def _install_ndk(ndk):
 
 """Derived from https://gitlab.com/fdroid/android-sdk-transparency-log/-/blob/master/checksums.json"""
 NDKS = [
+    {
+        "release": "r10e",
+        "sha256": "ee5f405f3b57c4f5c3b3b8b5d495ae12b660e03d2112e4ed5c728d349f1e520c",
+        "url": "https://dl.google.com/android/repository/android-ndk-r10e-linux-x86_64.zip"
+    },
     {
         "release": "r11",
         "revision": "11.0.2655954",

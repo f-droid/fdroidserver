@@ -1825,12 +1825,26 @@ class CommonTest(unittest.TestCase):
 
         list_entry = mock.Mock()
         calls = []
-        build.ndk = ['11.0.2655954', 'r12b', 'r21e']
+        build.ndk = ['r10e', '11.0.2655954', 'r12b', 'r21e']
         for n in build.ndk:
             calls.append(mock.call(n))
         with mock.patch('fdroidserver.common._install_ndk', list_entry):
             fdroidserver.common.auto_install_ndk(build)
             list_entry.assert_has_calls(calls)
+
+    @unittest.skip("This test downloads and unzips a 1GB file.")
+    def test_install_ndk(self):
+        """NDK r10e is a special case since its missing source.properties"""
+        sdk_path = tempfile.mkdtemp(
+            prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir
+        )
+        config = {'sdk_path': sdk_path}
+        fdroidserver.common.config = config
+        fdroidserver.common._install_ndk('r10e')
+        r10e = os.path.join(sdk_path, 'ndk', 'r10e')
+        self.assertEqual('r10e', fdroidserver.common.get_ndk_version(r10e))
+        fdroidserver.common.fill_config_defaults(config)
+        self.assertEqual({'r10e': r10e}, config['ndk_paths'])
 
     def test_fill_config_defaults(self):
         """Test the auto-detection of NDKs installed in standard paths"""
@@ -1853,6 +1867,16 @@ class CommonTest(unittest.TestCase):
         config = {'sdk_path': sdk_path}
         fdroidserver.common.fill_config_defaults(config)
         self.assertEqual({'r17c': ndk_bundle, 'r21e': r21e}, config['ndk_paths'])
+
+        r10e = os.path.join(sdk_path, 'ndk', 'r10e')
+        os.makedirs(r10e)
+        with open(os.path.join(r10e, 'RELEASE.TXT'), 'w') as fp:
+            fp.write('r10e-rc4 (64-bit)\n')
+        config = {'sdk_path': sdk_path}
+        fdroidserver.common.fill_config_defaults(config)
+        self.assertEqual(
+            {'r10e': r10e, 'r17c': ndk_bundle, 'r21e': r21e}, config['ndk_paths']
+        )
 
 
 if __name__ == "__main__":

@@ -10,11 +10,6 @@ NDK_BASE=$1
 test -e $NDK_BASE || mkdir -p $NDK_BASE
 cd $NDK_BASE
 
-if [ ! -e $NDK_BASE/r10e ]; then
-    7zr x /vagrant/cache/android-ndk-r10e-linux-x86_64.bin > /dev/null
-    mv android-ndk-r10e r10e
-fi
-
 for version in r21e r22b; do
     if [ ! -e ${NDK_BASE}/${version} ]; then
         unzip /vagrant/cache/android-ndk-${version}-linux-x86_64.zip > /dev/null
