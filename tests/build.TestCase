@@ -362,7 +362,7 @@ class BuildTest(unittest.TestCase):
         with mock.patch(
             'fdroidserver.common.force_exit', lambda *args: None
         ) as a, mock.patch(
-            'fdroidserver.common.get_android_tools_version_log', lambda s: 'fake'
+            'fdroidserver.common.get_android_tools_version_log', lambda: 'fake'
         ) as b, mock.patch(
             'fdroidserver.common.FDroidPopen', FakeProcess
         ) as c, mock.patch(
