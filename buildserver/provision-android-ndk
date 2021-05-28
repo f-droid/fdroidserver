@@ -18,9 +18,15 @@ fi
 for version in r21e r22b; do
     if [ ! -e ${NDK_BASE}/${version} ]; then
         unzip /vagrant/cache/android-ndk-${version}-linux-x86_64.zip > /dev/null
-        mv android-ndk-${version} ${version}
+        mv android-ndk-${version} \
+	   `sed -En 's,^Pkg.Revision *= *(.+),\1,p' android-ndk-${version}/source.properties`
     fi
 done
 
+# allow gradle/etc to install missing NDK versions
+chgrp vagrant $NDK_BASE
+chmod g+w $NDK_BASE
+
+# ensure all users can read and execute the NDK
 chmod -R a+rX $NDK_BASE/
 find $NDK_BASE/ -type f -executable -print0 | xargs -0 chmod a+x

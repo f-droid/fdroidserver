@@ -17,4 +17,4 @@ chmod 0644 $bsenv
 
 # make sure that SSH never hangs at a password or key prompt
 printf '    StrictHostKeyChecking yes' >> /etc/ssh/ssh_config
-printf '    BatchMode yes' >> /etc/ssh/config
+printf '    BatchMode yes' >> /etc/ssh/ssh_config
