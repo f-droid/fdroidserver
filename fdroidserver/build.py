@@ -237,7 +237,7 @@ def build_server(app, build, vcs, build_dir, output_dir, log_dir, force):
         try:
             cmd_stdout = chan.makefile('rb', 1024)
             output = bytes()
-            output += common.get_android_tools_version_log(build.ndk_path()).encode()
+            output += common.get_android_tools_version_log().encode()
             while not chan.exit_status_ready():
                 line = cmd_stdout.readline()
                 if line:
@@ -402,7 +402,7 @@ def build_local(app, build, vcs, build_dir, output_dir, log_dir, srclib_dir, ext
         log_path = os.path.join(log_dir,
                                 common.get_toolsversion_logname(app, build))
         with open(log_path, 'w') as f:
-            f.write(common.get_android_tools_version_log(build.ndk_path()))
+            f.write(common.get_android_tools_version_log())
     else:
         if build.sudo:
             logging.warning('%s:%s runs this on the buildserver with sudo:\n\t%s\nThese commands were skipped because fdroid build is not running on a dedicated build server.'
@@ -1088,7 +1088,7 @@ def main():
             build_starttime = common.get_wiki_timestamp()
             tools_version_log = ''
             if not options.onserver:
-                tools_version_log = common.get_android_tools_version_log(build.ndk_path())
+                tools_version_log = common.get_android_tools_version_log()
                 common.write_running_status_json(status_output)
             try:
 

@@ -96,7 +96,6 @@ packages="
  openjdk-8-jre-headless
  openjdk-8-jdk-headless
  optipng
- p7zip
  pkg-config
  python-gnupg
  python-lxml

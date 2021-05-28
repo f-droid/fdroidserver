@@ -214,6 +214,14 @@ def _add_java_paths_to_config(pathlist, thisconfig):
 
 
 def fill_config_defaults(thisconfig):
+    """Fill in the global config dict with relevant defaults
+
+    For config values that have a path that can be expanded, e.g. an
+    env var or a ~/, this will store the original value using "_orig"
+    appended to the key name so that if the config gets written out,
+    it will preserve the original, unexpanded string.
+
+    """
     for k, v in default_config.items():
         if k not in thisconfig:
             thisconfig[k] = v
@@ -280,6 +288,28 @@ def fill_config_defaults(thisconfig):
             if exp is not None:
                 thisconfig[k][k2] = exp
                 thisconfig[k][k2 + '_orig'] = v
+
+    ndk_paths = thisconfig.get('ndk_paths', {})
+
+    ndk_bundle = os.path.join(thisconfig['sdk_path'], 'ndk-bundle')
+    if os.path.exists(ndk_bundle):
+        version = get_ndk_version(ndk_bundle)
+        if version not in ndk_paths:
+            ndk_paths[version] = ndk_bundle
+
+    ndk_dir = os.path.join(thisconfig['sdk_path'], 'ndk')
+    if os.path.exists(ndk_dir):
+        for ndk in glob.glob(os.path.join(ndk_dir, '*')):
+            version = get_ndk_version(ndk)
+            if version not in ndk_paths:
+                ndk_paths[version] = ndk
+
+    for k in list(ndk_paths.keys()):
+        if not re.match(r'r[1-9][0-9]*[a-z]?', k):
+            for ndkdict in NDKS:
+                if k == ndkdict.get('revision'):
+                    ndk_paths[ndkdict['release']] = ndk_paths.pop(k)
+                    break
 
 
 def regsub_file(pattern, repl, path):
@@ -3842,7 +3872,7 @@ def get_wiki_timestamp(timestamp=None):
     return time.strftime("%Y-%m-%d %H:%M:%SZ", timestamp)
 
 
-def get_android_tools_versions(ndk_path=None):
+def get_android_tools_versions():
     '''get a list of the versions of all installed Android SDK/NDK components'''
 
     global config
@@ -3850,11 +3880,9 @@ def get_android_tools_versions(ndk_path=None):
     if sdk_path[-1] != '/':
         sdk_path += '/'
     components = []
-    if ndk_path:
-        ndk_release_txt = os.path.join(ndk_path, 'RELEASE.TXT')
-        if os.path.isfile(ndk_release_txt):
-            with open(ndk_release_txt, 'r') as fp:
-                components.append((os.path.basename(ndk_path), fp.read()[:-1]))
+    for ndk_path in config.get('ndk_paths', []):
+        version = get_ndk_version(ndk_path)
+        components.append((os.path.basename(ndk_path), str(version)))
 
     pattern = re.compile(r'^Pkg.Revision *= *(.+)', re.MULTILINE)
     for root, dirs, files in os.walk(sdk_path):
@@ -3868,10 +3896,10 @@ def get_android_tools_versions(ndk_path=None):
     return components
 
 
-def get_android_tools_version_log(ndk_path=None):
+def get_android_tools_version_log():
     '''get a list of the versions of all installed Android SDK/NDK components'''
     log = '== Installed Android Tools ==\n\n'
-    components = get_android_tools_versions(ndk_path)
+    components = get_android_tools_versions()
     for name, version in sorted(components):
         log += '* ' + name + ' (' + version + ')\n'
 
@@ -3985,12 +4013,23 @@ def sha256base64(filename):
 
 
 def get_ndk_version(ndk_path):
+    """Get the version info from the metadata in the NDK package
+
+    Since r11, the info is nice and easy to find in
+    sources.properties.  Before, there was a kludgey format in
+    RELEASE.txt.  This is only needed for r10e.
+
+    """
     source_properties = os.path.join(ndk_path, 'source.properties')
+    release_txt = os.path.join(ndk_path, 'RELEASE.TXT')
     if os.path.exists(source_properties):
         with open(source_properties) as fp:
             m = re.search(r'^Pkg.Revision *= *(.+)', fp.read(), flags=re.MULTILINE)
             if m:
                 return m.group(1)
+    elif os.path.exists(release_txt):
+        with open(release_txt) as fp:
+            return fp.read().split('-')[0]
 
 
 def auto_install_ndk(build):
@@ -4021,6 +4060,32 @@ def auto_install_ndk(build):
     ndk = build.get('ndk')
     if not ndk:
         return
+    if isinstance(ndk, str):
+        _install_ndk(ndk)
+    elif isinstance(ndk, list):
+        for n in ndk:
+            _install_ndk(n)
+    else:
+        BuildException(_('Invalid ndk: entry in build: "{ndk}"')
+                       .format(ndk=str(ndk)))
+
+
+def _install_ndk(ndk):
+    """Install specified NDK if it is not already installed
+
+    Parameters
+    ----------
+
+    ndk
+        The NDK version to install, either in "release" form (r21e) or
+        "revision" form (21.4.7075529).
+    """
+    if re.match(r'[1-9][0-9.]+[0-9]', ndk):
+        for ndkdict in NDKS:
+            if ndk == ndkdict['revision']:
+                ndk = ndkdict['release']
+                break
+
     ndk_path = config.get(ndk)
     if ndk_path and os.path.isdir(ndk_path):
         return
@@ -4062,6 +4127,11 @@ def auto_install_ndk(build):
 
 """Derived from https://gitlab.com/fdroid/android-sdk-transparency-log/-/blob/master/checksums.json"""
 NDKS = [
+    {
+        "release": "r10e",
+        "sha256": "ee5f405f3b57c4f5c3b3b8b5d495ae12b660e03d2112e4ed5c728d349f1e520c",
+        "url": "https://dl.google.com/android/repository/android-ndk-r10e-linux-x86_64.zip"
+    },
     {
         "release": "r11",
         "revision": "11.0.2655954",
