@@ -131,7 +131,7 @@ if git_repo.is_dirty() and 'fdroidserver/common.py' in modified:
             'source_branch': branch.name,
             'target_project_id': 36527,  # fdroid/fdroidserver
             'target_branch': 'master',
-            'title': 'update to gradle v' + version,
+            'title': 'update NDK',
             'description': description,
             'labels': ['fdroid-bot', 'buildserver'],
             'remove_source_branch': True,
