@@ -361,12 +361,12 @@ def build_local(app, build, vcs, build_dir, output_dir, log_dir, srclib_dir, ext
     ndk_path = build.ndk_path()
     if build.ndk or (build.buildjni and build.buildjni != ['no']):
         if not ndk_path:
-            logging.critical("Android NDK version '%s' could not be found!" % build.ndk)
-            logging.critical("Configured versions:")
+            logging.warning("Android NDK version '%s' could not be found!" % build.ndk)
+            logging.warning("Configured versions:")
             for k, v in config['ndk_paths'].items():
                 if k.endswith("_orig"):
                     continue
-                logging.critical("  %s: %s" % (k, v))
+                logging.warning("  %s: %s" % (k, v))
             if onserver:
                 common.auto_install_ndk(build)
             else:
