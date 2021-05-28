@@ -224,7 +224,10 @@ def fill_config_defaults(thisconfig):
     """
     for k, v in default_config.items():
         if k not in thisconfig:
-            thisconfig[k] = v
+            if isinstance(v, dict) or isinstance(v, list):
+                thisconfig[k] = v.copy()
+            else:
+                thisconfig[k] = v
 
     # Expand paths (~users and $vars)
     def expand_path(path):
