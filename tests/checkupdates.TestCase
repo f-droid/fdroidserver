@@ -106,6 +106,38 @@ class CheckupdatesTest(unittest.TestCase):
                     fdroidserver.checkupdates.checkupdates_app(app)
                 wrmock.assert_called_with(app.metadatapath, app)
 
+    def test_checkupdates_app_tags(self):
+        fdroidserver.checkupdates.options = mock.Mock()
+        fdroidserver.checkupdates.options.auto = 'bleh'
+        fdroidserver.checkupdates.config = {}
+
+        app = fdroidserver.metadata.App()
+        app.id = 'loop.starts.shooting'
+        app.metadatapath = 'metadata/' + app.id + '.yml'
+        app.CurrentVersion = '1.1.8'
+        app.CurrentVersionCode = 10108
+        app.UpdateCheckMode = 'Tags'
+        app.AutoUpdateMode = 'Version'
+
+        build = fdroidserver.metadata.Build()
+        build.versionCode = app.CurrentVersionCode
+        build.versionName = app.CurrentVersion
+        app['Builds'].append(build)
+
+        with mock.patch('fdroidserver.checkupdates.check_tags', lambda app,
+                        pattern: (None, 'bla', None)):
+            fdroidserver.checkupdates.checkupdates_app(app)
+
+        with mock.patch('fdroidserver.checkupdates.check_tags', lambda app,
+                        pattern: ('1.1.9', 10109, 'v1.1.9')):
+            with mock.patch('fdroidserver.metadata.write_metadata',
+                            mock.Mock()):
+                with mock.patch('subprocess.call', lambda cmd: 0):
+                    fdroidserver.checkupdates.checkupdates_app(app)
+                build = app['Builds'][-1]
+                self.assertEqual(build.versionName, '1.1.9')
+                self.assertEqual(build.commit, 'v1.1.9')
+
     def test_check_http(self):
         fdroidserver.checkupdates.options = mock.Mock()
 
