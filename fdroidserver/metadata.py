@@ -448,7 +448,7 @@ valuetypes = {
                    ["AntiFeatures"]),
 
     FieldValidator("Auto Update Mode",
-                   r"^(Version .+|None)$",
+                   r"^(Version.*|None)$",
                    ["AutoUpdateMode"]),
 
     FieldValidator("Update Check Mode",

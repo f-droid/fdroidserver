@@ -492,7 +492,7 @@ def checkupdates_app(app):
             logging.warning("Can't auto-update app with no CurrentVersionCode: " + app.id)
         elif mode in ('None', 'Static'):
             pass
-        elif mode.startswith('Version '):
+        elif mode.startswith('Version'):
             pattern = mode[8:]
             suffix = ''
             if pattern.startswith('+'):
