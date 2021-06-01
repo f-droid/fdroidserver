@@ -968,7 +968,9 @@ def write_yaml(mf, app):
         return builds
 
     yaml_app = _app_to_yaml(app)
-    ruamel.yaml.round_trip_dump(yaml_app, mf, indent=4, block_seq_indent=2)
+    yaml = ruamel.yaml.YAML()
+    yaml.indent(mapping=4, sequence=4, offset=2)
+    yaml.dump(yaml_app, stream=mf)
 
 
 build_line_sep = re.compile(r'(?<!\\),')
