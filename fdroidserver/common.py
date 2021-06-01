@@ -4117,15 +4117,16 @@ def _install_ndk(ndk):
                 zipfp.extract(info.filename, path=ndk_base)
                 os.chmod(os.path.join(ndk_base, info.filename), 0o644)  # nosec bandit B103
     os.remove(zipball)
-    extracted = glob.glob(os.path.join(ndk_base, '*'))[0]
-    version = get_ndk_version(extracted)
-    ndk_dir = os.path.join(ndk_base, version)
-    os.rename(extracted, ndk_dir)
-    if 'ndk_paths' not in config:
-        config['ndk_paths'] = dict()
-    config['ndk_paths'][ndk] = ndk_dir
-    logging.info(_('Set NDK {release} ({version}) up')
-                 .format(release=ndk, version=version))
+    for extracted in glob.glob(os.path.join(ndk_base, '*')):
+        version = get_ndk_version(extracted)
+        if os.path.basename(extracted) != version:
+            ndk_dir = os.path.join(ndk_base, version)
+            os.rename(extracted, ndk_dir)
+            if 'ndk_paths' not in config:
+                config['ndk_paths'] = dict()
+            config['ndk_paths'][ndk] = ndk_dir
+            logging.info(_('Set NDK {release} ({version}) up')
+                         .format(release=ndk, version=version))
 
 
 """Derived from https://gitlab.com/fdroid/android-sdk-transparency-log/-/blob/master/checksums.json"""
