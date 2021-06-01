@@ -1,16 +1,19 @@
 #!/bin/bash
 #
+# $1 is the root dir to install the NDKs into
+# $2 and after are the NDK releases to install
 
 echo $0
 set -e
 set -x
 
 NDK_BASE=$1
+shift
 
 test -e $NDK_BASE || mkdir -p $NDK_BASE
 cd $NDK_BASE
 
-for version in r21e r22b; do
+for version in $@; do
     if [ ! -e ${NDK_BASE}/${version} ]; then
         unzip /vagrant/cache/android-ndk-${version}-linux-x86_64.zip > /dev/null
         mv android-ndk-${version} \
