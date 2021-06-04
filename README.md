@@ -88,5 +88,6 @@ with _jenkins-_ since they are run on https://jenkins.debian.net.
 
 Everything can be translated.  See
 [Translation and Localization](https://f-droid.org/docs/Translation_and_Localization)
-for more info.
+for more info.  
+
 [![translation status](https://hosted.weblate.org/widgets/f-droid/-/fdroidserver/multi-auto.svg)](https://hosted.weblate.org/engage/f-droid/?utm_source=widget)
