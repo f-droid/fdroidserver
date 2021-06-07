@@ -266,9 +266,10 @@ def check_repomanifest(app, branch=None):
             if vercode:
                 logging.debug("Manifest exists in subdir '{0}'. Found version {1} ({2})"
                               .format(subdir, version, vercode))
-                if int(vercode) > int(hcode):
+                i_vercode = common.version_code_string_to_int(vercode)
+                if i_vercode > common.version_code_string_to_int(hcode):
                     hpak = package
-                    hcode = str(int(vercode))
+                    hcode = str(i_vercode)
                     hver = version
 
         if not hpak:
