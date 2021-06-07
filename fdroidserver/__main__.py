@@ -21,7 +21,6 @@
 import re
 import sys
 import os
-import locale
 import pkgutil
 import logging
 
@@ -198,7 +197,7 @@ def main():
     else:
         mod = __import__(available_plugins[command]['name'], None, None, [command])
 
-    system_langcode, system_encoding = locale.getdefaultlocale()
+    system_encoding = sys.getdefaultencoding()
     if system_encoding is None or system_encoding.lower() not in ('utf-8', 'utf8'):
         logging.warning(_("Encoding is set to '{enc}' fdroid might run "
                           "into encoding issues. Please set it to 'UTF-8' "
