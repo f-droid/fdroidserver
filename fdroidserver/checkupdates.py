@@ -166,9 +166,8 @@ def check_tags(app, pattern):
                     filecontent = (build_dir / filecode).read_text()
 
                     m = re.search(codeex, filecontent)
-                    if not m:
-                        raise FDroidException("No RE match for version code")
-                    vercode = m.group(1).strip()
+                    if m:
+                        vercode = m.group(1).strip()
 
                 version = "??"
                 if filever:
@@ -176,9 +175,8 @@ def check_tags(app, pattern):
                         filecontent = (build_dir / filever).read_text()
 
                     m = re.search(verex, filecontent)
-                    if not m:
-                        raise FDroidException("No RE match for version")
-                    version = m.group(1)
+                    if m:
+                        version = m.group(1)
 
                     if vercode:
                         logging.debug("UpdateCheckData found version {0} ({1})"
