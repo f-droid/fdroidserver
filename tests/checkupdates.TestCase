@@ -2,19 +2,17 @@
 
 # http://www.drdobbs.com/testing/unit-testing-with-python/240165163
 
-import inspect
 import logging
 import optparse
 import os
 import sys
 import unittest
 from unittest import mock
+from pathlib import Path
 
 
-localmodule = os.path.realpath(
-    os.path.join(os.path.dirname(inspect.getfile(inspect.currentframe())), '..')
-)
-print('localmodule: ' + localmodule)
+localmodule = Path(__file__).resolve().parent.parent
+print('localmodule: ' + str(localmodule))
 if localmodule not in sys.path:
     sys.path.insert(0, localmodule)
 
@@ -28,11 +26,11 @@ class CheckupdatesTest(unittest.TestCase):
 
     def setUp(self):
         logging.basicConfig(level=logging.DEBUG)
-        self.basedir = os.path.join(localmodule, 'tests')
-        self.tmpdir = os.path.abspath(os.path.join(self.basedir, '..', '.testfiles'))
-        if not os.path.exists(self.tmpdir):
-            os.makedirs(self.tmpdir)
-        os.chdir(self.basedir)
+        self.basedir = localmodule / 'tests'
+        self.tmpdir = localmodule / '.testfiles'
+        self.tmpdir.mkdir(exist_ok=True)
+        # TODO: Python3.6: Accepts a path-like object.
+        os.chdir(str(self.basedir))
 
     def test_autoupdatemode_no_suffix(self):
         fdroidserver.checkupdates.options = mock.Mock()
@@ -52,7 +50,9 @@ class CheckupdatesTest(unittest.TestCase):
         build.versionName = app.CurrentVersion
         app['Builds'].append(build)
 
-        with mock.patch('fdroidserver.checkupdates.check_http', lambda app: ('1.1.9', 10109)):
+        with mock.patch(
+            'fdroidserver.checkupdates.check_http', lambda app: ('1.1.9', 10109)
+        ):
             with mock.patch('fdroidserver.metadata.write_metadata', mock.Mock()):
                 with mock.patch('subprocess.call', lambda cmd: 0):
                     fdroidserver.checkupdates.checkupdates_app(app)
@@ -71,14 +71,16 @@ class CheckupdatesTest(unittest.TestCase):
         app.CurrentVersion = '1.1.8-fdroid'
         app.CurrentVersionCode = 10108
         app.UpdateCheckMode = 'HTTP'
-        app.AutoUpdateMode = 'Version +.%c-fdroid v%v_%c'
+        app.AutoUpdateMode = r'Version +.%c-fdroid v%v_%c'
 
         build = fdroidserver.metadata.Build()
         build.versionCode = app.CurrentVersionCode
         build.versionName = app.CurrentVersion
         app['Builds'].append(build)
 
-        with mock.patch('fdroidserver.checkupdates.check_http', lambda app: ('1.1.9', 10109)):
+        with mock.patch(
+            'fdroidserver.checkupdates.check_http', lambda app: ('1.1.9', 10109)
+        ):
             with mock.patch('fdroidserver.metadata.write_metadata', mock.Mock()):
                 with mock.patch('subprocess.call', lambda cmd: 0):
                     fdroidserver.checkupdates.checkupdates_app(app)
@@ -98,11 +100,17 @@ class CheckupdatesTest(unittest.TestCase):
         app.UpdateCheckMode = 'HTTP'
         app.UpdateCheckData = 'mock'
 
-        with mock.patch('fdroidserver.checkupdates.check_http', lambda app: (None, 'bla')):
+        with mock.patch(
+            'fdroidserver.checkupdates.check_http', lambda app: (None, 'bla')
+        ):
             fdroidserver.checkupdates.checkupdates_app(app)
 
-        with mock.patch('fdroidserver.checkupdates.check_http', lambda app: ('1.1.9', 10109)):
-            with mock.patch('fdroidserver.metadata.write_metadata', mock.Mock()) as wrmock:
+        with mock.patch(
+            'fdroidserver.checkupdates.check_http', lambda app: ('1.1.9', 10109)
+        ):
+            with mock.patch(
+                'fdroidserver.metadata.write_metadata', mock.Mock()
+            ) as wrmock:
                 with mock.patch('subprocess.call', lambda cmd: 0):
                     fdroidserver.checkupdates.checkupdates_app(app)
                 wrmock.assert_called_with(app.metadatapath, app)
@@ -125,14 +133,17 @@ class CheckupdatesTest(unittest.TestCase):
         build.versionName = app.CurrentVersion
         app['Builds'].append(build)
 
-        with mock.patch('fdroidserver.checkupdates.check_tags', lambda app,
-                        pattern: (None, 'bla', None)):
+        with mock.patch(
+            'fdroidserver.checkupdates.check_tags',
+            lambda app, pattern: (None, 'bla', None),
+        ):
             fdroidserver.checkupdates.checkupdates_app(app)
 
-        with mock.patch('fdroidserver.checkupdates.check_tags', lambda app,
-                        pattern: ('1.1.9', 10109, 'v1.1.9')):
-            with mock.patch('fdroidserver.metadata.write_metadata',
-                            mock.Mock()):
+        with mock.patch(
+            'fdroidserver.checkupdates.check_tags',
+            lambda app, pattern: ('1.1.9', 10109, 'v1.1.9'),
+        ):
+            with mock.patch('fdroidserver.metadata.write_metadata', mock.Mock()):
                 with mock.patch('subprocess.call', lambda cmd: 0):
                     fdroidserver.checkupdates.checkupdates_app(app)
                 build = app['Builds'][-1]
@@ -200,16 +211,17 @@ class CheckupdatesTest(unittest.TestCase):
         vcs = mock.Mock()
         vcs.latesttags.return_value = ['1.1.8', '1.1.9']
         with mock.patch(
-            'builtins.open', mock.mock_open(read_data='v1.1.9\nc10109')
+            'pathlib.Path.read_text', lambda a: 'v1.1.9\nc10109'
         ) as _ignored, mock.patch('fdroidserver.common.getvcs', return_value=vcs):
             _ignored  # silence the linters
-            vername, vercode, tag = fdroidserver.checkupdates.check_tags(app, None)
+            vername, vercode, _tag = fdroidserver.checkupdates.check_tags(app, None)
             self.assertEqual(vername, '1.1.9')
             self.assertEqual(vercode, '10109')
 
 
 if __name__ == "__main__":
-    os.chdir(os.path.dirname(__file__))
+    # TODO: Python3.6: Accept path-like object.
+    os.chdir(str(Path(__file__).parent))
 
     parser = optparse.OptionParser()
     parser.add_option(

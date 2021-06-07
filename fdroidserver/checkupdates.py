@@ -31,6 +31,7 @@ from distutils.version import LooseVersion
 import logging
 import copy
 import urllib.parse
+from pathlib import Path
 
 from . import _
 from . import common
@@ -62,7 +63,7 @@ def check_http(app):
                 raise FDroidException(_('UpdateCheckData has invalid URL: {url}').format(url=urlcode))
 
         vercode = None
-        if len(urlcode) > 0:
+        if urlcode:
             logging.debug("...requesting {0}".format(urlcode))
             req = urllib.request.Request(urlcode, None, headers=net.HEADERS)
             resp = urllib.request.urlopen(req, None, 20)  # nosec B310 scheme is filtered above
@@ -74,7 +75,7 @@ def check_http(app):
             vercode = m.group(1).strip()
 
         version = "??"
-        if len(urlver) > 0:
+        if urlver:
             if urlver != '.':
                 logging.debug("...requesting {0}".format(urlver))
                 req = urllib.request.Request(urlver, None)
@@ -109,10 +110,10 @@ def check_tags(app, pattern):
     try:
 
         if app.RepoType == 'srclib':
-            build_dir = os.path.join('build', 'srclib', app.Repo)
+            build_dir = Path('build/srclib') / app.Repo
             repotype = common.getsrclibvcs(app.Repo)
         else:
-            build_dir = os.path.join('build', app.id)
+            build_dir = Path('build') / app.id
             repotype = app.RepoType
 
         if repotype not in ('git', 'git-svn', 'hg', 'bzr'):
@@ -161,8 +162,8 @@ def check_tags(app, pattern):
             if app.UpdateCheckData:
                 filecode, codeex, filever, verex = app.UpdateCheckData.split('|')
                 vercode = None
-                if len(filecode) > 0:
-                    filecontent = open(os.path.join(build_dir, filecode)).read()
+                if filecode:
+                    filecontent = (build_dir / filecode).read_text()
 
                     m = re.search(codeex, filecontent)
                     if not m:
@@ -170,9 +171,9 @@ def check_tags(app, pattern):
                     vercode = m.group(1).strip()
 
                 version = "??"
-                if len(filever) > 0:
+                if filever:
                     if filever != '.':
-                        filecontent = open(os.path.join(build_dir, filever)).read()
+                        filecontent = (build_dir / filever).read_text()
 
                     m = re.search(verex, filecontent)
                     if not m:
@@ -189,12 +190,9 @@ def check_tags(app, pattern):
                             hver = version
             else:
                 for subdir in possible_subdirs(app):
-                    if subdir == '.':
-                        root_dir = build_dir
-                    else:
-                        root_dir = os.path.join(build_dir, subdir)
+                    root_dir = build_dir / subdir
                     paths = common.manifest_paths(root_dir, last_build.gradle)
-                    version, vercode, package = common.parse_androidmanifests(paths, app)
+                    version, vercode, _package = common.parse_androidmanifests(paths, app)
                     if vercode:
                         logging.debug("Manifest exists in subdir '{0}'. Found version {1} ({2})"
                                       .format(subdir, version, vercode))
@@ -227,10 +225,10 @@ def check_repomanifest(app, branch=None):
     try:
 
         if app.RepoType == 'srclib':
-            build_dir = os.path.join('build', 'srclib', app.Repo)
+            build_dir = Path('build/srclib') / app.Repo
             repotype = common.getsrclibvcs(app.Repo)
         else:
-            build_dir = os.path.join('build', app.id)
+            build_dir = Path('build') / app.id
             repotype = app.RepoType
 
         # Set up vcs interface and make sure we have the latest code...
@@ -248,7 +246,7 @@ def check_repomanifest(app, branch=None):
             vcs.gotorevision(None)
 
         last_build = metadata.Build()
-        if len(app.get('Builds', [])) > 0:
+        if app.get('Builds', []):
             last_build = app.get('Builds', [])[-1]
 
         try_init_submodules(app, last_build, vcs)
@@ -257,10 +255,7 @@ def check_repomanifest(app, branch=None):
         hver = None
         hcode = "0"
         for subdir in possible_subdirs(app):
-            if subdir == '.':
-                root_dir = build_dir
-            else:
-                root_dir = os.path.join(build_dir, subdir)
+            root_dir = build_dir / subdir
             paths = common.manifest_paths(root_dir, last_build.gradle)
             version, vercode, package = common.parse_androidmanifests(paths, app)
             if vercode:
@@ -290,10 +285,10 @@ def check_repotrunk(app):
 
     try:
         if app.RepoType == 'srclib':
-            build_dir = os.path.join('build', 'srclib', app.Repo)
+            build_dir = Path('build/srclib') / app.Repo
             repotype = common.getsrclibvcs(app.Repo)
         else:
-            build_dir = os.path.join('build', app.id)
+            build_dir = Path('build') / app.id
             repotype = app.RepoType
 
         if repotype not in ('git-svn', ):
@@ -360,10 +355,11 @@ def try_init_submodules(app, last_build, vcs):
 # Return all directories under startdir that contain any of the manifest
 # files, and thus are probably an Android project.
 def dirs_with_manifest(startdir):
-    for root, dirs, files in os.walk(startdir):
+    # TODO: Python3.6: Accepts a path-like object.
+    for root, _dirs, files in os.walk(str(startdir)):
         if any(m in files for m in [
                 'AndroidManifest.xml', 'pom.xml', 'build.gradle', 'build.gradle.kts']):
-            yield root
+            yield Path(root)
 
 
 # Tries to find a new subdir starting from the root build_dir. Returns said
@@ -371,9 +367,9 @@ def dirs_with_manifest(startdir):
 def possible_subdirs(app):
 
     if app.RepoType == 'srclib':
-        build_dir = os.path.join('build', 'srclib', app.Repo)
+        build_dir = Path('build/srclib') / app.Repo
     else:
-        build_dir = os.path.join('build', app.id)
+        build_dir = Path('build') / app.id
 
     last_build = app.get_last_build()
 
@@ -381,7 +377,7 @@ def possible_subdirs(app):
         m_paths = common.manifest_paths(d, last_build.gradle)
         package = common.parse_androidmanifests(m_paths, app)[2]
         if package is not None:
-            subdir = os.path.relpath(d, build_dir)
+            subdir = d.relative_to(build_dir)
             logging.debug("Adding possible subdir %s" % subdir)
             yield subdir
 
@@ -401,9 +397,9 @@ def fetch_autoname(app, tag):
         return None
 
     if app.RepoType == 'srclib':
-        build_dir = os.path.join('build', 'srclib', app.Repo)
+        build_dir = Path('build/srclib') / app.Repo
     else:
-        build_dir = os.path.join('build', app.id)
+        build_dir = Path('build') / app.id
 
     try:
         vcs = common.getvcs(app.RepoType, app.Repo, build_dir)
@@ -413,13 +409,10 @@ def fetch_autoname(app, tag):
 
     last_build = app.get_last_build()
 
-    logging.debug("...fetch auto name from " + build_dir)
+    logging.debug("...fetch auto name from " + str(build_dir))
     new_name = None
     for subdir in possible_subdirs(app):
-        if subdir == '.':
-            root_dir = build_dir
-        else:
-            root_dir = os.path.join(build_dir, subdir)
+        root_dir = build_dir / subdir
         new_name = common.fetch_real_name(root_dir, last_build.gradle)
         if new_name is not None:
             break

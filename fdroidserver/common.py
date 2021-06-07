@@ -51,6 +51,7 @@ import yaml
 import zipfile
 import tempfile
 import json
+from pathlib import Path
 
 # TODO change to only import defusedxml once its installed everywhere
 try:
@@ -119,13 +120,13 @@ orig_path = None
 default_config = {
     'sdk_path': "$ANDROID_HOME",
     'ndk_paths': {},
-    'cachedir': os.path.join(os.getenv('HOME'), '.cache', 'fdroidserver'),
+    'cachedir': str(Path.home() / '.cache/fdroidserver'),
     'java_paths': None,
     'scan_binary': False,
     'ant': "ant",
     'mvn3': "mvn",
     'gradle': os.path.join(FDROID_PATH, 'gradlew-fdroid'),
-    'gradle_version_dir': os.path.join(os.path.join(os.getenv('HOME'), '.cache', 'fdroidserver'), 'gradle'),
+    'gradle_version_dir': str(Path.home() / '.cache/fdroidserver/gradle'),
     'sync_from_local_copy_dir': False,
     'allow_disabled_algorithms': False,
     'per_app_repos': False,
@@ -884,6 +885,8 @@ def setup_vcs(app):
 
 
 def getvcs(vcstype, remote, local):
+    # TODO: Remove this in Python3.6
+    local = str(local)
     if vcstype == 'git':
         return vcs_git(remote, local)
     if vcstype == 'git-svn':
@@ -1082,13 +1085,13 @@ class vcs_git(vcs):
 
         p = FDroidPopen(['git', 'rev-parse', '--show-toplevel'], cwd=self.local, output=False)
         result = p.output.rstrip()
-        if not result.endswith(self.local):
+        if Path(result) != Path(self.local).resolve():
             raise VCSException('Repository mismatch')
 
     def gotorevisionx(self, rev):
         if not os.path.exists(self.local):
             # Brand new checkout
-            p = self.git(['clone', '--', self.remote, self.local])
+            p = self.git(['clone', '--', self.remote, str(self.local)])
             if p.returncode != 0:
                 self.clone_failed = True
                 raise VCSException("Git clone failed", p.output)
@@ -1197,7 +1200,7 @@ class vcs_gitsvn(vcs):
         """
         p = FDroidPopen(['git', 'rev-parse', '--show-toplevel'], cwd=self.local, output=False)
         result = p.output.rstrip()
-        if not result.endswith(self.local):
+        if Path(result) != Path(self.local).resolve():
             raise VCSException('Repository mismatch')
 
     def git(self, args, envs=dict(), cwd=None, output=True):
@@ -1258,7 +1261,7 @@ class vcs_gitsvn(vcs):
                 raise VCSException(_('Invalid redirect to non-HTTPS: {before} -> {after} ')
                                    .format(before=remote, after=location))
 
-            gitsvn_args.extend(['--', remote, self.local])
+            gitsvn_args.extend(['--', remote, str(self.local)])
             p = self.git(gitsvn_args)
             if p.returncode != 0:
                 self.clone_failed = True
@@ -1358,7 +1361,7 @@ class vcs_hg(vcs):
 
     def gotorevisionx(self, rev):
         if not os.path.exists(self.local):
-            p = FDroidPopen(['hg', 'clone', '--ssh', '/bin/false', '--', self.remote, self.local],
+            p = FDroidPopen(['hg', 'clone', '--ssh', '/bin/false', '--', self.remote, str(self.local)],
                             output=False)
             if p.returncode != 0:
                 self.clone_failed = True
@@ -1416,7 +1419,7 @@ class vcs_bzr(vcs):
 
     def gotorevisionx(self, rev):
         if not os.path.exists(self.local):
-            p = self.bzr(['branch', self.remote, self.local], output=False)
+            p = self.bzr(['branch', self.remote, str(self.local)], output=False)
             if p.returncode != 0:
                 self.clone_failed = True
                 raise VCSException("Bzr branch failed", p.output)
@@ -1494,6 +1497,8 @@ def retrieve_string_singleline(app_dir, string, xmlfiles=None):
 def manifest_paths(app_dir, flavours):
     '''Return list of existing files that will be used to find the highest vercode'''
 
+    # TODO: Remove this in Python3.6
+    app_dir = str(app_dir)
     possible_manifests = \
         [os.path.join(app_dir, 'AndroidManifest.xml'),
          os.path.join(app_dir, 'src', 'main', 'AndroidManifest.xml'),
@@ -1513,6 +1518,8 @@ def manifest_paths(app_dir, flavours):
 
 def fetch_real_name(app_dir, flavours):
     '''Retrieve the package name. Returns the name, or None if not found.'''
+    # TODO: Remove this in Python3.6
+    app_dir = str(app_dir)
     for path in manifest_paths(app_dir, flavours):
         if not path.endswith('.xml') or not os.path.isfile(path):
             continue
