@@ -217,7 +217,7 @@ def get_lastbuild(builds):
 def check_update_check_data_url(app):
     """UpdateCheckData must have a valid HTTPS URL to protect checkupdates runs
     """
-    if app.UpdateCheckData:
+    if app.UpdateCheckData and app.UpdateCheckMode == 'HTTP':
         urlcode, codeex, urlver, verex = app.UpdateCheckData.split('|')
         for url in (urlcode, urlver):
             if url != '.':
