@@ -130,7 +130,7 @@ def scan_binary(apkfile):
 
 def scan_source(build_dir, build=metadata.Build()):
     """Scan the source code in the given directory (and all subdirectories).
-    
+
     Returns
     -------
     the number of fatal problems encountered.
@@ -198,7 +198,7 @@ def scan_source(build_dir, build=metadata.Build()):
 
         Parameters
         ----------
-        what: string 
+        what: string
           describing the problem, will be printed in log messages
         path_in_build_dir
           path to the file relative to `build`-dir
@@ -218,13 +218,13 @@ def scan_source(build_dir, build=metadata.Build()):
 
         Parameters
         ----------
-        what: string 
+        what: string
           describing the problem, will be printed in log messages
         path_in_build_dir
           path to the file relative to `build`-dir
         filepath
           Path (relative to our current path) to the file
-        
+
         Returns
         -------
         0 as we deleted the offending file
@@ -247,7 +247,7 @@ def scan_source(build_dir, build=metadata.Build()):
 
         Parameters
         ----------
-        what: string 
+        what: string
           describing the problem, will be printed in log messages
         path_in_build_dir
           path to the file relative to `build`-dir
@@ -265,18 +265,18 @@ def scan_source(build_dir, build=metadata.Build()):
 
     def handleproblem(what, path_in_build_dir, filepath):
         """Dispatches to problem handlers (ignore, delete, warn).
-        
+
         Or returns 1 for increasing the error count.
 
         Parameters
         ----------
-        what: string 
+        what: string
           describing the problem, will be printed in log messages
         path_in_build_dir
           path to the file relative to `build`-dir
         filepath
           Path (relative to our current path) to the file
-        
+
         Returns
         -------
         0 if the problem was ignored/deleted/is only a warning, 1 otherwise

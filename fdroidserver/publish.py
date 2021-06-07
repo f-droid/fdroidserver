@@ -56,7 +56,7 @@ def publish_source_tarball(apkfilename, unsigned_dir, output_dir):
 
 def key_alias(appid):
     """No summary.
-    
+
     Get the alias which F-Droid uses to indentify the singing key
     for this App in F-Droids keystore.
     """
@@ -101,7 +101,7 @@ def read_fingerprints_from_keystore():
 
 def sign_sig_key_fingerprint_list(jar_file):
     """Sign the list of app-signing key fingerprints.
-    
+
     This is used primaryily by fdroid update to determine which APKs
     where built and signed by F-Droid and which ones were
     manually added by users.
@@ -125,7 +125,7 @@ def sign_sig_key_fingerprint_list(jar_file):
 
 def store_stats_fdroid_signing_key_fingerprints(appids, indent=None):
     """Store list of all signing-key fingerprints for given appids to HD.
-    
+
     This list will later on be needed by fdroid update.
     """
     if not os.path.exists('stats'):
@@ -172,9 +172,9 @@ def check_for_key_collisions(allapps):
 
     Parameters
     ----------
-    allapps 
+    allapps
       a dict of all apps to process
-    
+
     Returns
     -------
     a list of all aliases corresponding to allapps

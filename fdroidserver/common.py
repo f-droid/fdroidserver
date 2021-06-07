@@ -972,7 +972,7 @@ class vcs:
 
     def gotorevision(self, rev, refresh=True):
         """Take the local repository to a clean version of the given revision.
-        
+
         Take the local repository to a clean version of the given
         revision, which is specificed in the VCS's native
         format. Beforehand, the repository can be dirty, or even
@@ -1031,7 +1031,7 @@ class vcs:
 
     def gotorevisionx(self, rev):  # pylint: disable=unused-argument
         """No summary.
-        
+
         Derived classes need to implement this.
 
         It's called once basic checking has been performed.
@@ -1109,7 +1109,7 @@ class vcs_git(vcs):
 
     def checkrepo(self):
         """No summary.
-        
+
         If the local directory exists, but is somehow not a git repository,
         git will traverse up the directory tree until it finds one
         that is (i.e.  fdroidserver) and then we'll proceed to destroy
@@ -1256,7 +1256,7 @@ class vcs_gitsvn(vcs):
 
     def checkrepo(self):
         """No summary.
-        
+
         If the local directory exists, but is somehow not a git repository,
         git will traverse up the directory tree until it finds one that
         is (i.e.  fdroidserver) and then we'll proceed to destory it!
@@ -2499,7 +2499,7 @@ class KnownApks:
 
     def getapp(self, apkname):
         """Look up information - given the 'apkname'.
-        
+
         Returns (app id, date added/None).
         Or returns None for an unknown apk.
         """
@@ -2587,7 +2587,7 @@ def is_apk_and_debuggable(apkfile):
     ----------
     apkfile
         full path to the APK to check
-        
+
     """
     if get_file_extension(apkfile) != 'apk':
         return False
@@ -2708,7 +2708,7 @@ def get_apk_id_aapt(apkfile):
 
 def get_native_code(apkfile):
     """Aapt checks if there are architecture folders under the lib/ folder.
-    
+
     We are simulating the same behaviour.
     """
     arch_re = re.compile("^lib/(.*)/.*$")
@@ -2834,7 +2834,7 @@ def FDroidPopen(commands, cwd=None, envs=None, output=True, stderr_to_stdout=Tru
         optionally specifies a working directory
     envs
         a optional dictionary of environment variables and their values
-    
+
     Returns
     -------
     A PopenResult.
@@ -3168,7 +3168,7 @@ def metadata_find_signing_files(appid, vercode):
 
     Returns
     -------
-    List 
+    List
         of 4-tuples for each signing key with following paths:
         (signature_file, signature_block_file, manifest, v2_files), where v2_files
         is either a (apk_signing_block_offset_file, apk_signing_block_file) pair or None
@@ -3207,7 +3207,7 @@ def metadata_find_developer_signing_files(appid, vercode):
 
     Returns
     -------
-    List 
+    List
         of 4-tuples for each signing key with following paths:
         (signature_file, signature_block_file, manifest, v2_files), where v2_files
         is either a (apk_signing_block_offset_file, apk_signing_block_file) pair or None
@@ -3337,7 +3337,7 @@ def apk_extract_signatures(apkpath, outdir):
 
 def get_min_sdk_version(apk):
     """Wrap the androguard function to always return and int.
-    
+
     Fall back to 1 if we can't get a valid minsdk version.
 
     Parameters
@@ -3490,7 +3490,7 @@ def verify_apk_signature(apk, min_sdk_version=None):
 
     Returns
     -------
-    Boolean 
+    Boolean
         whether the APK was verified
     """
     if set_command_in_config('apksigner'):
@@ -3534,7 +3534,7 @@ def verify_old_apk_signature(apk):
 
     Returns
     -------
-    Boolean 
+    Boolean
         whether the APK was verified
 
     """
@@ -3635,7 +3635,7 @@ def compare_apks(apk1, apk2, tmp_dir, log_dir=None):
 
 def set_command_in_config(command):
     """Try to find specified command in the path, if it hasn't been manually set in config.yml.
-    
+
     If found, it is added to the config
     dict.  The return value says whether the command is available.
 
@@ -3782,7 +3782,7 @@ def load_stats_fdroid_signing_key_fingerprints():
 
     Returns
     -------
-    dict 
+    dict
         containing the signing-key fingerprints.
     """
     jar_file = os.path.join('stats', 'publishsigkeys.jar')
@@ -3819,7 +3819,7 @@ def write_to_config(thisconfig, key, value=None, config_file=None):
         config dictionary
     key
         variable name in config to be overwritten/added
-    value   
+    value
         optional value to be written, instead of fetched
         from 'thisconfig' dictionary.
     """

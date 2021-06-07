@@ -371,7 +371,7 @@ def zip_data(apkfile, count=1024):
     """
     Extract central directory, EOCD, and offsets from ZIP.
 
-    Returns 
+    Returns
     -------
     ZipData
     """
@@ -411,7 +411,7 @@ def patch_v2_sig(extracted_v2_sig, output_apk):
 def patch_apk(extracted_meta, extracted_v2_sig, unsigned_apk, output_apk):
     """Patch extracted_meta + extracted_v2_sig.
 
-    Patches extracted_meta + extracted_v2_sig (if not None) 
+    Patches extracted_meta + extracted_v2_sig (if not None)
     onto unsigned_apk and save as output_apk.
     """
     date_time = copy_apk(unsigned_apk, output_apk)

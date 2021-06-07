@@ -363,7 +363,7 @@ def check_gplay(app):
 
 def try_init_submodules(app, last_build, vcs):
     """Try to init submodules if the last build entry used them.
-    
+
     They might have been removed from the app's repo in the meantime,
     so if we can't find any submodules we continue with the updates check.
     If there is any other error in initializing them then we stop the check.

@@ -671,7 +671,7 @@ def has_known_vulnerability(filename):
 
 def insert_obbs(repodir, apps, apks):
     """Scan the .obb files in a given repo directory and adds them to the relevant APK instances.
-    
+
     OBB files have versionCodes like APK
     files, and they are loosely associated.  If there is an OBB file
     present, then any APK with the same or higher versionCode will use
@@ -1950,7 +1950,7 @@ def fill_missing_icon_densities(empty_densities, icon_filename, apk, repo_dir):
 
 def apply_info_from_latest_apk(apps, apks):
     """No summary.
-    
+
     Some information from the apks needs to be applied up to the application level.
 
     When doing this, we use the info from the most recent version's apk.
@@ -2236,7 +2236,7 @@ def prepare_apps(apps, apks, repodir):
       list of apks that belong into repo, this gets modified in place
     repodir
       the target repository directory, metadata files will be copied here
-    
+
     Returns
     -------
     the relevant subset of apps (as a deepcopy)

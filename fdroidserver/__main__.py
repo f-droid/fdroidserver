@@ -70,9 +70,9 @@ def print_help(available_plugins=None):
 
 def preparse_plugin(module_name, module_dir):
     """No summary.
-    
+
     Simple regex based parsing for plugin scripts.
-       
+
     So we don't have to import them when we just need the summary,
     but not plan on executing this particular plugin.
     """

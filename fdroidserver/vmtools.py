@@ -80,7 +80,7 @@ def _check_output(cmd, cwd=None):
 
 def get_build_vm(srvdir, provider=None):
     """No summary.
-    
+
     Factory function for getting FDroidBuildVm instances.
 
     This function tries to figure out what hypervisor should be used

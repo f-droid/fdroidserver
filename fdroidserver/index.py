@@ -590,7 +590,7 @@ def _copy_to_local_copy_dir(repodir, f):
 
 def v1_sort_packages(packages, fdroid_signing_key_fingerprints):
     """Sort the supplied list to ensure a deterministic sort order for package entries in the index file.
-    
+
     This sort-order also expresses
     installation preference to the clients.
     (First in this list = first to install)
@@ -1124,7 +1124,7 @@ def get_public_key_from_jar(jar):
     ----------
     jar
       a zipfile.ZipFile object
-    
+
     Returns
     -------
     the public key from the jar and its fingerprint

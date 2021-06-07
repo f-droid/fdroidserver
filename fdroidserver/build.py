@@ -836,7 +836,7 @@ def trybuild(app, build, build_dir, output_dir, log_dir, also_check_dir,
     Parameters
     ----------
     output_dir
-        The directory where the build output will go. 
+        The directory where the build output will go.
         Usually this is the 'unsigned' directory.
     repo_dir
         The repo directory - used for checking if the build is necessary.
@@ -895,7 +895,7 @@ def force_halt_build(timeout):
 
 def parse_commandline():
     """Parse the command line.
-    
+
     Returns
     -------
     options

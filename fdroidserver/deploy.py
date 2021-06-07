@@ -48,7 +48,7 @@ REMOTE_HOSTNAME_REGEX = re.compile(r'\W*\w+\W+(\w+).*')
 
 def update_awsbucket(repo_section):
     """Upload the contents of the directory `repo_section` (including subdirectories) to the AWS S3 "bucket".
-    
+
     The contents of that subdir of the
     bucket will first be deleted.
 
@@ -141,10 +141,10 @@ def update_awsbucket_s3cmd(repo_section):
 
 def update_awsbucket_libcloud(repo_section):
     """No summary.
-    
+
     Upload the contents of the directory `repo_section` (including
-    subdirectories) to the AWS S3 "bucket". 
-    
+    subdirectories) to the AWS S3 "bucket".
+
     The contents of that subdir of the
     bucket will first be deleted.
 
