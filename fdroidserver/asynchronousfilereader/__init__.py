@@ -1,8 +1,7 @@
-"""
+"""Simple thread based asynchronous file reader for Python.
+
 AsynchronousFileReader
 ======================
-
-Simple thread based asynchronous file reader for Python.
 
 see https://github.com/soxofaan/asynchronousfilereader
 
@@ -22,10 +21,9 @@ except ImportError:
 
 
 class AsynchronousFileReader(threading.Thread):
-    """
-    Helper class to implement asynchronous reading of a file
-    in a separate thread. Pushes read lines on a queue to
-    be consumed in another thread.
+    """Helper class to implement asynchronous reading of a file in a separate thread.
+    
+    Pushes read lines on a queue to be consumed in another thread.
     """
 
     def __init__(self, fd, queue=None, autostart=True):
@@ -40,9 +38,7 @@ class AsynchronousFileReader(threading.Thread):
             self.start()
 
     def run(self):
-        """
-        The body of the tread: read lines and put them on the queue.
-        """
+        """Read lines and put them on the queue (the body of the tread)."""
         while True:
             line = self._fd.readline()
             if not line:
@@ -50,15 +46,11 @@ class AsynchronousFileReader(threading.Thread):
             self.queue.put(line)
 
     def eof(self):
-        """
-        Check whether there is no more content to expect.
-        """
+        """Check whether there is no more content to expect."""
         return not self.is_alive() and self.queue.empty()
 
     def readlines(self):
-        """
-        Get currently available lines.
-        """
+        """Get currently available lines."""
         while not self.queue.empty():
             yield self.queue.get()
 

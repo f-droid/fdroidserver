@@ -45,7 +45,6 @@ start_timestamp = time.gmtime()
 
 def publish_source_tarball(apkfilename, unsigned_dir, output_dir):
     """Move the source tarball into the output directory..."""
-
     tarfilename = apkfilename[:-4] + '_src.tar.gz'
     tarfile = os.path.join(unsigned_dir, tarfilename)
     if os.path.exists(tarfile):
@@ -56,7 +55,9 @@ def publish_source_tarball(apkfilename, unsigned_dir, output_dir):
 
 
 def key_alias(appid):
-    """Get the alias which F-Droid uses to indentify the singing key
+    """No summary.
+    
+    Get the alias which F-Droid uses to indentify the singing key
     for this App in F-Droids keystore.
     """
     if config and 'keyaliases' in config and appid in config['keyaliases']:
@@ -74,9 +75,7 @@ def key_alias(appid):
 
 
 def read_fingerprints_from_keystore():
-    """Obtain a dictionary containing all singning-key fingerprints which
-    are managed by F-Droid, grouped by appid.
-    """
+    """Obtain a dictionary containing all singning-key fingerprints which are managed by F-Droid, grouped by appid."""
     env_vars = {'LC_ALL': 'C.UTF-8',
                 'FDROID_KEY_STORE_PASS': config['keystorepass']}
     cmd = [config['keytool'], '-list',
@@ -101,8 +100,9 @@ def read_fingerprints_from_keystore():
 
 
 def sign_sig_key_fingerprint_list(jar_file):
-    """sign the list of app-signing key fingerprints which is
-    used primaryily by fdroid update to determine which APKs
+    """Sign the list of app-signing key fingerprints.
+    
+    This is used primaryily by fdroid update to determine which APKs
     where built and signed by F-Droid and which ones were
     manually added by users.
     """
@@ -125,6 +125,7 @@ def sign_sig_key_fingerprint_list(jar_file):
 
 def store_stats_fdroid_signing_key_fingerprints(appids, indent=None):
     """Store list of all signing-key fingerprints for given appids to HD.
+    
     This list will later on be needed by fdroid update.
     """
     if not os.path.exists('stats'):
@@ -143,8 +144,7 @@ def store_stats_fdroid_signing_key_fingerprints(appids, indent=None):
 
 
 def status_update_json(generatedKeys, signedApks):
-    """Output a JSON file with metadata about this run"""
-
+    """Output a JSON file with metadata about this run."""
     logging.debug(_('Outputting JSON'))
     output = common.setup_status_output(start_timestamp)
     output['apksigner'] = shutil.which(config.get('apksigner', ''))
@@ -158,8 +158,8 @@ def status_update_json(generatedKeys, signedApks):
 
 
 def check_for_key_collisions(allapps):
-    """
-    Make sure there's no collision in keyaliases from apps.
+    """Make sure there's no collision in keyaliases from apps.
+
     It was suggested at
     https://dev.guardianproject.info/projects/bazaar/wiki/FDroid_Audit
     that a package could be crafted, such that it would use the same signing
@@ -168,9 +168,16 @@ def check_for_key_collisions(allapps):
     the colliding ID would be something that would be a) a valid package ID,
     and b) a sane-looking ID that would make its way into the repo.
     Nonetheless, to be sure, before publishing we check that there are no
-    collisions, and refuse to do any publishing if that's the case...
-    :param allapps a dict of all apps to process
-    :return: a list of all aliases corresponding to allapps
+    collisions, and refuse to do any publishing if that's the case.
+
+    Parameters
+    ----------
+    allapps 
+      a dict of all apps to process
+    
+    Returns
+    -------
+    a list of all aliases corresponding to allapps
     """
     allaliases = []
     for appid in allapps:
@@ -185,9 +192,12 @@ def check_for_key_collisions(allapps):
 
 
 def create_key_if_not_existing(keyalias):
-    """
-    Ensures a signing key with the given keyalias exists
-    :return: boolean, True if a new key was created, false otherwise
+    """Ensure a signing key with the given keyalias exists.
+
+    Returns
+    -------
+    boolean
+      True if a new key was created, False otherwise
     """
     # See if we already have a key for this application, and
     # if not generate one...

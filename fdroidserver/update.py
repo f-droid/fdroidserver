@@ -128,13 +128,16 @@ def disabled_algorithms_allowed():
 
 
 def status_update_json(apps, apks):
-    """Output a JSON file with metadata about this `fdroid update` run
+    """Output a JSON file with metadata about this `fdroid update` run.
 
-    :param apps: fully populated list of all applications
-    :param apks: all to be published apks
+    Parameters
+    ----------
+    apps
+      fully populated list of all applications
+    apks
+      all to be published apks
 
     """
-
     logging.debug(_('Outputting JSON'))
     output = common.setup_status_output(start_timestamp)
     output['antiFeatures'] = dict()
@@ -194,10 +197,14 @@ def status_update_json(apps, apks):
 
 
 def update_wiki(apps, apks):
-    """Update the wiki
+    """Update the wiki.
 
-    :param apps: fully populated list of all applications
-    :param apks: all apks, except...
+    Parameters
+    ----------
+    apps
+      fully populated list of all applications
+    apks
+      all apks, except...
     """
     logging.info("Updating wiki")
     wikicat = 'Apps'
@@ -422,9 +429,14 @@ def update_wiki(apps, apks):
 def delete_disabled_builds(apps, apkcache, repodirs):
     """Delete disabled build outputs.
 
-    :param apps: list of all applications, as per metadata.read_metadata
-    :param apkcache: current apk cache information
-    :param repodirs: the repo directories to process
+    Parameters
+    ----------
+    apps
+      list of all applications, as per metadata.read_metadata
+    apkcache
+      current apk cache information
+    repodirs
+      the repo directories to process
     """
     for appid, app in apps.items():
         for build in app.get('Builds', []):
@@ -480,9 +492,12 @@ def resize_icon(iconpath, density):
 
 
 def resize_all_icons(repodirs):
-    """Resize all icons that exceed the max size
+    """Resize all icons that exceed the max size.
 
-    :param repodirs: the repo directories to process
+    Parameters
+    ----------
+    repodirs
+      the repo directories to process
     """
     for repodir in repodirs:
         for density in screen_densities:
@@ -504,12 +519,17 @@ def getsig(apkpath):
     md5 digest algorithm.  This is not the same as the standard X.509
     certificate fingerprint.
 
-    :param apkpath: path to the apk
-    :returns: A string containing the md5 of the signature of the apk or None
-              if an error occurred.
+    Parameters
+    ----------
+    apkpath
+      path to the apk
+
+    Returns
+    -------
+    A string containing the md5 of the signature of the apk or None
+    if an error occurred.
 
     """
-
     cert_encoded = common.get_first_signer_certificate(apkpath)
     if not cert_encoded:
         return None
@@ -521,7 +541,7 @@ def get_cache_file():
 
 
 def get_cache():
-    """Get the cached dict of the APK index
+    """Get the cached dict of the APK index.
 
     Gather information about all the apk files in the repo directory,
     using cached data if possible. Some of the index operations take a
@@ -533,7 +553,9 @@ def get_cache():
     those cases, there is no easy way to know what has changed from
     the cache, so just rerun the whole thing.
 
-    :return: apkcache
+    Returns
+    -------
+    apkcache
 
     """
     apkcachefile = get_cache_file()
@@ -582,7 +604,7 @@ def write_cache(apkcache):
 
 
 def get_icon_bytes(apkzip, iconsrc):
-    '''ZIP has no official encoding, UTF-* and CP437 are defacto'''
+    """ZIP has no official encoding, UTF-* and CP437 are defacto."""
     try:
         return apkzip.read(iconsrc)
     except KeyError:
@@ -590,7 +612,7 @@ def get_icon_bytes(apkzip, iconsrc):
 
 
 def has_known_vulnerability(filename):
-    """checks for known vulnerabilities in the APK
+    """Check for known vulnerabilities in the APK.
 
     Checks OpenSSL .so files in the APK to see if they are a known vulnerable
     version.  Google also enforces this:
@@ -603,7 +625,6 @@ def has_known_vulnerability(filename):
     Janus is similar to Master Key but is perhaps easier to scan for.
     https://www.guardsquare.com/en/blog/new-android-vulnerability-allows-attackers-modify-apps-without-affecting-their-signatures
     """
-
     found_vuln = False
 
     # statically load this pattern
@@ -649,8 +670,9 @@ def has_known_vulnerability(filename):
 
 
 def insert_obbs(repodir, apps, apks):
-    """Scans the .obb files in a given repo directory and adds them to the
-    relevant APK instances.  OBB files have versionCodes like APK
+    """Scan the .obb files in a given repo directory and adds them to the relevant APK instances.
+    
+    OBB files have versionCodes like APK
     files, and they are loosely associated.  If there is an OBB file
     present, then any APK with the same or higher versionCode will use
     that OBB file.  There are two OBB types: main and patch, each APK
@@ -658,12 +680,16 @@ def insert_obbs(repodir, apps, apks):
 
     https://developer.android.com/google/play/expansion-files.html
 
-    :param repodir: repo directory to scan
-    :param apps: list of current, valid apps
-    :param apks: current information on all APKs
+    Parameters
+    ----------
+    repodir
+      repo directory to scan
+    apps
+      list of current, valid apps
+    apks
+      current information on all APKs
 
     """
-
     def obbWarnDelete(f, msg):
         logging.warning(msg + ' ' + f)
         if options.delete_unknown:
@@ -715,7 +741,7 @@ def insert_obbs(repodir, apps, apks):
 
 
 def translate_per_build_anti_features(apps, apks):
-    """Grab the anti-features list from the build metadata
+    """Grab the anti-features list from the build metadata.
 
     For most Anti-Features, they are really most applicable per-APK,
     not for an app.  An app can fix a vulnerability, add/remove
@@ -729,7 +755,6 @@ def translate_per_build_anti_features(apps, apks):
     from the build 'antifeatures' field, not directly included.
 
     """
-
     antiFeatures = dict()
     for packageName, app in apps.items():
         d = dict()
@@ -749,7 +774,7 @@ def translate_per_build_anti_features(apps, apks):
 
 
 def _get_localized_dict(app, locale):
-    '''get the dict to add localized store metadata to'''
+    """Get the dict to add localized store metadata to."""
     if 'localized' not in app:
         app['localized'] = collections.OrderedDict()
     if locale not in app['localized']:
@@ -758,7 +783,7 @@ def _get_localized_dict(app, locale):
 
 
 def _set_localized_text_entry(app, locale, key, f):
-    """Read a fastlane/triple-t metadata file and add an entry to the app
+    """Read a fastlane/triple-t metadata file and add an entry to the app.
 
     This reads more than the limit, in case there is leading or
     trailing whitespace to be stripped
@@ -779,7 +804,7 @@ def _set_localized_text_entry(app, locale, key, f):
 
 
 def _set_author_entry(app, key, f):
-    """read a fastlane/triple-t author file and add the entry to the app
+    """Read a fastlane/triple-t author file and add the entry to the app.
 
     This reads more than the limit, in case there is leading or
     trailing whitespace to be stripped
@@ -796,7 +821,7 @@ def _set_author_entry(app, key, f):
 
 
 def _strip_and_copy_image(in_file, outpath):
-    """Remove any metadata from image and copy it to new path
+    """Remove any metadata from image and copy it to new path.
 
     Sadly, image metadata like EXIF can be used to exploit devices.
     It is not used at all in the F-Droid ecosystem, so its much safer
@@ -861,8 +886,7 @@ def _strip_and_copy_image(in_file, outpath):
 
 
 def _get_base_hash_extension(f):
-    '''split a graphic/screenshot filename into base, sha256, and extension
-    '''
+    """Split a graphic/screenshot filename into base, sha256, and extension."""
     base, extension = common.get_extension(f)
     sha256_index = base.find('_')
     if sha256_index > 0:
@@ -871,7 +895,7 @@ def _get_base_hash_extension(f):
 
 
 def sanitize_funding_yml_entry(entry):
-    """FUNDING.yml comes from upstream repos, entries must be sanitized"""
+    """FUNDING.yml comes from upstream repos, entries must be sanitized."""
     if type(entry) not in (bytes, int, float, list, str):
         return
     if isinstance(entry, bytes):
@@ -894,7 +918,7 @@ def sanitize_funding_yml_entry(entry):
 
 
 def sanitize_funding_yml_name(name):
-    """Sanitize usernames that come from FUNDING.yml"""
+    """Sanitize usernames that come from FUNDING.yml."""
     entry = sanitize_funding_yml_entry(name)
     if entry:
         m = metadata.VALID_USERNAME_REGEX.match(entry)
@@ -904,7 +928,7 @@ def sanitize_funding_yml_name(name):
 
 
 def insert_funding_yml_donation_links(apps):
-    """include donation links from FUNDING.yml in app's source repo
+    """Include donation links from FUNDING.yml in app's source repo.
 
     GitHub made a standard file format for declaring donation
     links. This parses that format from upstream repos to include in
@@ -917,7 +941,6 @@ def insert_funding_yml_donation_links(apps):
     https://help.github.com/en/articles/displaying-a-sponsor-button-in-your-repository#about-funding-files
 
     """
-
     if not os.path.isdir('build'):
         return  # nothing to do
     for packageName, app in apps.items():
@@ -989,7 +1012,7 @@ def insert_funding_yml_donation_links(apps):
 
 
 def copy_triple_t_store_metadata(apps):
-    """Include store metadata from the app's source repo
+    """Include store metadata from the app's source repo.
 
     The Triple-T Gradle Play Publisher is a plugin that has a standard
     file layout for all of the metadata and graphics that the Google
@@ -1007,7 +1030,6 @@ def copy_triple_t_store_metadata(apps):
     https://github.com/Triple-T/gradle-play-publisher/blob/2.1.0/README.md#publishing-listings
 
     """
-
     if not os.path.isdir('build'):
         return  # nothing to do
 
@@ -1112,7 +1134,7 @@ def copy_triple_t_store_metadata(apps):
 
 
 def insert_localized_app_metadata(apps):
-    """scans standard locations for graphics and localized text
+    """Scan standard locations for graphics and localized text.
 
     Scans for localized description files, changelogs, store graphics, and
     screenshots and adds them to the app metadata. Each app's source repo root
@@ -1139,7 +1161,6 @@ def insert_localized_app_metadata(apps):
     See also our documentation page:
     https://f-droid.org/en/docs/All_About_Descriptions_Graphics_and_Screenshots/#in-the-apps-build-metadata-in-an-fdroiddata-collection
     """
-
     sourcedirs = glob.glob(os.path.join('build', '[A-Za-z]*', 'src', '[A-Za-z]*', 'fastlane', 'metadata', 'android', '[a-z][a-z]*'))
     sourcedirs += glob.glob(os.path.join('build', '[A-Za-z]*', 'fastlane', 'metadata', 'android', '[a-z][a-z]*'))
     sourcedirs += glob.glob(os.path.join('build', '[A-Za-z]*', 'metadata', '[a-z][a-z]*'))
@@ -1259,15 +1280,19 @@ def insert_localized_app_metadata(apps):
 
 
 def scan_repo_files(apkcache, repodir, knownapks, use_date_from_file=False):
-    """Scan a repo for all files with an extension except APK/OBB
+    """Scan a repo for all files with an extension except APK/OBB.
 
-    :param apkcache: current cached info about all repo files
-    :param repodir: repo directory to scan
-    :param knownapks: list of all known files, as per metadata.read_metadata
-    :param use_date_from_file: use date from file (instead of current date)
-                               for newly added files
+    Parameters
+    ----------
+    apkcache
+      current cached info about all repo files
+    repodir
+      repo directory to scan
+    knownapks
+      list of all known files, as per metadata.read_metadata
+    use_date_from_file
+      use date from file (instead of current date) for newly added files
     """
-
     cachechanged = False
     repo_files = []
     repodir = repodir.encode()
@@ -1343,14 +1368,22 @@ def scan_repo_files(apkcache, repodir, knownapks, use_date_from_file=False):
 
 
 def scan_apk(apk_file):
-    """
-    Scans an APK file and returns dictionary with metadata of the APK.
+    """Scan an APK file and returns dictionary with metadata of the APK.
 
     Attention: This does *not* verify that the APK signature is correct.
 
-    :param apk_file: The (ideally absolute) path to the APK file
-    :raises BuildException
-    :return A dict containing APK metadata
+    Parameters
+    ----------
+    apk_file
+      The (ideally absolute) path to the APK file
+
+    Raises
+    ------
+    BuildException
+
+    Returns
+    -------
+    A dict containing APK metadata
     """
     apk = {
         'hash': common.sha256sum(apk_file),
@@ -1397,7 +1430,7 @@ def scan_apk(apk_file):
 
 
 def _get_apk_icons_src(apkfile, icon_name):
-    """Extract the paths to the app icon in all available densities
+    """Extract the paths to the app icon in all available densities.
 
     The folder name is normally generated by the Android Tools, but
     there is nothing that prevents people from using whatever DPI
@@ -1423,7 +1456,7 @@ def _get_apk_icons_src(apkfile, icon_name):
 
 
 def _sanitize_sdk_version(value):
-    """Sanitize the raw values from androguard to handle bad values
+    """Sanitize the raw values from androguard to handle bad values.
 
     minSdkVersion/targetSdkVersion/maxSdkVersion must be integers, but
     that doesn't stop devs from doing strange things like setting them
@@ -1564,23 +1597,33 @@ def scan_apk_androguard(apk, apkfile):
 
 def process_apk(apkcache, apkfilename, repodir, knownapks, use_date_from_apk=False,
                 allow_disabled_algorithms=False, archive_bad_sig=False):
-    """Processes the apk with the given filename in the given repo directory.
+    """Process the apk with the given filename in the given repo directory.
 
     This also extracts the icons.
 
-    :param apkcache: current apk cache information
-    :param apkfilename: the filename of the apk to scan
-    :param repodir: repo directory to scan
-    :param knownapks: known apks info
-    :param use_date_from_apk: use date from APK (instead of current date)
-                              for newly added APKs
-    :param allow_disabled_algorithms: allow APKs with valid signatures that include
-                                      disabled algorithms in the signature (e.g. MD5)
-    :param archive_bad_sig: move APKs with a bad signature to the archive
-    :returns: (skip, apk, cachechanged) where skip is a boolean indicating whether to skip this apk,
-     apk is the scanned apk information, and cachechanged is True if the apkcache got changed.
-    """
+    Parameters
+    ----------
+    apkcache
+      current apk cache information
+    apkfilename
+      the filename of the apk to scan
+    repodir
+      repo directory to scan
+    knownapks
+      known apks info
+    use_date_from_apk
+      use date from APK (instead of current date) for newly added APKs
+    allow_disabled_algorithms
+      allow APKs with valid signatures that include
+      disabled algorithms in the signature (e.g. MD5)
+    archive_bad_sig
+      move APKs with a bad signature to the archive
 
+    Returns
+    -------
+    (skip, apk, cachechanged) where skip is a boolean indicating whether to skip this apk,
+      apk is the scanned apk information, and cachechanged is True if the apkcache got changed.
+    """
     apk = {}
     apkfile = os.path.join(repodir, apkfilename)
 
@@ -1699,19 +1742,26 @@ def process_apk(apkcache, apkfilename, repodir, knownapks, use_date_from_apk=Fal
 
 
 def process_apks(apkcache, repodir, knownapks, use_date_from_apk=False):
-    """Processes the apks in the given repo directory.
+    """Process the apks in the given repo directory.
 
     This also extracts the icons.
 
-    :param apkcache: current apk cache information
-    :param repodir: repo directory to scan
-    :param knownapks: known apks info
-    :param use_date_from_apk: use date from APK (instead of current date)
-                              for newly added APKs
-    :returns: (apks, cachechanged) where apks is a list of apk information,
-              and cachechanged is True if the apkcache got changed.
-    """
+    Parameters
+    ----------
+    apkcache
+      current apk cache information
+    repodir
+      repo directory to scan
+    knownapks
+     b known apks info
+    use_date_from_apk
+      use date from APK (instead of current date) for newly added APKs
 
+    Returns
+    -------
+    (apks, cachechanged) where apks is a list of apk information,
+      and cachechanged is True if the apkcache got changed.
+    """
     cachechanged = False
 
     for icon_dir in get_all_icon_dirs(repodir):
@@ -1737,19 +1787,28 @@ def process_apks(apkcache, repodir, knownapks, use_date_from_apk=False):
 
 
 def extract_apk_icons(icon_filename, apk, apkzip, repo_dir):
-    """Extracts PNG icons from an APK with the supported pixel densities
+    """Extract PNG icons from an APK with the supported pixel densities.
 
     Extracts icons from the given APK zip in various densities, saves
     them into given repo directory and stores their names in the APK
     metadata dictionary.  If the icon is an XML icon, then this tries
     to find PNG icon that can replace it.
 
-    :param icon_filename: A string representing the icon's file name
-    :param apk: A populated dictionary containing APK metadata.
-                Needs to have 'icons_src' key
-    :param apkzip: An opened zipfile.ZipFile of the APK file
-    :param repo_dir: The directory of the APK's repository
-    :return: A list of icon densities that are missing
+    Parameters
+    ----------
+    icon_filename
+      A string representing the icon's file name
+    apk
+      A populated dictionary containing APK metadata.
+      Needs to have 'icons_src' key
+    apkzip
+      An opened zipfile.ZipFile of the APK file
+    repo_dir
+      The directory of the APK's repository
+
+    Returns
+    -------
+    A list of icon densities that are missing
 
     """
     res_name_re = re.compile(r'res/(drawable|mipmap)-(x*[hlm]dpi|anydpi).*/(.*)_[0-9]+dp.(png|xml)')
@@ -1820,13 +1879,14 @@ def extract_apk_icons(icon_filename, apk, apkzip, repo_dir):
 
 
 def fill_missing_icon_densities(empty_densities, icon_filename, apk, repo_dir):
-    """
-    Resize existing PNG icons for densities missing in the APK to ensure all densities are available
+    """Resize existing PNG icons for densities missing in the APK to ensure all densities are available.
 
-    :param empty_densities: A list of icon densities that are missing
-    :param icon_filename: A string representing the icon's file name
-    :param apk: A populated dictionary containing APK metadata. Needs to have 'icons' key
-    :param repo_dir: The directory of the APK's repository
+    Parameters
+    ----------
+    empty_densities: A list of icon densities that are missing
+    icon_filename: A string representing the icon's file name
+    apk: A populated dictionary containing APK metadata. Needs to have 'icons' key
+    repo_dir: The directory of the APK's repository
 
     """
     # First try resizing down to not lose quality
@@ -1889,8 +1949,10 @@ def fill_missing_icon_densities(empty_densities, icon_filename, apk, repo_dir):
 
 
 def apply_info_from_latest_apk(apps, apks):
-    """
+    """No summary.
+    
     Some information from the apks needs to be applied up to the application level.
+
     When doing this, we use the info from the most recent version's apk.
     We deal with figuring out when the app was added and last updated at the same time.
     """
@@ -1920,7 +1982,7 @@ def apply_info_from_latest_apk(apps, apks):
 
 
 def make_categories_txt(repodir, categories):
-    '''Write a category list in the repo to allow quick access'''
+    """Write a category list in the repo to allow quick access."""
     catdata = ''
     for cat in sorted(categories):
         catdata += cat + '\n'
@@ -1982,8 +2044,7 @@ def archive_old_apks(apps, apks, archapks, repodir, archivedir, defaultkeepversi
 
 
 def move_apk_between_sections(from_dir, to_dir, apk):
-    """move an APK from repo to archive or vice versa"""
-
+    """Move an APK from repo to archive or vice versa."""
     def _move_file(from_dir, to_dir, filename, ignore_missing):
         from_path = os.path.join(from_dir, filename)
         if ignore_missing and not os.path.exists(from_path):
@@ -2033,15 +2094,14 @@ def add_apks_to_per_app_repos(repodir, apks):
 
 
 def create_metadata_from_template(apk):
-    '''create a new metadata file using internal or external template
+    """Create a new metadata file using internal or external template.
 
     Generate warnings for apk's with no metadata (or create skeleton
     metadata files, if requested on the command line).  Though the
     template file is YAML, this uses neither pyyaml nor ruamel.yaml
     since those impose things on the metadata file made from the
     template: field sort order, empty field value, formatting, etc.
-    '''
-
+    """
     if os.path.exists('template.yml'):
         with open('template.yml') as f:
             metatxt = f.read()
@@ -2086,7 +2146,8 @@ def create_metadata_from_template(apk):
 
 
 def read_added_date_from_all_apks(apps, apks):
-    """
+    """No summary.
+
     Added dates come from the stats/known_apks.txt file but are
     read when scanning apks and thus need to be applied form apk
     level to app level for _all_ apps and not only from non-archived
@@ -2107,7 +2168,7 @@ def read_added_date_from_all_apks(apps, apks):
 
 
 def insert_missing_app_names_from_apks(apps, apks):
-    """Use app name from APK if it is not set in the metadata
+    """Use app name from APK if it is not set in the metadata.
 
     Name -> localized -> from APK
 
@@ -2148,7 +2209,7 @@ def insert_missing_app_names_from_apks(apps, apks):
 
 
 def get_apps_with_packages(apps, apks):
-    """Returns a deepcopy of that subset apps that actually has any associated packages. Skips disabled apps."""
+    """Return a deepcopy of that subset apps that actually has any associated packages. Skips disabled apps."""
     appsWithPackages = collections.OrderedDict()
     for packageName in apps:
         app = apps[packageName]
@@ -2165,12 +2226,20 @@ def get_apps_with_packages(apps, apks):
 
 
 def prepare_apps(apps, apks, repodir):
-    """Encapsulates all necessary preparation steps before we can build an index out of apps and apks.
+    """Encapsulate all necessary preparation steps before we can build an index out of apps and apks.
 
-    :param apps: All apps as read from metadata
-    :param apks: list of apks that belong into repo, this gets modified in place
-    :param repodir: the target repository directory, metadata files will be copied here
-    :return: the relevant subset of apps (as a deepcopy)
+    Parameters
+    ----------
+    apps
+      All apps as read from metadata
+    apks
+      list of apks that belong into repo, this gets modified in place
+    repodir
+      the target repository directory, metadata files will be copied here
+    
+    Returns
+    -------
+    the relevant subset of apps (as a deepcopy)
     """
     apps_with_packages = get_apps_with_packages(apps, apks)
     apply_info_from_latest_apk(apps_with_packages, apks)

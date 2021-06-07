@@ -75,7 +75,7 @@ def main():
     fingerprint = urllib.parse.parse_qs(query).get('fingerprint')
 
     def _append_to_url_path(*args):
-        '''Append the list of path components to URL, keeping the rest the same'''
+        """Append the list of path components to URL, keeping the rest the same."""
         newpath = posixpath.join(path, *args)
         return urllib.parse.urlunparse((scheme, hostname, newpath, params, query, fragment))
 

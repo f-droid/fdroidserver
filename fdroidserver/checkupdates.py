@@ -363,6 +363,7 @@ def check_gplay(app):
 
 def try_init_submodules(app, last_build, vcs):
     """Try to init submodules if the last build entry used them.
+    
     They might have been removed from the app's repo in the meantime,
     so if we can't find any submodules we continue with the updates check.
     If there is any other error in initializing them then we stop the check.
@@ -589,8 +590,7 @@ def checkupdates_app(app):
 
 
 def status_update_json(processed, failed):
-    """Output a JSON file with metadata about this run"""
-
+    """Output a JSON file with metadata about this run."""
     logging.debug(_('Outputting JSON'))
     output = common.setup_status_output(start_timestamp)
     if processed:

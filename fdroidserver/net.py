@@ -38,16 +38,22 @@ def download_file(url, local_filename=None, dldir='tmp'):
 
 
 def http_get(url, etag=None, timeout=600):
-    """
-    Downloads the content from the given URL by making a GET request.
+    """Download the content from the given URL by making a GET request.
 
     If an ETag is given, it will do a HEAD request first, to see if the content changed.
 
-    :param url: The URL to download from.
-    :param etag: The last ETag to be used for the request (optional).
-    :return: A tuple consisting of:
-        - The raw content that was downloaded or None if it did not change
-        - The new eTag as returned by the HTTP request
+    Parameters
+    ----------
+    url
+      The URL to download from.
+    etag
+      The last ETag to be used for the request (optional).
+
+    Returns
+    -------
+    A tuple consisting of:
+      - The raw content that was downloaded or None if it did not change
+      - The new eTag as returned by the HTTP request
     """
     # TODO disable TLS Session IDs and TLS Session Tickets
     #      (plain text cookie visible to anyone who can see the network traffic)

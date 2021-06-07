@@ -69,7 +69,7 @@ class Decoder(json.JSONDecoder):
 
 
 def _add_diffoscope_info(d):
-    """Add diffoscope setup metadata to provided dict under 'diffoscope' key
+    """Add diffoscope setup metadata to provided dict under 'diffoscope' key.
 
     The imports are broken out at stages since various versions of
     diffoscope support various parts of these.
@@ -112,7 +112,7 @@ def _add_diffoscope_info(d):
 
 
 def write_json_report(url, remote_apk, unsigned_apk, compare_result):
-    """write out the results of the verify run to JSON
+    """Write out the results of the verify run to JSON.
 
     This builds up reports on the repeated runs of `fdroid verify` on
     a set of apps.  It uses the timestamps on the compared files to
@@ -120,7 +120,6 @@ def write_json_report(url, remote_apk, unsigned_apk, compare_result):
     repeatedly.
 
     """
-
     jsonfile = unsigned_apk + '.json'
     if os.path.exists(jsonfile):
         with open(jsonfile) as fp:

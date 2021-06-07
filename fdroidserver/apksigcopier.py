@@ -13,8 +13,7 @@
 #
 # --                                                            ; }}}1
 
-"""
-copy/extract/patch apk signatures
+"""Copy/extract/patch apk signatures.
 
 apksigcopier is a tool for copying APK signatures from a signed APK to an
 unsigned one (in order to verify reproducible builds).
@@ -129,8 +128,7 @@ class APKZipInfo(ReproducibleZipInfo):
 
 
 def noautoyes(value):
-    """
-    Turns False into NO, None into AUTO, and True into YES.
+    """Turn False into NO, None into AUTO, and True into YES.
 
     >>> from apksigcopier import noautoyes, NO, AUTO, YES
     >>> noautoyes(False) == NO == noautoyes(NO)
@@ -152,7 +150,8 @@ def noautoyes(value):
 
 
 def is_meta(filename):
-    """
+    """No summary.
+
     Returns whether filename is a v1 (JAR) signature file (.SF), signature block
     file (.RSA, .DSA, or .EC), or manifest (MANIFEST.MF).
 
@@ -162,7 +161,7 @@ def is_meta(filename):
 
 
 def exclude_from_copying(filename):
-    """fdroidserver always wants JAR Signature files to be excluded"""
+    """Fdroidserver always wants JAR Signature files to be excluded."""
     return is_meta(filename)
 
 
@@ -198,17 +197,17 @@ def exclude_from_copying(filename):
 
 # FIXME: makes certain assumptions and doesn't handle all valid ZIP files!
 def copy_apk(unsigned_apk, output_apk):
-    """
-    Copy APK like apksigner would, excluding files matched by
-    exclude_from_copying().
-
-    Returns max date_time.
+    """Copy APK like apksigner would, excluding files matched by exclude_from_copying().
 
     The following global variables (which default to False), can be set to
     override the default behaviour:
 
     * set exclude_all_meta=True to exclude all metadata files
     * set copy_extra_bytes=True to copy extra bytes after data (e.g. a v2 sig)
+
+    Returns
+    -------
+    max date_time.
     """
     with zipfile.ZipFile(unsigned_apk, "r") as zf:
         infos = zf.infolist()
@@ -410,9 +409,10 @@ def patch_v2_sig(extracted_v2_sig, output_apk):
 
 
 def patch_apk(extracted_meta, extracted_v2_sig, unsigned_apk, output_apk):
-    """
-    Patch extracted_meta + extracted_v2_sig (if not None) onto unsigned_apk and
-    save as output_apk.
+    """Patch extracted_meta + extracted_v2_sig.
+
+    Patches extracted_meta + extracted_v2_sig (if not None) 
+    onto unsigned_apk and save as output_apk.
     """
     date_time = copy_apk(unsigned_apk, output_apk)
     patch_meta(extracted_meta, output_apk, date_time=date_time)
@@ -421,8 +421,7 @@ def patch_apk(extracted_meta, extracted_v2_sig, unsigned_apk, output_apk):
 
 
 def do_extract(signed_apk, output_dir, v1_only=NO):
-    """
-    Extract signatures from signed_apk and save in output_dir.
+    """Extract signatures from signed_apk and save in output_dir.
 
     The v1_only parameter controls whether the absence of a v1 signature is
     considered an error or not:
@@ -457,8 +456,7 @@ def do_extract(signed_apk, output_dir, v1_only=NO):
 
 
 def do_patch(metadata_dir, unsigned_apk, output_apk, v1_only=NO):
-    """
-    Patch signatures from metadata_dir onto unsigned_apk and save as output_apk.
+    """Patch signatures from metadata_dir onto unsigned_apk and save as output_apk.
 
     The v1_only parameter controls whether the absence of a v1 signature is
     considered an error or not:
@@ -498,8 +496,7 @@ def do_patch(metadata_dir, unsigned_apk, output_apk, v1_only=NO):
 
 
 def do_copy(signed_apk, unsigned_apk, output_apk, v1_only=NO):
-    """
-    Copy signatures from signed_apk onto unsigned_apk and save as output_apk.
+    """Copy signatures from signed_apk onto unsigned_apk and save as output_apk.
 
     The v1_only parameter controls whether the absence of a v1 signature is
     considered an error or not:

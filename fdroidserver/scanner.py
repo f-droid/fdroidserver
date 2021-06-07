@@ -104,7 +104,7 @@ def get_gradle_compile_commands(build):
 
 
 def scan_binary(apkfile):
-    """Scan output of apkanalyzer for known non-free classes
+    """Scan output of apkanalyzer for known non-free classes.
 
     apkanalyzer produces useful output when it can run, but it does
     not support all recent JDK versions, and also some DEX versions,
@@ -112,7 +112,6 @@ def scan_binary(apkfile):
     to run without exiting with an error.
 
     """
-
     logging.info(_('Scanning APK with apkanalyzer for known non-free classes.'))
     result = common.SdkToolsPopen(["apkanalyzer", "dex", "packages", "--defined-only", apkfile], output=False)
     if result.returncode != 0:
@@ -130,10 +129,12 @@ def scan_binary(apkfile):
 
 
 def scan_source(build_dir, build=metadata.Build()):
-    """Scan the source code in the given directory (and all subdirectories)
-    and return the number of fatal problems encountered
+    """Scan the source code in the given directory (and all subdirectories).
+    
+    Returns
+    -------
+    the number of fatal problems encountered.
     """
-
     count = 0
 
     allowlisted = [
@@ -193,10 +194,18 @@ def scan_source(build_dir, build=metadata.Build()):
         return False
 
     def ignoreproblem(what, path_in_build_dir):
-        """
-        :param what: string describing the problem, will be printed in log messages
-        :param path_in_build_dir: path to the file relative to `build`-dir
-        "returns: 0 as we explicitly ignore the file, so don't count an error
+        """No summary.
+
+        Parameters
+        ----------
+        what: string 
+          describing the problem, will be printed in log messages
+        path_in_build_dir
+          path to the file relative to `build`-dir
+
+        Returns
+        -------
+        0 as we explicitly ignore the file, so don't count an error
         """
         msg = ('Ignoring %s at %s' % (what, path_in_build_dir))
         logging.info(msg)
@@ -205,11 +214,20 @@ def scan_source(build_dir, build=metadata.Build()):
         return 0
 
     def removeproblem(what, path_in_build_dir, filepath):
-        """
-        :param what: string describing the problem, will be printed in log messages
-        :param path_in_build_dir: path to the file relative to `build`-dir
-        :param filepath: Path (relative to our current path) to the file
-        "returns: 0 as we deleted the offending file
+        """No summary.
+
+        Parameters
+        ----------
+        what: string 
+          describing the problem, will be printed in log messages
+        path_in_build_dir
+          path to the file relative to `build`-dir
+        filepath
+          Path (relative to our current path) to the file
+        
+        Returns
+        -------
+        0 as we deleted the offending file
         """
         msg = ('Removing %s at %s' % (what, path_in_build_dir))
         logging.info(msg)
@@ -225,10 +243,18 @@ def scan_source(build_dir, build=metadata.Build()):
         return 0
 
     def warnproblem(what, path_in_build_dir):
-        """
-        :param what: string describing the problem, will be printed in log messages
-        :param path_in_build_dir: path to the file relative to `build`-dir
-        :returns: 0, as warnings don't count as errors
+        """No summary.
+
+        Parameters
+        ----------
+        what: string 
+          describing the problem, will be printed in log messages
+        path_in_build_dir
+          path to the file relative to `build`-dir
+
+        Returns
+        -------
+        0, as warnings don't count as errors
         """
         if toignore(path_in_build_dir):
             return 0
@@ -238,13 +264,22 @@ def scan_source(build_dir, build=metadata.Build()):
         return 0
 
     def handleproblem(what, path_in_build_dir, filepath):
-        """Dispatches to problem handlers (ignore, delete, warn) or returns 1
-         for increasing the error count
+        """Dispatches to problem handlers (ignore, delete, warn).
+        
+        Or returns 1 for increasing the error count.
 
-        :param what: string describing the problem, will be printed in log messages
-        :param path_in_build_dir: path to the file relative to `build`-dir
-        :param filepath: Path (relative to our current path) to the file
-        :returns: 0 if the problem was ignored/deleted/is only a warning, 1 otherwise
+        Parameters
+        ----------
+        what: string 
+          describing the problem, will be printed in log messages
+        path_in_build_dir
+          path to the file relative to `build`-dir
+        filepath
+          Path (relative to our current path) to the file
+        
+        Returns
+        -------
+        0 if the problem was ignored/deleted/is only a warning, 1 otherwise
         """
         if toignore(path_in_build_dir):
             return ignoreproblem(what, path_in_build_dir)

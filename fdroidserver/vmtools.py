@@ -79,15 +79,24 @@ def _check_output(cmd, cwd=None):
 
 
 def get_build_vm(srvdir, provider=None):
-    """Factory function for getting FDroidBuildVm instances.
+    """No summary.
+    
+    Factory function for getting FDroidBuildVm instances.
 
     This function tries to figure out what hypervisor should be used
     and creates an object for controlling a build VM.
 
-    :param srvdir: path to a directory which contains a Vagrantfile
-    :param provider: optionally this parameter allows specifiying an
-        specific vagrant provider.
-    :returns: FDroidBuildVm instance.
+    Parameters
+    ----------
+    srvdir
+      path to a directory which contains a Vagrantfile
+    provider
+      optionally this parameter allows specifiying an
+      specific vagrant provider.
+
+    Returns
+    -------
+    FDroidBuildVm instance.
     """
     abssrvdir = abspath(srvdir)
 
@@ -171,9 +180,9 @@ class FDroidBuildVm():
     This is intended to be a hypervisor independent, fault tolerant
     wrapper around the vagrant functions we use.
     """
+
     def __init__(self, srvdir):
-        """Create new server class.
-        """
+        """Create new server class."""
         self.srvdir = srvdir
         self.srvname = basename(srvdir) + '_default'
         self.vgrntfile = os.path.join(srvdir, 'Vagrantfile')
@@ -252,7 +261,7 @@ class FDroidBuildVm():
         self.vgrnt.package(output=output)
 
     def vagrant_uuid_okay(self):
-        '''Having an uuid means that vagrant up has run successfully.'''
+        """Having an uuid means that vagrant up has run successfully."""
         if self.srvuuid is None:
             return False
         return True
@@ -282,9 +291,14 @@ class FDroidBuildVm():
     def box_add(self, boxname, boxfile, force=True):
         """Add vagrant box to vagrant.
 
-        :param boxname: name assigned to local deployment of box
-        :param boxfile: path to box file
-        :param force: overwrite existing box image (default: True)
+        Parameters
+        ----------
+        boxname
+          name assigned to local deployment of box
+        boxfile
+          path to box file
+        force
+          overwrite existing box image (default: True)
         """
         boxfile = abspath(boxfile)
         if not isfile(boxfile):
@@ -304,10 +318,11 @@ class FDroidBuildVm():
             shutil.rmtree(boxpath)
 
     def sshinfo(self):
-        """Get ssh connection info for a vagrant VM
+        """Get ssh connection info for a vagrant VM.
 
-        :returns: A dictionary containing 'hostname', 'port', 'user'
-            and 'idfile'
+        Returns
+        -------
+        A dictionary containing 'hostname', 'port', 'user' and 'idfile'
         """
         import paramiko
         try:

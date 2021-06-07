@@ -425,6 +425,7 @@ Build documentation:
   image: python:3.9-buster
   script:
     - pip install -e .[docs]
+    - pydocstyle fdroidserver
     - cd docs
     - sphinx-apidoc -o ./source ../fdroidserver -M -e
     - sphinx-autogen -o generated source/*.rst

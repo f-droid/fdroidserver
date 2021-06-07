@@ -33,8 +33,7 @@ start_timestamp = time.gmtime()
 
 
 def status_update_json(signed):
-    """Output a JSON file with metadata about this run"""
-
+    """Output a JSON file with metadata about this run."""
     logging.debug(_('Outputting JSON'))
     output = common.setup_status_output(start_timestamp)
     if signed:

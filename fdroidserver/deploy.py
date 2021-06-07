@@ -47,14 +47,13 @@ REMOTE_HOSTNAME_REGEX = re.compile(r'\W*\w+\W+(\w+).*')
 
 
 def update_awsbucket(repo_section):
-    '''
-    Upload the contents of the directory `repo_section` (including
-    subdirectories) to the AWS S3 "bucket". The contents of that subdir of the
+    """Upload the contents of the directory `repo_section` (including subdirectories) to the AWS S3 "bucket".
+    
+    The contents of that subdir of the
     bucket will first be deleted.
 
     Requires AWS credentials set in config.yml: awsaccesskeyid, awssecretkey
-    '''
-
+    """
     logging.debug('Syncing "' + repo_section + '" to Amazon S3 bucket "'
                   + config['awsbucket'] + '"')
 
@@ -65,7 +64,7 @@ def update_awsbucket(repo_section):
 
 
 def update_awsbucket_s3cmd(repo_section):
-    '''upload using the CLI tool s3cmd, which provides rsync-like sync
+    """Upload using the CLI tool s3cmd, which provides rsync-like sync.
 
     The upload is done in multiple passes to reduce the chance of
     interfering with an existing client-server interaction.  In the
@@ -74,8 +73,7 @@ def update_awsbucket_s3cmd(repo_section):
     the third/last pass, the indexes are uploaded, and any removed
     files are deleted from the server.  The last pass is the only pass
     to use a full MD5 checksum of all files to detect changes.
-    '''
-
+    """
     logging.debug(_('Using s3cmd to sync with: {url}')
                   .format(url=config['awsbucket']))
 
@@ -142,14 +140,16 @@ def update_awsbucket_s3cmd(repo_section):
 
 
 def update_awsbucket_libcloud(repo_section):
-    '''
+    """No summary.
+    
     Upload the contents of the directory `repo_section` (including
-    subdirectories) to the AWS S3 "bucket". The contents of that subdir of the
+    subdirectories) to the AWS S3 "bucket". 
+    
+    The contents of that subdir of the
     bucket will first be deleted.
 
     Requires AWS credentials set in config.yml: awsaccesskeyid, awssecretkey
-    '''
-
+    """
     logging.debug(_('using Apache libcloud to sync with {url}')
                   .format(url=config['awsbucket']))
 
@@ -280,14 +280,14 @@ def update_serverwebroot(serverwebroot, repo_section):
 
 
 def sync_from_localcopy(repo_section, local_copy_dir):
-    '''Syncs the repo from "local copy dir" filesystem to this box
+    """Sync the repo from "local copy dir" filesystem to this box.
 
     In setups that use offline signing, this is the last step that
     syncs the repo from the "local copy dir" e.g. a thumb drive to the
     repo on the local filesystem.  That local repo is then used to
     push to all the servers that are configured.
 
-    '''
+    """
     logging.info('Syncing from local_copy_dir to this repo.')
     # trailing slashes have a meaning in rsync which is not needed here, so
     # make sure both paths have exactly one trailing slash
@@ -302,13 +302,13 @@ def sync_from_localcopy(repo_section, local_copy_dir):
 
 
 def update_localcopy(repo_section, local_copy_dir):
-    '''copy data from offline to the "local copy dir" filesystem
+    """Copy data from offline to the "local copy dir" filesystem.
 
     This updates the copy of this repo used to shuttle data from an
     offline signing machine to the online machine, e.g. on a thumb
     drive.
 
-    '''
+    """
     # local_copy_dir is guaranteed to have a trailing slash in main() below
     common.local_rsync(options, repo_section, local_copy_dir)
 
@@ -319,7 +319,7 @@ def update_localcopy(repo_section, local_copy_dir):
 
 
 def _get_size(start_path='.'):
-    '''get size of all files in a dir https://stackoverflow.com/a/1392549'''
+    """Get size of all files in a dir https://stackoverflow.com/a/1392549."""
     total_size = 0
     for root, dirs, files in os.walk(start_path):
         for f in files:
@@ -329,7 +329,7 @@ def _get_size(start_path='.'):
 
 
 def update_servergitmirrors(servergitmirrors, repo_section):
-    '''update repo mirrors stored in git repos
+    """Update repo mirrors stored in git repos.
 
     This is a hack to use public git repos as F-Droid repos.  It
     recreates the git repo from scratch each time, so that there is no
@@ -339,7 +339,7 @@ def update_servergitmirrors(servergitmirrors, repo_section):
     For history, there is the archive section, and there is the binary
     transparency log.
 
-    '''
+    """
     import git
     from clint.textui import progress
     if config.get('local_copy_dir') \
@@ -623,7 +623,7 @@ def upload_apk_to_virustotal(virustotal_apikey, packageName, apkName, hash,
 
 
 def push_binary_transparency(git_repo_path, git_remote):
-    '''push the binary transparency git repo to the specifed remote.
+    """Push the binary transparency git repo to the specifed remote.
 
     If the remote is a local directory, make sure it exists, and is a
     git repo.  This is used to move this git repo from an offline
@@ -636,7 +636,7 @@ def push_binary_transparency(git_repo_path, git_remote):
     case, git_remote is a dir on the local file system, e.g. a thumb
     drive.
 
-    '''
+    """
     import git
 
     logging.info(_('Pushing binary transparency log to {url}')

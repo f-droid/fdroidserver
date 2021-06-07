@@ -44,7 +44,7 @@ VALID_USERNAME_REGEX = re.compile(r'^[a-z\d](?:[a-z\d/._-]){0,38}$', re.IGNORECA
 
 
 def _warn_or_exception(value, cause=None):
-    '''output warning or Exception depending on -W'''
+    """Output warning or Exception depending on -W."""
     if warnings_action == 'ignore':
         pass
     elif warnings_action == 'error':
@@ -326,7 +326,7 @@ class Build(dict):
         return 'ant'
 
     def ndk_path(self):
-        """Returns the path to the first configured NDK or an empty string"""
+        """Return the path to the first configured NDK or an empty string."""
         ndk = self.ndk
         if isinstance(ndk, list):
             ndk = self.ndk[0]
@@ -368,8 +368,7 @@ def flagtype(name):
 
 
 class FieldValidator():
-    """
-    Designates App metadata field types and checks that it matches
+    """Designate App metadata field types and checks that it matches.
 
     'name'     - The long name of the field type
     'matching' - List of possible values or regex expression
@@ -545,7 +544,7 @@ def read_srclibs():
 
 
 def read_metadata(appids={}, sort_by_time=False):
-    """Return a list of App instances sorted newest first
+    """Return a list of App instances sorted newest first.
 
     This reads all of the metadata files in a 'data' repository, then
     builds a list of App instances from those files.  The list is
@@ -555,7 +554,6 @@ def read_metadata(appids={}, sort_by_time=False):
     appids is a dict with appids a keys and versionCodes as values.
 
     """
-
     # Always read the srclibs before the apps, since they can use a srlib as
     # their source repository.
     read_srclibs()
@@ -723,7 +721,7 @@ def _decode_bool(s):
 
 
 def parse_metadata(metadatapath):
-    """parse metadata file, also checking the source repo for .fdroid.yml
+    """Parse metadata file, also checking the source repo for .fdroid.yml.
 
     If this is a metadata file from fdroiddata, it will first load the
     source repo type and URL from fdroiddata, then read .fdroid.yml if
@@ -777,7 +775,7 @@ def parse_metadata(metadatapath):
 
 
 def parse_yaml_metadata(mf, app):
-    """Parse the .yml file and post-process it
+    """Parse the .yml file and post-process it.
 
     Clean metadata .yml files can be used directly, but in order to
     make a better user experience for people editing .yml files, there
@@ -787,7 +785,6 @@ def parse_yaml_metadata(mf, app):
     overall process.
 
     """
-
     try:
         yamldata = yaml.load(mf, Loader=SafeLoader)
     except yaml.YAMLError as e:
@@ -836,7 +833,7 @@ def parse_yaml_metadata(mf, app):
 
 
 def post_parse_yaml_metadata(yamldata):
-    """transform yaml metadata to our internal data format"""
+    """Transform yaml metadata to our internal data format."""
     for build in yamldata.get('Builds', []):
         for flag in build.keys():
             _flagtype = flagtype(flag)
@@ -859,10 +856,13 @@ def post_parse_yaml_metadata(yamldata):
 def write_yaml(mf, app):
     """Write metadata in yaml format.
 
-    :param mf: active file discriptor for writing
-    :param app: app metadata to written to the yaml file
+    Parameters
+    ----------
+    mf
+      active file discriptor for writing
+    app
+      app metadata to written to the yaml file
     """
-
     # import rumael.yaml and check version
     try:
         import ruamel.yaml
@@ -992,6 +992,6 @@ def write_metadata(metadatapath, app):
 
 
 def add_metadata_arguments(parser):
-    '''add common command line flags related to metadata processing'''
+    """Add common command line flags related to metadata processing."""
     parser.add_argument("-W", choices=['error', 'warn', 'ignore'], default='error',
                         help=_("force metadata errors (default) to be warnings, or to be ignored."))

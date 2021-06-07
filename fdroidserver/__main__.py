@@ -69,9 +69,13 @@ def print_help(available_plugins=None):
 
 
 def preparse_plugin(module_name, module_dir):
-    """simple regex based parsing for plugin scripts,
-       so we don't have to import them when we just need the summary,
-       but not plan on executing this particular plugin."""
+    """No summary.
+    
+    Simple regex based parsing for plugin scripts.
+       
+    So we don't have to import them when we just need the summary,
+    but not plan on executing this particular plugin.
+    """
     if '.' in module_name:
         raise ValueError("No '.' allowed in fdroid plugin modules: '{}'"
                          .format(module_name))

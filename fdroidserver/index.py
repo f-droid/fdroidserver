@@ -49,12 +49,18 @@ def make(apps, apks, repodir, archive):
 
     This requires properly initialized options and config objects.
 
-    :param apps: OrderedDict of apps to go into the index, each app should have
-                 at least one associated apk
-    :param apks: list of apks to go into the index
-    :param repodir: the repo directory
-    :param archive: True if this is the archive repo, False if it's the
-                    main one.
+    Parameters
+    ----------
+    apps
+      OrderedDict of apps to go into the index, each app should have
+      at least one associated apk
+    apks
+      list of apks to go into the index
+    repodir
+      the repo directory
+    archive
+      True if this is the archive repo, False if it's the
+      main one.
     """
     from fdroidserver.update import METADATA_VERSION
 
@@ -583,12 +589,16 @@ def _copy_to_local_copy_dir(repodir, f):
 
 
 def v1_sort_packages(packages, fdroid_signing_key_fingerprints):
-    """Sorts the supplied list to ensure a deterministic sort order for
-    package entries in the index file. This sort-order also expresses
+    """Sort the supplied list to ensure a deterministic sort order for package entries in the index file.
+    
+    This sort-order also expresses
     installation preference to the clients.
     (First in this list = first to install)
 
-    :param packages: list of packages which need to be sorted before but into index file.
+    Parameters
+    ----------
+    packages
+      list of packages which need to be sorted before but into index file.
     """
     GROUP_DEV_SIGNED = 1
     GROUP_FDROID_SIGNED = 2
@@ -618,10 +628,7 @@ def v1_sort_packages(packages, fdroid_signing_key_fingerprints):
 
 
 def make_v0(apps, apks, repodir, repodict, requestsdict, fdroid_signing_key_fingerprints):
-    """
-    aka index.jar aka index.xml
-    """
-
+    """Aka index.jar aka index.xml."""
     doc = Document()
 
     def addElement(name, value, doc, parent):
@@ -641,7 +648,7 @@ def make_v0(apps, apks, repodir, repodict, requestsdict, fdroid_signing_key_fing
         addElement(name, value, doc, parent)
 
     def addElementCheckLocalized(name, app, key, doc, parent, default=''):
-        """Fill in field from metadata or localized block
+        """Fill in field from metadata or localized block.
 
         For name/summary/description, they can come only from the app source,
         or from a dir in fdroiddata.  They can be entirely missing from the
@@ -652,7 +659,6 @@ def make_v0(apps, apks, repodir, repodict, requestsdict, fdroid_signing_key_fing
         alpha- sort order.
 
         """
-
         el = doc.createElement(name)
         value = app.get(key)
         lkey = key[:1].lower() + key[1:]
@@ -965,9 +971,12 @@ def make_v0(apps, apks, repodir, repodict, requestsdict, fdroid_signing_key_fing
 
 
 def extract_pubkey():
-    """
-    Extracts and returns the repository's public key from the keystore.
-    :return: public key in hex, repository fingerprint
+    """Extract and return the repository's public key from the keystore.
+
+    Returns
+    -------
+    public key in hex
+    repository fingerprint
     """
     if 'repo_pubkey' in common.config:
         pubkey = unhexlify(common.config['repo_pubkey'])
@@ -991,7 +1000,7 @@ def extract_pubkey():
 
 
 def get_mirror_service_urls(url):
-    '''Get direct URLs from git service for use by fdroidclient
+    """Get direct URLs from git service for use by fdroidclient.
 
     Via 'servergitmirrors', fdroidserver can create and push a mirror
     to certain well known git services like gitlab or github.  This
@@ -999,8 +1008,7 @@ def get_mirror_service_urls(url):
     branch in git. The files are then accessible via alternate URLs,
     where they are served in their raw format via a CDN rather than
     from git.
-    '''
-
+    """
     if url.startswith('git@'):
         url = re.sub(r'^git@([^:]+):(.+)', r'https://\1/\2', url)
 
@@ -1038,15 +1046,19 @@ def get_mirror_service_urls(url):
 
 
 def download_repo_index(url_str, etag=None, verify_fingerprint=True, timeout=600):
-    """Downloads and verifies index file, then returns its data.
+    """Download and verifies index file, then returns its data.
 
     Downloads the repository index from the given :param url_str and
     verifies the repository's fingerprint if :param verify_fingerprint
     is not False.
 
-    :raises: VerificationException() if the repository could not be verified
+    Raises
+    ------
+    VerificationException() if the repository could not be verified
 
-    :return: A tuple consisting of:
+    Returns
+    -------
+    A tuple consisting of:
         - The index in JSON format or None if the index did not change
         - The new eTag as returned by the HTTP request
 
@@ -1077,15 +1089,18 @@ def download_repo_index(url_str, etag=None, verify_fingerprint=True, timeout=600
 
 
 def get_index_from_jar(jarfile, fingerprint=None):
-    """Returns the data, public key, and fingerprint from index-v1.jar
+    """Return the data, public key, and fingerprint from index-v1.jar.
 
-    :param fingerprint is the SHA-256 fingerprint of signing key. Only
-           hex digits count, all other chars will can be discarded.
+    Parameters
+    ----------
+    fingerprint is the SHA-256 fingerprint of signing key. Only
+      hex digits count, all other chars will can be discarded.
 
-    :raises: VerificationException() if the repository could not be verified
+    Raises
+    ------
+    VerificationException() if the repository could not be verified
 
     """
-
     logging.debug(_('Verifying index signature:'))
     common.verify_jar_signature(jarfile)
     with zipfile.ZipFile(jarfile) as jar:
@@ -1099,13 +1114,20 @@ def get_index_from_jar(jarfile, fingerprint=None):
 
 
 def get_public_key_from_jar(jar):
-    """
-    Get the public key and its fingerprint from a JAR file.
+    """Get the public key and its fingerprint from a JAR file.
 
-    :raises: VerificationException() if the JAR was not signed exactly once
+    Raises
+    ------
+    VerificationException() if the JAR was not signed exactly once
 
-    :param jar: a zipfile.ZipFile object
-    :return: the public key from the jar and its fingerprint
+    Parameters
+    ----------
+    jar
+      a zipfile.ZipFile object
+    
+    Returns
+    -------
+    the public key from the jar and its fingerprint
     """
     # extract certificate from jar
     certs = [n for n in jar.namelist() if common.SIGNATURE_BLOCK_FILE_REGEX.match(n)]

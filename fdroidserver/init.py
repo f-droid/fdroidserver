@@ -36,7 +36,7 @@ options = None
 
 
 def disable_in_config(key, value):
-    '''write a key/value to the local config.yml, then comment it out'''
+    """Write a key/value to the local config.yml, then comment it out."""
     import yaml
     with open('config.yml') as f:
         data = f.read()

@@ -67,7 +67,6 @@ def build_server(app, build, vcs, build_dir, output_dir, log_dir, force):
         target folder for the build result
     force
     """
-
     global buildserverid
 
     try:
@@ -325,7 +324,7 @@ def force_gradle_build_tools(build_dir, build_tools):
 
 
 def transform_first_char(string, method):
-    """Uses method() on the first character of string."""
+    """Use method() on the first character of string."""
     if len(string) == 0:
         return string
     if len(string) == 1:
@@ -338,11 +337,10 @@ def add_failed_builds_entry(failed_builds, appid, build, entry):
 
 
 def get_metadata_from_apk(app, build, apkfile):
-    """get the required metadata from the built APK
+    """Get the required metadata from the built APK.
 
-    versionName is allowed to be a blank string, i.e. ''
+    VersionName is allowed to be a blank string, i.e. ''
     """
-
     appid, versionCode, versionName = common.get_apk_id(apkfile)
     native_code = common.get_native_code(apkfile)
 
@@ -833,8 +831,7 @@ def build_local(app, build, vcs, build_dir, output_dir, log_dir, srclib_dir, ext
 def trybuild(app, build, build_dir, output_dir, log_dir, also_check_dir,
              srclib_dir, extlib_dir, tmp_dir, repo_dir, vcs, test,
              server, force, onserver, refresh):
-    """
-    Build a particular version of an application, if it needs building.
+    """Build a particular version of an application, if it needs building.
 
     Parameters
     ----------
@@ -857,7 +854,6 @@ def trybuild(app, build, build_dir, output_dir, log_dir, also_check_dir,
     Boolean
         True if the build was done, False if it wasn't necessary.
     """
-
     dest_file = common.get_release_filename(app, build)
 
     dest = os.path.join(output_dir, dest_file)
@@ -890,7 +886,7 @@ def trybuild(app, build, build_dir, output_dir, log_dir, also_check_dir,
 
 
 def force_halt_build(timeout):
-    """Halt the currently running Vagrant VM, to be called from a Timer"""
+    """Halt the currently running Vagrant VM, to be called from a Timer."""
     logging.error(_('Force halting build after {0} sec timeout!').format(timeout))
     timeout_event.set()
     vm = vmtools.get_build_vm('builder')
@@ -898,8 +894,13 @@ def force_halt_build(timeout):
 
 
 def parse_commandline():
-    """Parse the command line. Returns options, parser."""
-
+    """Parse the command line.
+    
+    Returns
+    -------
+    options
+    parser
+    """
     parser = argparse.ArgumentParser(usage="%(prog)s [options] [APPID[:VERCODE] [APPID[:VERCODE] ...]]")
     common.setup_global_opts(parser)
     parser.add_argument("appid", nargs='*', help=_("application ID with optional versionCode in the form APPID[:VERCODE]"))
