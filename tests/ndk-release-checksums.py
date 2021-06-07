@@ -35,25 +35,20 @@ errors = 0
 release = None
 revision = None
 for k, entries in checksums.items():
-    if k.startswith('https://dl.google.com/android/repository/android-ndk'):
+    if k.endswith('.zip') and k.startswith(
+        'https://dl.google.com/android/repository/android-ndk'
+    ):
         m = re.search(r'-(r[1-9][0-9]?[a-z]?)-linux', k)
         if m:
+            d = {'url': k, 'release': m.group(1), 'sha256': checksums[k][0]['sha256']}
             for entry in entries:
                 if 'source.properties' in entry:
                     n = re.search(
                         r'[1-9][0-9]\.[0-9]\.[0-9]{7}', entry['source.properties']
                     )
                     if n:
-                        release = m.group(1)
-                        revision = n.group()
-                        ndks.append(
-                            {
-                                'url': k,
-                                'release': release,
-                                'revision': revision,
-                                'sha256': checksums[k][0]['sha256'],
-                            }
-                        )
+                        d['revision'] = n.group()
+            ndks.append(d)
             for d in config['NDKS']:
                 if k == d['url']:
                     sha256 = d['sha256']
