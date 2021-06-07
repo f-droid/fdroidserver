@@ -43,7 +43,8 @@ except ImportError:
         from yaml import Loader as FullLoader
 
 localmodule = os.path.realpath(
-    os.path.join(os.path.dirname(inspect.getfile(inspect.currentframe())), '..'))
+    os.path.join(os.path.dirname(inspect.getfile(inspect.currentframe())), '..')
+)
 print('localmodule: ' + localmodule)
 if localmodule not in sys.path:
     sys.path.insert(0, localmodule)
@@ -55,11 +56,7 @@ import fdroidserver.update
 from fdroidserver.common import FDroidPopen
 
 
-DONATION_FIELDS = (
-    'Donate',
-    'Liberapay',
-    'OpenCollective',
-)
+DONATION_FIELDS = ('Donate', 'Liberapay', 'OpenCollective')
 
 
 class Options:
@@ -77,6 +74,7 @@ class UpdateTest(unittest.TestCase):
         logging.getLogger('androguard.axml').setLevel(logging.INFO)
         logging.getLogger('androguard.core.api_specific_resources').setLevel(logging.INFO)
         from PIL import PngImagePlugin
+
         logging.getLogger(PngImagePlugin.__name__).setLevel(logging.INFO)
         self.basedir = os.path.join(localmodule, 'tests')
         self.tmpdir = os.path.abspath(os.path.join(self.basedir, '..', '.testfiles'))
@@ -114,12 +112,17 @@ class UpdateTest(unittest.TestCase):
         shutil.copystat(testfile, cpfile)
 
         apps = dict()
-        for packageName in ('info.guardianproject.urzip', 'org.videolan.vlc', 'obb.mainpatch.current',
-                            'com.nextcloud.client', 'com.nextcloud.client.dev',
-                            'eu.siacs.conversations'):
+        for packageName in (
+            'info.guardianproject.urzip',
+            'org.videolan.vlc',
+            'obb.mainpatch.current',
+            'com.nextcloud.client',
+            'com.nextcloud.client.dev',
+            'eu.siacs.conversations',
+        ):
             apps[packageName] = fdroidserver.metadata.App()
             apps[packageName]['id'] = packageName
-            apps[packageName]['CurrentVersionCode'] = 0xcafebeef
+            apps[packageName]['CurrentVersionCode'] = 0xCAFEBEEF
 
         apps['info.guardianproject.urzip']['CurrentVersionCode'] = 100
 
@@ -286,7 +289,7 @@ class UpdateTest(unittest.TestCase):
         appid = 'info.guardianproject.checkey'
         testapps = {appid: copy.copy(apps[appid])}
         self.assertEqual('Checkey the app!', testapps[appid]['Name'])
-        del(testapps[appid]['Name'])
+        del (testapps[appid]['Name'])
         fdroidserver.update.insert_missing_app_names_from_apks(testapps, apks)
         self.assertIsNone(testapps[appid].get('Name'))
 
@@ -367,8 +370,9 @@ class UpdateTest(unittest.TestCase):
 
     def test_insert_triple_t_2_metadata(self):
         packageName = 'org.piwigo.android'
-        tmptestsdir = tempfile.mkdtemp(prefix=inspect.currentframe().f_code.co_name,
-                                       dir=self.tmpdir)
+        tmptestsdir = tempfile.mkdtemp(
+            prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir
+        )
         os.rmdir(tmptestsdir)
         shutil.copytree(os.path.join(self.basedir, 'triple-t-2'), tmptestsdir)
         os.chdir(tmptestsdir)
@@ -414,8 +418,7 @@ class UpdateTest(unittest.TestCase):
         config = dict()
         fdroidserver.common.fill_config_defaults(config)
         fdroidserver.common.config = config
-        p = FDroidPopen(['java', '-cp', 'getsig',
-                         'getsig', apkfile])
+        p = FDroidPopen(['java', '-cp', 'getsig', 'getsig', apkfile])
         sig = None
         for line in p.output.splitlines():
             if line.startswith('Result:'):
@@ -509,7 +512,9 @@ class UpdateTest(unittest.TestCase):
 
     def testScanApksAndObbs(self):
         os.chdir(os.path.join(localmodule, 'tests'))
-        testdir = tempfile.mkdtemp(prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir)
+        testdir = tempfile.mkdtemp(
+            prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir
+        )
         os.chdir(testdir)
         shutil.copytree(os.path.join(self.basedir, 'repo'), 'repo')
         shutil.copytree(os.path.join(self.basedir, 'metadata'), 'metadata')
@@ -567,7 +572,9 @@ class UpdateTest(unittest.TestCase):
     def test_apkcache_json(self):
         """test the migration from pickle to json"""
         os.chdir(os.path.join(localmodule, 'tests'))
-        testdir = tempfile.mkdtemp(prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir)
+        testdir = tempfile.mkdtemp(
+            prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir
+        )
         os.chdir(testdir)
         shutil.copytree(os.path.join(self.basedir, 'repo'), 'repo')
         config = dict()
@@ -608,7 +615,9 @@ class UpdateTest(unittest.TestCase):
         fdroidserver.common.config = config
         fdroidserver.update.config = config
 
-        testdir = tempfile.mkdtemp(prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir)
+        testdir = tempfile.mkdtemp(
+            prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir
+        )
         os.chdir(testdir)
         os.mkdir('repo')
         os.mkdir('stats')
@@ -625,8 +634,10 @@ class UpdateTest(unittest.TestCase):
         self.assertEqual(filename, info['apkName'])
         self.assertEqual(datetime, type(info['added']))
         self.assertEqual(os.path.getsize(os.path.join('repo', filename)), info['size'])
-        self.assertEqual('531190bdbc07e77d5577249949106f32dac7f62d38d66d66c3ae058be53a729d',
-                         info['hash'])
+        self.assertEqual(
+            '531190bdbc07e77d5577249949106f32dac7f62d38d66d66c3ae058be53a729d',
+            info['hash'],
+        )
 
     def test_read_added_date_from_all_apks(self):
         config = dict()
@@ -770,7 +781,9 @@ class UpdateTest(unittest.TestCase):
         fdroidserver.common.fill_config_defaults(config)
         fdroidserver.common.config = config
         fdroidserver.update.config = config
-        testdir = tempfile.mkdtemp(prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir)
+        testdir = tempfile.mkdtemp(
+            prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir
+        )
         os.chdir(testdir)
         os.mkdir('repo')
         apkfile = 'repo/badzip_1.apk'
@@ -780,7 +793,6 @@ class UpdateTest(unittest.TestCase):
             fdroidserver.update.scan_apk(apkfile)
 
     def test_process_apk(self):
-
         def _build_yaml_representer(dumper, data):
             '''Creates a YAML representation of a Build instance'''
             return dumper.represent_dict(data)
@@ -820,8 +832,9 @@ class UpdateTest(unittest.TestCase):
             if apkName == '../org.dyndns.fules.ck_20.apk':
                 self.assertEqual(apk['icon'], 'org.dyndns.fules.ck.20.png')
             for density in fdroidserver.update.screen_densities:
-                icon_path = os.path.join(fdroidserver.update.get_icon_dir('repo', density),
-                                         apk['icon'])
+                icon_path = os.path.join(
+                    fdroidserver.update.get_icon_dir('repo', density), apk['icon']
+                )
                 self.assertTrue(os.path.isfile(icon_path))
                 self.assertTrue(os.path.getsize(icon_path) > 1)
 
@@ -863,8 +876,9 @@ class UpdateTest(unittest.TestCase):
 
         knownapks = fdroidserver.common.KnownApks()
 
-        tmptestsdir = tempfile.mkdtemp(prefix=inspect.currentframe().f_code.co_name,
-                                       dir=self.tmpdir)
+        tmptestsdir = tempfile.mkdtemp(
+            prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir
+        )
         print('tmptestsdir', tmptestsdir)
         os.chdir(tmptestsdir)
         os.mkdir('repo')
@@ -873,7 +887,7 @@ class UpdateTest(unittest.TestCase):
         fdroidserver.update.process_apks({}, 'repo', knownapks)
         fdroidserver.update.process_apks({}, 'archive', knownapks)
 
-        disabledsigs = ['org.bitbucket.tickytacky.mirrormirror_2.apk', ]
+        disabledsigs = ['org.bitbucket.tickytacky.mirrormirror_2.apk']
         for apkName in disabledsigs:
             shutil.copy(os.path.join(self.basedir, apkName),
                         os.path.join(tmptestsdir, 'repo'))
@@ -964,7 +978,9 @@ class UpdateTest(unittest.TestCase):
 
     def test_translate_per_build_anti_features(self):
         os.chdir(os.path.join(localmodule, 'tests'))
-        testdir = tempfile.mkdtemp(prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir)
+        testdir = tempfile.mkdtemp(
+            prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir
+        )
         os.chdir(testdir)
         shutil.copytree(os.path.join(self.basedir, 'repo'), 'repo')
         shutil.copytree(os.path.join(self.basedir, 'metadata'), 'metadata')
@@ -995,8 +1011,9 @@ class UpdateTest(unittest.TestCase):
         self.assertTrue(foundtest)
 
     def test_create_metadata_from_template(self):
-        tmptestsdir = tempfile.mkdtemp(prefix=inspect.currentframe().f_code.co_name,
-                                       dir=self.tmpdir)
+        tmptestsdir = tempfile.mkdtemp(
+            prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir
+        )
         print('tmptestsdir', tmptestsdir)
         os.chdir(tmptestsdir)
         os.mkdir('repo')
@@ -1097,8 +1114,9 @@ class UpdateTest(unittest.TestCase):
         assert icons_src == {}
 
     def test_strip_and_copy_image(self):
-        tmptestsdir = tempfile.mkdtemp(prefix=inspect.currentframe().f_code.co_name,
-                                       dir=self.tmpdir)
+        tmptestsdir = tempfile.mkdtemp(
+            prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir
+        )
 
         in_file = os.path.join(self.basedir, 'metadata', 'info.guardianproject.urzip', 'en-US', 'images', 'icon.png')
         out_file = os.path.join(tmptestsdir, 'icon.png')
@@ -1115,7 +1133,9 @@ class UpdateTest(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmpdir, TmpCwd(tmpdir):
             os.mkdir('metadata')
             with open('template.yml', 'w') as f:
-                f.write(textwrap.dedent('''\
+                f.write(
+                    textwrap.dedent(
+                        '''\
                     Disabled:
                     License:
                     AuthorName:
@@ -1149,51 +1169,60 @@ class UpdateTest(unittest.TestCase):
                     CurrentVersion:
                     CurrentVersionCode:
                     NoSourceSince:
-                    '''))
+                    '''
+                    )
+                )
             fdroidserver.update.create_metadata_from_template(apk)
             with open(os.path.join('metadata', 'rocks.janicerand.yml')) as f:
                 metadata_content = yaml.load(f, Loader=SafeLoader)
                 self.maxDiff = None
-                self.assertDictEqual(metadata_content,
-                                     {'ArchivePolicy': '',
-                                      'AuthorEmail': '',
-                                      'AuthorName': '',
-                                      'AuthorWebSite': '',
-                                      'AutoName': 'rocks.janicerand',
-                                      'AutoUpdateMode': '',
-                                      'Binaries': '',
-                                      'Bitcoin': '',
-                                      'Builds': '',
-                                      'Changelog': '',
-                                      'CurrentVersion': '',
-                                      'CurrentVersionCode': '',
-                                      'Disabled': '',
-                                      'Donate': '',
-                                      'FlattrID': '',
-                                      'IssueTracker': '',
-                                      'LiberapayID': '',
-                                      'License': '',
-                                      'Litecoin': '',
-                                      'Name': 'rocks.janicerand',
-                                      'NoSourceSince': '',
-                                      'Repo': '',
-                                      'RepoType': '',
-                                      'RequiresRoot': '',
-                                      'SourceCode': '',
-                                      'Summary': 'rocks.janicerand',
-                                      'Translation': '',
-                                      'UpdateCheckData': '',
-                                      'UpdateCheckIgnore': '',
-                                      'UpdateCheckMode': '',
-                                      'UpdateCheckName': '',
-                                      'VercodeOperation': '',
-                                      'WebSite': ''})
+                self.assertDictEqual(
+                    metadata_content,
+                    {
+                        'ArchivePolicy': '',
+                        'AuthorEmail': '',
+                        'AuthorName': '',
+                        'AuthorWebSite': '',
+                        'AutoName': 'rocks.janicerand',
+                        'AutoUpdateMode': '',
+                        'Binaries': '',
+                        'Bitcoin': '',
+                        'Builds': '',
+                        'Changelog': '',
+                        'CurrentVersion': '',
+                        'CurrentVersionCode': '',
+                        'Disabled': '',
+                        'Donate': '',
+                        'FlattrID': '',
+                        'IssueTracker': '',
+                        'LiberapayID': '',
+                        'License': '',
+                        'Litecoin': '',
+                        'Name': 'rocks.janicerand',
+                        'NoSourceSince': '',
+                        'Repo': '',
+                        'RepoType': '',
+                        'RequiresRoot': '',
+                        'SourceCode': '',
+                        'Summary': 'rocks.janicerand',
+                        'Translation': '',
+                        'UpdateCheckData': '',
+                        'UpdateCheckIgnore': '',
+                        'UpdateCheckMode': '',
+                        'UpdateCheckName': '',
+                        'VercodeOperation': '',
+                        'WebSite': '',
+                    },
+                )
 
     def test_insert_funding_yml_donation_links(self):
-        testdir = tempfile.mkdtemp(prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir)
+        testdir = tempfile.mkdtemp(
+            prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir
+        )
         os.chdir(testdir)
         os.mkdir('build')
-        content = textwrap.dedent("""
+        content = textwrap.dedent(
+            """
             community_bridge: ''
             custom: [LINK1, LINK2]
             github: USERNAME
@@ -1203,7 +1232,8 @@ class UpdateTest(unittest.TestCase):
             open_collective: USERNAME
             otechie: USERNAME
             patreon: USERNAME
-        """)
+        """
+        )
         app = fdroidserver.metadata.App()
         app.id = 'fake.app.id'
         apps = {app.id: app}
@@ -1230,7 +1260,9 @@ class UpdateTest(unittest.TestCase):
 
     def test_insert_funding_yml_donation_links_one_at_a_time(self):
         """Exercise the FUNDING.yml code one entry at a time"""
-        testdir = tempfile.mkdtemp(prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir)
+        testdir = tempfile.mkdtemp(
+            prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir
+        )
         os.chdir(testdir)
         os.mkdir('build')
 
@@ -1242,7 +1274,8 @@ class UpdateTest(unittest.TestCase):
         for field in DONATION_FIELDS:
             self.assertIsNone(app.get(field))
 
-        content = textwrap.dedent("""
+        content = textwrap.dedent(
+            """
             community_bridge: 'blah-de-blah'
             github: USERNAME
             issuehunt: USERNAME
@@ -1250,7 +1283,8 @@ class UpdateTest(unittest.TestCase):
             liberapay: USERNAME
             open_collective: USERNAME
             patreon: USERNAME
-        """)
+        """
+        )
         for line in content.split('\n'):
             if not line:
                 continue
@@ -1270,7 +1304,9 @@ class UpdateTest(unittest.TestCase):
                     self.assertEqual(app.get('Donate', '').split('/')[-1], v)
 
     def test_insert_funding_yml_donation_links_with_corrupt_file(self):
-        testdir = tempfile.mkdtemp(prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir)
+        testdir = tempfile.mkdtemp(
+            prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir
+        )
         os.chdir(testdir)
         os.mkdir('build')
         app = fdroidserver.metadata.App()
@@ -1278,11 +1314,15 @@ class UpdateTest(unittest.TestCase):
         apps = {app.id: app}
         os.mkdir(os.path.join('build', app.id))
         with open(os.path.join('build', app.id, 'FUNDING.yml'), 'w') as fp:
-            fp.write(textwrap.dedent("""
+            fp.write(
+                textwrap.dedent(
+                    """
                 opencollective: foo
                 custom: []
                 liberapay: :
-            """))
+            """
+                )
+            )
         fdroidserver.update.insert_funding_yml_donation_links(apps)
         for field in DONATION_FIELDS:
             self.assertIsNone(app.get(field))
@@ -1311,8 +1351,9 @@ class UpdateTest(unittest.TestCase):
         self.assertIsNotNone(fdroidserver.update.sanitize_funding_yml_entry(['first', 'second']))
 
     def test_set_localized_text_entry(self):
-        tmptestsdir = tempfile.mkdtemp(prefix=inspect.currentframe().f_code.co_name,
-                                       dir=self.tmpdir)
+        tmptestsdir = tempfile.mkdtemp(
+            prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir
+        )
         os.chdir(tmptestsdir)
         config = dict()
         fdroidserver.common.fill_config_defaults(config)
@@ -1342,8 +1383,9 @@ class UpdateTest(unittest.TestCase):
             self.assertIsNone(app['localized'].get(locale, {}).get(key))
 
     def test_set_author_entry(self):
-        tmptestsdir = tempfile.mkdtemp(prefix=inspect.currentframe().f_code.co_name,
-                                       dir=self.tmpdir)
+        tmptestsdir = tempfile.mkdtemp(
+            prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir
+        )
         os.chdir(tmptestsdir)
         config = dict()
         fdroidserver.common.fill_config_defaults(config)
@@ -1411,8 +1453,13 @@ if __name__ == "__main__":
     os.chdir(os.path.dirname(__file__))
 
     parser = optparse.OptionParser()
-    parser.add_option("-v", "--verbose", action="store_true", default=False,
-                      help="Spew out even more information than normal")
+    parser.add_option(
+        "-v",
+        "--verbose",
+        action="store_true",
+        default=False,
+        help="Spew out even more information than normal",
+    )
     (fdroidserver.common.options, args) = parser.parse_args(['--verbose'])
 
     newSuite = unittest.TestSuite()

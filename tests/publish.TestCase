@@ -23,7 +23,8 @@ import textwrap
 from unittest import mock
 
 localmodule = os.path.realpath(
-    os.path.join(os.path.dirname(inspect.getfile(inspect.currentframe())), '..'))
+    os.path.join(os.path.dirname(inspect.getfile(inspect.currentframe())), '..')
+)
 print('localmodule: ' + localmodule)
 if localmodule not in sys.path:
     sys.path.insert(0, localmodule)
@@ -56,8 +57,9 @@ class PublishTest(unittest.TestCase):
         self.assertEqual('ee8807d2', publish.key_alias("org.schabi.newpipe"))
         self.assertEqual('b53c7e11', publish.key_alias("de.grobox.liberario"))
 
-        publish.config = {'keyaliases': {'yep.app': '@org.org.org',
-                                         'com.example.app': '1a2b3c4d'}}
+        publish.config = {
+            'keyaliases': {'yep.app': '@org.org.org', 'com.example.app': '1a2b3c4d'}
+        }
         self.assertEqual('78688a0f', publish.key_alias('yep.app'))
         self.assertEqual('1a2b3c4d', publish.key_alias('com.example.app'))
 
@@ -69,11 +71,13 @@ class PublishTest(unittest.TestCase):
         publish.config['keypass'] = '123456'
         publish.config['keystore'] = 'dummy-keystore.jks'
 
-        expected = {'78688a0f': '277655a6235bc6b0ef2d824396c51ba947f5ebc738c293d887e7083ff338af82',
-                    'd2d51ff2': 'fa3f6a017541ee7fe797be084b1bcfbf92418a7589ef1f7fdeb46741b6d2e9c3',
-                    'dc3b169e': '6ae5355157a47ddcc3834a71f57f6fb5a8c2621c8e0dc739e9ddf59f865e497c',
-                    'a163ec9b': 'd34f678afbaa8f2fa6cc0edd6f0c2d1d2e2e9eb08bea521b24c740806016bff4',
-                    'repokey': 'c58460800c7b250a619c30c13b07b7359a43e5af71a4352d86c58ae18c9f6d41'}
+        expected = {
+            '78688a0f': '277655a6235bc6b0ef2d824396c51ba947f5ebc738c293d887e7083ff338af82',
+            'd2d51ff2': 'fa3f6a017541ee7fe797be084b1bcfbf92418a7589ef1f7fdeb46741b6d2e9c3',
+            'dc3b169e': '6ae5355157a47ddcc3834a71f57f6fb5a8c2621c8e0dc739e9ddf59f865e497c',
+            'a163ec9b': 'd34f678afbaa8f2fa6cc0edd6f0c2d1d2e2e9eb08bea521b24c740806016bff4',
+            'repokey': 'c58460800c7b250a619c30c13b07b7359a43e5af71a4352d86c58ae18c9f6d41',
+        }
         result = publish.read_fingerprints_from_keystore()
         self.maxDiff = None
         self.assertEqual(expected, result)
@@ -84,17 +88,20 @@ class PublishTest(unittest.TestCase):
         publish.config = common.config
         publish.config['keystorepass'] = '123456'
         publish.config['keypass'] = '123456'
-        publish.config['keystore'] = os.path.join(os.getcwd(),
-                                                  'dummy-keystore.jks')
+        publish.config['keystore'] = os.path.join(os.getcwd(), 'dummy-keystore.jks')
         publish.config['repo_keyalias'] = 'repokey'
 
-        appids = ['com.example.app',
-                  'net.unavailable',
-                  'org.test.testy',
-                  'com.example.anotherapp',
-                  'org.org.org']
+        appids = [
+            'com.example.app',
+            'net.unavailable',
+            'org.test.testy',
+            'com.example.anotherapp',
+            'org.org.org',
+        ]
 
-        testdir = tempfile.mkdtemp(prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir)
+        testdir = tempfile.mkdtemp(
+            prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir
+        )
         os.chdir(testdir)
         with open('config.py', 'w') as f:
             pass
@@ -114,15 +121,20 @@ class PublishTest(unittest.TestCase):
             },
             "org.test.testy": {
                 "signer": "6ae5355157a47ddcc3834a71f57f6fb5a8c2621c8e0dc739e9ddf59f865e497c"
-            }
+            },
         }
         self.assertEqual(expected, common.load_stats_fdroid_signing_key_fingerprints())
 
         with open('config.py', 'r') as f:
-            self.assertEqual(textwrap.dedent('''\
+            self.assertEqual(
+                textwrap.dedent(
+                    '''\
 
                 repo_key_sha256 = "c58460800c7b250a619c30c13b07b7359a43e5af71a4352d86c58ae18c9f6d41"
-                '''), f.read())
+                '''
+                ),
+                f.read(),
+            )
 
     def test_store_and_load_fdroid_signing_key_fingerprints_with_missmatch(self):
         common.config = {}
@@ -130,12 +142,13 @@ class PublishTest(unittest.TestCase):
         publish.config = common.config
         publish.config['keystorepass'] = '123456'
         publish.config['keypass'] = '123456'
-        publish.config['keystore'] = os.path.join(os.getcwd(),
-                                                  'dummy-keystore.jks')
+        publish.config['keystore'] = os.path.join(os.getcwd(), 'dummy-keystore.jks')
         publish.config['repo_keyalias'] = 'repokey'
         publish.config['repo_key_sha256'] = 'bad bad bad bad bad bad bad bad bad bad bad bad'
 
-        testdir = tempfile.mkdtemp(prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir)
+        testdir = tempfile.mkdtemp(
+            prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir
+        )
         os.chdir(testdir)
         publish.store_stats_fdroid_signing_key_fingerprints({}, indent=2)
         with self.assertRaises(FDroidException):
@@ -149,7 +162,9 @@ class PublishTest(unittest.TestCase):
         publish.config['repo_keyalias'] = 'sova'
         publish.config['keystorepass'] = 'r9aquRHYoI8+dYz6jKrLntQ5/NJNASFBacJh7Jv2BlI='
         publish.config['keypass'] = 'r9aquRHYoI8+dYz6jKrLntQ5/NJNASFBacJh7Jv2BlI='
-        testdir = tempfile.mkdtemp(prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir)
+        testdir = tempfile.mkdtemp(
+            prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir
+        )
 
         shutil.copy('keystore.jks', testdir)
         os.mkdir(os.path.join(testdir, 'repo'))
@@ -170,6 +185,7 @@ class PublishTest(unittest.TestCase):
 
     def test_check_for_key_collisions(self):
         from fdroidserver.metadata import App
+
         common.config = {}
         common.fill_config_defaults(common.config)
         publish.config = common.config
@@ -253,11 +269,12 @@ class PublishTest(unittest.TestCase):
                 self.assertEqual(publish.config['keytool'], data['keytool'])
 
     def test_sign_then_implant_signature(self):
-
         class Options:
             verbose = False
 
-        testdir = tempfile.mkdtemp(prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir)
+        testdir = tempfile.mkdtemp(
+            prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir
+        )
         os.chdir(testdir)
 
         config = common.read_config(Options)
@@ -322,8 +339,13 @@ if __name__ == "__main__":
     os.chdir(os.path.dirname(__file__))
 
     parser = optparse.OptionParser()
-    parser.add_option("-v", "--verbose", action="store_true", default=False,
-                      help="Spew out even more information than normal")
+    parser.add_option(
+        "-v",
+        "--verbose",
+        action="store_true",
+        default=False,
+        help="Spew out even more information than normal",
+    )
     (common.options, args) = parser.parse_args(['--verbose'])
 
     newSuite = unittest.TestSuite()

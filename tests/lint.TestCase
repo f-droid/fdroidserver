@@ -12,7 +12,8 @@ import tempfile
 import unittest
 
 localmodule = os.path.realpath(
-    os.path.join(os.path.dirname(inspect.getfile(inspect.currentframe())), '..'))
+    os.path.join(os.path.dirname(inspect.getfile(inspect.currentframe())), '..')
+)
 print('localmodule: ' + localmodule)
 if localmodule not in sys.path:
     sys.path.insert(0, localmodule)
@@ -322,8 +323,13 @@ if __name__ == "__main__":
     os.chdir(os.path.dirname(__file__))
 
     parser = optparse.OptionParser()
-    parser.add_option("-v", "--verbose", action="store_true", default=False,
-                      help="Spew out even more information than normal")
+    parser.add_option(
+        "-v",
+        "--verbose",
+        action="store_true",
+        default=False,
+        help="Spew out even more information than normal",
+    )
     (fdroidserver.lint.options, args) = parser.parse_args(['--verbose'])
     fdroidserver.common.options = fdroidserver.lint.options
 

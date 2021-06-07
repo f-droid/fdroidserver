@@ -13,7 +13,8 @@ import unittest
 
 
 localmodule = os.path.realpath(
-    os.path.join(os.path.dirname(inspect.getfile(inspect.currentframe())), '..'))
+    os.path.join(os.path.dirname(inspect.getfile(inspect.currentframe())), '..')
+)
 print('localmodule: ' + localmodule)
 if localmodule not in sys.path:
     sys.path.insert(0, localmodule)
@@ -35,7 +36,9 @@ class InitTest(unittest.TestCase):
         fdroidserver.init.config = None
 
     def test_disable_in_config(self):
-        testdir = tempfile.mkdtemp(prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir)
+        testdir = tempfile.mkdtemp(
+            prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir
+        )
         os.chdir(testdir)
         with open('config.yml', 'w') as fp:
             fp.write('keystore: NONE\n')
@@ -53,7 +56,9 @@ class InitTest(unittest.TestCase):
 
     def test_main_in_empty_dir(self):
         """Test that `fdroid init` will find apksigner and add it to the config"""
-        testdir = tempfile.mkdtemp(prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir)
+        testdir = tempfile.mkdtemp(
+            prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir
+        )
         os.chdir(testdir)
 
         shutil.copy(os.path.join(self.basedir, 'keystore.jks'), testdir)
@@ -74,8 +79,13 @@ if __name__ == "__main__":
     os.chdir(os.path.dirname(__file__))
 
     parser = optparse.OptionParser()
-    parser.add_option("-v", "--verbose", action="store_true", default=False,
-                      help="Spew out even more information than normal")
+    parser.add_option(
+        "-v",
+        "--verbose",
+        action="store_true",
+        default=False,
+        help="Spew out even more information than normal",
+    )
     (fdroidserver.init.options, args) = parser.parse_args(['--verbose'])
 
     newSuite = unittest.TestSuite()

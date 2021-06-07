@@ -242,12 +242,15 @@ class BuildTest(unittest.TestCase):
         os.mkdir('bin')
         os.mkdir('gen')
         with open('build.xml', 'w') as fp:
-            fp.write(textwrap.dedent(
-                """<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+            fp.write(
+                textwrap.dedent(
+                    """<?xml version="1.0" encoding="UTF-8" standalone="no"?>
                 <project basedir="." default="clean" name="mockapp">
                 <target name="release"/>
                 <target name="clean"/>
-                </project>"""))
+                </project>"""
+                )
+            )
 
         def make_fake_apk(output, build):
             with open(build.output, 'w') as fp:
@@ -277,7 +280,9 @@ class BuildTest(unittest.TestCase):
         self.assertFalse(os.path.exists('gradle-wrapper.jar'))
 
     def test_scan_with_extlib(self):
-        testdir = tempfile.mkdtemp(prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir)
+        testdir = tempfile.mkdtemp(
+            prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir
+        )
         os.chdir(testdir)
         os.mkdir("build")
 
@@ -293,9 +298,11 @@ class BuildTest(unittest.TestCase):
         os.makedirs("extlib/android")
         # write a fake binary jar file the scanner should definitely error on
         with open('extlib/android/android-support-v4r11.jar', 'wb') as file:
-            file.write(b'PK\x03\x04\x14\x00\x08\x00\x08\x00-\x0eiA\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\t\x00\x04\x00META-INF/\xfe\xca\x00\x00\x03\x00PK\x07\x08\x00\x00\x00\x00\x02\x00\x00\x00\x00\x00\x00\x00')
+            file.write(
+                b'PK\x03\x04\x14\x00\x08\x00\x08\x00-\x0eiA\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\t\x00\x04\x00META-INF/\xfe\xca\x00\x00\x03\x00PK\x07\x08\x00\x00\x00\x00\x02\x00\x00\x00\x00\x00\x00\x00'
+            )
 
-        class FakeVcs():
+        class FakeVcs:
             # no need to change to the correct commit here
             def gotorevision(self, rev, refresh=True):
                 pass
@@ -307,15 +314,17 @@ class BuildTest(unittest.TestCase):
         build.extlibs = []
         os.makedirs('build/libs')
         shutil.copy('extlib/android/android-support-v4r11.jar', 'build/libs')
-        fdroidserver.common.prepare_source(FakeVcs(), app, build,
-                                           "build", "ignore", "extlib")
+        fdroidserver.common.prepare_source(
+            FakeVcs(), app, build, "build", "ignore", "extlib"
+        )
         count = fdroidserver.scanner.scan_source("build", build)
         self.assertEqual(1, count, "Should produce a scanner error without extlib")
 
         # Now try again as an extlib
         build.extlibs = ['android/android-support-v4r11.jar']
-        fdroidserver.common.prepare_source(FakeVcs(), app, build,
-                                           "build", "ignore", "extlib")
+        fdroidserver.common.prepare_source(
+            FakeVcs(), app, build, "build", "ignore", "extlib"
+        )
         count = fdroidserver.scanner.scan_source("build", build)
         self.assertEqual(0, count, "Shouldn't error on jar from extlib")
 
@@ -335,25 +344,31 @@ class BuildTest(unittest.TestCase):
         os.mkdir('metadata')
         appid = 'info.guardianproject.checkey'
         metadata_file = os.path.join('metadata', appid + '.yml')
-        shutil.copy(os.path.join(self.basedir, metadata_file),
-                    'metadata')
+        shutil.copy(os.path.join(self.basedir, metadata_file), 'metadata')
         with open(metadata_file) as fp:
             app = fdroidserver.metadata.App(yaml.safe_load(fp))
         app['RepoType'] = 'git'
-        app['Binaries'] = 'https://example.com/fdroid/repo/info.guardianproject.checkey_%v.apk'
-        build = fdroidserver.metadata.Build({
-            'versionCode': 123,
-            'versionName': '1.2.3',
-            'commit': '1.2.3',
-            'disable': False,
-        })
+        app[
+            'Binaries'
+        ] = 'https://example.com/fdroid/repo/info.guardianproject.checkey_%v.apk'
+        build = fdroidserver.metadata.Build(
+            {
+                'versionCode': 123,
+                'versionName': '1.2.3',
+                'commit': '1.2.3',
+                'disable': False,
+            }
+        )
         app['Builds'] = [build]
         fdroidserver.metadata.write_metadata(metadata_file, app)
 
         os.makedirs(os.path.join('unsigned', 'binaries'))
-        production_result = os.path.join('unsigned', '%s_%d.apk' % (appid, build['versionCode']))
-        production_compare_file = os.path.join('unsigned', 'binaries',
-                                               '%s_%d.binary.apk' % (appid, build['versionCode']))
+        production_result = os.path.join(
+            'unsigned', '%s_%d.apk' % (appid, build['versionCode'])
+        )
+        production_compare_file = os.path.join(
+            'unsigned', 'binaries', '%s_%d.binary.apk' % (appid, build['versionCode'])
+        )
         os.makedirs(os.path.join('tmp', 'binaries'))
         test_result = os.path.join('tmp', '%s_%d.apk' % (appid, build['versionCode']))
         test_compare_file = os.path.join(
@@ -385,7 +400,9 @@ class BuildTest(unittest.TestCase):
                 # failed comparison
                 open(production_result, 'w').close()
                 open(production_compare_file, 'w').close()
-                with mock.patch('fdroidserver.common.verify_apks', lambda *args: 'failed'):
+                with mock.patch(
+                    'fdroidserver.common.verify_apks', lambda *args: 'failed'
+                ):
                     fdroidserver.build.main()
                 self.assertFalse(os.path.exists(production_result))
                 self.assertFalse(os.path.exists(production_compare_file))
@@ -403,7 +420,9 @@ class BuildTest(unittest.TestCase):
                 # failed comparison
                 open(test_result, 'w').close()
                 open(test_compare_file, 'w').close()
-                with mock.patch('fdroidserver.common.verify_apks', lambda *args: 'failed'):
+                with mock.patch(
+                    'fdroidserver.common.verify_apks', lambda *args: 'failed'
+                ):
                     fdroidserver.build.main()
                 self.assertTrue(os.path.exists(test_result))
                 self.assertFalse(os.path.exists(test_compare_file))
@@ -415,8 +434,13 @@ if __name__ == "__main__":
     os.chdir(os.path.dirname(__file__))
 
     parser = optparse.OptionParser()
-    parser.add_option("-v", "--verbose", action="store_true", default=False,
-                      help="Spew out even more information than normal")
+    parser.add_option(
+        "-v",
+        "--verbose",
+        action="store_true",
+        default=False,
+        help="Spew out even more information than normal",
+    )
     (fdroidserver.common.options, args) = parser.parse_args(['--verbose'])
 
     newSuite = unittest.TestSuite()

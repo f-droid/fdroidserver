@@ -12,7 +12,8 @@ from unittest import mock
 from testcommon import TmpCwd
 
 localmodule = os.path.realpath(
-    os.path.join(os.path.dirname(inspect.getfile(inspect.currentframe())), '..'))
+    os.path.join(os.path.dirname(inspect.getfile(inspect.currentframe())), '..')
+)
 print('localmodule: ' + localmodule)
 if localmodule not in sys.path:
     sys.path.insert(0, localmodule)
@@ -47,24 +48,34 @@ class RewriteMetaTest(unittest.TestCase):
             rewritemeta.main()
 
             with open('metadata/a.yml') as f:
-                self.assertEqual(f.read(), textwrap.dedent('''\
+                self.assertEqual(
+                    f.read(),
+                    textwrap.dedent(
+                        '''\
                     License: Unknown
 
                     AutoName: a
 
                     AutoUpdateMode: None
                     UpdateCheckMode: None
-                    '''))
+                    '''
+                    ),
+                )
 
             with open('metadata/b.yml') as f:
-                self.assertEqual(f.read(), textwrap.dedent('''\
+                self.assertEqual(
+                    f.read(),
+                    textwrap.dedent(
+                        '''\
                     License: Unknown
 
                     AutoName: b
 
                     AutoUpdateMode: None
                     UpdateCheckMode: None
-                    '''))
+                    '''
+                    ),
+                )
 
     def test_rewrite_scenario_yml_no_ruamel(self):
         sys.argv = ['rewritemeta', 'a']
@@ -81,16 +92,26 @@ class RewriteMetaTest(unittest.TestCase):
                     rewritemeta.main()
 
             with open('metadata/a.yml') as f:
-                self.assertEqual(f.read(), textwrap.dedent('''\
-                    AutoName: a'''))
+                self.assertEqual(
+                    f.read(),
+                    textwrap.dedent(
+                        '''\
+                    AutoName: a'''
+                    ),
+                )
 
 
 if __name__ == "__main__":
     os.chdir(os.path.dirname(__file__))
 
     parser = optparse.OptionParser()
-    parser.add_option("-v", "--verbose", action="store_true", default=False,
-                      help="Spew out even more information than normal")
+    parser.add_option(
+        "-v",
+        "--verbose",
+        action="store_true",
+        default=False,
+        help="Spew out even more information than normal",
+    )
     (common.options, args) = parser.parse_args(['--verbose'])
 
     newSuite = unittest.TestSuite()

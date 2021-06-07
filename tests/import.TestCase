@@ -14,13 +14,15 @@ import unittest
 from unittest import mock
 
 localmodule = os.path.realpath(
-    os.path.join(os.path.dirname(inspect.getfile(inspect.currentframe())), '..'))
+    os.path.join(os.path.dirname(inspect.getfile(inspect.currentframe())), '..')
+)
 print('localmodule: ' + localmodule)
 if localmodule not in sys.path:
     sys.path.insert(0, localmodule)
 
 import fdroidserver.common
 import fdroidserver.metadata
+
 # work around the syntax error from: import fdroidserver.import
 import import_proxy
 
@@ -55,19 +57,37 @@ class ImportTest(unittest.TestCase):
         self.assertEqual(app.Repo, 'https://gitlab.com/fdroid/ci-test-app.git')
 
     def test_get_app_from_url(self):
-        testdir = tempfile.mkdtemp(prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir)
+        testdir = tempfile.mkdtemp(
+            prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir
+        )
         os.chdir(testdir)
         os.mkdir(os.path.join(testdir, 'tmp'))
         tmp_importer = os.path.join(testdir, 'tmp', 'importer')
         data = (
-            ('cn.wildfirechat.chat', 'https://github.com/wildfirechat/android-chat', '0.6.9', '23'),
-            ('com.anpmech.launcher', 'https://github.com/KeikaiLauncher/KeikaiLauncher', 'Unknown', None),
-            ('ut.ewh.audiometrytest', 'https://github.com/ReeceStevens/ut_ewh_audiometer_2014', '1.65', '14'),
+            (
+                'cn.wildfirechat.chat',
+                'https://github.com/wildfirechat/android-chat',
+                '0.6.9',
+                '23',
+            ),
+            (
+                'com.anpmech.launcher',
+                'https://github.com/KeikaiLauncher/KeikaiLauncher',
+                'Unknown',
+                None,
+            ),
+            (
+                'ut.ewh.audiometrytest',
+                'https://github.com/ReeceStevens/ut_ewh_audiometer_2014',
+                '1.65',
+                '14',
+            ),
         )
         for appid, url, vn, vc in data:
             shutil.rmtree(tmp_importer, ignore_errors=True)
-            shutil.copytree(os.path.join(self.basedir, 'source-files', appid),
-                            tmp_importer)
+            shutil.copytree(
+                os.path.join(self.basedir, 'source-files', appid), tmp_importer
+            )
 
             app = fdroidserver.common.get_app_from_url(url)
             with mock.patch('fdroidserver.common.getvcs',
@@ -92,8 +112,13 @@ if __name__ == "__main__":
     os.chdir(os.path.dirname(__file__))
 
     parser = optparse.OptionParser()
-    parser.add_option("-v", "--verbose", action="store_true", default=False,
-                      help="Spew out even more information than normal")
+    parser.add_option(
+        "-v",
+        "--verbose",
+        action="store_true",
+        default=False,
+        help="Spew out even more information than normal",
+    )
     (fdroidserver.common.options, args) = parser.parse_args(['--verbose'])
 
     newSuite = unittest.TestSuite()

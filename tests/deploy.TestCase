@@ -10,7 +10,8 @@ import unittest
 from unittest import mock
 
 localmodule = os.path.realpath(
-    os.path.join(os.path.dirname(inspect.getfile(inspect.currentframe())), '..'))
+    os.path.join(os.path.dirname(inspect.getfile(inspect.currentframe())), '..')
+)
 if localmodule not in sys.path:
     sys.path.insert(0, localmodule)
 
@@ -47,34 +48,52 @@ class DeployTest(unittest.TestCase):
         def update_server_webroot_call(cmd):
             nonlocal call_iteration
             if call_iteration == 0:
-                self.assertListEqual(cmd, ['rsync',
-                                           '--archive',
-                                           '--delete-after',
-                                           '--safe-links',
-                                           '--quiet',
-                                           '--exclude', 'repo/index.xml',
-                                           '--exclude', 'repo/index.jar',
-                                           '--exclude', 'repo/index-v1.jar',
-                                           'repo',
-                                           'example.com:/var/www/fdroid'])
+                self.assertListEqual(
+                    cmd,
+                    [
+                        'rsync',
+                        '--archive',
+                        '--delete-after',
+                        '--safe-links',
+                        '--quiet',
+                        '--exclude',
+                        'repo/index.xml',
+                        '--exclude',
+                        'repo/index.jar',
+                        '--exclude',
+                        'repo/index-v1.jar',
+                        'repo',
+                        'example.com:/var/www/fdroid',
+                    ],
+                )
             elif call_iteration == 1:
-                self.assertListEqual(cmd, ['rsync',
-                                           '--archive',
-                                           '--delete-after',
-                                           '--safe-links',
-                                           '--quiet',
-                                           'repo',
-                                           serverwebroot])
+                self.assertListEqual(
+                    cmd,
+                    [
+                        'rsync',
+                        '--archive',
+                        '--delete-after',
+                        '--safe-links',
+                        '--quiet',
+                        'repo',
+                        serverwebroot,
+                    ],
+                )
             elif call_iteration == 2:
-                self.assertListEqual(cmd, ['rsync',
-                                           '--archive',
-                                           '--delete-after',
-                                           '--safe-links',
-                                           '--quiet',
-                                           'Sym.apk',
-                                           'Sym.apk.asc',
-                                           'Sym.apk.sig',
-                                           'example.com:/var/www/fdroid'])
+                self.assertListEqual(
+                    cmd,
+                    [
+                        'rsync',
+                        '--archive',
+                        '--delete-after',
+                        '--safe-links',
+                        '--quiet',
+                        'Sym.apk',
+                        'Sym.apk.asc',
+                        'Sym.apk.sig',
+                        'example.com:/var/www/fdroid',
+                    ],
+                )
             else:
                 self.fail('unexpected subprocess.call invocation')
             call_iteration += 1
@@ -86,8 +105,7 @@ class DeployTest(unittest.TestCase):
             os.symlink('repo/com.example.sym.apk.asc', 'Sym.apk.asc')
             os.symlink('repo/com.example.sym.apk.sig', 'Sym.apk.sig')
             with mock.patch('subprocess.call', side_effect=update_server_webroot_call):
-                fdroidserver.deploy.update_serverwebroot(serverwebroot,
-                                                         repo_section)
+                fdroidserver.deploy.update_serverwebroot(serverwebroot, repo_section)
         self.assertEqual(call_iteration, 3, 'expected 3 invocations of subprocess.call')
 
     def test_update_serverwebroot_with_id_file(self):
@@ -108,41 +126,55 @@ class DeployTest(unittest.TestCase):
         def update_server_webroot_call(cmd):
             nonlocal call_iteration
             if call_iteration == 0:
-                self.assertListEqual(cmd, ['rsync',
-                                           '--archive',
-                                           '--delete-after',
-                                           '--safe-links',
-                                           '--verbose',
-                                           '-e',
-                                           'ssh -oBatchMode=yes -oIdentitiesOnly=yes -i '
-                                           + fdroidserver.deploy.config['identity_file'],
-                                           '--exclude', 'archive/index.xml',
-                                           '--exclude', 'archive/index.jar',
-                                           '--exclude', 'archive/index-v1.jar',
-                                           'archive',
-                                           serverwebroot])
+                self.assertListEqual(
+                    cmd,
+                    [
+                        'rsync',
+                        '--archive',
+                        '--delete-after',
+                        '--safe-links',
+                        '--verbose',
+                        '-e',
+                        'ssh -oBatchMode=yes -oIdentitiesOnly=yes -i '
+                        + fdroidserver.deploy.config['identity_file'],
+                        '--exclude',
+                        'archive/index.xml',
+                        '--exclude',
+                        'archive/index.jar',
+                        '--exclude',
+                        'archive/index-v1.jar',
+                        'archive',
+                        serverwebroot,
+                    ],
+                )
             elif call_iteration == 1:
-                self.assertListEqual(cmd, ['rsync',
-                                           '--archive',
-                                           '--delete-after',
-                                           '--safe-links',
-                                           '--verbose',
-                                           '-e',
-                                           'ssh -oBatchMode=yes -oIdentitiesOnly=yes -i '
-                                           + fdroidserver.deploy.config['identity_file'],
-                                           'archive',
-                                           serverwebroot])
+                self.assertListEqual(
+                    cmd,
+                    [
+                        'rsync',
+                        '--archive',
+                        '--delete-after',
+                        '--safe-links',
+                        '--verbose',
+                        '-e',
+                        'ssh -oBatchMode=yes -oIdentitiesOnly=yes -i '
+                        + fdroidserver.deploy.config['identity_file'],
+                        'archive',
+                        serverwebroot,
+                    ],
+                )
             else:
                 self.fail('unexpected subprocess.call invocation')
             call_iteration += 1
             return 0
 
         with mock.patch('subprocess.call', side_effect=update_server_webroot_call):
-            fdroidserver.deploy.update_serverwebroot(serverwebroot,
-                                                     repo_section)
+            fdroidserver.deploy.update_serverwebroot(serverwebroot, repo_section)
         self.assertEqual(call_iteration, 2, 'expected 2 invocations of subprocess.call')
 
-    @unittest.skipIf(not os.getenv('VIRUSTOTAL_API_KEY'), 'VIRUSTOTAL_API_KEY is not set')
+    @unittest.skipIf(
+        not os.getenv('VIRUSTOTAL_API_KEY'), 'VIRUSTOTAL_API_KEY is not set'
+    )
     def test_upload_to_virustotal(self):
         fdroidserver.deploy.options.verbose = True
         virustotal_apikey = os.getenv('VIRUSTOTAL_API_KEY')
@@ -150,15 +182,14 @@ class DeployTest(unittest.TestCase):
 
     def test_remote_hostname_regex(self):
         for remote_url, name in (
-                ('git@github.com:guardianproject/fdroid-repo', 'github'),
-                ('git@gitlab.com:guardianproject/fdroid-repo', 'gitlab'),
-                ('https://github.com:guardianproject/fdroid-repo', 'github'),
-                ('https://gitlab.com/guardianproject/fdroid-repo', 'gitlab'),
-                ('https://salsa.debian.org/foo/repo', 'salsa'),
+            ('git@github.com:guardianproject/fdroid-repo', 'github'),
+            ('git@gitlab.com:guardianproject/fdroid-repo', 'gitlab'),
+            ('https://github.com:guardianproject/fdroid-repo', 'github'),
+            ('https://gitlab.com/guardianproject/fdroid-repo', 'gitlab'),
+            ('https://salsa.debian.org/foo/repo', 'salsa'),
         ):
             self.assertEqual(
-                name,
-                fdroidserver.deploy.REMOTE_HOSTNAME_REGEX.sub(r'\1', remote_url)
+                name, fdroidserver.deploy.REMOTE_HOSTNAME_REGEX.sub(r'\1', remote_url)
             )
 
 
@@ -166,8 +197,13 @@ if __name__ == "__main__":
     os.chdir(os.path.dirname(__file__))
 
     parser = optparse.OptionParser()
-    parser.add_option("-v", "--verbose", action="store_true", default=False,
-                      help="Spew out even more information than normal")
+    parser.add_option(
+        "-v",
+        "--verbose",
+        action="store_true",
+        default=False,
+        help="Spew out even more information than normal",
+    )
     (fdroidserver.common.options, args) = parser.parse_args(['--verbose'])
 
     newSuite = unittest.TestSuite()
