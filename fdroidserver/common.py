@@ -862,10 +862,8 @@ def write_status_json(output, pretty=False, name=None):
 
 def get_head_commit_id(git_repo):
     """Get git commit ID for HEAD as a str
-
-    repo.head.commit.binsha is a bytearray stored in a str
     """
-    return hexlify(bytearray(git_repo.head.commit.binsha)).decode()
+    return git_repo.head.commit.hexsha
 
 
 def setup_vcs(app):
@@ -914,6 +912,8 @@ class vcs:
 
     def __init__(self, remote, local):
 
+        # TODO: Remove this in Python3.6
+        local = str(local)
         # svn, git-svn and bzr may require auth
         self.username = None
         if self.repotype() in ('git-svn', 'bzr'):
@@ -1611,7 +1611,8 @@ def parse_androidmanifests(paths, app):
     max_package = None
 
     for path in paths:
-
+        # TODO: Remove this in Python3.6
+        path = str(path)
         if not os.path.isfile(path):
             continue
 
@@ -1803,11 +1804,12 @@ def is_strict_application_id(name):
 
 def get_all_gradle_and_manifests(build_dir):
     paths = []
-    for root, dirs, files in os.walk(build_dir):
+    # TODO: Python3.6: Accepts a path-like object.
+    for root, dirs, files in os.walk(str(build_dir)):
         for f in sorted(files):
             if f == 'AndroidManifest.xml' \
                or f.endswith('.gradle') or f.endswith('.gradle.kts'):
-                full = os.path.join(root, f)
+                full = Path(root) / f
                 paths.append(full)
     return paths
 
@@ -1817,22 +1819,18 @@ def get_gradle_subdir(build_dir, paths):
     first_gradle_dir = None
     for path in paths:
         if not first_gradle_dir:
-            first_gradle_dir = os.path.relpath(os.path.dirname(path), build_dir)
-        if os.path.exists(path) and SETTINGS_GRADLE_REGEX.match(os.path.basename(path)):
-            with open(path) as fp:
-                for m in GRADLE_SUBPROJECT_REGEX.finditer(fp.read()):
-                    for f in glob.glob(os.path.join(os.path.dirname(path), m.group(1), 'build.gradle*')):
-                        with open(f) as fp:
-                            while True:
-                                line = fp.readline()
-                                if not line:
-                                    break
-                                if ANDROID_PLUGIN_REGEX.match(line):
-                                    return os.path.relpath(os.path.dirname(f), build_dir)
-    if first_gradle_dir and first_gradle_dir != '.':
+            first_gradle_dir = path.parent.relative_to(build_dir)
+        if path.exists() and SETTINGS_GRADLE_REGEX.match(str(path.name)):
+            for m in GRADLE_SUBPROJECT_REGEX.finditer(path.read_text()):
+                for f in (path.parent / m.group(1)).glob('build.gradle*'):
+                    with f.open() as fp:
+                        for line in fp.readlines():
+                            if ANDROID_PLUGIN_REGEX.match(line):
+                                return f.parent.relative_to(build_dir)
+    if first_gradle_dir and first_gradle_dir != Path('.'):
         return first_gradle_dir
 
-    return ''
+    return
 
 
 def getrepofrompage(url):
@@ -4324,3 +4322,10 @@ NDKS = [
         "url": "https://dl.google.com/android/repository/android-ndk-r22b-linux-x86_64.zip"
     }
 ]
+
+
+def handle_retree_error_on_windows(function, path, excinfo):
+    """Python can't remove a readonly file on Windows so chmod first"""
+    if function in (os.unlink, os.rmdir, os.remove) and excinfo[0] == PermissionError:
+        os.chmod(path, stat.S_IWRITE)
+        function(path)

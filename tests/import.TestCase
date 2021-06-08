@@ -2,29 +2,29 @@
 
 # http://www.drdobbs.com/testing/unit-testing-with-python/240165163
 
-import inspect
 import logging
 import optparse
 import os
-import requests
 import shutil
 import sys
 import tempfile
 import unittest
 from unittest import mock
+from pathlib import Path
 
-localmodule = os.path.realpath(
-    os.path.join(os.path.dirname(inspect.getfile(inspect.currentframe())), '..')
-)
-print('localmodule: ' + localmodule)
-if localmodule not in sys.path:
-    sys.path.insert(0, localmodule)
-
-import fdroidserver.common
-import fdroidserver.metadata
+import requests
+from testcommon import TmpCwd
 
 # work around the syntax error from: import fdroidserver.import
 import import_proxy
+
+localmodule = Path(__file__).resolve().parent.parent
+print('localmodule: ' + str(localmodule))
+if localmodule not in sys.path:
+    sys.path.insert(0, str(localmodule))
+
+import fdroidserver.common
+import fdroidserver.metadata
 
 
 class ImportTest(unittest.TestCase):
@@ -32,11 +32,11 @@ class ImportTest(unittest.TestCase):
 
     def setUp(self):
         logging.basicConfig(level=logging.DEBUG)
-        self.basedir = os.path.join(localmodule, 'tests')
-        self.tmpdir = os.path.abspath(os.path.join(self.basedir, '..', '.testfiles'))
-        if not os.path.exists(self.tmpdir):
-            os.makedirs(self.tmpdir)
-        os.chdir(self.basedir)
+        self.basedir = localmodule / 'tests'
+        self.tmpdir = localmodule / '.testfiles'
+        self.tmpdir.mkdir(exist_ok=True)
+        # TODO: Python3.6: Accepts a path-like object.
+        os.chdir(str(self.basedir))
 
     def test_import_gitlab(self):
         # FDroidPopen needs some config to work
@@ -57,59 +57,72 @@ class ImportTest(unittest.TestCase):
         self.assertEqual(app.Repo, 'https://gitlab.com/fdroid/ci-test-app.git')
 
     def test_get_app_from_url(self):
-        testdir = tempfile.mkdtemp(
-            prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir
-        )
-        os.chdir(testdir)
-        os.mkdir(os.path.join(testdir, 'tmp'))
-        tmp_importer = os.path.join(testdir, 'tmp', 'importer')
-        data = (
-            (
-                'cn.wildfirechat.chat',
-                'https://github.com/wildfirechat/android-chat',
-                '0.6.9',
-                '23',
-            ),
-            (
-                'com.anpmech.launcher',
-                'https://github.com/KeikaiLauncher/KeikaiLauncher',
-                'Unknown',
-                None,
-            ),
-            (
-                'ut.ewh.audiometrytest',
-                'https://github.com/ReeceStevens/ut_ewh_audiometer_2014',
-                '1.65',
-                '14',
-            ),
-        )
-        for appid, url, vn, vc in data:
-            shutil.rmtree(tmp_importer, ignore_errors=True)
-            shutil.copytree(
-                os.path.join(self.basedir, 'source-files', appid), tmp_importer
+        # TODO: Pytohn3.6: The dir parameter now accepts a path-like object.
+        with tempfile.TemporaryDirectory(dir=str(self.tmpdir)) as testdir, TmpCwd(
+            testdir
+        ):
+            testdir = Path(testdir)
+            (testdir / 'tmp').mkdir()
+            tmp_importer = testdir / 'tmp/importer'
+            data = (
+                (
+                    'cn.wildfirechat.chat',
+                    'https://github.com/wildfirechat/android-chat',
+                    '0.6.9',
+                    '23',
+                ),
+                (
+                    'com.anpmech.launcher',
+                    'https://github.com/KeikaiLauncher/KeikaiLauncher',
+                    'Unknown',
+                    None,
+                ),
+                (
+                    'ut.ewh.audiometrytest',
+                    'https://github.com/ReeceStevens/ut_ewh_audiometer_2014',
+                    '1.65',
+                    '14',
+                ),
             )
+            for appid, url, vn, vc in data:
+                # TODO: Python3.6: Accepts a path-like object.
+                shutil.rmtree(
+                    str(tmp_importer),
+                    onerror=fdroidserver.common.handle_retree_error_on_windows,
+                )
+                shutil.copytree(
+                    str(self.basedir / 'source-files' / appid), str(tmp_importer)
+                )
 
-            app = fdroidserver.common.get_app_from_url(url)
-            with mock.patch('fdroidserver.common.getvcs',
-                            lambda a, b, c: fdroidserver.common.vcs(url, testdir)):
-                with mock.patch('fdroidserver.common.vcs.gotorevision',
-                                lambda s, rev: None):
-                    with mock.patch('shutil.rmtree', lambda a: None):
-                        build_dir = import_proxy.clone_to_tmp_dir(app)
-            self.assertEqual('git', app.RepoType)
-            self.assertEqual(url, app.Repo)
-            self.assertEqual(url, app.SourceCode)
-            logging.info(build_dir)
-            paths = fdroidserver.common.get_all_gradle_and_manifests(build_dir)
-            self.assertNotEqual(paths, [])
-            versionName, versionCode, package = fdroidserver.common.parse_androidmanifests(paths, app)
-            self.assertEqual(vn, versionName)
-            self.assertEqual(vc, versionCode)
-            self.assertEqual(appid, package)
+                app = fdroidserver.common.get_app_from_url(url)
+                with mock.patch(
+                    'fdroidserver.common.getvcs',
+                    lambda a, b, c: fdroidserver.common.vcs(url, testdir),
+                ), mock.patch(
+                    'fdroidserver.common.vcs.gotorevision', lambda s, rev: None
+                ), mock.patch(
+                    'shutil.rmtree', lambda a, onerror=None: None
+                ):
+                    build_dir = import_proxy.clone_to_tmp_dir(app)
+                self.assertEqual('git', app.RepoType)
+                self.assertEqual(url, app.Repo)
+                self.assertEqual(url, app.SourceCode)
+                logging.info(build_dir)
+                paths = fdroidserver.common.get_all_gradle_and_manifests(build_dir)
+                self.assertNotEqual(paths, [])
+                (
+                    versionName,
+                    versionCode,
+                    package,
+                ) = fdroidserver.common.parse_androidmanifests(paths, app)
+                self.assertEqual(vn, versionName)
+                self.assertEqual(vc, versionCode)
+                self.assertEqual(appid, package)
 
 
 if __name__ == "__main__":
-    os.chdir(os.path.dirname(__file__))
+    # TODO: Python3.6: Support added to accept objects implementing the os.PathLike interface.
+    os.chdir(str(Path(__file__).parent))
 
     parser = optparse.OptionParser()
     parser.add_option(

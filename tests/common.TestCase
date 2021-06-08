@@ -22,6 +22,7 @@ import yaml
 import gzip
 from zipfile import ZipFile
 from unittest import mock
+from pathlib import Path
 
 
 localmodule = os.path.realpath(
@@ -1223,26 +1224,28 @@ class CommonTest(unittest.TestCase):
 
     def test_get_all_gradle_and_manifests(self):
         """Test whether the function works with relative and absolute paths"""
-        a = fdroidserver.common.get_all_gradle_and_manifests(os.path.join('source-files', 'cn.wildfirechat.chat'))
+        a = fdroidserver.common.get_all_gradle_and_manifests(Path('source-files/cn.wildfirechat.chat'))
         paths = [
-            os.path.join('source-files', 'cn.wildfirechat.chat', 'avenginekit', 'build.gradle'),
-            os.path.join('source-files', 'cn.wildfirechat.chat', 'build.gradle'),
-            os.path.join('source-files', 'cn.wildfirechat.chat', 'chat', 'build.gradle'),
-            os.path.join('source-files', 'cn.wildfirechat.chat', 'client', 'build.gradle'),
-            os.path.join('source-files', 'cn.wildfirechat.chat', 'client', 'src', 'main', 'AndroidManifest.xml'),
-            os.path.join('source-files', 'cn.wildfirechat.chat', 'emojilibrary', 'build.gradle'),
-            os.path.join('source-files', 'cn.wildfirechat.chat', 'gradle', 'build_libraries.gradle'),
-            os.path.join('source-files', 'cn.wildfirechat.chat', 'imagepicker', 'build.gradle'),
-            os.path.join('source-files', 'cn.wildfirechat.chat', 'mars-core-release', 'build.gradle'),
-            os.path.join('source-files', 'cn.wildfirechat.chat', 'push', 'build.gradle'),
-            os.path.join('source-files', 'cn.wildfirechat.chat', 'settings.gradle'),
+            'avenginekit/build.gradle',
+            'build.gradle',
+            'chat/build.gradle',
+            'client/build.gradle',
+            'client/src/main/AndroidManifest.xml',
+            'emojilibrary/build.gradle',
+            'gradle/build_libraries.gradle',
+            'imagepicker/build.gradle',
+            'mars-core-release/build.gradle',
+            'push/build.gradle',
+            'settings.gradle',
         ]
+        paths = [Path('source-files/cn.wildfirechat.chat') / path for path in paths]
         self.assertEqual(sorted(paths), sorted(a))
 
-        abspath = os.path.join(self.basedir, 'source-files', 'realm')
+        abspath = Path(self.basedir) / 'source-files/realm'
         p = fdroidserver.common.get_all_gradle_and_manifests(abspath)
         self.assertEqual(1, len(p))
-        self.assertTrue(p[0].startswith(abspath))
+        # TODO: Pathon3.9: self.assertTrue(p[0].is_relative_to(abspath))
+        self.assertTrue(abspath in p[0].parents)
 
     def test_get_gradle_subdir(self):
         subdirs = {
@@ -1251,17 +1254,12 @@ class CommonTest(unittest.TestCase):
             'org.tasks': 'app',
             'ut.ewh.audiometrytest': 'app',
         }
-        for f in (
-            'cn.wildfirechat.chat',
-            'com.anpmech.launcher',
-            'org.tasks',
-            'ut.ewh.audiometrytest',
-        ):
-            build_dir = os.path.join('source-files', f)
+        for k, v in subdirs.items():
+            build_dir = Path('source-files') / k
             paths = fdroidserver.common.get_all_gradle_and_manifests(build_dir)
             logging.info(paths)
             subdir = fdroidserver.common.get_gradle_subdir(build_dir, paths)
-            self.assertEqual(subdirs[f], subdir)
+            self.assertEqual(v, str(subdir))
 
     def test_parse_srclib_spec_good(self):
         self.assertEqual(fdroidserver.common.parse_srclib_spec('osmand-external-skia@android/oreo'),
