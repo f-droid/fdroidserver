@@ -1,7 +1,7 @@
 
 variables:
   pip: pip3 --timeout 100 --retries 10
-# speed up git checkout phase
+  # speed up git checkout phase
   GIT_DEPTH: 1
 
 
@@ -133,7 +133,7 @@ ubuntu_bionic_pip:
     - deactivate
     - tar tzf dist/fdroidserver-*.tar.gz | grep locale/de/LC_MESSAGES/fdroidserver.mo
     # back to bare machine to act as user's install machine
-    - $pip install --upgrade pip setuptools wheel # make this go away: "error: invalid command 'bdist_wheel'"
+    - $pip install --upgrade pip setuptools wheel  # make this go away: "error: invalid command 'bdist_wheel'"
     - $pip install dist/fdroidserver-*.tar.gz
     - tar xzf dist/fdroidserver-*.tar.gz
     - cd fdroidserver-*
@@ -360,7 +360,7 @@ plugin_fetchsrclibs:
     - . env/bin/activate
     - export PATH="$CI_PROJECT_DIR:$PATH"
     - export PYTHONPATH="$CI_PROJECT_DIR/examples"
-    - $pip install wheel # to make this go away: "error: invalid command 'bdist_wheel'"
+    - $pip install wheel  # to make this go away: "error: invalid command 'bdist_wheel'"
     - $pip install -e .
     - fdroid | grep fetchsrclibs
 
@@ -421,20 +421,21 @@ Build documentation:
     - pip install -e .[docs]
     - cd docs
     - sphinx-apidoc -o ./source ../fdroidserver -M -e
-    - sphinx-autogen -o generated source/*.rst   
+    - sphinx-autogen -o generated source/*.rst
     - make html
   artifacts:
     paths:
       - docs/build/html/
 
+
 pages:
   image: alpine:latest
   stage: deploy
   script:
-    - cp docs/build/html public -r # GL Pages needs the files in a directory named "public"
+    - cp docs/build/html public -r  # GL Pages needs the files in a directory named "public"
   artifacts:
     paths:
       - public
   needs: ["Build documentation"]
   rules:
-    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH' # only publish pages on default (master) branch
+    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'  # only publish pages on default (master) branch
