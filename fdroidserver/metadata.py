@@ -978,6 +978,8 @@ build_cont = re.compile(r'^[ \t]')
 
 
 def write_metadata(metadatapath, app):
+    # TODO: Remove this
+    metadatapath = str(metadatapath)
     if metadatapath.endswith('.yml'):
         if importlib.util.find_spec('ruamel.yaml'):
             with open(metadatapath, 'w') as mf:
