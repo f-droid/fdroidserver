@@ -14,7 +14,6 @@ import unittest
 import yaml
 import zipfile
 from unittest import mock
-from pathlib import Path
 
 localmodule = os.path.realpath(
     os.path.join(os.path.dirname(inspect.getfile(inspect.currentframe())), '..')
@@ -476,7 +475,7 @@ class BuildTest(unittest.TestCase):
             }
         )
         app['Builds'] = [build]
-        fdroidserver.metadata.write_metadata(Path(metadata_file), app)
+        fdroidserver.metadata.write_metadata(metadata_file, app)
 
         os.makedirs(os.path.join('unsigned', 'binaries'))
         production_result = os.path.join(
