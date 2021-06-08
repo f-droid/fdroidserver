@@ -1,10 +1,6 @@
 #!/usr/bin/env python3
 
-# http://www.drdobbs.com/testing/unit-testing-with-python/240165163
-
 import io
-import glob
-import inspect
 import logging
 import optparse
 import os
@@ -12,25 +8,27 @@ import random
 import shutil
 import sys
 import unittest
-import yaml
+from unittest import mock
 import tempfile
 import textwrap
 from collections import OrderedDict
-from unittest import mock
+from pathlib import Path
+
+
+import yaml
+from testcommon import TmpCwd
+
 
 try:
     from yaml import CSafeLoader as SafeLoader
 except ImportError:
     from yaml import SafeLoader
 
-localmodule = os.path.realpath(
-    os.path.join(os.path.dirname(inspect.getfile(inspect.currentframe())), '..')
-)
-print('localmodule: ' + localmodule)
+localmodule = Path(__file__).resolve().parent.parent
+print('localmodule: ' + str(localmodule))
 if localmodule not in sys.path:
-    sys.path.insert(0, localmodule)
+    sys.path.insert(0, str(localmodule))
 
-from testcommon import TmpCwd
 
 import fdroidserver.common
 import fdroidserver.metadata
@@ -42,11 +40,11 @@ class MetadataTest(unittest.TestCase):
 
     def setUp(self):
         logging.basicConfig(level=logging.DEBUG)
-        self.basedir = os.path.join(localmodule, 'tests')
-        self.tmpdir = os.path.abspath(os.path.join(self.basedir, '..', '.testfiles'))
-        if not os.path.exists(self.tmpdir):
-            os.makedirs(self.tmpdir)
-        os.chdir(self.basedir)
+        self.basedir = localmodule / 'tests'
+        self.tmpdir = localmodule / '.testfiles'
+        self.tmpdir.mkdir(exist_ok=True)
+        # TODO: Python3.6: Accepts a path-like object.
+        os.chdir(str(self.basedir))
 
     def test_FieldValidator_BitcoinAddress(self):
         validator = None
@@ -59,23 +57,53 @@ class MetadataTest(unittest.TestCase):
         fdroidserver.metadata.warnings_action = 'error'
 
         # some valid addresses (P2PKH, P2SH, Bech32)
-        self.assertIsNone(validator.check('1BrrrrErsrWetrTrnrrrrm4GFg7xJaNVN2', 'fake.app.id'))
-        self.assertIsNone(validator.check('3JrrrrWrEZr3rNrrvrecrnyirrnqRhWNLy', 'fake.app.id'))
-        self.assertIsNone(validator.check('bc1qar0srrr7xrkvr5lr43lrdnwrre5rgtrzrf5rrq', 'fake.app.id'))
+        self.assertIsNone(
+            validator.check('1BrrrrErsrWetrTrnrrrrm4GFg7xJaNVN2', 'fake.app.id')
+        )
+        self.assertIsNone(
+            validator.check('3JrrrrWrEZr3rNrrvrecrnyirrnqRhWNLy', 'fake.app.id')
+        )
+        self.assertIsNone(
+            validator.check('bc1qar0srrr7xrkvr5lr43lrdnwrre5rgtrzrf5rrq', 'fake.app.id')
+        )
 
         # some invalid addresses
-        self.assertRaises(fdroidserver.exception.MetaDataException, validator.check,
-                          '21BvMrSYsrWrtrrlL5A10mlGFr7rrarrN2', 'fake.app.id')
-        self.assertRaises(fdroidserver.exception.MetaDataException, validator.check,
-                          '5Hrgr3ur5rGLrfKrrrrrrHSrqJrroGrrzrQrrrrrrLNrsrDrrrA', 'fake.app.id')
-        self.assertRaises(fdroidserver.exception.MetaDataException, validator.check,
-                          '92rr46rUrgTrrromrVrirW6r1rrrdrerrdbJrrrhrCsYrrrrrrc', 'fake.app.id')
-        self.assertRaises(fdroidserver.exception.MetaDataException, validator.check,
-                          'K1BvMrSYsrWrtrrrn5Au4m4GFr7rrarrN2', 'fake.app.id')
-        self.assertRaises(fdroidserver.exception.MetaDataException, validator.check,
-                          'L1BvMrSYsrWrtrrrn5Au4m4GFr7rrarrN2', 'fake.app.id')
-        self.assertRaises(fdroidserver.exception.MetaDataException, validator.check,
-                          'tb1qw5r8drrejxrrg4y5rrrrrraryrrrrwrkxrjrsx', 'fake.app.id')
+        self.assertRaises(
+            fdroidserver.exception.MetaDataException,
+            validator.check,
+            '21BvMrSYsrWrtrrlL5A10mlGFr7rrarrN2',
+            'fake.app.id',
+        )
+        self.assertRaises(
+            fdroidserver.exception.MetaDataException,
+            validator.check,
+            '5Hrgr3ur5rGLrfKrrrrrrHSrqJrroGrrzrQrrrrrrLNrsrDrrrA',
+            'fake.app.id',
+        )
+        self.assertRaises(
+            fdroidserver.exception.MetaDataException,
+            validator.check,
+            '92rr46rUrgTrrromrVrirW6r1rrrdrerrdbJrrrhrCsYrrrrrrc',
+            'fake.app.id',
+        )
+        self.assertRaises(
+            fdroidserver.exception.MetaDataException,
+            validator.check,
+            'K1BvMrSYsrWrtrrrn5Au4m4GFr7rrarrN2',
+            'fake.app.id',
+        )
+        self.assertRaises(
+            fdroidserver.exception.MetaDataException,
+            validator.check,
+            'L1BvMrSYsrWrtrrrn5Au4m4GFr7rrarrN2',
+            'fake.app.id',
+        )
+        self.assertRaises(
+            fdroidserver.exception.MetaDataException,
+            validator.check,
+            'tb1qw5r8drrejxrrg4y5rrrrrraryrrrrwrkxrjrsx',
+            'fake.app.id',
+        )
 
     def test_FieldValidator_LitecoinAddress(self):
         validator = None
@@ -88,27 +116,55 @@ class MetadataTest(unittest.TestCase):
         fdroidserver.metadata.warnings_action = 'error'
 
         # some valid addresses (L, M, 3)
-        self.assertIsNone(validator.check('LgeGrrrrJAxyXprrPrrBrrX5Qrrrrrrrrd', 'fake.app.id'))
-        self.assertIsNone(validator.check('MrrrrrrrJAxyXpanPtrrRAX5QHxvUJo8id', 'fake.app.id'))
+        self.assertIsNone(
+            validator.check('LgeGrrrrJAxyXprrPrrBrrX5Qrrrrrrrrd', 'fake.app.id')
+        )
+        self.assertIsNone(
+            validator.check('MrrrrrrrJAxyXpanPtrrRAX5QHxvUJo8id', 'fake.app.id')
+        )
         self.assertIsNone(validator.check('3rereVr9rAryrranrrrrrAXrrHx', 'fake.app.id'))
 
         # some invalid addresses (various special use/testnet addresses, invalid chars)
-        self.assertRaises(fdroidserver.exception.MetaDataException, validator.check,
-                          '21BvMrSYsrWrtrrrn5Au4l4GFr7rrarrN2', 'fake.app.id')
-        self.assertRaises(fdroidserver.exception.MetaDataException, validator.check,
-                          '5Hrgr3ur5rGLrfKrrrrrr1SrqJrroGrrzrQrrrrrrLNrsrDrrrA', 'fake.app.id')
-        self.assertRaises(fdroidserver.exception.MetaDataException, validator.check,
-                          '92rr46rUrgTrrromrVrirW6r1rrrdrerrdbJrrrhrCsYrrrrrrc', 'fake.app.id')
-        self.assertRaises(fdroidserver.exception.MetaDataException, validator.check,
-                          'K1BvMrSYsrWrtrrrn5Au4m4GFr7rrarrN2', 'fake.app.id')
-        self.assertRaises(fdroidserver.exception.MetaDataException, validator.check,
-                          'L0000rSYsrWrtrrrn5Au4m4GFr7rrarrN2', 'fake.app.id')
-        self.assertRaises(fdroidserver.exception.MetaDataException, validator.check,
-                          'tb1qw5r8drrejxrrg4y5rrrrrraryrrrrwrkxrjrsx', 'fake.app.id')
+        self.assertRaises(
+            fdroidserver.exception.MetaDataException,
+            validator.check,
+            '21BvMrSYsrWrtrrrn5Au4l4GFr7rrarrN2',
+            'fake.app.id',
+        )
+        self.assertRaises(
+            fdroidserver.exception.MetaDataException,
+            validator.check,
+            '5Hrgr3ur5rGLrfKrrrrrr1SrqJrroGrrzrQrrrrrrLNrsrDrrrA',
+            'fake.app.id',
+        )
+        self.assertRaises(
+            fdroidserver.exception.MetaDataException,
+            validator.check,
+            '92rr46rUrgTrrromrVrirW6r1rrrdrerrdbJrrrhrCsYrrrrrrc',
+            'fake.app.id',
+        )
+        self.assertRaises(
+            fdroidserver.exception.MetaDataException,
+            validator.check,
+            'K1BvMrSYsrWrtrrrn5Au4m4GFr7rrarrN2',
+            'fake.app.id',
+        )
+        self.assertRaises(
+            fdroidserver.exception.MetaDataException,
+            validator.check,
+            'L0000rSYsrWrtrrrn5Au4m4GFr7rrarrN2',
+            'fake.app.id',
+        )
+        self.assertRaises(
+            fdroidserver.exception.MetaDataException,
+            validator.check,
+            'tb1qw5r8drrejxrrg4y5rrrrrraryrrrrwrkxrjrsx',
+            'fake.app.id',
+        )
 
     def test_valid_funding_yml_regex(self):
         """Check the regex can find all the cases"""
-        with open(os.path.join(self.basedir, 'funding-usernames.yaml')) as fp:
+        with (self.basedir / 'funding-usernames.yaml').open() as fp:
             data = yaml.load(fp, Loader=SafeLoader)
 
         for k, entries in data.items():
@@ -117,12 +173,15 @@ class MetadataTest(unittest.TestCase):
                 if k == 'custom':
                     pass
                 elif k == 'bad':
-                    self.assertIsNone(m, 'this is an invalid %s username: {%s}' % (k, entry))
+                    self.assertIsNone(
+                        m, 'this is an invalid %s username: {%s}' % (k, entry)
+                    )
                 else:
-                    self.assertIsNotNone(m, 'this is a valid %s username: {%s}' % (k, entry))
+                    self.assertIsNotNone(
+                        m, 'this is a valid %s username: {%s}' % (k, entry)
+                    )
 
     def test_read_metadata(self):
-
         def _build_yaml_representer(dumper, data):
             '''Creates a YAML representation of a Build instance'''
             return dumper.represent_dict(data)
@@ -141,77 +200,83 @@ class MetadataTest(unittest.TestCase):
             'org.videolan.vlc',
             'com.politedroid',
         ):
-            savepath = os.path.join('metadata', 'dump', appid + '.yaml')
+            savepath = Path('metadata/dump') / (appid + '.yaml')
             frommeta = dict(apps[appid])
             self.assertTrue(appid in apps)
-            with open(savepath, 'r') as f:
+            with savepath.open('r') as f:
                 from_yaml = yaml.load(f, Loader=SafeLoader)
             self.assertEqual(frommeta, from_yaml)
             # comment above assert and uncomment below to update test
             # files when new metadata fields are added
-            # with open(savepath, 'w') as f:
+            # with savepath.open('w') as f:
             #     yaml.add_representer(fdroidserver.metadata.Build, _build_yaml_representer)
             #     yaml.dump(frommeta, f, default_flow_style=False)
 
     def test_rewrite_yaml_fakeotaupdate(self):
-        testdir = tempfile.mkdtemp(
-            prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir
-        )
-        fdroidserver.common.config = {'accepted_formats': ['yml']}
-        fdroidserver.metadata.warnings_action = None
+        # TODO: Pytohn3.6: The dir parameter now accepts a path-like object.
+        with tempfile.TemporaryDirectory(dir=str(self.tmpdir)) as testdir:
+            testdir = Path(testdir)
+            fdroidserver.common.config = {'accepted_formats': ['yml']}
+            fdroidserver.metadata.warnings_action = None
 
-        # rewrite metadata
-        allapps = fdroidserver.metadata.read_metadata()
-        for appid, app in allapps.items():
-            if appid == 'fake.ota.update':
-                fdroidserver.metadata.write_metadata(
-                    os.path.join(testdir, appid + '.yml'), app
-                )
+            # rewrite metadata
+            allapps = fdroidserver.metadata.read_metadata()
+            for appid, app in allapps.items():
+                if appid == 'fake.ota.update':
+                    fdroidserver.metadata.write_metadata(
+                        testdir / (appid + '.yml'), app
+                    )
 
-        # assert rewrite result
-        with open(os.path.join(testdir, 'fake.ota.update.yml'), 'r') as result:
-            with open('metadata-rewrite-yml/fake.ota.update.yml', 'r') as orig:
-                self.maxDiff = None
-                self.assertEqual(result.read(), orig.read())
+            # assert rewrite result
+            self.maxDiff = None
+            file_name = 'fake.ota.update.yml'
+            self.assertEqual(
+                (testdir / file_name).read_text(),
+                (Path('metadata-rewrite-yml') / file_name).read_text(),
+            )
 
     def test_rewrite_yaml_fdroidclient(self):
-        testdir = tempfile.mkdtemp(
-            prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir
-        )
-        fdroidserver.common.config = {'accepted_formats': ['yml']}
+        # TODO: Pytohn3.6: The dir parameter now accepts a path-like object.
+        with tempfile.TemporaryDirectory(dir=str(self.tmpdir)) as testdir:
+            testdir = Path(testdir)
+            fdroidserver.common.config = {'accepted_formats': ['yml']}
 
-        # rewrite metadata
-        allapps = fdroidserver.metadata.read_metadata()
-        for appid, app in allapps.items():
-            if appid == 'org.fdroid.fdroid':
-                fdroidserver.metadata.write_metadata(
-                    os.path.join(testdir, appid + '.yml'), app
-                )
+            # rewrite metadata
+            allapps = fdroidserver.metadata.read_metadata()
+            for appid, app in allapps.items():
+                if appid == 'org.fdroid.fdroid':
+                    fdroidserver.metadata.write_metadata(
+                        testdir / (appid + '.yml'), app
+                    )
 
-        # assert rewrite result
-        with open(os.path.join(testdir, 'org.fdroid.fdroid.yml'), 'r') as result:
-            with open('metadata-rewrite-yml/org.fdroid.fdroid.yml', 'r') as orig:
-                self.maxDiff = None
-                self.assertEqual(result.read(), orig.read())
+            # assert rewrite result
+            self.maxDiff = None
+            file_name = 'org.fdroid.fdroid.yml'
+            self.assertEqual(
+                (testdir / file_name).read_text(),
+                (Path('metadata-rewrite-yml') / file_name).read_text(),
+            )
 
     def test_rewrite_yaml_special_build_params(self):
-        testdir = tempfile.mkdtemp(
-            prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir
-        )
+        # TODO: Pytohn3.6: The dir parameter now accepts a path-like object.
+        with tempfile.TemporaryDirectory(dir=str(self.tmpdir)) as testdir:
+            testdir = Path(testdir)
 
-        # rewrite metadata
-        allapps = fdroidserver.metadata.read_metadata()
-        for appid, app in allapps.items():
-            if appid == 'app.with.special.build.params':
-                fdroidserver.metadata.write_metadata(
-                    os.path.join(testdir, appid + '.yml'), app
-                )
+            # rewrite metadata
+            allapps = fdroidserver.metadata.read_metadata()
+            for appid, app in allapps.items():
+                if appid == 'app.with.special.build.params':
+                    fdroidserver.metadata.write_metadata(
+                        testdir / (appid + '.yml'), app
+                    )
 
-        # assert rewrite result
-        with open(os.path.join(testdir, 'app.with.special.build.params.yml'), 'r') as result:
-            with open('metadata-rewrite-yml/app.with.special.build.params.yml', 'r') as orig:
-                self.maxDiff = None
-                self.assertEqual(result.read(), orig.read())
+            # assert rewrite result
+            self.maxDiff = None
+            file_name = 'app.with.special.build.params.yml'
+            self.assertEqual(
+                (testdir / file_name).read_text(),
+                (Path('metadata-rewrite-yml') / file_name).read_text(),
+            )
 
     def test_post_parse_yaml_metadata(self):
         fdroidserver.metadata.warnings_action = 'error'
@@ -222,12 +287,18 @@ class MetadataTest(unittest.TestCase):
         builds.append(build)
 
         build['versionCode'] = 1.1
-        self.assertRaises(fdroidserver.exception.MetaDataException,
-                          fdroidserver.metadata.post_parse_yaml_metadata, yamldata)
+        self.assertRaises(
+            fdroidserver.exception.MetaDataException,
+            fdroidserver.metadata.post_parse_yaml_metadata,
+            yamldata,
+        )
 
         build['versionCode'] = '1'
-        self.assertRaises(fdroidserver.exception.MetaDataException,
-                          fdroidserver.metadata.post_parse_yaml_metadata, yamldata)
+        self.assertRaises(
+            fdroidserver.exception.MetaDataException,
+            fdroidserver.metadata.post_parse_yaml_metadata,
+            yamldata,
+        )
 
         build['versionCode'] = 1
         build['versionName'] = 1
@@ -258,39 +329,42 @@ class MetadataTest(unittest.TestCase):
         self.assertEqual('1234567890', yamldata['Builds'][0]['commit'])
 
     def test_read_metadata_sort_by_time(self):
-        testdir = tempfile.mkdtemp(
-            prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir
-        )
-        metadatadir = os.path.join(testdir, 'metadata')
-        os.makedirs(metadatadir)
+        # TODO: Pytohn3.6: The dir parameter now accepts a path-like object.
+        with tempfile.TemporaryDirectory(dir=str(self.tmpdir)) as testdir, TmpCwd(
+            testdir
+        ):
+            testdir = Path(testdir)
+            metadatadir = testdir / 'metadata'
+            metadatadir.mkdir()
 
-        randomlist = []
-        randomapps = glob.glob(os.path.join(self.basedir, 'metadata', '*.yml'))
-        random.shuffle(randomapps)
-        i = 1
-        for f in randomapps:
-            shutil.copy(f, metadatadir)
-            new = os.path.join(metadatadir, os.path.basename(f))
-            stat = os.stat(new)
-            os.utime(new, (stat.st_ctime, stat.st_mtime + i))
-            # prepend new item so newest is always first
-            randomlist = [os.path.basename(f)[:-4]] + randomlist
-            i += 1
-        os.chdir(testdir)
-        allapps = fdroidserver.metadata.read_metadata(sort_by_time=True)
-        allappids = []
-        for appid, app in allapps.items():
-            allappids.append(appid)
-        self.assertEqual(randomlist, allappids)
+            randomlist = []
+            randomapps = list((self.basedir / 'metadata').glob('*.yml'))
+            random.shuffle(randomapps)
+            i = 1
+            for f in randomapps:
+                # TODO: Pytohn3.6: The parameter now accepts a path-like object.
+                shutil.copy(str(f), str(metadatadir))
+                new = metadatadir / f.name
+                stat = new.stat()
+                # TODO: Changed in version 3.6: Accepts a path-like object.
+                os.utime(str(new), (stat.st_ctime, stat.st_mtime + i))
+                # prepend new item so newest is always first
+                randomlist = [f.stem] + randomlist
+                i += 1
+            allapps = fdroidserver.metadata.read_metadata(sort_by_time=True)
+            allappids = []
+            for appid, app in allapps.items():
+                allappids.append(appid)
+            self.assertEqual(randomlist, allappids)
 
     def test_parse_yaml_metadata_unknown_app_field(self):
         mf = io.StringIO(
             textwrap.dedent(
                 """\
-            AutoName: F-Droid
-            RepoType: git
-            Builds: []
-            bad: value"""
+                AutoName: F-Droid
+                RepoType: git
+                Builds: []
+                bad: value"""
             )
         )
         mf.name = 'mock_filename.yaml'
@@ -302,10 +376,10 @@ class MetadataTest(unittest.TestCase):
         mf = io.StringIO(
             textwrap.dedent(
                 """\
-            AutoName: F-Droid
-            RepoType: git
-            Builds:
-              - bad: value"""
+                AutoName: F-Droid
+                RepoType: git
+                Builds:
+                - bad: value"""
             )
         )
         mf.name = 'mock_filename.yaml'
@@ -314,23 +388,23 @@ class MetadataTest(unittest.TestCase):
                 fdroidserver.metadata.parse_yaml_metadata(mf, {})
 
     def test_parse_yaml_srclib_corrupt_file(self):
-        testdir = tempfile.mkdtemp(
-            prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir
-        )
-        srclibfile = os.path.join(testdir, 'srclib', 'mock.yml')
-        os.mkdir(os.path.dirname(srclibfile))
-        with open(srclibfile, 'w') as fp:
-            fp.write(
-                textwrap.dedent(
-                    """
-            - RepoType: git
-            - Repo: https://github.com/realm/realm-js.git
-            """
+        # TODO: Pytohn3.6: The dir parameter now accepts a path-like object.
+        with tempfile.TemporaryDirectory(dir=str(self.tmpdir)) as testdir:
+            testdir = Path(testdir)
+            srclibfile = testdir / 'srclib/mock.yml'
+            srclibfile.parent.mkdir()
+            with srclibfile.open('w') as fp:
+                fp.write(
+                    textwrap.dedent(
+                        """
+                        - RepoType: git
+                        - Repo: https://github.com/realm/realm-js.git
+                        """
+                    )
                 )
-            )
-        with mock.patch('fdroidserver.metadata.warnings_action', 'error'):
-            with self.assertRaises(MetaDataException):
-                fdroidserver.metadata.parse_yaml_srclib(srclibfile)
+            with mock.patch('fdroidserver.metadata.warnings_action', 'error'):
+                with self.assertRaises(MetaDataException):
+                    fdroidserver.metadata.parse_yaml_srclib(srclibfile)
 
     def test_write_yaml_with_placeholder_values(self):
         mf = io.StringIO()
@@ -358,26 +432,26 @@ class MetadataTest(unittest.TestCase):
             mf.read(),
             textwrap.dedent(
                 """\
-            Categories:
-              - None
-            License: Unknown
-            SourceCode: https://gitlab.com/fdroid/fdroidclient.git
-            IssueTracker: https://gitlab.com/fdroid/fdroidclient/issues
+                Categories:
+                  - None
+                License: Unknown
+                SourceCode: https://gitlab.com/fdroid/fdroidclient.git
+                IssueTracker: https://gitlab.com/fdroid/fdroidclient/issues
 
-            RepoType: git
-            Repo: https://gitlab.com/fdroid/fdroidclient.git
+                RepoType: git
+                Repo: https://gitlab.com/fdroid/fdroidclient.git
 
-            Builds:
-              - versionName: Unknown
-                versionCode: 0
-                disable: Generated by import.py ...
-                commit: Unknown
-                gradle:
-                  - true
+                Builds:
+                  - versionName: Unknown
+                    versionCode: 0
+                    disable: Generated by import.py ...
+                    commit: Unknown
+                    gradle:
+                      - true
 
-            AutoUpdateMode: None
-            UpdateCheckMode: Tags
-            """
+                AutoUpdateMode: None
+                UpdateCheckMode: Tags
+                """
             ),
         )
 
@@ -385,26 +459,26 @@ class MetadataTest(unittest.TestCase):
         mf = io.StringIO(
             textwrap.dedent(
                 """\
-            AutoName: F-Droid
-            RepoType: git
-            Builds:
-                - versionCode: 1
-                  versionName: v0.1.0
-                  sudo:
-                    - apt-get update
-                    - apt-get install -y whatever
-                    - sed -i -e 's/<that attr="bad"/<that attr="good"/' ~/.whatever/config.xml
-                  init:
-                    - bash generate_some_file.sh
-                    - sed -i -e 'g/what/ever/' /some/file
-                  prebuild:
-                    - npm something
-                    - echo 'important setting' >> /a/file
-                  build:
-                    - ./gradlew someSpecialTask
-                    - sed -i 'd/that wrong config/' gradle.properties
-                    - ./gradlew compile
-            """
+                AutoName: F-Droid
+                RepoType: git
+                Builds:
+                  - versionCode: 1
+                    versionName: v0.1.0
+                    sudo:
+                      - apt-get update
+                      - apt-get install -y whatever
+                      - sed -i -e 's/<that attr="bad"/<that attr="good"/' ~/.whatever/config.xml
+                    init:
+                      - bash generate_some_file.sh
+                      - sed -i -e 'g/what/ever/' /some/file
+                    prebuild:
+                      - npm something
+                      - echo 'important setting' >> /a/file
+                    build:
+                      - ./gradlew someSpecialTask
+                      - sed -i 'd/that wrong config/' gradle.properties
+                      - ./gradlew compile
+                """
             )
         )
         mf.name = 'mock_filename.yaml'
@@ -413,36 +487,45 @@ class MetadataTest(unittest.TestCase):
         with mock.patch('fdroidserver.metadata.warnings_action', 'error'):
             fdroidserver.metadata.parse_yaml_metadata(mf, result)
         self.maxDiff = None
-        self.assertDictEqual(result, {'AutoName': 'F-Droid',
-                                      'RepoType': 'git',
-                                      'Builds': [{'versionCode': 1,
-                                                  'versionName': 'v0.1.0',
-                                                  'sudo': "apt-get update && "
-                                                          "apt-get install -y whatever && "
-                                                          "sed -i -e 's/<that attr=\"bad\"/<that attr=\"good\"/' ~/.whatever/config.xml",
-                                                  'init': "bash generate_some_file.sh && "
-                                                          "sed -i -e 'g/what/ever/' /some/file",
-                                                  'prebuild': "npm something && echo 'important setting' >> /a/file",
-                                                  'build': "./gradlew someSpecialTask && "
-                                                           "sed -i 'd/that wrong config/' gradle.properties && "
-                                                           "./gradlew compile"}]})
+        self.assertDictEqual(
+            result,
+            {
+                'AutoName': 'F-Droid',
+                'RepoType': 'git',
+                'Builds': [
+                    {
+                        'versionCode': 1,
+                        'versionName': 'v0.1.0',
+                        'sudo': "apt-get update && "
+                        "apt-get install -y whatever && "
+                        "sed -i -e 's/<that attr=\"bad\"/<that attr=\"good\"/' ~/.whatever/config.xml",
+                        'init': "bash generate_some_file.sh && "
+                        "sed -i -e 'g/what/ever/' /some/file",
+                        'prebuild': "npm something && echo 'important setting' >> /a/file",
+                        'build': "./gradlew someSpecialTask && "
+                        "sed -i 'd/that wrong config/' gradle.properties && "
+                        "./gradlew compile",
+                    }
+                ],
+            },
+        )
 
     def test_parse_yaml_metadata_prebuild_strings(self):
         mf = io.StringIO(
             textwrap.dedent(
                 """\
-            AutoName: F-Droid
-            RepoType: git
-            Builds:
-                - versionCode: 1
-                  versionName: v0.1.0
-                  sudo: |-
-                    apt-get update && apt-get install -y whatever && sed -i -e 's/<that attr="bad"/<that attr="good"/' ~/.whatever/config.xml
-                  init: bash generate_some_file.sh && sed -i -e 'g/what/ever/' /some/file
-                  prebuild: npm something && echo 'important setting' >> /a/file
-                  build: |-
-                    ./gradlew someSpecialTask && sed -i 'd/that wrong config/' gradle.properties && ./gradlew compile
-            """
+                AutoName: F-Droid
+                RepoType: git
+                Builds:
+                  - versionCode: 1
+                    versionName: v0.1.0
+                    sudo: |-
+                      apt-get update && apt-get install -y whatever && sed -i -e 's/<that attr="bad"/<that attr="good"/' ~/.whatever/config.xml
+                    init: bash generate_some_file.sh && sed -i -e 'g/what/ever/' /some/file
+                    prebuild: npm something && echo 'important setting' >> /a/file
+                    build: |-
+                      ./gradlew someSpecialTask && sed -i 'd/that wrong config/' gradle.properties && ./gradlew compile
+                """
             )
         )
         mf.name = 'mock_filename.yaml'
@@ -451,32 +534,41 @@ class MetadataTest(unittest.TestCase):
         with mock.patch('fdroidserver.metadata.warnings_action', 'error'):
             fdroidserver.metadata.parse_yaml_metadata(mf, result)
         self.maxDiff = None
-        self.assertDictEqual(result, {'AutoName': 'F-Droid',
-                                      'RepoType': 'git',
-                                      'Builds': [{'versionCode': 1,
-                                                  'versionName': 'v0.1.0',
-                                                  'sudo': "apt-get update && "
-                                                          "apt-get install -y whatever && "
-                                                          "sed -i -e 's/<that attr=\"bad\"/<that attr=\"good\"/' ~/.whatever/config.xml",
-                                                  'init': "bash generate_some_file.sh && "
-                                                          "sed -i -e 'g/what/ever/' /some/file",
-                                                  'prebuild': "npm something && echo 'important setting' >> /a/file",
-                                                  'build': "./gradlew someSpecialTask && "
-                                                           "sed -i 'd/that wrong config/' gradle.properties && "
-                                                           "./gradlew compile"}]})
+        self.assertDictEqual(
+            result,
+            {
+                'AutoName': 'F-Droid',
+                'RepoType': 'git',
+                'Builds': [
+                    {
+                        'versionCode': 1,
+                        'versionName': 'v0.1.0',
+                        'sudo': "apt-get update && "
+                        "apt-get install -y whatever && "
+                        "sed -i -e 's/<that attr=\"bad\"/<that attr=\"good\"/' ~/.whatever/config.xml",
+                        'init': "bash generate_some_file.sh && "
+                        "sed -i -e 'g/what/ever/' /some/file",
+                        'prebuild': "npm something && echo 'important setting' >> /a/file",
+                        'build': "./gradlew someSpecialTask && "
+                        "sed -i 'd/that wrong config/' gradle.properties && "
+                        "./gradlew compile",
+                    }
+                ],
+            },
+        )
 
     def test_parse_yaml_metadata_prebuild_string(self):
         mf = io.StringIO(
             textwrap.dedent(
                 """\
-            AutoName: F-Droid
-            RepoType: git
-            Builds:
-                - versionCode: 1
-                  versionName: v0.1.0
-                  prebuild: |-
-                    a && b && sed -i 's,a,b,'
-            """
+                AutoName: F-Droid
+                RepoType: git
+                Builds:
+                  - versionCode: 1
+                    versionName: v0.1.0
+                    prebuild: |-
+                      a && b && sed -i 's,a,b,'
+                """
             )
         )
         mf.name = 'mock_filename.yaml'
@@ -484,26 +576,34 @@ class MetadataTest(unittest.TestCase):
         result = {}
         with mock.patch('fdroidserver.metadata.warnings_action', 'error'):
             fdroidserver.metadata.parse_yaml_metadata(mf, result)
-        self.assertDictEqual(result, {'AutoName': 'F-Droid',
-                                      'RepoType': 'git',
-                                      'Builds': [{'versionCode': 1,
-                                                  'versionName': 'v0.1.0',
-                                                  'prebuild': "a && b && "
-                                                              "sed -i 's,a,b,'"}]})
+        self.assertDictEqual(
+            result,
+            {
+                'AutoName': 'F-Droid',
+                'RepoType': 'git',
+                'Builds': [
+                    {
+                        'versionCode': 1,
+                        'versionName': 'v0.1.0',
+                        'prebuild': "a && b && " "sed -i 's,a,b,'",
+                    }
+                ],
+            },
+        )
 
     def test_parse_yaml_provides_should_be_ignored(self):
         mf = io.StringIO(
             textwrap.dedent(
                 """\
-            Provides: this.is.deprecated
-            AutoName: F-Droid
-            RepoType: git
-            Builds:
-                - versionCode: 1
-                  versionName: v0.1.0
-                  prebuild: |-
-                    a && b && sed -i 's,a,b,'
-            """
+                Provides: this.is.deprecated
+                AutoName: F-Droid
+                RepoType: git
+                Builds:
+                  - versionCode: 1
+                    versionName: v0.1.0
+                    prebuild: |-
+                      a && b && sed -i 's,a,b,'
+                """
             )
         )
         mf.name = 'mock_filename.yaml'
@@ -533,21 +633,21 @@ class MetadataTest(unittest.TestCase):
             mf.read(),
             textwrap.dedent(
                 """\
-            Categories:
-              - None
-            License: Unknown
+                Categories:
+                  - None
+                License: Unknown
 
-            Builds:
-              - versionName: v1.2.3
-                versionCode: 102030
-                sudo: chmod +rwx /opt
-                init: sed -i -e 'g/what/ever/' /some/file
-                prebuild: sed -i 'd/that wrong config/' gradle.properties
-                build: ./gradlew compile
+                Builds:
+                  - versionName: v1.2.3
+                    versionCode: 102030
+                    sudo: chmod +rwx /opt
+                    init: sed -i -e 'g/what/ever/' /some/file
+                    prebuild: sed -i 'd/that wrong config/' gradle.properties
+                    build: ./gradlew compile
 
-            AutoUpdateMode: None
-            UpdateCheckMode: None
-            """
+                AutoUpdateMode: None
+                UpdateCheckMode: None
+                """
             ),
         )
 
@@ -570,21 +670,21 @@ class MetadataTest(unittest.TestCase):
             mf.read(),
             textwrap.dedent(
                 """\
-            Categories:
-              - None
-            License: Unknown
+                Categories:
+                  - None
+                License: Unknown
 
-            Builds:
-              - versionName: v1.2.3
-                versionCode: 102030
-                sudo: chmod +rwx /opt
-                init: sed -i -e 'g/what/ever/' /some/file
-                prebuild: sed -i 'd/that wrong config/' gradle.properties
-                build: ./gradlew compile
+                Builds:
+                  - versionName: v1.2.3
+                    versionCode: 102030
+                    sudo: chmod +rwx /opt
+                    init: sed -i -e 'g/what/ever/' /some/file
+                    prebuild: sed -i 'd/that wrong config/' gradle.properties
+                    build: ./gradlew compile
 
-            AutoUpdateMode: None
-            UpdateCheckMode: None
-            """
+                AutoUpdateMode: None
+                UpdateCheckMode: None
+                """
             ),
         )
 
@@ -596,16 +696,21 @@ class MetadataTest(unittest.TestCase):
         build = fdroidserver.metadata.Build()
         build.versionCode = 102030
         build.versionName = 'v1.2.3'
-        build.sudo = ["apt-get update",
-                      "apt-get install -y whatever",
-                      "sed -i -e 's/<that attr=\"bad\"/<that attr=\"good\"/' ~/.whatever/config.xml"]
-        build.init = ["bash generate_some_file.sh",
-                      "sed -i -e 'g/what/ever/' /some/file"]
-        build.prebuild = ["npm something",
-                          "echo 'important setting' >> /a/file"]
-        build.build = ["./gradlew someSpecialTask",
-                       "sed -i 'd/that wrong config/' gradle.properties",
-                       "./gradlew compile"]
+        build.sudo = [
+            "apt-get update",
+            "apt-get install -y whatever",
+            "sed -i -e 's/<that attr=\"bad\"/<that attr=\"good\"/' ~/.whatever/config.xml",
+        ]
+        build.init = [
+            "bash generate_some_file.sh",
+            "sed -i -e 'g/what/ever/' /some/file",
+        ]
+        build.prebuild = ["npm something", "echo 'important setting' >> /a/file"]
+        build.build = [
+            "./gradlew someSpecialTask",
+            "sed -i 'd/that wrong config/' gradle.properties",
+            "./gradlew compile",
+        ]
         app['Builds'].append(build)
         fdroidserver.metadata.write_yaml(mf, app)
         mf.seek(0)
@@ -705,65 +810,81 @@ class MetadataTest(unittest.TestCase):
             mf.read(),
             textwrap.dedent(
                 """\
-            Categories:
-              - None
-            License: Unknown
+                Categories:
+                  - None
+                License: Unknown
 
-            Builds:
-              - versionName: v1.2.3
-                versionCode: 102030
-                gradle:
-                  - yes
+                Builds:
+                  - versionName: v1.2.3
+                    versionCode: 102030
+                    gradle:
+                      - yes
 
-            AutoUpdateMode: None
-            UpdateCheckMode: None
-            """
+                AutoUpdateMode: None
+                UpdateCheckMode: None
+                """
             ),
         )
 
     def test_parse_yaml_srclib_unknown_key(self):
         fdroidserver.metadata.warnings_action = 'error'
         with tempfile.TemporaryDirectory() as tmpdir, TmpCwd(tmpdir):
-            with open('test.yml', 'w', encoding='utf-8') as f:
-                f.write(textwrap.dedent('''\
-                    RepoType: git
-                    Repo: https://example.com/test.git
-                    Evil: I should not be here.
-                    '''))
-            with self.assertRaisesRegex(MetaDataException,
-                                        "Invalid srclib metadata: "
-                                        "unknown key 'Evil' in "
-                                        "'test.yml'"):
-                fdroidserver.metadata.parse_yaml_srclib('test.yml')
+            with Path('test.yml').open('w', encoding='utf-8') as f:
+                f.write(
+                    textwrap.dedent(
+                        '''\
+                        RepoType: git
+                        Repo: https://example.com/test.git
+                        Evil: I should not be here.
+                        '''
+                    )
+                )
+            with self.assertRaisesRegex(
+                MetaDataException,
+                "Invalid srclib metadata: " "unknown key 'Evil' in " "'test.yml'",
+            ):
+                fdroidserver.metadata.parse_yaml_srclib(Path('test.yml'))
 
     def test_parse_yaml_srclib_does_not_exists(self):
         fdroidserver.metadata.warnings_action = 'error'
-        with self.assertRaisesRegex(MetaDataException,
-                                    "Invalid scrlib metadata: "
-                                    "'non/existent-test-srclib.yml' "
-                                    "does not exist"):
-            fdroidserver.metadata.parse_yaml_srclib('non/existent-test-srclib.yml')
+        with self.assertRaisesRegex(
+            MetaDataException,
+            "Invalid scrlib metadata: "
+            r"'non(/|\\)existent-test-srclib.yml' "
+            "does not exist",
+        ):
+            fdroidserver.metadata.parse_yaml_srclib(
+                Path('non/existent-test-srclib.yml')
+            )
 
     def test_parse_yaml_srclib_simple(self):
         fdroidserver.metadata.warnings_action = 'error'
         with tempfile.TemporaryDirectory() as tmpdir, TmpCwd(tmpdir):
-            with open('simple.yml', 'w', encoding='utf-8') as f:
-                f.write(textwrap.dedent('''\
+            with Path('simple.yml').open('w', encoding='utf-8') as f:
+                f.write(
+                    textwrap.dedent(
+                        '''\
                     # this should be simple
                     RepoType: git
                     Repo: https://git.host/repo.git
-                    '''))
-            srclib = fdroidserver.metadata.parse_yaml_srclib('simple.yml')
-            self.assertDictEqual({'Repo': 'https://git.host/repo.git',
-                                  'RepoType': 'git',
-                                  'Subdir': None,
-                                  'Prepare': None},
-                                 srclib)
+                    '''
+                    )
+                )
+            srclib = fdroidserver.metadata.parse_yaml_srclib(Path('simple.yml'))
+            self.assertDictEqual(
+                {
+                    'Repo': 'https://git.host/repo.git',
+                    'RepoType': 'git',
+                    'Subdir': None,
+                    'Prepare': None,
+                },
+                srclib,
+            )
 
     def test_parse_yaml_srclib_simple_with_blanks(self):
         fdroidserver.metadata.warnings_action = 'error'
         with tempfile.TemporaryDirectory() as tmpdir, TmpCwd(tmpdir):
-            with open('simple.yml', 'w', encoding='utf-8') as f:
+            with Path('simple.yml').open('w', encoding='utf-8') as f:
                 f.write(
                     textwrap.dedent(
                         '''\
@@ -779,17 +900,21 @@ class MetadataTest(unittest.TestCase):
                     '''
                     )
                 )
-            srclib = fdroidserver.metadata.parse_yaml_srclib('simple.yml')
-            self.assertDictEqual({'Repo': 'https://git.host/repo.git',
-                                  'RepoType': 'git',
-                                  'Subdir': [''],
-                                  'Prepare': ''},
-                                 srclib)
+            srclib = fdroidserver.metadata.parse_yaml_srclib(Path('simple.yml'))
+            self.assertDictEqual(
+                {
+                    'Repo': 'https://git.host/repo.git',
+                    'RepoType': 'git',
+                    'Subdir': [''],
+                    'Prepare': '',
+                },
+                srclib,
+            )
 
     def test_parse_yaml_srclib_Changelog_cketti(self):
         fdroidserver.metadata.warnings_action = 'error'
         with tempfile.TemporaryDirectory() as tmpdir, TmpCwd(tmpdir):
-            with open('Changelog-cketti.yml', 'w', encoding='utf-8') as f:
+            with Path('Changelog-cketti.yml').open('w', encoding='utf-8') as f:
                 f.write(
                     textwrap.dedent(
                         '''\
@@ -801,21 +926,27 @@ class MetadataTest(unittest.TestCase):
                     '''
                     )
                 )
-            srclib = fdroidserver.metadata.parse_yaml_srclib('Changelog-cketti.yml')
-            self.assertDictEqual(srclib,
-                                 {'Repo': 'https://github.com/cketti/ckChangeLog',
-                                  'RepoType': 'git',
-                                  'Subdir': ['library', 'ckChangeLog/src/main'],
-                                  'Prepare': "[ -f project.properties ] || echo 'source.dir=java' > "
-                                             "ant.properties && echo -e "
-                                             "'android.library=true\\ntarget=android-19' > project.properties"})
+            srclib = fdroidserver.metadata.parse_yaml_srclib(
+                Path('Changelog-cketti.yml')
+            )
+            self.assertDictEqual(
+                srclib,
+                {
+                    'Repo': 'https://github.com/cketti/ckChangeLog',
+                    'RepoType': 'git',
+                    'Subdir': ['library', 'ckChangeLog/src/main'],
+                    'Prepare': "[ -f project.properties ] || echo 'source.dir=java' > "
+                    "ant.properties && echo -e "
+                    "'android.library=true\\ntarget=android-19' > project.properties",
+                },
+            )
 
     def test_read_srclibs_yml_subdir_list(self):
         fdroidserver.metadata.warnings_action = 'error'
         fdroidserver.metadata.srclibs = None
         with tempfile.TemporaryDirectory() as tmpdir, TmpCwd(tmpdir):
-            os.mkdir('srclibs')
-            with open('srclibs/with-list.yml', 'w', encoding='utf-8') as f:
+            Path('srclibs').mkdir()
+            with Path('srclibs/with-list.yml').open('w', encoding='utf-8') as f:
                 f.write(
                     textwrap.dedent(
                         '''\
@@ -839,25 +970,33 @@ class MetadataTest(unittest.TestCase):
                 )
             fdroidserver.metadata.read_srclibs()
         self.maxDiff = None
-        self.assertDictEqual(fdroidserver.metadata.srclibs,
-                             {'with-list': {'RepoType': 'git',
-                                            'Repo': 'https://git.host/repo.git',
-                                            'Subdir': ['This is your last chance.',
-                                                       'After this, there is no turning back.',
-                                                       'You take the blue pill—the story ends,',
-                                                       'you wake up in your bed',
-                                                       'and believe whatever you want to believe.',
-                                                       'You take the red pill—you stay in Wonderland',
-                                                       'and I show you how deep the rabbit-hole goes.'],
-                                            'Prepare': 'There is a difference between knowing the path '
-                                                       'and walking the path.'}})
+        self.assertDictEqual(
+            fdroidserver.metadata.srclibs,
+            {
+                'with-list': {
+                    'RepoType': 'git',
+                    'Repo': 'https://git.host/repo.git',
+                    'Subdir': [
+                        'This is your last chance.',
+                        'After this, there is no turning back.',
+                        'You take the blue pill—the story ends,',
+                        'you wake up in your bed',
+                        'and believe whatever you want to believe.',
+                        'You take the red pill—you stay in Wonderland',
+                        'and I show you how deep the rabbit-hole goes.',
+                    ],
+                    'Prepare': 'There is a difference between knowing the path '
+                    'and walking the path.',
+                }
+            },
+        )
 
     def test_read_srclibs_yml_prepare_list(self):
         fdroidserver.metadata.warnings_action = 'error'
         fdroidserver.metadata.srclibs = None
         with tempfile.TemporaryDirectory() as tmpdir, TmpCwd(tmpdir):
-            os.mkdir('srclibs')
-            with open('srclibs/with-list.yml', 'w', encoding='utf-8') as f:
+            Path('srclibs').mkdir()
+            with Path('srclibs/with-list.yml').open('w', encoding='utf-8') as f:
                 f.write(
                     textwrap.dedent(
                         '''\
@@ -880,25 +1019,31 @@ class MetadataTest(unittest.TestCase):
                 )
             fdroidserver.metadata.read_srclibs()
         self.maxDiff = None
-        self.assertDictEqual(fdroidserver.metadata.srclibs,
-                             {'with-list': {'RepoType': 'git',
-                                            'Repo': 'https://git.host/repo.git',
-                                            'Subdir': [''],
-                                            'Prepare': 'The Matrix is a system, Neo. && '
-                                                       'That system is our enemy. && '
-                                                       'But when you\'re inside, you look around, what do you see? && '
-                                                       'Businessmen, teachers, lawyers, carpenters. && '
-                                                       'The very minds of the people we are trying to save. && '
-                                                       'But until we do, these people are still a part of that system and that makes them our enemy. && '
-                                                       'You have to understand, most of these people are not ready to be unplugged. && '
-                                                       'And many of them are so inert, so hopelessly dependent on the system that they will fight to protect it.'}})
+        self.assertDictEqual(
+            fdroidserver.metadata.srclibs,
+            {
+                'with-list': {
+                    'RepoType': 'git',
+                    'Repo': 'https://git.host/repo.git',
+                    'Subdir': [''],
+                    'Prepare': 'The Matrix is a system, Neo. && '
+                    'That system is our enemy. && '
+                    'But when you\'re inside, you look around, what do you see? && '
+                    'Businessmen, teachers, lawyers, carpenters. && '
+                    'The very minds of the people we are trying to save. && '
+                    'But until we do, these people are still a part of that system and that makes them our enemy. && '
+                    'You have to understand, most of these people are not ready to be unplugged. && '
+                    'And many of them are so inert, so hopelessly dependent on the system that they will fight to protect it.',
+                }
+            },
+        )
 
     def test_read_srclibs(self):
         fdroidserver.metadata.warnings_action = 'error'
         fdroidserver.metadata.srclibs = None
         with tempfile.TemporaryDirectory() as tmpdir, TmpCwd(tmpdir):
-            os.mkdir('srclibs')
-            with open('srclibs/simple.yml', 'w', encoding='utf-8') as f:
+            Path('srclibs').mkdir()
+            with Path('srclibs/simple.yml').open('w', encoding='utf-8') as f:
                 f.write(
                     textwrap.dedent(
                         '''\
@@ -907,7 +1052,7 @@ class MetadataTest(unittest.TestCase):
                     '''
                     )
                 )
-            with open('srclibs/simple-wb.yml', 'w', encoding='utf-8') as f:
+            with Path('srclibs/simple-wb.yml').open('w', encoding='utf-8') as f:
                 f.write(
                     textwrap.dedent(
                         '''\
@@ -921,20 +1066,26 @@ class MetadataTest(unittest.TestCase):
                     )
                 )
             fdroidserver.metadata.read_srclibs()
-        self.assertDictEqual(fdroidserver.metadata.srclibs,
-                             {'simple-wb': {'RepoType': 'git',
-                                            'Repo': 'https://git.host/repo.git',
-                                            'Subdir': [''],
-                                            'Prepare': ''},
-                              'simple': {'RepoType': 'git',
-                                         'Repo': 'https://git.host/repo.git',
-                                         'Subdir': None,
-                                         'Prepare': None}})
+        self.assertDictEqual(
+            fdroidserver.metadata.srclibs,
+            {
+                'simple-wb': {
+                    'RepoType': 'git',
+                    'Repo': 'https://git.host/repo.git',
+                    'Subdir': [''],
+                    'Prepare': '',
+                },
+                'simple': {
+                    'RepoType': 'git',
+                    'Repo': 'https://git.host/repo.git',
+                    'Subdir': None,
+                    'Prepare': None,
+                },
+            },
+        )
 
 
 if __name__ == "__main__":
-    os.chdir(os.path.dirname(__file__))
-
     parser = optparse.OptionParser()
     parser.add_option(
         "-v",

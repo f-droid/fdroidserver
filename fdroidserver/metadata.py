@@ -19,9 +19,9 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import git
-import os
+from pathlib import Path, PurePosixPath
+import platform
 import re
-import glob
 import logging
 import yaml
 try:
@@ -31,9 +31,9 @@ except ImportError:
 import importlib
 from collections import OrderedDict
 
-import fdroidserver.common
-from fdroidserver import _
-from fdroidserver.exception import MetaDataException, FDroidException
+from . import common
+from . import _
+from .exception import MetaDataException, FDroidException
 
 srclibs = None
 warnings_action = None
@@ -330,7 +330,7 @@ class Build(dict):
         ndk = self.ndk
         if isinstance(ndk, list):
             ndk = self.ndk[0]
-        return fdroidserver.common.config['ndk_paths'].get(ndk, '')
+        return common.config['ndk_paths'].get(ndk, '')
 
 
 flagtypes = {
@@ -470,15 +470,22 @@ def parse_yaml_srclib(metadatapath):
                 'Subdir': None,
                 'Prepare': None}
 
-    if not os.path.exists(metadatapath):
+    if not metadatapath.exists():
         _warn_or_exception(_("Invalid scrlib metadata: '{file}' "
                              "does not exist"
                              .format(file=metadatapath)))
         return thisinfo
 
-    with open(metadatapath, "r", encoding="utf-8") as f:
+    with metadatapath.open("r", encoding="utf-8") as f:
         try:
             data = yaml.load(f, Loader=SafeLoader)
+            if type(data) is not dict:
+                if platform.system() == 'Windows':
+                    # Handle symlink on Windows
+                    symlink = metadatapath.parent / metadatapath.read_text()
+                    if symlink.is_file():
+                        with symlink.open("r", encoding="utf-8") as s:
+                            data = yaml.load(s, Loader=SafeLoader)
             if type(data) is not dict:
                 raise yaml.error.YAMLError(_('{file} is blank or corrupt!')
                                            .format(file=metadatapath))
@@ -486,8 +493,7 @@ def parse_yaml_srclib(metadatapath):
             _warn_or_exception(_("Invalid srclib metadata: could not "
                                  "parse '{file}'")
                                .format(file=metadatapath) + '\n'
-                               + fdroidserver.common.run_yamllint(metadatapath,
-                                                                  indent=4),
+                               + common.run_yamllint(metadatapath, indent=4),
                                cause=e)
             return thisinfo
 
@@ -531,13 +537,11 @@ def read_srclibs():
 
     srclibs = {}
 
-    srcdir = 'srclibs'
-    if not os.path.exists(srcdir):
-        os.makedirs(srcdir)
+    srcdir = Path('srclibs')
+    srcdir.mkdir(exist_ok=True)
 
-    for metadatapath in sorted(glob.glob(os.path.join(srcdir, '*.yml'))):
-        srclibname = os.path.basename(metadatapath[:-4])
-        srclibs[srclibname] = parse_yaml_srclib(metadatapath)
+    for metadatapath in sorted(srcdir.glob('*.yml')):
+        srclibs[metadatapath.stem] = parse_yaml_srclib(metadatapath)
 
 
 def read_metadata(appids={}, sort_by_time=False):
@@ -559,18 +563,17 @@ def read_metadata(appids={}, sort_by_time=False):
     apps = OrderedDict()
 
     for basedir in ('metadata', 'tmp'):
-        if not os.path.exists(basedir):
-            os.makedirs(basedir)
+        Path(basedir).mkdir(exist_ok=True)
 
     if appids:
-        vercodes = fdroidserver.common.read_pkg_args(appids)
-        metadatafiles = fdroidserver.common.get_metadata_files(vercodes)
+        vercodes = common.read_pkg_args(appids)
+        metadatafiles = common.get_metadata_files(vercodes)
     else:
-        metadatafiles = (glob.glob(os.path.join('metadata', '*.yml'))
-                         + glob.glob('.fdroid.yml'))
+        metadatafiles = list(Path('metadata').glob('*.yml')) + list(
+            Path('.').glob('.fdroid.yml'))
 
     if sort_by_time:
-        entries = ((os.stat(path).st_mtime, path) for path in metadatafiles)
+        entries = ((path.stat().st_mtime, path) for path in metadatafiles)
         metadatafiles = []
         for _ignored, path in sorted(entries, reverse=True):
             metadatafiles.append(path)
@@ -579,8 +582,8 @@ def read_metadata(appids={}, sort_by_time=False):
         metadatafiles = sorted(metadatafiles)
 
     for metadatapath in metadatafiles:
-        appid, _ignored = fdroidserver.common.get_extension(os.path.basename(metadatapath))
-        if appid != '.fdroid' and not fdroidserver.common.is_valid_package_name(appid):
+        appid = metadatapath.stem
+        if appid != '.fdroid' and not common.is_valid_package_name(appid):
             _warn_or_exception(_("{appid} from {path} is not a valid Java Package Name!")
                                .format(appid=appid, path=metadatapath))
         if appid in apps:
@@ -684,7 +687,7 @@ def post_metadata_parse(app):
 
 # Parse metadata for a single application.
 #
-#  'metadatapath' - the filename to read. The "Application ID" aka
+#  'metadatapath' - the file path to read. The "Application ID" aka
 #               "Package Name" for the application comes from this
 #               filename. Pass None to get a blank entry.
 #
@@ -729,27 +732,27 @@ def parse_metadata(metadatapath):
     the source code.
 
     """
-
+    metadatapath = Path(metadatapath)
     app = App()
-    app.metadatapath = metadatapath
-    metadata_file = os.path.basename(metadatapath)
-    name, _ignored = fdroidserver.common.get_extension(metadata_file)
+    app.metadatapath = str(PurePosixPath(metadatapath))
+    name = metadatapath.stem
     if name != '.fdroid':
         app.id = name
 
-    if metadatapath.endswith('.yml'):
-        with open(metadatapath, 'r') as mf:
+    if metadatapath.suffix == '.yml':
+        with metadatapath.open('r') as mf:
             parse_yaml_metadata(mf, app)
     else:
         _warn_or_exception(_('Unknown metadata format: {path} (use: *.yml)')
                            .format(path=metadatapath))
 
-    if metadata_file != '.fdroid.yml' and app.Repo:
-        build_dir = fdroidserver.common.get_build_dir(app)
-        metadata_in_repo = os.path.join(build_dir, '.fdroid.yml')
-        if os.path.isfile(metadata_in_repo):
+    if metadatapath.name != '.fdroid.yml' and app.Repo:
+        build_dir = common.get_build_dir(app)
+        metadata_in_repo = build_dir / '.fdroid.yml'
+        if metadata_in_repo.is_file():
             try:
-                commit_id = fdroidserver.common.get_head_commit_id(git.repo.Repo(build_dir))
+                # TODO: Python3.6: Should accept path-like
+                commit_id = common.get_head_commit_id(git.Repo(str(build_dir)))
                 logging.debug(_('Including metadata from %s@%s') % (metadata_in_repo, commit_id))
             except git.exc.InvalidGitRepositoryError:
                 logging.debug(_('Including metadata from {path}').format(metadata_in_repo))
@@ -764,11 +767,11 @@ def parse_metadata(metadatapath):
         if app.get('Builds'):
             build = app['Builds'][-1]
             if build.subdir:
-                root_dir = build.subdir
+                root_dir = Path(build.subdir)
             else:
-                root_dir = '.'
-            paths = fdroidserver.common.manifest_paths(root_dir, build.gradle)
-            _ignored, _ignored, app.id = fdroidserver.common.parse_androidmanifests(paths, app)
+                root_dir = Path('.')
+            paths = common.manifest_paths(root_dir, build.gradle)
+            _ignored, _ignored, app.id = common.parse_androidmanifests(paths, app)
 
     return app
 
@@ -790,8 +793,7 @@ def parse_yaml_metadata(mf, app):
     except yaml.YAMLError as e:
         _warn_or_exception(_("could not parse '{path}'")
                            .format(path=mf.name) + '\n'
-                           + fdroidserver.common.run_yamllint(mf.name,
-                                                              indent=4),
+                           + common.run_yamllint(mf.name, indent=4),
                            cause=e)
 
     deprecated_in_yaml = ['Provides']
@@ -801,7 +803,7 @@ def parse_yaml_metadata(mf, app):
             if field not in yaml_app_fields + deprecated_in_yaml:
                 msg = (_("Unrecognised app field '{fieldname}' in '{path}'")
                        .format(fieldname=field, path=mf.name))
-                if os.path.basename(mf.name) == '.fdroid.yml':
+                if Path(mf.name).name == '.fdroid.yml':
                     logging.error(msg)
                     del yamldata[field]
                 else:
@@ -978,11 +980,10 @@ build_cont = re.compile(r'^[ \t]')
 
 
 def write_metadata(metadatapath, app):
-    # TODO: Remove this
-    metadatapath = str(metadatapath)
-    if metadatapath.endswith('.yml'):
+    metadatapath = Path(metadatapath)
+    if metadatapath.suffix == '.yml':
         if importlib.util.find_spec('ruamel.yaml'):
-            with open(metadatapath, 'w') as mf:
+            with metadatapath.open('w') as mf:
                 return write_yaml(mf, app)
         else:
             raise FDroidException(_('ruamel.yaml not installed, can not write metadata.'))

@@ -669,8 +669,8 @@ def get_metadata_files(vercodes):
     found_invalid = False
     metadatafiles = []
     for appid in vercodes.keys():
-        f = os.path.join('metadata', '%s.yml' % appid)
-        if os.path.exists(f):
+        f = Path('metadata') / ('%s.yml' % appid)
+        if f.exists():
             metadatafiles.append(f)
         else:
             found_invalid = True
@@ -795,9 +795,9 @@ def get_build_dir(app):
     '''get the dir that this app will be built in'''
 
     if app.RepoType == 'srclib':
-        return os.path.join('build', 'srclib', app.Repo)
+        return Path('build/srclib') / app.Repo
 
-    return os.path.join('build', app.id)
+    return Path('build') / app.id
 
 
 class Encoder(json.JSONEncoder):
@@ -869,6 +869,8 @@ def get_head_commit_id(git_repo):
 def setup_vcs(app):
     '''checkout code from VCS and return instance of vcs and the build dir'''
     build_dir = get_build_dir(app)
+    # TODO: Remove this
+    build_dir = str(build_dir)
 
     # Set up vcs interface and make sure we have the latest code...
     logging.debug("Getting {0} vcs interface for {1}"
@@ -3982,6 +3984,8 @@ YAML_LINT_CONFIG = {'extends': 'default',
 
 def run_yamllint(path, indent=0):
 
+    # TODO: Remove this
+    path = str(path)
     try:
         import yamllint.config
         import yamllint.linter

@@ -220,9 +220,6 @@ class CheckupdatesTest(unittest.TestCase):
 
 
 if __name__ == "__main__":
-    # TODO: Python3.6: Accept path-like object.
-    os.chdir(str(Path(__file__).parent))
-
     parser = optparse.OptionParser()
     parser.add_option(
         "-v",

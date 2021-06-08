@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 
-import inspect
 import logging
 import optparse
 import os
@@ -9,14 +8,15 @@ import unittest
 import tempfile
 import textwrap
 from unittest import mock
+from pathlib import Path
+
+
 from testcommon import TmpCwd
 
-localmodule = os.path.realpath(
-    os.path.join(os.path.dirname(inspect.getfile(inspect.currentframe())), '..')
-)
-print('localmodule: ' + localmodule)
+localmodule = Path(__file__).resolve().parent.parent
+print('localmodule: ' + str(localmodule))
 if localmodule not in sys.path:
-    sys.path.insert(0, localmodule)
+    sys.path.insert(0, str(localmodule))
 
 from fdroidserver import common
 from fdroidserver import rewritemeta
@@ -28,30 +28,29 @@ class RewriteMetaTest(unittest.TestCase):
 
     def setUp(self):
         logging.basicConfig(level=logging.DEBUG)
-        self.basedir = os.path.join(localmodule, 'tests')
-        self.tmpdir = os.path.abspath(os.path.join(self.basedir, '..', '.testfiles'))
-        if not os.path.exists(self.tmpdir):
-            os.makedirs(self.tmpdir)
-        os.chdir(self.basedir)
+        self.basedir = localmodule / 'tests'
+        self.tmpdir = localmodule / '.testfiles'
+        self.tmpdir.mkdir(exist_ok=True)
+        # TODO: Python3.6: Accepts a path-like object.
+        os.chdir(str(self.basedir))
 
     def test_rewrite_scenario_trivial(self):
 
         sys.argv = ['rewritemeta', 'a', 'b']
 
         with tempfile.TemporaryDirectory() as tmpdir, TmpCwd(tmpdir):
-            os.mkdir('metadata')
-            with open('metadata/a.yml', 'w') as f:
+            Path('metadata').mkdir()
+            with Path('metadata/a.yml').open('w') as f:
                 f.write('AutoName: a')
-            with open('metadata/b.yml', 'w') as f:
+            with Path('metadata/b.yml').open('w') as f:
                 f.write('AutoName: b')
 
             rewritemeta.main()
 
-            with open('metadata/a.yml') as f:
-                self.assertEqual(
-                    f.read(),
-                    textwrap.dedent(
-                        '''\
+            self.assertEqual(
+                Path('metadata/a.yml').read_text(),
+                textwrap.dedent(
+                    '''\
                     License: Unknown
 
                     AutoName: a
@@ -59,14 +58,13 @@ class RewriteMetaTest(unittest.TestCase):
                     AutoUpdateMode: None
                     UpdateCheckMode: None
                     '''
-                    ),
-                )
+                ),
+            )
 
-            with open('metadata/b.yml') as f:
-                self.assertEqual(
-                    f.read(),
-                    textwrap.dedent(
-                        '''\
+            self.assertEqual(
+                Path('metadata/b.yml').read_text(),
+                textwrap.dedent(
+                    '''\
                     License: Unknown
 
                     AutoName: b
@@ -74,14 +72,14 @@ class RewriteMetaTest(unittest.TestCase):
                     AutoUpdateMode: None
                     UpdateCheckMode: None
                     '''
-                    ),
-                )
+                ),
+            )
 
     def test_rewrite_scenario_yml_no_ruamel(self):
         sys.argv = ['rewritemeta', 'a']
         with tempfile.TemporaryDirectory() as tmpdir, TmpCwd(tmpdir):
-            os.mkdir('metadata')
-            with open('metadata/a.yml', 'w') as f:
+            Path('metadata').mkdir()
+            with Path('metadata/a.yml').open('w') as f:
                 f.write('AutoName: a')
 
             def boom(*args):
@@ -91,19 +89,12 @@ class RewriteMetaTest(unittest.TestCase):
                 with self.assertRaises(FDroidException):
                     rewritemeta.main()
 
-            with open('metadata/a.yml') as f:
-                self.assertEqual(
-                    f.read(),
-                    textwrap.dedent(
-                        '''\
-                    AutoName: a'''
-                    ),
-                )
+            self.assertEqual(
+                Path('metadata/a.yml').read_text(), 'AutoName: a'
+            )
 
 
 if __name__ == "__main__":
-    os.chdir(os.path.dirname(__file__))
-
     parser = optparse.OptionParser()
     parser.add_option(
         "-v",
