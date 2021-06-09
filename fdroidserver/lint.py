@@ -530,6 +530,7 @@ def check_extlib_dir(apps):
     for app in apps:
         for build in app.get('Builds', []):
             for path in build.extlibs:
+                path = Path(path)
                 if path not in extlib_files:
                     yield _(
                         "{appid}: Unknown extlib {path} in build '{versionName}'"
