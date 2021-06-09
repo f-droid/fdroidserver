@@ -162,17 +162,25 @@ def check_tags(app, pattern):
             if app.UpdateCheckData:
                 filecode, codeex, filever, verex = app.UpdateCheckData.split('|')
                 vercode = None
-                if filecode:
-                    filecontent = (build_dir / filecode).read_text()
+                filecode = build_dir / filecode
+                if not filecode.is_file():
+                    logging.debug("UpdateCheckData file {0} not found in tag {1}".format(filecode, tag))
+                    continue
 
-                    m = re.search(codeex, filecontent)
-                    if m:
-                        vercode = m.group(1).strip()
+                filecontent = filecode.read_text()
+
+                m = re.search(codeex, filecontent)
+                if m:
+                    vercode = m.group(1).strip()
 
                 version = "??"
                 if filever:
                     if filever != '.':
-                        filecontent = (build_dir / filever).read_text()
+                        filever = build_dir / filever
+                        if filever.is_file():
+                            filecontent = filever.read_text()
+                        else:
+                            logging.debug("UpdateCheckData file {0} not found in tag {1}".format(filever, tag))
 
                     m = re.search(verex, filecontent)
                     if m:
