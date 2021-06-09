@@ -1222,6 +1222,19 @@ class CommonTest(unittest.TestCase):
         self.assertEqual(('20180430-underscore', '2018_04_30', 'com.kunzisoft.fdroidtest.applicationidsuffix.underscore'),
                          fdroidserver.common.parse_androidmanifests(paths, app))
 
+        app = fdroidserver.metadata.App()
+        build = fdroidserver.metadata.Build()
+        build.gradle = ['underscore_first']
+        app['Builds'] = [build]
+        app.id = 'com.kunzisoft.fdroidtest.applicationidsuffix.underscore_first'
+        paths = [
+            os.path.join('source-files', 'com.kunzisoft.testcase', 'build.gradle'),
+        ]
+        for path in paths:
+            self.assertTrue(os.path.isfile(path))
+        self.assertEqual(('1.0', '1', 'com.kunzisoft.fdroidtest.applicationidsuffix.underscore_first'),
+                         fdroidserver.common.parse_androidmanifests(paths, app))
+
     def test_get_all_gradle_and_manifests(self):
         """Test whether the function works with relative and absolute paths"""
         a = fdroidserver.common.get_all_gradle_and_manifests(Path('source-files/cn.wildfirechat.chat'))
