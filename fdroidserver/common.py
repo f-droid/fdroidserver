@@ -3983,9 +3983,7 @@ YAML_LINT_CONFIG = {'extends': 'default',
 
 
 def run_yamllint(path, indent=0):
-
-    # TODO: Remove this
-    path = str(path)
+    path = Path(path)
     try:
         import yamllint.config
         import yamllint.linter
@@ -3993,10 +3991,10 @@ def run_yamllint(path, indent=0):
         return ''
 
     result = []
-    with open(path, 'r', encoding='utf-8') as f:
+    with path.open('r', encoding='utf-8') as f:
         problems = yamllint.linter.run(f, yamllint.config.YamlLintConfig(json.dumps(YAML_LINT_CONFIG)))
     for problem in problems:
-        result.append(' ' * indent + path + ':' + str(problem.line) + ': ' + problem.message)
+        result.append(' ' * indent + str(path) + ':' + str(problem.line) + ': ' + problem.message)
     return '\n'.join(result)
 
 
