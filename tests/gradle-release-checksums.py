@@ -95,6 +95,13 @@ if os.getenv('CI_PROJECT_NAMESPACE') != 'fdroid':
 git_repo = git.repo.Repo('.')
 modified = git_repo.git().ls_files(modified=True).split()
 if git_repo.is_dirty() and ('gradlew-fdroid' in modified or 'makebuildserver' in modified):
+    private_token = os.getenv('PERSONAL_ACCESS_TOKEN')
+    if not private_token:
+        print(Fore.RED
+              + 'ERROR: GitLab Token not found in PERSONAL_ACCESS_TOKEN!'
+              + Style.RESET_ALL)
+        exit(1)
+
     branch = git_repo.create_head(os.path.basename(__file__), force=True)
     branch.checkout()
     git_repo.index.add(['gradlew-fdroid', 'makebuildserver'])
@@ -112,12 +119,6 @@ if git_repo.is_dirty() and ('gradlew-fdroid' in modified or 'makebuildserver' in
     remote.push(force=True)
     git.remote.Remote.rm(git_repo, remote_name)
 
-    private_token = os.getenv('PERSONAL_ACCESS_TOKEN')
-    if not private_token:
-        print(Fore.RED
-              + 'ERROR: GitLab Token not found in PERSONAL_ACCESS_TOKEN!'
-              + Style.RESET_ALL)
-        exit(1)
     gl = gitlab.Gitlab(os.getenv('CI_SERVER_URL'), api_version=4,
                        private_token=private_token)
     project = gl.projects.get(project_path, lazy=True)
