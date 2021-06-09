@@ -161,19 +161,22 @@ def check_tags(app, pattern):
 
             if app.UpdateCheckData:
                 filecode, codeex, filever, verex = app.UpdateCheckData.split('|')
-                vercode = None
-                filecode = build_dir / filecode
-                if not filecode.is_file():
-                    logging.debug("UpdateCheckData file {0} not found in tag {1}".format(filecode, tag))
-                    continue
 
-                filecontent = filecode.read_text()
+                if filecode:
+                    filecode = build_dir / filecode
+                    if not filecode.is_file():
+                        logging.debug("UpdateCheckData file {0} not found in tag {1}".format(filecode, tag))
+                        continue
+                    filecontent = filecode.read_text()
+                else:
+                    filecontent = tag
 
                 m = re.search(codeex, filecontent)
-                if m:
-                    vercode = m.group(1).strip()
+                if not m:
+                    continue
 
-                version = "??"
+                vercode = m.group(1).strip()
+
                 if filever:
                     if filever != '.':
                         filever = build_dir / filever
@@ -181,19 +184,22 @@ def check_tags(app, pattern):
                             filecontent = filever.read_text()
                         else:
                             logging.debug("UpdateCheckData file {0} not found in tag {1}".format(filever, tag))
+                else:
+                    filecontent = tag
 
+                version = tag
+                if verex:
                     m = re.search(verex, filecontent)
                     if m:
                         version = m.group(1)
 
-                    if vercode:
-                        logging.debug("UpdateCheckData found version {0} ({1})"
-                                      .format(version, vercode))
-                        i_vercode = common.version_code_string_to_int(vercode)
-                        if i_vercode > common.version_code_string_to_int(hcode):
-                            htag = tag
-                            hcode = str(i_vercode)
-                            hver = version
+                logging.debug("UpdateCheckData found version {0} ({1})"
+                              .format(version, vercode))
+                i_vercode = common.version_code_string_to_int(vercode)
+                if i_vercode > common.version_code_string_to_int(hcode):
+                    htag = tag
+                    hcode = str(i_vercode)
+                    hver = version
             else:
                 for subdir in possible_subdirs(app):
                     root_dir = build_dir / subdir
