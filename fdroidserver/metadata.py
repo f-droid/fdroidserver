@@ -19,7 +19,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import git
-from pathlib import Path, PurePosixPath
+from pathlib import Path
 import platform
 import re
 import logging
@@ -734,7 +734,7 @@ def parse_metadata(metadatapath):
     """
     metadatapath = Path(metadatapath)
     app = App()
-    app.metadatapath = str(PurePosixPath(metadatapath))
+    app.metadatapath = metadatapath.as_posix()
     name = metadatapath.stem
     if name != '.fdroid':
         app.id = name

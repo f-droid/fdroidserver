@@ -25,7 +25,7 @@ import sys
 import yaml
 from argparse import ArgumentParser
 import logging
-from pathlib import Path, PurePosixPath
+from pathlib import Path
 
 try:
     from yaml import CSafeLoader as SafeLoader
@@ -192,7 +192,7 @@ def main():
         build.subdir = options.subdir
         build.gradle = ['yes']
     elif subdir:
-        build.subdir = str(PurePosixPath(subdir))
+        build.subdir = subdir.as_posix()
         build.gradle = ['yes']
 
     if options.license:
