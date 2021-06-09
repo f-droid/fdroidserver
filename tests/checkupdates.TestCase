@@ -158,7 +158,7 @@ class CheckupdatesTest(unittest.TestCase):
         app.metadatapath = 'metadata/' + app.id + '.yml'
         app.CurrentVersionCode = 10108
         app.UpdateCheckMode = 'HTTP'
-        app.UpdateCheckData = 'https://a.net/b.txt|c(.*)|https://d.net/e.txt|v(.*)'
+        app.UpdateCheckData = r'https://a.net/b.txt|c(.*)|https://d.net/e.txt|v(.*)'
         app.UpdateCheckIgnore = 'beta'
 
         respmock = mock.Mock()
@@ -187,7 +187,7 @@ class CheckupdatesTest(unittest.TestCase):
         app.metadatapath = 'metadata/' + app.id + '.yml'
         app.CurrentVersionCode = 10108
         app.UpdateCheckMode = 'HTTP'
-        app.UpdateCheckData = 'https://a.net/b.txt|c(.*)|https://d.net/e.txt|v(.*)'
+        app.UpdateCheckData = r'https://a.net/b.txt|c(.*)|https://d.net/e.txt|v(.*)'
         app.UpdateCheckIgnore = 'beta'
 
         respmock = mock.Mock()
@@ -206,10 +206,10 @@ class CheckupdatesTest(unittest.TestCase):
         app.RepoType = 'git'
         app.CurrentVersionCode = 10108
         app.UpdateCheckMode = 'Tags'
-        app.UpdateCheckData = 'b.txt|c(.*)|e.txt|v(.*)'
+        app.UpdateCheckData = r'b.txt|c(.*)|e.txt|v(.*)'
 
         vcs = mock.Mock()
-        vcs.latesttags.return_value = ['1.1.8', '1.1.9']
+        vcs.latesttags.return_value = ['1.1.9', '1.1.8']
         with mock.patch(
             'pathlib.Path.read_text', lambda a: 'v1.1.9\nc10109'
         ) as _ignored, mock.patch.object(
@@ -220,6 +220,50 @@ class CheckupdatesTest(unittest.TestCase):
             vername, vercode, _tag = fdroidserver.checkupdates.check_tags(app, None)
             self.assertEqual(vername, '1.1.9')
             self.assertEqual(vercode, '10109')
+
+        app.UpdateCheckData = r'b.txt|c(.*)|.|v(.*)'
+        with mock.patch(
+            'pathlib.Path.read_text', lambda a: 'v1.1.0\nc10109'
+        ) as _ignored, mock.patch.object(
+            Path, 'is_file'
+        ) as mock_path, mock.patch('fdroidserver.common.getvcs', return_value=vcs):
+            _ignored  # silence the linters
+            mock_path.is_file.return_falue = True
+            vername, vercode, _tag = fdroidserver.checkupdates.check_tags(app, None)
+            self.assertEqual(vername, '1.1.0')
+            self.assertEqual(vercode, '10109')
+
+        app.UpdateCheckData = r'b.txt|c(.*)||'
+        with mock.patch(
+            'pathlib.Path.read_text', lambda a: 'v1.1.9\nc10109'
+        ) as _ignored, mock.patch.object(
+            Path, 'is_file'
+        ) as mock_path, mock.patch('fdroidserver.common.getvcs', return_value=vcs):
+            _ignored  # silence the linters
+            mock_path.is_file.return_falue = True
+            vername, vercode, _tag = fdroidserver.checkupdates.check_tags(app, None)
+            self.assertEqual(vername, '1.1.9')
+            self.assertEqual(vercode, '10109')
+
+        vcs.latesttags.return_value = ['Android-1.1.0', '1.1.8']
+        app.UpdateCheckData = r'b.txt|c(.*)||Android-([\d.]+)'
+        with mock.patch(
+            'pathlib.Path.read_text', lambda a: 'v1.1.9\nc10109'
+        ) as _ignored, mock.patch.object(
+            Path, 'is_file'
+        ) as mock_path, mock.patch('fdroidserver.common.getvcs', return_value=vcs):
+            _ignored  # silence the linters
+            mock_path.is_file.return_falue = True
+            vername, vercode, _tag = fdroidserver.checkupdates.check_tags(app, None)
+            self.assertEqual(vername, '1.1.0')
+            self.assertEqual(vercode, '10109')
+
+        app.UpdateCheckData = r'|\+(\d+)||Android-([\d.]+)'
+        vcs.latesttags.return_value = ['Android-1.1.0+1']
+        with mock.patch('fdroidserver.common.getvcs', return_value=vcs):
+            vername, vercode, _tag = fdroidserver.checkupdates.check_tags(app, None)
+            self.assertEqual(vername, '1.1.0')
+            self.assertEqual(vercode, '1')
 
 
 if __name__ == "__main__":
