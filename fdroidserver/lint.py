@@ -17,11 +17,11 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from argparse import ArgumentParser
-import glob
-import os
 import re
 import sys
+import platform
 import urllib.parse
+from pathlib import Path
 
 from . import _
 from . import common
@@ -33,8 +33,12 @@ options = None
 
 
 def enforce_https(domain):
-    return (re.compile(r'^http://([^/]*\.)?' + re.escape(domain) + r'(/.*)?', re.IGNORECASE),
-            domain + " URLs should always use https://")
+    return (
+        re.compile(
+            r'^http://([^/]*\.)?' + re.escape(domain) + r'(/.*)?', re.IGNORECASE
+        ),
+        domain + " URLs should always use https://",
+    )
 
 
 https_enforcings = [
@@ -59,8 +63,10 @@ https_enforcings = [
 
 
 def forbid_shortener(domain):
-    return (re.compile(r'https?://[^/]*' + re.escape(domain) + r'/.*'),
-            _("URL shorteners should not be used"))
+    return (
+        re.compile(r'https?://[^/]*' + re.escape(domain) + r'/.*'),
+        _("URL shorteners should not be used"),
+    )
 
 
 http_url_shorteners = [
@@ -119,70 +125,98 @@ http_url_shorteners = [
     forbid_shortener('➡.ws'),
 ]
 
-http_checks = https_enforcings + http_url_shorteners + [
-    (re.compile(r'^(?!https?://)[^/]+'),
-     _("URL must start with https:// or http://")),
-    (re.compile(r'^https://(github|gitlab)\.com(/[^/]+){2,3}\.git'),
-     _("Appending .git is not necessary")),
-    (re.compile(r'^https://[^/]*(github|gitlab|bitbucket|rawgit|githubusercontent)\.[a-zA-Z]+/([^/]+/){2,3}master/'),
-     _("Use /HEAD instead of /master to point at a file in the default branch")),
-]
+http_checks = (
+    https_enforcings
+    + http_url_shorteners
+    + [
+        (
+            re.compile(r'^(?!https?://)[^/]+'),
+            _("URL must start with https:// or http://"),
+        ),
+        (
+            re.compile(r'^https://(github|gitlab)\.com(/[^/]+){2,3}\.git'),
+            _("Appending .git is not necessary"),
+        ),
+        (
+            re.compile(
+                r'^https://[^/]*(github|gitlab|bitbucket|rawgit|githubusercontent)\.[a-zA-Z]+/([^/]+/){2,3}master/'
+            ),
+            _("Use /HEAD instead of /master to point at a file in the default branch"),
+        ),
+    ]
+)
 
 regex_checks = {
     'WebSite': http_checks,
     'SourceCode': http_checks,
     'Repo': https_enforcings,
     'UpdateCheckMode': https_enforcings,
-    'IssueTracker': http_checks + [
-        (re.compile(r'.*github\.com/[^/]+/[^/]+/*$'),
-         _("/issues is missing")),
-        (re.compile(r'.*gitlab\.com/[^/]+/[^/]+/*$'),
-         _("/issues is missing")),
+    'IssueTracker': http_checks
+    + [
+        (re.compile(r'.*github\.com/[^/]+/[^/]+/*$'), _("/issues is missing")),
+        (re.compile(r'.*gitlab\.com/[^/]+/[^/]+/*$'), _("/issues is missing")),
     ],
-    'Donate': http_checks + [
-        (re.compile(r'.*flattr\.com'),
-         _("Flattr donation methods belong in the FlattrID: field")),
-        (re.compile(r'.*liberapay\.com'),
-         _("Liberapay donation methods belong in the Liberapay: field")),
-        (re.compile(r'.*opencollective\.com'),
-         _("OpenCollective donation methods belong in the OpenCollective: field")),
+    'Donate': http_checks
+    + [
+        (
+            re.compile(r'.*flattr\.com'),
+            _("Flattr donation methods belong in the FlattrID: field"),
+        ),
+        (
+            re.compile(r'.*liberapay\.com'),
+            _("Liberapay donation methods belong in the Liberapay: field"),
+        ),
+        (
+            re.compile(r'.*opencollective\.com'),
+            _("OpenCollective donation methods belong in the OpenCollective: field"),
+        ),
     ],
     'Changelog': http_checks,
     'Author Name': [
-        (re.compile(r'^\s'),
-         _("Unnecessary leading space")),
-        (re.compile(r'.*\s$'),
-         _("Unnecessary trailing space")),
+        (re.compile(r'^\s'), _("Unnecessary leading space")),
+        (re.compile(r'.*\s$'), _("Unnecessary trailing space")),
     ],
     'Summary': [
-        (re.compile(r'.*\b(free software|open source)\b.*', re.IGNORECASE),
-         _("No need to specify that the app is Free Software")),
-        (re.compile(r'.*((your|for).*android|android.*(app|device|client|port|version))', re.IGNORECASE),
-         _("No need to specify that the app is for Android")),
-        (re.compile(r'.*[a-z0-9][.!?]( |$)'),
-         _("Punctuation should be avoided")),
-        (re.compile(r'^\s'),
-         _("Unnecessary leading space")),
-        (re.compile(r'.*\s$'),
-         _("Unnecessary trailing space")),
+        (
+            re.compile(r'.*\b(free software|open source)\b.*', re.IGNORECASE),
+            _("No need to specify that the app is Free Software"),
+        ),
+        (
+            re.compile(
+                r'.*((your|for).*android|android.*(app|device|client|port|version))',
+                re.IGNORECASE,
+            ),
+            _("No need to specify that the app is for Android"),
+        ),
+        (re.compile(r'.*[a-z0-9][.!?]( |$)'), _("Punctuation should be avoided")),
+        (re.compile(r'^\s'), _("Unnecessary leading space")),
+        (re.compile(r'.*\s$'), _("Unnecessary trailing space")),
     ],
-    'Description': https_enforcings + http_url_shorteners + [
-        (re.compile(r'\s*[*#][^ .]'),
-         _("Invalid bulleted list")),
-        (re.compile(r'https://f-droid.org/[a-z][a-z](_[A-Za-z]{2,4})?/'),
-         _("Locale included in f-droid.org URL")),
-        (re.compile(r'^\s'),
-         _("Unnecessary leading space")),
-        (re.compile(r'.*\s$'),
-         _("Unnecessary trailing space")),
-        (re.compile(r'.*<(applet|base|body|button|embed|form|head|html|iframe|img|input|link|object|picture|script|source|style|svg|video).*', re.IGNORECASE),
-         _("Forbidden HTML tags")),
-        (re.compile(r'''.*\s+src=["']javascript:.*'''),
-         _("Javascript in HTML src attributes")),
+    'Description': https_enforcings
+    + http_url_shorteners
+    + [
+        (re.compile(r'\s*[*#][^ .]'), _("Invalid bulleted list")),
+        (
+            re.compile(r'https://f-droid.org/[a-z][a-z](_[A-Za-z]{2,4})?/'),
+            _("Locale included in f-droid.org URL"),
+        ),
+        (re.compile(r'^\s'), _("Unnecessary leading space")),
+        (re.compile(r'.*\s$'), _("Unnecessary trailing space")),
+        (
+            re.compile(
+                r'.*<(applet|base|body|button|embed|form|head|html|iframe|img|input|link|object|picture|script|source|style|svg|video).*',
+                re.IGNORECASE,
+            ),
+            _("Forbidden HTML tags"),
+        ),
+        (
+            re.compile(r'''.*\s+src=["']javascript:.*'''),
+            _("Javascript in HTML src attributes"),
+        ),
     ],
 }
 
-locale_pattern = re.compile(r'^[a-z]{2,3}(-[A-Z][A-Z])?$')
+locale_pattern = re.compile(r"[a-z]{2,3}(-([A-Z][a-zA-Z]+|\d+|[a-z]+))*")
 
 
 def check_regexes(app):
@@ -215,8 +249,7 @@ def get_lastbuild(builds):
 
 
 def check_update_check_data_url(app):
-    """UpdateCheckData must have a valid HTTPS URL to protect checkupdates runs
-    """
+    """UpdateCheckData must have a valid HTTPS URL to protect checkupdates runs"""
     if app.UpdateCheckData and app.UpdateCheckMode == 'HTTP':
         urlcode, codeex, urlver, verex = app.UpdateCheckData.split('|')
         for url in (urlcode, urlver):
@@ -229,33 +262,40 @@ def check_update_check_data_url(app):
 
 
 def check_vercode_operation(app):
-    if app.VercodeOperation and not common.VERCODE_OPERATION_RE.match(app.VercodeOperation):
+    if app.VercodeOperation and not common.VERCODE_OPERATION_RE.match(
+        app.VercodeOperation
+    ):
         yield _('Invalid VercodeOperation: {field}').format(field=app.VercodeOperation)
 
 
 def check_ucm_tags(app):
     lastbuild = get_lastbuild(app.get('Builds', []))
-    if (lastbuild is not None
-            and lastbuild.commit
-            and app.UpdateCheckMode == 'RepoManifest'
-            and not lastbuild.commit.startswith('unknown')
-            and lastbuild.versionCode == app.CurrentVersionCode
-            and not lastbuild.forcevercode
-            and any(s in lastbuild.commit for s in '.,_-/')):
-        yield _("Last used commit '{commit}' looks like a tag, but UpdateCheckMode is '{ucm}'")\
-            .format(commit=lastbuild.commit, ucm=app.UpdateCheckMode)
+    if (
+        lastbuild is not None
+        and lastbuild.commit
+        and app.UpdateCheckMode == 'RepoManifest'
+        and not lastbuild.commit.startswith('unknown')
+        and lastbuild.versionCode == app.CurrentVersionCode
+        and not lastbuild.forcevercode
+        and any(s in lastbuild.commit for s in '.,_-/')
+    ):
+        yield _(
+            "Last used commit '{commit}' looks like a tag, but UpdateCheckMode is '{ucm}'"
+        ).format(commit=lastbuild.commit, ucm=app.UpdateCheckMode)
 
 
 def check_char_limits(app):
     limits = config['char_limits']
 
     if len(app.Summary) > limits['summary']:
-        yield _("Summary of length {length} is over the {limit} char limit")\
-            .format(length=len(app.Summary), limit=limits['summary'])
+        yield _("Summary of length {length} is over the {limit} char limit").format(
+            length=len(app.Summary), limit=limits['summary']
+        )
 
     if len(app.Description) > limits['description']:
-        yield _("Description of length {length} is over the {limit} char limit")\
-            .format(length=len(app.Description), limit=limits['description'])
+        yield _("Description of length {length} is over the {limit} char limit").format(
+            length=len(app.Description), limit=limits['description']
+        )
 
 
 def check_old_links(app):
@@ -272,8 +312,9 @@ def check_old_links(app):
         for f in ['WebSite', 'SourceCode', 'IssueTracker', 'Changelog']:
             v = app.get(f)
             if any(s in v for s in old_sites):
-                yield _("App is in '{repo}' but has a link to {url}")\
-                    .format(repo=app.Repo, url=v)
+                yield _("App is in '{repo}' but has a link to {url}").format(
+                    repo=app.Repo, url=v
+                )
 
 
 def check_useless_fields(app):
@@ -286,8 +327,14 @@ filling_ucms = re.compile(r'^(Tags.*|RepoManifest.*)')
 
 def check_checkupdates_ran(app):
     if filling_ucms.match(app.UpdateCheckMode):
-        if not app.AutoName and not app.CurrentVersion and app.CurrentVersionCode == '0':
-            yield _("UpdateCheckMode is set but it looks like checkupdates hasn't been run yet")
+        if (
+            not app.AutoName
+            and not app.CurrentVersion
+            and app.CurrentVersionCode == '0'
+        ):
+            yield _(
+                "UpdateCheckMode is set but it looks like checkupdates hasn't been run yet"
+            )
 
 
 def check_empty_fields(app):
@@ -295,25 +342,27 @@ def check_empty_fields(app):
         yield _("Categories are not set")
 
 
-all_categories = set([
-    "Connectivity",
-    "Development",
-    "Games",
-    "Graphics",
-    "Internet",
-    "Money",
-    "Multimedia",
-    "Navigation",
-    "Phone & SMS",
-    "Reading",
-    "Science & Education",
-    "Security",
-    "Sports & Health",
-    "System",
-    "Theming",
-    "Time",
-    "Writing",
-])
+all_categories = set(
+    [
+        "Connectivity",
+        "Development",
+        "Games",
+        "Graphics",
+        "Internet",
+        "Money",
+        "Multimedia",
+        "Navigation",
+        "Phone & SMS",
+        "Reading",
+        "Science & Education",
+        "Security",
+        "Sports & Health",
+        "System",
+        "Theming",
+        "Time",
+        "Writing",
+    ]
+)
 
 
 def check_categories(app):
@@ -376,7 +425,9 @@ def check_bulleted_lists(app):
         if line[0] == lchar and line[1] == ' ':
             lcount += 1
             if lcount > 2 and lchar not in validchars:
-                yield _("Description has a list (%s) but it isn't bulleted (*) nor numbered (#)") % lchar
+                yield _(
+                    "Description has a list (%s) but it isn't bulleted (*) nor numbered (#)"
+                ) % lchar
                 break
         else:
             lchar = line[0]
@@ -389,50 +440,61 @@ def check_builds(app):
     for build in app.get('Builds', []):
         if build.disable:
             if build.disable.startswith('Generated by import.py'):
-                yield _("Build generated by `fdroid import` - remove disable line once ready")
+                yield _(
+                    "Build generated by `fdroid import` - remove disable line once ready"
+                )
             continue
         for s in ['master', 'origin', 'HEAD', 'default', 'trunk']:
             if build.commit and build.commit.startswith(s):
-                yield _("Branch '{branch}' used as commit in build '{versionName}'")\
-                    .format(branch=s, versionName=build.versionName)
+                yield _(
+                    "Branch '{branch}' used as commit in build '{versionName}'"
+                ).format(branch=s, versionName=build.versionName)
             for srclib in build.srclibs:
                 if '@' in srclib:
                     ref = srclib.split('@')[1].split('/')[0]
                     if ref.startswith(s):
-                        yield _("Branch '{branch}' used as commit in srclib '{srclib}'")\
-                            .format(branch=s, srclib=srclib)
+                        yield _(
+                            "Branch '{branch}' used as commit in srclib '{srclib}'"
+                        ).format(branch=s, srclib=srclib)
                 else:
-                    yield _('srclibs missing name and/or @') + ' (srclibs: ' + srclib + ')'
+                    yield _(
+                        'srclibs missing name and/or @'
+                    ) + ' (srclibs: ' + srclib + ')'
         for key in build.keys():
             if key not in supported_flags:
                 yield _('%s is not an accepted build field') % key
 
 
 def check_files_dir(app):
-    dir_path = os.path.join('metadata', app.id)
-    if not os.path.isdir(dir_path):
+    dir_path = Path('metadata') / app.id
+    if not dir_path.is_dir():
         return
     files = set()
-    for name in os.listdir(dir_path):
-        path = os.path.join(dir_path, name)
-        if not (os.path.isfile(path) or name == 'signatures' or locale_pattern.match(name)):
+    for path in dir_path.iterdir():
+        name = path.name
+        if not (
+            path.is_file() or name == 'signatures' or locale_pattern.fullmatch(name)
+        ):
             yield _("Found non-file at %s") % path
             continue
         files.add(name)
 
-    used = {'signatures', }
+    used = {
+        'signatures',
+    }
     for build in app.get('Builds', []):
         for fname in build.patch:
             if fname not in files:
-                yield _("Unknown file '{filename}' in build '{versionName}'")\
-                    .format(filename=fname, versionName=build.versionName)
+                yield _("Unknown file '{filename}' in build '{versionName}'").format(
+                    filename=fname, versionName=build.versionName
+                )
             else:
                 used.add(fname)
 
     for name in files.difference(used):
-        if locale_pattern.match(name):
+        if locale_pattern.fullmatch(name):
             continue
-        yield _("Unused file at %s") % os.path.join(dir_path, name)
+        yield _("Unused file at %s") % (dir_path / name)
 
 
 def check_format(app):
@@ -446,41 +508,49 @@ def check_license_tag(app):
         return
     if app.License not in config['lint_licenses']:
         if config['lint_licenses'] == APPROVED_LICENSES:
-            yield _('Unexpected license tag "{}"! Only use FSF or OSI '
-                    'approved tags from https://spdx.org/license-list') \
-                .format(app.License)
+            yield _(
+                'Unexpected license tag "{}"! Only use FSF or OSI '
+                'approved tags from https://spdx.org/license-list'
+            ).format(app.License)
         else:
-            yield _('Unexpected license tag "{}"! Only use license tags '
-                    'configured in your config file').format(app.License)
+            yield _(
+                'Unexpected license tag "{}"! Only use license tags '
+                'configured in your config file'
+            ).format(app.License)
 
 
 def check_extlib_dir(apps):
-    dir_path = os.path.join('build', 'extlib')
-    unused_extlib_files = set()
-    for root, dirs, files in os.walk(dir_path):
-        for name in files:
-            unused_extlib_files.add(os.path.join(root, name)[len(dir_path) + 1:])
+    dir_path = Path('build/extlib')
+    extlib_files = set()
+    for path in dir_path.glob('**/*'):
+        if path.is_file():
+            extlib_files.add(path.relative_to(dir_path))
 
     used = set()
     for app in apps:
         for build in app.get('Builds', []):
             for path in build.extlibs:
-                if path not in unused_extlib_files:
-                    yield _("{appid}: Unknown extlib {path} in build '{versionName}'")\
-                        .format(appid=app.id, path=path, versionName=build.versionName)
+                if path not in extlib_files:
+                    yield _(
+                        "{appid}: Unknown extlib {path} in build '{versionName}'"
+                    ).format(appid=app.id, path=path, versionName=build.versionName)
                 else:
                     used.add(path)
 
-    for path in unused_extlib_files.difference(used):
-        if any(path.endswith(s) for s in [
-                '.gitignore',
-                'source.txt', 'origin.txt', 'md5.txt',
-                'LICENSE', 'LICENSE.txt',
-                'COPYING', 'COPYING.txt',
-                'NOTICE', 'NOTICE.txt',
-                ]):
-            continue
-        yield _("Unused extlib at %s") % os.path.join(dir_path, path)
+    for path in extlib_files.difference(used):
+        if path.name not in [
+            '.gitignore',
+            'source.txt',
+            'origin.txt',
+            'md5.txt',
+            'LICENSE',
+            'LICENSE.txt',
+            'COPYING',
+            'COPYING.txt',
+            'NOTICE',
+            'NOTICE.txt',
+        ]:
+            yield _("Unused extlib at %s") % (dir_path / path)
 
 
 def check_app_field_types(app):
@@ -493,39 +563,69 @@ def check_app_field_types(app):
             continue
         elif field == 'Builds':
             if not isinstance(v, list):
-                yield(_("{appid}: {field} must be a '{type}', but it is a '{fieldtype}'!")
-                      .format(appid=app.id, field=field,
-                              type='list', fieldtype=v.__class__.__name__))
+                yield (
+                    _(
+                        "{appid}: {field} must be a '{type}', but it is a '{fieldtype}'!"
+                    ).format(
+                        appid=app.id,
+                        field=field,
+                        type='list',
+                        fieldtype=v.__class__.__name__,
+                    )
+                )
         elif t == metadata.TYPE_LIST and not isinstance(v, list):
-            yield(_("{appid}: {field} must be a '{type}', but it is a '{fieldtype}!'")
-                  .format(appid=app.id, field=field,
-                          type='list', fieldtype=v.__class__.__name__))
+            yield (
+                _(
+                    "{appid}: {field} must be a '{type}', but it is a '{fieldtype}!'"
+                ).format(
+                    appid=app.id,
+                    field=field,
+                    type='list',
+                    fieldtype=v.__class__.__name__,
+                )
+            )
         elif t == metadata.TYPE_STRING and not type(v) in (str, bool, dict):
-            yield(_("{appid}: {field} must be a '{type}', but it is a '{fieldtype}'!")
-                  .format(appid=app.id, field=field,
-                          type='str', fieldtype=v.__class__.__name__))
+            yield (
+                _(
+                    "{appid}: {field} must be a '{type}', but it is a '{fieldtype}'!"
+                ).format(
+                    appid=app.id,
+                    field=field,
+                    type='str',
+                    fieldtype=v.__class__.__name__,
+                )
+            )
 
 
 def check_for_unsupported_metadata_files(basedir=""):
     """Checks whether any non-metadata files are in metadata/"""
-
+    basedir = Path(basedir)
     global config
 
+    if not (basedir / 'metadata').exists():
+        return False
     return_value = False
-    for f in glob.glob(basedir + 'metadata/*') + glob.glob(basedir + 'metadata/.*'):
-        if os.path.isdir(f):
-            if not os.path.exists(f + '.yml'):
+    for f in (basedir / 'metadata').iterdir():
+        if f.is_dir():
+            if not Path(str(f) + '.yml').exists():
                 print(_('"%s/" has no matching metadata file!') % f)
                 return_value = True
-        elif f.endswith('.yml'):
-            packageName = os.path.splitext(os.path.basename(f))[0]
+        elif f.suffix == '.yml':
+            packageName = f.stem
             if not common.is_valid_package_name(packageName):
-                print('"' + packageName + '" is an invalid package name!\n'
-                      + 'https://developer.android.com/studio/build/application-id')
+                print(
+                    '"'
+                    + packageName
+                    + '" is an invalid package name!\n'
+                    + 'https://developer.android.com/studio/build/application-id'
+                )
                 return_value = True
         else:
-            print(_('"{path}" is not a supported file format (use: metadata/*.yml)')
-                  .format(path=f.replace(basedir, '')))
+            print(
+                _(
+                    '"{path}" is not a supported file format (use: metadata/*.yml)'
+                ).format(path=f.relative_to(basedir))
+            )
             return_value = True
 
     return return_value
@@ -556,8 +656,11 @@ def check_current_version_code(app):
     if active_builds == 0:
         return  # all builds are disabled
     if cv is not None and int(cv) < min_versionCode:
-        yield(_('CurrentVersionCode {cv} is less than oldest build entry {versionCode}')
-              .format(cv=cv, versionCode=min_versionCode))
+        yield (
+            _(
+                'CurrentVersionCode {cv} is less than oldest build entry {versionCode}'
+            ).format(cv=cv, versionCode=min_versionCode)
+        )
 
 
 def main():
@@ -567,12 +670,25 @@ def main():
     # Parse command line...
     parser = ArgumentParser()
     common.setup_global_opts(parser)
-    parser.add_argument("-f", "--format", action="store_true", default=False,
-                        help=_("Also warn about formatting issues, like rewritemeta -l"))
-    parser.add_argument('--force-yamllint', action="store_true", default=False,
-                        help=_("When linting the entire repository yamllint is disabled by default. "
-                               "This option forces yamllint regardless."))
-    parser.add_argument("appid", nargs='*', help=_("application ID of file to operate on"))
+    parser.add_argument(
+        "-f",
+        "--format",
+        action="store_true",
+        default=False,
+        help=_("Also warn about formatting issues, like rewritemeta -l"),
+    )
+    parser.add_argument(
+        '--force-yamllint',
+        action="store_true",
+        default=False,
+        help=_(
+            "When linting the entire repository yamllint is disabled by default. "
+            "This option forces yamllint regardless."
+        ),
+    )
+    parser.add_argument(
+        "appid", nargs='*', help=_("application ID of file to operate on")
+    )
     metadata.add_metadata_arguments(parser)
     options = parser.parse_args()
     metadata.warnings_action = options.W
@@ -586,7 +702,7 @@ def main():
     anywarns = check_for_unsupported_metadata_files()
 
     apps_check_funcs = []
-    if len(options.appid) == 0:
+    if not options.appid:
         # otherwise it finds tons of unused extlibs
         apps_check_funcs.append(check_extlib_dir)
     for check_func in apps_check_funcs:
@@ -600,29 +716,37 @@ def main():
 
         if options.force_yamllint:
             import yamllint  # throw error if it is not installed
+
             yamllint  # make pyflakes ignore this
 
         # only run yamllint when linting individual apps.
-        if len(options.appid) > 0 or options.force_yamllint:
+        if options.appid or options.force_yamllint:
 
             # run yamllint on app metadata
-            ymlpath = os.path.join('metadata', appid + '.yml')
-            if os.path.isfile(ymlpath):
+            ymlpath = Path('metadata') / (appid + '.yml')
+            if ymlpath.is_file():
                 yamllintresult = common.run_yamllint(ymlpath)
-                if yamllintresult != '':
+                if yamllintresult:
                     print(yamllintresult)
 
             # run yamllint on srclib metadata
             srclibs = set()
             for build in app.get('Builds', []):
                 for srclib in build.srclibs:
-                    srclibs.add(srclib)
+                    name, _ref, _number, _subdir = common.parse_srclib_spec(srclib)
+                    srclibs.add(name + '.yml')
             for srclib in srclibs:
-                name, ref, number, subdir = common.parse_srclib_spec(srclib)
-                srclibpath = os.path.join('srclibs', name + '.yml')
-                if os.path.isfile(srclibpath):
+                srclibpath = Path('srclibs') / srclib
+                if srclibpath.is_file():
+                    if platform.system() == 'Windows':
+                        # Handle symlink on Windows
+                        symlink = srclibpath.read_text()
+                        if symlink in srclibs:
+                            continue
+                        elif (srclibpath.parent / symlink).is_file():
+                            srclibpath = srclibpath.parent / symlink
                     yamllintresult = common.run_yamllint(srclibpath)
-                    if yamllintresult != '':
+                    if yamllintresult:
                         print(yamllintresult)
 
         app_check_funcs = [

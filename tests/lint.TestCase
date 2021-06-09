@@ -2,7 +2,6 @@
 
 # http://www.drdobbs.com/testing/unit-testing-with-python/240165163
 
-import inspect
 import logging
 import optparse
 import os
@@ -10,13 +9,12 @@ import shutil
 import sys
 import tempfile
 import unittest
+from pathlib import Path
 
-localmodule = os.path.realpath(
-    os.path.join(os.path.dirname(inspect.getfile(inspect.currentframe())), '..')
-)
-print('localmodule: ' + localmodule)
+localmodule = Path(__file__).resolve().parent.parent
+print('localmodule: ' + str(localmodule))
 if localmodule not in sys.path:
-    sys.path.insert(0, localmodule)
+    sys.path.insert(0, str(localmodule))
 
 import fdroidserver.common
 import fdroidserver.lint
@@ -27,26 +25,34 @@ class LintTest(unittest.TestCase):
     '''fdroidserver/lint.py'''
 
     def setUp(self):
-        logging.basicConfig(level=logging.INFO)
-        self.basedir = os.path.join(localmodule, 'tests')
-        self.tmpdir = os.path.abspath(os.path.join(self.basedir, '..', '.testfiles'))
-        if not os.path.exists(self.tmpdir):
-            os.makedirs(self.tmpdir)
-        os.chdir(self.basedir)
+        logging.basicConfig(level=logging.DEBUG)
+        self.basedir = localmodule / 'tests'
+        self.tmpdir = localmodule / '.testfiles'
+        self.tmpdir.mkdir(exist_ok=True)
+        # TODO: Python3.6: Accepts a path-like object.
+        os.chdir(str(self.basedir))
 
     def test_check_for_unsupported_metadata_files(self):
         self.assertTrue(fdroidserver.lint.check_for_unsupported_metadata_files())
 
-        tmptestsdir = tempfile.mkdtemp(prefix=inspect.currentframe().f_code.co_name,
-                                       dir=self.tmpdir)
-        self.assertFalse(fdroidserver.lint.check_for_unsupported_metadata_files(tmptestsdir + '/'))
-        shutil.copytree(os.path.join(localmodule, 'tests', 'metadata'),
-                        os.path.join(tmptestsdir, 'metadata'),
-                        ignore=shutil.ignore_patterns('apk', 'dump', '*.json'))
-        self.assertFalse(fdroidserver.lint.check_for_unsupported_metadata_files(tmptestsdir + '/'))
-        with open(os.path.join(tmptestsdir, 'metadata', 'org.adaway.json'), 'w') as fp:
-            fp.write('placeholder')
-        self.assertTrue(fdroidserver.lint.check_for_unsupported_metadata_files(tmptestsdir + '/'))
+        with tempfile.TemporaryDirectory(dir=str(self.tmpdir)) as testdir:
+            testdir = Path(testdir)
+            self.assertFalse(
+                fdroidserver.lint.check_for_unsupported_metadata_files(testdir)
+            )
+            # TODO: Python3.6: Accepts a path-like object.
+            shutil.copytree(
+                str(self.basedir / 'metadata'),
+                str(testdir / 'metadata'),
+                ignore=shutil.ignore_patterns('apk', 'dump', '*.json'),
+            )
+            self.assertFalse(
+                fdroidserver.lint.check_for_unsupported_metadata_files(testdir)
+            )
+            (testdir / 'metadata/org.adaway.json').write_text('placeholder')
+            self.assertTrue(
+                fdroidserver.lint.check_for_unsupported_metadata_files(testdir)
+            )
 
     def test_forbidden_html_tags(self):
         config = dict()
@@ -130,7 +136,9 @@ class LintTest(unittest.TestCase):
         fields = {
             'AntiFeatures': {
                 'good': [
-                    ['KnownVuln', ],
+                    [
+                        'KnownVuln',
+                    ],
                     ['NonFreeNet', 'KnownVuln'],
                 ],
                 'bad': [
@@ -140,7 +148,9 @@ class LintTest(unittest.TestCase):
             },
             'Categories': {
                 'good': [
-                    ['Sports & Health', ],
+                    [
+                        'Sports & Health',
+                    ],
                     ['Multimedia', 'Graphics'],
                 ],
                 'bad': [
@@ -154,7 +164,9 @@ class LintTest(unittest.TestCase):
                 ],
                 'bad': [
                     [],
-                    ['nope', ],
+                    [
+                        'nope',
+                    ],
                     29,
                 ],
             },
@@ -320,8 +332,6 @@ class LintTest(unittest.TestCase):
 
 
 if __name__ == "__main__":
-    os.chdir(os.path.dirname(__file__))
-
     parser = optparse.OptionParser()
     parser.add_option(
         "-v",
