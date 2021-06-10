@@ -1084,6 +1084,32 @@ class MetadataTest(unittest.TestCase):
             },
         )
 
+    def test_build_ndk_path(self):
+        """"""
+        config = {'ndk_paths': {}, 'sdk_path': tempfile.mkdtemp(prefix='android-sdk-')}
+        fdroidserver.common.config = config
+
+        build = fdroidserver.metadata.Build()
+        build.ndk = 'r10e'
+        self.assertEqual('', build.ndk_path())
+
+        correct = '/fake/path/ndk/r21b'
+        config['ndk_paths'] = {'r21b': correct}
+        self.assertEqual('', build.ndk_path())
+        config['ndk_paths'] = {'r10e': correct}
+        self.assertEqual(correct, build.ndk_path())
+
+        r10e = '/fake/path/ndk/r10e'
+        r22b = '/fake/path/ndk/r22e'
+        config['ndk_paths'] = {'r10e': r10e, 'r22b': r22b}
+        self.assertEqual(r10e, build.ndk_path())
+
+        build.ndk = ['r10e', 'r22b']
+        self.assertEqual(r10e, build.ndk_path())
+
+        build.ndk = ['r22b', 'r10e']
+        self.assertEqual(r22b, build.ndk_path())
+
 
 if __name__ == "__main__":
     parser = optparse.OptionParser()
