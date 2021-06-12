@@ -217,6 +217,12 @@ def check_tags(app, pattern):
                             hver = version
 
         if hver:
+            try:
+                commit = vcs.getref(htag)
+                if commit:
+                    return (hver, hcode, commit)
+            except VCSException:
+                pass
             return (hver, hcode, htag)
         return (None, "Couldn't find any version information", None)
 
