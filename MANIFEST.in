@@ -715,6 +715,7 @@ include tests/source-files/com.anpmech.launcher/app/build.gradle
 include tests/source-files/com.anpmech.launcher/app/src/main/AndroidManifest.xml
 include tests/source-files/com.anpmech.launcher/build.gradle
 include tests/source-files/com.anpmech.launcher/settings.gradle
+include tests/source-files/com.github.jameshnsears.quoteunquote/build.gradle
 include tests/source-files/com.integreight.onesheeld/build.gradle
 include tests/source-files/com.integreight.onesheeld/gradle/wrapper/gradle-wrapper.properties
 include tests/source-files/com.integreight.onesheeld/localeapi/build.gradle

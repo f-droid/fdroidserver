@@ -1,0 +1,232 @@
+apply plugin: 'com.android.application'
+apply plugin: 'com.google.gms.google-services'
+apply plugin: 'kotlin-android'
+
+apply from: '../jacoco.gradle'
+apply from: '../ktlint.gradle'
+apply from: '../detekt.gradle'
+apply from: '../checkstyle.gradle'
+apply from: '../sonarcube.gradle'
+
+def localPropertiesFile = rootProject.file("local.properties")
+def localProperties = new Properties()
+
+if (!localPropertiesFile.exists()) {
+    localProperties.setProperty("RELEASE_STORE_PASSWORD", "")
+    localProperties.setProperty("RELEASE_KEY_PASSWORD", "")
+    localProperties.setProperty("RELEASE_KEY_ALIAS", "")
+    localProperties.setProperty("RELEASE_STORE_FILE", "keystore.jks")
+    Writer writer = new FileWriter(localPropertiesFile, false)
+    localProperties.store(writer, "empty, as creating the file is done manually via gpg")
+    writer.close()
+
+    file(project(':app').projectDir.path + "/keystore.jks").text = ""
+}
+
+localProperties.load(new FileInputStream(localPropertiesFile))
+
+android {
+    compileSdkVersion 30
+    // compileSdkVersion "android-S"
+
+    signingConfigs {
+        googleplay {
+            keyAlias localProperties['RELEASE_KEY_ALIAS']
+            keyPassword localProperties['RELEASE_KEY_PASSWORD']
+            storeFile file(localProperties['RELEASE_STORE_FILE'])
+            storePassword localProperties['RELEASE_STORE_PASSWORD']
+        }
+    }
+
+    defaultConfig {
+        minSdkVersion 24
+        targetSdkVersion 30
+        // minSdkVersion "S"
+        // targetSdkVersion "S"
+
+        applicationId "com.github.jameshnsears.quoteunquote"
+
+        versionCode 73
+        versionName "2.5.2"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunnerArguments clearPackageData: 'true'
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments += ["room.schemaLocation":
+                                      "$projectDir/schemas".toString()]
+            }
+        }
+    }
+
+    packagingOptions {
+        exclude "**/module-info.class"
+        exclude 'LICENSE'
+        exclude 'README.md'
+    }
+
+    lintOptions {
+        abortOnError true
+        warningsAsErrors false
+        checkAllWarnings = true
+        xmlReport false
+        htmlReport true
+    }
+
+    buildTypes {
+        def gitHash = { ->
+            def stdout = new ByteArrayOutputStream()
+            exec {
+                commandLine 'git', 'rev-parse', '--short=8', 'HEAD'
+                standardOutput = stdout
+            }
+            return stdout.toString().trim()
+        }
+
+        release {
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+
+            buildConfigField("String", "GIT_HASH", "\"$gitHash\"")
+            buildConfigField("String", "DATABASE_QUOTATIONS", "\"quotations.db.prod\"")
+        }
+        debug {
+            testCoverageEnabled true
+            buildConfigField("String", "GIT_HASH", "\"$gitHash\"")
+            buildConfigField("String", "DATABASE_QUOTATIONS", "\"quotations.db.dev\"")
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8.toString()
+    }
+
+    flavorDimensions 'Version'
+    productFlavors {
+        'googleplay' {
+            dimension 'Version'
+            versionNameSuffix "-googleplay"
+            signingConfig signingConfigs.googleplay
+        }
+        'googleplayS' {
+            dimension 'Version'
+            versionNameSuffix "-googleplay-S"
+            signingConfig signingConfigs.googleplay
+        }
+        'fdroid' {
+            dimension 'Version'
+            versionNameSuffix "-fdroid"
+            isDefault true
+        }
+        'fdroidS' {
+            dimension 'Version'
+            versionNameSuffix "-fdroid-S"
+        }
+    }
+
+    sourceSets {
+        androidTest {
+            assets.srcDirs += files("$projectDir/schemas".toString())
+        }
+        fdroid {
+            assets.srcDirs = ['src/main/assets']
+            java.srcDirs = ['src/main/java', 'src/fdroid/java']
+        }
+        fdroidS {
+            assets.srcDirs = ['src/main/assets']
+            java.srcDirs = ['src/main/java', 'src/fdroid/java']
+        }
+        googleplay {
+            assets.srcDirs = ['src/main/assets']
+            java.srcDirs = ['src/main/java']
+        }
+        googleplayS {
+            assets.srcDirs = ['src/main/assets']
+            java.srcDirs = ['src/main/java']
+        }
+    }
+
+    testOptions {
+        // will make tests run very slowly on the emulator/device + affects coverage #
+        // execution 'ANDROIDX_TEST_ORCHESTRATOR'
+
+        animationsDisabled true
+        unitTests {
+            includeAndroidResources = true
+            returnDefaultValues = true
+            all {
+                maxHeapSize = "1024m"
+                jacoco {
+                    includeNoLocationClasses = true
+                    excludes = ['jdk.internal.*']
+                }
+            }
+        }
+    }
+
+    buildFeatures {
+        viewBinding = true
+    }
+}
+
+dependencies {
+    androidTestImplementation "androidx.arch.core:core-testing:2.1.0"
+    androidTestImplementation 'androidx.room:room-testing:2.3.0'
+    androidTestImplementation 'androidx.test:core:1.4.0-beta01'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
+    androidTestImplementation 'androidx.test:rules:1.3.0'
+    androidTestImplementation 'androidx.test:runner:1.3.0'
+    androidTestImplementation 'io.mockk:mockk-android:1.11.0'
+
+    annotationProcessor 'androidx.room:room-compiler:2.3.0'
+
+    debugImplementation 'androidx.fragment:fragment-testing:1.3.4'
+    debugImplementation 'androidx.test:core:1.4.0-beta01'
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.7'
+
+    implementation 'androidx.activity:activity:1.2.3'
+    implementation 'androidx.fragment:fragment:1.3.4'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
+    implementation 'androidx.core:core-ktx:1.5.0'
+    fdroidSImplementation 'androidx.core:core-ktx:1.6.0-beta02'
+    googleplaySImplementation 'androidx.core:core-ktx:1.6.0-beta02'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'androidx.lifecycle:lifecycle-common-java8:2.3.1'
+    implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1'
+    implementation 'androidx.multidex:multidex:2.0.1'
+    implementation 'androidx.room:room-guava:2.3.0'
+    implementation 'androidx.room:room-runtime:2.3.0'
+    implementation 'androidx.room:room-rxjava2:2.3.0'
+    implementation 'com.google.android.material:material:1.3.0'
+    implementation 'com.jakewharton.rxbinding2:rxbinding:2.2.0'
+    implementation 'com.jakewharton.timber:timber:4.7.1'
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
+    implementation 'io.reactivex.rxjava2:rxjava:2.2.21'
+    implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.5.10'
+
+    implementation project(path: ':cloudLib')
+    implementation project(path: ':utilsLib')
+
+    testImplementation 'androidx.arch.core:core-testing:2.1.0'
+    testImplementation 'androidx.room:room-testing:2.3.0'
+    testImplementation 'androidx.test:core-ktx:1.3.0'
+    testImplementation 'androidx.test.ext:junit:1.1.2'
+    testImplementation 'androidx.test:rules:1.3.0'
+    testImplementation 'com.google.guava:guava:30.1.1-jre'
+    testImplementation 'io.mockk:mockk:1.11.0'
+    testImplementation 'junit:junit:4.13.2'
+    testImplementation 'org.robolectric:robolectric:4.5.1'
+}
+
+repositories {
+    mavenCentral()
+}

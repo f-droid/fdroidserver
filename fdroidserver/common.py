@@ -1683,7 +1683,8 @@ def parse_androidmanifests(paths, app):
                             if '}' in line:
                                 inside_required_flavour -= 1
                         else:
-                            if flavour and (flavour in line):
+                            if flavour and re.match(
+                                    r'.*[\'"\s]{flavour}[\'"\s].*'.format(flavour=flavour), line):
                                 inside_required_flavour = 1
 
                         if '{' in line:
