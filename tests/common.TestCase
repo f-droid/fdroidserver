@@ -1248,6 +1248,19 @@ class CommonTest(unittest.TestCase):
         self.assertEqual(('2.5.2-fdroid', '73', 'com.github.jameshnsears.quoteunquote'),
                          fdroidserver.common.parse_androidmanifests(paths, app))
 
+        app = fdroidserver.metadata.App()
+        build = fdroidserver.metadata.Build()
+        build.gradle = ['fdroidFlavor']
+        app['Builds'] = [build]
+        app.id = 'com.jens.automation2'
+        paths = [
+            os.path.join('source-files', 'com.jens.automation2', 'build.gradle'),
+        ]
+        for path in paths:
+            self.assertTrue(os.path.isfile(path))
+        self.assertEqual(('1.6.34-fdroid', '105', 'com.jens.automation2'),
+                         fdroidserver.common.parse_androidmanifests(paths, app))
+
     def test_get_all_gradle_and_manifests(self):
         """Test whether the function works with relative and absolute paths"""
         a = fdroidserver.common.get_all_gradle_and_manifests(Path('source-files/cn.wildfirechat.chat'))
