@@ -1296,6 +1296,44 @@ else
 fi
 
 #------------------------------------------------------------------------------#
+echo_header "Test recovering from from broken git submodules"
+
+if have_git_2_3; then
+    ROOT=$(create_test_dir)
+    cd "$ROOT"
+    mkdir foo bar
+    cd foo
+    git init
+    echo a > a
+    git add a
+    GIT_COMMITTER_NAME="Test" GIT_COMMITTER_EMAIL="no@mail" git commit -m "a" --author "Author <no@mail>"
+
+    cd ../bar
+    git init
+    git submodule add "file://$(pwd)/../foo" baz
+    rm .gitmodules
+    GIT_COMMITTER_NAME="Test" GIT_COMMITTER_EMAIL="no@mail" git commit -am "a" --author "Author <no@mail>"
+    rm -rf baz
+    git checkout baz
+    git tag 2
+
+    cd ..
+    mkdir repo
+    mkdir metadata
+    echo "RepoType: git" >> metadata/fake.yml
+    echo "Repo: file://$(pwd)/bar" >> metadata/fake.yml
+    echo "AutoUpdateMode: Version" >> metadata/fake.yml
+    echo "UpdateCheckMode: Tags" >> metadata/fake.yml
+    echo "UpdateCheckData: '|||'" >> metadata/fake.yml
+    echo "CurrentVersion: 1" >> metadata/fake.yml
+    echo "CurrentVersionCode: 1" >> metadata/fake.yml
+
+    $fdroid checkupdates --allow-dirty
+    grep "CurrentVersionCode: 2" metadata/fake.yml
+fi
+
+
+#------------------------------------------------------------------------------#
 
 # remove this to prevent git conflicts and complaining
 rm -rf $WORKSPACE/fdroidserver.egg-info/
