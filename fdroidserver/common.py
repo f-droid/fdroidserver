@@ -4528,7 +4528,7 @@ NDKS = [
 
 
 def handle_retree_error_on_windows(function, path, excinfo):
-    """Python can't remove a readonly file on Windows so chmod first"""
+    """Python can't remove a readonly file on Windows so chmod first."""
     if function in (os.unlink, os.rmdir, os.remove) and excinfo[0] == PermissionError:
         os.chmod(path, stat.S_IWRITE)
         function(path)
