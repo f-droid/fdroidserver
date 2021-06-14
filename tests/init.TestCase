@@ -54,6 +54,7 @@ class InitTest(unittest.TestCase):
         config = fdroidserver.common.read_config(fdroidserver.common.options)
         self.assertIsNone(config.get('keypass'))
 
+    @unittest.skipIf(os.name == 'nt', "calling main() like this hangs on Windows")
     def test_main_in_empty_dir(self):
         """Test that `fdroid init` will find apksigner and add it to the config"""
         testdir = tempfile.mkdtemp(

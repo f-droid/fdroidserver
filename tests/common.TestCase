@@ -332,6 +332,7 @@ class CommonTest(unittest.TestCase):
             re.search('android:versionCode="%s"' % build.versionCode, filedata)
         )
 
+    @unittest.skipIf(os.name == 'nt', "`fdroid build` assumes POSIX scripting")
     def test_prepare_sources_with_prebuild_subdir(self):
         testdir = tempfile.mkdtemp(
             prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir
