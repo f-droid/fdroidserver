@@ -336,6 +336,12 @@ def read_config(opts=None):
     reading it.  config.py is deprecated and supported for backwards
     compatibility.
 
+    config.yml requires ASCII or UTF-8 encoding because this code does
+    not auto-detect the file's encoding.  That is left up to the YAML
+    library.  YAML allows ASCII, UTF-8, UTF-16, and UTF-32 encodings.
+    Since it is a good idea to manage config.yml (WITHOUT PASSWORDS!)
+    in git, it makes sense to use a globally standard encoding.
+
     """
     global config, options
 
@@ -354,7 +360,7 @@ def read_config(opts=None):
 
     if os.path.exists(config_file):
         logging.debug(_("Reading '{config_file}'").format(config_file=config_file))
-        with open(config_file) as fp:
+        with open(config_file, encoding='utf-8') as fp:
             config = yaml.safe_load(fp)
     elif os.path.exists(old_config_file):
         logging.warning(_("""{oldfile} is deprecated, use {newfile}""")
