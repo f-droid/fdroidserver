@@ -339,12 +339,12 @@ class BuildTest(unittest.TestCase):
 
         os.mkdir('build')
         os.mkdir('build/reports')
-        with open('build.gradle', 'w') as fp:
+        with open('build.gradle', 'w', encoding='utf-8') as fp:
             fp.write('// placeholder')
 
         os.mkdir('bin')
         os.mkdir('gen')
-        with open('build.xml', 'w') as fp:
+        with open('build.xml', 'w', encoding='utf-8') as fp:
             fp.write(
                 textwrap.dedent(
                     """<?xml version="1.0" encoding="UTF-8" standalone="no"?>

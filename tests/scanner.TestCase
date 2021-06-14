@@ -76,7 +76,7 @@ class ScannerTest(unittest.TestCase):
             build = fdroidserver.metadata.Build()
             build.gradle = [flavor]
             regexs = fdroidserver.scanner.get_gradle_compile_commands(build)
-            with open(f) as fp:
+            with open(f, encoding='utf-8') as fp:
                 for line in fp.readlines():
                     for regex in regexs:
                         m = regex.match(line)
@@ -93,7 +93,7 @@ class ScannerTest(unittest.TestCase):
         fdroidserver.scanner.config = None
         fdroidserver.scanner.options = mock.Mock()
         fdroidserver.scanner.options.json = True
-        with open('build.gradle', 'w') as fp:
+        with open('build.gradle', 'w', encoding='utf-8') as fp:
             fp.write(
                 textwrap.dedent(
                     """
@@ -233,7 +233,7 @@ class ScannerTest(unittest.TestCase):
                 fp.write('placeholder')
             self.assertTrue(os.path.exists(f))
 
-        with open('build.xml', 'w') as fp:
+        with open('build.xml', 'w', encoding='utf-8') as fp:
             fp.write(
                 textwrap.dedent(
                     """<?xml version="1.0" encoding="UTF-8" standalone="no"?>
@@ -288,7 +288,7 @@ class ScannerTest(unittest.TestCase):
         fdroidserver.scanner.options = mock.Mock()
         build = fdroidserver.metadata.Build()
         build.scandelete = ['build.gradle']
-        with open('build.gradle', 'w') as fp:
+        with open('build.gradle', 'w', encoding='utf-8') as fp:
             fp.write(
                 textwrap.dedent(
                     """

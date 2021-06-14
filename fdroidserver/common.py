@@ -1633,6 +1633,10 @@ def parse_androidmanifests(paths, app):
     Extract some information from the AndroidManifest.xml at the given path.
     Returns (version, vercode, package), any or all of which might be None.
     All values returned are strings.
+
+    Android Studio recommends "you use UTF-8 encoding whenever possible", so
+    this code assumes the files use UTF-8.
+    https://sites.google.com/a/android.com/tools/knownissues/encoding
     """
 
     ignoreversions = app.UpdateCheckIgnore
@@ -1663,7 +1667,7 @@ def parse_androidmanifests(paths, app):
             flavour = app['Builds'][-1].gradle[-1]
 
         if path.endswith('.gradle') or path.endswith('.gradle.kts'):
-            with open(path, 'r') as f:
+            with open(path, 'r', encoding='utf-8') as f:
                 android_plugin_file = False
                 inside_flavour_group = 0
                 inside_required_flavour = 0
@@ -1864,7 +1868,7 @@ def get_gradle_subdir(build_dir, paths):
         if path.exists() and SETTINGS_GRADLE_REGEX.match(str(path.name)):
             for m in GRADLE_SUBPROJECT_REGEX.finditer(path.read_text(encoding='utf-8')):
                 for f in (path.parent / m.group(1)).glob('build.gradle*'):
-                    with f.open() as fp:
+                    with f.open(encoding='utf-8') as fp:
                         for line in fp.readlines():
                             if ANDROID_PLUGIN_REGEX.match(line):
                                 return f.parent.relative_to(build_dir)
