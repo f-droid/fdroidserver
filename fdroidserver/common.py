@@ -1649,7 +1649,7 @@ def parse_androidmanifests(paths, app):
                             temp_version_name = matches.group(2)
 
                     if inside_flavour_group > 0:
-                        if inside_required_flavour > 0:
+                        if inside_required_flavour > 1:
                             matches = psearch_g(line)
                             if matches:
                                 s = matches.group(2)
@@ -1678,13 +1678,19 @@ def parse_androidmanifests(paths, app):
                             if matches:
                                 vercode = matches.group(1)
 
+                        if inside_required_flavour > 0:
                             if '{' in line:
                                 inside_required_flavour += 1
                             if '}' in line:
                                 inside_required_flavour -= 1
+                                if inside_required_flavour == 1:
+                                    inside_required_flavour -= 1
                         else:
-                            if flavour and (flavour in line):
-                                inside_required_flavour = 1
+                            if flavour:
+                                if re.match(r'.*[\'"\s]{flavour}[\'"\s].*\{{.*'.format(flavour=flavour), line):
+                                    inside_required_flavour = 2
+                                elif re.match(r'.*[\'"\s]{flavour}[\'"\s].*'.format(flavour=flavour), line):
+                                    inside_required_flavour = 1
 
                         if '{' in line:
                             inside_flavour_group += 1
