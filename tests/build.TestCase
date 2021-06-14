@@ -284,7 +284,7 @@ class BuildTest(unittest.TestCase):
                     onserver=False,
                     refresh=False,
                 )
-            # now run `fdroid buid --onserver`
+            # now run `fdroid build --onserver`
             self.assertTrue('r21e' not in config['ndk_paths'])
             fdroidserver.build.build_local(
                 app,
