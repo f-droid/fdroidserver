@@ -1171,18 +1171,11 @@ class vcs_git(vcs):
         p = FDroidPopen(['git', 'tag'], cwd=self.local, output=False)
         return p.output.splitlines()
 
-    tag_format = re.compile(r'tag: ([^),]*)')
-
     def latesttags(self):
         self.checkrepo()
-        p = FDroidPopen(['git', 'log', '--tags',
-                         '--simplify-by-decoration', '--pretty=format:%d'],
+        p = FDroidPopen(['git', 'tag', '--sort=-authordate'],
                         cwd=self.local, output=False)
-        tags = []
-        for line in p.output.splitlines():
-            for tag in self.tag_format.findall(line):
-                tags.append(tag)
-        return tags
+        return p.output.splitlines()
 
 
 class vcs_gitsvn(vcs):

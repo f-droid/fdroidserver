@@ -2059,6 +2059,19 @@ class CommonTest(unittest.TestCase):
             {'r10e': r10e, 'r17c': ndk_bundle, 'r21e': r21e}, config['ndk_paths']
         )
 
+    def test_vcs_git_latesttags(self):
+        vcs = fdroidserver.common.vcs_git(None, None)
+        popenmock = mock.Mock()
+        popenmock.output = "8.9.5\n8.9.4\n8.6.3\n8,9,3"
+        with mock.patch(
+            'fdroidserver.common.FDroidPopen', lambda a, **b: popenmock
+        ) as _ignored, mock.patch(
+            'fdroidserver.common.vcs_git.checkrepo'
+        ) as _ignored:
+            _ignored  # silence the linters
+            tags = vcs.latesttags()
+            self.assertEqual(tags, ['8.9.5', '8.9.4', '8.6.3', '8,9,3'])
+
 
 if __name__ == "__main__":
     os.chdir(os.path.dirname(__file__))
