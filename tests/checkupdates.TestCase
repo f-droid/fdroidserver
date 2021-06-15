@@ -265,6 +265,13 @@ class CheckupdatesTest(unittest.TestCase):
             self.assertEqual(vername, '1.1.0')
             self.assertEqual(vercode, '1')
 
+        app.UpdateCheckData = '|||'
+        vcs.latesttags.return_value = ['2']
+        with mock.patch('fdroidserver.common.getvcs', return_value=vcs):
+            vername, vercode, _tag = fdroidserver.checkupdates.check_tags(app, None)
+            self.assertEqual(vername, '2')
+            self.assertEqual(vercode, '2')
+
 
 if __name__ == "__main__":
     parser = optparse.OptionParser()
