@@ -171,11 +171,13 @@ def check_tags(app, pattern):
                 else:
                     filecontent = tag
 
-                m = re.search(codeex, filecontent)
-                if not m:
-                    continue
+                vercode = tag
+                if codeex:
+                    m = re.search(codeex, filecontent)
+                    if not m:
+                        continue
 
-                vercode = m.group(1).strip()
+                    vercode = m.group(1).strip()
 
                 if filever:
                     if filever != '.':
