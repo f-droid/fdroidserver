@@ -2062,7 +2062,15 @@ class CommonTest(unittest.TestCase):
     def test_vcs_git_latesttags(self):
         vcs = fdroidserver.common.vcs_git(None, None)
         popenmock = mock.Mock()
-        popenmock.output = "8.9.5\n8.9.4\n8.6.3\n8,9,3"
+        popenmock.output = """
+ (HEAD, tag: 8.9.5, origin/master, origin/HEAD, master)
+ (tag: 8.9.4)
+ (tag: 8.9.3, tag: 8,9,3)
+ (tag: 8.9.3b)
+ (tag: awesome_release)
+ (origin/feature/cast)
+ (tag: 8.6.3)
+"""
         with mock.patch(
             'fdroidserver.common.FDroidPopen', lambda a, **b: popenmock
         ) as _ignored, mock.patch(
@@ -2070,7 +2078,8 @@ class CommonTest(unittest.TestCase):
         ) as _ignored:
             _ignored  # silence the linters
             tags = vcs.latesttags()
-            self.assertEqual(tags, ['8.9.5', '8.9.4', '8.6.3', '8,9,3'])
+            self.assertEqual(tags, ['8.9.5', '8.9.4', '8.9.3', '8,9,3',
+                                    '8.9.3b', 'awesome_release', '8.6.3'])
 
 
 if __name__ == "__main__":
