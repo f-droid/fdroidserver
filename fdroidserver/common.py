@@ -1104,11 +1104,17 @@ class vcs_git(vcs):
             p = FDroidPopen(['git', 'submodule', 'foreach', '--recursive',
                              'git', 'reset', '--hard'], cwd=self.local, output=False)
             if p.returncode != 0:
+                logging.debug("Git submodule reset failed (ignored) {output}".format(output=p.output))
+            p = FDroidPopen(['git', 'reset', '--hard'], cwd=self.local, output=False)
+            if p.returncode != 0:
                 raise VCSException(_("Git reset failed"), p.output)
             # Remove untracked files now, in case they're tracked in the target
             # revision (it happens!)
             p = FDroidPopen(['git', 'submodule', 'foreach', '--recursive',
                              'git', 'clean', '-dffx'], cwd=self.local, output=False)
+            if p.returncode != 0:
+                logging.debug("Git submodule cleanup failed (ignored) {output}".format(output=p.output))
+            p = FDroidPopen(['git', 'clean', '-dffx'], cwd=self.local, output=False)
             if p.returncode != 0:
                 raise VCSException(_("Git clean failed"), p.output)
             if not self.refreshed:
