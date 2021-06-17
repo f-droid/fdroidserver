@@ -1026,7 +1026,7 @@ class vcs:
         """Get a list of all the known tags, sorted from newest to oldest"""
         raise VCSException('latesttags not supported for this vcs type')
 
-    def getref(self):
+    def getref(self, revname=None):
         """Get current commit reference (hash, revision, etc)"""
         raise VCSException('getref not supported for this vcs type')
 
@@ -1205,6 +1205,15 @@ class vcs_git(vcs):
                     tags.append(tag)
         return tags
 
+    def getref(self, revname='HEAD'):
+        self.checkrepo()
+        p = FDroidPopen(['git', 'rev-parse', '--verify',
+                         '{revname}^{{commit}}'.format(revname=revname)], cwd=self.local,
+                        output=False)
+        if p.returncode != 0:
+            return None
+        return p.output.strip()
+
 
 class vcs_gitsvn(vcs):
 
@@ -1366,9 +1375,9 @@ class vcs_gitsvn(vcs):
             if os.path.isdir(d):
                 return os.listdir(d)
 
-    def getref(self):
+    def getref(self, revname='HEAD'):
         self.checkrepo()
-        p = FDroidPopen(['git', 'svn', 'find-rev', 'HEAD'], cwd=self.local, output=False)
+        p = FDroidPopen(['git', 'svn', 'find-rev', revname], cwd=self.local, output=False)
         if p.returncode != 0:
             return None
         return p.output.strip()
