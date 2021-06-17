@@ -44,7 +44,7 @@ done
 cd /vagrant/cache
 
 # make links for `android update sdk` to use and delete
-blacklist="build-tools_r17-linux.zip
+blocklist="build-tools_r17-linux.zip
            build-tools_r18.0.1-linux.zip
            build-tools_r18.1-linux.zip
            build-tools_r18.1.1-linux.zip
@@ -66,7 +66,7 @@ blacklist="build-tools_r17-linux.zip
 latestm2=`ls -1 android_m2repository*.zip | sort -n | tail -1`
 for f in $latestm2 android-[0-9]*.zip platform-[0-9]*.zip build-tools_r*-linux.zip; do
     rm -f ${ANDROID_HOME}/temp/$f
-    if [[ $blacklist != *$f* ]]; then
+    if [[ $blocklist != *$f* ]]; then
         ln -s /vagrant/cache/$f ${ANDROID_HOME}/temp/
     fi
 done

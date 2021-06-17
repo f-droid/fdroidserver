@@ -752,8 +752,8 @@ include tests/source-files/fdroid/fdroidclient/AndroidManifest.xml
 include tests/source-files/fdroid/fdroidclient/build.gradle
 include tests/source-files/firebase-suspect/app/build.gradle
 include tests/source-files/firebase-suspect/build.gradle
-include tests/source-files/firebase-whitelisted/app/build.gradle
-include tests/source-files/firebase-whitelisted/build.gradle
+include tests/source-files/firebase-allowlisted/app/build.gradle
+include tests/source-files/firebase-allowlisted/build.gradle
 include tests/source-files/info.guardianproject.ripple/build.gradle
 include tests/source-files/open-keychain/open-keychain/build.gradle
 include tests/source-files/open-keychain/open-keychain/OpenKeychain/build.gradle
