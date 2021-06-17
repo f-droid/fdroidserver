@@ -511,12 +511,16 @@ def checkupdates_app(app):
             logging.warning(logmsg)
     elif vercode == app.CurrentVersionCode:
         logging.info("...up to date")
-    else:
+    elif int(vercode) > int(app.CurrentVersionCode):
         logging.debug("...updating - old vercode={0}, new vercode={1}".format(
             app.CurrentVersionCode, vercode))
         app.CurrentVersion = version
         app.CurrentVersionCode = str(int(vercode))
         updating = True
+    else:
+        logging.info("Refusing to auto update, since the current version is newer")
+        logging.debug("...old vercode={0}, new vercode={1}".format(
+            app.CurrentVersionCode, vercode))
 
     commitmsg = fetch_autoname(app, tag)
 

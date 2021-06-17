@@ -60,6 +60,16 @@ class CheckupdatesTest(unittest.TestCase):
                 self.assertEqual(build.versionName, '1.1.9')
                 self.assertEqual(build.commit, '1.1.9')
 
+        with mock.patch(
+            'fdroidserver.checkupdates.check_http', lambda app: ('1.7.9', 10107)
+        ):
+            with mock.patch('fdroidserver.metadata.write_metadata', mock.Mock()):
+                with mock.patch('subprocess.call', lambda cmd: 0):
+                    fdroidserver.checkupdates.checkupdates_app(app)
+                build = app['Builds'][-1]
+                self.assertEqual(build.versionName, '1.1.9')
+                self.assertEqual(build.commit, '1.1.9')
+
     def test_autoupdatemode_suffix(self):
         fdroidserver.checkupdates.options = mock.Mock()
         fdroidserver.checkupdates.options.auto = 'bleh'
