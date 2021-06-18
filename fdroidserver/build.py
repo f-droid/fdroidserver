@@ -23,7 +23,6 @@ import glob
 import subprocess
 import posixpath
 import re
-import resource
 import sys
 import tarfile
 import threading
@@ -1026,17 +1025,22 @@ def main():
         raise FDroidException("No apps to process.")
 
     # make sure enough open files are allowed to process everything
-    soft, hard = resource.getrlimit(resource.RLIMIT_NOFILE)
-    if len(apps) > soft:
-        try:
-            soft = len(apps) * 2
-            if soft > hard:
-                soft = hard
-            resource.setrlimit(resource.RLIMIT_NOFILE, (soft, hard))
-            logging.debug(_('Set open file limit to {integer}')
-                          .format(integer=soft))
-        except (OSError, ValueError) as e:
-            logging.warning(_('Setting open file limit failed: ') + str(e))
+    try:
+        import resource  # not available on Windows
+
+        soft, hard = resource.getrlimit(resource.RLIMIT_NOFILE)
+        if len(apps) > soft:
+            try:
+                soft = len(apps) * 2
+                if soft > hard:
+                    soft = hard
+                resource.setrlimit(resource.RLIMIT_NOFILE, (soft, hard))
+                logging.debug(_('Set open file limit to {integer}')
+                              .format(integer=soft))
+            except (OSError, ValueError) as e:
+                logging.warning(_('Setting open file limit failed: ') + str(e))
+    except ImportError:
+        pass
 
     if options.latest:
         for app in apps.values():
