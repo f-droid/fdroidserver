@@ -136,18 +136,18 @@ def scan_source(build_dir, build=metadata.Build()):
 
     count = 0
 
-    whitelisted = [
+    allowlisted = [
         'firebase-jobdispatcher',  # https://github.com/firebase/firebase-jobdispatcher-android/blob/master/LICENSE
         'com.firebaseui',          # https://github.com/firebase/FirebaseUI-Android/blob/master/LICENSE
         'geofire-android'          # https://github.com/firebase/geofire-java/blob/master/LICENSE
     ]
 
-    def is_whitelisted(s):
-        return any(wl in s for wl in whitelisted)
+    def is_allowlisted(s):
+        return any(al in s for al in allowlisted)
 
     def suspects_found(s):
         for n, r in NON_FREE_GRADLE_LINES.items():
-            if r.match(s) and not is_whitelisted(s):
+            if r.match(s) and not is_allowlisted(s):
                 yield n
 
     allowed_repos = [re.compile(r'^https://' + re.escape(repo) + r'/*') for repo in [
