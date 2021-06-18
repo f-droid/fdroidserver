@@ -1,0 +1,22 @@
+{
+    "python.formatting.blackArgs": [
+        "--config pyproject.toml"
+    ],
+    "python.formatting.provider": "black",
+    "python.linting.banditEnabled": true,
+    "python.linting.banditArgs": [
+        "-r",
+        "-ii",
+        "--ini .bandit",
+    ],
+    "python.linting.enabled": true,
+    "python.linting.mypyArgs": [
+        "--config-file mypy.ini"
+    ],
+    "python.linting.mypyEnabled": true,
+    "python.linting.pycodestyleEnabled": true,
+    "python.linting.pylintArgs": [
+        "--rcfile=.pylint-rcfile"
+    ],
+    "python.linting.pylintEnabled": true,
+}
