@@ -315,14 +315,15 @@ class CommonTest(unittest.TestCase):
         fdroidserver.common.prepare_source(FakeVcs(), app, build,
                                            fdroidclient_testdir, fdroidclient_testdir, fdroidclient_testdir)
 
-        with open(os.path.join(fdroidclient_testdir, 'build.gradle'), 'r') as f:
-            filedata = f.read()
+        fdroidclient_testdir = Path(fdroidclient_testdir)
+        build_gradle = fdroidclient_testdir / 'build.gradle'
+        filedata = build_gradle.read_text(encoding='utf-8')
         self.assertIsNotNone(
             re.search(r"\s+compileSdkVersion %s\s+" % testint, filedata)
         )
 
-        with open(os.path.join(fdroidclient_testdir, 'AndroidManifest.xml')) as f:
-            filedata = f.read()
+        androidmanifest_xml = fdroidclient_testdir / 'AndroidManifest.xml'
+        filedata = androidmanifest_xml.read_text(encoding='utf-8')
         self.assertIsNone(re.search('android:debuggable', filedata))
         self.assertIsNotNone(
             re.search('android:versionName="%s"' % build.versionName, filedata)
@@ -331,6 +332,7 @@ class CommonTest(unittest.TestCase):
             re.search('android:versionCode="%s"' % build.versionCode, filedata)
         )
 
+    @unittest.skipIf(os.name == 'nt', "`fdroid build` assumes POSIX scripting")
     def test_prepare_sources_with_prebuild_subdir(self):
         testdir = tempfile.mkdtemp(
             prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir
@@ -342,10 +344,10 @@ class CommonTest(unittest.TestCase):
         )
 
         subdir = 'baz/bar'
-        subdir_path = os.path.join(app_build_dir, subdir)
-        os.makedirs(subdir_path)
-        with open(os.path.join(subdir_path, 'build.gradle'), 'w') as fp:
-            fp.write('// just a test placeholder')
+        subdir_path = Path(app_build_dir) / subdir
+        subdir_path.mkdir(parents=True, exist_ok=True)
+        build_gradle = subdir_path / 'build.gradle'
+        build_gradle.write_text('// just a test placeholder', encoding='utf-8')
 
         config = dict()
         fdroidserver.common.fill_config_defaults(config)
@@ -921,7 +923,7 @@ class CommonTest(unittest.TestCase):
         self.assertNotEqual(0, len(files))
         for f in files:
             appid, versionCode = os.path.splitext(os.path.basename(f))[0][12:].split('_')
-            with open(f) as fp:
+            with open(f, encoding='utf-8') as fp:
                 m = fdroidserver.common.APK_ID_TRIPLET_REGEX.match(fp.read())
                 if m:
                     self.assertEqual(appid, m.group(1))
@@ -962,6 +964,7 @@ class CommonTest(unittest.TestCase):
 
     def test_get_sdkversions_androguard(self):
         """This is a sanity test that androguard isn't broken"""
+
         def get_minSdkVersion(apkfile):
             apk = fdroidserver.common._get_androguard_APK(apkfile)
             return fdroidserver.common.get_min_sdk_version(apk)
@@ -1685,6 +1688,34 @@ class CommonTest(unittest.TestCase):
         config = fdroidserver.common.read_config(fdroidserver.common.options)
         self.assertEqual('yml', config.get('apksigner'))
 
+    def test_with_config_yml_utf8(self):
+        """Make sure it is possible to use config.yml in UTF-8 encoding."""
+        testdir = tempfile.mkdtemp(
+            prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir
+        )
+        os.chdir(testdir)
+        teststr = '/πÇÇ现代通用字-български-عربي1/ö/yml'
+        with open('config.yml', 'w', encoding='utf-8') as fp:
+            fp.write('apksigner: ' + teststr)
+        self.assertTrue(os.path.exists('config.yml'))
+        self.assertFalse(os.path.exists('config.py'))
+        config = fdroidserver.common.read_config(fdroidserver.common.options)
+        self.assertEqual(teststr, config.get('apksigner'))
+
+    def test_with_config_yml_utf8_as_ascii(self):
+        """Make sure it is possible to use config.yml Unicode encoded as ASCII."""
+        testdir = tempfile.mkdtemp(
+            prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir
+        )
+        os.chdir(testdir)
+        teststr = '/πÇÇ现代通用字-български-عربي1/ö/yml'
+        with open('config.yml', 'w') as fp:
+            yaml.dump({'apksigner': teststr}, fp)
+        self.assertTrue(os.path.exists('config.yml'))
+        self.assertFalse(os.path.exists('config.py'))
+        config = fdroidserver.common.read_config(fdroidserver.common.options)
+        self.assertEqual(teststr, config.get('apksigner'))
+
     def test_with_config_yml_with_env_var(self):
         """Make sure it is possible to use config.yml alone."""
         testdir = tempfile.mkdtemp(
@@ -1852,9 +1883,9 @@ class CommonTest(unittest.TestCase):
         self.assertEqual([],
                          data['fdroiddata']['untrackedFiles'])
         dirtyfile = 'dirtyfile'
-        with open(dirtyfile, 'w') as fp:
+        with open(dirtyfile, 'w', encoding='utf-8') as fp:
             fp.write('this is just a test')
-        with open(file_in_git, 'a') as fp:
+        with open(file_in_git, 'a', encoding='utf-8') as fp:
             fp.write('\nappend some stuff')
         self.assertEqual([],
                          data['fdroiddata']['modifiedFiles'])

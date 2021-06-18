@@ -434,6 +434,48 @@ Build documentation:
       - docs/build/html/
 
 
+Windows:
+  tags:
+    - windows
+  script:
+    - Import-Module "$env:ChocolateyInstall\helpers\chocolateyProfile.psm1"
+    - choco install --no-progress -y git --force --params "/GitAndUnixToolsOnPath"
+    - choco install --no-progress -y python3
+    - choco install --no-progress -y jdk8
+    - choco install --no-progress -y rsync
+    - refreshenv
+    - python -m pip install --upgrade babel pip setuptools
+    - python -m pip install -e .
+
+    - $files = @(Get-ChildItem tests\*.TestCase)
+    - foreach ($f in $files) {
+          write-output $f;
+          python $f;
+          if( $LASTEXITCODE -eq 0 ) {
+              write-output "SUCCESS $f";
+          } else {
+              write-output "ERROR $f failed";
+          }
+      }
+
+    # these are the tests that must pass
+    - python tests\checkupdates.TestCase
+    - python tests\exception.TestCase
+    - python tests\import.TestCase
+    - python tests\init.TestCase
+    - python tests\lint.TestCase
+    - python tests\main.TestCase
+    - python tests\metadata.TestCase
+    - python tests\rewritemeta.TestCase
+    - python tests\vcs.TestCase
+  after_script:
+    - Copy-Item C:\ProgramData\chocolatey\logs\chocolatey.log
+  artifacts:
+    when: always
+    paths:
+      - "*.log"
+
+
 pages:
   image: alpine:latest
   stage: deploy

@@ -48,7 +48,7 @@ class RewriteMetaTest(unittest.TestCase):
             rewritemeta.main()
 
             self.assertEqual(
-                Path('metadata/a.yml').read_text(),
+                Path('metadata/a.yml').read_text(encoding='utf-8'),
                 textwrap.dedent(
                     '''\
                     License: Unknown
@@ -62,7 +62,7 @@ class RewriteMetaTest(unittest.TestCase):
             )
 
             self.assertEqual(
-                Path('metadata/b.yml').read_text(),
+                Path('metadata/b.yml').read_text(encoding='utf-8'),
                 textwrap.dedent(
                     '''\
                     License: Unknown
@@ -90,7 +90,7 @@ class RewriteMetaTest(unittest.TestCase):
                     rewritemeta.main()
 
             self.assertEqual(
-                Path('metadata/a.yml').read_text(), 'AutoName: a'
+                Path('metadata/a.yml').read_text(encoding='utf-8'), 'AutoName: a'
             )
 
 

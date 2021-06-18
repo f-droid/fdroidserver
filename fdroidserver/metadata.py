@@ -482,7 +482,7 @@ def parse_yaml_srclib(metadatapath):
             if type(data) is not dict:
                 if platform.system() == 'Windows':
                     # Handle symlink on Windows
-                    symlink = metadatapath.parent / metadatapath.read_text()
+                    symlink = metadatapath.parent / metadatapath.read_text(encoding='utf-8')
                     if symlink.is_file():
                         with symlink.open("r", encoding="utf-8") as s:
                             data = yaml.load(s, Loader=SafeLoader)
@@ -740,7 +740,7 @@ def parse_metadata(metadatapath):
         app.id = name
 
     if metadatapath.suffix == '.yml':
-        with metadatapath.open('r') as mf:
+        with metadatapath.open('r', encoding='utf-8') as mf:
             parse_yaml_metadata(mf, app)
     else:
         _warn_or_exception(_('Unknown metadata format: {path} (use: *.yml)')

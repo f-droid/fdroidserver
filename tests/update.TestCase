@@ -411,7 +411,7 @@ class UpdateTest(unittest.TestCase):
 
     def javagetsig(self, apkfile):
         getsig_dir = 'getsig'
-        if not os.path.exists(getsig_dir + "/getsig.class"):
+        if not os.path.exists(os.path.join(getsig_dir, "getsig.class")):
             logging.critical("getsig.class not found. To fix: cd '%s' && ./make.sh" % getsig_dir)
             sys.exit(1)
         # FDroidPopen needs some config to work
