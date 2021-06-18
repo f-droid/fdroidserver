@@ -181,9 +181,9 @@ lint_format_safety_bandit_checks:
     - function set_error() { export EXITVALUE=1; printf "\x1b[31mERROR `history|tail -2|head -1|cut -b 6-500`\x1b[0m\n"; }
     - ./hooks/pre-commit || set_error
     - bandit
+        -r
         -ii
-        -s B110,B404,B408,B410,B603,B607
-        -r $CI_PROJECT_DIR fdroid
+        --ini .bandit
         || set_error
     - safety check --full-report || set_error
     - pylint --rcfile=.pylint-rcfile --output-format=colorized --reports=n
@@ -213,8 +213,7 @@ lint_mypy:
           python3-pip
           python3-wheel
     - pip install -e .[test]
-    # exclude vendored file
-    - mypy --exclude fdroidserver/apksigcopier.py
+    - mypy
 
 
 fedora_latest:
