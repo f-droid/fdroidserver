@@ -785,8 +785,10 @@ def apk_parse_release_filename(apkname):
     return None, None, None
 
 
-def get_release_filename(app, build):
-    if build.output:
+def get_release_filename(app, build, extension=None):
+    if extension:
+        return "%s_%s.%s" % (app.id, build.versionCode, extension)
+    if build.output and get_file_extension(build.output):
         return "%s_%s.%s" % (app.id, build.versionCode, get_file_extension(build.output))
     else:
         return "%s_%s.apk" % (app.id, build.versionCode)
