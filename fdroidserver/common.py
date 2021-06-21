@@ -1211,8 +1211,9 @@ class vcs_git(vcs):
     tag_format = re.compile(r'tag: ([^) ]*)')
 
     def latesttags(self):
-        """Returns a list of latest tags
-        the definition is a little blurry here, Android does not care for the
+        """Return a list of latest tags.
+
+        The definition is a little blurry here, Android does not care for the
         version name of an app as normally used as the tag name so versions do
         not need to follow strverscmp() or similar. Also they can be rather
         arbitrary so git tag --sort=-version:refname does not work. On the other side
