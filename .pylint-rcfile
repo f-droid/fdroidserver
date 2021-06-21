@@ -43,3 +43,5 @@ good-names=i,j,k,ex,Run,f,fp
 # Maximum number of nested blocks for function / method body
 max-nested-blocks=5
 
+[FORMAT]
+max-line-length=88
