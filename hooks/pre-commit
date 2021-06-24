@@ -55,13 +55,16 @@ fi
 # We ignore the following PEP8 warnings
 # * E123: closing bracket does not match indentation of opening bracket's line
 #   - Broken if multiple indentation levels start on a single line
+# * E203: whitespace before ':'
+#   - E203 is not PEP 8 compliant and conflict with black
 # * E501: line too long (82 > 79 characters)
 #   - Recommended for readability but not enforced
 #   - Some lines are awkward to wrap around a char limit
 # * W503: line break before binary operator
 #   - Quite pedantic
 
-PEP8_IGNORE="E123,E501,W503"
+
+PEP8_IGNORE="E123,E203,E501,W503"
 
 err() {
 	echo >&2 ERROR: "$@"
