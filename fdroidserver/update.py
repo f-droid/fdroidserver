@@ -1342,13 +1342,15 @@ def scan_repo_files(apkcache, repodir, knownapks, use_date_from_file=False):
     return repo_files, cachechanged
 
 
-def scan_apk(apk_file):
+def scan_apk(apk_file, require_signature=True):
     """
     Scans an APK file and returns dictionary with metadata of the APK.
 
     Attention: This does *not* verify that the APK signature is correct.
 
     :param apk_file: The (ideally absolute) path to the APK file
+    :param require_signature: Raise an exception is there is no valid
+                              signature. Default to Ture.
     :raises BuildException
     :return A dict containing APK metadata
     """
@@ -1375,12 +1377,14 @@ def scan_apk(apk_file):
     # Get the signature, or rather the signing key fingerprints
     logging.debug('Getting signature of {0}'.format(os.path.basename(apk_file)))
     apk['sig'] = getsig(apk_file)
-    if not apk['sig']:
-        raise BuildException(_("Failed to get APK signing key fingerprint"))
-    apk['signer'] = common.apk_signer_fingerprint(os.path.join(os.getcwd(),
-                                                               apk_file))
-    if not apk.get('signer'):
-        raise BuildException(_("Failed to get APK signing key fingerprint"))
+    if require_signature:
+        if not apk['sig']:
+            raise BuildException(_("Failed to get APK signing key fingerprint"))
+        apk['signer'] = common.apk_signer_fingerprint(
+            os.path.join(os.getcwd(), apk_file)
+        )
+        if not apk.get('signer'):
+            raise BuildException(_("Failed to get APK signing key fingerprint"))
 
     # Get size of the APK
     apk['size'] = os.path.getsize(apk_file)
