@@ -2112,6 +2112,36 @@ class CommonTest(unittest.TestCase):
             self.assertEqual(tags, ['8.9.5', '8.9.4', '8.9.3', '8,9,3',
                                     '8.9.3b', 'awesome_release', '8.6.3'])
 
+    def test_get_release_filename(self):
+        app = fdroidserver.metadata.App()
+        app.id = 'test.app'
+        build = fdroidserver.metadata.Build()
+        build.versionCode = 123
+
+        build.output = 'build/apk/*'
+        self.assertEqual(
+            fdroidserver.common.get_release_filename(app, build),
+            "%s_%s.apk" % (app.id, build.versionCode),
+        )
+
+        build.output = 'build/apk/*.zip'
+        self.assertEqual(
+            fdroidserver.common.get_release_filename(app, build),
+            "%s_%s.zip" % (app.id, build.versionCode),
+        )
+
+        build.output = 'build/apk/*.apk'
+        self.assertEqual(
+            fdroidserver.common.get_release_filename(app, build),
+            "%s_%s.apk" % (app.id, build.versionCode),
+        )
+
+        build.output = 'build/apk/*.apk'
+        self.assertEqual(
+            fdroidserver.common.get_release_filename(app, build, 'exe'),
+            "%s_%s.exe" % (app.id, build.versionCode),
+        )
+
 
 if __name__ == "__main__":
     os.chdir(os.path.dirname(__file__))
