@@ -1374,7 +1374,6 @@ def scan_apk(apk_file, require_signature=True):
 
     Parameters
     ----------
-
     apk_file
       The (ideally absolute) path to the APK file
     require_signature

@@ -36,7 +36,7 @@ class Tail(object):
     """Represents a tail command."""
 
     def __init__(self, tailed_file):
-        """Initiate a Tail instance.
+        """Initialize a Tail instance.
 
         Check for file validity, assigns callback function to standard out.
 
