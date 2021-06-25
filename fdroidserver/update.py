@@ -1368,16 +1368,25 @@ def scan_repo_files(apkcache, repodir, knownapks, use_date_from_file=False):
 
 
 def scan_apk(apk_file, require_signature=True):
-    """
-    Scans an APK file and returns dictionary with metadata of the APK.
+    """Scan an APK file and returns dictionary with metadata of the APK.
 
     Attention: This does *not* verify that the APK signature is correct.
 
-    :param apk_file: The (ideally absolute) path to the APK file
-    :param require_signature: Raise an exception is there is no valid
-                              signature. Default to Ture.
-    :raises BuildException
-    :return A dict containing APK metadata
+    Parameters
+    ----------
+
+    apk_file
+      The (ideally absolute) path to the APK file
+    require_signature
+      Raise an exception is there is no valid signature. Default to True.
+
+    Raises
+    ------
+    BuildException
+
+    Returns
+    -------
+    A dict containing APK metadata
     """
     apk = {
         'hash': common.sha256sum(apk_file),
