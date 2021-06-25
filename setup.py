@@ -64,7 +64,7 @@ setup(name='fdroidserver',
       packages=['fdroidserver', 'fdroidserver.asynchronousfilereader'],
       scripts=['fdroid', 'makebuildserver'],
       data_files=get_data_files(),
-      python_requires='>=3.4',
+      python_requires='>=3.5',
       cmdclass={'versioncheck': VersionCheckCommand},
       setup_requires=[
           'babel',
