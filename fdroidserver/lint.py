@@ -248,8 +248,8 @@ def get_lastbuild(builds):
     return lastbuild
 
 
-def check_update_check_data_url(app):
-    """Updatecheckdata must have a valid HTTPS URL to protect checkupdates runs."""
+def check_update_check_data_url(app):  # noqa: D403
+    """UpdateCheckData must have a valid HTTPS URL to protect checkupdates runs."""
     if app.UpdateCheckData and app.UpdateCheckMode == 'HTTP':
         urlcode, codeex, urlver, verex = app.UpdateCheckData.split('|')
         for url in (urlcode, urlver):

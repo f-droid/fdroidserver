@@ -1056,7 +1056,7 @@ class vcs:
         """Get a list of all the known tags, sorted from newest to oldest."""
         raise VCSException('latesttags not supported for this vcs type')
 
-    def getref(self):
+    def getref(self, revname=None):
         """Get current commit reference (hash, revision, etc)."""
         raise VCSException('getref not supported for this vcs type')
 
