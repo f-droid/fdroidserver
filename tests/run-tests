@@ -1332,6 +1332,50 @@ if have_git_2_3; then
     grep "CurrentVersionCode: 2" metadata/fake.yml
 fi
 
+#------------------------------------------------------------------------------#
+echo_header "checkupdates ignore broken submodule"
+
+if have_git_2_3; then
+    ROOT=$(create_test_dir)
+    cd "$ROOT"
+    mkdir foo bar
+    cd foo
+    git init
+    echo a > a
+    git add a
+    GIT_COMMITTER_NAME="Test" GIT_COMMITTER_EMAIL="no@mail" git commit -m a --author "Author <no@mail>"
+
+    cd ../bar
+    git init
+    git submodule add "file://$(pwd)/../foo" baz
+    GIT_COMMITTER_NAME="Test" GIT_COMMITTER_EMAIL="no@mail" git commit -am a --author "Author <no@mail>"
+    git tag 2
+
+    cd ../foo
+    # delete the commit referenced in bar
+    GIT_COMMITTER_NAME="Test" GIT_COMMITTER_EMAIL="no@mail" git commit --amend -m aa --author "Author <no@mail>"
+    git reflog expire --expire=now --all
+    git gc --aggressive --prune=now
+
+    cd ..
+    mkdir repo
+    mkdir metadata
+    echo "RepoType: git" >> metadata/fake.yml
+    echo "Repo: file://$(pwd)/bar" >> metadata/fake.yml
+    echo "Builds:" >> metadata/fake.yml
+    echo "   - versionName: 1" >> metadata/fake.yml
+    echo "     versionCode: 1" >> metadata/fake.yml
+    echo "     submodules: true" >> metadata/fake.yml
+    echo "AutoUpdateMode: Version" >> metadata/fake.yml
+    echo "UpdateCheckMode: Tags" >> metadata/fake.yml
+    echo "UpdateCheckData: '|||'" >> metadata/fake.yml
+    echo "CurrentVersion: 1" >> metadata/fake.yml
+    echo "CurrentVersionCode: 1" >> metadata/fake.yml
+
+    $fdroid checkupdates --allow-dirty
+    grep "CurrentVersionCode: 2" metadata/fake.yml
+fi
+
 
 #------------------------------------------------------------------------------#
 

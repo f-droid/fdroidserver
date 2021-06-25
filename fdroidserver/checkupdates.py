@@ -373,6 +373,8 @@ def try_init_submodules(app, last_build, vcs):
             vcs.initsubmodules()
         except NoSubmodulesException:
             logging.info("No submodules present for {}".format(_getappname(app)))
+        except VCSException:
+            logging.info("submodule broken for {}".format(_getappname(app)))
 
 
 # Return all directories under startdir that contain any of the manifest
