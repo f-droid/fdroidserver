@@ -65,11 +65,6 @@ fdroid_init_with_prebuilt_keystore() {
     echo 'keypass: r9aquRHYoI8+dYz6jKrLntQ5/NJNASFBacJh7Jv2BlI=' >> config.yml
 }
 
-# the < is reverse since 0 means success in exit codes
-have_git_2_3() {
-    python3 -c "import sys; from distutils.version import LooseVersion as V; sys.exit(V(sys.argv[3]) < V('2.3'))" `git --version`
-}
-
 is_MD5_disabled() {
     javac $WORKSPACE/tests/IsMD5Disabled.java && java -cp $WORKSPACE/tests IsMD5Disabled
 }
@@ -139,6 +134,11 @@ if which gsed; then
     sed=gsed
 else
     sed=sed
+fi
+
+# allow the location of git to be overridden
+if [ -z "$git" ]; then
+    git="env HOME= GIT_AUTHOR_NAME='Test' GIT_AUTHOR_EMAIL='no@mail' GIT_COMMITTER_NAME='Test' GIT_COMMITTER_EMAIL='no@mail' git"
 fi
 
 set -x # show each command as it is executed
@@ -1047,19 +1047,15 @@ fdroid_init_with_prebuilt_keystore
 cp -a $WORKSPACE/tests/metadata $WORKSPACE/tests/repo $WORKSPACE/tests/stats $REPOROOT/
 echo "binary_transparency_remote: $GIT_REMOTE" >> config.yml
 $fdroid update --verbose
-if have_git_2_3; then
-    $fdroid deploy --verbose
-    test -e repo/index.xml
-    test -e repo/index.jar
-    test -e repo/index-v1.jar
-    grep -F '<application id=' repo/index.xml > /dev/null
-    cd binary_transparency
-    [ `git rev-list --count HEAD` == "2" ]
-    cd $GIT_REMOTE
-    [ `git rev-list --count HEAD` == "2" ]
-else
-    echo "Skipping test, `git --version` older than 2.3"
-fi
+$fdroid deploy --verbose
+test -e repo/index.xml
+test -e repo/index.jar
+test -e repo/index-v1.jar
+grep -F '<application id=' repo/index.xml > /dev/null
+cd binary_transparency
+[ "$($git rev-list --count HEAD)" == "2" ]
+cd $GIT_REMOTE
+[ "$($git rev-list --count HEAD)" == "2" ]
 
 
 #------------------------------------------------------------------------------#
@@ -1118,8 +1114,8 @@ echo_header "setup a new repo from scratch using ANDROID_HOME with git mirror"
 # fake git remote server for repo mirror
 SERVER_GIT_MIRROR=`create_test_dir`
 cd $SERVER_GIT_MIRROR
-git init
-git config receive.denyCurrentBranch updateInstead
+$git init
+$git config receive.denyCurrentBranch updateInstead
 
 REPOROOT=`create_test_dir`
 GIT_MIRROR=$REPOROOT/git-mirror
@@ -1161,73 +1157,71 @@ test -e $REPOROOT/archive/com.politedroid_3.apk
 ! test -e $SERVER_GIT_MIRROR/fdroid/archive/com.politedroid_3.apk
 after=`du -s --bytes $GIT_MIRROR/.git/ | awk '{print $1}'`
 ! test -e $GIT_MIRROR/.git/test-stamp
-git -C $GIT_MIRROR gc
-git -C $SERVER_GIT_MIRROR gc
+$git -C "$GIT_MIRROR" gc
+$git -C "$SERVER_GIT_MIRROR" gc
 test $before -gt $after
 
 
 #------------------------------------------------------------------------------#
 echo_header "sign binary repo in offline box, then publishing from online box"
 
-if have_git_2_3; then
-    OFFLINE_ROOT=`create_test_dir`
-    KEYSTORE=$WORKSPACE/tests/keystore.p12
-    LOCAL_COPY_DIR=`create_test_dir`/fdroid
-    mkdir $LOCAL_COPY_DIR
-    ONLINE_ROOT=`create_test_dir`
-    SERVERWEBROOT=`create_test_dir`/fdroid
+OFFLINE_ROOT=`create_test_dir`
+KEYSTORE=$WORKSPACE/tests/keystore.p12
+LOCAL_COPY_DIR=`create_test_dir`/fdroid
+mkdir $LOCAL_COPY_DIR
+ONLINE_ROOT=`create_test_dir`
+SERVERWEBROOT=`create_test_dir`/fdroid
 
-    # create offline binary transparency log
-    cd $OFFLINE_ROOT
-    mkdir binary_transparency
-    cd binary_transparency
-    git init
+# create offline binary transparency log
+cd $OFFLINE_ROOT
+mkdir binary_transparency
+cd binary_transparency
+$git init
 
-    # fake git remote server for binary transparency log
-    BINARY_TRANSPARENCY_REMOTE=`create_test_dir`
+# fake git remote server for binary transparency log
+BINARY_TRANSPARENCY_REMOTE=`create_test_dir`
 
-    # fake git remote server for repo mirror
-    SERVER_GIT_MIRROR=`create_test_dir`
-    cd $SERVER_GIT_MIRROR
-    git init
-    git config receive.denyCurrentBranch updateInstead
+# fake git remote server for repo mirror
+SERVER_GIT_MIRROR=`create_test_dir`
+cd $SERVER_GIT_MIRROR
+$git init
+$git config receive.denyCurrentBranch updateInstead
 
-    cd $OFFLINE_ROOT
-    fdroid_init_with_prebuilt_keystore
-    printf '\narchive_older: 3\n' >> config.yml
-    cp -a $WORKSPACE/tests/metadata $WORKSPACE/tests/repo $WORKSPACE/tests/stats $OFFLINE_ROOT/
-    mkdir $OFFLINE_ROOT/unsigned
-    cp $WORKSPACE/tests/urzip-release-unsigned.apk $OFFLINE_ROOT/unsigned
+cd $OFFLINE_ROOT
+fdroid_init_with_prebuilt_keystore
+printf '\narchive_older: 3\n' >> config.yml
+cp -a $WORKSPACE/tests/metadata $WORKSPACE/tests/repo $WORKSPACE/tests/stats $OFFLINE_ROOT/
+mkdir $OFFLINE_ROOT/unsigned
+cp $WORKSPACE/tests/urzip-release-unsigned.apk $OFFLINE_ROOT/unsigned
 
-    echo "mirrors: ['http://foo.bar/fdroid', 'http://asdflkdsfjafdsdfhkjh.onion/fdroid']" >> config.yml
-    echo "servergitmirrors: $SERVER_GIT_MIRROR" >> config.yml
-    echo "local_copy_dir: $LOCAL_COPY_DIR" >> config.yml
-    $fdroid update --pretty
-    grep -F '<application id=' repo/index.xml > /dev/null
-    grep -F '/fdroid/repo</mirror>' repo/index.xml
-    grep -F '/fdroid/archive</mirror>' archive/index.xml
-    test `grep '<mirror>' repo/index.xml | wc -l` -eq 2
-    test `grep '<mirror>' archive/index.xml | wc -l` -eq 2
-    cd binary_transparency
-    [ `git rev-list --count HEAD` == "1" ]
-    cd ..
-    $fdroid deploy --verbose
-    test -e $LOCAL_COPY_DIR/unsigned/urzip-release-unsigned.apk
-    grep -F '<application id=' $LOCAL_COPY_DIR/repo/index.xml > /dev/null
-    cd $ONLINE_ROOT
-    echo "local_copy_dir: $LOCAL_COPY_DIR" >> config.yml
-    echo "sync_from_local_copy_dir: True" >> config.yml
-    echo "serverwebroot: $SERVERWEBROOT" >> config.yml
-    echo "servergitmirrors: $SERVER_GIT_MIRROR" >> config.yml
-    echo "binary_transparency_remote: $BINARY_TRANSPARENCY_REMOTE" >> config.yml
-    $fdroid deploy --verbose
-    test -e $ONLINE_ROOT/unsigned/urzip-release-unsigned.apk
-    test -e $SERVERWEBROOT/unsigned/urzip-release-unsigned.apk
-    cd $BINARY_TRANSPARENCY_REMOTE
-    [ `git rev-list --count HEAD` == "1" ]
-    cd $SERVER_GIT_MIRROR
-    [ `git rev-list --count HEAD` == "1" ]
-fi
+echo "mirrors: ['http://foo.bar/fdroid', 'http://asdflkdsfjafdsdfhkjh.onion/fdroid']" >> config.yml
+echo "servergitmirrors: $SERVER_GIT_MIRROR" >> config.yml
+echo "local_copy_dir: $LOCAL_COPY_DIR" >> config.yml
+$fdroid update --pretty
+grep -F '<application id=' repo/index.xml > /dev/null
+grep -F '/fdroid/repo</mirror>' repo/index.xml
+grep -F '/fdroid/archive</mirror>' archive/index.xml
+test `grep '<mirror>' repo/index.xml | wc -l` -eq 2
+test `grep '<mirror>' archive/index.xml | wc -l` -eq 2
+cd binary_transparency
+[ "$($git rev-list --count HEAD)" == "1" ]
+cd ..
+$fdroid deploy --verbose
+test -e $LOCAL_COPY_DIR/unsigned/urzip-release-unsigned.apk
+grep -F '<application id=' $LOCAL_COPY_DIR/repo/index.xml > /dev/null
+cd $ONLINE_ROOT
+echo "local_copy_dir: $LOCAL_COPY_DIR" >> config.yml
+echo "sync_from_local_copy_dir: True" >> config.yml
+echo "serverwebroot: $SERVERWEBROOT" >> config.yml
+echo "servergitmirrors: $SERVER_GIT_MIRROR" >> config.yml
+echo "binary_transparency_remote: $BINARY_TRANSPARENCY_REMOTE" >> config.yml
+$fdroid deploy --verbose
+test -e $ONLINE_ROOT/unsigned/urzip-release-unsigned.apk
+test -e $SERVERWEBROOT/unsigned/urzip-release-unsigned.apk
+cd $BINARY_TRANSPARENCY_REMOTE
+[ "$($git rev-list --count HEAD)" == "1" ]
+cd $SERVER_GIT_MIRROR
+[ "$($git rev-list --count HEAD)" == "1" ]
 
 
 #------------------------------------------------------------------------------#
@@ -1298,39 +1292,79 @@ fi
 #------------------------------------------------------------------------------#
 echo_header "Test recovering from from broken git submodules"
 
-if have_git_2_3; then
-    ROOT=$(create_test_dir)
-    cd "$ROOT"
-    mkdir foo bar
-    cd foo
-    git init
-    echo a > a
-    git add a
-    GIT_COMMITTER_NAME="Test" GIT_COMMITTER_EMAIL="no@mail" git commit -m "a" --author "Author <no@mail>"
+ROOT=$(create_test_dir)
+cd "$ROOT"
+mkdir foo bar
+cd foo
+$git init
+echo a > a
+$git add a
+$git commit -m "a"
 
-    cd ../bar
-    git init
-    git submodule add "file://$(pwd)/../foo" baz
-    rm .gitmodules
-    GIT_COMMITTER_NAME="Test" GIT_COMMITTER_EMAIL="no@mail" git commit -am "a" --author "Author <no@mail>"
-    rm -rf baz
-    git checkout baz
-    git tag 2
+cd ../bar
+$git init
+$git submodule add "file://$(pwd)/../foo" baz
+rm .gitmodules
+$git commit -am "a"
+rm -rf baz
+$git checkout baz
+$git tag 2
 
-    cd ..
-    mkdir repo
-    mkdir metadata
-    echo "RepoType: git" >> metadata/fake.yml
-    echo "Repo: file://$(pwd)/bar" >> metadata/fake.yml
-    echo "AutoUpdateMode: Version" >> metadata/fake.yml
-    echo "UpdateCheckMode: Tags" >> metadata/fake.yml
-    echo "UpdateCheckData: '|||'" >> metadata/fake.yml
-    echo "CurrentVersion: 1" >> metadata/fake.yml
-    echo "CurrentVersionCode: 1" >> metadata/fake.yml
+cd ..
+mkdir repo
+mkdir metadata
+echo "RepoType: git" >> metadata/fake.yml
+echo "Repo: file://$(pwd)/bar" >> metadata/fake.yml
+echo "AutoUpdateMode: Version" >> metadata/fake.yml
+echo "UpdateCheckMode: Tags" >> metadata/fake.yml
+echo "UpdateCheckData: '|||'" >> metadata/fake.yml
+echo "CurrentVersion: 1" >> metadata/fake.yml
+echo "CurrentVersionCode: 1" >> metadata/fake.yml
 
-    $fdroid checkupdates --allow-dirty
-    grep "CurrentVersionCode: 2" metadata/fake.yml
-fi
+$fdroid checkupdates --allow-dirty
+grep "CurrentVersionCode: 2" metadata/fake.yml
+
+#------------------------------------------------------------------------------#
+echo_header "checkupdates ignore broken submodule"
+
+ROOT=$(create_test_dir)
+cd "$ROOT"
+mkdir foo bar
+cd foo
+$git init
+echo a > a
+$git add a
+$git commit -m a
+
+cd ../bar
+$git init
+$git submodule add "file://$(pwd)/../foo" baz
+$git commit -am a
+$git tag 2
+
+cd ../foo
+# delete the commit referenced in bar
+$git commit --amend -m aa
+$git reflog expire --expire=now --all
+$git gc --aggressive --prune=now
+
+cd ..
+mkdir repo
+mkdir metadata
+echo "RepoType: git" >> metadata/fake.yml
+echo "Repo: file://$(pwd)/bar" >> metadata/fake.yml
+echo "Builds:" >> metadata/fake.yml
+echo "   - versionName: 1" >> metadata/fake.yml
+echo "     versionCode: 1" >> metadata/fake.yml
+echo "     submodules: true" >> metadata/fake.yml
+echo "AutoUpdateMode: Version" >> metadata/fake.yml
+echo "UpdateCheckMode: Tags" >> metadata/fake.yml
+echo "UpdateCheckData: '|||'" >> metadata/fake.yml
+echo "CurrentVersion: 1" >> metadata/fake.yml
+echo "CurrentVersionCode: 1" >> metadata/fake.yml
+
+$fdroid checkupdates --allow-dirty
+grep "CurrentVersionCode: 2" metadata/fake.yml
 
 
 #------------------------------------------------------------------------------#
