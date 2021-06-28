@@ -3,7 +3,7 @@
 # Golubev Alexander <fatzer2@gmail.com>, 2020, 2021.
 # Mingun <Alexander_Sergey@mail.ru>, 2020.
 # anonymous <noreply@weblate.org>, 2020.
-# Andrey <andrey@mailbox.org>, 2020.
+# Andrey <andrey@mailbox.org>, 2020, 2021.
 # gardenapple <gardenapple@posteo.net>, 2020.
 # Boris Timofeev <mashin87@gmail.com>, 2020.
 # Hans-Christoph Steiner <hans@guardianproject.info>, 2020.
@@ -15,8 +15,8 @@ msgstr ""
 "Project-Id-Version: fdroidserver 1.0.0-95-gd7af22b\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2021-01-29 16:12+0100\n"
-"PO-Revision-Date: 2021-05-17 04:57+0000\n"
-"Last-Translator: Чтабс <chtabs2k19@gmail.com>\n"
+"PO-Revision-Date: 2021-06-06 13:34+0000\n"
+"Last-Translator: Andrey <andrey@mailbox.org>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/f-droid/fdroidserver/ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
@@ -48,7 +48,7 @@ msgid ""
 "SSH Public Key to be used as Deploy Key:"
 msgstr ""
 "\n"
-"Открытый SSH-ключ, который будет использоваться в качестве ключа развёртывания (Deploy Key):"
+"Открытый SSH-ключ, который будет использоваться в качестве ключа развертывания (Deploy Key):"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -56,7 +56,7 @@ msgid ""
 "SSH public key to be used as deploy key:"
 msgstr ""
 "\n"
-"Открытый SSH-ключ, который будет использоваться в качестве ключа развёртывания (Deploy Key):"
+"Открытый SSH-ключ, который будет использоваться в качестве ключа развертывания (Deploy Key):"
 
 #: ../fdroidserver/nightly.py
 #, python-brace-format
@@ -931,7 +931,7 @@ msgstr "Не удалось настроить HEAD для удаленного 
 #: ../fdroidserver/common.py
 #, python-format
 msgid "Git remote set-head failed: \"%s\""
-msgstr "Не удалось настроить HEAD для удалённого репозитория (git remote set-head): \"%s\""
+msgstr "Не удалось настроить HEAD для удаленного репозитория (git remote set-head): \"%s\""
 
 #: ../fdroidserver/common.py
 msgid "Git reset failed"
@@ -984,7 +984,7 @@ msgstr "Проигнорировано: файл {ext} в '{path}'"
 
 #: ../fdroidserver/update.py
 msgid "Include APKs that are signed with disabled algorithms like MD5"
-msgstr "Включать APK, подписанные отключёнными алгоритмами, например MD5"
+msgstr "Включать APK, подписанные отключенными алгоритмами, например MD5"
 
 #: ../fdroidserver/mirror.py
 msgid "Include the PGP signature .asc files in the mirror"
@@ -1123,7 +1123,7 @@ msgstr "Неверно указан versionCode: \"{versionCode}\". Это до�
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "JAR signature failed to verify: {path}"
-msgstr "Не удаётся проверить подпись JAR: {path}"
+msgstr "Не удается проверить подпись JAR: {path}"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -1137,7 +1137,7 @@ msgstr "JAR-файл Java"
 #: ../fdroidserver/publish.py ../fdroidserver/update.py
 #: ../fdroidserver/mirror.py
 msgid "Java JDK not found! Install in standard location or set java_paths!"
-msgstr "Не обнаружена Java JDK! Установите её по стандартному пути или настройте переменную java_paths!"
+msgstr "Не обнаружена Java JDK! Установите ее по стандартному пути или настройте переменную java_paths!"
 
 #: ../fdroidserver/scanner.py
 msgid "Java compiled class"
@@ -1355,7 +1355,7 @@ msgstr "Параметры"
 
 #: ../fdroidserver/verify.py
 msgid "Output JSON report to file named after APK."
-msgstr "Вывод отчёта в формате JSON под именем файла APK."
+msgstr "Вывод отчета в формате JSON под именем файла APK."
 
 #: ../fdroidserver/scanner.py
 msgid "Output JSON to stdout."
@@ -1696,11 +1696,11 @@ msgstr "Короткое описание приложения ({length} зна�
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "System clock is older than date in {path}!"
-msgstr "Системное время отстаёт от date в {path}!"
+msgstr "Системное время отстает от date в {path}!"
 
 #: ../fdroidserver/build.py
 msgid "Test mode - put output in the tmp directory only, and always build, even if the output already exists."
-msgstr "Тестовый режим. Всё собранное попадает во временную директорию; сборка запускается снова в любом случае."
+msgstr "Тестовый режим. Все собранное попадает во временную директорию; сборка запускается снова в любом случае."
 
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
 #: ../fdroidserver/update.py
@@ -1730,7 +1730,7 @@ msgstr "Идентификационная метка (fingerprint) репози
 
 #: ../fdroidserver/common.py
 msgid "The repository's index could not be verified."
-msgstr "Индекс репозитория не прошёл проверку."
+msgstr "Индекс репозитория не прошел проверку."
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
@@ -2046,11 +2046,11 @@ msgstr "Предупреждать о возможных ошибках в ме�
 
 #: ../fdroidserver/update.py
 msgid "When configured for signed indexes, create only unsigned indexes at this stage"
-msgstr "Даже если в конфигурации сборки задано подписывать индексы, то всё равно cоздавать неподписанные индексы (только на данном этапе)"
+msgstr "Даже если в конфигурации сборки задано подписывать индексы, то все равно cоздавать неподписанные индексы (только на данном этапе)"
 
 #: ../fdroidserver/lint.py
 msgid "When linting the entire repository yamllint is disabled by default. This option forces yamllint regardless."
-msgstr "При проверке целого репозитория, yamllint по умолчанию отключён. Этот параметр принудительно включает yamllint."
+msgstr "При проверке целого репозитория, yamllint по умолчанию отключен. Этот параметр принудительно включает yamllint."
 
 msgid "X.509 'Distiguished Name' used when generating keys"
 msgstr "При генерации ключей использовалось различимое имя (Distinguished Name) стандарта X.509"
@@ -2127,7 +2127,7 @@ msgstr "аргумент \"-\" c режимом %r"
 
 #: ../fdroidserver/nightly.py
 msgid "attempting bare SSH connection to test deploy key:"
-msgstr "попытка установить голое SSH-соединение для проверки ключа развёртывания:"
+msgstr "попытка установить голое SSH-соединение для проверки ключа развертывания:"
 
 #: ../fdroidserver/nightly.py
 msgid "attempting bare ssh connection to test deploy key:"
@@ -2678,7 +2678,7 @@ msgstr "Неверно заполненное поле {field} в {name}"
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "{file} is blank or corrupt!"
-msgstr "{file} пустой или повреждённый!"
+msgstr "{file} пустой или поврежденный!"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
