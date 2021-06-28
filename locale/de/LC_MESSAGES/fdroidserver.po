@@ -17,13 +17,14 @@
 # C. Rüdinger <Mail-an-CR@web.de>, 2021.
 # VfBFan <drop0815@posteo.de>, 2021.
 # Roman Leo <roman.leo@gmx.de>, 2021.
+# Follpvosten <wolfi@karpador.xyz>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2021-01-29 16:12+0100\n"
-"PO-Revision-Date: 2021-05-25 13:33+0000\n"
-"Last-Translator: Roman Leo <roman.leo@gmx.de>\n"
+"PO-Revision-Date: 2021-05-26 20:33+0000\n"
+"Last-Translator: Follpvosten <wolfi@karpador.xyz>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/f-droid/fdroidserver/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -250,9 +251,8 @@ msgid ".fdroid.txt is not supported!  Convert to .fdroid.yml or .fdroid.json."
 msgstr ".fdroid.txt wird nicht unterstützt!  Konvertieren Sie in .fdroid.yml oder .fdroid.json."
 
 #: ../fdroidserver/lint.py
-#, fuzzy
 msgid "/issues is missing"
-msgstr "/Probleme fehlen"
+msgstr "/issues fehlt"
 
 #: ../fdroidserver/mirror.py
 msgid "A URL is required as an argument!"
