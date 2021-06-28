@@ -89,8 +89,9 @@ def extract(options):
 def main():
     parser = ArgumentParser()
     common.setup_global_opts(parser)
-    parser.add_argument("APK", nargs='*',
-                        help=_("signed APK, either a file-path or HTTPS URL."))
+    parser.add_argument(
+        "APK", nargs='*', help=_("signed APK, either a file-path or HTTPS URL.")
+    )
     parser.add_argument("--no-check-https", action="store_true", default=False)
     options = parser.parse_args()
 

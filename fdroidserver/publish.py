@@ -76,11 +76,16 @@ def key_alias(appid):
 
 def read_fingerprints_from_keystore():
     """Obtain a dictionary containing all singning-key fingerprints which are managed by F-Droid, grouped by appid."""
-    env_vars = {'LC_ALL': 'C.UTF-8',
-                'FDROID_KEY_STORE_PASS': config['keystorepass']}
-    cmd = [config['keytool'], '-list',
-           '-v', '-keystore', config['keystore'],
-           '-storepass:env', 'FDROID_KEY_STORE_PASS']
+    env_vars = {'LC_ALL': 'C.UTF-8', 'FDROID_KEY_STORE_PASS': config['keystorepass']}
+    cmd = [
+        config['keytool'],
+        '-list',
+        '-v',
+        '-keystore',
+        config['keystore'],
+        '-storepass:env',
+        'FDROID_KEY_STORE_PASS',
+    ]
     if config['keystore'] == 'NONE':
         cmd += config['smartcardoptions']
     p = FDroidPopen(cmd, envs=env_vars, output=False)
@@ -116,8 +121,10 @@ def sign_sig_key_fingerprint_list(jar_file):
         cmd += config['smartcardoptions']
     else:  # smardcards never use -keypass
         cmd += '-keypass:env', 'FDROID_KEY_PASS'
-    env_vars = {'FDROID_KEY_STORE_PASS': config['keystorepass'],
-                'FDROID_KEY_PASS': config.get('keypass', "")}
+    env_vars = {
+        'FDROID_KEY_STORE_PASS': config['keystorepass'],
+        'FDROID_KEY_PASS': config.get('keypass', ""),
+    }
     p = common.FDroidPopen(cmd, envs=env_vars)
     if p.returncode != 0:
         raise FDroidException("Failed to sign '{}'!".format(jar_file))
@@ -201,24 +208,44 @@ def create_key_if_not_existing(keyalias):
     """
     # See if we already have a key for this application, and
     # if not generate one...
-    env_vars = {'LC_ALL': 'C.UTF-8',
-                'FDROID_KEY_STORE_PASS': config['keystorepass'],
-                'FDROID_KEY_PASS': config.get('keypass', "")}
-    cmd = [config['keytool'], '-list',
-           '-alias', keyalias, '-keystore', config['keystore'],
-           '-storepass:env', 'FDROID_KEY_STORE_PASS']
+    env_vars = {
+        'LC_ALL': 'C.UTF-8',
+        'FDROID_KEY_STORE_PASS': config['keystorepass'],
+        'FDROID_KEY_PASS': config.get('keypass', ""),
+    }
+    cmd = [
+        config['keytool'],
+        '-list',
+        '-alias',
+        keyalias,
+        '-keystore',
+        config['keystore'],
+        '-storepass:env',
+        'FDROID_KEY_STORE_PASS',
+    ]
     if config['keystore'] == 'NONE':
         cmd += config['smartcardoptions']
     p = FDroidPopen(cmd, envs=env_vars)
     if p.returncode != 0:
         logging.info("Key does not exist - generating...")
-        cmd = [config['keytool'], '-genkey',
-               '-keystore', config['keystore'],
-               '-alias', keyalias,
-               '-keyalg', 'RSA', '-keysize', '2048',
-               '-validity', '10000',
-               '-storepass:env', 'FDROID_KEY_STORE_PASS',
-               '-dname', config['keydname']]
+        cmd = [
+            config['keytool'],
+            '-genkey',
+            '-keystore',
+            config['keystore'],
+            '-alias',
+            keyalias,
+            '-keyalg',
+            'RSA',
+            '-keysize',
+            '2048',
+            '-validity',
+            '10000',
+            '-storepass:env',
+            'FDROID_KEY_STORE_PASS',
+            '-dname',
+            config['keydname'],
+        ]
         if config['keystore'] == 'NONE':
             cmd += config['smartcardoptions']
         else:
@@ -235,11 +262,15 @@ def main():
     global config, options
 
     # Parse command line...
-    parser = ArgumentParser(usage="%(prog)s [options] "
-                                  "[APPID[:VERCODE] [APPID[:VERCODE] ...]]")
+    parser = ArgumentParser(
+        usage="%(prog)s [options] " "[APPID[:VERCODE] [APPID[:VERCODE] ...]]"
+    )
     common.setup_global_opts(parser)
-    parser.add_argument("appid", nargs='*',
-                        help=_("application ID with optional versionCode in the form APPID[:VERCODE]"))
+    parser.add_argument(
+        "appid",
+        nargs='*',
+        help=_("application ID with optional versionCode in the form APPID[:VERCODE]"),
+    )
     metadata.add_metadata_arguments(parser)
     options = parser.parse_args()
     metadata.warnings_action = options.W
@@ -247,7 +278,9 @@ def main():
     config = common.read_config(options)
 
     if not ('jarsigner' in config and 'keytool' in config):
-        logging.critical(_('Java JDK not found! Install in standard location or set java_paths!'))
+        logging.critical(
+            _('Java JDK not found! Install in standard location or set java_paths!')
+        )
         sys.exit(1)
 
     common.assert_config_keystore(config)
@@ -279,16 +312,21 @@ def main():
 
     allapps = metadata.read_metadata()
     vercodes = common.read_pkg_args(options.appid, True)
-    common.get_metadata_files(vercodes)     # only check appids
+    common.get_metadata_files(vercodes)  # only check appids
     signed_apks = dict()
     generated_keys = dict()
     allaliases = check_for_key_collisions(allapps)
-    logging.info(ngettext('{0} app, {1} key aliases',
-                          '{0} apps, {1} key aliases', len(allapps)).format(len(allapps), len(allaliases)))
+    logging.info(
+        ngettext(
+            '{0} app, {1} key aliases', '{0} apps, {1} key aliases', len(allapps)
+        ).format(len(allapps), len(allaliases))
+    )
 
     # Process any APKs or ZIPs that are waiting to be signed...
-    for apkfile in sorted(glob.glob(os.path.join(unsigned_dir, '*.apk'))
-                          + glob.glob(os.path.join(unsigned_dir, '*.zip'))):
+    for apkfile in sorted(
+        glob.glob(os.path.join(unsigned_dir, '*.apk'))
+        + glob.glob(os.path.join(unsigned_dir, '*.zip'))
+    ):
 
         appid, vercode = common.publishednameinfo(apkfile)
         apkfilename = os.path.basename(apkfile)
@@ -302,8 +340,9 @@ def main():
         # There ought to be valid metadata for this app, otherwise why are we
         # trying to publish it?
         if appid not in allapps:
-            logging.error("Unexpected {0} found in unsigned directory"
-                          .format(apkfilename))
+            logging.error(
+                "Unexpected {0} found in unsigned directory".format(apkfilename)
+            )
             sys.exit(1)
         app = allapps[appid]
 
@@ -359,7 +398,9 @@ def main():
                 signature_file, _ignored, manifest, v2_files = signingfiles
 
                 with open(signature_file, 'rb') as f:
-                    devfp = common.signer_fingerprint_short(common.get_certificate(f.read()))
+                    devfp = common.signer_fingerprint_short(
+                        common.get_certificate(f.read())
+                    )
                 devsigned = '{}_{}_{}.apk'.format(appid, vercode, devfp)
                 devsignedtmp = os.path.join(tmp_dir, devsigned)
 
@@ -390,8 +431,7 @@ def main():
                 common.sign_apk(apkfile, signed_apk_path, keyalias)
                 if appid not in signed_apks:
                     signed_apks[appid] = []
-                signed_apks[appid].append({"keyalias": keyalias,
-                                           "filename": apkfile})
+                signed_apks[appid].append({"keyalias": keyalias, "filename": apkfile})
 
                 publish_source_tarball(apkfilename, unsigned_dir, output_dir)
                 logging.info('Published ' + apkfilename)

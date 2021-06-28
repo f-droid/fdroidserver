@@ -59,7 +59,9 @@ def main():
     signed = []
     for output_dir in repodirs:
         if not os.path.isdir(output_dir):
-            raise FDroidException(_("Missing output directory") + " '" + output_dir + "'")
+            raise FDroidException(
+                _("Missing output directory") + " '" + output_dir + "'"
+            )
 
         # Process any apks that are waiting to be signed...
         for f in sorted(glob.glob(os.path.join(output_dir, '*.*'))):
