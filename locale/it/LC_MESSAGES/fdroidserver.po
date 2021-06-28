@@ -9,20 +9,21 @@
 # Hans-Christoph Steiner <hans@guardianproject.info>, 2020.
 # Francesco Saltori <francescosaltori@gmail.com>, 2020.
 # Francesco Esposito <email@francescoesposito.org>, 2021.
+# mondstern <mondstern@snopyta.org>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2021-01-29 16:12+0100\n"
-"PO-Revision-Date: 2021-02-05 14:41+0000\n"
-"Last-Translator: IvanDan <ivandanza@gmail.com>\n"
+"PO-Revision-Date: 2021-03-01 21:55+0000\n"
+"Last-Translator: mondstern <mondstern@snopyta.org>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/f-droid/fdroidserver/it/>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.5-dev\n"
+"X-Generator: Weblate 4.5\n"
 
 #: ../fdroidserver/common.py
 msgid ""
@@ -72,7 +73,7 @@ msgstr "\"%s/\" non ha un file di metadati corrispondente!"
 
 #: ../fdroidserver/index.py
 msgid "\"repo_pubkey\" must be present in config.yml when using --nosign!"
-msgstr ""
+msgstr "\"repo_pubkey\" deve essere presente in config.yml quando si utilizza nos nosign!"
 
 #: ../fdroidserver/install.py
 #, python-brace-format
@@ -1170,7 +1171,7 @@ msgstr "Elenca i file che verrebbero riformattati"
 
 #: ../fdroidserver/lint.py
 msgid "Locale included in f-droid.org URL"
-msgstr ""
+msgstr "Locale incluso in f-droid.org URL"
 
 #: ../fdroidserver/build.py
 msgid "Make the build stop on exceptions"
@@ -1186,7 +1187,7 @@ msgstr "Riga del serverwebroot malformata:"
 
 #: ../fdroidserver/mirror.py
 msgid "Mirror the full repo and archive, all file types."
-msgstr ""
+msgstr "Rispecchiare il repository completo e l'archivio, tutti i tipi di file."
 
 #: ../fdroidserver/gpgsign.py
 msgid "Missing output directory"
@@ -1351,7 +1352,7 @@ msgstr "Opzioni"
 
 #: ../fdroidserver/verify.py
 msgid "Output JSON report to file named after APK."
-msgstr ""
+msgstr "Rapporto di uscita JSON al file chiamato dopo APK."
 
 #: ../fdroidserver/scanner.py
 msgid "Output JSON to stdout."
@@ -1361,7 +1362,7 @@ msgstr "Invia l'output del JSON allo stdout."
 #: ../fdroidserver/update.py ../fdroidserver/signindex.py
 #: ../fdroidserver/checkupdates.py
 msgid "Outputting JSON"
-msgstr ""
+msgstr "Output di JSON"
 
 #: ../fdroidserver/import.py
 msgid "Overall license of the project."
@@ -1461,7 +1462,7 @@ msgstr "Invio del log di trasparenza binaria su {url}"
 #: ../fdroidserver/deploy.py ../fdroidserver/upload.py
 #, python-brace-format
 msgid "Pushing to {url}"
-msgstr ""
+msgstr "Spingere a {url}"
 
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Quickly start a new repository"
@@ -1563,7 +1564,7 @@ msgstr "Esecuzione di wget in {path}"
 
 #: ../fdroidserver/build.py
 msgid "Scan the resulting APK(s) for known non-free classes."
-msgstr ""
+msgstr "Scansiona gli APK risultanti per le classi non libere note."
 
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Scan the source code of a package"
@@ -1572,44 +1573,44 @@ msgstr "Scansiona il codice sorgente di un pacchetto"
 #: ../fdroidserver/scanner.py
 #, python-brace-format
 msgid "Scanner found {count} problems in {appid}:"
-msgstr ""
+msgstr "Scanner trovato {count} problemi in {appid}:"
 
 #: ../fdroidserver/scanner.py
 #, python-brace-format
 msgid "Scanner found {count} problems in {appid}:{versionCode}:"
-msgstr ""
+msgstr "Scanner trovato {count} problemi in {appid}: {versionCode}:"
 
 #: ../fdroidserver/build.py
 msgid "Scanner found {} problem"
 msgid_plural "Scanner found {} problems"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Scanner trovato {} problema"
+msgstr[1] "Scanner trovato {} problemi"
 
 #: ../fdroidserver/common.py
 msgid "Set clock to that time using:"
-msgstr ""
+msgstr "Imposta l'orologio a quell'ora usando:"
 
 #: ../fdroidserver/nightly.py
 msgid "Set maximum releases in repo before older ones are archived"
-msgstr ""
+msgstr "Imposta le versioni massime in repo prima che quelle più vecchie vengano archiviate"
 
 #: ../fdroidserver/build.py
 #, python-brace-format
 msgid "Set open file limit to {integer}"
-msgstr ""
+msgstr "Imposta il limite di file aperto su {integer}"
 
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Set up an app build for a nightly build repo"
-msgstr ""
+msgstr "Impostare una build di app per un repository di build notturno"
 
 #: ../fdroidserver/build.py
 msgid "Setting open file limit failed: "
-msgstr ""
+msgstr "Impostazione del limite di file aperto non riuscita: "
 
 #: ../fdroidserver/build.py
 #, python-brace-format
 msgid "Setting {0} sec timeout for this build"
-msgstr ""
+msgstr "Impostazione del timeout {0} sec per questa build"
 
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Sign and place packages in the repo"
@@ -1621,57 +1622,57 @@ msgstr "Firma gli indici creati con update --nosign"
 
 #: ../fdroidserver/build.py
 msgid "Skip scanning the source code for binaries and other problems"
-msgstr ""
+msgstr "Salta la scansione del codice sorgente per i binari e altri problemi"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Skipping '{apkfilename}' with invalid signature!"
-msgstr ""
+msgstr "Saltare '{apkfilename} con firma non valida!"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Skipping index generation for {appid}"
-msgstr ""
+msgstr "Saltare la generazione dell'indice per {appid}"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Skipping {apkfilename} with invalid signature!"
-msgstr ""
+msgstr "Saltare {apkfilename} con firma non valida!"
 
 #: ../fdroidserver/scanner.py
 #, python-brace-format
 msgid "Skipping {appid}: disabled"
-msgstr ""
+msgstr "Saltare {appid}: disabilitato"
 
 #: ../fdroidserver/scanner.py
 #, python-brace-format
 msgid "Skipping {appid}: no builds specified"
-msgstr ""
+msgstr "Skipping {appid}: nessuna build specificata"
 
 #: ../fdroidserver/deploy.py ../fdroidserver/upload.py
 msgid "Specify a local folder to sync the repo to"
-msgstr ""
+msgstr "Specificare una cartella locale in cui sincronizzare il repository"
 
 #: ../fdroidserver/deploy.py ../fdroidserver/upload.py
 msgid "Specify an identity file to provide to SSH for rsyncing"
-msgstr ""
+msgstr "Specificare un file di identità da fornire a SSH per rsyncing"
 
 #: ../fdroidserver/build.py
 msgid "Specify that we're running on the build server"
-msgstr ""
+msgstr "Specificare che stiamo eseguendo sul server di compilazione"
 
 #: ../fdroidserver/nightly.py
 msgid "Specify which debug keystore file to use."
-msgstr ""
+msgstr "Specificare quale file keystore di debug utilizzare."
 
 #: ../fdroidserver/common.py
 msgid "Spew out even more information than normal"
-msgstr ""
+msgstr "Vomitare ancora più informazioni del normale"
 
 #: ../fdroidserver/nightly.py
 #, python-brace-format
 msgid "Striping mystery signature from {apkfilename}"
-msgstr ""
+msgstr "Striping firma misteriosa da {apkfilename}"
 
 #: ../fdroidserver/nightly.py
 #, python-brace-format
@@ -1681,17 +1682,17 @@ msgstr "Riduzione della firma misteriosa da {apkfilename}"
 #: ../fdroidserver/lint.py
 #, python-format
 msgid "Summary '%s' is just the app's name"
-msgstr ""
+msgstr "Riepilogo \"%s\" è solo il nome dell'app"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "Summary of length {length} is over the {limit} char limit"
-msgstr ""
+msgstr "Riepilogo di length {length} supera il limite di caratteri {limit}"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "System clock is older than date in {path}!"
-msgstr ""
+msgstr "L'orologio di sistema è più vecchio della data in {path}!"
 
 #: ../fdroidserver/build.py
 msgid "Test mode - put output in the tmp directory only, and always build, even if the output already exists."
@@ -1958,7 +1959,7 @@ msgstr ""
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 #: /usr/lib/python3.7/optparse.py
 msgid "Usage"
-msgstr "Utilizzo"
+msgstr "Uso"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 #: /usr/lib/python3.7/optparse.py
@@ -1997,7 +1998,7 @@ msgstr ""
 
 #: ../fdroidserver/common.py
 msgid "Using Java's jarsigner, not recommended for verifying APKs! Use apksigner"
-msgstr ""
+msgstr "Utilizzando jarsigner di Java, non raccomandato per verificare APK! Utilizzare apksigner"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -2045,7 +2046,7 @@ msgstr ""
 
 #: ../fdroidserver/lint.py
 msgid "When linting the entire repository yamllint is disabled by default. This option forces yamllint regardless."
-msgstr ""
+msgstr "Quando linting l'intero repository yamllint è disabilitato per impostazione predefinita. Questa opzione costringe yamllint a prescindere."
 
 msgid "X.509 'Distiguished Name' used when generating keys"
 msgstr ""
@@ -2086,7 +2087,7 @@ msgstr "opzione ambigua: %s (%s?)"
 
 #: ../fdroidserver/common.py
 msgid "apksigner not found, it's required for signing!"
-msgstr ""
+msgstr "apksigner non trovato, è necessario per la firma!"
 
 #: ../fdroidserver/lint.py ../fdroidserver/rewritemeta.py
 #: ../fdroidserver/checkupdates.py
@@ -2105,7 +2106,7 @@ msgstr ""
 
 #: ../fdroidserver/checkupdates.py
 msgid "applicationId to check for updates"
-msgstr ""
+msgstr "applicationId per controllare gli aggiornamenti"
 
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
 #: ../fdroidserver/verify.py ../fdroidserver/publish.py
@@ -2118,19 +2119,19 @@ msgstr ""
 #: /usr/lib/python3.7/argparse.py
 #, python-format
 msgid "argument \"-\" with mode %r"
-msgstr ""
+msgstr "argomento \" -\" con la modalità %r"
 
 #: ../fdroidserver/nightly.py
 msgid "attempting bare SSH connection to test deploy key:"
-msgstr ""
+msgstr "tentativo di connessione SSH nuda per testare la chiave di distribuzione:"
 
 #: ../fdroidserver/nightly.py
 msgid "attempting bare ssh connection to test deploy key:"
-msgstr ""
+msgstr "tentativo di connessione ssh nuda per testare la chiave di distribuzione:"
 
 #: ../fdroidserver/common.py
 msgid "can not parse scrlib spec (not a string): '{}'"
-msgstr ""
+msgstr "impossibile analizzare le specifiche scrlib (non una stringa): '{}'"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py
@@ -2146,13 +2147,13 @@ msgstr "impossibile trovare srclibs richiesto: \"{path}\""
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py
 msgid "cannot have multiple subparser arguments"
-msgstr ""
+msgstr "impossibile avere più argomenti subparser"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py
 #, python-format
 msgid "cannot merge actions - two groups are named %r"
-msgstr ""
+msgstr "impossibile unire le azioni : due gruppi sono denominati %r"
 
 #: ../fdroidserver/nightly.py
 msgid "cannot publish update, did you set the deploy key?"
