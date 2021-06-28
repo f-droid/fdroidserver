@@ -18,7 +18,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2021-01-29 16:12+0100\n"
 "PO-Revision-Date: 2021-02-08 21:42+0000\n"
-"Last-Translator: FW <weblate.scordium@slmail.me>\n"
+"Last-Translator: TobiGr <tobigr@mail.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/f-droid/fdroidserver/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -1950,14 +1950,12 @@ msgstr "UpdateCheckMode ist gesetzt, aber es sieht so aus, als ob checkupdates n
 
 #. Translators: https://developer.android.com/studio/build/application-id
 #: ../fdroidserver/lint.py
-#, fuzzy
 msgid "UpdateCheckName is set to the known application ID - it can be removed"
-msgstr "Update Check Name ist auf die bekannte App-ID gesetzt - sie kann entfernt werden"
+msgstr "UpdateCheckName ist auf die bekannte App-ID gesetzt - sie kann entfernt werden"
 
 #: ../fdroidserver/lint.py
-#, fuzzy
 msgid "UpdateCheckName is set to the known application ID, it can be removed"
-msgstr "Update Check Name ist auf die bekannte App-ID gesetzt - sie kann entfernt werden"
+msgstr "UpdateCheckName ist auf eine bekannte App-ID gesetzt, sie kann entfernt werden"
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
@@ -1965,9 +1963,9 @@ msgid "Uploading {apkfilename} to androidobservatory.org"
 msgstr "Lade {apkfilename} auf androidobservatory.org hoch"
 
 #: ../fdroidserver/deploy.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Uploading {apkfilename} to virustotal"
-msgstr "Lese {apkfilename} aus dem Cache"
+msgstr "Lade {apkfilename} auf VirusTotal hoch"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 #: /usr/lib/python3.7/optparse.py
