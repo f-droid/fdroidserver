@@ -17,8 +17,8 @@ msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2021-01-29 16:12+0100\n"
-"PO-Revision-Date: 2021-02-08 17:47+0000\n"
-"Last-Translator: TobiGr <tobigr@mail.de>\n"
+"PO-Revision-Date: 2021-02-08 21:42+0000\n"
+"Last-Translator: FW <weblate.scordium@slmail.me>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/f-droid/fdroidserver/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -1784,7 +1784,7 @@ msgstr "URL {url} in der Beschreibung: {error}"
 
 #: ../fdroidserver/lint.py
 msgid "Unexpected license tag \"{}\"! Only use FSF or OSI approved tags from https://spdx.org/license-list"
-msgstr "Ungültiges Lizenz-Tag \"{}\"! Verwenden Sie nur Tags von https://spdx.org/license-list, die durch die FSF oder OSI gebilligt werden."
+msgstr "Ungültiges Lizenz-Kennzeichen \"{}\"! Verwenden Sie nur Kennzeichen von https://spdx.org/license-list, die von FSF oder OSI anerkannt sind."
 
 #: ../fdroidserver/lint.py
 msgid "Unexpected license tag \"{}\"! Only use license tags configured in your config file"
@@ -1798,7 +1798,7 @@ msgstr "Unerwarteter Text in der gleichen Zeile wie {field} in {linedesc}"
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Unknown entry {key} in {configname}"
-msgstr ""
+msgstr "Unbekannter Eintrag [key] in [configname]"
 
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Unknown exception found!"
@@ -1904,14 +1904,14 @@ msgid "Unused file at %s"
 msgstr "Nicht verwendete Datei bei %s"
 
 #: ../fdroidserver/scanner.py
-#, fuzzy, python-format
+#, python-format
 msgid "Unused scandelete path: %s"
-msgstr "Nicht verwendete Datei bei %s"
+msgstr "Nicht verwendeter „scandelete“ Pfad: %s"
 
 #: ../fdroidserver/scanner.py
-#, fuzzy, python-format
+#, python-format
 msgid "Unused scanignore path: %s"
-msgstr "Nicht verwendete Datei bei %s"
+msgstr "Nicht verwendeter „scanignore“ Pfad: %s"
 
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Update repo information for new packages"
@@ -2104,16 +2104,14 @@ msgstr "apksigner nicht gefunden, er wird zum Signieren benötigt!"
 
 #: ../fdroidserver/lint.py ../fdroidserver/rewritemeta.py
 #: ../fdroidserver/checkupdates.py
-#, fuzzy
 msgid "application ID of file to operate on"
-msgstr "App-ID, um auf Aktualisierungen zu prüfen"
+msgstr "App-ID der Datei, die bearbeitet werden soll"
 
 #: ../fdroidserver/verify.py ../fdroidserver/publish.py
 #: ../fdroidserver/build.py ../fdroidserver/scanner.py
 #: ../fdroidserver/install.py
-#, fuzzy
 msgid "application ID with optional versionCode in the form APPID[:VERCODE]"
-msgstr "App-ID mit optionalem Versionscode in der Form APPID[:VERCODE]"
+msgstr "App-ID mit fakultativem Versionscode in der Form APPID[:VERCODE]"
 
 #: ../fdroidserver/lint.py ../fdroidserver/rewritemeta.py
 msgid "applicationId in the form APPID"
@@ -2137,9 +2135,8 @@ msgid "argument \"-\" with mode %r"
 msgstr "Argument \"-\" mit Modus %r"
 
 #: ../fdroidserver/nightly.py
-#, fuzzy
 msgid "attempting bare SSH connection to test deploy key:"
-msgstr "Versuch einer reinen ssh-Verbindung, um den Deployment-Key zu testen:"
+msgstr "Versuch einer reinen SSH-Verbindung, um den Deployment-Key zu testen:"
 
 #: ../fdroidserver/nightly.py
 msgid "attempting bare ssh connection to test deploy key:"
@@ -2474,7 +2471,7 @@ msgstr "Positionsparameter"
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "process log deploy {path} to {dest} failed!"
-msgstr ""
+msgstr "Bereitstellen des Process Log {path} auf {dest} ist fehlgeschlagen!"
 
 #: ../fdroidserver/signatures.py
 #, python-brace-format
@@ -2487,9 +2484,9 @@ msgid "refuse downloading via insecure http connection (use https or specify --n
 msgstr "Download über ungesicherte HTTP-Verbindung verweigert (verwenden Sie HTTPS oder geben Sie --no-https-check an): {apkfilename}"
 
 #: ../fdroidserver/index.py
-#, fuzzy, python-format
+#, python-format
 msgid "repo_icon \"repo/icons/%s\" does not exist, generating placeholder."
-msgstr "repo_icon %s existiert nicht, erzeuge Platzhalter."
+msgstr "repo_icon \"repo/icons/%s\" existiert nicht, erzeuge Platzhalter."
 
 #: ../fdroidserver/index.py
 #, python-format
@@ -2507,7 +2504,7 @@ msgstr "s3cmd-Sync {path} indizieren auf {url} und dann löschen"
 
 #: ../fdroidserver/scanner.py
 msgid "shared library"
-msgstr ""
+msgstr "dynamische Bibliothek"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 #: /usr/lib/python3.7/optparse.py
@@ -2595,7 +2592,7 @@ msgstr "Verwende Apache libcloud zur Synchronisation mit {url}"
 
 #: ../fdroidserver/deploy.py
 msgid "virustotal.com is rate limiting, waiting to retry..."
-msgstr ""
+msgstr "virustotal.com limitiert die Zugriffe, warte auf Wiederholung …"
 
 #: ../fdroidserver/update.py
 msgid "wiki support is deprecated and will be removed in the next release!"
@@ -2624,9 +2621,9 @@ msgid "{apkfilename}'s AndroidManifest.xml has a bad date: "
 msgstr "Die AndroidManifest.xml der App „{apkfilename}” hat ein ungültiges Datum: "
 
 #: ../fdroidserver/update.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{appid} does not have a name! Using application ID instead."
-msgstr "{appid} besitzt keinen Namen! Verwende den Paketnamen stattdessen."
+msgstr "{appid} besitzt keinen Namen! Die Anwendungs-ID wird stattdessen verwendet."
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -2639,9 +2636,9 @@ msgid "{appid} from {path} is not a valid Android Package Name!"
 msgstr "{appid} von {path} ist kein gültiger Android-Paketname!"
 
 #: ../fdroidserver/update.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{appid} from {path} is not a valid Android application ID!"
-msgstr "{appid} von {path} ist kein gültiger Android-Paketname!"
+msgstr "{appid} von {path} ist keine gültige Android-Anwendungs-ID!"
 
 #: ../fdroidserver/metadata.py ../fdroidserver/update.py
 #, python-brace-format
@@ -2695,9 +2692,9 @@ msgid "{name} \"{path}\" does not exist! Correct it in config.yml."
 msgstr "{name} \"{path}\" existiert nicht! Korrigieren Sie es in der config.yml."
 
 #: ../fdroidserver/update.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{name} \"{section}/icons/{path}\" does not exist! Check \"config.yml\"."
-msgstr "{name} \"{path}\" existiert nicht! Korrigieren Sie es in der config.yml."
+msgstr "{name} \"{section}/icons/{path}\" existiert nicht! Überprüfe \"config.yml\"."
 
 #: ../fdroidserver/common.py
 #, python-brace-format
