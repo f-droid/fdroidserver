@@ -5,7 +5,7 @@
 # Luca Zambarda <luke.zambarda@gmail.com>, 2020.
 # IvanDan <ivandanza@gmail.com>, 2020, 2021.
 # Massimiliano Caniparoli <massic80@gmail.com>, 2020.
-# x <hardwired1.0@protonmail.com>, 2020.
+# x <hardwired1.0@protonmail.com>, 2020, 2021.
 # Hans-Christoph Steiner <hans@guardianproject.info>, 2020.
 # Francesco Saltori <francescosaltori@gmail.com>, 2020.
 # Francesco Esposito <email@francescoesposito.org>, 2021.
@@ -16,7 +16,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2021-01-29 16:12+0100\n"
 "PO-Revision-Date: 2021-03-01 21:55+0000\n"
-"Last-Translator: mondstern <mondstern@snopyta.org>\n"
+"Last-Translator: x <hardwired1.0@protonmail.com>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/f-droid/fdroidserver/it/>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
@@ -288,7 +288,7 @@ msgstr "Avvisa anche dei problemi di formattazione, come rewritemeta -l"
 
 #: ../fdroidserver/scanner.py
 msgid "Android AAR library"
-msgstr "Libreria AAR per Android"
+msgstr "Libreria Android AAR"
 
 #: ../fdroidserver/scanner.py
 msgid "Android APK file"
