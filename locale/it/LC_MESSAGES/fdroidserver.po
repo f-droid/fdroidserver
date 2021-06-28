@@ -3,7 +3,7 @@
 # This file is distributed under the same license as the PACKAGE package.
 # random r <epsilin@yopmail.com>, 2020.
 # Luca Zambarda <luke.zambarda@gmail.com>, 2020.
-# IvanDan <ivandanza@gmail.com>, 2020.
+# IvanDan <ivandanza@gmail.com>, 2020, 2021.
 # Massimiliano Caniparoli <massic80@gmail.com>, 2020.
 # x <hardwired1.0@protonmail.com>, 2020.
 # Hans-Christoph Steiner <hans@guardianproject.info>, 2020.
@@ -14,8 +14,8 @@ msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2021-01-29 16:12+0100\n"
-"PO-Revision-Date: 2021-01-14 21:33+0000\n"
-"Last-Translator: Francesco Esposito <email@francescoesposito.org>\n"
+"PO-Revision-Date: 2021-02-05 14:41+0000\n"
+"Last-Translator: IvanDan <ivandanza@gmail.com>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/f-droid/fdroidserver/it/>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
@@ -1741,15 +1741,8 @@ msgid "These are the apps that have been archived from the main repo."
 msgstr ""
 
 #: ../fdroidserver/common.py
-#, fuzzy
 msgid "This is a repository of apps to be used with F-Droid. Applications in this repository are either official binaries built by the original application developers, or are binaries built from source by the admin of f-droid.org using the tools on https://gitlab.com/fdroid."
-msgstr ""
-"\n"
-"        Questo è un repository di app da  usare con FDroid. Le applicazioni in questo\n"
-"        repository sono binari ufficiali compilati dagli sviluppatori originali \n"
-"        dell'applicazione, oppure sono binari compilati dai sorgenti da f-droid.org\n"
-"         usando i tool su https://gitlab.com/fdroid.\n"
-"        "
+msgstr "Questo è un repository di applicazioni da utilizzare con F-Droid. Le applicazioni in questo repository sono o binari ufficiali compilati dagli sviluppatori dell'applicazione originale, o sono binari compilati dai sorgenti dall'amministratore di f-droid.org usando gli strumenti su https://gitlab.com/fdroid."
 
 #: ../fdroidserver/import.py
 #, python-format
