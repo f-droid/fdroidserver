@@ -4,20 +4,21 @@
 # ihor_ck <igor_ck@outlook.com>, 2020.
 # Ihor Hordiichuk <igor_ck@outlook.com>, 2020, 2021.
 # Tymofij Lytvynenko <till.svit@gmail.com>, 2021.
+# DankXylese <dankxylese@slapmywang.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2021-01-29 16:12+0100\n"
-"PO-Revision-Date: 2021-03-16 03:14+0000\n"
-"Last-Translator: Ihor Hordiichuk <igor_ck@outlook.com>\n"
+"PO-Revision-Date: 2021-06-28 18:52+0000\n"
+"Last-Translator: DankXylese <dankxylese@slapmywang.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/f-droid/fdroidserver/uk/>\n"
 "Language: uk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.5.2-dev\n"
+"X-Generator: Weblate 4.7.1-dev\n"
 
 #: ../fdroidserver/common.py
 msgid ""
@@ -2172,7 +2173,7 @@ msgstr "команди з модулів плагіна:"
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 #: /usr/lib/python3.7/optparse.py
 msgid "complex"
-msgstr "complex"
+msgstr "складний"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py
