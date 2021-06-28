@@ -1,4 +1,3 @@
-
 import gettext
 import glob
 import os
@@ -8,7 +7,9 @@ import sys
 # support running straight from git and standard installs
 rootpaths = [
     os.path.realpath(os.path.join(os.path.dirname(__file__), '..')),
-    os.path.realpath(os.path.join(os.path.dirname(__file__), '..', '..', '..', '..', 'share')),
+    os.path.realpath(
+        os.path.join(os.path.dirname(__file__), '..', '..', '..', '..', 'share')
+    ),
     os.path.join(sys.prefix, 'share'),
 ]
 

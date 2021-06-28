@@ -54,27 +54,72 @@ def _ssh_key_from_debug_keystore(keystore=KEYSTORE_FILE):
     p12 = os.path.join(tmp_dir, '.keystore.p12')
     _config = dict()
     common.fill_config_defaults(_config)
-    subprocess.check_call([_config['keytool'], '-importkeystore',
-                           '-srckeystore', keystore, '-srcalias', KEY_ALIAS,
-                           '-srcstorepass', PASSWORD, '-srckeypass', PASSWORD,
-                           '-destkeystore', p12, '-destalias', KEY_ALIAS,
-                           '-deststorepass', PASSWORD, '-destkeypass', PASSWORD,
-                           '-deststoretype', 'PKCS12'],
-                          env={'LC_ALL': 'C.UTF-8'})
-    subprocess.check_call(['openssl', 'pkcs12', '-in', p12, '-out', key_pem,
-                           '-passin', 'pass:' + PASSWORD, '-passout', 'pass:' + PASSWORD],
-                          env={'LC_ALL': 'C.UTF-8'})
-    subprocess.check_call(['openssl', 'rsa', '-in', key_pem, '-out', privkey,
-                           '-passin', 'pass:' + PASSWORD],
-                          env={'LC_ALL': 'C.UTF-8'})
+    subprocess.check_call(
+        [
+            _config['keytool'],
+            '-importkeystore',
+            '-srckeystore',
+            keystore,
+            '-srcalias',
+            KEY_ALIAS,
+            '-srcstorepass',
+            PASSWORD,
+            '-srckeypass',
+            PASSWORD,
+            '-destkeystore',
+            p12,
+            '-destalias',
+            KEY_ALIAS,
+            '-deststorepass',
+            PASSWORD,
+            '-destkeypass',
+            PASSWORD,
+            '-deststoretype',
+            'PKCS12',
+        ],
+        env={'LC_ALL': 'C.UTF-8'},
+    )
+    subprocess.check_call(
+        [
+            'openssl',
+            'pkcs12',
+            '-in',
+            p12,
+            '-out',
+            key_pem,
+            '-passin',
+            'pass:' + PASSWORD,
+            '-passout',
+            'pass:' + PASSWORD,
+        ],
+        env={'LC_ALL': 'C.UTF-8'},
+    )
+    subprocess.check_call(
+        [
+            'openssl',
+            'rsa',
+            '-in',
+            key_pem,
+            '-out',
+            privkey,
+            '-passin',
+            'pass:' + PASSWORD,
+        ],
+        env={'LC_ALL': 'C.UTF-8'},
+    )
     os.remove(key_pem)
     os.remove(p12)
     os.chmod(privkey, 0o600)  # os.umask() should cover this, but just in case
 
     rsakey = paramiko.RSAKey.from_private_key_file(privkey)
-    fingerprint = base64.b64encode(hashlib.sha256(rsakey.asbytes()).digest()).decode('ascii').rstrip('=')
-    ssh_private_key_file = os.path.join(tmp_dir, 'debug_keystore_'
-                                        + fingerprint.replace('/', '_') + '_id_rsa')
+    fingerprint = (
+        base64.b64encode(hashlib.sha256(rsakey.asbytes()).digest())
+        .decode('ascii')
+        .rstrip('=')
+    )
+    ssh_private_key_file = os.path.join(
+        tmp_dir, 'debug_keystore_' + fingerprint.replace('/', '_') + '_id_rsa'
+    )
     shutil.move(privkey, ssh_private_key_file)
 
     pub = rsakey.get_name() + ' ' + rsakey.get_base64() + ' ' + ssh_private_key_file
@@ -90,20 +135,46 @@ def main():
 
     parser = ArgumentParser()
     common.setup_global_opts(parser)
-    parser.add_argument("--keystore", default=KEYSTORE_FILE,
-                        help=_("Specify which debug keystore file to use."))
-    parser.add_argument("--show-secret-var", action="store_true", default=False,
-                        help=_("Print the secret variable to the terminal for easy copy/paste"))
-    parser.add_argument("--keep-private-keys", action="store_true", default=False,
-                        help=_("Do not remove the private keys generated from the keystore"))
-    parser.add_argument("--no-deploy", action="store_true", default=False,
-                        help=_("Do not deploy the new files to the repo"))
-    parser.add_argument("--file", default='app/build/outputs/apk/*.apk',
-                        help=_('The file to be included in the repo (path or glob)'))
-    parser.add_argument("--no-checksum", action="store_true", default=False,
-                        help=_("Don't use rsync checksums"))
-    parser.add_argument("--archive-older", type=int, default=20,
-                        help=_("Set maximum releases in repo before older ones are archived"))
+    parser.add_argument(
+        "--keystore",
+        default=KEYSTORE_FILE,
+        help=_("Specify which debug keystore file to use."),
+    )
+    parser.add_argument(
+        "--show-secret-var",
+        action="store_true",
+        default=False,
+        help=_("Print the secret variable to the terminal for easy copy/paste"),
+    )
+    parser.add_argument(
+        "--keep-private-keys",
+        action="store_true",
+        default=False,
+        help=_("Do not remove the private keys generated from the keystore"),
+    )
+    parser.add_argument(
+        "--no-deploy",
+        action="store_true",
+        default=False,
+        help=_("Do not deploy the new files to the repo"),
+    )
+    parser.add_argument(
+        "--file",
+        default='app/build/outputs/apk/*.apk',
+        help=_('The file to be included in the repo (path or glob)'),
+    )
+    parser.add_argument(
+        "--no-checksum",
+        action="store_true",
+        default=False,
+        help=_("Don't use rsync checksums"),
+    )
+    parser.add_argument(
+        "--archive-older",
+        type=int,
+        default=20,
+        help=_("Set maximum releases in repo before older ones are archived"),
+    )
     # TODO add --with-btlog
     options = parser.parse_args()
 
@@ -149,9 +220,11 @@ def main():
                               + '\nhttps://developer.github.com/v3/guides/managing-deploy-keys/#deploy-keys')
             git_user_name = repo_git_base
             git_user_email = os.getenv('USER') + '@' + platform.node()
-        elif 'CIRCLE_REPOSITORY_URL' in os.environ \
-             and 'CIRCLE_PROJECT_USERNAME' in os.environ \
-             and 'CIRCLE_PROJECT_REPONAME' in os.environ:
+        elif (
+            'CIRCLE_REPOSITORY_URL' in os.environ
+            and 'CIRCLE_PROJECT_USERNAME' in os.environ
+            and 'CIRCLE_PROJECT_REPONAME' in os.environ
+        ):
             # we are in Circle CI
             repo_git_base = (os.getenv('CIRCLE_PROJECT_USERNAME')
                              + '/' + os.getenv('CIRCLE_PROJECT_REPONAME') + NIGHTLY)
@@ -229,7 +302,9 @@ Last updated: {date}'''.format(repo_git_base=repo_git_base,
         config += "repo_description = 'Nightly builds from %s'\n" % git_user_email
         config += "archive_name = '%s'\n" % (repo_git_base + ' archive')
         config += "archive_url = '%s'\n" % (repo_base + '/archive')
-        config += "archive_description = 'Old nightly builds that have been archived.'\n"
+        config += (
+            "archive_description = 'Old nightly builds that have been archived.'\n"
+        )
         config += "archive_older = %i\n" % options.archive_older
         config += "servergitmirrors = '%s'\n" % servergitmirror
         config += "keystore = '%s'\n" % KEYSTORE_FILE
@@ -252,25 +327,38 @@ Last updated: {date}'''.format(repo_git_base=repo_git_base,
             for f in files:
                 if f.endswith('-debug.apk'):
                     apkfilename = os.path.join(root, f)
-                    logging.debug(_('Stripping mystery signature from {apkfilename}')
-                                  .format(apkfilename=apkfilename))
+                    logging.debug(
+                        _('Stripping mystery signature from {apkfilename}').format(
+                            apkfilename=apkfilename
+                        )
+                    )
                     destapk = os.path.join(repodir, os.path.basename(f))
                     os.chmod(apkfilename, 0o644)
-                    logging.debug(_('Resigning {apkfilename} with provided debug.keystore')
-                                  .format(apkfilename=os.path.basename(apkfilename)))
+                    logging.debug(
+                        _(
+                            'Resigning {apkfilename} with provided debug.keystore'
+                        ).format(apkfilename=os.path.basename(apkfilename))
+                    )
                     common.apk_strip_v1_signatures(apkfilename, strip_manifest=True)
                     common.sign_apk(apkfilename, destapk, KEY_ALIAS)
 
         if options.verbose:
             logging.debug(_('attempting bare SSH connection to test deploy key:'))
             try:
-                subprocess.check_call(['ssh', '-Tvi', ssh_private_key_file,
-                                       '-oIdentitiesOnly=yes', '-oStrictHostKeyChecking=no',
-                                       servergitmirror.split(':')[0]])
+                subprocess.check_call(
+                    [
+                        'ssh',
+                        '-Tvi',
+                        ssh_private_key_file,
+                        '-oIdentitiesOnly=yes',
+                        '-oStrictHostKeyChecking=no',
+                        servergitmirror.split(':')[0],
+                    ]
+                )
             except subprocess.CalledProcessError:
                 pass
 
-        app_url = clone_url[:-len(NIGHTLY)]
+        app_url = clone_url[: -len(NIGHTLY)]
         template = dict()
         template['AuthorName'] = clone_url.split('/')[4]
         template['AuthorWebSite'] = '/'.join(clone_url.split('/')[:4])
@@ -282,9 +370,13 @@ Last updated: {date}'''.format(repo_git_base=repo_git_base,
         with open('template.yml', 'w') as fp:
             yaml.dump(template, fp)
 
-        subprocess.check_call(['fdroid', 'update', '--rename-apks', '--create-metadata', '--verbose'],
-                              cwd=repo_basedir)
-        common.local_rsync(options, repo_basedir + '/metadata/', git_mirror_metadatadir + '/')
+        subprocess.check_call(
+            ['fdroid', 'update', '--rename-apks', '--create-metadata', '--verbose'],
+            cwd=repo_basedir,
+        )
+        common.local_rsync(
+            options, repo_basedir + '/metadata/', git_mirror_metadatadir + '/'
+        )
         common.local_rsync(options, repo_basedir + '/stats/', git_mirror_statsdir + '/')
         mirror_git_repo.git.add(all=True)
         mirror_git_repo.index.commit("update app metadata")
@@ -294,8 +386,11 @@ Last updated: {date}'''.format(repo_git_base=repo_git_base,
                 cmd = ['fdroid', 'deploy', '--verbose', '--no-keep-git-mirror-archive']
                 subprocess.check_call(cmd, cwd=repo_basedir)
             except subprocess.CalledProcessError:
-                logging.error(_('cannot publish update, did you set the deploy key?')
-                              + '\n' + deploy_key_url)
+                logging.error(
+                    _('cannot publish update, did you set the deploy key?')
+                    + '\n'
+                    + deploy_key_url
+                )
                 sys.exit(1)
 
         if not options.keep_private_keys:
@@ -326,8 +421,11 @@ Last updated: {date}'''.format(repo_git_base=repo_git_base,
         if options.show_secret_var:
             with open(options.keystore, 'rb') as fp:
                 debug_keystore = base64.standard_b64encode(fp.read()).decode('ascii')
-            print(_('\n{path} encoded for the DEBUG_KEYSTORE secret variable:')
-                  .format(path=options.keystore))
+            print(
+                _('\n{path} encoded for the DEBUG_KEYSTORE secret variable:').format(
+                    path=options.keystore
+                )
+            )
             print(debug_keystore)
 
     os.umask(umask)

@@ -41,10 +41,19 @@ def sign_jar(jar):
     but then Android < 4.3 would not be able to verify it.
     https://code.google.com/p/android/issues/detail?id=38321
     """
-    args = [config['jarsigner'], '-keystore', config['keystore'],
-            '-storepass:env', 'FDROID_KEY_STORE_PASS',
-            '-digestalg', 'SHA1', '-sigalg', 'SHA1withRSA',
-            jar, config['repo_keyalias']]
+    args = [
+        config['jarsigner'],
+        '-keystore',
+        config['keystore'],
+        '-storepass:env',
+        'FDROID_KEY_STORE_PASS',
+        '-digestalg',
+        'SHA1',
+        '-sigalg',
+        'SHA1withRSA',
+        jar,
+        config['repo_keyalias'],
+    ]
     if config['keystore'] == 'NONE':
         args += config['smartcardoptions']
     else:  # smardcards never use -keypass
@@ -96,7 +105,9 @@ def main():
 
     if 'jarsigner' not in config:
         raise FDroidException(
-            _('Java jarsigner not found! Install in standard location or set java_paths!')
+            _(
+                'Java jarsigner not found! Install in standard location or set java_paths!'
+            )
         )
 
     repodirs = ['repo']

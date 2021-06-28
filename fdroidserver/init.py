@@ -38,6 +38,7 @@ options = None
 def disable_in_config(key, value):
     """Write a key/value to the local config.yml, then comment it out."""
     import yaml
+
     with open('config.yml') as f:
         data = f.read()
     pattern = r'\n[\s#]*' + key + r':.*'
@@ -54,16 +55,33 @@ def main():
     # Parse command line...
     parser = ArgumentParser()
     common.setup_global_opts(parser)
-    parser.add_argument("-d", "--distinguished-name", default=None,
-                        help=_("X.509 'Distinguished Name' used when generating keys"))
-    parser.add_argument("--keystore", default=None,
-                        help=_("Path to the keystore for the repo signing key"))
-    parser.add_argument("--repo-keyalias", default=None,
-                        help=_("Alias of the repo signing key in the keystore"))
-    parser.add_argument("--android-home", default=None,
-                        help=_("Path to the Android SDK (sometimes set in ANDROID_HOME)"))
-    parser.add_argument("--no-prompt", action="store_true", default=False,
-                        help=_("Do not prompt for Android SDK path, just fail"))
+    parser.add_argument(
+        "-d",
+        "--distinguished-name",
+        default=None,
+        help=_("X.509 'Distinguished Name' used when generating keys"),
+    )
+    parser.add_argument(
+        "--keystore",
+        default=None,
+        help=_("Path to the keystore for the repo signing key"),
+    )
+    parser.add_argument(
+        "--repo-keyalias",
+        default=None,
+        help=_("Alias of the repo signing key in the keystore"),
+    )
+    parser.add_argument(
+        "--android-home",
+        default=None,
+        help=_("Path to the Android SDK (sometimes set in ANDROID_HOME)"),
+    )
+    parser.add_argument(
+        "--no-prompt",
+        action="store_true",
+        default=False,
+        help=_("Do not prompt for Android SDK path, just fail"),
+    )
     options = parser.parse_args()
 
     fdroiddir = os.getcwd()
@@ -81,8 +99,9 @@ def main():
         # and if the user leaves it blank, ignore and move on.
         default_sdk_path = ''
         if sys.platform == 'win32' or sys.platform == 'cygwin':
-            p = os.path.join(os.getenv('USERPROFILE'),
-                             'AppData', 'Local', 'Android', 'android-sdk')
+            p = os.path.join(
+                os.getenv('USERPROFILE'), 'AppData', 'Local', 'Android', 'android-sdk'
+            )
         elif sys.platform == 'darwin':
             # on OSX, Homebrew is common and has an easy path to detect
             p = '/usr/local/opt/android-sdk'
@@ -96,10 +115,13 @@ def main():
             test_config['sdk_path'] = default_sdk_path
 
         if not common.test_sdk_exists(test_config):
-            del(test_config['sdk_path'])
+            del (test_config['sdk_path'])
             while not options.no_prompt:
                 try:
-                    s = input(_('Enter the path to the Android SDK (%s) here:\n> ') % default_sdk_path)
+                    s = input(
+                        _('Enter the path to the Android SDK (%s) here:\n> ')
+                        % default_sdk_path
+                    )
                 except KeyboardInterrupt:
                     print('')
                     sys.exit(1)
@@ -112,8 +134,9 @@ def main():
                 default_sdk_path = ''
 
     if test_config.get('sdk_path') and not common.test_sdk_exists(test_config):
-        raise FDroidException(_("Android SDK not found at {path}!")
-                              .format(path=test_config['sdk_path']))
+        raise FDroidException(
+            _("Android SDK not found at {path}!").format(path=test_config['sdk_path'])
+        )
 
     if not os.path.exists('config.yml') and not os.path.exists('config.py'):
         # 'metadata' and 'tmp' are created in fdroid
@@ -124,12 +147,14 @@ def main():
             shutil.copyfile(example_config_yml, 'config.yml')
         else:
             from pkg_resources import get_distribution
+
             versionstr = get_distribution('fdroidserver').version
             if not versionstr:
                 versionstr = 'master'
             with open('config.yml', 'w') as fp:
-                fp.write('# see https://gitlab.com/fdroid/fdroidserver/blob/'
-                         + versionstr + '/examples/config.yml\n')
+                fp.write('# see https://gitlab.com/fdroid/fdroidserver/blob/')
+                fp.write(versionstr)
+                fp.write('/examples/config.yml\n')
         os.chmod('config.yml', 0o0600)
         # If android_home is None, test_config['sdk_path'] will be used and
         # "$ANDROID_HOME" may be used if the env var is set up correctly.
@@ -138,7 +163,9 @@ def main():
         if 'sdk_path' in test_config:
             common.write_to_config(test_config, 'sdk_path', options.android_home)
     else:
-        logging.warning('Looks like this is already an F-Droid repo, cowardly refusing to overwrite it...')
+        logging.warning(
+            'Looks like this is already an F-Droid repo, cowardly refusing to overwrite it...'
+        )
         logging.info('Try running `fdroid init` in an empty directory.')
         raise FDroidException('Repository already exists.')
 
@@ -162,8 +189,9 @@ def main():
         else:
             keystore = os.path.abspath(options.keystore)
             if not os.path.exists(keystore):
-                logging.info('"' + keystore
-                             + '" does not exist, creating a new keystore there.')
+                logging.info(
+                    '"' + keystore + '" does not exist, creating a new keystore there.'
+                )
     common.write_to_config(test_config, 'keystore', keystore)
     repo_keyalias = None
     keydname = None
@@ -174,12 +202,19 @@ def main():
         keydname = options.distinguished_name
         common.write_to_config(test_config, 'keydname', keydname)
     if keystore == 'NONE':  # we're using a smartcard
-        common.write_to_config(test_config, 'repo_keyalias', '1')  # seems to be the default
+        common.write_to_config(
+            test_config, 'repo_keyalias', '1'
+        )  # seems to be the default
         disable_in_config('keypass', 'never used with smartcard')
-        common.write_to_config(test_config, 'smartcardoptions',
-                               ('-storetype PKCS11 '
-                                + '-providerClass sun.security.pkcs11.SunPKCS11 '
-                                + '-providerArg opensc-fdroid.cfg'))
+        common.write_to_config(
+            test_config,
+            'smartcardoptions',
+            (
+                '-storetype PKCS11 '
+                + '-providerClass sun.security.pkcs11.SunPKCS11 '
+                + '-providerArg opensc-fdroid.cfg'
+            ),
+        )
         # find opensc-pkcs11.so
         if not os.path.exists('opensc-fdroid.cfg'):
             if os.path.exists('/usr/lib/opensc-pkcs11.so'):
@@ -187,29 +222,43 @@ def main():
             elif os.path.exists('/usr/lib64/opensc-pkcs11.so'):
                 opensc_so = '/usr/lib64/opensc-pkcs11.so'
             else:
-                files = glob.glob('/usr/lib/' + os.uname()[4] + '-*-gnu/opensc-pkcs11.so')
+                files = glob.glob(
+                    '/usr/lib/' + os.uname()[4] + '-*-gnu/opensc-pkcs11.so'
+                )
                 if len(files) > 0:
                     opensc_so = files[0]
                 else:
                     opensc_so = '/usr/lib/opensc-pkcs11.so'
-                    logging.warning('No OpenSC PKCS#11 module found, '
-                                    + 'install OpenSC then edit "opensc-fdroid.cfg"!')
+                    logging.warning(
+                        'No OpenSC PKCS#11 module found, '
+                        + 'install OpenSC then edit "opensc-fdroid.cfg"!'
+                    )
             with open('opensc-fdroid.cfg', 'w') as f:
                 f.write('name = OpenSC\nlibrary = ')
                 f.write(opensc_so)
                 f.write('\n')
-        logging.info("Repo setup using a smartcard HSM. Please edit keystorepass and repo_keyalias in config.yml.")
-        logging.info("If you want to generate a new repo signing key in the HSM you can do that with 'fdroid update "
-                     "--create-key'.")
+        logging.info(
+            "Repo setup using a smartcard HSM. Please edit keystorepass and repo_keyalias in config.yml."
+        )
+        logging.info(
+            "If you want to generate a new repo signing key in the HSM you can do that with 'fdroid update "
+            "--create-key'."
+        )
     elif os.path.exists(keystore):
         to_set = ['keystorepass', 'keypass', 'repo_keyalias', 'keydname']
         if repo_keyalias:
             to_set.remove('repo_keyalias')
         if keydname:
             to_set.remove('keydname')
-        logging.warning('\n' + _('Using existing keystore "{path}"').format(path=keystore)
-                        + '\n' + _('Now set these in config.yml:') + ' '
-                        + ', '.join(to_set) + '\n')
+        logging.warning(
+            '\n'
+            + _('Using existing keystore "{path}"').format(path=keystore)
+            + '\n'
+            + _('Now set these in config.yml:')
+            + ' '
+            + ', '.join(to_set)
+            + '\n'
+        )
     else:
         password = common.genpassword()
         c = dict(test_config)
@@ -229,11 +278,17 @@ def main():
     msg += '\n  ' + _('Keystore for signing key:\t') + keystore
     if repo_keyalias is not None:
         msg += '\n  Alias for key in store:\t' + repo_keyalias
-    msg += '\n\n' + '''To complete the setup, add your APKs to "%s"
+    msg += '\n\n'
+    msg += (
+        _(
+            '''To complete the setup, add your APKs to "%s"
 then run "fdroid update -c; fdroid update".  You might also want to edit
 "config.yml" to set the URL, repo name, and more.  You should also set up
 a signing key (a temporary one might have been automatically generated).
 
 For more info: https://f-droid.org/docs/Setup_an_F-Droid_App_Repo
-and https://f-droid.org/docs/Signing_Process''' % os.path.join(fdroiddir, 'repo')
+and https://f-droid.org/docs/Signing_Process'''
+        )
+        % os.path.join(fdroiddir, 'repo')
+    )
     logging.info(msg)
