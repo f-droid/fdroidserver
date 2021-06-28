@@ -12,13 +12,14 @@
 # forght <forght@posteo.de>, 2021.
 # TobiGr <tobigr@mail.de>, 2021.
 # FW <weblate.scordium@slmail.me>, 2021.
+# fossdd <fossdd@tutanota.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2021-01-29 16:12+0100\n"
-"PO-Revision-Date: 2021-02-08 21:42+0000\n"
-"Last-Translator: TobiGr <tobigr@mail.de>\n"
+"PO-Revision-Date: 2021-02-10 20:09+0000\n"
+"Last-Translator: fossdd <fossdd@tutanota.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/f-droid/fdroidserver/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -860,7 +861,7 @@ msgid "Found \"{path}\" graphic without metadata for app \"{name}\"!"
 msgstr "Grafik \"{path}\" ohne Metadaten für App \"{name}\" gefunden!"
 
 #: ../fdroidserver/update.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Found bad funding file \"{path}\" for \"{name}\":"
 msgstr "Schlechte Finanzierungsdatei \"{path}\" für \"{name}\" gefunden:"
 
@@ -1745,16 +1746,8 @@ msgid "These are the apps that have been archived from the main repo."
 msgstr "Dies sind die Apps, die aus dem Hauptrepository archiviert wurden."
 
 #: ../fdroidserver/common.py
-#, fuzzy
 msgid "This is a repository of apps to be used with F-Droid. Applications in this repository are either official binaries built by the original application developers, or are binaries built from source by the admin of f-droid.org using the tools on https://gitlab.com/fdroid."
-msgstr ""
-"\n"
-"        Dies ist eine Paketquelle für Anwendungen, die für die Benutzung\n"
-"        zusammen mit F-Droid gedacht ist. Die darin enthaltenen\n"
-"        Anwendungen sind entweder offizielle von den Entwicklern erstellte\n"
-"        Binärdateien oder werden von f-droid.org mithilfe des Werkzeugs auf\n"
-"        https://gitlab.com/fdroid aus dem Quellcode erstellt.\n"
-"        "
+msgstr "Dies ist eine Paketquelle für Anwendungen, die für die Benutzung zusammen mit F-Droid gedacht ist. Die darin enthaltenen Anwendungen sind entweder offizielle von den Entwicklern erstellte Binärdateien oder werden von f-droid.org mithilfe des Werkzeugs auf https://gitlab.com/fdroid aus dem Quellcode erstellt."
 
 #: ../fdroidserver/import.py
 #, python-format
