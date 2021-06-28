@@ -17,8 +17,8 @@ msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2021-01-29 16:12+0100\n"
-"PO-Revision-Date: 2021-02-08 10:41+0000\n"
-"Last-Translator: FW <weblate.scordium@slmail.me>\n"
+"PO-Revision-Date: 2021-02-08 17:47+0000\n"
+"Last-Translator: TobiGr <tobigr@mail.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/f-droid/fdroidserver/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -1783,9 +1783,8 @@ msgid "URL {url} in Description: {error}"
 msgstr "URL {url} in der Beschreibung: {error}"
 
 #: ../fdroidserver/lint.py
-#, fuzzy
 msgid "Unexpected license tag \"{}\"! Only use FSF or OSI approved tags from https://spdx.org/license-list"
-msgstr "Ungültiges Lizenz-Tag \"%s\"! Verwenden Sie nur Tags von https://spdx.org/license-list"
+msgstr "Ungültiges Lizenz-Tag \"{}\"! Verwenden Sie nur Tags von https://spdx.org/license-list, die durch die FSF oder OSI gebilligt werden."
 
 #: ../fdroidserver/lint.py
 msgid "Unexpected license tag \"{}\"! Only use license tags configured in your config file"
