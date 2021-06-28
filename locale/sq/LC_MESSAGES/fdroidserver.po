@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fdroidserver 1.0.6-349-g907c04ea\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2021-01-29 16:12+0100\n"
-"PO-Revision-Date: 2021-01-29 10:51+0000\n"
+"PO-Revision-Date: 2021-03-22 16:55+0000\n"
 "Last-Translator: Besnik Bleta <besnik@programeshqip.org>\n"
 "Language-Team: Albanian <https://hosted.weblate.org/projects/f-droid/fdroidserver/sq/>\n"
 "Language: sq\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.5-dev\n"
+"X-Generator: Weblate 4.5.2-dev\n"
 
 #: ../fdroidserver/common.py
 msgid ""
@@ -65,7 +65,7 @@ msgstr "\"%s/\" s’ka kartel tejtëdhënash me përputhje!"
 
 #: ../fdroidserver/index.py
 msgid "\"repo_pubkey\" must be present in config.yml when using --nosign!"
-msgstr ""
+msgstr "\"repo_pubkey\" duhet të jetë i pranishëm te config.yml, kur përdoret --nosign!"
 
 #: ../fdroidserver/install.py
 #, python-brace-format
@@ -445,9 +445,9 @@ msgid "Checking archiving for {appid} - APKs:{integer}, keepversions:{keep}, arc
 msgstr "Po kontrollohet arkivimi përr {appid} - APKs:{integer}, keepversions:{keep}, archapks:{arch}"
 
 #: ../fdroidserver/update.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Checking archiving for {appid} - apks:{integer}, keepversions:{keep}, archapks:{arch}"
-msgstr "Po kontrollohet arkivimi përr {appid} - APKs:{integer}, keepversions:{keep}, archapks:{arch}"
+msgstr "Po kontrollohet arkivimi për {appid} - apks:{integer}, keepversions:{keep}, archapks:{arch}"
 
 #: ../fdroidserver/update.py
 msgid "Clean update - don't uses caches, reprocess all APKs"
@@ -473,7 +473,7 @@ msgstr "Argumente që përplasen: '--verbose' dhe '--quiet' s’mund të përdor
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Conflicting config files! Using {newfile}, ignoring {oldfile}!"
-msgstr ""
+msgstr "Kartela formësimi me përplasje! Po përdoret {newfile}, po shpërfillet {oldfile}!"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -524,7 +524,7 @@ msgstr "S’u gjet dot ID pakete"
 
 #: ../fdroidserver/update.py
 msgid "Cowardily refusing to overwrite existing signing key setup!"
-msgstr ""
+msgstr "Po refuzohet me burracakëri të mbishkruhet ujdisje ekzistuese kyçesh nënshkrimi!"
 
 #: ../fdroidserver/update.py
 msgid "Create a repo signing key in a keystore"
@@ -724,7 +724,7 @@ msgstr ""
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Environment variable {var} from {configname} is not set!"
-msgstr ""
+msgstr "S’është ujdisur ndryshore {var} nga {configname}!"
 
 #: ../fdroidserver/deploy.py ../fdroidserver/checkupdates.py
 #: ../fdroidserver/upload.py
@@ -865,7 +865,7 @@ msgstr "U gjetën versionCodes të pavlefshëm për disa aplikacione"
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Found multiple JAR Signature Block Files in {path}"
-msgstr ""
+msgstr "Te {path} u gjetën Kartela të shumta JAR Blloqesh Nënshkrimi"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
@@ -1212,9 +1212,8 @@ msgid "No commit specified for {versionName} in {linedesc}"
 msgstr "Te {linedesc} s’ka parashtrim të specifikuar për {versionName}"
 
 #: ../fdroidserver/common.py
-#, fuzzy
 msgid "No config.yml found, using defaults."
-msgstr "S’u gjet 'config.yml', po përdoren parazgjedhjet."
+msgstr "S’u gjet config.yml, po përdoren parazgjedhjet."
 
 #: ../fdroidserver/index.py
 msgid "No fingerprint in URL."
@@ -1670,7 +1669,7 @@ msgstr "Po hiqet nënshkrim misterioz nga {apkfilename}"
 #: ../fdroidserver/nightly.py
 #, python-brace-format
 msgid "Stripping mystery signature from {apkfilename}"
-msgstr ""
+msgstr "Po hiqet nënshkrim i mistershëm prej {apkfilename}"
 
 #: ../fdroidserver/lint.py
 #, python-format
@@ -1735,15 +1734,8 @@ msgid "These are the apps that have been archived from the main repo."
 msgstr "Këto janë aplikacionet që janë arkivuar nga depoja kryesore."
 
 #: ../fdroidserver/common.py
-#, fuzzy
 msgid "This is a repository of apps to be used with F-Droid. Applications in this repository are either official binaries built by the original application developers, or are binaries built from source by the admin of f-droid.org using the tools on https://gitlab.com/fdroid."
-msgstr ""
-"\n"
-"        Kjo është një depo aplikacionesh për t’u përdorur me FDroid. Aplikacionet\n"
-"        në këtë depo ose janë dyorë zyrtarë të montuar nga zhvilluesit e aplikacionit\n"
-"        origjinal, ose janë dyorë të montuar nga burimi prej f-droid.org duke përdorur\n"
-"        mjetet në https://gitlab.com/fdroid.\n"
-"        "
+msgstr "Kjo është një depo aplikacionesh për t’u përdorur me F-Droid. Aplikacionet në këtë depo ose janë dyorë zyrtarë të montuar nga zhvilluesit e aplikacionit rigjinal, ose janë dyorë të montuar nga burimi prej f-droid.org duke përdorur mjetet në https://gitlab.com/fdroid."
 
 #: ../fdroidserver/import.py
 #, python-format
@@ -1787,7 +1779,7 @@ msgstr "Tekst i papritur në të njëjtin rresht me {field} te {linedesc}"
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Unknown entry {key} in {configname}"
-msgstr ""
+msgstr "Zë i panjohur {key} në {configname}"
 
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Unknown exception found!"
@@ -2471,9 +2463,9 @@ msgid "refuse downloading via insecure http connection (use https or specify --n
 msgstr "mos pranon shkarkim përmes lidhjeje http të pasigurt (përdorni https ose specifikoni --no-https-check): {apkfilename}"
 
 #: ../fdroidserver/index.py
-#, fuzzy, python-format
+#, python-format
 msgid "repo_icon \"repo/icons/%s\" does not exist, generating placeholder."
-msgstr "repo_icon %s s’ekziston, po prodhohet vendmbajtëse."
+msgstr "repo_icon \"repo/icons/%s\" s’ekziston, po prodhohet vendmbajtëse."
 
 #: ../fdroidserver/index.py
 #, python-format
@@ -2679,14 +2671,14 @@ msgid "{name} \"{path}\" does not exist! Correct it in config.yml."
 msgstr "{name} \"{path}\" s’ekziston! Ndreqeni te config.yml."
 
 #: ../fdroidserver/update.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{name} \"{section}/icons/{path}\" does not exist! Check \"config.yml\"."
-msgstr "{name} \"{path}\" s’ekziston! Ndreqeni te config.yml."
+msgstr "{name} \"{section}/icons/{path}\" s’ekziston! Kontrolloni \"config.yml\"."
 
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "{oldfile} is deprecated, use {newfile}"
-msgstr ""
+msgstr "{oldfile} është nxjerrë nga përdorimi, përdorni {newfile}"
 
 #: ../fdroidserver/import.py
 #, python-brace-format
