@@ -13,20 +13,21 @@
 # TobiGr <tobigr@mail.de>, 2021.
 # FW <weblate.scordium@slmail.me>, 2021.
 # fossdd <fossdd@tutanota.com>, 2021.
+# Ceeee <marius.romanus@gmx.de>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2021-01-29 16:12+0100\n"
-"PO-Revision-Date: 2021-02-10 20:09+0000\n"
-"Last-Translator: fossdd <fossdd@tutanota.com>\n"
+"PO-Revision-Date: 2021-05-17 16:10+0000\n"
+"Last-Translator: Ceeee <marius.romanus@gmx.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/f-droid/fdroidserver/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.5-dev\n"
+"X-Generator: Weblate 4.7-dev\n"
 
 #: ../fdroidserver/common.py
 msgid ""
@@ -900,7 +901,7 @@ msgstr "Es wurden keine Signaturzertifikate für das Repository gefunden."
 #: ../fdroidserver/lint.py
 #, python-format
 msgid "Found non-file at %s"
-msgstr "Eine Nicht-Datei gefunden bei %s"
+msgstr "Ungültige Datei bei %s"
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
