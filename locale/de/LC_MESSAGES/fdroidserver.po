@@ -21,8 +21,8 @@ msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2021-01-29 16:12+0100\n"
-"PO-Revision-Date: 2021-05-17 16:36+0000\n"
-"Last-Translator: forght <forght@posteo.de>\n"
+"PO-Revision-Date: 2021-05-25 13:33+0000\n"
+"Last-Translator: TobiGr <tobigr@mail.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/f-droid/fdroidserver/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -2674,7 +2674,7 @@ msgstr "{appid}: {field} muss ein '{type}' sein, ist aber ein '{fieldtype}'!"
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "{build_flag} must be an integer, found: {value}"
-msgstr "{build_flag} muss ein Integer sein: {value}"
+msgstr "{build_flag} muss ein Integer sein, gefunden: {value}"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
@@ -2724,7 +2724,7 @@ msgstr "{path} hat Dateigröße Null!"
 #: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "{path} more than 200MB, manually upload: {url}"
-msgstr "{path} ist größer als 200MB und muss manuell zu {url} hochgeladen werden"
+msgstr "{path} ist größer als 200MB und muss manuell auf {url} hochgeladen werden"
 
 #: ../fdroidserver/mirror.py
 #, python-brace-format
