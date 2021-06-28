@@ -641,7 +641,7 @@ def has_known_vulnerability(filename):
     files_in_apk = set()
     with zipfile.ZipFile(filename) as zf:
         for name in zf.namelist():
-            if name.endswith('libcrypto.so') or name.endswith('libssl.so'):
+            if name.endswith('.so') and ('libcrypto' in name or 'libssl' in name):
                 lib = zf.open(name)
                 while True:
                     chunk = lib.read(4096)
