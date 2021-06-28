@@ -16,13 +16,14 @@
 # Ceeee <marius.romanus@gmx.de>, 2021.
 # C. Rüdinger <Mail-an-CR@web.de>, 2021.
 # VfBFan <drop0815@posteo.de>, 2021.
+# Roman Leo <roman.leo@gmx.de>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2021-01-29 16:12+0100\n"
 "PO-Revision-Date: 2021-05-25 13:33+0000\n"
-"Last-Translator: TobiGr <tobigr@mail.de>\n"
+"Last-Translator: Roman Leo <roman.leo@gmx.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/f-droid/fdroidserver/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -992,17 +993,14 @@ msgid "Include APKs that are signed with disabled algorithms like MD5"
 msgstr "APKs einschließen, die mit deaktivierten Algorithmen wie MD5 signiert sind"
 
 #: ../fdroidserver/mirror.py
-#, fuzzy
 msgid "Include the PGP signature .asc files in the mirror"
 msgstr "Einbinden der .asc-PGP-Signaturdateien in den Spiegelserver"
 
 #: ../fdroidserver/mirror.py
-#, fuzzy
 msgid "Include the build logs in the mirror"
 msgstr "Einbinden der Build-Protokolle in den Spiegelserver"
 
 #: ../fdroidserver/mirror.py
-#, fuzzy
 msgid "Include the source tarballs in the mirror"
 msgstr "Einbinden der Quellen-Tarballs in den Spiegelserver"
 
@@ -1189,7 +1187,6 @@ msgid "Make the build stop on exceptions"
 msgstr "Erstellung bei Fehlern anhalten"
 
 #: ../fdroidserver/index.py
-#, fuzzy
 msgid "Malformed repository mirrors."
 msgstr "Fehlerhafte Paketquellen-Spiegelserver."
 
@@ -1721,9 +1718,8 @@ msgid "The base URL for the repo to log (default: https://f-droid.org)"
 msgstr "Basis-Adresse zur Anmeldung am Repository (Standard: https://f-droid.org)"
 
 #: ../fdroidserver/mirror.py
-#, fuzzy
 msgid "The directory to write the mirror to"
-msgstr "Das Verzeichnis, in das der Spiegelserver geschrieben werden soll"
+msgstr "Das Verzeichnis in das der Spiegelserver geschrieben werden soll"
 
 #: ../fdroidserver/nightly.py
 msgid "The file to be included in the repo (path or glob)"
