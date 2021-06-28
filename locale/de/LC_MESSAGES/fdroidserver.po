@@ -14,13 +14,14 @@
 # FW <weblate.scordium@slmail.me>, 2021.
 # fossdd <fossdd@tutanota.com>, 2021.
 # Ceeee <marius.romanus@gmx.de>, 2021.
+# C. Rüdinger <Mail-an-CR@web.de>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2021-01-29 16:12+0100\n"
-"PO-Revision-Date: 2021-05-17 16:10+0000\n"
-"Last-Translator: Ceeee <marius.romanus@gmx.de>\n"
+"PO-Revision-Date: 2021-05-17 16:11+0000\n"
+"Last-Translator: C. Rüdinger <Mail-an-CR@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/f-droid/fdroidserver/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -628,7 +629,7 @@ msgstr "Beschreibung enthält eine Liste (%s), ist aber weder aufgezählt (*) no
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "Description of length {length} is over the {limit} char limit"
-msgstr "Beschreibung der Länge {length} ist über dem {limit}-Zeichen Limit"
+msgstr "Länge der Beschreibung {length} übersteigt die zulässige Zeichenzahl {limit}"
 
 #: ../fdroidserver/import.py
 msgid "Do not add 'disable:' to the generated build entries"
