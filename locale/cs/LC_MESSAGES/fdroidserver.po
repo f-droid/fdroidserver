@@ -1,21 +1,20 @@
 # SOME DESCRIPTIVE TITLE.
 # This file is put in the public domain.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
+# mondstern <mondstern@snopyta.org>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 1.0.0-95-gd7af22b\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2021-01-29 16:12+0100\n"
-"PO-Revision-Date: 2019-02-01 13:33+0000\n"
-"Last-Translator: Michal Čihař <michal@cihar.com>\n"
+"PO-Revision-Date: 2021-03-05 16:50+0000\n"
+"Last-Translator: mondstern <mondstern@snopyta.org>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/f-droid/fdroidserver/cs/>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 3.5-dev\n"
+"X-Generator: Weblate 4.5.1-dev\n"
 
 #: ../fdroidserver/common.py
 msgid ""
@@ -124,7 +123,7 @@ msgstr ""
 #: /usr/lib/python3.7/argparse.py
 #, python-format
 msgid "%r is not callable"
-msgstr ""
+msgstr "%r není možné volat"
 
 #: ../fdroidserver/lint.py
 #, python-format
@@ -160,7 +159,7 @@ msgstr ""
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py
 msgid "'required' is an invalid argument for positionals"
-msgstr ""
+msgstr "'povinné' je Neplatný argument pro pozicials"
 
 #: ../fdroidserver/common.py
 msgid "'sdk_path' not set in 'config.yml'!"
@@ -186,12 +185,12 @@ msgstr ""
 #: ../fdroidserver/install.py
 #, python-brace-format
 msgid "'{apkfilename}' is already installed on {dev}."
-msgstr ""
+msgstr "'{apkfilename} ' je již nainstalován na {dev}."
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "'{field}' in {linedesc} is obsolete, see docs for current fields:"
-msgstr ""
+msgstr "'{field} ' v {linedesc} je zastaralý, viz dokumenty pro aktuální pole:"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -211,7 +210,7 @@ msgstr ""
 #: ../fdroidserver/checkupdates.py
 #, python-brace-format
 msgid "...checkupdate failed for {appid} : {error}"
-msgstr ""
+msgstr "...kontrola selhala pro {appid} : {error}"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py
@@ -232,15 +231,15 @@ msgstr ""
 
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Add PGP signatures using GnuPG for packages in repo"
-msgstr ""
+msgstr "Přidejte podpisy PGP pomocí GnuPG pro balíčky v repo"
 
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Add a new application from its source code"
-msgstr ""
+msgstr "Přidejte novou aplikaci ze zdrojového kódu"
 
 #: ../fdroidserver/update.py
 msgid "Add a repo signing key to an unsigned repo"
-msgstr ""
+msgstr "Přidejte podpisový klíč repo k nepodepsanému repo"
 
 #: ../fdroidserver/update.py
 msgid "Add skeleton metadata files for APKs that are missing them"
@@ -427,7 +426,7 @@ msgstr "Kategorie nejsou nastavené"
 
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Check for updates to applications"
-msgstr ""
+msgstr "Zkontrolujte aktualizace aplikací"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -523,7 +522,7 @@ msgstr ""
 
 #: ../fdroidserver/update.py
 msgid "Create skeleton metadata files that are missing"
-msgstr ""
+msgstr "Vytvořte soubory metadat kostry, které chybí"
 
 #: ../fdroidserver/deploy.py ../fdroidserver/upload.py
 #, python-brace-format
@@ -675,7 +674,7 @@ msgstr ""
 
 #: ../fdroid
 msgid "Dynamically scan APKs post build"
-msgstr ""
+msgstr "Dynamicky skenovat APKs post build"
 
 #: ../fdroidserver/__main__.py
 msgid "ERROR: The \"server\" subcommand has been removed, use \"deploy\"!"
@@ -984,7 +983,7 @@ msgstr ""
 
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Install built packages on devices"
-msgstr ""
+msgstr "Nainstalujte vestavěné balíčky na zařízení"
 
 #: ../fdroidserver/install.py
 #, python-format
@@ -1008,7 +1007,7 @@ msgstr ""
 
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Interact with the repo HTTP server"
-msgstr ""
+msgstr "Interakce se serverem repo HTTP"
 
 #: ../fdroidserver/update.py
 msgid "Invalid APK"
@@ -1445,11 +1444,11 @@ msgstr ""
 
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Quickly start a new repository"
-msgstr ""
+msgstr "Rychle spusťte nové úložiště"
 
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Read all the metadata files and exit"
-msgstr ""
+msgstr "Přečtěte si všechny soubory metadat a ukončete"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -1547,7 +1546,7 @@ msgstr ""
 
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Scan the source code of a package"
-msgstr ""
+msgstr "Naskenujte zdrojový kód balíčku"
 
 #: ../fdroidserver/scanner.py
 #, python-brace-format
@@ -1594,11 +1593,11 @@ msgstr ""
 
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Sign and place packages in the repo"
-msgstr ""
+msgstr "Podepsat a umístit balíčky v repo"
 
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Sign indexes created using update --nosign"
-msgstr ""
+msgstr "Podepsat indexy vytvořené pomocí aktualizace -- nosign"
 
 #: ../fdroidserver/build.py
 msgid "Skip scanning the source code for binaries and other problems"
@@ -1884,11 +1883,11 @@ msgstr ""
 
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Update repo information for new packages"
-msgstr ""
+msgstr "Aktualizujte informace o repo pro nové balíčky"
 
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Update the binary transparency log for a URL"
-msgstr ""
+msgstr "Aktualizujte protokol binárního průhlednosti pro adresu URL"
 
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Update the stats of the repo"
@@ -2005,7 +2004,7 @@ msgstr ""
 
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Verify the integrity of downloaded packages"
-msgstr ""
+msgstr "Ověřte integritu stažených balíčků"
 
 #: ../fdroidserver/index.py
 msgid "Verifying index signature:"
@@ -2390,13 +2389,13 @@ msgstr ""
 #: /usr/lib/python3.7/getopt.py
 #, python-format
 msgid "option -%s not recognized"
-msgstr ""
+msgstr "možnost - %s není rozpoznána"
 
 #: /usr/lib/python3.5/getopt.py /usr/lib/python3.6/getopt.py
 #: /usr/lib/python3.7/getopt.py
 #, python-format
 msgid "option -%s requires argument"
-msgstr ""
+msgstr "možnost - %s vyžaduje argument"
 
 #: /usr/lib/python3.5/getopt.py /usr/lib/python3.6/getopt.py
 #: /usr/lib/python3.7/getopt.py
@@ -2414,7 +2413,7 @@ msgstr ""
 #: /usr/lib/python3.7/getopt.py
 #, python-format
 msgid "option --%s not recognized"
-msgstr ""
+msgstr "možnost -%s není rozpoznána"
 
 #: /usr/lib/python3.5/getopt.py /usr/lib/python3.6/getopt.py
 #: /usr/lib/python3.7/getopt.py
@@ -2478,7 +2477,7 @@ msgstr ""
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 #: /usr/lib/python3.7/optparse.py
 msgid "show program's version number and exit"
-msgstr ""
+msgstr "zobrazit číslo verze programu a ukončit"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.5/optparse.py
 #: /usr/lib/python3.6/argparse.py /usr/lib/python3.6/optparse.py
