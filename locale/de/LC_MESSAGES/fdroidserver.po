@@ -21,8 +21,8 @@ msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2021-01-29 16:12+0100\n"
-"PO-Revision-Date: 2021-05-17 16:35+0000\n"
-"Last-Translator: Ceeee <marius.romanus@gmx.de>\n"
+"PO-Revision-Date: 2021-05-17 16:36+0000\n"
+"Last-Translator: VfBFan <drop0815@posteo.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/f-droid/fdroidserver/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -673,7 +673,7 @@ msgstr "Keine rsync-Prüfsummen verwenden"
 
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Download complete mirrors of small repos"
-msgstr "Komplette Spiegel von kleinen Repos herunterladen"
+msgstr "Komplette Spiegel von kleinen Paketquellen herunterladen"
 
 #: ../fdroidserver/stats.py
 msgid "Download logs we don't have"
@@ -904,7 +904,7 @@ msgstr "Es wurden keine Signaturzertifikate für das Repository gefunden."
 #: ../fdroidserver/lint.py
 #, python-format
 msgid "Found non-file at %s"
-msgstr "Ungültige Datei bei %s"
+msgstr "Ungültige Datei bei %s gefunden"
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
@@ -989,19 +989,22 @@ msgstr "Ignoriere die Datei {ext} bei '{path}'"
 
 #: ../fdroidserver/update.py
 msgid "Include APKs that are signed with disabled algorithms like MD5"
-msgstr "APKs einschliessen, die mit deaktivierten Algorithmen wie MD5 signiert sind"
+msgstr "APKs einschließen, die mit deaktivierten Algorithmen wie MD5 signiert sind"
 
 #: ../fdroidserver/mirror.py
+#, fuzzy
 msgid "Include the PGP signature .asc files in the mirror"
-msgstr "Die .asc-PGP-Signaturdateien in den Spiegel aufnehmen"
+msgstr "Einbinden der .asc-PGP-Signaturdateien in den Spiegelserver"
 
 #: ../fdroidserver/mirror.py
+#, fuzzy
 msgid "Include the build logs in the mirror"
-msgstr "Erstellungsprotokolle in den Spiegel aufnehmen"
+msgstr "Einbinden der Build-Protokolle in den Spiegelserver"
 
 #: ../fdroidserver/mirror.py
+#, fuzzy
 msgid "Include the source tarballs in the mirror"
-msgstr "Quellen-Tarballs in den Spiegel aufnehmen"
+msgstr "Einbinden der Quellen-Tarballs in den Spiegelserver"
 
 #: ../fdroidserver/common.py
 msgid "Initialising submodules"
@@ -1186,8 +1189,9 @@ msgid "Make the build stop on exceptions"
 msgstr "Erstellung bei Fehlern anhalten"
 
 #: ../fdroidserver/index.py
+#, fuzzy
 msgid "Malformed repository mirrors."
-msgstr "Fehlerhafte Repository Mirrors."
+msgstr "Fehlerhafte Paketquellen-Spiegelserver."
 
 #: ../fdroidserver/deploy.py
 msgid "Malformed serverwebroot line:"
@@ -1195,7 +1199,7 @@ msgstr "Fehlerhafte serverwebroot Zeile:"
 
 #: ../fdroidserver/mirror.py
 msgid "Mirror the full repo and archive, all file types."
-msgstr "Das vollständige Repo und Archiv spiegeln, alle Dateitypen."
+msgstr "Spiegeln Sie die komplette Paketquelle und das Archiv, inklusive aller Dateitypen."
 
 #: ../fdroidserver/gpgsign.py
 msgid "Missing output directory"
@@ -1717,8 +1721,9 @@ msgid "The base URL for the repo to log (default: https://f-droid.org)"
 msgstr "Basis-Adresse zur Anmeldung am Repository (Standard: https://f-droid.org)"
 
 #: ../fdroidserver/mirror.py
+#, fuzzy
 msgid "The directory to write the mirror to"
-msgstr "Das Verzeichnis, in das der Mirror geschrieben werden soll"
+msgstr "Das Verzeichnis, in das der Spiegelserver geschrieben werden soll"
 
 #: ../fdroidserver/nightly.py
 msgid "The file to be included in the repo (path or glob)"
@@ -2353,7 +2358,7 @@ msgstr "local_copy_dir muß ein Verzeichnis sein, keine Datei!"
 #: ../fdroidserver/index.py
 #, python-format
 msgid "mirror '%s' does not end with 'fdroid'!"
-msgstr "Mirror '%s' ended nicht auf 'fdroid'!"
+msgstr "Spiegelserver '%s' ended nicht mit 'fdroid'!"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py
