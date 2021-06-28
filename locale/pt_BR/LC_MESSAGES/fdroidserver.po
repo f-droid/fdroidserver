@@ -6,20 +6,21 @@
 # Rafael Fontenelle <rafaelff@gnome.org>, 2020, 2021.
 # ssantos <ssantos@web.de>, 2020.
 # The Cats <philosoph@snopyta.org>, 2020.
+# Eduardo Rodrigues <edu.rodrigues2580@gmail.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2021-01-29 16:12+0100\n"
-"PO-Revision-Date: 2021-01-14 21:33+0000\n"
-"Last-Translator: Rafael Fontenelle <rafaelff@gnome.org>\n"
+"PO-Revision-Date: 2021-02-19 19:50+0000\n"
+"Last-Translator: Eduardo Rodrigues <edu.rodrigues2580@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/f-droid/fdroidserver/pt_BR/>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.5-dev\n"
+"X-Generator: Weblate 4.5\n"
 
 #: ../fdroidserver/common.py
 msgid ""
@@ -70,7 +71,7 @@ msgstr "\"%s/\" não tem arquivo de metadados correspondente!"
 
 #: ../fdroidserver/index.py
 msgid "\"repo_pubkey\" must be present in config.yml when using --nosign!"
-msgstr ""
+msgstr "\"repo_pubkey\" deve estar presente em config.yml quando se usa --nosign!"
 
 #: ../fdroidserver/install.py
 #, python-brace-format
@@ -450,9 +451,9 @@ msgid "Checking archiving for {appid} - APKs:{integer}, keepversions:{keep}, arc
 msgstr "Verificar o arquivamento de {appid} - APKs: {integer}, Versões Mantidas: {keep}, Arcos de APKs: {arch}"
 
 #: ../fdroidserver/update.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Checking archiving for {appid} - apks:{integer}, keepversions:{keep}, archapks:{arch}"
-msgstr "Verificar o arquivamento de {appid} - APKs: {integer}, Versões Mantidas: {keep}, Arcos de APKs: {arch}"
+msgstr "Verificar o arquivamento de {appid} - apks:{integer}, keepversions:{keep}, archapks:{arch}"
 
 #: ../fdroidserver/update.py
 msgid "Clean update - don't uses caches, reprocess all APKs"
@@ -1739,16 +1740,8 @@ msgid "These are the apps that have been archived from the main repo."
 msgstr "Estas são as aplicações que foram arquivadas a partir do repositório principal."
 
 #: ../fdroidserver/common.py
-#, fuzzy
 msgid "This is a repository of apps to be used with F-Droid. Applications in this repository are either official binaries built by the original application developers, or are binaries built from source by the admin of f-droid.org using the tools on https://gitlab.com/fdroid."
-msgstr ""
-"\n"
-"        Este é um repositório de aplicativos a serem usados com o FDroid. Os\n"
-"        aplicativos neste repositório são binários oficiais compilados pelos\n"
-"        desenvolvedores do aplicativo original ou são binários compilados a\n"
-"        partir da fonte por f-droid.org usando as ferramentas em\n"
-"        https://gitlab.com/fdroid.\n"
-"        "
+msgstr "Este é um repositório de aplicativos a serem usados com o F-Droid. Os aplicativos neste repositório são binários oficiais compilados pelos desenvolvedores do aplicativo original ou são binários compilados a partir da fonte por f-droid.org usando as ferramentas em https://gitlab.com/fdroid."
 
 #: ../fdroidserver/import.py
 #, python-format
@@ -2476,9 +2469,9 @@ msgid "refuse downloading via insecure http connection (use https or specify --n
 msgstr "Recuse o download insegura via conexão http (use https ou especifique --no-https-check): {apkfilename}"
 
 #: ../fdroidserver/index.py
-#, fuzzy, python-format
+#, python-format
 msgid "repo_icon \"repo/icons/%s\" does not exist, generating placeholder."
-msgstr "repo_icon %s não existe, gerando um espaço reservado."
+msgstr "repo_icon \"repo/icons/%s\" não existe, gerando um espaço reservado."
 
 #: ../fdroidserver/index.py
 #, python-format
@@ -2684,9 +2677,9 @@ msgid "{name} \"{path}\" does not exist! Correct it in config.yml."
 msgstr "{name} \"{path}\" não existe! Corrija-o no config.yml."
 
 #: ../fdroidserver/update.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{name} \"{section}/icons/{path}\" does not exist! Check \"config.yml\"."
-msgstr "{name} \"{path}\" não existe! Corrija-o no config.yml."
+msgstr "{name} \"{section}/icons/{path}\" não existe! Corrija-o no \"config.yml\"."
 
 #: ../fdroidserver/common.py
 #, python-brace-format
