@@ -23,15 +23,15 @@ msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2021-01-29 16:12+0100\n"
-"PO-Revision-Date: 2021-05-26 20:33+0000\n"
-"Last-Translator: Follpvosten <wolfi@karpador.xyz>\n"
+"PO-Revision-Date: 2021-06-21 18:34+0000\n"
+"Last-Translator: VfBFan <drop0815@posteo.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/f-droid/fdroidserver/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.7-dev\n"
+"X-Generator: Weblate 4.7\n"
 
 #: ../fdroidserver/common.py
 msgid ""
@@ -682,7 +682,7 @@ msgstr "Herunterladung von Logs welche wir nicht haben"
 
 #: ../fdroidserver/common.py
 msgid "Downloading the repository already failed once, not trying again."
-msgstr "Herunterladen des Repositories bereits einmal fehlgeschlagen, versuche es nicht nochmal."
+msgstr "Herunterladen des Repositorys bereits einmal fehlgeschlagen, versuche es nicht nochmal."
 
 #: ../fdroidserver/verify.py
 #, python-brace-format
@@ -1731,11 +1731,11 @@ msgstr "Derzeit werden nur die Befehle „init” und „update” unterstützt"
 
 #: ../fdroidserver/index.py
 msgid "The repository's fingerprint does not match."
-msgstr "Der Fingerabdruck des Repositories stimmt nicht."
+msgstr "Der Fingerabdruck des Repositorys stimmt nicht."
 
 #: ../fdroidserver/common.py
 msgid "The repository's index could not be verified."
-msgstr "Der Index des Repositories konnte nicht verifiziert werden."
+msgstr "Der Index des Repositorys konnte nicht verifiziert werden."
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
