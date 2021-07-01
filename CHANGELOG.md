@@ -7,6 +7,19 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 ## [Unreleased]
 
 
+## [2.0.3] - 2021-07-01
+
+### Fixed
+
+* Support AutoUpdateMode: Version without pattern
+  [931](https://gitlab.com/fdroid/fdroidserver/-/merge_requests/931)
+
+## [2.0.2] - 2021-06-01
+
+### Fixed
+
+* fix "ruamel round_trip_dump will be removed"
+
 ## [2.0.1] - 2021-03-09
 
 ### Fixed
