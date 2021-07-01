@@ -282,6 +282,8 @@ __complete_signatures() {
 			__complete_options
 			return 0;;
 	esac
+        _filedir 'apk'
+        return 0
 }
 
 __complete_signindex() {

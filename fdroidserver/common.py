@@ -362,6 +362,8 @@ def read_config(opts=None):
         logging.debug(_("Reading '{config_file}'").format(config_file=config_file))
         with open(config_file, encoding='utf-8') as fp:
             config = yaml.safe_load(fp)
+        if not config:
+            config = {}
     elif os.path.exists(old_config_file):
         logging.warning(_("""{oldfile} is deprecated, use {newfile}""")
                         .format(oldfile=old_config_file, newfile=config_file))

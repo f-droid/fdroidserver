@@ -340,7 +340,8 @@ fdroid build:
     - fdroid build --verbose --latest org.fdroid.fdroid.privileged
     # each `fdroid build --on-server` run expects sudo, then uninstalls it
     - apt-get install sudo
-    - fdroid build --verbose --on-server --no-tarball --latest org.fdroid.fdroid
+    - currentVersionCode=`python3 -c "import yaml; print(yaml.load(open('metadata/org.fdroid.fdroid.yml'))['CurrentVersionCode'])"`
+    - fdroid build --verbose --on-server --no-tarball org.fdroid.fdroid:$currentVersionCode
 
 
 # test the plugin API and specifically the fetchsrclibs plugin, which

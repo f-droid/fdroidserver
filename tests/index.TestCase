@@ -23,6 +23,7 @@ if localmodule not in sys.path:
 
 import fdroidserver.common
 import fdroidserver.index
+import fdroidserver.net
 import fdroidserver.signindex
 import fdroidserver.publish
 from testcommon import TmpCwd
@@ -147,6 +148,17 @@ class IndexTest(unittest.TestCase):
         self.assertEqual(10, len(index['apps']))
         self.assertEqual(10, len(index['packages']))
         self.assertEqual('new_etag', new_etag)
+
+    @patch('fdroidserver.net.http_get')
+    def test_download_repo_index_url_parsing(self, mock_http_get):
+        mock_http_get.side_effect = lambda url, etag, timeout: (None, url)
+        repo_url = 'https://example.org/fdroid/repo'
+        index_url = 'https://example.org/fdroid/repo/index-v1.jar'
+        fingerprint_url = 'https://example.org/fdroid/repo?fingerprint=' + GP_FINGERPRINT
+        slash_url = 'https://example.org/fdroid/repo//?fingerprint=' + GP_FINGERPRINT
+        for url in (repo_url, index_url, fingerprint_url, slash_url):
+            _ignored, returned_url = fdroidserver.index.download_repo_index(url, verify_fingerprint=False)
+            self.assertEqual(index_url, returned_url)
 
     def test_v1_sort_packages(self):
 
