@@ -409,6 +409,32 @@ class UpdateTest(unittest.TestCase):
         self.assertFalse(os.path.exists(os.path.join('de-DE', 'phoneScreenshots', '01_Login.jpg')))
         self.assertFalse(os.path.exists(os.path.join('de-DE', 'sevenInchScreenshots', '01_Login.png')))
 
+    def test_insert_triple_t_multiple_metadata(self):
+        namespace = 'ch.admin.bag.covidcertificate.'
+        packages = ('verifier', 'wallet')
+        names = dict(verifier='COVID Certificate Check', wallet='COVID Certificate')
+
+        tmptestsdir = tempfile.mkdtemp(
+            prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir
+        )
+        os.rmdir(tmptestsdir)
+        shutil.copytree(os.path.join(self.basedir, 'triple-t-multiple'), tmptestsdir)
+        os.chdir(tmptestsdir)
+
+        for p in packages:
+            packageName = namespace + p
+            config = dict()
+            fdroidserver.common.fill_config_defaults(config)
+            fdroidserver.common.config = config
+            fdroidserver.update.config = config
+            fdroidserver.update.options = fdroidserver.common.options
+
+            apps = fdroidserver.metadata.read_metadata()
+            self.assertTrue(packageName in apps)
+            fdroidserver.update.copy_triple_t_store_metadata(apps)
+            app = apps[packageName]
+            self.assertEqual(app['localized']['en-US']['name'], names[p])
+
     def javagetsig(self, apkfile):
         getsig_dir = 'getsig'
         if not os.path.exists(os.path.join(getsig_dir, "getsig.class")):

@@ -1,0 +1,50 @@
+AntiFeatures:
+  - Tracking
+Categories:
+  - Sports & Health
+License: MPL-2.0
+AuthorName: Swiss Admin
+AuthorWebSite: https://www.bit.admin.ch
+SourceCode: https://github.com/admin-ch/CovidCertificate-App-Android
+IssueTracker: https://github.com/admin-ch/CovidCertificate-App-Android/issues
+Changelog: https://github.com/admin-ch/CovidCertificate-App-Android/releases
+
+AutoName: Covid Cert
+
+RepoType: git
+Repo: https://github.com/admin-ch/CovidCertificate-App-Android
+Binaries: https://github.com/admin-ch/CovidCertificate-App-Android/releases/download/v%v-%c-verifier/verifier-prod-%v-%c-signed.apk
+
+Builds:
+  - versionName: 1.2.0
+    versionCode: 1200
+    commit: v1.2.0-1200-verifier
+    subdir: verifier
+    submodules: true
+    gradle:
+      - prod
+    rm:
+      - sdk/sdk/testKeystore
+      - wallet/testKeystore
+      - verifier/testKeystore
+    prebuild: printf '\nbuildTimestamp=%s\n' "$(curl -sL https://github.com/admin-ch/CovidCertificate-App-Android/releases/download/v$$VERSION$$-$$VERCODE$$-verifier/verifier-prod-$$VERSION$$-$$VERCODE$$-buildtimestamp.txt
+        | tr -cd '0-9')" >> gradle.properties
+
+  - versionName: 2.0.0
+    versionCode: 2000
+    commit: 5a871eabf1fce16b84e4c7b97c94fd3f2a37e910
+    subdir: verifier
+    submodules: true
+    gradle:
+      - prod
+    rm:
+      - sdk/sdk/testKeystore
+      - wallet/testKeystore
+      - verifier/testKeystore
+    prebuild: printf '\nbuildTimestamp=%s\n' "$(curl -sL https://github.com/admin-ch/CovidCertificate-App-Android/releases/download/v$$VERSION$$-$$VERCODE$$-verifier/verifier-prod-$$VERSION$$-$$VERCODE$$-buildtimestamp.txt
+        | tr -cd '0-9')" >> gradle.properties
+
+AutoUpdateMode: Version
+UpdateCheckMode: Tags ^v[\d.]+-\d+-verifier$
+CurrentVersion: 2.0.0
+CurrentVersionCode: 2000
