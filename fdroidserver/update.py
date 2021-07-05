@@ -1059,12 +1059,12 @@ def copy_triple_t_store_metadata(apps):
                             if flavor not in ('yes', 'no'):
                                 p = os.path.join('build', packageName, gradle_path, 'src', flavor, 'play')
                             gradle_subdirs.add(p)
-        if not gradle_subdirs:
-            gradle_subdirs.update(glob.glob(os.path.join('build', packageName, '*', 'src', '*', 'play')))
         if not gradle_subdirs and len(app.get('Builds', [])) and app.get('Builds', [])[-1].subdir:
             gradle_subdirs.update(glob.glob(os.path.join('build', packageName, app.get('Builds', [])[-1].subdir, 'src', '*', 'play')))
+        if not gradle_subdirs:
+            gradle_subdirs.update(glob.glob(os.path.join('build', packageName, '*', 'src', '*', 'play')))
 
-        for d in gradle_subdirs:
+        for d in sorted(gradle_subdirs):
             logging.debug('Triple-T Gradle Play Publisher: ' + d)
             for root, dirs, files in os.walk(d):
                 segments = root.split('/')
