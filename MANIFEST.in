@@ -730,6 +730,7 @@ include tests/source-files/com.integreight.onesheeld/quickReturnHeader/build.gra
 include tests/source-files/com.integreight.onesheeld/quickReturnHeader/src/main/AndroidManifest.xml
 include tests/source-files/com.integreight.onesheeld/settings.gradle
 include tests/source-files/com.jens.automation2/build.gradle
+include tests/source-files/com.jens.automation2/app/build.gradle
 include tests/source-files/com.kunzisoft.testcase/build.gradle
 include tests/source-files/com.nextcloud.client/build.gradle
 include tests/source-files/com.nextcloud.client.dev/src/generic/fastlane/metadata/android/en-US/full_description.txt
