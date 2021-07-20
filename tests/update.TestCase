@@ -62,6 +62,7 @@ DONATION_FIELDS = ('Donate', 'Liberapay', 'OpenCollective')
 class Options:
     allow_disabled_algorithms = False
     clean = False
+    nosign = False
     pretty = True
     rename_apks = False
 
@@ -1025,6 +1026,104 @@ class UpdateTest(unittest.TestCase):
         self.assertTrue(skip)
         self.assertIsNone(apk)
         self.assertFalse(cachechanged)
+
+    def test_get_apks_without_allowed_signatures(self):
+        """Test when no AllowedAPKSigningKeys is specified"""
+        config = dict()
+        fdroidserver.common.fill_config_defaults(config)
+        fdroidserver.common.config = config
+        fdroidserver.common.options = Options
+
+        app = fdroidserver.metadata.App()
+        knownapks = fdroidserver.common.KnownApks()
+        apkfile = 'v1.v2.sig_1020.apk'
+        (skip, apk, cachechanged) = fdroidserver.update.process_apk(
+            {}, apkfile, 'repo', knownapks, False
+        )
+
+        r = fdroidserver.update.get_apks_without_allowed_signatures(app, apk)
+        self.assertIsNone(r)
+
+    def test_get_apks_without_allowed_signatures_allowed(self):
+        """Test when the APK matches the specified AllowedAPKSigningKeys"""
+        config = dict()
+        fdroidserver.common.fill_config_defaults(config)
+        fdroidserver.common.config = config
+        fdroidserver.common.options = Options
+        fdroidserver.update.options = fdroidserver.common.options
+
+        app = fdroidserver.metadata.App(
+            {
+                'AllowedAPKSigningKeys': '32a23624c201b949f085996ba5ed53d40f703aca4989476949cae891022e0ed6'
+            }
+        )
+        knownapks = fdroidserver.common.KnownApks()
+        apkfile = 'v1.v2.sig_1020.apk'
+        (skip, apk, cachechanged) = fdroidserver.update.process_apk(
+            {}, apkfile, 'repo', knownapks, False
+        )
+
+        r = fdroidserver.update.get_apks_without_allowed_signatures(app, apk)
+        self.assertIsNone(r)
+
+    def test_get_apks_without_allowed_signatures_blocked(self):
+        """Test when the APK does not match any specified AllowedAPKSigningKeys"""
+        config = dict()
+        fdroidserver.common.fill_config_defaults(config)
+        fdroidserver.common.config = config
+        fdroidserver.common.options = Options
+        fdroidserver.update.options = fdroidserver.common.options
+
+        app = fdroidserver.metadata.App(
+            {
+                'AllowedAPKSigningKeys': 'fa4edeadfa4edeadfa4edeadfa4edeadfa4edeadfa4edeadfa4edeadfa4edead'
+            }
+        )
+        knownapks = fdroidserver.common.KnownApks()
+        apkfile = 'v1.v2.sig_1020.apk'
+        (skip, apk, cachechanged) = fdroidserver.update.process_apk(
+            {}, apkfile, 'repo', knownapks, False
+        )
+
+        r = fdroidserver.update.get_apks_without_allowed_signatures(app, apk)
+        self.assertEqual(apkfile, r)
+
+    def test_update_with_AllowedAPKSigningKeys(self):
+        """Test that APKs without allowed signatures get deleted."""
+        testdir = tempfile.mkdtemp(
+            prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir
+        )
+        os.chdir(testdir)
+        os.mkdir('repo')
+        testapk = os.path.join('repo', 'com.politedroid_6.apk')
+        shutil.copy(os.path.join(self.basedir, testapk), testapk)
+        os.mkdir('metadata')
+        metadatafile = os.path.join('metadata', 'com.politedroid.yml')
+        shutil.copy(os.path.join(self.basedir, metadatafile), metadatafile)
+        with open(metadatafile, 'a') as fp:
+            fp.write(
+                '\n\nAllowedAPKSigningKeys: 32a23624c201b949f085996ba5ed53d40f703aca4989476949cae891022e0ed6\n'
+            )
+
+        fdroidserver.common.options = Options
+        config = fdroidserver.common.read_config(fdroidserver.common.options)
+        config['repo_keyalias'] = 'sova'
+        config['keystorepass'] = 'r9aquRHYoI8+dYz6jKrLntQ5/NJNASFBacJh7Jv2BlI='
+        config['keypass'] = 'r9aquRHYoI8+dYz6jKrLntQ5/NJNASFBacJh7Jv2BlI='
+        config['keystore'] = os.path.join(self.basedir, 'keystore.jks')
+
+        self.assertTrue(os.path.exists(testapk))
+        with mock.patch('sys.argv', ['fdroid update', '--delete-unknown']):
+            fdroidserver.update.main()
+        self.assertTrue(os.path.exists(testapk))
+
+        with open(metadatafile, 'a') as fp:
+            fp.write(
+                '\n\nAllowedAPKSigningKeys: fa4edeadfa4edeadfa4edeadfa4edeadfa4edeadfa4edeadfa4edeadfa4edead\n'
+            )
+        with mock.patch('sys.argv', ['fdroid update', '--delete-unknown']):
+            fdroidserver.update.main()
+        self.assertFalse(os.path.exists(testapk))
 
     def test_translate_per_build_anti_features(self):
         os.chdir(os.path.join(localmodule, 'tests'))

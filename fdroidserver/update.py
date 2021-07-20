@@ -36,6 +36,8 @@ import yaml
 import copy
 from datetime import datetime
 from argparse import ArgumentParser
+from pathlib import Path
+
 try:
     from yaml import CSafeLoader as SafeLoader
 except ImportError:
@@ -51,6 +53,7 @@ from . import metadata
 from .exception import BuildException, FDroidException
 
 from PIL import Image, PngImagePlugin
+
 if hasattr(Image, 'DecompressionBombWarning'):
     warnings.simplefilter('error', Image.DecompressionBombWarning)
 Image.MAX_IMAGE_PIXELS = 0xffffff  # 4096x4096
@@ -688,7 +691,6 @@ def insert_obbs(repodir, apps, apks):
       list of current, valid apps
     apks
       current information on all APKs
-
     """
     def obbWarnDelete(f, msg):
         logging.warning(msg + ' ' + f)
@@ -2223,6 +2225,31 @@ def get_apps_with_packages(apps, apks):
     return appsWithPackages
 
 
+def get_apks_without_allowed_signatures(app, apk):
+    """Check the APK or package has been signed by one of the allowed signing certificates.
+
+    The fingerprint of the signing certificate is the standard X.509
+    SHA-256 fingerprint as a hex string.  It can be fetched from an
+    APK using:
+
+    apksigner verify --print-certs my.apk | grep SHA-256
+
+    Parameters
+    ----------
+    app
+      The app which declares the AllowedSigningKey
+    apk
+      The APK to check
+    """
+    if not app or not apk:
+        return
+    allowed_signer_keys = app.get('AllowedAPKSigningKeys', [])
+    if not allowed_signer_keys:
+        return
+    if apk['signer'] not in allowed_signer_keys:
+        return apk['apkName']
+
+
 def prepare_apps(apps, apks, repodir):
     """Encapsulate all necessary preparation steps before we can build an index out of apps and apks.
 
@@ -2372,6 +2399,23 @@ def main():
     appid_has_apks = set()
     appid_has_repo_files = set()
     for apk in apks:
+        to_remove = get_apks_without_allowed_signatures(apps.get(apk['packageName']), apk)
+        if to_remove:
+            apks.remove(apk)
+            logging.warning(
+                _('"{path}" is signed by a key that is not allowed:').format(
+                    path=to_remove
+                )
+                + '\n'
+                + apk['signer']
+            )
+            if options.delete_unknown:
+                for d in repodirs:
+                    path = Path(d) / to_remove
+                    if path.exists():
+                        logging.warning(_('Removing {path}"').format(path=path))
+                        path.unlink()
+
         if apk['apkName'].endswith('.apk'):
             appid_has_apks.add(apk['packageName'])
         else:
