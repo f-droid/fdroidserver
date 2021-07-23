@@ -186,8 +186,6 @@ class App(dict):
             return Build()
 
 
-TYPE_UNKNOWN = 0
-TYPE_OBSOLETE = 1
 TYPE_STRING = 2
 TYPE_BOOL = 3
 TYPE_LIST = 4
@@ -202,8 +200,6 @@ fieldtypes = {
     'Categories': TYPE_LIST,
     'AntiFeatures': TYPE_LIST,
     'Build': TYPE_BUILD,
-    'BuildVersion': TYPE_OBSOLETE,
-    'UseBuilt': TYPE_OBSOLETE,
 }
 
 
