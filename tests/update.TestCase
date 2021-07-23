@@ -62,9 +62,11 @@ DONATION_FIELDS = ('Donate', 'Liberapay', 'OpenCollective')
 class Options:
     allow_disabled_algorithms = False
     clean = False
+    delete_unknown = False
     nosign = False
     pretty = True
     rename_apks = False
+    verbose = False
 
 
 class UpdateTest(unittest.TestCase):
@@ -83,11 +85,13 @@ class UpdateTest(unittest.TestCase):
             os.makedirs(self.tmpdir)
         os.chdir(self.basedir)
 
+        fdroidserver.common.config = None
+        fdroidserver.common.options = None
+
     def testInsertStoreMetadata(self):
         config = dict()
         fdroidserver.common.fill_config_defaults(config)
         fdroidserver.update.config = config
-        fdroidserver.update.options = fdroidserver.common.options
         os.chdir(os.path.join(localmodule, 'tests'))
 
         shutil.rmtree(os.path.join('repo', 'info.guardianproject.urzip'), ignore_errors=True)
@@ -194,11 +198,10 @@ class UpdateTest(unittest.TestCase):
         fdroidserver.common.config = config
         fdroidserver.update.config = config
         os.chdir(os.path.join(localmodule, 'tests'))
-        fdroidserver.update.options = type('', (), {})()
+        fdroidserver.common.options = Options
+        fdroidserver.update.options = fdroidserver.common.options
         fdroidserver.update.options.clean = True
         fdroidserver.update.options.delete_unknown = True
-        fdroidserver.update.options.rename_apks = False
-        fdroidserver.update.options.allow_disabled_algorithms = False
 
         apps = fdroidserver.metadata.read_metadata()
         knownapks = fdroidserver.common.KnownApks()
@@ -248,6 +251,7 @@ class UpdateTest(unittest.TestCase):
             {'packageName': 'apks', 'name': 'fromapk2', 'versionCode': 2},
             {'packageName': 'apks', 'name': testvalue, 'versionCode': 3},
         ]
+        fdroidserver.common.options = Options
         fdroidserver.update.insert_missing_app_names_from_apks(apps, apks)
         for appid, app in apps.items():
             if appid == 'none':
@@ -277,11 +281,10 @@ class UpdateTest(unittest.TestCase):
         fdroidserver.common.fill_config_defaults(config)
         fdroidserver.common.config = config
         fdroidserver.update.config = config
-        fdroidserver.update.options = type('', (), {})()
+        fdroidserver.common.options = Options
+        fdroidserver.update.options = fdroidserver.common.options
         fdroidserver.update.options.clean = True
         fdroidserver.update.options.delete_unknown = True
-        fdroidserver.update.options.rename_apks = False
-        fdroidserver.update.options.allow_disabled_algorithms = False
 
         apps = fdroidserver.metadata.read_metadata()
         knownapks = fdroidserver.common.KnownApks()
@@ -349,7 +352,6 @@ class UpdateTest(unittest.TestCase):
         fdroidserver.common.fill_config_defaults(config)
         fdroidserver.common.config = config
         fdroidserver.update.config = config
-        fdroidserver.update.options = fdroidserver.common.options
         os.chdir(tmptestsdir)
 
         apps = fdroidserver.metadata.read_metadata()
@@ -382,7 +384,6 @@ class UpdateTest(unittest.TestCase):
         fdroidserver.common.fill_config_defaults(config)
         fdroidserver.common.config = config
         fdroidserver.update.config = config
-        fdroidserver.update.options = fdroidserver.common.options
 
         apps = fdroidserver.metadata.read_metadata()
         self.assertTrue(packageName in apps)
@@ -484,6 +485,7 @@ class UpdateTest(unittest.TestCase):
         # config needed to use jarsigner and keytool
         config = dict()
         fdroidserver.common.fill_config_defaults(config)
+        fdroidserver.common.options = Options
         fdroidserver.update.config = config
         apkfile = 'urzip.apk'
         sig = self.javagetsig(apkfile)
@@ -575,11 +577,10 @@ class UpdateTest(unittest.TestCase):
         fdroidserver.common.config = config
         fdroidserver.update.config = config
 
-        fdroidserver.update.options = type('', (), {})()
+        fdroidserver.common.options = Options
+        fdroidserver.update.options = fdroidserver.common.options
         fdroidserver.update.options.clean = True
         fdroidserver.update.options.delete_unknown = True
-        fdroidserver.update.options.rename_apks = False
-        fdroidserver.update.options.allow_disabled_algorithms = False
 
         apps = fdroidserver.metadata.read_metadata()
         knownapks = fdroidserver.common.KnownApks()
@@ -634,11 +635,10 @@ class UpdateTest(unittest.TestCase):
         fdroidserver.common.config = config
         fdroidserver.update.config = config
 
-        fdroidserver.update.options = type('', (), {})()
+        fdroidserver.common.options = Options
+        fdroidserver.update.options = fdroidserver.common.options
         fdroidserver.update.options.clean = True
         fdroidserver.update.options.delete_unknown = True
-        fdroidserver.update.options.rename_apks = False
-        fdroidserver.update.options.allow_disabled_algorithms = False
 
         fdroidserver.metadata.read_metadata()
         knownapks = fdroidserver.common.KnownApks()
@@ -695,7 +695,7 @@ class UpdateTest(unittest.TestCase):
         fdroidserver.common.fill_config_defaults(config)
         fdroidserver.common.config = config
         fdroidserver.update.config = config
-        fdroidserver.update.options = Options
+        fdroidserver.common.options = Options
         os.chdir(os.path.join(localmodule, 'tests'))
         apps = fdroidserver.metadata.read_metadata()
         knownapks = fdroidserver.common.KnownApks()
@@ -707,7 +707,7 @@ class UpdateTest(unittest.TestCase):
         fdroidserver.common.fill_config_defaults(config)
         fdroidserver.common.config = config
         fdroidserver.update.config = config
-        fdroidserver.update.options = Options
+        fdroidserver.common.options = Options
         os.chdir(os.path.join(localmodule, 'tests'))
         apps = fdroidserver.metadata.read_metadata()
         knownapks = fdroidserver.common.KnownApks()
@@ -856,11 +856,11 @@ class UpdateTest(unittest.TestCase):
         config['ndk_paths'] = dict()
         fdroidserver.common.config = config
         fdroidserver.update.config = config
-        fdroidserver.update.options = type('', (), {})()
+
+        fdroidserver.common.options = Options
+        fdroidserver.update.options = fdroidserver.common.options
         fdroidserver.update.options.clean = True
-        fdroidserver.update.options.rename_apks = False
         fdroidserver.update.options.delete_unknown = True
-        fdroidserver.update.options.allow_disabled_algorithms = False
 
         for icon_dir in fdroidserver.update.get_all_icon_dirs('repo'):
             if not os.path.exists(icon_dir):
@@ -918,12 +918,11 @@ class UpdateTest(unittest.TestCase):
         fdroidserver.common.config = config
         fdroidserver.update.config = config
 
-        fdroidserver.update.options = type('', (), {})()
+        fdroidserver.common.options = Options
+        fdroidserver.update.options = fdroidserver.common.options
         fdroidserver.update.options.clean = True
         fdroidserver.update.options.verbose = True
-        fdroidserver.update.options.rename_apks = False
         fdroidserver.update.options.delete_unknown = True
-        fdroidserver.update.options.allow_disabled_algorithms = False
 
         knownapks = fdroidserver.common.KnownApks()
 
@@ -1015,6 +1014,7 @@ class UpdateTest(unittest.TestCase):
         fdroidserver.common.fill_config_defaults(config)
         fdroidserver.common.config = config
         fdroidserver.update.config = config
+        fdroidserver.common.options = Options
         fdroidserver.update.options = fdroidserver.common.options
         fdroidserver.update.options.delete_unknown = False
 
@@ -1139,11 +1139,10 @@ class UpdateTest(unittest.TestCase):
         fdroidserver.common.config = config
         fdroidserver.update.config = config
 
-        fdroidserver.update.options = type('', (), {})()
+        fdroidserver.common.options = Options
+        fdroidserver.update.options = fdroidserver.common.options
         fdroidserver.update.options.clean = True
         fdroidserver.update.options.delete_unknown = True
-        fdroidserver.update.options.rename_apks = False
-        fdroidserver.update.options.allow_disabled_algorithms = False
 
         apps = fdroidserver.metadata.read_metadata()
         knownapks = fdroidserver.common.KnownApks()
@@ -1175,11 +1174,9 @@ class UpdateTest(unittest.TestCase):
         fdroidserver.common.config = config
         fdroidserver.update.config = config
 
-        fdroidserver.update.options = type('', (), {})()
+        fdroidserver.common.options = Options
+        fdroidserver.update.options = fdroidserver.common.options
         fdroidserver.update.options.clean = True
-        fdroidserver.update.options.delete_unknown = False
-        fdroidserver.update.options.rename_apks = False
-        fdroidserver.update.options.allow_disabled_algorithms = False
 
         knownapks = fdroidserver.common.KnownApks()
         apks, cachechanged = fdroidserver.update.process_apks({}, 'repo', knownapks, False)
