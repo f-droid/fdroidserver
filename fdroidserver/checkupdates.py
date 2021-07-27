@@ -487,8 +487,7 @@ def checkupdates_app(app):
         msg = 'Checking disabled'
         noverok = True
     else:
-        version = None
-        msg = 'Invalid update check method'
+        raise MetaDataException(_('Invalid UpdateCheckMode: {mode}').format(mode=mode))
 
     if version and vercode and app.VercodeOperation:
         if not common.VERCODE_OPERATION_RE.match(app.VercodeOperation):
@@ -513,7 +512,7 @@ def checkupdates_app(app):
         else:
             logging.warning(logmsg)
     elif vercode == app.CurrentVersionCode:
-        logging.info("...up to date")
+        logging.debug("...up to date")
     elif int(vercode) > int(app.CurrentVersionCode):
         logging.debug("...updating - old vercode={0}, new vercode={1}".format(
             app.CurrentVersionCode, vercode))
@@ -521,9 +520,11 @@ def checkupdates_app(app):
         app.CurrentVersionCode = str(int(vercode))
         updating = True
     else:
-        logging.info("Refusing to auto update, since the current version is newer")
-        logging.debug("...old vercode={0}, new vercode={1}".format(
-            app.CurrentVersionCode, vercode))
+        raise FDroidException(
+            _('current version is newer: old vercode={old}, new vercode={new}').format(
+                old=app.CurrentVersionCode, new=vercode
+            )
+        )
 
     commitmsg = fetch_autoname(app, tag)
 
@@ -536,7 +537,9 @@ def checkupdates_app(app):
     if options.auto:
         mode = app.AutoUpdateMode
         if not app.CurrentVersionCode:
-            logging.warning("Can't auto-update app with no CurrentVersionCode: " + app.id)
+            raise MetaDataException(
+                _("Can't auto-update app with no CurrentVersionCode")
+            )
         elif mode in ('None', 'Static'):
             pass
         elif mode.startswith('Version'):
@@ -557,7 +560,11 @@ def checkupdates_app(app):
                     latest = build
 
             if int(latest.versionCode) > int(app.CurrentVersionCode):
-                logging.info("Refusing to auto update, since the latest build is newer")
+                raise FDroidException(
+                    _(
+                        'latest build recipe is newer: old vercode={old}, new vercode={new}'
+                    ).format(old=latest.versionCode, new=app.CurrentVersionCode)
+                )
 
             if not gotcur:
                 newbuild = copy.deepcopy(latest)
@@ -577,7 +584,9 @@ def checkupdates_app(app):
                 ver = _getcvname(app)
                 commitmsg = "Update %s to %s" % (name, ver)
         else:
-            logging.warning('Invalid auto update mode "' + mode + '" on ' + app.id)
+            raise MetaDataException(
+                _('Invalid AutoUpdateMode: {mode}').format(mode=mode)
+            )
 
     if commitmsg:
         metadata.write_metadata(app.metadatapath, app)
@@ -705,6 +714,7 @@ def main():
     locallog = ''
     processed = []
     failed = dict()
+    exit_code = 0
     for appid, app in apps.items():
 
         if options.autoonly and app.AutoUpdateMode in ('None', 'Static'):
@@ -721,12 +731,15 @@ def main():
         except Exception as e:
             msg = _("...checkupdate failed for {appid} : {error}").format(appid=appid, error=e)
             logging.error(msg)
+            logging.debug(traceback.format_exc())
             locallog += msg + '\n'
             failed[appid] = str(e)
+            exit_code = 1
 
     update_wiki(None, locallog)
     status_update_json(processed, failed)
     logging.info(_("Finished"))
+    sys.exit(exit_code)
 
 
 if __name__ == "__main__":

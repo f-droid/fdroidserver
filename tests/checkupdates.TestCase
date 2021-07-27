@@ -65,7 +65,8 @@ class CheckupdatesTest(unittest.TestCase):
         ):
             with mock.patch('fdroidserver.metadata.write_metadata', mock.Mock()):
                 with mock.patch('subprocess.call', lambda cmd: 0):
-                    fdroidserver.checkupdates.checkupdates_app(app)
+                    with self.assertRaises(FDroidException):
+                        fdroidserver.checkupdates.checkupdates_app(app)
                 build = app['Builds'][-1]
                 self.assertEqual(build.versionName, '1.1.9')
                 self.assertEqual(build.commit, '1.1.9')
