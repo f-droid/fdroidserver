@@ -45,9 +45,6 @@ from .exception import VCSException, NoSubmodulesException, FDroidException, Met
 # required.
 def check_http(app):
 
-    ignoreversions = app.UpdateCheckIgnore
-    ignoresearch = re.compile(ignoreversions).search if ignoreversions else None
-
     if not app.UpdateCheckData:
         raise FDroidException('Missing Update Check Data')
 
@@ -60,39 +57,32 @@ def check_http(app):
         if not parsed.netloc or not parsed.scheme or parsed.scheme != 'https':
             raise FDroidException(_('UpdateCheckData has invalid URL: {url}').format(url=urlcode))
 
-    vercode = None
-    if urlcode:
-        logging.debug("...requesting {0}".format(urlcode))
-        req = urllib.request.Request(urlcode, None, headers=net.HEADERS)
+    logging.debug("...requesting {0}".format(urlcode))
+    req = urllib.request.Request(urlcode, None, headers=net.HEADERS)
+    resp = urllib.request.urlopen(req, None, 20)  # nosec B310 scheme is filtered above
+    page = resp.read().decode('utf-8')
+
+    m = re.search(codeex, page)
+    if not m:
+        raise FDroidException("No RE match for version code")
+    vercode = m.group(1).strip()
+
+    if urlver != '.':
+        logging.debug("...requesting {0}".format(urlver))
+        req = urllib.request.Request(urlver, None)
         resp = urllib.request.urlopen(req, None, 20)  # nosec B310 scheme is filtered above
         page = resp.read().decode('utf-8')
 
-        m = re.search(codeex, page)
-        if not m:
-            raise FDroidException("No RE match for version code")
-        vercode = m.group(1).strip()
+    m = re.search(verex, page)
+    if not m:
+        raise FDroidException("No RE match for version")
+    version = m.group(1)
 
-    version = "??"
-    if urlver:
-        if urlver != '.':
-            logging.debug("...requesting {0}".format(urlver))
-            req = urllib.request.Request(urlver, None)
-            resp = urllib.request.urlopen(req, None, 20)  # nosec B310 scheme is filtered above
-            page = resp.read().decode('utf-8')
+    if app.UpdateCheckIgnore and re.search(app.UpdateCheckIgnore, version):
+        logging.info("Version {version} for {appid} is ignored".format(version=version, appid=app.id))
+        return (None, None)
 
-        m = re.search(verex, page)
-        if not m:
-            raise FDroidException("No RE match for version")
-        version = m.group(1)
-
-    if ignoresearch and version:
-        if not ignoresearch(version):
-            return (version, vercode)
-        else:
-            logging.info("Version {version} for {appid} is ignored".format(version=version, appid=app.id))
-            return (None, None)
-    else:
-        return (version, vercode)
+    return (version, vercode)
 
 
 def check_tags(app, pattern):
