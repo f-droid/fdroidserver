@@ -186,9 +186,8 @@ class CheckupdatesTest(unittest.TestCase):
             faked = scheme + '://fake.url/for/testing/scheme'
             app.UpdateCheckData = faked + '|ignored|' + faked + '|ignored'
             app.metadatapath = 'metadata/' + app.id + '.yml'
-            vername, vercode = fdroidserver.checkupdates.check_http(app)
-            self.assertIsNone(vername)
-            self.assertTrue(FDroidException.__name__ in vercode)
+            with self.assertRaises(FDroidException):
+                fdroidserver.checkupdates.check_http(app)
 
     def test_check_http_ignore(self):
         fdroidserver.checkupdates.options = mock.Mock()
