@@ -109,10 +109,10 @@ def check_tags(app, pattern):
         repotype = app.RepoType
 
     if repotype not in ('git', 'git-svn', 'hg', 'bzr'):
-        return (None, 'Tags update mode only works for git, hg, bzr and git-svn repositories currently', None)
+        raise MetaDataException(_('Tags update mode only works for git, hg, bzr and git-svn repositories currently'))
 
     if repotype == 'git-svn' and ';' not in app.Repo:
-        return (None, 'Tags update mode used in git-svn, but the repo was not set up with tags', None)
+        raise MetaDataException(_('Tags update mode used in git-svn, but the repo was not set up with tags'))
 
     # Set up vcs interface and make sure we have the latest code...
     vcs = common.getvcs(app.RepoType, app.Repo, build_dir)
@@ -133,14 +133,14 @@ def check_tags(app, pattern):
     else:
         tags = vcs.gettags()
     if not tags:
-        return (None, "No tags found", None)
+        raise FDroidException(_('No tags found'))
 
     logging.debug("All tags: " + ','.join(tags))
     if pattern:
         pat = re.compile(pattern)
         tags = [tag for tag in tags if pat.match(tag)]
         if not tags:
-            return (None, "No matching tags found", None)
+            raise FDroidException(_('No matching tags found'))
         logging.debug("Matching tags: " + ','.join(tags))
 
     if len(tags) > 5 and repotype == 'git':
@@ -218,7 +218,7 @@ def check_tags(app, pattern):
         except VCSException:
             pass
         return (hver, hcode, htag)
-    return (None, "Couldn't find any version information", None)
+    raise FDroidException(_("Couldn't find any version information"))
 
 
 def check_repomanifest(app, branch=None):
@@ -272,10 +272,10 @@ def check_repomanifest(app, branch=None):
                 hver = version
 
     if not hpak:
-        return (None, "Couldn't find package ID")
+        raise FDroidException(_("Couldn't find package ID"))
     if hver:
         return (hver, hcode)
-    return (None, "Couldn't find any version information")
+    raise FDroidException(_("Couldn't find any version information"))
 
 
 def check_repotrunk(app):
@@ -287,7 +287,7 @@ def check_repotrunk(app):
         repotype = app.RepoType
 
     if repotype not in ('git-svn', ):
-        return (None, 'RepoTrunk update mode only makes sense in git-svn repositories')
+        raise MetaDataException(_('RepoTrunk update mode only makes sense in git-svn repositories'))
 
     # Set up vcs interface and make sure we have the latest code...
     vcs = common.getvcs(app.RepoType, app.Repo, build_dir)
