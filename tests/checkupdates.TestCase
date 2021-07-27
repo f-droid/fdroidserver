@@ -205,7 +205,6 @@ class CheckupdatesTest(unittest.TestCase):
         with mock.patch('urllib.request.urlopen', lambda a, b, c: respmock):
             vername, vercode = fdroidserver.checkupdates.check_http(app)
             self.assertEqual(vername, None)
-            self.assertEqual(vercode, 'Version 1.1.9-beta is ignored')
 
     def test_check_tags_data(self):
         fdroidserver.checkupdates.options = mock.Mock()

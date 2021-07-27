@@ -89,7 +89,8 @@ def check_http(app):
         if not ignoresearch(version):
             return (version, vercode)
         else:
-            return (None, ("Version {version} is ignored").format(version=version))
+            logging.info("Version {version} for {appid} is ignored".format(version=version, appid=app.id))
+            return (None, None)
     else:
         return (version, vercode)
 
@@ -428,31 +429,22 @@ def checkupdates_app(app):
     commitmsg = None
 
     tag = None
-    msg = None
     vercode = None
-    noverok = False
     mode = app.UpdateCheckMode
     if mode.startswith('Tags'):
         pattern = mode[5:] if len(mode) > 4 else None
         (version, vercode, tag) = check_tags(app, pattern)
-        msg = vercode
     elif mode == 'RepoManifest':
         (version, vercode) = check_repomanifest(app)
-        msg = vercode
     elif mode.startswith('RepoManifest/'):
         tag = mode[13:]
         (version, vercode) = check_repomanifest(app, tag)
-        msg = vercode
     elif mode == 'RepoTrunk':
         (version, vercode) = check_repotrunk(app)
-        msg = vercode
     elif mode == 'HTTP':
         (version, vercode) = check_http(app)
-        msg = vercode
     elif mode in ('None', 'Static'):
-        version = None
-        msg = 'Checking disabled'
-        noverok = True
+        raise MetaDataException(_('Checking disabled'))
     else:
         raise MetaDataException(_('Invalid UpdateCheckMode: {mode}').format(mode=mode))
 
@@ -473,11 +465,7 @@ def checkupdates_app(app):
 
     updating = False
     if version is None:
-        logmsg = "...{0} : {1}".format(app.id, msg)
-        if noverok:
-            logging.info(logmsg)
-        else:
-            logging.warning(logmsg)
+        logging.warning('no version information found for {appid}'.format(appid=app.id))
     elif vercode == app.CurrentVersionCode:
         logging.debug("...up to date")
     elif int(vercode) > int(app.CurrentVersionCode):
