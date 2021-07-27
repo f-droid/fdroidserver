@@ -746,6 +746,7 @@ include tests/source-files/com.nextcloud.client/src/versionDev/fastlane/metadata
 include tests/source-files/com.nextcloud.client/src/versionDev/fastlane/metadata/android/en-US/short_description.txt
 include tests/source-files/com.nextcloud.client/src/versionDev/fastlane/metadata/android/en-US/title.txt
 include tests/source-files/com.seafile.seadroid2/app/build.gradle
+include tests/source-files/de.varengold.activeTAN/build.gradle
 include tests/source-files/dev.patrickgold.florisboard/app/build.gradle.kts
 include tests/source-files/eu.siacs.conversations/build.gradle
 include tests/source-files/eu.siacs.conversations/metadata/en-US/name.txt

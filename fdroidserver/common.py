@@ -1691,11 +1691,11 @@ def parse_androidmanifests(paths, app):
         vercode = None
         package = None
 
-        flavour = None
+        flavours = None
         temp_app_id = None
         temp_version_name = None
         if len(app.get('Builds', [])) > 0 and 'gradle' in app['Builds'][-1] and app['Builds'][-1].gradle:
-            flavour = app['Builds'][-1].gradle[-1]
+            flavours = app['Builds'][-1].gradle
 
         if path.endswith('.gradle') or path.endswith('.gradle.kts'):
             with open(path, 'r', encoding='utf-8') as f:
@@ -1753,12 +1753,14 @@ def parse_androidmanifests(paths, app):
                                 inside_required_flavour -= 1
                                 if inside_required_flavour == 1:
                                     inside_required_flavour -= 1
-                        else:
-                            if flavour:
+                        elif flavours:
+                            for flavour in flavours:
                                 if re.match(r'.*[\'"\s]{flavour}[\'"\s].*\{{.*'.format(flavour=flavour), line):
                                     inside_required_flavour = 2
+                                    break
                                 elif re.match(r'.*[\'"\s]{flavour}[\'"\s].*'.format(flavour=flavour), line):
                                     inside_required_flavour = 1
+                                    break
 
                         if '{' in line:
                             inside_flavour_group += 1
