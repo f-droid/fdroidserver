@@ -688,7 +688,7 @@ LOCAL_COPY_DIR=`create_test_dir`/fdroid
 mkdir -p $LOCAL_COPY_DIR/repo
 echo "local_copy_dir: $LOCAL_COPY_DIR" >> config.yml
 
-$fdroid checkupdates --allow-dirty
+$fdroid checkupdates --allow-dirty || true
 which gpg && $fdroid gpgsign
 $fdroid lint
 $fdroid readmeta

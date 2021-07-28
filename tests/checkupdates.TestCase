@@ -65,7 +65,8 @@ class CheckupdatesTest(unittest.TestCase):
         ):
             with mock.patch('fdroidserver.metadata.write_metadata', mock.Mock()):
                 with mock.patch('subprocess.call', lambda cmd: 0):
-                    fdroidserver.checkupdates.checkupdates_app(app)
+                    with self.assertRaises(FDroidException):
+                        fdroidserver.checkupdates.checkupdates_app(app)
                 build = app['Builds'][-1]
                 self.assertEqual(build.versionName, '1.1.9')
                 self.assertEqual(build.commit, '1.1.9')
@@ -185,9 +186,8 @@ class CheckupdatesTest(unittest.TestCase):
             faked = scheme + '://fake.url/for/testing/scheme'
             app.UpdateCheckData = faked + '|ignored|' + faked + '|ignored'
             app.metadatapath = 'metadata/' + app.id + '.yml'
-            vername, vercode = fdroidserver.checkupdates.check_http(app)
-            self.assertIsNone(vername)
-            self.assertTrue(FDroidException.__name__ in vercode)
+            with self.assertRaises(FDroidException):
+                fdroidserver.checkupdates.check_http(app)
 
     def test_check_http_ignore(self):
         fdroidserver.checkupdates.options = mock.Mock()
@@ -205,7 +205,6 @@ class CheckupdatesTest(unittest.TestCase):
         with mock.patch('urllib.request.urlopen', lambda a, b, c: respmock):
             vername, vercode = fdroidserver.checkupdates.check_http(app)
             self.assertEqual(vername, None)
-            self.assertEqual(vercode, 'Version 1.1.9-beta is ignored')
 
     def test_check_tags_data(self):
         fdroidserver.checkupdates.options = mock.Mock()

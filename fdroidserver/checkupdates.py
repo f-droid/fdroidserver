@@ -45,290 +45,248 @@ from .exception import VCSException, NoSubmodulesException, FDroidException, Met
 # required.
 def check_http(app):
 
-    ignoreversions = app.UpdateCheckIgnore
-    ignoresearch = re.compile(ignoreversions).search if ignoreversions else None
+    if not app.UpdateCheckData:
+        raise FDroidException('Missing Update Check Data')
 
-    try:
-
-        if not app.UpdateCheckData:
-            raise FDroidException('Missing Update Check Data')
-
-        urlcode, codeex, urlver, verex = app.UpdateCheckData.split('|')
-        parsed = urllib.parse.urlparse(urlcode)
+    urlcode, codeex, urlver, verex = app.UpdateCheckData.split('|')
+    parsed = urllib.parse.urlparse(urlcode)
+    if not parsed.netloc or not parsed.scheme or parsed.scheme != 'https':
+        raise FDroidException(_('UpdateCheckData has invalid URL: {url}').format(url=urlcode))
+    if urlver != '.':
+        parsed = urllib.parse.urlparse(urlver)
         if not parsed.netloc or not parsed.scheme or parsed.scheme != 'https':
             raise FDroidException(_('UpdateCheckData has invalid URL: {url}').format(url=urlcode))
-        if urlver != '.':
-            parsed = urllib.parse.urlparse(urlver)
-            if not parsed.netloc or not parsed.scheme or parsed.scheme != 'https':
-                raise FDroidException(_('UpdateCheckData has invalid URL: {url}').format(url=urlcode))
 
-        vercode = None
-        if urlcode:
-            logging.debug("...requesting {0}".format(urlcode))
-            req = urllib.request.Request(urlcode, None, headers=net.HEADERS)
-            resp = urllib.request.urlopen(req, None, 20)  # nosec B310 scheme is filtered above
-            page = resp.read().decode('utf-8')
+    logging.debug("...requesting {0}".format(urlcode))
+    req = urllib.request.Request(urlcode, None, headers=net.HEADERS)
+    resp = urllib.request.urlopen(req, None, 20)  # nosec B310 scheme is filtered above
+    page = resp.read().decode('utf-8')
 
-            m = re.search(codeex, page)
-            if not m:
-                raise FDroidException("No RE match for version code")
-            vercode = m.group(1).strip()
+    m = re.search(codeex, page)
+    if not m:
+        raise FDroidException("No RE match for version code")
+    vercode = m.group(1).strip()
 
-        version = "??"
-        if urlver:
-            if urlver != '.':
-                logging.debug("...requesting {0}".format(urlver))
-                req = urllib.request.Request(urlver, None)
-                resp = urllib.request.urlopen(req, None, 20)  # nosec B310 scheme is filtered above
-                page = resp.read().decode('utf-8')
+    if urlver != '.':
+        logging.debug("...requesting {0}".format(urlver))
+        req = urllib.request.Request(urlver, None)
+        resp = urllib.request.urlopen(req, None, 20)  # nosec B310 scheme is filtered above
+        page = resp.read().decode('utf-8')
 
-            m = re.search(verex, page)
-            if not m:
-                raise FDroidException("No RE match for version")
-            version = m.group(1)
+    m = re.search(verex, page)
+    if not m:
+        raise FDroidException("No RE match for version")
+    version = m.group(1)
 
-        if ignoresearch and version:
-            if not ignoresearch(version):
-                return (version, vercode)
-            else:
-                return (None, ("Version {version} is ignored").format(version=version))
-        else:
-            return (version, vercode)
-    except FDroidException:
-        msg = "Could not complete http check for app {0} due to unknown error: {1}".format(app.id, traceback.format_exc())
-        return (None, msg)
+    if app.UpdateCheckIgnore and re.search(app.UpdateCheckIgnore, version):
+        logging.info("Version {version} for {appid} is ignored".format(version=version, appid=app.id))
+        return (None, None)
+
+    return (version, vercode)
 
 
-# Check for a new version by looking at the tags in the source repo.
-# Whether this can be used reliably or not depends on
-# the development procedures used by the project's developers. Use it with
-# caution, because it's inappropriate for many projects.
-# Returns (None, "a message") if this didn't work, or (version, vercode, tag) for
-# the details of the current version.
 def check_tags(app, pattern):
+    """Check for a new version by looking at the tags in the source repo.
 
-    try:
+    Whether this can be used reliably or not depends on
+    the development procedures used by the project's developers. Use it with
+    caution, because it's inappropriate for many projects.
+    """
+    if app.RepoType == 'srclib':
+        build_dir = Path('build/srclib') / app.Repo
+        repotype = common.getsrclibvcs(app.Repo)
+    else:
+        build_dir = Path('build') / app.id
+        repotype = app.RepoType
 
-        if app.RepoType == 'srclib':
-            build_dir = Path('build/srclib') / app.Repo
-            repotype = common.getsrclibvcs(app.Repo)
+    if repotype not in ('git', 'git-svn', 'hg', 'bzr'):
+        raise MetaDataException(_('Tags update mode only works for git, hg, bzr and git-svn repositories currently'))
+
+    if repotype == 'git-svn' and ';' not in app.Repo:
+        raise MetaDataException(_('Tags update mode used in git-svn, but the repo was not set up with tags'))
+
+    # Set up vcs interface and make sure we have the latest code...
+    vcs = common.getvcs(app.RepoType, app.Repo, build_dir)
+
+    vcs.gotorevision(None)
+
+    last_build = app.get_last_build()
+
+    try_init_submodules(app, last_build, vcs)
+
+    htag = None
+    hver = None
+    hcode = "0"
+
+    tags = []
+    if repotype == 'git':
+        tags = vcs.latesttags()
+    else:
+        tags = vcs.gettags()
+    if not tags:
+        raise FDroidException(_('No tags found'))
+
+    logging.debug("All tags: " + ','.join(tags))
+    if pattern:
+        pat = re.compile(pattern)
+        tags = [tag for tag in tags if pat.match(tag)]
+        if not tags:
+            raise FDroidException(_('No matching tags found'))
+        logging.debug("Matching tags: " + ','.join(tags))
+
+    if len(tags) > 5 and repotype == 'git':
+        tags = tags[:5]
+        logging.debug("Latest tags: " + ','.join(tags))
+
+    for tag in tags:
+        logging.debug("Check tag: '{0}'".format(tag))
+        vcs.gotorevision(tag)
+
+        if app.UpdateCheckData:
+            filecode, codeex, filever, verex = app.UpdateCheckData.split('|')
+
+            if filecode:
+                filecode = build_dir / filecode
+                if not filecode.is_file():
+                    logging.debug("UpdateCheckData file {0} not found in tag {1}".format(filecode, tag))
+                    continue
+                filecontent = filecode.read_text()
+            else:
+                filecontent = tag
+
+            vercode = tag
+            if codeex:
+                m = re.search(codeex, filecontent)
+                if not m:
+                    continue
+
+                vercode = m.group(1).strip()
+
+            if filever:
+                if filever != '.':
+                    filever = build_dir / filever
+                    if filever.is_file():
+                        filecontent = filever.read_text()
+                    else:
+                        logging.debug("UpdateCheckData file {0} not found in tag {1}".format(filever, tag))
+            else:
+                filecontent = tag
+
+            version = tag
+            if verex:
+                m = re.search(verex, filecontent)
+                if m:
+                    version = m.group(1)
+
+            logging.debug("UpdateCheckData found version {0} ({1})"
+                          .format(version, vercode))
+            i_vercode = common.version_code_string_to_int(vercode)
+            if i_vercode > common.version_code_string_to_int(hcode):
+                htag = tag
+                hcode = str(i_vercode)
+                hver = version
         else:
-            build_dir = Path('build') / app.id
-            repotype = app.RepoType
+            for subdir in possible_subdirs(app):
+                root_dir = build_dir / subdir
+                paths = common.manifest_paths(root_dir, last_build.gradle)
+                version, vercode, _package = common.parse_androidmanifests(paths, app)
+                if version == 'Unknown' or version == 'Ignore':
+                    version = tag
+                if vercode:
+                    logging.debug("Manifest exists in subdir '{0}'. Found version {1} ({2})"
+                                  .format(subdir, version, vercode))
+                    i_vercode = common.version_code_string_to_int(vercode)
+                    if i_vercode > common.version_code_string_to_int(hcode):
+                        htag = tag
+                        hcode = str(i_vercode)
+                        hver = version
 
-        if repotype not in ('git', 'git-svn', 'hg', 'bzr'):
-            return (None, 'Tags update mode only works for git, hg, bzr and git-svn repositories currently', None)
+    if hver:
+        try:
+            commit = vcs.getref(htag)
+            if commit:
+                return (hver, hcode, commit)
+        except VCSException:
+            pass
+        return (hver, hcode, htag)
+    raise FDroidException(_("Couldn't find any version information"))
 
-        if repotype == 'git-svn' and ';' not in app.Repo:
-            return (None, 'Tags update mode used in git-svn, but the repo was not set up with tags', None)
 
-        # Set up vcs interface and make sure we have the latest code...
-        vcs = common.getvcs(app.RepoType, app.Repo, build_dir)
+def check_repomanifest(app, branch=None):
+    """Check for a new version by looking at the AndroidManifest.xml at the HEAD of the source repo.
 
+    Whether this can be used reliably or not depends on
+    the development procedures used by the project's developers. Use it with
+    caution, because it's inappropriate for many projects.
+    """
+    if app.RepoType == 'srclib':
+        build_dir = Path('build/srclib') / app.Repo
+        repotype = common.getsrclibvcs(app.Repo)
+    else:
+        build_dir = Path('build') / app.id
+        repotype = app.RepoType
+
+    # Set up vcs interface and make sure we have the latest code...
+    vcs = common.getvcs(app.RepoType, app.Repo, build_dir)
+
+    if repotype == 'git':
+        if branch:
+            branch = 'origin/' + branch
+        vcs.gotorevision(branch)
+    elif repotype == 'git-svn':
+        vcs.gotorevision(branch)
+    elif repotype == 'hg':
+        vcs.gotorevision(branch)
+    elif repotype == 'bzr':
         vcs.gotorevision(None)
 
-        last_build = app.get_last_build()
+    last_build = metadata.Build()
+    if app.get('Builds', []):
+        last_build = app.get('Builds', [])[-1]
 
-        try_init_submodules(app, last_build, vcs)
+    try_init_submodules(app, last_build, vcs)
 
-        htag = None
-        hver = None
-        hcode = "0"
+    hpak = None
+    hver = None
+    hcode = "0"
+    for subdir in possible_subdirs(app):
+        root_dir = build_dir / subdir
+        paths = common.manifest_paths(root_dir, last_build.gradle)
+        version, vercode, package = common.parse_androidmanifests(paths, app)
+        if vercode:
+            logging.debug("Manifest exists in subdir '{0}'. Found version {1} ({2})"
+                          .format(subdir, version, vercode))
+            i_vercode = common.version_code_string_to_int(vercode)
+            if i_vercode > common.version_code_string_to_int(hcode):
+                hpak = package
+                hcode = str(i_vercode)
+                hver = version
 
-        tags = []
-        if repotype == 'git':
-            tags = vcs.latesttags()
-        else:
-            tags = vcs.gettags()
-        if not tags:
-            return (None, "No tags found", None)
-
-        logging.debug("All tags: " + ','.join(tags))
-        if pattern:
-            pat = re.compile(pattern)
-            tags = [tag for tag in tags if pat.match(tag)]
-            if not tags:
-                return (None, "No matching tags found", None)
-            logging.debug("Matching tags: " + ','.join(tags))
-
-        if len(tags) > 5 and repotype == 'git':
-            tags = tags[:5]
-            logging.debug("Latest tags: " + ','.join(tags))
-
-        for tag in tags:
-            logging.debug("Check tag: '{0}'".format(tag))
-            vcs.gotorevision(tag)
-
-            if app.UpdateCheckData:
-                filecode, codeex, filever, verex = app.UpdateCheckData.split('|')
-
-                if filecode:
-                    filecode = build_dir / filecode
-                    if not filecode.is_file():
-                        logging.debug("UpdateCheckData file {0} not found in tag {1}".format(filecode, tag))
-                        continue
-                    filecontent = filecode.read_text()
-                else:
-                    filecontent = tag
-
-                vercode = tag
-                if codeex:
-                    m = re.search(codeex, filecontent)
-                    if not m:
-                        continue
-
-                    vercode = m.group(1).strip()
-
-                if filever:
-                    if filever != '.':
-                        filever = build_dir / filever
-                        if filever.is_file():
-                            filecontent = filever.read_text()
-                        else:
-                            logging.debug("UpdateCheckData file {0} not found in tag {1}".format(filever, tag))
-                else:
-                    filecontent = tag
-
-                version = tag
-                if verex:
-                    m = re.search(verex, filecontent)
-                    if m:
-                        version = m.group(1)
-
-                logging.debug("UpdateCheckData found version {0} ({1})"
-                              .format(version, vercode))
-                i_vercode = common.version_code_string_to_int(vercode)
-                if i_vercode > common.version_code_string_to_int(hcode):
-                    htag = tag
-                    hcode = str(i_vercode)
-                    hver = version
-            else:
-                for subdir in possible_subdirs(app):
-                    root_dir = build_dir / subdir
-                    paths = common.manifest_paths(root_dir, last_build.gradle)
-                    version, vercode, _package = common.parse_androidmanifests(paths, app)
-                    if version == 'Unknown' or version == 'Ignore':
-                        version = tag
-                    if vercode:
-                        logging.debug("Manifest exists in subdir '{0}'. Found version {1} ({2})"
-                                      .format(subdir, version, vercode))
-                        i_vercode = common.version_code_string_to_int(vercode)
-                        if i_vercode > common.version_code_string_to_int(hcode):
-                            htag = tag
-                            hcode = str(i_vercode)
-                            hver = version
-
-        if hver:
-            try:
-                commit = vcs.getref(htag)
-                if commit:
-                    return (hver, hcode, commit)
-            except VCSException:
-                pass
-            return (hver, hcode, htag)
-        return (None, "Couldn't find any version information", None)
-
-    except VCSException as vcse:
-        msg = "VCS error while scanning app {0}: {1}".format(app.id, vcse)
-        return (None, msg, None)
-    except Exception:
-        msg = "Could not scan app {0} due to unknown error: {1}".format(app.id, traceback.format_exc())
-        return (None, msg, None)
-
-
-# Check for a new version by looking at the AndroidManifest.xml at the HEAD
-# of the source repo. Whether this can be used reliably or not depends on
-# the development procedures used by the project's developers. Use it with
-# caution, because it's inappropriate for many projects.
-# Returns (None, "a message") if this didn't work, or (version, vercode) for
-# the details of the current version.
-def check_repomanifest(app, branch=None):
-
-    try:
-
-        if app.RepoType == 'srclib':
-            build_dir = Path('build/srclib') / app.Repo
-            repotype = common.getsrclibvcs(app.Repo)
-        else:
-            build_dir = Path('build') / app.id
-            repotype = app.RepoType
-
-        # Set up vcs interface and make sure we have the latest code...
-        vcs = common.getvcs(app.RepoType, app.Repo, build_dir)
-
-        if repotype == 'git':
-            if branch:
-                branch = 'origin/' + branch
-            vcs.gotorevision(branch)
-        elif repotype == 'git-svn':
-            vcs.gotorevision(branch)
-        elif repotype == 'hg':
-            vcs.gotorevision(branch)
-        elif repotype == 'bzr':
-            vcs.gotorevision(None)
-
-        last_build = metadata.Build()
-        if app.get('Builds', []):
-            last_build = app.get('Builds', [])[-1]
-
-        try_init_submodules(app, last_build, vcs)
-
-        hpak = None
-        hver = None
-        hcode = "0"
-        for subdir in possible_subdirs(app):
-            root_dir = build_dir / subdir
-            paths = common.manifest_paths(root_dir, last_build.gradle)
-            version, vercode, package = common.parse_androidmanifests(paths, app)
-            if vercode:
-                logging.debug("Manifest exists in subdir '{0}'. Found version {1} ({2})"
-                              .format(subdir, version, vercode))
-                i_vercode = common.version_code_string_to_int(vercode)
-                if i_vercode > common.version_code_string_to_int(hcode):
-                    hpak = package
-                    hcode = str(i_vercode)
-                    hver = version
-
-        if not hpak:
-            return (None, "Couldn't find package ID")
-        if hver:
-            return (hver, hcode)
-        return (None, "Couldn't find any version information")
-
-    except VCSException as vcse:
-        msg = "VCS error while scanning app {0}: {1}".format(app.id, vcse)
-        return (None, msg)
-    except Exception:
-        msg = "Could not scan app {0} due to unknown error: {1}".format(app.id, traceback.format_exc())
-        return (None, msg)
+    if not hpak:
+        raise FDroidException(_("Couldn't find package ID"))
+    if hver:
+        return (hver, hcode)
+    raise FDroidException(_("Couldn't find any version information"))
 
 
 def check_repotrunk(app):
+    if app.RepoType == 'srclib':
+        build_dir = Path('build/srclib') / app.Repo
+        repotype = common.getsrclibvcs(app.Repo)
+    else:
+        build_dir = Path('build') / app.id
+        repotype = app.RepoType
 
-    try:
-        if app.RepoType == 'srclib':
-            build_dir = Path('build/srclib') / app.Repo
-            repotype = common.getsrclibvcs(app.Repo)
-        else:
-            build_dir = Path('build') / app.id
-            repotype = app.RepoType
+    if repotype not in ('git-svn', ):
+        raise MetaDataException(_('RepoTrunk update mode only makes sense in git-svn repositories'))
 
-        if repotype not in ('git-svn', ):
-            return (None, 'RepoTrunk update mode only makes sense in git-svn repositories')
+    # Set up vcs interface and make sure we have the latest code...
+    vcs = common.getvcs(app.RepoType, app.Repo, build_dir)
 
-        # Set up vcs interface and make sure we have the latest code...
-        vcs = common.getvcs(app.RepoType, app.Repo, build_dir)
+    vcs.gotorevision(None)
 
-        vcs.gotorevision(None)
-
-        ref = vcs.getref()
-        return (ref, ref)
-    except VCSException as vcse:
-        msg = "VCS error while scanning app {0}: {1}".format(app.id, vcse)
-        return (None, msg)
-    except Exception:
-        msg = "Could not scan app {0} due to unknown error: {1}".format(app.id, traceback.format_exc())
-        return (None, msg)
+    ref = vcs.getref()
+    return (ref, ref)
 
 
 # Check for a new version by looking at the Google Play Store.
@@ -461,34 +419,24 @@ def checkupdates_app(app):
     commitmsg = None
 
     tag = None
-    msg = None
     vercode = None
-    noverok = False
     mode = app.UpdateCheckMode
     if mode.startswith('Tags'):
         pattern = mode[5:] if len(mode) > 4 else None
         (version, vercode, tag) = check_tags(app, pattern)
-        msg = vercode
     elif mode == 'RepoManifest':
         (version, vercode) = check_repomanifest(app)
-        msg = vercode
     elif mode.startswith('RepoManifest/'):
         tag = mode[13:]
         (version, vercode) = check_repomanifest(app, tag)
-        msg = vercode
     elif mode == 'RepoTrunk':
         (version, vercode) = check_repotrunk(app)
-        msg = vercode
     elif mode == 'HTTP':
         (version, vercode) = check_http(app)
-        msg = vercode
     elif mode in ('None', 'Static'):
-        version = None
-        msg = 'Checking disabled'
-        noverok = True
+        raise MetaDataException(_('Checking disabled'))
     else:
-        version = None
-        msg = 'Invalid update check method'
+        raise MetaDataException(_('Invalid UpdateCheckMode: {mode}').format(mode=mode))
 
     if version and vercode and app.VercodeOperation:
         if not common.VERCODE_OPERATION_RE.match(app.VercodeOperation):
@@ -507,13 +455,9 @@ def checkupdates_app(app):
 
     updating = False
     if version is None:
-        logmsg = "...{0} : {1}".format(app.id, msg)
-        if noverok:
-            logging.info(logmsg)
-        else:
-            logging.warning(logmsg)
+        logging.warning('no version information found for {appid}'.format(appid=app.id))
     elif vercode == app.CurrentVersionCode:
-        logging.info("...up to date")
+        logging.debug("...up to date")
     elif int(vercode) > int(app.CurrentVersionCode):
         logging.debug("...updating - old vercode={0}, new vercode={1}".format(
             app.CurrentVersionCode, vercode))
@@ -521,9 +465,11 @@ def checkupdates_app(app):
         app.CurrentVersionCode = str(int(vercode))
         updating = True
     else:
-        logging.info("Refusing to auto update, since the current version is newer")
-        logging.debug("...old vercode={0}, new vercode={1}".format(
-            app.CurrentVersionCode, vercode))
+        raise FDroidException(
+            _('current version is newer: old vercode={old}, new vercode={new}').format(
+                old=app.CurrentVersionCode, new=vercode
+            )
+        )
 
     commitmsg = fetch_autoname(app, tag)
 
@@ -536,7 +482,9 @@ def checkupdates_app(app):
     if options.auto:
         mode = app.AutoUpdateMode
         if not app.CurrentVersionCode:
-            logging.warning("Can't auto-update app with no CurrentVersionCode: " + app.id)
+            raise MetaDataException(
+                _("Can't auto-update app with no CurrentVersionCode")
+            )
         elif mode in ('None', 'Static'):
             pass
         elif mode.startswith('Version'):
@@ -557,7 +505,11 @@ def checkupdates_app(app):
                     latest = build
 
             if int(latest.versionCode) > int(app.CurrentVersionCode):
-                logging.info("Refusing to auto update, since the latest build is newer")
+                raise FDroidException(
+                    _(
+                        'latest build recipe is newer: old vercode={old}, new vercode={new}'
+                    ).format(old=latest.versionCode, new=app.CurrentVersionCode)
+                )
 
             if not gotcur:
                 newbuild = copy.deepcopy(latest)
@@ -577,7 +529,9 @@ def checkupdates_app(app):
                 ver = _getcvname(app)
                 commitmsg = "Update %s to %s" % (name, ver)
         else:
-            logging.warning('Invalid auto update mode "' + mode + '" on ' + app.id)
+            raise MetaDataException(
+                _('Invalid AutoUpdateMode: {mode}').format(mode=mode)
+            )
 
     if commitmsg:
         metadata.write_metadata(app.metadatapath, app)
@@ -705,6 +659,7 @@ def main():
     locallog = ''
     processed = []
     failed = dict()
+    exit_code = 0
     for appid, app in apps.items():
 
         if options.autoonly and app.AutoUpdateMode in ('None', 'Static'):
@@ -721,12 +676,15 @@ def main():
         except Exception as e:
             msg = _("...checkupdate failed for {appid} : {error}").format(appid=appid, error=e)
             logging.error(msg)
+            logging.debug(traceback.format_exc())
             locallog += msg + '\n'
             failed[appid] = str(e)
+            exit_code = 1
 
     update_wiki(None, locallog)
     status_update_json(processed, failed)
     logging.info(_("Finished"))
+    sys.exit(exit_code)
 
 
 if __name__ == "__main__":
