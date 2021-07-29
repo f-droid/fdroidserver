@@ -434,7 +434,8 @@ def checkupdates_app(app):
     elif mode == 'HTTP':
         (version, vercode) = check_http(app)
     elif mode in ('None', 'Static'):
-        raise MetaDataException(_('Checking disabled'))
+        logging.debug('Checking disabled')
+        return
     else:
         raise MetaDataException(_('Invalid UpdateCheckMode: {mode}').format(mode=mode))
 
