@@ -456,7 +456,7 @@ def checkupdates_app(app):
 
     updating = False
     if version is None:
-        logging.warning('no version information found for {appid}'.format(appid=app.id))
+        raise FDroidException(_('no version information found'))
     elif vercode == app.CurrentVersionCode:
         logging.debug("...up to date")
     elif int(vercode) > int(app.CurrentVersionCode):
