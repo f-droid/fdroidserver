@@ -434,7 +434,8 @@ def checkupdates_app(app):
     elif mode == 'HTTP':
         (version, vercode) = check_http(app)
     elif mode in ('None', 'Static'):
-        raise MetaDataException(_('Checking disabled'))
+        logging.debug('Checking disabled')
+        return
     else:
         raise MetaDataException(_('Invalid UpdateCheckMode: {mode}').format(mode=mode))
 
@@ -455,7 +456,7 @@ def checkupdates_app(app):
 
     updating = False
     if version is None:
-        logging.warning('no version information found for {appid}'.format(appid=app.id))
+        raise FDroidException(_('no version information found'))
     elif vercode == app.CurrentVersionCode:
         logging.debug("...up to date")
     elif int(vercode) > int(app.CurrentVersionCode):
