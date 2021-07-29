@@ -114,7 +114,8 @@ class CheckupdatesTest(unittest.TestCase):
         with mock.patch(
             'fdroidserver.checkupdates.check_http', lambda app: (None, 'bla')
         ):
-            fdroidserver.checkupdates.checkupdates_app(app)
+            with self.assertRaises(FDroidException):
+                fdroidserver.checkupdates.checkupdates_app(app)
 
         with mock.patch(
             'fdroidserver.checkupdates.check_http', lambda app: ('1.1.9', 10109)
@@ -148,7 +149,8 @@ class CheckupdatesTest(unittest.TestCase):
             'fdroidserver.checkupdates.check_tags',
             lambda app, pattern: (None, 'bla', None),
         ):
-            fdroidserver.checkupdates.checkupdates_app(app)
+            with self.assertRaises(FDroidException):
+                fdroidserver.checkupdates.checkupdates_app(app)
 
         with mock.patch(
             'fdroidserver.checkupdates.check_tags',
