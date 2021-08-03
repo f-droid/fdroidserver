@@ -1043,6 +1043,8 @@ def copy_triple_t_store_metadata(apps):
         gradle_subdirs = set()
         if builds and builds[-1].subdir:
             gradle_subdirs.update(glob.glob(os.path.join('build', packageName, builds[-1].subdir, 'src', '*', 'play')))
+            if not gradle_subdirs:
+                gradle_subdirs.update(glob.glob(os.path.join('build', packageName, builds[-1].subdir, '*', 'src', '*', 'play')))
         if not gradle_subdirs:
             sg_list = sorted(glob.glob(os.path.join('build', packageName, 'settings.gradle*')))
             if sg_list:
