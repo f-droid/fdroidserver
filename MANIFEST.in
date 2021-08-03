@@ -822,8 +822,10 @@ include tests/triple-t-2/build/org.piwigo.android/app/src/main/play/release-note
 include tests/triple-t-2/build/org.piwigo.android/build.gradle
 include tests/triple-t-2/build/org.piwigo.android/settings.gradle
 include tests/triple-t-2/metadata/org.piwigo.android.yml
+include tests/triple-t-multiple/build/ch.admin.bag.covidcertificate.verifier/settings.gradle
 include tests/triple-t-multiple/build/ch.admin.bag.covidcertificate.verifier/verifier/src/main/play/listings/en-US/title.txt
 include tests/triple-t-multiple/build/ch.admin.bag.covidcertificate.verifier/wallet/src/main/play/listings/en-US/title.txt
+include tests/triple-t-multiple/build/ch.admin.bag.covidcertificate.wallet/settings.gradle
 include tests/triple-t-multiple/build/ch.admin.bag.covidcertificate.wallet/verifier/src/main/play/listings/en-US/title.txt
 include tests/triple-t-multiple/build/ch.admin.bag.covidcertificate.wallet/wallet/src/main/play/listings/en-US/title.txt
 include tests/triple-t-multiple/metadata/ch.admin.bag.covidcertificate.verifier.yml
