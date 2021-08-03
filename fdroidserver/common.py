@@ -892,7 +892,10 @@ def write_status_json(output, pretty=False, name=None):
 
 def get_head_commit_id(git_repo):
     """Get git commit ID for HEAD as a str."""
-    return git_repo.head.commit.hexsha
+    try:
+        return git_repo.head.commit.hexsha
+    except ValueError:
+        return "None"
 
 
 def setup_vcs(app):
