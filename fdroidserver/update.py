@@ -1039,28 +1039,29 @@ def copy_triple_t_store_metadata(apps):
     setting_gradle_pattern = re.compile(r"""\s*include\s+["']:([^"']+)["'](?:,[\n\s]*["']:([^"']+)["'])*""")
 
     for packageName, app in apps.items():
+        builds = app.get('Builds', [])
         gradle_subdirs = set()
-        sg_list = glob.glob(os.path.join('build', packageName, 'settings.gradle*'))
-        if sg_list:
-            settings_gradle = sg_list[0]
-            with open(settings_gradle, encoding='utf-8') as fp:
-                data = fp.read()
-            for matches in setting_gradle_pattern.findall(data):
-                for m in matches:
-                    if m:
-                        gradle_path = m.replace(':', '/')
-                        p = os.path.join('build', packageName, gradle_path, 'src', 'main', 'play')
-                        if os.path.exists(p):
-                            gradle_subdirs.add(p)
-                        flavors = set()
-                        if app.get('Builds'):
-                            flavors = app['Builds'][0].gradle
-                        for flavor in flavors:
-                            if flavor not in ('yes', 'no'):
-                                p = os.path.join('build', packageName, gradle_path, 'src', flavor, 'play')
-                            gradle_subdirs.add(p)
-        if not gradle_subdirs and len(app.get('Builds', [])) and app.get('Builds', [])[-1].subdir:
-            gradle_subdirs.update(glob.glob(os.path.join('build', packageName, app.get('Builds', [])[-1].subdir, 'src', '*', 'play')))
+        if builds and builds[-1].subdir:
+            gradle_subdirs.update(glob.glob(os.path.join('build', packageName, builds[-1].subdir, 'src', '*', 'play')))
+        if not gradle_subdirs:
+            sg_list = sorted(glob.glob(os.path.join('build', packageName, 'settings.gradle*')))
+            if sg_list:
+                settings_gradle = sg_list[0]
+                with open(settings_gradle, encoding='utf-8') as fp:
+                    data = fp.read()
+                for matches in setting_gradle_pattern.findall(data):
+                    for m in matches:
+                        if m:
+                            gradle_path = m.replace(':', '/')
+                            p = os.path.join('build', packageName, gradle_path, 'src', 'main', 'play')
+                            if os.path.exists(p):
+                                gradle_subdirs.add(p)
+                            flavors = builds[-1].gradle if builds else []
+                            for flavor in flavors:
+                                if flavor not in ('yes', 'no', True, False):
+                                    p = os.path.join('build', packageName, gradle_path, 'src', flavor, 'play')
+                                    if os.path.exists(p):
+                                        gradle_subdirs.add(p)
         if not gradle_subdirs:
             gradle_subdirs.update(glob.glob(os.path.join('build', packageName, '*', 'src', '*', 'play')))
 
@@ -1077,60 +1078,51 @@ def copy_triple_t_store_metadata(apps):
                     if f == 'fulldescription' or f == 'full-description.txt':
                         _set_localized_text_entry(app, locale, 'description',
                                                   os.path.join(root, f))
-                        continue
                     elif f == 'shortdescription' or f == 'short-description.txt':
                         _set_localized_text_entry(app, locale, 'summary',
                                                   os.path.join(root, f))
-                        continue
                     elif f == 'title' or f == 'title.txt':
                         _set_localized_text_entry(app, locale, 'name',
                                                   os.path.join(root, f))
-                        continue
                     elif f == 'video' or f == 'video-url.txt':
                         _set_localized_text_entry(app, locale, 'video',
                                                   os.path.join(root, f))
-                        continue
                     elif f == 'whatsnew':
                         _set_localized_text_entry(app, segments[-1], 'whatsNew',
                                                   os.path.join(root, f))
-                        continue
                     elif f == 'default.txt' and segments[-2] == 'release-notes':
                         _set_localized_text_entry(app, locale, 'whatsNew',
                                                   os.path.join(root, f))
-                        continue
                     elif f == 'contactEmail' or f == 'contact-email.txt':
                         _set_author_entry(app, 'authorEmail', os.path.join(root, f))
-                        continue
                     elif f == 'contactPhone' or f == 'contact-phone.txt':
                         _set_author_entry(app, 'authorPhone', os.path.join(root, f))
-                        continue
                     elif f == 'contactWebsite' or f == 'contact-website.txt':
                         _set_author_entry(app, 'authorWebSite', os.path.join(root, f))
-                        continue
-
-                    base, extension = common.get_extension(f)
-                    dirname = os.path.basename(root)
-                    if extension in ALLOWED_EXTENSIONS \
-                       and (dirname in GRAPHIC_NAMES or dirname in tt_graphic_names
-                            or dirname in SCREENSHOT_DIRS or dirname in tt_screenshot_dirs):
-                        repofilename = os.path.basename(f)
-                        if segments[-2] == 'listing':
-                            locale = segments[-3]
-                        elif segments[-4] == 'listings':  # v2.x
-                            locale = segments[-3]
-                            if dirname in tt_graphic_names:
-                                repofilename = GRAPHIC_NAMES[tt_graphic_names.index(dirname)]
-                                repofilename += '.' + extension
-                                dirname = ''
+                    else:
+                        base, extension = common.get_extension(f)
+                        dirname = os.path.basename(root)
+                        if extension in ALLOWED_EXTENSIONS \
+                           and (dirname in GRAPHIC_NAMES or dirname in tt_graphic_names
+                                or dirname in SCREENSHOT_DIRS or dirname in tt_screenshot_dirs):
+                            repofilename = os.path.basename(f)
+                            if segments[-2] == 'listing':
+                                locale = segments[-3]
+                            elif segments[-4] == 'listings':  # v2.x
+                                locale = segments[-3]
+                                if dirname in tt_graphic_names:
+                                    repofilename = GRAPHIC_NAMES[tt_graphic_names.index(dirname)]
+                                    repofilename += '.' + extension
+                                    dirname = ''
+                                else:
+                                    dirname = SCREENSHOT_DIRS[tt_screenshot_dirs.index(dirname)]
                             else:
-                                dirname = SCREENSHOT_DIRS[tt_screenshot_dirs.index(dirname)]
-                        else:
-                            locale = segments[-2]
-                        destdir = os.path.join('repo', packageName, locale, dirname)
-                        os.makedirs(destdir, mode=0o755, exist_ok=True)
-                        sourcefile = os.path.join(root, f)
-                        destfile = os.path.join(destdir, repofilename)
-                        _strip_and_copy_image(sourcefile, destfile)
+                                locale = segments[-2]
+                            destdir = os.path.join('repo', packageName, locale, dirname)
+                            os.makedirs(destdir, mode=0o755, exist_ok=True)
+                            sourcefile = os.path.join(root, f)
+                            destfile = os.path.join(destdir, repofilename)
+                            _strip_and_copy_image(sourcefile, destfile)
 
 
 def insert_localized_app_metadata(apps):
