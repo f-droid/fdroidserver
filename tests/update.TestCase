@@ -409,6 +409,30 @@ class UpdateTest(unittest.TestCase):
         self.assertFalse(os.path.exists(os.path.join('de-DE', 'phoneScreenshots', '01_Login.jpg')))
         self.assertFalse(os.path.exists(os.path.join('de-DE', 'sevenInchScreenshots', '01_Login.png')))
 
+    def test_insert_triple_t_anysoftkeyboard(self):
+        packages = ('com.anysoftkeyboard.languagepack.dutch', 'com.menny.android.anysoftkeyboard')
+        names = ('Dutch for AnySoftKeyboard', 'AnySoftKeyboard')
+
+        tmptestsdir = tempfile.mkdtemp(
+            prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir
+        )
+        os.rmdir(tmptestsdir)
+        shutil.copytree(os.path.join(self.basedir, 'triple-t-anysoftkeyboard'), tmptestsdir)
+        os.chdir(tmptestsdir)
+
+        for packageName, name in zip(packages, names):
+            config = dict()
+            fdroidserver.common.fill_config_defaults(config)
+            fdroidserver.common.config = config
+            fdroidserver.update.config = config
+            fdroidserver.update.options = fdroidserver.common.options
+
+            apps = fdroidserver.metadata.read_metadata()
+            self.assertTrue(packageName in apps)
+            fdroidserver.update.copy_triple_t_store_metadata(apps)
+            app = apps[packageName]
+            self.assertEqual(app['localized']['en-US']['name'], name)
+
     def test_insert_triple_t_multiple_metadata(self):
         namespace = 'ch.admin.bag.covidcertificate.'
         packages = ('verifier', 'wallet')
