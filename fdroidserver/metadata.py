@@ -90,6 +90,8 @@ yaml_app_field_order = [
     '\n',
     'Builds',
     '\n',
+    'AllowedAPKSigningKeys',
+    '\n',
     'MaintainerNotes',
     '\n',
     'ArchivePolicy',
@@ -145,6 +147,7 @@ class App(dict):
         self.RepoType = ''
         self.Repo = ''
         self.Binaries = None
+        self.AllowedAPKSigningKeys = []
         self.MaintainerNotes = ''
         self.ArchivePolicy = None
         self.AutoUpdateMode = 'None'
@@ -186,8 +189,6 @@ class App(dict):
             return Build()
 
 
-TYPE_UNKNOWN = 0
-TYPE_OBSOLETE = 1
 TYPE_STRING = 2
 TYPE_BOOL = 3
 TYPE_LIST = 4
@@ -201,9 +202,8 @@ fieldtypes = {
     'MaintainerNotes': TYPE_MULTILINE,
     'Categories': TYPE_LIST,
     'AntiFeatures': TYPE_LIST,
+    'AllowedAPKSigningKeys': TYPE_LIST,
     'Build': TYPE_BUILD,
-    'BuildVersion': TYPE_OBSOLETE,
-    'UseBuilt': TYPE_OBSOLETE,
 }
 
 
@@ -436,6 +436,10 @@ valuetypes = {
     FieldValidator("Binaries",
                    r'^http[s]?://',
                    ["Binaries"]),
+
+    FieldValidator("AllowedAPKSigningKeys",
+                   r'^[a-fA-F0-9]{64}$',
+                   ["AllowedAPKSigningKeys"]),
 
     FieldValidator("Archive Policy",
                    r'^[0-9]+ versions$',
@@ -931,6 +935,14 @@ def write_yaml(mf, app):
                             cm.update({field: _builds_to_yaml(app)})
                     elif field == 'CurrentVersionCode':
                         cm.update({field: _field_to_yaml(TYPE_INT, getattr(app, field))})
+                    elif field == 'AllowedAPKSigningKeys':
+                        value = getattr(app, field)
+                        if value:
+                            value = [str(i).lower() for i in value]
+                            if len(value) == 1:
+                                cm.update({field: _field_to_yaml(TYPE_STRING, value[0])})
+                            else:
+                                cm.update({field: _field_to_yaml(TYPE_LIST, value)})
                     else:
                         cm.update({field: _field_to_yaml(fieldtype(field), getattr(app, field))})
 

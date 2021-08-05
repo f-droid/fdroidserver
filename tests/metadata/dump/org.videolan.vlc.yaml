@@ -1,3 +1,4 @@
+AllowedAPKSigningKeys: []
 AntiFeatures: []
 ArchivePolicy: 9 versions
 AuthorEmail: null
