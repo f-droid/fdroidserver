@@ -1,0 +1,76 @@
+Categories:
+  - Writing
+License: Apache-2.0
+SourceCode: https://github.com/AnySoftKeyboard/AnySoftKeyboard/
+IssueTracker: https://github.com/AnySoftKeyboard/AnySoftKeyboard/issues
+Donate: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=KDYBGNUNMMN94&lc=US&item_name=AnySoftKeyboard
+
+AutoName: AnySoftKeyboard - Dutch Language Pack
+Description: |-
+    <b>This app has been deprecated in favor of https://f-droid.org/en/packages/com.anysoftkeyboard.languagepack.dutch_oss/</b>
+
+    This is the Dutch language pack for AnySoftKeyboard. It offers an extensive
+    Dutch dictionary and optimised keyboard. In order to use it, first install
+    https://f-droid.org/packages/com.menny.android.anysoftkeyboard – a practical input method for Android
+    smartphones and tablets.
+
+    The dictionary is based on the word list from Stichting OpenTaal and has the
+    Quality Mark Spelling (Keurmerk Spelling) of the Dutch Language Union
+    (Taalunie). This language pack has been created by Stichting OpenTaal and can be
+    installed by all without any costs. The language-specific files in this language
+    pack have a dual license. Both the BSD 2-Clause License as the Creative Commons,
+    Attribution 4.0 (unported) apply.
+
+    Please, help us create free and open Dutch writing tools. Donate tax free to our
+    foundation at <a href="https://www.opentaal.org/vrienden-van-opentaal">https://www.opentaal.org/vrienden-van-opentaal</a>
+
+RepoType: git
+Repo: https://github.com/AnySoftKeyboard/AnySoftKeyboard.git
+
+Builds:
+  - versionName: '1.0'
+    versionCode: 1
+    disable: wait for upstream
+    commit: c5efd5986ce9beec299919f7ae9f174abd33b156
+    gradle:
+      - yes
+    forceversion: true
+    preassemble:
+      - :makeDictionary
+
+  - versionName: '1.4'
+    versionCode: 5
+    commit: dutch-1.4
+    gradle:
+      - yes
+    forceversion: true
+    preassemble:
+      - :makeDictionary
+
+  - versionName: 4.0.1396
+    versionCode: 2908
+    commit: 1.10-r4
+    subdir: addons/languages/dutch
+    sudo:
+      - apt-get update || apt-get update
+      - apt-get install -t stretch-backports openjdk-11-jdk-headless openjdk-11-jre-headless
+      - update-alternatives --auto java
+    gradle:
+      - yes
+    output: ../../../outputs/apks/release/addons-languages-*-$$VERCODE$$.apk
+    prebuild:
+      - echo "//gradleVersion = '6.8.3'" | tee build.gradle
+      - sed -i -e "s calculateApplicationId(project) 'com.anysoftkeyboard.languagepack.dutch'
+        " ../../../gradle/apk_module.gradle
+      - sed -i -e '/Data\.versionCode/ c versionCode $$VERCODE$$' -e '/Data\.versionName/
+        c versionName "$$VERSION$$"' ../../../gradle/versioning_apk.gradle
+    scanignore:
+      - addons/languages/*/pack/dictionary/*.gz
+    ndk: r14b
+
+MaintainerNotes: Package ID is now com.anysoftkeyboard.languagepack.dutch_oss
+
+AutoUpdateMode: None
+UpdateCheckMode: None
+CurrentVersion: 4.0.1396
+CurrentVersionCode: 2908

@@ -1,0 +1,523 @@
+Categories:
+  - Writing
+License: Apache-2.0
+WebSite: https://anysoftkeyboard.github.io
+SourceCode: https://github.com/AnySoftKeyboard/AnySoftKeyboard
+IssueTracker: https://github.com/AnySoftKeyboard/AnySoftKeyboard/issues
+Translation: https://crowdin.com/project/anysoftkeyboard
+Changelog: https://github.com/AnySoftKeyboard/AnySoftKeyboard/releases
+Donate: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=KDYBGNUNMMN94&lc=US&item_name=AnySoftKeyboard
+
+AutoName: AnySoftKeyboard
+
+RepoType: git
+Repo: https://github.com/AnySoftKeyboard/AnySoftKeyboard.git
+
+Builds:
+  - versionName: '20120528'
+    versionCode: 74
+    commit: d6c2f7448
+    srclibs:
+      - AnySoftKeyboard-API@78768bc479
+    prebuild: sed -i 's@\(android.library.reference.1=\).*@\1$$AnySoftKeyboard-API$$@'
+        project.properties
+    buildjni:
+      - yes
+    ndk: r12b
+
+  - versionName: 20120814-eye-candy
+    versionCode: 76
+    disable: doesn't build
+    commit: unknown - see disabled
+    srclibs:
+      - AnySoftKeyboard-API@78768bc479
+    prebuild: sed -i 's@\(android.library.reference.1=\).*@\1$$AnySoftKeyboard-API$$@'
+        project.properties
+    buildjni:
+      - yes
+    ndk: r12b
+
+  - versionName: 20130106-eye-candy
+    versionCode: 85
+    commit: a7723e1db5
+    srclibs:
+      - AnySoftKeyboard-API@b21d8907
+    prebuild:
+      - sed -i 's@\(android.library.reference.1=\).*@\1$$AnySoftKeyboard-API$$@' project.properties
+      - rm -rf libs/armeabi*/ libs/x86/ libs/mips/ ant/ keyboard_keystore StoreStuff/
+        res/raw/words_1.dict
+      - wget https://softkeyboard.googlecode.com/svn-history/r544/trunk/project/dict_creation/makedict_Linux
+      - wget https://github.com/AnySoftKeyboard/AnySoftKeyboardTools/blob/HEAD/makedict/makedict.jar?raw=true
+        -O makedict.jar
+      - chmod +x makedict_Linux
+      - ./makedict_Linux dict/words.xml
+    buildjni:
+      - yes
+    ndk: r12b
+
+  - versionName: 20130222-skinny-eye-candy
+    versionCode: 95
+    commit: 50daad0b0a
+    srclibs:
+      - AnySoftKeyboard-API@b21d8907
+      - AnySoftKeyboardTools@73e9a09496
+    prebuild:
+      - sed -i 's@\(android.library.reference.1=\).*@\1$$AnySoftKeyboard-API$$@' project.properties
+      - sed -i 's@..\/AnySoftKeyboardTools@$$AnySoftKeyboardTools$$@g' build.xml
+      - rm -rf libs/armeabi*/ libs/x86/ libs/mips/ ant/ keyboard_keystore StoreStuff/
+        res/raw/words_1.dict
+    buildjni:
+      - yes
+    ndk: r12b
+
+  - versionName: 20130501-skinny-eye-candy-post-birthday
+    versionCode: 98
+    commit: 6f51b8a9d
+    srclibs:
+      - AnySoftKeyboard-API@2c864957
+      - AnySoftKeyboardTools@73e9a09496
+    prebuild:
+      - sed -i 's@\(android.library.reference.1=\).*@\1$$AnySoftKeyboard-API$$@' project.properties
+      - sed -i 's@..\/AnySoftKeyboardTools@$$AnySoftKeyboardTools$$@g' build.xml
+      - rm -rf libs/armeabi*/ libs/x86/ libs/mips/ ant/ keyboard_keystore StoreStuff/
+        res/raw/words_1.dict
+    buildjni:
+      - yes
+    ndk: r12b
+
+  - versionName: '20130528'
+    versionCode: 102
+    commit: 72fd519
+    srclibs:
+      - AnySoftKeyboard-API@8d8a958e17
+      - AnySoftKeyboardTools@73e9a09496
+    prebuild:
+      - sed -i 's@\(reference.1=\).*@\1$$AnySoftKeyboard-API$$@' project.properties
+      - sed -i 's@..\/AnySoftKeyboardTools@$$AnySoftKeyboardTools$$@g' build.xml
+      - rm -rf libs/armeabi*/ libs/x86/ libs/mips/ ant/ keyboard_keystore StoreStuff/
+        res/raw/words_1.dict
+    buildjni:
+      - yes
+    ndk: r12b
+
+  - versionName: '20130709'
+    versionCode: 106
+    commit: f1ba2de
+    srclibs:
+      - AnySoftKeyboard-API@30851236d7
+      - AnySoftKeyboardTools@73e9a09496
+    prebuild:
+      - sed -i 's@\(.1=\).*@\1$$AnySoftKeyboard-API$$@' project.properties
+      - sed -i 's@..\/AnySoftKeyboardTools@$$AnySoftKeyboardTools$$@g' build.xml
+      - rm -rf libs/armeabi*/ libs/x86/ libs/mips/ ant/ keyboard_keystore StoreStuff/
+        res/raw/words_1.dict
+    buildjni:
+      - yes
+    ndk: r12b
+
+  - versionName: '20130807'
+    versionCode: 107
+    disable: not published
+    commit: unknown - see disabled
+
+  - versionName: '20130919'
+    versionCode: 111
+    commit: 2a68963f
+    srclibs:
+      - AnySoftKeyboard-API@30851236d7
+      - AnySoftKeyboardTools@73e9a09496
+    prebuild:
+      - sed -i 's@\(.1=\).*@\1$$AnySoftKeyboard-API$$@' project.properties
+      - sed -i 's@..\/AnySoftKeyboardTools@$$AnySoftKeyboardTools$$@g' build.xml
+      - rm -rf libs/armeabi*/ libs/x86/ libs/mips/ ant/ keyboard_keystore StoreStuff/
+        res/raw/words_1.dict
+    buildjni:
+      - yes
+    ndk: r12b
+
+  - versionName: '20131101'
+    versionCode: 114
+    disable: no longer uses ant, prebuilts
+    commit: 82538d456f8
+    srclibs:
+      - AnySoftKeyboard-API@08b452ff4
+      - AnySoftKeyboardTools@73e9a09496
+    prebuild:
+      - sed -i 's@\(.1=\).*@\1$$AnySoftKeyboard-API$$@' project.properties
+      - sed -i 's@..\/AnySoftKeyboardTools@$$AnySoftKeyboardTools$$@g' build.xml
+      - rm -rf libs/armeabi*/ libs/x86/ libs/mips/ ant/ keyboard_keystore StoreStuff/
+        res/raw/words_1.dict
+    buildjni:
+      - yes
+    ndk: r12b
+
+  - versionName: 1.2.20140705
+    versionCode: 140
+    disable: build words dict from source, no idea what version name/code it is
+    commit: 1.5-r4.1
+    gradle:
+      - yes
+    rm:
+      - res/raw/words_1.dict
+
+  - versionName: 1.8.84
+    versionCode: 1409
+    commit: 1.8-r1
+    init: sed -i -e '/fabric/d' -e '/canaryCompile/,+2d' build.gradle
+    gradle:
+      - yes
+    rm:
+      - src/main/res/raw/words_1.dict
+    preassemble:
+      - makeEnglishDictionary
+
+  - versionName: 1.8.133
+    versionCode: 1458
+    disable: broken subdir
+    commit: 1.8-r3
+    subdir: app
+    init: sed -i -e '/fabric/d' -e '/canaryCompile/,+2d' ../build.gradle build.gradle
+    gradle:
+      - yes
+    rm:
+      - app/src/main/res/raw/words_1.dict
+    preassemble:
+      - :makeEnglishDictionary
+
+  - versionName: 1.8.146
+    versionCode: 1471
+    commit: 1.8-r4
+    subdir: app
+    init: sed -i -e '/fabric/d' -e '/canaryCompile/,+2d' ../build.gradle build.gradle
+    gradle:
+      - yes
+    rm:
+      - app/src/main/res/raw/words_1.dict
+    preassemble:
+      - :makeEnglishDictionary
+
+  - versionName: 1.8.190
+    versionCode: 1515
+    disable: weird version/vc-issue
+    commit: 1.8-r5.1
+    subdir: app
+    init: sed -i -e '/fabric/d' -e '/canaryCompile/,+2d' ../build.gradle build.gradle
+    gradle:
+      - yes
+    rm:
+      - app/src/main/res/raw/words_1.dict
+    preassemble:
+      - :makeEnglishDictionary
+
+  - versionName: 1.8.195
+    versionCode: 1520
+    commit: 1.8-r5.2
+    subdir: app
+    init: sed -i -e '/fabric/d' -e '/canaryCompile/,+2d' ../build.gradle build.gradle
+    gradle:
+      - yes
+    rm:
+      - app/src/main/res/raw/words_1.dict
+    preassemble:
+      - :makeEnglishDictionary
+
+  - versionName: 1.8.253
+    versionCode: 1578
+    commit: 1.8-r6
+    subdir: app
+    init: sed -i -e '/fabric/d' -e '/canaryCompile/,+2d' ../build.gradle build.gradle
+    gradle:
+      - yes
+    forceversion: true
+    rm:
+      - app/src/main/res/raw/words_1.dict
+    prebuild: sed -i -e '/versionCode/d' -e '/versionName/aversionCode $$VERCODE$$'  build.gradle
+    preassemble:
+      - :makeEnglishDictionary
+
+  - versionName: 1.8.329
+    versionCode: 1654
+    commit: 1.8-r7
+    subdir: app
+    init: sed -i -e '/fabric/d' -e '/canaryCompile/,+2d' ../build.gradle build.gradle
+    gradle:
+      - yes
+    forceversion: true
+    rm:
+      - app/src/main/res/raw/words_1.dict
+    prebuild: sed -i -e '/versionCode/d' -e '/versionName/aversionCode $$VERCODE$$'  build.gradle
+    preassemble:
+      - :makeEnglishDictionary
+
+  - versionName: 1.8.401
+    versionCode: 1726
+    commit: 1.8-r7.1
+    subdir: app
+    init: sed -i -e '/fabric/d' -e '/canaryCompile/,+2d' ../build.gradle build.gradle
+    gradle:
+      - yes
+    forceversion: true
+    rm:
+      - app/src/main/res/raw/words_1.dict
+    prebuild:
+      - sed -i -e '/versionCode/d' -e '/versionName/aversionCode $$VERCODE$$' build.gradle
+      - sed -i -e '/crashlytics/,$d' build.gradle
+    preassemble:
+      - :makeEnglishDictionary
+
+  - versionName: 1.8.503
+    versionCode: 1828
+    commit: 1.8-r8
+    subdir: app
+    init: sed -i -e '/fabric/d' -e '/canaryCompile/,+2d' ../build.gradle build.gradle
+    gradle:
+      - yes
+    forceversion: true
+    rm:
+      - app/src/main/res/raw/words_*.dict
+    prebuild:
+      - sed -i -e '/versionCode/d' -e '/versionName/aversionCode $$VERCODE$$' build.gradle
+      - sed -i -e '/crashlytics/,$d' build.gradle
+    preassemble:
+      - :makeEnglishDictionary
+
+  - versionName: 1.8.585
+    versionCode: 1910
+    commit: 1.8-r9
+    subdir: app
+    init: sed -i -e '/fabric/d' -e '/canaryCompile/,+2d' ../build.gradle build.gradle
+    gradle:
+      - yes
+    forceversion: true
+    rm:
+      - app/src/main/res/raw/words_*.dict
+    prebuild:
+      - sed -i -e '/versionCode/d' -e '/versionName/aversionCode $$VERCODE$$' build.gradle
+      - sed -i -e '/crashlytics/,$d' build.gradle
+    preassemble:
+      - :makeEnglishDictionary
+
+  - versionName: 1.8.735
+    versionCode: 2060
+    commit: 1.8-r10
+    subdir: app
+    init: sed -i -e '/fabric/d' -e '/canaryCompile/,+2d' ../build.gradle build.gradle
+    gradle:
+      - yes
+    forceversion: true
+    rm:
+      - app/src/main/res/raw/words_*.dict
+    prebuild:
+      - sed -i -e '/versionCode/d' -e '/versionName/aversionCode $$VERCODE$$' build.gradle
+      - sed -i -e '/crashlytics/,$d' build.gradle
+    preassemble:
+      - :makeEnglishDictionary
+
+  - versionName: 1.8.844
+    versionCode: 2169
+    commit: 1.8-r11
+    subdir: app
+    init: sed -i -e '/fabric/d' -e '/canaryCompile/,+2d' ../build.gradle build.gradle
+    gradle:
+      - yes
+    forceversion: true
+    rm:
+      - app/src/main/res/raw/words_*.dict
+    prebuild:
+      - sed -i -e '/versionCode/d' -e '/versionName/aversionCode $$VERCODE$$' build.gradle
+      - sed -i -e '/crashlytics/,$d' build.gradle
+    preassemble:
+      - :makeEnglishDictionary
+
+  - versionName: 1.8.1241
+    versionCode: 2566
+    commit: 1.8-r12
+    subdir: app
+    init: sed -i -e '/fabric/d' -e '/canaryCompile/,+2d' ../build.gradle build.gradle
+    gradle:
+      - yes
+    forceversion: true
+    rm:
+      - app/src/main/res/raw/words_*.dict
+    prebuild:
+      - sed -i -e '/versionCode/d' -e '/versionName/aversionCode $$VERCODE$$' build.gradle
+      - sed -i -e '/crashlytics/,$d' build.gradle
+    preassemble:
+      - :makeEnglishDictionary
+
+  - versionName: 1.8.1333
+    versionCode: 2658
+    commit: 1.8-r12.2
+    subdir: app
+    init: sed -i -e '/fabric/d' -e '/canaryCompile/,+2d' ../build.gradle build.gradle
+    gradle:
+      - yes
+    forceversion: true
+    rm:
+      - app/src/main/res/raw/words_*.dict
+    prebuild:
+      - sed -i -e '/versionCode/d' -e '/versionName/aversionCode $$VERCODE$$' build.gradle
+      - sed -i -e '/crashlytics/,$d' build.gradle
+    ndk: r11c
+    preassemble:
+      - :makeEnglishDictionary
+
+  - versionName: 1.9.1117
+    versionCode: 3692
+    commit: 1.9-r1
+    subdir: app
+    init: sed -i -e '/fabric/d' -e '/canaryImplementation/,+2d' ../build.gradle build.gradle
+    gradle:
+      - yes
+    forceversion: true
+    rm:
+      - app/src/main/res/raw/words_*.dict
+    prebuild:
+      - sed -i -e '/versionCode/d' -e '/versionName/aversionCode $$VERCODE$$' -e '/crashlytics/,$d'
+        build.gradle
+      - sed -i -e 's/gradle:3.1.0-alpha06/gradle:3.0.1/' ../build.gradle
+    scandelete:
+      - buildSrc
+      - app/src/debug
+    ndk: r14b
+    preassemble:
+      - :makeEnglishDictionary
+
+  - versionName: 1.9.1944
+    versionCode: 4519
+    commit: 1.9-r3-fdroid
+    subdir: app
+    init: sed -i -e '/fabric/d' -e '/canaryImplementation/d' ../build.gradle build.gradle
+    gradle:
+      - yes
+    forceversion: true
+    rm:
+      - app/src/main/res/raw/words_*.dict
+    prebuild: sed -i -e '/versionCode/d' -e '/versionName/aversionCode $$VERCODE$$'
+        -e '/crashlytics/,$d' build.gradle
+    scandelete:
+      - buildSrc
+      - app/src/debug
+    ndk: r14b
+    preassemble:
+      - :makeEnglishDictionary
+
+  - versionName: 1.9.2055
+    versionCode: 4630
+    commit: 1.9-r4
+    subdir: app
+    init: sed -i -e '/fabric/d' -e '/canaryImplementation/d' ../build.gradle build.gradle
+    gradle:
+      - yes
+    forceversion: true
+    rm:
+      - app/src/main/res/raw/words_*.dict
+    prebuild: sed -i -e '/versionCode/d' -e '/versionName/aversionCode $$VERCODE$$'
+        -e '/crashlytics/,$d' build.gradle
+    scandelete:
+      - buildSrc
+      - app/src/debug
+    ndk: r14b
+    preassemble:
+      - :makeEnglishDictionary
+
+  - versionName: 1.9.2445
+    versionCode: 5020
+    commit: 1.9-r5.1
+    subdir: app
+    gradle:
+      - yes
+    forceversion: true
+    rm:
+      - app/src/main/res/raw/words_*.dict
+    prebuild: sed -i -e '/versionCode/d' -e '/versionName/aversionCode $$VERCODE$$'
+        build.gradle
+    scandelete:
+      - buildSrc
+      - app/src/debug
+    ndk: r14b
+    preassemble:
+      - :makeEnglishDictionary
+
+  - versionName: 1.9.2629
+    versionCode: 5204
+    commit: 1.9-r6
+    subdir: app
+    gradle:
+      - yes
+    forceversion: true
+    prebuild: sed -i -e '/versionCode/d' -e '/versionName/aversionCode $$VERCODE$$'
+        build.gradle
+    scandelete:
+      - buildSrc
+    ndk: r14b
+
+  - versionName: 1.10.364
+    versionCode: 5539
+    commit: 1.10-r1
+    subdir: app
+    gradle:
+      - yes
+    forceversion: true
+    prebuild: sed -i -e '/versionCode/d' -e '/versionName/aversionCode $$VERCODE$$'
+        build.gradle
+    scandelete:
+      - buildSrc
+    ndk: r14b
+
+  - versionName: 1.10.606
+    versionCode: 5781
+    commit: 1.10-r2
+    subdir: app
+    gradle:
+      - yes
+    forceversion: true
+    prebuild: sed -i -e '/versionCode/d' -e '/versionName/aversionCode $$VERCODE$$'
+        build.gradle
+    scandelete:
+      - buildSrc
+    ndk: r14b
+
+  - versionName: 1.10.1109
+    versionCode: 6279
+    commit: e57c9cc852aefdc1ff60b024e52d4341337b3df7
+    subdir: app
+    gradle:
+      - yes
+    forceversion: true
+    prebuild: sed -i -e '/versionCode/d' -e '/versionName/aversionCode $$VERCODE$$'
+        build.gradle
+    scanignore:
+      - buildSrc
+    ndk: r14b
+    gradleprops:
+      - forceVersionBuildCount=4709
+
+  - versionName: 1.10.1786
+    versionCode: 6956
+    commit: 1.10-r4
+    subdir: ime/app
+    sudo:
+      - apt-get update || apt-get update
+      - apt-get install -t stretch-backports openjdk-11-jdk-headless openjdk-11-jre-headless
+      - update-alternatives --auto java
+    gradle:
+      - yes
+    prebuild:
+      - sed -i -e "/EnvKey/ a //gradleVersion = '6.8.3'" ../build.gradle
+      - sed -i -e '/Data\.versionCode/ c versionCode $$VERCODE$$' -e '/Data\.versionName/
+        c versionName "$$VERSION$$"' ../../gradle/versioning_apk.gradle
+    scanignore:
+      - addons/languages/*/pack/dictionary/*.gz
+    ndk: r14b
+
+MaintainerNotes: |-
+    * Prior to 1.9.2629, generates english dictionary binary (src/main/res/raw/words_*.dict) from source files (under `english_dictionary` folder. Mostly AOSP word-list)
+
+    Summary and Description have been moved to the new localizable text files:
+    https://f-droid.org/docs/All_About_Descriptions_Graphics_and_Screenshots
+
+AutoUpdateMode: None
+UpdateCheckMode: None
+CurrentVersion: 1.10.1786
+CurrentVersionCode: 6956
