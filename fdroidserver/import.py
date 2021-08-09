@@ -254,7 +254,10 @@ def main():
             sys.exit(1)
         elif tmp_importer_dir:
             # For Windows: Close the repo or a git.exe instance holds handles to repo
-            git_repo.close()
+            try:
+                git_repo.close()
+            except AttributeError:  # Debian/stretch's version does not have close()
+                pass
             # TODO: Python3.9: Accepts a path-like object for both src and dst.
             shutil.move(str(tmp_importer_dir), str(build_dir))
         Path('build/.fdroidvcs-' + appid).write_text(app.RepoType + ' ' + app.Repo)
