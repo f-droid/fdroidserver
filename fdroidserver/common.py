@@ -370,8 +370,6 @@ def read_config(opts=None):
         with io.open(old_config_file, "rb") as fp:
             code = compile(fp.read(), old_config_file, 'exec')
             exec(code, None, config)  # nosec TODO automatically migrate
-    else:
-        logging.warning(_("No config.yml found, using defaults."))
 
     for k in ('mirrors', 'install_list', 'uninstall_list', 'serverwebroot', 'servergitroot'):
         if k in config:
