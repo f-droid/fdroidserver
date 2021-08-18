@@ -446,7 +446,7 @@ valuetypes = {
                    ["ArchivePolicy"]),
 
     FieldValidator("Anti-Feature",
-                   r'^(Ads|Tracking|NonFreeNet|NonFreeDep|NonFreeAdd|UpstreamNonFree|NonFreeAssets|KnownVuln|ApplicationDebuggable|NoSourceSince)$',
+                   r'^(Ads|Tracking|NonFreeNet|NonFreeDep|NonFreeAdd|UpstreamNonFree|NonFreeAssets|KnownVuln|ApplicationDebuggable|NoSourceSince|AdultContent)$',
                    ["AntiFeatures"]),
 
     FieldValidator("Auto Update Mode",
