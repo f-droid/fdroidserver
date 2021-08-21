@@ -202,6 +202,12 @@ def check_tags(app, pattern):
                         hver = version
 
     if hver:
+        if htag != tags[0]:
+            logging.info(
+                "{appid}: latest tag {tag} does not contain highest version {version}".format(
+                    appid=app.id, tag=tags[0], version=hver
+                )
+            )
         try:
             commit = vcs.getref(htag)
             if commit:
