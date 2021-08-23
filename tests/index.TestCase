@@ -358,7 +358,7 @@ class IndexTest(unittest.TestCase):
         )
         self.assertTrue(os.path.exists(os.path.join('repo', 'index.xml')))
 
-    def test_get_mirror_service_urls(self):
+    def test_github_get_mirror_service_urls(self):
         for url in [
             'git@github.com:foo/bar',
             'git@github.com:foo/bar.git',
@@ -370,19 +370,28 @@ class IndexTest(unittest.TestCase):
                 fdroidserver.index.get_mirror_service_urls(url),
             )
 
+    def test_gitlab_get_mirror_service_urls(self):
         for url in [
             'git@gitlab.com:group/project',
             'git@gitlab.com:group/project.git',
             'https://gitlab.com/group/project',
             'https://gitlab.com/group/project.git',
         ]:
-            self.assertEqual(
-                [
-                    'https://group.gitlab.io/project/fdroid',
-                    'https://gitlab.com/group/project/-/raw/master/fdroid',
-                ],
-                fdroidserver.index.get_mirror_service_urls(url),
-            )
+            with patch('fdroidserver.common.get_dir_size', return_value=100000):
+                self.assertEqual(
+                    [
+                        'https://group.gitlab.io/project/fdroid',
+                        'https://gitlab.com/group/project/-/raw/master/fdroid',
+                    ],
+                    fdroidserver.index.get_mirror_service_urls(url),
+                )
+            with patch('fdroidserver.common.get_dir_size', return_value=1234567890):
+                self.assertEqual(
+                    [
+                        'https://gitlab.com/group/project/-/raw/master/fdroid',
+                    ],
+                    fdroidserver.index.get_mirror_service_urls(url),
+                )
 
     def test_make_website(self):
         tmptestsdir = tempfile.mkdtemp(

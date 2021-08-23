@@ -1003,11 +1003,19 @@ def get_mirror_service_urls(url):
     """Get direct URLs from git service for use by fdroidclient.
 
     Via 'servergitmirrors', fdroidserver can create and push a mirror
-    to certain well known git services like gitlab or github.  This
+    to certain well known git services like GitLab or GitHub.  This
     will always use the 'master' branch since that is the default
     branch in git. The files are then accessible via alternate URLs,
     where they are served in their raw format via a CDN rather than
     from git.
+
+    Both of the GitLab URLs will work with F-Droid, but only the
+    GitLab Pages will work in the browser This is because the "raw"
+    URLs are not served with the correct mime types, so any index.html
+    which is put in the repo will not be rendered. Putting an
+    index.html file in the repo root is a common way for to make
+    information about the repo available to end user.
+
     """
     if url.startswith('git@'):
         url = re.sub(r'^git@([^:]+):(.+)', r'https://\1/\2', url)
@@ -1030,14 +1038,17 @@ def get_mirror_service_urls(url):
         segments.extend([branch, folder])
         urls.append('/'.join(segments))
     elif hostname == "gitlab.com":
-        # Both these Gitlab URLs will work with F-Droid, but only the first will work in the browser
-        # This is because the `raw` URLs are not served with the correct mime types, so any
-        # index.html which is put in the repo will not be rendered. Putting an index.html file in
-        # the repo root is a common way for to make information about the repo available to end user.
-
-        # Gitlab-like Pages segments "https://user.gitlab.io/repo/folder"
-        gitlab_pages = ["https:", "", user + ".gitlab.io", repo, folder]
-        urls.append('/'.join(gitlab_pages))
+        if common.get_dir_size() <= common.GITLAB_COM_PAGES_MAX_SIZE:
+            # Gitlab-like Pages segments "https://user.gitlab.io/repo/folder"
+            gitlab_pages = ["https:", "", user + ".gitlab.io", repo, folder]
+            urls.append('/'.join(gitlab_pages))
+        else:
+            logging.warning(
+                _(
+                    'Skipping GitLab Pages mirror because the repo is too large (>%.2fGB)!'
+                )
+                % (common.GITLAB_COM_PAGES_MAX_SIZE / 1000000000)
+            )
         # GitLab Raw "https://gitlab.com/user/repo/-/raw/branch/folder"
         gitlab_raw = segments + ['-', 'raw', branch, folder]
         urls.append('/'.join(gitlab_raw))

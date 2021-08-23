@@ -111,6 +111,10 @@ MAX_VERSION_CODE = 0x7fffffff  # Java's Integer.MAX_VALUE (2147483647)
 
 XMLNS_ANDROID = '{http://schemas.android.com/apk/res/android}'
 
+# https://docs.gitlab.com/ee/user/gitlab_com/#gitlab-pages
+GITLAB_COM_PAGES_MAX_SIZE = 1000000000
+
+
 config = None
 options = None
 env = None
@@ -476,6 +480,13 @@ def parse_human_readable_size(size):
         if not m:
             raise ValueError(_('Not a valid size definition: "{}"').format(size))
         return int(float(m.group("value")) * units[m.group("unit")])
+
+
+def get_dir_size(path_or_str):
+    """Get the total size of all files in the given directory."""
+    if isinstance(path_or_str, str):
+        path_or_str = Path(path_or_str)
+    return sum(f.stat().st_size for f in path_or_str.glob('**/*') if f.is_file())
 
 
 def assert_config_keystore(config):
