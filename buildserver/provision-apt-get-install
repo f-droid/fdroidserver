@@ -27,6 +27,10 @@ Dpkg::Use-Pty "0";
 quiet "1";
 EOF
 
+cat <<EOF > /etc/apt/apt.conf.d/99confdef
+Dpkg::Options { "--force-confdef"; };
+EOF
+
 if echo $debian_mirror | grep '^https' 2>&1 > /dev/null; then
     apt-get update || apt-get update
     apt-get install apt-transport-https ca-certificates
