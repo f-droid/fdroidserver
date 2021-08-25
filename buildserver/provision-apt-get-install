@@ -52,6 +52,9 @@ apt-get update || apt-get update
 apt-get upgrade --download-only
 apt-get upgrade
 
+# again after upgrade in case of keyring changes
+apt-get update || apt-get update
+
 packages="
  androguard/stretch-backports
  ant
