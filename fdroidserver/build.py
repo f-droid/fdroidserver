@@ -1212,7 +1212,9 @@ def main():
                     common.force_exit(1)
                 add_failed_builds_entry(failed_builds, appid, build, vcse)
                 wikilog = str(vcse)
-                common.deploy_build_log_with_rsync(appid, build.versionCode, str(vcse))
+                common.deploy_build_log_with_rsync(
+                    appid, build.versionCode, "".join(traceback.format_exc())
+                )
             except FDroidException as e:
                 with open(os.path.join(log_dir, appid + '.log'), 'a+') as f:
                     f.write('\n\n============================================================\n')
@@ -1228,6 +1230,9 @@ def main():
                     common.force_exit(1)
                 add_failed_builds_entry(failed_builds, appid, build, e)
                 wikilog = e.get_wikitext()
+                common.deploy_build_log_with_rsync(
+                    appid, build.versionCode, "".join(traceback.format_exc())
+                )
             except Exception as e:
                 logging.error("Could not build app %s due to unknown error: %s" % (
                     appid, traceback.format_exc()))
@@ -1236,6 +1241,9 @@ def main():
                     common.force_exit(1)
                 add_failed_builds_entry(failed_builds, appid, build, e)
                 wikilog = str(e)
+                common.deploy_build_log_with_rsync(
+                    appid, build.versionCode, "".join(traceback.format_exc())
+                )
 
             if options.wiki and wikilog:
                 try:
