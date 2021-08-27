@@ -1228,6 +1228,7 @@ def main():
                     common.force_exit(1)
                 add_failed_builds_entry(failed_builds, appid, build, e)
                 wikilog = e.get_wikitext()
+                common.deploy_build_log_with_rsync(appid, build.versionCode, str(e))
             except Exception as e:
                 logging.error("Could not build app %s due to unknown error: %s" % (
                     appid, traceback.format_exc()))
@@ -1236,6 +1237,7 @@ def main():
                     common.force_exit(1)
                 add_failed_builds_entry(failed_builds, appid, build, e)
                 wikilog = str(e)
+                common.deploy_build_log_with_rsync(appid, build.versionCode, str(e))
 
             if options.wiki and wikilog:
                 try:
