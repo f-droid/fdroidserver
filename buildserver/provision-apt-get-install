@@ -51,94 +51,20 @@ apt-get upgrade
 apt-get update || apt-get update
 
 packages="
- androguard
- ant
- asn1c
- ant-contrib
- autoconf
- autoconf2.13
- automake
- automake1.11
- autopoint
- bison
- bzr
- ca-certificates-java
- cmake
- curl
+ default-jdk-headless
+ default-jre-headless
  dexdump
- disorderfs
- expect
- faketime
- flex
- gettext
- gettext-base
- git-core
- git-svn
- gperf
- gpg
- gpgconf
- libassuan0
- libgpg-error0
- javacc
- libarchive-zip-perl
- libexpat1-dev
- libgcc1:i386
- libglib2.0-dev
- liblzma-dev
- libncurses5:i386
- librsvg2-bin
- libsaxonb-java
- libssl-dev
- libstdc++6:i386
- libtool
- libtool-bin
- make
- maven
- mercurial
- nasm
- openjdk-8-jre-headless
- openjdk-8-jdk-headless
- optipng
- pkg-config
- python-gnupg
- python-lxml
- python-magic
- python-pip
- python-setuptools
- python3-asn1crypto
- python3-defusedxml
- python3-git
- python3-gitdb
- python3-gnupg
- python3-pip
- python3-pyasn1
- python3-pyasn1-modules
- python3-qrcode
- python3-requests
- python3-setuptools
- python3-smmap
- python3-yaml
- python3-ruamel.yaml
- python3-pil
- python3-paramiko
- quilt
- rsync
- scons
- sqlite3
- subversion
+ fdroidserver
+ gnupg
  sudo
- swig
- unzip
- xsltproc
- yasm
- zip
- zlib1g:i386
 "
+
 apt-get install $packages --download-only
 apt-get install $packages
+apt-get purge fdroidserver
 
 highestjava=`update-java-alternatives --list | sort -n | tail -1 | cut -d ' ' -f 1`
 update-java-alternatives --set $highestjava
 
-# configure headless openjdk to work without gtk accessability dependencies
-sed -i -e 's@\(assistive_technologies=org.GNOME.Accessibility.AtkWrapper\)@#\1@' /etc/java-8-openjdk/accessibility.properties
+# configure headless openjdk to work without gtk accessibility dependencies
+sed -i -e 's@\(assistive_technologies=org.GNOME.Accessibility.AtkWrapper\)@#\1@' /etc/java-11-openjdk/accessibility.properties
