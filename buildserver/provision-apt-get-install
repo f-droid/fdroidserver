@@ -43,8 +43,6 @@ deb ${debian_mirror} bullseye-updates main
 EOF
 echo "deb ${debian_mirror} bullseye-backports main" > /etc/apt/sources.list.d/backports.list
 
-dpkg --add-architecture i386
-
 apt-get update || apt-get update
 apt-get upgrade --download-only
 apt-get upgrade
