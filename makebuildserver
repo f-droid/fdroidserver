@@ -43,74 +43,22 @@ logging.basicConfig(format=logformat, level=loglevel)
 
 tail = None
 
-BASEBOX_DEFAULT = 'fdroid/basebox-stretch64'
-BASEBOX_VERSION_DEFAULT = '0.5.1'
+BASEBOX_DEFAULT = 'fdroid/bullseye64'
+BASEBOX_VERSION_DEFAULT = '11.20220317.1'
 BASEBOX_CHECKSUMS = {
-    '0.6.1': {
+    '11.20220317.1': {
         'libvirt': {
-            'box.img': 'a45342ad238271815f9197325cd0317d6df87e1c20372015532919d817d0dc07',
-            'metadata.json': '9b5f62362ce3cd25c50881d8ae124879fc21ed4fdb16cc78d57058f116680f25',
-            'Vagrantfile': '4435901624f21dad201c3bd7f0d8d4ece842bc9fbbb70e312eee54f07173f24e',
+            'box.img': 'fbde152a2f61d191983be9d1dbeae2591af32cca1ec27daa342485d97187515e',
+            'metadata.json': '42b96a01106c25f3a222ddad0baead0b811cc64926f924fb836bbfa43580e646',
+            'Vagrantfile': 'f9c6fcbb47a4d0d33eb066859c8e87efd642287a638bd7da69a9e7a6f25fec47',
         },
         'virtualbox': {
-            'box-disk1.vmdk': '6b536f26dcee137aca9a3f5f6f20aef795193ef2e8c387a0ffbdb7c5fe2ec0fb',
-            'box.ovf': 'cbdd6315187d4ce8ff15ed5a00a2c8b0d33abe6b0356439ce4d8d9ac3724f875',
-            'metadata.json': '098439524f76cafe026140b787ca419297a055a3f6006b9d60e6d5326d18ba99',
-            'Vagrantfile': '95c64a0e82a6420845c05038c4c97b3aba629b09eb2b78e879423d06f6b54a54',
+            'box.ovf': 'becd5cea2666d42e12def13a91766aa0d4b0e8e6f53102486c2a6cdb4e401b08',
+            'box.vmdk': '49c96a58a3ee99681d348075864a290c60a8d334fddd21be453c825fcee75eda',
+            'metadata.json': 'ffdaa989f2f6932cd8042e1102371f405cc7ad38e324210a1326192e4689e83a',
+            'Vagrantfile': '0bbc2ae97668d8da27ab97b766752dcd0bf9e41900e21057de15a58ee7fae47d',
         }
     },
-    '0.6.0': {
-        'libvirt': {
-            'box.img': '82c2c3548cf48f0f4c6601f40f8bec36ff37e9a74d6f717067a526250ad790ad',
-            'metadata.json': '9b5f62362ce3cd25c50881d8ae124879fc21ed4fdb16cc78d57058f116680f25',
-            'Vagrantfile': '4435901624f21dad201c3bd7f0d8d4ece842bc9fbbb70e312eee54f07173f24e',
-        },
-        'virtualbox': {
-            'box-disk1.vmdk': '6b536f26dcee137aca9a3f5f6f20aef795193ef2e8c387a0ffbdb7c5fe2ec0fb',
-            'box.ovf': 'cbdd6315187d4ce8ff15ed5a00a2c8b0d33abe6b0356439ce4d8d9ac3724f875',
-            'metadata.json': '098439524f76cafe026140b787ca419297a055a3f6006b9d60e6d5326d18ba99',
-            'Vagrantfile': '95c64a0e82a6420845c05038c4c97b3aba629b09eb2b78e879423d06f6b54a54',
-        }
-    },
-    '0.5.1': {
-        'libvirt': {
-            'box.img': 'ad015940b866e36a593ef5fa0035ec6703f74a7f082ab76a1d2bd9463714cd4a',
-            'metadata.json': '5ced8ecf886722a5152095e099b778b1d2b859c2e1dcf834182274034b8a629d',
-            'Vagrantfile': 'cc7b8edb26481c158b2c28d15d32f7e146de892847c9308ac262678cf0ae8260',
-        },
-        'virtualbox': {
-            'box-disk1.vmdk': 'cba36a9c9814bdff9aabaea8786c27477ef8958cf6ee65ad844cb2726bdab93e',
-            'box.ovf': 'cbdd6315187d4ce8ff15ed5a00a2c8b0d33abe6b0356439ce4d8d9ac3724f875',
-            'metadata.json': '098439524f76cafe026140b787ca419297a055a3f6006b9d60e6d5326d18ba99',
-            'Vagrantfile': 'ae50c3d152c3016e853176005d1a5da7a8e6ae424c9074e93b1a1015aa2f2e14',
-        }
-    },
-    '0.5': {
-        'virtualbox': {
-            'box-disk1.vmdk': '8834d5eb78758437c2517f83282172fd5e3842d88f657d577592d0917cd02f89',
-            'box.ovf': 'cbdd6315187d4ce8ff15ed5a00a2c8b0d33abe6b0356439ce4d8d9ac3724f875',
-            'metadata.json': '098439524f76cafe026140b787ca419297a055a3f6006b9d60e6d5326d18ba99',
-            'Vagrantfile': 'ae50c3d152c3016e853176005d1a5da7a8e6ae424c9074e93b1a1015aa2f2e14',
-        },
-        'libvirt': {
-            'box.img': '2ef5f1fdc98c24a4f67cecb526d21e1d73dedf5a0072ceff528a0e75da3ff452',
-            'metadata.json': 'da79a5e2327dcf81a18a9d66a6e91205a20e440f23d3928e633fd39d60c641e5',
-            'Vagrantfile': 'cc7b8edb26481c158b2c28d15d32f7e146de892847c9308ac262678cf0ae8260',
-        }
-    },
-    '0.3': {
-        'libvirt': {
-            'box.img': '24f06f415dde4cdb01d68c904fc57386ea060ba7b94e700670c58694b3d3635e',
-            'metadata.json': '0965955659082fd2e67723deb3311ba253c96153d3176d856db1b3e6e461cf23',
-            'Vagrantfile': 'cc7b8edb26481c158b2c28d15d32f7e146de892847c9308ac262678cf0ae8260',
-        },
-        'virtualbox': {
-            'box-disk1.vmdk': '103114977f1a36f7121ef9b3a1495129baa10bfedfada61a13345c8863c4dcd6',
-            'box.ovf': '33a5fbaf3dba443237baefcba6d56ca7a76121ca530f1140aa8263a69d7d3695',
-            'metadata.json': '098439524f76cafe026140b787ca419297a055a3f6006b9d60e6d5326d18ba99',
-            'Vagrantfile': 'ae50c3d152c3016e853176005d1a5da7a8e6ae424c9074e93b1a1015aa2f2e14',
-        }
-    }
 }
 
 config = {
@@ -138,7 +86,7 @@ logging.debug("makebuildserver.config.py parsed -> %s", json.dumps(config, inden
 if config['basebox'] == BASEBOX_DEFAULT and 'basebox_version' not in config:
     config['basebox_version'] = BASEBOX_VERSION_DEFAULT
 # note: vagrant allows putting '/' into the name of a local box,
-# so this check is not completely relyable, but better than nothing
+# so this check is not completely reliable, but better than nothing
 if 'basebox_version' in config and 'basebox' in config and '/' not in config['basebox']:
     logging.critical("Can not get version '{version}' for basebox '{box}', "
                      "vagrant does not support versioning for locally added boxes."
@@ -488,7 +436,7 @@ def main():
                          "virtualbox, libvirt)"
                          .format(vm_provider=config['cm_provider']))
         sys.exit(1)
-    # Check if selected basebox is available
+    # Check if selected Vagrant box is available
     available_boxes_by_provider = [x.name for x in v.box_list() if x.provider == config['vm_provider']]
     if '/' not in config['basebox'] and config['basebox'] not in available_boxes_by_provider:
         logging.critical("Vagrant box '{basebox}' not available "
@@ -501,7 +449,7 @@ def main():
                                  basebox=config['basebox']))
         sys.exit(1)
 
-    # download and verfiy fdroid pre-built basebox
+    # Download and verify pre-built Vagrant boxes
     if config['basebox'] == BASEBOX_DEFAULT:
         buildserver_not_created = any([True for x in v.status() if x.state == 'not_created' and x.name == 'default'])
         if buildserver_not_created or options.clean:

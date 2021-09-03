@@ -62,7 +62,7 @@ vagrant global-status \
 # so we need to "manually" clone the git repo here…
 cd $WORKSPACE
 
-# set up Android SDK to use the Debian packages in stretch
+# set up Android SDK to use the Debian packages
 export ANDROID_HOME=/usr/lib/android-sdk
 
 # now build the whole archive

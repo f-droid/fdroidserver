@@ -334,7 +334,7 @@ def main():
     package_json = tmp_importer_dir / 'package.json'  # react-native
     pubspec_yaml = tmp_importer_dir / 'pubspec.yaml'  # flutter
     if package_json.exists():
-        build.sudo = ['apt-get update || apt-get update', 'apt-get install -t stretch-backports npm', 'npm install -g react-native-cli']
+        build.sudo = ['apt-get update || apt-get update', 'apt-get install npm', 'npm install -g react-native-cli']
         build.init = ['npm install']
         with package_json.open() as fp:
             data = json.load(fp)
