@@ -11,20 +11,21 @@
 # 世界 <i@nekox.me>, 2021.
 # ZZY2357 <ZZY2357@outlook.com>, 2021.
 # yahoo～～ <xll520yzl@gmail.com>, 2021.
+# Liu Wenyuan <15816141883@163.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2021-01-29 16:12+0100\n"
-"PO-Revision-Date: 2021-07-05 17:03+0000\n"
-"Last-Translator: yahoo～～ <xll520yzl@gmail.com>\n"
+"PO-Revision-Date: 2021-09-06 13:35+0000\n"
+"Last-Translator: Liu Wenyuan <15816141883@163.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/f-droid/fdroidserver/zh_Hans/>\n"
 "Language: zh_Hans\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.8-dev\n"
+"X-Generator: Weblate 4.8.1-dev\n"
 
 #: ../fdroidserver/common.py
 msgid ""
@@ -590,12 +591,12 @@ msgstr "从存储库中删除没有元数据的 APK 和 OBB"
 #: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "Deleting archive, repo is too big ({size} max {limit})"
-msgstr ""
+msgstr "存储库过大，将删除存档（大小 {size}，限制 {limit}）"
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "Deleting git-mirror history, repo is too big ({size} max {limit})"
-msgstr ""
+msgstr "存储库过大，将删除镜像历史（大小 {size}，限制 {limit}）"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -605,25 +606,26 @@ msgstr "删除未知文件： {path}"
 #: ../fdroidserver/lint.py
 #, python-format
 msgid "Description '%s' is just the app's summary"
-msgstr ""
+msgstr "简介“%s”与应用的概括文字相同"
 
 #: ../fdroidserver/lint.py
 msgid "Description has a duplicate line"
-msgstr ""
+msgstr "简介有重复行"
 
 #: ../fdroidserver/lint.py
 #, python-format
 msgid "Description has a list (%s) but it isn't bulleted (*) nor numbered (#)"
-msgstr ""
+msgstr "简介中带有列表（%s），但它既不是子弹（*）形列表也不是编号（#）型列表"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "Description of length {length} is over the {limit} char limit"
-msgstr ""
+msgstr "简介长度 {length} 超过 {limit} 字限制"
 
 #: ../fdroidserver/import.py
+#, fuzzy
 msgid "Do not add 'disable:' to the generated build entries"
-msgstr ""
+msgstr "不要给生成的构建项添加 'disable:'"
 
 #: ../fdroidserver/nightly.py
 msgid "Do not deploy the new files to the repo"
@@ -677,14 +679,14 @@ msgid "Downloading {url} failed. {error}"
 msgstr "下载 {url} 失败。{error}"
 
 #: ../fdroidserver/metadata.py
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Duplicate build recipe found for versionCode {versionCode} in {linedesc}"
-msgstr ""
+msgstr "在 {linedesc} 中找到了重复的为 versionCode {versionCode} 使用的构建配方"
 
 #: ../fdroidserver/lint.py
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Duplicate link in '{field}': {url}"
-msgstr ""
+msgstr "“{field}”中有重复的链接：{url}"
 
 #: ../fdroid
 msgid "Dynamically scan APKs post build"
@@ -699,20 +701,22 @@ msgid ""
 "ERROR: this command should never be used to mirror f-droid.org!\n"
 "A full mirror of f-droid.org requires more than 200GB."
 msgstr ""
+"错误：请不要使用此命令镜像 f-droid.org！\n"
+"对 f-droid.org 进行完整镜像需要超过 200GB 的储存空间。"
 
 #: ../fdroidserver/nightly.py
 msgid "ERROR: unsupported CI type, patches welcome!"
-msgstr ""
+msgstr "错误：不支持此类 CI，如果有能力请帮我们添加支持！"
 
 #: ../fdroidserver/metadata.py
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Empty build flag at {linedesc}"
-msgstr ""
+msgstr "{linedesc} 中构建标志为空"
 
 #: ../fdroidserver/__main__.py
 #, python-brace-format
 msgid "Encoding is set to '{enc}' fdroid might run into encoding issues. Please set it to 'UTF-8' for best results."
-msgstr ""
+msgstr "编码被设置为“{enc}”，可能会导致 fdroid 出现编码问题。为了最佳效果，请将其更改为“UTF-8”。"
 
 #: ../fdroidserver/init.py
 #, python-format
@@ -720,54 +724,56 @@ msgid ""
 "Enter the path to the Android SDK (%s) here:\n"
 "> "
 msgstr ""
+"请在此处输入 Android SDK（%s）的路径：\n"
+"> "
 
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Environment variable {var} from {configname} is not set!"
-msgstr ""
+msgstr "没有设置 {configname} 中的环境变量 {var}！"
 
 #: ../fdroidserver/deploy.py ../fdroidserver/checkupdates.py
 #: ../fdroidserver/upload.py
 #, python-format
 msgid "Error while attempting to publish log: %s"
-msgstr ""
+msgstr "尝试发布日志时出错：%s"
 
 #: ../fdroidserver/import.py ../fdroidserver/common.py
 msgid "Error while getting repo address"
-msgstr ""
+msgstr "获取存储库地址时出错"
 
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Extract signatures from APKs"
-msgstr ""
+msgstr "从 APK 中提取签名"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Failed copying {path}: {error}"
-msgstr ""
+msgstr "复制 {path} 失败：{error}"
 
 #: ../fdroidserver/signatures.py
 #, python-brace-format
 msgid "Failed fetching signatures for '{apkfilename}': {error}"
-msgstr ""
+msgstr "获取“{apkfilename}”的签名时出错：{error}"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Failed reading {path}: {error}"
-msgstr ""
+msgstr "读取 {path} 失败：{error}"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Failed resizing {path}: {error}"
-msgstr ""
+msgstr "缩放 {path} 失败：{error}"
 
 #: ../fdroidserver/publish.py
 msgid "Failed to align application"
 msgstr "未能匹配应用程序"
 
 #: ../fdroidserver/deploy.py ../fdroidserver/upload.py
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Failed to create S3 bucket: {url}"
-msgstr ""
+msgstr "创建 S3 桶失败：{url}"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
