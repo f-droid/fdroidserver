@@ -5,20 +5,21 @@
 # riveravaldez <riveravaldezmail@gmail.com>, 2020.
 # Eduardo Rodrigues <edu.rodrigues2580@gmail.com>, 2020.
 # Lilian Sosa <liliancsosa@gmail.com>, 2021.
+# Germe the fur star <FOSSgerme.deb@tuta.io>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2021-01-29 16:12+0100\n"
-"PO-Revision-Date: 2021-01-15 13:24+0000\n"
-"Last-Translator: Lilian Sosa <liliancsosa@gmail.com>\n"
+"PO-Revision-Date: 2021-04-10 21:26+0000\n"
+"Last-Translator: Germe the fur star <FOSSgerme.deb@tuta.io>\n"
 "Language-Team: Spanish (Argentina) <https://hosted.weblate.org/projects/f-droid/fdroidserver/es_AR/>\n"
 "Language: es_AR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.5-dev\n"
+"X-Generator: Weblate 4.6-dev\n"
 
 #: ../fdroidserver/common.py
 msgid ""
@@ -29,6 +30,12 @@ msgid ""
 "        tools on https://gitlab.com/fdroid.\n"
 "        "
 msgstr ""
+"\n"
+"        Este es un repositorio de apps para ser usado con FDroid. Las aplicaciones\n"
+" en este repositorio son tanto binarios oficiales construidos por el autor original\n"
+" de la aplicacion, o son binarios construidos desde la fuente por f-droid.org usando\n"
+" herramientas en https://gitlab.com/fdroid.\n"
+"        "
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -2493,7 +2500,7 @@ msgstr ""
 
 #: ../fdroidserver/scanner.py
 msgid "shared library"
-msgstr ""
+msgstr "librería compartida"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 #: /usr/lib/python3.7/optparse.py
@@ -2529,12 +2536,12 @@ msgstr ""
 
 #: ../fdroidserver/scanner.py
 msgid "static library"
-msgstr ""
+msgstr "librería estática"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "supplied timestamp value '{timestamp}' is not a unix timestamp"
-msgstr ""
+msgstr "valor marca de tiempo suministrado'{timestamp}' no es un marca de tiempo de unix"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py
@@ -2558,7 +2565,7 @@ msgstr ""
 #: /usr/lib/python3.7/argparse.py
 #, python-format
 msgid "unrecognized arguments: %s"
-msgstr ""
+msgstr "argumentos no reconocidos: %s"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -2607,7 +2614,7 @@ msgstr ""
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "{apkfilename}'s AndroidManifest.xml has a bad date: "
-msgstr ""
+msgstr "el AndroidManifest.xml del {apkfilename} tiene una mala fecha: "
 
 #: ../fdroidserver/update.py
 #, python-brace-format
