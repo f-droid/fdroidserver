@@ -33,7 +33,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2021-01-29 16:12+0100\n"
 "PO-Revision-Date: 2021-07-02 07:48+0000\n"
-"Last-Translator: lilim <lionel@les-miquelots.net>\n"
+"Last-Translator: Jaxom <jaxom+weblate@tchack.xyz>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/f-droid/fdroidserver/fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
@@ -2531,7 +2531,7 @@ msgstr "passer le déploiement des journaux de compilation complets: le contenu 
 
 #: ../fdroidserver/common.py
 msgid "skip deploying full build logs: not enabled in config"
-msgstr "passer le déploiement des journaux de compilation complets: non activé dans la configuration"
+msgstr "passer le déploiement des journaux de compilation complets : non activé dans la configuration"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
