@@ -26,13 +26,14 @@
 # Gavy <gavy@protonmail.com>, 2021.
 # lilim <lionel@les-miquelots.net>, 2021.
 # Jaxom <jaxom+weblate@tchack.xyz>, 2021.
+# booteille <booteille@protonmail.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2021-01-29 16:12+0100\n"
-"PO-Revision-Date: 2021-07-02 07:38+0000\n"
-"Last-Translator: Jaxom <jaxom+weblate@tchack.xyz>\n"
+"PO-Revision-Date: 2021-07-02 07:39+0000\n"
+"Last-Translator: booteille <booteille@protonmail.com>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/f-droid/fdroidserver/fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
@@ -2107,9 +2108,8 @@ msgstr "apksigner est introuvable, il est requis pour la signature !"
 
 #: ../fdroidserver/lint.py ../fdroidserver/rewritemeta.py
 #: ../fdroidserver/checkupdates.py
-#, fuzzy
 msgid "application ID of file to operate on"
-msgstr "applicationId pour vérifier les mises à jour"
+msgstr "ID d'application du fichier sur lequel agir"
 
 #: ../fdroidserver/verify.py ../fdroidserver/publish.py
 #: ../fdroidserver/build.py ../fdroidserver/scanner.py
@@ -2164,7 +2164,7 @@ msgstr "Impossible de trouver srclibs : \"{path}\""
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py
 msgid "cannot have multiple subparser arguments"
-msgstr ""
+msgstr "Impossible d'avoir plusieurs arguments du sous-parseur"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py
@@ -2186,7 +2186,6 @@ msgid "command to execute, either 'init' or 'update'"
 msgstr "Commande à exécuter : 'init' ou 'update'"
 
 #: ../fdroidserver/__main__.py
-#, fuzzy
 msgid "commands from plugin modules:"
 msgstr "commandes des modules d'extension :"
 
