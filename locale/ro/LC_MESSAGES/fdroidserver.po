@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: fdroidserver 2.0a5-27-gf24eae0f\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2021-01-29 16:12+0100\n"
-"PO-Revision-Date: 2021-06-23 23:32+0000\n"
+"PO-Revision-Date: 2021-08-05 15:35+0000\n"
 "Last-Translator: Simona Iacob <s@zp1.net>\n"
 "Language-Team: Romanian <https://hosted.weblate.org/projects/f-droid/fdroidserver/ro/>\n"
 "Language: ro\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < 20)) ? 1 : 2;\n"
-"X-Generator: Weblate 4.7.1-dev\n"
+"X-Generator: Weblate 4.8-dev\n"
 
 #: ../fdroidserver/common.py
 msgid ""
@@ -2261,11 +2261,11 @@ msgstr "a eșuat distribuirea jurnalelor de construcție în '{path}'"
 
 #: ../fdroid
 msgid "fdroid [-h|--help|--version] <command> [<args>]"
-msgstr "fdroid [-h|--help|--version] <command> [<args>]"
+msgstr "fdroid [-h|--help|--version] <comandă> [<args>]"
 
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "fdroid [<command>] [-h|--help|--version|<args>]"
-msgstr "fdroid [<command>] [-h|--help|--version|<args>]"
+msgstr "fdroid [<comandă>] [-h|--help|--version|<args>]"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 #: /usr/lib/python3.7/optparse.py
