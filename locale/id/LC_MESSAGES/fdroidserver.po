@@ -1,6 +1,6 @@
 # SOME DESCRIPTIVE TITLE.
 # This file is put in the public domain.
-# signz signotorez <signotorez@gmail.com>, 2020.
+# signz signotorez <signotorez@gmail.com>, 2020, 2021.
 # Reza Almanda <rezaalmanda27@gmail.com>, 2021.
 msgid ""
 msgstr ""
@@ -8,7 +8,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2021-01-29 16:12+0100\n"
 "PO-Revision-Date: 2021-03-13 19:36+0000\n"
-"Last-Translator: Reza Almanda <rezaalmanda27@gmail.com>\n"
+"Last-Translator: signz signotorez <signotorez@gmail.com>\n"
 "Language-Team: Indonesian <https://hosted.weblate.org/projects/f-droid/fdroidserver/id/>\n"
 "Language: id\n"
 "MIME-Version: 1.0\n"
@@ -77,7 +77,7 @@ msgstr "\"{path}\" berisi {name}({version}) sekarang"
 #: ../fdroidserver/deploy.py ../fdroidserver/upload.py
 #, python-brace-format
 msgid "\"{path}\" exists but s3cmd is not installed!"
-msgstr ""
+msgstr "\"{path}\" ada tetapi s3cmd tidak terpasang!"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
@@ -1592,7 +1592,7 @@ msgstr ""
 
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Sign and place packages in the repo"
-msgstr ""
+msgstr "Tandai dan tempatkan paket ke dalam repo"
 
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Sign indexes created using update --nosign"
