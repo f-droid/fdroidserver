@@ -1,20 +1,21 @@
 # SOME DESCRIPTIVE TITLE.
 # This file is put in the public domain.
 # signz signotorez <signotorez@gmail.com>, 2020.
+# Reza Almanda <rezaalmanda27@gmail.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 1.1-680-ge1d3de71\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2021-01-29 16:12+0100\n"
-"PO-Revision-Date: 2020-10-06 08:26+0000\n"
-"Last-Translator: signz signotorez <signotorez@gmail.com>\n"
+"PO-Revision-Date: 2021-03-13 19:36+0000\n"
+"Last-Translator: Reza Almanda <rezaalmanda27@gmail.com>\n"
 "Language-Team: Indonesian <https://hosted.weblate.org/projects/f-droid/fdroidserver/id/>\n"
 "Language: id\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.3-dev\n"
+"X-Generator: Weblate 4.5.2-dev\n"
 
 #: ../fdroidserver/common.py
 msgid ""
@@ -31,12 +32,16 @@ msgid ""
 "\n"
 "SSH Public Key to be used as Deploy Key:"
 msgstr ""
+"\n"
+"Kunci Publik SSH yang akan digunakan sebagai Kunci Deploy:"
 
 #: ../fdroidserver/nightly.py
 msgid ""
 "\n"
 "SSH public key to be used as deploy key:"
 msgstr ""
+"\n"
+"Kunci Publik SSH yang akan digunakan sebagai Kunci Deploy:"
 
 #: ../fdroidserver/nightly.py
 #, python-brace-format
@@ -82,7 +87,7 @@ msgstr "\"{path}\" format berkas tidak didukung (gunakan: metadata/*.yml)"
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "\"{path}\" is not an accepted format, convert to: {formats}"
-msgstr ""
+msgstr "\"{path}\" bukan format yang diterima, dikonversi ke: {formats}"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -105,7 +110,7 @@ msgstr "%(prog)s [opsi] url"
 #: /usr/lib/python3.7/argparse.py
 #, python-format
 msgid "%(prog)s: error: %(message)s\n"
-msgstr ""
+msgstr "%(prog)s: galat: %(message)s\n"
 
 #: ../fdroidserver/scanner.py
 #, python-format
@@ -115,7 +120,7 @@ msgstr "%d terdapat masalah"
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 #: /usr/lib/python3.7/optparse.py
 msgid "%prog [options]"
-msgstr ""
+msgstr "%prog [opsi]"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py
@@ -126,13 +131,13 @@ msgstr "%r tidak bisa dipanggil"
 #: ../fdroidserver/lint.py
 #, python-format
 msgid "%s is not an accepted build field"
-msgstr ""
+msgstr "%s bukan bidang build yang diterima"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 #: /usr/lib/python3.7/optparse.py
 #, python-format
 msgid "%s option does not take a value"
-msgstr ""
+msgstr "%s opsi tidak mengambil nilai"
 
 #: ../fdroidserver/index.py ../fdroidserver/common.py
 msgid "'keypass' not found in config.yml!"
@@ -140,7 +145,7 @@ msgstr "'keypass' tidak ditemukan dalam config.yml!"
 
 #: ../fdroidserver/common.py
 msgid "'keystore' is NONE and 'smartcardoptions' is blank!"
-msgstr ""
+msgstr "'keystore' adalah NONE dan 'smartcardoptions' kosong!"
 
 #: ../fdroidserver/index.py ../fdroidserver/common.py
 msgid "'keystore' not found in config.yml!"
@@ -354,7 +359,7 @@ msgstr ""
 
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Build a package from source"
-msgstr ""
+msgstr "Bangun paket dari sumber"
 
 #: ../fdroidserver/build.py
 msgid "Build all applications available"
@@ -670,7 +675,7 @@ msgstr ""
 
 #: ../fdroid
 msgid "Dynamically scan APKs post build"
-msgstr ""
+msgstr "Pindai APK secara dinamis pasca build"
 
 #: ../fdroidserver/__main__.py
 msgid "ERROR: The \"server\" subcommand has been removed, use \"deploy\"!"
@@ -979,7 +984,7 @@ msgstr ""
 
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Install built packages on devices"
-msgstr ""
+msgstr "Instal paket bawaan di perangkat"
 
 #: ../fdroidserver/install.py
 #, python-format
@@ -1414,7 +1419,7 @@ msgstr ""
 
 #: ../fdroidserver/update.py
 msgid "Produce human-readable index.xml"
-msgstr ""
+msgstr "Buat index.xml yang bisa dibaca manusia"
 
 #: ../fdroidserver/import.py
 msgid "Project URL to import from."
@@ -1591,7 +1596,7 @@ msgstr ""
 
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Sign indexes created using update --nosign"
-msgstr ""
+msgstr "Tanda tangani indeks yang dibuat menggunakan update --nosign"
 
 #: ../fdroidserver/build.py
 msgid "Skip scanning the source code for binaries and other problems"
@@ -2391,7 +2396,7 @@ msgstr "opsi -%s memerlukan argumen"
 #: /usr/lib/python3.7/getopt.py
 #, python-format
 msgid "option --%s must not have an argument"
-msgstr ""
+msgstr "opsi --%s harus tidak mengandung argumen"
 
 #: /usr/lib/python3.5/getopt.py /usr/lib/python3.6/getopt.py
 #: /usr/lib/python3.7/getopt.py
@@ -2424,7 +2429,7 @@ msgstr ""
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py
 msgid "positional arguments"
-msgstr ""
+msgstr "argumen posisi"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -2515,7 +2520,7 @@ msgstr "argumen berikut ini diperlukan: %s"
 #: /usr/lib/python3.7/argparse.py
 #, python-format
 msgid "unexpected option string: %s"
-msgstr ""
+msgstr "string opsi tak terduga: %s"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py
