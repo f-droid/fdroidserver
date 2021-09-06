@@ -31,7 +31,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2021-01-29 16:12+0100\n"
 "PO-Revision-Date: 2021-03-14 11:08+0000\n"
-"Last-Translator: gub <gub.gub@laposte.net>\n"
+"Last-Translator: lilim <lionel@les-miquelots.net>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/f-droid/fdroidserver/fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
@@ -2410,7 +2410,7 @@ msgstr "un des arguments %s est requis"
 
 #: ../fdroidserver/index.py ../fdroidserver/common.py
 msgid "only accepts strings, lists, and tuples"
-msgstr "accepte uniquement les chaînes de caractères, listes et tuples."
+msgstr "accepte uniquement les chaînes de caractères, listes et tuples"
 
 #: ../fdroidserver/install.py
 #, python-format
