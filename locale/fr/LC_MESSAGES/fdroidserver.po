@@ -33,7 +33,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2021-01-29 16:12+0100\n"
 "PO-Revision-Date: 2021-07-02 07:56+0000\n"
-"Last-Translator: lilim <lionel@les-miquelots.net>\n"
+"Last-Translator: Jaxom <jaxom+weblate@tchack.xyz>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/f-droid/fdroidserver/fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
@@ -2596,11 +2596,11 @@ msgstr "utilisation de Apache libcloud pour syncronizer avec {url}"
 
 #: ../fdroidserver/deploy.py
 msgid "virustotal.com is rate limiting, waiting to retry..."
-msgstr "virustotal.com limite le nombre de requête, en attente avant de réessayer..."
+msgstr "virustotal.com limite le nombre de requêtes, en attente avant de réessayer..."
 
 #: ../fdroidserver/update.py
 msgid "wiki support is deprecated and will be removed in the next release!"
-msgstr ""
+msgstr "l'assistance wiki est obsolète et sera enlevée dans la prochaine version !"
 
 #: ../fdroidserver/publish.py
 #, python-brace-format
@@ -2610,9 +2610,9 @@ msgstr[0] "{0} appli, {1} alias de clé"
 msgstr[1] "{0} applis, {1} alias de clé"
 
 #: ../fdroidserver/update.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{apkfilename} ({appid}) has no metadata!"
-msgstr "{apkfilename} ({appid}) n’a pas de métadonnées !"
+msgstr "{apkfilename} ({appid}) ne contient pas de métadonnées !"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
