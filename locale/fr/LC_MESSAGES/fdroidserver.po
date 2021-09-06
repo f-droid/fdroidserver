@@ -33,7 +33,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2021-01-29 16:12+0100\n"
 "PO-Revision-Date: 2021-07-02 07:39+0000\n"
-"Last-Translator: booteille <booteille@protonmail.com>\n"
+"Last-Translator: hilariousperson <gobelpepite+github@gmail.com>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/f-droid/fdroidserver/fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
@@ -1957,7 +1957,7 @@ msgstr "UpdateCheckMode est configuré mais on dirait que checkupdates n'a pas e
 #. Translators: https://developer.android.com/studio/build/application-id
 #: ../fdroidserver/lint.py
 msgid "UpdateCheckName is set to the known application ID - it can be removed"
-msgstr ""
+msgstr "UpdateCheckName est défini sur l'ID d’application connu - il peut être supprimé"
 
 #: ../fdroidserver/lint.py
 msgid "UpdateCheckName is set to the known application ID, it can be removed"
