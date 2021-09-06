@@ -32,8 +32,8 @@ msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2021-01-29 16:12+0100\n"
-"PO-Revision-Date: 2021-07-02 07:58+0000\n"
-"Last-Translator: lilim <lionel@les-miquelots.net>\n"
+"PO-Revision-Date: 2021-07-02 07:59+0000\n"
+"Last-Translator: Jaxom <jaxom+weblate@tchack.xyz>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/f-droid/fdroidserver/fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
@@ -2617,42 +2617,42 @@ msgstr "{apkfilename} ({appid}) ne contient pas de métadonnées !"
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "{apkfilename} has multiple {name} files, looks like Master Key exploit!"
-msgstr "{apkfilename} a pluseiurs fichiers {name}, on dirait que c'est une faille ou exploitation de la clé maître (Master Key) !"
+msgstr "{apkfilename} a plusieurs fichiers {name}, on dirait que c'est une faille ou exploitation de la clé maître (Master Key) !"
 
 #: ../fdroidserver/update.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{apkfilename}'s AndroidManifest.xml has a bad date: "
 msgstr "Le fichier AndroidManifest.xml de {apkfilename} possède une date incorrecte : "
 
 #: ../fdroidserver/update.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{appid} does not have a name! Using application ID instead."
 msgstr "{appid} n’a pas de nom ! Utilisation de l’ID d’application à la place."
 
 #: ../fdroidserver/update.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{appid} does not have a name! Using package name instead."
 msgstr "{appid} n’a pas de nom ! Utilisation du nom du paquet à la place."
 
 #: ../fdroidserver/update.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{appid} from {path} is not a valid Android Package Name!"
 msgstr "{appid} de {path} n’est pas un nom de paquet Android valide !"
 
 #: ../fdroidserver/update.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{appid} from {path} is not a valid Android application ID!"
 msgstr "{appid} de {path} n’est pas un ID d’application Android valide !"
 
 #: ../fdroidserver/metadata.py ../fdroidserver/update.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{appid} from {path} is not a valid Java Package Name!"
 msgstr "{appid} de {path} n’est pas un nom de paquet Java valide !"
 
 #: ../fdroidserver/mirror.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{appid} is missing {name}"
-msgstr "{appid} manque de {name}"
+msgstr "{appid} n'a pas de {name}"
 
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vname
 #: ../fdroidserver/lint.py
