@@ -33,15 +33,15 @@ msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2021-01-29 16:12+0100\n"
-"PO-Revision-Date: 2021-07-14 16:55+0000\n"
-"Last-Translator: translator <yasinoc375@advew.com>\n"
+"PO-Revision-Date: 2021-09-02 20:49+0000\n"
+"Last-Translator: lilim <lionel@les-miquelots.net>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/f-droid/fdroidserver/fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.7.2-dev\n"
+"X-Generator: Weblate 4.8.1-dev\n"
 
 #: ../fdroidserver/common.py
 msgid ""
@@ -2568,7 +2568,7 @@ msgstr "chaîne d'option inattendue : %s"
 #: /usr/lib/python3.7/argparse.py
 #, python-format
 msgid "unknown parser %(parser_name)r (choices: %(choices)s)"
-msgstr "parser inconnu %(parser_name)r (choix: %(choices)s)"
+msgstr "parser inconnu %(parser_name)r (choix : %(choices)s)"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py
@@ -2694,7 +2694,7 @@ msgstr "{file} est vide ou corrompu !"
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "{name} \"{path}\" does not exist! Correct it in config.yml."
-msgstr "{name} \"{path}\" n'existe pas! Corrigez le dans config.yml."
+msgstr "{name} \"{path}\" n'existe pas ! Corrigez le dans config.yml."
 
 #: ../fdroidserver/update.py
 #, python-brace-format
