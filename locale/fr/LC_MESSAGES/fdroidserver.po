@@ -31,7 +31,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2021-01-29 16:12+0100\n"
 "PO-Revision-Date: 2021-03-14 11:15+0000\n"
-"Last-Translator: gub <gub.gub@laposte.net>\n"
+"Last-Translator: lilim <lionel@les-miquelots.net>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/f-droid/fdroidserver/fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
@@ -2473,7 +2473,7 @@ msgstr "arguments optionnels"
 #: ../fdroidserver/nightly.py
 #, python-brace-format
 msgid "overwriting existing {path}"
-msgstr ""
+msgstr "en train d'écraser l'existant {path}"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py
