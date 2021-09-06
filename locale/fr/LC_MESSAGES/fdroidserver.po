@@ -32,8 +32,8 @@ msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2021-01-29 16:12+0100\n"
-"PO-Revision-Date: 2021-07-02 07:46+0000\n"
-"Last-Translator: gub <gub.gub@laposte.net>\n"
+"PO-Revision-Date: 2021-07-02 07:47+0000\n"
+"Last-Translator: Jaxom <jaxom+weblate@tchack.xyz>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/f-droid/fdroidserver/fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
@@ -2495,17 +2495,16 @@ msgstr "repo_icon \"repo/icons/%s\" n'existe pas, génération d'une icône de s
 #: ../fdroidserver/index.py
 #, python-format
 msgid "repo_icon %s does not exist, generating placeholder."
-msgstr "repo_icon %s n'existe pas, génération d'une icône de remplacement."
+msgstr "Le repo_icon %s n'existe pas, génération d'une icône de remplacement."
 
 #: ../fdroidserver/metadata.py
-#, fuzzy
 msgid "ruamel.yaml not installed, can not write metadata."
-msgstr "ruamel.yaml n’est pas installé, impossible d’écrire des métadonnées."
+msgstr "ruamel.yaml n’est pas installé, impossible d’écrire les métadonnées."
 
 #: ../fdroidserver/deploy.py ../fdroidserver/upload.py
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "s3cmd sync indexes {path} to {url} and delete"
-msgstr ""
+msgstr "s3cmd synchroniser les index {path} vers {url} et les supprimer"
 
 #: ../fdroidserver/scanner.py
 msgid "shared library"
