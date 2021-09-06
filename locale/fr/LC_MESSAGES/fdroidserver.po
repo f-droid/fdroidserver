@@ -32,8 +32,8 @@ msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2021-01-29 16:12+0100\n"
-"PO-Revision-Date: 2021-07-02 08:09+0000\n"
-"Last-Translator: lilim <lionel@les-miquelots.net>\n"
+"PO-Revision-Date: 2021-07-02 08:10+0000\n"
+"Last-Translator: Jaxom <jaxom+weblate@tchack.xyz>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/f-droid/fdroidserver/fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
@@ -470,7 +470,7 @@ msgid "Checking archiving for {appid} - APKs:{integer}, keepversions:{keep}, arc
 msgstr "Vérification de l'archivage pour {appid} - APKs : {integer}, keepversions : {keep}, archapks : {arch}"
 
 #: ../fdroidserver/update.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Checking archiving for {appid} - apks:{integer}, keepversions:{keep}, archapks:{arch}"
 msgstr "Vérification de l'archivage pour {appid} - APKs : {integer}, keepversions : {keep}, archapks : {arch}"
 
@@ -2199,8 +2199,8 @@ msgstr "complexe"
 #, fuzzy, python-format
 msgid "conflicting option string: %s"
 msgid_plural "conflicting option strings: %s"
-msgstr[0] "chaîne de caractères optionnelle en conflit : %s"
-msgstr[1] "chaînes de caractères optionnelles en conflit : %s"
+msgstr[0] "chaîne d'options en conflit : %s"
+msgstr[1] "chaînes d'options en conflit : %s"
 
 #: ../fdroidserver/nightly.py
 #, python-brace-format
@@ -2370,7 +2370,7 @@ msgid "mutually exclusive arguments must be optional"
 msgstr "les arguments qui s'excluent mutuellement doivent être optionnels"
 
 #: ../fdroidserver/mirror.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "no \"icon\" in {appid}"
 msgstr "aucune \"icon\" dans {appid}"
 
@@ -2673,7 +2673,7 @@ msgstr "{appid}: {field} doit être un '{type}', mais est un '{fieldtype}' !"
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "{appid}: {field} must be a '{type}', but it is a '{fieldtype}'!"
-msgstr "{appid}: {field} doit être un '{type}', mais est un '{fieldtype}'!"
+msgstr "{appid}: {field} doit être un '{type}', mais est un '{fieldtype}' !"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
