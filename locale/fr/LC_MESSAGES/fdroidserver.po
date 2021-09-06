@@ -25,13 +25,14 @@
 # Vincent Finance <linuxmario@linuxmario.net>, 2021.
 # Gavy <gavy@protonmail.com>, 2021.
 # lilim <lionel@les-miquelots.net>, 2021.
+# Jaxom <jaxom+weblate@tchack.xyz>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2021-01-29 16:12+0100\n"
 "PO-Revision-Date: 2021-07-02 07:38+0000\n"
-"Last-Translator: gub <gub.gub@laposte.net>\n"
+"Last-Translator: Jaxom <jaxom+weblate@tchack.xyz>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/f-droid/fdroidserver/fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
@@ -1757,15 +1758,8 @@ msgid "These are the apps that have been archived from the main repo."
 msgstr "Voici les applications qui ont été archivées à partir du dépôt principal."
 
 #: ../fdroidserver/common.py
-#, fuzzy
 msgid "This is a repository of apps to be used with F-Droid. Applications in this repository are either official binaries built by the original application developers, or are binaries built from source by the admin of f-droid.org using the tools on https://gitlab.com/fdroid."
-msgstr ""
-"\n"
-"        Ceci est un dépôt d’applications à utiliser avec FDroid. Les applications publiées\n"
-"        dans ce dépôt sont soit celles compilées par les développeurs\n"
-"        de ces applications, soit celles compilées par f-droid.org à partir des\n"
-"        sources en utilisant les outils disponibles sur https://gitlab.com/fdroid.\n"
-"        "
+msgstr "Ceci est un dépôt d’applications à utiliser avec FDroid. Les applications publiées dans ce dépôt sont soit les binaires officiels compilés par les développeurs de ces applications, soit celles compilées par f-droid.org à partir des sources en utilisant les outils disponibles sur https://gitlab.com/fdroid."
 
 #: ../fdroidserver/import.py
 #, python-format
@@ -2120,7 +2114,6 @@ msgstr "applicationId pour vérifier les mises à jour"
 #: ../fdroidserver/verify.py ../fdroidserver/publish.py
 #: ../fdroidserver/build.py ../fdroidserver/scanner.py
 #: ../fdroidserver/install.py
-#, fuzzy
 msgid "application ID with optional versionCode in the form APPID[:VERCODE]"
 msgstr "applicationId avec le versionCode optionnel sous la forme APPID[:VERCODE]"
 
@@ -2204,11 +2197,11 @@ msgstr "complexe"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py
-#, python-format
+#, fuzzy, python-format
 msgid "conflicting option string: %s"
 msgid_plural "conflicting option strings: %s"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "chaîne de caractères optionnelle en conflit : %s"
+msgstr[1] "chaînes de caractères optionnelles en conflit : %s"
 
 #: ../fdroidserver/nightly.py
 #, python-brace-format
@@ -2250,9 +2243,9 @@ msgstr "log du processus {path} déployé vers {dest}"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py
-#, fuzzy, python-format
+#, python-format
 msgid "dest= is required for options like %r"
-msgstr "dest= est requis pour les options comme %r"
+msgstr "dest= est obligatoire pour les options comme %r"
 
 #: ../fdroidserver/scanner.py
 msgid "executable binary, possibly code"
@@ -2282,9 +2275,9 @@ msgid "expected one argument"
 msgstr "un seul argument est attendu"
 
 #: ../fdroidserver/common.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "failed deploying build logs to '{path}'"
-msgstr "le journal de construction n'a pas pu être déployé sur '{path}'"
+msgstr "le journal de compilation n'a pas pu être déployé sur '{path}'"
 
 #: ../fdroid
 msgid "fdroid [-h|--help|--version] <command> [<args>]"
@@ -2332,13 +2325,13 @@ msgstr "entier"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py
-#, fuzzy, python-format
+#, python-format
 msgid "invalid %(type)s value: %(value)r"
 msgstr "valeur %(type)s non valide : %(value)r"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py
-#, fuzzy, python-format
+#, python-format
 msgid "invalid choice: %(value)r (choose from %(choices)s)"
 msgstr "choix non valide : %(value)r (choisissez parmi %(choices)s)"
 
@@ -2350,7 +2343,7 @@ msgstr "valeur de conflict_resolution invalide : %r"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py
-#, fuzzy, python-format
+#, python-format
 msgid "invalid option string %(option)r: must start with a character %(prefix_chars)r"
 msgstr "chaîne d’option non valide %(option)r : doit commencer par un caractère %(prefix_chars)r"
 
@@ -2368,7 +2361,7 @@ msgid "local_copy_dir must be directory, not a file!"
 msgstr "local_copy_dir doit être absolument un dossier, pas un fichier !"
 
 #: ../fdroidserver/index.py
-#, fuzzy, python-format
+#, python-format
 msgid "mirror '%s' does not end with 'fdroid'!"
 msgstr "le miroir «%s» ne se termine pas par «fdroid» !"
 
@@ -2419,7 +2412,7 @@ msgstr "option %s : Si vous voulez vraiment installer toutes les applications si
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 #: /usr/lib/python3.7/optparse.py
-#, fuzzy, python-format
+#, python-format
 msgid "option %s: invalid %s value: %r"
 msgstr "option %s : valeur %s non valide : %r"
 
