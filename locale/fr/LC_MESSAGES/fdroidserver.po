@@ -32,8 +32,8 @@ msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2021-01-29 16:12+0100\n"
-"PO-Revision-Date: 2021-07-02 07:52+0000\n"
-"Last-Translator: Jaxom <jaxom+weblate@tchack.xyz>\n"
+"PO-Revision-Date: 2021-07-02 07:56+0000\n"
+"Last-Translator: lilim <lionel@les-miquelots.net>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/f-droid/fdroidserver/fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
@@ -2606,8 +2606,8 @@ msgstr ""
 #, python-brace-format
 msgid "{0} app, {1} key aliases"
 msgid_plural "{0} apps, {1} key aliases"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{0} appli, {1} alias de clé"
+msgstr[1] "{0} applis, {1} alias de clé"
 
 #: ../fdroidserver/update.py
 #, fuzzy, python-brace-format
@@ -2617,7 +2617,7 @@ msgstr "{apkfilename} ({appid}) n’a pas de métadonnées !"
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "{apkfilename} has multiple {name} files, looks like Master Key exploit!"
-msgstr ""
+msgstr "{apkfilename} a pluseiurs fichiers {name}, on dirait que c'est une faille ou exploitation de la clé maître (Master Key) !"
 
 #: ../fdroidserver/update.py
 #, fuzzy, python-brace-format
