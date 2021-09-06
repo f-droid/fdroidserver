@@ -32,8 +32,8 @@ msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2021-01-29 16:12+0100\n"
-"PO-Revision-Date: 2021-07-02 08:33+0000\n"
-"Last-Translator: lilim <lionel@les-miquelots.net>\n"
+"PO-Revision-Date: 2021-07-02 14:30+0000\n"
+"Last-Translator: Jaxom <jaxom+weblate@tchack.xyz>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/f-droid/fdroidserver/fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
@@ -2668,7 +2668,7 @@ msgstr "{appid} : pas de versions spécifiées, s'exécute à partir de l'éta
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "{appid}: {field} must be a '{type}', but it is a '{fieldtype}!'"
-msgstr "{appid}: {field} doit être un '{type}', mais est un '{fieldtype}' !"
+msgstr "{appid}: {field} doit être un '{type}', mais est un '{fieldtype}!'"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
@@ -2676,9 +2676,9 @@ msgid "{appid}: {field} must be a '{type}', but it is a '{fieldtype}'!"
 msgstr "{appid}: {field} doit être un '{type}', mais est un '{fieldtype}' !"
 
 #: ../fdroidserver/metadata.py
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "{build_flag} must be an integer, found: {value}"
-msgstr "{build_flag} doit être un entier, a trouvé: {value}"
+msgstr "{build_flag} doit être un entier, valeur trouvée : {value}"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
@@ -2686,7 +2686,7 @@ msgid "{field} not terminated in {name}"
 msgstr ""
 
 #: ../fdroidserver/metadata.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{file} is blank or corrupt!"
 msgstr "{file} est vide ou corrompu !"
 
@@ -2701,19 +2701,19 @@ msgid "{name} \"{section}/icons/{path}\" does not exist! Check \"config.yml\"."
 msgstr "{name} \"{section}/icons/{path}\" n'existe pas ! Vérifiez \"config.yml\"."
 
 #: ../fdroidserver/common.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{oldfile} is deprecated, use {newfile}"
 msgstr "{oldfile} est obsolète, utilisez {newfile}"
 
 #: ../fdroidserver/import.py
 #, python-brace-format
 msgid "{path} already exists, ignoring import results!"
-msgstr "{path} existe déjà, ignorance des résultats de l'importation"
+msgstr "{path} existe déjà, ignorance des résultats de l'importation !"
 
 #: ../fdroidserver/nightly.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{path} does not exist!  Create it by running:"
-msgstr "{path} n’existe pas !  Créez-le en exécutant :"
+msgstr "{path} n’existe pas ! Créez-le en exécutant :"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -2721,7 +2721,7 @@ msgid "{path} has bad file signature \"{pattern}\", possible Janus exploit!"
 msgstr ""
 
 #: ../fdroidserver/update.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{path} is zero size!"
 msgstr "{path} a une taille nulle !"
 
