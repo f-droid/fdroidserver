@@ -27,13 +27,14 @@
 # lilim <lionel@les-miquelots.net>, 2021.
 # Jaxom <jaxom+weblate@tchack.xyz>, 2021.
 # booteille <booteille@protonmail.com>, 2021.
+# translator <yasinoc375@advew.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2021-01-29 16:12+0100\n"
-"PO-Revision-Date: 2021-07-13 17:46+0000\n"
-"Last-Translator: hilariousperson <gobelpepite+github@gmail.com>\n"
+"PO-Revision-Date: 2021-07-14 16:55+0000\n"
+"Last-Translator: translator <yasinoc375@advew.com>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/f-droid/fdroidserver/fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
@@ -115,12 +116,12 @@ msgstr "\"{path}\" existe mais s3cmd n'est pas installé !"
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "\"{path}\" is not a supported file format (use: metadata/*.yml)"
-msgstr "\"{path}\" n'est pas un format supporté (utiliser : metadata/*.yml)"
+msgstr "Le format du ficher \"{path}\" n'est pas supporté (utiliser : metadata/*.yml)"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "\"{path}\" is not an accepted format, convert to: {formats}"
-msgstr "\"{path}\" n'est pas un format accepté, convertir en : \"{formats}\""
+msgstr "\"{path}\" n'est pas un format accepté, convertir en : {formats}"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -2196,7 +2197,7 @@ msgstr "complexe"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py
-#, fuzzy, python-format
+#, python-format
 msgid "conflicting option string: %s"
 msgid_plural "conflicting option strings: %s"
 msgstr[0] "chaîne d'options en conflit : %s"
@@ -2502,9 +2503,9 @@ msgid "ruamel.yaml not installed, can not write metadata."
 msgstr "ruamel.yaml n’est pas installé, impossible d’écrire les métadonnées."
 
 #: ../fdroidserver/deploy.py ../fdroidserver/upload.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "s3cmd sync indexes {path} to {url} and delete"
-msgstr "s3cmd synchroniser les index {path} vers {url} et les supprimer"
+msgstr "s3cmd synchroniser les index de {path} vers {url} et les supprimer"
 
 #: ../fdroidserver/scanner.py
 msgid "shared library"
@@ -2676,7 +2677,7 @@ msgid "{appid}: {field} must be a '{type}', but it is a '{fieldtype}'!"
 msgstr "{appid}: {field} doit être un '{type}', mais est un '{fieldtype}' !"
 
 #: ../fdroidserver/metadata.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{build_flag} must be an integer, found: {value}"
 msgstr "{build_flag} doit être un entier, valeur trouvée : {value}"
 
