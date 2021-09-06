@@ -7,13 +7,14 @@
 # Eric <spice2wolf@gmail.com>, 2020, 2021.
 # Carlos <linghao.zhang@protonmail.com>, 2021.
 # Hans-Christoph Steiner <hans@guardianproject.info>, 2021.
+# Liu Tao <lyuutau@outlook.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2021-01-29 16:12+0100\n"
-"PO-Revision-Date: 2021-01-31 22:07+0000\n"
-"Last-Translator: Eric <spice2wolf@gmail.com>\n"
+"PO-Revision-Date: 2021-02-15 21:33+0000\n"
+"Last-Translator: Liu Tao <lyuutau@outlook.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/f-droid/fdroidserver/zh_Hans/>\n"
 "Language: zh_Hans\n"
 "MIME-Version: 1.0\n"
@@ -284,11 +285,11 @@ msgstr "同时提示格式问题，如 rewritemeta -l"
 
 #: ../fdroidserver/scanner.py
 msgid "Android AAR library"
-msgstr ""
+msgstr "Android AAR 库"
 
 #: ../fdroidserver/scanner.py
 msgid "Android APK file"
-msgstr ""
+msgstr "Android APK 文件"
 
 #: ../fdroidserver/scanner.py
 msgid "Android DEX code"
@@ -367,7 +368,7 @@ msgstr "分支 '{branch}' 在源码库 '{srclib}' 里被用作相应的 commit"
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Broken symlink: {path}"
-msgstr ""
+msgstr "断开的符号链接：{path}"
 
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Build a package from source"
@@ -407,13 +408,13 @@ msgstr[0] "因扫描时的{}错误而无法构建"
 #: ../fdroidserver/vmtools.py
 #, python-brace-format
 msgid "Cannot read \"{path}\"!"
-msgstr ""
+msgstr "无法读取“{path}”！"
 
 #. Translators: https://developer.android.com/studio/build/application-id
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Cannot resolve application ID {appid}"
-msgstr ""
+msgstr "无法解析应用程序 ID {appid}"
 
 #: ../fdroidserver/rewritemeta.py
 #, python-brace-format
