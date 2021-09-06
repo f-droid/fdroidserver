@@ -30,8 +30,8 @@ msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2021-01-29 16:12+0100\n"
-"PO-Revision-Date: 2021-03-14 10:24+0000\n"
-"Last-Translator: gub <gub.gub@laposte.net>\n"
+"PO-Revision-Date: 2021-03-14 10:37+0000\n"
+"Last-Translator: lilim <lionel@les-miquelots.net>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/f-droid/fdroidserver/fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
@@ -2222,11 +2222,11 @@ msgstr "impossible de lire '{path}'"
 
 #: ../fdroidserver/common.py
 msgid "could not parse srclib spec (no ref specified): '{}'"
-msgstr "impossible d'analyser la spécification srclib (pas de référence spécifiée): '{}'"
+msgstr "impossible d'analyser la spécification srclib (pas de référence spécifiée) : '{}'"
 
 #: ../fdroidserver/common.py
 msgid "could not parse srclib spec (too many '@' signs): '{}'"
-msgstr "impossible d'analyser la spécification srclib (trop de caractères '@'): '{}'"
+msgstr "impossible d'analyser la spécification srclib (trop de caractères '@') : '{}'"
 
 #: ../fdroidserver/nightly.py
 #, python-brace-format
@@ -2246,7 +2246,7 @@ msgstr "déploiement des journaux de compilation sur « {path} »"
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "deployed process log {path} to {dest}"
-msgstr ""
+msgstr "log du processus {path} déployé vers {dest}"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py
@@ -2263,8 +2263,8 @@ msgstr "binaire exécutable, possiblement du code"
 #, python-format
 msgid "expected %s argument"
 msgid_plural "expected %s arguments"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "argument %s requis"
+msgstr[1] "arguments %s requis"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py
@@ -2319,11 +2319,11 @@ msgstr "archive GZIP"
 #: /usr/lib/python3.7/argparse.py
 #, python-format
 msgid "ignored explicit argument %r"
-msgstr ""
+msgstr "argument explicite %r ignoré"
 
 #: ../fdroidserver/index.py
 msgid "index-v1 must have a signature, use `fdroid signindex` to create it!"
-msgstr ""
+msgstr "index-v1 doit avoir une signature, utilisez `fdroid signindex` pour la créer !"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 #: /usr/lib/python3.7/optparse.py
@@ -2346,7 +2346,7 @@ msgstr "choix non valide : %(value)r (choisissez parmi %(choices)s)"
 #: /usr/lib/python3.7/argparse.py
 #, python-format
 msgid "invalid conflict_resolution value: %r"
-msgstr ""
+msgstr "valeur conflict_resolution invalide : %r"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py
