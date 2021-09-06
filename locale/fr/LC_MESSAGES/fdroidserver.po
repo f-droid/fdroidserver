@@ -30,8 +30,8 @@ msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2021-01-29 16:12+0100\n"
-"PO-Revision-Date: 2021-03-14 10:42+0000\n"
-"Last-Translator: lilim <lionel@les-miquelots.net>\n"
+"PO-Revision-Date: 2021-03-14 11:08+0000\n"
+"Last-Translator: gub <gub.gub@laposte.net>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/f-droid/fdroidserver/fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
@@ -2406,16 +2406,16 @@ msgstr "non permis avec les arguments %s"
 #: /usr/lib/python3.7/argparse.py
 #, python-format
 msgid "one of the arguments %s is required"
-msgstr ""
+msgstr "un des arguments %s est requis"
 
 #: ../fdroidserver/index.py ../fdroidserver/common.py
 msgid "only accepts strings, lists, and tuples"
-msgstr ""
+msgstr "accepte uniquement les chaînes de caractères, listes et tuples."
 
 #: ../fdroidserver/install.py
 #, python-format
 msgid "option %s: If you really want to install all the signed apps, use --all"
-msgstr ""
+msgstr "option %s : Si vous voulez vraiment installer toutes les applications signées, utilisez --all"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 #: /usr/lib/python3.7/optparse.py
