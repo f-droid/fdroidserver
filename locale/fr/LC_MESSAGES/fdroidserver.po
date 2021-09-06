@@ -24,13 +24,14 @@
 # ButterflyOfFire <ButterflyOfFire@protonmail.com>, 2021.
 # Vincent Finance <linuxmario@linuxmario.net>, 2021.
 # Gavy <gavy@protonmail.com>, 2021.
+# lilim <lionel@les-miquelots.net>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2021-01-29 16:12+0100\n"
 "PO-Revision-Date: 2021-03-14 10:18+0000\n"
-"Last-Translator: hilariousperson <gobelpepite+github@gmail.com>\n"
+"Last-Translator: lilim <lionel@les-miquelots.net>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/f-droid/fdroidserver/fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
@@ -1841,7 +1842,7 @@ msgstr "Version inconnue de aapt, peut causer des problèmes : "
 
 #: ../fdroidserver/lint.py
 msgid "Unlinkified link - use [http://foo.bar Link title] or [http://foo.bar]"
-msgstr ""
+msgstr "Lien non lié - utiliser [http://foo.bar Titre du lien] ou [http://foo.bar]"
 
 #: ../fdroidserver/lint.py
 msgid "Unnecessary leading space"
@@ -1863,7 +1864,7 @@ msgstr "Champ application non reconnu : "
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Unrecognised build flag '{build_flag}' in '{path}'"
-msgstr ""
+msgstr "Option de compilation '{build_flag}' non reconnue dans '{path}'"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
