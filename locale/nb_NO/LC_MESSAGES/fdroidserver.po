@@ -1,13 +1,13 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR Free Software Foundation, Inc.
-# Allan Nordhøy <epost@anotheragency.no>, 2020.
+# Allan Nordhøy <epost@anotheragency.no>, 2020, 2021.
 # Hans-Christoph Steiner <hans@guardianproject.info>, 2020.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.8-74-ga380b9f\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2021-01-29 16:12+0100\n"
-"PO-Revision-Date: 2020-10-14 09:28+0000\n"
+"PO-Revision-Date: 2021-04-12 20:32+0000\n"
 "Last-Translator: Allan Nordhøy <epost@anotheragency.no>\n"
 "Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects/f-droid/fdroidserver/nb_NO/>\n"
 "Language: nb_NO\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.3-dev\n"
+"X-Generator: Weblate 4.6-dev\n"
 
 #: ../fdroidserver/common.py
 msgid ""
@@ -296,9 +296,9 @@ msgid "Android SDK '{path}' does not have '{dirname}' installed!"
 msgstr "Android-SDK '{path}' har ikke '{dirname}' installert."
 
 #: ../fdroidserver/init.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Android SDK not found at {path}!"
-msgstr "Fant ikke Android-SDK!"
+msgstr "Fant ikke Android-SDK i {path}!"
 
 #: ../fdroidserver/common.py
 msgid "Android SDK not found!"
@@ -315,9 +315,9 @@ msgid "Android SDK path '{path}' is not a directory!"
 msgstr "Android SDK-stien '{path}' er ikke ei mappe."
 
 #: ../fdroidserver/common.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Android SDK tool {cmd} found!"
-msgstr "Fant ikke Android-SDK!"
+msgstr "Fant ikke Android-SDK-verktøyet {cmd}!"
 
 #. Translators: "build-tools" is the file name of a package from
 #. Google, it is part of the Android SDK. So it probably shouldn't be
@@ -500,7 +500,7 @@ msgstr "Fant ikke \"{path}\" for fjerning derav"
 #: ../fdroidserver/update.py
 #, fuzzy, python-brace-format
 msgid "Could not open APK {path} for analysis: "
-msgstr "Kunne ikke åpne APK-fil for analyse"
+msgstr "Kunne ikke åpne APK {path} for analyse: "
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -2750,7 +2750,7 @@ msgstr "{name} \"{path}\" finnes ikke. Rett det i config.yml."
 #: ../fdroidserver/update.py
 #, fuzzy, python-brace-format
 msgid "{name} \"{section}/icons/{path}\" does not exist! Check \"config.yml\"."
-msgstr "{name} \"{path}\" finnes ikke. Rett det i config.yml."
+msgstr "{name} «{path}» finnes ikke. Rett det i config.yml."
 
 #: ../fdroidserver/common.py
 #, python-brace-format
