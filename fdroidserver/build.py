@@ -266,7 +266,7 @@ def build_server(app, build, vcs, build_dir, output_dir, log_dir, force):
             else:
                 message = "Build.py failed on server for {0}:{1}"
             raise BuildException(message.format(app.id, build.versionName),
-                                 None if options.verbose else str(output, 'utf-8'))
+                                 str(output, 'utf-8'))
 
         # Retreive logs...
         toolsversion_log = common.get_toolsversion_logname(app, build)
@@ -292,7 +292,7 @@ def build_server(app, build, vcs, build_dir, output_dir, log_dir, force):
         except Exception:
             raise BuildException(
                 "Build failed for {0}:{1} - missing output files".format(
-                    app.id, build.versionName), None if options.verbose else str(output, 'utf-8'))
+                    app.id, build.versionName), str(output, 'utf-8'))
         ftp.close()
 
     finally:
