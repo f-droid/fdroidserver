@@ -130,9 +130,9 @@ ubuntu_bionic_pip:
     # setup venv to act as release build machine
     - python -m venv sdist-env
     - . sdist-env/bin/activate
-    - ./setup.py compile_catalog sdist
+    - ./setup.py sdist
     - deactivate
-    - tar tzf dist/fdroidserver-*.tar.gz | grep locale/de/LC_MESSAGES/fdroidserver.mo
+    - tar tzf dist/fdroidserver-*.tar.gz
     # back to bare machine to act as user's install machine
     - $pip install --upgrade pip setuptools wheel  # make this go away: "error: invalid command 'bdist_wheel'"
     - $pip install dist/fdroidserver-*.tar.gz
@@ -141,7 +141,7 @@ ubuntu_bionic_pip:
     - fdroid=`which fdroid` ./tests/run-tests
 
 
-# test install process on a bleeding edge distro with pip
+# test installation process on a bleeding edge distro with pip
 arch_pip_install:
   image: archlinux
   only:
@@ -272,7 +272,7 @@ fedora_latest:
                      unzip
                      wget
                      which
-    - ./setup.py compile_catalog sdist
+    - ./setup.py sdist
     - useradd -m -c "test account" --password "fakepassword"  testuser
     - su testuser --login --command "cd `pwd`; $pip install --user dist/fdroidserver-*.tar.gz"
     - test -e ~testuser/.local/share/locale/de/LC_MESSAGES/fdroidserver.mo

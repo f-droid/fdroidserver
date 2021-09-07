@@ -7,6 +7,8 @@ import re
 import subprocess
 import sys
 
+from setuptools.command.install import install
+
 
 class VersionCheckCommand(Command):
     """Make sure git tag and version match before uploading"""
@@ -28,6 +30,17 @@ class VersionCheckCommand(Command):
         print('Upload using: twine upload --sign dist/fdroidserver-%s.tar.gz' % version)
 
 
+class InstallWithCompile(install):
+    def run(self):
+        from babel.messages.frontend import compile_catalog
+        compiler = compile_catalog(self.distribution)
+        option_dict = self.distribution.get_option_dict('compile_catalog')
+        compiler.domain = [option_dict['domain'][1]]
+        compiler.directory = option_dict['directory'][1]
+        compiler.run()
+        super().run()
+
+
 def get_data_files():
     # workaround issue on OSX or --user installs, where sys.prefix is not an installable location
     if os.access(sys.prefix, os.W_OK | os.X_OK):
@@ -43,7 +56,8 @@ def get_data_files():
                        ['buildserver/config.buildserver.yml', ]
                        + re.findall(r'include (examples/.*)', data)))
 
-    for f in re.findall(r'include (locale/[a-z][a-z][a-zA-Z_]*/LC_MESSAGES/fdroidserver.mo)', data):
+    for f in re.findall(r'include (locale/[a-z][a-z][a-zA-Z_]*/LC_MESSAGES/fdroidserver\.)po', data):
+        f += 'mo'
         d = os.path.join(data_prefix, 'share', os.path.dirname(f))
         data_files.append((d, [f, ]))
     return data_files
@@ -68,7 +82,10 @@ setup(name='fdroidserver',
       },
       data_files=get_data_files(),
       python_requires='>=3.5',
-      cmdclass={'versioncheck': VersionCheckCommand},
+      cmdclass={
+          'versioncheck': VersionCheckCommand,
+          'install': InstallWithCompile,
+      },
       setup_requires=[
           'babel',
       ],
