@@ -879,6 +879,10 @@ def trybuild(app, build, build_dir, output_dir, log_dir, also_check_dir,
         # grabbing the source now.
         vcs.gotorevision(build.commit, refresh)
 
+        # Initialise submodules if required
+        if build.submodules:
+            vcs.initsubmodules()
+
         build_server(app, build, vcs, build_dir, output_dir, log_dir, force)
     else:
         build_local(app, build, vcs, build_dir, output_dir, log_dir, srclib_dir, extlib_dir, tmp_dir, force, onserver, refresh)
