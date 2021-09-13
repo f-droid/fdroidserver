@@ -589,7 +589,7 @@ def find_sdk_tools_cmd(cmd):
             return path
     # did not find the command, exit with error message
     test_sdk_exists(config)  # ignore result so None is never returned
-    raise FDroidException(_("Android SDK tool {cmd} found!").format(cmd=cmd))
+    raise FDroidException(_("Android SDK tool {cmd} not found!").format(cmd=cmd))
 
 
 def test_aapt_version(aapt):
