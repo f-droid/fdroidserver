@@ -27,6 +27,7 @@ import fdroidserver.net
 import fdroidserver.signindex
 import fdroidserver.publish
 from testcommon import TmpCwd
+from pathlib import Path
 
 
 GP_FINGERPRINT = 'B7C2EEFD8DAC7806AF67DFCD92EB18126BC08312A7F2D6F3862E46013C7A6135'
@@ -371,27 +372,31 @@ class IndexTest(unittest.TestCase):
             )
 
     def test_gitlab_get_mirror_service_urls(self):
-        for url in [
-            'git@gitlab.com:group/project',
-            'git@gitlab.com:group/project.git',
-            'https://gitlab.com/group/project',
-            'https://gitlab.com/group/project.git',
-        ]:
-            with patch('fdroidserver.common.get_dir_size', return_value=100000):
-                self.assertEqual(
-                    [
-                        'https://group.gitlab.io/project/fdroid',
-                        'https://gitlab.com/group/project/-/raw/master/fdroid',
-                    ],
-                    fdroidserver.index.get_mirror_service_urls(url),
-                )
-            with patch('fdroidserver.common.get_dir_size', return_value=1234567890):
-                self.assertEqual(
-                    [
-                        'https://gitlab.com/group/project/-/raw/master/fdroid',
-                    ],
-                    fdroidserver.index.get_mirror_service_urls(url),
-                )
+        with tempfile.TemporaryDirectory() as tmpdir, TmpCwd(tmpdir):
+            os.mkdir('fdroid')
+            with Path('fdroid/placeholder').open('w') as fp:
+                fp.write('                                        ')
+            for url in [
+                'git@gitlab.com:group/project',
+                'git@gitlab.com:group/project.git',
+                'https://gitlab.com/group/project',
+                'https://gitlab.com/group/project.git',
+            ]:
+                with patch('fdroidserver.common.GITLAB_COM_PAGES_MAX_SIZE', 1000):
+                    self.assertEqual(
+                        [
+                            'https://group.gitlab.io/project/fdroid',
+                            'https://gitlab.com/group/project/-/raw/master/fdroid',
+                        ],
+                        fdroidserver.index.get_mirror_service_urls(url),
+                    )
+                with patch('fdroidserver.common.GITLAB_COM_PAGES_MAX_SIZE', 10):
+                    self.assertEqual(
+                        [
+                            'https://gitlab.com/group/project/-/raw/master/fdroid',
+                        ],
+                        fdroidserver.index.get_mirror_service_urls(url),
+                    )
 
     def test_make_website(self):
         tmptestsdir = tempfile.mkdtemp(
