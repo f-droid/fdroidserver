@@ -1543,8 +1543,8 @@ def scan_apk_androguard(apk, apkfile):
 
     icon_id_str = apkobject.get_element("application", "icon")
     if icon_id_str:
-        icon_id = int(icon_id_str.replace("@", "0x"), 16)
         try:
+            icon_id = int(icon_id_str.replace("@", "0x"), 16)
             resource_id = arsc.get_id(apk['packageName'], icon_id)
             if resource_id:
                 icon_name = arsc.get_id(apk['packageName'], icon_id)[1]
