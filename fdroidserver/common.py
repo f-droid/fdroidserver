@@ -4310,7 +4310,7 @@ def _install_ndk(ndk):
     """
     if re.match(r'[1-9][0-9.]+[0-9]', ndk):
         for ndkdict in NDKS:
-            if ndk == ndkdict['revision']:
+            if ndk == ndkdict.get('revision'):
                 ndk = ndkdict['release']
                 break
 
