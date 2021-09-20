@@ -2113,6 +2113,7 @@ class CommonTest(unittest.TestCase):
             ) as _ignored, mock.patch(
                 'fdroidserver.common.sha256sum', return_value=sha256
             ):
+                _ignored  # silence the linters
                 fdroidserver.common._install_ndk(r)
 
     def test_fill_config_defaults(self):
