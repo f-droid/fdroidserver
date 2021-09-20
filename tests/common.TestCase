@@ -2082,6 +2082,39 @@ class CommonTest(unittest.TestCase):
         fdroidserver.common.fill_config_defaults(config)
         self.assertEqual({'r10e': r10e}, config['ndk_paths'])
 
+    def test_install_ndk_versions(self):
+        """Test whether NDK version parsing is working properly"""
+
+        def fake_download(url, zipball):
+            print(url, zipball)
+            with ZipFile(zipball, 'w') as zipfp:
+                zipfp.writestr(os.path.basename(url), url)
+
+        sdk_path = tempfile.mkdtemp(
+            prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir
+        )
+        config = {'sdk_path': sdk_path}
+        fdroidserver.common.config = config
+        for r, sha256 in (
+            (
+                'r10e',
+                'ee5f405f3b57c4f5c3b3b8b5d495ae12b660e03d2112e4ed5c728d349f1e520c',
+            ),
+            ('r20', '57435158f109162f41f2f43d5563d2164e4d5d0364783a9a6fab3ef12cb06ce0'),
+            (
+                '23.0.7599858',
+                'e3eacf80016b91d4cd2c8ca9f34eebd32df912bb799c859cc5450b6b19277b4f',
+            ),
+        ):
+            with mock.patch(
+                'fdroidserver.net.download_file', side_effect=fake_download
+            ) as _ignored, mock.patch(
+                'fdroidserver.common.get_ndk_version', return_value=r
+            ) as _ignored, mock.patch(
+                'fdroidserver.common.sha256sum', return_value=sha256
+            ):
+                fdroidserver.common._install_ndk(r)
+
     def test_fill_config_defaults(self):
         """Test the auto-detection of NDKs installed in standard paths"""
         sdk_path = tempfile.mkdtemp(
