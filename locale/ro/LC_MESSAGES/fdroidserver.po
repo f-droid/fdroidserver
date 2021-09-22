@@ -3,20 +3,21 @@
 # Daniel Șerbănescu <daniel@serbanescu.dk>, 2021.
 # Christian Eichert <c@zp1.net>, 2021.
 # Simona Iacob <s@zp1.net>, 2021.
+# Licaon Kter <licaon.kter@protonmail.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 2.0a5-27-gf24eae0f\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2021-01-29 16:12+0100\n"
-"PO-Revision-Date: 2021-08-05 15:35+0000\n"
-"Last-Translator: Simona Iacob <s@zp1.net>\n"
+"PO-Revision-Date: 2021-09-23 07:37+0000\n"
+"Last-Translator: Licaon Kter <licaon.kter@protonmail.com>\n"
 "Language-Team: Romanian <https://hosted.weblate.org/projects/f-droid/fdroidserver/ro/>\n"
 "Language: ro\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < 20)) ? 1 : 2;\n"
-"X-Generator: Weblate 4.8-dev\n"
+"X-Generator: Weblate 4.9-dev\n"
 
 #: ../fdroidserver/common.py
 msgid ""
@@ -381,7 +382,7 @@ msgstr "Construire generată de `fdroid import` - eliminați linia de dezactivar
 
 #: ../fdroidserver/checkupdates.py
 msgid "Build metadata git repo has uncommited changes!"
-msgstr "Build metadata git repo are modificări necomandate!"
+msgstr "Depozitul git al metadatelor de construire are modificări necomandate!"
 
 #: ../fdroidserver/build.py
 msgid "Build only the latest version of each package"
