@@ -17,15 +17,15 @@ msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2021-01-29 16:12+0100\n"
-"PO-Revision-Date: 2021-09-06 13:35+0000\n"
-"Last-Translator: Liu Wenyuan <15816141883@163.com>\n"
+"PO-Revision-Date: 2021-09-26 01:35+0000\n"
+"Last-Translator: Eric <spice2wolf@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/f-droid/fdroidserver/zh_Hans/>\n"
 "Language: zh_Hans\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.8.1-dev\n"
+"X-Generator: Weblate 4.9-dev\n"
 
 #: ../fdroidserver/common.py
 msgid ""
@@ -623,7 +623,6 @@ msgid "Description of length {length} is over the {limit} char limit"
 msgstr "简介长度 {length} 超过 {limit} 字限制"
 
 #: ../fdroidserver/import.py
-#, fuzzy
 msgid "Do not add 'disable:' to the generated build entries"
 msgstr "不要给生成的构建项添加 'disable:'"
 
@@ -679,12 +678,12 @@ msgid "Downloading {url} failed. {error}"
 msgstr "下载 {url} 失败。{error}"
 
 #: ../fdroidserver/metadata.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Duplicate build recipe found for versionCode {versionCode} in {linedesc}"
-msgstr "在 {linedesc} 中找到了重复的为 versionCode {versionCode} 使用的构建配方"
+msgstr "在 {linedesc} 中找到了 versionCode {versionCode} 的重复构建配方"
 
 #: ../fdroidserver/lint.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Duplicate link in '{field}': {url}"
 msgstr "“{field}”中有重复的链接：{url}"
 
@@ -709,9 +708,9 @@ msgid "ERROR: unsupported CI type, patches welcome!"
 msgstr "错误：不支持此类 CI，如果有能力请帮我们添加支持！"
 
 #: ../fdroidserver/metadata.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Empty build flag at {linedesc}"
-msgstr "{linedesc} 中构建标志为空"
+msgstr "位于 {linedesc} 的空构建标志"
 
 #: ../fdroidserver/__main__.py
 #, python-brace-format
@@ -771,9 +770,9 @@ msgid "Failed to align application"
 msgstr "未能匹配应用程序"
 
 #: ../fdroidserver/deploy.py ../fdroidserver/upload.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Failed to create S3 bucket: {url}"
-msgstr "创建 S3 桶失败：{url}"
+msgstr "创建亚马逊简易储存服务失败：{url}"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
