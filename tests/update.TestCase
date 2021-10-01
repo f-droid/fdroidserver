@@ -843,6 +843,40 @@ class UpdateTest(unittest.TestCase):
         with self.assertRaises(fdroidserver.exception.BuildException):
             fdroidserver.update.scan_apk(apkfile)
 
+    @unittest.skipUnless(
+        os.path.exists('tests/SystemWebView-repack.apk'), "file too big for sdist"
+    )
+    def test_scan_apk_bad_icon_id(self):
+        """Some APKs can produce an exception when extracting the icon
+
+        This kind of parsing exception should be reported then ignored
+        so that working APKs can be included in the index.  There are
+        so many weird things that make it into APKs, that does not
+        automatically disqualify them from inclusion. For example:
+
+        ValueError: invalid literal for int() with base 16: '<0x801FF, type 0x07>'
+
+        The test APK was made from:
+        https://gitlab.com/fdroid/fdroidserver/-/merge_requests/1018#note_690565333
+        It was then stripped down by doing:
+
+        * mkdir SystemWebView
+        * cd SystemWebView/
+        * unzip ../SystemWebView.apk
+        * rm -rf META-INF/ lib assets/icudtl.dat assets/stored-locales/
+        * jar cf ../SystemWebView-repack.apk *
+        """
+        # reset the state, perhaps this should be in setUp()
+        config = dict()
+        fdroidserver.common.fill_config_defaults(config)
+        fdroidserver.common.config = config
+        fdroidserver.update.config = config
+        with tempfile.TemporaryDirectory() as tmpdir, TmpCwd(tmpdir):
+            os.mkdir('repo')
+            apkfile = 'repo/SystemWebView-repack.apk'
+            shutil.copy(os.path.join(self.basedir, os.path.basename(apkfile)), apkfile)
+            fdroidserver.update.scan_apk(apkfile)
+
     def test_process_apk(self):
         def _build_yaml_representer(dumper, data):
             '''Creates a YAML representation of a Build instance'''
