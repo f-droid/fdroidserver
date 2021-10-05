@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: fdroidserver 1.0.0-95-gd7af22b\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2021-01-29 16:12+0100\n"
-"PO-Revision-Date: 2021-10-01 13:11+0000\n"
+"PO-Revision-Date: 2021-10-05 14:45+0000\n"
 "Last-Translator: Agnieszka C <aga_04@o2.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/f-droid/fdroidserver/pl/>\n"
 "Language: pl\n"
@@ -529,7 +529,7 @@ msgstr "Nie można znaleźć identyfikatora pakietu"
 
 #: ../fdroidserver/update.py
 msgid "Cowardily refusing to overwrite existing signing key setup!"
-msgstr "Cowardily odmawia zastąpienia istniejącej konfiguracji klucza podpisującego!"
+msgstr "Tchórzliwa odmowa nadpisania istniejącej konfiguracji klucza podpisu!"
 
 #: ../fdroidserver/update.py
 msgid "Create a repo signing key in a keystore"
