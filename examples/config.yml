@@ -354,8 +354,8 @@
 # generating our default list.  (https://pypi.org/project/spdx-license-list)
 #
 # You can override our default list of allowed licenes by setting this option.
-# Just supply a custom list of licene names you would like to allow. Setting
-# this to `None` disables this lint check.
+# Just supply a custom list of licene names you would like to allow. To disable
+# checking licenses by the linter, assign an empty value to lint_licenses.
 #
 # lint_licenses:
 #   - Custom-License-A
