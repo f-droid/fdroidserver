@@ -315,6 +315,7 @@ plugin_fetchsrclibs:
     - apt-get install
         curl
         git
+        python3-cffi
         python3-cryptography
         python3-pip
         python3-venv
