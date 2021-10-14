@@ -203,7 +203,7 @@ def check_tags(app, pattern):
 
     if hver:
         if htag != tags[0]:
-            logging.info(
+            logging.warning(
                 "{appid}: latest tag {tag} does not contain highest version {version}".format(
                     appid=app.id, tag=tags[0], version=hver
                 )
@@ -690,7 +690,6 @@ def main():
 
     update_wiki(None, locallog)
     status_update_json(processed, failed)
-    logging.info(_("Finished"))
     sys.exit(exit_code)
 
 
