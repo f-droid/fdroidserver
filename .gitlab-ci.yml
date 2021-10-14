@@ -507,6 +507,8 @@ Windows:
     when: always
     paths:
       - "*.log"
+  allow_failure:
+    exit_codes: 1
 
 
 pages:
