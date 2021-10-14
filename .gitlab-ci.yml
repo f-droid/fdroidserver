@@ -391,6 +391,7 @@ plugin_fetchsrclibs:
     - apt-get install
         curl
         git
+        python3-cffi
         python3-cryptography
         python3-pip
         python3-venv
@@ -507,6 +508,8 @@ Windows:
     when: always
     paths:
       - "*.log"
+  allow_failure:
+    exit_codes: 1
 
 
 pages:
