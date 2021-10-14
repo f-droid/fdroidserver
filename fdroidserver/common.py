@@ -1167,6 +1167,9 @@ class vcs_git(vcs):
                 p = self.git(['fetch', 'origin'], cwd=self.local)
                 if p.returncode != 0:
                     raise VCSException(_("Git fetch failed"), p.output)
+                p = self.git(['remote', 'prune', 'origin'], output=False, cwd=self.local)
+                if p.returncode != 0:
+                    raise VCSException(_("Git prune failed"), p.output)
                 p = self.git(['fetch', '--prune', '--tags', '--force', 'origin'], output=False, cwd=self.local)
                 if p.returncode != 0:
                     raise VCSException(_("Git fetch failed"), p.output)
