@@ -3,20 +3,21 @@
 # Hans-Christoph Steiner <hans@guardianproject.info>, 2020.
 # Elias Mårtenson <elias@dhsdevelopments.com>, 2021.
 # Joel A <joeax910@student.liu.se>, 2021.
+# Kristoffer Grundström <swedishsailfishosuser@tutanota.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 1.0.0-95-gd7af22b\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2021-01-29 16:12+0100\n"
-"PO-Revision-Date: 2021-08-03 09:50+0000\n"
-"Last-Translator: Joel A <joeax910@student.liu.se>\n"
+"PO-Revision-Date: 2021-10-16 13:25+0000\n"
+"Last-Translator: Kristoffer Grundström <swedishsailfishosuser@tutanota.com>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/f-droid/fdroidserver/sv/>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.8-dev\n"
+"X-Generator: Weblate 4.9-dev\n"
 
 #: ../fdroidserver/common.py
 msgid ""
@@ -50,46 +51,46 @@ msgstr ""
 #: ../fdroidserver/lint.py
 #, python-format
 msgid "\"%s/\" has no matching metadata file!"
-msgstr ""
+msgstr "\"%s/\" har ingen matchande meta-datafil!"
 
 #: ../fdroidserver/index.py
 msgid "\"repo_pubkey\" must be present in config.yml when using --nosign!"
 msgstr ""
 
 #: ../fdroidserver/install.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "\"{apkfilename}\" is already installed on {dev}."
-msgstr "'{apkfilename}' är redan installerad på {dev}."
+msgstr "'{apkfilename}' är redan installerad i {dev}."
 
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "\"{path}\" contains outdated {name} ({version})"
-msgstr ""
+msgstr "\"{path}\" innehåller utdaterat {name} ({version})"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "\"{path}\" contains recent {name} ({version})"
-msgstr ""
+msgstr "\"{path}\" innehåller senaste {name} ({version})"
 
 #: ../fdroidserver/deploy.py ../fdroidserver/upload.py
 #, python-brace-format
 msgid "\"{path}\" exists but s3cmd is not installed!"
-msgstr ""
+msgstr "\"{path}\" existerar, men s3cmd är inte installerat!"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "\"{path}\" is not a supported file format (use: metadata/*.yml)"
-msgstr ""
+msgstr "\"{path}\" är inte ett filformat som stöds (använd: metadata/*.yml)"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "\"{path}\" is not an accepted format, convert to: {formats}"
-msgstr ""
+msgstr "\"{path}\" är inte ett accepterat format, konvertera till: {formats}"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "\"{url}\" is not a valid URL!"
-msgstr ""
+msgstr "\"{url}\" är inte en giltig URL!"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 #: /usr/lib/python3.7/optparse.py
@@ -1596,7 +1597,7 @@ msgstr "Signera och placera paket i förrådet"
 
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Sign indexes created using update --nosign"
-msgstr ""
+msgstr "Signera index som har skapats med att använda update --nosign"
 
 #: ../fdroidserver/build.py
 msgid "Skip scanning the source code for binaries and other problems"
@@ -1886,7 +1887,7 @@ msgstr "Uppdatera förrådinformation för nya paket"
 
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Update the binary transparency log for a URL"
-msgstr ""
+msgstr "Uppdatera binärens genomskinliga logg för en URL"
 
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Update the stats of the repo"
@@ -2398,13 +2399,13 @@ msgstr "alternativet -%s kräver argument"
 #: /usr/lib/python3.7/getopt.py
 #, python-format
 msgid "option --%s must not have an argument"
-msgstr ""
+msgstr "alternativet --%s måste inte ha ett argument"
 
 #: /usr/lib/python3.5/getopt.py /usr/lib/python3.6/getopt.py
 #: /usr/lib/python3.7/getopt.py
 #, python-format
 msgid "option --%s not a unique prefix"
-msgstr ""
+msgstr "alternativet --%s inte ett unikt prefix"
 
 #: /usr/lib/python3.5/getopt.py /usr/lib/python3.6/getopt.py
 #: /usr/lib/python3.7/getopt.py
@@ -2416,7 +2417,7 @@ msgstr "alternativet --%s kändes inte igen"
 #: /usr/lib/python3.7/getopt.py
 #, python-format
 msgid "option --%s requires argument"
-msgstr ""
+msgstr "alternativet --%s kräver argument"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py
@@ -2431,7 +2432,7 @@ msgstr ""
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py
 msgid "positional arguments"
-msgstr ""
+msgstr "positionella argument"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -2522,7 +2523,7 @@ msgstr "följande argument krävs: %s"
 #: /usr/lib/python3.7/argparse.py
 #, python-format
 msgid "unexpected option string: %s"
-msgstr ""
+msgstr "oväntad alternativ-sträng: %s"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py
@@ -2534,12 +2535,12 @@ msgstr ""
 #: /usr/lib/python3.7/argparse.py
 #, python-format
 msgid "unrecognized arguments: %s"
-msgstr ""
+msgstr "argumenten känns inte igen: %s"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "unsafe permissions on '{config_file}' (should be 0600)!"
-msgstr ""
+msgstr "o-säkra behörigheter på '{config_file}' (borde vara 0600)!"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py ../fdroid
 #: /usr/lib/python3.7/argparse.py ../fdroidserver/__main__.py
