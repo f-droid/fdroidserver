@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: fdroidserver 1.0.0-95-gd7af22b\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2021-01-29 16:12+0100\n"
-"PO-Revision-Date: 2021-10-12 17:21+0000\n"
+"PO-Revision-Date: 2021-10-16 13:25+0000\n"
 "Last-Translator: Agnieszka C <aga_04@o2.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/f-droid/fdroidserver/pl/>\n"
 "Language: pl\n"
@@ -383,7 +383,7 @@ msgstr "Kompilacja generowana przez `fdroid import` - usuń wyłączenie linii p
 
 #: ../fdroidserver/checkupdates.py
 msgid "Build metadata git repo has uncommited changes!"
-msgstr "Zbuduj metadane repozytorium git z niezmienionymi zmianami!"
+msgstr "Repozytorium git metadanych kompilacji zawiera niescommitowane zmiany!"
 
 #: ../fdroidserver/build.py
 msgid "Build only the latest version of each package"
@@ -469,7 +469,7 @@ msgstr "Polecenie '%s' nie rozpoznane.\n"
 
 #: ../fdroidserver/checkupdates.py
 msgid "Commit changes"
-msgstr "Zatwierdź zmiany"
+msgstr "Scommituj zmiany"
 
 #: ../fdroidserver/__main__.py
 msgid "Conflicting arguments: '--verbose' and '--quiet' can not be specified at the same time."
@@ -1152,7 +1152,7 @@ msgstr "Magazyn kluczy do podpisywania klucza:\t"
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "Last used commit '{commit}' looks like a tag, but UpdateCheckMode is '{ucm}'"
-msgstr "Ostatnio używane zatwierdzenie '{commit}' wygląda jak tag, ale UpdateCheckMode to '{ucm}'"
+msgstr "Ostatnio używany commit '{commit}' wygląda jak tag, ale UpdateCheckMode to '{ucm}'"
 
 #: ../fdroidserver/lint.py
 msgid "Liberapay donation methods belong in the Liberapay: field"
@@ -1214,7 +1214,7 @@ msgstr "Nie znaleziono podłączonych urządzeń"
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "No commit specified for {versionName} in {linedesc}"
-msgstr "Nie określono zatwierdzenia dla {versionName} w {linedesc}"
+msgstr "Nie określono commita dla {versionName} w {linedesc}"
 
 #: ../fdroidserver/common.py
 msgid "No config.yml found, using defaults."
@@ -1544,7 +1544,7 @@ msgstr "Przepisywanie '{appid}' do '{path}'"
 
 #: ../fdroidserver/checkupdates.py
 msgid "Run on git repo that has uncommitted changes"
-msgstr "Uruchom ponownie repozytorium git z niezatwierdzonymi zmianami"
+msgstr "Uruchom ponownie repozytorium git z niescommitowanymi zmianami"
 
 #: ../fdroidserver/lint.py
 msgid "Run rewritemeta to fix formatting"
