@@ -33,7 +33,7 @@ EOF
 
 if echo $debian_mirror | grep '^https' 2>&1 > /dev/null; then
     apt-get update || apt-get update
-    apt-get install apt-transport-https ca-certificates
+    apt-get install ca-certificates
 fi
 
 cat << EOF > /etc/apt/sources.list
