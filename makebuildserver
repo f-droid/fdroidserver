@@ -416,7 +416,7 @@ def main():
         logging.info('Halting %s', serverdir)
         v.halt()
         with open(vf, 'r', encoding='utf-8') as f:
-            oldconfig = yaml.load(f)
+            oldconfig = yaml.safe_load(f)
         if config != oldconfig:
             logging.info("Server configuration has changed, rebuild from scratch is required")
             vm.destroy()
@@ -427,7 +427,7 @@ def main():
         logging.info("No existing server - building from scratch")
     if writevf:
         with open(vf, 'w', encoding='utf-8') as f:
-            yaml.dump(config, f)
+            yaml.safe_dump(config, f)
 
     # Check if selected provider is supported
     if config['vm_provider'] not in ['libvirt', 'virtualbox']:
