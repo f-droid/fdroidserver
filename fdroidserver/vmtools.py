@@ -465,8 +465,6 @@ class LibvirtBuildVm(FDroidBuildVm):
             vagrantfile = textwrap.dedent(
                 """\
                   Vagrant.configure("2") do |config|
-                    config.ssh.username = "vagrant"
-                    config.ssh.password = "vagrant"
 
                     config.vm.provider :libvirt do |libvirt|
 
