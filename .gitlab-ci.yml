@@ -433,6 +433,7 @@ servergitmirrors:
         python3-cryptography
         python3-cffi
         python3-pip
+        python3-pil
         python3-venv
         rsync
         wget
