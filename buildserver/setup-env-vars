@@ -16,5 +16,5 @@ echo "export DEBIAN_FRONTEND=noninteractive" >> $bsenv
 chmod 0644 $bsenv
 
 # make sure that SSH never hangs at a password or key prompt
-printf '    StrictHostKeyChecking yes' >> /etc/ssh/ssh_config
-printf '    BatchMode yes' >> /etc/ssh/ssh_config
+printf '    StrictHostKeyChecking yes\n' >> /etc/ssh/ssh_config
+printf '    BatchMode yes\n' >> /etc/ssh/ssh_config
