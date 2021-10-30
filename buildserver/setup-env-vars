@@ -18,5 +18,9 @@ echo 'export fdroidserver=$home_vagrant/fdroidserver' >> $bsenv
 chmod 0644 $bsenv
 
 # make sure that SSH never hangs at a password or key prompt
-printf '    StrictHostKeyChecking yes\n' >> /etc/ssh/ssh_config
-printf '    BatchMode yes\n' >> /etc/ssh/ssh_config
+mkdir -p /etc/ssh/ssh_config.d/
+cat << EOF >> /etc/ssh/ssh_config.d/fdroid
+Host *
+    StrictHostKeyChecking yes
+    BatchMode yes
+EOF
