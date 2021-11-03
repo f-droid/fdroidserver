@@ -4338,7 +4338,19 @@ def _install_ndk(ndk):
     with zipfile.ZipFile(zipball) as zipfp:
         for info in zipfp.infolist():
             permbits = info.external_attr >> 16
-            if stat.S_ISDIR(permbits) or stat.S_IXUSR & permbits:
+            if stat.S_ISLNK(permbits):
+                link = os.path.join(ndk_base, info.filename)
+                link_target = zipfp.read(info).decode()
+                link_dir = os.path.dirname(link)
+                os.makedirs(link_dir, 0o755, True)  # ensure intermediate directories are created
+                os.symlink(link_target, link)
+
+                real_target = os.path.realpath(link)
+                if not real_target.startswith(ndk_base):
+                    os.remove(link)
+                    logging.error(_('Unexpected symlink target: {link} -> {target}')
+                                  .format(link=link, target=real_target))
+            elif stat.S_ISDIR(permbits) or stat.S_IXUSR & permbits:
                 zipfp.extract(info.filename, path=ndk_base)
                 os.chmod(os.path.join(ndk_base, info.filename), 0o755)  # nosec bandit B103
             else:

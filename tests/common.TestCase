@@ -20,7 +20,8 @@ import unittest
 import textwrap
 import yaml
 import gzip
-from zipfile import ZipFile
+import stat
+from zipfile import ZipFile, ZipInfo
 from unittest import mock
 from pathlib import Path
 
@@ -2115,6 +2116,70 @@ class CommonTest(unittest.TestCase):
             ):
                 _ignored  # silence the linters
                 fdroidserver.common._install_ndk(r)
+
+    def test_install_ndk_with_symlinks(self):
+        """Some NDK zipballs might have symlinks in them."""
+
+        def fake_download(url, zipball):
+            print(url, zipball)
+            unix_st_mode = (
+                stat.S_IFLNK
+                | stat.S_IRUSR
+                | stat.S_IWUSR
+                | stat.S_IXUSR
+                | stat.S_IRGRP
+                | stat.S_IWGRP
+                | stat.S_IXGRP
+                | stat.S_IROTH
+                | stat.S_IWOTH
+                | stat.S_IXOTH
+            )
+            with ZipFile(zipball, 'w') as zipfp:
+                zipfp.writestr('ndk/' + os.path.basename(url), url)
+
+                zipInfo = ZipInfo('ndk/basename')
+                zipInfo.create_system = 3
+                zipInfo.external_attr = unix_st_mode << 16
+                zipfp.writestr(zipInfo, os.path.basename(url))
+
+                zipInfo = ZipInfo('ndk/bad_abs_link')
+                zipInfo.create_system = 3
+                zipInfo.external_attr = unix_st_mode << 16
+                zipfp.writestr(zipInfo, '/etc/passwd')
+
+                zipInfo = ZipInfo('ndk/bad_rel_link')
+                zipInfo.create_system = 3
+                zipInfo.external_attr = unix_st_mode << 16
+                zipfp.writestr(zipInfo, '../../../../../../../etc/passwd')
+
+                zipInfo = ZipInfo('ndk/bad_rel_link2')
+                zipInfo.create_system = 3
+                zipInfo.external_attr = unix_st_mode << 16
+                zipfp.writestr(zipInfo, 'foo/../../../../../../../../../etc/passwd')
+
+        sdk_path = tempfile.mkdtemp(
+            prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir
+        )
+        config = {'sdk_path': sdk_path}
+        fdroidserver.common.config = config
+        r = 'r20'
+        sha256 = '57435158f109162f41f2f43d5563d2164e4d5d0364783a9a6fab3ef12cb06ce0'
+        with mock.patch(
+            'fdroidserver.net.download_file', side_effect=fake_download
+        ) as _ignored, mock.patch(
+            'fdroidserver.common.get_ndk_version', return_value=r
+        ) as _ignored, mock.patch(
+            'fdroidserver.common.sha256sum', return_value=sha256
+        ):
+            _ignored  # silence the linters
+            fdroidserver.common._install_ndk(r)
+
+        self.assertTrue(os.path.exists(os.path.join(sdk_path, 'ndk', 'r20')))
+        self.assertTrue(os.path.exists(os.path.join(sdk_path, 'ndk', 'r20', 'basename')))
+        self.assertFalse(os.path.exists(os.path.join(sdk_path, 'ndk', 'r20', 'bad_abs_link')))
+        self.assertFalse(os.path.exists(os.path.join(sdk_path, 'ndk', 'r20', 'bad_rel_link')))
+        self.assertFalse(os.path.exists(os.path.join(sdk_path, 'ndk', 'r20', 'bad_rel_link2')))
+        os.system('ls -l ' + os.path.join(sdk_path, 'ndk', 'r20'))
 
     def test_fill_config_defaults(self):
         """Test the auto-detection of NDKs installed in standard paths"""
