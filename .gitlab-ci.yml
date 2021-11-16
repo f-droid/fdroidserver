@@ -317,6 +317,7 @@ plugin_fetchsrclibs:
         git
         python3-cffi
         python3-cryptography
+        python3-matplotlib
         python3-pip
         python3-pil
         python3-venv
