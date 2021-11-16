@@ -280,13 +280,6 @@
 # virustotal_apikey: {env: virustotal_apikey}
 
 
-# The build logs can be posted to a mediawiki instance, like on f-droid.org.
-# wiki_protocol: http
-# wiki_server: server
-# wiki_path: /wiki/
-# wiki_user: login
-# wiki_password: 1234
-
 # Keep a log of all generated index files in a git repo to provide a
 # "binary transparency" log for anyone to check the history of the
 # binaries that are published.  This is in the form of a "git remote",

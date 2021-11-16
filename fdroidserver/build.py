@@ -23,7 +23,6 @@ import glob
 import subprocess
 import posixpath
 import re
-import sys
 import tarfile
 import threading
 import traceback
@@ -1074,12 +1073,6 @@ def main():
                 app['Builds'] = [build]
                 break
 
-    if options.wiki:
-        import mwclient
-        site = mwclient.Site((config['wiki_protocol'], config['wiki_server']),
-                             path=config['wiki_path'])
-        site.login(config['wiki_user'], config['wiki_password'])
-
     # Build applications...
     failed_builds = []
     build_succeeded = []
@@ -1112,8 +1105,6 @@ def main():
             else:
                 timer = None
 
-            wikilog = None
-            build_starttime = common.get_wiki_timestamp()
             tools_version_log = ''
             if not options.onserver:
                 tools_version_log = common.get_android_tools_version_log()
@@ -1205,7 +1196,6 @@ def main():
 
                     build_succeeded.append(app)
                     build_succeeded_ids.append([app['id'], build.versionCode])
-                    wikilog = "Build succeeded"
 
             except VCSException as vcse:
                 reason = str(vcse).split('\n', 1)[0] if options.verbose else str(vcse)
@@ -1215,17 +1205,17 @@ def main():
                     logging.debug("Error encoutered, stopping by user request.")
                     common.force_exit(1)
                 add_failed_builds_entry(failed_builds, appid, build, vcse)
-                wikilog = str(vcse)
                 common.deploy_build_log_with_rsync(
                     appid, build.versionCode, "".join(traceback.format_exc())
                 )
             except FDroidException as e:
+                tstamp = time.strftime("%Y-%m-%d %H:%M:%SZ", time.gmtime())
                 with open(os.path.join(log_dir, appid + '.log'), 'a+') as f:
                     f.write('\n\n============================================================\n')
                     f.write('versionCode: %s\nversionName: %s\ncommit: %s\n' %
                             (build.versionCode, build.versionName, build.commit))
                     f.write('Build completed at '
-                            + common.get_wiki_timestamp() + '\n')
+                            + tstamp + '\n')
                     f.write('\n' + tools_version_log + '\n')
                     f.write(str(e))
                 logging.error("Could not build app %s: %s" % (appid, e))
@@ -1233,7 +1223,6 @@ def main():
                     logging.debug("Error encoutered, stopping by user request.")
                     common.force_exit(1)
                 add_failed_builds_entry(failed_builds, appid, build, e)
-                wikilog = e.get_wikitext()
                 common.deploy_build_log_with_rsync(
                     appid, build.versionCode, "".join(traceback.format_exc())
                 )
@@ -1244,35 +1233,9 @@ def main():
                     logging.debug("Error encoutered, stopping by user request.")
                     common.force_exit(1)
                 add_failed_builds_entry(failed_builds, appid, build, e)
-                wikilog = str(e)
                 common.deploy_build_log_with_rsync(
                     appid, build.versionCode, "".join(traceback.format_exc())
                 )
-
-            if options.wiki and wikilog:
-                try:
-                    # Write a page with the last build log for this version code
-                    lastbuildpage = appid + '/lastbuild_' + build.versionCode
-                    newpage = site.Pages[lastbuildpage]
-                    with open(os.path.join('tmp', 'fdroidserverid')) as fp:
-                        fdroidserverid = fp.read().rstrip()
-                    txt = "* build session started at " + common.get_wiki_timestamp(start_timestamp) + '\n' \
-                          + "* this build started at " + build_starttime + '\n' \
-                          + "* this build completed at " + common.get_wiki_timestamp() + '\n' \
-                          + common.get_git_describe_link() \
-                          + '* fdroidserverid: [https://gitlab.com/fdroid/fdroidserver/commit/' \
-                          + fdroidserverid + ' ' + fdroidserverid + ']\n\n'
-                    if buildserverid:
-                        txt += '* buildserverid: [https://gitlab.com/fdroid/fdroidserver/commit/' \
-                               + buildserverid + ' ' + buildserverid + ']\n\n'
-                    txt += tools_version_log + '\n\n'
-                    txt += '== Build Log ==\n\n' + wikilog
-                    newpage.save(txt, summary='Build log')
-                    # Redirect from /lastbuild to the most recent build log
-                    newpage = site.Pages[appid + '/lastbuild']
-                    newpage.save('#REDIRECT [[' + lastbuildpage + ']]', summary='Update redirect')
-                except Exception as e:
-                    logging.error("Error while attempting to publish build log: %s" % e)
 
             if timer:
                 timer.cancel()  # kill the watchdog timer
@@ -1298,27 +1261,13 @@ def main():
                               "{} builds failed", len(failed_builds)).format(len(failed_builds)))
 
     if options.wiki:
-        wiki_page_path = 'build_' + time.strftime('%s', start_timestamp)
-        newpage = site.Pages[wiki_page_path]
-        txt = ''
-        txt += "* command line: <code>%s</code>\n" % ' '.join(sys.argv)
-        txt += "* started at %s\n" % common.get_wiki_timestamp(start_timestamp)
-        txt += "* completed at %s\n" % common.get_wiki_timestamp()
-        if buildserverid:
-            txt += ('* buildserverid: [https://gitlab.com/fdroid/fdroidserver/commit/{id} {id}]\n'
-                    .format(id=buildserverid))
-        if fdroidserverid:
-            txt += ('* fdroidserverid: [https://gitlab.com/fdroid/fdroidserver/commit/{id} {id}]\n'
-                    .format(id=fdroidserverid))
         if os.cpu_count():
-            txt += "* host processors: %d\n" % os.cpu_count()
             status_output['hostOsCpuCount'] = os.cpu_count()
         if os.path.isfile('/proc/meminfo') and os.access('/proc/meminfo', os.R_OK):
             with open('/proc/meminfo') as fp:
                 for line in fp:
                     m = re.search(r'MemTotal:\s*([0-9].*)', line)
                     if m:
-                        txt += "* host RAM: %s\n" % m.group(1)
                         status_output['hostProcMeminfoMemTotal'] = m.group(1)
                         break
         fdroid_path = os.path.realpath(os.path.join(os.path.dirname(__file__), '..'))
@@ -1328,18 +1277,10 @@ def main():
                 for line in configfile:
                     m = re.search(r'cpus\s*=\s*([0-9].*)', line)
                     if m:
-                        txt += "* guest processors: %s\n" % m.group(1)
                         status_output['guestVagrantVmCpus'] = m.group(1)
                     m = re.search(r'memory\s*=\s*([0-9].*)', line)
                     if m:
-                        txt += "* guest RAM: %s MB\n" % m.group(1)
                         status_output['guestVagrantVmMemory'] = m.group(1)
-        txt += "* successful builds: %d\n" % len(build_succeeded)
-        txt += "* failed builds: %d\n" % len(failed_builds)
-        txt += "\n\n"
-        newpage.save(txt, summary='Run log')
-        newpage = site.Pages['build']
-        newpage.save('#REDIRECT [[' + wiki_page_path + ']]', summary='Update redirect')
 
     if buildserverid:
         status_output['buildserver'] = {'commitId': buildserverid}
