@@ -185,7 +185,7 @@ def make_website(apps, repodir, repodict):
     <link href="icons/{icon}" rel="shortcut icon" type="image/png">
     <meta content="{name}" property="og:site_name">
     <meta content="{name}" property="og:title">
-    <meta content="" property="og:determiner">
+    <meta content property="og:determiner">
     <meta content="{description}" property="og:description">
     <meta content="index,nofollow" name="robots">
   </head>
