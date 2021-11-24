@@ -1260,7 +1260,7 @@ def main():
         logging.info(ngettext("{} build failed",
                               "{} builds failed", len(failed_builds)).format(len(failed_builds)))
 
-    if options.wiki:
+    if options.server:
         if os.cpu_count():
             status_output['hostOsCpuCount'] = os.cpu_count()
         if os.path.isfile('/proc/meminfo') and os.access('/proc/meminfo', os.R_OK):
