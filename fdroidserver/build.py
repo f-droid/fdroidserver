@@ -934,7 +934,7 @@ def parse_commandline():
     parser.add_argument("-a", "--all", action="store_true", default=False,
                         help=_("Build all applications available"))
     parser.add_argument("-w", "--wiki", default=False, action="store_true",
-                        help=_("Update the wiki"))
+                        help=argparse.SUPPRESS)
     metadata.add_metadata_arguments(parser)
     options = parser.parse_args()
     metadata.warnings_action = options.W
