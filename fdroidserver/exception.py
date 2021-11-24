@@ -8,13 +8,6 @@ class FDroidException(Exception):
             return self.detail
         return '[...]\n' + self.detail[-16000:]
 
-    def get_wikitext(self):
-        ret = repr(self.value) + "\n"
-        if self.detail:
-            ret += "=detail=\n"
-            ret += "<pre>\n" + self.shortened_detail() + "</pre>\n"
-        return ret
-
     def __str__(self):
         if self.value is None:
             ret = __name__

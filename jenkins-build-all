@@ -83,17 +83,6 @@ fi
 
 echo "build_server_always: true" > config.yml
 echo "deploy_process_logs: true" >> config.yml
-# if the local mediawiki is available, then use it
-if nc -z -w1 localhost 32445; then
-    wikiflag="--wiki"
-    echo "wiki_protocol: http" >> config.yml
-    echo "wiki_server: localhost:32445" >> config.yml
-    echo "wiki_path: /mediawiki/" >> config.yml
-    echo "wiki_user: fdroid" >> config.yml
-    echo "wiki_password: update.TestCase" >> config.yml
-else
-    sed -i '/^wiki_/d' config.yml
-fi
 
 printf '\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\nbuild all with reproducible signatures\n'
 for f in metadata/*/signatures/*; do
@@ -114,7 +103,7 @@ sed -Ei 's,^(\s+endtime\s*=\s*time\.time\(\))\s*.*,\1 + 6 * 60 * 60  # 6 hours,'
     $WORKSPACE/fdroidserver/build.py
 
 printf '\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\nbuild all\n'
-$WORKSPACE/fdroid build --verbose --latest --no-tarball --all $wikiflag
+$WORKSPACE/fdroid build --verbose --latest --no-tarball --all
 
 vagrant global-status
 if [ -d builder ]; then

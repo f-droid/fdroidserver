@@ -4100,13 +4100,6 @@ def get_examples_dir():
     return examplesdir
 
 
-def get_wiki_timestamp(timestamp=None):
-    """Return current time in the standard format for posting to the wiki."""
-    if timestamp is None:
-        timestamp = time.gmtime()
-    return time.strftime("%Y-%m-%d %H:%M:%SZ", timestamp)
-
-
 def get_android_tools_versions():
     """Get a list of the versions of all installed Android SDK/NDK components."""
     global config
@@ -4138,22 +4131,6 @@ def get_android_tools_version_log():
         log += '* ' + name + ' (' + version + ')\n'
 
     return log
-
-
-def get_git_describe_link():
-    """Get a link to the current fdroiddata commit, to post to the wiki."""
-    try:
-        output = subprocess.check_output(['git', 'describe', '--always', '--dirty', '--abbrev=0'],
-                                         universal_newlines=True).strip()
-    except subprocess.CalledProcessError:
-        pass
-    if output:
-        commit = output.replace('-dirty', '')
-        return ('* fdroiddata: [https://gitlab.com/fdroid/fdroiddata/commit/{commit} {id}]\n'
-                .format(commit=commit, id=output))
-    else:
-        logging.error(_("'{path}' failed to execute!").format(path='git describe'))
-        return ''
 
 
 def calculate_math_string(expr):

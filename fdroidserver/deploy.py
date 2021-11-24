@@ -672,28 +672,6 @@ def push_binary_transparency(git_repo_path, git_remote):
         origin.push('master')
 
 
-def update_wiki():
-    try:
-        import mwclient
-        site = mwclient.Site((config['wiki_protocol'], config['wiki_server']),
-                             path=config['wiki_path'])
-        site.login(config['wiki_user'], config['wiki_password'])
-
-        # Write a page with the last build log for this version code
-        wiki_page_path = 'deploy_' + time.strftime('%s', start_timestamp)
-        newpage = site.Pages[wiki_page_path]
-        txt = ''
-        txt += "* command line: <code>" + ' '.join(sys.argv) + "</code>\n"
-        txt += "* started at " + common.get_wiki_timestamp(start_timestamp) + '\n'
-        txt += "* completed at " + common.get_wiki_timestamp() + '\n'
-        txt += "\n\n"
-        newpage.save(txt, summary='Run log')
-        newpage = site.Pages['deploy']
-        newpage.save('#REDIRECT [[' + wiki_page_path + ']]', summary='Update redirect')
-    except Exception as e:
-        logging.error(_('Error while attempting to publish log: %s') % e)
-
-
 def main():
     global config, options
 
@@ -810,9 +788,6 @@ def main():
     if binary_transparency_remote:
         push_binary_transparency(BINARY_TRANSPARENCY_DIR,
                                  binary_transparency_remote)
-
-    if config.get('wiki_server') and config.get('wiki_path'):
-        update_wiki()
 
     common.write_status_json(common.setup_status_output(start_timestamp))
     sys.exit(0)
