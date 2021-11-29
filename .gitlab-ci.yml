@@ -203,16 +203,16 @@ lint_format_safety_bandit_checks:
 
 
 lint_mypy:
-  image: debian:bullseye
+  image: debian:bullseye-backports
   <<: *apt-template
   script:
-    - sed -i '/pyjks/d' setup.py  # TODO get from backports once available
     # use Debian packages to avoid building C/rust sources
     - apt-get install
           mypy
           python3-cryptography
           python3-pip
           python3-wheel
+    - apt-get install -t bullseye-backports python3-pyjks
     - pip install -e .[test]
     - mypy
 
