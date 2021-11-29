@@ -4538,6 +4538,12 @@ NDKS = [
         "revision": "23.0.7599858",
         "sha256": "e3eacf80016b91d4cd2c8ca9f34eebd32df912bb799c859cc5450b6b19277b4f",
         "url": "https://dl.google.com/android/repository/android-ndk-r23-linux.zip"
+    },
+    {
+        "release": "r23b",
+        "revision": "23.1.7779620",
+        "sha256": "c6e97f9c8cfe5b7be0a9e6c15af8e7a179475b7ded23e2d1c1fa0945d6fb4382",
+        "url": "https://dl.google.com/android/repository/android-ndk-r23b-linux.zip"
     }
 ]
 
