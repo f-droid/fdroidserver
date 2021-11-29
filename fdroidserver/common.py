@@ -476,7 +476,7 @@ def parse_human_readable_size(size):
             raise ValueError(_('Could not parse size "{size}", wrong type "{type}"')
                              .format(size=size, type=type(size)))
         s = size.lower().replace(' ', '')
-        m = re.match(r'^(?P<value>[0-9][0-9.]+) *(?P<unit>' + r'|'.join(units.keys()) + r')$', s)
+        m = re.match(r'^(?P<value>[0-9][0-9.]*) *(?P<unit>' + r'|'.join(units.keys()) + r')$', s)
         if not m:
             raise ValueError(_('Not a valid size definition: "{}"').format(size))
         return int(float(m.group("value")) * units[m.group("unit")])
