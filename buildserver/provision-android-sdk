@@ -117,6 +117,11 @@ cat <<EOF > $ANDROID_HOME/licenses/android-sdk-preview-license-old
 84831b9409646a918e30573bab4c9c91346d8abd
 EOF
 
+cat <<EOF > $ANDROID_HOME/licenses/intel-android-extra-license
+
+d975f751698a77b662f1254ddbeed3901e976f5a
+EOF
+
 echo y | $ANDROID_HOME/tools/bin/sdkmanager "extras;m2repository;com;android;support;constraint;constraint-layout;1.0.1"
 echo y | $ANDROID_HOME/tools/bin/sdkmanager "extras;m2repository;com;android;support;constraint;constraint-layout-solver;1.0.1"
 echo y | $ANDROID_HOME/tools/bin/sdkmanager "extras;m2repository;com;android;support;constraint;constraint-layout;1.0.2"
