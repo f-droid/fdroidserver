@@ -1,0 +1,116 @@
+apply plugin: 'com.android.application'
+
+def getCheckedOutGitCommitHash() {
+    'git rev-parse --verify --short HEAD'.execute().text.trim()
+}
+
+def getAvailableLocales() {
+    new File("app/src/main/res").list(new FilenameFilter() {
+        @Override
+        boolean accept(File dir, String name) {
+            return name.startsWith("values-") && new File(new File(dir,name), "strings.xml").exists();
+        }
+    }).collect() { fold -> fold.substring("values-".length())}.join(",")
+}
+
+android {
+    compileSdkVersion 30
+    buildToolsVersion '30.0.0'
+    def signingFilePath = System.getProperty("user.home") + "/.idea/signing.gradle"
+    if (new File(signingFilePath).exists()) {
+        apply from: signingFilePath
+    }
+    defaultConfig {
+        applicationId "org.noise_planet.noisecapture"
+        minSdkVersion 15
+        targetSdkVersion 30
+        versionCode 55
+        versionName "1.2.19"
+        // Store build date in apk
+        buildConfigField "long", "TIMESTAMP", System.currentTimeMillis() + "L"
+        buildConfigField "String", "GITHASH", "\"${getCheckedOutGitCommitHash().toString()}\""
+        buildConfigField "String", "SUPPORTEDLOCALES",  "\"${getAvailableLocales()}\""
+        // Enabling multidex support.
+        multiDexEnabled false
+
+        vectorDrawables.useSupportLibrary = true
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    dexOptions {
+        javaMaxHeapSize "4g"
+    }
+    lintOptions {
+        abortOnError false
+        disable 'MissingTranslation'
+    }
+    buildTypes {
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            if (new File(signingFilePath).exists()) {
+                signingConfig signingConfigs.release
+            }
+        }
+        debug {
+            debuggable true
+            if (new File(signingFilePath).exists()) {
+                signingConfig signingConfigs.debug
+            }
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_7
+        targetCompatibility JavaVersion.VERSION_1_7
+    }
+    testOptions {
+        unitTests {
+            includeAndroidResources = true
+        }
+    }
+}
+
+// For using the MPAndroidChart package
+// https://github.com/PhilJay/MPAndroidChart
+// Apache License, Version 2.0
+task listrepos {
+    doLast {
+        println "Repositories:"
+        project.repositories.each { println "Name: " + it.name + "; url: " + it.url }
+    }
+}
+
+repositories {
+    mavenLocal()
+}
+
+dependencies {
+    implementation 'com.github.PhilJay:MPAndroidChart:v2.2.5'
+    implementation 'org.slf4j:slf4j-simple:1.7.12'
+    implementation name: 'org/noise-planet/jwarble/0.2.3/jwarble-0.2.3'
+    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.9.10'
+    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.9.10'
+
+    // multithreaded FFT for realtime visualisation of spectrum only
+    implementation 'com.github.wendykierp:JTransforms:3.1'
+    implementation 'org.apache.commons:commons-math3:3.5'
+    implementation 'androidx.appcompat:appcompat:1.0.0'
+    implementation 'com.google.android.material:material:1.0.0'
+    implementation 'androidx.vectordrawable:vectordrawable:1.0.0'
+    implementation 'com.nhaarman.supertooltips:library:3.0.0'
+    //compile 'com.android.support:multidex:1.0.0'
+    // Testing-only dependencies
+    // Force usage of support annotations in the test app, since it is internally used by the runner module.
+    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+    androidTestImplementation 'androidx.annotation:annotation:1.0.0'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
+    androidTestImplementation 'androidx.test:rules:1.1.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0'
+    // unit test
+    testImplementation group: 'org.robolectric', name: 'robolectric', version: '4.3.1'
+    testImplementation 'junit:junit:4.12'
+    testImplementation group: 'com.googlecode.soundlibs', name: 'jorbis', version: '0.0.17.4'
+    implementation project(':sosfilter')
+}
+

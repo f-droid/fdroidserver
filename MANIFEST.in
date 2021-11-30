@@ -765,6 +765,9 @@ include tests/source-files/org.tasks/build.gradle
 include tests/source-files/org.tasks/build.gradle.kts
 include tests/source-files/org.tasks/buildSrc/build.gradle.kts
 include tests/source-files/org.tasks/settings.gradle.kts
+include tests/source-files/org.noise_planet.noisecapture/app/build.gradle
+include tests/source-files/org.noise_planet.noisecapture/settings.gradle
+include tests/source-files/org.noise_planet.noisecapture/sosfilter/build.gradle
 include tests/source-files/osmandapp/osmand/build.gradle
 include tests/source-files/osmandapp/osmand/gradle/wrapper/gradle-wrapper.properties
 include tests/source-files/realm/react-native/android/build.gradle

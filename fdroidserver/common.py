@@ -105,7 +105,7 @@ VALID_APPLICATION_ID_REGEX = re.compile(r'''(?:^[a-z_]+(?:\d*[a-zA-Z_]*)*)(?:\.[
 ANDROID_PLUGIN_REGEX = re.compile(r'''\s*(:?apply plugin:|id)\(?\s*['"](android|com\.android\.application)['"]\s*\)?''')
 
 SETTINGS_GRADLE_REGEX = re.compile(r'settings\.gradle(?:\.kts)?')
-GRADLE_SUBPROJECT_REGEX = re.compile(r'''['"]:([^'"]+)['"]''')
+GRADLE_SUBPROJECT_REGEX = re.compile(r'''['"]:?([^'"]+)['"]''')
 
 MAX_VERSION_CODE = 0x7fffffff  # Java's Integer.MAX_VALUE (2147483647)
 
