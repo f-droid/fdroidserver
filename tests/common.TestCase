@@ -1310,6 +1310,7 @@ class CommonTest(unittest.TestCase):
             'com.anpmech.launcher': 'app',
             'org.tasks': 'app',
             'ut.ewh.audiometrytest': 'app',
+            'org.noise_planet.noisecapture': 'app',
         }
         for k, v in subdirs.items():
             build_dir = Path('source-files') / k
