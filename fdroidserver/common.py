@@ -4302,6 +4302,8 @@ def _install_ndk(ndk):
             url = ndkdict['url']
             sha256 = ndkdict['sha256']
             break
+    else:
+        raise FDroidException("NDK %s not found" % ndk)
     ndk_base = os.path.join(config['sdk_path'], 'ndk')
     logging.info(_('Downloading %s') % url)
     zipball = os.path.join(
