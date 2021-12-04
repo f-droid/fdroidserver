@@ -133,7 +133,7 @@ def write_json_report(url, remote_apk, unsigned_apk, compare_result):
         d = hashabledict()
         output[key] = d
         d['file'] = filename
-        d['sha256'] = update.sha256sum(filename)
+        d['sha256'] = common.sha256sum(filename)
         d['timestamp'] = os.stat(filename).st_ctime
         d['packageName'], d['versionCode'], d['versionName'] = common.get_apk_id(filename)
     if compare_result:
