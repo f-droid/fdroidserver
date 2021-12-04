@@ -28,7 +28,6 @@ from collections import OrderedDict
 from . import _
 from . import common
 from . import net
-from . import update
 from .exception import FDroidException
 
 options = None
