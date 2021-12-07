@@ -27,6 +27,7 @@ def _run_wget(path, urls):
     if not urls:
         return
     logging.debug(_('Running wget in {path}').format(path=path))
+    cwd = os.getcwd()
     os.makedirs(path, exist_ok=True)
     os.chdir(path)
     urls_file = '.fdroid-mirror-wget-input-file'
@@ -43,6 +44,7 @@ def _run_wget(path, urls):
         ]
     )
     os.remove(urls_file)
+    os.chdir(cwd)  # leave the working env the way we found it
 
 
 def main():
