@@ -18,7 +18,6 @@ include examples/makebuildserver.config.py
 include examples/opensc-fdroid.cfg
 include examples/public-read-only-s3-bucket-policy.json
 include examples/template.yml
-include fdroid
 include gradlew-fdroid
 include LICENSE
 include locale/bo/LC_MESSAGES/fdroidserver.mo
