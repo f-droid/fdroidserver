@@ -584,15 +584,6 @@ def main():
         run_via_vagrant_ssh(v, ['rm', '-f', '~/.gradle/caches/modules-2/modules-2.lock'])
         run_via_vagrant_ssh(v, ['rm', '-fr', '~/.gradle/caches/*/plugin-resolution/'])
 
-    p = subprocess.Popen(['git', 'rev-parse', 'HEAD'], stdout=subprocess.PIPE,
-                         universal_newlines=True)
-    buildserverid = p.communicate()[0].strip()
-    logging.info("Writing buildserver ID ...ID is %s", buildserverid)
-    # sync data before we halt() the machine, we had an empty buildserverid otherwise
-    write_bsid_cmd = 'sh -c "echo \'{}\' >/home/vagrant/buildserverid; sync"'.format(buildserverid)
-    run_via_vagrant_ssh(v, write_bsid_cmd)
-    logging.debug("+ {}".format(write_bsid_cmd))
-
     logging.info("Stopping build server VM")
     v.halt()
 

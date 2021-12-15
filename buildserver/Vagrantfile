@@ -86,5 +86,7 @@ Vagrant.configure("2") do |config|
   config.vm.provision "shell", path: "provision-android-ndk",
     args: ["/opt/android-sdk/ndk", "r21e", "r22b"]
   config.vm.provision "shell", path: "provision-gradle"
+  config.vm.provision "shell", path: "provision-buildserverid",
+    args: [`git rev-parse HEAD`]
 
 end
