@@ -233,6 +233,7 @@ black:
         fdroidserver/readmeta.py
         fdroidserver/signindex.py
         fdroidserver/tail.py
+        setup.py
         tests/build.TestCase
         tests/deploy.TestCase
         tests/exception.TestCase
