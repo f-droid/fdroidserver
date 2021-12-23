@@ -395,8 +395,10 @@ plugin_fetchsrclibs:
         python3-cffi
         python3-cryptography
         python3-matplotlib
+        python3-nacl
         python3-pip
         python3-pil
+        python3-pycparser
         python3-venv
     - python3 -m venv --system-site-packages env
     - . env/bin/activate
