@@ -1179,6 +1179,7 @@ class UpdateTest(unittest.TestCase):
 
     def test_update_with_AllowedAPKSigningKeys(self):
         """Test that APKs without allowed signatures get deleted."""
+        # Prepare test environment
         testdir = tempfile.mkdtemp(
             prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir
         )
@@ -1188,12 +1189,15 @@ class UpdateTest(unittest.TestCase):
         shutil.copy(os.path.join(self.basedir, testapk), testapk)
         os.mkdir('metadata')
         metadatafile = os.path.join('metadata', 'com.politedroid.yml')
+
+        # Copy and manipulate metadata file
         shutil.copy(os.path.join(self.basedir, metadatafile), metadatafile)
         with open(metadatafile, 'a') as fp:
             fp.write(
                 '\n\nAllowedAPKSigningKeys: 32a23624c201b949f085996ba5ed53d40f703aca4989476949cae891022e0ed6\n'
             )
 
+        # Set up options
         fdroidserver.common.options = Options
         config = fdroidserver.common.read_config(fdroidserver.common.options)
         if 'apksigner' not in config:  # TODO remove me for buildserver-bullseye
@@ -1204,14 +1208,20 @@ class UpdateTest(unittest.TestCase):
         config['keystore'] = os.path.join(self.basedir, 'keystore.jks')
 
         self.assertTrue(os.path.exists(testapk))
+
+        # Test for non-deletion
         with mock.patch('sys.argv', ['fdroid update', '--delete-unknown']):
             fdroidserver.update.main()
         self.assertTrue(os.path.exists(testapk))
 
+        # Copy and manipulate metadata file again
+        shutil.copy(os.path.join(self.basedir, metadatafile), metadatafile)
         with open(metadatafile, 'a') as fp:
             fp.write(
                 '\n\nAllowedAPKSigningKeys: fa4edeadfa4edeadfa4edeadfa4edeadfa4edeadfa4edeadfa4edeadfa4edead\n'
             )
+
+        # Test for deletion
         with mock.patch('sys.argv', ['fdroid update', '--delete-unknown']):
             fdroidserver.update.main()
         self.assertFalse(os.path.exists(testapk))
