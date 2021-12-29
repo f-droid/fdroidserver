@@ -23,13 +23,10 @@ from pathlib import Path
 import platform
 import re
 import logging
-import yaml
-try:
-    from yaml import CSafeLoader as SafeLoader
-except ImportError:
-    from yaml import SafeLoader
 import importlib
 from collections import OrderedDict
+
+from ruamel.yaml import YAML, YAMLError
 
 from . import common
 from . import _
@@ -483,18 +480,19 @@ def parse_yaml_srclib(metadatapath):
 
     with metadatapath.open("r", encoding="utf-8") as f:
         try:
-            data = yaml.load(f, Loader=SafeLoader)
+            yaml = YAML(typ='safe')
+            data = yaml.load(f)
             if type(data) is not dict:
                 if platform.system() == 'Windows':
                     # Handle symlink on Windows
                     symlink = metadatapath.parent / metadatapath.read_text(encoding='utf-8')
                     if symlink.is_file():
                         with symlink.open("r", encoding="utf-8") as s:
-                            data = yaml.load(s, Loader=SafeLoader)
+                            data = yaml.load(s)
             if type(data) is not dict:
-                raise yaml.error.YAMLError(_('{file} is blank or corrupt!')
-                                           .format(file=metadatapath))
-        except yaml.error.YAMLError as e:
+                raise YAMLError(_('{file} is blank or corrupt!')
+                                .format(file=metadatapath))
+        except YAMLError as e:
             _warn_or_exception(_("Invalid srclib metadata: could not "
                                  "parse '{file}'")
                                .format(file=metadatapath) + '\n'
@@ -797,8 +795,9 @@ def parse_yaml_metadata(mf, app):
 
     """
     try:
-        yamldata = yaml.load(mf, Loader=SafeLoader)
-    except yaml.YAMLError as e:
+        yaml = YAML(typ='safe')
+        yamldata = yaml.load(mf)
+    except YAMLError as e:
         _warn_or_exception(_("could not parse '{path}'")
                            .format(path=mf.name) + '\n'
                            + common.run_yamllint(mf.name, indent=4),
