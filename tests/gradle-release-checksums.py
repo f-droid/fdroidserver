@@ -139,4 +139,7 @@ if git_repo.is_dirty() and ('gradlew-fdroid' in modified or 'makebuildserver' in
         })
         mr.save()
     except gitlab.exceptions.GitlabCreateError as e:
-        print(e.error_message)
+        if e.response_code == 409:  # Another open merge request already exists for this source branch
+            print(e.error_message)
+        else:
+            raise e
