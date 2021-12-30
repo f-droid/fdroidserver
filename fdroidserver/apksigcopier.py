@@ -59,6 +59,7 @@ import zipfile
 import zlib
 
 from collections import namedtuple
+from typing import Dict, Tuple, Union
 
 __version__ = "0.4.0"
 NAME = "apksigcopier"
@@ -95,7 +96,7 @@ class ZipError(APKSigCopierError):
 class ReproducibleZipInfo(zipfile.ZipInfo):
     """Reproducible ZipInfo hack."""
 
-    _override = {}
+    _override = {}  # type: Dict[str, Union[int, Tuple[int, ...]]]
 
     def __init__(self, zinfo, **override):
         if override:
