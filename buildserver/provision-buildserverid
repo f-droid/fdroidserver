@@ -1,0 +1,9 @@
+#!/bin/bash -e
+
+test -n "$1"
+
+echo "Writing buildserver ID ...ID is $1"
+set -x
+echo "$1" > /home/vagrant/buildserverid
+# sync data before we halt() the machine, we had an empty buildserverid otherwise
+sync

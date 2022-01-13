@@ -27,4 +27,4 @@ chmod g+w $NDK_BASE
 
 # ensure all users can read and execute the NDK
 chmod -R a+rX $NDK_BASE/
-find $NDK_BASE/ -type f -executable -print0 | xargs -0 chmod a+x
+find $NDK_BASE/ -type f -executable -exec chmod a+x -- {} +

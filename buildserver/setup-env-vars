@@ -12,6 +12,8 @@ echo "# generated on "`date` > $bsenv
 echo export ANDROID_HOME=$1 >> $bsenv
 echo 'export PATH=$PATH:${ANDROID_HOME}/tools:${ANDROID_HOME}/platform-tools:/opt/gradle/bin' >> $bsenv
 echo "export DEBIAN_FRONTEND=noninteractive" >> $bsenv
+echo 'export home_vagrant=/home/vagrant' >> $bsenv
+echo 'export fdroidserver=$home_vagrant/fdroidserver' >> $bsenv
 
 chmod 0644 $bsenv
 
