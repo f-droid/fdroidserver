@@ -5,6 +5,7 @@
 import difflib
 import git
 import glob
+import importlib
 import inspect
 import json
 import logging
@@ -20,9 +21,8 @@ import unittest
 import textwrap
 import yaml
 import gzip
-import stat
 from distutils.version import LooseVersion
-from zipfile import BadZipFile, ZipFile, ZipInfo
+from zipfile import BadZipFile, ZipFile
 from unittest import mock
 from pathlib import Path
 
@@ -2164,7 +2164,7 @@ class CommonTest(unittest.TestCase):
         )
         self.assertEqual(
             {'com.example': [12345, 67890], 'org.fdroid.fdroid': [1]},
-            fdroidserver.common.read_pkg_args(appid_versionCode_pairs, allow_vercodes)
+            fdroidserver.common.read_pkg_args(appid_versionCode_pairs, allow_vercodes),
         )
         appid_versionCode_pairs = (
             'com.example:67890',
@@ -2210,41 +2210,78 @@ class CommonTest(unittest.TestCase):
             fdroidserver.common.metadata_find_developer_signing_files(appid, vc),
         )
 
+    @mock.patch('sdkmanager.build_package_list', lambda use_net: None)
     def test_auto_install_ndk(self):
         """Test all possible field data types for build.ndk"""
+        fdroidserver.common.config = {'sdk_path': self.testdir}
+        sdk_path = self.testdir
         build = fdroidserver.metadata.Build()
 
         none_entry = mock.Mock()
-        with mock.patch('fdroidserver.common._install_ndk', none_entry):
+        with mock.patch('sdkmanager.install', none_entry):
             fdroidserver.common.auto_install_ndk(build)
             none_entry.assert_not_called()
 
         empty_list = mock.Mock()
         build.ndk = []
-        with mock.patch('fdroidserver.common._install_ndk', empty_list):
+        with mock.patch('sdkmanager.install', empty_list):
             fdroidserver.common.auto_install_ndk(build)
             empty_list.assert_not_called()
 
         release_entry = mock.Mock()
         build.ndk = 'r21e'
-        with mock.patch('fdroidserver.common._install_ndk', release_entry):
+        with mock.patch('sdkmanager.install', release_entry):
             fdroidserver.common.auto_install_ndk(build)
-            release_entry.assert_called_once_with('r21e')
+            release_entry.assert_called_once_with('ndk;r21e', sdk_path)
 
         revision_entry = mock.Mock()
         build.ndk = '21.4.7075529'
-        with mock.patch('fdroidserver.common._install_ndk', revision_entry):
+        with mock.patch('sdkmanager.install', revision_entry):
             fdroidserver.common.auto_install_ndk(build)
-            revision_entry.assert_called_once_with('21.4.7075529')
+            revision_entry.assert_called_once_with('ndk;21.4.7075529', sdk_path)
 
         list_entry = mock.Mock()
         calls = []
         build.ndk = ['r10e', '11.0.2655954', 'r12b', 'r21e']
         for n in build.ndk:
-            calls.append(mock.call(n))
-        with mock.patch('fdroidserver.common._install_ndk', list_entry):
+            calls.append(mock.call(f'ndk;{n}', sdk_path))
+        with mock.patch('sdkmanager.install', list_entry):
             fdroidserver.common.auto_install_ndk(build)
             list_entry.assert_has_calls(calls)
+
+    @unittest.skipIf(importlib.util.find_spec('sdkmanager') is None, 'needs sdkmanager')
+    @mock.patch('sdkmanager.build_package_list', lambda use_net: None)
+    @mock.patch('sdkmanager._install_zipball_from_cache', lambda a, b: None)
+    @mock.patch('sdkmanager._generate_package_xml', lambda a, b, c: None)
+    def test_auto_install_ndk_mock_dl(self):
+        """Test NDK installs by actually calling sdkmanager"""
+        import sdkmanager
+        import pkg_resources
+
+        sdkmanager_version = LooseVersion(
+            pkg_resources.get_distribution('sdkmanager').version
+        )
+        if sdkmanager_version < LooseVersion('0.6.4'):
+            raise unittest.SkipTest('needs fdroid sdkmanager >= 0.6.4')
+
+        fdroidserver.common.config = {'sdk_path': 'placeholder'}
+        build = fdroidserver.metadata.Build()
+        url = 'https://dl.google.com/android/repository/android-ndk-r24-linux.zip'
+        path = sdkmanager.get_cachedir() / os.path.basename(url)
+        sdkmanager.packages = {
+            ('ndk', '24.0.8215888'): url,
+            ('ndk', 'r24'): url,
+        }
+        build.ndk = 'r24'
+        firstrun = mock.Mock()
+        with mock.patch('sdkmanager.download_file', firstrun):
+            fdroidserver.common.auto_install_ndk(build)
+            firstrun.assert_called_once_with(url, path)
+        build.ndk = '24.0.8215888'
+        secondrun = mock.Mock()
+        with mock.patch('sdkmanager.download_file', secondrun):
+            fdroidserver.common.auto_install_ndk(build)
+            secondrun.assert_called_once_with(url, path)
 
     @unittest.skip("This test downloads and unzips a 1GB file.")
     def test_install_ndk(self):
@@ -2257,101 +2294,6 @@ class CommonTest(unittest.TestCase):
         fdroidserver.common.fill_config_defaults(config)
         self.assertEqual({'r10e': r10e}, config['ndk_paths'])
 
-    def test_install_ndk_versions(self):
-        """Test whether NDK version parsing is working properly"""
-
-        def fake_download(url, zipball):
-            print(url, zipball)
-            with ZipFile(zipball, 'w') as zipfp:
-                zipfp.writestr(os.path.basename(url), url)
-
-        with tempfile.TemporaryDirectory(
-            prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir
-        ) as sdk_path:
-            config = {'sdk_path': sdk_path}
-            fdroidserver.common.config = config
-            for r, sha256 in (
-                (
-                    'r10e',
-                    'ee5f405f3b57c4f5c3b3b8b5d495ae12b660e03d2112e4ed5c728d349f1e520c',
-                ),
-                ('r20', '57435158f109162f41f2f43d5563d2164e4d5d0364783a9a6fab3ef12cb06ce0'),
-                (
-                    '23.0.7599858',
-                    'e3eacf80016b91d4cd2c8ca9f34eebd32df912bb799c859cc5450b6b19277b4f',
-                ),
-            ):
-                with mock.patch(
-                    'fdroidserver.net.download_file', side_effect=fake_download
-                ) as _ignored, mock.patch(
-                    'fdroidserver.common.get_ndk_version', return_value=r
-                ) as _ignored, mock.patch(
-                    'fdroidserver.common.sha256sum', return_value=sha256
-                ):
-                    _ignored  # silence the linters
-                    fdroidserver.common._install_ndk(r)
-
-    def test_install_ndk_with_symlinks(self):
-        """Some NDK zipballs might have symlinks in them."""
-
-        def fake_download(url, zipball):
-            print(url, zipball)
-            unix_st_mode = (
-                stat.S_IFLNK
-                | stat.S_IRUSR
-                | stat.S_IWUSR
-                | stat.S_IXUSR
-                | stat.S_IRGRP
-                | stat.S_IWGRP
-                | stat.S_IXGRP
-                | stat.S_IROTH
-                | stat.S_IWOTH
-                | stat.S_IXOTH
-            )
-            with ZipFile(zipball, 'w') as zipfp:
-                zipfp.writestr('ndk/' + os.path.basename(url), url)
-
-                zipInfo = ZipInfo('ndk/basename')
-                zipInfo.create_system = 3
-                zipInfo.external_attr = unix_st_mode << 16
-                zipfp.writestr(zipInfo, os.path.basename(url))
-
-                zipInfo = ZipInfo('ndk/bad_abs_link')
-                zipInfo.create_system = 3
-                zipInfo.external_attr = unix_st_mode << 16
-                zipfp.writestr(zipInfo, '/etc/passwd')
-
-                zipInfo = ZipInfo('ndk/bad_rel_link')
-                zipInfo.create_system = 3
-                zipInfo.external_attr = unix_st_mode << 16
-                zipfp.writestr(zipInfo, '../../../../../../../etc/passwd')
-
-                zipInfo = ZipInfo('ndk/bad_rel_link2')
-                zipInfo.create_system = 3
-                zipInfo.external_attr = unix_st_mode << 16
-                zipfp.writestr(zipInfo, 'foo/../../../../../../../../../etc/passwd')
-
-        config = {'sdk_path': self.tmpdir}
-        fdroidserver.common.config = config
-        r = 'r20'
-        sha256 = '57435158f109162f41f2f43d5563d2164e4d5d0364783a9a6fab3ef12cb06ce0'
-        with mock.patch(
-            'fdroidserver.net.download_file', side_effect=fake_download
-        ) as _ignored, mock.patch(
-            'fdroidserver.common.get_ndk_version', return_value=r
-        ) as _ignored, mock.patch(
-            'fdroidserver.common.sha256sum', return_value=sha256
-        ):
-            _ignored  # silence the linters
-            fdroidserver.common._install_ndk(r)
-
-        self.assertTrue(os.path.exists(os.path.join(self.tmpdir, 'ndk', 'r20')))
-        self.assertTrue(os.path.exists(os.path.join(self.tmpdir, 'ndk', 'r20', 'basename')))
-        self.assertFalse(os.path.exists(os.path.join(self.tmpdir, 'ndk', 'r20', 'bad_abs_link')))
-        self.assertFalse(os.path.exists(os.path.join(self.tmpdir, 'ndk', 'r20', 'bad_rel_link')))
-        self.assertFalse(os.path.exists(os.path.join(self.tmpdir, 'ndk', 'r20', 'bad_rel_link2')))
-        os.system('ls -l ' + os.path.join(self.tmpdir, 'ndk', 'r20'))
-
     def test_fill_config_defaults(self):
         """Test the auto-detection of NDKs installed in standard paths"""
         ndk_bundle = os.path.join(self.tmpdir, 'ndk-bundle')
@@ -2360,7 +2302,7 @@ class CommonTest(unittest.TestCase):
             fp.write('Pkg.Desc = Android NDK\nPkg.Revision = 17.2.4988734\n')
         config = {'sdk_path': self.tmpdir}
         fdroidserver.common.fill_config_defaults(config)
-        self.assertEqual({'r17c': ndk_bundle}, config['ndk_paths'])
+        self.assertEqual({'17.2.4988734': ndk_bundle}, config['ndk_paths'])
 
         r21e = os.path.join(self.tmpdir, 'ndk', '21.4.7075529')
         os.makedirs(r21e)
@@ -2368,7 +2310,10 @@ class CommonTest(unittest.TestCase):
             fp.write('Pkg.Desc = Android NDK\nPkg.Revision = 21.4.7075529\n')
         config = {'sdk_path': self.tmpdir}
         fdroidserver.common.fill_config_defaults(config)
-        self.assertEqual({'r17c': ndk_bundle, 'r21e': r21e}, config['ndk_paths'])
+        self.assertEqual(
+            {'17.2.4988734': ndk_bundle, '21.4.7075529': r21e},
+            config['ndk_paths'],
+        )
 
         r10e = os.path.join(self.tmpdir, 'ndk', 'r10e')
         os.makedirs(r10e)
@@ -2377,7 +2322,8 @@ class CommonTest(unittest.TestCase):
         config = {'sdk_path': self.tmpdir}
         fdroidserver.common.fill_config_defaults(config)
         self.assertEqual(
-            {'r10e': r10e, 'r17c': ndk_bundle, 'r21e': r21e}, config['ndk_paths']
+            {'r10e': r10e, '17.2.4988734': ndk_bundle, '21.4.7075529': r21e},
+            config['ndk_paths'],
         )
 
     @unittest.skipIf(not os.path.isdir('/usr/lib/jvm/default-java'), 'uses Debian path')
@@ -2411,7 +2357,7 @@ class CommonTest(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmpdir, TmpCwd(tmpdir):
             repo = git.Repo.init(Path.cwd())
             f = Path("test")
-            date = 10**9
+            date = 10 ** 9
             for tag in tags:
                 date += 1
                 f.write_text(tag)
