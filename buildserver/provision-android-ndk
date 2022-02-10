@@ -15,7 +15,7 @@ cd $NDK_BASE
 
 for version in $@; do
     if [ ! -e ${NDK_BASE}/${version} ]; then
-        unzip /vagrant/cache/android-ndk-${version}-linux-x86_64.zip > /dev/null
+        unzip /vagrant/cache/android-ndk-${version}-linux*.zip > /dev/null
         mv android-ndk-${version} \
 	   `sed -En 's,^Pkg.Revision *= *(.+),\1,p' android-ndk-${version}/source.properties`
     fi
