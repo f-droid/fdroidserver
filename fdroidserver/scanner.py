@@ -347,33 +347,33 @@ def scan_source(build_dir, build=metadata.Build()):
                 continue
 
             path_in_build_dir = os.path.relpath(filepath, build_dir)
-            extension = os.path.splitext(path_in_build_dir)[1]
 
             if curfile in ('gradle-wrapper.jar', 'gradlew', 'gradlew.bat'):
                 removeproblem(curfile, path_in_build_dir, filepath)
-            elif extension == '.apk':
+            elif curfile.endswith('.apk'):
                 removeproblem(_('Android APK file'), path_in_build_dir, filepath)
 
-            elif extension == '.a':
+            elif curfile.endswith('.a'):
                 count += handleproblem(_('static library'), path_in_build_dir, filepath)
-            elif extension == '.aar':
+            elif curfile.endswith('.aar'):
                 count += handleproblem(_('Android AAR library'), path_in_build_dir, filepath)
-            elif extension == '.class':
+            elif curfile.endswith('.class'):
                 count += handleproblem(_('Java compiled class'), path_in_build_dir, filepath)
-            elif extension == '.dex':
+            elif curfile.endswith('.dex'):
                 count += handleproblem(_('Android DEX code'), path_in_build_dir, filepath)
-            elif extension == '.gz':
+            elif curfile.endswith('.gz'):
                 count += handleproblem(_('gzip file archive'), path_in_build_dir, filepath)
-            elif extension == '.so':
+            # We use a regular expression here to also match versioned shared objects like .so.0.0.0
+            elif re.match(r'.*\.so(\..+)*$', curfile):
                 count += handleproblem(_('shared library'), path_in_build_dir, filepath)
-            elif extension == '.zip':
+            elif curfile.endswith('.zip'):
                 count += handleproblem(_('ZIP file archive'), path_in_build_dir, filepath)
-            elif extension == '.jar':
+            elif curfile.endswith('.jar'):
                 for name in suspects_found(curfile):
                     count += handleproblem('usual suspect \'%s\'' % name, path_in_build_dir, filepath)
                 count += handleproblem(_('Java JAR file'), path_in_build_dir, filepath)
 
-            elif extension == '.java':
+            elif curfile.endswith('.java'):
                 if not os.path.isfile(filepath):
                     continue
                 with open(filepath, 'r', errors='replace') as f:
@@ -382,7 +382,7 @@ def scan_source(build_dir, build=metadata.Build()):
                             count += handleproblem('DexClassLoader', path_in_build_dir, filepath)
                             break
 
-            elif extension == '.gradle':
+            elif curfile.endswith('.gradle'):
                 if not os.path.isfile(filepath):
                     continue
                 with open(filepath, 'r', errors='replace') as f:
@@ -398,7 +398,7 @@ def scan_source(build_dir, build=metadata.Build()):
                     if not any(r.match(url) for r in allowed_repos):
                         count += handleproblem('unknown maven repo \'%s\'' % url, path_in_build_dir, filepath)
 
-            elif extension in ['', '.bin', '.out', '.exe']:
+            elif curfile.endswith(('.', '.bin', '.out', '.exe')):
                 if is_binary(filepath):
                     count += handleproblem('binary', path_in_build_dir, filepath)
 
