@@ -4,20 +4,21 @@
 # Michal L <michalrmsmi@wp.pl>, 2020, 2021.
 # mondstern <mondstern@snopyta.org>, 2021.
 # Hans-Christoph Steiner <hans@guardianproject.info>, 2021.
+# Agnieszka C <aga_04@o2.pl>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 1.0.0-95-gd7af22b\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2021-01-29 16:12+0100\n"
-"PO-Revision-Date: 2021-03-13 19:36+0000\n"
-"Last-Translator: WaldiS <sto@tutanota.de>\n"
+"PO-Revision-Date: 2021-10-16 13:25+0000\n"
+"Last-Translator: Agnieszka C <aga_04@o2.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/f-droid/fdroidserver/pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.5.2-dev\n"
+"X-Generator: Weblate 4.9-dev\n"
 
 #: ../fdroidserver/common.py
 msgid ""
@@ -382,7 +383,7 @@ msgstr "Kompilacja generowana przez `fdroid import` - usuń wyłączenie linii p
 
 #: ../fdroidserver/checkupdates.py
 msgid "Build metadata git repo has uncommited changes!"
-msgstr "Zbuduj metadane repozytorium git z niezmienionymi zmianami!"
+msgstr "Repozytorium git metadanych kompilacji zawiera niescommitowane zmiany!"
 
 #: ../fdroidserver/build.py
 msgid "Build only the latest version of each package"
@@ -468,7 +469,7 @@ msgstr "Polecenie '%s' nie rozpoznane.\n"
 
 #: ../fdroidserver/checkupdates.py
 msgid "Commit changes"
-msgstr "Zatwierdź zmiany"
+msgstr "Scommituj zmiany"
 
 #: ../fdroidserver/__main__.py
 msgid "Conflicting arguments: '--verbose' and '--quiet' can not be specified at the same time."
@@ -528,7 +529,7 @@ msgstr "Nie można znaleźć identyfikatora pakietu"
 
 #: ../fdroidserver/update.py
 msgid "Cowardily refusing to overwrite existing signing key setup!"
-msgstr "Cowardily odmawia zastąpienia istniejącej konfiguracji klucza podpisującego!"
+msgstr "Tchórzliwa odmowa nadpisania istniejącej konfiguracji klucza podpisu!"
 
 #: ../fdroidserver/update.py
 msgid "Create a repo signing key in a keystore"
@@ -752,7 +753,7 @@ msgstr "Nieudane kopiowanie {path}: {error}"
 #: ../fdroidserver/signatures.py
 #, python-brace-format
 msgid "Failed fetching signatures for '{apkfilename}': {error}"
-msgstr "Nie powiodło się pobieranie sygnatur dla '{apkfilename}': {error}"
+msgstr "Nie powiodło się pobieranie podpisów dla '{apkfilename}': {error}"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -824,7 +825,7 @@ msgstr "Skończone"
 
 #: ../fdroidserver/lint.py
 msgid "Flattr donation methods belong in the FlattrID flag"
-msgstr "Metody flattr donation należą do flagi FlattrID"
+msgstr "Metody darowizn Flattr należą do flagi FlattrID"
 
 #: ../fdroidserver/lint.py
 msgid "Flattr donation methods belong in the FlattrID: field"
@@ -1151,7 +1152,7 @@ msgstr "Magazyn kluczy do podpisywania klucza:\t"
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "Last used commit '{commit}' looks like a tag, but UpdateCheckMode is '{ucm}'"
-msgstr "Ostatnio używane zatwierdzenie '{commit}' wygląda jak tag, ale UpdateCheckMode to '{ucm}'"
+msgstr "Ostatnio używany commit '{commit}' wygląda jak tag, ale UpdateCheckMode to '{ucm}'"
 
 #: ../fdroidserver/lint.py
 msgid "Liberapay donation methods belong in the Liberapay: field"
@@ -1213,7 +1214,7 @@ msgstr "Nie znaleziono podłączonych urządzeń"
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "No commit specified for {versionName} in {linedesc}"
-msgstr "Nie określono zatwierdzenia dla {versionName} w {linedesc}"
+msgstr "Nie określono commita dla {versionName} w {linedesc}"
 
 #: ../fdroidserver/common.py
 msgid "No config.yml found, using defaults."
@@ -1453,12 +1454,12 @@ msgstr "Przepchnij dziennik do tego zdalnego repozytorium git"
 #: ../fdroidserver/deploy.py ../fdroidserver/upload.py
 #, python-brace-format
 msgid "Pushing binary transparency log to {url}"
-msgstr "Przesyłanie dziennika zmian binarnych do {url}"
+msgstr "Przesyłanie dziennika przejrzystości plików binarnych do {url}"
 
 #: ../fdroidserver/deploy.py ../fdroidserver/upload.py
 #, python-brace-format
 msgid "Pushing to {url}"
-msgstr "Naciśnij na {url}"
+msgstr "Wyślij do {url}"
 
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Quickly start a new repository"
@@ -1543,7 +1544,7 @@ msgstr "Przepisywanie '{appid}' do '{path}'"
 
 #: ../fdroidserver/checkupdates.py
 msgid "Run on git repo that has uncommitted changes"
-msgstr "Uruchom ponownie repozytorium git z niezatwierdzonymi zmianami"
+msgstr "Uruchom ponownie repozytorium git z niescommitowanymi zmianami"
 
 #: ../fdroidserver/lint.py
 msgid "Run rewritemeta to fix formatting"
@@ -1740,7 +1741,7 @@ msgstr "To są aplikacje, które zostały zarchiwizowane w głównym repozytoriu
 
 #: ../fdroidserver/common.py
 msgid "This is a repository of apps to be used with F-Droid. Applications in this repository are either official binaries built by the original application developers, or are binaries built from source by the admin of f-droid.org using the tools on https://gitlab.com/fdroid."
-msgstr "To jest repozytorium aplikacji używanych z F-Droid. Aplikacje w tym repozytorium są albo oficjalnymi plikami binarnymi utworzonymi przez pierwotnych twórców aplikacji, albo plikami binarnymi utworzonymi ze źródła przez administratora f-droid.org przy użyciu narzędzi na https://gitlab.com/fdroid."
+msgstr "To jest repozytorium aplikacji używanych z F-Droid. Aplikacje w tym repozytorium są albo oficjalnymi plikami binarnymi utworzonymi przez oryginalnych programistów aplikacji, albo plikami binarnymi utworzonymi ze źródła przez administratora f-droid.org przy użyciu narzędzi na https://gitlab.com/fdroid."
 
 #: ../fdroidserver/import.py
 #, python-format
@@ -1905,7 +1906,7 @@ msgstr "Zaktualizuj informacje o repozytorium dla nowych pakietów"
 
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Update the binary transparency log for a URL"
-msgstr "Zaktualizuj dziennik przezroczystości binarnej dla adresu URL"
+msgstr "Zaktualizuj dziennik przejrzystości plików binarnych dla adresu URL"
 
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Update the stats of the repo"

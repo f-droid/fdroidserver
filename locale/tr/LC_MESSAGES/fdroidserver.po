@@ -1,20 +1,21 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR Free Software Foundation, Inc.
 # Oğuz Ersen <oguzersen@protonmail.com>, 2020, 2021.
+# Orhan <orya@pm.me>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2021-01-29 16:12+0100\n"
-"PO-Revision-Date: 2021-01-31 22:07+0000\n"
-"Last-Translator: Oğuz Ersen <oguzersen@protonmail.com>\n"
+"PO-Revision-Date: 2021-07-01 22:06+0000\n"
+"Last-Translator: Orhan <orya@pm.me>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/f-droid/fdroidserver/tr/>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.5-dev\n"
+"X-Generator: Weblate 4.8-dev\n"
 
 #: ../fdroidserver/common.py
 msgid ""
@@ -366,7 +367,7 @@ msgstr "Bozuk simgesel bağlantı: {path}"
 
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Build a package from source"
-msgstr "Kaynaktan bir paket inşa et"
+msgstr "Kaynaktan bir paket oluştur"
 
 #: ../fdroidserver/build.py
 msgid "Build all applications available"
@@ -459,7 +460,7 @@ msgstr "Kategorilerin virgülle ayrılmış listesi."
 #: ../fdroid ../fdroidserver/__main__.py
 #, c-format, python-format
 msgid "Command '%s' not recognised.\n"
-msgstr "Komut '%s' tanınmıyor.\n"
+msgstr "'%s' komutu tanınmıyor.\n"
 
 #: ../fdroidserver/checkupdates.py
 msgid "Commit changes"
@@ -531,7 +532,7 @@ msgstr "Bir anahtar deposunda, depo imzalama anahtarı yaratır"
 
 #: ../fdroidserver/update.py
 msgid "Create skeleton metadata files that are missing"
-msgstr "Eksik olan iskelet üst veri dosyalarını yarat"
+msgstr "Eksik olan iskelet üst veri dosyalarını oluştur"
 
 #: ../fdroidserver/deploy.py ../fdroidserver/upload.py
 #, python-brace-format
@@ -580,7 +581,7 @@ msgstr "DEBUG_KEYSTORE ayarlı değil veya değer eksik"
 
 #: ../fdroidserver/update.py
 msgid "Delete APKs and/or OBBs without metadata from the repo"
-msgstr "Depodan üst verisi olmayan APKları ve/veya OBBleri sil"
+msgstr "Depoda üst verisi olmayan APK ve/veya OBB dosyalarını sil"
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
@@ -683,7 +684,7 @@ msgstr "'{field}' içinde yinelenen bağlantı: {url}"
 
 #: ../fdroid
 msgid "Dynamically scan APKs post build"
-msgstr "İnşa sonrası APKları dinamik olarak tara"
+msgstr "Oluşturma sonrası APK dosyalarını dinamik olarak tara"
 
 #: ../fdroidserver/__main__.py
 msgid "ERROR: The \"server\" subcommand has been removed, use \"deploy\"!"
@@ -996,7 +997,7 @@ msgstr "Kullanılabilir tüm imzalı uygulamaları kur"
 
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Install built packages on devices"
-msgstr "İnşa edilen paketleri aygıtlara kur"
+msgstr "Oluşturulan paketleri aygıtlara kur"
 
 #: ../fdroidserver/install.py
 #, python-format
@@ -1495,7 +1496,7 @@ msgstr "Belirtilen dosyalar kaldırılıyor"
 
 #: ../fdroidserver/update.py
 msgid "Rename APK files that do not match package.name_123.apk"
-msgstr "paket.ad_123.apk ile eşleşmeyen tüm APK dosyalarını yeniden adlandır"
+msgstr "paket.adı_123.apk örüntüsüyle eşleşmeyen tüm APK dosyalarını yeniden adlandır"
 
 #: ../fdroidserver/update.py
 msgid "Report on build data status"
@@ -1782,7 +1783,7 @@ msgstr "{configname} içinde bilinmeyen girdi {key}"
 
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Unknown exception found!"
-msgstr "Bilinmeyen özel durum bulundu!"
+msgstr "Bilinmeyen istisna bulundu!"
 
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vname
 #: ../fdroidserver/lint.py
@@ -2399,13 +2400,13 @@ msgstr "seçenek %s: geçersiz seçim: %r (%s içinden seçin)"
 #: /usr/lib/python3.7/getopt.py
 #, python-format
 msgid "option -%s not recognized"
-msgstr "seçenek -%s tanınmıyor"
+msgstr "-%s seçeneği tanınmıyor"
 
 #: /usr/lib/python3.5/getopt.py /usr/lib/python3.6/getopt.py
 #: /usr/lib/python3.7/getopt.py
 #, python-format
 msgid "option -%s requires argument"
-msgstr "şeçenek -%s argüman gerektirir"
+msgstr "-%s seçeneği argüman gerektirir"
 
 #: /usr/lib/python3.5/getopt.py /usr/lib/python3.6/getopt.py
 #: /usr/lib/python3.7/getopt.py
@@ -2423,7 +2424,7 @@ msgstr "--%s seçeneği tekil ön ek değil"
 #: /usr/lib/python3.7/getopt.py
 #, python-format
 msgid "option --%s not recognized"
-msgstr "seçenek --%s tanınmıyor"
+msgstr "--%s seçeneği tanınmıyor"
 
 #: /usr/lib/python3.5/getopt.py /usr/lib/python3.6/getopt.py
 #: /usr/lib/python3.7/getopt.py
@@ -2561,7 +2562,7 @@ msgstr "kullanım: "
 
 #: ../fdroid
 msgid "usage: fdroid [-h|--help|--version] <command> [<args>]"
-msgstr "kullanım: fdroid [-h|--help|--version] <komut>[<argümanlar>]"
+msgstr "kullanım: fdroid [-h|--help|--version] <komut> [<argümanlar>]"
 
 #: ../fdroidserver/deploy.py ../fdroidserver/upload.py
 #, python-brace-format

@@ -2,20 +2,21 @@
 # This file is put in the public domain.
 # THANOS SIOURDAKIS <siourdakisthanos@gmail.com>, 2020.
 # fresh <fresh190@protonmail.com>, 2020, 2021.
+# Michalis <michalisntovas@yahoo.gr>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 2.0a0-62-gc63c4b3d\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2021-01-29 16:12+0100\n"
-"PO-Revision-Date: 2021-01-04 15:47+0000\n"
-"Last-Translator: fresh <fresh190@protonmail.com>\n"
+"PO-Revision-Date: 2021-02-18 17:50+0000\n"
+"Last-Translator: Michalis <michalisntovas@yahoo.gr>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/f-droid/fdroidserver/el/>\n"
 "Language: el\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.4.1-dev\n"
+"X-Generator: Weblate 4.5\n"
 
 #: ../fdroidserver/common.py
 msgid ""
@@ -26,18 +27,28 @@ msgid ""
 "        tools on https://gitlab.com/fdroid.\n"
 "        "
 msgstr ""
+"\n"
+"        Αυτό είναι ένα αποθετήριο εφαρμογών που θα χρησιμοποιηθεί με το FDroid. Οι εφαρμογές\n"
+"        σε αυτό το αποθετήριο είναι είτε επίσημα δυαδικά αρχεία που δημιουργήθηκαν από τους\n"
+"        προγραμματιστές της εφαρμογής ή είναι δυαδικά αρχεία που έχουν δημιουργηθεί από \n"
+"        την πηγή με το f-droid.org χρησιμοποιώντας τα εργαλεία στο https://gitlab.com/fdroid.\n"
+"        "
 
 #: ../fdroidserver/nightly.py
 msgid ""
 "\n"
 "SSH Public Key to be used as Deploy Key:"
 msgstr ""
+"\n"
+"Δημόσιο κλειδί SSH που θα χρησιμοποιηθεί ως κλειδί ανάπτυξης:"
 
 #: ../fdroidserver/nightly.py
 msgid ""
 "\n"
 "SSH public key to be used as deploy key:"
 msgstr ""
+"\n"
+"Δημόσιο κλειδί SSH που θα χρησιμοποιηθεί ως κλειδί ανάπτυξης:"
 
 #: ../fdroidserver/nightly.py
 #, python-brace-format
@@ -45,63 +56,65 @@ msgid ""
 "\n"
 "{path} encoded for the DEBUG_KEYSTORE secret variable:"
 msgstr ""
+"\n"
+"{path} κωδικοποιημένη για τη μυστική μεταβλητή DEBUG_KEYSTORE:"
 
 #: ../fdroidserver/lint.py
 #, python-format
 msgid "\"%s/\" has no matching metadata file!"
-msgstr ""
+msgstr "\"%s/\" δεν έχει αρχείο μετα-δεδομένων που να ταιριάζει!"
 
 #: ../fdroidserver/index.py
 msgid "\"repo_pubkey\" must be present in config.yml when using --nosign!"
-msgstr ""
+msgstr "Το \"repo_pubkey\" πρέπει να υπάρχει στο config.yml όταν χρησιμοποιείτε το --nosign!"
 
 #: ../fdroidserver/install.py
 #, python-brace-format
 msgid "\"{apkfilename}\" is already installed on {dev}."
-msgstr ""
+msgstr "Το \"{apkfilename}\" είναι ήδη εγκατεστημένο στο {dev}."
 
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "\"{path}\" contains outdated {name} ({version})"
-msgstr ""
+msgstr "Το \"{path}\" περιέχει ένα ξεπερασμένο {name} ({version})"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "\"{path}\" contains recent {name} ({version})"
-msgstr ""
+msgstr "Το \"{path}\" περιέχει ένα πρόσφατο {name} ({version})"
 
 #: ../fdroidserver/deploy.py ../fdroidserver/upload.py
 #, python-brace-format
 msgid "\"{path}\" exists but s3cmd is not installed!"
-msgstr ""
+msgstr "Το \"{path}\" υπάρχει, αλλά το s3cmd δεν έχει εγκατασταθεί!"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "\"{path}\" is not a supported file format (use: metadata/*.yml)"
-msgstr ""
+msgstr "Το \"{path}\" δεν είναι υποστηριζόμενη μορφή αρχείου (χρήση: μεταδεδομένα/*.yml)"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "\"{path}\" is not an accepted format, convert to: {formats}"
-msgstr ""
+msgstr "Το \"{path}\" δεν είναι αποδεκτή μορφή, μετατροπή σε: {formats}"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "\"{url}\" is not a valid URL!"
-msgstr ""
+msgstr "Το \"{url}\" δεν είναι έγκυρο URL!"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 #: /usr/lib/python3.7/optparse.py
 #, python-format
 msgid "%(option)s option requires %(number)d argument"
 msgid_plural "%(option)s option requires %(number)d arguments"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Η επιλογή %(option)s απαιτεί %(number)d όρισμα"
+msgstr[1] "Η επιλογή %(option)s απαιτεί %(number)d ορίσματα"
 
 #: ../fdroidserver/mirror.py
 #, python-format
 msgid "%(prog)s [options] url"
-msgstr ""
+msgstr "%(prog)s [επιλογές] url"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py
@@ -112,7 +125,7 @@ msgstr "%(prog)s: σφάλμα: %(message)s\n"
 #: ../fdroidserver/scanner.py
 #, python-format
 msgid "%d problems found"
-msgstr ""
+msgstr "%d προβλήματα εντοπίστηκαν"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 #: /usr/lib/python3.7/optparse.py
@@ -123,34 +136,34 @@ msgstr "%prog [επιλογές]"
 #: /usr/lib/python3.7/argparse.py
 #, python-format
 msgid "%r is not callable"
-msgstr ""
+msgstr "Δεν είναι δυνατή η κλήση του %r"
 
 #: ../fdroidserver/lint.py
 #, python-format
 msgid "%s is not an accepted build field"
-msgstr ""
+msgstr "Το %s δεν είναι αποδεκτό πεδίο δόμησης"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 #: /usr/lib/python3.7/optparse.py
 #, python-format
 msgid "%s option does not take a value"
-msgstr ""
+msgstr "Η επιλογή %s δεν λαμβάνει τιμή"
 
 #: ../fdroidserver/index.py ../fdroidserver/common.py
 msgid "'keypass' not found in config.yml!"
-msgstr ""
+msgstr "Το «keypass» δεν βρέθηκε στο config.yml!"
 
 #: ../fdroidserver/common.py
 msgid "'keystore' is NONE and 'smartcardoptions' is blank!"
-msgstr ""
+msgstr "Το \"keystore\" είναι NONE και το \"smartcardoptions\" είναι κενό!"
 
 #: ../fdroidserver/index.py ../fdroidserver/common.py
 msgid "'keystore' not found in config.yml!"
-msgstr ""
+msgstr "Το 'keystore' δεν βρέθηκε στο config.yml!"
 
 #: ../fdroidserver/index.py ../fdroidserver/common.py
 msgid "'keystorepass' not found in config.yml!"
-msgstr ""
+msgstr "Το 'keystorepass' δεν βρέθηκε στο config.yml!"
 
 #: ../fdroidserver/index.py ../fdroidserver/common.py
 msgid "'repo_keyalias' not found in config.yml!"
@@ -215,7 +228,7 @@ msgstr ""
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py
 msgid ".__call__() not defined"
-msgstr ""
+msgstr ". __call__ () δεν έχει οριστεί"
 
 #: ../fdroidserver/metadata.py
 msgid ".fdroid.txt is not supported!  Convert to .fdroid.yml or .fdroid.json."
@@ -569,7 +582,7 @@ msgstr ""
 
 #: ../fdroidserver/update.py
 msgid "Delete APKs and/or OBBs without metadata from the repo"
-msgstr ""
+msgstr "Διαγραφή APKs και/ή OBBs χωρίς μεταδεδομένα από το αποθετήριο"
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
@@ -672,7 +685,7 @@ msgstr ""
 
 #: ../fdroid
 msgid "Dynamically scan APKs post build"
-msgstr ""
+msgstr "Δυναμική σάρωση APK μετά τη δημιουργία"
 
 #: ../fdroidserver/__main__.py
 msgid "ERROR: The \"server\" subcommand has been removed, use \"deploy\"!"
@@ -1005,7 +1018,7 @@ msgstr ""
 
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Interact with the repo HTTP server"
-msgstr ""
+msgstr "Αλληλεπίδραση με το διακομιστή HTTP του αποθετηρίου"
 
 #: ../fdroidserver/update.py
 msgid "Invalid APK"
@@ -1505,7 +1518,7 @@ msgstr ""
 
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Rewrite all the metadata files"
-msgstr ""
+msgstr "Επανεγγραφή όλων των αρχείων μετα-δεδομένων"
 
 #: ../fdroidserver/rewritemeta.py
 msgid "Rewrite to a specific format: "
@@ -1590,11 +1603,11 @@ msgstr ""
 
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Sign and place packages in the repo"
-msgstr ""
+msgstr "Υπογράψτε και τοποθετήστε τα πακέτα στο αποθετήριο"
 
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Sign indexes created using update --nosign"
-msgstr ""
+msgstr "Υπογραφή ευρετηρίων που δημιουργήθηκαν με τη χρήση update --nosign"
 
 #: ../fdroidserver/build.py
 msgid "Skip scanning the source code for binaries and other problems"
@@ -1880,7 +1893,7 @@ msgstr ""
 
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Update repo information for new packages"
-msgstr ""
+msgstr "Ενημέρωση πληροφοριών αποθετηρίου για νέα πακέτα"
 
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Update the binary transparency log for a URL"
@@ -1888,7 +1901,7 @@ msgstr ""
 
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Update the stats of the repo"
-msgstr ""
+msgstr "Ενημέρωση των στατιστικών του αποθετηρίου"
 
 #: ../fdroidserver/update.py ../fdroidserver/build.py
 msgid "Update the wiki"
@@ -2001,7 +2014,7 @@ msgstr ""
 
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Verify the integrity of downloaded packages"
-msgstr ""
+msgstr "Επαλήθευση της ακεραιότητας των πακέτων που έχουν ληφθεί"
 
 #: ../fdroidserver/index.py
 msgid "Verifying index signature:"
@@ -2014,7 +2027,7 @@ msgstr ""
 
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Warn about possible metadata errors"
-msgstr ""
+msgstr "Προειδοποίηση για πιθανά σφάλματα μετα-δεδομένων"
 
 #: ../fdroidserver/update.py
 msgid "When configured for signed indexes, create only unsigned indexes at this stage"
@@ -2053,13 +2066,13 @@ msgstr ""
 #: /usr/lib/python3.7/argparse.py
 #, python-format
 msgid "ambiguous option: %(option)s could match %(matches)s"
-msgstr ""
+msgstr "Ασαφής επιλογή: %(option)s θα μπορούσε να ταιριάζει με %(matches)s"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 #: /usr/lib/python3.7/optparse.py
 #, python-format
 msgid "ambiguous option: %s (%s?)"
-msgstr ""
+msgstr "ασαφής επιλογή: %s (%s;)"
 
 #: ../fdroidserver/common.py
 msgid "apksigner not found, it's required for signing!"
@@ -2113,7 +2126,7 @@ msgstr ""
 #: /usr/lib/python3.7/argparse.py
 #, python-format
 msgid "can't open '%s': %s"
-msgstr ""
+msgstr "δεν είναι δυνατό το άνοιγμα του '%s': %s"
 
 #: ../fdroidserver/build.py
 #, python-brace-format
@@ -2252,7 +2265,7 @@ msgstr ""
 
 #: ../fdroidserver/metadata.py
 msgid "force errors to be warnings, or ignore"
-msgstr ""
+msgstr "Επιβάλετε τα σφάλματα ως προειδοποιήσεις ή αγνοήστε τα"
 
 #: ../fdroidserver/metadata.py
 msgid "force metadata errors (default) to be warnings, or to be ignored."
@@ -2341,7 +2354,7 @@ msgstr ""
 #: /usr/lib/python3.7/optparse.py
 #, python-format
 msgid "no such option: %s"
-msgstr ""
+msgstr "δεν υπάρχει τέτοια επιλογή: %s"
 
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "no version info found!"
@@ -2396,13 +2409,13 @@ msgstr "η επιλογή -%s απαιτεί επιχείρημα"
 #: /usr/lib/python3.7/getopt.py
 #, python-format
 msgid "option --%s must not have an argument"
-msgstr ""
+msgstr "η επιλογή --%s δεν πρέπει να έχει όρισμα"
 
 #: /usr/lib/python3.5/getopt.py /usr/lib/python3.6/getopt.py
 #: /usr/lib/python3.7/getopt.py
 #, python-format
 msgid "option --%s not a unique prefix"
-msgstr ""
+msgstr "η επιλογή --%s δεν είναι ένα μοναδικό πρόθεμα"
 
 #: /usr/lib/python3.5/getopt.py /usr/lib/python3.6/getopt.py
 #: /usr/lib/python3.7/getopt.py
@@ -2414,7 +2427,7 @@ msgstr "η επιλογή --%s δεν αναγνωρίζεται"
 #: /usr/lib/python3.7/getopt.py
 #, python-format
 msgid "option --%s requires argument"
-msgstr ""
+msgstr "η επιλογή --%s απαιτεί όρισμα"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py
@@ -2514,7 +2527,7 @@ msgstr ""
 #: /usr/lib/python3.7/argparse.py
 #, python-format
 msgid "the following arguments are required: %s"
-msgstr ""
+msgstr "Απαιτούνται τα ακόλουθα ορίσματα: %s"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py
@@ -2532,12 +2545,12 @@ msgstr "άγνωστος συντακτικός αναλυτής %(parser_name)r
 #: /usr/lib/python3.7/argparse.py
 #, python-format
 msgid "unrecognized arguments: %s"
-msgstr ""
+msgstr "μη αναγνωρίσιμα ορίσματα: %s"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "unsafe permissions on '{config_file}' (should be 0600)!"
-msgstr ""
+msgstr "μη ασφαλή δικαιώματα στο '{config_file}' (πρέπει να είναι 0600)!"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py ../fdroid
 #: /usr/lib/python3.7/argparse.py ../fdroidserver/__main__.py
@@ -2546,7 +2559,7 @@ msgstr "χρήση: "
 
 #: ../fdroid
 msgid "usage: fdroid [-h|--help|--version] <command> [<args>]"
-msgstr ""
+msgstr "χρήση: fdroid [-h|--help|--version] <command> [<args>]"
 
 #: ../fdroidserver/deploy.py ../fdroidserver/upload.py
 #, python-brace-format

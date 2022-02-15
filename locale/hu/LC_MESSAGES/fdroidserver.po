@@ -1,21 +1,21 @@
 # SOME DESCRIPTIVE TITLE.
 # This file is put in the public domain.
-# Balázs Meskó <meskobalazs@mailbox.org>, 2020.
+# Balázs Meskó <meskobalazs@mailbox.org>, 2020, 2021.
 # Hans-Christoph Steiner <hans@guardianproject.info>, 2020, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 1.0.6-70-g54bc858\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2021-01-29 16:12+0100\n"
-"PO-Revision-Date: 2021-01-14 14:58+0000\n"
-"Last-Translator: Hans-Christoph Steiner <hans@guardianproject.info>\n"
+"PO-Revision-Date: 2021-07-05 17:03+0000\n"
+"Last-Translator: Balázs Meskó <meskobalazs@mailbox.org>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/f-droid/fdroidserver/hu/>\n"
 "Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.5-dev\n"
+"X-Generator: Weblate 4.8-dev\n"
 
 #: ../fdroidserver/common.py
 msgid ""
@@ -26,6 +26,12 @@ msgid ""
 "        tools on https://gitlab.com/fdroid.\n"
 "        "
 msgstr ""
+"\n"
+"        Ez egy F-Droiddal használható alkalmazástároló. Az ebben a tárolóban\n"
+"        lévő alkalmazások az eredeti fejlesztők hivatalos binárisai, vagy forrásból\n"
+"        készültek az f-droid.org által, az itt található eszközök segítségével:\n"
+"        https://gitlab.com/fdroid.\n"
+"        "
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -36,7 +42,6 @@ msgstr ""
 "A telepítési kulcsként használandó nyilvános SSH-kulcs:"
 
 #: ../fdroidserver/nightly.py
-#, fuzzy
 msgid ""
 "\n"
 "SSH public key to be used as deploy key:"
@@ -60,10 +65,10 @@ msgstr "A(z) „%s/” nem rendelkezik megfelelő metaadatfájllal."
 
 #: ../fdroidserver/index.py
 msgid "\"repo_pubkey\" must be present in config.yml when using --nosign!"
-msgstr ""
+msgstr "A „repo_pubkey” megadása kötelező a config.yml-ben, ha a --nosign kapcsolót használja!"
 
 #: ../fdroidserver/install.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "\"{apkfilename}\" is already installed on {dev}."
 msgstr "A(z) „{apkfilename}” már telepítve van ezen: {dev}."
 
@@ -95,15 +100,15 @@ msgstr "A(z) „{path}” nem egy elfogadott formátum, alakítsa át erre: {for
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "\"{url}\" is not a valid URL!"
-msgstr ""
+msgstr "A(z) „{url}” nem érvényes URL!"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 #: /usr/lib/python3.7/optparse.py
 #, python-format
 msgid "%(option)s option requires %(number)d argument"
 msgid_plural "%(option)s option requires %(number)d arguments"
-msgstr[0] "a(z) %(option)s kapcsoló %(number)d argumentumot igényel"
-msgstr[1] "a(z) %(option)s kapcsoló %(number)d argumentumot igényel"
+msgstr[0] "A(z) %(option)s kapcsoló %(number)d argumentumot igényel"
+msgstr[1] "A(z) %(option)s kapcsoló %(number)d argumentumot igényel"
 
 #: ../fdroidserver/mirror.py
 #, python-format
@@ -130,7 +135,7 @@ msgstr "%prog [kapcsolók]"
 #: /usr/lib/python3.7/argparse.py
 #, python-format
 msgid "%r is not callable"
-msgstr "a(z) %r nem hívható"
+msgstr "A(z) %r nem hívható"
 
 #: ../fdroidserver/lint.py
 #, python-format
@@ -149,7 +154,7 @@ msgstr "A „keypass” nem található a config.yml fájlban."
 
 #: ../fdroidserver/common.py
 msgid "'keystore' is NONE and 'smartcardoptions' is blank!"
-msgstr ""
+msgstr "A „keystore” értéke NONE és a „smartcardoptions” üres."
 
 #: ../fdroidserver/index.py ../fdroidserver/common.py
 msgid "'keystore' not found in config.yml!"
@@ -166,14 +171,13 @@ msgstr "A „repo_keyalias” nem található a config.yml fájlban."
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py
 msgid "'required' is an invalid argument for positionals"
-msgstr ""
+msgstr "A „required” argumentum érvénytelen argumentum pozicionális paraméterek esetén"
 
 #: ../fdroidserver/common.py
 msgid "'sdk_path' not set in 'config.yml'!"
 msgstr "Az „sdk_path” nincs megadva a „config.yml” fájlban."
 
 #: ../fdroidserver/common.py
-#, fuzzy
 msgid "'sdk_path' not set in config.yml!"
 msgstr "Az „sdk_path” nincs megadva a „config.yml” fájlban."
 
@@ -198,7 +202,7 @@ msgstr "A(z) „{apkfilename}” már telepítve van ezen: {dev}."
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "'{field}' in {linedesc} is obsolete, see docs for current fields:"
-msgstr ""
+msgstr "A(z) „{field}” elavult itt: {linedesc}, a jelenlegi mezőkhöz lásd a dokumentációt:"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -208,7 +212,7 @@ msgstr "A(z) „{field}” véletlenszerű sorrendben lesz. Használjon () vagy 
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "'{path}' failed to execute!"
-msgstr "A(z) „{path}” végrehajtása meghiúsult."
+msgstr "A(z) „{path}” végrehajtása sikertelen."
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
@@ -256,64 +260,64 @@ msgstr "Metaadatfájl-vázak hozzáadása azon APK-khoz, melyeknél hiányoznak"
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Adding new repo for only {name}"
-msgstr ""
+msgstr "Új tároló hozzáadása csak a következő miatt: {name}"
 
 #: ../fdroidserver/init.py
 msgid "Alias of the repo signing key in the keystore"
-msgstr ""
+msgstr "A tároló aláírókulcsának álneve a kulcstárolóban"
 
 #: ../fdroidserver/import.py
 msgid "Allows a different revision (or git branch) to be specified for the initial import"
-msgstr ""
+msgstr "Lehetővé teszi, hogy különböző verziót (vagy git ágat) adjon meg a kezdeti importáláshoz"
 
 #: ../fdroidserver/mirror.py
 msgid "Also mirror the full archive section"
-msgstr ""
+msgstr "Letükrözi a teljes archívum szakaszt is"
 
 #: ../fdroidserver/lint.py
 msgid "Also warn about formatting issues, like rewritemeta -l"
-msgstr ""
+msgstr "Figyelmeztet a formázási problémákra is, mint a „rewritemeta -l”"
 
 #: ../fdroidserver/scanner.py
 msgid "Android AAR library"
-msgstr ""
+msgstr "Android AAR programkönyvtár"
 
 #: ../fdroidserver/scanner.py
 msgid "Android APK file"
-msgstr ""
+msgstr "Android APK-fájl"
 
 #: ../fdroidserver/scanner.py
 msgid "Android DEX code"
-msgstr ""
+msgstr "Android DEX kód"
 
 #: ../fdroidserver/common.py ../fdroidserver/build.py
 #, python-brace-format
 msgid "Android SDK '{path}' does not have '{dirname}' installed!"
-msgstr ""
+msgstr "A(z) „{dirname}” nincs telepítve a(z) „{path}” Android SDK elérési úton."
 
 #: ../fdroidserver/init.py
 #, python-brace-format
 msgid "Android SDK not found at {path}!"
-msgstr ""
+msgstr "Az Android SDK nem található itt: {path}!"
 
 #: ../fdroidserver/common.py
 msgid "Android SDK not found!"
-msgstr ""
+msgstr "Az Android SDK nem található."
 
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Android SDK path '{path}' does not exist!"
-msgstr ""
+msgstr "A(z) „{path}” Android SDK elérési út nem található."
 
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Android SDK path '{path}' is not a directory!"
-msgstr ""
+msgstr "A(z) „{path}” Android SDK elérési út nem könyvtár."
 
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Android SDK tool {cmd} found!"
-msgstr ""
+msgstr "A(z) „{cmd}” Android SDK eszköz megtalálva."
 
 #. Translators: "build-tools" is the file name of a package from
 #. Google, it is part of the Android SDK. So it probably shouldn't be
@@ -321,45 +325,45 @@ msgstr ""
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Android build-tools path '{path}' does not exist!"
-msgstr ""
+msgstr "A(z) „{path}” Android build-tools elérési út nem létezik."
 
 #: ../fdroidserver/update.py
 msgid "AndroidManifest.xml has no date"
-msgstr ""
+msgstr "Az AndroidManifest.xml fájlnak nincs dátuma"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "App is in '{repo}' but has a link to {url}"
-msgstr ""
+msgstr "Az alkalmazás a(z) „{repo}” tárolóban található, de erre hivatkozik: {url}"
 
 #: ../fdroidserver/lint.py
 msgid "Appending .git is not necessary"
-msgstr ""
+msgstr "A .git hozzáfűzése nem szükséges"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Archiving {apkfilename} with invalid signature!"
-msgstr ""
+msgstr "Az érvénytelen aláírású {apkfilename} archiválása."
 
 #: ../fdroidserver/mirror.py
 msgid "Base URL to mirror, can include the index signing key using the query string: ?fingerprint="
-msgstr ""
+msgstr "A tükrözendő alap URL, tartalmazhatja az index aláírókulcsát a lekérdezésben: ?fingerprint="
 
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vname
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "Branch '{branch}' used as commit in build '{versionName}'"
-msgstr ""
+msgstr "A(z) „{branch}” ág véglegesítésként használva a(z) „{versionName}” összeállításnál"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "Branch '{branch}' used as commit in srclib '{srclib}'"
-msgstr ""
+msgstr "A(z) „{branch}” ág véglegesítésként használva a(z) „{srclib}” srclibnél"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Broken symlink: {path}"
-msgstr ""
+msgstr "Törött szimbolikus link: {path}"
 
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Build a package from source"
@@ -367,69 +371,69 @@ msgstr "Csomag összeállítása forrásból"
 
 #: ../fdroidserver/build.py
 msgid "Build all applications available"
-msgstr ""
+msgstr "Az összes elérhető alkalmazás összeállítása"
 
 #: ../fdroidserver/lint.py
 msgid "Build generated by `fdroid import` - remove disable line once ready"
-msgstr ""
+msgstr "Az összeállítást az „fdroid import” állította elő – törölje a letiltási sort, ha végzett"
 
 #: ../fdroidserver/checkupdates.py
 msgid "Build metadata git repo has uncommited changes!"
-msgstr ""
+msgstr "A metaadatok git tárolójában nem véglegesített változások találhatók!"
 
 #: ../fdroidserver/build.py
 msgid "Build only the latest version of each package"
-msgstr ""
+msgstr "Csak a csomagok legújabb verziójának összeállítása"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Build should have comma-separated versionName and versionCode, not \"{value}\", in {linedesc}"
-msgstr ""
+msgstr "Az összeállításnál vesszővel elválasztva kell megadni a versionName és versionCode paramétereket, nem így: „{value}”, itt: {linedesc}"
 
 #: ../fdroidserver/init.py
 #, python-format
 msgid "Built repo based in \"%s\" with this config:"
-msgstr ""
+msgstr "A tároló összeállítva itt: „%s”, ezzel a konfigurációval:"
 
 #: ../fdroidserver/build.py
 msgid "Can't build due to {} error while scanning"
 msgid_plural "Can't build due to {} errors while scanning"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Nem lehet összeállítani, mert {} hiba történt az átvizsgáláskor"
+msgstr[1] "Nem lehet összeállítani, mert {} hiba történt az átvizsgáláskor"
 
 #: ../fdroidserver/vmtools.py
 #, python-brace-format
 msgid "Cannot read \"{path}\"!"
-msgstr ""
+msgstr "A(z) „{path}” nem olvasható!"
 
 #. Translators: https://developer.android.com/studio/build/application-id
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Cannot resolve application ID {appid}"
-msgstr ""
+msgstr "A(z) {appid} alkalmazásazonosító nem oldható fel"
 
 #: ../fdroidserver/rewritemeta.py
 #, python-brace-format
 msgid "Cannot rewrite \"{path}\""
-msgstr ""
+msgstr "A(z) „{path}” nem írható újra"
 
 #: ../fdroidserver/rewritemeta.py
 msgid "Cannot use --list and --to at the same time"
-msgstr ""
+msgstr "A --list és a --to kapcsoló egyszerre nem használható"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Cannot write \"{path}\", not an accepted format, use: {formats}"
-msgstr ""
+msgstr "A(z) „{path}” nem írható, nem elfogadott formátumú, használja ezt: {formats}"
 
 #: ../fdroidserver/lint.py
 #, python-format
 msgid "Categories '%s' is not valid"
-msgstr ""
+msgstr "A(z) „%s” kategória érvénytelen"
 
 #: ../fdroidserver/lint.py
 msgid "Categories are not set"
-msgstr ""
+msgstr "A kategóriák nincsenek megadva"
 
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Check for updates to applications"
@@ -438,20 +442,20 @@ msgstr "Alkalmazásfrissítések keresése"
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Checking archiving for {appid} - APKs:{integer}, keepversions:{keep}, archapks:{arch}"
-msgstr ""
+msgstr "Archiválás ellenőrzése ennél: {appid} – APKs:{integer}, keepversions:{keep}, archapks:{arch}"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Checking archiving for {appid} - apks:{integer}, keepversions:{keep}, archapks:{arch}"
-msgstr ""
+msgstr "Archiválás ellenőrzése ennél: {appid} – apks:{integer}, keepversions:{keep}, archapks:{arch}"
 
 #: ../fdroidserver/update.py
 msgid "Clean update - don't uses caches, reprocess all APKs"
-msgstr ""
+msgstr "Tiszta frissítés – nem használ gyorsítótárat, minden APK-k újra feldolgoz"
 
 #: ../fdroidserver/import.py
 msgid "Comma separated list of categories."
-msgstr ""
+msgstr "Kategóriák vesszőkkel elválasztott listája."
 
 #: ../fdroid ../fdroidserver/__main__.py
 #, c-format, python-format
@@ -460,71 +464,71 @@ msgstr "A(z) „%s” nem ismerhető fel.\n"
 
 #: ../fdroidserver/checkupdates.py
 msgid "Commit changes"
-msgstr ""
+msgstr "Változások véglegesítése"
 
 #: ../fdroidserver/__main__.py
 msgid "Conflicting arguments: '--verbose' and '--quiet' can not be specified at the same time."
-msgstr ""
+msgstr "Ütköző argumentumok: a „--verbose” és a „--quite” kapcsolók együtt nem adhatók meg."
 
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Conflicting config files! Using {newfile}, ignoring {oldfile}!"
-msgstr ""
+msgstr "Ütköző konfigurációs fájlok! {newfile} használata, {oldfile} mellőzése."
 
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Could not find '{command}' on your system"
-msgstr ""
+msgstr "A(z) „{command}” nem található a rendszeren"
 
 #: ../fdroidserver/import.py
 msgid "Could not find latest version code"
-msgstr ""
+msgstr "A legfrissebb verzió kódja nem található"
 
 #: ../fdroidserver/import.py
 msgid "Could not find latest version name"
-msgstr ""
+msgstr "A legfrissebb verzió neve nem található"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Could not find {path} to remove it"
-msgstr ""
+msgstr "A(z) {path} eltávolítandó fájl nem található"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Could not open APK {path} for analysis: "
-msgstr ""
+msgstr "A(z) {path} APK nem nyitható meg az elemzéshez: "
 
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Could not parse size \"{size}\", wrong type \"{type}\""
-msgstr ""
+msgstr "A(z) „{size}” méret nem dolgozható fel, hibás „{type}” típus"
 
 #. Translators: https://developer.android.com/studio/build/application-id
 #: ../fdroidserver/import.py
 msgid "Couldn't find Application ID"
-msgstr ""
+msgstr "Az alkalmazásazonosító nem található"
 
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
 #: ../fdroidserver/import.py
 msgid "Couldn't find latest version code"
-msgstr ""
+msgstr "A legfrissebb verzió kódja nem található"
 
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vname
 #: ../fdroidserver/import.py
 msgid "Couldn't find latest version name"
-msgstr ""
+msgstr "A legfrissebb verzió neve nem található"
 
 #: ../fdroidserver/import.py
 msgid "Couldn't find package ID"
-msgstr ""
+msgstr "A csomagazonosító nem található"
 
 #: ../fdroidserver/update.py
 msgid "Cowardily refusing to overwrite existing signing key setup!"
-msgstr ""
+msgstr "A meglévő aláírókulcs-beállítás felülírása megtagadva."
 
 #: ../fdroidserver/update.py
 msgid "Create a repo signing key in a keystore"
-msgstr ""
+msgstr "Tároló-aláírókulcs létrehozása a kulcstárban"
 
 #: ../fdroidserver/update.py
 msgid "Create skeleton metadata files that are missing"
@@ -533,150 +537,150 @@ msgstr "Hiányzó metaadatfájl-vázak létrehozása"
 #: ../fdroidserver/deploy.py ../fdroidserver/upload.py
 #, python-brace-format
 msgid "Created new container \"{name}\""
-msgstr ""
+msgstr "Új „{name}” konténer létrehozva"
 
 #: ../fdroidserver/deploy.py ../fdroidserver/upload.py
 #, python-brace-format
 msgid "Creating \"{path}\" for configuring s3cmd."
-msgstr ""
+msgstr "„{path}” létrehozása a s3cmd beállításához."
 
 #: ../fdroidserver/publish.py
 msgid "Creating log directory"
-msgstr ""
+msgstr "Naplókönyvtár létrehozása"
 
 #: ../fdroidserver/deploy.py ../fdroidserver/upload.py
 #, python-brace-format
 msgid "Creating new S3 bucket: {url}"
-msgstr ""
+msgstr "Új S3 vödör létrehozása: {url}"
 
 #: ../fdroidserver/publish.py
 msgid "Creating output directory"
-msgstr ""
+msgstr "Kimeneti könyvtár létrehozása"
 
 #: ../fdroidserver/index.py
 msgid "Creating signed index with this key (SHA256):"
-msgstr ""
+msgstr "Aláírt index létrehozása ezzel a kulccsal (SHA256):"
 
 #: ../fdroidserver/import.py ../fdroidserver/verify.py
 #: ../fdroidserver/publish.py
 msgid "Creating temporary directory"
-msgstr ""
+msgstr "Ideiglenes könyvtár létrehozása"
 
 #: ../fdroidserver/index.py
 msgid "Creating unsigned index in preparation for signing"
-msgstr ""
+msgstr "Nem aláírt index létrehozása az aláírás előkészítéséhez"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "CurrentVersionCode {cv} is less than oldest build entry {versionCode}"
-msgstr ""
+msgstr "A CurrentVersionCode ({cv}) kisebb, mint a legrégebbi összeállítási bejegyzés: {versionCode}"
 
 #: ../fdroidserver/nightly.py
 msgid "DEBUG_KEYSTORE is not set or the value is incomplete"
-msgstr ""
+msgstr "A DEBUG_KEYSTORE nincs beállítva, vagy az értéke nem teljes"
 
 #: ../fdroidserver/update.py
 msgid "Delete APKs and/or OBBs without metadata from the repo"
-msgstr "Minden metaadat nélküli APK és OBB fájl törlése a tárolóból"
+msgstr "Minden metaadat nélküli APK- és OBB-fájl törlése a tárolóból"
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "Deleting archive, repo is too big ({size} max {limit})"
-msgstr ""
+msgstr "Archívum törlése, a tároló túl nagy ({size}, korlát: {limit})"
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "Deleting git-mirror history, repo is too big ({size} max {limit})"
-msgstr ""
+msgstr "A git-mirror előzményeinek törlése, a tároló túl nagy ({size}, korlát: {limit})"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Deleting unknown file: {path}"
-msgstr ""
+msgstr "Ismeretlen fájl törlése: {path}"
 
 #: ../fdroidserver/lint.py
 #, python-format
 msgid "Description '%s' is just the app's summary"
-msgstr ""
+msgstr "A(z) „%s” leírás csak az alkalmazás összegzése"
 
 #: ../fdroidserver/lint.py
 msgid "Description has a duplicate line"
-msgstr ""
+msgstr "A leírás ismételt sorokat tartalmaz"
 
 #: ../fdroidserver/lint.py
 #, python-format
 msgid "Description has a list (%s) but it isn't bulleted (*) nor numbered (#)"
-msgstr ""
+msgstr "A leírás listát (%s) tartalmaz, de nem pontozott (*) vagy számozott (#)"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "Description of length {length} is over the {limit} char limit"
-msgstr ""
+msgstr "A leírás {length} karakteres hossza több, mint a {limit} karakteres korlát"
 
 #: ../fdroidserver/import.py
 msgid "Do not add 'disable:' to the generated build entries"
-msgstr ""
+msgstr "Ne adja a hozzá a „disable:” szöveget az előállított összeállítási elemekhez"
 
 #: ../fdroidserver/nightly.py
 msgid "Do not deploy the new files to the repo"
-msgstr ""
+msgstr "Ne telepítse az új fájlokat a tárolóba"
 
 #: ../fdroidserver/mirror.py
 #, python-brace-format
 msgid "Do not include \"{path}\" in URL!"
-msgstr ""
+msgstr "Ne adja hozzá a(z) „{path}” elérési utat az URL-hez."
 
 #: ../fdroidserver/init.py
 msgid "Do not prompt for Android SDK path, just fail"
-msgstr ""
+msgstr "Ne kérdezze meg az Android SDK elérési utat, csak álljon le sikertelenül"
 
 #: ../fdroidserver/nightly.py
 msgid "Do not remove the private keys generated from the keystore"
-msgstr ""
+msgstr "Ne távolítsa el a kulcstárolóból előállított privát kulcsokat"
 
 #: ../fdroidserver/build.py
 msgid "Don't create a source tarball, useful when testing a build"
-msgstr ""
+msgstr "Ne hozzon létre forráscsomagot, ez egy összeállítás tesztelésekor hasznos"
 
 #: ../fdroidserver/stats.py
 msgid "Don't do anything logs-related"
-msgstr ""
+msgstr "Ne tegyen semmilyen naplózással kapcsolatos dolgot"
 
 #: ../fdroidserver/build.py
 msgid "Don't refresh the repository, useful when testing a build with no internet connection"
-msgstr ""
+msgstr "Ne frissítse a tárolót, hasznos ha internetkapcsolat nélkül tesztel egy összeállítást"
 
 #: ../fdroidserver/deploy.py ../fdroidserver/nightly.py
 #: ../fdroidserver/upload.py
 msgid "Don't use rsync checksums"
-msgstr ""
+msgstr "Ne használja az rsync ellenőrzőösszegeit"
 
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Download complete mirrors of small repos"
-msgstr ""
+msgstr "Kis tárolók teljes tükrének letöltése"
 
 #: ../fdroidserver/stats.py
 msgid "Download logs we don't have"
-msgstr ""
+msgstr "Helyben nem meglévő naplók letöltése"
 
 #: ../fdroidserver/common.py
 msgid "Downloading the repository already failed once, not trying again."
-msgstr ""
+msgstr "A tároló letöltése már egyszer sikertelen volt, nem próbálja meg újra."
 
 #: ../fdroidserver/verify.py
 #, python-brace-format
 msgid "Downloading {url} failed. {error}"
-msgstr ""
+msgstr "A(z) {url} letöltése sikertelen. {error}"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Duplicate build recipe found for versionCode {versionCode} in {linedesc}"
-msgstr ""
+msgstr "Ismételt összeállítási recept található a(z) {versionCode} verziókódhoz itt: {linedesc}"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "Duplicate link in '{field}': {url}"
-msgstr ""
+msgstr "Ismételt hivatkozás a(z) „{field}” mezőben: {url}"
 
 #: ../fdroid
 msgid "Dynamically scan APKs post build"
@@ -684,27 +688,29 @@ msgstr "APK-k dinamikus átvizsgálása összeállítás után"
 
 #: ../fdroidserver/__main__.py
 msgid "ERROR: The \"server\" subcommand has been removed, use \"deploy\"!"
-msgstr ""
+msgstr "HIBA: A „server” alparancs eltávolításra került, használja ezt: „deploy”!"
 
 #: ../fdroidserver/mirror.py
 msgid ""
 "ERROR: this command should never be used to mirror f-droid.org!\n"
 "A full mirror of f-droid.org requires more than 200GB."
 msgstr ""
+"HIBA: a parancsot sose használja az f-droid.org tükrözéséhez.\n"
+"Az f-droid.org teljes tükrözéséhez több mint 200 GB tárhely szükséges."
 
 #: ../fdroidserver/nightly.py
 msgid "ERROR: unsupported CI type, patches welcome!"
-msgstr ""
+msgstr "HIBA: nem támogatott CI típus, foltokat szívesen fogadunk."
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Empty build flag at {linedesc}"
-msgstr ""
+msgstr "Hibás összeállítási kapcsoló itt: {linedesc}"
 
 #: ../fdroidserver/__main__.py
 #, python-brace-format
 msgid "Encoding is set to '{enc}' fdroid might run into encoding issues. Please set it to 'UTF-8' for best results."
-msgstr ""
+msgstr "A karakterkódolás beállítása „{enc}”, az fdroid kódolási problémákba futhat. A legjobb eredmény érdekében használjon „UTF-8” kódolást."
 
 #: ../fdroidserver/init.py
 #, python-format
@@ -712,280 +718,282 @@ msgid ""
 "Enter the path to the Android SDK (%s) here:\n"
 "> "
 msgstr ""
+"Adja meg az Android SDK (%s) elérési útját itt:\n"
+"> "
 
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Environment variable {var} from {configname} is not set!"
-msgstr ""
+msgstr "A(z) {configname} konfigurációból származó {var} környezeti változó nincs beállítva."
 
 #: ../fdroidserver/deploy.py ../fdroidserver/checkupdates.py
 #: ../fdroidserver/upload.py
 #, python-format
 msgid "Error while attempting to publish log: %s"
-msgstr ""
+msgstr "Hiba történt a napló közzétételekor: %s"
 
 #: ../fdroidserver/import.py ../fdroidserver/common.py
 msgid "Error while getting repo address"
-msgstr ""
+msgstr "Hiba történt a tároló címének lekérésekor"
 
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Extract signatures from APKs"
-msgstr ""
+msgstr "Aláírások kinyerése az APK-kból"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Failed copying {path}: {error}"
-msgstr ""
+msgstr "A(z) {path} másolása sikertelen: {error}"
 
 #: ../fdroidserver/signatures.py
 #, python-brace-format
 msgid "Failed fetching signatures for '{apkfilename}': {error}"
-msgstr ""
+msgstr "A(z) „{apkfilename}” aláírásainak összegyűjtése sikertelen: {error}"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Failed reading {path}: {error}"
-msgstr ""
+msgstr "A(z) {path} olvasása sikertelen: {error}"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Failed resizing {path}: {error}"
-msgstr ""
+msgstr "A(z) {path} átméretezése sikertelen: {error}"
 
 #: ../fdroidserver/publish.py
 msgid "Failed to align application"
-msgstr ""
+msgstr "Az alkalmazás igazítása sikertelen"
 
 #: ../fdroidserver/deploy.py ../fdroidserver/upload.py
 #, python-brace-format
 msgid "Failed to create S3 bucket: {url}"
-msgstr ""
+msgstr "Az S3 vödör létrehozása sikertelen: {url}"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Failed to get APK information, deleting {path}"
-msgstr ""
+msgstr "Az APK információk lekérése sikertelen, a(z) {path} törlése"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Failed to get APK information, skipping {path}"
-msgstr ""
+msgstr "Az APK információk lekérése sikertelen, a(z) {path} kihagyása"
 
 #: ../fdroidserver/common.py
 msgid "Failed to get APK manifest information"
-msgstr ""
+msgstr "Az APK leíró információk lekérése sikertelen"
 
 #: ../fdroidserver/install.py
 #, python-brace-format
 msgid "Failed to install '{apkfilename}' on {dev}: {error}"
-msgstr ""
+msgstr "A(z) „{apkfilename}” telepítése a(z) {dev} eszközön sikertelen: {error}"
 
 #: ../fdroidserver/publish.py ../fdroidserver/common.py
 msgid "Failed to sign application"
-msgstr ""
+msgstr "Az alkalmazás aláírása sikertelen"
 
 #: ../fdroidserver/common.py
 msgid "Failed to zipalign application"
-msgstr ""
+msgstr "Az alkalmazás elrendezése a ZIP-fájlban sikertelen"
 
 #: ../fdroidserver/build.py
 #, python-brace-format
 msgid "Fetched buildserverid from VM: {buildserverid}"
-msgstr ""
+msgstr "A virtuális géptől lekért buildserverid: {buildserverid}"
 
 #: ../fdroidserver/signatures.py
 #, python-brace-format
 msgid "Fetched signatures for '{apkfilename}' -> '{sigdir}'"
-msgstr ""
+msgstr "A(z) „{apkfilename}” APK aláírásai lekérve -> „{sigdir}”"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "File disappeared while processing it: {path}"
-msgstr ""
+msgstr "A fájl feldolgozás közben eltűnt: {path}"
 
 #: ../fdroidserver/verify.py ../fdroidserver/stats.py ../fdroidserver/update.py
 #: ../fdroidserver/rewritemeta.py ../fdroidserver/build.py
 #: ../fdroidserver/checkupdates.py ../fdroidserver/scanner.py
 #: ../fdroidserver/install.py
 msgid "Finished"
-msgstr ""
+msgstr "Befejezve"
 
 #: ../fdroidserver/lint.py
 msgid "Flattr donation methods belong in the FlattrID flag"
-msgstr ""
+msgstr "A Flattr adományozási módok a FlattrID jelzőbe tartoznak"
 
 #: ../fdroidserver/lint.py
 msgid "Flattr donation methods belong in the FlattrID: field"
-msgstr ""
+msgstr "A Flattr adományozási módok a FlattrID: mezőbe tartoznak"
 
 #: ../fdroidserver/lint.py
 msgid "Forbidden HTML tags"
-msgstr ""
+msgstr "Tiltott HTML címkék"
 
 #: ../fdroidserver/build.py
 msgid "Force build of disabled apps, and carries on regardless of scan problems. Only allowed in test mode."
-msgstr ""
+msgstr "Letiltott alkalmazások összeállításának kényszerítése, és folytatás az átvizsgálási problémáktól függetlenül. Csak teszt módban engedélyezett."
 
 #: ../fdroidserver/build.py
 #, python-brace-format
 msgid "Force halting build after {0} sec timeout!"
-msgstr ""
+msgstr "Összeállítás kényszerített leállítása {0} másodperces időtúllépés után."
 
 #: ../fdroidserver/scanner.py
 msgid "Force scan of disabled apps and builds."
-msgstr ""
+msgstr "Letiltott alkalmazások és összeállítások átvizsgálásának kényszerítése."
 
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Found \"{path}\" graphic without metadata for app \"{name}\"!"
-msgstr ""
+msgstr "Metaadatok nélküli „{path}” grafika található a(z) „{name}” alkalmazásnál."
 
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Found bad funding file \"{path}\" for \"{name}\":"
-msgstr ""
+msgstr "Hibás „{path}” finanszírozási fájl található a(z) „{name}” alkalmazásnál:"
 
 #: ../fdroidserver/common.py ../fdroidserver/metadata.py
 msgid "Found invalid appids in arguments"
-msgstr ""
+msgstr "Érvénytelen alkalmazásazonosítók találhatók az argumentumokban"
 
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
 #: ../fdroidserver/common.py
 msgid "Found invalid versionCodes for some apps"
-msgstr ""
+msgstr "Egyes alkalmazásoknál érvénytelen versionCode paraméterek találhatók"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Found multiple JAR Signature Block Files in {path}"
-msgstr ""
+msgstr "Több JAR aláírásblokkfájl található itt: {path}"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Found multiple metadata files for {appid}"
-msgstr ""
+msgstr "Több metaadatfájl található ennél: {appid}"
 
 #: ../fdroidserver/index.py
 msgid "Found multiple signing certificates for repository."
-msgstr ""
+msgstr "Több aláíró-tanúsítvány található a tárolóhoz."
 
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Found multiple signing certificates in {path}"
-msgstr ""
+msgstr "Több aláíró-tanúsítvány található itt: {path}"
 
 #: ../fdroidserver/index.py
 msgid "Found no signing certificates for repository."
-msgstr ""
+msgstr "Nem található aláíró-tanúsítvány a tárolóhoz."
 
 #: ../fdroidserver/lint.py
 #, python-format
 msgid "Found non-file at %s"
-msgstr ""
+msgstr "Nem fájl található itt: %s"
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "Found {apkfilename} at {url}"
-msgstr ""
+msgstr "{apkfilename} található itt: {url}"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Generated skeleton metadata for {appid}"
-msgstr ""
+msgstr "Metaadatváz előállítva ehhez: {appid}"
 
 #: ../fdroidserver/common.py
 #, python-format
 msgid "Git checkout of '%s' failed"
-msgstr ""
+msgstr "A(z) „%s” git ágra váltás sikertelen"
 
 #: ../fdroidserver/common.py
 msgid "Git clean failed"
-msgstr ""
+msgstr "A git tisztítás sikertelen"
 
 #: ../fdroidserver/common.py
 msgid "Git fetch failed"
-msgstr ""
+msgstr "A git lekérés sikertelen"
 
 #: ../fdroidserver/common.py
 msgid "Git remote set-head failed"
-msgstr ""
+msgstr "A git távoli fej beállítás sikertelen"
 
 #: ../fdroidserver/common.py
 #, python-format
 msgid "Git remote set-head failed: \"%s\""
-msgstr ""
+msgstr "A git távoli fej beállítás sikertelen: „%s”"
 
 #: ../fdroidserver/common.py
 msgid "Git reset failed"
-msgstr ""
+msgstr "A git helyreállítás sikertelen"
 
 #: ../fdroidserver/common.py
 msgid "Git submodule sync failed"
-msgstr ""
+msgstr "A git almodul szinkronizációs sikertelen"
 
 #: ../fdroidserver/common.py
 msgid "Git submodule update failed"
-msgstr ""
+msgstr "A git almodul frissítése sikertelen"
 
 #: ../fdroidserver/common.py
 msgid "HTTPS must be used with Subversion URLs!"
-msgstr ""
+msgstr "HTTPS-t kell használni a Subversion URL-ekhez."
 
 #: ../fdroidserver/deploy.py
 msgid "If a git mirror gets to big, allow the archive to be deleted"
-msgstr ""
+msgstr "Ha egy tükör túl naggyá válik, akkor engedélyezze az archívum törlését"
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "If this upload fails, try manually uploading to {url}"
-msgstr ""
+msgstr "Ha a feltöltés sikertelen, próbálja meg kézzel feltölteni ide: {url}"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Ignoring '{field}' in '{metapath}' metadata because it is deprecated."
-msgstr ""
+msgstr "A(z) „{field}” mellőzése a(z) „{metapath}” metaadatokban, mert elavult."
 
 #: ../fdroidserver/update.py
 #, python-format
 msgid "Ignoring FUNDING.yml entry longer than 2048: %s"
-msgstr ""
+msgstr "A 2048-nál hosszabb FUNDING.yml bejegyzés figyelmen kívül hagyása: %s"
 
 #: ../fdroidserver/index.py
 msgid "Ignoring package without metadata: "
-msgstr ""
+msgstr "A metaadatok nélküli csomag figyelmen kívül hagyása: "
 
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Ignoring stale cache data for {apkfilename}"
-msgstr ""
+msgstr "A(z) {apkfilename} elévült gyorsítótáradatainak figyelmen kívül hagyása"
 
 #: ../fdroidserver/rewritemeta.py
 #, python-brace-format
 msgid "Ignoring {ext} file at '{path}'"
-msgstr ""
+msgstr "A(z) {ext} fájl figyelmen kívül hagyása itt: „{path}”"
 
 #: ../fdroidserver/update.py
 msgid "Include APKs that are signed with disabled algorithms like MD5"
-msgstr ""
+msgstr "A letiltott algoritmusokkal (például MD5) aláírt APK-k belevétele"
 
 #: ../fdroidserver/mirror.py
 msgid "Include the PGP signature .asc files in the mirror"
-msgstr ""
+msgstr "A PGP-aláírást tartalmazó .asc fájlok belevétele a tükörbe"
 
 #: ../fdroidserver/mirror.py
 msgid "Include the build logs in the mirror"
-msgstr ""
+msgstr "Az összeállítási napló belevétele a tükörbe"
 
 #: ../fdroidserver/mirror.py
 msgid "Include the source tarballs in the mirror"
-msgstr ""
+msgstr "A forráscsomagok belevétele a tükörbe"
 
 #: ../fdroidserver/common.py
 msgid "Initialising submodules"
-msgstr ""
+msgstr "Almodulok előkészítése"
 
 #: ../fdroidserver/install.py
 msgid "Install all signed applications available"
-msgstr ""
+msgstr "Összes aláírt alkalmazás telepítése"
 
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Install built packages on devices"
@@ -994,22 +1002,22 @@ msgstr "Összeállított csomagok telepítése az eszközökre"
 #: ../fdroidserver/install.py
 #, python-format
 msgid "Installing %s..."
-msgstr ""
+msgstr "%s telepítése…"
 
 #: ../fdroidserver/install.py
 #, python-format
 msgid "Installing %s…"
-msgstr ""
+msgstr "%s telepítése…"
 
 #: ../fdroidserver/install.py
 #, python-brace-format
 msgid "Installing '{apkfilename}' on {dev}..."
-msgstr ""
+msgstr "A(z) „{apkfilename}” telepítése ezen: {dev}…"
 
 #: ../fdroidserver/install.py
 #, python-brace-format
 msgid "Installing '{apkfilename}' on {dev}…"
-msgstr ""
+msgstr "A(z) „{apkfilename}” telepítése ezen: {dev}…"
 
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Interact with the repo HTTP server"
@@ -1017,317 +1025,317 @@ msgstr "Interakció a tároló HTTP kiszolgálójával"
 
 #: ../fdroidserver/update.py
 msgid "Invalid APK"
-msgstr ""
+msgstr "Érvénytelen APK"
 
 #: ../fdroidserver/lint.py ../fdroidserver/checkupdates.py
 #, python-brace-format
 msgid "Invalid VercodeOperation: {field}"
-msgstr ""
+msgstr "Érvénytelen VercodeOperation: {field}"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Invalid application ID {appid}"
-msgstr ""
+msgstr "Érvénytelen alkalmazásazonosító: {appid}"
 
 #: ../fdroidserver/metadata.py
 #, python-format
 msgid "Invalid boolean '%s'"
-msgstr ""
+msgstr "Érvénytelen logikai érték: „%s”"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Invalid build flag at {line} in {linedesc}"
-msgstr ""
+msgstr "Érvénytelen összeállítási jelző a(z) {line}. sorban, itt: {linedesc}"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Invalid build format: {value} in {name}"
-msgstr ""
+msgstr "Érvénytelen összeállítási formátum: {value} itt: {name}"
 
 #: ../fdroidserver/lint.py
 msgid "Invalid bulleted list"
-msgstr ""
+msgstr "Érvénytelen felsorolás"
 
 #: ../fdroidserver/lint.py
 #, python-format
 msgid "Invalid license tag \"%s\"! Use only tags from https://spdx.org/license-list"
-msgstr ""
+msgstr "Érvénytelen „%s” licenccímke! Csak az itt lévő címkéket használja: https://spdx.org/license-list"
 
 #: ../fdroidserver/lint.py
 msgid "Invalid link - use [http://foo.bar Link title] or [http://foo.bar]"
-msgstr ""
+msgstr "Érvénytelen hivatkozás – ezek egyikét használja: [http://foo.bar Hivatkozás címe] vagy [http://foo.bar]"
 
 #: ../fdroidserver/metadata.py
 #, python-format
 msgid "Invalid metadata in %s:%d"
-msgstr ""
+msgstr "Érvénytelen metaadatok itt: %s:%d"
 
 #: ../fdroidserver/metadata.py
 msgid "Invalid metadata in: "
-msgstr ""
+msgstr "Érvénytelen metaadatok itt: "
 
 #: ../fdroidserver/common.py
 #, python-format
 msgid "Invalid name for published file: %s"
-msgstr ""
+msgstr "Érvénytelen név a közzétett fájlnak: %s"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Invalid package name {0}"
-msgstr ""
+msgstr "Érvénytelen csomagnév: {0}"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Invalid redirect to non-HTTPS: {before} -> {after} "
-msgstr ""
+msgstr "Érvénytelen átirányítás nem HTTPS oldalra: {before} -> {after} "
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Invalid scrlib metadata: '{file}' does not exist"
-msgstr ""
+msgstr "Érvénytelen srclib metaadatok: a(z) „{file}” nem létezik"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Invalid srclib metadata: could not parse '{file}'"
-msgstr ""
+msgstr "Érvénytelen srclib metaadatok: a(z) „{file}” nem dolgozható fel"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Invalid srclib metadata: unknown key '{key}' in '{file}'"
-msgstr ""
+msgstr "Érvénytelen srclib metaadatok: ismeretlen „{key}” kulcs itt: „{file}”"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Invalid versionCode: \"{versionCode}\" is not an integer!"
-msgstr ""
+msgstr "Érvénytelen versionCode: a(z) „{versionCode}” nem egész szám."
 
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "JAR signature failed to verify: {path}"
-msgstr ""
+msgstr "A JAR aláírásának ellenőrzése sikertelen: {path}"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "JAR signature verified: {path}"
-msgstr ""
+msgstr "A JAR aláírása ellenőrizve: {path}"
 
 #: ../fdroidserver/scanner.py
 msgid "Java JAR file"
-msgstr ""
+msgstr "Java JAR-fájl"
 
 #: ../fdroidserver/publish.py ../fdroidserver/update.py
 #: ../fdroidserver/mirror.py
 msgid "Java JDK not found! Install in standard location or set java_paths!"
-msgstr ""
+msgstr "A Java JDK nem található. Telepítse szabványos helyre, vagy adja meg a JAVA_PATH változókat."
 
 #: ../fdroidserver/scanner.py
 msgid "Java compiled class"
-msgstr ""
+msgstr "Legfordított Java osztály"
 
 #: ../fdroidserver/signindex.py
 msgid "Java jarsigner not found! Install in standard location or set java_paths!"
-msgstr ""
+msgstr "A Java „jarsigner” nem található. Telepítse szabványos helyre, vagy adja meg a JAVA_PATH változókat."
 
 #: ../fdroidserver/lint.py
 msgid "Javascript in HTML src attributes"
-msgstr ""
+msgstr "JavaScript a HTML src attribútumokban"
 
 #: ../fdroidserver/init.py
 msgid "Keystore for signing key:\t"
-msgstr ""
+msgstr "Kulcstároló az aláírókulcshoz:\t"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "Last used commit '{commit}' looks like a tag, but UpdateCheckMode is '{ucm}'"
-msgstr ""
+msgstr "A legutóbb használt „{commit}” véglegesítés címkének tűnik, de az UpdateCheckMode „{ucm}”"
 
 #: ../fdroidserver/lint.py
 msgid "Liberapay donation methods belong in the Liberapay: field"
-msgstr ""
+msgstr "A Liberapay adományozási módok a Liberapay: mezőbe tartoznak"
 
 #: ../fdroidserver/lint.py
 msgid "Liberapay donation methods belong in the LiberapayID flag"
-msgstr ""
+msgstr "A Liberapay adományozási módok a LiberapayID jelzőbe tartoznak"
 
 #: ../fdroidserver/rewritemeta.py
 msgid "List files that would be reformatted"
-msgstr ""
+msgstr "Az újra formázásra kerülendő fájlok felsorolása"
 
 #: ../fdroidserver/lint.py
 msgid "Locale included in f-droid.org URL"
-msgstr ""
+msgstr "A területi beállítás szerepel az f-droid.org URL-ben"
 
 #: ../fdroidserver/build.py
 msgid "Make the build stop on exceptions"
-msgstr ""
+msgstr "Az összeállítás álljon meg a kivételeknél"
 
 #: ../fdroidserver/index.py
 msgid "Malformed repository mirrors."
-msgstr ""
+msgstr "Rosszul formázott tárolótükrök."
 
 #: ../fdroidserver/deploy.py
 msgid "Malformed serverwebroot line:"
-msgstr ""
+msgstr "Rosszul formázott serverwebroot sor:"
 
 #: ../fdroidserver/mirror.py
 msgid "Mirror the full repo and archive, all file types."
-msgstr ""
+msgstr "A teljes tároló és archívum tükrözés, minden fájltípussal."
 
 #: ../fdroidserver/gpgsign.py
 msgid "Missing output directory"
-msgstr ""
+msgstr "Hiányzó kimeneti könyvtár"
 
 #: ../fdroidserver/lint.py
 #, python-format
 msgid "Name '%s' is just the auto name - remove it"
-msgstr ""
+msgstr "A(z) „%s” név csak az automatikus név – eltávolítás"
 
 #: ../fdroidserver/common.py
 msgid "No 'config.yml' found, using defaults."
-msgstr ""
+msgstr "Nem található „config.yml”, alapértelmezések használata."
 
 #: ../fdroidserver/common.py
 msgid "No Android SDK found!"
-msgstr ""
+msgstr "Nem található Android SDK."
 
 #: ../fdroidserver/import.py
 msgid "No android or kivy project could be found. Specify --subdir?"
-msgstr ""
+msgstr "Nem található android vagy kivy projekt. Megad --subdir argumentumot?"
 
 #: ../fdroidserver/install.py
 msgid "No attached devices found"
-msgstr ""
+msgstr "Nem található csatolt eszköz"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "No commit specified for {versionName} in {linedesc}"
-msgstr ""
+msgstr "Nincs megadva véglegesítés a(z) {versionName} verzióhoz itt: {linedesc}"
 
 #: ../fdroidserver/common.py
 msgid "No config.yml found, using defaults."
-msgstr ""
+msgstr "Nem található config.yml, alapértelmezések használata."
 
 #: ../fdroidserver/index.py
 msgid "No fingerprint in URL."
-msgstr ""
+msgstr "Nincs ujjlenyomat az URL-ben."
 
 #: ../fdroidserver/common.py
 msgid "No git submodules available"
-msgstr ""
+msgstr "Nem érhetők el git almodulok"
 
 #: ../fdroidserver/import.py
 msgid "No gradle project could be found. Specify --subdir?"
-msgstr ""
+msgstr "Nem található gradle projekt. Megad --subdir argumentumot?"
 
 #: ../fdroidserver/import.py ../fdroidserver/common.py
 msgid "No information found."
-msgstr ""
+msgstr "Nem található információ."
 
 #: ../fdroidserver/lint.py
 msgid "No need to specify that the app is Free Software"
-msgstr ""
+msgstr "Nem kell megadnia, hogy az alkalmazás szabad szoftver"
 
 #: ../fdroidserver/lint.py
 msgid "No need to specify that the app is for Android"
-msgstr ""
+msgstr "Nem kell megadnia, hogy az alkalmazás androidos"
 
 #: ../fdroidserver/deploy.py
 msgid "No option set! Edit your config.yml to set at least one of these:"
-msgstr ""
+msgstr "Nincs beállítás megadva. Szerkessze a config.yml fájlt, hogy ezek közül legalább egyet megadjon:"
 
 #: ../fdroidserver/common.py
 msgid "No packages specified"
-msgstr ""
+msgstr "Nincs csomag megadva"
 
 #: ../fdroidserver/install.py
 #, python-format
 msgid "No signed APK available for %s"
-msgstr ""
+msgstr "Nem érhetők el aláírt APK-k ehhez: %s"
 
 #: ../fdroidserver/install.py
 msgid "No signed output directory - nothing to do"
-msgstr ""
+msgstr "Nincs aláírt kimeneti könyvtár – nincs teendő"
 
 #: ../fdroidserver/update.py ../fdroidserver/common.py
 #, python-brace-format
 msgid "No signing certificates found in {path}"
-msgstr ""
+msgstr "Nem található aláíró-tanúsítvány itt: {path}"
 
 #: ../fdroidserver/common.py ../fdroidserver/metadata.py
 #, python-format
 msgid "No such package: %s"
-msgstr ""
+msgstr "Nincs ilyen csomag: %s"
 
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "No such versionCode {versionCode} for app {appid}"
-msgstr ""
+msgstr "Nincs {versionCode} versionCode a(z) {appid} alkalmazáshoz"
 
 #: ../fdroidserver/verify.py ../fdroidserver/publish.py
 msgid "No unsigned directory - nothing to do"
-msgstr ""
+msgstr "Nincs aláíratlan könyvtár – nincs teendő"
 
 #: ../fdroidserver/common.py
 msgid "Not a valid size definition: \"{}\""
-msgstr ""
+msgstr "Nem érvényes méretmegadás: „{}”"
 
 #: ../fdroidserver/signindex.py
 msgid "Nothing to do"
-msgstr ""
+msgstr "Nincs teendő"
 
 #: ../fdroidserver/checkupdates.py
 #, python-brace-format
 msgid "Nothing to do for {appid}."
-msgstr ""
+msgstr "Nincs teendő a(z) {appid} alkalmazásnál."
 
 #: ../fdroidserver/init.py
 msgid "Now set these in config.yml:"
-msgstr ""
+msgstr "Most adja meg ezeket a config.yml fájlban:"
 
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "OBB file has newer versionCode({integer}) than any APK:"
-msgstr ""
+msgstr "Az OBB-fájlnak újabb versionCode értéke ({integer}) van, mint bármelyik APK-nak:"
 
 #: ../fdroidserver/update.py
 msgid "OBB filename must start with \"main.\" or \"patch.\":"
-msgstr ""
+msgstr "Az OBB-fájl nevének „main.” vagy „patch.” szöveggel kell kezdődnie:"
 
 #: ../fdroidserver/update.py
 msgid "OBB's packagename does not match a supported APK:"
-msgstr ""
+msgstr "Az OBB csomagneve nem egyezik egyik támogatott APK-val sem:"
 
 #: ../fdroidserver/deploy.py
 msgid "Offline machine, skipping git mirror generation until `fdroid deploy`"
-msgstr ""
+msgstr "Offline gép, git tükör előállításának kihagyása az „fdroid deploy” kiadásáig"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Old APK signature failed to verify: {path}"
-msgstr ""
+msgstr "A régi APK aláírásának ellenőrzése sikertelen: {path}"
 
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Old, deprecated name for fdroid deploy"
-msgstr ""
+msgstr "Régi, elavult név az fdroid deploy parancshoz"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Only PNG and JPEG are supported for graphics, found: {path}"
-msgstr ""
+msgstr "A grafikáknál csak PNG és JPEG formátum támogatott, ez található: {path}"
 
 #: ../fdroidserver/checkupdates.py
 msgid "Only print differences with the Play Store"
-msgstr ""
+msgstr "Csak a különbségek kiírása Play Áruház esetén"
 
 #: ../fdroidserver/checkupdates.py
 msgid "Only process apps with auto-updates"
-msgstr ""
+msgstr "Csak az automatikus frissítésekkel rendelkező alkalmazások feldolgozása"
 
 #: ../fdroidserver/lint.py
 msgid "OpenCollective donation methods belong in the OpenCollective: field"
-msgstr ""
+msgstr "Az OpenCollective adományozási módok a OpenCollective: mezőbe tartoznak"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 #: /usr/lib/python3.7/optparse.py
@@ -1336,91 +1344,91 @@ msgstr "Beállítások"
 
 #: ../fdroidserver/verify.py
 msgid "Output JSON report to file named after APK."
-msgstr ""
+msgstr "A JSON jelentés kiírása egy APK után elnevezett fájlba."
 
 #: ../fdroidserver/scanner.py
 msgid "Output JSON to stdout."
-msgstr ""
+msgstr "A JSON kiírása a szabványos kimenetre."
 
 #: ../fdroidserver/gpgsign.py ../fdroidserver/publish.py
 #: ../fdroidserver/update.py ../fdroidserver/signindex.py
 #: ../fdroidserver/checkupdates.py
 msgid "Outputting JSON"
-msgstr ""
+msgstr "JSON kiírása"
 
 #: ../fdroidserver/import.py
 msgid "Overall license of the project."
-msgstr ""
+msgstr "Az egész projekt átfogó licence."
 
 #: ../fdroidserver/index.py
 #, python-brace-format
 msgid "Overriding blank versionName in {apkfilename} from metadata: {version}"
-msgstr ""
+msgstr "Az üres versionName felülírása a(z) {apkfilename} fájlban a metaadatokból: {version}"
 
 #: ../fdroidserver/import.py
 #, python-brace-format
 msgid "Package \"{appid}\" already exists"
-msgstr ""
+msgstr "A(z) „{appid}” csomag már létezik"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Parsing manifest at '{path}'"
-msgstr ""
+msgstr "A(z) „{path}” helyen lévő leírófájl feldolgozása"
 
 #: ../fdroidserver/common.py
 msgid "Password required with username"
-msgstr ""
+msgstr "Jelszó szükséges a felhasználónévvel"
 
 #: ../fdroidserver/import.py
 msgid "Path to main Android project subdirectory, if not in root."
-msgstr ""
+msgstr "A fő androidos projekt alkönyvtár elérési útja, ha nem a gyökér."
 
 msgid "Path to main android project subdirectory, if not in root."
-msgstr ""
+msgstr "A fő androidos projekt alkönyvtár elérési útja, ha nem a gyökér."
 
 #: ../fdroidserver/init.py
 msgid "Path to the Android SDK (sometimes set in ANDROID_HOME)"
-msgstr ""
+msgstr "Az Android SDK elérési útja (néha az ANDROID_HOME-ban van megadva)"
 
 #: ../fdroidserver/btlog.py
 msgid "Path to the git repo to use as the log"
-msgstr ""
+msgstr "A naplóként használandó git tároló elérési útja"
 
 #: ../fdroidserver/init.py
 msgid "Path to the keystore for the repo signing key"
-msgstr ""
+msgstr "A tároló aláírókulcsához használt kulcstároló elérési útja"
 
 #: ../fdroidserver/nightly.py
 msgid "Print the secret variable to the terminal for easy copy/paste"
-msgstr ""
+msgstr "A titkos változó kiírása a terminálba a könnyű másolás és beillesztés érdekében"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Problem with description of {appid}: {error}"
-msgstr ""
+msgstr "Probléma a(z) {appid} leírásával: {error}"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Problem with xml at '{path}'"
-msgstr ""
+msgstr "Probléma az itt lévő XML-lel: „{path}”"
 
 #: ../fdroidserver/checkupdates.py
 msgid "Process auto-updates"
-msgstr ""
+msgstr "Automatikus frissítések feldolgozása"
 
 #: ../fdroidserver/publish.py ../fdroidserver/update.py
 #, python-brace-format
 msgid "Processing {apkfilename}"
-msgstr ""
+msgstr "{apkfilename} feldolgozása"
 
 #: ../fdroidserver/checkupdates.py ../fdroidserver/scanner.py
 #, python-brace-format
 msgid "Processing {appid}"
-msgstr ""
+msgstr "{appid} feldolgozása"
 
 #: ../fdroidserver/update.py
 msgid "Produce human-readable XML/JSON for index files"
-msgstr ""
+msgstr "Ember számára olvasható XML/JSON fájlok készítése indexfájlként"
 
 #: ../fdroidserver/update.py
 msgid "Produce human-readable index.xml"
@@ -1428,25 +1436,25 @@ msgstr "Ember számára olvasható index.xml előállítása"
 
 #: ../fdroidserver/import.py
 msgid "Project URL to import from."
-msgstr ""
+msgstr "Importálási forrásként használandó projekt URL."
 
 #: ../fdroidserver/lint.py
 msgid "Punctuation should be avoided"
-msgstr ""
+msgstr "A központozást kerülni kell"
 
 #: ../fdroidserver/btlog.py
 msgid "Push the log to this git remote repository"
-msgstr ""
+msgstr "A napló beküldése ebbe a távoli git tárolóba"
 
 #: ../fdroidserver/deploy.py ../fdroidserver/upload.py
 #, python-brace-format
 msgid "Pushing binary transparency log to {url}"
-msgstr ""
+msgstr "A bináris átláthatósági napló beküldése ide: {url}"
 
 #: ../fdroidserver/deploy.py ../fdroidserver/upload.py
 #, python-brace-format
 msgid "Pushing to {url}"
-msgstr ""
+msgstr "Beküldés ide: {url}"
 
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Quickly start a new repository"
@@ -1459,32 +1467,32 @@ msgstr "Összes metaadatfájl felolvasása és kilépés"
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Reading '{config_file}'"
-msgstr ""
+msgstr "„{config_file}” olvasása"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Reading minSdkVersion failed: \"{apkfilename}\""
-msgstr ""
+msgstr "A minSdkVersion olvasása sikertelen: „{apkfilename}”"
 
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
 #. https://developer.android.com/guide/topics/manifest/manifest-element.html#vname
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Reading packageName/versionCode/versionName failed, APK invalid: '{apkfilename}'"
-msgstr ""
+msgstr "A packageName/versionCode/versionName olvasása sikertelen, az APK érvénytelen: „{apkfilename}”"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Reading {apkfilename} from cache"
-msgstr ""
+msgstr "A(z) {apkfilename} olvasása gyorsítótárból"
 
 #: ../fdroidserver/stats.py
 msgid "Recalculate aggregate stats - use when changes have been made that would invalidate old cached data."
-msgstr ""
+msgstr "Aggregált statisztikák újraszámítása – akkor használja, ha a változtatások érvénytelenítenék a régi gyorsítótárazott adatokat."
 
 #: ../fdroidserver/common.py
 msgid "Removing specified files"
-msgstr ""
+msgstr "Megadott fájlok eltávolítása"
 
 #: ../fdroidserver/update.py
 msgid "Rename APK files that do not match package.name_123.apk"
@@ -1492,24 +1500,24 @@ msgstr "Azon APK fájlok átnevezése, melyek nem illeszkednek a csomag.név_123
 
 #: ../fdroidserver/update.py
 msgid "Report on build data status"
-msgstr ""
+msgstr "Összeállítás adatainak állapotának jelentése"
 
 #: ../fdroidserver/build.py
 msgid "Reset and create a brand new build server, even if the existing one appears to be ok."
-msgstr ""
+msgstr "Visszaállítás és teljesen új összeállítási kiszolgáló létrehozása, még akkor is, ha a meglévő rendben lévőnek tűnik."
 
 #: ../fdroidserver/nightly.py
 #, python-brace-format
 msgid "Resigning {apkfilename} with provided debug.keystore"
-msgstr ""
+msgstr "A(z) {apkfilename} újra aláírása a megadott debug.keystore segítségével"
 
 #: ../fdroidserver/update.py
 msgid "Resize all the icons exceeding the max pixel size and exit"
-msgstr ""
+msgstr "A legnagyobb képpontméretet meghaladó összes ikon átméretezése, és kilépés"
 
 #: ../fdroidserver/common.py
 msgid "Restrict output to warnings and errors"
-msgstr ""
+msgstr "A kimenet figyelmeztetésekre és hibákra korlátozása"
 
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Rewrite all the metadata files"
@@ -1517,38 +1525,38 @@ msgstr "Összes metaadatfájl újraírása"
 
 #: ../fdroidserver/rewritemeta.py
 msgid "Rewrite to a specific format: "
-msgstr ""
+msgstr "Újraírás megadott formátumba: "
 
 #: ../fdroidserver/rewritemeta.py
 #, python-brace-format
 msgid "Rewriting '{appid}'"
-msgstr ""
+msgstr "„{appid}” újraírása"
 
 #: ../fdroidserver/rewritemeta.py
 #, python-brace-format
 msgid "Rewriting '{appid}' to '{path}'"
-msgstr ""
+msgstr "„{appid}” újraírása ide: „{path}”"
 
 #: ../fdroidserver/checkupdates.py
 msgid "Run on git repo that has uncommitted changes"
-msgstr ""
+msgstr "Futtatás azon a git tárolón, amelyben nem véglegesített változtatások vannak"
 
 #: ../fdroidserver/lint.py
 msgid "Run rewritemeta to fix formatting"
-msgstr ""
+msgstr "A rewritemeta futtatása a formázás javításához"
 
 #: ../fdroidserver/deploy.py ../fdroidserver/upload.py
 msgid "Running first pass with MD5 checking disabled"
-msgstr ""
+msgstr "Az MD5 ellenőrzés első menetének futtatása letiltva"
 
 #: ../fdroidserver/mirror.py
 #, python-brace-format
 msgid "Running wget in {path}"
-msgstr ""
+msgstr "A wget futtatása itt: {path}"
 
 #: ../fdroidserver/build.py
 msgid "Scan the resulting APK(s) for known non-free classes."
-msgstr ""
+msgstr "Az elkészült APK-k átvizsgálása ismert nem szabad osztályokat keresve."
 
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Scan the source code of a package"
@@ -1557,31 +1565,31 @@ msgstr "A csomag forráskódjának átvizsgálása"
 #: ../fdroidserver/scanner.py
 #, python-brace-format
 msgid "Scanner found {count} problems in {appid}:"
-msgstr ""
+msgstr "Az átvizsgáló {count} problémát talált a(z) „{appid}” alkalmazásban:"
 
 #: ../fdroidserver/scanner.py
 #, python-brace-format
 msgid "Scanner found {count} problems in {appid}:{versionCode}:"
-msgstr ""
+msgstr "Az átvizsgáló {count} problémát talált a(z) „{appid}:{versionCode}” alkalmazásban:"
 
 #: ../fdroidserver/build.py
 msgid "Scanner found {} problem"
 msgid_plural "Scanner found {} problems"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Az átvizsgáló {count} problémát talált"
+msgstr[1] "Az átvizsgáló {count} problémát talált"
 
 #: ../fdroidserver/common.py
 msgid "Set clock to that time using:"
-msgstr ""
+msgstr "Óra beállítása ara az időre a következővel:"
 
 #: ../fdroidserver/nightly.py
 msgid "Set maximum releases in repo before older ones are archived"
-msgstr ""
+msgstr "A tárolókban szereplő kiadások számának legnagyobb száma, mielőtt a régebbieket archiválni kezdi"
 
 #: ../fdroidserver/build.py
 #, python-brace-format
 msgid "Set open file limit to {integer}"
-msgstr ""
+msgstr "A nyitott fájlok korlátjának beállítása erre: {integer}"
 
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Set up an app build for a nightly build repo"
@@ -1589,12 +1597,12 @@ msgstr ""
 
 #: ../fdroidserver/build.py
 msgid "Setting open file limit failed: "
-msgstr ""
+msgstr "A nyitott fájlok korlátjának beállítása sikertelen: "
 
 #: ../fdroidserver/build.py
 #, python-brace-format
 msgid "Setting {0} sec timeout for this build"
-msgstr ""
+msgstr "{0} másodperces időtúllépés beállítása ehhez az összeállításhoz"
 
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Sign and place packages in the repo"
@@ -1606,32 +1614,32 @@ msgstr "Az update --nosign paranccsal készült indexek aláírása"
 
 #: ../fdroidserver/build.py
 msgid "Skip scanning the source code for binaries and other problems"
-msgstr ""
+msgstr "A forráskód binárisok és egyéb problémák miatti átvizsgálásának kihagyása"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Skipping '{apkfilename}' with invalid signature!"
-msgstr ""
+msgstr "Az érvénytelen aláírású „{apkfilename}” kihagyása."
 
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Skipping index generation for {appid}"
-msgstr ""
+msgstr "A(z) „{appid}” indexelőállításának kihagyása"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Skipping {apkfilename} with invalid signature!"
-msgstr ""
+msgstr "Az érvénytelen aláírású {apkfilename} kihagyása."
 
 #: ../fdroidserver/scanner.py
 #, python-brace-format
 msgid "Skipping {appid}: disabled"
-msgstr ""
+msgstr "{appid} kihagyása: letiltott"
 
 #: ../fdroidserver/scanner.py
 #, python-brace-format
 msgid "Skipping {appid}: no builds specified"
-msgstr ""
+msgstr "{appid} kihagyása: nincs összeállítás megadva"
 
 #: ../fdroidserver/deploy.py ../fdroidserver/upload.py
 msgid "Specify a local folder to sync the repo to"
@@ -2159,7 +2167,7 @@ msgstr ""
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 #: /usr/lib/python3.7/optparse.py
 msgid "complex"
-msgstr ""
+msgstr "komplex"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py
@@ -2260,7 +2268,7 @@ msgstr "lebegőpontos"
 
 #: ../fdroidserver/metadata.py
 msgid "force errors to be warnings, or ignore"
-msgstr ""
+msgstr "hibák figyelmeztetéssé változtatása, vagy figyelmen kívül hagyása"
 
 #: ../fdroidserver/metadata.py
 msgid "force metadata errors (default) to be warnings, or to be ignored."
@@ -2349,7 +2357,7 @@ msgstr ""
 #: /usr/lib/python3.7/optparse.py
 #, python-format
 msgid "no such option: %s"
-msgstr ""
+msgstr "nincs ilyen kapcsoló: %s"
 
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "no version info found!"
@@ -2404,13 +2412,13 @@ msgstr "a(z) -%s kapcsolóhoz argumentum szükséges"
 #: /usr/lib/python3.7/getopt.py
 #, python-format
 msgid "option --%s must not have an argument"
-msgstr ""
+msgstr "a(z) --%s kapcsolóhoz argumentum szükséges"
 
 #: /usr/lib/python3.5/getopt.py /usr/lib/python3.6/getopt.py
 #: /usr/lib/python3.7/getopt.py
 #, python-format
 msgid "option --%s not a unique prefix"
-msgstr ""
+msgstr "a(z) --%s kapcsoló nem egyedi előtag"
 
 #: /usr/lib/python3.5/getopt.py /usr/lib/python3.6/getopt.py
 #: /usr/lib/python3.7/getopt.py
@@ -2422,7 +2430,7 @@ msgstr "a(z) --%s kapcsoló nem ismert"
 #: /usr/lib/python3.7/getopt.py
 #, python-format
 msgid "option --%s requires argument"
-msgstr ""
+msgstr "a(z) --%s kapcsolóhoz argumentum szükséges"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py
@@ -2437,7 +2445,7 @@ msgstr ""
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py
 msgid "positional arguments"
-msgstr ""
+msgstr "pozicionális argumentumok"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -2522,13 +2530,13 @@ msgstr ""
 #: /usr/lib/python3.7/argparse.py
 #, python-format
 msgid "the following arguments are required: %s"
-msgstr ""
+msgstr "a következő argumentumok szükségesek: %s"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py
 #, python-format
 msgid "unexpected option string: %s"
-msgstr ""
+msgstr "váratlan kapcsoló karakterlánc: %s"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py
@@ -2540,12 +2548,12 @@ msgstr ""
 #: /usr/lib/python3.7/argparse.py
 #, python-format
 msgid "unrecognized arguments: %s"
-msgstr ""
+msgstr "nem felismert argumentumok: %s"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "unsafe permissions on '{config_file}' (should be 0600)!"
-msgstr ""
+msgstr "nem biztonságos jogosultságok ennél: „{config_file}” (0600-nak kellene lennie)!"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py ../fdroid
 #: /usr/lib/python3.7/argparse.py ../fdroidserver/__main__.py

@@ -1,20 +1,21 @@
 # SOME DESCRIPTIVE TITLE.
 # This file is put in the public domain.
 # Hans-Christoph Steiner <hans@guardianproject.info>, 2020, 2021.
+# Myeongjin Lee <aranet100@gmail.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.8-135-g16dd6d28\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2021-01-29 16:12+0100\n"
-"PO-Revision-Date: 2021-01-28 22:09+0000\n"
-"Last-Translator: Hans-Christoph Steiner <hans@guardianproject.info>\n"
+"PO-Revision-Date: 2021-08-16 19:53+0000\n"
+"Last-Translator: Myeongjin Lee <aranet100@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/f-droid/fdroidserver/ko/>\n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.5-dev\n"
+"X-Generator: Weblate 4.8-dev\n"
 
 #: ../fdroidserver/common.py
 msgid ""
@@ -35,7 +36,6 @@ msgstr ""
 "배포 키로 사용될 SSH 공개 키:"
 
 #: ../fdroidserver/nightly.py
-#, fuzzy
 msgid ""
 "\n"
 "SSH public key to be used as deploy key:"
@@ -62,9 +62,9 @@ msgid "\"repo_pubkey\" must be present in config.yml when using --nosign!"
 msgstr ""
 
 #: ../fdroidserver/install.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "\"{apkfilename}\" is already installed on {dev}."
-msgstr "'{apkfilename}'는 이미 {dev}에 설치되어 있습니다."
+msgstr "\"{apkfilename}\"는 이미 {dev}에 설치되어 있습니다."
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -94,7 +94,7 @@ msgstr ""
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "\"{url}\" is not a valid URL!"
-msgstr ""
+msgstr "\"{url}\"은 올바른 URL이 아닙니다!"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 #: /usr/lib/python3.7/optparse.py
@@ -147,7 +147,7 @@ msgstr "'keypass'를 config.yml에서 찾을 수 없습니다!"
 
 #: ../fdroidserver/common.py
 msgid "'keystore' is NONE and 'smartcardoptions' is blank!"
-msgstr ""
+msgstr "'keystore'이 없고 'smartcardoptions'가 비어 있습니다!"
 
 #: ../fdroidserver/index.py ../fdroidserver/common.py
 msgid "'keystore' not found in config.yml!"
@@ -168,12 +168,11 @@ msgstr "'required'는 고정적을 위한 잘못된 인수입니다"
 
 #: ../fdroidserver/common.py
 msgid "'sdk_path' not set in 'config.yml'!"
-msgstr "'sdk_path'를 'config.yml'에서 설정할 수 없습니다!"
+msgstr "'sdk_path'가 'config.yml'에서 설정되어 있지 않습니다!"
 
 #: ../fdroidserver/common.py
-#, fuzzy
 msgid "'sdk_path' not set in config.yml!"
-msgstr "'sdk_path'를 'config.yml'에서 설정할 수 없습니다!"
+msgstr "'sdk_path'가 config.yml에서 설정되어 있지 않습니다!"
 
 #. Translators: "build-tools" is the file name of a package from
 #. Google, it is part of the Android SDK. So it probably shouldn't be
@@ -401,9 +400,9 @@ msgstr "\"{path}\"를 읽을 수 없습니다!"
 
 #. Translators: https://developer.android.com/studio/build/application-id
 #: ../fdroidserver/metadata.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Cannot resolve application ID {appid}"
-msgstr "앱 id {appid}를 해결할 수 없습니다"
+msgstr "애플리케이션 ID {appid}를 해결할 수 없습니다"
 
 #: ../fdroidserver/rewritemeta.py
 #, python-brace-format
@@ -989,7 +988,7 @@ msgid "Install built packages on devices"
 msgstr "기기에 내장된 패키지 설치"
 
 #: ../fdroidserver/install.py
-#, fuzzy, python-format
+#, python-format
 msgid "Installing %s..."
 msgstr "%s 설치 중…"
 
@@ -999,9 +998,9 @@ msgid "Installing %s…"
 msgstr "%s 설치 중…"
 
 #: ../fdroidserver/install.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Installing '{apkfilename}' on {dev}..."
-msgstr "{dev}에서 '{apkfilename}' 설치 중…"
+msgstr "{dev}에서 '{apkfilename}' 설치 중..."
 
 #: ../fdroidserver/install.py
 #, python-brace-format
@@ -1752,9 +1751,8 @@ msgid "URL {url} in Description: {error}"
 msgstr ""
 
 #: ../fdroidserver/lint.py
-#, fuzzy
 msgid "Unexpected license tag \"{}\"! Only use FSF or OSI approved tags from https://spdx.org/license-list"
-msgstr "잘못된 라이선스 태그 \"%s\"! https://spdx.org/license-list 에서의 태그만을 사용하세요"
+msgstr "잘못된 라이선스 태그 \"{}\"! https://spdx.org/license-list 에서 FSF 또는 OSI에서 승인된 태그만을 사용하세요"
 
 #: ../fdroidserver/lint.py
 msgid "Unexpected license tag \"{}\"! Only use license tags configured in your config file"
@@ -1791,9 +1789,9 @@ msgid "Unknown metadata format: {path}"
 msgstr "알 수 없는 메타데이터 형식: {path}"
 
 #: ../fdroidserver/metadata.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Unknown metadata format: {path} (use: *.yml)"
-msgstr "알 수 없는 메타데이터 형식: {path}"
+msgstr "알 수 없는 메타데이터 형식: {path} (사용: *.yml)"
 
 #: ../fdroidserver/common.py
 msgid "Unknown version of aapt, might cause problems: "
@@ -1874,14 +1872,14 @@ msgid "Unused file at %s"
 msgstr "%s에서 사용되지 않은 파일"
 
 #: ../fdroidserver/scanner.py
-#, fuzzy, python-format
+#, python-format
 msgid "Unused scandelete path: %s"
-msgstr "%s에서 사용되지 않은 파일"
+msgstr "사용되지 않은 스캔삭제 경로: %s"
 
 #: ../fdroidserver/scanner.py
-#, fuzzy, python-format
+#, python-format
 msgid "Unused scanignore path: %s"
-msgstr "%s에서 사용되지 않은 파일"
+msgstr "사용되지 않은 스캔삭제 경로: %s"
 
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Update repo information for new packages"
@@ -2072,16 +2070,14 @@ msgstr ""
 
 #: ../fdroidserver/lint.py ../fdroidserver/rewritemeta.py
 #: ../fdroidserver/checkupdates.py
-#, fuzzy
 msgid "application ID of file to operate on"
-msgstr "업데이트를 확인할 applicationId"
+msgstr "작업할 파일의 애플리케이션 ID"
 
 #: ../fdroidserver/verify.py ../fdroidserver/publish.py
 #: ../fdroidserver/build.py ../fdroidserver/scanner.py
 #: ../fdroidserver/install.py
-#, fuzzy
 msgid "application ID with optional versionCode in the form APPID[:VERCODE]"
-msgstr "양식 APPID[:VERCODE]에서 선택적인 versionCode로 된 applicationId"
+msgstr "양식 APPID[:VERCODE]에서 선택적인 versionCode로 된 애플리케이션 ID"
 
 #: ../fdroidserver/lint.py ../fdroidserver/rewritemeta.py
 msgid "applicationId in the form APPID"
@@ -2588,9 +2584,9 @@ msgid "{apkfilename}'s AndroidManifest.xml has a bad date: "
 msgstr "{apkfilename}의 AndroidManifest.xml에 잘못된 날짜가 있습니다: "
 
 #: ../fdroidserver/update.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{appid} does not have a name! Using application ID instead."
-msgstr "{appid}는 이름을 가지지 않습니다! 대신 패키지 이름 사용."
+msgstr "{appid}는 이름을 가지지 않습니다! 대신 애플리케이션 ID를 사용."
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -2659,9 +2655,9 @@ msgid "{name} \"{path}\" does not exist! Correct it in config.yml."
 msgstr "{name} \"{path}\"는 존재하지 않습니다! config.yml에서 그것을 고치세요."
 
 #: ../fdroidserver/update.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{name} \"{section}/icons/{path}\" does not exist! Check \"config.yml\"."
-msgstr "{name} \"{path}\"는 존재하지 않습니다! config.yml에서 그것을 고치세요."
+msgstr "{name} \"{section}/icons/{path}\"는 존재하지 않습니다! \"config.yml\"을 확인하세요."
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -2699,9 +2695,9 @@ msgid "{url} does not end with \"fdroid\", check the URL path!"
 msgstr "{url}는 \"fdroid\"로 끝나지 않습니다, URL 경로를 확인하세요!"
 
 #: ../fdroidserver/common.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{url} does not start with \"http\"!"
-msgstr "{url}는 \"fdroid\"로 끝나지 않습니다, URL 경로를 확인하세요!"
+msgstr "{url}는 \"http\"로 시작하지 않습니다!"
 
 #: ../fdroidserver/build.py
 msgid "{} build failed"

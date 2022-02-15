@@ -1,20 +1,21 @@
 # SOME DESCRIPTIVE TITLE.
 # This file is put in the public domain.
 # mondstern <mondstern@snopyta.org>, 2021.
+# Petr Novák <nit.monkey@gmail.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 1.0.0-95-gd7af22b\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2021-01-29 16:12+0100\n"
-"PO-Revision-Date: 2021-03-05 16:50+0000\n"
-"Last-Translator: mondstern <mondstern@snopyta.org>\n"
+"PO-Revision-Date: 2021-11-10 21:49+0000\n"
+"Last-Translator: Petr Novák <nit.monkey@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/f-droid/fdroidserver/cs/>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 4.5.1-dev\n"
+"X-Generator: Weblate 4.9.1-dev\n"
 
 #: ../fdroidserver/common.py
 msgid ""
@@ -494,9 +495,8 @@ msgstr ""
 
 #. Translators: https://developer.android.com/studio/build/application-id
 #: ../fdroidserver/import.py
-#, fuzzy
 msgid "Couldn't find Application ID"
-msgstr "Nedaří se nalézt identif. balíčku"
+msgstr "Nedaří se nalézt ID aplikace"
 
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
 #: ../fdroidserver/import.py
