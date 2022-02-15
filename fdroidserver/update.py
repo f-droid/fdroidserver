@@ -1500,8 +1500,8 @@ def process_apk(apkcache, apkfilename, repodir, knownapks, use_date_from_apk=Fal
         # resize existing icons for densities missing in the APK
         fill_missing_icon_densities(empty_densities, iconfilename, apk, repodir)
 
-        if use_date_from_apk and manifest.date_time[1] != 0:
-            default_date_param = datetime(*manifest.date_time)
+        if use_date_from_apk:
+            default_date_param = datetime.fromtimestamp(os.stat(apkfile).st_mtime)
         else:
             default_date_param = None
 
