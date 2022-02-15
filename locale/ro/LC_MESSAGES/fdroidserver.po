@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 2.0a5-27-gf24eae0f\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2021-01-29 16:12+0100\n"
+"POT-Creation-Date: 2022-02-15 20:04+0100\n"
 "PO-Revision-Date: 2021-09-23 07:37+0000\n"
 "Last-Translator: Licaon Kter <licaon.kter@protonmail.com>\n"
 "Language-Team: Romanian <https://hosted.weblate.org/projects/f-droid/fdroidserver/ro/>\n"
@@ -66,6 +66,11 @@ msgid "\"%s/\" has no matching metadata file!"
 msgstr "\"%s/\" nu are un fișier de metadate corespunzător!"
 
 #: ../fdroidserver/index.py
+#, fuzzy, python-brace-format
+msgid "\"local_copy_dir\" {path} does not exist!"
+msgstr "Directorul root pentru local_copy_dir \"{path}\" nu există!"
+
+#: ../fdroidserver/index.py
 msgid "\"repo_pubkey\" must be present in config.yml when using --nosign!"
 msgstr "\"repo_pubkey\" trebuie să fie prezent în config.yml atunci când se folosește --nosign!"
 
@@ -98,6 +103,11 @@ msgstr "\"{path}\" nu este un format de fișier acceptat (utilizați: metadata/*
 #, python-brace-format
 msgid "\"{path}\" is not an accepted format, convert to: {formats}"
 msgstr "\"{path}\" nu este un format acceptat, convertiți în: {formats}"
+
+#: ../fdroidserver/update.py
+#, fuzzy, python-brace-format
+msgid "\"{path}\" is signed by a key that is not allowed:"
+msgstr "\"{path}\" există, dar s3cmd nu este instalat!"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -322,6 +332,11 @@ msgstr "Calea Android SDK '{path}' nu este un director!"
 msgid "Android SDK tool {cmd} found!"
 msgstr "Instrumentul Android SDK {cmd} găsit!"
 
+#: ../fdroidserver/common.py
+#, fuzzy, python-brace-format
+msgid "Android SDK tool {cmd} not found!"
+msgstr "Instrumentul Android SDK {cmd} găsit!"
+
 #. Translators: "build-tools" is the file name of a package from
 #. Google, it is part of the Android SDK. So it probably shouldn't be
 #. translated or transliterated.
@@ -397,6 +412,10 @@ msgstr "Build ar trebui să aibă versionName și versionCode separate prin virg
 #, python-format
 msgid "Built repo based in \"%s\" with this config:"
 msgstr "Construit depozit bazat în \"%s\" cu această configurație:"
+
+#: ../fdroidserver/checkupdates.py
+msgid "Can't auto-update app with no CurrentVersionCode"
+msgstr ""
 
 #: ../fdroidserver/build.py
 msgid "Can't build due to {} error while scanning"
@@ -512,6 +531,11 @@ msgstr "Nu a putut analiza dimensiunea \"{size}\", tip greșit \"{type}\""
 msgid "Couldn't find Application ID"
 msgstr "Nu s-a putut găsi ID-ul aplicației"
 
+#: ../fdroidserver/checkupdates.py
+#, fuzzy
+msgid "Couldn't find any version information"
+msgstr "Nu a putut găsi numele celei mai recente versiuni"
+
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
 #: ../fdroidserver/import.py
 msgid "Couldn't find latest version code"
@@ -522,7 +546,7 @@ msgstr "Nu am putut găsi codul ultimei versiuni"
 msgid "Couldn't find latest version name"
 msgstr "Nu a putut găsi numele celei mai recente versiuni"
 
-#: ../fdroidserver/import.py
+#: ../fdroidserver/import.py ../fdroidserver/checkupdates.py
 msgid "Couldn't find package ID"
 msgstr "Nu a putut găsi ID-ul pachetului"
 
@@ -668,6 +692,11 @@ msgid "Download logs we don't have"
 msgstr "Descărcați jurnalele pe care nu le avem"
 
 #: ../fdroidserver/common.py
+#, python-format
+msgid "Downloading %s"
+msgstr ""
+
+#: ../fdroidserver/common.py
 msgid "Downloading the repository already failed once, not trying again."
 msgstr "Descărcarea depozitului a eșuat deja o dată, nu mai încerc din nou."
 
@@ -785,6 +814,11 @@ msgstr "Nu a reușit să obțină informații despre APK, sărind peste {path}"
 
 #: ../fdroidserver/common.py
 msgid "Failed to get APK manifest information"
+msgstr "Nu a reușit să obțină informații despre manifestul APK"
+
+#: ../fdroidserver/update.py
+#, fuzzy
+msgid "Failed to get APK signing key fingerprint"
 msgstr "Nu a reușit să obțină informații despre manifestul APK"
 
 #: ../fdroidserver/install.py
@@ -918,6 +952,11 @@ msgid "Git fetch failed"
 msgstr "Git fetch a eșuat"
 
 #: ../fdroidserver/common.py
+#, fuzzy
+msgid "Git prune failed"
+msgstr "Resetarea Git a eșuat"
+
+#: ../fdroidserver/common.py
 msgid "Git remote set-head failed"
 msgstr "Git remote set-head eșuat"
 
@@ -991,6 +1030,16 @@ msgstr "Includeți jurnalele de construcție în oglindă"
 msgid "Include the source tarballs in the mirror"
 msgstr "Includeți tarball-urile sursă în oglindă"
 
+#: ../fdroidserver/metadata.py
+#, fuzzy, python-format
+msgid "Including metadata from %s@%s"
+msgstr "Metadate nevalabile în %s:%d"
+
+#: ../fdroidserver/metadata.py
+#, fuzzy, python-brace-format
+msgid "Including metadata from {path}"
+msgstr "Format de metadate necunoscut: {path}"
+
 #: ../fdroidserver/common.py
 msgid "Initialising submodules"
 msgstr "Inițializarea submodulelor"
@@ -1030,6 +1079,16 @@ msgstr ""
 #: ../fdroidserver/update.py
 msgid "Invalid APK"
 msgstr "APK invalid"
+
+#: ../fdroidserver/checkupdates.py
+#, python-brace-format
+msgid "Invalid AutoUpdateMode: {mode}"
+msgstr ""
+
+#: ../fdroidserver/checkupdates.py
+#, fuzzy, python-brace-format
+msgid "Invalid UpdateCheckMode: {mode}"
+msgstr "Nume de pachet nevalabil {0}"
 
 #: ../fdroidserver/lint.py ../fdroidserver/checkupdates.py
 #, python-brace-format
@@ -1082,6 +1141,11 @@ msgstr "Metadate invalide în: "
 #, python-format
 msgid "Invalid name for published file: %s"
 msgstr "Nume nevalabil pentru fișierul publicat: %s"
+
+#: ../fdroidserver/common.py
+#, python-brace-format
+msgid "Invalid ndk: entry in build: \"{ndk}\""
+msgstr ""
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -1144,6 +1208,11 @@ msgstr "Java jarsigner nu a fost găsit! Instalați în locația standard sau se
 msgid "Javascript in HTML src attributes"
 msgstr "Javascript în atributele src HTML"
 
+#: ../fdroidserver/build.py
+#, fuzzy, python-brace-format
+msgid "Keeping failed build \"{apkfilename}\""
+msgstr "Citirea minSdkVersion a eșuat: \"{apkfilename}\""
+
 #: ../fdroidserver/init.py
 msgid "Keystore for signing key:\t"
 msgstr "Keystore pentru cheia de semnare:\t"
@@ -1163,6 +1232,11 @@ msgstr "Metodele de donație Liberapay fac parte din indicatorul LiberapayID"
 
 #: ../fdroidserver/rewritemeta.py
 msgid "List files that would be reformatted"
+msgstr "Lista fișierelor care vor fi reformatate"
+
+#: ../fdroidserver/rewritemeta.py
+#, fuzzy
+msgid "List files that would be reformatted (dry run)"
 msgstr "Lista fișierelor care vor fi reformatate"
 
 #: ../fdroidserver/lint.py
@@ -1197,6 +1271,11 @@ msgstr "Numele \"%s\" este doar un nume auto - eliminați-l"
 #: ../fdroidserver/common.py
 msgid "No 'config.yml' found, using defaults."
 msgstr "Nu s-a găsit niciun 'config.yml', se folosesc valorile implicite."
+
+#: ../fdroidserver/verify.py
+#, fuzzy, python-format
+msgid "No APK for package: %s"
+msgstr "Nu există un astfel de pachet: %s"
 
 #: ../fdroidserver/common.py
 msgid "No Android SDK found!"
@@ -1234,6 +1313,16 @@ msgstr "Nu a putut fi găsit niciun proiect gradle. Specificați --subdir?"
 #: ../fdroidserver/import.py ../fdroidserver/common.py
 msgid "No information found."
 msgstr "Nu s-au găsit informații."
+
+#: ../fdroidserver/checkupdates.py
+#, fuzzy
+msgid "No matching tags found"
+msgstr "Nu s-au găsit informații."
+
+#: ../fdroidserver/update.py
+#, fuzzy, python-brace-format
+msgid "No minimum SDK version found in {0}, using default (3)."
+msgstr "Nu s-a găsit niciun config.yml, se folosesc valorile implicite."
 
 #: ../fdroidserver/lint.py
 msgid "No need to specify that the app is Free Software"
@@ -1275,6 +1364,11 @@ msgstr "Nu există un astfel de pachet: %s"
 #, python-brace-format
 msgid "No such versionCode {versionCode} for app {appid}"
 msgstr "Nu există un astfel de versionCode {versionCode} pentru aplicația {appid}"
+
+#: ../fdroidserver/checkupdates.py
+#, fuzzy
+msgid "No tags found"
+msgstr "Nu s-au găsit dispozitive atașate"
 
 #: ../fdroidserver/verify.py ../fdroidserver/publish.py
 msgid "No unsigned directory - nothing to do"
@@ -1499,7 +1593,16 @@ msgid "Removing specified files"
 msgstr "Eliminarea fișierelor specificate"
 
 #: ../fdroidserver/update.py
+#, python-brace-format
+msgid "Removing {path}\""
+msgstr ""
+
+#: ../fdroidserver/update.py
 msgid "Rename APK files that do not match package.name_123.apk"
+msgstr ""
+
+#: ../fdroidserver/checkupdates.py
+msgid "RepoTrunk update mode only makes sense in git-svn repositories"
 msgstr ""
 
 #: ../fdroidserver/update.py
@@ -1583,6 +1686,16 @@ msgstr[0] "Scannerul a găsit o problemă {}"
 msgstr[1] "Scannerul a găsit {} probleme"
 msgstr[2] "Scannerul a găsit {} probleme"
 
+#: ../fdroidserver/scanner.py
+#, fuzzy
+msgid "Scanning APK with apkanalyzer for known non-free classes."
+msgstr "Scanați APK-ul (APK-urile) rezultat(e) pentru clasele cunoscute care nu sunt libere."
+
+#: ../fdroidserver/common.py
+#, python-brace-format
+msgid "Set NDK {release} ({version}) up"
+msgstr ""
+
 #: ../fdroidserver/common.py
 msgid "Set clock to that time using:"
 msgstr "Setați ceasul la ora respectivă folosind:"
@@ -1625,6 +1738,11 @@ msgstr "Treceți peste scanarea codului sursă pentru binare și alte probleme"
 #, python-brace-format
 msgid "Skipping '{apkfilename}' with invalid signature!"
 msgstr "Ignorarea '{apkfilename}' cu semnătură invalidă!"
+
+#: ../fdroidserver/index.py
+#, python-format
+msgid "Skipping GitLab Pages mirror because the repo is too large (>%.2fGB)!"
+msgstr ""
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -1691,6 +1809,14 @@ msgstr "Rezumat al lungimii {length} depășește limita de caractere {limit} ch
 msgid "System clock is older than date in {path}!"
 msgstr "Ceasul sistemului este mai vechi decât data din {path}!"
 
+#: ../fdroidserver/checkupdates.py
+msgid "Tags update mode only works for git, hg, bzr and git-svn repositories currently"
+msgstr ""
+
+#: ../fdroidserver/checkupdates.py
+msgid "Tags update mode used in git-svn, but the repo was not set up with tags"
+msgstr ""
+
 #: ../fdroidserver/build.py
 msgid "Test mode - put output in the tmp directory only, and always build, even if the output already exists."
 msgstr "Modul test - puneți ieșirea numai în directorul tmp și construiți întotdeauna, chiar dacă ieșirea există deja."
@@ -1747,6 +1873,18 @@ msgstr "Acesta este un depozit de aplicații care pot fi utilizate cu F-Droid. A
 msgid "This repo already has local metadata: %s"
 msgstr "Acest depozit are deja metadate locale: %s"
 
+#: ../fdroidserver/init.py
+#, python-format
+msgid ""
+"To complete the setup, add your APKs to \"%s\"\n"
+"then run \"fdroid update -c; fdroid update\".  You might also want to edit\n"
+"\"config.yml\" to set the URL, repo name, and more.  You should also set up\n"
+"a signing key (a temporary one might have been automatically generated).\n"
+"\n"
+"For more info: https://f-droid.org/docs/Setup_an_F-Droid_App_Repo\n"
+"and https://f-droid.org/docs/Signing_Process"
+msgstr ""
+
 #: ../fdroidserver/deploy.py ../fdroidserver/upload.py
 msgid "To use awsbucket, awssecretkey and awsaccesskeyid must also be set in config.yml!"
 msgstr "Pentru a utiliza awsbucket, awssecretkey și awsaccesskeyid trebuie să fie de asemenea setate în config.yml!"
@@ -1775,6 +1913,11 @@ msgstr "Etichetă de licență neașteptată \"{}\"! Folosiți numai etichete ap
 #: ../fdroidserver/lint.py
 msgid "Unexpected license tag \"{}\"! Only use license tags configured in your config file"
 msgstr "Etichetă de licență neașteptată \"{}\"! Utilizați numai etichetele de licență configurate în fișierul de configurare"
+
+#: ../fdroidserver/common.py
+#, python-brace-format
+msgid "Unexpected symlink target: {link} -> {target}"
+msgstr ""
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
@@ -1898,6 +2041,11 @@ msgstr "Calea de scanare a ștergerii neutilizată: %s"
 #, python-format
 msgid "Unused scanignore path: %s"
 msgstr "Cale de scanare neutilizată: %s"
+
+#: ../fdroidserver/common.py
+#, python-format
+msgid "Unzipping to %s"
+msgstr ""
 
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Update repo information for new packages"
@@ -2083,6 +2231,11 @@ msgid "ambiguous option: %s (%s?)"
 msgstr "opțiune ambiguă: %s (%s?)"
 
 #: ../fdroidserver/common.py
+#, fuzzy
+msgid "apksigner not found! Cannot sign or verify modern APKs"
+msgstr "apksigner nu a fost găsit, este necesar pentru a semna!"
+
+#: ../fdroidserver/common.py
 msgid "apksigner not found, it's required for signing!"
 msgstr "apksigner nu a fost găsit, este necesar pentru a semna!"
 
@@ -2206,6 +2359,11 @@ msgstr "could not parse srclib spec (prea multe semne '@'): '{}'"
 msgid "created {path}"
 msgstr "a creat {path}"
 
+#: ../fdroidserver/checkupdates.py
+#, python-brace-format
+msgid "current version is newer: old vercode={old}, new vercode={new}"
+msgstr ""
+
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "deleting: repo/{apkfilename}"
@@ -2328,6 +2486,11 @@ msgstr "valoare invalidă a rezoluției_conflictului: %r"
 msgid "invalid option string %(option)r: must start with a character %(prefix_chars)r"
 msgstr "șir de opțiuni invalid %(option)r: trebuie să înceapă cu un caracter %(prefix_chars)r"
 
+#: ../fdroidserver/checkupdates.py
+#, python-brace-format
+msgid "latest build recipe is newer: old vercode={old}, new vercode={new}"
+msgstr ""
+
 #: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "local_copy_dir does not end with \"fdroid\", perhaps you meant: \"{path}\""
@@ -2368,6 +2531,11 @@ msgstr "nu există o astfel de opțiune: %s"
 
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "no version info found!"
+msgstr "nu s-au găsit informații despre versiune!"
+
+#: ../fdroidserver/checkupdates.py
+#, fuzzy
+msgid "no version information found"
 msgstr "nu s-au găsit informații despre versiune!"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
@@ -2487,6 +2655,11 @@ msgstr "ruamel.yaml nu este instalat, nu poate scrie metadatele."
 #, python-brace-format
 msgid "s3cmd sync indexes {path} to {url} and delete"
 msgstr "s3cmd sincronizează indexurile {path} cu {url} și șterge"
+
+#: ../fdroidserver/scanner.py
+#, python-format
+msgid "scanner not cleanly run apkanalyzer: %s"
+msgstr ""
 
 #: ../fdroidserver/scanner.py
 msgid "shared library"
@@ -2632,6 +2805,11 @@ msgstr "{appid} din {path} nu este un ID de aplicație Android valid!"
 msgid "{appid} from {path} is not a valid Java Package Name!"
 msgstr "{appid} din {path} nu este un nume de pachet Java valid!"
 
+#: ../fdroidserver/update.py
+#, python-brace-format
+msgid "{appid} has both APKs and files: {files}"
+msgstr ""
+
 #: ../fdroidserver/mirror.py
 #, python-brace-format
 msgid "{appid} is missing {name}"
@@ -2712,6 +2890,11 @@ msgstr "{path} este de dimensiune zero!"
 #, python-brace-format
 msgid "{path} more than 200MB, manually upload: {url}"
 msgstr "{path} mai mult de 200MB, încărcați manual: {url}"
+
+#: ../fdroidserver/update.py
+#, fuzzy, python-brace-format
+msgid "{path}: {error}"
+msgstr "A eșuat copierea {path}: {error}"
 
 #: ../fdroidserver/mirror.py
 #, python-brace-format
