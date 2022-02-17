@@ -100,7 +100,7 @@ msgstr ""
 #: ../fdroidserver/install.py
 #, python-brace-format
 msgid "\"{apkfilename}\" is already installed on {dev}."
-msgstr "'{apkfilename}' ist bereits auf {dev} installiert."
+msgstr "\"{apkfilename}\" ist bereits auf {dev} installiert."
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -115,7 +115,7 @@ msgstr "{name} ({version}) in \"{path}\" ist aktuell"
 #: ../fdroidserver/deploy.py ../fdroidserver/upload.py
 #, python-brace-format
 msgid "\"{path}\" exists but s3cmd is not installed!"
-msgstr "„{path}” vorhanden, aber S3cmd ist nicht installiert!"
+msgstr "\"{path}” vorhanden, aber S3cmd ist nicht installiert!"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
@@ -2737,7 +2737,7 @@ msgstr "kein \"icon\" in {appid}"
 
 #: ../fdroidserver/signatures.py
 msgid "no APK supplied"
-msgstr "Kein APK bereitgestellt"
+msgstr "kein APK bereitgestellt"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 #: /usr/lib/python3.7/optparse.py
@@ -2747,7 +2747,7 @@ msgstr "keine solche Option: %s"
 
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "no version info found!"
-msgstr "Keine Versionsinformationen gefunden!"
+msgstr "keine Versionsinformation gefunden!"
 
 #: ../fdroidserver/checkupdates.py
 msgid "no version information found"
