@@ -9,7 +9,8 @@ msgstr ""
 "POT-Creation-Date: 2022-02-15 20:04+0100\n"
 "PO-Revision-Date: 2021-03-22 16:55+0000\n"
 "Last-Translator: Besnik Bleta <besnik@programeshqip.org>\n"
-"Language-Team: Albanian <https://hosted.weblate.org/projects/f-droid/fdroidserver/sq/>\n"
+"Language-Team: Albanian <https://hosted.weblate.org/projects/f-droid/"
+"fdroidserver/sq/>\n"
 "Language: sq\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -20,16 +21,22 @@ msgstr ""
 #: ../fdroidserver/common.py
 msgid ""
 "\n"
-"        This is a repository of apps to be used with FDroid. Applications in this\n"
-"        repository are either official binaries built by the original application\n"
-"        developers, or are binaries built from source by f-droid.org using the\n"
+"        This is a repository of apps to be used with FDroid. Applications in "
+"this\n"
+"        repository are either official binaries built by the original "
+"application\n"
+"        developers, or are binaries built from source by f-droid.org using "
+"the\n"
 "        tools on https://gitlab.com/fdroid.\n"
 "        "
 msgstr ""
 "\n"
-"        Kjo është një depo aplikacionesh për t’u përdorur me FDroid. Aplikacionet\n"
-"        në këtë depo ose janë dyorë zyrtarë të montuar nga zhvilluesit e aplikacionit\n"
-"        origjinal, ose janë dyorë të montuar nga burimi prej f-droid.org duke përdorur\n"
+"        Kjo është një depo aplikacionesh për t’u përdorur me FDroid. "
+"Aplikacionet\n"
+"        në këtë depo ose janë dyorë zyrtarë të montuar nga zhvilluesit e "
+"aplikacionit\n"
+"        origjinal, ose janë dyorë të montuar nga burimi prej f-droid.org "
+"duke përdorur\n"
 "        mjetet në https://gitlab.com/fdroid.\n"
 "        "
 
@@ -61,7 +68,7 @@ msgstr ""
 #: ../fdroidserver/lint.py
 #, python-format
 msgid "\"%s/\" has no matching metadata file!"
-msgstr "\"%s/\" s’ka kartel tejtëdhënash me përputhje!"
+msgstr "\"%s/\" s’ka kartelë tejtëdhënash me përputhje!"
 
 #: ../fdroidserver/index.py
 #, fuzzy, python-brace-format
@@ -70,7 +77,9 @@ msgstr "Drejtoria rrënjë për local_copy_dir \"{path}\" s’ekziston!"
 
 #: ../fdroidserver/index.py
 msgid "\"repo_pubkey\" must be present in config.yml when using --nosign!"
-msgstr "\"repo_pubkey\" duhet të jetë i pranishëm te config.yml, kur përdoret --nosign!"
+msgstr ""
+"\"repo_pubkey\" duhet të jetë i pranishëm te config.yml, kur përdoret --"
+"nosign!"
 
 #: ../fdroidserver/install.py
 #, python-brace-format
@@ -95,12 +104,14 @@ msgstr "\"{path}\" ekziston, por s3cmd s’është e instaluar!"
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "\"{path}\" is not a supported file format (use: metadata/*.yml)"
-msgstr "\"{path}\" s’është format kartelash i mbuluar (përdorni: metadata/*.yml)"
+msgstr ""
+"\"{path}\" s’është format kartelash i mbuluar (përdorni: metadata/*.yml)"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "\"{path}\" is not an accepted format, convert to: {formats}"
-msgstr "\"{path}\" s’është në një format të pranuar, shndërrojeni në: {formats}"
+msgstr ""
+"\"{path}\" s’është në një format të pranuar, shndërrojeni në: {formats}"
 
 #: ../fdroidserver/update.py
 #, fuzzy, python-brace-format
@@ -197,12 +208,14 @@ msgstr "'sdk_path' te 'config.yml' s’është ujdisur!"
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "'{aapt}' is too old, fdroid requires build-tools-23.0.0 or newer!"
-msgstr "'{aapt}' është shumë i vjetër, fdroid lyp build-tools-23.0.0 ose më të ri!"
+msgstr ""
+"'{aapt}' është shumë i vjetër, fdroid lyp build-tools-23.0.0 ose më të ri!"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "'{aapt}' is too old, fdroid requires build-tools-{version} or newer!"
-msgstr "'{aapt}' është shumë i vjetër, fdroid lyp build-tools-{version} ose më të ri!"
+msgstr ""
+"'{aapt}' është shumë i vjetër, fdroid lyp build-tools-{version} ose më të ri!"
 
 #: ../fdroidserver/install.py
 #, python-brace-format
@@ -212,12 +225,18 @@ msgstr "'{apkfilename}' është tashmë e instaluar në {dev}."
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "'{field}' in {linedesc} is obsolete, see docs for current fields:"
-msgstr "'{field}' te {linedesc} është e vjetruar, për fushat në përdorim, shihni dokumentimin:"
+msgstr ""
+"'{field}' te {linedesc} është e vjetruar, për fushat në përdorim, shihni "
+"dokumentimin:"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
-msgid "'{field}' will be in random order! Use () or [] brackets if order is important!"
-msgstr "'{field}' do të jetë sipas një rendi kuturu! Nëse rendi është i rëndësishëm, përdorni kllapa () ose []!"
+msgid ""
+"'{field}' will be in random order! Use () or [] brackets if order is "
+"important!"
+msgstr ""
+"'{field}' do të jetë sipas një rendi kuturu! Nëse rendi është i rëndësishëm, "
+"përdorni kllapa () ose []!"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -227,7 +246,9 @@ msgstr "S’u arrit të përmbushet '{path}'!"
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "'{value}' is not a valid {field} in {appid}. Regex pattern: {pattern}"
-msgstr "'{value}' s’është një {field} e vlefshme te {appid}. Rregullsi shprehjeje të rregullt: {pattern}"
+msgstr ""
+"'{value}' s’është një {field} e vlefshme te {appid}. Rregullsi shprehjeje të "
+"rregullt: {pattern}"
 
 #: ../fdroidserver/checkupdates.py
 #, python-brace-format
@@ -241,7 +262,8 @@ msgstr ".__call__() e pacaktuar"
 
 #: ../fdroidserver/metadata.py
 msgid ".fdroid.txt is not supported!  Convert to .fdroid.yml or .fdroid.json."
-msgstr ".fdroid.txt nuk mbulohet!  Shndërrojeni në .fdroid.yml ose .fdroid.json."
+msgstr ""
+".fdroid.txt nuk mbulohet!  Shndërrojeni në .fdroid.yml ose .fdroid.json."
 
 #: ../fdroidserver/lint.py
 msgid "/issues is missing"
@@ -277,8 +299,12 @@ msgid "Alias of the repo signing key in the keystore"
 msgstr "Alias i kyçit të nënshkrimeve të depos te depo kyçesh"
 
 #: ../fdroidserver/import.py
-msgid "Allows a different revision (or git branch) to be specified for the initial import"
-msgstr "Lejon të specifikohet një rishikim tjetër (ose kryeni “git branch”) për importimin fillestar"
+msgid ""
+"Allows a different revision (or git branch) to be specified for the initial "
+"import"
+msgstr ""
+"Lejon të specifikohet një rishikim tjetër (ose kryeni “git branch”) për "
+"importimin fillestar"
 
 #: ../fdroidserver/mirror.py
 msgid "Also mirror the full archive section"
@@ -361,8 +387,12 @@ msgid "Archiving {apkfilename} with invalid signature!"
 msgstr "Po arkivohet {apkfilename} me nënshkrim të pavlefshëm!"
 
 #: ../fdroidserver/mirror.py
-msgid "Base URL to mirror, can include the index signing key using the query string: ?fingerprint="
-msgstr "URL bazë për t’u pasqyruar, mund të përfshijë kyçin e nënshkrimit të treguesit që përdor vargun e kërkimi: ?fingerprint="
+msgid ""
+"Base URL to mirror, can include the index signing key using the query "
+"string: ?fingerprint="
+msgstr ""
+"URL bazë për t’u pasqyruar, mund të përfshijë kyçin e nënshkrimit të "
+"treguesit që përdor vargun e kërkimi: ?fingerprint="
 
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vname
 #: ../fdroidserver/lint.py
@@ -390,7 +420,9 @@ msgstr "Monto krejt aplikacionet e mundshme"
 
 #: ../fdroidserver/lint.py
 msgid "Build generated by `fdroid import` - remove disable line once ready"
-msgstr "Montim i prodhuar nga `fdroid import` - hiqni rreshtin e çaktivizimit, pasi të jetë gati"
+msgstr ""
+"Montim i prodhuar nga `fdroid import` - hiqni rreshtin e çaktivizimit, pasi "
+"të jetë gati"
 
 #: ../fdroidserver/checkupdates.py
 msgid "Build metadata git repo has uncommited changes!"
@@ -402,8 +434,12 @@ msgstr "Monto vetëm versionin më të ri të çdo pakete"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
-msgid "Build should have comma-separated versionName and versionCode, not \"{value}\", in {linedesc}"
-msgstr "Montimi duhet të ketë versionName dhe versionCode ndarë me presje, jo \"{value}\", te {linedesc}"
+msgid ""
+"Build should have comma-separated versionName and versionCode, not "
+"\"{value}\", in {linedesc}"
+msgstr ""
+"Montimi duhet të ketë versionName dhe versionCode ndarë me presje, jo "
+"\"{value}\", te {linedesc}"
 
 #: ../fdroidserver/init.py
 #, python-format
@@ -443,7 +479,8 @@ msgstr "S’mund të përdoret --list dhe --to në të njëjtën kohë"
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Cannot write \"{path}\", not an accepted format, use: {formats}"
-msgstr "S’shkruhet dot \"{path}\", s’është format i pranuar, përdorni: {formats}"
+msgstr ""
+"S’shkruhet dot \"{path}\", s’është format i pranuar, përdorni: {formats}"
 
 #: ../fdroidserver/lint.py
 #, python-format
@@ -460,13 +497,21 @@ msgstr "Kontrollo për përditësime aplikacionesh"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
-msgid "Checking archiving for {appid} - APKs:{integer}, keepversions:{keep}, archapks:{arch}"
-msgstr "Po kontrollohet arkivimi përr {appid} - APKs:{integer}, keepversions:{keep}, archapks:{arch}"
+msgid ""
+"Checking archiving for {appid} - APKs:{integer}, keepversions:{keep}, "
+"archapks:{arch}"
+msgstr ""
+"Po kontrollohet arkivimi përr {appid} - APKs:{integer}, keepversions:{keep}, "
+"archapks:{arch}"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
-msgid "Checking archiving for {appid} - apks:{integer}, keepversions:{keep}, archapks:{arch}"
-msgstr "Po kontrollohet arkivimi për {appid} - apks:{integer}, keepversions:{keep}, archapks:{arch}"
+msgid ""
+"Checking archiving for {appid} - apks:{integer}, keepversions:{keep}, "
+"archapks:{arch}"
+msgstr ""
+"Po kontrollohet arkivimi për {appid} - apks:{integer}, keepversions:{keep}, "
+"archapks:{arch}"
 
 #: ../fdroidserver/update.py
 msgid "Clean update - don't uses caches, reprocess all APKs"
@@ -486,13 +531,19 @@ msgid "Commit changes"
 msgstr "Depozito ndryshimet"
 
 #: ../fdroidserver/__main__.py
-msgid "Conflicting arguments: '--verbose' and '--quiet' can not be specified at the same time."
-msgstr "Argumente që përplasen: '--verbose' dhe '--quiet' s’mund të përdoren në të njëjtën kohë."
+msgid ""
+"Conflicting arguments: '--verbose' and '--quiet' can not be specified at the "
+"same time."
+msgstr ""
+"Argumente që përplasen: '--verbose' dhe '--quiet' s’mund të përdoren në të "
+"njëjtën kohë."
 
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Conflicting config files! Using {newfile}, ignoring {oldfile}!"
-msgstr "Kartela formësimi me përplasje! Po përdoret {newfile}, po shpërfillet {oldfile}!"
+msgstr ""
+"Kartela formësimi me përplasje! Po përdoret {newfile}, po shpërfillet "
+"{oldfile}!"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -548,7 +599,9 @@ msgstr "S’u gjet dot ID pakete"
 
 #: ../fdroidserver/update.py
 msgid "Cowardily refusing to overwrite existing signing key setup!"
-msgstr "Po refuzohet me burracakëri të mbishkruhet ujdisje ekzistuese kyçesh nënshkrimi!"
+msgstr ""
+"Po refuzohet me burracakëri të mbishkruhet ujdisje ekzistuese kyçesh "
+"nënshkrimi!"
 
 #: ../fdroidserver/update.py
 msgid "Create a repo signing key in a keystore"
@@ -597,7 +650,9 @@ msgstr "Po krijohet tregues i panënshkruar, si përgatitje për nënshkrim"
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "CurrentVersionCode {cv} is less than oldest build entry {versionCode}"
-msgstr "CurrentVersionCode {cv} është më i vogël sesa zëri {versionCode} i montimit më të vjetër"
+msgstr ""
+"CurrentVersionCode {cv} është më i vogël sesa zëri {versionCode} i montimit "
+"më të vjetër"
 
 #: ../fdroidserver/nightly.py
 msgid "DEBUG_KEYSTORE is not set or the value is incomplete"
@@ -615,7 +670,9 @@ msgstr "Po fshihet arkivi, depoja është shumë e madhe ({size} maks. {limit})"
 #: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "Deleting git-mirror history, repo is too big ({size} max {limit})"
-msgstr "Po fshihet historik git-mirror, depoja është shumë e madhe ({size} maks. {limit})"
+msgstr ""
+"Po fshihet historik git-mirror, depoja është shumë e madhe ({size} maks. "
+"{limit})"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -634,7 +691,9 @@ msgstr "Përshkrimi ka një rresht të përsëdytur"
 #: ../fdroidserver/lint.py
 #, python-format
 msgid "Description has a list (%s) but it isn't bulleted (*) nor numbered (#)"
-msgstr "Përshkrimi ka një listë (%s), por kjo s’është as me toptha (*), as e numërtuar (#)"
+msgstr ""
+"Përshkrimi ka një listë (%s), por kjo s’është as me toptha (*), as e "
+"numërtuar (#)"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
@@ -671,8 +730,11 @@ msgid "Don't do anything logs-related"
 msgstr "Mos bëj gjë që lidhet me regjistrat"
 
 #: ../fdroidserver/build.py
-msgid "Don't refresh the repository, useful when testing a build with no internet connection"
-msgstr "Mos rifresko depon, e dobishme kur testohet një montim pa lidhje internet"
+msgid ""
+"Don't refresh the repository, useful when testing a build with no internet "
+"connection"
+msgstr ""
+"Mos rifresko depon, e dobishme kur testohet një montim pa lidhje internet"
 
 #: ../fdroidserver/deploy.py ../fdroidserver/nightly.py
 #: ../fdroidserver/upload.py
@@ -703,8 +765,10 @@ msgstr "Shkarkimi i {url} dështoi. {error}"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
-msgid "Duplicate build recipe found for versionCode {versionCode} in {linedesc}"
-msgstr "U gjet përsëdytje recete montimi për versionCode {versionCode} te {linedesc}"
+msgid ""
+"Duplicate build recipe found for versionCode {versionCode} in {linedesc}"
+msgstr ""
+"U gjet përsëdytje recete montimi për versionCode {versionCode} te {linedesc}"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
@@ -724,7 +788,8 @@ msgid ""
 "ERROR: this command should never be used to mirror f-droid.org!\n"
 "A full mirror of f-droid.org requires more than 200GB."
 msgstr ""
-"GABIM: ky urdhër s’duhet përdorur kurrë për krijimin e një pasqyre të f-droid.org!\n"
+"GABIM: ky urdhër s’duhet përdorur kurrë për krijimin e një pasqyre të f-"
+"droid.org!\n"
 "Një pasqyrë e plotë e f-droid.org lyp më tepër se 200GB."
 
 #: ../fdroidserver/nightly.py
@@ -738,8 +803,12 @@ msgstr "Flamurkë e zbrazët montimi te {linedesc}"
 
 #: ../fdroidserver/__main__.py
 #, python-brace-format
-msgid "Encoding is set to '{enc}' fdroid might run into encoding issues. Please set it to 'UTF-8' for best results."
-msgstr "Si kodim është caktuar '{enc}'. Fdroid mund të hasë probleme kodimi. Për përfundimet më të mira, caktojeni si 'UTF-8'."
+msgid ""
+"Encoding is set to '{enc}' fdroid might run into encoding issues. Please set "
+"it to 'UTF-8' for best results."
+msgstr ""
+"Si kodim është caktuar '{enc}'. Fdroid mund të hasë probleme kodimi. Për "
+"përfundimet më të mira, caktojeni si 'UTF-8'."
 
 #: ../fdroidserver/init.py
 #, python-format
@@ -865,8 +934,12 @@ msgid "Forbidden HTML tags"
 msgstr "Etiketa HTML të ndaluara"
 
 #: ../fdroidserver/build.py
-msgid "Force build of disabled apps, and carries on regardless of scan problems. Only allowed in test mode."
-msgstr "Detyro montim aplikacionesh të çaktivizuara, dhe vazhdon pavarësisht problemesh skanimi. E lejuar vetëm nën mënyrën testim."
+msgid ""
+"Force build of disabled apps, and carries on regardless of scan problems. "
+"Only allowed in test mode."
+msgstr ""
+"Detyro montim aplikacionesh të çaktivizuara, dhe vazhdon pavarësisht "
+"problemesh skanimi. E lejuar vetëm nën mënyrën testim."
 
 #: ../fdroidserver/build.py
 #, python-brace-format
@@ -989,7 +1062,9 @@ msgstr "Nëse ky ngarkim dështon, provoni ta ngarkoni dorazi te {url}"
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Ignoring '{field}' in '{metapath}' metadata because it is deprecated."
-msgstr "Po shpërfillet '{field}' te tejtëdhëna '{metapath}', ngaqë është nxjerrë nga përdorimi."
+msgstr ""
+"Po shpërfillet '{field}' te tejtëdhëna '{metapath}', ngaqë është nxjerrë nga "
+"përdorimi."
 
 #: ../fdroidserver/update.py
 #, python-format
@@ -1012,7 +1087,9 @@ msgstr "Po shpërfillet kartelë {ext} te '{path}'"
 
 #: ../fdroidserver/update.py
 msgid "Include APKs that are signed with disabled algorithms like MD5"
-msgstr "Përfshi APKra që janë nënshkruar me algoritme të çaktivizuar, bie fjala, me MD5"
+msgstr ""
+"Përfshi APKra që janë nënshkruar me algoritme të çaktivizuar, bie fjala, me "
+"MD5"
 
 #: ../fdroidserver/mirror.py
 msgid "Include the PGP signature .asc files in the mirror"
@@ -1117,12 +1194,17 @@ msgstr "Listë me toptha e pavlefshme"
 
 #: ../fdroidserver/lint.py
 #, python-format
-msgid "Invalid license tag \"%s\"! Use only tags from https://spdx.org/license-list"
-msgstr "Etiketë e pavlefshme licence \"%s\"! Përdorni vetëm etiketa nga https://spdx.org/license-list"
+msgid ""
+"Invalid license tag \"%s\"! Use only tags from https://spdx.org/license-list"
+msgstr ""
+"Etiketë e pavlefshme licence \"%s\"! Përdorni vetëm etiketa nga https://spdx."
+"org/license-list"
 
 #: ../fdroidserver/lint.py
 msgid "Invalid link - use [http://foo.bar Link title] or [http://foo.bar]"
-msgstr "Lidhje e pavlefshme - përdorni [http://lidhja_që_na_intereson Lidhje titull] ose [http://lidhja_që_na_intereson]"
+msgstr ""
+"Lidhje e pavlefshme - përdorni [http://lidhja_që_na_intereson Lidhje titull] "
+"ose [http://lidhja_që_na_intereson]"
 
 #: ../fdroidserver/metadata.py
 #, python-format
@@ -1166,7 +1248,8 @@ msgstr "Tejtëdhëna srclib të pavlefshme: s’u përtyp dot '{file}'"
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Invalid srclib metadata: unknown key '{key}' in '{file}'"
-msgstr "Tejtëdhëna srclib të pavlefshme: kyçi panjohur '{key}' te kartela '{file}'"
+msgstr ""
+"Tejtëdhëna srclib të pavlefshme: kyçi panjohur '{key}' te kartela '{file}'"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
@@ -1190,15 +1273,20 @@ msgstr "Kartelë JAR Java"
 #: ../fdroidserver/publish.py ../fdroidserver/update.py
 #: ../fdroidserver/mirror.py
 msgid "Java JDK not found! Install in standard location or set java_paths!"
-msgstr "S’u gjet Java JDK! Instalojeni në vendndodhje standarde ose caktoni java_paths!"
+msgstr ""
+"S’u gjet Java JDK! Instalojeni në vendndodhje standarde ose caktoni "
+"java_paths!"
 
 #: ../fdroidserver/scanner.py
 msgid "Java compiled class"
 msgstr "Klasë Java e përpiluar"
 
 #: ../fdroidserver/signindex.py
-msgid "Java jarsigner not found! Install in standard location or set java_paths!"
-msgstr "S’u gjet Java jarsigner! Instalojeni në vendndodhje standarde ose caktoni java_paths!"
+msgid ""
+"Java jarsigner not found! Install in standard location or set java_paths!"
+msgstr ""
+"S’u gjet Java jarsigner! Instalojeni në vendndodhje standarde ose caktoni "
+"java_paths!"
 
 #: ../fdroidserver/lint.py
 msgid "Javascript in HTML src attributes"
@@ -1215,8 +1303,11 @@ msgstr "Depo kyçesh për kyç nënshkrimi:\t"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
-msgid "Last used commit '{commit}' looks like a tag, but UpdateCheckMode is '{ucm}'"
-msgstr "Parashtrimi '{commit}' i përdorur së fundi duket si etiketë, por si UpdateCheckMode është '{ucm}'"
+msgid ""
+"Last used commit '{commit}' looks like a tag, but UpdateCheckMode is '{ucm}'"
+msgstr ""
+"Parashtrimi '{commit}' i përdorur së fundi duket si etiketë, por si "
+"UpdateCheckMode është '{ucm}'"
 
 #: ../fdroidserver/lint.py
 msgid "Liberapay donation methods belong in the Liberapay: field"
@@ -1330,7 +1421,9 @@ msgstr "S’ka nevojë të specifikohet që aplikacioni është për Android"
 
 #: ../fdroidserver/deploy.py
 msgid "No option set! Edit your config.yml to set at least one of these:"
-msgstr "S’ka mundësi të ujdisur! Përpunoni config.yml tuaj që të ujdisni të paktën një prej:"
+msgstr ""
+"S’ka mundësi të ujdisur! Përpunoni config.yml tuaj që të ujdisni të paktën "
+"një prej:"
 
 #: ../fdroidserver/common.py
 msgid "No packages specified"
@@ -1403,7 +1496,9 @@ msgstr "packagename i OBB-së nuk përputhet me ndonjë APK të mbuluar:"
 
 #: ../fdroidserver/deploy.py
 msgid "Offline machine, skipping git mirror generation until `fdroid deploy`"
-msgstr "Makinë jo në linjë, po anashkalohet prodhim pasqyre git, deri sa `fdroid deploy`"
+msgstr ""
+"Makinë jo në linjë, po anashkalohet prodhim pasqyre git, deri sa `fdroid "
+"deploy`"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -1429,7 +1524,8 @@ msgstr "Kryeje vetëm për aplikacione me vetëpërditësime"
 
 #: ../fdroidserver/lint.py
 msgid "OpenCollective donation methods belong in the OpenCollective: field"
-msgstr "Metodat e dhurimit përmes OpenCollective i takojnë fushës OpenCollective:"
+msgstr ""
+"Metodat e dhurimit përmes OpenCollective i takojnë fushës OpenCollective:"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 #: /usr/lib/python3.7/optparse.py
@@ -1457,7 +1553,9 @@ msgstr "Licenca e përgjithshme e projektit."
 #: ../fdroidserver/index.py
 #, python-brace-format
 msgid "Overriding blank versionName in {apkfilename} from metadata: {version}"
-msgstr "Po anashkalohet versionName i zbrazët te {apkfilename} prej tejtëdhënash: {version}"
+msgstr ""
+"Po anashkalohet versionName i zbrazët te {apkfilename} prej tejtëdhënash: "
+"{version}"
 
 #: ../fdroidserver/import.py
 #, python-brace-format
@@ -1475,10 +1573,12 @@ msgstr "Me emrin e përdoruesit lypset fjalëkalim"
 
 #: ../fdroidserver/import.py
 msgid "Path to main Android project subdirectory, if not in root."
-msgstr "Shteg për te nëndrejtoria e projektit kryesor Android, në mos qoftë rrënja."
+msgstr ""
+"Shteg për te nëndrejtoria e projektit kryesor Android, në mos qoftë rrënja."
 
 msgid "Path to main android project subdirectory, if not in root."
-msgstr "Shteg për te nëndrejtoria e projektit kryesor android, në mos qoftë rrënja."
+msgstr ""
+"Shteg për te nëndrejtoria e projektit kryesor android, në mos qoftë rrënja."
 
 #: ../fdroidserver/init.py
 msgid "Path to the Android SDK (sometimes set in ANDROID_HOME)"
@@ -1494,7 +1594,8 @@ msgstr "Shteg për te depo kyçesh për kyçin e nënshkrimit të depos"
 
 #: ../fdroidserver/nightly.py
 msgid "Print the secret variable to the terminal for easy copy/paste"
-msgstr "Shtype ndryshoren e fshehtë te terminali, për kopjim/ngjitje të kollajtë"
+msgstr ""
+"Shtype ndryshoren e fshehtë te terminali, për kopjim/ngjitje të kollajtë"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
@@ -1572,8 +1673,12 @@ msgstr "Leximi i minSdkVersion dështoi: \"{apkfilename}\""
 #. https://developer.android.com/guide/topics/manifest/manifest-element.html#vname
 #: ../fdroidserver/common.py
 #, python-brace-format
-msgid "Reading packageName/versionCode/versionName failed, APK invalid: '{apkfilename}'"
-msgstr "Leximi i packageName/versionCode/versionName dështoi, APK e pavlefshme: '{apkfilename}'"
+msgid ""
+"Reading packageName/versionCode/versionName failed, APK invalid: "
+"'{apkfilename}'"
+msgstr ""
+"Leximi i packageName/versionCode/versionName dështoi, APK e pavlefshme: "
+"'{apkfilename}'"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -1581,8 +1686,13 @@ msgid "Reading {apkfilename} from cache"
 msgstr "Po lexohet {apkfilename} prej fshehtine"
 
 #: ../fdroidserver/stats.py
-msgid "Recalculate aggregate stats - use when changes have been made that would invalidate old cached data."
-msgstr "Rinjehso statistika përmbledhëse - përdoreni kur janë bërë ndryshime të cilat mund të bënin të pavlefshme të dhëna të vjetra të ruajtura në fshehtinë."
+msgid ""
+"Recalculate aggregate stats - use when changes have been made that would "
+"invalidate old cached data."
+msgstr ""
+"Rinjehso statistika përmbledhëse - përdoreni kur janë bërë ndryshime të "
+"cilat mund të bënin të pavlefshme të dhëna të vjetra të ruajtura në "
+"fshehtinë."
 
 #: ../fdroidserver/common.py
 msgid "Removing specified files"
@@ -1606,8 +1716,12 @@ msgid "Report on build data status"
 msgstr "Raport mbi gjendje të dhënash montimi"
 
 #: ../fdroidserver/build.py
-msgid "Reset and create a brand new build server, even if the existing one appears to be ok."
-msgstr "Zeroje dhe krijo një shërbyes montimesh të ri fringo, edhe nëse ai ekzistuesi duket të jetë në rregull."
+msgid ""
+"Reset and create a brand new build server, even if the existing one appears "
+"to be ok."
+msgstr ""
+"Zeroje dhe krijo një shërbyes montimesh të ri fringo, edhe nëse ai "
+"ekzistuesi duket të jetë në rregull."
 
 #: ../fdroidserver/nightly.py
 #, python-brace-format
@@ -1616,7 +1730,8 @@ msgstr "Po rinënshkruhet {apkfilename} me debug.keystore e furnizuar"
 
 #: ../fdroidserver/update.py
 msgid "Resize all the icons exceeding the max pixel size and exit"
-msgstr "Ripërmaso krejt ikonat që tejkalojnë madhësinë maksimum në piksel dhe dil"
+msgstr ""
+"Ripërmaso krejt ikonat që tejkalojnë madhësinë maksimum në piksel dhe dil"
 
 #: ../fdroidserver/common.py
 msgid "Restrict output to warnings and errors"
@@ -1697,7 +1812,9 @@ msgstr "Vëre sahatin në atë kohë duke përdorur:"
 
 #: ../fdroidserver/nightly.py
 msgid "Set maximum releases in repo before older ones are archived"
-msgstr "Caktoni numër maksimum hedhjesh në qarkullim, përpara se të arkivohen të vjetrat"
+msgstr ""
+"Caktoni numër maksimum hedhjesh në qarkullim, përpara se të arkivohen të "
+"vjetrat"
 
 #: ../fdroidserver/build.py
 #, python-brace-format
@@ -1765,7 +1882,9 @@ msgstr "Specifikoni një dosje vendore te e cila të njëkohësohet depoja"
 
 #: ../fdroidserver/deploy.py ../fdroidserver/upload.py
 msgid "Specify an identity file to provide to SSH for rsyncing"
-msgstr "Specifikoni një kartelë identiteti për t’ia furnizuar SSH-s për njëkohësim me rsync-un"
+msgstr ""
+"Specifikoni një kartelë identiteti për t’ia furnizuar SSH-s për njëkohësim "
+"me rsync-un"
 
 #: ../fdroidserver/build.py
 msgid "Specify that we're running on the build server"
@@ -1797,7 +1916,8 @@ msgstr "Përmbledhja '%s' është thjesht emri i aplikacionit"
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "Summary of length {length} is over the {limit} char limit"
-msgstr "Përmbledhja me gjatësi {length} është mbi kufirin prej {limit} shenjash"
+msgstr ""
+"Përmbledhja me gjatësi {length} është mbi kufirin prej {limit} shenjash"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -1805,7 +1925,9 @@ msgid "System clock is older than date in {path}!"
 msgstr "Ora e sistemit është më herët se sa data në {path}!"
 
 #: ../fdroidserver/checkupdates.py
-msgid "Tags update mode only works for git, hg, bzr and git-svn repositories currently"
+msgid ""
+"Tags update mode only works for git, hg, bzr and git-svn repositories "
+"currently"
 msgstr ""
 
 #: ../fdroidserver/checkupdates.py
@@ -1813,8 +1935,12 @@ msgid "Tags update mode used in git-svn, but the repo was not set up with tags"
 msgstr ""
 
 #: ../fdroidserver/build.py
-msgid "Test mode - put output in the tmp directory only, and always build, even if the output already exists."
-msgstr "Mënyra testim - hidhe output-in vetëm te drejtoria tmp, dhe monto përherë, edhe nëse output-i ekziston tashmë."
+msgid ""
+"Test mode - put output in the tmp directory only, and always build, even if "
+"the output already exists."
+msgstr ""
+"Mënyra testim - hidhe output-in vetëm te drejtoria tmp, dhe monto përherë, "
+"edhe nëse output-i ekziston tashmë."
 
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
 #: ../fdroidserver/update.py
@@ -1832,7 +1958,8 @@ msgstr "Drejtoria ku të shkruhet pasqyra"
 
 #: ../fdroidserver/nightly.py
 msgid "The file to be included in the repo (path or glob)"
-msgstr "Kartela që duhet përfshirë te depoja (shteg ose shenjë e gjithëpushtetshme)"
+msgstr ""
+"Kartela që duhet përfshirë te depoja (shteg ose shenjë e gjithëpushtetshme)"
 
 #: ../fdroidserver/deploy.py
 msgid "The only commands currently supported are 'init' and 'update'"
@@ -1860,8 +1987,16 @@ msgid "These are the apps that have been archived from the main repo."
 msgstr "Këto janë aplikacionet që janë arkivuar nga depoja kryesore."
 
 #: ../fdroidserver/common.py
-msgid "This is a repository of apps to be used with F-Droid. Applications in this repository are either official binaries built by the original application developers, or are binaries built from source by the admin of f-droid.org using the tools on https://gitlab.com/fdroid."
-msgstr "Kjo është një depo aplikacionesh për t’u përdorur me F-Droid. Aplikacionet në këtë depo ose janë dyorë zyrtarë të montuar nga zhvilluesit e aplikacionit rigjinal, ose janë dyorë të montuar nga burimi prej f-droid.org duke përdorur mjetet në https://gitlab.com/fdroid."
+msgid ""
+"This is a repository of apps to be used with F-Droid. Applications in this "
+"repository are either official binaries built by the original application "
+"developers, or are binaries built from source by the admin of f-droid.org "
+"using the tools on https://gitlab.com/fdroid."
+msgstr ""
+"Kjo është një depo aplikacionesh për t’u përdorur me F-Droid. Aplikacionet "
+"në këtë depo ose janë dyorë zyrtarë të montuar nga zhvilluesit e "
+"aplikacionit rigjinal, ose janë dyorë të montuar nga burimi prej f-droid.org "
+"duke përdorur mjetet në https://gitlab.com/fdroid."
 
 #: ../fdroidserver/import.py
 #, python-format
@@ -1881,8 +2016,12 @@ msgid ""
 msgstr ""
 
 #: ../fdroidserver/deploy.py ../fdroidserver/upload.py
-msgid "To use awsbucket, awssecretkey and awsaccesskeyid must also be set in config.yml!"
-msgstr "Për të përdorur awsbucket, te config.yml duhen ujdisur edhe awssecretkey dhe awsaccesskey!"
+msgid ""
+"To use awsbucket, awssecretkey and awsaccesskeyid must also be set in config."
+"yml!"
+msgstr ""
+"Për të përdorur awsbucket, te config.yml duhen ujdisur edhe awssecretkey dhe "
+"awsaccesskey!"
 
 #: ../fdroidserver/lint.py
 msgid "URL must start with https:// or http://"
@@ -1902,12 +2041,20 @@ msgid "URL {url} in Description: {error}"
 msgstr "URL {url} te Përshkrim: {error}"
 
 #: ../fdroidserver/lint.py
-msgid "Unexpected license tag \"{}\"! Only use FSF or OSI approved tags from https://spdx.org/license-list"
-msgstr "Etiketë licence \"{}\" e papritur! Përdorni vetëm etiketa të miratuara nga FSF ose OSI, prej https://spdx.org/license-list"
+msgid ""
+"Unexpected license tag \"{}\"! Only use FSF or OSI approved tags from "
+"https://spdx.org/license-list"
+msgstr ""
+"Etiketë licence \"{}\" e papritur! Përdorni vetëm etiketa të miratuara nga "
+"FSF ose OSI, prej https://spdx.org/license-list"
 
 #: ../fdroidserver/lint.py
-msgid "Unexpected license tag \"{}\"! Only use license tags configured in your config file"
-msgstr "Etiketë e papritur licence \"{}\"! Përdorni vetëm etiketa licencash të formësuara te kartela e formësimit tuaj"
+msgid ""
+"Unexpected license tag \"{}\"! Only use license tags configured in your "
+"config file"
+msgstr ""
+"Etiketë e papritur licence \"{}\"! Përdorni vetëm etiketa licencash të "
+"formësuara te kartela e formësimit tuaj"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -1955,7 +2102,9 @@ msgstr "Version i panjohur i aapt-së, mund të sjellë probleme: "
 
 #: ../fdroidserver/lint.py
 msgid "Unlinkified link - use [http://foo.bar Link title] or [http://foo.bar]"
-msgstr "Lidhje e cila është hequr nga lidhje - përdorni [http://lidhja_që_na_intereson Lidhje titull] ose [http://lidhja_që_na_intereson]"
+msgstr ""
+"Lidhje e cila është hequr nga lidhje - përdorni [http://"
+"lidhja_që_na_intereson Lidhje titull] ose [http://lidhja_që_na_intereson]"
 
 #: ../fdroidserver/lint.py
 msgid "Unnecessary leading space"
@@ -2074,17 +2223,23 @@ msgid "UpdateCheckData not a valid URL: {url}"
 msgstr "UpdateCheckData s’është URL e vlefshme: {url}"
 
 #: ../fdroidserver/lint.py
-msgid "UpdateCheckMode is set but it looks like checkupdates hasn't been run yet"
-msgstr "UpdateCheckMode është ujdisur, por duket sikur checkupdates s’është xhiruar ende"
+msgid ""
+"UpdateCheckMode is set but it looks like checkupdates hasn't been run yet"
+msgstr ""
+"UpdateCheckMode është ujdisur, por duket sikur checkupdates s’është xhiruar "
+"ende"
 
 #. Translators: https://developer.android.com/studio/build/application-id
 #: ../fdroidserver/lint.py
 msgid "UpdateCheckName is set to the known application ID - it can be removed"
-msgstr "Si UpdateCheckName është caktuar ID-ja e aplikacionit të njohur - s’mund të hiqet"
+msgstr ""
+"Si UpdateCheckName është caktuar ID-ja e aplikacionit të njohur - s’mund të "
+"hiqet"
 
 #: ../fdroidserver/lint.py
 msgid "UpdateCheckName is set to the known application ID, it can be removed"
-msgstr "Si UpdateCheckName është caktuar ID aplikacioni të njohur - s’mund të hiqet"
+msgstr ""
+"Si UpdateCheckName është caktuar ID aplikacioni të njohur - s’mund të hiqet"
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
@@ -2109,7 +2264,9 @@ msgstr "Përdorim: %s\n"
 
 #: ../fdroidserver/lint.py
 msgid "Use /HEAD instead of /master to point at a file in the default branch"
-msgstr "Për të treguar një kartelë te dega parazgjedhje, përdorni /HEAD, në vend se /master"
+msgstr ""
+"Për të treguar një kartelë te dega parazgjedhje, përdorni /HEAD, në vend se /"
+"master"
 
 #: ../fdroidserver/update.py
 msgid "Use `fdroid update -c` to create it."
@@ -2121,7 +2278,9 @@ msgstr "Përdor shërbyes montimesh"
 
 #: ../fdroidserver/update.py
 msgid "Use date from APK instead of current time for newly added APKs"
-msgstr "Për APK-ra të shtuara rishtazi, përdor datë prej APK-je, në vend se kohën e tanishme"
+msgstr ""
+"Për APK-ra të shtuara rishtazi, përdor datë prej APK-je, në vend se kohën e "
+"tanishme"
 
 #: ../fdroidserver/deploy.py ../fdroidserver/upload.py
 #, python-brace-format
@@ -2137,8 +2296,11 @@ msgid "Using APK Signature v3"
 msgstr "Po përdoret Nënshkrimi APK-je v3"
 
 #: ../fdroidserver/common.py
-msgid "Using Java's jarsigner, not recommended for verifying APKs! Use apksigner"
-msgstr "Po përdoret jarsigner Java, nuk rekomandohet për verifikim APK-sh! Përdorni apksigner"
+msgid ""
+"Using Java's jarsigner, not recommended for verifying APKs! Use apksigner"
+msgstr ""
+"Po përdoret jarsigner Java, nuk rekomandohet për verifikim APK-sh! Përdorni "
+"apksigner"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -2161,7 +2323,9 @@ msgstr "Urdhrat e vlefshëm janë:"
 
 #: ../fdroidserver/verify.py
 msgid "Verify against locally cached copy rather than redownloading."
-msgstr "Verifikoje ndaj një kopjeje të ruajtur lokalisht në fshehtinë, në vend se ta rishkarkosh."
+msgstr ""
+"Verifikoje ndaj një kopjeje të ruajtur lokalisht në fshehtinë, në vend se ta "
+"rishkarkosh."
 
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Verify the integrity of downloaded packages"
@@ -2173,19 +2337,29 @@ msgstr "Po verifikohet nënshkrim treguesi:"
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
-msgid "VirusTotal API key cannot upload files larger than 32MB, use {url} to upload {path}."
-msgstr "Kyçi API VirusTotal s’mund të ngarkojë kartela më të mëdha se 2MB, përdorni {url} që të ngarkoni {path}."
+msgid ""
+"VirusTotal API key cannot upload files larger than 32MB, use {url} to upload "
+"{path}."
+msgstr ""
+"Kyçi API VirusTotal s’mund të ngarkojë kartela më të mëdha se 2MB, përdorni "
+"{url} që të ngarkoni {path}."
 
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Warn about possible metadata errors"
 msgstr "Sinjalizo rreth gabimesh të mundshëm tejtëdhënash"
 
 #: ../fdroidserver/update.py
-msgid "When configured for signed indexes, create only unsigned indexes at this stage"
-msgstr "Kur është formësuar për tregues të nënshkruar, në këtë fazë krijo vetëm tregues të panënshkruar"
+msgid ""
+"When configured for signed indexes, create only unsigned indexes at this "
+"stage"
+msgstr ""
+"Kur është formësuar për tregues të nënshkruar, në këtë fazë krijo vetëm "
+"tregues të panënshkruar"
 
 #: ../fdroidserver/lint.py
-msgid "When linting the entire repository yamllint is disabled by default. This option forces yamllint regardless."
+msgid ""
+"When linting the entire repository yamllint is disabled by default. This "
+"option forces yamllint regardless."
 msgstr ""
 
 msgid "X.509 'Distiguished Name' used when generating keys"
@@ -2197,7 +2371,9 @@ msgstr "X.509 'Distinguished Name' i përdorur teksa prodhoheshin kyçe"
 
 #: ../fdroidserver/common.py
 msgid "You can use ANDROID_HOME to set the path to your SDK, i.e.:"
-msgstr "Mund të përdorni ANDROID_HOME që të caktoni shtegun për te SDK-ja juaj, domethënë:"
+msgstr ""
+"Mund të përdorni ANDROID_HOME që të caktoni shtegun për te SDK-ja juaj, "
+"domethënë:"
 
 #: ../fdroidserver/scanner.py
 msgid "ZIP file archive"
@@ -2430,7 +2606,9 @@ msgstr "bëji detyrimisht gabimet të jenë sinjalizime, ose shpërfilli"
 
 #: ../fdroidserver/metadata.py
 msgid "force metadata errors (default) to be warnings, or to be ignored."
-msgstr "bëji gabimet e tejtëdhënave (parazgjedhje) të jenë sinjalizime, ose të shpërfillen."
+msgstr ""
+"bëji gabimet e tejtëdhënave (parazgjedhje) të jenë sinjalizime, ose të "
+"shpërfillen."
 
 #: ../fdroidserver/common.py
 msgid "git svn clone failed"
@@ -2448,7 +2626,9 @@ msgstr "u shpërfill argumenti eksplicit %r"
 
 #: ../fdroidserver/index.py
 msgid "index-v1 must have a signature, use `fdroid signindex` to create it!"
-msgstr "index-v1 duhet të ketë një nënshkrim, përdorni `fdroid signindex` për ta krijuar!"
+msgstr ""
+"index-v1 duhet të ketë një nënshkrim, përdorni `fdroid signindex` për ta "
+"krijuar!"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 #: /usr/lib/python3.7/optparse.py
@@ -2476,8 +2656,12 @@ msgstr "vlerë e pavlefshme conflict_resolution: %r"
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py
 #, python-format
-msgid "invalid option string %(option)r: must start with a character %(prefix_chars)r"
-msgstr "varg i pavlefshëm mundësie %(option)r: duhet të fillojë me një shenjë %(prefix_chars)r"
+msgid ""
+"invalid option string %(option)r: must start with a character "
+"%(prefix_chars)r"
+msgstr ""
+"varg i pavlefshëm mundësie %(option)r: duhet të fillojë me një shenjë "
+"%(prefix_chars)r"
 
 #: ../fdroidserver/checkupdates.py
 #, python-brace-format
@@ -2486,8 +2670,11 @@ msgstr ""
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
-msgid "local_copy_dir does not end with \"fdroid\", perhaps you meant: \"{path}\""
-msgstr "local_copy_dir does s’mbaron me \"fdroid\", ndoshta kishit në mendje: \"{path}\""
+msgid ""
+"local_copy_dir does not end with \"fdroid\", perhaps you meant: \"{path}\""
+msgstr ""
+"local_copy_dir does s’mbaron me \"fdroid\", ndoshta kishit në mendje: "
+"\"{path}\""
 
 #: ../fdroidserver/deploy.py
 msgid "local_copy_dir must be an absolute path!"
@@ -2550,7 +2737,9 @@ msgstr "prano vetëm vargje, lista dhe dyshe"
 #: ../fdroidserver/install.py
 #, python-format
 msgid "option %s: If you really want to install all the signed apps, use --all"
-msgstr "mundësi %s: Nëse doni vërtet të instaloni krejt aplikacionet e nënshkruar, përdorni --all"
+msgstr ""
+"mundësi %s: Nëse doni vërtet të instaloni krejt aplikacionet e nënshkruar, "
+"përdorni --all"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 #: /usr/lib/python3.7/optparse.py
@@ -2622,13 +2811,21 @@ msgstr ""
 
 #: ../fdroidserver/signatures.py
 #, python-brace-format
-msgid "refuse downloading via insecure HTTP connection (use HTTPS or specify --no-https-check): {apkfilename}"
-msgstr "refuzo shkarkim përmes lidhjeje HTTP të pasigurt (përdorni HTTPS ose specifikoni --no-https-check): {apkfilename}"
+msgid ""
+"refuse downloading via insecure HTTP connection (use HTTPS or specify --no-"
+"https-check): {apkfilename}"
+msgstr ""
+"refuzo shkarkim përmes lidhjeje HTTP të pasigurt (përdorni HTTPS ose "
+"specifikoni --no-https-check): {apkfilename}"
 
 #: ../fdroidserver/signatures.py
 #, python-brace-format
-msgid "refuse downloading via insecure http connection (use https or specify --no-https-check): {apkfilename}"
-msgstr "mos pranon shkarkim përmes lidhjeje http të pasigurt (përdorni https ose specifikoni --no-https-check): {apkfilename}"
+msgid ""
+"refuse downloading via insecure http connection (use https or specify --no-"
+"https-check): {apkfilename}"
+msgstr ""
+"mos pranon shkarkim përmes lidhjeje http të pasigurt (përdorni https ose "
+"specifikoni --no-https-check): {apkfilename}"
 
 #: ../fdroidserver/index.py
 #, python-format
@@ -2675,11 +2872,14 @@ msgstr "APK e nënshkruar, ose një shteg-kartele, ose URL HTTPS."
 
 #: ../fdroidserver/common.py
 msgid "skip deploying full build logs: log content is empty"
-msgstr "anashkalo sendërtim regjistrash të plotë montimesh: lëndë e regjistrit është e zbrazët"
+msgstr ""
+"anashkalo sendërtim regjistrash të plotë montimesh: lëndë e regjistrit është "
+"e zbrazët"
 
 #: ../fdroidserver/common.py
 msgid "skip deploying full build logs: not enabled in config"
-msgstr "anashkalo krijim regjistrash të plotë montimi: e paaktivizuar te formësimi"
+msgstr ""
+"anashkalo krijim regjistrash të plotë montimi: e paaktivizuar te formësimi"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -2748,7 +2948,9 @@ msgstr "virustotal.com i kufizon shpejtësitë, po pritet për riprovim…"
 
 #: ../fdroidserver/update.py
 msgid "wiki support is deprecated and will be removed in the next release!"
-msgstr "Mbulimi për wiki është nxjerrë nga përdorimi dhe do të hiqet në hedhjen e ardhshme në qarkullim!"
+msgstr ""
+"Mbulimi për wiki është nxjerrë nga përdorimi dhe do të hiqet në hedhjen e "
+"ardhshme në qarkullim!"
 
 #: ../fdroidserver/publish.py
 #, python-brace-format
@@ -2765,7 +2967,9 @@ msgstr "{apkfilename} ({appid}) s’ka tejtëdhëna!"
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "{apkfilename} has multiple {name} files, looks like Master Key exploit!"
-msgstr "{apkfilename} ka shumë kartela {name}, duket si rreng me Kyçin e Përgjithshëm!"
+msgstr ""
+"{apkfilename} ka shumë kartela {name}, duket si rreng me Kyçin e "
+"Përgjithshëm!"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -2816,17 +3020,21 @@ msgstr "{appid}: extlib i panjohur {path} te montimi '{versionName}'"
 #: ../fdroidserver/scanner.py
 #, python-brace-format
 msgid "{appid}: no builds specified, running on current source state"
-msgstr "{appid}: s’u specifikuan montime, po xhirohet me gjendjen e tanishme të burimit"
+msgstr ""
+"{appid}: s’u specifikuan montime, po xhirohet me gjendjen e tanishme të "
+"burimit"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "{appid}: {field} must be a '{type}', but it is a '{fieldtype}!'"
-msgstr "{appid}: {field} duhet të jetë një '{type}', po është një '{fieldtype}!'"
+msgstr ""
+"{appid}: {field} duhet të jetë një '{type}', po është një '{fieldtype}!'"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "{appid}: {field} must be a '{type}', but it is a '{fieldtype}'!"
-msgstr "{appid}: {field} duhet të jetë një '{type}', por është një '{fieldtype}'!"
+msgstr ""
+"{appid}: {field} duhet të jetë një '{type}', por është një '{fieldtype}'!"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
@@ -2851,7 +3059,8 @@ msgstr "{name} \"{path}\" s’ekziston! Ndreqeni te config.yml."
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "{name} \"{section}/icons/{path}\" does not exist! Check \"config.yml\"."
-msgstr "{name} \"{section}/icons/{path}\" s’ekziston! Kontrolloni \"config.yml\"."
+msgstr ""
+"{name} \"{section}/icons/{path}\" s’ekziston! Kontrolloni \"config.yml\"."
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -2871,7 +3080,9 @@ msgstr "{path} s’ekziston!  Krijojeni duke xhiruar:"
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "{path} has bad file signature \"{pattern}\", possible Janus exploit!"
-msgstr "{path} ka \"{pattern}\" të gabuar nënshkrimi kartele, ka gjasa të jetë rreng Janus!"
+msgstr ""
+"{path} ka \"{pattern}\" të gabuar nënshkrimi kartele, ka gjasa të jetë rreng "
+"Janus!"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -2909,3 +3120,42 @@ msgid "{} build succeeded"
 msgid_plural "{} builds succeeded"
 msgstr[0] "{} doli me sukses"
 msgstr[1] "{} dolën me sukses"
+
+#~ msgid "Cannot find a packageName for {path}!"
+#~ msgstr "S’gjendet dot një packageName për {path}!"
+
+#~ msgid "Cannot find an appid for {path}!"
+#~ msgstr "S’gjendet dot një appid për {path}!"
+
+#~ msgid "Clean after all scans have finished"
+#~ msgstr "Pastroje, pasi të kenë përfunduar krejt skanimet"
+
+#~ msgid "Clean before the scans start and rebuild the container"
+#~ msgstr ""
+#~ "Pastrojeni përpara se të fillojnë skanimet dhe të rimontohet kontejneri"
+
+#~ msgid "Clean up all containers and then exit"
+#~ msgstr "Pastroji krejt kontejnerët dhe mandej dil"
+
+#~ msgid "Could not open APK file for analysis"
+#~ msgstr "S’u hap dot kartela APK për analizim"
+
+#~ msgid "Override path for repo APKs (default: ./repo)"
+#~ msgstr "Shteg anashkalimi për APK-ra depoje (parazgjedhje: ./repo)"
+
+#~ msgid "Prepare Drozer to run a scan"
+#~ msgstr "Përgatite Drozer-in të bëjë një skanim"
+
+#~ msgid "Prepare drozer to run a scan"
+#~ msgstr "Përgatite Drozer-in të kryejë një skanim"
+
+#~ msgid "Scan only the latest version of each package"
+#~ msgstr "Skano vetëm versionin më të ri të çdo pakete"
+
+#~ msgid "Setup an emulator, install the APK on it and perform a Drozer scan"
+#~ msgstr ""
+#~ "Ujdisni një emulues, instaloni në të APK-në dhe kryeni një skanim Drozer"
+
+#~ msgid "Setup an emulator, install the APK on it and perform a drozer scan"
+#~ msgstr ""
+#~ "Ujdisni një emulues, instaloni në të APK-në dhe kryeni një skanim Drozer"
