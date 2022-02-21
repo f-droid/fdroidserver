@@ -349,7 +349,6 @@ Last updated: {date}'''.format(repo_git_base=repo_git_base,
                             'Resigning {apkfilename} with provided debug.keystore'
                         ).format(apkfilename=os.path.basename(apkfilename))
                     )
-                    common.apk_strip_v1_signatures(apkfilename, strip_manifest=True)
                     common.sign_apk(apkfilename, destapk, KEY_ALIAS)
 
         if options.verbose:
