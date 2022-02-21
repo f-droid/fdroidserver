@@ -135,7 +135,7 @@ def main():
             clone_url = os.getenv('CI_PROJECT_URL') + NIGHTLY
             repo_base = clone_url + '/raw/master/fdroid'
             servergitmirror = 'git@' + urlparse(clone_url).netloc + ':' + repo_git_base
-            deploy_key_url = clone_url + '/settings/repository'
+            deploy_key_url = clone_url + '/-/settings/repository#js-deploy-keys-settings'
             git_user_name = os.getenv('GITLAB_USER_NAME')
             git_user_email = os.getenv('GITLAB_USER_EMAIL')
         elif 'TRAVIS_REPO_SLUG' in os.environ:
