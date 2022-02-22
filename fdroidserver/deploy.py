@@ -107,6 +107,8 @@ def update_awsbucket_s3cmd(repo_section):
     indexxml = os.path.join(repo_section, 'index.xml')
     indexjar = os.path.join(repo_section, 'index.jar')
     indexv1jar = os.path.join(repo_section, 'index-v1.jar')
+    indexv1json = os.path.join(repo_section, 'index-v1.json')
+    indexv1jsonasc = os.path.join(repo_section, 'index-v1.json.asc')
 
     s3url = s3bucketurl + '/fdroid/'
     logging.debug('s3cmd sync new files in ' + repo_section + ' to ' + s3url)
@@ -116,6 +118,8 @@ def update_awsbucket_s3cmd(repo_section):
                           '--exclude', indexxml,
                           '--exclude', indexjar,
                           '--exclude', indexv1jar,
+                          '--exclude', indexv1json,
+                          '--exclude', indexv1jsonasc,
                           repo_section, s3url]) != 0:
         raise FDroidException()
     logging.debug('s3cmd sync all files in ' + repo_section + ' to ' + s3url)
@@ -124,6 +128,8 @@ def update_awsbucket_s3cmd(repo_section):
                           '--exclude', indexxml,
                           '--exclude', indexjar,
                           '--exclude', indexv1jar,
+                          '--exclude', indexv1json,
+                          '--exclude', indexv1jsonasc,
                           repo_section, s3url]) != 0:
         raise FDroidException()
 
@@ -251,6 +257,8 @@ def update_serverwebroot(serverwebroot, repo_section):
     indexxml = os.path.join(repo_section, 'index.xml')
     indexjar = os.path.join(repo_section, 'index.jar')
     indexv1jar = os.path.join(repo_section, 'index-v1.jar')
+    indexv1json = os.path.join(repo_section, 'index-v1.json')
+    indexv1jsonasc = os.path.join(repo_section, 'index-v1.json.asc')
     # Upload the first time without the index files and delay the deletion as
     # much as possible, that keeps the repo functional while this update is
     # running.  Then once it is complete, rerun the command again to upload
@@ -263,6 +271,8 @@ def update_serverwebroot(serverwebroot, repo_section):
                        + ['--exclude', indexxml,
                           '--exclude', indexjar,
                           '--exclude', indexv1jar,
+                          '--exclude', indexv1json,
+                          '--exclude', indexv1jsonasc,
                           repo_section, serverwebroot]) != 0:
         raise FDroidException()
     if subprocess.call(rsyncargs + [repo_section, serverwebroot]) != 0:
