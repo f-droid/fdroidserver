@@ -1053,9 +1053,9 @@ msgid "Include the source tarballs in the mirror"
 msgstr "Inclure au miroir les tarballs de source"
 
 #: ../fdroidserver/metadata.py
-#, fuzzy, python-format
+#, python-format
 msgid "Including metadata from %s@%s"
-msgstr "Métadonnées non valides dans %s:%d"
+msgstr ""
 
 #: ../fdroidserver/metadata.py
 #, fuzzy, python-brace-format

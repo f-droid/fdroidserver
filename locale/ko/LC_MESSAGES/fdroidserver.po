@@ -1013,14 +1013,14 @@ msgid "Include the source tarballs in the mirror"
 msgstr ""
 
 #: ../fdroidserver/metadata.py
-#, fuzzy, python-format
+#, python-format
 msgid "Including metadata from %s@%s"
-msgstr "%s:%d에서 잘못된 메타데이터"
+msgstr ""
 
 #: ../fdroidserver/metadata.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Including metadata from {path}"
-msgstr "알 수 없는 메타데이터 형식: {path}"
+msgstr ""
 
 #: ../fdroidserver/common.py
 msgid "Initialising submodules"

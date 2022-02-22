@@ -206,7 +206,7 @@ def main():
             clone_url = os.getenv('CI_PROJECT_URL') + NIGHTLY
             repo_base = clone_url + '/raw/master/fdroid'
             servergitmirror = 'git@' + urlparse(clone_url).netloc + ':' + repo_git_base
-            deploy_key_url = clone_url + '/settings/repository'
+            deploy_key_url = clone_url + '/-/settings/repository#js-deploy-keys-settings'
             git_user_name = os.getenv('GITLAB_USER_NAME')
             git_user_email = os.getenv('GITLAB_USER_EMAIL')
         elif 'TRAVIS_REPO_SLUG' in os.environ:
@@ -349,7 +349,6 @@ Last updated: {date}'''.format(repo_git_base=repo_git_base,
                             'Resigning {apkfilename} with provided debug.keystore'
                         ).format(apkfilename=os.path.basename(apkfilename))
                     )
-                    common.apk_strip_v1_signatures(apkfilename, strip_manifest=True)
                     common.sign_apk(apkfilename, destapk, KEY_ALIAS)
 
         if options.verbose:
