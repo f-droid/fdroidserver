@@ -1030,14 +1030,14 @@ msgid "Include the source tarballs in the mirror"
 msgstr "Incluir os tarballs de fontes no espelho"
 
 #: ../fdroidserver/metadata.py
-#, fuzzy, python-format
+#, python-format
 msgid "Including metadata from %s@%s"
-msgstr "Metadados inválidos em %s:%d"
+msgstr ""
 
 #: ../fdroidserver/metadata.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Including metadata from {path}"
-msgstr "Formato de metadados desconhecido: {path}"
+msgstr ""
 
 #: ../fdroidserver/common.py
 msgid "Initialising submodules"

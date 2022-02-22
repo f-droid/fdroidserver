@@ -1027,9 +1027,9 @@ msgid "Include the source tarballs in the mirror"
 msgstr "A forráscsomagok belevétele a tükörbe"
 
 #: ../fdroidserver/metadata.py
-#, fuzzy, python-format
+#, python-format
 msgid "Including metadata from %s@%s"
-msgstr "Érvénytelen metaadatok itt: %s:%d"
+msgstr ""
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format

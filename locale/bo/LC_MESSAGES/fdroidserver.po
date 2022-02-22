@@ -1025,14 +1025,14 @@ msgid "Include the source tarballs in the mirror"
 msgstr ""
 
 #: ../fdroidserver/metadata.py
-#, fuzzy, python-format
+#, python-format
 msgid "Including metadata from %s@%s"
-msgstr "ཁུངས་ལྡན་མིན་པའི་རྒྱབ་ལྗོངས་ཡིག་ཆའི་ནང་།%s 1:%d 2"
+msgstr ""
 
 #: ../fdroidserver/metadata.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Including metadata from {path}"
-msgstr "ངོས་འཛིན་མི་ཐུབ་པའི་རྒྱབ་ལྗོངས་ཡིག་ཆའི་སྒྲིག་བཀོད། : {path}"
+msgstr ""
 
 #: ../fdroidserver/common.py
 msgid "Initialising submodules"

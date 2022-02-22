@@ -1034,14 +1034,14 @@ msgid "Include the source tarballs in the mirror"
 msgstr "Incluir en el espejo los archivos tarball de código fuente"
 
 #: ../fdroidserver/metadata.py
-#, fuzzy, python-format
+#, python-format
 msgid "Including metadata from %s@%s"
-msgstr "Metadatos no válidos en %s:%d"
+msgstr ""
 
 #: ../fdroidserver/metadata.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Including metadata from {path}"
-msgstr "Formato de metadatos desconocido: {path}"
+msgstr ""
 
 #: ../fdroidserver/common.py
 msgid "Initialising submodules"
