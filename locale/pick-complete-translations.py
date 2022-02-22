@@ -44,7 +44,7 @@ with open(manifest_file) as fp:
 
 manifest_lines = set()
 for locale in active:
-    manifest_lines.add('include locale/%s/LC_MESSAGES/fdroidserver.mo\n' % locale)
+    manifest_lines.add('include locale/%s/LC_MESSAGES/fdroidserver.po\n' % locale)
 
 with open(manifest_file, 'a') as fp:
     for line in manifest_lines:
