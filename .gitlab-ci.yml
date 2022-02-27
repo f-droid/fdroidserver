@@ -547,8 +547,8 @@ docker:
   services:
     - docker:dind
   variables:
-    TEST_IMAGE: registry.gitlab.com/$CI_PROJECT_NAMESPACE/${CI_PROJECT_NAME}:$CI_BUILD_REF_NAME
-    RELEASE_IMAGE: registry.gitlab.com/$CI_PROJECT_NAMESPACE/${CI_PROJECT_NAME}:buildserver
+    TEST_IMAGE: $CI_REGISTRY_IMAGE:$CI_BUILD_REF_NAME
+    RELEASE_IMAGE: $CI_REGISTRY_IMAGE:buildserver
   script:
     - cd buildserver
     - docker build -t $TEST_IMAGE --build-arg GIT_REV_PARSE_HEAD=$(git rev-parse HEAD) .
