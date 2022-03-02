@@ -398,7 +398,7 @@ def scan_source(build_dir, build=metadata.Build()):
                     if not any(r.match(url) for r in allowed_repos):
                         count += handleproblem('unknown maven repo \'%s\'' % url, path_in_build_dir, filepath)
 
-            elif curfile.endswith(('.', '.bin', '.out', '.exe')):
+            elif os.path.splitext(path_in_build_dir)[1] in ['', '.bin', '.out', '.exe']:
                 if is_binary(filepath):
                     count += handleproblem('binary', path_in_build_dir, filepath)
 
