@@ -330,11 +330,10 @@ gradle/ndk:
 
 # Run an actual build in a simple, faked version of the buildserver guest VM.
 fdroid build:
-  image: registry.gitlab.com/fdroid/ci-images-client
+  image: registry.gitlab.com/fdroid/fdroidserver:buildserver
   only:
     changes:
       - .gitlab-ci.yml
-      - buildserver/provision-apt-get-install
       - fdroidserver/build.py
       - fdroidserver/common.py
       - fdroidserver/exception.py
@@ -347,33 +346,47 @@ fdroid build:
     paths:
       - .gradle
   script:
-    - bash buildserver/provision-apt-get-install http://deb.debian.org/debian
+    - apt-get update
     - apt-get dist-upgrade
-    - apt-get install -t stretch-backports
-         python3-asn1crypto
-         python3-pip
-         python3-ruamel.yaml
-         python3-setuptools
-         python3-venv
-    - apt-get purge fdroidserver
-    - pyvenv env --system-site-packages
-    - . env/bin/activate
-    - $pip install -e .
-    - export PATH="$CI_PROJECT_DIR:$PATH"
-    - export PYTHONPATH=$CI_PROJECT_DIR
-    - export PYTHONUNBUFFERED=true
+    - apt-get clean
 
-    - git clone https://gitlab.com/fdroid/fdroiddata.git --depth 1
+    - test -n "$fdroidserver" || source /etc/profile.d/bsenv.sh
+
+    - ln -fsv "$CI_PROJECT_DIR" "$fdroidserver"
+
+    # TODO remove sdkmanager install once it is included in the buildserver image
+    - pip3 install git+https://gitlab.com/fdroid/sdkmanager.git@0.5.2
+    - rm -rf "$ANDROID_HOME/tools" # TODO remove once sdkmanager can upgrade installed packages
+    - sdkmanager "tools" "platform-tools" "build-tools;31.0.0"
+
+    - git ls-remote https://gitlab.com/fdroid/fdroiddata.git master
+    - git clone --depth 1 https://gitlab.com/fdroid/fdroiddata.git
     - cd fdroiddata
-    - test -d build || mkdir build
+    - for d in build logs repo tmp unsigned $home_vagrant/.android; do
+          test -d $d || mkdir $d;
+          chown -R vagrant $d;
+      done
 
-    - export GRADLE_USER_HOME=$CI_PROJECT_DIR/.gradle
-    # try a user build first
-    - fdroid build --verbose --latest org.fdroid.fdroid.privileged
-    # each `fdroid build --on-server` run expects sudo, then uninstalls it
-    - apt-get install sudo
+    - export GRADLE_USER_HOME=$home_vagrant/.gradle
+    - export fdroid="sudo --preserve-env --user vagrant
+          env PATH=$fdroidserver:$PATH
+          env PYTHONPATH=$fdroidserver:$fdroidserver/examples
+          env PYTHONUNBUFFERED=true
+          env TERM=$TERM
+          env HOME=$home_vagrant
+          fdroid"
+
+    - chown -R vagrant $home_vagrant
+
+    # try user build
+    - $fdroid build --verbose --latest org.fdroid.fdroid.privileged
+
+    # try on-server build
     - currentVersionCode=`python3 -c "import yaml; print(yaml.load(open('metadata/org.fdroid.fdroid.yml'))['CurrentVersionCode'])"`
-    - fdroid build --verbose --on-server --no-tarball org.fdroid.fdroid:$currentVersionCode
+    - $fdroid build --verbose --on-server --no-tarball org.fdroid.fdroid:$currentVersionCode
+
+    # each `fdroid build --on-server` run expects sudo, then uninstalls it
+    - ! dpkg --list sudo
 
 
 # test the plugin API and specifically the fetchsrclibs plugin, which
