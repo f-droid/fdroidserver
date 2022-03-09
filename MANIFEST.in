@@ -833,6 +833,11 @@ include tests/triple-t-anysoftkeyboard/build/com.menny.android.anysoftkeyboard/i
 include tests/triple-t-anysoftkeyboard/build/com.menny.android.anysoftkeyboard/settings.gradle
 include tests/triple-t-anysoftkeyboard/metadata/com.anysoftkeyboard.languagepack.dutch.yml
 include tests/triple-t-anysoftkeyboard/metadata/com.menny.android.anysoftkeyboard.yml
+include tests/triple-t-flutter/metadata/fr.emersion.goguma.yml
+include tests/triple-t-flutter/build/fr.emersion.goguma/android/app/src/main/play/listings/en-US/title.txt
+include tests/triple-t-flutter/build/fr.emersion.goguma/android/app/src/main/play/listings/en-US/short-description.txt
+include tests/triple-t-flutter/build/fr.emersion.goguma/android/app/src/main/play/listings/en-US/full-description.txt
+include tests/triple-t-flutter/build/fr.emersion.goguma/android/app/src/main/play/contact-website.txt
 include tests/triple-t-multiple/build/ch.admin.bag.covidcertificate.verifier/settings.gradle
 include tests/triple-t-multiple/build/ch.admin.bag.covidcertificate.verifier/verifier/src/main/play/listings/en-US/title.txt
 include tests/triple-t-multiple/build/ch.admin.bag.covidcertificate.verifier/wallet/src/main/play/listings/en-US/title.txt

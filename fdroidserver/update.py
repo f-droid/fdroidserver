@@ -844,6 +844,9 @@ def copy_triple_t_store_metadata(apps):
                                         gradle_subdirs.add(p)
         if not gradle_subdirs:
             gradle_subdirs.update(glob.glob(os.path.join('build', packageName, '*', 'src', '*', 'play')))
+        if not gradle_subdirs:
+            # Flutter-style android subdir
+            gradle_subdirs.update(glob.glob(os.path.join('build', packageName, 'android', 'app', 'src', '*', 'play')))
 
         for d in sorted(gradle_subdirs):
             logging.debug('Triple-T Gradle Play Publisher: ' + d)

@@ -1,0 +1,11 @@
+An IRC client for mobile devices.
+
+Goals:
+
+<ul>
+	<li><b>Modern</b>: support for many IRCv3 extensions, plus some special support for IRC bouncers.</li>
+	<li><b>Easy to use</b>: offer a simple, straightforward interface.</li>
+	<li><b>Offline-first</b>: users should be able to read past conversations while offline, and network disruptions should be handled transparently.</li>
+	<li><b>Lightweight</b>: go easy on resource usage to run smoothly on older phones and save battery power.</li>
+	<li><b>Cross-platform</b>: the main target platforms are Linux and Android.</li>
+</ul>

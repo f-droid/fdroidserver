@@ -1,0 +1,30 @@
+Categories:
+  - Internet
+License: AGPL-3.0-only
+WebSite: https://sr.ht/~emersion/goguma
+SourceCode: https://git.sr.ht/~emersion/goguma
+IssueTracker: https://todo.sr.ht/~emersion/goguma
+
+AutoName: Goguma
+
+RepoType: git
+Repo: https://git.sr.ht/~emersion/goguma
+
+Builds:
+  - versionName: 0.1.0
+    versionCode: 1
+    commit: 944d2d1e000901365392e850a98ee03f5dedba32
+    output: build/app/outputs/flutter-apk/app-release.apk
+    srclibs:
+      - flutter@2.10.2
+    build:
+      - $$flutter$$/bin/flutter config --no-analytics
+      - $$flutter$$/bin/flutter create --org fr.emersion --project-name goguma --platforms
+        android --no-overwrite .
+      - $$flutter$$/bin/flutter build apk --release --verbose
+
+AutoUpdateMode: Version
+UpdateCheckMode: Tags
+UpdateCheckData: pubspec.yaml|version:\s.+\+(\d+)|.|version:\s(.+)\+
+CurrentVersion: 0.1.0
+CurrentVersionCode: 1

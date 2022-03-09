@@ -461,6 +461,30 @@ class UpdateTest(unittest.TestCase):
             app = apps[packageName]
             self.assertEqual(app['localized']['en-US']['name'], names[p])
 
+    def test_insert_triple_t_flutter(self):
+        packageName = 'fr.emersion.goguma'
+
+        tmptestsdir = tempfile.mkdtemp(
+            prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir
+        )
+        os.rmdir(tmptestsdir)
+        shutil.copytree(os.path.join(self.basedir, 'triple-t-flutter'), tmptestsdir)
+        os.chdir(tmptestsdir)
+
+        config = dict()
+        fdroidserver.common.fill_config_defaults(config)
+        fdroidserver.common.config = config
+        fdroidserver.update.config = config
+        fdroidserver.update.options = fdroidserver.common.options
+
+        apps = fdroidserver.metadata.read_metadata()
+        self.assertTrue(packageName in apps)
+        fdroidserver.update.copy_triple_t_store_metadata(apps)
+        app = apps[packageName]
+        self.assertEqual(app['authorWebSite'], 'https://emersion.fr')
+        self.assertEqual(app['localized']['en-US']['name'], 'Goguma')
+        self.assertEqual(app['localized']['en-US']['summary'], 'An IRC client for mobile devices')
+
     def javagetsig(self, apkfile):
         getsig_dir = 'getsig'
         if not os.path.exists(os.path.join(getsig_dir, "getsig.class")):
