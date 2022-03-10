@@ -1368,6 +1368,54 @@ grep "CurrentVersionCode: 2" metadata/fake.yml
 
 
 #------------------------------------------------------------------------------#
+echo_header "checkupdates check version in submodule"
+
+ROOT=$(create_test_dir)
+cd "$ROOT"
+mkdir app sub
+cd sub
+$git init
+echo 1 > ver
+$git add ver
+$git commit -m 1
+
+cd ../app
+$git init
+$git submodule add "file://$(pwd)/../sub"
+$git commit -am 1
+$git tag 1
+
+cd ../sub
+echo 2 > ver
+$git commit -am 2
+
+cd ../app
+$git init
+$git submodule update --remote
+$git commit -am 2
+
+cd ..
+mkdir repo
+mkdir metadata
+cat > metadata/fake.yml <<EOF
+RepoType: git
+Repo: file://$(pwd)/app
+Builds:
+   - versionName: 0
+     versionCode: 0
+     submodules: true
+AutoUpdateMode: Version
+UpdateCheckMode: Tags
+UpdateCheckData: 'sub/ver|(\d)||'
+CurrentVersion: 0
+CurrentVersionCode: 0
+EOF
+
+$fdroid checkupdates --allow-dirty --auto -v
+grep "CurrentVersionCode: 1" metadata/fake.yml
+
+
+#------------------------------------------------------------------------------#
 
 # remove this to prevent git conflicts and complaining
 rm -rf $WORKSPACE/fdroidserver.egg-info/

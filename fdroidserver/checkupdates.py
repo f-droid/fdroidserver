@@ -141,6 +141,7 @@ def check_tags(app, pattern):
     for tag in tags:
         logging.debug("Check tag: '{0}'".format(tag))
         vcs.gotorevision(tag)
+        try_init_submodules(app, last_build, vcs)
 
         if app.UpdateCheckData:
             filecode, codeex, filever, verex = app.UpdateCheckData.split('|')
