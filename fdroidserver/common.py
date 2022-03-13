@@ -1564,7 +1564,11 @@ def retrieve_string(app_dir, string, xmlfiles=None):
     for path in xmlfiles:
         if not os.path.isfile(path):
             continue
-        xml = parse_xml(path)
+        try:
+            xml = parse_xml(path)
+        except XMLElementTree.ParseError:
+            logging.warning(_("Problem with xml at '{path}'").format(path=path))
+            continue
         element = xml.find('string[@name="' + name + '"]')
         if element is not None:
             content = element_content(element)
@@ -1606,7 +1610,11 @@ def fetch_real_name(app_dir, flavours):
         if not path.endswith('.xml') or not os.path.isfile(path):
             continue
         logging.debug("fetch_real_name: Checking manifest at " + path)
-        xml = parse_xml(path)
+        try:
+            xml = parse_xml(path)
+        except XMLElementTree.ParseError:
+            logging.warning(_("Problem with xml at '{path}'").format(path=path))
+            continue
         app = xml.find('application')
         if app is None:
             continue
