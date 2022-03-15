@@ -83,6 +83,7 @@ NON_FREE_GRADLE_LINES = {
         r'cloudrail',
         r'com.tencent.bugly',
         r'appcenter-push',
+        r'com.github.junrar:junrar',
     ]
 }
 
