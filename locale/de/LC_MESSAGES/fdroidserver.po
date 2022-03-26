@@ -18,13 +18,14 @@
 # VfBFan <drop0815@posteo.de>, 2021.
 # Roman Leo <roman.leo@gmx.de>, 2021.
 # Follpvosten <wolfi@karpador.xyz>, 2021.
+# ssantos <ssantos@web.de>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2022-02-15 20:04+0100\n"
-"PO-Revision-Date: 2022-02-22 21:46+0000\n"
-"Last-Translator: C. Rüdinger <Mail-an-CR@web.de>\n"
+"PO-Revision-Date: 2022-02-23 21:29+0000\n"
+"Last-Translator: ssantos <ssantos@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/f-droid/fdroidserver/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -1735,7 +1736,7 @@ msgstr ""
 
 #: ../fdroidserver/checkupdates.py
 msgid "RepoTrunk update mode only makes sense in git-svn repositories"
-msgstr ""
+msgstr "Der RepoTrunk-Aktualisierungsmodus ist nur bei git-svn-Paketquellen sinnvoll"
 
 #: ../fdroidserver/update.py
 msgid "Report on build data status"
@@ -1881,7 +1882,7 @@ msgstr "Überspringen von '{apkfilename}' mit ungültiger Signatur!"
 #: ../fdroidserver/index.py
 #, python-format
 msgid "Skipping GitLab Pages mirror because the repo is too large (>%.2fGB)!"
-msgstr ""
+msgstr "GitLab Pages Mirror wird übersprungen, da das Repo zu groß ist (>%.2fGB)!"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -1956,11 +1957,11 @@ msgstr "Die System-Uhr ist älter als das Datum in {path}!"
 msgid ""
 "Tags update mode only works for git, hg, bzr and git-svn repositories "
 "currently"
-msgstr ""
+msgstr "Der Aktualisierungsmodus funktioniert derzeit nur für Git-, Hg-, Bzr- und Git-SVN-Paketquellen"
 
 #: ../fdroidserver/checkupdates.py
 msgid "Tags update mode used in git-svn, but the repo was not set up with tags"
-msgstr ""
+msgstr "Aktualisierungsmodus mit Tags in git-svn verwendet, aber das Repo wurde nicht mit Tags eingerichtet"
 
 #: ../fdroidserver/build.py
 msgid ""
@@ -2088,7 +2089,7 @@ msgstr ""
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Unexpected symlink target: {link} -> {target}"
-msgstr ""
+msgstr "Unerwartetes Symlink-Ziel: {link} -> {target}"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
@@ -2696,9 +2697,9 @@ msgstr ""
 "%(prefix_chars)r beginnen"
 
 #: ../fdroidserver/checkupdates.py
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "latest build recipe is newer: old vercode={old}, new vercode={new}"
-msgstr ""
+msgstr "Das neueste Build-Rezept ist neuer: alter Vercode={old}, neuer Vercode={new}"
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
