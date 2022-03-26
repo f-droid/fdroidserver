@@ -14,20 +14,21 @@
 # Liu Wenyuan <15816141883@163.com>, 2021.
 # JY3 <GeeyunJY3@gmail.com>, 2021, 2022.
 # Eric <alchemillatruth@purelymail.com>, 2022.
+# shenzhui007 <12231252@bjtu.edu.cn>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2022-02-15 20:04+0100\n"
-"PO-Revision-Date: 2022-02-27 11:55+0000\n"
-"Last-Translator: JY3 <GeeyunJY3@gmail.com>\n"
+"PO-Revision-Date: 2022-03-26 16:14+0000\n"
+"Last-Translator: shenzhui007 <12231252@bjtu.edu.cn>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/f-droid/fdroidserver/zh_Hans/>\n"
 "Language: zh_Hans\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.11.1-dev\n"
+"X-Generator: Weblate 4.12-dev\n"
 
 #: ../fdroidserver/common.py
 msgid ""
@@ -696,7 +697,7 @@ msgstr "下载当前没有的日志"
 #: ../fdroidserver/common.py
 #, python-format
 msgid "Downloading %s"
-msgstr ""
+msgstr "下载%s中"
 
 #: ../fdroidserver/common.py
 msgid "Downloading the repository already failed once, not trying again."
@@ -807,7 +808,7 @@ msgstr "创建亚马逊简易储存服务失败：{url}"
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Failed to get APK information, deleting {path}"
-msgstr ""
+msgstr "获取APK信息失败，删除{path}中"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
