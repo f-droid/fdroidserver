@@ -48,6 +48,8 @@ try:
 except ImportError:
     pass
 
+buildserverid = None
+
 
 # Note that 'force' here also implies test mode.
 def build_server(app, build, vcs, build_dir, output_dir, log_dir, force):
@@ -951,7 +953,6 @@ def parse_commandline():
 
 options = None
 config = None
-buildserverid = None
 fdroidserverid = None
 start_timestamp = time.gmtime()
 status_output = None

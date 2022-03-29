@@ -3257,6 +3257,7 @@ class ClonedZipInfo(zipfile.ZipInfo):
     """
 
     def __init__(self, zinfo):
+        super().__init__()
         self.original = zinfo
         for k in self.__slots__:
             try:

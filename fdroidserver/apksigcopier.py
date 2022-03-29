@@ -99,6 +99,7 @@ class ReproducibleZipInfo(zipfile.ZipInfo):
     _override = {}  # type: Dict[str, Union[int, Tuple[int, ...]]]
 
     def __init__(self, zinfo, **override):
+        super().__init__()
         if override:
             self._override = {**self._override, **override}
         for k in self.__slots__:

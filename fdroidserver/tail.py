@@ -105,6 +105,7 @@ class Tail(object):
 
 class TailError(Exception):
     def __init__(self, msg):
+        super().__init__()
         self.message = msg
 
     def __str__(self):
