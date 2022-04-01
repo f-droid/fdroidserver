@@ -2177,10 +2177,11 @@ def main():
     apks += files
     appid_has_apks = set()
     appid_has_repo_files = set()
+    remove_apks = []
     for apk in apks:
         to_remove = get_apks_without_allowed_signatures(apps.get(apk['packageName']), apk)
         if to_remove:
-            apks.remove(apk)
+            remove_apks.append(apk)
             logging.warning(
                 _('"{path}" is signed by a key that is not allowed:').format(
                     path=to_remove
@@ -2216,6 +2217,9 @@ def main():
                         os.remove(rmf)
                 else:
                     logging.warning(msg + '\n\t' + _('Use `fdroid update -c` to create it.'))
+
+    for apk in remove_apks:
+        apks.remove(apk)
 
     mismatch_errors = ''
     for appid in appid_has_apks:
