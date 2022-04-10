@@ -16,6 +16,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import json
 import os
 import time
 import zipfile
@@ -24,6 +25,7 @@ import logging
 
 from . import _
 from . import common
+from . import metadata
 from .exception import FDroidException
 
 config = None
@@ -78,6 +80,12 @@ def sign_index_v1(repodir, json_name):
     """
     name, ext = common.get_extension(json_name)
     index_file = os.path.join(repodir, json_name)
+
+    # Test if index is valid
+    with open(index_file, encoding="utf-8") as fp:
+        index = json.load(fp)
+        [metadata.App(app) for app in index["apps"]]
+
     jar_file = os.path.join(repodir, name + '.jar')
     with zipfile.ZipFile(jar_file, 'w', zipfile.ZIP_DEFLATED) as jar:
         jar.write(index_file, json_name)
