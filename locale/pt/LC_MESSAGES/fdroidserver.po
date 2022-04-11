@@ -3,13 +3,14 @@
 # ssantos <ssantos@web.de>, 2020, 2021, 2022.
 # Peter J. Mello <admin@petermello.net>, 2021.
 # Eduardo Rodrigues <edu.rodrigues2580@gmail.com>, 2021.
+# SC <lalocas@protonmail.com>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 1.1-680-ge1d3de71\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2022-02-15 20:04+0100\n"
 "PO-Revision-Date: 2022-04-11 21:51+0000\n"
-"Last-Translator: ssantos <ssantos@web.de>\n"
+"Last-Translator: SC <lalocas@protonmail.com>\n"
 "Language-Team: Portuguese <https://hosted.weblate.org/projects/f-droid/fdroidserver/pt/>\n"
 "Language: pt\n"
 "MIME-Version: 1.0\n"
@@ -65,9 +66,9 @@ msgid "\"%s/\" has no matching metadata file!"
 msgstr "\"%s/\" não tem ficheiro de metadados correspondente!"
 
 #: ../fdroidserver/index.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "\"local_copy_dir\" {path} does not exist!"
-msgstr "O diretório raiz para local_copy_dir \"{path}\" não existe!"
+msgstr "O diretório raiz para \"local_copy_dir\" {path} não existe!"
 
 #: ../fdroidserver/index.py
 msgid "\"repo_pubkey\" must be present in config.yml when using --nosign!"
@@ -331,9 +332,9 @@ msgid "Android SDK tool {cmd} found!"
 msgstr "Ferramenta {cmd} do Android SDK foi encontrada!"
 
 #: ../fdroidserver/common.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Android SDK tool {cmd} not found!"
-msgstr "Ferramenta {cmd} do Android SDK foi encontrada!"
+msgstr "A ferramenta SDK do Android {cmd} não foi encontrada!"
 
 #. Translators: "build-tools" is the file name of a package from
 #. Google, it is part of the Android SDK. So it probably shouldn't be
@@ -413,7 +414,7 @@ msgstr "Repo construído baseado em \"%s\" com esta configuração:"
 
 #: ../fdroidserver/checkupdates.py
 msgid "Can't auto-update app with no CurrentVersionCode"
-msgstr ""
+msgstr "Não é possível atualizar automaticamente a aplicação sem CurrentVersionCode"
 
 #: ../fdroidserver/build.py
 msgid "Can't build due to {} error while scanning"
@@ -529,9 +530,8 @@ msgid "Couldn't find Application ID"
 msgstr "Não foi possível encontrar o ID da aplicação"
 
 #: ../fdroidserver/checkupdates.py
-#, fuzzy
 msgid "Couldn't find any version information"
-msgstr "Não foi possível encontrar o nome da versão mais recente"
+msgstr "Não foi encontrada qualquer informação da versão"
 
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
 #: ../fdroidserver/import.py
