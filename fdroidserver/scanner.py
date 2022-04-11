@@ -28,10 +28,10 @@ import traceback
 import urllib.parse
 import urllib.request
 from argparse import ArgumentParser
-from copy import deepcopy
 from tempfile import TemporaryDirectory
 from pathlib import Path
 from datetime import datetime, timedelta
+from dataclasses import dataclass, field, fields
 
 from . import _
 from . import common
@@ -41,8 +41,13 @@ from . import scanner
 
 options = None
 
-DEFAULT_JSON_PER_BUILD = {'errors': [], 'warnings': [], 'infos': []}  # type: ignore
-json_per_build = deepcopy(DEFAULT_JSON_PER_BUILD)
+
+@dataclass
+class MessageStore:
+    infos: list = field(default_factory=list)
+    warnings: list = field(default_factory=list)
+    errors: list = field(default_factory=list)
+
 
 MAVEN_URL_REGEX = re.compile(r"""\smaven\s*(?:{.*?(?:setUrl|url)|\((?:url)?)\s*=?\s*(?:uri)?\(?\s*["']?([^\s"']+)["']?[^})]*[)}]""",
                              re.DOTALL)
@@ -422,7 +427,7 @@ def scan_binary(apkfile):
     return problems
 
 
-def scan_source(build_dir, build=metadata.Build()):
+def scan_source(build_dir, build=metadata.Build(), json_per_build=None):
     """Scan the source code in the given directory (and all subdirectories).
 
     Returns
@@ -430,6 +435,9 @@ def scan_source(build_dir, build=metadata.Build()):
     the number of fatal problems encountered.
     """
     count = 0
+
+    if not json_per_build:
+        json_per_build = MessageStore()
 
     def suspects_found(s):
         for n, r in _get_tool().regexs['err_gradle_signatures'].items():
@@ -484,7 +492,7 @@ def scan_source(build_dir, build=metadata.Build()):
                     return True
         return False
 
-    def ignoreproblem(what, path_in_build_dir):
+    def ignoreproblem(what, path_in_build_dir, json_per_build):
         """No summary.
 
         Parameters
@@ -501,10 +509,10 @@ def scan_source(build_dir, build=metadata.Build()):
         msg = ('Ignoring %s at %s' % (what, path_in_build_dir))
         logging.info(msg)
         if json_per_build is not None:
-            json_per_build['infos'].append([msg, path_in_build_dir])
+            json_per_build.infos.append([msg, path_in_build_dir])
         return 0
 
-    def removeproblem(what, path_in_build_dir, filepath):
+    def removeproblem(what, path_in_build_dir, filepath, json_per_build):
         """No summary.
 
         Parameters
@@ -523,7 +531,7 @@ def scan_source(build_dir, build=metadata.Build()):
         msg = ('Removing %s at %s' % (what, path_in_build_dir))
         logging.info(msg)
         if json_per_build is not None:
-            json_per_build['infos'].append([msg, path_in_build_dir])
+            json_per_build.infos.append([msg, path_in_build_dir])
         try:
             os.remove(filepath)
         except FileNotFoundError:
@@ -533,7 +541,7 @@ def scan_source(build_dir, build=metadata.Build()):
             pass
         return 0
 
-    def warnproblem(what, path_in_build_dir):
+    def warnproblem(what, path_in_build_dir, json_per_build):
         """No summary.
 
         Parameters
@@ -551,10 +559,10 @@ def scan_source(build_dir, build=metadata.Build()):
             return 0
         logging.warning('Found %s at %s' % (what, path_in_build_dir))
         if json_per_build is not None:
-            json_per_build['warnings'].append([what, path_in_build_dir])
+            json_per_build.warnings.append([what, path_in_build_dir])
         return 0
 
-    def handleproblem(what, path_in_build_dir, filepath):
+    def handleproblem(what, path_in_build_dir, filepath, json_per_build):
         """Dispatches to problem handlers (ignore, delete, warn).
 
         Or returns 1 for increasing the error count.
@@ -573,13 +581,13 @@ def scan_source(build_dir, build=metadata.Build()):
         0 if the problem was ignored/deleted/is only a warning, 1 otherwise
         """
         if toignore(path_in_build_dir):
-            return ignoreproblem(what, path_in_build_dir)
+            return ignoreproblem(what, path_in_build_dir, json_per_build)
         if todelete(path_in_build_dir):
-            return removeproblem(what, path_in_build_dir, filepath)
+            return removeproblem(what, path_in_build_dir, filepath, json_per_build)
         if 'src/test' in path_in_build_dir or '/test/' in path_in_build_dir:
-            return warnproblem(what, path_in_build_dir)
+            return warnproblem(what, path_in_build_dir, json_per_build)
         if options and 'json' in vars(options) and options.json:
-            json_per_build['errors'].append([what, path_in_build_dir])
+            json_per_build.errors.append([what, path_in_build_dir])
         if options and (options.verbose or not ('json' in vars(options) and options.json)):
             logging.error('Found %s at %s' % (what, path_in_build_dir))
         return 1
@@ -639,29 +647,58 @@ def scan_source(build_dir, build=metadata.Build()):
             path_in_build_dir = os.path.relpath(filepath, build_dir)
 
             if curfile in ('gradle-wrapper.jar', 'gradlew', 'gradlew.bat'):
-                removeproblem(curfile, path_in_build_dir, filepath)
+                removeproblem(curfile, path_in_build_dir, filepath, json_per_build)
             elif curfile.endswith('.apk'):
-                removeproblem(_('Android APK file'), path_in_build_dir, filepath)
+                removeproblem(
+                    _('Android APK file'), path_in_build_dir, filepath, json_per_build
+                )
 
             elif curfile.endswith('.a'):
-                count += handleproblem(_('static library'), path_in_build_dir, filepath)
+                count += handleproblem(
+                    _('static library'), path_in_build_dir, filepath, json_per_build
+                )
             elif curfile.endswith('.aar'):
-                count += handleproblem(_('Android AAR library'), path_in_build_dir, filepath)
+                count += handleproblem(
+                    _('Android AAR library'),
+                    path_in_build_dir,
+                    filepath,
+                    json_per_build,
+                )
             elif curfile.endswith('.class'):
-                count += handleproblem(_('Java compiled class'), path_in_build_dir, filepath)
+                count += handleproblem(
+                    _('Java compiled class'),
+                    path_in_build_dir,
+                    filepath,
+                    json_per_build,
+                )
             elif curfile.endswith('.dex'):
-                count += handleproblem(_('Android DEX code'), path_in_build_dir, filepath)
+                count += handleproblem(
+                    _('Android DEX code'), path_in_build_dir, filepath, json_per_build
+                )
             elif curfile.endswith('.gz'):
-                count += handleproblem(_('gzip file archive'), path_in_build_dir, filepath)
+                count += handleproblem(
+                    _('gzip file archive'), path_in_build_dir, filepath, json_per_build
+                )
             # We use a regular expression here to also match versioned shared objects like .so.0.0.0
             elif re.match(r'.*\.so(\..+)*$', curfile):
-                count += handleproblem(_('shared library'), path_in_build_dir, filepath)
+                count += handleproblem(
+                    _('shared library'), path_in_build_dir, filepath, json_per_build
+                )
             elif curfile.endswith('.zip'):
-                count += handleproblem(_('ZIP file archive'), path_in_build_dir, filepath)
+                count += handleproblem(
+                    _('ZIP file archive'), path_in_build_dir, filepath, json_per_build
+                )
             elif curfile.endswith('.jar'):
                 for name in suspects_found(curfile):
-                    count += handleproblem('usual suspect \'%s\'' % name, path_in_build_dir, filepath)
-                count += handleproblem(_('Java JAR file'), path_in_build_dir, filepath)
+                    count += handleproblem(
+                        'usual suspect \'%s\'' % name,
+                        path_in_build_dir,
+                        filepath,
+                        json_per_build,
+                    )
+                count += handleproblem(
+                    _('Java JAR file'), path_in_build_dir, filepath, json_per_build
+                )
 
             elif curfile.endswith('.java'):
                 if not os.path.isfile(filepath):
@@ -669,7 +706,12 @@ def scan_source(build_dir, build=metadata.Build()):
                 with open(filepath, 'r', errors='replace') as f:
                     for line in f:
                         if 'DexClassLoader' in line:
-                            count += handleproblem('DexClassLoader', path_in_build_dir, filepath)
+                            count += handleproblem(
+                                'DexClassLoader',
+                                path_in_build_dir,
+                                filepath,
+                                json_per_build,
+                            )
                             break
 
             elif curfile.endswith('.gradle') or curfile.endswith('.gradle.kts'):
@@ -680,21 +722,36 @@ def scan_source(build_dir, build=metadata.Build()):
                 for i, line in enumerate(lines):
                     if is_used_by_gradle(line):
                         for name in suspects_found(line):
-                            count += handleproblem("usual suspect \'%s\'" % (name),
-                                                   path_in_build_dir, filepath)
+                            count += handleproblem(
+                                "usual suspect \'%s\'" % (name),
+                                path_in_build_dir,
+                                filepath,
+                                json_per_build,
+                            )
                 noncomment_lines = [line for line in lines if not common.gradle_comment.match(line)]
                 no_comments = re.sub(r'/\*.*?\*/', '', ''.join(noncomment_lines), flags=re.DOTALL)
                 for url in MAVEN_URL_REGEX.findall(no_comments):
                     if not any(r.match(url) for r in allowed_repos):
-                        count += handleproblem('unknown maven repo \'%s\'' % url, path_in_build_dir, filepath)
+                        count += handleproblem(
+                            'unknown maven repo \'%s\'' % url,
+                            path_in_build_dir,
+                            filepath,
+                            json_per_build,
+                        )
 
             elif os.path.splitext(path_in_build_dir)[1] in ['', '.bin', '.out', '.exe']:
                 if is_binary(filepath):
-                    count += handleproblem('binary', path_in_build_dir, filepath)
+                    count += handleproblem(
+                        'binary', path_in_build_dir, filepath, json_per_build
+                    )
 
             elif is_executable(filepath):
                 if is_binary(filepath) and not (safe_path(path_in_build_dir) or is_image_file(filepath)):
-                    warnproblem(_('executable binary, possibly code'), path_in_build_dir)
+                    warnproblem(
+                        _('executable binary, possibly code'),
+                        path_in_build_dir,
+                        json_per_build,
+                    )
 
     for p in scanignore:
         if p not in scanignore_worked:
@@ -710,7 +767,7 @@ def scan_source(build_dir, build=metadata.Build()):
 
 
 def main():
-    global options, json_per_build
+    global options
 
     # Parse command line...
     parser = ArgumentParser(
@@ -778,7 +835,9 @@ def main():
 
         if app.Disabled and not options.force:
             logging.info(_("Skipping {appid}: disabled").format(appid=appid))
-            json_per_appid['disabled'] = json_per_build['infos'].append('Skipping: disabled')
+            json_per_appid['disabled'] = MessageStore().infos.append(
+                'Skipping: disabled'
+            )
             continue
 
         try:
@@ -794,9 +853,9 @@ def main():
             else:
                 logging.info(_("{appid}: no builds specified, running on current source state")
                              .format(appid=appid))
-                json_per_build = deepcopy(DEFAULT_JSON_PER_BUILD)
+                json_per_build = MessageStore()
                 json_per_appid['current-source-state'] = json_per_build
-                count = scan_source(build_dir)
+                count = scan_source(build_dir, json_per_build=json_per_build)
                 if count > 0:
                     logging.warning(_('Scanner found {count} problems in {appid}:')
                                     .format(count=count, appid=appid))
@@ -804,7 +863,7 @@ def main():
                 app['Builds'] = []
 
             for build in app.get('Builds', []):
-                json_per_build = deepcopy(DEFAULT_JSON_PER_BUILD)
+                json_per_build = MessageStore()
                 json_per_appid[build.versionCode] = json_per_build
 
                 if build.disable and not options.force:
@@ -818,7 +877,7 @@ def main():
                                       build_dir, srclib_dir,
                                       extlib_dir, False)
 
-                count = scan_source(build_dir, build)
+                count = scan_source(build_dir, build, json_per_build=json_per_build)
                 if count > 0:
                     logging.warning(_('Scanner found {count} problems in {appid}:{versionCode}:')
                                     .format(count=count, appid=appid, versionCode=build.versionCode))
@@ -837,8 +896,11 @@ def main():
             probcount += 1
 
         for k, v in json_per_appid.items():
-            if len(v['errors']) or len(v['warnings']) or len(v['infos']):
-                json_output[appid] = json_per_appid
+            if len(v.errors) or len(v.warnings) or len(v.infos):
+                json_output[appid] = {
+                    k: dict((field.name, getattr(v, field.name)) for field in fields(v))
+                    for k, v in json_per_appid.items()
+                }
                 break
 
     logging.info(_("Finished"))

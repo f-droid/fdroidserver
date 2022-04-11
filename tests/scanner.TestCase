@@ -17,6 +17,7 @@ import zipfile
 import collections
 import pathlib
 from unittest import mock
+from dataclasses import asdict
 from datetime import datetime, timedelta
 
 localmodule = os.path.realpath(
@@ -172,7 +173,10 @@ class ScannerTest(unittest.TestCase):
 
         # run scanner as if from `fdroid build`
         os.chdir(self.testdir)
-        count = fdroidserver.scanner.scan_source(build_dir)
+        json_per_build = fdroidserver.scanner.MessageStore()
+        count = fdroidserver.scanner.scan_source(
+            build_dir, json_per_build=json_per_build
+        )
         self.assertEqual(6, count, 'there should be this many errors')
         os.chdir(build_dir)
 
@@ -181,10 +185,11 @@ class ScannerTest(unittest.TestCase):
         for f in remove:
             self.assertFalse(os.path.exists(f), f + ' should have been removed')
 
+        json_per_build_asdict = asdict(json_per_build)
         files = dict()
         for section in ('errors', 'infos', 'warnings'):
             files[section] = []
-            for msg, f in fdroidserver.scanner.json_per_build[section]:
+            for msg, f in json_per_build_asdict[section]:
                 files[section].append(f)
 
         self.assertFalse(
