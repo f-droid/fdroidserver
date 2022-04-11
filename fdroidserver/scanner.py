@@ -23,6 +23,7 @@ import re
 import sys
 import traceback
 from argparse import ArgumentParser
+from copy import deepcopy
 import logging
 import itertools
 
@@ -35,7 +36,7 @@ config = None
 options = None
 
 DEFAULT_JSON_PER_BUILD = {'errors': [], 'warnings': [], 'infos': []}  # type: ignore
-json_per_build = DEFAULT_JSON_PER_BUILD
+json_per_build = deepcopy(DEFAULT_JSON_PER_BUILD)
 
 MAVEN_URL_REGEX = re.compile(r"""\smaven\s*{.*?(?:setUrl|url)\s*=?\s*(?:uri)?\(?\s*["']?([^\s"']+)["']?[^}]*}""",
                              re.DOTALL)
@@ -479,7 +480,7 @@ def main():
             else:
                 logging.info(_("{appid}: no builds specified, running on current source state")
                              .format(appid=appid))
-                json_per_build = DEFAULT_JSON_PER_BUILD
+                json_per_build = deepcopy(DEFAULT_JSON_PER_BUILD)
                 json_per_appid['current-source-state'] = json_per_build
                 count = scan_source(build_dir)
                 if count > 0:
@@ -489,7 +490,7 @@ def main():
                 app['Builds'] = []
 
             for build in app.get('Builds', []):
-                json_per_build = DEFAULT_JSON_PER_BUILD
+                json_per_build = deepcopy(DEFAULT_JSON_PER_BUILD)
                 json_per_appid[build.versionCode] = json_per_build
 
                 if build.disable and not options.force:
