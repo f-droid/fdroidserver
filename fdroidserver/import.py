@@ -227,7 +227,9 @@ def main():
         app.License = data.get('license', app.License)
         app.Description = data.get('description', app.Description)
         build.srclibs = ['flutter@stable']
-        build.output = 'build/app/outputs/apk/release/app-release.apk'
+        build.output = 'build/app/outputs/apk/release/app-release-unsigned.apk'
+        build.subdir = None
+        build.gradle = None
         build.build = [
             '$$flutter$$/bin/flutter config --no-analytics',
             '$$flutter$$/bin/flutter packages pub get',
