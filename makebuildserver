@@ -426,7 +426,7 @@ def main():
     if os.path.exists(boxfile):
         os.remove(boxfile)
 
-    vm.package(output=boxfile)
+    v.package(output=boxfile)
 
     logging.info("Adding box")
     vm.box_add('buildserver', boxfile, force=True)
