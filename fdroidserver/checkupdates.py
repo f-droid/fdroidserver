@@ -455,12 +455,6 @@ def checkupdates_app(app):
         vercode = str(common.calculate_math_string(op))
         logging.debug("Applied vercode operation: %s -> %s" % (oldvercode, vercode))
 
-    if version and any(version.startswith(s) for s in [
-            '${',  # Gradle variable names
-            '@string/',  # Strings we could not resolve
-            ]):
-        version = "Unknown"
-
     updating = False
     if version is None:
         raise FDroidException(_('no version information found'))

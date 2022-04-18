@@ -1703,6 +1703,18 @@ def parse_androidmanifests(paths, app):
     max_vercode = None
     max_package = None
 
+    def vnsearch(line):
+        matches = vnsearch_g(line)
+        if matches and not any(
+            matches.group(2).startswith(s)
+            for s in [
+                '${',  # Gradle variable names
+                '@string/',  # Strings we could not resolve
+            ]
+        ):
+            return matches.group(2)
+        return None
+
     for path in paths:
         # TODO: Remove this in Python3.6
         path = str(path)
@@ -1735,9 +1747,9 @@ def parse_androidmanifests(paths, app):
                             temp_app_id = matches.group(2)
 
                     if "versionName" in line and not temp_version_name:
-                        matches = vnsearch_g(line)
+                        matches = vnsearch(line)
                         if matches:
-                            temp_version_name = matches.group(2)
+                            temp_version_name = matches
 
                     if inside_flavour_group > 0:
                         if inside_required_flavour > 1:
@@ -1755,9 +1767,10 @@ def parse_androidmanifests(paths, app):
                                     if app_matches_packagename(app, temp_app_id):
                                         package = temp_app_id
 
-                            matches = vnsearch_g(line)
+                            matches = vnsearch(line)
                             if matches:
-                                version = matches.group(2)
+                                version = matches
+
                             else:
                                 # If build.gradle contains applicationNameSuffix add it to the end of version name
                                 matches = vnssearch_g(line)
@@ -1799,9 +1812,9 @@ def parse_androidmanifests(paths, app):
                                 if app_matches_packagename(app, s):
                                     package = s
                         if not version:
-                            matches = vnsearch_g(line)
+                            matches = vnsearch(line)
                             if matches:
-                                version = matches.group(2)
+                                version = matches
                         if not vercode:
                             matches = vcsearch_g(line)
                             if matches:
