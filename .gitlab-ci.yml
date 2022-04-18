@@ -386,7 +386,7 @@ fdroid build:
     - $fdroid build --verbose --on-server --no-tarball org.fdroid.fdroid:$currentVersionCode
 
     # each `fdroid build --on-server` run expects sudo, then uninstalls it
-    - ! dpkg --list sudo
+    - if dpkg --list sudo; then echo "sudo should not be still there"; exit 1; fi
 
 
 # test the plugin API and specifically the fetchsrclibs plugin, which
