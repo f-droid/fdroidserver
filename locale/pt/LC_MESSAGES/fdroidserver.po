@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: fdroidserver 1.1-680-ge1d3de71\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2022-02-15 20:04+0100\n"
-"PO-Revision-Date: 2022-04-11 21:51+0000\n"
-"Last-Translator: SC <lalocas@protonmail.com>\n"
+"PO-Revision-Date: 2022-04-20 13:32+0000\n"
+"Last-Translator: ssantos <ssantos@web.de>\n"
 "Language-Team: Portuguese <https://hosted.weblate.org/projects/f-droid/fdroidserver/pt/>\n"
 "Language: pt\n"
 "MIME-Version: 1.0\n"
@@ -1687,9 +1687,9 @@ msgid "Scanning APK with apkanalyzer for known non-free classes."
 msgstr "Procure no(s) APK(s) resultante(s) por classes conhecidas não livres."
 
 #: ../fdroidserver/common.py
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Set NDK {release} ({version}) up"
-msgstr ""
+msgstr "Definir NDK {release} ({version}) para cima"
 
 #: ../fdroidserver/common.py
 msgid "Set clock to that time using:"
@@ -1737,7 +1737,7 @@ msgstr "Ignorando '{apkfilename}' com uma assinatura inválida!"
 #: ../fdroidserver/index.py
 #, python-format
 msgid "Skipping GitLab Pages mirror because the repo is too large (>%.2fGB)!"
-msgstr ""
+msgstr "A ignorar o espelho do GitLab Pages porque o repositório é muito grande (>%.2fGB)!"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
