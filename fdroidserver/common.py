@@ -385,7 +385,8 @@ def read_config(opts=None):
     # smartcardoptions must be a list since its command line args for Popen
     smartcardoptions = config.get('smartcardoptions')
     if isinstance(smartcardoptions, str):
-        config['smartcardoptions'] = re.sub(r'\s+', r' ', config['smartcardoptions']).split(' ')
+        options = re.sub(r'\s+', r' ', config['smartcardoptions']).split(' ')
+        config['smartcardoptions'] = [i.strip() for i in options if i]
     elif not smartcardoptions and 'keystore' in config and config['keystore'] == 'NONE':
         # keystore='NONE' means use smartcard, these are required defaults
         config['smartcardoptions'] = ['-storetype', 'PKCS11', '-providerName',
