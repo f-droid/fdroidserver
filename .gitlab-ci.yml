@@ -566,5 +566,7 @@ docker:
     - cd buildserver
     - docker build -t $TEST_IMAGE --build-arg GIT_REV_PARSE_HEAD=$(git rev-parse HEAD) .
     - docker tag $TEST_IMAGE $RELEASE_IMAGE
+    - docker tag $TEST_IMAGE ${RELEASE_IMAGE}-stretch
     - echo $CI_BUILD_TOKEN | docker login -u gitlab-ci-token --password-stdin registry.gitlab.com
     - docker push $RELEASE_IMAGE
+    - docker push $RELEASE_IMAGE-stretch
