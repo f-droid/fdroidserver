@@ -10,20 +10,21 @@
 # Francesco Saltori <francescosaltori@gmail.com>, 2020.
 # Francesco Esposito <email@francescoesposito.org>, 2021.
 # mondstern <mondstern@snopyta.org>, 2021.
+# Frankie McEyes <mceyes@protonmail.com>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2022-02-15 20:04+0100\n"
-"PO-Revision-Date: 2021-03-03 06:19+0000\n"
-"Last-Translator: mondstern <mondstern@snopyta.org>\n"
+"PO-Revision-Date: 2022-04-21 10:12+0000\n"
+"Last-Translator: Frankie McEyes <mceyes@protonmail.com>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/f-droid/fdroidserver/it/>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.5\n"
+"X-Generator: Weblate 4.12-dev\n"
 
 #: ../fdroidserver/common.py
 msgid ""
@@ -72,9 +73,9 @@ msgid "\"%s/\" has no matching metadata file!"
 msgstr "\"%s/\" non ha un file di metadati corrispondente!"
 
 #: ../fdroidserver/index.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "\"local_copy_dir\" {path} does not exist!"
-msgstr "La directory principale per local_copy_dir \"{path}\" non esiste!"
+msgstr "La directory principale per \"local_copy_dir\" {path} non esiste!"
 
 #: ../fdroidserver/index.py
 msgid "\"repo_pubkey\" must be present in config.yml when using --nosign!"
@@ -111,9 +112,9 @@ msgid "\"{path}\" is not an accepted format, convert to: {formats}"
 msgstr "\"{path}\" non è un formato accettato, convertire a: {formats}"
 
 #: ../fdroidserver/update.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "\"{path}\" is signed by a key that is not allowed:"
-msgstr "\"{path}\" esiste ma s3cmd non è installato!"
+msgstr "\"{path}\" è firmato da una chiave non autorizzata:"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -338,9 +339,9 @@ msgid "Android SDK tool {cmd} found!"
 msgstr "Android SDK tool {cmd} trovato!"
 
 #: ../fdroidserver/common.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Android SDK tool {cmd} not found!"
-msgstr "Android SDK tool {cmd} trovato!"
+msgstr "Strumento Android SDK {cmd} non trovato!"
 
 #. Translators: "build-tools" is the file name of a package from
 #. Google, it is part of the Android SDK. So it probably shouldn't be
@@ -420,7 +421,7 @@ msgstr "Costruito il repository in \"%s\" con questa configurazione:"
 
 #: ../fdroidserver/checkupdates.py
 msgid "Can't auto-update app with no CurrentVersionCode"
-msgstr ""
+msgstr "Impossibile aggiornare automaticamente app prive del CurrentVersionCode"
 
 #: ../fdroidserver/build.py
 msgid "Can't build due to {} error while scanning"
@@ -536,9 +537,8 @@ msgid "Couldn't find Application ID"
 msgstr "Impossibile trovare l'ID dell'applicazione"
 
 #: ../fdroidserver/checkupdates.py
-#, fuzzy
 msgid "Couldn't find any version information"
-msgstr "Impossibile trovare il nome dell'ultima versione"
+msgstr "Impossibile trovare informazioni sulla versione"
 
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
 #: ../fdroidserver/import.py
@@ -698,7 +698,7 @@ msgstr "Scarica registri che non abbiamo"
 #: ../fdroidserver/common.py
 #, python-format
 msgid "Downloading %s"
-msgstr ""
+msgstr "Scaricando %s"
 
 #: ../fdroidserver/common.py
 msgid "Downloading the repository already failed once, not trying again."
@@ -821,9 +821,8 @@ msgid "Failed to get APK manifest information"
 msgstr "Impossibile ottenere informazioni del manifest dell’APK"
 
 #: ../fdroidserver/update.py
-#, fuzzy
 msgid "Failed to get APK signing key fingerprint"
-msgstr "Impossibile ottenere informazioni del manifest dell’APK"
+msgstr "Impossibile ottenere l'impronta digitale della chiave di firma del pacchetto APK"
 
 #: ../fdroidserver/install.py
 #, python-brace-format
@@ -956,9 +955,8 @@ msgid "Git fetch failed"
 msgstr "Recupero Git non riuscito"
 
 #: ../fdroidserver/common.py
-#, fuzzy
 msgid "Git prune failed"
-msgstr "Ripristino Git non riuscito"
+msgstr "Cancellazione Git non riuscita"
 
 #: ../fdroidserver/common.py
 msgid "Git remote set-head failed"
@@ -1037,12 +1035,12 @@ msgstr "Includere i tarball dei sorgenti nel mirror"
 #: ../fdroidserver/metadata.py
 #, python-format
 msgid "Including metadata from %s@%s"
-msgstr ""
+msgstr "Includo metadati da %s@%s"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Including metadata from {path}"
-msgstr ""
+msgstr "Includo metadati da {path}"
 
 #: ../fdroidserver/common.py
 msgid "Initialising submodules"
@@ -1149,7 +1147,7 @@ msgstr "Nome non valido per il file pubblicato: %s"
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Invalid ndk: entry in build: \"{ndk}\""
-msgstr ""
+msgstr "nkd non valido: entry nella compilazione: \"{ndk}\""
 
 #: ../fdroidserver/common.py
 #, python-brace-format
