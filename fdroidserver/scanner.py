@@ -22,8 +22,10 @@ import os
 import re
 import sys
 import traceback
+import zipfile
 from argparse import ArgumentParser
 from copy import deepcopy
+from tempfile import TemporaryDirectory
 import logging
 import itertools
 
@@ -42,19 +44,13 @@ MAVEN_URL_REGEX = re.compile(r"""\smaven\s*{.*?(?:setUrl|url)\s*=?\s*(?:uri)?\(?
                              re.DOTALL)
 
 CODE_SIGNATURES = {
-    # The `apkanalyzer dex packages` output looks like this:
-    # M d 1   1       93      <packagename> <other stuff>
-    # The first column has P/C/M/F for package, class, method or field
-    # The second column has x/k/r/d for removed, kept, referenced and defined.
-    # We already filter for defined only in the apkanalyzer call. 'r' will be
-    # for things referenced but not distributed in the apk.
-    exp: re.compile(r'.[\s]*d[\s]*[0-9]*[\s]*[0-9*][\s]*[0-9]*[\s]*' + exp, re.IGNORECASE) for exp in [
-        r'(com\.google\.firebase[^\s]*)',
-        r'(com\.google\.android\.gms[^\s]*)',
-        r'(com\.google\.android\.play\.core[^\s]*)',
-        r'(com\.google\.tagmanager[^\s]*)',
-        r'(com\.google\.analytics[^\s]*)',
-        r'(com\.android\.billing[^\s]*)',
+    exp: re.compile(r'.*' + exp, re.IGNORECASE) for exp in [
+        r'com/google/firebase',
+        r'com/google/android/gms',
+        r'com/google/android/play/core',
+        r'com/google/tagmanager',
+        r'com/google/analytics',
+        r'com/android/billing',
     ]
 }
 
@@ -106,26 +102,34 @@ def get_gradle_compile_commands(build):
     return [re.compile(r'\s*' + c, re.IGNORECASE) for c in commands]
 
 
-def scan_binary(apkfile):
-    """Scan output of apkanalyzer for known non-free classes.
-
-    apkanalyzer produces useful output when it can run, but it does
-    not support all recent JDK versions, and also some DEX versions,
-    so this cannot count on it to always produce useful output or even
-    to run without exiting with an error.
-
+def get_embedded_classes(apkfile):
     """
-    logging.info(_('Scanning APK with apkanalyzer for known non-free classes.'))
-    result = common.SdkToolsPopen(["apkanalyzer", "dex", "packages", "--defined-only", apkfile], output=False)
-    if result.returncode != 0:
-        logging.warning(_('scanner not cleanly run apkanalyzer: %s') % result.output)
+    Get the list of Java classes embedded into all DEX files.
+
+    :return: set of Java classes names as string
+    """
+    class_regex = re.compile(r'classes.*\.dex')
+    with TemporaryDirectory() as tmp_dir:
+        with zipfile.ZipFile(apkfile, 'r') as apk_zip:
+            class_infos = [info for info in apk_zip.infolist() if class_regex.search(info.filename)]
+            for info in class_infos:
+                apk_zip.extract(info, tmp_dir)
+        dexes = ['{}/{}'.format(tmp_dir, dex.filename) for dex in class_infos]
+        run = common.SdkToolsPopen(["dexdump"] + dexes)
+        classes = set(re.findall(r'[A-Z]+((?:\w+\/)+\w+)', run.output))
+        return classes
+
+
+def scan_binary(apkfile):
+    """Scan output of dexdump for known non-free classes."""
+    logging.info(_('Scanning APK with dexdump for known non-free classes.'))
+    result = get_embedded_classes(apkfile)
     problems = 0
-    for suspect, regexp in CODE_SIGNATURES.items():
-        matches = regexp.findall(result.output)
-        if matches:
-            for m in set(matches):
-                logging.debug("Found class '%s'" % m)
-            problems += 1
+    for classname in result:
+        for suspect, regexp in CODE_SIGNATURES.items():
+            if regexp.match(classname):
+                logging.debug("Found class '%s'" % classname)
+                problems += 1
     if problems:
         logging.critical("Found problems in %s" % apkfile)
     return problems
