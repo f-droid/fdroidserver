@@ -48,6 +48,8 @@
 # The same policy is applied to the archive repo, if there is one.
 # repo_maxage: 0
 
+# Canonical URL of the repositoy, needs to end in /repo. Is is used to identity
+# the repo in the client, as well.
 # repo_url: https://MyFirstFDroidRepo.org/fdroid/repo
 # repo_name: My First F-Droid Repo Demo
 # repo_description: >-

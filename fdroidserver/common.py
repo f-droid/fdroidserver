@@ -433,6 +433,14 @@ def read_config(opts=None):
         limit = config['git_mirror_size_limit']
         config['git_mirror_size_limit'] = parse_human_readable_size(limit)
 
+    if 'repo_url' in config:
+        if not config['repo_url'].endswith('/repo'):
+            raise FDroidException(_('repo_url needs to end with /repo'))
+
+    if 'archive_url' in config:
+        if not config['archive_url'].endswith('/archive'):
+            raise FDroidException(_('archive_url needs to end with /archive'))
+
     confignames_to_delete = set()
     for configname, dictvalue in config.items():
         if configname == 'java_paths':
