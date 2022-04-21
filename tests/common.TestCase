@@ -1845,6 +1845,63 @@ class CommonTest(unittest.TestCase):
         config = fdroidserver.common.read_config(fdroidserver.common.options)
         self.assertEqual('yml', config.get('apksigner'))
 
+    def test_config_repo_url(self):
+        """repo_url ends in /repo, archive_url ends in /archive."""
+        testdir = tempfile.mkdtemp(
+            prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir
+        )
+        os.chdir(testdir)
+        with open('config.yml', 'w') as fp:
+            fp.write('repo_url: https://MyFirstFDroidRepo.org/fdroid/repo\n')
+            fp.write('archive_url: https://MyFirstFDroidRepo.org/fdroid/archive')
+        config = fdroidserver.common.read_config()
+        self.assertEqual('https://MyFirstFDroidRepo.org/fdroid/repo', config.get('repo_url'))
+        self.assertEqual('https://MyFirstFDroidRepo.org/fdroid/archive', config.get('archive_url'))
+
+    def test_config_repo_url_extra_slash(self):
+        """repo_url ends in /repo, archive_url ends in /archive."""
+        testdir = tempfile.mkdtemp(
+            prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir
+        )
+        os.chdir(testdir)
+        with open('config.yml', 'w') as fp:
+            fp.write('repo_url: https://MyFirstFDroidRepo.org/fdroid/repo/')
+        with self.assertRaises(FDroidException):
+            fdroidserver.common.read_config()
+
+    def test_config_repo_url_not_repo(self):
+        """repo_url ends in /repo, archive_url ends in /archive."""
+        testdir = tempfile.mkdtemp(
+            prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir
+        )
+        os.chdir(testdir)
+        with open('config.yml', 'w') as fp:
+            fp.write('repo_url: https://MyFirstFDroidRepo.org/fdroid/foo')
+        with self.assertRaises(FDroidException):
+            fdroidserver.common.read_config()
+
+    def test_config_archive_url_extra_slash(self):
+        """repo_url ends in /repo, archive_url ends in /archive."""
+        testdir = tempfile.mkdtemp(
+            prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir
+        )
+        os.chdir(testdir)
+        with open('config.yml', 'w') as fp:
+            fp.write('archive_url: https://MyFirstFDroidRepo.org/fdroid/archive/')
+        with self.assertRaises(FDroidException):
+            fdroidserver.common.read_config()
+
+    def test_config_archive_url_not_repo(self):
+        """repo_url ends in /repo, archive_url ends in /archive."""
+        testdir = tempfile.mkdtemp(
+            prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir
+        )
+        os.chdir(testdir)
+        with open('config.yml', 'w') as fp:
+            fp.write('archive_url: https://MyFirstFDroidRepo.org/fdroid/foo')
+        with self.assertRaises(FDroidException):
+            fdroidserver.common.read_config()
+
     def test_write_to_config_yml(self):
         testdir = tempfile.mkdtemp(
             prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir
