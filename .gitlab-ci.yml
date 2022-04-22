@@ -382,8 +382,7 @@ fdroid build:
     - $fdroid build --verbose --latest org.fdroid.fdroid.privileged
 
     # try on-server build
-    - currentVersionCode=`python3 -c "import yaml; print(yaml.load(open('metadata/org.fdroid.fdroid.yml'))['CurrentVersionCode'])"`
-    - $fdroid build --verbose --on-server --no-tarball org.fdroid.fdroid:$currentVersionCode
+    - $fdroid build --verbose --on-server --no-tarball --latest org.fdroid.fdroid
 
     # each `fdroid build --on-server` run expects sudo, then uninstalls it
     - if dpkg --list sudo; then echo "sudo should not be still there"; exit 1; fi
