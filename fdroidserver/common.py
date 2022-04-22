@@ -585,6 +585,9 @@ def find_sdk_tools_cmd(cmd):
         sdk_platform_tools = os.path.join(config['sdk_path'], 'platform-tools')
         if os.path.exists(sdk_platform_tools):
             tooldirs.append(sdk_platform_tools)
+    sdk_build_tools = glob.glob(os.path.join(config['sdk_path'], 'build-tools', '*.*'))
+    if sdk_build_tools:
+        tooldirs.append(sorted(sdk_build_tools)[-1])  # use most recent version
     if os.path.exists('/usr/bin'):
         tooldirs.append('/usr/bin')
     for d in tooldirs:
