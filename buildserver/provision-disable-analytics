@@ -1,0 +1,15 @@
+#!/bin/bash
+
+set -ex
+
+# Flutter
+# https://github.com/flutter/flutter/issues/73657
+flutter_conf=/home/vagrant/.flutter
+cat <<EOF > $flutter_conf
+{
+  "enabled": false
+}
+EOF
+chown -R vagrant.vagrant $flutter_conf
+chmod -R 0644 $flutter_conf
+
