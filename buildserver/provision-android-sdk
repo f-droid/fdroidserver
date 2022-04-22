@@ -1,5 +1,4 @@
 #!/bin/bash
-#
 
 echo $0
 set -e
@@ -8,19 +7,6 @@ set -x
 if [ -z $ANDROID_HOME ]; then
     echo "ANDROID_HOME env var must be set!"
     exit 1
-fi
-
-# TODO remove the rm, this should work with an existing ANDROID_HOME
-if [ ! -x $ANDROID_HOME/tools/android ]; then
-    rm -rf $ANDROID_HOME
-    mkdir ${ANDROID_HOME}
-    mkdir ${ANDROID_HOME}/temp
-    mkdir ${ANDROID_HOME}/platforms
-    mkdir ${ANDROID_HOME}/build-tools
-    cd $ANDROID_HOME
-
-    tools=`ls -1 /vagrant/cache/tools_*.zip | sort -n | tail -1`
-    unzip -qq $tools
 fi
 
 # disable the repositories of proprietary stuff
@@ -40,59 +26,92 @@ for line in $disabled; do
     echo $line >> ${HOME}/.android/sites-settings.cfg
 done
 
-
-cd /vagrant/cache
-
-# make links for `android update sdk` to use and delete
-blocklist="build-tools_r17-linux.zip
-           build-tools_r18.0.1-linux.zip
-           build-tools_r18.1-linux.zip
-           build-tools_r18.1.1-linux.zip
-           build-tools_r19-linux.zip
-           build-tools_r19.0.1-linux.zip
-           build-tools_r19.0.2-linux.zip
-           build-tools_r19.0.3-linux.zip
-           build-tools_r21-linux.zip
-           build-tools_r21.0.1-linux.zip
-           build-tools_r21.0.2-linux.zip
-           build-tools_r21.1-linux.zip
-           build-tools_r21.1.1-linux.zip
-           build-tools_r22-linux.zip
-           build-tools_r23-linux.zip
-           android-1.5_r04-linux.zip
-           android-1.6_r03-linux.zip
-           android-2.0_r01-linux.zip
-           android-2.0.1_r01-linux.zip"
-latestm2=`ls -1 android_m2repository*.zip | sort -n | tail -1`
-for f in $latestm2 android-[0-9]*.zip platform-[0-9]*.zip build-tools_r*-linux.zip; do
-    rm -f ${ANDROID_HOME}/temp/$f
-    if [[ $blocklist != *$f* ]]; then
-        ln -s /vagrant/cache/$f ${ANDROID_HOME}/temp/
-    fi
+# Include old makebuildserver cache that is a Vagrant synced_folder
+# for sdkmanager to use.
+cachedir=$HOME/.cache/sdkmanager
+mkdir -p $cachedir
+pushd $cachedir
+for f in /vagrant/cache/*.zip; do
+    test -e $f && ln -s $f
 done
+popd
 
-# install all cached platforms
-cached=""
-for f in `ls -1 android-[0-9]*.zip platform-[0-9]*.zip`; do
-    sdk=`unzip -c $f "*/build.prop" | sed -n 's,^ro.build.version.sdk=,,p'`
-    cached=,android-${sdk}${cached}
-done
+# TODO do not preinstall 'tools' or 'platform-tools' at all, app builds don't need them
+packages="
+  tools;25.2.5
+  platform-tools
+  build-tools;19.1.0
+  build-tools;20.0.0
+  build-tools;21.1.2
+  build-tools;22.0.1
+  build-tools;23.0.1
+  build-tools;23.0.2
+  build-tools;23.0.3
+  build-tools;24.0.0
+  build-tools;24.0.1
+  build-tools;24.0.2
+  build-tools;24.0.3
+  build-tools;25.0.0
+  build-tools;25.0.1
+  build-tools;25.0.2
+  build-tools;25.0.3
+  build-tools;26.0.0
+  build-tools;26.0.1
+  build-tools;26.0.2
+  build-tools;26.0.3
+  build-tools;27.0.0
+  build-tools;27.0.1
+  build-tools;27.0.2
+  build-tools;27.0.3
+  build-tools;28.0.0
+  build-tools;28.0.1
+  build-tools;28.0.2
+  build-tools;28.0.3
+  build-tools;29.0.2
+  build-tools;29.0.3
+  build-tools;30.0.0
+  build-tools;30.0.1
+  build-tools;30.0.2
+  build-tools;30.0.3
+  build-tools;31.0.0
+  platforms;android-10
+  platforms;android-11
+  platforms;android-12
+  platforms;android-13
+  platforms;android-14
+  platforms;android-15
+  platforms;android-16
+  platforms;android-17
+  platforms;android-18
+  platforms;android-19
+  platforms;android-20
+  platforms;android-21
+  platforms;android-22
+  platforms;android-23
+  platforms;android-24
+  platforms;android-25
+  platforms;android-26
+  platforms;android-27
+  platforms;android-28
+  platforms;android-29
+  platforms;android-30
+  platforms;android-31
+"
 
-# install all cached build-tools
-for f in `ls -1 build-tools*.zip`; do
-    ver=`unzip -c $f "*/source.properties" | sed -n 's,^Pkg.Revision=,,p'`
-    if [[ $ver == 24.0.0 ]] && [[ $f =~ .*r24\.0\.1.* ]]; then
-        # 24.0.1 has the wrong revision in the zip
-        ver=24.0.1
-    fi
-    cached=,build-tools-${ver}${cached}
-done
+if [ $# -gt 0 ]; then
+    echo found args
+    packages=$@
+fi
 
-${ANDROID_HOME}/tools/android update sdk --no-ui --all \
-    --filter platform-tools,extra-android-m2repository${cached} <<EOH
-y
+# temporary test of whether this script ran. It will change once
+# 'tools' is no longer installed by default.
+if [ ! -x $ANDROID_HOME/tools/bin/sdkmanager ]; then
+    mkdir -p ${ANDROID_HOME}/
+    sdkmanager $packages
+fi
 
-EOH
+# this hacked cache should not end up in the Vagrant box or Docker image
+rm -rf $cachedir
 
 mkdir -p $ANDROID_HOME/licenses/
 
@@ -129,6 +148,7 @@ chmod g+w $ANDROID_HOME
 find $ANDROID_HOME/ -type f -executable -print0 | xargs -0 chmod a+x
 
 # allow gradle to install newer build-tools and platforms
+mkdir -p $ANDROID_HOME/{build-tools,platforms}
 chgrp vagrant $ANDROID_HOME/{build-tools,platforms}
 chmod g+w $ANDROID_HOME/{build-tools,platforms}
 
