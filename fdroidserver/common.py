@@ -3006,7 +3006,7 @@ def set_FDroidPopen_env(build=None):
     if build is not None:
         path = build.ndk_path()
         paths = orig_path.split(os.pathsep)
-        if path not in paths:
+        if path and path not in paths:
             paths = [path] + paths
             env['PATH'] = os.pathsep.join(paths)
         for n in ['ANDROID_NDK', 'NDK', 'ANDROID_NDK_HOME']:
