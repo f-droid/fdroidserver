@@ -1,0 +1,75 @@
+#!/usr/bin/env python3
+
+import inspect
+import json
+import logging
+import optparse
+import os
+import shutil
+import sys
+import tempfile
+import unittest
+
+localmodule = os.path.realpath(
+    os.path.join(os.path.dirname(inspect.getfile(inspect.currentframe())), '..')
+)
+print('localmodule: ' + localmodule)
+if localmodule not in sys.path:
+    sys.path.insert(0, localmodule)
+
+from fdroidserver import common, signindex
+from pathlib import Path
+
+
+class SignindexTest(unittest.TestCase):
+
+    basedir = Path(__file__).resolve().parent
+
+    def setUp(self):
+        signindex.config = None
+        config = common.read_config(common.options)
+        config['jarsigner'] = common.find_sdk_tools_cmd('jarsigner')
+        config['verbose'] = True
+        config['keystore'] = str(self.basedir / 'keystore.jks')
+        config['repo_keyalias'] = 'sova'
+        config['keystorepass'] = 'r9aquRHYoI8+dYz6jKrLntQ5/NJNASFBacJh7Jv2BlI='
+        config['keypass'] = 'r9aquRHYoI8+dYz6jKrLntQ5/NJNASFBacJh7Jv2BlI='
+        signindex.config = config
+
+        logging.basicConfig(level=logging.DEBUG)
+        self.tempdir = tempfile.TemporaryDirectory()
+        os.chdir(self.tempdir.name)
+        self.repodir = Path('repo')
+        self.repodir.mkdir()
+
+    def tearDown(self):
+        self.tempdir.cleanup()
+
+    def test_sign_index_v1(self):
+        shutil.copy(str(self.basedir / 'repo/index-v1.json'), 'repo')
+        signindex.sign_index_v1(str(self.repodir), 'index-v1.json')
+        self.assertTrue((self.repodir / 'index-v1.jar').exists())
+
+    def test_sign_index_v1_corrupt(self):
+        with open('repo/index-v1.json', 'w') as fp:
+            fp.write('corrupt JSON!')
+        with self.assertRaises(json.decoder.JSONDecodeError, msg='error on bad JSON'):
+            signindex.sign_index_v1(str(self.repodir), 'index-v1.json')
+
+
+if __name__ == "__main__":
+    os.chdir(os.path.dirname(__file__))
+
+    parser = optparse.OptionParser()
+    parser.add_option(
+        "-v",
+        "--verbose",
+        action="store_true",
+        default=False,
+        help="Spew out even more information than normal",
+    )
+    (common.options, args) = parser.parse_args(['--verbose'])
+
+    newSuite = unittest.TestSuite()
+    newSuite.addTest(unittest.makeSuite(SignindexTest))
+    unittest.main(failfast=False)
