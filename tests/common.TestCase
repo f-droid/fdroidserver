@@ -2364,6 +2364,14 @@ class CommonTest(unittest.TestCase):
             "%s_%s.exe" % (app.id, build.versionCode),
         )
 
+    def test_no_zero_length_ndk_path_prefixes(self):
+        fdroidserver.common.config = {'ndk_paths': {}}
+        build = fdroidserver.metadata.Build()
+
+        os.environ['PATH'] = '/usr/bin:/usr/sbin'
+        fdroidserver.common.set_FDroidPopen_env(build)
+        self.assertNotIn('', os.getenv('PATH').split(os.pathsep))
+
 
 if __name__ == "__main__":
     os.chdir(os.path.dirname(__file__))
