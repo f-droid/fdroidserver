@@ -246,6 +246,7 @@ black:
         tests/metadata.TestCase
         tests/ndk-release-checksums.py
         tests/rewritemeta.TestCase
+        tests/signindex.TestCase
 
 
 fedora_latest:
