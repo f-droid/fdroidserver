@@ -695,6 +695,7 @@ include tests/rewritemeta.TestCase
 include tests/run-tests
 include tests/scanner.TestCase
 include tests/signatures.TestCase
+include tests/signindex.TestCase
 include tests/signindex/guardianproject.jar
 include tests/signindex/guardianproject-v1.jar
 include tests/signindex/testy.jar
