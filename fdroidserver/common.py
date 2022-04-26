@@ -4341,8 +4341,9 @@ def _install_ndk(ndk):
         os.path.basename(url)
     )
     net.download_file(url, zipball)
-    if sha256 != sha256sum(zipball):
-        raise FDroidException('SHA-256 %s does not match expected for %s' % (sha256, url))
+    calced = sha256sum(zipball)
+    if sha256 != calced:
+        raise FDroidException('SHA-256 %s does not match expected for %s (%s)' % (calced, url, sha256))
     logging.info(_('Unzipping to %s') % ndk_base)
     with zipfile.ZipFile(zipball) as zipfp:
         for info in zipfp.infolist():
