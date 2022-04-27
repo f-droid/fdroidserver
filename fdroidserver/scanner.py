@@ -102,22 +102,31 @@ def get_gradle_compile_commands(build):
     return [re.compile(r'\s*' + c, re.IGNORECASE) for c in commands]
 
 
-def get_embedded_classes(apkfile):
+def get_embedded_classes(apkfile, depth=0):
     """
     Get the list of Java classes embedded into all DEX files.
 
     :return: set of Java classes names as string
     """
+    apk_regex = re.compile(r'.*\.apk')
     class_regex = re.compile(r'classes.*\.dex')
     with TemporaryDirectory() as tmp_dir:
         with zipfile.ZipFile(apkfile, 'r') as apk_zip:
+            # apk files can contain apk files, again
+            apk_infos = [info for info in apk_zip.infolist() if apk_regex.search(info.filename)]
             class_infos = [info for info in apk_zip.infolist() if class_regex.search(info.filename)]
-            for info in class_infos:
+            for info in apk_infos + class_infos:
                 apk_zip.extract(info, tmp_dir)
+        apks = ['{}/{}'.format(tmp_dir, apk.filename) for apk in apk_infos]
+        apk_classes = set()
+        if apks and depth < 10:  # zipbomb protection
+            apk_classes = set.union(*(get_embedded_classes(apk, depth + 1) for apk in apks))
         dexes = ['{}/{}'.format(tmp_dir, dex.filename) for dex in class_infos]
+        if not dexes:
+            return apk_classes
         run = common.SdkToolsPopen(["dexdump"] + dexes)
         classes = set(re.findall(r'[A-Z]+((?:\w+\/)+\w+)', run.output))
-        return classes
+        return classes.union(apk_classes)
 
 
 def scan_binary(apkfile):
