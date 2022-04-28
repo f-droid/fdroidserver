@@ -110,22 +110,29 @@ def get_embedded_classes(apkfile, depth=0):
     """
     apk_regex = re.compile(r'.*\.apk')
     class_regex = re.compile(r'classes.*\.dex')
+
     with TemporaryDirectory() as tmp_dir:
         apk_classes = set()
+
         with zipfile.ZipFile(apkfile, 'r') as apk_zip:
             # apk files can contain apk files, again
-            if depth < 10:  # zipbomb protection
+            if depth > 10:  # zipbomb protection
+                logging.error(_('max recursion depth in zip file reached: %s') % apk_zip)
+            else:
                 for apk in [name for name in apk_zip.namelist() if apk_regex.search(name)]:
                     with apk_zip.open(apk) as apk_fp:
                         apk_classes = apk_classes.union(get_embedded_classes(apk_fp, depth + 1))
+
             dexes = [name for name in apk_zip.namelist() if class_regex.search(name)]
             for name in dexes:
                 apk_zip.extract(name, tmp_dir)
         if not dexes:
             return apk_classes
+
         tmp_dexes = ['{}/{}'.format(tmp_dir, dex) for dex in dexes]
         run = common.SdkToolsPopen(["dexdump"] + tmp_dexes)
         classes = set(re.findall(r'[A-Z]+((?:\w+\/)+\w+)', run.output))
+
         return classes.union(apk_classes)
 
 
