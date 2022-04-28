@@ -111,20 +111,20 @@ def get_embedded_classes(apkfile, depth=0):
     apk_regex = re.compile(r'.*\.apk')
     class_regex = re.compile(r'classes.*\.dex')
     with TemporaryDirectory() as tmp_dir:
+        apk_classes = set()
         with zipfile.ZipFile(apkfile, 'r') as apk_zip:
             # apk files can contain apk files, again
-            apk_infos = [info for info in apk_zip.infolist() if apk_regex.search(info.filename)]
-            class_infos = [info for info in apk_zip.infolist() if class_regex.search(info.filename)]
-            for info in apk_infos + class_infos:
-                apk_zip.extract(info, tmp_dir)
-        apks = ['{}/{}'.format(tmp_dir, apk.filename) for apk in apk_infos]
-        apk_classes = set()
-        if apks and depth < 10:  # zipbomb protection
-            apk_classes = set.union(*(get_embedded_classes(apk, depth + 1) for apk in apks))
-        dexes = ['{}/{}'.format(tmp_dir, dex.filename) for dex in class_infos]
+            if depth < 10:  # zipbomb protection
+                for apk in [name for name in apk_zip.namelist() if apk_regex.search(name)]:
+                    with apk_zip.open(apk) as apk_fp:
+                        apk_classes = apk_classes.union(get_embedded_classes(apk_fp, depth + 1))
+            dexes = [name for name in apk_zip.namelist() if class_regex.search(name)]
+            for name in dexes:
+                apk_zip.extract(name, tmp_dir)
         if not dexes:
             return apk_classes
-        run = common.SdkToolsPopen(["dexdump"] + dexes)
+        tmp_dexes = ['{}/{}'.format(tmp_dir, dex) for dex in dexes]
+        run = common.SdkToolsPopen(["dexdump"] + tmp_dexes)
         classes = set(re.findall(r'[A-Z]+((?:\w+\/)+\w+)', run.output))
         return classes.union(apk_classes)
 
