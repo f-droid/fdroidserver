@@ -108,32 +108,27 @@ def get_embedded_classes(apkfile, depth=0):
 
     :return: set of Java classes names as string
     """
+    if depth > 10:  # zipbomb protection
+        logging.error(_('max recursion depth in zip file reached: %s') % apk_zip)
+        return set()
+
     apk_regex = re.compile(r'.*\.apk')
     class_regex = re.compile(r'classes.*\.dex')
+    classes = set()
 
-    with TemporaryDirectory() as tmp_dir:
-        apk_classes = set()
-
-        with zipfile.ZipFile(apkfile, 'r') as apk_zip:
+    with TemporaryDirectory() as tmp_dir, zipfile.ZipFile(apkfile, 'r') as apk_zip:
+        for info in apk_zip.infolist():
             # apk files can contain apk files, again
-            if depth > 10:  # zipbomb protection
-                logging.error(_('max recursion depth in zip file reached: %s') % apk_zip)
-            else:
-                for apk in [name for name in apk_zip.namelist() if apk_regex.search(name)]:
-                    with apk_zip.open(apk) as apk_fp:
-                        apk_classes = apk_classes.union(get_embedded_classes(apk_fp, depth + 1))
+            if apk_regex.search(info.filename):
+                with apk_zip.open(info) as apk_fp:
+                    classes = classes.union(get_embedded_classes(apk_fp, depth + 1))
 
-            dexes = [name for name in apk_zip.namelist() if class_regex.search(name)]
-            for name in dexes:
-                apk_zip.extract(name, tmp_dir)
-        if not dexes:
-            return apk_classes
+            elif class_regex.search(info.filename):
+                apk_zip.extract(info, tmp_dir)
+                run = common.SdkToolsPopen(["dexdump", '{}/{}'.format(tmp_dir, info.filename)])
+                classes = classes.union(set(re.findall(r'[A-Z]+((?:\w+\/)+\w+)', run.output)))
 
-        tmp_dexes = ['{}/{}'.format(tmp_dir, dex) for dex in dexes]
-        run = common.SdkToolsPopen(["dexdump"] + tmp_dexes)
-        classes = set(re.findall(r'[A-Z]+((?:\w+\/)+\w+)', run.output))
-
-        return classes.union(apk_classes)
+    return classes
 
 
 def scan_binary(apkfile):
