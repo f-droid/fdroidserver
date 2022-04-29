@@ -224,6 +224,12 @@ class ScannerTest(unittest.TestCase):
             fdroidserver.scanner.scan_binary(apkfile),
             'Did not find bad code signature in binary',
         )
+        apkfile = os.path.join(self.basedir, 'apk.embedded_1.apk')
+        self.assertEqual(
+            1,
+            fdroidserver.scanner.scan_binary(apkfile),
+            'Did not find bad code signature in binary',
+        )
 
     def test_build_local_scanner(self):
         """`fdroid build` calls scanner functions, test them here"""
