@@ -109,8 +109,7 @@ def get_embedded_classes(apkfile, depth=0):
     :return: set of Java classes names as string
     """
     if depth > 10:  # zipbomb protection
-        logging.error(_('max recursion depth in zip file reached: %s') % apkfile)
-        return set()
+        return {_('Max recursion depth in ZIP file reached: %s') % apkfile}
 
     apk_regex = re.compile(r'.*\.apk')
     class_regex = re.compile(r'classes.*\.dex')
