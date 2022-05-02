@@ -115,17 +115,20 @@ def get_embedded_classes(apkfile, depth=0):
     class_regex = re.compile(r'classes.*\.dex')
     classes = set()
 
-    with TemporaryDirectory() as tmp_dir, zipfile.ZipFile(apkfile, 'r') as apk_zip:
-        for info in apk_zip.infolist():
-            # apk files can contain apk files, again
-            if apk_regex.search(info.filename):
-                with apk_zip.open(info) as apk_fp:
-                    classes = classes.union(get_embedded_classes(apk_fp, depth + 1))
+    try:
+        with TemporaryDirectory() as tmp_dir, zipfile.ZipFile(apkfile, 'r') as apk_zip:
+            for info in apk_zip.infolist():
+                # apk files can contain apk files, again
+                if apk_regex.search(info.filename):
+                    with apk_zip.open(info) as apk_fp:
+                        classes = classes.union(get_embedded_classes(apk_fp, depth + 1))
 
-            elif class_regex.search(info.filename):
-                apk_zip.extract(info, tmp_dir)
-                run = common.SdkToolsPopen(["dexdump", '{}/{}'.format(tmp_dir, info.filename)])
-                classes = classes.union(set(re.findall(r'[A-Z]+((?:\w+\/)+\w+)', run.output)))
+                elif class_regex.search(info.filename):
+                    apk_zip.extract(info, tmp_dir)
+                    run = common.SdkToolsPopen(["dexdump", '{}/{}'.format(tmp_dir, info.filename)])
+                    classes = classes.union(set(re.findall(r'[A-Z]+((?:\w+\/)+\w+)', run.output)))
+    except zipfile.BadZipFile as ex:
+        return {_('Problem with ZIP file: %s, error %s') % (apkfile, ex)}
 
     return classes
 
