@@ -15,7 +15,7 @@ set -e
 cd /home/fdroid
 for section in repo archive; do
     echo "Started $section at `date`:"
-    for host in fdroid@ftp-push.lysator.liu.se fdroid@plug-mirror.rcac.purdue.edu fdroid@mirror.f-droid.org; do
+    for host in fdroid@ftp-push.lysator.liu.se fdroid@plug-mirror.rcac.purdue.edu fdroid@ftp.agdsn.de; do
         set -x
         # be super careful with the trailing slashes here! if one is wrong, it'll delete the entire section!
         rsync --archive --delay-updates --progress --delete \
