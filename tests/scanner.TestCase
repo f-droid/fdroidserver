@@ -5,6 +5,7 @@ import inspect
 import logging
 import optparse
 import os
+import re
 import shutil
 import sys
 import tempfile
@@ -201,6 +202,34 @@ class ScannerTest(unittest.TestCase):
         for f in remove:
             self.assertTrue(f in files['infos'],
                             f + ' should be removed with an info message')
+
+    def test_scan_binary(self):
+        config = dict()
+        fdroidserver.common.fill_config_defaults(config)
+        fdroidserver.common.config = config
+        fdroidserver.common.options = mock.Mock()
+        fdroidserver.common.options.verbose = False
+
+        apkfile = os.path.join(self.basedir, 'no_targetsdk_minsdk1_unsigned.apk')
+        self.assertEqual(
+            0,
+            fdroidserver.scanner.scan_binary(apkfile),
+            'Found false positives in binary',
+        )
+        fdroidserver.scanner.CODE_SIGNATURES["java/lang/Object"] = re.compile(
+            r'.*java/lang/Object', re.IGNORECASE | re.UNICODE
+        )
+        self.assertEqual(
+            1,
+            fdroidserver.scanner.scan_binary(apkfile),
+            'Did not find bad code signature in binary',
+        )
+        apkfile = os.path.join(self.basedir, 'apk.embedded_1.apk')
+        self.assertEqual(
+            1,
+            fdroidserver.scanner.scan_binary(apkfile),
+            'Did not find bad code signature in binary',
+        )
 
     def test_build_local_scanner(self):
         """`fdroid build` calls scanner functions, test them here"""
