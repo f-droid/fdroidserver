@@ -125,7 +125,10 @@ def get_embedded_classes(apkfile, depth=0):
 
                 elif class_regex.search(info.filename):
                     apk_zip.extract(info, tmp_dir)
-                    run = common.SdkToolsPopen(["dexdump", '{}/{}'.format(tmp_dir, info.filename)])
+                    run = common.SdkToolsPopen(
+                        ["dexdump", '{}/{}'.format(tmp_dir, info.filename)],
+                        output=False,
+                    )
                     classes = classes.union(set(re.findall(r'[A-Z]+((?:\w+\/)+\w+)', run.output)))
     except zipfile.BadZipFile as ex:
         return {_('Problem with ZIP file: %s, error %s') % (apkfile, ex)}
