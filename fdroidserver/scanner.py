@@ -81,6 +81,8 @@ NON_FREE_GRADLE_LINES = {
         r'com.tencent.bugly',
         r'appcenter-push',
         r'com.github.junrar:junrar',
+        r'androidx.navigation:navigation-dynamic-features',
+        r'xyz.belvi.mobilevision:barcodescanner',
     ]
 }
 
