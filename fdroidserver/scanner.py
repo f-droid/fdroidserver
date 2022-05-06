@@ -406,7 +406,7 @@ def scan_source(build_dir, build=metadata.Build()):
                             count += handleproblem('DexClassLoader', path_in_build_dir, filepath)
                             break
 
-            elif curfile.endswith('.gradle'):
+            elif curfile.endswith('.gradle') or curfile.endswith('.gradle.kts'):
                 if not os.path.isfile(filepath):
                     continue
                 with open(filepath, 'r', errors='replace') as f:
