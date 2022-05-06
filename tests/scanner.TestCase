@@ -50,6 +50,7 @@ class ScannerTest(unittest.TestCase):
             'realm': 1,
             'se.manyver': 2,
             'com.jens.automation2': 2,
+            'com.github.shadowsocks': 5,
         }
         for d in glob.glob(os.path.join(source_files, '*')):
             build = fdroidserver.metadata.Build()
