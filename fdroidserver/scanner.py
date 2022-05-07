@@ -83,6 +83,7 @@ NON_FREE_GRADLE_LINES = {
         r'com.github.junrar:junrar',
         r'androidx.navigation:navigation-dynamic-features',
         r'xyz.belvi.mobilevision:barcodescanner',
+        r'org.jetbrains.kotlinx:kotlinx-coroutines-play-services',
     ]
 }
 
