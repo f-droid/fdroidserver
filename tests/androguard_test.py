@@ -48,24 +48,60 @@ class UpdateTest(unittest.TestCase):
         fdroidserver.update.options.clean = True
         fdroidserver.update.options.delete_unknown = True
 
-        self.assertTrue(fdroidserver.common.SdkToolsPopen('aapt'))
+        self.assertTrue(fdroidserver.common.SdkToolsPopen(['aapt']))
         try:
             from androguard.core.bytecodes.apk import APK
             dir(APK)
         except ImportError:
             raise Exception("androguard not installed!")
 
-        apkList = ['../info.guardianproject.urzip.apk', '../org.dyndns.fules.ck_20.apk']
+        apkList = [
+            (
+                '../org.dyndns.fules.ck_20.apk',
+                {
+                    'apkName': '../org.dyndns.fules.ck_20.apk',
+                    'uses-permission': [
+                        fdroidserver.update.UsesPermission(
+                            name='android.permission.BIND_INPUT_METHOD',
+                            maxSdkVersion=None,
+                        ),
+                        fdroidserver.update.UsesPermission(
+                            name='android.permission.READ_EXTERNAL_STORAGE',
+                            maxSdkVersion=None,
+                        ),
+                        fdroidserver.update.UsesPermission(
+                            name='android.permission.VIBRATE', maxSdkVersion=None
+                        ),
+                    ],
+                    'uses-permission-sdk-23': [],
+                    'features': [],
+                    'icons_src': {
+                        '240': 'res/drawable-hdpi-v4/icon_launcher.png',
+                        '120': 'res/drawable-ldpi-v4/icon_launcher.png',
+                        '160': 'res/drawable-mdpi-v4/icon_launcher.png',
+                        '-1': 'res/drawable-mdpi-v4/icon_launcher.png',
+                    },
+                    'packageName': 'org.dyndns.fules.ck',
+                    'versionCode': 20,
+                    'versionName': 'v1.6pre2',
+                    'minSdkVersion': 7,
+                    'targetSdkVersion': 8,
+                    'nativecode': [
+                        'arm64-v8a',
+                        'armeabi',
+                        'armeabi-v7a',
+                        'mips',
+                        'mips64',
+                        'x86',
+                        'x86_64',
+                    ],
+                },
+            )
+        ]
 
-        for apkName in apkList:
+        for apkName, apkaapt in apkList:
             logging.debug("Processing " + apkName)
             apkfile = os.path.join('repo', apkName)
-
-            apkaapt = _create_apkmetadata_object(apkName)
-            logging.debug("Using AAPT for metadata")
-            fdroidserver.update.scan_apk_aapt(apkaapt, apkfile)
-            # avoid AAPT application name bug
-            del apkaapt['name']
 
             apkandroguard = _create_apkmetadata_object(apkName)
             logging.debug("Using androguard for metadata")
