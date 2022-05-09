@@ -18,12 +18,13 @@
 
 import os
 import requests
+import urllib
 
 HEADERS = {'User-Agent': 'F-Droid'}
 
 
 def download_file(url, local_filename=None, dldir='tmp'):
-    filename = url.split('/')[-1]
+    filename = urllib.parse.urlparse(url).path.split('/')[-1]
     if local_filename is None:
         local_filename = os.path.join(dldir, filename)
     # the stream=True parameter keeps memory usage low

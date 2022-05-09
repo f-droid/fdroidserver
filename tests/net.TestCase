@@ -1,0 +1,70 @@
+#!/usr/bin/env python3
+
+import inspect
+import logging
+import optparse
+import os
+import sys
+import tempfile
+import unittest
+from unittest.mock import MagicMock, patch
+
+localmodule = os.path.realpath(
+    os.path.join(os.path.dirname(inspect.getfile(inspect.currentframe())), '..')
+)
+print('localmodule: ' + localmodule)
+if localmodule not in sys.path:
+    sys.path.insert(0, localmodule)
+
+from fdroidserver import common, net
+from pathlib import Path
+
+
+class NetTest(unittest.TestCase):
+
+    basedir = Path(__file__).resolve().parent
+
+    def setUp(self):
+        logging.basicConfig(level=logging.DEBUG)
+        self.tempdir = tempfile.TemporaryDirectory()
+        os.chdir(self.tempdir.name)
+        Path('tmp').mkdir()
+
+    def tearDown(self):
+        self.tempdir.cleanup()
+
+    @patch('requests.get')
+    def test_download_file_url_parsing(self, requests_get):
+        def _get(url, stream, allow_redirects, headers):  # pylint: disable=W0613
+            return MagicMock()
+
+        requests_get.side_effect = _get
+        f = net.download_file('https://f-droid.org/repo/index-v1.jar')
+        self.assertTrue(requests_get.called)
+        self.assertTrue(os.path.exists(f))
+        self.assertEqual('tmp/index-v1.jar', f)
+
+        f = net.download_file(
+            'https://d-05.example.com/custom/com.downloader.aegis-3175421.apk?_fn=QVBLUHVyZV92My4xNy41NF9hcGtwdXJlLmNvbS5hcGs&_p=Y29tLmFwa3B1cmUuYWVnb24&am=6avvTpfJ1dMl9-K6JYKzQw&arg=downloader%3A%2F%2Fcampaign%2F%3Futm_medium%3Ddownloader%26utm_source%3Daegis&at=1652080635&k=1f6e58465df3a441665e585719ab0b13627a117f&r=https%3A%2F%2Fdownloader.com%2Fdownloader-app.html%3Ficn%3Daegis%26ici%3Dimage_qr&uu=http%3A%2F%2F172.16.82.1%2Fcustom%2Fcom.downloader.aegis-3175421.apk%3Fk%3D3fb9c4ae0be578206f6a1c330736fac1627a117f'
+        )
+        self.assertTrue(requests_get.called)
+        self.assertTrue(os.path.exists(f))
+        self.assertEqual('tmp/com.downloader.aegis-3175421.apk', f)
+
+
+if __name__ == "__main__":
+    os.chdir(os.path.dirname(__file__))
+
+    parser = optparse.OptionParser()
+    parser.add_option(
+        "-v",
+        "--verbose",
+        action="store_true",
+        default=False,
+        help="Spew out even more information than normal",
+    )
+    (common.options, args) = parser.parse_args(['--verbose'])
+
+    newSuite = unittest.TestSuite()
+    newSuite.addTest(unittest.makeSuite(NetTest))
+    unittest.main(failfast=False)
