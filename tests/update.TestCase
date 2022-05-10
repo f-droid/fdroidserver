@@ -1652,6 +1652,70 @@ class UpdateTest(unittest.TestCase):
                 self.assertEqual(fdroidserver.update.config['jarsigner'], data['jarsigner'])
                 self.assertEqual(fdroidserver.update.config['keytool'], data['keytool'])
 
+    def test_scan_metadata_androguard(self):
+
+        def _create_apkmetadata_object(apkName):
+            """Create an empty apk metadata object."""
+            apk = {}
+            apk['apkName'] = apkName
+            apk['uses-permission'] = []
+            apk['uses-permission-sdk-23'] = []
+            apk['features'] = []
+            apk['icons_src'] = {}
+            return apk
+
+        apkList = [
+            (
+                'org.dyndns.fules.ck_20.apk',
+                {
+                    'apkName': 'org.dyndns.fules.ck_20.apk',
+                    'uses-permission': [
+                        fdroidserver.update.UsesPermission(
+                            name='android.permission.BIND_INPUT_METHOD',
+                            maxSdkVersion=None,
+                        ),
+                        fdroidserver.update.UsesPermission(
+                            name='android.permission.READ_EXTERNAL_STORAGE',
+                            maxSdkVersion=None,
+                        ),
+                        fdroidserver.update.UsesPermission(
+                            name='android.permission.VIBRATE', maxSdkVersion=None
+                        ),
+                    ],
+                    'uses-permission-sdk-23': [],
+                    'features': [],
+                    'icons_src': {
+                        '240': 'res/drawable-hdpi-v4/icon_launcher.png',
+                        '120': 'res/drawable-ldpi-v4/icon_launcher.png',
+                        '160': 'res/drawable-mdpi-v4/icon_launcher.png',
+                        '-1': 'res/drawable-mdpi-v4/icon_launcher.png',
+                    },
+                    'packageName': 'org.dyndns.fules.ck',
+                    'versionCode': 20,
+                    'versionName': 'v1.6pre2',
+                    'minSdkVersion': 7,
+                    'name': 'Compass Keyboard',
+                    'targetSdkVersion': 8,
+                    'nativecode': [
+                        'arm64-v8a',
+                        'armeabi',
+                        'armeabi-v7a',
+                        'mips',
+                        'mips64',
+                        'x86',
+                        'x86_64',
+                    ],
+                },
+            )
+        ]
+
+        for apkfile, apkaapt in apkList:
+            apkandroguard = _create_apkmetadata_object(apkfile)
+            fdroidserver.update.scan_apk_androguard(apkandroguard, apkfile)
+
+            self.maxDiff = None
+            self.assertEqual(apkaapt, apkandroguard)
+
 
 if __name__ == "__main__":
     os.chdir(os.path.dirname(__file__))
