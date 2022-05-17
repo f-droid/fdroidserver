@@ -66,10 +66,7 @@ def make(apps, apks, repodir, archive):
     """
     from fdroidserver.update import METADATA_VERSION
 
-    if hasattr(common.options, 'nosign') and common.options.nosign:
-        if 'keystore' not in common.config and 'repo_pubkey' not in common.config:
-            raise FDroidException(_('"repo_pubkey" must be present in config.yml when using --nosign!'))
-    else:
+    if not hasattr(common.options, 'nosign') or not common.options.nosign:
         common.assert_config_keystore(common.config)
 
     # Historically the index has been sorted by App Name, so we enforce this ordering here
@@ -1378,7 +1375,7 @@ def extract_pubkey():
     """
     if 'repo_pubkey' in common.config:
         pubkey = unhexlify(common.config['repo_pubkey'])
-    else:
+    elif 'keystorepass' in common.config:
         env_vars = {'LC_ALL': 'C.UTF-8',
                     'FDROID_KEY_STORE_PASS': common.config['keystorepass']}
         p = FDroidPopenBytes([common.config['keytool'], '-exportcert',
@@ -1393,6 +1390,9 @@ def extract_pubkey():
                 msg += ' Is your crypto smartcard plugged in?'
             raise FDroidException(msg)
         pubkey = p.output
+    else:
+        raise FDroidException(_('Neither "repo_pubkey" nor "keystorepass" set in config.yml'))
+
     repo_pubkey_fingerprint = common.get_cert_fingerprint(pubkey)
     return hexlify(pubkey), repo_pubkey_fingerprint
 
