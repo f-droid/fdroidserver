@@ -17,8 +17,19 @@ print('localmodule: ' + localmodule)
 if localmodule not in sys.path:
     sys.path.insert(0, localmodule)
 
-from fdroidserver import common, signindex
+from fdroidserver import common, signindex, update
 from pathlib import Path
+from unittest.mock import patch
+
+
+class Options:
+    allow_disabled_algorithms = False
+    clean = False
+    delete_unknown = False
+    nosign = False
+    pretty = True
+    rename_apks = False
+    verbose = False
 
 
 class SignindexTest(unittest.TestCase):
@@ -49,12 +60,34 @@ class SignindexTest(unittest.TestCase):
         shutil.copy(str(self.basedir / 'repo/index-v1.json'), 'repo')
         signindex.sign_index_v1(str(self.repodir), 'index-v1.json')
         self.assertTrue((self.repodir / 'index-v1.jar').exists())
+        self.assertTrue((self.repodir / 'index-v1.json').exists())
 
     def test_sign_index_v1_corrupt(self):
         with open('repo/index-v1.json', 'w') as fp:
             fp.write('corrupt JSON!')
         with self.assertRaises(json.decoder.JSONDecodeError, msg='error on bad JSON'):
             signindex.sign_index_v1(str(self.repodir), 'index-v1.json')
+
+    def test_signindex(self):
+        os.mkdir('archive')
+        metadata = Path('metadata')
+        metadata.mkdir()
+        with (metadata / 'info.guardianproject.urzip.yml').open('w') as fp:
+            fp.write('# placeholder')
+        shutil.copy(str(self.basedir / 'urzip.apk'), 'repo')
+        index_files = []
+        for f in ('index.xml', 'index.jar', 'index-v1.json', 'index-v1.jar'):
+            for section in (Path('repo'), Path('archive')):
+                path = section / f
+                self.assertFalse(path.exists(), '%s should not exist yet!' % path)
+                index_files.append(path)
+        common.options = Options
+        with patch('sys.argv', ['fdroid update']):
+            update.main()
+        with patch('sys.argv', ['fdroid signindex', '--verbose']):
+            signindex.main()
+        for f in index_files:
+            self.assertTrue(f.exists(), '%s should exist!' % f)
 
 
 if __name__ == "__main__":

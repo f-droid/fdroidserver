@@ -139,7 +139,6 @@ def main():
         index_file = os.path.join(output_dir, json_name)
         if os.path.exists(index_file):
             sign_index_v1(output_dir, json_name)
-            os.remove(index_file)
             logging.info('Signed ' + index_file)
             signed.append(index_file)
 
