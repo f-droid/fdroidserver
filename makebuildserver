@@ -139,12 +139,6 @@ CACHE_FILES = [
     # Until we find a solution for that we need to stay at this revision.
     ('https://dl.google.com/android/repository/tools_r25.2.5-linux.zip',
      '577516819c8b5fae680f049d39014ff1ba4af870b687cab10595783e6f22d33e'),
-    ('https://dl.google.com/android/repository/android-2.1_r03.zip',
-     'b9cc140a9b879586181b22cfc7d4aa18b979251e16e9b17771c5d0acb71ba940'),
-    ('https://dl.google.com/android/repository/android-2.2_r03.zip',
-     '7c9ea1bd7cb225504bd085d7c93ae27d52bd88d29b621d28108f82fef68177c0'),
-    ('https://dl.google.com/android/repository/android-2.3.1_r02.zip',
-     'b2ab4896d0a4857e4f688f69eb08b0e1a8074709d4445a92a83ece7ec7cd198c'),
     ('https://dl.google.com/android/repository/android-2.3.3_r02.zip',
      '54bdb0f1ca06ba5747061ddeea20f431af72c448334fd4d3d7f84ea2ccd29fea'),
     ('https://dl.google.com/android/repository/android-3.0_r02.zip',
