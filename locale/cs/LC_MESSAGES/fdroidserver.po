@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: fdroidserver 1.0.0-95-gd7af22b\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2022-02-15 20:04+0100\n"
-"PO-Revision-Date: 2022-05-15 12:15+0000\n"
+"PO-Revision-Date: 2022-05-19 17:18+0000\n"
 "Last-Translator: Fjuro <fjuro@seznam.cz>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/f-droid/fdroidserver/cs/>\n"
 "Language: cs\n"
@@ -204,7 +204,7 @@ msgstr "'{aapt}' je příliš starý, fdroid vyžaduje build-tools-23.0.0 nebo n
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "'{aapt}' is too old, fdroid requires build-tools-{version} or newer!"
-msgstr ""
+msgstr "'{aapt}' je příliš starý, fdroid vyžaduje build-tools-{version} nebo novější!"
 
 #: ../fdroidserver/install.py
 #, python-brace-format
@@ -219,17 +219,17 @@ msgstr "'{field} ' v {linedesc} je zastaralý, viz dokumenty pro aktuální pole
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "'{field}' will be in random order! Use () or [] brackets if order is important!"
-msgstr ""
+msgstr "'{field}' bude v náhodném pořadí! Pokud je pořadí důležité, použijte závorky () nebo []!"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "'{path}' failed to execute!"
-msgstr ""
+msgstr "'{path}' nepodařilo se provést!"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "'{value}' is not a valid {field} in {appid}. Regex pattern: {pattern}"
-msgstr ""
+msgstr "'{value}' není platný {field} v {appid}. Vzor regulárního výrazu: {pattern}"
 
 #: ../fdroidserver/checkupdates.py
 #, python-brace-format
@@ -243,7 +243,7 @@ msgstr ".__call__() není definováno"
 
 #: ../fdroidserver/metadata.py
 msgid ".fdroid.txt is not supported!  Convert to .fdroid.yml or .fdroid.json."
-msgstr ""
+msgstr ".fdroid.txt není podporován!  Převeďte na .fdroid.yml nebo .fdroid.json."
 
 #: ../fdroidserver/lint.py
 msgid "/issues is missing"
@@ -251,7 +251,7 @@ msgstr "/issues chybí"
 
 #: ../fdroidserver/mirror.py
 msgid "A URL is required as an argument!"
-msgstr ""
+msgstr "Jako argument je vyžadována adresa URL!"
 
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Add PGP signatures using GnuPG for packages in repo"
@@ -267,12 +267,12 @@ msgstr "Přidejte podpisový klíč repo k nepodepsanému repo"
 
 #: ../fdroidserver/update.py
 msgid "Add skeleton metadata files for APKs that are missing them"
-msgstr ""
+msgstr "Přidání souborů metadat kostry pro soubory APK, které chybí"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Adding new repo for only {name}"
-msgstr ""
+msgstr "Přidání nového repozitáře pouze pro {name}"
 
 #: ../fdroidserver/init.py
 msgid "Alias of the repo signing key in the keystore"
