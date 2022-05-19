@@ -1415,7 +1415,7 @@ def scan_apk_androguard(apk, apkfile):
 
 
 def process_apk(apkcache, apkfilename, repodir, knownapks, use_date_from_apk=False,
-                allow_disabled_algorithms=False, archive_bad_sig=False):
+                allow_disabled_algorithms=False, archive_bad_sig=False, apps=None):
     """Process the apk with the given filename in the given repo directory.
 
     This also extracts the icons.
@@ -1467,6 +1467,12 @@ def process_apk(apkcache, apkfilename, repodir, knownapks, use_date_from_apk=Fal
             logging.warning(_("Skipping '{apkfilename}' with invalid signature!")
                             .format(apkfilename=apkfilename))
             return True, None, False
+
+        if apps:
+            if apk['packageName'] in apps:
+                for build in apps[apk['packageName']].get('Builds', []):
+                    if int(build['versionCode']) == apk['versionCode'] and build['disable']:
+                        return True, None, False
 
         # Check for debuggable apks...
         if common.is_apk_and_debuggable(apkfile):
@@ -1560,7 +1566,7 @@ def process_apk(apkcache, apkfilename, repodir, knownapks, use_date_from_apk=Fal
     return False, apk, cachechanged
 
 
-def process_apks(apkcache, repodir, knownapks, use_date_from_apk=False):
+def process_apks(apkcache, repodir, knownapks, use_date_from_apk=False, apps=None):
     """Process the apks in the given repo directory.
 
     This also extracts the icons.
@@ -1596,7 +1602,7 @@ def process_apks(apkcache, repodir, knownapks, use_date_from_apk=False):
         apkfilename = apkfile[len(repodir) + 1:]
         ada = disabled_algorithms_allowed()
         (skip, apk, cachethis) = process_apk(apkcache, apkfilename, repodir, knownapks,
-                                             use_date_from_apk, ada, True)
+                                             use_date_from_apk, ada, True, apps)
         if skip:
             continue
         apks.append(apk)
@@ -2209,7 +2215,8 @@ def main():
     delete_disabled_builds(apps, apkcache, repodirs)
 
     # Scan all apks in the main repo
-    apks, cachechanged = process_apks(apkcache, repodirs[0], knownapks, options.use_date_from_apk)
+    apks, cachechanged = process_apks(apkcache, repodirs[0], knownapks,
+                                      options.use_date_from_apk, apps)
 
     files, fcachechanged = scan_repo_files(apkcache, repodirs[0], knownapks,
                                            options.use_date_from_apk)
@@ -2272,7 +2279,8 @@ def main():
 
     # Scan the archive repo for apks as well
     if len(repodirs) > 1:
-        archapks, cc = process_apks(apkcache, repodirs[1], knownapks, options.use_date_from_apk)
+        archapks, cc = process_apks(apkcache, repodirs[1], knownapks,
+                                    options.use_date_from_apk, apps)
         if cc:
             cachechanged = True
     else:

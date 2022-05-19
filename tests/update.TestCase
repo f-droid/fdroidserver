@@ -1716,6 +1716,38 @@ class UpdateTest(unittest.TestCase):
             self.maxDiff = None
             self.assertEqual(apkaapt, apkandroguard)
 
+    def test_exclude_disabled_apks(self):
+        testdir = tempfile.mkdtemp(
+            prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir
+        )
+        os.chdir(testdir)
+        os.mkdir('repo')
+        testapk = os.path.join('repo', 'com.politedroid_6.apk')
+        testapk_new = os.path.join('repo', 'Politedroid-1.5.apk')
+        shutil.copy(os.path.join(self.basedir, testapk), testapk_new)
+
+        config = dict()
+        fdroidserver.common.fill_config_defaults(config)
+        config['ndk_paths'] = dict()
+        fdroidserver.common.config = config
+        fdroidserver.update.config = config
+
+        fdroidserver.common.options = Options
+        fdroidserver.update.options = fdroidserver.common.options
+        fdroidserver.update.options.clean = True
+
+        app = fdroidserver.metadata.App()
+        app.id = 'com.politedroid'
+        apps = {app.id: app}
+        build = fdroidserver.metadata.Build()
+        build.versionCode = 6
+        build.disable = "disabled"
+        app['Builds'] = [build]
+
+        knownapks = fdroidserver.common.KnownApks()
+        apks, cachechanged = fdroidserver.update.process_apks({}, 'repo', knownapks, False, apps)
+        self.assertEqual([], apks)
+
 
 if __name__ == "__main__":
     os.chdir(os.path.dirname(__file__))
