@@ -70,6 +70,7 @@ packages="
  ca-certificates-java
  cmake
  curl
+ dexdump
  disorderfs
  expect
  faketime
