@@ -260,8 +260,22 @@ def update_awsbucket_libcloud(repo_section):
 
 
 def update_serverwebroot(serverwebroot, repo_section):
-    # use a checksum comparison for accurate comparisons on different
-    # filesystems, for example, FAT has a low resolution timestamp
+    """Deploy the index files to the serverwebroot using rsync.
+
+    Upload the first time without the index files and delay the
+    deletion as much as possible.  That keeps the repo functional
+    while this update is running.  Then once it is complete, rerun the
+    command again to upload the index files.  Always using the same
+    target with rsync allows for very strict settings on the receiving
+    server, you can literally specify the one rsync command that is
+    allowed to run in ~/.ssh/authorized_keys.  (serverwebroot is
+    guaranteed to have a trailing slash in common.py)
+
+    It is possible to optionally use a checksum comparison for
+    accurate comparisons on different filesystems, for example, FAT
+    has a low resolution timestamp
+
+    """
     rsyncargs = ['rsync', '--archive', '--delete-after', '--safe-links']
     if not options.no_checksum:
         rsyncargs.append('--checksum')
@@ -273,13 +287,6 @@ def update_serverwebroot(serverwebroot, repo_section):
         rsyncargs += ['-e', 'ssh -oBatchMode=yes -oIdentitiesOnly=yes -i ' + options.identity_file]
     elif 'identity_file' in config:
         rsyncargs += ['-e', 'ssh -oBatchMode=yes -oIdentitiesOnly=yes -i ' + config['identity_file']]
-    # Upload the first time without the index files and delay the deletion as
-    # much as possible, that keeps the repo functional while this update is
-    # running.  Then once it is complete, rerun the command again to upload
-    # the index files.  Always using the same target with rsync allows for
-    # very strict settings on the receiving server, you can literally specify
-    # the one rsync command that is allowed to run in ~/.ssh/authorized_keys.
-    # (serverwebroot is guaranteed to have a trailing slash in common.py)
     logging.info('rsyncing ' + repo_section + ' to ' + serverwebroot)
     excludes = _get_index_excludes(repo_section)
     if subprocess.call(rsyncargs + excludes + [repo_section, serverwebroot]) != 0:
