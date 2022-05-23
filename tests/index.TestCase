@@ -57,7 +57,7 @@ class IndexTest(unittest.TestCase):
         fdroidserver.signindex.config = config
 
         if not os.path.exists('repo/index-v1.jar'):
-            fdroidserver.signindex.sign_index_v1(
+            fdroidserver.signindex.sign_index(
                 os.path.join(self.basedir, 'repo'), 'index-v1.json'
             )
 

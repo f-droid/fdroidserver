@@ -2372,6 +2372,72 @@ class CommonTest(unittest.TestCase):
         fdroidserver.common.set_FDroidPopen_env(build)
         self.assertNotIn('', os.getenv('PATH').split(os.pathsep))
 
+    def test_is_repo_file(self):
+        is_repo_file = fdroidserver.common.is_repo_file
+        self.assertFalse(is_repo_file('does-not-exist'))
+
+        with tempfile.TemporaryDirectory() as tmpdir, TmpCwd(tmpdir):
+            Path('repo').mkdir()
+            repo_files = [
+                'repo/com.example.test.helloworld_1.apk',
+                'repo/com.politedroid_6.apk',
+                'repo/duplicate.permisssions_9999999.apk',
+                'repo/fake.ota.update_1234.zip',
+                'repo/info.guardianproject.index-v1.jar_123.apk',
+                'repo/info.zwanenburg.caffeinetile_4.apk',
+                'repo/main.1101613.obb.main.twoversions.obb',
+            ]
+            index_files = [
+                'repo/entry.jar',
+                'repo/entry.json',
+                'repo/index-v1.jar',
+                'repo/index-v1.json',
+                'repo/index-v2.jar',
+                'repo/index-v2.json',
+                'repo/index.css',
+                'repo/index.html',
+                'repo/index.jar',
+                'repo/index.png',
+                'repo/index.xml',
+            ]
+            non_repo_files = ['repo/categories.txt']
+            for f in repo_files + index_files + non_repo_files:
+                open(f, 'w').close()
+
+            repo_dirs = [
+                'repo/com.politedroid',
+                'repo/info.guardianproject.index-v1.jar',
+                'repo/status',
+            ]
+            for d in repo_dirs:
+                os.mkdir(d)
+
+            for f in repo_files:
+                self.assertTrue(os.path.exists(f), f + ' was created')
+                self.assertTrue(is_repo_file(f), f + ' is repo file')
+
+            for f in index_files:
+                self.assertTrue(os.path.exists(f), f + ' was created')
+                self.assertFalse(is_repo_file(f), f + ' is repo file')
+                gpg_signed = [
+                    'repo/entry.json',
+                    'repo/index-v1.json',
+                    'repo/index-v2.json',
+                ]
+                self.assertEqual(
+                    (f in gpg_signed or is_repo_file(f, for_gpg_signing=False)),
+                    is_repo_file(f, for_gpg_signing=True),
+                    f + ' gpg signable?',
+                )
+
+            for d in repo_dirs:
+                self.assertTrue(os.path.exists(d), d + ' was created')
+                self.assertFalse(is_repo_file(d), d + ' not repo file')
+
+            for f in non_repo_files:
+                self.assertTrue(os.path.exists(f), f + ' was created')
+                self.assertFalse(is_repo_file(f), f + ' not repo file')
+
 
 if __name__ == "__main__":
     os.chdir(os.path.dirname(__file__))

@@ -28,11 +28,13 @@ import re
 import shutil
 import tempfile
 import urllib.parse
+import yaml
 import zipfile
 import calendar
 import qrcode
 from binascii import hexlify, unhexlify
 from datetime import datetime, timezone
+from pathlib import Path
 from xml.dom.minidom import Document
 
 from . import _
@@ -136,6 +138,8 @@ def make(apps, apks, repodir, archive):
             fdroid_signing_key_fingerprints)
     make_v1(sortedapps, apks, repodir, repodict, requestsdict,
             fdroid_signing_key_fingerprints)
+    make_v2(sortedapps, apks, repodir, repodict, requestsdict,
+            fdroid_signing_key_fingerprints, archive)
     make_website(sortedapps, repodir, repodict)
 
 
@@ -469,6 +473,393 @@ fieldset select, fieldset input, #reposelect select, #reposelect input {
 }""")
 
 
+def dict_diff(source, target):
+    if not isinstance(target, dict) or not isinstance(source, dict):
+        return target
+
+    result = {key: None for key in source if key not in target}
+
+    for key, value in target.items():
+        if key not in source:
+            result[key] = value
+        elif value != source[key]:
+            result[key] = dict_diff(source[key], value)
+
+    return result
+
+
+def file_entry(filename, hashType=None, hsh=None, size=None):
+    meta = {}
+    meta["name"] = "/" + filename.split("/", 1)[1]
+    if hsh:
+        meta[hashType] = hsh
+    if hsh != "sha256":
+        meta["sha256"] = common.sha256sum(filename)
+    if size:
+        meta["size"] = size
+    else:
+        meta["size"] = os.stat(filename).st_size
+    return meta
+
+
+def load_locale(name, repodir):
+    lst = {}
+    for yml in Path().glob("config/**/{name}.yml".format(name=name)):
+        locale = yml.parts[1]
+        if len(yml.parts) == 2:
+            locale = "en-US"
+        with open(yml, encoding="utf-8") as fp:
+            elem = yaml.safe_load(fp)
+            for akey, avalue in elem.items():
+                if akey not in lst:
+                    lst[akey] = {}
+                for key, value in avalue.items():
+                    if key not in lst[akey]:
+                        lst[akey][key] = {}
+                    if key == "icon":
+                        shutil.copy(os.path.join("config", value), os.path.join(repodir, "icons"))
+                        lst[akey][key][locale] = file_entry(os.path.join(repodir, "icons", value))
+                    else:
+                        lst[akey][key][locale] = value
+
+    return lst
+
+
+def convert_datetime(obj):
+    if isinstance(obj, datetime):
+        # Java prefers milliseconds
+        # we also need to account for time zone/daylight saving time
+        return int(calendar.timegm(obj.timetuple()) * 1000)
+    return obj
+
+
+def package_metadata(app, repodir):
+    meta = {}
+    for element in (
+        "added",
+        # "binaries",
+        "Categories",
+        "Changelog",
+        "IssueTracker",
+        "lastUpdated",
+        "License",
+        "SourceCode",
+        "Translation",
+        "WebSite",
+        "video",
+        "featureGraphic",
+        "promoGraphic",
+        "tvBanner",
+        "screenshots",
+        "AuthorEmail",
+        "AuthorName",
+        "AuthorPhone",
+        "AuthorWebSite",
+        "Bitcoin",
+        "FlattrID",
+        "Liberapay",
+        "LiberapayID",
+        "Litecoin",
+        "OpenCollective",
+    ):
+        if element in app and app[element]:
+            element_new = element[:1].lower() + element[1:]
+            meta[element_new] = convert_datetime(app[element])
+
+    for element in (
+        "Name",
+        "Summary",
+        "Description",
+    ):
+        element_new = element[:1].lower() + element[1:]
+        if element in app and app[element]:
+            meta[element_new] = {"en-US": convert_datetime(app[element])}
+        elif "localized" in app:
+            localized = {k: v[element_new] for k, v in app["localized"].items() if element_new in v}
+            if localized:
+                meta[element_new] = localized
+
+    if "name" not in meta and app["AutoName"]:
+        meta["name"] = {"en-US": app["AutoName"]}
+
+    # fdroidserver/metadata.py App default
+    if meta["license"] == "Unknown":
+        del meta["license"]
+
+    if app["Donate"]:
+        meta["donate"] = [app["Donate"]]
+
+    # TODO handle different resolutions
+    if app.get("icon"):
+        meta["icon"] = {"en-US": file_entry(os.path.join(repodir, "icons", app["icon"]))}
+
+    if "iconv2" in app:
+        meta["icon"] = app["iconv2"]
+
+    return meta
+
+
+def convert_version(version, app, repodir):
+    ver = {}
+    if "added" in version:
+        ver["added"] = convert_datetime(version["added"])
+    else:
+        ver["added"] = 0
+
+    ver["file"] = {
+        "name": "/{}".format(version["apkName"]),
+        version["hashType"]: version["hash"],
+        "size": version["size"]
+    }
+
+    if "srcname" in version:
+        ver["src"] = file_entry(os.path.join(repodir, version["srcname"]))
+
+    if "obbMainFile" in version:
+        ver["obbMainFile"] = file_entry(
+            os.path.join(repodir, version["obbMainFile"]),
+            "sha256", version["obbMainFileSha256"]
+        )
+
+    if "obbPatchFile" in version:
+        ver["obbPatchFile"] = file_entry(
+            os.path.join(repodir, version["obbPatchFile"]),
+            "sha256", version["obbPatchFileSha256"]
+        )
+
+    ver["manifest"] = manifest = {}
+
+    for element in (
+        "nativecode",
+        "versionName",
+        "maxSdkVersion",
+    ):
+        if element in version:
+            manifest[element] = version[element]
+
+    if "versionCode" in version:
+        manifest["versionCode"] = int(version["versionCode"])
+
+    if "features" in version and version["features"]:
+        manifest["features"] = features = []
+        for feature in version["features"]:
+            # TODO get version from manifest, default (0) is omitted
+            # features.append({"name": feature, "version": 1})
+            features.append({"name": feature})
+
+    if "minSdkVersion" in version:
+        manifest["usesSdk"] = {}
+        manifest["usesSdk"]["minSdkVersion"] = version["minSdkVersion"]
+        if "targetSdkVersion" in version:
+            manifest["usesSdk"]["targetSdkVersion"] = version["targetSdkVersion"]
+        else:
+            # https://developer.android.com/guide/topics/manifest/uses-sdk-element.html#target
+            manifest["usesSdk"]["targetSdkVersion"] = manifest["usesSdk"]["minSdkVersion"]
+
+    if "signer" in version:
+        manifest["signer"] = {"sha256": [version["signer"]]}
+
+    for element in ("uses-permission", "uses-permission-sdk-23"):
+        en = element.replace("uses-permission", "usesPermission").replace("-sdk-23", "Sdk23")
+        if element in version and version[element]:
+            manifest[en] = []
+            for perm in version[element]:
+                if perm[1]:
+                    manifest[en].append({"name": perm[0], "maxSdkVersion": perm[1]})
+                else:
+                    manifest[en].append({"name": perm[0]})
+
+    if "AntiFeatures" in app and app["AntiFeatures"]:
+        ver["antiFeatures"] = {}
+        for antif in app["AntiFeatures"]:
+            # TODO: get reasons from fdroiddata
+            # ver["antiFeatures"][antif] = {"en-US": "reason"}
+            ver["antiFeatures"][antif] = {}
+
+    if "AntiFeatures" in version and version["AntiFeatures"]:
+        if "antiFeatures" not in ver:
+            ver["antiFeatures"] = {}
+        for antif in version["AntiFeatures"]:
+            # TODO: get reasons from fdroiddata
+            # ver["antiFeatures"][antif] = {"en-US": "reason"}
+            ver["antiFeatures"][antif] = {}
+
+    if "versionCode" in version:
+        if int(version["versionCode"]) > int(app["CurrentVersionCode"]):
+            ver["releaseChannels"] = ["Beta"]
+
+    versionCodeStr = str(version['versionCode'])  # TODO build.versionCode should be int!
+    for build in app.get('Builds', []):
+        if build['versionCode'] == versionCodeStr and "whatsNew" in build:
+            ver["whatsNew"] = build["whatsNew"]
+            break
+
+    return ver
+
+
+def v2_repo(repodict, repodir, archive):
+    repo = {}
+
+    repo["name"] = {"en-US": repodict["name"]}
+    repo["description"] = {"en-US": repodict["description"]}
+    repo["icon"] = {"en-US": file_entry("{}/icons/{}".format(repodir, repodict["icon"]))}
+
+    config = load_locale("config", repodir)
+    if config:
+        repo["name"] = config["archive" if archive else "repo"]["name"]
+        repo["description"] = config["archive" if archive else "repo"]["description"]
+        repo["icon"] = config["archive" if archive else "repo"]["icon"]
+
+    repo["address"] = repodict["address"]
+    repo["webBaseUrl"] = "https://f-droid.org/packages/"
+
+    if "repo_url" in common.config:
+        primary_mirror = common.config["repo_url"][:-len("/repo")]
+        if "mirrors" in repodict and primary_mirror not in repodict["mirrors"]:
+            repodict["mirrors"].append(primary_mirror)
+
+    if "mirrors" in repodict:
+        repo["mirrors"] = [{"url": mirror} for mirror in repodict["mirrors"]]
+
+    repo["timestamp"] = repodict["timestamp"]
+
+    anti_features = load_locale("antiFeatures", repodir)
+    if anti_features:
+        repo["antiFeatures"] = anti_features
+
+    categories = load_locale("categories", repodir)
+    if categories:
+        repo["categories"] = categories
+
+    channels = load_locale("channels", repodir)
+    if channels:
+        repo["releaseChannels"] = channels
+
+    return repo
+
+
+def make_v2(apps, packages, repodir, repodict, requestsdict, fdroid_signing_key_fingerprints, archive):
+
+    def _index_encoder_default(obj):
+        if isinstance(obj, set):
+            return sorted(list(obj))
+        if isinstance(obj, datetime):
+            # Java prefers milliseconds
+            # we also need to account for time zone/daylight saving time
+            return int(calendar.timegm(obj.timetuple()) * 1000)
+        if isinstance(obj, dict):
+            d = collections.OrderedDict()
+            for key in sorted(obj.keys()):
+                d[key] = obj[key]
+            return d
+        raise TypeError(repr(obj) + " is not JSON serializable")
+
+    output = collections.OrderedDict()
+    output["repo"] = v2_repo(repodict, repodir, archive)
+    if requestsdict and requestsdict["install"] or requestsdict["uninstall"]:
+        output["repo"]["requests"] = requestsdict
+
+    # establish sort order of the index
+    v1_sort_packages(packages, fdroid_signing_key_fingerprints)
+
+    output_packages = collections.OrderedDict()
+    output['packages'] = output_packages
+    for package in packages:
+        packageName = package['packageName']
+        if packageName not in apps:
+            logging.info(_('Ignoring package without metadata: ') + package['apkName'])
+            continue
+        if not package.get('versionName'):
+            app = apps[packageName]
+            versionCodeStr = str(package['versionCode'])  # TODO build.versionCode should be int!
+            for build in app.get('Builds', []):
+                if build['versionCode'] == versionCodeStr:
+                    versionName = build.get('versionName')
+                    logging.info(_('Overriding blank versionName in {apkfilename} from metadata: {version}')
+                                 .format(apkfilename=package['apkName'], version=versionName))
+                    package['versionName'] = versionName
+                    break
+        if packageName in output_packages:
+            packagelist = output_packages[packageName]
+        else:
+            packagelist = {}
+            output_packages[packageName] = packagelist
+            packagelist["metadata"] = package_metadata(apps[packageName], repodir)
+            if "signer" in package:
+                packagelist["metadata"]["preferredSigner"] = package["signer"]
+
+            packagelist["versions"] = {}
+
+        packagelist["versions"][package["hash"]] = convert_version(package, apps[packageName], repodir)
+
+    entry = {}
+    entry["timestamp"] = repodict["timestamp"]
+
+    entry["version"] = repodict["version"]
+    if "maxage" in repodict:
+        entry["maxAge"] = repodict["maxage"]
+
+    json_name = 'index-v2.json'
+    index_file = os.path.join(repodir, json_name)
+    with open(index_file, "w", encoding="utf-8") as fp:
+        if common.options.pretty:
+            json.dump(output, fp, default=_index_encoder_default, indent=2, ensure_ascii=False)
+        else:
+            json.dump(output, fp, default=_index_encoder_default, ensure_ascii=False)
+
+    json_name = "tmp/{}_{}.json".format(repodir, convert_datetime(repodict["timestamp"]))
+    with open(json_name, "w", encoding="utf-8") as fp:
+        if common.options.pretty:
+            json.dump(output, fp, default=_index_encoder_default, indent=2, ensure_ascii=False)
+        else:
+            json.dump(output, fp, default=_index_encoder_default, ensure_ascii=False)
+
+    entry["index"] = file_entry(index_file)
+    entry["index"]["numPackages"] = len(output.get("packages", []))
+
+    indexes = sorted(Path().glob("tmp/{}*.json".format(repodir)), key=lambda x: x.name)
+    indexes.pop()  # remove current index
+    # remove older indexes
+    while len(indexes) > 10:
+        indexes.pop(0).unlink()
+
+    indexes = [json.loads(Path(fn).read_text(encoding="utf-8")) for fn in indexes]
+
+    for diff in Path().glob("{}/diff/*.json".format(repodir)):
+        diff.unlink()
+
+    entry["diffs"] = {}
+    for old in indexes:
+        diff_name = str(old["repo"]["timestamp"]) + ".json"
+        diff_file = os.path.join(repodir, "diff", diff_name)
+        diff = dict_diff(old, output)
+        if not os.path.exists(os.path.join(repodir, "diff")):
+            os.makedirs(os.path.join(repodir, "diff"))
+        with open(diff_file, "w", encoding="utf-8") as fp:
+            if common.options.pretty:
+                json.dump(diff, fp, default=_index_encoder_default, indent=2, ensure_ascii=False)
+            else:
+                json.dump(diff, fp, default=_index_encoder_default, ensure_ascii=False)
+
+        entry["diffs"][old["repo"]["timestamp"]] = file_entry(diff_file)
+        entry["diffs"][old["repo"]["timestamp"]]["numPackages"] = len(diff.get("packages", []))
+
+    json_name = "entry.json"
+    index_file = os.path.join(repodir, json_name)
+    with open(index_file, "w", encoding="utf-8") as fp:
+        if common.options.pretty:
+            json.dump(entry, fp, default=_index_encoder_default, indent=2, ensure_ascii=False)
+        else:
+            json.dump(entry, fp, default=_index_encoder_default, ensure_ascii=False)
+
+    if common.options.nosign:
+        _copy_to_local_copy_dir(repodir, index_file)
+        logging.debug(_('index-v2 must have a signature, use `fdroid signindex` to create it!'))
+    else:
+        signindex.config = common.config
+        signindex.sign_index(repodir, json_name, signindex.HashAlg.SHA256)
+
+
 def make_v1(apps, packages, repodir, repodict, requestsdict, fdroid_signing_key_fingerprints):
 
     def _index_encoder_default(obj):
@@ -504,7 +895,10 @@ def make_v1(apps, packages, repodir, repodict, requestsdict, fdroid_signing_key_
                      'ArchivePolicy', 'AutoName', 'AutoUpdateMode', 'MaintainerNotes',
                      'Provides', 'Repo', 'RepoType', 'RequiresRoot',
                      'UpdateCheckData', 'UpdateCheckIgnore', 'UpdateCheckMode',
-                     'UpdateCheckName', 'NoSourceSince', 'VercodeOperation'):
+                     'UpdateCheckName', 'NoSourceSince', 'VercodeOperation',
+                     'summary', 'description', 'promoGraphic', 'screenshots', 'whatsNew',
+                     'featureGraphic', 'iconv2', 'tvBanner',
+                     ):
                 continue
 
             # name things after the App class fields in fdroidclient
@@ -573,7 +967,7 @@ def make_v1(apps, packages, repodir, repodict, requestsdict, fdroid_signing_key_
         logging.debug(_('index-v1 must have a signature, use `fdroid signindex` to create it!'))
     else:
         signindex.config = common.config
-        signindex.sign_index_v1(repodir, json_name)
+        signindex.sign_index(repodir, json_name)
 
 
 def _copy_to_local_copy_dir(repodir, f):

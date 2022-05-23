@@ -9,6 +9,7 @@ variables:
 ci-images-base run-tests:
   image: registry.gitlab.com/fdroid/ci-images-base
   script:
+    - $pip install --upgrade pip setuptools wheel  # make this go away: "error: invalid command 'bdist_wheel'"
     - $pip install -e .
     - ./tests/run-tests
     # make sure that translations do not cause stacktraces
