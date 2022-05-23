@@ -182,7 +182,15 @@ def main():
         os.makedirs(tempdir, exist_ok=True)
         gitrepodir = os.path.join(options.git_repo, repodir)
         os.makedirs(gitrepodir, exist_ok=True)
-        for f in ('index.jar', 'index.xml', 'index-v1.jar', 'index-v1.json'):
+        for f in (
+            'entry.jar',
+            'entry.json',
+            'index-v1.jar',
+            'index-v1.json',
+            'index-v2.json',
+            'index.jar',
+            'index.xml',
+        ):
             dlfile = os.path.join(tempdir, f)
             dlurl = options.url + '/' + repodir + '/' + f
             http_headers_file = os.path.join(gitrepodir, f + '.HTTP-headers.json')
