@@ -47,7 +47,7 @@ REMOTE_HOSTNAME_REGEX = re.compile(r'\W*\w+\W+(\w+).*')
 
 
 def _get_index_excludes(repo_section):
-    """The list of files to be synced last, since they finalize the deploy.
+    """Return the list of files to be synced last, since they finalize the deploy.
 
     The process of pushing all the new packages to the various
     services can take a while.  So the index files should be updated
