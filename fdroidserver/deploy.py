@@ -46,6 +46,35 @@ USER_S3CFG = 's3cfg'
 REMOTE_HOSTNAME_REGEX = re.compile(r'\W*\w+\W+(\w+).*')
 
 
+def _get_index_excludes(repo_section):
+    """The list of files to be synced last, since they finalize the deploy.
+
+    The process of pushing all the new packages to the various
+    services can take a while.  So the index files should be updated
+    last.  That ensures that the package files are available when the
+    client learns about them from the new index files.
+
+    """
+    indexes = [
+        os.path.join(repo_section, 'entry.jar'),
+        os.path.join(repo_section, 'entry.json'),
+        os.path.join(repo_section, 'entry.json.asc'),
+        os.path.join(repo_section, 'index-v1.jar'),
+        os.path.join(repo_section, 'index-v1.json'),
+        os.path.join(repo_section, 'index-v1.json.asc'),
+        os.path.join(repo_section, 'index-v2.jar'),
+        os.path.join(repo_section, 'index-v2.json'),
+        os.path.join(repo_section, 'index-v2.json.asc'),
+        os.path.join(repo_section, 'index.jar'),
+        os.path.join(repo_section, 'index.xml'),
+    ]
+    index_excludes = []
+    for f in indexes:
+        index_excludes.append('--exclude')
+        index_excludes.append(f)
+    return index_excludes
+
+
 def update_awsbucket(repo_section):
     """Upload the contents of the directory `repo_section` (including subdirectories) to the AWS S3 "bucket".
 
@@ -104,33 +133,23 @@ def update_awsbucket_s3cmd(repo_section):
         s3cmd_sync += ['--verbose']
     if options.quiet:
         s3cmd_sync += ['--quiet']
-    indexxml = os.path.join(repo_section, 'index.xml')
-    indexjar = os.path.join(repo_section, 'index.jar')
-    indexv1jar = os.path.join(repo_section, 'index-v1.jar')
-    indexv1json = os.path.join(repo_section, 'index-v1.json')
-    indexv1jsonasc = os.path.join(repo_section, 'index-v1.json.asc')
 
     s3url = s3bucketurl + '/fdroid/'
     logging.debug('s3cmd sync new files in ' + repo_section + ' to ' + s3url)
     logging.debug(_('Running first pass with MD5 checking disabled'))
-    if subprocess.call(s3cmd_sync
-                       + ['--no-check-md5', '--skip-existing',
-                          '--exclude', indexxml,
-                          '--exclude', indexjar,
-                          '--exclude', indexv1jar,
-                          '--exclude', indexv1json,
-                          '--exclude', indexv1jsonasc,
-                          repo_section, s3url]) != 0:
+    excludes = _get_index_excludes(repo_section)
+    returncode = subprocess.call(
+        s3cmd_sync
+        + excludes
+        + ['--no-check-md5', '--skip-existing', repo_section, s3url]
+    )
+    if returncode != 0:
         raise FDroidException()
     logging.debug('s3cmd sync all files in ' + repo_section + ' to ' + s3url)
-    if subprocess.call(s3cmd_sync
-                       + ['--no-check-md5',
-                          '--exclude', indexxml,
-                          '--exclude', indexjar,
-                          '--exclude', indexv1jar,
-                          '--exclude', indexv1json,
-                          '--exclude', indexv1jsonasc,
-                          repo_section, s3url]) != 0:
+    returncode = subprocess.call(
+        s3cmd_sync + excludes + ['--no-check-md5', repo_section, s3url]
+    )
+    if returncode != 0:
         raise FDroidException()
 
     logging.debug(_('s3cmd sync indexes {path} to {url} and delete')
@@ -254,11 +273,6 @@ def update_serverwebroot(serverwebroot, repo_section):
         rsyncargs += ['-e', 'ssh -oBatchMode=yes -oIdentitiesOnly=yes -i ' + options.identity_file]
     elif 'identity_file' in config:
         rsyncargs += ['-e', 'ssh -oBatchMode=yes -oIdentitiesOnly=yes -i ' + config['identity_file']]
-    indexxml = os.path.join(repo_section, 'index.xml')
-    indexjar = os.path.join(repo_section, 'index.jar')
-    indexv1jar = os.path.join(repo_section, 'index-v1.jar')
-    indexv1json = os.path.join(repo_section, 'index-v1.json')
-    indexv1jsonasc = os.path.join(repo_section, 'index-v1.json.asc')
     # Upload the first time without the index files and delay the deletion as
     # much as possible, that keeps the repo functional while this update is
     # running.  Then once it is complete, rerun the command again to upload
@@ -267,13 +281,8 @@ def update_serverwebroot(serverwebroot, repo_section):
     # the one rsync command that is allowed to run in ~/.ssh/authorized_keys.
     # (serverwebroot is guaranteed to have a trailing slash in common.py)
     logging.info('rsyncing ' + repo_section + ' to ' + serverwebroot)
-    if subprocess.call(rsyncargs
-                       + ['--exclude', indexxml,
-                          '--exclude', indexjar,
-                          '--exclude', indexv1jar,
-                          '--exclude', indexv1json,
-                          '--exclude', indexv1jsonasc,
-                          repo_section, serverwebroot]) != 0:
+    excludes = _get_index_excludes(repo_section)
+    if subprocess.call(rsyncargs + excludes + [repo_section, serverwebroot]) != 0:
         raise FDroidException()
     if subprocess.call(rsyncargs + [repo_section, serverwebroot]) != 0:
         raise FDroidException()
