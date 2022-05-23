@@ -56,17 +56,17 @@ class SignindexTest(unittest.TestCase):
     def tearDown(self):
         self.tempdir.cleanup()
 
-    def test_sign_index_v1(self):
+    def test_sign_index(self):
         shutil.copy(str(self.basedir / 'repo/index-v1.json'), 'repo')
-        signindex.sign_index_v1(str(self.repodir), 'index-v1.json')
+        signindex.sign_index(str(self.repodir), 'index-v1.json')
         self.assertTrue((self.repodir / 'index-v1.jar').exists())
         self.assertTrue((self.repodir / 'index-v1.json').exists())
 
-    def test_sign_index_v1_corrupt(self):
+    def test_sign_index_corrupt(self):
         with open('repo/index-v1.json', 'w') as fp:
             fp.write('corrupt JSON!')
         with self.assertRaises(json.decoder.JSONDecodeError, msg='error on bad JSON'):
-            signindex.sign_index_v1(str(self.repodir), 'index-v1.json')
+            signindex.sign_index(str(self.repodir), 'index-v1.json')
 
     def test_signindex(self):
         os.mkdir('archive')

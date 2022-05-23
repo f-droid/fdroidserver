@@ -4088,26 +4088,33 @@ def get_per_app_repos():
     return repos
 
 
-def is_repo_file(filename):
+def is_repo_file(filename, for_gpg_signing=False):
     """Whether the file in a repo is a build product to be delivered to users."""
     if isinstance(filename, str):
         filename = filename.encode('utf-8', errors="surrogateescape")
-    return os.path.isfile(filename) \
-        and not filename.endswith(b'.asc') \
-        and not filename.endswith(b'.sig') \
-        and not filename.endswith(b'.idsig') \
-        and not filename.endswith(b'.log.gz') \
-        and os.path.basename(filename) not in [
-            b'index.css',
-            b'index.jar',
-            b'index_unsigned.jar',
-            b'index.xml',
-            b'index.html',
-            b'index.png',
-            b'index-v1.jar',
-            b'index-v1.json',
-            b'categories.txt',
-        ]
+    ignore_files = [
+        b'categories.txt',
+        b'entry.jar',
+        b'index-v1.jar',
+        b'index-v2.jar',
+        b'index.css',
+        b'index.html',
+        b'index.jar',
+        b'index.png',
+        b'index.xml',
+        b'index_unsigned.jar',
+    ]
+    if not for_gpg_signing:
+        ignore_files += [b'entry.json', b'index-v1.json', b'index-v2.json']
+
+    return (
+        os.path.isfile(filename)
+        and not filename.endswith(b'.asc')
+        and not filename.endswith(b'.sig')
+        and not filename.endswith(b'.idsig')
+        and not filename.endswith(b'.log.gz')
+        and os.path.basename(filename) not in ignore_files
+    )
 
 
 def get_examples_dir():

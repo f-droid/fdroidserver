@@ -21,6 +21,7 @@ import os
 import time
 import zipfile
 from argparse import ArgumentParser
+from enum import Enum
 import logging
 
 from . import _
@@ -33,29 +34,46 @@ options = None
 start_timestamp = time.gmtime()
 
 
-def sign_jar(jar):
+HashAlg = Enum("SHA1", "SHA256")
+
+
+def sign_jar(jar, hash_algorithm=None):
     """Sign a JAR file with Java's jarsigner.
 
     This method requires a properly initialized config object.
-
-    This does use old hashing algorithms, i.e. SHA1, but that's not
-    broken yet for file verification.  This could be set to SHA256,
-    but then Android < 4.3 would not be able to verify it.
-    https://code.google.com/p/android/issues/detail?id=38321
     """
-    args = [
-        config['jarsigner'],
-        '-keystore',
-        config['keystore'],
-        '-storepass:env',
-        'FDROID_KEY_STORE_PASS',
-        '-digestalg',
-        'SHA1',
-        '-sigalg',
-        'SHA1withRSA',
-        jar,
-        config['repo_keyalias'],
-    ]
+    if hash_algorithm == HashAlg.SHA256:
+        args = [
+            config['jarsigner'],
+            '-keystore',
+            config['keystore'],
+            '-storepass:env',
+            'FDROID_KEY_STORE_PASS',
+            '-digestalg',
+            'SHA-256',
+            '-sigalg',
+            'SHA256withRSA',
+            jar,
+            config['repo_keyalias'],
+        ]
+    else:
+        # This does use old hashing algorithms, i.e. SHA1, but that's not
+        # broken yet for file verification.  This could be set to SHA256,
+        # but then Android < 4.3 would not be able to verify it.
+        # https://code.google.com/p/android/issues/detail?id=38321
+        args = [
+            config['jarsigner'],
+            '-keystore',
+            config['keystore'],
+            '-storepass:env',
+            'FDROID_KEY_STORE_PASS',
+            '-digestalg',
+            'SHA1',
+            '-sigalg',
+            'SHA1withRSA',
+            jar,
+            config['repo_keyalias'],
+        ]
     if config['keystore'] == 'NONE':
         args += config['smartcardoptions']
     else:  # smardcards never use -keypass
@@ -69,7 +87,7 @@ def sign_jar(jar):
         raise FDroidException("Failed to sign %s!" % jar)
 
 
-def sign_index_v1(repodir, json_name):
+def sign_index(repodir, json_name, hash_algorithm=None):
     """Sign index-v1.json to make index-v1.jar.
 
     This is a bit different than index.jar: instead of their being index.xml
@@ -84,12 +102,14 @@ def sign_index_v1(repodir, json_name):
     # Test if index is valid
     with open(index_file, encoding="utf-8") as fp:
         index = json.load(fp)
-        [metadata.App(app) for app in index["apps"]]
+        # TODO: add test for index-v2
+        if "apps" in index:
+            [metadata.App(app) for app in index["apps"]]
 
     jar_file = os.path.join(repodir, name + '.jar')
     with zipfile.ZipFile(jar_file, 'w', zipfile.ZIP_DEFLATED) as jar:
         jar.write(index_file, json_name)
-    sign_jar(jar_file)
+    sign_jar(jar_file, hash_algorithm)
 
 
 def status_update_json(signed):
@@ -138,7 +158,14 @@ def main():
         json_name = 'index-v1.json'
         index_file = os.path.join(output_dir, json_name)
         if os.path.exists(index_file):
-            sign_index_v1(output_dir, json_name)
+            sign_index(output_dir, json_name)
+            logging.info('Signed ' + index_file)
+            signed.append(index_file)
+
+        json_name = 'entry.json'
+        index_file = os.path.join(output_dir, json_name)
+        if os.path.exists(index_file):
+            sign_index(output_dir, json_name, HashAlg.SHA256)
             logging.info('Signed ' + index_file)
             signed.append(index_file)
 

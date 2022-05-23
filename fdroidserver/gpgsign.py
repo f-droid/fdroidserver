@@ -65,9 +65,7 @@ def main():
 
         # Process any apks that are waiting to be signed...
         for f in sorted(glob.glob(os.path.join(output_dir, '*.*'))):
-            if common.get_file_extension(f) == 'asc':
-                continue
-            if not common.is_repo_file(f) and not f.endswith('/index-v1.json'):
+            if not common.is_repo_file(f, for_gpg_signing=True):
                 continue
             filename = os.path.basename(f)
             sigfilename = filename + ".asc"

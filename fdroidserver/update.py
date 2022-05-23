@@ -554,7 +554,7 @@ def _get_localized_dict(app, locale):
     return app['localized'][locale]
 
 
-def _set_localized_text_entry(app, locale, key, f):
+def _set_localized_text_entry(app, locale, key, f, versionCode=None):
     """Read a fastlane/triple-t metadata file and add an entry to the app.
 
     This reads more than the limit, in case there is leading or
@@ -563,9 +563,17 @@ def _set_localized_text_entry(app, locale, key, f):
     """
     try:
         limit = config['char_limits'][key]
-        localized = _get_localized_dict(app, locale)
+        if not versionCode:
+            localized = _get_localized_dict(app, locale)
         with open(f, errors='replace') as fp:
             text = fp.read(limit * 2)
+            if versionCode:
+                for build in app["Builds"]:
+                    if int(build["versionCode"]) == versionCode:
+                        if "whatsNew" not in build:
+                            build["whatsNew"] = collections.OrderedDict()
+                        build["whatsNew"][locale] = text[:limit]
+                        return
             if len(text) > 0:
                 if key in ('name', 'summary', 'video'):  # hardcoded as a single line
                     localized[key] = text.strip('\n')[:limit]
@@ -987,15 +995,33 @@ def insert_localized_app_metadata(apps):
                     locale = segments[-2]
                     _set_localized_text_entry(apps[packageName], locale, 'whatsNew',
                                               os.path.join(root, f))
-                    continue
 
                 base, extension = common.get_extension(f)
+
+                if extension == 'txt':
+                    try:
+                        versionCode = int(base)
+                        locale = segments[-2]
+                        if base in [a["versionCode"] for a in apps[packageName]["Builds"]]:
+                            _set_localized_text_entry(apps[packageName], locale, 'whatsNew',
+                                                      os.path.join(root, f), versionCode)
+                        continue
+                    except ValueError:
+                        pass
+
                 if locale == 'images':
                     locale = segments[-2]
                     destdir = os.path.join('repo', packageName, locale)
                 if base in GRAPHIC_NAMES and extension in ALLOWED_EXTENSIONS:
                     os.makedirs(destdir, mode=0o755, exist_ok=True)
                     _strip_and_copy_image(os.path.join(root, f), destdir)
+                    dst = os.path.join(destdir, f)
+                    if os.path.isfile(dst):
+                        if base == "icon":
+                            base = "iconv2"
+                        if base not in apps[packageName] or not isinstance(apps[packageName][base], collections.OrderedDict):
+                            apps[packageName][base] = collections.OrderedDict()
+                        apps[packageName][base][locale] = index.file_entry(dst)
             for d in dirs:
                 if d in SCREENSHOT_DIRS:
                     if locale == 'images':
@@ -1044,12 +1070,26 @@ def insert_localized_app_metadata(apps):
                     if not os.path.exists(index_file):
                         os.link(f, index_file, follow_symlinks=False)
                     graphics[base] = filename
+                    if base == "icon":
+                        base = "iconv2"
+                    if base not in apps[packageName] or not isinstance(apps[packageName][base], collections.OrderedDict):
+                        apps[packageName][base] = collections.OrderedDict()
+                    apps[packageName][base][locale] = index.file_entry(index_file)
             elif screenshotdir in SCREENSHOT_DIRS:
                 # there can any number of these per locale
                 logging.debug(_('adding to {name}: {path}').format(name=screenshotdir, path=f))
                 if screenshotdir not in graphics:
                     graphics[screenshotdir] = []
                 graphics[screenshotdir].append(filename)
+
+                newKey = screenshotdir.replace("Screenshots", "")
+                if "screenshots" not in apps[packageName]:
+                    apps[packageName]["screenshots"] = collections.OrderedDict()
+                if newKey not in apps[packageName]["screenshots"]:
+                    apps[packageName]["screenshots"][newKey] = collections.OrderedDict()
+                if locale not in apps[packageName]["screenshots"][newKey]:
+                    apps[packageName]["screenshots"][newKey][locale] = []
+                apps[packageName]["screenshots"][newKey][locale].append(index.file_entry(f))
             else:
                 logging.warning(_('Unsupported graphics file found: {path}').format(path=f))
 
