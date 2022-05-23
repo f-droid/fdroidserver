@@ -87,9 +87,10 @@ FDROID_PATH = os.path.realpath(os.path.join(os.path.dirname(__file__), '..'))
 # this is the build-tools version, aapt has a separate version that
 # has to be manually set in test_aapt_version()
 MINIMUM_AAPT_BUILD_TOOLS_VERSION = '26.0.0'
+# 30.0.0 is the first version to support --v4-signing-enabled.
 # 26.0.2 is the first version recognizing md5 based signatures as valid again
 # (as does android, so we want that)
-MINIMUM_APKSIGNER_BUILD_TOOLS_VERSION = '26.0.2'
+MINIMUM_APKSIGNER_BUILD_TOOLS_VERSION = '30.0.0'
 
 VERCODE_OPERATION_RE = re.compile(r'^([ 0-9/*+-]|%c)+$')
 
@@ -3412,6 +3413,18 @@ def get_min_sdk_version(apk):
         return 1
 
 
+def get_apksigner_smartcardoptions(smartcardoptions):
+    if '-providerName' in smartcardoptions.copy():
+        pos = smartcardoptions.index('-providerName')
+        # remove -providerName and it's argument
+        del smartcardoptions[pos]
+        del smartcardoptions[pos]
+    replacements = {'-storetype': '--ks-type',
+                    '-providerClass': '--provider-class',
+                    '-providerArg': '--provider-arg'}
+    return [replacements.get(n, n) for n in smartcardoptions]
+
+
 def sign_apk(unsigned_path, signed_path, keyalias):
     """Sign and zipalign an unsigned APK, then save to a new file, deleting the unsigned.
 
@@ -3429,16 +3442,7 @@ def sign_apk(unsigned_path, signed_path, keyalias):
 
     """
     if config['keystore'] == 'NONE':
-        apksigner_smartcardoptions = config['smartcardoptions'].copy()
-        if '-providerName' in apksigner_smartcardoptions:
-            pos = config['smartcardoptions'].index('-providerName')
-            # remove -providerName and it's argument
-            del apksigner_smartcardoptions[pos]
-            del apksigner_smartcardoptions[pos]
-        replacements = {'-storetype': '--ks-type',
-                        '-providerClass': '--provider-class',
-                        '-providerArg': '--provider-arg'}
-        signing_args = [replacements.get(n, n) for n in apksigner_smartcardoptions]
+        signing_args = get_apksigner_smartcardoptions(config['smartcardoptions'])
     else:
         signing_args = ['--key-pass', 'env:FDROID_KEY_PASS']
     apksigner = config.get('apksigner', '')

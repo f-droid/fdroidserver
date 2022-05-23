@@ -6,6 +6,7 @@ import logging
 import optparse
 import os
 import shutil
+import subprocess
 import sys
 import tempfile
 import unittest
@@ -17,7 +18,7 @@ print('localmodule: ' + localmodule)
 if localmodule not in sys.path:
     sys.path.insert(0, localmodule)
 
-from fdroidserver import common, signindex, update
+from fdroidserver import apksigcopier, common, signindex, update
 from pathlib import Path
 from unittest.mock import patch
 
@@ -96,6 +97,34 @@ class SignindexTest(unittest.TestCase):
             signindex.main()
         for f in index_files:
             self.assertTrue(f.exists(), '%s should exist!' % f)
+        self.assertFalse(os.path.exists('index-v2.jar'))  # no JAR version of this file
+
+        # index.jar aka v0 must by signed by SHA1withRSA
+        f = 'repo/index.jar'
+        common.verify_jar_signature(f)
+        self.assertIsNone(apksigcopier.extract_v2_sig(f, expected=False))
+        cp = subprocess.run(
+            ['jarsigner', '-verify', '-verbose', f], stdout=subprocess.PIPE
+        )
+        self.assertTrue(b'SHA1withRSA' in cp.stdout)
+
+        # index-v1.jar must by signed by SHA1withRSA
+        f = 'repo/index-v1.jar'
+        common.verify_jar_signature(f)
+        self.assertIsNone(apksigcopier.extract_v2_sig(f, expected=False))
+        cp = subprocess.run(
+            ['jarsigner', '-verify', '-verbose', f], stdout=subprocess.PIPE
+        )
+        self.assertTrue(b'SHA1withRSA' in cp.stdout)
+
+        # entry.jar aka index v2 must by signed by a modern algorithm
+        f = 'repo/entry.jar'
+        common.verify_jar_signature(f)
+        self.assertIsNone(apksigcopier.extract_v2_sig(f, expected=False))
+        cp = subprocess.run(
+            ['jarsigner', '-verify', '-verbose', f], stdout=subprocess.PIPE
+        )
+        self.assertFalse(b'SHA1withRSA' in cp.stdout)
 
 
 if __name__ == "__main__":

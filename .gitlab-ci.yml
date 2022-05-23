@@ -125,7 +125,7 @@ ubuntu_lts_ppa:
     - ./run-tests
 
 
-# Test using Ubuntu/bionic LTS (supported til 2022) with all depends
+# Test using Ubuntu/bionic LTS (supported til April, 2023) with all depends
 # from pypi.  The venv is used to isolate the dist tarball generation
 # environment from the clean install environment.
 ubuntu_bionic_pip:
@@ -145,6 +145,11 @@ ubuntu_bionic_pip:
     - tar tzf dist/fdroidserver-*.tar.gz
     # back to bare machine to act as user's install machine
     - $pip install --upgrade pip setuptools wheel  # make this go away: "error: invalid command 'bdist_wheel'"
+
+    - export ANDROID_HOME=/opt/android-sdk
+    - $pip install sdkmanager
+    - sdkmanager 'build-tools;30.0.0'
+
     - $pip install dist/fdroidserver-*.tar.gz
     - tar xzf dist/fdroidserver-*.tar.gz
     - cd fdroidserver-*

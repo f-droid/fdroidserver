@@ -858,7 +858,7 @@ def make_v2(apps, packages, repodir, repodict, requestsdict, fdroid_signing_key_
         logging.debug(_('index-v2 must have a signature, use `fdroid signindex` to create it!'))
     else:
         signindex.config = common.config
-        signindex.sign_index(repodir, json_name, signindex.HashAlg.SHA256)
+        signindex.sign_index(repodir, json_name)
 
 
 def make_v1(apps, packages, repodir, repodict, requestsdict, fdroid_signing_key_fingerprints):
@@ -1345,7 +1345,7 @@ def make_v0(apps, apks, repodir, repodict, requestsdict, fdroid_signing_key_fing
                 os.remove(signed)
         else:
             signindex.config = common.config
-            signindex.sign_jar(signed)
+            signindex.sign_jar(signed, use_old_algs=True)
 
     # Copy the repo icon into the repo directory...
     icon_dir = os.path.join(repodir, 'icons')
