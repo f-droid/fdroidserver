@@ -235,6 +235,7 @@ black:
         examples/fdroid_extract_repo_pubkey.py
         examples/makebuildserver.config.py
         fdroid
+        fdroidserver/btlog.py
         fdroidserver/exception.py
         fdroidserver/gpgsign.py
         fdroidserver/lint.py

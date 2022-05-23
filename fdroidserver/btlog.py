@@ -70,7 +70,8 @@ def make_binary_transparency_log(
         if not url:
             url = common.config['repo_url'].rstrip('/')
         with open(os.path.join(btrepo, 'README.md'), 'w') as fp:
-            fp.write("""
+            fp.write(
+                """
 # Binary Transparency Log for %s
 
 This is a log of the signed app index metadata.  This is stored in a
@@ -80,8 +81,10 @@ F-Droid repository was a publicly released file.
 
 For more info on this idea:
 * https://wiki.mozilla.org/Security/Binary_Transparency
-""" % url[:url.rindex('/')])  # strip '/repo'
-        gitrepo.index.add(['README.md', ])
+"""
+                % url[: url.rindex('/')]  # strip '/repo'
+            )
+        gitrepo.index.add(['README.md'])
         gitrepo.index.commit('add README')
 
     for repodir in repodirs:
@@ -150,13 +153,22 @@ def main():
 
     parser = ArgumentParser()
     common.setup_global_opts(parser)
-    parser.add_argument("--git-repo",
-                        default=os.path.join(os.getcwd(), 'binary_transparency'),
-                        help=_("Path to the git repo to use as the log"))
-    parser.add_argument("-u", "--url", default='https://f-droid.org',
-                        help=_("The base URL for the repo to log (default: https://f-droid.org)"))
-    parser.add_argument("--git-remote", default=None,
-                        help=_("Push the log to this git remote repository"))
+    parser.add_argument(
+        "--git-repo",
+        default=os.path.join(os.getcwd(), 'binary_transparency'),
+        help=_("Path to the git repo to use as the log"),
+    )
+    parser.add_argument(
+        "-u",
+        "--url",
+        default='https://f-droid.org',
+        help=_("The base URL for the repo to log (default: https://f-droid.org)"),
+    )
+    parser.add_argument(
+        "--git-remote",
+        default=None,
+        help=_("Push the log to this git remote repository"),
+    )
     options = parser.parse_args()
 
     if options.verbose:
@@ -204,7 +216,7 @@ def main():
             r = session.head(dlurl, headers=headers, allow_redirects=False)
             if r.status_code != 200:
                 logging.debug(
-                    'HTTP Response (' + str(r.status_code) + '), did not download ' + dlurl
+                    'HTTP Response (%d), did not download %s' % (r.status_code, dlurl)
                 )
                 continue
             if etag and etag == r.headers.get('ETag'):
@@ -226,7 +238,9 @@ def main():
 
     if new_files:
         os.chdir(tempdirbase)
-        make_binary_transparency_log(repodirs, options.git_repo, options.url, 'fdroid btlog')
+        make_binary_transparency_log(
+            repodirs, options.git_repo, options.url, 'fdroid btlog'
+        )
     if options.git_remote:
         deploy.push_binary_transparency(options.git_repo, options.git_remote)
     shutil.rmtree(tempdirbase, ignore_errors=True)
