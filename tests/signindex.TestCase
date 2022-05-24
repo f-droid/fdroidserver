@@ -76,7 +76,15 @@ class SignindexTest(unittest.TestCase):
             fp.write('# placeholder')
         shutil.copy(str(self.basedir / 'urzip.apk'), 'repo')
         index_files = []
-        for f in ('index.xml', 'index.jar', 'index-v1.json', 'index-v1.jar'):
+        for f in (
+            'entry.jar',
+            'entry.json',
+            'index-v1.jar',
+            'index-v1.json',
+            'index-v2.json',
+            'index.jar',
+            'index.xml',
+        ):
             for section in (Path('repo'), Path('archive')):
                 path = section / f
                 self.assertFalse(path.exists(), '%s should not exist yet!' % path)

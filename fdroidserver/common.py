@@ -2592,6 +2592,7 @@ def use_androguard():
             use_androguard.show_path = False
         if options and options.verbose:
             logging.getLogger("androguard.axml").setLevel(logging.INFO)
+        logging.getLogger("androguard.core.api_specific_resources").setLevel(logging.ERROR)
         return True
     except ImportError:
         return False
