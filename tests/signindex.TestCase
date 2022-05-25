@@ -70,6 +70,8 @@ class SignindexTest(unittest.TestCase):
             signindex.sign_index(str(self.repodir), 'index-v1.json')
 
     def test_signindex(self):
+        if common.find_apksigner({}) is None:  # TODO remove me for buildserver-bullseye
+            self.skipTest('SKIPPING test_signindex, apksigner not installed!')
         os.mkdir('archive')
         metadata = Path('metadata')
         metadata.mkdir()
