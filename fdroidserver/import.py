@@ -194,6 +194,9 @@ def main():
     elif subdir:
         build.subdir = subdir.as_posix()
         build.gradle = ['yes']
+    else:
+        # subdir might be None
+        subdir = Path()
 
     if options.license:
         app.License = options.license
