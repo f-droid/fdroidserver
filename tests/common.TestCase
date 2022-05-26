@@ -54,6 +54,8 @@ class CommonTest(unittest.TestCase):
             os.makedirs(self.tmpdir)
         os.chdir(self.basedir)
         fdroidserver.common.config = None
+        fdroidserver.common.options = mock.Mock()
+        fdroidserver.common.options.verbose = False
         self.path = os.environ['PATH']
         self.android_home = os.environ.get('ANDROID_HOME')
 
@@ -2437,6 +2439,98 @@ class CommonTest(unittest.TestCase):
             for f in non_repo_files:
                 self.assertTrue(os.path.exists(f), f + ' was created')
                 self.assertFalse(is_repo_file(f), f + ' not repo file')
+
+    def test_get_smartcardoptions_list(self):
+        os.chdir(self.tmpdir)
+        with open('config.yml', 'w') as fp:
+            fp.write(
+                textwrap.dedent(
+                    """
+                    smartcardoptions:
+                      - -storetype
+                      -  PKCS11
+                      - -providerName
+                      -  SunPKCS11-OpenSC
+                      - -providerClass
+                      -  sun.security.pkcs11.SunPKCS11
+                      - -providerArg
+                      -  opensc-fdroid.cfg
+                    """
+                )
+            )
+        config = fdroidserver.common.read_config()
+        fdroidserver.common.config = config
+        self.assertTrue(isinstance(config['smartcardoptions'], list))
+        self.assertEqual(
+            [
+                '-storetype',
+                'PKCS11',
+                '-providerName',
+                'SunPKCS11-OpenSC',
+                '-providerClass',
+                'sun.security.pkcs11.SunPKCS11',
+                '-providerArg',
+                'opensc-fdroid.cfg',
+            ],
+            config['smartcardoptions'],
+        )
+
+    def test_get_smartcardoptions_spaces(self):
+        os.chdir(self.tmpdir)
+        with open('config.yml', 'w') as fp:
+            fp.write(
+                textwrap.dedent(
+                    """smartcardoptions: |
+                         -storetype      PKCS11
+                         -providerClass  sun.security.pkcs11.SunPKCS11
+                         -providerArg    /etc/pkcs11_java.cfg
+
+                    """
+                )
+            )
+        config = fdroidserver.common.read_config()
+        fdroidserver.common.config = config
+        self.assertTrue(isinstance(config['smartcardoptions'], list))
+        self.assertEqual(
+            [
+                '-storetype',
+                'PKCS11',
+                '-providerClass',
+                'sun.security.pkcs11.SunPKCS11',
+                '-providerArg',
+                '/etc/pkcs11_java.cfg',
+            ],
+            config['smartcardoptions'],
+        )
+
+    def test_get_smartcardoptions_config_py(self):
+        os.chdir(self.tmpdir)
+        with open('config.py', 'w') as fp:
+            fp.write(
+                textwrap.dedent(
+                    """
+                    smartcardoptions = '''
+                    \t-storetype\tPKCS11
+                    \t-providerClass\tsun.security.pkcs11.SunPKCS11
+                    \t-providerArg\t/etc/pkcs11_java.cfg
+
+                     '''
+                    """
+                )
+            )
+        config = fdroidserver.common.read_config()
+        fdroidserver.common.config = config
+        self.assertEqual(
+            [
+                '-storetype',
+                'PKCS11',
+                '-providerClass',
+                'sun.security.pkcs11.SunPKCS11',
+                '-providerArg',
+                '/etc/pkcs11_java.cfg',
+            ],
+            config['smartcardoptions'],
+        )
 
 
 if __name__ == "__main__":
