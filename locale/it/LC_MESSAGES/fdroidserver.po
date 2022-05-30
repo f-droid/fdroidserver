@@ -1,7 +1,7 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# random r <epsilin@yopmail.com>, 2020.
+# random r <epsilin@yopmail.com>, 2020, 2022.
 # Luca Zambarda <luke.zambarda@gmail.com>, 2020.
 # IvanDan <ivandanza@gmail.com>, 2020, 2021.
 # Massimiliano Caniparoli <massic80@gmail.com>, 2020.
@@ -16,15 +16,15 @@ msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2022-02-15 20:04+0100\n"
-"PO-Revision-Date: 2022-04-21 10:12+0000\n"
-"Last-Translator: Frankie McEyes <mceyes@protonmail.com>\n"
+"PO-Revision-Date: 2022-05-31 08:19+0000\n"
+"Last-Translator: random r <epsilin@yopmail.com>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/f-droid/fdroidserver/it/>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.12-dev\n"
+"X-Generator: Weblate 4.13-dev\n"
 
 #: ../fdroidserver/common.py
 msgid ""
@@ -1085,12 +1085,12 @@ msgstr "APK non valido"
 #: ../fdroidserver/checkupdates.py
 #, python-brace-format
 msgid "Invalid AutoUpdateMode: {mode}"
-msgstr ""
+msgstr "Modalità di aggiornamento automatico non valida: {mode}"
 
 #: ../fdroidserver/checkupdates.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Invalid UpdateCheckMode: {mode}"
-msgstr "Nome del pacchetto non valido {0}"
+msgstr "Modalità di controllo aggiornamento non valida: {mode}"
 
 #: ../fdroidserver/lint.py ../fdroidserver/checkupdates.py
 #, python-brace-format
@@ -1211,9 +1211,9 @@ msgid "Javascript in HTML src attributes"
 msgstr "Javascript negli attributi HTML src"
 
 #: ../fdroidserver/build.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Keeping failed build \"{apkfilename}\""
-msgstr "Lettura di minSdkVersion non riuscita: \"{apkfilename}\""
+msgstr "Mantenimento della build fallita \"{apkfilename}\""
 
 #: ../fdroidserver/init.py
 msgid "Keystore for signing key:\t"
@@ -1237,9 +1237,8 @@ msgid "List files that would be reformatted"
 msgstr "Elenca i file che verrebbero riformattati"
 
 #: ../fdroidserver/rewritemeta.py
-#, fuzzy
 msgid "List files that would be reformatted (dry run)"
-msgstr "Elenca i file che verrebbero riformattati"
+msgstr "Elenca i file che verrebbero riformattati (simulazione)"
 
 #: ../fdroidserver/lint.py
 msgid "Locale included in f-droid.org URL"
@@ -1275,9 +1274,9 @@ msgid "No 'config.yml' found, using defaults."
 msgstr "Nessun 'config.yml' trovato, utilizzando i valori predefiniti."
 
 #: ../fdroidserver/verify.py
-#, fuzzy, python-format
+#, python-format
 msgid "No APK for package: %s"
-msgstr "Nessun pacchetto di questo tipo: %s"
+msgstr "Nessun APK per il pacchetto: %s"
 
 #: ../fdroidserver/common.py
 msgid "No Android SDK found!"
@@ -1317,14 +1316,13 @@ msgid "No information found."
 msgstr "Nessun informazione trovata."
 
 #: ../fdroidserver/checkupdates.py
-#, fuzzy
 msgid "No matching tags found"
-msgstr "Nessun informazione trovata."
+msgstr "Nessuna etichetta corrispondente trovata"
 
 #: ../fdroidserver/update.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "No minimum SDK version found in {0}, using default (3)."
-msgstr "Nessun config.yml trovato, utilizzando i valori predefiniti."
+msgstr "Nessuna versione minima dell'SDK trovata in {0}, viene usata la predefinita (3)."
 
 #: ../fdroidserver/lint.py
 msgid "No need to specify that the app is Free Software"
@@ -1368,9 +1366,8 @@ msgid "No such versionCode {versionCode} for app {appid}"
 msgstr "Nessun versionCode di questo tipo {versionCode} per l'app {appid}"
 
 #: ../fdroidserver/checkupdates.py
-#, fuzzy
 msgid "No tags found"
-msgstr "Nessun dispositivo collegato trovato"
+msgstr "Nessuna etichetta trovata"
 
 #: ../fdroidserver/verify.py ../fdroidserver/publish.py
 msgid "No unsigned directory - nothing to do"
@@ -1597,7 +1594,7 @@ msgstr "Rimozione dei file specificati"
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Removing {path}\""
-msgstr ""
+msgstr "Rimozione di {path}\""
 
 #: ../fdroidserver/update.py
 msgid "Rename APK files that do not match package.name_123.apk"
