@@ -2689,9 +2689,11 @@ def get_apk_id(apkfile):
     try:
         return get_apk_id_androguard(apkfile)
     except zipfile.BadZipFile as e:
-        logging.error(apkfile + ': ' + str(e))
-        if 'aapt' in config:
+        if config and 'aapt' in config:
+            logging.error(apkfile + ': ' + str(e))
             return get_apk_id_aapt(apkfile)
+        else:
+            raise e
 
 
 def get_apk_id_androguard(apkfile):

@@ -21,7 +21,7 @@ import textwrap
 import yaml
 import gzip
 import stat
-from zipfile import ZipFile, ZipInfo
+from zipfile import BadZipFile, ZipFile, ZipInfo
 from unittest import mock
 from pathlib import Path
 
@@ -959,8 +959,23 @@ class CommonTest(unittest.TestCase):
                 self.assertEqual(versionCode, vc, 'aapt versionCode parsing failed for ' + apkfilename)
                 self.assertEqual(versionName, vn, 'aapt versionName parsing failed for ' + apkfilename)
 
+    def test_get_apk_id_bad_path(self):
         with self.assertRaises(FDroidException):
             fdroidserver.common.get_apk_id('nope')
+
+    def test_get_apk_id_api_call(self):
+        self.assertEqual(
+            ('info.guardianproject.urzip', '100', '0.1'),
+            fdroidserver.common.get_apk_id('urzip.apk'),
+        )
+
+    def test_get_apk_id_bad_zip(self):
+        os.chdir(self.tmpdir)
+        badzip = 'badzip.apk'
+        with open(badzip, 'w') as fp:
+            fp.write('not a ZIP')
+        with self.assertRaises(BadZipFile):
+            fdroidserver.common.get_apk_id(badzip)
 
     def test_get_apk_id_aapt_regex(self):
         files = glob.glob(os.path.join(self.basedir, 'build-tools', '[1-9]*.*', '*.txt'))
