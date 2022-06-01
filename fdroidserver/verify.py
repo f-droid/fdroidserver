@@ -221,7 +221,7 @@ def main():
                         net.download_file(url.replace('/repo', '/archive'), dldir=tmp_dir)
                     except requests.exceptions.HTTPError as e:
                         raise FDroidException(_('Downloading {url} failed. {error}')
-                                              .format(url=url, error=e))
+                                              .format(url=url, error=e)) from e
 
             unsigned_apk = os.path.join(unsigned_dir, apkfilename)
             compare_result = common.verify_apks(remote_apk, unsigned_apk, tmp_dir)

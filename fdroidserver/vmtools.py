@@ -401,7 +401,7 @@ class LibvirtBuildVm(FDroidBuildVm):
         try:
             self.conn = libvirt.open('qemu:///system')
         except libvirt.libvirtError as e:
-            raise FDroidBuildVmException('could not connect to libvirtd: %s' % (e))
+            raise FDroidBuildVmException('could not connect to libvirtd: %s' % (e)) from e
 
     def destroy(self):
 

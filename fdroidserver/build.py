@@ -131,7 +131,7 @@ def build_server(app, build, vcs, build_dir, output_dir, log_dir, force):
                                          sshinfo['user'] + "@" + sshinfo['hostname'] + ":" + ftp.getcwd()],
                                         stderr=subprocess.STDOUT)
             except subprocess.CalledProcessError as e:
-                raise FDroidException(str(e), e.output.decode())
+                raise FDroidException(str(e), e.output.decode()) from e
 
         logging.info("Preparing server for build...")
         serverpath = os.path.abspath(os.path.dirname(__file__))
@@ -290,10 +290,10 @@ def build_server(app, build, vcs, build_dir, output_dir, log_dir, force):
             ftp.get(apkfile, os.path.join(output_dir, apkfile))
             if not options.notarball:
                 ftp.get(tarball, os.path.join(output_dir, tarball))
-        except Exception:
+        except Exception as exc:
             raise BuildException(
                 "Build failed for {0}:{1} - missing output files".format(
-                    app.id, build.versionName), str(output, 'utf-8'))
+                    app.id, build.versionName), str(output, 'utf-8')) from exc
         ftp.close()
 
     finally:

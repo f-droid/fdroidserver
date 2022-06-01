@@ -480,14 +480,14 @@ def parse_human_readable_size(size):
     }
     try:
         return int(float(size))
-    except (ValueError, TypeError):
+    except (ValueError, TypeError) as exc:
         if type(size) != str:
             raise ValueError(_('Could not parse size "{size}", wrong type "{type}"')
-                             .format(size=size, type=type(size)))
+                             .format(size=size, type=type(size))) from exc
         s = size.lower().replace(' ', '')
         m = re.match(r'^(?P<value>[0-9][0-9.]*) *(?P<unit>' + r'|'.join(units.keys()) + r')$', s)
         if not m:
-            raise ValueError(_('Not a valid size definition: "{}"').format(size))
+            raise ValueError(_('Not a valid size definition: "{}"').format(size)) from exc
         return int(float(m.group("value")) * units[m.group("unit")])
 
 
@@ -793,8 +793,8 @@ def publishednameinfo(filename):
     m = publish_name_regex.match(filename)
     try:
         result = (m.group(1), m.group(2))
-    except AttributeError:
-        raise FDroidException(_("Invalid name for published file: %s") % filename)
+    except AttributeError as exc:
+        raise FDroidException(_("Invalid name for published file: %s") % filename) from exc
     return result
 
 
@@ -1350,7 +1350,7 @@ class vcs_gitsvn(vcs):
                 r = requests.head(remote)
                 r.raise_for_status()
             except Exception as e:
-                raise VCSException('SVN certificate pre-validation failed: ' + str(e))
+                raise VCSException('SVN certificate pre-validation failed: ' + str(e)) from e
             location = r.headers.get('location')
             if location and not location.startswith('https://'):
                 raise VCSException(_('Invalid redirect to non-HTTPS: {before} -> {after} ')
@@ -2605,8 +2605,8 @@ use_androguard.show_path = True  # type: ignore
 def _get_androguard_APK(apkfile):
     try:
         from androguard.core.bytecodes.apk import APK
-    except ImportError:
-        raise FDroidException("androguard library is not installed")
+    except ImportError as exc:
+        raise FDroidException("androguard library is not installed") from exc
 
     return APK(apkfile)
 
@@ -2835,7 +2835,7 @@ def FDroidPopenBytes(commands, cwd=None, envs=None, output=True, stderr_to_stdou
                              stderr=stderr_param)
     except OSError as e:
         raise BuildException("OSError while trying to execute "
-                             + ' '.join(commands) + ': ' + str(e))
+                             + ' '.join(commands) + ': ' + str(e)) from e
 
     # TODO are these AsynchronousFileReader threads always exiting?
     if not stderr_to_stdout and options.verbose:
@@ -3535,7 +3535,7 @@ def verify_jar_signature(jar):
         if e.returncode == 4:
             logging.debug(_('JAR signature verified: {path}').format(path=jar))
         else:
-            raise VerificationException(error + '\n' + e.output.decode('utf-8'))
+            raise VerificationException(error + '\n' + e.output.decode('utf-8')) from e
 
 
 def verify_apk_signature(apk, min_sdk_version=None):
@@ -4200,10 +4200,10 @@ def calculate_math_string(expr):
         if '#' in expr:
             raise SyntaxError('no comments allowed')
         return execute_ast(ast.parse(expr, mode='eval').body)
-    except SyntaxError:
+    except SyntaxError as exc:
         raise SyntaxError("could not parse expression '{expr}', "
                           "only basic math operations are allowed (+, -, *)"
-                          .format(expr=expr))
+                          .format(expr=expr)) from exc
 
 
 def force_exit(exitvalue=0):
