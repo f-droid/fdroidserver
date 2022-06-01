@@ -24,10 +24,13 @@ import sys
 import traceback
 import zipfile
 from argparse import ArgumentParser
+from collections import namedtuple
 from copy import deepcopy
 from tempfile import TemporaryDirectory
 import logging
 import itertools
+
+import requests
 
 from . import _
 from . import common
@@ -140,7 +143,45 @@ def get_embedded_classes(apkfile, depth=0):
     return classes
 
 
-def scan_binary(apkfile):
+# taken from exodus_core
+def _compile_signatures(signatures):
+    """
+    Compiles the regex associated to each signature, in order to speed up the trackers detection.
+
+    :return: A compiled list of signatures.
+    """
+    compiled_tracker_signature = []
+    try:
+        compiled_tracker_signature = [
+            re.compile(track.code_signature) for track in signatures
+        ]
+    except TypeError:
+        print("signatures is not iterable")
+    return compiled_tracker_signature
+
+
+# taken from exodus_core
+def load_trackers_signatures():
+    """
+    Load trackers signatures from the official Exodus database.
+
+    :return: a dictionary containing signatures.
+    """
+    signatures = []
+    exodus_url = "https://reports.exodus-privacy.eu.org/api/trackers"
+    r = requests.get(exodus_url)
+    data = r.json()
+    for e in data['trackers']:
+        signatures.append(
+            namedtuple('tracker', data['trackers'][e].keys())(
+                *data['trackers'][e].values()
+            )
+        )
+    logging.debug('{} trackers signatures loaded'.format(len(signatures)))
+    return signatures, _compile_signatures(signatures)
+
+
+def scan_binary(apkfile, extract_signatures=None):
     """Scan output of dexdump for known non-free classes."""
     logging.info(_('Scanning APK with dexdump for known non-free classes.'))
     result = get_embedded_classes(apkfile)
@@ -150,6 +191,29 @@ def scan_binary(apkfile):
             if regexp.match(classname):
                 logging.debug("Found class '%s'" % classname)
                 problems += 1
+
+    if extract_signatures:
+
+        def _detect_tracker(sig, tracker, class_list):
+            for clazz in class_list:
+                if sig.search(clazz):
+                    return tracker
+            return None
+
+        results = []
+        args = [(extract_signatures[1][index], tracker, result)
+                for (index, tracker) in enumerate(extract_signatures[0]) if
+                len(tracker.code_signature) > 3]
+
+        for res in itertools.starmap(_detect_tracker, args):
+            if res:
+                results.append(res)
+
+        trackers = [t for t in results if t is not None]
+        for tracker in trackers:
+            logging.debug("Found tracker {}".format(tracker.code_signature))
+        problems += len(trackers)
+
     if problems:
         logging.critical("Found problems in %s" % apkfile)
     return problems
@@ -454,6 +518,11 @@ def main():
     )
     common.setup_global_opts(parser)
     parser.add_argument("appid", nargs='*', help=_("application ID with optional versionCode in the form APPID[:VERCODE]"))
+    parser.add_argument(
+        "--exodus",
+        action="store_true",
+        help="Use tracker scanner from Exodus project (requires internet)",
+    )
     parser.add_argument("-f", "--force", action="store_true", default=False,
                         help=_("Force scan of disabled apps and builds."))
     parser.add_argument("--json", action="store_true", default=False,
@@ -473,10 +542,14 @@ def main():
 
     probcount = 0
 
+    exodus = []
+    if options.exodus:
+        exodus = load_trackers_signatures()
+
     appids = []
     for apk in options.appid:
         if os.path.isfile(apk):
-            count = scan_binary(apk)
+            count = scan_binary(apk, exodus)
             if count > 0:
                 logging.warning(
                     _('Scanner found {count} problems in {apk}:').format(
