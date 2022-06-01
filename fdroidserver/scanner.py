@@ -449,7 +449,9 @@ def main():
     global config, options, json_per_build
 
     # Parse command line...
-    parser = ArgumentParser(usage="%(prog)s [options] [APPID[:VERCODE] [APPID[:VERCODE] ...]]")
+    parser = ArgumentParser(
+        usage="%(prog)s [options] [APPID[:VERCODE] path/to.apk ...]"
+    )
     common.setup_global_opts(parser)
     parser.add_argument("appid", nargs='*', help=_("application ID with optional versionCode in the form APPID[:VERCODE]"))
     parser.add_argument("-f", "--force", action="store_true", default=False,
@@ -469,11 +471,28 @@ def main():
 
     config = common.read_config(options)
 
+    probcount = 0
+
+    appids = []
+    for apk in options.appid:
+        if os.path.isfile(apk):
+            count = scan_binary(apk)
+            if count > 0:
+                logging.warning(
+                    _('Scanner found {count} problems in {apk}:').format(
+                        count=count, apk=apk
+                    )
+                )
+                probcount += count
+        else:
+            appids.append(apk)
+
+    if not appids:
+        return
+
     # Read all app and srclib metadata
     allapps = metadata.read_metadata()
-    apps = common.read_app_args(options.appid, allapps, True)
-
-    probcount = 0
+    apps = common.read_app_args(appids, allapps, True)
 
     build_dir = 'build'
     if not os.path.isdir(build_dir):
