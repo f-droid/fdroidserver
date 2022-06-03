@@ -235,6 +235,8 @@ def build_server(app, build, vcs, build_dir, output_dir, log_dir, force):
             cmdline += ' --skip-scan'
         if options.notarball:
             cmdline += ' --no-tarball'
+        if (options.scan_binary or config.get('scan_binary')) and not options.skipscan:
+            cmdline += ' --scan-binary'
         cmdline += " %s:%s" % (app.id, build.versionCode)
         chan.exec_command('bash --login -c "' + cmdline + '"')  # nosec B601 inputs are sanitized
 
