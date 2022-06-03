@@ -91,11 +91,15 @@ def make(apps, apks, repodir, archive):
         repodict['description'] = common.config['archive_description']
         archive_url = common.config.get('archive_url', common.config['repo_url'][:-4] + 'archive')
         repodict['address'] = archive_url
+        if 'archive_web_base_url' in common.config:
+            repodict["webBaseUrl"] = common.config['archive_web_base_url']
         urlbasepath = os.path.basename(urllib.parse.urlparse(archive_url).path)
     else:
         repodict['name'] = common.config['repo_name']
         repodict['icon'] = common.config.get('repo_icon', common.default_config['repo_icon'])
         repodict['address'] = common.config['repo_url']
+        if 'repo_web_base_url' in common.config:
+            repodict["webBaseUrl"] = common.config['repo_web_base_url']
         repodict['description'] = common.config['repo_description']
         urlbasepath = os.path.basename(urllib.parse.urlparse(common.config['repo_url']).path)
 
@@ -711,7 +715,8 @@ def v2_repo(repodict, repodir, archive):
         repo["icon"] = config["archive" if archive else "repo"]["icon"]
 
     repo["address"] = repodict["address"]
-    repo["webBaseUrl"] = "https://f-droid.org/packages/"
+    if "webBaseUrl" in repodict:
+        repo["webBaseUrl"] = repodict["webBaseUrl"]
 
     if "mirrors" in repodict:
         repo["mirrors"] = [{"url": mirror} for mirror in repodict["mirrors"]]
