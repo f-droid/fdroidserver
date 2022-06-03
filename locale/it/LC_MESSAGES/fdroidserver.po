@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2022-02-15 20:04+0100\n"
-"PO-Revision-Date: 2022-05-31 08:19+0000\n"
+"PO-Revision-Date: 2022-06-03 10:53+0000\n"
 "Last-Translator: random r <epsilin@yopmail.com>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/f-droid/fdroidserver/it/>\n"
 "Language: it\n"
@@ -2229,9 +2229,8 @@ msgid "ambiguous option: %s (%s?)"
 msgstr "opzione ambigua: %s (%s?)"
 
 #: ../fdroidserver/common.py
-#, fuzzy
 msgid "apksigner not found! Cannot sign or verify modern APKs"
-msgstr "apksigner non trovato, è necessario per la firma!"
+msgstr "apksigner non trovato! Impossibile firmare o verificare gli APK moderni"
 
 #: ../fdroidserver/common.py
 msgid "apksigner not found, it's required for signing!"
@@ -2530,9 +2529,8 @@ msgid "no version info found!"
 msgstr "nessuna informazione sulla versione è stata trovata!"
 
 #: ../fdroidserver/checkupdates.py
-#, fuzzy
 msgid "no version information found"
-msgstr "nessuna informazione sulla versione è stata trovata!"
+msgstr "nessuna informazione sulla versione trovata"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py
