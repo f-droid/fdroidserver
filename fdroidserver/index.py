@@ -713,13 +713,12 @@ def v2_repo(repodict, repodir, archive):
     repo["address"] = repodict["address"]
     repo["webBaseUrl"] = "https://f-droid.org/packages/"
 
-    if "repo_url" in common.config:
-        primary_mirror = common.config["repo_url"][:-len("/repo")]
-        if "mirrors" in repodict and primary_mirror not in repodict["mirrors"]:
-            repodict["mirrors"].append(primary_mirror)
-
     if "mirrors" in repodict:
         repo["mirrors"] = [{"url": mirror} for mirror in repodict["mirrors"]]
+
+        # the first entry is traditionally the primary mirror
+        if repodict['address'] not in repodict["mirrors"]:
+            repo["mirrors"].insert(0, {"url": repodict['address'], "isPrimary": True})
 
     repo["timestamp"] = repodict["timestamp"]
 
