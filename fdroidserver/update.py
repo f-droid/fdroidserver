@@ -1317,7 +1317,7 @@ def scan_apk_androguard(apk, apkfile):
     except (FileNotFoundError, zipfile.BadZipFile) as e:
         logging.error(_("Could not open APK {path} for analysis: ").format(path=apkfile)
                       + str(e))
-        raise BuildException(_("Invalid APK"))
+        raise BuildException(_("Invalid APK")) from e
 
     apk['packageName'] = apkobject.get_package()
 

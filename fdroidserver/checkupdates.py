@@ -495,8 +495,8 @@ def checkupdates_app(app):
             if pattern.startswith('+'):
                 try:
                     suffix, pattern = pattern[1:].split(' ', 1)
-                except ValueError:
-                    raise MetaDataException("Invalid AutoUpdateMode: " + mode)
+                except ValueError as exc:
+                    raise MetaDataException("Invalid AutoUpdateMode: " + mode) from exc
 
             gotcur = False
             latest = None

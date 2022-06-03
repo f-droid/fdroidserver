@@ -147,8 +147,8 @@ def noautoyes(value):
         return value
     try:
         return {False: NO, None: AUTO, True: YES}[value]
-    except KeyError:
-        raise ValueError("expected False, None, or True")
+    except KeyError as exc:
+        raise ValueError("expected False, None, or True") from exc
 
 
 def is_meta(filename):
