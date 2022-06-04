@@ -1887,7 +1887,6 @@ def move_apk_between_sections(from_dir, to_dir, apk):
     _move_file(from_dir, to_dir, apk['apkName'] + '.asc', True)
     _move_file(from_dir, to_dir, apk['apkName'] + '.idsig', True)
     _move_file(from_dir, to_dir, apk['apkName'][:-4] + '.log.gz', True)
-    _move_file(from_dir, to_dir, apk['apkName'][:-4] + '.log.gz.asc', True)
     for density in all_screen_densities:
         from_icon_dir = get_icon_dir(from_dir, density)
         to_icon_dir = get_icon_dir(to_dir, density)
@@ -1896,6 +1895,7 @@ def move_apk_between_sections(from_dir, to_dir, apk):
         _move_file(from_icon_dir, to_icon_dir, apk['icons'][density], True)
     if 'srcname' in apk:
         _move_file(from_dir, to_dir, apk['srcname'], False)
+        _move_file(from_dir, to_dir, apk['srcname'] + '.asc', True)
 
 
 def add_apks_to_per_app_repos(repodir, apks):
