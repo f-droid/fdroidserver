@@ -2,7 +2,7 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # ERDwaYbR <weblate.uu@vvvvv5.uu.me>, 2020.
-# Trey Yang <stevsfy@gmail.com>, 2020.
+# Trey Yang <stevsfy@gmail.com>, 2020, 2022.
 # taiyuan <1006333969@qq.com>, 2020.
 # Eric <spice2wolf@gmail.com>, 2020, 2021.
 # Carlos <linghao.zhang@protonmail.com>, 2021.
@@ -20,15 +20,15 @@ msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2022-02-15 20:04+0100\n"
-"PO-Revision-Date: 2022-04-10 16:08+0000\n"
-"Last-Translator: JY3 <GeeyunJY3@gmail.com>\n"
+"PO-Revision-Date: 2022-06-06 23:27+0000\n"
+"Last-Translator: Trey Yang <stevsfy@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/f-droid/fdroidserver/zh_Hans/>\n"
 "Language: zh_Hans\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.12-dev\n"
+"X-Generator: Weblate 4.13-dev\n"
 
 #: ../fdroidserver/common.py
 msgid ""
@@ -421,7 +421,7 @@ msgstr "使用此配置并基于 \"%s\" 的构建存储库："
 
 #: ../fdroidserver/checkupdates.py
 msgid "Can't auto-update app with no CurrentVersionCode"
-msgstr ""
+msgstr "在没有CurrentVersionCode的情况下不能自动更新应用程序"
 
 #: ../fdroidserver/build.py
 msgid "Can't build due to {} error while scanning"
@@ -813,24 +813,24 @@ msgstr "获取 APK 信息失败，正在删除 {path}"
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Failed to get APK information, skipping {path}"
-msgstr ""
+msgstr "获取APK信息失败，跳过{path}"
 
 #: ../fdroidserver/common.py
 msgid "Failed to get APK manifest information"
-msgstr ""
+msgstr "未能获取 APK 清单信息"
 
 #: ../fdroidserver/update.py
 msgid "Failed to get APK signing key fingerprint"
-msgstr ""
+msgstr "未能获取APK签名密钥指纹"
 
 #: ../fdroidserver/install.py
 #, python-brace-format
 msgid "Failed to install '{apkfilename}' on {dev}: {error}"
-msgstr ""
+msgstr "无法在 {dev} 上安装“{apkfilename}”：{error}"
 
 #: ../fdroidserver/publish.py ../fdroidserver/common.py
 msgid "Failed to sign application"
-msgstr ""
+msgstr "未能对应用程序进行签名"
 
 #: ../fdroidserver/common.py
 msgid "Failed to zipalign application"
@@ -839,24 +839,24 @@ msgstr "未能归档对齐（zipalign）应用"
 #: ../fdroidserver/build.py
 #, python-brace-format
 msgid "Fetched buildserverid from VM: {buildserverid}"
-msgstr ""
+msgstr "从虚拟机获取了buildserverid：{buildserverid}"
 
 #: ../fdroidserver/signatures.py
 #, python-brace-format
 msgid "Fetched signatures for '{apkfilename}' -> '{sigdir}'"
-msgstr ""
+msgstr "获取了'{apkfilename}'的签名-> '{sigdir}'"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "File disappeared while processing it: {path}"
-msgstr ""
+msgstr "文件在处理时消失： {path}"
 
 #: ../fdroidserver/verify.py ../fdroidserver/stats.py ../fdroidserver/update.py
 #: ../fdroidserver/rewritemeta.py ../fdroidserver/build.py
 #: ../fdroidserver/checkupdates.py ../fdroidserver/scanner.py
 #: ../fdroidserver/install.py
 msgid "Finished"
-msgstr ""
+msgstr "已完成"
 
 #: ../fdroidserver/lint.py
 msgid "Flattr donation methods belong in the FlattrID flag"
@@ -868,7 +868,7 @@ msgstr ""
 
 #: ../fdroidserver/lint.py
 msgid "Forbidden HTML tags"
-msgstr ""
+msgstr "禁止的HTML标签"
 
 #: ../fdroidserver/build.py
 msgid "Force build of disabled apps, and carries on regardless of scan problems. Only allowed in test mode."
@@ -877,35 +877,35 @@ msgstr "强制编译已禁用应用，忽略扫描出错。仅用于测试模式
 #: ../fdroidserver/build.py
 #, python-brace-format
 msgid "Force halting build after {0} sec timeout!"
-msgstr ""
+msgstr "在{0}秒超时后强制停止构建!"
 
 #: ../fdroidserver/scanner.py
 msgid "Force scan of disabled apps and builds."
-msgstr ""
+msgstr "强制扫描已禁用的应用和内部版本。"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Found \"{path}\" graphic without metadata for app \"{name}\"!"
-msgstr ""
+msgstr "为应用程序“{name}”找到了没有元数据的“{path}”图形！"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Found bad funding file \"{path}\" for \"{name}\":"
-msgstr ""
+msgstr "为“{name}”找到了错误的资金文件“{path}”："
 
 #: ../fdroidserver/common.py ../fdroidserver/metadata.py
 msgid "Found invalid appids in arguments"
-msgstr ""
+msgstr "在参数中发现无效的appids"
 
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
 #: ../fdroidserver/common.py
 msgid "Found invalid versionCodes for some apps"
-msgstr ""
+msgstr "发现某些应用的版本代码无效"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Found multiple JAR Signature Block Files in {path}"
-msgstr ""
+msgstr "在{path}中发现多个JAR签名块文件"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
@@ -913,27 +913,28 @@ msgid "Found multiple metadata files for {appid}"
 msgstr "找到多个{appid}的元数据文件"
 
 #: ../fdroidserver/index.py
+#, fuzzy
 msgid "Found multiple signing certificates for repository."
-msgstr ""
+msgstr "发现存储库的多个签名证书。"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Found multiple signing certificates in {path}"
-msgstr ""
+msgstr "在{path}中发现多个签名证书"
 
 #: ../fdroidserver/index.py
 msgid "Found no signing certificates for repository."
-msgstr ""
+msgstr "未找到存储库的签名证书。"
 
 #: ../fdroidserver/lint.py
 #, python-format
 msgid "Found non-file at %s"
-msgstr ""
+msgstr "在%s处发现非文件"
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "Found {apkfilename} at {url}"
-msgstr ""
+msgstr "在{url}发现{apkfilename}"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
