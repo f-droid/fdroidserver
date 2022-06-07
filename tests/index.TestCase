@@ -359,6 +359,49 @@ class IndexTest(unittest.TestCase):
         )
         self.assertTrue(os.path.exists(os.path.join('repo', 'index.xml')))
 
+    def test_v0_invalid_config_exception(self):
+        """Index v0 needs additional config values when using --nosign
+
+        index.xml aka Index v0 includes the full repo public key in
+        the XML itself.  So when running `fdroid update --nosign`,
+        there needs to be either repo_pubkey or a full keystore config
+        present.
+
+        """
+        tmptestsdir = tempfile.mkdtemp(
+            prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir
+        )
+        os.chdir(tmptestsdir)
+        os.mkdir('repo')
+        repo_icons_dir = os.path.join('repo', 'icons')
+        self.assertFalse(os.path.isdir(repo_icons_dir))
+        repodict = {
+            'address': 'https://example.com/fdroid/repo',
+            'description': 'This is just a test',
+            'icon': 'blahblah',
+            'name': 'test',
+            'timestamp': datetime.datetime.now(),
+            'version': 12,
+        }
+        requestsdict = {'install': [], 'uninstall': []}
+
+        fdroidserver.common.options.nosign = False
+        with self.assertRaises(fdroidserver.exception.FDroidException):
+            fdroidserver.index.make_v0({}, [], 'repo', repodict, requestsdict, {})
+
+        fdroidserver.common.options.nosign = True
+        with self.assertRaises(fdroidserver.exception.FDroidException):
+            fdroidserver.index.make_v0({}, [], 'repo', repodict, requestsdict, {})
+
+        fdroidserver.common.config['repo_pubkey'] = 'ffffffffffffffffffffffffffffffffff'
+        self.assertFalse(os.path.exists(os.path.join('repo', 'index.xml')))
+        self.assertFalse(os.path.exists(os.path.join('repo', 'index_unsigned.jar')))
+        self.assertFalse(os.path.exists(os.path.join('repo', 'index.jar')))
+        fdroidserver.index.make_v0({}, [], 'repo', repodict, requestsdict, {})
+        self.assertTrue(os.path.exists(os.path.join('repo', 'index.xml')))
+        self.assertTrue(os.path.exists(os.path.join('repo', 'index_unsigned.jar')))
+        self.assertFalse(os.path.exists(os.path.join('repo', 'index.jar')))
+
     def test_github_get_mirror_service_urls(self):
         for url in [
             'git@github.com:foo/bar',
