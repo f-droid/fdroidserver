@@ -91,11 +91,15 @@ def make(apps, apks, repodir, archive):
         repodict['description'] = common.config['archive_description']
         archive_url = common.config.get('archive_url', common.config['repo_url'][:-4] + 'archive')
         repodict['address'] = archive_url
+        if 'archive_web_base_url' in common.config:
+            repodict["webBaseUrl"] = common.config['archive_web_base_url']
         urlbasepath = os.path.basename(urllib.parse.urlparse(archive_url).path)
     else:
         repodict['name'] = common.config['repo_name']
         repodict['icon'] = common.config.get('repo_icon', common.default_config['repo_icon'])
         repodict['address'] = common.config['repo_url']
+        if 'repo_web_base_url' in common.config:
+            repodict["webBaseUrl"] = common.config['repo_web_base_url']
         repodict['description'] = common.config['repo_description']
         urlbasepath = os.path.basename(urllib.parse.urlparse(common.config['repo_url']).path)
 
@@ -711,15 +715,15 @@ def v2_repo(repodict, repodir, archive):
         repo["icon"] = config["archive" if archive else "repo"]["icon"]
 
     repo["address"] = repodict["address"]
-    repo["webBaseUrl"] = "https://f-droid.org/packages/"
-
-    if "repo_url" in common.config:
-        primary_mirror = common.config["repo_url"][:-len("/repo")]
-        if "mirrors" in repodict and primary_mirror not in repodict["mirrors"]:
-            repodict["mirrors"].append(primary_mirror)
+    if "webBaseUrl" in repodict:
+        repo["webBaseUrl"] = repodict["webBaseUrl"]
 
     if "mirrors" in repodict:
         repo["mirrors"] = [{"url": mirror} for mirror in repodict["mirrors"]]
+
+        # the first entry is traditionally the primary mirror
+        if repodict['address'] not in repodict["mirrors"]:
+            repo["mirrors"].insert(0, {"url": repodict['address'], "isPrimary": True})
 
     repo["timestamp"] = repodict["timestamp"]
 
