@@ -445,7 +445,7 @@ plugin_fetchsrclibs:
 
 # test a full update and deploy cycle to gitlab.com
 servergitmirrors:
-  image: debian:buster
+  image: debian:bullseye-backports
   <<: *apt-template
   only:
     - master@fdroid/fdroidserver
@@ -462,12 +462,15 @@ servergitmirrors:
         python3-pil
         python3-pip
         python3-pycparser
+        python3-setuptools
         python3-venv
         rsync
         wget
+    - apt-get install -t bullseye-backports apksigner
     - python3 -m venv --system-site-packages env
     - . env/bin/activate
     - export PYTHONPATH=`pwd`
+    - export SETUPTOOLS_USE_DISTUTILS=stdlib # https://github.com/pypa/setuptools/issues/2956
     - $pip install -e .
     - mkdir /root/.ssh/
     - ./tests/key-tricks.py
