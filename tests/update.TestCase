@@ -1165,6 +1165,8 @@ class UpdateTest(unittest.TestCase):
 
         fdroidserver.common.options = Options
         config = fdroidserver.common.read_config(fdroidserver.common.options)
+        if 'apksigner' not in config:  # TODO remove me for buildserver-bullseye
+            self.skipTest('SKIPPING test_update_with_AllowedAPKSigningKeys, apksigner not installed!')
         config['repo_keyalias'] = 'sova'
         config['keystorepass'] = 'r9aquRHYoI8+dYz6jKrLntQ5/NJNASFBacJh7Jv2BlI='
         config['keypass'] = 'r9aquRHYoI8+dYz6jKrLntQ5/NJNASFBacJh7Jv2BlI='

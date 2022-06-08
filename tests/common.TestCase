@@ -450,7 +450,7 @@ class CommonTest(unittest.TestCase):
             sourcefile = os.path.join(sourcedir, f)
             testfile = os.path.join(testsdir, f)
             shutil.copy(sourcefile, testsdir)
-            fdroidserver.signindex.sign_jar(testfile)
+            fdroidserver.signindex.sign_jar(testfile, use_old_algs=True)
             # these should be resigned, and therefore different
             self.assertNotEqual(
                 open(sourcefile, 'rb').read(), open(testfile, 'rb').read()
@@ -872,6 +872,9 @@ class CommonTest(unittest.TestCase):
         self.assertFalse(os.path.isfile(unsigned))
         self.assertTrue(fdroidserver.common.verify_apk_signature(signed))
 
+    @unittest.skipUnless(
+        os.path.exists('tests/SystemWebView-repack.apk'), "file too big for sdist"
+    )
     def test_resign_apk(self):
         """When using apksigner, it should resign signed APKs"""
         config = fdroidserver.common.read_config(fdroidserver.common.options)
@@ -2455,8 +2458,42 @@ class CommonTest(unittest.TestCase):
                 self.assertTrue(os.path.exists(f), f + ' was created')
                 self.assertFalse(is_repo_file(f), f + ' not repo file')
 
+    def test_get_apksigner_smartcardoptions(self):
+        testdir = tempfile.mkdtemp(
+            prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir
+        )
+        os.chdir(testdir)
+        with open('config.yml', 'w') as fp:
+            d = {
+                'smartcardoptions': '-storetype PKCS11'
+                ' -providerName SunPKCS11-OpenSC'
+                ' -providerClass sun.security.pkcs11.SunPKCS11'
+                ' -providerArg opensc-fdroid.cfg'
+            }
+            yaml.dump(d, fp)
+        config = fdroidserver.common.read_config()
+        fdroidserver.common.config = config
+        self.assertTrue(isinstance(d['smartcardoptions'], str))
+        self.assertTrue(isinstance(config['smartcardoptions'], list))
+        self.assertEqual(
+            [
+                '--ks-type',
+                'PKCS11',
+                '--provider-class',
+                'sun.security.pkcs11.SunPKCS11',
+                '--provider-arg',
+                'opensc-fdroid.cfg',
+            ],
+            fdroidserver.common.get_apksigner_smartcardoptions(
+                config['smartcardoptions']
+            ),
+        )
+
     def test_get_smartcardoptions_list(self):
-        os.chdir(self.tmpdir)
+        testdir = tempfile.mkdtemp(
+            prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir
+        )
+        os.chdir(testdir)
         with open('config.yml', 'w') as fp:
             fp.write(
                 textwrap.dedent(
@@ -2491,7 +2528,10 @@ class CommonTest(unittest.TestCase):
         )
 
     def test_get_smartcardoptions_spaces(self):
-        os.chdir(self.tmpdir)
+        testdir = tempfile.mkdtemp(
+            prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir
+        )
+        os.chdir(testdir)
         with open('config.yml', 'w') as fp:
             fp.write(
                 textwrap.dedent(
@@ -2519,7 +2559,10 @@ class CommonTest(unittest.TestCase):
         )
 
     def test_get_smartcardoptions_config_py(self):
-        os.chdir(self.tmpdir)
+        testdir = tempfile.mkdtemp(
+            prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir
+        )
+        os.chdir(testdir)
         with open('config.py', 'w') as fp:
             fp.write(
                 textwrap.dedent(

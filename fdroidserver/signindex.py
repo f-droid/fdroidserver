@@ -21,7 +21,6 @@ import os
 import time
 import zipfile
 from argparse import ArgumentParser
-from enum import Enum
 import logging
 
 from . import _
@@ -34,29 +33,27 @@ options = None
 start_timestamp = time.gmtime()
 
 
-HashAlg = Enum("SHA1", "SHA256")
+def sign_jar(jar, use_old_algs=False):
+    """Sign a JAR file with the best available algorithm.
 
+    The current signing method uses apksigner to sign the JAR so that
+    it will automatically select algorithms that are compatible with
+    Android SDK 23, which added the most recent algorithms:
+    https://developer.android.com/reference/java/security/Signature
 
-def sign_jar(jar, hash_algorithm=None):
-    """Sign a JAR file with Java's jarsigner.
+    This signing method uses then inherits the default signing
+    algothim settings, since Java and Android both maintain those.
+    That helps avoid a repeat of being stuck on an old signing
+    algorithm.  That means specifically that this call to apksigner
+    does not specify any of the algorithms.
+
+    The old indexes must be signed by SHA1withRSA otherwise they will
+    no longer be compatible with old Androids.
 
     This method requires a properly initialized config object.
+
     """
-    if hash_algorithm == HashAlg.SHA256:
-        args = [
-            config['jarsigner'],
-            '-keystore',
-            config['keystore'],
-            '-storepass:env',
-            'FDROID_KEY_STORE_PASS',
-            '-digestalg',
-            'SHA-256',
-            '-sigalg',
-            'SHA256withRSA',
-            jar,
-            config['repo_keyalias'],
-        ]
-    else:
+    if use_old_algs:
         # This does use old hashing algorithms, i.e. SHA1, but that's not
         # broken yet for file verification.  This could be set to SHA256,
         # but then Android < 4.3 would not be able to verify it.
@@ -74,20 +71,50 @@ def sign_jar(jar, hash_algorithm=None):
             jar,
             config['repo_keyalias'],
         ]
-    if config['keystore'] == 'NONE':
-        args += config['smartcardoptions']
-    else:  # smardcards never use -keypass
-        args += ['-keypass:env', 'FDROID_KEY_PASS']
+        if config['keystore'] == 'NONE':
+            args += config['smartcardoptions']
+        else:  # smardcards never use -keypass
+            args += ['-keypass:env', 'FDROID_KEY_PASS']
+    else:
+        # https://developer.android.com/studio/command-line/apksigner
+        args = [
+            config['apksigner'],
+            'sign',
+            '--min-sdk-version',
+            '23',  # enable all current algorithms
+            '--max-sdk-version',
+            '24',  # avoid future incompatible algorithms
+            # disable all APK signature types, only use JAR sigs aka v1
+            '--v1-signing-enabled',
+            'true',
+            '--v2-signing-enabled',
+            'false',
+            '--v3-signing-enabled',
+            'false',
+            '--v4-signing-enabled',
+            'false',
+            '--ks',
+            config['keystore'],
+            '--ks-pass',
+            'env:FDROID_KEY_STORE_PASS',
+            '--ks-key-alias',
+            config['repo_keyalias'],
+        ]
+        if config['keystore'] == 'NONE':
+            args += common.get_apksigner_smartcardoptions(config['smartcardoptions'])
+        else:  # smardcards never use --key-pass
+            args += ['--key-pass', 'env:FDROID_KEY_PASS']
+        args += [jar]
     env_vars = {
         'FDROID_KEY_STORE_PASS': config['keystorepass'],
         'FDROID_KEY_PASS': config.get('keypass', ""),
     }
     p = common.FDroidPopen(args, envs=env_vars)
     if p.returncode != 0:
-        raise FDroidException("Failed to sign %s!" % jar)
+        raise FDroidException("Failed to sign %s: %s" % (jar, p.output))
 
 
-def sign_index(repodir, json_name, hash_algorithm=None):
+def sign_index(repodir, json_name):
     """Sign index-v1.json to make index-v1.jar.
 
     This is a bit different than index.jar: instead of their being index.xml
@@ -109,7 +136,11 @@ def sign_index(repodir, json_name, hash_algorithm=None):
     jar_file = os.path.join(repodir, name + '.jar')
     with zipfile.ZipFile(jar_file, 'w', zipfile.ZIP_DEFLATED) as jar:
         jar.write(index_file, json_name)
-    sign_jar(jar_file, hash_algorithm)
+
+    if json_name in ('index.xml', 'index-v1.json'):
+        sign_jar(jar_file, use_old_algs=True)
+    else:
+        sign_jar(jar_file)
 
 
 def status_update_json(signed):
@@ -165,7 +196,7 @@ def main():
         json_name = 'entry.json'
         index_file = os.path.join(output_dir, json_name)
         if os.path.exists(index_file):
-            sign_index(output_dir, json_name, HashAlg.SHA256)
+            sign_index(output_dir, json_name)
             logging.info('Signed ' + index_file)
             signed.append(index_file)
 
