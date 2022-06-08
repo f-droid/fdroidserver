@@ -21,6 +21,7 @@ import textwrap
 import yaml
 import gzip
 import stat
+from distutils.version import LooseVersion
 from zipfile import BadZipFile, ZipFile, ZipInfo
 from unittest import mock
 from pathlib import Path
@@ -782,6 +783,7 @@ class CommonTest(unittest.TestCase):
         self.assertEqual(apksigner, config.get('apksigner'))
 
     def test_find_apksigner_system_package_android_home(self):
+        """Test that apksigner v30 or newer is found"""
         testdir = tempfile.mkdtemp(
             prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir
         )
@@ -789,8 +791,19 @@ class CommonTest(unittest.TestCase):
         android_home = os.getenv('ANDROID_HOME')
         if not android_home or not os.path.isdir(android_home):
             self.skipTest('SKIPPING since ANDROID_HOME (%s) is not a dir!' % android_home)
-        if not glob.glob(os.path.join(android_home, 'build-tools', '*', 'apksigner')):
+        build_tools = glob.glob(os.path.join(android_home, 'build-tools', '*', 'apksigner'))
+        if not build_tools:
             self.skipTest('SKIPPING since ANDROID_HOME (%s) build-tools has no apksigner!' % android_home)
+        min_version = fdroidserver.common.MINIMUM_APKSIGNER_BUILD_TOOLS_VERSION
+        version = '0'
+        for bt in sorted(build_tools):
+            v = bt.split('/')[-2]
+            if v == 'debian':
+                continue
+            if LooseVersion(version) < LooseVersion(v):
+                version = v
+        if LooseVersion(version) < LooseVersion(min_version):
+            self.skipTest('SKIPPING since build-tools %s or higher is required!' % min_version)
         fdroidserver.common.config = {'sdk_path': android_home}
         os.environ['PATH'] = '/fake/path/to/avoid/conflicts'
         config = fdroidserver.common.read_config()
