@@ -26,6 +26,7 @@ import fdroidserver.build
 import fdroidserver.common
 import fdroidserver.metadata
 import fdroidserver.scanner
+import fdroidserver.vmtools
 
 
 class FakeProcess:
@@ -543,6 +544,93 @@ class BuildTest(unittest.TestCase):
                 self.assertFalse(os.path.exists(test_compare_file))
                 self.assertFalse(os.path.exists(production_result))
                 self.assertFalse(os.path.exists(production_compare_file))
+
+    @mock.patch('fdroidserver.vmtools.get_build_vm')
+    @mock.patch('fdroidserver.vmtools.get_clean_builder')
+    @mock.patch('paramiko.SSHClient')
+    @mock.patch('subprocess.check_output')
+    def test_build_server_cmdline(
+        self,
+        subprocess_check_output,
+        paramiko_SSHClient,
+        fdroidserver_vmtools_get_clean_builder,
+        fdroidserver_vmtools_get_build_vm,
+    ):
+        """Test command line flags passed to the buildserver"""
+        global cmdline_args
+        test_flag = ['', False]
+
+        def _exec_command(args):
+            flag = test_flag[0]
+            if test_flag[1]:
+                self.assertTrue(flag in args, flag + ' should be present')
+            else:
+                self.assertFalse(flag in args, flag + ' should not be present')
+
+        testdir = tempfile.mkdtemp(
+            prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir
+        )
+        os.chdir(testdir)
+        os.mkdir('tmp')
+
+        chan = mock.MagicMock()
+        chan.exec_command = _exec_command
+        chan.recv_exit_status = lambda: 0
+        transport = mock.MagicMock()
+        transport.open_session = mock.Mock(return_value=chan)
+        sshs = mock.MagicMock()
+        sshs.get_transport = mock.Mock(return_value=transport)
+        paramiko_SSHClient.return_value = sshs
+        subprocess_check_output.return_value = (
+            b'0123456789abcdef0123456789abcdefcafebabe'
+        )
+        fdroidserver_vmtools_get_clean_builder.side_effect = lambda s: {
+            'hostname': 'example.com',
+            'idfile': '/path/to/id/file',
+            'port': 123,
+            'user': 'fake',
+        }
+        fdroidserver.common.config = {'sdk_path': '/fake/android/sdk/path'}
+        fdroidserver.build.options = mock.MagicMock()
+        vcs = mock.Mock()
+        vcs.getsrclib = mock.Mock(return_value=None)
+        app = fdroidserver.metadata.App()
+        app['metadatapath'] = 'metadata/fake.id.yml'
+        app['id'] = 'fake.id'
+        app['RepoType'] = 'git'
+        build = fdroidserver.metadata.Build(
+            {
+                'versionCode': 123,
+                'versionName': '1.2.3',
+                'commit': '1.2.3',
+                'disable': False,
+            }
+        )
+        app['Builds'] = [build]
+
+        test_flag = ('--on-server', True)
+        fdroidserver.build.build_server(app, build, vcs, '', '', '', False)
+        self.assertTrue(fdroidserver_vmtools_get_build_vm.called)
+
+        for force in (True, False):
+            test_flag = ('--force', force)
+            fdroidserver.build.build_server(app, build, vcs, '', '', '', force)
+
+        fdroidserver.build.options.notarball = True
+        test_flag = ('--no-tarball', True)
+        fdroidserver.build.build_server(app, build, vcs, '', '', '', False)
+        fdroidserver.build.options.notarball = False
+        test_flag = ('--no-tarball', False)
+        fdroidserver.build.build_server(app, build, vcs, '', '', '', False)
+
+        fdroidserver.build.options.skipscan = False
+        test_flag = ('--scan-binary', True)
+        fdroidserver.build.build_server(app, build, vcs, '', '', '', False)
+        fdroidserver.build.options.skipscan = True
+        test_flag = ('--scan-binary', False)
+        fdroidserver.build.build_server(app, build, vcs, '', '', '', False)
+        test_flag = ('--skip-scan', True)
+        fdroidserver.build.build_server(app, build, vcs, '', '', '', False)
 
 
 if __name__ == "__main__":

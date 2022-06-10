@@ -281,35 +281,27 @@ fedora_latest:
                      findutils
                      git
                      gnupg
-                     java-1.8.0-openjdk-devel
+                     java-17-openjdk-devel
                      python3
                      python3-babel
                      python3-matplotlib
                      python3-pip
                      rsync
-                     unzip
-                     wget
                      which
+    - $pip install sdkmanager
     - ./setup.py sdist
     - useradd -m -c "test account" --password "fakepassword"  testuser
     - su testuser --login --command "cd `pwd`; $pip install --user dist/fdroidserver-*.tar.gz"
     - test -e ~testuser/.local/share/locale/de/LC_MESSAGES/fdroidserver.mo
-    - wget --no-verbose -O tools.zip https://dl.google.com/android/repository/tools_r25.2.5-linux.zip
-    - unzip -q tools.zip
-    - rm tools.zip
     - export BUILD_TOOLS_VERSION=`sed -n "s,^MINIMUM_APKSIGNER_BUILD_TOOLS_VERSION\s*=\s*['\"]\(.*\)[['\"],\1,p" fdroidserver/common.py`
-    - export JAVA_HOME=/etc/alternatives/jre
     - export ANDROID_HOME=`pwd`/android-sdk
-    - mkdir $ANDROID_HOME
-    - mv tools $ANDROID_HOME/
     - mkdir -p $ANDROID_HOME/licenses/
     - printf "\n8933bad161af4178b1185d1a37fbf41ea5269c55\nd56f5187479451eabf01fb78af6dfcb131a6481e\n24333f8a63b6825ea9c5514f83c2829b004d1fee" > $ANDROID_HOME/licenses/android-sdk-license
     - printf "\n84831b9409646a918e30573bab4c9c91346d8abd" > $ANDROID_HOME/licenses/android-sdk-preview-license
     - printf "\n79120722343a6f314e0719f863036c702b0e6b2a\n84831b9409646a918e30573bab4c9c91346d8abd" > $ANDROID_HOME/licenses/android-sdk-preview-license-old
     - mkdir ~/.android
     - touch ~/.android/repositories.cfg
-    - echo y | $ANDROID_HOME/tools/bin/sdkmanager "platform-tools" > /dev/null
-    - echo y | $ANDROID_HOME/tools/bin/sdkmanager "build-tools;$BUILD_TOOLS_VERSION" > /dev/null
+    - sdkmanager "platform-tools" "build-tools;$BUILD_TOOLS_VERSION"
     - chown -R testuser .
     - cd tests
     - su testuser --login --command
@@ -453,7 +445,7 @@ plugin_fetchsrclibs:
 
 # test a full update and deploy cycle to gitlab.com
 servergitmirrors:
-  image: debian:buster
+  image: debian:bullseye-backports
   <<: *apt-template
   only:
     - master@fdroid/fdroidserver
@@ -470,12 +462,15 @@ servergitmirrors:
         python3-pil
         python3-pip
         python3-pycparser
+        python3-setuptools
         python3-venv
         rsync
         wget
+    - apt-get install -t bullseye-backports apksigner
     - python3 -m venv --system-site-packages env
     - . env/bin/activate
     - export PYTHONPATH=`pwd`
+    - export SETUPTOOLS_USE_DISTUTILS=stdlib # https://github.com/pypa/setuptools/issues/2956
     - $pip install -e .
     - mkdir /root/.ssh/
     - ./tests/key-tricks.py
