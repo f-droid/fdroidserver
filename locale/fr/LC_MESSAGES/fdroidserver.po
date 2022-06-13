@@ -29,13 +29,14 @@
 # booteille <booteille@protonmail.com>, 2021.
 # translator <yasinoc375@advew.com>, 2021.
 # translator <kvb@tuta.io>, 2022.
+# Julien Maulny <julien.maulny@protonmail.com>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2022-02-15 20:04+0100\n"
-"PO-Revision-Date: 2022-05-21 17:18+0000\n"
-"Last-Translator: translator <kvb@tuta.io>\n"
+"PO-Revision-Date: 2022-06-13 19:19+0000\n"
+"Last-Translator: Julien Maulny <julien.maulny@protonmail.com>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/f-droid/fdroidserver/fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
@@ -357,9 +358,9 @@ msgid "Android SDK tool {cmd} found!"
 msgstr "Outil SDK Android {cmd} trouvé !"
 
 #: ../fdroidserver/common.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Android SDK tool {cmd} not found!"
-msgstr "Outil Android SDK {cmd} introuvable !"
+msgstr "L'outil SDK Android {cmd} n'a pas été trouvé !"
 
 #. Translators: "build-tools" is the file name of a package from
 #. Google, it is part of the Android SDK. So it probably shouldn't be
@@ -438,9 +439,8 @@ msgid "Built repo based in \"%s\" with this config:"
 msgstr "Dépôt du build basé sur \"%s\" avec cette config :"
 
 #: ../fdroidserver/checkupdates.py
-#, fuzzy
 msgid "Can't auto-update app with no CurrentVersionCode"
-msgstr "Impossible d’effectuer une mise à jour automatique d’une application sans code de version actuel."
+msgstr "Impossible de mettre à jour l'application automatiquement sans \"CurrentVersionCode\"."
 
 #: ../fdroidserver/build.py
 msgid "Can't build due to {} error while scanning"
@@ -715,9 +715,9 @@ msgid "Download logs we don't have"
 msgstr "Télécharger les journaux que n'avons pas"
 
 #: ../fdroidserver/common.py
-#, fuzzy, python-format
+#, python-format
 msgid "Downloading %s"
-msgstr "Téléchargement %s"
+msgstr "Téléchargement de %s"
 
 #: ../fdroidserver/common.py
 msgid "Downloading the repository already failed once, not trying again."
@@ -1023,7 +1023,7 @@ msgstr "Ignorer l'entrée FUNDING.yml supérieure à 2048 : %s"
 
 #: ../fdroidserver/index.py
 msgid "Ignoring package without metadata: "
-msgstr "Ignorer le package sans métadonnées : "
+msgstr "Paquet sans métadonnées ignoré : "
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -1052,12 +1052,12 @@ msgid "Include the source tarballs in the mirror"
 msgstr "Inclure au miroir les tarballs de source"
 
 #: ../fdroidserver/metadata.py
-#, fuzzy, python-format
+#, python-format
 msgid "Including metadata from %s@%s"
-msgstr "Inclure les métadonnées de %s@%s."
+msgstr "Inclure les métadonnées de %s@%s"
 
 #: ../fdroidserver/metadata.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Including metadata from {path}"
 msgstr "Inclure les métadonnées de {path}"
 
@@ -1102,12 +1102,12 @@ msgid "Invalid APK"
 msgstr "APK invalide"
 
 #: ../fdroidserver/checkupdates.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Invalid AutoUpdateMode: {mode}"
 msgstr "AutoUpdateMode non valide : {mode}"
 
 #: ../fdroidserver/checkupdates.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Invalid UpdateCheckMode: {mode}"
 msgstr "UpdateCheckMode non valide : {mode}"
 
@@ -1164,9 +1164,9 @@ msgid "Invalid name for published file: %s"
 msgstr "Nom non valide pour le fichier publié :%s"
 
 #: ../fdroidserver/common.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Invalid ndk: entry in build: \"{ndk}\""
-msgstr "Ndk non valide : entrée dans la build : « {ndk} »"
+msgstr "Ndk non valide : entrée dans le build : « {ndk} »"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -1355,30 +1355,30 @@ msgstr "Pas besoin de spécifier que l'application est pour Android"
 
 #: ../fdroidserver/deploy.py
 msgid "No option set! Edit your config.yml to set at least one of these:"
-msgstr "Aucune option configurer ! Éditer votre config.yml pour le mettre au moins a l'un d'eux :"
+msgstr "Aucune option configurée ! Éditez votre config.yml pour définir au moins l'une d'entre elles :"
 
 #: ../fdroidserver/common.py
 msgid "No packages specified"
-msgstr "Aucun packet spécifier"
+msgstr "Aucun paquet spécifié"
 
 #: ../fdroidserver/install.py
 #, python-format
 msgid "No signed APK available for %s"
-msgstr "Aucun APK signée dispognible pour %s"
+msgstr "Aucun APK signé disponible pour %s"
 
 #: ../fdroidserver/install.py
 msgid "No signed output directory - nothing to do"
-msgstr "Aucun dossier de sortie signée - rien n'est a faire"
+msgstr "Aucun répertoire de sortie signé — il n'y a rien à faire"
 
 #: ../fdroidserver/update.py ../fdroidserver/common.py
 #, python-brace-format
 msgid "No signing certificates found in {path}"
-msgstr "Aucun certificat signée trouvée dans {path}"
+msgstr "Aucun certificat signé trouvé dans {path}"
 
 #: ../fdroidserver/common.py ../fdroidserver/metadata.py
 #, python-format
 msgid "No such package: %s"
-msgstr "Aucun packet comme sa : %s"
+msgstr "Ce paquet n'existe pas : %s"
 
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
 #: ../fdroidserver/common.py
@@ -1393,7 +1393,7 @@ msgstr "Aucune étiquette trouvée"
 
 #: ../fdroidserver/verify.py ../fdroidserver/publish.py
 msgid "No unsigned directory - nothing to do"
-msgstr "Aucun dossier signée - rien n'est a faire"
+msgstr "Aucun dossier non signé — il n'y a rien à faire"
 
 #: ../fdroidserver/common.py
 msgid "Not a valid size definition: \"{}\""
