@@ -1,4 +1,3 @@
-
 require 'yaml'
 require 'pathname'
 
@@ -84,7 +83,7 @@ Vagrant.configure("2") do |config|
     args: [configfile['debian_mirror']]
   config.vm.provision "shell", name: "android-sdk", path: "provision-android-sdk"
   config.vm.provision "shell", name: "android-ndk", path: "provision-android-ndk",
-    args: ["/opt/android-sdk/ndk", "r23b"]
+    args: ["/opt/android-sdk/ndk", "r23c"]
   config.vm.provision "shell", name: "gradle", path: "provision-gradle"
   config.vm.provision "shell", name: "disable-analytics", path: "provision-disable-analytics"
   config.vm.provision "shell", name: "buildserverid", path: "provision-buildserverid",
