@@ -90,6 +90,7 @@ NON_FREE_GRADLE_LINES = {
         r'org.jetbrains.kotlinx:kotlinx-coroutines-play-services',
         r'me.pushy:sdk',
         r'io.github.sinaweibosdk',
+        r'com.umeng.umsdk',
     ]
 }
 
