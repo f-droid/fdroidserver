@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2022-02-15 20:04+0100\n"
-"PO-Revision-Date: 2022-06-21 15:32+0000\n"
+"PO-Revision-Date: 2022-06-21 17:33+0000\n"
 "Last-Translator: Iago <iagrivmoa@gmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/f-droid/fdroidserver/es/>\n"
 "Language: es\n"
@@ -1317,9 +1317,8 @@ msgid "No information found."
 msgstr "No se encontró información."
 
 #: ../fdroidserver/checkupdates.py
-#, fuzzy
 msgid "No matching tags found"
-msgstr "No se encontró información."
+msgstr "No se encontraron etiquetas coincidentes"
 
 #: ../fdroidserver/update.py
 #, fuzzy, python-brace-format
@@ -1368,9 +1367,8 @@ msgid "No such versionCode {versionCode} for app {appid}"
 msgstr "No existe tal versiónCode {versionCode} para app {appid}"
 
 #: ../fdroidserver/checkupdates.py
-#, fuzzy
 msgid "No tags found"
-msgstr "No se han encontrado dispositivos asociados"
+msgstr "No se encontró ninguna etiqueta"
 
 #: ../fdroidserver/verify.py ../fdroidserver/publish.py
 msgid "No unsigned directory - nothing to do"
@@ -1597,7 +1595,7 @@ msgstr "Removiendo archivos especificados"
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Removing {path}\""
-msgstr ""
+msgstr "Eliminando {path}\""
 
 #: ../fdroidserver/update.py
 msgid "Rename APK files that do not match package.name_123.apk"
@@ -1812,7 +1810,7 @@ msgstr "¡El fecha del sistema es anterior a la de {path}!"
 
 #: ../fdroidserver/checkupdates.py
 msgid "Tags update mode only works for git, hg, bzr and git-svn repositories currently"
-msgstr ""
+msgstr "El modo de actualización de etiquetas actualmente solo funciona para repositorios de git, hg, bzr y git-svn"
 
 #: ../fdroidserver/checkupdates.py
 msgid "Tags update mode used in git-svn, but the repo was not set up with tags"
@@ -1885,6 +1883,13 @@ msgid ""
 "For more info: https://f-droid.org/docs/Setup_an_F-Droid_App_Repo\n"
 "and https://f-droid.org/docs/Signing_Process"
 msgstr ""
+"Para completar la configuración, añade tus APKs a \"%s\"\n"
+"después ejecuta \"fdroid update -c; fdroid update\".  Puede que también quieras editar \"config.yml\" \n"
+"para especificar la URL, el nombre del repositorio, y más.  También debes de configurar una \n"
+"llave de firmado (puede que se haya generrado automáticamente una temporal).\n"
+"\n"
+"ara más información: https://f-droid.org/docs/Setup_an_F-Droid_App_Repo\n"
+"y https://f-droid.org/docs/Signing_Process"
 
 #: ../fdroidserver/deploy.py ../fdroidserver/upload.py
 msgid "To use awsbucket, awssecretkey and awsaccesskeyid must also be set in config.yml!"
@@ -2362,7 +2367,7 @@ msgstr "{path} creado"
 #: ../fdroidserver/checkupdates.py
 #, python-brace-format
 msgid "current version is newer: old vercode={old}, new vercode={new}"
-msgstr ""
+msgstr "la versión actual es más nueva: código de versión viejo={old}, código de versión nuevo={new}"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -2533,9 +2538,8 @@ msgid "no version info found!"
 msgstr "¡no se encontró información de la versión!"
 
 #: ../fdroidserver/checkupdates.py
-#, fuzzy
 msgid "no version information found"
-msgstr "¡no se encontró información de la versión!"
+msgstr "no se encontró información de la versión"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py
@@ -2806,7 +2810,7 @@ msgstr "¡{appid} de {path} no es un nombre de paquete Java válido!"
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "{appid} has both APKs and files: {files}"
-msgstr ""
+msgstr "{appid} tiene tanto APKs como archivos: {files}"
 
 #: ../fdroidserver/mirror.py
 #, python-brace-format
@@ -2890,9 +2894,9 @@ msgid "{path} more than 200MB, manually upload: {url}"
 msgstr "{path} mayor de 200MB, subir manualmente: {url}"
 
 #: ../fdroidserver/update.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{path}: {error}"
-msgstr "Fallo copiando {path}: {error}"
+msgstr "{path}: {error}"
 
 #: ../fdroidserver/mirror.py
 #, python-brace-format
