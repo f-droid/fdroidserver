@@ -35,15 +35,15 @@ msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2022-02-15 20:04+0100\n"
-"PO-Revision-Date: 2022-06-13 19:19+0000\n"
-"Last-Translator: Julien Maulny <julien.maulny@protonmail.com>\n"
+"PO-Revision-Date: 2022-06-23 06:12+0000\n"
+"Last-Translator: translator <kvb@tuta.io>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/f-droid/fdroidserver/fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.13-dev\n"
+"X-Generator: Weblate 4.13.1-dev\n"
 
 #: ../fdroidserver/common.py
 msgid ""
@@ -1256,9 +1256,8 @@ msgid "List files that would be reformatted"
 msgstr "Lister les fichiers qui seront reformater"
 
 #: ../fdroidserver/rewritemeta.py
-#, fuzzy
 msgid "List files that would be reformatted (dry run)"
-msgstr "Lister les fichiers qui seront reformater"
+msgstr "Lister les fichiers qui seront reformater (test à blanc)"
 
 #: ../fdroidserver/lint.py
 msgid "Locale included in f-droid.org URL"
@@ -1336,14 +1335,13 @@ msgid "No information found."
 msgstr "Aucune information trouvée."
 
 #: ../fdroidserver/checkupdates.py
-#, fuzzy
 msgid "No matching tags found"
 msgstr "Aucune étiquette correspondante n’a été trouvée"
 
 #: ../fdroidserver/update.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "No minimum SDK version found in {0}, using default (3)."
-msgstr "Aucune version minimale du SDK trouvée dans {0}, en utilisant la valeur par défaut (3)."
+msgstr "Aucune version minimale du SDK trouvée dans {0}, utilisation de la valeur par défaut (3)."
 
 #: ../fdroidserver/lint.py
 msgid "No need to specify that the app is Free Software"
@@ -1387,7 +1385,6 @@ msgid "No such versionCode {versionCode} for app {appid}"
 msgstr "Aucun code de version {versionCode} pour l'application {appid}"
 
 #: ../fdroidserver/checkupdates.py
-#, fuzzy
 msgid "No tags found"
 msgstr "Aucune étiquette trouvée"
 
@@ -1614,7 +1611,7 @@ msgid "Removing specified files"
 msgstr "Suppression des fichiers spécifiés"
 
 #: ../fdroidserver/update.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Removing {path}\""
 msgstr "Suppression de {path}\""
 
