@@ -37,7 +37,7 @@ msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2022-02-15 20:04+0100\n"
-"PO-Revision-Date: 2022-06-23 13:32+0000\n"
+"PO-Revision-Date: 2022-06-23 17:27+0000\n"
 "Last-Translator: Ldm Public <ldmpub@gmail.com>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/f-droid/fdroidserver/fr/>\n"
 "Language: fr\n"
@@ -1830,11 +1830,11 @@ msgstr "L'horloge système est plus âgée que la date dans {path} !"
 
 #: ../fdroidserver/checkupdates.py
 msgid "Tags update mode only works for git, hg, bzr and git-svn repositories currently"
-msgstr "Le mode de mise à jour des étiquettes fonctionne seulement pour dépôt git, hg, bzr et git-svn pour le moment"
+msgstr "Le mode de mise à jour par étiquettes fonctionne seulement pour les dépôts git, hg, bzr et git-svn pour le moment"
 
 #: ../fdroidserver/checkupdates.py
 msgid "Tags update mode used in git-svn, but the repo was not set up with tags"
-msgstr "Le mode de mise à jour d'étiquettes utilisé dans git-svn, mais le dépôt n'était pas configuré avec des étiquettes"
+msgstr "Le mode de mise à jour par étiquettes est utilisé dans git-svn, mais le dépôt n'était pas paramétré avec des étiquettes"
 
 #: ../fdroidserver/build.py
 msgid "Test mode - put output in the tmp directory only, and always build, even if the output already exists."
@@ -2386,7 +2386,7 @@ msgstr "{path} a été créé"
 #: ../fdroidserver/checkupdates.py
 #, python-brace-format
 msgid "current version is newer: old vercode={old}, new vercode={new}"
-msgstr "la version actuel est plus récente : ancien vercode={old}, nouveau vercode={new}"
+msgstr "la version actuelle est plus récente : ancien vercode={old}, nouveau vercode={new}"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -2850,7 +2850,7 @@ msgstr "{appid} : pas de versions spécifiées, s'exécute à partir de l'éta
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "{appid}: {field} must be a '{type}', but it is a '{fieldtype}!'"
-msgstr "{appid} : {field} doit être un '{type}', mais est un '{fieldtype} !'"
+msgstr "{appid} : {field} doit être de '{type}', mais est un '{fieldtype} !'"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
