@@ -38,7 +38,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2022-02-15 20:04+0100\n"
 "PO-Revision-Date: 2022-06-23 17:27+0000\n"
-"Last-Translator: Ldm Public <ldmpub@gmail.com>\n"
+"Last-Translator: Translator <kvb@tuta.io>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/f-droid/fdroidserver/fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
@@ -1232,7 +1232,7 @@ msgid "Javascript in HTML src attributes"
 msgstr "Attributs Javascript trouvée dans HTML src"
 
 #: ../fdroidserver/build.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Keeping failed build \"{apkfilename}\""
 msgstr "Conserver la version ayant échoué « {apkfilename} »"
 
@@ -1706,7 +1706,6 @@ msgstr[0] "Le scanneur a trouvé {} problème"
 msgstr[1] "Le scanneur a trouvé {} problèmes"
 
 #: ../fdroidserver/scanner.py
-#, fuzzy
 msgid "Scanning APK with apkanalyzer for known non-free classes."
 msgstr "Analyse de l’APK avec apkanalyzer pour les classes non libres connues."
 
@@ -1759,9 +1758,9 @@ msgid "Skipping '{apkfilename}' with invalid signature!"
 msgstr "Omission de '{apkfilename}' qui a une signature non valide !"
 
 #: ../fdroidserver/index.py
-#, fuzzy, python-format
+#, python-format
 msgid "Skipping GitLab Pages mirror because the repo is too large (>%.2fGB)!"
-msgstr "Ignorer le miroir GitLab Pages car le référentiel est trop volumineux (>%.2fGo) !"
+msgstr "Ignorer le miroir GitLab Pages car le dépôt est trop volumineux (>%.2fGB) !"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -1986,7 +1985,7 @@ msgstr "Version inconnue de aapt, peut causer des problèmes : "
 
 #: ../fdroidserver/lint.py
 msgid "Unlinkified link - use [http://foo.bar Link title] or [http://foo.bar]"
-msgstr "Lien non lié - utiliser [http://foo.bar Titre du lien] ou [http://foo.bar]"
+msgstr "Lien non lié — utiliser [http://foo.bar Titre du lien] ou [http://foo.bar]"
 
 #: ../fdroidserver/lint.py
 msgid "Unnecessary leading space"
@@ -2512,7 +2511,7 @@ msgstr "chaîne d’option non valide %(option)r : doit commencer par un caract�
 #: ../fdroidserver/checkupdates.py
 #, python-brace-format
 msgid "latest build recipe is newer: old vercode={old}, new vercode={new}"
-msgstr ""
+msgstr "la recette de la dernière version est plus récente : ancien vercode={old}, nouveau vercode={new}"
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
@@ -2681,7 +2680,7 @@ msgstr "s3cmd synchroniser les index de {path} vers {url} et les supprimer"
 #: ../fdroidserver/scanner.py
 #, python-format
 msgid "scanner not cleanly run apkanalyzer: %s"
-msgstr ""
+msgstr "l'analyseur n'a pas exécuté proprement apkanalyzer : %s"
 
 #: ../fdroidserver/scanner.py
 msgid "shared library"
