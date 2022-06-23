@@ -30,13 +30,14 @@
 # translator <yasinoc375@advew.com>, 2021.
 # translator <kvb@tuta.io>, 2022.
 # Julien Maulny <julien.maulny@protonmail.com>, 2022.
+# Translator <kvb@tuta.io>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2022-02-15 20:04+0100\n"
-"PO-Revision-Date: 2022-06-23 06:12+0000\n"
-"Last-Translator: translator <kvb@tuta.io>\n"
+"PO-Revision-Date: 2022-06-23 12:17+0000\n"
+"Last-Translator: Translator <kvb@tuta.io>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/f-droid/fdroidserver/fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
@@ -1293,9 +1294,9 @@ msgid "No 'config.yml' found, using defaults."
 msgstr "Aucun 'config.yml' trouvée, utilisation des originales."
 
 #: ../fdroidserver/verify.py
-#, fuzzy, python-format
+#, python-format
 msgid "No APK for package: %s"
-msgstr "Pas d’APK pour le paquet: %s"
+msgstr "Pas d’APK pour le paquet : %s"
 
 #: ../fdroidserver/common.py
 msgid "No Android SDK found!"
@@ -1621,7 +1622,7 @@ msgstr "Renomme les fichiers APK dont le nom ne ressemble pas à nom.paquet_123.
 
 #: ../fdroidserver/checkupdates.py
 msgid "RepoTrunk update mode only makes sense in git-svn repositories"
-msgstr ""
+msgstr "Le mode de mise à jour de RepoTrunk n'a de sens seulement dans les dépôts git-svn"
 
 #: ../fdroidserver/update.py
 msgid "Report on build data status"
