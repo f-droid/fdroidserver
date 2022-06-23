@@ -26,7 +26,7 @@
 # Gavy <gavy@protonmail.com>, 2021.
 # lilim <lionel@les-miquelots.net>, 2021.
 # Jaxom <jaxom+weblate@tchack.xyz>, 2021.
-# booteille <booteille@protonmail.com>, 2021.
+# booteille <booteille@protonmail.com>, 2021, 2022.
 # translator <yasinoc375@advew.com>, 2021.
 # translator <kvb@tuta.io>, 2022.
 # Julien Maulny <julien.maulny@protonmail.com>, 2022.
@@ -37,7 +37,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2022-02-15 20:04+0100\n"
 "PO-Revision-Date: 2022-06-23 13:31+0000\n"
-"Last-Translator: Translator <kvb@tuta.io>\n"
+"Last-Translator: booteille <booteille@protonmail.com>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/f-droid/fdroidserver/fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
@@ -2272,7 +2272,7 @@ msgstr "ID d'application du fichier sur lequel agir"
 #: ../fdroidserver/build.py ../fdroidserver/scanner.py
 #: ../fdroidserver/install.py
 msgid "application ID with optional versionCode in the form APPID[:VERCODE]"
-msgstr "applicationId avec le versionCode optionnel sous la forme APPID[:VERCODE]"
+msgstr "ID d'application avec le versionCode optionnel sous la forme APPID[:VERCODE]"
 
 #: ../fdroidserver/lint.py ../fdroidserver/rewritemeta.py
 msgid "applicationId in the form APPID"
