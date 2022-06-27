@@ -2,9 +2,13 @@
 
 # http://www.drdobbs.com/testing/unit-testing-with-python/240165163
 
+import git
 import logging
 import os
+import shutil
 import sys
+import tempfile
+import time
 import unittest
 from unittest import mock
 from pathlib import Path
@@ -27,6 +31,12 @@ class CheckupdatesTest(unittest.TestCase):
         logging.basicConfig(level=logging.DEBUG)
         self.basedir = localmodule / 'tests'
         os.chdir(self.basedir)
+        self.testdir = tempfile.TemporaryDirectory(
+            str(time.time()), self._testMethodName + '_'
+        )
+
+    def tearDown(self):
+        self.testdir.cleanup()
 
     def test_autoupdatemode_no_suffix(self):
         fdroidserver.checkupdates.config = {}
@@ -316,6 +326,56 @@ class CheckupdatesTest(unittest.TestCase):
             vername, vercode, _tag = fdroidserver.checkupdates.check_tags(app, None)
         self.assertEqual(vername, '2')
         self.assertEqual(vercode, 2)
+
+    def test_push_commits(self):
+        testdir = self.testdir.name
+        os.chdir(testdir)
+        os.mkdir('metadata')
+        for f in (self.basedir / 'metadata').glob('*.yml'):
+            shutil.copy(f, 'metadata')
+        git_repo = git.Repo.init(testdir)
+        git_repo.git.add(all=True)
+        git_repo.index.commit("all metadata files")
+
+        git_remote_upstream = os.path.join(testdir, 'git_remote_upstream')
+        upstream = git.Repo.init(git_remote_upstream, bare=True)
+        git_repo.create_remote('upstream', 'file://' + git_remote_upstream)
+        git_remote_origin = os.path.join(testdir, 'git_remote_origin')
+        origin = git.Repo.init(git_remote_origin, bare=True)
+        git_repo.create_remote('origin', 'file://' + git_remote_origin)
+        for remote in git_repo.remotes:
+            remote.push(git_repo.active_branch)
+        self.assertEqual(git_repo.head, upstream.head)
+        self.assertEqual(origin.head, upstream.head)
+        # pretend that checkupdates ran but didn't create any new commits
+        fdroidserver.checkupdates.push_commits()
+
+        appid = 'org.adaway'
+        self.assertNotIn(appid, git_repo.branches)
+        self.assertNotIn('checkupdates', git_repo.branches)
+        self.assertNotIn(appid, git_repo.remotes.origin.repo.branches)  # TODO fix
+
+        # now make commit
+        app = fdroidserver.metadata.read_metadata({appid: -1})[appid]
+        build = fdroidserver.metadata.Build()
+        build.versionName = 'fake'
+        build.versionCode = 999999999
+        app.Builds.append(build)
+        metadata_file = 'metadata/%s.yml' % appid
+        fdroidserver.metadata.write_metadata(metadata_file, app)
+        git_repo.index.add(metadata_file)
+        git_repo.index.commit('changed ' + appid)
+
+        # and push the new commit to the dynamic branch
+        fdroidserver.checkupdates.push_commits()
+        self.assertIn(appid, git_repo.branches)
+        self.assertIn(appid, git_repo.remotes.origin.refs)
+        self.assertNotIn('checkupdates', git_repo.branches)
+        self.assertNotIn(appid, git_repo.remotes.upstream.refs)
+
+    def test_make_merge_request(self):
+        testdir = self.testdir.name
+        os.chdir(testdir)
 
 
 if __name__ == "__main__":

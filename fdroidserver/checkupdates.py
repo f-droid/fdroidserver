@@ -18,6 +18,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import git
 import os
 import re
 import urllib.request
@@ -681,6 +682,46 @@ def get_last_build_from_app(app: metadata.App) -> metadata.Build:
         return app['Builds'][-1]
     else:
         return metadata.Build()
+
+
+def push_commits(remote_name='origin'):
+    """Push commits using either appid or 'checkupdates' as branch name."""
+    git_repo = git.Repo.init('.')
+    files = set()
+    upstream_main = 'main' if 'main' in git_repo.remotes.upstream.refs else 'master'
+    local_main = 'main' if 'main' in git_repo.refs else 'master'
+    for commit in git_repo.iter_commits(f'upstream/{upstream_main}...{local_main}'):
+        files.update(commit.stats.files.keys())
+
+    branch_name = 'checkupdates'
+    files = list(files)
+    if len(files) == 1:
+        m = re.match(r'metadata/([^\s]+)\.yml', files[0])
+        if m:
+            branch_name = m.group(1)  # appid
+    if len(files) > 0:
+        git_repo.create_head(branch_name, force=True)
+        remote = git_repo.remotes[remote_name]
+        pushinfos = remote.push(
+            branch_name, force=True, set_upstream=True, progress=progress
+        )
+        for pushinfo in pushinfos:
+            if pushinfo.flags & (
+                git.remote.PushInfo.ERROR
+                | git.remote.PushInfo.REJECTED
+                | git.remote.PushInfo.REMOTE_FAILURE
+                | git.remote.PushInfo.REMOTE_REJECTED
+            ):
+                # Show potentially useful messages from git remote
+                if progress:
+                    for line in progress.other_lines:
+                        if line.startswith('remote:'):
+                            logging.debug(line)
+                raise FDroidException(
+                    f'{remote.url} push failed: {pushinfo.flags} {pushinfo.summary}'
+                )
+            else:
+                logging.debug(remote.url + ': ' + pushinfo.summary)
 
 
 def status_update_json(processed: list, failed: dict) -> None:
