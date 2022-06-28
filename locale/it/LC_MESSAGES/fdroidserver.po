@@ -11,20 +11,21 @@
 # Francesco Esposito <email@francescoesposito.org>, 2021.
 # mondstern <mondstern@snopyta.org>, 2021.
 # Frankie McEyes <mceyes@protonmail.com>, 2022.
+# Antonello Pirina <fardeledge@tutanota.com>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2022-02-15 20:04+0100\n"
-"PO-Revision-Date: 2022-06-03 10:53+0000\n"
-"Last-Translator: random r <epsilin@yopmail.com>\n"
+"PO-Revision-Date: 2022-06-28 20:54+0000\n"
+"Last-Translator: Antonello Pirina <fardeledge@tutanota.com>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/f-droid/fdroidserver/it/>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.13-dev\n"
+"X-Generator: Weblate 4.13.1-dev\n"
 
 #: ../fdroidserver/common.py
 msgid ""
@@ -1685,9 +1686,8 @@ msgstr[0] "Scanner trovato {} problema"
 msgstr[1] "Scanner trovato {} problemi"
 
 #: ../fdroidserver/scanner.py
-#, fuzzy
 msgid "Scanning APK with apkanalyzer for known non-free classes."
-msgstr "Scansiona gli APK risultanti per le classi non libere note."
+msgstr "Scansiona gli APK con apkanalyzer per le classi non libere note."
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -1740,7 +1740,7 @@ msgstr "Saltare '{apkfilename} con firma non valida!"
 #: ../fdroidserver/index.py
 #, python-format
 msgid "Skipping GitLab Pages mirror because the repo is too large (>%.2fGB)!"
-msgstr ""
+msgstr "Saltando il mirror di GitLab Pages perché la repo è troppo grande (>%.2fGB)!"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
