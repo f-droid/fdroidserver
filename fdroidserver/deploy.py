@@ -453,9 +453,10 @@ def update_servergitmirrors(servergitmirrors, repo_section):
                                          | git.remote.PushInfo.REMOTE_FAILURE
                                          | git.remote.PushInfo.REMOTE_REJECTED):
                         # Show potentially useful messages from git remote
-                        for line in progress.other_lines:
-                            if line.startswith('remote:'):
-                                logging.debug(line)
+                        if progress:
+                            for line in progress.other_lines:
+                                if line.startswith('remote:'):
+                                    logging.debug(line)
                         raise FDroidException(remote.url + ' push failed: ' + str(pushinfo.flags)
                                               + ' ' + pushinfo.summary)
                     else:
