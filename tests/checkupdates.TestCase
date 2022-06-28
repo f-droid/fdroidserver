@@ -379,6 +379,33 @@ class CheckupdatesTest(unittest.TestCase):
         self.assertNotIn('checkupdates', git_repo.branches)
         self.assertNotIn(appid, git_repo.remotes.upstream.refs)
 
+    def test_push_commits_verbose(self):
+        class Options:
+            verbose = True
+
+        fdroidserver.checkupdates.options = Options
+        repos = self._get_test_git_repos()
+        git_repo = repos[0]
+        git_repo.remotes.origin.push(git_repo.active_branch)
+        git_repo.remotes.upstream.push(git_repo.active_branch)
+
+        # make commit
+        appid = 'org.adaway'
+        app = fdroidserver.metadata.read_metadata({appid: -1})[appid]
+        build = fdroidserver.metadata.Build()
+        build.versionName = 'fake'
+        build.versionCode = 999999999
+        app.Builds.append(build)
+        metadata_file = 'metadata/%s.yml' % appid
+        fdroidserver.metadata.write_metadata(metadata_file, app)
+        git_repo.index.add(metadata_file)
+        git_repo.index.commit('changed ' + appid)
+
+        # and push the new commit to the dynamic branch
+        fdroidserver.checkupdates.push_commits()
+        self.assertIn(appid, git_repo.branches)
+        self.assertIn(appid, git_repo.remotes.origin.refs)
+
     def test_prune_empty_appid_branches(self):
         git_repo, origin_repo, upstream_repo = self._get_test_git_repos()
         for remote in git_repo.remotes:

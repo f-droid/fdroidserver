@@ -684,7 +684,7 @@ def get_last_build_from_app(app: metadata.App) -> metadata.Build:
         return metadata.Build()
 
 
-def push_commits(remote_name='origin'):
+def push_commits(remote_name='origin', verbose=False):
     """Push commits using either appid or 'checkupdates' as branch name."""
     git_repo = git.Repo.init('.')
     files = set()
@@ -700,6 +700,20 @@ def push_commits(remote_name='origin'):
         if m:
             branch_name = m.group(1)  # appid
     if len(files) > 0:
+        if verbose:
+            from clint.textui import progress
+
+            bar = progress.Bar()
+
+            class MyProgressPrinter(git.RemoteProgress):
+                def update(self, op_code, current, maximum=None, message=None):
+                    if isinstance(maximum, float):
+                        bar.show(current, maximum)
+
+            progress = MyProgressPrinter()
+        else:
+            progress = None
+
         git_repo.create_head(branch_name, force=True)
         remote = git_repo.remotes[remote_name]
         pushinfos = remote.push(
