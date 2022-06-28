@@ -724,6 +724,27 @@ def push_commits(remote_name='origin'):
                 logging.debug(remote.url + ': ' + pushinfo.summary)
 
 
+def prune_empty_appid_branches(git_repo=None):
+    """Remove empty branches from checkupdates-bot git remote."""
+    if git_repo is None:
+        git_repo = git.Repo.init('.')
+    main_branch = 'main'
+    if main_branch not in git_repo.remotes.upstream.refs:
+        main_branch = 'master'
+    upstream_main = 'upstream/' + main_branch
+
+    remote = git_repo.remotes.origin
+    remote.update(prune=True)
+    merged_branches = git_repo.git().branch(remotes=True, merged=upstream_main).split()
+    for remote_branch in merged_branches:
+        if not remote_branch or '/' not in remote_branch:
+            continue
+        if remote_branch.split('/')[1] not in (main_branch, 'HEAD'):
+            for ref in git_repo.remotes.origin.refs:
+                if remote_branch == ref.name:
+                    remote.push(':%s' % ref.remote_head, force=True)  # rm remote branch
+
+
 def status_update_json(processed: list, failed: dict) -> None:
     """Output a JSON file with metadata about this run."""
     logging.debug(_('Outputting JSON'))

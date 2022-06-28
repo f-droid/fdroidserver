@@ -327,7 +327,7 @@ class CheckupdatesTest(unittest.TestCase):
         self.assertEqual(vername, '2')
         self.assertEqual(vercode, 2)
 
-    def test_push_commits(self):
+    def _get_test_git_repos(self):
         testdir = self.testdir.name
         os.chdir(testdir)
         os.mkdir('metadata')
@@ -338,22 +338,28 @@ class CheckupdatesTest(unittest.TestCase):
         git_repo.index.commit("all metadata files")
 
         git_remote_upstream = os.path.join(testdir, 'git_remote_upstream')
-        upstream = git.Repo.init(git_remote_upstream, bare=True)
+        upstream_repo = git.Repo.init(git_remote_upstream, bare=True)
         git_repo.create_remote('upstream', 'file://' + git_remote_upstream)
         git_remote_origin = os.path.join(testdir, 'git_remote_origin')
-        origin = git.Repo.init(git_remote_origin, bare=True)
+        origin_repo = git.Repo.init(git_remote_origin, bare=True)
         git_repo.create_remote('origin', 'file://' + git_remote_origin)
+
+        return git_repo, origin_repo, upstream_repo
+
+    def test_push_commits(self):
+        git_repo, origin_repo, upstream_repo = self._get_test_git_repos()
         for remote in git_repo.remotes:
             remote.push(git_repo.active_branch)
-        self.assertEqual(git_repo.head, upstream.head)
-        self.assertEqual(origin.head, upstream.head)
+        self.assertEqual(git_repo.head, upstream_repo.head)
+        self.assertEqual(origin_repo.head, upstream_repo.head)
         # pretend that checkupdates ran but didn't create any new commits
         fdroidserver.checkupdates.push_commits()
 
         appid = 'org.adaway'
         self.assertNotIn(appid, git_repo.branches)
+        self.assertNotIn(appid, origin_repo.branches)
+        self.assertNotIn(appid, upstream_repo.branches)
         self.assertNotIn('checkupdates', git_repo.branches)
-        self.assertNotIn(appid, git_repo.remotes.origin.repo.branches)  # TODO fix
 
         # now make commit
         app = fdroidserver.metadata.read_metadata({appid: -1})[appid]
@@ -371,6 +377,25 @@ class CheckupdatesTest(unittest.TestCase):
         self.assertIn(appid, git_repo.branches)
         self.assertIn(appid, git_repo.remotes.origin.refs)
         self.assertNotIn('checkupdates', git_repo.branches)
+        self.assertNotIn(appid, git_repo.remotes.upstream.refs)
+
+    def test_prune_empty_appid_branches(self):
+        git_repo, origin_repo, upstream_repo = self._get_test_git_repos()
+        for remote in git_repo.remotes:
+            remote.push(git_repo.active_branch)
+        self.assertEqual(git_repo.head, upstream_repo.head)
+        self.assertEqual(origin_repo.head, upstream_repo.head)
+
+        appid = 'org.adaway'
+        git_repo.create_head(appid, force=True)
+        git_repo.remotes.origin.push(appid, force=True)
+        self.assertIn(appid, git_repo.branches)
+        self.assertIn(appid, origin_repo.branches)
+        self.assertIn(appid, git_repo.remotes.origin.refs)
+        self.assertNotIn(appid, git_repo.remotes.upstream.refs)
+        fdroidserver.checkupdates.prune_empty_appid_branches()
+        self.assertNotIn(appid, origin_repo.branches)
+        self.assertNotIn(appid, git_repo.remotes.origin.refs)
         self.assertNotIn(appid, git_repo.remotes.upstream.refs)
 
     def test_make_merge_request(self):
