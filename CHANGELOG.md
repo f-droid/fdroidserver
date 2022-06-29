@@ -4,8 +4,36 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 
-## [Unreleased]
+## [2.1.1] - 2022-09-06
 
+* gradlew-fdroid: Include latest versions and checksums
+* nightly: update Raw URLs to fix breakage and avoid redirects
+* signindex: gpg-sign index-v1.json and deploy it
+* update: fix --use-date-from-apk when used with files (#1012)
+
+## [2.1] - 2022-02-22
+
+For a more complete overview, see the [2.1
+milestone](https://gitlab.com/fdroid/fdroidserver/-/milestones/11)
+
+## [2.0.5] - 2022-09-06
+
+### Fixed
+
+* gradlew-fdroid: Include latest versions and checksums
+* nightly: add support for GitHub Actions
+* nightly: update Raw URLs to fix breakage and avoid redirects
+* update: fix --use-date-from-apk when used with files (#1012)
+* Fix GitLab CI
+
+## [2.0.4] - 2022-06-29
+
+### Fixed
+
+* deploy: ensure progress is instantiated before trying to use it
+* signindex: gpg-sign index-v1.json and deploy it
+  [1080](https://gitlab.com/fdroid/fdroidserver/-/merge_requests/1080)
+  [1124](https://gitlab.com/fdroid/fdroidserver/-/merge_requests/1124)
 
 ## [2.0.3] - 2021-07-01
 
