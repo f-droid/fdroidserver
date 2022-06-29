@@ -4,6 +4,15 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 
+## [2.0.4] - 2022-06-29
+
+### Fixed
+
+* deploy: ensure progress is instantiated before trying to use it
+* signindex: gpg-sign index-v1.json and deploy it
+  [1080](https://gitlab.com/fdroid/fdroidserver/-/merge_requests/1080)
+  [1124](https://gitlab.com/fdroid/fdroidserver/-/merge_requests/1124)
+
 ## [2.0.3] - 2021-07-01
 
 ### Fixed
