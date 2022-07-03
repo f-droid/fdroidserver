@@ -16,20 +16,21 @@
 # Eric <alchemillatruth@purelymail.com>, 2022.
 # shenzhui007 <12231252@bjtu.edu.cn>, 2022.
 # linsui <linsui@inbox.lv>, 2022.
+# YangYulin <yylteam@icloud.com>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2022-02-15 20:04+0100\n"
-"PO-Revision-Date: 2022-06-10 11:01+0000\n"
-"Last-Translator: linsui <linsui@inbox.lv>\n"
+"PO-Revision-Date: 2022-07-03 09:32+0000\n"
+"Last-Translator: YangYulin <yylteam@icloud.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/f-droid/fdroidserver/zh_Hans/>\n"
 "Language: zh_Hans\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.13-dev\n"
+"X-Generator: Weblate 4.13.1-dev\n"
 
 #: ../fdroidserver/common.py
 msgid ""
@@ -1124,11 +1125,11 @@ msgstr "无效的项目符号列表"
 #: ../fdroidserver/lint.py
 #, python-format
 msgid "Invalid license tag \"%s\"! Use only tags from https://spdx.org/license-list"
-msgstr ""
+msgstr "无效的许可证标签“%s”！仅使用 https://spdx.org/license-list 中的标签"
 
 #: ../fdroidserver/lint.py
 msgid "Invalid link - use [http://foo.bar Link title] or [http://foo.bar]"
-msgstr ""
+msgstr "无效链接 - 使用 [http://foo.bar 链接标题] 或 [http://foo.bar]"
 
 #: ../fdroidserver/metadata.py
 #, python-format
