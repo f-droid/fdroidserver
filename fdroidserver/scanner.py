@@ -514,7 +514,7 @@ def main():
 
     # Parse command line...
     parser = ArgumentParser(
-        usage="%(prog)s [options] [APPID[:VERCODE] path/to.apk ...]"
+        usage="%(prog)s [options] [(APPID[:VERCODE] | path/to.apk) ...]"
     )
     common.setup_global_opts(parser)
     parser.add_argument("appid", nargs='*', help=_("application ID with optional versionCode in the form APPID[:VERCODE]"))
