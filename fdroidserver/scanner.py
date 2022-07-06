@@ -36,6 +36,7 @@ from . import _
 from . import common
 from . import metadata
 from .exception import BuildException, VCSException
+from . import scanner
 
 config = None
 options = None
@@ -161,7 +162,7 @@ def _exodus_compile_signatures(signatures):
 
 
 # taken from exodus_core
-def load_trackers_signatures():
+def load_exodus_trackers_signatures():
     """
     Load trackers signatures from the official Exodus database.
 
@@ -178,7 +179,7 @@ def load_trackers_signatures():
             )
         )
     logging.debug('{} trackers signatures loaded'.format(len(signatures)))
-    return signatures, _exodus_compile_signatures(signatures)
+    return signatures, scanner._exodus_compile_signatures(signatures)
 
 
 def scan_binary(apkfile, extract_signatures=None):
@@ -544,7 +545,7 @@ def main():
 
     exodus = []
     if options.exodus:
-        exodus = load_trackers_signatures()
+        exodus = load_exodus_trackers_signatures()
 
     appids = []
     for apk in options.appid:

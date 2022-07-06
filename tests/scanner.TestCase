@@ -359,6 +359,53 @@ class Test__exodus_compile_signatures(unittest.TestCase):
         self.assertListEqual(result, [])
 
 
+class Test_load_exodus_trackers_signatures(unittest.TestCase):
+
+    def setUp(self):
+        self.requests_ret = mock.Mock()
+        self.requests_ret.json = mock.Mock(return_value={
+            "trackers": {
+                "1": {
+                    "id": 1,
+                    "name": "Steyer Puch 1",
+                    "description": "blah blah blah",
+                    "creation_date": "1956-01-01",
+                    "code_signature": "com.puch.|com.steyer.",
+                    "network_signature": "pst\\.com",
+                    "website": "https://pst.com",
+                    "categories": ["tracker"],
+                    "documentation": [],
+                },
+                "2": {
+                    "id": 2,
+                    "name": "Steyer Puch 2",
+                    "description": "blah blah blah",
+                    "creation_date": "1956-01-01",
+                    "code_signature": "com.puch.|com.steyer.",
+                    "network_signature": "pst\\.com",
+                    "website": "https://pst.com",
+                    "categories": ["tracker"],
+                    "documentation": [],
+                }
+            },
+        })
+        self.requests_func = mock.Mock(return_value=self.requests_ret)
+        self.compilesig_func = mock.Mock(return_value=9999)
+
+    def test_ok(self):
+        with mock.patch("requests.get", self.requests_func), mock.patch(
+            "fdroidserver.scanner._exodus_compile_signatures", self.compilesig_func
+        ):
+            result_sigs, result_regex = fdroidserver.scanner.load_exodus_trackers_signatures()
+            self.requests_func.assert_called_once_with("https://reports.exodus-privacy.eu.org/api/trackers")
+            self.assertEqual(len(result_sigs), 2)
+            self.assertEqual(result_sigs[0].id, 1)
+            self.assertEqual(result_sigs[1].id, 2)
+
+            self.compilesig_func.assert_called_once_with(result_sigs)
+            self.assertEqual(result_regex, 9999)
+
+
 if __name__ == "__main__":
     os.chdir(os.path.dirname(__file__))
 
@@ -376,5 +423,6 @@ if __name__ == "__main__":
     newSuite.addTests([
         unittest.makeSuite(ScannerTest),
         unittest.makeSuite(Test__exodus_compile_signatures),
+        unittest.makeSuite(Test_load_exodus_trackers_signatures),
     ])
     unittest.main(failfast=False)
