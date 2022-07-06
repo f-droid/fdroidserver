@@ -338,6 +338,27 @@ class ScannerTest(unittest.TestCase):
         self.assertEqual(0, count, 'there should be this many errors')
 
 
+class Test__exodus_compile_signatures(unittest.TestCase):
+
+    def setUp(self):
+        self.m1 = mock.Mock()
+        self.m1.code_signature = r"^random\sregex$"
+        self.m2 = mock.Mock()
+        self.m2.code_signature = r"^another.+regex$"
+        self.mock_sigs = [self.m1, self.m2]
+
+    def test_ok(self):
+        result = fdroidserver.scanner._exodus_compile_signatures(self.mock_sigs)
+        self.assertListEqual(result, [
+            re.compile(self.m1.code_signature),
+            re.compile(self.m2.code_signature),
+        ])
+
+    def test_not_iterable(self):
+        result = fdroidserver.scanner._exodus_compile_signatures(123)
+        self.assertListEqual(result, [])
+
+
 if __name__ == "__main__":
     os.chdir(os.path.dirname(__file__))
 
@@ -352,5 +373,8 @@ if __name__ == "__main__":
     (fdroidserver.common.options, args) = parser.parse_args(['--verbose'])
 
     newSuite = unittest.TestSuite()
-    newSuite.addTest(unittest.makeSuite(ScannerTest))
+    newSuite.addTests([
+        unittest.makeSuite(ScannerTest),
+        unittest.makeSuite(Test__exodus_compile_signatures),
+    ])
     unittest.main(failfast=False)

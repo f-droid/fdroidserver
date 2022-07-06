@@ -144,7 +144,7 @@ def get_embedded_classes(apkfile, depth=0):
 
 
 # taken from exodus_core
-def _compile_signatures(signatures):
+def _exodus_compile_signatures(signatures):
     """
     Compiles the regex associated to each signature, in order to speed up the trackers detection.
 
@@ -178,7 +178,7 @@ def load_trackers_signatures():
             )
         )
     logging.debug('{} trackers signatures loaded'.format(len(signatures)))
-    return signatures, _compile_signatures(signatures)
+    return signatures, _exodus_compile_signatures(signatures)
 
 
 def scan_binary(apkfile, extract_signatures=None):
