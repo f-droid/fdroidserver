@@ -327,10 +327,16 @@ class Test_scan_binary(unittest.TestCase):
             self.assertEqual(
                 1,
                 fdroidserver.scanner.scan_binary(apkfile),
-                'Did not find bad code signature in binary',
+                "Did not find expected code signature '{}' in binary '{}'".format(fdroidserver.scanner.CODE_SIGNATURES.values(), apkfile),
             )
 
-    def test_embedded_apk_code_signature(self):
+    @unittest.skipIf(
+        sys.version_info < (3, 9),
+        "Our implementation for traversing zip files will silently fail to work"
+        "on older python versions, also see: "
+        "https://gitlab.com/fdroid/fdroidserver/-/merge_requests/1110#note_932026766"
+    )
+    def test_bottom_level_embedded_apk_code_signature(self):
         apkfile = os.path.join(self.basedir, 'apk.embedded_1.apk')
         with mock.patch("fdroidserver.scanner.CODE_SIGNATURES", {"org/bitbucket/tickytacky/mirrormirror/MainActivity": re.compile(
             r'.*org/bitbucket/tickytacky/mirrormirror/MainActivity', re.IGNORECASE | re.UNICODE
@@ -338,7 +344,7 @@ class Test_scan_binary(unittest.TestCase):
             self.assertEqual(
                 1,
                 fdroidserver.scanner.scan_binary(apkfile),
-                'Did not find bad code signature in binary',
+                "Did not find expected code signature '{}' in binary '{}'".format(fdroidserver.scanner.CODE_SIGNATURES.values(), apkfile),
             )
 
     def test_top_level_signature_embedded_apk_present(self):
@@ -349,13 +355,13 @@ class Test_scan_binary(unittest.TestCase):
             self.assertEqual(
                 1,
                 fdroidserver.scanner.scan_binary(apkfile),
-                'Did not find bad code signature in binary',
+                "Did not find expected code signature '{}' in binary '{}'".format(fdroidserver.scanner.CODE_SIGNATURES.values(), apkfile),
             )
 
-    def test_ok(self):
+    def test_no_match(self):
         apkfile = os.path.join(self.basedir, 'no_targetsdk_minsdk1_unsigned.apk')
         result = fdroidserver.scanner.scan_binary(apkfile)
-        self.assertEqual(0, result, 'Found false positives in binary')
+        self.assertEqual(0, result, "Found false positives in binary '{}'".format(apkfile))
 
 
 class Test__exodus_compile_signatures(unittest.TestCase):
@@ -410,7 +416,7 @@ class Test_load_exodus_trackers_signatures(unittest.TestCase):
             },
         })
         self.requests_func = mock.Mock(return_value=self.requests_ret)
-        self.compilesig_func = mock.Mock(return_value=9999)
+        self.compilesig_func = mock.Mock(return_value="mocked return value")
 
     def test_ok(self):
         with mock.patch("requests.get", self.requests_func), mock.patch(
@@ -419,11 +425,10 @@ class Test_load_exodus_trackers_signatures(unittest.TestCase):
             result_sigs, result_regex = fdroidserver.scanner.load_exodus_trackers_signatures()
             self.requests_func.assert_called_once_with("https://reports.exodus-privacy.eu.org/api/trackers")
             self.assertEqual(len(result_sigs), 2)
-            self.assertEqual(result_sigs[0].id, 1)
-            self.assertEqual(result_sigs[1].id, 2)
+            self.assertListEqual([1, 2], sorted([x.id for x in result_sigs]))
 
             self.compilesig_func.assert_called_once_with(result_sigs)
-            self.assertEqual(result_regex, 9999)
+            self.assertEqual(result_regex, "mocked return value")
 
 
 if __name__ == "__main__":
