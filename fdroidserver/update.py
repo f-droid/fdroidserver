@@ -34,7 +34,7 @@ import json
 import time
 import yaml
 import copy
-from datetime import datetime
+from datetime import datetime, timezone
 from argparse import ArgumentParser
 from pathlib import Path
 
@@ -1124,7 +1124,7 @@ def scan_repo_files(apkcache, repodir, knownapks, use_date_from_file=False):
 
         if use_date_from_file:
             timestamp = stat.st_ctime
-            default_date_param = time.gmtime(time.mktime(datetime.fromtimestamp(timestamp).timetuple()))
+            default_date_param = datetime.fromtimestamp(timestamp, tz=timezone.utc)
         else:
             default_date_param = None
 
