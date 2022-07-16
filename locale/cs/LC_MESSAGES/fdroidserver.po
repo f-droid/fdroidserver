@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: fdroidserver 1.0.0-95-gd7af22b\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2022-02-15 20:04+0100\n"
-"PO-Revision-Date: 2022-05-19 17:18+0000\n"
+"PO-Revision-Date: 2022-07-17 12:26+0000\n"
 "Last-Translator: Fjuro <fjuro@seznam.cz>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/f-droid/fdroidserver/cs/>\n"
 "Language: cs\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 4.13-dev\n"
+"X-Generator: Weblate 4.14-dev\n"
 
 #: ../fdroidserver/common.py
 msgid ""
@@ -276,65 +276,65 @@ msgstr "Přidání nového repozitáře pouze pro {name}"
 
 #: ../fdroidserver/init.py
 msgid "Alias of the repo signing key in the keystore"
-msgstr ""
+msgstr "Alias podepisovacího klíče repozitáře v keystore"
 
 #: ../fdroidserver/import.py
 msgid "Allows a different revision (or git branch) to be specified for the initial import"
-msgstr ""
+msgstr "Umožňuje zadat jinou revizi (nebo větev gitu) pro počáteční import"
 
 #: ../fdroidserver/mirror.py
 msgid "Also mirror the full archive section"
-msgstr ""
+msgstr "Také zrcadlit celou sekci archivu"
 
 #: ../fdroidserver/lint.py
 msgid "Also warn about formatting issues, like rewritemeta -l"
-msgstr ""
+msgstr "Také varovat před problémy s formátování, jako rewritemeta -l"
 
 #: ../fdroidserver/scanner.py
 msgid "Android AAR library"
-msgstr ""
+msgstr "Knihovna AAR pro Android"
 
 #: ../fdroidserver/scanner.py
 msgid "Android APK file"
-msgstr ""
+msgstr "Soubor APK pro Android"
 
 #: ../fdroidserver/scanner.py
 msgid "Android DEX code"
-msgstr ""
+msgstr "Kód Android DEX"
 
 #: ../fdroidserver/common.py ../fdroidserver/build.py
 #, python-brace-format
 msgid "Android SDK '{path}' does not have '{dirname}' installed!"
-msgstr ""
+msgstr "Android SDK '{path}' nemá nainstalovaný '{dirname}'!"
 
 #: ../fdroidserver/init.py
 #, python-brace-format
 msgid "Android SDK not found at {path}!"
-msgstr ""
+msgstr "Android SDK nebylo nalezeno v {path}!"
 
 #: ../fdroidserver/common.py
 msgid "Android SDK not found!"
-msgstr ""
+msgstr "Android SDK nenalezeno!"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Android SDK path '{path}' does not exist!"
-msgstr ""
+msgstr "Android SDK s cestou '{path}' neexistuje!"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Android SDK path '{path}' is not a directory!"
-msgstr ""
+msgstr "Cesta Android SDK '{path}' není adresář!"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Android SDK tool {cmd} found!"
-msgstr ""
+msgstr "Nástroj Android SDK {cmd} nalezen!"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Android SDK tool {cmd} not found!"
-msgstr ""
+msgstr "Nástroj Android SDK {cmd} nenalezen!"
 
 #. Translators: "build-tools" is the file name of a package from
 #. Google, it is part of the Android SDK. So it probably shouldn't be
@@ -342,45 +342,45 @@ msgstr ""
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Android build-tools path '{path}' does not exist!"
-msgstr ""
+msgstr "Cesta k build-tools Androidu '{path}' neexistuje!"
 
 #: ../fdroidserver/update.py
 msgid "AndroidManifest.xml has no date"
-msgstr ""
+msgstr "AndroidManifest.xml nemá datum"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "App is in '{repo}' but has a link to {url}"
-msgstr ""
+msgstr "Aplikace je v repozitáři '{repo}' ale má odkaz na {url}"
 
 #: ../fdroidserver/lint.py
 msgid "Appending .git is not necessary"
-msgstr ""
+msgstr "Přidání .git není nutné"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Archiving {apkfilename} with invalid signature!"
-msgstr ""
+msgstr "Archivování {apkfilename} s neplatným podpisem!"
 
 #: ../fdroidserver/mirror.py
 msgid "Base URL to mirror, can include the index signing key using the query string: ?fingerprint="
-msgstr ""
+msgstr "Základní adresa URL pro zrcadlení, může obsahovat klíč pro podepisování indexu pomocí řetězce dotazu: ?fingerprint="
 
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vname
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "Branch '{branch}' used as commit in build '{versionName}'"
-msgstr ""
+msgstr "Větev '{branch}' použitá jako revize v sestavení '{versionName}'"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "Branch '{branch}' used as commit in srclib '{srclib}'"
-msgstr ""
+msgstr "Větev '{branch}' použitá jako revize v srclib '{srclib}'"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Broken symlink: {path}"
-msgstr ""
+msgstr "Rozbitý symlink: {path}"
 
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Build a package from source"
@@ -388,65 +388,65 @@ msgstr "Sestavit balíček ze zdroje"
 
 #: ../fdroidserver/build.py
 msgid "Build all applications available"
-msgstr ""
+msgstr "Sestavit všechny dostupné aplikace"
 
 #: ../fdroidserver/lint.py
 msgid "Build generated by `fdroid import` - remove disable line once ready"
-msgstr ""
+msgstr "Sestavení vygenerováno pomocí `fdroid import` - odeberte řádek se zakázáním po dokončení"
 
 #: ../fdroidserver/checkupdates.py
 msgid "Build metadata git repo has uncommited changes!"
-msgstr ""
+msgstr "Git repozitář s metadaty sestavení má neodeslané změny!"
 
 #: ../fdroidserver/build.py
 msgid "Build only the latest version of each package"
-msgstr ""
+msgstr "Sestavit pouze nejnovější verzi každého balíčku"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Build should have comma-separated versionName and versionCode, not \"{value}\", in {linedesc}"
-msgstr ""
+msgstr "Sestavení by mělo být versionName a versionCode oddělené čárkami, ne „{value}“ v {linedesc}"
 
 #: ../fdroidserver/init.py
 #, python-format
 msgid "Built repo based in \"%s\" with this config:"
-msgstr ""
+msgstr "Sestaven repozitář založený v „%s“ s touto konfigurací:"
 
 #: ../fdroidserver/checkupdates.py
 msgid "Can't auto-update app with no CurrentVersionCode"
-msgstr ""
+msgstr "Nelze automaticky aktualizovat aplikaci bez CurrentVersionCode"
 
 #: ../fdroidserver/build.py
 msgid "Can't build due to {} error while scanning"
 msgid_plural "Can't build due to {} errors while scanning"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Nelze sestavit kvůli {} chybě při skenování"
+msgstr[1] "Nelze sestavit kvůli {} chybám při skenování"
+msgstr[2] "Nelze sestavit kvůli {} chybám při skenování"
 
 #: ../fdroidserver/vmtools.py
 #, python-brace-format
 msgid "Cannot read \"{path}\"!"
-msgstr ""
+msgstr "Nelze přečíst „{path}“!"
 
 #. Translators: https://developer.android.com/studio/build/application-id
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Cannot resolve application ID {appid}"
-msgstr ""
+msgstr "Nelze přeložit ID aplikace {appid}"
 
 #: ../fdroidserver/rewritemeta.py
 #, python-brace-format
 msgid "Cannot rewrite \"{path}\""
-msgstr ""
+msgstr "Nelze přepsat „{path}“"
 
 #: ../fdroidserver/rewritemeta.py
 msgid "Cannot use --list and --to at the same time"
-msgstr ""
+msgstr "Nelze současně použít --list a --to"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Cannot write \"{path}\", not an accepted format, use: {formats}"
-msgstr ""
+msgstr "Nelze zapsat „{path}“, není akceptovaný formát, použijte: {formats}"
 
 #: ../fdroidserver/lint.py
 #, python-format
@@ -464,20 +464,20 @@ msgstr "Zkontrolujte aktualizace aplikací"
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Checking archiving for {appid} - APKs:{integer}, keepversions:{keep}, archapks:{arch}"
-msgstr ""
+msgstr "Kontrola archivace u {appid} - APKs:{integer}, keepversions:{keep}, archapks:{arch}"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Checking archiving for {appid} - apks:{integer}, keepversions:{keep}, archapks:{arch}"
-msgstr ""
+msgstr "Kontrola archivace u {appid} - apks:{integer}, keepversions:{keep}, archapks:{arch}"
 
 #: ../fdroidserver/update.py
 msgid "Clean update - don't uses caches, reprocess all APKs"
-msgstr ""
+msgstr "Čistá aktualizace - nepoužívat mezipaměti, znovu zpracovat všechny soubory APK"
 
 #: ../fdroidserver/import.py
 msgid "Comma separated list of categories."
-msgstr ""
+msgstr "Seznam kategorií oddělený čárkami."
 
 #: ../fdroid ../fdroidserver/__main__.py
 #, c-format, python-format
@@ -486,44 +486,44 @@ msgstr "Příkaz '%s' nebyl rozpoznán.\n"
 
 #: ../fdroidserver/checkupdates.py
 msgid "Commit changes"
-msgstr ""
+msgstr "Odeslat změny"
 
 #: ../fdroidserver/__main__.py
 msgid "Conflicting arguments: '--verbose' and '--quiet' can not be specified at the same time."
-msgstr ""
+msgstr "Konfliktní argumenty: '--verbose' a '--quiet' nelze zadat současně."
 
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Conflicting config files! Using {newfile}, ignoring {oldfile}!"
-msgstr ""
+msgstr "Konfliktní konfigurační soubory! Používám {newfile}, ignoruji {oldfile}!"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Could not find '{command}' on your system"
-msgstr ""
+msgstr "Ve vašem systému se nepodařilo najít příkaz '{command}'"
 
 #: ../fdroidserver/import.py
 msgid "Could not find latest version code"
-msgstr ""
+msgstr "Nepodařilo se najít kód poslední verze"
 
 #: ../fdroidserver/import.py
 msgid "Could not find latest version name"
-msgstr ""
+msgstr "Nepodařilo se najít název poslední verze"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Could not find {path} to remove it"
-msgstr ""
+msgstr "Nepodařilo se nalézt {path} k odstranění"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Could not open APK {path} for analysis: "
-msgstr ""
+msgstr "Nepodařilo se otevřít APK {path} pro analýzu: "
 
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Could not parse size \"{size}\", wrong type \"{type}\""
-msgstr ""
+msgstr "Nepodařilo se zpracovat velikost „{size}“, nesprávný typ „{type}“"
 
 #. Translators: https://developer.android.com/studio/build/application-id
 #: ../fdroidserver/import.py
@@ -531,19 +531,18 @@ msgid "Couldn't find Application ID"
 msgstr "Nedaří se nalézt ID aplikace"
 
 #: ../fdroidserver/checkupdates.py
-#, fuzzy
 msgid "Couldn't find any version information"
-msgstr "Nedaří se nalézt ID aplikace"
+msgstr "Nepodařilo se najít žádné informace o verzi"
 
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
 #: ../fdroidserver/import.py
 msgid "Couldn't find latest version code"
-msgstr ""
+msgstr "Nepodařilo se nalézt kód poslední verze"
 
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vname
 #: ../fdroidserver/import.py
 msgid "Couldn't find latest version name"
-msgstr ""
+msgstr "Nepodařilo se nalézt název poslední verze"
 
 #: ../fdroidserver/import.py ../fdroidserver/checkupdates.py
 msgid "Couldn't find package ID"
@@ -551,11 +550,11 @@ msgstr "Nedaří se nalézt identif. balíčku"
 
 #: ../fdroidserver/update.py
 msgid "Cowardily refusing to overwrite existing signing key setup!"
-msgstr ""
+msgstr "Zbaběle odmítám přepsat existující nastavení podpisového klíče!"
 
 #: ../fdroidserver/update.py
 msgid "Create a repo signing key in a keystore"
-msgstr ""
+msgstr "Vytvořit podepisující klíč repozitáře v keystore"
 
 #: ../fdroidserver/update.py
 msgid "Create skeleton metadata files that are missing"
@@ -564,29 +563,29 @@ msgstr "Vytvořte soubory metadat kostry, které chybí"
 #: ../fdroidserver/deploy.py ../fdroidserver/upload.py
 #, python-brace-format
 msgid "Created new container \"{name}\""
-msgstr ""
+msgstr "Vytvořen nový kontejner „{name}“"
 
 #: ../fdroidserver/deploy.py ../fdroidserver/upload.py
 #, python-brace-format
 msgid "Creating \"{path}\" for configuring s3cmd."
-msgstr ""
+msgstr "Vytváření „{path}“ pro konfiguraci s3cmd."
 
 #: ../fdroidserver/publish.py
 msgid "Creating log directory"
-msgstr ""
+msgstr "Vytváření adresáře protokolů"
 
 #: ../fdroidserver/deploy.py ../fdroidserver/upload.py
 #, python-brace-format
 msgid "Creating new S3 bucket: {url}"
-msgstr ""
+msgstr "Vytváření nového bucketu S3: {url}"
 
 #: ../fdroidserver/publish.py
 msgid "Creating output directory"
-msgstr ""
+msgstr "Vytváření výstupního adresáře"
 
 #: ../fdroidserver/index.py
 msgid "Creating signed index with this key (SHA256):"
-msgstr ""
+msgstr "Vytváření podepsaného indexu s tímto klíčem (SHA256):"
 
 #: ../fdroidserver/import.py ../fdroidserver/verify.py
 #: ../fdroidserver/publish.py
@@ -595,16 +594,16 @@ msgstr "Vytváření dočasné složky"
 
 #: ../fdroidserver/index.py
 msgid "Creating unsigned index in preparation for signing"
-msgstr ""
+msgstr "Vytváření nepodepsaného indexu v rámci přípravy na podpis"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "CurrentVersionCode {cv} is less than oldest build entry {versionCode}"
-msgstr ""
+msgstr "CurrentVersionCode {cv} je menší než nejstarší položka sestavení {versionCode}"
 
 #: ../fdroidserver/nightly.py
 msgid "DEBUG_KEYSTORE is not set or the value is incomplete"
-msgstr ""
+msgstr "DEBUG_KEYSTORE není nastaven nebo je hodnota neúplná"
 
 #: ../fdroidserver/update.py
 msgid "Delete APKs and/or OBBs without metadata from the repo"
@@ -613,106 +612,106 @@ msgstr "Odstraňte soubory APK a/nebo OBB bez metadat z úložiště"
 #: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "Deleting archive, repo is too big ({size} max {limit})"
-msgstr ""
+msgstr "Mazání archivu, repozitář je příliš velký ({size} max {limit})"
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "Deleting git-mirror history, repo is too big ({size} max {limit})"
-msgstr ""
+msgstr "Mazání historie git-mirroru, repozitář je příliš velký ({size} max {limit})"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Deleting unknown file: {path}"
-msgstr ""
+msgstr "Mazání neznámého souboru: {path}"
 
 #: ../fdroidserver/lint.py
 #, python-format
 msgid "Description '%s' is just the app's summary"
-msgstr ""
+msgstr "Popis ‚%s‘ je pouze souhrn aplikace"
 
 #: ../fdroidserver/lint.py
 msgid "Description has a duplicate line"
-msgstr ""
+msgstr "Popis má duplicitní řádek"
 
 #: ../fdroidserver/lint.py
 #, python-format
 msgid "Description has a list (%s) but it isn't bulleted (*) nor numbered (#)"
-msgstr ""
+msgstr "Popis má seznam (%s) ale není opatřen odrážkami (*) ani očíslován (#)"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "Description of length {length} is over the {limit} char limit"
-msgstr ""
+msgstr "Popis délky {length} přesahuje limit {limit} znaků"
 
 #: ../fdroidserver/import.py
 msgid "Do not add 'disable:' to the generated build entries"
-msgstr ""
+msgstr "Nepřidávat ‚disable:‘ k vygenerovaným položkám sestavení"
 
 #: ../fdroidserver/nightly.py
 msgid "Do not deploy the new files to the repo"
-msgstr ""
+msgstr "Nevydávat nové soubory do repozitáře"
 
 #: ../fdroidserver/mirror.py
 #, python-brace-format
 msgid "Do not include \"{path}\" in URL!"
-msgstr ""
+msgstr "V URL neuvádějte „{path}“!"
 
 #: ../fdroidserver/init.py
 msgid "Do not prompt for Android SDK path, just fail"
-msgstr ""
+msgstr "Nevyžadovat cestu Android SDK, prostě selhat"
 
 #: ../fdroidserver/nightly.py
 msgid "Do not remove the private keys generated from the keystore"
-msgstr ""
+msgstr "Nemazat soukromé klíče vygenerované z keystore"
 
 #: ../fdroidserver/build.py
 msgid "Don't create a source tarball, useful when testing a build"
-msgstr ""
+msgstr "Nevytvářet zdrojový tarball, užitečné při testování sestavení"
 
 #: ../fdroidserver/stats.py
 msgid "Don't do anything logs-related"
-msgstr ""
+msgstr "Nedělat nic, co souvisí s protokoly"
 
 #: ../fdroidserver/build.py
 msgid "Don't refresh the repository, useful when testing a build with no internet connection"
-msgstr ""
+msgstr "Neobnovovat repozitář, užitečné při testování bez připojení k internetu"
 
 #: ../fdroidserver/deploy.py ../fdroidserver/nightly.py
 #: ../fdroidserver/upload.py
 msgid "Don't use rsync checksums"
-msgstr ""
+msgstr "Nepoužívat kontrolní součty rsync"
 
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Download complete mirrors of small repos"
-msgstr ""
+msgstr "Stáhnout kompletní zrcadla malých repozitářů"
 
 #: ../fdroidserver/stats.py
 msgid "Download logs we don't have"
-msgstr ""
+msgstr "Stáhnout protokoly, které nemáme"
 
 #: ../fdroidserver/common.py
 #, python-format
 msgid "Downloading %s"
-msgstr ""
+msgstr "Stahování %s"
 
 #: ../fdroidserver/common.py
 msgid "Downloading the repository already failed once, not trying again."
-msgstr ""
+msgstr "Stahování repozitáře již jednou selhalo, nezkouším to znovu."
 
 #: ../fdroidserver/verify.py
 #, python-brace-format
 msgid "Downloading {url} failed. {error}"
-msgstr ""
+msgstr "Stahování {url} selhalo. {error}"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Duplicate build recipe found for versionCode {versionCode} in {linedesc}"
-msgstr ""
+msgstr "Nalezen duplicitní recept sestavení pro versionCode {versionCode} v {linedesc}"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "Duplicate link in '{field}': {url}"
-msgstr ""
+msgstr "Duplicitní odkaz v '{field}': {url}"
 
 #: ../fdroid
 msgid "Dynamically scan APKs post build"
@@ -720,27 +719,29 @@ msgstr "Dynamicky skenovat APKs post build"
 
 #: ../fdroidserver/__main__.py
 msgid "ERROR: The \"server\" subcommand has been removed, use \"deploy\"!"
-msgstr ""
+msgstr "CHYBA: Podpříkaz „server“ byl odebrán, použijte „deploy“!"
 
 #: ../fdroidserver/mirror.py
 msgid ""
 "ERROR: this command should never be used to mirror f-droid.org!\n"
 "A full mirror of f-droid.org requires more than 200GB."
 msgstr ""
+"CHYBA: tento příkaz by nikdy neměl být použit k zrcadlení f-droid.org!\n"
+"Celé zrcadlo f-droid.org vyžaduje více než 200GB."
 
 #: ../fdroidserver/nightly.py
 msgid "ERROR: unsupported CI type, patches welcome!"
-msgstr ""
+msgstr "CHYBA: nepodporovaný typ CI, opravy vítány!"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Empty build flag at {linedesc}"
-msgstr ""
+msgstr "Prázdný příznak sestavení na řádku {linedesc}"
 
 #: ../fdroidserver/__main__.py
 #, python-brace-format
 msgid "Encoding is set to '{enc}' fdroid might run into encoding issues. Please set it to 'UTF-8' for best results."
-msgstr ""
+msgstr "Kódování je nastaveno na ‚{enc}‘ fdroid může mít problémy s kódováním. Pro dosažení nejlepších výsledků jej prosím nastavte na ‚UTF-8‘."
 
 #: ../fdroidserver/init.py
 #, python-format
@@ -748,100 +749,102 @@ msgid ""
 "Enter the path to the Android SDK (%s) here:\n"
 "> "
 msgstr ""
+"Zadejte cestu k Android SDK (%s) zde:\n"
+"> "
 
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Environment variable {var} from {configname} is not set!"
-msgstr ""
+msgstr "Proměnná prostředí {var} z {configname} není nastavena!"
 
 #: ../fdroidserver/deploy.py ../fdroidserver/checkupdates.py
 #: ../fdroidserver/upload.py
 #, python-format
 msgid "Error while attempting to publish log: %s"
-msgstr ""
+msgstr "Chyba při pokusu o zveřejnění protokolu: %s"
 
 #: ../fdroidserver/import.py ../fdroidserver/common.py
 msgid "Error while getting repo address"
-msgstr ""
+msgstr "Chyba při získávání adresy repozitáře"
 
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Extract signatures from APKs"
-msgstr ""
+msgstr "Extrahovat podpisy ze souborů APK"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Failed copying {path}: {error}"
-msgstr ""
+msgstr "Chyba při kopírování {path}: {error}"
 
 #: ../fdroidserver/signatures.py
 #, python-brace-format
 msgid "Failed fetching signatures for '{apkfilename}': {error}"
-msgstr ""
+msgstr "Chyba při načítání podpisů pro ‚{apkfilename}‘: {error}"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Failed reading {path}: {error}"
-msgstr ""
+msgstr "Chyba při čtení {path}: {error}"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Failed resizing {path}: {error}"
-msgstr ""
+msgstr "Chyba při změně velikosti {path}: {error}"
 
 #: ../fdroidserver/publish.py
 msgid "Failed to align application"
-msgstr ""
+msgstr "Nepodařilo se zarovnat aplikaci"
 
 #: ../fdroidserver/deploy.py ../fdroidserver/upload.py
 #, python-brace-format
 msgid "Failed to create S3 bucket: {url}"
-msgstr ""
+msgstr "Nepodařilo se vytvořit bucket S3: {url}"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Failed to get APK information, deleting {path}"
-msgstr ""
+msgstr "Nepodařilo se získat informace o APK, mazání {path}"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Failed to get APK information, skipping {path}"
-msgstr ""
+msgstr "Nepodařilo se získat informace o APK, přeskakování {path}"
 
 #: ../fdroidserver/common.py
 msgid "Failed to get APK manifest information"
-msgstr ""
+msgstr "Nepodařilo se získat informace o manifestu APK"
 
 #: ../fdroidserver/update.py
 msgid "Failed to get APK signing key fingerprint"
-msgstr ""
+msgstr "Nepodařilo se získat otisk podpisového klíče APK"
 
 #: ../fdroidserver/install.py
 #, python-brace-format
 msgid "Failed to install '{apkfilename}' on {dev}: {error}"
-msgstr ""
+msgstr "Nepodařilo se nainstalovat ‚{apkfilename}‘ na {dev}: {error}"
 
 #: ../fdroidserver/publish.py ../fdroidserver/common.py
 msgid "Failed to sign application"
-msgstr ""
+msgstr "Nepodařilo se podepsat aplikaci"
 
 #: ../fdroidserver/common.py
 msgid "Failed to zipalign application"
-msgstr ""
+msgstr "Nepodařilo se udělat zipalign aplikace"
 
 #: ../fdroidserver/build.py
 #, python-brace-format
 msgid "Fetched buildserverid from VM: {buildserverid}"
-msgstr ""
+msgstr "Načteno buildserverid z VM: {buildserverid}"
 
 #: ../fdroidserver/signatures.py
 #, python-brace-format
 msgid "Fetched signatures for '{apkfilename}' -> '{sigdir}'"
-msgstr ""
+msgstr "Načteny podpisy pro ‚{apkfilename}‘ -> ‚{sigdir}‘"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "File disappeared while processing it: {path}"
-msgstr ""
+msgstr "Soubor zmizel při jeho zpracování: {path}"
 
 #: ../fdroidserver/verify.py ../fdroidserver/stats.py ../fdroidserver/update.py
 #: ../fdroidserver/rewritemeta.py ../fdroidserver/build.py
