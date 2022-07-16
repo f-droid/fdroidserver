@@ -22,7 +22,7 @@ msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2022-02-15 20:04+0100\n"
-"PO-Revision-Date: 2022-07-14 21:54+0000\n"
+"PO-Revision-Date: 2022-07-17 12:26+0000\n"
 "Last-Translator: YangYulin <yylteam@icloud.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/f-droid/fdroidserver/zh_Hans/>\n"
 "Language: zh_Hans\n"
@@ -1188,33 +1188,33 @@ msgstr "无法验证 JAR 签名：{path}"
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "JAR signature verified: {path}"
-msgstr ""
+msgstr "已验证的 JAR 签名：{path}"
 
 #: ../fdroidserver/scanner.py
 msgid "Java JAR file"
-msgstr ""
+msgstr "Java JAR 文件"
 
 #: ../fdroidserver/publish.py ../fdroidserver/update.py
 #: ../fdroidserver/mirror.py
 msgid "Java JDK not found! Install in standard location or set java_paths!"
-msgstr ""
+msgstr "未找到 Java JDK！安装在标准位置或设置java_paths！"
 
 #: ../fdroidserver/scanner.py
 msgid "Java compiled class"
-msgstr ""
+msgstr "Java 编译类"
 
 #: ../fdroidserver/signindex.py
 msgid "Java jarsigner not found! Install in standard location or set java_paths!"
-msgstr ""
+msgstr "未找到 Java jarsigner！安装在标准位置或设置java_paths！"
 
 #: ../fdroidserver/lint.py
 msgid "Javascript in HTML src attributes"
-msgstr ""
+msgstr "HTML src 属性中的 Javascript"
 
 #: ../fdroidserver/build.py
 #, python-brace-format
 msgid "Keeping failed build \"{apkfilename}\""
-msgstr ""
+msgstr "保持失败的生成“{apkfilename}”"
 
 #: ../fdroidserver/init.py
 msgid "Keystore for signing key:\t"
@@ -1223,15 +1223,15 @@ msgstr "签名密钥的密钥库:\t"
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "Last used commit '{commit}' looks like a tag, but UpdateCheckMode is '{ucm}'"
-msgstr ""
+msgstr "最后使用的提交 '{commit}' 看起来像一个标签，但 UpdateCheckMode 是 '{ucm}'"
 
 #: ../fdroidserver/lint.py
 msgid "Liberapay donation methods belong in the Liberapay: field"
-msgstr ""
+msgstr "Liberapay 捐赠方式属于 Liberapay: 字段"
 
 #: ../fdroidserver/lint.py
 msgid "Liberapay donation methods belong in the LiberapayID flag"
-msgstr ""
+msgstr "Liberapay 捐赠方式属于 LiberapayID 标志"
 
 #: ../fdroidserver/rewritemeta.py
 msgid "List files that would be reformatted"
