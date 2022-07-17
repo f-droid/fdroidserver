@@ -13,6 +13,8 @@ import textwrap
 import unittest
 import uuid
 import yaml
+import collections
+import pathlib
 from unittest import mock
 
 localmodule = os.path.realpath(
@@ -26,6 +28,7 @@ import fdroidserver.build
 import fdroidserver.common
 import fdroidserver.metadata
 import fdroidserver.scanner
+from testcommon import TmpCwd
 
 
 class ScannerTest(unittest.TestCase):
@@ -431,6 +434,52 @@ class Test_load_exodus_trackers_signatures(unittest.TestCase):
             self.assertEqual(result_regex, "mocked return value")
 
 
+class Test_main(unittest.TestCase):
+
+    def setUp(self):
+        self.args = ["com.example.app", "local/additional.apk", "another.apk"]
+        self.exit_func = mock.Mock()
+        self.read_app_args_func = mock.Mock(return_value={})
+        self.scan_binary_func = mock.Mock(return_value=0)
+
+    def test_parsing_appid(self):
+        """
+        This test verifies that app id get parsed correctly
+        (doesn't test how they get processed)
+        """
+        self.args = ["com.example.app"]
+        with tempfile.TemporaryDirectory() as tmpdir, TmpCwd(tmpdir), mock.patch(
+            "sys.exit", self.exit_func
+        ), mock.patch("sys.argv", ["fdroid scanner", *self.args]), mock.patch(
+            "fdroidserver.common.read_app_args", self.read_app_args_func
+        ), mock.patch("fdroidserver.scanner.scan_binary", self.scan_binary_func):
+            fdroidserver.scanner.main()
+
+            self.exit_func.assert_not_called()
+            self.read_app_args_func.assert_called_once_with(
+                ['com.example.app'], collections.OrderedDict(), True
+            )
+            self.scan_binary_func.assert_not_called()
+
+    def test_parsing_apkpath(self):
+        """
+        This test verifies that apk paths get parsed correctly
+        (doesn't test how they get processed)
+        """
+        self.args = ["local.application.apk"]
+        with tempfile.TemporaryDirectory() as tmpdir, TmpCwd(tmpdir), mock.patch(
+            "sys.exit", self.exit_func
+        ), mock.patch("sys.argv", ["fdroid scanner", *self.args]), mock.patch(
+            "fdroidserver.common.read_app_args", self.read_app_args_func
+        ), mock.patch("fdroidserver.scanner.scan_binary", self.scan_binary_func):
+            pathlib.Path(self.args[0]).touch()
+            fdroidserver.scanner.main()
+
+            self.exit_func.assert_not_called()
+            self.read_app_args_func.assert_not_called()
+            self.scan_binary_func.assert_called_once_with('local.application.apk', [])
+
+
 if __name__ == "__main__":
     os.chdir(os.path.dirname(__file__))
 
@@ -450,5 +499,6 @@ if __name__ == "__main__":
         unittest.makeSuite(Test_scan_binary),
         unittest.makeSuite(Test__exodus_compile_signatures),
         unittest.makeSuite(Test_load_exodus_trackers_signatures),
+        unittest.makeSuite(Test_main),
     ])
     unittest.main(failfast=False)

@@ -550,7 +550,7 @@ def main():
     appids = []
     for apk in options.appid:
         if os.path.isfile(apk):
-            count = scan_binary(apk, exodus)
+            count = scanner.scan_binary(apk, exodus)
             if count > 0:
                 logging.warning(
                     _('Scanner found {count} problems in {apk}:').format(
@@ -565,6 +565,7 @@ def main():
         return
 
     # Read all app and srclib metadata
+
     allapps = metadata.read_metadata()
     apps = common.read_app_args(appids, allapps, True)
 
