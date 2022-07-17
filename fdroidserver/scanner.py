@@ -36,6 +36,7 @@ from . import _
 from . import common
 from . import metadata
 from .exception import BuildException, VCSException
+from . import scanner
 
 config = None
 options = None
@@ -144,7 +145,7 @@ def get_embedded_classes(apkfile, depth=0):
 
 
 # taken from exodus_core
-def _compile_signatures(signatures):
+def _exodus_compile_signatures(signatures):
     """
     Compiles the regex associated to each signature, in order to speed up the trackers detection.
 
@@ -161,7 +162,7 @@ def _compile_signatures(signatures):
 
 
 # taken from exodus_core
-def load_trackers_signatures():
+def load_exodus_trackers_signatures():
     """
     Load trackers signatures from the official Exodus database.
 
@@ -178,7 +179,7 @@ def load_trackers_signatures():
             )
         )
     logging.debug('{} trackers signatures loaded'.format(len(signatures)))
-    return signatures, _compile_signatures(signatures)
+    return signatures, scanner._exodus_compile_signatures(signatures)
 
 
 def scan_binary(apkfile, extract_signatures=None):
@@ -514,7 +515,7 @@ def main():
 
     # Parse command line...
     parser = ArgumentParser(
-        usage="%(prog)s [options] [APPID[:VERCODE] path/to.apk ...]"
+        usage="%(prog)s [options] [(APPID[:VERCODE] | path/to.apk) ...]"
     )
     common.setup_global_opts(parser)
     parser.add_argument("appid", nargs='*', help=_("application ID with optional versionCode in the form APPID[:VERCODE]"))
@@ -544,12 +545,12 @@ def main():
 
     exodus = []
     if options.exodus:
-        exodus = load_trackers_signatures()
+        exodus = load_exodus_trackers_signatures()
 
     appids = []
     for apk in options.appid:
         if os.path.isfile(apk):
-            count = scan_binary(apk, exodus)
+            count = scanner.scan_binary(apk, exodus)
             if count > 0:
                 logging.warning(
                     _('Scanner found {count} problems in {apk}:').format(
@@ -564,6 +565,7 @@ def main():
         return
 
     # Read all app and srclib metadata
+
     allapps = metadata.read_metadata()
     apps = common.read_app_args(appids, allapps, True)
 
