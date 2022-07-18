@@ -198,6 +198,7 @@ def scan_binary(apkfile, extract_signatures=None):
         def _detect_tracker(sig, tracker, class_list):
             for clazz in class_list:
                 if sig.search(clazz):
+                    logging.debug("Found tracker, class {} matching {}".format(clazz, tracker.code_signature))
                     return tracker
             return None
 
@@ -211,8 +212,6 @@ def scan_binary(apkfile, extract_signatures=None):
                 results.append(res)
 
         trackers = [t for t in results if t is not None]
-        for tracker in trackers:
-            logging.debug("Found tracker {}".format(tracker.code_signature))
         problems += len(trackers)
 
     if problems:
