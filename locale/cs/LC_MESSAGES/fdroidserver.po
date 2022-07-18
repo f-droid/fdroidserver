@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: fdroidserver 1.0.0-95-gd7af22b\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2022-02-15 20:04+0100\n"
-"PO-Revision-Date: 2022-07-17 12:26+0000\n"
+"PO-Revision-Date: 2022-07-19 17:13+0000\n"
 "Last-Translator: Fjuro <fjuro@seznam.cz>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/f-droid/fdroidserver/cs/>\n"
 "Language: cs\n"
@@ -851,65 +851,65 @@ msgstr "Soubor zmizel při jeho zpracování: {path}"
 #: ../fdroidserver/checkupdates.py ../fdroidserver/scanner.py
 #: ../fdroidserver/install.py
 msgid "Finished"
-msgstr ""
+msgstr "Dokončeno"
 
 #: ../fdroidserver/lint.py
 msgid "Flattr donation methods belong in the FlattrID flag"
-msgstr ""
+msgstr "Metody darování Flattr patří do příznaku FlattrID"
 
 #: ../fdroidserver/lint.py
 msgid "Flattr donation methods belong in the FlattrID: field"
-msgstr ""
+msgstr "Metody darování Flattr patří do pole FlattrID:"
 
 #: ../fdroidserver/lint.py
 msgid "Forbidden HTML tags"
-msgstr ""
+msgstr "Zakázané značky HTML"
 
 #: ../fdroidserver/build.py
 msgid "Force build of disabled apps, and carries on regardless of scan problems. Only allowed in test mode."
-msgstr ""
+msgstr "Vynutí sestavení zakázaných aplikací a pokračuje bez ohledu na problémy se skenováním. Povoleno pouze v testovacím režimu."
 
 #: ../fdroidserver/build.py
 #, python-brace-format
 msgid "Force halting build after {0} sec timeout!"
-msgstr ""
+msgstr "Vynutit zastavení sestavování po uplynutí časového limitu {0} sekund!"
 
 #: ../fdroidserver/scanner.py
 msgid "Force scan of disabled apps and builds."
-msgstr ""
+msgstr "Vynutit kontrolu zakázaných aplikací a sestavení."
 
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Found \"{path}\" graphic without metadata for app \"{name}\"!"
-msgstr ""
+msgstr "Nalezena grafika „{path}“ bez metadat u aplikace „{name}“!"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Found bad funding file \"{path}\" for \"{name}\":"
-msgstr ""
+msgstr "Nalezeno špatné financování souboru „{path}“ pro „{name}“:"
 
 #: ../fdroidserver/common.py ../fdroidserver/metadata.py
 msgid "Found invalid appids in arguments"
-msgstr ""
+msgstr "V argumentech nalezena neplatná id aplikací"
 
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
 #: ../fdroidserver/common.py
 msgid "Found invalid versionCodes for some apps"
-msgstr ""
+msgstr "U některých aplikací nalezeny neplatné versionCodes"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Found multiple JAR Signature Block Files in {path}"
-msgstr ""
+msgstr "V {path} nalezeno několik podpisových bloků JAR"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Found multiple metadata files for {appid}"
-msgstr ""
+msgstr "Nalezeno několik souborů metadat pro {appid}"
 
 #: ../fdroidserver/index.py
 msgid "Found multiple signing certificates for repository."
-msgstr ""
+msgstr "Nalezeno více podpisových certifikátů pro repozitář."
 
 #: ../fdroidserver/update.py
 #, python-brace-format
