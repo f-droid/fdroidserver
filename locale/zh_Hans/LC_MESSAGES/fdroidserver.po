@@ -24,7 +24,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2022-02-15 20:04+0100\n"
 "PO-Revision-Date: 2022-07-19 17:13+0000\n"
-"Last-Translator: Yang Yulin <yylteam@icloud.com>\n"
+"Last-Translator: JY3 <GeeyunJY3@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/f-droid/fdroidserver/zh_Hans/>\n"
 "Language: zh_Hans\n"
 "MIME-Version: 1.0\n"
@@ -2864,7 +2864,7 @@ msgstr ""
 #: ../fdroidserver/nightly.py
 #, python-brace-format
 msgid "{path} does not exist!  Create it by running:"
-msgstr ""
+msgstr "{path} 不存在！通过运行以下命令创建它："
 
 #: ../fdroidserver/update.py
 #, python-brace-format
