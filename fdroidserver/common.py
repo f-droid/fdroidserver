@@ -960,11 +960,6 @@ def read_app_args(appid_versionCode_pairs, allow_version_codes=False, sort_by_ti
         if appid in vercodes:
             apps[appid] = app
 
-    if len(apps) != len(vercodes):
-        for p in vercodes:
-            if p not in allapps:
-                logging.critical(_("No such package: %s") % p)
-        raise FDroidException(_("Found invalid appids in arguments"))
     if not apps:
         raise FDroidException(_("No packages specified"))
 
