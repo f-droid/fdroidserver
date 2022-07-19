@@ -545,7 +545,7 @@ def read_srclibs():
         srclibs[metadatapath.stem] = parse_yaml_srclib(metadatapath)
 
 
-def read_metadata(appids={}, sort_by_time=False):
+def read_metadata(appid_to_vercode={}, sort_by_time=False):
     """Return a list of App instances sorted newest first.
 
     This reads all of the metadata files in a 'data' repository, then
@@ -553,7 +553,7 @@ def read_metadata(appids={}, sort_by_time=False):
     sorted based on creation time, newest first.  Most of the time,
     the newer files are the most interesting.
 
-    appids is a dict with appids a keys and versionCodes as values.
+    appid_to_vercode is a dict with appids a keys and versionCodes as values.
 
     """
     # Always read the srclibs before the apps, since they can use a srlib as
@@ -565,9 +565,8 @@ def read_metadata(appids={}, sort_by_time=False):
     for basedir in ('metadata', 'tmp'):
         Path(basedir).mkdir(exist_ok=True)
 
-    if appids:
-        vercodes = common.read_pkg_args(appids)
-        metadatafiles = common.get_metadata_files(vercodes)
+    if appid_to_vercode:
+        metadatafiles = common.get_metadata_files(appid_to_vercode)
     else:
         metadatafiles = list(Path('metadata').glob('*.yml')) + list(
             Path('.').glob('.fdroid.yml')
