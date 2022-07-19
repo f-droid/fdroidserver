@@ -17,13 +17,14 @@
 # shenzhui007 <12231252@bjtu.edu.cn>, 2022.
 # linsui <linsui@inbox.lv>, 2022.
 # YangYulin <yylteam@icloud.com>, 2022.
+# Yang Yulin <yylteam@icloud.com>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2022-02-15 20:04+0100\n"
-"PO-Revision-Date: 2022-07-17 12:26+0000\n"
-"Last-Translator: YangYulin <yylteam@icloud.com>\n"
+"PO-Revision-Date: 2022-07-19 17:13+0000\n"
+"Last-Translator: Yang Yulin <yylteam@icloud.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/f-droid/fdroidserver/zh_Hans/>\n"
 "Language: zh_Hans\n"
 "MIME-Version: 1.0\n"
@@ -1243,7 +1244,7 @@ msgstr "列出将被重新设定格式的文件 (dry run)"
 
 #: ../fdroidserver/lint.py
 msgid "Locale included in f-droid.org URL"
-msgstr ""
+msgstr "包含在 f-droid.org URL 中的区域设置"
 
 #: ../fdroidserver/build.py
 msgid "Make the build stop on exceptions"
@@ -1251,62 +1252,62 @@ msgstr "异常时中止编译"
 
 #: ../fdroidserver/index.py
 msgid "Malformed repository mirrors."
-msgstr ""
+msgstr "格式错误的存储库镜像。"
 
 #: ../fdroidserver/deploy.py
 msgid "Malformed serverwebroot line:"
-msgstr ""
+msgstr "格式错误的服务器网络根行："
 
 #: ../fdroidserver/mirror.py
 msgid "Mirror the full repo and archive, all file types."
-msgstr ""
+msgstr "镜像完整存储库和存档，所有文件类型。"
 
 #: ../fdroidserver/gpgsign.py
 msgid "Missing output directory"
-msgstr ""
+msgstr "缺少输出目录"
 
 #: ../fdroidserver/lint.py
 #, python-format
 msgid "Name '%s' is just the auto name - remove it"
-msgstr ""
+msgstr "名称 '%s' 只是自动名称 - 删除它"
 
 #: ../fdroidserver/common.py
 msgid "No 'config.yml' found, using defaults."
-msgstr ""
+msgstr "未找到“config.yml”，使用默认值。"
 
 #: ../fdroidserver/verify.py
 #, python-format
 msgid "No APK for package: %s"
-msgstr ""
+msgstr "没有 APK 安装包： %s"
 
 #: ../fdroidserver/common.py
 msgid "No Android SDK found!"
-msgstr ""
+msgstr "未找到 Android SDK！"
 
 #: ../fdroidserver/import.py
 msgid "No android or kivy project could be found. Specify --subdir?"
-msgstr ""
+msgstr "找不到 android 或 kivy 项目。指定 --subdir?"
 
 #: ../fdroidserver/install.py
 msgid "No attached devices found"
-msgstr ""
+msgstr "未找到连接的设备"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "No commit specified for {versionName} in {linedesc}"
-msgstr ""
+msgstr "在 {linedesc} 中没有为 {versionName} 指定提交"
 
 #: ../fdroidserver/common.py
 msgid "No config.yml found, using defaults."
-msgstr ""
+msgstr "未找到 config.yml，使用默认值。"
 
 #: ../fdroidserver/index.py
 msgid "No fingerprint in URL."
-msgstr ""
+msgstr "URL 中没有指纹。"
 
 #: ../fdroidserver/common.py
 msgid "No git submodules available"
-msgstr ""
+msgstr "没有可用的 git 子模块"
 
 #: ../fdroidserver/import.py
 msgid "No gradle project could be found. Specify --subdir?"
