@@ -1144,10 +1144,7 @@ def main():
             _get_tool()
         return
 
-    # Read all app and srclib metadata
-
-    allapps = metadata.read_metadata()
-    apps = common.read_app_args(appids, allapps, True)
+    apps = common.read_app_args(appids, allow_version_codes=True)
 
     build_dir = 'build'
     if not os.path.isdir(build_dir):

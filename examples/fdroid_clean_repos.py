@@ -24,9 +24,9 @@ def main():
     )
     metadata.add_metadata_arguments(parser)
     options = common.parse_args(parser)
-    pkgs = common.read_pkg_args(options.appid, True)
-    allapps = metadata.read_metadata(pkgs)
-    apps = common.read_app_args(options.appid, allapps, True)
+    apps = common.read_app_args(
+        options.appid, allow_version_codes=True, sort_by_time=True
+    )
     common.read_config()
 
     for appid, app in apps.items():

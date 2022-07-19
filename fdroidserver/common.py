@@ -939,7 +939,7 @@ def get_metadata_files(vercodes):
     return metadatafiles
 
 
-def read_app_args(appid_versionCode_pairs, allapps, allow_version_codes=False):
+def read_app_args(appid_versionCode_pairs, allow_version_codes=False, sort_by_time=False):
     """Build a list of App instances for processing.
 
     On top of what read_pkg_args does, this returns the whole app
@@ -950,6 +950,7 @@ def read_app_args(appid_versionCode_pairs, allapps, allow_version_codes=False):
 
     """
     vercodes = read_pkg_args(appid_versionCode_pairs, allow_version_codes)
+    allapps = fdroidserver.metadata.read_metadata(appid_versionCode_pairs, sort_by_time)
 
     if not vercodes:
         return allapps

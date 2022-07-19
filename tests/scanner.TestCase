@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 
-import collections
 import glob
 import inspect
 import logging
@@ -855,7 +854,7 @@ class Test_main(unittest.TestCase):
 
             self.exit_func.assert_not_called()
             self.read_app_args_func.assert_called_once_with(
-                ['com.example.app'], collections.OrderedDict(), True
+                ['com.example.app'], allow_version_codes=True
             )
             self.scan_binary_func.assert_not_called()
 
