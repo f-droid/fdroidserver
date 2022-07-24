@@ -10,20 +10,21 @@
 # mondstern <mondstern@snopyta.org>, 2021.
 # Germe the fur star <FOSSgerme.deb@tuta.io>, 2021.
 # Iago <iagrivmoa@gmail.com>, 2022.
+# Iago <translate@delthia.com>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2022-02-15 20:04+0100\n"
-"PO-Revision-Date: 2022-06-21 17:33+0000\n"
-"Last-Translator: Iago <iagrivmoa@gmail.com>\n"
+"PO-Revision-Date: 2022-07-25 10:24+0000\n"
+"Last-Translator: Iago <translate@delthia.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/f-droid/fdroidserver/es/>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.13.1-dev\n"
+"X-Generator: Weblate 4.14-dev\n"
 
 #: ../fdroidserver/common.py
 msgid ""
@@ -338,9 +339,9 @@ msgid "Android SDK tool {cmd} found!"
 msgstr "¡Se encontró la herramienta de desarrollo (SDK) {cmd}!"
 
 #: ../fdroidserver/common.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Android SDK tool {cmd} not found!"
-msgstr "¡Se encontró la herramienta de desarrollo (SDK) {cmd}!"
+msgstr "¡No se encontró la herramienta {cmd} del SDK de Android!"
 
 #. Translators: "build-tools" is the file name of a package from
 #. Google, it is part of the Android SDK. So it probably shouldn't be
@@ -420,7 +421,7 @@ msgstr "Repositorio creado en \"%s\" con esta configuración:"
 
 #: ../fdroidserver/checkupdates.py
 msgid "Can't auto-update app with no CurrentVersionCode"
-msgstr ""
+msgstr "No se puede actualizar automáticamente, app sin CurrentVersionCode"
 
 #: ../fdroidserver/build.py
 msgid "Can't build due to {} error while scanning"
@@ -1035,12 +1036,12 @@ msgstr "Incluir en el espejo los archivos tarball de código fuente"
 #: ../fdroidserver/metadata.py
 #, python-format
 msgid "Including metadata from %s@%s"
-msgstr ""
+msgstr "Incluyendo metadatos de %s@%s"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Including metadata from {path}"
-msgstr ""
+msgstr "Incluyendo metadatos de {path}"
 
 #: ../fdroidserver/common.py
 msgid "Initialising submodules"
@@ -1147,7 +1148,7 @@ msgstr "Nombre no válido para archivo publicado: %s"
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Invalid ndk: entry in build: \"{ndk}\""
-msgstr ""
+msgstr "Ndk no válido: entrada en paquete: \"{ndk}\""
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -1237,9 +1238,8 @@ msgid "List files that would be reformatted"
 msgstr "Lista de archivos que se reformatearán"
 
 #: ../fdroidserver/rewritemeta.py
-#, fuzzy
 msgid "List files that would be reformatted (dry run)"
-msgstr "Lista de archivos que se reformatearán"
+msgstr "Lista de archivos que se reformatearán (ejecución en seco)"
 
 #: ../fdroidserver/lint.py
 msgid "Locale included in f-droid.org URL"
@@ -1275,9 +1275,9 @@ msgid "No 'config.yml' found, using defaults."
 msgstr "No se encontró 'config.yml', se usarán los valores predeterminados."
 
 #: ../fdroidserver/verify.py
-#, fuzzy, python-format
+#, python-format
 msgid "No APK for package: %s"
-msgstr "No existe tal paquete: %s"
+msgstr "No existe APK para tal paquete: %s"
 
 #: ../fdroidserver/common.py
 msgid "No Android SDK found!"
@@ -1321,9 +1321,9 @@ msgid "No matching tags found"
 msgstr "No se encontraron etiquetas coincidentes"
 
 #: ../fdroidserver/update.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "No minimum SDK version found in {0}, using default (3)."
-msgstr "No se encontró 'config.yml'. Se usarán los valores predeterminados."
+msgstr "No se encontró una versión de SDK mínima en {0}, utilizando el valor por defecto (3)."
 
 #: ../fdroidserver/lint.py
 msgid "No need to specify that the app is Free Software"
@@ -1603,7 +1603,7 @@ msgstr "Cambiar el nombre de archivos APK que no coinciden con el formato packag
 
 #: ../fdroidserver/checkupdates.py
 msgid "RepoTrunk update mode only makes sense in git-svn repositories"
-msgstr ""
+msgstr "El modo de actualización RepoTrunk solo tiene sentido en repositorios git-svn"
 
 #: ../fdroidserver/update.py
 msgid "Report on build data status"
@@ -1741,7 +1741,7 @@ msgstr "¡Ignorando '{apkfilename}' por firma no válida!"
 #: ../fdroidserver/index.py
 #, python-format
 msgid "Skipping GitLab Pages mirror because the repo is too large (>%.2fGB)!"
-msgstr ""
+msgstr "Saltando el mirror de GitLab Pages porque el repositorio es demasiado grande (¡>%.2fGB!)"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -2493,7 +2493,7 @@ msgstr "cadena de opciones %(option)r no válida: tiene que comenzar por un car�
 #: ../fdroidserver/checkupdates.py
 #, python-brace-format
 msgid "latest build recipe is newer: old vercode={old}, new vercode={new}"
-msgstr ""
+msgstr "la última receta de empaquetado es más nueva: vercode={old}, nuevo vercode={new}"
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
