@@ -1579,7 +1579,7 @@ def retrieve_string(app_dir, string, xmlfiles=None):
             continue
         try:
             xml = parse_xml(path)
-        except XMLElementTree.ParseError:
+        except (XMLElementTree.ParseError, ValueError):
             logging.warning(_("Problem with xml at '{path}'").format(path=path))
             continue
         element = xml.find('string[@name="' + name + '"]')
@@ -1625,7 +1625,7 @@ def fetch_real_name(app_dir, flavours):
         logging.debug("fetch_real_name: Checking manifest at " + path)
         try:
             xml = parse_xml(path)
-        except XMLElementTree.ParseError:
+        except (XMLElementTree.ParseError, ValueError):
             logging.warning(_("Problem with xml at '{path}'").format(path=path))
             continue
         app = xml.find('application')
@@ -1846,7 +1846,7 @@ def parse_androidmanifests(paths, app):
         else:
             try:
                 xml = parse_xml(path)
-            except Exception:
+            except (XMLElementTree.ParseError, ValueError):
                 logging.warning(_("Problem with xml at '{path}'").format(path=path))
                 continue
             if "package" in xml.attrib:
