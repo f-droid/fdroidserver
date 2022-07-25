@@ -4090,6 +4090,7 @@ def calculate_math_string(expr):
         ast.Mult: operator.mul,
         ast.Sub: operator.sub,
         ast.USub: operator.neg,
+        ast.Pow: operator.pow,
     }
 
     def execute_ast(node):
