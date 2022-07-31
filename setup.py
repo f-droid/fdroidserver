@@ -80,7 +80,6 @@ setup(
     url='https://f-droid.org',
     license='AGPL-3.0',
     packages=['fdroidserver', 'fdroidserver.asynchronousfilereader'],
-    scripts=['makebuildserver'],
     entry_points={'console_scripts': ['fdroid=fdroidserver.__main__:main']},
     data_files=get_data_files(),
     python_requires='>=3.9',
