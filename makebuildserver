@@ -133,7 +133,7 @@ elif os.path.exists('makebs.config.py'):
     # this is the old name for the config file
     exec(compile(open('makebs.config.py').read(), 'makebs.config.py', 'exec'), config)
 if '__builtins__' in config:
-    del(config['__builtins__'])  # added by compile/exec
+    del config['__builtins__']  # added by compile/exec
 logging.debug("makebuildserver.config.py parsed -> %s", json.dumps(config, indent=4, sort_keys=True))
 if config['basebox'] == BASEBOX_DEFAULT and 'basebox_version' not in config:
     config['basebox_version'] = BASEBOX_VERSION_DEFAULT

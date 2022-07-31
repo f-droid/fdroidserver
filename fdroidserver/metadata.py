@@ -816,7 +816,7 @@ def parse_yaml_metadata(mf, app):
                                   "metadata because it is deprecated.")
                                 .format(field=deprecated_field,
                                         metapath=mf.name))
-                del(yamldata[deprecated_field])
+                del yamldata[deprecated_field]
 
         if yamldata.get('Builds', None):
             for build in yamldata.get('Builds', []):
