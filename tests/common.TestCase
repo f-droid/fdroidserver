@@ -1168,6 +1168,17 @@ class CommonTest(unittest.TestCase):
         self.assertEqual(('0.3.10', '29', 'dev.patrickgold.florisboard'),
                          fdroidserver.common.parse_androidmanifests(paths, app))
 
+        app = fdroidserver.metadata.App()
+        app.id = 'com.ubergeek42.WeechatAndroid'
+        paths = [
+            os.path.join('source-files', 'com.ubergeek42.WeechatAndroid', 'app', 'build.gradle.kts'),
+            os.path.join('source-files', 'com.ubergeek42.WeechatAndroid', 'app', 'src', 'main', 'res', 'values', 'strings.xml'),
+        ]
+        for path in paths:
+            self.assertTrue(os.path.isfile(path))
+        self.assertEqual(('1.8.1', '1_08_01', None),
+                         fdroidserver.common.parse_androidmanifests(paths, app))
+
     def test_parse_androidmanifests_ignore(self):
         app = fdroidserver.metadata.App()
         app.id = 'org.fdroid.fdroid'

@@ -1579,7 +1579,7 @@ def retrieve_string(app_dir, string, xmlfiles=None):
             continue
         try:
             xml = parse_xml(path)
-        except XMLElementTree.ParseError:
+        except (XMLElementTree.ParseError, ValueError):
             logging.warning(_("Problem with xml at '{path}'").format(path=path))
             continue
         element = xml.find('string[@name="' + name + '"]')
@@ -1625,7 +1625,7 @@ def fetch_real_name(app_dir, flavours):
         logging.debug("fetch_real_name: Checking manifest at " + path)
         try:
             xml = parse_xml(path)
-        except XMLElementTree.ParseError:
+        except (XMLElementTree.ParseError, ValueError):
             logging.warning(_("Problem with xml at '{path}'").format(path=path))
             continue
         app = xml.find('application')
@@ -1846,20 +1846,21 @@ def parse_androidmanifests(paths, app):
         else:
             try:
                 xml = parse_xml(path)
-                if "package" in xml.attrib:
-                    s = xml.attrib["package"]
-                    if app_matches_packagename(app, s):
-                        package = s
-                if XMLNS_ANDROID + "versionName" in xml.attrib:
-                    version = xml.attrib[XMLNS_ANDROID + "versionName"]
-                    base_dir = os.path.dirname(path)
-                    version = retrieve_string_singleline(base_dir, version)
-                if XMLNS_ANDROID + "versionCode" in xml.attrib:
-                    a = xml.attrib[XMLNS_ANDROID + "versionCode"]
-                    if string_is_integer(a):
-                        vercode = a
-            except Exception:
+            except (XMLElementTree.ParseError, ValueError):
                 logging.warning(_("Problem with xml at '{path}'").format(path=path))
+                continue
+            if "package" in xml.attrib:
+                s = xml.attrib["package"]
+                if app_matches_packagename(app, s):
+                    package = s
+            if XMLNS_ANDROID + "versionName" in xml.attrib:
+                version = xml.attrib[XMLNS_ANDROID + "versionName"]
+                base_dir = os.path.dirname(path)
+                version = retrieve_string_singleline(base_dir, version)
+            if XMLNS_ANDROID + "versionCode" in xml.attrib:
+                a = xml.attrib[XMLNS_ANDROID + "versionCode"]
+                if string_is_integer(a):
+                    vercode = a
 
         # Remember package name, may be defined separately from version+vercode
         if package is None:
