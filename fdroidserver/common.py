@@ -468,7 +468,7 @@ def read_config(opts=None):
                                   .format(key=k, configname=configname))
 
     for configname in confignames_to_delete:
-        del(config[configname])
+        del config[configname]
 
     return config
 
@@ -3656,7 +3656,7 @@ def compare_apks(apk1, apk2, tmp_dir, log_dir=None):
                             '--max-report-size', '12345678', '--max-diff-block-lines', '128',
                             '--html', htmlfile, '--text', textfile,
                             absapk1, absapk2]) != 0:
-            return("Failed to run diffoscope " + apk1)
+            return "Failed to run diffoscope " + apk1
 
     apk1dir = os.path.join(tmp_dir, apk_badchars.sub('_', apk1[0:-4]))  # trim .apk
     apk2dir = os.path.join(tmp_dir, apk_badchars.sub('_', apk2[0:-4]))  # trim .apk
@@ -3675,17 +3675,17 @@ def compare_apks(apk1, apk2, tmp_dir, log_dir=None):
     if set_command_in_config('apktool'):
         if subprocess.call([config['apktool'], 'd', absapk1, '--output', 'apktool'],
                            cwd=apk1dir) != 0:
-            return("Failed to run apktool " + apk1)
+            return "Failed to run apktool " + apk1
         if subprocess.call([config['apktool'], 'd', absapk2, '--output', 'apktool'],
                            cwd=apk2dir) != 0:
-            return("Failed to run apktool " + apk2)
+            return "Failed to run apktool " + apk2
 
     p = FDroidPopen(['diff', '-r', apk1dir, apk2dir], output=False)
     lines = p.output.splitlines()
     if len(lines) != 1 or 'META-INF' not in lines[0]:
         if set_command_in_config('meld'):
             p = FDroidPopen([config['meld'], apk1dir, apk2dir], output=False)
-        return("Unexpected diff output:\n" + p.output)
+        return "Unexpected diff output:\n" + p.output
 
     # since everything verifies, delete the comparison to keep cruft down
     shutil.rmtree(apk1dir)

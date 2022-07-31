@@ -319,7 +319,7 @@ class UpdateTest(unittest.TestCase):
                          repoapps['info.guardianproject.urzip']['localized']['en-US']['name'])
         self.assertIsNone(repoapps['obb.mainpatch.current'].get('Name'))
 
-        del(repoapps['info.guardianproject.urzip']['localized'])
+        del repoapps['info.guardianproject.urzip']['localized']
         fdroidserver.update.insert_missing_app_names_from_apks(repoapps, apks)
         self.assertEqual('urzip-πÇÇπÇÇ现代汉语通用字-български-عربي1234',
                          repoapps['info.guardianproject.urzip']['localized']['en-US']['name'])

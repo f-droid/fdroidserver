@@ -1017,7 +1017,7 @@ def v1_sort_packages(packages, fdroid_signing_key_fingerprints):
         if package.get('versionCode', None):
             versionCode = -int(package['versionCode'])
 
-        return(packageName, group, signer, versionCode)
+        return packageName, group, signer, versionCode
 
     packages.sort(key=v1_sort_keys)
 

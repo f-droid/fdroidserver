@@ -751,9 +751,9 @@ def insert_funding_yml_donation_links(apps):
                     app['OpenCollective'] = s
             if not app.get('Donate'):
                 if 'liberapay' in data:
-                    del(data['liberapay'])
+                    del data['liberapay']
                 if 'open_collective' in data:
-                    del(data['open_collective'])
+                    del data['open_collective']
                 # this tuple provides a preference ordering
                 for k in ('custom', 'github', 'patreon', 'community_bridge', 'ko_fi', 'issuehunt'):
                     v = data.get(k)
