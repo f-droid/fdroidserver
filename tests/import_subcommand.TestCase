@@ -15,15 +15,13 @@ from pathlib import Path
 import requests
 from testcommon import TmpCwd
 
-# work around the syntax error from: import fdroidserver.import
-import import_proxy
-
 localmodule = Path(__file__).resolve().parent.parent
 print('localmodule: ' + str(localmodule))
 if localmodule not in sys.path:
     sys.path.insert(0, str(localmodule))
 
 import fdroidserver.common
+import fdroidserver.import_subcommand
 import fdroidserver.metadata
 
 
@@ -37,6 +35,8 @@ class ImportTest(unittest.TestCase):
         self.tmpdir.mkdir(exist_ok=True)
         # TODO: Python3.6: Accepts a path-like object.
         os.chdir(str(self.basedir))
+        fdroidserver.import_subcommand.options = mock.Mock()
+        fdroidserver.import_subcommand.options.rev = None
 
     def test_import_gitlab(self):
         # FDroidPopen needs some config to work
@@ -52,7 +52,7 @@ class ImportTest(unittest.TestCase):
             return
 
         app = fdroidserver.common.get_app_from_url(url)
-        import_proxy.clone_to_tmp_dir(app)
+        fdroidserver.import_subcommand.clone_to_tmp_dir(app)
         self.assertEqual(app.RepoType, 'git')
         self.assertEqual(app.Repo, 'https://gitlab.com/fdroid/ci-test-app.git')
 
@@ -103,7 +103,7 @@ class ImportTest(unittest.TestCase):
                 ), mock.patch(
                     'shutil.rmtree', lambda a, onerror=None: None
                 ):
-                    build_dir = import_proxy.clone_to_tmp_dir(app)
+                    build_dir = fdroidserver.import_subcommand.clone_to_tmp_dir(app)
                 self.assertEqual('git', app.RepoType)
                 self.assertEqual(url, app.Repo)
                 self.assertEqual(url, app.SourceCode)

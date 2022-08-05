@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 #
-# import.py - part of the FDroid server tools
+# import_subcommand.py - part of the FDroid server tools
 # Copyright (C) 2010-13, Ciaran Gultnieks, ciaran@ciarang.com
 # Copyright (C) 2013-2014 Daniel Martí <mvdan@mvdan.cc>
 #
@@ -40,9 +40,6 @@ from .exception import FDroidException
 
 config = None
 options = None
-
-
-# WARNING!  This cannot be imported as a Python module, so reuseable functions need to go into common.py!
 
 
 def clone_to_tmp_dir(app):

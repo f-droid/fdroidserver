@@ -567,8 +567,7 @@ include tests/gnupghome/secring.gpg
 include tests/gnupghome/trustdb.gpg
 include tests/gradle-maven-blocks.yaml
 include tests/gradle-release-checksums.py
-include tests/import_proxy.py
-include tests/import.TestCase
+include tests/import_subcommand.TestCase
 include tests/index.TestCase
 include tests/init.TestCase
 include tests/install.TestCase
