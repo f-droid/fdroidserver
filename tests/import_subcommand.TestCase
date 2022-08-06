@@ -51,7 +51,7 @@ class ImportTest(unittest.TestCase):
             print('Skipping ImportTest!')
             return
 
-        app = fdroidserver.common.get_app_from_url(url)
+        app = fdroidserver.import_subcommand.get_app_from_url(url)
         fdroidserver.import_subcommand.clone_to_tmp_dir(app)
         self.assertEqual(app.RepoType, 'git')
         self.assertEqual(app.Repo, 'https://gitlab.com/fdroid/ci-test-app.git')
@@ -88,13 +88,13 @@ class ImportTest(unittest.TestCase):
                 # TODO: Python3.6: Accepts a path-like object.
                 shutil.rmtree(
                     str(tmp_importer),
-                    onerror=fdroidserver.common.handle_retree_error_on_windows,
+                    onerror=fdroidserver.import_subcommand.handle_retree_error_on_windows,
                 )
                 shutil.copytree(
                     str(self.basedir / 'source-files' / appid), str(tmp_importer)
                 )
 
-                app = fdroidserver.common.get_app_from_url(url)
+                app = fdroidserver.import_subcommand.get_app_from_url(url)
                 with mock.patch(
                     'fdroidserver.common.getvcs',
                     lambda a, b, c: fdroidserver.common.vcs(url, testdir),
@@ -118,6 +118,19 @@ class ImportTest(unittest.TestCase):
                 self.assertEqual(vn, versionName)
                 self.assertEqual(vc, versionCode)
                 self.assertEqual(appid, package)
+
+    def test_bad_urls(self):
+        for url in (
+            'asdf',
+            'file://thing.git',
+            'https:///github.com/my/project',
+            'git:///so/many/slashes',
+            'ssh:/notabug.org/missing/a/slash',
+            'git:notabug.org/missing/some/slashes',
+            'https//github.com/bar/baz',
+        ):
+            with self.assertRaises(ValueError):
+                fdroidserver.import_subcommand.get_app_from_url(url)
 
 
 if __name__ == "__main__":

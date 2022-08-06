@@ -45,8 +45,6 @@ import logging
 import hashlib
 import socket
 import base64
-import urllib.parse
-import urllib.request
 import yaml
 import zipfile
 import tempfile
@@ -1942,121 +1940,6 @@ def get_gradle_subdir(build_dir, paths):
         return first_gradle_dir
 
     return
-
-
-def getrepofrompage(url):
-    """Get the repo type and address from the given web page.
-
-    The page is scanned in a rather naive manner for 'git clone xxxx',
-    'hg clone xxxx', etc, and when one of these is found it's assumed
-    that's the information we want.  Returns repotype, address, or
-    None, reason
-
-    """
-    if not url.startswith('http'):
-        return (None, _('{url} does not start with "http"!'.format(url=url)))
-    req = urllib.request.urlopen(url)  # nosec B310 non-http URLs are filtered out
-    if req.getcode() != 200:
-        return (None, 'Unable to get ' + url + ' - return code ' + str(req.getcode()))
-    page = req.read().decode(req.headers.get_content_charset())
-
-    # Works for BitBucket
-    m = re.search('data-fetch-url="(.*)"', page)
-    if m is not None:
-        repo = m.group(1)
-
-        if repo.endswith('.git'):
-            return ('git', repo)
-
-        return ('hg', repo)
-
-    # Works for BitBucket (obsolete)
-    index = page.find('hg clone')
-    if index != -1:
-        repotype = 'hg'
-        repo = page[index + 9:]
-        index = repo.find('<')
-        if index == -1:
-            return (None, _("Error while getting repo address"))
-        repo = repo[:index]
-        repo = repo.split('"')[0]
-        return (repotype, repo)
-
-    # Works for BitBucket (obsolete)
-    index = page.find('git clone')
-    if index != -1:
-        repotype = 'git'
-        repo = page[index + 10:]
-        index = repo.find('<')
-        if index == -1:
-            return (None, _("Error while getting repo address"))
-        repo = repo[:index]
-        repo = repo.split('"')[0]
-        return (repotype, repo)
-
-    return (None, _("No information found.") + page)
-
-
-def get_app_from_url(url):
-    """Guess basic app metadata from the URL.
-
-    The URL must include a network hostname, unless it is an lp:,
-    file:, or git/ssh URL.  This throws ValueError on bad URLs to
-    match urlparse().
-
-    """
-    parsed = urllib.parse.urlparse(url)
-    invalid_url = False
-    if not parsed.scheme or not parsed.path:
-        invalid_url = True
-
-    app = fdroidserver.metadata.App()
-    app.Repo = url
-    if url.startswith('git://') or url.startswith('git@'):
-        app.RepoType = 'git'
-    elif parsed.netloc == 'github.com':
-        app.RepoType = 'git'
-        app.SourceCode = url
-        app.IssueTracker = url + '/issues'
-    elif parsed.netloc == 'gitlab.com' or parsed.netloc == 'framagit.org':
-        # git can be fussy with gitlab URLs unless they end in .git
-        if url.endswith('.git'):
-            url = url[:-4]
-        app.Repo = url + '.git'
-        app.RepoType = 'git'
-        app.SourceCode = url
-        app.IssueTracker = url + '/issues'
-    elif parsed.netloc == 'notabug.org':
-        if url.endswith('.git'):
-            url = url[:-4]
-        app.Repo = url + '.git'
-        app.RepoType = 'git'
-        app.SourceCode = url
-        app.IssueTracker = url + '/issues'
-    elif parsed.netloc == 'bitbucket.org':
-        if url.endswith('/'):
-            url = url[:-1]
-        app.SourceCode = url + '/src'
-        app.IssueTracker = url + '/issues'
-        # Figure out the repo type and adddress...
-        app.RepoType, app.Repo = getrepofrompage(url)
-    elif parsed.netloc == 'codeberg.org':
-        app.RepoType = 'git'
-        app.SourceCode = url
-        app.IssueTracker = url + '/issues'
-    elif url.startswith('https://') and url.endswith('.git'):
-        app.RepoType = 'git'
-
-    if not parsed.netloc and parsed.scheme in ('git', 'http', 'https', 'ssh'):
-        invalid_url = True
-
-    if invalid_url:
-        raise ValueError(_('"{url}" is not a valid URL!'.format(url=url)))
-
-    if not app.RepoType:
-        raise FDroidException("Unable to determine vcs type. " + app.Repo)
-
-    return app
 
 
 def parse_srclib_spec(spec):
@@ -4609,10 +4492,3 @@ NDKS = [
         "url": "https://dl.google.com/android/repository/android-ndk-r25b-linux.zip"
     }
 ]
-
-
-def handle_retree_error_on_windows(function, path, excinfo):
-    """Python can't remove a readonly file on Windows so chmod first."""
-    if function in (os.unlink, os.rmdir, os.remove) and excinfo[0] == PermissionError:
-        os.chmod(path, stat.S_IWRITE)
-        function(path)
