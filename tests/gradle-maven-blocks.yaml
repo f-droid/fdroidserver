@@ -776,3 +776,5 @@
 - ' maven{ url ''https://maven.aliyun.com/repository/public''}'
 - ' maven{url "https://jitpack.io"}'
 - ' maven{url "https://plugins.gradle.org/m2/"}'
+- ' maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")'
+- ' maven(url = "https://maven.pkg.jetbrains.space/public/p/kotlinx-html/maven")'
