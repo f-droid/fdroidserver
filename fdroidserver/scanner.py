@@ -101,6 +101,7 @@ def get_gradle_compile_commands(build):
                        'provided',
                        'apk',
                        'implementation',
+                       'classpath',
                        'api',
                        'compileOnly',
                        'runtimeOnly']
