@@ -34,39 +34,6 @@ options = None
 config = None
 
 
-class hashabledict(OrderedDict):
-    def __key(self):
-        return tuple((k, self[k]) for k in sorted(self))
-
-    def __hash__(self):
-        try:
-            return hash(self.__key())
-        except TypeError as e:
-            print(self.__key())
-            raise e
-
-    def __eq__(self, other):
-        return self.__key() == other.__key()
-
-    def __lt__(self, other):
-        return self.__key() < other.__key()
-
-    def __qt__(self, other):
-        return self.__key() > other.__key()
-
-
-class Decoder(json.JSONDecoder):
-    def __init__(self, **kwargs):
-        json.JSONDecoder.__init__(self, **kwargs)
-        self.parse_array = self.JSONArray
-        # Use the python implemenation of the scanner
-        self.scan_once = json.scanner.py_make_scanner(self)
-
-    def JSONArray(self, s_and_end, scan_once, **kwargs):
-        values, end = json.decoder.JSONArray(s_and_end, scan_once, **kwargs)
-        return set(values), end
-
-
 def _add_diffoscope_info(d):
     """Add diffoscope setup metadata to provided dict under 'diffoscope' key.
 
@@ -76,7 +43,7 @@ def _add_diffoscope_info(d):
     """
     try:
         import diffoscope
-        d['diffoscope'] = hashabledict()
+        d['diffoscope'] = dict()
         d['diffoscope']['VERSION'] = diffoscope.VERSION
 
         from diffoscope.comparators import ComparatorManager
@@ -89,7 +56,7 @@ def _add_diffoscope_info(d):
             for tool in external_tools
             if not tool_check_installed(tool)
         ]
-        d['diffoscope']['External-Tools-Required'] = tuple(external_tools)
+        d['diffoscope']['External-Tools-Required'] = external_tools
 
         from diffoscope.tools import OS_NAMES, get_current_os
         from diffoscope.external_tools import EXTERNAL_TOOLS
@@ -102,10 +69,12 @@ def _add_diffoscope_info(d):
                     tools.add(EXTERNAL_TOOLS[x][os_])
                 except KeyError:
                     pass
-            d['diffoscope']['Available-in-{}-packages'.format(OS_NAMES[os_])] = tuple(sorted(tools))
+            tools = sorted(tools)
+            d['diffoscope']['Available-in-{}-packages'.format(OS_NAMES[os_])] = tools
 
-        from diffoscope.tools import python_module_missing
-        d['diffoscope']['Missing-Python-Modules'] = tuple(sorted(python_module_missing.modules))
+        from diffoscope.tools import python_module_missing as pmm
+
+        d['diffoscope']['Missing-Python-Modules'] = sorted(pmm.modules)
     except ImportError:
         pass
 
@@ -118,6 +87,9 @@ def write_json_report(url, remote_apk, unsigned_apk, compare_result):
     ensure that there is only one report per file, even when run
     repeatedly.
 
+    The output is run through JSON to normalize things like tuples vs
+    lists.
+
     """
     jsonfile = unsigned_apk + '.json'
     if os.path.exists(jsonfile):
@@ -125,11 +97,11 @@ def write_json_report(url, remote_apk, unsigned_apk, compare_result):
             data = json.load(fp, object_pairs_hook=OrderedDict)
     else:
         data = OrderedDict()
-    output = hashabledict()
+    output = dict()
     _add_diffoscope_info(output)
     output['url'] = url
     for key, filename in (('local', unsigned_apk), ('remote', remote_apk)):
-        d = hashabledict()
+        d = dict()
         output[key] = d
         d['file'] = filename
         d['sha256'] = common.sha256sum(filename)
@@ -148,14 +120,22 @@ def write_json_report(url, remote_apk, unsigned_apk, compare_result):
         jsonfile = 'unsigned/verified.json'
         if os.path.exists(jsonfile):
             with open(jsonfile) as fp:
-                data = json.load(fp, cls=Decoder, object_pairs_hook=hashabledict)
+                data = json.load(fp)
         else:
             data = OrderedDict()
             data['packages'] = OrderedDict()
         packageName = output['local']['packageName']
+
         if packageName not in data['packages']:
-            data['packages'][packageName] = set()
-        data['packages'][packageName].add(output)
+            data['packages'][packageName] = []
+        found = False
+        output_dump = json.dumps(output, sort_keys=True)
+        for p in data['packages'][packageName]:
+            if output_dump == json.dumps(p, sort_keys=True):
+                found = True
+                break
+        if not found:
+            data['packages'][packageName].insert(0, json.loads(output_dump))
         with open(jsonfile, 'w') as fp:
             json.dump(data, fp, cls=common.Encoder, sort_keys=True)
 
