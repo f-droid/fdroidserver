@@ -2357,26 +2357,29 @@ class CommonTest(unittest.TestCase):
         )
 
     def test_vcs_git_latesttags(self):
-        vcs = fdroidserver.common.vcs_git(None, None)
-        popenmock = mock.Mock()
-        popenmock.output = """
- (HEAD, tag: 8.9.5, origin/master, origin/HEAD, master)
- (tag: 8.9.4)
- (tag: 8.9.3, tag: 8,9,3)
- (tag: 8.9.3b)
- (tag: awesome_release)
- (origin/feature/cast)
- (tag: 8.6.3)
-"""
-        with mock.patch(
-            'fdroidserver.common.FDroidPopen', lambda a, **b: popenmock
-        ) as _ignored, mock.patch(
-            'fdroidserver.common.vcs_git.checkrepo'
-        ) as _ignored:
-            _ignored  # silence the linters
-            tags = vcs.latesttags()
-            self.assertEqual(tags, ['8.9.5', '8.9.4', '8.9.3', '8,9,3',
-                                    '8.9.3b', 'awesome_release', '8.6.3'])
+        tags = [
+            "1.1.1",
+            "2.2.2",
+            "v3.0",
+            "0.0.4",
+            "0.5.0-beta",
+            "666(6)",
+            "seven",
+        ]
+        with tempfile.TemporaryDirectory() as tmpdir, TmpCwd(tmpdir):
+            # TODO: Python3.6: Should accept path-like
+            repo = git.Repo.init(str(Path.cwd()))
+            f = Path("test")
+            date = 10**9
+            for tag in tags:
+                date += 1
+                f.write_text(tag)
+                repo.index.add([str(f)])
+                repo.index.commit(tag, commit_date=str(date) + " +0000")
+                repo.create_tag(tag)
+
+            vcs = fdroidserver.common.vcs_git(None, Path.cwd())
+            self.assertEqual(vcs.latesttags(), tags[::-1])
 
     def test_get_release_filename(self):
         app = fdroidserver.metadata.App()
