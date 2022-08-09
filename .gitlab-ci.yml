@@ -249,6 +249,7 @@ black:
         fdroidserver/readmeta.py
         fdroidserver/signindex.py
         fdroidserver/tail.py
+        fdroidserver/verify.py
         setup.py
         tests/build.TestCase
         tests/deploy.TestCase
@@ -263,6 +264,7 @@ black:
         tests/ndk-release-checksums.py
         tests/rewritemeta.TestCase
         tests/signindex.TestCase
+        tests/verify.TestCase
 
 
 fedora_latest:

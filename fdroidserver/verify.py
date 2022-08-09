@@ -43,23 +43,25 @@ def _add_diffoscope_info(d):
     """
     try:
         import diffoscope
+
         d['diffoscope'] = dict()
         d['diffoscope']['VERSION'] = diffoscope.VERSION
 
         from diffoscope.comparators import ComparatorManager
+
         ComparatorManager().reload()
 
         from diffoscope.tools import tool_check_installed, tool_required
+
         external_tools = sorted(tool_required.all)
         external_tools = [
-            tool
-            for tool in external_tools
-            if not tool_check_installed(tool)
+            tool for tool in external_tools if not tool_check_installed(tool)
         ]
         d['diffoscope']['External-Tools-Required'] = external_tools
 
         from diffoscope.tools import OS_NAMES, get_current_os
         from diffoscope.external_tools import EXTERNAL_TOOLS
+
         current_os = get_current_os()
         os_list = [current_os] if (current_os in OS_NAMES) else iter(OS_NAMES)
         for os_ in os_list:
@@ -106,13 +108,16 @@ def write_json_report(url, remote_apk, unsigned_apk, compare_result):
         d['file'] = filename
         d['sha256'] = common.sha256sum(filename)
         d['timestamp'] = os.stat(filename).st_ctime
-        d['packageName'], d['versionCode'], d['versionName'] = common.get_apk_id(filename)
+        d['packageName'], d['versionCode'], d['versionName'] = common.get_apk_id(
+            filename
+        )
     if compare_result:
         output['verified'] = False
         output['result'] = compare_result
     else:
         output['verified'] = True
-    data[str(output['local']['timestamp'])] = output  # str makes better dict keys than float
+    # str makes better dict keys than float
+    data[str(output['local']['timestamp'])] = output
     with open(jsonfile, 'w') as fp:
         json.dump(data, fp, sort_keys=True)
 
@@ -145,13 +150,27 @@ def main():
     global options, config
 
     # Parse command line...
-    parser = ArgumentParser(usage="%(prog)s [options] [APPID[:VERCODE] [APPID[:VERCODE] ...]]")
+    parser = ArgumentParser(
+        usage="%(prog)s [options] [APPID[:VERCODE] [APPID[:VERCODE] ...]]"
+    )
     common.setup_global_opts(parser)
-    parser.add_argument("appid", nargs='*', help=_("application ID with optional versionCode in the form APPID[:VERCODE]"))
-    parser.add_argument("--reuse-remote-apk", action="store_true", default=False,
-                        help=_("Verify against locally cached copy rather than redownloading."))
-    parser.add_argument("--output-json", action="store_true", default=False,
-                        help=_("Output JSON report to file named after APK."))
+    parser.add_argument(
+        "appid",
+        nargs='*',
+        help=_("application ID with optional versionCode in the form APPID[:VERCODE]"),
+    )
+    parser.add_argument(
+        "--reuse-remote-apk",
+        action="store_true",
+        default=False,
+        help=_("Verify against locally cached copy rather than redownloading."),
+    )
+    parser.add_argument(
+        "--output-json",
+        action="store_true",
+        default=False,
+        help=_("Output JSON report to file named after APK."),
+    )
     options = parser.parse_args()
 
     config = common.read_config(options)
@@ -198,10 +217,15 @@ def main():
                     net.download_file(url, dldir=tmp_dir)
                 except requests.exceptions.HTTPError:
                     try:
-                        net.download_file(url.replace('/repo', '/archive'), dldir=tmp_dir)
+                        net.download_file(
+                            url.replace('/repo', '/archive'), dldir=tmp_dir
+                        )
                     except requests.exceptions.HTTPError as e:
-                        raise FDroidException(_('Downloading {url} failed. {error}')
-                                              .format(url=url, error=e)) from e
+                        raise FDroidException(
+                            _('Downloading {url} failed. {error}').format(
+                                url=url, error=e
+                            )
+                        ) from e
 
             unsigned_apk = os.path.join(unsigned_dir, apkfilename)
             compare_result = common.verify_apks(remote_apk, unsigned_apk, tmp_dir)
