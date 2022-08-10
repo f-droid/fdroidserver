@@ -11,13 +11,14 @@
 # Germe the fur star <FOSSgerme.deb@tuta.io>, 2021.
 # Iago <iagrivmoa@gmail.com>, 2022.
 # Iago <translate@delthia.com>, 2022.
+# Jaime Marquínez Ferrándiz <weblate@jregistros.fastmail.net>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2022-02-15 20:04+0100\n"
-"PO-Revision-Date: 2022-07-25 10:24+0000\n"
-"Last-Translator: Iago <translate@delthia.com>\n"
+"PO-Revision-Date: 2022-08-11 20:47+0000\n"
+"Last-Translator: Jaime Marquínez Ferrándiz <weblate@jregistros.fastmail.net>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/f-droid/fdroidserver/es/>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
@@ -1089,9 +1090,9 @@ msgid "Invalid AutoUpdateMode: {mode}"
 msgstr "ModoActualizaciónAutomática Inválido: {mode}"
 
 #: ../fdroidserver/checkupdates.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Invalid UpdateCheckMode: {mode}"
-msgstr "Nombre de paquete no válido {0}"
+msgstr "UpdateCheckMode no válido {mode}"
 
 #: ../fdroidserver/lint.py ../fdroidserver/checkupdates.py
 #, python-brace-format
@@ -1214,7 +1215,7 @@ msgstr "Javascript en atributos src de HTML src"
 #: ../fdroidserver/build.py
 #, fuzzy, python-brace-format
 msgid "Keeping failed build \"{apkfilename}\""
-msgstr "Falló lectura de minSdkVersion: \"{apkfilename}\""
+msgstr "Conservando la compilación fallida \"{apkfilename}\""
 
 #: ../fdroidserver/init.py
 msgid "Keystore for signing key:\t"
@@ -1688,7 +1689,7 @@ msgstr[1] "El escáner encontró {} problemas"
 #: ../fdroidserver/scanner.py
 #, fuzzy
 msgid "Scanning APK with apkanalyzer for known non-free classes."
-msgstr "Escaneando los APK(s) resultantes en busca de clases no libres conocidas."
+msgstr "Escaneando el APK con apkanalyzer en busca de clases no libres conocidas."
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -1923,7 +1924,7 @@ msgstr "¡Etiqueta de licencia inesperada \"{}\"! Use solo etiquetas de licencia
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Unexpected symlink target: {link} -> {target}"
-msgstr ""
+msgstr "Destino del enlace simbólico inesperado: {link} ->{target}"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
@@ -2051,7 +2052,7 @@ msgstr "Ruta scanignore sin uso: %s"
 #: ../fdroidserver/common.py
 #, python-format
 msgid "Unzipping to %s"
-msgstr ""
+msgstr "Descomprimiendo a %s"
 
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Update repo information for new packages"
@@ -2237,9 +2238,8 @@ msgid "ambiguous option: %s (%s?)"
 msgstr "opción ambigua: %s (%s?)"
 
 #: ../fdroidserver/common.py
-#, fuzzy
 msgid "apksigner not found! Cannot sign or verify modern APKs"
-msgstr "¡Se requiere apksigner para firmar pero no se encontró!"
+msgstr "¡No se encontró apksigner! No se pueden firmar o verificar los APKs modernos"
 
 #: ../fdroidserver/common.py
 msgid "apksigner not found, it's required for signing!"
@@ -2660,9 +2660,9 @@ msgid "s3cmd sync indexes {path} to {url} and delete"
 msgstr "s3cmd sync indexa {path} a {url} y elimina"
 
 #: ../fdroidserver/scanner.py
-#, python-format
+#, fuzzy, python-format
 msgid "scanner not cleanly run apkanalyzer: %s"
-msgstr ""
+msgstr "El escáner no ejecutó apkanalyzer adecuadamente: %s"
 
 #: ../fdroidserver/scanner.py
 msgid "shared library"
