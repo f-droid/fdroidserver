@@ -18,7 +18,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2022-02-15 20:04+0100\n"
 "PO-Revision-Date: 2022-08-11 20:47+0000\n"
-"Last-Translator: Jaime Marquínez Ferrándiz <weblate@jregistros.fastmail.net>\n"
+"Last-Translator: Iago <translate@delthia.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/f-droid/fdroidserver/es/>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
@@ -1815,7 +1815,7 @@ msgstr "El modo de actualización de etiquetas actualmente solo funciona para re
 
 #: ../fdroidserver/checkupdates.py
 msgid "Tags update mode used in git-svn, but the repo was not set up with tags"
-msgstr ""
+msgstr "El modo de actualización de etiquetas se utilizó en git-svn, pero el repositorio no se configuró con etiquetas"
 
 #: ../fdroidserver/build.py
 msgid "Test mode - put output in the tmp directory only, and always build, even if the output already exists."
