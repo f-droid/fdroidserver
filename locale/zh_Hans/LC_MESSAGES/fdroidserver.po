@@ -18,13 +18,14 @@
 # linsui <linsui@inbox.lv>, 2022.
 # YangYulin <yylteam@icloud.com>, 2022.
 # Yang Yulin <yylteam@icloud.com>, 2022.
+# yangyangdaji <1504305527@qq.com>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2022-02-15 20:04+0100\n"
-"PO-Revision-Date: 2022-07-30 07:00+0000\n"
-"Last-Translator: Yang Yulin <yylteam@icloud.com>\n"
+"PO-Revision-Date: 2022-08-11 20:47+0000\n"
+"Last-Translator: yangyangdaji <1504305527@qq.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/f-droid/fdroidserver/zh_Hans/>\n"
 "Language: zh_Hans\n"
 "MIME-Version: 1.0\n"
@@ -1328,11 +1329,11 @@ msgstr ""
 
 #: ../fdroidserver/lint.py
 msgid "No need to specify that the app is Free Software"
-msgstr ""
+msgstr "不需要说明该应用是自由软件"
 
 #: ../fdroidserver/lint.py
 msgid "No need to specify that the app is for Android"
-msgstr ""
+msgstr "不需要说明该应用是用于安卓的"
 
 #: ../fdroidserver/deploy.py
 msgid "No option set! Edit your config.yml to set at least one of these:"
