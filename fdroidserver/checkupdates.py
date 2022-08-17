@@ -55,7 +55,7 @@ def check_http(app):
     if urlver != '.':
         parsed = urllib.parse.urlparse(urlver)
         if not parsed.netloc or not parsed.scheme or parsed.scheme != 'https':
-            raise FDroidException(_('UpdateCheckData has invalid URL: {url}').format(url=urlcode))
+            raise FDroidException(_('UpdateCheckData has invalid URL: {url}').format(url=urlver))
 
     logging.debug("...requesting {0}".format(urlcode))
     req = urllib.request.Request(urlcode, None, headers=net.HEADERS)
