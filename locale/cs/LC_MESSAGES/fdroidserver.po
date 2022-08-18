@@ -3,13 +3,14 @@
 # mondstern <mondstern@snopyta.org>, 2021.
 # Petr Novák <nit.monkey@gmail.com>, 2021.
 # Fjuro <fjuro@seznam.cz>, 2022.
+# Filip Klopec <filipklopec@gmail.com>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 1.0.0-95-gd7af22b\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2022-02-15 20:04+0100\n"
-"PO-Revision-Date: 2022-07-22 02:58+0000\n"
-"Last-Translator: Fjuro <fjuro@seznam.cz>\n"
+"PO-Revision-Date: 2022-08-19 01:16+0000\n"
+"Last-Translator: Filip Klopec <filipklopec@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/f-droid/fdroidserver/cs/>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
@@ -914,11 +915,11 @@ msgstr "Nalezeno více podpisových certifikátů pro repozitář."
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Found multiple signing certificates in {path}"
-msgstr ""
+msgstr "Nalezeno více podpisových certifikátů v {path}"
 
 #: ../fdroidserver/index.py
 msgid "Found no signing certificates for repository."
-msgstr ""
+msgstr "Pro repozitář nenalezen žádný podpisový certifikát."
 
 #: ../fdroidserver/lint.py
 #, python-format
@@ -928,7 +929,7 @@ msgstr ""
 #: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "Found {apkfilename} at {url}"
-msgstr ""
+msgstr "Nalezen {apkfilename} na {url}"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
