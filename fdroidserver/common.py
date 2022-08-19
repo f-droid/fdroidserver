@@ -2445,13 +2445,19 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
 def getpaths_map(build_dir, globpaths):
     """Extend via globbing the paths from a field and return them as a map from original path to resulting paths."""
     paths = dict()
+    not_found_paths = []
     for p in globpaths:
         p = p.strip()
         full_path = os.path.join(build_dir, p)
         full_path = os.path.normpath(full_path)
         paths[p] = [r[len(build_dir) + 1:] for r in glob.glob(full_path)]
         if not paths[p]:
-            raise FDroidException("glob path '%s' did not match any files/dirs" % p)
+            not_found_paths.append(p)
+    if not_found_paths:
+        raise FDroidException(
+            "Some glob paths did not match any files/dirs:\n"
+            + "\n".join(not_found_paths)
+        )
     return paths
 
 
