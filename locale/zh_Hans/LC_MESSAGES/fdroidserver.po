@@ -24,8 +24,8 @@ msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2022-02-15 20:04+0100\n"
-"PO-Revision-Date: 2022-08-16 05:21+0000\n"
-"Last-Translator: Yang Yulin <yylteam@icloud.com>\n"
+"PO-Revision-Date: 2022-08-23 13:16+0000\n"
+"Last-Translator: linsui <linsui@inbox.lv>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/f-droid/fdroidserver/zh_Hans/>\n"
 "Language: zh_Hans\n"
 "MIME-Version: 1.0\n"
@@ -1567,24 +1567,24 @@ msgstr "读取全部元数据文件并退出"
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Reading '{config_file}'"
-msgstr ""
+msgstr "读取 '{config_file}'"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Reading minSdkVersion failed: \"{apkfilename}\""
-msgstr ""
+msgstr "读取 minSdkVersion 失败：\"{apkfilename}\""
 
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
 #. https://developer.android.com/guide/topics/manifest/manifest-element.html#vname
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Reading packageName/versionCode/versionName failed, APK invalid: '{apkfilename}'"
-msgstr ""
+msgstr "读取 packageName/versionCode/versionName 失败，APK 无效：'{apkfilename}'"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Reading {apkfilename} from cache"
-msgstr ""
+msgstr "从缓存读取 {apkfilename}"
 
 #: ../fdroidserver/stats.py
 msgid "Recalculate aggregate stats - use when changes have been made that would invalidate old cached data."
@@ -1592,12 +1592,12 @@ msgstr "重新计算聚合统计数据-当已经做出更改而导致旧的缓�
 
 #: ../fdroidserver/common.py
 msgid "Removing specified files"
-msgstr ""
+msgstr "删除指定文件"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Removing {path}\""
-msgstr ""
+msgstr "删除 {path}\""
 
 #: ../fdroidserver/update.py
 msgid "Rename APK files that do not match package.name_123.apk"
@@ -1605,7 +1605,7 @@ msgstr "重命名文件名不符合 package.name_123.apk 的 APK 文件"
 
 #: ../fdroidserver/checkupdates.py
 msgid "RepoTrunk update mode only makes sense in git-svn repositories"
-msgstr ""
+msgstr "RepoTrunk 更新模式仅对 git-svn 存储库有意义"
 
 #: ../fdroidserver/update.py
 msgid "Report on build data status"
@@ -1618,7 +1618,7 @@ msgstr "即使已有服务器看起来运行正常，请重置并创建一个全
 #: ../fdroidserver/nightly.py
 #, python-brace-format
 msgid "Resigning {apkfilename} with provided debug.keystore"
-msgstr ""
+msgstr "使用提供的 debug.keystore 重签名 {apkfilename}"
 
 #: ../fdroidserver/update.py
 msgid "Resize all the icons exceeding the max pixel size and exit"
@@ -1639,16 +1639,16 @@ msgstr "重写为特定格式： "
 #: ../fdroidserver/rewritemeta.py
 #, python-brace-format
 msgid "Rewriting '{appid}'"
-msgstr ""
+msgstr "重写 '{appid}'"
 
 #: ../fdroidserver/rewritemeta.py
 #, python-brace-format
 msgid "Rewriting '{appid}' to '{path}'"
-msgstr ""
+msgstr "将 '{appid}' 重写为 '{path}'"
 
 #: ../fdroidserver/checkupdates.py
 msgid "Run on git repo that has uncommitted changes"
-msgstr ""
+msgstr "在具有未提交更改的 git 存储库上运行"
 
 #: ../fdroidserver/lint.py
 msgid "Run rewritemeta to fix formatting"
@@ -1656,16 +1656,16 @@ msgstr "运行“重写元数据”(rewritemeta)修复格式"
 
 #: ../fdroidserver/deploy.py ../fdroidserver/upload.py
 msgid "Running first pass with MD5 checking disabled"
-msgstr ""
+msgstr "禁用 MD5 检查并运行第一遍"
 
 #: ../fdroidserver/mirror.py
 #, python-brace-format
 msgid "Running wget in {path}"
-msgstr ""
+msgstr "在 {path} 中运行 wget"
 
 #: ../fdroidserver/build.py
 msgid "Scan the resulting APK(s) for known non-free classes."
-msgstr ""
+msgstr "扫描产生的 APK(s) 是否有已知的非自由类。"
 
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Scan the source code of a package"
