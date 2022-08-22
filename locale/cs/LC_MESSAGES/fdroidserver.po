@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: fdroidserver 1.0.0-95-gd7af22b\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2022-02-15 20:04+0100\n"
-"PO-Revision-Date: 2022-08-19 01:16+0000\n"
-"Last-Translator: Filip Klopec <filipklopec@gmail.com>\n"
+"PO-Revision-Date: 2022-08-23 13:16+0000\n"
+"Last-Translator: Fjuro <fjuro@seznam.cz>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/f-droid/fdroidserver/cs/>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
@@ -684,7 +684,7 @@ msgstr "Nepoužívat kontrolní součty rsync"
 
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Download complete mirrors of small repos"
-msgstr "Stáhnout kompletní zrcadla malých repozitářů"
+msgstr "Stáhnout kompletní mirrory malých repozitářů"
 
 #: ../fdroidserver/stats.py
 msgid "Download logs we don't have"
@@ -728,7 +728,7 @@ msgid ""
 "A full mirror of f-droid.org requires more than 200GB."
 msgstr ""
 "CHYBA: tento příkaz by nikdy neměl být použit k zrcadlení f-droid.org!\n"
-"Celé zrcadlo f-droid.org vyžaduje více než 200GB."
+"Celý mirror f-droid.org vyžaduje více než 200GB."
 
 #: ../fdroidserver/nightly.py
 msgid "ERROR: unsupported CI type, patches welcome!"
@@ -924,7 +924,7 @@ msgstr "Pro repozitář nenalezen žádný podpisový certifikát."
 #: ../fdroidserver/lint.py
 #, python-format
 msgid "Found non-file at %s"
-msgstr ""
+msgstr "Nalezen ne-soubor v %s"
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
@@ -934,98 +934,98 @@ msgstr "Nalezen {apkfilename} na {url}"
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Generated skeleton metadata for {appid}"
-msgstr ""
+msgstr "Vygenerována kostra metadat pro {appid}"
 
 #: ../fdroidserver/common.py
 #, python-format
 msgid "Git checkout of '%s' failed"
-msgstr ""
+msgstr "Git checkout '%s' se nezdařil"
 
 #: ../fdroidserver/common.py
 msgid "Git clean failed"
-msgstr ""
+msgstr "Git clean se nezdařil"
 
 #: ../fdroidserver/common.py
 msgid "Git fetch failed"
-msgstr ""
+msgstr "Git fetch se nezdařil"
 
 #: ../fdroidserver/common.py
 msgid "Git prune failed"
-msgstr ""
+msgstr "Git prune se nezdařil"
 
 #: ../fdroidserver/common.py
 msgid "Git remote set-head failed"
-msgstr ""
+msgstr "Git remote set-head se nezdařil"
 
 #: ../fdroidserver/common.py
 #, python-format
 msgid "Git remote set-head failed: \"%s\""
-msgstr ""
+msgstr "Git remote set-head se nezdařil: „%s“"
 
 #: ../fdroidserver/common.py
 msgid "Git reset failed"
-msgstr ""
+msgstr "Git reset se nezdařil"
 
 #: ../fdroidserver/common.py
 msgid "Git submodule sync failed"
-msgstr ""
+msgstr "Git submodule sync se nezdařil"
 
 #: ../fdroidserver/common.py
 msgid "Git submodule update failed"
-msgstr ""
+msgstr "Git submodule update se nezdařil"
 
 #: ../fdroidserver/common.py
 msgid "HTTPS must be used with Subversion URLs!"
-msgstr ""
+msgstr "U URL adres Subversion musí být použito HTTPS!"
 
 #: ../fdroidserver/deploy.py
 msgid "If a git mirror gets to big, allow the archive to be deleted"
-msgstr ""
+msgstr "Pokud se git mirror stane příliš velkým, umožnit smazání archivu"
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "If this upload fails, try manually uploading to {url}"
-msgstr ""
+msgstr "Pokud toto nahrání selže, zkuste manuálně nahrát na {url}"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Ignoring '{field}' in '{metapath}' metadata because it is deprecated."
-msgstr ""
+msgstr "Ignorování pole ‚{field}‘ v metadatech ‚{metapath}‘, protože je zastaralé."
 
 #: ../fdroidserver/update.py
 #, python-format
 msgid "Ignoring FUNDING.yml entry longer than 2048: %s"
-msgstr ""
+msgstr "Ignorování vstupu FUNDING.yml delšího než 2048: %s"
 
 #: ../fdroidserver/index.py
 msgid "Ignoring package without metadata: "
-msgstr ""
+msgstr "Ignorování balíčku bez metadat: "
 
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Ignoring stale cache data for {apkfilename}"
-msgstr ""
+msgstr "Ignorování zastaralých dat mezipaměti {apkfilename}"
 
 #: ../fdroidserver/rewritemeta.py
 #, python-brace-format
 msgid "Ignoring {ext} file at '{path}'"
-msgstr ""
+msgstr "Ignorování souboru {ext} v ‚{path}‘"
 
 #: ../fdroidserver/update.py
 msgid "Include APKs that are signed with disabled algorithms like MD5"
-msgstr ""
+msgstr "Zahrnout soubory APK, které jsou podepsané zakázanými algoritmy jako MD5"
 
 #: ../fdroidserver/mirror.py
 msgid "Include the PGP signature .asc files in the mirror"
-msgstr ""
+msgstr "Zahrnout .asc soubory podpisu PGP do mirroru"
 
 #: ../fdroidserver/mirror.py
 msgid "Include the build logs in the mirror"
-msgstr ""
+msgstr "Zahrnout protokoly sestavení do mirroru"
 
 #: ../fdroidserver/mirror.py
 msgid "Include the source tarballs in the mirror"
-msgstr ""
+msgstr "Zahrnout zdrojové tarbally do mirroru"
 
 #: ../fdroidserver/metadata.py
 #, python-format
