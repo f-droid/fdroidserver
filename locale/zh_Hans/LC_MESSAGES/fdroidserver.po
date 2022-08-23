@@ -19,13 +19,14 @@
 # YangYulin <yylteam@icloud.com>, 2022.
 # Yang Yulin <yylteam@icloud.com>, 2022.
 # yangyangdaji <1504305527@qq.com>, 2022.
+# Yang Yulin <yylteam@hotmail.com>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2022-02-15 20:04+0100\n"
 "PO-Revision-Date: 2022-08-23 13:16+0000\n"
-"Last-Translator: linsui <linsui@inbox.lv>\n"
+"Last-Translator: Yang Yulin <yylteam@hotmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/f-droid/fdroidserver/zh_Hans/>\n"
 "Language: zh_Hans\n"
 "MIME-Version: 1.0\n"
@@ -1674,26 +1675,26 @@ msgstr "扫描一个应用的源代码"
 #: ../fdroidserver/scanner.py
 #, python-brace-format
 msgid "Scanner found {count} problems in {appid}:"
-msgstr ""
+msgstr "扫描仪在 {appid} 中发现 {count} 个问题："
 
 #: ../fdroidserver/scanner.py
 #, python-brace-format
 msgid "Scanner found {count} problems in {appid}:{versionCode}:"
-msgstr ""
+msgstr "扫描仪在 {appid}:{versionCode} 中发现 {count} 个问题："
 
 #: ../fdroidserver/build.py
 msgid "Scanner found {} problem"
 msgid_plural "Scanner found {} problems"
-msgstr[0] ""
+msgstr[0] "扫描仪发现 {} 个问题"
 
 #: ../fdroidserver/scanner.py
 msgid "Scanning APK with apkanalyzer for known non-free classes."
-msgstr ""
+msgstr "使用 apkanalyzer 扫描 APK 以查找已知的非免费类。"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Set NDK {release} ({version}) up"
-msgstr ""
+msgstr "设置 NDK {release} ({version})"
 
 #: ../fdroidserver/common.py
 msgid "Set clock to that time using:"
