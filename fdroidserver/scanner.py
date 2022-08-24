@@ -89,6 +89,9 @@ NON_FREE_GRADLE_LINES = {
         r'xyz.belvi.mobilevision:barcodescanner',
         r'org.jetbrains.kotlinx:kotlinx-coroutines-play-services',
         r'me.pushy:sdk',
+        r'io.github.sinaweibosdk',
+        r'com.umeng.umsdk',
+        r'com.google.android.exoplayer:extension-cast',
     ]
 }
 
