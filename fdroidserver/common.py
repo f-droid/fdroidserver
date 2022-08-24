@@ -1555,7 +1555,7 @@ def retrieve_string(app_dir, string, xmlfiles=None):
         s = XMLElementTree.tostring(element, encoding='utf-8', method='text')
         return s.decode('utf-8').strip()
 
-    for path in xmlfiles:
+    for path in sorted(xmlfiles):
         if not os.path.isfile(path):
             continue
         try:
