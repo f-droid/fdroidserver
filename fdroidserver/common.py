@@ -1238,34 +1238,15 @@ class vcs_git(vcs):
         p = FDroidPopen(['git', 'tag'], cwd=self.local, output=False)
         return p.output.splitlines()
 
-    tag_format = re.compile(r'tag: ([^) ]*)')
-
     def latesttags(self):
-        """Return a list of latest tags.
-
-        The definition is a little blurry here, Android does not care for the
-        version name of an app as normally used as the tag name so versions do
-        not need to follow strverscmp() or similar. Also they can be rather
-        arbitrary so git tag --sort=-version:refname does not work. On the other side
-        sorting them by creation date, i.e. git tag --sort=-authordate does not
-        work either as there are a lot of repos where older tags were created
-        later.
-
-        So git log preserves the graph order and only sorts by date afterwards.
-        This results in tags of beta versions being sorted earlier then the
-        latest tag as long as they are part of the graph below the latest tag
-        or are created earlier.
-        """
+        """Return a list of latest tags."""
         self.checkrepo()
-        p = FDroidPopen(['git', 'log', '--tags',
-                         '--simplify-by-decoration', '--pretty=format:%d'],
-                        cwd=self.local, output=False)
-        tags = []
-        for line in p.output.splitlines():
-            for entry in line.split(', '):
-                for tag in self.tag_format.findall(entry):
-                    tags.append(tag)
-        return tags
+        # TODO: Python3.6: Should accept path-like
+        return [tag.name for tag in sorted(
+            git.Repo(self.local).tags,
+            key=lambda t: t.commit.committed_date,
+            reverse=True
+        )]
 
     def getref(self, revname='HEAD'):
         self.checkrepo()
