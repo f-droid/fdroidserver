@@ -254,8 +254,7 @@ black:
         tests/build.TestCase
         tests/deploy.TestCase
         tests/exception.TestCase
-        tests/import.TestCase
-        tests/import_proxy.py
+        tests/import_subcommand.TestCase
         tests/init.TestCase
         tests/install.TestCase
         tests/key-tricks.py

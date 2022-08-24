@@ -40,7 +40,7 @@ COMMANDS = OrderedDict([
     ("deploy", _("Interact with the repo HTTP server")),
     ("verify", _("Verify the integrity of downloaded packages")),
     ("checkupdates", _("Check for updates to applications")),
-    ("import", _("Add a new application from its source code")),
+    ("import", _("Extract application metadata from a source repository")),
     ("install", _("Install built packages on devices")),
     ("readmeta", _("Read all the metadata files and exit")),
     ("rewritemeta", _("Rewrite all the metadata files")),
@@ -197,6 +197,8 @@ def main():
 
     del sys.argv[1]
     if command in COMMANDS.keys():
+        # import is named import_subcommand internally b/c import is reserved by Python
+        command = 'import_subcommand' if command == 'import' else command
         mod = __import__('fdroidserver.' + command, None, None, [command])
     else:
         mod = __import__(available_plugins[command]['name'], None, None, [command])

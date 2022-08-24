@@ -1419,19 +1419,6 @@ class CommonTest(unittest.TestCase):
         with self.assertRaises(MetaDataException):
             self.assertEqual(fdroidserver.common.parse_srclib_spec('@multi@at-signs@'))
 
-    def test_bad_urls(self):
-        for url in (
-            'asdf',
-            'file://thing.git',
-            'https:///github.com/my/project',
-            'git:///so/many/slashes',
-            'ssh:/notabug.org/missing/a/slash',
-            'git:notabug.org/missing/some/slashes',
-            'https//github.com/bar/baz',
-        ):
-            with self.assertRaises(ValueError):
-                fdroidserver.common.get_app_from_url(url)
-
     def test_remove_signing_keys(self):
         testdir = tempfile.mkdtemp(
             prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir
