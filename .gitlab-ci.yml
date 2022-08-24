@@ -407,7 +407,7 @@ fdroid build:
 # fdroiddata because that one is known to work, and this is a CI job,
 # so it should be isolated from the normal churn of fdroiddata.
 plugin_fetchsrclibs:
-  image: debian:buster
+  image: debian:bullseye
   <<: *apt-template
   only:
     changes:
@@ -430,7 +430,8 @@ plugin_fetchsrclibs:
     - . env/bin/activate
     - export PATH="$CI_PROJECT_DIR:$PATH"
     - export PYTHONPATH="$CI_PROJECT_DIR/examples"
-    - $pip install wheel  # to make this go away: "error: invalid command 'bdist_wheel'"
+    # workaround https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1003252
+    - export SETUPTOOLS_USE_DISTUTILS=stdlib
     - $pip install -e .
     - fdroid | grep fetchsrclibs
 
