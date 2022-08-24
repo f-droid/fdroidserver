@@ -1,0 +1,166 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+buildscript {
+    ext.kotlin_version = "1.6.21"
+    ext.latestAboutLibsRelease = "10.3.0"
+
+    ext.coroutinesVersion = "1.6.2"
+
+    ext.coroutinesCore = "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion"
+    ext.coroutinesAndroid = "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion"
+    ext.coroutinesRX =  "org.jetbrains.kotlinx:kotlinx-coroutines-rx2:$coroutinesVersion"
+
+    ext.gson = 'com.google.code.gson:gson:2.9.0'
+
+    ext.glideVersion = "4.13.1"
+    ext.glide = "com.github.bumptech.glide:glide:$glideVersion"
+    ext.glideCompiler = "com.github.bumptech.glide:compiler:$glideVersion"
+
+    ext.paging_version = "3.1.1"
+
+    ext.rxkotlin = "io.reactivex.rxjava2:rxkotlin:2.4.0"
+    ext.rxandroid = "io.reactivex.rxjava2:rxandroid:2.1.1"
+    ext.rxbinding = 'com.jakewharton.rxbinding2:rxbinding:2.2.0'
+    ext.rxbindingKotlin = 'com.jakewharton.rxbinding2:rxbinding-kotlin:2.2.0'
+
+    ext.androidCore = 'androidx.core:core-ktx:1.8.0'
+    ext.appCompat = 'androidx.appcompat:appcompat:1.4.2'
+    ext.material = 'com.google.android.material:material:1.6.0-beta01'
+
+    ext.preference = "androidx.preference:preference-ktx:1.2.0"
+
+    ext.recyclerview = 'androidx.recyclerview:recyclerview:1.2.1'
+    ext.constraintlayout = 'androidx.constraintlayout:constraintlayout:2.1.4'
+    ext.swiperefresh = 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
+
+    ext.jsoup = 'org.jsoup:jsoup:1.15.1'
+
+    ext.crashlytics = 'com.google.firebase:firebase-crashlytics:18.2.8'
+    ext.analytics = 'com.google.firebase:firebase-analytics:20.1.0'
+    ext.play_services = 'com.google.android.gms:play-services-auth:20.1.0'
+
+    ext.exoplayer_version = "2.16.1"
+    ext.room_version = "2.4.2"
+
+    ext.nav_version = "2.4.2"
+
+    def koin_version = "3.0.2"
+
+    // Koin main features for Android (Scope,ViewModel ...)
+    ext.koinAndroid = "io.insert-koin:koin-android:$koin_version"
+    // Koin Android - experimental builder extensions
+    ext.koinAndroidExt = "io.insert-koin:koin-android-ext:$koin_version"
+
+    ext.lottieVersion = "4.2.2"
+
+    ext.coil = "2.1.0"
+
+    ext.jetpack = "1.2.0-rc01"
+
+    ext.accompanist = "0.24.11-rc"
+
+    ext.composeUi = "androidx.compose.ui:ui:$jetpack"
+    // Tooling support (Previews, etc.)
+    ext.composeUiTooling = "androidx.compose.ui:ui-tooling:$jetpack"
+    // Foundation (Border, Background, Box, Image, Scroll, shapes, animations, etc.)
+    ext.composeFoundation = "androidx.compose.foundation:foundation:$jetpack"
+    // Material Design
+    ext.composeMaterial = "androidx.compose.material:material:$jetpack"
+    ext.materialYou = "androidx.compose.material3:material3:1.0.0-alpha13"
+    // Material design icons
+    ext.composeMaterialIconsCore = "androidx.compose.material:material-icons-core:$jetpack"
+    ext.composeMaterialIconsExtended = "androidx.compose.material:material-icons-extended:$jetpack"
+    // Integration with activities
+    ext.composeActivity = 'androidx.activity:activity-compose:1.4.0'
+    // Integration with ViewModels
+    ext.composeLifecycle = 'androidx.lifecycle:lifecycle-viewmodel-compose:2.4.1'
+    // Integration with observables
+    ext.composeRuntimeLivedata = "androidx.compose.runtime:runtime-livedata:$jetpack"
+    ext.composeRuntimeRxjava2 = "androidx.compose.runtime:runtime-rxjava2:$jetpack"
+    ext.composeMaterialThemeAdapter = "com.google.android.material:compose-theme-adapter:1.1.11"
+    ext.composeMaterial3ThemeAdapter = "com.google.android.material:compose-theme-adapter-3:1.0.11"
+    ext.landscapistGlide = "com.github.skydoves:landscapist-glide:1.5.2"
+    ext.composeConstraintLayout = "androidx.constraintlayout:constraintlayout-compose:1.0.1"
+    ext.composeAnimation = "androidx.compose.animation:animation:$jetpack"
+    ext.materialPlaceholder = "com.google.accompanist:accompanist-placeholder-material:$accompanist"
+    ext.drawablePainter = "com.google.accompanist:accompanist-drawablepainter:$accompanist"
+    ext.permissions = "com.google.accompanist:accompanist-permissions:$accompanist"
+    ext.uiUtil = "androidx.compose.ui:ui-util:$jetpack"
+    ext.coilCompose = "io.coil-kt:coil-compose:$coil"
+    ext.navCompose = "androidx.navigation:navigation-compose:$nav_version"
+    ext.navMaterial = "com.google.accompanist:accompanist-navigation-material:$accompanist"
+    ext.navAnimation = "com.google.accompanist:accompanist-navigation-animation:$accompanist"
+
+    ext.swipeRefresh = "com.google.accompanist:accompanist-swiperefresh:$accompanist"
+    ext.systemUiController = "com.google.accompanist:accompanist-systemuicontroller:$accompanist"
+
+    ext.inset =  "com.google.accompanist:accompanist-insets:$accompanist"
+    // If using insets-ui
+    ext.insetUi = "com.google.accompanist:accompanist-insets-ui:$accompanist"
+
+    ext.datastore = "androidx.datastore:datastore:1.0.0"
+    ext.datastorePref = "androidx.datastore:datastore-preferences:1.0.0"
+
+    ext {
+        jakepurple13Tools = [
+                helpfultools: [
+                        Deps.gsonutils,
+                        Deps.helpfulutils,
+                        Deps.loggingutils,
+                        Deps.dragswipe,
+                        Deps.funutils,
+                        Deps.rxutils
+                ]
+        ]
+        room = [
+                room: [
+                        "androidx.room:room-runtime:$room_version",
+                        "androidx.room:room-ktx:$room_version",
+                        "androidx.room:room-rxjava2:$room_version"
+                ]
+        ]
+
+        koin = [koin: [koinAndroid, koinAndroidExt]]
+
+        compose = [
+                compose: [
+                        composeUi, composeUiTooling, composeFoundation, composeMaterial,
+                        composeMaterialIconsCore, composeMaterialIconsExtended,
+                        composeActivity, composeLifecycle,
+                        composeRuntimeLivedata, composeRuntimeRxjava2,
+                        composeMaterialThemeAdapter, composeMaterial3ThemeAdapter,
+                        landscapistGlide, coilCompose,
+                        composeConstraintLayout, permissions,
+                        materialPlaceholder, drawablePainter, uiUtil,
+                        materialYou,
+                        inset, insetUi,
+                        navCompose, navMaterial, navAnimation,
+                        swipeRefresh, systemUiController
+                ]
+        ]
+
+        firebaseCrash = [ crash: [crashlytics, analytics] ]
+
+        datastore = [ datastore: [datastore, datastorePref] ]
+    }
+
+    repositories {
+        google()
+        gradlePluginPortal()
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:7.1.2'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath 'com.google.gms:google-services:4.3.10'
+        classpath 'com.google.firebase:firebase-crashlytics-gradle:2.8.1'
+        classpath "com.mikepenz.aboutlibraries.plugin:aboutlibraries-plugin:10.3.0"
+        classpath "org.jetbrains.kotlin:kotlin-serialization:$kotlin_version"
+        // NOTE: Do not place your application dependencies here; they belong
+        // in the individual module build.gradle files
+        classpath "androidx.navigation:navigation-safe-args-gradle-plugin:$nav_version"
+    }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}

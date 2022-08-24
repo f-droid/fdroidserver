@@ -55,6 +55,7 @@ class ScannerTest(unittest.TestCase):
             'com.jens.automation2': 2,
             'com.github.shadowsocks': 6,
             'org.tasks': 1,
+            'OtakuWorld': 2,
         }
         for d in glob.glob(os.path.join(source_files, '*')):
             build = fdroidserver.metadata.Build()
@@ -66,15 +67,15 @@ class ScannerTest(unittest.TestCase):
 
     def test_get_gradle_compile_commands(self):
         test_files = [
-            ('source-files/fdroid/fdroidclient/build.gradle', 'yes', 17),
-            ('source-files/com.nextcloud.client/build.gradle', 'generic', 24),
+            ('source-files/fdroid/fdroidclient/build.gradle', 'yes', 18),
+            ('source-files/com.nextcloud.client/build.gradle', 'generic', 28),
             ('source-files/com.kunzisoft.testcase/build.gradle', 'libre', 4),
             ('source-files/cn.wildfirechat.chat/chat/build.gradle', 'yes', 33),
             ('source-files/org.tasks/app/build.gradle.kts', 'generic', 39),
             ('source-files/at.bitfire.davdroid/build.gradle', 'standard', 16),
             ('source-files/se.manyver/android/app/build.gradle', 'indie', 29),
             ('source-files/osmandapp/osmand/build.gradle', 'free', 5),
-            ('source-files/eu.siacs.conversations/build.gradle', 'free', 23),
+            ('source-files/eu.siacs.conversations/build.gradle', 'free', 24),
             ('source-files/org.mozilla.rocket/app/build.gradle', 'focus', 42),
             ('source-files/com.jens.automation2/app/build.gradle', 'fdroidFlavor', 8),
         ]
