@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: fdroidserver 1.0.0-95-gd7af22b\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2022-02-15 20:04+0100\n"
-"PO-Revision-Date: 2022-08-24 19:14+0000\n"
+"PO-Revision-Date: 2022-08-24 19:49+0000\n"
 "Last-Translator: Fjuro <fjuro@seznam.cz>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/f-droid/fdroidserver/cs/>\n"
 "Language: cs\n"
@@ -1415,19 +1415,19 @@ msgstr "Starý, zastaralý název pro fdroid deploy"
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Only PNG and JPEG are supported for graphics, found: {path}"
-msgstr ""
+msgstr "Pro grafiku jsou podporovány pouze formáty PNG a JPEG, nalezeno: {path}"
 
 #: ../fdroidserver/checkupdates.py
 msgid "Only print differences with the Play Store"
-msgstr ""
+msgstr "Zobrazit pouze rozdíly s Obchodem Play"
 
 #: ../fdroidserver/checkupdates.py
 msgid "Only process apps with auto-updates"
-msgstr ""
+msgstr "Zpracovat pouze aplikace s automatickými aktualizacemi"
 
 #: ../fdroidserver/lint.py
 msgid "OpenCollective donation methods belong in the OpenCollective: field"
-msgstr ""
+msgstr "Darovací metody OpenCollective patří do pole OpenCollective:"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 #: /usr/lib/python3.7/optparse.py
@@ -1436,91 +1436,91 @@ msgstr "Možnosti"
 
 #: ../fdroidserver/verify.py
 msgid "Output JSON report to file named after APK."
-msgstr ""
+msgstr "Uložit hlášení JSON do souboru pojmenovaného podle APK."
 
 #: ../fdroidserver/scanner.py
 msgid "Output JSON to stdout."
-msgstr ""
+msgstr "Uložit JSON do stdout."
 
 #: ../fdroidserver/gpgsign.py ../fdroidserver/publish.py
 #: ../fdroidserver/update.py ../fdroidserver/signindex.py
 #: ../fdroidserver/checkupdates.py
 msgid "Outputting JSON"
-msgstr ""
+msgstr "Ukládání výstupu JSON"
 
 #: ../fdroidserver/import.py
 msgid "Overall license of the project."
-msgstr ""
+msgstr "Celková licence projektu."
 
 #: ../fdroidserver/index.py
 #, python-brace-format
 msgid "Overriding blank versionName in {apkfilename} from metadata: {version}"
-msgstr ""
+msgstr "Přepisování prázdného versionName v {apkfilename} z metadat: {version}"
 
 #: ../fdroidserver/import.py
 #, python-brace-format
 msgid "Package \"{appid}\" already exists"
-msgstr ""
+msgstr "Balíček „{appid}“ již existuje"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Parsing manifest at '{path}'"
-msgstr ""
+msgstr "Parsování manifestu v ‚{path}‘"
 
 #: ../fdroidserver/common.py
 msgid "Password required with username"
-msgstr ""
+msgstr "Vyžadováno heslo s uživatelským jménem"
 
 #: ../fdroidserver/import.py
 msgid "Path to main Android project subdirectory, if not in root."
-msgstr ""
+msgstr "Cesta k hlavnímu podadresáři projektu Android, pokud není v kořenovém adresáři."
 
 msgid "Path to main android project subdirectory, if not in root."
-msgstr ""
+msgstr "Cesta k hlavnímu podadresáři projektu android, pokud není v kořenovém adresáři."
 
 #: ../fdroidserver/init.py
 msgid "Path to the Android SDK (sometimes set in ANDROID_HOME)"
-msgstr ""
+msgstr "Cesta k Android SDK (někdy nastavena v ANDROID_HOME)"
 
 #: ../fdroidserver/btlog.py
 msgid "Path to the git repo to use as the log"
-msgstr ""
+msgstr "Cesta ke git repozitáři k použití jako protokol"
 
 #: ../fdroidserver/init.py
 msgid "Path to the keystore for the repo signing key"
-msgstr ""
+msgstr "Cesta k úložišti klíčů pro podpisový klíč repozitáře"
 
 #: ../fdroidserver/nightly.py
 msgid "Print the secret variable to the terminal for easy copy/paste"
-msgstr ""
+msgstr "Zobrazit tajnou proměnnou v terminálu pro jednoduché kopírování/vložení"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Problem with description of {appid}: {error}"
-msgstr ""
+msgstr "Problém s popisem {appid}: {error}"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Problem with xml at '{path}'"
-msgstr ""
+msgstr "Problém s xml v '{path}'"
 
 #: ../fdroidserver/checkupdates.py
 msgid "Process auto-updates"
-msgstr ""
+msgstr "Zpracovat auto-aktualizace"
 
 #: ../fdroidserver/publish.py ../fdroidserver/update.py
 #, python-brace-format
 msgid "Processing {apkfilename}"
-msgstr ""
+msgstr "Zpracování {apkfilename}"
 
 #: ../fdroidserver/checkupdates.py ../fdroidserver/scanner.py
 #, python-brace-format
 msgid "Processing {appid}"
-msgstr ""
+msgstr "Zpracování {appid}"
 
 #: ../fdroidserver/update.py
 msgid "Produce human-readable XML/JSON for index files"
-msgstr ""
+msgstr "Vytváření lidsky čitelných souborů XML/JSON pro indexové soubory"
 
 #: ../fdroidserver/update.py
 msgid "Produce human-readable index.xml"
@@ -1528,25 +1528,25 @@ msgstr "Vytvořit člověku čitelný index.xml"
 
 #: ../fdroidserver/import.py
 msgid "Project URL to import from."
-msgstr ""
+msgstr "Adresa URL projektu, ze které se má importovat."
 
 #: ../fdroidserver/lint.py
 msgid "Punctuation should be avoided"
-msgstr ""
+msgstr "Mělo by být vyvarováno interpunkce"
 
 #: ../fdroidserver/btlog.py
 msgid "Push the log to this git remote repository"
-msgstr ""
+msgstr "Odeslat protokol do tohoto vzdáleného git repozitáře"
 
 #: ../fdroidserver/deploy.py ../fdroidserver/upload.py
 #, python-brace-format
 msgid "Pushing binary transparency log to {url}"
-msgstr ""
+msgstr "Odeslání protokolu binární průhlednosti do {url}"
 
 #: ../fdroidserver/deploy.py ../fdroidserver/upload.py
 #, python-brace-format
 msgid "Pushing to {url}"
-msgstr ""
+msgstr "Odesílání do {url}"
 
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Quickly start a new repository"
@@ -1559,37 +1559,37 @@ msgstr "Přečtěte si všechny soubory metadat a ukončete"
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Reading '{config_file}'"
-msgstr ""
+msgstr "Čtení ‚{config_file}‘"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Reading minSdkVersion failed: \"{apkfilename}\""
-msgstr ""
+msgstr "Čtení minSdkVersion selhalo: „{apkfilename}“"
 
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
 #. https://developer.android.com/guide/topics/manifest/manifest-element.html#vname
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Reading packageName/versionCode/versionName failed, APK invalid: '{apkfilename}'"
-msgstr ""
+msgstr "Čtení packageName/versionCode/versionName se nezdařilo, APK nepatné: ‚{apkfilename}‘"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Reading {apkfilename} from cache"
-msgstr ""
+msgstr "Čtení {apkfilename} z mezipaměti"
 
 #: ../fdroidserver/stats.py
 msgid "Recalculate aggregate stats - use when changes have been made that would invalidate old cached data."
-msgstr ""
+msgstr "Přepočítat souhrnné statistiky - používá se, pokud byly provedeny změny, které by zneplatnily stará data uložená v mezipaměti."
 
 #: ../fdroidserver/common.py
 msgid "Removing specified files"
-msgstr ""
+msgstr "Odebírání určených souborů"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Removing {path}\""
-msgstr ""
+msgstr "Odebírání {path}\""
 
 #: ../fdroidserver/update.py
 msgid "Rename APK files that do not match package.name_123.apk"
@@ -1597,28 +1597,28 @@ msgstr "Přejmenujte soubory APK, které se neshodují s package.name_123.apk"
 
 #: ../fdroidserver/checkupdates.py
 msgid "RepoTrunk update mode only makes sense in git-svn repositories"
-msgstr ""
+msgstr "Režim aktualizace RepoTrunk má smysl pouze v repozitářích git-svn"
 
 #: ../fdroidserver/update.py
 msgid "Report on build data status"
-msgstr ""
+msgstr "Hlášení o stavu dat sestavení"
 
 #: ../fdroidserver/build.py
 msgid "Reset and create a brand new build server, even if the existing one appears to be ok."
-msgstr ""
+msgstr "Resetovat a vytvořit zcela nový server sestavení, i když se stávající zdá být v pořádku."
 
 #: ../fdroidserver/nightly.py
 #, python-brace-format
 msgid "Resigning {apkfilename} with provided debug.keystore"
-msgstr ""
+msgstr "Opětovné podepisování {apkfilename} s poskytnutým debug.keystore"
 
 #: ../fdroidserver/update.py
 msgid "Resize all the icons exceeding the max pixel size and exit"
-msgstr ""
+msgstr "Změnit velikost všech ikon přesahujících maximální velikost pixelů a ukončit aplikaci"
 
 #: ../fdroidserver/common.py
 msgid "Restrict output to warnings and errors"
-msgstr ""
+msgstr "Omezit výstup na varování a chyby"
 
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Rewrite all the metadata files"
@@ -1626,7 +1626,7 @@ msgstr "Přepsat všechny soubory metadat"
 
 #: ../fdroidserver/rewritemeta.py
 msgid "Rewrite to a specific format: "
-msgstr ""
+msgstr "Přepis do určitého formátu: "
 
 #: ../fdroidserver/rewritemeta.py
 #, python-brace-format
