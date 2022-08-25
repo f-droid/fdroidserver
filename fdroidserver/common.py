@@ -900,13 +900,17 @@ def write_status_json(output, pretty=False, name=None):
         os.makedirs(status_dir)
     if not name:
         output['endTimestamp'] = int(datetime.now(timezone.utc).timestamp() * 1000)
-        name = sys.argv[0].split()[1]  # fdroid subcommand
-    path = os.path.join(status_dir, name + '.json')
-    with open(path, 'w') as fp:
-        if pretty:
-            json.dump(output, fp, sort_keys=True, cls=Encoder, indent=2)
-        else:
-            json.dump(output, fp, sort_keys=True, cls=Encoder, separators=(',', ':'))
+        names = ['running', sys.argv[0].split()[1]]  # fdroid subcommand
+    else:
+        names = [name]
+
+    for fname in names:
+        path = os.path.join(status_dir, fname + '.json')
+        with open(path, "w", encoding="utf-8") as fp:
+            if pretty:
+                json.dump(output, fp, sort_keys=True, cls=Encoder, indent=2)
+            else:
+                json.dump(output, fp, sort_keys=True, cls=Encoder, separators=(',', ':'))
     rsync_status_file_to_repo(path, repo_subdir='status')
 
 
