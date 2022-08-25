@@ -530,7 +530,7 @@ Windows:
     # these are the tests that must pass
     - python tests\checkupdates.TestCase
     - python tests\exception.TestCase
-    - python tests\import.TestCase
+    - python tests\import_subcommand.TestCase
     - python tests\init.TestCase
     - python tests\lint.TestCase
     - python tests\main.TestCase
