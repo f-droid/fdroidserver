@@ -86,6 +86,17 @@ def _ssh_key_from_debug_keystore(keystore=KEYSTORE_FILE):
     return ssh_private_key_file
 
 
+def get_repo_base_url(clone_url, repo_git_base, force_type=None):
+    if force_type is None:
+        force_type = urlparse(clone_url).netloc
+    if force_type == 'gitlab.com':
+        return clone_url + '/-/raw/master/fdroid'
+    if force_type == 'github.com':
+        return 'https://raw.githubusercontent.com/%s/master/fdroid' % repo_git_base
+    print(_('ERROR: unsupported git host "%s", patches welcome!') % force_type)
+    sys.exit(1)
+
+
 def main():
 
     parser = ArgumentParser()
@@ -129,11 +140,12 @@ def main():
         cibase = os.getcwd()
         os.makedirs(repodir, exist_ok=True)
 
+        # the 'master' branch is hardcoded in fdroidserver/deploy.py
         if 'CI_PROJECT_PATH' in os.environ and 'CI_PROJECT_URL' in os.environ:
             # we are in GitLab CI
             repo_git_base = os.getenv('CI_PROJECT_PATH') + NIGHTLY
             clone_url = os.getenv('CI_PROJECT_URL') + NIGHTLY
-            repo_base = clone_url + '/raw/master/fdroid'
+            repo_base = get_repo_base_url(clone_url, repo_git_base, force_type='gitlab.com')
             servergitmirror = 'git@' + urlparse(clone_url).netloc + ':' + repo_git_base
             deploy_key_url = clone_url + '/-/settings/repository#js-deploy-keys-settings'
             git_user_name = os.getenv('GITLAB_USER_NAME')
@@ -142,8 +154,7 @@ def main():
             # we are in Travis CI
             repo_git_base = os.getenv('TRAVIS_REPO_SLUG') + NIGHTLY
             clone_url = 'https://github.com/' + repo_git_base
-            _branch = os.getenv('TRAVIS_BRANCH')
-            repo_base = 'https://raw.githubusercontent.com/' + repo_git_base + '/' + _branch + '/fdroid'
+            repo_base = get_repo_base_url(clone_url, repo_git_base, force_type='github.com')
             servergitmirror = 'git@github.com:' + repo_git_base
             deploy_key_url = ('https://github.com/' + repo_git_base + '/settings/keys'
                               + '\nhttps://developer.github.com/v3/guides/managing-deploy-keys/#deploy-keys')
@@ -156,7 +167,7 @@ def main():
             repo_git_base = (os.getenv('CIRCLE_PROJECT_USERNAME')
                              + '/' + os.getenv('CIRCLE_PROJECT_REPONAME') + NIGHTLY)
             clone_url = os.getenv('CIRCLE_REPOSITORY_URL') + NIGHTLY
-            repo_base = clone_url + '/raw/master/fdroid'
+            repo_base = get_repo_base_url(clone_url, repo_git_base, force_type='github.com')
             servergitmirror = 'git@' + urlparse(clone_url).netloc + ':' + repo_git_base
             deploy_key_url = ('https://github.com/' + repo_git_base + '/settings/keys'
                               + '\nhttps://developer.github.com/v3/guides/managing-deploy-keys/#deploy-keys')
