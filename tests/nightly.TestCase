@@ -1,0 +1,56 @@
+#!/usr/bin/env python3
+
+import inspect
+import optparse
+import os
+import requests
+import sys
+import unittest
+
+localmodule = os.path.realpath(
+    os.path.join(os.path.dirname(inspect.getfile(inspect.currentframe())), '..')
+)
+print('localmodule: ' + localmodule)
+if localmodule not in sys.path:
+    sys.path.insert(0, localmodule)
+
+from fdroidserver import common, nightly
+
+
+class NightlyTest(unittest.TestCase):
+    def test_get_repo_base_url(self):
+        for clone_url, repo_git_base, result in [
+            (
+                'https://github.com/onionshare/onionshare-android-nightly',
+                'onionshare/onionshare-android-nightly',
+                'https://raw.githubusercontent.com/onionshare/onionshare-android-nightly/master/fdroid',
+            ),
+            (
+                'https://gitlab.com/fdroid/fdroidclient-nightly',
+                'fdroid/fdroidclient-nightly',
+                'https://gitlab.com/fdroid/fdroidclient-nightly/-/raw/master/fdroid',
+            ),
+        ]:
+            url = nightly.get_repo_base_url(clone_url, repo_git_base)
+            self.assertEqual(result, url)
+            r = requests.head(os.path.join(url, 'repo/index-v1.jar'))
+            # gitlab.com often returns 403 Forbidden from their cloudflare restrictions
+            self.assertTrue(r.status_code in (200, 403), 'should not be a redirect')
+
+
+if __name__ == "__main__":
+    os.chdir(os.path.dirname(__file__))
+
+    parser = optparse.OptionParser()
+    parser.add_option(
+        "-v",
+        "--verbose",
+        action="store_true",
+        default=False,
+        help="Spew out even more information than normal",
+    )
+    (common.options, args) = parser.parse_args(['--verbose'])
+
+    newSuite = unittest.TestSuite()
+    newSuite.addTest(unittest.makeSuite(NightlyTest))
+    unittest.main(failfast=False)
