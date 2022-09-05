@@ -108,7 +108,7 @@ def px_to_dpi(px):
 
 
 def get_icon_dir(repodir, density):
-    if density == '0' or density == '65534':
+    if density in ('0', '65534'):
         return os.path.join(repodir, "icons")
     else:
         return os.path.join(repodir, "icons-%s" % density)
@@ -647,7 +647,7 @@ def _strip_and_copy_image(in_file, outpath):
         except Exception as e:
             logging.error(_("Failed copying {path}: {error}".format(path=in_file, error=e)))
             return
-    elif extension == 'jpg' or extension == 'jpeg':
+    elif extension in ('jpg', 'jpeg'):
         try:
             with open(in_file, 'rb') as fp:
                 in_image = Image.open(fp)
@@ -866,16 +866,16 @@ def copy_triple_t_store_metadata(apps):
                     locale = segments[-2]
 
                 for f in files:
-                    if f == 'fulldescription' or f == 'full-description.txt':
+                    if f in ('fulldescription', 'full-description.txt'):
                         _set_localized_text_entry(app, locale, 'description',
                                                   os.path.join(root, f))
-                    elif f == 'shortdescription' or f == 'short-description.txt':
+                    elif f in ('shortdescription', 'short-description.txt'):
                         _set_localized_text_entry(app, locale, 'summary',
                                                   os.path.join(root, f))
-                    elif f == 'title' or f == 'title.txt':
+                    elif f in ('title', 'title.txt'):
                         _set_localized_text_entry(app, locale, 'name',
                                                   os.path.join(root, f))
-                    elif f == 'video' or f == 'video-url.txt':
+                    elif f in ('video', 'video-url.txt'):
                         _set_localized_text_entry(app, locale, 'video',
                                                   os.path.join(root, f))
                     elif f == 'whatsnew':
@@ -884,11 +884,11 @@ def copy_triple_t_store_metadata(apps):
                     elif f == 'default.txt' and segments[-2] == 'release-notes':
                         _set_localized_text_entry(app, locale, 'whatsNew',
                                                   os.path.join(root, f))
-                    elif f == 'contactEmail' or f == 'contact-email.txt':
+                    elif f in ('contactEmail', 'contact-email.txt'):
                         _set_author_entry(app, 'authorEmail', os.path.join(root, f))
-                    elif f == 'contactPhone' or f == 'contact-phone.txt':
+                    elif f in ('contactPhone', 'contact-phone.txt'):
                         _set_author_entry(app, 'authorPhone', os.path.join(root, f))
-                    elif f == 'contactWebsite' or f == 'contact-website.txt':
+                    elif f in ('contactWebsite', 'contact-website.txt'):
                         _set_author_entry(app, 'authorWebSite', os.path.join(root, f))
                     else:
                         base, extension = common.get_extension(f)
@@ -1113,7 +1113,7 @@ def scan_repo_files(apkcache, repodir, knownapks, use_date_from_file=False):
     repodir = repodir.encode()
     for name in os.listdir(repodir):
         file_extension = common.get_file_extension(name)
-        if file_extension == 'apk' or file_extension == 'obb':
+        if file_extension in ('apk', 'obb'):
             continue
         filename = os.path.join(repodir, name)
         name_utf8 = name.decode()
@@ -1405,8 +1405,10 @@ def scan_apk_androguard(apk, apkfile):
         if key not in item.attrib:
             continue
         feature = str(item.attrib[key])
-        if feature != "android.hardware.screen.portrait" \
-                and feature != "android.hardware.screen.landscape":
+        if feature not in (
+            'android.hardware.screen.portrait',
+            'android.hardware.screen.landscape',
+        ):
             if feature.startswith("android.feature."):
                 feature = feature[16:]
         required = item.attrib.get(xmlns + 'required')

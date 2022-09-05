@@ -2616,7 +2616,7 @@ def get_apk_id_androguard(apkfile):
 
                     if axml.getName() == 'manifest':
                         break
-                elif _type == END_TAG or _type == TEXT or _type == END_DOCUMENT:
+                elif _type in (END_TAG, TEXT, END_DOCUMENT):
                     raise RuntimeError('{path}: <manifest> must be the first element in AndroidManifest.xml'
                                        .format(path=apkfile))
 
