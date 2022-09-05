@@ -45,7 +45,7 @@ class ImportTest(unittest.TestCase):
         fdroidserver.common.config = config
 
         url = 'https://gitlab.com/fdroid/ci-test-app'
-        r = requests.head(url)
+        r = requests.head(url, timeout=300)
         if r.status_code != 200:
             print("ERROR", url, 'unreachable (', r.status_code, ')')
             print('Skipping ImportTest!')

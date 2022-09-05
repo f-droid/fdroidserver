@@ -174,7 +174,7 @@ def load_exodus_trackers_signatures():
     """
     signatures = []
     exodus_url = "https://reports.exodus-privacy.eu.org/api/trackers"
-    r = requests.get(exodus_url)
+    r = requests.get(exodus_url, timeout=300)
     data = r.json()
     for e in data['trackers']:
         signatures.append(

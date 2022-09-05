@@ -35,7 +35,7 @@ class NetTest(unittest.TestCase):
 
     @patch('requests.get')
     def test_download_file_url_parsing(self, requests_get):
-        def _get(url, stream, allow_redirects, headers):  # pylint: disable=W0613
+        def _get(url, stream, allow_redirects, headers, timeout):  # pylint: disable=W0613
             return MagicMock()
 
         requests_get.side_effect = _get

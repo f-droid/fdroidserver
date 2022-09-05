@@ -428,7 +428,9 @@ class Test_load_exodus_trackers_signatures(unittest.TestCase):
             "fdroidserver.scanner._exodus_compile_signatures", self.compilesig_func
         ):
             result_sigs, result_regex = fdroidserver.scanner.load_exodus_trackers_signatures()
-            self.requests_func.assert_called_once_with("https://reports.exodus-privacy.eu.org/api/trackers")
+            self.requests_func.assert_called_once_with(
+                "https://reports.exodus-privacy.eu.org/api/trackers", timeout=300
+            )
             self.assertEqual(len(result_sigs), 2)
             self.assertListEqual([1, 2], sorted([x.id for x in result_sigs]))
 

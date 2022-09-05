@@ -1331,7 +1331,7 @@ class vcs_gitsvn(vcs):
             # git-svn sucks at certificate validation, this throws useful errors:
             try:
                 import requests
-                r = requests.head(remote)
+                r = requests.head(remote, timeout=300)
                 r.raise_for_status()
             except Exception as e:
                 raise VCSException('SVN certificate pre-validation failed: ' + str(e)) from e
