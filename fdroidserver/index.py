@@ -489,17 +489,11 @@ def dict_diff(source, target):
     return result
 
 
-def file_entry(filename, hashType=None, hsh=None, size=None):
+def file_entry(filename, hash_value=None):
     meta = {}
     meta["name"] = "/" + filename.split("/", 1)[1]
-    if hsh:
-        meta[hashType] = hsh
-    if hsh != "sha256":
-        meta["sha256"] = common.sha256sum(filename)
-    if size:
-        meta["size"] = size
-    else:
-        meta["size"] = os.stat(filename).st_size
+    meta["sha256"] = hash_value or common.sha256sum(filename)
+    meta["size"] = os.stat(filename).st_size
     return meta
 
 
@@ -619,13 +613,13 @@ def convert_version(version, app, repodir):
     if "obbMainFile" in version:
         ver["obbMainFile"] = file_entry(
             os.path.join(repodir, version["obbMainFile"]),
-            "sha256", version["obbMainFileSha256"]
+            version["obbMainFileSha256"],
         )
 
     if "obbPatchFile" in version:
         ver["obbPatchFile"] = file_entry(
             os.path.join(repodir, version["obbPatchFile"]),
-            "sha256", version["obbPatchFileSha256"]
+            version["obbPatchFileSha256"],
         )
 
     ver["manifest"] = manifest = {}
