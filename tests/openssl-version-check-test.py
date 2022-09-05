@@ -13,7 +13,7 @@ import requests
 versions = [
 ]
 
-r = requests.get('https://www.openssl.org/news/changelog.html')
+r = requests.get('https://www.openssl.org/news/changelog.html', timeout=300)
 
 safe = set()
 bad = set()

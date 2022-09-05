@@ -33,7 +33,7 @@ class NightlyTest(unittest.TestCase):
         ]:
             url = nightly.get_repo_base_url(clone_url, repo_git_base)
             self.assertEqual(result, url)
-            r = requests.head(os.path.join(url, 'repo/index-v1.jar'))
+            r = requests.head(os.path.join(url, 'repo/index-v1.jar'), timeout=300)
             # gitlab.com often returns 403 Forbidden from their cloudflare restrictions
             self.assertTrue(r.status_code in (200, 403), 'should not be a redirect')
 

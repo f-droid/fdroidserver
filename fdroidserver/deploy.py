@@ -506,7 +506,7 @@ def upload_apk_to_android_observatory(path):
     apkfilename = os.path.basename(path)
     r = requests.post('https://androidobservatory.org/',
                       data={'q': update.sha256sum(path), 'searchby': 'hash'},
-                      headers=net.HEADERS)
+                      headers=net.HEADERS, timeout=300)
     if r.status_code == 200:
         # from now on XPath will be used to retrieve the message in the HTML
         # androidobservatory doesn't have a nice API to talk with
@@ -534,7 +534,7 @@ def upload_apk_to_android_observatory(path):
     r = requests.post('https://androidobservatory.org/upload',
                       files={'apk': (apkfilename, open(path, 'rb'))},
                       headers=net.HEADERS,
-                      allow_redirects=False)
+                      allow_redirects=False, timeout=300)
 
 
 def upload_to_virustotal(repo_section, virustotal_apikey):
@@ -586,7 +586,7 @@ def upload_apk_to_virustotal(virustotal_apikey, packageName, apkName, hash,
     needs_file_upload = False
     while True:
         r = requests.get('https://www.virustotal.com/vtapi/v2/file/report?'
-                         + urllib.parse.urlencode(data), headers=headers)
+                         + urllib.parse.urlencode(data), headers=headers, timeout=300)
         if r.status_code == 200:
             response = r.json()
             if response['response_code'] == 0:
@@ -620,7 +620,7 @@ def upload_apk_to_virustotal(virustotal_apikey, packageName, apkName, hash,
         elif size > 32000000:
             # VirusTotal API requires fetching a URL to upload bigger files
             r = requests.get('https://www.virustotal.com/vtapi/v2/file/scan/upload_url?'
-                             + urllib.parse.urlencode(data), headers=headers)
+                             + urllib.parse.urlencode(data), headers=headers, timeout=300)
             if r.status_code == 200:
                 upload_url = r.json().get('upload_url')
             elif r.status_code == 403:
@@ -638,7 +638,7 @@ def upload_apk_to_virustotal(virustotal_apikey, packageName, apkName, hash,
         files = {
             'file': (apkName, open(repofilename, 'rb'))
         }
-        r = requests.post(upload_url, data=data, headers=headers, files=files)
+        r = requests.post(upload_url, data=data, headers=headers, files=files, timeout=300)
         logging.debug(_('If this upload fails, try manually uploading to {url}')
                       .format(url=manual_url))
         r.raise_for_status()

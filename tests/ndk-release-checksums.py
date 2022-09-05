@@ -15,7 +15,8 @@ versions = dict()
 
 while not checksums:
     r = requests.get(
-        'https://gitlab.com/fdroid/android-sdk-transparency-log/-/raw/master/checksums.json'
+        'https://gitlab.com/fdroid/android-sdk-transparency-log/-/raw/master/checksums.json',
+        timeout=300,
     )
     if r.status_code == 200:
         checksums = r.json()

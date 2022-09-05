@@ -1331,7 +1331,7 @@ class vcs_gitsvn(vcs):
             # git-svn sucks at certificate validation, this throws useful errors:
             try:
                 import requests
-                r = requests.head(remote)
+                r = requests.head(remote, timeout=300)
                 r.raise_for_status()
             except Exception as e:
                 raise VCSException('SVN certificate pre-validation failed: ' + str(e)) from e
@@ -2616,7 +2616,7 @@ def get_apk_id_androguard(apkfile):
 
                     if axml.getName() == 'manifest':
                         break
-                elif _type == END_TAG or _type == TEXT or _type == END_DOCUMENT:
+                elif _type in (END_TAG, TEXT, END_DOCUMENT):
                     raise RuntimeError('{path}: <manifest> must be the first element in AndroidManifest.xml'
                                        .format(path=apkfile))
 

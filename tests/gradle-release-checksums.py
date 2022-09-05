@@ -14,7 +14,10 @@ checksums = None
 versions = dict()
 
 while not checksums:
-    r = requests.get('https://gitlab.com/fdroid/gradle-transparency-log/-/raw/master/checksums.json')
+    r = requests.get(
+        'https://gitlab.com/fdroid/gradle-transparency-log/-/raw/master/checksums.json',
+        timeout=300,
+    )
     if r.status_code == 200:
         checksums = r.json()
 

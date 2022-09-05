@@ -191,7 +191,7 @@ def check_tags(app, pattern):
                 root_dir = build_dir / subdir
                 paths = common.manifest_paths(root_dir, last_build.gradle)
                 version, vercode, _package = common.parse_androidmanifests(paths, app)
-                if version == 'Unknown' or version == 'Ignore':
+                if version in ('Unknown', 'Ignore'):
                     version = tag
                 if vercode:
                     logging.debug("Manifest exists in subdir '{0}'. Found version {1} ({2})"

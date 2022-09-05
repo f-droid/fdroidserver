@@ -98,7 +98,7 @@ def main():
         # exist, prompt the user using platform-specific default
         # and if the user leaves it blank, ignore and move on.
         default_sdk_path = ''
-        if sys.platform == 'win32' or sys.platform == 'cygwin':
+        if sys.platform in ('win32', 'cygwin'):
             p = os.path.join(
                 os.getenv('USERPROFILE'), 'AppData', 'Local', 'Android', 'android-sdk'
             )
