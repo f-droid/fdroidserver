@@ -1,22 +1,22 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR Free Software Foundation, Inc.
 # Allan Nordhøy <epost@anotheragency.no>, 2020, 2021, 2022.
-# Hans-Christoph Steiner <hans@guardianproject.info>, 2020.
+# Hans-Christoph Steiner <hans@guardianproject.info>, 2020, 2022.
 # mondstern <mondstern@snopyta.org>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.8-74-ga380b9f\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2022-02-15 20:04+0100\n"
-"PO-Revision-Date: 2022-02-16 15:13+0000\n"
-"Last-Translator: Allan Nordhøy <epost@anotheragency.no>\n"
+"PO-Revision-Date: 2022-09-06 14:30+0000\n"
+"Last-Translator: Hans-Christoph Steiner <hans@guardianproject.info>\n"
 "Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects/f-droid/fdroidserver/nb_NO/>\n"
 "Language: nb_NO\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.11-dev\n"
+"X-Generator: Weblate 4.14.1-dev\n"
 
 #: ../fdroidserver/common.py
 msgid ""
@@ -100,9 +100,9 @@ msgid "\"{path}\" is not an accepted format, convert to: {formats}"
 msgstr "\"{path}\" er ikke et godtatt format, konverter til: {formats}"
 
 #: ../fdroidserver/update.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "\"{path}\" is signed by a key that is not allowed:"
-msgstr "\"{path}\" finnes, men s3cmd er ikke installert!"
+msgstr ""
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -703,7 +703,7 @@ msgstr "Last ned logger som ikke finnes lokalt"
 #: ../fdroidserver/common.py
 #, python-format
 msgid "Downloading %s"
-msgstr "Laster ned %s …"
+msgstr "Laster ned %s"
 
 #: ../fdroidserver/common.py
 msgid "Downloading the repository already failed once, not trying again."
@@ -1111,9 +1111,9 @@ msgid "Invalid AutoUpdateMode: {mode}"
 msgstr "Ugyldig AutoUpdateMode: {mode}"
 
 #: ../fdroidserver/checkupdates.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Invalid UpdateCheckMode: {mode}"
-msgstr "Ugyldig pakkenavn {0}"
+msgstr ""
 
 #: ../fdroidserver/lint.py ../fdroidserver/checkupdates.py
 #, python-brace-format
@@ -1355,9 +1355,9 @@ msgid "No matching tags found"
 msgstr "Ingen informasjon funnet."
 
 #: ../fdroidserver/update.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "No minimum SDK version found in {0}, using default (3)."
-msgstr "Fant ingen 'config.yml' , bruker forvalg."
+msgstr ""
 
 #: ../fdroidserver/lint.py
 msgid "No need to specify that the app is Free Software"
@@ -1639,9 +1639,9 @@ msgid "Removing specified files"
 msgstr "Fjerner angitte filer"
 
 #: ../fdroidserver/update.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Removing {path}\""
-msgstr "Fjerner {path}\" …"
+msgstr "Fjerner {path}\""
 
 #: ../fdroidserver/update.py
 msgid "Rename APK files that do not match package.name_123.apk"
@@ -2101,9 +2101,9 @@ msgid "Unused scanignore path: %s"
 msgstr "Ubrukt fil i %s"
 
 #: ../fdroidserver/common.py
-#, fuzzy, python-format
+#, python-format
 msgid "Unzipping to %s"
-msgstr "Pakker ut til %s …"
+msgstr "Pakker ut til %s"
 
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Update repo information for new packages"
