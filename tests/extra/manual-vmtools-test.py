@@ -112,7 +112,7 @@ def main(args):
 
 if __name__ == '__main__':
     logging.basicConfig(format='%(message)s', level=logging.DEBUG)
-    
+
     parser = ArgumentParser(description="""\
 This is intended for manually testing vmtools.py
 
