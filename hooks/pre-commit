@@ -60,8 +60,10 @@ fi
 #   - Some lines are awkward to wrap around a char limit
 # * W503: line break before binary operator
 #   - Quite pedantic
+# * E275: missing whitespace after keyword
+#   - added after this code was frozen
 
-PEP8_IGNORE="E123,E501,W503"
+PEP8_IGNORE="E123,E275,E501,W503"
 
 err() {
 	echo >&2 ERROR: "$@"
