@@ -21,6 +21,7 @@ include examples/template.yml
 include gradlew-fdroid
 include LICENSE
 include locale/bo/LC_MESSAGES/fdroidserver.po
+include locale/cs/LC_MESSAGES/fdroidserver.po
 include locale/de/LC_MESSAGES/fdroidserver.po
 include locale/es/LC_MESSAGES/fdroidserver.po
 include locale/fr/LC_MESSAGES/fdroidserver.po
