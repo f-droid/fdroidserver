@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2022-02-15 20:04+0100\n"
+"POT-Creation-Date: 2022-09-06 22:24+0200\n"
 "PO-Revision-Date: 2022-02-17 19:57+0000\n"
 "Last-Translator: Ihor Hordiichuk <igor_ck@outlook.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/f-droid/fdroidserver/uk/>\n"
@@ -110,13 +110,13 @@ msgstr "\"{path}\" має непідтримуваний формат, конв�
 msgid "\"{path}\" is signed by a key that is not allowed:"
 msgstr "«{path}» підписано не дозволеним ключем:"
 
-#: ../fdroidserver/common.py
+#: ../fdroidserver/common.py ../fdroidserver/import_subcommand.py
 #, python-brace-format
 msgid "\"{url}\" is not a valid URL!"
 msgstr "\"{url}\" є недійсною URL-адресою!"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
-#: /usr/lib/python3.7/optparse.py
+#: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
 #, python-format
 msgid "%(option)s option requires %(number)d argument"
 msgid_plural "%(option)s option requires %(number)d arguments"
@@ -130,7 +130,7 @@ msgid "%(prog)s [options] url"
 msgstr "%(prog)s url [можливості]"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py
+#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #, python-format
 msgid "%(prog)s: error: %(message)s\n"
 msgstr "%(prog)s: помилка: %(message)s\n"
@@ -141,12 +141,12 @@ msgid "%d problems found"
 msgstr "%d знайдено проблем"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
-#: /usr/lib/python3.7/optparse.py
+#: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
 msgid "%prog [options]"
 msgstr "%prog [параметри]"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py
+#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #, python-format
 msgid "%r is not callable"
 msgstr "%r не можна викликати"
@@ -157,7 +157,7 @@ msgid "%s is not an accepted build field"
 msgstr "%s не є прийнятним полем для створення"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
-#: /usr/lib/python3.7/optparse.py
+#: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
 #, python-format
 msgid "%s option does not take a value"
 msgstr "%s параметр не приймає значення"
@@ -183,7 +183,7 @@ msgid "'repo_keyalias' not found in config.yml!"
 msgstr "'repo_keyalias' не знайдено в config.yml!"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py
+#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 msgid "'required' is an invalid argument for positionals"
 msgstr "'required' недійсний аргумент для позицій"
 
@@ -239,7 +239,7 @@ msgid "...checkupdate failed for {appid} : {error}"
 msgstr "... checkupdate не вдалося для {appid} : {error}"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py
+#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 msgid ".__call__() not defined"
 msgstr ".__call__() не визначено"
 
@@ -280,7 +280,7 @@ msgstr "Додати новий репозиторій лише для {name}"
 msgid "Alias of the repo signing key in the keystore"
 msgstr "Псевдонім підписного ключа репозиторію у сховищі ключів"
 
-#: ../fdroidserver/import.py
+#: ../fdroidserver/import.py ../fdroidserver/import_subcommand.py
 msgid "Allows a different revision (or git branch) to be specified for the initial import"
 msgstr "Дозволяє вказати іншу версію (або git гілку) для початкового імпорту"
 
@@ -477,7 +477,7 @@ msgstr "Перевірка архівації на {appid} — apks:{integer}, k
 msgid "Clean update - don't uses caches, reprocess all APKs"
 msgstr "Очистити оновлення - не використовує кеш, повторно обробляє всі APK"
 
-#: ../fdroidserver/import.py
+#: ../fdroidserver/import.py ../fdroidserver/import_subcommand.py
 msgid "Comma separated list of categories."
 msgstr "Список категорій, розділених комами."
 
@@ -504,11 +504,11 @@ msgstr "Суперечливі файли налаштувань! Викорис
 msgid "Could not find '{command}' on your system"
 msgstr "Не вдалося знайти '{command}' у вашій системі"
 
-#: ../fdroidserver/import.py
+#: ../fdroidserver/import.py ../fdroidserver/import_subcommand.py
 msgid "Could not find latest version code"
 msgstr "Не вдалося знайти останню версію коду"
 
-#: ../fdroidserver/import.py
+#: ../fdroidserver/import.py ../fdroidserver/import_subcommand.py
 msgid "Could not find latest version name"
 msgstr "Не вдалося знайти найновішу назву версії"
 
@@ -528,7 +528,7 @@ msgid "Could not parse size \"{size}\", wrong type \"{type}\""
 msgstr "Не вдалося проаналізувати розмір \"{size}\", неправильний тип \"{type}\""
 
 #. Translators: https://developer.android.com/studio/build/application-id
-#: ../fdroidserver/import.py
+#: ../fdroidserver/import.py ../fdroidserver/import_subcommand.py
 msgid "Couldn't find Application ID"
 msgstr "Не вдалося знайти ID застосунку"
 
@@ -645,7 +645,7 @@ msgstr "Опис містить список (%s) але не маркірова
 msgid "Description of length {length} is over the {limit} char limit"
 msgstr "Довжина опису {length} перевищує ліміт {limit}"
 
-#: ../fdroidserver/import.py
+#: ../fdroidserver/import.py ../fdroidserver/import_subcommand.py
 msgid "Do not add 'disable:' to the generated build entries"
 msgstr "Не додавайте 'disable:' до створених записів збірки"
 
@@ -735,6 +735,11 @@ msgstr ""
 msgid "ERROR: unsupported CI type, patches welcome!"
 msgstr "ПОМИЛКА: непідтримуваний вид CI, виправлення вітається!"
 
+#: ../fdroidserver/nightly.py
+#, fuzzy, python-format
+msgid "ERROR: unsupported git host \"%s\", patches welcome!"
+msgstr "ПОМИЛКА: непідтримуваний вид CI, виправлення вітається!"
+
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Empty build flag at {linedesc}"
@@ -766,8 +771,13 @@ msgid "Error while attempting to publish log: %s"
 msgstr "Помилка під час отримання адреси сховища: %s"
 
 #: ../fdroidserver/import.py ../fdroidserver/common.py
+#: ../fdroidserver/import_subcommand.py
 msgid "Error while getting repo address"
 msgstr "Помилка отримання адреси репозиторію"
+
+#: ../fdroidserver/__main__.py
+msgid "Extract application metadata from a source repository"
+msgstr ""
 
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Extract signatures from APKs"
@@ -1252,6 +1262,11 @@ msgstr "Несправні дзеркала репозиторію."
 msgid "Malformed serverwebroot line:"
 msgstr "Несправний шлях serverwebroot:"
 
+#: ../fdroidserver/scanner.py
+#, python-format
+msgid "Max recursion depth in ZIP file reached: %s"
+msgstr ""
+
 #: ../fdroidserver/mirror.py
 msgid "Mirror the full repo and archive, all file types."
 msgstr "Дзеркало всього репозиторію та архіву всіх типів файлів."
@@ -1264,6 +1279,10 @@ msgstr "Відсутній вихідний шлях"
 #, python-format
 msgid "Name '%s' is just the auto name - remove it"
 msgstr "Назву '%s' — створено самочинно, вилучіть її"
+
+#: ../fdroidserver/index.py
+msgid "Neither \"repo_pubkey\" nor \"keystorepass\" set in config.yml"
+msgstr ""
 
 #: ../fdroidserver/common.py
 msgid "No 'config.yml' found, using defaults."
@@ -1303,11 +1322,12 @@ msgstr "Немає власного цифрового відбитка в URL-�
 msgid "No git submodules available"
 msgstr "Немає доступних підмодулів git"
 
-#: ../fdroidserver/import.py
+#: ../fdroidserver/import.py ../fdroidserver/import_subcommand.py
 msgid "No gradle project could be found. Specify --subdir?"
 msgstr "Не знайдено жодного проєкту gradle. Вказати його у --subdir?"
 
 #: ../fdroidserver/import.py ../fdroidserver/common.py
+#: ../fdroidserver/import_subcommand.py
 msgid "No information found."
 msgstr "Подробиць не знайдено."
 
@@ -1431,7 +1451,7 @@ msgid "OpenCollective donation methods belong in the OpenCollective: field"
 msgstr "Належний до OpenCollective метод допомоги OpenCollective: не вдалося"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
-#: /usr/lib/python3.7/optparse.py
+#: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
 msgid "Options"
 msgstr "Параметри"
 
@@ -1449,7 +1469,7 @@ msgstr "Вивід JSON на stdout."
 msgid "Outputting JSON"
 msgstr "Вивід JSON"
 
-#: ../fdroidserver/import.py
+#: ../fdroidserver/import.py ../fdroidserver/import_subcommand.py
 msgid "Overall license of the project."
 msgstr "Загальна ліцензія проєкту."
 
@@ -1458,7 +1478,7 @@ msgstr "Загальна ліцензія проєкту."
 msgid "Overriding blank versionName in {apkfilename} from metadata: {version}"
 msgstr "Перезапис порожнього versionName у {apkfilename} з метаданих: {version}"
 
-#: ../fdroidserver/import.py
+#: ../fdroidserver/import.py ../fdroidserver/import_subcommand.py
 #, python-brace-format
 msgid "Package \"{appid}\" already exists"
 msgstr "Пакунок \"{appid}\" вже існує"
@@ -1472,7 +1492,7 @@ msgstr "Читання маніфесту у '{path}'"
 msgid "Password required with username"
 msgstr "Потрібен парольіз іменем користувача"
 
-#: ../fdroidserver/import.py
+#: ../fdroidserver/import.py ../fdroidserver/import_subcommand.py
 msgid "Path to main Android project subdirectory, if not in root."
 msgstr "Шлях до основного підкаталогу проєкту Android, якщо не в кореневому каталозі."
 
@@ -1494,6 +1514,11 @@ msgstr "Шлях до сховища ключів для підписного к
 #: ../fdroidserver/nightly.py
 msgid "Print the secret variable to the terminal for easy copy/paste"
 msgstr "Вивести таємну змінну до термінала для легкого копіювання/вставлення"
+
+#: ../fdroidserver/scanner.py
+#, python-format
+msgid "Problem with ZIP file: %s, error %s"
+msgstr ""
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
@@ -1527,7 +1552,7 @@ msgstr "Створити доступний для читання людиною
 msgid "Produce human-readable index.xml"
 msgstr "Створити зручний для сприйняття index.xml"
 
-#: ../fdroidserver/import.py
+#: ../fdroidserver/import.py ../fdroidserver/import_subcommand.py
 msgid "Project URL to import from."
 msgstr "URL-адреса проєкту для імпорту."
 
@@ -1665,6 +1690,11 @@ msgid "Scan the source code of a package"
 msgstr "Сканування джерельного коду пакунка"
 
 #: ../fdroidserver/scanner.py
+#, fuzzy, python-brace-format
+msgid "Scanner found {count} problems in {apk}:"
+msgstr "Зчитувач знайшов {count} проблеми в {appid}:"
+
+#: ../fdroidserver/scanner.py
 #, python-brace-format
 msgid "Scanner found {count} problems in {appid}:"
 msgstr "Зчитувач знайшов {count} проблеми в {appid}:"
@@ -1683,6 +1713,11 @@ msgstr[2] "Знайдено {} проблем"
 
 #: ../fdroidserver/scanner.py
 msgid "Scanning APK with apkanalyzer for known non-free classes."
+msgstr "Перевірка APK на наявність відомих невільних класів за допомогою apkanalyzer."
+
+#: ../fdroidserver/scanner.py
+#, fuzzy
+msgid "Scanning APK with dexdump for known non-free classes."
 msgstr "Перевірка APK на наявність відомих невільних класів за допомогою apkanalyzer."
 
 #: ../fdroidserver/common.py
@@ -1862,7 +1897,7 @@ msgstr "Ці застосунки, заархівовано з основног�
 msgid "This is a repository of apps to be used with F-Droid. Applications in this repository are either official binaries built by the original application developers, or are binaries built from source by the admin of f-droid.org using the tools on https://gitlab.com/fdroid."
 msgstr "Цей репозиторій застосунків для використання з FDroid. Застосунки в цьому репозиторії — це або офіційні двійкові файли, побудовані розробниками оригінального застосунку, або двійкові файли, побудовані з джерела f-droid.org за допомогою інструментів з https://gitlab.com/fdroid."
 
-#: ../fdroidserver/import.py
+#: ../fdroidserver/import.py ../fdroidserver/import_subcommand.py
 #, python-format
 msgid "This repo already has local metadata: %s"
 msgstr "Репозиторій вже має локальні метадані: %s"
@@ -2103,12 +2138,12 @@ msgid "Uploading {apkfilename} to virustotal"
 msgstr "Завантаження {apkfilename} до virustotal"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
-#: /usr/lib/python3.7/optparse.py
+#: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
 msgid "Usage"
 msgstr "Використання"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
-#: /usr/lib/python3.7/optparse.py
+#: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
 #, python-format
 msgid "Usage: %s\n"
 msgstr "Використання: %s\n"
@@ -2220,13 +2255,13 @@ msgid "adding to {name}: {path}"
 msgstr "додавання до {name}: {path}"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py
+#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #, python-format
 msgid "ambiguous option: %(option)s could match %(matches)s"
 msgstr "неоднозначний параметр: %(option)s може відповідати %(matches)s"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
-#: /usr/lib/python3.7/optparse.py
+#: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
 #, python-format
 msgid "ambiguous option: %s (%s?)"
 msgstr "неоднозначний параметр: %s (%s?)"
@@ -2265,8 +2300,12 @@ msgstr "applicationId для перевірки наявності оновле�
 msgid "applicationId with optional versionCode in the form APPID[:VERCODE]"
 msgstr "applicationId з необов'язковим versionCode у формі APPID[:VERCODE]"
 
+#: ../fdroidserver/common.py
+msgid "archive_url needs to end with /archive"
+msgstr ""
+
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py
+#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #, python-format
 msgid "argument \"-\" with mode %r"
 msgstr "аргумент \"-\" в режимі %r"
@@ -2283,6 +2322,11 @@ msgstr "спроба відкритого з'єднання ssh для пере�
 msgid "can not parse scrlib spec (not a string): '{}'"
 msgstr "не вдається проаналізувати специфікацію scrlib (не рядок): '{}'"
 
+#: /usr/lib/python3.9/argparse.py
+#, fuzzy, python-format
+msgid "can't open '%(filename)s': %(error)s"
+msgstr "не може відкрити '%s': %s"
+
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py
 #, python-format
@@ -2295,12 +2339,12 @@ msgid "cannot find required srclibs: \"{path}\""
 msgstr "не вдалося знайти потрібні srclibs: \"{path}\""
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py
+#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 msgid "cannot have multiple subparser arguments"
 msgstr "не може мати кілька аргументів підпарсера"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py
+#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #, python-format
 msgid "cannot merge actions - two groups are named %r"
 msgstr "не може об'єднати дії - дві групи мають ім'я %r"
@@ -2323,12 +2367,12 @@ msgid "commands from plugin modules:"
 msgstr "команди з модулів плагіна:"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
-#: /usr/lib/python3.7/optparse.py
+#: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
 msgid "complex"
 msgstr "складний"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py
+#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #, python-format
 msgid "conflicting option string: %s"
 msgid_plural "conflicting option strings: %s"
@@ -2380,7 +2424,7 @@ msgid "deployed process log {path} to {dest}"
 msgstr "розгорнуто журнал процесів {path} до {dest}"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py
+#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #, python-format
 msgid "dest= is required for options like %r"
 msgstr "dest= потрібен для таких варіантів, як %r"
@@ -2390,7 +2434,7 @@ msgid "executable binary, possibly code"
 msgstr "виконуваний двійковий файл, можливо, код"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py
+#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #, python-format
 msgid "expected %s argument"
 msgid_plural "expected %s arguments"
@@ -2399,17 +2443,17 @@ msgstr[1] "очікується %s аргументи"
 msgstr[2] "очікується %s аргументів"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py
+#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 msgid "expected at least one argument"
 msgstr "очікується хоча б один аргумент"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py
+#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 msgid "expected at most one argument"
 msgstr "очікується не більше одного аргументу"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py
+#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 msgid "expected one argument"
 msgstr "очікується один аргумент"
 
@@ -2427,7 +2471,7 @@ msgid "fdroid [<command>] [-h|--help|--version|<args>]"
 msgstr "fdroid [<команда>] [-h|--help|--version|<аргументи>]"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
-#: /usr/lib/python3.7/optparse.py
+#: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
 msgid "floating-point"
 msgstr "з комою, що плаває"
 
@@ -2448,7 +2492,7 @@ msgid "gzip file archive"
 msgstr "gzip-архів"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py
+#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #, python-format
 msgid "ignored explicit argument %r"
 msgstr "нехтується явний аргумент %r"
@@ -2457,31 +2501,36 @@ msgstr "нехтується явний аргумент %r"
 msgid "index-v1 must have a signature, use `fdroid signindex` to create it!"
 msgstr "index-v1 повинен мати підпис, використовуйте `fdroid signindex`, щоб створити його!"
 
+#: ../fdroidserver/index.py
+#, fuzzy
+msgid "index-v2 must have a signature, use `fdroid signindex` to create it!"
+msgstr "index-v1 повинен мати підпис, використовуйте `fdroid signindex`, щоб створити його!"
+
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
-#: /usr/lib/python3.7/optparse.py
+#: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
 msgid "integer"
 msgstr "ціле число"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py
+#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #, python-format
 msgid "invalid %(type)s value: %(value)r"
 msgstr "недійсне %(type)s значення: %(value)r"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py
+#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #, python-format
 msgid "invalid choice: %(value)r (choose from %(choices)s)"
 msgstr "неправильний вибір: %(value)r (варто обрати з %(choices)s)"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py
+#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #, python-format
 msgid "invalid conflict_resolution value: %r"
 msgstr "недійсне значення conflict_resolution: %r"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py
+#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #, python-format
 msgid "invalid option string %(option)r: must start with a character %(prefix_chars)r"
 msgstr "неправильний рядок параметра %(option)r: повинен починатися зі знаку %(prefix_chars)r"
@@ -2510,7 +2559,7 @@ msgid "mirror '%s' does not end with 'fdroid'!"
 msgstr "дзеркало '%s' не закінчується на 'fdroid'!"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py
+#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 msgid "mutually exclusive arguments must be optional"
 msgstr "взаємозаперечні аргументи повинні бути необов'язковими"
 
@@ -2524,7 +2573,7 @@ msgid "no APK supplied"
 msgstr "APK не надано"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
-#: /usr/lib/python3.7/optparse.py
+#: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
 #, python-format
 msgid "no such option: %s"
 msgstr "такого параметру немає: %s"
@@ -2538,13 +2587,13 @@ msgid "no version information found"
 msgstr "не знайдено відомостей про версію"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py
+#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #, python-format
 msgid "not allowed with argument %s"
 msgstr "не дозволено з аргументом %s"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py
+#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #, python-format
 msgid "one of the arguments %s is required"
 msgstr "потрібен один з аргументів %s"
@@ -2559,55 +2608,55 @@ msgid "option %s: If you really want to install all the signed apps, use --all"
 msgstr "параметр %s: Якщо ви дійсно хочете встановити всі підписані застосунки, використовуйте --all"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
-#: /usr/lib/python3.7/optparse.py
+#: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
 #, python-format
 msgid "option %s: invalid %s value: %r"
 msgstr "параметр %s: недійсне %s значення: %r"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
-#: /usr/lib/python3.7/optparse.py
+#: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
 #, python-format
 msgid "option %s: invalid choice: %r (choose from %s)"
 msgstr "для параметра %s: неправильний вибір: %r (вибрати з %s)"
 
 #: /usr/lib/python3.5/getopt.py /usr/lib/python3.6/getopt.py
-#: /usr/lib/python3.7/getopt.py
+#: /usr/lib/python3.7/getopt.py /usr/lib/python3.9/getopt.py
 #, python-format
 msgid "option -%s not recognized"
 msgstr "параметр -%s не розпізнано"
 
 #: /usr/lib/python3.5/getopt.py /usr/lib/python3.6/getopt.py
-#: /usr/lib/python3.7/getopt.py
+#: /usr/lib/python3.7/getopt.py /usr/lib/python3.9/getopt.py
 #, python-format
 msgid "option -%s requires argument"
 msgstr "параметр -%s потрібен аргумент"
 
 #: /usr/lib/python3.5/getopt.py /usr/lib/python3.6/getopt.py
-#: /usr/lib/python3.7/getopt.py
+#: /usr/lib/python3.7/getopt.py /usr/lib/python3.9/getopt.py
 #, python-format
 msgid "option --%s must not have an argument"
 msgstr "параметр --%s не має аргументу"
 
 #: /usr/lib/python3.5/getopt.py /usr/lib/python3.6/getopt.py
-#: /usr/lib/python3.7/getopt.py
+#: /usr/lib/python3.7/getopt.py /usr/lib/python3.9/getopt.py
 #, python-format
 msgid "option --%s not a unique prefix"
 msgstr "параметр --%s не унікальний префікс"
 
 #: /usr/lib/python3.5/getopt.py /usr/lib/python3.6/getopt.py
-#: /usr/lib/python3.7/getopt.py
+#: /usr/lib/python3.7/getopt.py /usr/lib/python3.9/getopt.py
 #, python-format
 msgid "option --%s not recognized"
 msgstr "параметр --%s не визнано"
 
 #: /usr/lib/python3.5/getopt.py /usr/lib/python3.6/getopt.py
-#: /usr/lib/python3.7/getopt.py
+#: /usr/lib/python3.7/getopt.py /usr/lib/python3.9/getopt.py
 #, python-format
 msgid "option --%s requires argument"
 msgstr "параметр --%s потрібен аргумент"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py
+#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 msgid "optional arguments"
 msgstr "необов'язкові аргументи"
 
@@ -2617,7 +2666,7 @@ msgid "overwriting existing {path}"
 msgstr "перезаписування наявного шляху {path}"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py
+#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 msgid "positional arguments"
 msgstr "позиційні аргументи"
 
@@ -2646,6 +2695,10 @@ msgstr "repo_icon \"repo/icons/%s\" не існує, створення запо
 msgid "repo_icon %s does not exist, generating placeholder."
 msgstr "repo_icon %s не існує, створення заповнювача."
 
+#: ../fdroidserver/common.py
+msgid "repo_url needs to end with /repo"
+msgstr ""
+
 #: ../fdroidserver/metadata.py
 msgid "ruamel.yaml not installed, can not write metadata."
 msgstr "ruamel.yaml не встановлено, не вдається записати метадані."
@@ -2665,13 +2718,14 @@ msgid "shared library"
 msgstr "спільна бібліотека"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
-#: /usr/lib/python3.7/optparse.py
+#: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
 msgid "show program's version number and exit"
 msgstr "показати номер версії програми та вийти"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.5/optparse.py
 #: /usr/lib/python3.6/argparse.py /usr/lib/python3.6/optparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.7/optparse.py
+#: /usr/lib/python3.9/argparse.py /usr/lib/python3.9/optparse.py
 msgid "show this help message and exit"
 msgstr "показати довідку та вийти"
 
@@ -2706,25 +2760,25 @@ msgid "supplied timestamp value '{timestamp}' is not a unix timestamp"
 msgstr "надане значення часової позначки '{timestamp}' не є часовою міткою Unix"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py
+#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #, python-format
 msgid "the following arguments are required: %s"
 msgstr "такі аргументи зобов'язані: %s"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py
+#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #, python-format
 msgid "unexpected option string: %s"
 msgstr "неочікуваний рядок параметрів: %s"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py
+#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #, python-format
 msgid "unknown parser %(parser_name)r (choices: %(choices)s)"
 msgstr "невідомий парсер %(parser_name)r (варто вибрати: %(choices)s)"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py
+#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #, python-format
 msgid "unrecognized arguments: %s"
 msgstr "нерозпізнані аргументи: %s"
@@ -2736,6 +2790,7 @@ msgstr "небезпечні дозволи на '{config_file}' (should be 0600
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py ../fdroid
 #: /usr/lib/python3.7/argparse.py ../fdroidserver/__main__.py
+#: /usr/lib/python3.9/argparse.py
 msgid "usage: "
 msgstr "використання: "
 
@@ -2865,7 +2920,7 @@ msgstr "{name} \"{section}/icons/{path}\" не існує! Виправте йо
 msgid "{oldfile} is deprecated, use {newfile}"
 msgstr "{oldfile} вилучено, використовується {newfile}"
 
-#: ../fdroidserver/import.py
+#: ../fdroidserver/import.py ../fdroidserver/import_subcommand.py
 #, python-brace-format
 msgid "{path} already exists, ignoring import results!"
 msgstr "{path} вже існує, нехтування результатами імпорту!"
@@ -2900,7 +2955,7 @@ msgstr "{path}: {error}"
 msgid "{url} does not end with \"fdroid\", check the URL path!"
 msgstr "{url} не закінчується на \"fdroid\", перевірте шлях URL!"
 
-#: ../fdroidserver/common.py
+#: ../fdroidserver/common.py ../fdroidserver/import_subcommand.py
 #, python-brace-format
 msgid "{url} does not start with \"http\"!"
 msgstr "{url} не починається на \"http\"!"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 2.0a5-27-gf24eae0f\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2022-02-15 20:04+0100\n"
+"POT-Creation-Date: 2022-09-06 22:24+0200\n"
 "PO-Revision-Date: 2022-03-03 02:51+0000\n"
 "Last-Translator: Simona Iacob <s@zp1.net>\n"
 "Language-Team: Romanian <https://hosted.weblate.org/projects/f-droid/fdroidserver/ro/>\n"
@@ -109,13 +109,13 @@ msgstr "\"{path}\" nu este un format acceptat, convertiți în: {formats}"
 msgid "\"{path}\" is signed by a key that is not allowed:"
 msgstr "\"{path}\" \"{path}\" este semnat de o cheie care nu este permisă:"
 
-#: ../fdroidserver/common.py
+#: ../fdroidserver/common.py ../fdroidserver/import_subcommand.py
 #, python-brace-format
 msgid "\"{url}\" is not a valid URL!"
 msgstr "\"{url}\" nu este un URL valid!"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
-#: /usr/lib/python3.7/optparse.py
+#: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
 #, python-format
 msgid "%(option)s option requires %(number)d argument"
 msgid_plural "%(option)s option requires %(number)d arguments"
@@ -129,7 +129,7 @@ msgid "%(prog)s [options] url"
 msgstr "%(prog)s [opțiuni] url"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py
+#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #, python-format
 msgid "%(prog)s: error: %(message)s\n"
 msgstr "%(prog)s: eroare: %(message)s\n"
@@ -140,12 +140,12 @@ msgid "%d problems found"
 msgstr "%d probleme găsite"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
-#: /usr/lib/python3.7/optparse.py
+#: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
 msgid "%prog [options]"
 msgstr "%prog [opțiuni]"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py
+#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #, python-format
 msgid "%r is not callable"
 msgstr "%r nu este apelabil"
@@ -156,7 +156,7 @@ msgid "%s is not an accepted build field"
 msgstr "%s nu este un câmp de construcție acceptat"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
-#: /usr/lib/python3.7/optparse.py
+#: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
 #, python-format
 msgid "%s option does not take a value"
 msgstr "Opțiunea %s nu acceptă o valoare"
@@ -182,7 +182,7 @@ msgid "'repo_keyalias' not found in config.yml!"
 msgstr "'repo_keyalias' nu se găsește în config.yml!"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py
+#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 msgid "'required' is an invalid argument for positionals"
 msgstr "'required' este un argument invalid pentru poziționale"
 
@@ -238,7 +238,7 @@ msgid "...checkupdate failed for {appid} : {error}"
 msgstr "...checkupdate a eșuat pentru {appid} : {error}"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py
+#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 msgid ".__call__() not defined"
 msgstr ".__call__() nu este definit"
 
@@ -279,7 +279,7 @@ msgstr "Adăugarea unui nou depozit doar pentru {name}"
 msgid "Alias of the repo signing key in the keystore"
 msgstr "Alias al cheii de semnare repo din magazinul de chei"
 
-#: ../fdroidserver/import.py
+#: ../fdroidserver/import.py ../fdroidserver/import_subcommand.py
 msgid "Allows a different revision (or git branch) to be specified for the initial import"
 msgstr "Permite specificarea unei revizuiri diferite (sau a unei ramuri git) pentru importul inițial"
 
@@ -476,7 +476,7 @@ msgstr "Verificarea arhivării pentru {appid} - apks:{integer}, keepversions:{ke
 msgid "Clean update - don't uses caches, reprocess all APKs"
 msgstr "Actualizare curată - nu folosește memoria cache, reprocesează toate APK-urile"
 
-#: ../fdroidserver/import.py
+#: ../fdroidserver/import.py ../fdroidserver/import_subcommand.py
 msgid "Comma separated list of categories."
 msgstr "Lista de categorii separate prin virgulă."
 
@@ -503,11 +503,11 @@ msgstr "Fișiere de configurare conflictuale! Folosind {newfile}, ignorând {old
 msgid "Could not find '{command}' on your system"
 msgstr "Nu a putut găsi '{command}' pe sistemul dvs"
 
-#: ../fdroidserver/import.py
+#: ../fdroidserver/import.py ../fdroidserver/import_subcommand.py
 msgid "Could not find latest version code"
 msgstr "Nu a putut găsi codul ultimei versiuni"
 
-#: ../fdroidserver/import.py
+#: ../fdroidserver/import.py ../fdroidserver/import_subcommand.py
 msgid "Could not find latest version name"
 msgstr "Nu a putut găsi numele celei mai recente versiuni"
 
@@ -527,7 +527,7 @@ msgid "Could not parse size \"{size}\", wrong type \"{type}\""
 msgstr "Nu a putut analiza dimensiunea \"{size}\", tip greșit \"{type}\""
 
 #. Translators: https://developer.android.com/studio/build/application-id
-#: ../fdroidserver/import.py
+#: ../fdroidserver/import.py ../fdroidserver/import_subcommand.py
 msgid "Couldn't find Application ID"
 msgstr "Nu s-a putut găsi ID-ul aplicației"
 
@@ -644,7 +644,7 @@ msgstr "Descrierea are o listă (%s), dar nu este punctată (*) și nici numerot
 msgid "Description of length {length} is over the {limit} char limit"
 msgstr "Descrierea lungimii {length} este peste limita {limit} limitei de caractere"
 
-#: ../fdroidserver/import.py
+#: ../fdroidserver/import.py ../fdroidserver/import_subcommand.py
 msgid "Do not add 'disable:' to the generated build entries"
 msgstr "Nu adăugați \"disable:\" la intrările de construcție generate"
 
@@ -734,6 +734,11 @@ msgstr ""
 msgid "ERROR: unsupported CI type, patches welcome!"
 msgstr "ERROR: tip CI neacceptat, patch-uri binevenite!"
 
+#: ../fdroidserver/nightly.py
+#, fuzzy, python-format
+msgid "ERROR: unsupported git host \"%s\", patches welcome!"
+msgstr "ERROR: tip CI neacceptat, patch-uri binevenite!"
+
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Empty build flag at {linedesc}"
@@ -765,8 +770,13 @@ msgid "Error while attempting to publish log: %s"
 msgstr "Eroare la încercarea de a publica jurnalul: %s"
 
 #: ../fdroidserver/import.py ../fdroidserver/common.py
+#: ../fdroidserver/import_subcommand.py
 msgid "Error while getting repo address"
 msgstr "Eroare la obținerea adresei repo"
+
+#: ../fdroidserver/__main__.py
+msgid "Extract application metadata from a source repository"
+msgstr ""
 
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Extract signatures from APKs"
@@ -1251,6 +1261,11 @@ msgstr "Oglinzi de depozit malformate."
 msgid "Malformed serverwebroot line:"
 msgstr "Linie de root a serverului web deformată:"
 
+#: ../fdroidserver/scanner.py
+#, python-format
+msgid "Max recursion depth in ZIP file reached: %s"
+msgstr ""
+
 #: ../fdroidserver/mirror.py
 msgid "Mirror the full repo and archive, all file types."
 msgstr "Oglindește întregul repo și arhiva, toate tipurile de fișiere."
@@ -1263,6 +1278,10 @@ msgstr "Lipsește directorul de ieșire"
 #, python-format
 msgid "Name '%s' is just the auto name - remove it"
 msgstr "Numele \"%s\" este doar un nume auto - eliminați-l"
+
+#: ../fdroidserver/index.py
+msgid "Neither \"repo_pubkey\" nor \"keystorepass\" set in config.yml"
+msgstr ""
 
 #: ../fdroidserver/common.py
 msgid "No 'config.yml' found, using defaults."
@@ -1302,11 +1321,12 @@ msgstr "Nu există amprente în URL."
 msgid "No git submodules available"
 msgstr "Nu există submodule git disponibile"
 
-#: ../fdroidserver/import.py
+#: ../fdroidserver/import.py ../fdroidserver/import_subcommand.py
 msgid "No gradle project could be found. Specify --subdir?"
 msgstr "Nu a putut fi găsit niciun proiect gradle. Specificați --subdir?"
 
 #: ../fdroidserver/import.py ../fdroidserver/common.py
+#: ../fdroidserver/import_subcommand.py
 msgid "No information found."
 msgstr "Nu s-au găsit informații."
 
@@ -1430,7 +1450,7 @@ msgid "OpenCollective donation methods belong in the OpenCollective: field"
 msgstr "Metodele de donație OpenCollective aparțin OpenCollective: câmp"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
-#: /usr/lib/python3.7/optparse.py
+#: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
 msgid "Options"
 msgstr "Opțiuni"
 
@@ -1448,7 +1468,7 @@ msgstr "Emite JSON către stdout."
 msgid "Outputting JSON"
 msgstr "Ieșirea JSON"
 
-#: ../fdroidserver/import.py
+#: ../fdroidserver/import.py ../fdroidserver/import_subcommand.py
 msgid "Overall license of the project."
 msgstr "Licența generală a proiectului."
 
@@ -1457,7 +1477,7 @@ msgstr "Licența generală a proiectului."
 msgid "Overriding blank versionName in {apkfilename} from metadata: {version}"
 msgstr "Suprascrierea versiunii goale VersionName în {apkfilename} din metadate: {version}"
 
-#: ../fdroidserver/import.py
+#: ../fdroidserver/import.py ../fdroidserver/import_subcommand.py
 #, python-brace-format
 msgid "Package \"{appid}\" already exists"
 msgstr "Pachetul \"{appid}\" există deja"
@@ -1471,7 +1491,7 @@ msgstr "Analiza manifestului la '{path}'"
 msgid "Password required with username"
 msgstr "Parola este necesară cu numele de utilizator"
 
-#: ../fdroidserver/import.py
+#: ../fdroidserver/import.py ../fdroidserver/import_subcommand.py
 msgid "Path to main Android project subdirectory, if not in root."
 msgstr "Calea de acces la subdirectorul principal al proiectului Android, dacă nu se află în root."
 
@@ -1493,6 +1513,11 @@ msgstr "Calea către depozitul de chei pentru cheia de semnare a repo-ului"
 #: ../fdroidserver/nightly.py
 msgid "Print the secret variable to the terminal for easy copy/paste"
 msgstr "Tipărește variabila secretă în terminal pentru un ușor copy/paste"
+
+#: ../fdroidserver/scanner.py
+#, python-format
+msgid "Problem with ZIP file: %s, error %s"
+msgstr ""
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
@@ -1526,7 +1551,7 @@ msgstr "Producerea de fișiere XML/JSON lizibile de către om pentru fișierele 
 msgid "Produce human-readable index.xml"
 msgstr "Produce index.xml lizibil pentru oameni"
 
-#: ../fdroidserver/import.py
+#: ../fdroidserver/import.py ../fdroidserver/import_subcommand.py
 msgid "Project URL to import from."
 msgstr "URL-ul proiectului din care se importă."
 
@@ -1664,6 +1689,11 @@ msgid "Scan the source code of a package"
 msgstr "Scanarea codului sursă al unui pachet"
 
 #: ../fdroidserver/scanner.py
+#, fuzzy, python-brace-format
+msgid "Scanner found {count} problems in {apk}:"
+msgstr "Scanerul a găsit {count} probleme în {appid}:"
+
+#: ../fdroidserver/scanner.py
 #, python-brace-format
 msgid "Scanner found {count} problems in {appid}:"
 msgstr "Scanerul a găsit {count} probleme în {appid}:"
@@ -1682,6 +1712,11 @@ msgstr[2] "Scannerul a găsit {} probleme"
 
 #: ../fdroidserver/scanner.py
 msgid "Scanning APK with apkanalyzer for known non-free classes."
+msgstr "Scanarea APK cu apkanalyzer pentru clasele non-libere cunoscute."
+
+#: ../fdroidserver/scanner.py
+#, fuzzy
+msgid "Scanning APK with dexdump for known non-free classes."
 msgstr "Scanarea APK cu apkanalyzer pentru clasele non-libere cunoscute."
 
 #: ../fdroidserver/common.py
@@ -1861,7 +1896,7 @@ msgstr "Acestea sunt aplicațiile care au fost arhivate din depozitul principal.
 msgid "This is a repository of apps to be used with F-Droid. Applications in this repository are either official binaries built by the original application developers, or are binaries built from source by the admin of f-droid.org using the tools on https://gitlab.com/fdroid."
 msgstr "Acesta este un depozit de aplicații care pot fi utilizate cu F-Droid. Aplicațiile din acest depozit sunt fie binare oficiale construite de către dezvoltatorii aplicațiilor originale, fie binare construite din sursă de către administratorul f-droid.org folosind instrumentele de pe https://gitlab.com/fdroid."
 
-#: ../fdroidserver/import.py
+#: ../fdroidserver/import.py ../fdroidserver/import_subcommand.py
 #, python-format
 msgid "This repo already has local metadata: %s"
 msgstr "Acest depozit are deja metadate locale: %s"
@@ -2102,12 +2137,12 @@ msgid "Uploading {apkfilename} to virustotal"
 msgstr "Încărcarea {apkfilename} la virustotal"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
-#: /usr/lib/python3.7/optparse.py
+#: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
 msgid "Usage"
 msgstr "Utilizare"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
-#: /usr/lib/python3.7/optparse.py
+#: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
 #, python-format
 msgid "Usage: %s\n"
 msgstr "Utilizare: %s\n"
@@ -2219,13 +2254,13 @@ msgid "adding to {name}: {path}"
 msgstr "adăugând la {name}: {path}"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py
+#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #, python-format
 msgid "ambiguous option: %(option)s could match %(matches)s"
 msgstr "opțiune ambiguă: %(option)s ar putea corespunde cu %(matches)s"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
-#: /usr/lib/python3.7/optparse.py
+#: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
 #, python-format
 msgid "ambiguous option: %s (%s?)"
 msgstr "opțiune ambiguă: %s (%s?)"
@@ -2264,8 +2299,12 @@ msgstr "applicationId pentru a verifica dacă există actualizări"
 msgid "applicationId with optional versionCode in the form APPID[:VERCODE]"
 msgstr "applicationId cu versionCode opțional sub forma APPID[:VERCODE]"
 
+#: ../fdroidserver/common.py
+msgid "archive_url needs to end with /archive"
+msgstr ""
+
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py
+#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #, python-format
 msgid "argument \"-\" with mode %r"
 msgstr "argumentul \"-\" cu modul %r"
@@ -2282,6 +2321,11 @@ msgstr "încercând o conexiune ssh goală pentru a testa cheia de implementare:
 msgid "can not parse scrlib spec (not a string): '{}'"
 msgstr "nu poate analiza specificația scrlib (not a string): '{}'"
 
+#: /usr/lib/python3.9/argparse.py
+#, fuzzy, python-format
+msgid "can't open '%(filename)s': %(error)s"
+msgstr "nu se poate deschide '%s': %s"
+
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py
 #, python-format
@@ -2294,12 +2338,12 @@ msgid "cannot find required srclibs: \"{path}\""
 msgstr "nu poate găsi srclibs necesare: \"{path}\""
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py
+#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 msgid "cannot have multiple subparser arguments"
 msgstr "nu poate avea mai multe argumente subparser"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py
+#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #, python-format
 msgid "cannot merge actions - two groups are named %r"
 msgstr "nu poate fuziona acțiuni - două grupuri se numesc %r"
@@ -2322,12 +2366,12 @@ msgid "commands from plugin modules:"
 msgstr "comenzi din modulele plugin:"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
-#: /usr/lib/python3.7/optparse.py
+#: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
 msgid "complex"
 msgstr "complexă"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py
+#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #, python-format
 msgid "conflicting option string: %s"
 msgid_plural "conflicting option strings: %s"
@@ -2379,7 +2423,7 @@ msgid "deployed process log {path} to {dest}"
 msgstr "a implementat jurnalul de proces {path} la {dest}"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py
+#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #, python-format
 msgid "dest= is required for options like %r"
 msgstr "dest= este necesar pentru opțiuni precum %r"
@@ -2389,7 +2433,7 @@ msgid "executable binary, possibly code"
 msgstr "binar executabil, eventual cod"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py
+#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #, python-format
 msgid "expected %s argument"
 msgid_plural "expected %s arguments"
@@ -2398,17 +2442,17 @@ msgstr[1] "argumente %s așteptate"
 msgstr[2] "argumente %s așteptate"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py
+#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 msgid "expected at least one argument"
 msgstr "se așteaptă cel puțin un argument"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py
+#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 msgid "expected at most one argument"
 msgstr "se așteaptă cel mult un argument"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py
+#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 msgid "expected one argument"
 msgstr "se așteaptă un singur argument"
 
@@ -2426,7 +2470,7 @@ msgid "fdroid [<command>] [-h|--help|--version|<args>]"
 msgstr "fdroid [<comandă>] [-h|--help|--version|<args>]"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
-#: /usr/lib/python3.7/optparse.py
+#: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
 msgid "floating-point"
 msgstr "punct flotant"
 
@@ -2447,7 +2491,7 @@ msgid "gzip file archive"
 msgstr "Arhiva de fișiere gzip"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py
+#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #, python-format
 msgid "ignored explicit argument %r"
 msgstr "a ignorat argumentul explicit %r"
@@ -2456,31 +2500,36 @@ msgstr "a ignorat argumentul explicit %r"
 msgid "index-v1 must have a signature, use `fdroid signindex` to create it!"
 msgstr "index-v1 trebuie să aibă o semnătură, folosiți `fdroid signindex` pentru a o crea!"
 
+#: ../fdroidserver/index.py
+#, fuzzy
+msgid "index-v2 must have a signature, use `fdroid signindex` to create it!"
+msgstr "index-v1 trebuie să aibă o semnătură, folosiți `fdroid signindex` pentru a o crea!"
+
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
-#: /usr/lib/python3.7/optparse.py
+#: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
 msgid "integer"
 msgstr "întreg"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py
+#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #, python-format
 msgid "invalid %(type)s value: %(value)r"
 msgstr "invalid %(type)s valoare: %(value)r"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py
+#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #, python-format
 msgid "invalid choice: %(value)r (choose from %(choices)s)"
 msgstr "alegere invalidă: %(value)r (alege din %(choices)s)"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py
+#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #, python-format
 msgid "invalid conflict_resolution value: %r"
 msgstr "valoare invalidă a rezoluției_conflictului: %r"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py
+#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #, python-format
 msgid "invalid option string %(option)r: must start with a character %(prefix_chars)r"
 msgstr "șir de opțiuni invalid %(option)r: trebuie să înceapă cu un caracter %(prefix_chars)r"
@@ -2509,7 +2558,7 @@ msgid "mirror '%s' does not end with 'fdroid'!"
 msgstr "oglinda '%s' nu se termină cu 'fdroid'!"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py
+#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 msgid "mutually exclusive arguments must be optional"
 msgstr "argumentele care se exclud reciproc trebuie să fie opționale"
 
@@ -2523,7 +2572,7 @@ msgid "no APK supplied"
 msgstr "nici un APK furnizat"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
-#: /usr/lib/python3.7/optparse.py
+#: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
 #, python-format
 msgid "no such option: %s"
 msgstr "nu există o astfel de opțiune: %s"
@@ -2537,13 +2586,13 @@ msgid "no version information found"
 msgstr "nu s-au găsit informații despre versiune"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py
+#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #, python-format
 msgid "not allowed with argument %s"
 msgstr "nu este permis cu argumentul %s"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py
+#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #, python-format
 msgid "one of the arguments %s is required"
 msgstr "unul dintre argumentele %s este necesar"
@@ -2558,55 +2607,55 @@ msgid "option %s: If you really want to install all the signed apps, use --all"
 msgstr "opțiunea %s: Dacă doriți cu adevărat să instalați toate aplicațiile semnate, utilizați --all"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
-#: /usr/lib/python3.7/optparse.py
+#: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
 #, python-format
 msgid "option %s: invalid %s value: %r"
 msgstr "opțiunea %s: valoare %s invalidă: %r"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
-#: /usr/lib/python3.7/optparse.py
+#: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
 #, python-format
 msgid "option %s: invalid choice: %r (choose from %s)"
 msgstr "opțiunea %s: alegere invalidă: %r (alege din %s)"
 
 #: /usr/lib/python3.5/getopt.py /usr/lib/python3.6/getopt.py
-#: /usr/lib/python3.7/getopt.py
+#: /usr/lib/python3.7/getopt.py /usr/lib/python3.9/getopt.py
 #, python-format
 msgid "option -%s not recognized"
 msgstr "opțiunea -%s nerecunoscută"
 
 #: /usr/lib/python3.5/getopt.py /usr/lib/python3.6/getopt.py
-#: /usr/lib/python3.7/getopt.py
+#: /usr/lib/python3.7/getopt.py /usr/lib/python3.9/getopt.py
 #, python-format
 msgid "option -%s requires argument"
 msgstr "opțiunea -%s necesită argument"
 
 #: /usr/lib/python3.5/getopt.py /usr/lib/python3.6/getopt.py
-#: /usr/lib/python3.7/getopt.py
+#: /usr/lib/python3.7/getopt.py /usr/lib/python3.9/getopt.py
 #, python-format
 msgid "option --%s must not have an argument"
 msgstr "opțiunea --%s nu trebuie să aibă un argument"
 
 #: /usr/lib/python3.5/getopt.py /usr/lib/python3.6/getopt.py
-#: /usr/lib/python3.7/getopt.py
+#: /usr/lib/python3.7/getopt.py /usr/lib/python3.9/getopt.py
 #, python-format
 msgid "option --%s not a unique prefix"
 msgstr "opțiunea --%s nu este un prefix unic"
 
 #: /usr/lib/python3.5/getopt.py /usr/lib/python3.6/getopt.py
-#: /usr/lib/python3.7/getopt.py
+#: /usr/lib/python3.7/getopt.py /usr/lib/python3.9/getopt.py
 #, python-format
 msgid "option --%s not recognized"
 msgstr "opțiunea --%s nerecunoscută"
 
 #: /usr/lib/python3.5/getopt.py /usr/lib/python3.6/getopt.py
-#: /usr/lib/python3.7/getopt.py
+#: /usr/lib/python3.7/getopt.py /usr/lib/python3.9/getopt.py
 #, python-format
 msgid "option --%s requires argument"
 msgstr "opțiunea --%s necesită un argument"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py
+#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 msgid "optional arguments"
 msgstr "argumente opționale"
 
@@ -2616,7 +2665,7 @@ msgid "overwriting existing {path}"
 msgstr "suprascriere {path} existent"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py
+#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 msgid "positional arguments"
 msgstr "argumente poziționale"
 
@@ -2645,6 +2694,10 @@ msgstr "repo_icon \"repo/icons/%s\" nu există, se generează un înlocuitor."
 msgid "repo_icon %s does not exist, generating placeholder."
 msgstr "repo_icon %s nu există, se generează un spațiu rezervat."
 
+#: ../fdroidserver/common.py
+msgid "repo_url needs to end with /repo"
+msgstr ""
+
 #: ../fdroidserver/metadata.py
 msgid "ruamel.yaml not installed, can not write metadata."
 msgstr "ruamel.yaml nu este instalat, nu poate scrie metadatele."
@@ -2664,13 +2717,14 @@ msgid "shared library"
 msgstr "bibliotecă partajată"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
-#: /usr/lib/python3.7/optparse.py
+#: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
 msgid "show program's version number and exit"
 msgstr "arată numărul versiunii programului și iese"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.5/optparse.py
 #: /usr/lib/python3.6/argparse.py /usr/lib/python3.6/optparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.7/optparse.py
+#: /usr/lib/python3.9/argparse.py /usr/lib/python3.9/optparse.py
 msgid "show this help message and exit"
 msgstr "arată acest mesaj de ajutor și iese"
 
@@ -2705,25 +2759,25 @@ msgid "supplied timestamp value '{timestamp}' is not a unix timestamp"
 msgstr "valoarea timestamp furnizată '{timestamp}' nu este un timestamp unix"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py
+#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #, python-format
 msgid "the following arguments are required: %s"
 msgstr "sunt necesare următoarele argumente: %s"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py
+#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #, python-format
 msgid "unexpected option string: %s"
 msgstr "șir de opțiuni neașteptate: %s"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py
+#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #, python-format
 msgid "unknown parser %(parser_name)r (choices: %(choices)s)"
 msgstr "parser necunoscut %(parser_name)r (choices: %(choices)s)"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py
+#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #, python-format
 msgid "unrecognized arguments: %s"
 msgstr "argumente nerecunoscute: %s"
@@ -2735,6 +2789,7 @@ msgstr "permisiuni nesigure pe '{config_file}' (ar trebui să fie 0600)!"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py ../fdroid
 #: /usr/lib/python3.7/argparse.py ../fdroidserver/__main__.py
+#: /usr/lib/python3.9/argparse.py
 msgid "usage: "
 msgstr "utilizare: "
 
@@ -2864,7 +2919,7 @@ msgstr "{name} \"{section}/icons/{path}\" nu există! Verificați \"config.yml\"
 msgid "{oldfile} is deprecated, use {newfile}"
 msgstr "{oldfile} este depreciat, folosiți {newfile}"
 
-#: ../fdroidserver/import.py
+#: ../fdroidserver/import.py ../fdroidserver/import_subcommand.py
 #, python-brace-format
 msgid "{path} already exists, ignoring import results!"
 msgstr "{path} există deja, ignorând rezultatele importului!"
@@ -2899,7 +2954,7 @@ msgstr "{path}: {error}"
 msgid "{url} does not end with \"fdroid\", check the URL path!"
 msgstr "{url} nu se termină cu \"fdroid\", verificați calea URL!"
 
-#: ../fdroidserver/common.py
+#: ../fdroidserver/common.py ../fdroidserver/import_subcommand.py
 #, python-brace-format
 msgid "{url} does not start with \"http\"!"
 msgstr "{url} nu începe cu \"http\"!"

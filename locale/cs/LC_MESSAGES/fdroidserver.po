@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 1.0.0-95-gd7af22b\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2022-02-15 20:04+0100\n"
+"POT-Creation-Date: 2022-09-06 22:24+0200\n"
 "PO-Revision-Date: 2022-08-27 18:18+0000\n"
 "Last-Translator: Fjuro <fjuro@seznam.cz>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/f-droid/fdroidserver/cs/>\n"
@@ -109,13 +109,13 @@ msgstr "\"{path}\" není přijatelný formát, převeďte na: {formats}"
 msgid "\"{path}\" is signed by a key that is not allowed:"
 msgstr "\"{path}\" je podepsáno klíčem, který není povolen:"
 
-#: ../fdroidserver/common.py
+#: ../fdroidserver/common.py ../fdroidserver/import_subcommand.py
 #, python-brace-format
 msgid "\"{url}\" is not a valid URL!"
 msgstr "\"{url}\" není platná adresa URL!"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
-#: /usr/lib/python3.7/optparse.py
+#: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
 #, python-format
 msgid "%(option)s option requires %(number)d argument"
 msgid_plural "%(option)s option requires %(number)d arguments"
@@ -129,7 +129,7 @@ msgid "%(prog)s [options] url"
 msgstr "%(prog)s [možnosti] url"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py
+#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #, python-format
 msgid "%(prog)s: error: %(message)s\n"
 msgstr "%(prog)s: chyba: %(message)s\n"
@@ -140,12 +140,12 @@ msgid "%d problems found"
 msgstr "nalezeno %d problémů"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
-#: /usr/lib/python3.7/optparse.py
+#: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
 msgid "%prog [options]"
 msgstr "%prog [možnosti]"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py
+#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #, python-format
 msgid "%r is not callable"
 msgstr "%r není možné volat"
@@ -156,7 +156,7 @@ msgid "%s is not an accepted build field"
 msgstr "%s není akceptované pole sestavení"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
-#: /usr/lib/python3.7/optparse.py
+#: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
 #, python-format
 msgid "%s option does not take a value"
 msgstr "možnost %s nepřebírá hodnotu"
@@ -182,7 +182,7 @@ msgid "'repo_keyalias' not found in config.yml!"
 msgstr "'repo_keyalias' nebyl nalezen v config.yml!"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py
+#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 msgid "'required' is an invalid argument for positionals"
 msgstr "'povinné' je Neplatný argument pro pozicials"
 
@@ -238,7 +238,7 @@ msgid "...checkupdate failed for {appid} : {error}"
 msgstr "...kontrola selhala pro {appid} : {error}"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py
+#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 msgid ".__call__() not defined"
 msgstr ".__call__() není definováno"
 
@@ -279,7 +279,7 @@ msgstr "Přidání nového repozitáře pouze pro {name}"
 msgid "Alias of the repo signing key in the keystore"
 msgstr "Alias podepisovacího klíče repozitáře v keystore"
 
-#: ../fdroidserver/import.py
+#: ../fdroidserver/import.py ../fdroidserver/import_subcommand.py
 msgid "Allows a different revision (or git branch) to be specified for the initial import"
 msgstr "Umožňuje zadat jinou revizi (nebo větev gitu) pro počáteční import"
 
@@ -476,7 +476,7 @@ msgstr "Kontrola archivace u {appid} - apks:{integer}, keepversions:{keep}, arch
 msgid "Clean update - don't uses caches, reprocess all APKs"
 msgstr "Čistá aktualizace - nepoužívat mezipaměti, znovu zpracovat všechny soubory APK"
 
-#: ../fdroidserver/import.py
+#: ../fdroidserver/import.py ../fdroidserver/import_subcommand.py
 msgid "Comma separated list of categories."
 msgstr "Seznam kategorií oddělený čárkami."
 
@@ -503,11 +503,11 @@ msgstr "Konfliktní konfigurační soubory! Používám {newfile}, ignoruji {old
 msgid "Could not find '{command}' on your system"
 msgstr "Ve vašem systému se nepodařilo najít příkaz '{command}'"
 
-#: ../fdroidserver/import.py
+#: ../fdroidserver/import.py ../fdroidserver/import_subcommand.py
 msgid "Could not find latest version code"
 msgstr "Nepodařilo se najít kód poslední verze"
 
-#: ../fdroidserver/import.py
+#: ../fdroidserver/import.py ../fdroidserver/import_subcommand.py
 msgid "Could not find latest version name"
 msgstr "Nepodařilo se najít název poslední verze"
 
@@ -527,7 +527,7 @@ msgid "Could not parse size \"{size}\", wrong type \"{type}\""
 msgstr "Nepodařilo se zpracovat velikost „{size}“, nesprávný typ „{type}“"
 
 #. Translators: https://developer.android.com/studio/build/application-id
-#: ../fdroidserver/import.py
+#: ../fdroidserver/import.py ../fdroidserver/import_subcommand.py
 msgid "Couldn't find Application ID"
 msgstr "Nedaří se nalézt ID aplikace"
 
@@ -644,7 +644,7 @@ msgstr "Popis má seznam (%s) ale není opatřen odrážkami (*) ani očíslová
 msgid "Description of length {length} is over the {limit} char limit"
 msgstr "Popis délky {length} přesahuje limit {limit} znaků"
 
-#: ../fdroidserver/import.py
+#: ../fdroidserver/import.py ../fdroidserver/import_subcommand.py
 msgid "Do not add 'disable:' to the generated build entries"
 msgstr "Nepřidávat ‚disable:‘ k vygenerovaným položkám sestavení"
 
@@ -734,6 +734,11 @@ msgstr ""
 msgid "ERROR: unsupported CI type, patches welcome!"
 msgstr "CHYBA: nepodporovaný typ CI, opravy vítány!"
 
+#: ../fdroidserver/nightly.py
+#, fuzzy, python-format
+msgid "ERROR: unsupported git host \"%s\", patches welcome!"
+msgstr "CHYBA: nepodporovaný typ CI, opravy vítány!"
+
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Empty build flag at {linedesc}"
@@ -765,8 +770,13 @@ msgid "Error while attempting to publish log: %s"
 msgstr "Chyba při pokusu o zveřejnění protokolu: %s"
 
 #: ../fdroidserver/import.py ../fdroidserver/common.py
+#: ../fdroidserver/import_subcommand.py
 msgid "Error while getting repo address"
 msgstr "Chyba při získávání adresy repozitáře"
+
+#: ../fdroidserver/__main__.py
+msgid "Extract application metadata from a source repository"
+msgstr ""
 
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Extract signatures from APKs"
@@ -1251,6 +1261,11 @@ msgstr "Poškozené mirrory repozitáře."
 msgid "Malformed serverwebroot line:"
 msgstr "Poškozený řádek serverwebroot:"
 
+#: ../fdroidserver/scanner.py
+#, python-format
+msgid "Max recursion depth in ZIP file reached: %s"
+msgstr ""
+
 #: ../fdroidserver/mirror.py
 msgid "Mirror the full repo and archive, all file types."
 msgstr "Zrcadlení celého repozitáře a archivu, všechny typy souborů."
@@ -1263,6 +1278,10 @@ msgstr "Chybějící výstupní adresář"
 #, python-format
 msgid "Name '%s' is just the auto name - remove it"
 msgstr "Název ‚%s‘ je pouze automatický název - odstraňte jej"
+
+#: ../fdroidserver/index.py
+msgid "Neither \"repo_pubkey\" nor \"keystorepass\" set in config.yml"
+msgstr ""
 
 #: ../fdroidserver/common.py
 msgid "No 'config.yml' found, using defaults."
@@ -1302,11 +1321,12 @@ msgstr "V adrese URL není otisk prstu."
 msgid "No git submodules available"
 msgstr "Nejsou k dispozici žádné submoduly git"
 
-#: ../fdroidserver/import.py
+#: ../fdroidserver/import.py ../fdroidserver/import_subcommand.py
 msgid "No gradle project could be found. Specify --subdir?"
 msgstr "Nebyl nalezen žádný projekt gradle. Specifikujte --subdir?"
 
 #: ../fdroidserver/import.py ../fdroidserver/common.py
+#: ../fdroidserver/import_subcommand.py
 msgid "No information found."
 msgstr "Nebyly nalezeny žádné informace."
 
@@ -1430,7 +1450,7 @@ msgid "OpenCollective donation methods belong in the OpenCollective: field"
 msgstr "Darovací metody OpenCollective patří do pole OpenCollective:"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
-#: /usr/lib/python3.7/optparse.py
+#: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
 msgid "Options"
 msgstr "Možnosti"
 
@@ -1448,7 +1468,7 @@ msgstr "Uložit JSON do stdout."
 msgid "Outputting JSON"
 msgstr "Ukládání výstupu JSON"
 
-#: ../fdroidserver/import.py
+#: ../fdroidserver/import.py ../fdroidserver/import_subcommand.py
 msgid "Overall license of the project."
 msgstr "Celková licence projektu."
 
@@ -1457,7 +1477,7 @@ msgstr "Celková licence projektu."
 msgid "Overriding blank versionName in {apkfilename} from metadata: {version}"
 msgstr "Přepisování prázdného versionName v {apkfilename} z metadat: {version}"
 
-#: ../fdroidserver/import.py
+#: ../fdroidserver/import.py ../fdroidserver/import_subcommand.py
 #, python-brace-format
 msgid "Package \"{appid}\" already exists"
 msgstr "Balíček „{appid}“ již existuje"
@@ -1471,7 +1491,7 @@ msgstr "Parsování manifestu v ‚{path}‘"
 msgid "Password required with username"
 msgstr "Vyžadováno heslo s uživatelským jménem"
 
-#: ../fdroidserver/import.py
+#: ../fdroidserver/import.py ../fdroidserver/import_subcommand.py
 msgid "Path to main Android project subdirectory, if not in root."
 msgstr "Cesta k hlavnímu podadresáři projektu Android, pokud není v kořenovém adresáři."
 
@@ -1493,6 +1513,11 @@ msgstr "Cesta k úložišti klíčů pro podpisový klíč repozitáře"
 #: ../fdroidserver/nightly.py
 msgid "Print the secret variable to the terminal for easy copy/paste"
 msgstr "Zobrazit tajnou proměnnou v terminálu pro jednoduché kopírování/vložení"
+
+#: ../fdroidserver/scanner.py
+#, python-format
+msgid "Problem with ZIP file: %s, error %s"
+msgstr ""
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
@@ -1526,7 +1551,7 @@ msgstr "Vytváření lidsky čitelných souborů XML/JSON pro indexové soubory"
 msgid "Produce human-readable index.xml"
 msgstr "Vytvořit člověku čitelný index.xml"
 
-#: ../fdroidserver/import.py
+#: ../fdroidserver/import.py ../fdroidserver/import_subcommand.py
 msgid "Project URL to import from."
 msgstr "Adresa URL projektu, ze které se má importovat."
 
@@ -1664,6 +1689,11 @@ msgid "Scan the source code of a package"
 msgstr "Naskenujte zdrojový kód balíčku"
 
 #: ../fdroidserver/scanner.py
+#, fuzzy, python-brace-format
+msgid "Scanner found {count} problems in {apk}:"
+msgstr "Skener našel {count} problémů v {appid}:"
+
+#: ../fdroidserver/scanner.py
 #, python-brace-format
 msgid "Scanner found {count} problems in {appid}:"
 msgstr "Skener našel {count} problémů v {appid}:"
@@ -1682,6 +1712,11 @@ msgstr[2] "Skener našel {} problémů"
 
 #: ../fdroidserver/scanner.py
 msgid "Scanning APK with apkanalyzer for known non-free classes."
+msgstr "Skenování APK pomocí apkanalyzer pro známé nesvobodné třídy."
+
+#: ../fdroidserver/scanner.py
+#, fuzzy
+msgid "Scanning APK with dexdump for known non-free classes."
 msgstr "Skenování APK pomocí apkanalyzer pro známé nesvobodné třídy."
 
 #: ../fdroidserver/common.py
@@ -1861,7 +1896,7 @@ msgstr "Aplikace, které byly archivovány z hlavního repozitáře."
 msgid "This is a repository of apps to be used with F-Droid. Applications in this repository are either official binaries built by the original application developers, or are binaries built from source by the admin of f-droid.org using the tools on https://gitlab.com/fdroid."
 msgstr "Toto je repozitář aplikací, který lze používat s aplikací F-Droid. Aplikace v tomto repozitáři jsou buď oficiální binární soubory sestavené původními vývojáři aplikací, nebo binární soubory sestavené ze zdrojových kódů správcem f-droid.org pomocí nástrojů na adrese https://gitlab.com/fdroid."
 
-#: ../fdroidserver/import.py
+#: ../fdroidserver/import.py ../fdroidserver/import_subcommand.py
 #, python-format
 msgid "This repo already has local metadata: %s"
 msgstr "Tento repozitář již má místní metadata: %s"
@@ -2102,12 +2137,12 @@ msgid "Uploading {apkfilename} to virustotal"
 msgstr "Nahrávání {apkfilename} na virustotal"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
-#: /usr/lib/python3.7/optparse.py
+#: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
 msgid "Usage"
 msgstr "Použití"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
-#: /usr/lib/python3.7/optparse.py
+#: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
 #, python-format
 msgid "Usage: %s\n"
 msgstr "Použití: %s\n"
@@ -2219,13 +2254,13 @@ msgid "adding to {name}: {path}"
 msgstr "přidávání do {name}: {path}"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py
+#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #, python-format
 msgid "ambiguous option: %(option)s could match %(matches)s"
 msgstr "nejednoznačná možnost: %(option)s by mohlo odpovídat %(matches)s"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
-#: /usr/lib/python3.7/optparse.py
+#: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
 #, python-format
 msgid "ambiguous option: %s (%s?)"
 msgstr "nejednoznačná možnost: %s (%s?)"
@@ -2264,8 +2299,12 @@ msgstr "applicationId pro kontrolu aktualizací"
 msgid "applicationId with optional versionCode in the form APPID[:VERCODE]"
 msgstr "applicationId s nepovinným versionCode ve tvaru APPID[:VERCODE]"
 
+#: ../fdroidserver/common.py
+msgid "archive_url needs to end with /archive"
+msgstr ""
+
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py
+#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #, python-format
 msgid "argument \"-\" with mode %r"
 msgstr "argument \"-\" s režimem %r"
@@ -2282,6 +2321,11 @@ msgstr "pokus o holé ssh připojení k testování klíče pro nasazení:"
 msgid "can not parse scrlib spec (not a string): '{}'"
 msgstr "nelze parsovat specifikaci scrlib (není to řetězec): ‚{}‘"
 
+#: /usr/lib/python3.9/argparse.py
+#, fuzzy, python-format
+msgid "can't open '%(filename)s': %(error)s"
+msgstr "nelze otevřít '%s': %s"
+
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py
 #, python-format
@@ -2294,12 +2338,12 @@ msgid "cannot find required srclibs: \"{path}\""
 msgstr "nelze najít požadované srclibs: „{path}“"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py
+#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 msgid "cannot have multiple subparser arguments"
 msgstr "nelze mít více argumentů subparseru"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py
+#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #, python-format
 msgid "cannot merge actions - two groups are named %r"
 msgstr "nelze sloučit akce - dvě skupiny jsou pojmenovány %r"
@@ -2322,12 +2366,12 @@ msgid "commands from plugin modules:"
 msgstr "příkazy z modulů pluginů:"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
-#: /usr/lib/python3.7/optparse.py
+#: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
 msgid "complex"
 msgstr "komplexní"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py
+#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #, python-format
 msgid "conflicting option string: %s"
 msgid_plural "conflicting option strings: %s"
@@ -2379,7 +2423,7 @@ msgid "deployed process log {path} to {dest}"
 msgstr "protokol procesu {path} nasazen do {dest}"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py
+#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #, python-format
 msgid "dest= is required for options like %r"
 msgstr "dest= je vyžadován pro možnosti jako %r"
@@ -2389,7 +2433,7 @@ msgid "executable binary, possibly code"
 msgstr "spustitelná binárka, případně kód"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py
+#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #, python-format
 msgid "expected %s argument"
 msgid_plural "expected %s arguments"
@@ -2398,17 +2442,17 @@ msgstr[1] "očekávány %s argumenty"
 msgstr[2] "očekáváno %s argumentů"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py
+#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 msgid "expected at least one argument"
 msgstr "očekáván alespoň jeden argument"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py
+#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 msgid "expected at most one argument"
 msgstr "očekáván maximálně jeden argument"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py
+#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 msgid "expected one argument"
 msgstr "očekáván jeden argument"
 
@@ -2426,7 +2470,7 @@ msgid "fdroid [<command>] [-h|--help|--version|<args>]"
 msgstr "fdroid [<příkaz>] [-h|--help|--version|<argumenty>]"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
-#: /usr/lib/python3.7/optparse.py
+#: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
 msgid "floating-point"
 msgstr "floating-point"
 
@@ -2447,7 +2491,7 @@ msgid "gzip file archive"
 msgstr "archiv souborů gzip"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py
+#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #, python-format
 msgid "ignored explicit argument %r"
 msgstr "ignorován explicitní argument %r"
@@ -2456,31 +2500,36 @@ msgstr "ignorován explicitní argument %r"
 msgid "index-v1 must have a signature, use `fdroid signindex` to create it!"
 msgstr "index-v1 musí mít podpis, použijte `fdroid signindex` pro jeho vytvoření!"
 
+#: ../fdroidserver/index.py
+#, fuzzy
+msgid "index-v2 must have a signature, use `fdroid signindex` to create it!"
+msgstr "index-v1 musí mít podpis, použijte `fdroid signindex` pro jeho vytvoření!"
+
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
-#: /usr/lib/python3.7/optparse.py
+#: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
 msgid "integer"
 msgstr "celé číslo"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py
+#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #, python-format
 msgid "invalid %(type)s value: %(value)r"
 msgstr "neplatná hodnota %(type)s: %(value)r"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py
+#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #, python-format
 msgid "invalid choice: %(value)r (choose from %(choices)s)"
 msgstr "neplatná volba: %(value)r (vyberte si z %(choices)s)"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py
+#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #, python-format
 msgid "invalid conflict_resolution value: %r"
 msgstr "neplatná hodnota conflict_resolution: %r"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py
+#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #, python-format
 msgid "invalid option string %(option)r: must start with a character %(prefix_chars)r"
 msgstr "neplatný řetězec možnosti %(option)r: musí začínat znakem %(prefix_chars)r"
@@ -2509,7 +2558,7 @@ msgid "mirror '%s' does not end with 'fdroid'!"
 msgstr "mirror '%s' nekončí s 'fdroid'!"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py
+#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 msgid "mutually exclusive arguments must be optional"
 msgstr "společně exkluzivní argumenty musí být volitelné"
 
@@ -2523,7 +2572,7 @@ msgid "no APK supplied"
 msgstr "neposkytnuto APK"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
-#: /usr/lib/python3.7/optparse.py
+#: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
 #, python-format
 msgid "no such option: %s"
 msgstr "žádná taková volba: %s"
@@ -2537,13 +2586,13 @@ msgid "no version information found"
 msgstr "nenalezeny informace o verzi"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py
+#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #, python-format
 msgid "not allowed with argument %s"
 msgstr "není povoleno s argumentem %s"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py
+#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #, python-format
 msgid "one of the arguments %s is required"
 msgstr "jeden z argumentů %s je vyžadován"
@@ -2558,55 +2607,55 @@ msgid "option %s: If you really want to install all the signed apps, use --all"
 msgstr "možnost %s: pokud opravdu chcete nainstalovat všechny podepsané aplikace, použijte --all"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
-#: /usr/lib/python3.7/optparse.py
+#: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
 #, python-format
 msgid "option %s: invalid %s value: %r"
 msgstr "možnost %s: neplatná hodnota %s: %r"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
-#: /usr/lib/python3.7/optparse.py
+#: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
 #, python-format
 msgid "option %s: invalid choice: %r (choose from %s)"
 msgstr "možnost %s: neplatná volba: %r (vyberte si z %s)"
 
 #: /usr/lib/python3.5/getopt.py /usr/lib/python3.6/getopt.py
-#: /usr/lib/python3.7/getopt.py
+#: /usr/lib/python3.7/getopt.py /usr/lib/python3.9/getopt.py
 #, python-format
 msgid "option -%s not recognized"
 msgstr "možnost - %s není rozpoznána"
 
 #: /usr/lib/python3.5/getopt.py /usr/lib/python3.6/getopt.py
-#: /usr/lib/python3.7/getopt.py
+#: /usr/lib/python3.7/getopt.py /usr/lib/python3.9/getopt.py
 #, python-format
 msgid "option -%s requires argument"
 msgstr "možnost - %s vyžaduje argument"
 
 #: /usr/lib/python3.5/getopt.py /usr/lib/python3.6/getopt.py
-#: /usr/lib/python3.7/getopt.py
+#: /usr/lib/python3.7/getopt.py /usr/lib/python3.9/getopt.py
 #, python-format
 msgid "option --%s must not have an argument"
 msgstr "možnost --%s nesmí mít argument"
 
 #: /usr/lib/python3.5/getopt.py /usr/lib/python3.6/getopt.py
-#: /usr/lib/python3.7/getopt.py
+#: /usr/lib/python3.7/getopt.py /usr/lib/python3.9/getopt.py
 #, python-format
 msgid "option --%s not a unique prefix"
 msgstr "možnost --%s není jedinečná předpona"
 
 #: /usr/lib/python3.5/getopt.py /usr/lib/python3.6/getopt.py
-#: /usr/lib/python3.7/getopt.py
+#: /usr/lib/python3.7/getopt.py /usr/lib/python3.9/getopt.py
 #, python-format
 msgid "option --%s not recognized"
 msgstr "možnost -%s není rozpoznána"
 
 #: /usr/lib/python3.5/getopt.py /usr/lib/python3.6/getopt.py
-#: /usr/lib/python3.7/getopt.py
+#: /usr/lib/python3.7/getopt.py /usr/lib/python3.9/getopt.py
 #, python-format
 msgid "option --%s requires argument"
 msgstr "možnost --%s vyžaduje argument"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py
+#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 msgid "optional arguments"
 msgstr "volitelné argumenty"
 
@@ -2616,7 +2665,7 @@ msgid "overwriting existing {path}"
 msgstr "přepisování existující {path}"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py
+#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 msgid "positional arguments"
 msgstr "poziční argumenty"
 
@@ -2645,6 +2694,10 @@ msgstr "repo_icon \"repo/icons/%s\" neexistuje, generování placeholderu."
 msgid "repo_icon %s does not exist, generating placeholder."
 msgstr "repo_icon %s neexistuje, generování placeholderu."
 
+#: ../fdroidserver/common.py
+msgid "repo_url needs to end with /repo"
+msgstr ""
+
 #: ../fdroidserver/metadata.py
 msgid "ruamel.yaml not installed, can not write metadata."
 msgstr "ruamel.yaml není nainstalován, nelze zapisovat metadata."
@@ -2664,13 +2717,14 @@ msgid "shared library"
 msgstr "sdílená knihovna"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
-#: /usr/lib/python3.7/optparse.py
+#: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
 msgid "show program's version number and exit"
 msgstr "zobrazit číslo verze programu a ukončit"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.5/optparse.py
 #: /usr/lib/python3.6/argparse.py /usr/lib/python3.6/optparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.7/optparse.py
+#: /usr/lib/python3.9/argparse.py /usr/lib/python3.9/optparse.py
 msgid "show this help message and exit"
 msgstr "zobrazí tuto nápovědu a skončí"
 
@@ -2705,25 +2759,25 @@ msgid "supplied timestamp value '{timestamp}' is not a unix timestamp"
 msgstr "poskytnutá hodnota timestamp '{timestamp}' není unixová timestamp"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py
+#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #, python-format
 msgid "the following arguments are required: %s"
 msgstr "jsou vyžadovány následující argumenty: %s"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py
+#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #, python-format
 msgid "unexpected option string: %s"
 msgstr "neočekávaný řetězec možností: %s"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py
+#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #, python-format
 msgid "unknown parser %(parser_name)r (choices: %(choices)s)"
 msgstr "neznámý parser %(parser_name)r (volby: %(choices)s)"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py
+#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #, python-format
 msgid "unrecognized arguments: %s"
 msgstr "nerozpoznané argumenty: %s"
@@ -2735,6 +2789,7 @@ msgstr "nebezpečné oprávnění na '{config_file}' (má být 0600)!"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py ../fdroid
 #: /usr/lib/python3.7/argparse.py ../fdroidserver/__main__.py
+#: /usr/lib/python3.9/argparse.py
 msgid "usage: "
 msgstr "použití: "
 
@@ -2864,7 +2919,7 @@ msgstr "{name} \"{section}/icons/{path}\" neexistuje! Zkontrolujte \"config.yml\
 msgid "{oldfile} is deprecated, use {newfile}"
 msgstr "{oldfile} je zastaralý, použijte {newfile}"
 
-#: ../fdroidserver/import.py
+#: ../fdroidserver/import.py ../fdroidserver/import_subcommand.py
 #, python-brace-format
 msgid "{path} already exists, ignoring import results!"
 msgstr "{path} již existuje, ignorování importování výsledků!"
@@ -2899,7 +2954,7 @@ msgstr "{path}: {error}"
 msgid "{url} does not end with \"fdroid\", check the URL path!"
 msgstr "{url} nekončí s \"fdroid\", zkontrolujte cestu URL!"
 
-#: ../fdroidserver/common.py
+#: ../fdroidserver/common.py ../fdroidserver/import_subcommand.py
 #, python-brace-format
 msgid "{url} does not start with \"http\"!"
 msgstr "{url} nezačíná s \"http\"!"
