@@ -1,12 +1,12 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR Free Software Foundation, Inc.
-# Hans-Christoph Steiner <hans@guardianproject.info>, 2020, 2021.
+# Hans-Christoph Steiner <hans@guardianproject.info>, 2020, 2021, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2022-02-15 20:04+0100\n"
-"PO-Revision-Date: 2021-01-14 14:58+0000\n"
+"PO-Revision-Date: 2022-09-06 14:30+0000\n"
 "Last-Translator: Hans-Christoph Steiner <hans@guardianproject.info>\n"
 "Language-Team: Tibetan <https://hosted.weblate.org/projects/f-droid/fdroidserver/bo/>\n"
 "Language: bo\n"
@@ -14,7 +14,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.5-dev\n"
+"X-Generator: Weblate 4.14.1-dev\n"
 
 #: ../fdroidserver/common.py
 msgid ""
@@ -242,9 +242,8 @@ msgid "/issues is missing"
 msgstr "/གནས་དོན་བོར་བརླག་སོང་འདུག"
 
 #: ../fdroidserver/mirror.py
-#, fuzzy
 msgid "A URL is required as an argument!"
-msgstr "གདམ་ཀ། -%s 1 རྩོད་དགོས།"
+msgstr ""
 
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Add PGP signatures using GnuPG for packages in repo"
@@ -292,9 +291,8 @@ msgid "Android APK file"
 msgstr ""
 
 #: ../fdroidserver/scanner.py
-#, fuzzy
 msgid "Android DEX code"
-msgstr "ཨེན་ཀྲོཌ་ SDK རྙེད་མ་སོང་།!"
+msgstr ""
 
 #: ../fdroidserver/common.py ../fdroidserver/build.py
 #, python-brace-format
@@ -302,9 +300,9 @@ msgid "Android SDK '{path}' does not have '{dirname}' installed!"
 msgstr "ཨེན་ཀྲོཌ་SDK '{path}1{dirname}' '{dirname}'སྒྲིག་བཅུག་མིན་འདུག!"
 
 #: ../fdroidserver/init.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Android SDK not found at {path}!"
-msgstr "ཨེན་ཀྲོཌ་ SDK རྙེད་སོན་བྱུང་མ་སོང་།!"
+msgstr ""
 
 #: ../fdroidserver/common.py
 msgid "Android SDK not found!"
@@ -321,14 +319,14 @@ msgid "Android SDK path '{path}' is not a directory!"
 msgstr "ཨེན་ཀྲོཌSDKཐབས་ལམ་ '{path}1' ཡིག་ཆ་གསོག་ཉར་རེད་མིན་འདུག!"
 
 #: ../fdroidserver/common.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Android SDK tool {cmd} found!"
-msgstr "ཨེན་ཀྲོཌ་ SDK རྙེད་སོན་བྱུང་མ་སོང་།!"
+msgstr ""
 
 #: ../fdroidserver/common.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Android SDK tool {cmd} not found!"
-msgstr "ཨེན་ཀྲོཌ་ SDK རྙེད་སོན་བྱུང་མ་སོང་།!"
+msgstr ""
 
 #. Translators: "build-tools" is the file name of a package from
 #. Google, it is part of the Android SDK. So it probably shouldn't be
@@ -510,9 +508,9 @@ msgid "Could not find {path} to remove it"
 msgstr "{path}མེད་པ་བཟོས་པ་ལ་རྙེད་མ་སོང་།"
 
 #: ../fdroidserver/update.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Could not open APK {path} for analysis: "
-msgstr "དཔྱད་ཞིབ་ཀྱི་ཆེད་དུ་APK ཡིག་ཆ་ཁ་ཕྱེས་ཐུབ་ཀྱི་མིན་འདུག"
+msgstr ""
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -1080,9 +1078,9 @@ msgid "Invalid AutoUpdateMode: {mode}"
 msgstr ""
 
 #: ../fdroidserver/checkupdates.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Invalid UpdateCheckMode: {mode}"
-msgstr "ཁུངས་ལྡན་མིན་པའི་ཐུམ་སྒྲིལ་གྱི་མིང་།{0}"
+msgstr ""
 
 #: ../fdroidserver/lint.py ../fdroidserver/checkupdates.py
 #, python-brace-format
@@ -1318,9 +1316,9 @@ msgid "No matching tags found"
 msgstr "གནས་ཚུལ་རྙེད་མ་སོང་།."
 
 #: ../fdroidserver/update.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "No minimum SDK version found in {0}, using default (3)."
-msgstr "'config.yml' རྙེད་མ་སོང་།, སོར་བཞག་བེད་སྤྱོད་བྱེད་བཞིན་པ།."
+msgstr ""
 
 #: ../fdroidserver/lint.py
 msgid "No need to specify that the app is Free Software"
@@ -2855,9 +2853,9 @@ msgid "{name} \"{path}\" does not exist! Correct it in config.yml."
 msgstr "{name} \"{path}\" མིན་འདུག! config.ymlནོར་བཅོས་བྱེད།."
 
 #: ../fdroidserver/update.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{name} \"{section}/icons/{path}\" does not exist! Check \"config.yml\"."
-msgstr "{name} \"{path}\" མིན་འདུག! config.ymlནོར་བཅོས་བྱེད།."
+msgstr ""
 
 #: ../fdroidserver/common.py
 #, python-brace-format
