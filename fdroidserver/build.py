@@ -78,7 +78,7 @@ def build_server(app, build, vcs, build_dir, output_dir, log_dir, force):
 
     output = None
     try:
-        if not buildserverid:
+        if not buildserverid:  # pylint: disable=used-before-assignment
             try:
                 buildserverid = subprocess.check_output(['vagrant', 'ssh', '-c',
                                                          'cat /home/vagrant/buildserverid'],

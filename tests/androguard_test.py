@@ -32,7 +32,7 @@ class UpdateTest(unittest.TestCase):
             apk['features'] = []
             apk['icons_src'] = {}
             return apk
-        
+
         config = dict()
         fdroidserver.common.fill_config_defaults(config)
         fdroidserver.update.config = config
