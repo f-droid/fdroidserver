@@ -1,7 +1,7 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# random r <epsilin@yopmail.com>, 2020.
+# random r <epsilin@yopmail.com>, 2020, 2022.
 # Luca Zambarda <luke.zambarda@gmail.com>, 2020.
 # IvanDan <ivandanza@gmail.com>, 2020, 2021.
 # Massimiliano Caniparoli <massic80@gmail.com>, 2020.
@@ -10,20 +10,22 @@
 # Francesco Saltori <francescosaltori@gmail.com>, 2020.
 # Francesco Esposito <email@francescoesposito.org>, 2021.
 # mondstern <mondstern@snopyta.org>, 2021.
+# Frankie McEyes <mceyes@protonmail.com>, 2022.
+# Antonello Pirina <fardeledge@tutanota.com>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2022-02-15 20:04+0100\n"
-"PO-Revision-Date: 2021-03-03 06:19+0000\n"
-"Last-Translator: mondstern <mondstern@snopyta.org>\n"
+"PO-Revision-Date: 2022-06-28 20:54+0000\n"
+"Last-Translator: Antonello Pirina <fardeledge@tutanota.com>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/f-droid/fdroidserver/it/>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.5\n"
+"X-Generator: Weblate 4.13.1-dev\n"
 
 #: ../fdroidserver/common.py
 msgid ""
@@ -72,9 +74,9 @@ msgid "\"%s/\" has no matching metadata file!"
 msgstr "\"%s/\" non ha un file di metadati corrispondente!"
 
 #: ../fdroidserver/index.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "\"local_copy_dir\" {path} does not exist!"
-msgstr "La directory principale per local_copy_dir \"{path}\" non esiste!"
+msgstr "La directory principale per \"local_copy_dir\" {path} non esiste!"
 
 #: ../fdroidserver/index.py
 msgid "\"repo_pubkey\" must be present in config.yml when using --nosign!"
@@ -111,9 +113,9 @@ msgid "\"{path}\" is not an accepted format, convert to: {formats}"
 msgstr "\"{path}\" non è un formato accettato, convertire a: {formats}"
 
 #: ../fdroidserver/update.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "\"{path}\" is signed by a key that is not allowed:"
-msgstr "\"{path}\" esiste ma s3cmd non è installato!"
+msgstr "\"{path}\" è firmato da una chiave non autorizzata:"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -338,9 +340,9 @@ msgid "Android SDK tool {cmd} found!"
 msgstr "Android SDK tool {cmd} trovato!"
 
 #: ../fdroidserver/common.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Android SDK tool {cmd} not found!"
-msgstr "Android SDK tool {cmd} trovato!"
+msgstr "Strumento Android SDK {cmd} non trovato!"
 
 #. Translators: "build-tools" is the file name of a package from
 #. Google, it is part of the Android SDK. So it probably shouldn't be
@@ -420,7 +422,7 @@ msgstr "Costruito il repository in \"%s\" con questa configurazione:"
 
 #: ../fdroidserver/checkupdates.py
 msgid "Can't auto-update app with no CurrentVersionCode"
-msgstr ""
+msgstr "Impossibile aggiornare automaticamente app prive del CurrentVersionCode"
 
 #: ../fdroidserver/build.py
 msgid "Can't build due to {} error while scanning"
@@ -536,9 +538,8 @@ msgid "Couldn't find Application ID"
 msgstr "Impossibile trovare l'ID dell'applicazione"
 
 #: ../fdroidserver/checkupdates.py
-#, fuzzy
 msgid "Couldn't find any version information"
-msgstr "Impossibile trovare il nome dell'ultima versione"
+msgstr "Impossibile trovare informazioni sulla versione"
 
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
 #: ../fdroidserver/import.py
@@ -698,7 +699,7 @@ msgstr "Scarica registri che non abbiamo"
 #: ../fdroidserver/common.py
 #, python-format
 msgid "Downloading %s"
-msgstr ""
+msgstr "Scaricando %s"
 
 #: ../fdroidserver/common.py
 msgid "Downloading the repository already failed once, not trying again."
@@ -821,9 +822,8 @@ msgid "Failed to get APK manifest information"
 msgstr "Impossibile ottenere informazioni del manifest dell’APK"
 
 #: ../fdroidserver/update.py
-#, fuzzy
 msgid "Failed to get APK signing key fingerprint"
-msgstr "Impossibile ottenere informazioni del manifest dell’APK"
+msgstr "Impossibile ottenere l'impronta digitale della chiave di firma del pacchetto APK"
 
 #: ../fdroidserver/install.py
 #, python-brace-format
@@ -956,9 +956,8 @@ msgid "Git fetch failed"
 msgstr "Recupero Git non riuscito"
 
 #: ../fdroidserver/common.py
-#, fuzzy
 msgid "Git prune failed"
-msgstr "Ripristino Git non riuscito"
+msgstr "Cancellazione Git non riuscita"
 
 #: ../fdroidserver/common.py
 msgid "Git remote set-head failed"
@@ -1037,12 +1036,12 @@ msgstr "Includere i tarball dei sorgenti nel mirror"
 #: ../fdroidserver/metadata.py
 #, python-format
 msgid "Including metadata from %s@%s"
-msgstr ""
+msgstr "Includo metadati da %s@%s"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Including metadata from {path}"
-msgstr ""
+msgstr "Includo metadati da {path}"
 
 #: ../fdroidserver/common.py
 msgid "Initialising submodules"
@@ -1087,12 +1086,12 @@ msgstr "APK non valido"
 #: ../fdroidserver/checkupdates.py
 #, python-brace-format
 msgid "Invalid AutoUpdateMode: {mode}"
-msgstr ""
+msgstr "Modalità di aggiornamento automatico non valida: {mode}"
 
 #: ../fdroidserver/checkupdates.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Invalid UpdateCheckMode: {mode}"
-msgstr "Nome del pacchetto non valido {0}"
+msgstr "Modalità di controllo aggiornamento non valida: {mode}"
 
 #: ../fdroidserver/lint.py ../fdroidserver/checkupdates.py
 #, python-brace-format
@@ -1149,7 +1148,7 @@ msgstr "Nome non valido per il file pubblicato: %s"
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Invalid ndk: entry in build: \"{ndk}\""
-msgstr ""
+msgstr "nkd non valido: entry nella compilazione: \"{ndk}\""
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -1213,9 +1212,9 @@ msgid "Javascript in HTML src attributes"
 msgstr "Javascript negli attributi HTML src"
 
 #: ../fdroidserver/build.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Keeping failed build \"{apkfilename}\""
-msgstr "Lettura di minSdkVersion non riuscita: \"{apkfilename}\""
+msgstr "Mantenimento della build fallita \"{apkfilename}\""
 
 #: ../fdroidserver/init.py
 msgid "Keystore for signing key:\t"
@@ -1239,9 +1238,8 @@ msgid "List files that would be reformatted"
 msgstr "Elenca i file che verrebbero riformattati"
 
 #: ../fdroidserver/rewritemeta.py
-#, fuzzy
 msgid "List files that would be reformatted (dry run)"
-msgstr "Elenca i file che verrebbero riformattati"
+msgstr "Elenca i file che verrebbero riformattati (simulazione)"
 
 #: ../fdroidserver/lint.py
 msgid "Locale included in f-droid.org URL"
@@ -1277,9 +1275,9 @@ msgid "No 'config.yml' found, using defaults."
 msgstr "Nessun 'config.yml' trovato, utilizzando i valori predefiniti."
 
 #: ../fdroidserver/verify.py
-#, fuzzy, python-format
+#, python-format
 msgid "No APK for package: %s"
-msgstr "Nessun pacchetto di questo tipo: %s"
+msgstr "Nessun APK per il pacchetto: %s"
 
 #: ../fdroidserver/common.py
 msgid "No Android SDK found!"
@@ -1319,14 +1317,13 @@ msgid "No information found."
 msgstr "Nessun informazione trovata."
 
 #: ../fdroidserver/checkupdates.py
-#, fuzzy
 msgid "No matching tags found"
-msgstr "Nessun informazione trovata."
+msgstr "Nessuna etichetta corrispondente trovata"
 
 #: ../fdroidserver/update.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "No minimum SDK version found in {0}, using default (3)."
-msgstr "Nessun config.yml trovato, utilizzando i valori predefiniti."
+msgstr "Nessuna versione minima dell'SDK trovata in {0}, viene usata la predefinita (3)."
 
 #: ../fdroidserver/lint.py
 msgid "No need to specify that the app is Free Software"
@@ -1370,9 +1367,8 @@ msgid "No such versionCode {versionCode} for app {appid}"
 msgstr "Nessun versionCode di questo tipo {versionCode} per l'app {appid}"
 
 #: ../fdroidserver/checkupdates.py
-#, fuzzy
 msgid "No tags found"
-msgstr "Nessun dispositivo collegato trovato"
+msgstr "Nessuna etichetta trovata"
 
 #: ../fdroidserver/verify.py ../fdroidserver/publish.py
 msgid "No unsigned directory - nothing to do"
@@ -1599,7 +1595,7 @@ msgstr "Rimozione dei file specificati"
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Removing {path}\""
-msgstr ""
+msgstr "Rimozione di {path}\""
 
 #: ../fdroidserver/update.py
 msgid "Rename APK files that do not match package.name_123.apk"
@@ -1690,9 +1686,8 @@ msgstr[0] "Scanner trovato {} problema"
 msgstr[1] "Scanner trovato {} problemi"
 
 #: ../fdroidserver/scanner.py
-#, fuzzy
 msgid "Scanning APK with apkanalyzer for known non-free classes."
-msgstr "Scansiona gli APK risultanti per le classi non libere note."
+msgstr "Scansiona gli APK con apkanalyzer per le classi non libere note."
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -1745,7 +1740,7 @@ msgstr "Saltare '{apkfilename} con firma non valida!"
 #: ../fdroidserver/index.py
 #, python-format
 msgid "Skipping GitLab Pages mirror because the repo is too large (>%.2fGB)!"
-msgstr ""
+msgstr "Saltando il mirror di GitLab Pages perché la repo è troppo grande (>%.2fGB)!"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -2234,9 +2229,8 @@ msgid "ambiguous option: %s (%s?)"
 msgstr "opzione ambigua: %s (%s?)"
 
 #: ../fdroidserver/common.py
-#, fuzzy
 msgid "apksigner not found! Cannot sign or verify modern APKs"
-msgstr "apksigner non trovato, è necessario per la firma!"
+msgstr "apksigner non trovato! Impossibile firmare o verificare gli APK moderni"
 
 #: ../fdroidserver/common.py
 msgid "apksigner not found, it's required for signing!"
@@ -2535,9 +2529,8 @@ msgid "no version info found!"
 msgstr "nessuna informazione sulla versione è stata trovata!"
 
 #: ../fdroidserver/checkupdates.py
-#, fuzzy
 msgid "no version information found"
-msgstr "nessuna informazione sulla versione è stata trovata!"
+msgstr "nessuna informazione sulla versione trovata"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py
