@@ -173,6 +173,16 @@ def main():
                               + '\nhttps://developer.github.com/v3/guides/managing-deploy-keys/#deploy-keys')
             git_user_name = os.getenv('CIRCLE_USERNAME')
             git_user_email = git_user_name + '@' + platform.node()
+        elif 'GITHUB_ACTIONS' in os.environ:
+            # we are in Github actions
+            repo_git_base = (os.getenv('GITHUB_REPOSITORY') + NIGHTLY)
+            clone_url = (os.getenv('GITHUB_SERVER_URL') + '/' + repo_git_base)
+            repo_base = get_repo_base_url(clone_url, repo_git_base, force_type='github.com')
+            servergitmirror = 'git@' + urlparse(clone_url).netloc + ':' + repo_git_base
+            deploy_key_url = ('https://github.com/' + repo_git_base + '/settings/keys'
+                              + '\nhttps://developer.github.com/v3/guides/managing-deploy-keys/#deploy-keys')
+            git_user_name = os.getenv('GITHUB_ACTOR')
+            git_user_email = git_user_name + '@' + platform.node()
         else:
             print(_('ERROR: unsupported CI type, patches welcome!'))
             sys.exit(1)
