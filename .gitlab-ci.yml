@@ -560,6 +560,10 @@ pages:
     - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'  # only publish pages on default (master) branch
 
 
+# This job pushes the official CI docker image based on the master
+# branch, so in fdroid/fdroidserver, it should only run on the master
+# branch.  Otherwise, tags or other branches will overwrite the docker
+# image which is supposed to be what is in master.
 docker:
   dependencies:
     - fdroid build
@@ -568,6 +572,8 @@ docker:
       - .gitlab-ci.yml
       - makebuildserver
       - buildserver/*
+    variables:
+      - $CI_COMMIT_BRANCH == "master" || $CI_PROJECT_NAMESPACE != "fdroid"
   image: docker:git
   services:
     - docker:dind
