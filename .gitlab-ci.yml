@@ -560,6 +560,10 @@ pages:
     - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'  # only publish pages on default (master) branch
 
 
+# This job pushes the official CI docker image based on the master
+# branch, so in fdroid/fdroidserver, it should only run on the master
+# branch.  Otherwise, tags or other branches will overwrite the docker
+# image which is supposed to be what is in master.
 docker:
   dependencies:
     - fdroid build
@@ -568,6 +572,8 @@ docker:
       - .gitlab-ci.yml
       - makebuildserver
       - buildserver/*
+    variables:
+      - $CI_COMMIT_BRANCH == "master" || $CI_PROJECT_NAMESPACE != "fdroid"
   image: docker:git
   services:
     - docker:dind
@@ -580,5 +586,10 @@ docker:
     - docker tag $TEST_IMAGE $RELEASE_IMAGE
     - docker tag $TEST_IMAGE ${RELEASE_IMAGE}-stretch
     - echo $CI_BUILD_TOKEN | docker login -u gitlab-ci-token --password-stdin registry.gitlab.com
+    # This avoids filling up gitlab.com free tier accounts with unused docker images.
+    - echo "Skipping docker push to save quota on your gitlab namespace."
+    - echo "If you want to enable the push, set FDROID_PUSH_DOCKER_IMAGE in"
+    - echo "https://gitlab.com/$CI_PROJECT_NAMESPACE/fdroidserver/-/settings/ci_cd#js-cicd-variables-settings"
+    - test -n "$FDROID_PUSH_DOCKER_IMAGE" || exit 0
     - docker push $RELEASE_IMAGE
     - docker push $RELEASE_IMAGE-stretch
