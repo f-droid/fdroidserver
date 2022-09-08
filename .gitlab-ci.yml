@@ -40,7 +40,7 @@ metadata_v0:
   image: registry.gitlab.com/fdroid/fdroidserver:buildserver
   variables:
     GIT_DEPTH: 1000
-    RELEASE_COMMIT_ID: 37c95f59a17d86723fdb71e984121726db777f32  # 2.0a5~
+    RELEASE_COMMIT_ID: b987a4af5c770472f7db8958b304b28b1e6624fd  # 2.1.1
   script:
     - git fetch https://gitlab.com/fdroid/fdroidserver.git $RELEASE_COMMIT_ID
     - cd tests
@@ -55,11 +55,6 @@ metadata_v0:
     - git checkout $GITCOMMIT
     - cd fdroiddata
     - ../tests/dump_internal_metadata_format.py
-    - sed -i
-          -e '/AllowedAPKSigningKeys:/d'
-          -e '/Liberapay:/d'
-          -e '/OpenCollective/d'
-          metadata/dump_*/*.yaml
     - diff -uw metadata/dump_*
 
 .apt-template: &apt-template
