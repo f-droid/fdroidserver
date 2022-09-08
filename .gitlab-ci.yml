@@ -248,6 +248,7 @@ black:
         setup.py
         tests/build.TestCase
         tests/deploy.TestCase
+        tests/dump_internal_metadata_format.py
         tests/exception.TestCase
         tests/import_subcommand.TestCase
         tests/init.TestCase
