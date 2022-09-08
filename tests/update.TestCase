@@ -88,28 +88,49 @@ class UpdateTest(unittest.TestCase):
         fdroidserver.common.config = None
         fdroidserver.common.options = None
 
-    def testInsertStoreMetadata(self):
+    def test_insert_store_metadata(self):
+        tmptestsdir = tempfile.mkdtemp(
+            prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir
+        )
+        os.chdir(tmptestsdir)
+
         config = dict()
         fdroidserver.common.fill_config_defaults(config)
         fdroidserver.update.config = config
-        os.chdir(os.path.join(localmodule, 'tests'))
 
-        shutil.rmtree(os.path.join('repo', 'info.guardianproject.urzip'), ignore_errors=True)
-
-        shutil.rmtree(os.path.join('build', 'com.nextcloud.client'), ignore_errors=True)
-        shutil.copytree(os.path.join('source-files', 'com.nextcloud.client'),
-                        os.path.join('build', 'com.nextcloud.client'))
-
-        shutil.rmtree(os.path.join('build', 'com.nextcloud.client.dev'), ignore_errors=True)
-        shutil.copytree(os.path.join('source-files', 'com.nextcloud.client.dev'),
-                        os.path.join('build', 'com.nextcloud.client.dev'))
-
-        shutil.rmtree(os.path.join('build', 'eu.siacs.conversations'), ignore_errors=True)
-        shutil.copytree(os.path.join('source-files', 'eu.siacs.conversations'),
-                        os.path.join('build', 'eu.siacs.conversations'))
+        repo_dir = os.path.join(self.basedir, 'repo')
+        os.mkdir('metadata')
+        for packageName in (
+                'obb.mainpatch.current',
+                'org.videolan.vlc',
+        ):
+            shutil.copytree(
+                os.path.join(repo_dir, packageName),
+                os.path.join('repo', packageName)
+            )
+        for packageName in (
+                'info.guardianproject.checkey',
+                'info.guardianproject.urzip',
+                'org.smssecure.smssecure',
+        ):
+            if not os.path.exists('metadata'):
+                os.mkdir('metadata')
+            shutil.copytree(
+                os.path.join(self.basedir, 'metadata', packageName),
+                os.path.join('metadata', packageName)
+            )
+        for packageName in (
+                'com.nextcloud.client',
+                'com.nextcloud.client.dev',
+                'eu.siacs.conversations',
+        ):
+            shutil.copytree(
+                os.path.join(self.basedir, 'source-files', packageName),
+                os.path.join(tmptestsdir, 'build', packageName),
+            )
 
         testfilename = 'icon_yAfSvPRJukZzMMfUzvbYqwaD1XmHXNtiPBtuPVHW-6s=.png'
-        testfile = os.path.join('repo', 'org.videolan.vlc', 'en-US', 'icon.png')
+        testfile = os.path.join(repo_dir, 'org.videolan.vlc', 'en-US', 'icon.png')
         cpdir = os.path.join('metadata', 'org.videolan.vlc', 'en-US')
         cpfile = os.path.join(cpdir, testfilename)
         os.makedirs(cpdir, exist_ok=True)
@@ -155,7 +176,7 @@ class UpdateTest(unittest.TestCase):
 
         self.assertEqual(6, len(apps))
         for packageName, app in apps.items():
-            self.assertTrue('localized' in app)
+            self.assertTrue('localized' in app, packageName)
             self.assertTrue('en-US' in app['localized'])
             self.assertEqual(1, len(app['localized']))
             if packageName == 'info.guardianproject.urzip':
