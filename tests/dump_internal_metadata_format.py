@@ -40,7 +40,17 @@ import fdroidserver.metadata  # noqa
 
 def _build_yaml_representer(dumper, data):
     """Create a YAML representation of a Build instance."""
-    return dumper.represent_dict(data)
+    # internal representation of keys were switched
+    # to lists instead of strings concatenated by &&
+    # https://gitlab.com/fdroid/fdroidserver/merge_requests/1185
+    output = {}
+    for k, v in data.items():
+        if k in ("build", "init", "prebuild", "sudo"):
+            output[k] = " && ".join(v)
+        else:
+            output[k] = v
+
+    return dumper.represent_dict(output)
 
 
 parser = ArgumentParser()

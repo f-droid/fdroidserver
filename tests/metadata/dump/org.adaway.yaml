@@ -281,7 +281,8 @@ Builds:
   output: null
   patch: []
   preassemble: []
-  prebuild: android update project -p ../com_actionbarsherlock
+  prebuild:
+  - android update project -p ../com_actionbarsherlock
   rm: []
   scandelete: []
   scanignore: []
@@ -316,7 +317,8 @@ Builds:
   output: null
   patch: []
   preassemble: []
-  prebuild: android update project -p ../com_actionbarsherlock
+  prebuild:
+  - android update project -p ../com_actionbarsherlock
   rm: []
   scandelete: []
   scanignore: []
@@ -351,7 +353,8 @@ Builds:
   output: null
   patch: []
   preassemble: []
-  prebuild: android update project -p ../com_actionbarsherlock
+  prebuild:
+  - android update project -p ../com_actionbarsherlock
   rm: []
   scandelete: []
   scanignore: []
@@ -386,7 +389,8 @@ Builds:
   output: null
   patch: []
   preassemble: []
-  prebuild: android update project -p ../com_actionbarsherlock
+  prebuild:
+  - android update project -p ../com_actionbarsherlock
   rm: []
   scandelete: []
   scanignore: []
@@ -421,7 +425,9 @@ Builds:
   output: null
   patch: []
   preassemble: []
-  prebuild: android update project -p ../com_actionbarsherlock && rm -rf libs/armeabi/*
+  prebuild:
+  - android update project -p ../com_actionbarsherlock
+  - rm -rf libs/armeabi/*
   rm: []
   scandelete: []
   scanignore: []
@@ -455,8 +461,10 @@ Builds:
   output: null
   patch: []
   preassemble: []
-  prebuild: android update project -p ../com_actionbarsherlock && rm -rf libs/armeabi/*
-    && rm libs/android-support-v4.jar
+  prebuild:
+  - android update project -p ../com_actionbarsherlock
+  - rm -rf libs/armeabi/*
+  - rm libs/android-support-v4.jar
   rm: []
   scandelete: []
   scanignore: []
@@ -490,7 +498,9 @@ Builds:
   output: null
   patch: []
   preassemble: []
-  prebuild: android update project -p ../com_actionbarsherlock && rm -rf libs/armeabi/*
+  prebuild:
+  - android update project -p ../com_actionbarsherlock
+  - rm -rf libs/armeabi/*
   rm: []
   scandelete: []
   scanignore: []
@@ -524,8 +534,10 @@ Builds:
   output: null
   patch: []
   preassemble: []
-  prebuild: android update project -p ../com_actionbarsherlock && rm -rf libs/armeabi/*
-    && android update project -p ../org_donations
+  prebuild:
+  - android update project -p ../com_actionbarsherlock
+  - rm -rf libs/armeabi/*
+  - android update project -p ../org_donations
   rm: []
   scandelete: []
   scanignore: []
@@ -559,8 +571,10 @@ Builds:
   output: null
   patch: []
   preassemble: []
-  prebuild: android update project -p ../com_actionbarsherlock && rm -rf libs/armeabi/*
-    && android update project -p ../org_donations
+  prebuild:
+  - android update project -p ../com_actionbarsherlock
+  - rm -rf libs/armeabi/*
+  - android update project -p ../org_donations
   rm: []
   scandelete: []
   scanignore: []
@@ -594,8 +608,10 @@ Builds:
   output: null
   patch: []
   preassemble: []
-  prebuild: android update project -p ../com_actionbarsherlock && rm -rf libs/armeabi/*
-    && android update project -p ../org_donations
+  prebuild:
+  - android update project -p ../com_actionbarsherlock
+  - rm -rf libs/armeabi/*
+  - android update project -p ../org_donations
   rm: []
   scandelete: []
   scanignore: []
@@ -629,8 +645,10 @@ Builds:
   output: null
   patch: []
   preassemble: []
-  prebuild: android update project -p ../com_actionbarsherlock && rm -rf libs/armeabi/*
-    && android update project -p ../org_donations
+  prebuild:
+  - android update project -p ../com_actionbarsherlock
+  - rm -rf libs/armeabi/*
+  - android update project -p ../org_donations
   rm: []
   scandelete: []
   scanignore: []
@@ -662,8 +680,9 @@ Builds:
   forceversion: false
   gradle: []
   gradleprops: []
-  init: rm android-libs/Donations/custom_rules.xml && git clone https://github.com/dschuermann/HtmlSpanner
-    android-libs/HtmlSpanner
+  init:
+  - rm android-libs/Donations/custom_rules.xml
+  - git clone https://github.com/dschuermann/HtmlSpanner android-libs/HtmlSpanner
   maven: false
   ndk: null
   novcheck: false
@@ -671,12 +690,13 @@ Builds:
   output: null
   patch: []
   preassemble: []
-  prebuild: rm -rf ../update_zip libs/root-commands-1.2.jar libs/htmlspanner-0.2-fork.jar
-    && cp -f libs/htmlcleaner-2.2.jar android-libs/HtmlSpanner/htmlspanner/libs/ &&
-    echo "android.library.reference.3=$$RootCommands$$" >> project.properties && echo
-    "android.library.reference.4=android-libs/HtmlSpanner/htmlspanner" >> project.properties
-    && find . -type f -print0 | xargs -0 sed -i 's/org.rootcommands/org.sufficientlysecure.rootcommands/g'
-    && cp android-libs/Donations/ant-templates/other/DonationsConfig.java android-libs/Donations/src/org/donations/
+  prebuild:
+  - rm -rf ../update_zip libs/root-commands-1.2.jar libs/htmlspanner-0.2-fork.jar
+  - cp -f libs/htmlcleaner-2.2.jar android-libs/HtmlSpanner/htmlspanner/libs/
+  - echo "android.library.reference.3=$$RootCommands$$" >> project.properties
+  - echo "android.library.reference.4=android-libs/HtmlSpanner/htmlspanner" >> project.properties
+  - find . -type f -print0 | xargs -0 sed -i 's/org.rootcommands/org.sufficientlysecure.rootcommands/g'
+  - cp android-libs/Donations/ant-templates/other/DonationsConfig.java android-libs/Donations/src/org/donations/
   rm: []
   scandelete: []
   scanignore: []
@@ -709,8 +729,9 @@ Builds:
   forceversion: false
   gradle: []
   gradleprops: []
-  init: rm android-libs/Donations/custom_rules.xml && git clone https://github.com/dschuermann/HtmlSpanner
-    android-libs/HtmlSpanner
+  init:
+  - rm android-libs/Donations/custom_rules.xml
+  - git clone https://github.com/dschuermann/HtmlSpanner android-libs/HtmlSpanner
   maven: false
   ndk: null
   novcheck: false
@@ -718,12 +739,13 @@ Builds:
   output: null
   patch: []
   preassemble: []
-  prebuild: rm -rf ../update_zip libs/root-commands-1.2.jar libs/htmlspanner-0.2-fork.jar
-    && cp -f libs/htmlcleaner-2.2.jar android-libs/HtmlSpanner/htmlspanner/libs/ &&
-    echo "android.library.reference.3=$$RootCommands$$" >> project.properties && echo
-    "android.library.reference.4=android-libs/HtmlSpanner/htmlspanner" >> project.properties
-    && find . -type f -print0 | xargs -0 sed -i 's/org.rootcommands/org.sufficientlysecure.rootcommands/g'
-    && cp android-libs/Donations/ant-templates/other/DonationsConfig.java android-libs/Donations/src/org/donations/
+  prebuild:
+  - rm -rf ../update_zip libs/root-commands-1.2.jar libs/htmlspanner-0.2-fork.jar
+  - cp -f libs/htmlcleaner-2.2.jar android-libs/HtmlSpanner/htmlspanner/libs/
+  - echo "android.library.reference.3=$$RootCommands$$" >> project.properties
+  - echo "android.library.reference.4=android-libs/HtmlSpanner/htmlspanner" >> project.properties
+  - find . -type f -print0 | xargs -0 sed -i 's/org.rootcommands/org.sufficientlysecure.rootcommands/g'
+  - cp android-libs/Donations/ant-templates/other/DonationsConfig.java android-libs/Donations/src/org/donations/
   rm: []
   scandelete: []
   scanignore: []

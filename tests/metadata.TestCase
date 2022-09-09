@@ -504,15 +504,24 @@ class MetadataTest(unittest.TestCase):
                     {
                         'versionCode': 1,
                         'versionName': 'v0.1.0',
-                        'sudo': "apt-get update && "
-                        "apt-get install -y whatever && "
-                        "sed -i -e 's/<that attr=\"bad\"/<that attr=\"good\"/' ~/.whatever/config.xml",
-                        'init': "bash generate_some_file.sh && "
-                        "sed -i -e 'g/what/ever/' /some/file",
-                        'prebuild': "npm something && echo 'important setting' >> /a/file",
-                        'build': "./gradlew someSpecialTask && "
-                        "sed -i 'd/that wrong config/' gradle.properties && "
-                        "./gradlew compile",
+                        'sudo': [
+                            "apt-get update",
+                            "apt-get install -y whatever",
+                            "sed -i -e 's/<that attr=\"bad\"/<that attr=\"good\"/' ~/.whatever/config.xml",
+                        ],
+                        'init': [
+                            "bash generate_some_file.sh",
+                            "sed -i -e 'g/what/ever/' /some/file",
+                        ],
+                        'prebuild': [
+                            "npm something",
+                            "echo 'important setting' >> /a/file",
+                        ],
+                        'build': [
+                            "./gradlew someSpecialTask",
+                            "sed -i 'd/that wrong config/' gradle.properties",
+                            "./gradlew compile",
+                        ],
                     }
                 ],
             },
@@ -551,15 +560,23 @@ class MetadataTest(unittest.TestCase):
                     {
                         'versionCode': 1,
                         'versionName': 'v0.1.0',
-                        'sudo': "apt-get update && "
-                        "apt-get install -y whatever && "
-                        "sed -i -e 's/<that attr=\"bad\"/<that attr=\"good\"/' ~/.whatever/config.xml",
-                        'init': "bash generate_some_file.sh && "
-                        "sed -i -e 'g/what/ever/' /some/file",
-                        'prebuild': "npm something && echo 'important setting' >> /a/file",
-                        'build': "./gradlew someSpecialTask && "
-                        "sed -i 'd/that wrong config/' gradle.properties && "
-                        "./gradlew compile",
+                        'sudo': [
+                            "apt-get update && "
+                            "apt-get install -y whatever && "
+                            "sed -i -e 's/<that attr=\"bad\"/<that attr=\"good\"/' ~/.whatever/config.xml"
+                        ],
+                        'init': [
+                            "bash generate_some_file.sh && "
+                            "sed -i -e 'g/what/ever/' /some/file"
+                        ],
+                        'prebuild': [
+                            "npm something && echo 'important setting' >> /a/file"
+                        ],
+                        'build': [
+                            "./gradlew someSpecialTask && "
+                            "sed -i 'd/that wrong config/' gradle.properties && "
+                            "./gradlew compile"
+                        ],
                     }
                 ],
             },
@@ -593,7 +610,7 @@ class MetadataTest(unittest.TestCase):
                     {
                         'versionCode': 1,
                         'versionName': 'v0.1.0',
-                        'prebuild': "a && b && " "sed -i 's,a,b,'",
+                        'prebuild': ["a && b && " "sed -i 's,a,b,'"],
                     }
                 ],
             },
@@ -630,10 +647,10 @@ class MetadataTest(unittest.TestCase):
         build = fdroidserver.metadata.Build()
         build.versionCode = 102030
         build.versionName = 'v1.2.3'
-        build.sudo = "chmod +rwx /opt"
-        build.init = "sed -i -e 'g/what/ever/' /some/file"
-        build.prebuild = "sed -i 'd/that wrong config/' gradle.properties"
-        build.build = "./gradlew compile"
+        build.sudo = ["chmod +rwx /opt"]
+        build.init = ["sed -i -e 'g/what/ever/' /some/file"]
+        build.prebuild = ["sed -i 'd/that wrong config/' gradle.properties"]
+        build.build = ["./gradlew compile"]
         app['Builds'].append(build)
         fdroidserver.metadata.write_yaml(mf, app)
         mf.seek(0)
@@ -762,10 +779,21 @@ class MetadataTest(unittest.TestCase):
         build = fdroidserver.metadata.Build()
         build.versionCode = 102030
         build.versionName = 'v1.2.3'
-        build.sudo = "apt-get update && apt-get install -y whatever && sed -i -e 's/<that attr=\"bad\"/<that attr=\"good\"/' ~/.whatever/config.xml"
-        build.init = "bash generate_some_file.sh && sed -i -e 'g/what/ever/' /some/file"
-        build.prebuild = "npm something && echo 'important setting' >> /a/file"
-        build.build = "./gradlew someSpecialTask && sed -i 'd/that wrong config/' gradle.properties && ./gradlew compile"
+        build.sudo = [
+            "apt-get update",
+            "apt-get install -y whatever",
+            "sed -i -e 's/<that attr=\"bad\"/<that attr=\"good\"/' ~/.whatever/config.xml",
+        ]
+        build.init = [
+            "bash generate_some_file.sh",
+            "sed -i -e 'g/what/ever/' /some/file",
+        ]
+        build.prebuild = ["npm something", "echo 'important setting' >> /a/file"]
+        build.build = [
+            "./gradlew someSpecialTask",
+            "sed -i 'd/that wrong config/' gradle.properties",
+            "./gradlew compile",
+        ]
         app['Builds'].append(build)
         fdroidserver.metadata.write_yaml(mf, app)
         mf.seek(0)
@@ -914,7 +942,7 @@ class MetadataTest(unittest.TestCase):
                     'Repo': 'https://git.host/repo.git',
                     'RepoType': 'git',
                     'Subdir': [''],
-                    'Prepare': '',
+                    'Prepare': [],
                 },
                 srclib,
             )
@@ -943,9 +971,11 @@ class MetadataTest(unittest.TestCase):
                     'Repo': 'https://github.com/cketti/ckChangeLog',
                     'RepoType': 'git',
                     'Subdir': ['library', 'ckChangeLog/src/main'],
-                    'Prepare': "[ -f project.properties ] || echo 'source.dir=java' > "
-                    "ant.properties && echo -e "
-                    "'android.library=true\\ntarget=android-19' > project.properties",
+                    'Prepare': [
+                        "[ -f project.properties ] || echo 'source.dir=java' > "
+                        "ant.properties && echo -e "
+                        "'android.library=true\\ntarget=android-19' > project.properties"
+                    ],
                 },
             )
 
@@ -993,8 +1023,10 @@ class MetadataTest(unittest.TestCase):
                         'You take the red pill—you stay in Wonderland',
                         'and I show you how deep the rabbit-hole goes.',
                     ],
-                    'Prepare': 'There is a difference between knowing the path '
-                    'and walking the path.',
+                    'Prepare': [
+                        'There is a difference between knowing the path '
+                        'and walking the path.'
+                    ],
                 }
             },
         )
@@ -1014,14 +1046,10 @@ class MetadataTest(unittest.TestCase):
 
                     Subdir:
                     Prepare:
-                     - The Matrix is a system, Neo.
-                     - That system is our enemy.
-                     - But when you're inside, you look around, what do you see?
-                     - Businessmen, teachers, lawyers, carpenters.
-                     - The very minds of the people we are trying to save.
-                     - But until we do, these people are still a part of that system and that makes them our enemy.
-                     - You have to understand, most of these people are not ready to be unplugged.
-                     - And many of them are so inert, so hopelessly dependent on the system that they will fight to protect it.
+                     - Many
+                     - invalid
+                     - commands
+                     - here.
                     '''
                     )
                 )
@@ -1034,14 +1062,12 @@ class MetadataTest(unittest.TestCase):
                     'RepoType': 'git',
                     'Repo': 'https://git.host/repo.git',
                     'Subdir': [''],
-                    'Prepare': 'The Matrix is a system, Neo. && '
-                    'That system is our enemy. && '
-                    'But when you\'re inside, you look around, what do you see? && '
-                    'Businessmen, teachers, lawyers, carpenters. && '
-                    'The very minds of the people we are trying to save. && '
-                    'But until we do, these people are still a part of that system and that makes them our enemy. && '
-                    'You have to understand, most of these people are not ready to be unplugged. && '
-                    'And many of them are so inert, so hopelessly dependent on the system that they will fight to protect it.',
+                    'Prepare': [
+                        'Many',
+                        'invalid',
+                        'commands',
+                        'here.',
+                    ],
                 }
             },
         )
@@ -1081,7 +1107,7 @@ class MetadataTest(unittest.TestCase):
                     'RepoType': 'git',
                     'Repo': 'https://git.host/repo.git',
                     'Subdir': [''],
-                    'Prepare': '',
+                    'Prepare': [],
                 },
                 'simple': {
                     'RepoType': 'git',

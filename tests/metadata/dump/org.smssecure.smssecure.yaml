@@ -32,13 +32,27 @@ Builds:
   output: null
   patch: []
   preassemble: []
-  prebuild: touch signing.properties && pushd $$GradleWitness$$ && gradle jar && popd
-    && cp $$GradleWitness$$/build/libs/GradleWitness.jar libs/gradle-witness.jar &&
-    sed -i -e '20,22d' build.gradle && pushd $$PreferenceFragment$$ && gradle uploadArchives
-    && popd && sed -i -e '/5470f5872514a6226fa1fc6f4e000991f38805691c534cf0bd2778911fc773ad/d'
-    build.gradle && mkdir smil && pushd smil && wget -c http://www.w3.org/TR/smil-boston-dom/java-binding.zip
-    && unzip java-binding.zip && popd && cp -fR smil/java/org src/ && rm -fR smil
-    && sed -i -e '/org.w3c.smil/d' build.gradle && cp -fR $$AospMms$$/src/org src/
+  prebuild:
+  - touch signing.properties
+  - pushd $$GradleWitness$$
+  - gradle jar
+  - popd
+  - cp $$GradleWitness$$/build/libs/GradleWitness.jar libs/gradle-witness.jar
+  - sed -i -e '20,22d' build.gradle
+  - pushd $$PreferenceFragment$$
+  - gradle uploadArchives
+  - popd
+  - sed -i -e '/5470f5872514a6226fa1fc6f4e000991f38805691c534cf0bd2778911fc773ad/d'
+    build.gradle
+  - mkdir smil
+  - pushd smil
+  - wget -c http://www.w3.org/TR/smil-boston-dom/java-binding.zip
+  - unzip java-binding.zip
+  - popd
+  - cp -fR smil/java/org src/
+  - rm -fR smil
+  - sed -i -e '/org.w3c.smil/d' build.gradle
+  - cp -fR $$AospMms$$/src/org src/
   rm:
   - libs/*
   scandelete: []
@@ -78,8 +92,12 @@ Builds:
   output: null
   patch: []
   preassemble: []
-  prebuild: touch signing.properties && pushd $$GradleWitness$$ && gradle jar && popd
-    && cp $$GradleWitness$$/build/libs/GradleWitness.jar libs/gradle-witness.jar
+  prebuild:
+  - touch signing.properties
+  - pushd $$GradleWitness$$
+  - gradle jar
+  - popd
+  - cp $$GradleWitness$$/build/libs/GradleWitness.jar libs/gradle-witness.jar
   rm:
   - libs/*.jar
   scandelete: []
@@ -116,8 +134,11 @@ Builds:
   output: null
   patch: []
   preassemble: []
-  prebuild: touch signing.properties && ./build-witness.sh && rm -rf libs/gradle-witness/build
-    && echo "org.gradle.jvmargs=-Xms512m -Xmx512m -XX:MaxPermSize=512m" >> gradle.properties
+  prebuild:
+  - touch signing.properties
+  - ./build-witness.sh
+  - rm -rf libs/gradle-witness/build
+  - echo "org.gradle.jvmargs=-Xms512m -Xmx512m -XX:MaxPermSize=512m" >> gradle.properties
   rm:
   - libs/*.jar
   scandelete: []
@@ -153,8 +174,11 @@ Builds:
   output: null
   patch: []
   preassemble: []
-  prebuild: touch signing.properties && ./build-witness.sh && rm -rf libs/gradle-witness/build
-    && echo "org.gradle.jvmargs=-Xms512m -Xmx512m -XX:MaxPermSize=512m" >> gradle.properties
+  prebuild:
+  - touch signing.properties
+  - ./build-witness.sh
+  - rm -rf libs/gradle-witness/build
+  - echo "org.gradle.jvmargs=-Xms512m -Xmx512m -XX:MaxPermSize=512m" >> gradle.properties
   rm:
   - libs/*.jar
   scandelete: []
@@ -190,7 +214,10 @@ Builds:
   output: null
   patch: []
   preassemble: []
-  prebuild: touch signing.properties && ./scripts/build-witness.sh && rm -rf libs/gradle-witness/build
+  prebuild:
+  - touch signing.properties
+  - ./scripts/build-witness.sh
+  - rm -rf libs/gradle-witness/build
   rm:
   - libs/*.jar
   scandelete: []
@@ -226,7 +253,10 @@ Builds:
   output: null
   patch: []
   preassemble: []
-  prebuild: touch signing.properties && ./scripts/build-witness.sh && rm -rf libs/gradle-witness/build
+  prebuild:
+  - touch signing.properties
+  - ./scripts/build-witness.sh
+  - rm -rf libs/gradle-witness/build
   rm:
   - libs/*.jar
   scandelete: []
@@ -262,7 +292,10 @@ Builds:
   output: null
   patch: []
   preassemble: []
-  prebuild: touch signing.properties && ./scripts/build-witness.sh && rm -rf libs/gradle-witness/build
+  prebuild:
+  - touch signing.properties
+  - ./scripts/build-witness.sh
+  - rm -rf libs/gradle-witness/build
   rm:
   - libs/*.jar
   scandelete: []
@@ -298,7 +331,10 @@ Builds:
   output: null
   patch: []
   preassemble: []
-  prebuild: touch signing.properties && ./scripts/build-witness.sh && rm -rf libs/gradle-witness/build
+  prebuild:
+  - touch signing.properties
+  - ./scripts/build-witness.sh
+  - rm -rf libs/gradle-witness/build
   rm:
   - libs/*.jar
   scandelete: []

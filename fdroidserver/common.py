@@ -2055,9 +2055,9 @@ def getsrclib(spec, srclib_dir, basepath=False,
     if prepare:
 
         if srclib["Prepare"]:
-            cmd = replace_config_vars(srclib["Prepare"], build)
+            cmd = replace_config_vars("; ".join(srclib["Prepare"]), build)
 
-            p = FDroidPopen(['bash', '-x', '-c', '--', cmd], cwd=libdir)
+            p = FDroidPopen(['bash', '-e', '-u', '-o', 'pipefail', '-x', '-c', '--', cmd], cwd=libdir)
             if p.returncode != 0:
                 raise BuildException("Error running prepare command for srclib %s"
                                      % name, p.output)
@@ -2119,10 +2119,10 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
 
     # Run an init command if one is required
     if build.init:
-        cmd = replace_config_vars(build.init, build)
+        cmd = replace_config_vars("; ".join(build.init), build)
         logging.info("Running 'init' commands in %s" % root_dir)
 
-        p = FDroidPopen(['bash', '-x', '-c', '--', cmd], cwd=root_dir)
+        p = FDroidPopen(['bash', '-e', '-u', '-o', 'pipefail', '-x', '-c', '--', cmd], cwd=root_dir)
         if p.returncode != 0:
             raise BuildException("Error running init command for %s:%s" %
                                  (app.id, build.versionName), p.output)
@@ -2286,13 +2286,13 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
     if build.prebuild:
         logging.info("Running 'prebuild' commands in %s" % root_dir)
 
-        cmd = replace_config_vars(build.prebuild, build)
+        cmd = replace_config_vars("; ".join(build.prebuild), build)
 
         # Substitute source library paths into prebuild commands
         for name, number, libpath in srclibpaths:
             cmd = cmd.replace('$$' + name + '$$', os.path.join(os.getcwd(), libpath))
 
-        p = FDroidPopen(['bash', '-x', '-c', '--', cmd], cwd=root_dir)
+        p = FDroidPopen(['bash', '-e', '-u', '-o', 'pipefail', '-x', '-c', '--', cmd], cwd=root_dir)
         if p.returncode != 0:
             raise BuildException("Error running prebuild command for %s:%s" %
                                  (app.id, build.versionName), p.output)

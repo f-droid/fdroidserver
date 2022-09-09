@@ -390,7 +390,7 @@ def build_local(app, build, vcs, build_dir, output_dir, log_dir, srclib_dir, ext
             logging.info("Running 'sudo' commands in %s" % os.getcwd())
 
             p = FDroidPopen(['sudo', 'DEBIAN_FRONTEND=noninteractive',
-                             'bash', '-x', '-c', build.sudo])
+                             'bash', '-e', '-u', '-o', 'pipefail', '-x', '-c', '; '.join(build.sudo)])
             if p.returncode != 0:
                 raise BuildException("Error running sudo command for %s:%s" %
                                      (app.id, build.versionName), p.output)
@@ -535,13 +535,13 @@ def build_local(app, build, vcs, build_dir, output_dir, log_dir, srclib_dir, ext
     # Run a build command if one is required...
     if build.build:
         logging.info("Running 'build' commands in %s" % root_dir)
-        cmd = common.replace_config_vars(build.build, build)
+        cmd = common.replace_config_vars("; ".join(build.build), build)
 
         # Substitute source library paths into commands...
         for name, number, libpath in srclibpaths:
             cmd = cmd.replace('$$' + name + '$$', os.path.join(os.getcwd(), libpath))
 
-        p = FDroidPopen(['bash', '-x', '-c', cmd], cwd=root_dir)
+        p = FDroidPopen(['bash', '-e', '-u', '-o', 'pipefail', '-x', '-c', cmd], cwd=root_dir)
 
         if p.returncode != 0:
             raise BuildException("Error running build command for %s:%s" %
