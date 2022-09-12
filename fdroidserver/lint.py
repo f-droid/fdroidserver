@@ -662,6 +662,16 @@ def check_current_version_code(app):
         )
 
 
+def check_updates_expected(app):
+    """Check if update checking makes sense."""
+    if (app.get('NoSourceSince') or app.get('ArchivePolicy') == '0 versions') and (
+        app.get('AutoUpdateMode') or app.get('UpdateCheckMode')
+    ):
+        yield _(
+            'App has NoSourceSince or ArchivePolicy "0 versions" but AutoUpateMode or UpdateCheck are not None'
+        )
+
+
 def main():
 
     global config, options
@@ -768,6 +778,7 @@ def main():
             check_format,
             check_license_tag,
             check_current_version_code,
+            check_updates_expected,
         ]
 
         for check_func in app_check_funcs:
