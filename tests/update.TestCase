@@ -1424,7 +1424,7 @@ class UpdateTest(unittest.TestCase):
                         'AutoUpdateMode': '',
                         'Binaries': '',
                         'Bitcoin': '',
-                        'Builds': '',
+                        'Builds': None,
                         'Changelog': '',
                         'CurrentVersion': '',
                         'CurrentVersionCode': '',

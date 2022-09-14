@@ -203,7 +203,7 @@ fieldtypes = {
     'Categories': TYPE_LIST,
     'AntiFeatures': TYPE_LIST,
     'AllowedAPKSigningKeys': TYPE_LIST,
-    'Build': TYPE_BUILD,
+    'Builds': TYPE_BUILD,
 }
 
 
