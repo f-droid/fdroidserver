@@ -25,6 +25,7 @@ import os
 import paramiko
 import platform
 import shutil
+import ssl
 import subprocess
 import sys
 import tempfile
@@ -47,7 +48,11 @@ DISTINGUISHED_NAME = 'CN=Android Debug,O=Android,C=US'
 NIGHTLY = '-nightly'
 
 
-def _ssh_key_from_debug_keystore(keystore=KEYSTORE_FILE):
+def _ssh_key_from_debug_keystore(keystore=None):
+    if keystore is None:
+        # set this here so it can be overridden in the tests
+        # TODO convert this to a class to get rid of this nonsense
+        keystore = KEYSTORE_FILE
     tmp_dir = tempfile.mkdtemp(prefix='.')
     privkey = os.path.join(tmp_dir, '.privkey')
     key_pem = os.path.join(tmp_dir, '.key.pem')
@@ -94,10 +99,17 @@ def _ssh_key_from_debug_keystore(keystore=KEYSTORE_FILE):
         ],
         env={'LC_ALL': 'C.UTF-8'},
     )
+
+    # OpenSSL 3.0 changed the default output format from PKCS#1 to
+    # PKCS#8, which paramiko does not support.
+    # https://www.openssl.org/docs/man3.0/man1/openssl-rsa.html#traditional
+    # https://github.com/paramiko/paramiko/issues/1015
+    openssl_rsa_cmd = ['openssl', 'rsa']
+    if ssl.OPENSSL_VERSION_INFO[0] >= 3:
+        openssl_rsa_cmd += ['-traditional']
     subprocess.check_call(
-        [
-            'openssl',
-            'rsa',
+        openssl_rsa_cmd
+        + [
             '-in',
             key_pem,
             '-out',

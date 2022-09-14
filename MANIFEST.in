@@ -43,6 +43,7 @@ include locale/zh_Hant/LC_MESSAGES/fdroidserver.po
 include makebuildserver
 include README.md
 include tests/androguard_test.py
+include tests/aosp_testkey_debug.keystore
 include tests/bad-unicode-*.apk
 include tests/build.TestCase
 include tests/build-tools/17.0.0/aapt-output-com.moez.QKSMS_182.txt
