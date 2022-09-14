@@ -430,11 +430,11 @@ Last updated: {date}'''.format(repo_git_base=repo_git_base,
                           + '\n     -dname "CN=Android Debug,O=Android,C=US"')
             sys.exit(1)
         ssh_dir = os.path.join(os.getenv('HOME'), '.ssh')
-        os.makedirs(os.path.dirname(ssh_dir), exist_ok=True)
         privkey = _ssh_key_from_debug_keystore(options.keystore)
-        ssh_private_key_file = os.path.join(ssh_dir, os.path.basename(privkey))
-        shutil.move(privkey, ssh_private_key_file)
-        shutil.move(privkey + '.pub', ssh_private_key_file + '.pub')
+        if os.path.exists(ssh_dir):
+            ssh_private_key_file = os.path.join(ssh_dir, os.path.basename(privkey))
+            shutil.move(privkey, ssh_private_key_file)
+            shutil.move(privkey + '.pub', ssh_private_key_file + '.pub')
         if shutil.rmtree.avoids_symlink_attacks:
             shutil.rmtree(os.path.dirname(privkey))
 
