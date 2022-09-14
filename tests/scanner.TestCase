@@ -45,17 +45,17 @@ class ScannerTest(unittest.TestCase):
         fdroidserver.scanner.options.json = False
         source_files = os.path.join(self.basedir, 'source-files')
         projects = {
-            'cn.wildfirechat.chat': 4,
-            'com.integreight.onesheeld': 11,
+            'OtakuWorld': 2,
             'Zillode': 1,
+            'cn.wildfirechat.chat': 4,
+            'com.github.shadowsocks': 6,
+            'com.integreight.onesheeld': 11,
+            'com.jens.automation2': 2,
             'firebase-suspect': 1,
             'org.mozilla.rocket': 3,
+            'org.tasks': 3,
             'realm': 1,
             'se.manyver': 2,
-            'com.jens.automation2': 2,
-            'com.github.shadowsocks': 6,
-            'org.tasks': 1,
-            'OtakuWorld': 2,
         }
         for d in glob.glob(os.path.join(source_files, '*')):
             build = fdroidserver.metadata.Build()

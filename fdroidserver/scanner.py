@@ -68,6 +68,8 @@ NON_FREE_GRADLE_LINES = {
         r'google.*admob',
         r'google.*play.*services',
         r'com.google.android.play:core.*',
+        r'com.google.android.play:app-update',
+        r'com.google.android.libraries.places:places',
         r'com.google.mlkit',
         r'com.android.billingclient',
         r'androidx.work:work-gcm',
@@ -92,6 +94,17 @@ NON_FREE_GRADLE_LINES = {
         r'io.github.sinaweibosdk',
         r'com.umeng.umsdk',
         r'com.google.android.exoplayer:extension-cast',
+        r'io.objectbox:objectbox-gradle-plugin',
+        r'com.evernote:android-job',
+        r'com.yayandroid:LocationManager',
+        r'com.onesignal:OneSignal',
+        r'com.cloudinary:cloudinary-android',
+        r'com.google.android.exoplayer:extension-cronet',
+        r'com.anjlab.android.iab.v3:library',
+        r'com.github.penn5:donations',
+        r'com.mapbox',
+        r'com.yandex.android',
+        r'com.hypertrack',
     ]
 }
 
@@ -234,8 +247,10 @@ def scan_source(build_dir, build=metadata.Build()):
 
     allowlisted = [
         'firebase-jobdispatcher',  # https://github.com/firebase/firebase-jobdispatcher-android/blob/master/LICENSE
-        'com.firebaseui',          # https://github.com/firebase/FirebaseUI-Android/blob/master/LICENSE
-        'geofire-android'          # https://github.com/firebase/geofire-java/blob/master/LICENSE
+        'com.firebaseui',  # https://github.com/firebase/FirebaseUI-Android/blob/master/LICENSE
+        'geofire-android',  # https://github.com/firebase/geofire-java/blob/master/LICENSE
+        'com.yandex.android:authsdk',  # https://github.com/yandexmobile/yandex-login-sdk-android/blob/master/LICENSE.txt
+        'com.hypertrack:hyperlog',  # https://github.com/hypertrack/hyperlog-android#license
     ]
 
     def is_allowlisted(s):
