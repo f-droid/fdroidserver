@@ -4118,6 +4118,25 @@ def run_yamllint(path, indent=0):
     return '\n'.join(result)
 
 
+def calculate_IPFS_cid(filename):
+    """
+    Calculate the IPFS CID of a file and add it to the index.
+
+    uses ipfs_cid package at https://packages.debian.org/sid/ipfs-cid
+    Returns CIDv1 of a file as per IPFS recommendation
+    """
+    exe_name = 'ipfs_cid'
+    if not set_command_in_config(exe_name) or not config.get(exe_name):
+        logging.info(_("%s not found, skipping CIDv1 generation") % exe_name)
+        return
+    file_cid = subprocess.run([config[exe_name], filename], capture_output=True)
+
+    if file_cid.returncode == 0:
+        cid_output = file_cid.stdout.decode()
+        cid_output_dict = json.loads(cid_output)
+        return cid_output_dict['CIDv1']
+
+
 def sha256sum(filename):
     """Calculate the sha256 of the given file."""
     sha = hashlib.sha256()

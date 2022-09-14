@@ -92,6 +92,7 @@ debian_testing:
         fdroidserver
         git
         gnupg
+        ipfs-cid
         python3-defusedxml
         python3-setuptools
         zipalign

@@ -836,7 +836,7 @@ class UpdateTest(unittest.TestCase):
         fdroidserver.update.config = config
         apk_info = fdroidserver.update.scan_apk('repo/no.min.target.sdk_987.apk')
         self.maxDiff = None
-        self.assertDictEqual(apk_info, {
+        expected = {
             'icons': {},
             'icons_src': {'-1': 'res/drawable/ic_launcher.png',
                           '160': 'res/drawable/ic_launcher.png'},
@@ -859,11 +859,18 @@ class UpdateTest(unittest.TestCase):
                 fdroidserver.update.UsesPermission(name='android.permission.READ_PHONE_STATE',
                                                    maxSdkVersion=None),
                 fdroidserver.update.UsesPermission(name='android.permission.READ_EXTERNAL_STORAGE',
-                                                   maxSdkVersion=None)]})
+                                                   maxSdkVersion=None),
+            ],
+        }
+        if config.get('ipfs_cid'):
+            expected['ipfsCIDv1'] = 'bafybeidwxseoagnew3gtlasttqovl7ciuwxaud5a5p4a5pzpbrfcfj2gaa'
+
+        self.assertDictEqual(apk_info, expected)
 
     def test_scan_apk_no_sig(self):
         config = dict()
         fdroidserver.common.fill_config_defaults(config)
+        fdroidserver.common.config = config
         fdroidserver.update.config = config
         os.chdir(os.path.join(localmodule, 'tests'))
         if os.path.basename(os.getcwd()) != 'tests':
@@ -929,6 +936,7 @@ class UpdateTest(unittest.TestCase):
 
         config = dict()
         fdroidserver.common.fill_config_defaults(config)
+        fdroidserver.common.config = config
         fdroidserver.update.config = config
         os.chdir(os.path.join(localmodule, 'tests'))
 
@@ -986,6 +994,8 @@ class UpdateTest(unittest.TestCase):
             with open(savepath, 'r') as f:
                 from_yaml = yaml.load(f, Loader=TestLoader)
             self.maxDiff = None
+            if not config.get('ipfs_cid'):
+                del from_yaml['ipfsCIDv1']  # handle when ipfs_cid is not installed
             self.assertEqual(apk, from_yaml)
 
     def test_process_apk_signed_by_disabled_algorithms(self):
