@@ -1252,12 +1252,10 @@ class vcs_git(vcs):
 
     def getref(self, revname='HEAD'):
         self.checkrepo()
-        p = FDroidPopen(['git', 'rev-parse', '--verify',
-                         '{revname}^{{commit}}'.format(revname=revname)], cwd=self.local,
-                        output=False)
-        if p.returncode != 0:
+        repo = git.Repo(self.local)
+        if not repo.is_valid_object(revname):
             return None
-        return p.output.strip()
+        return repo.commit(revname).hexsha
 
 
 class vcs_gitsvn(vcs):
