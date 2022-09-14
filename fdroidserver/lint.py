@@ -664,8 +664,10 @@ def check_current_version_code(app):
 
 def check_updates_expected(app):
     """Check if update checking makes sense."""
-    if (app.get('NoSourceSince') or app.get('ArchivePolicy') == '0 versions') and (
-        app.get('AutoUpdateMode') or app.get('UpdateCheckMode')
+    if (
+        app.get('NoSourceSince') or app.get('ArchivePolicy') == '0 versions'
+    ) and not all(
+        app.get(key, 'None') == 'None' for key in ('AutoUpdateMode', 'UpdateCheckMode')
     ):
         yield _(
             'App has NoSourceSince or ArchivePolicy "0 versions" but AutoUpateMode or UpdateCheck are not None'
