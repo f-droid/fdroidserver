@@ -1508,6 +1508,20 @@ class CommonTest(unittest.TestCase):
         with self.assertRaises(SyntaxError):
             fdroidserver.common.calculate_math_string('1-1 # no comment')
 
+    def test_calculate_IPFS_cid_with_no_tool(self):
+        fdroidserver.common.config = {'ipfs_cid': None}
+        self.assertIsNone(fdroidserver.common.calculate_IPFS_cid('urzip.apk'))
+        self.assertIsNone(fdroidserver.common.calculate_IPFS_cid('FileDoesNotExist'))
+
+    @unittest.skipUnless(shutil.which('ipfs_cid'), 'calculate_IPFS_cid needs ipfs_cid')
+    def test_calculate_IPFS_cid(self):
+        fdroidserver.common.config = dict()
+        self.assertIsNone(fdroidserver.common.calculate_IPFS_cid('FileDoesNotExist'))
+        self.assertEqual(
+            fdroidserver.common.calculate_IPFS_cid('urzip.apk'),
+            "bafybeigmtgrwyvj77jaflje2rf533haeqtpu2wtwsctryjusjnsawacsam",
+        )
+
     def test_deploy_build_log_with_rsync_with_id_file(self):
 
         mocklogcontent = bytes(

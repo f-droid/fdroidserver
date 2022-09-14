@@ -13,6 +13,7 @@ icons_src:
   '120': res/drawable-ldpi-v4/icon_launcher.png
   '160': res/drawable-mdpi-v4/icon_launcher.png
   '240': res/drawable-hdpi-v4/icon_launcher.png
+ipfsCIDv1: bafybeifijmr5ygvfvig4vzbmdc3ysj6m46ddohaol4vgp4qoyooqpc27zu
 minSdkVersion: 7
 name: Compass Keyboard
 nativecode:

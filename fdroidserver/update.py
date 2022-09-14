@@ -58,7 +58,7 @@ if hasattr(Image, 'DecompressionBombWarning'):
     warnings.simplefilter('error', Image.DecompressionBombWarning)
 Image.MAX_IMAGE_PIXELS = 0xffffff  # 4096x4096
 
-METADATA_VERSION = 20001
+METADATA_VERSION = 20002
 
 # less than the valid range of versionCode, i.e. Java's Integer.MIN_VALUE
 UNSET_VERSION_CODE = -0x100000000
@@ -1148,6 +1148,7 @@ def scan_repo_files(apkcache, repodir, knownapks, use_date_from_file=False):
             repo_file['apkName'] = name_utf8
             repo_file['hash'] = shasum
             repo_file['hashType'] = 'sha256'
+            repo_file['ipfsCIDv1'] = common.calculate_IPFS_cid(name_utf8)
             repo_file['versionCode'] = 0
             repo_file['versionName'] = shasum[0:7]
             # the static ID is the SHA256 unless it is set in the metadata
@@ -1212,6 +1213,9 @@ def scan_apk(apk_file, require_signature=True):
         'icons': {},
         'antiFeatures': set(),
     }
+    ipfsCIDv1 = common.calculate_IPFS_cid(apk_file)
+    if ipfsCIDv1:
+        apk['ipfsCIDv1'] = ipfsCIDv1
 
     scan_apk_androguard(apk, apk_file)
 

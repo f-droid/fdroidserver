@@ -9,6 +9,7 @@ icons:
 icons_src:
   '-1': res/drawable/ic_launcher.png
   '160': res/drawable/ic_launcher.png
+ipfsCIDv1: bafybeigmtgrwyvj77jaflje2rf533haeqtpu2wtwsctryjusjnsawacsam
 minSdkVersion: 4
 name: urzip
 packageName: info.guardianproject.urzip

@@ -607,6 +607,10 @@ def convert_version(version, app, repodir):
         "size": version["size"]
     }
 
+    ipfsCIDv1 = version.get("ipfsCIDv1")
+    if ipfsCIDv1:
+        ver["file"]["ipfsCIDv1"] = ipfsCIDv1
+
     if "srcname" in version:
         ver["src"] = file_entry(os.path.join(repodir, version["srcname"]))
 
@@ -945,7 +949,7 @@ def make_v1(apps, packages, repodir, repodict, requestsdict, fdroid_signing_key_
         for k, v in sorted(package.items()):
             if not v:
                 continue
-            if k in ('icon', 'icons', 'icons_src', 'name', ):
+            if k in ('icon', 'icons', 'icons_src', 'ipfsCIDv1', 'name'):
                 continue
             d[k] = v
 
