@@ -414,6 +414,7 @@ plugin_fetchsrclibs:
         python3-pil
         python3-pip
         python3-pycparser
+        python3-ruamel.yaml
         python3-venv
     - python3 -m venv --system-site-packages env
     - . env/bin/activate
