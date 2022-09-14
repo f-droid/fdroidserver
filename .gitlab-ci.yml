@@ -246,6 +246,7 @@ black:
         tests/lint.TestCase
         tests/metadata.TestCase
         tests/ndk-release-checksums.py
+        tests/nightly.TestCase
         tests/rewritemeta.TestCase
         tests/scanner.TestCase
         tests/signindex.TestCase

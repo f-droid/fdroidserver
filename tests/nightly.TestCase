@@ -1,11 +1,18 @@
 #!/usr/bin/env python3
 
 import inspect
+import logging
 import optparse
 import os
 import requests
+import shutil
 import sys
+import tempfile
+import time
 import unittest
+
+from pathlib import Path
+from unittest.mock import patch
 
 localmodule = os.path.realpath(
     os.path.join(os.path.dirname(inspect.getfile(inspect.currentframe())), '..')
@@ -17,7 +24,51 @@ if localmodule not in sys.path:
 from fdroidserver import common, nightly
 
 
+AOSP_TESTKEY_DEBUG_KEYSTORE_KEY_FILE_NAME = (
+    'debug_keystore_k47SVrA85+oMZAexHc62PkgvIgO8TJBYN00U82xSlxc_id_rsa'
+)
+
+
+class Options:
+    allow_disabled_algorithms = False
+    clean = False
+    delete_unknown = False
+    nosign = False
+    pretty = True
+    rename_apks = False
+    verbose = False
+
+
 class NightlyTest(unittest.TestCase):
+
+    basedir = Path(__file__).resolve().parent
+    path = os.environ['PATH']
+
+    def setUp(self):
+        logging.basicConfig(level=logging.WARNING)
+        self.basedir = Path(localmodule) / 'tests'
+        self.testroot = Path(localmodule) / '.testfiles'
+        self.testroot.mkdir(exist_ok=True)
+        os.chdir(self.basedir)
+        self.tempdir = tempfile.TemporaryDirectory(
+            str(time.time()), self._testMethodName + '_', self.testroot
+        )
+        self.testdir = Path(self.tempdir.name)
+        self.home = self.testdir / 'home'
+        self.home.mkdir()
+        self.dot_android = self.home / '.android'
+        nightly.KEYSTORE_FILE = str(self.dot_android / 'debug.keystore')
+
+    def tearDown(self):
+        self.tempdir.cleanup()
+
+    def _copy_test_debug_keystore(self):
+        self.dot_android.mkdir()
+        shutil.copy(
+            self.basedir / 'aosp_testkey_debug.keystore',
+            self.dot_android / 'debug.keystore',
+        )
+
     def test_get_repo_base_url(self):
         for clone_url, repo_git_base, result in [
             (
@@ -36,6 +87,63 @@ class NightlyTest(unittest.TestCase):
             r = requests.head(os.path.join(url, 'repo/index-v1.jar'), timeout=300)
             # gitlab.com often returns 403 Forbidden from their cloudflare restrictions
             self.assertTrue(r.status_code in (200, 403), 'should not be a redirect')
+
+    @patch.dict(os.environ, clear=True)
+    def test_ssh_key_from_debug_keystore(self):
+        os.environ['HOME'] = str(self.home)
+        os.environ['PATH'] = self.path
+        ssh_private_key_file = nightly._ssh_key_from_debug_keystore(
+            self.basedir / 'aosp_testkey_debug.keystore'
+        )
+        with open(ssh_private_key_file) as fp:
+            assert '-----BEGIN RSA PRIVATE KEY-----' in fp.read()
+        with open(ssh_private_key_file + '.pub') as fp:
+            assert fp.read(8) == 'ssh-rsa '
+
+    @patch.dict(os.environ, clear=True)
+    @patch('sys.argv', ['fdroid nightly', '--verbose'])
+    def test_main_empty_dot_android(self):
+        """Test that it exits with an error when ~/.android is empty"""
+        os.environ['HOME'] = str(self.home)
+        os.environ['PATH'] = self.path
+        with self.assertRaises(SystemExit) as cm:
+            nightly.main()
+        self.assertEqual(cm.exception.code, 1)
+
+    @patch.dict(os.environ, clear=True)
+    @patch('sys.argv', ['fdroid nightly', '--verbose'])
+    def test_main_empty_dot_ssh(self):
+        """Test that it does not create ~/.ssh if it does not exist
+
+        Careful!  If the test env is wrong, it can mess up the local
+        SSH setup.
+
+        """
+        dot_ssh = self.home / '.ssh'
+        self._copy_test_debug_keystore()
+        os.environ['HOME'] = str(self.home)
+        os.environ['PATH'] = self.path
+        assert not dot_ssh.exists()
+        nightly.main()
+        assert not dot_ssh.exists()
+
+    @patch.dict(os.environ, clear=True)
+    @patch('sys.argv', ['fdroid nightly', '--verbose'])
+    def test_main_on_user_machine(self):
+        """Test that `fdroid nightly` runs on the user's machine
+
+        Careful!  If the test env is wrong, it can mess up the local
+        SSH setup.
+
+        """
+        dot_ssh = self.home / '.ssh'
+        dot_ssh.mkdir()
+        self._copy_test_debug_keystore()
+        os.environ['HOME'] = str(self.home)
+        os.environ['PATH'] = self.path
+        nightly.main()
+        assert (dot_ssh / AOSP_TESTKEY_DEBUG_KEYSTORE_KEY_FILE_NAME).exists()
+        assert (dot_ssh / (AOSP_TESTKEY_DEBUG_KEYSTORE_KEY_FILE_NAME + '.pub')).exists()
 
 
 if __name__ == "__main__":
