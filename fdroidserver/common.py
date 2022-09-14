@@ -712,11 +712,7 @@ def read_pkg_args(appid_versionCode_pairs, allow_vercodes=False):
         p = apk_regex.sub(r':\1', p)
         if allow_vercodes and ':' in p:
             package, vercode = p.split(':')
-            try:
-                i_vercode = int(vercode, 0)
-            except ValueError:
-                i_vercode = int(vercode)
-            vercode = str(i_vercode)
+            vercode = version_code_string_to_int(vercode)
         else:
             package, vercode = p, None
         if package not in vercodes:
@@ -819,7 +815,7 @@ def publishednameinfo(filename):
     filename = os.path.basename(filename)
     m = publish_name_regex.match(filename)
     try:
-        result = (m.group(1), m.group(2))
+        result = (m.group(1), int(m.group(2)))
     except AttributeError as exc:
         raise FDroidException(_("Invalid name for published file: %s") % filename) from exc
     return result
@@ -846,10 +842,10 @@ def apk_parse_release_filename(apkname):
     """
     m = apk_release_filename_with_sigfp.match(apkname)
     if m:
-        return m.group('appid'), m.group('vercode'), m.group('sigfp')
+        return m.group('appid'), int(m.group('vercode')), m.group('sigfp')
     m = apk_release_filename.match(apkname)
     if m:
-        return m.group('appid'), m.group('vercode'), None
+        return m.group('appid'), int(m.group('vercode')), None
     return None, None, None
 
 
@@ -1803,7 +1799,7 @@ def parse_androidmanifests(paths, app):
 
                             matches = vcsearch_g(line)
                             if matches:
-                                vercode = matches.group(1)
+                                vercode = version_code_string_to_int(matches.group(1))
 
                         if inside_required_flavour > 0:
                             if '{' in line:
@@ -1841,7 +1837,7 @@ def parse_androidmanifests(paths, app):
                         if not vercode:
                             matches = vcsearch_g(line)
                             if matches:
-                                vercode = matches.group(1)
+                                vercode = version_code_string_to_int(matches.group(1))
                     if not android_plugin_file and ANDROID_PLUGIN_REGEX.match(line):
                         android_plugin_file = True
             if android_plugin_file:
@@ -1868,9 +1864,8 @@ def parse_androidmanifests(paths, app):
                 base_dir = os.path.dirname(path)
                 version = retrieve_string_singleline(base_dir, version)
             if XMLNS_ANDROID + "versionCode" in xml.attrib:
-                a = xml.attrib[XMLNS_ANDROID + "versionCode"]
-                if string_is_integer(a):
-                    vercode = a
+                vercode = version_code_string_to_int(
+                    xml.attrib[XMLNS_ANDROID + "versionCode"])
 
         # Remember package name, may be defined separately from version+vercode
         if package is None:
@@ -2635,9 +2630,9 @@ def get_apk_id_androguard(apkfile):
                             appid = value
                         elif versionCode is None and name == 'versionCode':
                             if value.startswith('0x'):
-                                versionCode = str(int(value, 16))
+                                versionCode = int(value, 16)
                             else:
-                                versionCode = value
+                                versionCode = int(value)
                         elif versionName is None and name == 'versionName':
                             versionName = value
 
@@ -2657,12 +2652,15 @@ def get_apk_id_androguard(apkfile):
 
 
 def get_apk_id_aapt(apkfile):
+    """Read (appid, versionCode, versionName) from an APK."""
     p = SdkToolsPopen(['aapt', 'dump', 'badging', apkfile], output=False)
     m = APK_ID_TRIPLET_REGEX.match(p.output[0:p.output.index('\n')])
     if m:
-        return m.group(1), m.group(2), m.group(3)
-    raise FDroidException(_("Reading packageName/versionCode/versionName failed, APK invalid: '{apkfilename}'")
-                          .format(apkfilename=apkfile))
+        return m.group(1), int(m.group(2)), m.group(3)
+    raise FDroidException(_(
+        "Reading packageName/versionCode/versionName failed,"
+        "APK invalid: '{apkfilename}'"
+    ).format(apkfilename=apkfile))
 
 
 def get_native_code(apkfile):
@@ -3859,6 +3857,8 @@ def string_is_integer(string):
 
 def version_code_string_to_int(vercode):
     """Convert an version code string of any base into an int."""
+    # TODO: Python 3.6 allows underscores in numeric literals
+    vercode = vercode.replace('_', '')
     try:
         return int(vercode, 0)
     except ValueError:

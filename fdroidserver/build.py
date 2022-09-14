@@ -336,7 +336,7 @@ def transform_first_char(string, method):
 
 
 def add_failed_builds_entry(failed_builds, appid, build, entry):
-    failed_builds.append([appid, int(build.versionCode), str(entry)])
+    failed_builds.append([appid, build.versionCode, str(entry)])
 
 
 def get_metadata_from_apk(app, build, apkfile):
@@ -807,10 +807,10 @@ def build_local(app, build, vcs, build_dir, output_dir, log_dir, srclib_dir, ext
         vercode, version = get_metadata_from_apk(app, build, src)
         if version != build.versionName or vercode != build.versionCode:
             raise BuildException(("Unexpected version/version code in output;"
-                                  " APK: '%s' / '%s', "
-                                  " Expected: '%s' / '%s'")
-                                 % (version, str(vercode), build.versionName,
-                                    str(build.versionCode)))
+                                  " APK: '%s' / '%d', "
+                                  " Expected: '%s' / '%d'")
+                                 % (version, vercode, build.versionName,
+                                    build.versionCode))
         if (options.scan_binary or config.get('scan_binary')) and not options.skipscan:
             if scanner.scan_binary(src):
                 raise BuildException("Found blocklisted packages in final apk!")
@@ -1096,7 +1096,7 @@ def main():
             if build.timeout is None:
                 timeout = 7200
             else:
-                timeout = int(build.timeout)
+                timeout = build.timeout
             if options.server and timeout > 0:
                 logging.debug(_('Setting {0} sec timeout for this build').format(timeout))
                 timer = threading.Timer(timeout, force_halt_build, [timeout])

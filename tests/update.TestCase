@@ -1427,7 +1427,7 @@ class UpdateTest(unittest.TestCase):
                         'Builds': None,
                         'Changelog': '',
                         'CurrentVersion': '',
-                        'CurrentVersionCode': '',
+                        'CurrentVersionCode': None,
                         'Disabled': '',
                         'Donate': '',
                         'FlattrID': '',

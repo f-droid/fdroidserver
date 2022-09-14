@@ -65,7 +65,7 @@ def check_http(app):
     m = re.search(codeex, page)
     if not m:
         raise FDroidException("No RE match for version code")
-    vercode = m.group(1).strip()
+    vercode = common.version_code_string_to_int(m.group(1).strip())
 
     if urlver != '.':
         logging.debug("...requesting {0}".format(urlver))
@@ -116,7 +116,7 @@ def check_tags(app, pattern):
 
     htag = None
     hver = None
-    hcode = "0"
+    hcode = 0
 
     tags = []
     if repotype == 'git':
@@ -181,10 +181,10 @@ def check_tags(app, pattern):
 
             logging.debug("UpdateCheckData found version {0} ({1})"
                           .format(version, vercode))
-            i_vercode = common.version_code_string_to_int(vercode)
-            if i_vercode > common.version_code_string_to_int(hcode):
+            vercode = common.version_code_string_to_int(vercode)
+            if vercode > hcode:
                 htag = tag
-                hcode = str(i_vercode)
+                hcode = vercode
                 hver = version
         else:
             for subdir in possible_subdirs(app):
@@ -196,10 +196,9 @@ def check_tags(app, pattern):
                 if vercode:
                     logging.debug("Manifest exists in subdir '{0}'. Found version {1} ({2})"
                                   .format(subdir, version, vercode))
-                    i_vercode = common.version_code_string_to_int(vercode)
-                    if i_vercode > common.version_code_string_to_int(hcode):
+                    if vercode > hcode:
                         htag = tag
-                        hcode = str(i_vercode)
+                        hcode = vercode
                         hver = version
 
     if hver:
@@ -255,7 +254,7 @@ def check_repomanifest(app, branch=None):
 
     hpak = None
     hver = None
-    hcode = "0"
+    hcode = 0
     for subdir in possible_subdirs(app):
         root_dir = build_dir / subdir
         paths = common.manifest_paths(root_dir, last_build.gradle)
@@ -263,10 +262,9 @@ def check_repomanifest(app, branch=None):
         if vercode:
             logging.debug("Manifest exists in subdir '{0}'. Found version {1} ({2})"
                           .format(subdir, version, vercode))
-            i_vercode = common.version_code_string_to_int(vercode)
-            if i_vercode > common.version_code_string_to_int(hcode):
+            if vercode > hcode:
                 hpak = package
-                hcode = str(i_vercode)
+                hcode = vercode
                 hver = version
 
     if not hpak:
@@ -460,11 +458,11 @@ def checkupdates_app(app):
         raise FDroidException(_('no version information found'))
     elif vercode == app.CurrentVersionCode:
         logging.debug("...up to date")
-    elif int(vercode) > int(app.CurrentVersionCode):
+    elif vercode > app.CurrentVersionCode:
         logging.debug("...updating - old vercode={0}, new vercode={1}".format(
             app.CurrentVersionCode, vercode))
         app.CurrentVersion = version
-        app.CurrentVersionCode = str(int(vercode))
+        app.CurrentVersionCode = vercode
         updating = True
     else:
         raise FDroidException(
@@ -501,12 +499,12 @@ def checkupdates_app(app):
             gotcur = False
             latest = None
             for build in app.get('Builds', []):
-                if int(build.versionCode) >= int(app.CurrentVersionCode):
+                if build.versionCode >= app.CurrentVersionCode:
                     gotcur = True
-                if not latest or int(build.versionCode) > int(latest.versionCode):
+                if not latest or build.versionCode > latest.versionCode:
                     latest = build
 
-            if int(latest.versionCode) > int(app.CurrentVersionCode):
+            if latest.versionCode > app.CurrentVersionCode:
                 raise FDroidException(
                     _(
                         'latest build recipe is newer: old vercode={old}, new vercode={new}'
@@ -517,13 +515,15 @@ def checkupdates_app(app):
                 newbuild = copy.deepcopy(latest)
                 newbuild.disable = False
                 newbuild.versionCode = app.CurrentVersionCode
-                newbuild.versionName = app.CurrentVersion + suffix.replace('%c', newbuild.versionCode)
+                newbuild.versionName = app.CurrentVersion + suffix.replace(
+                    '%c', str(newbuild.versionCode)
+                )
                 logging.info("...auto-generating build for " + newbuild.versionName)
                 if tag:
                     newbuild.commit = tag
                 else:
-                    commit = pattern.replace('%v', app.CurrentVersion)
-                    commit = commit.replace('%c', newbuild.versionCode)
+                    commit = pattern.replace('%v', str(app.CurrentVersion))
+                    commit = commit.replace('%c', str(newbuild.versionCode))
                     newbuild.commit = commit
 
                 app['Builds'].append(newbuild)

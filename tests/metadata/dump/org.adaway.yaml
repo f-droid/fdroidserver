@@ -42,7 +42,7 @@ Builds:
   sudo: ''
   target: null
   timeout: null
-  versionCode: '13'
+  versionCode: 13
   versionName: '1.12'
 - androidupdate: []
   antcommands: []
@@ -78,7 +78,7 @@ Builds:
   sudo: ''
   target: null
   timeout: null
-  versionCode: '16'
+  versionCode: 16
   versionName: '1.15'
 - androidupdate: []
   antcommands: []
@@ -114,7 +114,7 @@ Builds:
   sudo: ''
   target: null
   timeout: null
-  versionCode: '19'
+  versionCode: 19
   versionName: '1.18'
 - androidupdate: []
   antcommands: []
@@ -150,7 +150,7 @@ Builds:
   sudo: ''
   target: null
   timeout: null
-  versionCode: '20'
+  versionCode: 20
   versionName: '1.19'
 - androidupdate: []
   antcommands: []
@@ -186,7 +186,7 @@ Builds:
   sudo: ''
   target: null
   timeout: null
-  versionCode: '21'
+  versionCode: 21
   versionName: '1.20'
 - androidupdate: []
   antcommands: []
@@ -222,7 +222,7 @@ Builds:
   sudo: ''
   target: null
   timeout: null
-  versionCode: '22'
+  versionCode: 22
   versionName: '1.21'
 - androidupdate: []
   antcommands: []
@@ -256,7 +256,7 @@ Builds:
   sudo: ''
   target: null
   timeout: null
-  versionCode: '24'
+  versionCode: 24
   versionName: '1.23'
 - androidupdate: []
   antcommands: []
@@ -291,7 +291,7 @@ Builds:
   sudo: ''
   target: null
   timeout: null
-  versionCode: '25'
+  versionCode: 25
   versionName: '1.24'
 - androidupdate: []
   antcommands: []
@@ -326,7 +326,7 @@ Builds:
   sudo: ''
   target: null
   timeout: null
-  versionCode: '26'
+  versionCode: 26
   versionName: '1.25'
 - androidupdate: []
   antcommands: []
@@ -361,7 +361,7 @@ Builds:
   sudo: ''
   target: null
   timeout: null
-  versionCode: '27'
+  versionCode: 27
   versionName: '1.26'
 - androidupdate: []
   antcommands: []
@@ -396,7 +396,7 @@ Builds:
   sudo: ''
   target: null
   timeout: null
-  versionCode: '28'
+  versionCode: 28
   versionName: '1.27'
 - androidupdate: []
   antcommands: []
@@ -431,7 +431,7 @@ Builds:
   sudo: ''
   target: null
   timeout: null
-  versionCode: '30'
+  versionCode: 30
   versionName: '1.29'
 - androidupdate: []
   antcommands: []
@@ -466,7 +466,7 @@ Builds:
   sudo: ''
   target: null
   timeout: null
-  versionCode: '33'
+  versionCode: 33
   versionName: '1.32'
 - androidupdate: []
   antcommands: []
@@ -500,7 +500,7 @@ Builds:
   sudo: ''
   target: null
   timeout: null
-  versionCode: '34'
+  versionCode: 34
   versionName: '1.33'
 - androidupdate: []
   antcommands: []
@@ -535,7 +535,7 @@ Builds:
   sudo: ''
   target: null
   timeout: null
-  versionCode: '35'
+  versionCode: 35
   versionName: '1.34'
 - androidupdate: []
   antcommands: []
@@ -570,7 +570,7 @@ Builds:
   sudo: ''
   target: null
   timeout: null
-  versionCode: '36'
+  versionCode: 36
   versionName: '1.35'
 - androidupdate: []
   antcommands: []
@@ -605,7 +605,7 @@ Builds:
   sudo: ''
   target: null
   timeout: null
-  versionCode: '37'
+  versionCode: 37
   versionName: '1.36'
 - androidupdate: []
   antcommands: []
@@ -640,7 +640,7 @@ Builds:
   sudo: ''
   target: null
   timeout: null
-  versionCode: '38'
+  versionCode: 38
   versionName: '1.37'
 - androidupdate:
   - .
@@ -687,7 +687,7 @@ Builds:
   sudo: ''
   target: null
   timeout: null
-  versionCode: '40'
+  versionCode: 40
   versionName: '2.1'
 - androidupdate:
   - .
@@ -734,7 +734,7 @@ Builds:
   sudo: ''
   target: null
   timeout: null
-  versionCode: '42'
+  versionCode: 42
   versionName: '2.3'
 - androidupdate: []
   antcommands: []
@@ -771,7 +771,7 @@ Builds:
   sudo: ''
   target: null
   timeout: null
-  versionCode: '45'
+  versionCode: 45
   versionName: '2.6'
 - androidupdate: []
   antcommands: []
@@ -808,7 +808,7 @@ Builds:
   sudo: ''
   target: null
   timeout: null
-  versionCode: '46'
+  versionCode: 46
   versionName: '2.7'
 - androidupdate: []
   antcommands: []
@@ -845,7 +845,7 @@ Builds:
   sudo: ''
   target: null
   timeout: null
-  versionCode: '47'
+  versionCode: 47
   versionName: '2.8'
 - androidupdate: []
   antcommands: []
@@ -882,7 +882,7 @@ Builds:
   sudo: ''
   target: null
   timeout: null
-  versionCode: '48'
+  versionCode: 48
   versionName: 2.8.1
 - androidupdate: []
   antcommands: []
@@ -919,7 +919,7 @@ Builds:
   sudo: ''
   target: null
   timeout: null
-  versionCode: '49'
+  versionCode: 49
   versionName: '2.9'
 - androidupdate: []
   antcommands: []
@@ -956,7 +956,7 @@ Builds:
   sudo: ''
   target: null
   timeout: null
-  versionCode: '50'
+  versionCode: 50
   versionName: 2.9.1
 - androidupdate: []
   antcommands: []
@@ -993,7 +993,7 @@ Builds:
   sudo: ''
   target: null
   timeout: null
-  versionCode: '51'
+  versionCode: 51
   versionName: 2.9.2
 - androidupdate: []
   antcommands: []
@@ -1030,14 +1030,14 @@ Builds:
   sudo: ''
   target: null
   timeout: null
-  versionCode: '52'
+  versionCode: 52
   versionName: '3.0'
 Categories:
 - System
 - Security
 Changelog: ''
 CurrentVersion: '3.0'
-CurrentVersionCode: '52'
+CurrentVersionCode: 52
 Description: 'An ad blocker that uses the hosts file. The hosts file
 
   contains a list of mappings between hostnames and IP addresses. When

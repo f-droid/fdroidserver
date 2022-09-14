@@ -311,7 +311,7 @@ def main():
 
     # Create a build line...
     build.versionName = versionName or 'Unknown'
-    build.versionCode = versionCode or '0'  # TODO heinous but this is still a str
+    build.versionCode = versionCode or 0
     if options.subdir:
         build.subdir = options.subdir
         build.gradle = ['yes']

@@ -168,7 +168,7 @@ def status_update_json(apps, apks):
         gotcurrentver = False
         for apk in apks:
             if apk['packageName'] == appid:
-                if str(apk['versionCode']) == app.get('CurrentVersionCode'):
+                if apk['versionCode'] == app.get('CurrentVersionCode'):
                     gotcurrentver = True
                 apklist.append(apk)
         validapks = 0
@@ -181,7 +181,7 @@ def status_update_json(apps, apks):
                 if not build.get('disable'):
                     builtit = False
                     for apk in apklist:
-                        if apk['versionCode'] == int(build.versionCode):
+                        if apk['versionCode'] == build.versionCode:
                             builtit = True
                             validapks += 1
                             break
@@ -493,8 +493,9 @@ def insert_obbs(repodir, apps, apks):
             if packagename == apk['packageName'] and apk['versionCode'] > highestVersionCode:
                 highestVersionCode = apk['versionCode']
         if versionCode > highestVersionCode:
-            obbWarnDelete(f, _('OBB file has newer versionCode({integer}) than any APK:')
-                          .format(integer=str(versionCode)))
+            obbWarnDelete(f, _(
+                'OBB file has newer versionCode({integer}) than any APK:'
+            ).format(integer=versionCode))
             continue
         obbsha256 = common.sha256sum(f)
         obbs.append((packagename, versionCode, obbfile, obbsha256))
@@ -533,7 +534,7 @@ def translate_per_build_anti_features(apps, apks):
         for build in app.get('Builds', []):
             afl = build.get('antifeatures')
             if afl:
-                d[int(build.versionCode)] = afl
+                d[build.versionCode] = afl
         if len(d) > 0:
             antiFeatures[packageName] = d
 
@@ -569,7 +570,7 @@ def _set_localized_text_entry(app, locale, key, f, versionCode=None):
             text = fp.read(limit * 2)
             if versionCode:
                 for build in app["Builds"]:
-                    if int(build["versionCode"]) == versionCode:
+                    if build["versionCode"] == versionCode:
                         if "whatsNew" not in build:
                             build["whatsNew"] = collections.OrderedDict()
                         build["whatsNew"][locale] = text[:limit]
@@ -1002,9 +1003,16 @@ def insert_localized_app_metadata(apps):
                     try:
                         versionCode = int(base)
                         locale = segments[-2]
-                        if base in [a["versionCode"] for a in apps[packageName]["Builds"]]:
-                            _set_localized_text_entry(apps[packageName], locale, 'whatsNew',
-                                                      os.path.join(root, f), versionCode)
+                        if versionCode in [
+                            a["versionCode"] for a in apps[packageName]["Builds"]
+                        ]:
+                            _set_localized_text_entry(
+                                apps[packageName],
+                                locale,
+                                'whatsNew',
+                                os.path.join(root, f),
+                                versionCode,
+                            )
                         continue
                     except ValueError:
                         pass
@@ -1477,7 +1485,7 @@ def process_apk(apkcache, apkfilename, repodir, knownapks, use_date_from_apk=Fal
         if apps:
             if apk['packageName'] in apps:
                 for build in apps[apk['packageName']].get('Builds', []):
-                    if int(build['versionCode']) == apk['versionCode'] and build['disable']:
+                    if build['versionCode'] == apk['versionCode'] and build['disable']:
                         return True, None, False
 
         # Check for debuggable apks...
@@ -1809,7 +1817,7 @@ def apply_info_from_latest_apk(apps, apks):
         else:
             app.icon = bestapk['icon'] if 'icon' in bestapk else None
             if app.get('CurrentVersionCode') is None:
-                app['CurrentVersionCode'] = str(bestver)
+                app['CurrentVersionCode'] = bestver
 
 
 def make_categories_txt(repodir, categories):
@@ -1828,7 +1836,7 @@ def archive_old_apks(apps, apks, archapks, repodir, archivedir, defaultkeepversi
         for apk in apk_list:
             if apk['packageName'] == appid:
                 if app.get('CurrentVersionCode') is not None:
-                    if apk['versionCode'] == common.version_code_string_to_int(app['CurrentVersionCode']):
+                    if apk['versionCode'] == app['CurrentVersionCode']:
                         currentVersionApk = apk
                         continue
                 apkList.append(apk)

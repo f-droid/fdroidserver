@@ -53,7 +53,7 @@ Builds:
   sudo: ''
   target: null
   timeout: null
-  versionCode: '5'
+  versionCode: 5
   versionName: 0.3.3
 - androidupdate: []
   antcommands: []
@@ -91,7 +91,7 @@ Builds:
   sudo: ''
   target: null
   timeout: null
-  versionCode: '6'
+  versionCode: 6
   versionName: 0.3.3
 - androidupdate: []
   antcommands: []
@@ -128,7 +128,7 @@ Builds:
   sudo: ''
   target: null
   timeout: null
-  versionCode: '9'
+  versionCode: 9
   versionName: 0.4.2
 - androidupdate: []
   antcommands: []
@@ -165,7 +165,7 @@ Builds:
   sudo: ''
   target: null
   timeout: null
-  versionCode: '11'
+  versionCode: 11
   versionName: 0.5.1
 - androidupdate: []
   antcommands: []
@@ -201,7 +201,7 @@ Builds:
   sudo: ''
   target: null
   timeout: null
-  versionCode: '12'
+  versionCode: 12
   versionName: 0.5.2
 - androidupdate: []
   antcommands: []
@@ -237,7 +237,7 @@ Builds:
   sudo: ''
   target: null
   timeout: null
-  versionCode: '100'
+  versionCode: 100
   versionName: 0.5.3
 - androidupdate: []
   antcommands: []
@@ -273,7 +273,7 @@ Builds:
   sudo: ''
   target: null
   timeout: null
-  versionCode: '101'
+  versionCode: 101
   versionName: 0.5.4
 - androidupdate: []
   antcommands: []
@@ -309,13 +309,13 @@ Builds:
   sudo: ''
   target: null
   timeout: null
-  versionCode: '102'
+  versionCode: 102
   versionName: 0.6.0
 Categories:
 - Phone & SMS
 Changelog: ''
 CurrentVersion: 0.6.0
-CurrentVersionCode: '102'
+CurrentVersionCode: 102
 Description: 'SMSSecure is an SMS/MMS application that allows you to protect your
   privacy while communicating with friends.
 

@@ -204,6 +204,7 @@ fieldtypes = {
     'AntiFeatures': TYPE_LIST,
     'AllowedAPKSigningKeys': TYPE_LIST,
     'Builds': TYPE_BUILD,
+    'CurrentVersionCode': TYPE_INT,
 }
 
 
@@ -615,29 +616,31 @@ def split_list_values(s):
 
 
 def sorted_builds(builds):
-    return sorted(builds, key=lambda build: int(build.versionCode))
+    return sorted(builds, key=lambda build: build.versionCode)
 
 
 esc_newlines = re.compile(r'\\( |\n)')
 
 
 def post_metadata_parse(app):
-    # TODO keep native types, convert only for .txt metadata
-    for k, v in app.items():
-        if type(v) in (float, int):
-            app[k] = str(v)
-
     if 'flavours' in app and app['flavours'] == [True]:
         app['flavours'] = 'yes'
 
-    for field, fieldtype in fieldtypes.items():
-        if fieldtype != TYPE_LIST:
-            continue
-        value = app.get(field)
-        if isinstance(value, str):
-            app[field] = [value, ]
-        elif value is not None:
-            app[field] = [str(i) for i in value]
+    for k, v in app.items():
+        if fieldtype(k) == TYPE_LIST:
+            if isinstance(v, str):
+                app[k] = [v, ]
+            elif v:
+                app[k] = [str(i) for i in v]
+        elif fieldtype(k) == TYPE_INT:
+            if v:
+                app[k] = int(v)
+        elif fieldtype(k) == TYPE_STRING:
+            if v:
+                app[k] = str(v)
+        else:
+            if type(v) in (float, int):
+                app[k] = str(v)
 
     def _yaml_bool_unmapable(v):
         return v in (True, False, [True], [False])
@@ -673,7 +676,7 @@ def post_metadata_parse(app):
                             else:
                                 build[k] = []
                     elif flagtype(k) is TYPE_INT:
-                        build[k] = str(v)
+                        build[k] = v
                     elif flagtype(k) is TYPE_STRING:
                         if isinstance(v, bool) and k in _bool_allowed:
                             build[k] = v

@@ -71,42 +71,42 @@ class BuildTest(unittest.TestCase):
             (
                 'repo/obb.main.twoversions_1101613.apk',
                 'obb.main.twoversions',
-                '1101613',
+                1101613,
                 '0.1',
                 None,
             ),
             (
                 'org.bitbucket.tickytacky.mirrormirror_1.apk',
                 'org.bitbucket.tickytacky.mirrormirror',
-                '1',
+                1,
                 '1.0',
                 None,
             ),
             (
                 'org.bitbucket.tickytacky.mirrormirror_2.apk',
                 'org.bitbucket.tickytacky.mirrormirror',
-                '2',
+                2,
                 '1.0.1',
                 None,
             ),
             (
                 'org.bitbucket.tickytacky.mirrormirror_3.apk',
                 'org.bitbucket.tickytacky.mirrormirror',
-                '3',
+                3,
                 '1.0.2',
                 None,
             ),
             (
                 'org.bitbucket.tickytacky.mirrormirror_4.apk',
                 'org.bitbucket.tickytacky.mirrormirror',
-                '4',
+                4,
                 '1.0.3',
                 None,
             ),
             (
                 'org.dyndns.fules.ck_20.apk',
                 'org.dyndns.fules.ck',
-                '20',
+                20,
                 'v1.6pre2',
                 [
                     'arm64-v8a',
@@ -118,81 +118,81 @@ class BuildTest(unittest.TestCase):
                     'x86_64',
                 ],
             ),
-            ('urzip.apk', 'info.guardianproject.urzip', '100', '0.1', None),
-            ('urzip-badcert.apk', 'info.guardianproject.urzip', '100', '0.1', None),
-            ('urzip-badsig.apk', 'info.guardianproject.urzip', '100', '0.1', None),
-            ('urzip-release.apk', 'info.guardianproject.urzip', '100', '0.1', None),
+            ('urzip.apk', 'info.guardianproject.urzip', 100, '0.1', None),
+            ('urzip-badcert.apk', 'info.guardianproject.urzip', 100, '0.1', None),
+            ('urzip-badsig.apk', 'info.guardianproject.urzip', 100, '0.1', None),
+            ('urzip-release.apk', 'info.guardianproject.urzip', 100, '0.1', None),
             (
                 'urzip-release-unsigned.apk',
                 'info.guardianproject.urzip',
-                '100',
+                100,
                 '0.1',
                 None,
             ),
-            ('repo/com.politedroid_3.apk', 'com.politedroid', '3', '1.2', None),
-            ('repo/com.politedroid_4.apk', 'com.politedroid', '4', '1.3', None),
-            ('repo/com.politedroid_5.apk', 'com.politedroid', '5', '1.4', None),
-            ('repo/com.politedroid_6.apk', 'com.politedroid', '6', '1.5', None),
+            ('repo/com.politedroid_3.apk', 'com.politedroid', 3, '1.2', None),
+            ('repo/com.politedroid_4.apk', 'com.politedroid', 4, '1.3', None),
+            ('repo/com.politedroid_5.apk', 'com.politedroid', 5, '1.4', None),
+            ('repo/com.politedroid_6.apk', 'com.politedroid', 6, '1.5', None),
             (
                 'repo/duplicate.permisssions_9999999.apk',
                 'duplicate.permisssions',
-                '9999999',
+                9999999,
                 '',
                 None,
             ),
             (
                 'repo/info.zwanenburg.caffeinetile_4.apk',
                 'info.zwanenburg.caffeinetile',
-                '4',
+                4,
                 '1.3',
                 None,
             ),
             (
                 'repo/obb.main.oldversion_1444412523.apk',
                 'obb.main.oldversion',
-                '1444412523',
+                1444412523,
                 '0.1',
                 None,
             ),
             (
                 'repo/obb.mainpatch.current_1619_another-release-key.apk',
                 'obb.mainpatch.current',
-                '1619',
+                1619,
                 '0.1',
                 None,
             ),
             (
                 'repo/obb.mainpatch.current_1619.apk',
                 'obb.mainpatch.current',
-                '1619',
+                1619,
                 '0.1',
                 None,
             ),
             (
                 'repo/obb.main.twoversions_1101613.apk',
                 'obb.main.twoversions',
-                '1101613',
+                1101613,
                 '0.1',
                 None,
             ),
             (
                 'repo/obb.main.twoversions_1101615.apk',
                 'obb.main.twoversions',
-                '1101615',
+                1101615,
                 '0.1',
                 None,
             ),
             (
                 'repo/obb.main.twoversions_1101617.apk',
                 'obb.main.twoversions',
-                '1101617',
+                1101617,
                 '0.1',
                 None,
             ),
             (
                 'repo/urzip-; Рахма́, [rɐxˈmanʲɪnəf] سيرجي_رخمانينوف 谢·.apk',
                 'info.guardianproject.urzip',
-                '100',
+                100,
                 '0.1',
                 None,
             ),
@@ -228,7 +228,7 @@ class BuildTest(unittest.TestCase):
         build = fdroidserver.metadata.Build()
         build.commit = '1.0'
         build.output = app.id + '.apk'
-        build.versionCode = '1'
+        build.versionCode = 1
         build.versionName = '1.0'
         build.ndk = 'r21e'  # aka 21.4.7075529
         vcs = mock.Mock()
@@ -326,7 +326,7 @@ class BuildTest(unittest.TestCase):
         build.output = app.id + '.apk'
         build.scandelete = ['baz.so']
         build.scanignore = ['foo.aar']
-        build.versionCode = '1'
+        build.versionCode = 1
         build.versionName = '1.0'
         vcs = mock.Mock()
 
