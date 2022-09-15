@@ -1253,9 +1253,10 @@ class vcs_git(vcs):
     def getref(self, revname='HEAD'):
         self.checkrepo()
         repo = git.Repo(self.local)
-        if not repo.is_valid_object(revname):
+        try:
+            return repo.commit(revname).hexsha
+        except git.BadName:
             return None
-        return repo.commit(revname).hexsha
 
 
 class vcs_gitsvn(vcs):
