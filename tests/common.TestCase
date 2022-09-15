@@ -2382,6 +2382,23 @@ class CommonTest(unittest.TestCase):
             vcs = fdroidserver.common.vcs_git(None, Path.cwd())
             self.assertEqual(vcs.latesttags(), tags[::-1])
 
+    def test_vcs_git_getref(self):
+
+        with tempfile.TemporaryDirectory() as tmpdir, TmpCwd(tmpdir):
+            # TODO: Python3.6: Should accept path-like
+            repo = git.Repo.init(str(Path.cwd()))
+            tag = "1.1.1"
+            f = Path("test")
+            f.write_text(tag)
+            repo.index.add([str(f)])
+            repo.index.commit("foo")
+            repo.create_tag(tag)
+
+            vcs = fdroidserver.common.vcs_git(None, Path.cwd())
+
+            self.assertIsNotNone(vcs.getref("1.1.1"))
+            self.assertIsNone(vcs.getref("invalid"))
+
     def test_get_release_filename(self):
         app = fdroidserver.metadata.App()
         app.id = 'test.app'
