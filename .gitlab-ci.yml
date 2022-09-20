@@ -219,7 +219,7 @@ lint_format_safety_bandit_checks:
         --ini .bandit
         || set_error
     - safety check --full-report || set_error
-    - pylint --rcfile=.pylint-rcfile --output-format=colorized --reports=n
+    - pylint --output-format=colorized --reports=n
             fdroid
             makebuildserver
             setup.py
@@ -234,26 +234,11 @@ lint_format_safety_bandit_checks:
     - exit $EXITVALUE
 
 
-lint_mypy:
-  image: debian:bullseye-backports
-  <<: *apt-template
-  script:
-    # use Debian packages to avoid building C/rust sources
-    - apt-get install
-          mypy
-          python3-cryptography
-          python3-pip
-          python3-wheel
-    - apt-get install -t bullseye-backports python3-pyjks
-    - pip install -e .[test]
-    - mypy
-
-
 black:
   image: python:slim
   script:
     - pip install black
-    - black --check --diff --color --skip-string-normalization
+    - black --check --diff --color
         examples/fdroid_extract_repo_pubkey.py
         examples/makebuildserver.config.py
         fdroid
