@@ -85,7 +85,8 @@ FDROID_PATH = os.path.realpath(os.path.join(os.path.dirname(__file__), '..'))
 # this is the build-tools version, aapt has a separate version that
 # has to be manually set in test_aapt_version()
 MINIMUM_AAPT_BUILD_TOOLS_VERSION = '26.0.0'
-# 30.0.0 is the first version to support --v4-signing-enabled.
+# 31.0.0 is the first version to support --v4-signing-enabled.
+# we only require 30.0.0 for now as that's the version in buster-backports, see also signindex.py
 # 26.0.2 is the first version recognizing md5 based signatures as valid again
 # (as does android, so we want that)
 MINIMUM_APKSIGNER_BUILD_TOOLS_VERSION = '30.0.0'
