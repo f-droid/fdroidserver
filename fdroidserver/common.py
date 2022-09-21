@@ -125,6 +125,7 @@ default_config = {
     'sdk_path': "$ANDROID_HOME",
     'ndk_paths': {},
     'cachedir': str(Path.home() / '.cache/fdroidserver'),
+    'cachedir_scanner': str(Path.home() / '.cache/fdroidserver/scanner'),
     'java_paths': None,
     'scan_binary': False,
     'ant': "ant",

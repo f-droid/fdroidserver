@@ -4,6 +4,7 @@ import glob
 import inspect
 import logging
 import optparse
+import io
 import os
 import re
 import shutil
@@ -17,6 +18,7 @@ import zipfile
 import collections
 import pathlib
 from unittest import mock
+from datetime import datetime, timedelta
 
 localmodule = os.path.realpath(
     os.path.join(os.path.dirname(inspect.getfile(inspect.currentframe())), '..')
@@ -446,21 +448,19 @@ class Test_scan_binary(unittest.TestCase):
         fdroidserver.common.config = config
         fdroidserver.common.options = mock.Mock()
 
+        fdroidserver.scanner.SIGNATURE_TOOL = mock.Mock()
+        fdroidserver.scanner.SIGNATURE_TOOL.regex = {}
+        fdroidserver.scanner.SIGNATURE_TOOL.regex['code_signatures'] = {
+            "java/lang/Object": re.compile(r'.*java/lang/Object', re.IGNORECASE | re.UNICODE)
+        }
+
     def test_code_signature_match(self):
         apkfile = os.path.join(self.basedir, 'no_targetsdk_minsdk1_unsigned.apk')
-        mock_code_signatures = {
-            "java/lang/Object": re.compile(
-                r'.*java/lang/Object', re.IGNORECASE | re.UNICODE
-            )
-        }
-        with mock.patch("fdroidserver.scanner.CODE_SIGNATURES", mock_code_signatures):
-            self.assertEqual(
-                1,
-                fdroidserver.scanner.scan_binary(apkfile),
-                "Did not find expected code signature '{}' in binary '{}'".format(
-                    fdroidserver.scanner.CODE_SIGNATURES.values(), apkfile
-                ),
-            )
+        self.assertEqual(
+            1,
+            fdroidserver.scanner.scan_binary(apkfile),
+            "Did not find expected code signature '{}' in binary '{}'".format(fdroidserver.scanner.SIGNATURE_TOOL.regex['code_signatures'].values(), apkfile),
+        )
 
     @unittest.skipIf(
         sys.version_info < (3, 9),
@@ -470,43 +470,84 @@ class Test_scan_binary(unittest.TestCase):
     )
     def test_bottom_level_embedded_apk_code_signature(self):
         apkfile = os.path.join(self.basedir, 'apk.embedded_1.apk')
-        mock_code_signatures = {
+        fdroidserver.scanner.SIGNATURE_TOOL.regex['code_signatures'] = {
             "org/bitbucket/tickytacky/mirrormirror/MainActivity": re.compile(
-                r'.*org/bitbucket/tickytacky/mirrormirror/MainActivity',
-                re.IGNORECASE | re.UNICODE,
+                r'.*org/bitbucket/tickytacky/mirrormirror/MainActivity', re.IGNORECASE | re.UNICODE
             )
         }
-        with mock.patch("fdroidserver.scanner.CODE_SIGNATURES", mock_code_signatures):
-            self.assertEqual(
-                1,
-                fdroidserver.scanner.scan_binary(apkfile),
-                "Did not find expected code signature '{}' in binary '{}'".format(
-                    fdroidserver.scanner.CODE_SIGNATURES.values(), apkfile
-                ),
-            )
+
+        self.assertEqual(
+            1,
+            fdroidserver.scanner.scan_binary(apkfile),
+            "Did not find expected code signature '{}' in binary '{}'".format(fdroidserver.scanner.SIGNATURE_TOOL.regex['code_signatures'].values(), apkfile),
+        )
 
     def test_top_level_signature_embedded_apk_present(self):
         apkfile = os.path.join(self.basedir, 'apk.embedded_1.apk')
-        mock_code_signatures = {
+        fdroidserver.scanner.SIGNATURE_TOOL.regex['code_signatures'] = {
             "org/fdroid/ci/BuildConfig": re.compile(
                 r'.*org/fdroid/ci/BuildConfig', re.IGNORECASE | re.UNICODE
             )
         }
-        with mock.patch("fdroidserver.scanner.CODE_SIGNATURES", mock_code_signatures):
-            self.assertEqual(
-                1,
-                fdroidserver.scanner.scan_binary(apkfile),
-                "Did not find expected code signature '{}' in binary '{}'".format(
-                    fdroidserver.scanner.CODE_SIGNATURES.values(), apkfile
-                ),
-            )
-
-    def test_no_match(self):
-        apkfile = os.path.join(self.basedir, 'no_targetsdk_minsdk1_unsigned.apk')
-        result = fdroidserver.scanner.scan_binary(apkfile)
         self.assertEqual(
-            0, result, "Found false positives in binary '{}'".format(apkfile)
+            1,
+            fdroidserver.scanner.scan_binary(apkfile),
+            "Did not find expected code signature '{}' in binary '{}'".format(fdroidserver.scanner.SIGNATURE_TOOL.regex['code_signatures'].values(), apkfile),
         )
+
+    # TODO: re-enable once allow-listing migrated to more complex regexes
+    # def test_no_match(self):
+    #     apkfile = os.path.join(self.basedir, 'no_targetsdk_minsdk1_unsigned.apk')
+    #     result = fdroidserver.scanner.scan_binary(apkfile)
+    #     self.assertEqual(0, result, "Found false positives in binary '{}'".format(apkfile))
+
+
+# class Test__fetch_exodus_signatures_to_cache(unittest.TestCase):
+#     def setUp(self):
+#         self.web_req_func = mock.Mock(return_value=io.StringIO(json.dumps({
+#             "trackers": {
+#                 "1": {
+#                     "id": 1,
+#                     "name": "Steyer Puch 1",
+#                     "description": "blah blah blah",
+#                     "creation_date": "1956-01-01",
+#                     "code_signature": "com.puch.|com.steyer.",
+#                     "network_signature": "pst\\.com",
+#                     "website": "https://pst.com",
+#                     "categories": ["tracker"],
+#                     "documentation": [],
+#                 },
+#                 "2": {
+#                     "id": 2,
+#                     "name": "Steyer Puch 2",
+#                     "description": "blah blah blah",
+#                     "creation_date": "1956-01-01",
+#                     "code_signature": "com.puch.|com.steyer.",
+#                     "network_signature": "pst\\.com",
+#                     "website": "https://pst.com",
+#                     "categories": ["tracker"],
+#                     "documentation": [],
+#                 }
+#             },
+#         })))
+#         self.open_func = mock.mock_open()
+#         self.cachedir_func = mock.Mock(return_value=pathlib.Path("mocked/path"))
+#
+#     def test_ok(self):
+#         with mock.patch("urllib.request.urlopen", self.web_req_func), mock.patch(
+#             "builtins.open", self.open_func
+#         ) as outfilemock, mock.patch(
+#             "fdroidserver.scanner._scanner_cachedir", self.cachedir_func
+#         ), mock.patch("fdroidserver.scanner._datetime_now", unittest.mock.Mock(return_value=datetime(1999, 12, 31, 23, 59, 59))):
+#             fdroidserver.scanner.fetch_exodus_signatures_to_cache()
+#
+#         self.cachedir_func.assert_called_once()
+#         self.web_req_func.assert_called_once_with("https://reports.exodus-privacy.eu.org/api/trackers")
+#         self.open_func.assert_called_once_with(pathlib.Path("mocked/path/exodus.json"), "w", encoding="utf-8")
+#         self.assertEqual(
+#             mock_open_to_str(self.open_func),
+#             """{"signatures": {"exodus-1": {"name": "Steyer Puch 1", "code_signature": "com.puch.|com.steyer.", "network_signature": "pst\\\\.com", "types": ["tracker", "non-free"]}, "exodus-2": {"name": "Steyer Puch 2", "code_signature": "com.puch.|com.steyer.", "network_signature": "pst\\\\.com", "types": ["tracker", "non-free"]}}, "timestamp": "1999-12-31T23:59:59"}"""
+#         )
 
 
 class Test__exodus_compile_signatures(unittest.TestCase):
@@ -581,6 +622,106 @@ class Test_load_exodus_trackers_signatures(unittest.TestCase):
             self.assertEqual(regex, "mocked return value")
 
 
+class Test_SignatureDataController(unittest.TestCase):
+    # __init__
+    def test_init(self):
+        sdc = fdroidserver.scanner.SignatureDataController('nnn', 'fff.yml')
+        self.assertEqual(sdc.name, 'nnn')
+        self.assertEqual(sdc.filename, 'fff.yml')
+        self.assertEqual(sdc.cache_outdated_interval, timedelta(days=7))
+        self.assertDictEqual(sdc.data, {})
+
+    # check_last_updated
+    def test_check_last_updated_ok(self):
+        sdc = fdroidserver.scanner.SignatureDataController('nnn', 'fff.yml')
+        sdc.data['timestamp'] = datetime.now().astimezone().isoformat()
+        sdc.check_last_updated()
+
+    def test_check_last_updated_exception_cache_outdated(self):
+        sdc = fdroidserver.scanner.SignatureDataController('nnn', 'fff.yml')
+        sdc.data['timestamp'] = (datetime.now().astimezone() - timedelta(days=30)).isoformat()
+        with self.assertRaises(fdroidserver.scanner.SignatureCacheOutdatedException):
+            sdc.check_last_updated()
+
+    def test_check_last_updated_exception_missing_timestamp_value(self):
+        sdc = fdroidserver.scanner.SignatureDataController('nnn', 'fff.yml')
+        with self.assertRaises(fdroidserver.scanner.SignatureCacheMalformedException):
+            sdc.check_last_updated()
+
+    def test_check_last_updated_exception_not_string(self):
+        sdc = fdroidserver.scanner.SignatureDataController('nnn', 'fff.yml')
+        sdc.data['timestamp'] = 12345
+        with self.assertRaises(fdroidserver.scanner.SignatureCacheMalformedException):
+            sdc.check_last_updated()
+
+    def test_check_last_updated_exception_not_iso_formatted_string(self):
+        sdc = fdroidserver.scanner.SignatureDataController('nnn', 'fff.yml')
+        sdc.data['timestamp'] = '01/09/2002 10:11'
+        with self.assertRaises(fdroidserver.scanner.SignatureCacheMalformedException):
+            sdc.check_last_updated()
+
+    # check_data_version
+    def test_check_data_version_ok(self):
+        sdc = fdroidserver.scanner.SignatureDataController('nnn', 'fff.yml')
+        sdc.data['version'] = fdroidserver.scanner.SCANNER_CACHE_VERSION
+        sdc.check_data_version()
+
+    def test_check_data_version_exception(self):
+        sdc = fdroidserver.scanner.SignatureDataController('nnn', 'fff.yml')
+        with self.assertRaises(fdroidserver.scanner.SignatureCacheMalformedException):
+            sdc.check_data_version()
+
+
+class Test_ScannerSignatureDataController_fetch_signatures_from_web(unittest.TestCase):
+    def setUp(self):
+        self.uo_func = mock.Mock(return_value=io.StringIO(textwrap.dedent('''\
+          version: 999
+          timestamp: "1999-12-31T23:59:59.999999+00:00"
+          signatures:
+          - binary_signature: com/google/firebase
+            name: Google Firebase
+            types:
+            - tracker
+            - non-free
+          - gradle_signature: com/google/android/gms
+            name: Google Mobile Services
+            types:
+            - non-free
+          - network_signature: doubleclick\\.net
+            name: Another thing to test.
+            types:
+            - ads
+        ''')))
+
+    def test_fetch_signatures_from_web(self):
+        sdc = fdroidserver.scanner.ScannerSignatureDataController()
+        with unittest.mock.patch('urllib.request.urlopen', self.uo_func):
+            sdc.fetch_signatures_from_web()
+        self.assertEqual(sdc.data.get('version'), 999)
+        self.assertEqual(sdc.data.get('timestamp'), "1999-12-31T23:59:59.999999+00:00")
+        self.assertListEqual(
+            sdc.data.get('signatures'),
+            [
+                {
+                    'binary_signature': 'com/google/firebase',
+                    'name': 'Google Firebase',
+                    'types': ['tracker', 'non-free'],
+                },
+                {
+                    'gradle_signature': 'com/google/android/gms',
+                    'name': 'Google Mobile Services',
+                    'types': ['non-free'],
+                },
+                {
+                    'network_signature': 'doubleclick\\.net',
+                    'name': 'Another thing to test.',
+                    'types': ['ads'],
+                },
+            ]
+        )
+        self.assertEqual(len(sdc.data), 3)
+
+
 class Test_main(unittest.TestCase):
     def setUp(self):
         self.args = ["com.example.app", "local/additional.apk", "another.apk"]
@@ -644,13 +785,13 @@ if __name__ == "__main__":
     (fdroidserver.common.options, args) = parser.parse_args(['--verbose'])
 
     newSuite = unittest.TestSuite()
-    newSuite.addTests(
-        [
-            unittest.makeSuite(ScannerTest),
-            unittest.makeSuite(Test_scan_binary),
-            unittest.makeSuite(Test__exodus_compile_signatures),
-            unittest.makeSuite(Test_load_exodus_trackers_signatures),
-            unittest.makeSuite(Test_main),
-        ]
-    )
+    newSuite.addTests([
+        unittest.makeSuite(ScannerTest),
+        unittest.makeSuite(Test_scan_binary),
+        unittest.makeSuite(Test__exodus_compile_signatures),
+        unittest.makeSuite(Test_load_exodus_trackers_signatures),
+        unittest.makeSuite(Test_SignatureDataController),
+        unittest.makeSuite(Test_ScannerSignatureDataController_fetch_signatures_from_web),
+        unittest.makeSuite(Test_main),
+    ])
     unittest.main(failfast=False)
