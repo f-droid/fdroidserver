@@ -188,26 +188,37 @@ class ScannerTest(unittest.TestCase):
             for msg, f in fdroidserver.scanner.json_per_build[section]:
                 files[section].append(f)
 
-        self.assertFalse('ascii.out' in files['errors'],
-                         'an ASCII .out file is not an error')
-        self.assertFalse('snippet.png' in files['errors'],
-                         'an executable valid image is not an error')
+        self.assertFalse(
+            'ascii.out' in files['errors'], 'ASCII .out file is not an error'
+        )
+        self.assertFalse(
+            'snippet.png' in files['errors'], 'executable valid image is not an error'
+        )
 
         self.assertTrue('arg.jar' in files['errors'], 'all JAR files are errors')
         self.assertTrue('baz.so' in files['errors'], 'all .so files are errors')
-        self.assertTrue('binary.out' in files['errors'], 'a binary .out file is an error')
-        self.assertTrue('classes.dex' in files['errors'], 'all classes.dex files are errors')
+        self.assertTrue(
+            'binary.out' in files['errors'], 'a binary .out file is an error'
+        )
+        self.assertTrue(
+            'classes.dex' in files['errors'], 'all classes.dex files are errors'
+        )
         self.assertTrue('sqlcipher.aar' in files['errors'], 'all AAR files are errors')
         self.assertTrue('static.a' in files['errors'], 'all .a files are errors')
 
-        self.assertTrue('fake.png' in files['warnings'],
-                        'a random binary that is executable that is not an image is a warning')
-        self.assertTrue('src/test/resources/classes.dex' in files['warnings'],
-                        'suspicious file but in a test dir is a warning')
+        self.assertTrue(
+            'fake.png' in files['warnings'],
+            'a random binary that is executable that is not an image is a warning',
+        )
+        self.assertTrue(
+            'src/test/resources/classes.dex' in files['warnings'],
+            'suspicious file but in a test dir is a warning',
+        )
 
         for f in remove:
-            self.assertTrue(f in files['infos'],
-                            f + ' should be removed with an info message')
+            self.assertTrue(
+                f in files['infos'], '%s should be removed with an info message' % f
+            )
 
     def test_build_local_scanner(self):
         """`fdroid build` calls scanner functions, test them here"""
@@ -260,14 +271,26 @@ class ScannerTest(unittest.TestCase):
 
         with mock.patch('fdroidserver.common.replace_build_vars', wraps=make_fake_apk):
             with mock.patch('fdroidserver.common.get_native_code', return_value='x86'):
-                with mock.patch('fdroidserver.common.get_apk_id',
-                                return_value=(app.id, build.versionCode, build.versionName)):
-                    with mock.patch('fdroidserver.common.is_apk_and_debuggable', return_value=False):
+                with mock.patch(
+                    'fdroidserver.common.get_apk_id',
+                    return_value=(app.id, build.versionCode, build.versionName),
+                ):
+                    with mock.patch(
+                        'fdroidserver.common.is_apk_and_debuggable', return_value=False
+                    ):
                         fdroidserver.build.build_local(
-                            app, build, vcs,
-                            build_dir=testdir, output_dir=testdir,
-                            log_dir=None, srclib_dir=None, extlib_dir=None, tmp_dir=None,
-                            force=False, onserver=False, refresh=False
+                            app,
+                            build,
+                            vcs,
+                            build_dir=testdir,
+                            output_dir=testdir,
+                            log_dir=None,
+                            srclib_dir=None,
+                            extlib_dir=None,
+                            tmp_dir=None,
+                            force=False,
+                            onserver=False,
+                            refresh=False,
                         )
         self.assertTrue(os.path.exists('baz.so'))
         self.assertTrue(os.path.exists('foo.aar'))
@@ -316,7 +339,6 @@ class ScannerTest(unittest.TestCase):
 
 
 class Test_scan_binary(unittest.TestCase):
-
     def setUp(self):
         self.basedir = os.path.join(localmodule, 'tests')
         config = dict()
@@ -326,51 +348,68 @@ class Test_scan_binary(unittest.TestCase):
 
     def test_code_signature_match(self):
         apkfile = os.path.join(self.basedir, 'no_targetsdk_minsdk1_unsigned.apk')
-        with mock.patch("fdroidserver.scanner.CODE_SIGNATURES", {"java/lang/Object": re.compile(
-            r'.*java/lang/Object', re.IGNORECASE | re.UNICODE
-        )}):
+        mock_code_signatures = {
+            "java/lang/Object": re.compile(
+                r'.*java/lang/Object', re.IGNORECASE | re.UNICODE
+            )
+        }
+        with mock.patch("fdroidserver.scanner.CODE_SIGNATURES", mock_code_signatures):
             self.assertEqual(
                 1,
                 fdroidserver.scanner.scan_binary(apkfile),
-                "Did not find expected code signature '{}' in binary '{}'".format(fdroidserver.scanner.CODE_SIGNATURES.values(), apkfile),
+                "Did not find expected code signature '{}' in binary '{}'".format(
+                    fdroidserver.scanner.CODE_SIGNATURES.values(), apkfile
+                ),
             )
 
     @unittest.skipIf(
         sys.version_info < (3, 9),
         "Our implementation for traversing zip files will silently fail to work"
         "on older python versions, also see: "
-        "https://gitlab.com/fdroid/fdroidserver/-/merge_requests/1110#note_932026766"
+        "https://gitlab.com/fdroid/fdroidserver/-/merge_requests/1110#note_932026766",
     )
     def test_bottom_level_embedded_apk_code_signature(self):
         apkfile = os.path.join(self.basedir, 'apk.embedded_1.apk')
-        with mock.patch("fdroidserver.scanner.CODE_SIGNATURES", {"org/bitbucket/tickytacky/mirrormirror/MainActivity": re.compile(
-            r'.*org/bitbucket/tickytacky/mirrormirror/MainActivity', re.IGNORECASE | re.UNICODE
-        )}):
+        mock_code_signatures = {
+            "org/bitbucket/tickytacky/mirrormirror/MainActivity": re.compile(
+                r'.*org/bitbucket/tickytacky/mirrormirror/MainActivity',
+                re.IGNORECASE | re.UNICODE,
+            )
+        }
+        with mock.patch("fdroidserver.scanner.CODE_SIGNATURES", mock_code_signatures):
             self.assertEqual(
                 1,
                 fdroidserver.scanner.scan_binary(apkfile),
-                "Did not find expected code signature '{}' in binary '{}'".format(fdroidserver.scanner.CODE_SIGNATURES.values(), apkfile),
+                "Did not find expected code signature '{}' in binary '{}'".format(
+                    fdroidserver.scanner.CODE_SIGNATURES.values(), apkfile
+                ),
             )
 
     def test_top_level_signature_embedded_apk_present(self):
         apkfile = os.path.join(self.basedir, 'apk.embedded_1.apk')
-        with mock.patch("fdroidserver.scanner.CODE_SIGNATURES", {"org/fdroid/ci/BuildConfig": re.compile(
-            r'.*org/fdroid/ci/BuildConfig', re.IGNORECASE | re.UNICODE
-        )}):
+        mock_code_signatures = {
+            "org/fdroid/ci/BuildConfig": re.compile(
+                r'.*org/fdroid/ci/BuildConfig', re.IGNORECASE | re.UNICODE
+            )
+        }
+        with mock.patch("fdroidserver.scanner.CODE_SIGNATURES", mock_code_signatures):
             self.assertEqual(
                 1,
                 fdroidserver.scanner.scan_binary(apkfile),
-                "Did not find expected code signature '{}' in binary '{}'".format(fdroidserver.scanner.CODE_SIGNATURES.values(), apkfile),
+                "Did not find expected code signature '{}' in binary '{}'".format(
+                    fdroidserver.scanner.CODE_SIGNATURES.values(), apkfile
+                ),
             )
 
     def test_no_match(self):
         apkfile = os.path.join(self.basedir, 'no_targetsdk_minsdk1_unsigned.apk')
         result = fdroidserver.scanner.scan_binary(apkfile)
-        self.assertEqual(0, result, "Found false positives in binary '{}'".format(apkfile))
+        self.assertEqual(
+            0, result, "Found false positives in binary '{}'".format(apkfile)
+        )
 
 
 class Test__exodus_compile_signatures(unittest.TestCase):
-
     def setUp(self):
         self.m1 = mock.Mock()
         self.m1.code_signature = r"^random\sregex$"
@@ -380,10 +419,13 @@ class Test__exodus_compile_signatures(unittest.TestCase):
 
     def test_ok(self):
         result = fdroidserver.scanner._exodus_compile_signatures(self.mock_sigs)
-        self.assertListEqual(result, [
-            re.compile(self.m1.code_signature),
-            re.compile(self.m2.code_signature),
-        ])
+        self.assertListEqual(
+            result,
+            [
+                re.compile(self.m1.code_signature),
+                re.compile(self.m2.code_signature),
+            ],
+        )
 
     def test_not_iterable(self):
         result = fdroidserver.scanner._exodus_compile_signatures(123)
@@ -391,35 +433,36 @@ class Test__exodus_compile_signatures(unittest.TestCase):
 
 
 class Test_load_exodus_trackers_signatures(unittest.TestCase):
-
     def setUp(self):
         self.requests_ret = mock.Mock()
-        self.requests_ret.json = mock.Mock(return_value={
-            "trackers": {
-                "1": {
-                    "id": 1,
-                    "name": "Steyer Puch 1",
-                    "description": "blah blah blah",
-                    "creation_date": "1956-01-01",
-                    "code_signature": "com.puch.|com.steyer.",
-                    "network_signature": "pst\\.com",
-                    "website": "https://pst.com",
-                    "categories": ["tracker"],
-                    "documentation": [],
+        self.requests_ret.json = mock.Mock(
+            return_value={
+                "trackers": {
+                    "1": {
+                        "id": 1,
+                        "name": "Steyer Puch 1",
+                        "description": "blah blah blah",
+                        "creation_date": "1956-01-01",
+                        "code_signature": "com.puch.|com.steyer.",
+                        "network_signature": "pst\\.com",
+                        "website": "https://pst.com",
+                        "categories": ["tracker"],
+                        "documentation": [],
+                    },
+                    "2": {
+                        "id": 2,
+                        "name": "Steyer Puch 2",
+                        "description": "blah blah blah",
+                        "creation_date": "1956-01-01",
+                        "code_signature": "com.puch.|com.steyer.",
+                        "network_signature": "pst\\.com",
+                        "website": "https://pst.com",
+                        "categories": ["tracker"],
+                        "documentation": [],
+                    },
                 },
-                "2": {
-                    "id": 2,
-                    "name": "Steyer Puch 2",
-                    "description": "blah blah blah",
-                    "creation_date": "1956-01-01",
-                    "code_signature": "com.puch.|com.steyer.",
-                    "network_signature": "pst\\.com",
-                    "website": "https://pst.com",
-                    "categories": ["tracker"],
-                    "documentation": [],
-                }
-            },
-        })
+            }
+        )
         self.requests_func = mock.Mock(return_value=self.requests_ret)
         self.compilesig_func = mock.Mock(return_value="mocked return value")
 
@@ -427,19 +470,18 @@ class Test_load_exodus_trackers_signatures(unittest.TestCase):
         with mock.patch("requests.get", self.requests_func), mock.patch(
             "fdroidserver.scanner._exodus_compile_signatures", self.compilesig_func
         ):
-            result_sigs, result_regex = fdroidserver.scanner.load_exodus_trackers_signatures()
+            sigs, regex = fdroidserver.scanner.load_exodus_trackers_signatures()
             self.requests_func.assert_called_once_with(
                 "https://reports.exodus-privacy.eu.org/api/trackers", timeout=300
             )
-            self.assertEqual(len(result_sigs), 2)
-            self.assertListEqual([1, 2], sorted([x.id for x in result_sigs]))
+            self.assertEqual(len(sigs), 2)
+            self.assertListEqual([1, 2], sorted([x.id for x in sigs]))
 
-            self.compilesig_func.assert_called_once_with(result_sigs)
-            self.assertEqual(result_regex, "mocked return value")
+            self.compilesig_func.assert_called_once_with(sigs)
+            self.assertEqual(regex, "mocked return value")
 
 
 class Test_main(unittest.TestCase):
-
     def setUp(self):
         self.args = ["com.example.app", "local/additional.apk", "another.apk"]
         self.exit_func = mock.Mock()
@@ -456,7 +498,9 @@ class Test_main(unittest.TestCase):
             "sys.exit", self.exit_func
         ), mock.patch("sys.argv", ["fdroid scanner", *self.args]), mock.patch(
             "fdroidserver.common.read_app_args", self.read_app_args_func
-        ), mock.patch("fdroidserver.scanner.scan_binary", self.scan_binary_func):
+        ), mock.patch(
+            "fdroidserver.scanner.scan_binary", self.scan_binary_func
+        ):
             fdroidserver.scanner.main()
 
             self.exit_func.assert_not_called()
@@ -475,7 +519,9 @@ class Test_main(unittest.TestCase):
             "sys.exit", self.exit_func
         ), mock.patch("sys.argv", ["fdroid scanner", *self.args]), mock.patch(
             "fdroidserver.common.read_app_args", self.read_app_args_func
-        ), mock.patch("fdroidserver.scanner.scan_binary", self.scan_binary_func):
+        ), mock.patch(
+            "fdroidserver.scanner.scan_binary", self.scan_binary_func
+        ):
             pathlib.Path(self.args[0]).touch()
             fdroidserver.scanner.main()
 
@@ -498,11 +544,13 @@ if __name__ == "__main__":
     (fdroidserver.common.options, args) = parser.parse_args(['--verbose'])
 
     newSuite = unittest.TestSuite()
-    newSuite.addTests([
-        unittest.makeSuite(ScannerTest),
-        unittest.makeSuite(Test_scan_binary),
-        unittest.makeSuite(Test__exodus_compile_signatures),
-        unittest.makeSuite(Test_load_exodus_trackers_signatures),
-        unittest.makeSuite(Test_main),
-    ])
+    newSuite.addTests(
+        [
+            unittest.makeSuite(ScannerTest),
+            unittest.makeSuite(Test_scan_binary),
+            unittest.makeSuite(Test__exodus_compile_signatures),
+            unittest.makeSuite(Test_load_exodus_trackers_signatures),
+            unittest.makeSuite(Test_main),
+        ]
+    )
     unittest.main(failfast=False)
