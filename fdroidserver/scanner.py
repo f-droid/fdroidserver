@@ -234,22 +234,30 @@ class SignatureDataController:
         if (timestamp + self.cache_outdated_interval) < scanner._datetime_now():
             raise SignatureCacheOutdatedException()
 
+    def load(self):
+        try:
+            self.load_from_cache()
+            self.verify_data()
+        except SignatureCacheMalformedException as e:
+            self.load_from_defaults()
+            self.write_to_cache()
+
     def load_from_defaults(self):
-        sig_file = Path(__file__).absolute().parent / 'scanner_signatures' / self.file_name
+        sig_file = Path(__file__).absolute().parent / 'data' / 'scanner' / self.filename
         with open(sig_file) as f:
-            self.data = yaml.safe_load(f)
+            self.data = json.load(f)
 
     def load_from_cache(self):
         sig_file = scanner._scanner_cachedir() / self.filename
         if not sig_file.exists():
             raise SignatureCacheMalformedException()
         with open(sig_file) as f:
-            self.data = yaml.safe_load(f)
+            self.data = json.load(f)
 
     def write_to_cache(self):
         sig_file = scanner._scanner_cachedir() / self.filename
         with open(sig_file, "w", encoding="utf-8") as f:
-            yaml.safe_dump(self.data, f)
+            json.dump(self.data, f, indent=2)
         logging.debug("write '{}' to cache".format(self.filename))
 
     def verify_data(self):
@@ -287,7 +295,7 @@ class ExodusSignatureDataController(SignatureDataController):
 
 class ScannerSignatureDataController(SignatureDataController):
     def __init__(self):
-        super().__init__('Scanner signatures', 'scanner.yml')
+        super().__init__('Scanner signatures', 'scanner.json')
 
     def fetch_signatures_from_web(self):
         url = "https://uniqx.gitlab.io/fdroid-scanner-signatures/sigs.json"
@@ -298,29 +306,31 @@ class ScannerSignatureDataController(SignatureDataController):
             self.data = data
 
 
-class SignatureTool():
+class ScannerTool():
     def __init__(self):
         self.sdcs = [ScannerSignatureDataController()]
         for sdc in self.sdcs:
-            sdc.fetch_signatures_from_web()
-            # TODO: use cache
-            # if not sdc.check_cache():
-            #    sdc.load_from_defaults()
+            sdc.load()
         self.compile_regexes()
 
     def compile_regexes(self):
         self.regex = {'code_signatures': {}}
         for sdc in self.sdcs:
-            for lname, ldef in sdc.data.get('signatures', []).items():
-                self.regex['code_signatures'].update({(x, re.compile(x)) for x in ldef.get('code_signatures', [])})
-
-    def binary_signatures(self):
-        for sdc in self.sdcs:
-            for sig in sdc.binary_signatures():
-                yield sig
+            print(']]]', sdc.data)
+            for signame, sigdef in sdc.data.get('signatures', {}).items():
+                for sig in sigdef['code_signatures']:
+                    self.regex['code_signatures'][sig] = re.compile(sig, re.IGNORECASE)
+        print(')))', self.regex['code_signatures'])
 
 
-SIGNATURE_TOOL = SignatureTool()
+# TODO: change this from global instance to dependency injection
+SCANNER_TOOL = None
+
+
+def _get_tool():
+    if not scanner.SCANNER_TOOL:
+        scanner.SCANNER_TOOL = ScannerTool()
+    return scanner.SCANNER_TOOL
 
 
 # taken from exodus_core
@@ -350,7 +360,7 @@ def scan_binary(apkfile, extract_signatures=None):
     result = get_embedded_classes(apkfile)
     problems = 0
     for classname in result:
-        for suspect, regexp in SIGNATURE_TOOL.regex['code_signatures'].items():
+        for suspect, regexp in _get_tool().regex['code_signatures'].items():
             if regexp.match(classname):
                 logging.debug("Found class '%s'" % classname)
                 problems += 1

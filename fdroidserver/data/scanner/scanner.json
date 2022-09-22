@@ -1,0 +1,42 @@
+{
+  "signatures": {
+    "com.android.billing": {
+      "code_signatures": [
+        "com/android/billing"
+      ],
+      "license": "NonFree"
+    },
+    "com.google.analytics": {
+      "code_signatures": [
+        "com/google/analytics"
+      ],
+      "license": "NonFree"
+    },
+    "com.google.android.gms": {
+      "code_signatures": [
+        "com/google/android/gms"
+      ],
+      "license": "NonFree"
+    },
+    "com.google.android.play.core": {
+      "code_signatures": [
+        "com/google/android/play/core"
+      ],
+      "license": "NonFree"
+    },
+    "com.google.firebase": {
+      "code_signatures": [
+        "com/google/firebase"
+      ],
+      "license": "NonFree"
+    },
+    "com.google.tagmanager": {
+      "code_signatures": [
+        "com/google/tagmanager"
+      ],
+      "license": "NonFree"
+    }
+  },
+  "timestamp": "2022-09-15T12:43:06.508370+00:00",
+  "version": 1
+}
