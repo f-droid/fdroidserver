@@ -51,56 +51,6 @@ json_per_build = deepcopy(DEFAULT_JSON_PER_BUILD)
 MAVEN_URL_REGEX = re.compile(r"""\smaven\s*(?:{.*?(?:setUrl|url)|\((?:url)?)\s*=?\s*(?:uri)?\(?\s*["']?([^\s"']+)["']?[^})]*[)}]""",
                              re.DOTALL)
 
-# Common known non-free blobs (always lower case):
-NON_FREE_GRADLE_LINES = {
-    exp: re.compile(r'.*' + exp, re.IGNORECASE) for exp in [
-        r'flurryagent',
-        r'paypal.*mpl',
-        r'admob.*sdk.*android',
-        r'google.*ad.*view',
-        r'google.*admob',
-        r'google.*play.*services',
-        r'com.google.android.play:core.*',
-        r'com.google.android.play:app-update',
-        r'com.google.android.libraries.places:places',
-        r'com.google.mlkit',
-        r'com.android.billingclient',
-        r'androidx.work:work-gcm',
-        r'crittercism',
-        r'heyzap',
-        r'jpct.*ae',
-        r'youtube.*android.*player.*api',
-        r'bugsense',
-        r'crashlytics',
-        r'ouya.*sdk',
-        r'libspen23',
-        r'firebase',
-        r'''["']com.facebook.android['":]''',
-        r'cloudrail',
-        r'com.tencent.bugly',
-        r'appcenter-push',
-        r'com.github.junrar:junrar',
-        r'androidx.navigation:navigation-dynamic-features',
-        r'xyz.belvi.mobilevision:barcodescanner',
-        r'org.jetbrains.kotlinx:kotlinx-coroutines-play-services',
-        r'me.pushy:sdk',
-        r'io.github.sinaweibosdk',
-        r'com.umeng.umsdk',
-        r'com.google.android.exoplayer:extension-cast',
-        r'io.objectbox:objectbox-gradle-plugin',
-        r'com.evernote:android-job',
-        r'com.yayandroid:LocationManager',
-        r'com.onesignal:OneSignal',
-        r'com.cloudinary:cloudinary-android',
-        r'com.google.android.exoplayer:extension-cronet',
-        r'com.anjlab.android.iab.v3:library',
-        r'com.github.penn5:donations',
-        r'com.mapbox',
-        r'com.yandex.android',
-        r'com.hypertrack',
-    ]
-}
-
 
 SCANNER_CACHE_VERSION = 1
 
@@ -314,13 +264,13 @@ class ScannerTool():
         self.compile_regexes()
 
     def compile_regexes(self):
-        self.regex = {'code_signatures': {}}
+        self.regex = {'code_signatures': {}, 'gradle_signatures': {}}
         for sdc in self.sdcs:
-            print(']]]', sdc.data)
             for signame, sigdef in sdc.data.get('signatures', {}).items():
-                for sig in sigdef['code_signatures']:
-                    self.regex['code_signatures'][sig] = re.compile(sig, re.IGNORECASE)
-        print(')))', self.regex['code_signatures'])
+                for sig in sigdef.get('code_signatures', []):
+                    self.regex['code_signatures'][sig] = re.compile('.*' + sig, re.IGNORECASE)
+                for sig in sigdef.get('gradle_signatures', []):
+                    self.regex['gradle_signatures'][sig] = re.compile('.*' + sig, re.IGNORECASE)
 
 
 # TODO: change this from global instance to dependency injection
@@ -412,7 +362,7 @@ def scan_source(build_dir, build=metadata.Build()):
         return any(al in s for al in allowlisted)
 
     def suspects_found(s):
-        for n, r in NON_FREE_GRADLE_LINES.items():
+        for n, r in _get_tool().regex['gradle_signatures'].items():
             if r.match(s) and not is_allowlisted(s):
                 yield n
 
