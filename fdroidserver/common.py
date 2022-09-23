@@ -287,6 +287,9 @@ def fill_config_defaults(thisconfig):
     if not thisconfig.get('apksigner'):
         logging.warning(_('apksigner not found! Cannot sign or verify modern APKs'))
 
+    if 'ipfs_cid' not in thisconfig and shutil.which('ipfs_cid'):
+        logging.warning(_("ipfs_cid not found, skipping CIDv1 generation"))
+
     for k in ['ndk_paths', 'java_paths']:
         d = thisconfig[k]
         for k2 in d.copy():
@@ -4144,17 +4147,15 @@ def run_yamllint(path, indent=0):
 
 
 def calculate_IPFS_cid(filename):
-    """
-    Calculate the IPFS CID of a file and add it to the index.
+    """Calculate the IPFS CID of a file and add it to the index.
 
     uses ipfs_cid package at https://packages.debian.org/sid/ipfs-cid
     Returns CIDv1 of a file as per IPFS recommendation
     """
-    exe_name = 'ipfs_cid'
-    if not set_command_in_config(exe_name) or not config.get(exe_name):
-        logging.info(_("%s not found, skipping CIDv1 generation") % exe_name)
+    cmd = config and config.get('ipfs_cid')
+    if not cmd:
         return
-    file_cid = subprocess.run([config[exe_name], filename], capture_output=True)
+    file_cid = subprocess.run([cmd, filename], capture_output=True)
 
     if file_cid.returncode == 0:
         cid_output = file_cid.stdout.decode()
