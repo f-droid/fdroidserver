@@ -16,25 +16,25 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import imghdr
-import json
 import os
 import re
 import sys
-import traceback
-import zipfile
+import json
 import yaml
+import imghdr
+import shutil
+import logging
+import zipfile
+import requests
+import itertools
+import traceback
+import urllib.request
 from argparse import ArgumentParser
 from collections import namedtuple
 from copy import deepcopy
 from tempfile import TemporaryDirectory
 from pathlib import Path
-import logging
-import itertools
-import urllib.request
 from datetime import datetime, timedelta
-
-import requests
 
 from . import _
 from . import common
@@ -145,18 +145,24 @@ def _scanner_cachedir():
     """
     get `Path` to local cache dir
     """
-    if not common.config or "cachedir_scanner" not in common.config:
-        raise ConfigurationException("could not load 'cachedir_scanner' config")
-    cachedir = Path(config["cachedir_scanner"])
+    if not common.config:
+        raise ConfigurationException('config not initialized')
+    if "cachedir_scanner" not in common.config:
+        raise ConfigurationException("could not load 'cachedir_scanner' from config")
+    cachedir = Path(common.config["cachedir_scanner"])
     cachedir.mkdir(exist_ok=True, parents=True)
     return cachedir
 
 
-class SignatureCacheMalformedException(Exception):
+class SignatureDataMalformedException(Exception):
     pass
 
 
-class SignatureCacheOutdatedException(Exception):
+class SignatureDataOutdatedException(Exception):
+    pass
+
+
+class SignatureDataVersionMismatchException(Exception):
     pass
 
 
@@ -169,26 +175,37 @@ class SignatureDataController:
 
     def check_data_version(self):
         if self.data.get("version") != SCANNER_CACHE_VERSION:
-            raise SignatureCacheMalformedException()
+            raise SignatureDataVersionMismatchException()
 
     def check_last_updated(self):
+        '''
+        NOTE: currently not in use
+
+        Checks if the timestamp value is ok. Raises an exception if something
+        is not ok.
+
+        :raises SignatureDataMalformedException: when timestamp value is
+                                                 inaccessible or not parseable
+        :raises SignatureDataOutdatedException: when timestamp is older then
+                                                `self.cache_outdated_interval`
+        '''
         timestamp = self.data.get("timestamp")
         if not timestamp:
-            raise SignatureCacheMalformedException()
+            raise SignatureDataMalformedException()
         try:
             timestamp = datetime.fromisoformat(timestamp)
         except ValueError as e:
-            raise SignatureCacheMalformedException() from e
+            raise SignatureDataMalformedException() from e
         except TypeError as e:
-            raise SignatureCacheMalformedException() from e
+            raise SignatureDataMalformedException() from e
         if (timestamp + self.cache_outdated_interval) < scanner._datetime_now():
-            raise SignatureCacheOutdatedException()
+            raise SignatureDataOutdatedException()
 
     def load(self):
         try:
             self.load_from_cache()
             self.verify_data()
-        except SignatureCacheMalformedException as e:
+        except (SignatureDataMalformedException, SignatureDataVersionMismatchException):
             self.load_from_defaults()
             self.write_to_cache()
 
@@ -200,7 +217,7 @@ class SignatureDataController:
     def load_from_cache(self):
         sig_file = scanner._scanner_cachedir() / self.filename
         if not sig_file.exists():
-            raise SignatureCacheMalformedException()
+            raise SignatureDataMalformedException()
         with open(sig_file) as f:
             self.data = json.load(f)
 
@@ -211,7 +228,12 @@ class SignatureDataController:
         logging.debug("write '{}' to cache".format(self.filename))
 
     def verify_data(self):
+        '''
+        cleans and validates and cleans `self.data`
+        '''
+        self.check_data_version()
         valid_keys = ['timestamp', 'version', 'signatures']
+
         for k in [x for x in self.data.keys() if x not in valid_keys]:
             del self.data[k]
 
@@ -264,23 +286,35 @@ class ScannerTool():
         self.compile_regexes()
 
     def compile_regexes(self):
-        self.regex = {'code_signatures': {}, 'gradle_signatures': {}}
+        self.err_regex = {'code_signatures': {}, 'gradle_signatures': {}}
         for sdc in self.sdcs:
             for signame, sigdef in sdc.data.get('signatures', {}).items():
                 for sig in sigdef.get('code_signatures', []):
-                    self.regex['code_signatures'][sig] = re.compile('.*' + sig, re.IGNORECASE)
+                    self.err_regex['code_signatures'][sig] = re.compile('.*' + sig, re.IGNORECASE)
                 for sig in sigdef.get('gradle_signatures', []):
-                    self.regex['gradle_signatures'][sig] = re.compile('.*' + sig, re.IGNORECASE)
+                    self.err_regex['gradle_signatures'][sig] = re.compile('.*' + sig, re.IGNORECASE)
+
+    def clear_cache(self):
+        # delete cache folder and all its contents
+        shutil.rmtree(scanner._scanner_cachedir(), ignore_errors=True)
+        # re-initialize, this will re-populate the cache from default values
+        self.__init__()
 
 
-# TODO: change this from global instance to dependency injection
-SCANNER_TOOL = None
+# TODO: change this from singleton instance to dependency injection
+# use `_get_tool()` instead of accessing this directly
+_SCANNER_TOOL = None
 
 
 def _get_tool():
-    if not scanner.SCANNER_TOOL:
-        scanner.SCANNER_TOOL = ScannerTool()
-    return scanner.SCANNER_TOOL
+    '''
+    lazy loading factory for ScannerTool singleton
+
+    ScannerTool initialization need to access `common.config` values. Those are only available after initialization through `common.read_config()` So this factory assumes config was called at an erlier point in time
+    '''
+    if not scanner._SCANNER_TOOL:
+        scanner._SCANNER_TOOL = ScannerTool()
+    return scanner._SCANNER_TOOL
 
 
 # taken from exodus_core
@@ -310,7 +344,7 @@ def scan_binary(apkfile, extract_signatures=None):
     result = get_embedded_classes(apkfile)
     problems = 0
     for classname in result:
-        for suspect, regexp in _get_tool().regex['code_signatures'].items():
+        for suspect, regexp in _get_tool().err_regex['code_signatures'].items():
             if regexp.match(classname):
                 logging.debug("Found class '%s'" % classname)
                 problems += 1
@@ -362,7 +396,7 @@ def scan_source(build_dir, build=metadata.Build()):
         return any(al in s for al in allowlisted)
 
     def suspects_found(s):
-        for n, r in _get_tool().regex['gradle_signatures'].items():
+        for n, r in _get_tool().err_regex['gradle_signatures'].items():
             if r.match(s) and not is_allowlisted(s):
                 yield n
 
@@ -652,6 +686,8 @@ def main():
                         help=_("Force scan of disabled apps and builds."))
     parser.add_argument("--json", action="store_true", default=False,
                         help=_("Output JSON to stdout."))
+    parser.add_argument("--clear-cache", action="store_true", default=False,
+                        help=_("purge local scanner definitions cache"))
     metadata.add_metadata_arguments(parser)
     options = parser.parse_args()
     metadata.warnings_action = options.W
@@ -664,6 +700,9 @@ def main():
             logging.getLogger().setLevel(logging.ERROR)
 
     config = common.read_config(options)
+
+    if options.clear_cache:
+        scanner._get_tool().clear_cache()
 
     probcount = 0
 
