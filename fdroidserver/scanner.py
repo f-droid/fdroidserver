@@ -272,6 +272,7 @@ def scan_source(build_dir, build=metadata.Build()):
         'oss.sonatype.org/content/repositories/releases',
         'oss.sonatype.org/content/groups/public',
         'clojars.org/repo',  # Clojure free software libs
+        'repo.clojars.org',  # Clojure free software libs
         's3.amazonaws.com/repo.commonsware.com',  # CommonsWare
         'plugins.gradle.org/m2',  # Gradle plugin repo
         'maven.google.com',  # Google Maven Repo, https://developer.android.com/studio/build/dependencies.html#google-maven
