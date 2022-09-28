@@ -24,12 +24,10 @@ import imghdr
 import shutil
 import logging
 import zipfile
-import requests
 import itertools
 import traceback
 import urllib.request
 from argparse import ArgumentParser
-from collections import namedtuple
 from copy import deepcopy
 from tempfile import TemporaryDirectory
 from pathlib import Path
@@ -113,23 +111,6 @@ def get_embedded_classes(apkfile, depth=0):
         return {_('Problem with ZIP file: %s, error %s') % (apkfile, ex)}
 
     return classes
-
-
-# taken from exodus_core
-def _exodus_compile_signatures(signatures):
-    """
-    Compiles the regex associated to each signature, in order to speed up the trackers detection.
-
-    :return: A compiled list of signatures.
-    """
-    compiled_tracker_signature = []
-    try:
-        compiled_tracker_signature = [
-            re.compile(track.code_signature) for track in signatures
-        ]
-    except TypeError:
-        print("signatures is not iterable")
-    return compiled_tracker_signature
 
 
 def _datetime_now():
@@ -345,27 +326,6 @@ def _get_tool():
     if not scanner._SCANNER_TOOL:
         scanner._SCANNER_TOOL = ScannerTool()
     return scanner._SCANNER_TOOL
-
-
-# taken from exodus_core
-def load_exodus_trackers_signatures():
-    """
-    Load trackers signatures from the official Exodus database.
-
-    :return: a dictionary containing signatures.
-    """
-    signatures = []
-    exodus_url = "https://reports.exodus-privacy.eu.org/api/trackers"
-    r = requests.get(exodus_url, timeout=300)
-    data = r.json()
-    for e in data['trackers']:
-        signatures.append(
-            namedtuple('tracker', data['trackers'][e].keys())(
-                *data['trackers'][e].values()
-            )
-        )
-    logging.debug('{} trackers signatures loaded'.format(len(signatures)))
-    return signatures, scanner._exodus_compile_signatures(signatures)
 
 
 def scan_binary(apkfile, extract_signatures=None):

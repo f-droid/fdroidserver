@@ -496,132 +496,6 @@ class Test_scan_binary(unittest.TestCase):
             "Did not find expected code signature '{}' in binary '{}'".format(fdroidserver.scanner._SCANNER_TOOL.regexs['err_code_signatures'].values(), apkfile),
         )
 
-    # TODO: re-enable once allow-listing migrated to more complex regexes
-    # def test_no_match(self):
-    #     apkfile = os.path.join(self.basedir, 'no_targetsdk_minsdk1_unsigned.apk')
-    #     result = fdroidserver.scanner.scan_binary(apkfile)
-    #     self.assertEqual(0, result, "Found false positives in binary '{}'".format(apkfile))
-
-
-# class Test__fetch_exodus_signatures_to_cache(unittest.TestCase):
-#     def setUp(self):
-#         self.web_req_func = mock.Mock(return_value=io.StringIO(json.dumps({
-#             "trackers": {
-#                 "1": {
-#                     "id": 1,
-#                     "name": "Steyer Puch 1",
-#                     "description": "blah blah blah",
-#                     "creation_date": "1956-01-01",
-#                     "code_signature": "com.puch.|com.steyer.",
-#                     "network_signature": "pst\\.com",
-#                     "website": "https://pst.com",
-#                     "categories": ["tracker"],
-#                     "documentation": [],
-#                 },
-#                 "2": {
-#                     "id": 2,
-#                     "name": "Steyer Puch 2",
-#                     "description": "blah blah blah",
-#                     "creation_date": "1956-01-01",
-#                     "code_signature": "com.puch.|com.steyer.",
-#                     "network_signature": "pst\\.com",
-#                     "website": "https://pst.com",
-#                     "categories": ["tracker"],
-#                     "documentation": [],
-#                 }
-#             },
-#         })))
-#         self.open_func = mock.mock_open()
-#         self.cachedir_func = mock.Mock(return_value=pathlib.Path("mocked/path"))
-#
-#     def test_ok(self):
-#         with mock.patch("urllib.request.urlopen", self.web_req_func), mock.patch(
-#             "builtins.open", self.open_func
-#         ) as outfilemock, mock.patch(
-#             "fdroidserver.scanner._scanner_cachedir", self.cachedir_func
-#         ), mock.patch("fdroidserver.scanner._datetime_now", unittest.mock.Mock(return_value=datetime(1999, 12, 31, 23, 59, 59))):
-#             fdroidserver.scanner.fetch_exodus_signatures_to_cache()
-#
-#         self.cachedir_func.assert_called_once()
-#         self.web_req_func.assert_called_once_with("https://reports.exodus-privacy.eu.org/api/trackers")
-#         self.open_func.assert_called_once_with(pathlib.Path("mocked/path/exodus.json"), "w", encoding="utf-8")
-#         self.assertEqual(
-#             mock_open_to_str(self.open_func),
-#             """{"signatures": {"exodus-1": {"name": "Steyer Puch 1", "code_signature": "com.puch.|com.steyer.", "network_signature": "pst\\\\.com", "types": ["tracker", "non-free"]}, "exodus-2": {"name": "Steyer Puch 2", "code_signature": "com.puch.|com.steyer.", "network_signature": "pst\\\\.com", "types": ["tracker", "non-free"]}}, "timestamp": "1999-12-31T23:59:59"}"""
-#         )
-
-
-class Test__exodus_compile_signatures(unittest.TestCase):
-    def setUp(self):
-        self.m1 = mock.Mock()
-        self.m1.code_signature = r"^random\sregex$"
-        self.m2 = mock.Mock()
-        self.m2.code_signature = r"^another.+regex$"
-        self.mock_sigs = [self.m1, self.m2]
-
-    def test_ok(self):
-        result = fdroidserver.scanner._exodus_compile_signatures(self.mock_sigs)
-        self.assertListEqual(
-            result,
-            [
-                re.compile(self.m1.code_signature),
-                re.compile(self.m2.code_signature),
-            ],
-        )
-
-    def test_not_iterable(self):
-        result = fdroidserver.scanner._exodus_compile_signatures(123)
-        self.assertListEqual(result, [])
-
-
-class Test_load_exodus_trackers_signatures(unittest.TestCase):
-    def setUp(self):
-        self.requests_ret = mock.Mock()
-        self.requests_ret.json = mock.Mock(
-            return_value={
-                "trackers": {
-                    "1": {
-                        "id": 1,
-                        "name": "Steyer Puch 1",
-                        "description": "blah blah blah",
-                        "creation_date": "1956-01-01",
-                        "code_signature": "com.puch.|com.steyer.",
-                        "network_signature": "pst\\.com",
-                        "website": "https://pst.com",
-                        "categories": ["tracker"],
-                        "documentation": [],
-                    },
-                    "2": {
-                        "id": 2,
-                        "name": "Steyer Puch 2",
-                        "description": "blah blah blah",
-                        "creation_date": "1956-01-01",
-                        "code_signature": "com.puch.|com.steyer.",
-                        "network_signature": "pst\\.com",
-                        "website": "https://pst.com",
-                        "categories": ["tracker"],
-                        "documentation": [],
-                    },
-                },
-            }
-        )
-        self.requests_func = mock.Mock(return_value=self.requests_ret)
-        self.compilesig_func = mock.Mock(return_value="mocked return value")
-
-    def test_ok(self):
-        with mock.patch("requests.get", self.requests_func), mock.patch(
-            "fdroidserver.scanner._exodus_compile_signatures", self.compilesig_func
-        ):
-            sigs, regex = fdroidserver.scanner.load_exodus_trackers_signatures()
-            self.requests_func.assert_called_once_with(
-                "https://reports.exodus-privacy.eu.org/api/trackers", timeout=300
-            )
-            self.assertEqual(len(sigs), 2)
-            self.assertListEqual([1, 2], sorted([x.id for x in sigs]))
-
-            self.compilesig_func.assert_called_once_with(sigs)
-            self.assertEqual(regex, "mocked return value")
-
 
 class Test_SignatureDataController(unittest.TestCase):
     # __init__
@@ -629,7 +503,7 @@ class Test_SignatureDataController(unittest.TestCase):
         sdc = fdroidserver.scanner.SignatureDataController('nnn', 'fff.yml')
         self.assertEqual(sdc.name, 'nnn')
         self.assertEqual(sdc.filename, 'fff.yml')
-        self.assertEqual(sdc.cache_outdated_interval, timedelta(days=7))
+        self.assertEqual(sdc.cache_outdated_interval, None)
         self.assertDictEqual(sdc.data, {})
 
     # check_last_updated
@@ -640,6 +514,7 @@ class Test_SignatureDataController(unittest.TestCase):
 
     def test_check_last_updated_exception_cache_outdated(self):
         sdc = fdroidserver.scanner.SignatureDataController('nnn', 'fff.yml')
+        sdc.cache_outdated_interval = timedelta(days=7)
         sdc.data['timestamp'] = (datetime.now().astimezone() - timedelta(days=30)).isoformat()
         with self.assertRaises(fdroidserver.scanner.SignatureDataOutdatedException):
             sdc.check_last_updated()
@@ -778,8 +653,6 @@ if __name__ == "__main__":
     newSuite.addTests([
         unittest.makeSuite(ScannerTest),
         unittest.makeSuite(Test_scan_binary),
-        unittest.makeSuite(Test__exodus_compile_signatures),
-        unittest.makeSuite(Test_load_exodus_trackers_signatures),
         unittest.makeSuite(Test_SignatureDataController),
         unittest.makeSuite(Test_ScannerSignatureDataController_fetch_signatures_from_web),
         unittest.makeSuite(Test_main),
