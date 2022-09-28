@@ -31,7 +31,7 @@ import fdroidserver.build
 import fdroidserver.common
 import fdroidserver.metadata
 import fdroidserver.scanner
-from testcommon import TmpCwd
+from testcommon import TmpCwd, mock_open_to_str
 
 
 class ScannerTest(unittest.TestCase):
@@ -449,17 +449,18 @@ class Test_scan_binary(unittest.TestCase):
         fdroidserver.common.options = mock.Mock()
 
         fdroidserver.scanner._SCANNER_TOOL = mock.Mock()
-        fdroidserver.scanner._SCANNER_TOOL.err_regex = {}
-        fdroidserver.scanner._SCANNER_TOOL.err_regex['code_signatures'] = {
+        fdroidserver.scanner._SCANNER_TOOL.regexs = {}
+        fdroidserver.scanner._SCANNER_TOOL.regexs['err_code_signatures'] = {
             "java/lang/Object": re.compile(r'.*java/lang/Object', re.IGNORECASE | re.UNICODE)
         }
+        fdroidserver.scanner._SCANNER_TOOL.regexs['warn_code_signatures'] = {}
 
     def test_code_signature_match(self):
         apkfile = os.path.join(self.basedir, 'no_targetsdk_minsdk1_unsigned.apk')
         self.assertEqual(
             1,
             fdroidserver.scanner.scan_binary(apkfile),
-            "Did not find expected code signature '{}' in binary '{}'".format(fdroidserver.scanner._SCANNER_TOOL.err_regex['code_signatures'].values(), apkfile),
+            "Did not find expected code signature '{}' in binary '{}'".format(fdroidserver.scanner._SCANNER_TOOL.regexs['err_code_signatures'].values(), apkfile),
         )
 
     @unittest.skipIf(
@@ -470,7 +471,7 @@ class Test_scan_binary(unittest.TestCase):
     )
     def test_bottom_level_embedded_apk_code_signature(self):
         apkfile = os.path.join(self.basedir, 'apk.embedded_1.apk')
-        fdroidserver.scanner._SCANNER_TOOL.err_regex['code_signatures'] = {
+        fdroidserver.scanner._SCANNER_TOOL.regexs['err_code_signatures'] = {
             "org/bitbucket/tickytacky/mirrormirror/MainActivity": re.compile(
                 r'.*org/bitbucket/tickytacky/mirrormirror/MainActivity', re.IGNORECASE | re.UNICODE
             )
@@ -479,12 +480,12 @@ class Test_scan_binary(unittest.TestCase):
         self.assertEqual(
             1,
             fdroidserver.scanner.scan_binary(apkfile),
-            "Did not find expected code signature '{}' in binary '{}'".format(fdroidserver.scanner._SCANNER_TOOL.err_regex['code_signatures'].values(), apkfile),
+            "Did not find expected code signature '{}' in binary '{}'".format(fdroidserver.scanner._SCANNER_TOOL.regexs['err_code_signatures'].values(), apkfile),
         )
 
     def test_top_level_signature_embedded_apk_present(self):
         apkfile = os.path.join(self.basedir, 'apk.embedded_1.apk')
-        fdroidserver.scanner._SCANNER_TOOL.err_regex['code_signatures'] = {
+        fdroidserver.scanner._SCANNER_TOOL.regexs['err_code_signatures'] = {
             "org/fdroid/ci/BuildConfig": re.compile(
                 r'.*org/fdroid/ci/BuildConfig', re.IGNORECASE | re.UNICODE
             )
@@ -492,7 +493,7 @@ class Test_scan_binary(unittest.TestCase):
         self.assertEqual(
             1,
             fdroidserver.scanner.scan_binary(apkfile),
-            "Did not find expected code signature '{}' in binary '{}'".format(fdroidserver.scanner._SCANNER_TOOL.err_regex['code_signatures'].values(), apkfile),
+            "Did not find expected code signature '{}' in binary '{}'".format(fdroidserver.scanner._SCANNER_TOOL.regexs['err_code_signatures'].values(), apkfile),
         )
 
     # TODO: re-enable once allow-listing migrated to more complex regexes
@@ -671,6 +672,23 @@ class Test_SignatureDataController(unittest.TestCase):
         with self.assertRaises(fdroidserver.scanner.SignatureDataVersionMismatchException):
             sdc.check_data_version()
 
+    def test_write_to_cache(self):
+        open_func = mock.mock_open()
+        sdc = fdroidserver.scanner.SignatureDataController('nnn', 'fff.yml')
+        sdc.data = {"mocked": "data"}
+
+        with mock.patch("builtins.open", open_func), mock.patch(
+            "fdroidserver.scanner._scanner_cachedir",
+            return_value=pathlib.Path('.'),
+        ):
+            sdc.write_to_cache()
+
+        open_func.assert_called_with(pathlib.Path('fff.yml'), 'w', encoding="utf-8")
+        self.assertEqual(
+            mock_open_to_str(open_func),
+            """{\n  "mocked": "data"\n}"""
+        )
+
 
 class Test_ScannerSignatureDataController_fetch_signatures_from_web(unittest.TestCase):
     def setUp(self):
@@ -692,34 +710,6 @@ class Test_ScannerSignatureDataController_fetch_signatures_from_web(unittest.Tes
             types:
             - ads
         ''')))
-
-    def test_fetch_signatures_from_web(self):
-        sdc = fdroidserver.scanner.ScannerSignatureDataController()
-        with unittest.mock.patch('urllib.request.urlopen', self.uo_func):
-            sdc.fetch_signatures_from_web()
-        self.assertEqual(sdc.data.get('version'), 999)
-        self.assertEqual(sdc.data.get('timestamp'), "1999-12-31T23:59:59.999999+00:00")
-        self.assertListEqual(
-            sdc.data.get('signatures'),
-            [
-                {
-                    'binary_signature': 'com/google/firebase',
-                    'name': 'Google Firebase',
-                    'types': ['tracker', 'non-free'],
-                },
-                {
-                    'gradle_signature': 'com/google/android/gms',
-                    'name': 'Google Mobile Services',
-                    'types': ['non-free'],
-                },
-                {
-                    'network_signature': 'doubleclick\\.net',
-                    'name': 'Another thing to test.',
-                    'types': ['ads'],
-                },
-            ]
-        )
-        self.assertEqual(len(sdc.data), 3)
 
 
 class Test_main(unittest.TestCase):
@@ -768,7 +758,7 @@ class Test_main(unittest.TestCase):
 
             self.exit_func.assert_not_called()
             self.read_app_args_func.assert_not_called()
-            self.scan_binary_func.assert_called_once_with('local.application.apk', [])
+            self.scan_binary_func.assert_called_once_with('local.application.apk')
 
 
 if __name__ == "__main__":

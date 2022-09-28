@@ -50,6 +50,11 @@ class TmpPyPath():
 
 
 def mock_open_to_str(mock):
+    """
+    helper function for accessing all data written into a
+    unittest.mock.mock_open() instance as a string.
+    """
+
     return "".join([
         x.args[0] for x in mock.mock_calls if str(x).startswith("call().write(")
     ])

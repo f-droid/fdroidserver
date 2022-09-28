@@ -76,7 +76,7 @@ from fdroidserver.exception import FDroidException, VCSException, NoSubmodulesEx
     BuildException, VerificationException, MetaDataException
 from .asynchronousfilereader import AsynchronousFileReader
 
-from . import apksigcopier
+from . import apksigcopier, common
 
 
 # The path to this fdroidserver distribution
@@ -319,6 +319,22 @@ def fill_config_defaults(thisconfig):
                 if k == ndkdict.get('revision'):
                     ndk_paths[ndkdict['release']] = ndk_paths.pop(k)
                     break
+
+
+def get_config(options=None):
+    """
+    helper function for getting access to commons.config while safely
+    initializing if it wasn't initialized yet.
+    """
+    global config
+
+    if config is not None:
+        return config
+
+    config = {}
+    common.fill_config_defaults(config)
+    common.read_config(options)
+    return config
 
 
 def regsub_file(pattern, repl, path):
