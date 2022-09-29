@@ -209,7 +209,7 @@ class SignatureDataController:
             self.write_to_cache()
 
     def load_from_defaults(self):
-        sig_file = Path(__file__).absolute().parent / 'data' / 'scanner' / self.filename
+        sig_file = (Path(__file__).parent / 'data' / 'scanner' / self.filename).resolve()
         with open(sig_file) as f:
             self.data = json.load(f)
 
