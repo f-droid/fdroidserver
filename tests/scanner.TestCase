@@ -565,7 +565,7 @@ class Test_SignatureDataController(unittest.TestCase):
         )
 
 
-class Test_ScannerSignatureDataController_fetch_signatures_from_web(unittest.TestCase):
+class Test_SUSSDataController_fetch_signatures_from_web(unittest.TestCase):
     def setUp(self):
         self.uo_func = mock.Mock(return_value=io.StringIO(textwrap.dedent('''\
           version: 999
@@ -654,7 +654,7 @@ if __name__ == "__main__":
         unittest.makeSuite(ScannerTest),
         unittest.makeSuite(Test_scan_binary),
         unittest.makeSuite(Test_SignatureDataController),
-        unittest.makeSuite(Test_ScannerSignatureDataController_fetch_signatures_from_web),
+        unittest.makeSuite(Test_SUSSDataController_fetch_signatures_from_web),
         unittest.makeSuite(Test_main),
     ])
     unittest.main(failfast=False)

@@ -268,14 +268,14 @@ class ExodusSignatureDataController(SignatureDataController):
                     }
 
 
-class ScannerSignatureDataController(SignatureDataController):
+class SUSSDataController(SignatureDataController):
     def __init__(self):
-        super().__init__('Scanner signatures', 'scanner.json')
+        super().__init__('SUSS', 'suss.json')
 
 
 class ScannerTool():
     def __init__(self):
-        self.sdcs = [ScannerSignatureDataController()]
+        self.sdcs = [SUSSDataController()]
         self.load()
         self.compile_regexes()
 
