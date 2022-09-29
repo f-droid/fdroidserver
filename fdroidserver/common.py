@@ -912,7 +912,7 @@ def write_status_json(output, pretty=False, name=None):
                 json.dump(output, fp, sort_keys=True, cls=Encoder, indent=2)
             else:
                 json.dump(output, fp, sort_keys=True, cls=Encoder, separators=(',', ':'))
-    rsync_status_file_to_repo(path, repo_subdir='status')
+        rsync_status_file_to_repo(path, repo_subdir='status')
 
 
 def get_head_commit_id(git_repo):
