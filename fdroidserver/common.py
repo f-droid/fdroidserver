@@ -125,13 +125,11 @@ default_config = {
     'sdk_path': "$ANDROID_HOME",
     'ndk_paths': {},
     'cachedir': str(Path.home() / '.cache/fdroidserver'),
-    'cachedir_scanner': str(Path.home() / '.cache/fdroidserver/scanner'),
     'java_paths': None,
     'scan_binary': False,
     'ant': "ant",
     'mvn3': "mvn",
     'gradle': os.path.join(FDROID_PATH, 'gradlew-fdroid'),
-    'gradle_version_dir': str(Path.home() / '.cache/fdroidserver/gradle'),
     'sync_from_local_copy_dir': False,
     'allow_disabled_algorithms': False,
     'per_app_repos': False,
@@ -319,6 +317,11 @@ def fill_config_defaults(thisconfig):
                 if k == ndkdict.get('revision'):
                     ndk_paths[ndkdict['release']] = ndk_paths.pop(k)
                     break
+
+    if 'cachedir_scanner' not in thisconfig:
+        thisconfig['cachedir_scanner'] = str(Path(thisconfig['cachedir']) / 'scanner')
+    if 'gradle_version_dir' not in thisconfig:
+        thisconfig['gradle_version_dir'] = str(Path(thisconfig['cachedir']) / 'gradle')
 
 
 def get_config(options=None):
