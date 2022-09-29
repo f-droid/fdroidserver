@@ -13,6 +13,7 @@ import textwrap
 import unittest
 import uuid
 import yaml
+import zipfile
 import collections
 import pathlib
 from unittest import mock
@@ -336,6 +337,105 @@ class ScannerTest(unittest.TestCase):
         count = fdroidserver.scanner.scan_source(testdir, build)
         self.assertFalse(os.path.exists("build.gradle"))
         self.assertEqual(0, count, 'there should be this many errors')
+
+    def test_get_embedded_classes(self):
+        config = dict()
+        fdroidserver.common.config = config
+        fdroidserver.common.fill_config_defaults(config)
+        for f in (
+            'apk.embedded_1.apk',
+            'bad-unicode-πÇÇ现代通用字-български-عربي1.apk',
+            'janus.apk',
+            'minimal_targetsdk_30_unsigned.apk',
+            'no_targetsdk_minsdk1_unsigned.apk',
+            'org.bitbucket.tickytacky.mirrormirror_1.apk',
+            'org.bitbucket.tickytacky.mirrormirror_2.apk',
+            'org.bitbucket.tickytacky.mirrormirror_3.apk',
+            'org.bitbucket.tickytacky.mirrormirror_4.apk',
+            'org.dyndns.fules.ck_20.apk',
+            'SpeedoMeterApp.main_1.apk',
+            'urzip.apk',
+            'urzip-badcert.apk',
+            'urzip-badsig.apk',
+            'urzip-release.apk',
+            'urzip-release-unsigned.apk',
+            'repo/com.example.test.helloworld_1.apk',
+            'repo/com.politedroid_3.apk',
+            'repo/com.politedroid_4.apk',
+            'repo/com.politedroid_5.apk',
+            'repo/com.politedroid_6.apk',
+            'repo/duplicate.permisssions_9999999.apk',
+            'repo/info.zwanenburg.caffeinetile_4.apk',
+            'repo/no.min.target.sdk_987.apk',
+            'repo/obb.main.oldversion_1444412523.apk',
+            'repo/obb.mainpatch.current_1619_another-release-key.apk',
+            'repo/obb.mainpatch.current_1619.apk',
+            'repo/obb.main.twoversions_1101613.apk',
+            'repo/obb.main.twoversions_1101615.apk',
+            'repo/obb.main.twoversions_1101617.apk',
+            'repo/souch.smsbypass_9.apk',
+            'repo/urzip-; Рахма́, [rɐxˈmanʲɪnəf] سيرجي_رخمانينوف 谢·.apk',
+            'repo/v1.v2.sig_1020.apk',
+        ):
+            self.assertNotEqual(
+                set(),
+                fdroidserver.scanner.get_embedded_classes(f),
+                'should return results for ' + f,
+            )
+
+    def test_get_embedded_classes_empty_archives(self):
+        config = dict()
+        fdroidserver.common.config = config
+        fdroidserver.common.fill_config_defaults(config)
+        print('basedir')
+        for f in (
+            'Norway_bouvet_europe_2.obf.zip',
+            'repo/fake.ota.update_1234.zip',
+        ):
+            self.assertEqual(
+                set(),
+                fdroidserver.scanner.get_embedded_classes(f),
+                'should return not results for ' + f,
+            )
+
+    @unittest.skipIf(
+        sys.hexversion < 0x03090000, 'Python < 3.9 has a limited zipfile.is_zipfile()'
+    )
+    def test_get_embedded_classes_secret_apk(self):
+        """Try to hide an APK+DEX in an APK and see if we can find it"""
+        config = dict()
+        fdroidserver.common.config = config
+        fdroidserver.common.fill_config_defaults(config)
+        apk = 'urzip.apk'
+        mapzip = 'Norway_bouvet_europe_2.obf.zip'
+        secretfile = os.path.join(
+            self.basedir, 'org.bitbucket.tickytacky.mirrormirror_1.apk'
+        )
+        with tempfile.TemporaryDirectory() as tmpdir:
+            shutil.copy(apk, tmpdir)
+            shutil.copy(mapzip, tmpdir)
+            os.chdir(tmpdir)
+            with zipfile.ZipFile(mapzip, 'a') as zipfp:
+                zipfp.write(secretfile, 'secretapk')
+                with zipfile.ZipFile(apk) as readfp:
+                    with readfp.open('classes.dex') as cfp:
+                        zipfp.writestr('secretdex', cfp.read())
+            with zipfile.ZipFile(apk, 'a') as zipfp:
+                zipfp.write(mapzip)
+
+            cls = fdroidserver.scanner.get_embedded_classes(apk)
+            self.assertTrue(
+                'org/bitbucket/tickytacky/mirrormirror/MainActivity' in cls,
+                'this should find the classes in the hidden, embedded APK',
+            )
+            self.assertTrue(
+                'DEX file with fake name: secretdex' in cls,
+                'badly named embedded DEX fils should throw an error',
+            )
+            self.assertTrue(
+                'ZIP file without proper file extension: secretapk' in cls,
+                'badly named embedded ZIPs should throw an error',
+            )
 
 
 class Test_scan_binary(unittest.TestCase):
