@@ -54,8 +54,8 @@ class ScannerTest(unittest.TestCase):
             'com.integreight.onesheeld': 11,
             'com.jens.automation2': 2,
             'firebase-suspect': 1,
-            'org.mozilla.rocket': 3,
-            'org.tasks': 3,
+            'org.mozilla.rocket': 1,
+            'org.tasks': 2,
             'realm': 1,
             'se.manyver': 2,
         }

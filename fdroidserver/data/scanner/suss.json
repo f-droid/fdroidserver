@@ -1,4 +1,5 @@
 {
+  "cache_duration": 86400,
   "signatures": {
     "admob": {
       "gradle_signatures": [
@@ -137,13 +138,14 @@
     },
     "com.hypertrack": {
       "gradle_signatures": [
-        "com.hypertrack"
+        "com\\.hypertrack(?!:hyperlog)"
       ],
       "license": "NonFree"
     },
     "com.mapbox": {
+      "MaintainerNotes": "com.mapbox.mapboxsdk:mapbox-sdk-services seems to be fully under this license:\nhttps://github.com/mapbox/mapbox-java/blob/main/LICENSE\n",
       "gradle_signatures": [
-        "com.mapbox"
+        "com\\.mapbox(?!\\.mapboxsdk:mapbox-sdk-services)"
       ],
       "license": "NonFree"
     },
@@ -167,7 +169,7 @@
     },
     "com.yandex.android": {
       "gradle_signatures": [
-        "com.yandex.android"
+        "com\\.yandex\\.android(?!:authsdk)"
       ],
       "license": "NonFree"
     },
@@ -191,7 +193,7 @@
     },
     "firebase": {
       "gradle_signatures": [
-        "firebase"
+        "com(\\.google)?\\.firebase[.:](?!firebase-jobdispatcher|geofire-java)"
       ],
       "license": "NonFree"
     },
@@ -286,6 +288,7 @@
       "license": "NonFree"
     }
   },
-  "timestamp": "2022-09-22T13:16:29.313769+00:00",
-  "version": 1
+  "timestamp": "2022-09-29T19:35:04.875586+00:00",
+  "version": 1,
+  "last_updated": "2022-09-30T05:13:18.411707+02:00"
 }
