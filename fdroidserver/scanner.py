@@ -114,7 +114,7 @@ def get_embedded_classes(apkfile, depth=0):
 
 def _datetime_now():
     """Get datetime.now(), using this funciton allows mocking it for testing."""
-    return datetime.now().astimezone()
+    return datetime.utcnow()
 
 
 def _scanner_cachedir():
