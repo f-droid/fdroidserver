@@ -141,6 +141,10 @@ class SignatureDataOutdatedException(Exception):
     pass
 
 
+class SignatureDataCacheMissException(Exception):
+    pass
+
+
 class SignatureDataVersionMismatchException(Exception):
     pass
 
@@ -151,7 +155,7 @@ class SignatureDataController:
         self.filename = filename
         self.url = url
         # by default we assume cache is valid indefinitely
-        self.cache_outdated_interval = timedelta(days=999999)
+        self.cache_duration = timedelta(days=999999)
         self.data = {}
 
     def check_data_version(self):
@@ -162,63 +166,65 @@ class SignatureDataController:
         '''
         NOTE: currently not in use
 
-        Checks if the timestamp value is ok. Raises an exception if something
-        is not ok.
+        Checks if the last_updated value is ok. Raises an exception if
+        it's expired or inaccessible.
 
         :raises SignatureDataMalformedException: when timestamp value is
                                                  inaccessible or not parse-able
         :raises SignatureDataOutdatedException: when timestamp is older then
-                                                `self.cache_outdated_interval`
+                                                `self.cache_duration`
         '''
-        timestamp = self.data.get("timestamp")
-        if not timestamp:
-            raise SignatureDataMalformedException()
-        try:
-            timestamp = datetime.fromisoformat(timestamp)
-        except ValueError as e:
-            raise SignatureDataMalformedException() from e
-        except TypeError as e:
-            raise SignatureDataMalformedException() from e
-        if (timestamp + self.cache_outdated_interval) < scanner._datetime_now():
-            raise SignatureDataOutdatedException()
+        last_updated = self.data.get("last_updated", None)
+        if last_updated:
+            try:
+                last_updated = datetime.fromisoformat(last_updated)
+            except ValueError as e:
+                raise SignatureDataMalformedException() from e
+            except TypeError as e:
+                raise SignatureDataMalformedException() from e
+            delta = (last_updated + self.cache_duration) - scanner._datetime_now()
+            if delta > timedelta(seconds=0):
+                logging.debug(_('next {name} cache update due in {time}').format(
+                    name=self.filename, time=delta
+                ))
+            else:
+                raise SignatureDataOutdatedException()
 
     def fetch(self):
         try:
-            self.load_from_cache()
-            self.verify_data()
-            self.check_last_updated()
-        except (
-            SignatureDataMalformedException,
-            SignatureDataVersionMismatchException,
-            SignatureDataOutdatedException
-        ):
-            try:
-                self.fetch_signatures_from_web()
-            except AttributeError:
-                # just load from defaults if fetch_signatures_from_web is not
-                # implemented
-                self.load_from_defaults()
+            self.fetch_signatures_from_web()
             self.write_to_cache()
+        except Exception as e:
+            raise Exception(_("downloading scanner signatures from '{}' failed").format(self.url)) from e
 
     def load(self):
         try:
-            self.load_from_cache()
-            self.verify_data()
-        except (SignatureDataMalformedException, SignatureDataVersionMismatchException):
-            self.load_from_defaults()
+            try:
+                self.load_from_cache()
+                self.verify_data()
+                self.check_last_updated()
+            except SignatureDataCacheMissException:
+                self.load_from_defaults()
+        except SignatureDataOutdatedException:
+            self.fetch_signatures_from_web()
             self.write_to_cache()
+        except (SignatureDataMalformedException, SignatureDataVersionMismatchException) as e:
+            logging.critical(_("scanner cache is malformed! You can clear it with: '{clear}'").format(
+                clear='rm -r {}'.format(common.get_config()['cachedir_scanner'])
+            ))
+            raise e
 
     def load_from_defaults(self):
         sig_file = (Path(__file__).parent / 'data' / 'scanner' / self.filename).resolve()
         with open(sig_file) as f:
-            self.data = json.load(f)
+            self.set_data(json.load(f))
 
     def load_from_cache(self):
         sig_file = scanner._scanner_cachedir() / self.filename
         if not sig_file.exists():
-            raise SignatureDataMalformedException()
+            raise SignatureDataCacheMissException()
         with open(sig_file) as f:
-            self.data = json.load(f)
+            self.set_data(json.load(f))
 
     def write_to_cache(self):
         sig_file = scanner._scanner_cachedir() / self.filename
@@ -231,29 +237,36 @@ class SignatureDataController:
         cleans and validates and cleans `self.data`
         '''
         self.check_data_version()
-        valid_keys = ['timestamp', 'version', 'signatures']
+        valid_keys = ['timestamp', 'last_updated', 'version', 'signatures', 'cache_duration']
 
         for k in list(self.data.keys()):
             if k not in valid_keys:
                 del self.data[k]
 
+    def set_data(self, new_data):
+        self.data = new_data
+        if 'cache_duration' in new_data:
+            self.cache_duration = timedelta(seconds=new_data['cache_duration'])
+
     def fetch_signatures_from_web(self):
         logging.debug(_("downloading '{}'").format(self.url))
         with urllib.request.urlopen(self.url) as f:
-            self.data = json.load(f)
+            self.set_data(json.load(f))
+        self.data['last_updated'] = scanner._datetime_now().isoformat()
 
 
 class ExodusSignatureDataController(SignatureDataController):
     def __init__(self):
         super().__init__('Exodus signatures', 'exodus.yml', 'https://reports.exodus-privacy.eu.org/api/trackers')
-        self.cache_outdated_interval = timedelta(days=1)  # refresh exodus cache after one day
+        self.cache_duration = timedelta(days=1)  # refresh exodus cache after one day
 
     def fetch_signatures_from_web(self):
         logging.debug(_("downloading '{}'").format(self.url))
 
-        self.data = {
+        data = {
             "signatures": {},
             "timestamp": scanner._datetime_now().isoformat(),
+            "last_updated": scanner._datetime_now().isoformat(),
             "version": SCANNER_CACHE_VERSION,
         }
 
@@ -261,7 +274,7 @@ class ExodusSignatureDataController(SignatureDataController):
             d = json.load(f)
             for tracker in d["trackers"].values():
                 if tracker.get('code_signature'):
-                    self.data["signatures"][tracker["name"]] = {
+                    data["signatures"][tracker["name"]] = {
                         "name": tracker["name"],
                         "warn_code_signatures": [tracker["code_signature"]],
                         # exodus also provides network signatures, unused atm.
@@ -273,6 +286,7 @@ class ExodusSignatureDataController(SignatureDataController):
                                               # etc. might be listed by exodus
                                               # too.
                     }
+        self.set_data(data)
 
 
 class ScannerTool():
@@ -316,6 +330,7 @@ class ScannerTool():
     def refresh(self):
         for sdc in self.sdcs:
             sdc.fetch_signatures_from_web()
+            sdc.write_to_cache()
 
     def add(self, new_controller: SignatureDataController):
         self.sdcs.append(new_controller)
@@ -684,7 +699,7 @@ def main():
             logging.getLogger().setLevel(logging.ERROR)
 
     # initialize/load configuration values
-    common.get_config(options)
+    common.get_config(opts=options)
 
     if options.refresh:
         scanner._get_tool().refresh()

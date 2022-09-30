@@ -324,19 +324,26 @@ def fill_config_defaults(thisconfig):
         thisconfig['gradle_version_dir'] = str(Path(thisconfig['cachedir']) / 'gradle')
 
 
-def get_config(options=None):
+def get_config(opts=None):
     """
     helper function for getting access to commons.config while safely
     initializing if it wasn't initialized yet.
     """
-    global config
+    global config, options
 
     if config is not None:
         return config
 
     config = {}
     common.fill_config_defaults(config)
-    common.read_config(options)
+    common.read_config(opts=opts)
+
+    # make sure these values are available in common.py even if they didn't
+    # declare global in a scope
+    common.config = config
+    if opts is not None:
+        common.options = opts
+
     return config
 
 

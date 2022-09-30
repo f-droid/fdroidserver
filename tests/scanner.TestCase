@@ -502,38 +502,37 @@ class Test_SignatureDataController(unittest.TestCase):
         sdc = fdroidserver.scanner.SignatureDataController('nnn', 'fff.yml', 'https://example.com/test.json')
         self.assertEqual(sdc.name, 'nnn')
         self.assertEqual(sdc.filename, 'fff.yml')
-        self.assertEqual(sdc.cache_outdated_interval, timedelta(999999))
+        self.assertEqual(sdc.cache_duration, timedelta(999999))
         self.assertDictEqual(sdc.data, {})
 
     # check_last_updated
     def test_check_last_updated_ok(self):
         sdc = fdroidserver.scanner.SignatureDataController('nnn', 'fff.yml', 'https://example.com/test.json')
-        sdc.data['timestamp'] = datetime.now().astimezone().isoformat()
+        sdc.data['last_updated'] = datetime.now().astimezone().isoformat()
         sdc.check_last_updated()
 
     def test_check_last_updated_exception_cache_outdated(self):
         sdc = fdroidserver.scanner.SignatureDataController('nnn', 'fff.yml', 'https://example.com/test.json')
-        sdc.cache_outdated_interval = timedelta(days=7)
-        sdc.data['timestamp'] = (datetime.now().astimezone() - timedelta(days=30)).isoformat()
+        sdc.cache_duration = timedelta(days=7)
+        sdc.data['last_updated'] = (datetime.now().astimezone() - timedelta(days=30)).isoformat()
         with self.assertRaises(fdroidserver.scanner.SignatureDataOutdatedException):
-            sdc.check_last_updated()
-
-    def test_check_last_updated_exception_missing_timestamp_value(self):
-        sdc = fdroidserver.scanner.SignatureDataController('nnn', 'fff.yml', 'https://example.com/test.json')
-        with self.assertRaises(fdroidserver.scanner.SignatureDataMalformedException):
             sdc.check_last_updated()
 
     def test_check_last_updated_exception_not_string(self):
         sdc = fdroidserver.scanner.SignatureDataController('nnn', 'fff.yml', 'https://example.com/test.json')
-        sdc.data['timestamp'] = 12345
+        sdc.data['last_updated'] = 12345
         with self.assertRaises(fdroidserver.scanner.SignatureDataMalformedException):
             sdc.check_last_updated()
 
     def test_check_last_updated_exception_not_iso_formatted_string(self):
         sdc = fdroidserver.scanner.SignatureDataController('nnn', 'fff.yml', 'https://example.com/test.json')
-        sdc.data['timestamp'] = '01/09/2002 10:11'
+        sdc.data['last_updated'] = '01/09/2002 10:11'
         with self.assertRaises(fdroidserver.scanner.SignatureDataMalformedException):
             sdc.check_last_updated()
+
+    def test_check_last_updated_no_exception_missing_when_last_updated_not_set(self):
+        sdc = fdroidserver.scanner.SignatureDataController('nnn', 'fff.yml', 'https://example.com/test.json')
+        sdc.check_last_updated()
 
     # check_data_version
     def test_check_data_version_ok(self):
