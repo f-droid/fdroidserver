@@ -325,10 +325,7 @@ def fill_config_defaults(thisconfig):
 
 
 def get_config(opts=None):
-    """
-    helper function for getting access to commons.config while safely
-    initializing if it wasn't initialized yet.
-    """
+    """Get config instace. This function takes care of initaling config data before returning it."""
     global config, options
 
     if config is not None:

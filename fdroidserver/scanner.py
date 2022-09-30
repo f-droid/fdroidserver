@@ -113,16 +113,12 @@ def get_embedded_classes(apkfile, depth=0):
 
 
 def _datetime_now():
-    """
-    simple wrapper for datetime.now to allow mocking it for testing
-    """
+    """Get datetime.now(), using this funciton allows mocking it for testing."""
     return datetime.now().astimezone()
 
 
 def _scanner_cachedir():
-    """
-    get `Path` to local cache dir
-    """
+    """Get `Path` to fdroidserver cache dir."""
     cfg = common.get_config()
     if not cfg:
         raise ConfigurationException('config not initialized')
@@ -163,17 +159,14 @@ class SignatureDataController:
             raise SignatureDataVersionMismatchException()
 
     def check_last_updated(self):
-        '''
-        NOTE: currently not in use
-
-        Checks if the last_updated value is ok. Raises an exception if
-        it's expired or inaccessible.
+        """
+        Check if the last_updated value is ok and raise an exception if expired or inaccessible.
 
         :raises SignatureDataMalformedException: when timestamp value is
                                                  inaccessible or not parse-able
         :raises SignatureDataOutdatedException: when timestamp is older then
                                                 `self.cache_duration`
-        '''
+        """
         last_updated = self.data.get("last_updated", None)
         if last_updated:
             try:
@@ -233,9 +226,11 @@ class SignatureDataController:
         logging.debug("write '{}' to cache".format(self.filename))
 
     def verify_data(self):
-        '''
-        cleans and validates and cleans `self.data`
-        '''
+        """
+        Clean and validate `self.data`.
+
+        Right now this function does just a basic key sanitation.
+        """
         self.check_data_version()
         valid_keys = ['timestamp', 'last_updated', 'version', 'signatures', 'cache_duration']
 
@@ -351,11 +346,11 @@ _SCANNER_TOOL = None
 
 
 def _get_tool():
-    '''
-    lazy loading factory for ScannerTool singleton
+    """
+    Lazy loading function for getting a ScannerTool instance.
 
     ScannerTool initialization need to access `common.config` values. Those are only available after initialization through `common.read_config()` So this factory assumes config was called at an erlier point in time
-    '''
+    """
     if not scanner._SCANNER_TOOL:
         scanner._SCANNER_TOOL = ScannerTool()
     return scanner._SCANNER_TOOL
