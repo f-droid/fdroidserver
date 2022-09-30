@@ -508,19 +508,19 @@ class Test_SignatureDataController(unittest.TestCase):
     # check_last_updated
     def test_check_last_updated_ok(self):
         sdc = fdroidserver.scanner.SignatureDataController('nnn', 'fff.yml', 'https://example.com/test.json')
-        sdc.data['last_updated'] = datetime.utcnow().isoformat()
+        sdc.data['last_updated'] = datetime.utcnow().timestamp()
         sdc.check_last_updated()
 
     def test_check_last_updated_exception_cache_outdated(self):
         sdc = fdroidserver.scanner.SignatureDataController('nnn', 'fff.yml', 'https://example.com/test.json')
         sdc.cache_duration = timedelta(days=7)
-        sdc.data['last_updated'] = (datetime.utcnow() - timedelta(days=30)).isoformat()
+        sdc.data['last_updated'] = (datetime.utcnow() - timedelta(days=30)).timestamp()
         with self.assertRaises(fdroidserver.scanner.SignatureDataOutdatedException):
             sdc.check_last_updated()
 
     def test_check_last_updated_exception_not_string(self):
         sdc = fdroidserver.scanner.SignatureDataController('nnn', 'fff.yml', 'https://example.com/test.json')
-        sdc.data['last_updated'] = 12345
+        sdc.data['last_updated'] = 'sepp'
         with self.assertRaises(fdroidserver.scanner.SignatureDataMalformedException):
             sdc.check_last_updated()
 

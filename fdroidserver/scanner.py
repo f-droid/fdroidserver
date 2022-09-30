@@ -170,7 +170,7 @@ class SignatureDataController:
         last_updated = self.data.get("last_updated", None)
         if last_updated:
             try:
-                last_updated = datetime.fromisoformat(last_updated)
+                last_updated = datetime.fromtimestamp(last_updated)
             except ValueError as e:
                 raise SignatureDataMalformedException() from e
             except TypeError as e:
@@ -247,7 +247,7 @@ class SignatureDataController:
         logging.debug(_("downloading '{}'").format(self.url))
         with urllib.request.urlopen(self.url) as f:
             self.set_data(json.load(f))
-        self.data['last_updated'] = scanner._datetime_now().isoformat()
+        self.data['last_updated'] = scanner._datetime_now().timestamp()
 
 
 class ExodusSignatureDataController(SignatureDataController):
@@ -260,8 +260,8 @@ class ExodusSignatureDataController(SignatureDataController):
 
         data = {
             "signatures": {},
-            "timestamp": scanner._datetime_now().isoformat(),
-            "last_updated": scanner._datetime_now().isoformat(),
+            "timestamp": scanner._datetime_now().timestamp(),
+            "last_updated": scanner._datetime_now().timestamp(),
             "version": SCANNER_CACHE_VERSION,
         }
 
@@ -1104,7 +1104,7 @@ SUSS_DEFAULT = '''{
       "license": "NonFree"
     }
   },
-  "timestamp": "2022-09-29T19:35:04.875586+00:00",
+  "timestamp": 1664480104.875586,
   "version": 1,
-  "last_updated": "2022-09-30T05:13:18.411707+02:00"
+  "last_updated": 1664480104.875586
 }'''
