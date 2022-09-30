@@ -244,8 +244,10 @@ class SignatureDataController:
             self.cache_duration = timedelta(seconds=new_data['cache_duration'])
 
     def fetch_signatures_from_web(self):
+        if not self.url.startswith("https://"):
+            raise Exception(_("can't open non-https url: '{};".format(self.url)))
         logging.debug(_("downloading '{}'").format(self.url))
-        with urllib.request.urlopen(self.url) as f:
+        with urllib.request.urlopen(self.url) as f:  # nosec B310 scheme filtered above
             self.set_data(json.load(f))
         self.data['last_updated'] = scanner._datetime_now().timestamp()
 
@@ -265,7 +267,9 @@ class ExodusSignatureDataController(SignatureDataController):
             "version": SCANNER_CACHE_VERSION,
         }
 
-        with urllib.request.urlopen(self.url) as f:
+        if not self.url.startswith("https://"):
+            raise Exception(_("can't open non-https url: '{};".format(self.url)))
+        with urllib.request.urlopen(self.url) as f:  # nosec B310 scheme filtered above
             d = json.load(f)
             for tracker in d["trackers"].values():
                 if tracker.get('code_signature'):
@@ -356,7 +360,7 @@ def _get_tool():
     return scanner._SCANNER_TOOL
 
 
-def scan_binary(apkfile, extract_signatures=None):
+def scan_binary(apkfile):
     """Scan output of dexdump for known non-free classes."""
     logging.info(_('Scanning APK with dexdump for known non-free classes.'))
     result = get_embedded_classes(apkfile)
