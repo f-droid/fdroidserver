@@ -383,20 +383,9 @@ def scan_source(build_dir, build=metadata.Build()):
     """
     count = 0
 
-    allowlisted = [
-        'firebase-jobdispatcher',  # https://github.com/firebase/firebase-jobdispatcher-android/blob/master/LICENSE
-        'com.firebaseui',  # https://github.com/firebase/FirebaseUI-Android/blob/master/LICENSE
-        'geofire-android',  # https://github.com/firebase/geofire-java/blob/master/LICENSE
-        'com.yandex.android:authsdk',  # https://github.com/yandexmobile/yandex-login-sdk-android/blob/master/LICENSE.txt
-        'com.hypertrack:hyperlog',  # https://github.com/hypertrack/hyperlog-android#license
-    ]
-
-    def is_allowlisted(s):
-        return any(al in s for al in allowlisted)
-
     def suspects_found(s):
         for n, r in _get_tool().regexs['err_gradle_signatures'].items():
-            if r.match(s) and not is_allowlisted(s):
+            if r.match(s):
                 yield n
 
     allowed_repos = [re.compile(r'^https://' + re.escape(repo) + r'/*') for repo in [
