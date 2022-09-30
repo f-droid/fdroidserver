@@ -265,6 +265,7 @@ black:
         tests/metadata.TestCase
         tests/ndk-release-checksums.py
         tests/rewritemeta.TestCase
+        tests/scanner.TestCase
         tests/signindex.TestCase
         tests/verify.TestCase
 

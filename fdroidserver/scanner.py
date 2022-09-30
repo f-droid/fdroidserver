@@ -136,7 +136,7 @@ def get_embedded_classes(apkfile, depth=0):
     if depth > 10:  # zipbomb protection
         return {_('Max recursion depth in ZIP file reached: %s') % apkfile}
 
-    apk_regex = re.compile(r'.*\.apk')
+    archive_regex = re.compile(r'.*\.(aab|aar|apk|apks|jar|war|xapk|zip)$')
     class_regex = re.compile(r'classes.*\.dex')
     classes = set()
 
@@ -144,11 +144,21 @@ def get_embedded_classes(apkfile, depth=0):
         with TemporaryDirectory() as tmp_dir, zipfile.ZipFile(apkfile, 'r') as apk_zip:
             for info in apk_zip.infolist():
                 # apk files can contain apk files, again
-                if apk_regex.search(info.filename):
-                    with apk_zip.open(info) as apk_fp:
+                with apk_zip.open(info) as apk_fp:
+                    if zipfile.is_zipfile(apk_fp):
                         classes = classes.union(get_embedded_classes(apk_fp, depth + 1))
+                        if not archive_regex.search(info.filename):
+                            classes.add(
+                                'ZIP file without proper file extension: %s'
+                                % info.filename
+                            )
+                        continue
 
-                elif class_regex.search(info.filename):
+                with apk_zip.open(info.filename) as fp:
+                    file_magic = fp.read(3)
+                if file_magic == b'dex':
+                    if not class_regex.search(info.filename):
+                        classes.add('DEX file with fake name: %s' % info.filename)
                     apk_zip.extract(info, tmp_dir)
                     run = common.SdkToolsPopen(
                         ["dexdump", '{}/{}'.format(tmp_dir, info.filename)],
