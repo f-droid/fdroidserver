@@ -545,6 +545,10 @@ class Test_SignatureDataController(unittest.TestCase):
         with self.assertRaises(fdroidserver.scanner.SignatureDataVersionMismatchException):
             sdc.check_data_version()
 
+    @unittest.skipIf(
+        sys.version_info < (3, 9, 0),
+        "mock_open doesn't allow easy access to written data in older python versions",
+    )
     def test_write_to_cache(self):
         open_func = mock.mock_open()
         sdc = fdroidserver.scanner.SignatureDataController('nnn', 'fff.yml', 'https://example.com/test.json')
