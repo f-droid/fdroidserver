@@ -203,7 +203,7 @@ gradlew-fdroid:
 
 # Run all the various linters and static analysis tools.
 lint_format_safety_bandit_checks:
-  image: alpine:3.13
+  image: alpine:3.16
   variables:
     LANG: C.UTF-8
   script:
