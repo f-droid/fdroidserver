@@ -975,6 +975,17 @@ class CommonTest(unittest.TestCase):
                 self.assertEqual(versionCode, vc, 'aapt versionCode parsing failed for ' + apkfilename)
                 self.assertEqual(versionName, vn, 'aapt versionName parsing failed for ' + apkfilename)
 
+    def test_get_apk_id_bad_apk(self):
+        """get_apk_id should never return None on error, only raise exceptions"""
+        with self.assertRaises(KeyError):
+            fdroidserver.common.get_apk_id('Norway_bouvet_europe_2.obf.zip')
+        shutil.copy('Norway_bouvet_europe_2.obf.zip', self.tmpdir)
+        os.chdir(self.tmpdir)
+        with ZipFile('Norway_bouvet_europe_2.obf.zip', 'a') as zipfp:
+            zipfp.writestr('AndroidManifest.xml', 'not a manifest')
+        with self.assertRaises(KeyError):
+            fdroidserver.common.get_apk_id('Norway_bouvet_europe_2.obf.zip')
+
     def test_get_apk_id_bad_path(self):
         with self.assertRaises(FDroidException):
             fdroidserver.common.get_apk_id('nope')
