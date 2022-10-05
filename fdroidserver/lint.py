@@ -670,7 +670,7 @@ def check_updates_expected(app):
         app.get(key, 'None') == 'None' for key in ('AutoUpdateMode', 'UpdateCheckMode')
     ):
         yield _(
-            'App has NoSourceSince or ArchivePolicy "0 versions" but AutoUpateMode or UpdateCheck are not None'
+            'App has NoSourceSince or ArchivePolicy "0 versions" but AutoUpdateMode or UpdateCheckMode are not None'
         )
 
 
