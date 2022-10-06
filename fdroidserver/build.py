@@ -987,7 +987,7 @@ def main():
         if not options.appid and not options.all:
             parser.error("option %s: If you really want to build all the apps, use --all" % "all")
 
-    config = common.read_config(options)
+    config = common.read_config(opts=options)
 
     if config['build_server_always']:
         options.server = True

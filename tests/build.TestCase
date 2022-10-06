@@ -402,7 +402,7 @@ class BuildTest(unittest.TestCase):
         os.chdir(testdir)
         os.mkdir("build")
 
-        config = dict()
+        config = fdroidserver.common.get_config()
         config['sdk_path'] = os.getenv('ANDROID_HOME')
         config['ndk_paths'] = {'r10d': os.getenv('ANDROID_NDK_HOME')}
         fdroidserver.common.config = config

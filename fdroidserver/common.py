@@ -76,7 +76,7 @@ from fdroidserver.exception import FDroidException, VCSException, NoSubmodulesEx
     BuildException, VerificationException, MetaDataException
 from .asynchronousfilereader import AsynchronousFileReader
 
-from . import apksigcopier
+from . import apksigcopier, common
 
 
 # The path to this fdroidserver distribution
@@ -130,7 +130,6 @@ default_config = {
     'ant': "ant",
     'mvn3': "mvn",
     'gradle': os.path.join(FDROID_PATH, 'gradlew-fdroid'),
-    'gradle_version_dir': str(Path.home() / '.cache/fdroidserver/gradle'),
     'sync_from_local_copy_dir': False,
     'allow_disabled_algorithms': False,
     'per_app_repos': False,
@@ -318,6 +317,31 @@ def fill_config_defaults(thisconfig):
                 if k == ndkdict.get('revision'):
                     ndk_paths[ndkdict['release']] = ndk_paths.pop(k)
                     break
+
+    if 'cachedir_scanner' not in thisconfig:
+        thisconfig['cachedir_scanner'] = str(Path(thisconfig['cachedir']) / 'scanner')
+    if 'gradle_version_dir' not in thisconfig:
+        thisconfig['gradle_version_dir'] = str(Path(thisconfig['cachedir']) / 'gradle')
+
+
+def get_config(opts=None):
+    """Get config instace. This function takes care of initializing config data before returning it."""
+    global config, options
+
+    if config is not None:
+        return config
+
+    config = {}
+    common.fill_config_defaults(config)
+    common.read_config(opts=opts)
+
+    # make sure these values are available in common.py even if they didn't
+    # declare global in a scope
+    common.config = config
+    if opts is not None:
+        common.options = opts
+
+    return config
 
 
 def regsub_file(pattern, repl, path):

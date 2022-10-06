@@ -45,3 +45,10 @@ class BuildException(FDroidException):
 
 class VerificationException(FDroidException):
     pass
+
+
+class ConfigurationException(FDroidException):
+    def __init__(self, value=None, detail=None):
+        super().__init__()
+        self.value = value
+        self.detail = detail

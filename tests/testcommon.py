@@ -36,8 +36,7 @@ class TmpCwd():
 
 
 class TmpPyPath():
-    """Context-manager for temporarily changing the current working
-    directory.
+    """Context-manager for temporarily adding a direcory to python path
     """
 
     def __init__(self, additional_path):
@@ -48,3 +47,14 @@ class TmpPyPath():
 
     def __exit__(self, a, b, c):
         sys.path.remove(self.additional_path)
+
+
+def mock_open_to_str(mock):
+    """
+    helper function for accessing all data written into a
+    unittest.mock.mock_open() instance as a string.
+    """
+
+    return "".join([
+        x.args[0] for x in mock.mock_calls if str(x).startswith("call().write(")
+    ])
