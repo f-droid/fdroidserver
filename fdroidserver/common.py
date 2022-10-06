@@ -325,7 +325,7 @@ def fill_config_defaults(thisconfig):
 
 
 def get_config(opts=None):
-    """Get config instace. This function takes care of initaling config data before returning it."""
+    """Get config instace. This function takes care of initializing config data before returning it."""
     global config, options
 
     if config is not None:

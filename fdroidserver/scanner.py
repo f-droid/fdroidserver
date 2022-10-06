@@ -353,7 +353,7 @@ def _get_tool():
     """
     Lazy loading function for getting a ScannerTool instance.
 
-    ScannerTool initialization need to access `common.config` values. Those are only available after initialization through `common.read_config()` So this factory assumes config was called at an erlier point in time
+    ScannerTool initialization need to access `common.config` values. Those are only available after initialization through `common.read_config()`. So this factory assumes config was called at an erlier point in time.
     """
     if not scanner._SCANNER_TOOL:
         scanner._SCANNER_TOOL = ScannerTool()
@@ -682,7 +682,7 @@ def main():
     parser.add_argument("--json", action="store_true", default=False,
                         help=_("Output JSON to stdout."))
     parser.add_argument("--refresh", "-r", action="store_true", default=False,
-                        help=_("fetach the latest version of signatures from the web"))
+                        help=_("fetch the latest version of signatures from the web"))
     metadata.add_metadata_arguments(parser)
     options = parser.parse_args()
     metadata.warnings_action = options.W
