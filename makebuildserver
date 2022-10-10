@@ -44,8 +44,21 @@ logging.basicConfig(format=logformat, level=loglevel)
 tail = None
 
 BASEBOX_DEFAULT = 'fdroid/bullseye64'
-BASEBOX_VERSION_DEFAULT = '11.20220317.1'
+BASEBOX_VERSION_DEFAULT = "11.20221010.1"
 BASEBOX_CHECKSUMS = {
+    "11.20221010.1": {
+        "libvirt": {
+            "box.img": "c2114aa276c176fa65b8072f5dcd1e8a6ab9f7d15fd5da791727a0164fd43254",
+            "Vagrantfile": "f9c6fcbb47a4d0d33eb066859c8e87efd642287a638bd7da69a9e7a6f25fec47",
+            "metadata.json": "42b96a01106c25f3a222ddad0baead0b811cc64926f924fb836bbfa43580e646",
+        },
+        "virtualbox": {
+            "box.ovf": "5e4de5f1f4b481b2c1917c0b2f6e6334f4741cc18c5b278e3bafb094535ff2cb",
+            "box.vmdk": "737053bc886037ae76bb38a1776eba2a5579d49423de990e93ef4a3f0cab4f1c",
+            "Vagrantfile": "0bbc2ae97668d8da27ab97b766752dcd0bf9e41900e21057de15a58ee7fae47d",
+            "metadata.json": "ffdaa989f2f6932cd8042e1102371f405cc7ad38e324210a1326192e4689e83a",
+        }
+    },
     '11.20220317.1': {
         'libvirt': {
             'box.img': 'fbde152a2f61d191983be9d1dbeae2591af32cca1ec27daa342485d97187515e',
