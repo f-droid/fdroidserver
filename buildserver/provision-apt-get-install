@@ -56,7 +56,9 @@ packages="
  default-jre-headless
  dexdump
  fdroidserver
+ git-svn
  gnupg
+ mercurial
  patch
  rsync
  sudo
