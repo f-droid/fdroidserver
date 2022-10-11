@@ -369,7 +369,7 @@ fdroid build:
     - ln -fsv "$CI_PROJECT_DIR" "$fdroidserver"
 
     # TODO remove sdkmanager install once it is included in the buildserver image
-    - pip3 install git+https://gitlab.com/fdroid/sdkmanager.git@0.5.2
+    - apt-get install sdkmanager
     - rm -rf "$ANDROID_HOME/tools" # TODO remove once sdkmanager can upgrade installed packages
     - sdkmanager "tools" "platform-tools" "build-tools;31.0.0"
 
