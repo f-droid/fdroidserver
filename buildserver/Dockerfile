@@ -1,5 +1,5 @@
 
-FROM debian:stretch
+FROM debian:bullseye
 
 ENV LANG=C.UTF-8 \
     DEBIAN_FRONTEND=noninteractive

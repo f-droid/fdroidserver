@@ -122,11 +122,6 @@ cat <<EOF > $ANDROID_HOME/licenses/intel-android-extra-license
 d975f751698a77b662f1254ddbeed3901e976f5a
 EOF
 
-echo y | $ANDROID_HOME/tools/bin/sdkmanager "extras;m2repository;com;android;support;constraint;constraint-layout;1.0.1"
-echo y | $ANDROID_HOME/tools/bin/sdkmanager "extras;m2repository;com;android;support;constraint;constraint-layout-solver;1.0.1"
-echo y | $ANDROID_HOME/tools/bin/sdkmanager "extras;m2repository;com;android;support;constraint;constraint-layout;1.0.2"
-echo y | $ANDROID_HOME/tools/bin/sdkmanager "extras;m2repository;com;android;support;constraint;constraint-layout-solver;1.0.2"
-
 chmod a+X $(dirname $ANDROID_HOME/)
 chmod -R a+rX $ANDROID_HOME/
 chgrp vagrant $ANDROID_HOME

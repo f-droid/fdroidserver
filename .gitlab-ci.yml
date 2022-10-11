@@ -407,7 +407,7 @@ fdroid build:
 # fdroiddata because that one is known to work, and this is a CI job,
 # so it should be isolated from the normal churn of fdroiddata.
 plugin_fetchsrclibs:
-  image: debian:buster
+  image: debian:bullseye
   <<: *apt-template
   only:
     changes:
@@ -430,7 +430,8 @@ plugin_fetchsrclibs:
     - . env/bin/activate
     - export PATH="$CI_PROJECT_DIR:$PATH"
     - export PYTHONPATH="$CI_PROJECT_DIR/examples"
-    - $pip install wheel  # to make this go away: "error: invalid command 'bdist_wheel'"
+    # workaround https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1003252
+    - export SETUPTOOLS_USE_DISTUTILS=stdlib
     - $pip install -e .
     - fdroid | grep fetchsrclibs
 
@@ -588,7 +589,7 @@ docker:
     - cd buildserver
     - docker build -t $TEST_IMAGE --build-arg GIT_REV_PARSE_HEAD=$(git rev-parse HEAD) .
     - docker tag $TEST_IMAGE $RELEASE_IMAGE
-    - docker tag $TEST_IMAGE ${RELEASE_IMAGE}-stretch
+    - docker tag $TEST_IMAGE ${RELEASE_IMAGE}-bullseye
     - echo $CI_BUILD_TOKEN | docker login -u gitlab-ci-token --password-stdin registry.gitlab.com
     # This avoids filling up gitlab.com free tier accounts with unused docker images.
     - if test -n "$FDROID_PUSH_DOCKER_IMAGE"; then
@@ -598,4 +599,4 @@ docker:
           exit 0;
       fi
     - docker push $RELEASE_IMAGE
-    - docker push $RELEASE_IMAGE-stretch
+    - docker push $RELEASE_IMAGE-bullseye
