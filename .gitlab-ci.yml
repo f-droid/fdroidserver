@@ -592,7 +592,7 @@ docker:
     - docker tag $TEST_IMAGE ${RELEASE_IMAGE}-bullseye
     - echo $CI_BUILD_TOKEN | docker login -u gitlab-ci-token --password-stdin registry.gitlab.com
     # This avoids filling up gitlab.com free tier accounts with unused docker images.
-    - if test -n "$FDROID_PUSH_DOCKER_IMAGE"; then
+    - if test -z "$FDROID_PUSH_DOCKER_IMAGE"; then
           echo "Skipping docker push to save quota on your gitlab namespace.";
           echo "If you want to enable the push, set FDROID_PUSH_DOCKER_IMAGE in";
           echo "https://gitlab.com/$CI_PROJECT_NAMESPACE/fdroidserver/-/settings/ci_cd#js-cicd-variables-settings";
