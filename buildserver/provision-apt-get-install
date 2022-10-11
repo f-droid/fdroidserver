@@ -51,7 +51,7 @@ apt-get upgrade
 apt-get update || apt-get update
 
 packages="
- apksigner/bullseye-backports
+ apksigner
  default-jdk-headless
  default-jre-headless
  dexdump
