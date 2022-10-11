@@ -2930,7 +2930,6 @@ def replace_build_vars(cmd, build):
 def replace_config_vars(cmd, build):
     cmd = cmd.replace('$$SDK$$', config['sdk_path'])
     cmd = cmd.replace('$$NDK$$', build.ndk_path())
-    cmd = cmd.replace('$$MVN3$$', config['mvn3'])
     if build is not None:
         cmd = replace_build_vars(cmd, build)
     return cmd
