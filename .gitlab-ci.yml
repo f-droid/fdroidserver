@@ -400,6 +400,8 @@ fdroid build:
 
     # each `fdroid build --on-server` run expects sudo, then uninstalls it
     - if dpkg --list sudo; then echo "sudo should not be still there"; exit 1; fi
+    - 'if [ ! -f repo/status/running.json ]; then echo "ERROR: running.json does not exist!"; exit 1; fi'
+    - 'if [ ! -f repo/status/build.json ]; then echo "ERROR: build.json does not exist!"; exit 1; fi'
 
 
 # test the plugin API and specifically the fetchsrclibs plugin, which
