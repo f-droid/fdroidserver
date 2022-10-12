@@ -35,8 +35,8 @@ RUN useradd --create-home -s /bin/bash vagrant && echo -n 'vagrant:vagrant' | ch
 # Debian Docker images will soon default to HTTPS for apt sources, so force it.
 # https://github.com/debuerreotype/docker-debian-artifacts/issues/15
 #
-# Ensure fdroidserver is installed before purging unneeded packages,
-# otherwise, all its dependencies get purged.
+# Ensure fdroidserver's dependencies are marked manual before purging
+# unneeded packages, otherwise, all its dependencies get purged.
 RUN printf "path-exclude=/usr/share/locale/*\npath-exclude=/usr/share/man/*\npath-exclude=/usr/share/doc/*\npath-include=/usr/share/doc/*/copyright\n" >/etc/dpkg/dpkg.cfg.d/01_nodoc \
 	&& mkdir -p /usr/share/man/man1 \
 	&& apt-get update \
@@ -57,9 +57,8 @@ RUN printf "path-exclude=/usr/share/locale/*\npath-exclude=/usr/share/man/*\npat
 	&& bash /opt/buildserver/provision-gradle \
 	&& bash /opt/buildserver/provision-buildserverid $GIT_REV_PARSE_HEAD \
 	&& rm -rf /vagrant/cache \
-	&& apt-get install fdroidserver \
+	&& apt-mark manual `apt-cache depends fdroidserver | sed -nE 's,^[| ]*Depends: ([a-z0-9 -]+),\1,p'` \
 	&& apt-get autoremove --purge \
-	&& apt-get purge fdroidserver \
 	&& apt-get clean \
 	&& rm -rf /var/lib/apt/lists/*
 
