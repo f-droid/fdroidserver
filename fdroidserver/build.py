@@ -877,6 +877,9 @@ def trybuild(app, build, build_dir, output_dir, log_dir, also_check_dir,
     logging.info("Building version %s (%s) of %s" % (
         build.versionName, build.versionCode, app.id))
 
+    if not onserver:
+        common.write_running_status_json(status_output)
+
     if server:
         # When using server mode, still keep a local cache of the repo, by
         # grabbing the source now.
@@ -1070,6 +1073,9 @@ def main():
                 app['Builds'] = [build]
                 break
 
+    if not options.onserver:
+        common.write_running_status_json(status_output)
+
     # Build applications...
     failed_builds = []
     build_succeeded = []
@@ -1105,7 +1111,6 @@ def main():
             tools_version_log = ''
             if not options.onserver:
                 tools_version_log = common.get_android_tools_version_log()
-                common.write_running_status_json(status_output)
             try:
 
                 # For the first build of a particular app, we need to set up
