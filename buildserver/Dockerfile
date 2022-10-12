@@ -40,7 +40,7 @@ RUN useradd --create-home -s /bin/bash vagrant && echo -n 'vagrant:vagrant' | ch
 RUN printf "path-exclude=/usr/share/locale/*\npath-exclude=/usr/share/man/*\npath-exclude=/usr/share/doc/*\npath-include=/usr/share/doc/*/copyright\n" >/etc/dpkg/dpkg.cfg.d/01_nodoc \
 	&& mkdir -p /usr/share/man/man1 \
 	&& apt-get update \
-	&& apt-get install apt-transport-https ca-certificates \
+	&& apt-get install ca-certificates \
 	&& sed -i 's,http:,https:,' /etc/apt/sources.list \
 	&& apt-get upgrade \
 	&& apt-get dist-upgrade \
