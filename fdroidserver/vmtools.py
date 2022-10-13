@@ -18,16 +18,13 @@
 
 from os.path import isdir, isfile, basename, abspath, expanduser
 import os
-import math
 import json
-import tarfile
 import shutil
 import subprocess
 import textwrap
 import logging
 from .common import FDroidException
 
-from fdroidserver import _
 import threading
 
 lock = threading.Lock()
@@ -283,9 +280,6 @@ class FDroidBuildVm:
         except subprocess.CalledProcessError as e:
             logging.debug('pruning global vagrant status failed: %s', e)
 
-    def package(self, output=None):
-        self.vgrnt.package(output=output)
-
     def vagrant_uuid_okay(self):
         """Having an uuid means that vagrant up has run successfully."""
         if self.srvuuid is None:
@@ -379,18 +373,6 @@ class FDroidBuildVm:
         except subprocess.CalledProcessError as e:
             raise FDroidBuildVmException("Error getting ssh config") from e
 
-    def snapshot_create(self, snapshot_name):
-        raise NotImplementedError('not implemented, please use a sub-type instance')
-
-    def snapshot_list(self):
-        raise NotImplementedError('not implemented, please use a sub-type instance')
-
-    def snapshot_exists(self, snapshot_name):
-        raise NotImplementedError('not implemented, please use a sub-type instance')
-
-    def snapshot_revert(self, snapshot_name):
-        raise NotImplementedError('not implemented, please use a sub-type instance')
-
 
 class LibvirtBuildVm(FDroidBuildVm):
     def __init__(self, srvdir):
@@ -421,95 +403,6 @@ class LibvirtBuildVm(FDroidBuildVm):
         except subprocess.CalledProcessError as e:
             logging.info("could not undefine libvirt domain '%s': %s", self.srvname, e)
 
-    def package(self, output=None, keep_box_file=False):
-        if not output:
-            output = "buildserver.box"
-            logging.debug("no output name set for packaging '%s', "
-                          "defaulting to %s", self.srvname, output)
-        storagePool = self.conn.storagePoolLookupByName('default')
-        domainInfo = self.conn.lookupByName(self.srvname).info()
-        if storagePool:
-
-            if isfile('metadata.json'):
-                os.remove('metadata.json')
-            if isfile('Vagrantfile'):
-                os.remove('Vagrantfile')
-            if isfile('box.img'):
-                os.remove('box.img')
-
-            logging.debug('preparing box.img for box %s', output)
-            vol = storagePool.storageVolLookupByName(self.srvname + '.img')
-            imagepath = vol.path()
-            # TODO use a libvirt storage pool to ensure the img file is readable
-            if not os.access(imagepath, os.R_OK):
-                logging.warning(_('Cannot read "{path}"!').format(path=imagepath))
-                _check_call(
-                    ['sudo', '/bin/chmod', '-R', 'a+rX', '/var/lib/libvirt/images']
-                )
-            shutil.copy2(imagepath, 'box.img')
-            _check_call(['qemu-img', 'rebase', '-p', '-b', '', 'box.img'])
-            img_info_raw = _check_output(
-                ['qemu-img', 'info', '--output=json', 'box.img']
-            )
-            img_info = json.loads(img_info_raw.decode('utf-8'))
-            metadata = {
-                "provider": "libvirt",
-                "format": img_info['format'],
-                "virtual_size": math.ceil(img_info['virtual-size'] / (1024.0 ** 3)),
-            }
-
-            logging.debug('preparing metadata.json for box %s', output)
-            with open('metadata.json', 'w') as fp:
-                fp.write(json.dumps(metadata))
-            logging.debug('preparing Vagrantfile for box %s', output)
-            vagrantfile = textwrap.dedent(
-                """\
-                  Vagrant.configure("2") do |config|
-
-                    config.vm.provider :libvirt do |libvirt|
-
-                      libvirt.driver = "kvm"
-                      libvirt.host = ""
-                      libvirt.connect_via_ssh = false
-                      libvirt.storage_pool_name = "default"
-                      libvirt.cpus = {cpus}
-                      libvirt.memory = {memory}
-
-                    end
-                  end""".format_map(
-                    {
-                        'memory': str(int(domainInfo[1] / 1024)),
-                        'cpus': str(domainInfo[3]),
-                    }
-                )
-            )
-            with open('Vagrantfile', 'w') as fp:
-                fp.write(vagrantfile)
-            try:
-                import libarchive
-
-                with libarchive.file_writer(output, 'gnutar', 'gzip') as tar:
-                    logging.debug('adding files to box %s ...', output)
-                    tar.add_files('metadata.json', 'Vagrantfile', 'box.img')
-            except (ImportError, AttributeError):
-                with tarfile.open(output, 'w:gz') as tar:
-                    logging.debug('adding metadata.json to box %s ...', output)
-                    tar.add('metadata.json')
-                    logging.debug('adding Vagrantfile to box %s ...', output)
-                    tar.add('Vagrantfile')
-                    logging.debug('adding box.img to box %s ...', output)
-                    tar.add('box.img')
-
-            if not keep_box_file:
-                logging.debug('box packaging complete, removing temporary files.')
-                os.remove('metadata.json')
-                os.remove('Vagrantfile')
-                os.remove('box.img')
-
-        else:
-            logging.warning("could not connect to storage-pool 'default', "
-                            "skip packaging buildserver box")
-
     def box_add(self, boxname, boxfile, force=True):
         boximg = '%s_vagrant_box_image_0.img' % (boxname)
         if force:
@@ -530,84 +423,9 @@ class LibvirtBuildVm(FDroidBuildVm):
         except subprocess.CalledProcessError as e:
             logging.debug("tried removing '%s', file was not present in first place", boxname, exc_info=e)
 
-    def snapshot_create(self, snapshot_name):
-        logging.info("creating snapshot '%s' for vm '%s'", snapshot_name, self.srvname)
-        try:
-            _check_call(['virsh', '-c', 'qemu:///system', 'snapshot-create-as', self.srvname, snapshot_name])
-        except subprocess.CalledProcessError as e:
-            raise FDroidBuildVmException("could not create snapshot '%s' "
-                                         "of libvirt vm '%s'"
-                                         % (snapshot_name, self.srvname)) from e
-
-    def snapshot_list(self):
-        import libvirt
-        try:
-            dom = self.conn.lookupByName(self.srvname)
-            return dom.listAllSnapshots()
-        except libvirt.libvirtError as e:
-            raise FDroidBuildVmException('could not list snapshots for domain \'%s\'' % self.srvname) from e
-
-    def snapshot_exists(self, snapshot_name):
-        import libvirt
-
-        try:
-            dom = self.conn.lookupByName(self.srvname)
-            return dom.snapshotLookupByName(snapshot_name) is not None
-        except libvirt.libvirtError:
-            return False
-
-    def snapshot_revert(self, snapshot_name):
-        logging.info("reverting vm '%s' to snapshot '%s'", self.srvname, snapshot_name)
-        import libvirt
-
-        try:
-            dom = self.conn.lookupByName(self.srvname)
-            snap = dom.snapshotLookupByName(snapshot_name)
-            dom.revertToSnapshot(snap)
-        except libvirt.libvirtError as e:
-            raise FDroidBuildVmException('could not revert domain \'%s\' to snapshot \'%s\''
-                                         % (self.srvname, snapshot_name)) from e
-
 
 class VirtualboxBuildVm(FDroidBuildVm):
 
     def __init__(self, srvdir):
         self.provider = 'virtualbox'
         super().__init__(srvdir)
-
-    def snapshot_create(self, snapshot_name):
-        logging.info("creating snapshot '%s' for vm '%s'", snapshot_name, self.srvname)
-        try:
-            _check_call(['VBoxManage', 'snapshot', self.srvuuid, 'take', 'fdroidclean'], cwd=self.srvdir)
-        except subprocess.CalledProcessError as e:
-            raise FDroidBuildVmException('could not cerate snapshot '
-                                         'of virtualbox vm %s'
-                                         % self.srvname) from e
-
-    def snapshot_list(self):
-        try:
-            o = _check_output(['VBoxManage', 'snapshot',
-                               self.srvuuid, 'list',
-                               '--details'], cwd=self.srvdir)
-            return o
-        except subprocess.CalledProcessError as e:
-            raise FDroidBuildVmException("could not list snapshots "
-                                         "of virtualbox vm '%s'"
-                                         % (self.srvname)) from e
-
-    def snapshot_exists(self, snapshot_name):
-        try:
-            return str(snapshot_name) in str(self.snapshot_list())
-        except FDroidBuildVmException:
-            return False
-
-    def snapshot_revert(self, snapshot_name):
-        logging.info("reverting vm '%s' to snapshot '%s'",
-                     self.srvname, snapshot_name)
-        try:
-            _check_call(['VBoxManage', 'snapshot', self.srvuuid,
-                         'restore', 'fdroidclean'], cwd=self.srvdir)
-        except subprocess.CalledProcessError as e:
-            raise FDroidBuildVmException("could not load snapshot "
-                                         "'fdroidclean' for vm '%s'"
-                                         % (self.srvname)) from e

@@ -2,7 +2,13 @@ require 'yaml'
 require 'pathname'
 
 srvpath = Pathname.new(File.dirname(__FILE__)).realpath
-configfile = YAML.load_file(File.join(srvpath, "/Vagrantfile.yaml"))
+configpath = File.join(srvpath, "/Vagrantfile.yaml")
+if File.exists? configpath
+  configfile = YAML.load_file(configpath)
+else
+  puts "#{configpath} does not exist, run ./makebuildserver?"
+  configfile = Hash.new
+end
 
 Vagrant.configure("2") do |config|
 
