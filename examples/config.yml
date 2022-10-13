@@ -355,3 +355,19 @@
 # lint_licenses:
 #   - Custom-License-A
 #   - Another-License
+
+# `fdroid scanner` can scan for signatures from various sources. By default
+# it's configured to only use F-Droids official SUSS collection. We have
+# support for these special collections:
+#  * 'exodus' - official exodus-privacy.org signatures
+#  * 'etip' - exodus privacy investigation platfrom community contributed
+#           signatures
+#  * 'suss' - official F-Droid: Suspicious or Unwanted Software Signatures
+# You can also configure scanner to use custom collections of signatures here.
+# They have to follow the format specified in the SUSS readme.
+# (https://gitlab.com/fdroid/fdroid-suss/#cache-file-data-format)
+#
+# scanner_signature_sources:
+#   - suss
+#   - exodus
+#   - https://example.com/signatures.json

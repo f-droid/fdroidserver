@@ -163,6 +163,7 @@ default_config = {
     'archive_older': 0,
     'lint_licenses': fdroidserver.lint.APPROVED_LICENSES,  # type: ignore
     'git_mirror_size_limit': 10000000000,
+    'scanner_signature_sources': ['suss'],
 }
 
 

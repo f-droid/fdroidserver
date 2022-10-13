@@ -656,6 +656,37 @@ class Test_SignatureDataController(unittest.TestCase):
         func_fsfw.assert_called_once_with()
         func_wtc.assert_called_once_with()
 
+    def test_load_try_web_when_no_defaults(self):
+        sdc = fdroidserver.scanner.SignatureDataController(
+            'nnn', 'fff.yml', 'https://example.com/test.json'
+        )
+        func_lfc = mock.Mock(
+            side_effect=fdroidserver.scanner.SignatureDataCacheMissException()
+        )
+        func_lfd = mock.Mock(
+            side_effect=fdroidserver.scanner.SignatureDataNoDefaultsException()
+        )
+        func_fsfw = mock.Mock()
+        func_wtc = mock.Mock()
+        with mock.patch(
+            'fdroidserver.scanner.SignatureDataController.load_from_cache',
+            func_lfc,
+        ), mock.patch(
+            'fdroidserver.scanner.SignatureDataController.load_from_defaults',
+            func_lfd,
+        ), mock.patch(
+            'fdroidserver.scanner.SignatureDataController.fetch_signatures_from_web',
+            func_fsfw,
+        ), mock.patch(
+            'fdroidserver.scanner.SignatureDataController.write_to_cache',
+            func_wtc,
+        ):
+            sdc.load()
+        func_lfc.assert_called_once_with()
+        func_lfd.assert_called_once_with()
+        func_fsfw.assert_called_once_with()
+        func_wtc.assert_called_once_with()
+
     @unittest.skipIf(
         sys.version_info < (3, 9, 0),
         "mock_open doesn't allow easy access to written data in older python versions",
