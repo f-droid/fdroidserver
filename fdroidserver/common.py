@@ -336,8 +336,6 @@ def get_config(opts=None):
     if config is not None:
         return config
 
-    config = {}
-    common.fill_config_defaults(config)
     common.read_config(opts=opts)
 
     # make sure these values are available in common.py even if they didn't
