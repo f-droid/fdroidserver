@@ -521,6 +521,21 @@ def checkupdates_app(app):
 
             if not gotcur:
                 newbuilds = copy.deepcopy(builds[-len(vercodes):])
+
+                bullseye_blocklist = [
+                    'apt-get install -y openjdk-11-jdk',
+                    'apt-get install -y openjdk-11-jdk-headless',
+                    'apt-get install -t stretch-backports openjdk-11-jdk-headless openjdk-11-jre-headless',
+                    'apt-get install -y -t stretch-backports openjdk-11-jdk-headless openjdk-11-jre-headless',
+                    'update-alternatives --auto java',
+                ]
+
+                for build in newbuilds:
+                    if "sudo" in build:
+                        build["sudo"] = [line for line in build["sudo"] if line not in bullseye_blocklist]
+                        if build["sudo"] == ['apt-get update']:
+                            build["sudo"] = ''
+
                 for b, v in zip(newbuilds, vercodes):
                     b.disable = False
                     b.versionCode = v
