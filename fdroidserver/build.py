@@ -877,9 +877,6 @@ def trybuild(app, build, build_dir, output_dir, log_dir, also_check_dir,
     logging.info("Building version %s (%s) of %s" % (
         build.versionName, build.versionCode, app.id))
 
-    if not onserver:
-        common.write_running_status_json(status_output)
-
     if server:
         # When using server mode, still keep a local cache of the repo, by
         # grabbing the source now.
@@ -1199,6 +1196,9 @@ def main():
                     build_succeeded.append(app)
                     build_succeeded_ids.append([app['id'], build.versionCode])
 
+                    if not options.onserver:
+                        common.write_running_status_json(status_output)
+
             except VCSException as vcse:
                 reason = str(vcse).split('\n', 1)[0] if options.verbose else str(vcse)
                 logging.error("VCS error while building app %s: %s" % (
@@ -1210,6 +1210,9 @@ def main():
                 common.deploy_build_log_with_rsync(
                     appid, build.versionCode, "".join(traceback.format_exc())
                 )
+                if not options.onserver:
+                    common.write_running_status_json(status_output)
+
             except FDroidException as e:
                 tstamp = time.strftime("%Y-%m-%d %H:%M:%SZ", time.gmtime())
                 with open(os.path.join(log_dir, appid + '.log'), 'a+') as f:
@@ -1228,6 +1231,9 @@ def main():
                 common.deploy_build_log_with_rsync(
                     appid, build.versionCode, "".join(traceback.format_exc())
                 )
+                if not options.onserver:
+                    common.write_running_status_json(status_output)
+
             except Exception as e:
                 logging.error("Could not build app %s due to unknown error: %s" % (
                     appid, traceback.format_exc()))
@@ -1238,6 +1244,8 @@ def main():
                 common.deploy_build_log_with_rsync(
                     appid, build.versionCode, "".join(traceback.format_exc())
                 )
+                if not options.onserver:
+                    common.write_running_status_json(status_output)
 
             if timer:
                 timer.cancel()  # kill the watchdog timer
