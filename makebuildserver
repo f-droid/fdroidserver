@@ -129,8 +129,6 @@ CACHE_FILES = [
      '7faa7198769f872826c8ef4f1450f839ec27f0b4d5d1e51bade63667cbccd205'),
     ('https://services.gradle.org/distributions/gradle-7.0.2-bin.zip',
      '0e46229820205440b48a5501122002842b82886e76af35f0f3a069243dca4b3c'),
-    ('https://dl.google.com/android/repository/android-ndk-r23c-linux.zip',
-     '6ce94604b77d28113ecd588d425363624a5228d9662450c48d2e4053f8039242'),
 ]
 
 
