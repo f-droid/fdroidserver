@@ -1100,8 +1100,6 @@ def main():
                 timer = None
 
             tools_version_log = ''
-            if not options.onserver:
-                tools_version_log = common.get_android_tools_version_log()
             try:
 
                 # For the first build of a particular app, we need to set up
