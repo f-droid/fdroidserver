@@ -69,7 +69,7 @@ class ImportTest(unittest.TestCase):
                     'cn.wildfirechat.chat',
                     'https://github.com/wildfirechat/android-chat',
                     '0.6.9',
-                    '23',
+                    23,
                 ),
                 (
                     'com.anpmech.launcher',
@@ -81,7 +81,7 @@ class ImportTest(unittest.TestCase):
                     'ut.ewh.audiometrytest',
                     'https://github.com/ReeceStevens/ut_ewh_audiometer_2014',
                     '1.65',
-                    '14',
+                    14,
                 ),
             )
             for appid, url, vn, vc in data:

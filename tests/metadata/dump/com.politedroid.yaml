@@ -44,7 +44,7 @@ Builds:
   sudo: ''
   target: android-10
   timeout: null
-  versionCode: '3'
+  versionCode: 3
   versionName: '1.2'
 - androidupdate: []
   antcommands: []
@@ -78,7 +78,7 @@ Builds:
   sudo: ''
   target: android-15
   timeout: null
-  versionCode: '4'
+  versionCode: 4
   versionName: '1.3'
 - androidupdate: []
   antcommands: []
@@ -112,7 +112,7 @@ Builds:
   sudo: ''
   target: android-10
   timeout: null
-  versionCode: '5'
+  versionCode: 5
   versionName: '1.4'
 - androidupdate: []
   antcommands: []
@@ -147,13 +147,13 @@ Builds:
   sudo: echo 'this is just a test'
   target: null
   timeout: null
-  versionCode: '6'
+  versionCode: 6
   versionName: '1.5'
 Categories:
 - Time
 Changelog: ''
 CurrentVersion: '1.5'
-CurrentVersionCode: '6'
+CurrentVersionCode: 6
 Description: Activates silent mode during calendar events.
 Disabled: null
 Donate: null

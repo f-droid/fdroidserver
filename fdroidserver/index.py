@@ -637,7 +637,7 @@ def convert_version(version, app, repodir):
             manifest[element] = version[element]
 
     if "versionCode" in version:
-        manifest["versionCode"] = int(version["versionCode"])
+        manifest["versionCode"] = version["versionCode"]
 
     if "features" in version and version["features"]:
         manifest["features"] = features = []
@@ -684,12 +684,11 @@ def convert_version(version, app, repodir):
             ver["antiFeatures"][antif] = {}
 
     if "versionCode" in version:
-        if int(version["versionCode"]) > int(app["CurrentVersionCode"]):
+        if version["versionCode"] > app["CurrentVersionCode"]:
             ver["releaseChannels"] = ["Beta"]
 
-    versionCodeStr = str(version['versionCode'])  # TODO build.versionCode should be int!
     for build in app.get('Builds', []):
-        if build['versionCode'] == versionCodeStr and "whatsNew" in build:
+        if build['versionCode'] == version['versionCode'] and "whatsNew" in build:
             ver["whatsNew"] = build["whatsNew"]
             break
 
@@ -770,9 +769,8 @@ def make_v2(apps, packages, repodir, repodict, requestsdict, fdroid_signing_key_
             continue
         if not package.get('versionName'):
             app = apps[packageName]
-            versionCodeStr = str(package['versionCode'])  # TODO build.versionCode should be int!
             for build in app.get('Builds', []):
-                if build['versionCode'] == versionCodeStr:
+                if build['versionCode'] == package['versionCode']:
                     versionName = build.get('versionName')
                     logging.info(_('Overriding blank versionName in {apkfilename} from metadata: {version}')
                                  .format(apkfilename=package['apkName'], version=versionName))
@@ -905,6 +903,7 @@ def make_v1(apps, packages, repodir, repodict, requestsdict, fdroid_signing_key_
                 k = 'packageName'
             elif k == 'CurrentVersionCode':  # TODO make SuggestedVersionCode the canonical name
                 k = 'suggestedVersionCode'
+                v = str(v)
             elif k == 'CurrentVersion':  # TODO make SuggestedVersionName the canonical name
                 k = 'suggestedVersionName'
             else:
@@ -931,9 +930,8 @@ def make_v1(apps, packages, repodir, repodict, requestsdict, fdroid_signing_key_
             continue
         if not package.get('versionName'):
             app = apps[packageName]
-            versionCodeStr = str(package['versionCode'])  # TODO build.versionCode should be int!
             for build in app.get('Builds', []):
-                if build['versionCode'] == versionCodeStr:
+                if build['versionCode'] == package['versionCode']:
                     versionName = build.get('versionName')
                     logging.info(_('Overriding blank versionName in {apkfilename} from metadata: {version}')
                                  .format(apkfilename=package['apkName'], version=versionName))
@@ -1013,7 +1011,7 @@ def v1_sort_packages(packages, fdroid_signing_key_fingerprints):
 
         versionCode = None
         if package.get('versionCode', None):
-            versionCode = -int(package['versionCode'])
+            versionCode = -package['versionCode']
 
         return packageName, group, signer, versionCode
 
@@ -1179,7 +1177,7 @@ def make_v0(apps, apks, repodir, repodict, requestsdict, fdroid_signing_key_fing
         # one is recommended. They are historically mis-named, and need
         # changing, but stay like this for now to support existing clients.
         addElement('marketversion', app.CurrentVersion, doc, apel)
-        addElement('marketvercode', app.CurrentVersionCode, doc, apel)
+        addElement('marketvercode', str(app.CurrentVersionCode), doc, apel)
 
         if app.Provides:
             pv = app.Provides.split(',')
@@ -1214,7 +1212,7 @@ def make_v0(apps, apks, repodir, repodict, requestsdict, fdroid_signing_key_fing
         for apk in apklist:
             file_extension = common.get_file_extension(apk['apkName'])
             # find the APK for the "Current Version"
-            if current_version_code < int(app.CurrentVersionCode):
+            if current_version_code < app.CurrentVersionCode:
                 current_version_file = apk['apkName']
             if current_version_code < apk['versionCode']:
                 current_version_code = apk['versionCode']
@@ -1224,9 +1222,11 @@ def make_v0(apps, apks, repodir, repodict, requestsdict, fdroid_signing_key_fing
 
             versionName = apk.get('versionName')
             if not versionName:
-                versionCodeStr = str(apk['versionCode'])  # TODO build.versionCode should be int!
                 for build in app.get('Builds', []):
-                    if build['versionCode'] == versionCodeStr and 'versionName' in build:
+                    if (
+                        build['versionCode'] == apk['versionCode']
+                        and 'versionName' in build
+                    ):
                         versionName = build['versionName']
                         break
             if versionName:

@@ -240,10 +240,10 @@ def get_lastbuild(builds):
     lastbuild = None
     for build in builds:
         if not build.disable:
-            vercode = int(build.versionCode)
+            vercode = build.versionCode
             if lowest_vercode == -1 or vercode < lowest_vercode:
                 lowest_vercode = vercode
-        if not lastbuild or int(build.versionCode) > int(lastbuild.versionCode):
+        if not lastbuild or build.versionCode > lastbuild.versionCode:
             lastbuild = build
     return lastbuild
 
@@ -327,13 +327,10 @@ filling_ucms = re.compile(r'^(Tags.*|RepoManifest.*)')
 
 def check_checkupdates_ran(app):
     if filling_ucms.match(app.UpdateCheckMode):
-        if (
-            not app.AutoName
-            and not app.CurrentVersion
-            and app.CurrentVersionCode == '0'
-        ):
+        if not app.AutoName and not app.CurrentVersion and app.CurrentVersionCode == 0:
             yield _(
-                "UpdateCheckMode is set but it looks like checkupdates hasn't been run yet"
+                "UpdateCheckMode is set but it looks like"
+                "checkupdates hasn't been run yet"
             )
 
 
@@ -637,7 +634,7 @@ def check_current_version_code(app):
     if archive_policy and archive_policy.split()[0] == "0":
         return
     cv = app.get('CurrentVersionCode')
-    if cv is not None and int(cv) == 0:
+    if cv is not None and cv == 0:
         return
 
     builds = app.get('Builds')
@@ -645,7 +642,7 @@ def check_current_version_code(app):
     min_versionCode = None
     if builds:
         for build in builds:
-            vc = int(build['versionCode'])
+            vc = build['versionCode']
             if min_versionCode is None or min_versionCode > vc:
                 min_versionCode = vc
             if not build.get('disable'):
@@ -654,7 +651,7 @@ def check_current_version_code(app):
                 break
     if active_builds == 0:
         return  # all builds are disabled
-    if cv is not None and int(cv) < min_versionCode:
+    if cv is not None and cv < min_versionCode:
         yield (
             _(
                 'CurrentVersionCode {cv} is less than oldest build entry {versionCode}'

@@ -318,7 +318,7 @@ class IndexTest(unittest.TestCase):
         }
         app = fdroidserver.metadata.parse_metadata(metadatafile)
         app['icon'] = 'info.zwanenburg.caffeinetile.4.xml'
-        app['CurrentVersionCode'] = '4'
+        app['CurrentVersionCode'] = 4
         apps = {app.id: app}
         apk = {
             'hash': 'dbbdd7deadb038862f426b71efe4a64df8c3edf25d669e935f349510e16f65db',

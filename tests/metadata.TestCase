@@ -46,6 +46,14 @@ class MetadataTest(unittest.TestCase):
         # TODO: Python3.6: Accepts a path-like object.
         os.chdir(str(self.basedir))
 
+    def test_fieldtypes_key_exist(self):
+        for k in fdroidserver.metadata.fieldtypes.keys():
+            self.assertTrue(k in fdroidserver.metadata.yaml_app_fields)
+
+    def test_build_flagtypes_key_exist(self):
+        for k in fdroidserver.metadata.flagtypes.keys():
+            self.assertTrue(k in fdroidserver.metadata.build_flags)
+
     def test_FieldValidator_BitcoinAddress(self):
         validator = None
         for vali in fdroidserver.metadata.valuetypes:
