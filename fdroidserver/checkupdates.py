@@ -379,7 +379,6 @@ def _getcvname(app):
 
 
 def fetch_autoname(app, tag):
-
     if not app.RepoType or app.UpdateCheckMode in ('None', 'Static') \
        or app.UpdateCheckName == "Ignore":
         return None
@@ -417,14 +416,23 @@ def fetch_autoname(app, tag):
     return commitmsg
 
 
-def checkupdates_app(app):
+def operate_vercode(operation, vercode):
+    if not common.VERCODE_OPERATION_RE.match(operation):
+        raise MetaDataException(_('Invalid VercodeOperation: {field}')
+                                .format(field=operation))
+    oldvercode = vercode
+    op = operation.replace("%c", str(oldvercode))
+    vercode = common.calculate_math_string(op)
+    logging.debug("Applied vercode operation: %d -> %d" % (oldvercode, vercode))
+    return vercode
 
+
+def checkupdates_app(app):
     # If a change is made, commitmsg should be set to a description of it.
     # Only if this is set will changes be written back to the metadata.
     commitmsg = None
 
     tag = None
-    vercode = None
     mode = app.UpdateCheckMode
     if mode.startswith('Tags'):
         pattern = mode[5:] if len(mode) > 4 else None
@@ -444,30 +452,33 @@ def checkupdates_app(app):
     else:
         raise MetaDataException(_('Invalid UpdateCheckMode: {mode}').format(mode=mode))
 
-    if version and vercode and app.VercodeOperation:
-        if not common.VERCODE_OPERATION_RE.match(app.VercodeOperation):
-            raise MetaDataException(_('Invalid VercodeOperation: {field}')
-                                    .format(field=app.VercodeOperation))
-        oldvercode = str(int(vercode))
-        op = app.VercodeOperation.replace("%c", oldvercode)
-        vercode = str(common.calculate_math_string(op))
-        logging.debug("Applied vercode operation: %s -> %s" % (oldvercode, vercode))
+    if not version or not vercode:
+        raise FDroidException(_('no version information found'))
+
+    if app.VercodeOperation:
+        if isinstance(app.VercodeOperation, str):
+            vercodes = [operate_vercode(app.VercodeOperation, vercode)]
+        else:
+            vercodes = sorted([
+                operate_vercode(operation, vercode)
+                for operation in app.VercodeOperation
+            ])
+    else:
+        vercodes = [vercode]
 
     updating = False
-    if version is None:
-        raise FDroidException(_('no version information found'))
-    elif vercode == app.CurrentVersionCode:
+    if vercodes[-1] == app.CurrentVersionCode:
         logging.debug("...up to date")
-    elif vercode > app.CurrentVersionCode:
+    elif vercodes[-1] > app.CurrentVersionCode:
         logging.debug("...updating - old vercode={0}, new vercode={1}".format(
-            app.CurrentVersionCode, vercode))
+            app.CurrentVersionCode, vercodes[-1]))
         app.CurrentVersion = version
-        app.CurrentVersionCode = vercode
+        app.CurrentVersionCode = vercodes[-1]
         updating = True
     else:
         raise FDroidException(
             _('current version is newer: old vercode={old}, new vercode={new}').format(
-                old=app.CurrentVersionCode, new=vercode
+                old=app.CurrentVersionCode, new=vercodes[-1]
             )
         )
 
@@ -498,35 +509,38 @@ def checkupdates_app(app):
 
             gotcur = False
             latest = None
-            for build in app.get('Builds', []):
-                if build.versionCode >= app.CurrentVersionCode:
-                    gotcur = True
-                if not latest or build.versionCode > latest.versionCode:
-                    latest = build
+            builds = app.get('Builds', [])
 
-            if latest.versionCode > app.CurrentVersionCode:
-                raise FDroidException(
-                    _(
-                        'latest build recipe is newer: old vercode={old}, new vercode={new}'
-                    ).format(old=latest.versionCode, new=app.CurrentVersionCode)
-                )
+            if builds:
+                latest = builds[-1]
+                if latest.versionCode == app.CurrentVersionCode:
+                    gotcur = True
+                elif latest.versionCode > app.CurrentVersionCode:
+                    raise FDroidException(
+                        _(
+                            'latest build recipe is newer: '
+                            'old vercode={old}, new vercode={new}'
+                        ).format(old=latest.versionCode, new=app.CurrentVersionCode)
+                    )
 
             if not gotcur:
-                newbuild = copy.deepcopy(latest)
-                newbuild.disable = False
-                newbuild.versionCode = app.CurrentVersionCode
-                newbuild.versionName = app.CurrentVersion + suffix.replace(
-                    '%c', str(newbuild.versionCode)
-                )
-                logging.info("...auto-generating build for " + newbuild.versionName)
-                if tag:
-                    newbuild.commit = tag
-                else:
-                    commit = pattern.replace('%v', str(app.CurrentVersion))
-                    commit = commit.replace('%c', str(newbuild.versionCode))
-                    newbuild.commit = commit
+                newbuilds = copy.deepcopy(builds[-len(vercodes):])
+                for b, v in zip(newbuilds, vercodes):
+                    b.disable = False
+                    b.versionCode = v
+                    b.versionName = app.CurrentVersion + suffix.replace(
+                        '%c', str(v)
+                    )
+                    logging.info("...auto-generating build for " + b.versionName)
+                    if tag:
+                        b.commit = tag
+                    else:
+                        commit = pattern.replace('%v', app.CurrentVersion)
+                        commit = commit.replace('%c', str(v))
+                        b.commit = commit
 
-                app['Builds'].append(newbuild)
+                app['Builds'].extend(newbuilds)
+
                 name = _getappname(app)
                 ver = _getcvname(app)
                 commitmsg = "Update %s to %s" % (name, ver)

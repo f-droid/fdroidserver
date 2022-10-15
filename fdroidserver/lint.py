@@ -262,10 +262,21 @@ def check_update_check_data_url(app):  # noqa: D403
 
 
 def check_vercode_operation(app):
-    if app.VercodeOperation and not common.VERCODE_OPERATION_RE.match(
-        app.VercodeOperation
-    ):
-        yield _('Invalid VercodeOperation: {field}').format(field=app.VercodeOperation)
+    if not app.VercodeOperation:
+        return
+    ops = (
+        [app.VercodeOperation]
+        if isinstance(app.VercodeOperation, str)
+        else app.VercodeOperation
+    )
+    invalid_ops = []
+    for op in ops:
+        if not common.VERCODE_OPERATION_RE.match(op):
+            invalid_ops += op
+    if invalid_ops:
+        yield _('Invalid VercodeOperation: {invalid_ops}').format(
+            invalid_ops=invalid_ops
+        )
 
 
 def check_ucm_tags(app):
