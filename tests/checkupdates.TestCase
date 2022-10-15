@@ -56,9 +56,10 @@ class CheckupdatesTest(unittest.TestCase):
             with mock.patch('fdroidserver.metadata.write_metadata', mock.Mock()):
                 with mock.patch('subprocess.call', lambda cmd: 0):
                     fdroidserver.checkupdates.checkupdates_app(app)
-                build = app['Builds'][-1]
-                self.assertEqual(build.versionName, '1.1.9')
-                self.assertEqual(build.commit, '1.1.9')
+
+        build = app['Builds'][-1]
+        self.assertEqual(build.versionName, '1.1.9')
+        self.assertEqual(build.commit, '1.1.9')
 
         with mock.patch(
             'fdroidserver.checkupdates.check_http', lambda app: ('1.7.9', 10107)
@@ -67,9 +68,10 @@ class CheckupdatesTest(unittest.TestCase):
                 with mock.patch('subprocess.call', lambda cmd: 0):
                     with self.assertRaises(FDroidException):
                         fdroidserver.checkupdates.checkupdates_app(app)
-                build = app['Builds'][-1]
-                self.assertEqual(build.versionName, '1.1.9')
-                self.assertEqual(build.commit, '1.1.9')
+
+        build = app['Builds'][-1]
+        self.assertEqual(build.versionName, '1.1.9')
+        self.assertEqual(build.commit, '1.1.9')
 
     def test_autoupdatemode_suffix(self):
         fdroidserver.checkupdates.options = mock.Mock()
@@ -95,9 +97,10 @@ class CheckupdatesTest(unittest.TestCase):
             with mock.patch('fdroidserver.metadata.write_metadata', mock.Mock()):
                 with mock.patch('subprocess.call', lambda cmd: 0):
                     fdroidserver.checkupdates.checkupdates_app(app)
-                build = app['Builds'][-1]
-                self.assertEqual(build.versionName, '1.1.9.10109-fdroid')
-                self.assertEqual(build.commit, 'v1.1.9_10109')
+
+        build = app['Builds'][-1]
+        self.assertEqual(build.versionName, '1.1.9.10109-fdroid')
+        self.assertEqual(build.commit, 'v1.1.9_10109')
 
     def test_checkupdates_app_http(self):
         fdroidserver.checkupdates.options = mock.Mock()
@@ -159,9 +162,10 @@ class CheckupdatesTest(unittest.TestCase):
             with mock.patch('fdroidserver.metadata.write_metadata', mock.Mock()):
                 with mock.patch('subprocess.call', lambda cmd: 0):
                     fdroidserver.checkupdates.checkupdates_app(app)
-                build = app['Builds'][-1]
-                self.assertEqual(build.versionName, '1.1.9')
-                self.assertEqual(build.commit, 'v1.1.9')
+
+        build = app['Builds'][-1]
+        self.assertEqual(build.versionName, '1.1.9')
+        self.assertEqual(build.commit, 'v1.1.9')
 
     def test_check_http(self):
         fdroidserver.checkupdates.options = mock.Mock()
@@ -178,8 +182,8 @@ class CheckupdatesTest(unittest.TestCase):
         respmock.read = lambda: 'v1.1.9\nc10109'.encode('utf-8')
         with mock.patch('urllib.request.urlopen', lambda a, b, c: respmock):
             vername, vercode = fdroidserver.checkupdates.check_http(app)
-            self.assertEqual(vername, '1.1.9')
-            self.assertEqual(vercode, 10109)
+        self.assertEqual(vername, '1.1.9')
+        self.assertEqual(vercode, 10109)
 
     def test_check_http_blocks_unknown_schemes(self):
         app = fdroidserver.metadata.App()
@@ -206,7 +210,7 @@ class CheckupdatesTest(unittest.TestCase):
         respmock.read = lambda: 'v1.1.9-beta\nc10109'.encode('utf-8')
         with mock.patch('urllib.request.urlopen', lambda a, b, c: respmock):
             vername, vercode = fdroidserver.checkupdates.check_http(app)
-            self.assertEqual(vername, None)
+        self.assertEqual(vername, None)
 
     def test_check_tags_data(self):
         fdroidserver.checkupdates.options = mock.Mock()
@@ -229,8 +233,8 @@ class CheckupdatesTest(unittest.TestCase):
             _ignored  # silence the linters
             mock_path.is_file.return_falue = True
             vername, vercode, _tag = fdroidserver.checkupdates.check_tags(app, None)
-            self.assertEqual(vername, '1.1.9')
-            self.assertEqual(vercode, 10109)
+        self.assertEqual(vername, '1.1.9')
+        self.assertEqual(vercode, 10109)
 
         app.UpdateCheckData = r'b.txt|c(.*)|.|v(.*)'
         with mock.patch(
@@ -241,8 +245,8 @@ class CheckupdatesTest(unittest.TestCase):
             _ignored  # silence the linters
             mock_path.is_file.return_falue = True
             vername, vercode, _tag = fdroidserver.checkupdates.check_tags(app, None)
-            self.assertEqual(vername, '1.1.0')
-            self.assertEqual(vercode, 10109)
+        self.assertEqual(vername, '1.1.0')
+        self.assertEqual(vercode, 10109)
 
         app.UpdateCheckData = r'b.txt|c(.*)||'
         with mock.patch(
@@ -253,8 +257,8 @@ class CheckupdatesTest(unittest.TestCase):
             _ignored  # silence the linters
             mock_path.is_file.return_falue = True
             vername, vercode, _tag = fdroidserver.checkupdates.check_tags(app, None)
-            self.assertEqual(vername, '1.1.9')
-            self.assertEqual(vercode, 10109)
+        self.assertEqual(vername, '1.1.9')
+        self.assertEqual(vercode, 10109)
 
         vcs.latesttags.return_value = ['Android-1.1.0', '1.1.8']
         app.UpdateCheckData = r'b.txt|c(.*)||Android-([\d.]+)'
@@ -266,22 +270,22 @@ class CheckupdatesTest(unittest.TestCase):
             _ignored  # silence the linters
             mock_path.is_file.return_falue = True
             vername, vercode, _tag = fdroidserver.checkupdates.check_tags(app, None)
-            self.assertEqual(vername, '1.1.0')
-            self.assertEqual(vercode, 10109)
+        self.assertEqual(vername, '1.1.0')
+        self.assertEqual(vercode, 10109)
 
         app.UpdateCheckData = r'|\+(\d+)||Android-([\d.]+)'
         vcs.latesttags.return_value = ['Android-1.1.0+1']
         with mock.patch('fdroidserver.common.getvcs', return_value=vcs):
             vername, vercode, _tag = fdroidserver.checkupdates.check_tags(app, None)
-            self.assertEqual(vername, '1.1.0')
-            self.assertEqual(vercode, 1)
+        self.assertEqual(vername, '1.1.0')
+        self.assertEqual(vercode, 1)
 
         app.UpdateCheckData = '|||'
         vcs.latesttags.return_value = ['2']
         with mock.patch('fdroidserver.common.getvcs', return_value=vcs):
             vername, vercode, _tag = fdroidserver.checkupdates.check_tags(app, None)
-            self.assertEqual(vername, '2')
-            self.assertEqual(vercode, 2)
+        self.assertEqual(vername, '2')
+        self.assertEqual(vercode, 2)
 
 
 if __name__ == "__main__":
