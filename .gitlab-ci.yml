@@ -70,8 +70,8 @@ metadata_v0:
     - echo Etc/UTC > /etc/timezone
     - echo 'APT::Install-Recommends "0";'
            'APT::Install-Suggests "0";'
-           'APT::Acquire::Retries "20";'
            'APT::Get::Assume-Yes "true";'
+           'Acquire::Retries "20";'
            'Dpkg::Use-Pty "0";'
            'quiet "1";'
         >> /etc/apt/apt.conf.d/99gitlab
