@@ -124,29 +124,34 @@ ubuntu_lts_ppa:
     - ./run-tests
 
 
-# Test using Ubuntu/bionic LTS (supported til 2022) with all depends
-# from pypi.  The venv is used to isolate the dist tarball generation
-# environment from the clean install environment.
-ubuntu_bionic_pip:
-  image: ubuntu:bionic
+# Test using Ubuntu/jammy LTS (supported til April, 2027) with depends
+# from pypi and sdkmanager.  The venv is used to isolate the dist
+# tarball generation environment from the clean install environment.
+ubuntu_jammy_pip:
+  image: ubuntu:jammy
   <<: *apt-template
   script:
-    - apt-get install git default-jdk-headless python3-pip python3-venv rsync zipalign libarchive13
+    - apt-get install git default-jdk-headless python3-pip python3-venv rsync
     - rm -rf env
-    - pyvenv env
+    - python3 -m venv env
     - . env/bin/activate
     - $pip install --upgrade babel pip setuptools
     # setup venv to act as release build machine
-    - python -m venv sdist-env
+    - python3 -m venv sdist-env
     - . sdist-env/bin/activate
     - ./setup.py sdist
     - deactivate
     - tar tzf dist/fdroidserver-*.tar.gz
+
     # back to bare machine to act as user's install machine
-    - $pip install --upgrade pip setuptools wheel  # make this go away: "error: invalid command 'bdist_wheel'"
+    - export ANDROID_HOME=/opt/android-sdk
+    - $pip install sdkmanager
+    - sdkmanager 'build-tools;33.0.0'
+
     - $pip install dist/fdroidserver-*.tar.gz
     - tar xzf dist/fdroidserver-*.tar.gz
     - cd fdroidserver-*
+    - export PATH=$PATH:$ANDROID_HOME/build-tools/33.0.0
     - fdroid=`which fdroid` ./tests/run-tests
 
 
