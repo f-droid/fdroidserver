@@ -32,13 +32,6 @@
 #
 # cachedir = 'buildserver/cache'
 
-# A big part of creating a new instance is downloading packages from Debian.
-# This setups up a folder in ~/.cache/fdroidserver to cache the downloaded
-# packages when rebuilding the build server from scratch.  This requires
-# that virtualbox-guest-utils is installed.
-#
-# apt_package_cache = True
-
 # The buildserver can use some local caches to speed up builds,
 # especially when the internet connection is slow and/or expensive.
 # If enabled, the buildserver setup will look for standard caches in

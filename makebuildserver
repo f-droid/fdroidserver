@@ -77,7 +77,6 @@ BASEBOX_CHECKSUMS = {
 config = {
     'basebox': BASEBOX_DEFAULT,
     'debian_mirror': 'https://deb.debian.org/debian/',
-    'apt_package_cache': False,
     'copy_caches_from_host': False,
     'boot_timeout': 600,
     'cachedir': os.path.join(os.getenv('HOME'), '.cache', 'fdroidserver'),
@@ -120,18 +119,6 @@ if config['vm_provider'] == 'libvirt':
             sys.exit(1)
         tmp = os.path.dirname(tmp)
     logging.debug('cache dir %s is accessible for libvirt vm.', config['cachedir'])
-
-if config['apt_package_cache']:
-    config['aptcachedir'] = config['cachedir'] + '/apt/archives'
-    logging.debug('aptcachedir is set to %s', config['aptcachedir'])
-    aptcachelock = os.path.join(config['aptcachedir'], 'lock')
-    if os.path.isfile(aptcachelock):
-        logging.info('apt cache dir is locked, removing lock')
-        os.remove(aptcachelock)
-    aptcachepartial = os.path.join(config['aptcachedir'], 'partial')
-    if os.path.isdir(aptcachepartial):
-        logging.info('removing partial downloads from apt cache dir')
-        shutil.rmtree(aptcachepartial)
 
 CACHE_FILES = [
     ('https://services.gradle.org/distributions/gradle-6.8.3-bin.zip',

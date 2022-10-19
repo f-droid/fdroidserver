@@ -69,7 +69,6 @@ fi
 cat <<EOF > $WORKSPACE/makebuildserver.config.py
 debian_mirror = 'http://deb.debian.org/debian/'
 boot_timeout = 1200
-apt_package_cache = True
 copy_caches_from_host = True
 memory = $memory
 cpus = $cpus
