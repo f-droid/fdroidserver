@@ -76,7 +76,7 @@ BASEBOX_CHECKSUMS = {
 
 config = {
     'basebox': BASEBOX_DEFAULT,
-    'debian_mirror': 'http://deb.debian.org/debian/',
+    'debian_mirror': 'https://deb.debian.org/debian/',
     'apt_package_cache': False,
     'copy_caches_from_host': False,
     'boot_timeout': 600,
