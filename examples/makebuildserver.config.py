@@ -2,29 +2,6 @@
 #
 # You may want to alter these before running ./makebuildserver
 
-# Name of the Vagrant basebox to use, by default it will be downloaded
-# from Vagrant Cloud.  For release builds setup, generate the basebox
-# locally using https://gitlab.com/fdroid/basebox, add it to Vagrant,
-# then set this to the local basebox name.
-# This defaults to "fdroid/basebox-stretch64" which will download a
-# prebuilt basebox from https://app.vagrantup.com/fdroid.
-#
-# (If you change this value you have to supply the `--clean` option on
-#  your next `makebuildserver` run.)
-#
-# basebox = "basebox-stretch64"
-
-# This allows you to pin your basebox to a specific versions. It defaults
-# the most recent basebox version which can be aumotaically verifyed by
-# `makebuildserver`.
-# Please note that vagrant does not support versioning of locally added
-# boxes, so we can't support that either.
-#
-# (If you change this value you have to supply the `--clean` option on
-#  your next `makebuildserver` run.)
-#
-# basebox_version = "0.1"
-
 # In the process of setting up the build server, many gigs of files
 # are downloaded (Android SDK components, gradle, etc).  These are
 # cached so that they are not redownloaded each time. By default,
