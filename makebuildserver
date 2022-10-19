@@ -27,6 +27,8 @@ parser.add_option("-c", "--clean", action="store_true", default=False,
 parser.add_option('--skip-cache-update', action="store_true", default=False,
                   help="""Skip downloading and checking cache."""
                        """This assumes that the cache is already downloaded completely.""")
+parser.add_option('--copy-caches-from-host', action="store_true", default=False,
+                  help="""Copy gradle and pip caches into the buildserver VM""")
 parser.add_option('--keep-box-file', action="store_true", default=False,
                   help="""Box file will not be deleted after adding it to box storage"""
                        """ (KVM-only).""")
@@ -77,7 +79,6 @@ BASEBOX_CHECKSUMS = {
 config = {
     'basebox': BASEBOX_DEFAULT,
     'debian_mirror': 'https://deb.debian.org/debian/',
-    'copy_caches_from_host': False,
     'boot_timeout': 600,
     'cachedir': os.path.join(os.getenv('HOME'), '.cache', 'fdroidserver'),
     'cpus': 1,
@@ -376,7 +377,7 @@ def main():
         logging.error("'vagrant up' failed.")
         sys.exit(1)
 
-    if config['copy_caches_from_host']:
+    if options.copy_caches_from_host:
         ssh_config = v.ssh_config()
         user = re.search(r'User ([^ \n]+)', ssh_config).group(1)
         hostname = re.search(r'HostName ([^ \n]+)', ssh_config).group(1)

@@ -32,16 +32,6 @@
 #
 # cachedir = 'buildserver/cache'
 
-# The buildserver can use some local caches to speed up builds,
-# especially when the internet connection is slow and/or expensive.
-# If enabled, the buildserver setup will look for standard caches in
-# your HOME dir and copy them to the buildserver VM. Be aware: this
-# will reduce the isolation of the buildserver from your host machine,
-# so the buildserver will provide an environment only as trustworthy
-# as the host machine's environment.
-#
-# copy_caches_from_host = True
-
 # To specify which Debian mirror the build server VM should use, by
 # default it uses http.debian.net, which auto-detects which is the
 # best mirror to use.
