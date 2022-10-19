@@ -78,16 +78,12 @@ BASEBOX_CHECKSUMS = {
     },
 }
 
-config = {
-    'debian_mirror': 'https://deb.debian.org/debian/',
-    'boot_timeout': 600,
-    'cachedir': os.path.join(os.getenv('HOME'), '.cache', 'fdroidserver'),
-    'cpus': 1,
-    'memory': 2048,
-    'hwvirtex': 'off',
-    'vm_provider': 'virtualbox',
-}
-
+configfile = 'buildserver/Vagrantfile.yaml'
+if not os.path.exists(configfile):
+    logging.warning('%s does not exist, copying template file.' % configfile)
+    shutil.copy('examples/Vagrantfile.yaml', configfile)
+with open(configfile) as fp:
+    config = yaml.safe_load(fp)
 with open('buildserver/Vagrantfile') as fp:
     m = re.search(r"""\.vm\.box\s*=\s*["'](.*)["']""", fp.read())
     if not m:
@@ -95,14 +91,21 @@ with open('buildserver/Vagrantfile') as fp:
         exit(1)
     config['basebox'] = m.group(1)
 config['basebox_version'] = BASEBOX_VERSION_DEFAULT
-# load config file, if present
+config['cachedir'] = os.path.join(os.getenv('HOME'), '.cache', 'fdroidserver')
+
+show_config_deprecation = False
 if os.path.exists('makebuildserver.config.py'):
-    exec(compile(open('makebuildserver.config.py').read(), 'makebuildserver.config.py', 'exec'), config)
+    show_config_deprecation = True
+    logging.error('makebuildserver.config.py exists!')
 elif os.path.exists('makebs.config.py'):
+    show_config_deprecation = True
     # this is the old name for the config file
-    exec(compile(open('makebs.config.py').read(), 'makebs.config.py', 'exec'), config)
-if '__builtins__' in config:
-    del config['__builtins__']  # added by compile/exec
+    logging.error('makebs.config.py exists!')
+if show_config_deprecation:
+    logging.error('Config is via buildserver/Vagrantfile.yaml and command line flags.')
+    parser.print_help()
+    exit(1)
+
 logging.debug("makebuildserver.config.py parsed -> %s", json.dumps(config, indent=4, sort_keys=True))
 
 # Update cached files.
@@ -253,17 +256,14 @@ def main():
     # use VirtualBox software virtualization if hardware is not available,
     # like if this is being run in kvm or some other VM platform, like
     # http://jenkins.debian.net, the values are 'on' or 'off'
-    if sys.platform.startswith('darwin'):
-        # all < 10 year old Macs work, and OSX servers as VM host are very
-        # rare, but this could also be auto-detected if someone codes it
-        config['hwvirtex'] = 'on'
-        logging.info('platform is darwnin -> hwvirtex = \'on\'')
-    elif os.path.exists('/proc/cpuinfo'):
+    if config.get('hwvirtex') != 'off' and os.path.exists('/proc/cpuinfo'):
         with open('/proc/cpuinfo') as f:
             contents = f.read()
         if 'vmx' in contents or 'svm' in contents:
-            config['hwvirtex'] = 'on'
-            logging.info('found \'vmx\' or \'svm\' in /proc/cpuinfo -> hwvirtex = \'on\'')
+            logging.debug('found \'vmx\' or \'svm\' in /proc/cpuinfo -> hwvirtex = \'on\'')
+        else:
+            logging.error('hwvirtex = \'on\' and no \'vmx\' or \'svm\' found in /proc/cpuinfo!')
+            exit(1)
 
     serverdir = os.path.join(os.getcwd(), 'buildserver')
     logfilename = os.path.join(serverdir, 'up.log')
@@ -351,8 +351,6 @@ def main():
                          .format(box=config['basebox'],
                                  provider=config['vm_provider'],
                                  version=config['basebox_version']))
-        else:
-            logging.debug('not updating basebox ...')
     else:
         logging.debug('using unverified basebox ...')
 
