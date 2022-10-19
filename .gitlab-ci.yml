@@ -107,27 +107,6 @@ debian_testing:
     - ./run-tests
 
 
-# This tests with buster-backports to match what is used on the f-droid.org publish server. 
-buster_backports:
-  image: debian:buster-backports
-  <<: *apt-template
-  script:
-    - apt-get install
-        aapt
-        androguard
-        apksigner
-        dexdump
-        fdroidserver
-        git
-        gnupg
-        python3-defusedxml
-        python3-setuptools
-        zipalign
-    - apt-get install -t buster-backports apksigner
-    - cd tests
-    - ./run-tests
-
-
 # Test using latest LTS set up with the PPA, including Recommends.
 ubuntu_lts_ppa:
   image: ubuntu:latest
