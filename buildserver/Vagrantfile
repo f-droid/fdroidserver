@@ -1,5 +1,6 @@
 require 'yaml'
 require 'pathname'
+require 'fileutils'
 
 configfile = {
   'boot_timeout' => 600,
@@ -14,9 +15,15 @@ configfile = {
 srvpath = Pathname.new(File.dirname(__FILE__)).realpath
 configpath = File.join(srvpath, "/Vagrantfile.yaml")
 if File.exists? configpath
-  YAML.load_file(configpath).each do |k,v|
-    configfile[k] = v
+  c = YAML.load_file(configpath)
+  if c and not c.empty?
+    c.each do |k,v|
+      configfile[k] = v
+    end
   end
+else
+  puts "Copying example file to #{configpath}"
+  FileUtils.cp('../examples/Vagrantfile.yaml', configpath)
 end
 
 Vagrant.configure("2") do |config|
