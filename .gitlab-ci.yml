@@ -70,8 +70,8 @@ metadata_v0:
     - echo Etc/UTC > /etc/timezone
     - echo 'APT::Install-Recommends "0";'
            'APT::Install-Suggests "0";'
-           'APT::Acquire::Retries "20";'
            'APT::Get::Assume-Yes "true";'
+           'Acquire::Retries "20";'
            'Dpkg::Use-Pty "0";'
            'quiet "1";'
         >> /etc/apt/apt.conf.d/99gitlab
@@ -107,27 +107,6 @@ debian_testing:
     - ./run-tests
 
 
-# This tests with buster-backports to match what is used on the f-droid.org publish server. 
-buster_backports:
-  image: debian:buster-backports
-  <<: *apt-template
-  script:
-    - apt-get install
-        aapt
-        androguard
-        apksigner
-        dexdump
-        fdroidserver
-        git
-        gnupg
-        python3-defusedxml
-        python3-setuptools
-        zipalign
-    - apt-get install -t buster-backports apksigner
-    - cd tests
-    - ./run-tests
-
-
 # Test using latest LTS set up with the PPA, including Recommends.
 ubuntu_lts_ppa:
   image: ubuntu:latest
@@ -147,16 +126,16 @@ ubuntu_lts_ppa:
     - ./run-tests
 
 
-# Test using Ubuntu/bionic LTS (supported til April, 2023) with all depends
-# from pypi.  The venv is used to isolate the dist tarball generation
-# environment from the clean install environment.
-ubuntu_bionic_pip:
-  image: ubuntu:bionic
+# Test using Ubuntu/jammy LTS (supported til April, 2027) with depends
+# from pypi and sdkmanager.  The venv is used to isolate the dist
+# tarball generation environment from the clean install environment.
+ubuntu_jammy_pip:
+  image: ubuntu:jammy
   <<: *apt-template
   script:
-    - apt-get install git default-jdk-headless python3-pip python3-venv rsync zipalign libarchive13 dexdump
+    - apt-get install git default-jdk-headless python3-pip python3-venv rsync
     - rm -rf env
-    - pyvenv env
+    - python3 -m venv env
     - . env/bin/activate
     - $pip install --upgrade babel pip setuptools
     # setup venv to act as release build machine
@@ -166,8 +145,6 @@ ubuntu_bionic_pip:
     - deactivate
     - tar tzf dist/fdroidserver-*.tar.gz
     # back to bare machine to act as user's install machine
-    - $pip install --upgrade pip setuptools wheel  # make this go away: "error: invalid command 'bdist_wheel'"
-
     - export ANDROID_HOME=/opt/android-sdk
     - $pip install sdkmanager
     - sdkmanager 'build-tools;30.0.0'
