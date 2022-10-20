@@ -1,10 +1,10 @@
 [tool.black]
 skip-string-normalization = true
-target-version = ["py35"]
+target-version = ["py39"]
 
 
 [tool.mypy]
-python_version = "3.5"
+python_version = "3.9"
 
 files = "fdroidserver"
 

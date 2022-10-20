@@ -94,7 +94,7 @@ setup(
     scripts=['makebuildserver'],
     entry_points={'console_scripts': ['fdroid=fdroidserver.__main__:main']},
     data_files=get_data_files(),
-    python_requires='>=3.5',
+    python_requires='>=3.9',
     cmdclass={
         'versioncheck': VersionCheckCommand,
         'install': InstallWithCompile,
