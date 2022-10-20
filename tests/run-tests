@@ -1303,6 +1303,9 @@ fi
 #------------------------------------------------------------------------------#
 echo_header "Test recovering from from broken git submodules"
 
+# On some platforms, checkupdates submodule tests need explicit perms to use file:///
+export GIT_ALLOW_PROTOCOL=file
+
 ROOT=$(create_test_dir)
 cd "$ROOT"
 mkdir foo bar
@@ -1425,6 +1428,7 @@ EOF
 $fdroid checkupdates --allow-dirty --auto -v
 grep "CurrentVersionCode: 1" metadata/fake.yml
 
+unset GIT_ALLOW_PROTOCOL
 
 #------------------------------------------------------------------------------#
 
