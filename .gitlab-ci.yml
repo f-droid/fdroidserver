@@ -479,9 +479,11 @@ servergitmirrors:
     - diff repo/index-v1.jar index-v1.jar
 
 Build documentation:
-  image: python:3.9-buster
+  image: debian:bullseye
+  <<: *apt-template
   script:
-    - pip install -e .[docs]
+    - apt-get install python3-pip make
+    - pip install .[docs]
     - pydocstyle fdroidserver
     - cd docs
     - sphinx-apidoc -o ./source ../fdroidserver -M -e
