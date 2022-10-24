@@ -1526,7 +1526,9 @@ class CommonTest(unittest.TestCase):
 
     @unittest.skipUnless(shutil.which('ipfs_cid'), 'calculate_IPFS_cid needs ipfs_cid')
     def test_calculate_IPFS_cid(self):
-        fdroidserver.common.config = dict()
+        config = dict()
+        fdroidserver.common.fill_config_defaults(config)
+        fdroidserver.common.config = config
         self.assertIsNone(fdroidserver.common.calculate_IPFS_cid('FileDoesNotExist'))
         self.assertEqual(
             fdroidserver.common.calculate_IPFS_cid('urzip.apk'),
