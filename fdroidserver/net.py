@@ -2,6 +2,7 @@
 #
 # net.py - part of the FDroid server tools
 # Copyright (C) 2015 Hans-Christoph Steiner <hans@eds.org>
+# Copyright (C) 2022 FC Stegerman <flx@obfusk.net>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as published by
@@ -16,28 +17,51 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import logging
 import os
 import requests
+import time
 import urllib
+from requests.adapters import HTTPAdapter, Retry
+from requests.exceptions import ChunkedEncodingError
 
 HEADERS = {'User-Agent': 'F-Droid'}
 
 
-def download_file(url, local_filename=None, dldir='tmp'):
+def download_file(url, local_filename=None, dldir='tmp', retries=3, backoff_factor=0.1):
     filename = urllib.parse.urlparse(url).path.split('/')[-1]
     if local_filename is None:
         local_filename = os.path.join(dldir, filename)
-    # the stream=True parameter keeps memory usage low
-    r = requests.get(
-        url, stream=True, allow_redirects=True, headers=HEADERS, timeout=300
-    )
-    r.raise_for_status()
-    with open(local_filename, 'wb') as f:
-        for chunk in r.iter_content(chunk_size=1024):
-            if chunk:  # filter out keep-alive new chunks
-                f.write(chunk)
-                f.flush()
-    return local_filename
+    # Retry applies to failed DNS lookups, socket connections and connection
+    # timeouts, never to requests where data has made it to the server; so we
+    # handle ChunkedEncodingError during transfer ourselves.
+    for i in range(retries + 1):
+        if retries:
+            max_retries = Retry(total=retries - i, backoff_factor=backoff_factor)
+            adapter = HTTPAdapter(max_retries=max_retries)
+            session = requests.Session()
+            session.mount('http://', adapter)
+            session.mount('https://', adapter)
+        else:
+            session = requests
+        # the stream=True parameter keeps memory usage low
+        r = session.get(
+            url, stream=True, allow_redirects=True, headers=HEADERS, timeout=300
+        )
+        r.raise_for_status()
+        try:
+            with open(local_filename, 'wb') as f:
+                for chunk in r.iter_content(chunk_size=1024):
+                    if chunk:  # filter out keep-alive new chunks
+                        f.write(chunk)
+                        f.flush()
+            return local_filename
+        except ChunkedEncodingError as err:
+            if i == retries:
+                raise err
+            logging.warning('Download interrupted, retrying...')
+            time.sleep(backoff_factor * 2**i)
+    raise ValueError("retries must be >= 0")
 
 
 def http_get(url, etag=None, timeout=600):
