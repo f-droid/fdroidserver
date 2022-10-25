@@ -115,12 +115,13 @@ packages="
 
 apt-get install $packages --download-only
 apt-get install $packages
-apt-get autoremove --purge
 
 # fdroidserver comes from git, it was installed just for dependencies
+apt-mark manual `apt-cache depends fdroidserver | sed -nE 's,^[| ]*Depends: ([a-z0-9 -]+),\1,p'`
 apt-get purge fdroidserver
 
 # clean up things that will become outdated anyway
+apt-get autoremove --purge
 apt-get clean
 rm -rf /var/lib/apt/lists/*
 
