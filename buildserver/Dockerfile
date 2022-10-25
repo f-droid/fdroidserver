@@ -53,7 +53,6 @@ RUN printf "path-exclude=/usr/share/locale/*\npath-exclude=/usr/share/man/*\npat
 	&& bash /opt/buildserver/provision-gradle \
 	&& bash /opt/buildserver/provision-buildserverid $GIT_REV_PARSE_HEAD \
 	&& rm -rf /vagrant/cache \
-	&& apt-mark manual `apt-cache depends fdroidserver | sed -nE 's,^[| ]*Depends: ([a-z0-9 -]+),\1,p'` \
 	&& apt-get autoremove --purge \
 	&& apt-get clean \
 	&& rm -rf /var/lib/apt/lists/*
