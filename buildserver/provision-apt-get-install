@@ -44,6 +44,54 @@ EOF
 echo "deb ${debian_mirror} bullseye-backports main" > /etc/apt/sources.list.d/backports.list
 
 apt-get update || apt-get update
+
+# purge things that might come from the base box, but we don't want
+# https://salsa.debian.org/cloud-team/debian-vagrant-images/-/tree/master/config_space/package_config
+# cat config_space/package_config/* | sort -u | grep -v '[A-Z#]'
+purge="
+ apt-listchanges
+ apt-utils
+ bash-completion
+ bind9-*
+ bsdextrautils
+ build-essential
+ bzip2
+ chrony
+ cloud-utils
+ cron
+ dbus
+ debconf-i18n
+ debian-faq
+ dmidecode
+ doc-debian
+ fdisk
+ file
+ groff-base
+ krb5-locales
+ less
+ locales
+ logrotate
+ lsof
+ manpages
+ nano
+ ncurses-term
+ netcat-traditional
+ pciutils
+ reportbug
+ rsyslog
+ tasksel
+ telnet
+ traceroute
+ unattended-upgrades
+ vim-*
+ wamerican
+ wget
+ whiptail
+ xxd
+ xz-utils
+"
+apt-get purge $purge
+
 apt-get upgrade --download-only
 apt-get upgrade
 
@@ -67,7 +115,14 @@ packages="
 
 apt-get install $packages --download-only
 apt-get install $packages
+apt-get autoremove --purge
+
+# fdroidserver comes from git, it was installed just for dependencies
 apt-get purge fdroidserver
+
+# clean up things that will become outdated anyway
+apt-get clean
+rm -rf /var/lib/apt/lists/*
 
 highestjava=`update-java-alternatives --list | sort -n | tail -1 | cut -d ' ' -f 1`
 update-java-alternatives --set $highestjava
