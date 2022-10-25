@@ -965,16 +965,17 @@ def write_yaml(mf, app):
                 build = Build(build)
             b = ruamel.yaml.comments.CommentedMap()
             for field in build_flags:
-                value = getattr(build, field)
-                if hasattr(build, field) and value:
+                if hasattr(build, field):
+                    value = getattr(build, field)
                     if field == 'gradle' and value == ['off']:
                         value = [ruamel.yaml.scalarstring.SingleQuotedScalarString('off')]
                     if field in ('maven', 'buildozer'):
                         if value == 'no':
                             continue
-                        elif value == 'yes':
-                            value = 'yes'
-                    b.update({field: _field_to_yaml(flagtype(field), value)})
+                    typ = flagtype(field)
+                    # don't check value == True for TYPE_INT as it could be 0
+                    if value is not None and (typ == TYPE_INT or value):
+                        b.update({field: _field_to_yaml(typ, value)})
             builds.append(b)
 
         # insert extra empty lines between build entries
