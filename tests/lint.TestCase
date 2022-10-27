@@ -222,7 +222,7 @@ class LintTest(unittest.TestCase):
 
         anywarns = False
         for good in good_fields:
-            app.VercodeOperation = good
+            app.VercodeOperation = [good]
             for warn in fdroidserver.lint.check_vercode_operation(app):
                 anywarns = True
                 logging.debug(warn)
@@ -230,7 +230,7 @@ class LintTest(unittest.TestCase):
 
         for bad in bad_fields:
             anywarns = False
-            app.VercodeOperation = bad
+            app.VercodeOperation = [bad]
             for warn in fdroidserver.lint.check_vercode_operation(app):
                 anywarns = True
                 logging.debug(warn)

@@ -1447,7 +1447,7 @@ class UpdateTest(unittest.TestCase):
                         'UpdateCheckIgnore': '',
                         'UpdateCheckMode': '',
                         'UpdateCheckName': '',
-                        'VercodeOperation': '',
+                        'VercodeOperation': None,
                         'WebSite': '',
                     },
                 )

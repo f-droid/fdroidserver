@@ -456,13 +456,9 @@ def checkupdates_app(app):
         raise FDroidException(_('no version information found'))
 
     if app.VercodeOperation:
-        if isinstance(app.VercodeOperation, str):
-            vercodes = [operate_vercode(app.VercodeOperation, vercode)]
-        else:
-            vercodes = sorted([
-                operate_vercode(operation, vercode)
-                for operation in app.VercodeOperation
-            ])
+        vercodes = sorted([
+            operate_vercode(operation, vercode) for operation in app.VercodeOperation
+        ])
     else:
         vercodes = [vercode]
 

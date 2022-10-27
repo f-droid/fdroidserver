@@ -360,7 +360,7 @@ UpdateCheckData: null
 UpdateCheckIgnore: null
 UpdateCheckMode: Tags
 UpdateCheckName: null
-VercodeOperation: null
+VercodeOperation: []
 WebSite: http://www.smssecure.org
 added: null
 comments: {}

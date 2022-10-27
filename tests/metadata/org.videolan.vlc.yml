@@ -804,6 +804,7 @@ ArchivePolicy: 9 versions
 AutoUpdateMode: None
 UpdateCheckMode: Tags
 # Only use higher vercode ops, if we do build those arches
-VercodeOperation: "%c + 5"
+VercodeOperation:
+  - "%c + 5"
 CurrentVersion: 1.2.6
 CurrentVersionCode: 1030005

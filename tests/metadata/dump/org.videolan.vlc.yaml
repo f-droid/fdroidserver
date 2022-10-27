@@ -2442,7 +2442,8 @@ UpdateCheckData: null
 UpdateCheckIgnore: null
 UpdateCheckMode: Tags
 UpdateCheckName: null
-VercodeOperation: '%c + 5'
+VercodeOperation:
+  - '%c + 5'
 WebSite: http://www.videolan.org/vlc/download-android.html
 added: null
 comments: {}
