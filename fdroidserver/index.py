@@ -1518,7 +1518,7 @@ def get_index_from_jar(jarfile, fingerprint=None):
 
     """
     logging.debug(_('Verifying index signature:'))
-    common.verify_jar_signature(jarfile)
+    common.verify_deprecated_jar_signature(jarfile)
     with zipfile.ZipFile(jarfile) as jar:
         public_key, public_key_fingerprint = get_public_key_from_jar(jar)
         if fingerprint is not None:

@@ -3416,12 +3416,26 @@ def verify_apks(signed_apk, unsigned_apk, tmp_dir, v1_only=None):
     return None
 
 
-def verify_jar_signature(jar):
+def verify_deprecated_jar_signature(jar):
     """Verify the signature of a given JAR file.
 
     jarsigner is very shitty: unsigned JARs pass as "verified"! So
     this has to turn on -strict then check for result 4, since this
     does not expect the signature to be from a CA-signed certificate.
+
+    Also used to verify the signature on an archived APK, supporting deprecated
+    algorithms.
+
+    F-Droid aims to keep every single binary that it ever published.  Therefore,
+    it needs to be able to verify APK signatures that include deprecated/removed
+    algorithms.  For example, jarsigner treats an MD5 signature as unsigned.
+
+    jarsigner passes unsigned APKs as "verified"! So this has to turn
+    on -strict then check for result 4.
+
+    Just to be safe, this never reuses the file, and locks down the
+    file permissions while in use.  That should prevent a bad actor
+    from changing the settings during operation.
 
     Raises
     ------
@@ -3430,15 +3444,30 @@ def verify_jar_signature(jar):
 
     """
     error = _('JAR signature failed to verify: {path}').format(path=jar)
+    _java_security = os.path.join(os.getcwd(), '.java.security')
+    if os.path.exists(_java_security):
+        os.remove(_java_security)
+    with open(_java_security, 'w') as fp:
+        fp.write('jdk.jar.disabledAlgorithms=MD2, RSA keySize < 1024')
+    os.chmod(_java_security, 0o400)
+
     try:
-        output = subprocess.check_output([config['jarsigner'], '-strict', '-verify', jar],
-                                         stderr=subprocess.STDOUT)
+        cmd = [
+            config['jarsigner'],
+            '-J-Djava.security.properties=' + _java_security,
+            '-strict', '-verify', jar
+        ]
+        output = subprocess.check_output(cmd, stderr=subprocess.STDOUT)
         raise VerificationException(error + '\n' + output.decode('utf-8'))
     except subprocess.CalledProcessError as e:
         if e.returncode == 4:
             logging.debug(_('JAR signature verified: {path}').format(path=jar))
         else:
             raise VerificationException(error + '\n' + e.output.decode('utf-8')) from e
+    finally:
+        if os.path.exists(_java_security):
+            os.chmod(_java_security, 0o600)
+            os.remove(_java_security)
 
 
 def verify_apk_signature(apk, min_sdk_version=None):
@@ -3471,60 +3500,10 @@ def verify_apk_signature(apk, min_sdk_version=None):
             config['jarsigner_warning_displayed'] = True
             logging.warning(_("Using Java's jarsigner, not recommended for verifying APKs! Use apksigner"))
         try:
-            verify_jar_signature(apk)
+            verify_deprecated_jar_signature(apk)
             return True
         except Exception as e:
             logging.error(e)
-    return False
-
-
-def verify_old_apk_signature(apk):
-    """Verify the signature on an archived APK, supporting deprecated algorithms.
-
-    F-Droid aims to keep every single binary that it ever published.  Therefore,
-    it needs to be able to verify APK signatures that include deprecated/removed
-    algorithms.  For example, jarsigner treats an MD5 signature as unsigned.
-
-    jarsigner passes unsigned APKs as "verified"! So this has to turn
-    on -strict then check for result 4.
-
-    Just to be safe, this never reuses the file, and locks down the
-    file permissions while in use.  That should prevent a bad actor
-    from changing the settings during operation.
-
-    Returns
-    -------
-    Boolean
-        whether the APK was verified
-
-    """
-    _java_security = os.path.join(os.getcwd(), '.java.security')
-    if os.path.exists(_java_security):
-        os.remove(_java_security)
-    with open(_java_security, 'w') as fp:
-        fp.write('jdk.jar.disabledAlgorithms=MD2, RSA keySize < 1024')
-    os.chmod(_java_security, 0o400)
-
-    try:
-        cmd = [
-            config['jarsigner'],
-            '-J-Djava.security.properties=' + _java_security,
-            '-strict', '-verify', apk
-        ]
-        output = subprocess.check_output(cmd, stderr=subprocess.STDOUT)
-    except subprocess.CalledProcessError as e:
-        if e.returncode != 4:
-            output = e.output
-        else:
-            logging.debug(_('JAR signature verified: {path}').format(path=apk))
-            return True
-    finally:
-        if os.path.exists(_java_security):
-            os.chmod(_java_security, 0o600)
-            os.remove(_java_security)
-
-    logging.error(_('Old APK signature failed to verify: {path}').format(path=apk)
-                  + '\n' + output.decode('utf-8'))
     return False
 
 
@@ -3749,7 +3728,7 @@ def load_stats_fdroid_signing_key_fingerprints():
     if not os.path.isfile(jar_file):
         return {}
     try:
-        verify_jar_signature(jar_file)
+        verify_deprecated_jar_signature(jar_file)
     except VerificationException as e:
         raise FDroidException("Signature validation of '{}' failed! "
                               "Please run publish again to rebuild this file.".format(jar_file)) from e

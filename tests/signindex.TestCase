@@ -103,7 +103,7 @@ class SignindexTest(unittest.TestCase):
 
         # index.jar aka v0 must by signed by SHA1withRSA
         f = 'repo/index.jar'
-        common.verify_jar_signature(f)
+        common.verify_deprecated_jar_signature(f)
         self.assertIsNone(apksigcopier.extract_v2_sig(f, expected=False))
         cp = subprocess.run(
             ['jarsigner', '-verify', '-verbose', f], stdout=subprocess.PIPE
@@ -112,7 +112,7 @@ class SignindexTest(unittest.TestCase):
 
         # index-v1.jar must by signed by SHA1withRSA
         f = 'repo/index-v1.jar'
-        common.verify_jar_signature(f)
+        common.verify_deprecated_jar_signature(f)
         self.assertIsNone(apksigcopier.extract_v2_sig(f, expected=False))
         cp = subprocess.run(
             ['jarsigner', '-verify', '-verbose', f], stdout=subprocess.PIPE
@@ -121,7 +121,7 @@ class SignindexTest(unittest.TestCase):
 
         # entry.jar aka index v2 must by signed by a modern algorithm
         f = 'repo/entry.jar'
-        common.verify_jar_signature(f)
+        common.verify_deprecated_jar_signature(f)
         self.assertIsNone(apksigcopier.extract_v2_sig(f, expected=False))
         cp = subprocess.run(
             ['jarsigner', '-verify', '-verbose', f], stdout=subprocess.PIPE
