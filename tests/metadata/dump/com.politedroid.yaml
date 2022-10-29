@@ -178,7 +178,7 @@ UpdateCheckData: null
 UpdateCheckIgnore: null
 UpdateCheckMode: Tags
 UpdateCheckName: null
-VercodeOperation: null
+VercodeOperation: []
 WebSite: ''
 added: null
 comments: {}

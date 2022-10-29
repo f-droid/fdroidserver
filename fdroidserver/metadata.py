@@ -153,7 +153,7 @@ class App(dict):
         self.AutoUpdateMode = 'None'
         self.UpdateCheckMode = 'None'
         self.UpdateCheckIgnore = None
-        self.VercodeOperation = None
+        self.VercodeOperation = []
         self.UpdateCheckName = None
         self.UpdateCheckData = None
         self.CurrentVersion = ''
@@ -204,6 +204,7 @@ fieldtypes = {
     'AntiFeatures': TYPE_LIST,
     'AllowedAPKSigningKeys': TYPE_LIST,
     'Builds': TYPE_BUILD,
+    'VercodeOperation': TYPE_LIST,
     'CurrentVersionCode': TYPE_INT,
 }
 

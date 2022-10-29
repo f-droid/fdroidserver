@@ -264,13 +264,8 @@ def check_update_check_data_url(app):  # noqa: D403
 def check_vercode_operation(app):
     if not app.VercodeOperation:
         return
-    ops = (
-        [app.VercodeOperation]
-        if isinstance(app.VercodeOperation, str)
-        else app.VercodeOperation
-    )
     invalid_ops = []
-    for op in ops:
+    for op in app.VercodeOperation:
         if not common.VERCODE_OPERATION_RE.match(op):
             invalid_ops += op
     if invalid_ops:

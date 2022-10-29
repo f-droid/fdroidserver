@@ -1084,7 +1084,7 @@ UpdateCheckData: null
 UpdateCheckIgnore: null
 UpdateCheckMode: Tags
 UpdateCheckName: null
-VercodeOperation: null
+VercodeOperation: []
 WebSite: http://sufficientlysecure.org/index.php/adaway
 added: null
 comments: {}

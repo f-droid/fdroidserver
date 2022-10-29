@@ -59,6 +59,8 @@ metadata_v0:
           -e "s/CurrentVersionCode:.'\([0-9]*\)'/CurrentVersionCode:\1/"
           -e "s/  versionCode:.'\([0-9]*\)'/  versionCode:\1/"
           -e "s/  timeout:.'\([0-9]*\)'/  timeout:\1/"
+          -e "/VercodeOperation/s/null/[]/"
+          -e 's/VercodeOperation:.\([^[]\+\)/VercodeOperation:\n- \1/'
           metadata/dump_*/*.yaml
     - diff -uw metadata/dump_*
 
