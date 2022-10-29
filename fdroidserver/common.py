@@ -3808,11 +3808,11 @@ def load_stats_fdroid_signing_key_fingerprints():
     jar_file = os.path.join('stats', 'publishsigkeys.jar')
     if not os.path.isfile(jar_file):
         return {}
-    cmd = [config['jarsigner'], '-strict', '-verify', jar_file]
-    p = FDroidPopen(cmd, output=False)
-    if p.returncode != 4:
+    try:
+        verify_jar_signature(jar_file)
+    except VerificationException as e:
         raise FDroidException("Signature validation of '{}' failed! "
-                              "Please run publish again to rebuild this file.".format(jar_file))
+                              "Please run publish again to rebuild this file.".format(jar_file)) from e
 
     jar_sigkey = apk_signer_fingerprint(jar_file)
     repo_key_sig = config.get('repo_key_sha256')
