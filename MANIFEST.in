@@ -559,9 +559,6 @@ include tests/get_android_tools_versions/android-sdk/patcher/v4/source.propertie
 include tests/get_android_tools_versions/android-sdk/platforms/android-30/source.properties
 include tests/get_android_tools_versions/android-sdk/skiaparser/1/source.properties
 include tests/get_android_tools_versions/android-sdk/tools/source.properties
-include tests/getsig/getsig.java
-include tests/getsig/make.sh
-include tests/getsig/run.sh
 include tests/gnupghome/pubring.gpg
 include tests/gnupghome/random_seed
 include tests/gnupghome/secring.gpg
