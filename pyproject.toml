@@ -1,6 +1,6 @@
 [tool.black]
 skip-string-normalization = true
-target-version = ["py39"]
+target-version = ["py38"]
 
 
 [tool.mypy]
