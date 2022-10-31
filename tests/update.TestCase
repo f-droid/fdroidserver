@@ -102,28 +102,27 @@ class UpdateTest(unittest.TestCase):
         repo_dir = os.path.join(self.basedir, 'repo')
         os.mkdir('metadata')
         for packageName in (
-                'obb.mainpatch.current',
-                'org.videolan.vlc',
+            'obb.mainpatch.current',
+            'org.videolan.vlc',
         ):
             shutil.copytree(
-                os.path.join(repo_dir, packageName),
-                os.path.join('repo', packageName)
+                os.path.join(repo_dir, packageName), os.path.join('repo', packageName)
             )
         for packageName in (
-                'info.guardianproject.checkey',
-                'info.guardianproject.urzip',
-                'org.smssecure.smssecure',
+            'info.guardianproject.checkey',
+            'info.guardianproject.urzip',
+            'org.smssecure.smssecure',
         ):
             if not os.path.exists('metadata'):
                 os.mkdir('metadata')
             shutil.copytree(
                 os.path.join(self.basedir, 'metadata', packageName),
-                os.path.join('metadata', packageName)
+                os.path.join('metadata', packageName),
             )
         for packageName in (
-                'com.nextcloud.client',
-                'com.nextcloud.client.dev',
-                'eu.siacs.conversations',
+            'com.nextcloud.client',
+            'com.nextcloud.client.dev',
+            'eu.siacs.conversations',
         ):
             shutil.copytree(
                 os.path.join(self.basedir, 'source-files', packageName),
@@ -255,7 +254,6 @@ class UpdateTest(unittest.TestCase):
         fdroidserver.update.insert_localized_app_metadata(apps)
         self.assertEqual('42', apps[app.id]['localized']['en-US']['whatsNew'])
 
-
     def test_name_title_scraping(self):
         """metadata file --> fdroiddata localized files --> fastlane/triple-t in app source --> APK"""
         config = dict()
@@ -360,7 +358,7 @@ class UpdateTest(unittest.TestCase):
         appid = 'info.guardianproject.checkey'
         testapps = {appid: copy.copy(apps[appid])}
         self.assertEqual('Checkey the app!', testapps[appid]['Name'])
-        del (testapps[appid]['Name'])
+        del testapps[appid]['Name']
         fdroidserver.update.insert_missing_app_names_from_apks(testapps, apks)
         self.assertIsNone(testapps[appid].get('Name'))
 
