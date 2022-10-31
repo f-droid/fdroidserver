@@ -596,6 +596,7 @@ include tests/metadata/info.guardianproject.checkey/en-US/summary.txt
 include tests/metadata/info.guardianproject.checkey/ja-JP/name.txt
 include tests/metadata/info.guardianproject.checkey.yml
 include tests/metadata/info.guardianproject.urzip/en-US/changelogs/100.txt
+include tests/metadata/info.guardianproject.urzip/en-US/changelogs/default.txt
 include tests/metadata/info.guardianproject.urzip/en-US/full_description.txt
 include tests/metadata/info.guardianproject.urzip/en-US/images/featureGraphic.png
 include tests/metadata/info.guardianproject.urzip/en-US/images/icon.png
