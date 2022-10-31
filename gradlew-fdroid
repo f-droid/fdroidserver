@@ -46,7 +46,7 @@ download_gradle() {
         else
             tmpdir=$(mktemp -d)
         fi
-        curl -o "${tmpdir}/gradle-$1-bin.zip" --silent --fail --show-error --location "${URL}"
+        curl -o "${tmpdir}/gradle-$1-bin.zip" --silent --fail --show-error --location --retry 3 --retry-all-errors "${URL}"
         gradle_zip="${tmpdir}/gradle-$1-bin.zip"
     fi
     echo "${shasum} ${gradle_zip}" | sha256sum -c -
