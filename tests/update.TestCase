@@ -74,6 +74,7 @@ class UpdateTest(unittest.TestCase):
 
     def setUp(self):
         logging.basicConfig(level=logging.INFO)
+        logging.getLogger('androguard.apk').setLevel(logging.WARNING)
         logging.getLogger('androguard.axml').setLevel(logging.INFO)
         logging.getLogger('androguard.core.api_specific_resources').setLevel(logging.INFO)
         from PIL import PngImagePlugin
@@ -212,6 +213,49 @@ class UpdateTest(unittest.TestCase):
             elif packageName == 'eu.siacs.conversations':
                 self.assertEqual('Conversations', app['localized']['en-US']['name'])
 
+    def test_insert_fastlane_default_txt_changelog(self):
+        """Test that Fastlane's default.txt is handled properly
+
+        https://docs.fastlane.tools/actions/supply/#changelogs-whats-new
+        """
+        tmptestsdir = tempfile.mkdtemp(
+            prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir
+        )
+        os.chdir(tmptestsdir)
+
+        config = dict()
+        fdroidserver.common.fill_config_defaults(config)
+        fdroidserver.update.config = config
+
+        app = fdroidserver.metadata.App()
+        app.id = 'com.example.app'
+        changelogs_dir = 'build/%s/metadata/en-US/changelogs' % app.id
+        os.makedirs(changelogs_dir)
+        with open(os.path.join(changelogs_dir, 'default.txt'), 'w') as fp:
+            fp.write('default')
+        with open(os.path.join(changelogs_dir, '42.txt'), 'w') as fp:
+            fp.write('42')
+        apps = {app.id: app}
+        build = fdroidserver.metadata.Build()
+        build.versionCode = 42
+        app['Builds'] = [build]
+
+        fdroidserver.update.insert_localized_app_metadata(apps)
+        self.assertEqual('default', apps[app.id]['localized']['en-US']['whatsNew'])
+
+        app.CurrentVersionCode = 1
+        fdroidserver.update.insert_localized_app_metadata(apps)
+        self.assertEqual('default', apps[app.id]['localized']['en-US']['whatsNew'])
+
+        app.CurrentVersionCode = 10000
+        fdroidserver.update.insert_localized_app_metadata(apps)
+        self.assertEqual('default', apps[app.id]['localized']['en-US']['whatsNew'])
+
+        app.CurrentVersionCode = 42
+        fdroidserver.update.insert_localized_app_metadata(apps)
+        self.assertEqual('42', apps[app.id]['localized']['en-US']['whatsNew'])
+
+
     def test_name_title_scraping(self):
         """metadata file --> fdroiddata localized files --> fastlane/triple-t in app source --> APK"""
         config = dict()
@@ -225,6 +269,7 @@ class UpdateTest(unittest.TestCase):
         fdroidserver.update.options.delete_unknown = True
 
         apps = fdroidserver.metadata.read_metadata()
+        apps['info.guardianproject.urzip']['CurrentVersionCode'] = 100
         knownapks = fdroidserver.common.KnownApks()
         apks, cachechanged = fdroidserver.update.process_apks({}, 'repo', knownapks, False)
         fdroidserver.update.insert_localized_app_metadata(apps)
@@ -233,6 +278,7 @@ class UpdateTest(unittest.TestCase):
         self.assertIsNone(app.Name)
         self.assertTrue('localized' in app)
         self.assertEqual('title', app['localized']['en-US']['name'])
+        self.assertEqual('100\n', app['localized']['en-US']['whatsNew'])
         app = apps['org.videolan.vlc']
         self.assertIsNone(app.Name)
         self.assertTrue('localized' in app)
