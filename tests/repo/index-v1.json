@@ -221,7 +221,8 @@
           "icon": "icon_NJXNzMcyf-v9i5a1ElJi0j9X1LvllibCa48xXYPlOqQ=.png",
           "name": "title",
           "summary": "short description",
-          "video": "video"
+          "video": "video",
+          "whatsNew": "default"
         }
       }
     }
