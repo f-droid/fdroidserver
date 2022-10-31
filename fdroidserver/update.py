@@ -996,6 +996,12 @@ def insert_localized_app_metadata(apps):
                     locale = segments[-2]
                     _set_localized_text_entry(apps[packageName], locale, 'whatsNew',
                                               os.path.join(root, f))
+                elif f == 'default.txt':
+                    # use "default.txt" changelog entry as fallback.
+                    localized = _get_localized_dict(apps[packageName], locale)
+                    if not localized.get('whatsNew', ''):
+                        _set_localized_text_entry(apps[packageName], locale, 'whatsNew',
+                                                  os.path.join(root, f))
 
                 base, extension = common.get_extension(f)
 
