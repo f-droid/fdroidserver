@@ -1,3 +1,4 @@
+---
 
 variables:
   pip: pip3 --timeout 100 --retries 10
@@ -136,16 +137,14 @@ ubuntu_jammy_pip:
   <<: *apt-template
   script:
     - apt-get install git default-jdk-headless python3-pip python3-venv rsync
-    - rm -rf env
-    - python3 -m venv env
-    - . env/bin/activate
-    - $pip install --upgrade babel pip setuptools
+
     # setup venv to act as release build machine
-    - python -m venv sdist-env
+    - python3 -m venv sdist-env
     - . sdist-env/bin/activate
     - ./setup.py sdist
     - deactivate
     - tar tzf dist/fdroidserver-*.tar.gz
+
     # back to bare machine to act as user's install machine
     - export ANDROID_HOME=/opt/android-sdk
     - $pip install sdkmanager
@@ -354,7 +353,7 @@ fdroid build:
 
     # TODO remove sdkmanager install once it is included in the buildserver image
     - apt-get install sdkmanager
-    - rm -rf "$ANDROID_HOME/tools" # TODO remove once sdkmanager can upgrade installed packages
+    - rm -rf "$ANDROID_HOME/tools"  # TODO remove once sdkmanager can upgrade installed packages
     - sdkmanager "tools" "platform-tools" "build-tools;31.0.0"
 
     - git ls-remote https://gitlab.com/fdroid/fdroiddata.git master
@@ -462,7 +461,7 @@ servergitmirrors:
     - python3 -m venv --system-site-packages env
     - . env/bin/activate
     - export PYTHONPATH=`pwd`
-    - export SETUPTOOLS_USE_DISTUTILS=stdlib # https://github.com/pypa/setuptools/issues/2956
+    - export SETUPTOOLS_USE_DISTUTILS=stdlib  # https://github.com/pypa/setuptools/issues/2956
     - $pip install -e .
     - mkdir /root/.ssh/
     - ./tests/key-tricks.py
