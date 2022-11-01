@@ -721,9 +721,9 @@ def v2_repo(repodict, repodir, archive):
 
     repo["timestamp"] = repodict["timestamp"]
 
-    anti_features = load_locale("antiFeatures", repodir)
-    if anti_features:
-        repo["antiFeatures"] = anti_features
+    antiFeatures = load_locale("antiFeatures", repodir)
+    if antiFeatures:
+        repo["antiFeatures"] = antiFeatures
 
     categories = load_locale("categories", repodir)
     if categories:
