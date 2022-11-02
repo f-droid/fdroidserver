@@ -721,9 +721,9 @@ def v2_repo(repodict, repodir, archive):
 
     repo["timestamp"] = repodict["timestamp"]
 
-    anti_features = load_locale("antiFeatures", repodir)
-    if anti_features:
-        repo["antiFeatures"] = anti_features
+    antiFeatures = load_locale("antiFeatures", repodir)
+    if antiFeatures:
+        repo["antiFeatures"] = antiFeatures
 
     categories = load_locale("categories", repodir)
     if categories:
@@ -910,7 +910,7 @@ def make_v1(apps, packages, repodir, repodict, requestsdict, fdroid_signing_key_
                 k = k[:1].lower() + k[1:]
             d[k] = v
 
-    # establish sort order in localized dicts
+    # establish sort order in lists, sets, and localized dicts
     for app in output['apps']:
         localized = app.get('localized')
         if localized:
@@ -920,6 +920,9 @@ def make_v1(apps, packages, repodir, repodict, requestsdict, fdroid_signing_key_
                 for ikey, iname in sorted(lvalue.items()):
                     lordered[lkey][ikey] = iname
             app['localized'] = lordered
+        antiFeatures = app.get('AntiFeatures')
+        if antiFeatures:
+            app['AntiFeatures'] = sorted(set(antiFeatures))
 
     output_packages = collections.OrderedDict()
     output['packages'] = output_packages
@@ -1192,7 +1195,8 @@ def make_v0(apps, apks, repodir, repodict, requestsdict, fdroid_signing_key_fing
         if 'antiFeatures' in apklist[0]:
             app.AntiFeatures.extend(apklist[0]['antiFeatures'])
         if app.AntiFeatures:
-            addElementNonEmpty('antifeatures', ','.join(app.AntiFeatures), doc, apel)
+            afout = sorted(set(app.AntiFeatures))
+            addElementNonEmpty('antifeatures', ','.join(afout), doc, apel)
 
         # Check for duplicates - they will make the client unhappy...
         for i in range(len(apklist) - 1):

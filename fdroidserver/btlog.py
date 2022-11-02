@@ -91,7 +91,7 @@ For more info on this idea:
         cpdir = os.path.join(btrepo, repodir)
         if not os.path.exists(cpdir):
             os.mkdir(cpdir)
-        for f in ('index.xml', 'index-v1.json'):
+        for f in ('index.xml', 'index-v1.json', 'index-v2.json', 'entry.json'):
             repof = os.path.join(repodir, f)
             if not os.path.exists(repof):
                 continue
@@ -107,7 +107,7 @@ For more info on this idea:
                 with open(dest, 'w') as fp:
                     json.dump(output, fp, indent=2)
             gitrepo.index.add([repof])
-        for f in ('index.jar', 'index-v1.jar'):
+        for f in ('index.jar', 'index-v1.jar', 'entry.jar'):
             repof = os.path.join(repodir, f)
             if not os.path.exists(repof):
                 continue
