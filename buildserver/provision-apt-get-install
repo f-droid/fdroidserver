@@ -31,6 +31,8 @@ cat <<EOF > /etc/apt/apt.conf.d/99confdef
 Dpkg::Options { "--force-confdef"; };
 EOF
 
+echo "man-db man-db/auto-update boolean false" | debconf-set-selections
+
 if echo $debian_mirror | grep '^https' 2>&1 > /dev/null; then
     apt-get update || apt-get update
     apt-get install ca-certificates
