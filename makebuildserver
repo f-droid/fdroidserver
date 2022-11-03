@@ -435,6 +435,22 @@ def main():
         logging.critical('could not add box \'%s\' as \'buildserver\', terminating', boxfile)
         sys.exit(1)
 
+    # Boxes are stored in two places when using vagrant-libvirt:
+    #
+    #  1. `vagrant box add` -> ~/.vagrant.d/boxes/buildserver/0/libvirt/
+    #  2. `vagrant up` -> /var/lib/libvirt/images/buildserver_vagrant_box_image_0_box.img
+    #
+    # If the second box is not cleaned up, then `fdroid build` will
+    # continue to use that one from the second location, thereby
+    # ignoring the updated one at the first location.  This process
+    # keeps the second one around until the new box is ready in case
+    # `fdroid build` is using it while this script is running.
+    img = 'buildserver_vagrant_box_image_0_box.img'
+    if os.path.exists(os.path.join('/var/lib/libvirt/images', img)):
+        subprocess.call(
+            ['virsh', '-c', 'qemu:///system', 'vol-delete', '--pool', 'default', '--vol', img]
+        )
+
     if not options.keep_box_file:
         logging.debug("""box added to vagrant, removing generated box file '%s'""",
                       boxfile)
