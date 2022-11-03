@@ -516,8 +516,11 @@ def parse_yaml_srclib(metadatapath):
                     thisinfo[key] = data[key]
                 elif data[key] is None:
                     thisinfo[key] = ['']
-            elif key == 'Prepare' and isinstance(data[key], list):
-                thisinfo[key] = ' && '.join(data[key])
+            elif key == 'Prepare' or flagtype(key) == TYPE_SCRIPT:
+                if isinstance(data[key], list):
+                    thisinfo[key] = data[key]
+                else:
+                    thisinfo[key] = [data[key]] if data[key] else []
             else:
                 thisinfo[key] = str(data[key] or '')
 
@@ -847,9 +850,8 @@ def post_parse_yaml_metadata(yamldata):
             _flagtype = flagtype(flag)
 
             if _flagtype is TYPE_SCRIPT:
-                # concatenate script flags into a single string if they are stored as list
-                if isinstance(build[flag], list):
-                    build[flag] = ' && '.join(build[flag])
+                if isinstance(build[flag], str):
+                    build[flag] = [build[flag]]
             elif _flagtype is TYPE_STRING:
                 # things like versionNames are strings, but without quotes can be numbers
                 if isinstance(build[flag], float) or isinstance(build[flag], int):
@@ -914,12 +916,6 @@ def write_yaml(mf, app):
             if type(value) == list:
                 if len(value) == 1:
                     return value[0]
-                else:
-                    return value
-            else:
-                script_lines = value.split(' && ')
-                if len(script_lines) > 1:
-                    return script_lines
                 else:
                     return value
         else:

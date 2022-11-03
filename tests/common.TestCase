@@ -375,7 +375,7 @@ class CommonTest(unittest.TestCase):
         build = fdroidserver.metadata.Build()
         build.commit = 'master'
         build.gradle = ['yes']
-        build.prebuild = 'test -d $$FakeSrcLib$$/testdirshouldexist'  # actual test condition
+        build.prebuild = ['test -d $$FakeSrcLib$$/testdirshouldexist']  # actual test condition
         build.srclibs = [srclibname + '@1.2.3']
         build.subdir = subdir
         build.versionCode = 0xCAFE

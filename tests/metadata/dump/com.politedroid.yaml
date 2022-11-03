@@ -144,7 +144,8 @@ Builds:
   srclibs: []
   subdir: null
   submodules: false
-  sudo: echo 'this is just a test'
+  sudo:
+  - echo 'this is just a test'
   target: null
   timeout: null
   versionCode: 6
