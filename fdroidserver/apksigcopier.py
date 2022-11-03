@@ -16,13 +16,10 @@
 # --                                                            ; }}}1
 
 """
-copy/extract/patch android apk signatures & compare apks
+Copy/extract/patch android apk signatures.
 
 apksigcopier is a tool for copying android APK signatures from a signed APK to
 an unsigned one (in order to verify reproducible builds).
-
-It can also be used to compare two APKs with different signatures; this requires
-apksigner.
 
 
 CLI
@@ -31,30 +28,26 @@ CLI
 $ apksigcopier extract [OPTIONS] SIGNED_APK OUTPUT_DIR
 $ apksigcopier patch [OPTIONS] METADATA_DIR UNSIGNED_APK OUTPUT_APK
 $ apksigcopier copy [OPTIONS] SIGNED_APK UNSIGNED_APK OUTPUT_APK
-$ apksigcopier compare [OPTIONS] FIRST_APK SECOND_APK
 
 The following environment variables can be set to 1, yes, or true to
 override the default behaviour:
 
-* set APKSIGCOPIER_EXCLUDE_ALL_META=1 to exclude all metadata files
 * set APKSIGCOPIER_COPY_EXTRA_BYTES=1 to copy extra bytes after data (e.g. a v2 sig)
 
 
 API
 ===
 
->> from apksigcopier import do_extract, do_patch, do_copy, do_compare
+>> from apksigcopier import do_extract, do_patch, do_copy
 >> do_extract(signed_apk, output_dir, v1_only=NO)
 >> do_patch(metadata_dir, unsigned_apk, output_apk, v1_only=NO)
 >> do_copy(signed_apk, unsigned_apk, output_apk, v1_only=NO)
->> do_compare(first_apk, second_apk, unsigned=False)
 
 You can use False, None, and True instead of NO, AUTO, and YES respectively.
 
 The following global variables (which default to False), can be set to
 override the default behaviour:
 
-* set exclude_all_meta=True to exclude all metadata files
 * set copy_extra_bytes=True to copy extra bytes after data (e.g. a v2 sig)
 """
 
@@ -63,25 +56,17 @@ import json
 import os
 import re
 import struct
-import subprocess
-import sys
-import tempfile
 import zipfile
 import zlib
 
 from collections import namedtuple
-from typing import Any, BinaryIO, Dict, Iterable, Iterator, Optional, Tuple, Union
+from typing import Any, BinaryIO, Dict, Iterable, Iterator, Literal, Optional, Tuple, Union
 
 __version__ = "1.1.0"
 NAME = "apksigcopier"
 
-if sys.version_info >= (3, 8):
-    from typing import Literal
-    NoAutoYes = Literal["no", "auto", "yes"]
-else:
-    NoAutoYes = str
-
 DateTime = Tuple[int, int, int, int, int, int]
+NoAutoYes = Literal["no", "auto", "yes"]
 NoAutoYesBoolNone = Union[NoAutoYes, bool, None]
 ZipInfoDataPairs = Iterable[Tuple[zipfile.ZipInfo, bytes]]
 
@@ -90,9 +75,7 @@ NOAUTOYES: Tuple[NoAutoYes, NoAutoYes, NoAutoYes] = ("no", "auto", "yes")
 NO, AUTO, YES = NOAUTOYES
 APK_META = re.compile(r"^META-INF/([0-9A-Za-z_-]+\.(SF|RSA|DSA|EC)|MANIFEST\.MF)$")
 META_EXT: Tuple[str, ...] = ("SF", "RSA|DSA|EC", "MF")
-COPY_EXCLUDE: Tuple[str, ...] = ("META-INF/MANIFEST.MF",)
 DATETIMEZERO: DateTime = (1980, 0, 0, 0, 0, 0)
-VERIFY_CMD: Tuple[str, ...] = ("apksigner", "verify")
 
 ################################################################################
 #
@@ -124,7 +107,6 @@ VALID_ZIP_META = dict(
 
 ZipData = namedtuple("ZipData", ("cd_offset", "eocd_offset", "cd_and_eocd"))
 
-exclude_all_meta = False    # exclude all metadata files in copy_apk()
 copy_extra_bytes = False    # copy extra bytes after data in copy_apk()
 
 
@@ -185,7 +167,7 @@ class APKZipInfo(ReproducibleZipInfo):
 
 def noautoyes(value: NoAutoYesBoolNone) -> NoAutoYes:
     """
-    Turns False into NO, None into AUTO, and True into YES.
+    Turn False into NO, None into AUTO, and True into YES.
 
     >>> from apksigcopier import noautoyes, NO, AUTO, YES
     >>> noautoyes(False) == NO == noautoyes(NO)
@@ -208,8 +190,10 @@ def noautoyes(value: NoAutoYesBoolNone) -> NoAutoYes:
 
 def is_meta(filename: str) -> bool:
     """
-    Returns whether filename is a v1 (JAR) signature file (.SF), signature block
-    file (.RSA, .DSA, or .EC), or manifest (MANIFEST.MF).
+    Check whether filename is a JAR metadata file.
+
+    This is true when filename is a v1 (JAR) signature file (.SF), signature
+    block file (.RSA, .DSA, or .EC), or manifest (MANIFEST.MF).
 
     See https://docs.oracle.com/javase/tutorial/deployment/jar/intro.html
     """
@@ -218,13 +202,12 @@ def is_meta(filename: str) -> bool:
 
 def exclude_from_copying(filename: str) -> bool:
     """
-    Returns whether to exclude a file during copy_apk().
+    Check whether to exclude a file during copy_apk().
 
-    Excludes filenames in COPY_EXCLUDE (i.e. MANIFEST.MF) by default; when
-    exclude_all_meta is set to True instead, excludes all metadata files as
-    matched by is_meta().
+    Fdroidserver always wants JAR Signature files to be excluded, so
+    it excludes all metadata files as matched by is_meta().
     """
-    return is_meta(filename) if exclude_all_meta else filename in COPY_EXCLUDE
+    return is_meta(filename)
 
 
 ################################################################################
@@ -301,19 +284,19 @@ def zipflinger_virtual_entry(size: int) -> bytes:
 #   src/main/java/com/android/apksig/ApkSigner.java
 def copy_apk(unsigned_apk: str, output_apk: str, *, zfe_size: Optional[int] = None) -> DateTime:
     """
-    Copy APK like apksigner would, excluding files matched by
-    exclude_from_copying().
+    Copy APK like apksigner would, excluding files matched by exclude_from_copying().
 
     Adds a zipflinger virtual entry of zfe_size bytes if one is not already
     present and zfe_size is not None.
 
-    Returns max date_time.
-
     The following global variables (which default to False), can be set to
     override the default behaviour:
 
-    * set exclude_all_meta=True to exclude all metadata files
     * set copy_extra_bytes=True to copy extra bytes after data (e.g. a v2 sig)
+
+    Returns
+    -------
+    max date_time
     """
     with zipfile.ZipFile(unsigned_apk, "r") as zf:
         infos = zf.infolist()
@@ -546,7 +529,9 @@ def zip_data(apkfile: str, count: int = 1024) -> ZipData:
     """
     Extract central directory, EOCD, and offsets from ZIP.
 
-    Returns ZipData.
+    Returns
+    -------
+    ZipData
     """
     with open(apkfile, "rb") as fh:
         fh.seek(-count, os.SEEK_END)
@@ -584,10 +569,7 @@ def patch_v2_sig(extracted_v2_sig: Tuple[int, bytes], output_apk: str) -> None:
 def patch_apk(extracted_meta: ZipInfoDataPairs, extracted_v2_sig: Optional[Tuple[int, bytes]],
               unsigned_apk: str, output_apk: str, *,
               differences: Optional[Dict[str, Any]] = None) -> None:
-    """
-    Patch extracted_meta + extracted_v2_sig (if not None) onto unsigned_apk and
-    save as output_apk.
-    """
+    """Patch extracted_meta + extracted_v2_sig (if not None) onto unsigned_apk and save as output_apk."""
     if differences and "zipflinger_virtual_entry" in differences:
         zfe_size = differences["zipflinger_virtual_entry"]
     else:
@@ -596,20 +578,6 @@ def patch_apk(extracted_meta: ZipInfoDataPairs, extracted_v2_sig: Optional[Tuple
     patch_meta(extracted_meta, output_apk, date_time=date_time, differences=differences)
     if extracted_v2_sig is not None:
         patch_v2_sig(extracted_v2_sig, output_apk)
-
-
-def verify_apk(apk: str, min_sdk_version: Optional[int] = None) -> None:
-    """Verifies APK using apksigner."""
-    args = VERIFY_CMD
-    if min_sdk_version is not None:
-        args += (f"--min-sdk-version={min_sdk_version}",)
-    args += ("--", apk)
-    try:
-        subprocess.run(args, check=True, stdout=subprocess.PIPE)
-    except subprocess.CalledProcessError:
-        raise APKSigCopierError(f"failed to verify {apk}")              # pylint: disable=W0707
-    except FileNotFoundError:
-        raise APKSigCopierError(f"{VERIFY_CMD[0]} command not found")   # pylint: disable=W0707
 
 
 # FIXME: support multiple signers?
@@ -731,123 +699,5 @@ def do_copy(signed_apk: str, unsigned_apk: str, output_apk: str,
             differences = extract_differences(signed_apk, extracted_meta)
     patch_apk(extracted_meta, extracted_v2_sig, unsigned_apk, output_apk,
               differences=differences)
-
-
-def do_compare(first_apk: str, second_apk: str, unsigned: bool = False,
-               min_sdk_version: Optional[int] = None, *,
-               ignore_differences: bool = False) -> None:
-    """
-    Compare first_apk to second_apk by:
-    * using apksigner to check if the first APK verifies
-    * checking if the second APK also verifies (unless unsigned is True)
-    * copying the signature from first_apk to a copy of second_apk
-    * checking if the resulting APK verifies
-    """
-    global exclude_all_meta
-    verify_apk(first_apk, min_sdk_version=min_sdk_version)
-    if not unsigned:
-        verify_apk(second_apk, min_sdk_version=min_sdk_version)
-    with tempfile.TemporaryDirectory() as tmpdir:
-        output_apk = os.path.join(tmpdir, "output.apk")        # FIXME
-        old_exclude_all_meta = exclude_all_meta                # FIXME
-        exclude_all_meta = not unsigned
-        try:
-            do_copy(first_apk, second_apk, output_apk, AUTO,
-                    ignore_differences=ignore_differences)
-        finally:
-            exclude_all_meta = old_exclude_all_meta
-        verify_apk(output_apk, min_sdk_version=min_sdk_version)
-
-
-def main():
-    """CLI; requires click."""
-
-    global exclude_all_meta, copy_extra_bytes
-    exclude_all_meta = os.environ.get("APKSIGCOPIER_EXCLUDE_ALL_META") in ("1", "yes", "true")
-    copy_extra_bytes = os.environ.get("APKSIGCOPIER_COPY_EXTRA_BYTES") in ("1", "yes", "true")
-
-    import click
-
-    NAY = click.Choice(NOAUTOYES)
-
-    @click.group(help="""
-        apksigcopier - copy/extract/patch android apk signatures & compare apks
-    """)
-    @click.version_option(__version__)
-    def cli():
-        pass
-
-    @cli.command(help="""
-        Extract APK signatures from signed APK.
-    """)
-    @click.option("--v1-only", type=NAY, default=NO, show_default=True,
-                  envvar="APKSIGCOPIER_V1_ONLY", help="Expect only a v1 signature.")
-    @click.option("--ignore-differences", is_flag=True, help="Don't write differences.json.")
-    @click.argument("signed_apk", type=click.Path(exists=True, dir_okay=False))
-    @click.argument("output_dir", type=click.Path(exists=True, file_okay=False))
-    def extract(*args, **kwargs):
-        do_extract(*args, **kwargs)
-
-    @cli.command(help="""
-        Patch extracted APK signatures onto unsigned APK.
-    """)
-    @click.option("--v1-only", type=NAY, default=NO, show_default=True,
-                  envvar="APKSIGCOPIER_V1_ONLY", help="Expect only a v1 signature.")
-    @click.option("--ignore-differences", is_flag=True, help="Don't read differences.json.")
-    @click.argument("metadata_dir", type=click.Path(exists=True, file_okay=False))
-    @click.argument("unsigned_apk", type=click.Path(exists=True, dir_okay=False))
-    @click.argument("output_apk", type=click.Path(dir_okay=False))
-    def patch(*args, **kwargs):
-        do_patch(*args, **kwargs)
-
-    @cli.command(help="""
-        Copy (extract & patch) signatures from signed to unsigned APK.
-    """)
-    @click.option("--v1-only", type=NAY, default=NO, show_default=True,
-                  envvar="APKSIGCOPIER_V1_ONLY", help="Expect only a v1 signature.")
-    @click.option("--ignore-differences", is_flag=True, help="Don't copy metadata differences.")
-    @click.argument("signed_apk", type=click.Path(exists=True, dir_okay=False))
-    @click.argument("unsigned_apk", type=click.Path(exists=True, dir_okay=False))
-    @click.argument("output_apk", type=click.Path(dir_okay=False))
-    def copy(*args, **kwargs):
-        do_copy(*args, **kwargs)
-
-    @cli.command(help="""
-        Compare two APKs by copying the signature from the first to a copy of
-        the second and checking if the resulting APK verifies.
-
-        This command requires apksigner.
-    """)
-    @click.option("--unsigned", is_flag=True, help="Accept unsigned SECOND_APK.")
-    @click.option("--min-sdk-version", type=click.INT, help="Passed to apksigner.")
-    @click.option("--ignore-differences", is_flag=True, help="Don't copy metadata differences.")
-    @click.argument("first_apk", type=click.Path(exists=True, dir_okay=False))
-    @click.argument("second_apk", type=click.Path(exists=True, dir_okay=False))
-    def compare(*args, **kwargs):
-        do_compare(*args, **kwargs)
-
-    # FIXME: click autocompletion is broken and this workaround fails w/ >= 8.0
-    if click.__version__.startswith("7."):
-        def autocomplete_path(ctx=None, args=(), incomplete=""):    # pylint: disable=W0613
-            head, tail = os.path.split(os.path.expanduser(incomplete))
-            return sorted(
-                (e.path if head else e.path[2:]) + ("/" if e.is_dir() else "")
-                for e in os.scandir(head or ".") if e.name.startswith(tail)
-            )
-
-        for command in cli.commands.values():
-            for param in command.params:
-                if isinstance(param.type, click.Path):
-                    param.autocompletion = autocomplete_path
-
-    try:
-        cli(prog_name=NAME)
-    except APKSigCopierError as e:
-        click.echo(f"Error: {e}.", err=True)
-        sys.exit(1)
-
-
-if __name__ == "__main__":
-    main()
 
 # vim: set tw=80 sw=4 sts=4 et fdm=marker :
