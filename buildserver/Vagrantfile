@@ -1,29 +1,41 @@
 require 'yaml'
 require 'pathname'
+require 'fileutils'
+
+configfile = {
+  'boot_timeout' => 600,
+  'cachedir' => File.join(ENV['HOME'], '.cache', 'fdroidserver'),
+  'cpus' => 1,
+  'debian_mirror' => 'https://deb.debian.org/debian/',
+  'hwvirtex' => 'on',
+  'memory' => 2048,
+  'vm_provider' => 'virtualbox',
+}
 
 srvpath = Pathname.new(File.dirname(__FILE__)).realpath
 configpath = File.join(srvpath, "/Vagrantfile.yaml")
 if File.exists? configpath
-  configfile = YAML.load_file(configpath)
+  c = YAML.load_file(configpath)
+  if c and not c.empty?
+    c.each do |k,v|
+      configfile[k] = v
+    end
+  end
 else
-  puts "#{configpath} does not exist, run ./makebuildserver?"
-  configfile = Hash.new
+  puts "Copying example file to #{configpath}"
+  FileUtils.cp('../examples/Vagrantfile.yaml', configpath)
 end
 
 Vagrant.configure("2") do |config|
 
-  # these two caching methods conflict, so only use one at a time
-  if Vagrant.has_plugin?("vagrant-cachier") and not configfile.has_key? "aptcachedir"
+  if Vagrant.has_plugin?("vagrant-cachier")
     config.cache.scope = :box
     config.cache.auto_detect = false
     config.cache.enable :apt
     config.cache.enable :chef
   end
 
-  config.vm.box = configfile['basebox']
-  if configfile.has_key? "basebox_version"
-    config.vm.box_version = configfile['basebox_version']
-  end
+  config.vm.box = "fdroid/bullseye64"
 
   if not configfile.has_key? "vm_provider" or configfile["vm_provider"] == "virtualbox"
     # default to VirtualBox if not set
@@ -66,22 +78,13 @@ Vagrant.configure("2") do |config|
       args: [configfile["aptproxy"]]
   end
 
-  # buildserver/ is shared to the VM's /vagrant by default so the old
-  # default does not need a custom mount
-  if configfile["cachedir"] != "buildserver/cache"
-    config.vm.synced_folder configfile["cachedir"], '/vagrant/cache',
-      create: true, type: synced_folder_type
-  end
+  config.vm.synced_folder configfile["cachedir"], '/vagrant/cache',
+                          create: true, type: synced_folder_type
+
   # Make sure dir exists to mount to, since buildserver/ is
   # automatically mounted as /vagrant in the guest VM. This is more
   # necessary with 9p synced folders
   Dir.mkdir('cache') unless File.exists?('cache')
-
-  # cache .deb packages on the host via a mount trick
-  if configfile.has_key? "aptcachedir"
-    config.vm.synced_folder configfile["aptcachedir"], "/var/cache/apt/archives",
-      owner: 'root', group: 'root', create: true
-  end
 
   config.vm.provision "shell", name: "setup-env-vars", path: "setup-env-vars",
     args: ["/opt/android-sdk"]

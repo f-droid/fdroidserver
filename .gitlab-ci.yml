@@ -223,7 +223,6 @@ black:
     - pip install black
     - black --check --diff --color
         examples/fdroid_extract_repo_pubkey.py
-        examples/makebuildserver.config.py
         fdroid
         fdroidserver/btlog.py
         fdroidserver/exception.py

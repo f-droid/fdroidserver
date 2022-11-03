@@ -66,13 +66,11 @@ if [ `nproc` -le 6 ]; then
 else
     cpus=6
 fi
-cat <<EOF > $WORKSPACE/makebuildserver.config.py
-debian_mirror = 'http://deb.debian.org/debian/'
-boot_timeout = 1200
-apt_package_cache = True
-copy_caches_from_host = True
-memory = $memory
-cpus = $cpus
+cat <<EOF > $WORKSPACE/buildserver/Vagrantfile.yaml
+debian_mirror: https://deb.debian.org/debian/
+boot_timeout: 1200
+memory: $memory
+cpus: $cpus
 EOF
 
 cd $WORKSPACE

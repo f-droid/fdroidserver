@@ -14,10 +14,10 @@ include examples/fdroid_export_keystore_to_nitrokey.py
 include examples/fdroid_extract_repo_pubkey.py
 include examples/fdroid_fetchsrclibs.py
 include examples/fdroid_nitrokeyimport.py
-include examples/makebuildserver.config.py
 include examples/opensc-fdroid.cfg
 include examples/public-read-only-s3-bucket-policy.json
 include examples/template.yml
+include examples/Vagrantfile.yaml
 include gradlew-fdroid
 include LICENSE
 include locale/bo/LC_MESSAGES/fdroidserver.po
@@ -42,7 +42,6 @@ include locale/zh_Hans/LC_MESSAGES/fdroidserver.po
 include locale/zh_Hant/LC_MESSAGES/fdroidserver.po
 include makebuildserver
 include README.md
-include tests/androguard_test.py
 include tests/apk.embedded_1.apk
 include tests/bad-unicode-*.apk
 include tests/build.TestCase

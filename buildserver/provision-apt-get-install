@@ -90,6 +90,8 @@ purge="
  xxd
  xz-utils
 "
+# clean up files packages to be purged, then purge the packages
+rm -rf /var/run/dbus /var/log/unattended-upgrades
 apt-get purge $purge
 
 apt-get upgrade --download-only
