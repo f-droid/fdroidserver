@@ -500,7 +500,7 @@ Windows:
   script:
     - Import-Module "$env:ChocolateyInstall\helpers\chocolateyProfile.psm1"
     - choco install --no-progress -y git --force --params "/GitAndUnixToolsOnPath"
-    - choco install --no-progress -y python3
+    - choco install --no-progress -y python3 --version=3.10
     - choco install --no-progress -y jdk8
     - choco install --no-progress -y rsync
     - refreshenv
