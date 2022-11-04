@@ -690,6 +690,12 @@ def check_updates_expected(app):
         )
 
 
+def check_updates_ucm_http_aum_pattern(app):  # noqa: D403
+    """AutoUpdateMode with UpdateCheckMode: HTTP must have a pattern."""
+    if app.UpdateCheckMode == "HTTP" and app.AutoUpdateMode == "Version":
+        yield _("AutoUpdateMode with UpdateCheckMode: HTTP must have a pattern.")
+
+
 def main():
 
     global config, options
@@ -798,6 +804,7 @@ def main():
             check_license_tag,
             check_current_version_code,
             check_updates_expected,
+            check_updates_ucm_http_aum_pattern,
         ]
 
         for check_func in app_check_funcs:
