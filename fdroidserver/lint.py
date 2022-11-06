@@ -218,6 +218,8 @@ regex_checks = {
 
 locale_pattern = re.compile(r"[a-z]{2,3}(-([A-Z][a-zA-Z]+|\d+|[a-z]+))*")
 
+versioncode_check_pattern = re.compile(r"(\\d|\[(0-9|\\d)_?(a-fA-F)?])[+]")
+
 
 def check_regexes(app):
     for f, checks in regex_checks.items():
@@ -259,6 +261,17 @@ def check_update_check_data_url(app):  # noqa: D403
                     yield _('UpdateCheckData not a valid URL: {url}').format(url=url)
                 if parsed.scheme != 'https':
                     yield _('UpdateCheckData must use HTTPS URL: {url}').format(url=url)
+
+
+def check_update_check_data_int(app):  # noqa: D403
+    """UpdateCheckData regex must match integers."""
+    if app.UpdateCheckData:
+        urlcode, codeex, urlver, verex = app.UpdateCheckData.split('|')
+        # codeex can be empty as well
+        if codeex and not versioncode_check_pattern.search(codeex):
+            yield _(
+                f'UpdateCheckData must match the version code as integer (\\d or [0-9]): {codeex}'
+            )
 
 
 def check_vercode_operation(app):
@@ -677,6 +690,12 @@ def check_updates_expected(app):
         )
 
 
+def check_updates_ucm_http_aum_pattern(app):  # noqa: D403
+    """AutoUpdateMode with UpdateCheckMode: HTTP must have a pattern."""
+    if app.UpdateCheckMode == "HTTP" and app.AutoUpdateMode == "Version":
+        yield _("AutoUpdateMode with UpdateCheckMode: HTTP must have a pattern.")
+
+
 def main():
 
     global config, options
@@ -767,6 +786,7 @@ def main():
             check_app_field_types,
             check_regexes,
             check_update_check_data_url,
+            check_update_check_data_int,
             check_vercode_operation,
             check_ucm_tags,
             check_char_limits,
@@ -784,6 +804,7 @@ def main():
             check_license_tag,
             check_current_version_code,
             check_updates_expected,
+            check_updates_ucm_http_aum_pattern,
         ]
 
         for check_func in app_check_funcs:
