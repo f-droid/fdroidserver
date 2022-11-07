@@ -1075,10 +1075,8 @@ def main():
 
     # Build applications...
     failed_builds = []
-    build_succeeded = []
     build_succeeded_ids = []
     status_output['failedBuilds'] = failed_builds
-    status_output['successfulBuilds'] = build_succeeded
     status_output['successfulBuildIds'] = build_succeeded_ids
     # Only build for 72 hours, then stop gracefully.
     endtime = time.time() + 72 * 60 * 60
@@ -1193,7 +1191,6 @@ def main():
                                              'supplied reference binary '
                                              'successfully')
 
-                    build_succeeded.append(app)
                     build_succeeded_ids.append([app['id'], build.versionCode])
 
                     if not options.onserver:
@@ -1255,17 +1252,17 @@ def main():
             logging.info("Stopping after global build timeout...")
             break
 
-    for app in build_succeeded:
-        logging.info("success: %s" % (app.id))
+    for app in build_succeeded_ids:
+        logging.info("success: %s" % app[0])
 
     if not options.verbose:
         for fb in failed_builds:
             logging.info('Build for app {}:{} failed:\n{}'.format(*fb))
 
     logging.info(_("Finished"))
-    if len(build_succeeded) > 0:
+    if len(build_succeeded_ids) > 0:
         logging.info(ngettext("{} build succeeded",
-                              "{} builds succeeded", len(build_succeeded)).format(len(build_succeeded)))
+                              "{} builds succeeded", len(build_succeeded_ids)).format(len(build_succeeded_ids)))
     if len(failed_builds) > 0:
         logging.info(ngettext("{} build failed",
                               "{} builds failed", len(failed_builds)).format(len(failed_builds)))
