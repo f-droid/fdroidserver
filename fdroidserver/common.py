@@ -3985,7 +3985,6 @@ def is_repo_file(filename, for_gpg_signing=False):
         b'categories.txt',
         b'entry.jar',
         b'index-v1.jar',
-        b'index-v2.jar',
         b'index.css',
         b'index.html',
         b'index.jar',
