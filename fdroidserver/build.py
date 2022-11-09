@@ -335,10 +335,6 @@ def transform_first_char(string, method):
     return method(string[0]) + string[1:]
 
 
-def add_failed_builds_entry(failed_builds, appid, build, entry):
-    failed_builds.append([appid, build.versionCode, str(entry)])
-
-
 def get_metadata_from_apk(app, build, apkfile):
     """Get the required metadata from the built APK.
 
@@ -1203,7 +1199,7 @@ def main():
                 if options.stop:
                     logging.debug("Error encoutered, stopping by user request.")
                     common.force_exit(1)
-                add_failed_builds_entry(failed_builds, appid, build, vcse)
+                failed_builds.append((appid, build.versionCode))
                 common.deploy_build_log_with_rsync(
                     appid, build.versionCode, "".join(traceback.format_exc())
                 )
@@ -1224,20 +1220,20 @@ def main():
                 if options.stop:
                     logging.debug("Error encoutered, stopping by user request.")
                     common.force_exit(1)
-                add_failed_builds_entry(failed_builds, appid, build, e)
+                failed_builds.append((appid, build.versionCode))
                 common.deploy_build_log_with_rsync(
                     appid, build.versionCode, "".join(traceback.format_exc())
                 )
                 if not options.onserver:
                     common.write_running_status_json(status_output)
 
-            except Exception as e:
+            except Exception:
                 logging.error("Could not build app %s due to unknown error: %s" % (
                     appid, traceback.format_exc()))
                 if options.stop:
                     logging.debug("Error encoutered, stopping by user request.")
                     common.force_exit(1)
-                add_failed_builds_entry(failed_builds, appid, build, e)
+                failed_builds.append((appid, build.versionCode))
                 common.deploy_build_log_with_rsync(
                     appid, build.versionCode, "".join(traceback.format_exc())
                 )
@@ -1257,7 +1253,7 @@ def main():
 
     if not options.verbose:
         for fb in failed_builds:
-            logging.info('Build for app {}:{} failed:\n{}'.format(*fb))
+            logging.info('Build for app {}:{} failed'.format(*fb))
 
     logging.info(_("Finished"))
     if len(build_succeeded_ids) > 0:
