@@ -409,6 +409,9 @@ def main():
                       boxfile)
         os.remove(boxfile)
 
+        # This was needed just to create the box, after that, it is unused.
+        vm.destroy()
+
 
 if __name__ == '__main__':
 
