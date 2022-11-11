@@ -328,28 +328,27 @@ Last updated: {date}'''.format(repo_git_base=repo_git_base,
         with open(ssh_config, 'a') as fp:
             fp.write('\n\nHost *\n\tIdentityFile %s\n' % ssh_private_key_file)
 
-        config = ''
-        config += "identity_file = '%s'\n" % ssh_private_key_file
-        config += "repo_name = '%s'\n" % repo_git_base
-        config += "repo_url = '%s'\n" % repo_url
-        config += "repo_description = 'Nightly builds from %s'\n" % git_user_email
-        config += "archive_name = '%s'\n" % (repo_git_base + ' archive')
-        config += "archive_url = '%s'\n" % (repo_base + '/archive')
-        config += (
-            "archive_description = 'Old nightly builds that have been archived.'\n"
-        )
-        config += "archive_older = %i\n" % options.archive_older
-        config += "servergitmirrors = '%s'\n" % servergitmirror
-        config += "keystore = '%s'\n" % KEYSTORE_FILE
-        config += "repo_keyalias = '%s'\n" % KEY_ALIAS
-        config += "keystorepass = '%s'\n" % PASSWORD
-        config += "keypass = '%s'\n" % PASSWORD
-        config += "keydname = '%s'\n" % DISTINGUISHED_NAME
-        config += "make_current_version_link = False\n"
-        config += "update_stats = True\n"
-        with open('config.py', 'w') as fp:
-            fp.write(config)
-        os.chmod('config.py', 0o600)
+        config = {
+            'identity_file': ssh_private_key_file,
+            'repo_name': repo_git_base,
+            'repo_url': repo_url,
+            'repo_description': 'Nightly builds from %s' % git_user_email,
+            'archive_name': repo_git_base + ' archive',
+            'archive_url': repo_base + '/archive',
+            'archive_description': 'Old nightly builds that have been archived.',
+            'archive_older': options.archive_older,
+            'servergitmirrors': servergitmirror,
+            'keystore': KEYSTORE_FILE,
+            'repo_keyalias': KEY_ALIAS,
+            'keystorepass': PASSWORD,
+            'keypass': PASSWORD,
+            'keydname': DISTINGUISHED_NAME,
+            'make_current_version_link': False,
+            'update_stats': True,
+        }
+        with open('config.yml', 'w') as fp:
+            yaml.dump(config, fp, default_flow_style=False)
+        os.chmod('config.yml', 0o600)
         config = common.read_config(options)
         common.assert_config_keystore(config)
 
