@@ -48,6 +48,11 @@ DISTINGUISHED_NAME = 'CN=Android Debug,O=Android,C=US'
 NIGHTLY = '-nightly'
 
 
+def _get_keystore_secret_var(keystore):
+    with open(keystore, 'rb') as fp:
+        return base64.standard_b64encode(fp.read()).decode('ascii')
+
+
 def _ssh_key_from_debug_keystore(keystore=None):
     if keystore is None:
         # set this here so it can be overridden in the tests
@@ -450,8 +455,7 @@ Last updated: {date}'''.format(repo_git_base=repo_git_base,
             shutil.rmtree(os.path.dirname(privkey))
 
         if options.show_secret_var:
-            with open(options.keystore, 'rb') as fp:
-                debug_keystore = base64.standard_b64encode(fp.read()).decode('ascii')
+            debug_keystore = _get_keystore_secret_var(options.keystore)
             print(
                 _('\n{path} encoded for the DEBUG_KEYSTORE secret variable:').format(
                     path=options.keystore
