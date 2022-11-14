@@ -153,6 +153,7 @@ ubuntu_jammy_pip:
     - $pip install dist/fdroidserver-*.tar.gz
     - tar xzf dist/fdroidserver-*.tar.gz
     - cd fdroidserver-*
+    - export PATH=$PATH:$ANDROID_HOME/build-tools/33.0.0
     - fdroid=`which fdroid` ./tests/run-tests
 
 
