@@ -35,7 +35,7 @@ from argparse import ArgumentParser
 
 from . import _
 from . import common
-
+from .exception import VCSException
 
 # hard coded defaults for Android ~/.android/debug.keystore files
 # https://developers.google.com/android/guides/client-auth
@@ -205,6 +205,7 @@ def main():
     )
     # TODO add --with-btlog
     options = parser.parse_args()
+    common.options = options
 
     # force a tighter umask since this writes private key material
     umask = os.umask(0o077)
@@ -284,10 +285,11 @@ def main():
         git_mirror_statsdir = os.path.join(git_mirror_path, 'fdroid', 'stats')
         if not os.path.isdir(git_mirror_repodir):
             logging.debug(_('cloning {url}').format(url=clone_url))
-            try:
-                git.Repo.clone_from(clone_url, git_mirror_path)
-            except Exception:
-                pass
+            vcs = common.getvcs('git', clone_url, git_mirror_path)
+            p = vcs.git(['clone', '--', vcs.remote, str(vcs.local)])
+            if p.returncode != 0:
+                print('WARNING: only public git repos are supported!')
+                raise VCSException('git clone %s failed:' % clone_url, p.output)
         if not os.path.isdir(git_mirror_repodir):
             os.makedirs(git_mirror_repodir, mode=0o755)
 
