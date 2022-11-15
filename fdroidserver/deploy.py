@@ -25,6 +25,7 @@ import re
 import subprocess
 import time
 import urllib
+import yaml
 from argparse import ArgumentParser
 import logging
 import shutil
@@ -445,16 +446,21 @@ def update_servergitmirrors(servergitmirrors, repo_section):
                 continue
             if remote.name == 'gitlab':
                 logging.debug('Writing .gitlab-ci.yml to deploy to GitLab Pages')
-                with open(os.path.join(git_mirror_path, ".gitlab-ci.yml"), "wt") as out_file:
-                    out_file.write("""pages:
-  script:
-   - mkdir .public
-   - cp -r * .public/
-   - mv .public public
-  artifacts:
-    paths:
-    - public
-""")
+                with open(os.path.join(git_mirror_path, ".gitlab-ci.yml"), "wt") as fp:
+                    yaml.dump(
+                        {
+                            'pages': {
+                                'script': [
+                                    'mkdir .public',
+                                    'cp -r * .public/',
+                                    'mv .public public',
+                                ],
+                                'artifacts': {'paths': ['public']},
+                            }
+                        },
+                        fp,
+                        default_flow_style=False,
+                    )
 
                 repo.git.add(all=True)
                 repo.index.commit("fdroidserver git-mirror: Deploy to GitLab Pages")
