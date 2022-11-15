@@ -870,6 +870,9 @@ class CommonTest(unittest.TestCase):
         self.assertFalse(os.path.isfile(unsigned))
         self.assertTrue(fdroidserver.common.verify_apk_signature(signed))
 
+    @unittest.skipUnless(
+        os.path.exists('tests/SystemWebView-repack.apk'), "file too big for sdist"
+    )
     def test_resign_apk(self):
         """When using apksigner, it should resign signed APKs"""
         config = fdroidserver.common.read_config(fdroidserver.common.options)
