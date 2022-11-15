@@ -416,8 +416,9 @@ class IndexTest(unittest.TestCase):
 
     def test_gitlab_get_mirror_service_urls(self):
         with tempfile.TemporaryDirectory() as tmpdir, TmpCwd(tmpdir):
-            os.mkdir('fdroid')
-            with Path('fdroid/placeholder').open('w') as fp:
+            git_mirror_path = Path('git-mirror/fdroid')
+            git_mirror_path.mkdir(parents=True)
+            with (git_mirror_path / 'placeholder').open('w') as fp:
                 fp.write('                                        ')
             for url in [
                 'git@gitlab.com:group/project',
