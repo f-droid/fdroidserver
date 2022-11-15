@@ -3445,30 +3445,25 @@ def verify_deprecated_jar_signature(jar):
 
     """
     error = _('JAR signature failed to verify: {path}').format(path=jar)
-    _java_security = os.path.join(os.getcwd(), '.java.security')
-    if os.path.exists(_java_security):
-        os.remove(_java_security)
-    with open(_java_security, 'w') as fp:
-        fp.write('jdk.jar.disabledAlgorithms=MD2, RSA keySize < 1024')
-    os.chmod(_java_security, 0o400)
+    with tempfile.TemporaryDirectory() as tmpdir:
+        java_security = os.path.join(tmpdir, 'java.security')
+        with open(java_security, 'w') as fp:
+            fp.write('jdk.jar.disabledAlgorithms=MD2, RSA keySize < 1024')
+        os.chmod(java_security, 0o400)
 
-    try:
-        cmd = [
-            config['jarsigner'],
-            '-J-Djava.security.properties=' + _java_security,
-            '-strict', '-verify', jar
-        ]
-        output = subprocess.check_output(cmd, stderr=subprocess.STDOUT)
-        raise VerificationException(error + '\n' + output.decode('utf-8'))
-    except subprocess.CalledProcessError as e:
-        if e.returncode == 4:
-            logging.debug(_('JAR signature verified: {path}').format(path=jar))
-        else:
-            raise VerificationException(error + '\n' + e.output.decode('utf-8')) from e
-    finally:
-        if os.path.exists(_java_security):
-            os.chmod(_java_security, 0o600)
-            os.remove(_java_security)
+        try:
+            cmd = [
+                config['jarsigner'],
+                '-J-Djava.security.properties=' + java_security,
+                '-strict', '-verify', jar
+            ]
+            output = subprocess.check_output(cmd, stderr=subprocess.STDOUT)
+            raise VerificationException(error + '\n' + output.decode('utf-8'))
+        except subprocess.CalledProcessError as e:
+            if e.returncode == 4:
+                logging.debug(_('JAR signature verified: {path}').format(path=jar))
+            else:
+                raise VerificationException(error + '\n' + e.output.decode('utf-8')) from e
 
 
 def verify_apk_signature(apk, min_sdk_version=None):
