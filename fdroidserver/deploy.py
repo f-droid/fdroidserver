@@ -469,6 +469,7 @@ def update_servergitmirrors(servergitmirrors, repo_section):
                                     'mv .public public',
                                 ],
                                 'artifacts': {'paths': ['public']},
+                                'variables': {'GIT_DEPTH': 1},
                             }
                         },
                         fp,
