@@ -25,6 +25,7 @@ import logging
 import zipfile
 import itertools
 import traceback
+import urllib.parse
 import urllib.request
 from argparse import ArgumentParser
 from copy import deepcopy
@@ -141,6 +142,10 @@ class SignatureDataCacheMissException(Exception):
     pass
 
 
+class SignatureDataNoDefaultsException(Exception):
+    pass
+
+
 class SignatureDataVersionMismatchException(Exception):
     pass
 
@@ -198,7 +203,7 @@ class SignatureDataController:
                 self.check_last_updated()
             except SignatureDataCacheMissException:
                 self.load_from_defaults()
-        except SignatureDataOutdatedException:
+        except (SignatureDataOutdatedException, SignatureDataNoDefaultsException):
             self.fetch_signatures_from_web()
             self.write_to_cache()
         except (SignatureDataMalformedException, SignatureDataVersionMismatchException) as e:
@@ -208,9 +213,7 @@ class SignatureDataController:
             raise e
 
     def load_from_defaults(self):
-        sig_file = (Path(__file__).parent / 'data' / 'scanner' / self.filename).resolve()
-        with open(sig_file) as f:
-            self.set_data(json.load(f))
+        raise SignatureDataNoDefaultsException()
 
     def load_from_cache(self):
         sig_file = scanner._scanner_cachedir() / self.filename
@@ -254,8 +257,9 @@ class SignatureDataController:
 
 class ExodusSignatureDataController(SignatureDataController):
     def __init__(self):
-        super().__init__('Exodus signatures', 'exodus.yml', 'https://reports.exodus-privacy.eu.org/api/trackers')
+        super().__init__('Exodus signatures', 'exodus.json', 'https://reports.exodus-privacy.eu.org/api/trackers')
         self.cache_duration = timedelta(days=1)  # refresh exodus cache after one day
+        self.has_trackers_json_key = True
 
     def fetch_signatures_from_web(self):
         logging.debug(_("downloading '{}'").format(self.url))
@@ -270,8 +274,10 @@ class ExodusSignatureDataController(SignatureDataController):
         if not self.url.startswith("https://"):
             raise Exception(_("can't open non-https url: '{};".format(self.url)))
         with urllib.request.urlopen(self.url) as f:  # nosec B310 scheme filtered above
-            d = json.load(f)
-            for tracker in d["trackers"].values():
+            trackerlist = json.load(f)
+            if self.has_trackers_json_key:
+                trackerlist = trackerlist["trackers"].values()
+            for tracker in trackerlist:
                 if tracker.get('code_signature'):
                     data["signatures"][tracker["name"]] = {
                         "name": tracker["name"],
@@ -288,6 +294,15 @@ class ExodusSignatureDataController(SignatureDataController):
         self.set_data(data)
 
 
+class EtipSignatureDataController(ExodusSignatureDataController):
+    def __init__(self):
+        super().__init__()
+        self.name = 'ETIP signatures'
+        self.filename = 'etip.json'
+        self.url = 'https://etip.exodus-privacy.eu.org/api/trackers/?format=json'
+        self.has_trackers_json_key = False
+
+
 class SUSSDataController(SignatureDataController):
     def __init__(self):
         super().__init__(
@@ -302,15 +317,41 @@ class SUSSDataController(SignatureDataController):
 
 class ScannerTool():
     def __init__(self):
-        self.sdcs = [
-            SUSSDataController(),
-        ]
 
         # we could add support for loading additional signature source
         # definitions from config.yml here
 
+        self.scanner_data_lookup()
         self.load()
         self.compile_regexes()
+
+    def scanner_data_lookup(self):
+        sigsources = common.get_config().get('scanner_signature_sources', [])
+        logging.debug(
+            "scanner is configured to use signature data from: '{}'"
+            .format("', '".join(sigsources))
+        )
+        self.sdcs = []
+        for i, source_url in enumerate(sigsources):
+            if source_url.lower() == 'suss':
+                self.sdcs.append(SUSSDataController())
+            elif source_url.lower() == 'exodus':
+                self.sdcs.append(ExodusSignatureDataController())
+            elif source_url.lower() == 'etip':
+                self.sdcs.append(EtipSignatureDataController())
+            else:
+                u = urllib.parse.urlparse(source_url)
+                if u.scheme != 'https' or u.path == "":
+                    raise ConfigurationException(
+                        "Invalid 'scanner_signature_sources' configuration: '{}'. "
+                        "Has to be a valid HTTPS-URL or match a predefined "
+                        "constants: 'suss', 'exodus'".format(source_url)
+                    )
+                self.sdcs.append(SignatureDataController(
+                    source_url,
+                    '{}_{}'.format(i, os.path.basename(u.path)),
+                    source_url,
+                ))
 
     def load(self):
         for sdc in self.sdcs:
@@ -672,11 +713,6 @@ def main():
     )
     common.setup_global_opts(parser)
     parser.add_argument("appid", nargs='*', help=_("application ID with optional versionCode in the form APPID[:VERCODE]"))
-    parser.add_argument(
-        "--exodus",
-        action="store_true",
-        help="Use tracker scanner from Exodus project (requires internet)",
-    )
     parser.add_argument("-f", "--force", action="store_true", default=False,
                         help=_("Force scan of disabled apps and builds."))
     parser.add_argument("--json", action="store_true", default=False,
@@ -699,13 +735,6 @@ def main():
 
     if options.refresh:
         scanner._get_tool().refresh()
-    if options.exodus:
-        c = ExodusSignatureDataController()
-        if options.refresh:
-            c.fetch_signatures_from_web()
-        else:
-            c.fetch()
-        scanner._get_tool().add(c)
 
     probcount = 0
 
