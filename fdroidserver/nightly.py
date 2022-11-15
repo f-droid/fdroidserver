@@ -197,10 +197,11 @@ def main():
         default=False,
         help=_("Don't use rsync checksums"),
     )
+    archive_older_unset = -1
     parser.add_argument(
         "--archive-older",
         type=int,
-        default=20,
+        default=archive_older_unset,
         help=_("Set maximum releases in repo before older ones are archived"),
     )
     # TODO add --with-btlog
@@ -280,9 +281,10 @@ def main():
 
         repo_url = repo_base + '/repo'
         git_mirror_path = os.path.join(repo_basedir, 'git-mirror')
-        git_mirror_repodir = os.path.join(git_mirror_path, 'fdroid', 'repo')
-        git_mirror_metadatadir = os.path.join(git_mirror_path, 'fdroid', 'metadata')
-        git_mirror_statsdir = os.path.join(git_mirror_path, 'fdroid', 'stats')
+        git_mirror_fdroiddir = os.path.join(git_mirror_path, 'fdroid')
+        git_mirror_repodir = os.path.join(git_mirror_fdroiddir, 'repo')
+        git_mirror_metadatadir = os.path.join(git_mirror_fdroiddir, 'metadata')
+        git_mirror_statsdir = os.path.join(git_mirror_fdroiddir, 'stats')
         if not os.path.isdir(git_mirror_repodir):
             logging.debug(_('cloning {url}').format(url=clone_url))
             vcs = common.getvcs('git', clone_url, git_mirror_path)
@@ -334,6 +336,19 @@ Last updated: {date}'''.format(repo_git_base=repo_git_base,
         logging.debug(_('adding IdentityFile to {path}').format(path=ssh_config))
         with open(ssh_config, 'a') as fp:
             fp.write('\n\nHost *\n\tIdentityFile %s\n' % ssh_private_key_file)
+
+        if options.archive_older == archive_older_unset:
+            fdroid_size = common.get_dir_size(git_mirror_fdroiddir)
+            max_size = common.GITLAB_COM_PAGES_MAX_SIZE
+            if fdroid_size < max_size:
+                options.archive_older = 20
+            else:
+                options.archive_older = 3
+                print(
+                    'WARNING: repo is %s over the GitLab Pages limit (%s)'
+                    % (fdroid_size - max_size, max_size)
+                )
+                print('Setting --archive-older to 3')
 
         config = {
             'identity_file': ssh_private_key_file,
