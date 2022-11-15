@@ -2470,7 +2470,6 @@ class CommonTest(unittest.TestCase):
                 'repo/entry.json',
                 'repo/index-v1.jar',
                 'repo/index-v1.json',
-                'repo/index-v2.jar',
                 'repo/index-v2.json',
                 'repo/index.css',
                 'repo/index.html',

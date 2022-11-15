@@ -62,7 +62,6 @@ def _get_index_excludes(repo_section):
         os.path.join(repo_section, 'index-v1.jar'),
         os.path.join(repo_section, 'index-v1.json'),
         os.path.join(repo_section, 'index-v1.json.asc'),
-        os.path.join(repo_section, 'index-v2.jar'),
         os.path.join(repo_section, 'index-v2.json'),
         os.path.join(repo_section, 'index-v2.json.asc'),
         os.path.join(repo_section, 'index.jar'),
