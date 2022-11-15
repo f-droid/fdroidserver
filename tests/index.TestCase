@@ -414,10 +414,16 @@ class IndexTest(unittest.TestCase):
                 fdroidserver.index.get_mirror_service_urls(url),
             )
 
+    @patch.dict(os.environ, clear=True)
     def test_gitlab_get_mirror_service_urls(self):
         with tempfile.TemporaryDirectory() as tmpdir, TmpCwd(tmpdir):
             git_mirror_path = Path('git-mirror/fdroid')
             git_mirror_path.mkdir(parents=True)
+            ci_job_id = '12345678'
+            artifacts_url = (
+                'https://group.gitlab.io/-/project/-/jobs/%s/artifacts/public/fdroid'
+                % ci_job_id
+            )
             with (git_mirror_path / 'placeholder').open('w') as fp:
                 fp.write('                                        ')
             for url in [
@@ -427,20 +433,34 @@ class IndexTest(unittest.TestCase):
                 'https://gitlab.com/group/project.git',
             ]:
                 with patch('fdroidserver.common.GITLAB_COM_PAGES_MAX_SIZE', 1000):
+                    expected = [
+                        'https://group.gitlab.io/project/fdroid',
+                        'https://gitlab.com/group/project/-/raw/master/fdroid',
+                    ]
                     self.assertEqual(
-                        [
-                            'https://group.gitlab.io/project/fdroid',
-                            'https://gitlab.com/group/project/-/raw/master/fdroid',
-                        ],
+                        expected,
                         fdroidserver.index.get_mirror_service_urls(url),
                     )
+                    with patch.dict(os.environ, clear=True):
+                        os.environ['CI_JOB_ID'] = ci_job_id
+                        self.assertEqual(
+                            expected + [artifacts_url],
+                            fdroidserver.index.get_mirror_service_urls(url),
+                        )
                 with patch('fdroidserver.common.GITLAB_COM_PAGES_MAX_SIZE', 10):
+                    expected = [
+                        'https://gitlab.com/group/project/-/raw/master/fdroid',
+                    ]
                     self.assertEqual(
-                        [
-                            'https://gitlab.com/group/project/-/raw/master/fdroid',
-                        ],
+                        expected,
                         fdroidserver.index.get_mirror_service_urls(url),
                     )
+                    with patch.dict(os.environ, clear=True):
+                        os.environ['CI_JOB_ID'] = ci_job_id
+                        self.assertEqual(
+                            expected + [artifacts_url],
+                            fdroidserver.index.get_mirror_service_urls(url),
+                        )
 
     def test_make_website(self):
         tmptestsdir = tempfile.mkdtemp(

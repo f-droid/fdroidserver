@@ -1453,6 +1453,26 @@ def get_mirror_service_urls(url):
         # GitLab Raw "https://gitlab.com/user/repo/-/raw/branch/folder"
         gitlab_raw = segments + ['-', 'raw', branch, folder]
         urls.append('/'.join(gitlab_raw))
+        # GitLab Artifacts "https://user.gitlab.io/-/repo/-/jobs/job_id/artifacts/public/folder"
+        job_id = os.getenv('CI_JOB_ID')
+        try:
+            int(job_id)
+            gitlab_artifacts = [
+                "https:",
+                "",
+                user + ".gitlab.io",
+                '-',
+                repo,
+                '-',
+                'jobs',
+                job_id,
+                'artifacts',
+                'public',
+                folder,
+            ]
+            urls.append('/'.join(gitlab_artifacts))
+        except (TypeError, ValueError):
+            pass  # no Job ID to use, ignore
 
     return urls
 
