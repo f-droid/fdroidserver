@@ -377,7 +377,8 @@ def update_servergitmirrors(servergitmirrors, repo_section):
     if repo_section == 'repo':
         git_mirror_path = 'git-mirror'
         dotgit = os.path.join(git_mirror_path, '.git')
-        git_repodir = os.path.join(git_mirror_path, 'fdroid', repo_section)
+        git_fdroiddir = os.path.join(git_mirror_path, 'fdroid')
+        git_repodir = os.path.join(git_fdroiddir, repo_section)
         if not os.path.isdir(git_repodir):
             os.makedirs(git_repodir)
         # github/gitlab use bare git repos, so only count the .git folder
@@ -439,6 +440,18 @@ def update_servergitmirrors(servergitmirrors, repo_section):
         else:
             progress = None
 
+        # only deploy to GitLab Artifacts if too big for GitLab Pages
+        if common.get_dir_size(git_fdroiddir) <= common.GITLAB_COM_PAGES_MAX_SIZE:
+            gitlab_ci_job_name = 'pages'
+        else:
+            gitlab_ci_job_name = 'GitLab Artifacts'
+            logging.warning(
+                _(
+                    'Skipping GitLab Pages mirror because the repo is too large (>%.2fGB)!'
+                )
+                % (common.GITLAB_COM_PAGES_MAX_SIZE / 1000000000)
+            )
+
         # push for every remote. This will overwrite the git history
         for remote in repo.remotes:
             if remote.name not in enabled_remotes:
@@ -449,7 +462,7 @@ def update_servergitmirrors(servergitmirrors, repo_section):
                 with open(os.path.join(git_mirror_path, ".gitlab-ci.yml"), "wt") as fp:
                     yaml.dump(
                         {
-                            'pages': {
+                            gitlab_ci_job_name: {
                                 'script': [
                                     'mkdir .public',
                                     'cp -r * .public/',
