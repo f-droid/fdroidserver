@@ -110,8 +110,8 @@ def sign_jar(jar, use_old_algs=False):
         'FDROID_KEY_PASS': config.get('keypass', ""),
     }
     p = common.FDroidPopen(args, envs=env_vars)
-    if p.returncode != 0:
-        # workaround for buster-backports apksigner on f-droid.org publish server
+    if not use_old_algs and p.returncode != 0:
+        # workaround for apksigner v30 on f-droid.org publish server
         v4 = args.index("--v4-signing-enabled")
         del args[v4 + 1]
         del args[v4]

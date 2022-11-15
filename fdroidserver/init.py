@@ -264,7 +264,7 @@ def main():
         c = dict(test_config)
         c['keystorepass'] = password
         c['keypass'] = password
-        c['repo_keyalias'] = socket.getfqdn()
+        c['repo_keyalias'] = repo_keyalias or socket.getfqdn()
         c['keydname'] = 'CN=' + c['repo_keyalias'] + ', OU=F-Droid'
         common.write_to_config(test_config, 'keystorepass', password)
         common.write_to_config(test_config, 'keypass', password)

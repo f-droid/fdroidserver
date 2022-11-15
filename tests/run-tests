@@ -151,10 +151,7 @@ test -x ./hooks/pre-commit && ./hooks/pre-commit
 
 
 #------------------------------------------------------------------------------#
-echo_header "test python getsig replacement"
-
-cd $WORKSPACE/tests/getsig
-./make.sh
+echo_header "run unit tests"
 
 cd $WORKSPACE/tests
 for testcase in $WORKSPACE/tests/*.TestCase; do

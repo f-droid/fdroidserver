@@ -50,7 +50,7 @@ from . import _
 from . import common
 from . import index
 from . import metadata
-from .exception import BuildException, FDroidException
+from .exception import BuildException, FDroidException, VerificationException
 
 from PIL import Image, PngImagePlugin
 
@@ -1532,9 +1532,10 @@ def process_apk(apkcache, apkfilename, repodir, knownapks, use_date_from_apk=Fal
         skipapk = False
         if not common.verify_apk_signature(apkfile):
             if repodir == 'archive' or allow_disabled_algorithms:
-                if common.verify_old_apk_signature(apkfile):
+                try:
+                    common.verify_deprecated_jar_signature(apkfile)
                     apk['antiFeatures'].update(['KnownVuln', 'DisabledAlgorithm'])
-                else:
+                except VerificationException:
                     skipapk = True
             else:
                 skipapk = True

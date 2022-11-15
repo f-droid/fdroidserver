@@ -39,7 +39,8 @@ import fdroidserver.signindex
 import fdroidserver.common
 import fdroidserver.metadata
 from testcommon import TmpCwd
-from fdroidserver.exception import FDroidException, VCSException, MetaDataException
+from fdroidserver.exception import FDroidException, VCSException,\
+    MetaDataException, VerificationException
 
 
 class CommonTest(unittest.TestCase):
@@ -484,34 +485,33 @@ class CommonTest(unittest.TestCase):
         config['jarsigner'] = fdroidserver.common.find_sdk_tools_cmd('jarsigner')
         fdroidserver.common.config = config
 
-        self.assertTrue(fdroidserver.common.verify_old_apk_signature('bad-unicode-πÇÇ现代通用字-български-عربي1.apk'))
-        self.assertTrue(fdroidserver.common.verify_old_apk_signature('org.bitbucket.tickytacky.mirrormirror_1.apk'))
-        self.assertTrue(fdroidserver.common.verify_old_apk_signature('org.bitbucket.tickytacky.mirrormirror_2.apk'))
-        self.assertTrue(fdroidserver.common.verify_old_apk_signature('org.bitbucket.tickytacky.mirrormirror_3.apk'))
-        self.assertTrue(fdroidserver.common.verify_old_apk_signature('org.bitbucket.tickytacky.mirrormirror_4.apk'))
-        self.assertTrue(fdroidserver.common.verify_old_apk_signature('org.dyndns.fules.ck_20.apk'))
-        self.assertTrue(fdroidserver.common.verify_old_apk_signature('urzip.apk'))
-        self.assertFalse(fdroidserver.common.verify_old_apk_signature('urzip-badcert.apk'))
-        self.assertFalse(fdroidserver.common.verify_old_apk_signature('urzip-badsig.apk'))
-        self.assertTrue(fdroidserver.common.verify_old_apk_signature('urzip-release.apk'))
-        self.assertFalse(fdroidserver.common.verify_old_apk_signature('urzip-release-unsigned.apk'))
+        try:
+            fdroidserver.common.verify_deprecated_jar_signature('bad-unicode-πÇÇ现代通用字-български-عربي1.apk')
+            fdroidserver.common.verify_deprecated_jar_signature('org.bitbucket.tickytacky.mirrormirror_1.apk')
+            fdroidserver.common.verify_deprecated_jar_signature('org.bitbucket.tickytacky.mirrormirror_2.apk')
+            fdroidserver.common.verify_deprecated_jar_signature('org.bitbucket.tickytacky.mirrormirror_3.apk')
+            fdroidserver.common.verify_deprecated_jar_signature('org.bitbucket.tickytacky.mirrormirror_4.apk')
+            fdroidserver.common.verify_deprecated_jar_signature('org.dyndns.fules.ck_20.apk')
+            fdroidserver.common.verify_deprecated_jar_signature('urzip.apk')
+            fdroidserver.common.verify_deprecated_jar_signature('urzip-release.apk')
+        except VerificationException:
+            self.fail("failed to jarsigner failed to verify an old apk")
+        self.assertRaises(VerificationException, fdroidserver.common.verify_deprecated_jar_signature, 'urzip-badcert.apk')
+        self.assertRaises(VerificationException, fdroidserver.common.verify_deprecated_jar_signature, 'urzip-badsig.apk')
+        self.assertRaises(VerificationException, fdroidserver.common.verify_deprecated_jar_signature, 'urzip-release-unsigned.apk')
 
-    def test_verify_jar_signature_succeeds(self):
-        config = fdroidserver.common.read_config(fdroidserver.common.options)
-        fdroidserver.common.config = config
-        source_dir = os.path.join(self.basedir, 'signindex')
-        for f in ('testy.jar', 'guardianproject.jar'):
-            testfile = os.path.join(source_dir, f)
-            fdroidserver.common.verify_jar_signature(testfile)
-
-    def test_verify_jar_signature_fails(self):
+    def test_verify_deprecated_jar_signature(self):
         config = fdroidserver.common.read_config(fdroidserver.common.options)
         config['jarsigner'] = fdroidserver.common.find_sdk_tools_cmd('jarsigner')
         fdroidserver.common.config = config
         source_dir = os.path.join(self.basedir, 'signindex')
+        for f in ('testy.jar', 'guardianproject.jar'):
+            testfile = os.path.join(source_dir, f)
+            fdroidserver.common.verify_deprecated_jar_signature(testfile)
+
         testfile = os.path.join(source_dir, 'unsigned.jar')
         with self.assertRaises(fdroidserver.index.VerificationException):
-            fdroidserver.common.verify_jar_signature(testfile)
+            fdroidserver.common.verify_deprecated_jar_signature(testfile)
 
     def test_verify_apks(self):
         config = fdroidserver.common.read_config(fdroidserver.common.options)

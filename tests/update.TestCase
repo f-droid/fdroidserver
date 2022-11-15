@@ -20,7 +20,6 @@ import unittest
 import yaml
 import zipfile
 import textwrap
-from binascii import unhexlify
 from datetime import datetime
 from distutils.version import LooseVersion
 from testcommon import TmpCwd
@@ -53,7 +52,6 @@ import fdroidserver.common
 import fdroidserver.exception
 import fdroidserver.metadata
 import fdroidserver.update
-from fdroidserver.common import FDroidPopen
 
 
 DONATION_FIELDS = ('Donate', 'Liberapay', 'OpenCollective')
@@ -549,48 +547,6 @@ class UpdateTest(unittest.TestCase):
         self.assertEqual(app['authorWebSite'], 'https://emersion.fr')
         self.assertEqual(app['localized']['en-US']['name'], 'Goguma')
         self.assertEqual(app['localized']['en-US']['summary'], 'An IRC client for mobile devices')
-
-    def javagetsig(self, apkfile):
-        getsig_dir = 'getsig'
-        if not os.path.exists(os.path.join(getsig_dir, "getsig.class")):
-            logging.critical("getsig.class not found. To fix: cd '%s' && ./make.sh" % getsig_dir)
-            sys.exit(1)
-        # FDroidPopen needs some config to work
-        config = dict()
-        fdroidserver.common.fill_config_defaults(config)
-        fdroidserver.common.config = config
-        p = FDroidPopen(['java', '-cp', 'getsig', 'getsig', apkfile])
-        sig = None
-        for line in p.output.splitlines():
-            if line.startswith('Result:'):
-                sig = line[7:].strip()
-                break
-        if p.returncode == 0:
-            return sig
-        else:
-            return None
-
-    def testGoodGetsig(self):
-        # config needed to use jarsigner and keytool
-        config = dict()
-        fdroidserver.common.fill_config_defaults(config)
-        fdroidserver.common.options = Options
-        fdroidserver.update.config = config
-        apkfile = 'urzip.apk'
-        sig = self.javagetsig(apkfile)
-        self.assertIsNotNone(sig, "sig is None")
-        pysig = fdroidserver.update.getsig(apkfile)
-        self.assertIsNotNone(pysig, "pysig is None")
-        self.assertEqual(sig, fdroidserver.update.getsig(apkfile),
-                         "python sig not equal to java sig!")
-        self.assertEqual(len(sig), len(pysig),
-                         "the length of the two sigs are different!")
-        try:
-            self.assertEqual(unhexlify(sig), unhexlify(pysig),
-                             "the length of the two sigs are different!")
-        except TypeError as e:
-            print(e)
-            self.assertTrue(False, 'TypeError!')
 
     def testBadGetsig(self):
         """getsig() should still be able to fetch the fingerprint of bad signatures"""
