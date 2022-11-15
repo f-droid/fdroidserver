@@ -1781,6 +1781,27 @@ class UpdateTest(unittest.TestCase):
         apks, cachechanged = fdroidserver.update.process_apks({}, 'repo', knownapks, False, apps)
         self.assertEqual([], apks)
 
+    def test_archive_old_apks(self):
+        app = fdroidserver.metadata.App()
+        app.id = 'test'
+        app.VercodeOperation = ['%c+1', '%c+2', '%c+3', '%c+4']
+        apps = {app.id: app}
+        with self.assertLogs(level='DEBUG') as cm:
+            fdroidserver.update.archive_old_apks(apps, [], [], '', '', 3)
+            self.assertEqual(cm.output, [
+                "DEBUG:root:Checking archiving for test - apks:0, keepversions:12, archapks:0"
+            ])
+
+        app = fdroidserver.metadata.App()
+        app.id = 'org.smssecure.smssecure'
+        app.CurrentVersionCode = 135
+        apps = {app.id: app}
+        with self.assertLogs(level='DEBUG') as cm:
+            fdroidserver.update.archive_old_apks(apps, [], [], '', '', 3)
+            self.assertEqual(cm.output, [
+                "DEBUG:root:Checking archiving for org.smssecure.smssecure - apks:0, keepversions:6, archapks:0"
+            ])
+
 
 if __name__ == "__main__":
     os.chdir(os.path.dirname(__file__))
