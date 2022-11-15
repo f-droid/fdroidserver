@@ -5,11 +5,20 @@ variables:
   GIT_DEPTH: 1
 
 
-# Run the whole test suite in an environment that is like the buildserver guest VM.
-ci-images-base run-tests:
-  image: registry.gitlab.com/fdroid/ci-images-base
+# Run the whole test suite in an environment that is like the
+# buildserver guest VM.  This installs python3-babel because that is
+# only used by the test suite, and not needed in the buildserver.
+#
+# Some extra packages are required for this test run that are not
+# provided by the buildserver since they are not needed there:
+# * python3-babel for compiling localization files
+# * gnupg-agent for the full signing setup
+# * python3-clint for fancy progress bars for users
+buildserver run-tests:
+  image: registry.gitlab.com/fdroid/fdroidserver:buildserver
   script:
-    - $pip install -e .
+    - apt-get update
+    - apt-get install gnupg-agent python3-babel python3-clint
     - ./tests/run-tests
     # make sure that translations do not cause stacktraces
     - cd $CI_PROJECT_DIR/locale
@@ -28,7 +37,7 @@ ci-images-base run-tests:
 # The COMMIT_ID should be bumped after each release, so that the list
 # of sed hacks needed does not continuously grow.
 metadata_v0:
-  image: registry.gitlab.com/fdroid/ci-images-base
+  image: registry.gitlab.com/fdroid/fdroidserver:buildserver
   variables:
     GIT_DEPTH: 1000
     RELEASE_COMMIT_ID: 37c95f59a17d86723fdb71e984121726db777f32  # 2.0a5~
