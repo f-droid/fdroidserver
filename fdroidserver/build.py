@@ -1277,8 +1277,7 @@ def main():
                     if m:
                         status_output['hostProcMeminfoMemTotal'] = m.group(1)
                         break
-        fdroid_path = os.path.realpath(os.path.join(os.path.dirname(__file__), '..'))
-        buildserver_config = os.path.join(fdroid_path, 'makebuildserver.config.py')
+        buildserver_config = 'builder/Vagrantfile'
         if os.path.isfile(buildserver_config) and os.access(buildserver_config, os.R_OK):
             with open(buildserver_config) as configfile:
                 for line in configfile:

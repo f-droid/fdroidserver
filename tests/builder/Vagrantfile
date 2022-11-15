@@ -1,0 +1,12 @@
+# generated file, do not change.
+# https://gitlab.com/fdroid/fdroid-bootstrap-buildserver/-/blob/c0762bf9398d0/provision.yml#L552
+
+Vagrant.configure("2") do |config|
+  config.vm.box = "buildserver"
+  config.vm.synced_folder ".", "/vagrant", disabled: true
+
+  config.vm.provider :libvirt do |libvirt|
+    libvirt.cpus = 24
+    libvirt.memory = 30720
+  end
+end
