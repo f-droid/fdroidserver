@@ -2680,9 +2680,9 @@ def get_native_code(apkfile):
 
 
 class PopenResult:
-    def __init__(self):
-        self.returncode = None
-        self.output = None
+    def __init__(self, returncode=None, output=None):
+        self.returncode = returncode
+        self.output = output
 
 
 def SdkToolsPopen(commands, cwd=None, output=True):

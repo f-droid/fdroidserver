@@ -25,6 +25,7 @@ import os
 import paramiko
 import platform
 import shutil
+import ssl
 import subprocess
 import sys
 import tempfile
@@ -34,7 +35,7 @@ from argparse import ArgumentParser
 
 from . import _
 from . import common
-
+from .exception import VCSException
 
 # hard coded defaults for Android ~/.android/debug.keystore files
 # https://developers.google.com/android/guides/client-auth
@@ -47,7 +48,16 @@ DISTINGUISHED_NAME = 'CN=Android Debug,O=Android,C=US'
 NIGHTLY = '-nightly'
 
 
-def _ssh_key_from_debug_keystore(keystore=KEYSTORE_FILE):
+def _get_keystore_secret_var(keystore):
+    with open(keystore, 'rb') as fp:
+        return base64.standard_b64encode(fp.read()).decode('ascii')
+
+
+def _ssh_key_from_debug_keystore(keystore=None):
+    if keystore is None:
+        # set this here so it can be overridden in the tests
+        # TODO convert this to a class to get rid of this nonsense
+        keystore = KEYSTORE_FILE
     tmp_dir = tempfile.mkdtemp(prefix='.')
     privkey = os.path.join(tmp_dir, '.privkey')
     key_pem = os.path.join(tmp_dir, '.key.pem')
@@ -94,10 +104,17 @@ def _ssh_key_from_debug_keystore(keystore=KEYSTORE_FILE):
         ],
         env={'LC_ALL': 'C.UTF-8'},
     )
+
+    # OpenSSL 3.0 changed the default output format from PKCS#1 to
+    # PKCS#8, which paramiko does not support.
+    # https://www.openssl.org/docs/man3.0/man1/openssl-rsa.html#traditional
+    # https://github.com/paramiko/paramiko/issues/1015
+    openssl_rsa_cmd = ['openssl', 'rsa']
+    if ssl.OPENSSL_VERSION_INFO[0] >= 3:
+        openssl_rsa_cmd += ['-traditional']
     subprocess.check_call(
-        [
-            'openssl',
-            'rsa',
+        openssl_rsa_cmd
+        + [
             '-in',
             key_pem,
             '-out',
@@ -180,14 +197,16 @@ def main():
         default=False,
         help=_("Don't use rsync checksums"),
     )
+    archive_older_unset = -1
     parser.add_argument(
         "--archive-older",
         type=int,
-        default=20,
+        default=archive_older_unset,
         help=_("Set maximum releases in repo before older ones are archived"),
     )
     # TODO add --with-btlog
     options = parser.parse_args()
+    common.options = options
 
     # force a tighter umask since this writes private key material
     umask = os.umask(0o077)
@@ -262,15 +281,17 @@ def main():
 
         repo_url = repo_base + '/repo'
         git_mirror_path = os.path.join(repo_basedir, 'git-mirror')
-        git_mirror_repodir = os.path.join(git_mirror_path, 'fdroid', 'repo')
-        git_mirror_metadatadir = os.path.join(git_mirror_path, 'fdroid', 'metadata')
-        git_mirror_statsdir = os.path.join(git_mirror_path, 'fdroid', 'stats')
+        git_mirror_fdroiddir = os.path.join(git_mirror_path, 'fdroid')
+        git_mirror_repodir = os.path.join(git_mirror_fdroiddir, 'repo')
+        git_mirror_metadatadir = os.path.join(git_mirror_fdroiddir, 'metadata')
+        git_mirror_statsdir = os.path.join(git_mirror_fdroiddir, 'stats')
         if not os.path.isdir(git_mirror_repodir):
             logging.debug(_('cloning {url}').format(url=clone_url))
-            try:
-                git.Repo.clone_from(clone_url, git_mirror_path)
-            except Exception:
-                pass
+            vcs = common.getvcs('git', clone_url, git_mirror_path)
+            p = vcs.git(['clone', '--', vcs.remote, str(vcs.local)])
+            if p.returncode != 0:
+                print('WARNING: only public git repos are supported!')
+                raise VCSException('git clone %s failed:' % clone_url, p.output)
         if not os.path.isdir(git_mirror_repodir):
             os.makedirs(git_mirror_repodir, mode=0o755)
 
@@ -316,28 +337,40 @@ Last updated: {date}'''.format(repo_git_base=repo_git_base,
         with open(ssh_config, 'a') as fp:
             fp.write('\n\nHost *\n\tIdentityFile %s\n' % ssh_private_key_file)
 
-        config = ''
-        config += "identity_file = '%s'\n" % ssh_private_key_file
-        config += "repo_name = '%s'\n" % repo_git_base
-        config += "repo_url = '%s'\n" % repo_url
-        config += "repo_description = 'Nightly builds from %s'\n" % git_user_email
-        config += "archive_name = '%s'\n" % (repo_git_base + ' archive')
-        config += "archive_url = '%s'\n" % (repo_base + '/archive')
-        config += (
-            "archive_description = 'Old nightly builds that have been archived.'\n"
-        )
-        config += "archive_older = %i\n" % options.archive_older
-        config += "servergitmirrors = '%s'\n" % servergitmirror
-        config += "keystore = '%s'\n" % KEYSTORE_FILE
-        config += "repo_keyalias = '%s'\n" % KEY_ALIAS
-        config += "keystorepass = '%s'\n" % PASSWORD
-        config += "keypass = '%s'\n" % PASSWORD
-        config += "keydname = '%s'\n" % DISTINGUISHED_NAME
-        config += "make_current_version_link = False\n"
-        config += "update_stats = True\n"
-        with open('config.py', 'w') as fp:
-            fp.write(config)
-        os.chmod('config.py', 0o600)
+        if options.archive_older == archive_older_unset:
+            fdroid_size = common.get_dir_size(git_mirror_fdroiddir)
+            max_size = common.GITLAB_COM_PAGES_MAX_SIZE
+            if fdroid_size < max_size:
+                options.archive_older = 20
+            else:
+                options.archive_older = 3
+                print(
+                    'WARNING: repo is %s over the GitLab Pages limit (%s)'
+                    % (fdroid_size - max_size, max_size)
+                )
+                print('Setting --archive-older to 3')
+
+        config = {
+            'identity_file': ssh_private_key_file,
+            'repo_name': repo_git_base,
+            'repo_url': repo_url,
+            'repo_description': 'Nightly builds from %s' % git_user_email,
+            'archive_name': repo_git_base + ' archive',
+            'archive_url': repo_base + '/archive',
+            'archive_description': 'Old nightly builds that have been archived.',
+            'archive_older': options.archive_older,
+            'servergitmirrors': servergitmirror,
+            'keystore': KEYSTORE_FILE,
+            'repo_keyalias': KEY_ALIAS,
+            'keystorepass': PASSWORD,
+            'keypass': PASSWORD,
+            'keydname': DISTINGUISHED_NAME,
+            'make_current_version_link': False,
+            'update_stats': True,
+        }
+        with open('config.yml', 'w') as fp:
+            yaml.dump(config, fp, default_flow_style=False)
+        os.chmod('config.yml', 0o600)
         config = common.read_config(options)
         common.assert_config_keystore(config)
 
@@ -430,17 +463,16 @@ Last updated: {date}'''.format(repo_git_base=repo_git_base,
                           + '\n     -dname "CN=Android Debug,O=Android,C=US"')
             sys.exit(1)
         ssh_dir = os.path.join(os.getenv('HOME'), '.ssh')
-        os.makedirs(os.path.dirname(ssh_dir), exist_ok=True)
         privkey = _ssh_key_from_debug_keystore(options.keystore)
-        ssh_private_key_file = os.path.join(ssh_dir, os.path.basename(privkey))
-        shutil.move(privkey, ssh_private_key_file)
-        shutil.move(privkey + '.pub', ssh_private_key_file + '.pub')
+        if os.path.exists(ssh_dir):
+            ssh_private_key_file = os.path.join(ssh_dir, os.path.basename(privkey))
+            shutil.move(privkey, ssh_private_key_file)
+            shutil.move(privkey + '.pub', ssh_private_key_file + '.pub')
         if shutil.rmtree.avoids_symlink_attacks:
             shutil.rmtree(os.path.dirname(privkey))
 
         if options.show_secret_var:
-            with open(options.keystore, 'rb') as fp:
-                debug_keystore = base64.standard_b64encode(fp.read()).decode('ascii')
+            debug_keystore = _get_keystore_secret_var(options.keystore)
             print(
                 _('\n{path} encoded for the DEBUG_KEYSTORE secret variable:').format(
                     path=options.keystore

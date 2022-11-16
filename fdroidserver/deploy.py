@@ -25,6 +25,7 @@ import re
 import subprocess
 import time
 import urllib
+import yaml
 from argparse import ArgumentParser
 import logging
 import shutil
@@ -376,7 +377,8 @@ def update_servergitmirrors(servergitmirrors, repo_section):
     if repo_section == 'repo':
         git_mirror_path = 'git-mirror'
         dotgit = os.path.join(git_mirror_path, '.git')
-        git_repodir = os.path.join(git_mirror_path, 'fdroid', repo_section)
+        git_fdroiddir = os.path.join(git_mirror_path, 'fdroid')
+        git_repodir = os.path.join(git_fdroiddir, repo_section)
         if not os.path.isdir(git_repodir):
             os.makedirs(git_repodir)
         # github/gitlab use bare git repos, so only count the .git folder
@@ -438,6 +440,18 @@ def update_servergitmirrors(servergitmirrors, repo_section):
         else:
             progress = None
 
+        # only deploy to GitLab Artifacts if too big for GitLab Pages
+        if common.get_dir_size(git_fdroiddir) <= common.GITLAB_COM_PAGES_MAX_SIZE:
+            gitlab_ci_job_name = 'pages'
+        else:
+            gitlab_ci_job_name = 'GitLab Artifacts'
+            logging.warning(
+                _(
+                    'Skipping GitLab Pages mirror because the repo is too large (>%.2fGB)!'
+                )
+                % (common.GITLAB_COM_PAGES_MAX_SIZE / 1000000000)
+            )
+
         # push for every remote. This will overwrite the git history
         for remote in repo.remotes:
             if remote.name not in enabled_remotes:
@@ -445,16 +459,22 @@ def update_servergitmirrors(servergitmirrors, repo_section):
                 continue
             if remote.name == 'gitlab':
                 logging.debug('Writing .gitlab-ci.yml to deploy to GitLab Pages')
-                with open(os.path.join(git_mirror_path, ".gitlab-ci.yml"), "wt") as out_file:
-                    out_file.write("""pages:
-  script:
-   - mkdir .public
-   - cp -r * .public/
-   - mv .public public
-  artifacts:
-    paths:
-    - public
-""")
+                with open(os.path.join(git_mirror_path, ".gitlab-ci.yml"), "wt") as fp:
+                    yaml.dump(
+                        {
+                            gitlab_ci_job_name: {
+                                'script': [
+                                    'mkdir .public',
+                                    'cp -r * .public/',
+                                    'mv .public public',
+                                ],
+                                'artifacts': {'paths': ['public']},
+                                'variables': {'GIT_DEPTH': 1},
+                            }
+                        },
+                        fp,
+                        default_flow_style=False,
+                    )
 
                 repo.git.add(all=True)
                 repo.index.commit("fdroidserver git-mirror: Deploy to GitLab Pages")

@@ -1438,7 +1438,8 @@ def get_mirror_service_urls(url):
         segments.extend([branch, folder])
         urls.append('/'.join(segments))
     elif hostname == "gitlab.com":
-        if common.get_dir_size(folder) <= common.GITLAB_COM_PAGES_MAX_SIZE:
+        git_mirror_path = os.path.join('git-mirror', folder)
+        if common.get_dir_size(git_mirror_path) <= common.GITLAB_COM_PAGES_MAX_SIZE:
             # Gitlab-like Pages segments "https://user.gitlab.io/repo/folder"
             gitlab_pages = ["https:", "", user + ".gitlab.io", repo, folder]
             urls.append('/'.join(gitlab_pages))
@@ -1452,6 +1453,26 @@ def get_mirror_service_urls(url):
         # GitLab Raw "https://gitlab.com/user/repo/-/raw/branch/folder"
         gitlab_raw = segments + ['-', 'raw', branch, folder]
         urls.append('/'.join(gitlab_raw))
+        # GitLab Artifacts "https://user.gitlab.io/-/repo/-/jobs/job_id/artifacts/public/folder"
+        job_id = os.getenv('CI_JOB_ID')
+        try:
+            int(job_id)
+            gitlab_artifacts = [
+                "https:",
+                "",
+                user + ".gitlab.io",
+                '-',
+                repo,
+                '-',
+                'jobs',
+                job_id,
+                'artifacts',
+                'public',
+                folder,
+            ]
+            urls.append('/'.join(gitlab_artifacts))
+        except (TypeError, ValueError):
+            pass  # no Job ID to use, ignore
 
     return urls
 

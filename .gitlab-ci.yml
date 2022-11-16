@@ -148,11 +148,12 @@ ubuntu_jammy_pip:
     # back to bare machine to act as user's install machine
     - export ANDROID_HOME=/opt/android-sdk
     - $pip install sdkmanager
-    - sdkmanager 'build-tools;30.0.0'
+    - sdkmanager 'build-tools;33.0.0'
 
     - $pip install dist/fdroidserver-*.tar.gz
     - tar xzf dist/fdroidserver-*.tar.gz
     - cd fdroidserver-*
+    - export PATH=$PATH:$ANDROID_HOME/build-tools/33.0.0
     - fdroid=`which fdroid` ./tests/run-tests
 
 
@@ -246,6 +247,7 @@ black:
         tests/lint.TestCase
         tests/metadata.TestCase
         tests/ndk-release-checksums.py
+        tests/nightly.TestCase
         tests/rewritemeta.TestCase
         tests/scanner.TestCase
         tests/signindex.TestCase
