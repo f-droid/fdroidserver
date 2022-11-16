@@ -2118,19 +2118,47 @@ class CommonTest(unittest.TestCase):
                 {'AutoName': testvalue, 'id': 'nope'}]:
             self.assertEqual(testvalue, fdroidserver.common.get_app_display_name(app))
 
+    @mock.patch.dict(os.environ, {'PATH': os.getenv('PATH')}, clear=True)
     def test_get_android_tools_versions(self):
-        sdk_path = os.path.join(self.basedir, 'get_android_tools_versions')
-        fdroidserver.common.config = {'sdk_path': sdk_path}
+        sdk_path = os.path.join(self.basedir, 'get_android_tools_versions/android-sdk')
+        config = {
+            'ndk_paths': {'r10e': os.path.join(sdk_path, '..', 'android-ndk-r10e')},
+            'sdk_path': sdk_path,
+        }
+        fdroidserver.common.config = config
+        fdroidserver.common.fill_config_defaults(config)
         components = fdroidserver.common.get_android_tools_versions()
         expected = (
-            ('android-ndk/android-ndk-r21d', '21.3.6528147'),
-            ('android-ndk/r11c', '11.2.2725575'),
-            ('android-ndk/r17c', '17.2.4988734'),
-            ('android-sdk/patcher/v4', '1'),
-            ('android-sdk/platforms/android-30', '3'),
-            ('android-sdk/skiaparser/1', '6'),
-            ('android-sdk/tools', '26.1.1'),
+            ('../android-ndk-r10e', 'r10e'),
+            ('ndk-bundle', '21.4.7075529'),
+            ('ndk/11.2.2725575', '11.2.2725575'),
+            ('ndk/17.2.4988734', '17.2.4988734'),
+            ('ndk/21.3.6528147', '21.3.6528147'),
+            ('patcher/v4', '1'),
+            ('platforms/android-30', '3'),
+            ('skiaparser/1', '6'),
+            ('tools', '26.1.1'),
         )
+        self.assertSequenceEqual(expected, sorted(components))
+
+    @mock.patch.dict(os.environ, {'PATH': os.getenv('PATH')}, clear=True)
+    def test_get_android_tools_versions_no_ndk(self):
+        with tempfile.TemporaryDirectory() as tmpdir:
+            sdk_path = Path(tmpdir) / 'get_android_tools_versions'
+            shutil.copytree(
+                os.path.join(self.basedir, 'get_android_tools_versions'), sdk_path
+            )
+            shutil.rmtree(sdk_path / 'android-ndk-r10e')
+            shutil.rmtree(sdk_path / 'android-sdk/ndk')
+            shutil.rmtree(sdk_path / 'android-sdk/ndk-bundle')
+            fdroidserver.common.config = {'sdk_path': str(sdk_path)}
+            components = fdroidserver.common.get_android_tools_versions()
+            expected = (
+                ('android-sdk/patcher/v4', '1'),
+                ('android-sdk/platforms/android-30', '3'),
+                ('android-sdk/skiaparser/1', '6'),
+                ('android-sdk/tools', '26.1.1'),
+            )
         self.assertSequenceEqual(expected, sorted(components))
 
     def test_read_pkg_args(self):

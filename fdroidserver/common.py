@@ -4043,10 +4043,10 @@ def get_android_tools_versions():
     sdk_path = config['sdk_path']
     if sdk_path[-1] != '/':
         sdk_path += '/'
-    components = []
-    for ndk_path in config.get('ndk_paths', []):
+    components = set()
+    for ndk_path in config.get('ndk_paths', {}).values():
         version = get_ndk_version(ndk_path)
-        components.append((os.path.basename(ndk_path), str(version)))
+        components.add((os.path.relpath(ndk_path, sdk_path), str(version)))
 
     pattern = re.compile(r'^Pkg.Revision *= *(.+)', re.MULTILINE)
     for root, dirs, files in os.walk(sdk_path):
@@ -4055,9 +4055,9 @@ def get_android_tools_versions():
             with open(source_properties, 'r') as fp:
                 m = pattern.search(fp.read())
                 if m:
-                    components.append((root[len(sdk_path):], m.group(1)))
+                    components.add((os.path.relpath(root, sdk_path), m.group(1)))
 
-    return components
+    return sorted(components)
 
 
 def get_android_tools_version_log():
