@@ -337,7 +337,7 @@ def main():
         v.up(provision=True)
     except subprocess.CalledProcessError:
         debug_log_vagrant_vm(serverdir, config)
-        logging.error("'vagrant up' failed.")
+        logging.error("'vagrant up' failed. Consult %s", logfilename)
         sys.exit(1)
 
     if options.copy_caches_from_host:
