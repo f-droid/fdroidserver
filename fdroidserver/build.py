@@ -1100,8 +1100,6 @@ def main():
                 timer = None
 
             tools_version_log = ''
-            if not options.onserver:
-                tools_version_log = common.get_android_tools_version_log()
             try:
 
                 # For the first build of a particular app, we need to set up
@@ -1111,8 +1109,7 @@ def main():
                     vcs, build_dir = common.setup_vcs(app)
                     first = False
 
-                logging.info("Using %s" % vcs.clientversion())
-                logging.debug("Checking " + build.versionName)
+                logging.debug("Checking %s:%s" % (appid, build.versionCode))
                 if trybuild(app, build, build_dir, output_dir, log_dir,
                             also_check_dir, srclib_dir, extlib_dir,
                             tmp_dir, repo_dir, vcs, options.test,
