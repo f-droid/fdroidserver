@@ -7,7 +7,7 @@ import logging
 
 from fdroidserver import _, common, metadata
 
-from fdserver.exeption import VCSException
+from fdroidserver.exception import VCSException
 
 fdroid_summary = 'reset app VCSs to the latest version'
 
