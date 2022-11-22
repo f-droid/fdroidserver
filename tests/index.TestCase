@@ -26,7 +26,7 @@ import fdroidserver.index
 import fdroidserver.net
 import fdroidserver.signindex
 import fdroidserver.publish
-from testcommon import TmpCwd
+from testcommon import TmpCwd, mkdtemp
 from pathlib import Path
 
 
@@ -44,10 +44,6 @@ class IndexTest(unittest.TestCase):
         logging.basicConfig(level=logging.DEBUG)
         self.basedir = os.path.join(localmodule, 'tests')
         os.chmod(os.path.join(self.basedir, 'config.py'), 0o600)
-        self.tmpdir = os.path.abspath(os.path.join(self.basedir, '..', '.testfiles'))
-        if not os.path.exists(self.tmpdir):
-            os.makedirs(self.tmpdir)
-        os.chdir(self.basedir)
 
         fdroidserver.common.config = None
         fdroidserver.common.options = Options
@@ -60,6 +56,13 @@ class IndexTest(unittest.TestCase):
             fdroidserver.signindex.sign_index(
                 os.path.join(self.basedir, 'repo'), 'index-v1.json'
             )
+        self._td = mkdtemp()
+        self.testdir = self._td.name
+
+    def tearDown(self):
+        os.chdir(self.basedir)
+        self._td.cleanup()
+        os.remove('repo/index-v1.jar')
 
     def test_get_public_key_from_jar_succeeds(self):
         source_dir = os.path.join(self.basedir, 'signindex')
@@ -269,10 +272,7 @@ class IndexTest(unittest.TestCase):
             self.assertEqual(json.dumps(i, indent=2), json.dumps(o, indent=2))
 
     def test_make_v0_repo_only(self):
-        tmptestsdir = tempfile.mkdtemp(
-            prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir
-        )
-        os.chdir(tmptestsdir)
+        os.chdir(self.testdir)
         os.mkdir('repo')
         repo_icons_dir = os.path.join('repo', 'icons')
         self.assertFalse(os.path.isdir(repo_icons_dir))
@@ -298,10 +298,7 @@ class IndexTest(unittest.TestCase):
         self.assertTrue(os.path.exists(os.path.join('repo', 'index.xml')))
 
     def test_make_v0(self):
-        tmptestsdir = tempfile.mkdtemp(
-            prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir
-        )
-        os.chdir(tmptestsdir)
+        os.chdir(self.testdir)
         os.mkdir('metadata')
         os.mkdir('repo')
         metadatafile = 'metadata/info.zwanenburg.caffeinetile.yml'
@@ -368,10 +365,7 @@ class IndexTest(unittest.TestCase):
         present.
 
         """
-        tmptestsdir = tempfile.mkdtemp(
-            prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir
-        )
-        os.chdir(tmptestsdir)
+        os.chdir(self.testdir)
         os.mkdir('repo')
         repo_icons_dir = os.path.join('repo', 'icons')
         self.assertFalse(os.path.isdir(repo_icons_dir))
@@ -463,10 +457,7 @@ class IndexTest(unittest.TestCase):
                         )
 
     def test_make_website(self):
-        tmptestsdir = tempfile.mkdtemp(
-            prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir
-        )
-        os.chdir(tmptestsdir)
+        os.chdir(self.testdir)
         os.mkdir('metadata')
         os.mkdir('repo')
 

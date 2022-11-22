@@ -8,7 +8,6 @@ import os
 import optparse
 import shutil
 import sys
-import tempfile
 import unittest
 
 
@@ -20,6 +19,7 @@ if localmodule not in sys.path:
     sys.path.insert(0, localmodule)
 
 import fdroidserver.init
+from testcommon import mkdtemp
 
 
 class InitTest(unittest.TestCase):
@@ -28,18 +28,17 @@ class InitTest(unittest.TestCase):
     def setUp(self):
         logging.basicConfig(level=logging.DEBUG)
         self.basedir = os.path.join(localmodule, 'tests')
-        self.tmpdir = os.path.abspath(os.path.join(self.basedir, '..', '.testfiles'))
-        if not os.path.exists(self.tmpdir):
-            os.makedirs(self.tmpdir)
-        os.chdir(self.basedir)
         fdroidserver.common.config = None
         fdroidserver.init.config = None
+        self._td = mkdtemp()
+        self.testdir = self._td.name
+
+    def tearDown(self):
+        self._td.cleanup()
+        os.chdir(self.basedir)
 
     def test_disable_in_config(self):
-        testdir = tempfile.mkdtemp(
-            prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir
-        )
-        os.chdir(testdir)
+        os.chdir(self.testdir)
         with open('config.yml', 'w') as fp:
             fp.write('keystore: NONE\n')
             fp.write('keypass: mysupersecrets\n')
@@ -57,12 +56,9 @@ class InitTest(unittest.TestCase):
     @unittest.skipIf(os.name == 'nt', "calling main() like this hangs on Windows")
     def test_main_in_empty_dir(self):
         """Test that `fdroid init` will find apksigner and add it to the config"""
-        testdir = tempfile.mkdtemp(
-            prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir
-        )
-        os.chdir(testdir)
+        os.chdir(self.testdir)
 
-        shutil.copy(os.path.join(self.basedir, 'keystore.jks'), testdir)
+        shutil.copy(os.path.join(self.basedir, 'keystore.jks'), self.testdir)
 
         bindir = os.path.join(os.getcwd(), 'bin')
         os.mkdir(bindir)

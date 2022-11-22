@@ -122,6 +122,7 @@ class NightlyTest(unittest.TestCase):
             assert '-----BEGIN RSA PRIVATE KEY-----' in fp.read()
         with open(ssh_private_key_file + '.pub') as fp:
             assert fp.read(8) == 'ssh-rsa '
+        shutil.rmtree(os.path.dirname(ssh_private_key_file))
 
     @patch.dict(os.environ, clear=True)
     @patch('sys.argv', ['fdroid nightly', '--verbose'])

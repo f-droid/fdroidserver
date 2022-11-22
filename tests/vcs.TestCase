@@ -7,7 +7,6 @@ import logging
 import optparse
 import os
 import sys
-import tempfile
 import unittest
 
 from git import Repo
@@ -23,6 +22,7 @@ import fdroidserver.build
 import fdroidserver.common
 import fdroidserver.metadata
 import fdroidserver.scanner
+from testcommon import mkdtemp
 
 
 class VCSTest(unittest.TestCase):
@@ -31,16 +31,16 @@ class VCSTest(unittest.TestCase):
     def setUp(self):
         logging.basicConfig(level=logging.DEBUG)
         self.basedir = os.path.join(localmodule, 'tests')
-        self.tmpdir = os.path.abspath(os.path.join(self.basedir, '..', '.testfiles'))
-        if not os.path.exists(self.tmpdir):
-            os.makedirs(self.tmpdir)
+        os.chdir(self.basedir)
+        self._td = mkdtemp()
+        self.testdir = self._td.name
+
+    def tearDown(self):
+        self._td.cleanup()
         os.chdir(self.basedir)
 
     def test_remote_set_head_can_fail(self):
-        testdir = tempfile.mkdtemp(
-            prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir
-        )
-        os.chdir(testdir)
+        os.chdir(self.testdir)
         # First create an upstream repo with one commit
         upstream_repo = Repo.init("upstream_repo")
         with open(upstream_repo.working_dir + "/file", 'w') as f:

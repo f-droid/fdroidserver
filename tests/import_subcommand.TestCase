@@ -4,7 +4,6 @@
 
 import logging
 import optparse
-import os
 import shutil
 import sys
 import tempfile
@@ -31,36 +30,30 @@ class ImportTest(unittest.TestCase):
     def setUp(self):
         logging.basicConfig(level=logging.DEBUG)
         self.basedir = localmodule / 'tests'
-        self.tmpdir = localmodule / '.testfiles'
-        self.tmpdir.mkdir(exist_ok=True)
-        # TODO: Python3.6: Accepts a path-like object.
-        os.chdir(str(self.basedir))
         fdroidserver.import_subcommand.options = mock.Mock()
         fdroidserver.import_subcommand.options.rev = None
 
     def test_import_gitlab(self):
-        # FDroidPopen needs some config to work
-        config = dict()
-        fdroidserver.common.fill_config_defaults(config)
-        fdroidserver.common.config = config
+        with tempfile.TemporaryDirectory() as testdir, TmpCwd(testdir):
+            # FDroidPopen needs some config to work
+            config = dict()
+            fdroidserver.common.fill_config_defaults(config)
+            fdroidserver.common.config = config
 
-        url = 'https://gitlab.com/fdroid/ci-test-app'
-        r = requests.head(url, timeout=300)
-        if r.status_code != 200:
-            print("ERROR", url, 'unreachable (', r.status_code, ')')
-            print('Skipping ImportTest!')
-            return
+            url = 'https://gitlab.com/fdroid/ci-test-app'
+            r = requests.head(url, timeout=300)
+            if r.status_code != 200:
+                print("ERROR", url, 'unreachable (', r.status_code, ')')
+                print('Skipping ImportTest!')
+                return
 
-        app = fdroidserver.import_subcommand.get_app_from_url(url)
-        fdroidserver.import_subcommand.clone_to_tmp_dir(app)
-        self.assertEqual(app.RepoType, 'git')
-        self.assertEqual(app.Repo, 'https://gitlab.com/fdroid/ci-test-app.git')
+            app = fdroidserver.import_subcommand.get_app_from_url(url)
+            fdroidserver.import_subcommand.clone_to_tmp_dir(app)
+            self.assertEqual(app.RepoType, 'git')
+            self.assertEqual(app.Repo, 'https://gitlab.com/fdroid/ci-test-app.git')
 
     def test_get_app_from_url(self):
-        # TODO: Pytohn3.6: The dir parameter now accepts a path-like object.
-        with tempfile.TemporaryDirectory(dir=str(self.tmpdir)) as testdir, TmpCwd(
-            testdir
-        ):
+        with tempfile.TemporaryDirectory() as testdir, TmpCwd(testdir):
             testdir = Path(testdir)
             (testdir / 'tmp').mkdir()
             tmp_importer = testdir / 'tmp/importer'

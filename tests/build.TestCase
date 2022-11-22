@@ -22,11 +22,14 @@ print('localmodule: ' + localmodule)
 if localmodule not in sys.path:
     sys.path.insert(0, localmodule)
 
+from testcommon import TmpCwd
+
 import fdroidserver.build
 import fdroidserver.common
 import fdroidserver.metadata
 import fdroidserver.scanner
 import fdroidserver.vmtools
+from testcommon import mkdtemp
 
 
 class FakeProcess:
@@ -45,12 +48,15 @@ class BuildTest(unittest.TestCase):
         logger = logging.getLogger('androguard.axml')
         logger.setLevel(logging.INFO)  # tame the axml debug messages
         self.basedir = os.path.join(localmodule, 'tests')
-        self.tmpdir = os.path.abspath(os.path.join(self.basedir, '..', '.testfiles'))
-        if not os.path.exists(self.tmpdir):
-            os.makedirs(self.tmpdir)
         os.chdir(self.basedir)
         fdroidserver.common.config = None
         fdroidserver.build.config = None
+        self._td = mkdtemp()
+        self.testdir = self._td.name
+
+    def tearDown(self):
+        os.chdir(self.basedir)
+        self._td.cleanup()
 
     def create_fake_android_home(self, d):
         os.makedirs(os.path.join(d, 'build-tools'), exist_ok=True)
@@ -210,106 +216,100 @@ class BuildTest(unittest.TestCase):
 
     def test_build_local_ndk(self):
         """Test if `fdroid build` detects installed NDKs and auto-installs when missing"""
-        testdir = tempfile.mkdtemp(
-            prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir
-        )
-        os.chdir(testdir)
+        with tempfile.TemporaryDirectory() as testdir, TmpCwd(
+            testdir
+        ), tempfile.TemporaryDirectory() as sdk_path:
+            config = {'ndk_paths': {}, 'sdk_path': sdk_path}
+            fdroidserver.common.config = config
+            fdroidserver.build.config = config
+            fdroidserver.build.options = mock.Mock()
+            fdroidserver.build.options.scan_binary = False
+            fdroidserver.build.options.notarball = True
+            fdroidserver.build.options.skipscan = True
 
-        config = {'ndk_paths': {}, 'sdk_path': tempfile.mkdtemp(prefix='android-sdk-')}
-        fdroidserver.common.config = config
-        fdroidserver.build.config = config
-        fdroidserver.build.options = mock.Mock()
-        fdroidserver.build.options.scan_binary = False
-        fdroidserver.build.options.notarball = True
-        fdroidserver.build.options.skipscan = True
+            app = fdroidserver.metadata.App()
+            app.id = 'mocked.app.id'
+            build = fdroidserver.metadata.Build()
+            build.commit = '1.0'
+            build.output = app.id + '.apk'
+            build.versionCode = 1
+            build.versionName = '1.0'
+            build.ndk = 'r21e'  # aka 21.4.7075529
+            vcs = mock.Mock()
 
-        app = fdroidserver.metadata.App()
-        app.id = 'mocked.app.id'
-        build = fdroidserver.metadata.Build()
-        build.commit = '1.0'
-        build.output = app.id + '.apk'
-        build.versionCode = 1
-        build.versionName = '1.0'
-        build.ndk = 'r21e'  # aka 21.4.7075529
-        vcs = mock.Mock()
+            def make_fake_apk(output, build):
+                with open(build.output, 'w') as fp:
+                    fp.write('APK PLACEHOLDER')
+                return output
 
-        def make_fake_apk(output, build):
-            with open(build.output, 'w') as fp:
-                fp.write('APK PLACEHOLDER')
-            return output
+            def fake_download_file(_ignored, local_filename):
+                _ignored  # silence the linters
+                with zipfile.ZipFile(local_filename, 'x') as zipfp:
+                    zipfp.writestr(
+                        'android-ndk-r21e/source.properties',
+                        'Pkg.Revision = 21.4.7075529\n',
+                    )
 
-        def fake_download_file(_ignored, local_filename):
-            _ignored  # silence the linters
-            with zipfile.ZipFile(local_filename, 'x') as zipfp:
-                zipfp.writestr(
-                    'android-ndk-r21e/source.properties',
-                    'Pkg.Revision = 21.4.7075529\n',
-                )
-
-        # use "as _ignored" just to make a pretty layout
-        with mock.patch(
-            'fdroidserver.common.replace_build_vars', wraps=make_fake_apk
-        ) as _ignored, mock.patch(
-            'fdroidserver.common.get_native_code', return_value='x86'
-        ) as _ignored, mock.patch(
-            'fdroidserver.common.get_apk_id',
-            return_value=(app.id, build.versionCode, build.versionName),
-        ) as _ignored, mock.patch(
-            'fdroidserver.common.is_apk_and_debuggable', return_value=False
-        ) as _ignored, mock.patch(
-            'fdroidserver.common.sha256sum',
-            return_value='ad7ce5467e18d40050dc51b8e7affc3e635c85bd8c59be62de32352328ed467e',
-        ) as _ignored, mock.patch(
-            'fdroidserver.common.is_apk_and_debuggable', return_value=False
-        ) as _ignored, mock.patch(
-            'fdroidserver.build.FDroidPopen', FakeProcess
-        ) as _ignored, mock.patch(
-            'fdroidserver.net.download_file', wraps=fake_download_file
-        ) as _ignored:
-            _ignored  # silence the linters
-            with self.assertRaises(
-                fdroidserver.exception.FDroidException,
-                msg="No NDK setup, `fdroid build` should fail with error",
-            ):
+            # use "as _ignored" just to make a pretty layout
+            with mock.patch(
+                'fdroidserver.common.replace_build_vars', wraps=make_fake_apk
+            ) as _ignored, mock.patch(
+                'fdroidserver.common.get_native_code', return_value='x86'
+            ) as _ignored, mock.patch(
+                'fdroidserver.common.get_apk_id',
+                return_value=(app.id, build.versionCode, build.versionName),
+            ) as _ignored, mock.patch(
+                'fdroidserver.common.is_apk_and_debuggable', return_value=False
+            ) as _ignored, mock.patch(
+                'fdroidserver.common.sha256sum',
+                return_value='ad7ce5467e18d40050dc51b8e7affc3e635c85bd8c59be62de32352328ed467e',
+            ) as _ignored, mock.patch(
+                'fdroidserver.common.is_apk_and_debuggable', return_value=False
+            ) as _ignored, mock.patch(
+                'fdroidserver.build.FDroidPopen', FakeProcess
+            ) as _ignored, mock.patch(
+                'fdroidserver.net.download_file', wraps=fake_download_file
+            ) as _ignored:
+                _ignored  # silence the linters
+                with self.assertRaises(
+                    fdroidserver.exception.FDroidException,
+                    msg="No NDK setup, `fdroid build` should fail with error",
+                ):
+                    fdroidserver.build.build_local(
+                        app,
+                        build,
+                        vcs,
+                        build_dir=testdir,
+                        output_dir=testdir,
+                        log_dir=None,
+                        srclib_dir=None,
+                        extlib_dir=None,
+                        tmp_dir=None,
+                        force=False,
+                        onserver=False,
+                        refresh=False,
+                    )
+                # now run `fdroid build --onserver`
+                self.assertTrue('r21e' not in config['ndk_paths'])
                 fdroidserver.build.build_local(
                     app,
                     build,
                     vcs,
                     build_dir=testdir,
                     output_dir=testdir,
-                    log_dir=None,
+                    log_dir=os.getcwd(),
                     srclib_dir=None,
                     extlib_dir=None,
                     tmp_dir=None,
                     force=False,
-                    onserver=False,
+                    onserver=True,
                     refresh=False,
                 )
-            # now run `fdroid build --onserver`
-            self.assertTrue('r21e' not in config['ndk_paths'])
-            fdroidserver.build.build_local(
-                app,
-                build,
-                vcs,
-                build_dir=testdir,
-                output_dir=testdir,
-                log_dir=os.getcwd(),
-                srclib_dir=None,
-                extlib_dir=None,
-                tmp_dir=None,
-                force=False,
-                onserver=True,
-                refresh=False,
-            )
-            self.assertTrue(os.path.exists(config['ndk_paths']['r21e']))
+                self.assertTrue(os.path.exists(config['ndk_paths']['r21e']))
 
     def test_build_local_clean(self):
         """Test if `fdroid build` cleans ant and gradle build products"""
-        testdir = tempfile.mkdtemp(
-            prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir
-        )
-        os.chdir(testdir)
-
+        os.chdir(self.testdir)
         config = dict()
         fdroidserver.common.fill_config_defaults(config)
         fdroidserver.common.config = config
@@ -374,8 +374,8 @@ class BuildTest(unittest.TestCase):
                             app,
                             build,
                             vcs,
-                            build_dir=testdir,
-                            output_dir=testdir,
+                            build_dir=self.testdir,
+                            output_dir=self.testdir,
                             log_dir=None,
                             srclib_dir=None,
                             extlib_dir=None,
@@ -396,10 +396,7 @@ class BuildTest(unittest.TestCase):
         self.assertFalse(os.path.exists('gradle-wrapper.jar'))
 
     def test_scan_with_extlib(self):
-        testdir = tempfile.mkdtemp(
-            prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir
-        )
-        os.chdir(testdir)
+        os.chdir(self.testdir)
         os.mkdir("build")
 
         config = fdroidserver.common.get_config()
@@ -446,11 +443,8 @@ class BuildTest(unittest.TestCase):
 
     def test_failed_verifies_are_not_in_unsigned(self):
 
-        testdir = tempfile.mkdtemp(
-            prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir
-        )
-        os.chdir(testdir)
-        sdk_path = os.path.join(testdir, 'android-sdk')
+        os.chdir(self.testdir)
+        sdk_path = os.path.join(self.testdir, 'android-sdk')
         self.create_fake_android_home(sdk_path)
         with open('config.yml', 'w') as fp:
             yaml.dump({'sdk_path': sdk_path}, fp)
@@ -567,10 +561,7 @@ class BuildTest(unittest.TestCase):
             else:
                 self.assertFalse(flag in args, flag + ' should not be present')
 
-        testdir = tempfile.mkdtemp(
-            prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir
-        )
-        os.chdir(testdir)
+        os.chdir(self.testdir)
         os.mkdir('tmp')
 
         chan = mock.MagicMock()

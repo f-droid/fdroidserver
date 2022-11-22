@@ -22,7 +22,7 @@ import zipfile
 import textwrap
 from datetime import datetime
 from distutils.version import LooseVersion
-from testcommon import TmpCwd
+from testcommon import TmpCwd, mkdtemp
 from unittest import mock
 
 try:
@@ -79,19 +79,19 @@ class UpdateTest(unittest.TestCase):
 
         logging.getLogger(PngImagePlugin.__name__).setLevel(logging.INFO)
         self.basedir = os.path.join(localmodule, 'tests')
-        self.tmpdir = os.path.abspath(os.path.join(self.basedir, '..', '.testfiles'))
-        if not os.path.exists(self.tmpdir):
-            os.makedirs(self.tmpdir)
         os.chdir(self.basedir)
+        self._td = mkdtemp()
+        self.testdir = self._td.name
 
         fdroidserver.common.config = None
         fdroidserver.common.options = None
 
+    def tearDown(self):
+        os.chdir(self.basedir)
+        self._td.cleanup()
+
     def test_insert_store_metadata(self):
-        tmptestsdir = tempfile.mkdtemp(
-            prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir
-        )
-        os.chdir(tmptestsdir)
+        os.chdir(self.testdir)
 
         config = dict()
         fdroidserver.common.fill_config_defaults(config)
@@ -124,7 +124,7 @@ class UpdateTest(unittest.TestCase):
         ):
             shutil.copytree(
                 os.path.join(self.basedir, 'source-files', packageName),
-                os.path.join(tmptestsdir, 'build', packageName),
+                os.path.join(self.testdir, 'build', packageName),
             )
 
         testfilename = 'icon_yAfSvPRJukZzMMfUzvbYqwaD1XmHXNtiPBtuPVHW-6s=.png'
@@ -215,10 +215,7 @@ class UpdateTest(unittest.TestCase):
 
         https://docs.fastlane.tools/actions/supply/#changelogs-whats-new
         """
-        tmptestsdir = tempfile.mkdtemp(
-            prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir
-        )
-        os.chdir(tmptestsdir)
+        os.chdir(self.testdir)
 
         config = dict()
         fdroidserver.common.fill_config_defaults(config)
@@ -254,11 +251,12 @@ class UpdateTest(unittest.TestCase):
 
     def test_name_title_scraping(self):
         """metadata file --> fdroiddata localized files --> fastlane/triple-t in app source --> APK"""
+        shutil.copytree(self.basedir, self.testdir, dirs_exist_ok=True)
         config = dict()
         fdroidserver.common.fill_config_defaults(config)
         fdroidserver.common.config = config
         fdroidserver.update.config = config
-        os.chdir(os.path.join(localmodule, 'tests'))
+        os.chdir(self.testdir)
         fdroidserver.common.options = Options
         fdroidserver.update.options = fdroidserver.common.options
         fdroidserver.update.options.clean = True
@@ -340,6 +338,8 @@ class UpdateTest(unittest.TestCase):
                 self.assertEqual(testvalue, app['localized']['en-US']['name'])
 
     def test_insert_missing_app_names_from_apks_from_repo(self):
+        os.chdir(self.testdir)
+        shutil.copytree(self.basedir, self.testdir, dirs_exist_ok=True)
         config = dict()
         fdroidserver.common.fill_config_defaults(config)
         fdroidserver.common.config = config
@@ -393,9 +393,7 @@ class UpdateTest(unittest.TestCase):
         if not os.path.isdir(importer):
             logging.warning('skipping test_insert_triple_t_metadata, import.TestCase must run first!')
             return
-        tmptestsdir = tempfile.mkdtemp(prefix=inspect.currentframe().f_code.co_name,
-                                       dir=self.tmpdir)
-        packageDir = os.path.join(tmptestsdir, 'build', packageName)
+        packageDir = os.path.join(self.testdir, 'build', packageName)
         shutil.copytree(importer, packageDir)
 
         # always use the same commit so these tests work when ci-test-app.git is updated
@@ -405,17 +403,17 @@ class UpdateTest(unittest.TestCase):
         repo.git.reset('--hard', 'b9e5d1a0d8d6fc31d4674b2f0514fef10762ed4f')
         repo.git.clean('-fdx')
 
-        os.mkdir(os.path.join(tmptestsdir, 'metadata'))
+        os.mkdir(os.path.join(self.testdir, 'metadata'))
         metadata = dict()
         metadata['Description'] = 'This is just a test app'
-        with open(os.path.join(tmptestsdir, 'metadata', packageName + '.yml'), 'w') as fp:
+        with open(os.path.join(self.testdir, 'metadata', packageName + '.yml'), 'w') as fp:
             yaml.dump(metadata, fp)
 
         config = dict()
         fdroidserver.common.fill_config_defaults(config)
         fdroidserver.common.config = config
         fdroidserver.update.config = config
-        os.chdir(tmptestsdir)
+        os.chdir(self.testdir)
 
         apps = fdroidserver.metadata.read_metadata()
         fdroidserver.update.copy_triple_t_store_metadata(apps)
@@ -436,12 +434,8 @@ class UpdateTest(unittest.TestCase):
 
     def test_insert_triple_t_2_metadata(self):
         packageName = 'org.piwigo.android'
-        tmptestsdir = tempfile.mkdtemp(
-            prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir
-        )
-        os.rmdir(tmptestsdir)
-        shutil.copytree(os.path.join(self.basedir, 'triple-t-2'), tmptestsdir)
-        os.chdir(tmptestsdir)
+        shutil.copytree(os.path.join(self.basedir, 'triple-t-2'), self.testdir, dirs_exist_ok=True)
+        os.chdir(self.testdir)
 
         config = dict()
         fdroidserver.common.fill_config_defaults(config)
@@ -478,12 +472,8 @@ class UpdateTest(unittest.TestCase):
         packages = ('com.anysoftkeyboard.languagepack.dutch', 'com.menny.android.anysoftkeyboard')
         names = ('Dutch for AnySoftKeyboard', 'AnySoftKeyboard')
 
-        tmptestsdir = tempfile.mkdtemp(
-            prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir
-        )
-        os.rmdir(tmptestsdir)
-        shutil.copytree(os.path.join(self.basedir, 'triple-t-anysoftkeyboard'), tmptestsdir)
-        os.chdir(tmptestsdir)
+        shutil.copytree(os.path.join(self.basedir, 'triple-t-anysoftkeyboard'), self.testdir, dirs_exist_ok=True)
+        os.chdir(self.testdir)
 
         for packageName, name in zip(packages, names):
             config = dict()
@@ -503,12 +493,8 @@ class UpdateTest(unittest.TestCase):
         packages = ('verifier', 'wallet')
         names = dict(verifier='COVID Certificate Check', wallet='COVID Certificate')
 
-        tmptestsdir = tempfile.mkdtemp(
-            prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir
-        )
-        os.rmdir(tmptestsdir)
-        shutil.copytree(os.path.join(self.basedir, 'triple-t-multiple'), tmptestsdir)
-        os.chdir(tmptestsdir)
+        shutil.copytree(os.path.join(self.basedir, 'triple-t-multiple'), self.testdir, dirs_exist_ok=True)
+        os.chdir(self.testdir)
 
         for p in packages:
             packageName = namespace + p
@@ -527,12 +513,8 @@ class UpdateTest(unittest.TestCase):
     def test_insert_triple_t_flutter(self):
         packageName = 'fr.emersion.goguma'
 
-        tmptestsdir = tempfile.mkdtemp(
-            prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir
-        )
-        os.rmdir(tmptestsdir)
-        shutil.copytree(os.path.join(self.basedir, 'triple-t-flutter'), tmptestsdir)
-        os.chdir(tmptestsdir)
+        shutil.copytree(os.path.join(self.basedir, 'triple-t-flutter'), self.testdir, dirs_exist_ok=True)
+        os.chdir(self.testdir)
 
         config = dict()
         fdroidserver.common.fill_config_defaults(config)
@@ -609,11 +591,7 @@ class UpdateTest(unittest.TestCase):
                          "python sig was: " + str(sig))
 
     def testScanApksAndObbs(self):
-        os.chdir(os.path.join(localmodule, 'tests'))
-        testdir = tempfile.mkdtemp(
-            prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir
-        )
-        os.chdir(testdir)
+        os.chdir(self.testdir)
         shutil.copytree(os.path.join(self.basedir, 'repo'), 'repo')
         shutil.copytree(os.path.join(self.basedir, 'metadata'), 'metadata')
         config = dict()
@@ -668,11 +646,7 @@ class UpdateTest(unittest.TestCase):
 
     def test_apkcache_json(self):
         """test the migration from pickle to json"""
-        os.chdir(os.path.join(localmodule, 'tests'))
-        testdir = tempfile.mkdtemp(
-            prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir
-        )
-        os.chdir(testdir)
+        os.chdir(self.testdir)
         shutil.copytree(os.path.join(self.basedir, 'repo'), 'repo')
         config = dict()
         fdroidserver.common.fill_config_defaults(config)
@@ -711,10 +685,7 @@ class UpdateTest(unittest.TestCase):
         fdroidserver.common.config = config
         fdroidserver.update.config = config
 
-        testdir = tempfile.mkdtemp(
-            prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir
-        )
-        os.chdir(testdir)
+        os.chdir(self.testdir)
         os.mkdir('repo')
         os.mkdir('stats')
         with open(os.path.join('stats', 'known_apks.txt'), 'w') as fp:
@@ -736,25 +707,27 @@ class UpdateTest(unittest.TestCase):
         )
 
     def test_read_added_date_from_all_apks(self):
+        os.chdir(self.testdir)
+        shutil.copytree(os.path.join(self.basedir, 'repo'), 'repo')
         config = dict()
         fdroidserver.common.fill_config_defaults(config)
         fdroidserver.common.config = config
         fdroidserver.update.config = config
         fdroidserver.common.options = Options
-        os.chdir(os.path.join(localmodule, 'tests'))
         apps = fdroidserver.metadata.read_metadata()
         knownapks = fdroidserver.common.KnownApks()
         apks, cachechanged = fdroidserver.update.process_apks({}, 'repo', knownapks)
         fdroidserver.update.read_added_date_from_all_apks(apps, apks)
 
     def test_apply_info_from_latest_apk(self):
+        os.chdir(self.testdir)
+        shutil.copytree(os.path.join(self.basedir, 'repo'), 'repo')
         config = dict()
         fdroidserver.common.fill_config_defaults(config)
         fdroidserver.common.config = config
         fdroidserver.update.config = config
         fdroidserver.common.options = Options
         fdroidserver.update.options = fdroidserver.common.options
-        os.chdir(os.path.join(localmodule, 'tests'))
         apps = fdroidserver.metadata.read_metadata()
         knownapks = fdroidserver.common.KnownApks()
         apks, cachechanged = fdroidserver.update.process_apks({}, 'repo', knownapks)
@@ -765,7 +738,7 @@ class UpdateTest(unittest.TestCase):
         fdroidserver.common.fill_config_defaults(config)
         fdroidserver.common.config = config
         fdroidserver.update.config = config
-        os.chdir(os.path.join(localmodule, 'tests'))
+        os.chdir(self.basedir)
 
         if 'apksigner' in config:
             apk_info = fdroidserver.update.scan_apk('v2.only.sig_2.apk')
@@ -873,7 +846,7 @@ class UpdateTest(unittest.TestCase):
         fdroidserver.common.fill_config_defaults(config)
         fdroidserver.common.config = config
         fdroidserver.update.config = config
-        os.chdir(os.path.join(localmodule, 'tests'))
+        os.chdir(self.basedir)
         if os.path.basename(os.getcwd()) != 'tests':
             raise Exception('This test must be run in the "tests/" subdir')
 
@@ -885,10 +858,7 @@ class UpdateTest(unittest.TestCase):
         fdroidserver.common.fill_config_defaults(config)
         fdroidserver.common.config = config
         fdroidserver.update.config = config
-        testdir = tempfile.mkdtemp(
-            prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir
-        )
-        os.chdir(testdir)
+        os.chdir(self.testdir)
         os.mkdir('repo')
         apkfile = 'repo/badzip_1.apk'
         with open(apkfile, 'w') as fp:
@@ -935,11 +905,13 @@ class UpdateTest(unittest.TestCase):
             '''Creates a YAML representation of a Build instance'''
             return dumper.represent_dict(data)
 
+        os.chdir(self.testdir)
+        shutil.copytree(self.basedir, 'tests')
         config = dict()
         fdroidserver.common.fill_config_defaults(config)
         fdroidserver.common.config = config
         fdroidserver.update.config = config
-        os.chdir(os.path.join(localmodule, 'tests'))
+        os.chdir("tests")
 
         config['ndk_paths'] = dict()
         fdroidserver.common.config = config
@@ -1016,87 +988,83 @@ class UpdateTest(unittest.TestCase):
 
         knownapks = fdroidserver.common.KnownApks()
 
-        tmptestsdir = tempfile.mkdtemp(
-            prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir
-        )
-        print('tmptestsdir', tmptestsdir)
-        os.chdir(tmptestsdir)
-        os.mkdir('repo')
-        os.mkdir('archive')
-        # setup the repo, create icons dirs, etc.
-        fdroidserver.update.process_apks({}, 'repo', knownapks)
-        fdroidserver.update.process_apks({}, 'archive', knownapks)
+        with tempfile.TemporaryDirectory() as tmptestsdir, TmpCwd(tmptestsdir):
+            os.mkdir('repo')
+            os.mkdir('archive')
+            # setup the repo, create icons dirs, etc.
+            fdroidserver.update.process_apks({}, 'repo', knownapks)
+            fdroidserver.update.process_apks({}, 'archive', knownapks)
 
-        disabledsigs = ['org.bitbucket.tickytacky.mirrormirror_2.apk']
-        for apkName in disabledsigs:
-            shutil.copy(os.path.join(self.basedir, apkName),
-                        os.path.join(tmptestsdir, 'repo'))
+            disabledsigs = ['org.bitbucket.tickytacky.mirrormirror_2.apk']
+            for apkName in disabledsigs:
+                shutil.copy(os.path.join(self.basedir, apkName),
+                            os.path.join(tmptestsdir, 'repo'))
 
-            skip, apk, cachechanged = fdroidserver.update.process_apk({}, apkName, 'repo',
-                                                                      knownapks,
-                                                                      allow_disabled_algorithms=True,
-                                                                      archive_bad_sig=False)
-            self.assertFalse(skip)
-            self.assertIsNotNone(apk)
-            self.assertTrue(cachechanged)
-            self.assertFalse(os.path.exists(os.path.join('archive', apkName)))
-            self.assertTrue(os.path.exists(os.path.join('repo', apkName)))
+                skip, apk, cachechanged = fdroidserver.update.process_apk({}, apkName, 'repo',
+                                                                          knownapks,
+                                                                          allow_disabled_algorithms=True,
+                                                                          archive_bad_sig=False)
+                self.assertFalse(skip)
+                self.assertIsNotNone(apk)
+                self.assertTrue(cachechanged)
+                self.assertFalse(os.path.exists(os.path.join('archive', apkName)))
+                self.assertTrue(os.path.exists(os.path.join('repo', apkName)))
 
-            if os.path.exists('/usr/bin/apksigner') or 'apksigner' in config:
-                print('SKIPPING: apksigner installed and it allows MD5 signatures')
-                return
+                if os.path.exists('/usr/bin/apksigner') or 'apksigner' in config:
+                    print('SKIPPING: apksigner installed and it allows MD5 signatures')
+                    return
 
-            javac = config['jarsigner'].replace('jarsigner', 'javac')
-            v = subprocess.check_output([javac, '-version'], stderr=subprocess.STDOUT)[6:-1].decode('utf-8')
-            if LooseVersion(v) < LooseVersion('1.8.0_132'):
-                print('SKIPPING: running tests with old Java (' + v + ')')
-                return
+                javac = config['jarsigner'].replace('jarsigner', 'javac')
+                v = subprocess.check_output([javac, '-version'], stderr=subprocess.STDOUT)[6:-1].decode('utf-8')
+                if LooseVersion(v) < LooseVersion('1.8.0_132'):
+                    print('SKIPPING: running tests with old Java (' + v + ')')
+                    return
 
-            # this test only works on systems with fully updated Java/jarsigner
-            # that has MD5 listed in jdk.jar.disabledAlgorithms in java.security
-            # https://blogs.oracle.com/java-platform-group/oracle-jre-will-no-longer-trust-md5-signed-code-by-default
-            skip, apk, cachechanged = fdroidserver.update.process_apk({}, apkName, 'repo',
-                                                                      knownapks,
-                                                                      allow_disabled_algorithms=False,
-                                                                      archive_bad_sig=True)
-            self.assertTrue(skip)
-            self.assertIsNone(apk)
-            self.assertFalse(cachechanged)
-            self.assertTrue(os.path.exists(os.path.join('archive', apkName)))
-            self.assertFalse(os.path.exists(os.path.join('repo', apkName)))
+                # this test only works on systems with fully updated Java/jarsigner
+                # that has MD5 listed in jdk.jar.disabledAlgorithms in java.security
+                # https://blogs.oracle.com/java-platform-group/oracle-jre-will-no-longer-trust-md5-signed-code-by-default
+                skip, apk, cachechanged = fdroidserver.update.process_apk({}, apkName, 'repo',
+                                                                          knownapks,
+                                                                          allow_disabled_algorithms=False,
+                                                                          archive_bad_sig=True)
+                self.assertTrue(skip)
+                self.assertIsNone(apk)
+                self.assertFalse(cachechanged)
+                self.assertTrue(os.path.exists(os.path.join('archive', apkName)))
+                self.assertFalse(os.path.exists(os.path.join('repo', apkName)))
 
-            skip, apk, cachechanged = fdroidserver.update.process_apk({}, apkName, 'archive',
-                                                                      knownapks,
-                                                                      allow_disabled_algorithms=False,
-                                                                      archive_bad_sig=False)
-            self.assertFalse(skip)
-            self.assertIsNotNone(apk)
-            self.assertTrue(cachechanged)
-            self.assertTrue(os.path.exists(os.path.join('archive', apkName)))
-            self.assertFalse(os.path.exists(os.path.join('repo', apkName)))
+                skip, apk, cachechanged = fdroidserver.update.process_apk({}, apkName, 'archive',
+                                                                          knownapks,
+                                                                          allow_disabled_algorithms=False,
+                                                                          archive_bad_sig=False)
+                self.assertFalse(skip)
+                self.assertIsNotNone(apk)
+                self.assertTrue(cachechanged)
+                self.assertTrue(os.path.exists(os.path.join('archive', apkName)))
+                self.assertFalse(os.path.exists(os.path.join('repo', apkName)))
 
-            # ensure that icons have been moved to the archive as well
-            for density in fdroidserver.update.screen_densities:
-                icon_path = os.path.join(fdroidserver.update.get_icon_dir('archive', density),
-                                         apk['icon'])
-                self.assertTrue(os.path.isfile(icon_path))
-                self.assertTrue(os.path.getsize(icon_path) > 1)
+                # ensure that icons have been moved to the archive as well
+                for density in fdroidserver.update.screen_densities:
+                    icon_path = os.path.join(fdroidserver.update.get_icon_dir('archive', density),
+                                             apk['icon'])
+                    self.assertTrue(os.path.isfile(icon_path))
+                    self.assertTrue(os.path.getsize(icon_path) > 1)
 
-        badsigs = ['urzip-badcert.apk', 'urzip-badsig.apk', 'urzip-release-unsigned.apk', ]
-        for apkName in badsigs:
-            shutil.copy(os.path.join(self.basedir, apkName),
-                        os.path.join(tmptestsdir, 'repo'))
+            badsigs = ['urzip-badcert.apk', 'urzip-badsig.apk', 'urzip-release-unsigned.apk', ]
+            for apkName in badsigs:
+                shutil.copy(os.path.join(self.basedir, apkName),
+                            os.path.join(self.testdir, 'repo'))
 
-            skip, apk, cachechanged = fdroidserver.update.process_apk({}, apkName, 'repo',
-                                                                      knownapks,
-                                                                      allow_disabled_algorithms=False,
-                                                                      archive_bad_sig=False)
-            self.assertTrue(skip)
-            self.assertIsNone(apk)
-            self.assertFalse(cachechanged)
+                skip, apk, cachechanged = fdroidserver.update.process_apk({}, apkName, 'repo',
+                                                                          knownapks,
+                                                                          allow_disabled_algorithms=False,
+                                                                          archive_bad_sig=False)
+                self.assertTrue(skip)
+                self.assertIsNone(apk)
+                self.assertFalse(cachechanged)
 
     def test_process_invalid_apk(self):
-        os.chdir(os.path.join(localmodule, 'tests'))
+        os.chdir(self.basedir)
         if os.path.basename(os.getcwd()) != 'tests':
             raise Exception('This test must be run in the "tests/" subdir')
 
@@ -1119,6 +1087,8 @@ class UpdateTest(unittest.TestCase):
 
     def test_get_apks_without_allowed_signatures(self):
         """Test when no AllowedAPKSigningKeys is specified"""
+        os.chdir(self.testdir)
+        shutil.copytree(os.path.join(self.basedir, 'repo'), 'repo')
         config = dict()
         fdroidserver.common.fill_config_defaults(config)
         fdroidserver.common.config = config
@@ -1127,6 +1097,7 @@ class UpdateTest(unittest.TestCase):
 
         app = fdroidserver.metadata.App()
         knownapks = fdroidserver.common.KnownApks()
+        apks, cachechanged = fdroidserver.update.process_apks({}, 'repo', knownapks)
         apkfile = 'v1.v2.sig_1020.apk'
         (skip, apk, cachechanged) = fdroidserver.update.process_apk(
             {}, apkfile, 'repo', knownapks, False
@@ -1137,6 +1108,8 @@ class UpdateTest(unittest.TestCase):
 
     def test_get_apks_without_allowed_signatures_allowed(self):
         """Test when the APK matches the specified AllowedAPKSigningKeys"""
+        os.chdir(self.testdir)
+        shutil.copytree(os.path.join(self.basedir, 'repo'), 'repo')
         config = dict()
         fdroidserver.common.fill_config_defaults(config)
         fdroidserver.common.config = config
@@ -1149,6 +1122,7 @@ class UpdateTest(unittest.TestCase):
             }
         )
         knownapks = fdroidserver.common.KnownApks()
+        apks, cachechanged = fdroidserver.update.process_apks({}, 'repo', knownapks)
         apkfile = 'v1.v2.sig_1020.apk'
         (skip, apk, cachechanged) = fdroidserver.update.process_apk(
             {}, apkfile, 'repo', knownapks, False
@@ -1159,6 +1133,8 @@ class UpdateTest(unittest.TestCase):
 
     def test_get_apks_without_allowed_signatures_blocked(self):
         """Test when the APK does not match any specified AllowedAPKSigningKeys"""
+        os.chdir(self.testdir)
+        shutil.copytree(os.path.join(self.basedir, 'repo'), 'repo')
         config = dict()
         fdroidserver.common.fill_config_defaults(config)
         fdroidserver.common.config = config
@@ -1171,6 +1147,7 @@ class UpdateTest(unittest.TestCase):
             }
         )
         knownapks = fdroidserver.common.KnownApks()
+        apks, cachechanged = fdroidserver.update.process_apks({}, 'repo', knownapks)
         apkfile = 'v1.v2.sig_1020.apk'
         (skip, apk, cachechanged) = fdroidserver.update.process_apk(
             {}, apkfile, 'repo', knownapks, False
@@ -1181,11 +1158,7 @@ class UpdateTest(unittest.TestCase):
 
     def test_update_with_AllowedAPKSigningKeys(self):
         """Test that APKs without allowed signatures get deleted."""
-        # Prepare test environment
-        testdir = tempfile.mkdtemp(
-            prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir
-        )
-        os.chdir(testdir)
+        os.chdir(self.testdir)
         os.mkdir('repo')
         testapk = os.path.join('repo', 'com.politedroid_6.apk')
         shutil.copy(os.path.join(self.basedir, testapk), testapk)
@@ -1229,11 +1202,7 @@ class UpdateTest(unittest.TestCase):
         self.assertFalse(os.path.exists(testapk))
 
     def test_translate_per_build_anti_features(self):
-        os.chdir(os.path.join(localmodule, 'tests'))
-        testdir = tempfile.mkdtemp(
-            prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir
-        )
-        os.chdir(testdir)
+        os.chdir(self.testdir)
         shutil.copytree(os.path.join(self.basedir, 'repo'), 'repo')
         shutil.copytree(os.path.join(self.basedir, 'metadata'), 'metadata')
         config = dict()
@@ -1262,11 +1231,7 @@ class UpdateTest(unittest.TestCase):
         self.assertTrue(foundtest)
 
     def test_create_metadata_from_template(self):
-        tmptestsdir = tempfile.mkdtemp(
-            prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir
-        )
-        print('tmptestsdir', tmptestsdir)
-        os.chdir(tmptestsdir)
+        os.chdir(self.testdir)
         os.mkdir('repo')
         os.mkdir('metadata')
         shutil.copy(os.path.join(localmodule, 'tests', 'urzip.apk'), 'repo')
@@ -1308,7 +1273,7 @@ class UpdateTest(unittest.TestCase):
         # test using external template.yml
         os.remove(testfile)
         self.assertFalse(os.path.exists(testfile))
-        shutil.copy(os.path.join(localmodule, 'examples', 'template.yml'), tmptestsdir)
+        shutil.copy(os.path.join(localmodule, 'examples', 'template.yml'), self.testdir)
         fdroidserver.update.create_metadata_from_template(apk)
         self.assertTrue(os.path.exists(testfile))
         apps = fdroidserver.metadata.read_metadata()
@@ -1363,17 +1328,13 @@ class UpdateTest(unittest.TestCase):
         assert not icons_src
 
     def test_strip_and_copy_image(self):
-        tmptestsdir = tempfile.mkdtemp(
-            prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir
-        )
-
         in_file = os.path.join(self.basedir, 'metadata', 'info.guardianproject.urzip', 'en-US', 'images', 'icon.png')
-        out_file = os.path.join(tmptestsdir, 'icon.png')
+        out_file = os.path.join(self.testdir, 'icon.png')
         fdroidserver.update._strip_and_copy_image(in_file, out_file)
         self.assertTrue(os.path.exists(out_file))
 
         in_file = os.path.join(self.basedir, 'corrupt-featureGraphic.png')
-        out_file = os.path.join(tmptestsdir, 'corrupt-featureGraphic.png')
+        out_file = os.path.join(self.testdir, 'corrupt-featureGraphic.png')
         fdroidserver.update._strip_and_copy_image(in_file, out_file)
         self.assertFalse(os.path.exists(out_file))
 
@@ -1463,10 +1424,7 @@ class UpdateTest(unittest.TestCase):
                 )
 
     def test_insert_funding_yml_donation_links(self):
-        testdir = tempfile.mkdtemp(
-            prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir
-        )
-        os.chdir(testdir)
+        os.chdir(self.testdir)
         os.mkdir('build')
         content = textwrap.dedent(
             """
@@ -1507,10 +1465,7 @@ class UpdateTest(unittest.TestCase):
 
     def test_insert_funding_yml_donation_links_one_at_a_time(self):
         """Exercise the FUNDING.yml code one entry at a time"""
-        testdir = tempfile.mkdtemp(
-            prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir
-        )
-        os.chdir(testdir)
+        os.chdir(self.testdir)
         os.mkdir('build')
 
         app = fdroidserver.metadata.App()
@@ -1551,10 +1506,7 @@ class UpdateTest(unittest.TestCase):
                     self.assertEqual(app.get('Donate', '').split('/')[-1], v)
 
     def test_insert_funding_yml_donation_links_with_corrupt_file(self):
-        testdir = tempfile.mkdtemp(
-            prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir
-        )
-        os.chdir(testdir)
+        os.chdir(self.testdir)
         os.mkdir('build')
         app = fdroidserver.metadata.App()
         app.id = 'fake.app.id'
@@ -1598,10 +1550,7 @@ class UpdateTest(unittest.TestCase):
         self.assertIsNotNone(fdroidserver.update.sanitize_funding_yml_entry(['first', 'second']))
 
     def test_set_localized_text_entry(self):
-        tmptestsdir = tempfile.mkdtemp(
-            prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir
-        )
-        os.chdir(tmptestsdir)
+        os.chdir(self.testdir)
         config = dict()
         fdroidserver.common.fill_config_defaults(config)
         fdroidserver.update.config = config
@@ -1630,10 +1579,7 @@ class UpdateTest(unittest.TestCase):
             self.assertIsNone(app['localized'].get(locale, {}).get(key))
 
     def test_set_author_entry(self):
-        tmptestsdir = tempfile.mkdtemp(
-            prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir
-        )
-        os.chdir(tmptestsdir)
+        os.chdir(self.testdir)
         config = dict()
         fdroidserver.common.fill_config_defaults(config)
         fdroidserver.update.config = config
@@ -1760,10 +1706,7 @@ class UpdateTest(unittest.TestCase):
             self.assertEqual(apkaapt, apkandroguard)
 
     def test_exclude_disabled_apks(self):
-        testdir = tempfile.mkdtemp(
-            prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir
-        )
-        os.chdir(testdir)
+        os.chdir(self.testdir)
         os.mkdir('repo')
         testapk = os.path.join('repo', 'com.politedroid_6.apk')
         testapk_new = os.path.join('repo', 'Politedroid-1.5.apk')
