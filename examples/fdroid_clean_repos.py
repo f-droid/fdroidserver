@@ -13,9 +13,15 @@ fdroid_summary = 'reset app VCSs to the latest version'
 
 
 def main():
-    parser = argparse.ArgumentParser(usage="%(prog)s [options] [APPID[:VERCODE] [APPID[:VERCODE] ...]]")
+    parser = argparse.ArgumentParser(
+        usage="%(prog)s [options] [APPID[:VERCODE] [APPID[:VERCODE] ...]]"
+    )
     common.setup_global_opts(parser)
-    parser.add_argument("appid", nargs='*', help=_("applicationId with optional versionCode in the form APPID[:VERCODE]"))
+    parser.add_argument(
+        "appid",
+        nargs='*',
+        help=_("applicationId with optional versionCode in the form APPID[:VERCODE]"),
+    )
     metadata.add_metadata_arguments(parser)
     options = parser.parse_args()
     common.options = options

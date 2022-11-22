@@ -223,6 +223,7 @@ black:
   script:
     - pip install black
     - black --check --diff --color
+        examples/fdroid_clean_repos.py
         examples/fdroid_extract_repo_pubkey.py
         fdroid
         fdroidserver/btlog.py
