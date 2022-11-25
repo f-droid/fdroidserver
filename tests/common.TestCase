@@ -58,8 +58,6 @@ class CommonTest(unittest.TestCase):
         fdroidserver.common.config = None
         fdroidserver.common.options = mock.Mock()
         fdroidserver.common.options.verbose = False
-        self.path = os.environ['PATH']
-        self.android_home = os.environ.get('ANDROID_HOME')
         self._td = mkdtemp()
         self.testdir = self._td.name
 
@@ -67,9 +65,6 @@ class CommonTest(unittest.TestCase):
         os.chdir(self.basedir)
         self._td.cleanup()
         shutil.rmtree(self.tmpdir)
-        os.environ['PATH'] = self.path
-        if self.android_home:
-            os.environ['ANDROID_HOME'] = self.android_home
 
     def test_parse_human_readable_size(self):
         for k, v in (
@@ -695,10 +690,11 @@ class CommonTest(unittest.TestCase):
         usr_bin_apksigner = '/usr/bin/apksigner'
         if not os.path.isfile(usr_bin_apksigner):
             self.skipTest('SKIPPING since %s is not installed!' % usr_bin_apksigner)
-        os.environ['PATH'] = '/usr/local/bin:/usr/bin:/bin'
-        config = {}
-        fdroidserver.common.find_apksigner(config)
-        self.assertEqual(usr_bin_apksigner, config.get('apksigner'))
+        with mock.patch.dict(os.environ, clear=True):
+            os.environ['PATH'] = '/usr/local/bin:/usr/bin:/bin'
+            config = {}
+            fdroidserver.common.find_apksigner(config)
+            self.assertEqual(usr_bin_apksigner, config.get('apksigner'))
 
     def test_find_apksigner_config_overrides(self):
         """apksigner should come from config before any auto-detection"""
@@ -711,10 +707,11 @@ class CommonTest(unittest.TestCase):
         os.chmod(do_not_use, 0o0755)
         apksigner = os.path.join(self.tmpdir, 'apksigner')
         config = {'apksigner': apksigner}
-        os.environ['ANDROID_HOME'] = android_home
-        os.environ['PATH'] = '%s:/usr/local/bin:/usr/bin:/bin' % android_home
-        fdroidserver.common.find_apksigner(config)
-        self.assertEqual(apksigner, config.get('apksigner'))
+        with mock.patch.dict(os.environ, clear=True):
+            os.environ['ANDROID_HOME'] = android_home
+            os.environ['PATH'] = '%s:/usr/local/bin:/usr/bin:/bin' % android_home
+            fdroidserver.common.find_apksigner(config)
+            self.assertEqual(apksigner, config.get('apksigner'))
 
     def test_find_apksigner_prefer_path(self):
         """apksigner should come from PATH before ANDROID_HOME"""
@@ -732,10 +729,11 @@ class CommonTest(unittest.TestCase):
         os.chmod(do_not_use, 0o0755)
 
         config = {'sdk_path': android_home}
-        os.environ['ANDROID_HOME'] = android_home
-        os.environ['PATH'] = '%s:/usr/local/bin:/usr/bin:/bin' % os.path.dirname(apksigner)
-        fdroidserver.common.find_apksigner(config)
-        self.assertEqual(apksigner, config.get('apksigner'))
+        with mock.patch.dict(os.environ, clear=True):
+            os.environ['ANDROID_HOME'] = android_home
+            os.environ['PATH'] = '%s:/usr/local/bin:/usr/bin:/bin' % os.path.dirname(apksigner)
+            fdroidserver.common.find_apksigner(config)
+            self.assertEqual(apksigner, config.get('apksigner'))
 
     def test_find_apksigner_prefer_newest(self):
         """apksigner should be the newest available in ANDROID_HOME"""
@@ -755,9 +753,10 @@ class CommonTest(unittest.TestCase):
         os.chmod(do_not_use, 0o0755)
 
         config = {'sdk_path': android_home}
-        os.environ['PATH'] = '/fake/path/to/avoid/conflicts'
-        fdroidserver.common.find_apksigner(config)
-        self.assertEqual(apksigner, config.get('apksigner'))
+        with mock.patch.dict(os.environ, clear=True):
+            os.environ['PATH'] = '/fake/path/to/avoid/conflicts'
+            fdroidserver.common.find_apksigner(config)
+            self.assertEqual(apksigner, config.get('apksigner'))
 
     def test_find_apksigner_system_package_android_home(self):
         """Test that apksigner v30 or newer is found"""
@@ -779,13 +778,14 @@ class CommonTest(unittest.TestCase):
         if LooseVersion(version) < LooseVersion(min_version):
             self.skipTest('SKIPPING since build-tools %s or higher is required!' % min_version)
         fdroidserver.common.config = {'sdk_path': android_home}
-        os.environ['PATH'] = '/fake/path/to/avoid/conflicts'
-        config = fdroidserver.common.read_config()
-        fdroidserver.common.find_apksigner(config)
-        self.assertEqual(
-            os.path.join(android_home, 'build-tools'),
-            os.path.dirname(os.path.dirname(config.get('apksigner'))),
-        )
+        with mock.patch.dict(os.environ, clear=True):
+            os.environ['PATH'] = '/fake/path/to/avoid/conflicts'
+            config = fdroidserver.common.read_config()
+            fdroidserver.common.find_apksigner(config)
+            self.assertEqual(
+                os.path.join(android_home, 'build-tools'),
+                os.path.dirname(os.path.dirname(config.get('apksigner'))),
+            )
 
     def test_sign_apk(self):
         config = fdroidserver.common.read_config(fdroidserver.common.options)
@@ -1792,13 +1792,14 @@ class CommonTest(unittest.TestCase):
     def test_with_config_yml_with_env_var(self):
         """Make sure it is possible to use config.yml alone."""
         os.chdir(self.tmpdir)
-        os.environ['SECRET'] = 'mysecretpassword'
-        with open('config.yml', 'w') as fp:
-            fp.write("""keypass: {'env': 'SECRET'}""")
-        self.assertTrue(os.path.exists('config.yml'))
-        self.assertFalse(os.path.exists('config.py'))
-        config = fdroidserver.common.read_config(fdroidserver.common.options)
-        self.assertEqual(os.getenv('SECRET', 'fail'), config.get('keypass'))
+        with mock.patch.dict(os.environ):
+            os.environ['SECRET'] = 'mysecretpassword'
+            with open('config.yml', 'w') as fp:
+                fp.write("""keypass: {'env': 'SECRET'}""")
+            self.assertTrue(os.path.exists('config.yml'))
+            self.assertFalse(os.path.exists('config.py'))
+            config = fdroidserver.common.read_config(fdroidserver.common.options)
+            self.assertEqual(os.getenv('SECRET', 'fail'), config.get('keypass'))
 
     def test_with_config_py(self):
         """Make sure it is still possible to use config.py alone."""
@@ -2338,9 +2339,10 @@ class CommonTest(unittest.TestCase):
         fdroidserver.common.config = {'ndk_paths': {}}
         build = fdroidserver.metadata.Build()
 
-        os.environ['PATH'] = '/usr/bin:/usr/sbin'
-        fdroidserver.common.set_FDroidPopen_env(build)
-        self.assertNotIn('', os.getenv('PATH').split(os.pathsep))
+        with mock.patch.dict(os.environ, clear=True):
+            os.environ['PATH'] = '/usr/bin:/usr/sbin'
+            fdroidserver.common.set_FDroidPopen_env(build)
+            self.assertNotIn('', os.getenv('PATH').split(os.pathsep))
 
     def test_is_repo_file(self):
         is_repo_file = fdroidserver.common.is_repo_file
