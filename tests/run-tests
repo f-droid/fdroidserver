@@ -80,6 +80,17 @@ exit(c.get('apksigner') is None)
 "
 }
 
+err_handler() {
+# remove this to prevent git conflicts and complaining
+    rm -rf "$WORKSPACE"/fdroidserver.egg-info/
+    rm -rf "$WORKSPACE"/.testfiles/run-tests.*
+    rm -rf "$WORKSPACE"/.testfiles/test_*
+    rm -f "$WORKSPACE"/.testfiles/tmp.*
+    rmdir --ignore-fail-on-non-empty "$WORKSPACE"/.testfiles
+}
+
+trap err_handler INT EXIT
+
 #------------------------------------------------------------------------------#
 # "main"
 
@@ -1426,10 +1437,5 @@ $fdroid checkupdates --allow-dirty --auto -v
 grep "CurrentVersionCode: 1" metadata/fake.yml
 
 unset GIT_ALLOW_PROTOCOL
-
-#------------------------------------------------------------------------------#
-
-# remove this to prevent git conflicts and complaining
-rm -rf $WORKSPACE/fdroidserver.egg-info/
 
 echo SUCCESS
