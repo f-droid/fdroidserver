@@ -257,7 +257,7 @@ echo "" >> metadata/org.fdroid.ci.test.app.yml
 echo "Repo: https://gitlab.com/fdroid/ci-test-app.git" >> metadata/org.fdroid.ci.test.app.yml
 echo "RepoType: git" >> metadata/org.fdroid.ci.test.app.yml
 mkdir build
-cp -a $WORKSPACE/tests/tmp/importer build/org.fdroid.ci.test.app
+git clone https://gitlab.com/fdroid/ci-test-app.git build/org.fdroid.ci.test.app
 ls -l build/org.fdroid.ci.test.app
 $fdroid scanner org.fdroid.ci.test.app --verbose
 
