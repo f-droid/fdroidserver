@@ -753,6 +753,7 @@ class UpdateTest(unittest.TestCase):
         fdroidserver.common.config = config
         fdroidserver.update.config = config
         fdroidserver.common.options = Options
+        fdroidserver.update.options = fdroidserver.common.options
         os.chdir(os.path.join(localmodule, 'tests'))
         apps = fdroidserver.metadata.read_metadata()
         knownapks = fdroidserver.common.KnownApks()
@@ -1122,6 +1123,7 @@ class UpdateTest(unittest.TestCase):
         fdroidserver.common.fill_config_defaults(config)
         fdroidserver.common.config = config
         fdroidserver.common.options = Options
+        fdroidserver.update.options = fdroidserver.common.options
 
         app = fdroidserver.metadata.App()
         knownapks = fdroidserver.common.KnownApks()
