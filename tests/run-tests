@@ -1277,10 +1277,13 @@ fi
 echo_header 'test mirroring a repo'
 
 if which wget; then
+    TESTROOT=`create_test_dir`
     REPOROOT=`create_test_dir`
-    cd $WORKSPACE/tests
+    cp -r "$WORKSPACE/tests" "$TESTROOT"
+    cd "$TESTROOT/tests"
     test -d archive || mkdir archive
     cp repo/index-v1.json $REPOROOT/
+    $fdroid update
     $fdroid signindex
     mv $REPOROOT/index-v1.json repo/index-v1.json
 
