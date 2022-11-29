@@ -32,10 +32,13 @@ def main():
 
     for appid, app in apps.items():
         if "Builds" in app and len(app["Builds"]) > 0:
+            build = app.get('Builds')[-1]
             logging.info(_("Cleaning up '{appid}' VCS").format(appid=appid))
             try:
                 vcs, build_dir = common.setup_vcs(app)
-                vcs.gotorevision(app["Builds"][-1].commit)
+                vcs.gotorevision(build.commit)
+                if build.submodules:
+                    vcs.initsubmodules()
 
             except VCSException:
                 pass
