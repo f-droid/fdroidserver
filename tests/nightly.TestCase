@@ -246,7 +246,14 @@ class NightlyTest(unittest.TestCase):
         ):
             self.assertTrue(self.testroot == Path.home().parent)
             with patch('subprocess.check_call', _subprocess_check_call):
-                nightly.main()
+                try:
+                    nightly.main()
+                except exception.BuildException as e:
+                    if "apksigner not found" in e.value:
+                        self.skipTest("skipping, apksigner not found due to fake $HOME")
+                    else:
+                        raise
+
         self.assertEqual(called, [['ssh', '-Tvi'], ['fdroid', 'deploy']])
         self.assertFalse(os.path.exists('config.py'))
         git_url = 'git@github.com:f-droid/test-nightly'
@@ -314,7 +321,14 @@ class NightlyTest(unittest.TestCase):
         ):
             self.assertTrue(self.testroot == Path.home().parent)
             with patch('subprocess.check_call', _subprocess_check_call):
-                nightly.main()
+                try:
+                    nightly.main()
+                except exception.BuildException as e:
+                    if "apksigner not found" in e.value:
+                        self.skipTest("skipping, apksigner not found due to fake $HOME")
+                    else:
+                        raise
+
         self.assertEqual(called, [['ssh', '-Tvi'], ['fdroid', 'deploy']])
         self.assertFalse(os.path.exists('config.py'))
         expected = {
