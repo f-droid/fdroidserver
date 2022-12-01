@@ -3403,15 +3403,21 @@ def verify_apks(signed_apk, unsigned_apk, tmp_dir, v1_only=None):
         apksigcopier.do_copy(signed_apk, unsigned_apk, tmp_apk, v1_only=v1_only)
     except apksigcopier.APKSigCopierError as e:
         logging.info('...NOT verified - {0}'.format(tmp_apk))
-        return 'signature copying failed: {}'.format(str(e))
+        error = 'signature copying failed: {}'.format(str(e))
+        result = compare_apks(signed_apk, unsigned_apk, tmp_dir,
+                              os.path.dirname(unsigned_apk))
+        if result is not None:
+            error += '\nComparing reference APK to unsigned APK...\n' + result
+        return error
 
     if not verify_apk_signature(tmp_apk):
         logging.info('...NOT verified - {0}'.format(tmp_apk))
+        error = 'verification of APK with copied signature failed'
         result = compare_apks(signed_apk, tmp_apk, tmp_dir,
                               os.path.dirname(unsigned_apk))
         if result is not None:
-            return result
-        return 'verification of APK with copied signature failed'
+            error += '\nComparing reference APK to APK with copied signature...\n' + result
+        return error
 
     logging.info('...successfully verified')
     return None
