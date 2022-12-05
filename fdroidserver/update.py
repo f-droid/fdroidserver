@@ -46,6 +46,7 @@ except ImportError:
 
 import collections
 from binascii import hexlify
+from biplist import readPlist
 
 from . import _
 from . import common
@@ -522,6 +523,48 @@ def insert_obbs(repodir, apps, apks):
                     apk['obbPatchFileSha256'] = obbsha256
             if 'obbMainFile' in apk and 'obbPatchFile' in apk:
                 break
+
+
+def process_ipa(repodir, apks):
+    """Scan the .ipa files in a given repo directory
+
+    Parameters
+    ----------
+    repodir
+      repo directory to scan
+    apps
+      list of current, valid apps
+    apks
+      current information on all APKs
+    """
+    def ipaWarnDelete(f, msg):
+        logging.warning(msg + ' ' + f)
+        if options.delete_unknown:
+            logging.error(_("Deleting unknown file: {path}").format(path=f))
+            os.remove(f)
+
+    for f in glob.glob(os.path.join(repodir, '*.ipa')):
+        ipa = {}
+        apks.append(ipa)
+
+        ipa["apkName"] = os.path.basename(f)
+        ipa["hash"] = common.sha256sum(f)
+        ipa["hashType"] = "sha256"
+        ipa["size"] = os.path.getsize(f)
+
+        with zipfile.ZipFile(f) as ipa_zip:
+            for info in ipa_zip.infolist():
+                if re.match("Payload/[^/]*.app/Info.plist", info.filename):
+                    with ipa_zip.open(info) as plist_file:
+                        plist = readPlist(plist_file)
+                        # https://developer.apple.com/documentation/bundleresources/information_property_list/cfbundleversion
+                        version = plist["CFBundleVersion"].split('.')
+                        major = int(version.pop(0))
+                        minor = int(version.pop(0)) if version else 0
+                        patch = int(version.pop(0)) if version else 0
+                        ipa["packageName"] = plist["CFBundleIdentifier"]
+                        ipa["versionCode"] = major * 10**12 + minor * 10**6 + patch
+                        ipa["versionName"] = plist["CFBundleShortVersionString"]
 
 
 def translate_per_build_anti_features(apps, apks):
@@ -1139,7 +1182,7 @@ def scan_repo_files(apkcache, repodir, knownapks, use_date_from_file=False):
     repodir = repodir.encode()
     for name in os.listdir(repodir):
         file_extension = common.get_file_extension(name)
-        if file_extension in ('apk', 'obb'):
+        if file_extension in ('apk', 'obb', 'ipa'):
             continue
         filename = os.path.join(repodir, name)
         name_utf8 = name.decode()
@@ -2128,6 +2171,7 @@ def prepare_apps(apps, apks, repodir):
     -------
     the relevant subset of apps (as a deepcopy)
     """
+    process_ipa(repodir, apks)
     apps_with_packages = get_apps_with_packages(apps, apks)
     apply_info_from_latest_apk(apps_with_packages, apks)
     insert_funding_yml_donation_links(apps)
