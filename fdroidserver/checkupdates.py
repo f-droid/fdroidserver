@@ -524,6 +524,7 @@ def checkupdates_app(app):
 
                 bullseye_blocklist = [
                     'apt-get install -y openjdk-11-jdk',
+                    'apt-get install openjdk-11-jdk-headless',
                     'apt-get install -y openjdk-11-jdk-headless',
                     'apt-get install -t stretch-backports openjdk-11-jdk-headless openjdk-11-jre-headless',
                     'apt-get install -y -t stretch-backports openjdk-11-jdk-headless openjdk-11-jre-headless',
