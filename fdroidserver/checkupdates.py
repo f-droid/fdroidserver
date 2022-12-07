@@ -533,7 +533,8 @@ def checkupdates_app(app):
 
                 for build in newbuilds:
                     if "sudo" in build:
-                        build["sudo"] = [line for line in build["sudo"] if line not in bullseye_blocklist]
+                        if any("openjdk-11" in line for line in build["sudo"]):
+                            build["sudo"] = [line for line in build["sudo"] if line not in bullseye_blocklist]
                         if build["sudo"] == ['apt-get update']:
                             build["sudo"] = ''
 
