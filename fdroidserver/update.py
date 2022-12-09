@@ -565,6 +565,7 @@ def process_ipa(repodir, apks):
                         ipa["packageName"] = plist["CFBundleIdentifier"]
                         ipa["versionCode"] = major * 10**12 + minor * 10**6 + patch
                         ipa["versionName"] = plist["CFBundleShortVersionString"]
+                        ipa["usage"] = {k: v for k, v in plist.items() if 'Usage' in k}
 
 
 def translate_per_build_anti_features(apps, apks):
