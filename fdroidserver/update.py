@@ -557,8 +557,8 @@ def process_ipa(repodir, apks):
                 if re.match("Payload/[^/]*.app/Info.plist", info.filename):
                     with ipa_zip.open(info) as plist_file:
                         plist = readPlist(plist_file)
-                        # https://developer.apple.com/documentation/bundleresources/information_property_list/cfbundleversion
-                        version = plist["CFBundleVersion"].split('.')
+                        # https://developer.apple.com/documentation/bundleresources/information_property_list/cfbundleshortversionstring
+                        version = plist["CFBundleShortVersionString"].split('.')
                         major = int(version.pop(0))
                         minor = int(version.pop(0)) if version else 0
                         patch = int(version.pop(0)) if version else 0
