@@ -62,6 +62,7 @@ metadata_v0:
           -e "s/  timeout:.'\([0-9]*\)'/  timeout:\1/"
           -e "/VercodeOperation/s/null/[]/"
           -e 's/VercodeOperation:.\([^[]\+\)/VercodeOperation:\n- \1/'
+          -e '/LiberapayID/d'
           metadata/dump_*/*.yaml
     - diff -uw metadata/dump_*
 

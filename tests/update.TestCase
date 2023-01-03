@@ -1395,7 +1395,6 @@ class UpdateTest(unittest.TestCase):
                     Changelog:
                     Donate:
                     FlattrID:
-                    LiberapayID:
                     Bitcoin:
                     Litecoin:
                     Name:
@@ -1442,7 +1441,6 @@ class UpdateTest(unittest.TestCase):
                         'Donate': '',
                         'FlattrID': '',
                         'IssueTracker': '',
-                        'LiberapayID': '',
                         'License': '',
                         'Litecoin': '',
                         'Name': 'rocks.janicerand',
