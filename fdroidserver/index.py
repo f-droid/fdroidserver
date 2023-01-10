@@ -1300,7 +1300,7 @@ def make_v0(apps, apks, repodir, repodict, requestsdict, fdroid_signing_key_fing
                 name = app.get('localized', {}).get('en-US', {}).get('name')
             if not name:
                 name = app.id
-            sanitized_name = re.sub(b'''[ '"&%?+=/]''', b'', name.encode('utf-8'))
+            sanitized_name = re.sub(b'''[ '"&%?+=/]''', b'', str(name).encode('utf-8'))
             apklinkname = sanitized_name + os.path.splitext(current_version_file)[1].encode('utf-8')
             current_version_path = os.path.join(repodir, current_version_file).encode('utf-8', 'surrogateescape')
             if os.path.islink(apklinkname):
