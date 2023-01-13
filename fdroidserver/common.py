@@ -102,7 +102,7 @@ STRICT_APPLICATION_ID_REGEX = re.compile(r'''(?:^[a-zA-Z]+(?:\d*[a-zA-Z_]*)*)(?:
 VALID_APPLICATION_ID_REGEX = re.compile(r'''(?:^[a-z_]+(?:\d*[a-zA-Z_]*)*)(?:\.[a-z_]+(?:\d*[a-zA-Z_]*)*)*$''',
                                         re.IGNORECASE)
 ANDROID_PLUGIN_REGEX = re.compile(r'''\s*(:?apply plugin:|id)\(?\s*['"](android|com\.android\.application)['"]\s*\)?''')
-APPLE_BUNDLEiDENTIFIER_REGEX = re.compile(r'''^[a-zA-Z-.]*''')
+APPLE_BUNDLEIDENTIFIER_REGEX = re.compile(r'''^[a-zA-Z-.]*''')
 
 SETTINGS_GRADLE_REGEX = re.compile(r'settings\.gradle(?:\.kts)?')
 GRADLE_SUBPROJECT_REGEX = re.compile(r'''['"]:?([^'"]+)['"]''')
@@ -2016,7 +2016,7 @@ def is_valid_package_name(name):
 
     """
     return VALID_APPLICATION_ID_REGEX.match(name) is not None \
-        or APPLE_BUNDLEiDENTIFIER_REGEX.match(name) is not None \
+        or APPLE_BUNDLEIDENTIFIER_REGEX.match(name) is not None \
         or FDROID_PACKAGE_NAME_REGEX.match(name) is not None
 
 

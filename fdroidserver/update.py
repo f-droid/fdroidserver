@@ -528,7 +528,7 @@ def insert_obbs(repodir, apps, apks):
 def version_string_to_int(version):
     """Approximately convert a [Major].[Minor].[Patch] version string
     consisting of numeric characters (0-9) and periods to a number. The
-    exponents are chosen such that it still fits in the 64bit index.yaml range.
+    exponents are chosen such that it still fits in the 64bit JSON/Android range.
     """
     version = version.split('.')
     major = int(version.pop(0)) if version else 0
