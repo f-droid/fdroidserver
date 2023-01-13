@@ -46,7 +46,6 @@ except ImportError:
 
 import collections
 from binascii import hexlify
-from biplist import readPlist
 
 from . import _
 from . import common
@@ -555,25 +554,28 @@ def process_ipa(repodir, apks):
             logging.error(_("Deleting unknown file: {path}").format(path=f))
             os.remove(f)
 
-    for f in glob.glob(os.path.join(repodir, '*.ipa')):
-        ipa = {}
-        apks.append(ipa)
+    ipas = glob.glob(os.path.join(repodir, '*.ipa'))
+    if ipas:
+        from biplist import readPlist
+        for f in ipas:
+            ipa = {}
+            apks.append(ipa)
 
-        ipa["apkName"] = os.path.basename(f)
-        ipa["hash"] = common.sha256sum(f)
-        ipa["hashType"] = "sha256"
-        ipa["size"] = os.path.getsize(f)
+            ipa["apkName"] = os.path.basename(f)
+            ipa["hash"] = common.sha256sum(f)
+            ipa["hashType"] = "sha256"
+            ipa["size"] = os.path.getsize(f)
 
-        with zipfile.ZipFile(f) as ipa_zip:
-            for info in ipa_zip.infolist():
-                if re.match("Payload/[^/]*.app/Info.plist", info.filename):
-                    with ipa_zip.open(info) as plist_file:
-                        plist = readPlist(plist_file)
-                        ipa["packageName"] = plist["CFBundleIdentifier"]
-                        # https://developer.apple.com/documentation/bundleresources/information_property_list/cfbundleshortversionstring
-                        ipa["versionCode"] = version_string_to_int(plist["CFBundleShortVersionString"])
-                        ipa["versionName"] = plist["CFBundleShortVersionString"]
-                        ipa["usage"] = {k: v for k, v in plist.items() if 'Usage' in k}
+            with zipfile.ZipFile(f) as ipa_zip:
+                for info in ipa_zip.infolist():
+                    if re.match("Payload/[^/]*.app/Info.plist", info.filename):
+                        with ipa_zip.open(info) as plist_file:
+                            plist = readPlist(plist_file)
+                            ipa["packageName"] = plist["CFBundleIdentifier"]
+                            # https://developer.apple.com/documentation/bundleresources/information_property_list/cfbundleshortversionstring
+                            ipa["versionCode"] = version_string_to_int(plist["CFBundleShortVersionString"])
+                            ipa["versionName"] = plist["CFBundleShortVersionString"]
+                            ipa["usage"] = {k: v for k, v in plist.items() if 'Usage' in k}
 
 
 def translate_per_build_anti_features(apps, apks):
