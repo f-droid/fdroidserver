@@ -525,8 +525,20 @@ def insert_obbs(repodir, apps, apks):
                 break
 
 
+def version_string_to_int(version):
+    """Approximately convert a [Major].[Minor].[Patch] version string
+    consisting of numeric characters (0-9) and periods to a number. The
+    exponents are chosen such that it still fits in the 64bit index.yaml range.
+    """
+    version = version.split('.')
+    major = int(version.pop(0)) if version else 0
+    minor = int(version.pop(0)) if version else 0
+    patch = int(version.pop(0)) if version else 0
+    return major * 10**12 + minor * 10**6 + patch
+
+
 def process_ipa(repodir, apks):
-    """Scan the .ipa files in a given repo directory
+    """Scan the .ipa files in a given repo directory.
 
     Parameters
     ----------
@@ -557,13 +569,9 @@ def process_ipa(repodir, apks):
                 if re.match("Payload/[^/]*.app/Info.plist", info.filename):
                     with ipa_zip.open(info) as plist_file:
                         plist = readPlist(plist_file)
-                        # https://developer.apple.com/documentation/bundleresources/information_property_list/cfbundleshortversionstring
-                        version = plist["CFBundleShortVersionString"].split('.')
-                        major = int(version.pop(0))
-                        minor = int(version.pop(0)) if version else 0
-                        patch = int(version.pop(0)) if version else 0
                         ipa["packageName"] = plist["CFBundleIdentifier"]
-                        ipa["versionCode"] = major * 10**12 + minor * 10**6 + patch
+                        # https://developer.apple.com/documentation/bundleresources/information_property_list/cfbundleshortversionstring
+                        ipa["versionCode"] = version_string_to_int(plist["CFBundleShortVersionString"])
                         ipa["versionName"] = plist["CFBundleShortVersionString"]
                         ipa["usage"] = {k: v for k, v in plist.items() if 'Usage' in k}
 
