@@ -15,14 +15,11 @@ from collections import OrderedDict
 from pathlib import Path
 
 
-import yaml
 from testcommon import TmpCwd
 
+from ruamel.yaml import YAML
 
-try:
-    from yaml import CSafeLoader as SafeLoader
-except ImportError:
-    from yaml import SafeLoader
+yaml = YAML(typ='safe')
 
 localmodule = Path(__file__).resolve().parent.parent
 print('localmodule: ' + str(localmodule))
@@ -173,7 +170,7 @@ class MetadataTest(unittest.TestCase):
     def test_valid_funding_yml_regex(self):
         """Check the regex can find all the cases"""
         with (self.basedir / 'funding-usernames.yaml').open() as fp:
-            data = yaml.load(fp, Loader=SafeLoader)
+            data = yaml.load(fp)
 
         for k, entries in data.items():
             for entry in entries:
@@ -212,7 +209,7 @@ class MetadataTest(unittest.TestCase):
             frommeta = dict(apps[appid])
             self.assertTrue(appid in apps)
             with savepath.open('r') as f:
-                from_yaml = yaml.load(f, Loader=SafeLoader)
+                from_yaml = yaml.load(f)
             self.assertEqual(frommeta, from_yaml)
             # comment above assert and uncomment below to update test
             # files when new metadata fields are added
