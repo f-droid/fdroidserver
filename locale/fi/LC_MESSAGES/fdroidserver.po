@@ -1213,10 +1213,6 @@ msgstr ""
 msgid "Liberapay donation methods belong in the Liberapay: field"
 msgstr ""
 
-#: ../fdroidserver/lint.py
-msgid "Liberapay donation methods belong in the LiberapayID flag"
-msgstr ""
-
 #: ../fdroidserver/rewritemeta.py
 msgid "List files that would be reformatted"
 msgstr ""

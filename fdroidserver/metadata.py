@@ -69,7 +69,6 @@ yaml_app_field_order = [
     'Donate',
     'FlattrID',
     'Liberapay',
-    'LiberapayID',
     'OpenCollective',
     'Bitcoin',
     'Litecoin',
@@ -132,7 +131,6 @@ class App(dict):
         self.Donate = None
         self.FlattrID = None
         self.Liberapay = None
-        self.LiberapayID = None
         self.OpenCollective = None
         self.Bitcoin = None
         self.Litecoin = None
@@ -403,10 +401,6 @@ valuetypes = {
     FieldValidator("Liberapay",
                    VALID_USERNAME_REGEX,
                    ['Liberapay']),
-
-    FieldValidator("Liberapay ID",
-                   r'^[0-9]+$',
-                   ['LiberapayID']),
 
     FieldValidator("Open Collective",
                    VALID_USERNAME_REGEX,

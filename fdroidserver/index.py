@@ -553,7 +553,6 @@ def package_metadata(app, repodir):
         "Bitcoin",
         "FlattrID",
         "Liberapay",
-        "LiberapayID",
         "Litecoin",
         "OpenCollective",
     ):
@@ -1173,7 +1172,6 @@ def make_v0(apps, apks, repodir, repodict, requestsdict, fdroid_signing_key_fing
         addElementNonEmpty('bitcoin', app.Bitcoin, doc, apel)
         addElementNonEmpty('litecoin', app.Litecoin, doc, apel)
         addElementNonEmpty('flattr', app.FlattrID, doc, apel)
-        addElementNonEmpty('liberapay', app.LiberapayID, doc, apel)
         addElementNonEmpty('openCollective', app.OpenCollective, doc, apel)
 
         # These elements actually refer to the current version (i.e. which
