@@ -1145,7 +1145,7 @@ class vcs_git(vcs):
             '-c', 'core.sshCommand=/bin/false',
             '-c', 'url.https://.insteadOf=ssh://',
         ]
-        for domain in ('bitbucket.org', 'github.com', 'gitlab.com'):
+        for domain in ('bitbucket.org', 'github.com', 'gitlab.com', 'codeberg.org'):
             git_config.append('-c')
             git_config.append('url.https://u:p@' + domain + '/.insteadOf=git@' + domain + ':')
             git_config.append('-c')
