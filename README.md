@@ -30,13 +30,6 @@ find the source for the documentation in
 [fdroid/fdroid-website](https://gitlab.com/fdroid/fdroid-website).
 
 
-## CI/CD status
-
-|  fdroidserver | buildserver | fdroid build --all | publishing tools |
-|:-------------:|:-----------:|:------------------:|:----------------:|
-| [![fdroidserver status on GNU/Linux](https://gitlab.com/fdroid/fdroidserver/badges/master/pipeline.svg)](https://gitlab.com/fdroid/fdroidserver/-/jobs) | [![buildserver status](https://jenkins.debian.net/job/reproducible_setup_fdroid_build_environment/badge/icon)](https://jenkins.debian.net/job/reproducible_setup_fdroid_build_environment) | [![fdroid build all status](https://jenkins.debian.net/job/reproducible_fdroid_build_apps/badge/icon)](https://jenkins.debian.net/job/reproducible_fdroid_build_apps/) | [![fdroid test status](https://jenkins.debian.net/job/reproducible_fdroid_test/badge/icon)](https://jenkins.debian.net/job/reproducible_fdroid_test/) |
-
-
 ## Installing
 
 There are many ways to install _fdroidserver_, they are documented on
