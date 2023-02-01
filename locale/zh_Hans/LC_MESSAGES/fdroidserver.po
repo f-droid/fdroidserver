@@ -807,7 +807,7 @@ msgstr ""
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Environment variable {var} from {configname} is not set!"
-msgstr "没有设置 {configname} 中的环境变量 {var}！"
+msgstr "来自 {configname} 的环境变量没有被设置！"
 
 #: ../fdroidserver/deploy.py ../fdroidserver/checkupdates.py
 #: ../fdroidserver/upload.py
