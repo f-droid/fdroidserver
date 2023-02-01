@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2022-09-06 22:24+0200\n"
-"PO-Revision-Date: 2022-02-17 19:57+0000\n"
+"PO-Revision-Date: 2022-09-08 14:15+0000\n"
 "Last-Translator: Ihor Hordiichuk <igor_ck@outlook.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/f-droid/fdroidserver/uk/>\n"
 "Language: uk\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.11-dev\n"
+"X-Generator: Weblate 4.14.1-dev\n"
 
 #: ../fdroidserver/common.py
 msgid ""
@@ -736,9 +736,9 @@ msgid "ERROR: unsupported CI type, patches welcome!"
 msgstr "ПОМИЛКА: непідтримуваний вид CI, виправлення вітається!"
 
 #: ../fdroidserver/nightly.py
-#, fuzzy, python-format
+#, python-format
 msgid "ERROR: unsupported git host \"%s\", patches welcome!"
-msgstr "ПОМИЛКА: непідтримуваний вид CI, виправлення вітається!"
+msgstr "ПОМИЛКА: непідтримуваний git-хост «%s», виправлення вітаються!"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
@@ -777,7 +777,7 @@ msgstr "Помилка отримання адреси репозиторію"
 
 #: ../fdroidserver/__main__.py
 msgid "Extract application metadata from a source repository"
-msgstr ""
+msgstr "Витяг метаданих застосунку з вихідного репозиторію"
 
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Extract signatures from APKs"
@@ -1265,7 +1265,7 @@ msgstr "Несправний шлях serverwebroot:"
 #: ../fdroidserver/scanner.py
 #, python-format
 msgid "Max recursion depth in ZIP file reached: %s"
-msgstr ""
+msgstr "Досягнуто максимальної глибини рекурсії у ZIP-файлі: %s"
 
 #: ../fdroidserver/mirror.py
 msgid "Mirror the full repo and archive, all file types."
@@ -1282,7 +1282,7 @@ msgstr "Назву '%s' — створено самочинно, вилучіт�
 
 #: ../fdroidserver/index.py
 msgid "Neither \"repo_pubkey\" nor \"keystorepass\" set in config.yml"
-msgstr ""
+msgstr "Ні \"repo_pubkey\", ні \"keystorepass\" не встановлені в config.yml"
 
 #: ../fdroidserver/common.py
 msgid "No 'config.yml' found, using defaults."
@@ -1518,7 +1518,7 @@ msgstr "Вивести таємну змінну до термінала для 
 #: ../fdroidserver/scanner.py
 #, python-format
 msgid "Problem with ZIP file: %s, error %s"
-msgstr ""
+msgstr "Проблема з ZIP файлом: %s, помилка %s"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
@@ -1690,9 +1690,9 @@ msgid "Scan the source code of a package"
 msgstr "Сканування джерельного коду пакунка"
 
 #: ../fdroidserver/scanner.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Scanner found {count} problems in {apk}:"
-msgstr "Зчитувач знайшов {count} проблеми в {appid}:"
+msgstr "Сканер виявив {count} проблем у {apk}:"
 
 #: ../fdroidserver/scanner.py
 #, python-brace-format
@@ -1716,9 +1716,8 @@ msgid "Scanning APK with apkanalyzer for known non-free classes."
 msgstr "Перевірка APK на наявність відомих невільних класів за допомогою apkanalyzer."
 
 #: ../fdroidserver/scanner.py
-#, fuzzy
 msgid "Scanning APK with dexdump for known non-free classes."
-msgstr "Перевірка APK на наявність відомих невільних класів за допомогою apkanalyzer."
+msgstr "Сканування APK за допомогою dexdump на наявність відомих невільних класів."
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -2302,7 +2301,7 @@ msgstr "applicationId з необов'язковим versionCode у формі A
 
 #: ../fdroidserver/common.py
 msgid "archive_url needs to end with /archive"
-msgstr ""
+msgstr "archive_url має закінчуватися на /archive"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
@@ -2323,9 +2322,9 @@ msgid "can not parse scrlib spec (not a string): '{}'"
 msgstr "не вдається проаналізувати специфікацію scrlib (не рядок): '{}'"
 
 #: /usr/lib/python3.9/argparse.py
-#, fuzzy, python-format
+#, python-format
 msgid "can't open '%(filename)s': %(error)s"
-msgstr "не може відкрити '%s': %s"
+msgstr "не вдалося відкрити «%(filename)s»: %(error)s"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py
@@ -2502,9 +2501,8 @@ msgid "index-v1 must have a signature, use `fdroid signindex` to create it!"
 msgstr "index-v1 повинен мати підпис, використовуйте `fdroid signindex`, щоб створити його!"
 
 #: ../fdroidserver/index.py
-#, fuzzy
 msgid "index-v2 must have a signature, use `fdroid signindex` to create it!"
-msgstr "index-v1 повинен мати підпис, використовуйте `fdroid signindex`, щоб створити його!"
+msgstr "index-v2 повинен мати підпис, використовуйте `fdroid signindex`, щоб створити його!"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 #: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
@@ -2697,7 +2695,7 @@ msgstr "repo_icon %s не існує, створення заповнювача.
 
 #: ../fdroidserver/common.py
 msgid "repo_url needs to end with /repo"
-msgstr ""
+msgstr "repo_url повинен закінчуватися на /repo"
 
 #: ../fdroidserver/metadata.py
 msgid "ruamel.yaml not installed, can not write metadata."
