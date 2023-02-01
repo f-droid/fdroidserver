@@ -20,20 +20,21 @@
 # Yang Yulin <yylteam@icloud.com>, 2022.
 # yangyangdaji <1504305527@qq.com>, 2022.
 # Yang Yulin <yylteam@hotmail.com>, 2022.
+# Eric <hamburger1024@mailbox.org>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2022-09-06 22:24+0200\n"
-"PO-Revision-Date: 2022-08-23 13:16+0000\n"
-"Last-Translator: Yang Yulin <yylteam@hotmail.com>\n"
+"PO-Revision-Date: 2022-09-08 14:15+0000\n"
+"Last-Translator: Eric <hamburger1024@mailbox.org>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/f-droid/fdroidserver/zh_Hans/>\n"
 "Language: zh_Hans\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.14-dev\n"
+"X-Generator: Weblate 4.14.1-dev\n"
 
 #: ../fdroidserver/common.py
 msgid ""
@@ -744,9 +745,9 @@ msgid "ERROR: unsupported CI type, patches welcome!"
 msgstr "错误：不支持此类 CI，如果有能力请帮我们添加支持！"
 
 #: ../fdroidserver/nightly.py
-#, fuzzy, python-format
+#, python-format
 msgid "ERROR: unsupported git host \"%s\", patches welcome!"
-msgstr "错误：不支持此类 CI，如果有能力请帮我们添加支持！"
+msgstr "错误：不支持的 git 主机“%s”，欢迎提交补丁！"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
@@ -1698,9 +1699,9 @@ msgid "Scan the source code of a package"
 msgstr "扫描一个应用的源代码"
 
 #: ../fdroidserver/scanner.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Scanner found {count} problems in {apk}:"
-msgstr "扫描仪在 {appid} 中发现 {count} 个问题："
+msgstr "扫描仪在 {apk} 中发现 {count} 个问题："
 
 #: ../fdroidserver/scanner.py
 #, python-brace-format
@@ -1722,9 +1723,8 @@ msgid "Scanning APK with apkanalyzer for known non-free classes."
 msgstr "使用 apkanalyzer 扫描 APK 以查找已知的非免费类。"
 
 #: ../fdroidserver/scanner.py
-#, fuzzy
 msgid "Scanning APK with dexdump for known non-free classes."
-msgstr "使用 apkanalyzer 扫描 APK 以查找已知的非免费类。"
+msgstr "使用 dexdump 扫描 APK 以查找已知的非自由类。"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -2322,9 +2322,9 @@ msgid "can not parse scrlib spec (not a string): '{}'"
 msgstr ""
 
 #: /usr/lib/python3.9/argparse.py
-#, fuzzy, python-format
+#, python-format
 msgid "can't open '%(filename)s': %(error)s"
-msgstr "无法打开 '%s': %s"
+msgstr "无法打开 '%(filename)s'：%(error)s"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py
