@@ -702,7 +702,7 @@ msgstr "不提示输入 Android SDK 路径，仅显示失败"
 
 #: ../fdroidserver/nightly.py
 msgid "Do not remove the private keys generated from the keystore"
-msgstr "不要删除从密钥库生成的私钥"
+msgstr "不要从密钥库删除已生成的私钥"
 
 #: ../fdroidserver/build.py
 msgid "Don't create a source tarball, useful when testing a build"
