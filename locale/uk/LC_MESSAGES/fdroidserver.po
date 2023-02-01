@@ -6,20 +6,21 @@
 # Tymofij Lytvynenko <till.svit@gmail.com>, 2021.
 # DankXylese <dankxylese@slapmywang.com>, 2021.
 # Dan <denqwerta@gmail.com>, 2022.
+# Sergii Horichenko <m@sgg.im>, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2022-09-06 22:24+0200\n"
-"PO-Revision-Date: 2022-12-15 13:16+0000\n"
-"Last-Translator: Dan <denqwerta@gmail.com>\n"
+"PO-Revision-Date: 2023-01-15 21:28+0000\n"
+"Last-Translator: Sergii Horichenko <m@sgg.im>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/f-droid/fdroidserver/uk/>\n"
 "Language: uk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.15-dev\n"
+"X-Generator: Weblate 4.15.1-dev\n"
 
 #: ../fdroidserver/common.py
 msgid ""
@@ -262,7 +263,7 @@ msgstr "Додати підписи GnuPG для пакунків у репоз�
 
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Add a new application from its source code"
-msgstr "Додайте новий застосунок зі свого вихідного коду"
+msgstr "Додайте нову програму з її початкового коду"
 
 #: ../fdroidserver/update.py
 msgid "Add a repo signing key to an unsigned repo"
@@ -1688,7 +1689,7 @@ msgstr "Перевірити отриманий файл APK на наявніс
 
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Scan the source code of a package"
-msgstr "Сканування джерельного коду пакунка"
+msgstr "Сканування початкового коду пакунка"
 
 #: ../fdroidserver/scanner.py
 #, python-brace-format
@@ -1761,7 +1762,7 @@ msgstr "Запис індексів, створених за допомогою 
 
 #: ../fdroidserver/build.py
 msgid "Skip scanning the source code for binaries and other problems"
-msgstr "Пропустити сканування вихідного коду для двійкових файлів та інших проблем"
+msgstr "Пропустити сканування початкового коду на наявність двійкових файлів та інших проблем"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -2962,9 +2963,9 @@ msgstr "{url} не починається на \"http\"!"
 #: ../fdroidserver/build.py
 msgid "{} build failed"
 msgid_plural "{} builds failed"
-msgstr[0] "{} не вдалося створити"
-msgstr[1] "{} не вдалося створити"
-msgstr[2] "{} не вдалося створити"
+msgstr[0] "{} не вдалося зібрати"
+msgstr[1] "{} не вдалося зібрати"
+msgstr[2] "{} не вдалося зібрати"
 
 #: ../fdroidserver/build.py
 msgid "{} build succeeded"
