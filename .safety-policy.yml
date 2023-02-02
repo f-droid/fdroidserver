@@ -1,0 +1,7 @@
+---
+
+security:
+  ignore-vulnerabilities:
+    52495:
+      reason: setuptools comes from Debian
+      expires: '2025-01-31'
