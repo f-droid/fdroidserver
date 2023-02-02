@@ -1358,7 +1358,7 @@ class UpdateTest(unittest.TestCase):
 
         # pylint: disable=protected-access
         icons_src = fdroidserver.update._get_apk_icons_src('urzip-release.apk', None)
-        assert icons_src == {}
+        assert not icons_src
 
     def test_strip_and_copy_image(self):
         tmptestsdir = tempfile.mkdtemp(
