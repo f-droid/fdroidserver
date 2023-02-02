@@ -49,6 +49,7 @@ except ImportError:
     pass
 
 buildserverid = None
+ssh_channel = None
 
 
 # Note that 'force' here also implies test mode.
@@ -68,7 +69,7 @@ def build_server(app, build, vcs, build_dir, output_dir, log_dir, force):
         target folder for the build result
     force
     """
-    global buildserverid
+    global buildserverid, ssh_channel
 
     try:
         paramiko
@@ -892,6 +893,8 @@ def force_halt_build(timeout):
     """Halt the currently running Vagrant VM, to be called from a Timer."""
     logging.error(_('Force halting build after {0} sec timeout!').format(timeout))
     timeout_event.set()
+    if ssh_channel:
+        ssh_channel.close()
     vm = vmtools.get_build_vm('builder')
     vm.destroy()
 
