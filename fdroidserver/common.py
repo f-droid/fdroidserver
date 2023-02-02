@@ -4518,5 +4518,11 @@ NDKS = [
         "revision": "25.1.8937393",
         "sha256": "403ac3e3020dd0db63a848dcaba6ceb2603bf64de90949d5c4361f848e44b005",
         "url": "https://dl.google.com/android/repository/android-ndk-r25b-linux.zip"
+    },
+    {
+        "release": "r25c",
+        "revision": "25.2.9519653",
+        "sha256": "769ee342ea75f80619d985c2da990c48b3d8eaf45f48783a2d48870d04b46108",
+        "url": "https://dl.google.com/android/repository/android-ndk-r25c-linux.zip"
     }
 ]
