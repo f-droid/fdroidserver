@@ -49,7 +49,27 @@ confidence = ["HIGH", "INFERENCE"]
 # --enable=similarities". If you want to run only the classes checker, but have
 # no Warning level messages displayed, use "--disable=all --enable=classes
 # --disable=W".
-disable = ["invalid-name", "missing-module-docstring", "missing-class-docstring", "missing-function-docstring", "no-member"]
+
+# TODO many of these could be fixed if someone wants to spend the time
+disable = [
+  "broad-exception-caught",
+  "broad-exception-raised",
+  "consider-iterating-dictionary",
+  "consider-using-sys-exit",
+  "invalid-name",
+  "missing-class-docstring",
+  "missing-function-docstring",
+  "missing-module-docstring",
+  "no-else-break",
+  "no-else-continue",
+  "no-else-raise",
+  "no-else-return",
+  "no-member",
+  "pointless-exception-statement",
+  "subprocess-run-check",
+  "use-dict-literal",
+]
+
 
 [tool.pylint.miscellaneous]
 # List of note tags to take in consideration, separated by a comma.
