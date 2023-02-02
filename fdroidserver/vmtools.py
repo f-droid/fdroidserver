@@ -323,7 +323,7 @@ class FDroidBuildVm:
         boxfile = abspath(boxfile)
         if not isfile(boxfile):
             raise FDroidBuildVmException(
-                'supplied boxfile \'%s\' does not exist', boxfile
+                'supplied boxfile \'%s\' does not exist' % boxfile
             )
         self.vgrnt.box_add(boxname, abspath(boxfile), force=force)
 

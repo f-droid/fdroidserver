@@ -159,7 +159,6 @@ def main():
                         output = 'git commit ' + subprocess.check_output(['git', 'rev-parse', 'HEAD'],
                                                                          universal_newlines=True)
                 elif os.path.exists('setup.py'):
-                    import re
                     m = re.search(r'''.*[\s,\(]+version\s*=\s*["']([0-9a-z.]+)["'].*''',
                                   open('setup.py').read(), flags=re.MULTILINE)
                     if m:

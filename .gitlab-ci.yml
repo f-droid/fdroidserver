@@ -220,9 +220,10 @@ lint_format_safety_bandit_checks:
 
 
 black:
-  image: python:slim
+  image: debian:bookworm-slim
+  <<: *apt-template
   script:
-    - pip install black
+    - apt-get install black
     - black --check --diff --color
         examples/fdroid_clean_repos.py
         examples/fdroid_extract_repo_pubkey.py

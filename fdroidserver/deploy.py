@@ -430,12 +430,12 @@ def update_servergitmirrors(servergitmirrors, repo_section):
         repo.index.commit("fdroidserver git-mirror")
 
         if options.verbose:
-            bar = progress.Bar()
+            progressbar = progress.Bar()
 
             class MyProgressPrinter(git.RemoteProgress):
                 def update(self, op_code, current, maximum=None, message=None):
                     if isinstance(maximum, float):
-                        bar.show(current, maximum)
+                        progressbar.show(current, maximum)
             progress = MyProgressPrinter()
         else:
             progress = None
@@ -497,7 +497,7 @@ def update_servergitmirrors(servergitmirrors, repo_section):
                         logging.debug(remote.url + ': ' + pushinfo.summary)
 
         if progress:
-            bar.done()
+            progressbar.done()
 
 
 def upload_to_android_observatory(repo_section):

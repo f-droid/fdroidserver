@@ -252,7 +252,7 @@ def main():
     tmp_importer_dir = None
 
     local_metadata_files = common.get_local_metadata_files()
-    if local_metadata_files != []:
+    if local_metadata_files:
         raise FDroidException(_("This repo already has local metadata: %s") % local_metadata_files[0])
 
     build = metadata.Build()
