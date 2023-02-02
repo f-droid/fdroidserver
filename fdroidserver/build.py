@@ -893,7 +893,7 @@ def force_halt_build(timeout):
     logging.error(_('Force halting build after {0} sec timeout!').format(timeout))
     timeout_event.set()
     vm = vmtools.get_build_vm('builder')
-    vm.halt()
+    vm.destroy()
 
 
 def parse_commandline():
