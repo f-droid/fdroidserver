@@ -574,9 +574,10 @@ docker:
   services:
     - docker:dind
   variables:
-    TEST_IMAGE: $CI_REGISTRY_IMAGE:$CI_BUILD_REF_NAME
     RELEASE_IMAGE: $CI_REGISTRY_IMAGE:buildserver
   script:
+    # git ref names can contain many chars that are not allowed in docker tags
+    - export TEST_IMAGE=$CI_REGISTRY_IMAGE:$(printf $CI_BUILD_REF_NAME | sed 's,[^a-zA-Z0-9_.-],_,g')
     - cd buildserver
     - docker build -t $TEST_IMAGE --build-arg GIT_REV_PARSE_HEAD=$(git rev-parse HEAD) .
     - docker tag $TEST_IMAGE $RELEASE_IMAGE
