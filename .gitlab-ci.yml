@@ -378,6 +378,10 @@ fdroid build:
           fdroid"
 
     - chown -R vagrant $home_vagrant
+    - chown -R vagrant $fdroidserver/.git
+    - chown vagrant $fdroidserver/
+    - chown -R vagrant .git
+    - chown vagrant .
 
     # try user build
     - $fdroid build --verbose --latest org.fdroid.fdroid.privileged
