@@ -64,6 +64,7 @@ metadata_v0:
           -e 's/VercodeOperation:.\([^[]\+\)/VercodeOperation:\n- \1/'
           -e '/LiberapayID/d'
           -e '/postbuild/d'
+          -e '/binary:/d'
           metadata/dump_*/*.yaml
     - diff -uw metadata/dump_*
 

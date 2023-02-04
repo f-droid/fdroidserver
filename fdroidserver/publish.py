@@ -346,7 +346,11 @@ def main():
             sys.exit(1)
         app = allapps[appid]
 
-        if app.Binaries:
+        build = None
+        for b in app.get("Builds", ()):
+            if b.get("versionCode") == vercode:
+                build = b
+        if app.Binaries or (build and build.binary):
 
             # It's an app where we build from source, and verify the apk
             # contents against a developer's binary, and then publish their
