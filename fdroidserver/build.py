@@ -49,6 +49,7 @@ except ImportError:
     pass
 
 buildserverid = None
+ssh_channel = None
 
 
 # Note that 'force' here also implies test mode.
@@ -68,7 +69,7 @@ def build_server(app, build, vcs, build_dir, output_dir, log_dir, force):
         target folder for the build result
     force
     """
-    global buildserverid
+    global buildserverid, ssh_channel
 
     try:
         paramiko
@@ -223,8 +224,8 @@ def build_server(app, build, vcs, build_dir, output_dir, log_dir, force):
 
         # Execute the build script...
         logging.info("Starting build...")
-        chan = sshs.get_transport().open_session()
-        chan.get_pty()
+        ssh_channel = sshs.get_transport().open_session()
+        ssh_channel.get_pty()
         cmdline = posixpath.join(homedir, 'fdroidserver', 'fdroid')
         cmdline += ' build --on-server'
         if force:
@@ -238,14 +239,14 @@ def build_server(app, build, vcs, build_dir, output_dir, log_dir, force):
         if (options.scan_binary or config.get('scan_binary')) and not options.skipscan:
             cmdline += ' --scan-binary'
         cmdline += " %s:%s" % (app.id, build.versionCode)
-        chan.exec_command('bash --login -c "' + cmdline + '"')  # nosec B601 inputs are sanitized
+        ssh_channel.exec_command('bash --login -c "' + cmdline + '"')  # nosec B601 inputs are sanitized
 
         # Fetch build process output ...
         try:
-            cmd_stdout = chan.makefile('rb', 1024)
+            cmd_stdout = ssh_channel.makefile('rb', 1024)
             output = bytes()
             output += common.get_android_tools_version_log().encode()
-            while not chan.exit_status_ready():
+            while not ssh_channel.exit_status_ready():
                 line = cmd_stdout.readline()
                 if line:
                     if options.verbose:
@@ -262,7 +263,7 @@ def build_server(app, build, vcs, build_dir, output_dir, log_dir, force):
 
         # Check build process exit status ...
         logging.info("...getting exit status")
-        returncode = chan.recv_exit_status()
+        returncode = ssh_channel.recv_exit_status()
         if returncode != 0:
             if timeout_event.is_set():
                 message = "Timeout exceeded! Build VM force-stopped for {0}:{1}"
@@ -892,6 +893,8 @@ def force_halt_build(timeout):
     """Halt the currently running Vagrant VM, to be called from a Timer."""
     logging.error(_('Force halting build after {0} sec timeout!').format(timeout))
     timeout_event.set()
+    if ssh_channel:
+        ssh_channel.close()
     vm = vmtools.get_build_vm('builder')
     vm.destroy()
 
