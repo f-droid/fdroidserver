@@ -30,14 +30,6 @@ find the source for the documentation in
 [fdroid/fdroid-website](https://gitlab.com/fdroid/fdroid-website).
 
 
-## CI/CD status
-
-|                          |  fdroidserver | buildserver | fdroid build --all | publishing tools |
-|--------------------------|:-------------:|:-----------:|:------------------:|:----------------:|
-| GNU/Linux                | [![fdroidserver status on GNU/Linux](https://gitlab.com/fdroid/fdroidserver/badges/master/pipeline.svg)](https://gitlab.com/fdroid/fdroidserver/-/jobs) | [![buildserver status](https://jenkins.debian.net/job/reproducible_setup_fdroid_build_environment/badge/icon)](https://jenkins.debian.net/job/reproducible_setup_fdroid_build_environment) | [![fdroid build all status](https://jenkins.debian.net/job/reproducible_fdroid_build_apps/badge/icon)](https://jenkins.debian.net/job/reproducible_fdroid_build_apps/) | [![fdroid test status](https://jenkins.debian.net/job/reproducible_fdroid_test/badge/icon)](https://jenkins.debian.net/job/reproducible_fdroid_test/) |
-| macOS                    | [![fdroidserver status on macOS](https://travis-ci.org/f-droid/fdroidserver.svg?branch=master)](https://travis-ci.org/f-droid/fdroidserver) | | | |
-
-
 ## Installing
 
 There are many ways to install _fdroidserver_, they are documented on
@@ -102,7 +94,7 @@ It can be built locally via
 pip install -e .[docs]
 cd docs
 sphinx-apidoc -o ./source ../fdroidserver -M -e
-sphinx-autogen -o generated source/*.rst   
+sphinx-autogen -o generated source/*.rst
 make html
 ```
 
@@ -119,7 +111,7 @@ When writing docstrings you should follow the
 
 Everything can be translated.  See
 [Translation and Localization](https://f-droid.org/docs/Translation_and_Localization)
-for more info.  
+for more info.
 
 <div align="center">
 
