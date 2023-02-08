@@ -84,6 +84,9 @@ if not os.path.exists(configfile):
     shutil.copy('examples/Vagrantfile.yaml', configfile)
 with open(configfile) as fp:
     config = yaml.safe_load(fp)
+    if not isinstance(config, dict):
+        logging.info("config is empty or not a dict, using default.")
+        config = {}
 with open('buildserver/Vagrantfile') as fp:
     m = re.search(r"""\.vm\.box\s*=\s*["'](.*)["']""", fp.read())
     if not m:
