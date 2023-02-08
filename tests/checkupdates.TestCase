@@ -27,8 +27,6 @@ class CheckupdatesTest(unittest.TestCase):
     def setUp(self):
         logging.basicConfig(level=logging.DEBUG)
         self.basedir = localmodule / 'tests'
-        self.tmpdir = localmodule / '.testfiles'
-        self.tmpdir.mkdir(exist_ok=True)
         # TODO: Python3.6: Accepts a path-like object.
         os.chdir(str(self.basedir))
 

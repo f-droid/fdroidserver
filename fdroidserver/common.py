@@ -4253,47 +4253,48 @@ def _install_ndk(ndk):
         raise FDroidException("NDK %s not found" % ndk)
     ndk_base = os.path.join(config['sdk_path'], 'ndk')
     logging.info(_('Downloading %s') % url)
-    zipball = os.path.join(
-        tempfile.mkdtemp(prefix='android-ndk-'),
-        os.path.basename(url)
-    )
-    net.download_file(url, zipball)
-    calced = sha256sum(zipball)
-    if sha256 != calced:
-        raise FDroidException('SHA-256 %s does not match expected for %s (%s)' % (calced, url, sha256))
-    logging.info(_('Unzipping to %s') % ndk_base)
-    with zipfile.ZipFile(zipball) as zipfp:
-        for info in zipfp.infolist():
-            permbits = info.external_attr >> 16
-            if stat.S_ISLNK(permbits):
-                link = os.path.join(ndk_base, info.filename)
-                link_target = zipfp.read(info).decode()
-                link_dir = os.path.dirname(link)
-                os.makedirs(link_dir, 0o755, True)  # ensure intermediate directories are created
-                os.symlink(link_target, link)
+    with tempfile.TemporaryDirectory(prefix='android-ndk-') as ndk_dir:
+        zipball = os.path.join(
+            ndk_dir,
+            os.path.basename(url)
+        )
+        net.download_file(url, zipball)
+        calced = sha256sum(zipball)
+        if sha256 != calced:
+            raise FDroidException('SHA-256 %s does not match expected for %s (%s)' % (calced, url, sha256))
+        logging.info(_('Unzipping to %s') % ndk_base)
+        with zipfile.ZipFile(zipball) as zipfp:
+            for info in zipfp.infolist():
+                permbits = info.external_attr >> 16
+                if stat.S_ISLNK(permbits):
+                    link = os.path.join(ndk_base, info.filename)
+                    link_target = zipfp.read(info).decode()
+                    link_dir = os.path.dirname(link)
+                    os.makedirs(link_dir, 0o755, True)  # ensure intermediate directories are created
+                    os.symlink(link_target, link)
 
-                real_target = os.path.realpath(link)
-                if not real_target.startswith(ndk_base):
-                    os.remove(link)
-                    logging.error(_('Unexpected symlink target: {link} -> {target}')
-                                  .format(link=link, target=real_target))
-            elif stat.S_ISDIR(permbits) or stat.S_IXUSR & permbits:
-                zipfp.extract(info.filename, path=ndk_base)
-                os.chmod(os.path.join(ndk_base, info.filename), 0o755)  # nosec bandit B103
-            else:
-                zipfp.extract(info.filename, path=ndk_base)
-                os.chmod(os.path.join(ndk_base, info.filename), 0o644)  # nosec bandit B103
-    os.remove(zipball)
-    for extracted in glob.glob(os.path.join(ndk_base, '*')):
-        version = get_ndk_version(extracted)
-        if os.path.basename(extracted) != version:
-            ndk_dir = os.path.join(ndk_base, version)
-            os.rename(extracted, ndk_dir)
-            if 'ndk_paths' not in config:
-                config['ndk_paths'] = dict()
-            config['ndk_paths'][ndk] = ndk_dir
-            logging.info(_('Set NDK {release} ({version}) up')
-                         .format(release=ndk, version=version))
+                    real_target = os.path.realpath(link)
+                    if not real_target.startswith(ndk_base):
+                        os.remove(link)
+                        logging.error(_('Unexpected symlink target: {link} -> {target}')
+                                      .format(link=link, target=real_target))
+                elif stat.S_ISDIR(permbits) or stat.S_IXUSR & permbits:
+                    zipfp.extract(info.filename, path=ndk_base)
+                    os.chmod(os.path.join(ndk_base, info.filename), 0o755)  # nosec bandit B103
+                else:
+                    zipfp.extract(info.filename, path=ndk_base)
+                    os.chmod(os.path.join(ndk_base, info.filename), 0o644)  # nosec bandit B103
+        os.remove(zipball)
+        for extracted in glob.glob(os.path.join(ndk_base, '*')):
+            version = get_ndk_version(extracted)
+            if os.path.basename(extracted) != version:
+                ndk_dir = os.path.join(ndk_base, version)
+                os.rename(extracted, ndk_dir)
+                if 'ndk_paths' not in config:
+                    config['ndk_paths'] = dict()
+                config['ndk_paths'][ndk] = ndk_dir
+                logging.info(_('Set NDK {release} ({version}) up')
+                             .format(release=ndk, version=version))
 
 
 """Derived from https://gitlab.com/fdroid/android-sdk-transparency-log/-/blob/master/checksums.json"""

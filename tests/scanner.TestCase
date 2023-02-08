@@ -30,17 +30,20 @@ import fdroidserver.build
 import fdroidserver.common
 import fdroidserver.metadata
 import fdroidserver.scanner
-from testcommon import TmpCwd, mock_open_to_str
+from testcommon import TmpCwd, mkdtemp, mock_open_to_str
 
 
 class ScannerTest(unittest.TestCase):
     def setUp(self):
         logging.basicConfig(level=logging.INFO)
         self.basedir = os.path.join(localmodule, 'tests')
-        self.tmpdir = os.path.abspath(os.path.join(self.basedir, '..', '.testfiles'))
-        if not os.path.exists(self.tmpdir):
-            os.makedirs(self.tmpdir)
         os.chdir(self.basedir)
+        self._td = mkdtemp()
+        self.testdir = self._td.name
+
+    def tearDown(self):
+        os.chdir(self.basedir)
+        self._td.cleanup()
 
     def test_scan_source_files(self):
         fdroidserver.scanner.options = mock.Mock()
@@ -97,10 +100,7 @@ class ScannerTest(unittest.TestCase):
 
     def test_scan_source_files_sneaky_maven(self):
         """Check for sneaking in banned maven repos"""
-        testdir = tempfile.mkdtemp(
-            prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir
-        )
-        os.chdir(testdir)
+        os.chdir(self.testdir)
         fdroidserver.scanner.config = None
         fdroidserver.scanner.options = mock.Mock()
         fdroidserver.scanner.options.json = True
@@ -119,7 +119,7 @@ class ScannerTest(unittest.TestCase):
             """
                 )
             )
-        count = fdroidserver.scanner.scan_source(testdir)
+        count = fdroidserver.scanner.scan_source(self.testdir)
         self.assertEqual(2, count, 'there should be this many errors')
 
     def test_scan_source_file_types(self):
@@ -129,11 +129,8 @@ class ScannerTest(unittest.TestCase):
         difference between absolute and relative paths.
 
         """
-        testdir = tempfile.mkdtemp(
-            prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir
-        )
         build_dir = os.path.join('build', 'fake.app')
-        abs_build_dir = os.path.join(testdir, build_dir)
+        abs_build_dir = os.path.join(self.testdir, build_dir)
         os.makedirs(abs_build_dir, exist_ok=True)
         os.chdir(abs_build_dir)
 
@@ -174,7 +171,7 @@ class ScannerTest(unittest.TestCase):
         os.system('ls -l fake.png')
 
         # run scanner as if from `fdroid build`
-        os.chdir(testdir)
+        os.chdir(self.testdir)
         count = fdroidserver.scanner.scan_source(build_dir)
         self.assertEqual(6, count, 'there should be this many errors')
         os.chdir(build_dir)
@@ -224,11 +221,7 @@ class ScannerTest(unittest.TestCase):
 
     def test_build_local_scanner(self):
         """`fdroid build` calls scanner functions, test them here"""
-        testdir = tempfile.mkdtemp(
-            prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir
-        )
-        os.chdir(testdir)
-
+        os.chdir(self.testdir)
         config = dict()
         fdroidserver.common.fill_config_defaults(config)
         fdroidserver.common.config = config
@@ -284,8 +277,8 @@ class ScannerTest(unittest.TestCase):
                             app,
                             build,
                             vcs,
-                            build_dir=testdir,
-                            output_dir=testdir,
+                            build_dir=self.testdir,
+                            output_dir=self.testdir,
                             log_dir=None,
                             srclib_dir=None,
                             extlib_dir=None,
@@ -314,10 +307,7 @@ class ScannerTest(unittest.TestCase):
 
     def test_scan_gradle_file_with_multiple_problems(self):
         """Check that the scanner can handle scandelete with gradle files with multiple problems"""
-        testdir = tempfile.mkdtemp(
-            prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir
-        )
-        os.chdir(testdir)
+        os.chdir(self.testdir)
         fdroidserver.scanner.config = None
         fdroidserver.scanner.options = mock.Mock()
         build = fdroidserver.metadata.Build()
@@ -335,7 +325,7 @@ class ScannerTest(unittest.TestCase):
             """
                 )
             )
-        count = fdroidserver.scanner.scan_source(testdir, build)
+        count = fdroidserver.scanner.scan_source(self.testdir, build)
         self.assertFalse(os.path.exists("build.gradle"))
         self.assertEqual(0, count, 'there should be this many errors')
 

@@ -80,6 +80,17 @@ exit(c.get('apksigner') is None)
 "
 }
 
+err_handler() {
+# remove this to prevent git conflicts and complaining
+    rm -rf "$WORKSPACE"/fdroidserver.egg-info/
+    rm -rf "$WORKSPACE"/.testfiles/run-tests.*
+    rm -rf "$WORKSPACE"/.testfiles/test_*
+    rm -f "$WORKSPACE"/.testfiles/tmp.*
+    rmdir --ignore-fail-on-non-empty "$WORKSPACE"/.testfiles
+}
+
+trap err_handler INT EXIT
+
 #------------------------------------------------------------------------------#
 # "main"
 
@@ -246,7 +257,7 @@ echo "" >> metadata/org.fdroid.ci.test.app.yml
 echo "Repo: https://gitlab.com/fdroid/ci-test-app.git" >> metadata/org.fdroid.ci.test.app.yml
 echo "RepoType: git" >> metadata/org.fdroid.ci.test.app.yml
 mkdir build
-cp -a $WORKSPACE/tests/tmp/importer build/org.fdroid.ci.test.app
+git clone https://gitlab.com/fdroid/ci-test-app.git build/org.fdroid.ci.test.app
 ls -l build/org.fdroid.ci.test.app
 $fdroid scanner org.fdroid.ci.test.app --verbose
 
@@ -1266,10 +1277,13 @@ fi
 echo_header 'test mirroring a repo'
 
 if which wget; then
+    TESTROOT=`create_test_dir`
     REPOROOT=`create_test_dir`
-    cd $WORKSPACE/tests
+    cp -r "$WORKSPACE/tests" "$TESTROOT"
+    cd "$TESTROOT/tests"
     test -d archive || mkdir archive
     cp repo/index-v1.json $REPOROOT/
+    $fdroid update
     $fdroid signindex
     mv $REPOROOT/index-v1.json repo/index-v1.json
 
@@ -1426,10 +1440,5 @@ $fdroid checkupdates --allow-dirty --auto -v
 grep "CurrentVersionCode: 1" metadata/fake.yml
 
 unset GIT_ALLOW_PROTOCOL
-
-#------------------------------------------------------------------------------#
-
-# remove this to prevent git conflicts and complaining
-rm -rf $WORKSPACE/fdroidserver.egg-info/
 
 echo SUCCESS

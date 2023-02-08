@@ -38,10 +38,18 @@ class MetadataTest(unittest.TestCase):
     def setUp(self):
         logging.basicConfig(level=logging.DEBUG)
         self.basedir = localmodule / 'tests'
-        self.tmpdir = localmodule / '.testfiles'
-        self.tmpdir.mkdir(exist_ok=True)
-        # TODO: Python3.6: Accepts a path-like object.
-        os.chdir(str(self.basedir))
+        os.chdir(self.basedir)
+
+    def tearDown(self):
+        # auto-generated dirs by functions, not tests, so they are not always cleaned up
+        try:
+            os.rmdir("srclibs")
+        except OSError:
+            pass
+        try:
+            os.rmdir("tmp")
+        except OSError:
+            pass
 
     def test_fieldtypes_key_exist(self):
         for k in fdroidserver.metadata.fieldtypes.keys():
@@ -218,8 +226,7 @@ class MetadataTest(unittest.TestCase):
             #     yaml.dump(frommeta, f, default_flow_style=False)
 
     def test_rewrite_yaml_fakeotaupdate(self):
-        # TODO: Pytohn3.6: The dir parameter now accepts a path-like object.
-        with tempfile.TemporaryDirectory(dir=str(self.tmpdir)) as testdir:
+        with tempfile.TemporaryDirectory() as testdir:
             testdir = Path(testdir)
             fdroidserver.common.config = {'accepted_formats': ['yml']}
             fdroidserver.metadata.warnings_action = None
@@ -241,8 +248,7 @@ class MetadataTest(unittest.TestCase):
             )
 
     def test_rewrite_yaml_fdroidclient(self):
-        # TODO: Pytohn3.6: The dir parameter now accepts a path-like object.
-        with tempfile.TemporaryDirectory(dir=str(self.tmpdir)) as testdir:
+        with tempfile.TemporaryDirectory() as testdir:
             testdir = Path(testdir)
             fdroidserver.common.config = {'accepted_formats': ['yml']}
 
@@ -263,8 +269,7 @@ class MetadataTest(unittest.TestCase):
             )
 
     def test_rewrite_yaml_special_build_params(self):
-        # TODO: Pytohn3.6: The dir parameter now accepts a path-like object.
-        with tempfile.TemporaryDirectory(dir=str(self.tmpdir)) as testdir:
+        with tempfile.TemporaryDirectory() as testdir:
             testdir = Path(testdir)
 
             # rewrite metadata
@@ -334,10 +339,7 @@ class MetadataTest(unittest.TestCase):
         self.assertEqual('1234567890', yamldata['Builds'][0]['commit'])
 
     def test_read_metadata_sort_by_time(self):
-        # TODO: Pytohn3.6: The dir parameter now accepts a path-like object.
-        with tempfile.TemporaryDirectory(dir=str(self.tmpdir)) as testdir, TmpCwd(
-            testdir
-        ):
+        with tempfile.TemporaryDirectory() as testdir, TmpCwd(testdir):
             testdir = Path(testdir)
             metadatadir = testdir / 'metadata'
             metadatadir.mkdir()
@@ -393,8 +395,7 @@ class MetadataTest(unittest.TestCase):
                 fdroidserver.metadata.parse_yaml_metadata(mf, {})
 
     def test_parse_yaml_srclib_corrupt_file(self):
-        # TODO: Pytohn3.6: The dir parameter now accepts a path-like object.
-        with tempfile.TemporaryDirectory(dir=str(self.tmpdir)) as testdir:
+        with tempfile.TemporaryDirectory() as testdir:
             testdir = Path(testdir)
             srclibfile = testdir / 'srclib/mock.yml'
             srclibfile.parent.mkdir()
@@ -1117,29 +1118,30 @@ class MetadataTest(unittest.TestCase):
 
     def test_build_ndk_path(self):
         """"""
-        config = {'ndk_paths': {}, 'sdk_path': tempfile.mkdtemp(prefix='android-sdk-')}
-        fdroidserver.common.config = config
+        with tempfile.TemporaryDirectory(prefix='android-sdk-') as sdk_path:
+            config = {'ndk_paths': {}, 'sdk_path': sdk_path}
+            fdroidserver.common.config = config
 
-        build = fdroidserver.metadata.Build()
-        build.ndk = 'r10e'
-        self.assertEqual('', build.ndk_path())
+            build = fdroidserver.metadata.Build()
+            build.ndk = 'r10e'
+            self.assertEqual('', build.ndk_path())
 
-        correct = '/fake/path/ndk/r21b'
-        config['ndk_paths'] = {'r21b': correct}
-        self.assertEqual('', build.ndk_path())
-        config['ndk_paths'] = {'r10e': correct}
-        self.assertEqual(correct, build.ndk_path())
+            correct = '/fake/path/ndk/r21b'
+            config['ndk_paths'] = {'r21b': correct}
+            self.assertEqual('', build.ndk_path())
+            config['ndk_paths'] = {'r10e': correct}
+            self.assertEqual(correct, build.ndk_path())
 
-        r10e = '/fake/path/ndk/r10e'
-        r22b = '/fake/path/ndk/r22e'
-        config['ndk_paths'] = {'r10e': r10e, 'r22b': r22b}
-        self.assertEqual(r10e, build.ndk_path())
+            r10e = '/fake/path/ndk/r10e'
+            r22b = '/fake/path/ndk/r22e'
+            config['ndk_paths'] = {'r10e': r10e, 'r22b': r22b}
+            self.assertEqual(r10e, build.ndk_path())
 
-        build.ndk = ['r10e', 'r22b']
-        self.assertEqual(r10e, build.ndk_path())
+            build.ndk = ['r10e', 'r22b']
+            self.assertEqual(r10e, build.ndk_path())
 
-        build.ndk = ['r22b', 'r10e']
-        self.assertEqual(r22b, build.ndk_path())
+            build.ndk = ['r22b', 'r10e']
+            self.assertEqual(r22b, build.ndk_path())
 
 
 if __name__ == "__main__":

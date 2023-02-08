@@ -34,6 +34,7 @@ from fdroidserver import common
 from fdroidserver import metadata
 from fdroidserver import signatures
 from fdroidserver.exception import FDroidException
+from testcommon import mkdtemp
 
 
 class PublishTest(unittest.TestCase):
@@ -42,9 +43,12 @@ class PublishTest(unittest.TestCase):
     def setUp(self):
         logging.basicConfig(level=logging.DEBUG)
         self.basedir = os.path.join(localmodule, 'tests')
-        self.tmpdir = os.path.abspath(os.path.join(self.basedir, '..', '.testfiles'))
-        if not os.path.exists(self.tmpdir):
-            os.makedirs(self.tmpdir)
+        os.chdir(self.basedir)
+        self._td = mkdtemp()
+        self.testdir = self._td.name
+
+    def tearDown(self):
+        self._td.cleanup()
         os.chdir(self.basedir)
 
     def test_key_alias(self):
@@ -88,7 +92,7 @@ class PublishTest(unittest.TestCase):
         publish.config = common.config
         publish.config['keystorepass'] = '123456'
         publish.config['keypass'] = '123456'
-        publish.config['keystore'] = os.path.join(os.getcwd(), 'dummy-keystore.jks')
+        publish.config['keystore'] = os.path.join(self.basedir, 'dummy-keystore.jks')
         publish.config['repo_keyalias'] = 'repokey'
 
         appids = [
@@ -99,10 +103,7 @@ class PublishTest(unittest.TestCase):
             'org.org.org',
         ]
 
-        testdir = tempfile.mkdtemp(
-            prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir
-        )
-        os.chdir(testdir)
+        os.chdir(self.testdir)
         with open('config.py', 'w') as f:
             pass
 
@@ -142,14 +143,11 @@ class PublishTest(unittest.TestCase):
         publish.config = common.config
         publish.config['keystorepass'] = '123456'
         publish.config['keypass'] = '123456'
-        publish.config['keystore'] = os.path.join(os.getcwd(), 'dummy-keystore.jks')
+        publish.config['keystore'] = os.path.join(self.basedir, 'dummy-keystore.jks')
         publish.config['repo_keyalias'] = 'repokey'
         publish.config['repo_key_sha256'] = 'bad bad bad bad bad bad bad bad bad bad bad bad'
 
-        testdir = tempfile.mkdtemp(
-            prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir
-        )
-        os.chdir(testdir)
+        os.chdir(self.testdir)
         publish.store_stats_fdroid_signing_key_fingerprints({}, indent=2)
         with self.assertRaises(FDroidException):
             common.load_stats_fdroid_signing_key_fingerprints()
@@ -162,24 +160,20 @@ class PublishTest(unittest.TestCase):
         publish.config['repo_keyalias'] = 'sova'
         publish.config['keystorepass'] = 'r9aquRHYoI8+dYz6jKrLntQ5/NJNASFBacJh7Jv2BlI='
         publish.config['keypass'] = 'r9aquRHYoI8+dYz6jKrLntQ5/NJNASFBacJh7Jv2BlI='
-        testdir = tempfile.mkdtemp(
-            prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir
-        )
-
-        shutil.copy('keystore.jks', testdir)
-        os.mkdir(os.path.join(testdir, 'repo'))
-        metadata_dir = os.path.join(testdir, 'metadata')
+        shutil.copy('keystore.jks', self.testdir)
+        os.mkdir(os.path.join(self.testdir, 'repo'))
+        metadata_dir = os.path.join(self.testdir, 'metadata')
         os.mkdir(metadata_dir)
         shutil.copy(os.path.join('metadata', 'com.politedroid.yml'), metadata_dir)
         with open(os.path.join(metadata_dir, 'com.politedroid.yml'), 'a') as fp:
             fp.write('\nBinaries: https://placeholder/foo%v.apk\n')
-        os.mkdir(os.path.join(testdir, 'unsigned'))
-        shutil.copy('repo/com.politedroid_6.apk', os.path.join(testdir, 'unsigned'))
-        os.mkdir(os.path.join(testdir, 'unsigned', 'binaries'))
+        os.mkdir(os.path.join(self.testdir, 'unsigned'))
+        shutil.copy('repo/com.politedroid_6.apk', os.path.join(self.testdir, 'unsigned'))
+        os.mkdir(os.path.join(self.testdir, 'unsigned', 'binaries'))
         shutil.copy('repo/com.politedroid_6.apk',
-                    os.path.join(testdir, 'unsigned', 'binaries', 'com.politedroid_6.binary.apk'))
+                    os.path.join(self.testdir, 'unsigned', 'binaries', 'com.politedroid_6.binary.apk'))
 
-        os.chdir(testdir)
+        os.chdir(self.testdir)
         with mock.patch.object(sys, 'argv', ['fdroid fakesubcommand']):
             publish.main()
 
@@ -222,8 +216,7 @@ class PublishTest(unittest.TestCase):
         publish.config['keypass'] = '654321'
         publish.config['keystore'] = "keystore.jks"
         publish.config['keydname'] = 'CN=Birdman, OU=Cell, O=Alcatraz, L=Alcatraz, S=California, C=US'
-        testdir = tempfile.mkdtemp(prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir)
-        os.chdir(testdir)
+        os.chdir(self.testdir)
         keystore = jks.KeyStore.new("jks", [])
         keystore.save(publish.config['keystore'], publish.config['keystorepass'])
 
@@ -272,10 +265,7 @@ class PublishTest(unittest.TestCase):
         class Options:
             verbose = False
 
-        testdir = tempfile.mkdtemp(
-            prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir
-        )
-        os.chdir(testdir)
+        os.chdir(self.testdir)
 
         config = common.read_config(Options)
         if 'apksigner' not in config:
@@ -283,7 +273,7 @@ class PublishTest(unittest.TestCase):
         config['repo_keyalias'] = 'sova'
         config['keystorepass'] = 'r9aquRHYoI8+dYz6jKrLntQ5/NJNASFBacJh7Jv2BlI='
         config['keypass'] = 'r9aquRHYoI8+dYz6jKrLntQ5/NJNASFBacJh7Jv2BlI='
-        shutil.copy(os.path.join(self.basedir, 'keystore.jks'), testdir)
+        shutil.copy(os.path.join(self.basedir, 'keystore.jks'), self.testdir)
         config['keystore'] = 'keystore.jks'
         config['keydname'] = 'CN=Birdman, OU=Cell, O=Alcatraz, L=Alcatraz, S=California, C=US'
         publish.config = config

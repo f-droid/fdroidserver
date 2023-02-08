@@ -17,6 +17,7 @@
 
 import os
 import sys
+import tempfile
 
 
 class TmpCwd():
@@ -58,3 +59,10 @@ def mock_open_to_str(mock):
     return "".join([
         x.args[0] for x in mock.mock_calls if str(x).startswith("call().write(")
     ])
+
+
+def mkdtemp():
+    if sys.version_info < (3, 10):  # ignore_cleanup_errors was added in 3.10
+        return tempfile.TemporaryDirectory()
+    else:
+        return tempfile.TemporaryDirectory(ignore_cleanup_errors=True)
