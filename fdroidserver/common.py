@@ -950,8 +950,6 @@ def get_head_commit_id(git_repo):
 def setup_vcs(app):
     """Checkout code from VCS and return instance of vcs and the build dir."""
     build_dir = get_build_dir(app)
-    # TODO: Remove this
-    build_dir = str(build_dir)
 
     # Set up vcs interface and make sure we have the latest code...
     logging.debug("Getting {0} vcs interface for {1}"
@@ -966,8 +964,6 @@ def setup_vcs(app):
 
 
 def getvcs(vcstype, remote, local):
-    # TODO: Remove this in Python3.6
-    local = str(local)
     if vcstype == 'git':
         return vcs_git(remote, local)
     if vcstype == 'git-svn':
@@ -995,8 +991,6 @@ class vcs:
 
     def __init__(self, remote, local):
 
-        # TODO: Remove this in Python3.6
-        local = str(local)
         # svn, git-svn and bzr may require auth
         self.username = None
         if self.repotype() in ('git-svn', 'bzr'):
@@ -1268,7 +1262,6 @@ class vcs_git(vcs):
     def latesttags(self):
         """Return a list of latest tags."""
         self.checkrepo()
-        # TODO: Python3.6: Should accept path-like
         return [tag.name for tag in sorted(
             git.Repo(self.local).tags,
             key=lambda t: t.commit.committed_date,
@@ -1603,29 +1596,25 @@ def retrieve_string_singleline(app_dir, string, xmlfiles=None):
 
 def manifest_paths(app_dir, flavours):
     """Return list of existing files that will be used to find the highest vercode."""
-    # TODO: Remove this in Python3.6
-    app_dir = str(app_dir)
     possible_manifests = \
-        [os.path.join(app_dir, 'AndroidManifest.xml'),
-         os.path.join(app_dir, 'src', 'main', 'AndroidManifest.xml'),
-         os.path.join(app_dir, 'src', 'AndroidManifest.xml'),
-         os.path.join(app_dir, 'build.gradle'),
-         os.path.join(app_dir, 'build-extras.gradle'),
-         os.path.join(app_dir, 'build.gradle.kts')]
+        [Path(app_dir) / 'AndroidManifest.xml',
+         Path(app_dir) / 'src/main/AndroidManifest.xml',
+         Path(app_dir) / 'src/AndroidManifest.xml',
+         Path(app_dir) / 'build.gradle',
+         Path(app_dir) / 'build-extras.gradle',
+         Path(app_dir) / 'build.gradle.kts']
 
     for flavour in flavours:
         if flavour == 'yes':
             continue
         possible_manifests.append(
-            os.path.join(app_dir, 'src', flavour, 'AndroidManifest.xml'))
+            Path(app_dir) / 'src' / flavour / 'AndroidManifest.xml')
 
-    return [path for path in possible_manifests if os.path.isfile(path)]
+    return [path for path in possible_manifests if path.is_file()]
 
 
 def fetch_real_name(app_dir, flavours):
     """Retrieve the package name. Returns the name, or None if not found."""
-    # TODO: Remove this in Python3.6
-    app_dir = str(app_dir)
     for path in manifest_paths(app_dir, flavours):
         if not path.endswith('.xml') or not os.path.isfile(path):
             continue
@@ -1736,8 +1725,6 @@ def parse_androidmanifests(paths, app):
         return None
 
     for path in paths:
-        # TODO: Remove this in Python3.6
-        path = str(path)
         if not os.path.isfile(path):
             continue
 
@@ -1752,7 +1739,7 @@ def parse_androidmanifests(paths, app):
         if len(app.get('Builds', [])) > 0 and 'gradle' in app['Builds'][-1] and app['Builds'][-1].gradle:
             flavours = app['Builds'][-1].gradle
 
-        if path.endswith('.gradle') or path.endswith('.gradle.kts'):
+        if path.suffix == '.gradle' or path.name.endswith('.gradle.kts'):
             with open(path, 'r', encoding='utf-8') as f:
                 android_plugin_file = False
                 inside_flavour_group = 0
@@ -2221,11 +2208,11 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
         for path in manifest_paths(root_dir, flavours):
             if not os.path.isfile(path):
                 continue
-            if path.endswith('.xml'):
+            if path.suffix == '.xml':
                 regsub_file(r'android:versionName="[^"]*"',
                             r'android:versionName="%s"' % build.versionName,
                             path)
-            elif path.endswith('.gradle'):
+            elif path.suffix == '.gradle':
                 regsub_file(r"""(\s*)versionName[\s'"=]+.*""",
                             r"""\1versionName '%s'""" % build.versionName,
                             path)
@@ -2233,13 +2220,13 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
     if build.forcevercode:
         logging.info("Changing the version code")
         for path in manifest_paths(root_dir, flavours):
-            if not os.path.isfile(path):
+            if not path.is_file():
                 continue
-            if path.endswith('.xml'):
+            if path.suffix == '.xml':
                 regsub_file(r'android:versionCode="[^"]*"',
                             r'android:versionCode="%s"' % build.versionCode,
                             path)
-            elif path.endswith('.gradle'):
+            elif path.suffix == '.gradle':
                 regsub_file(r'versionCode[ =]+[0-9]+',
                             r'versionCode %s' % build.versionCode,
                             path)
@@ -2341,7 +2328,7 @@ def getpaths_map(build_dir, globpaths):
         p = p.strip()
         full_path = os.path.join(build_dir, p)
         full_path = os.path.normpath(full_path)
-        paths[p] = [r[len(build_dir) + 1:] for r in glob.glob(full_path)]
+        paths[p] = [r[len(str(build_dir)) + 1:] for r in glob.glob(full_path)]
         if not paths[p]:
             not_found_paths.append(p)
     if not_found_paths:

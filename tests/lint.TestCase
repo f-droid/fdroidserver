@@ -29,8 +29,7 @@ class LintTest(unittest.TestCase):
         self.basedir = localmodule / 'tests'
         self.tmpdir = localmodule / '.testfiles'
         self.tmpdir.mkdir(exist_ok=True)
-        # TODO: Python3.6: Accepts a path-like object.
-        os.chdir(str(self.basedir))
+        os.chdir(self.basedir)
 
     def test_check_for_unsupported_metadata_files(self):
         self.assertTrue(fdroidserver.lint.check_for_unsupported_metadata_files())
@@ -40,10 +39,9 @@ class LintTest(unittest.TestCase):
             self.assertFalse(
                 fdroidserver.lint.check_for_unsupported_metadata_files(testdir)
             )
-            # TODO: Python3.6: Accepts a path-like object.
             shutil.copytree(
-                str(self.basedir / 'metadata'),
-                str(testdir / 'metadata'),
+                self.basedir / 'metadata',
+                testdir / 'metadata',
                 ignore=shutil.ignore_patterns('apk', 'dump', '*.json'),
             )
             self.assertFalse(

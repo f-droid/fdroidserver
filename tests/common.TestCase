@@ -1075,7 +1075,7 @@ class CommonTest(unittest.TestCase):
         self.assertEqual('b30bb971af0d134866e158ec748fcd553df97c150f58b0a963190bbafbeb0868', sig)
 
     def test_parse_xml(self):
-        manifest = os.path.join('source-files', 'fdroid', 'fdroidclient', 'AndroidManifest.xml')
+        manifest = Path('source-files/fdroid/fdroidclient/AndroidManifest.xml')
         parsed = fdroidserver.common.parse_xml(manifest)
         self.assertIsNotNone(parsed)
         self.assertEqual(str(type(parsed)), "<class 'xml.etree.ElementTree.Element'>")
@@ -1084,8 +1084,8 @@ class CommonTest(unittest.TestCase):
         app = fdroidserver.metadata.App()
         app.id = 'org.fdroid.fdroid'
         paths = [
-            os.path.join('source-files', 'fdroid', 'fdroidclient', 'AndroidManifest.xml'),
-            os.path.join('source-files', 'fdroid', 'fdroidclient', 'build.gradle'),
+            Path('source-files/fdroid/fdroidclient/AndroidManifest.xml'),
+            Path('source-files/fdroid/fdroidclient/build.gradle'),
         ]
         for path in paths:
             self.assertTrue(os.path.isfile(path))
@@ -1099,17 +1099,17 @@ class CommonTest(unittest.TestCase):
         app.SourceCode = url.rstrip('.git')
         app.Repo = url
         paths = [
-            os.path.join('source-files', 'cn.wildfirechat.chat', 'avenginekit', 'build.gradle'),
-            os.path.join('source-files', 'cn.wildfirechat.chat', 'build.gradle'),
-            os.path.join('source-files', 'cn.wildfirechat.chat', 'client', 'build.gradle'),
-            os.path.join('source-files', 'cn.wildfirechat.chat', 'client', 'src', 'main', 'AndroidManifest.xml'),
-            os.path.join('source-files', 'cn.wildfirechat.chat', 'emojilibrary', 'build.gradle'),
-            os.path.join('source-files', 'cn.wildfirechat.chat', 'gradle', 'build_libraries.gradle'),
-            os.path.join('source-files', 'cn.wildfirechat.chat', 'imagepicker', 'build.gradle'),
-            os.path.join('source-files', 'cn.wildfirechat.chat', 'mars-core-release', 'build.gradle'),
-            os.path.join('source-files', 'cn.wildfirechat.chat', 'push', 'build.gradle'),
-            os.path.join('source-files', 'cn.wildfirechat.chat', 'settings.gradle'),
-            os.path.join('source-files', 'cn.wildfirechat.chat', 'chat', 'build.gradle'),
+            Path('source-files/cn.wildfirechat.chat/avenginekit/build.gradle'),
+            Path('source-files/cn.wildfirechat.chat/build.gradle'),
+            Path('source-files/cn.wildfirechat.chat/client/build.gradle'),
+            Path('source-files/cn.wildfirechat.chat/client/src/main/AndroidManifest.xml'),
+            Path('source-files/cn.wildfirechat.chat/emojilibrary/build.gradle'),
+            Path('source-files/cn.wildfirechat.chat/gradle/build_libraries.gradle'),
+            Path('source-files/cn.wildfirechat.chat/imagepicker/build.gradle'),
+            Path('source-files/cn.wildfirechat.chat/mars-core-release/build.gradle'),
+            Path('source-files/cn.wildfirechat.chat/push/build.gradle'),
+            Path('source-files/cn.wildfirechat.chat/settings.gradle'),
+            Path('source-files/cn.wildfirechat.chat/chat/build.gradle'),
         ]
         for path in paths:
             self.assertTrue(os.path.isfile(path))
@@ -1119,18 +1119,18 @@ class CommonTest(unittest.TestCase):
         app = fdroidserver.metadata.App()
         app.Repo = 'https://github.com/Integreight/1Sheeld-Android-App'
         paths = [
-            os.path.join('source-files', 'com.integreight.onesheeld', 'pagerIndicator', 'src', 'main', 'AndroidManifest.xml'),
-            os.path.join('source-files', 'com.integreight.onesheeld', 'pagerIndicator', 'build.gradle'),
-            os.path.join('source-files', 'com.integreight.onesheeld', 'oneSheeld', 'src', 'main', 'AndroidManifest.xml'),
-            os.path.join('source-files', 'com.integreight.onesheeld', 'oneSheeld', 'build.gradle'),
-            os.path.join('source-files', 'com.integreight.onesheeld', 'localeapi', 'src', 'main', 'AndroidManifest.xml'),
-            os.path.join('source-files', 'com.integreight.onesheeld', 'localeapi', 'build.gradle'),
-            os.path.join('source-files', 'com.integreight.onesheeld', 'build.gradle'),
-            os.path.join('source-files', 'com.integreight.onesheeld', 'settings.gradle'),
-            os.path.join('source-files', 'com.integreight.onesheeld', 'quickReturnHeader', 'src', 'main', 'AndroidManifest.xml'),
-            os.path.join('source-files', 'com.integreight.onesheeld', 'quickReturnHeader', 'build.gradle'),
-            os.path.join('source-files', 'com.integreight.onesheeld', 'pullToRefreshlibrary', 'src', 'main', 'AndroidManifest.xml'),
-            os.path.join('source-files', 'com.integreight.onesheeld', 'pullToRefreshlibrary', 'build.gradle'),
+            Path('source-files/com.integreight.onesheeld/pagerIndicator/src/main/AndroidManifest.xml'),
+            Path('source-files/com.integreight.onesheeld/pagerIndicator/build.gradle'),
+            Path('source-files/com.integreight.onesheeld/oneSheeld/src/main/AndroidManifest.xml'),
+            Path('source-files/com.integreight.onesheeld/oneSheeld/build.gradle'),
+            Path('source-files/com.integreight.onesheeld/localeapi/src/main/AndroidManifest.xml'),
+            Path('source-files/com.integreight.onesheeld/localeapi/build.gradle'),
+            Path('source-files/com.integreight.onesheeld/build.gradle'),
+            Path('source-files/com.integreight.onesheeld/settings.gradle'),
+            Path('source-files/com.integreight.onesheeld/quickReturnHeader/src/main/AndroidManifest.xml'),
+            Path('source-files/com.integreight.onesheeld/quickReturnHeader/build.gradle'),
+            Path('source-files/com.integreight.onesheeld/pullToRefreshlibrary/src/main/AndroidManifest.xml'),
+            Path('source-files/com.integreight.onesheeld/pullToRefreshlibrary/build.gradle'),
         ]
         for path in paths:
             self.assertTrue(os.path.isfile(path))
@@ -1140,7 +1140,7 @@ class CommonTest(unittest.TestCase):
         app = fdroidserver.metadata.App()
         app.id = 'dev.patrickgold.florisboard'
         paths = [
-            os.path.join('source-files', 'dev.patrickgold.florisboard', 'app', 'build.gradle.kts'),
+            Path('source-files/dev.patrickgold.florisboard/app/build.gradle.kts'),
         ]
         for path in paths:
             self.assertTrue(os.path.isfile(path))
@@ -1150,8 +1150,8 @@ class CommonTest(unittest.TestCase):
         app = fdroidserver.metadata.App()
         app.id = 'com.ubergeek42.WeechatAndroid'
         paths = [
-            os.path.join('source-files', 'com.ubergeek42.WeechatAndroid', 'app', 'build.gradle.kts'),
-            os.path.join('source-files', 'com.ubergeek42.WeechatAndroid', 'app', 'src', 'main', 'res', 'values', 'strings.xml'),
+            Path('source-files/com.ubergeek42.WeechatAndroid/app/build.gradle.kts'),
+            Path('source-files/com.ubergeek42.WeechatAndroid/app/src/main/res/values/strings.xml'),
         ]
         for path in paths:
             self.assertTrue(os.path.isfile(path))
@@ -1163,8 +1163,8 @@ class CommonTest(unittest.TestCase):
         app.id = 'org.fdroid.fdroid'
         app.UpdateCheckIgnore = '-test'
         paths = [
-            os.path.join('source-files', 'fdroid', 'fdroidclient', 'AndroidManifest.xml'),
-            os.path.join('source-files', 'fdroid', 'fdroidclient', 'build.gradle'),
+            Path('source-files/fdroid/fdroidclient/AndroidManifest.xml'),
+            Path('source-files/fdroid/fdroidclient/build.gradle'),
         ]
         for path in paths:
             self.assertTrue(os.path.isfile(path))
@@ -1178,8 +1178,8 @@ class CommonTest(unittest.TestCase):
         app['Builds'] = [build]
         app.id = 'org.fdroid.fdroid.dev'
         paths = [
-            os.path.join('source-files', 'fdroid', 'fdroidclient', 'AndroidManifest.xml'),
-            os.path.join('source-files', 'fdroid', 'fdroidclient', 'build.gradle'),
+            Path('source-files/fdroid/fdroidclient/AndroidManifest.xml'),
+            Path('source-files/fdroid/fdroidclient/build.gradle'),
         ]
         for path in paths:
             self.assertTrue(os.path.isfile(path))
@@ -1192,7 +1192,7 @@ class CommonTest(unittest.TestCase):
         app['Builds'] = [build]
         app.id = 'eu.siacs.conversations'
         paths = [
-            os.path.join('source-files', 'eu.siacs.conversations', 'build.gradle'),
+            Path('source-files/eu.siacs.conversations/build.gradle'),
         ]
         for path in paths:
             self.assertTrue(os.path.isfile(path))
@@ -1205,7 +1205,7 @@ class CommonTest(unittest.TestCase):
         app['Builds'] = [build]
         app.id = 'com.nextcloud.client'
         paths = [
-            os.path.join('source-files', 'com.nextcloud.client', 'build.gradle'),
+            Path('source-files/com.nextcloud.client/build.gradle'),
         ]
         for path in paths:
             self.assertTrue(os.path.isfile(path))
@@ -1218,7 +1218,7 @@ class CommonTest(unittest.TestCase):
         app['Builds'] = [build]
         app.id = 'com.nextcloud.android.beta'
         paths = [
-            os.path.join('source-files', 'com.nextcloud.client', 'build.gradle'),
+            Path('source-files/com.nextcloud.client/build.gradle'),
         ]
         for path in paths:
             self.assertTrue(os.path.isfile(path))
@@ -1231,7 +1231,7 @@ class CommonTest(unittest.TestCase):
         app['Builds'] = [build]
         app.id = 'at.bitfire.davdroid'
         paths = [
-            os.path.join('source-files', 'at.bitfire.davdroid', 'build.gradle'),
+            Path('source-files/at.bitfire.davdroid/build.gradle'),
         ]
         for path in paths:
             self.assertTrue(os.path.isfile(path))
@@ -1244,7 +1244,7 @@ class CommonTest(unittest.TestCase):
         app['Builds'] = [build]
         app.id = 'com.kunzisoft.fdroidtest.applicationidsuffix.libre'
         paths = [
-            os.path.join('source-files', 'com.kunzisoft.testcase', 'build.gradle'),
+            Path('source-files/com.kunzisoft.testcase/build.gradle'),
         ]
         for path in paths:
             self.assertTrue(os.path.isfile(path))
@@ -1257,7 +1257,7 @@ class CommonTest(unittest.TestCase):
         app['Builds'] = [build]
         app.id = 'com.kunzisoft.fdroidtest.applicationidsuffix.pro'
         paths = [
-            os.path.join('source-files', 'com.kunzisoft.testcase', 'build.gradle'),
+            Path('source-files/com.kunzisoft.testcase/build.gradle'),
         ]
         for path in paths:
             self.assertTrue(os.path.isfile(path))
@@ -1270,7 +1270,7 @@ class CommonTest(unittest.TestCase):
         app['Builds'] = [build]
         app.id = 'com.kunzisoft.fdroidtest.applicationidsuffix'
         paths = [
-            os.path.join('source-files', 'com.kunzisoft.testcase', 'build.gradle'),
+            Path('source-files/com.kunzisoft.testcase/build.gradle'),
         ]
         for path in paths:
             self.assertTrue(os.path.isfile(path))
@@ -1283,7 +1283,7 @@ class CommonTest(unittest.TestCase):
         app['Builds'] = [build]
         app.id = 'com.kunzisoft.fdroidtest.applicationidsuffix.underscore'
         paths = [
-            os.path.join('source-files', 'com.kunzisoft.testcase', 'build.gradle'),
+            Path('source-files/com.kunzisoft.testcase/build.gradle'),
         ]
         for path in paths:
             self.assertTrue(os.path.isfile(path))
@@ -1296,7 +1296,7 @@ class CommonTest(unittest.TestCase):
         app['Builds'] = [build]
         app.id = 'com.kunzisoft.fdroidtest.applicationidsuffix.underscore_first'
         paths = [
-            os.path.join('source-files', 'com.kunzisoft.testcase', 'build.gradle'),
+            Path('source-files/com.kunzisoft.testcase/build.gradle'),
         ]
         for path in paths:
             self.assertTrue(os.path.isfile(path))
@@ -1309,7 +1309,7 @@ class CommonTest(unittest.TestCase):
         app['Builds'] = [build]
         app.id = 'com.github.jameshnsears.quoteunquote'
         paths = [
-            os.path.join('source-files', 'com.github.jameshnsears.quoteunquote', 'build.gradle'),
+            Path('source-files/com.github.jameshnsears.quoteunquote/build.gradle'),
         ]
         for path in paths:
             self.assertTrue(os.path.isfile(path))
@@ -1322,7 +1322,7 @@ class CommonTest(unittest.TestCase):
         app['Builds'] = [build]
         app.id = 'com.jens.automation2'
         paths = [
-            os.path.join('source-files', 'com.jens.automation2', 'build.gradle'),
+            Path('source-files/com.jens.automation2/build.gradle'),
         ]
         for path in paths:
             self.assertTrue(os.path.isfile(path))
@@ -1335,7 +1335,7 @@ class CommonTest(unittest.TestCase):
         app['Builds'] = [build]
         app.id = 'de.varengold.activeTAN'
         paths = [
-            os.path.join('source-files', 'de.varengold.activeTAN', 'build.gradle'),
+            Path('source-files/de.varengold.activeTAN/build.gradle'),
         ]
         for path in paths:
             self.assertTrue(os.path.isfile(path))
@@ -1364,8 +1364,7 @@ class CommonTest(unittest.TestCase):
         abspath = Path(self.basedir) / 'source-files/realm'
         p = fdroidserver.common.get_all_gradle_and_manifests(abspath)
         self.assertEqual(1, len(p))
-        # TODO: Pathon3.9: self.assertTrue(p[0].is_relative_to(abspath))
-        self.assertTrue(abspath in p[0].parents)
+        self.assertTrue(p[0].is_relative_to(abspath))
 
     def test_get_gradle_subdir(self):
         subdirs = {
@@ -2274,8 +2273,7 @@ class CommonTest(unittest.TestCase):
             "seven",
         ]
         with tempfile.TemporaryDirectory() as tmpdir, TmpCwd(tmpdir):
-            # TODO: Python3.6: Should accept path-like
-            repo = git.Repo.init(str(Path.cwd()))
+            repo = git.Repo.init(Path.cwd())
             f = Path("test")
             date = 10**9
             for tag in tags:
@@ -2291,8 +2289,7 @@ class CommonTest(unittest.TestCase):
     def test_vcs_git_getref(self):
 
         with tempfile.TemporaryDirectory() as tmpdir, TmpCwd(tmpdir):
-            # TODO: Python3.6: Should accept path-like
-            repo = git.Repo.init(str(Path.cwd()))
+            repo = git.Repo.init(Path.cwd())
             tag = "1.1.1"
             f = Path("test")
             f.write_text(tag)

@@ -752,8 +752,7 @@ def parse_metadata(metadatapath):
         metadata_in_repo = build_dir / '.fdroid.yml'
         if metadata_in_repo.is_file():
             try:
-                # TODO: Python3.6: Should accept path-like
-                commit_id = common.get_head_commit_id(git.Repo(str(build_dir)))
+                commit_id = common.get_head_commit_id(git.Repo(build_dir))
                 logging.debug(_('Including metadata from %s@%s') % (metadata_in_repo, commit_id))
             except git.exc.InvalidGitRepositoryError:
                 logging.debug(_('Including metadata from {path}').format(metadata_in_repo))

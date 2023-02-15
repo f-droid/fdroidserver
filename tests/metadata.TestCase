@@ -349,12 +349,10 @@ class MetadataTest(unittest.TestCase):
             random.shuffle(randomapps)
             i = 1
             for f in randomapps:
-                # TODO: Pytohn3.6: The parameter now accepts a path-like object.
-                shutil.copy(str(f), str(metadatadir))
+                shutil.copy(f, metadatadir)
                 new = metadatadir / f.name
                 stat = new.stat()
-                # TODO: Changed in version 3.6: Accepts a path-like object.
-                os.utime(str(new), (stat.st_ctime, stat.st_mtime + i))
+                os.utime(new, (stat.st_ctime, stat.st_mtime + i))
                 # prepend new item so newest is always first
                 randomlist = [f.stem] + randomlist
                 i += 1
