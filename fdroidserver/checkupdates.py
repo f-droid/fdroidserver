@@ -343,8 +343,7 @@ def try_init_submodules(app, last_build, vcs):
 # Return all directories under startdir that contain any of the manifest
 # files, and thus are probably an Android project.
 def dirs_with_manifest(startdir):
-    # TODO: Python3.6: Accepts a path-like object.
-    for root, _dirs, files in os.walk(str(startdir)):
+    for root, _dirs, files in os.walk(startdir):
         if any(m in files for m in [
                 'AndroidManifest.xml', 'pom.xml', 'build.gradle', 'build.gradle.kts']):
             yield Path(root)

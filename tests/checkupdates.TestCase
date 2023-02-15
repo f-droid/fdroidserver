@@ -27,8 +27,7 @@ class CheckupdatesTest(unittest.TestCase):
     def setUp(self):
         logging.basicConfig(level=logging.DEBUG)
         self.basedir = localmodule / 'tests'
-        # TODO: Python3.6: Accepts a path-like object.
-        os.chdir(str(self.basedir))
+        os.chdir(self.basedir)
 
     def test_autoupdatemode_no_suffix(self):
         fdroidserver.checkupdates.options = mock.Mock()

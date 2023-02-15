@@ -78,14 +78,11 @@ class ImportTest(unittest.TestCase):
                 ),
             )
             for appid, url, vn, vc in data:
-                # TODO: Python3.6: Accepts a path-like object.
                 shutil.rmtree(
-                    str(tmp_importer),
+                    tmp_importer,
                     onerror=fdroidserver.import_subcommand.handle_retree_error_on_windows,
                 )
-                shutil.copytree(
-                    str(self.basedir / 'source-files' / appid), str(tmp_importer)
-                )
+                shutil.copytree(self.basedir / 'source-files' / appid, tmp_importer)
 
                 app = fdroidserver.import_subcommand.get_app_from_url(url)
                 with mock.patch(

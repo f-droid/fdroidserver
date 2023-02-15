@@ -87,13 +87,12 @@ def main():
             newbuilds.append(new)
         app['Builds'] = newbuilds
 
-        # rewrite to temporary file before overwriting existsing
+        # rewrite to temporary file before overwriting existing
         # file in case there's a bug in write_metadata
         with tempfile.TemporaryDirectory() as tmpdir:
             tmp_path = Path(tmpdir) / path.name
             metadata.write_metadata(tmp_path, app)
-            # TODO: Python3.6: Accept path-lik
-            shutil.move(str(tmp_path), str(path))
+            shutil.move(tmp_path, path)
 
     logging.debug(_("Finished"))
 
