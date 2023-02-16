@@ -23,6 +23,7 @@ if localmodule not in sys.path:
 
 import fdroidserver.common
 import fdroidserver.index
+import fdroidserver.metadata
 import fdroidserver.net
 import fdroidserver.signindex
 import fdroidserver.publish
@@ -51,6 +52,7 @@ class IndexTest(unittest.TestCase):
         config['jarsigner'] = fdroidserver.common.find_sdk_tools_cmd('jarsigner')
         fdroidserver.common.config = config
         fdroidserver.signindex.config = config
+        fdroidserver.update.config = config
 
         if not os.path.exists('repo/index-v1.jar'):
             fdroidserver.signindex.sign_index(
@@ -507,6 +509,40 @@ class IndexTest(unittest.TestCase):
 
         fdroidserver.index.v1_sort_packages(
             i, fdroidserver.common.load_stats_fdroid_signing_key_fingerprints()
+        )
+
+    def test_package_metadata(self):
+        """A smoke check and format check of index.package_metadata()"""
+        def _kn(key):
+            return key[0].lower() + key[1:]
+
+        apps = fdroidserver.metadata.read_metadata()
+        fdroidserver.update.insert_localized_app_metadata(apps)
+
+        # smoke check all metadata files
+        for appid, app in apps.items():
+            metadata = fdroidserver.index.package_metadata(app, 'repo')
+            for k in ('Description', 'Name', 'Summary', 'video'):
+                if app.get(k):
+                    self.assertTrue(isinstance(metadata[_kn(k)], dict))
+            for k in ('AuthorWebSite', 'IssueTracker', 'Translation', 'WebSite'):
+                if app.get(k):
+                    self.assertTrue(isinstance(metadata[_kn(k)], str))
+
+        # make sure these known values were properly parsed and included
+        appid = 'info.guardianproject.urzip'
+        app = apps[appid]
+        metadata = fdroidserver.index.package_metadata(app, 'repo')
+        # files
+        self.assertEqual(36027, metadata['featureGraphic']['en-US']['size'])
+        self.assertEqual(1413, metadata['icon']['en-US']['size'])
+        # localized strings
+        self.assertEqual({'en-US': 'title'}, metadata['name'])
+        self.assertEqual({'en-US': 'video'}, metadata['video'])
+        # strings
+        self.assertEqual(
+            'https://dev.guardianproject.info/projects/urzip',
+            metadata['webSite'],
         )
 
 
