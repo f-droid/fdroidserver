@@ -159,6 +159,9 @@ ubuntu_jammy_pip:
     - export PATH=$PATH:$ANDROID_HOME/build-tools/33.0.0
     - fdroid=`which fdroid` ./tests/run-tests
 
+    # check localization was properly installed
+    - LANGUAGE='de' fdroid --help | grep 'Gültige Befehle sind'
+
 
 # test installation process on a bleeding edge distro with pip
 arch_pip_install:

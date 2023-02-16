@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 
-import os
 import re
 import subprocess
 import sys
@@ -50,30 +49,20 @@ class InstallWithCompile(install):
 
 
 def get_data_files():
-    # workaround issue on OSX or --user installs, where sys.prefix is not an installable location
-    if os.access(sys.prefix, os.W_OK | os.X_OK):
-        data_prefix = sys.prefix
-    else:
-        data_prefix = '.'
-
     data_files = []
     with open('MANIFEST.in') as fp:
         data = fp.read()
 
     data_files.append(
-        (
-            data_prefix + '/share/doc/fdroidserver/examples',
-            ['buildserver/config.buildserver.yml']
-            + re.findall(r'include (examples/.*)', data),
-        )
+        ('share/doc/fdroidserver/examples', re.findall(r'include (examples/.*)', data))
+    )
+    data_files.append(
+        ('share/doc/fdroidserver/examples', ['buildserver/config.buildserver.yml'])
     )
 
-    for f in re.findall(
-        r'include (locale/[a-z][a-z][a-zA-Z_]*/LC_MESSAGES/fdroidserver\.)po', data
-    ):
-        f += 'mo'
-        d = os.path.join(data_prefix, 'share', os.path.dirname(f))
-        data_files.append((d, [f]))
+    for d in re.findall(r'include (locale/.*)/fdroidserver\.po', data):
+        data_files.append(('share/' + d, [d + '/fdroidserver.mo']))
+
     return data_files
 
 
@@ -91,7 +80,6 @@ setup(
     url='https://f-droid.org',
     license='AGPL-3.0',
     packages=['fdroidserver', 'fdroidserver.asynchronousfilereader'],
-    scripts=['makebuildserver'],
     entry_points={'console_scripts': ['fdroid=fdroidserver.__main__:main']},
     data_files=get_data_files(),
     python_requires='>=3.9',
