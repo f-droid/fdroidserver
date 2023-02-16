@@ -33,6 +33,7 @@ Builds:
   oldsdkloc: false
   output: null
   patch: []
+  postbuild: ''
   preassemble: []
   prebuild: ''
   rm: []
@@ -67,6 +68,7 @@ Builds:
   oldsdkloc: false
   output: null
   patch: []
+  postbuild: ''
   preassemble: []
   prebuild: ''
   rm: []
@@ -101,6 +103,7 @@ Builds:
   oldsdkloc: false
   output: null
   patch: []
+  postbuild: ''
   preassemble: []
   prebuild: ''
   rm: []
@@ -136,6 +139,7 @@ Builds:
   oldsdkloc: false
   output: null
   patch: []
+  postbuild: ''
   preassemble: []
   prebuild: ''
   rm: []

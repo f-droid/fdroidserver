@@ -31,6 +31,7 @@ Builds:
   oldsdkloc: false
   output: null
   patch: []
+  postbuild: ''
   preassemble: []
   prebuild: ''
   rm: []
@@ -67,6 +68,7 @@ Builds:
   output: null
   patch:
   - defprop.patch
+  postbuild: ''
   preassemble: []
   prebuild: ''
   rm: []
@@ -103,6 +105,7 @@ Builds:
   output: null
   patch:
   - defprop.patch
+  postbuild: ''
   preassemble: []
   prebuild: ''
   rm: []
@@ -139,6 +142,7 @@ Builds:
   output: null
   patch:
   - defprop.patch
+  postbuild: ''
   preassemble: []
   prebuild: ''
   rm: []
@@ -175,6 +179,7 @@ Builds:
   output: null
   patch:
   - defprop.patch
+  postbuild: ''
   preassemble: []
   prebuild: ''
   rm: []
@@ -211,6 +216,7 @@ Builds:
   output: null
   patch:
   - defprop.patch
+  postbuild: ''
   preassemble: []
   prebuild: ''
   rm: []
@@ -245,6 +251,7 @@ Builds:
   oldsdkloc: false
   output: null
   patch: []
+  postbuild: ''
   preassemble: []
   prebuild: ''
   rm: []
@@ -280,6 +287,7 @@ Builds:
   oldsdkloc: false
   output: null
   patch: []
+  postbuild: ''
   preassemble: []
   prebuild:
   - android update project -p ../com_actionbarsherlock
@@ -316,6 +324,7 @@ Builds:
   oldsdkloc: false
   output: null
   patch: []
+  postbuild: ''
   preassemble: []
   prebuild:
   - android update project -p ../com_actionbarsherlock
@@ -352,6 +361,7 @@ Builds:
   oldsdkloc: false
   output: null
   patch: []
+  postbuild: ''
   preassemble: []
   prebuild:
   - android update project -p ../com_actionbarsherlock
@@ -388,6 +398,7 @@ Builds:
   oldsdkloc: false
   output: null
   patch: []
+  postbuild: ''
   preassemble: []
   prebuild:
   - android update project -p ../com_actionbarsherlock
@@ -424,6 +435,7 @@ Builds:
   oldsdkloc: false
   output: null
   patch: []
+  postbuild: ''
   preassemble: []
   prebuild:
   - android update project -p ../com_actionbarsherlock
@@ -460,6 +472,7 @@ Builds:
   oldsdkloc: false
   output: null
   patch: []
+  postbuild: ''
   preassemble: []
   prebuild:
   - android update project -p ../com_actionbarsherlock
@@ -497,6 +510,7 @@ Builds:
   oldsdkloc: false
   output: null
   patch: []
+  postbuild: ''
   preassemble: []
   prebuild:
   - android update project -p ../com_actionbarsherlock
@@ -533,6 +547,7 @@ Builds:
   oldsdkloc: false
   output: null
   patch: []
+  postbuild: ''
   preassemble: []
   prebuild:
   - android update project -p ../com_actionbarsherlock
@@ -570,6 +585,7 @@ Builds:
   oldsdkloc: false
   output: null
   patch: []
+  postbuild: ''
   preassemble: []
   prebuild:
   - android update project -p ../com_actionbarsherlock
@@ -607,6 +623,7 @@ Builds:
   oldsdkloc: false
   output: null
   patch: []
+  postbuild: ''
   preassemble: []
   prebuild:
   - android update project -p ../com_actionbarsherlock
@@ -644,6 +661,7 @@ Builds:
   oldsdkloc: false
   output: null
   patch: []
+  postbuild: ''
   preassemble: []
   prebuild:
   - android update project -p ../com_actionbarsherlock
@@ -689,6 +707,7 @@ Builds:
   oldsdkloc: false
   output: null
   patch: []
+  postbuild: ''
   preassemble: []
   prebuild:
   - rm -rf ../update_zip libs/root-commands-1.2.jar libs/htmlspanner-0.2-fork.jar
@@ -738,6 +757,7 @@ Builds:
   oldsdkloc: false
   output: null
   patch: []
+  postbuild: ''
   preassemble: []
   prebuild:
   - rm -rf ../update_zip libs/root-commands-1.2.jar libs/htmlspanner-0.2-fork.jar
@@ -781,6 +801,7 @@ Builds:
   oldsdkloc: false
   output: null
   patch: []
+  postbuild: ''
   preassemble:
   - renameExecutables
   prebuild: ''
@@ -818,6 +839,7 @@ Builds:
   oldsdkloc: false
   output: null
   patch: []
+  postbuild: ''
   preassemble:
   - renameExecutables
   prebuild: ''
@@ -855,6 +877,7 @@ Builds:
   oldsdkloc: false
   output: null
   patch: []
+  postbuild: ''
   preassemble:
   - renameExecutables
   prebuild: ''
@@ -892,6 +915,7 @@ Builds:
   oldsdkloc: false
   output: null
   patch: []
+  postbuild: ''
   preassemble:
   - renameExecutables
   prebuild: ''
@@ -929,6 +953,7 @@ Builds:
   oldsdkloc: false
   output: null
   patch: []
+  postbuild: ''
   preassemble:
   - renameExecutables
   prebuild: ''
@@ -966,6 +991,7 @@ Builds:
   oldsdkloc: false
   output: null
   patch: []
+  postbuild: ''
   preassemble:
   - renameExecutables
   prebuild: ''
@@ -1003,6 +1029,7 @@ Builds:
   oldsdkloc: false
   output: null
   patch: []
+  postbuild: ''
   preassemble:
   - renameExecutables
   prebuild: ''
@@ -1040,6 +1067,7 @@ Builds:
   oldsdkloc: false
   output: null
   patch: []
+  postbuild: ''
   preassemble:
   - renameExecutables
   prebuild: ''

@@ -33,6 +33,7 @@ import argparse
 from configparser import ConfigParser
 import logging
 from gettext import ngettext
+from pathlib import Path
 
 from . import _
 from . import common
@@ -789,6 +790,23 @@ def build_local(app, build, vcs, build_dir, output_dir, log_dir, srclib_dir, ext
         if len(apks) < 1:
             raise BuildException('No apks match %s' % globpath)
         src = os.path.normpath(apks[0])
+
+    # Run a postbuild command if one is required...
+    if build.postbuild:
+        logging.info(f"Running 'postbuild' commands in {root_dir}")
+        cmd = common.replace_config_vars("; ".join(build.postbuild), build)
+
+        # Substitute source library paths into commands...
+        for name, number, libpath in srclibpaths:
+            cmd = cmd.replace(f"$${name}$$", str(Path.cwd() / libpath))
+
+        cmd = cmd.replace('$$OUT$$', str(Path(src).resolve()))
+
+        p = FDroidPopen(['bash', '-e', '-u', '-o', 'pipefail', '-x', '-c', cmd], cwd=root_dir)
+
+        if p.returncode != 0:
+            raise BuildException("Error running postbuild command for "
+                                 f"{app.id}:{build.versionName}", p.output)
 
     # Make sure it's not debuggable...
     if common.is_apk_and_debuggable(src):

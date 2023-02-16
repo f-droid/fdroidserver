@@ -245,6 +245,7 @@ build_flags = [
     'preassemble',
     'gradleprops',
     'antcommands',
+    'postbuild',
     'novcheck',
     'antifeatures',
 ]
@@ -284,6 +285,7 @@ class Build(dict):
         self.preassemble = []
         self.gradleprops = []
         self.antcommands = []
+        self.postbuild = ''
         self.novcheck = False
         self.antifeatures = []
         if copydict:
@@ -348,6 +350,7 @@ flagtypes = {
     'init': TYPE_SCRIPT,
     'prebuild': TYPE_SCRIPT,
     'build': TYPE_SCRIPT,
+    'postbuild': TYPE_SCRIPT,
     'submodules': TYPE_BOOL,
     'oldsdkloc': TYPE_BOOL,
     'forceversion': TYPE_BOOL,
