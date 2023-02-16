@@ -541,7 +541,6 @@ def package_metadata(app, repodir):
         "SourceCode",
         "Translation",
         "WebSite",
-        "video",
         "featureGraphic",
         "promoGraphic",
         "tvBanner",
@@ -564,6 +563,7 @@ def package_metadata(app, repodir):
         "Name",
         "Summary",
         "Description",
+        "video",
     ):
         element_new = element[:1].lower() + element[1:]
         if element in app and app[element]:
