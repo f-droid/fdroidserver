@@ -1616,7 +1616,7 @@ def manifest_paths(app_dir, flavours):
 def fetch_real_name(app_dir, flavours):
     """Retrieve the package name. Returns the name, or None if not found."""
     for path in manifest_paths(app_dir, flavours):
-        if not path.endswith('.xml') or not os.path.isfile(path):
+        if not path.suffix == '.xml' or not path.is_file():
             continue
         logging.debug("fetch_real_name: Checking manifest at " + path)
         try:
@@ -1725,7 +1725,7 @@ def parse_androidmanifests(paths, app):
         return None
 
     for path in paths:
-        if not os.path.isfile(path):
+        if not path.is_file():
             continue
 
         logging.debug(_("Parsing manifest at '{path}'").format(path=path))
