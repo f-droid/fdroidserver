@@ -31,6 +31,7 @@ Builds:
   oldsdkloc: false
   output: null
   patch: []
+  postbuild: ''
   preassemble: []
   prebuild:
   - touch signing.properties
@@ -91,6 +92,7 @@ Builds:
   oldsdkloc: false
   output: null
   patch: []
+  postbuild: ''
   preassemble: []
   prebuild:
   - touch signing.properties
@@ -133,6 +135,7 @@ Builds:
   oldsdkloc: false
   output: null
   patch: []
+  postbuild: ''
   preassemble: []
   prebuild:
   - touch signing.properties
@@ -173,6 +176,7 @@ Builds:
   oldsdkloc: false
   output: null
   patch: []
+  postbuild: ''
   preassemble: []
   prebuild:
   - touch signing.properties
@@ -213,6 +217,7 @@ Builds:
   oldsdkloc: false
   output: null
   patch: []
+  postbuild: ''
   preassemble: []
   prebuild:
   - touch signing.properties
@@ -252,6 +257,7 @@ Builds:
   oldsdkloc: false
   output: null
   patch: []
+  postbuild: ''
   preassemble: []
   prebuild:
   - touch signing.properties
@@ -291,6 +297,7 @@ Builds:
   oldsdkloc: false
   output: null
   patch: []
+  postbuild: ''
   preassemble: []
   prebuild:
   - touch signing.properties
@@ -330,6 +337,7 @@ Builds:
   oldsdkloc: false
   output: null
   patch: []
+  postbuild: ''
   preassemble: []
   prebuild:
   - touch signing.properties

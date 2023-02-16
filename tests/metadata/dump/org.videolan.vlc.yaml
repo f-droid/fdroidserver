@@ -34,6 +34,7 @@ Builds:
   oldsdkloc: false
   output: null
   patch: []
+  postbuild: ''
   preassemble: []
   prebuild:
   - sed -i '48d' ../Makefile
@@ -73,6 +74,7 @@ Builds:
   oldsdkloc: false
   output: null
   patch: []
+  postbuild: ''
   preassemble: []
   prebuild:
   - sed -i '48d' ../Makefile
@@ -112,6 +114,7 @@ Builds:
   oldsdkloc: false
   output: null
   patch: []
+  postbuild: ''
   preassemble: []
   prebuild:
   - sed -i '48d' ../Makefile
@@ -151,6 +154,7 @@ Builds:
   oldsdkloc: false
   output: null
   patch: []
+  postbuild: ''
   preassemble: []
   prebuild:
   - sed -i '48d' ../Makefile
@@ -188,6 +192,7 @@ Builds:
   output: null
   patch:
   - ndkr9.patch
+  postbuild: ''
   preassemble: []
   prebuild:
   - sed -i '/ant/d' ../Makefile && ln -s vlc-android/$$VLC$$ ../vlc
@@ -226,6 +231,7 @@ Builds:
   output: null
   patch:
   - ndkr9.patch
+  postbuild: ''
   preassemble: []
   prebuild:
   - sed -i '/ant/d' ../Makefile && ln -s vlc-android/$$VLC$$ ../vlc
@@ -264,6 +270,7 @@ Builds:
   output: null
   patch:
   - ndkr9.patch
+  postbuild: ''
   preassemble: []
   prebuild:
   - sed -i '/ant/d' ../Makefile && ln -s vlc-android/$$VLC$$ ../vlc
@@ -302,6 +309,7 @@ Builds:
   output: null
   patch:
   - ndkr9.patch
+  postbuild: ''
   preassemble: []
   prebuild:
   - sed -i '/ant/d' ../Makefile && ln -s vlc-android/$$VLC$$ ../vlc
@@ -339,6 +347,7 @@ Builds:
   oldsdkloc: false
   output: null
   patch: []
+  postbuild: ''
   preassemble: []
   prebuild:
   - sed -i '/ant/d' ../Makefile && ln -s vlc-android/$$VLC$$ ../vlc
@@ -376,6 +385,7 @@ Builds:
   oldsdkloc: false
   output: null
   patch: []
+  postbuild: ''
   preassemble: []
   prebuild:
   - sed -i '/ant/d' ../Makefile && ln -s vlc-android/$$VLC$$ ../vlc
@@ -413,6 +423,7 @@ Builds:
   oldsdkloc: false
   output: null
   patch: []
+  postbuild: ''
   preassemble: []
   prebuild:
   - sed -i '/ant/d' ../Makefile && ln -s vlc-android/$$VLC$$ ../vlc
@@ -450,6 +461,7 @@ Builds:
   oldsdkloc: false
   output: null
   patch: []
+  postbuild: ''
   preassemble: []
   prebuild:
   - sed -i '/ant/d' ../Makefile && ln -s vlc-android/$$VLC$$ ../vlc
@@ -487,6 +499,7 @@ Builds:
   oldsdkloc: false
   output: null
   patch: []
+  postbuild: ''
   preassemble: []
   prebuild:
   - sed -i '/ant/d' ../Makefile && ln -s vlc-android/$$VLC$$ ../vlc
@@ -524,6 +537,7 @@ Builds:
   oldsdkloc: false
   output: null
   patch: []
+  postbuild: ''
   preassemble: []
   prebuild:
   - sed -i '/ant/d' ../Makefile && ln -s vlc-android/$$VLC$$ ../vlc
@@ -561,6 +575,7 @@ Builds:
   oldsdkloc: false
   output: null
   patch: []
+  postbuild: ''
   preassemble: []
   prebuild:
   - sed -i '/ant/d' ../Makefile && ln -s vlc-android/$$VLC-2.2$$ ../vlc
@@ -598,6 +613,7 @@ Builds:
   oldsdkloc: false
   output: null
   patch: []
+  postbuild: ''
   preassemble: []
   prebuild:
   - sed -i '/ant/d' ../Makefile && ln -s vlc-android/$$VLC-2.2$$ ../vlc
@@ -635,6 +651,7 @@ Builds:
   oldsdkloc: false
   output: null
   patch: []
+  postbuild: ''
   preassemble: []
   prebuild:
   - sed -i '/ant/d' ../Makefile && ln -s vlc-android/$$VLC-2.2$$ ../vlc
@@ -672,6 +689,7 @@ Builds:
   oldsdkloc: false
   output: null
   patch: []
+  postbuild: ''
   preassemble: []
   prebuild:
   - sed -i '/ant/d' ../Makefile && ln -s vlc-android/$$VLC-2.2$$ ../vlc
@@ -709,6 +727,7 @@ Builds:
   oldsdkloc: false
   output: null
   patch: []
+  postbuild: ''
   preassemble: []
   prebuild:
   - sed -i '/ant/d' ../Makefile && ln -s vlc-android/$$VLC-2.2$$ ../vlc
@@ -746,6 +765,7 @@ Builds:
   oldsdkloc: false
   output: null
   patch: []
+  postbuild: ''
   preassemble: []
   prebuild:
   - sed -i '/ant/d' ../Makefile && ln -s vlc-android/$$VLC-2.2$$ ../vlc
@@ -783,6 +803,7 @@ Builds:
   oldsdkloc: false
   output: null
   patch: []
+  postbuild: ''
   preassemble: []
   prebuild:
   - sed -i '/ant/d' ../Makefile && ln -s vlc-android/$$VLC-2.2$$ ../vlc
@@ -820,6 +841,7 @@ Builds:
   oldsdkloc: false
   output: null
   patch: []
+  postbuild: ''
   preassemble: []
   prebuild:
   - sed -i '/ant/d' ../Makefile && ln -s vlc-android/$$VLC-2.2$$ ../vlc
@@ -857,6 +879,7 @@ Builds:
   oldsdkloc: false
   output: null
   patch: []
+  postbuild: ''
   preassemble: []
   prebuild:
   - sed -i '/ant/d' ../Makefile && ln -s vlc-android/$$VLC-2.2$$ ../vlc
@@ -894,6 +917,7 @@ Builds:
   oldsdkloc: false
   output: null
   patch: []
+  postbuild: ''
   preassemble: []
   prebuild:
   - sed -i '/ant/d' ../Makefile && ln -s vlc-android/$$VLC-2.2$$ ../vlc
@@ -931,6 +955,7 @@ Builds:
   oldsdkloc: false
   output: null
   patch: []
+  postbuild: ''
   preassemble: []
   prebuild:
   - sed -i '/ant/d' ../Makefile && ln -s vlc-android/$$VLC-2.2$$ ../vlc
@@ -968,6 +993,7 @@ Builds:
   oldsdkloc: false
   output: null
   patch: []
+  postbuild: ''
   preassemble: []
   prebuild:
   - sed -i '/ant/d' ../Makefile && ln -s vlc-android/$$VLC-2.2$$ ../vlc
@@ -1005,6 +1031,7 @@ Builds:
   oldsdkloc: false
   output: null
   patch: []
+  postbuild: ''
   preassemble: []
   prebuild:
   - sed -i '/ant/d' ../Makefile && ln -s vlc-android/$$VLC-2.2$$ ../vlc
@@ -1042,6 +1069,7 @@ Builds:
   oldsdkloc: false
   output: null
   patch: []
+  postbuild: ''
   preassemble: []
   prebuild:
   - sed -i '/ant/d' ../Makefile && ln -s vlc-android/$$VLC-2.2$$ ../vlc
@@ -1079,6 +1107,7 @@ Builds:
   oldsdkloc: false
   output: null
   patch: []
+  postbuild: ''
   preassemble: []
   prebuild:
   - sed -i '/ant/d' ../Makefile && ln -s vlc-android/$$VLC-2.2$$ ../vlc
@@ -1116,6 +1145,7 @@ Builds:
   oldsdkloc: false
   output: null
   patch: []
+  postbuild: ''
   preassemble: []
   prebuild:
   - sed -i '/ant/d' ../Makefile && ln -s vlc-android/$$VLC-2.2$$ ../vlc
@@ -1153,6 +1183,7 @@ Builds:
   oldsdkloc: false
   output: null
   patch: []
+  postbuild: ''
   preassemble: []
   prebuild:
   - sed -i '/ant/d' ../Makefile && ln -s vlc-android/$$VLC-2.2$$ ../vlc
@@ -1190,6 +1221,7 @@ Builds:
   oldsdkloc: false
   output: null
   patch: []
+  postbuild: ''
   preassemble: []
   prebuild:
   - sed -i '/ant/d' ../Makefile && ln -s vlc-android/$$VLC-2.2$$ ../vlc
@@ -1227,6 +1259,7 @@ Builds:
   oldsdkloc: false
   output: null
   patch: []
+  postbuild: ''
   preassemble: []
   prebuild:
   - sed -i '/ant/d' ../Makefile && ln -s vlc-android/$$VLC-2.2$$ ../vlc
@@ -1264,6 +1297,7 @@ Builds:
   oldsdkloc: false
   output: null
   patch: []
+  postbuild: ''
   preassemble: []
   prebuild:
   - sed -i '/ant/d' ../Makefile && ln -s vlc-android/$$VLC-2.2$$ ../vlc
@@ -1301,6 +1335,7 @@ Builds:
   oldsdkloc: false
   output: null
   patch: []
+  postbuild: ''
   preassemble: []
   prebuild:
   - sed -i '/ant/d' ../Makefile && ln -s vlc-android/$$VLC-2.2$$ ../vlc
@@ -1338,6 +1373,7 @@ Builds:
   oldsdkloc: false
   output: null
   patch: []
+  postbuild: ''
   preassemble: []
   prebuild:
   - sed -i '/ant/d' ../Makefile && ln -s vlc-android/$$VLC-2.2$$ ../vlc
@@ -1376,6 +1412,7 @@ Builds:
   oldsdkloc: false
   output: null
   patch: []
+  postbuild: ''
   preassemble: []
   prebuild:
   - sed -i -e '/^TARGET/aexit 0' -e 's@\-d \"gradle\/wrapper\"@1@g' ../compile.sh
@@ -1415,6 +1452,7 @@ Builds:
   oldsdkloc: false
   output: null
   patch: []
+  postbuild: ''
   preassemble: []
   prebuild:
   - sed -i -e '/^TARGET/aexit 0' -e 's@\-d \"gradle\/wrapper\"@1@g' ../compile.sh
@@ -1454,6 +1492,7 @@ Builds:
   oldsdkloc: false
   output: null
   patch: []
+  postbuild: ''
   preassemble: []
   prebuild:
   - sed -i -e '/^TARGET/aexit 0' -e 's@\-d \"gradle\/wrapper\"@1@g' ../compile.sh
@@ -1493,6 +1532,7 @@ Builds:
   oldsdkloc: false
   output: null
   patch: []
+  postbuild: ''
   preassemble: []
   prebuild:
   - sed -i -e '/^TARGET/aexit 0' -e 's@\-d \"gradle\/wrapper\"@1@g' ../compile.sh
@@ -1532,6 +1572,7 @@ Builds:
   oldsdkloc: false
   output: null
   patch: []
+  postbuild: ''
   preassemble: []
   prebuild:
   - sed -i -e '/^TARGET/aexit 0' -e 's@\-d \"gradle\/wrapper\"@1@g' ../compile.sh
@@ -1571,6 +1612,7 @@ Builds:
   oldsdkloc: false
   output: null
   patch: []
+  postbuild: ''
   preassemble: []
   prebuild:
   - sed -i -e '/^TARGET/aexit 0' -e 's@\-d \"gradle\/wrapper\"@1@g' ../compile.sh
@@ -1610,6 +1652,7 @@ Builds:
   oldsdkloc: false
   output: null
   patch: []
+  postbuild: ''
   preassemble: []
   prebuild:
   - sed -i -e '/^TARGET/aexit 0' -e 's@\-d \"gradle\/wrapper\"@1@g' ../compile.sh
@@ -1649,6 +1692,7 @@ Builds:
   oldsdkloc: false
   output: null
   patch: []
+  postbuild: ''
   preassemble: []
   prebuild:
   - sed -i -e '/^TARGET/aexit 0' -e 's@\-d \"gradle\/wrapper\"@1@g' ../compile.sh
@@ -1688,6 +1732,7 @@ Builds:
   oldsdkloc: false
   output: null
   patch: []
+  postbuild: ''
   preassemble: []
   prebuild:
   - sed -i -e '/^TARGET/aexit 0' -e 's@\-d \"gradle\/wrapper\"@1@g' ../compile.sh
@@ -1727,6 +1772,7 @@ Builds:
   oldsdkloc: false
   output: null
   patch: []
+  postbuild: ''
   preassemble: []
   prebuild:
   - sed -i -e '/^TARGET/aexit 0' -e 's@\-d \"gradle\/wrapper\"@1@g' ../compile.sh
@@ -1766,6 +1812,7 @@ Builds:
   oldsdkloc: false
   output: null
   patch: []
+  postbuild: ''
   preassemble: []
   prebuild:
   - sed -i -e '/^TARGET/aexit 0' -e 's@\-d \"gradle\/wrapper\"@1@g' ../compile.sh
@@ -1805,6 +1852,7 @@ Builds:
   oldsdkloc: false
   output: null
   patch: []
+  postbuild: ''
   preassemble: []
   prebuild:
   - sed -i -e '/^TARGET/aexit 0' -e 's@\-d \"gradle\/wrapper\"@1@g' ../compile.sh
@@ -1844,6 +1892,7 @@ Builds:
   oldsdkloc: false
   output: null
   patch: []
+  postbuild: ''
   preassemble: []
   prebuild:
   - sed -i -e '/^TARGET/aexit 0' -e 's@\-d \"gradle\/wrapper\"@1@g' ../compile.sh
@@ -1883,6 +1932,7 @@ Builds:
   oldsdkloc: false
   output: null
   patch: []
+  postbuild: ''
   preassemble: []
   prebuild:
   - sed -i -e '/^TARGET/aexit 0' -e 's@\-d \"gradle\/wrapper\"@1@g' ../compile.sh
@@ -1922,6 +1972,7 @@ Builds:
   oldsdkloc: false
   output: null
   patch: []
+  postbuild: ''
   preassemble: []
   prebuild:
   - sed -i -e '/^TARGET/aexit 0' -e 's@\-d \"gradle\/wrapper\"@1@g' ../compile.sh
@@ -1961,6 +2012,7 @@ Builds:
   oldsdkloc: false
   output: null
   patch: []
+  postbuild: ''
   preassemble: []
   prebuild:
   - sed -i -e '/^TARGET/aexit 0' -e 's@\-d \"gradle\/wrapper\"@1@g' ../compile.sh
@@ -2000,6 +2052,7 @@ Builds:
   oldsdkloc: false
   output: null
   patch: []
+  postbuild: ''
   preassemble: []
   prebuild:
   - sed -i -e '/^TARGET/aexit 0' -e 's@\-d \"gradle\/wrapper\"@1@g' ../compile.sh
@@ -2039,6 +2092,7 @@ Builds:
   oldsdkloc: false
   output: null
   patch: []
+  postbuild: ''
   preassemble: []
   prebuild:
   - sed -i -e '/^TARGET/aexit 0' -e 's@\-d \"gradle\/wrapper\"@1@g' ../compile.sh
@@ -2078,6 +2132,7 @@ Builds:
   oldsdkloc: false
   output: null
   patch: []
+  postbuild: ''
   preassemble: []
   prebuild:
   - sed -i -e '/^TARGET/aexit 0' -e 's@\-d \"gradle\/wrapper\"@1@g' ../compile.sh
@@ -2117,6 +2172,7 @@ Builds:
   oldsdkloc: false
   output: null
   patch: []
+  postbuild: ''
   preassemble: []
   prebuild:
   - sed -i -e '/^TARGET/aexit 0' -e 's@\-d \"gradle\/wrapper\"@1@g' ../compile.sh
@@ -2156,6 +2212,7 @@ Builds:
   oldsdkloc: false
   output: null
   patch: []
+  postbuild: ''
   preassemble: []
   prebuild:
   - sed -i -e '/^TARGET/aexit 0' -e 's@\-d \"gradle\/wrapper\"@1@g' ../compile.sh
@@ -2195,6 +2252,7 @@ Builds:
   oldsdkloc: false
   output: null
   patch: []
+  postbuild: ''
   preassemble: []
   prebuild:
   - sed -i -e '/^TARGET/aexit 0' -e 's@\-d \"gradle\/wrapper\"@1@g' ../compile.sh
@@ -2234,6 +2292,7 @@ Builds:
   oldsdkloc: false
   output: null
   patch: []
+  postbuild: ''
   preassemble: []
   prebuild:
   - sed -i -e '/^TARGET/aexit 0' -e 's@\-d \"gradle\/wrapper\"@1@g' ../compile.sh
@@ -2273,6 +2332,7 @@ Builds:
   oldsdkloc: false
   output: null
   patch: []
+  postbuild: ''
   preassemble: []
   prebuild:
   - sed -i -e '/^TARGET/aexit 0' -e 's@\-d \"gradle\/wrapper\"@1@g' ../compile.sh
@@ -2312,6 +2372,7 @@ Builds:
   oldsdkloc: false
   output: null
   patch: []
+  postbuild: ''
   preassemble: []
   prebuild:
   - sed -i -e '/^TARGET/aexit 0' -e 's@\-d \"gradle\/wrapper\"@1@g' ../compile.sh
@@ -2351,6 +2412,7 @@ Builds:
   oldsdkloc: false
   output: null
   patch: []
+  postbuild: ''
   preassemble: []
   prebuild:
   - sed -i -e '/^TARGET/aexit 0' -e 's@\-d \"gradle\/wrapper\"@1@g' ../compile.sh
@@ -2390,6 +2452,7 @@ Builds:
   oldsdkloc: false
   output: null
   patch: []
+  postbuild: ''
   preassemble: []
   prebuild:
   - sed -i -e '/^TARGET/aexit 0' -e 's@\-d \"gradle\/wrapper\"@1@g' ../compile.sh
@@ -2429,6 +2492,7 @@ Builds:
   oldsdkloc: false
   output: null
   patch: []
+  postbuild: ''
   preassemble: []
   prebuild:
   - sed -i -e '/^TARGET/aexit 0' -e 's@\-d \"gradle\/wrapper\"@1@g' ../compile.sh
@@ -2468,6 +2532,7 @@ Builds:
   oldsdkloc: false
   output: null
   patch: []
+  postbuild: ''
   preassemble: []
   prebuild:
   - sed -i -e '/^TARGET/aexit 0' -e 's@\-d \"gradle\/wrapper\"@1@g' ../compile.sh
@@ -2507,6 +2572,7 @@ Builds:
   oldsdkloc: false
   output: null
   patch: []
+  postbuild: ''
   preassemble: []
   prebuild:
   - sed -i -e '/^TARGET/aexit 0' -e 's@\-d \"gradle\/wrapper\"@1@g' ../compile.sh
