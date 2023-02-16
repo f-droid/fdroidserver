@@ -3258,7 +3258,8 @@ def apk_implant_signatures(apkpath, outpath, manifest):
 
     """
     sigdir = os.path.dirname(manifest)  # FIXME
-    apksigcopier.do_patch(sigdir, apkpath, outpath, v1_only=None)
+    apksigcopier.do_patch(sigdir, apkpath, outpath, v1_only=None,
+                          exclude=apksigcopier.exclude_meta)
 
 
 def apk_extract_signatures(apkpath, outdir):
@@ -3388,7 +3389,8 @@ def verify_apks(signed_apk, unsigned_apk, tmp_dir, v1_only=None):
     tmp_apk = os.path.join(tmp_dir, 'sigcp_' + os.path.basename(unsigned_apk))
 
     try:
-        apksigcopier.do_copy(signed_apk, unsigned_apk, tmp_apk, v1_only=v1_only)
+        apksigcopier.do_copy(signed_apk, unsigned_apk, tmp_apk, v1_only=v1_only,
+                             exclude=apksigcopier.exclude_meta)
     except apksigcopier.APKSigCopierError as e:
         logging.info('...NOT verified - {0}'.format(tmp_apk))
         error = 'signature copying failed: {}'.format(str(e))
