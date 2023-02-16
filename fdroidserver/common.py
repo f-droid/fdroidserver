@@ -1619,7 +1619,7 @@ def fetch_real_name(app_dir, flavours):
     for path in manifest_paths(app_dir, flavours):
         if not path.suffix == '.xml' or not path.is_file():
             continue
-        logging.debug("fetch_real_name: Checking manifest at " + path)
+        logging.debug("fetch_real_name: Checking manifest at %s" % path)
         try:
             xml = parse_xml(path)
         except (XMLElementTree.ParseError, ValueError):
