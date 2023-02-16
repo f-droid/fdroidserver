@@ -227,6 +227,7 @@ build_flags = [
     'maven',
     'buildozer',
     'output',
+    'binary',
     'srclibs',
     'oldsdkloc',
     'encoding',
@@ -267,6 +268,7 @@ class Build(dict):
         self.maven = False
         self.buildozer = False
         self.output = None
+        self.binary = None
         self.srclibs = []
         self.oldsdkloc = False
         self.encoding = None

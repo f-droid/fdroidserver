@@ -1143,7 +1143,7 @@ def main():
                             tools_version_log = ''.join(f.readlines())
                         os.remove(toolslog)
 
-                    if app.Binaries is not None:
+                    if url := build.binary or app.Binaries:
                         # This is an app where we build from source, and
                         # verify the APK contents against a developer's
                         # binary. We get that binary now, and save it
@@ -1155,7 +1155,6 @@ def main():
                                          "developer supplied reference "
                                          "binaries: '{path}'"
                                          .format(path=binaries_dir))
-                        url = app.Binaries
                         url = url.replace('%v', build.versionName)
                         url = url.replace('%c', str(build.versionCode))
                         logging.info("...retrieving " + url)
