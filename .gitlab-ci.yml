@@ -509,8 +509,11 @@ Build documentation:
       - docs/build/html/
 
 
+# this job will only run in branches called "windows" until the Windows port is complete
 Windows:
   tags:
+    - windows
+  only:
     - windows
   script:
     - Import-Module "$env:ChocolateyInstall\helpers\chocolateyProfile.psm1"
