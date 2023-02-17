@@ -856,6 +856,52 @@ class CommonTest(unittest.TestCase):
         self.assertFalse(os.path.isfile(unsigned))
         self.assertTrue(fdroidserver.common.verify_apk_signature(signed))
 
+    @unittest.skipIf(os.getuid() == 0, 'This is meaningless when run as root')
+    def test_sign_apk_fail(self):
+        config = fdroidserver.common.read_config(fdroidserver.common.options)
+        if 'apksigner' not in config:
+            self.skipTest('SKIPPING test_sign_apk_fail, apksigner not installed!')
+
+        config['keyalias'] = 'sova'
+        config['keystorepass'] = 'r9aquRHYoI8+dYz6jKrLntQ5/NJNASFBacJh7Jv2BlI='
+        config['keypass'] = 'r9aquRHYoI8+dYz6jKrLntQ5/NJNASFBacJh7Jv2BlI='
+        config['keystore'] = os.path.join(self.basedir, 'keystore.jks')
+        fdroidserver.common.config = config
+        fdroidserver.signindex.config = config
+
+        unsigned = os.path.join(self.testdir, 'urzip-release-unsigned.apk')
+        signed = os.path.join(self.testdir, 'urzip-release.apk')
+        shutil.copy(os.path.join(self.basedir, 'urzip-release-unsigned.apk'), self.testdir)
+
+        os.chmod(unsigned, 0o000)
+        with self.assertRaises(fdroidserver.exception.BuildException):
+            fdroidserver.common.sign_apk(unsigned, signed, config['keyalias'])
+        os.chmod(unsigned, 0o777)
+        self.assertTrue(os.path.isfile(unsigned))
+        self.assertFalse(os.path.isfile(signed))
+
+    def test_sign_apk_corrupt(self):
+        config = fdroidserver.common.read_config(fdroidserver.common.options)
+        if 'apksigner' not in config:
+            self.skipTest('SKIPPING test_sign_apk_corrupt, apksigner not installed!')
+
+        config['keyalias'] = 'sova'
+        config['keystorepass'] = 'r9aquRHYoI8+dYz6jKrLntQ5/NJNASFBacJh7Jv2BlI='
+        config['keypass'] = 'r9aquRHYoI8+dYz6jKrLntQ5/NJNASFBacJh7Jv2BlI='
+        config['keystore'] = os.path.join(self.basedir, 'keystore.jks')
+        fdroidserver.common.config = config
+        fdroidserver.signindex.config = config
+
+        unsigned = os.path.join(self.testdir, 'urzip-release-unsigned.apk')
+        signed = os.path.join(self.testdir, 'urzip-release.apk')
+        with open(unsigned, 'w') as fp:
+            fp.write('this is a corrupt APK')
+
+        with self.assertRaises(fdroidserver.exception.BuildException):
+            fdroidserver.common.sign_apk(unsigned, signed, config['keyalias'])
+        self.assertTrue(os.path.isfile(unsigned))
+        self.assertFalse(os.path.isfile(signed))
+
     @unittest.skipUnless(
         os.path.exists('tests/SystemWebView-repack.apk'), "file too big for sdist"
     )
