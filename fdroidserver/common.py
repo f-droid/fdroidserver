@@ -197,18 +197,18 @@ def _add_java_paths_to_config(pathlist, thisconfig):
         j = os.path.basename(d)
         # the last one found will be the canonical one, so order appropriately
         for regex in [
-                r'^1\.([16-9][0-9]?)\.0\.jdk$',  # OSX
-                r'^jdk1\.([16-9][0-9]?)\.0_[0-9]+.jdk$',  # OSX and Oracle tarball
-                r'^jdk1\.([16-9][0-9]?)\.0_[0-9]+$',  # Oracle Windows
-                r'^jdk([16-9][0-9]?)-openjdk$',  # Arch
-                r'^java-([16-9][0-9]?)-openjdk$',  # Arch
-                r'^java-([16-9][0-9]?)-jdk$',  # Arch (oracle)
-                r'^java-1\.([16-9][0-9]?)\.0-.*$',  # RedHat
-                r'^java-([16-9][0-9]?)-oracle$',  # Debian WebUpd8
-                r'^jdk-([16-9][0-9]?)-oracle-.*$',  # Debian make-jpkg
-                r'^java-([16-9][0-9]?)-openjdk-[^c][^o][^m].*$',  # Debian
-                r'^oracle-jdk-bin-1\.([17-9][0-9]?).*$',  # Gentoo (oracle)
-                r'^icedtea-bin-([17-9][0-9]?).*$',  # Gentoo (openjdk)
+                r'^1\.([126-9][0-9]?)\.0\.jdk$',  # OSX
+                r'^jdk1\.([126-9][0-9]?)\.0_[0-9]+.jdk$',  # OSX and Oracle tarball
+                r'^jdk1\.([126-9][0-9]?)\.0_[0-9]+$',  # Oracle Windows
+                r'^jdk([126-9][0-9]?)-openjdk$',  # Arch
+                r'^java-([126-9][0-9]?)-openjdk$',  # Arch
+                r'^java-([126-9][0-9]?)-jdk$',  # Arch (oracle)
+                r'^java-1\.([126-9][0-9]?)\.0-.*$',  # RedHat
+                r'^java-([126-9][0-9]?)-oracle$',  # Debian WebUpd8
+                r'^jdk-([126-9][0-9]?)-oracle-.*$',  # Debian make-jpkg
+                r'^java-([126-9][0-9]?)-openjdk-[^c][^o][^m].*$',  # Debian
+                r'^oracle-jdk-bin-1\.([126-9][0-9]?).*$',  # Gentoo (oracle)
+                r'^icedtea-bin-([126-9][0-9]?).*$',  # Gentoo (openjdk)
                 ]:
             m = re.match(regex, j)
             if not m:
@@ -256,19 +256,20 @@ def fill_config_defaults(thisconfig):
     if thisconfig['java_paths'] is None:
         thisconfig['java_paths'] = dict()
         pathlist = []
-        pathlist += glob.glob('/usr/lib/jvm/j*[16-9]*')
-        pathlist += glob.glob('/usr/java/jdk1.[16-9]*')
-        pathlist += glob.glob('/System/Library/Java/JavaVirtualMachines/1.[16-9][0-9]?.0.jdk')
+        pathlist += glob.glob('/usr/lib/jvm/j*[126-9]*')
+        pathlist += glob.glob('/usr/java/jdk1.[126-9]*')
+        pathlist += glob.glob('/System/Library/Java/JavaVirtualMachines/1.[126-9][0-9]?.0.jdk')
         pathlist += glob.glob('/Library/Java/JavaVirtualMachines/*jdk*[0-9]*')
         pathlist += glob.glob('/opt/oracle-jdk-*1.[0-9]*')
         pathlist += glob.glob('/opt/icedtea-*[0-9]*')
         if os.getenv('JAVA_HOME') is not None:
             pathlist.append(os.getenv('JAVA_HOME'))
         if os.getenv('PROGRAMFILES') is not None:
-            pathlist += glob.glob(os.path.join(os.getenv('PROGRAMFILES'), 'Java', 'jdk1.[16-9][0-9]?.*'))
+            pathlist += glob.glob(os.path.join(os.getenv('PROGRAMFILES'), 'Java', 'jdk1.[126-9][0-9]?.*'))
         _add_java_paths_to_config(pathlist, thisconfig)
 
-    for java_version in ('14', '13', '12', '11', '10', '9', '8', '7'):
+    for java_version in range(29, 6, -1):
+        java_version = str(java_version)
         if java_version not in thisconfig['java_paths']:
             continue
         java_home = thisconfig['java_paths'][java_version]
