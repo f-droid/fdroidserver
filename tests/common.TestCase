@@ -2262,6 +2262,24 @@ class CommonTest(unittest.TestCase):
             {'r10e': r10e, 'r17c': ndk_bundle, 'r21e': r21e}, config['ndk_paths']
         )
 
+    @unittest.skipIf(not os.path.isdir('/usr/lib/jvm/default-java'), 'uses Debian path')
+    def test_fill_config_defaults_java(self):
+        """Test the auto-detection of Java installed in standard paths"""
+        config = {'sdk_path': self.tmpdir}
+        fdroidserver.common.fill_config_defaults(config)
+        java_paths = []
+        # use presence of javac to make sure its JDK not just JRE
+        for f in glob.glob('/usr/lib/jvm/java-*-openjdk-amd64/bin/javac'):
+            jdk = os.path.dirname(os.path.dirname(f))
+            if not os.path.islink(jdk):
+                java_paths.append(jdk)
+        self.assertEqual(
+            len(java_paths),
+            len(config['java_paths'])
+        )
+        for f in config['java_paths'].values():
+            self.assertTrue(f in java_paths)
+
     def test_vcs_git_latesttags(self):
         tags = [
             "1.1.1",
