@@ -121,27 +121,43 @@ def sign_jar(jar, use_old_algs=False):
 
 
 def sign_index(repodir, json_name):
-    """Sign index-v1.json to make index-v1.jar.
+    """Sign data file like entry.json to make a signed JAR like entry.jar.
 
-    This is a bit different than index.jar: instead of their being index.xml
-    and index_unsigned.jar, the presence of index-v1.json means that there is
-    unsigned data.  That file is then stuck into a jar and signed by the
-    signing process.  index-v1.json is never published to the repo.  It is
-    included in the binary transparency log, if that is enabled.
+    The data file like index-v1.json means that there is unsigned
+    data.  That file is then stuck into a jar and signed by the
+    signing process. This is a bit different than sign_jar, which is
+    used for index.jar: that creates index.xml then puts that in a
+    index_unsigned.jar, then that file is signed.
+
+    This also checks to make sure that the JSON files are intact
+    before signing them.  Broken JSON files should never be signed, so
+    taking some extra time and failing hard is the preferred
+    option. This signing process can happen on an entirely separate
+    machine and file tree, so this ensures that nothing got broken
+    during transfer.
+
     """
+    json_file = os.path.join(repodir, json_name)
+    with open(json_file, encoding="utf-8") as fp:
+        data = json.load(fp)
+        if json_name == 'entry.json':
+            index_file = os.path.join(repodir, data['index']['name'].lstrip('/'))
+            sha256 = common.sha256sum(index_file)
+            if sha256 != data['index']['sha256']:
+                raise FDroidException(
+                    _('%s has bad SHA-256: %s') % (index_file, sha256)
+                )
+            with open(index_file) as fp:
+                index = json.load(fp)
+            if not isinstance(index, dict):
+                raise FDroidException(_('%s did not produce a dict!') % index_file)
+        elif json_name == 'index-v1.json':
+            [metadata.App(app) for app in data["apps"]]
+
     name, ext = common.get_extension(json_name)
-    index_file = os.path.join(repodir, json_name)
-
-    # Test if index is valid
-    with open(index_file, encoding="utf-8") as fp:
-        index = json.load(fp)
-        # TODO: add test for index-v2
-        if "apps" in index:
-            [metadata.App(app) for app in index["apps"]]
-
     jar_file = os.path.join(repodir, name + '.jar')
     with zipfile.ZipFile(jar_file, 'w', zipfile.ZIP_DEFLATED) as jar:
-        jar.write(index_file, json_name)
+        jar.write(json_file, json_name)
 
     if json_name in ('index.xml', 'index-v1.json'):
         sign_jar(jar_file, use_old_algs=True)
