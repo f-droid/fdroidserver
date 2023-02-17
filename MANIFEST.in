@@ -642,8 +642,10 @@ include tests/repo/com.politedroid_4.apk
 include tests/repo/com.politedroid_5.apk
 include tests/repo/com.politedroid_6.apk
 include tests/repo/duplicate.permisssions_9999999.apk
+include tests/repo/entry.json
 include tests/repo/fake.ota.update_1234.zip
 include tests/repo/index-v1.json
+include tests/repo/index-v2.json
 include tests/repo/index.xml
 include tests/repo/info.zwanenburg.caffeinetile_4.apk
 include tests/repo/main.1101613.obb.main.twoversions.obb

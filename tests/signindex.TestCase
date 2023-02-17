@@ -18,7 +18,7 @@ print('localmodule: ' + localmodule)
 if localmodule not in sys.path:
     sys.path.insert(0, localmodule)
 
-from fdroidserver import apksigcopier, common, signindex, update
+from fdroidserver import apksigcopier, common, exception, signindex, update
 from pathlib import Path
 from unittest.mock import patch
 
@@ -68,6 +68,68 @@ class SignindexTest(unittest.TestCase):
             fp.write('corrupt JSON!')
         with self.assertRaises(json.decoder.JSONDecodeError, msg='error on bad JSON'):
             signindex.sign_index(str(self.repodir), 'index-v1.json')
+
+    def test_sign_entry(self):
+        entry = 'repo/entry.json'
+        v2 = 'repo/index-v2.json'
+        shutil.copy(self.basedir / entry, entry)
+        shutil.copy(self.basedir / v2, v2)
+        signindex.sign_index(self.repodir, 'entry.json')
+        self.assertTrue((self.repodir / 'entry.jar').exists())
+
+    def test_sign_entry_corrupt(self):
+        """sign_index should exit with error if entry.json is bad JSON"""
+        entry = 'repo/entry.json'
+        with open(entry, 'w') as fp:
+            fp.write('{')
+        with self.assertRaises(json.decoder.JSONDecodeError, msg='error on bad JSON'):
+            signindex.sign_index(self.repodir, 'entry.json')
+        self.assertFalse((self.repodir / 'entry.jar').exists())
+
+    def test_sign_entry_corrupt_leave_entry_jar(self):
+        """sign_index should not touch existing entry.jar if entry.json is corrupt"""
+        existing = 'repo/entry.jar'
+        testvalue = "Don't touch!"
+        with open(existing, 'w') as fp:
+            fp.write(testvalue)
+        with open('repo/entry.json', 'w') as fp:
+            fp.write('{')
+        with self.assertRaises(json.decoder.JSONDecodeError, msg='error on bad JSON'):
+            signindex.sign_index(self.repodir, 'entry.json')
+        with open(existing) as fp:
+            self.assertEqual(testvalue, fp.read())
+
+    def test_sign_corrupt_index_v2_json(self):
+        """sign_index should exit with error if index-v2.json JSON is corrupt"""
+        with open('repo/index-v2.json', 'w') as fp:
+            fp.write('{"key": "not really an index"')
+        good_entry = {
+            "timestamp": 1676583021000,
+            "version": 20002,
+            "index": {
+                "name": "/index-v2.json",
+                "sha256": common.sha256sum('repo/index-v2.json'),
+                "size": os.path.getsize('repo/index-v2.json'),
+                "numPackages": 0,
+            },
+        }
+        with open('repo/entry.json', 'w') as fp:
+            json.dump(good_entry, fp)
+        with self.assertRaises(json.decoder.JSONDecodeError, msg='error on bad JSON'):
+            signindex.sign_index(self.repodir, 'entry.json')
+        self.assertFalse((self.repodir / 'entry.jar').exists())
+
+    def test_sign_index_v2_corrupt_sha256(self):
+        """sign_index should exit with error if SHA-256 of file in entry is wrong"""
+        entry = 'repo/entry.json'
+        v2 = 'repo/index-v2.json'
+        shutil.copy(self.basedir / entry, entry)
+        shutil.copy(self.basedir / v2, v2)
+        with open(v2, 'a') as fp:
+            fp.write(' ')
+        with self.assertRaises(exception.FDroidException, msg='error on bad SHA-256'):
+            signindex.sign_index(self.repodir, 'entry.json')
+        self.assertFalse((self.repodir / 'entry.jar').exists())
 
     def test_signindex(self):
         if common.find_apksigner({}) is None:  # TODO remove me for buildserver-bullseye
