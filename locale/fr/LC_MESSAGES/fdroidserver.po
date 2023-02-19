@@ -39,16 +39,15 @@ msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2022-09-06 22:24+0200\n"
-"PO-Revision-Date: 2022-11-01 17:07+0000\n"
-"Last-Translator: John Donne <akheron@zaclys.net>\n"
-"Language-Team: French <https://hosted.weblate.org/projects/f-droid/"
-"fdroidserver/fr/>\n"
+"PO-Revision-Date: 2022-11-09 21:42+0000\n"
+"Last-Translator: Translator <kvb@tuta.io>\n"
+"Language-Team: French <https://hosted.weblate.org/projects/f-droid/fdroidserver/fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.14.2-dev\n"
+"X-Generator: Weblate 4.15-dev\n"
 
 #: ../fdroidserver/common.py
 msgid ""
@@ -145,9 +144,9 @@ msgid "\"{path}\" is not an accepted format, convert to: {formats}"
 msgstr "\"{path}\" n'est pas un format accepté, convertir en : {formats}"
 
 #: ../fdroidserver/update.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "\"{path}\" is signed by a key that is not allowed:"
-msgstr "\"{path}\" est signé par une clé qui n'est pas autorisée :"
+msgstr "\"{path}\" est signé par une clé qui n'est pas autorisée :"
 
 #: ../fdroidserver/common.py ../fdroidserver/import_subcommand.py
 #, python-brace-format
@@ -522,7 +521,7 @@ msgstr ""
 #: ../fdroidserver/lint.py
 #, python-format
 msgid "Categories '%s' is not valid"
-msgstr "Catégorie « %s » invalide"
+msgstr "Catégories « %s » invalides"
 
 #: ../fdroidserver/lint.py
 msgid "Categories are not set"
@@ -546,14 +545,11 @@ msgstr ""
 msgid ""
 "Checking archiving for {appid} - apks:{integer}, keepversions:{keep}, "
 "archapks:{arch}"
-msgstr ""
-"Vérification de l'archivage pour {appid} - apks : {integer}, keepversions : "
-"{keep}, archapks : {arch}"
+msgstr "Vérification de l'archivage pour {appid} — apks : {integer}, keepversions : {keep}, archapks : {arch}"
 
 #: ../fdroidserver/update.py
 msgid "Clean update - don't uses caches, reprocess all APKs"
-msgstr ""
-"Mise à jour propre - n'utilise pas les caches, traite à nouveau tous les APKs"
+msgstr "Mise à jour propre — n'utilise pas les caches, traite à nouveau tous les APKs"
 
 #: ../fdroidserver/import.py ../fdroidserver/import_subcommand.py
 msgid "Comma separated list of categories."
@@ -840,10 +836,9 @@ msgid "ERROR: unsupported CI type, patches welcome!"
 msgstr "ERREUR : type de CI non supporté, les corrections sont bienvenues !"
 
 #: ../fdroidserver/nightly.py
-#, fuzzy, python-format
+#, python-format
 msgid "ERROR: unsupported git host \"%s\", patches welcome!"
-msgstr ""
-"ERREUR : type de CI \"%s\" non supporté, les corrections sont bienvenues !"
+msgstr "ERREUR : hébergeur git « %s » non supporté, les corrections sont les bienvenues !"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
@@ -885,7 +880,6 @@ msgid "Error while getting repo address"
 msgstr "Erreur lors de l'obtention de l'adresse du dépôt"
 
 #: ../fdroidserver/__main__.py
-#, fuzzy
 msgid "Extract application metadata from a source repository"
 msgstr "Extraire les métadonnées de l'application depuis un dépôt source"
 
@@ -1263,8 +1257,7 @@ msgstr ""
 
 #: ../fdroidserver/lint.py
 msgid "Invalid link - use [http://foo.bar Link title] or [http://foo.bar]"
-msgstr ""
-"Lien non valide - utilisez [http://foo.bar Link title] ou [http://foo.bar]"
+msgstr "Lien non valide — utilisez [http://foo.bar Link title] ou [http://foo.bar]"
 
 #: ../fdroidserver/metadata.py
 #, python-format
@@ -1402,7 +1395,7 @@ msgid "Malformed serverwebroot line:"
 msgstr "serverwebroot malformer en ligne :"
 
 #: ../fdroidserver/scanner.py
-#, fuzzy, python-format
+#, python-format
 msgid "Max recursion depth in ZIP file reached: %s"
 msgstr "Profondeur maximale de récursivité dans le fichier ZIP atteinte : %s"
 
@@ -1417,13 +1410,11 @@ msgstr "Répertoire de destination manquant"
 #: ../fdroidserver/lint.py
 #, python-format
 msgid "Name '%s' is just the auto name - remove it"
-msgstr "Le nom '%s' est just un nom générer - retirer le"
+msgstr "Le nom '%s' est juste un nom généré — supprimez-le"
 
 #: ../fdroidserver/index.py
-#, fuzzy
 msgid "Neither \"repo_pubkey\" nor \"keystorepass\" set in config.yml"
-msgstr ""
-"Ni \"repo_pubkey\", ni \"keystorepass\" ne sont définis dans config.yml"
+msgstr "Ni « repo_pubkey », ni « keystorepass » ne sont définis dans config.yml"
 
 #: ../fdroidserver/common.py
 msgid "No 'config.yml' found, using defaults."
@@ -1678,7 +1669,7 @@ msgstr ""
 "Afficher la variable secrète dans le terminal pour un copier/coller facilité"
 
 #: ../fdroidserver/scanner.py
-#, fuzzy, python-format
+#, python-format
 msgid "Problem with ZIP file: %s, error %s"
 msgstr "Problème avec le fichier ZIP : %s, erreur %s"
 
@@ -1774,9 +1765,7 @@ msgstr "Lecture de {apkfilename} à partir du cache"
 msgid ""
 "Recalculate aggregate stats - use when changes have been made that would "
 "invalidate old cached data."
-msgstr ""
-"Recalculer les statistiques agrégées - à utiliser quand les modifications "
-"faites peuvent invalider les anciennes données en cache."
+msgstr "Recalculer les statistiques agrégées — à utiliser quand les modifications faites peuvent invalider les anciennes données en cache."
 
 #: ../fdroidserver/common.py
 msgid "Removing specified files"
@@ -1861,14 +1850,14 @@ msgstr "Exécution de wget dans {path}"
 
 #: ../fdroidserver/build.py
 msgid "Scan the resulting APK(s) for known non-free classes."
-msgstr "Scanne le(s) APK(s) résultants pour des classes non-libres connues."
+msgstr "Analyse le(s) APK(s) généré(s) afin de trouver les classes connues comme non libres."
 
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Scan the source code of a package"
 msgstr "Scanner le code source d'un paquet"
 
 #: ../fdroidserver/scanner.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Scanner found {count} problems in {apk}:"
 msgstr "Le scan a détecté {count} problèmes dans {apk} :"
 
@@ -1893,9 +1882,8 @@ msgid "Scanning APK with apkanalyzer for known non-free classes."
 msgstr "Analyse de l’APK avec apkanalyzer pour les classes non libres connues."
 
 #: ../fdroidserver/scanner.py
-#, fuzzy
 msgid "Scanning APK with dexdump for known non-free classes."
-msgstr "Analyse de l’APK avec apkanalyzer pour les classes non libres connues."
+msgstr "Analyse de l’APK avec dexdump pour les classes non libres connues."
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -2041,9 +2029,7 @@ msgstr ""
 msgid ""
 "Test mode - put output in the tmp directory only, and always build, even if "
 "the output already exists."
-msgstr ""
-"Mode test – mettre la sortie dans le dossier tmp uniquement et toujours "
-"compiler, même si la sortie existe déjà."
+msgstr "Mode test — mettre la sortie dans le dossier tmp uniquement et toujours compiler, même si la sortie existe déjà."
 
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
 #: ../fdroidserver/update.py
@@ -2082,7 +2068,7 @@ msgstr "Le dossier racine pour local_copy_dir \"{path}\" n'existe pas !"
 
 #: ../fdroidserver/publish.py
 msgid "There is a keyalias collision - publishing halted"
-msgstr "Il y a une collision de keyalias - publication interrompue"
+msgstr "Il y a une collision de keyalias — publication interrompue"
 
 #: ../fdroidserver/common.py
 msgid "These are the apps that have been archived from the main repo."
@@ -2554,7 +2540,6 @@ msgstr ""
 "applicationId avec le versionCode optionnel sous la forme APPID[:VERCODE]"
 
 #: ../fdroidserver/common.py
-#, fuzzy
 msgid "archive_url needs to end with /archive"
 msgstr "archive_url doit se terminer par /archive"
 
@@ -2579,9 +2564,9 @@ msgstr ""
 "caractères) : '{}'"
 
 #: /usr/lib/python3.9/argparse.py
-#, fuzzy, python-format
+#, python-format
 msgid "can't open '%(filename)s': %(error)s"
-msgstr "Impossible d'ouvrir '%(filename)s' : %(error)s"
+msgstr "impossible d'ouvrir « %(filename)s » : %(error)s"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py
@@ -2603,7 +2588,7 @@ msgstr "Impossible d'avoir plusieurs arguments du sous-parseur"
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #, python-format
 msgid "cannot merge actions - two groups are named %r"
-msgstr "impossible de fusionner les actions - deux groupes sont nommés %r"
+msgstr "impossible de fusionner les actions — deux groupes sont nommés %r"
 
 #: ../fdroidserver/nightly.py
 msgid "cannot publish update, did you set the deploy key?"
@@ -2767,11 +2752,8 @@ msgstr ""
 "créer !"
 
 #: ../fdroidserver/index.py
-#, fuzzy
 msgid "index-v2 must have a signature, use `fdroid signindex` to create it!"
-msgstr ""
-"index-v1 doit avoir une signature, utilisez `fdroid signindex` pour la "
-"créer !"
+msgstr "index-v2 doit avoir une signature, utilisez `fdroid signindex` pour la créer !"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 #: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
@@ -2984,7 +2966,6 @@ msgid "repo_icon %s does not exist, generating placeholder."
 msgstr "Le repo_icon %s n'existe pas, génération d'une icône de remplacement."
 
 #: ../fdroidserver/common.py
-#, fuzzy
 msgid "repo_url needs to end with /repo"
 msgstr "repo_url doit se terminer par /repo"
 
