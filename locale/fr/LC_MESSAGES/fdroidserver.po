@@ -31,7 +31,7 @@
 # translator <kvb@tuta.io>, 2022.
 # Julien Maulny <julien.maulny@protonmail.com>, 2022.
 # Translator <kvb@tuta.io>, 2022.
-# Ldm Public <ldmpub@gmail.com>, 2022.
+# Ldm Public <ldmpub@gmail.com>, 2022, 2023.
 # TopFox <Arnaud.Savary@etu.unige.ch>, 2022.
 # John Donne <akheron@zaclys.net>, 2022.
 # Deleted User <noreply+22825@weblate.org>, 2023.
@@ -41,7 +41,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2022-09-06 22:24+0200\n"
 "PO-Revision-Date: 2023-01-02 10:50+0000\n"
-"Last-Translator: Deleted User <noreply+22825@weblate.org>\n"
+"Last-Translator: Ldm Public <ldmpub@gmail.com>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/f-droid/fdroidserver/fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
@@ -501,7 +501,7 @@ msgstr "Impossible de lire \"{path}\" !"
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Cannot resolve application ID {appid}"
-msgstr "Impossible de résoudre l'identifiant de l'application {appid}"
+msgstr "Impossible de trouver l'identifiant de l'application {appid}"
 
 #: ../fdroidserver/rewritemeta.py
 #, python-brace-format
@@ -820,8 +820,7 @@ msgstr "Analyser dynamiquement les APKs après compilation"
 
 #: ../fdroidserver/__main__.py
 msgid "ERROR: The \"server\" subcommand has been removed, use \"deploy\"!"
-msgstr ""
-"ERREUR : La sous-commande \"server\" a été supprimée, utilisez \"deploy\" !"
+msgstr "ERREUR : La sous-commande \"server\" a été supprimée, utilisez plutôt \"deploy\" !"
 
 #: ../fdroidserver/mirror.py
 msgid ""
@@ -2208,11 +2207,11 @@ msgstr ""
 
 #: ../fdroidserver/lint.py
 msgid "Unnecessary leading space"
-msgstr "Espace non nécessaire au début"
+msgstr "Espace inutile au début"
 
 #: ../fdroidserver/lint.py
 msgid "Unnecessary trailing space"
-msgstr "Espace non-nécessaire à la fin"
+msgstr "Espace inutile à la fin"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
@@ -2334,9 +2333,7 @@ msgstr ""
 #. Translators: https://developer.android.com/studio/build/application-id
 #: ../fdroidserver/lint.py
 msgid "UpdateCheckName is set to the known application ID - it can be removed"
-msgstr ""
-"UpdateCheckName est défini sur l'ID d’application connu - il peut être "
-"supprimé"
+msgstr "UpdateCheckName a pour valeur l'ID d’application - il peut être supprimé"
 
 #: ../fdroidserver/lint.py
 msgid "UpdateCheckName is set to the known application ID, it can be removed"
@@ -2515,7 +2512,7 @@ msgstr "apksigner est introuvable, il est requis pour la signature !"
 #: ../fdroidserver/lint.py ../fdroidserver/rewritemeta.py
 #: ../fdroidserver/checkupdates.py
 msgid "application ID of file to operate on"
-msgstr "ID d'application du fichier sur lequel agir"
+msgstr "applicationId du fichier à traiter"
 
 #: ../fdroidserver/verify.py ../fdroidserver/publish.py
 #: ../fdroidserver/build.py ../fdroidserver/scanner.py
@@ -2560,9 +2557,7 @@ msgstr "tentative de connexion ssh simple pour tester la clé de déploiement :"
 
 #: ../fdroidserver/common.py
 msgid "can not parse scrlib spec (not a string): '{}'"
-msgstr ""
-"Impossible de parcourir la spécification de srclib (pas une chaîne de "
-"caractères) : '{}'"
+msgstr "impossible d'analyser la spécification de scrlib (not a string) : '{}'"
 
 #: /usr/lib/python3.9/argparse.py
 #, python-format
@@ -2686,8 +2681,8 @@ msgstr "binaire exécutable, possiblement du code"
 #, python-format
 msgid "expected %s argument"
 msgid_plural "expected %s arguments"
-msgstr[0] "argument %s requis"
-msgstr[1] "arguments %s requis"
+msgstr[0] "%s argument attendu"
+msgstr[1] "%s arguments attendus"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
@@ -2810,7 +2805,7 @@ msgstr "local_copy_dir doir être un chemin absolut !"
 
 #: ../fdroidserver/deploy.py
 msgid "local_copy_dir must be directory, not a file!"
-msgstr "local_copy_dir doit être absolument un dossier, pas un fichier !"
+msgstr "local_copy_dir doit être un dossier et non un fichier !"
 
 #: ../fdroidserver/index.py
 #, python-format
@@ -2839,7 +2834,7 @@ msgstr "option inexistante : %s"
 
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "no version info found!"
-msgstr "aucun information de version n'a été trouvée !"
+msgstr "aucune information de version n'a été trouvée !"
 
 #: ../fdroidserver/checkupdates.py
 msgid "no version information found"
@@ -2924,7 +2919,7 @@ msgstr "arguments optionnels"
 #: ../fdroidserver/nightly.py
 #, python-brace-format
 msgid "overwriting existing {path}"
-msgstr "en train d'écraser l'existant {path}"
+msgstr "écrasement de {path} en cours"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
