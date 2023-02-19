@@ -3349,6 +3349,8 @@ def sign_apk(unsigned_path, signed_path, keyalias):
         'FDROID_KEY_STORE_PASS': config['keystorepass'],
         'FDROID_KEY_PASS': config.get('keypass', "")})
     if p.returncode != 0:
+        if os.path.exists(signed_path):
+            os.remove(signed_path)
         raise BuildException(_("Failed to sign application"), p.output)
     os.remove(unsigned_path)
 
