@@ -2,7 +2,7 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # Manuela Silva <mmsrs@sky.com>, 2020.
-# ssantos <ssantos@web.de>, 2020, 2021.
+# ssantos <ssantos@web.de>, 2020, 2021, 2022, 2023.
 # Hans-Christoph Steiner <hans@guardianproject.info>, 2020, 2022.
 # Peter J. Mello <admin@petermello.net>, 2021.
 msgid ""
@@ -10,15 +10,15 @@ msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2022-09-06 22:24+0200\n"
-"PO-Revision-Date: 2022-09-06 14:30+0000\n"
-"Last-Translator: Hans-Christoph Steiner <hans@guardianproject.info>\n"
+"PO-Revision-Date: 2023-02-05 17:10+0000\n"
+"Last-Translator: ssantos <ssantos@web.de>\n"
 "Language-Team: Portuguese (Portugal) <https://hosted.weblate.org/projects/f-droid/fdroidserver/pt_PT/>\n"
 "Language: pt_PT\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.14.1-dev\n"
+"X-Generator: Weblate 4.16-dev\n"
 
 #: ../fdroidserver/common.py
 msgid ""
@@ -67,9 +67,9 @@ msgid "\"%s/\" has no matching metadata file!"
 msgstr "\"%s/\" não tem ficheiro de metadados correspondente!"
 
 #: ../fdroidserver/index.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "\"local_copy_dir\" {path} does not exist!"
-msgstr "O diretório raiz para local_copy_dir \"{path}\" não existe!"
+msgstr "O diretório raiz para \"local_copy_dir\" {path} não existe!"
 
 #: ../fdroidserver/index.py
 msgid "\"repo_pubkey\" must be present in config.yml when using --nosign!"
@@ -108,7 +108,7 @@ msgstr "\"{path}\" não é um formato aceito, converter para: {formats}"
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "\"{path}\" is signed by a key that is not allowed:"
-msgstr ""
+msgstr "\"{path}\" é assinado por uma chave que não é permitida:"
 
 #: ../fdroidserver/common.py ../fdroidserver/import_subcommand.py
 #, python-brace-format
@@ -333,9 +333,9 @@ msgid "Android SDK tool {cmd} found!"
 msgstr "Ferramenta {cmd} do Android SDK foi encontrada!"
 
 #: ../fdroidserver/common.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Android SDK tool {cmd} not found!"
-msgstr "Ferramenta {cmd} do Android SDK foi encontrada!"
+msgstr "A ferramenta SDK do Android {cmd} não foi encontrada!"
 
 #. Translators: "build-tools" is the file name of a package from
 #. Google, it is part of the Android SDK. So it probably shouldn't be
@@ -415,7 +415,7 @@ msgstr "Repo construído baseado em \"%s\" com esta configuração:"
 
 #: ../fdroidserver/checkupdates.py
 msgid "Can't auto-update app with no CurrentVersionCode"
-msgstr ""
+msgstr "Não é possível atualizar a app automaticamente sem CurrentVersionCode"
 
 #: ../fdroidserver/build.py
 msgid "Can't build due to {} error while scanning"
@@ -531,9 +531,8 @@ msgid "Couldn't find Application ID"
 msgstr "Não foi possível encontrar o ID da aplicação"
 
 #: ../fdroidserver/checkupdates.py
-#, fuzzy
 msgid "Couldn't find any version information"
-msgstr "Não foi possível encontrar o nome da versão mais recente"
+msgstr "Não foi encontrada qualquer informação da versão"
 
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
 #: ../fdroidserver/import.py
@@ -693,7 +692,7 @@ msgstr "Descarregar os registos que nós não temos"
 #: ../fdroidserver/common.py
 #, python-format
 msgid "Downloading %s"
-msgstr ""
+msgstr "A descarregar %s"
 
 #: ../fdroidserver/common.py
 msgid "Downloading the repository already failed once, not trying again."
@@ -735,9 +734,9 @@ msgid "ERROR: unsupported CI type, patches welcome!"
 msgstr "ERRO: tipo de CI sem suporte, patches são bem-vindos!"
 
 #: ../fdroidserver/nightly.py
-#, fuzzy, python-format
+#, python-format
 msgid "ERROR: unsupported git host \"%s\", patches welcome!"
-msgstr "ERRO: tipo de CI sem suporte, patches são bem-vindos!"
+msgstr "ERRO: host de git \"%s\" não suportado, patches são bem-vindos!"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
@@ -776,7 +775,7 @@ msgstr "Erro ao obter o endereço do repo"
 
 #: ../fdroidserver/__main__.py
 msgid "Extract application metadata from a source repository"
-msgstr ""
+msgstr "Extrair metadados de aplicações de um repositório de origem"
 
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Extract signatures from APKs"
@@ -826,9 +825,8 @@ msgid "Failed to get APK manifest information"
 msgstr "Falha ao obter informações de manifesto do APK"
 
 #: ../fdroidserver/update.py
-#, fuzzy
 msgid "Failed to get APK signing key fingerprint"
-msgstr "Falha ao obter informações de manifesto do APK"
+msgstr "Falha ao obter a impressão digital da chave de assinatura do APK"
 
 #: ../fdroidserver/install.py
 #, python-brace-format
@@ -961,9 +959,8 @@ msgid "Git fetch failed"
 msgstr "Git fetch falhou"
 
 #: ../fdroidserver/common.py
-#, fuzzy
 msgid "Git prune failed"
-msgstr "Git reset falhou"
+msgstr "Git prune falhou"
 
 #: ../fdroidserver/common.py
 msgid "Git remote set-head failed"
@@ -1042,12 +1039,12 @@ msgstr "Incluir os tarballs de fontes no espelho"
 #: ../fdroidserver/metadata.py
 #, python-format
 msgid "Including metadata from %s@%s"
-msgstr ""
+msgstr "Incluindo metadados de %s@%s"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Including metadata from {path}"
-msgstr ""
+msgstr "Incluindo metadados de {path}"
 
 #: ../fdroidserver/common.py
 msgid "Initialising submodules"
@@ -1092,12 +1089,12 @@ msgstr "APK inválido"
 #: ../fdroidserver/checkupdates.py
 #, python-brace-format
 msgid "Invalid AutoUpdateMode: {mode}"
-msgstr ""
+msgstr "AutoUpdateMode inválido: {mode}"
 
 #: ../fdroidserver/checkupdates.py
 #, python-brace-format
 msgid "Invalid UpdateCheckMode: {mode}"
-msgstr ""
+msgstr "UpdateCheckMode inválido: {mode}"
 
 #: ../fdroidserver/lint.py ../fdroidserver/checkupdates.py
 #, python-brace-format
@@ -1154,7 +1151,7 @@ msgstr "Nome inválido para o ficheiro publicado: %s"
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Invalid ndk: entry in build: \"{ndk}\""
-msgstr ""
+msgstr "Ndk inválido: entrada na compilação: \"{ndk}\""
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -1218,9 +1215,9 @@ msgid "Javascript in HTML src attributes"
 msgstr "JavaScript em atributos HTML src"
 
 #: ../fdroidserver/build.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Keeping failed build \"{apkfilename}\""
-msgstr "A leitura de minSdkVersion falhou: \"{apkfilename}\""
+msgstr "Mantendo a compilação com falha \"{apkfilename}\""
 
 #: ../fdroidserver/init.py
 msgid "Keystore for signing key:\t"
@@ -1244,9 +1241,8 @@ msgid "List files that would be reformatted"
 msgstr "Listar ficheiros que devem ser reformatados"
 
 #: ../fdroidserver/rewritemeta.py
-#, fuzzy
 msgid "List files that would be reformatted (dry run)"
-msgstr "Listar ficheiros que devem ser reformatados"
+msgstr "Listar ficheiros que devem ser reformatados (execução a seco)"
 
 #: ../fdroidserver/lint.py
 msgid "Locale included in f-droid.org URL"
@@ -1267,7 +1263,7 @@ msgstr "Linha de serverwebroot malformada:"
 #: ../fdroidserver/scanner.py
 #, python-format
 msgid "Max recursion depth in ZIP file reached: %s"
-msgstr ""
+msgstr "Profundidade máxima de recursão no ficheiro ZIP atingida: %s"
 
 #: ../fdroidserver/mirror.py
 msgid "Mirror the full repo and archive, all file types."
@@ -1284,16 +1280,16 @@ msgstr "O nome '%s' é apenas o nome automático - remover"
 
 #: ../fdroidserver/index.py
 msgid "Neither \"repo_pubkey\" nor \"keystorepass\" set in config.yml"
-msgstr ""
+msgstr "Nem \"repo_pubkey\" nem \"keystorepass\" definidos em config.yml"
 
 #: ../fdroidserver/common.py
 msgid "No 'config.yml' found, using defaults."
 msgstr "'config.yml' não encontrado, utilizando as predefinições."
 
 #: ../fdroidserver/verify.py
-#, fuzzy, python-format
+#, python-format
 msgid "No APK for package: %s"
-msgstr "Nenhum pacote desses: %s"
+msgstr "Nenhum APK para o pacote: %s"
 
 #: ../fdroidserver/common.py
 msgid "No Android SDK found!"
@@ -1335,12 +1331,12 @@ msgstr "Nenhuma informação encontrada."
 
 #: ../fdroidserver/checkupdates.py
 msgid "No matching tags found"
-msgstr ""
+msgstr "Não foram encontradas marcações correspondentes"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "No minimum SDK version found in {0}, using default (3)."
-msgstr ""
+msgstr "Nenhuma versão mínima do SDK encontrada em {0}, a usar a predefinição (3)."
 
 #: ../fdroidserver/lint.py
 msgid "No need to specify that the app is Free Software"
@@ -1384,9 +1380,8 @@ msgid "No such versionCode {versionCode} for app {appid}"
 msgstr "Nenhum versionCode {versionCode} para o app {appid}"
 
 #: ../fdroidserver/checkupdates.py
-#, fuzzy
 msgid "No tags found"
-msgstr "Nenhum aparelho anexado encontrado"
+msgstr "Nenhuma etiqueta encontrada"
 
 #: ../fdroidserver/verify.py ../fdroidserver/publish.py
 msgid "No unsigned directory - nothing to do"
@@ -1521,7 +1516,7 @@ msgstr "Imprimir a variável secreta para o terminal para copiar/colar fácilmen
 #: ../fdroidserver/scanner.py
 #, python-format
 msgid "Problem with ZIP file: %s, error %s"
-msgstr ""
+msgstr "Problema com o ficheiro ZIP: %s, erro %s"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
@@ -1618,7 +1613,7 @@ msgstr "Apagando ficheiros especificados"
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Removing {path}\""
-msgstr ""
+msgstr "A remover {path}\""
 
 #: ../fdroidserver/update.py
 msgid "Rename APK files that do not match package.name_123.apk"
@@ -1626,7 +1621,7 @@ msgstr "Renomear todos os ficheiros APKs que não correspondem com package.name_
 
 #: ../fdroidserver/checkupdates.py
 msgid "RepoTrunk update mode only makes sense in git-svn repositories"
-msgstr ""
+msgstr "O modo de atualização repoTrunk só faz sentido em repositórios de git-svn"
 
 #: ../fdroidserver/update.py
 msgid "Report on build data status"
@@ -1693,9 +1688,9 @@ msgid "Scan the source code of a package"
 msgstr "Analisar o código fonte de um pacote"
 
 #: ../fdroidserver/scanner.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Scanner found {count} problems in {apk}:"
-msgstr "O scanner encontrou {count} problemas em {appid}:"
+msgstr "O scanner encontrou {count} problemas em {apk}:"
 
 #: ../fdroidserver/scanner.py
 #, python-brace-format
@@ -1714,19 +1709,17 @@ msgstr[0] "Scanner encontrou {} problema"
 msgstr[1] "Scanner encontrou {} problemas"
 
 #: ../fdroidserver/scanner.py
-#, fuzzy
 msgid "Scanning APK with apkanalyzer for known non-free classes."
-msgstr "Procure no(s) APK(s) resultante(s) por classes conhecidas não livres."
+msgstr "Varrer os APK com apkanalyzer para classes não-livres."
 
 #: ../fdroidserver/scanner.py
-#, fuzzy
 msgid "Scanning APK with dexdump for known non-free classes."
-msgstr "Procure no(s) APK(s) resultante(s) por classes conhecidas não livres."
+msgstr "A verificar o APK com dexdump por classes não-livres conhecidas."
 
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Set NDK {release} ({version}) up"
-msgstr ""
+msgstr "Definir NDK {release} ({version}) para cima"
 
 #: ../fdroidserver/common.py
 msgid "Set clock to that time using:"
@@ -1774,7 +1767,7 @@ msgstr "Ignorando '{apkfilename}' com uma assinatura inválida!"
 #: ../fdroidserver/index.py
 #, python-format
 msgid "Skipping GitLab Pages mirror because the repo is too large (>%.2fGB)!"
-msgstr ""
+msgstr "A ignorar o espelho do GitLab Pages pelo repositório ser muito grande (>%.2fGB)!"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -1843,11 +1836,11 @@ msgstr "O relógio do sistema é mais antigo que a data em {path}!"
 
 #: ../fdroidserver/checkupdates.py
 msgid "Tags update mode only works for git, hg, bzr and git-svn repositories currently"
-msgstr ""
+msgstr "O modo de atualização de marcações só funciona atualmente para repositórios git, hg, bzr e git-svn"
 
 #: ../fdroidserver/checkupdates.py
 msgid "Tags update mode used in git-svn, but the repo was not set up with tags"
-msgstr ""
+msgstr "Modo de atualização de marcações usado no git-svn, mas a repo não foi configurada com marcações"
 
 #: ../fdroidserver/build.py
 msgid "Test mode - put output in the tmp directory only, and always build, even if the output already exists."
@@ -1916,6 +1909,13 @@ msgid ""
 "For more info: https://f-droid.org/docs/Setup_an_F-Droid_App_Repo\n"
 "and https://f-droid.org/docs/Signing_Process"
 msgstr ""
+"Para completar a configuração, adicione os seus APKs ao \"%s\",\n"
+"depois execute \"fdroid update -c; fdroid update\".  Também pode editar\n"
+"\"config.yml\" para definir a URL, nome do repo, e muito mais. Também deve configurar\n"
+"uma chave de assinatura (uma chave temporária pode ter sido gerada automaticamente).\n"
+"\n"
+"Para mais informações: https://f-droid.org/docs/Setup_an_F-Droid_App_Repo\n"
+"e https://f-droid.org/docs/Signing_Process"
 
 #: ../fdroidserver/deploy.py ../fdroidserver/upload.py
 msgid "To use awsbucket, awssecretkey and awsaccesskeyid must also be set in config.yml!"
@@ -1949,7 +1949,7 @@ msgstr "Etiqueta de licença \"{}\" inesperada! Use somente as etiquetas de lice
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Unexpected symlink target: {link} -> {target}"
-msgstr ""
+msgstr "Alvo symlink inesperado: {link} -> {target}"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
@@ -2077,7 +2077,7 @@ msgstr "O caminho de scanignore não é usado: %s"
 #: ../fdroidserver/common.py
 #, python-format
 msgid "Unzipping to %s"
-msgstr ""
+msgstr "A descompactar para %s"
 
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Update repo information for new packages"
@@ -2264,7 +2264,7 @@ msgstr "opção ambígua: %s (%s?)"
 
 #: ../fdroidserver/common.py
 msgid "apksigner not found! Cannot sign or verify modern APKs"
-msgstr ""
+msgstr "apksigner não encontrado! Não é possível assinar ou verificar APKs modernos"
 
 #: ../fdroidserver/common.py
 msgid "apksigner not found, it's required for signing!"
@@ -2298,7 +2298,7 @@ msgstr "applicationId com versionCode opcional na forma APPID[:VERCODE]"
 
 #: ../fdroidserver/common.py
 msgid "archive_url needs to end with /archive"
-msgstr ""
+msgstr "archive_url precisa de terminar com /archive"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
@@ -2319,9 +2319,9 @@ msgid "can not parse scrlib spec (not a string): '{}'"
 msgstr "não é possível analisar as especificações do scrlib (não é uma cadeia): '{}'"
 
 #: /usr/lib/python3.9/argparse.py
-#, fuzzy, python-format
+#, python-format
 msgid "can't open '%(filename)s': %(error)s"
-msgstr "não dá pra abrir '%s': %s"
+msgstr "não é possível abrir '%(filename)s': %(error)s"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py
@@ -2401,7 +2401,7 @@ msgstr "{path} criado"
 #: ../fdroidserver/checkupdates.py
 #, python-brace-format
 msgid "current version is newer: old vercode={old}, new vercode={new}"
-msgstr ""
+msgstr "a versão atual é mais nova: velho vercódigo={old}, novo vercódigo={new}"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -2496,9 +2496,8 @@ msgid "index-v1 must have a signature, use `fdroid signindex` to create it!"
 msgstr "index-v1 deve ter uma assinatura, use ' fdroid signindex ' para criá-lo!"
 
 #: ../fdroidserver/index.py
-#, fuzzy
 msgid "index-v2 must have a signature, use `fdroid signindex` to create it!"
-msgstr "index-v1 deve ter uma assinatura, use ' fdroid signindex ' para criá-lo!"
+msgstr "index-v2 deve ter uma assinatura, use droid signindex` para o criar!"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 #: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
@@ -2532,7 +2531,7 @@ msgstr "Opção cadeia %(option)r inválida: deve começar com o caractere %(pre
 #: ../fdroidserver/checkupdates.py
 #, python-brace-format
 msgid "latest build recipe is newer: old vercode={old}, new vercode={new}"
-msgstr ""
+msgstr "a última receita de construção é mais recente: velho vercódigo={old}, novo vercódigo={new}"
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
@@ -2691,7 +2690,7 @@ msgstr "repo_icon %s não existe, a gerar um espaço reservado."
 
 #: ../fdroidserver/common.py
 msgid "repo_url needs to end with /repo"
-msgstr ""
+msgstr "repo_url precisa de terminar com /repo"
 
 #: ../fdroidserver/metadata.py
 msgid "ruamel.yaml not installed, can not write metadata."
@@ -2705,7 +2704,7 @@ msgstr "s3cmd sincroniza índices {path} para {url} e exclui"
 #: ../fdroidserver/scanner.py
 #, python-format
 msgid "scanner not cleanly run apkanalyzer: %s"
-msgstr ""
+msgstr "o scanner não executa corretamente o apkanalyzer: %s"
 
 #: ../fdroidserver/scanner.py
 msgid "shared library"
@@ -2855,7 +2854,7 @@ msgstr "{appid} do {path} não é um Nome de Pacote Java válido!"
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "{appid} has both APKs and files: {files}"
-msgstr ""
+msgstr "{appid} tem APKs e ficheiros: {files}"
 
 #: ../fdroidserver/mirror.py
 #, python-brace-format
@@ -2939,9 +2938,9 @@ msgid "{path} more than 200MB, manually upload: {url}"
 msgstr "{path} mais de 200MB, enviar manualmente: {url}"
 
 #: ../fdroidserver/update.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{path}: {error}"
-msgstr "Falha ao copiar {path}: {error}"
+msgstr "{path}: {error}"
 
 #: ../fdroidserver/mirror.py
 #, python-brace-format

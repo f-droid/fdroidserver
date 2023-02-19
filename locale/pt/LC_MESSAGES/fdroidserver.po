@@ -1,6 +1,6 @@
 # SOME DESCRIPTIVE TITLE.
 # This file is put in the public domain.
-# ssantos <ssantos@web.de>, 2020, 2021, 2022.
+# ssantos <ssantos@web.de>, 2020, 2021, 2022, 2023.
 # Peter J. Mello <admin@petermello.net>, 2021.
 # Eduardo Rodrigues <edu.rodrigues2580@gmail.com>, 2021.
 # SC <lalocas@protonmail.com>, 2022.
@@ -9,15 +9,15 @@ msgstr ""
 "Project-Id-Version: fdroidserver 1.1-680-ge1d3de71\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2022-09-06 22:24+0200\n"
-"PO-Revision-Date: 2022-05-24 20:28+0000\n"
-"Last-Translator: SC <lalocas@protonmail.com>\n"
+"PO-Revision-Date: 2023-02-19 20:57+0000\n"
+"Last-Translator: ssantos <ssantos@web.de>\n"
 "Language-Team: Portuguese <https://hosted.weblate.org/projects/f-droid/fdroidserver/pt/>\n"
 "Language: pt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.13-dev\n"
+"X-Generator: Weblate 4.16-dev\n"
 
 #: ../fdroidserver/common.py
 msgid ""
@@ -733,9 +733,9 @@ msgid "ERROR: unsupported CI type, patches welcome!"
 msgstr "ERRO: tipo de CI sem suporte, patches são bem-vindos!"
 
 #: ../fdroidserver/nightly.py
-#, fuzzy, python-format
+#, python-format
 msgid "ERROR: unsupported git host \"%s\", patches welcome!"
-msgstr "ERRO: tipo de CI sem suporte, patches são bem-vindos!"
+msgstr "ERRO: host de git \"%s\" não suportado, patches são bem-vindos!"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
@@ -774,7 +774,7 @@ msgstr "Erro ao obter o endereço do repo"
 
 #: ../fdroidserver/__main__.py
 msgid "Extract application metadata from a source repository"
-msgstr ""
+msgstr "Extrair metadados de aplicações de um repositório de origem"
 
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Extract signatures from APKs"
@@ -959,7 +959,7 @@ msgstr "Git fetch falhou"
 
 #: ../fdroidserver/common.py
 msgid "Git prune failed"
-msgstr "Falha na remoção do Git"
+msgstr "Git prune falhou"
 
 #: ../fdroidserver/common.py
 msgid "Git remote set-head failed"
@@ -1262,7 +1262,7 @@ msgstr "Linha de serverwebroot malformada:"
 #: ../fdroidserver/scanner.py
 #, python-format
 msgid "Max recursion depth in ZIP file reached: %s"
-msgstr ""
+msgstr "Profundidade máxima de recursão no ficheiro ZIP atingida: %s"
 
 #: ../fdroidserver/mirror.py
 msgid "Mirror the full repo and archive, all file types."
@@ -1279,7 +1279,7 @@ msgstr "O nome '%s' é apenas o nome automático - remover"
 
 #: ../fdroidserver/index.py
 msgid "Neither \"repo_pubkey\" nor \"keystorepass\" set in config.yml"
-msgstr ""
+msgstr "Nem \"repo_pubkey\" nem \"keystorepass\" definidos em config.yml"
 
 #: ../fdroidserver/common.py
 msgid "No 'config.yml' found, using defaults."
@@ -1515,7 +1515,7 @@ msgstr "Imprimir a variável secreta para o terminal para copiar/colar fácilmen
 #: ../fdroidserver/scanner.py
 #, python-format
 msgid "Problem with ZIP file: %s, error %s"
-msgstr ""
+msgstr "Problema com o ficheiro ZIP: %s, erro %s"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
@@ -1687,9 +1687,9 @@ msgid "Scan the source code of a package"
 msgstr "Analisar o código fonte de um pacote"
 
 #: ../fdroidserver/scanner.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Scanner found {count} problems in {apk}:"
-msgstr "O scanner encontrou {count} problemas em {appid}:"
+msgstr "O scanner encontrou {count} problemas em {apk}:"
 
 #: ../fdroidserver/scanner.py
 #, python-brace-format
@@ -1712,9 +1712,8 @@ msgid "Scanning APK with apkanalyzer for known non-free classes."
 msgstr "Varrer os APK com apkanalyzer para classes não-livres."
 
 #: ../fdroidserver/scanner.py
-#, fuzzy
 msgid "Scanning APK with dexdump for known non-free classes."
-msgstr "Varrer os APK com apkanalyzer para classes não-livres."
+msgstr "A verificar o APK com dexdump por classes não-livres conhecidas."
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -2298,7 +2297,7 @@ msgstr "applicationId com versionCode opcional na forma APPID[:VERCODE]"
 
 #: ../fdroidserver/common.py
 msgid "archive_url needs to end with /archive"
-msgstr ""
+msgstr "archive_url precisa de terminar com /archive"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
@@ -2319,15 +2318,15 @@ msgid "can not parse scrlib spec (not a string): '{}'"
 msgstr "não é possível analisar as especificações do scrlib (não é uma cadeia): '{}'"
 
 #: /usr/lib/python3.9/argparse.py
-#, fuzzy, python-format
+#, python-format
 msgid "can't open '%(filename)s': %(error)s"
-msgstr "não dá pra abrir '%s': %s"
+msgstr "não é possível abrir '%(filename)s': %(error)s"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py
 #, python-format
 msgid "can't open '%s': %s"
-msgstr "não dá pra abrir '%s': %s"
+msgstr "não é possível abrir '%s': %s"
 
 #: ../fdroidserver/build.py
 #, python-brace-format
@@ -2496,9 +2495,8 @@ msgid "index-v1 must have a signature, use `fdroid signindex` to create it!"
 msgstr "index-v1 deve ter uma assinatura, use ' fdroid signindex ' para criá-lo!"
 
 #: ../fdroidserver/index.py
-#, fuzzy
 msgid "index-v2 must have a signature, use `fdroid signindex` to create it!"
-msgstr "index-v1 deve ter uma assinatura, use ' fdroid signindex ' para criá-lo!"
+msgstr "index-v2 deve ter uma assinatura, use droid signindex` para o criar!"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 #: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
@@ -2691,7 +2689,7 @@ msgstr "repo_icon %s não existe, a gerar um espaço reservado."
 
 #: ../fdroidserver/common.py
 msgid "repo_url needs to end with /repo"
-msgstr ""
+msgstr "repo_url precisa de terminar com /repo"
 
 #: ../fdroidserver/metadata.py
 msgid "ruamel.yaml not installed, can not write metadata."
