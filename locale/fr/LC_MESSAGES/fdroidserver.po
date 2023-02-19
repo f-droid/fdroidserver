@@ -40,10 +40,9 @@ msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2022-09-06 22:24+0200\n"
-"PO-Revision-Date: 2023-01-02 10:50+0000\n"
-"Last-Translator: gub <gub.gub@laposte.net>\n"
-"Language-Team: French <https://hosted.weblate.org/projects/f-droid/"
-"fdroidserver/fr/>\n"
+"PO-Revision-Date: 2023-01-05 18:23+0000\n"
+"Last-Translator: Ldm Public <ldmpub@gmail.com>\n"
+"Language-Team: French <https://hosted.weblate.org/projects/f-droid/fdroidserver/fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -2632,8 +2631,8 @@ msgstr "complexe"
 #, python-format
 msgid "conflicting option string: %s"
 msgid_plural "conflicting option strings: %s"
-msgstr[0] "option en conflit: %s"
-msgstr[1] "options en conflit: %s"
+msgstr[0] "option en conflit : %s"
+msgstr[1] "options en conflit : %s"
 
 #: ../fdroidserver/nightly.py
 #, python-brace-format
@@ -2681,7 +2680,7 @@ msgstr "déploiement des journaux de compilation sur « {path} »"
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "deployed process log {path} to {dest}"
-msgstr "journal du processus déployé {path} à {dest}"
+msgstr "journal du processus déployé de {path} vers {dest}"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
@@ -3169,9 +3168,7 @@ msgstr "{appid} n'a pas de {name}"
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "{appid}: Unknown extlib {path} in build '{versionName}'"
-msgstr ""
-"{appid} : Bibliothèque externe (extlib) {path} inconnue dans la version "
-"'{versionName}'"
+msgstr "{appid} : Bibliothèque externe (extlib) {path} inconnue dans la version '{versionName}'"
 
 #: ../fdroidserver/scanner.py
 #, python-brace-format
