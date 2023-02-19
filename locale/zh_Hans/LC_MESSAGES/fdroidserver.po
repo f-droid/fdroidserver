@@ -22,15 +22,15 @@
 # Yang Yulin <yylteam@hotmail.com>, 2022.
 # Eric <hamburger1024@mailbox.org>, 2022.
 # Xu ZhuoHan <yylteam@hotmail.com>, 2022.
-# Xiang Heng Wei <yylteam@hotmail.com>, 2022.
+# Xiang Heng Wei <yylteam@hotmail.com>, 2022, 2023.
 # RainSlide <RainSlide@outlook.com>, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2022-09-06 22:24+0200\n"
-"PO-Revision-Date: 2023-01-30 21:55+0000\n"
-"Last-Translator: RainSlide <RainSlide@outlook.com>\n"
+"PO-Revision-Date: 2023-02-14 00:18+0000\n"
+"Last-Translator: Xiang Heng Wei <yylteam@hotmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/f-droid/fdroidserver/zh_Hans/>\n"
 "Language: zh_Hans\n"
 "MIME-Version: 1.0\n"
@@ -2067,11 +2067,11 @@ msgstr "未知元数据格式：{path} (使用:*.yml)"
 
 #: ../fdroidserver/common.py
 msgid "Unknown version of aapt, might cause problems: "
-msgstr ""
+msgstr "未知版本的 aapt，可能会导致问题： "
 
 #: ../fdroidserver/lint.py
 msgid "Unlinkified link - use [http://foo.bar Link title] or [http://foo.bar]"
-msgstr ""
+msgstr "无链接的链接 - 使用[http://foo.bar 链接标题]或[http://foo.bar]"
 
 #: ../fdroidserver/lint.py
 msgid "Unnecessary leading space"
@@ -2103,30 +2103,30 @@ msgstr "{linedesc} 中有无法识别的栏目 '{field}'"
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Unsupported file type \"{extension}\" for repo graphic"
-msgstr ""
+msgstr "存储库图形不支持的文件类型“{extension}”"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Unsupported graphics file found: {path}"
-msgstr ""
+msgstr "发现不支持的图形文件：{path}"
 
 #: ../fdroidserver/rewritemeta.py
 #, python-brace-format
 msgid "Unsupported metadata format, use: --to [{supported}]"
-msgstr ""
+msgstr "不支持的元数据格式，请使用：--to [{supported}]"
 
 #: ../fdroidserver/metadata.py
 msgid "Unterminated ]"
-msgstr ""
+msgstr "未终止 ]"
 
 #: ../fdroidserver/metadata.py
 msgid "Unterminated ]]"
-msgstr ""
+msgstr "未终止 ]]"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Unterminated build in {name}"
-msgstr ""
+msgstr "{name} 中未终止的构建"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
