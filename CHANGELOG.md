@@ -4,8 +4,73 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 
-## [Unreleased]
+## [2.2.0] - 2023-02-20
 
+### Added
+* Support index-v2 format, localizable Anti-Features, Categories
+* New entry point for repos, entry.jar, signed with modern algorithms
+* New config/ subdirectory for localizable configuration
+* Script entries in metadata files (init, prebuild, build, etc) now handled as
+  lists so they now support using && or ; in the script, and behave like
+  .gitlab-ci.yml and other CI YAML.
+* GPG signatures for index-v1.json and index-v2.json
+* Use default.txt as fallback changelog when inserting fastlane metadata
+* scanner: F-Droid signatures now maintained in fdroid/suss
+* scanner: maintain signature sources in config.yml, including Exodus Privacy
+* scanner: use dexdump for class names
+* scanner: directly scan APK files when given a path
+* scanner: recursively scan APKs for DEX and ZIP using file magic
+* signindex: validate index files before signing
+* update: set ArchivePolicy based on VercodeOperation/signature
+* Include IPFS CIDv1 in index-v2.json for hosting repos on IPFS
+* Per-repo beta channel configuration
+* Add Czech translation
+
+### Fixed
+
+* apksigner v30 or higher now required for verifying and signing APKs
+* 3.9 as minimum supported Python version
+* Lots of translation updates
+* Better pip packaging
+* nightly: big overhaul for reliable operation on all Debian/Ubuntu versions
+* Improved logging, fewer confusing verbose messages
+* scanner: fix detection of binary files without extension
+* import: more reliable operation, including Flutter apps
+* Support Java 20 and up
+
+### Removed
+* Remove obsolete `fdroid stats` command
+
+## [2.1.1] - 2022-09-06
+
+* gradlew-fdroid: Include latest versions and checksums
+* nightly: update Raw URLs to fix breakage and avoid redirects
+* signindex: gpg-sign index-v1.json and deploy it
+* update: fix --use-date-from-apk when used with files (#1012)
+
+## [2.1] - 2022-02-22
+
+For a more complete overview, see the [2.1
+milestone](https://gitlab.com/fdroid/fdroidserver/-/milestones/11)
+
+## [2.0.5] - 2022-09-06
+
+### Fixed
+
+* gradlew-fdroid: Include latest versions and checksums
+* nightly: add support for GitHub Actions
+* nightly: update Raw URLs to fix breakage and avoid redirects
+* update: fix --use-date-from-apk when used with files (#1012)
+* Fix GitLab CI
+
+## [2.0.4] - 2022-06-29
+
+### Fixed
+
+* deploy: ensure progress is instantiated before trying to use it
+* signindex: gpg-sign index-v1.json and deploy it
+  [1080](https://gitlab.com/fdroid/fdroidserver/-/merge_requests/1080)
+  [1124](https://gitlab.com/fdroid/fdroidserver/-/merge_requests/1124)
 
 ## [2.0.3] - 2021-07-01
 
@@ -19,6 +84,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 ### Fixed
 
 * fix "ruamel round_trip_dump will be removed"
+  [932](https://gitlab.com/fdroid/fdroidserver/-/merge_requests/932)
 
 ## [2.0.1] - 2021-03-09
 
