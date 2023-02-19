@@ -20,7 +20,7 @@
 # hilariousperson <gobelpepite+github@gmail.com>, 2021.
 # Madeorsk <madeorsk@protonmail.com>, 2021.
 # Adrien le Maire <adrien@alemaire.be>, 2021.
-# gub <gub.gub@laposte.net>, 2021.
+# gub <gub.gub@laposte.net>, 2021, 2023.
 # ButterflyOfFire <ButterflyOfFire@protonmail.com>, 2021, 2022, 2023.
 # Vincent Finance <linuxmario@linuxmario.net>, 2021.
 # Gavy <gavy@protonmail.com>, 2021.
@@ -41,8 +41,9 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2022-09-06 22:24+0200\n"
 "PO-Revision-Date: 2023-01-02 10:50+0000\n"
-"Last-Translator: ButterflyOfFire <ButterflyOfFire@protonmail.com>\n"
-"Language-Team: French <https://hosted.weblate.org/projects/f-droid/fdroidserver/fr/>\n"
+"Last-Translator: gub <gub.gub@laposte.net>\n"
+"Language-Team: French <https://hosted.weblate.org/projects/f-droid/"
+"fdroidserver/fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -546,11 +547,14 @@ msgstr ""
 msgid ""
 "Checking archiving for {appid} - apks:{integer}, keepversions:{keep}, "
 "archapks:{arch}"
-msgstr "Vérification de l'archivage pour {appid} — apks : {integer}, keepversions : {keep}, archapks : {arch}"
+msgstr ""
+"Vérification de l'archivage pour {appid} — apks : {integer}, keepversions : "
+"{keep}, archapks : {arch}"
 
 #: ../fdroidserver/update.py
 msgid "Clean update - don't uses caches, reprocess all APKs"
-msgstr "Mise à jour propre — n'utilise pas les caches, traite à nouveau tous les APKs"
+msgstr ""
+"Mise à jour propre — n'utilise pas les caches, traite à nouveau tous les APKs"
 
 #: ../fdroidserver/import.py ../fdroidserver/import_subcommand.py
 msgid "Comma separated list of categories."
@@ -820,7 +824,9 @@ msgstr "Analyser dynamiquement les APKs après compilation"
 
 #: ../fdroidserver/__main__.py
 msgid "ERROR: The \"server\" subcommand has been removed, use \"deploy\"!"
-msgstr "ERREUR : La sous-commande \"server\" a été supprimée, utilisez plutôt \"deploy\" !"
+msgstr ""
+"ERREUR : La sous-commande \"server\" a été supprimée, utilisez plutôt "
+"\"deploy\" !"
 
 #: ../fdroidserver/mirror.py
 msgid ""
@@ -838,7 +844,9 @@ msgstr "ERREUR : type de CI non supporté, les corrections sont bienvenues !"
 #: ../fdroidserver/nightly.py
 #, python-format
 msgid "ERROR: unsupported git host \"%s\", patches welcome!"
-msgstr "ERREUR : hébergeur git « %s » non supporté, les corrections sont les bienvenues !"
+msgstr ""
+"ERREUR : hébergeur git « %s » non supporté, les corrections sont les "
+"bienvenues !"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
@@ -1257,7 +1265,8 @@ msgstr ""
 
 #: ../fdroidserver/lint.py
 msgid "Invalid link - use [http://foo.bar Link title] or [http://foo.bar]"
-msgstr "Lien non valide — utilisez [http://foo.bar Link title] ou [http://foo.bar]"
+msgstr ""
+"Lien non valide — utilisez [http://foo.bar Link title] ou [http://foo.bar]"
 
 #: ../fdroidserver/metadata.py
 #, python-format
@@ -1414,7 +1423,8 @@ msgstr "Le nom '%s' est juste un nom généré — supprimez-le"
 
 #: ../fdroidserver/index.py
 msgid "Neither \"repo_pubkey\" nor \"keystorepass\" set in config.yml"
-msgstr "Ni « repo_pubkey », ni « keystorepass » ne sont définis dans config.yml"
+msgstr ""
+"Ni « repo_pubkey », ni « keystorepass » ne sont définis dans config.yml"
 
 #: ../fdroidserver/common.py
 msgid "No 'config.yml' found, using defaults."
@@ -1765,7 +1775,9 @@ msgstr "Lecture de {apkfilename} à partir du cache"
 msgid ""
 "Recalculate aggregate stats - use when changes have been made that would "
 "invalidate old cached data."
-msgstr "Recalculer les statistiques agrégées — à utiliser quand les modifications faites peuvent invalider les anciennes données en cache."
+msgstr ""
+"Recalculer les statistiques agrégées — à utiliser quand les modifications "
+"faites peuvent invalider les anciennes données en cache."
 
 #: ../fdroidserver/common.py
 msgid "Removing specified files"
@@ -1850,7 +1862,9 @@ msgstr "Exécution de wget dans {path}"
 
 #: ../fdroidserver/build.py
 msgid "Scan the resulting APK(s) for known non-free classes."
-msgstr "Analyse le(s) APK(s) généré(s) afin de trouver les classes connues comme non libres."
+msgstr ""
+"Analyse le(s) APK(s) généré(s) afin de trouver les classes connues comme non "
+"libres."
 
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Scan the source code of a package"
@@ -2029,7 +2043,9 @@ msgstr ""
 msgid ""
 "Test mode - put output in the tmp directory only, and always build, even if "
 "the output already exists."
-msgstr "Mode test — mettre la sortie dans le dossier tmp uniquement et toujours compiler, même si la sortie existe déjà."
+msgstr ""
+"Mode test — mettre la sortie dans le dossier tmp uniquement et toujours "
+"compiler, même si la sortie existe déjà."
 
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
 #: ../fdroidserver/update.py
@@ -2333,7 +2349,8 @@ msgstr ""
 #. Translators: https://developer.android.com/studio/build/application-id
 #: ../fdroidserver/lint.py
 msgid "UpdateCheckName is set to the known application ID - it can be removed"
-msgstr "UpdateCheckName a pour valeur l'ID d’application - il peut être supprimé"
+msgstr ""
+"UpdateCheckName a pour valeur l'ID d’application - il peut être supprimé"
 
 #: ../fdroidserver/lint.py
 msgid "UpdateCheckName is set to the known application ID, it can be removed"
@@ -2664,7 +2681,7 @@ msgstr "déploiement des journaux de compilation sur « {path} »"
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "deployed process log {path} to {dest}"
-msgstr "log du processus {path} déployé vers {dest}"
+msgstr "journal du processus déployé {path} à {dest}"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
@@ -2745,11 +2762,13 @@ msgstr "argument explicite %r ignoré"
 msgid "index-v1 must have a signature, use `fdroid signindex` to create it!"
 msgstr ""
 "index-v1 doit avoir une signature, utilisez `fdroid signindex` pour la "
-"créer !"
+"créer !"
 
 #: ../fdroidserver/index.py
 msgid "index-v2 must have a signature, use `fdroid signindex` to create it!"
-msgstr "index-v2 doit avoir une signature, utilisez `fdroid signindex` pour la créer !"
+msgstr ""
+"index-v2 doit avoir une signature, utilisez `fdroid signindex` pour la "
+"créer !"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 #: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
@@ -2801,7 +2820,7 @@ msgstr ""
 
 #: ../fdroidserver/deploy.py
 msgid "local_copy_dir must be an absolute path!"
-msgstr "local_copy_dir doir être un chemin absolut !"
+msgstr "local_copy_dir doit être un chemin absolu !"
 
 #: ../fdroidserver/deploy.py
 msgid "local_copy_dir must be directory, not a file!"
