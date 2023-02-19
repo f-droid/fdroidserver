@@ -2,20 +2,21 @@
 # Copyright (C) YEAR Free Software Foundation, Inc.
 # Oğuz Ersen <oguzersen@protonmail.com>, 2020, 2021, 2022.
 # Orhan <orya@pm.me>, 2021.
+# Oğuz Ersen <oguz@ersen.moe>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2022-09-06 22:24+0200\n"
-"PO-Revision-Date: 2022-02-15 22:36+0000\n"
-"Last-Translator: Oğuz Ersen <oguzersen@protonmail.com>\n"
+"PO-Revision-Date: 2022-09-08 14:15+0000\n"
+"Last-Translator: Oğuz Ersen <oguz@ersen.moe>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/f-droid/fdroidserver/tr/>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.11-dev\n"
+"X-Generator: Weblate 4.14.1-dev\n"
 
 #: ../fdroidserver/common.py
 msgid ""
@@ -731,9 +732,9 @@ msgid "ERROR: unsupported CI type, patches welcome!"
 msgstr "HATA: desteklenmeyen CI türü, yama gönderebilirsiniz!"
 
 #: ../fdroidserver/nightly.py
-#, fuzzy, python-format
+#, python-format
 msgid "ERROR: unsupported git host \"%s\", patches welcome!"
-msgstr "HATA: desteklenmeyen CI türü, yama gönderebilirsiniz!"
+msgstr "HATA: desteklenmeyen git ana makinesi \"%s\", yama gönderebilirsiniz!"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
@@ -772,7 +773,7 @@ msgstr "Depo adresi alınırken hata"
 
 #: ../fdroidserver/__main__.py
 msgid "Extract application metadata from a source repository"
-msgstr ""
+msgstr "Bir kaynak depodan uygulama üst verilerini ayıkla"
 
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Extract signatures from APKs"
@@ -1260,7 +1261,7 @@ msgstr "Bozuk serverwebroot satırı:"
 #: ../fdroidserver/scanner.py
 #, python-format
 msgid "Max recursion depth in ZIP file reached: %s"
-msgstr ""
+msgstr "ZIP dosyasında azami özyineleme derinliğine ulaşıldı: %s"
 
 #: ../fdroidserver/mirror.py
 msgid "Mirror the full repo and archive, all file types."
@@ -1277,7 +1278,7 @@ msgstr "Ad '%s' yalnızca kendiliğinden bir ad - kaldırın"
 
 #: ../fdroidserver/index.py
 msgid "Neither \"repo_pubkey\" nor \"keystorepass\" set in config.yml"
-msgstr ""
+msgstr "config.yml dosyasında ne \"repo_pubkey\" ne de \"keystorepass\" ayarlandı"
 
 #: ../fdroidserver/common.py
 msgid "No 'config.yml' found, using defaults."
@@ -1513,7 +1514,7 @@ msgstr "Kolay kopyala yapıştır için gizli değişkeni terminale yaz"
 #: ../fdroidserver/scanner.py
 #, python-format
 msgid "Problem with ZIP file: %s, error %s"
-msgstr ""
+msgstr "ZIP dosyası ile ilgili sorun: %s, hata %s"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
@@ -1685,9 +1686,9 @@ msgid "Scan the source code of a package"
 msgstr "Bir paketin kaynak kodunu tara"
 
 #: ../fdroidserver/scanner.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Scanner found {count} problems in {apk}:"
-msgstr "Tarayıcı {appid} içinde {count} sorun buldu:"
+msgstr "Tarayıcı {apk} içinde {count} sorun buldu:"
 
 #: ../fdroidserver/scanner.py
 #, python-brace-format
@@ -1710,9 +1711,8 @@ msgid "Scanning APK with apkanalyzer for known non-free classes."
 msgstr "Bilinen özgür olmayan sınıflar için apkanalyzer ile APK taranıyor."
 
 #: ../fdroidserver/scanner.py
-#, fuzzy
 msgid "Scanning APK with dexdump for known non-free classes."
-msgstr "Bilinen özgür olmayan sınıflar için apkanalyzer ile APK taranıyor."
+msgstr "Bilinen özgür olmayan sınıflar için dexdump ile APK taranıyor."
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -2296,7 +2296,7 @@ msgstr "APPID[:VERCODE] biçiminde applicationId, isteğe bağlı versionCode il
 
 #: ../fdroidserver/common.py
 msgid "archive_url needs to end with /archive"
-msgstr ""
+msgstr "archive_url'nin /archive ile bitmesi gerekiyor"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
@@ -2317,9 +2317,9 @@ msgid "can not parse scrlib spec (not a string): '{}'"
 msgstr "scrlib belirtimi ayrıştırılamıyor (bir dizge değil): '{}'"
 
 #: /usr/lib/python3.9/argparse.py
-#, fuzzy, python-format
+#, python-format
 msgid "can't open '%(filename)s': %(error)s"
-msgstr "'%s' açılamıyor: %s"
+msgstr "'%(filename)s' açılamıyor: %(error)s"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py
@@ -2494,9 +2494,8 @@ msgid "index-v1 must have a signature, use `fdroid signindex` to create it!"
 msgstr "index-v1 bir imzaya sahip olmalı, oluşturmak için `fdroid signindex` kullanın!"
 
 #: ../fdroidserver/index.py
-#, fuzzy
 msgid "index-v2 must have a signature, use `fdroid signindex` to create it!"
-msgstr "index-v1 bir imzaya sahip olmalı, oluşturmak için `fdroid signindex` kullanın!"
+msgstr "index-v2 bir imzaya sahip olmalı, oluşturmak için `fdroid signindex` kullanın!"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 #: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
@@ -2689,7 +2688,7 @@ msgstr "repo_icon %s yok, yer tutucu oluşturuyor."
 
 #: ../fdroidserver/common.py
 msgid "repo_url needs to end with /repo"
-msgstr ""
+msgstr "repo_url'nin /repo ile bitmesi gerekiyor"
 
 #: ../fdroidserver/metadata.py
 msgid "ruamel.yaml not installed, can not write metadata."
