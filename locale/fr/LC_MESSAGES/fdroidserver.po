@@ -436,8 +436,7 @@ msgstr ""
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "Branch '{branch}' used as commit in srclib '{srclib}'"
-msgstr ""
-"La branche « {branch} » est utilisée comme commit dans srclib « {srclib} »"
+msgstr "Branche '{branch}' utilisée comme commit dans srclib '{srclib}'"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
