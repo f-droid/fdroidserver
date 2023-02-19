@@ -8,20 +8,21 @@
 # The Cats <philosoph@snopyta.org>, 2020.
 # Eduardo Rodrigues <edu.rodrigues2580@gmail.com>, 2021.
 # Flavio F. M. <flavius_androiduser@protonmail.com>, 2022.
+# The Cats <philosoph@danwin1210.de>, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2022-09-06 22:24+0200\n"
-"PO-Revision-Date: 2022-05-10 03:07+0000\n"
-"Last-Translator: Flavio F. M. <flavius_androiduser@protonmail.com>\n"
+"PO-Revision-Date: 2023-02-01 00:47+0000\n"
+"Last-Translator: The Cats <philosoph@danwin1210.de>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/f-droid/fdroidserver/pt_BR/>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.12.1\n"
+"X-Generator: Weblate 4.16-dev\n"
 
 #: ../fdroidserver/common.py
 msgid ""
@@ -738,9 +739,9 @@ msgid "ERROR: unsupported CI type, patches welcome!"
 msgstr "ERRO: tipo de IC não suportado, correções bem-vindas!"
 
 #: ../fdroidserver/nightly.py
-#, fuzzy, python-format
+#, python-format
 msgid "ERROR: unsupported git host \"%s\", patches welcome!"
-msgstr "ERRO: tipo de IC não suportado, correções bem-vindas!"
+msgstr "ERRO: host de git \"%s\" não suportado, patches são bem-vindos!"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
@@ -779,7 +780,7 @@ msgstr "Erro ao obter o endereço do repositório"
 
 #: ../fdroidserver/__main__.py
 msgid "Extract application metadata from a source repository"
-msgstr ""
+msgstr "Extrair metadados de aplicativos de um repositório de origem"
 
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Extract signatures from APKs"
@@ -1267,7 +1268,7 @@ msgstr "Linha mal-formada do 'serverwebroot':"
 #: ../fdroidserver/scanner.py
 #, python-format
 msgid "Max recursion depth in ZIP file reached: %s"
-msgstr ""
+msgstr "Profundidade máxima de recursão no arquivo ZIP atingida: %s"
 
 #: ../fdroidserver/mirror.py
 msgid "Mirror the full repo and archive, all file types."
@@ -1284,7 +1285,7 @@ msgstr "O nome '%s' é apenas o nome automático - remova-o"
 
 #: ../fdroidserver/index.py
 msgid "Neither \"repo_pubkey\" nor \"keystorepass\" set in config.yml"
-msgstr ""
+msgstr "Nem \"repo_pubkey\" nem \"keystorepass\" definidos em config.yml"
 
 #: ../fdroidserver/common.py
 msgid "No 'config.yml' found, using defaults."
@@ -1520,7 +1521,7 @@ msgstr "Imprima a variável secreta no terminal para facilitar a cópia/colagem"
 #: ../fdroidserver/scanner.py
 #, python-format
 msgid "Problem with ZIP file: %s, error %s"
-msgstr ""
+msgstr "Problema com o arquivo ZIP: %s, erro %s"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
@@ -1692,9 +1693,9 @@ msgid "Scan the source code of a package"
 msgstr "Percorre o código-fonte de um pacote"
 
 #: ../fdroidserver/scanner.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Scanner found {count} problems in {apk}:"
-msgstr "O scanner encontrou {count} problemas em {appid}:"
+msgstr "O scanner encontrou {count} problemas em {apk}:"
 
 #: ../fdroidserver/scanner.py
 #, python-brace-format
@@ -1717,9 +1718,8 @@ msgid "Scanning APK with apkanalyzer for known non-free classes."
 msgstr "Verifique os APKs resultantes na busca das classes não-livres já conhecidas."
 
 #: ../fdroidserver/scanner.py
-#, fuzzy
 msgid "Scanning APK with dexdump for known non-free classes."
-msgstr "Verifique os APKs resultantes na busca das classes não-livres já conhecidas."
+msgstr "Verificando o APK com dexdump por classes não-livres conhecidas."
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -2303,7 +2303,7 @@ msgstr "applicationId com versionCode opcional na forma APPID[:VERCODE]"
 
 #: ../fdroidserver/common.py
 msgid "archive_url needs to end with /archive"
-msgstr ""
+msgstr "archive_url precisa terminar com /archive"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
@@ -2324,9 +2324,9 @@ msgid "can not parse scrlib spec (not a string): '{}'"
 msgstr "não é possível analisar a especificação scrlib (não uma string): '{}'"
 
 #: /usr/lib/python3.9/argparse.py
-#, fuzzy, python-format
+#, python-format
 msgid "can't open '%(filename)s': %(error)s"
-msgstr "não foi possível abrir \"%s\": %s"
+msgstr "não é possível abrir '%(filename)s': %(error)s"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py
@@ -2501,9 +2501,8 @@ msgid "index-v1 must have a signature, use `fdroid signindex` to create it!"
 msgstr "index-v1 deve ter uma assinatura, use ' fdroid signindex ' para criá-lo!"
 
 #: ../fdroidserver/index.py
-#, fuzzy
 msgid "index-v2 must have a signature, use `fdroid signindex` to create it!"
-msgstr "index-v1 deve ter uma assinatura, use ' fdroid signindex ' para criá-lo!"
+msgstr "index-v2 deve ter uma assinatura, use droid signindex` para criá-la!"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 #: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
@@ -2696,7 +2695,7 @@ msgstr "repo_icon %s não existe, gerando um espaço reservado."
 
 #: ../fdroidserver/common.py
 msgid "repo_url needs to end with /repo"
-msgstr ""
+msgstr "repo_url precisa terminar com /repo"
 
 #: ../fdroidserver/metadata.py
 msgid "ruamel.yaml not installed, can not write metadata."
