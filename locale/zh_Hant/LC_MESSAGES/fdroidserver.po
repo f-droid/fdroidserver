@@ -675,10 +675,6 @@ msgstr "不要移除從金鑰儲存生成的私密金鑰"
 msgid "Don't create a source tarball, useful when testing a build"
 msgstr "不要建立 tarball，在測試一個構建時很有用處"
 
-#: ../fdroidserver/stats.py
-msgid "Don't do anything logs-related"
-msgstr "不要做任何與日誌有關的事情"
-
 #: ../fdroidserver/build.py
 msgid "Don't refresh the repository, useful when testing a build with no internet connection"
 msgstr "不要更新軟體庫，在沒有網路連線時測試構建很有用"
@@ -691,10 +687,6 @@ msgstr "不使用 rsync 檢驗和"
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Download complete mirrors of small repos"
 msgstr "下載小型軟體庫完整的鏡像"
-
-#: ../fdroidserver/stats.py
-msgid "Download logs we don't have"
-msgstr "下載我們沒有的日誌"
 
 #: ../fdroidserver/common.py
 #, python-format
@@ -865,7 +857,7 @@ msgstr "抓取 '{apkfilename}' 的簽署資料 -> '{sigdir}'"
 msgid "File disappeared while processing it: {path}"
 msgstr "檔案 「路徑： {path}」在處理過程中消失了！"
 
-#: ../fdroidserver/verify.py ../fdroidserver/stats.py ../fdroidserver/update.py
+#: ../fdroidserver/verify.py ../fdroidserver/update.py
 #: ../fdroidserver/rewritemeta.py ../fdroidserver/build.py
 #: ../fdroidserver/checkupdates.py ../fdroidserver/scanner.py
 #: ../fdroidserver/install.py
@@ -1633,10 +1625,6 @@ msgstr "讀取套件名稱/版本代碼/版本名稱 失敗，APK 無效：'{apk
 msgid "Reading {apkfilename} from cache"
 msgstr "從緩存讀取 {apkfilename}"
 
-#: ../fdroidserver/stats.py
-msgid "Recalculate aggregate stats - use when changes have been made that would invalidate old cached data."
-msgstr "重新計算集合統計 - 使用時進行更改，這會使得舊的快取資料無效。"
-
 #: ../fdroidserver/common.py
 msgid "Removing specified files"
 msgstr "移除指定檔案"
@@ -2118,10 +2106,6 @@ msgstr "為新的套件包更新軟體庫資訊"
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Update the binary transparency log for a URL"
 msgstr "為網址更新二進制的透明日誌"
-
-#: ../fdroid ../fdroidserver/__main__.py
-msgid "Update the stats of the repo"
-msgstr "更新軟體庫的統計"
 
 #: ../fdroidserver/update.py ../fdroidserver/build.py
 msgid "Update the wiki"

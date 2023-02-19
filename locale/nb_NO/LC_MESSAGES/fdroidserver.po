@@ -676,11 +676,6 @@ msgstr "Ikke fjern de private nøklene generert fra nøkkellageret"
 msgid "Don't create a source tarball, useful when testing a build"
 msgstr "Ikke opprett en kildetjæreball, nyttig når et bygg skal testes"
 
-#: ../fdroidserver/stats.py
-#, fuzzy
-msgid "Don't do anything logs-related"
-msgstr "Ikke gjør noe relatert til logging"
-
 #: ../fdroidserver/build.py
 #, fuzzy
 msgid "Don't refresh the repository, useful when testing a build with no internet connection"
@@ -694,11 +689,6 @@ msgstr "Ikke bruk rsync-sjekksummer"
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Download complete mirrors of small repos"
 msgstr "Last ned fullstendige speilinger av små pakkebrønner"
-
-#: ../fdroidserver/stats.py
-#, fuzzy
-msgid "Download logs we don't have"
-msgstr "Last ned logger som ikke finnes lokalt"
 
 #: ../fdroidserver/common.py
 #, python-format
@@ -875,7 +865,7 @@ msgstr "Hentet signaturer for '{apkfilename}' → '{sigdir}'"
 msgid "File disappeared while processing it: {path}"
 msgstr "En fil ble borte mens den ble behandlet: {path}"
 
-#: ../fdroidserver/verify.py ../fdroidserver/stats.py ../fdroidserver/update.py
+#: ../fdroidserver/verify.py ../fdroidserver/update.py
 #: ../fdroidserver/rewritemeta.py ../fdroidserver/build.py
 #: ../fdroidserver/checkupdates.py ../fdroidserver/scanner.py
 #: ../fdroidserver/install.py
@@ -1654,11 +1644,6 @@ msgstr "Kunne ikke lese packageName/versionCode/versionName, APK ugyldig: \"{apk
 msgid "Reading {apkfilename} from cache"
 msgstr "Behandler {apkfilename}"
 
-#: ../fdroidserver/stats.py
-#, fuzzy
-msgid "Recalculate aggregate stats - use when changes have been made that would invalidate old cached data."
-msgstr "Rekalkuler resultatmengdestatistikk - bruk når endringer har blitt gjort som ville ha gjort gammel hurtiglagringsdata ugyldig."
-
 #: ../fdroidserver/common.py
 msgid "Removing specified files"
 msgstr "Fjerner angitte filer"
@@ -2147,10 +2132,6 @@ msgstr "Oppdater repo informasjon for nye pakker"
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Update the binary transparency log for a URL"
 msgstr "Oppdater binær gjennomsiktighetslogg for en URL"
-
-#: ../fdroid ../fdroidserver/__main__.py
-msgid "Update the stats of the repo"
-msgstr "Oppdater pakkebrønnens status"
 
 #: ../fdroidserver/update.py ../fdroidserver/build.py
 msgid "Update the wiki"

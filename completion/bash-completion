@@ -261,12 +261,6 @@ __complete_nightly() {
 	__complete_options
 }
 
-__complete_stats() {
-	opts="-v -q -d"
-	lopts="--verbose --quiet --download"
-	__complete_options
-}
-
 __complete_deploy() {
 	opts="-i -v -q"
 	lopts="--identity-file --local-copy-dir --sync-from-local-copy-dir
@@ -317,7 +311,6 @@ rewritemeta \
 scanner \
 signatures \
 signindex \
-stats \
 update \
 verify \
 "

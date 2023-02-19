@@ -671,10 +671,6 @@ msgstr ""
 msgid "Don't create a source tarball, useful when testing a build"
 msgstr "No crear el tarbal de codigo fuente, útil cuando se esta probando la construcción"
 
-#: ../fdroidserver/stats.py
-msgid "Don't do anything logs-related"
-msgstr "No hacer nada que refiera a los registros relacionados"
-
 #: ../fdroidserver/build.py
 msgid "Don't refresh the repository, useful when testing a build with no internet connection"
 msgstr "No refrescar el repositorio, útil cuando se esta probando la construcción y no se tiene conexión a Internet"
@@ -687,10 +683,6 @@ msgstr "No usar sumas de validación de rsync"
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Download complete mirrors of small repos"
 msgstr ""
-
-#: ../fdroidserver/stats.py
-msgid "Download logs we don't have"
-msgstr "Descargar los registros que no faltan"
 
 #: ../fdroidserver/common.py
 #, python-format
@@ -847,7 +839,7 @@ msgstr ""
 msgid "File disappeared while processing it: {path}"
 msgstr ""
 
-#: ../fdroidserver/verify.py ../fdroidserver/stats.py ../fdroidserver/update.py
+#: ../fdroidserver/verify.py ../fdroidserver/update.py
 #: ../fdroidserver/rewritemeta.py ../fdroidserver/build.py
 #: ../fdroidserver/checkupdates.py ../fdroidserver/scanner.py
 #: ../fdroidserver/install.py
@@ -1582,10 +1574,6 @@ msgstr ""
 msgid "Reading {apkfilename} from cache"
 msgstr ""
 
-#: ../fdroidserver/stats.py
-msgid "Recalculate aggregate stats - use when changes have been made that would invalidate old cached data."
-msgstr "Recalcular agregación de estados - usar cuando se hacen cambios que invalidarían los datos antiguos cacheados."
-
 #: ../fdroidserver/common.py
 msgid "Removing specified files"
 msgstr ""
@@ -2051,10 +2039,6 @@ msgstr "Actualizar información del repositorio para paquetes nuevos"
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Update the binary transparency log for a URL"
 msgstr "Actualizar el registro de transparencia binario de un URL"
-
-#: ../fdroid ../fdroidserver/__main__.py
-msgid "Update the stats of the repo"
-msgstr "Actualizar las estadísticas del repositorio"
 
 #: ../fdroidserver/update.py ../fdroidserver/build.py
 msgid "Update the wiki"

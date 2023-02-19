@@ -669,10 +669,6 @@ msgstr "Nu eliminați cheile private generate din keystore"
 msgid "Don't create a source tarball, useful when testing a build"
 msgstr "Nu creați un tarball sursă, util atunci când testați o construcție"
 
-#: ../fdroidserver/stats.py
-msgid "Don't do anything logs-related"
-msgstr "Nu faceți nimic legat de jurnale"
-
 #: ../fdroidserver/build.py
 msgid "Don't refresh the repository, useful when testing a build with no internet connection"
 msgstr "Nu reîmprospătați depozitul, util atunci când testați o construcție fără conexiune la internet"
@@ -685,10 +681,6 @@ msgstr "Nu folosiți sumele de verificare rsync"
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Download complete mirrors of small repos"
 msgstr "Descărcați oglinzi complete ale depozitelor mici"
-
-#: ../fdroidserver/stats.py
-msgid "Download logs we don't have"
-msgstr "Descărcați jurnalele pe care nu le avem"
 
 #: ../fdroidserver/common.py
 #, python-format
@@ -857,7 +849,7 @@ msgstr "A preluat semnăturile pentru '{apkfilename}' -> '{sigdir}'"
 msgid "File disappeared while processing it: {path}"
 msgstr "Fișierul a dispărut în timpul procesării acestuia: {path}"
 
-#: ../fdroidserver/verify.py ../fdroidserver/stats.py ../fdroidserver/update.py
+#: ../fdroidserver/verify.py ../fdroidserver/update.py
 #: ../fdroidserver/rewritemeta.py ../fdroidserver/build.py
 #: ../fdroidserver/checkupdates.py ../fdroidserver/scanner.py
 #: ../fdroidserver/install.py
@@ -1603,10 +1595,6 @@ msgstr "Citirea packageName/versionCode/versionName a eșuat, APK invalid: '{apk
 msgid "Reading {apkfilename} from cache"
 msgstr "Citirea {apkfilename} din memoria cache"
 
-#: ../fdroidserver/stats.py
-msgid "Recalculate aggregate stats - use when changes have been made that would invalidate old cached data."
-msgstr "Recalculează statisticile agregate - se utilizează atunci când au fost efectuate modificări care ar invalida vechile date din memoria cache."
-
 #: ../fdroidserver/common.py
 msgid "Removing specified files"
 msgstr "Eliminarea fișierelor specificate"
@@ -2088,10 +2076,6 @@ msgstr "Actualizarea informațiilor repo pentru noile pachete"
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Update the binary transparency log for a URL"
 msgstr "Actualizarea jurnalului de transparență binară pentru o adresă URL"
-
-#: ../fdroid ../fdroidserver/__main__.py
-msgid "Update the stats of the repo"
-msgstr "Actualizați statisticile repo-ului"
 
 #: ../fdroidserver/update.py ../fdroidserver/build.py
 msgid "Update the wiki"

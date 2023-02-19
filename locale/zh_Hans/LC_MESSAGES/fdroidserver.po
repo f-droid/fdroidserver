@@ -708,10 +708,6 @@ msgstr "不要从密钥库删除已生成的私钥"
 msgid "Don't create a source tarball, useful when testing a build"
 msgstr "不创建源码 tarball 文件，便于内部版本测试"
 
-#: ../fdroidserver/stats.py
-msgid "Don't do anything logs-related"
-msgstr "请勿做任何日志相关的操作"
-
 #: ../fdroidserver/build.py
 msgid ""
 "Don't refresh the repository, useful when testing a build with no internet "
@@ -726,10 +722,6 @@ msgstr "请勿使用 rsync 校验和"
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Download complete mirrors of small repos"
 msgstr "下载小型仓库的完整镜像"
-
-#: ../fdroidserver/stats.py
-msgid "Download logs we don't have"
-msgstr "下载当前没有的日志"
 
 #: ../fdroidserver/common.py
 #, python-format
@@ -903,7 +895,7 @@ msgstr "获取了'{apkfilename}'的签名-> '{sigdir}'"
 msgid "File disappeared while processing it: {path}"
 msgstr "文件在处理时消失： {path}"
 
-#: ../fdroidserver/verify.py ../fdroidserver/stats.py ../fdroidserver/update.py
+#: ../fdroidserver/verify.py ../fdroidserver/update.py
 #: ../fdroidserver/rewritemeta.py ../fdroidserver/build.py
 #: ../fdroidserver/checkupdates.py ../fdroidserver/scanner.py
 #: ../fdroidserver/install.py
@@ -1658,12 +1650,6 @@ msgstr ""
 msgid "Reading {apkfilename} from cache"
 msgstr "从缓存读取 {apkfilename}"
 
-#: ../fdroidserver/stats.py
-msgid ""
-"Recalculate aggregate stats - use when changes have been made that would "
-"invalidate old cached data."
-msgstr "重新计算聚合统计数据-当已经做出更改而导致旧的缓存数据无效时使用。"
-
 #: ../fdroidserver/common.py
 msgid "Removing specified files"
 msgstr "删除指定文件"
@@ -2165,10 +2151,6 @@ msgstr "更新新包的存储库信息"
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Update the binary transparency log for a URL"
 msgstr "更新 URL 的二进制透明度日志"
-
-#: ../fdroid ../fdroidserver/__main__.py
-msgid "Update the stats of the repo"
-msgstr "更新存储库统计信息"
 
 #: ../fdroidserver/update.py ../fdroidserver/build.py
 msgid "Update the wiki"

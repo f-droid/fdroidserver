@@ -672,10 +672,6 @@ msgstr "Не вилучайте приватні ключі, утворені у
 msgid "Don't create a source tarball, useful when testing a build"
 msgstr "Не створюйте вихідний код, корисно під час тестування створення"
 
-#: ../fdroidserver/stats.py
-msgid "Don't do anything logs-related"
-msgstr "Не робіть нічого пов'язаного з журналами"
-
 #: ../fdroidserver/build.py
 msgid "Don't refresh the repository, useful when testing a build with no internet connection"
 msgstr "Не оновлюйте репозиторій, корисно під час тестування створення без з'єднання з Інтернетом"
@@ -688,10 +684,6 @@ msgstr "Не використовуйте контрольні суми rsync"
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Download complete mirrors of small repos"
 msgstr "Завантажувати повноцінні дзеркала невеликих репозиторіїв"
-
-#: ../fdroidserver/stats.py
-msgid "Download logs we don't have"
-msgstr "Журналів завантаження у нас немає"
 
 #: ../fdroidserver/common.py
 #, python-format
@@ -860,7 +852,7 @@ msgstr "Отримані підписи для '{apkfilename}' -> '{sigdir}'"
 msgid "File disappeared while processing it: {path}"
 msgstr "Файл зник під час його обробки: {path}"
 
-#: ../fdroidserver/verify.py ../fdroidserver/stats.py ../fdroidserver/update.py
+#: ../fdroidserver/verify.py ../fdroidserver/update.py
 #: ../fdroidserver/rewritemeta.py ../fdroidserver/build.py
 #: ../fdroidserver/checkupdates.py ../fdroidserver/scanner.py
 #: ../fdroidserver/install.py
@@ -1606,10 +1598,6 @@ msgstr "Помилка packageName/versionCode/versionName, APK недійсне
 msgid "Reading {apkfilename} from cache"
 msgstr "Читання {apkfilename} з кешу"
 
-#: ../fdroidserver/stats.py
-msgid "Recalculate aggregate stats - use when changes have been made that would invalidate old cached data."
-msgstr "Перерахуйте сукупну статистику - використовуйте, коли були внесені зміни, які призведуть до втрати старих кешованих даних."
-
 #: ../fdroidserver/common.py
 msgid "Removing specified files"
 msgstr "Вилучення вказаних файлів"
@@ -2091,10 +2079,6 @@ msgstr "Оновіть дані репозиторію для нових пак�
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Update the binary transparency log for a URL"
 msgstr "Оновити бінарний журнал прозорості для URL-адреси"
-
-#: ../fdroid ../fdroidserver/__main__.py
-msgid "Update the stats of the repo"
-msgstr "Оновити статистику репозиторію"
 
 #: ../fdroidserver/update.py ../fdroidserver/build.py
 msgid "Update the wiki"
