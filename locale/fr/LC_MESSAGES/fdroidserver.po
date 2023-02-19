@@ -2632,8 +2632,8 @@ msgstr "complexe"
 #, python-format
 msgid "conflicting option string: %s"
 msgid_plural "conflicting option strings: %s"
-msgstr[0] "chaîne d'options en conflit : %s"
-msgstr[1] "chaînes d'options en conflit : %s"
+msgstr[0] "option en conflit: %s"
+msgstr[1] "options en conflit: %s"
 
 #: ../fdroidserver/nightly.py
 #, python-brace-format
