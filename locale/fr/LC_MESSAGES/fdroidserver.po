@@ -21,7 +21,7 @@
 # Madeorsk <madeorsk@protonmail.com>, 2021.
 # Adrien le Maire <adrien@alemaire.be>, 2021.
 # gub <gub.gub@laposte.net>, 2021.
-# ButterflyOfFire <ButterflyOfFire@protonmail.com>, 2021, 2022.
+# ButterflyOfFire <ButterflyOfFire@protonmail.com>, 2021, 2022, 2023.
 # Vincent Finance <linuxmario@linuxmario.net>, 2021.
 # Gavy <gavy@protonmail.com>, 2021.
 # lilim <lionel@les-miquelots.net>, 2021.
@@ -41,7 +41,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2022-09-06 22:24+0200\n"
 "PO-Revision-Date: 2023-01-02 10:50+0000\n"
-"Last-Translator: Ldm Public <ldmpub@gmail.com>\n"
+"Last-Translator: ButterflyOfFire <ButterflyOfFire@protonmail.com>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/f-droid/fdroidserver/fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
@@ -2289,7 +2289,7 @@ msgstr "Chemin scanignore inutilisé : %s"
 #: ../fdroidserver/common.py
 #, python-format
 msgid "Unzipping to %s"
-msgstr "Décompression vers %s"
+msgstr "Extraction vers %s"
 
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Update repo information for new packages"
@@ -3022,7 +3022,7 @@ msgstr "les srclibs manquent un nom ou un @"
 
 #: ../fdroidserver/scanner.py
 msgid "static library"
-msgstr "bibliothèque statique"
+msgstr "librairie statique"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
