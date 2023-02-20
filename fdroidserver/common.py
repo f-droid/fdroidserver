@@ -971,7 +971,7 @@ def getvcs(vcstype, remote, local):
     if vcstype == 'bzr':
         return vcs_bzr(remote, local)
     if vcstype == 'srclib':
-        if local != os.path.join('build', 'srclib', remote):
+        if local != Path('build', 'srclib', remote):
             raise VCSException("Error: srclib paths are hard-coded!")
         return getsrclib(remote, os.path.join('build', 'srclib'), raw=True)
     if vcstype == 'svn':
