@@ -46,7 +46,6 @@ COMMANDS = OrderedDict([
     ("rewritemeta", _("Rewrite all the metadata files")),
     ("lint", _("Warn about possible metadata errors")),
     ("scanner", _("Scan the source code of a package")),
-    ("stats", _("Update the stats of the repo")),
     ("signindex", _("Sign indexes created using update --nosign")),
     ("btlog", _("Update the binary transparency log for a URL")),
     ("signatures", _("Extract signatures from APKs")),

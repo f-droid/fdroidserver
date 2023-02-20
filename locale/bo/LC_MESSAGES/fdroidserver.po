@@ -662,10 +662,6 @@ msgstr ""
 msgid "Don't create a source tarball, useful when testing a build"
 msgstr "ཊར་བོལ་གྱི་འབྱུང་ཁུངས་མ་བཟོས། འདིས་ཐོན་སྐྱེད་ཚོད་ལྟ་བྱེད་པ་ལ་ཕན་ཐོགས།"
 
-#: ../fdroidserver/stats.py
-msgid "Don't do anything logs-related"
-msgstr "ཐོ་གཞུང་དང་འབྲེལ་བ་ཡོད་པའི་རིགས་ལ་གང་ཡང་མ་བྱེད།"
-
 #: ../fdroidserver/build.py
 msgid "Don't refresh the repository, useful when testing a build with no internet connection"
 msgstr "མཛོད་ཁང་སྐྱར་སོས་མ་བྱེད། དྲྭ་རྒྱ་མེད་པའི་སྐབས་ལ་ཐོན་སྐྱེད་ཚོད་ལྟ་བྱེད་པར་ཕན་ཐོགས་ཡོང་།"
@@ -678,10 +674,6 @@ msgstr "rsync ཡིག་ཚགས་བརྟག་དཔྱད་ཀྱི་
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Download complete mirrors of small repos"
 msgstr ""
-
-#: ../fdroidserver/stats.py
-msgid "Download logs we don't have"
-msgstr "ཐོ་གཞུང་ཕབ་ལེན་ང་ཚོར་མེད།"
 
 #: ../fdroidserver/common.py
 #, python-format
@@ -850,7 +842,7 @@ msgstr "'{apkfilename}' ཆེད་དུ་མིང་རྟགས་འཚ�
 msgid "File disappeared while processing it: {path}"
 msgstr ""
 
-#: ../fdroidserver/verify.py ../fdroidserver/stats.py ../fdroidserver/update.py
+#: ../fdroidserver/verify.py ../fdroidserver/update.py
 #: ../fdroidserver/rewritemeta.py ../fdroidserver/build.py
 #: ../fdroidserver/checkupdates.py ../fdroidserver/scanner.py
 #: ../fdroidserver/install.py
@@ -1606,10 +1598,6 @@ msgstr "ཐུམ་སྒྲིལ་གྱི་མིང་ཀློག་བ
 msgid "Reading {apkfilename} from cache"
 msgstr "སྦས་ཁུང་ནས་ {apkfilename}ཀློག་བཞིན་པ།"
 
-#: ../fdroidserver/stats.py
-msgid "Recalculate aggregate stats - use when changes have been made that would invalidate old cached data."
-msgstr "ཕྱོགས་བསྡོམས་བྱས་པའི་གྲངས་ཐོ་རྣམས་སྐྱར་རྩིས་བྱེད། -བསྒྱུར་བ་འགྲོ་བའི་སྐབས་ལ་བེད་སྤྱོད་བྱེད།."
-
 #: ../fdroidserver/common.py
 msgid "Removing specified files"
 msgstr "དམིགས་སྟོན་བྱས་པའི་ཡིག་ཆ་རྣམས་མེད་པ་བཟོ་བཞིན་པ།"
@@ -2083,10 +2071,6 @@ msgstr "ཐུམ་སྒྲིལ་གསར་པའི་ཆེད་དུ
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Update the binary transparency log for a URL"
 msgstr "URLཆེད་དུ་ཨང་གྲངས་ཀྱི་ཐོ་གཞུང་གསར་བསྒྱུར།"
-
-#: ../fdroid ../fdroidserver/__main__.py
-msgid "Update the stats of the repo"
-msgstr "རེ་པོའི་གྲངས་ཐོ་རྣམས་གསར་བསྒྱུར་བྱེད།"
 
 #: ../fdroidserver/update.py ../fdroidserver/build.py
 msgid "Update the wiki"

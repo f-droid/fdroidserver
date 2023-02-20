@@ -82,11 +82,13 @@ exit(c.get('apksigner') is None)
 
 err_handler() {
 # remove this to prevent git conflicts and complaining
+    set +x
     rm -rf "$WORKSPACE"/fdroidserver.egg-info/
     rm -rf "$WORKSPACE"/.testfiles/run-tests.*
     rm -rf "$WORKSPACE"/.testfiles/test_*
     rm -f "$WORKSPACE"/.testfiles/tmp.*
-    rmdir --ignore-fail-on-non-empty "$WORKSPACE"/.testfiles
+    test -d "$WORKSPACE"/.testfiles && \
+	rmdir --ignore-fail-on-non-empty "$WORKSPACE"/.testfiles
 }
 
 trap err_handler INT EXIT

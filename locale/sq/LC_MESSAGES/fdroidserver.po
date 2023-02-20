@@ -665,10 +665,6 @@ msgstr "Mos i hiq kyçet private të prodhuar nga depo kyçesh"
 msgid "Don't create a source tarball, useful when testing a build"
 msgstr "Mos krijo një paketë tar burimi, e dobishme kur testohet një montim"
 
-#: ../fdroidserver/stats.py
-msgid "Don't do anything logs-related"
-msgstr "Mos bëj gjë që lidhet me regjistrat"
-
 #: ../fdroidserver/build.py
 msgid "Don't refresh the repository, useful when testing a build with no internet connection"
 msgstr "Mos rifresko depon, e dobishme kur testohet një montim pa lidhje internet"
@@ -681,10 +677,6 @@ msgstr "Mos përdorni checksum-e rsync-u"
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Download complete mirrors of small repos"
 msgstr "Shkarko pasqyra të plota deposh të vogla"
-
-#: ../fdroidserver/stats.py
-msgid "Download logs we don't have"
-msgstr "Shkarkoni regjistra që s’i kemi"
 
 #: ../fdroidserver/common.py
 #, python-format
@@ -853,7 +845,7 @@ msgstr "U sollën nënshkrime për '{apkfilename}' -> '{sigdir}'"
 msgid "File disappeared while processing it: {path}"
 msgstr "Kartela u zhduk teksa përpunohej: {path}"
 
-#: ../fdroidserver/verify.py ../fdroidserver/stats.py ../fdroidserver/update.py
+#: ../fdroidserver/verify.py ../fdroidserver/update.py
 #: ../fdroidserver/rewritemeta.py ../fdroidserver/build.py
 #: ../fdroidserver/checkupdates.py ../fdroidserver/scanner.py
 #: ../fdroidserver/install.py
@@ -1599,10 +1591,6 @@ msgstr "Leximi i packageName/versionCode/versionName dështoi, APK e pavlefshme:
 msgid "Reading {apkfilename} from cache"
 msgstr "Po lexohet {apkfilename} prej fshehtine"
 
-#: ../fdroidserver/stats.py
-msgid "Recalculate aggregate stats - use when changes have been made that would invalidate old cached data."
-msgstr "Rinjehso statistika përmbledhëse - përdoreni kur janë bërë ndryshime të cilat mund të bënin të pavlefshme të dhëna të vjetra të ruajtura në fshehtinë."
-
 #: ../fdroidserver/common.py
 msgid "Removing specified files"
 msgstr "Po hiqen kartelat e treguara"
@@ -2084,10 +2072,6 @@ msgstr "Përditësoni të dhëna depoje për paketa të reja"
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Update the binary transparency log for a URL"
 msgstr "Përditësoni regjistrin e transparencës së dyorit për një URL"
-
-#: ../fdroid ../fdroidserver/__main__.py
-msgid "Update the stats of the repo"
-msgstr "Përditëso statistikat e depos"
 
 #: ../fdroidserver/update.py ../fdroidserver/build.py
 msgid "Update the wiki"

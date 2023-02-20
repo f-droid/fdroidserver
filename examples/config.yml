@@ -289,26 +289,10 @@
 # configured to allow push access (e.g. ssh key, username/password, etc)
 # binary_transparency_remote: git@gitlab.com:fdroid/binary-transparency-log.git
 
-# Only set this to true when running a repository where you want to generate
-# stats, and only then on the master build servers, not a development
-# machine. If you want to keep the "added" and "last updated" dates for each
-# app and APK in your repo, then you should enable this.
+# If you want to keep the "added" and "last updated" dates for each
+# app and APK in your repo, enable this.  The name comes from an old
+# system for tracking statistics that is no longer included.
 # update_stats: true
-
-# When used with stats, this is a list of IP addresses that are ignored for
-# calculation purposes.
-# stats_ignore: []
-
-# Server stats logs are retrieved from. Required when update_stats is True.
-# stats_server: example.com
-
-# User stats logs are retrieved from. Required when update_stats is True.
-# stats_user: bob
-
-# Use the following to push stats to a Carbon instance:
-# stats_to_carbon: false
-# carbon_host: 0.0.0.0
-# carbon_port: 2003
 
 # Set this to true to always use a build server. This saves specifying the
 # --server option on dedicated secure build server hosts.

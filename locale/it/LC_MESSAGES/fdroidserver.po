@@ -676,10 +676,6 @@ msgstr "Non rimuovere le chiavi private generate dal keystore"
 msgid "Don't create a source tarball, useful when testing a build"
 msgstr "Non creare un tarball sorgente, utile per testare una build"
 
-#: ../fdroidserver/stats.py
-msgid "Don't do anything logs-related"
-msgstr "Non fare niente sui log"
-
 #: ../fdroidserver/build.py
 msgid "Don't refresh the repository, useful when testing a build with no internet connection"
 msgstr "Non aggiornare il repository, utile per testare una build offline"
@@ -692,10 +688,6 @@ msgstr "Non usare checksum rsync"
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Download complete mirrors of small repos"
 msgstr "Scarica mirror completi di piccoli repository"
-
-#: ../fdroidserver/stats.py
-msgid "Download logs we don't have"
-msgstr "Scarica registri che non abbiamo"
 
 #: ../fdroidserver/common.py
 #, python-format
@@ -864,7 +856,7 @@ msgstr "Firme recuperate per \"{apkfilename}\" -> \"{sigdir}\""
 msgid "File disappeared while processing it: {path}"
 msgstr "Il file è scomparso durante l'elaborazione: {path}"
 
-#: ../fdroidserver/verify.py ../fdroidserver/stats.py ../fdroidserver/update.py
+#: ../fdroidserver/verify.py ../fdroidserver/update.py
 #: ../fdroidserver/rewritemeta.py ../fdroidserver/build.py
 #: ../fdroidserver/checkupdates.py ../fdroidserver/scanner.py
 #: ../fdroidserver/install.py
@@ -1610,10 +1602,6 @@ msgstr "Lettura di packageName/versionCode/ ersionName non riuscita, APK non val
 msgid "Reading {apkfilename} from cache"
 msgstr "Lettura di {apkfilename} dalla cache"
 
-#: ../fdroidserver/stats.py
-msgid "Recalculate aggregate stats - use when changes have been made that would invalidate old cached data."
-msgstr "Ricalcola statistiche aggregate: da utilizzare quando sono state apportate modifiche che invaliderebbero i vecchi dati memorizzati nella cache."
-
 #: ../fdroidserver/common.py
 msgid "Removing specified files"
 msgstr "Rimozione dei file specificati"
@@ -2087,10 +2075,6 @@ msgstr "Aggiorna le informazioni del repository coi nuovi pacchetti"
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Update the binary transparency log for a URL"
 msgstr "Aggiorna il log di trasparenza binario con un nuovo URL"
-
-#: ../fdroid ../fdroidserver/__main__.py
-msgid "Update the stats of the repo"
-msgstr "Aggiorna le statistiche del repo"
 
 #: ../fdroidserver/update.py ../fdroidserver/build.py
 msgid "Update the wiki"

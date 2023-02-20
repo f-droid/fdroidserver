@@ -670,10 +670,6 @@ msgstr "Nemazat soukromé klíče vygenerované z keystore"
 msgid "Don't create a source tarball, useful when testing a build"
 msgstr "Nevytvářet zdrojový tarball, užitečné při testování sestavení"
 
-#: ../fdroidserver/stats.py
-msgid "Don't do anything logs-related"
-msgstr "Nedělat nic, co souvisí s protokoly"
-
 #: ../fdroidserver/build.py
 msgid "Don't refresh the repository, useful when testing a build with no internet connection"
 msgstr "Neobnovovat repozitář, užitečné při testování bez připojení k internetu"
@@ -686,10 +682,6 @@ msgstr "Nepoužívat kontrolní součty rsync"
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Download complete mirrors of small repos"
 msgstr "Stáhnout kompletní mirrory malých repozitářů"
-
-#: ../fdroidserver/stats.py
-msgid "Download logs we don't have"
-msgstr "Stáhnout protokoly, které nemáme"
 
 #: ../fdroidserver/common.py
 #, python-format
@@ -858,7 +850,7 @@ msgstr "Načteny podpisy pro ‚{apkfilename}‘ -> ‚{sigdir}‘"
 msgid "File disappeared while processing it: {path}"
 msgstr "Soubor zmizel při jeho zpracování: {path}"
 
-#: ../fdroidserver/verify.py ../fdroidserver/stats.py ../fdroidserver/update.py
+#: ../fdroidserver/verify.py ../fdroidserver/update.py
 #: ../fdroidserver/rewritemeta.py ../fdroidserver/build.py
 #: ../fdroidserver/checkupdates.py ../fdroidserver/scanner.py
 #: ../fdroidserver/install.py
@@ -1604,10 +1596,6 @@ msgstr "Čtení packageName/versionCode/versionName se nezdařilo, APK nepatné:
 msgid "Reading {apkfilename} from cache"
 msgstr "Čtení {apkfilename} z mezipaměti"
 
-#: ../fdroidserver/stats.py
-msgid "Recalculate aggregate stats - use when changes have been made that would invalidate old cached data."
-msgstr "Přepočítat souhrnné statistiky - používá se, pokud byly provedeny změny, které by zneplatnily stará data uložená v mezipaměti."
-
 #: ../fdroidserver/common.py
 msgid "Removing specified files"
 msgstr "Odebírání určených souborů"
@@ -2089,10 +2077,6 @@ msgstr "Aktualizujte informace o repo pro nové balíčky"
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Update the binary transparency log for a URL"
 msgstr "Aktualizujte protokol binárního průhlednosti pro adresu URL"
-
-#: ../fdroid ../fdroidserver/__main__.py
-msgid "Update the stats of the repo"
-msgstr "Aktualizovat statistiky repozitáře"
 
 #: ../fdroidserver/update.py ../fdroidserver/build.py
 msgid "Update the wiki"

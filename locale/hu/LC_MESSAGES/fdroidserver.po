@@ -667,10 +667,6 @@ msgstr "Ne távolítsa el a kulcstárolóból előállított privát kulcsokat"
 msgid "Don't create a source tarball, useful when testing a build"
 msgstr "Ne hozzon létre forráscsomagot, ez egy összeállítás tesztelésekor hasznos"
 
-#: ../fdroidserver/stats.py
-msgid "Don't do anything logs-related"
-msgstr "Ne tegyen semmilyen naplózással kapcsolatos dolgot"
-
 #: ../fdroidserver/build.py
 msgid "Don't refresh the repository, useful when testing a build with no internet connection"
 msgstr "Ne frissítse a tárolót, hasznos ha internetkapcsolat nélkül tesztel egy összeállítást"
@@ -683,10 +679,6 @@ msgstr "Ne használja az rsync ellenőrzőösszegeit"
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Download complete mirrors of small repos"
 msgstr "Kis tárolók teljes tükrének letöltése"
-
-#: ../fdroidserver/stats.py
-msgid "Download logs we don't have"
-msgstr "Helyben nem meglévő naplók letöltése"
 
 #: ../fdroidserver/common.py
 #, python-format
@@ -856,7 +848,7 @@ msgstr "A(z) „{apkfilename}” APK aláírásai lekérve -> „{sigdir}”"
 msgid "File disappeared while processing it: {path}"
 msgstr "A fájl feldolgozás közben eltűnt: {path}"
 
-#: ../fdroidserver/verify.py ../fdroidserver/stats.py ../fdroidserver/update.py
+#: ../fdroidserver/verify.py ../fdroidserver/update.py
 #: ../fdroidserver/rewritemeta.py ../fdroidserver/build.py
 #: ../fdroidserver/checkupdates.py ../fdroidserver/scanner.py
 #: ../fdroidserver/install.py
@@ -1605,10 +1597,6 @@ msgstr "A packageName/versionCode/versionName olvasása sikertelen, az APK érv�
 msgid "Reading {apkfilename} from cache"
 msgstr "A(z) {apkfilename} olvasása gyorsítótárból"
 
-#: ../fdroidserver/stats.py
-msgid "Recalculate aggregate stats - use when changes have been made that would invalidate old cached data."
-msgstr "Aggregált statisztikák újraszámítása – akkor használja, ha a változtatások érvénytelenítenék a régi gyorsítótárazott adatokat."
-
 #: ../fdroidserver/common.py
 msgid "Removing specified files"
 msgstr "Megadott fájlok eltávolítása"
@@ -2084,10 +2072,6 @@ msgstr "Tárolóinformációk frissítése az új csomagoknál"
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Update the binary transparency log for a URL"
 msgstr "A bináris átláthatósági napló frissítése az URL-nél"
-
-#: ../fdroid ../fdroidserver/__main__.py
-msgid "Update the stats of the repo"
-msgstr "A tároló statisztikáinak frissítése"
 
 #: ../fdroidserver/update.py ../fdroidserver/build.py
 msgid "Update the wiki"

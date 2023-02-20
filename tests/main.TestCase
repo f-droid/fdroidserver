@@ -44,7 +44,6 @@ class MainTest(unittest.TestCase):
                 'rewritemeta',
                 'lint',
                 'scanner',
-                'stats',
                 'signindex',
                 'btlog',
                 'signatures',

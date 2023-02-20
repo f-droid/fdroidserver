@@ -666,10 +666,6 @@ msgstr "Anahtar deposundan oluşturulan özel anahtarları kaldırmayın"
 msgid "Don't create a source tarball, useful when testing a build"
 msgstr "Bir kaynak tar dosyası yaratma, bir inşa sınanırken yararlıdır"
 
-#: ../fdroidserver/stats.py
-msgid "Don't do anything logs-related"
-msgstr "Günlüklerle ilgili bir şey yapma"
-
 #: ../fdroidserver/build.py
 msgid "Don't refresh the repository, useful when testing a build with no internet connection"
 msgstr "Depoyu yenileme, bir inşa internet bağlantısı olmadan sınanırken yararlıdır"
@@ -682,10 +678,6 @@ msgstr "Rsync sağlama toplamlarını kullanma"
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Download complete mirrors of small repos"
 msgstr "Küçük depoların tam yansımasını indir"
-
-#: ../fdroidserver/stats.py
-msgid "Download logs we don't have"
-msgstr "Bizde olmayan günlükleri indir"
 
 #: ../fdroidserver/common.py
 #, python-format
@@ -854,7 +846,7 @@ msgstr "'{apkfilename}' için imzalar alındı -> '{sigdir}'"
 msgid "File disappeared while processing it: {path}"
 msgstr "Dosya işlenirken kayboldu: {path}"
 
-#: ../fdroidserver/verify.py ../fdroidserver/stats.py ../fdroidserver/update.py
+#: ../fdroidserver/verify.py ../fdroidserver/update.py
 #: ../fdroidserver/rewritemeta.py ../fdroidserver/build.py
 #: ../fdroidserver/checkupdates.py ../fdroidserver/scanner.py
 #: ../fdroidserver/install.py
@@ -1600,10 +1592,6 @@ msgstr "packageName/versionCode/versionName okuma başarısız, APK geçersiz: '
 msgid "Reading {apkfilename} from cache"
 msgstr "{apkfilename} önbellekten okunuyor"
 
-#: ../fdroidserver/stats.py
-msgid "Recalculate aggregate stats - use when changes have been made that would invalidate old cached data."
-msgstr "Toplam istatistikleri yeniden hesapla - eski önbelleklenen veriyi geçersiz kılacak değişiklikler yapıldığında kullan."
-
 #: ../fdroidserver/common.py
 msgid "Removing specified files"
 msgstr "Belirtilen dosyalar kaldırılıyor"
@@ -2084,10 +2072,6 @@ msgstr "Yeni paketler için depo bilgisini güncelle"
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Update the binary transparency log for a URL"
 msgstr "Bir URL için çalıştırılabilir şeffaflık günlüğünü güncelle"
-
-#: ../fdroid ../fdroidserver/__main__.py
-msgid "Update the stats of the repo"
-msgstr "Depo istatistikleri güncelleştir"
 
 #: ../fdroidserver/update.py ../fdroidserver/build.py
 msgid "Update the wiki"
