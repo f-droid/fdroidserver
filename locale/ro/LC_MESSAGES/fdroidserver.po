@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 2.0a5-27-gf24eae0f\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2022-09-06 22:24+0200\n"
+"POT-Creation-Date: 2023-02-21 14:38+0100\n"
 "PO-Revision-Date: 2022-09-08 14:15+0000\n"
 "Last-Translator: Licaon Kter <licaon.kter@protonmail.com>\n"
 "Language-Team: Romanian <https://hosted.weblate.org/projects/f-droid/fdroidserver/ro/>\n"
@@ -18,30 +18,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < 20)) ? 1 : 2;\n"
 "X-Generator: Weblate 4.14.1-dev\n"
-
-#: ../fdroidserver/common.py
-msgid ""
-"\n"
-"        This is a repository of apps to be used with FDroid. Applications in this\n"
-"        repository are either official binaries built by the original application\n"
-"        developers, or are binaries built from source by f-droid.org using the\n"
-"        tools on https://gitlab.com/fdroid.\n"
-"        "
-msgstr ""
-"\n"
-"        Acesta este un depozit de aplicații care pot fi utilizate cu FDroid. Aplicațiile din acest\n"
-"        depozit sunt fie binare oficiale construite de către aplicația originală\n"
-"        dezvoltatorii aplicațiilor, fie sunt binare construite de la sursă de către f-droid.org folosind aplicația\n"
-"        instrumente de pe https://gitlab.com/fdroid.\n"
-"        "
-
-#: ../fdroidserver/nightly.py
-msgid ""
-"\n"
-"SSH Public Key to be used as Deploy Key:"
-msgstr ""
-"\n"
-"Cheia publică SSH care urmează să fie utilizată ca cheie de implementare:"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -70,10 +46,6 @@ msgstr "\"%s/\" nu are un fișier de metadate corespunzător!"
 msgid "\"local_copy_dir\" {path} does not exist!"
 msgstr "\"local_copy_dir\" {path} nu există!"
 
-#: ../fdroidserver/index.py
-msgid "\"repo_pubkey\" must be present in config.yml when using --nosign!"
-msgstr "\"repo_pubkey\" trebuie să fie prezent în config.yml atunci când se folosește --nosign!"
-
 #: ../fdroidserver/install.py
 #, python-brace-format
 msgid "\"{apkfilename}\" is already installed on {dev}."
@@ -89,7 +61,7 @@ msgstr "\"{path}\" conține {name} ({version}) depășite"
 msgid "\"{path}\" contains recent {name} ({version})"
 msgstr "\"{path}\" conține {name} recente ({version})"
 
-#: ../fdroidserver/deploy.py ../fdroidserver/upload.py
+#: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "\"{path}\" exists but s3cmd is not installed!"
 msgstr "\"{path}\" există, dar s3cmd nu este instalat!"
@@ -99,23 +71,19 @@ msgstr "\"{path}\" există, dar s3cmd nu este instalat!"
 msgid "\"{path}\" is not a supported file format (use: metadata/*.yml)"
 msgstr "\"{path}\" nu este un format de fișier acceptat (utilizați: metadata/*.yml)"
 
-#: ../fdroidserver/metadata.py
-#, python-brace-format
-msgid "\"{path}\" is not an accepted format, convert to: {formats}"
-msgstr "\"{path}\" nu este un format acceptat, convertiți în: {formats}"
-
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "\"{path}\" is signed by a key that is not allowed:"
 msgstr "\"{path}\" \"{path}\" este semnat de o cheie care nu este permisă:"
 
-#: ../fdroidserver/common.py ../fdroidserver/import_subcommand.py
+#: ../fdroidserver/import_subcommand.py
 #, python-brace-format
 msgid "\"{url}\" is not a valid URL!"
 msgstr "\"{url}\" nu este un URL valid!"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 #: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
+#: /usr/lib/python3.11/optparse.py
 #, python-format
 msgid "%(option)s option requires %(number)d argument"
 msgid_plural "%(option)s option requires %(number)d arguments"
@@ -123,13 +91,9 @@ msgstr[0] "Opțiunea %(option)s necesită %(number)d argument"
 msgstr[1] "Opțiunea %(option)s necesită %(number)d argumente"
 msgstr[2] "Opțiunea %(option)s necesită %(number)d argumente"
 
-#: ../fdroidserver/mirror.py
-#, python-format
-msgid "%(prog)s [options] url"
-msgstr "%(prog)s [opțiuni] url"
-
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
+#: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "%(prog)s: error: %(message)s\n"
 msgstr "%(prog)s: eroare: %(message)s\n"
@@ -141,14 +105,26 @@ msgstr "%d probleme găsite"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 #: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
+#: /usr/lib/python3.11/optparse.py
 msgid "%prog [options]"
 msgstr "%prog [opțiuni]"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
+#: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "%r is not callable"
 msgstr "%r nu este apelabil"
+
+#: ../fdroidserver/signindex.py
+#, python-format
+msgid "%s did not produce a dict!"
+msgstr ""
+
+#: ../fdroidserver/signindex.py
+#, python-format
+msgid "%s has bad SHA-256: %s"
+msgstr ""
 
 #: ../fdroidserver/lint.py
 #, python-format
@@ -157,11 +133,12 @@ msgstr "%s nu este un câmp de construcție acceptat"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 #: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
+#: /usr/lib/python3.11/optparse.py
 #, python-format
 msgid "%s option does not take a value"
 msgstr "Opțiunea %s nu acceptă o valoare"
 
-#: ../fdroidserver/index.py ../fdroidserver/common.py
+#: ../fdroidserver/common.py
 msgid "'keypass' not found in config.yml!"
 msgstr "'keypass' nu a fost găsit în config.yml!"
 
@@ -169,53 +146,32 @@ msgstr "'keypass' nu a fost găsit în config.yml!"
 msgid "'keystore' is NONE and 'smartcardoptions' is blank!"
 msgstr "'keystore' este NONE și 'smartcardoptions' este gol!"
 
-#: ../fdroidserver/index.py ../fdroidserver/common.py
+#: ../fdroidserver/common.py
 msgid "'keystore' not found in config.yml!"
 msgstr "'keystore' nu a fost găsit în config.yml!"
 
-#: ../fdroidserver/index.py ../fdroidserver/common.py
+#: ../fdroidserver/common.py
 msgid "'keystorepass' not found in config.yml!"
 msgstr "'keystorepass' nu se găsește în config.yml!"
 
-#: ../fdroidserver/index.py ../fdroidserver/common.py
+#: ../fdroidserver/common.py
 msgid "'repo_keyalias' not found in config.yml!"
 msgstr "'repo_keyalias' nu se găsește în config.yml!"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
+#: /usr/lib/python3.11/argparse.py
 msgid "'required' is an invalid argument for positionals"
 msgstr "'required' este un argument invalid pentru poziționale"
-
-#: ../fdroidserver/common.py
-msgid "'sdk_path' not set in 'config.yml'!"
-msgstr "'sdk_path' nu este setat în 'config.yml'!"
 
 #: ../fdroidserver/common.py
 msgid "'sdk_path' not set in config.yml!"
 msgstr "'sdk_path' nu este setat în 'config.yml'!"
 
-#. Translators: "build-tools" is the file name of a package from
-#. Google, it is part of the Android SDK. So it probably shouldn't be
-#. translated or transliterated.
-#: ../fdroidserver/common.py
-#, python-brace-format
-msgid "'{aapt}' is too old, fdroid requires build-tools-23.0.0 or newer!"
-msgstr "'{aapt}' este prea vechi, fdroid necesită build-tools-23.0.0 sau mai nou!"
-
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "'{aapt}' is too old, fdroid requires build-tools-{version} or newer!"
 msgstr "'{aapt}' este prea vechi, fdroid necesită build-tools-{version} sau mai nou!"
-
-#: ../fdroidserver/install.py
-#, python-brace-format
-msgid "'{apkfilename}' is already installed on {dev}."
-msgstr "'{apkfilename}' este deja instalat pe {dev}."
-
-#: ../fdroidserver/metadata.py
-#, python-brace-format
-msgid "'{field}' in {linedesc} is obsolete, see docs for current fields:"
-msgstr "'{field}' din {linedesc} este învechit, consultați documentația pentru câmpurile actuale:"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -239,12 +195,9 @@ msgstr "...checkupdate a eșuat pentru {appid} : {error}"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
+#: /usr/lib/python3.11/argparse.py
 msgid ".__call__() not defined"
 msgstr ".__call__() nu este definit"
-
-#: ../fdroidserver/metadata.py
-msgid ".fdroid.txt is not supported!  Convert to .fdroid.yml or .fdroid.json."
-msgstr ".fdroid.txt nu este acceptat!   Convertiți în .fdroid.yml sau .fdroid.json."
 
 #: ../fdroidserver/lint.py
 msgid "/issues is missing"
@@ -254,13 +207,9 @@ msgstr "/problemele lipsesc"
 msgid "A URL is required as an argument!"
 msgstr "Un URL este necesar ca argument!"
 
-#: ../fdroid ../fdroidserver/__main__.py
+#: ../fdroidserver/__main__.py
 msgid "Add PGP signatures using GnuPG for packages in repo"
 msgstr "Adăugați semnături PGP folosind GnuPG pentru pachetele din depozit"
-
-#: ../fdroid ../fdroidserver/__main__.py
-msgid "Add a new application from its source code"
-msgstr "Adăugați o nouă aplicație din codul său sursă"
 
 #: ../fdroidserver/update.py
 msgid "Add a repo signing key to an unsigned repo"
@@ -279,7 +228,7 @@ msgstr "Adăugarea unui nou depozit doar pentru {name}"
 msgid "Alias of the repo signing key in the keystore"
 msgstr "Alias al cheii de semnare repo din magazinul de chei"
 
-#: ../fdroidserver/import.py ../fdroidserver/import_subcommand.py
+#: ../fdroidserver/import_subcommand.py
 msgid "Allows a different revision (or git branch) to be specified for the initial import"
 msgstr "Permite specificarea unei revizuiri diferite (sau a unei ramuri git) pentru importul inițial"
 
@@ -303,19 +252,10 @@ msgstr "Android APK fișier"
 msgid "Android DEX code"
 msgstr "Android DEX cod"
 
-#: ../fdroidserver/common.py ../fdroidserver/build.py
-#, python-brace-format
-msgid "Android SDK '{path}' does not have '{dirname}' installed!"
-msgstr "Android SDK '{path}' nu are instalat '{dirname}'!"
-
 #: ../fdroidserver/init.py
 #, python-brace-format
 msgid "Android SDK not found at {path}!"
 msgstr "Android SDK nu a fost găsit la {path}!"
-
-#: ../fdroidserver/common.py
-msgid "Android SDK not found!"
-msgstr "Android SDK nu a fost găsit!"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -329,25 +269,12 @@ msgstr "Calea Android SDK '{path}' nu este un director!"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
-msgid "Android SDK tool {cmd} found!"
-msgstr "Instrumentul Android SDK {cmd} găsit!"
-
-#: ../fdroidserver/common.py
-#, python-brace-format
 msgid "Android SDK tool {cmd} not found!"
 msgstr "Instrumentul Android SDK {cmd} nu a fost găsit!"
 
-#. Translators: "build-tools" is the file name of a package from
-#. Google, it is part of the Android SDK. So it probably shouldn't be
-#. translated or transliterated.
-#: ../fdroidserver/common.py
-#, python-brace-format
-msgid "Android build-tools path '{path}' does not exist!"
-msgstr "Calea Android build-tools '{path}' nu există!"
-
-#: ../fdroidserver/update.py
-msgid "AndroidManifest.xml has no date"
-msgstr "AndroidManifest.xml nu are nicio dată"
+#: ../fdroidserver/lint.py
+msgid "App has NoSourceSince or ArchivePolicy \"0 versions\" but AutoUpdateMode or UpdateCheckMode are not None"
+msgstr ""
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
@@ -362,6 +289,10 @@ msgstr "Adăugarea .git nu este necesară"
 #, python-brace-format
 msgid "Archiving {apkfilename} with invalid signature!"
 msgstr "Arhivare {apkfilename} cu semnătură invalidă!"
+
+#: ../fdroidserver/lint.py
+msgid "AutoUpdateMode with UpdateCheckMode: HTTP must have a pattern."
+msgstr ""
 
 #: ../fdroidserver/mirror.py
 msgid "Base URL to mirror, can include the index signing key using the query string: ?fingerprint="
@@ -383,7 +314,7 @@ msgstr "Ramificația '{branch}' utilizată ca și commit în srclib '{srclib}'"
 msgid "Broken symlink: {path}"
 msgstr "Legătură sym ruptă: {path}"
 
-#: ../fdroid ../fdroidserver/__main__.py
+#: ../fdroidserver/__main__.py
 msgid "Build a package from source"
 msgstr "Construiți un pachet din sursă"
 
@@ -403,11 +334,6 @@ msgstr "Depozitul git al metadatelor de construire are modificări necomandate!"
 msgid "Build only the latest version of each package"
 msgstr "Construiți doar cea mai recentă versiune a fiecărui pachet"
 
-#: ../fdroidserver/metadata.py
-#, python-brace-format
-msgid "Build should have comma-separated versionName and versionCode, not \"{value}\", in {linedesc}"
-msgstr "Build ar trebui să aibă versionName și versionCode separate prin virgulă, nu \"{value}\", în {linedesc}"
-
 #: ../fdroidserver/init.py
 #, python-format
 msgid "Built repo based in \"%s\" with this config:"
@@ -424,30 +350,10 @@ msgstr[0] "Nu se poate construi din cauza unei erori {} în timpul scanării"
 msgstr[1] "Nu se poate construi din cauza erorilor {} în timpul scanării"
 msgstr[2] "Nu se poate construi din cauza erorilor {} în timpul scanării"
 
-#: ../fdroidserver/vmtools.py
-#, python-brace-format
-msgid "Cannot read \"{path}\"!"
-msgstr "Nu se poate citi \"{path}\"!"
-
-#. Translators: https://developer.android.com/studio/build/application-id
-#: ../fdroidserver/metadata.py
-#, python-brace-format
-msgid "Cannot resolve application ID {appid}"
-msgstr "Nu se poate rezolva ID-ul aplicației {appid}"
-
 #: ../fdroidserver/rewritemeta.py
 #, python-brace-format
 msgid "Cannot rewrite \"{path}\""
 msgstr "Nu se poate rescrie \"{path}\""
-
-#: ../fdroidserver/rewritemeta.py
-msgid "Cannot use --list and --to at the same time"
-msgstr "Nu se poate utiliza --list și --to în același timp"
-
-#: ../fdroidserver/metadata.py
-#, python-brace-format
-msgid "Cannot write \"{path}\", not an accepted format, use: {formats}"
-msgstr "Nu se poate scrie \"{path}\", nu este un format acceptat, utilizați: {formats}"
 
 #: ../fdroidserver/lint.py
 #, python-format
@@ -458,14 +364,9 @@ msgstr "Categoriile \"%s\" nu sunt valabile"
 msgid "Categories are not set"
 msgstr "Categoriile nu sunt setate"
 
-#: ../fdroid ../fdroidserver/__main__.py
+#: ../fdroidserver/__main__.py
 msgid "Check for updates to applications"
 msgstr "Verificați dacă există actualizări ale aplicațiilor"
-
-#: ../fdroidserver/update.py
-#, python-brace-format
-msgid "Checking archiving for {appid} - APKs:{integer}, keepversions:{keep}, archapks:{arch}"
-msgstr "Verificarea arhivării pentru {appid} - APKs:{integer}, keepversions:{keep}, archapks:{arch}"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -476,12 +377,12 @@ msgstr "Verificarea arhivării pentru {appid} - apks:{integer}, keepversions:{ke
 msgid "Clean update - don't uses caches, reprocess all APKs"
 msgstr "Actualizare curată - nu folosește memoria cache, reprocesează toate APK-urile"
 
-#: ../fdroidserver/import.py ../fdroidserver/import_subcommand.py
+#: ../fdroidserver/import_subcommand.py
 msgid "Comma separated list of categories."
 msgstr "Lista de categorii separate prin virgulă."
 
-#: ../fdroid ../fdroidserver/__main__.py
-#, c-format, python-format
+#: ../fdroidserver/__main__.py
+#, python-format
 msgid "Command '%s' not recognised.\n"
 msgstr "Comanda '%s' nerecunoscută.\n"
 
@@ -503,11 +404,11 @@ msgstr "Fișiere de configurare conflictuale! Folosind {newfile}, ignorând {old
 msgid "Could not find '{command}' on your system"
 msgstr "Nu a putut găsi '{command}' pe sistemul dvs"
 
-#: ../fdroidserver/import.py ../fdroidserver/import_subcommand.py
+#: ../fdroidserver/import_subcommand.py
 msgid "Could not find latest version code"
 msgstr "Nu a putut găsi codul ultimei versiuni"
 
-#: ../fdroidserver/import.py ../fdroidserver/import_subcommand.py
+#: ../fdroidserver/import_subcommand.py
 msgid "Could not find latest version name"
 msgstr "Nu a putut găsi numele celei mai recente versiuni"
 
@@ -526,8 +427,7 @@ msgstr "Nu s-a putut deschide APK {path} pentru analiză: "
 msgid "Could not parse size \"{size}\", wrong type \"{type}\""
 msgstr "Nu a putut analiza dimensiunea \"{size}\", tip greșit \"{type}\""
 
-#. Translators: https://developer.android.com/studio/build/application-id
-#: ../fdroidserver/import.py ../fdroidserver/import_subcommand.py
+#: ../fdroidserver/import_subcommand.py
 msgid "Couldn't find Application ID"
 msgstr "Nu s-a putut găsi ID-ul aplicației"
 
@@ -535,17 +435,7 @@ msgstr "Nu s-a putut găsi ID-ul aplicației"
 msgid "Couldn't find any version information"
 msgstr "Nu am putut găsi nicio informație despre versiune"
 
-#. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
-#: ../fdroidserver/import.py
-msgid "Couldn't find latest version code"
-msgstr "Nu am putut găsi codul ultimei versiuni"
-
-#. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vname
-#: ../fdroidserver/import.py
-msgid "Couldn't find latest version name"
-msgstr "Nu a putut găsi numele celei mai recente versiuni"
-
-#: ../fdroidserver/import.py ../fdroidserver/checkupdates.py
+#: ../fdroidserver/checkupdates.py
 msgid "Couldn't find package ID"
 msgstr "Nu a putut găsi ID-ul pachetului"
 
@@ -553,20 +443,12 @@ msgstr "Nu a putut găsi ID-ul pachetului"
 msgid "Cowardily refusing to overwrite existing signing key setup!"
 msgstr "Refuzând cu lașitate să suprascrieți configurarea cheilor de semnare existente!"
 
-#: ../fdroidserver/update.py
-msgid "Create a repo signing key in a keystore"
-msgstr "Creați o cheie de semnare repo într-un depozit de chei"
-
-#: ../fdroidserver/update.py
-msgid "Create skeleton metadata files that are missing"
-msgstr "Creați fișiere de metadate schelet care lipsesc"
-
-#: ../fdroidserver/deploy.py ../fdroidserver/upload.py
+#: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "Created new container \"{name}\""
 msgstr "Creat un nou container \"{name}\""
 
-#: ../fdroidserver/deploy.py ../fdroidserver/upload.py
+#: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "Creating \"{path}\" for configuring s3cmd."
 msgstr "Crearea \"{path}\" pentru configurarea s3cmd."
@@ -575,7 +457,7 @@ msgstr "Crearea \"{path}\" pentru configurarea s3cmd."
 msgid "Creating log directory"
 msgstr "Crearea directorului de jurnal"
 
-#: ../fdroidserver/deploy.py ../fdroidserver/upload.py
+#: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "Creating new S3 bucket: {url}"
 msgstr "Crearea unui nou recipient S3: {url}"
@@ -588,8 +470,7 @@ msgstr "Crearea directorului de ieșire"
 msgid "Creating signed index with this key (SHA256):"
 msgstr "Crearea unui index semnat cu această cheie (SHA256):"
 
-#: ../fdroidserver/import.py ../fdroidserver/verify.py
-#: ../fdroidserver/publish.py
+#: ../fdroidserver/publish.py ../fdroidserver/verify.py
 msgid "Creating temporary directory"
 msgstr "Crearea unui director temporar"
 
@@ -644,7 +525,7 @@ msgstr "Descrierea are o listă (%s), dar nu este punctată (*) și nici numerot
 msgid "Description of length {length} is over the {limit} char limit"
 msgstr "Descrierea lungimii {length} este peste limita {limit} limitei de caractere"
 
-#: ../fdroidserver/import.py ../fdroidserver/import_subcommand.py
+#: ../fdroidserver/import_subcommand.py
 msgid "Do not add 'disable:' to the generated build entries"
 msgstr "Nu adăugați \"disable:\" la intrările de construcție generate"
 
@@ -674,11 +555,10 @@ msgid "Don't refresh the repository, useful when testing a build with no interne
 msgstr "Nu reîmprospătați depozitul, util atunci când testați o construcție fără conexiune la internet"
 
 #: ../fdroidserver/deploy.py ../fdroidserver/nightly.py
-#: ../fdroidserver/upload.py
 msgid "Don't use rsync checksums"
 msgstr "Nu folosiți sumele de verificare rsync"
 
-#: ../fdroid ../fdroidserver/__main__.py
+#: ../fdroidserver/__main__.py
 msgid "Download complete mirrors of small repos"
 msgstr "Descărcați oglinzi complete ale depozitelor mici"
 
@@ -696,19 +576,10 @@ msgstr "Descărcarea depozitului a eșuat deja o dată, nu mai încerc din nou."
 msgid "Downloading {url} failed. {error}"
 msgstr "Descărcarea {url} a eșuat. {error}"
 
-#: ../fdroidserver/metadata.py
-#, python-brace-format
-msgid "Duplicate build recipe found for versionCode {versionCode} in {linedesc}"
-msgstr "S-a găsit o rețetă de construcție duplicată pentru versionCode {versionCode} în {linedesc}"
-
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "Duplicate link in '{field}': {url}"
 msgstr "Legătură duplicată în \"{field}\": {url}"
-
-#: ../fdroid
-msgid "Dynamically scan APKs post build"
-msgstr "Scanarea dinamică a APK-urilor post build"
 
 #: ../fdroidserver/__main__.py
 msgid "ERROR: The \"server\" subcommand has been removed, use \"deploy\"!"
@@ -731,11 +602,6 @@ msgstr "ERROR: tip CI neacceptat, patch-uri binevenite!"
 msgid "ERROR: unsupported git host \"%s\", patches welcome!"
 msgstr "EROARE: gazdă git neacceptată „%s”, corecții binevenite!"
 
-#: ../fdroidserver/metadata.py
-#, python-brace-format
-msgid "Empty build flag at {linedesc}"
-msgstr "Indicator de construcție gol la {linedesc}"
-
 #: ../fdroidserver/__main__.py
 #, python-brace-format
 msgid "Encoding is set to '{enc}' fdroid might run into encoding issues. Please set it to 'UTF-8' for best results."
@@ -755,13 +621,6 @@ msgstr ""
 msgid "Environment variable {var} from {configname} is not set!"
 msgstr "Variabila de mediu {var} din {configname} nu este setată!"
 
-#: ../fdroidserver/deploy.py ../fdroidserver/checkupdates.py
-#: ../fdroidserver/upload.py
-#, python-format
-msgid "Error while attempting to publish log: %s"
-msgstr "Eroare la încercarea de a publica jurnalul: %s"
-
-#: ../fdroidserver/import.py ../fdroidserver/common.py
 #: ../fdroidserver/import_subcommand.py
 msgid "Error while getting repo address"
 msgstr "Eroare la obținerea adresei repo"
@@ -770,7 +629,7 @@ msgstr "Eroare la obținerea adresei repo"
 msgid "Extract application metadata from a source repository"
 msgstr "Extrageți metadatele aplicației dintr-un depozit sursă"
 
-#: ../fdroid ../fdroidserver/__main__.py
+#: ../fdroidserver/__main__.py
 msgid "Extract signatures from APKs"
 msgstr "Extrageți semnăturile din APK-uri"
 
@@ -794,11 +653,7 @@ msgstr "A eșuat citirea {path}: {error}"
 msgid "Failed resizing {path}: {error}"
 msgstr "A eșuat redimensionarea {path}: {error}"
 
-#: ../fdroidserver/publish.py
-msgid "Failed to align application"
-msgstr "Nu a reușit să alinieze aplicația"
-
-#: ../fdroidserver/deploy.py ../fdroidserver/upload.py
+#: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "Failed to create S3 bucket: {url}"
 msgstr "Nu s-a reușit crearea unui recipient S3: {url}"
@@ -813,10 +668,6 @@ msgstr "Nu a reușit să obțină informații despre APK, ștergând {path}"
 msgid "Failed to get APK information, skipping {path}"
 msgstr "Nu a reușit să obțină informații despre APK, sărind peste {path}"
 
-#: ../fdroidserver/common.py
-msgid "Failed to get APK manifest information"
-msgstr "Nu a reușit să obțină informații despre manifestul APK"
-
 #: ../fdroidserver/update.py
 msgid "Failed to get APK signing key fingerprint"
 msgstr "Nu a reușit să obțină amprenta digitală a cheii de semnare APK"
@@ -826,13 +677,9 @@ msgstr "Nu a reușit să obțină amprenta digitală a cheii de semnare APK"
 msgid "Failed to install '{apkfilename}' on {dev}: {error}"
 msgstr "Nu s-a reușit instalarea '{apkfilename}' pe {dev}: {error}"
 
-#: ../fdroidserver/publish.py ../fdroidserver/common.py
+#: ../fdroidserver/common.py
 msgid "Failed to sign application"
 msgstr "Nu a reușit să semneze aplicația"
-
-#: ../fdroidserver/common.py
-msgid "Failed to zipalign application"
-msgstr "A eșuat să se comprime în zip aplicația"
 
 #: ../fdroidserver/build.py
 #, python-brace-format
@@ -849,16 +696,11 @@ msgstr "A preluat semnăturile pentru '{apkfilename}' -> '{sigdir}'"
 msgid "File disappeared while processing it: {path}"
 msgstr "Fișierul a dispărut în timpul procesării acestuia: {path}"
 
-#: ../fdroidserver/verify.py ../fdroidserver/update.py
-#: ../fdroidserver/rewritemeta.py ../fdroidserver/build.py
-#: ../fdroidserver/checkupdates.py ../fdroidserver/scanner.py
-#: ../fdroidserver/install.py
+#: ../fdroidserver/build.py ../fdroidserver/install.py
+#: ../fdroidserver/rewritemeta.py ../fdroidserver/scanner.py
+#: ../fdroidserver/update.py
 msgid "Finished"
 msgstr "Finalizat"
-
-#: ../fdroidserver/lint.py
-msgid "Flattr donation methods belong in the FlattrID flag"
-msgstr "Metodele de donație Flattr aparțin indicatorului FlattrID"
 
 #: ../fdroidserver/lint.py
 msgid "Flattr donation methods belong in the FlattrID: field"
@@ -891,7 +733,7 @@ msgstr "Am găsit graficul \"{path}\" fără metadate pentru aplicația \"{name}
 msgid "Found bad funding file \"{path}\" for \"{name}\":"
 msgstr "Am găsit un fișier de finanțare necorespunzător \"{path}\" pentru \"{name}\":"
 
-#: ../fdroidserver/common.py ../fdroidserver/metadata.py
+#: ../fdroidserver/common.py
 msgid "Found invalid appids in arguments"
 msgstr "Găsit appids invalid în argumente"
 
@@ -914,11 +756,6 @@ msgstr "Am găsit mai multe fișiere de metadate pentru {appid}"
 msgid "Found multiple signing certificates for repository."
 msgstr "S-au găsit mai multe certificate de semnare pentru depozit."
 
-#: ../fdroidserver/update.py
-#, python-brace-format
-msgid "Found multiple signing certificates in {path}"
-msgstr "S-au găsit mai multe certificate de semnare în {path}"
-
 #: ../fdroidserver/index.py
 msgid "Found no signing certificates for repository."
 msgstr "Nu s-au găsit certificate de semnare pentru depozit."
@@ -932,6 +769,16 @@ msgstr "Găsit non-file la %s"
 #, python-brace-format
 msgid "Found {apkfilename} at {url}"
 msgstr "Am găsit {apkfilename} la {url}"
+
+#: ../fdroidserver/scanner.py
+#, fuzzy, python-brace-format
+msgid "Found {count} problems in {filename}"
+msgstr "Scanerul a găsit {count} probleme în {appid}:"
+
+#: ../fdroidserver/scanner.py
+#, python-brace-format
+msgid "Found {count} warnings in {filename}"
+msgstr ""
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -954,10 +801,6 @@ msgstr "Git fetch a eșuat"
 #: ../fdroidserver/common.py
 msgid "Git prune failed"
 msgstr "Git plum a eșuat"
-
-#: ../fdroidserver/common.py
-msgid "Git remote set-head failed"
-msgstr "Git remote set-head eșuat"
 
 #: ../fdroidserver/common.py
 #, python-format
@@ -1008,11 +851,6 @@ msgstr "Ignorarea pachetului fără metadate: "
 msgid "Ignoring stale cache data for {apkfilename}"
 msgstr "Ignorarea datelor vechi din memoria cache pentru {apkfilename}"
 
-#: ../fdroidserver/rewritemeta.py
-#, python-brace-format
-msgid "Ignoring {ext} file at '{path}'"
-msgstr "Ignorarea fișierului {ext} de la '{path}'"
-
 #: ../fdroidserver/update.py
 msgid "Include APKs that are signed with disabled algorithms like MD5"
 msgstr "Includeți APK-uri care sunt semnate cu algoritmi dezactivați, cum ar fi MD5"
@@ -1047,7 +885,7 @@ msgstr "Inițializarea submodulelor"
 msgid "Install all signed applications available"
 msgstr "Instalați toate aplicațiile semnate disponibile"
 
-#: ../fdroid ../fdroidserver/__main__.py
+#: ../fdroidserver/__main__.py
 msgid "Install built packages on devices"
 msgstr "Instalarea pachetelor construite pe dispozitive"
 
@@ -1057,21 +895,11 @@ msgid "Installing %s..."
 msgstr "Se instalează %s..."
 
 #: ../fdroidserver/install.py
-#, python-format
-msgid "Installing %s…"
-msgstr "Se instalează %s…"
-
-#: ../fdroidserver/install.py
 #, python-brace-format
 msgid "Installing '{apkfilename}' on {dev}..."
 msgstr "Instalarea '{apkfilename}' pe {dev}..."
 
-#: ../fdroidserver/install.py
-#, python-brace-format
-msgid "Installing '{apkfilename}' on {dev}…"
-msgstr "Instalarea '{apkfilename}' pe {dev}…"
-
-#: ../fdroid ../fdroidserver/__main__.py
+#: ../fdroidserver/__main__.py
 msgid "Interact with the repo HTTP server"
 msgstr "Interacționați cu serverul HTTP repo"
 
@@ -1089,9 +917,14 @@ msgstr "AutoUpdateMode invalid: {mode}"
 msgid "Invalid UpdateCheckMode: {mode}"
 msgstr "UpdateCheckMode invalid: {mode}"
 
-#: ../fdroidserver/lint.py ../fdroidserver/checkupdates.py
+#: ../fdroidserver/checkupdates.py
 #, python-brace-format
 msgid "Invalid VercodeOperation: {field}"
+msgstr "VercodeOperation invalid: {field}"
+
+#: ../fdroidserver/lint.py
+#, fuzzy, python-brace-format
+msgid "Invalid VercodeOperation: {invalid_ops}"
 msgstr "VercodeOperation invalid: {field}"
 
 #: ../fdroidserver/common.py
@@ -1104,37 +937,9 @@ msgstr "ID-ul aplicației nevalabil {appid}"
 msgid "Invalid boolean '%s'"
 msgstr "Boolean invalid \"%s"
 
-#: ../fdroidserver/metadata.py
-#, python-brace-format
-msgid "Invalid build flag at {line} in {linedesc}"
-msgstr "Indicator de construcție nevalabil la {line} în {linedesc}"
-
-#: ../fdroidserver/metadata.py
-#, python-brace-format
-msgid "Invalid build format: {value} in {name}"
-msgstr "Format de construcție invalid: {value} în {name}"
-
 #: ../fdroidserver/lint.py
 msgid "Invalid bulleted list"
 msgstr "Listă cu puncte invalidă"
-
-#: ../fdroidserver/lint.py
-#, python-format
-msgid "Invalid license tag \"%s\"! Use only tags from https://spdx.org/license-list"
-msgstr "Etichetă de licență invalidă \"%s\"! Utilizați numai etichetele din https://spdx.org/license-list"
-
-#: ../fdroidserver/lint.py
-msgid "Invalid link - use [http://foo.bar Link title] or [http://foo.bar]"
-msgstr "Legătură invalidă - utilizați [http://foo.bar Link title] sau [http://foo.bar]"
-
-#: ../fdroidserver/metadata.py
-#, python-format
-msgid "Invalid metadata in %s:%d"
-msgstr "Metadate nevalabile în %s:%d"
-
-#: ../fdroidserver/metadata.py
-msgid "Invalid metadata in: "
-msgstr "Metadate invalide în: "
 
 #: ../fdroidserver/common.py
 #, python-format
@@ -1145,11 +950,6 @@ msgstr "Nume nevalabil pentru fișierul publicat: %s"
 #, python-brace-format
 msgid "Invalid ndk: entry in build: \"{ndk}\""
 msgstr "Ndk invalid: intrare în build: \"{ndk}\""
-
-#: ../fdroidserver/common.py
-#, python-brace-format
-msgid "Invalid package name {0}"
-msgstr "Nume de pachet nevalabil {0}"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -1171,11 +971,6 @@ msgstr "Metadate srclib nevalabile: nu s-a putut analiza '{file}'"
 msgid "Invalid srclib metadata: unknown key '{key}' in '{file}'"
 msgstr "Metadate srclib invalide: cheie necunoscută '{key}' în '{file}'"
 
-#: ../fdroidserver/metadata.py
-#, python-brace-format
-msgid "Invalid versionCode: \"{versionCode}\" is not an integer!"
-msgstr "VersionCode invalid: \"{versionCode}\" nu este un număr întreg!"
-
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "JAR signature failed to verify: {path}"
@@ -1190,8 +985,8 @@ msgstr "Semnătura JAR verificată: {path}"
 msgid "Java JAR file"
 msgstr "Fișier Java JAR"
 
-#: ../fdroidserver/publish.py ../fdroidserver/update.py
-#: ../fdroidserver/mirror.py
+#: ../fdroidserver/mirror.py ../fdroidserver/publish.py
+#: ../fdroidserver/update.py
 msgid "Java JDK not found! Install in standard location or set java_paths!"
 msgstr "Java JDK nu a fost găsit! Instalați în locația standard sau setați java_paths!"
 
@@ -1224,14 +1019,6 @@ msgstr "Ultima confirmare utilizată '{commit}' arată ca o etichetă, dar Updat
 #: ../fdroidserver/lint.py
 msgid "Liberapay donation methods belong in the Liberapay: field"
 msgstr "Metodele de donație Liberapay se află în Liberapay: câmp"
-
-#: ../fdroidserver/lint.py
-msgid "Liberapay donation methods belong in the LiberapayID flag"
-msgstr "Metodele de donație Liberapay fac parte din indicatorul LiberapayID"
-
-#: ../fdroidserver/rewritemeta.py
-msgid "List files that would be reformatted"
-msgstr "Lista fișierelor care vor fi reformatate"
 
 #: ../fdroidserver/rewritemeta.py
 msgid "List files that would be reformatted (dry run)"
@@ -1266,18 +1053,9 @@ msgstr "Oglindește întregul repo și arhiva, toate tipurile de fișiere."
 msgid "Missing output directory"
 msgstr "Lipsește directorul de ieșire"
 
-#: ../fdroidserver/lint.py
-#, python-format
-msgid "Name '%s' is just the auto name - remove it"
-msgstr "Numele \"%s\" este doar un nume auto - eliminați-l"
-
 #: ../fdroidserver/index.py
 msgid "Neither \"repo_pubkey\" nor \"keystorepass\" set in config.yml"
 msgstr "Nici \"repo_pubkey\" și nici \"keystorepass\" nu sunt setate în config.yml"
-
-#: ../fdroidserver/common.py
-msgid "No 'config.yml' found, using defaults."
-msgstr "Nu s-a găsit niciun 'config.yml', se folosesc valorile implicite."
 
 #: ../fdroidserver/verify.py
 #, python-format
@@ -1288,22 +1066,9 @@ msgstr "Nu există APK pentru pachetul: %s"
 msgid "No Android SDK found!"
 msgstr "Nu s-a găsit niciun SDK Android!"
 
-#: ../fdroidserver/import.py
-msgid "No android or kivy project could be found. Specify --subdir?"
-msgstr "Nu a putut fi găsit niciun proiect android sau kivy. Specificați --subdir?"
-
 #: ../fdroidserver/install.py
 msgid "No attached devices found"
 msgstr "Nu s-au găsit dispozitive atașate"
-
-#: ../fdroidserver/metadata.py
-#, python-brace-format
-msgid "No commit specified for {versionName} in {linedesc}"
-msgstr "Nu s-a specificat nicio confirmare pentru {versionName} în {linedesc}"
-
-#: ../fdroidserver/common.py
-msgid "No config.yml found, using defaults."
-msgstr "Nu s-a găsit niciun config.yml, se folosesc valorile implicite."
 
 #: ../fdroidserver/index.py
 msgid "No fingerprint in URL."
@@ -1313,11 +1078,10 @@ msgstr "Nu există amprente în URL."
 msgid "No git submodules available"
 msgstr "Nu există submodule git disponibile"
 
-#: ../fdroidserver/import.py ../fdroidserver/import_subcommand.py
+#: ../fdroidserver/import_subcommand.py
 msgid "No gradle project could be found. Specify --subdir?"
 msgstr "Nu a putut fi găsit niciun proiect gradle. Specificați --subdir?"
 
-#: ../fdroidserver/import.py ../fdroidserver/common.py
 #: ../fdroidserver/import_subcommand.py
 msgid "No information found."
 msgstr "Nu s-au găsit informații."
@@ -1356,12 +1120,12 @@ msgstr "Nu există niciun APK semnat disponibil pentru %s"
 msgid "No signed output directory - nothing to do"
 msgstr "Nici un director de ieșire semnat - nimic de făcut"
 
-#: ../fdroidserver/update.py ../fdroidserver/common.py
+#: ../fdroidserver/common.py
 #, python-brace-format
 msgid "No signing certificates found in {path}"
 msgstr "Nu s-au găsit certificate de semnare în {path}"
 
-#: ../fdroidserver/common.py ../fdroidserver/metadata.py
+#: ../fdroidserver/common.py
 #, python-format
 msgid "No such package: %s"
 msgstr "Nu există un astfel de pachet: %s"
@@ -1376,7 +1140,7 @@ msgstr "Nu există un astfel de versionCode {versionCode} pentru aplicația {app
 msgid "No tags found"
 msgstr "Nu s-au găsit etichete"
 
-#: ../fdroidserver/verify.py ../fdroidserver/publish.py
+#: ../fdroidserver/publish.py ../fdroidserver/verify.py
 msgid "No unsigned directory - nothing to do"
 msgstr "Niciun director nesemnat - nimic de făcut"
 
@@ -1415,15 +1179,6 @@ msgstr "OBB's packagename nu se potrivește cu un APK acceptat:"
 msgid "Offline machine, skipping git mirror generation until `fdroid deploy`"
 msgstr "Mașină offline, sărind peste generarea oglinzii git până la `fdroid deploy`"
 
-#: ../fdroidserver/common.py
-#, python-brace-format
-msgid "Old APK signature failed to verify: {path}"
-msgstr "Nu s-a reușit verificarea semnăturii APK vechi: {path}"
-
-#: ../fdroid ../fdroidserver/__main__.py
-msgid "Old, deprecated name for fdroid deploy"
-msgstr "Nume vechi, depreciat pentru fdroid deploy"
-
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Only PNG and JPEG are supported for graphics, found: {path}"
@@ -1441,8 +1196,7 @@ msgstr "Procesați numai aplicațiile cu actualizări automate"
 msgid "OpenCollective donation methods belong in the OpenCollective: field"
 msgstr "Metodele de donație OpenCollective aparțin OpenCollective: câmp"
 
-#: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
-#: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
+#: /usr/lib/python3.11/optparse.py
 msgid "Options"
 msgstr "Opțiuni"
 
@@ -1454,13 +1208,13 @@ msgstr "Emite raportul JSON în fișierul numit după APK."
 msgid "Output JSON to stdout."
 msgstr "Emite JSON către stdout."
 
-#: ../fdroidserver/gpgsign.py ../fdroidserver/publish.py
-#: ../fdroidserver/update.py ../fdroidserver/signindex.py
-#: ../fdroidserver/checkupdates.py
+#: ../fdroidserver/checkupdates.py ../fdroidserver/gpgsign.py
+#: ../fdroidserver/publish.py ../fdroidserver/signindex.py
+#: ../fdroidserver/update.py
 msgid "Outputting JSON"
 msgstr "Ieșirea JSON"
 
-#: ../fdroidserver/import.py ../fdroidserver/import_subcommand.py
+#: ../fdroidserver/import_subcommand.py
 msgid "Overall license of the project."
 msgstr "Licența generală a proiectului."
 
@@ -1469,7 +1223,7 @@ msgstr "Licența generală a proiectului."
 msgid "Overriding blank versionName in {apkfilename} from metadata: {version}"
 msgstr "Suprascrierea versiunii goale VersionName în {apkfilename} din metadate: {version}"
 
-#: ../fdroidserver/import.py ../fdroidserver/import_subcommand.py
+#: ../fdroidserver/import_subcommand.py
 #, python-brace-format
 msgid "Package \"{appid}\" already exists"
 msgstr "Pachetul \"{appid}\" există deja"
@@ -1483,12 +1237,9 @@ msgstr "Analiza manifestului la '{path}'"
 msgid "Password required with username"
 msgstr "Parola este necesară cu numele de utilizator"
 
-#: ../fdroidserver/import.py ../fdroidserver/import_subcommand.py
+#: ../fdroidserver/import_subcommand.py
 msgid "Path to main Android project subdirectory, if not in root."
 msgstr "Calea de acces la subdirectorul principal al proiectului Android, dacă nu se află în root."
-
-msgid "Path to main android project subdirectory, if not in root."
-msgstr "Calea de acces la subdirectorul principal al proiectului android, dacă nu este în root."
 
 #: ../fdroidserver/init.py
 msgid "Path to the Android SDK (sometimes set in ANDROID_HOME)"
@@ -1510,11 +1261,6 @@ msgstr "Tipărește variabila secretă în terminal pentru un ușor copy/paste"
 #, python-format
 msgid "Problem with ZIP file: %s, error %s"
 msgstr "Problema cu fișierul ZIP: %s, eroare %s"
-
-#: ../fdroidserver/metadata.py
-#, python-brace-format
-msgid "Problem with description of {appid}: {error}"
-msgstr "Problemă cu descrierea lui {appid}: {error}"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -1539,11 +1285,7 @@ msgstr "Prelucrare {appid}"
 msgid "Produce human-readable XML/JSON for index files"
 msgstr "Producerea de fișiere XML/JSON lizibile de către om pentru fișierele de indexare"
 
-#: ../fdroidserver/update.py
-msgid "Produce human-readable index.xml"
-msgstr "Produce index.xml lizibil pentru oameni"
-
-#: ../fdroidserver/import.py ../fdroidserver/import_subcommand.py
+#: ../fdroidserver/import_subcommand.py
 msgid "Project URL to import from."
 msgstr "URL-ul proiectului din care se importă."
 
@@ -1555,21 +1297,21 @@ msgstr "Punctuația trebuie evitată"
 msgid "Push the log to this git remote repository"
 msgstr "Împingeți jurnalul în acest depozit de la distanță git"
 
-#: ../fdroidserver/deploy.py ../fdroidserver/upload.py
+#: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "Pushing binary transparency log to {url}"
 msgstr "Trimiterea jurnalului de transparență binară la {url}"
 
-#: ../fdroidserver/deploy.py ../fdroidserver/upload.py
+#: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "Pushing to {url}"
 msgstr "Împingerea către {url}"
 
-#: ../fdroid ../fdroidserver/__main__.py
+#: ../fdroidserver/__main__.py
 msgid "Quickly start a new repository"
 msgstr "Începeți rapid un nou depozit"
 
-#: ../fdroid ../fdroidserver/__main__.py
+#: ../fdroidserver/__main__.py
 msgid "Read all the metadata files and exit"
 msgstr "Citiți toate fișierele de metadate și ieșiți"
 
@@ -1580,14 +1322,12 @@ msgstr "Citirea '{config_file}'"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
-msgid "Reading minSdkVersion failed: \"{apkfilename}\""
-msgstr "Citirea minSdkVersion a eșuat: \"{apkfilename}\""
-
-#. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
-#. https://developer.android.com/guide/topics/manifest/manifest-element.html#vname
-#: ../fdroidserver/common.py
-#, python-brace-format
 msgid "Reading packageName/versionCode/versionName failed, APK invalid: '{apkfilename}'"
+msgstr "Citirea packageName/versionCode/versionName a eșuat, APK invalid: '{apkfilename}'"
+
+#: ../fdroidserver/common.py
+#, fuzzy, python-brace-format
+msgid "Reading packageName/versionCode/versionName failed,APK invalid: '{apkfilename}'"
 msgstr "Citirea packageName/versionCode/versionName a eșuat, APK invalid: '{apkfilename}'"
 
 #: ../fdroidserver/update.py
@@ -1612,10 +1352,6 @@ msgstr "Redenumiți fișierele APK care nu se potrivesc cu package.name_123.apk"
 msgid "RepoTrunk update mode only makes sense in git-svn repositories"
 msgstr "Modul de actualizare RepoTrunk are sens doar în depozitele git-svn"
 
-#: ../fdroidserver/update.py
-msgid "Report on build data status"
-msgstr "Deleting specified files"
-
 #: ../fdroidserver/build.py
 msgid "Reset and create a brand new build server, even if the existing one appears to be ok."
 msgstr "Resetați și creați un nou server de construcție, chiar dacă cel existent pare să fie în regulă."
@@ -1633,23 +1369,14 @@ msgstr "Redimensionați toate pictogramele care depășesc dimensiunea maximă a
 msgid "Restrict output to warnings and errors"
 msgstr "Limitarea ieșirii la avertismente și erori"
 
-#: ../fdroid ../fdroidserver/__main__.py
+#: ../fdroidserver/__main__.py
 msgid "Rewrite all the metadata files"
 msgstr "Rescrieți toate fișierele de metadate"
-
-#: ../fdroidserver/rewritemeta.py
-msgid "Rewrite to a specific format: "
-msgstr "Rescrierea într-un format specific: "
 
 #: ../fdroidserver/rewritemeta.py
 #, python-brace-format
 msgid "Rewriting '{appid}'"
 msgstr "Rescrierea '{appid}'"
-
-#: ../fdroidserver/rewritemeta.py
-#, python-brace-format
-msgid "Rewriting '{appid}' to '{path}'"
-msgstr "Rescrierea '{appid}' în '{path}'"
 
 #: ../fdroidserver/checkupdates.py
 msgid "Run on git repo that has uncommitted changes"
@@ -1659,7 +1386,7 @@ msgstr "Rulați pe un depozit git care are modificări necomandate"
 msgid "Run rewritemeta to fix formatting"
 msgstr "Rulați rewritemeta pentru a repara formatarea"
 
-#: ../fdroidserver/deploy.py ../fdroidserver/upload.py
+#: ../fdroidserver/deploy.py
 msgid "Running first pass with MD5 checking disabled"
 msgstr "Rularea primei treceri cu verificarea MD5 dezactivată"
 
@@ -1672,14 +1399,14 @@ msgstr "Rularea wget în {path}"
 msgid "Scan the resulting APK(s) for known non-free classes."
 msgstr "Scanați APK-ul (APK-urile) rezultat(e) pentru clasele cunoscute care nu sunt libere."
 
-#: ../fdroid ../fdroidserver/__main__.py
+#: ../fdroidserver/__main__.py
 msgid "Scan the source code of a package"
 msgstr "Scanarea codului sursă al unui pachet"
 
 #: ../fdroidserver/scanner.py
-#, python-brace-format
-msgid "Scanner found {count} problems in {apk}:"
-msgstr "Scannerul a găsit {count} probleme în {apk}:"
+#, fuzzy, python-brace-format
+msgid "Scanner found {count} problems in {apk}"
+msgstr "Scanerul a găsit {count} probleme în {appid}:"
 
 #: ../fdroidserver/scanner.py
 #, python-brace-format
@@ -1697,10 +1424,6 @@ msgid_plural "Scanner found {} problems"
 msgstr[0] "Scannerul a găsit o problemă {}"
 msgstr[1] "Scannerul a găsit {} probleme"
 msgstr[2] "Scannerul a găsit {} probleme"
-
-#: ../fdroidserver/scanner.py
-msgid "Scanning APK with apkanalyzer for known non-free classes."
-msgstr "Scanarea APK cu apkanalyzer pentru clasele non-libere cunoscute."
 
 #: ../fdroidserver/scanner.py
 msgid "Scanning APK with dexdump for known non-free classes."
@@ -1724,7 +1447,7 @@ msgstr "Setați numărul maxim de versiuni în depozit înainte ca cele mai vech
 msgid "Set open file limit to {integer}"
 msgstr "Setați limita fișierelor deschise la {integer}"
 
-#: ../fdroid ../fdroidserver/__main__.py
+#: ../fdroidserver/__main__.py
 msgid "Set up an app build for a nightly build repo"
 msgstr "Configurați o compilare de aplicații pentru un depozit de compilare nocturnă"
 
@@ -1737,11 +1460,11 @@ msgstr "Setarea limitei fișierelor deschise a eșuat: "
 msgid "Setting {0} sec timeout for this build"
 msgstr "Setarea {0} sec timeout pentru această construcție"
 
-#: ../fdroid ../fdroidserver/__main__.py
+#: ../fdroidserver/__main__.py
 msgid "Sign and place packages in the repo"
 msgstr "Semnați și plasați pachetele în repo"
 
-#: ../fdroid ../fdroidserver/__main__.py
+#: ../fdroidserver/__main__.py
 msgid "Sign indexes created using update --nosign"
 msgstr "Semnează indexurile create folosind update --nosign"
 
@@ -1754,7 +1477,7 @@ msgstr "Treceți peste scanarea codului sursă pentru binare și alte probleme"
 msgid "Skipping '{apkfilename}' with invalid signature!"
 msgstr "Ignorarea '{apkfilename}' cu semnătură invalidă!"
 
-#: ../fdroidserver/index.py
+#: ../fdroidserver/deploy.py ../fdroidserver/index.py
 #, python-format
 msgid "Skipping GitLab Pages mirror because the repo is too large (>%.2fGB)!"
 msgstr "Omiterea oglinzii GitLab Pages pentru că repo-ul este prea mare (>%.2fGB)!"
@@ -1774,22 +1497,13 @@ msgstr "Săritură {apkfilename} cu semnătură invalidă!"
 msgid "Skipping {appid}: disabled"
 msgstr "Salt peste {appid}: dezactivat"
 
-#: ../fdroidserver/scanner.py
-#, python-brace-format
-msgid "Skipping {appid}: no builds specified"
-msgstr "Skipping {appid}: nu sunt specificate construcțiile"
-
-#: ../fdroidserver/deploy.py ../fdroidserver/upload.py
+#: ../fdroidserver/deploy.py
 msgid "Specify a local folder to sync the repo to"
 msgstr "Specificați un dosar local în care să sincronizați depozitul"
 
-#: ../fdroidserver/deploy.py ../fdroidserver/upload.py
+#: ../fdroidserver/deploy.py
 msgid "Specify an identity file to provide to SSH for rsyncing"
 msgstr "Specificați un fișier de identitate pe care să îl furnizați la SSH pentru rsyncing"
-
-#: ../fdroidserver/build.py
-msgid "Specify that we're running on the build server"
-msgstr "Specificați că rulăm pe serverul de construcție"
 
 #: ../fdroidserver/nightly.py
 msgid "Specify which debug keystore file to use."
@@ -1798,11 +1512,6 @@ msgstr "Specificați fișierul keystore de depanare care trebuie utilizat."
 #: ../fdroidserver/common.py
 msgid "Spew out even more information than normal"
 msgstr "Aruncă și mai multe informații decât în mod normal"
-
-#: ../fdroidserver/nightly.py
-#, python-brace-format
-msgid "Striping mystery signature from {apkfilename}"
-msgstr "Semnătură misterioasă de tip Striping de la {apkfilename}"
 
 #: ../fdroidserver/nightly.py
 #, python-brace-format
@@ -1854,17 +1563,9 @@ msgstr "Directorul în care se va scrie oglinda"
 msgid "The file to be included in the repo (path or glob)"
 msgstr "Fișierul care urmează să fie inclus în repo (cale sau glob)"
 
-#: ../fdroidserver/deploy.py
-msgid "The only commands currently supported are 'init' and 'update'"
-msgstr "Singurele comenzi acceptate în prezent sunt 'init' and 'update'"
-
 #: ../fdroidserver/index.py
 msgid "The repository's fingerprint does not match."
 msgstr "Amprenta digitală a depozitului nu se potrivește."
-
-#: ../fdroidserver/common.py
-msgid "The repository's index could not be verified."
-msgstr "Indexul depozitului nu a putut fi verificat."
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
@@ -1883,7 +1584,7 @@ msgstr "Acestea sunt aplicațiile care au fost arhivate din depozitul principal.
 msgid "This is a repository of apps to be used with F-Droid. Applications in this repository are either official binaries built by the original application developers, or are binaries built from source by the admin of f-droid.org using the tools on https://gitlab.com/fdroid."
 msgstr "Acesta este un depozit de aplicații care pot fi utilizate cu F-Droid. Aplicațiile din acest depozit sunt fie binare oficiale construite de către dezvoltatorii aplicațiilor originale, fie binare construite din sursă de către administratorul f-droid.org folosind instrumentele de pe https://gitlab.com/fdroid."
 
-#: ../fdroidserver/import.py ../fdroidserver/import_subcommand.py
+#: ../fdroidserver/import_subcommand.py
 #, python-format
 msgid "This repo already has local metadata: %s"
 msgstr "Acest depozit are deja metadate locale: %s"
@@ -1907,7 +1608,7 @@ msgstr ""
 "Pentru mai multe informații: https://f-droid.org/docs/Setup_an_F-Droid_App_Repo\n"
 "și https://f-droid.org/docs/Signing_Process"
 
-#: ../fdroidserver/deploy.py ../fdroidserver/upload.py
+#: ../fdroidserver/deploy.py
 msgid "To use awsbucket, awssecretkey and awsaccesskeyid must also be set in config.yml!"
 msgstr "Pentru a utiliza awsbucket, awssecretkey și awsaccesskeyid trebuie să fie de asemenea setate în config.yml!"
 
@@ -1918,10 +1619,6 @@ msgstr "URL-ul trebuie să înceapă cu https:// sau http://"
 #: ../fdroidserver/lint.py
 msgid "URL shorteners should not be used"
 msgstr "Scurtătoarele de URL-uri nu trebuie utilizate"
-
-#: ../fdroidserver/metadata.py
-msgid "URL title is just the URL, use brackets: [URL]"
-msgstr "Titlul URL este doar URL-ul, utilizați paranteze: [URL]"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
@@ -1941,17 +1638,12 @@ msgstr "Etichetă de licență neașteptată \"{}\"! Utilizați numai etichetele
 msgid "Unexpected symlink target: {link} -> {target}"
 msgstr "Neașteptată țintă symlink: {link} -> {target}"
 
-#: ../fdroidserver/metadata.py
-#, python-brace-format
-msgid "Unexpected text on same line as {field} in {linedesc}"
-msgstr "Text neașteptat pe aceeași linie cu {field} în {linedesc}"
-
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Unknown entry {key} in {configname}"
 msgstr "Intrare necunoscută {key} în {configname}"
 
-#: ../fdroid ../fdroidserver/__main__.py
+#: ../fdroidserver/__main__.py
 msgid "Unknown exception found!"
 msgstr "S-a găsit o excepție necunoscută!"
 
@@ -1968,21 +1660,12 @@ msgstr "Format de metadate necunoscut: %s"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
-msgid "Unknown metadata format: {path}"
-msgstr "Format de metadate necunoscut: {path}"
-
-#: ../fdroidserver/metadata.py
-#, python-brace-format
 msgid "Unknown metadata format: {path} (use: *.yml)"
 msgstr "Format de metadate necunoscut: {path} (use: *.yml)"
 
 #: ../fdroidserver/common.py
 msgid "Unknown version of aapt, might cause problems: "
 msgstr "Versiune necunoscută de aapt, ar putea cauza probleme: "
-
-#: ../fdroidserver/lint.py
-msgid "Unlinkified link - use [http://foo.bar Link title] or [http://foo.bar]"
-msgstr "Link nelegat - folosiți [http://foo.bar Link title] sau [http://foo.bar]"
 
 #: ../fdroidserver/lint.py
 msgid "Unnecessary leading space"
@@ -1998,18 +1681,9 @@ msgid "Unrecognised app field '{fieldname}' in '{path}'"
 msgstr "Câmp de aplicație nerecunoscut '{fieldname}' în '{path}'"
 
 #: ../fdroidserver/metadata.py
-msgid "Unrecognised app field: "
-msgstr "Câmp de aplicație nerecunoscut: "
-
-#: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Unrecognised build flag '{build_flag}' in '{path}'"
 msgstr "Indicator de construcție nerecunoscut '{build_flag}' în '{path}'"
-
-#: ../fdroidserver/metadata.py
-#, python-brace-format
-msgid "Unrecognised field '{field}' in {linedesc}"
-msgstr "Câmp nerecunoscut '{field}' în {linedesc}"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -2020,29 +1694,6 @@ msgstr "Tip de fișier \"{extension}\" neacceptat pentru graficul repo"
 #, python-brace-format
 msgid "Unsupported graphics file found: {path}"
 msgstr "A fost găsit un fișier grafic neacceptat: {path}"
-
-#: ../fdroidserver/rewritemeta.py
-#, python-brace-format
-msgid "Unsupported metadata format, use: --to [{supported}]"
-msgstr "Format de metadate neacceptat, utilizați: --to [{supported}]"
-
-#: ../fdroidserver/metadata.py
-msgid "Unterminated ]"
-msgstr "Neterminat ]"
-
-#: ../fdroidserver/metadata.py
-msgid "Unterminated ]]"
-msgstr "Nefinalizat ]]"
-
-#: ../fdroidserver/metadata.py
-#, python-brace-format
-msgid "Unterminated build in {name}"
-msgstr "Construcție nefinalizată în {name}"
-
-#: ../fdroidserver/metadata.py
-#, python-brace-format
-msgid "Unterminated continuation in {name}"
-msgstr "Continuare nefinalizată în {name}"
 
 #: ../fdroidserver/lint.py
 #, python-format
@@ -2069,22 +1720,23 @@ msgstr "Cale de scanare neutilizată: %s"
 msgid "Unzipping to %s"
 msgstr "Decomprimarea la %s"
 
-#: ../fdroid ../fdroidserver/__main__.py
+#: ../fdroidserver/__main__.py
 msgid "Update repo information for new packages"
 msgstr "Actualizarea informațiilor repo pentru noile pachete"
 
-#: ../fdroid ../fdroidserver/__main__.py
+#: ../fdroidserver/__main__.py
 msgid "Update the binary transparency log for a URL"
 msgstr "Actualizarea jurnalului de transparență binară pentru o adresă URL"
-
-#: ../fdroidserver/update.py ../fdroidserver/build.py
-msgid "Update the wiki"
-msgstr "Actualizarea wiki"
 
 #: ../fdroidserver/checkupdates.py
 #, python-brace-format
 msgid "UpdateCheckData has invalid URL: {url}"
 msgstr "UpdateCheckData are un URL invalid: {url}"
+
+#: ../fdroidserver/lint.py
+#, python-brace-format
+msgid "UpdateCheckData must match the version code as integer (\\d or [0-9]): {codeex}"
+msgstr ""
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
@@ -2096,14 +1748,10 @@ msgstr "UpdateCheckData trebuie să utilizeze un URL HTTPS: {url}"
 msgid "UpdateCheckData not a valid URL: {url}"
 msgstr "UpdateCheckData nu este un URL valid: {url}"
 
-#: ../fdroidserver/lint.py
-msgid "UpdateCheckMode is set but it looks like checkupdates hasn't been run yet"
-msgstr "UpdateCheckMode este setat, dar se pare că checkupdates nu a fost rulat încă"
-
 #. Translators: https://developer.android.com/studio/build/application-id
 #: ../fdroidserver/lint.py
-msgid "UpdateCheckName is set to the known application ID - it can be removed"
-msgstr "UpdateCheckName este setat la ID-ul cunoscut al aplicației - acesta poate fi eliminat"
+msgid "UpdateCheckMode is set but it looks likecheckupdates hasn't been run yet"
+msgstr ""
 
 #: ../fdroidserver/lint.py
 msgid "UpdateCheckName is set to the known application ID, it can be removed"
@@ -2121,11 +1769,13 @@ msgstr "Încărcarea {apkfilename} la virustotal"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 #: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
+#: /usr/lib/python3.11/optparse.py
 msgid "Usage"
 msgstr "Utilizare"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 #: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
+#: /usr/lib/python3.11/optparse.py
 #, python-format
 msgid "Usage: %s\n"
 msgstr "Utilizare: %s\n"
@@ -2146,7 +1796,7 @@ msgstr "Utilizați serverul de construcție"
 msgid "Use date from APK instead of current time for newly added APKs"
 msgstr "Utilizați data din APK în loc de ora curentă pentru APK-urile nou adăugate"
 
-#: ../fdroidserver/deploy.py ../fdroidserver/upload.py
+#: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "Using \"{path}\" for configuring s3cmd."
 msgstr "Utilizarea \"{path}\" pentru configurarea s3cmd."
@@ -2173,12 +1823,12 @@ msgstr "Folosind androguard din \"{path}\""
 msgid "Using existing keystore \"{path}\""
 msgstr "Utilizarea keystore-ului existent \"{path}\""
 
-#: ../fdroidserver/deploy.py ../fdroidserver/upload.py
+#: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "Using s3cmd to sync with: {url}"
 msgstr "Folosind s3cmd pentru a sincroniza cu: {url}"
 
-#: ../fdroid ../fdroidserver/__main__.py
+#: ../fdroidserver/__main__.py
 msgid "Valid commands are:"
 msgstr "Comenzile valide sunt:"
 
@@ -2186,7 +1836,7 @@ msgstr "Comenzile valide sunt:"
 msgid "Verify against locally cached copy rather than redownloading."
 msgstr "Verificați în funcție de copia memorată în memoria cache locală, mai degrabă decât să reîncărcați."
 
-#: ../fdroid ../fdroidserver/__main__.py
+#: ../fdroidserver/__main__.py
 msgid "Verify the integrity of downloaded packages"
 msgstr "Verificarea integrității pachetelor descărcate"
 
@@ -2199,7 +1849,7 @@ msgstr "Verificarea semnăturii indexului:"
 msgid "VirusTotal API key cannot upload files larger than 32MB, use {url} to upload {path}."
 msgstr "VirusTotal API key nu poate încărca fișiere mai mari de 32MB, utilizați {url} pentru a încărca {path}."
 
-#: ../fdroid ../fdroidserver/__main__.py
+#: ../fdroidserver/__main__.py
 msgid "Warn about possible metadata errors"
 msgstr "Avertizează cu privire la posibile erori de metadate"
 
@@ -2210,9 +1860,6 @@ msgstr "Atunci când este configurat pentru indici cu semnătură, creați numai
 #: ../fdroidserver/lint.py
 msgid "When linting the entire repository yamllint is disabled by default. This option forces yamllint regardless."
 msgstr "Atunci când se face linting pentru întregul depozit, yamllint este dezactivat în mod implicit. Această opțiune forțează yamllint indiferent de aceasta."
-
-msgid "X.509 'Distiguished Name' used when generating keys"
-msgstr "X.509 \"Distiguished Name\" utilizat la generarea cheilor"
 
 #: ../fdroidserver/init.py
 msgid "X.509 'Distinguished Name' used when generating keys"
@@ -2238,12 +1885,14 @@ msgstr "adăugând la {name}: {path}"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
+#: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "ambiguous option: %(option)s could match %(matches)s"
 msgstr "opțiune ambiguă: %(option)s ar putea corespunde cu %(matches)s"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 #: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
+#: /usr/lib/python3.11/optparse.py
 #, python-format
 msgid "ambiguous option: %s (%s?)"
 msgstr "opțiune ambiguă: %s (%s?)"
@@ -2256,31 +1905,16 @@ msgstr "apksigner nu a fost găsit! Nu se poate semna sau verifica APK-urile mod
 msgid "apksigner not found, it's required for signing!"
 msgstr "apksigner nu a fost găsit, este necesar pentru a semna!"
 
-#: ../fdroidserver/lint.py ../fdroidserver/rewritemeta.py
-#: ../fdroidserver/checkupdates.py
+#: ../fdroidserver/checkupdates.py ../fdroidserver/lint.py
+#: ../fdroidserver/rewritemeta.py
 msgid "application ID of file to operate on"
 msgstr "ID-ul de aplicație al fișierului pe care se operează"
 
-#: ../fdroidserver/verify.py ../fdroidserver/publish.py
-#: ../fdroidserver/build.py ../fdroidserver/scanner.py
-#: ../fdroidserver/install.py
+#: ../fdroidserver/build.py ../fdroidserver/install.py
+#: ../fdroidserver/publish.py ../fdroidserver/scanner.py
+#: ../fdroidserver/verify.py
 msgid "application ID with optional versionCode in the form APPID[:VERCODE]"
 msgstr "ID-ul aplicației cu versionCode opțional sub forma APPID[:VERCODE]"
-
-#: ../fdroidserver/lint.py ../fdroidserver/rewritemeta.py
-msgid "applicationId in the form APPID"
-msgstr "applicationId sub forma APPID"
-
-#: ../fdroidserver/checkupdates.py
-msgid "applicationId to check for updates"
-msgstr "applicationId pentru a verifica dacă există actualizări"
-
-#. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
-#: ../fdroidserver/verify.py ../fdroidserver/publish.py
-#: ../fdroidserver/build.py ../fdroidserver/scanner.py
-#: ../fdroidserver/install.py
-msgid "applicationId with optional versionCode in the form APPID[:VERCODE]"
-msgstr "applicationId cu versionCode opțional sub forma APPID[:VERCODE]"
 
 #: ../fdroidserver/common.py
 msgid "archive_url needs to end with /archive"
@@ -2288,32 +1922,32 @@ msgstr "archive_url trebuie să se termine cu /archive"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
+#: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "argument \"-\" with mode %r"
 msgstr "argumentul \"-\" cu modul %r"
+
+#: /usr/lib/python3.11/argparse.py
+#, python-format
+msgid "argument %(argument_name)s: %(message)s"
+msgstr ""
 
 #: ../fdroidserver/nightly.py
 msgid "attempting bare SSH connection to test deploy key:"
 msgstr "încercând o conexiune SSH goală pentru a testa cheia de implementare:"
 
-#: ../fdroidserver/nightly.py
-msgid "attempting bare ssh connection to test deploy key:"
-msgstr "încercând o conexiune ssh goală pentru a testa cheia de implementare:"
-
 #: ../fdroidserver/common.py
 msgid "can not parse scrlib spec (not a string): '{}'"
 msgstr "nu poate analiza specificația scrlib (not a string): '{}'"
 
-#: /usr/lib/python3.9/argparse.py
+#: /usr/lib/python3.9/argparse.py /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "can't open '%(filename)s': %(error)s"
 msgstr "nu se poate deschide '%(filename)s': %(error)s"
 
-#: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py
-#, python-format
-msgid "can't open '%s': %s"
-msgstr "nu se poate deschide '%s': %s"
+#: ../fdroidserver/scanner.py
+msgid "can't open non-https url: '{};"
+msgstr ""
 
 #: ../fdroidserver/build.py
 #, python-brace-format
@@ -2322,11 +1956,13 @@ msgstr "nu poate găsi srclibs necesare: \"{path}\""
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
+#: /usr/lib/python3.11/argparse.py
 msgid "cannot have multiple subparser arguments"
 msgstr "nu poate avea mai multe argumente subparser"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
+#: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "cannot merge actions - two groups are named %r"
 msgstr "nu poate fuziona acțiuni - două grupuri se numesc %r"
@@ -2340,21 +1976,19 @@ msgstr "nu poate publica actualizarea, ați setat cheia de implementare?"
 msgid "cloning {url}"
 msgstr "clonarea {url}"
 
-#: ../fdroidserver/deploy.py
-msgid "command to execute, either 'init' or 'update'"
-msgstr "comanda de executat, fie 'init' or 'update'"
-
 #: ../fdroidserver/__main__.py
 msgid "commands from plugin modules:"
 msgstr "comenzi din modulele plugin:"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 #: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
+#: /usr/lib/python3.11/optparse.py
 msgid "complex"
 msgstr "complexă"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
+#: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "conflicting option string: %s"
 msgid_plural "conflicting option strings: %s"
@@ -2362,10 +1996,15 @@ msgstr[0] "șir de opțiuni conflictuale: %s"
 msgstr[1] "șiruri de opțiuni conflictuale: %s"
 msgstr[2] "șiruri de opțiuni conflictuale: %s"
 
-#: ../fdroidserver/nightly.py
-#, python-brace-format
-msgid "copying {apkfilename} into {path}"
-msgstr "copierea {apkfilename} în {path}"
+#: /usr/lib/python3.11/argparse.py
+#, fuzzy, python-format
+msgid "conflicting subparser alias: %s"
+msgstr "șir de opțiuni conflictuale: %s"
+
+#: /usr/lib/python3.11/argparse.py
+#, fuzzy, python-format
+msgid "conflicting subparser: %s"
+msgstr "șir de opțiuni conflictuale: %s"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
@@ -2397,19 +2036,25 @@ msgstr "ștergere: repo/{apkfilename}"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
-msgid "deployed build logs to '{path}'"
-msgstr "a implementat jurnalele de construcție în '{path}'"
-
-#: ../fdroidserver/common.py
-#, python-brace-format
 msgid "deployed process log {path} to {dest}"
 msgstr "a implementat jurnalul de proces {path} la {dest}"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
+#: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "dest= is required for options like %r"
 msgstr "dest= este necesar pentru opțiuni precum %r"
+
+#: ../fdroidserver/scanner.py
+#, fuzzy
+msgid "downloading '{}'"
+msgstr "Descărcare %s"
+
+#: ../fdroidserver/scanner.py
+#, fuzzy
+msgid "downloading scanner signatures from '{}' failed"
+msgstr "Eliminarea semnăturii misterioase din {apkfilename}"
 
 #: ../fdroidserver/scanner.py
 msgid "executable binary, possibly code"
@@ -2417,6 +2062,7 @@ msgstr "binar executabil, eventual cod"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
+#: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "expected %s argument"
 msgid_plural "expected %s arguments"
@@ -2426,40 +2072,33 @@ msgstr[2] "argumente %s așteptate"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
+#: /usr/lib/python3.11/argparse.py
 msgid "expected at least one argument"
 msgstr "se așteaptă cel puțin un argument"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
+#: /usr/lib/python3.11/argparse.py
 msgid "expected at most one argument"
 msgstr "se așteaptă cel mult un argument"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
+#: /usr/lib/python3.11/argparse.py
 msgid "expected one argument"
 msgstr "se așteaptă un singur argument"
 
-#: ../fdroidserver/common.py
-#, python-brace-format
-msgid "failed deploying build logs to '{path}'"
-msgstr "a eșuat distribuirea jurnalelor de construcție în '{path}'"
-
-#: ../fdroid
-msgid "fdroid [-h|--help|--version] <command> [<args>]"
-msgstr "fdroid [-h|--help|--version] <comandă> [<args>]"
-
-#: ../fdroid ../fdroidserver/__main__.py
+#: ../fdroidserver/__main__.py
 msgid "fdroid [<command>] [-h|--help|--version|<args>]"
 msgstr "fdroid [<comandă>] [-h|--help|--version|<args>]"
 
-#: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
-#: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
+#: ../fdroidserver/scanner.py
+msgid "fetch the latest version of signatures from the web"
+msgstr ""
+
+#: /usr/lib/python3.11/optparse.py
 msgid "floating-point"
 msgstr "punct flotant"
-
-#: ../fdroidserver/metadata.py
-msgid "force errors to be warnings, or ignore"
-msgstr "forțați erorile să fie avertismente sau ignorați"
 
 #: ../fdroidserver/metadata.py
 msgid "force metadata errors (default) to be warnings, or to be ignored."
@@ -2475,6 +2114,7 @@ msgstr "Arhiva de fișiere gzip"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
+#: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "ignored explicit argument %r"
 msgstr "a ignorat argumentul explicit %r"
@@ -2489,32 +2129,41 @@ msgstr "index-v2 trebuie să aibă o semnătură, folosiți `fdroid signindex` p
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 #: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
+#: /usr/lib/python3.11/optparse.py
 msgid "integer"
 msgstr "întreg"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
+#: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "invalid %(type)s value: %(value)r"
 msgstr "invalid %(type)s valoare: %(value)r"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
+#: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "invalid choice: %(value)r (choose from %(choices)s)"
 msgstr "alegere invalidă: %(value)r (alege din %(choices)s)"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
+#: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "invalid conflict_resolution value: %r"
 msgstr "valoare invalidă a rezoluției_conflictului: %r"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
+#: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "invalid option string %(option)r: must start with a character %(prefix_chars)r"
 msgstr "șir de opțiuni invalid %(option)r: trebuie să înceapă cu un caracter %(prefix_chars)r"
+
+#: ../fdroidserver/common.py
+msgid "ipfs_cid not found, skipping CIDv1 generation"
+msgstr ""
 
 #: ../fdroidserver/checkupdates.py
 #, python-brace-format
@@ -2541,8 +2190,14 @@ msgstr "oglinda '%s' nu se termină cu 'fdroid'!"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
+#: /usr/lib/python3.11/argparse.py
 msgid "mutually exclusive arguments must be optional"
 msgstr "argumentele care se exclud reciproc trebuie să fie opționale"
+
+#: ../fdroidserver/scanner.py
+#, python-brace-format
+msgid "next {name} cache update due in {time}"
+msgstr ""
 
 #: ../fdroidserver/mirror.py
 #, python-brace-format
@@ -2555,11 +2210,12 @@ msgstr "nici un APK furnizat"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 #: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
+#: /usr/lib/python3.11/optparse.py
 #, python-format
 msgid "no such option: %s"
 msgstr "nu există o astfel de opțiune: %s"
 
-#: ../fdroid ../fdroidserver/__main__.py
+#: ../fdroidserver/__main__.py
 msgid "no version info found!"
 msgstr "nu s-au găsit informații despre versiune!"
 
@@ -2569,17 +2225,19 @@ msgstr "nu s-au găsit informații despre versiune"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
+#: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "not allowed with argument %s"
 msgstr "nu este permis cu argumentul %s"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
+#: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "one of the arguments %s is required"
 msgstr "unul dintre argumentele %s este necesar"
 
-#: ../fdroidserver/index.py ../fdroidserver/common.py
+#: ../fdroidserver/common.py ../fdroidserver/index.py
 msgid "only accepts strings, lists, and tuples"
 msgstr "acceptă doar șiruri de caractere, liste și tupluri"
 
@@ -2590,48 +2248,56 @@ msgstr "opțiunea %s: Dacă doriți cu adevărat să instalați toate aplicații
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 #: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
+#: /usr/lib/python3.11/optparse.py
 #, python-format
 msgid "option %s: invalid %s value: %r"
 msgstr "opțiunea %s: valoare %s invalidă: %r"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 #: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
+#: /usr/lib/python3.11/optparse.py
 #, python-format
 msgid "option %s: invalid choice: %r (choose from %s)"
 msgstr "opțiunea %s: alegere invalidă: %r (alege din %s)"
 
 #: /usr/lib/python3.5/getopt.py /usr/lib/python3.6/getopt.py
 #: /usr/lib/python3.7/getopt.py /usr/lib/python3.9/getopt.py
+#: /usr/lib/python3.11/getopt.py
 #, python-format
 msgid "option -%s not recognized"
 msgstr "opțiunea -%s nerecunoscută"
 
 #: /usr/lib/python3.5/getopt.py /usr/lib/python3.6/getopt.py
 #: /usr/lib/python3.7/getopt.py /usr/lib/python3.9/getopt.py
+#: /usr/lib/python3.11/getopt.py
 #, python-format
 msgid "option -%s requires argument"
 msgstr "opțiunea -%s necesită argument"
 
 #: /usr/lib/python3.5/getopt.py /usr/lib/python3.6/getopt.py
 #: /usr/lib/python3.7/getopt.py /usr/lib/python3.9/getopt.py
+#: /usr/lib/python3.11/getopt.py
 #, python-format
 msgid "option --%s must not have an argument"
 msgstr "opțiunea --%s nu trebuie să aibă un argument"
 
 #: /usr/lib/python3.5/getopt.py /usr/lib/python3.6/getopt.py
 #: /usr/lib/python3.7/getopt.py /usr/lib/python3.9/getopt.py
+#: /usr/lib/python3.11/getopt.py
 #, python-format
 msgid "option --%s not a unique prefix"
 msgstr "opțiunea --%s nu este un prefix unic"
 
 #: /usr/lib/python3.5/getopt.py /usr/lib/python3.6/getopt.py
 #: /usr/lib/python3.7/getopt.py /usr/lib/python3.9/getopt.py
+#: /usr/lib/python3.11/getopt.py
 #, python-format
 msgid "option --%s not recognized"
 msgstr "opțiunea --%s nerecunoscută"
 
 #: /usr/lib/python3.5/getopt.py /usr/lib/python3.6/getopt.py
 #: /usr/lib/python3.7/getopt.py /usr/lib/python3.9/getopt.py
+#: /usr/lib/python3.11/getopt.py
 #, python-format
 msgid "option --%s requires argument"
 msgstr "opțiunea --%s necesită un argument"
@@ -2641,6 +2307,11 @@ msgstr "opțiunea --%s necesită un argument"
 msgid "optional arguments"
 msgstr "argumente opționale"
 
+#: /usr/lib/python3.11/argparse.py
+#, fuzzy
+msgid "options"
+msgstr "Opțiuni"
+
 #: ../fdroidserver/nightly.py
 #, python-brace-format
 msgid "overwriting existing {path}"
@@ -2648,6 +2319,7 @@ msgstr "suprascriere {path} existent"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
+#: /usr/lib/python3.11/argparse.py
 msgid "positional arguments"
 msgstr "argumente poziționale"
 
@@ -2661,20 +2333,10 @@ msgstr "jurnalul procesului deploy {path} la {dest} a eșuat!"
 msgid "refuse downloading via insecure HTTP connection (use HTTPS or specify --no-https-check): {apkfilename}"
 msgstr "refuză descărcarea prin conexiune HTTP nesigură (utilizați HTTPS sau specificați --no-https-check): {apkfilename}"
 
-#: ../fdroidserver/signatures.py
-#, python-brace-format
-msgid "refuse downloading via insecure http connection (use https or specify --no-https-check): {apkfilename}"
-msgstr "refuză descărcarea prin conexiune http nesigură (utilizați https sau specificați --no-https-check): {apkfilename}"
-
 #: ../fdroidserver/index.py
 #, python-format
 msgid "repo_icon \"repo/icons/%s\" does not exist, generating placeholder."
 msgstr "repo_icon \"repo/icons/%s\" nu există, se generează un înlocuitor."
-
-#: ../fdroidserver/index.py
-#, python-format
-msgid "repo_icon %s does not exist, generating placeholder."
-msgstr "repo_icon %s nu există, se generează un spațiu rezervat."
 
 #: ../fdroidserver/common.py
 msgid "repo_url needs to end with /repo"
@@ -2684,15 +2346,15 @@ msgstr "repo_url trebuie să se termine cu /repo"
 msgid "ruamel.yaml not installed, can not write metadata."
 msgstr "ruamel.yaml nu este instalat, nu poate scrie metadatele."
 
-#: ../fdroidserver/deploy.py ../fdroidserver/upload.py
+#: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "s3cmd sync indexes {path} to {url} and delete"
 msgstr "s3cmd sincronizează indexurile {path} cu {url} și șterge"
 
 #: ../fdroidserver/scanner.py
-#, python-format
-msgid "scanner not cleanly run apkanalyzer: %s"
-msgstr "scanerul nu a rulat curat apkanalyzer: %s"
+#, python-brace-format
+msgid "scanner cache is malformed! You can clear it with: '{clear}'"
+msgstr ""
 
 #: ../fdroidserver/scanner.py
 msgid "shared library"
@@ -2700,6 +2362,7 @@ msgstr "bibliotecă partajată"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 #: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
+#: /usr/lib/python3.11/optparse.py
 msgid "show program's version number and exit"
 msgstr "arată numărul versiunii programului și iese"
 
@@ -2707,6 +2370,7 @@ msgstr "arată numărul versiunii programului și iese"
 #: /usr/lib/python3.6/argparse.py /usr/lib/python3.6/optparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.7/optparse.py
 #: /usr/lib/python3.9/argparse.py /usr/lib/python3.9/optparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.11/optparse.py
 msgid "show this help message and exit"
 msgstr "arată acest mesaj de ajutor și iese"
 
@@ -2735,31 +2399,30 @@ msgstr "srclibs lipsește numele și/sau @"
 msgid "static library"
 msgstr "bibliotecă statică"
 
-#: ../fdroidserver/common.py
-#, python-brace-format
-msgid "supplied timestamp value '{timestamp}' is not a unix timestamp"
-msgstr "valoarea timestamp furnizată '{timestamp}' nu este un timestamp unix"
-
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
+#: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "the following arguments are required: %s"
 msgstr "sunt necesare următoarele argumente: %s"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
+#: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "unexpected option string: %s"
 msgstr "șir de opțiuni neașteptate: %s"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
+#: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "unknown parser %(parser_name)r (choices: %(choices)s)"
 msgstr "parser necunoscut %(parser_name)r (choices: %(choices)s)"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
+#: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "unrecognized arguments: %s"
 msgstr "argumente nerecunoscute: %s"
@@ -2771,15 +2434,11 @@ msgstr "permisiuni nesigure pe '{config_file}' (ar trebui să fie 0600)!"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py ../fdroid
 #: /usr/lib/python3.7/argparse.py ../fdroidserver/__main__.py
-#: /usr/lib/python3.9/argparse.py
+#: /usr/lib/python3.9/argparse.py /usr/lib/python3.11/argparse.py
 msgid "usage: "
 msgstr "utilizare: "
 
-#: ../fdroid
-msgid "usage: fdroid [-h|--help|--version] <command> [<args>]"
-msgstr "utilizare: fdroid [-h|--help|--version] <comandă> [<argumente>]"
-
-#: ../fdroidserver/deploy.py ../fdroidserver/upload.py
+#: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "using Apache libcloud to sync with {url}"
 msgstr "folosind Apache libcloud pentru a se sincroniza cu {url}"
@@ -2787,10 +2446,6 @@ msgstr "folosind Apache libcloud pentru a se sincroniza cu {url}"
 #: ../fdroidserver/deploy.py
 msgid "virustotal.com is rate limiting, waiting to retry..."
 msgstr "virustotal.com limitează rata, așteptând o nouă încercare..."
-
-#: ../fdroidserver/update.py
-msgid "wiki support is deprecated and will be removed in the next release!"
-msgstr "Suportul pentru wiki este depreciat și va fi eliminat în următoarea versiune!"
 
 #: ../fdroidserver/publish.py
 #, python-brace-format
@@ -2819,16 +2474,6 @@ msgstr "AndroidManifest.xml al lui {apkfilename} are o dată greșită: "
 #, python-brace-format
 msgid "{appid} does not have a name! Using application ID instead."
 msgstr "{appid} nu are un nume! În schimb, utilizați ID-ul aplicației."
-
-#: ../fdroidserver/update.py
-#, python-brace-format
-msgid "{appid} does not have a name! Using package name instead."
-msgstr "{appid} nu are un nume! În schimb, se folosește numele pachetului."
-
-#: ../fdroidserver/update.py
-#, python-brace-format
-msgid "{appid} from {path} is not a valid Android Package Name!"
-msgstr "{appid} din {path} nu este un nume de pachet Android valid!"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -2878,18 +2523,8 @@ msgstr "{build_flag} trebuie să fie un număr întreg, găsit: {value}"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
-msgid "{field} not terminated in {name}"
-msgstr "{field} nu se termină în {name}"
-
-#: ../fdroidserver/metadata.py
-#, python-brace-format
 msgid "{file} is blank or corrupt!"
 msgstr "{file} este gol sau corupt!"
-
-#: ../fdroidserver/update.py
-#, python-brace-format
-msgid "{name} \"{path}\" does not exist! Correct it in config.yml."
-msgstr "{name} \"{path}\" nu există! Corectați-o în config.yml."
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -2901,7 +2536,7 @@ msgstr "{name} \"{section}/icons/{path}\" nu există! Verificați \"config.yml\"
 msgid "{oldfile} is deprecated, use {newfile}"
 msgstr "{oldfile} este depreciat, folosiți {newfile}"
 
-#: ../fdroidserver/import.py ../fdroidserver/import_subcommand.py
+#: ../fdroidserver/import_subcommand.py
 #, python-brace-format
 msgid "{path} already exists, ignoring import results!"
 msgstr "{path} există deja, ignorând rezultatele importului!"
@@ -2936,7 +2571,7 @@ msgstr "{path}: {error}"
 msgid "{url} does not end with \"fdroid\", check the URL path!"
 msgstr "{url} nu se termină cu \"fdroid\", verificați calea URL!"
 
-#: ../fdroidserver/common.py ../fdroidserver/import_subcommand.py
+#: ../fdroidserver/import_subcommand.py
 #, python-brace-format
 msgid "{url} does not start with \"http\"!"
 msgstr "{url} nu începe cu \"http\"!"
