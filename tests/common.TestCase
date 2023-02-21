@@ -2357,7 +2357,7 @@ class CommonTest(unittest.TestCase):
         fdroidserver.common.fill_config_defaults(config)
         java_paths = []
         # use presence of javac to make sure its JDK not just JRE
-        for f in glob.glob('/usr/lib/jvm/java-*-openjdk-amd64/bin/javac'):
+        for f in glob.glob('/usr/lib/jvm/java-*-openjdk-*/bin/javac'):
             jdk = os.path.dirname(os.path.dirname(f))
             if not os.path.islink(jdk):
                 java_paths.append(jdk)
