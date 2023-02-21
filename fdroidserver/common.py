@@ -962,6 +962,11 @@ def setup_vcs(app):
 
 
 def getvcs(vcstype, remote, local):
+    """Return a vcs instance based on the arguments.
+
+    remote and local can be either a string or a pathlib.Path
+
+    """
     if vcstype == 'git':
         return vcs_git(remote, local)
     if vcstype == 'git-svn':
@@ -971,7 +976,7 @@ def getvcs(vcstype, remote, local):
     if vcstype == 'bzr':
         return vcs_bzr(remote, local)
     if vcstype == 'srclib':
-        if local != Path('build', 'srclib', remote):
+        if str(local) != os.path.join('build', 'srclib', str(remote)):
             raise VCSException("Error: srclib paths are hard-coded!")
         return getsrclib(remote, os.path.join('build', 'srclib'), raw=True)
     if vcstype == 'svn':
@@ -1989,13 +1994,18 @@ def getsrclib(spec, srclib_dir, basepath=False,
               build=None):
     """Get the specified source library.
 
-    Returns the path to it. Normally this is the path to be used when
+    Return the path to it. Normally this is the path to be used when
     referencing it, which may be a subdirectory of the actual project. If
     you want the base directory of the project, pass 'basepath=True'.
 
+    spec and srclib_dir are both strings, not pathlib.Path.
     """
     number = None
     subdir = None
+    if not isinstance(spec, str):
+        spec = str(spec)
+    if not isinstance(srclib_dir, str):
+        spec = str(srclib_dir)
     if raw:
         name = spec
         ref = None

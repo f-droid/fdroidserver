@@ -58,6 +58,7 @@ class CommonTest(unittest.TestCase):
         fdroidserver.common.config = None
         fdroidserver.common.options = mock.Mock()
         fdroidserver.common.options.verbose = False
+        fdroidserver.metadata.srclibs = None
         self._td = mkdtemp()
         self.testdir = self._td.name
 
@@ -411,6 +412,47 @@ class CommonTest(unittest.TestCase):
         vcs0.gotorevision('0.3', refresh=True)
         vcs1 = fdroidserver.common.getvcs('git', git_url, gitrepo)
         vcs1.gotorevision('0.3', refresh=False)
+
+    def test_setup_vcs_srclib(self):
+        app = fdroidserver.metadata.App(
+            {
+                'RepoType': 'srclib',
+                'Repo': 'TransportsRennes',
+            }
+        )
+        srclib = {
+            'RepoType': 'git',
+            'Repo': 'https://github.com/ybonnel/TransportsRennes',
+        }
+        fdroidserver.metadata.srclibs = {'TransportsRennes': srclib}
+        vcs, build_dir = fdroidserver.common.setup_vcs(app)
+        self.assertIsNotNone(vcs)
+        self.assertEqual(build_dir, Path('build/srclib/TransportsRennes'))
+
+    def test_getvcs_srclib(self):
+        vcstype = 'srclib'
+        remote = 'TransportsRennes'
+        local = 'build/srclib/' + remote
+        fdroidserver.metadata.srclibs = {
+            remote: {
+                'RepoType': 'git',
+                'Repo': 'https://github.com/ybonnel/TransportsRennes',
+            }
+        }
+        self.assertIsNotNone(fdroidserver.common.getvcs(vcstype, remote, local))
+        self.assertIsNotNone(fdroidserver.common.getvcs(vcstype, Path(remote), local))
+        self.assertIsNotNone(fdroidserver.common.getvcs(vcstype, remote, Path(local)))
+        self.assertIsNotNone(fdroidserver.common.getvcs(
+            vcstype, Path(remote), Path(local)
+        ))
+        with self.assertRaises(VCSException):
+            fdroidserver.common.getvcs(vcstype, remote, 'bad')
+        with self.assertRaises(VCSException):
+            fdroidserver.common.getvcs(vcstype, remote, Path('bad'))
+        with self.assertRaises(VCSException):
+            fdroidserver.common.getvcs(vcstype, Path(remote), 'bad')
+        with self.assertRaises(VCSException):
+            fdroidserver.common.getvcs(vcstype, Path(remote), Path('bad'))
 
     def test_fdroid_popen_stderr_redirect(self):
         config = dict()
@@ -2315,7 +2357,7 @@ class CommonTest(unittest.TestCase):
         fdroidserver.common.fill_config_defaults(config)
         java_paths = []
         # use presence of javac to make sure its JDK not just JRE
-        for f in glob.glob('/usr/lib/jvm/java-*-openjdk-amd64/bin/javac'):
+        for f in glob.glob('/usr/lib/jvm/java-*-openjdk-*/bin/javac'):
             jdk = os.path.dirname(os.path.dirname(f))
             if not os.path.islink(jdk):
                 java_paths.append(jdk)
