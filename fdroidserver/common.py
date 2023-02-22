@@ -202,7 +202,7 @@ def _add_java_paths_to_config(pathlist, thisconfig):
                 r'^java-1\.([126-9][0-9]?)\.0-.*$',  # RedHat
                 r'^java-([126-9][0-9]?)-oracle$',  # Debian WebUpd8
                 r'^jdk-([126-9][0-9]?)-oracle-.*$',  # Debian make-jpkg
-                r'^java-([126-9][0-9]?)-openjdk-[^c][^o][^m].*$',  # Debian
+                r'^java-([126-9][0-9]?)-openjdk-.*$',  # Debian
                 r'^oracle-jdk-bin-1\.([126-9][0-9]?).*$',  # Gentoo (oracle)
                 r'^icedtea-bin-([126-9][0-9]?).*$',  # Gentoo (openjdk)
                 ]:
