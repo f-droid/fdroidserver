@@ -31,6 +31,7 @@ clean:
 	-rm -f -- $(MOFILES)
 	-rm -f -- $(POFILES:=~)
 
+# to remove obsolete source strings, run xgettext without --join-existing
 $(TEMPLATE): $(FILES)
 	xgettext --join-existing --from-code=UTF-8 \
 		--language=Python --keyword=_ \
@@ -44,6 +45,7 @@ $(TEMPLATE): $(FILES)
 	sed -i 's,CHARSET,UTF-8,' $(TEMPLATE)
 
 %.po: $(TEMPLATE)
+	msgattrib --set-obsolete --ignore-file=$(TEMPLATE) -o $@ $@
 	msgattrib $(OPTS) --no-obsolete --output-file=$@ $@
 	msguniq $(OPTS) --use-first --output-file=$@ $@
 	msgmerge $(OPTS) --update $@ $(TEMPLATE)

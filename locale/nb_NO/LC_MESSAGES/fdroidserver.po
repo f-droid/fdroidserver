@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.8-74-ga380b9f\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2022-09-06 22:24+0200\n"
+"POT-Creation-Date: 2023-02-21 14:38+0100\n"
 "PO-Revision-Date: 2022-09-06 14:30+0000\n"
 "Last-Translator: Hans-Christoph Steiner <hans@guardianproject.info>\n"
 "Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects/f-droid/fdroidserver/nb_NO/>\n"
@@ -17,25 +17,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Weblate 4.14.1-dev\n"
-
-#: ../fdroidserver/common.py
-msgid ""
-"\n"
-"        This is a repository of apps to be used with FDroid. Applications in this\n"
-"        repository are either official binaries built by the original application\n"
-"        developers, or are binaries built from source by f-droid.org using the\n"
-"        tools on https://gitlab.com/fdroid.\n"
-"        "
-msgstr ""
-
-#: ../fdroidserver/nightly.py
-#, fuzzy
-msgid ""
-"\n"
-"SSH Public Key to be used as Deploy Key:"
-msgstr ""
-"\n"
-"Offentlig SSH-nøkkel å bruke som utrullingsnøkkel:"
 
 #: ../fdroidserver/nightly.py
 #, fuzzy
@@ -65,10 +46,6 @@ msgstr "\"%s/\" har ingen samsvarende metadatafil!"
 msgid "\"local_copy_dir\" {path} does not exist!"
 msgstr "Rotmappen for local_copy_dir \"{path}\" finnes ikke."
 
-#: ../fdroidserver/index.py
-msgid "\"repo_pubkey\" must be present in config.yml when using --nosign!"
-msgstr "«repo_pubkey» må være å finne i config.yml når du bruker «--nosign»!"
-
 #: ../fdroidserver/install.py
 #, fuzzy, python-brace-format
 msgid "\"{apkfilename}\" is already installed on {dev}."
@@ -84,7 +61,7 @@ msgstr "\"{path}\" inneholder utdatert {name} ({version})"
 msgid "\"{path}\" contains recent {name} ({version})"
 msgstr "\"{path}\" inneholder nylig {name} ({version})"
 
-#: ../fdroidserver/deploy.py ../fdroidserver/upload.py
+#: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "\"{path}\" exists but s3cmd is not installed!"
 msgstr "\"{path}\" finnes, men s3cmd er ikke installert!"
@@ -94,36 +71,28 @@ msgstr "\"{path}\" finnes, men s3cmd er ikke installert!"
 msgid "\"{path}\" is not a supported file format (use: metadata/*.yml)"
 msgstr "\"{path}\" er ikke et støttet filformat. (bruk: metadata/*.yml)"
 
-#: ../fdroidserver/metadata.py
-#, python-brace-format
-msgid "\"{path}\" is not an accepted format, convert to: {formats}"
-msgstr "\"{path}\" er ikke et godtatt format, konverter til: {formats}"
-
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "\"{path}\" is signed by a key that is not allowed:"
 msgstr ""
 
-#: ../fdroidserver/common.py ../fdroidserver/import_subcommand.py
+#: ../fdroidserver/import_subcommand.py
 #, python-brace-format
 msgid "\"{url}\" is not a valid URL!"
 msgstr "\"{url}\" er ikke en gyldig nettadresse."
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 #: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
+#: /usr/lib/python3.11/optparse.py
 #, python-format
 msgid "%(option)s option requires %(number)d argument"
 msgid_plural "%(option)s option requires %(number)d arguments"
 msgstr[0] "%(option)s-valget krever %(number)d argument"
 msgstr[1] "%(option)s-valget krever %(number)d argumenter"
 
-#: ../fdroidserver/mirror.py
-#, python-format
-msgid "%(prog)s [options] url"
-msgstr "%(prog)s [valg] url"
-
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
+#: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "%(prog)s: error: %(message)s\n"
 msgstr "%(prog)s: feil: %(message)s\n"
@@ -135,14 +104,26 @@ msgstr "%d problemer funnet"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 #: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
+#: /usr/lib/python3.11/optparse.py
 msgid "%prog [options]"
 msgstr "%prog [valg]"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
+#: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "%r is not callable"
 msgstr "%r kan ikke kalles"
+
+#: ../fdroidserver/signindex.py
+#, python-format
+msgid "%s did not produce a dict!"
+msgstr ""
+
+#: ../fdroidserver/signindex.py
+#, python-format
+msgid "%s has bad SHA-256: %s"
+msgstr ""
 
 #: ../fdroidserver/lint.py
 #, python-format
@@ -151,11 +132,12 @@ msgstr "%s er ikke et godtatt bygge-felt"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 #: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
+#: /usr/lib/python3.11/optparse.py
 #, python-format
 msgid "%s option does not take a value"
 msgstr "%s-valget tar ikke en verdi"
 
-#: ../fdroidserver/index.py ../fdroidserver/common.py
+#: ../fdroidserver/common.py
 msgid "'keypass' not found in config.yml!"
 msgstr "'keypass' ble ikke funnet i config.yml!"
 
@@ -163,55 +145,34 @@ msgstr "'keypass' ble ikke funnet i config.yml!"
 msgid "'keystore' is NONE and 'smartcardoptions' is blank!"
 msgstr "«keystore» er NONE og «smartcardoptions» er tom!"
 
-#: ../fdroidserver/index.py ../fdroidserver/common.py
+#: ../fdroidserver/common.py
 msgid "'keystore' not found in config.yml!"
 msgstr "'keystore' ble ikke funnet i config.yml!"
 
-#: ../fdroidserver/index.py ../fdroidserver/common.py
+#: ../fdroidserver/common.py
 msgid "'keystorepass' not found in config.yml!"
 msgstr "'keystorepass' ble ikke funnet i config.yml!"
 
-#: ../fdroidserver/index.py ../fdroidserver/common.py
+#: ../fdroidserver/common.py
 msgid "'repo_keyalias' not found in config.yml!"
 msgstr "'repo_keyalias' ble ikke funnet i config.yml!"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
+#: /usr/lib/python3.11/argparse.py
 #, fuzzy
 msgid "'required' is an invalid argument for positionals"
 msgstr "'required' er et ugyldig argument for posisjonsinfo"
-
-#: ../fdroidserver/common.py
-msgid "'sdk_path' not set in 'config.yml'!"
-msgstr "'sdk_path' ble ikke funnet i config.yml!"
 
 #: ../fdroidserver/common.py
 #, fuzzy
 msgid "'sdk_path' not set in config.yml!"
 msgstr "'sdk_path' ble ikke funnet i config.yml!"
 
-#. Translators: "build-tools" is the file name of a package from
-#. Google, it is part of the Android SDK. So it probably shouldn't be
-#. translated or transliterated.
-#: ../fdroidserver/common.py
-#, fuzzy, python-brace-format
-msgid "'{aapt}' is too old, fdroid requires build-tools-23.0.0 or newer!"
-msgstr "'{aapt}' er for gammel, fdroid krever build-tools-23.0.0 eller nyere."
-
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "'{aapt}' is too old, fdroid requires build-tools-{version} or newer!"
 msgstr "'{aapt}' er for gammel, fdroid krever build-tools-{version} eller nyere."
-
-#: ../fdroidserver/install.py
-#, python-brace-format
-msgid "'{apkfilename}' is already installed on {dev}."
-msgstr "'{apkfilename}' er allerede installert på {dev}."
-
-#: ../fdroidserver/metadata.py
-#, python-brace-format
-msgid "'{field}' in {linedesc} is obsolete, see docs for current fields:"
-msgstr "'{field}' i {linedesc} er foreldet, se dokumentasjon for gyldige felter:"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -235,12 +196,9 @@ msgstr "…oppdateringssjekk mislyktes for {appid}: {error}"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
+#: /usr/lib/python3.11/argparse.py
 msgid ".__call__() not defined"
 msgstr ".__call__() udefinert"
-
-#: ../fdroidserver/metadata.py
-msgid ".fdroid.txt is not supported!  Convert to .fdroid.yml or .fdroid.json."
-msgstr ".fdroid.txt støttes ikke. Konverter til .fdroid.yml eller .fdroid.json."
 
 #: ../fdroidserver/lint.py
 msgid "/issues is missing"
@@ -251,13 +209,9 @@ msgstr "/issues mangler"
 msgid "A URL is required as an argument!"
 msgstr "valg -%s krever et argument"
 
-#: ../fdroid ../fdroidserver/__main__.py
+#: ../fdroidserver/__main__.py
 msgid "Add PGP signatures using GnuPG for packages in repo"
 msgstr "Legg til PGP-signaturer for pakker i pakkebrønnen ved bruk av GnuPG"
-
-#: ../fdroid ../fdroidserver/__main__.py
-msgid "Add a new application from its source code"
-msgstr "Legg til et nytt program fra dets kildekode"
 
 #: ../fdroidserver/update.py
 msgid "Add a repo signing key to an unsigned repo"
@@ -276,7 +230,7 @@ msgstr "Legger til ny pakkebrønn kun for {name}"
 msgid "Alias of the repo signing key in the keystore"
 msgstr "Alias for pakkebrønnssigneringsnøkkel i nøkkellageret"
 
-#: ../fdroidserver/import.py ../fdroidserver/import_subcommand.py
+#: ../fdroidserver/import_subcommand.py
 msgid "Allows a different revision (or git branch) to be specified for the initial import"
 msgstr "Tillater en annen revisjon (eller git-avgreining) å angis for igangsettende import"
 
@@ -301,19 +255,10 @@ msgstr "APK-fil for Android"
 msgid "Android DEX code"
 msgstr "Fant ingen Android-SDK."
 
-#: ../fdroidserver/common.py ../fdroidserver/build.py
-#, python-brace-format
-msgid "Android SDK '{path}' does not have '{dirname}' installed!"
-msgstr "Android-SDK '{path}' har ikke '{dirname}' installert."
-
 #: ../fdroidserver/init.py
 #, python-brace-format
 msgid "Android SDK not found at {path}!"
 msgstr "Fant ikke Android-SDK i {path}!"
-
-#: ../fdroidserver/common.py
-msgid "Android SDK not found!"
-msgstr "Fant ikke Android-SDK!"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -326,26 +271,13 @@ msgid "Android SDK path '{path}' is not a directory!"
 msgstr "Android SDK-stien '{path}' er ikke ei mappe."
 
 #: ../fdroidserver/common.py
-#, python-brace-format
-msgid "Android SDK tool {cmd} found!"
-msgstr "Fant ikke Android-SDK-verktøyet {cmd}!"
-
-#: ../fdroidserver/common.py
 #, fuzzy, python-brace-format
 msgid "Android SDK tool {cmd} not found!"
 msgstr "Fant ikke Android-SDK-verktøyet {cmd}!"
 
-#. Translators: "build-tools" is the file name of a package from
-#. Google, it is part of the Android SDK. So it probably shouldn't be
-#. translated or transliterated.
-#: ../fdroidserver/common.py
-#, python-brace-format
-msgid "Android build-tools path '{path}' does not exist!"
-msgstr "Android build-tools -sti \"{path}\" finnes ikke."
-
-#: ../fdroidserver/update.py
-msgid "AndroidManifest.xml has no date"
-msgstr "AndroidManifest.xml mangler dato"
+#: ../fdroidserver/lint.py
+msgid "App has NoSourceSince or ArchivePolicy \"0 versions\" but AutoUpdateMode or UpdateCheckMode are not None"
+msgstr ""
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
@@ -360,6 +292,10 @@ msgstr "Å legge til .git er ikke nødvendig"
 #, python-brace-format
 msgid "Archiving {apkfilename} with invalid signature!"
 msgstr "Pakker {apkfilename} med ugyldig signatur."
+
+#: ../fdroidserver/lint.py
+msgid "AutoUpdateMode with UpdateCheckMode: HTTP must have a pattern."
+msgstr ""
 
 #: ../fdroidserver/mirror.py
 msgid "Base URL to mirror, can include the index signing key using the query string: ?fingerprint="
@@ -381,7 +317,7 @@ msgstr "Forgrening '{branch}' brukt som innsendelse i srclib '{srclib}'"
 msgid "Broken symlink: {path}"
 msgstr "Brutt symbolsk lenke: {path}"
 
-#: ../fdroid ../fdroidserver/__main__.py
+#: ../fdroidserver/__main__.py
 msgid "Build a package from source"
 msgstr "Bygg en pakke fra kildekode"
 
@@ -403,11 +339,6 @@ msgstr "Git-pakkebrønn for byggmetadata har uinnsendte endringer."
 msgid "Build only the latest version of each package"
 msgstr "Bygg kun seneste versjon av hver pakke"
 
-#: ../fdroidserver/metadata.py
-#, fuzzy, python-brace-format
-msgid "Build should have comma-separated versionName and versionCode, not \"{value}\", in {linedesc}"
-msgstr "Bygg skal ha kommainndelt versionName og versionCode, ikke \"{value}\", i {linedesc}"
-
 #: ../fdroidserver/init.py
 #, fuzzy, python-format
 msgid "Built repo based in \"%s\" with this config:"
@@ -423,30 +354,10 @@ msgid_plural "Can't build due to {} errors while scanning"
 msgstr[0] "Kan ikke bygge som følge av {} feil under skanning"
 msgstr[1] "Kan ikke bygge som følge av {} feiler under skanning"
 
-#: ../fdroidserver/vmtools.py
-#, fuzzy, python-brace-format
-msgid "Cannot read \"{path}\"!"
-msgstr "Kan ikke lese \"{path}\"."
-
-#. Translators: https://developer.android.com/studio/build/application-id
-#: ../fdroidserver/metadata.py
-#, fuzzy, python-brace-format
-msgid "Cannot resolve application ID {appid}"
-msgstr "Kan ikke fortolke program-ID {appid}"
-
 #: ../fdroidserver/rewritemeta.py
 #, fuzzy, python-brace-format
 msgid "Cannot rewrite \"{path}\""
 msgstr "Kan ikke lese \"{path}\"."
-
-#: ../fdroidserver/rewritemeta.py
-msgid "Cannot use --list and --to at the same time"
-msgstr "Kan ikke bruke --list og --to samtidig"
-
-#: ../fdroidserver/metadata.py
-#, python-brace-format
-msgid "Cannot write \"{path}\", not an accepted format, use: {formats}"
-msgstr "Kan ikke skrive \"{path}\", ikke et godkjent format, bruk: {formats}"
 
 #: ../fdroidserver/lint.py
 #, python-format
@@ -457,14 +368,9 @@ msgstr "Kategorien '%s' er ikke gyldig"
 msgid "Categories are not set"
 msgstr "Kategoreier ikke satt"
 
-#: ../fdroid ../fdroidserver/__main__.py
+#: ../fdroidserver/__main__.py
 msgid "Check for updates to applications"
 msgstr "Se etter programoppdateringer"
-
-#: ../fdroidserver/update.py
-#, fuzzy, python-brace-format
-msgid "Checking archiving for {appid} - APKs:{integer}, keepversions:{keep}, archapks:{arch}"
-msgstr "Sjekker arkivering for {appid} - APK-er:{integer}, keepversions:{keep}, archapks:{arch}"
 
 #: ../fdroidserver/update.py
 #, fuzzy, python-brace-format
@@ -475,12 +381,12 @@ msgstr "Sjekker arkivering for {appid} - APK-er:{integer}, keepversions:{keep}, 
 msgid "Clean update - don't uses caches, reprocess all APKs"
 msgstr "Ren oppdatering, ikke bruk hurtiglager, behandle alle APK-er på ny"
 
-#: ../fdroidserver/import.py ../fdroidserver/import_subcommand.py
+#: ../fdroidserver/import_subcommand.py
 msgid "Comma separated list of categories."
 msgstr "Kommainndelt liste over kategorier."
 
-#: ../fdroid ../fdroidserver/__main__.py
-#, c-format, python-format
+#: ../fdroidserver/__main__.py
+#, python-format
 msgid "Command '%s' not recognised.\n"
 msgstr "Kommandoen \"%s\" gjenkjennes ikke.\n"
 
@@ -502,12 +408,12 @@ msgstr "Filer i konflikt med hverandre. Bruker {newfile}, ser bort fra {oldfile}
 msgid "Could not find '{command}' on your system"
 msgstr "Fant ikke \"{command}\" på ditt system"
 
-#: ../fdroidserver/import.py ../fdroidserver/import_subcommand.py
+#: ../fdroidserver/import_subcommand.py
 #, fuzzy
 msgid "Could not find latest version code"
 msgstr "Fant ikke seneste versjonskode"
 
-#: ../fdroidserver/import.py ../fdroidserver/import_subcommand.py
+#: ../fdroidserver/import_subcommand.py
 #, fuzzy
 msgid "Could not find latest version name"
 msgstr "Fant ikke seneste versjonsnavn"
@@ -527,8 +433,7 @@ msgstr "Kunne ikke åpne APK {path} for analyse: "
 msgid "Could not parse size \"{size}\", wrong type \"{type}\""
 msgstr "Kunne ikke fortolke størrelse \"{size}\", feil type \"{type}\""
 
-#. Translators: https://developer.android.com/studio/build/application-id
-#: ../fdroidserver/import.py ../fdroidserver/import_subcommand.py
+#: ../fdroidserver/import_subcommand.py
 #, fuzzy
 msgid "Couldn't find Application ID"
 msgstr "Fant ikke pakke-ID"
@@ -538,17 +443,7 @@ msgstr "Fant ikke pakke-ID"
 msgid "Couldn't find any version information"
 msgstr "Fant ikke seneste versjonsnavn"
 
-#. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
-#: ../fdroidserver/import.py
-msgid "Couldn't find latest version code"
-msgstr "Fant ikke seneste versjonskode"
-
-#. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vname
-#: ../fdroidserver/import.py
-msgid "Couldn't find latest version name"
-msgstr "Fant ikke seneste versjonsnavn"
-
-#: ../fdroidserver/import.py ../fdroidserver/checkupdates.py
+#: ../fdroidserver/checkupdates.py
 msgid "Couldn't find package ID"
 msgstr "Fant ikke pakke-ID"
 
@@ -556,20 +451,12 @@ msgstr "Fant ikke pakke-ID"
 msgid "Cowardily refusing to overwrite existing signing key setup!"
 msgstr "Nekter feigt å overskrive eksisterende nøkkelsigneringsoppsett."
 
-#: ../fdroidserver/update.py
-msgid "Create a repo signing key in a keystore"
-msgstr "Opprett en nøkkelsigneringsnøkkel i et nøkkellager"
-
-#: ../fdroidserver/update.py
-msgid "Create skeleton metadata files that are missing"
-msgstr "Opprett skjelettmetadatafiler som mangler"
-
-#: ../fdroidserver/deploy.py ../fdroidserver/upload.py
+#: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "Created new container \"{name}\""
 msgstr "Opprettet ny beholder \"{name}\""
 
-#: ../fdroidserver/deploy.py ../fdroidserver/upload.py
+#: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "Creating \"{path}\" for configuring s3cmd."
 msgstr "Oppretter \"{path}\" for oppsett av s3cmd."
@@ -578,7 +465,7 @@ msgstr "Oppretter \"{path}\" for oppsett av s3cmd."
 msgid "Creating log directory"
 msgstr "Oppretter loggingsmappe"
 
-#: ../fdroidserver/deploy.py ../fdroidserver/upload.py
+#: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "Creating new S3 bucket: {url}"
 msgstr "Oppretter ny S3-spann: {url}"
@@ -592,8 +479,7 @@ msgstr "Oppretter utdatamappe"
 msgid "Creating signed index with this key (SHA256):"
 msgstr "Oppretter signert indeks med denne nøkkelen (SHA-256):"
 
-#: ../fdroidserver/import.py ../fdroidserver/verify.py
-#: ../fdroidserver/publish.py
+#: ../fdroidserver/publish.py ../fdroidserver/verify.py
 msgid "Creating temporary directory"
 msgstr "Oppretter midlertidig mappe"
 
@@ -650,7 +536,7 @@ msgstr "Beskrivelsen har en liste (%s), men er ikke punktvis (*) eller nummerert
 msgid "Description of length {length} is over the {limit} char limit"
 msgstr "Beskrivelse av lengde {length} overstiger {limit} tegngrensen"
 
-#: ../fdroidserver/import.py ../fdroidserver/import_subcommand.py
+#: ../fdroidserver/import_subcommand.py
 msgid "Do not add 'disable:' to the generated build entries"
 msgstr "Ikke legg til «deaktivert:» blant genererte bygg"
 
@@ -682,11 +568,10 @@ msgid "Don't refresh the repository, useful when testing a build with no interne
 msgstr "Ikke gjenoppfrisk pakkebrønnen, nyttig under testing av et bygg uten å ha internettilkobling"
 
 #: ../fdroidserver/deploy.py ../fdroidserver/nightly.py
-#: ../fdroidserver/upload.py
 msgid "Don't use rsync checksums"
 msgstr "Ikke bruk rsync-sjekksummer"
 
-#: ../fdroid ../fdroidserver/__main__.py
+#: ../fdroidserver/__main__.py
 msgid "Download complete mirrors of small repos"
 msgstr "Last ned fullstendige speilinger av små pakkebrønner"
 
@@ -704,19 +589,10 @@ msgstr "Nedlasting av pakkebrønn mislyktes én gang, prøver ikke igjen."
 msgid "Downloading {url} failed. {error}"
 msgstr "Nedlasting av {url} mislyktes. {error}"
 
-#: ../fdroidserver/metadata.py
-#, python-brace-format
-msgid "Duplicate build recipe found for versionCode {versionCode} in {linedesc}"
-msgstr "Dobbeltbyggoppskrift funnet for versjonCode {versionCode} i {linedesc}."
-
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "Duplicate link in '{field}': {url}"
 msgstr "Dobbeltlenke i \"{field}\": {url}"
-
-#: ../fdroid
-msgid "Dynamically scan APKs post build"
-msgstr "Dynamisk skanne APKs postbygg"
 
 #: ../fdroidserver/__main__.py
 #, fuzzy
@@ -742,11 +618,6 @@ msgstr "Feil: Ustøttet CI-type, feilrettinger er velkomne."
 msgid "ERROR: unsupported git host \"%s\", patches welcome!"
 msgstr "Feil: Ustøttet CI-type, feilrettinger er velkomne."
 
-#: ../fdroidserver/metadata.py
-#, python-brace-format
-msgid "Empty build flag at {linedesc}"
-msgstr "Tomt byggflagg på {linedesc}"
-
 #: ../fdroidserver/__main__.py
 #, python-brace-format
 msgid "Encoding is set to '{enc}' fdroid might run into encoding issues. Please set it to 'UTF-8' for best results."
@@ -766,13 +637,6 @@ msgstr ""
 msgid "Environment variable {var} from {configname} is not set!"
 msgstr "Miljøvariabelen {var} fra {configname} er ikke satt!"
 
-#: ../fdroidserver/deploy.py ../fdroidserver/checkupdates.py
-#: ../fdroidserver/upload.py
-#, fuzzy, python-format
-msgid "Error while attempting to publish log: %s"
-msgstr "Kunne ikke offentliggjøre logg: %s"
-
-#: ../fdroidserver/import.py ../fdroidserver/common.py
 #: ../fdroidserver/import_subcommand.py
 #, fuzzy
 msgid "Error while getting repo address"
@@ -782,7 +646,7 @@ msgstr "Kunne ikke hente pakkebrønnsadresse"
 msgid "Extract application metadata from a source repository"
 msgstr ""
 
-#: ../fdroid ../fdroidserver/__main__.py
+#: ../fdroidserver/__main__.py
 msgid "Extract signatures from APKs"
 msgstr "Hent ut signaturer fra APK-er"
 
@@ -806,12 +670,7 @@ msgstr "Klarte ikke å lese {path}: {error}"
 msgid "Failed resizing {path}: {error}"
 msgstr "Klarte ikke å endre størrelse på {path}: {error}"
 
-#: ../fdroidserver/publish.py
-#, fuzzy
-msgid "Failed to align application"
-msgstr "Klarte ikke å justere program"
-
-#: ../fdroidserver/deploy.py ../fdroidserver/upload.py
+#: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "Failed to create S3 bucket: {url}"
 msgstr "Klarte ikke å opprette S3-spann: {url}"
@@ -826,11 +685,6 @@ msgstr "Klarte ikke å hente APK-info, sletter {path}"
 msgid "Failed to get APK information, skipping {path}"
 msgstr "Klarte ikke å hente APK-info, hopper over {path}"
 
-#: ../fdroidserver/common.py
-#, fuzzy
-msgid "Failed to get APK manifest information"
-msgstr "Klarte ikke å hente APK-manifestinfo"
-
 #: ../fdroidserver/update.py
 #, fuzzy
 msgid "Failed to get APK signing key fingerprint"
@@ -841,13 +695,8 @@ msgstr "Klarte ikke å hente APK-manifestinfo"
 msgid "Failed to install '{apkfilename}' on {dev}: {error}"
 msgstr "Klarte ikke å installere '{apkfilename}' på {dev}: {error}"
 
-#: ../fdroidserver/publish.py ../fdroidserver/common.py
-msgid "Failed to sign application"
-msgstr "Klarte ikke å singere program"
-
 #: ../fdroidserver/common.py
-#, fuzzy
-msgid "Failed to zipalign application"
+msgid "Failed to sign application"
 msgstr "Klarte ikke å singere program"
 
 #: ../fdroidserver/build.py
@@ -865,16 +714,11 @@ msgstr "Hentet signaturer for '{apkfilename}' → '{sigdir}'"
 msgid "File disappeared while processing it: {path}"
 msgstr "En fil ble borte mens den ble behandlet: {path}"
 
-#: ../fdroidserver/verify.py ../fdroidserver/update.py
-#: ../fdroidserver/rewritemeta.py ../fdroidserver/build.py
-#: ../fdroidserver/checkupdates.py ../fdroidserver/scanner.py
-#: ../fdroidserver/install.py
+#: ../fdroidserver/build.py ../fdroidserver/install.py
+#: ../fdroidserver/rewritemeta.py ../fdroidserver/scanner.py
+#: ../fdroidserver/update.py
 msgid "Finished"
 msgstr "Fullført"
-
-#: ../fdroidserver/lint.py
-msgid "Flattr donation methods belong in the FlattrID flag"
-msgstr "Flatter-donasjonsmetoder hører hjemme i FlattrID-flagget"
 
 #: ../fdroidserver/lint.py
 #, fuzzy
@@ -908,7 +752,7 @@ msgstr "Fant \"{path}\"-grafikk uten metadata for programmet \"{name}\"."
 msgid "Found bad funding file \"{path}\" for \"{name}\":"
 msgstr "Fant feilaktig kronerullingsfil «{path}» for «{name}»:"
 
-#: ../fdroidserver/common.py ../fdroidserver/metadata.py
+#: ../fdroidserver/common.py
 #, fuzzy
 msgid "Found invalid appids in arguments"
 msgstr "Fant ugyldige App-ID-er i argumenter"
@@ -933,11 +777,6 @@ msgstr "Fant flere metadatafiler for {appid}"
 msgid "Found multiple signing certificates for repository."
 msgstr "Fant flere signeringssertifikater for pakkebrønn."
 
-#: ../fdroidserver/update.py
-#, fuzzy, python-brace-format
-msgid "Found multiple signing certificates in {path}"
-msgstr "Fant flere signeringssertifikater i {path}."
-
 #: ../fdroidserver/index.py
 #, fuzzy
 msgid "Found no signing certificates for repository."
@@ -952,6 +791,16 @@ msgstr "Fant ikke-fil i %s"
 #, python-brace-format
 msgid "Found {apkfilename} at {url}"
 msgstr "Fant {apkfilename} i {url}"
+
+#: ../fdroidserver/scanner.py
+#, fuzzy, python-brace-format
+msgid "Found {count} problems in {filename}"
+msgstr "Skanner fant {count} problemer i {appid}:"
+
+#: ../fdroidserver/scanner.py
+#, python-brace-format
+msgid "Found {count} warnings in {filename}"
+msgstr ""
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -975,11 +824,6 @@ msgstr "Git-innhenting mislyktes"
 #, fuzzy
 msgid "Git prune failed"
 msgstr "Git-tilbakestilling mislyktes"
-
-#: ../fdroidserver/common.py
-#, fuzzy
-msgid "Git remote set-head failed"
-msgstr "Git set-head annensteds hen mislyktes"
 
 #: ../fdroidserver/common.py
 #, fuzzy, python-format
@@ -1031,11 +875,6 @@ msgstr "Ignorerte pakke uten metadata: "
 msgid "Ignoring stale cache data for {apkfilename}"
 msgstr "Ignorerer brakk hurtiglagringsdata for {apkfilename}."
 
-#: ../fdroidserver/rewritemeta.py
-#, fuzzy, python-brace-format
-msgid "Ignoring {ext} file at '{path}'"
-msgstr "Ignorerer {ext}-fil i \"{path}\""
-
 #: ../fdroidserver/update.py
 #, fuzzy
 msgid "Include APKs that are signed with disabled algorithms like MD5"
@@ -1073,7 +912,7 @@ msgstr "Igangsetter undermoduler"
 msgid "Install all signed applications available"
 msgstr "Installer alle tilgjengelige signerte programmer"
 
-#: ../fdroid ../fdroidserver/__main__.py
+#: ../fdroidserver/__main__.py
 msgid "Install built packages on devices"
 msgstr "Installer bygde pakker på enheter"
 
@@ -1083,21 +922,11 @@ msgid "Installing %s..."
 msgstr "Installerer %s…"
 
 #: ../fdroidserver/install.py
-#, python-format
-msgid "Installing %s…"
-msgstr "Installerer %s…"
-
-#: ../fdroidserver/install.py
 #, fuzzy, python-brace-format
 msgid "Installing '{apkfilename}' on {dev}..."
 msgstr "Installerer '{apkfilename}' på {dev}…"
 
-#: ../fdroidserver/install.py
-#, python-brace-format
-msgid "Installing '{apkfilename}' on {dev}…"
-msgstr "Installerer '{apkfilename}' på {dev}…"
-
-#: ../fdroid ../fdroidserver/__main__.py
+#: ../fdroidserver/__main__.py
 msgid "Interact with the repo HTTP server"
 msgstr "Interagere med repo HTTP-serveren"
 
@@ -1115,9 +944,14 @@ msgstr "Ugyldig AutoUpdateMode: {mode}"
 msgid "Invalid UpdateCheckMode: {mode}"
 msgstr ""
 
-#: ../fdroidserver/lint.py ../fdroidserver/checkupdates.py
+#: ../fdroidserver/checkupdates.py
 #, python-brace-format
 msgid "Invalid VercodeOperation: {field}"
+msgstr "Ugyldig VercodeOperation: {field}"
+
+#: ../fdroidserver/lint.py
+#, fuzzy, python-brace-format
+msgid "Invalid VercodeOperation: {invalid_ops}"
 msgstr "Ugyldig VercodeOperation: {field}"
 
 #: ../fdroidserver/common.py
@@ -1130,38 +964,10 @@ msgstr "Ugyldig program-ID {appid}"
 msgid "Invalid boolean '%s'"
 msgstr "Ugyldig boolsk uttrykk \"%s\""
 
-#: ../fdroidserver/metadata.py
-#, fuzzy, python-brace-format
-msgid "Invalid build flag at {line} in {linedesc}"
-msgstr "Ugyldig byggflagg på {line} i {linedesc}"
-
-#: ../fdroidserver/metadata.py
-#, python-brace-format
-msgid "Invalid build format: {value} in {name}"
-msgstr "Ugyldig byggformat: {value} i {name}."
-
 #: ../fdroidserver/lint.py
 #, fuzzy
 msgid "Invalid bulleted list"
 msgstr "Ugyldig punktvis liste"
-
-#: ../fdroidserver/lint.py
-#, python-format
-msgid "Invalid license tag \"%s\"! Use only tags from https://spdx.org/license-list"
-msgstr "Ugyldig lisenstagg \"%s\". Kun bruk de som er å finne på https://spdx.org/license-list"
-
-#: ../fdroidserver/lint.py
-msgid "Invalid link - use [http://foo.bar Link title] or [http://foo.bar]"
-msgstr "Ugyldig lenke - bruk [http://foo.bar Lenketittel] eller [http://foo.bar]"
-
-#: ../fdroidserver/metadata.py
-#, python-format
-msgid "Invalid metadata in %s:%d"
-msgstr "Ugyldig metadata i %s:%d"
-
-#: ../fdroidserver/metadata.py
-msgid "Invalid metadata in: "
-msgstr "Ugyldig metadata i: "
 
 #: ../fdroidserver/common.py
 #, python-format
@@ -1172,11 +978,6 @@ msgstr "Ugyldig navn for publisert fil: %s"
 #, fuzzy, python-brace-format
 msgid "Invalid ndk: entry in build: \"{ndk}\""
 msgstr "Ugyldig NDK: oppføring i bygg: «{ndk}»"
-
-#: ../fdroidserver/common.py
-#, python-brace-format
-msgid "Invalid package name {0}"
-msgstr "Ugyldig pakkenavn {0}"
 
 #: ../fdroidserver/common.py
 #, fuzzy, python-brace-format
@@ -1198,11 +999,6 @@ msgstr "Ugyldig srclib-metadata: kunne ikke tolke «{file}»"
 msgid "Invalid srclib metadata: unknown key '{key}' in '{file}'"
 msgstr "Ugyldig srclib-metadata: ukjent nøkkel «{key}» i «{file}»"
 
-#: ../fdroidserver/metadata.py
-#, fuzzy, python-brace-format
-msgid "Invalid versionCode: \"{versionCode}\" is not an integer!"
-msgstr "Ugyldig versionCode: \"{versionCode}\" er ikke et heltall."
-
 #: ../fdroidserver/common.py
 #, fuzzy, python-brace-format
 msgid "JAR signature failed to verify: {path}"
@@ -1217,8 +1013,8 @@ msgstr "JAR-signatur bekreftet: {path}"
 msgid "Java JAR file"
 msgstr "JAR-fil for Java"
 
-#: ../fdroidserver/publish.py ../fdroidserver/update.py
-#: ../fdroidserver/mirror.py
+#: ../fdroidserver/mirror.py ../fdroidserver/publish.py
+#: ../fdroidserver/update.py
 #, fuzzy
 msgid "Java JDK not found! Install in standard location or set java_paths!"
 msgstr "Fant ingen Java JDK. Installer på vanlig plass, eller sett java_paths."
@@ -1256,14 +1052,6 @@ msgstr "Sist brukte innsendelse \"{commit}\" ser ut som en tagg, men oppdatering
 msgid "Liberapay donation methods belong in the Liberapay: field"
 msgstr "Flatter-donasjonsmetoder hører hjemme i FlattrID-flagget"
 
-#: ../fdroidserver/lint.py
-msgid "Liberapay donation methods belong in the LiberapayID flag"
-msgstr "Flatter-donasjonsmetoder hører hjemme i FlattrID-flagget"
-
-#: ../fdroidserver/rewritemeta.py
-msgid "List files that would be reformatted"
-msgstr "Liste over filer som ville blitt formatert"
-
 #: ../fdroidserver/rewritemeta.py
 #, fuzzy
 msgid "List files that would be reformatted (dry run)"
@@ -1300,18 +1088,9 @@ msgstr "Avspeil hele pakkebrønnen og arkivet, alle filtyper."
 msgid "Missing output directory"
 msgstr "Manglende utdatamappe"
 
-#: ../fdroidserver/lint.py
-#, fuzzy, python-format
-msgid "Name '%s' is just the auto name - remove it"
-msgstr "Navnet \"%s\" er kun det forvalgte navnet, fjern det."
-
 #: ../fdroidserver/index.py
 msgid "Neither \"repo_pubkey\" nor \"keystorepass\" set in config.yml"
 msgstr ""
-
-#: ../fdroidserver/common.py
-msgid "No 'config.yml' found, using defaults."
-msgstr "Fant ingen 'config.yml' , bruker forvalg."
 
 #: ../fdroidserver/verify.py
 #, fuzzy, python-format
@@ -1322,23 +1101,9 @@ msgstr "Ingen slik pakke: %s"
 msgid "No Android SDK found!"
 msgstr "Fant ingen Android-SDK."
 
-#: ../fdroidserver/import.py
-msgid "No android or kivy project could be found. Specify --subdir?"
-msgstr "Fant inget Android- eller Kivy-prosjekt. Angi --subdir?"
-
 #: ../fdroidserver/install.py
 msgid "No attached devices found"
 msgstr "Fant ingen tilknyttede enheter"
-
-#: ../fdroidserver/metadata.py
-#, python-brace-format
-msgid "No commit specified for {versionName} in {linedesc}"
-msgstr "Ingen innsendelse angitt for {versionName} i {linedesc}."
-
-#: ../fdroidserver/common.py
-#, fuzzy
-msgid "No config.yml found, using defaults."
-msgstr "Fant ingen 'config.yml' , bruker forvalg."
 
 #: ../fdroidserver/index.py
 msgid "No fingerprint in URL."
@@ -1349,12 +1114,11 @@ msgstr "Inget fingeravtrykk i nettadresse."
 msgid "No git submodules available"
 msgstr "Ingen Git-undermoduler tilgjengelige"
 
-#: ../fdroidserver/import.py ../fdroidserver/import_subcommand.py
+#: ../fdroidserver/import_subcommand.py
 #, fuzzy
 msgid "No gradle project could be found. Specify --subdir?"
 msgstr "Fant inget Android- eller Kivy-prosjekt. Angi --subdir?"
 
-#: ../fdroidserver/import.py ../fdroidserver/common.py
 #: ../fdroidserver/import_subcommand.py
 msgid "No information found."
 msgstr "Ingen informasjon funnet."
@@ -1394,12 +1158,12 @@ msgstr "Ingen signert APK tilgjengelig for %s"
 msgid "No signed output directory - nothing to do"
 msgstr "Ingen signert utdatamappe - ingenting å gjøre"
 
-#: ../fdroidserver/update.py ../fdroidserver/common.py
+#: ../fdroidserver/common.py
 #, python-brace-format
 msgid "No signing certificates found in {path}"
 msgstr "Ingen signeringssertifikater funnet i {path}"
 
-#: ../fdroidserver/common.py ../fdroidserver/metadata.py
+#: ../fdroidserver/common.py
 #, python-format
 msgid "No such package: %s"
 msgstr "Ingen slik pakke: %s"
@@ -1415,7 +1179,7 @@ msgstr "Ingen slik versionCode {versionCode} for programmet {appid}"
 msgid "No tags found"
 msgstr "Fant ingen tilknyttede enheter"
 
-#: ../fdroidserver/verify.py ../fdroidserver/publish.py
+#: ../fdroidserver/publish.py ../fdroidserver/verify.py
 msgid "No unsigned directory - nothing to do"
 msgstr "Ingen usignert mappe - ingenting å gjøre"
 
@@ -1456,16 +1220,6 @@ msgstr "OBB-pakkenavn samsvarer ikke med noen støttet APK:"
 msgid "Offline machine, skipping git mirror generation until `fdroid deploy`"
 msgstr "Frakoblet maskin. Hopper over Git-avspeilingsgenerering til «fdroid deploy»"
 
-#: ../fdroidserver/common.py
-#, fuzzy, python-brace-format
-msgid "Old APK signature failed to verify: {path}"
-msgstr "Klarte ikke å bekrefte foreldet APK-signatur: {path}"
-
-#: ../fdroid ../fdroidserver/__main__.py
-#, fuzzy
-msgid "Old, deprecated name for fdroid deploy"
-msgstr "Gammelt, foreldet navn for fdroid-innsendelse"
-
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Only PNG and JPEG are supported for graphics, found: {path}"
@@ -1485,8 +1239,7 @@ msgstr "Behandle kun programmer som har auto-oppdateringer"
 msgid "OpenCollective donation methods belong in the OpenCollective: field"
 msgstr "Flatter-donasjonsmetoder hører hjemme i FlattrID-flagget"
 
-#: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
-#: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
+#: /usr/lib/python3.11/optparse.py
 msgid "Options"
 msgstr "Valg"
 
@@ -1498,14 +1251,14 @@ msgstr "Skriv ut JSON-rapport til fil navngitt etter APK-en."
 msgid "Output JSON to stdout."
 msgstr "Send utdata-JSON til stdout."
 
-#: ../fdroidserver/gpgsign.py ../fdroidserver/publish.py
-#: ../fdroidserver/update.py ../fdroidserver/signindex.py
-#: ../fdroidserver/checkupdates.py
+#: ../fdroidserver/checkupdates.py ../fdroidserver/gpgsign.py
+#: ../fdroidserver/publish.py ../fdroidserver/signindex.py
+#: ../fdroidserver/update.py
 #, fuzzy
 msgid "Outputting JSON"
 msgstr "Produserer JSON"
 
-#: ../fdroidserver/import.py ../fdroidserver/import_subcommand.py
+#: ../fdroidserver/import_subcommand.py
 msgid "Overall license of the project."
 msgstr "Overnevnt lisens for prosjektet."
 
@@ -1514,7 +1267,7 @@ msgstr "Overnevnt lisens for prosjektet."
 msgid "Overriding blank versionName in {apkfilename} from metadata: {version}"
 msgstr "Overskriver blank versionName i {apkfilename} fra metadata: {version}."
 
-#: ../fdroidserver/import.py ../fdroidserver/import_subcommand.py
+#: ../fdroidserver/import_subcommand.py
 #, python-brace-format
 msgid "Package \"{appid}\" already exists"
 msgstr "Pakken «{appid}» finnes allerede"
@@ -1528,14 +1281,10 @@ msgstr "Tolker manifest i \"{path}\"."
 msgid "Password required with username"
 msgstr "Passord påkrevd med brukernavn"
 
-#: ../fdroidserver/import.py ../fdroidserver/import_subcommand.py
+#: ../fdroidserver/import_subcommand.py
 #, fuzzy
 msgid "Path to main Android project subdirectory, if not in root."
 msgstr "Sti til hovedundermappe for Androidprosjekt, hvis ikke i rot."
-
-#, fuzzy
-msgid "Path to main android project subdirectory, if not in root."
-msgstr "Sti til undermappe for hoved-Androidprosjekt, hvis ikke i rot."
 
 #: ../fdroidserver/init.py
 msgid "Path to the Android SDK (sometimes set in ANDROID_HOME)"
@@ -1560,11 +1309,6 @@ msgstr "Skriv den hemmelige variabelen til terminalen for enkel kopiering/innlim
 msgid "Problem with ZIP file: %s, error %s"
 msgstr ""
 
-#: ../fdroidserver/metadata.py
-#, fuzzy, python-brace-format
-msgid "Problem with description of {appid}: {error}"
-msgstr "Problem med beskrivelse av {appid}: {error}"
-
 #: ../fdroidserver/common.py
 #, fuzzy, python-brace-format
 msgid "Problem with xml at '{path}'"
@@ -1588,11 +1332,7 @@ msgstr "Behandler {appid}"
 msgid "Produce human-readable XML/JSON for index files"
 msgstr "Produser menneskelig lesbar XML/JSON for indeksfiler"
 
-#: ../fdroidserver/update.py
-msgid "Produce human-readable index.xml"
-msgstr "Produser menneskelig lesbar index.xml"
-
-#: ../fdroidserver/import.py ../fdroidserver/import_subcommand.py
+#: ../fdroidserver/import_subcommand.py
 msgid "Project URL to import from."
 msgstr "Prosjektnettadresse å importere fra."
 
@@ -1604,21 +1344,21 @@ msgstr "Tegnsetting bør unngås"
 msgid "Push the log to this git remote repository"
 msgstr "Dytt loggen til denne Git-pakkebrønnen annensteds hen"
 
-#: ../fdroidserver/deploy.py ../fdroidserver/upload.py
+#: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "Pushing binary transparency log to {url}"
 msgstr "Dytter binærgjennomsiktighetslogg til {url}."
 
-#: ../fdroidserver/deploy.py ../fdroidserver/upload.py
+#: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "Pushing to {url}"
 msgstr "Dytter til {url}."
 
-#: ../fdroid ../fdroidserver/__main__.py
+#: ../fdroidserver/__main__.py
 msgid "Quickly start a new repository"
 msgstr "Raskt starte et nytt lager"
 
-#: ../fdroid ../fdroidserver/__main__.py
+#: ../fdroidserver/__main__.py
 msgid "Read all the metadata files and exit"
 msgstr "Les alle metadatafilene og avslutt"
 
@@ -1628,15 +1368,13 @@ msgid "Reading '{config_file}'"
 msgstr "Leser '{config_file}'"
 
 #: ../fdroidserver/common.py
-#, fuzzy, python-brace-format
-msgid "Reading minSdkVersion failed: \"{apkfilename}\""
-msgstr "Kunne ikke lese minSdkVersion: \"{apkfilename}\""
-
-#. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
-#. https://developer.android.com/guide/topics/manifest/manifest-element.html#vname
-#: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Reading packageName/versionCode/versionName failed, APK invalid: '{apkfilename}'"
+msgstr "Kunne ikke lese packageName/versionCode/versionName, APK ugyldig: \"{apkfilename}\""
+
+#: ../fdroidserver/common.py
+#, fuzzy, python-brace-format
+msgid "Reading packageName/versionCode/versionName failed,APK invalid: '{apkfilename}'"
 msgstr "Kunne ikke lese packageName/versionCode/versionName, APK ugyldig: \"{apkfilename}\""
 
 #: ../fdroidserver/update.py
@@ -1662,10 +1400,6 @@ msgstr "Gi nytt navn til APK-filer som ikke samsvarer med package.name_123.apk"
 msgid "RepoTrunk update mode only makes sense in git-svn repositories"
 msgstr "RepoTrunk-oppdateringsmodus gir kun mening i Git-SVN-kodelager"
 
-#: ../fdroidserver/update.py
-msgid "Report on build data status"
-msgstr "Rapporter byggdatastatus"
-
 #: ../fdroidserver/build.py
 #, fuzzy
 msgid "Reset and create a brand new build server, even if the existing one appears to be ok."
@@ -1685,23 +1419,14 @@ msgstr "Endre størrelse på alle ikoner som overstiger maksimal pikselantall og
 msgid "Restrict output to warnings and errors"
 msgstr "Begrens utdata til advarsler og feil"
 
-#: ../fdroid ../fdroidserver/__main__.py
+#: ../fdroidserver/__main__.py
 msgid "Rewrite all the metadata files"
 msgstr "Skriv om alle metadatafilene"
-
-#: ../fdroidserver/rewritemeta.py
-msgid "Rewrite to a specific format: "
-msgstr "Skriv om til et spesifikt format: "
 
 #: ../fdroidserver/rewritemeta.py
 #, fuzzy, python-brace-format
 msgid "Rewriting '{appid}'"
 msgstr "Skriver om \"{appid}\""
-
-#: ../fdroidserver/rewritemeta.py
-#, python-brace-format
-msgid "Rewriting '{appid}' to '{path}'"
-msgstr "Skriver om \"{appid}\" til \"{path}\""
 
 #: ../fdroidserver/checkupdates.py
 msgid "Run on git repo that has uncommitted changes"
@@ -1711,7 +1436,7 @@ msgstr "Kjør på Git-pakkebrønn som har uinnsendte endringer"
 msgid "Run rewritemeta to fix formatting"
 msgstr "Kjør rewritemetadata for å fikse formatering"
 
-#: ../fdroidserver/deploy.py ../fdroidserver/upload.py
+#: ../fdroidserver/deploy.py
 #, fuzzy
 msgid "Running first pass with MD5 checking disabled"
 msgstr "Kjører første passering med MD5-sjekking avskrudd"
@@ -1725,13 +1450,13 @@ msgstr "Kjører wget i {path}."
 msgid "Scan the resulting APK(s) for known non-free classes."
 msgstr "Skann resulterende APK(er) for kjente ufrie klasser."
 
-#: ../fdroid ../fdroidserver/__main__.py
+#: ../fdroidserver/__main__.py
 msgid "Scan the source code of a package"
 msgstr "Skann kildekoden til en pakke"
 
 #: ../fdroidserver/scanner.py
 #, fuzzy, python-brace-format
-msgid "Scanner found {count} problems in {apk}:"
+msgid "Scanner found {count} problems in {apk}"
 msgstr "Skanner fant {count} problemer i {appid}:"
 
 #: ../fdroidserver/scanner.py
@@ -1749,11 +1474,6 @@ msgid "Scanner found {} problem"
 msgid_plural "Scanner found {} problems"
 msgstr[0] "Skanner fant {} problem"
 msgstr[1] "Skanner fant {} problemer"
-
-#: ../fdroidserver/scanner.py
-#, fuzzy
-msgid "Scanning APK with apkanalyzer for known non-free classes."
-msgstr "Skanner APK med APK Analyzer for kjente ikke-frie klasser."
 
 #: ../fdroidserver/scanner.py
 #, fuzzy
@@ -1778,7 +1498,7 @@ msgstr ""
 msgid "Set open file limit to {integer}"
 msgstr "Sett åpen filgrense til {integer}"
 
-#: ../fdroid ../fdroidserver/__main__.py
+#: ../fdroidserver/__main__.py
 msgid "Set up an app build for a nightly build repo"
 msgstr "Sett opp programbygging for nattlig byggingspakkebrønn."
 
@@ -1792,11 +1512,11 @@ msgstr "Kunne ikke sette åpen filgrense: "
 msgid "Setting {0} sec timeout for this build"
 msgstr "Setter {0} sek. tidsavbrudd for dette bygget"
 
-#: ../fdroid ../fdroidserver/__main__.py
+#: ../fdroidserver/__main__.py
 msgid "Sign and place packages in the repo"
 msgstr "Logg inn og legg til pakker i pakkebrønnen"
 
-#: ../fdroid ../fdroidserver/__main__.py
+#: ../fdroidserver/__main__.py
 msgid "Sign indexes created using update --nosign"
 msgstr "Signer indekser ved bruk av update --nosign"
 
@@ -1809,7 +1529,7 @@ msgstr "Hopp over skanning av kildekoden for binærfiler og andre problemer"
 msgid "Skipping '{apkfilename}' with invalid signature!"
 msgstr "Hopper over '{apkfilename}' med ugyldig signatur."
 
-#: ../fdroidserver/index.py
+#: ../fdroidserver/deploy.py ../fdroidserver/index.py
 #, fuzzy, python-format
 msgid "Skipping GitLab Pages mirror because the repo is too large (>%.2fGB)!"
 msgstr "Hopper over GitLab Pages-avspeiling fordi kodelageret er for stort (>%.2f GB)!"
@@ -1829,23 +1549,14 @@ msgstr "Hopper over {apkfilename} med ugyldig signatur."
 msgid "Skipping {appid}: disabled"
 msgstr "Hopper over {appid}: Avskrudd"
 
-#: ../fdroidserver/scanner.py
-#, python-brace-format
-msgid "Skipping {appid}: no builds specified"
-msgstr "Hopper over {appid}: Ingen bygg angitt"
-
-#: ../fdroidserver/deploy.py ../fdroidserver/upload.py
+#: ../fdroidserver/deploy.py
 msgid "Specify a local folder to sync the repo to"
 msgstr "Angi ei lokal mappe å synkronisere pakkebrønnen til"
 
-#: ../fdroidserver/deploy.py ../fdroidserver/upload.py
+#: ../fdroidserver/deploy.py
 #, fuzzy
 msgid "Specify an identity file to provide to SSH for rsyncing"
 msgstr "Angi ei identitetsfil å tilby til SSH for rsync-ing"
-
-#: ../fdroidserver/build.py
-msgid "Specify that we're running on the build server"
-msgstr "Angi at kjøring utføres på byggtjeneren"
 
 #: ../fdroidserver/nightly.py
 msgid "Specify which debug keystore file to use."
@@ -1855,11 +1566,6 @@ msgstr "Angi hvilken feilrettingsnøkkellagersfil som skal brukes."
 #, fuzzy
 msgid "Spew out even more information than normal"
 msgstr "Gulp opp enda mer info enn normalt"
-
-#: ../fdroidserver/nightly.py
-#, python-brace-format
-msgid "Striping mystery signature from {apkfilename}"
-msgstr "Stripper mystisk signatur fra {apkfilename}"
 
 #: ../fdroidserver/nightly.py
 #, fuzzy, python-brace-format
@@ -1911,19 +1617,9 @@ msgstr "Mappen å skrive speilet til"
 msgid "The file to be included in the repo (path or glob)"
 msgstr "Filen å inkludere i pakkebrønnen (sti eller glob)."
 
-#: ../fdroidserver/deploy.py
-#, fuzzy
-msgid "The only commands currently supported are 'init' and 'update'"
-msgstr "De eneste kommandoene som støttes foreløpig er \"init\" og \"update\"."
-
 #: ../fdroidserver/index.py
 msgid "The repository's fingerprint does not match."
 msgstr "Pakkebrønnens fingeravtrykk samsvarer ikke."
-
-#: ../fdroidserver/common.py
-#, fuzzy
-msgid "The repository's index could not be verified."
-msgstr "Kunne ikke bekrefte pakkebrønnens indeks."
 
 #: ../fdroidserver/deploy.py
 #, fuzzy, python-brace-format
@@ -1942,7 +1638,7 @@ msgstr ""
 msgid "This is a repository of apps to be used with F-Droid. Applications in this repository are either official binaries built by the original application developers, or are binaries built from source by the admin of f-droid.org using the tools on https://gitlab.com/fdroid."
 msgstr ""
 
-#: ../fdroidserver/import.py ../fdroidserver/import_subcommand.py
+#: ../fdroidserver/import_subcommand.py
 #, python-format
 msgid "This repo already has local metadata: %s"
 msgstr "Denne pakkebrønnen har allerede lokal metadata: %s"
@@ -1959,7 +1655,7 @@ msgid ""
 "and https://f-droid.org/docs/Signing_Process"
 msgstr ""
 
-#: ../fdroidserver/deploy.py ../fdroidserver/upload.py
+#: ../fdroidserver/deploy.py
 #, fuzzy
 msgid "To use awsbucket, awssecretkey and awsaccesskeyid must also be set in config.yml!"
 msgstr "For å bruke AWS-spann, må \"awssecretkey\" og \"awsaccesskeyid\" også være satt i config.yml."
@@ -1972,10 +1668,6 @@ msgstr "Nettadressen må starte med https:// eller http://"
 #, fuzzy
 msgid "URL shorteners should not be used"
 msgstr "Nettadresseforkortere skal ikke brukes"
-
-#: ../fdroidserver/metadata.py
-msgid "URL title is just the URL, use brackets: [URL]"
-msgstr "Nettadressetittel er kun nettadressen, bruk hakeparenteser: [Nettadresse]"
 
 #: ../fdroidserver/lint.py
 #, fuzzy, python-brace-format
@@ -1996,17 +1688,12 @@ msgstr ""
 msgid "Unexpected symlink target: {link} -> {target}"
 msgstr ""
 
-#: ../fdroidserver/metadata.py
-#, fuzzy, python-brace-format
-msgid "Unexpected text on same line as {field} in {linedesc}"
-msgstr "Uventet tekst på samme linje som {field} i {linedesc}."
-
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Unknown entry {key} in {configname}"
 msgstr ""
 
-#: ../fdroid ../fdroidserver/__main__.py
+#: ../fdroidserver/__main__.py
 msgid "Unknown exception found!"
 msgstr "Ukjent unntak møtt!"
 
@@ -2022,11 +1709,6 @@ msgid "Unknown metadata format: %s"
 msgstr "Ukjent metadataformat: %s"
 
 #: ../fdroidserver/metadata.py
-#, python-brace-format
-msgid "Unknown metadata format: {path}"
-msgstr "Ukjent metadataformat: {path}"
-
-#: ../fdroidserver/metadata.py
 #, fuzzy, python-brace-format
 msgid "Unknown metadata format: {path} (use: *.yml)"
 msgstr "Ukjent metadataformat: {path}"
@@ -2035,10 +1717,6 @@ msgstr "Ukjent metadataformat: {path}"
 #, fuzzy
 msgid "Unknown version of aapt, might cause problems: "
 msgstr "Ukjent versjon av aapt, kan forårsake problemer: "
-
-#: ../fdroidserver/lint.py
-msgid "Unlinkified link - use [http://foo.bar Link title] or [http://foo.bar]"
-msgstr "Avlenket lenke - bruk [http://foo.bar Lenketittel] eller [http://foo.bar]"
 
 #: ../fdroidserver/lint.py
 msgid "Unnecessary leading space"
@@ -2054,18 +1732,9 @@ msgid "Unrecognised app field '{fieldname}' in '{path}'"
 msgstr "Ugjenkjent felt «{fieldname}» i «{path}»"
 
 #: ../fdroidserver/metadata.py
-msgid "Unrecognised app field: "
-msgstr "Ugjenkjent programfelt: "
-
-#: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Unrecognised build flag '{build_flag}' in '{path}'"
 msgstr "Ugjenkjent felt «{build_flag}» i «{path}»"
-
-#: ../fdroidserver/metadata.py
-#, python-brace-format
-msgid "Unrecognised field '{field}' in {linedesc}"
-msgstr "Ugjenkjent felt \"{field}\" i {linedesc}"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -2076,29 +1745,6 @@ msgstr "Ustøttet filtype \"{extension}\" for pakkebrønnsgrafikk"
 #, python-brace-format
 msgid "Unsupported graphics file found: {path}"
 msgstr "Ustøttet grafikkfil funnet: {path}."
-
-#: ../fdroidserver/rewritemeta.py
-#, python-brace-format
-msgid "Unsupported metadata format, use: --to [{supported}]"
-msgstr "Ustøttet metadataformat, bruk: --to [{supported}]"
-
-#: ../fdroidserver/metadata.py
-msgid "Unterminated ]"
-msgstr "Uterminert ]"
-
-#: ../fdroidserver/metadata.py
-msgid "Unterminated ]]"
-msgstr "Uterminert ]]"
-
-#: ../fdroidserver/metadata.py
-#, python-brace-format
-msgid "Unterminated build in {name}"
-msgstr "Uterminert bygg i {name}."
-
-#: ../fdroidserver/metadata.py
-#, python-brace-format
-msgid "Unterminated continuation in {name}"
-msgstr "Uterminert fortsettelse i {name}."
 
 #: ../fdroidserver/lint.py
 #, fuzzy, python-format
@@ -2125,22 +1771,23 @@ msgstr "Ubrukt fil i %s"
 msgid "Unzipping to %s"
 msgstr "Pakker ut til %s"
 
-#: ../fdroid ../fdroidserver/__main__.py
+#: ../fdroidserver/__main__.py
 msgid "Update repo information for new packages"
 msgstr "Oppdater repo informasjon for nye pakker"
 
-#: ../fdroid ../fdroidserver/__main__.py
+#: ../fdroidserver/__main__.py
 msgid "Update the binary transparency log for a URL"
 msgstr "Oppdater binær gjennomsiktighetslogg for en URL"
-
-#: ../fdroidserver/update.py ../fdroidserver/build.py
-msgid "Update the wiki"
-msgstr "Oppdater wiki-en"
 
 #: ../fdroidserver/checkupdates.py
 #, python-brace-format
 msgid "UpdateCheckData has invalid URL: {url}"
 msgstr "UpdateCheckData har ugyldig nettadresse: {url}"
+
+#: ../fdroidserver/lint.py
+#, python-brace-format
+msgid "UpdateCheckData must match the version code as integer (\\d or [0-9]): {codeex}"
+msgstr ""
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
@@ -2152,15 +1799,10 @@ msgstr "UpdateCheckData må bruke HTTPS-nettadresse: {url}"
 msgid "UpdateCheckData not a valid URL: {url}"
 msgstr "UpdateCheckData er ikke en gyldig nettadresse: {url}"
 
-#: ../fdroidserver/lint.py
-msgid "UpdateCheckMode is set but it looks like checkupdates hasn't been run yet"
-msgstr "UpdateCheckMode er satt, men det ser ut til at checkupdates ikke har blitt kjørt enda."
-
 #. Translators: https://developer.android.com/studio/build/application-id
 #: ../fdroidserver/lint.py
-#, fuzzy
-msgid "UpdateCheckName is set to the known application ID - it can be removed"
-msgstr "\"Update Check Name\" er satt til den kjente App-ID-en - den kan fjernes."
+msgid "UpdateCheckMode is set but it looks likecheckupdates hasn't been run yet"
+msgstr ""
 
 #: ../fdroidserver/lint.py
 #, fuzzy
@@ -2179,11 +1821,13 @@ msgstr "Behandler {apkfilename}"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 #: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
+#: /usr/lib/python3.11/optparse.py
 msgid "Usage"
 msgstr "Bruk"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 #: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
+#: /usr/lib/python3.11/optparse.py
 #, python-format
 msgid "Usage: %s\n"
 msgstr "Bruk: %s\n"
@@ -2204,7 +1848,7 @@ msgstr "Bruk byggtjener"
 msgid "Use date from APK instead of current time for newly added APKs"
 msgstr "Bruk dato fra APK istedenfor nåværende tid for nylig tillagte APK-er"
 
-#: ../fdroidserver/deploy.py ../fdroidserver/upload.py
+#: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "Using \"{path}\" for configuring s3cmd."
 msgstr "Bruker \"{path}\" for oppsett av s3cmd."
@@ -2234,12 +1878,12 @@ msgstr "Bruker Androguard fra \"{path}\""
 msgid "Using existing keystore \"{path}\""
 msgstr "Bruker eksisterende nøkkellager \"{path}\"."
 
-#: ../fdroidserver/deploy.py ../fdroidserver/upload.py
+#: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "Using s3cmd to sync with: {url}"
 msgstr "Bruk s3cmd til å synkronisere med: {url}"
 
-#: ../fdroid ../fdroidserver/__main__.py
+#: ../fdroidserver/__main__.py
 msgid "Valid commands are:"
 msgstr "Gyldige kommandoer er:"
 
@@ -2247,7 +1891,7 @@ msgstr "Gyldige kommandoer er:"
 msgid "Verify against locally cached copy rather than redownloading."
 msgstr "Bekreft mot lokalt hurtiglagret kopi snarere enn å laste ned på ny."
 
-#: ../fdroid ../fdroidserver/__main__.py
+#: ../fdroidserver/__main__.py
 msgid "Verify the integrity of downloaded packages"
 msgstr "Bekreft integriteten til nedlastede pakker"
 
@@ -2260,7 +1904,7 @@ msgstr "Bekrefter indekssignatur:"
 msgid "VirusTotal API key cannot upload files larger than 32MB, use {url} to upload {path}."
 msgstr "VirusTotal API-nøkkel kan ikke laste opp filer større enn 32 MB, bruk {url} for å laste opp {path}."
 
-#: ../fdroid ../fdroidserver/__main__.py
+#: ../fdroidserver/__main__.py
 msgid "Warn about possible metadata errors"
 msgstr "Advar om mulige metadata-feil"
 
@@ -2272,9 +1916,6 @@ msgstr "Når oppsatt for signerte indekser, vil kun usignerte indekser bli oppre
 #: ../fdroidserver/lint.py
 msgid "When linting the entire repository yamllint is disabled by default. This option forces yamllint regardless."
 msgstr ""
-
-msgid "X.509 'Distiguished Name' used when generating keys"
-msgstr "X.509 \"Entydig navn\" (DN) brukt ved generering av nøkler."
 
 #: ../fdroidserver/init.py
 msgid "X.509 'Distinguished Name' used when generating keys"
@@ -2301,12 +1942,14 @@ msgstr "legger til i {name}: {path}"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
+#: /usr/lib/python3.11/argparse.py
 #, fuzzy, python-format
 msgid "ambiguous option: %(option)s could match %(matches)s"
 msgstr "tvetydig valg: %(option)s kan passe overens med %(matches)s"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 #: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
+#: /usr/lib/python3.11/optparse.py
 #, python-format
 msgid "ambiguous option: %s (%s?)"
 msgstr "tvetydig valg: %s (%s?)"
@@ -2320,33 +1963,17 @@ msgstr "fant ikke apksigner (som kreves for signering)."
 msgid "apksigner not found, it's required for signing!"
 msgstr "fant ikke apksigner (som kreves for signering)."
 
-#: ../fdroidserver/lint.py ../fdroidserver/rewritemeta.py
-#: ../fdroidserver/checkupdates.py
+#: ../fdroidserver/checkupdates.py ../fdroidserver/lint.py
+#: ../fdroidserver/rewritemeta.py
 #, fuzzy
 msgid "application ID of file to operate on"
 msgstr "App-ID å sjekke for oppdateringer"
 
-#: ../fdroidserver/verify.py ../fdroidserver/publish.py
-#: ../fdroidserver/build.py ../fdroidserver/scanner.py
-#: ../fdroidserver/install.py
+#: ../fdroidserver/build.py ../fdroidserver/install.py
+#: ../fdroidserver/publish.py ../fdroidserver/scanner.py
+#: ../fdroidserver/verify.py
 #, fuzzy
 msgid "application ID with optional versionCode in the form APPID[:VERCODE]"
-msgstr "App-ID med valgfri versionCode, i formen APPID[:VERCODE]"
-
-#: ../fdroidserver/lint.py ../fdroidserver/rewritemeta.py
-#, fuzzy
-msgid "applicationId in the form APPID"
-msgstr "App-ID i formen \"APPID\""
-
-#: ../fdroidserver/checkupdates.py
-msgid "applicationId to check for updates"
-msgstr "App-ID å sjekke for oppdateringer"
-
-#. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
-#: ../fdroidserver/verify.py ../fdroidserver/publish.py
-#: ../fdroidserver/build.py ../fdroidserver/scanner.py
-#: ../fdroidserver/install.py
-msgid "applicationId with optional versionCode in the form APPID[:VERCODE]"
 msgstr "App-ID med valgfri versionCode, i formen APPID[:VERCODE]"
 
 #: ../fdroidserver/common.py
@@ -2355,34 +1982,33 @@ msgstr ""
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
+#: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "argument \"-\" with mode %r"
 msgstr "argument \"-\" med modus %r"
+
+#: /usr/lib/python3.11/argparse.py
+#, python-format
+msgid "argument %(argument_name)s: %(message)s"
+msgstr ""
 
 #: ../fdroidserver/nightly.py
 #, fuzzy
 msgid "attempting bare SSH connection to test deploy key:"
 msgstr "forsøker naken SSH-tilkobling for å teste utrullingsnøkkel:"
 
-#: ../fdroidserver/nightly.py
-#, fuzzy
-msgid "attempting bare ssh connection to test deploy key:"
-msgstr "forsøker naken SSH-tilkobling for å teste utrullingsnøkkel:"
-
 #: ../fdroidserver/common.py
 msgid "can not parse scrlib spec (not a string): '{}'"
 msgstr ""
 
-#: /usr/lib/python3.9/argparse.py
+#: /usr/lib/python3.9/argparse.py /usr/lib/python3.11/argparse.py
 #, fuzzy, python-format
 msgid "can't open '%(filename)s': %(error)s"
 msgstr "kan ikke åpne '%s': %s"
 
-#: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py
-#, python-format
-msgid "can't open '%s': %s"
-msgstr "kan ikke åpne '%s': %s"
+#: ../fdroidserver/scanner.py
+msgid "can't open non-https url: '{};"
+msgstr ""
 
 #: ../fdroidserver/build.py
 #, fuzzy, python-brace-format
@@ -2391,11 +2017,13 @@ msgstr "Finner ikke AppID for {path}."
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
+#: /usr/lib/python3.11/argparse.py
 msgid "cannot have multiple subparser arguments"
 msgstr "kan ikke ha flere underfortolkningsargumenter"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
+#: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "cannot merge actions - two groups are named %r"
 msgstr "kan ikke flette handlinger - to grupper heter %r"
@@ -2410,32 +2038,35 @@ msgstr "kan ikke offentliggjøre oppdatering, har du satt utrullingsnøkkelen?"
 msgid "cloning {url}"
 msgstr "kloner {url}"
 
-#: ../fdroidserver/deploy.py
-msgid "command to execute, either 'init' or 'update'"
-msgstr "kommando å kjøre, enten 'init' eller 'update'"
-
 #: ../fdroidserver/__main__.py
 msgid "commands from plugin modules:"
 msgstr "kommandoer fra programtilleggsmodulene:"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 #: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
+#: /usr/lib/python3.11/optparse.py
 #, fuzzy
 msgid "complex"
 msgstr "kompleks"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
+#: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "conflicting option string: %s"
 msgid_plural "conflicting option strings: %s"
 msgstr[0] "konflikterende valgstreng: %s"
 msgstr[1] "konflikterende valgstrenger: %s"
 
-#: ../fdroidserver/nightly.py
-#, fuzzy, python-brace-format
-msgid "copying {apkfilename} into {path}"
-msgstr "kopierer {apkfilename} inn i {path}"
+#: /usr/lib/python3.11/argparse.py
+#, fuzzy, python-format
+msgid "conflicting subparser alias: %s"
+msgstr "konflikterende valgstreng: %s"
+
+#: /usr/lib/python3.11/argparse.py
+#, fuzzy, python-format
+msgid "conflicting subparser: %s"
+msgstr "konflikterende valgstreng: %s"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
@@ -2466,20 +2097,26 @@ msgid "deleting: repo/{apkfilename}"
 msgstr "Behandler {apkfilename}"
 
 #: ../fdroidserver/common.py
-#, fuzzy, python-brace-format
-msgid "deployed build logs to '{path}'"
-msgstr "utrullet bygglogger til \"{path}\""
-
-#: ../fdroidserver/common.py
 #, python-brace-format
 msgid "deployed process log {path} to {dest}"
 msgstr ""
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
+#: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "dest= is required for options like %r"
 msgstr "dest= er påkrevd for valg som %r"
+
+#: ../fdroidserver/scanner.py
+#, fuzzy
+msgid "downloading '{}'"
+msgstr "Laster ned %s"
+
+#: ../fdroidserver/scanner.py
+#, fuzzy
+msgid "downloading scanner signatures from '{}' failed"
+msgstr "Stripper mystisk signatur fra {apkfilename}"
 
 #: ../fdroidserver/scanner.py
 msgid "executable binary, possibly code"
@@ -2487,6 +2124,7 @@ msgstr "kjørbar binærfil, muligens kode"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
+#: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "expected %s argument"
 msgid_plural "expected %s arguments"
@@ -2495,42 +2133,35 @@ msgstr[1] "forventet %s argumenter"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
+#: /usr/lib/python3.11/argparse.py
 msgid "expected at least one argument"
 msgstr "forventet minst ett argument"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
+#: /usr/lib/python3.11/argparse.py
 msgid "expected at most one argument"
 msgstr "forventet på det meste ett argument"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
+#: /usr/lib/python3.11/argparse.py
 msgid "expected one argument"
 msgstr "forventet ett argument"
 
-#: ../fdroidserver/common.py
-#, fuzzy, python-brace-format
-msgid "failed deploying build logs to '{path}'"
-msgstr "klarte ikke å rulle ut bygglogger til \"{path}\""
-
-#: ../fdroid
-msgid "fdroid [-h|--help|--version] <command> [<args>]"
-msgstr "fdroid [-h|--help|--version] <kommando> [<argumenter>]"
-
-#: ../fdroid ../fdroidserver/__main__.py
+#: ../fdroidserver/__main__.py
 #, fuzzy
 msgid "fdroid [<command>] [-h|--help|--version|<args>]"
 msgstr "bruk: fdroid [-h|--help|--version] <kommando> [<argumenter>]"
 
-#: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
-#: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
+#: ../fdroidserver/scanner.py
+msgid "fetch the latest version of signatures from the web"
+msgstr ""
+
+#: /usr/lib/python3.11/optparse.py
 #, fuzzy
 msgid "floating-point"
 msgstr "flyttall"
-
-#: ../fdroidserver/metadata.py
-msgid "force errors to be warnings, or ignore"
-msgstr "tving feil til å bli advarsler, eller ignorer"
 
 #: ../fdroidserver/metadata.py
 #, fuzzy
@@ -2549,6 +2180,7 @@ msgstr ".gzip-filarkiv"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
+#: /usr/lib/python3.11/argparse.py
 #, fuzzy, python-format
 msgid "ignored explicit argument %r"
 msgstr "ignorerte eksplisitt argument %r"
@@ -2564,32 +2196,41 @@ msgstr "index-v1 må ha en signatur, bruk `fdroid signindex` for å opprette den
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 #: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
+#: /usr/lib/python3.11/optparse.py
 msgid "integer"
 msgstr "heltall"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
+#: /usr/lib/python3.11/argparse.py
 #, fuzzy, python-format
 msgid "invalid %(type)s value: %(value)r"
 msgstr "ugydlig %(type)s verdi: %(value)r"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
+#: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "invalid choice: %(value)r (choose from %(choices)s)"
 msgstr "ugyldig valg: %(value)r (velg fra %(choices)s)"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
+#: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "invalid conflict_resolution value: %r"
 msgstr "ugyldig conflict_resolution-verdi: %r"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
+#: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "invalid option string %(option)r: must start with a character %(prefix_chars)r"
 msgstr "Ugyldig valgstreng %(option)r: Må starte med et tegn %(prefix_chars)r"
+
+#: ../fdroidserver/common.py
+msgid "ipfs_cid not found, skipping CIDv1 generation"
+msgstr ""
 
 #: ../fdroidserver/checkupdates.py
 #, python-brace-format
@@ -2616,8 +2257,14 @@ msgstr "speilet \"%s\" slutter ikke med \"fdroid\"."
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
+#: /usr/lib/python3.11/argparse.py
 msgid "mutually exclusive arguments must be optional"
 msgstr "gjensidig utelukkende argumenter må være valgfrie"
+
+#: ../fdroidserver/scanner.py
+#, python-brace-format
+msgid "next {name} cache update due in {time}"
+msgstr ""
 
 #: ../fdroidserver/mirror.py
 #, fuzzy, python-brace-format
@@ -2630,11 +2277,12 @@ msgstr "ingen APK angitt"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 #: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
+#: /usr/lib/python3.11/optparse.py
 #, python-format
 msgid "no such option: %s"
 msgstr "Inget slikt valg: %s"
 
-#: ../fdroid ../fdroidserver/__main__.py
+#: ../fdroidserver/__main__.py
 msgid "no version info found!"
 msgstr "ingen versjonsinfo funnet!"
 
@@ -2645,17 +2293,19 @@ msgstr "ingen versjonsinfo funnet!"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
+#: /usr/lib/python3.11/argparse.py
 #, fuzzy, python-format
 msgid "not allowed with argument %s"
 msgstr "ikke tillatt med argument %s"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
+#: /usr/lib/python3.11/argparse.py
 #, fuzzy, python-format
 msgid "one of the arguments %s is required"
 msgstr "ett av argumentene %s kreves"
 
-#: ../fdroidserver/index.py ../fdroidserver/common.py
+#: ../fdroidserver/common.py ../fdroidserver/index.py
 #, fuzzy
 msgid "only accepts strings, lists, and tuples"
 msgstr "kun godta strenger, lister, og forekomster"
@@ -2667,48 +2317,56 @@ msgstr "valg %s: Hvis du virkelig ønsker å installere alle signerte programmer
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 #: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
+#: /usr/lib/python3.11/optparse.py
 #, python-format
 msgid "option %s: invalid %s value: %r"
 msgstr "valg %s: ugyldig %s verdi: %r"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 #: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
+#: /usr/lib/python3.11/optparse.py
 #, fuzzy, python-format
 msgid "option %s: invalid choice: %r (choose from %s)"
 msgstr "valg %s: ugyldig valg: %r (velg mellom %s)"
 
 #: /usr/lib/python3.5/getopt.py /usr/lib/python3.6/getopt.py
 #: /usr/lib/python3.7/getopt.py /usr/lib/python3.9/getopt.py
+#: /usr/lib/python3.11/getopt.py
 #, python-format
 msgid "option -%s not recognized"
 msgstr "Kommandoen \"-%s\" gjenkjennes ikke"
 
 #: /usr/lib/python3.5/getopt.py /usr/lib/python3.6/getopt.py
 #: /usr/lib/python3.7/getopt.py /usr/lib/python3.9/getopt.py
+#: /usr/lib/python3.11/getopt.py
 #, python-format
 msgid "option -%s requires argument"
 msgstr "valg -%s krever et argument"
 
 #: /usr/lib/python3.5/getopt.py /usr/lib/python3.6/getopt.py
 #: /usr/lib/python3.7/getopt.py /usr/lib/python3.9/getopt.py
+#: /usr/lib/python3.11/getopt.py
 #, fuzzy, python-format
 msgid "option --%s must not have an argument"
 msgstr "valget --%s kan ikke ha et argument"
 
 #: /usr/lib/python3.5/getopt.py /usr/lib/python3.6/getopt.py
 #: /usr/lib/python3.7/getopt.py /usr/lib/python3.9/getopt.py
+#: /usr/lib/python3.11/getopt.py
 #, fuzzy, python-format
 msgid "option --%s not a unique prefix"
 msgstr "valget --%s er ikke et unikt prefiks"
 
 #: /usr/lib/python3.5/getopt.py /usr/lib/python3.6/getopt.py
 #: /usr/lib/python3.7/getopt.py /usr/lib/python3.9/getopt.py
+#: /usr/lib/python3.11/getopt.py
 #, python-format
 msgid "option --%s not recognized"
 msgstr "Kommandoen \"--%s\" gjenkjennes ikke"
 
 #: /usr/lib/python3.5/getopt.py /usr/lib/python3.6/getopt.py
 #: /usr/lib/python3.7/getopt.py /usr/lib/python3.9/getopt.py
+#: /usr/lib/python3.11/getopt.py
 #, python-format
 msgid "option --%s requires argument"
 msgstr "valget --%s krever et argument"
@@ -2718,6 +2376,11 @@ msgstr "valget --%s krever et argument"
 msgid "optional arguments"
 msgstr "valgfrie argumenter"
 
+#: /usr/lib/python3.11/argparse.py
+#, fuzzy
+msgid "options"
+msgstr "Valg"
+
 #: ../fdroidserver/nightly.py
 #, python-brace-format
 msgid "overwriting existing {path}"
@@ -2725,6 +2388,7 @@ msgstr "overskriver eksisterende {path}"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
+#: /usr/lib/python3.11/argparse.py
 msgid "positional arguments"
 msgstr "Posisjonelle argumenter"
 
@@ -2738,19 +2402,9 @@ msgstr ""
 msgid "refuse downloading via insecure HTTP connection (use HTTPS or specify --no-https-check): {apkfilename}"
 msgstr "nekt nedlasting via usikker HTTP-tilkobling (bruk HTTPS eller angi --no-https-check): {apkfilename}"
 
-#: ../fdroidserver/signatures.py
-#, fuzzy, python-brace-format
-msgid "refuse downloading via insecure http connection (use https or specify --no-https-check): {apkfilename}"
-msgstr "nekt nedlasting via usikker HTTP-tilkobling (bruk HTTPS eller angi --no-https-check): {apkfilename}"
-
 #: ../fdroidserver/index.py
 #, python-format
 msgid "repo_icon \"repo/icons/%s\" does not exist, generating placeholder."
-msgstr ""
-
-#: ../fdroidserver/index.py
-#, python-format
-msgid "repo_icon %s does not exist, generating placeholder."
 msgstr ""
 
 #: ../fdroidserver/common.py
@@ -2762,15 +2416,15 @@ msgstr ""
 msgid "ruamel.yaml not installed, can not write metadata."
 msgstr "ruamel.yaml er ikke installert. Kan ikke skrive metadata."
 
-#: ../fdroidserver/deploy.py ../fdroidserver/upload.py
+#: ../fdroidserver/deploy.py
 #, fuzzy, python-brace-format
 msgid "s3cmd sync indexes {path} to {url} and delete"
 msgstr "s3cmd synkroniserer indekser {path} til {url} og sletter"
 
 #: ../fdroidserver/scanner.py
-#, fuzzy, python-format
-msgid "scanner not cleanly run apkanalyzer: %s"
-msgstr "skanneren kjørte ikke APK Analyzer uten feil: %s"
+#, python-brace-format
+msgid "scanner cache is malformed! You can clear it with: '{clear}'"
+msgstr ""
 
 #: ../fdroidserver/scanner.py
 msgid "shared library"
@@ -2778,6 +2432,7 @@ msgstr "delt bibliotek"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 #: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
+#: /usr/lib/python3.11/optparse.py
 msgid "show program's version number and exit"
 msgstr "vis programmets versjonsnummer og avslutt"
 
@@ -2785,6 +2440,7 @@ msgstr "vis programmets versjonsnummer og avslutt"
 #: /usr/lib/python3.6/argparse.py /usr/lib/python3.6/optparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.7/optparse.py
 #: /usr/lib/python3.9/argparse.py /usr/lib/python3.9/optparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.11/optparse.py
 msgid "show this help message and exit"
 msgstr "vis denne hjelpemeldingen og avslutt"
 
@@ -2816,31 +2472,30 @@ msgstr "srclibs mangler navn og/eller @"
 msgid "static library"
 msgstr "statisk bibliotek"
 
-#: ../fdroidserver/common.py
-#, fuzzy, python-brace-format
-msgid "supplied timestamp value '{timestamp}' is not a unix timestamp"
-msgstr "angitt tidsstempelverdi \"{timestamp}\" er ikke et Unix-tidsstempel"
-
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
+#: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "the following arguments are required: %s"
 msgstr "følgende argumenter kreves: %s"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
+#: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "unexpected option string: %s"
 msgstr "uventet valgstreng: %s"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
+#: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "unknown parser %(parser_name)r (choices: %(choices)s)"
 msgstr "ukjent fortolker %(parser_name)r (valg: %(choices)s)"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
+#: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "unrecognized arguments: %s"
 msgstr "ugjengkjente argumenter: %s"
@@ -2852,15 +2507,11 @@ msgstr "utrygge tilganger for '{config_file}' (skal være 0600)!"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py ../fdroid
 #: /usr/lib/python3.7/argparse.py ../fdroidserver/__main__.py
-#: /usr/lib/python3.9/argparse.py
+#: /usr/lib/python3.9/argparse.py /usr/lib/python3.11/argparse.py
 msgid "usage: "
 msgstr "bruk: "
 
-#: ../fdroid
-msgid "usage: fdroid [-h|--help|--version] <command> [<args>]"
-msgstr "bruk: fdroid [-h|--help|--version] <kommando> [<argumenter>]"
-
-#: ../fdroidserver/deploy.py ../fdroidserver/upload.py
+#: ../fdroidserver/deploy.py
 #, fuzzy, python-brace-format
 msgid "using Apache libcloud to sync with {url}"
 msgstr "bruker Apache-libcloud for å synkronisere med {url}"
@@ -2868,10 +2519,6 @@ msgstr "bruker Apache-libcloud for å synkronisere med {url}"
 #: ../fdroidserver/deploy.py
 msgid "virustotal.com is rate limiting, waiting to retry..."
 msgstr ""
-
-#: ../fdroidserver/update.py
-msgid "wiki support is deprecated and will be removed in the next release!"
-msgstr "wiki-støtte er foreldet og vil bli fjernet i neste utgave."
 
 #: ../fdroidserver/publish.py
 #, python-brace-format
@@ -2899,16 +2546,6 @@ msgstr "{apkfilename} sin AndroidManifest.xml har en feilaktig dato: "
 #, fuzzy, python-brace-format
 msgid "{appid} does not have a name! Using application ID instead."
 msgstr "{appid} mangler navn. Bruker pakkenavn istedenfor."
-
-#: ../fdroidserver/update.py
-#, python-brace-format
-msgid "{appid} does not have a name! Using package name instead."
-msgstr "{appid} mangler navn. Bruker pakkenavn istedenfor."
-
-#: ../fdroidserver/update.py
-#, python-brace-format
-msgid "{appid} from {path} is not a valid Android Package Name!"
-msgstr "{appid} fra {path} er ikke et gyldig Android-pakkenavn!"
 
 #: ../fdroidserver/update.py
 #, fuzzy, python-brace-format
@@ -2958,18 +2595,8 @@ msgstr "{build_flag} må være et heltall, fant: {value}"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
-msgid "{field} not terminated in {name}"
-msgstr "{field} ikke terminert i {name}."
-
-#: ../fdroidserver/metadata.py
-#, python-brace-format
 msgid "{file} is blank or corrupt!"
 msgstr "{file} er tom eller skadet!"
-
-#: ../fdroidserver/update.py
-#, python-brace-format
-msgid "{name} \"{path}\" does not exist! Correct it in config.yml."
-msgstr "{name} \"{path}\" finnes ikke. Rett det i config.yml."
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -2981,7 +2608,7 @@ msgstr "{name} «{section}/icons/{path}» finnes ikke. Rett det i config.yml."
 msgid "{oldfile} is deprecated, use {newfile}"
 msgstr "{oldfile} er avleggs, bruk {newfile}"
 
-#: ../fdroidserver/import.py ../fdroidserver/import_subcommand.py
+#: ../fdroidserver/import_subcommand.py
 #, python-brace-format
 msgid "{path} already exists, ignoring import results!"
 msgstr "{path} finnes allerede, ignorerer importeringsresultater."
@@ -3016,7 +2643,7 @@ msgstr "Klarte ikke å lese {path}: {error}"
 msgid "{url} does not end with \"fdroid\", check the URL path!"
 msgstr "{url} slutter ikke med \"fdroid\", sjekk nettadressestien."
 
-#: ../fdroidserver/common.py ../fdroidserver/import_subcommand.py
+#: ../fdroidserver/import_subcommand.py
 #, fuzzy, python-brace-format
 msgid "{url} does not start with \"http\"!"
 msgstr "{url} slutter ikke med \"fdroid\", sjekk nettadressestien."
