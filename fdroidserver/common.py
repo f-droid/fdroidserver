@@ -3230,20 +3230,6 @@ def apk_strip_v1_signatures(signed_apk, strip_manifest=False):
                             out_apk.writestr(ClonedZipInfo(info), buf)
 
 
-def _zipalign(unsigned_apk, aligned_apk):
-    """Run 'zipalign' using standard flags used by Gradle Android Plugin.
-
-    -p was added in build-tools-23.0.0
-
-    References
-    ----------
-    https://developer.android.com/studio/publish/app-signing#sign-manually
-    """
-    p = SdkToolsPopen(['zipalign', '-v', '-p', '4', unsigned_apk, aligned_apk])
-    if p.returncode != 0:
-        raise BuildException("Failed to align application")
-
-
 def apk_implant_signatures(apkpath, outpath, manifest):
     """Implant a signature from metadata into an APK.
 
@@ -3322,7 +3308,7 @@ def get_apksigner_smartcardoptions(smartcardoptions):
 
 
 def sign_apk(unsigned_path, signed_path, keyalias):
-    """Sign and zipalign an unsigned APK, then save to a new file, deleting the unsigned.
+    """Sign an unsigned APK, then save to a new file, deleting the unsigned.
 
     NONE is a Java keyword used to configure smartcards as the
     keystore.  Otherwise, the keystore is a local file.
