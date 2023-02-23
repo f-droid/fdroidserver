@@ -118,7 +118,7 @@ class CommonTest(unittest.TestCase):
             return False
 
     def _find_all(self):
-        tools = ['aapt', 'adb', 'zipalign']
+        tools = ['aapt', 'adb', 'jarsigner']
         if os.path.exists(os.path.join(os.getenv('ANDROID_HOME'), 'tools', 'android')):
             tools.append('android')
         for cmd in tools:

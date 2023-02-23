@@ -96,7 +96,6 @@ debian_testing:
         ipfs-cid
         python3-defusedxml
         python3-setuptools
-        zipalign
     - python3 -c 'import fdroidserver'
     - python3 -c 'import androguard'
     - cd tests

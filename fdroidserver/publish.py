@@ -431,7 +431,7 @@ def main():
                                                                       unsigned_dir,
                                                                       output_dir))
 
-                # Sign and zipalign the application...
+                # Sign the application...
                 common.sign_apk(apkfile, signed_apk_path, keyalias)
                 if appid not in signed_apks:
                     signed_apks[appid] = []
