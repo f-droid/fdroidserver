@@ -62,7 +62,6 @@ disable = [
   "broad-exception-caught",
   "broad-exception-raised",
   "consider-iterating-dictionary",
-  "consider-using-sys-exit",
   "invalid-name",
   "missing-class-docstring",
   "missing-function-docstring",
