@@ -31,6 +31,13 @@ disable_error_code = "no-redef, misc, arg-type"
 # avoid hangs.
 jobs = 4
 
+# Minimum Python version to use for version dependent checks. Will default to the
+# version used to run pylint.
+py-version = "3.9"
+
+# Files or directories to be skipped. They should be base names, not paths.
+ignore = ["apksigcopier.py"]
+
 [tool.pylint.basic]
 # Good variable names which should always be accepted, separated by a comma.
 good-names = ["i", "j", "k", "ex", "Run", "f", "fp"]
