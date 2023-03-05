@@ -1007,6 +1007,9 @@ class vcs:
         self.refreshed = False
         self.srclib = None
 
+    def _gettags(self):
+        raise NotImplementedError
+
     def repotype(self):
         return None
 

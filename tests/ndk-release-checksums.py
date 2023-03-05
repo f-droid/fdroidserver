@@ -99,6 +99,8 @@ if git_repo.is_dirty() and 'fdroidserver/common.py' in modified:
     remote_name = 'fdroid-bot'
     try:
         remote = git_repo.create_remote(remote_name, url)
+    # See https://github.com/PyCQA/pylint/issues/2856 .
+    # pylint: disable-next=no-member
     except git.exc.GitCommandError:
         remote = git.remote.Remote(git_repo, remote_name)
         remote.set_url(url)

@@ -764,6 +764,8 @@ def parse_metadata(metadatapath):
             try:
                 commit_id = common.get_head_commit_id(git.Repo(build_dir))
                 logging.debug(_('Including metadata from %s@%s') % (metadata_in_repo, commit_id))
+            # See https://github.com/PyCQA/pylint/issues/2856 .
+            # pylint: disable-next=no-member
             except git.exc.InvalidGitRepositoryError:
                 logging.debug(_('Including metadata from {path}').format(metadata_in_repo))
             app_in_repo = parse_metadata(metadata_in_repo)
