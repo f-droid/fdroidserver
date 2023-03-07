@@ -36,9 +36,11 @@ from fdroidserver.common import (verify_apk_signature,
 verify_apk_signature  # NOQA: B101
 generate_keystore  # NOQA: B101
 from fdroidserver.index import (download_repo_index,
+                                download_repo_index_v1,
                                 get_mirror_service_urls,
                                 make as make_index)  # NOQA: E402
 download_repo_index  # NOQA: B101
+download_repo_index_v1  # NOQA: B101
 get_mirror_service_urls  # NOQA: B101
 make_index  # NOQA: B101
 from fdroidserver.update import (process_apk,

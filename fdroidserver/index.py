@@ -1476,7 +1476,17 @@ def get_mirror_service_urls(url):
 
 
 def download_repo_index(url_str, etag=None, verify_fingerprint=True, timeout=600):
-    """Download and verifies index file, then returns its data.
+    """Download and verifies index v1 file, then returns its data.
+
+    Use the versioned functions to be sure you are getting the
+    expected data format.
+
+    """
+    return download_repo_index_v1(url_str, etag, verify_fingerprint, timeout)
+
+
+def download_repo_index_v1(url_str, etag=None, verify_fingerprint=True, timeout=600):
+    """Download and verifies index v1 file, then returns its data.
 
     Downloads the repository index from the given :param url_str and
     verifies the repository's fingerprint if :param verify_fingerprint
@@ -1489,7 +1499,7 @@ def download_repo_index(url_str, etag=None, verify_fingerprint=True, timeout=600
     Returns
     -------
     A tuple consisting of:
-        - The index in JSON format or None if the index did not change
+        - The index in JSON v1 format or None if the index did not change
         - The new eTag as returned by the HTTP request
 
     """
