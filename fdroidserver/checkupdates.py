@@ -159,6 +159,8 @@ def check_tags(app, pattern):
             if codeex:
                 m = re.search(codeex, filecontent)
                 if not m:
+                    logging.debug(f"UpdateCheckData regex {codeex} for version code"
+                                  f" has no match in tag {tag}")
                     continue
 
                 vercode = m.group(1).strip()
@@ -176,8 +178,12 @@ def check_tags(app, pattern):
             version = tag
             if verex:
                 m = re.search(verex, filecontent)
-                if m:
-                    version = m.group(1)
+                if not m:
+                    logging.debug(f"UpdateCheckData regex {verex} for version name"
+                                  f" has no match in tag {tag}")
+                    continue
+
+                version = m.group(1)
 
             logging.debug("UpdateCheckData found version {0} ({1})"
                           .format(version, vercode))
