@@ -41,10 +41,20 @@ class Options:
 
 
 class IndexTest(unittest.TestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        cls.basedir = os.path.join(localmodule, 'tests')
+        # TODO something should remove cls.index_v1_jar, but it was
+        # causing the tests to be flaky.  There seems to be something
+        # that is running the background somehow, maybe sign_index()
+        # exits before jarsigner actually finishes?
+        cls.index_v1_jar = os.path.join(cls.basedir, 'repo', 'index-v1.jar')
+
     def setUp(self):
         logging.basicConfig(level=logging.DEBUG)
-        self.basedir = os.path.join(localmodule, 'tests')
         os.chmod(os.path.join(self.basedir, 'config.py'), 0o600)
+        os.chdir(self.basedir)  # so read_config() can find config.py
 
         fdroidserver.common.config = None
         fdroidserver.common.options = Options
@@ -54,17 +64,17 @@ class IndexTest(unittest.TestCase):
         fdroidserver.signindex.config = config
         fdroidserver.update.config = config
 
-        if not os.path.exists('repo/index-v1.jar'):
-            fdroidserver.signindex.sign_index(
-                os.path.join(self.basedir, 'repo'), 'index-v1.json'
-            )
         self._td = mkdtemp()
         self.testdir = self._td.name
 
     def tearDown(self):
-        os.chdir(self.basedir)
         self._td.cleanup()
-        os.remove('repo/index-v1.jar')
+
+    def _sign_test_index_v1_jar(self):
+        if not os.path.exists(self.index_v1_jar):
+            fdroidserver.signindex.sign_index(
+                os.path.dirname(self.index_v1_jar), 'index-v1.json'
+            )
 
     def test_get_public_key_from_jar_succeeds(self):
         source_dir = os.path.join(self.basedir, 'signindex')
@@ -100,6 +110,7 @@ class IndexTest(unittest.TestCase):
             )
 
     def test_get_repo_key_fingerprint(self):
+        self._sign_test_index_v1_jar()
         pubkey, fingerprint = fdroidserver.index.extract_pubkey()
         data, public_key, public_key_fingerprint = fdroidserver.index.get_index_from_jar(
             'repo/index-v1.jar', fingerprint
@@ -115,6 +126,7 @@ class IndexTest(unittest.TestCase):
             fdroidserver.index.get_index_from_jar('repo/index-v1.jar', fingerprint)
 
     def test_get_index_from_jar_with_chars_to_be_stripped(self):
+        self._sign_test_index_v1_jar()
         fingerprint = 'NOOOO F4 9A F3 F1 1E FD DF 20 DF FD 70 F5 E3 11 7B 99 76 67 41 67 AD CA 28 0E 6B 19 32 A0 60 1B 26 F6'
         data, public_key, public_key_fingerprint = fdroidserver.index.get_index_from_jar(
             'repo/index-v1.jar', fingerprint
