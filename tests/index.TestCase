@@ -52,7 +52,7 @@ class IndexTest(unittest.TestCase):
         cls.index_v1_jar = os.path.join(cls.basedir, 'repo', 'index-v1.jar')
 
     def setUp(self):
-        logging.basicConfig(level=logging.DEBUG)
+        logging.basicConfig(level=logging.ERROR)
         os.chmod(os.path.join(self.basedir, 'config.py'), 0o600)
         os.chdir(self.basedir)  # so read_config() can find config.py
 
