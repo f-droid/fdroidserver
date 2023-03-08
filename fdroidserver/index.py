@@ -21,6 +21,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import collections
+import hashlib
 import json
 import logging
 import os
@@ -1526,15 +1527,78 @@ def download_repo_index_v1(url_str, etag=None, verify_fingerprint=True, timeout=
     with tempfile.NamedTemporaryFile() as fp:
         fp.write(download)
         fp.flush()
-        index, public_key, public_key_fingerprint = get_index_from_jar(fp.name, fingerprint)
+        index, public_key, public_key_fingerprint = get_index_from_jar(
+            fp.name, fingerprint, allow_deprecated=True
+        )
         index["repo"]["pubkey"] = hexlify(public_key).decode()
         index["repo"]["fingerprint"] = public_key_fingerprint
         index["apps"] = [metadata.App(app) for app in index["apps"]]
         return index, new_etag
 
 
-def get_index_from_jar(jarfile, fingerprint=None):
-    """Return the data, public key, and fingerprint from index-v1.jar.
+def download_repo_index_v2(url_str, etag=None, verify_fingerprint=True, timeout=600):
+    """Download and verifies index v2 file, then returns its data.
+
+    Downloads the repository index from the given :param url_str and
+    verifies the repository's fingerprint if :param verify_fingerprint
+    is not False.  In order to verify the data, the fingerprint must
+    be provided as part of the URL.
+
+    Raises
+    ------
+    VerificationException() if the repository could not be verified
+
+    Returns
+    -------
+    A tuple consisting of:
+        - The index in JSON v2 format or None if the index did not change
+        - The new eTag as returned by the HTTP request
+
+    """
+    url = urllib.parse.urlsplit(url_str)
+
+    fingerprint = None
+    if verify_fingerprint:
+        query = urllib.parse.parse_qs(url.query)
+        if 'fingerprint' not in query:
+            raise VerificationException(_("No fingerprint in URL."))
+        fingerprint = query['fingerprint'][0]
+
+    if url.path.endswith('/entry.jar') or url.path.endswith('/index-v2.json'):
+        path = url.path.rsplit('/', 1)[0]
+    else:
+        path = url.path.rstrip('/')
+
+    url = urllib.parse.SplitResult(url.scheme, url.netloc, path + '/entry.jar', '', '')
+    download, new_etag = net.http_get(url.geturl(), etag, timeout)
+
+    if download is None:
+        return None, new_etag
+
+    # jarsigner is used to verify the JAR, it requires a file for input
+    with tempfile.TemporaryDirectory() as dirname:
+        with (Path(dirname) / 'entry.jar').open('wb') as fp:
+            fp.write(download)
+            fp.flush()
+            entry, public_key, fingerprint = get_index_from_jar(fp.name, fingerprint)
+
+    name = entry['index']['name']
+    sha256 = entry['index']['sha256']
+    url = urllib.parse.SplitResult(url.scheme, url.netloc, path + name, '', '')
+    index, _ignored = net.http_get(url.geturl(), None, timeout)
+    if sha256 != hashlib.sha256(index).hexdigest():
+        raise VerificationException(
+            _("SHA-256 of {url} does not match entry!").format(url=url)
+        )
+    return json.loads(index), new_etag
+
+
+def get_index_from_jar(jarfile, fingerprint=None, allow_deprecated=False):
+    """Return the data, public key and fingerprint from an index JAR with one JSON file.
+
+    The F-Droid index files always contain a single data file and a
+    JAR Signature.  Since index-v1, the data file is always JSON.
+    That single data file is named the same as the JAR file.
 
     Parameters
     ----------
@@ -1547,14 +1611,25 @@ def get_index_from_jar(jarfile, fingerprint=None):
 
     """
     logging.debug(_('Verifying index signature:'))
-    common.verify_deprecated_jar_signature(jarfile)
+
+    if allow_deprecated:
+        common.verify_deprecated_jar_signature(jarfile)
+    else:
+        common.verify_jar_signature(jarfile)
+
     with zipfile.ZipFile(jarfile) as jar:
         public_key, public_key_fingerprint = get_public_key_from_jar(jar)
         if fingerprint is not None:
             fingerprint = re.sub(r'[^0-9A-F]', r'', fingerprint.upper())
             if fingerprint != public_key_fingerprint:
-                raise VerificationException(_("The repository's fingerprint does not match."))
-        data = json.loads(jar.read('index-v1.json').decode())
+                raise VerificationException(
+                    _("The repository's fingerprint does not match.")
+                )
+        for f in jar.namelist():
+            if not f.startswith('META-INF/'):
+                jsonfile = f
+                break
+        data = json.loads(jar.read(jsonfile))
         return data, public_key, public_key_fingerprint
 
 
