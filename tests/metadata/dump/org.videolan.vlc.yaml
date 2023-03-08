@@ -19,7 +19,6 @@ Builds:
   build:
   - cd ../ && ANDROID_ABI=armeabi-v7a ./compile.sh release
   buildjni: []
-  buildozer: false
   commit: 0.0.11
   disable: ''
   encoding: null
@@ -60,7 +59,6 @@ Builds:
   build:
   - cd ../ && ANDROID_ABI=armeabi ./compile.sh release
   buildjni: []
-  buildozer: false
   commit: 0.0.11
   disable: ''
   encoding: null
@@ -101,7 +99,6 @@ Builds:
   build:
   - cd ../ && ANDROID_ABI=x86 ./compile.sh release
   buildjni: []
-  buildozer: false
   commit: unknown - see disabled
   disable: ffmpeg error 0.0.11
   encoding: null
@@ -142,7 +139,6 @@ Builds:
   build:
   - cd ../ && ANDROID_ABI=mips ./compile.sh release
   buildjni: []
-  buildozer: false
   commit: 0.0.11
   disable: ''
   encoding: null
@@ -180,7 +176,6 @@ Builds:
   build:
   - cd ../ && ANDROID_ABI=mips ./compile.sh release
   buildjni: []
-  buildozer: false
   commit: 0.1.3
   disable: build failing (at 0.1.3)
   encoding: null
@@ -220,7 +215,6 @@ Builds:
   build:
   - cd ../ && ANDROID_ABI=x86 ./compile.sh release
   buildjni: []
-  buildozer: false
   commit: 0.1.3
   disable: ''
   encoding: null
@@ -260,7 +254,6 @@ Builds:
   build:
   - cd ../ && ANDROID_ABI=armeabi ./compile.sh release
   buildjni: []
-  buildozer: false
   commit: 0.1.3
   disable: ''
   encoding: null
@@ -300,7 +293,6 @@ Builds:
   build:
   - cd ../ && ANDROID_ABI=armeabi-v7a ./compile.sh release
   buildjni: []
-  buildozer: false
   commit: 0.1.3
   disable: ''
   encoding: null
@@ -340,7 +332,6 @@ Builds:
   build:
   - cd ../ && ANDROID_ABI=x86 ./compile.sh release
   buildjni: []
-  buildozer: false
   commit: 0.9.0
   disable: ''
   encoding: null
@@ -379,7 +370,6 @@ Builds:
   build:
   - cd ../ && ANDROID_ABI=armeabi-v7a ./compile.sh release
   buildjni: []
-  buildozer: false
   commit: 0.9.0
   disable: ''
   encoding: null
@@ -418,7 +408,6 @@ Builds:
   build:
   - cd ../ && ANDROID_ABI=x86 ./compile.sh release
   buildjni: []
-  buildozer: false
   commit: 0.9.1
   disable: ''
   encoding: null
@@ -457,7 +446,6 @@ Builds:
   build:
   - cd ../ && ANDROID_ABI=armeabi-v7a ./compile.sh release
   buildjni: []
-  buildozer: false
   commit: 0.9.1
   disable: ''
   encoding: null
@@ -496,7 +484,6 @@ Builds:
   build:
   - cd ../ && ANDROID_ABI=x86 ./compile.sh release
   buildjni: []
-  buildozer: false
   commit: 0.9.5
   disable: can't download gmp
   encoding: null
@@ -535,7 +522,6 @@ Builds:
   build:
   - cd ../ && ANDROID_ABI=armeabi-v7a ./compile.sh release
   buildjni: []
-  buildozer: false
   commit: 0.9.5
   disable: can't download gmp
   encoding: null
@@ -574,7 +560,6 @@ Builds:
   build:
   - cd ../ && ANDROID_ABI=x86 ./compile.sh release
   buildjni: []
-  buildozer: false
   commit: 0.9.6
   disable: ''
   encoding: null
@@ -613,7 +598,6 @@ Builds:
   build:
   - cd ../ && ANDROID_ABI=armeabi-v7a ./compile.sh release
   buildjni: []
-  buildozer: false
   commit: 0.9.6
   disable: ''
   encoding: null
@@ -652,7 +636,6 @@ Builds:
   build:
   - cd ../ && ANDROID_ABI=x86 ./compile.sh release
   buildjni: []
-  buildozer: false
   commit: 0.9.7
   disable: ''
   encoding: null
@@ -691,7 +674,6 @@ Builds:
   build:
   - cd ../ && ANDROID_ABI=armeabi-v7a ./compile.sh release
   buildjni: []
-  buildozer: false
   commit: 0.9.7
   disable: ''
   encoding: null
@@ -730,7 +712,6 @@ Builds:
   build:
   - cd ../ && ANDROID_ABI=mips ./compile.sh release
   buildjni: []
-  buildozer: false
   commit: 0.9.7.1
   disable: build fails
   encoding: null
@@ -769,7 +750,6 @@ Builds:
   build:
   - cd ../ && ANDROID_ABI=x86 ./compile.sh release
   buildjni: []
-  buildozer: false
   commit: 0.9.7.1
   disable: ''
   encoding: null
@@ -808,7 +788,6 @@ Builds:
   build:
   - cd ../ && ANDROID_ABI=armeabi-v7a ./compile.sh release
   buildjni: []
-  buildozer: false
   commit: 0.9.7.1
   disable: ''
   encoding: null
@@ -847,7 +826,6 @@ Builds:
   build:
   - cd ../ && ANDROID_ABI=x86 ./compile.sh release
   buildjni: []
-  buildozer: false
   commit: 0.9.8
   disable: ''
   encoding: null
@@ -886,7 +864,6 @@ Builds:
   build:
   - cd ../ && ANDROID_ABI=armeabi ./compile.sh release
   buildjni: []
-  buildozer: false
   commit: 0.9.8
   disable: ''
   encoding: null
@@ -925,7 +902,6 @@ Builds:
   build:
   - cd ../ && ANDROID_ABI=armeabi-v7a ./compile.sh release
   buildjni: []
-  buildozer: false
   commit: 0.9.8
   disable: ''
   encoding: null
@@ -964,7 +940,6 @@ Builds:
   build:
   - cd ../ && ANDROID_ABI=x86 ./compile.sh release
   buildjni: []
-  buildozer: false
   commit: 0.9.9
   disable: ''
   encoding: null
@@ -1003,7 +978,6 @@ Builds:
   build:
   - cd ../ && ANDROID_ABI=armeabi ./compile.sh release
   buildjni: []
-  buildozer: false
   commit: 0.9.9
   disable: ''
   encoding: null
@@ -1042,7 +1016,6 @@ Builds:
   build:
   - cd ../ && ANDROID_ABI=armeabi-v7a ./compile.sh release
   buildjni: []
-  buildozer: false
   commit: 0.9.9
   disable: ''
   encoding: null
@@ -1081,7 +1054,6 @@ Builds:
   build:
   - cd ../ && ANDROID_ABI=x86 ./compile.sh release
   buildjni: []
-  buildozer: false
   commit: 0.9.10
   disable: ''
   encoding: null
@@ -1120,7 +1092,6 @@ Builds:
   build:
   - cd ../ && ANDROID_ABI=armeabi ./compile.sh release
   buildjni: []
-  buildozer: false
   commit: 0.9.10
   disable: ''
   encoding: null
@@ -1159,7 +1130,6 @@ Builds:
   build:
   - cd ../ && ANDROID_ABI=armeabi-v7a ./compile.sh release
   buildjni: []
-  buildozer: false
   commit: 0.9.10
   disable: ''
   encoding: null
@@ -1198,7 +1168,6 @@ Builds:
   build:
   - cd ../ && ANDROID_ABI=x86 ./compile.sh release
   buildjni: []
-  buildozer: false
   commit: 1.0.0
   disable: doesn't build
   encoding: null
@@ -1237,7 +1206,6 @@ Builds:
   build:
   - cd ../ && ANDROID_ABI=armeabi ./compile.sh release
   buildjni: []
-  buildozer: false
   commit: 1.0.0
   disable: doesn't build
   encoding: null
@@ -1276,7 +1244,6 @@ Builds:
   build:
   - cd ../ && ANDROID_ABI=armeabi-v7a ./compile.sh release
   buildjni: []
-  buildozer: false
   commit: 1.0.0
   disable: doesn't build
   encoding: null
@@ -1315,7 +1282,6 @@ Builds:
   build:
   - cd ../ && ANDROID_ABI=x86 ./compile.sh release
   buildjni: []
-  buildozer: false
   commit: 1.0.1
   disable: ''
   encoding: null
@@ -1354,7 +1320,6 @@ Builds:
   build:
   - cd ../ && ANDROID_ABI=armeabi ./compile.sh release
   buildjni: []
-  buildozer: false
   commit: 1.0.1
   disable: ''
   encoding: null
@@ -1393,7 +1358,6 @@ Builds:
   build:
   - cd ../ && ANDROID_ABI=armeabi-v7a ./compile.sh release
   buildjni: []
-  buildozer: false
   commit: 1.0.1
   disable: ''
   encoding: null
@@ -1432,7 +1396,6 @@ Builds:
   build:
   - cd ../ && ./compile.sh -a "armeabi" --release
   buildjni: []
-  buildozer: false
   commit: 1.1.3
   disable: ''
   encoding: null
@@ -1473,7 +1436,6 @@ Builds:
   build:
   - cd ../ && ./compile.sh -a "armeabi-v7a" --release
   buildjni: []
-  buildozer: false
   commit: 1.1.3
   disable: ''
   encoding: null
@@ -1514,7 +1476,6 @@ Builds:
   build:
   - cd ../ && ./compile.sh -a "x86" --release
   buildjni: []
-  buildozer: false
   commit: 1.1.3
   disable: ''
   encoding: null
@@ -1555,7 +1516,6 @@ Builds:
   build:
   - cd ../ && ./compile.sh -a "armeabi" --release
   buildjni: []
-  buildozer: false
   commit: 1.1.5
   disable: ''
   encoding: null
@@ -1596,7 +1556,6 @@ Builds:
   build:
   - cd ../ && ./compile.sh -a "armeabi-v7a" --release
   buildjni: []
-  buildozer: false
   commit: 1.1.5
   disable: ''
   encoding: null
@@ -1637,7 +1596,6 @@ Builds:
   build:
   - cd ../ && ./compile.sh -a "x86" --release
   buildjni: []
-  buildozer: false
   commit: 1.1.5
   disable: ''
   encoding: null
@@ -1678,7 +1636,6 @@ Builds:
   build:
   - cd ../ && ./compile.sh -a "armeabi" --release
   buildjni: []
-  buildozer: false
   commit: 1.1.6
   disable: ''
   encoding: null
@@ -1719,7 +1676,6 @@ Builds:
   build:
   - cd ../ && ./compile.sh -a "armeabi-v7a" --release
   buildjni: []
-  buildozer: false
   commit: 1.1.6
   disable: ''
   encoding: null
@@ -1760,7 +1716,6 @@ Builds:
   build:
   - cd ../ && ./compile.sh -a "x86" --release
   buildjni: []
-  buildozer: false
   commit: 1.1.6
   disable: ''
   encoding: null
@@ -1801,7 +1756,6 @@ Builds:
   build:
   - cd ../ && ./compile.sh -a "armeabi" --release
   buildjni: []
-  buildozer: false
   commit: 1.2.0
   disable: ''
   encoding: null
@@ -1842,7 +1796,6 @@ Builds:
   build:
   - cd ../ && ./compile.sh -a "armeabi-v7a" --release
   buildjni: []
-  buildozer: false
   commit: 1.2.0
   disable: ''
   encoding: null
@@ -1883,7 +1836,6 @@ Builds:
   build:
   - cd ../ && ./compile.sh -a "x86" --release
   buildjni: []
-  buildozer: false
   commit: 1.2.0
   disable: ''
   encoding: null
@@ -1924,7 +1876,6 @@ Builds:
   build:
   - cd ../ && ./compile.sh -a "armeabi" --release
   buildjni: []
-  buildozer: false
   commit: 1.2.1
   disable: ''
   encoding: null
@@ -1965,7 +1916,6 @@ Builds:
   build:
   - cd ../ && ./compile.sh -a "armeabi-v7a" --release
   buildjni: []
-  buildozer: false
   commit: 1.2.1
   disable: ''
   encoding: null
@@ -2006,7 +1956,6 @@ Builds:
   build:
   - cd ../ && ./compile.sh -a "x86" --release
   buildjni: []
-  buildozer: false
   commit: 1.2.1
   disable: ''
   encoding: null
@@ -2047,7 +1996,6 @@ Builds:
   build:
   - cd ../ && ./compile.sh -a "armeabi" --release
   buildjni: []
-  buildozer: false
   commit: 1.2.2
   disable: ''
   encoding: null
@@ -2088,7 +2036,6 @@ Builds:
   build:
   - cd ../ && ./compile.sh -a "armeabi-v7a" --release
   buildjni: []
-  buildozer: false
   commit: 1.2.2
   disable: ''
   encoding: null
@@ -2129,7 +2076,6 @@ Builds:
   build:
   - cd ../ && ./compile.sh -a "x86" --release
   buildjni: []
-  buildozer: false
   commit: 1.2.2
   disable: ''
   encoding: null
@@ -2170,7 +2116,6 @@ Builds:
   build:
   - cd ../ && ./compile.sh -a "armeabi" --release
   buildjni: []
-  buildozer: false
   commit: 1.2.3
   disable: ''
   encoding: null
@@ -2211,7 +2156,6 @@ Builds:
   build:
   - cd ../ && ./compile.sh -a "armeabi-v7a" --release
   buildjni: []
-  buildozer: false
   commit: 1.2.3
   disable: ''
   encoding: null
@@ -2252,7 +2196,6 @@ Builds:
   build:
   - cd ../ && ./compile.sh -a "x86" --release
   buildjni: []
-  buildozer: false
   commit: 1.2.3
   disable: ''
   encoding: null
@@ -2293,7 +2236,6 @@ Builds:
   build:
   - cd ../ && ./compile.sh -a "armeabi" --release
   buildjni: []
-  buildozer: false
   commit: 1.2.4
   disable: ''
   encoding: null
@@ -2334,7 +2276,6 @@ Builds:
   build:
   - cd ../ && ./compile.sh -a "armeabi-v7a" --release
   buildjni: []
-  buildozer: false
   commit: 1.2.4
   disable: ''
   encoding: null
@@ -2375,7 +2316,6 @@ Builds:
   build:
   - cd ../ && ./compile.sh -a "x86" --release
   buildjni: []
-  buildozer: false
   commit: 1.2.4
   disable: ''
   encoding: null
@@ -2416,7 +2356,6 @@ Builds:
   build:
   - cd ../ && ./compile.sh -a "armeabi" --release
   buildjni: []
-  buildozer: false
   commit: 1.2.5
   disable: ''
   encoding: null
@@ -2457,7 +2396,6 @@ Builds:
   build:
   - cd ../ && ./compile.sh -a "armeabi-v7a" --release
   buildjni: []
-  buildozer: false
   commit: 1.2.5
   disable: ''
   encoding: null
@@ -2498,7 +2436,6 @@ Builds:
   build:
   - cd ../ && ./compile.sh -a "x86" --release
   buildjni: []
-  buildozer: false
   commit: 1.2.5
   disable: ''
   encoding: null
@@ -2539,7 +2476,6 @@ Builds:
   build:
   - cd ../ && ./compile.sh -a "armeabi" --release
   buildjni: []
-  buildozer: false
   commit: 1.2.6
   disable: ''
   encoding: null
@@ -2580,7 +2516,6 @@ Builds:
   build:
   - cd ../ && ./compile.sh -a "armeabi-v7a" --release
   buildjni: []
-  buildozer: false
   commit: 1.2.6
   disable: ''
   encoding: null
@@ -2621,7 +2556,6 @@ Builds:
   build:
   - cd ../ && ./compile.sh -a "x86" --release
   buildjni: []
-  buildozer: false
   commit: 1.2.6
   disable: ''
   encoding: null

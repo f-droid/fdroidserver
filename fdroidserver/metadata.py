@@ -225,7 +225,6 @@ build_flags = [
     'patch',
     'gradle',
     'maven',
-    'buildozer',
     'output',
     'binary',
     'srclibs',
@@ -266,7 +265,6 @@ class Build(dict):
         self.patch = []
         self.gradle = []
         self.maven = False
-        self.buildozer = False
         self.output = None
         self.binary = None
         self.srclibs = []
@@ -310,7 +308,7 @@ class Build(dict):
             raise AttributeError("No such attribute: " + name)
 
     def build_method(self):
-        for f in ['maven', 'gradle', 'buildozer']:
+        for f in ['maven', 'gradle']:
             if self.get(f):
                 return f
         if self.output:
@@ -321,7 +319,7 @@ class Build(dict):
     def output_method(self):
         if self.output:
             return 'raw'
-        for f in ['maven', 'gradle', 'buildozer']:
+        for f in ['maven', 'gradle']:
             if self.get(f):
                 return f
         return 'ant'
@@ -656,7 +654,7 @@ def post_metadata_parse(app):
         elif v == [False]:
             return ['no']
 
-    _bool_allowed = ('maven', 'buildozer')
+    _bool_allowed = ('maven')
 
     builds = []
     if 'Builds' in app:
@@ -963,7 +961,7 @@ def write_yaml(mf, app):
                     value = getattr(build, field)
                     if field == 'gradle' and value == ['off']:
                         value = [ruamel.yaml.scalarstring.SingleQuotedScalarString('off')]
-                    if field in ('maven', 'buildozer'):
+                    if field in ('maven'):
                         if value == 'no':
                             continue
                     typ = flagtype(field)
