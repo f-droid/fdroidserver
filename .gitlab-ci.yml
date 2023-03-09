@@ -56,6 +56,9 @@ metadata_v0:
     - git checkout $GITCOMMIT
     - cd fdroiddata
     - ../tests/dump_internal_metadata_format.py
+    - sed -i
+          -e "/buildozer/d"
+          metadata/dump_*/*.yaml
     - diff -uw metadata/dump_*
 
 .apt-template: &apt-template

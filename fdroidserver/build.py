@@ -30,7 +30,6 @@ import time
 import requests
 import tempfile
 import argparse
-from configparser import ConfigParser
 import logging
 from gettext import ngettext
 from pathlib import Path
@@ -456,9 +455,6 @@ def build_local(app, build, vcs, build_dir, output_dir, log_dir, srclib_dir, ext
         cmd += ['clean']
         p = FDroidPopen(cmd, cwd=root_dir, envs={"GRADLE_VERSION_DIR": config['gradle_version_dir'], "CACHEDIR": config['cachedir']})
 
-    elif bmethod == 'buildozer':
-        pass
-
     elif bmethod == 'ant':
         logging.info("Cleaning Ant project...")
         p = FDroidPopen(['ant', 'clean'], cwd=root_dir)
@@ -601,73 +597,6 @@ def build_local(app, build, vcs, build_dir, output_dir, log_dir, srclib_dir, ext
 
         bindir = os.path.join(root_dir, 'target')
 
-    elif bmethod == 'buildozer':
-        logging.info("Building Kivy project using buildozer...")
-
-        # parse buildozer.spez
-        spec = os.path.join(root_dir, 'buildozer.spec')
-        if not os.path.exists(spec):
-            raise BuildException("Expected to find buildozer-compatible spec at {0}"
-                                 .format(spec))
-        defaults = {'orientation': 'landscape', 'icon': '',
-                    'permissions': '', 'android.api': "19"}
-        bconfig = ConfigParser(defaults, allow_no_value=True)
-        bconfig.read(spec)
-
-        # update spec with sdk and ndk locations to prevent buildozer from
-        # downloading.
-        loc_ndk = common.env['ANDROID_NDK']
-        loc_sdk = common.env['ANDROID_SDK']
-        if loc_ndk == '$ANDROID_NDK':
-            loc_ndk = loc_sdk + '/ndk-bundle'
-
-        bc_ndk = None
-        bc_sdk = None
-        try:
-            bc_ndk = bconfig.get('app', 'android.sdk_path')
-        except Exception:
-            pass
-        try:
-            bc_sdk = bconfig.get('app', 'android.ndk_path')
-        except Exception:
-            pass
-
-        if bc_sdk is None:
-            bconfig.set('app', 'android.sdk_path', loc_sdk)
-        if bc_ndk is None:
-            bconfig.set('app', 'android.ndk_path', loc_ndk)
-
-        fspec = open(spec, 'w')
-        bconfig.write(fspec)
-        fspec.close()
-
-        logging.info("sdk_path = %s" % loc_sdk)
-        logging.info("ndk_path = %s" % loc_ndk)
-
-        p = None
-        # execute buildozer
-        cmd = ['buildozer', 'android', 'release']
-        try:
-            p = FDroidPopen(cmd, cwd=root_dir)
-        except Exception:
-            pass
-
-        # buidozer not installed ? clone repo and run
-        if (p is None or p.returncode != 0):
-            cmd = ['git', 'clone', 'https://github.com/kivy/buildozer.git']
-            p = subprocess.Popen(cmd, cwd=root_dir, shell=False)
-            p.wait()
-            if p.returncode != 0:
-                raise BuildException("Distribute build failed")
-
-            cmd = ['python', 'buildozer/buildozer/scripts/client.py', 'android', 'release']
-            p = FDroidPopen(cmd, cwd=root_dir)
-
-        # expected to fail.
-        # Signing will fail if not set by environnment vars (cf. p4a docs).
-        # But the unsigned APK will be ok.
-        p.returncode = 0
-
     elif bmethod == 'gradle':
         logging.info("Building Gradle project...")
 
@@ -723,26 +652,6 @@ def build_local(app, build, vcs, build_dir, output_dir, log_dir, srclib_dir, ext
             raise BuildException('Failed to find output')
         src = m.group(1)
         src = os.path.join(bindir, src) + '.apk'
-
-    elif omethod == 'buildozer':
-        src = None
-        for apks_dir in [
-                os.path.join(root_dir, '.buildozer', 'android', 'platform', 'build', 'dists', bconfig.get('app', 'title'), 'bin'),
-                ]:
-            for apkglob in ['*-release-unsigned.apk', '*-unsigned.apk', '*.apk']:
-                apks = glob.glob(os.path.join(apks_dir, apkglob))
-
-                if len(apks) > 1:
-                    raise BuildException('More than one resulting apks found in %s' % apks_dir,
-                                         '\n'.join(apks))
-                if len(apks) == 1:
-                    src = apks[0]
-                    break
-            if src is not None:
-                break
-
-        if src is None:
-            raise BuildException('Failed to find any output apks')
 
     elif omethod == 'gradle':
         src = None
