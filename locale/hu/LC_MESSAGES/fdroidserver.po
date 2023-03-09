@@ -596,9 +596,9 @@ msgid "ERROR: unsupported CI type, patches welcome!"
 msgstr "HIBA: nem támogatott CI típus, foltokat szívesen fogadunk!"
 
 #: ../fdroidserver/nightly.py
-#, fuzzy, python-format
+#, python-format
 msgid "ERROR: unsupported git host \"%s\", patches welcome!"
-msgstr "HIBA: nem támogatott CI típus, foltokat szívesen fogadunk!"
+msgstr ""
 
 #: ../fdroidserver/__main__.py
 #, python-brace-format
@@ -1936,9 +1936,9 @@ msgid "can not parse scrlib spec (not a string): '{}'"
 msgstr ""
 
 #: /usr/lib/python3.9/argparse.py /usr/lib/python3.11/argparse.py
-#, fuzzy, python-format
+#, python-format
 msgid "can't open '%(filename)s': %(error)s"
-msgstr "„%s” nem nyitható meg: %s"
+msgstr "„%(filename)s” nem nyitható meg: %(error)s"
 
 #: ../fdroidserver/scanner.py
 msgid "can't open non-https url: '{};"

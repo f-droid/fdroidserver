@@ -1926,9 +1926,9 @@ msgid "can not parse scrlib spec (not a string): '{}'"
 msgstr ""
 
 #: /usr/lib/python3.9/argparse.py /usr/lib/python3.11/argparse.py
-#, fuzzy, python-format
+#, python-format
 msgid "can't open '%(filename)s': %(error)s"
-msgstr "δεν είναι δυνατό το άνοιγμα του '%s': %s"
+msgstr "δεν είναι δυνατό το άνοιγμα του '%(filename)s': %(error)s"
 
 #: ../fdroidserver/scanner.py
 msgid "can't open non-https url: '{};"
