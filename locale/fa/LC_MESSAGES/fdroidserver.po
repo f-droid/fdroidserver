@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2023-02-21 14:38+0100\n"
+"POT-Creation-Date: 2023-03-09 13:11+0100\n"
 "PO-Revision-Date: 2021-07-27 15:49+0000\n"
 "Last-Translator: Danial Behzadi <dani.behzi@ubuntu.com>\n"
 "Language-Team: Persian <https://hosted.weblate.org/projects/f-droid/fdroidserver/fa/>\n"
@@ -1384,6 +1384,11 @@ msgstr ""
 msgid "Running wget in {path}"
 msgstr ""
 
+#: ../fdroidserver/index.py
+#, python-brace-format
+msgid "SHA-256 of {url} does not match entry!"
+msgstr ""
+
 #: ../fdroidserver/build.py
 msgid "Scan the resulting APK(s) for known non-free classes."
 msgstr ""
@@ -2028,7 +2033,6 @@ msgstr ""
 
 #: ../fdroidserver/scanner.py
 #, fuzzy
-#| msgid "Downloading %s"
 msgid "downloading '{}'"
 msgstr "در حال بارگیری %s"
 
@@ -2288,7 +2292,6 @@ msgstr "آرگومان‌های اختیاری"
 
 #: /usr/lib/python3.11/argparse.py
 #, fuzzy
-#| msgid "Options"
 msgid "options"
 msgstr "انتخاب‌ها"
 
@@ -2566,41 +2569,3 @@ msgid "{} build succeeded"
 msgid_plural "{} builds succeeded"
 msgstr[0] ""
 msgstr[1] ""
-
-#~ msgid "\"repo_pubkey\" must be present in config.yml when using --nosign!"
-#~ msgstr "\"repo_pubkey\" باید در config.yml هنگام استفاده از --nosign وجود داشته باشد!"
-
-#, python-brace-format
-#~ msgid "\"{path}\" is not an accepted format, convert to: {formats}"
-#~ msgstr "\"{path}\" قالب را قبول نکرده است، تبدیل به: {formats}"
-
-#, python-format
-#~ msgid "%(prog)s [options] url"
-#~ msgstr "%(prog)s [گزینه‌ها] نشانی‌وب"
-
-#~ msgid "'sdk_path' not set in 'config.yml'!"
-#~ msgstr "'sdk_path' تنظیم نشده است در 'config.yml'!"
-
-#, python-brace-format
-#~ msgid "'{aapt}' is too old, fdroid requires build-tools-23.0.0 or newer!"
-#~ msgstr "'{aapt}' خیلی قدیمی است، اف‌دروید به build-tools-23.0.0 یا جدیدتر نیاز دارد!"
-
-#, python-brace-format
-#~ msgid "'{apkfilename}' is already installed on {dev}."
-#~ msgstr "'{apkfilename}' قبلاً در {dev} نصب شده است."
-
-#, python-brace-format
-#~ msgid "'{field}' in {linedesc} is obsolete, see docs for current fields:"
-#~ msgstr "'{field}' در {linedesc} منسوخ شده است، برای فیلدهای فعلی به اسناد مراجعه کنید :"
-
-#~ msgid "Add a new application from its source code"
-#~ msgstr "برنامه جدیدی را از کد منبع‌اش اضافه می‌کند"
-
-#~ msgid "Create skeleton metadata files that are missing"
-#~ msgstr "پرونده‌های فراداده اسکلت را که موجود نیستند می‌سازد"
-
-#~ msgid "Dynamically scan APKs post build"
-#~ msgstr "پویش پویای APKها پس از ساخت"
-
-#~ msgid "usage: fdroid [-h|--help|--version] <command> [<args>]"
-#~ msgstr "استفاده: fdroid [-h|--help|--version] <command> [<args>]"

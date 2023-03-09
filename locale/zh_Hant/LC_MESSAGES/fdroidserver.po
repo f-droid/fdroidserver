@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2023-02-21 14:38+0100\n"
+"POT-Creation-Date: 2023-03-09 13:11+0100\n"
 "PO-Revision-Date: 2022-09-06 14:30+0000\n"
 "Last-Translator: Hans-Christoph Steiner <hans@guardianproject.info>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/f-droid/fdroidserver/zh_Hant/>\n"
@@ -1425,6 +1425,11 @@ msgstr "關閉 MD5 檢查以執行首次通過"
 #, python-brace-format
 msgid "Running wget in {path}"
 msgstr "在 {path} 裡執行 wget"
+
+#: ../fdroidserver/index.py
+#, python-brace-format
+msgid "SHA-256 of {url} does not match entry!"
+msgstr ""
 
 #: ../fdroidserver/build.py
 #, fuzzy

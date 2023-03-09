@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2023-02-21 14:38+0100\n"
+"POT-Creation-Date: 2023-03-09 13:11+0100\n"
 "PO-Revision-Date: 2023-02-25 12:43+0000\n"
 "Last-Translator: ssantos <ssantos@web.de>\n"
 "Language-Team: Portuguese (Portugal) <https://hosted.weblate.org/projects/f-droid/fdroidserver/pt_PT/>\n"
@@ -1393,6 +1393,11 @@ msgstr "Executando a primeira passagem com a verificação de MD5 desativada"
 #, python-brace-format
 msgid "Running wget in {path}"
 msgstr "Executando o wget em {path}"
+
+#: ../fdroidserver/index.py
+#, python-brace-format
+msgid "SHA-256 of {url} does not match entry!"
+msgstr ""
 
 #: ../fdroidserver/build.py
 msgid "Scan the resulting APK(s) for known non-free classes."

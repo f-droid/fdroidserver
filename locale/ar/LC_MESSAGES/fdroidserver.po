@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 2.1-273-g54e84d87\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2023-02-21 14:38+0100\n"
+"POT-Creation-Date: 2023-03-09 13:11+0100\n"
 "PO-Revision-Date: 2023-01-16 23:52+0000\n"
 "Last-Translator: Ahmad0a <Ahmad3p@protonmail.com>\n"
 "Language-Team: Arabic <https://hosted.weblate.org/projects/f-droid/fdroidserver/ar/>\n"
@@ -1382,6 +1382,11 @@ msgstr ""
 msgid "Running wget in {path}"
 msgstr ""
 
+#: ../fdroidserver/index.py
+#, python-brace-format
+msgid "SHA-256 of {url} does not match entry!"
+msgstr ""
+
 #: ../fdroidserver/build.py
 msgid "Scan the resulting APK(s) for known non-free classes."
 msgstr ""
@@ -2026,7 +2031,6 @@ msgstr ""
 
 #: ../fdroidserver/scanner.py
 #, fuzzy
-#| msgid "Downloading %s"
 msgid "downloading '{}'"
 msgstr "جاري التحميل %s"
 
@@ -2286,7 +2290,6 @@ msgstr ""
 
 #: /usr/lib/python3.11/argparse.py
 #, fuzzy
-#| msgid "Options"
 msgid "options"
 msgstr "خيارات"
 

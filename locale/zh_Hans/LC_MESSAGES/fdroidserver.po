@@ -30,7 +30,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2023-02-21 14:38+0100\n"
+"POT-Creation-Date: 2023-03-09 13:11+0100\n"
 "PO-Revision-Date: 2023-03-09 02:44+0000\n"
 "Last-Translator: Max Xie <monyxie@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/f-droid/fdroidserver/zh_Hans/>\n"
@@ -1412,6 +1412,11 @@ msgstr "禁用 MD5 检查并运行第一遍"
 #, python-brace-format
 msgid "Running wget in {path}"
 msgstr "在 {path} 中运行 wget"
+
+#: ../fdroidserver/index.py
+#, python-brace-format
+msgid "SHA-256 of {url} does not match entry!"
+msgstr ""
 
 #: ../fdroidserver/build.py
 msgid "Scan the resulting APK(s) for known non-free classes."
