@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: fdroidserver 1.1-680-ge1d3de71\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2023-02-21 14:38+0100\n"
-"PO-Revision-Date: 2023-02-19 20:57+0000\n"
+"PO-Revision-Date: 2023-02-25 12:43+0000\n"
 "Last-Translator: ssantos <ssantos@web.de>\n"
 "Language-Team: Portuguese <https://hosted.weblate.org/projects/f-droid/fdroidserver/pt/>\n"
 "Language: pt\n"
@@ -118,12 +118,12 @@ msgstr "%r não pode ser invocado"
 #: ../fdroidserver/signindex.py
 #, python-format
 msgid "%s did not produce a dict!"
-msgstr ""
+msgstr "%s não produziu um dict!"
 
 #: ../fdroidserver/signindex.py
 #, python-format
 msgid "%s has bad SHA-256: %s"
-msgstr ""
+msgstr "%s tem um SHA-256 ruim: %s"
 
 #: ../fdroidserver/lint.py
 #, python-format
@@ -273,7 +273,7 @@ msgstr "A ferramenta SDK do Android {cmd} não foi encontrada!"
 
 #: ../fdroidserver/lint.py
 msgid "App has NoSourceSince or ArchivePolicy \"0 versions\" but AutoUpdateMode or UpdateCheckMode are not None"
-msgstr ""
+msgstr "A app tem NoSourceSince ou ArchivePolicy \"0 versões\", mas AutoUpdateMode ou UpdateCheckMode não são Nenhum"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
@@ -291,7 +291,7 @@ msgstr "Arquivamento {apkfilename} com assinatura inválida!"
 
 #: ../fdroidserver/lint.py
 msgid "AutoUpdateMode with UpdateCheckMode: HTTP must have a pattern."
-msgstr ""
+msgstr "AutoUpdateMode com UpdateCheckMode: HTTP deve ter um modelo."
 
 #: ../fdroidserver/mirror.py
 msgid "Base URL to mirror, can include the index signing key using the query string: ?fingerprint="
@@ -769,14 +769,14 @@ msgid "Found {apkfilename} at {url}"
 msgstr "{apkfilename} encontrado em {url}"
 
 #: ../fdroidserver/scanner.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Found {count} problems in {filename}"
-msgstr "O scanner encontrou {count} problemas em {appid}:"
+msgstr "{count} problemas encontrados em {filename}"
 
 #: ../fdroidserver/scanner.py
 #, python-brace-format
 msgid "Found {count} warnings in {filename}"
-msgstr ""
+msgstr "{count} avisos encontrados em {filename}"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -921,9 +921,9 @@ msgid "Invalid VercodeOperation: {field}"
 msgstr "VercodeOperation inválido: {field}"
 
 #: ../fdroidserver/lint.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Invalid VercodeOperation: {invalid_ops}"
-msgstr "VercodeOperation inválido: {field}"
+msgstr "VercodeOperation inválido: {invalid_ops}"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -1324,9 +1324,9 @@ msgid "Reading packageName/versionCode/versionName failed, APK invalid: '{apkfil
 msgstr "A leitura de packageName/versionCode/versionName falhou, APK inválido: '{apkfilename}'"
 
 #: ../fdroidserver/common.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Reading packageName/versionCode/versionName failed,APK invalid: '{apkfilename}'"
-msgstr "A leitura de packageName/versionCode/versionName falhou, APK inválido: '{apkfilename}'"
+msgstr "Falha ao ler packageName/versionCode/versionName, APK inválido: '{apkfilename}'"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -1402,9 +1402,9 @@ msgid "Scan the source code of a package"
 msgstr "Analisar o código fonte de um pacote"
 
 #: ../fdroidserver/scanner.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Scanner found {count} problems in {apk}"
-msgstr "O scanner encontrou {count} problemas em {appid}:"
+msgstr "O scanner encontrou {count} problemas em {apk}"
 
 #: ../fdroidserver/scanner.py
 #, python-brace-format
@@ -1733,7 +1733,7 @@ msgstr "UpdateCheckData tem URL inválido: {url}"
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "UpdateCheckData must match the version code as integer (\\d or [0-9]): {codeex}"
-msgstr ""
+msgstr "UpdateCheckData deve corresponder ao código da versão como inteiro (\\d ou [0-9]): {codeex}"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
@@ -1748,7 +1748,7 @@ msgstr "UpdateCheckData não é uma URL válida: {url}"
 #. Translators: https://developer.android.com/studio/build/application-id
 #: ../fdroidserver/lint.py
 msgid "UpdateCheckMode is set but it looks likecheckupdates hasn't been run yet"
-msgstr ""
+msgstr "UpdateCheckMode é definido, mas parece que likecheckupdates ainda não foi executado"
 
 #: ../fdroidserver/lint.py
 msgid "UpdateCheckName is set to the known application ID, it can be removed"
@@ -1927,7 +1927,7 @@ msgstr "argumento \"-\" com o modo %r"
 #: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "argument %(argument_name)s: %(message)s"
-msgstr ""
+msgstr "argumento %(argument_name)s: %(message)s"
 
 #: ../fdroidserver/nightly.py
 msgid "attempting bare SSH connection to test deploy key:"
@@ -1944,7 +1944,7 @@ msgstr "não é possível abrir '%(filename)s': %(error)s"
 
 #: ../fdroidserver/scanner.py
 msgid "can't open non-https url: '{};"
-msgstr ""
+msgstr "não é possível abrir o url não-https: '{};"
 
 #: ../fdroidserver/build.py
 #, python-brace-format
@@ -1993,14 +1993,14 @@ msgstr[0] "cadeia de opções conflitante: %s"
 msgstr[1] "cadeias de opções conflitantes: %s"
 
 #: /usr/lib/python3.11/argparse.py
-#, fuzzy, python-format
+#, python-format
 msgid "conflicting subparser alias: %s"
-msgstr "cadeia de opções conflitante: %s"
+msgstr "alias de subanalisador conflitante: %s"
 
 #: /usr/lib/python3.11/argparse.py
-#, fuzzy, python-format
+#, python-format
 msgid "conflicting subparser: %s"
-msgstr "cadeia de opções conflitante: %s"
+msgstr "subanalisador conflitante: %s"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
@@ -2043,14 +2043,12 @@ msgid "dest= is required for options like %r"
 msgstr "dest = é necessário para opções como %r"
 
 #: ../fdroidserver/scanner.py
-#, fuzzy
 msgid "downloading '{}'"
-msgstr "A descarregar %s"
+msgstr "a descarregar '{}'"
 
 #: ../fdroidserver/scanner.py
-#, fuzzy
 msgid "downloading scanner signatures from '{}' failed"
-msgstr "Esvaziar a assinatura misteriosa de {apkfilename}"
+msgstr "a descarga de assinaturas de scanner de '{}' falhou"
 
 #: ../fdroidserver/scanner.py
 msgid "executable binary, possibly code"
@@ -2089,7 +2087,7 @@ msgstr "fdroid [<comando>] [-h|--help|--version|<args>]"
 
 #: ../fdroidserver/scanner.py
 msgid "fetch the latest version of signatures from the web"
-msgstr ""
+msgstr "buscar a versão de assinaturas mais recente da Web"
 
 #: /usr/lib/python3.11/optparse.py
 msgid "floating-point"
@@ -2158,7 +2156,7 @@ msgstr "Opção cadeia %(option)r inválida: deve começar com o caractere %(pre
 
 #: ../fdroidserver/common.py
 msgid "ipfs_cid not found, skipping CIDv1 generation"
-msgstr ""
+msgstr "ipfs_cid não encontrado, a ignorar a geração de CIDv1"
 
 #: ../fdroidserver/checkupdates.py
 #, python-brace-format
@@ -2192,7 +2190,7 @@ msgstr "argumentos mutuamente exclusivos devem ser opcional"
 #: ../fdroidserver/scanner.py
 #, python-brace-format
 msgid "next {name} cache update due in {time}"
-msgstr ""
+msgstr "próxima atualização do cache {name} prevista para {time}"
 
 #: ../fdroidserver/mirror.py
 #, python-brace-format
@@ -2303,9 +2301,8 @@ msgid "optional arguments"
 msgstr "argumentos opcionais"
 
 #: /usr/lib/python3.11/argparse.py
-#, fuzzy
 msgid "options"
-msgstr "Opções"
+msgstr "opções"
 
 #: ../fdroidserver/nightly.py
 #, python-brace-format
@@ -2349,7 +2346,7 @@ msgstr "s3cmd sincroniza índices {path} para {url} e apaga"
 #: ../fdroidserver/scanner.py
 #, python-brace-format
 msgid "scanner cache is malformed! You can clear it with: '{clear}'"
-msgstr ""
+msgstr "o cache do scanner está malformado! Pode limpá-lo com: '{clear}'"
 
 #: ../fdroidserver/scanner.py
 msgid "shared library"
