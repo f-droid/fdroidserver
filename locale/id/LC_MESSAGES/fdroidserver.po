@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 1.1-680-ge1d3de71\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2023-02-21 14:38+0100\n"
+"POT-Creation-Date: 2023-03-09 13:11+0100\n"
 "PO-Revision-Date: 2021-06-23 23:32+0000\n"
 "Last-Translator: whenwesober <naomi16i_1298q@cikuh.com>\n"
 "Language-Team: Indonesian <https://hosted.weblate.org/projects/f-droid/fdroidserver/id/>\n"
@@ -1384,6 +1384,11 @@ msgstr ""
 #: ../fdroidserver/mirror.py
 #, python-brace-format
 msgid "Running wget in {path}"
+msgstr ""
+
+#: ../fdroidserver/index.py
+#, python-brace-format
+msgid "SHA-256 of {url} does not match entry!"
 msgstr ""
 
 #: ../fdroidserver/build.py
