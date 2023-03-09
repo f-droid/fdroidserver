@@ -24,13 +24,14 @@
 # Xu ZhuoHan <yylteam@hotmail.com>, 2022.
 # Xiang Heng Wei <yylteam@hotmail.com>, 2022, 2023.
 # RainSlide <RainSlide@outlook.com>, 2023.
+# Eric <hamburger2048@users.noreply.hosted.weblate.org>, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2023-02-21 14:38+0100\n"
-"PO-Revision-Date: 2023-02-14 00:18+0000\n"
-"Last-Translator: Xiang Heng Wei <yylteam@hotmail.com>\n"
+"PO-Revision-Date: 2023-02-23 18:22+0000\n"
+"Last-Translator: Eric <hamburger2048@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/f-droid/fdroidserver/zh_Hans/>\n"
 "Language: zh_Hans\n"
 "MIME-Version: 1.0\n"
@@ -787,9 +788,9 @@ msgid "Found {apkfilename} at {url}"
 msgstr "在{url}发现{apkfilename}"
 
 #: ../fdroidserver/scanner.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Found {count} problems in {filename}"
-msgstr "扫描仪在 {appid} 中发现 {count} 个问题："
+msgstr "发现了 {count} 个问题，扫描对象 {filename}"
 
 #: ../fdroidserver/scanner.py
 #, python-brace-format
@@ -939,9 +940,9 @@ msgid "Invalid VercodeOperation: {field}"
 msgstr "无效的 VercodeOperation：{field}"
 
 #: ../fdroidserver/lint.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Invalid VercodeOperation: {invalid_ops}"
-msgstr "无效的 VercodeOperation：{field}"
+msgstr "无效的 VercodeOperation：{invalid_ops}"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -1342,7 +1343,7 @@ msgid "Reading packageName/versionCode/versionName failed, APK invalid: '{apkfil
 msgstr "读取 packageName/versionCode/versionName 失败，APK 无效：'{apkfilename}'"
 
 #: ../fdroidserver/common.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Reading packageName/versionCode/versionName failed,APK invalid: '{apkfilename}'"
 msgstr "读取 packageName/versionCode/versionName 失败，APK 无效：'{apkfilename}'"
 
@@ -1420,9 +1421,9 @@ msgid "Scan the source code of a package"
 msgstr "扫描一个应用的源代码"
 
 #: ../fdroidserver/scanner.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Scanner found {count} problems in {apk}"
-msgstr "扫描仪在 {appid} 中发现 {count} 个问题："
+msgstr "扫描仪发现了 {count} 个问题，扫描对象 {apk}"
 
 #: ../fdroidserver/scanner.py
 #, python-brace-format
@@ -2009,14 +2010,14 @@ msgid_plural "conflicting option strings: %s"
 msgstr[0] "有冲突的选项字串：%s"
 
 #: /usr/lib/python3.11/argparse.py
-#, fuzzy, python-format
+#, python-format
 msgid "conflicting subparser alias: %s"
-msgstr "有冲突的选项字串：%s"
+msgstr "有冲突的子解析器别名：%s"
 
 #: /usr/lib/python3.11/argparse.py
-#, fuzzy, python-format
+#, python-format
 msgid "conflicting subparser: %s"
-msgstr "有冲突的选项字串：%s"
+msgstr "有冲突的子解析器：%s"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
@@ -2059,14 +2060,12 @@ msgid "dest= is required for options like %r"
 msgstr ""
 
 #: ../fdroidserver/scanner.py
-#, fuzzy
 msgid "downloading '{}'"
-msgstr "正在下载 %s"
+msgstr "正在下载 '{}'"
 
 #: ../fdroidserver/scanner.py
-#, fuzzy
 msgid "downloading scanner signatures from '{}' failed"
-msgstr "从 {apkfilename} 中剥离神秘签名"
+msgstr "从 '{}' 下载扫描仪特征失败了"
 
 #: ../fdroidserver/scanner.py
 msgid "executable binary, possibly code"
@@ -2318,7 +2317,6 @@ msgid "optional arguments"
 msgstr "可选参数"
 
 #: /usr/lib/python3.11/argparse.py
-#, fuzzy
 msgid "options"
 msgstr "选项"
 
