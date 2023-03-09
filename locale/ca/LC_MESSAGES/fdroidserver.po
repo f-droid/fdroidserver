@@ -651,10 +651,6 @@ msgstr ""
 msgid "Don't create a source tarball, useful when testing a build"
 msgstr ""
 
-#: ../fdroidserver/stats.py
-msgid "Don't do anything logs-related"
-msgstr ""
-
 #: ../fdroidserver/build.py
 msgid "Don't refresh the repository, useful when testing a build with no internet connection"
 msgstr ""
@@ -666,10 +662,6 @@ msgstr ""
 
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Download complete mirrors of small repos"
-msgstr ""
-
-#: ../fdroidserver/stats.py
-msgid "Download logs we don't have"
 msgstr ""
 
 #: ../fdroidserver/common.py
@@ -835,7 +827,7 @@ msgstr ""
 msgid "File disappeared while processing it: {path}"
 msgstr ""
 
-#: ../fdroidserver/verify.py ../fdroidserver/stats.py ../fdroidserver/update.py
+#: ../fdroidserver/verify.py ../fdroidserver/update.py
 #: ../fdroidserver/rewritemeta.py ../fdroidserver/build.py
 #: ../fdroidserver/checkupdates.py ../fdroidserver/scanner.py
 #: ../fdroidserver/install.py
@@ -1581,10 +1573,6 @@ msgstr ""
 msgid "Reading {apkfilename} from cache"
 msgstr ""
 
-#: ../fdroidserver/stats.py
-msgid "Recalculate aggregate stats - use when changes have been made that would invalidate old cached data."
-msgstr ""
-
 #: ../fdroidserver/common.py
 msgid "Removing specified files"
 msgstr ""
@@ -2057,10 +2045,6 @@ msgstr ""
 
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Update the binary transparency log for a URL"
-msgstr ""
-
-#: ../fdroid ../fdroidserver/__main__.py
-msgid "Update the stats of the repo"
 msgstr ""
 
 #: ../fdroidserver/update.py ../fdroidserver/build.py
