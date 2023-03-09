@@ -112,7 +112,7 @@ msgstr "\"{path}\" bukan format yang diterima, dikonversi ke: {formats}"
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "\"{path}\" is signed by a key that is not allowed:"
-msgstr "\"{path}\" ditanda tangani oleh kunci yang tidak diperbolehkan:"
+msgstr "\"{path}\" ditandatangani oleh kunci yang tidak diperbolehkan:"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -278,7 +278,7 @@ msgstr "Tambah aplikasi baru dari kode sumbernya"
 #: ../fdroidserver/update.py
 msgid "Add a repo signing key to an unsigned repo"
 msgstr ""
-"Tambah sebuah kunci penanda tangan repo ke repo yang tidak ditanda tangani"
+"Tambahkan sebuah kunci penandatangan repo ke repo yang tidak ditandatangani"
 
 #: ../fdroidserver/update.py
 msgid "Add skeleton metadata files for APKs that are missing them"
