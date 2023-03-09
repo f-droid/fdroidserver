@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2023-02-21 14:38+0100\n"
-"PO-Revision-Date: 2023-01-16 14:02+0000\n"
+"PO-Revision-Date: 2023-02-23 18:22+0000\n"
 "Last-Translator: Ihor Hordiichuk <igor_ck@outlook.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/f-droid/fdroidserver/uk/>\n"
 "Language: uk\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.15.1-dev\n"
+"X-Generator: Weblate 4.16-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -122,12 +122,12 @@ msgstr "%r не можна викликати"
 #: ../fdroidserver/signindex.py
 #, python-format
 msgid "%s did not produce a dict!"
-msgstr ""
+msgstr "%s не створює dict!"
 
 #: ../fdroidserver/signindex.py
 #, python-format
 msgid "%s has bad SHA-256: %s"
-msgstr ""
+msgstr "%s має неправильний SHA-256: %s"
 
 #: ../fdroidserver/lint.py
 #, python-format
@@ -277,7 +277,7 @@ msgstr "Інструмент Android SDK {cmd} не знайдено!"
 
 #: ../fdroidserver/lint.py
 msgid "App has NoSourceSince or ArchivePolicy \"0 versions\" but AutoUpdateMode or UpdateCheckMode are not None"
-msgstr ""
+msgstr "Застосунок має NoSourceSince або ArchivePolicy «0 версій», але AutoUpdateMode або UpdateCheckMode не дорівнюють None"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
@@ -295,7 +295,7 @@ msgstr "Архівую {apkfilename} з неправильним підписо�
 
 #: ../fdroidserver/lint.py
 msgid "AutoUpdateMode with UpdateCheckMode: HTTP must have a pattern."
-msgstr ""
+msgstr "AutoUpdateMode з UpdateCheckMode: HTTP повинен мати шаблон."
 
 #: ../fdroidserver/mirror.py
 msgid "Base URL to mirror, can include the index signing key using the query string: ?fingerprint="
@@ -774,14 +774,14 @@ msgid "Found {apkfilename} at {url}"
 msgstr "Знайдено {apkfilename} у {url}"
 
 #: ../fdroidserver/scanner.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Found {count} problems in {filename}"
-msgstr "Зчитувач знайшов {count} проблеми в {appid}:"
+msgstr "Виявлено {count} проблем у {filename}"
 
 #: ../fdroidserver/scanner.py
 #, python-brace-format
 msgid "Found {count} warnings in {filename}"
-msgstr ""
+msgstr "Знайдено {count} попередження в {filename}"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -926,9 +926,9 @@ msgid "Invalid VercodeOperation: {field}"
 msgstr "Недійсна VercodeOperation: {field}"
 
 #: ../fdroidserver/lint.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Invalid VercodeOperation: {invalid_ops}"
-msgstr "Недійсна VercodeOperation: {field}"
+msgstr "Недійсна VercodeOperation: {invalid_ops}"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -1329,9 +1329,9 @@ msgid "Reading packageName/versionCode/versionName failed, APK invalid: '{apkfil
 msgstr "Помилка packageName/versionCode/versionName, APK недійсне: '{apkfilename}'"
 
 #: ../fdroidserver/common.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Reading packageName/versionCode/versionName failed,APK invalid: '{apkfilename}'"
-msgstr "Помилка packageName/versionCode/versionName, APK недійсне: '{apkfilename}'"
+msgstr "Не вдалося прочитати packageName/versionCode/versionName failed, APK недійсний: '{apkfilename}'"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -1407,9 +1407,9 @@ msgid "Scan the source code of a package"
 msgstr "Сканування початкового коду пакунка"
 
 #: ../fdroidserver/scanner.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Scanner found {count} problems in {apk}"
-msgstr "Зчитувач знайшов {count} проблеми в {appid}:"
+msgstr "Зчитувач знайшов {count} проблеми в {apk}"
 
 #: ../fdroidserver/scanner.py
 #, python-brace-format
@@ -1739,7 +1739,7 @@ msgstr "UpdateCheckData має недійсну URL-адресу: {url}"
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "UpdateCheckData must match the version code as integer (\\d or [0-9]): {codeex}"
-msgstr ""
+msgstr "UpdateCheckData повинен відповідати коду версії як ціле число (\\d або [0-9]): {codeex}"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
@@ -1754,7 +1754,7 @@ msgstr "UpdateCheckData не є дійсною URL-адресою: {url}"
 #. Translators: https://developer.android.com/studio/build/application-id
 #: ../fdroidserver/lint.py
 msgid "UpdateCheckMode is set but it looks likecheckupdates hasn't been run yet"
-msgstr ""
+msgstr "UpdateCheckMode налаштовано, але схоже, що команду checkupdates ще не було запущено"
 
 #: ../fdroidserver/lint.py
 msgid "UpdateCheckName is set to the known application ID, it can be removed"
@@ -1933,7 +1933,7 @@ msgstr "аргумент \"-\" в режимі %r"
 #: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "argument %(argument_name)s: %(message)s"
-msgstr ""
+msgstr "аргумент %(argument_name)s: %(message)s"
 
 #: ../fdroidserver/nightly.py
 msgid "attempting bare SSH connection to test deploy key:"
@@ -1950,7 +1950,7 @@ msgstr "не вдалося відкрити «%(filename)s»: %(error)s"
 
 #: ../fdroidserver/scanner.py
 msgid "can't open non-https url: '{};"
-msgstr ""
+msgstr "не вдалося відкрити не-https url: '{};"
 
 #: ../fdroidserver/build.py
 #, python-brace-format
@@ -2000,14 +2000,14 @@ msgstr[1] "суперечних рядка параметра: %s"
 msgstr[2] "суперечних рядків параметра: %s"
 
 #: /usr/lib/python3.11/argparse.py
-#, fuzzy, python-format
+#, python-format
 msgid "conflicting subparser alias: %s"
-msgstr "суперечний рядок параметра: %s"
+msgstr "конфліктний псевдонім субпарсера: %s"
 
 #: /usr/lib/python3.11/argparse.py
-#, fuzzy, python-format
+#, python-format
 msgid "conflicting subparser: %s"
-msgstr "суперечний рядок параметра: %s"
+msgstr "конфліктний субпарсер: %s"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
@@ -2050,14 +2050,12 @@ msgid "dest= is required for options like %r"
 msgstr "dest= потрібен для таких варіантів, як %r"
 
 #: ../fdroidserver/scanner.py
-#, fuzzy
 msgid "downloading '{}'"
-msgstr "Завантаження %s"
+msgstr "завантаження '{}'"
 
 #: ../fdroidserver/scanner.py
-#, fuzzy
 msgid "downloading scanner signatures from '{}' failed"
-msgstr "Видалення невідомого підпису для {apkfilename}"
+msgstr "не вдалося завантажити підписи сканера з '{}'"
 
 #: ../fdroidserver/scanner.py
 msgid "executable binary, possibly code"
@@ -2097,7 +2095,7 @@ msgstr "fdroid [<команда>] [-h|--help|--version|<аргументи>]"
 
 #: ../fdroidserver/scanner.py
 msgid "fetch the latest version of signatures from the web"
-msgstr ""
+msgstr "отримати останню версію підписів з інтернету"
 
 #: /usr/lib/python3.11/optparse.py
 msgid "floating-point"
@@ -2166,7 +2164,7 @@ msgstr "неправильний рядок параметра %(option)r: по�
 
 #: ../fdroidserver/common.py
 msgid "ipfs_cid not found, skipping CIDv1 generation"
-msgstr ""
+msgstr "ipfs_cid не знайдено, пропускаємо генерацію CIDv1"
 
 #: ../fdroidserver/checkupdates.py
 #, python-brace-format
@@ -2200,7 +2198,7 @@ msgstr "взаємозаперечні аргументи повинні бут�
 #: ../fdroidserver/scanner.py
 #, python-brace-format
 msgid "next {name} cache update due in {time}"
-msgstr ""
+msgstr "наступне оновлення кешу {name} відбудеться {time}"
 
 #: ../fdroidserver/mirror.py
 #, python-brace-format
@@ -2311,9 +2309,8 @@ msgid "optional arguments"
 msgstr "необов'язкові аргументи"
 
 #: /usr/lib/python3.11/argparse.py
-#, fuzzy
 msgid "options"
-msgstr "Параметри"
+msgstr "параметри"
 
 #: ../fdroidserver/nightly.py
 #, python-brace-format
@@ -2357,7 +2354,7 @@ msgstr "s3cmd синхронізувати індекси з {path} до {url} �
 #: ../fdroidserver/scanner.py
 #, python-brace-format
 msgid "scanner cache is malformed! You can clear it with: '{clear}'"
-msgstr ""
+msgstr "кеш сканера пошкоджено! Ви можете очистити його за допомогою: '{clear}'"
 
 #: ../fdroidserver/scanner.py
 msgid "shared library"
