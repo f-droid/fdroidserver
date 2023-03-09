@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 2.0a5-27-gf24eae0f\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2023-02-21 14:38+0100\n"
+"POT-Creation-Date: 2023-03-09 13:11+0100\n"
 "PO-Revision-Date: 2021-01-16 21:23+0000\n"
 "Last-Translator: Aled Powell <aled@aledpowell.cymru>\n"
 "Language-Team: Welsh <https://hosted.weblate.org/projects/f-droid/fdroidserver/cy/>\n"
@@ -1390,6 +1390,11 @@ msgstr ""
 msgid "Running wget in {path}"
 msgstr ""
 
+#: ../fdroidserver/index.py
+#, python-brace-format
+msgid "SHA-256 of {url} does not match entry!"
+msgstr ""
+
 #: ../fdroidserver/build.py
 msgid "Scan the resulting APK(s) for known non-free classes."
 msgstr ""
@@ -1939,9 +1944,9 @@ msgid "can not parse scrlib spec (not a string): '{}'"
 msgstr ""
 
 #: /usr/lib/python3.9/argparse.py /usr/lib/python3.11/argparse.py
-#, fuzzy, python-format
+#, python-format
 msgid "can't open '%(filename)s': %(error)s"
-msgstr "methu agor '%s': %s"
+msgstr "methu agor '%(filename)s': %(error)s"
 
 #: ../fdroidserver/scanner.py
 msgid "can't open non-https url: '{};"

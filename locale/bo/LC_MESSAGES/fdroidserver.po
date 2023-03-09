@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2023-02-21 14:38+0100\n"
+"POT-Creation-Date: 2023-03-09 13:11+0100\n"
 "PO-Revision-Date: 2022-09-06 14:30+0000\n"
 "Last-Translator: Hans-Christoph Steiner <hans@guardianproject.info>\n"
 "Language-Team: Tibetan <https://hosted.weblate.org/projects/f-droid/fdroidserver/bo/>\n"
@@ -595,9 +595,9 @@ msgid "ERROR: unsupported CI type, patches welcome!"
 msgstr "ནོར་འཁྲུལ།: རྒྱབ་སྐྱོར་མེད་པའི་CI རྣམ་གྲངས་དང་ལྷན་པ་རྒྱབ་ནའང་འགྲིག་གི་ཡོད།!"
 
 #: ../fdroidserver/nightly.py
-#, fuzzy, python-format
+#, python-format
 msgid "ERROR: unsupported git host \"%s\", patches welcome!"
-msgstr "ནོར་འཁྲུལ།: རྒྱབ་སྐྱོར་མེད་པའི་CI རྣམ་གྲངས་དང་ལྷན་པ་རྒྱབ་ནའང་འགྲིག་གི་ཡོད།!"
+msgstr ""
 
 #: ../fdroidserver/__main__.py
 #, python-brace-format
@@ -1401,6 +1401,11 @@ msgstr "MD5 ཚོད་ལྟ་བེད་སྤྱོད་མེད་པ�
 msgid "Running wget in {path}"
 msgstr "སྐྱར་བྲིས་ཡོད་།{path}"
 
+#: ../fdroidserver/index.py
+#, python-brace-format
+msgid "SHA-256 of {url} does not match entry!"
+msgstr ""
+
 #: ../fdroidserver/build.py
 msgid "Scan the resulting APK(s) for known non-free classes."
 msgstr ""
@@ -1943,9 +1948,9 @@ msgid "can not parse scrlib spec (not a string): '{}'"
 msgstr ""
 
 #: /usr/lib/python3.9/argparse.py /usr/lib/python3.11/argparse.py
-#, fuzzy, python-format
+#, python-format
 msgid "can't open '%(filename)s': %(error)s"
-msgstr "ཁ་ཕྱེས་ཐུབ་མ་སོང་།'%s 1': %s 2"
+msgstr "ཁ་ཕྱེས་ཐུབ་མ་སོང་།'%(filename)s': %(error)s"
 
 #: ../fdroidserver/scanner.py
 msgid "can't open non-https url: '{};"

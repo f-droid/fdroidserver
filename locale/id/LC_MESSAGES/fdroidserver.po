@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 1.1-680-ge1d3de71\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2022-02-15 20:04+0100\n"
+"POT-Creation-Date: 2023-02-21 14:38+0100\n"
 "PO-Revision-Date: 2021-06-23 23:32+0000\n"
 "Last-Translator: whenwesober <naomi16i_1298q@cikuh.com>\n"
 "Language-Team: Indonesian <https://hosted.weblate.org/projects/f-droid/fdroidserver/id/>\n"
@@ -17,24 +17,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Weblate 4.7.1-dev\n"
-
-#: ../fdroidserver/common.py
-msgid ""
-"\n"
-"        This is a repository of apps to be used with FDroid. Applications in this\n"
-"        repository are either official binaries built by the original application\n"
-"        developers, or are binaries built from source by f-droid.org using the\n"
-"        tools on https://gitlab.com/fdroid.\n"
-"        "
-msgstr ""
-
-#: ../fdroidserver/nightly.py
-msgid ""
-"\n"
-"SSH Public Key to be used as Deploy Key:"
-msgstr ""
-"\n"
-"Kunci Publik SSH yang akan digunakan sebagai Kunci Deploy:"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -50,6 +32,8 @@ msgid ""
 "\n"
 "{path} encoded for the DEBUG_KEYSTORE secret variable:"
 msgstr ""
+"\n"
+"{path} dienkode untuk variabel rahasia DEBUG_KEYSTORE:"
 
 #: ../fdroidserver/lint.py
 #, python-format
@@ -59,11 +43,7 @@ msgstr "\"%s/\" tidak ada kesesuaian pada berkas metadata!"
 #: ../fdroidserver/index.py
 #, python-brace-format
 msgid "\"local_copy_dir\" {path} does not exist!"
-msgstr ""
-
-#: ../fdroidserver/index.py
-msgid "\"repo_pubkey\" must be present in config.yml when using --nosign!"
-msgstr ""
+msgstr "\"local_copy_dir\" {path} tidak ada!"
 
 #: ../fdroidserver/install.py
 #, python-brace-format
@@ -80,7 +60,7 @@ msgstr "\"{path}\" berisi {name}({version}) kadaluarsa"
 msgid "\"{path}\" contains recent {name} ({version})"
 msgstr "\"{path}\" berisi {name}({version}) sekarang"
 
-#: ../fdroidserver/deploy.py ../fdroidserver/upload.py
+#: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "\"{path}\" exists but s3cmd is not installed!"
 msgstr "\"{path}\" ada tetapi s3cmd tidak terpasang!"
@@ -90,35 +70,27 @@ msgstr "\"{path}\" ada tetapi s3cmd tidak terpasang!"
 msgid "\"{path}\" is not a supported file format (use: metadata/*.yml)"
 msgstr "\"{path}\" format berkas tidak didukung (gunakan: metadata/*.yml)"
 
-#: ../fdroidserver/metadata.py
-#, python-brace-format
-msgid "\"{path}\" is not an accepted format, convert to: {formats}"
-msgstr "\"{path}\" bukan format yang diterima, dikonversi ke: {formats}"
-
 #: ../fdroidserver/update.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "\"{path}\" is signed by a key that is not allowed:"
-msgstr "\"{path}\" ada tetapi s3cmd tidak terpasang!"
+msgstr "\"{path}\" ditandatangani oleh kunci yang tidak diperbolehkan:"
 
-#: ../fdroidserver/common.py
+#: ../fdroidserver/import_subcommand.py
 #, python-brace-format
 msgid "\"{url}\" is not a valid URL!"
 msgstr "\"{url}\" URL tudak valid!"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
-#: /usr/lib/python3.7/optparse.py
+#: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
+#: /usr/lib/python3.11/optparse.py
 #, python-format
 msgid "%(option)s option requires %(number)d argument"
 msgid_plural "%(option)s option requires %(number)d arguments"
 msgstr[0] "opsi %(option)s memerlukan argumen sebanyak %(number)d"
 
-#: ../fdroidserver/mirror.py
-#, python-format
-msgid "%(prog)s [options] url"
-msgstr "%(prog)s [opsi] url"
-
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py
+#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
+#: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "%(prog)s: error: %(message)s\n"
 msgstr "%(prog)s: galat: %(message)s\n"
@@ -129,15 +101,27 @@ msgid "%d problems found"
 msgstr "%d terdapat masalah"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
-#: /usr/lib/python3.7/optparse.py
+#: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
+#: /usr/lib/python3.11/optparse.py
 msgid "%prog [options]"
 msgstr "%prog [opsi]"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py
+#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
+#: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "%r is not callable"
 msgstr "%r tidak bisa dipanggil"
+
+#: ../fdroidserver/signindex.py
+#, python-format
+msgid "%s did not produce a dict!"
+msgstr ""
+
+#: ../fdroidserver/signindex.py
+#, python-format
+msgid "%s has bad SHA-256: %s"
+msgstr ""
 
 #: ../fdroidserver/lint.py
 #, python-format
@@ -145,12 +129,13 @@ msgid "%s is not an accepted build field"
 msgstr "%s bukan bidang build yang diterima"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
-#: /usr/lib/python3.7/optparse.py
+#: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
+#: /usr/lib/python3.11/optparse.py
 #, python-format
 msgid "%s option does not take a value"
 msgstr "%s opsi tidak mengambil nilai"
 
-#: ../fdroidserver/index.py ../fdroidserver/common.py
+#: ../fdroidserver/common.py
 msgid "'keypass' not found in config.yml!"
 msgstr "'keypass' tidak ditemukan dalam config.yml!"
 
@@ -158,59 +143,37 @@ msgstr "'keypass' tidak ditemukan dalam config.yml!"
 msgid "'keystore' is NONE and 'smartcardoptions' is blank!"
 msgstr "'keystore' adalah NONE dan 'smartcardoptions' kosong!"
 
-#: ../fdroidserver/index.py ../fdroidserver/common.py
+#: ../fdroidserver/common.py
 msgid "'keystore' not found in config.yml!"
 msgstr "'keystore' tidak ditemukan dalam config.yml!"
 
-#: ../fdroidserver/index.py ../fdroidserver/common.py
+#: ../fdroidserver/common.py
 msgid "'keystorepass' not found in config.yml!"
 msgstr "'keystorepass' tidak ditemukan dalam config.yml!"
 
-#: ../fdroidserver/index.py ../fdroidserver/common.py
+#: ../fdroidserver/common.py
 msgid "'repo_keyalias' not found in config.yml!"
 msgstr "'repo_keyalias' tidak ditemukan dalam config.yml!"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py
+#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
+#: /usr/lib/python3.11/argparse.py
 msgid "'required' is an invalid argument for positionals"
 msgstr ""
 
 #: ../fdroidserver/common.py
-msgid "'sdk_path' not set in 'config.yml'!"
-msgstr ""
-
-#: ../fdroidserver/common.py
-#, fuzzy
 msgid "'sdk_path' not set in config.yml!"
-msgstr "'keypass' tidak ditemukan dalam config.yml!"
-
-#. Translators: "build-tools" is the file name of a package from
-#. Google, it is part of the Android SDK. So it probably shouldn't be
-#. translated or transliterated.
-#: ../fdroidserver/common.py
-#, python-brace-format
-msgid "'{aapt}' is too old, fdroid requires build-tools-23.0.0 or newer!"
-msgstr ""
+msgstr "'sdk_path' belum diatur di config.yml!"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "'{aapt}' is too old, fdroid requires build-tools-{version} or newer!"
-msgstr ""
-
-#: ../fdroidserver/install.py
-#, python-brace-format
-msgid "'{apkfilename}' is already installed on {dev}."
-msgstr "'{apkfilename}' sudah terpasang di {dev}."
-
-#: ../fdroidserver/metadata.py
-#, python-brace-format
-msgid "'{field}' in {linedesc} is obsolete, see docs for current fields:"
-msgstr ""
+msgstr "'{aapt}' terlalu usang, fdroid memerlukan build-tools-{version} atau yang lebih baru!"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "'{field}' will be in random order! Use () or [] brackets if order is important!"
-msgstr ""
+msgstr "'{field}' akan dalam urutan acak! Gunakan kurung () atau [] jika urutan tersebut penting!"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -228,33 +191,26 @@ msgid "...checkupdate failed for {appid} : {error}"
 msgstr ""
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py
+#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
+#: /usr/lib/python3.11/argparse.py
 msgid ".__call__() not defined"
 msgstr ".__call__() tidak didefinisikan"
 
-#: ../fdroidserver/metadata.py
-msgid ".fdroid.txt is not supported!  Convert to .fdroid.yml or .fdroid.json."
-msgstr ".fdroid.txt tudak didukung!  Konfersi ke .fdroid.yml atau .fdroid.json."
-
 #: ../fdroidserver/lint.py
 msgid "/issues is missing"
-msgstr ""
+msgstr "/issues tidak ada"
 
 #: ../fdroidserver/mirror.py
 msgid "A URL is required as an argument!"
 msgstr "URL diperlukan sebagai argumen!"
 
-#: ../fdroid ../fdroidserver/__main__.py
+#: ../fdroidserver/__main__.py
 msgid "Add PGP signatures using GnuPG for packages in repo"
-msgstr ""
-
-#: ../fdroid ../fdroidserver/__main__.py
-msgid "Add a new application from its source code"
-msgstr "Tambah aplikasi baru dari kode sumbernya"
+msgstr "Tambah tanda tangan PGP menggunakan GnuPG untuk paket di repo"
 
 #: ../fdroidserver/update.py
 msgid "Add a repo signing key to an unsigned repo"
-msgstr ""
+msgstr "Tambahkan sebuah kunci penandatangan repo ke repo yang tidak ditandatangani"
 
 #: ../fdroidserver/update.py
 msgid "Add skeleton metadata files for APKs that are missing them"
@@ -269,7 +225,7 @@ msgstr "Menambahkan repo baru hanya untuk {name}"
 msgid "Alias of the repo signing key in the keystore"
 msgstr ""
 
-#: ../fdroidserver/import.py
+#: ../fdroidserver/import_subcommand.py
 msgid "Allows a different revision (or git branch) to be specified for the initial import"
 msgstr ""
 
@@ -293,18 +249,9 @@ msgstr ""
 msgid "Android DEX code"
 msgstr ""
 
-#: ../fdroidserver/common.py ../fdroidserver/build.py
-#, python-brace-format
-msgid "Android SDK '{path}' does not have '{dirname}' installed!"
-msgstr ""
-
 #: ../fdroidserver/init.py
 #, python-brace-format
 msgid "Android SDK not found at {path}!"
-msgstr ""
-
-#: ../fdroidserver/common.py
-msgid "Android SDK not found!"
 msgstr ""
 
 #: ../fdroidserver/common.py
@@ -319,24 +266,11 @@ msgstr ""
 
 #: ../fdroidserver/common.py
 #, python-brace-format
-msgid "Android SDK tool {cmd} found!"
-msgstr ""
-
-#: ../fdroidserver/common.py
-#, python-brace-format
 msgid "Android SDK tool {cmd} not found!"
 msgstr ""
 
-#. Translators: "build-tools" is the file name of a package from
-#. Google, it is part of the Android SDK. So it probably shouldn't be
-#. translated or transliterated.
-#: ../fdroidserver/common.py
-#, python-brace-format
-msgid "Android build-tools path '{path}' does not exist!"
-msgstr ""
-
-#: ../fdroidserver/update.py
-msgid "AndroidManifest.xml has no date"
+#: ../fdroidserver/lint.py
+msgid "App has NoSourceSince or ArchivePolicy \"0 versions\" but AutoUpdateMode or UpdateCheckMode are not None"
 msgstr ""
 
 #: ../fdroidserver/lint.py
@@ -351,6 +285,10 @@ msgstr ""
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Archiving {apkfilename} with invalid signature!"
+msgstr ""
+
+#: ../fdroidserver/lint.py
+msgid "AutoUpdateMode with UpdateCheckMode: HTTP must have a pattern."
 msgstr ""
 
 #: ../fdroidserver/mirror.py
@@ -373,7 +311,7 @@ msgstr ""
 msgid "Broken symlink: {path}"
 msgstr ""
 
-#: ../fdroid ../fdroidserver/__main__.py
+#: ../fdroidserver/__main__.py
 msgid "Build a package from source"
 msgstr "Bangun paket dari sumber"
 
@@ -393,11 +331,6 @@ msgstr ""
 msgid "Build only the latest version of each package"
 msgstr ""
 
-#: ../fdroidserver/metadata.py
-#, python-brace-format
-msgid "Build should have comma-separated versionName and versionCode, not \"{value}\", in {linedesc}"
-msgstr ""
-
 #: ../fdroidserver/init.py
 #, python-format
 msgid "Built repo based in \"%s\" with this config:"
@@ -412,29 +345,9 @@ msgid "Can't build due to {} error while scanning"
 msgid_plural "Can't build due to {} errors while scanning"
 msgstr[0] ""
 
-#: ../fdroidserver/vmtools.py
-#, python-brace-format
-msgid "Cannot read \"{path}\"!"
-msgstr ""
-
-#. Translators: https://developer.android.com/studio/build/application-id
-#: ../fdroidserver/metadata.py
-#, python-brace-format
-msgid "Cannot resolve application ID {appid}"
-msgstr ""
-
 #: ../fdroidserver/rewritemeta.py
 #, python-brace-format
 msgid "Cannot rewrite \"{path}\""
-msgstr ""
-
-#: ../fdroidserver/rewritemeta.py
-msgid "Cannot use --list and --to at the same time"
-msgstr ""
-
-#: ../fdroidserver/metadata.py
-#, python-brace-format
-msgid "Cannot write \"{path}\", not an accepted format, use: {formats}"
 msgstr ""
 
 #: ../fdroidserver/lint.py
@@ -446,14 +359,9 @@ msgstr ""
 msgid "Categories are not set"
 msgstr ""
 
-#: ../fdroid ../fdroidserver/__main__.py
+#: ../fdroidserver/__main__.py
 msgid "Check for updates to applications"
 msgstr "Periksa pembaruan pada aplikasi"
-
-#: ../fdroidserver/update.py
-#, python-brace-format
-msgid "Checking archiving for {appid} - APKs:{integer}, keepversions:{keep}, archapks:{arch}"
-msgstr ""
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -464,12 +372,12 @@ msgstr ""
 msgid "Clean update - don't uses caches, reprocess all APKs"
 msgstr ""
 
-#: ../fdroidserver/import.py
+#: ../fdroidserver/import_subcommand.py
 msgid "Comma separated list of categories."
 msgstr ""
 
-#: ../fdroid ../fdroidserver/__main__.py
-#, c-format, python-format
+#: ../fdroidserver/__main__.py
+#, python-format
 msgid "Command '%s' not recognised.\n"
 msgstr "Perintah '%s' tidak dikenal.\n"
 
@@ -491,11 +399,11 @@ msgstr ""
 msgid "Could not find '{command}' on your system"
 msgstr ""
 
-#: ../fdroidserver/import.py
+#: ../fdroidserver/import_subcommand.py
 msgid "Could not find latest version code"
 msgstr ""
 
-#: ../fdroidserver/import.py
+#: ../fdroidserver/import_subcommand.py
 msgid "Could not find latest version name"
 msgstr ""
 
@@ -514,8 +422,7 @@ msgstr ""
 msgid "Could not parse size \"{size}\", wrong type \"{type}\""
 msgstr ""
 
-#. Translators: https://developer.android.com/studio/build/application-id
-#: ../fdroidserver/import.py
+#: ../fdroidserver/import_subcommand.py
 msgid "Couldn't find Application ID"
 msgstr ""
 
@@ -523,17 +430,7 @@ msgstr ""
 msgid "Couldn't find any version information"
 msgstr ""
 
-#. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
-#: ../fdroidserver/import.py
-msgid "Couldn't find latest version code"
-msgstr ""
-
-#. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vname
-#: ../fdroidserver/import.py
-msgid "Couldn't find latest version name"
-msgstr ""
-
-#: ../fdroidserver/import.py ../fdroidserver/checkupdates.py
+#: ../fdroidserver/checkupdates.py
 msgid "Couldn't find package ID"
 msgstr ""
 
@@ -541,20 +438,12 @@ msgstr ""
 msgid "Cowardily refusing to overwrite existing signing key setup!"
 msgstr ""
 
-#: ../fdroidserver/update.py
-msgid "Create a repo signing key in a keystore"
-msgstr ""
-
-#: ../fdroidserver/update.py
-msgid "Create skeleton metadata files that are missing"
-msgstr "Membuat kerangka berkas metadata yang hilang"
-
-#: ../fdroidserver/deploy.py ../fdroidserver/upload.py
+#: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "Created new container \"{name}\""
 msgstr ""
 
-#: ../fdroidserver/deploy.py ../fdroidserver/upload.py
+#: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "Creating \"{path}\" for configuring s3cmd."
 msgstr ""
@@ -563,7 +452,7 @@ msgstr ""
 msgid "Creating log directory"
 msgstr ""
 
-#: ../fdroidserver/deploy.py ../fdroidserver/upload.py
+#: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "Creating new S3 bucket: {url}"
 msgstr ""
@@ -576,8 +465,7 @@ msgstr ""
 msgid "Creating signed index with this key (SHA256):"
 msgstr ""
 
-#: ../fdroidserver/import.py ../fdroidserver/verify.py
-#: ../fdroidserver/publish.py
+#: ../fdroidserver/publish.py ../fdroidserver/verify.py
 msgid "Creating temporary directory"
 msgstr ""
 
@@ -632,7 +520,7 @@ msgstr ""
 msgid "Description of length {length} is over the {limit} char limit"
 msgstr ""
 
-#: ../fdroidserver/import.py
+#: ../fdroidserver/import_subcommand.py
 msgid "Do not add 'disable:' to the generated build entries"
 msgstr ""
 
@@ -662,11 +550,10 @@ msgid "Don't refresh the repository, useful when testing a build with no interne
 msgstr ""
 
 #: ../fdroidserver/deploy.py ../fdroidserver/nightly.py
-#: ../fdroidserver/upload.py
 msgid "Don't use rsync checksums"
 msgstr ""
 
-#: ../fdroid ../fdroidserver/__main__.py
+#: ../fdroidserver/__main__.py
 msgid "Download complete mirrors of small repos"
 msgstr ""
 
@@ -684,19 +571,10 @@ msgstr ""
 msgid "Downloading {url} failed. {error}"
 msgstr ""
 
-#: ../fdroidserver/metadata.py
-#, python-brace-format
-msgid "Duplicate build recipe found for versionCode {versionCode} in {linedesc}"
-msgstr ""
-
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "Duplicate link in '{field}': {url}"
 msgstr ""
-
-#: ../fdroid
-msgid "Dynamically scan APKs post build"
-msgstr "Pindai APK secara dinamis pasca build"
 
 #: ../fdroidserver/__main__.py
 msgid "ERROR: The \"server\" subcommand has been removed, use \"deploy\"!"
@@ -712,9 +590,9 @@ msgstr ""
 msgid "ERROR: unsupported CI type, patches welcome!"
 msgstr ""
 
-#: ../fdroidserver/metadata.py
-#, python-brace-format
-msgid "Empty build flag at {linedesc}"
+#: ../fdroidserver/nightly.py
+#, python-format
+msgid "ERROR: unsupported git host \"%s\", patches welcome!"
 msgstr ""
 
 #: ../fdroidserver/__main__.py
@@ -734,17 +612,15 @@ msgstr ""
 msgid "Environment variable {var} from {configname} is not set!"
 msgstr ""
 
-#: ../fdroidserver/deploy.py ../fdroidserver/checkupdates.py
-#: ../fdroidserver/upload.py
-#, python-format
-msgid "Error while attempting to publish log: %s"
-msgstr ""
-
-#: ../fdroidserver/import.py ../fdroidserver/common.py
+#: ../fdroidserver/import_subcommand.py
 msgid "Error while getting repo address"
 msgstr ""
 
-#: ../fdroid ../fdroidserver/__main__.py
+#: ../fdroidserver/__main__.py
+msgid "Extract application metadata from a source repository"
+msgstr ""
+
+#: ../fdroidserver/__main__.py
 msgid "Extract signatures from APKs"
 msgstr ""
 
@@ -768,11 +644,7 @@ msgstr ""
 msgid "Failed resizing {path}: {error}"
 msgstr ""
 
-#: ../fdroidserver/publish.py
-msgid "Failed to align application"
-msgstr ""
-
-#: ../fdroidserver/deploy.py ../fdroidserver/upload.py
+#: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "Failed to create S3 bucket: {url}"
 msgstr ""
@@ -787,10 +659,6 @@ msgstr ""
 msgid "Failed to get APK information, skipping {path}"
 msgstr ""
 
-#: ../fdroidserver/common.py
-msgid "Failed to get APK manifest information"
-msgstr ""
-
 #: ../fdroidserver/update.py
 msgid "Failed to get APK signing key fingerprint"
 msgstr ""
@@ -800,12 +668,8 @@ msgstr ""
 msgid "Failed to install '{apkfilename}' on {dev}: {error}"
 msgstr ""
 
-#: ../fdroidserver/publish.py ../fdroidserver/common.py
-msgid "Failed to sign application"
-msgstr ""
-
 #: ../fdroidserver/common.py
-msgid "Failed to zipalign application"
+msgid "Failed to sign application"
 msgstr ""
 
 #: ../fdroidserver/build.py
@@ -823,15 +687,10 @@ msgstr ""
 msgid "File disappeared while processing it: {path}"
 msgstr ""
 
-#: ../fdroidserver/verify.py ../fdroidserver/update.py
-#: ../fdroidserver/rewritemeta.py ../fdroidserver/build.py
-#: ../fdroidserver/checkupdates.py ../fdroidserver/scanner.py
-#: ../fdroidserver/install.py
+#: ../fdroidserver/build.py ../fdroidserver/install.py
+#: ../fdroidserver/rewritemeta.py ../fdroidserver/scanner.py
+#: ../fdroidserver/update.py
 msgid "Finished"
-msgstr ""
-
-#: ../fdroidserver/lint.py
-msgid "Flattr donation methods belong in the FlattrID flag"
 msgstr ""
 
 #: ../fdroidserver/lint.py
@@ -865,7 +724,7 @@ msgstr ""
 msgid "Found bad funding file \"{path}\" for \"{name}\":"
 msgstr ""
 
-#: ../fdroidserver/common.py ../fdroidserver/metadata.py
+#: ../fdroidserver/common.py
 msgid "Found invalid appids in arguments"
 msgstr ""
 
@@ -888,11 +747,6 @@ msgstr ""
 msgid "Found multiple signing certificates for repository."
 msgstr ""
 
-#: ../fdroidserver/update.py
-#, python-brace-format
-msgid "Found multiple signing certificates in {path}"
-msgstr ""
-
 #: ../fdroidserver/index.py
 msgid "Found no signing certificates for repository."
 msgstr ""
@@ -905,6 +759,16 @@ msgstr ""
 #: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "Found {apkfilename} at {url}"
+msgstr ""
+
+#: ../fdroidserver/scanner.py
+#, python-brace-format
+msgid "Found {count} problems in {filename}"
+msgstr ""
+
+#: ../fdroidserver/scanner.py
+#, python-brace-format
+msgid "Found {count} warnings in {filename}"
 msgstr ""
 
 #: ../fdroidserver/update.py
@@ -927,10 +791,6 @@ msgstr ""
 
 #: ../fdroidserver/common.py
 msgid "Git prune failed"
-msgstr ""
-
-#: ../fdroidserver/common.py
-msgid "Git remote set-head failed"
 msgstr ""
 
 #: ../fdroidserver/common.py
@@ -982,11 +842,6 @@ msgstr ""
 msgid "Ignoring stale cache data for {apkfilename}"
 msgstr ""
 
-#: ../fdroidserver/rewritemeta.py
-#, python-brace-format
-msgid "Ignoring {ext} file at '{path}'"
-msgstr ""
-
 #: ../fdroidserver/update.py
 msgid "Include APKs that are signed with disabled algorithms like MD5"
 msgstr ""
@@ -1021,7 +876,7 @@ msgstr ""
 msgid "Install all signed applications available"
 msgstr ""
 
-#: ../fdroid ../fdroidserver/__main__.py
+#: ../fdroidserver/__main__.py
 msgid "Install built packages on devices"
 msgstr "Instal paket bawaan di perangkat"
 
@@ -1031,21 +886,11 @@ msgid "Installing %s..."
 msgstr ""
 
 #: ../fdroidserver/install.py
-#, python-format
-msgid "Installing %s…"
-msgstr ""
-
-#: ../fdroidserver/install.py
 #, python-brace-format
 msgid "Installing '{apkfilename}' on {dev}..."
 msgstr ""
 
-#: ../fdroidserver/install.py
-#, python-brace-format
-msgid "Installing '{apkfilename}' on {dev}…"
-msgstr ""
-
-#: ../fdroid ../fdroidserver/__main__.py
+#: ../fdroidserver/__main__.py
 msgid "Interact with the repo HTTP server"
 msgstr "Interaksi dengan server repo HTTP"
 
@@ -1063,9 +908,14 @@ msgstr ""
 msgid "Invalid UpdateCheckMode: {mode}"
 msgstr ""
 
-#: ../fdroidserver/lint.py ../fdroidserver/checkupdates.py
+#: ../fdroidserver/checkupdates.py
 #, python-brace-format
 msgid "Invalid VercodeOperation: {field}"
+msgstr ""
+
+#: ../fdroidserver/lint.py
+#, python-brace-format
+msgid "Invalid VercodeOperation: {invalid_ops}"
 msgstr ""
 
 #: ../fdroidserver/common.py
@@ -1078,36 +928,8 @@ msgstr ""
 msgid "Invalid boolean '%s'"
 msgstr ""
 
-#: ../fdroidserver/metadata.py
-#, python-brace-format
-msgid "Invalid build flag at {line} in {linedesc}"
-msgstr ""
-
-#: ../fdroidserver/metadata.py
-#, python-brace-format
-msgid "Invalid build format: {value} in {name}"
-msgstr ""
-
 #: ../fdroidserver/lint.py
 msgid "Invalid bulleted list"
-msgstr ""
-
-#: ../fdroidserver/lint.py
-#, python-format
-msgid "Invalid license tag \"%s\"! Use only tags from https://spdx.org/license-list"
-msgstr ""
-
-#: ../fdroidserver/lint.py
-msgid "Invalid link - use [http://foo.bar Link title] or [http://foo.bar]"
-msgstr ""
-
-#: ../fdroidserver/metadata.py
-#, python-format
-msgid "Invalid metadata in %s:%d"
-msgstr ""
-
-#: ../fdroidserver/metadata.py
-msgid "Invalid metadata in: "
 msgstr ""
 
 #: ../fdroidserver/common.py
@@ -1118,11 +940,6 @@ msgstr ""
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Invalid ndk: entry in build: \"{ndk}\""
-msgstr ""
-
-#: ../fdroidserver/common.py
-#, python-brace-format
-msgid "Invalid package name {0}"
 msgstr ""
 
 #: ../fdroidserver/common.py
@@ -1145,11 +962,6 @@ msgstr ""
 msgid "Invalid srclib metadata: unknown key '{key}' in '{file}'"
 msgstr ""
 
-#: ../fdroidserver/metadata.py
-#, python-brace-format
-msgid "Invalid versionCode: \"{versionCode}\" is not an integer!"
-msgstr ""
-
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "JAR signature failed to verify: {path}"
@@ -1164,8 +976,8 @@ msgstr ""
 msgid "Java JAR file"
 msgstr ""
 
-#: ../fdroidserver/publish.py ../fdroidserver/update.py
-#: ../fdroidserver/mirror.py
+#: ../fdroidserver/mirror.py ../fdroidserver/publish.py
+#: ../fdroidserver/update.py
 msgid "Java JDK not found! Install in standard location or set java_paths!"
 msgstr ""
 
@@ -1199,14 +1011,6 @@ msgstr ""
 msgid "Liberapay donation methods belong in the Liberapay: field"
 msgstr ""
 
-#: ../fdroidserver/lint.py
-msgid "Liberapay donation methods belong in the LiberapayID flag"
-msgstr ""
-
-#: ../fdroidserver/rewritemeta.py
-msgid "List files that would be reformatted"
-msgstr ""
-
 #: ../fdroidserver/rewritemeta.py
 msgid "List files that would be reformatted (dry run)"
 msgstr ""
@@ -1227,6 +1031,11 @@ msgstr ""
 msgid "Malformed serverwebroot line:"
 msgstr ""
 
+#: ../fdroidserver/scanner.py
+#, python-format
+msgid "Max recursion depth in ZIP file reached: %s"
+msgstr ""
+
 #: ../fdroidserver/mirror.py
 msgid "Mirror the full repo and archive, all file types."
 msgstr ""
@@ -1235,13 +1044,8 @@ msgstr ""
 msgid "Missing output directory"
 msgstr ""
 
-#: ../fdroidserver/lint.py
-#, python-format
-msgid "Name '%s' is just the auto name - remove it"
-msgstr ""
-
-#: ../fdroidserver/common.py
-msgid "No 'config.yml' found, using defaults."
+#: ../fdroidserver/index.py
+msgid "Neither \"repo_pubkey\" nor \"keystorepass\" set in config.yml"
 msgstr ""
 
 #: ../fdroidserver/verify.py
@@ -1253,21 +1057,8 @@ msgstr ""
 msgid "No Android SDK found!"
 msgstr ""
 
-#: ../fdroidserver/import.py
-msgid "No android or kivy project could be found. Specify --subdir?"
-msgstr ""
-
 #: ../fdroidserver/install.py
 msgid "No attached devices found"
-msgstr ""
-
-#: ../fdroidserver/metadata.py
-#, python-brace-format
-msgid "No commit specified for {versionName} in {linedesc}"
-msgstr ""
-
-#: ../fdroidserver/common.py
-msgid "No config.yml found, using defaults."
 msgstr ""
 
 #: ../fdroidserver/index.py
@@ -1278,11 +1069,11 @@ msgstr ""
 msgid "No git submodules available"
 msgstr ""
 
-#: ../fdroidserver/import.py
+#: ../fdroidserver/import_subcommand.py
 msgid "No gradle project could be found. Specify --subdir?"
 msgstr ""
 
-#: ../fdroidserver/import.py ../fdroidserver/common.py
+#: ../fdroidserver/import_subcommand.py
 msgid "No information found."
 msgstr ""
 
@@ -1320,12 +1111,12 @@ msgstr ""
 msgid "No signed output directory - nothing to do"
 msgstr ""
 
-#: ../fdroidserver/update.py ../fdroidserver/common.py
+#: ../fdroidserver/common.py
 #, python-brace-format
 msgid "No signing certificates found in {path}"
 msgstr ""
 
-#: ../fdroidserver/common.py ../fdroidserver/metadata.py
+#: ../fdroidserver/common.py
 #, python-format
 msgid "No such package: %s"
 msgstr ""
@@ -1340,7 +1131,7 @@ msgstr ""
 msgid "No tags found"
 msgstr ""
 
-#: ../fdroidserver/verify.py ../fdroidserver/publish.py
+#: ../fdroidserver/publish.py ../fdroidserver/verify.py
 msgid "No unsigned directory - nothing to do"
 msgstr ""
 
@@ -1379,15 +1170,6 @@ msgstr ""
 msgid "Offline machine, skipping git mirror generation until `fdroid deploy`"
 msgstr ""
 
-#: ../fdroidserver/common.py
-#, python-brace-format
-msgid "Old APK signature failed to verify: {path}"
-msgstr ""
-
-#: ../fdroid ../fdroidserver/__main__.py
-msgid "Old, deprecated name for fdroid deploy"
-msgstr ""
-
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Only PNG and JPEG are supported for graphics, found: {path}"
@@ -1405,8 +1187,7 @@ msgstr ""
 msgid "OpenCollective donation methods belong in the OpenCollective: field"
 msgstr ""
 
-#: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
-#: /usr/lib/python3.7/optparse.py
+#: /usr/lib/python3.11/optparse.py
 msgid "Options"
 msgstr "Opsi"
 
@@ -1418,13 +1199,13 @@ msgstr ""
 msgid "Output JSON to stdout."
 msgstr ""
 
-#: ../fdroidserver/gpgsign.py ../fdroidserver/publish.py
-#: ../fdroidserver/update.py ../fdroidserver/signindex.py
-#: ../fdroidserver/checkupdates.py
+#: ../fdroidserver/checkupdates.py ../fdroidserver/gpgsign.py
+#: ../fdroidserver/publish.py ../fdroidserver/signindex.py
+#: ../fdroidserver/update.py
 msgid "Outputting JSON"
 msgstr ""
 
-#: ../fdroidserver/import.py
+#: ../fdroidserver/import_subcommand.py
 msgid "Overall license of the project."
 msgstr ""
 
@@ -1433,7 +1214,7 @@ msgstr ""
 msgid "Overriding blank versionName in {apkfilename} from metadata: {version}"
 msgstr ""
 
-#: ../fdroidserver/import.py
+#: ../fdroidserver/import_subcommand.py
 #, python-brace-format
 msgid "Package \"{appid}\" already exists"
 msgstr ""
@@ -1447,11 +1228,8 @@ msgstr ""
 msgid "Password required with username"
 msgstr ""
 
-#: ../fdroidserver/import.py
+#: ../fdroidserver/import_subcommand.py
 msgid "Path to main Android project subdirectory, if not in root."
-msgstr ""
-
-msgid "Path to main android project subdirectory, if not in root."
 msgstr ""
 
 #: ../fdroidserver/init.py
@@ -1470,9 +1248,9 @@ msgstr ""
 msgid "Print the secret variable to the terminal for easy copy/paste"
 msgstr ""
 
-#: ../fdroidserver/metadata.py
-#, python-brace-format
-msgid "Problem with description of {appid}: {error}"
+#: ../fdroidserver/scanner.py
+#, python-format
+msgid "Problem with ZIP file: %s, error %s"
 msgstr ""
 
 #: ../fdroidserver/common.py
@@ -1498,11 +1276,7 @@ msgstr ""
 msgid "Produce human-readable XML/JSON for index files"
 msgstr ""
 
-#: ../fdroidserver/update.py
-msgid "Produce human-readable index.xml"
-msgstr "Buat index.xml yang bisa dibaca manusia"
-
-#: ../fdroidserver/import.py
+#: ../fdroidserver/import_subcommand.py
 msgid "Project URL to import from."
 msgstr ""
 
@@ -1514,21 +1288,21 @@ msgstr ""
 msgid "Push the log to this git remote repository"
 msgstr ""
 
-#: ../fdroidserver/deploy.py ../fdroidserver/upload.py
+#: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "Pushing binary transparency log to {url}"
 msgstr ""
 
-#: ../fdroidserver/deploy.py ../fdroidserver/upload.py
+#: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "Pushing to {url}"
 msgstr ""
 
-#: ../fdroid ../fdroidserver/__main__.py
+#: ../fdroidserver/__main__.py
 msgid "Quickly start a new repository"
 msgstr "Mulai repositori baru secepatnya"
 
-#: ../fdroid ../fdroidserver/__main__.py
+#: ../fdroidserver/__main__.py
 msgid "Read all the metadata files and exit"
 msgstr "Baca semuanberkas metadata dan keluar"
 
@@ -1539,14 +1313,12 @@ msgstr ""
 
 #: ../fdroidserver/common.py
 #, python-brace-format
-msgid "Reading minSdkVersion failed: \"{apkfilename}\""
+msgid "Reading packageName/versionCode/versionName failed, APK invalid: '{apkfilename}'"
 msgstr ""
 
-#. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
-#. https://developer.android.com/guide/topics/manifest/manifest-element.html#vname
 #: ../fdroidserver/common.py
 #, python-brace-format
-msgid "Reading packageName/versionCode/versionName failed, APK invalid: '{apkfilename}'"
+msgid "Reading packageName/versionCode/versionName failed,APK invalid: '{apkfilename}'"
 msgstr ""
 
 #: ../fdroidserver/update.py
@@ -1571,10 +1343,6 @@ msgstr "Ubah nama berkas APK yang tidak sesuai dengan package.nama_123.apk"
 msgid "RepoTrunk update mode only makes sense in git-svn repositories"
 msgstr ""
 
-#: ../fdroidserver/update.py
-msgid "Report on build data status"
-msgstr ""
-
 #: ../fdroidserver/build.py
 msgid "Reset and create a brand new build server, even if the existing one appears to be ok."
 msgstr ""
@@ -1592,22 +1360,13 @@ msgstr ""
 msgid "Restrict output to warnings and errors"
 msgstr ""
 
-#: ../fdroid ../fdroidserver/__main__.py
+#: ../fdroidserver/__main__.py
 msgid "Rewrite all the metadata files"
 msgstr "Tulis ulang semua berkas metadata"
 
 #: ../fdroidserver/rewritemeta.py
-msgid "Rewrite to a specific format: "
-msgstr ""
-
-#: ../fdroidserver/rewritemeta.py
 #, python-brace-format
 msgid "Rewriting '{appid}'"
-msgstr ""
-
-#: ../fdroidserver/rewritemeta.py
-#, python-brace-format
-msgid "Rewriting '{appid}' to '{path}'"
 msgstr ""
 
 #: ../fdroidserver/checkupdates.py
@@ -1618,7 +1377,7 @@ msgstr ""
 msgid "Run rewritemeta to fix formatting"
 msgstr ""
 
-#: ../fdroidserver/deploy.py ../fdroidserver/upload.py
+#: ../fdroidserver/deploy.py
 msgid "Running first pass with MD5 checking disabled"
 msgstr ""
 
@@ -1631,9 +1390,14 @@ msgstr ""
 msgid "Scan the resulting APK(s) for known non-free classes."
 msgstr ""
 
-#: ../fdroid ../fdroidserver/__main__.py
+#: ../fdroidserver/__main__.py
 msgid "Scan the source code of a package"
 msgstr "Pindai sumber berkas paket"
+
+#: ../fdroidserver/scanner.py
+#, python-brace-format
+msgid "Scanner found {count} problems in {apk}"
+msgstr ""
 
 #: ../fdroidserver/scanner.py
 #, python-brace-format
@@ -1651,7 +1415,7 @@ msgid_plural "Scanner found {} problems"
 msgstr[0] ""
 
 #: ../fdroidserver/scanner.py
-msgid "Scanning APK with apkanalyzer for known non-free classes."
+msgid "Scanning APK with dexdump for known non-free classes."
 msgstr ""
 
 #: ../fdroidserver/common.py
@@ -1672,7 +1436,7 @@ msgstr ""
 msgid "Set open file limit to {integer}"
 msgstr ""
 
-#: ../fdroid ../fdroidserver/__main__.py
+#: ../fdroidserver/__main__.py
 msgid "Set up an app build for a nightly build repo"
 msgstr ""
 
@@ -1685,11 +1449,11 @@ msgstr ""
 msgid "Setting {0} sec timeout for this build"
 msgstr ""
 
-#: ../fdroid ../fdroidserver/__main__.py
+#: ../fdroidserver/__main__.py
 msgid "Sign and place packages in the repo"
 msgstr "Tandai dan tempatkan paket ke dalam repo"
 
-#: ../fdroid ../fdroidserver/__main__.py
+#: ../fdroidserver/__main__.py
 msgid "Sign indexes created using update --nosign"
 msgstr "Tanda tangani indeks yang dibuat menggunakan update --nosign"
 
@@ -1702,7 +1466,7 @@ msgstr ""
 msgid "Skipping '{apkfilename}' with invalid signature!"
 msgstr ""
 
-#: ../fdroidserver/index.py
+#: ../fdroidserver/deploy.py ../fdroidserver/index.py
 #, python-format
 msgid "Skipping GitLab Pages mirror because the repo is too large (>%.2fGB)!"
 msgstr ""
@@ -1722,21 +1486,12 @@ msgstr ""
 msgid "Skipping {appid}: disabled"
 msgstr ""
 
-#: ../fdroidserver/scanner.py
-#, python-brace-format
-msgid "Skipping {appid}: no builds specified"
-msgstr ""
-
-#: ../fdroidserver/deploy.py ../fdroidserver/upload.py
+#: ../fdroidserver/deploy.py
 msgid "Specify a local folder to sync the repo to"
 msgstr ""
 
-#: ../fdroidserver/deploy.py ../fdroidserver/upload.py
+#: ../fdroidserver/deploy.py
 msgid "Specify an identity file to provide to SSH for rsyncing"
-msgstr ""
-
-#: ../fdroidserver/build.py
-msgid "Specify that we're running on the build server"
 msgstr ""
 
 #: ../fdroidserver/nightly.py
@@ -1745,11 +1500,6 @@ msgstr ""
 
 #: ../fdroidserver/common.py
 msgid "Spew out even more information than normal"
-msgstr ""
-
-#: ../fdroidserver/nightly.py
-#, python-brace-format
-msgid "Striping mystery signature from {apkfilename}"
 msgstr ""
 
 #: ../fdroidserver/nightly.py
@@ -1802,16 +1552,8 @@ msgstr ""
 msgid "The file to be included in the repo (path or glob)"
 msgstr ""
 
-#: ../fdroidserver/deploy.py
-msgid "The only commands currently supported are 'init' and 'update'"
-msgstr ""
-
 #: ../fdroidserver/index.py
 msgid "The repository's fingerprint does not match."
-msgstr ""
-
-#: ../fdroidserver/common.py
-msgid "The repository's index could not be verified."
 msgstr ""
 
 #: ../fdroidserver/deploy.py
@@ -1831,7 +1573,7 @@ msgstr ""
 msgid "This is a repository of apps to be used with F-Droid. Applications in this repository are either official binaries built by the original application developers, or are binaries built from source by the admin of f-droid.org using the tools on https://gitlab.com/fdroid."
 msgstr ""
 
-#: ../fdroidserver/import.py
+#: ../fdroidserver/import_subcommand.py
 #, python-format
 msgid "This repo already has local metadata: %s"
 msgstr ""
@@ -1848,7 +1590,7 @@ msgid ""
 "and https://f-droid.org/docs/Signing_Process"
 msgstr ""
 
-#: ../fdroidserver/deploy.py ../fdroidserver/upload.py
+#: ../fdroidserver/deploy.py
 msgid "To use awsbucket, awssecretkey and awsaccesskeyid must also be set in config.yml!"
 msgstr ""
 
@@ -1858,10 +1600,6 @@ msgstr ""
 
 #: ../fdroidserver/lint.py
 msgid "URL shorteners should not be used"
-msgstr ""
-
-#: ../fdroidserver/metadata.py
-msgid "URL title is just the URL, use brackets: [URL]"
 msgstr ""
 
 #: ../fdroidserver/lint.py
@@ -1882,17 +1620,12 @@ msgstr ""
 msgid "Unexpected symlink target: {link} -> {target}"
 msgstr ""
 
-#: ../fdroidserver/metadata.py
-#, python-brace-format
-msgid "Unexpected text on same line as {field} in {linedesc}"
-msgstr ""
-
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Unknown entry {key} in {configname}"
 msgstr ""
 
-#: ../fdroid ../fdroidserver/__main__.py
+#: ../fdroidserver/__main__.py
 msgid "Unknown exception found!"
 msgstr "Eksepsi tidak ditemukan!"
 
@@ -1909,20 +1642,11 @@ msgstr ""
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
-msgid "Unknown metadata format: {path}"
-msgstr ""
-
-#: ../fdroidserver/metadata.py
-#, python-brace-format
 msgid "Unknown metadata format: {path} (use: *.yml)"
 msgstr ""
 
 #: ../fdroidserver/common.py
 msgid "Unknown version of aapt, might cause problems: "
-msgstr ""
-
-#: ../fdroidserver/lint.py
-msgid "Unlinkified link - use [http://foo.bar Link title] or [http://foo.bar]"
 msgstr ""
 
 #: ../fdroidserver/lint.py
@@ -1939,17 +1663,8 @@ msgid "Unrecognised app field '{fieldname}' in '{path}'"
 msgstr ""
 
 #: ../fdroidserver/metadata.py
-msgid "Unrecognised app field: "
-msgstr ""
-
-#: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Unrecognised build flag '{build_flag}' in '{path}'"
-msgstr ""
-
-#: ../fdroidserver/metadata.py
-#, python-brace-format
-msgid "Unrecognised field '{field}' in {linedesc}"
 msgstr ""
 
 #: ../fdroidserver/update.py
@@ -1960,29 +1675,6 @@ msgstr ""
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Unsupported graphics file found: {path}"
-msgstr ""
-
-#: ../fdroidserver/rewritemeta.py
-#, python-brace-format
-msgid "Unsupported metadata format, use: --to [{supported}]"
-msgstr ""
-
-#: ../fdroidserver/metadata.py
-msgid "Unterminated ]"
-msgstr ""
-
-#: ../fdroidserver/metadata.py
-msgid "Unterminated ]]"
-msgstr ""
-
-#: ../fdroidserver/metadata.py
-#, python-brace-format
-msgid "Unterminated build in {name}"
-msgstr ""
-
-#: ../fdroidserver/metadata.py
-#, python-brace-format
-msgid "Unterminated continuation in {name}"
 msgstr ""
 
 #: ../fdroidserver/lint.py
@@ -2010,21 +1702,22 @@ msgstr ""
 msgid "Unzipping to %s"
 msgstr ""
 
-#: ../fdroid ../fdroidserver/__main__.py
+#: ../fdroidserver/__main__.py
 msgid "Update repo information for new packages"
 msgstr "Perbarui informasi repo untuk paket yang baru"
 
-#: ../fdroid ../fdroidserver/__main__.py
+#: ../fdroidserver/__main__.py
 msgid "Update the binary transparency log for a URL"
 msgstr "Perbarui log transparansi biner untuk URL"
-
-#: ../fdroidserver/update.py ../fdroidserver/build.py
-msgid "Update the wiki"
-msgstr ""
 
 #: ../fdroidserver/checkupdates.py
 #, python-brace-format
 msgid "UpdateCheckData has invalid URL: {url}"
+msgstr ""
+
+#: ../fdroidserver/lint.py
+#, python-brace-format
+msgid "UpdateCheckData must match the version code as integer (\\d or [0-9]): {codeex}"
 msgstr ""
 
 #: ../fdroidserver/lint.py
@@ -2037,13 +1730,9 @@ msgstr ""
 msgid "UpdateCheckData not a valid URL: {url}"
 msgstr ""
 
-#: ../fdroidserver/lint.py
-msgid "UpdateCheckMode is set but it looks like checkupdates hasn't been run yet"
-msgstr ""
-
 #. Translators: https://developer.android.com/studio/build/application-id
 #: ../fdroidserver/lint.py
-msgid "UpdateCheckName is set to the known application ID - it can be removed"
+msgid "UpdateCheckMode is set but it looks likecheckupdates hasn't been run yet"
 msgstr ""
 
 #: ../fdroidserver/lint.py
@@ -2061,12 +1750,14 @@ msgid "Uploading {apkfilename} to virustotal"
 msgstr ""
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
-#: /usr/lib/python3.7/optparse.py
+#: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
+#: /usr/lib/python3.11/optparse.py
 msgid "Usage"
 msgstr "Penggunaan"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
-#: /usr/lib/python3.7/optparse.py
+#: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
+#: /usr/lib/python3.11/optparse.py
 #, python-format
 msgid "Usage: %s\n"
 msgstr "Penggunaan: %s\n"
@@ -2087,7 +1778,7 @@ msgstr ""
 msgid "Use date from APK instead of current time for newly added APKs"
 msgstr ""
 
-#: ../fdroidserver/deploy.py ../fdroidserver/upload.py
+#: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "Using \"{path}\" for configuring s3cmd."
 msgstr ""
@@ -2114,12 +1805,12 @@ msgstr ""
 msgid "Using existing keystore \"{path}\""
 msgstr ""
 
-#: ../fdroidserver/deploy.py ../fdroidserver/upload.py
+#: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "Using s3cmd to sync with: {url}"
 msgstr ""
 
-#: ../fdroid ../fdroidserver/__main__.py
+#: ../fdroidserver/__main__.py
 msgid "Valid commands are:"
 msgstr "Perintah yang benar adalah:"
 
@@ -2127,7 +1818,7 @@ msgstr "Perintah yang benar adalah:"
 msgid "Verify against locally cached copy rather than redownloading."
 msgstr ""
 
-#: ../fdroid ../fdroidserver/__main__.py
+#: ../fdroidserver/__main__.py
 msgid "Verify the integrity of downloaded packages"
 msgstr "Verifikasi integritas paket yang didownload"
 
@@ -2140,7 +1831,7 @@ msgstr ""
 msgid "VirusTotal API key cannot upload files larger than 32MB, use {url} to upload {path}."
 msgstr ""
 
-#: ../fdroid ../fdroidserver/__main__.py
+#: ../fdroidserver/__main__.py
 msgid "Warn about possible metadata errors"
 msgstr "Peringatkan mengenai kemungkinan error pada metadata"
 
@@ -2150,9 +1841,6 @@ msgstr ""
 
 #: ../fdroidserver/lint.py
 msgid "When linting the entire repository yamllint is disabled by default. This option forces yamllint regardless."
-msgstr ""
-
-msgid "X.509 'Distiguished Name' used when generating keys"
 msgstr ""
 
 #: ../fdroidserver/init.py
@@ -2178,13 +1866,15 @@ msgid "adding to {name}: {path}"
 msgstr ""
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py
+#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
+#: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "ambiguous option: %(option)s could match %(matches)s"
 msgstr "opsi ambigu: %(option)s bisa sesuai dengan %(matches)s"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
-#: /usr/lib/python3.7/optparse.py
+#: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
+#: /usr/lib/python3.11/optparse.py
 #, python-format
 msgid "ambiguous option: %s (%s?)"
 msgstr "opsi ambigu: %s (%s?)"
@@ -2197,55 +1887,49 @@ msgstr ""
 msgid "apksigner not found, it's required for signing!"
 msgstr ""
 
-#: ../fdroidserver/lint.py ../fdroidserver/rewritemeta.py
-#: ../fdroidserver/checkupdates.py
+#: ../fdroidserver/checkupdates.py ../fdroidserver/lint.py
+#: ../fdroidserver/rewritemeta.py
 msgid "application ID of file to operate on"
 msgstr ""
 
-#: ../fdroidserver/verify.py ../fdroidserver/publish.py
-#: ../fdroidserver/build.py ../fdroidserver/scanner.py
-#: ../fdroidserver/install.py
+#: ../fdroidserver/build.py ../fdroidserver/install.py
+#: ../fdroidserver/publish.py ../fdroidserver/scanner.py
+#: ../fdroidserver/verify.py
 msgid "application ID with optional versionCode in the form APPID[:VERCODE]"
 msgstr ""
 
-#: ../fdroidserver/lint.py ../fdroidserver/rewritemeta.py
-msgid "applicationId in the form APPID"
-msgstr ""
-
-#: ../fdroidserver/checkupdates.py
-msgid "applicationId to check for updates"
-msgstr ""
-
-#. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
-#: ../fdroidserver/verify.py ../fdroidserver/publish.py
-#: ../fdroidserver/build.py ../fdroidserver/scanner.py
-#: ../fdroidserver/install.py
-msgid "applicationId with optional versionCode in the form APPID[:VERCODE]"
+#: ../fdroidserver/common.py
+msgid "archive_url needs to end with /archive"
 msgstr ""
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py
+#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
+#: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "argument \"-\" with mode %r"
+msgstr ""
+
+#: /usr/lib/python3.11/argparse.py
+#, python-format
+msgid "argument %(argument_name)s: %(message)s"
 msgstr ""
 
 #: ../fdroidserver/nightly.py
 msgid "attempting bare SSH connection to test deploy key:"
 msgstr ""
 
-#: ../fdroidserver/nightly.py
-msgid "attempting bare ssh connection to test deploy key:"
-msgstr ""
-
 #: ../fdroidserver/common.py
 msgid "can not parse scrlib spec (not a string): '{}'"
 msgstr ""
 
-#: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py
+#: /usr/lib/python3.9/argparse.py /usr/lib/python3.11/argparse.py
 #, python-format
-msgid "can't open '%s': %s"
-msgstr "tidak bisa dibuka '%s': %s"
+msgid "can't open '%(filename)s': %(error)s"
+msgstr "tidak bisa dibuka '%(filename)s': %(error)s"
+
+#: ../fdroidserver/scanner.py
+msgid "can't open non-https url: '{};"
+msgstr ""
 
 #: ../fdroidserver/build.py
 #, python-brace-format
@@ -2253,12 +1937,14 @@ msgid "cannot find required srclibs: \"{path}\""
 msgstr ""
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py
+#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
+#: /usr/lib/python3.11/argparse.py
 msgid "cannot have multiple subparser arguments"
 msgstr ""
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py
+#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
+#: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "cannot merge actions - two groups are named %r"
 msgstr ""
@@ -2272,29 +1958,32 @@ msgstr ""
 msgid "cloning {url}"
 msgstr ""
 
-#: ../fdroidserver/deploy.py
-msgid "command to execute, either 'init' or 'update'"
-msgstr ""
-
 #: ../fdroidserver/__main__.py
 msgid "commands from plugin modules:"
 msgstr ""
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
-#: /usr/lib/python3.7/optparse.py
+#: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
+#: /usr/lib/python3.11/optparse.py
 msgid "complex"
-msgstr "rumit"
+msgstr "kompleks"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py
+#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
+#: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "conflicting option string: %s"
 msgid_plural "conflicting option strings: %s"
 msgstr[0] ""
 
-#: ../fdroidserver/nightly.py
-#, python-brace-format
-msgid "copying {apkfilename} into {path}"
+#: /usr/lib/python3.11/argparse.py
+#, python-format
+msgid "conflicting subparser alias: %s"
+msgstr ""
+
+#: /usr/lib/python3.11/argparse.py
+#, python-format
+msgid "conflicting subparser: %s"
 msgstr ""
 
 #: ../fdroidserver/metadata.py
@@ -2327,18 +2016,22 @@ msgstr ""
 
 #: ../fdroidserver/common.py
 #, python-brace-format
-msgid "deployed build logs to '{path}'"
-msgstr ""
-
-#: ../fdroidserver/common.py
-#, python-brace-format
 msgid "deployed process log {path} to {dest}"
 msgstr ""
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py
+#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
+#: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "dest= is required for options like %r"
+msgstr ""
+
+#: ../fdroidserver/scanner.py
+msgid "downloading '{}'"
+msgstr ""
+
+#: ../fdroidserver/scanner.py
+msgid "downloading scanner signatures from '{}' failed"
 msgstr ""
 
 #: ../fdroidserver/scanner.py
@@ -2346,48 +2039,42 @@ msgid "executable binary, possibly code"
 msgstr ""
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py
+#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
+#: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "expected %s argument"
 msgid_plural "expected %s arguments"
 msgstr[0] ""
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py
+#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
+#: /usr/lib/python3.11/argparse.py
 msgid "expected at least one argument"
 msgstr ""
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py
+#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
+#: /usr/lib/python3.11/argparse.py
 msgid "expected at most one argument"
 msgstr ""
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py
+#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
+#: /usr/lib/python3.11/argparse.py
 msgid "expected one argument"
 msgstr ""
 
-#: ../fdroidserver/common.py
-#, python-brace-format
-msgid "failed deploying build logs to '{path}'"
-msgstr ""
-
-#: ../fdroid
-msgid "fdroid [-h|--help|--version] <command> [<args>]"
-msgstr ""
-
-#: ../fdroid ../fdroidserver/__main__.py
+#: ../fdroidserver/__main__.py
 msgid "fdroid [<command>] [-h|--help|--version|<args>]"
 msgstr ""
 
-#: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
-#: /usr/lib/python3.7/optparse.py
-msgid "floating-point"
+#: ../fdroidserver/scanner.py
+msgid "fetch the latest version of signatures from the web"
 msgstr ""
 
-#: ../fdroidserver/metadata.py
-msgid "force errors to be warnings, or ignore"
-msgstr "paksa untuk mengingatkan adanya error, atau hiraukan"
+#: /usr/lib/python3.11/optparse.py
+msgid "floating-point"
+msgstr ""
 
 #: ../fdroidserver/metadata.py
 msgid "force metadata errors (default) to be warnings, or to be ignored."
@@ -2402,7 +2089,8 @@ msgid "gzip file archive"
 msgstr ""
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py
+#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
+#: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "ignored explicit argument %r"
 msgstr ""
@@ -2411,33 +2099,46 @@ msgstr ""
 msgid "index-v1 must have a signature, use `fdroid signindex` to create it!"
 msgstr ""
 
+#: ../fdroidserver/index.py
+msgid "index-v2 must have a signature, use `fdroid signindex` to create it!"
+msgstr ""
+
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
-#: /usr/lib/python3.7/optparse.py
+#: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
+#: /usr/lib/python3.11/optparse.py
 msgid "integer"
 msgstr ""
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py
+#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
+#: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "invalid %(type)s value: %(value)r"
 msgstr ""
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py
+#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
+#: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "invalid choice: %(value)r (choose from %(choices)s)"
 msgstr ""
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py
+#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
+#: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "invalid conflict_resolution value: %r"
 msgstr ""
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py
+#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
+#: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "invalid option string %(option)r: must start with a character %(prefix_chars)r"
+msgstr ""
+
+#: ../fdroidserver/common.py
+msgid "ipfs_cid not found, skipping CIDv1 generation"
 msgstr ""
 
 #: ../fdroidserver/checkupdates.py
@@ -2464,8 +2165,14 @@ msgid "mirror '%s' does not end with 'fdroid'!"
 msgstr ""
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py
+#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
+#: /usr/lib/python3.11/argparse.py
 msgid "mutually exclusive arguments must be optional"
+msgstr ""
+
+#: ../fdroidserver/scanner.py
+#, python-brace-format
+msgid "next {name} cache update due in {time}"
 msgstr ""
 
 #: ../fdroidserver/mirror.py
@@ -2478,12 +2185,13 @@ msgid "no APK supplied"
 msgstr ""
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
-#: /usr/lib/python3.7/optparse.py
+#: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
+#: /usr/lib/python3.11/optparse.py
 #, python-format
 msgid "no such option: %s"
 msgstr "tidak ada opsi: %s"
 
-#: ../fdroid ../fdroidserver/__main__.py
+#: ../fdroidserver/__main__.py
 msgid "no version info found!"
 msgstr ""
 
@@ -2492,18 +2200,20 @@ msgid "no version information found"
 msgstr ""
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py
+#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
+#: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "not allowed with argument %s"
 msgstr ""
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py
+#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
+#: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "one of the arguments %s is required"
 msgstr ""
 
-#: ../fdroidserver/index.py ../fdroidserver/common.py
+#: ../fdroidserver/common.py ../fdroidserver/index.py
 msgid "only accepts strings, lists, and tuples"
 msgstr ""
 
@@ -2513,57 +2223,71 @@ msgid "option %s: If you really want to install all the signed apps, use --all"
 msgstr ""
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
-#: /usr/lib/python3.7/optparse.py
+#: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
+#: /usr/lib/python3.11/optparse.py
 #, python-format
 msgid "option %s: invalid %s value: %r"
 msgstr ""
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
-#: /usr/lib/python3.7/optparse.py
+#: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
+#: /usr/lib/python3.11/optparse.py
 #, python-format
 msgid "option %s: invalid choice: %r (choose from %s)"
 msgstr ""
 
 #: /usr/lib/python3.5/getopt.py /usr/lib/python3.6/getopt.py
-#: /usr/lib/python3.7/getopt.py
+#: /usr/lib/python3.7/getopt.py /usr/lib/python3.9/getopt.py
+#: /usr/lib/python3.11/getopt.py
 #, python-format
 msgid "option -%s not recognized"
 msgstr "opsi -%s tidak dikenal"
 
 #: /usr/lib/python3.5/getopt.py /usr/lib/python3.6/getopt.py
-#: /usr/lib/python3.7/getopt.py
+#: /usr/lib/python3.7/getopt.py /usr/lib/python3.9/getopt.py
+#: /usr/lib/python3.11/getopt.py
 #, python-format
 msgid "option -%s requires argument"
 msgstr "opsi -%s memerlukan argumen"
 
 #: /usr/lib/python3.5/getopt.py /usr/lib/python3.6/getopt.py
-#: /usr/lib/python3.7/getopt.py
+#: /usr/lib/python3.7/getopt.py /usr/lib/python3.9/getopt.py
+#: /usr/lib/python3.11/getopt.py
 #, python-format
 msgid "option --%s must not have an argument"
 msgstr "opsi --%s harus tidak mengandung argumen"
 
 #: /usr/lib/python3.5/getopt.py /usr/lib/python3.6/getopt.py
-#: /usr/lib/python3.7/getopt.py
+#: /usr/lib/python3.7/getopt.py /usr/lib/python3.9/getopt.py
+#: /usr/lib/python3.11/getopt.py
 #, python-format
 msgid "option --%s not a unique prefix"
 msgstr "opsi --%s bukan prefiks unik"
 
 #: /usr/lib/python3.5/getopt.py /usr/lib/python3.6/getopt.py
-#: /usr/lib/python3.7/getopt.py
+#: /usr/lib/python3.7/getopt.py /usr/lib/python3.9/getopt.py
+#: /usr/lib/python3.11/getopt.py
 #, python-format
 msgid "option --%s not recognized"
 msgstr "opsi --%s tidak dikenal"
 
 #: /usr/lib/python3.5/getopt.py /usr/lib/python3.6/getopt.py
-#: /usr/lib/python3.7/getopt.py
+#: /usr/lib/python3.7/getopt.py /usr/lib/python3.9/getopt.py
+#: /usr/lib/python3.11/getopt.py
 #, python-format
 msgid "option --%s requires argument"
 msgstr "opsi --%s memerlukan argumen"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py
+#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 msgid "optional arguments"
 msgstr "argumen opsional"
+
+#: /usr/lib/python3.11/argparse.py
+#, fuzzy
+#| msgid "Options"
+msgid "options"
+msgstr "Opsi"
 
 #: ../fdroidserver/nightly.py
 #, python-brace-format
@@ -2571,7 +2295,8 @@ msgid "overwriting existing {path}"
 msgstr ""
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py
+#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
+#: /usr/lib/python3.11/argparse.py
 msgid "positional arguments"
 msgstr "argumen posisi"
 
@@ -2585,33 +2310,27 @@ msgstr ""
 msgid "refuse downloading via insecure HTTP connection (use HTTPS or specify --no-https-check): {apkfilename}"
 msgstr ""
 
-#: ../fdroidserver/signatures.py
-#, python-brace-format
-msgid "refuse downloading via insecure http connection (use https or specify --no-https-check): {apkfilename}"
-msgstr ""
-
 #: ../fdroidserver/index.py
 #, python-format
 msgid "repo_icon \"repo/icons/%s\" does not exist, generating placeholder."
 msgstr ""
 
-#: ../fdroidserver/index.py
-#, python-format
-msgid "repo_icon %s does not exist, generating placeholder."
+#: ../fdroidserver/common.py
+msgid "repo_url needs to end with /repo"
 msgstr ""
 
 #: ../fdroidserver/metadata.py
 msgid "ruamel.yaml not installed, can not write metadata."
 msgstr ""
 
-#: ../fdroidserver/deploy.py ../fdroidserver/upload.py
+#: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "s3cmd sync indexes {path} to {url} and delete"
 msgstr ""
 
 #: ../fdroidserver/scanner.py
-#, python-format
-msgid "scanner not cleanly run apkanalyzer: %s"
+#, python-brace-format
+msgid "scanner cache is malformed! You can clear it with: '{clear}'"
 msgstr ""
 
 #: ../fdroidserver/scanner.py
@@ -2619,13 +2338,16 @@ msgid "shared library"
 msgstr ""
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
-#: /usr/lib/python3.7/optparse.py
+#: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
+#: /usr/lib/python3.11/optparse.py
 msgid "show program's version number and exit"
 msgstr "menampilkan nomor versi program dan keluar"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.5/optparse.py
 #: /usr/lib/python3.6/argparse.py /usr/lib/python3.6/optparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.7/optparse.py
+#: /usr/lib/python3.9/argparse.py /usr/lib/python3.9/optparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.11/optparse.py
 msgid "show this help message and exit"
 msgstr "menampilkan bantuan ini dan keluar"
 
@@ -2654,31 +2376,30 @@ msgstr ""
 msgid "static library"
 msgstr ""
 
-#: ../fdroidserver/common.py
-#, python-brace-format
-msgid "supplied timestamp value '{timestamp}' is not a unix timestamp"
-msgstr ""
-
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py
+#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
+#: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "the following arguments are required: %s"
 msgstr "argumen berikut ini diperlukan: %s"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py
+#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
+#: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "unexpected option string: %s"
 msgstr "string opsi tak terduga: %s"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py
+#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
+#: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "unknown parser %(parser_name)r (choices: %(choices)s)"
 msgstr ""
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py
+#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
+#: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "unrecognized arguments: %s"
 msgstr "argumen tidak dikenal: %s"
@@ -2690,24 +2411,17 @@ msgstr "izin tidak aman pada '{config_file}' (seharusnya 0600)!"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py ../fdroid
 #: /usr/lib/python3.7/argparse.py ../fdroidserver/__main__.py
+#: /usr/lib/python3.9/argparse.py /usr/lib/python3.11/argparse.py
 msgid "usage: "
 msgstr "penggunaan: "
 
-#: ../fdroid
-msgid "usage: fdroid [-h|--help|--version] <command> [<args>]"
-msgstr "penggunaan: fdroid [-h|--help|--version] <perintah> [<argumen>]"
-
-#: ../fdroidserver/deploy.py ../fdroidserver/upload.py
+#: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "using Apache libcloud to sync with {url}"
 msgstr ""
 
 #: ../fdroidserver/deploy.py
 msgid "virustotal.com is rate limiting, waiting to retry..."
-msgstr ""
-
-#: ../fdroidserver/update.py
-msgid "wiki support is deprecated and will be removed in the next release!"
 msgstr ""
 
 #: ../fdroidserver/publish.py
@@ -2734,16 +2448,6 @@ msgstr ""
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "{appid} does not have a name! Using application ID instead."
-msgstr ""
-
-#: ../fdroidserver/update.py
-#, python-brace-format
-msgid "{appid} does not have a name! Using package name instead."
-msgstr ""
-
-#: ../fdroidserver/update.py
-#, python-brace-format
-msgid "{appid} from {path} is not a valid Android Package Name!"
 msgstr ""
 
 #: ../fdroidserver/update.py
@@ -2794,17 +2498,7 @@ msgstr ""
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
-msgid "{field} not terminated in {name}"
-msgstr ""
-
-#: ../fdroidserver/metadata.py
-#, python-brace-format
 msgid "{file} is blank or corrupt!"
-msgstr ""
-
-#: ../fdroidserver/update.py
-#, python-brace-format
-msgid "{name} \"{path}\" does not exist! Correct it in config.yml."
 msgstr ""
 
 #: ../fdroidserver/update.py
@@ -2817,7 +2511,7 @@ msgstr ""
 msgid "{oldfile} is deprecated, use {newfile}"
 msgstr ""
 
-#: ../fdroidserver/import.py
+#: ../fdroidserver/import_subcommand.py
 #, python-brace-format
 msgid "{path} already exists, ignoring import results!"
 msgstr ""
@@ -2852,7 +2546,7 @@ msgstr ""
 msgid "{url} does not end with \"fdroid\", check the URL path!"
 msgstr ""
 
-#: ../fdroidserver/common.py
+#: ../fdroidserver/import_subcommand.py
 #, python-brace-format
 msgid "{url} does not start with \"http\"!"
 msgstr ""
@@ -2866,3 +2560,75 @@ msgstr[0] ""
 msgid "{} build succeeded"
 msgid_plural "{} builds succeeded"
 msgstr[0] ""
+
+#~ msgid ""
+#~ "\n"
+#~ "        This is a repository of apps to be used with FDroid. Applications in this\n"
+#~ "        repository are either official binaries built by the original application\n"
+#~ "        developers, or are binaries built from source by f-droid.org using the\n"
+#~ "        tools on https://gitlab.com/fdroid.\n"
+#~ "        "
+#~ msgstr ""
+#~ "\n"
+#~ "        Ini adalah repositori aplikasi yang digunakan oleh FDroid. Aplikasi di\n"
+#~ "        repositori ini antara binari resmi yang dibuat oleh pengembang aplikasi\n"
+#~ "        atau binari yang dibuat dari sumbernya oleh f-droid.org menggunakan\n"
+#~ "        alat-alat di https://gitlab.com/fdroid.\n"
+#~ "        "
+
+#~ msgid ""
+#~ "\n"
+#~ "SSH Public Key to be used as Deploy Key:"
+#~ msgstr ""
+#~ "\n"
+#~ "Kunci Publik SSH yang akan digunakan sebagai Kunci Deploy:"
+
+#~ msgid "\"repo_pubkey\" must be present in config.yml when using --nosign!"
+#~ msgstr "\"repo_pubkey\" harus ada di config.yml ketika menggunakan --nosign!"
+
+#, python-brace-format
+#~ msgid "\"{path}\" is not an accepted format, convert to: {formats}"
+#~ msgstr "\"{path}\" bukan format yang diterima, dikonversi ke: {formats}"
+
+#, python-format
+#~ msgid "%(prog)s [options] url"
+#~ msgstr "%(prog)s [opsi] url"
+
+#~ msgid "'sdk_path' not set in 'config.yml'!"
+#~ msgstr "'sdk_path' belum diatur di 'config.yml'!"
+
+#, python-brace-format
+#~ msgid "'{aapt}' is too old, fdroid requires build-tools-23.0.0 or newer!"
+#~ msgstr "'{aapt}' terlalu usang, fdroid memerlukan build-tools-23.0.0 atau yang lebih baru!"
+
+#, python-brace-format
+#~ msgid "'{apkfilename}' is already installed on {dev}."
+#~ msgstr "'{apkfilename}' sudah terpasang di {dev}."
+
+#~ msgid ".fdroid.txt is not supported!  Convert to .fdroid.yml or .fdroid.json."
+#~ msgstr ".fdroid.txt tudak didukung!  Konfersi ke .fdroid.yml atau .fdroid.json."
+
+#~ msgid "Add a new application from its source code"
+#~ msgstr "Tambah aplikasi baru dari kode sumbernya"
+
+#~ msgid "Create skeleton metadata files that are missing"
+#~ msgstr "Membuat kerangka berkas metadata yang hilang"
+
+#~ msgid "Dynamically scan APKs post build"
+#~ msgstr "Pindai APK secara dinamis pasca build"
+
+#~ msgid "Produce human-readable index.xml"
+#~ msgstr "Buat index.xml yang bisa dibaca manusia"
+
+#, python-format
+#~ msgid "can't open '%s': %s"
+#~ msgstr "tidak bisa dibuka '%s': %s"
+
+#~ msgid "force errors to be warnings, or ignore"
+#~ msgstr "paksa untuk mengingatkan adanya error, atau hiraukan"
+
+#~ msgid "usage: fdroid [-h|--help|--version] <command> [<args>]"
+#~ msgstr "penggunaan: fdroid [-h|--help|--version] <perintah> [<argumen>]"
+
+#~ msgid "Update the stats of the repo"
+#~ msgstr "Perbarui status repo"
