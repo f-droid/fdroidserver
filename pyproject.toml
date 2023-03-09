@@ -52,8 +52,6 @@ confidence = ["HIGH", "INFERENCE"]
 
 # TODO many of these could be fixed if someone wants to spend the time
 disable = [
-  "broad-exception-caught",
-  "broad-exception-raised",
   "consider-iterating-dictionary",
   "consider-using-sys-exit",
   "invalid-name",
@@ -65,7 +63,6 @@ disable = [
   "no-else-raise",
   "no-else-return",
   "no-member",
-  "pointless-exception-statement",
   "subprocess-run-check",
   "use-dict-literal",
 ]
