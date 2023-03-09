@@ -1,20 +1,21 @@
 # SOME DESCRIPTIVE TITLE.
 # This file is put in the public domain.
 # Coding Otaku <contact@codingotaku.com>, 2021.
+# Abhiram <abhiram@skiff.com>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 1.0.6-70-g54bc858\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2022-09-06 22:24+0200\n"
-"PO-Revision-Date: 2021-01-14 14:58+0000\n"
-"Last-Translator: Coding Otaku <contact@codingotaku.com>\n"
+"PO-Revision-Date: 2022-11-22 19:37+0000\n"
+"Last-Translator: Abhiram <abhiram@skiff.com>\n"
 "Language-Team: Malayalam <https://hosted.weblate.org/projects/f-droid/fdroidserver/ml/>\n"
 "Language: ml\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.5-dev\n"
+"X-Generator: Weblate 4.15-dev\n"
 
 #: ../fdroidserver/common.py
 msgid ""
@@ -2353,7 +2354,7 @@ msgstr ""
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 #: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
 msgid "complex"
-msgstr ""
+msgstr "സങ്കീർണ്ണമായ"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
