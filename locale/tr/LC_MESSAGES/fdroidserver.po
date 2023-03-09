@@ -2,13 +2,13 @@
 # Copyright (C) YEAR Free Software Foundation, Inc.
 # Oğuz Ersen <oguzersen@protonmail.com>, 2020, 2021, 2022.
 # Orhan <orya@pm.me>, 2021.
-# Oğuz Ersen <oguz@ersen.moe>, 2022.
+# Oğuz Ersen <oguz@ersen.moe>, 2022, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2023-02-21 14:38+0100\n"
-"PO-Revision-Date: 2022-09-08 14:15+0000\n"
+"PO-Revision-Date: 2023-02-26 21:02+0000\n"
 "Last-Translator: Oğuz Ersen <oguz@ersen.moe>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/f-droid/fdroidserver/tr/>\n"
 "Language: tr\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.14.1-dev\n"
+"X-Generator: Weblate 4.16-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -117,12 +117,12 @@ msgstr "%r çağrılabilir değil"
 #: ../fdroidserver/signindex.py
 #, python-format
 msgid "%s did not produce a dict!"
-msgstr ""
+msgstr "%s bir sözlük üretmedi!"
 
 #: ../fdroidserver/signindex.py
 #, python-format
 msgid "%s has bad SHA-256: %s"
-msgstr ""
+msgstr "%s bozuk SHA-256'ya sahip: %s"
 
 #: ../fdroidserver/lint.py
 #, python-format
@@ -272,7 +272,7 @@ msgstr "Android SDK aracı {cmd} bulunamadı!"
 
 #: ../fdroidserver/lint.py
 msgid "App has NoSourceSince or ArchivePolicy \"0 versions\" but AutoUpdateMode or UpdateCheckMode are not None"
-msgstr ""
+msgstr "Uygulamanın NoSourceSince veya ArchivePolicy \"0 sürümü\" var ancak AutoUpdateMode veya UpdateCheckMode Yok değil"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
@@ -290,7 +290,7 @@ msgstr "Geçersiz imza ile {apkfilename} arşivleme!"
 
 #: ../fdroidserver/lint.py
 msgid "AutoUpdateMode with UpdateCheckMode: HTTP must have a pattern."
-msgstr ""
+msgstr "UpdateCheckMode ile AutoUpdateMode: HTTP bir desene sahip olmalıdır."
 
 #: ../fdroidserver/mirror.py
 msgid "Base URL to mirror, can include the index signing key using the query string: ?fingerprint="
@@ -768,14 +768,14 @@ msgid "Found {apkfilename} at {url}"
 msgstr "{url} adresinde {apkfilename} bulundu"
 
 #: ../fdroidserver/scanner.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Found {count} problems in {filename}"
-msgstr "Tarayıcı {appid} içinde {count} sorun buldu:"
+msgstr "{filename} içinde {count} sorun bulundu"
 
 #: ../fdroidserver/scanner.py
 #, python-brace-format
 msgid "Found {count} warnings in {filename}"
-msgstr ""
+msgstr "{filename} içinde {count} uyarı bulundu"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -920,9 +920,9 @@ msgid "Invalid VercodeOperation: {field}"
 msgstr "Geçersiz Vercode İşlemi: {field}"
 
 #: ../fdroidserver/lint.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Invalid VercodeOperation: {invalid_ops}"
-msgstr "Geçersiz Vercode İşlemi: {field}"
+msgstr "Geçersiz VercodeOperation: {invalid_ops}"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -1323,7 +1323,7 @@ msgid "Reading packageName/versionCode/versionName failed, APK invalid: '{apkfil
 msgstr "packageName/versionCode/versionName okuma başarısız, APK geçersiz: '{apkfilename}'"
 
 #: ../fdroidserver/common.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Reading packageName/versionCode/versionName failed,APK invalid: '{apkfilename}'"
 msgstr "packageName/versionCode/versionName okuma başarısız, APK geçersiz: '{apkfilename}'"
 
@@ -1401,9 +1401,9 @@ msgid "Scan the source code of a package"
 msgstr "Bir paketin kaynak kodunu tara"
 
 #: ../fdroidserver/scanner.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Scanner found {count} problems in {apk}"
-msgstr "Tarayıcı {appid} içinde {count} sorun buldu:"
+msgstr "Tarayıcı {apk} içinde {count} sorun buldu"
 
 #: ../fdroidserver/scanner.py
 #, python-brace-format
@@ -1732,7 +1732,7 @@ msgstr "UpdateCheckData geçersiz URL'ye sahip: {url}"
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "UpdateCheckData must match the version code as integer (\\d or [0-9]): {codeex}"
-msgstr ""
+msgstr "UpdateCheckData tam sayı olarak sürüm koduyla eşleşmelidir (\\d veya [0-9]): {codeex}"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
@@ -1747,7 +1747,7 @@ msgstr "UpdateCheckData geçerli bir URL değil: {url}"
 #. Translators: https://developer.android.com/studio/build/application-id
 #: ../fdroidserver/lint.py
 msgid "UpdateCheckMode is set but it looks likecheckupdates hasn't been run yet"
-msgstr ""
+msgstr "UpdateCheckMode ayarlı ancak checkupdates henüz çalıştırılmamış gibi görünüyor"
 
 #: ../fdroidserver/lint.py
 msgid "UpdateCheckName is set to the known application ID, it can be removed"
@@ -1926,7 +1926,7 @@ msgstr "%r kipiyle \"-\" argümanı"
 #: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "argument %(argument_name)s: %(message)s"
-msgstr ""
+msgstr "argüman %(argument_name)s: %(message)s"
 
 #: ../fdroidserver/nightly.py
 msgid "attempting bare SSH connection to test deploy key:"
@@ -1943,7 +1943,7 @@ msgstr "'%(filename)s' açılamıyor: %(error)s"
 
 #: ../fdroidserver/scanner.py
 msgid "can't open non-https url: '{};"
-msgstr ""
+msgstr "https olmayan url açılamıyor: '{};"
 
 #: ../fdroidserver/build.py
 #, python-brace-format
@@ -1992,14 +1992,14 @@ msgstr[0] "çakışan seçenek satırı: %s"
 msgstr[1] "çakışan seçenek satırları: %s"
 
 #: /usr/lib/python3.11/argparse.py
-#, fuzzy, python-format
+#, python-format
 msgid "conflicting subparser alias: %s"
-msgstr "çakışan seçenek satırı: %s"
+msgstr "çakışan alt ayrıştırıcı takma adı: %s"
 
 #: /usr/lib/python3.11/argparse.py
-#, fuzzy, python-format
+#, python-format
 msgid "conflicting subparser: %s"
-msgstr "çakışan seçenek satırı: %s"
+msgstr "çakışan alt ayrıştırıcı: %s"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
@@ -2042,14 +2042,12 @@ msgid "dest= is required for options like %r"
 msgstr "dest= %r gibi seçenekler için gerekli"
 
 #: ../fdroidserver/scanner.py
-#, fuzzy
 msgid "downloading '{}'"
-msgstr "%s indiriliyor"
+msgstr "'{}' indiriliyor"
 
 #: ../fdroidserver/scanner.py
-#, fuzzy
 msgid "downloading scanner signatures from '{}' failed"
-msgstr "Gizemli imza {apkfilename} dosyasından kaldırılıyor"
+msgstr "'{}' tarayıcı imzalarının indirilmesi başarısız oldu"
 
 #: ../fdroidserver/scanner.py
 msgid "executable binary, possibly code"
@@ -2088,7 +2086,7 @@ msgstr "fdroid [<komut>] [-h|--help|--version|<argümanlar>]"
 
 #: ../fdroidserver/scanner.py
 msgid "fetch the latest version of signatures from the web"
-msgstr ""
+msgstr "imzaların en son sürümünü internetten al"
 
 #: /usr/lib/python3.11/optparse.py
 msgid "floating-point"
@@ -2157,7 +2155,7 @@ msgstr "geçersiz seçenek satırı %(option)r: %(prefix_chars)r karakteri ile b
 
 #: ../fdroidserver/common.py
 msgid "ipfs_cid not found, skipping CIDv1 generation"
-msgstr ""
+msgstr "ipfs_cid bulunamadı, CIDv1 oluşturma atlanıyor"
 
 #: ../fdroidserver/checkupdates.py
 #, python-brace-format
@@ -2191,7 +2189,7 @@ msgstr "birbirinden bağımsız argümanlar isteğe bağlı olmalıdır"
 #: ../fdroidserver/scanner.py
 #, python-brace-format
 msgid "next {name} cache update due in {time}"
-msgstr ""
+msgstr "sonraki {name} önbellek güncellemesi {time} içinde"
 
 #: ../fdroidserver/mirror.py
 #, python-brace-format
@@ -2302,9 +2300,8 @@ msgid "optional arguments"
 msgstr "isteğe bağlı argümanlar"
 
 #: /usr/lib/python3.11/argparse.py
-#, fuzzy
 msgid "options"
-msgstr "Seçenekler"
+msgstr "seçenekler"
 
 #: ../fdroidserver/nightly.py
 #, python-brace-format
@@ -2348,7 +2345,7 @@ msgstr "s3cmd sync {path} konumunu {url} adresine indeksler ve siler"
 #: ../fdroidserver/scanner.py
 #, python-brace-format
 msgid "scanner cache is malformed! You can clear it with: '{clear}'"
-msgstr ""
+msgstr "tarayıcı önbelleği bozuk! Şu şekilde temizleyebilirsiniz: '{clear}'"
 
 #: ../fdroidserver/scanner.py
 msgid "shared library"
@@ -2542,7 +2539,7 @@ msgstr "{path} yok!  Şunu çalıştırarak oluşturun:"
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "{path} has bad file signature \"{pattern}\", possible Janus exploit!"
-msgstr "{path} konumunun bozum imzası \"{pattern}\" var, olası Janus istismarı!"
+msgstr "{path} konumunun bozuk imzası \"{pattern}\" var, olası Janus istismarı!"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
