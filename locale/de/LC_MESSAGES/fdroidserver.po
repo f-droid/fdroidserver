@@ -15,7 +15,7 @@
 # fossdd <fossdd@tutanota.com>, 2021.
 # Ceeee <marius.romanus@gmx.de>, 2021.
 # C. Rüdinger <Mail-an-CR@web.de>, 2021, 2022.
-# VfBFan <drop0815@posteo.de>, 2021.
+# VfBFan <drop0815@posteo.de>, 2021, 2023.
 # Roman Leo <roman.leo@gmx.de>, 2021.
 # Follpvosten <wolfi@karpador.xyz>, 2021.
 # ssantos <ssantos@web.de>, 2022.
@@ -24,15 +24,15 @@ msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2022-09-06 22:24+0200\n"
-"PO-Revision-Date: 2022-09-30 17:55+0000\n"
-"Last-Translator: nautilusx <translate@disroot.org>\n"
+"PO-Revision-Date: 2023-02-21 09:27+0000\n"
+"Last-Translator: VfBFan <drop0815@posteo.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/f-droid/fdroidserver/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.14.1\n"
+"X-Generator: Weblate 4.16-dev\n"
 
 #: ../fdroidserver/common.py
 msgid ""
@@ -250,7 +250,7 @@ msgstr "„{value}” ist kein gültiges {field} in {appid}. Regex-Muster: {patt
 #: ../fdroidserver/checkupdates.py
 #, python-brace-format
 msgid "...checkupdate failed for {appid} : {error}"
-msgstr "...checkupdate für {appid} fehlgeschlagen: {error}"
+msgstr "… checkupdate für {appid} fehlgeschlagen: {error}"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
@@ -1068,22 +1068,22 @@ msgstr "Erstellte Programmpakete auf Geräten installieren"
 #: ../fdroidserver/install.py
 #, python-format
 msgid "Installing %s..."
-msgstr "Installiere %s…"
+msgstr "Installiere %s …"
 
 #: ../fdroidserver/install.py
 #, python-format
 msgid "Installing %s…"
-msgstr "%s installieren …"
+msgstr "%s installieren …"
 
 #: ../fdroidserver/install.py
 #, python-brace-format
 msgid "Installing '{apkfilename}' on {dev}..."
-msgstr "Installiere '{apkfilename}' auf {dev}.…"
+msgstr "Installiere '{apkfilename}' auf {dev} …"
 
 #: ../fdroidserver/install.py
 #, python-brace-format
 msgid "Installing '{apkfilename}' on {dev}…"
-msgstr "Installiere '{apkfilename}' auf {dev}.…"
+msgstr "Installiere '{apkfilename}' auf {dev} …"
 
 #: ../fdroid ../fdroidserver/__main__.py
 msgid "Interact with the repo HTTP server"
@@ -2233,7 +2233,7 @@ msgstr "X.509 'Distinguished Name' zum Erzeugen von Schlüsseln"
 
 #: ../fdroidserver/common.py
 msgid "You can use ANDROID_HOME to set the path to your SDK, i.e.:"
-msgstr "Sie können ANDROID_HOME verwenden, um den Pfad zu Ihrem SDK zu setzen, z.B.:"
+msgstr "Sie können ANDROID_HOME verwenden, um den Pfad zu Ihrem SDK zu setzen, z. B.:"
 
 #: ../fdroidserver/scanner.py
 msgid "ZIP file archive"
@@ -2797,7 +2797,7 @@ msgstr "Verwende Apache libcloud zur Synchronisation mit {url}"
 
 #: ../fdroidserver/deploy.py
 msgid "virustotal.com is rate limiting, waiting to retry..."
-msgstr "virustotal.com limitiert die Zugriffe, warte auf Wiederholung …"
+msgstr "virustotal.com limitiert die Zugriffe, warte auf Wiederholung …"
 
 #: ../fdroidserver/update.py
 msgid "wiki support is deprecated and will be removed in the next release!"
