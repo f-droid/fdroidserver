@@ -18,7 +18,6 @@ msgstr ""
 "X-Generator: Weblate 4.5-dev\n"
 
 #: ../fdroidserver/common.py
-#, fuzzy
 msgid ""
 "\n"
 "        This is a repository of apps to be used with FDroid. Applications in "
