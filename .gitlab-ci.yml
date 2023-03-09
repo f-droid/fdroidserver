@@ -195,13 +195,11 @@ lint_format_safety_bandit_checks:
           ca-certificates
           dash
           gcc
-          gettext
           git
           make
           pycodestyle
           pyflakes3
           pylint
-          python3-babel
           python3-dev
           python3-git
           python3-nose
@@ -225,9 +223,25 @@ lint_format_safety_bandit_checks:
             tests/*.py
             tests/*.TestCase
         || set_error
+    - exit $EXITVALUE
+
+
+# Run all the various linters and static analysis tools.
+locales:
+  image: debian:bookworm-slim
+  variables:
+    LANG: C.UTF-8
+  script:
+    - apt-get update
+    - apt-get -y install --no-install-recommends
+          gettext
+          make
+          python3-babel
+    - export EXITVALUE=0
+    - function set_error() { export EXITVALUE=1; printf "\x1b[31mERROR `history|tail -2|head -1|cut -b 6-500`\x1b[0m\n"; }
     - make -C locale compile || set_error
     - rm -f locale/*/*/*.mo
-    - pybabel compile --domain=fdroidserver --directory locale 2>&1 | (grep -F "error:" && exit 1) || true
+    - pybabel compile --domain=fdroidserver --directory locale 2>&1 | { grep -F "error:" && exit 1; } || true
     - exit $EXITVALUE
 
 
