@@ -3408,8 +3408,40 @@ def verify_apks(signed_apk, unsigned_apk, tmp_dir, v1_only=None):
     return None
 
 
-def verify_deprecated_jar_signature(jar):
+def verify_jar_signature(jar):
     """Verify the signature of a given JAR file.
+
+    jarsigner is very shitty: unsigned JARs pass as "verified"! So
+    this has to turn on -strict then check for result 4, since this
+    does not expect the signature to be from a CA-signed certificate.
+
+    Raises
+    ------
+    VerificationException
+        If the JAR's signature could not be verified.
+
+    """
+    error = _('JAR signature failed to verify: {path}').format(path=jar)
+    try:
+        output = subprocess.check_output(
+            [config['jarsigner'], '-strict', '-verify', jar], stderr=subprocess.STDOUT
+        )
+        raise VerificationException(error + '\n' + output.decode('utf-8'))
+    except subprocess.CalledProcessError as e:
+        if e.returncode == 4:
+            logging.debug(_('JAR signature verified: {path}').format(path=jar))
+        else:
+            raise VerificationException(error + '\n' + e.output.decode('utf-8')) from e
+
+
+def verify_deprecated_jar_signature(jar):
+    """Verify the signature of a given JAR file, allowing deprecated algorithms.
+
+    index.jar (v0) and index-v1.jar are both signed by MD5/SHA1 by
+    definition, so this method provides a way to verify those.  Also,
+    apksigner has different deprecation rules than jarsigner, so this
+    is our current hack to try to represent the apksigner rules when
+    executing jarsigner.
 
     jarsigner is very shitty: unsigned JARs pass as "verified"! So
     this has to turn on -strict then check for result 4, since this

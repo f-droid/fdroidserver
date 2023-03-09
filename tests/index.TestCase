@@ -41,10 +41,20 @@ class Options:
 
 
 class IndexTest(unittest.TestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        cls.basedir = os.path.join(localmodule, 'tests')
+        # TODO something should remove cls.index_v1_jar, but it was
+        # causing the tests to be flaky.  There seems to be something
+        # that is running the background somehow, maybe sign_index()
+        # exits before jarsigner actually finishes?
+        cls.index_v1_jar = os.path.join(cls.basedir, 'repo', 'index-v1.jar')
+
     def setUp(self):
-        logging.basicConfig(level=logging.DEBUG)
-        self.basedir = os.path.join(localmodule, 'tests')
+        logging.basicConfig(level=logging.ERROR)
         os.chmod(os.path.join(self.basedir, 'config.py'), 0o600)
+        os.chdir(self.basedir)  # so read_config() can find config.py
 
         fdroidserver.common.config = None
         fdroidserver.common.options = Options
@@ -54,17 +64,17 @@ class IndexTest(unittest.TestCase):
         fdroidserver.signindex.config = config
         fdroidserver.update.config = config
 
-        if not os.path.exists('repo/index-v1.jar'):
-            fdroidserver.signindex.sign_index(
-                os.path.join(self.basedir, 'repo'), 'index-v1.json'
-            )
         self._td = mkdtemp()
         self.testdir = self._td.name
 
     def tearDown(self):
-        os.chdir(self.basedir)
         self._td.cleanup()
-        os.remove('repo/index-v1.jar')
+
+    def _sign_test_index_v1_jar(self):
+        if not os.path.exists(self.index_v1_jar):
+            fdroidserver.signindex.sign_index(
+                os.path.dirname(self.index_v1_jar), 'index-v1.json'
+            )
 
     def test_get_public_key_from_jar_succeeds(self):
         source_dir = os.path.join(self.basedir, 'signindex')
@@ -100,9 +110,10 @@ class IndexTest(unittest.TestCase):
             )
 
     def test_get_repo_key_fingerprint(self):
+        self._sign_test_index_v1_jar()
         pubkey, fingerprint = fdroidserver.index.extract_pubkey()
         data, public_key, public_key_fingerprint = fdroidserver.index.get_index_from_jar(
-            'repo/index-v1.jar', fingerprint
+            'repo/index-v1.jar', fingerprint, allow_deprecated=True
         )
         self.assertIsNotNone(data)
         self.assertIsNotNone(public_key)
@@ -112,12 +123,15 @@ class IndexTest(unittest.TestCase):
         pubkey, fingerprint = fdroidserver.index.extract_pubkey()
         fingerprint = fingerprint[:-1] + 'G'
         with self.assertRaises(fdroidserver.exception.VerificationException):
-            fdroidserver.index.get_index_from_jar('repo/index-v1.jar', fingerprint)
+            fdroidserver.index.get_index_from_jar(
+                'repo/index-v1.jar', fingerprint, allow_deprecated=True
+            )
 
     def test_get_index_from_jar_with_chars_to_be_stripped(self):
+        self._sign_test_index_v1_jar()
         fingerprint = 'NOOOO F4 9A F3 F1 1E FD DF 20 DF FD 70 F5 E3 11 7B 99 76 67 41 67 AD CA 28 0E 6B 19 32 A0 60 1B 26 F6'
         data, public_key, public_key_fingerprint = fdroidserver.index.get_index_from_jar(
-            'repo/index-v1.jar', fingerprint
+            'repo/index-v1.jar', fingerprint, allow_deprecated=True
         )
 
     @patch('requests.head')
@@ -157,14 +171,106 @@ class IndexTest(unittest.TestCase):
 
     @patch('fdroidserver.net.http_get')
     def test_download_repo_index_url_parsing(self, mock_http_get):
+        """Test whether it is trying to download the right file
+
+        This passes the URL back via the etag return value just as a
+        hack to check which URL was actually attempted.
+
+        """
         mock_http_get.side_effect = lambda url, etag, timeout: (None, url)
         repo_url = 'https://example.org/fdroid/repo'
         index_url = 'https://example.org/fdroid/repo/index-v1.jar'
         fingerprint_url = 'https://example.org/fdroid/repo?fingerprint=' + GP_FINGERPRINT
         slash_url = 'https://example.org/fdroid/repo//?fingerprint=' + GP_FINGERPRINT
         for url in (repo_url, index_url, fingerprint_url, slash_url):
-            _ignored, returned_url = fdroidserver.index.download_repo_index(url, verify_fingerprint=False)
-            self.assertEqual(index_url, returned_url)
+            _ignored, etag_set_to_url = fdroidserver.index.download_repo_index(url, verify_fingerprint=False)
+            self.assertEqual(index_url, etag_set_to_url)
+
+    @patch('fdroidserver.net.http_get')
+    def test_download_repo_index_v2_url_parsing(self, mock_http_get):
+        """Test whether it is trying to download the right file
+
+        This passes the URL back via the etag return value just as a
+        hack to check which URL was actually attempted.
+
+        """
+        mock_http_get.side_effect = lambda url, etag, timeout: (None, url)
+        repo_url = 'https://example.org/fdroid/repo'
+        entry_url = 'https://example.org/fdroid/repo/entry.jar'
+        index_url = 'https://example.org/fdroid/repo/index-v2.json'
+        fingerprint_url = 'https://example.org/fdroid/repo?fingerprint=' + GP_FINGERPRINT
+        slash_url = 'https://example.org/fdroid/repo//?fingerprint=' + GP_FINGERPRINT
+        for url in (repo_url, entry_url, index_url, fingerprint_url, slash_url):
+            _ignored, etag_set_to_url = fdroidserver.index.download_repo_index_v2(
+                url, verify_fingerprint=False
+            )
+            self.assertEqual(entry_url, etag_set_to_url)
+
+    @patch('fdroidserver.net.http_get')
+    def test_download_repo_index_v2(self, mock_http_get):
+        def http_get_def(url, etag, timeout):  # pylint: disable=unused-argument
+            f = os.path.basename(url)
+            with open(os.path.join(self.testdir, 'repo', f), 'rb') as fp:
+                return (fp.read(), 'fakeetag')
+        mock_http_get.side_effect = http_get_def
+        os.chdir(self.testdir)
+        fdroidserver.signindex.config['keystore'] = os.path.join(self.basedir, 'keystore.jks')
+        os.mkdir('repo')
+        shutil.copy(os.path.join(self.basedir, 'repo', 'entry.json'), 'repo')
+        shutil.copy(os.path.join(self.basedir, 'repo', 'index-v2.json'), 'repo')
+        fdroidserver.signindex.sign_index('repo', 'entry.json')
+        repo_url = 'https://example.org/fdroid/repo'
+        entry_url = 'https://example.org/fdroid/repo/entry.jar'
+        index_url = 'https://example.org/fdroid/repo/index-v2.json'
+        fingerprint_url = 'https://example.org/fdroid/repo?fingerprint=' + GP_FINGERPRINT
+        slash_url = 'https://example.org/fdroid/repo//?fingerprint=' + GP_FINGERPRINT
+        for url in (repo_url, entry_url, index_url, fingerprint_url, slash_url):
+            data, _ignored = fdroidserver.index.download_repo_index_v2(
+                url, verify_fingerprint=False
+            )
+            self.assertEqual(['repo', 'packages'], list(data.keys()))
+
+    @patch('fdroidserver.net.http_get')
+    def test_download_repo_index_v2_bad_fingerprint(self, mock_http_get):
+        def http_get_def(url, etag, timeout):  # pylint: disable=unused-argument
+            f = os.path.basename(url)
+            with open(os.path.join(self.testdir, 'repo', f), 'rb') as fp:
+                return (fp.read(), 'fakeetag')
+        mock_http_get.side_effect = http_get_def
+        os.chdir(self.testdir)
+        fdroidserver.signindex.config['keystore'] = os.path.join(self.basedir, 'keystore.jks')
+        os.mkdir('repo')
+        shutil.copy(os.path.join(self.basedir, 'repo', 'entry.json'), 'repo')
+        shutil.copy(os.path.join(self.basedir, 'repo', 'index-v2.json'), 'repo')
+        fdroidserver.signindex.sign_index('repo', 'entry.json')
+        bad_fp = '0123456789001234567890012345678900123456789001234567890012345678'
+        bad_fp_url = 'https://example.org/fdroid/repo?fingerprint=' + bad_fp
+        with self.assertRaises(fdroidserver.exception.VerificationException):
+            data, _ignored = fdroidserver.index.download_repo_index_v2(bad_fp_url)
+
+    @patch('fdroidserver.net.http_get')
+    def test_download_repo_index_v2_entry_verify(self, mock_http_get):
+        def http_get_def(url, etag, timeout):  # pylint: disable=unused-argument
+            return (b'not the entry.jar file contents', 'fakeetag')
+        mock_http_get.side_effect = http_get_def
+        url = 'https://example.org/fdroid/repo?fingerprint=' + GP_FINGERPRINT
+        with self.assertRaises(fdroidserver.exception.VerificationException):
+            data, _ignored = fdroidserver.index.download_repo_index_v2(url)
+
+    @patch('fdroidserver.net.http_get')
+    def test_download_repo_index_v2_index_verify(self, mock_http_get):
+        def http_get_def(url, etag, timeout):  # pylint: disable=unused-argument
+            return (b'not the index-v2.json file contents', 'fakeetag')
+        mock_http_get.side_effect = http_get_def
+        os.chdir(self.testdir)
+        fdroidserver.signindex.config['keystore'] = os.path.join(self.basedir, 'keystore.jks')
+        os.mkdir('repo')
+        shutil.copy(os.path.join(self.basedir, 'repo', 'entry.json'), 'repo')
+        shutil.copy(os.path.join(self.basedir, 'repo', 'index-v2.json'), 'repo')
+        fdroidserver.signindex.sign_index('repo', 'entry.json')
+        url = 'https://example.org/fdroid/repo?fingerprint=' + GP_FINGERPRINT
+        with self.assertRaises(fdroidserver.exception.VerificationException):
+            data, _ignored = fdroidserver.index.download_repo_index_v2(url)
 
     def test_v1_sort_packages(self):
 
