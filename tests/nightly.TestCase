@@ -48,7 +48,6 @@ class Options:
 
 
 class NightlyTest(unittest.TestCase):
-
     basedir = Path(__file__).resolve().parent
     path = os.environ['PATH']
 

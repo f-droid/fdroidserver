@@ -48,7 +48,6 @@ TEST_APP_ENTRY = {
 
 
 class VerifyTest(unittest.TestCase):
-
     basedir = Path(__file__).resolve().parent
 
     def setUp(self):

@@ -171,7 +171,6 @@ class LintTest(unittest.TestCase):
         }
 
         for field, values in fields.items():
-
             for bad in values['bad']:
                 anywarns = False
                 app[field] = bad

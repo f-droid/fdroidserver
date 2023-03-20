@@ -160,7 +160,6 @@ def get_repo_base_url(clone_url, repo_git_base, force_type=None):
 
 
 def main():
-
     parser = ArgumentParser()
     common.setup_global_opts(parser)
     parser.add_argument(

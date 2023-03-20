@@ -697,7 +697,6 @@ def check_updates_ucm_http_aum_pattern(app):  # noqa: D403
 
 
 def main():
-
     global config, options
 
     # Parse command line...
@@ -754,7 +753,6 @@ def main():
 
         # only run yamllint when linting individual apps.
         if options.appid or options.force_yamllint:
-
             # run yamllint on app metadata
             ymlpath = Path('metadata') / (appid + '.yml')
             if ymlpath.is_file():

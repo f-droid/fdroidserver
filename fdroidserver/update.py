@@ -2150,7 +2150,6 @@ start_timestamp = time.gmtime()
 
 
 def main():
-
     global config, options
 
     # Parse command line...

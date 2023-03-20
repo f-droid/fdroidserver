@@ -31,7 +31,6 @@ class DeployTest(unittest.TestCase):
         fdroidserver.deploy.config = {}
 
     def test_update_serverwebroot_make_cur_version_link(self):
-
         # setup parameters for this test run
         fdroidserver.deploy.options.no_chcksum = True
         fdroidserver.deploy.options.identity_file = None
@@ -123,7 +122,6 @@ class DeployTest(unittest.TestCase):
         self.assertEqual(call_iteration, 3, 'expected 3 invocations of subprocess.call')
 
     def test_update_serverwebroot_with_id_file(self):
-
         # setup parameters for this test run
         fdroidserver.deploy.options.no_chcksum = False
         fdroidserver.deploy.options.verbose = True

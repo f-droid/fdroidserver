@@ -49,7 +49,6 @@ def disable_in_config(key, value):
 
 
 def main():
-
     global options, config
 
     # Parse command line...

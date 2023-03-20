@@ -51,11 +51,7 @@ import tempfile
 import json
 from pathlib import Path
 
-# TODO change to only import defusedxml once its installed everywhere
-try:
-    import defusedxml.ElementTree as XMLElementTree
-except ImportError:
-    import xml.etree.ElementTree as XMLElementTree  # nosec this is a fallback only
+import defusedxml.ElementTree as XMLElementTree
 
 from base64 import urlsafe_b64encode
 from binascii import hexlify
@@ -4239,8 +4235,8 @@ def auto_install_ndk(build):
         for n in ndk:
             _install_ndk(n)
     else:
-        BuildException(_('Invalid ndk: entry in build: "{ndk}"')
-                       .format(ndk=str(ndk)))
+        raise BuildException(_('Invalid ndk: entry in build: "{ndk}"')
+                             .format(ndk=str(ndk)))
 
 
 def _install_ndk(ndk):
