@@ -51,11 +51,7 @@ import tempfile
 import json
 from pathlib import Path
 
-# TODO change to only import defusedxml once its installed everywhere
-try:
-    import defusedxml.ElementTree as XMLElementTree
-except ImportError:
-    import xml.etree.ElementTree as XMLElementTree  # nosec this is a fallback only
+import defusedxml.ElementTree as XMLElementTree
 
 from base64 import urlsafe_b64encode
 from binascii import hexlify
