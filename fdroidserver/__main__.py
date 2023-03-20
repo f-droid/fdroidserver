@@ -134,7 +134,7 @@ def main():
         sys.exit(0)
 
     command = sys.argv[1]
-    if command not in COMMANDS and command not in available_plugins.keys():
+    if command not in COMMANDS and command not in available_plugins:
         if command in ('-h', '--help'):
             print_help(available_plugins=available_plugins)
             sys.exit(0)

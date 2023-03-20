@@ -61,7 +61,6 @@ confidence = ["HIGH", "INFERENCE"]
 disable = [
   "broad-exception-caught",
   "broad-exception-raised",
-  "consider-iterating-dictionary",
   "invalid-name",
   "missing-class-docstring",
   "missing-function-docstring",

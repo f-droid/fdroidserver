@@ -504,8 +504,8 @@ def parse_yaml_srclib(metadatapath):
                                cause=e)
             return thisinfo
 
-    for key in data.keys():
-        if key not in thisinfo.keys():
+    for key in data:
+        if key not in thisinfo:
             _warn_or_exception(_("Invalid srclib metadata: unknown key "
                                  "'{key}' in '{file}'")
                                .format(key=key, file=metadatapath))

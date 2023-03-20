@@ -312,7 +312,7 @@ def main():
                                              version=config['basebox_version']))
                     sys.exit(1)
             # verify box
-            if config['basebox_version'] not in BASEBOX_CHECKSUMS.keys():
+            if config['basebox_version'] not in BASEBOX_CHECKSUMS:
                 logging.critical("can not verify '{box}', "
                                  "unknown basebox version '{version}'"
                                  .format(box=config['basebox'],
