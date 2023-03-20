@@ -21,6 +21,7 @@
 import git
 from pathlib import Path
 import platform
+import os
 import re
 import logging
 import importlib
@@ -329,7 +330,13 @@ class Build(dict):
         ndk = self.ndk
         if isinstance(ndk, list):
             ndk = self.ndk[0]
-        return common.config['ndk_paths'].get(ndk, '')
+        path = common.config['ndk_paths'].get(ndk)
+        if path:
+            return path
+        for vsn, path in common.config['ndk_paths'].items():
+            if not vsn.endswith("_orig") and path and os.path.basename(path) == ndk:
+                return path
+        return ''
 
 
 flagtypes = {
