@@ -623,7 +623,7 @@ def upload_apk_to_virustotal(virustotal_apikey, packageName, apkName, hash,
                                 + str(response['positives']) + ' times:'
                                 + '\n\t' + response['permalink'])
             break
-        elif r.status_code == 204:
+        if r.status_code == 204:
             logging.warning(_('virustotal.com is rate limiting, waiting to retry...'))
             time.sleep(30)  # wait for public API rate limiting
 

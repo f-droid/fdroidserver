@@ -1803,7 +1803,7 @@ def parse_androidmanifests(paths, app):
                                 if re.match(r'.*[\'"\s]{flavour}[\'"\s].*\{{.*'.format(flavour=flavour), line):
                                     inside_required_flavour = 2
                                     break
-                                elif re.match(r'.*[\'"\s]{flavour}[\'"\s].*'.format(flavour=flavour), line):
+                                if re.match(r'.*[\'"\s]{flavour}[\'"\s].*'.format(flavour=flavour), line):
                                     inside_required_flavour = 1
                                     break
 
