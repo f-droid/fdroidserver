@@ -31,6 +31,13 @@ disable_error_code = "no-redef, misc, arg-type"
 # avoid hangs.
 jobs = 4
 
+# Minimum Python version to use for version dependent checks. Will default to the
+# version used to run pylint.
+py-version = "3.9"
+
+# Files or directories to be skipped. They should be base names, not paths.
+ignore = ["apksigcopier.py"]
+
 [tool.pylint.basic]
 # Good variable names which should always be accepted, separated by a comma.
 good-names = ["i", "j", "k", "ex", "Run", "f", "fp"]
@@ -54,17 +61,13 @@ confidence = ["HIGH", "INFERENCE"]
 disable = [
   "broad-exception-caught",
   "broad-exception-raised",
-  "consider-iterating-dictionary",
-  "consider-using-sys-exit",
   "invalid-name",
   "missing-class-docstring",
   "missing-function-docstring",
   "missing-module-docstring",
-  "no-else-break",
   "no-else-continue",
   "no-else-raise",
   "no-else-return",
-  "no-member",
   "subprocess-run-check",
   "use-dict-literal",
 ]

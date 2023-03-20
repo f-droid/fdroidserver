@@ -504,8 +504,8 @@ def parse_yaml_srclib(metadatapath):
                                cause=e)
             return thisinfo
 
-    for key in data.keys():
-        if key not in thisinfo.keys():
+    for key in data:
+        if key not in thisinfo:
             _warn_or_exception(_("Invalid srclib metadata: unknown key "
                                  "'{key}' in '{file}'")
                                .format(key=key, file=metadatapath))
@@ -764,6 +764,8 @@ def parse_metadata(metadatapath):
             try:
                 commit_id = common.get_head_commit_id(git.Repo(build_dir))
                 logging.debug(_('Including metadata from %s@%s') % (metadata_in_repo, commit_id))
+            # See https://github.com/PyCQA/pylint/issues/2856 .
+            # pylint: disable-next=no-member
             except git.exc.InvalidGitRepositoryError:
                 logging.debug(_('Including metadata from {path}').format(metadata_in_repo))
             app_in_repo = parse_metadata(metadata_in_repo)

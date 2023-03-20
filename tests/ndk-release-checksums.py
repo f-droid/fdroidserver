@@ -7,6 +7,7 @@ import os
 import re
 import requests
 import subprocess
+import sys
 from colorama import Fore, Style
 
 
@@ -26,7 +27,7 @@ with open('fdroidserver/common.py') as fp:
 
 to_compile = re.search(r'\nNDKS = [^\]]+\]', common_py).group()
 if not to_compile:
-    exit(1)
+    sys.exit(1)
 code = compile(to_compile, '<string>', 'exec')
 config = {}
 exec(code, None, config)  # nosec this is just a CI script
@@ -78,7 +79,7 @@ with open('fdroidserver/common.py', 'w') as fp:
 if os.getenv('CI_PROJECT_NAMESPACE') != 'fdroid':
     p = subprocess.run(['git', '--no-pager', 'diff'])
     print(p.stdout)
-    exit(errors)
+    sys.exit(errors)
 
 
 # This only runs after commits are pushed to fdroid/fdroidserver
@@ -99,6 +100,8 @@ if git_repo.is_dirty() and 'fdroidserver/common.py' in modified:
     remote_name = 'fdroid-bot'
     try:
         remote = git_repo.create_remote(remote_name, url)
+    # See https://github.com/PyCQA/pylint/issues/2856 .
+    # pylint: disable-next=no-member
     except git.exc.GitCommandError:
         remote = git.remote.Remote(git_repo, remote_name)
         remote.set_url(url)
@@ -112,7 +115,7 @@ if git_repo.is_dirty() and 'fdroidserver/common.py' in modified:
             + 'ERROR: GitLab Token not found in PERSONAL_ACCESS_TOKEN!'
             + Style.RESET_ALL
         )
-        exit(1)
+        sys.exit(1)
     gl = gitlab.Gitlab(
         os.getenv('CI_SERVER_URL'), api_version=4, private_token=private_token
     )

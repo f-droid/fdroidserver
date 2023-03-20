@@ -6,6 +6,7 @@ import os
 import re
 import requests
 import subprocess
+import sys
 from colorama import Fore, Style
 from distutils.version import LooseVersion
 
@@ -92,7 +93,7 @@ with open('gradlew-fdroid', 'w') as fp:
 if os.getenv('CI_PROJECT_NAMESPACE') != 'fdroid':
     p = subprocess.run(['git', '--no-pager', 'diff'])
     print(p.stdout)
-    exit(errors)
+    sys.exit(errors)
 
 # This only runs after commits are pushed to fdroid/fdroidserver
 git_repo = git.repo.Repo('.')
@@ -103,7 +104,7 @@ if git_repo.is_dirty() and ('gradlew-fdroid' in modified or 'makebuildserver' in
         print(Fore.RED
               + 'ERROR: GitLab Token not found in PERSONAL_ACCESS_TOKEN!'
               + Style.RESET_ALL)
-        exit(1)
+        sys.exit(1)
 
     branch = git_repo.create_head(os.path.basename(__file__), force=True)
     branch.checkout()
@@ -116,6 +117,8 @@ if git_repo.is_dirty() and ('gradlew-fdroid' in modified or 'makebuildserver' in
     remote_name = 'fdroid-bot'
     try:
         remote = git_repo.create_remote(remote_name, url)
+    # See https://github.com/PyCQA/pylint/issues/2856 .
+    # pylint: disable-next=no-member
     except git.exc.GitCommandError:
         remote = git.remote.Remote(git_repo, remote_name)
         remote.set_url(url)

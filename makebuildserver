@@ -91,7 +91,7 @@ with open('buildserver/Vagrantfile') as fp:
     m = re.search(r"""\.vm\.box\s*=\s*["'](.*)["']""", fp.read())
     if not m:
         logging.error('Cannot find box name in buildserver/Vagrantfile!')
-        exit(1)
+        sys.exit(1)
     config['basebox'] = m.group(1)
 config['basebox_version'] = BASEBOX_VERSION_DEFAULT
 config['cachedir'] = os.path.join(os.getenv('HOME'), '.cache', 'fdroidserver')
@@ -107,7 +107,7 @@ elif os.path.exists('makebs.config.py'):
 if show_config_deprecation:
     logging.error('Config is via %s and command line flags.' % configfile)
     parser.print_help()
-    exit(1)
+    sys.exit(1)
 
 logging.debug("Vagrantfile.yaml parsed -> %s", json.dumps(config, indent=4, sort_keys=True))
 
@@ -264,7 +264,7 @@ def main():
             logging.debug('found \'vmx\' or \'svm\' in /proc/cpuinfo -> hwvirtex = \'on\'')
         else:
             logging.error('hwvirtex = \'on\' and no \'vmx\' or \'svm\' found in /proc/cpuinfo!')
-            exit(1)
+            sys.exit(1)
 
     serverdir = os.path.join(os.getcwd(), 'buildserver')
     logfilename = os.path.join(serverdir, 'up.log')
@@ -312,7 +312,7 @@ def main():
                                              version=config['basebox_version']))
                     sys.exit(1)
             # verify box
-            if config['basebox_version'] not in BASEBOX_CHECKSUMS.keys():
+            if config['basebox_version'] not in BASEBOX_CHECKSUMS:
                 logging.critical("can not verify '{box}', "
                                  "unknown basebox version '{version}'"
                                  .format(box=config['basebox'],

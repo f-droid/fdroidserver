@@ -33,7 +33,6 @@ import shutil
 from . import _
 from . import common
 from . import index
-from . import update
 from .exception import FDroidException
 
 config = None
@@ -524,7 +523,7 @@ def upload_apk_to_android_observatory(path):
 
     apkfilename = os.path.basename(path)
     r = requests.post('https://androidobservatory.org/',
-                      data={'q': update.sha256sum(path), 'searchby': 'hash'},
+                      data={'q': common.sha256sum(path), 'searchby': 'hash'},
                       headers=net.HEADERS, timeout=300)
     if r.status_code == 200:
         # from now on XPath will be used to retrieve the message in the HTML
@@ -624,7 +623,7 @@ def upload_apk_to_virustotal(virustotal_apikey, packageName, apkName, hash,
                                 + str(response['positives']) + ' times:'
                                 + '\n\t' + response['permalink'])
             break
-        elif r.status_code == 204:
+        if r.status_code == 204:
             logging.warning(_('virustotal.com is rate limiting, waiting to retry...'))
             time.sleep(30)  # wait for public API rate limiting
 

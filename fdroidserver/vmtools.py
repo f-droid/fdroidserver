@@ -199,6 +199,7 @@ class FDroidBuildVm:
 
     def __init__(self, srvdir):
         """Create new server class."""
+        self.provider = None
         self.srvdir = srvdir
         self.srvname = basename(srvdir) + '_default'
         self.vgrntfile = os.path.join(srvdir, 'Vagrantfile')
