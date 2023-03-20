@@ -442,7 +442,6 @@ class BuildTest(unittest.TestCase):
         self.assertEqual(0, count, "Shouldn't error on jar from extlib")
 
     def test_failed_verifies_are_not_in_unsigned(self):
-
         os.chdir(self.testdir)
         sdk_path = os.path.join(self.testdir, 'android-sdk')
         self.create_fake_android_home(sdk_path)

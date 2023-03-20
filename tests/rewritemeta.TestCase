@@ -32,7 +32,6 @@ class RewriteMetaTest(unittest.TestCase):
         os.chdir(self.basedir)
 
     def test_rewrite_scenario_trivial(self):
-
         sys.argv = ['rewritemeta', 'a', 'b']
 
         with tempfile.TemporaryDirectory() as tmpdir, TmpCwd(tmpdir):

@@ -45,7 +45,6 @@ def proper_format(app):
 
 
 def main():
-
     global config, options
 
     parser = ArgumentParser()

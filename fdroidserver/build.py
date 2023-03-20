@@ -888,7 +888,6 @@ timeout_event = threading.Event()
 
 
 def main():
-
     global options, config, buildserverid, fdroidserverid
 
     options, parser = parse_commandline()

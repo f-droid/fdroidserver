@@ -175,7 +175,6 @@ def status_update_json(signed):
 
 
 def main():
-
     global config, options
 
     parser = ArgumentParser()

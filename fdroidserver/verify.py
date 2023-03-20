@@ -146,7 +146,6 @@ def write_json_report(url, remote_apk, unsigned_apk, compare_result):
 
 
 def main():
-
     global options, config
 
     # Parse command line...
@@ -192,7 +191,6 @@ def main():
     vercodes = common.read_pkg_args(options.appid, True)
 
     for apkfile in sorted(glob.glob(os.path.join(unsigned_dir, '*.apk'))):
-
         apkfilename = os.path.basename(apkfile)
         url = 'https://f-droid.org/repo/' + apkfilename
         appid, vercode = common.publishednameinfo(apkfile)
@@ -205,7 +203,6 @@ def main():
         processed.add(appid)
 
         try:
-
             logging.info("Processing {apkfilename}".format(apkfilename=apkfilename))
 
             remote_apk = os.path.join(tmp_dir, apkfilename)

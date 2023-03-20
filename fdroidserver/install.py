@@ -44,7 +44,6 @@ def devices():
 
 
 def main():
-
     global options, config
 
     # Parse command line...

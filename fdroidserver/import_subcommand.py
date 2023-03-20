@@ -183,7 +183,6 @@ def get_app_from_url(url):
 
 
 def main():
-
     global config, options
 
     # Parse command line...
