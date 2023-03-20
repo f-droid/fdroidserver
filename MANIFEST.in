@@ -634,6 +634,7 @@ include tests/org.bitbucket.tickytacky.mirrormirror_2.apk
 include tests/org.bitbucket.tickytacky.mirrormirror_3.apk
 include tests/org.bitbucket.tickytacky.mirrormirror_4.apk
 include tests/org.dyndns.fules.ck_20.apk
+include tests/org.sajeg.fallingblocks_3.apk
 include tests/publish.TestCase
 include tests/repo/categories.txt
 include tests/repo/com.example.test.helloworld_1.apk

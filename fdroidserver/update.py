@@ -34,6 +34,7 @@ import json
 import time
 import yaml
 import copy
+import defusedxml.ElementTree as ElementTree
 from datetime import datetime, timezone
 from argparse import ArgumentParser
 from pathlib import Path
@@ -1394,13 +1395,16 @@ def scan_apk_androguard(apk, apkfile):
         apk['nativecode'].extend(sorted(list(arch)))
 
     for item in xml.findall('uses-permission'):
-        name = str(item.attrib[xmlns + 'name'])
+        name = item.attrib.get(xmlns + 'name')
+        if not name:
+            logging.debug(
+                _('Ignoring bad element in manifest: %s')
+                % ElementTree.tostring(item).decode()
+            )
+            continue
         maxSdkVersion = item.attrib.get(xmlns + 'maxSdkVersion')
         maxSdkVersion = int(maxSdkVersion) if maxSdkVersion else None
-        permission = UsesPermission(
-            name,
-            maxSdkVersion
-        )
+        permission = UsesPermission(str(name), maxSdkVersion)
         apk['uses-permission'].append(permission)
     for name, maxSdkVersion in apkobject.get_uses_implied_permission_list():
         permission = UsesPermission(
@@ -1410,20 +1414,26 @@ def scan_apk_androguard(apk, apkfile):
         apk['uses-permission'].append(permission)
 
     for item in xml.findall('uses-permission-sdk-23'):
-        name = str(item.attrib[xmlns + 'name'])
+        name = item.attrib.get(xmlns + 'name')
+        if not name:
+            logging.debug(
+                _('Ignoring bad element in manifest: %s')
+                % ElementTree.tostring(item).decode()
+            )
+            continue
         maxSdkVersion = item.attrib.get(xmlns + 'maxSdkVersion')
         maxSdkVersion = int(maxSdkVersion) if maxSdkVersion else None
-        permission_sdk_23 = UsesPermissionSdk23(
-            name,
-            maxSdkVersion
-        )
+        permission_sdk_23 = UsesPermissionSdk23(str(name), maxSdkVersion)
         apk['uses-permission-sdk-23'].append(permission_sdk_23)
 
     for item in xml.findall('uses-feature'):
-        key = xmlns + 'name'
-        if key not in item.attrib:
+        feature = str(item.attrib.get(xmlns + 'name', ''))
+        if not feature:
+            logging.debug(
+                _('Ignoring bad element in manifest: %s')
+                % ElementTree.tostring(item).decode()
+            )
             continue
-        feature = str(item.attrib[key])
         if feature not in (
             'android.hardware.screen.portrait',
             'android.hardware.screen.landscape',
