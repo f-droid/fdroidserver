@@ -4239,8 +4239,8 @@ def auto_install_ndk(build):
         for n in ndk:
             _install_ndk(n)
     else:
-        BuildException(_('Invalid ndk: entry in build: "{ndk}"')
-                       .format(ndk=str(ndk)))
+        raise BuildException(_('Invalid ndk: entry in build: "{ndk}"')
+                             .format(ndk=str(ndk)))
 
 
 def _install_ndk(ndk):
