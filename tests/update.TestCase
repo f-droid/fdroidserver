@@ -900,6 +900,29 @@ class UpdateTest(unittest.TestCase):
             shutil.copy(os.path.join(self.basedir, os.path.basename(apkfile)), apkfile)
             fdroidserver.update.scan_apk(apkfile)
 
+    def test_scan_apk_bad_namespace_in_manifest(self):
+        """Some APKs can produce an exception when parsing the AndroidManifest.xml
+
+        This kind of parsing exception should be reported then ignored
+        so that working APKs can be included in the index.  There are
+        so many weird things that make it into APKs, that does not
+        automatically disqualify them from inclusion.
+
+        This APK has <uses-permission> elements with messed up namespaces:
+        <uses-permission xmlns:n1="android" n1:name="android.permission.VIBRATE"/>
+
+        """
+        # reset the state, perhaps this should be in setUp()
+        config = dict()
+        fdroidserver.common.fill_config_defaults(config)
+        fdroidserver.common.config = config
+        fdroidserver.update.config = config
+        with tempfile.TemporaryDirectory() as tmpdir, TmpCwd(tmpdir):
+            os.mkdir('repo')
+            apkfile = 'repo/org.sajeg.fallingblocks_3.apk'
+            shutil.copy(os.path.join(self.basedir, os.path.basename(apkfile)), apkfile)
+            fdroidserver.update.scan_apk(apkfile)
+
     def test_process_apk(self):
         def _build_yaml_representer(dumper, data):
             '''Creates a YAML representation of a Build instance'''
