@@ -1,4 +1,8 @@
 #!/usr/bin/env python3
+#
+# This script is some of the only documentation of certain processes
+# that run in the buildserver setup.  It is not really maintained, but
+# is still here as a kind of reference.
 
 import os
 import sys
@@ -17,6 +21,7 @@ if localmodule not in sys.path:
 from fdroidserver.vmtools import get_build_vm
 
 
+# pylint: disable=no-member
 def main(args):
 
     if args.provider != None:
