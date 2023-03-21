@@ -447,9 +447,6 @@ class ScannerTest(unittest.TestCase):
                 'should return not results for ' + f,
             )
 
-    @unittest.skipIf(
-        sys.hexversion < 0x03090000, 'Python < 3.9 has a limited zipfile.is_zipfile()'
-    )
     def test_get_embedded_classes_secret_apk(self):
         """Try to hide an APK+DEX in an APK and see if we can find it"""
         config = dict()
@@ -516,12 +513,6 @@ class Test_scan_binary(unittest.TestCase):
             ),
         )
 
-    @unittest.skipIf(
-        sys.version_info < (3, 9),
-        "Our implementation for traversing zip files will silently fail to work"
-        "on older python versions, also see: "
-        "https://gitlab.com/fdroid/fdroidserver/-/merge_requests/1110#note_932026766",
-    )
     def test_bottom_level_embedded_apk_code_signature(self):
         apkfile = os.path.join(basedir, 'apk.embedded_1.apk')
         fdroidserver.scanner._SCANNER_TOOL.regexs['err_code_signatures'] = {
