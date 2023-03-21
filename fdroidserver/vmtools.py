@@ -197,9 +197,9 @@ class FDroidBuildVm:
     wrapper around the vagrant functions we use.
     """
 
-    def __init__(self, srvdir):
+    def __init__(self, srvdir, provider=None):
         """Create new server class."""
-        self.provider = None
+        self.provider = provider
         self.srvdir = srvdir
         self.srvname = basename(srvdir) + '_default'
         self.vgrntfile = os.path.join(srvdir, 'Vagrantfile')
@@ -377,8 +377,7 @@ class FDroidBuildVm:
 
 class LibvirtBuildVm(FDroidBuildVm):
     def __init__(self, srvdir):
-        self.provider = 'libvirt'
-        super().__init__(srvdir)
+        super().__init__(srvdir, 'libvirt')
         import libvirt
 
         try:
@@ -428,5 +427,4 @@ class LibvirtBuildVm(FDroidBuildVm):
 class VirtualboxBuildVm(FDroidBuildVm):
 
     def __init__(self, srvdir):
-        self.provider = 'virtualbox'
-        super().__init__(srvdir)
+        super().__init__(srvdir, 'virtualbox')
