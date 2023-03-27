@@ -663,7 +663,7 @@ if __name__ == "__main__":
         default=False,
         help="Spew out even more information than normal",
     )
-    (options, args) = parser.parse_args()
+    (options, args) = parser.parse_args(["--verbose"])
     Options.verbose = options.verbose
 
     newSuite = unittest.TestSuite()
