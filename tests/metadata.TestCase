@@ -1141,6 +1141,15 @@ class MetadataTest(unittest.TestCase):
             build.ndk = ['r22b', 'r10e']
             self.assertEqual(r22b, build.ndk_path())
 
+    def test_build_ndk_path_only_accepts_str(self):
+        """Paths in the config must be strings, never pathlib.Path instances"""
+        config = {'ndk_paths': {'r24': Path('r24')}}
+        fdroidserver.common.config = config
+        build = fdroidserver.metadata.Build()
+        build.ndk = 'r24'
+        with self.assertRaises(TypeError):
+            build.ndk_path()
+
 
 if __name__ == "__main__":
     parser = optparse.OptionParser()

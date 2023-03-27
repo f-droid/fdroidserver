@@ -116,6 +116,7 @@ env = None
 orig_path = None
 
 
+# All paths in the config must be strings, never pathlib.Path instances
 default_config = {
     'sdk_path': "$ANDROID_HOME",
     'ndk_paths': {},

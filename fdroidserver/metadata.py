@@ -325,12 +325,14 @@ class Build(dict):
                 return f
         return 'ant'
 
-    def ndk_path(self):
-        """Return the path to the first configured NDK or an empty string."""
+    def ndk_path(self) -> str:
+        """Return the path string of the first configured NDK or an empty string."""
         ndk = self.ndk
         if isinstance(ndk, list):
             ndk = self.ndk[0]
         path = common.config['ndk_paths'].get(ndk)
+        if path and not isinstance(path, str):
+            raise TypeError('NDK path is not string')
         if path:
             return path
         for vsn, path in common.config['ndk_paths'].items():

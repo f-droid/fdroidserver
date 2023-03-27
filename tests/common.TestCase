@@ -2371,6 +2371,37 @@ class CommonTest(unittest.TestCase):
         )
         for f in config['java_paths'].values():
             self.assertTrue(f in java_paths)
+            self.assertTrue(isinstance(f, str))  # paths in config must be str
+
+    @mock.patch.dict(os.environ, clear=True)
+    def test_sdk_path_in_config_must_be_strings(self):
+        """All paths in config must be strings, and never pathlib.Path instances"""
+        os.environ['PATH'] = '/usr/bin:/usr/sbin'
+        config = {'sdk_path': Path('/opt/android-sdk')}
+        fdroidserver.common.fill_config_defaults(config)
+        build = fdroidserver.metadata.Build()
+        with self.assertRaises(TypeError):
+            fdroidserver.common.set_FDroidPopen_env(build)
+
+    @mock.patch.dict(os.environ, clear=True)
+    def test_ndk_paths_in_config_must_be_strings(self):
+        """All paths in config must be strings, and never pathlib.Path instances"""
+        fdroidserver.common.config = {
+            'ndk_paths': {'r21d': Path('/opt/android-sdk/ndk/r21d')}
+        }
+        build = fdroidserver.metadata.Build()
+        build.ndk = 'r21d'
+        os.environ['PATH'] = '/usr/bin:/usr/sbin'
+        with self.assertRaises(TypeError):
+            fdroidserver.common.set_FDroidPopen_env(build)
+
+    @mock.patch.dict(os.environ, clear=True)
+    def test_FDroidPopen_envs_paths_can_be_pathlib(self):
+        os.environ['PATH'] = '/usr/bin:/usr/sbin'
+        envs = {'PATHLIB': Path('/pathlib/path'), 'STRING': '/string/path'}
+        p = fdroidserver.common.FDroidPopen(['/bin/sh', '-c', 'export'], envs=envs)
+        self.assertIn('/string/path', p.output)
+        self.assertIn('/pathlib/path', p.output)
 
     def test_vcs_git_latesttags(self):
         tags = [
