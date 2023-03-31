@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import copy
 import datetime
 import inspect
 import logging
@@ -425,6 +426,7 @@ class IndexTest(unittest.TestCase):
         app['icon'] = 'info.zwanenburg.caffeinetile.4.xml'
         app['CurrentVersionCode'] = 4
         apps = {app.id: app}
+        orig_apps = copy.deepcopy(apps)
         apk = {
             'hash': 'dbbdd7deadb038862f426b71efe4a64df8c3edf25d669e935f349510e16f65db',
             'hashType': 'sha256',
@@ -436,7 +438,7 @@ class IndexTest(unittest.TestCase):
                 '-1': 'res/drawable/ic_coffee_on.xml',
             },
             'icons': {'160': 'info.zwanenburg.caffeinetile.4.xml'},
-            'antiFeatures': [],
+            'antiFeatures': ['KnownVuln'],
             'packageName': 'info.zwanenburg.caffeinetile',
             'versionCode': 4,
             'name': 'Caffeine Tile',
@@ -463,6 +465,7 @@ class IndexTest(unittest.TestCase):
             )
         )
         self.assertTrue(os.path.exists(os.path.join('repo', 'index.xml')))
+        self.assertEqual(orig_apps, apps, "apps was modified when building the index")
 
     def test_v0_invalid_config_exception(self):
         """Index v0 needs additional config values when using --nosign

@@ -1,5 +1,5 @@
 AllowedAPKSigningKeys: []
-AntiFeatures: []
+AntiFeatures: ['NonFreeNet']
 ArchivePolicy: 4 versions
 AuthorEmail: null
 AuthorName: null
