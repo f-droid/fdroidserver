@@ -170,7 +170,8 @@
     },
     {
       "antiFeatures": [
-        "NoSourceSince"
+        "NoSourceSince",
+        "NonFreeNet"
       ],
       "categories": [
         "Time"
@@ -230,9 +231,6 @@
     "com.politedroid": [
       {
         "added": 1498176000000,
-        "antiFeatures": [
-          "NoSourceSince"
-        ],
         "apkName": "com.politedroid_6.apk",
         "hash": "70c2f776a2bac38a58a7d521f96ee0414c6f0fb1de973c3ca8b10862a009247d",
         "hashType": "sha256",
@@ -257,9 +255,6 @@
       },
       {
         "added": 1498176000000,
-        "antiFeatures": [
-          "NoSourceSince"
-        ],
         "apkName": "com.politedroid_5.apk",
         "hash": "5bdbfa071cca4b8d05ced41d6b28763595d6e8096cca5bbf0f9253c9a2622e5d",
         "hashType": "sha256",
@@ -284,9 +279,6 @@
       },
       {
         "added": 1498176000000,
-        "antiFeatures": [
-          "NoSourceSince"
-        ],
         "apkName": "com.politedroid_4.apk",
         "hash": "c809bdff83715fbf919f3840ee09869b038e209378b906e135ee40d3f0e1f075",
         "hashType": "sha256",
@@ -324,7 +316,6 @@
         "added": 1498176000000,
         "antiFeatures": [
           "KnownVuln",
-          "NoSourceSince",
           "NonFreeAssets",
           "UpstreamNonFree"
         ],

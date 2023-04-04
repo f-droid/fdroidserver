@@ -668,20 +668,24 @@ def convert_version(version, app, repodir):
                 else:
                     manifest[en].append({"name": perm[0]})
 
+    antiFeatures = dict()
     if "AntiFeatures" in app and app["AntiFeatures"]:
-        ver["antiFeatures"] = {}
         for antif in app["AntiFeatures"]:
             # TODO: get reasons from fdroiddata
             # ver["antiFeatures"][antif] = {"en-US": "reason"}
-            ver["antiFeatures"][antif] = {}
+            antiFeatures[antif] = dict()
 
-    if "AntiFeatures" in version and version["AntiFeatures"]:
-        if "antiFeatures" not in ver:
-            ver["antiFeatures"] = {}
-        for antif in version["AntiFeatures"]:
+    if "antiFeatures" in version and version["antiFeatures"]:
+        for antif in version["antiFeatures"]:
             # TODO: get reasons from fdroiddata
             # ver["antiFeatures"][antif] = {"en-US": "reason"}
-            ver["antiFeatures"][antif] = {}
+            antiFeatures[antif] = dict()
+
+    if app.get("NoSourceSince"):
+        antiFeatures["NoSourceSince"] = dict()
+
+    if antiFeatures:
+        ver["antiFeatures"] = dict(sorted(antiFeatures.items()))
 
     if "versionCode" in version:
         if version["versionCode"] > app["CurrentVersionCode"]:
@@ -920,9 +924,11 @@ def make_v1(apps, packages, repodir, repodict, requestsdict, fdroid_signing_key_
                 for ikey, iname in sorted(lvalue.items()):
                     lordered[lkey][ikey] = iname
             app['localized'] = lordered
-        antiFeatures = app.get('AntiFeatures')
+        antiFeatures = app.get('antiFeatures', [])
+        if apps[app["packageName"]].get("NoSourceSince"):
+            antiFeatures.append("NoSourceSince")
         if antiFeatures:
-            app['AntiFeatures'] = sorted(set(antiFeatures))
+            app['antiFeatures'] = sorted(set(antiFeatures))
 
     output_packages = collections.OrderedDict()
     output['packages'] = output_packages
@@ -1191,10 +1197,13 @@ def make_v0(apps, apks, repodir, repodict, requestsdict, fdroid_signing_key_fing
         # doesn't have to do any work by default...
         apklist = sorted(apklist, key=lambda apk: apk['versionCode'], reverse=True)
 
+        antiFeatures = list(app.AntiFeatures)
         if 'antiFeatures' in apklist[0]:
-            app.AntiFeatures.extend(apklist[0]['antiFeatures'])
-        if app.AntiFeatures:
-            afout = sorted(set(app.AntiFeatures))
+            antiFeatures.extend(apklist[0]['antiFeatures'])
+        if app.get("NoSourceSince"):
+            antiFeatures.append("NoSourceSince")
+        if antiFeatures:
+            afout = sorted(set(antiFeatures))
             addElementNonEmpty('antifeatures', ','.join(afout), doc, apel)
 
         # Check for duplicates - they will make the client unhappy...
