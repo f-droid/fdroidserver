@@ -129,6 +129,7 @@ class CommonTest(unittest.TestCase):
             except fdroidserver.exception.FDroidException:
                 pass
 
+    @unittest.skipUnless(os.getenv('ANDROID_HOME'), "Needs ANDROID_HOME env var")
     def test_find_sdk_tools_cmd(self):
         fdroidserver.common.config = dict()
         # TODO add this once everything works without sdk_path set in config
