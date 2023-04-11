@@ -10,7 +10,7 @@ export DEBIAN_FRONTEND=noninteractive
 printf 'APT::Install-Recommends "0";\nAPT::Install-Suggests "0";\n' \
        > /etc/apt/apt.conf.d/99no-install-recommends
 
-printf 'APT::Acquire::Retries "20";\n' \
+printf 'Acquire::Retries "20";\n' \
        > /etc/apt/apt.conf.d/99acquire-retries
 
 cat <<EOF > /etc/apt/apt.conf.d/99no-auto-updates
