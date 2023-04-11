@@ -552,9 +552,12 @@ include tests/dump_internal_metadata_format.py
 include tests/exception.TestCase
 include tests/extra/manual-vmtools-test.py
 include tests/funding-usernames.yaml
-include tests/get_android_tools_versions/android-ndk/android-ndk-r21d/source.properties
-include tests/get_android_tools_versions/android-ndk/r11c/source.properties
-include tests/get_android_tools_versions/android-ndk/r17c/source.properties
+include tests/get_android_tools_versions/android-ndk-r10e/RELEASE.TXT
+include tests/get_android_tools_versions/android-sdk/ndk/11.2.2725575/source.properties
+include tests/get_android_tools_versions/android-sdk/ndk/17.2.4988734/source.properties
+include tests/get_android_tools_versions/android-sdk/ndk/21.3.6528147/source.properties
+include tests/get_android_tools_versions/android-sdk/ndk-bundle/package.xml
+include tests/get_android_tools_versions/android-sdk/ndk-bundle/source.properties
 include tests/get_android_tools_versions/android-sdk/patcher/v4/source.properties
 include tests/get_android_tools_versions/android-sdk/platforms/android-30/source.properties
 include tests/get_android_tools_versions/android-sdk/skiaparser/1/source.properties

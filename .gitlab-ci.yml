@@ -276,7 +276,6 @@ black:
         tests/key-tricks.py
         tests/lint.TestCase
         tests/metadata.TestCase
-        tests/ndk-release-checksums.py
         tests/nightly.TestCase
         tests/rewritemeta.TestCase
         tests/scanner.TestCase
@@ -329,7 +328,7 @@ fedora_latest:
         "cd `pwd`; export ANDROID_HOME=$ANDROID_HOME; fdroid=~testuser/.local/bin/fdroid ./run-tests"
 
 
-gradle/ndk:
+gradle:
   image: debian:bullseye
   <<: *apt-template
   variables:
@@ -350,12 +349,10 @@ gradle/ndk:
         for f in `git diff --name-only --diff-filter=d FETCH_HEAD...HEAD`; do
            test "$f" == "makebuildserver" && export CHANGED="yes";
            test "$f" == "gradlew-fdroid" && export CHANGED="yes";
-           test "$f" == "fdroidserver/common.py" && export CHANGED="yes";
         done;
         test -z "$CHANGED" && exit;
       fi
     - ./tests/gradle-release-checksums.py
-    - ./tests/ndk-release-checksums.py
 
 
 # Run an actual build in a simple, faked version of the buildserver guest VM.
