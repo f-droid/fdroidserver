@@ -5,10 +5,10 @@ ENV LANG=C.UTF-8 \
     DEBIAN_FRONTEND=noninteractive
 
 RUN echo Etc/UTC > /etc/timezone \
-	&& echo 'APT::Install-Recommends "0";' \
-		'APT::Install-Suggests "0";' \
-		'APT::Acquire::Retries "20";' \
+	&& echo 'Acquire::Retries "20";' \
 		'APT::Get::Assume-Yes "true";' \
+		'APT::Install-Recommends "0";' \
+		'APT::Install-Suggests "0";' \
 		'Dpkg::Use-Pty "0";' \
 		'quiet "1";' \
         >> /etc/apt/apt.conf.d/99gitlab
