@@ -72,7 +72,8 @@
           "file": {
             "name": "/com.politedroid_6.apk",
             "sha256": "70c2f776a2bac38a58a7d521f96ee0414c6f0fb1de973c3ca8b10862a009247d",
-            "size": 16578
+            "size": 16578,
+            "ipfsCIDv1": "bafybeidvgxrq77qr7yqkcnykdfvszsxjqc5kzt6ya5k7r666wriadrylt4"
           },
           "manifest": {
             "versionName": "1.5",
@@ -105,7 +106,8 @@
           "file": {
             "name": "/com.politedroid_5.apk",
             "sha256": "5bdbfa071cca4b8d05ced41d6b28763595d6e8096cca5bbf0f9253c9a2622e5d",
-            "size": 18817
+            "size": 18817,
+            "ipfsCIDv1": "bafybeifbrio5rumqvgfd5sihs7yihux2yktfvd5i7jimlgrwchzcvi6ldu"
           },
           "manifest": {
             "versionName": "1.4",
@@ -138,7 +140,8 @@
           "file": {
             "name": "/com.politedroid_4.apk",
             "sha256": "c809bdff83715fbf919f3840ee09869b038e209378b906e135ee40d3f0e1f075",
-            "size": 18489
+            "size": 18489,
+            "ipfsCIDv1": "bafybeicridbev22c2rt3lwbfsrkafcf3yepak7kpvk6zgbayrxls2mmwim"
           },
           "manifest": {
             "versionName": "1.3",
@@ -180,7 +183,8 @@
           "file": {
             "name": "/com.politedroid_3.apk",
             "sha256": "665d03d61ebc642289fda697f71a59305b0202b16cafc5ffdae91cbe91f0b25d",
-            "size": 17552
+            "size": 17552,
+            "ipfsCIDv1": "bafybeib7arokhivttalcnq5ieu5fx5pzn7vo5qpmdiozqodzhb4ba53nd4"
           },
           "manifest": {
             "versionName": "1.2",
@@ -250,7 +254,8 @@
           "file": {
             "name": "/duplicate.permisssions_9999999.apk",
             "sha256": "8367857fe75f85321ce2c344b34804d0bc193707f6ba03710d025d9030803434",
-            "size": 27446
+            "size": 27446,
+            "ipfsCIDv1": "bafybeicucr4lk7fynyde4fpxubudpl6m6wqnuq2j6vjroutjyryw24en3u"
           },
           "manifest": {
             "versionName": "",
@@ -392,7 +397,8 @@
           "file": {
             "name": "/urzip-; Рахма́, [rɐxˈmanʲɪnəf] سيرجي_رخمانينوف 谢·.apk",
             "sha256": "15c0ec72c74a3791f42cdb43c57df0fb11a4dbb656851bbb8cf05b26a8372789",
-            "size": 11471
+            "size": 11471,
+            "ipfsCIDv1": "bafybeig77jwqx243si3gh55iqx4gkcxhltkt6pjimzgigfsk3kshsi6qem"
           },
           "manifest": {
             "versionName": "0.1",
@@ -431,7 +437,8 @@
           "file": {
             "name": "/info.zwanenburg.caffeinetile_4.apk",
             "sha256": "dbbdd7deadb038862f426b71efe4a64df8c3edf25d669e935f349510e16f65db",
-            "size": 11740
+            "size": 11740,
+            "ipfsCIDv1": "bafybeigormhkorw3mk6pkkfk63kkmxpvwylthgj67geulvskc5acr65sym"
           },
           "manifest": {
             "versionName": "1.3",
@@ -482,7 +489,8 @@
           "file": {
             "name": "/no.min.target.sdk_987.apk",
             "sha256": "e2e1dc1d550df2b5bc383860139207258645b5540abeccd305ed8b2cb6459d2c",
-            "size": 14102
+            "size": 14102,
+            "ipfsCIDv1": "bafybeidwxseoagnew3gtlasttqovl7ciuwxaud5a5p4a5pzpbrfcfj2gaa"
           },
           "manifest": {
             "versionName": "1.2-fake",
@@ -540,7 +548,8 @@
           "file": {
             "name": "/obb.main.oldversion_1444412523.apk",
             "sha256": "c5f149e526f89c05c62923bdb7bb1e2be5673c46ec85143f41e514340631449c",
-            "size": 14323
+            "size": 14323,
+            "ipfsCIDv1": "bafybeicnwnpiyfke3tbk3nve62meig65vved34i6kesjkksdciff6242ui"
           },
           "obbMainFile": {
             "name": "/main.1434483388.obb.main.oldversion.obb",
@@ -637,7 +646,8 @@
           "file": {
             "name": "/obb.main.twoversions_1101617.apk",
             "sha256": "9bc74566f089ef030ac33e7fbd99d92f1a38f363fb499fed138d9e7b774e821c",
-            "size": 11481
+            "size": 11481,
+            "ipfsCIDv1": "bafybeiblpfmwololxgsrum337rbbbsqg2gk6hytvt6szf4njubosju3bme"
           },
           "src": {
             "name": "/obb.main.twoversions_1101617_src.tar.gz",
@@ -668,7 +678,8 @@
           "file": {
             "name": "/obb.main.twoversions_1101615.apk",
             "sha256": "7b0b7b9ba248e15751a16e3a0e01e1e24cbb673686c38422030cb75d5c33f0bb",
-            "size": 11480
+            "size": 11480,
+            "ipfsCIDv1": "bafybeigglr3iefb3es4lp2sgfacppk3w2qqtuykjgf4actebpalyizef3q"
           },
           "obbMainFile": {
             "name": "/main.1101615.obb.main.twoversions.obb",
@@ -694,7 +705,8 @@
           "file": {
             "name": "/obb.main.twoversions_1101613.apk",
             "sha256": "cce97a52ff18d843185be7f22ecb1a557c36b7a9f8ba07a8be94e328e00b35dc",
-            "size": 11477
+            "size": 11477,
+            "ipfsCIDv1": "bafybeicocjo4khzp2rkui2ltvrhbksrm373lr3pb43ut7hqgbllfjpv6ti"
           },
           "obbMainFile": {
             "name": "/main.1101613.obb.main.twoversions.obb",
@@ -772,7 +784,8 @@
           "file": {
             "name": "/obb.mainpatch.current_1619.apk",
             "sha256": "eda5fc3ecfdac3252717e36bdbc9820865baeef162264af9ba5db7364f0e7a0c",
-            "size": 11479
+            "size": 11479,
+            "ipfsCIDv1": "bafybeievo4e234mllujityvtjgeltauyfbriszoqddzygmimcm4mo3zyqu"
           },
           "obbMainFile": {
             "name": "/main.1619.obb.mainpatch.current.obb",
@@ -803,7 +816,8 @@
           "file": {
             "name": "/obb.mainpatch.current_1619_another-release-key.apk",
             "sha256": "42e7d6d2f8254aaf9fe95ba6ecc233ee8c3cd543a3e4f3f9ebe1b638221122fa",
-            "size": 10541
+            "size": 10541,
+            "ipfsCIDv1": "bafybeiatdbzlxairqzvdowevwuy7nk24rknc55jpip2wb2sq4c3f7mtngm"
           },
           "obbMainFile": {
             "name": "/main.1619.obb.mainpatch.current.obb",
@@ -870,7 +884,8 @@
           "file": {
             "name": "/souch.smsbypass_9.apk",
             "sha256": "80b0ae68a1189baa3ee6717092e3dbf1a4210165f7f7e5f2f9616bd63a2ec01d",
-            "size": 81295
+            "size": 81295,
+            "ipfsCIDv1": "bafybeihaccfnt32q2iwfulh2m7jvdivuunlw6t72wa7jfi7igxvqxjqszy"
           },
           "manifest": {
             "versionName": "0.9",
