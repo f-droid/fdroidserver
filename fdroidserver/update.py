@@ -2179,6 +2179,7 @@ def main():
     metadata.warnings_action = options.W
 
     config = common.read_config(options)
+    common.setup_status_output(start_timestamp)
 
     common.use_androguard()
     if not (('jarsigner' in config or 'apksigner' in config)
