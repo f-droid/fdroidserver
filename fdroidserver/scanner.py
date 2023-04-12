@@ -446,9 +446,11 @@ def scan_source(build_dir, build=metadata.Build()):
         'oss.sonatype.org/content/repositories/snapshots',
         'oss.sonatype.org/content/repositories/releases',
         'oss.sonatype.org/content/groups/public',
+        'oss.sonatype.org/service/local/staging/deploy/maven2',
         's01.oss.sonatype.org/content/repositories/snapshots',
         's01.oss.sonatype.org/content/repositories/releases',
         's01.oss.sonatype.org/content/groups/public',
+        's01.oss.sonatype.org/service/local/staging/deploy/maven2',
         'clojars.org/repo',  # Clojure free software libs
         'repo.clojars.org',  # Clojure free software libs
         's3.amazonaws.com/repo.commonsware.com',  # CommonsWare
