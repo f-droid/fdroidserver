@@ -32,6 +32,7 @@ from tempfile import TemporaryDirectory
 from pathlib import Path
 from datetime import datetime, timedelta
 from dataclasses import dataclass, field, fields
+from enum import IntEnum
 
 from . import _
 from . import common
@@ -54,6 +55,10 @@ MAVEN_URL_REGEX = re.compile(r"""\smaven\s*(?:{.*?(?:setUrl|url)|\((?:url)?)\s*=
 
 
 SCANNER_CACHE_VERSION = 1
+
+
+class ExitCode(IntEnum):
+    NONFREE_CODE = 1
 
 
 def get_gradle_compile_commands(build):
@@ -781,6 +786,8 @@ def main():
                         help=_("Output JSON to stdout."))
     parser.add_argument("--refresh", "-r", action="store_true", default=False,
                         help=_("fetch the latest version of signatures from the web"))
+    parser.add_argument("--exit-code", "-e", action="store_true", default=False,
+                        help=_("Exit with a non-zero code if problems were found"))
     metadata.add_metadata_arguments(parser)
     options = parser.parse_args()
     metadata.warnings_action = options.W
@@ -815,6 +822,8 @@ def main():
             appids.append(apk)
 
     if not appids:
+        if options.exit_code and probcount > 0:
+            sys.exit(ExitCode.NONFREE_CODE)
         return
 
     # Read all app and srclib metadata
