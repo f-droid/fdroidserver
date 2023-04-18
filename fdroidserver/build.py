@@ -1112,6 +1112,34 @@ def main():
                                              'supplied reference binary '
                                              'successfully')
 
+                            used_key = common.apk_signer_fingerprint(of)
+                            expected_keys = app['AllowedAPKSigningKeys']
+                            if used_key is None:
+                                logging.warn(_('reference binary missing '
+                                               'signature'))
+                            elif len(expected_keys) == 0:
+                                logging.warn(_('AllowedAPKSigningKeys missing '
+                                               'but reference binary supplied'))
+                            elif used_key not in expected_keys:
+                                if options.test:
+                                    logging.warning(_('Keeping failed build "{apkfilename}"')
+                                                    .format(apkfilename=unsigned_apk))
+                                else:
+                                    logging.debug('removing %s', unsigned_apk)
+                                    os.remove(unsigned_apk)
+                                logging.debug('removing %s', of)
+                                os.remove(of)
+                                raise FDroidException('supplied reference '
+                                                      'binary signed with '
+                                                      '{signer} instead of '
+                                                      'with {expected}'.
+                                                      format(signer=used_key,
+                                                             expected=expected_keys))
+                            else:
+                                logging.info(_('supplied reference binary has '
+                                               'allowed signer {signer}').
+                                             format(signer=used_key))
+
                     build_succeeded_ids.append([app['id'], build.versionCode])
 
                     if not options.onserver:

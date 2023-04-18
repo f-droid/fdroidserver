@@ -627,6 +627,9 @@ class BuildTest(unittest.TestCase):
             }
         )
         app['Builds'] = [build]
+        expected_key = 'a' * 64
+        bogus_key = 'b' * 64
+        app['AllowedAPKSigningKeys'] = [expected_key]
         fdroidserver.metadata.write_metadata(metadata_file, app)
 
         os.makedirs(os.path.join('unsigned', 'binaries'))
@@ -657,13 +660,32 @@ class BuildTest(unittest.TestCase):
             a, b, c, d, e, f  # silence linters' "unused" warnings
 
             with mock.patch('sys.argv', ['fdroid build', appid]):
-                # successful comparison
+                # successful comparison, successful signer
                 open(production_result, 'w').close()
                 open(production_compare_file, 'w').close()
-                with mock.patch('fdroidserver.common.verify_apks', lambda *args: None):
+                with mock.patch(
+                    'fdroidserver.common.verify_apks', lambda *args: None
+                ) as g, mock.patch(
+                    'fdroidserver.common.apk_signer_fingerprint',
+                    lambda *args: expected_key,
+                ) as h:
+                    g, h
                     fdroidserver.build.main()
                 self.assertTrue(os.path.exists(production_result))
                 self.assertTrue(os.path.exists(production_compare_file))
+                # successful comparison, failed signer
+                open(production_result, 'w').close()
+                open(production_compare_file, 'w').close()
+                with mock.patch(
+                    'fdroidserver.common.verify_apks', lambda *args: None
+                ) as g, mock.patch(
+                    'fdroidserver.common.apk_signer_fingerprint',
+                    lambda *args: bogus_key,
+                ) as h:
+                    g, h
+                    fdroidserver.build.main()
+                self.assertFalse(os.path.exists(production_result))
+                self.assertFalse(os.path.exists(production_compare_file))
                 # failed comparison
                 open(production_result, 'w').close()
                 open(production_compare_file, 'w').close()
@@ -675,13 +697,34 @@ class BuildTest(unittest.TestCase):
                 self.assertFalse(os.path.exists(production_compare_file))
 
             with mock.patch('sys.argv', ['fdroid build', '--test', appid]):
-                # successful comparison
+                # successful comparison, successful signer
                 open(test_result, 'w').close()
                 open(test_compare_file, 'w').close()
-                with mock.patch('fdroidserver.common.verify_apks', lambda *args: None):
+                with mock.patch(
+                    'fdroidserver.common.verify_apks', lambda *args: None
+                ) as g, mock.patch(
+                    'fdroidserver.common.apk_signer_fingerprint',
+                    lambda *args: expected_key,
+                ) as h:
+                    g, h
                     fdroidserver.build.main()
                 self.assertTrue(os.path.exists(test_result))
                 self.assertTrue(os.path.exists(test_compare_file))
+                self.assertFalse(os.path.exists(production_result))
+                self.assertFalse(os.path.exists(production_compare_file))
+                # successful comparison, failed signer
+                open(test_result, 'w').close()
+                open(test_compare_file, 'w').close()
+                with mock.patch(
+                    'fdroidserver.common.verify_apks', lambda *args: None
+                ) as g, mock.patch(
+                    'fdroidserver.common.apk_signer_fingerprint',
+                    lambda *args: bogus_key,
+                ) as h:
+                    g, h
+                    fdroidserver.build.main()
+                self.assertTrue(os.path.exists(test_result))
+                self.assertFalse(os.path.exists(test_compare_file))
                 self.assertFalse(os.path.exists(production_result))
                 self.assertFalse(os.path.exists(production_compare_file))
                 # failed comparison
