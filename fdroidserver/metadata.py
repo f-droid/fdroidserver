@@ -607,33 +607,11 @@ def read_metadata(appids={}, sort_by_time=False):
     return apps
 
 
-# Port legacy ';' separators
-list_sep = re.compile(r'[,;]')
-
-
-def split_list_values(s):
-    res = []
-    for v in re.split(list_sep, s):
-        if not v:
-            continue
-        v = v.strip()
-        if not v:
-            continue
-        res.append(v)
-    return res
-
-
 def sorted_builds(builds):
     return sorted(builds, key=lambda build: build.versionCode)
 
 
-esc_newlines = re.compile(r'\\( |\n)')
-
-
 def post_metadata_parse(app):
-    if 'flavours' in app and app['flavours'] == [True]:
-        app['flavours'] = 'yes'
-
     for k, v in app.items():
         if fieldtype(k) == TYPE_LIST:
             if isinstance(v, str):
@@ -721,18 +699,6 @@ def post_metadata_parse(app):
 #  'descriptionlines' - original lines of description as formatted in the
 #                       metadata file.
 #
-
-
-bool_true = re.compile(r'([Yy]es|[Tt]rue)')
-bool_false = re.compile(r'([Nn]o|[Ff]alse)')
-
-
-def _decode_bool(s):
-    if bool_true.match(s):
-        return True
-    if bool_false.match(s):
-        return False
-    _warn_or_exception(_("Invalid boolean '%s'") % s)
 
 
 def parse_metadata(metadatapath):
@@ -995,10 +961,6 @@ def write_yaml(mf, app):
         yaml.dump(yaml_app, stream=mf)
     except AttributeError:  # Debian/stretch's version does not have YAML()
         ruamel.yaml.round_trip_dump(yaml_app, mf, indent=4, block_seq_indent=2)
-
-
-build_line_sep = re.compile(r'(?<!\\),')
-build_cont = re.compile(r'^[ \t]')
 
 
 def write_metadata(metadatapath, app):
