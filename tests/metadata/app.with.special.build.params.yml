@@ -64,7 +64,7 @@ Builds:
     patch:
       - manifest-ads.patch
       - mobilecore.patch
-    maven: 'yes'
+    maven: yes
     srclibs:
       - FacebookSDK@sdk-version-3.0.2
 

@@ -628,21 +628,6 @@ def post_metadata_parse(app):
             if type(v) in (float, int):
                 app[k] = str(v)
 
-    def _yaml_bool_unmapable(v):
-        return v in (True, False, [True], [False])
-
-    def _yaml_bool_unmap(v):
-        if v is True:
-            return 'yes'
-        elif v is False:
-            return 'no'
-        elif v == [True]:
-            return ['yes']
-        elif v == [False]:
-            return ['no']
-
-    _bool_allowed = ('maven')
-
     builds = []
     if 'Builds' in app:
         for build in app.get('Builds', []):
@@ -651,26 +636,15 @@ def post_metadata_parse(app):
             for k, v in build.items():
                 if not (v is None):
                     if flagtype(k) == TYPE_LIST:
-                        if _yaml_bool_unmapable(v):
-                            build[k] = _yaml_bool_unmap(v)
-
                         if isinstance(v, str):
                             build[k] = [v]
-                        elif isinstance(v, bool):
-                            if v:
-                                build[k] = ['yes']
-                            else:
-                                build[k] = []
                     elif flagtype(k) is TYPE_INT:
                         build[k] = v
                     elif flagtype(k) is TYPE_STRING:
-                        if isinstance(v, bool) and k in _bool_allowed:
+                        if k == 'maven':
                             build[k] = v
                         else:
-                            if _yaml_bool_unmapable(v):
-                                build[k] = _yaml_bool_unmap(v)
-                            else:
-                                build[k] = str(v)
+                            build[k] = str(v)
             builds.append(build)
 
     app['Builds'] = sorted_builds(builds)
@@ -860,22 +834,8 @@ def write_yaml(mf, app):
         raise FDroidException('currently installed version of ruamel.yaml ({}) is too old, >= 1.13 required.'.format(ruamel.yaml.__version__))
     # suiteable version ruamel.yaml imported successfully
 
-    _yaml_bools_true = ('y', 'Y', 'yes', 'Yes', 'YES',
-                        'true', 'True', 'TRUE',
-                        'on', 'On', 'ON')
-    _yaml_bools_false = ('n', 'N', 'no', 'No', 'NO',
-                         'false', 'False', 'FALSE',
-                         'off', 'Off', 'OFF')
-    _yaml_bools_plus_lists = []
-    _yaml_bools_plus_lists.extend(_yaml_bools_true)
-    _yaml_bools_plus_lists.extend([[x] for x in _yaml_bools_true])
-    _yaml_bools_plus_lists.extend(_yaml_bools_false)
-    _yaml_bools_plus_lists.extend([[x] for x in _yaml_bools_false])
-
     def _field_to_yaml(typ, value):
         if typ is TYPE_STRING:
-            if value in _yaml_bools_plus_lists:
-                return ruamel.yaml.scalarstring.SingleQuotedScalarString(str(value))
             return str(value)
         elif typ is TYPE_INT:
             return int(value)
