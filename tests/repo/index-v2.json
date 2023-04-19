@@ -16,8 +16,8 @@
     "address": "https://MyFirstFDroidRepo.org/fdroid/repo",
     "mirrors": [
       {
-        "url": "https://MyFirstFDroidRepo.org/fdroid/repo",
-        "isPrimary": true
+        "isPrimary": true,
+        "url": "https://MyFirstFDroidRepo.org/fdroid/repo"
       },
       {
         "url": "http://foobarfoobarfoobar.onion/fdroid/repo"
