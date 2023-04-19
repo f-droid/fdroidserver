@@ -654,6 +654,18 @@ class IndexTest(unittest.TestCase):
             metadata['webSite'],
         )
 
+    def test_add_mirrors_to_repodict(self):
+        """Test based on the contents of tests/config.py"""
+        repodict = dict()
+        fdroidserver.index.add_mirrors_to_repodict('repo', repodict)
+        self.assertEqual(
+            repodict['mirrors'],
+            [
+                'http://foobarfoobarfoobar.onion/fdroid/repo',
+                'https://foo.bar/fdroid/repo',
+            ],
+        )
+
 
 if __name__ == "__main__":
     os.chdir(os.path.dirname(__file__))
