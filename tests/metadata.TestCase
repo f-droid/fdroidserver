@@ -419,6 +419,22 @@ class MetadataTest(unittest.TestCase):
             with self.assertRaises(MetaDataException):
                 fdroidserver.metadata.parse_yaml_metadata(mf)
 
+    def test_parse_yaml_metadata_continue_on_warning(self):
+        """When errors are disabled, parsing should provide something that can work.
+
+        When errors are disabled, then it should try to give data that
+        lets something happen.  A zero-length file is valid for
+        operation, it just declares a Application ID as "known" and
+        nothing else.  This example gives a list as the base in the
+        .yml file, which is unparsable, so it gives a warning message
+        and carries on with a blank dict.
+
+        """
+        fdroidserver.metadata.warnings_action = None
+        mf = io.StringIO('[AntiFeatures: Tracking]')
+        mf.name = 'mock_filename.yaml'
+        self.assertEqual(fdroidserver.metadata.parse_yaml_metadata(mf), dict())
+
     def test_parse_yaml_srclib_corrupt_file(self):
         with tempfile.TemporaryDirectory() as testdir:
             testdir = Path(testdir)

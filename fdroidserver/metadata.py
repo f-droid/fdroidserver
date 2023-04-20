@@ -717,36 +717,48 @@ def parse_yaml_metadata(mf):
                            cause=e)
 
     if yamldata is None or yamldata == '':
-        return dict()
+        yamldata = dict()
+    if not isinstance(yamldata, dict):
+        _warn_or_exception(
+            _("'{path}' has invalid format, it should be a dictionary!").format(
+                path=mf.name
+            )
+        )
+        logging.error(_('Using blank dictionary instead of contents of {path}!').format(
+            path=mf.name)
+        )
+        yamldata = dict()
 
     deprecated_in_yaml = ['Provides']
 
-    if yamldata:
-        for field in tuple(yamldata.keys()):
-            if field not in yaml_app_fields + deprecated_in_yaml:
-                msg = (_("Unrecognised app field '{fieldname}' in '{path}'")
-                       .format(fieldname=field, path=mf.name))
-                if Path(mf.name).name == '.fdroid.yml':
-                    logging.error(msg)
-                    del yamldata[field]
-                else:
-                    _warn_or_exception(msg)
+    for field in tuple(yamldata.keys()):
+        if field not in yaml_app_fields + deprecated_in_yaml:
+            msg = _("Unrecognised app field '{fieldname}' in '{path}'").format(
+                fieldname=field, path=mf.name
+            )
+            if Path(mf.name).name == '.fdroid.yml':
+                logging.error(msg)
+                del yamldata[field]
+            else:
+                _warn_or_exception(msg)
 
-        for deprecated_field in deprecated_in_yaml:
-            if deprecated_field in yamldata:
-                logging.warning(_("Ignoring '{field}' in '{metapath}' "
-                                  "metadata because it is deprecated.")
-                                .format(field=deprecated_field,
-                                        metapath=mf.name))
-                del yamldata[deprecated_field]
+    for deprecated_field in deprecated_in_yaml:
+        if deprecated_field in yamldata:
+            del yamldata[deprecated_field]
+            logging.warning(
+                _(
+                    "Ignoring '{field}' in '{metapath}' "
+                    "metadata because it is deprecated."
+                ).format(field=deprecated_field, metapath=mf.name)
+            )
 
-        msg = _("Unrecognised build flag '{build_flag}' in '{path}'")
-        for build in yamldata.get('Builds', []):
-            for build_flag in build:
-                if build_flag not in build_flags:
-                    _warn_or_exception(msg.format(build_flag=build_flag, path=mf.name))
+    msg = _("Unrecognised build flag '{build_flag}' in '{path}'")
+    for build in yamldata.get('Builds', []):
+        for build_flag in build:
+            if build_flag not in build_flags:
+                _warn_or_exception(msg.format(build_flag=build_flag, path=mf.name))
 
-        post_parse_yaml_metadata(yamldata)
+    post_parse_yaml_metadata(yamldata)
     return yamldata
 
 
