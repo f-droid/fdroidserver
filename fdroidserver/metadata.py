@@ -675,23 +675,31 @@ def post_metadata_parse(app):
 def parse_metadata(metadatapath):
     """Parse metadata file, also checking the source repo for .fdroid.yml.
 
+    This function finds the relevant files, gets them parsed, converts
+    dicts into App and Build instances, and combines the results into
+    a single App instance.
+
     If this is a metadata file from fdroiddata, it will first load the
     source repo type and URL from fdroiddata, then read .fdroid.yml if
     it exists, then include the rest of the metadata as specified in
     fdroiddata, so that fdroiddata has precedence over the metadata in
     the source code.
 
+    .fdroid.yml is embedded in the app's source repo, so it is
+    "user-generated".  That means that it can have weird things in it
+    that need to be removed so they don't break the overall process,
+    e.g. if the upstream developer includes some broken field, it can
+    be overridden in the metadata file.
+
     """
     metadatapath = Path(metadatapath)
     app = App()
     app.metadatapath = metadatapath.as_posix()
-    name = metadatapath.stem
-    if name != '.fdroid':
-        app.id = name
-
+    if metadatapath.stem != '.fdroid':
+        app.id = metadatapath.stem
     if metadatapath.suffix == '.yml':
         with metadatapath.open('r', encoding='utf-8') as mf:
-            parse_yaml_metadata(mf, app)
+            app.update(parse_yaml_metadata(mf))
     else:
         _warn_or_exception(_('Unknown metadata format: {path} (use: *.yml)')
                            .format(path=metadatapath))
@@ -727,15 +735,18 @@ def parse_metadata(metadatapath):
     return app
 
 
-def parse_yaml_metadata(mf, app):
+def parse_yaml_metadata(mf):
     """Parse the .yml file and post-process it.
+
+    This function handles parsing a metadata YAML file and converting
+    all the various data types into a consistent internal
+    representation.  The results are meant to update an existing App
+    instance or used as a plain dict.
 
     Clean metadata .yml files can be used directly, but in order to
     make a better user experience for people editing .yml files, there
-    is post processing.  .fdroid.yml is embedded in the app's source
-    repo, so it is "user-generated".  That means that it can have
-    weird things in it that need to be removed so they don't break the
-    overall process.
+    is post processing.  That makes the parsing perform something like
+    Strict YAML.
 
     """
     try:
@@ -746,6 +757,9 @@ def parse_yaml_metadata(mf, app):
                            .format(path=mf.name) + '\n'
                            + common.run_yamllint(mf.name, indent=4),
                            cause=e)
+
+    if yamldata is None or yamldata == '':
+        return dict()
 
     deprecated_in_yaml = ['Provides']
 
@@ -775,8 +789,7 @@ def parse_yaml_metadata(mf, app):
                     _warn_or_exception(msg.format(build_flag=build_flag, path=mf.name))
 
         post_parse_yaml_metadata(yamldata)
-        app.update(yamldata)
-    return app
+    return yamldata
 
 
 def post_parse_yaml_metadata(yamldata):

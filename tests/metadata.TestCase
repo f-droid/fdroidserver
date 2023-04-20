@@ -362,6 +362,21 @@ class MetadataTest(unittest.TestCase):
                 allappids.append(appid)
             self.assertEqual(randomlist, allappids)
 
+    def test_parse_yaml_metadata_0size_file(self):
+        mf = io.StringIO('')
+        mf.name = 'mock_filename.yaml'
+        self.assertEqual(fdroidserver.metadata.parse_yaml_metadata(mf), dict())
+
+    def test_parse_yaml_metadata_empty_dict_file(self):
+        mf = io.StringIO('{}')
+        mf.name = 'mock_filename.yaml'
+        self.assertEqual(fdroidserver.metadata.parse_yaml_metadata(mf), dict())
+
+    def test_parse_yaml_metadata_empty_string_file(self):
+        mf = io.StringIO('""')
+        mf.name = 'mock_filename.yaml'
+        self.assertEqual(fdroidserver.metadata.parse_yaml_metadata(mf), dict())
+
     def test_parse_yaml_metadata_unknown_app_field(self):
         mf = io.StringIO(
             textwrap.dedent(
@@ -375,7 +390,7 @@ class MetadataTest(unittest.TestCase):
         mf.name = 'mock_filename.yaml'
         with mock.patch('fdroidserver.metadata.warnings_action', 'error'):
             with self.assertRaises(MetaDataException):
-                fdroidserver.metadata.parse_yaml_metadata(mf, {})
+                fdroidserver.metadata.parse_yaml_metadata(mf)
 
     def test_parse_yaml_metadata_unknown_build_flag(self):
         mf = io.StringIO(
@@ -390,7 +405,7 @@ class MetadataTest(unittest.TestCase):
         mf.name = 'mock_filename.yaml'
         with mock.patch('fdroidserver.metadata.warnings_action', 'error'):
             with self.assertRaises(MetaDataException):
-                fdroidserver.metadata.parse_yaml_metadata(mf, {})
+                fdroidserver.metadata.parse_yaml_metadata(mf)
 
     def test_parse_yaml_srclib_corrupt_file(self):
         with tempfile.TemporaryDirectory() as testdir:
@@ -487,9 +502,8 @@ class MetadataTest(unittest.TestCase):
         )
         mf.name = 'mock_filename.yaml'
         mf.seek(0)
-        result = {}
         with mock.patch('fdroidserver.metadata.warnings_action', 'error'):
-            fdroidserver.metadata.parse_yaml_metadata(mf, result)
+            result = fdroidserver.metadata.parse_yaml_metadata(mf)
         self.maxDiff = None
         self.assertDictEqual(
             result,
@@ -543,9 +557,8 @@ class MetadataTest(unittest.TestCase):
         )
         mf.name = 'mock_filename.yaml'
         mf.seek(0)
-        result = {}
         with mock.patch('fdroidserver.metadata.warnings_action', 'error'):
-            fdroidserver.metadata.parse_yaml_metadata(mf, result)
+            result = fdroidserver.metadata.parse_yaml_metadata(mf)
         self.maxDiff = None
         self.assertDictEqual(
             result,
@@ -594,9 +607,8 @@ class MetadataTest(unittest.TestCase):
         )
         mf.name = 'mock_filename.yaml'
         mf.seek(0)
-        result = {}
         with mock.patch('fdroidserver.metadata.warnings_action', 'error'):
-            fdroidserver.metadata.parse_yaml_metadata(mf, result)
+            result = fdroidserver.metadata.parse_yaml_metadata(mf)
         self.assertDictEqual(
             result,
             {
@@ -629,9 +641,8 @@ class MetadataTest(unittest.TestCase):
         )
         mf.name = 'mock_filename.yaml'
         mf.seek(0)
-        result = {}
         with mock.patch('fdroidserver.metadata.warnings_action', 'error'):
-            fdroidserver.metadata.parse_yaml_metadata(mf, result)
+            result = fdroidserver.metadata.parse_yaml_metadata(mf)
             self.assertNotIn('Provides', result)
             self.assertNotIn('provides', result)
 
