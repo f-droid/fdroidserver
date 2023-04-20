@@ -612,6 +612,26 @@ def sorted_builds(builds):
 
 
 def post_metadata_parse(app):
+    """Convert human-readable metadata data structures into consistent data structures.
+
+    This also handles conversions that make metadata YAML behave
+    something like StrictYAML.  Specifically, a field should have a
+    fixed value type, regardless of YAML 1.2's type auto-detection.
+
+    """
+
+    def _normalize_type_string(v):
+        """YAML 1.2's booleans are all lowercase.
+
+        Things like versionName are strings, but without quotes can be
+        numbers.  Like "versionName: 1.0" would be a YAML float, but
+        should be a string.
+
+        """
+        if isinstance(v, bool):
+            return str(v).lower()
+        return str(v)
+
     for k, v in app.items():
         if fieldtype(k) == TYPE_LIST:
             if isinstance(v, str):
@@ -623,7 +643,7 @@ def post_metadata_parse(app):
                 app[k] = int(v)
         elif fieldtype(k) == TYPE_STRING:
             if v:
-                app[k] = str(v)
+                app[k] = _normalize_type_string(v)
         else:
             if type(v) in (float, int):
                 app[k] = str(v)
@@ -641,7 +661,7 @@ def post_metadata_parse(app):
                     elif flagtype(k) is TYPE_INT:
                         build[k] = v
                     elif flagtype(k) is TYPE_STRING:
-                        build[k] = str(v)
+                        build[k] = _normalize_type_string(v)
             builds.append(build)
 
     app['Builds'] = sorted_builds(builds)
@@ -838,6 +858,7 @@ def write_yaml(mf, app):
     # suiteable version ruamel.yaml imported successfully
 
     def _field_to_yaml(typ, value):
+        """Convert data to YAML 1.2 format that keeps the right TYPE_*."""
         if typ is TYPE_STRING:
             return str(value)
         elif typ is TYPE_INT:
