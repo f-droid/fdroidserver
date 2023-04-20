@@ -607,78 +607,6 @@ def read_metadata(appids={}, sort_by_time=False):
     return apps
 
 
-def sorted_builds(builds):
-    return sorted(builds, key=lambda build: build.versionCode)
-
-
-def post_metadata_parse(app):
-    """Convert human-readable metadata data structures into consistent data structures.
-
-    This also handles conversions that make metadata YAML behave
-    something like StrictYAML.  Specifically, a field should have a
-    fixed value type, regardless of YAML 1.2's type auto-detection.
-
-    """
-
-    def _normalize_type_string(v):
-        """YAML 1.2's booleans are all lowercase.
-
-        Things like versionName are strings, but without quotes can be
-        numbers.  Like "versionName: 1.0" would be a YAML float, but
-        should be a string.
-
-        """
-        if isinstance(v, bool):
-            return str(v).lower()
-        return str(v)
-
-    for k, v in app.items():
-        if fieldtype(k) == TYPE_LIST:
-            if isinstance(v, str):
-                app[k] = [v, ]
-            elif v:
-                app[k] = [str(i) for i in v]
-        elif fieldtype(k) == TYPE_INT:
-            if v:
-                app[k] = int(v)
-        elif fieldtype(k) == TYPE_STRING:
-            if v:
-                app[k] = _normalize_type_string(v)
-        else:
-            if type(v) in (float, int):
-                app[k] = str(v)
-
-    builds = []
-    if 'Builds' in app:
-        for build in app.get('Builds', []):
-            if not isinstance(build, Build):
-                build = Build(build)
-            for k, v in build.items():
-                if not (v is None):
-                    if flagtype(k) == TYPE_LIST:
-                        if isinstance(v, str):
-                            build[k] = [v]
-                    elif flagtype(k) is TYPE_INT:
-                        build[k] = v
-                    elif flagtype(k) is TYPE_STRING:
-                        build[k] = _normalize_type_string(v)
-            builds.append(build)
-
-    app['Builds'] = sorted_builds(builds)
-
-
-# Parse metadata for a single application.
-#
-#  'metadatapath' - the file path to read. The "Application ID" aka
-#               "Package Name" for the application comes from this
-#               filename. Pass None to get a blank entry.
-#
-# Returns a dictionary containing all the details of the application. There are
-# two major kinds of information in the dictionary. Keys beginning with capital
-# letters correspond directory to identically named keys in the metadata file.
-# Keys beginning with lower case letters are generated in one way or another,
-# and are not found verbatim in the metadata.
-#
 # Known keys not originating from the metadata are:
 #
 #  'comments'         - a list of comments from the metadata file. Each is
@@ -687,9 +615,6 @@ def post_metadata_parse(app):
 #                       file. Where field is None, the comment goes at the
 #                       end of the file. Alternatively, 'build:version' is
 #                       for a comment before a particular build version.
-#  'descriptionlines' - original lines of description as formatted in the
-#                       metadata file.
-#
 
 
 def parse_metadata(metadatapath):
@@ -710,6 +635,25 @@ def parse_metadata(metadatapath):
     that need to be removed so they don't break the overall process,
     e.g. if the upstream developer includes some broken field, it can
     be overridden in the metadata file.
+
+    Parameters
+    ----------
+    metadatapath
+      The file path to read. The "Application ID" aka "Package Name"
+      for the application comes from this filename.
+
+    Raises
+    ------
+    FDroidException when there are syntax errors.
+
+    Returns
+    -------
+    Returns a dictionary containing all the details of the
+    application. There are two major kinds of information in the
+    dictionary. Keys beginning with capital letters correspond
+    directory to identically named keys in the metadata file.  Keys
+    beginning with lower case letters are generated in one way or
+    another, and are not found verbatim in the metadata.
 
     """
     metadatapath = Path(metadatapath)
@@ -740,8 +684,13 @@ def parse_metadata(metadatapath):
                 if k not in app:
                     app[k] = v
 
-    post_metadata_parse(app)
+    builds = []
+    for build in app.get('Builds', []):
+        builds.append(Build(build))
+    if builds:
+        app['Builds'] = builds
 
+    # if only .fdroid.yml was found, then this finds the appid
     if not app.id:
         if app.get('Builds'):
             build = app['Builds'][-1]
@@ -813,23 +762,77 @@ def parse_yaml_metadata(mf):
 
 
 def post_parse_yaml_metadata(yamldata):
-    """Transform yaml metadata to our internal data format."""
-    for build in yamldata.get('Builds', []):
-        for flag in build.keys():
-            _flagtype = flagtype(flag)
+    """Convert human-readable metadata data structures into consistent data structures.
 
-            if _flagtype is TYPE_SCRIPT:
-                if isinstance(build[flag], str):
-                    build[flag] = [build[flag]]
-            elif _flagtype is TYPE_STRING:
-                # things like versionNames are strings, but without quotes can be numbers
-                if isinstance(build[flag], float) or isinstance(build[flag], int):
-                    build[flag] = str(build[flag])
+    This also handles conversions that make metadata YAML behave
+    something like StrictYAML.  Specifically, a field should have a
+    fixed value type, regardless of YAML 1.2's type auto-detection.
+
+    """
+
+    def _normalize_type_string(v):
+        """YAML 1.2's booleans are all lowercase.
+
+        Things like versionName are strings, but without quotes can be
+        numbers.  Like "versionName: 1.0" would be a YAML float, but
+        should be a string.
+
+        """
+        if isinstance(v, bool):
+            return str(v).lower()
+        return str(v)
+
+    for k, v in yamldata.items():
+        if fieldtype(k) == TYPE_LIST:
+            if isinstance(v, str):
+                yamldata[k] = [v, ]
+            elif v:
+                yamldata[k] = [str(i) for i in v]
+        elif fieldtype(k) == TYPE_INT:
+            if v:
+                yamldata[k] = int(v)
+        elif fieldtype(k) == TYPE_STRING:
+            if v:
+                yamldata[k] = _normalize_type_string(v)
+        else:
+            if type(v) in (float, int):
+                yamldata[k] = str(v)
+
+    builds = []
+    for build in yamldata.get('Builds', []):
+        for k, v in build.items():
+            if v is None:
+                continue
+
+            _flagtype = flagtype(k)
+            if _flagtype is TYPE_STRING:
+                build[k] = _normalize_type_string(v)
             elif _flagtype is TYPE_INT:
+                build[k] = v
                 # versionCode must be int
-                if not isinstance(build[flag], int):
-                    _warn_or_exception(_('{build_flag} must be an integer, found: {value}')
-                                       .format(build_flag=flag, value=build[flag]))
+                if not isinstance(v, int):
+                    _warn_or_exception(
+                        _('{build_flag} must be an integer, found: {value}').format(
+                            build_flag=k, value=v
+                        )
+                    )
+            elif _flagtype in (TYPE_LIST, TYPE_SCRIPT):
+                if isinstance(v, str) or isinstance(v, int):
+                    build[k] = [_normalize_type_string(v)]
+                else:
+                    build[k] = v
+                # float and dict are here only to keep things compatible
+                if type(build[k]) not in (list, tuple, set, float, dict):
+                    _warn_or_exception(
+                        _('{build_flag} must be list or string, found: {value}').format(
+                            build_flag=k, value=v
+                        )
+                    )
+
+        builds.append(build)
+
+    if builds:
+        yamldata['Builds'] = sorted(builds, key=lambda build: build['versionCode'])
 
 
 def write_yaml(mf, app):

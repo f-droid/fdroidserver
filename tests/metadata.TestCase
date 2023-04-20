@@ -1178,15 +1178,11 @@ class PostMetadataParseTest(unittest.TestCase):
     def _post_metadata_parse_app_list(self, from_yaml, expected):
         app = {'AntiFeatures': from_yaml}
         metadata.post_parse_yaml_metadata(app)
-        metadata.post_metadata_parse(app)
-        del app['Builds']
         return {'AntiFeatures': expected}, app
 
     def _post_metadata_parse_app_string(self, from_yaml, expected):
         app = {'Repo': from_yaml}
         metadata.post_parse_yaml_metadata(app)
-        metadata.post_metadata_parse(app)
-        del app['Builds']
         return {'Repo': expected}, app
 
     def _post_metadata_parse_build_bool(self, from_yaml, expected):
@@ -1194,7 +1190,6 @@ class PostMetadataParseTest(unittest.TestCase):
         app = {'Builds': [{'versionCode': 1, tested_key: from_yaml}]}
         post = copy.deepcopy(app)
         metadata.post_parse_yaml_metadata(post)
-        metadata.post_metadata_parse(post)
         del app['Builds'][0]['versionCode']
         del post['Builds'][0]['versionCode']
         for build in post['Builds']:
@@ -1209,7 +1204,6 @@ class PostMetadataParseTest(unittest.TestCase):
         app = {'Builds': [{'versionCode': from_yaml}]}
         post = copy.deepcopy(app)
         metadata.post_parse_yaml_metadata(post)
-        metadata.post_metadata_parse(post)
         for build in post['Builds']:
             for k in list(build):
                 if k != tested_key:
@@ -1222,7 +1216,6 @@ class PostMetadataParseTest(unittest.TestCase):
         app = {'Builds': [{'versionCode': 1, tested_key: from_yaml}]}
         post = copy.deepcopy(app)
         metadata.post_parse_yaml_metadata(post)
-        metadata.post_metadata_parse(post)
         del app['Builds'][0]['versionCode']
         del post['Builds'][0]['versionCode']
         for build in post['Builds']:
@@ -1237,7 +1230,6 @@ class PostMetadataParseTest(unittest.TestCase):
         app = {'Builds': [{'versionCode': 1, tested_key: from_yaml}]}
         post = copy.deepcopy(app)
         metadata.post_parse_yaml_metadata(post)
-        metadata.post_metadata_parse(post)
         del app['Builds'][0]['versionCode']
         del post['Builds'][0]['versionCode']
         for build in post['Builds']:
@@ -1252,7 +1244,6 @@ class PostMetadataParseTest(unittest.TestCase):
         app = {'Builds': [{'versionCode': 1, tested_key: from_yaml}]}
         post = copy.deepcopy(app)
         metadata.post_parse_yaml_metadata(post)
-        metadata.post_metadata_parse(post)
         del app['Builds'][0]['versionCode']
         del post['Builds'][0]['versionCode']
         for build in post['Builds']:
@@ -1269,8 +1260,8 @@ class PostMetadataParseTest(unittest.TestCase):
         self.assertEqual(*self._post_metadata_parse_app_string(123456, '123456'))
         self.assertEqual(*self._post_metadata_parse_build_bool(123456, 123456))
         self.assertEqual(*self._post_metadata_parse_build_int(123456, 123456))
-        self.assertEqual(*self._post_metadata_parse_build_list(123456, 123456))
-        self.assertEqual(*self._post_metadata_parse_build_script(123456, 123456))
+        self.assertEqual(*self._post_metadata_parse_build_list(123456, ['123456']))
+        self.assertEqual(*self._post_metadata_parse_build_script(123456, ['123456']))
         self.assertEqual(*self._post_metadata_parse_build_string(123456, '123456'))
 
     def test_post_metadata_parse_int_0(self):
@@ -1279,8 +1270,8 @@ class PostMetadataParseTest(unittest.TestCase):
         self.assertEqual(*self._post_metadata_parse_app_string(0, 0))
         self.assertEqual(*self._post_metadata_parse_build_bool(0, 0))
         self.assertEqual(*self._post_metadata_parse_build_int(0, 0))
-        self.assertEqual(*self._post_metadata_parse_build_list(0, 0))
-        self.assertEqual(*self._post_metadata_parse_build_script(0, 0))
+        self.assertEqual(*self._post_metadata_parse_build_list(0, ['0']))
+        self.assertEqual(*self._post_metadata_parse_build_script(0, ['0']))
         self.assertEqual(*self._post_metadata_parse_build_string(0, '0'))
 
     def test_post_metadata_parse_float_0_0(self):
@@ -1373,9 +1364,9 @@ class PostMetadataParseTest(unittest.TestCase):
         self.assertEqual(*self._post_metadata_parse_app_string(False, False))
         self.assertEqual(*self._post_metadata_parse_build_bool(False, False))
         self.assertEqual(*self._post_metadata_parse_build_int(False, False))
-        self.assertEqual(*self._post_metadata_parse_build_list(False, False))
-        self.assertEqual(*self._post_metadata_parse_build_script(False, False))
-        self.assertEqual(*self._post_metadata_parse_build_string(False, 'False'))
+        self.assertEqual(*self._post_metadata_parse_build_list(False, ['false']))
+        self.assertEqual(*self._post_metadata_parse_build_script(False, ['false']))
+        self.assertEqual(*self._post_metadata_parse_build_string(False, 'false'))
 
     def test_post_metadata_parse_true(self):
         with self.assertRaises(TypeError):
@@ -1383,9 +1374,9 @@ class PostMetadataParseTest(unittest.TestCase):
         self.assertEqual(*self._post_metadata_parse_app_string(True, 'true'))
         self.assertEqual(*self._post_metadata_parse_build_bool(True, True))
         self.assertEqual(*self._post_metadata_parse_build_int(True, True))
-        self.assertEqual(*self._post_metadata_parse_build_list(True, True))
-        self.assertEqual(*self._post_metadata_parse_build_script(True, True))
-        self.assertEqual(*self._post_metadata_parse_build_string(True, 'True'))
+        self.assertEqual(*self._post_metadata_parse_build_list(True, ['true']))
+        self.assertEqual(*self._post_metadata_parse_build_script(True, ['true']))
+        self.assertEqual(*self._post_metadata_parse_build_string(True, 'true'))
 
 
 if __name__ == "__main__":
