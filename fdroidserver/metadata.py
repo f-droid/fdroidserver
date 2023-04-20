@@ -768,19 +768,12 @@ def parse_yaml_metadata(mf, app):
                                         metapath=mf.name))
                 del yamldata[deprecated_field]
 
-        if yamldata.get('Builds', None):
-            for build in yamldata.get('Builds', []):
-                # put all build flag keywords into a set to avoid
-                # excessive looping action
-                build_flag_set = set()
-                for build_flag in build.keys():
-                    build_flag_set.add(build_flag)
-                for build_flag in build_flag_set:
-                    if build_flag not in build_flags:
-                        _warn_or_exception(
-                            _("Unrecognised build flag '{build_flag}' "
-                              "in '{path}'").format(build_flag=build_flag,
-                                                    path=mf.name))
+        msg = _("Unrecognised build flag '{build_flag}' in '{path}'")
+        for build in yamldata.get('Builds', []):
+            for build_flag in build:
+                if build_flag not in build_flags:
+                    _warn_or_exception(msg.format(build_flag=build_flag, path=mf.name))
+
         post_parse_yaml_metadata(yamldata)
         app.update(yamldata)
     return app
