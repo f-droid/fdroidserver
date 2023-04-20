@@ -1136,7 +1136,6 @@ UpdateCheckName: null
 VercodeOperation: []
 WebSite: http://sufficientlysecure.org/index.php/adaway
 added: null
-comments: {}
 id: org.adaway
 lastUpdated: null
 metadatapath: metadata/org.adaway.yml

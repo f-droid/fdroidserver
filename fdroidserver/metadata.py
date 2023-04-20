@@ -159,7 +159,6 @@ class App(dict):
         self.id = None
         self.metadatapath = None
         self.Builds = []
-        self.comments = {}
         self.added = None
         self.lastUpdated = None
 
@@ -605,16 +604,6 @@ def read_metadata(appids={}, sort_by_time=False):
         apps[app.id] = app
 
     return apps
-
-
-# Known keys not originating from the metadata are:
-#
-#  'comments'         - a list of comments from the metadata file. Each is
-#                       a list of the form [field, comment] where field is
-#                       the name of the field it preceded in the metadata
-#                       file. Where field is None, the comment goes at the
-#                       end of the file. Alternatively, 'build:version' is
-#                       for a comment before a particular build version.
 
 
 def parse_metadata(metadatapath):

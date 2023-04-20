@@ -406,7 +406,6 @@ UpdateCheckName: null
 VercodeOperation: []
 WebSite: http://www.smssecure.org
 added: null
-comments: {}
 id: org.smssecure.smssecure
 lastUpdated: null
 metadatapath: metadata/org.smssecure.smssecure.yml

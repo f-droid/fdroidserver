@@ -2643,7 +2643,6 @@ VercodeOperation:
   - '%c + 5'
 WebSite: http://www.videolan.org/vlc/download-android.html
 added: null
-comments: {}
 id: org.videolan.vlc
 lastUpdated: null
 metadatapath: metadata/org.videolan.vlc.yml
