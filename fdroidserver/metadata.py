@@ -109,7 +109,6 @@ yaml_app_fields = [x for x in yaml_app_field_order if x != '\n']
 
 
 class App(dict):
-
     def __init__(self, copydict=None):
         if copydict:
             super().__init__(copydict)
@@ -252,7 +251,6 @@ build_flags = [
 
 
 class Build(dict):
-
     def __init__(self, copydict=None):
         super().__init__()
         self.disable = ''
@@ -375,7 +373,7 @@ def flagtype(name):
     return TYPE_STRING
 
 
-class FieldValidator():
+class FieldValidator:
     """Designate App metadata field types and checks that it matches.
 
     'name'     - The long name of the field type
@@ -495,8 +493,9 @@ def parse_yaml_srclib(metadatapath):
                         with symlink.open("r", encoding="utf-8") as s:
                             data = yaml.load(s)
             if type(data) is not dict:
-                raise YAMLError(_('{file} is blank or corrupt!')
-                                .format(file=metadatapath))
+                raise YAMLError(
+                    _('{file} is blank or corrupt!').format(file=metadatapath)
+                )
         except YAMLError as e:
             _warn_or_exception(_("Invalid srclib metadata: could not "
                                  "parse '{file}'")
@@ -507,9 +506,11 @@ def parse_yaml_srclib(metadatapath):
 
     for key in data:
         if key not in thisinfo:
-            _warn_or_exception(_("Invalid srclib metadata: unknown key "
-                                 "'{key}' in '{file}'")
-                               .format(key=key, file=metadatapath))
+            _warn_or_exception(
+                _("Invalid srclib metadata: unknown key '{key}' in '{file}'").format(
+                    key=key, file=metadatapath
+                )
+            )
             return thisinfo
         else:
             if key == 'Subdir':
@@ -580,7 +581,8 @@ def read_metadata(appids={}, sort_by_time=False):
         metadatafiles = common.get_metadata_files(vercodes)
     else:
         metadatafiles = list(Path('metadata').glob('*.yml')) + list(
-            Path('.').glob('.fdroid.yml'))
+            Path('.').glob('.fdroid.yml')
+        )
 
     if sort_by_time:
         entries = ((path.stat().st_mtime, path) for path in metadatafiles)
@@ -594,11 +596,15 @@ def read_metadata(appids={}, sort_by_time=False):
     for metadatapath in metadatafiles:
         appid = metadatapath.stem
         if appid != '.fdroid' and not common.is_valid_package_name(appid):
-            _warn_or_exception(_("{appid} from {path} is not a valid Java Package Name!")
-                               .format(appid=appid, path=metadatapath))
+            _warn_or_exception(
+                _("{appid} from {path} is not a valid Java Package Name!").format(
+                    appid=appid, path=metadatapath
+                )
+            )
         if appid in apps:
-            _warn_or_exception(_("Found multiple metadata files for {appid}")
-                               .format(appid=appid))
+            _warn_or_exception(
+                _("Found multiple metadata files for {appid}").format(appid=appid)
+            )
         app = parse_metadata(metadatapath)
         check_metadata(app)
         apps[app.id] = app
@@ -654,8 +660,9 @@ def parse_metadata(metadatapath):
         with metadatapath.open('r', encoding='utf-8') as mf:
             app.update(parse_yaml_metadata(mf))
     else:
-        _warn_or_exception(_('Unknown metadata format: {path} (use: *.yml)')
-                           .format(path=metadatapath))
+        _warn_or_exception(
+            _('Unknown metadata format: {path} (use: *.yml)').format(path=metadatapath)
+        )
 
     if metadatapath.name != '.fdroid.yml' and app.Repo:
         build_dir = common.get_build_dir(app)
@@ -663,11 +670,15 @@ def parse_metadata(metadatapath):
         if metadata_in_repo.is_file():
             try:
                 commit_id = common.get_head_commit_id(git.Repo(build_dir))
-                logging.debug(_('Including metadata from %s@%s') % (metadata_in_repo, commit_id))
+                logging.debug(
+                    _('Including metadata from %s@%s') % (metadata_in_repo, commit_id)
+                )
             # See https://github.com/PyCQA/pylint/issues/2856 .
             # pylint: disable-next=no-member
             except git.exc.InvalidGitRepositoryError:
-                logging.debug(_('Including metadata from {path}').format(metadata_in_repo))
+                logging.debug(
+                    _('Including metadata from {path}').format(metadata_in_repo)
+                )
             app_in_repo = parse_metadata(metadata_in_repo)
             for k, v in app_in_repo.items():
                 if k not in app:
@@ -711,10 +722,12 @@ def parse_yaml_metadata(mf):
         yaml = YAML(typ='safe')
         yamldata = yaml.load(mf)
     except YAMLError as e:
-        _warn_or_exception(_("could not parse '{path}'")
-                           .format(path=mf.name) + '\n'
-                           + common.run_yamllint(mf.name, indent=4),
-                           cause=e)
+        _warn_or_exception(
+            _("could not parse '{path}'").format(path=mf.name)
+            + '\n'
+            + common.run_yamllint(mf.name, indent=4),
+            cause=e,
+        )
 
     if yamldata is None or yamldata == '':
         yamldata = dict()
@@ -790,7 +803,7 @@ def post_parse_yaml_metadata(yamldata):
     for k, v in yamldata.items():
         if fieldtype(k) == TYPE_LIST:
             if isinstance(v, str):
-                yamldata[k] = [v, ]
+                yamldata[k] = [v]
             elif v:
                 yamldata[k] = [str(i) for i in v]
         elif fieldtype(k) == TYPE_INT:
@@ -930,7 +943,9 @@ def write_yaml(mf, app):
                 if hasattr(build, field):
                     value = getattr(build, field)
                     if field == 'gradle' and value == ['off']:
-                        value = [ruamel.yaml.scalarstring.SingleQuotedScalarString('off')]
+                        value = [
+                            ruamel.yaml.scalarstring.SingleQuotedScalarString('off')
+                        ]
                     typ = flagtype(field)
                     # don't check value == True for TYPE_INT as it could be 0
                     if value is not None and (typ == TYPE_INT or value):
@@ -960,7 +975,9 @@ def write_metadata(metadatapath, app):
             with metadatapath.open('w') as mf:
                 return write_yaml(mf, app)
         else:
-            raise FDroidException(_('ruamel.yaml not installed, can not write metadata.'))
+            raise FDroidException(
+                _('ruamel.yaml not installed, can not write metadata.')
+            )
 
     _warn_or_exception(_('Unknown metadata format: %s') % metadatapath)
 
