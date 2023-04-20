@@ -607,33 +607,11 @@ def read_metadata(appids={}, sort_by_time=False):
     return apps
 
 
-# Port legacy ';' separators
-list_sep = re.compile(r'[,;]')
-
-
-def split_list_values(s):
-    res = []
-    for v in re.split(list_sep, s):
-        if not v:
-            continue
-        v = v.strip()
-        if not v:
-            continue
-        res.append(v)
-    return res
-
-
 def sorted_builds(builds):
     return sorted(builds, key=lambda build: build.versionCode)
 
 
-esc_newlines = re.compile(r'\\( |\n)')
-
-
 def post_metadata_parse(app):
-    if 'flavours' in app and app['flavours'] == [True]:
-        app['flavours'] = 'yes'
-
     for k, v in app.items():
         if fieldtype(k) == TYPE_LIST:
             if isinstance(v, str):
@@ -650,21 +628,6 @@ def post_metadata_parse(app):
             if type(v) in (float, int):
                 app[k] = str(v)
 
-    def _yaml_bool_unmapable(v):
-        return v in (True, False, [True], [False])
-
-    def _yaml_bool_unmap(v):
-        if v is True:
-            return 'yes'
-        elif v is False:
-            return 'no'
-        elif v == [True]:
-            return ['yes']
-        elif v == [False]:
-            return ['no']
-
-    _bool_allowed = ('maven')
-
     builds = []
     if 'Builds' in app:
         for build in app.get('Builds', []):
@@ -673,26 +636,15 @@ def post_metadata_parse(app):
             for k, v in build.items():
                 if not (v is None):
                     if flagtype(k) == TYPE_LIST:
-                        if _yaml_bool_unmapable(v):
-                            build[k] = _yaml_bool_unmap(v)
-
                         if isinstance(v, str):
                             build[k] = [v]
-                        elif isinstance(v, bool):
-                            if v:
-                                build[k] = ['yes']
-                            else:
-                                build[k] = []
                     elif flagtype(k) is TYPE_INT:
                         build[k] = v
                     elif flagtype(k) is TYPE_STRING:
-                        if isinstance(v, bool) and k in _bool_allowed:
+                        if k == 'maven':
                             build[k] = v
                         else:
-                            if _yaml_bool_unmapable(v):
-                                build[k] = _yaml_bool_unmap(v)
-                            else:
-                                build[k] = str(v)
+                            build[k] = str(v)
             builds.append(build)
 
     app['Builds'] = sorted_builds(builds)
@@ -721,18 +673,6 @@ def post_metadata_parse(app):
 #  'descriptionlines' - original lines of description as formatted in the
 #                       metadata file.
 #
-
-
-bool_true = re.compile(r'([Yy]es|[Tt]rue)')
-bool_false = re.compile(r'([Nn]o|[Ff]alse)')
-
-
-def _decode_bool(s):
-    if bool_true.match(s):
-        return True
-    if bool_false.match(s):
-        return False
-    _warn_or_exception(_("Invalid boolean '%s'") % s)
 
 
 def parse_metadata(metadatapath):
@@ -894,22 +834,8 @@ def write_yaml(mf, app):
         raise FDroidException('currently installed version of ruamel.yaml ({}) is too old, >= 1.13 required.'.format(ruamel.yaml.__version__))
     # suiteable version ruamel.yaml imported successfully
 
-    _yaml_bools_true = ('y', 'Y', 'yes', 'Yes', 'YES',
-                        'true', 'True', 'TRUE',
-                        'on', 'On', 'ON')
-    _yaml_bools_false = ('n', 'N', 'no', 'No', 'NO',
-                         'false', 'False', 'FALSE',
-                         'off', 'Off', 'OFF')
-    _yaml_bools_plus_lists = []
-    _yaml_bools_plus_lists.extend(_yaml_bools_true)
-    _yaml_bools_plus_lists.extend([[x] for x in _yaml_bools_true])
-    _yaml_bools_plus_lists.extend(_yaml_bools_false)
-    _yaml_bools_plus_lists.extend([[x] for x in _yaml_bools_false])
-
     def _field_to_yaml(typ, value):
         if typ is TYPE_STRING:
-            if value in _yaml_bools_plus_lists:
-                return ruamel.yaml.scalarstring.SingleQuotedScalarString(str(value))
             return str(value)
         elif typ is TYPE_INT:
             return int(value)
@@ -995,10 +921,6 @@ def write_yaml(mf, app):
         yaml.dump(yaml_app, stream=mf)
     except AttributeError:  # Debian/stretch's version does not have YAML()
         ruamel.yaml.round_trip_dump(yaml_app, mf, indent=4, block_seq_indent=2)
-
-
-build_line_sep = re.compile(r'(?<!\\),')
-build_cont = re.compile(r'^[ \t]')
 
 
 def write_metadata(metadatapath, app):
