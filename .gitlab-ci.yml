@@ -58,6 +58,7 @@ metadata_v0:
     - ../tests/dump_internal_metadata_format.py
     - sed -i
           -e "/buildozer/d"
+          -e 's,maven\(\W\) false,maven\1 null,'
           metadata/dump_*/*.yaml
     - diff -uw metadata/dump_*
 
