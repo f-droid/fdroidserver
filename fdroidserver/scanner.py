@@ -294,7 +294,7 @@ class ExodusSignatureDataController(SignatureDataController):
                         "warn_code_signatures": [tracker["code_signature"]],
                         # exodus also provides network signatures, unused atm.
                         # "network_signatures": [tracker["network_signature"]],
-                        "AntiFeatures": ["Tracking"],
+                        "AntiFeatures": ["Tracking"],  # TODO
                         "license": "NonFree"  # We assume all trackers in exodus
                                               # are non-free, although free
                                               # trackers like piwik, acra,

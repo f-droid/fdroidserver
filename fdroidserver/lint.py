@@ -624,6 +624,17 @@ def check_app_field_types(app):
                     fieldtype=v.__class__.__name__,
                 )
             )
+        elif t == metadata.TYPE_STRINGMAP and not isinstance(v, dict):
+            yield (
+                _(
+                    "{appid}: {field} must be a '{type}', but it is a '{fieldtype}'!"
+                ).format(
+                    appid=app.id,
+                    field=field,
+                    type='dict',
+                    fieldtype=v.__class__.__name__,
+                )
+            )
 
 
 def check_antiFeatures(app):

@@ -1,5 +1,5 @@
 AllowedAPKSigningKeys: []
-AntiFeatures: []
+AntiFeatures: {}
 ArchivePolicy: null
 AuthorEmail: null
 AuthorName: null
@@ -11,7 +11,7 @@ Bitcoin: null
 Builds:
 - androidupdate: []
   antcommands: []
-  antifeatures: []
+  antifeatures: {}
   binary: null
   build: ''
   buildjni: []
@@ -72,7 +72,7 @@ Builds:
   versionName: 0.3.3
 - androidupdate: []
   antcommands: []
-  antifeatures: []
+  antifeatures: {}
   binary: null
   build: ''
   buildjni: []
@@ -115,7 +115,7 @@ Builds:
   versionName: 0.3.3
 - androidupdate: []
   antcommands: []
-  antifeatures: []
+  antifeatures: {}
   binary: null
   build: ''
   buildjni: []
@@ -156,7 +156,7 @@ Builds:
   versionName: 0.4.2
 - androidupdate: []
   antcommands: []
-  antifeatures: []
+  antifeatures: {}
   binary: null
   build: ''
   buildjni: []
@@ -197,7 +197,7 @@ Builds:
   versionName: 0.5.1
 - androidupdate: []
   antcommands: []
-  antifeatures: []
+  antifeatures: {}
   binary: null
   build: ''
   buildjni: []
@@ -237,7 +237,7 @@ Builds:
   versionName: 0.5.2
 - androidupdate: []
   antcommands: []
-  antifeatures: []
+  antifeatures: {}
   binary: null
   build: ''
   buildjni: []
@@ -277,7 +277,7 @@ Builds:
   versionName: 0.5.3
 - androidupdate: []
   antcommands: []
-  antifeatures: []
+  antifeatures: {}
   binary: null
   build: ''
   buildjni: []
@@ -317,7 +317,7 @@ Builds:
   versionName: 0.5.4
 - androidupdate: []
   antcommands: []
-  antifeatures: []
+  antifeatures: {}
   binary: null
   build: ''
   buildjni: []

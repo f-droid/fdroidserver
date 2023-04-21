@@ -568,7 +568,9 @@
             ]
           },
           "antiFeatures": {
-            "NoSourceSince": {},
+            "NoSourceSince": {
+              "en-US": "1.5"
+            },
             "NonFreeNet": {}
           }
         },
@@ -602,7 +604,9 @@
             ]
           },
           "antiFeatures": {
-            "NoSourceSince": {},
+            "NoSourceSince": {
+              "en-US": "1.5"
+            },
             "NonFreeNet": {}
           }
         },
@@ -645,7 +649,9 @@
             ]
           },
           "antiFeatures": {
-            "NoSourceSince": {},
+            "NoSourceSince": {
+              "en-US": "1.5"
+            },
             "NonFreeNet": {}
           }
         },
@@ -689,7 +695,9 @@
           },
           "antiFeatures": {
             "KnownVuln": {},
-            "NoSourceSince": {},
+            "NoSourceSince": {
+              "en-US": "1.5"
+            },
             "NonFreeAssets": {},
             "NonFreeNet": {},
             "UpstreamNonFree": {}

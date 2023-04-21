@@ -546,6 +546,13 @@ def package_metadata(app, repodir):
 
 
 def convert_version(version, app, repodir):
+    """Convert the internal representation of Builds: into index-v2 versions.
+
+    The diff algorithm of index-v2 uses null/None to mean a field to
+    be removed, so this function handles any Nones that are in the
+    metadata file.
+
+    """
     ver = {}
     if "added" in version:
         ver["added"] = convert_datetime(version["added"])
@@ -555,7 +562,7 @@ def convert_version(version, app, repodir):
     ver["file"] = {
         "name": "/{}".format(version["apkName"]),
         version["hashType"]: version["hash"],
-        "size": version["size"]
+        "size": version["size"],
     }
 
     ipfsCIDv1 = version.get("ipfsCIDv1")
@@ -619,24 +626,14 @@ def convert_version(version, app, repodir):
                 else:
                     manifest[en].append({"name": perm[0]})
 
-    antiFeatures = dict()
-    if "AntiFeatures" in app and app["AntiFeatures"]:
-        for antif in app["AntiFeatures"]:
-            # TODO: get reasons from fdroiddata
-            # ver["antiFeatures"][antif] = {"en-US": "reason"}
-            antiFeatures[antif] = dict()
-
-    if "antiFeatures" in version and version["antiFeatures"]:
-        for antif in version["antiFeatures"]:
-            # TODO: get reasons from fdroiddata
-            # ver["antiFeatures"][antif] = {"en-US": "reason"}
-            antiFeatures[antif] = dict()
-
-    if app.get("NoSourceSince"):
-        antiFeatures["NoSourceSince"] = dict()
-
+    # index-v2 has only per-version antifeatures, not per package.
+    antiFeatures = app.get('AntiFeatures', {})
+    for name, descdict in version.get('antiFeatures', dict()).items():
+        antiFeatures[name] = descdict
     if antiFeatures:
-        ver["antiFeatures"] = dict(sorted(antiFeatures.items()))
+        ver['antiFeatures'] = {
+            k: dict(sorted(antiFeatures[k].items())) for k in sorted(antiFeatures)
+        }
 
     if "versionCode" in version:
         if version["versionCode"] > app["CurrentVersionCode"]:
@@ -881,9 +878,8 @@ def make_v1(apps, packages, repodir, repodict, requestsdict, fdroid_signing_key_
                 for ikey, iname in sorted(lvalue.items()):
                     lordered[lkey][ikey] = iname
             app_dict['localized'] = lordered
-        antiFeatures = app_dict.get('antiFeatures', [])
-        if apps[app_dict["packageName"]].get("NoSourceSince"):
-            antiFeatures.append("NoSourceSince")
+        # v1 uses a list of keys for Anti-Features
+        antiFeatures = app_dict.get('antiFeatures', dict()).keys()
         if antiFeatures:
             app_dict['antiFeatures'] = sorted(set(antiFeatures))
 
@@ -914,6 +910,9 @@ def make_v1(apps, packages, repodir, repodict, requestsdict, fdroid_signing_key_
             if not v:
                 continue
             if k in ('icon', 'icons', 'icons_src', 'ipfsCIDv1', 'name'):
+                continue
+            if k == 'antiFeatures':
+                d[k] = sorted(v.keys())
                 continue
             d[k] = v
 
@@ -1160,8 +1159,6 @@ def make_v0(apps, apks, repodir, repodict, requestsdict, fdroid_signing_key_fing
         antiFeatures = list(app.AntiFeatures)
         if 'antiFeatures' in apklist[0]:
             antiFeatures.extend(apklist[0]['antiFeatures'])
-        if app.get("NoSourceSince"):
-            antiFeatures.append("NoSourceSince")
         if antiFeatures:
             afout = sorted(set(antiFeatures))
             addElementNonEmpty('antifeatures', ','.join(afout), doc, apel)

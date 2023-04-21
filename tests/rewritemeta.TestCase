@@ -45,11 +45,11 @@ class RewriteMetaTest(unittest.TestCase):
                 'versionCode': 3,
                 'commit': '6a548e4b19',
                 'target': 'android-10',
-                'antifeatures': [
-                    'KnownVuln',
-                    'UpstreamNonFree',
-                    'NonFreeAssets',
-                ],
+                'antifeatures': {
+                    'KnownVuln': {},
+                    'UpstreamNonFree': {},
+                    'NonFreeAssets': {},
+                },
             },
         )
 
@@ -68,6 +68,24 @@ class RewriteMetaTest(unittest.TestCase):
             },
         )
 
+    def test_remove_blank_flags_from_builds_org_adaway_52(self):
+        """Unset fields in Builds: entries should be removed."""
+        appid = 'org.adaway'
+        app = metadata.read_metadata({appid: -1})[appid]
+        builds = rewritemeta.remove_blank_flags_from_builds(app.get('Builds'))
+        self.assertEqual(
+            builds[-1],
+            {
+                'buildjni': ['yes'],
+                'commit': 'v3.0',
+                'gradle': ['yes'],
+                'preassemble': ['renameExecutables'],
+                'subdir': 'AdAway',
+                'versionCode': 52,
+                'versionName': '3.0',
+            },
+        )
+
     def test_remove_blank_flags_from_builds_no_builds(self):
         """Unset fields in Builds: entries should be removed."""
         self.assertEqual(
@@ -77,6 +95,24 @@ class RewriteMetaTest(unittest.TestCase):
         self.assertEqual(
             rewritemeta.remove_blank_flags_from_builds(dict()),
             list(),
+        )
+        self.assertEqual(
+            rewritemeta.remove_blank_flags_from_builds(list()),
+            list(),
+        )
+        self.assertEqual(
+            rewritemeta.remove_blank_flags_from_builds(set()),
+            list(),
+        )
+        self.assertEqual(
+            rewritemeta.remove_blank_flags_from_builds(tuple()),
+            list(),
+        )
+
+    def test_remove_blank_flags_from_builds_0_is_a_value(self):
+        self.assertEqual(
+            rewritemeta.remove_blank_flags_from_builds([{'versionCode': 0}]),
+            [{'versionCode': 0}],
         )
 
     def test_rewrite_no_builds(self):

@@ -114,7 +114,7 @@ class App(dict):
         super().__init__()
 
         self.Disabled = None
-        self.AntiFeatures = []
+        self.AntiFeatures = dict()
         self.Provides = None
         self.Categories = []
         self.License = 'Unknown'
@@ -182,12 +182,13 @@ TYPE_SCRIPT = 5
 TYPE_MULTILINE = 6
 TYPE_BUILD = 7
 TYPE_INT = 8
+TYPE_STRINGMAP = 9
 
 fieldtypes = {
     'Description': TYPE_MULTILINE,
     'MaintainerNotes': TYPE_MULTILINE,
     'Categories': TYPE_LIST,
-    'AntiFeatures': TYPE_LIST,
+    'AntiFeatures': TYPE_STRINGMAP,
     'AllowedAPKSigningKeys': TYPE_LIST,
     'Builds': TYPE_BUILD,
     'VercodeOperation': TYPE_LIST,
@@ -277,7 +278,7 @@ class Build(dict):
         self.antcommands = []
         self.postbuild = ''
         self.novcheck = False
-        self.antifeatures = []
+        self.antifeatures = dict()
         if copydict:
             super().__init__(copydict)
             return
@@ -358,7 +359,7 @@ flagtypes = {
     'forceversion': TYPE_BOOL,
     'forcevercode': TYPE_BOOL,
     'novcheck': TYPE_BOOL,
-    'antifeatures': TYPE_LIST,
+    'antifeatures': TYPE_STRINGMAP,
     'timeout': TYPE_INT,
 }
 
@@ -649,8 +650,6 @@ def parse_metadata(metadatapath):
     metadatapath = Path(metadatapath)
     app = App()
     app.metadatapath = metadatapath.as_posix()
-    if metadatapath.stem != '.fdroid':
-        app.id = metadatapath.stem
     if metadatapath.suffix == '.yml':
         with metadatapath.open('r', encoding='utf-8') as mf:
             app.update(parse_yaml_metadata(mf))
@@ -658,6 +657,10 @@ def parse_metadata(metadatapath):
         _warn_or_exception(
             _('Unknown metadata format: {path} (use: *.yml)').format(path=metadatapath)
         )
+
+    if metadatapath.stem != '.fdroid':
+        app.id = metadatapath.stem
+        parse_localized_antifeatures(app)
 
     if metadatapath.name != '.fdroid.yml' and app.Repo:
         build_dir = common.get_build_dir(app)
@@ -770,6 +773,116 @@ def parse_yaml_metadata(mf):
     return yamldata
 
 
+def parse_localized_antifeatures(app):
+    """Read in localized Anti-Features files from the filesystem.
+
+    To support easy integration with Weblate and other translation
+    systems, there is a special type of metadata that can be
+    maintained in a Fastlane-style directory layout, where each field
+    is represented by a text file on directories that specified which
+    app it belongs to, which locale, etc.  This function reads those
+    in and puts them into the internal dict, to be merged with any
+    related data that came from the metadata.yml file.
+
+    This needs to be run after parse_yaml_metadata() since that
+    normalizes the data structure.  Also, these values are lower
+    priority than what comes from the metadata file. So this should
+    not overwrite anything parse_yaml_metadata() puts into the App
+    instance.
+
+    metadata/<Application ID>/<locale>/antifeatures/<Version Code>_<Anti-Feature>.txt
+    metadata/<Application ID>/<locale>/antifeatures/<Anti-Feature>.txt
+
+    └── metadata/
+        └── <Application ID>/
+            ├── en-US/
+            │   └── antifeatures/
+            │       ├── 123_Ads.txt       -> "includes ad lib"
+            │       ├── 123_Tracking.txt  -> "standard suspects"
+            │       └── NoSourceSince.txt -> "it vanished"
+            │
+            └── zh-CN/
+                └── antifeatures/
+                    └── 123_Ads.txt       -> "包括广告图书馆"
+
+    Gets parsed into the metadata data structure:
+
+    AntiFeatures:
+      NoSourceSince:
+        en-US: it vanished
+    Builds:
+      - versionCode: 123
+        antifeatures:
+          Ads:
+            en-US: includes ad lib
+            zh-CN: 包括广告图书馆
+          Tracking:
+            en-US: standard suspects
+
+    """
+    app_dir = Path('metadata', app['id'])
+    if not app_dir.is_dir():
+        return
+    af_dup_msg = _('Duplicate Anti-Feature declaration at {path} was ignored!')
+
+    if app.get('AntiFeatures'):
+        app_has_AntiFeatures = True
+    else:
+        app_has_AntiFeatures = False
+
+    has_versionCode = re.compile(r'^-?[0-9]+_.*')
+    has_antifeatures_from_app = set()
+    for build in app.get('Builds', []):
+        antifeatures = build.get('antifeatures')
+        if antifeatures:
+            has_antifeatures_from_app.add(build['versionCode'])
+
+    for f in sorted(app_dir.glob('*/antifeatures/*.txt')):
+        path = f.as_posix()
+        left = path.index('/', 9)  # 9 is length of "metadata/"
+        right = path.index('/', left + 1)
+        locale = path[left + 1 : right]
+        description = f.read_text()
+        if has_versionCode.match(f.stem):
+            i = f.stem.index('_')
+            versionCode = int(f.stem[:i])
+            antifeature = f.stem[i + 1 :]
+            if versionCode in has_antifeatures_from_app:
+                logging.error(af_dup_msg.format(path=f))
+                continue
+            if 'Builds' not in app:
+                app['Builds'] = []
+            found = False
+            for build in app['Builds']:
+                # loop though builds again, there might be duplicate versionCodes
+                if versionCode == build['versionCode']:
+                    found = True
+                    if 'antifeatures' not in build:
+                        build['antifeatures'] = dict()
+                    if antifeature not in build['antifeatures']:
+                        build['antifeatures'][antifeature] = dict()
+                    build['antifeatures'][antifeature][locale] = description
+            if not found:
+                app['Builds'].append(
+                    {
+                        'versionCode': versionCode,
+                        'antifeatures': {
+                            antifeature: {locale: description},
+                        },
+                    }
+                )
+        elif app_has_AntiFeatures:
+            logging.error(af_dup_msg.format(path=f))
+            continue
+        else:
+            if 'AntiFeatures' not in app:
+                app['AntiFeatures'] = dict()
+            if f.stem not in app['AntiFeatures']:
+                app['AntiFeatures'][f.stem] = dict()
+            with f.open() as fp:
+                app['AntiFeatures'][f.stem][locale] = fp.read()
+
+
 def _normalize_type_string(v):
     """Normalize any data to TYPE_STRING.
 
@@ -785,6 +898,61 @@ def _normalize_type_string(v):
             return 'true'
         return 'false'
     return str(v)
+
+
+def _normalize_type_stringmap(k, v):
+    """Normalize any data to TYPE_STRINGMAP.
+
+    The internal representation of this format is a dict of dicts,
+    where the outer dict's keys are things like tag names of
+    Anti-Features, the inner dict's keys are locales, and the ultimate
+    values are human readable text.
+
+    Metadata entries like AntiFeatures: can be written in many
+    forms, including a simple one-entry string, a list of strings,
+    a dict with keys and descriptions as values, or a dict with
+    localization.
+
+    Returns
+    -------
+    A dictionary with string keys, where each value is either a string
+    message or a dict with locale keys and string message values.
+
+    """
+    if v is None:
+        return dict()
+    if isinstance(v, str) or isinstance(v, int) or isinstance(v, float):
+        return {_normalize_type_string(v): dict()}
+    if isinstance(v, list) or isinstance(v, tuple) or isinstance(v, set):
+        retdict = dict()
+        for i in v:
+            if isinstance(i, dict):
+                # transitional format
+                if len(i) != 1:
+                    _warn_or_exception(
+                        _(
+                            "'{value}' is not a valid {field}, should be {pattern}"
+                        ).format(field=k, value=v, pattern='key: value')
+                    )
+                afname = _normalize_type_string(next(iter(i)))
+                desc = _normalize_type_string(next(iter(i.values())))
+                retdict[afname] = {common.DEFAULT_LOCALE: desc}
+            else:
+                retdict[_normalize_type_string(i)] = {}
+        return retdict
+
+    retdict = dict()
+    for af, afdict in v.items():
+        key = _normalize_type_string(af)
+        if afdict:
+            if isinstance(afdict, dict):
+                retdict[key] = afdict
+            else:
+                retdict[key] = {common.DEFAULT_LOCALE: _normalize_type_string(afdict)}
+        else:
+            retdict[key] = dict()
+
+    return retdict
 
 
 def post_parse_yaml_metadata(yamldata):
@@ -808,6 +976,9 @@ def post_parse_yaml_metadata(yamldata):
         elif _fieldtype == TYPE_STRING:
             if v or v == 0:
                 yamldata[k] = _normalize_type_string(v)
+        elif _fieldtype == TYPE_STRINGMAP:
+            if v or v == 0:  # TODO probably want just `if v:`
+                yamldata[k] = _normalize_type_stringmap(k, v)
         else:
             if type(v) in (float, int):
                 yamldata[k] = str(v)
@@ -843,11 +1014,23 @@ def post_parse_yaml_metadata(yamldata):
                             build_flag=k, value=v
                         )
                     )
+            elif _flagtype == TYPE_STRINGMAP:
+                if v or v == 0:
+                    build[k] = _normalize_type_stringmap(k, v)
 
         builds.append(build)
 
     if builds:
         yamldata['Builds'] = sorted(builds, key=lambda build: build['versionCode'])
+
+    no_source_since = yamldata.get("NoSourceSince")
+    # do not overwrite the description if it is there
+    if no_source_since and not yamldata.get('AntiFeatures', {}).get('NoSourceSince'):
+        if 'AntiFeatures' not in yamldata:
+            yamldata['AntiFeatures'] = dict()
+        yamldata['AntiFeatures']['NoSourceSince'] = {
+            common.DEFAULT_LOCALE: no_source_since
+        }
 
 
 def write_yaml(mf, app):

@@ -26,6 +26,7 @@ if localmodule not in sys.path:
 import fdroidserver
 from fdroidserver import metadata
 from fdroidserver.exception import MetaDataException
+from fdroidserver.common import DEFAULT_LOCALE
 
 
 def _get_mock_mf(s):
@@ -216,6 +217,7 @@ class MetadataTest(unittest.TestCase):
         yaml = ruamel.yaml.YAML(typ='safe')
         apps = fdroidserver.metadata.read_metadata()
         for appid in (
+            'app.with.special.build.params',
             'org.smssecure.smssecure',
             'org.adaway',
             'org.videolan.vlc',
@@ -300,24 +302,24 @@ class MetadataTest(unittest.TestCase):
 
     @mock.patch('git.Repo')
     def test_rewrite_yaml_special_build_params(self, git_Repo):
-        with tempfile.TemporaryDirectory() as testdir:
-            testdir = Path(testdir)
+        """Test rewriting a plain YAML metadata file without localized files."""
+        os.chdir(self.testdir)
+        os.mkdir('metadata')
+        appid = 'app.with.special.build.params'
+        file_name = Path('metadata/%s.yml' % appid)
+        shutil.copy(self.basedir / file_name, file_name)
 
-            # rewrite metadata
-            allapps = fdroidserver.metadata.read_metadata()
-            for appid, app in allapps.items():
-                if appid == 'app.with.special.build.params':
-                    fdroidserver.metadata.write_metadata(
-                        testdir / (appid + '.yml'), app
-                    )
+        # rewrite metadata
+        allapps = fdroidserver.metadata.read_metadata({appid: -1})
+        for appid, app in allapps.items():
+            metadata.write_metadata(file_name, app)
 
-            # assert rewrite result
-            self.maxDiff = None
-            file_name = 'app.with.special.build.params.yml'
-            self.assertEqual(
-                (testdir / file_name).read_text(encoding='utf-8'),
-                (Path('metadata-rewrite-yml') / file_name).read_text(encoding='utf-8'),
-            )
+        # assert rewrite result
+        self.maxDiff = None
+        self.assertEqual(
+            file_name.read_text(),
+            (self.basedir / 'metadata-rewrite-yml' / file_name.name).read_text(),
+        )
 
     def test_normalize_type_string(self):
         """TYPE_STRING currently has some quirky behavior."""
@@ -330,6 +332,18 @@ class MetadataTest(unittest.TestCase):
         self.assertEqual('{}', metadata._normalize_type_string(dict()))
         self.assertEqual('false', metadata._normalize_type_string(False))
         self.assertEqual('true', metadata._normalize_type_string(True))
+
+    def test_normalize_type_stringmap_none(self):
+        self.assertEqual(dict(), metadata._normalize_type_stringmap('key', None))
+
+    def test_normalize_type_stringmap_empty_list(self):
+        self.assertEqual(dict(), metadata._normalize_type_stringmap('AntiFeatures', []))
+
+    def test_normalize_type_stringmap_simple_list_format(self):
+        self.assertEqual(
+            {'Ads': {}, 'Tracking': {}},
+            metadata._normalize_type_stringmap('AntiFeatures', ['Ads', 'Tracking']),
+        )
 
     def test_post_parse_yaml_metadata(self):
         yamldata = dict()
@@ -506,6 +520,96 @@ class MetadataTest(unittest.TestCase):
         self.assertEqual(fdroidserver.metadata.parse_yaml_metadata(mf), dict())
         _warning.assert_called_once()
         _error.assert_called_once()
+
+    def test_parse_localized_antifeatures(self):
+        """Unit test based on reading files included in the test repo."""
+        app = dict()
+        app['id'] = 'app.with.special.build.params'
+        metadata.parse_localized_antifeatures(app)
+        self.maxDiff = None
+        self.assertEqual(
+            app,
+            {
+                'AntiFeatures': {
+                    'Ads': {'en-US': 'please no'},
+                    'NoSourceSince': {'en-US': 'no activity\n'},
+                },
+                'Builds': [
+                    {
+                        'versionCode': 50,
+                        'antifeatures': {
+                            'Ads': {
+                                'en-US': 'includes ad lib\n',
+                                'zh-CN': '包括广告图书馆\n',
+                            },
+                            'Tracking': {'en-US': 'standard suspects\n'},
+                        },
+                    },
+                    {
+                        'versionCode': 49,
+                        'antifeatures': {
+                            'Tracking': {'zh-CN': 'Text from zh-CN/49_Tracking.txt'},
+                        },
+                    },
+                ],
+                'id': app['id'],
+            },
+        )
+
+    def test_parse_localized_antifeatures_passthrough(self):
+        """Test app values are cleanly passed through if no localized files."""
+        before = {
+            'id': 'placeholder',
+            'AntiFeatures': {'NonFreeDep': {}},
+            'Builds': [{'versionCode': 999, 'antifeatures': {'zero': {}, 'one': {}}}],
+        }
+        after = copy.deepcopy(before)
+        with tempfile.TemporaryDirectory() as testdir:
+            os.chdir(testdir)
+            os.mkdir('metadata')
+            os.mkdir(os.path.join('metadata', after['id']))
+            metadata.parse_localized_antifeatures(after)
+        self.assertEqual(before, after)
+
+    def test_parse_metadata_antifeatures_NoSourceSince(self):
+        """Test that NoSourceSince gets added as an Anti-Feature."""
+        os.chdir(self.testdir)
+        yml = Path('metadata/test.yml')
+        yml.parent.mkdir()
+        with yml.open('w') as fp:
+            fp.write('AntiFeatures: Ads\nNoSourceSince: gone\n')
+        app = metadata.parse_metadata(yml)
+        self.assertEqual(
+            app['AntiFeatures'], {'Ads': {}, 'NoSourceSince': {DEFAULT_LOCALE: 'gone'}}
+        )
+
+    @mock.patch('logging.error')
+    def test_yml_overrides_localized_antifeatures(self, logging_error):
+        """Definitions in .yml files should override the localized versions."""
+        app = metadata.parse_metadata('metadata/app.with.special.build.params.yml')
+
+        self.assertEqual(app['AntiFeatures'], {'UpstreamNonFree': {}})
+
+        self.assertEqual(49, app['Builds'][-3]['versionCode'])
+        self.assertEqual(
+            app['Builds'][-3]['antifeatures'],
+            {'Tracking': {DEFAULT_LOCALE: 'Uses the Facebook SDK.'}},
+        )
+
+        self.assertEqual(50, app['Builds'][-2]['versionCode'])
+        self.assertEqual(
+            app['Builds'][-2]['antifeatures'],
+            {
+                'Ads': {
+                    'en-US': 'includes ad lib\n',
+                    'zh-CN': '包括广告图书馆\n',
+                },
+                'Tracking': {'en-US': 'standard suspects\n'},
+            },
+        )
+        # errors are printed when .yml overrides localized
+        logging_error.assert_called()
+        self.assertEqual(3, len(logging_error.call_args_list))
 
     def test_parse_yaml_srclib_corrupt_file(self):
         with tempfile.TemporaryDirectory() as testdir:
@@ -740,6 +844,257 @@ class MetadataTest(unittest.TestCase):
         result = fdroidserver.metadata.parse_yaml_metadata(mf)
         self.assertNotIn('Provides', result)
         self.assertNotIn('provides', result)
+
+    def test_parse_yaml_app_antifeatures_dict(self):
+        nonfreenet = 'free it!'
+        tracking = 'so many'
+        mf = io.StringIO(
+            textwrap.dedent(
+                f"""
+                AntiFeatures:
+                  Tracking: {tracking}
+                  NonFreeNet: {nonfreenet}
+                """
+            )
+        )
+        self.assertEqual(
+            metadata.parse_yaml_metadata(mf),
+            {
+                'AntiFeatures': {
+                    'NonFreeNet': {DEFAULT_LOCALE: nonfreenet},
+                    'Tracking': {DEFAULT_LOCALE: tracking},
+                }
+            },
+        )
+
+    def test_parse_yaml_metadata_build_antifeatures_old_style(self):
+        mf = _get_mock_mf(
+            textwrap.dedent(
+                """
+                AntiFeatures:
+                  - Ads
+                Builds:
+                  - versionCode: 123
+                    antifeatures:
+                      - KnownVuln
+                      - UpstreamNonFree
+                      - NonFreeAssets
+                """
+            )
+        )
+        self.assertEqual(
+            metadata.parse_yaml_metadata(mf),
+            {
+                'AntiFeatures': {'Ads': {}},
+                'Builds': [
+                    {
+                        'antifeatures': {
+                            'KnownVuln': {},
+                            'NonFreeAssets': {},
+                            'UpstreamNonFree': {},
+                        },
+                        'versionCode': 123,
+                    }
+                ],
+            },
+        )
+
+    def test_parse_yaml_metadata_antifeatures_sort(self):
+        """All data should end up sorted, to minimize diffs in the index files."""
+        self.assertEqual(
+            metadata.parse_yaml_metadata(
+                _get_mock_mf(
+                    textwrap.dedent(
+                        """
+                Builds:
+                  - versionCode: 123
+                    antifeatures:
+                      KnownVuln:
+                        es: 2nd
+                        az: zero
+                        en-US: first
+                      UpstreamNonFree:
+                      NonFreeAssets:
+                AntiFeatures:
+                  NonFreeDep:
+                  Ads:
+                    sw: 2nd
+                    zh-CN: 3rd
+                    de: 1st
+                """
+                    )
+                )
+            ),
+            {
+                'AntiFeatures': {
+                    'Ads': {'de': '1st', 'sw': '2nd', 'zh-CN': '3rd'},
+                    'NonFreeDep': {},
+                },
+                'Builds': [
+                    {
+                        'antifeatures': {
+                            'KnownVuln': {'az': 'zero', 'en-US': 'first', 'es': '2nd'},
+                            'NonFreeAssets': {},
+                            'UpstreamNonFree': {},
+                        },
+                        'versionCode': 123,
+                    }
+                ],
+            },
+        )
+
+    def test_parse_yaml_app_antifeatures_str(self):
+        self.assertEqual(
+            metadata.parse_yaml_metadata(io.StringIO('AntiFeatures: Tracking')),
+            {'AntiFeatures': {'Tracking': {}}},
+        )
+
+    def test_parse_yaml_app_antifeatures_bool(self):
+        self.assertEqual(
+            metadata.parse_yaml_metadata(io.StringIO('AntiFeatures: true')),
+            {'AntiFeatures': {'true': {}}},
+        )
+
+    def test_parse_yaml_app_antifeatures_int(self):
+        self.assertEqual(
+            metadata.parse_yaml_metadata(io.StringIO('AntiFeatures: 1')),
+            {'AntiFeatures': {'1': {}}},
+        )
+
+    def test_parse_yaml_app_antifeatures_float(self):
+        self.assertEqual(
+            metadata.parse_yaml_metadata(io.StringIO('AntiFeatures: 1.0')),
+            {'AntiFeatures': {'1.0': {}}},
+        )
+
+    def test_parse_yaml_app_antifeatures_list_float(self):
+        self.assertEqual(
+            metadata.parse_yaml_metadata(io.StringIO('AntiFeatures:\n  - 1.0\n')),
+            {'AntiFeatures': {'1.0': {}}},
+        )
+
+    def test_parse_yaml_app_antifeatures_dict_float(self):
+        mf = io.StringIO('AntiFeatures:\n  0.0: too early\n')
+        self.assertEqual(
+            metadata.parse_yaml_metadata(mf),
+            {'AntiFeatures': {'0.0': {'en-US': 'too early'}}},
+        )
+
+    def test_parse_yaml_app_antifeatures_dict_float_fail_value(self):
+        mf = io.StringIO('AntiFeatures:\n  NoSourceSince: 1.0\n')
+        self.assertEqual(
+            metadata.parse_yaml_metadata(mf),
+            {'AntiFeatures': {'NoSourceSince': {'en-US': '1.0'}}},
+        )
+
+    def test_parse_yaml_metadata_type_stringmap_old_list(self):
+        mf = _get_mock_mf(
+            textwrap.dedent(
+                """
+                    AntiFeatures:
+                      - Ads
+                      - Tracking
+                """
+            )
+        )
+        self.assertEqual(
+            {'AntiFeatures': {'Ads': {}, 'Tracking': {}}},
+            metadata.parse_yaml_metadata(mf),
+        )
+
+    def test_parse_yaml_app_antifeatures_dict_no_value(self):
+        mf = io.StringIO(
+            textwrap.dedent(
+                """\
+                AntiFeatures:
+                  Tracking:
+                  NonFreeNet:
+                """
+            )
+        )
+        self.assertEqual(
+            metadata.parse_yaml_metadata(mf),
+            {'AntiFeatures': {'NonFreeNet': {}, 'Tracking': {}}},
+        )
+
+    def test_parse_yaml_metadata_type_stringmap_transitional(self):
+        """Support a transitional format, where users just append a text"""
+        ads = 'Has ad lib in it.'
+        tracking = 'opt-out reports with ACRA'
+        mf = _get_mock_mf(
+            textwrap.dedent(
+                f"""
+                    AntiFeatures:
+                      - Ads: {ads}
+                      - Tracking: {tracking}
+                """
+            )
+        )
+        self.assertEqual(
+            metadata.parse_yaml_metadata(mf),
+            {
+                'AntiFeatures': {
+                    'Ads': {DEFAULT_LOCALE: ads},
+                    'Tracking': {DEFAULT_LOCALE: tracking},
+                }
+            },
+        )
+
+    def test_parse_yaml_app_antifeatures_dict_mixed_values(self):
+        ads = 'true'
+        tracking = 'many'
+        nonfreenet = '1'
+        mf = io.StringIO(
+            textwrap.dedent(
+                f"""
+                AntiFeatures:
+                  Ads: {ads}
+                  Tracking: {tracking}
+                  NonFreeNet: {nonfreenet}
+                """
+            )
+        )
+        self.assertEqual(
+            metadata.parse_yaml_metadata(mf),
+            {
+                'AntiFeatures': {
+                    'Ads': {DEFAULT_LOCALE: ads},
+                    'NonFreeNet': {DEFAULT_LOCALE: nonfreenet},
+                    'Tracking': {DEFAULT_LOCALE: tracking},
+                }
+            },
+        )
+
+    def test_parse_yaml_app_antifeatures_stringmap_full(self):
+        ads = 'watching'
+        tracking = 'many'
+        nonfreenet = 'pipes'
+        nonfreenet_zh = '非免费网络'
+        self.maxDiff = None
+        mf = io.StringIO(
+            textwrap.dedent(
+                f"""
+                AntiFeatures:
+                  Ads:
+                    {DEFAULT_LOCALE}: {ads}
+                  Tracking:
+                    {DEFAULT_LOCALE}: {tracking}
+                  NonFreeNet:
+                    {DEFAULT_LOCALE}: {nonfreenet}
+                    zh-CN: {nonfreenet_zh}
+                """
+            )
+        )
+        self.assertEqual(
+            metadata.parse_yaml_metadata(mf),
+            {
+                'AntiFeatures': {
+                    'Ads': {DEFAULT_LOCALE: ads},
+                    'NonFreeNet': {DEFAULT_LOCALE: nonfreenet, 'zh-CN': nonfreenet_zh},
+                    'Tracking': {DEFAULT_LOCALE: tracking},
+                }
+            },
+        )
 
     def test_write_yaml_1_line_scripts_as_string(self):
         mf = io.StringIO()
@@ -1263,9 +1618,9 @@ class PostMetadataParseTest(unittest.TestCase):
         fdroidserver.metadata.warnings_action = 'error'
 
     def _post_metadata_parse_app_list(self, from_yaml, expected):
-        app = {'AntiFeatures': from_yaml}
+        app = {'AllowedAPKSigningKeys': from_yaml}
         metadata.post_parse_yaml_metadata(app)
-        return {'AntiFeatures': expected}, app
+        return {'AllowedAPKSigningKeys': expected}, app
 
     def _post_metadata_parse_app_string(self, from_yaml, expected):
         app = {'Repo': from_yaml}

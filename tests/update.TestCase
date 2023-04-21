@@ -768,7 +768,7 @@ class UpdateTest(unittest.TestCase):
                                                  '-1': 'res/drawable-mdpi-v4/icon_launcher.png'})
         self.assertEqual(apk_info['icons'], {})
         self.assertEqual(apk_info['features'], [])
-        self.assertEqual(apk_info['antiFeatures'], set())
+        self.assertEqual(apk_info['antiFeatures'], dict())
         self.assertEqual(apk_info['versionName'], 'v1.6pre2')
         self.assertEqual(apk_info['hash'],
                          '897486e1f857c6c0ee32ccbad0e1b8cd82f6d0e65a44a23f13f852d2b63a18c8')
@@ -819,7 +819,7 @@ class UpdateTest(unittest.TestCase):
             'hashType': 'sha256',
             'packageName': 'no.min.target.sdk',
             'features': [],
-            'antiFeatures': set(),
+            'antiFeatures': dict(),
             'size': 14102,
             'sig': 'b4964fd759edaa54e65bb476d0276880',
             'versionName': '1.2-fake',

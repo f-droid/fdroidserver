@@ -1,4 +1,4 @@
-antiFeatures: !!set {}
+antiFeatures: {}
 features: []
 hash: abfb3adb7496611749e7abfb014c5c789e3a02489e48a5c3665110d1b1acd931
 hashType: sha256

@@ -52,8 +52,9 @@ def remove_blank_flags_from_builds(builds):
     for build in builds:
         new = dict()
         for k in metadata.build_flags:
-            v = build[k]
-            if v is None or v is False or v == [] or v == '':
+            v = build.get(k)
+            # 0 is valid value, it should not be stripped
+            if v is None or v is False or v == '' or v == dict() or v == list():
                 continue
             new[k] = v
         newbuilds.append(new)

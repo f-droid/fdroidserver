@@ -597,7 +597,14 @@ include tests/main.TestCase
 include tests/metadata/apk/info.guardianproject.urzip.yaml
 include tests/metadata/apk/org.dyndns.fules.ck.yaml
 include tests/metadata/app.with.special.build.params.yml
+include tests/metadata/app.with.special.build.params/en-US/antifeatures/50_Ads.txt
+include tests/metadata/app.with.special.build.params/en-US/antifeatures/50_Tracking.txt
+include tests/metadata/app.with.special.build.params/en-US/antifeatures/Ads.txt
+include tests/metadata/app.with.special.build.params/en-US/antifeatures/NoSourceSince.txt
+include tests/metadata/app.with.special.build.params/zh-CN/antifeatures/49_Tracking.txt
+include tests/metadata/app.with.special.build.params/zh-CN/antifeatures/50_Ads.txt
 include tests/metadata/com.politedroid.yml
+include tests/metadata/dump/app.with.special.build.params.yaml
 include tests/metadata/dump/com.politedroid.yaml
 include tests/metadata/dump/org.adaway.yaml
 include tests/metadata/dump/org.smssecure.smssecure.yaml
