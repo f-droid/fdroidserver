@@ -488,7 +488,7 @@ servergitmirrors:
     - diff repo/index-v1.jar index-v1.jar
 
 Build documentation:
-  image: debian:bullseye-backports
+  image: debian:bookworm
   <<: *apt-template
   script:
     - apt-get install make python3-sphinx python3-numpydoc python3-pydata-sphinx-theme pydocstyle fdroidserver
