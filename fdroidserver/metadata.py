@@ -800,15 +800,16 @@ def post_parse_yaml_metadata(yamldata):
 
     """
     for k, v in yamldata.items():
-        if fieldtype(k) == TYPE_LIST:
+        _fieldtype = fieldtype(k)
+        if _fieldtype == TYPE_LIST:
             if isinstance(v, str):
                 yamldata[k] = [v]
             elif v:
                 yamldata[k] = [str(i) for i in v]
-        elif fieldtype(k) == TYPE_INT:
+        elif _fieldtype == TYPE_INT:
             if v:
                 yamldata[k] = int(v)
-        elif fieldtype(k) == TYPE_STRING:
+        elif _fieldtype == TYPE_STRING:
             if v or v == 0:
                 yamldata[k] = _normalize_type_string(v)
         else:
@@ -822,10 +823,10 @@ def post_parse_yaml_metadata(yamldata):
                 continue
 
             _flagtype = flagtype(k)
-            if _flagtype is TYPE_STRING:
+            if _flagtype == TYPE_STRING:
                 if v or v == 0:
                     build[k] = _normalize_type_string(v)
-            elif _flagtype is TYPE_INT:
+            elif _flagtype == TYPE_INT:
                 build[k] = v
                 # versionCode must be int
                 if not isinstance(v, int):
@@ -865,16 +866,16 @@ def write_yaml(mf, app):
     """
     def _field_to_yaml(typ, value):
         """Convert data to YAML 1.2 format that keeps the right TYPE_*."""
-        if typ is TYPE_STRING:
+        if typ == TYPE_STRING:
             return str(value)
-        elif typ is TYPE_INT:
+        elif typ == TYPE_INT:
             return int(value)
-        elif typ is TYPE_MULTILINE:
+        elif typ == TYPE_MULTILINE:
             if '\n' in value:
                 return ruamel.yaml.scalarstring.preserve_literal(str(value))
             else:
                 return str(value)
-        elif typ is TYPE_SCRIPT:
+        elif typ == TYPE_SCRIPT:
             if type(value) == list:
                 if len(value) == 1:
                     return value[0]
