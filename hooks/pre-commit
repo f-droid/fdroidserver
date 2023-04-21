@@ -94,6 +94,7 @@ find_command() {
 }
 
 DASH=$(find_command dash)
+PYDOCSTYLE=$(find_command pydocstyle)
 PYFLAKES=$(find_command pyflakes)
 PEP8=$(find_command pycodestyle pep8)
 RUBY=$(find_command ruby)
@@ -102,6 +103,9 @@ YAMLLINT=$(find_command yamllint)
 if [ "$PY_FILES $PY_TEST_FILES" != " " ]; then
     if ! $PYFLAKES $PY_FILES $PY_TEST_FILES; then
 	err "pyflakes tests failed!"
+    fi
+    if ! $PYDOCSTYLE $PY_FILES $PY_TEST_FILES; then
+	err "pydocstyle tests failed!"
     fi
 fi
 

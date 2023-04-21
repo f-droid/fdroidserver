@@ -10,15 +10,15 @@ from setuptools.command.install import install
 
 
 class VersionCheckCommand(Command):
-    """Make sure git tag and version match before uploading"""
+    """Make sure git tag and version match before uploading."""
 
     user_options = []
 
     def initialize_options(self):
-        """Abstract method that is required to be overwritten"""
+        """Abstract method that is required to be overwritten."""
 
     def finalize_options(self):
-        """Abstract method that is required to be overwritten"""
+        """Abstract method that is required to be overwritten."""
 
     def run(self):
         version = self.distribution.get_version()
