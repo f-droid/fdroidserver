@@ -13,7 +13,7 @@ if [ -z "$files" ]; then
     SH_FILES="hooks/pre-commit"
     BASH_FILES="gradlew-fdroid jenkins-build-all jenkins-setup-build-environment jenkins-test completion/bash-completion buildserver/provision-*"
     RB_FILES="buildserver/Vagrantfile"
-    YML_FILES="buildserver/*.yml examples/*.yml"
+    YML_FILES=".*.yml .yamllint */*.yml */*.yaml"
 else
     # if actually committing right now, then only run on the files
     # that are going to be committed at this moment
@@ -36,7 +36,7 @@ else
             *.rb)
                 RB_FILES+=" $f"
                 ;;
-            *.yml)
+            *.yml|.*.yml|.yamllint)
                 YML_FILES+=" $f"
                 ;;
             *)
@@ -139,7 +139,7 @@ for f in $RB_FILES; do
 done
 
 for f in $YML_FILES; do
-	if ! $YAMLLINT $f 1>/dev/null; then
+	if ! $YAMLLINT $f; then
 		err ".yml tests failed on $f!"
 	fi
 done
