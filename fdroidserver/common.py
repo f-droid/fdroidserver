@@ -77,6 +77,9 @@ from . import apksigcopier, common
 # The path to this fdroidserver distribution
 FDROID_PATH = os.path.realpath(os.path.join(os.path.dirname(__file__), '..'))
 
+# There needs to be a default, and this is the most common for software.
+DEFAULT_LOCALE = 'en-US'
+
 # this is the build-tools version, aapt has a separate version that
 # has to be manually set in test_aapt_version()
 MINIMUM_AAPT_BUILD_TOOLS_VERSION = '26.0.0'
@@ -507,7 +510,7 @@ def load_localized_config(name, repodir):
     for f in Path().glob("config/**/{name}.yml".format(name=name)):
         locale = f.parts[1]
         if len(f.parts) == 2:
-            locale = "en-US"
+            locale = DEFAULT_LOCALE
         with open(f, encoding="utf-8") as fp:
             elem = yaml.safe_load(fp)
             for afname, field_dict in elem.items():
@@ -3912,7 +3915,7 @@ def get_app_display_name(app):
     if app.get('Name'):
         return app['Name']
     if app.get('localized'):
-        localized = app['localized'].get('en-US')
+        localized = app['localized'].get(DEFAULT_LOCALE)
         if not localized:
             for v in app['localized'].values():
                 localized = v

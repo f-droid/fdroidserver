@@ -51,6 +51,7 @@ from . import _
 from . import common
 from . import index
 from . import metadata
+from .common import DEFAULT_LOCALE
 from .exception import BuildException, FDroidException, VerificationException
 
 from PIL import Image, PngImagePlugin
@@ -2034,7 +2035,7 @@ def insert_missing_app_names_from_apks(apps, apks):
 
     The name from the APK is set as the default name for the app if
     there is no other default set, e.g. app['Name'] or
-    app['localized']['en-US']['name'].  The en-US locale is defined in
+    app['localized'][DEFAULT_LOCALE]['name'].  The default is defined in
     the F-Droid ecosystem as the locale of last resort, as in the one
     that should always be present.  en-US is used since it is the
     locale of the source strings.
@@ -2050,7 +2051,7 @@ def insert_missing_app_names_from_apks(apps, apks):
     for appid, app in apps.items():
         if app.get('Name') is not None:
             continue
-        if app.get('localized', {}).get('en-US', {}).get('name') is not None:
+        if app.get('localized', {}).get(DEFAULT_LOCALE, {}).get('name') is not None:
             continue
 
         bestver = UNSET_VERSION_CODE
@@ -2063,9 +2064,9 @@ def insert_missing_app_names_from_apks(apps, apks):
         if bestver != UNSET_VERSION_CODE:
             if 'localized' not in app:
                 app['localized'] = {}
-            if 'en-US' not in app['localized']:
-                app['localized']['en-US'] = {}
-            app['localized']['en-US']['name'] = bestapk.get('name')
+            if DEFAULT_LOCALE not in app['localized']:
+                app['localized'][DEFAULT_LOCALE] = {}
+            app['localized'][DEFAULT_LOCALE]['name'] = bestapk.get('name')
 
 
 def get_apps_with_packages(apps, apks):

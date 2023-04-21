@@ -42,7 +42,7 @@ from . import common
 from . import metadata
 from . import net
 from . import signindex
-from fdroidserver.common import FDroidPopen, FDroidPopenBytes, load_stats_fdroid_signing_key_fingerprints
+from fdroidserver.common import DEFAULT_LOCALE, FDroidPopen, FDroidPopenBytes, load_stats_fdroid_signing_key_fingerprints
 from fdroidserver.exception import FDroidException, VerificationException
 
 
@@ -518,14 +518,14 @@ def package_metadata(app, repodir):
     ):
         element_new = element[:1].lower() + element[1:]
         if element in app and app[element]:
-            meta[element_new] = {"en-US": convert_datetime(app[element])}
+            meta[element_new] = {DEFAULT_LOCALE: convert_datetime(app[element])}
         elif "localized" in app:
             localized = {k: v[element_new] for k, v in app["localized"].items() if element_new in v}
             if localized:
                 meta[element_new] = localized
 
     if "name" not in meta and app["AutoName"]:
-        meta["name"] = {"en-US": app["AutoName"]}
+        meta["name"] = {DEFAULT_LOCALE: app["AutoName"]}
 
     # fdroidserver/metadata.py App default
     if meta["license"] == "Unknown":
@@ -536,9 +536,8 @@ def package_metadata(app, repodir):
 
     # TODO handle different resolutions
     if app.get("icon"):
-        meta["icon"] = {
-            "en-US": common.file_entry(os.path.join(repodir, "icons", app["icon"]))
-        }
+        icon_path = os.path.join(repodir, "icons", app["icon"])
+        meta["icon"] = {DEFAULT_LOCALE: common.file_entry(icon_path)}
 
     if "iconv2" in app:
         meta["icon"] = app["iconv2"]
@@ -654,10 +653,10 @@ def convert_version(version, app, repodir):
 def v2_repo(repodict, repodir, archive):
     repo = {}
 
-    repo["name"] = {"en-US": repodict["name"]}
-    repo["description"] = {"en-US": repodict["description"]}
+    repo["name"] = {DEFAULT_LOCALE: repodict["name"]}
+    repo["description"] = {DEFAULT_LOCALE: repodict["description"]}
     repo["icon"] = {
-        "en-US": common.file_entry("{}/icons/{}".format(repodir, repodict["icon"]))
+        DEFAULT_LOCALE: common.file_entry("%s/icons/%s" % (repodir, repodict["icon"]))
     }
 
     config = common.load_localized_config("config", repodir)
@@ -1022,7 +1021,7 @@ def make_v0(apps, apks, repodir, repodict, requestsdict, fdroid_signing_key_fing
         lkey = key[:1].lower() + key[1:]
         localized = app.get('localized')
         if not value and localized:
-            for lang in ['en-US'] + [x for x in localized.keys()]:
+            for lang in [DEFAULT_LOCALE] + [x for x in localized.keys()]:
                 if not lang.startswith('en'):
                     continue
                 if lang in localized:
@@ -1266,7 +1265,7 @@ def make_v0(apps, apks, repodir, repodict, requestsdict, fdroid_signing_key_fing
             namefield = common.config['current_version_name_source']
             name = app.get(namefield)
             if not name and namefield == 'Name':
-                name = app.get('localized', {}).get('en-US', {}).get('name')
+                name = app.get('localized', {}).get(DEFAULT_LOCALE, {}).get('name')
             if not name:
                 name = app.id
             sanitized_name = re.sub(b'''[ '"&%?+=/]''', b'', str(name).encode('utf-8'))
