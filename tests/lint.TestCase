@@ -132,23 +132,9 @@ class LintTest(unittest.TestCase):
         app.Description = 'These are some back'
 
         fields = {
-            'AntiFeatures': {
-                'good': [
-                    [
-                        'KnownVuln',
-                    ],
-                    ['NonFreeNet', 'KnownVuln'],
-                ],
-                'bad': [
-                    'KnownVuln',
-                    'NonFreeNet,KnownVuln',
-                ],
-            },
             'Categories': {
                 'good': [
-                    [
-                        'Sports & Health',
-                    ],
+                    ['Sports & Health'],
                     ['Multimedia', 'Graphics'],
                 ],
                 'bad': [
@@ -326,6 +312,53 @@ class LintTest(unittest.TestCase):
             anywarns = True
             logging.debug(warn)
         self.assertFalse(anywarns)
+
+
+class LintAntiFeaturesTest(unittest.TestCase):
+    def setUp(self):
+        self.basedir = localmodule / 'tests'
+        os.chdir(self.basedir)
+        fdroidserver.common.config = dict()
+        fdroidserver.lint.load_antiFeatures_config()
+
+    def test_check_antiFeatures_empty(self):
+        app = fdroidserver.metadata.App()
+        self.assertEqual([], list(fdroidserver.lint.check_antiFeatures(app)))
+
+    def test_check_antiFeatures_empty_AntiFeatures(self):
+        app = fdroidserver.metadata.App()
+        app['AntiFeatures'] = []
+        self.assertEqual([], list(fdroidserver.lint.check_antiFeatures(app)))
+
+    def test_check_antiFeatures(self):
+        app = fdroidserver.metadata.App()
+        app['AntiFeatures'] = ['Ads', 'UpstreamNonFree']
+        self.assertEqual([], list(fdroidserver.lint.check_antiFeatures(app)))
+
+    def test_check_antiFeatures_fails_one(self):
+        app = fdroidserver.metadata.App()
+        app['AntiFeatures'] = ['Ad']
+        self.assertEqual(1, len(list(fdroidserver.lint.check_antiFeatures(app))))
+
+    def test_check_antiFeatures_fails_many(self):
+        app = fdroidserver.metadata.App()
+        app['AntiFeatures'] = ['Adss', 'Tracker', 'NoSourceSince', 'FAKE', 'NonFree']
+        self.assertEqual(4, len(list(fdroidserver.lint.check_antiFeatures(app))))
+
+    def test_check_antiFeatures_build_empty(self):
+        app = fdroidserver.metadata.App()
+        app['Builds'] = [{'antifeatures': []}]
+        self.assertEqual([], list(fdroidserver.lint.check_antiFeatures(app)))
+
+    def test_check_antiFeatures_build(self):
+        app = fdroidserver.metadata.App()
+        app['Builds'] = [{'antifeatures': ['Tracking']}]
+        self.assertEqual(0, len(list(fdroidserver.lint.check_antiFeatures(app))))
+
+    def test_check_antiFeatures_build_fail(self):
+        app = fdroidserver.metadata.App()
+        app['Builds'] = [{'antifeatures': ['Ads', 'Tracker']}]
+        self.assertEqual(1, len(list(fdroidserver.lint.check_antiFeatures(app))))
 
 
 if __name__ == "__main__":

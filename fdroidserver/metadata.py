@@ -448,10 +448,6 @@ valuetypes = {
                    r'^[0-9]+ versions$',
                    ["ArchivePolicy"]),
 
-    FieldValidator("Anti-Feature",
-                   r'^(Ads|Tracking|NonFreeNet|NonFreeDep|NonFreeAdd|UpstreamNonFree|NonFreeAssets|KnownVuln|ApplicationDebuggable|NoSourceSince|NSFW)$',
-                   ["AntiFeatures"]),
-
     FieldValidator("Auto Update Mode",
                    r"^(Version.*|None)$",
                    ["AutoUpdateMode"]),
