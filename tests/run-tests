@@ -261,7 +261,12 @@ REPOROOT=`create_test_dir`
 GNUPGHOME=$REPOROOT/gnupghome
 cd $REPOROOT
 fdroid_init_with_prebuilt_keystore
-cp -a $WORKSPACE/tests/metadata $WORKSPACE/tests/repo $WORKSPACE/tests/stats $REPOROOT/
+cp -a \
+   $WORKSPACE/tests/config \
+   $WORKSPACE/tests/metadata \
+   $WORKSPACE/tests/repo \
+   $WORKSPACE/tests/stats \
+   $REPOROOT/
 cp -a $WORKSPACE/tests/gnupghome $GNUPGHOME
 chmod 0700 $GNUPGHOME
 echo "install_list: org.adaway" >> config.yml

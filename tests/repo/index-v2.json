@@ -27,6 +27,477 @@
       }
     ],
     "timestamp": 1676634233000,
+    "antiFeatures": {
+      "Ads": {
+        "description": {
+          "de": "Diese App enthält Werbung",
+          "en-US": "This app contains advertising",
+          "fa": "این کاره دارای تبلیغات است",
+          "ro": "Aplicația conține reclamă",
+          "zh-rCN": "此应用包含广告"
+        },
+        "icon": {
+          "de": {
+            "name": "/icons/ic_antifeature_ads.xml",
+            "sha256": "b333528573134c5de73484862a1b567a0bdfd6878d183f8500287abadc0ba60e",
+            "size": 1564
+          },
+          "en-US": {
+            "name": "/icons/ic_antifeature_ads.xml",
+            "sha256": "b333528573134c5de73484862a1b567a0bdfd6878d183f8500287abadc0ba60e",
+            "size": 1564
+          },
+          "fa": {
+            "name": "/icons/ic_antifeature_ads.xml",
+            "sha256": "b333528573134c5de73484862a1b567a0bdfd6878d183f8500287abadc0ba60e",
+            "size": 1564
+          },
+          "ro": {
+            "name": "/icons/ic_antifeature_ads.xml",
+            "sha256": "b333528573134c5de73484862a1b567a0bdfd6878d183f8500287abadc0ba60e",
+            "size": 1564
+          },
+          "zh-rCN": {
+            "name": "/icons/ic_antifeature_ads.xml",
+            "sha256": "b333528573134c5de73484862a1b567a0bdfd6878d183f8500287abadc0ba60e",
+            "size": 1564
+          }
+        },
+        "name": {
+          "de": "Werbung",
+          "en-US": "Ads",
+          "fa": "تبلیغات",
+          "ro": "Reclame",
+          "zh-rCN": "广告"
+        }
+      },
+      "DisabledAlgorithm": {
+        "description": {
+          "de": "Diese App hat eine schwache Sicherheitssignatur",
+          "en-US": "This app has a weak security signature",
+          "fa": "این کاره، امضای امنیتی ضعیفی دارد",
+          "ro": "Aplicația are o semnătură slab securizată",
+          "zh-rCN": "此应用的安全签名较弱"
+        },
+        "icon": {
+          "de": {
+            "name": "/icons/ic_antifeature_disabledalgorithm.xml",
+            "sha256": "94dea590c7c0aa37d351ab62a69fc7eefbc2cdbb84b79df3934c2e9332e1dcfb",
+            "size": 2313
+          },
+          "en-US": {
+            "name": "/icons/ic_antifeature_disabledalgorithm.xml",
+            "sha256": "94dea590c7c0aa37d351ab62a69fc7eefbc2cdbb84b79df3934c2e9332e1dcfb",
+            "size": 2313
+          },
+          "fa": {
+            "name": "/icons/ic_antifeature_disabledalgorithm.xml",
+            "sha256": "94dea590c7c0aa37d351ab62a69fc7eefbc2cdbb84b79df3934c2e9332e1dcfb",
+            "size": 2313
+          },
+          "ro": {
+            "name": "/icons/ic_antifeature_disabledalgorithm.xml",
+            "sha256": "94dea590c7c0aa37d351ab62a69fc7eefbc2cdbb84b79df3934c2e9332e1dcfb",
+            "size": 2313
+          },
+          "zh-rCN": {
+            "name": "/icons/ic_antifeature_disabledalgorithm.xml",
+            "sha256": "94dea590c7c0aa37d351ab62a69fc7eefbc2cdbb84b79df3934c2e9332e1dcfb",
+            "size": 2313
+          }
+        },
+        "name": {
+          "de": "Mit einem unsicheren Algorithmus signiert",
+          "en-US": "Signed Using An Unsafe Algorithm",
+          "fa": "امضا شده با الگوریتمی ناامن",
+          "ro": "Algoritm nesigur semnătură",
+          "zh-rCN": "使用不安全算法签名"
+        }
+      },
+      "KnownVuln": {
+        "description": {
+          "de": "Diese App enthält eine bekannte Sicherheitslücke",
+          "en-US": "This app contains a known security vulnerability",
+          "fa": "این کاره، آسیب‌پذیری امنیتی شناخته‌شده‌ای دارد",
+          "ro": "Aplicația conține o vulnerabilitate de securitate cunoscută",
+          "zh-rCN": "此应用包含已知的安全漏洞"
+        },
+        "icon": {
+          "de": {
+            "name": "/icons/ic_antifeature_knownvuln.xml",
+            "sha256": "743ddcad0120896b03bf62bca9b3b9902878ac9366959a0b77b2c50beeb37f9d",
+            "size": 1415
+          },
+          "en-US": {
+            "name": "/icons/ic_antifeature_knownvuln.xml",
+            "sha256": "743ddcad0120896b03bf62bca9b3b9902878ac9366959a0b77b2c50beeb37f9d",
+            "size": 1415
+          },
+          "fa": {
+            "name": "/icons/ic_antifeature_knownvuln.xml",
+            "sha256": "743ddcad0120896b03bf62bca9b3b9902878ac9366959a0b77b2c50beeb37f9d",
+            "size": 1415
+          },
+          "ro": {
+            "name": "/icons/ic_antifeature_knownvuln.xml",
+            "sha256": "743ddcad0120896b03bf62bca9b3b9902878ac9366959a0b77b2c50beeb37f9d",
+            "size": 1415
+          },
+          "zh-rCN": {
+            "name": "/icons/ic_antifeature_knownvuln.xml",
+            "sha256": "743ddcad0120896b03bf62bca9b3b9902878ac9366959a0b77b2c50beeb37f9d",
+            "size": 1415
+          }
+        },
+        "name": {
+          "de": "Bekannte Sicherheitslücke",
+          "en-US": "Known Vulnerability",
+          "fa": "آسیب‌پذیری شناخته",
+          "ro": "Vulnerabilitate cunoscută",
+          "zh-rCN": "含有已知漏洞"
+        }
+      },
+      "NSFW": {
+        "description": {
+          "de": "Diese App enthält Inhalte, die nicht überall veröffentlicht oder sichtbar sein sollten",
+          "en-US": "This app contains content that should not be publicized or visible everywhere",
+          "fa": "این کاره محتوایی دارد که نباید عمومی شده یا همه‌حا نمایان باشد",
+          "ro": "Această aplicație conține conținut care nu ar trebui să fie făcut public sau vizibil peste tot",
+          "zh-rCN": "此应用包含不应宣扬或随处可见的内容"
+        },
+        "icon": {
+          "de": {
+            "name": "/icons/ic_antifeature_nsfw.xml",
+            "sha256": "acab2a7a846700529cd7f2b7a7980f7d04a291f22db8434f3e966f7350ed1465",
+            "size": 871
+          },
+          "en-US": {
+            "name": "/icons/ic_antifeature_nsfw.xml",
+            "sha256": "acab2a7a846700529cd7f2b7a7980f7d04a291f22db8434f3e966f7350ed1465",
+            "size": 871
+          },
+          "fa": {
+            "name": "/icons/ic_antifeature_nsfw.xml",
+            "sha256": "acab2a7a846700529cd7f2b7a7980f7d04a291f22db8434f3e966f7350ed1465",
+            "size": 871
+          },
+          "ro": {
+            "name": "/icons/ic_antifeature_nsfw.xml",
+            "sha256": "acab2a7a846700529cd7f2b7a7980f7d04a291f22db8434f3e966f7350ed1465",
+            "size": 871
+          },
+          "zh-rCN": {
+            "name": "/icons/ic_antifeature_nsfw.xml",
+            "sha256": "acab2a7a846700529cd7f2b7a7980f7d04a291f22db8434f3e966f7350ed1465",
+            "size": 871
+          }
+        },
+        "name": {
+          "de": "NSFW",
+          "en-US": "NSFW",
+          "fa": "NSFW",
+          "ro": "NSFW",
+          "zh-rCN": "NSFW"
+        }
+      },
+      "NoSourceSince": {
+        "description": {
+          "en-US": "The source code is no longer available, no updates possible."
+        },
+        "icon": {
+          "de": {
+            "name": "/icons/ic_antifeature_nosourcesince.xml",
+            "sha256": "69c880b075967fe9598c777e18d600e1c1612bf061111911421fe8f6b9d88d4f",
+            "size": 1102
+          },
+          "en-US": {
+            "name": "/icons/ic_antifeature_nosourcesince.xml",
+            "sha256": "69c880b075967fe9598c777e18d600e1c1612bf061111911421fe8f6b9d88d4f",
+            "size": 1102
+          },
+          "fa": {
+            "name": "/icons/ic_antifeature_nosourcesince.xml",
+            "sha256": "69c880b075967fe9598c777e18d600e1c1612bf061111911421fe8f6b9d88d4f",
+            "size": 1102
+          },
+          "ro": {
+            "name": "/icons/ic_antifeature_nosourcesince.xml",
+            "sha256": "69c880b075967fe9598c777e18d600e1c1612bf061111911421fe8f6b9d88d4f",
+            "size": 1102
+          },
+          "zh-rCN": {
+            "name": "/icons/ic_antifeature_nosourcesince.xml",
+            "sha256": "69c880b075967fe9598c777e18d600e1c1612bf061111911421fe8f6b9d88d4f",
+            "size": 1102
+          }
+        },
+        "name": {
+          "de": "Der Quellcode ist nicht mehr erhältlich, keine Aktualisierungen möglich.",
+          "en-US": "Newer Source Not Available",
+          "fa": "کد مبدأ دیگر در دسترس نیست. به‌روز رسانی ناممکن است.",
+          "ro": "Codul sursă nu mai este disponibil, nu mai există posibilitatea de a actualiza.",
+          "zh-rCN": "源代码不再可用，无法更新。"
+        }
+      },
+      "NonFreeAdd": {
+        "description": {
+          "de": "Diese App bewirbt nicht-quelloffene Erweiterungen",
+          "en-US": "This app promotes non-free add-ons",
+          "fa": "این کاره، افزونه‌های ناآزاد را تبلیغ می‌کند",
+          "ro": "Aplicația promovează anexe ce nu sunt software liber",
+          "zh-rCN": "此应用推广非自由的附加组件"
+        },
+        "icon": {
+          "de": {
+            "name": "/icons/ic_antifeature_nonfreeadd.xml",
+            "sha256": "a1d1f2070bdaabf80ca5a55bccef98c82031ea2f31cc040be5ec009f44ddeef2",
+            "size": 1846
+          },
+          "en-US": {
+            "name": "/icons/ic_antifeature_nonfreeadd.xml",
+            "sha256": "a1d1f2070bdaabf80ca5a55bccef98c82031ea2f31cc040be5ec009f44ddeef2",
+            "size": 1846
+          },
+          "fa": {
+            "name": "/icons/ic_antifeature_nonfreeadd.xml",
+            "sha256": "a1d1f2070bdaabf80ca5a55bccef98c82031ea2f31cc040be5ec009f44ddeef2",
+            "size": 1846
+          },
+          "ro": {
+            "name": "/icons/ic_antifeature_nonfreeadd.xml",
+            "sha256": "a1d1f2070bdaabf80ca5a55bccef98c82031ea2f31cc040be5ec009f44ddeef2",
+            "size": 1846
+          },
+          "zh-rCN": {
+            "name": "/icons/ic_antifeature_nonfreeadd.xml",
+            "sha256": "a1d1f2070bdaabf80ca5a55bccef98c82031ea2f31cc040be5ec009f44ddeef2",
+            "size": 1846
+          }
+        },
+        "name": {
+          "de": "Nicht-quelloffene Erweiterungen",
+          "en-US": "Non-Free Addons",
+          "fa": "افزونه‌های ناآزاد",
+          "ro": "Anexe ne-libere",
+          "zh-rCN": "非自由附加组件"
+        }
+      },
+      "NonFreeAssets": {
+        "description": {
+          "de": "Diese App enthält nicht-quelloffene Bestandteile",
+          "en-US": "This app contains non-free assets",
+          "fa": "این کاره دارای بخش‌های ناآزاد است",
+          "ro": "Aceasta aplicație conține resurse ce nu sunt la disponibile la liber",
+          "zh-rCN": "此应用包含非自由资源"
+        },
+        "icon": {
+          "de": {
+            "name": "/icons/ic_antifeature_nonfreeassets.xml",
+            "sha256": "b39fe384386fc67fb30fa2f91402594110e2e42c961d76adc93141b8bd774008",
+            "size": 1784
+          },
+          "en-US": {
+            "name": "/icons/ic_antifeature_nonfreeassets.xml",
+            "sha256": "b39fe384386fc67fb30fa2f91402594110e2e42c961d76adc93141b8bd774008",
+            "size": 1784
+          },
+          "fa": {
+            "name": "/icons/ic_antifeature_nonfreeassets.xml",
+            "sha256": "b39fe384386fc67fb30fa2f91402594110e2e42c961d76adc93141b8bd774008",
+            "size": 1784
+          },
+          "ro": {
+            "name": "/icons/ic_antifeature_nonfreeassets.xml",
+            "sha256": "b39fe384386fc67fb30fa2f91402594110e2e42c961d76adc93141b8bd774008",
+            "size": 1784
+          },
+          "zh-rCN": {
+            "name": "/icons/ic_antifeature_nonfreeassets.xml",
+            "sha256": "b39fe384386fc67fb30fa2f91402594110e2e42c961d76adc93141b8bd774008",
+            "size": 1784
+          }
+        },
+        "name": {
+          "de": "Nicht-quelloffene Bestandteile",
+          "en-US": "Non-Free Assets",
+          "fa": "بخش‌های ناآزاد",
+          "ro": "Resurse ne-libere",
+          "zh-rCN": "非自由资产"
+        }
+      },
+      "NonFreeDep": {
+        "description": {
+          "de": "Diese App ist abhängig von anderen nicht-quelloffenen Apps",
+          "en-US": "This app depends on other non-free apps",
+          "fa": "این کاره به دیگر کاره‌های ناآزاد وابسته است",
+          "ro": "Aplicația depinde de alte aplicații ce nu sunt software liber",
+          "zh-rCN": "此应用依赖于其它非自由应用"
+        },
+        "icon": {
+          "de": {
+            "name": "/icons/ic_antifeature_nonfreedep.xml",
+            "sha256": "c1b4052a8f58125b2120d9ca07adb725d47bfa7cfcea80c4d6bbbc432b5cb83a",
+            "size": 1396
+          },
+          "en-US": {
+            "name": "/icons/ic_antifeature_nonfreedep.xml",
+            "sha256": "c1b4052a8f58125b2120d9ca07adb725d47bfa7cfcea80c4d6bbbc432b5cb83a",
+            "size": 1396
+          },
+          "fa": {
+            "name": "/icons/ic_antifeature_nonfreedep.xml",
+            "sha256": "c1b4052a8f58125b2120d9ca07adb725d47bfa7cfcea80c4d6bbbc432b5cb83a",
+            "size": 1396
+          },
+          "ro": {
+            "name": "/icons/ic_antifeature_nonfreedep.xml",
+            "sha256": "c1b4052a8f58125b2120d9ca07adb725d47bfa7cfcea80c4d6bbbc432b5cb83a",
+            "size": 1396
+          },
+          "zh-rCN": {
+            "name": "/icons/ic_antifeature_nonfreedep.xml",
+            "sha256": "c1b4052a8f58125b2120d9ca07adb725d47bfa7cfcea80c4d6bbbc432b5cb83a",
+            "size": 1396
+          }
+        },
+        "name": {
+          "de": "Nicht-quelloffene Abhängigkeiten",
+          "en-US": "Non-Free Dependencies",
+          "fa": "وابستگی‌های ناآزاد",
+          "ro": "Dependențe ne-libere",
+          "zh-rCN": "非自由依赖项"
+        }
+      },
+      "NonFreeNet": {
+        "description": {
+          "de": "Diese App bewirbt nicht-quelloffene Netzwerkdienste",
+          "en-US": "This app promotes or depends entirely on a non-free network service",
+          "fa": "این کاره، خدمات شبکه‌های ناآزاد را ترویج می‌کند",
+          "ro": "Aplicația promovează servicii de rețea ce nu sunt accesibile la liber",
+          "zh-rCN": "此应用推广非自由的网络服务"
+        },
+        "icon": {
+          "de": {
+            "name": "/icons/ic_antifeature_nonfreenet.xml",
+            "sha256": "7fff45c847ed2ecc94e85ba2341685c8f113fa5fdf7267a25637dc38ee0275f6",
+            "size": 3038
+          },
+          "en-US": {
+            "name": "/icons/ic_antifeature_nonfreenet.xml",
+            "sha256": "7fff45c847ed2ecc94e85ba2341685c8f113fa5fdf7267a25637dc38ee0275f6",
+            "size": 3038
+          },
+          "fa": {
+            "name": "/icons/ic_antifeature_nonfreenet.xml",
+            "sha256": "7fff45c847ed2ecc94e85ba2341685c8f113fa5fdf7267a25637dc38ee0275f6",
+            "size": 3038
+          },
+          "ro": {
+            "name": "/icons/ic_antifeature_nonfreenet.xml",
+            "sha256": "7fff45c847ed2ecc94e85ba2341685c8f113fa5fdf7267a25637dc38ee0275f6",
+            "size": 3038
+          },
+          "zh-rCN": {
+            "name": "/icons/ic_antifeature_nonfreenet.xml",
+            "sha256": "7fff45c847ed2ecc94e85ba2341685c8f113fa5fdf7267a25637dc38ee0275f6",
+            "size": 3038
+          }
+        },
+        "name": {
+          "de": "Nicht-quelloffene Netzwerkdienste",
+          "en-US": "Non-Free Network Services",
+          "fa": "خدمات شبکه‌ای ناآزاد",
+          "ro": "Servicii de rețea ne-libere",
+          "zh-rCN": "非自由网络服务"
+        }
+      },
+      "Tracking": {
+        "description": {
+          "de": "Diese App verfolgt und versendet Ihre Aktivitäten",
+          "en-US": "This app tracks and reports your activity",
+          "fa": "این کاره، فعّالیتتان را ردیابی و گزارش می‌کند",
+          "ro": "Aplicația îți înregistrează și raportează activitatea undeva",
+          "zh-rCN": "此应用会记录并报告你的活动"
+        },
+        "icon": {
+          "de": {
+            "name": "/icons/ic_antifeature_tracking.xml",
+            "sha256": "4779337b5b0a12c4b4a8a83d0d8a994a2477460db702784df4c8d3e3730be961",
+            "size": 2493
+          },
+          "en-US": {
+            "name": "/icons/ic_antifeature_tracking.xml",
+            "sha256": "4779337b5b0a12c4b4a8a83d0d8a994a2477460db702784df4c8d3e3730be961",
+            "size": 2493
+          },
+          "fa": {
+            "name": "/icons/ic_antifeature_tracking.xml",
+            "sha256": "4779337b5b0a12c4b4a8a83d0d8a994a2477460db702784df4c8d3e3730be961",
+            "size": 2493
+          },
+          "ro": {
+            "name": "/icons/ic_antifeature_tracking.xml",
+            "sha256": "4779337b5b0a12c4b4a8a83d0d8a994a2477460db702784df4c8d3e3730be961",
+            "size": 2493
+          },
+          "zh-rCN": {
+            "name": "/icons/ic_antifeature_tracking.xml",
+            "sha256": "4779337b5b0a12c4b4a8a83d0d8a994a2477460db702784df4c8d3e3730be961",
+            "size": 2493
+          }
+        },
+        "name": {
+          "de": "Tracking",
+          "en-US": "Tracking",
+          "fa": "ردیابی",
+          "ro": "Urmărire",
+          "zh-rCN": "跟踪用户"
+        }
+      },
+      "UpstreamNonFree": {
+        "description": {
+          "de": "Der Originalcode ist nicht völlig quelloffen",
+          "en-US": "The upstream source code is not entirely Free",
+          "fa": "کد مبدأ بالادستی کاملاً آزاد نیست",
+          "ro": "Codul sursa originar nu este în totalitatea lui software liber",
+          "zh-rCN": "上游源代码不是完全自由的"
+        },
+        "icon": {
+          "de": {
+            "name": "/icons/ic_antifeature_upstreamnonfree.xml",
+            "sha256": "06a9af843ff56ecd7a270f98c0b19b3154edf3ffa854e6d50a84ef00d0ce1a86",
+            "size": 1442
+          },
+          "en-US": {
+            "name": "/icons/ic_antifeature_upstreamnonfree.xml",
+            "sha256": "06a9af843ff56ecd7a270f98c0b19b3154edf3ffa854e6d50a84ef00d0ce1a86",
+            "size": 1442
+          },
+          "fa": {
+            "name": "/icons/ic_antifeature_upstreamnonfree.xml",
+            "sha256": "06a9af843ff56ecd7a270f98c0b19b3154edf3ffa854e6d50a84ef00d0ce1a86",
+            "size": 1442
+          },
+          "ro": {
+            "name": "/icons/ic_antifeature_upstreamnonfree.xml",
+            "sha256": "06a9af843ff56ecd7a270f98c0b19b3154edf3ffa854e6d50a84ef00d0ce1a86",
+            "size": 1442
+          },
+          "zh-rCN": {
+            "name": "/icons/ic_antifeature_upstreamnonfree.xml",
+            "sha256": "06a9af843ff56ecd7a270f98c0b19b3154edf3ffa854e6d50a84ef00d0ce1a86",
+            "size": 1442
+          }
+        },
+        "name": {
+          "de": "Originalcode nicht-quelloffen",
+          "en-US": "Upstream Non-Free",
+          "fa": "بالادست ناآزاد",
+          "ro": "Surse ne-libere",
+          "zh-rCN": "上游代码非自由"
+        }
+      }
+    },
     "requests": {
       "install": [
         "org.adaway"
