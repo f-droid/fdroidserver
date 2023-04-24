@@ -9,7 +9,6 @@ import random
 import shutil
 import sys
 import unittest
-from unittest import mock
 import tempfile
 import textwrap
 from collections import OrderedDict
@@ -39,6 +38,7 @@ class MetadataTest(unittest.TestCase):
         logging.basicConfig(level=logging.DEBUG)
         self.basedir = localmodule / 'tests'
         os.chdir(self.basedir)
+        fdroidserver.metadata.warnings_action = 'error'
 
     def tearDown(self):
         # auto-generated dirs by functions, not tests, so they are not always cleaned up
@@ -66,8 +66,6 @@ class MetadataTest(unittest.TestCase):
                 validator = vali
                 break
         self.assertIsNotNone(validator, "could not find 'Bitcoin address' validator")
-
-        fdroidserver.metadata.warnings_action = 'error'
 
         # some valid addresses (P2PKH, P2SH, Bech32)
         self.assertIsNone(
@@ -125,8 +123,6 @@ class MetadataTest(unittest.TestCase):
                 validator = vali
                 break
         self.assertIsNotNone(validator, "could not find 'Litecoin address' validator")
-
-        fdroidserver.metadata.warnings_action = 'error'
 
         # some valid addresses (L, M, 3, segwit)
         self.assertIsNone(
@@ -326,7 +322,6 @@ class MetadataTest(unittest.TestCase):
         self.assertEqual('true', metadata._normalize_type_string(True))
 
     def test_post_parse_yaml_metadata(self):
-        fdroidserver.metadata.warnings_action = 'error'
         yamldata = OrderedDict()
         builds = []
         yamldata['Builds'] = builds
@@ -425,9 +420,8 @@ class MetadataTest(unittest.TestCase):
             )
         )
         mf.name = 'mock_filename.yaml'
-        with mock.patch('fdroidserver.metadata.warnings_action', 'error'):
-            with self.assertRaises(MetaDataException):
-                fdroidserver.metadata.parse_yaml_metadata(mf)
+        with self.assertRaises(MetaDataException):
+            fdroidserver.metadata.parse_yaml_metadata(mf)
 
     def test_parse_yaml_metadata_unknown_build_flag(self):
         mf = io.StringIO(
@@ -440,9 +434,8 @@ class MetadataTest(unittest.TestCase):
             )
         )
         mf.name = 'mock_filename.yaml'
-        with mock.patch('fdroidserver.metadata.warnings_action', 'error'):
-            with self.assertRaises(MetaDataException):
-                fdroidserver.metadata.parse_yaml_metadata(mf)
+        with self.assertRaises(MetaDataException):
+            fdroidserver.metadata.parse_yaml_metadata(mf)
 
     def test_parse_yaml_metadata_continue_on_warning(self):
         """When errors are disabled, parsing should provide something that can work.
@@ -474,9 +467,8 @@ class MetadataTest(unittest.TestCase):
                         """
                     )
                 )
-            with mock.patch('fdroidserver.metadata.warnings_action', 'error'):
-                with self.assertRaises(MetaDataException):
-                    fdroidserver.metadata.parse_yaml_srclib(srclibfile)
+            with self.assertRaises(MetaDataException):
+                fdroidserver.metadata.parse_yaml_srclib(srclibfile)
 
     def test_write_yaml_with_placeholder_values(self):
         mf = io.StringIO()
@@ -555,8 +547,7 @@ class MetadataTest(unittest.TestCase):
         )
         mf.name = 'mock_filename.yaml'
         mf.seek(0)
-        with mock.patch('fdroidserver.metadata.warnings_action', 'error'):
-            result = fdroidserver.metadata.parse_yaml_metadata(mf)
+        result = fdroidserver.metadata.parse_yaml_metadata(mf)
         self.maxDiff = None
         self.assertDictEqual(
             result,
@@ -610,8 +601,7 @@ class MetadataTest(unittest.TestCase):
         )
         mf.name = 'mock_filename.yaml'
         mf.seek(0)
-        with mock.patch('fdroidserver.metadata.warnings_action', 'error'):
-            result = fdroidserver.metadata.parse_yaml_metadata(mf)
+        result = fdroidserver.metadata.parse_yaml_metadata(mf)
         self.maxDiff = None
         self.assertDictEqual(
             result,
@@ -660,8 +650,7 @@ class MetadataTest(unittest.TestCase):
         )
         mf.name = 'mock_filename.yaml'
         mf.seek(0)
-        with mock.patch('fdroidserver.metadata.warnings_action', 'error'):
-            result = fdroidserver.metadata.parse_yaml_metadata(mf)
+        result = fdroidserver.metadata.parse_yaml_metadata(mf)
         self.assertDictEqual(
             result,
             {
@@ -694,10 +683,9 @@ class MetadataTest(unittest.TestCase):
         )
         mf.name = 'mock_filename.yaml'
         mf.seek(0)
-        with mock.patch('fdroidserver.metadata.warnings_action', 'error'):
-            result = fdroidserver.metadata.parse_yaml_metadata(mf)
-            self.assertNotIn('Provides', result)
-            self.assertNotIn('provides', result)
+        result = fdroidserver.metadata.parse_yaml_metadata(mf)
+        self.assertNotIn('Provides', result)
+        self.assertNotIn('provides', result)
 
     def test_write_yaml_1_line_scripts_as_string(self):
         mf = io.StringIO()
@@ -923,7 +911,6 @@ class MetadataTest(unittest.TestCase):
         )
 
     def test_parse_yaml_srclib_unknown_key(self):
-        fdroidserver.metadata.warnings_action = 'error'
         with tempfile.TemporaryDirectory() as tmpdir, TmpCwd(tmpdir):
             with Path('test.yml').open('w', encoding='utf-8') as f:
                 f.write(
@@ -942,7 +929,6 @@ class MetadataTest(unittest.TestCase):
                 fdroidserver.metadata.parse_yaml_srclib(Path('test.yml'))
 
     def test_parse_yaml_srclib_does_not_exists(self):
-        fdroidserver.metadata.warnings_action = 'error'
         with self.assertRaisesRegex(
             MetaDataException,
             "Invalid scrlib metadata: "
@@ -954,7 +940,6 @@ class MetadataTest(unittest.TestCase):
             )
 
     def test_parse_yaml_srclib_simple(self):
-        fdroidserver.metadata.warnings_action = 'error'
         with tempfile.TemporaryDirectory() as tmpdir, TmpCwd(tmpdir):
             with Path('simple.yml').open('w', encoding='utf-8') as f:
                 f.write(
@@ -978,7 +963,6 @@ class MetadataTest(unittest.TestCase):
             )
 
     def test_parse_yaml_srclib_simple_with_blanks(self):
-        fdroidserver.metadata.warnings_action = 'error'
         with tempfile.TemporaryDirectory() as tmpdir, TmpCwd(tmpdir):
             with Path('simple.yml').open('w', encoding='utf-8') as f:
                 f.write(
@@ -1008,7 +992,6 @@ class MetadataTest(unittest.TestCase):
             )
 
     def test_parse_yaml_srclib_Changelog_cketti(self):
-        fdroidserver.metadata.warnings_action = 'error'
         with tempfile.TemporaryDirectory() as tmpdir, TmpCwd(tmpdir):
             with Path('Changelog-cketti.yml').open('w', encoding='utf-8') as f:
                 f.write(
@@ -1040,7 +1023,6 @@ class MetadataTest(unittest.TestCase):
             )
 
     def test_read_srclibs_yml_subdir_list(self):
-        fdroidserver.metadata.warnings_action = 'error'
         fdroidserver.metadata.srclibs = None
         with tempfile.TemporaryDirectory() as tmpdir, TmpCwd(tmpdir):
             Path('srclibs').mkdir()
@@ -1092,7 +1074,6 @@ class MetadataTest(unittest.TestCase):
         )
 
     def test_read_srclibs_yml_prepare_list(self):
-        fdroidserver.metadata.warnings_action = 'error'
         fdroidserver.metadata.srclibs = None
         with tempfile.TemporaryDirectory() as tmpdir, TmpCwd(tmpdir):
             Path('srclibs').mkdir()
@@ -1133,7 +1114,6 @@ class MetadataTest(unittest.TestCase):
         )
 
     def test_read_srclibs(self):
-        fdroidserver.metadata.warnings_action = 'error'
         fdroidserver.metadata.srclibs = None
         with tempfile.TemporaryDirectory() as tmpdir, TmpCwd(tmpdir):
             Path('srclibs').mkdir()
