@@ -24,14 +24,12 @@ import platform
 import os
 import re
 import logging
-import importlib
+import ruamel.yaml
 from collections import OrderedDict
-
-from ruamel.yaml import YAML, YAMLError
 
 from . import common
 from . import _
-from .exception import MetaDataException, FDroidException
+from .exception import MetaDataException
 
 srclibs = None
 warnings_action = None
@@ -486,7 +484,7 @@ def parse_yaml_srclib(metadatapath):
 
     with metadatapath.open("r", encoding="utf-8") as f:
         try:
-            yaml = YAML(typ='safe')
+            yaml = ruamel.yaml.YAML(typ='safe')
             data = yaml.load(f)
             if type(data) is not dict:
                 if platform.system() == 'Windows':
@@ -496,10 +494,10 @@ def parse_yaml_srclib(metadatapath):
                         with symlink.open("r", encoding="utf-8") as s:
                             data = yaml.load(s)
             if type(data) is not dict:
-                raise YAMLError(
+                raise ruamel.yaml.YAMLError(
                     _('{file} is blank or corrupt!').format(file=metadatapath)
                 )
-        except YAMLError as e:
+        except ruamel.yaml.YAMLError as e:
             _warn_or_exception(_("Invalid srclib metadata: could not "
                                  "parse '{file}'")
                                .format(file=metadatapath) + '\n'
@@ -722,9 +720,9 @@ def parse_yaml_metadata(mf):
 
     """
     try:
-        yaml = YAML(typ='safe')
+        yaml = ruamel.yaml.YAML(typ='safe')
         yamldata = yaml.load(mf)
-    except YAMLError as e:
+    except ruamel.yaml.YAMLError as e:
         _warn_or_exception(
             _("could not parse '{path}'").format(path=mf.name)
             + '\n'
@@ -867,21 +865,6 @@ def write_yaml(mf, app):
     app
       app metadata to written to the yaml file
     """
-    # import rumael.yaml and check version
-    try:
-        import ruamel.yaml
-    except ImportError as e:
-        raise FDroidException('ruamel.yaml not installed, can not write metadata.') from e
-    if not ruamel.yaml.__version__:
-        raise FDroidException('ruamel.yaml.__version__ not accessible. Please make sure a ruamel.yaml >= 0.13 is installed..')
-    m = re.match(r'(?P<major>[0-9]+)\.(?P<minor>[0-9]+)\.(?P<patch>[0-9]+)(-.+)?',
-                 ruamel.yaml.__version__)
-    if not m:
-        raise FDroidException('ruamel.yaml version malfored, please install an upstream version of ruamel.yaml')
-    if int(m.group('major')) < 0 or int(m.group('minor')) < 13:
-        raise FDroidException('currently installed version of ruamel.yaml ({}) is too old, >= 1.13 required.'.format(ruamel.yaml.__version__))
-    # suiteable version ruamel.yaml imported successfully
-
     def _field_to_yaml(typ, value):
         """Convert data to YAML 1.2 format that keeps the right TYPE_*."""
         if typ is TYPE_STRING:
@@ -974,13 +957,8 @@ def write_yaml(mf, app):
 def write_metadata(metadatapath, app):
     metadatapath = Path(metadatapath)
     if metadatapath.suffix == '.yml':
-        if importlib.util.find_spec('ruamel.yaml'):
-            with metadatapath.open('w') as mf:
-                return write_yaml(mf, app)
-        else:
-            raise FDroidException(
-                _('ruamel.yaml not installed, can not write metadata.')
-            )
+        with metadatapath.open('w') as mf:
+            return write_yaml(mf, app)
 
     _warn_or_exception(_('Unknown metadata format: %s') % metadatapath)
 
