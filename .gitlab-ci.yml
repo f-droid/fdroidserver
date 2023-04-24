@@ -267,6 +267,7 @@ black:
         fdroidserver/net.py
         fdroidserver/readmeta.py
         fdroidserver/rewritemeta.py
+        fdroidserver/signatures.py
         fdroidserver/signindex.py
         fdroidserver/tail.py
         fdroidserver/verify.py
