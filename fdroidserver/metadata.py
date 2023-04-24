@@ -397,8 +397,13 @@ class FieldValidator:
             values = [v]
         for v in values:
             if not self.compiled.match(v):
-                _warn_or_exception(_("'{value}' is not a valid {field} in {appid}. Regex pattern: {pattern}")
-                                   .format(value=v, field=self.name, appid=appid, pattern=self.matching))
+                _warn_or_exception(
+                    _(
+                        "'{value}' is not a valid {field} in {appid}. Regex pattern: {pattern}"
+                    ).format(
+                        value=v, field=self.name, appid=appid, pattern=self.matching
+                    )
+                )
 
 
 # Generic value types
@@ -469,16 +474,14 @@ def check_metadata(app):
 
 
 def parse_yaml_srclib(metadatapath):
-
-    thisinfo = {'RepoType': '',
-                'Repo': '',
-                'Subdir': None,
-                'Prepare': None}
+    thisinfo = {'RepoType': '', 'Repo': '', 'Subdir': None, 'Prepare': None}
 
     if not metadatapath.exists():
-        _warn_or_exception(_("Invalid scrlib metadata: '{file}' "
-                             "does not exist"
-                             .format(file=metadatapath)))
+        _warn_or_exception(
+            _("Invalid scrlib metadata: '{file}' does not exist").format(
+                file=metadatapath
+            )
+        )
         return thisinfo
 
     with metadatapath.open("r", encoding="utf-8") as f:
@@ -984,5 +987,9 @@ def write_metadata(metadatapath, app):
 
 def add_metadata_arguments(parser):
     """Add common command line flags related to metadata processing."""
-    parser.add_argument("-W", choices=['error', 'warn', 'ignore'], default='error',
-                        help=_("force metadata errors (default) to be warnings, or to be ignored."))
+    parser.add_argument(
+        "-W",
+        choices=['error', 'warn', 'ignore'],
+        default='error',
+        help=_("force metadata errors (default) to be warnings, or to be ignored."),
+    )
