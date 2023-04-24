@@ -884,6 +884,21 @@ def parse_localized_antifeatures(app):
             app['AntiFeatures'][f.stem][locale] = f.read_text()
 
 
+def _normalize_type_int(k, v):
+    """Normalize anything that can be reliably converted to an integer."""
+    if isinstance(v, int) and not isinstance(v, bool):
+        return v
+    if v is None:
+        return None
+    if isinstance(v, str):
+        try:
+            return int(v)
+        except ValueError:
+            pass
+    msg = _('{build_flag} must be an integer, found: {value}')
+    _warn_or_exception(msg.format(build_flag=k, value=v))
+
+
 def _normalize_type_string(v):
     """Normalize any data to TYPE_STRING.
 
@@ -980,8 +995,9 @@ def post_parse_yaml_metadata(yamldata):
             elif v:
                 yamldata[k] = [str(i) for i in v]
         elif _fieldtype == TYPE_INT:
-            if v:
-                yamldata[k] = int(v)
+            v = _normalize_type_int(k, v)
+            if v or v == 0:
+                yamldata[k] = v
         elif _fieldtype == TYPE_STRING:
             if v or v == 0:
                 yamldata[k] = _normalize_type_string(v)
@@ -1005,14 +1021,9 @@ def post_parse_yaml_metadata(yamldata):
                 if v or v == 0:
                     build[k] = _normalize_type_string(v)
             elif _flagtype == TYPE_INT:
-                build[k] = v
-                # versionCode must be int
-                if not isinstance(v, int):
-                    _warn_or_exception(
-                        _('{build_flag} must be an integer, found: {value}').format(
-                            build_flag=k, value=v
-                        )
-                    )
+                v = _normalize_type_int(k, v)
+                if v or v == 0:
+                    build[k] = v
             elif _flagtype in (TYPE_LIST, TYPE_SCRIPT):
                 if isinstance(v, str) or isinstance(v, int):
                     build[k] = [_normalize_type_string(v)]

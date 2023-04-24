@@ -355,6 +355,27 @@ class MetadataTest(unittest.TestCase):
             metadata._normalize_type_stringmap('AntiFeatures', ['Ads', 'Tracking']),
         )
 
+    def test_normalize_type_int(self):
+        """TYPE_INT should be an int whenever possible."""
+        self.assertEqual(0, metadata._normalize_type_int('key', 0))
+        self.assertEqual(1, metadata._normalize_type_int('key', 1))
+        self.assertEqual(-5, metadata._normalize_type_int('key', -5))
+        self.assertEqual(0, metadata._normalize_type_int('key', '0'))
+        self.assertEqual(1, metadata._normalize_type_int('key', '1'))
+        self.assertEqual(-5, metadata._normalize_type_int('key', '-5'))
+        self.assertEqual(
+            12345678901234567890,
+            metadata._normalize_type_int('key', 12345678901234567890),
+        )
+
+    def test_normalize_type_int_fails(self):
+        with self.assertRaises(MetaDataException):
+            metadata._normalize_type_int('key', '1a')
+        with self.assertRaises(MetaDataException):
+            metadata._normalize_type_int('key', 1.1)
+        with self.assertRaises(MetaDataException):
+            metadata._normalize_type_int('key', True)
+
     def test_post_parse_yaml_metadata(self):
         yamldata = dict()
         metadata.post_parse_yaml_metadata(yamldata)
@@ -383,7 +404,7 @@ class MetadataTest(unittest.TestCase):
             yamldata,
         )
 
-        build['versionCode'] = '1'
+        build['versionCode'] = '1a'
         self.assertRaises(
             fdroidserver.exception.MetaDataException,
             fdroidserver.metadata.post_parse_yaml_metadata,
@@ -1122,6 +1143,34 @@ class MetadataTest(unittest.TestCase):
                     'Tracking': {DEFAULT_LOCALE: tracking},
                 }
             },
+        )
+
+    def test_parse_yaml_build_type_int_fail(self):
+        mf = io.StringIO('Builds: [{versionCode: 1a}]')
+        with self.assertRaises(MetaDataException):
+            fdroidserver.metadata.parse_yaml_metadata(mf)
+
+    def test_parse_yaml_int_strict_typing_fails(self):
+        """Things that cannot be preserved when parsing as YAML."""
+        mf = io.StringIO('Builds: [{versionCode: 1, rm: 0xf}]')
+        self.assertEqual(
+            {'Builds': [{'rm': ['15'], 'versionCode': 1}]},  # 15 != 0xf
+            fdroidserver.metadata.parse_yaml_metadata(mf),
+        )
+        mf = io.StringIO('Builds: [{versionCode: 1, rm: 0x010}]')
+        self.assertEqual(
+            {'Builds': [{'rm': ['16'], 'versionCode': 1}]},  # 16 != 0x010
+            fdroidserver.metadata.parse_yaml_metadata(mf),
+        )
+        mf = io.StringIO('Builds: [{versionCode: 1, rm: 0o015}]')
+        self.assertEqual(
+            {'Builds': [{'rm': ['13'], 'versionCode': 1}]},  # 13 != 0o015
+            fdroidserver.metadata.parse_yaml_metadata(mf),
+        )
+        mf = io.StringIO('Builds: [{versionCode: 1, rm: 10_000}]')
+        self.assertEqual(
+            {'Builds': [{'rm': ['10000'], 'versionCode': 1}]},  # 10000 != 10_000
+            fdroidserver.metadata.parse_yaml_metadata(mf),
         )
 
     def test_write_yaml_1_line_scripts_as_string(self):
@@ -2137,7 +2186,8 @@ class PostMetadataParseTest(unittest.TestCase):
         self.assertEqual(*self._post_metadata_parse_app_list(False, False))
         self.assertEqual(*self._post_metadata_parse_app_string(False, 'false'))
         self.assertEqual(*self._post_metadata_parse_build_bool(False, False))
-        self.assertEqual(*self._post_metadata_parse_build_int(False, False))
+        with self.assertRaises(MetaDataException):
+            self._post_metadata_parse_build_int(False, MetaDataException)
         self.assertEqual(*self._post_metadata_parse_build_list(False, ['false']))
         self.assertEqual(*self._post_metadata_parse_build_script(False, ['false']))
         self.assertEqual(*self._post_metadata_parse_build_string(False, 'false'))
@@ -2147,7 +2197,8 @@ class PostMetadataParseTest(unittest.TestCase):
             self._post_metadata_parse_app_list(True, TypeError)
         self.assertEqual(*self._post_metadata_parse_app_string(True, 'true'))
         self.assertEqual(*self._post_metadata_parse_build_bool(True, True))
-        self.assertEqual(*self._post_metadata_parse_build_int(True, True))
+        with self.assertRaises(MetaDataException):
+            self._post_metadata_parse_build_int(True, MetaDataException)
         self.assertEqual(*self._post_metadata_parse_build_list(True, ['true']))
         self.assertEqual(*self._post_metadata_parse_build_script(True, ['true']))
         self.assertEqual(*self._post_metadata_parse_build_string(True, 'true'))
