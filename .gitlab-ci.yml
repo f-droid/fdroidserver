@@ -274,6 +274,7 @@ black:
         tests/dump_internal_metadata_format.py
         tests/exception.TestCase
         tests/import_subcommand.TestCase
+        tests/index.TestCase
         tests/init.TestCase
         tests/install.TestCase
         tests/key-tricks.py
