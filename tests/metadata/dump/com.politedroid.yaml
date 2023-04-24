@@ -27,7 +27,7 @@ Builds:
   gradle: []
   gradleprops: []
   init: ''
-  maven: false
+  maven: null
   ndk: null
   novcheck: false
   oldsdkloc: false
@@ -62,7 +62,7 @@ Builds:
   gradle: []
   gradleprops: []
   init: ''
-  maven: false
+  maven: null
   ndk: null
   novcheck: false
   oldsdkloc: false
@@ -97,7 +97,7 @@ Builds:
   gradle: []
   gradleprops: []
   init: ''
-  maven: false
+  maven: null
   ndk: null
   novcheck: false
   oldsdkloc: false
@@ -133,7 +133,7 @@ Builds:
   - 'yes'
   gradleprops: []
   init: ''
-  maven: false
+  maven: null
   ndk: null
   novcheck: false
   oldsdkloc: false

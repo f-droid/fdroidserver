@@ -214,6 +214,79 @@ class BuildTest(unittest.TestCase):
             self.assertEqual(versionCode, vc)
             self.assertEqual(versionName, vn)
 
+    @mock.patch('fdroidserver.common.get_apk_id')
+    @mock.patch('fdroidserver.build.FDroidPopen')
+    @mock.patch('fdroidserver.common.is_apk_and_debuggable', lambda f: False)
+    @mock.patch('fdroidserver.common.get_native_code', lambda f: 'x86')
+    def test_build_local_maven(self, fake_FDroidPopen, fake_get_apk_id):
+        """Test build_local() with a maven project"""
+
+        # pylint: disable=unused-argument
+        def _side_effect(cmd, cwd=None):
+            p = mock.MagicMock()
+            p.output = '[INFO] fake apkbuilder target/no.apk'
+            with open(os.path.join(self.testdir, 'target', 'no.apk'), 'w') as fp:
+                fp.write('placeholder')
+            p.returncode = 0
+            return p
+
+        fake_FDroidPopen.side_effect = _side_effect
+        os.chdir(self.testdir)
+        os.mkdir('target')
+        config = dict()
+        fdroidserver.common.fill_config_defaults(config)
+        fdroidserver.common.config = config
+        fdroidserver.build.config = config
+        fdroidserver.build.options = mock.Mock()
+        fdroidserver.build.options.scan_binary = False
+        fdroidserver.build.options.notarball = True
+        fdroidserver.build.options.skipscan = False
+
+        app = fdroidserver.metadata.App()
+        app.id = 'mocked.app.id'
+        build = fdroidserver.metadata.Build()
+        build.commit = '1.0'
+        build.versionCode = 1
+        build.versionName = '1.0'
+        fake_get_apk_id.side_effect = lambda f: (
+            app.id,
+            build.versionCode,
+            build.versionName,
+        )
+        vcs = mock.Mock()
+
+        build.maven = 'yes@..'
+        fdroidserver.build.build_local(
+            app,
+            build,
+            vcs,
+            build_dir=self.testdir,
+            output_dir=self.testdir,
+            log_dir=os.getcwd(),
+            srclib_dir=None,
+            extlib_dir=None,
+            tmp_dir=None,
+            force=False,
+            onserver=True,
+            refresh=False,
+        )
+
+        build.maven = 'yes'
+        fdroidserver.build.build_local(
+            app,
+            build,
+            vcs,
+            build_dir=self.testdir,
+            output_dir=self.testdir,
+            log_dir=os.getcwd(),
+            srclib_dir=None,
+            extlib_dir=None,
+            tmp_dir=None,
+            force=False,
+            onserver=True,
+            refresh=False,
+        )
+
     @mock.patch('sdkmanager.build_package_list', lambda use_net: None)
     def test_build_local_ndk(self):
         """Test if `fdroid build` detects installed NDKs and auto-installs when missing"""

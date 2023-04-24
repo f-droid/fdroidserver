@@ -265,7 +265,7 @@ class Build(dict):
         self.init = ''
         self.patch = []
         self.gradle = []
-        self.maven = False
+        self.maven = None
         self.output = None
         self.binary = None
         self.srclibs = []
@@ -641,10 +641,7 @@ def post_metadata_parse(app):
                     elif flagtype(k) is TYPE_INT:
                         build[k] = v
                     elif flagtype(k) is TYPE_STRING:
-                        if k == 'maven':
-                            build[k] = v
-                        else:
-                            build[k] = str(v)
+                        build[k] = str(v)
             builds.append(build)
 
     app['Builds'] = sorted_builds(builds)
@@ -898,9 +895,6 @@ def write_yaml(mf, app):
                     value = getattr(build, field)
                     if field == 'gradle' and value == ['off']:
                         value = [ruamel.yaml.scalarstring.SingleQuotedScalarString('off')]
-                    if field in ('maven'):
-                        if value == 'no':
-                            continue
                     typ = flagtype(field)
                     # don't check value == True for TYPE_INT as it could be 0
                     if value is not None and (typ == TYPE_INT or value):

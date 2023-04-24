@@ -7,6 +7,7 @@ import os
 import sys
 import tempfile
 import unittest
+from pathlib import Path
 from unittest import mock
 
 localmodule = os.path.realpath(
@@ -17,7 +18,7 @@ if localmodule not in sys.path:
 
 import fdroidserver.common
 import fdroidserver.deploy
-from testcommon import TmpCwd
+from testcommon import TmpCwd, mkdtemp
 
 
 class DeployTest(unittest.TestCase):
@@ -26,13 +27,38 @@ class DeployTest(unittest.TestCase):
     def setUp(self):
         logging.basicConfig(level=logging.DEBUG)
         self.basedir = os.path.join(localmodule, 'tests')
+        os.chdir(self.basedir)
+        self._td = mkdtemp()
+        self.testdir = self._td.name
 
         fdroidserver.deploy.options = mock.Mock()
         fdroidserver.deploy.config = {}
 
+    def tearDown(self):
+        self._td.cleanup()
+
+    def test_update_serverwebroot(self):
+        os.chdir(self.testdir)
+        repo = Path('repo')
+        repo.mkdir(parents=True)
+        fake_apk = repo / 'fake.apk'
+        with fake_apk.open('w') as fp:
+            fp.write('not an APK, but has the right filename')
+        serverwebroot = Path('serverwebroot')
+        serverwebroot.mkdir()
+
+        # setup parameters for this test run
+        fdroidserver.deploy.options.identity_file = None
+        fdroidserver.deploy.config['make_current_version_link'] = False
+
+        dest_apk = Path(serverwebroot) / fake_apk
+        self.assertFalse(dest_apk.is_file())
+        fdroidserver.deploy.update_serverwebroot(str(serverwebroot), 'repo')
+        self.assertTrue(dest_apk.is_file())
+
     def test_update_serverwebroot_make_cur_version_link(self):
         # setup parameters for this test run
-        fdroidserver.deploy.options.no_chcksum = True
+        fdroidserver.deploy.options.no_checksum = True
         fdroidserver.deploy.options.identity_file = None
         fdroidserver.deploy.options.verbose = False
         fdroidserver.deploy.options.quiet = True

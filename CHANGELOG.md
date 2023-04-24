@@ -4,6 +4,17 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 
+## unreleased
+
+### Added
+
+### Fixed
+
+### Removed
+
+* The `maven:` field is now always a string, with `yes` as a legacy special
+  value.  It is no longer treated like a boolean in any case.
+
 ## [2.2.1] - 2023-03-09
 
 ### Added
