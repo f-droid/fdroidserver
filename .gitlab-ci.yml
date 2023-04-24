@@ -261,6 +261,7 @@ black:
         fdroidserver/btlog.py
         fdroidserver/exception.py
         fdroidserver/gpgsign.py
+        fdroidserver/init.py
         fdroidserver/lint.py
         fdroidserver/mirror.py
         fdroidserver/net.py
