@@ -181,10 +181,10 @@ class IndexTest(unittest.TestCase):
 
         """
         mock_http_get.side_effect = lambda url, etag, timeout: (None, url)
-        repo_url = 'https://example.org/fdroid/repo'
-        index_url = 'https://example.org/fdroid/repo/index-v1.jar'
-        fingerprint_url = 'https://example.org/fdroid/repo?fingerprint=' + GP_FINGERPRINT
-        slash_url = 'https://example.org/fdroid/repo//?fingerprint=' + GP_FINGERPRINT
+        repo_url = 'https://fake.url/fdroid/repo'
+        index_url = 'https://fake.url/fdroid/repo/index-v1.jar'
+        fingerprint_url = 'https://fake.url/fdroid/repo?fingerprint=' + GP_FINGERPRINT
+        slash_url = 'https://fake.url/fdroid/repo//?fingerprint=' + GP_FINGERPRINT
         for url in (repo_url, index_url, fingerprint_url, slash_url):
             _ignored, etag_set_to_url = fdroidserver.index.download_repo_index(url, verify_fingerprint=False)
             self.assertEqual(index_url, etag_set_to_url)
@@ -198,11 +198,11 @@ class IndexTest(unittest.TestCase):
 
         """
         mock_http_get.side_effect = lambda url, etag, timeout: (None, url)
-        repo_url = 'https://example.org/fdroid/repo'
-        entry_url = 'https://example.org/fdroid/repo/entry.jar'
-        index_url = 'https://example.org/fdroid/repo/index-v2.json'
-        fingerprint_url = 'https://example.org/fdroid/repo?fingerprint=' + GP_FINGERPRINT
-        slash_url = 'https://example.org/fdroid/repo//?fingerprint=' + GP_FINGERPRINT
+        repo_url = 'https://fake.url/fdroid/repo'
+        entry_url = 'https://fake.url/fdroid/repo/entry.jar'
+        index_url = 'https://fake.url/fdroid/repo/index-v2.json'
+        fingerprint_url = 'https://fake.url/fdroid/repo?fingerprint=' + GP_FINGERPRINT
+        slash_url = 'https://fake.url/fdroid/repo//?fingerprint=' + GP_FINGERPRINT
         for url in (repo_url, entry_url, index_url, fingerprint_url, slash_url):
             _ignored, etag_set_to_url = fdroidserver.index.download_repo_index_v2(
                 url, verify_fingerprint=False
@@ -222,11 +222,11 @@ class IndexTest(unittest.TestCase):
         shutil.copy(os.path.join(self.basedir, 'repo', 'entry.json'), 'repo')
         shutil.copy(os.path.join(self.basedir, 'repo', 'index-v2.json'), 'repo')
         fdroidserver.signindex.sign_index('repo', 'entry.json')
-        repo_url = 'https://example.org/fdroid/repo'
-        entry_url = 'https://example.org/fdroid/repo/entry.jar'
-        index_url = 'https://example.org/fdroid/repo/index-v2.json'
-        fingerprint_url = 'https://example.org/fdroid/repo?fingerprint=' + GP_FINGERPRINT
-        slash_url = 'https://example.org/fdroid/repo//?fingerprint=' + GP_FINGERPRINT
+        repo_url = 'https://fake.url/fdroid/repo'
+        entry_url = 'https://fake.url/fdroid/repo/entry.jar'
+        index_url = 'https://fake.url/fdroid/repo/index-v2.json'
+        fingerprint_url = 'https://fake.url/fdroid/repo?fingerprint=' + GP_FINGERPRINT
+        slash_url = 'https://fake.url/fdroid/repo//?fingerprint=' + GP_FINGERPRINT
         for url in (repo_url, entry_url, index_url, fingerprint_url, slash_url):
             data, _ignored = fdroidserver.index.download_repo_index_v2(
                 url, verify_fingerprint=False
@@ -247,7 +247,7 @@ class IndexTest(unittest.TestCase):
         shutil.copy(os.path.join(self.basedir, 'repo', 'index-v2.json'), 'repo')
         fdroidserver.signindex.sign_index('repo', 'entry.json')
         bad_fp = '0123456789001234567890012345678900123456789001234567890012345678'
-        bad_fp_url = 'https://example.org/fdroid/repo?fingerprint=' + bad_fp
+        bad_fp_url = 'https://fake.url/fdroid/repo?fingerprint=' + bad_fp
         with self.assertRaises(fdroidserver.exception.VerificationException):
             data, _ignored = fdroidserver.index.download_repo_index_v2(bad_fp_url)
 
@@ -256,7 +256,7 @@ class IndexTest(unittest.TestCase):
         def http_get_def(url, etag, timeout):  # pylint: disable=unused-argument
             return (b'not the entry.jar file contents', 'fakeetag')
         mock_http_get.side_effect = http_get_def
-        url = 'https://example.org/fdroid/repo?fingerprint=' + GP_FINGERPRINT
+        url = 'https://fake.url/fdroid/repo?fingerprint=' + GP_FINGERPRINT
         with self.assertRaises(fdroidserver.exception.VerificationException):
             data, _ignored = fdroidserver.index.download_repo_index_v2(url)
 
@@ -271,7 +271,7 @@ class IndexTest(unittest.TestCase):
         shutil.copy(os.path.join(self.basedir, 'repo', 'entry.json'), 'repo')
         shutil.copy(os.path.join(self.basedir, 'repo', 'index-v2.json'), 'repo')
         fdroidserver.signindex.sign_index('repo', 'entry.json')
-        url = 'https://example.org/fdroid/repo?fingerprint=' + GP_FINGERPRINT
+        url = 'https://fake.url/fdroid/repo?fingerprint=' + GP_FINGERPRINT
         with self.assertRaises(fdroidserver.exception.VerificationException):
             data, _ignored = fdroidserver.index.download_repo_index_v2(url)
 
