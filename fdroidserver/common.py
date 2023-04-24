@@ -487,6 +487,42 @@ def read_config(opts=None):
     return config
 
 
+def file_entry(filename, hash_value=None):
+    meta = {}
+    meta["name"] = "/" + filename.split("/", 1)[1]
+    meta["sha256"] = hash_value or common.sha256sum(filename)
+    meta["size"] = os.stat(filename).st_size
+    return meta
+
+
+def load_localized_config(name, repodir):
+    lst = {}
+    for f in Path().glob("config/**/{name}.yml".format(name=name)):
+        locale = f.parts[1]
+        if len(f.parts) == 2:
+            locale = "en-US"
+        with open(f, encoding="utf-8") as fp:
+            elem = yaml.safe_load(fp)
+            for akey, avalue in elem.items():
+                if akey not in lst:
+                    lst[akey] = {}
+                for key, value in avalue.items():
+                    if key not in lst[akey]:
+                        lst[akey][key] = {}
+                    if key == "icon":
+                        shutil.copy(
+                            os.path.join("config", value),
+                            os.path.join(repodir, "icons")
+                        )
+                        lst[akey][key][locale] = file_entry(
+                            os.path.join(repodir, "icons", value)
+                        )
+                    else:
+                        lst[akey][key][locale] = value
+
+    return lst
+
+
 def parse_human_readable_size(size):
     units = {
         'b': 1,

@@ -29,7 +29,6 @@ import re
 import shutil
 import tempfile
 import urllib.parse
-import yaml
 import zipfile
 import calendar
 import qrcode
@@ -472,37 +471,6 @@ def dict_diff(source, target):
     return result
 
 
-def file_entry(filename, hash_value=None):
-    meta = {}
-    meta["name"] = "/" + filename.split("/", 1)[1]
-    meta["sha256"] = hash_value or common.sha256sum(filename)
-    meta["size"] = os.stat(filename).st_size
-    return meta
-
-
-def load_locale(name, repodir):
-    lst = {}
-    for yml in Path().glob("config/**/{name}.yml".format(name=name)):
-        locale = yml.parts[1]
-        if len(yml.parts) == 2:
-            locale = "en-US"
-        with open(yml, encoding="utf-8") as fp:
-            elem = yaml.safe_load(fp)
-            for akey, avalue in elem.items():
-                if akey not in lst:
-                    lst[akey] = {}
-                for key, value in avalue.items():
-                    if key not in lst[akey]:
-                        lst[akey][key] = {}
-                    if key == "icon":
-                        shutil.copy(os.path.join("config", value), os.path.join(repodir, "icons"))
-                        lst[akey][key][locale] = file_entry(os.path.join(repodir, "icons", value))
-                    else:
-                        lst[akey][key][locale] = value
-
-    return lst
-
-
 def convert_datetime(obj):
     if isinstance(obj, datetime):
         # Java prefers milliseconds
@@ -568,7 +536,9 @@ def package_metadata(app, repodir):
 
     # TODO handle different resolutions
     if app.get("icon"):
-        meta["icon"] = {"en-US": file_entry(os.path.join(repodir, "icons", app["icon"]))}
+        meta["icon"] = {
+            "en-US": common.file_entry(os.path.join(repodir, "icons", app["icon"]))
+        }
 
     if "iconv2" in app:
         meta["icon"] = app["iconv2"]
@@ -594,16 +564,16 @@ def convert_version(version, app, repodir):
         ver["file"]["ipfsCIDv1"] = ipfsCIDv1
 
     if "srcname" in version:
-        ver["src"] = file_entry(os.path.join(repodir, version["srcname"]))
+        ver["src"] = common.file_entry(os.path.join(repodir, version["srcname"]))
 
     if "obbMainFile" in version:
-        ver["obbMainFile"] = file_entry(
+        ver["obbMainFile"] = common.file_entry(
             os.path.join(repodir, version["obbMainFile"]),
             version["obbMainFileSha256"],
         )
 
     if "obbPatchFile" in version:
-        ver["obbPatchFile"] = file_entry(
+        ver["obbPatchFile"] = common.file_entry(
             os.path.join(repodir, version["obbPatchFile"]),
             version["obbPatchFileSha256"],
         )
@@ -686,9 +656,11 @@ def v2_repo(repodict, repodir, archive):
 
     repo["name"] = {"en-US": repodict["name"]}
     repo["description"] = {"en-US": repodict["description"]}
-    repo["icon"] = {"en-US": file_entry("{}/icons/{}".format(repodir, repodict["icon"]))}
+    repo["icon"] = {
+        "en-US": common.file_entry("{}/icons/{}".format(repodir, repodict["icon"]))
+    }
 
-    config = load_locale("config", repodir)
+    config = common.load_localized_config("config", repodir)
     if config:
         repo["name"] = config["archive" if archive else "repo"]["name"]
         repo["description"] = config["archive" if archive else "repo"]["description"]
@@ -702,15 +674,15 @@ def v2_repo(repodict, repodir, archive):
 
     repo["timestamp"] = repodict["timestamp"]
 
-    antiFeatures = load_locale("antiFeatures", repodir)
+    antiFeatures = common.load_localized_config("antiFeatures", repodir)
     if antiFeatures:
         repo["antiFeatures"] = antiFeatures
 
-    categories = load_locale("categories", repodir)
+    categories = common.load_localized_config("categories", repodir)
     if categories:
         repo["categories"] = categories
 
-    channels = load_locale("channels", repodir)
+    channels = common.load_localized_config("channels", repodir)
     if channels:
         repo["releaseChannels"] = channels
 
@@ -792,7 +764,7 @@ def make_v2(apps, packages, repodir, repodict, requestsdict, fdroid_signing_key_
         else:
             json.dump(output, fp, default=_index_encoder_default, ensure_ascii=False)
 
-    entry["index"] = file_entry(index_file)
+    entry["index"] = common.file_entry(index_file)
     entry["index"]["numPackages"] = len(output.get("packages", []))
 
     indexes = sorted(Path().glob("tmp/{}*.json".format(repodir)), key=lambda x: x.name)
@@ -819,7 +791,7 @@ def make_v2(apps, packages, repodir, repodict, requestsdict, fdroid_signing_key_
             else:
                 json.dump(diff, fp, default=_index_encoder_default, ensure_ascii=False)
 
-        entry["diffs"][old["repo"]["timestamp"]] = file_entry(diff_file)
+        entry["diffs"][old["repo"]["timestamp"]] = common.file_entry(diff_file)
         entry["diffs"][old["repo"]["timestamp"]]["numPackages"] = len(diff.get("packages", []))
 
     json_name = "entry.json"

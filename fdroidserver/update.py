@@ -1037,7 +1037,7 @@ def insert_localized_app_metadata(apps):
                             base = "iconv2"
                         if base not in apps[packageName] or not isinstance(apps[packageName][base], collections.OrderedDict):
                             apps[packageName][base] = collections.OrderedDict()
-                        apps[packageName][base][locale] = index.file_entry(dst)
+                        apps[packageName][base][locale] = common.file_entry(dst)
             for d in dirs:
                 if d in SCREENSHOT_DIRS:
                     if locale == 'images':
@@ -1090,7 +1090,7 @@ def insert_localized_app_metadata(apps):
                         base = "iconv2"
                     if base not in apps[packageName] or not isinstance(apps[packageName][base], collections.OrderedDict):
                         apps[packageName][base] = collections.OrderedDict()
-                    apps[packageName][base][locale] = index.file_entry(index_file)
+                    apps[packageName][base][locale] = common.file_entry(index_file)
             elif screenshotdir in SCREENSHOT_DIRS:
                 # there can any number of these per locale
                 logging.debug(_('adding to {name}: {path}').format(name=screenshotdir, path=f))
@@ -1105,7 +1105,7 @@ def insert_localized_app_metadata(apps):
                     apps[packageName]["screenshots"][newKey] = collections.OrderedDict()
                 if locale not in apps[packageName]["screenshots"][newKey]:
                     apps[packageName]["screenshots"][newKey][locale] = []
-                apps[packageName]["screenshots"][newKey][locale].append(index.file_entry(f))
+                apps[packageName]["screenshots"][newKey][locale].append(common.file_entry(f))
             else:
                 logging.warning(_('Unsupported graphics file found: {path}').format(path=f))
 
