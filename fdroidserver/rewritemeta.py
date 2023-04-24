@@ -49,9 +49,16 @@ def main():
 
     parser = ArgumentParser()
     common.setup_global_opts(parser)
-    parser.add_argument("-l", "--list", action="store_true", default=False,
-                        help=_("List files that would be reformatted (dry run)"))
-    parser.add_argument("appid", nargs='*', help=_("application ID of file to operate on"))
+    parser.add_argument(
+        "-l",
+        "--list",
+        action="store_true",
+        default=False,
+        help=_("List files that would be reformatted (dry run)"),
+    )
+    parser.add_argument(
+        "appid", nargs='*', help=_("application ID of file to operate on")
+    )
     metadata.add_metadata_arguments(parser)
     options = parser.parse_args()
     metadata.warnings_action = options.W
