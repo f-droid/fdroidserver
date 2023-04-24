@@ -761,6 +761,23 @@ def parse_yaml_metadata(mf):
     return yamldata
 
 
+def _normalize_type_string(v):
+    """Normalize any data to TYPE_STRING.
+
+    YAML 1.2's booleans are all lowercase.
+
+    Things like versionName are strings, but without quotes can be
+    numbers.  Like "versionName: 1.0" would be a YAML float, but
+    should be a string.
+
+    """
+    if isinstance(v, bool):
+        if v:
+            return 'true'
+        return 'false'
+    return str(v)
+
+
 def post_parse_yaml_metadata(yamldata):
     """Convert human-readable metadata data structures into consistent data structures.
 
@@ -769,19 +786,6 @@ def post_parse_yaml_metadata(yamldata):
     fixed value type, regardless of YAML 1.2's type auto-detection.
 
     """
-
-    def _normalize_type_string(v):
-        """YAML 1.2's booleans are all lowercase.
-
-        Things like versionName are strings, but without quotes can be
-        numbers.  Like "versionName: 1.0" would be a YAML float, but
-        should be a string.
-
-        """
-        if isinstance(v, bool):
-            return str(v).lower()
-        return str(v)
-
     for k, v in yamldata.items():
         if fieldtype(k) == TYPE_LIST:
             if isinstance(v, str):
@@ -792,7 +796,7 @@ def post_parse_yaml_metadata(yamldata):
             if v:
                 yamldata[k] = int(v)
         elif fieldtype(k) == TYPE_STRING:
-            if v:
+            if v or v == 0:
                 yamldata[k] = _normalize_type_string(v)
         else:
             if type(v) in (float, int):
@@ -806,7 +810,8 @@ def post_parse_yaml_metadata(yamldata):
 
             _flagtype = flagtype(k)
             if _flagtype is TYPE_STRING:
-                build[k] = _normalize_type_string(v)
+                if v or v == 0:
+                    build[k] = _normalize_type_string(v)
             elif _flagtype is TYPE_INT:
                 build[k] = v
                 # versionCode must be int

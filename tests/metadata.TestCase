@@ -288,6 +288,18 @@ class MetadataTest(unittest.TestCase):
                 (Path('metadata-rewrite-yml') / file_name).read_text(encoding='utf-8'),
             )
 
+    def test_normalize_type_string(self):
+        """TYPE_STRING currently has some quirky behavior."""
+        self.assertEqual('123456', metadata._normalize_type_string(123456))
+        self.assertEqual('1.0', metadata._normalize_type_string(1.0))
+        self.assertEqual('0', metadata._normalize_type_string(0))
+        self.assertEqual('0.0', metadata._normalize_type_string(0.0))
+        self.assertEqual('0.1', metadata._normalize_type_string(0.1))
+        self.assertEqual('[]', metadata._normalize_type_string(list()))
+        self.assertEqual('{}', metadata._normalize_type_string(dict()))
+        self.assertEqual('false', metadata._normalize_type_string(False))
+        self.assertEqual('true', metadata._normalize_type_string(True))
+
     def test_post_parse_yaml_metadata(self):
         fdroidserver.metadata.warnings_action = 'error'
         yamldata = OrderedDict()
@@ -1267,7 +1279,7 @@ class PostMetadataParseTest(unittest.TestCase):
     def test_post_metadata_parse_int_0(self):
         """Run the int 0 through the various field and flag types."""
         self.assertEqual(*self._post_metadata_parse_app_list(0, 0))
-        self.assertEqual(*self._post_metadata_parse_app_string(0, 0))
+        self.assertEqual(*self._post_metadata_parse_app_string(0, '0'))
         self.assertEqual(*self._post_metadata_parse_build_bool(0, 0))
         self.assertEqual(*self._post_metadata_parse_build_int(0, 0))
         self.assertEqual(*self._post_metadata_parse_build_list(0, ['0']))
@@ -1277,7 +1289,7 @@ class PostMetadataParseTest(unittest.TestCase):
     def test_post_metadata_parse_float_0_0(self):
         """Run the float 0.0 through the various field and flag types."""
         self.assertEqual(*self._post_metadata_parse_app_list(0.0, 0.0))
-        self.assertEqual(*self._post_metadata_parse_app_string(0.0, 0.0))
+        self.assertEqual(*self._post_metadata_parse_app_string(0.0, '0.0'))
         self.assertEqual(*self._post_metadata_parse_build_bool(0.0, 0.0))
         with self.assertRaises(MetaDataException):
             self._post_metadata_parse_build_int(0.0, MetaDataException)
@@ -1317,7 +1329,7 @@ class PostMetadataParseTest(unittest.TestCase):
             self._post_metadata_parse_build_int(list(), MetaDataException)
         self.assertEqual(*self._post_metadata_parse_build_list(list(), list()))
         self.assertEqual(*self._post_metadata_parse_build_script(list(), list()))
-        self.assertEqual(*self._post_metadata_parse_build_string(list(), '[]'))
+        self.assertEqual(*self._post_metadata_parse_build_string(list(), list()))
 
     def test_post_metadata_parse_set_of_1(self):
         self.assertEqual(*self._post_metadata_parse_app_list({1}, ['1']))
@@ -1337,7 +1349,7 @@ class PostMetadataParseTest(unittest.TestCase):
             self._post_metadata_parse_build_int(dict(), MetaDataException)
         self.assertEqual(*self._post_metadata_parse_build_list(dict(), dict()))
         self.assertEqual(*self._post_metadata_parse_build_script(dict(), dict()))
-        self.assertEqual(*self._post_metadata_parse_build_string(dict(), '{}'))
+        self.assertEqual(*self._post_metadata_parse_build_string(dict(), dict()))
 
     def test_post_metadata_parse_list_int_string(self):
         self.assertEqual(*self._post_metadata_parse_app_list([1, 'a'], ['1', 'a']))
@@ -1361,7 +1373,7 @@ class PostMetadataParseTest(unittest.TestCase):
 
     def test_post_metadata_parse_false(self):
         self.assertEqual(*self._post_metadata_parse_app_list(False, False))
-        self.assertEqual(*self._post_metadata_parse_app_string(False, False))
+        self.assertEqual(*self._post_metadata_parse_app_string(False, 'false'))
         self.assertEqual(*self._post_metadata_parse_build_bool(False, False))
         self.assertEqual(*self._post_metadata_parse_build_int(False, False))
         self.assertEqual(*self._post_metadata_parse_build_list(False, ['false']))
