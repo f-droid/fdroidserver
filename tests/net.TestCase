@@ -21,7 +21,6 @@ from pathlib import Path
 
 
 class NetTest(unittest.TestCase):
-
     basedir = Path(__file__).resolve().parent
 
     def setUp(self):
@@ -35,7 +34,8 @@ class NetTest(unittest.TestCase):
 
     @patch('requests.get')
     def test_download_file_url_parsing(self, requests_get):
-        def _get(url, stream, allow_redirects, headers, timeout):  # pylint: disable=W0613
+        # pylint: disable=unused-argument
+        def _get(url, stream, allow_redirects, headers, timeout):
             return MagicMock()
 
         requests_get.side_effect = _get
@@ -46,7 +46,7 @@ class NetTest(unittest.TestCase):
 
         f = net.download_file(
             'https://d-05.example.com/custom/com.downloader.aegis-3175421.apk?_fn=QVBLUHVyZV92My4xNy41NF9hcGtwdXJlLmNvbS5hcGs&_p=Y29tLmFwa3B1cmUuYWVnb24&am=6avvTpfJ1dMl9-K6JYKzQw&arg=downloader%3A%2F%2Fcampaign%2F%3Futm_medium%3Ddownloader%26utm_source%3Daegis&at=1652080635&k=1f6e58465df3a441665e585719ab0b13627a117f&r=https%3A%2F%2Fdownloader.com%2Fdownloader-app.html%3Ficn%3Daegis%26ici%3Dimage_qr&uu=http%3A%2F%2F172.16.82.1%2Fcustom%2Fcom.downloader.aegis-3175421.apk%3Fk%3D3fb9c4ae0be578206f6a1c330736fac1627a117f',
-            retries=0
+            retries=0,
         )
         self.assertTrue(requests_get.called)
         self.assertTrue(os.path.exists(f))
