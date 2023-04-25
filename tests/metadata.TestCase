@@ -14,9 +14,7 @@ import textwrap
 from collections import OrderedDict
 from pathlib import Path
 
-
 from testcommon import TmpCwd
-
 from ruamel.yaml import YAML
 
 yaml = YAML(typ='safe')
@@ -29,6 +27,12 @@ if localmodule not in sys.path:
 import fdroidserver
 from fdroidserver import metadata
 from fdroidserver.exception import MetaDataException
+
+
+def _get_mock_mf(s):
+    mf = io.StringIO(s)
+    mf.name = 'mock_filename.yaml'
+    return mf
 
 
 class MetadataTest(unittest.TestCase):
@@ -322,6 +326,20 @@ class MetadataTest(unittest.TestCase):
         self.assertEqual('true', metadata._normalize_type_string(True))
 
     def test_post_parse_yaml_metadata(self):
+        yamldata = dict()
+        metadata.post_parse_yaml_metadata(yamldata)
+
+        yamldata[
+            'AllowedAPKSigningKeys'
+        ] = 'c03dac71394d6c26766f1b04d3e31cfcac5d03b55d8aa40cc9b9fa6b74354c66'
+        metadata.post_parse_yaml_metadata(yamldata)
+
+    def test_post_parse_yaml_metadata_fails(self):
+        yamldata = {'AllowedAPKSigningKeys': True}
+        with self.assertRaises(TypeError):
+            metadata.post_parse_yaml_metadata(yamldata)
+
+    def test_post_parse_yaml_metadata_builds(self):
         yamldata = OrderedDict()
         builds = []
         yamldata['Builds'] = builds
@@ -395,17 +413,45 @@ class MetadataTest(unittest.TestCase):
             self.assertEqual(randomlist, allappids)
 
     def test_parse_yaml_metadata_0size_file(self):
-        mf = io.StringIO('')
-        mf.name = 'mock_filename.yaml'
-        self.assertEqual(fdroidserver.metadata.parse_yaml_metadata(mf), dict())
+        self.assertEqual(dict(), metadata.parse_yaml_metadata(_get_mock_mf('')))
 
     def test_parse_yaml_metadata_empty_dict_file(self):
-        mf = io.StringIO('{}')
-        mf.name = 'mock_filename.yaml'
-        self.assertEqual(fdroidserver.metadata.parse_yaml_metadata(mf), dict())
+        self.assertEqual(dict(), metadata.parse_yaml_metadata(_get_mock_mf('{}')))
 
     def test_parse_yaml_metadata_empty_string_file(self):
-        mf = io.StringIO('""')
+        self.assertEqual(dict(), metadata.parse_yaml_metadata(_get_mock_mf('""')))
+
+    def test_parse_yaml_metadata_fail_on_root_list(self):
+        with self.assertRaises(MetaDataException):
+            metadata.parse_yaml_metadata(_get_mock_mf('-'))
+        with self.assertRaises(MetaDataException):
+            metadata.parse_yaml_metadata(_get_mock_mf('[]'))
+        with self.assertRaises(MetaDataException):
+            metadata.parse_yaml_metadata(_get_mock_mf('- AutoName: fake'))
+
+    def test_parse_yaml_metadata_type_list_str(self):
+        v = 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855'
+        mf = _get_mock_mf('AllowedAPKSigningKeys: "%s"' % v)
+        self.assertEqual(
+            v,
+            metadata.parse_yaml_metadata(mf)['AllowedAPKSigningKeys'][0],
+        )
+
+    def test_parse_yaml_metadata_type_list_build_str(self):
+        mf = _get_mock_mf('Builds: [{versionCode: 1, rm: s}]')
+        self.assertEqual(
+            metadata.parse_yaml_metadata(mf),
+            {'Builds': [{'rm': ['s'], 'versionCode': 1}]},
+        )
+
+    def test_parse_yaml_metadata_app_type_list_fails(self):
+        mf = _get_mock_mf('AllowedAPKSigningKeys: true')
+        with self.assertRaises(TypeError):
+            metadata.parse_yaml_metadata(mf)
+        mf = _get_mock_mf('AllowedAPKSigningKeys: 1')
+        with self.assertRaises(TypeError):
+            metadata.parse_yaml_metadata(mf)
+
         mf.name = 'mock_filename.yaml'
         self.assertEqual(fdroidserver.metadata.parse_yaml_metadata(mf), dict())
 
@@ -449,8 +495,7 @@ class MetadataTest(unittest.TestCase):
 
         """
         fdroidserver.metadata.warnings_action = None
-        mf = io.StringIO('[AntiFeatures: Tracking]')
-        mf.name = 'mock_filename.yaml'
+        mf = _get_mock_mf('[AntiFeatures: Tracking]')
         self.assertEqual(fdroidserver.metadata.parse_yaml_metadata(mf), dict())
 
     def test_parse_yaml_srclib_corrupt_file(self):
