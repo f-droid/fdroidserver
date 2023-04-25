@@ -979,21 +979,35 @@ def _normalize_type_stringmap(k, v):
     return retdict
 
 
+def _normalize_type_list(k, v):
+    """Normalize any data to TYPE_LIST, which is always a list of strings."""
+    if isinstance(v, dict):
+        msg = _('{build_flag} must be list or string, found: {value}')
+        _warn_or_exception(msg.format(build_flag=k, value=v))
+    elif type(v) not in (list, tuple, set):
+        v = [v]
+    return [_normalize_type_string(i) for i in v]
+
+
 def post_parse_yaml_metadata(yamldata):
     """Convert human-readable metadata data structures into consistent data structures.
+
+    "Be conservative in what is written out, be liberal in what is parsed."
+    https://en.wikipedia.org/wiki/Robustness_principle
 
     This also handles conversions that make metadata YAML behave
     something like StrictYAML.  Specifically, a field should have a
     fixed value type, regardless of YAML 1.2's type auto-detection.
 
+    TODO: None values should probably be treated as the string 'null',
+    since YAML 1.2 uses that for nulls
+
     """
     for k, v in yamldata.items():
         _fieldtype = fieldtype(k)
         if _fieldtype == TYPE_LIST:
-            if isinstance(v, str):
-                yamldata[k] = [v]
-            elif v:
-                yamldata[k] = [str(i) for i in v]
+            if v or v == 0:
+                yamldata[k] = _normalize_type_list(k, v)
         elif _fieldtype == TYPE_INT:
             v = _normalize_type_int(k, v)
             if v or v == 0:
@@ -1025,17 +1039,8 @@ def post_parse_yaml_metadata(yamldata):
                 if v or v == 0:
                     build[k] = v
             elif _flagtype in (TYPE_LIST, TYPE_SCRIPT):
-                if isinstance(v, str) or isinstance(v, int):
-                    build[k] = [_normalize_type_string(v)]
-                else:
-                    build[k] = v
-                # float and dict are here only to keep things compatible
-                if type(build[k]) not in (list, tuple, set, float, dict):
-                    _warn_or_exception(
-                        _('{build_flag} must be list or string, found: {value}').format(
-                            build_flag=k, value=v
-                        )
-                    )
+                if v or v == 0:
+                    build[k] = _normalize_type_list(k, v)
             elif _flagtype == TYPE_STRINGMAP:
                 if v or v == 0:
                     build[k] = _normalize_type_stringmap(k, v)

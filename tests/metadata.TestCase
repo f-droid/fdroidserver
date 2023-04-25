@@ -376,6 +376,36 @@ class MetadataTest(unittest.TestCase):
         with self.assertRaises(MetaDataException):
             metadata._normalize_type_int('key', True)
 
+    def test_normalize_type_list(self):
+        """TYPE_LIST is always a list of strings, no matter what YAML thinks."""
+        k = 'placeholder'
+        yaml = ruamel.yaml.YAML(typ='safe')
+        self.assertEqual(['1.0'], metadata._normalize_type_list(k, 1.0))
+        self.assertEqual(['1234567890'], metadata._normalize_type_list(k, 1234567890))
+        self.assertEqual(['false'], metadata._normalize_type_list(k, False))
+        self.assertEqual(['true'], metadata._normalize_type_list(k, True))
+        self.assertEqual(['foo'], metadata._normalize_type_list(k, 'foo'))
+        self.assertEqual([], metadata._normalize_type_list(k, list()))
+        self.assertEqual([], metadata._normalize_type_list(k, tuple()))
+        self.assertEqual([], metadata._normalize_type_list(k, set()))
+        self.assertEqual(['0', '1', '2'], metadata._normalize_type_list(k, {0, 1, 2}))
+        self.assertEqual(
+            ['a', 'b', 'c', '0', '0.0'],
+            metadata._normalize_type_list(k, yaml.load('[a, b, c, 0, 0.0]')),
+        )
+        self.assertEqual(
+            ['1', '1.0', 's', 'true', '{}'],
+            metadata._normalize_type_list(k, yaml.load('[1, 1.0, s, true, {}]')),
+        )
+        self.assertEqual(
+            ['1', '1.0', 's', 'true', '{}'],
+            metadata._normalize_type_list(k, (1, 1.0, 's', True, dict())),
+        )
+
+    def test_normalize_type_list_fails(self):
+        with self.assertRaises(MetaDataException):
+            metadata._normalize_type_list('placeholder', dict())
+
     def test_post_parse_yaml_metadata(self):
         yamldata = dict()
         metadata.post_parse_yaml_metadata(yamldata)
@@ -386,9 +416,17 @@ class MetadataTest(unittest.TestCase):
         metadata.post_parse_yaml_metadata(yamldata)
 
     def test_post_parse_yaml_metadata_fails(self):
-        yamldata = {'AllowedAPKSigningKeys': True}
-        with self.assertRaises(TypeError):
+        yamldata = {'AllowedAPKSigningKeys': {'bad': 'dict-placement'}}
+        with self.assertRaises(MetaDataException):
             metadata.post_parse_yaml_metadata(yamldata)
+
+    def test_post_parse_yaml_metadata_0padding_fails(self):
+        """Special case: ideally 0 padding would be kept in string, but it is not."""
+        v = '0027293472934293872934729834729834729834729834792837487293847926'
+        yaml = ruamel.yaml.YAML(typ='safe')
+        yamldata = yaml.load('AllowedAPKSigningKeys: ' + v)
+        metadata.post_parse_yaml_metadata(yamldata)
+        self.assertNotEqual(yamldata['AllowedAPKSigningKeys'], v)
 
     def test_post_parse_yaml_metadata_builds(self):
         yamldata = OrderedDict()
@@ -496,14 +534,36 @@ class MetadataTest(unittest.TestCase):
         )
 
     def test_parse_yaml_metadata_app_type_list_fails(self):
-        mf = _get_mock_mf('AllowedAPKSigningKeys: true')
-        with self.assertRaises(TypeError):
-            metadata.parse_yaml_metadata(mf)
-        mf = _get_mock_mf('AllowedAPKSigningKeys: 1')
-        with self.assertRaises(TypeError):
+        mf = _get_mock_mf('AllowedAPKSigningKeys: {t: f}')
+        with self.assertRaises(MetaDataException):
             metadata.parse_yaml_metadata(mf)
 
-        self.assertEqual(fdroidserver.metadata.parse_yaml_metadata(mf), dict())
+    def test_parse_yaml_metadata_build_type_list_fails(self):
+        mf = _get_mock_mf('Builds: [{versionCode: 1, rm: {bad: dict-placement}}]')
+        with self.assertRaises(MetaDataException):
+            metadata.parse_yaml_metadata(mf)
+
+    def test_parse_yaml_metadata_0padding_fails(self):
+        """Special case: ideally this would keep 0 padding in string, but it does not.
+
+        It seems the only option is to quote values like that, or add
+        quirks to the YAML parsing.
+
+        """
+        v = '0027293472934293872934729834729834729834729834792837487293847926'
+        mf = io.StringIO('AllowedAPKSigningKeys: %s' % v)
+        mf.name = 'mock_filename.yaml'
+        self.assertNotEqual(
+            v,
+            metadata.parse_yaml_metadata(mf)['AllowedAPKSigningKeys'][0],
+        )
+
+        mf = io.StringIO('AllowedAPKSigningKeys: "%s"' % v)
+        mf.name = 'mock_filename.yaml'
+        self.assertEqual(
+            v,
+            metadata.parse_yaml_metadata(mf)['AllowedAPKSigningKeys'][0],
+        )
 
     def test_parse_yaml_metadata_unknown_app_field(self):
         mf = io.StringIO(
@@ -2078,8 +2138,7 @@ class PostMetadataParseTest(unittest.TestCase):
 
     def test_post_metadata_parse_int(self):
         """Run the int 123456 through the various field and flag types."""
-        with self.assertRaises(TypeError):
-            self._post_metadata_parse_app_list(123456, TypeError)
+        self.assertEqual(*self._post_metadata_parse_app_list(123456, ['123456']))
         self.assertEqual(*self._post_metadata_parse_app_string(123456, '123456'))
         self.assertEqual(*self._post_metadata_parse_build_bool(123456, True))
         self.assertEqual(*self._post_metadata_parse_build_int(123456, 123456))
@@ -2089,7 +2148,7 @@ class PostMetadataParseTest(unittest.TestCase):
 
     def test_post_metadata_parse_int_0(self):
         """Run the int 0 through the various field and flag types."""
-        self.assertEqual(*self._post_metadata_parse_app_list(0, 0))
+        self.assertEqual(*self._post_metadata_parse_app_list(0, ['0']))
         self.assertEqual(*self._post_metadata_parse_app_string(0, '0'))
         self.assertEqual(*self._post_metadata_parse_build_bool(0, False))
         self.assertEqual(*self._post_metadata_parse_build_int(0, 0))
@@ -2099,37 +2158,35 @@ class PostMetadataParseTest(unittest.TestCase):
 
     def test_post_metadata_parse_float_0_0(self):
         """Run the float 0.0 through the various field and flag types."""
-        self.assertEqual(*self._post_metadata_parse_app_list(0.0, 0.0))
+        self.assertEqual(*self._post_metadata_parse_app_list(0.0, ['0.0']))
         self.assertEqual(*self._post_metadata_parse_app_string(0.0, '0.0'))
         self.assertEqual(*self._post_metadata_parse_build_bool(0.0, False))
         with self.assertRaises(MetaDataException):
             self._post_metadata_parse_build_int(0.0, MetaDataException)
-        self.assertEqual(*self._post_metadata_parse_build_list(0.0, 0.0))
-        self.assertEqual(*self._post_metadata_parse_build_script(0.0, 0.0))
+        self.assertEqual(*self._post_metadata_parse_build_list(0.0, ['0.0']))
+        self.assertEqual(*self._post_metadata_parse_build_script(0.0, ['0.0']))
         self.assertEqual(*self._post_metadata_parse_build_string(0.0, '0.0'))
 
     def test_post_metadata_parse_float_0_1(self):
         """Run the float 0.1 through the various field and flag types."""
-        with self.assertRaises(TypeError):
-            self._post_metadata_parse_app_list(0.1, TypeError)
+        self.assertEqual(*self._post_metadata_parse_app_list(0.1, ['0.1']))
         self.assertEqual(*self._post_metadata_parse_app_string(0.1, '0.1'))
         self.assertEqual(*self._post_metadata_parse_build_bool(0.1, True))
         with self.assertRaises(MetaDataException):
             self._post_metadata_parse_build_int(0.1, MetaDataException)
-        self.assertEqual(*self._post_metadata_parse_build_list(0.1, 0.1))
-        self.assertEqual(*self._post_metadata_parse_build_script(0.1, 0.1))
+        self.assertEqual(*self._post_metadata_parse_build_list(0.1, ['0.1']))
+        self.assertEqual(*self._post_metadata_parse_build_script(0.1, ['0.1']))
         self.assertEqual(*self._post_metadata_parse_build_string(0.1, '0.1'))
 
     def test_post_metadata_parse_float_1_0(self):
         """Run the float 1.0 through the various field and flag types."""
-        with self.assertRaises(TypeError):
-            self._post_metadata_parse_app_list(1.0, TypeError)
+        self.assertEqual(*self._post_metadata_parse_app_list(1.0, ['1.0']))
         self.assertEqual(*self._post_metadata_parse_app_string(1.0, '1.0'))
         self.assertEqual(*self._post_metadata_parse_build_bool(1.0, True))
         with self.assertRaises(MetaDataException):
             self._post_metadata_parse_build_int(1.0, MetaDataException)
-        self.assertEqual(*self._post_metadata_parse_build_list(1.0, 1.0))
-        self.assertEqual(*self._post_metadata_parse_build_script(1.0, 1.0))
+        self.assertEqual(*self._post_metadata_parse_build_list(1.0, ['1.0']))
+        self.assertEqual(*self._post_metadata_parse_build_script(1.0, ['1.0']))
         self.assertEqual(*self._post_metadata_parse_build_string(1.0, '1.0'))
 
     def test_post_metadata_parse_empty_list(self):
@@ -2148,8 +2205,8 @@ class PostMetadataParseTest(unittest.TestCase):
         self.assertEqual(*self._post_metadata_parse_build_bool({1}, True))
         with self.assertRaises(MetaDataException):
             self._post_metadata_parse_build_int({1}, MetaDataException)
-        self.assertEqual(*self._post_metadata_parse_build_list({1}, {1}))
-        self.assertEqual(*self._post_metadata_parse_build_script({1}, {1}))
+        self.assertEqual(*self._post_metadata_parse_build_list({1}, ['1']))
+        self.assertEqual(*self._post_metadata_parse_build_script({1}, ['1']))
         self.assertEqual(*self._post_metadata_parse_build_string({1}, '{1}'))
 
     def test_post_metadata_parse_empty_dict(self):
@@ -2168,22 +2225,25 @@ class PostMetadataParseTest(unittest.TestCase):
         self.assertEqual(*self._post_metadata_parse_build_bool([1, 'a'], True))
         with self.assertRaises(MetaDataException):
             self._post_metadata_parse_build_int([1, 'a'], MetaDataException)
-        self.assertEqual(*self._post_metadata_parse_build_list([1, 'a'], [1, 'a']))
-        self.assertEqual(*self._post_metadata_parse_build_script([1, 'a'], [1, 'a']))
+        self.assertEqual(*self._post_metadata_parse_build_list([1, 'a'], ['1', 'a']))
+        self.assertEqual(*self._post_metadata_parse_build_script([1, 'a'], ['1', 'a']))
         self.assertEqual(*self._post_metadata_parse_build_string([1, 'a'], "[1, 'a']"))
 
     def test_post_metadata_parse_dict_int_string(self):
-        self.assertEqual(*self._post_metadata_parse_app_list({'k': 1}, ['k']))
+        with self.assertRaises(MetaDataException):
+            self._post_metadata_parse_app_list({'k': 1}, MetaDataException)
         self.assertEqual(*self._post_metadata_parse_app_string({'k': 1}, "{'k': 1}"))
         self.assertEqual(*self._post_metadata_parse_build_bool({'k': 1}, True))
         with self.assertRaises(MetaDataException):
             self._post_metadata_parse_build_int({'k': 1}, MetaDataException)
-        self.assertEqual(*self._post_metadata_parse_build_list({'k': 1}, {'k': 1}))
-        self.assertEqual(*self._post_metadata_parse_build_script({'k': 1}, {'k': 1}))
+        with self.assertRaises(MetaDataException):
+            self._post_metadata_parse_build_list({'k': 1}, MetaDataException)
+        with self.assertRaises(MetaDataException):
+            self._post_metadata_parse_build_script({'k': 1}, MetaDataException)
         self.assertEqual(*self._post_metadata_parse_build_string({'k': 1}, "{'k': 1}"))
 
     def test_post_metadata_parse_false(self):
-        self.assertEqual(*self._post_metadata_parse_app_list(False, False))
+        self.assertEqual(*self._post_metadata_parse_app_list(False, ['false']))
         self.assertEqual(*self._post_metadata_parse_app_string(False, 'false'))
         self.assertEqual(*self._post_metadata_parse_build_bool(False, False))
         with self.assertRaises(MetaDataException):
@@ -2193,8 +2253,7 @@ class PostMetadataParseTest(unittest.TestCase):
         self.assertEqual(*self._post_metadata_parse_build_string(False, 'false'))
 
     def test_post_metadata_parse_true(self):
-        with self.assertRaises(TypeError):
-            self._post_metadata_parse_app_list(True, TypeError)
+        self.assertEqual(*self._post_metadata_parse_app_list(True, ['true']))
         self.assertEqual(*self._post_metadata_parse_app_string(True, 'true'))
         self.assertEqual(*self._post_metadata_parse_build_bool(True, True))
         with self.assertRaises(MetaDataException):
