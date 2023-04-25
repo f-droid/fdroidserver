@@ -1,6 +1,45 @@
 [tool.black]
 skip-string-normalization = true
 target-version = ["py38"]
+include = '(^fdroid|\.pyi?|\.TestCase)$'
+# These files will never be included in black runs.  To run black on
+# one of thes files, remove it from this list.
+force-exclude = '''(
+  \.direnv|\.eggs|\.git|\.hg|\.mypy_cache|\.nox|\.svn|\.tox|\.venv|venv|_build|buck-out|build|dist|__pypackages__
+  | docs/source/conf\.py
+  | examples/fdroid_export_keystore_to_nitrokey\.py
+  | examples/fdroid_exportkeystore\.py
+  | examples/fdroid_fetchsrclibs\.py
+  | examples/fdroid_nitrokeyimport\.py
+  | fdroidserver/__init__\.py
+  | fdroidserver/__main__\.py
+  | fdroidserver/apksigcopier\.py
+  | fdroidserver/build\.py
+  | fdroidserver/checkupdates\.py
+  | fdroidserver/common\.py
+  | fdroidserver/deploy\.py
+  | fdroidserver/import_subcommand\.py
+  | fdroidserver/index\.py
+  | fdroidserver/install\.py
+  | fdroidserver/metadata\.py
+  | fdroidserver/nightly\.py
+  | fdroidserver/publish\.py
+  | fdroidserver/scanner\.py
+  | fdroidserver/update\.py
+  | fdroidserver/vmtools\.py
+  | locale/pick-complete-translations\.py
+  | tests/config\.py
+  | tests/extra/manual-vmtools-test\.py
+  | tests/gradle-release-checksums\.py
+  | tests/openssl-version-check-test\.py
+  | tests/testcommon\.py
+  | tests/valid-package-names/test\.py
+  | tests/checkupdates\.TestCase
+  | tests/common\.TestCase
+  | tests/publish\.TestCase
+  | tests/signatures\.TestCase
+  | tests/update\.TestCase
+)$'''
 
 
 [tool.mypy]
