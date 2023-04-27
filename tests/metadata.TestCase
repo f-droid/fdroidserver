@@ -1164,4 +1164,4 @@ if __name__ == "__main__":
 
     newSuite = unittest.TestSuite()
     newSuite.addTest(unittest.makeSuite(MetadataTest))
-    unittest.main(failfast=True)
+    unittest.main(failfast=False)
