@@ -12,6 +12,7 @@ Copyright (c) 2014 Stefaan Lippens
 __version__ = '0.2.1'
 
 import threading
+
 try:
     # Python 2
     from Queue import Queue
@@ -22,7 +23,7 @@ except ImportError:
 
 class AsynchronousFileReader(threading.Thread):
     """Helper class to implement asynchronous reading of a file in a separate thread.
-    
+
     Pushes read lines on a queue to be consumed in another thread.
     """
 
@@ -53,4 +54,3 @@ class AsynchronousFileReader(threading.Thread):
         """Get currently available lines."""
         while not self.queue.empty():
             yield self.queue.get()
-

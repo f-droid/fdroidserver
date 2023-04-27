@@ -254,37 +254,7 @@ black:
   <<: *apt-template
   script:
     - apt-get install black
-    - black --check --diff --color
-        examples/fdroid_clean_repos.py
-        examples/fdroid_extract_repo_pubkey.py
-        fdroid
-        fdroidserver/btlog.py
-        fdroidserver/exception.py
-        fdroidserver/gpgsign.py
-        fdroidserver/lint.py
-        fdroidserver/mirror.py
-        fdroidserver/net.py
-        fdroidserver/readmeta.py
-        fdroidserver/signindex.py
-        fdroidserver/tail.py
-        fdroidserver/verify.py
-        setup.py
-        tests/build.TestCase
-        tests/deploy.TestCase
-        tests/dump_internal_metadata_format.py
-        tests/exception.TestCase
-        tests/import_subcommand.TestCase
-        tests/init.TestCase
-        tests/install.TestCase
-        tests/key-tricks.py
-        tests/lint.TestCase
-        tests/metadata.TestCase
-        tests/nightly.TestCase
-        tests/rewritemeta.TestCase
-        tests/scanner.TestCase
-        tests/signindex.TestCase
-        tests/verify.TestCase
-
+    - black --check --diff --color $CI_PROJECT_DIR
 
 fedora_latest:
   image: fedora:latest

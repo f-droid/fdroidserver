@@ -114,7 +114,7 @@ def main():
             test_config['sdk_path'] = default_sdk_path
 
         if not common.test_sdk_exists(test_config):
-            del (test_config['sdk_path'])
+            del test_config['sdk_path']
             while not options.no_prompt:
                 try:
                     s = input(

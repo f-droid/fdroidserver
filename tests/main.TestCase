@@ -169,8 +169,7 @@ class MainTest(unittest.TestCase):
                         exit_mock.assert_called_once_with(0)
 
     def test_main_prevent_plugin_override(self):
-        """making sure build-in subcommands cannot be overridden by plugins
-        """
+        """making sure build-in subcommands cannot be overridden by plugins"""
         with tempfile.TemporaryDirectory() as tmpdir, TmpCwd(tmpdir):
             with open('fdroid_signatures.py', 'w') as f:
                 f.write(
