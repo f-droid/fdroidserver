@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import copy
 import io
 import logging
 import optparse
@@ -26,9 +27,8 @@ print('localmodule: ' + str(localmodule))
 if localmodule not in sys.path:
     sys.path.insert(0, str(localmodule))
 
-
-import fdroidserver.common
-import fdroidserver.metadata
+import fdroidserver
+from fdroidserver import metadata
 from fdroidserver.exception import MetaDataException
 
 
@@ -1149,6 +1149,232 @@ class MetadataTest(unittest.TestCase):
         build.ndk = 'r24'
         with self.assertRaises(TypeError):
             build.ndk_path()
+
+
+class PostMetadataParseTest(unittest.TestCase):
+    """Test the functions that post process the YAML input.
+
+    The following series of "post_metadata_parse" tests map out the
+    current state of automatic type conversion in the YAML post
+    processing.  They are not necessary a statement of how things
+    should be, but more to surface the details of it functions.
+
+    """
+
+    def setUp(self):
+        fdroidserver.metadata.warnings_action = 'error'
+
+    def _post_metadata_parse_app_list(self, from_yaml, expected):
+        app = {'AntiFeatures': from_yaml}
+        metadata.post_parse_yaml_metadata(app)
+        metadata.post_metadata_parse(app)
+        del app['Builds']
+        return {'AntiFeatures': expected}, app
+
+    def _post_metadata_parse_app_string(self, from_yaml, expected):
+        app = {'Repo': from_yaml}
+        metadata.post_parse_yaml_metadata(app)
+        metadata.post_metadata_parse(app)
+        del app['Builds']
+        return {'Repo': expected}, app
+
+    def _post_metadata_parse_build_bool(self, from_yaml, expected):
+        tested_key = 'submodules'
+        app = {'Builds': [{'versionCode': 1, tested_key: from_yaml}]}
+        post = copy.deepcopy(app)
+        metadata.post_parse_yaml_metadata(post)
+        metadata.post_metadata_parse(post)
+        del app['Builds'][0]['versionCode']
+        del post['Builds'][0]['versionCode']
+        for build in post['Builds']:
+            for k in list(build):
+                if k != tested_key:
+                    del build[k]
+        app['Builds'][0][tested_key] = expected
+        return app, post
+
+    def _post_metadata_parse_build_int(self, from_yaml, expected):
+        tested_key = 'versionCode'
+        app = {'Builds': [{'versionCode': from_yaml}]}
+        post = copy.deepcopy(app)
+        metadata.post_parse_yaml_metadata(post)
+        metadata.post_metadata_parse(post)
+        for build in post['Builds']:
+            for k in list(build):
+                if k != tested_key:
+                    del build[k]
+        app['Builds'][0][tested_key] = expected
+        return app, post
+
+    def _post_metadata_parse_build_list(self, from_yaml, expected):
+        tested_key = 'rm'
+        app = {'Builds': [{'versionCode': 1, tested_key: from_yaml}]}
+        post = copy.deepcopy(app)
+        metadata.post_parse_yaml_metadata(post)
+        metadata.post_metadata_parse(post)
+        del app['Builds'][0]['versionCode']
+        del post['Builds'][0]['versionCode']
+        for build in post['Builds']:
+            for k in list(build):
+                if k != tested_key:
+                    del build[k]
+        app['Builds'][0][tested_key] = expected
+        return app, post
+
+    def _post_metadata_parse_build_script(self, from_yaml, expected):
+        tested_key = 'build'
+        app = {'Builds': [{'versionCode': 1, tested_key: from_yaml}]}
+        post = copy.deepcopy(app)
+        metadata.post_parse_yaml_metadata(post)
+        metadata.post_metadata_parse(post)
+        del app['Builds'][0]['versionCode']
+        del post['Builds'][0]['versionCode']
+        for build in post['Builds']:
+            for k in list(build):
+                if k != tested_key:
+                    del build[k]
+        app['Builds'][0][tested_key] = expected
+        return app, post
+
+    def _post_metadata_parse_build_string(self, from_yaml, expected):
+        tested_key = 'commit'
+        app = {'Builds': [{'versionCode': 1, tested_key: from_yaml}]}
+        post = copy.deepcopy(app)
+        metadata.post_parse_yaml_metadata(post)
+        metadata.post_metadata_parse(post)
+        del app['Builds'][0]['versionCode']
+        del post['Builds'][0]['versionCode']
+        for build in post['Builds']:
+            for k in list(build):
+                if k != tested_key:
+                    del build[k]
+        app['Builds'][0][tested_key] = expected
+        return app, post
+
+    def test_post_metadata_parse_int(self):
+        """Run the int 123456 through the various field and flag types."""
+        with self.assertRaises(TypeError):
+            self._post_metadata_parse_app_list(123456, TypeError)
+        self.assertEqual(*self._post_metadata_parse_app_string(123456, '123456'))
+        self.assertEqual(*self._post_metadata_parse_build_bool(123456, 123456))
+        self.assertEqual(*self._post_metadata_parse_build_int(123456, 123456))
+        self.assertEqual(*self._post_metadata_parse_build_list(123456, 123456))
+        self.assertEqual(*self._post_metadata_parse_build_script(123456, 123456))
+        self.assertEqual(*self._post_metadata_parse_build_string(123456, '123456'))
+
+    def test_post_metadata_parse_int_0(self):
+        """Run the int 0 through the various field and flag types."""
+        self.assertEqual(*self._post_metadata_parse_app_list(0, 0))
+        self.assertEqual(*self._post_metadata_parse_app_string(0, 0))
+        self.assertEqual(*self._post_metadata_parse_build_bool(0, 0))
+        self.assertEqual(*self._post_metadata_parse_build_int(0, 0))
+        self.assertEqual(*self._post_metadata_parse_build_list(0, 0))
+        self.assertEqual(*self._post_metadata_parse_build_script(0, 0))
+        self.assertEqual(*self._post_metadata_parse_build_string(0, '0'))
+
+    def test_post_metadata_parse_float_0_0(self):
+        """Run the float 0.0 through the various field and flag types."""
+        self.assertEqual(*self._post_metadata_parse_app_list(0.0, 0.0))
+        self.assertEqual(*self._post_metadata_parse_app_string(0.0, 0.0))
+        self.assertEqual(*self._post_metadata_parse_build_bool(0.0, 0.0))
+        with self.assertRaises(MetaDataException):
+            self._post_metadata_parse_build_int(0.0, MetaDataException)
+        self.assertEqual(*self._post_metadata_parse_build_list(0.0, 0.0))
+        self.assertEqual(*self._post_metadata_parse_build_script(0.0, 0.0))
+        self.assertEqual(*self._post_metadata_parse_build_string(0.0, '0.0'))
+
+    def test_post_metadata_parse_float_0_1(self):
+        """Run the float 0.1 through the various field and flag types."""
+        with self.assertRaises(TypeError):
+            self._post_metadata_parse_app_list(0.1, TypeError)
+        self.assertEqual(*self._post_metadata_parse_app_string(0.1, '0.1'))
+        self.assertEqual(*self._post_metadata_parse_build_bool(0.1, 0.1))
+        with self.assertRaises(MetaDataException):
+            self._post_metadata_parse_build_int(0.1, MetaDataException)
+        self.assertEqual(*self._post_metadata_parse_build_list(0.1, 0.1))
+        self.assertEqual(*self._post_metadata_parse_build_script(0.1, 0.1))
+        self.assertEqual(*self._post_metadata_parse_build_string(0.1, '0.1'))
+
+    def test_post_metadata_parse_float_1_0(self):
+        """Run the float 1.0 through the various field and flag types."""
+        with self.assertRaises(TypeError):
+            self._post_metadata_parse_app_list(1.0, TypeError)
+        self.assertEqual(*self._post_metadata_parse_app_string(1.0, '1.0'))
+        self.assertEqual(*self._post_metadata_parse_build_bool(1.0, 1.0))
+        with self.assertRaises(MetaDataException):
+            self._post_metadata_parse_build_int(1.0, MetaDataException)
+        self.assertEqual(*self._post_metadata_parse_build_list(1.0, 1.0))
+        self.assertEqual(*self._post_metadata_parse_build_script(1.0, 1.0))
+        self.assertEqual(*self._post_metadata_parse_build_string(1.0, '1.0'))
+
+    def test_post_metadata_parse_empty_list(self):
+        self.assertEqual(*self._post_metadata_parse_app_list(list(), list()))
+        self.assertEqual(*self._post_metadata_parse_app_string(list(), list()))
+        self.assertEqual(*self._post_metadata_parse_build_bool(list(), list()))
+        with self.assertRaises(MetaDataException):
+            self._post_metadata_parse_build_int(list(), MetaDataException)
+        self.assertEqual(*self._post_metadata_parse_build_list(list(), list()))
+        self.assertEqual(*self._post_metadata_parse_build_script(list(), list()))
+        self.assertEqual(*self._post_metadata_parse_build_string(list(), '[]'))
+
+    def test_post_metadata_parse_set_of_1(self):
+        self.assertEqual(*self._post_metadata_parse_app_list({1}, ['1']))
+        self.assertEqual(*self._post_metadata_parse_app_string({1}, '{1}'))
+        self.assertEqual(*self._post_metadata_parse_build_bool({1}, {1}))
+        with self.assertRaises(MetaDataException):
+            self._post_metadata_parse_build_int({1}, MetaDataException)
+        self.assertEqual(*self._post_metadata_parse_build_list({1}, {1}))
+        self.assertEqual(*self._post_metadata_parse_build_script({1}, {1}))
+        self.assertEqual(*self._post_metadata_parse_build_string({1}, '{1}'))
+
+    def test_post_metadata_parse_empty_dict(self):
+        self.assertEqual(*self._post_metadata_parse_app_list(dict(), dict()))
+        self.assertEqual(*self._post_metadata_parse_app_string(dict(), dict()))
+        self.assertEqual(*self._post_metadata_parse_build_bool(dict(), dict()))
+        with self.assertRaises(MetaDataException):
+            self._post_metadata_parse_build_int(dict(), MetaDataException)
+        self.assertEqual(*self._post_metadata_parse_build_list(dict(), dict()))
+        self.assertEqual(*self._post_metadata_parse_build_script(dict(), dict()))
+        self.assertEqual(*self._post_metadata_parse_build_string(dict(), '{}'))
+
+    def test_post_metadata_parse_list_int_string(self):
+        self.assertEqual(*self._post_metadata_parse_app_list([1, 'a'], ['1', 'a']))
+        self.assertEqual(*self._post_metadata_parse_app_string([1, 'a'], "[1, 'a']"))
+        self.assertEqual(*self._post_metadata_parse_build_bool([1, 'a'], [1, 'a']))
+        with self.assertRaises(MetaDataException):
+            self._post_metadata_parse_build_int([1, 'a'], MetaDataException)
+        self.assertEqual(*self._post_metadata_parse_build_list([1, 'a'], [1, 'a']))
+        self.assertEqual(*self._post_metadata_parse_build_script([1, 'a'], [1, 'a']))
+        self.assertEqual(*self._post_metadata_parse_build_string([1, 'a'], "[1, 'a']"))
+
+    def test_post_metadata_parse_dict_int_string(self):
+        self.assertEqual(*self._post_metadata_parse_app_list({'k': 1}, ['k']))
+        self.assertEqual(*self._post_metadata_parse_app_string({'k': 1}, "{'k': 1}"))
+        self.assertEqual(*self._post_metadata_parse_build_bool({'k': 1}, {'k': 1}))
+        with self.assertRaises(MetaDataException):
+            self._post_metadata_parse_build_int({'k': 1}, MetaDataException)
+        self.assertEqual(*self._post_metadata_parse_build_list({'k': 1}, {'k': 1}))
+        self.assertEqual(*self._post_metadata_parse_build_script({'k': 1}, {'k': 1}))
+        self.assertEqual(*self._post_metadata_parse_build_string({'k': 1}, "{'k': 1}"))
+
+    def test_post_metadata_parse_false(self):
+        self.assertEqual(*self._post_metadata_parse_app_list(False, False))
+        self.assertEqual(*self._post_metadata_parse_app_string(False, False))
+        self.assertEqual(*self._post_metadata_parse_build_bool(False, False))
+        self.assertEqual(*self._post_metadata_parse_build_int(False, False))
+        self.assertEqual(*self._post_metadata_parse_build_list(False, False))
+        self.assertEqual(*self._post_metadata_parse_build_script(False, False))
+        self.assertEqual(*self._post_metadata_parse_build_string(False, 'False'))
+
+    def test_post_metadata_parse_true(self):
+        with self.assertRaises(TypeError):
+            self._post_metadata_parse_app_list(True, TypeError)
+        self.assertEqual(*self._post_metadata_parse_app_string(True, 'True'))
+        self.assertEqual(*self._post_metadata_parse_build_bool(True, True))
+        self.assertEqual(*self._post_metadata_parse_build_int(True, True))
+        self.assertEqual(*self._post_metadata_parse_build_list(True, True))
+        self.assertEqual(*self._post_metadata_parse_build_script(True, True))
+        self.assertEqual(*self._post_metadata_parse_build_string(True, 'True'))
 
 
 if __name__ == "__main__":
