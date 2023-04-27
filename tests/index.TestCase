@@ -8,6 +8,7 @@ import optparse
 import os
 import sys
 import unittest
+import yaml
 import zipfile
 from unittest.mock import patch
 import requests
@@ -28,6 +29,7 @@ import fdroidserver.metadata
 import fdroidserver.net
 import fdroidserver.signindex
 import fdroidserver.publish
+from fdroidserver.exception import FDroidException
 from testcommon import TmpCwd, mkdtemp
 from pathlib import Path
 
@@ -418,6 +420,11 @@ class IndexTest(unittest.TestCase):
             'address': 'https://example.com/fdroid/repo',
             'description': 'This is just a test',
             'icon': 'blahblah',
+            'mirrors': [
+                {'isPrimary': True, 'url': 'https://example.com/fdroid/repo'},
+                {'extra': 'data', 'url': 'http://one/fdroid/repo'},
+                {'url': 'http://two/fdroid/repo'},
+            ],
             'name': 'test',
             'timestamp': datetime.datetime.now(),
             'version': 12,
@@ -506,6 +513,26 @@ class IndexTest(unittest.TestCase):
         self.assertTrue(os.path.exists(os.path.join('repo', 'index.xml')))
         self.assertTrue(os.path.exists(os.path.join('repo', 'index_unsigned.jar')))
         self.assertFalse(os.path.exists(os.path.join('repo', 'index.jar')))
+
+    def test_make_v1_with_mirrors(self):
+        os.chdir(self.testdir)
+        os.mkdir('repo')
+        repodict = {
+            'address': 'https://example.com/fdroid/repo',
+            'mirrors': [
+                {'isPrimary': True, 'url': 'https://example.com/fdroid/repo'},
+                {'extra': 'data', 'url': 'http://one/fdroid/repo'},
+                {'url': 'http://two/fdroid/repo'},
+            ],
+        }
+        fdroidserver.index.make_v1({}, [], 'repo', repodict, {}, {})
+        index_v1 = Path('repo/index-v1.json')
+        self.assertTrue(index_v1.exists())
+        with index_v1.open() as fp:
+            self.assertEqual(
+                json.load(fp)['repo']['mirrors'],
+                ['http://one/fdroid/repo', 'http://two/fdroid/repo'],
+            )
 
     def test_github_get_mirror_service_urls(self):
         for url in [
@@ -653,6 +680,84 @@ class IndexTest(unittest.TestCase):
             'https://dev.guardianproject.info/projects/urzip',
             metadata['webSite'],
         )
+
+    def test_add_mirrors_to_repodict(self):
+        """Test based on the contents of tests/config.py"""
+        repodict = {'address': fdroidserver.common.config['repo_url']}
+        fdroidserver.index.add_mirrors_to_repodict('repo', repodict)
+        self.assertEqual(
+            repodict['mirrors'],
+            [
+                {'isPrimary': True, 'url': 'https://MyFirstFDroidRepo.org/fdroid/repo'},
+                {'url': 'http://foobarfoobarfoobar.onion/fdroid/repo'},
+                {'url': 'https://foo.bar/fdroid/repo'},
+            ],
+        )
+
+    def test_custom_config_yml_with_mirrors(self):
+        """Test based on custom contents of config.yml"""
+        os.chdir(self.testdir)
+        repo_url = 'https://example.com/fdroid/repo'
+        with open('config.yml', 'w') as fp:
+            yaml.dump({'repo_url': repo_url, 'mirrors': ['http://one/fdroid', ]}, fp)
+        os.system('cat config.yml')
+        fdroidserver.common.config = None
+        fdroidserver.common.read_config(Options)
+        repodict = {'address': fdroidserver.common.config['repo_url']}
+        fdroidserver.index.add_mirrors_to_repodict('repo', repodict)
+        self.assertEqual(
+            repodict['mirrors'],
+            [
+                {'url': 'https://example.com/fdroid/repo', 'isPrimary': True},
+                {'url': 'http://one/fdroid/repo'},
+            ]
+        )
+
+    def test_no_mirrors_config(self):
+        fdroidserver.common.config = dict()
+        repodict = {'address': 'https://example.com/fdroid/repo'}
+        fdroidserver.index.add_mirrors_to_repodict('repo', repodict)
+        self.assertFalse('mirrors' in repodict)
+
+    def test_add_metadata_to_canonical_in_mirrors_config(self):
+        """It is possible to add extra metadata to the canonical URL"""
+        fdroidserver.common.config = {
+            'repo_url': 'http://one/fdroid/repo',
+            'mirrors': [
+                {'url': 'http://one/fdroid', 'extra': 'data'},
+                {'url': 'http://two/fdroid'},
+            ],
+        }
+        repodict = {'address': fdroidserver.common.config['repo_url']}
+        fdroidserver.index.add_mirrors_to_repodict('repo', repodict)
+        self.assertEqual(
+            repodict['mirrors'],
+            [
+                {'extra': 'data', 'isPrimary': True, 'url': 'http://one/fdroid/repo'},
+                {'url': 'http://two/fdroid/repo'},
+            ],
+        )
+
+    def test_duplicate_primary_in_mirrors_config(self):
+        """There can be only one primary mirror aka canonical URL"""
+        fdroidserver.common.config = {
+            'repo_url': 'http://one/fdroid',
+            'mirrors': [
+                {'url': 'http://one/fdroid', 'countryCode': 'SA'},
+                {'url': 'http://two/fdroid'},
+                {'url': 'http://one/fdroid'},
+            ],
+        }
+        repodict = {'address': fdroidserver.common.config['repo_url']}
+        with self.assertRaises(FDroidException):
+            fdroidserver.index.add_mirrors_to_repodict('repo', repodict)
+
+    def test_bad_type_in_mirrors_config(self):
+        for i in (1, 2.3, b'asdf'):
+            fdroidserver.common.config = {'mirrors': i}
+            repodict = dict()
+            with self.assertRaises(FDroidException):
+                fdroidserver.index.add_mirrors_to_repodict('repo', repodict)
 
 
 if __name__ == "__main__":

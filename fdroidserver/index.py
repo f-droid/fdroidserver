@@ -91,7 +91,7 @@ def make(apps, apks, repodir, archive):
         repodict['address'] = archive_url
         if 'archive_web_base_url' in common.config:
             repodict["webBaseUrl"] = common.config['archive_web_base_url']
-        urlbasepath = os.path.basename(urllib.parse.urlparse(archive_url).path)
+        repo_section = os.path.basename(urllib.parse.urlparse(archive_url).path)
     else:
         repodict['name'] = common.config['repo_name']
         repodict['icon'] = common.config.get('repo_icon', common.default_config['repo_icon'])
@@ -99,27 +99,9 @@ def make(apps, apks, repodir, archive):
         if 'repo_web_base_url' in common.config:
             repodict["webBaseUrl"] = common.config['repo_web_base_url']
         repodict['description'] = common.config['repo_description']
-        urlbasepath = os.path.basename(urllib.parse.urlparse(common.config['repo_url']).path)
+        repo_section = os.path.basename(urllib.parse.urlparse(common.config['repo_url']).path)
 
-    mirrorcheckfailed = False
-    mirrors = []
-    for mirror in common.config.get('mirrors', []):
-        base = os.path.basename(urllib.parse.urlparse(mirror).path.rstrip('/'))
-        if common.config.get('nonstandardwebroot') is not True and base != 'fdroid':
-            logging.error(_("mirror '%s' does not end with 'fdroid'!") % mirror)
-            mirrorcheckfailed = True
-        # must end with / or urljoin strips a whole path segment
-        if mirror.endswith('/'):
-            mirrors.append(urllib.parse.urljoin(mirror, urlbasepath))
-        else:
-            mirrors.append(urllib.parse.urljoin(mirror + '/', urlbasepath))
-    for mirror in common.config.get('servergitmirrors', []):
-        for url in get_mirror_service_urls(mirror):
-            mirrors.append(url + '/' + repodir)
-    if mirrorcheckfailed:
-        raise FDroidException(_("Malformed repository mirrors."))
-    if mirrors:
-        repodict['mirrors'] = mirrors
+    add_mirrors_to_repodict(repo_section, repodict)
 
     requestsdict = collections.OrderedDict()
     for command in ('install', 'uninstall'):
@@ -713,15 +695,10 @@ def v2_repo(repodict, repodir, archive):
         repo["icon"] = config["archive" if archive else "repo"]["icon"]
 
     repo["address"] = repodict["address"]
+    if "mirrors" in repodict:
+        repo["mirrors"] = repodict["mirrors"]
     if "webBaseUrl" in repodict:
         repo["webBaseUrl"] = repodict["webBaseUrl"]
-
-    if "mirrors" in repodict:
-        repo["mirrors"] = [{"url": mirror} for mirror in repodict["mirrors"]]
-
-        # the first entry is traditionally the primary mirror
-        if repodict['address'] not in repodict["mirrors"]:
-            repo["mirrors"].insert(0, {"url": repodict['address'], "isPrimary": True})
 
     repo["timestamp"] = repodict["timestamp"]
 
@@ -878,8 +855,17 @@ def make_v1(apps, packages, repodir, repodict, requestsdict, fdroid_signing_key_
         raise TypeError(repr(obj) + " is not JSON serializable")
 
     output = collections.OrderedDict()
-    output['repo'] = repodict
+    output['repo'] = repodict.copy()
     output['requests'] = requestsdict
+
+    # index-v1 only supports a list of URL strings for additional mirrors
+    mirrors = []
+    for mirror in repodict.get('mirrors', []):
+        url = mirror['url']
+        if url != repodict['address']:
+            mirrors.append(mirror['url'])
+    if mirrors:
+        output['repo']['mirrors'] = mirrors
 
     # establish sort order of the index
     v1_sort_packages(packages, fdroid_signing_key_fingerprints)
@@ -1096,8 +1082,11 @@ def make_v0(apps, apks, repodir, repodict, requestsdict, fdroid_signing_key_fing
     repoel.setAttribute("version", str(repodict['version']))
 
     addElement('description', repodict['description'], doc, repoel)
+    # index v0 only supports a list of URL strings for additional mirrors
     for mirror in repodict.get('mirrors', []):
-        addElement('mirror', mirror, doc, repoel)
+        url = mirror['url']
+        if url != repodict['address']:
+            addElement('mirror', url, doc, repoel)
 
     root.appendChild(repoel)
 
@@ -1405,6 +1394,83 @@ def extract_pubkey():
 
     repo_pubkey_fingerprint = common.get_cert_fingerprint(pubkey)
     return hexlify(pubkey), repo_pubkey_fingerprint
+
+
+def add_mirrors_to_repodict(repo_section, repodict):
+    """Convert config into final dict of mirror metadata for the repo.
+
+    Internally and in index-v2, mirrors is a list of dicts, but it can
+    be specified in the config as a string or list of strings.  Also,
+    index v0 and v1 use a list of URL strings as the data structure.
+
+    The first entry is traditionally the primary mirror and canonical
+    URL.  'mirrors' should not be present in the index if there is
+    only the canonical URL, and no other mirrors.
+
+    The metadata items for each mirror entry are sorted by key to
+    ensure minimum diffs in the index files.
+
+    """
+    mirrors_config = common.config.get('mirrors', [])
+    if type(mirrors_config) not in (list, tuple):
+        mirrors_config = [mirrors_config]
+
+    mirrorcheckfailed = False
+    mirrors = []
+    urls = set()
+    for mirror in mirrors_config:
+        if isinstance(mirror, str):
+            mirror = {'url': mirror}
+        elif not isinstance(mirror, dict):
+            logging.error(
+                _('Bad entry type "{mirrortype}" in mirrors config: {mirror}').format(
+                    mirrortype=type(mirror), mirror=mirror
+                )
+            )
+            mirrorcheckfailed = True
+            continue
+        config_url = mirror['url']
+        base = os.path.basename(urllib.parse.urlparse(config_url).path.rstrip('/'))
+        if common.config.get('nonstandardwebroot') is not True and base != 'fdroid':
+            logging.error(_("mirror '%s' does not end with 'fdroid'!") % config_url)
+            mirrorcheckfailed = True
+        # must end with / or urljoin strips a whole path segment
+        if config_url.endswith('/'):
+            mirror['url'] = urllib.parse.urljoin(config_url, repo_section)
+        else:
+            mirror['url'] = urllib.parse.urljoin(config_url + '/', repo_section)
+        mirrors.append(mirror)
+        if mirror['url'] in urls:
+            mirrorcheckfailed = True
+            logging.error(
+                _('Duplicate entry "%s" in mirrors config!') % mirror['url']
+            )
+        urls.add(mirror['url'])
+    for mirror in common.config.get('servergitmirrors', []):
+        for url in get_mirror_service_urls(mirror):
+            mirrors.append({'url': url + '/' + repo_section})
+    if mirrorcheckfailed:
+        raise FDroidException(_("Malformed repository mirrors."))
+
+    if not mirrors:
+        return
+
+    repodict['mirrors'] = []
+    canonical_url = repodict['address']
+    found_primary = False
+    for mirror in mirrors:
+        if canonical_url == mirror['url']:
+            found_primary = True
+            mirror['isPrimary'] = True
+            sortedmirror = dict()
+            for k in sorted(mirror.keys()):
+                sortedmirror[k] = mirror[k]
+            repodict['mirrors'].insert(0, sortedmirror)
+        else:
+            repodict['mirrors'].append(mirror)
+
+    if repodict['mirrors'] and not found_primary:
+        repodict['mirrors'].insert(0, {'isPrimary': True, 'url': repodict['address']})
 
 
 def get_mirror_service_urls(url):

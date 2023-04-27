@@ -220,6 +220,15 @@
 # mirrors:
 #   - https://foo.bar/fdroid
 #   - http://foobarfoobarfoobar.onion/fdroid
+#
+# Or additional metadata can also be included by adding key/value pairs:
+#
+# mirrors:
+#   - url: https://foo.bar/fdroid
+#     countryCode: BA
+#   - url: http://foobarfoobarfoobar.onion/fdroid
+#
+
 
 # optionally specify which identity file to use when using rsync or git over SSH
 #
