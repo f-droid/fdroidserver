@@ -128,7 +128,7 @@ class MetadataTest(unittest.TestCase):
 
         fdroidserver.metadata.warnings_action = 'error'
 
-        # some valid addresses (L, M, 3)
+        # some valid addresses (L, M, 3, segwit)
         self.assertIsNone(
             validator.check('LgeGrrrrJAxyXprrPrrBrrX5Qrrrrrrrrd', 'fake.app.id')
         )
@@ -136,6 +136,11 @@ class MetadataTest(unittest.TestCase):
             validator.check('MrrrrrrrJAxyXpanPtrrRAX5QHxvUJo8id', 'fake.app.id')
         )
         self.assertIsNone(validator.check('3rereVr9rAryrranrrrrrAXrrHx', 'fake.app.id'))
+        self.assertIsNone(
+            validator.check(
+                'ltc1q7euacwhn6ef99vcfa57mute92q572aqsc4c2j5', 'fake.app.id'
+            )
+        )
 
         # some invalid addresses (various special use/testnet addresses, invalid chars)
         self.assertRaises(
