@@ -22,7 +22,7 @@ Builds:
   forcevercode: true
   forceversion: false
   gradle:
-  - 'yes'
+  - yes
   gradleprops: []
   init: ''
   maven: null
@@ -83,7 +83,7 @@ Builds:
   forcevercode: false
   forceversion: false
   gradle:
-  - 'yes'
+  - yes
   gradleprops: []
   init: ''
   maven: null
@@ -126,7 +126,7 @@ Builds:
   forcevercode: false
   forceversion: false
   gradle:
-  - 'yes'
+  - yes
   gradleprops: []
   init: ''
   maven: null
@@ -167,7 +167,7 @@ Builds:
   forcevercode: false
   forceversion: false
   gradle:
-  - 'yes'
+  - yes
   gradleprops: []
   init: ''
   maven: null
@@ -208,7 +208,7 @@ Builds:
   forcevercode: false
   forceversion: false
   gradle:
-  - 'yes'
+  - yes
   gradleprops: []
   init: ''
   maven: null
@@ -248,7 +248,7 @@ Builds:
   forcevercode: false
   forceversion: false
   gradle:
-  - 'yes'
+  - yes
   gradleprops: []
   init: ''
   maven: null
@@ -288,7 +288,7 @@ Builds:
   forcevercode: false
   forceversion: false
   gradle:
-  - 'yes'
+  - yes
   gradleprops: []
   init: ''
   maven: null
@@ -328,7 +328,7 @@ Builds:
   forcevercode: false
   forceversion: false
   gradle:
-  - 'yes'
+  - yes
   gradleprops: []
   init: ''
   maven: null

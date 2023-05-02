@@ -6,6 +6,7 @@ import logging
 import optparse
 import os
 import random
+import ruamel.yaml
 import shutil
 import sys
 import unittest
@@ -15,9 +16,6 @@ from collections import OrderedDict
 from pathlib import Path
 
 from testcommon import TmpCwd
-from ruamel.yaml import YAML
-
-yaml = YAML(typ='safe')
 
 localmodule = Path(__file__).resolve().parent.parent
 print('localmodule: ' + str(localmodule))
@@ -203,6 +201,7 @@ class MetadataTest(unittest.TestCase):
     def test_valid_funding_yml_regex(self):
         """Check the regex can find all the cases"""
         with (self.basedir / 'funding-usernames.yaml').open() as fp:
+            yaml = ruamel.yaml.YAML(typ='safe')
             data = yaml.load(fp)
 
         for k, entries in data.items():
@@ -220,10 +219,7 @@ class MetadataTest(unittest.TestCase):
                     )
 
     def test_read_metadata(self):
-        def _build_yaml_representer(dumper, data):
-            '''Creates a YAML representation of a Build instance'''
-            return dumper.represent_dict(data)
-
+        """Read specified metadata files included in tests/, compare to stored output"""
         self.maxDiff = None
 
         config = dict()
@@ -231,6 +227,7 @@ class MetadataTest(unittest.TestCase):
         fdroidserver.common.config = config
         fdroidserver.metadata.warnings_action = None
 
+        yaml = ruamel.yaml.YAML(typ='safe')
         apps = fdroidserver.metadata.read_metadata()
         for appid in (
             'org.smssecure.smssecure',
@@ -246,9 +243,10 @@ class MetadataTest(unittest.TestCase):
             self.assertEqual(frommeta, from_yaml)
             # comment above assert and uncomment below to update test
             # files when new metadata fields are added
-            # with savepath.open('w') as f:
-            #     yaml.add_representer(fdroidserver.metadata.Build, _build_yaml_representer)
-            #     yaml.dump(frommeta, f, default_flow_style=False)
+            # with savepath.open('w') as fp:
+            #     yaml.default_flow_style = False
+            #     yaml.register_class(metadata.Build)
+            #     yaml.dump(frommeta, fp)
 
     def test_rewrite_yaml_fakeotaupdate(self):
         with tempfile.TemporaryDirectory() as testdir:

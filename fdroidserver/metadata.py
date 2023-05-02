@@ -297,6 +297,10 @@ class Build(dict):
         else:
             raise AttributeError("No such attribute: " + name)
 
+    @classmethod
+    def to_yaml(cls, representer, node):
+        return representer.represent_dict(node)
+
     def build_method(self):
         for f in ['maven', 'gradle']:
             if self.get(f):
