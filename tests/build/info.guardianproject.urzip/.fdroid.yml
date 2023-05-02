@@ -1,0 +1,4 @@
+
+Summary: This should be overridden by metadata/info.guardianproject.urzip.yml
+Builds:
+  - versionCode: 50

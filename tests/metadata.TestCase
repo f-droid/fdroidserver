@@ -14,6 +14,7 @@ import tempfile
 import textwrap
 from collections import OrderedDict
 from pathlib import Path
+from unittest import mock
 
 from testcommon import TmpCwd, mkdtemp
 
@@ -201,8 +202,10 @@ class MetadataTest(unittest.TestCase):
                         m, 'this is a valid %s username: {%s}' % (k, entry)
                     )
 
-    def test_read_metadata(self):
+    @mock.patch('git.Repo')
+    def test_read_metadata(self, git_repo):
         """Read specified metadata files included in tests/, compare to stored output"""
+
         self.maxDiff = None
 
         config = dict()
@@ -231,6 +234,12 @@ class MetadataTest(unittest.TestCase):
             #     yaml.register_class(metadata.Build)
             #     yaml.dump(frommeta, fp)
 
+    @mock.patch('git.Repo')
+    def test_metadata_overrides_dot_fdroid_yml(self, git_Repo):
+        """Fields in metadata files should override anything in .fdroid.yml."""
+        app = metadata.parse_metadata('metadata/info.guardianproject.urzip.yml')
+        self.assertEqual(app['Summary'], '一个实用工具，获取已安装在您的设备上的应用的有关信息')
+
     def test_dot_fdroid_yml_works_without_git(self):
         """Parsing should work if .fdroid.yml is present and it is not a git repo."""
         os.chdir(self.testdir)
@@ -244,7 +253,8 @@ class MetadataTest(unittest.TestCase):
             fp.write('OpenCollective: test')
         metadata.parse_metadata(yml)  # should not throw an exception
 
-    def test_rewrite_yaml_fakeotaupdate(self):
+    @mock.patch('git.Repo')
+    def test_rewrite_yaml_fakeotaupdate(self, git_Repo):
         with tempfile.TemporaryDirectory() as testdir:
             testdir = Path(testdir)
             fdroidserver.common.config = {'accepted_formats': ['yml']}
@@ -266,7 +276,8 @@ class MetadataTest(unittest.TestCase):
                 (Path('metadata-rewrite-yml') / file_name).read_text(encoding='utf-8'),
             )
 
-    def test_rewrite_yaml_fdroidclient(self):
+    @mock.patch('git.Repo')
+    def test_rewrite_yaml_fdroidclient(self, git_Repo):
         with tempfile.TemporaryDirectory() as testdir:
             testdir = Path(testdir)
             fdroidserver.common.config = {'accepted_formats': ['yml']}
@@ -287,7 +298,8 @@ class MetadataTest(unittest.TestCase):
                 (Path('metadata-rewrite-yml') / file_name).read_text(encoding='utf-8'),
             )
 
-    def test_rewrite_yaml_special_build_params(self):
+    @mock.patch('git.Repo')
+    def test_rewrite_yaml_special_build_params(self, git_Repo):
         with tempfile.TemporaryDirectory() as testdir:
             testdir = Path(testdir)
 
