@@ -159,7 +159,6 @@ class App(dict):
         self.id = None
         self.metadatapath = None
         self.Builds = []
-        self.comments = {}
         self.added = None
         self.lastUpdated = None
 
@@ -607,73 +606,12 @@ def read_metadata(appids={}, sort_by_time=False):
     return apps
 
 
-def sorted_builds(builds):
-    return sorted(builds, key=lambda build: build.versionCode)
-
-
-def post_metadata_parse(app):
-    for k, v in app.items():
-        if fieldtype(k) == TYPE_LIST:
-            if isinstance(v, str):
-                app[k] = [v, ]
-            elif v:
-                app[k] = [str(i) for i in v]
-        elif fieldtype(k) == TYPE_INT:
-            if v:
-                app[k] = int(v)
-        elif fieldtype(k) == TYPE_STRING:
-            if v:
-                app[k] = str(v)
-        else:
-            if type(v) in (float, int):
-                app[k] = str(v)
-
-    builds = []
-    if 'Builds' in app:
-        for build in app.get('Builds', []):
-            if not isinstance(build, Build):
-                build = Build(build)
-            for k, v in build.items():
-                if not (v is None):
-                    if flagtype(k) == TYPE_LIST:
-                        if isinstance(v, str):
-                            build[k] = [v]
-                    elif flagtype(k) is TYPE_INT:
-                        build[k] = v
-                    elif flagtype(k) is TYPE_STRING:
-                        build[k] = str(v)
-            builds.append(build)
-
-    app['Builds'] = sorted_builds(builds)
-
-
-# Parse metadata for a single application.
-#
-#  'metadatapath' - the file path to read. The "Application ID" aka
-#               "Package Name" for the application comes from this
-#               filename. Pass None to get a blank entry.
-#
-# Returns a dictionary containing all the details of the application. There are
-# two major kinds of information in the dictionary. Keys beginning with capital
-# letters correspond directory to identically named keys in the metadata file.
-# Keys beginning with lower case letters are generated in one way or another,
-# and are not found verbatim in the metadata.
-#
-# Known keys not originating from the metadata are:
-#
-#  'comments'         - a list of comments from the metadata file. Each is
-#                       a list of the form [field, comment] where field is
-#                       the name of the field it preceded in the metadata
-#                       file. Where field is None, the comment goes at the
-#                       end of the file. Alternatively, 'build:version' is
-#                       for a comment before a particular build version.
-#  'descriptionlines' - original lines of description as formatted in the
-#                       metadata file.
-#
-
-
 def parse_metadata(metadatapath):
     """Parse metadata file, also checking the source repo for .fdroid.yml.
+
+    This function finds the relevant files, gets them parsed, converts
+    dicts into App and Build instances, and combines the results into
+    a single App instance.
 
     If this is a metadata file from fdroiddata, it will first load the
     source repo type and URL from fdroiddata, then read .fdroid.yml if
@@ -681,17 +619,40 @@ def parse_metadata(metadatapath):
     fdroiddata, so that fdroiddata has precedence over the metadata in
     the source code.
 
+    .fdroid.yml is embedded in the app's source repo, so it is
+    "user-generated".  That means that it can have weird things in it
+    that need to be removed so they don't break the overall process,
+    e.g. if the upstream developer includes some broken field, it can
+    be overridden in the metadata file.
+
+    Parameters
+    ----------
+    metadatapath
+      The file path to read. The "Application ID" aka "Package Name"
+      for the application comes from this filename.
+
+    Raises
+    ------
+    FDroidException when there are syntax errors.
+
+    Returns
+    -------
+    Returns a dictionary containing all the details of the
+    application. There are two major kinds of information in the
+    dictionary. Keys beginning with capital letters correspond
+    directory to identically named keys in the metadata file.  Keys
+    beginning with lower case letters are generated in one way or
+    another, and are not found verbatim in the metadata.
+
     """
     metadatapath = Path(metadatapath)
     app = App()
     app.metadatapath = metadatapath.as_posix()
-    name = metadatapath.stem
-    if name != '.fdroid':
-        app.id = name
-
+    if metadatapath.stem != '.fdroid':
+        app.id = metadatapath.stem
     if metadatapath.suffix == '.yml':
         with metadatapath.open('r', encoding='utf-8') as mf:
-            parse_yaml_metadata(mf, app)
+            app.update(parse_yaml_metadata(mf))
     else:
         _warn_or_exception(_('Unknown metadata format: {path} (use: *.yml)')
                            .format(path=metadatapath))
@@ -712,8 +673,13 @@ def parse_metadata(metadatapath):
                 if k not in app:
                     app[k] = v
 
-    post_metadata_parse(app)
+    builds = []
+    for build in app.get('Builds', []):
+        builds.append(Build(build))
+    if builds:
+        app['Builds'] = builds
 
+    # if only .fdroid.yml was found, then this finds the appid
     if not app.id:
         if app.get('Builds'):
             build = app['Builds'][-1]
@@ -727,15 +693,18 @@ def parse_metadata(metadatapath):
     return app
 
 
-def parse_yaml_metadata(mf, app):
+def parse_yaml_metadata(mf):
     """Parse the .yml file and post-process it.
+
+    This function handles parsing a metadata YAML file and converting
+    all the various data types into a consistent internal
+    representation.  The results are meant to update an existing App
+    instance or used as a plain dict.
 
     Clean metadata .yml files can be used directly, but in order to
     make a better user experience for people editing .yml files, there
-    is post processing.  .fdroid.yml is embedded in the app's source
-    repo, so it is "user-generated".  That means that it can have
-    weird things in it that need to be removed so they don't break the
-    overall process.
+    is post processing.  That makes the parsing perform something like
+    Strict YAML.
 
     """
     try:
@@ -747,63 +716,129 @@ def parse_yaml_metadata(mf, app):
                            + common.run_yamllint(mf.name, indent=4),
                            cause=e)
 
+    if yamldata is None or yamldata == '':
+        yamldata = dict()
+    if not isinstance(yamldata, dict):
+        _warn_or_exception(
+            _("'{path}' has invalid format, it should be a dictionary!").format(
+                path=mf.name
+            )
+        )
+        logging.error(_('Using blank dictionary instead of contents of {path}!').format(
+            path=mf.name)
+        )
+        yamldata = dict()
+
     deprecated_in_yaml = ['Provides']
 
-    if yamldata:
-        for field in tuple(yamldata.keys()):
-            if field not in yaml_app_fields + deprecated_in_yaml:
-                msg = (_("Unrecognised app field '{fieldname}' in '{path}'")
-                       .format(fieldname=field, path=mf.name))
-                if Path(mf.name).name == '.fdroid.yml':
-                    logging.error(msg)
-                    del yamldata[field]
-                else:
-                    _warn_or_exception(msg)
+    for field in tuple(yamldata.keys()):
+        if field not in yaml_app_fields + deprecated_in_yaml:
+            msg = _("Unrecognised app field '{fieldname}' in '{path}'").format(
+                fieldname=field, path=mf.name
+            )
+            if Path(mf.name).name == '.fdroid.yml':
+                logging.error(msg)
+                del yamldata[field]
+            else:
+                _warn_or_exception(msg)
 
-        for deprecated_field in deprecated_in_yaml:
-            if deprecated_field in yamldata:
-                logging.warning(_("Ignoring '{field}' in '{metapath}' "
-                                  "metadata because it is deprecated.")
-                                .format(field=deprecated_field,
-                                        metapath=mf.name))
-                del yamldata[deprecated_field]
+    for deprecated_field in deprecated_in_yaml:
+        if deprecated_field in yamldata:
+            del yamldata[deprecated_field]
+            logging.warning(
+                _(
+                    "Ignoring '{field}' in '{metapath}' "
+                    "metadata because it is deprecated."
+                ).format(field=deprecated_field, metapath=mf.name)
+            )
 
-        if yamldata.get('Builds', None):
-            for build in yamldata.get('Builds', []):
-                # put all build flag keywords into a set to avoid
-                # excessive looping action
-                build_flag_set = set()
-                for build_flag in build.keys():
-                    build_flag_set.add(build_flag)
-                for build_flag in build_flag_set:
-                    if build_flag not in build_flags:
-                        _warn_or_exception(
-                            _("Unrecognised build flag '{build_flag}' "
-                              "in '{path}'").format(build_flag=build_flag,
-                                                    path=mf.name))
-        post_parse_yaml_metadata(yamldata)
-        app.update(yamldata)
-    return app
+    msg = _("Unrecognised build flag '{build_flag}' in '{path}'")
+    for build in yamldata.get('Builds', []):
+        for build_flag in build:
+            if build_flag not in build_flags:
+                _warn_or_exception(msg.format(build_flag=build_flag, path=mf.name))
+
+    post_parse_yaml_metadata(yamldata)
+    return yamldata
+
+
+def _normalize_type_string(v):
+    """Normalize any data to TYPE_STRING.
+
+    YAML 1.2's booleans are all lowercase.
+
+    Things like versionName are strings, but without quotes can be
+    numbers.  Like "versionName: 1.0" would be a YAML float, but
+    should be a string.
+
+    """
+    if isinstance(v, bool):
+        if v:
+            return 'true'
+        return 'false'
+    return str(v)
 
 
 def post_parse_yaml_metadata(yamldata):
-    """Transform yaml metadata to our internal data format."""
-    for build in yamldata.get('Builds', []):
-        for flag in build.keys():
-            _flagtype = flagtype(flag)
+    """Convert human-readable metadata data structures into consistent data structures.
 
-            if _flagtype is TYPE_SCRIPT:
-                if isinstance(build[flag], str):
-                    build[flag] = [build[flag]]
-            elif _flagtype is TYPE_STRING:
-                # things like versionNames are strings, but without quotes can be numbers
-                if isinstance(build[flag], float) or isinstance(build[flag], int):
-                    build[flag] = str(build[flag])
+    This also handles conversions that make metadata YAML behave
+    something like StrictYAML.  Specifically, a field should have a
+    fixed value type, regardless of YAML 1.2's type auto-detection.
+
+    """
+    for k, v in yamldata.items():
+        if fieldtype(k) == TYPE_LIST:
+            if isinstance(v, str):
+                yamldata[k] = [v, ]
+            elif v:
+                yamldata[k] = [str(i) for i in v]
+        elif fieldtype(k) == TYPE_INT:
+            if v:
+                yamldata[k] = int(v)
+        elif fieldtype(k) == TYPE_STRING:
+            if v or v == 0:
+                yamldata[k] = _normalize_type_string(v)
+        else:
+            if type(v) in (float, int):
+                yamldata[k] = str(v)
+
+    builds = []
+    for build in yamldata.get('Builds', []):
+        for k, v in build.items():
+            if v is None:
+                continue
+
+            _flagtype = flagtype(k)
+            if _flagtype is TYPE_STRING:
+                if v or v == 0:
+                    build[k] = _normalize_type_string(v)
             elif _flagtype is TYPE_INT:
+                build[k] = v
                 # versionCode must be int
-                if not isinstance(build[flag], int):
-                    _warn_or_exception(_('{build_flag} must be an integer, found: {value}')
-                                       .format(build_flag=flag, value=build[flag]))
+                if not isinstance(v, int):
+                    _warn_or_exception(
+                        _('{build_flag} must be an integer, found: {value}').format(
+                            build_flag=k, value=v
+                        )
+                    )
+            elif _flagtype in (TYPE_LIST, TYPE_SCRIPT):
+                if isinstance(v, str) or isinstance(v, int):
+                    build[k] = [_normalize_type_string(v)]
+                else:
+                    build[k] = v
+                # float and dict are here only to keep things compatible
+                if type(build[k]) not in (list, tuple, set, float, dict):
+                    _warn_or_exception(
+                        _('{build_flag} must be list or string, found: {value}').format(
+                            build_flag=k, value=v
+                        )
+                    )
+
+        builds.append(build)
+
+    if builds:
+        yamldata['Builds'] = sorted(builds, key=lambda build: build['versionCode'])
 
 
 def write_yaml(mf, app):
@@ -832,6 +867,7 @@ def write_yaml(mf, app):
     # suiteable version ruamel.yaml imported successfully
 
     def _field_to_yaml(typ, value):
+        """Convert data to YAML 1.2 format that keeps the right TYPE_*."""
         if typ is TYPE_STRING:
             return str(value)
         elif typ is TYPE_INT:

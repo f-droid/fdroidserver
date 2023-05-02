@@ -878,7 +878,7 @@ def make_v1(apps, packages, repodir, repodict, requestsdict, fdroid_signing_key_
         for k, v in sorted(appdict.items()):
             if not v:
                 continue
-            if k in ('Builds', 'comments', 'metadatapath',
+            if k in ('Builds', 'metadatapath',
                      'ArchivePolicy', 'AutoName', 'AutoUpdateMode', 'MaintainerNotes',
                      'Provides', 'Repo', 'RepoType', 'RequiresRoot',
                      'UpdateCheckData', 'UpdateCheckIgnore', 'UpdateCheckMode',

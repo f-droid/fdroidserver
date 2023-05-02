@@ -323,7 +323,7 @@ def main():
     if git_modules.exists():
         build.submodules = True
 
-    metadata.post_metadata_parse(app)
+    metadata.post_parse_yaml_metadata(app)
 
     app['Builds'].append(build)
 
