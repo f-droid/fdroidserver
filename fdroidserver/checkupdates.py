@@ -110,7 +110,7 @@ def check_tags(app, pattern):
 
     vcs.gotorevision(None)
 
-    last_build = app.get_last_build()
+    last_build = get_last_build_from_app(app)
 
     try_init_submodules(app, last_build, vcs)
 
@@ -252,10 +252,7 @@ def check_repomanifest(app, branch=None):
     elif repotype == 'bzr':
         vcs.gotorevision(None)
 
-    last_build = metadata.Build()
-    if app.get('Builds', []):
-        last_build = app.get('Builds', [])[-1]
-
+    last_build = get_last_build_from_app(app)
     try_init_submodules(app, last_build, vcs)
 
     hpak = None
@@ -364,7 +361,7 @@ def possible_subdirs(app):
     else:
         build_dir = Path('build') / app.id
 
-    last_build = app.get_last_build()
+    last_build = get_last_build_from_app(app)
 
     for d in dirs_with_manifest(build_dir):
         m_paths = common.manifest_paths(d, last_build.gradle)
@@ -399,7 +396,7 @@ def fetch_autoname(app, tag):
     except VCSException:
         return None
 
-    last_build = app.get_last_build()
+    last_build = get_last_build_from_app(app)
 
     logging.debug("...fetch auto name from " + str(build_dir))
     new_name = None
@@ -577,6 +574,13 @@ def checkupdates_app(app):
             gitcmd.extend(["--", app.metadatapath])
             if subprocess.call(gitcmd) != 0:
                 raise FDroidException("Git commit failed")
+
+
+def get_last_build_from_app(app):
+    if app.get('Builds'):
+        return app['Builds'][-1]
+    else:
+        return metadata.Build()
 
 
 def status_update_json(processed, failed):

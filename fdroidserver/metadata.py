@@ -174,12 +174,6 @@ class App(dict):
         else:
             raise AttributeError("No such attribute: " + name)
 
-    def get_last_build(self):
-        if len(self.Builds) > 0:
-            return self.Builds[-1]
-        else:
-            return Build()
-
 
 TYPE_STRING = 2
 TYPE_BOOL = 3
