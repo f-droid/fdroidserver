@@ -2343,10 +2343,10 @@ def main():
         add_apks_to_per_app_repos(repodirs[0], apks)
         for appid, app in apps.items():
             repodir = os.path.join(appid, 'fdroid', 'repo')
-            appdict = dict()
-            appdict[appid] = app
+            app_dict = dict()
+            app_dict[appid] = app
             if os.path.isdir(repodir):
-                index.make(appdict, apks, repodir, False)
+                index.make(app_dict, apks, repodir, False)
             else:
                 logging.info(_('Skipping index generation for {appid}').format(appid=appid))
         return

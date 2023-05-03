@@ -843,10 +843,10 @@ def make_v1(apps, packages, repodir, repodict, requestsdict, fdroid_signing_key_
 
     appslist = []
     output['apps'] = appslist
-    for packageName, appdict in apps.items():
+    for packageName, app_dict in apps.items():
         d = collections.OrderedDict()
         appslist.append(d)
-        for k, v in sorted(appdict.items()):
+        for k, v in sorted(app_dict.items()):
             if not v:
                 continue
             if k in ('Builds', 'metadatapath',
@@ -872,20 +872,20 @@ def make_v1(apps, packages, repodir, repodict, requestsdict, fdroid_signing_key_
             d[k] = v
 
     # establish sort order in lists, sets, and localized dicts
-    for app in output['apps']:
-        localized = app.get('localized')
+    for app_dict in output['apps']:
+        localized = app_dict.get('localized')
         if localized:
             lordered = collections.OrderedDict()
             for lkey, lvalue in sorted(localized.items()):
                 lordered[lkey] = collections.OrderedDict()
                 for ikey, iname in sorted(lvalue.items()):
                     lordered[lkey][ikey] = iname
-            app['localized'] = lordered
-        antiFeatures = app.get('antiFeatures', [])
-        if apps[app["packageName"]].get("NoSourceSince"):
+            app_dict['localized'] = lordered
+        antiFeatures = app_dict.get('antiFeatures', [])
+        if apps[app_dict["packageName"]].get("NoSourceSince"):
             antiFeatures.append("NoSourceSince")
         if antiFeatures:
-            app['antiFeatures'] = sorted(set(antiFeatures))
+            app_dict['antiFeatures'] = sorted(set(antiFeatures))
 
     output_packages = collections.OrderedDict()
     output['packages'] = output_packages
@@ -1067,8 +1067,8 @@ def make_v0(apps, apks, repodir, repodict, requestsdict, fdroid_signing_key_fing
             root.appendChild(element)
             element.setAttribute('packageName', packageName)
 
-    for appid, appdict in apps.items():
-        app = metadata.App(appdict)
+    for appid, app_dict in apps.items():
+        app = metadata.App(app_dict)
 
         if app.get('Disabled') is not None:
             continue
