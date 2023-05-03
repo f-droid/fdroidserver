@@ -458,7 +458,6 @@ class MetadataTest(unittest.TestCase):
         with self.assertRaises(TypeError):
             metadata.parse_yaml_metadata(mf)
 
-        mf.name = 'mock_filename.yaml'
         self.assertEqual(fdroidserver.metadata.parse_yaml_metadata(mf), dict())
 
     def test_parse_yaml_metadata_unknown_app_field(self):
@@ -489,7 +488,9 @@ class MetadataTest(unittest.TestCase):
         with self.assertRaises(MetaDataException):
             fdroidserver.metadata.parse_yaml_metadata(mf)
 
-    def test_parse_yaml_metadata_continue_on_warning(self):
+    @mock.patch('logging.warning')
+    @mock.patch('logging.error')
+    def test_parse_yaml_metadata_continue_on_warning(self, _error, _warning):
         """When errors are disabled, parsing should provide something that can work.
 
         When errors are disabled, then it should try to give data that
@@ -503,6 +504,8 @@ class MetadataTest(unittest.TestCase):
         fdroidserver.metadata.warnings_action = None
         mf = _get_mock_mf('[AntiFeatures: Tracking]')
         self.assertEqual(fdroidserver.metadata.parse_yaml_metadata(mf), dict())
+        _warning.assert_called_once()
+        _error.assert_called_once()
 
     def test_parse_yaml_srclib_corrupt_file(self):
         with tempfile.TemporaryDirectory() as testdir:
