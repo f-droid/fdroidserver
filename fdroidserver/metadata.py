@@ -672,7 +672,7 @@ def parse_metadata(metadatapath):
             # pylint: disable-next=no-member
             except git.exc.InvalidGitRepositoryError:
                 logging.debug(
-                    _('Including metadata from {path}').format(metadata_in_repo)
+                    _('Including metadata from {path}').format(path=metadata_in_repo)
                 )
             app_in_repo = parse_metadata(metadata_in_repo)
             for k, v in app_in_repo.items():

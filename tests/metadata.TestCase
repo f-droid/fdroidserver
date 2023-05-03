@@ -15,7 +15,7 @@ import textwrap
 from collections import OrderedDict
 from pathlib import Path
 
-from testcommon import TmpCwd
+from testcommon import TmpCwd, mkdtemp
 
 localmodule = Path(__file__).resolve().parent.parent
 print('localmodule: ' + str(localmodule))
@@ -40,10 +40,13 @@ class MetadataTest(unittest.TestCase):
         logging.basicConfig(level=logging.DEBUG)
         self.basedir = localmodule / 'tests'
         os.chdir(self.basedir)
+        self._td = mkdtemp()
+        self.testdir = self._td.name
         fdroidserver.metadata.warnings_action = 'error'
 
     def tearDown(self):
         # auto-generated dirs by functions, not tests, so they are not always cleaned up
+        self._td.cleanup()
         try:
             os.rmdir("srclibs")
         except OSError:
@@ -227,6 +230,19 @@ class MetadataTest(unittest.TestCase):
             #     yaml.default_flow_style = False
             #     yaml.register_class(metadata.Build)
             #     yaml.dump(frommeta, fp)
+
+    def test_dot_fdroid_yml_works_without_git(self):
+        """Parsing should work if .fdroid.yml is present and it is not a git repo."""
+        os.chdir(self.testdir)
+        yml = Path('metadata/test.yml')
+        yml.parent.mkdir()
+        with yml.open('w') as fp:
+            fp.write('Repo: https://example.com/not/git/or/anything')
+        fdroid_yml = Path('build/test/.fdroid.yml')
+        fdroid_yml.parent.mkdir(parents=True)
+        with fdroid_yml.open('w') as fp:
+            fp.write('OpenCollective: test')
+        metadata.parse_metadata(yml)  # should not throw an exception
 
     def test_rewrite_yaml_fakeotaupdate(self):
         with tempfile.TemporaryDirectory() as testdir:
