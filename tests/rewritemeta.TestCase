@@ -9,15 +9,14 @@ import tempfile
 import textwrap
 from pathlib import Path
 
-from testcommon import TmpCwd
+from testcommon import TmpCwd, mkdtemp
 
 localmodule = Path(__file__).resolve().parent.parent
 print('localmodule: ' + str(localmodule))
 if localmodule not in sys.path:
     sys.path.insert(0, str(localmodule))
 
-from fdroidserver import common
-from fdroidserver import rewritemeta
+from fdroidserver import common, metadata, rewritemeta
 
 
 class RewriteMetaTest(unittest.TestCase):
@@ -27,6 +26,123 @@ class RewriteMetaTest(unittest.TestCase):
         logging.basicConfig(level=logging.DEBUG)
         self.basedir = localmodule / 'tests'
         os.chdir(self.basedir)
+        metadata.warnings_action = 'error'
+        self._td = mkdtemp()
+        self.testdir = self._td.name
+
+    def tearDown(self):
+        self._td.cleanup()
+
+    def test_remove_blank_flags_from_builds_com_politedroid_3(self):
+        """Unset fields in Builds: entries should be removed."""
+        appid = 'com.politedroid'
+        app = metadata.read_metadata({appid: -1})[appid]
+        builds = rewritemeta.remove_blank_flags_from_builds(app.get('Builds'))
+        self.assertEqual(
+            builds[0],
+            {
+                'versionName': '1.2',
+                'versionCode': 3,
+                'commit': '6a548e4b19',
+                'target': 'android-10',
+                'antifeatures': [
+                    'KnownVuln',
+                    'UpstreamNonFree',
+                    'NonFreeAssets',
+                ],
+            },
+        )
+
+    def test_remove_blank_flags_from_builds_com_politedroid_4(self):
+        """Unset fields in Builds: entries should be removed."""
+        appid = 'com.politedroid'
+        app = metadata.read_metadata({appid: -1})[appid]
+        builds = rewritemeta.remove_blank_flags_from_builds(app.get('Builds'))
+        self.assertEqual(
+            builds[1],
+            {
+                'versionName': '1.3',
+                'versionCode': 4,
+                'commit': 'ad865b57bf3ac59580f38485608a9b1dda4fa7dc',
+                'target': 'android-15',
+            },
+        )
+
+    def test_remove_blank_flags_from_builds_no_builds(self):
+        """Unset fields in Builds: entries should be removed."""
+        self.assertEqual(
+            rewritemeta.remove_blank_flags_from_builds(None),
+            list(),
+        )
+        self.assertEqual(
+            rewritemeta.remove_blank_flags_from_builds(dict()),
+            list(),
+        )
+
+    def test_rewrite_no_builds(self):
+        os.chdir(self.testdir)
+        Path('metadata').mkdir()
+        with Path('metadata/a.yml').open('w') as f:
+            f.write('AutoName: a')
+        rewritemeta.main()
+        self.assertEqual(
+            Path('metadata/a.yml').read_text(encoding='utf-8'),
+            textwrap.dedent(
+                '''\
+                License: Unknown
+
+                AutoName: a
+
+                AutoUpdateMode: None
+                UpdateCheckMode: None
+                '''
+            ),
+        )
+
+    def test_rewrite_empty_build_field(self):
+        os.chdir(self.testdir)
+        Path('metadata').mkdir()
+        with Path('metadata/a.yml').open('w') as fp:
+            fp.write(
+                textwrap.dedent(
+                    """
+                License: Apache-2.0
+                Builds:
+                  - versionCode: 4
+                    versionName: a
+                    rm:
+                """
+                )
+            )
+        rewritemeta.main()
+        self.assertEqual(
+            Path('metadata/a.yml').read_text(encoding='utf-8'),
+            textwrap.dedent(
+                '''\
+                License: Apache-2.0
+
+                Builds:
+                  - versionName: a
+                    versionCode: 4
+
+                AutoUpdateMode: None
+                UpdateCheckMode: None
+                '''
+            ),
+        )
+
+    def test_remove_blank_flags_from_builds_app_with_special_build_params(self):
+        appid = 'app.with.special.build.params'
+        app = metadata.read_metadata({appid: -1})[appid]
+        builds = rewritemeta.remove_blank_flags_from_builds(app.get('Builds'))
+        self.assertEqual(
+            builds[-1],
+            {
+                'versionName': '2.1.2',
+                'versionCode': 51,
+                'disable': 'Labelled as pre-release, so skipped',
+            },
+        )
 
     def test_rewrite_scenario_trivial(self):
         sys.argv = ['rewritemeta', 'a', 'b']
