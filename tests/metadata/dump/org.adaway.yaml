@@ -15,7 +15,7 @@ Builds:
   binary: null
   build: ''
   buildjni:
-  - 'yes'
+  - yes
   commit: ea5378a94ee0dc1d99d2cec95fae7e6d81afb2b9
   disable: ''
   encoding: null
@@ -51,7 +51,7 @@ Builds:
   binary: null
   build: ''
   buildjni:
-  - 'yes'
+  - yes
   commit: 4128e59da2eac5c2904c7c7568d298ca51e79540
   disable: ''
   encoding: null
@@ -88,7 +88,7 @@ Builds:
   binary: null
   build: ''
   buildjni:
-  - 'yes'
+  - yes
   commit: 0b9985398b9eef7baf6aadd0dbb12002bc199d2e
   disable: ''
   encoding: null
@@ -125,7 +125,7 @@ Builds:
   binary: null
   build: ''
   buildjni:
-  - 'yes'
+  - yes
   commit: ab27f4dab5f3ea5e228cfb4a6b0e1fbf53695f22
   disable: ''
   encoding: null
@@ -162,7 +162,7 @@ Builds:
   binary: null
   build: ''
   buildjni:
-  - 'yes'
+  - yes
   commit: 695e3801e4081026c8f7213a2345fc451d5eb89c
   disable: ''
   encoding: null
@@ -199,7 +199,7 @@ Builds:
   binary: null
   build: ''
   buildjni:
-  - 'yes'
+  - yes
   commit: 65138c11cc8b6affd28b68e125fbc1dff0886a4e
   disable: ''
   encoding: null
@@ -271,7 +271,7 @@ Builds:
   binary: null
   build: ''
   buildjni:
-  - 'yes'
+  - yes
   commit: f811e53e1e1d2ee047b18715fd7d2072b90ae76b
   disable: ''
   encoding: null
@@ -308,7 +308,7 @@ Builds:
   binary: null
   build: ''
   buildjni:
-  - 'yes'
+  - yes
   commit: ff97932761cdee68638dc2550751a64b2cbe18e7
   disable: ''
   encoding: null
@@ -345,7 +345,7 @@ Builds:
   binary: null
   build: ''
   buildjni:
-  - 'yes'
+  - yes
   commit: 33d4d80998f30bafc88c04c80cbae00b03916f99
   disable: ''
   encoding: null
@@ -382,7 +382,7 @@ Builds:
   binary: null
   build: ''
   buildjni:
-  - 'yes'
+  - yes
   commit: 743d25a7e287505461f33f4b8e57e4cf988fffea
   disable: ''
   encoding: null
@@ -419,7 +419,7 @@ Builds:
   binary: null
   build: ''
   buildjni:
-  - 'yes'
+  - yes
   commit: eaa07f4
   disable: ''
   encoding: null
@@ -688,7 +688,7 @@ Builds:
   binary: null
   build: ''
   buildjni:
-  - 'yes'
+  - yes
   commit: v2.1
   disable: ''
   encoding: null
@@ -738,7 +738,7 @@ Builds:
   binary: null
   build: ''
   buildjni:
-  - 'yes'
+  - yes
   commit: v2.3
   disable: ''
   encoding: null
@@ -784,7 +784,7 @@ Builds:
   binary: null
   build: ''
   buildjni:
-  - 'yes'
+  - yes
   commit: v2.6
   disable: ''
   encoding: null
@@ -792,7 +792,7 @@ Builds:
   forcevercode: false
   forceversion: false
   gradle:
-  - 'yes'
+  - yes
   gradleprops: []
   init: ''
   maven: null
@@ -822,7 +822,7 @@ Builds:
   binary: null
   build: ''
   buildjni:
-  - 'yes'
+  - yes
   commit: v2.7
   disable: ''
   encoding: null
@@ -830,7 +830,7 @@ Builds:
   forcevercode: false
   forceversion: false
   gradle:
-  - 'yes'
+  - yes
   gradleprops: []
   init: ''
   maven: null
@@ -860,7 +860,7 @@ Builds:
   binary: null
   build: ''
   buildjni:
-  - 'yes'
+  - yes
   commit: v2.8
   disable: ''
   encoding: null
@@ -868,7 +868,7 @@ Builds:
   forcevercode: false
   forceversion: false
   gradle:
-  - 'yes'
+  - yes
   gradleprops: []
   init: ''
   maven: null
@@ -898,7 +898,7 @@ Builds:
   binary: null
   build: ''
   buildjni:
-  - 'yes'
+  - yes
   commit: v2.8.1
   disable: ''
   encoding: null
@@ -906,7 +906,7 @@ Builds:
   forcevercode: false
   forceversion: false
   gradle:
-  - 'yes'
+  - yes
   gradleprops: []
   init: ''
   maven: null
@@ -936,7 +936,7 @@ Builds:
   binary: null
   build: ''
   buildjni:
-  - 'yes'
+  - yes
   commit: v2.9
   disable: ''
   encoding: null
@@ -944,7 +944,7 @@ Builds:
   forcevercode: false
   forceversion: false
   gradle:
-  - 'yes'
+  - yes
   gradleprops: []
   init: ''
   maven: null
@@ -974,7 +974,7 @@ Builds:
   binary: null
   build: ''
   buildjni:
-  - 'yes'
+  - yes
   commit: v2.9.1
   disable: ''
   encoding: null
@@ -982,7 +982,7 @@ Builds:
   forcevercode: false
   forceversion: false
   gradle:
-  - 'yes'
+  - yes
   gradleprops: []
   init: ''
   maven: null
@@ -1012,7 +1012,7 @@ Builds:
   binary: null
   build: ''
   buildjni:
-  - 'yes'
+  - yes
   commit: v2.9.2
   disable: ''
   encoding: null
@@ -1020,7 +1020,7 @@ Builds:
   forcevercode: false
   forceversion: false
   gradle:
-  - 'yes'
+  - yes
   gradleprops: []
   init: ''
   maven: null
@@ -1050,7 +1050,7 @@ Builds:
   binary: null
   build: ''
   buildjni:
-  - 'yes'
+  - yes
   commit: v3.0
   disable: ''
   encoding: null
@@ -1058,7 +1058,7 @@ Builds:
   forcevercode: false
   forceversion: false
   gradle:
-  - 'yes'
+  - yes
   gradleprops: []
   init: ''
   maven: null

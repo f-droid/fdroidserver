@@ -1,5 +1,6 @@
 AllowedAPKSigningKeys: []
-AntiFeatures: ['NonFreeNet']
+AntiFeatures:
+- NonFreeNet
 ArchivePolicy: 4 versions
 AuthorEmail: null
 AuthorName: null
@@ -130,7 +131,7 @@ Builds:
   forcevercode: false
   forceversion: false
   gradle:
-  - 'yes'
+  - yes
   gradleprops: []
   init: ''
   maven: null

@@ -7,9 +7,7 @@ import sys
 import unittest
 import tempfile
 import textwrap
-from unittest import mock
 from pathlib import Path
-
 
 from testcommon import TmpCwd
 
@@ -20,7 +18,6 @@ if localmodule not in sys.path:
 
 from fdroidserver import common
 from fdroidserver import rewritemeta
-from fdroidserver.exception import FDroidException
 
 
 class RewriteMetaTest(unittest.TestCase):
@@ -69,24 +66,6 @@ class RewriteMetaTest(unittest.TestCase):
                     UpdateCheckMode: None
                     '''
                 ),
-            )
-
-    def test_rewrite_scenario_yml_no_ruamel(self):
-        sys.argv = ['rewritemeta', 'a']
-        with tempfile.TemporaryDirectory() as tmpdir, TmpCwd(tmpdir):
-            Path('metadata').mkdir()
-            with Path('metadata/a.yml').open('w') as f:
-                f.write('AutoName: a')
-
-            def boom(*args):
-                raise FDroidException(' '.join((str(x) for x in args)))
-
-            with mock.patch('importlib.util.find_spec', boom):
-                with self.assertRaises(FDroidException):
-                    rewritemeta.main()
-
-            self.assertEqual(
-                Path('metadata/a.yml').read_text(encoding='utf-8'), 'AutoName: a'
             )
 
 

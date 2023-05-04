@@ -24,14 +24,12 @@ import platform
 import os
 import re
 import logging
-import importlib
+import ruamel.yaml
 from collections import OrderedDict
-
-from ruamel.yaml import YAML, YAMLError
 
 from . import common
 from . import _
-from .exception import MetaDataException, FDroidException
+from .exception import MetaDataException
 
 srclibs = None
 warnings_action = None
@@ -109,7 +107,6 @@ yaml_app_fields = [x for x in yaml_app_field_order if x != '\n']
 
 
 class App(dict):
-
     def __init__(self, copydict=None):
         if copydict:
             super().__init__(copydict)
@@ -176,12 +173,6 @@ class App(dict):
             del self[name]
         else:
             raise AttributeError("No such attribute: " + name)
-
-    def get_last_build(self):
-        if len(self.Builds) > 0:
-            return self.Builds[-1]
-        else:
-            return Build()
 
 
 TYPE_STRING = 2
@@ -252,7 +243,6 @@ build_flags = [
 
 
 class Build(dict):
-
     def __init__(self, copydict=None):
         super().__init__()
         self.disable = ''
@@ -306,6 +296,10 @@ class Build(dict):
             del self[name]
         else:
             raise AttributeError("No such attribute: " + name)
+
+    @classmethod
+    def to_yaml(cls, representer, node):
+        return representer.represent_dict(node)
 
     def build_method(self):
         for f in ['maven', 'gradle']:
@@ -375,7 +369,7 @@ def flagtype(name):
     return TYPE_STRING
 
 
-class FieldValidator():
+class FieldValidator:
     """Designate App metadata field types and checks that it matches.
 
     'name'     - The long name of the field type
@@ -399,8 +393,13 @@ class FieldValidator():
             values = [v]
         for v in values:
             if not self.compiled.match(v):
-                _warn_or_exception(_("'{value}' is not a valid {field} in {appid}. Regex pattern: {pattern}")
-                                   .format(value=v, field=self.name, appid=appid, pattern=self.matching))
+                _warn_or_exception(
+                    _(
+                        "'{value}' is not a valid {field} in {appid}. Regex pattern: {pattern}"
+                    ).format(
+                        value=v, field=self.name, appid=appid, pattern=self.matching
+                    )
+                )
 
 
 # Generic value types
@@ -471,21 +470,19 @@ def check_metadata(app):
 
 
 def parse_yaml_srclib(metadatapath):
-
-    thisinfo = {'RepoType': '',
-                'Repo': '',
-                'Subdir': None,
-                'Prepare': None}
+    thisinfo = {'RepoType': '', 'Repo': '', 'Subdir': None, 'Prepare': None}
 
     if not metadatapath.exists():
-        _warn_or_exception(_("Invalid scrlib metadata: '{file}' "
-                             "does not exist"
-                             .format(file=metadatapath)))
+        _warn_or_exception(
+            _("Invalid scrlib metadata: '{file}' does not exist").format(
+                file=metadatapath
+            )
+        )
         return thisinfo
 
     with metadatapath.open("r", encoding="utf-8") as f:
         try:
-            yaml = YAML(typ='safe')
+            yaml = ruamel.yaml.YAML(typ='safe')
             data = yaml.load(f)
             if type(data) is not dict:
                 if platform.system() == 'Windows':
@@ -495,9 +492,10 @@ def parse_yaml_srclib(metadatapath):
                         with symlink.open("r", encoding="utf-8") as s:
                             data = yaml.load(s)
             if type(data) is not dict:
-                raise YAMLError(_('{file} is blank or corrupt!')
-                                .format(file=metadatapath))
-        except YAMLError as e:
+                raise ruamel.yaml.YAMLError(
+                    _('{file} is blank or corrupt!').format(file=metadatapath)
+                )
+        except ruamel.yaml.YAMLError as e:
             _warn_or_exception(_("Invalid srclib metadata: could not "
                                  "parse '{file}'")
                                .format(file=metadatapath) + '\n'
@@ -507,9 +505,11 @@ def parse_yaml_srclib(metadatapath):
 
     for key in data:
         if key not in thisinfo:
-            _warn_or_exception(_("Invalid srclib metadata: unknown key "
-                                 "'{key}' in '{file}'")
-                               .format(key=key, file=metadatapath))
+            _warn_or_exception(
+                _("Invalid srclib metadata: unknown key '{key}' in '{file}'").format(
+                    key=key, file=metadatapath
+                )
+            )
             return thisinfo
         else:
             if key == 'Subdir':
@@ -580,7 +580,8 @@ def read_metadata(appids={}, sort_by_time=False):
         metadatafiles = common.get_metadata_files(vercodes)
     else:
         metadatafiles = list(Path('metadata').glob('*.yml')) + list(
-            Path('.').glob('.fdroid.yml'))
+            Path('.').glob('.fdroid.yml')
+        )
 
     if sort_by_time:
         entries = ((path.stat().st_mtime, path) for path in metadatafiles)
@@ -594,11 +595,15 @@ def read_metadata(appids={}, sort_by_time=False):
     for metadatapath in metadatafiles:
         appid = metadatapath.stem
         if appid != '.fdroid' and not common.is_valid_package_name(appid):
-            _warn_or_exception(_("{appid} from {path} is not a valid Java Package Name!")
-                               .format(appid=appid, path=metadatapath))
+            _warn_or_exception(
+                _("{appid} from {path} is not a valid Java Package Name!").format(
+                    appid=appid, path=metadatapath
+                )
+            )
         if appid in apps:
-            _warn_or_exception(_("Found multiple metadata files for {appid}")
-                               .format(appid=appid))
+            _warn_or_exception(
+                _("Found multiple metadata files for {appid}").format(appid=appid)
+            )
         app = parse_metadata(metadatapath)
         check_metadata(app)
         apps[app.id] = app
@@ -654,8 +659,9 @@ def parse_metadata(metadatapath):
         with metadatapath.open('r', encoding='utf-8') as mf:
             app.update(parse_yaml_metadata(mf))
     else:
-        _warn_or_exception(_('Unknown metadata format: {path} (use: *.yml)')
-                           .format(path=metadatapath))
+        _warn_or_exception(
+            _('Unknown metadata format: {path} (use: *.yml)').format(path=metadatapath)
+        )
 
     if metadatapath.name != '.fdroid.yml' and app.Repo:
         build_dir = common.get_build_dir(app)
@@ -663,11 +669,15 @@ def parse_metadata(metadatapath):
         if metadata_in_repo.is_file():
             try:
                 commit_id = common.get_head_commit_id(git.Repo(build_dir))
-                logging.debug(_('Including metadata from %s@%s') % (metadata_in_repo, commit_id))
+                logging.debug(
+                    _('Including metadata from %s@%s') % (metadata_in_repo, commit_id)
+                )
             # See https://github.com/PyCQA/pylint/issues/2856 .
             # pylint: disable-next=no-member
             except git.exc.InvalidGitRepositoryError:
-                logging.debug(_('Including metadata from {path}').format(metadata_in_repo))
+                logging.debug(
+                    _('Including metadata from {path}').format(metadata_in_repo)
+                )
             app_in_repo = parse_metadata(metadata_in_repo)
             for k, v in app_in_repo.items():
                 if k not in app:
@@ -708,13 +718,15 @@ def parse_yaml_metadata(mf):
 
     """
     try:
-        yaml = YAML(typ='safe')
+        yaml = ruamel.yaml.YAML(typ='safe')
         yamldata = yaml.load(mf)
-    except YAMLError as e:
-        _warn_or_exception(_("could not parse '{path}'")
-                           .format(path=mf.name) + '\n'
-                           + common.run_yamllint(mf.name, indent=4),
-                           cause=e)
+    except ruamel.yaml.YAMLError as e:
+        _warn_or_exception(
+            _("could not parse '{path}'").format(path=mf.name)
+            + '\n'
+            + common.run_yamllint(mf.name, indent=4),
+            cause=e,
+        )
 
     if yamldata is None or yamldata == '':
         yamldata = dict()
@@ -788,15 +800,16 @@ def post_parse_yaml_metadata(yamldata):
 
     """
     for k, v in yamldata.items():
-        if fieldtype(k) == TYPE_LIST:
+        _fieldtype = fieldtype(k)
+        if _fieldtype == TYPE_LIST:
             if isinstance(v, str):
-                yamldata[k] = [v, ]
+                yamldata[k] = [v]
             elif v:
                 yamldata[k] = [str(i) for i in v]
-        elif fieldtype(k) == TYPE_INT:
+        elif _fieldtype == TYPE_INT:
             if v:
                 yamldata[k] = int(v)
-        elif fieldtype(k) == TYPE_STRING:
+        elif _fieldtype == TYPE_STRING:
             if v or v == 0:
                 yamldata[k] = _normalize_type_string(v)
         else:
@@ -810,10 +823,10 @@ def post_parse_yaml_metadata(yamldata):
                 continue
 
             _flagtype = flagtype(k)
-            if _flagtype is TYPE_STRING:
+            if _flagtype == TYPE_STRING:
                 if v or v == 0:
                     build[k] = _normalize_type_string(v)
-            elif _flagtype is TYPE_INT:
+            elif _flagtype == TYPE_INT:
                 build[k] = v
                 # versionCode must be int
                 if not isinstance(v, int):
@@ -851,33 +864,18 @@ def write_yaml(mf, app):
     app
       app metadata to written to the yaml file
     """
-    # import rumael.yaml and check version
-    try:
-        import ruamel.yaml
-    except ImportError as e:
-        raise FDroidException('ruamel.yaml not installed, can not write metadata.') from e
-    if not ruamel.yaml.__version__:
-        raise FDroidException('ruamel.yaml.__version__ not accessible. Please make sure a ruamel.yaml >= 0.13 is installed..')
-    m = re.match(r'(?P<major>[0-9]+)\.(?P<minor>[0-9]+)\.(?P<patch>[0-9]+)(-.+)?',
-                 ruamel.yaml.__version__)
-    if not m:
-        raise FDroidException('ruamel.yaml version malfored, please install an upstream version of ruamel.yaml')
-    if int(m.group('major')) < 0 or int(m.group('minor')) < 13:
-        raise FDroidException('currently installed version of ruamel.yaml ({}) is too old, >= 1.13 required.'.format(ruamel.yaml.__version__))
-    # suiteable version ruamel.yaml imported successfully
-
     def _field_to_yaml(typ, value):
         """Convert data to YAML 1.2 format that keeps the right TYPE_*."""
-        if typ is TYPE_STRING:
+        if typ == TYPE_STRING:
             return str(value)
-        elif typ is TYPE_INT:
+        elif typ == TYPE_INT:
             return int(value)
-        elif typ is TYPE_MULTILINE:
+        elif typ == TYPE_MULTILINE:
             if '\n' in value:
                 return ruamel.yaml.scalarstring.preserve_literal(str(value))
             else:
                 return str(value)
-        elif typ is TYPE_SCRIPT:
+        elif typ == TYPE_SCRIPT:
             if type(value) == list:
                 if len(value) == 1:
                     return value[0]
@@ -930,7 +928,9 @@ def write_yaml(mf, app):
                 if hasattr(build, field):
                     value = getattr(build, field)
                     if field == 'gradle' and value == ['off']:
-                        value = [ruamel.yaml.scalarstring.SingleQuotedScalarString('off')]
+                        value = [
+                            ruamel.yaml.scalarstring.SingleQuotedScalarString('off')
+                        ]
                     typ = flagtype(field)
                     # don't check value == True for TYPE_INT as it could be 0
                     if value is not None and (typ == TYPE_INT or value):
@@ -945,27 +945,25 @@ def write_yaml(mf, app):
         return builds
 
     yaml_app = _app_to_yaml(app)
-    try:
-        yaml = ruamel.yaml.YAML()
-        yaml.indent(mapping=4, sequence=4, offset=2)
-        yaml.dump(yaml_app, stream=mf)
-    except AttributeError:  # Debian/stretch's version does not have YAML()
-        ruamel.yaml.round_trip_dump(yaml_app, mf, indent=4, block_seq_indent=2)
+    yaml = ruamel.yaml.YAML()
+    yaml.indent(mapping=4, sequence=4, offset=2)
+    yaml.dump(yaml_app, stream=mf)
 
 
 def write_metadata(metadatapath, app):
     metadatapath = Path(metadatapath)
     if metadatapath.suffix == '.yml':
-        if importlib.util.find_spec('ruamel.yaml'):
-            with metadatapath.open('w') as mf:
-                return write_yaml(mf, app)
-        else:
-            raise FDroidException(_('ruamel.yaml not installed, can not write metadata.'))
+        with metadatapath.open('w') as mf:
+            return write_yaml(mf, app)
 
     _warn_or_exception(_('Unknown metadata format: %s') % metadatapath)
 
 
 def add_metadata_arguments(parser):
     """Add common command line flags related to metadata processing."""
-    parser.add_argument("-W", choices=['error', 'warn', 'ignore'], default='error',
-                        help=_("force metadata errors (default) to be warnings, or to be ignored."))
+    parser.add_argument(
+        "-W",
+        choices=['error', 'warn', 'ignore'],
+        default='error',
+        help=_("force metadata errors (default) to be warnings, or to be ignored."),
+    )
