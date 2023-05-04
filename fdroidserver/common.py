@@ -510,12 +510,12 @@ def load_localized_config(name, repodir):
                     if key not in lst[akey]:
                         lst[akey][key] = {}
                     if key == "icon":
-                        shutil.copy(
-                            os.path.join("config", value),
-                            os.path.join(repodir, "icons")
-                        )
+                        icons_dir = os.path.join(repodir, 'icons')
+                        if not os.path.exists(icons_dir):
+                            os.mkdir(icons_dir)
+                        shutil.copy(os.path.join("config", value), icons_dir)
                         lst[akey][key][locale] = file_entry(
-                            os.path.join(repodir, "icons", value)
+                            os.path.join(icons_dir, value)
                         )
                     else:
                         lst[akey][key][locale] = value
