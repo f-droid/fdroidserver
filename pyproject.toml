@@ -1,3 +1,23 @@
+
+# We ignore the following PEP8 warnings
+# * E123: closing bracket does not match indentation of opening bracket's line
+#   - Broken if multiple indentation levels start on a single line
+# * E203: whitespace before ':'
+#   - E203 is not PEP 8 compliant and conflict with black
+# * E402: module level import not at top of file
+#   - The tests use a little hack in order to cleanly import the
+#     fdroidserver package locally like a regular package.  pep8 doesn't
+#     see that, so this makes pep8 skip E402 on the test files that need
+#     that hack.
+# * E501: line too long (82 > 79 characters)
+#   - Recommended for readability but not enforced
+#   - Some lines are awkward to wrap around a char limit
+# * W503: line break before binary operator
+#   - Quite pedantic
+
+[tool.autopep8]
+ignore = "E123,E203,E402,E501,W503"
+
 [tool.black]
 skip-string-normalization = true
 target-version = ["py38"]

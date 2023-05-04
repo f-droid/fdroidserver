@@ -52,20 +52,6 @@ else
     done
 fi
 
-# We ignore the following PEP8 warnings
-# * E123: closing bracket does not match indentation of opening bracket's line
-#   - Broken if multiple indentation levels start on a single line
-# * E203: whitespace before ':'
-#   - E203 is not PEP 8 compliant and conflict with black
-# * E501: line too long (82 > 79 characters)
-#   - Recommended for readability but not enforced
-#   - Some lines are awkward to wrap around a char limit
-# * W503: line break before binary operator
-#   - Quite pedantic
-
-
-PEP8_IGNORE="E123,E203,E501,W503"
-
 err() {
 	echo >&2 ERROR: "$@"
 	exit 1
@@ -96,7 +82,7 @@ find_command() {
 DASH=$(find_command dash)
 PYDOCSTYLE=$(find_command pydocstyle)
 PYFLAKES=$(find_command pyflakes)
-PEP8=$(find_command pycodestyle pep8)
+PYCODESTYLE=$(find_command pycodestyle pep8)
 RUBY=$(find_command ruby)
 YAMLLINT=$(find_command yamllint)
 
@@ -110,16 +96,13 @@ if [ "$PY_FILES $PY_TEST_FILES" != " " ]; then
 fi
 
 if [ "$PY_FILES" != "" ]; then
-    if ! $PEP8 --ignore=$PEP8_IGNORE $PY_FILES; then
+    if ! $PYCODESTYLE $PY_FILES; then
 	err "pep8 tests failed!"
     fi
 fi
 
-# The tests use a little hack in order to cleanly import the fdroidserver
-# package locally like a regular package.  pep8 doesn't see that, so this
-# makes pep8 skip E402 on the test files that need that hack.
 if [ "$PY_TEST_FILES" != "" ]; then
-    if ! $PEP8 --ignore=$PEP8_IGNORE,E402 $PY_TEST_FILES; then
+    if ! $PYCODESTYLE $PY_TEST_FILES; then
 	err "pep8 tests failed!"
     fi
 fi
