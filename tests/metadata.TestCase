@@ -1613,6 +1613,77 @@ class MetadataTest(unittest.TestCase):
         with self.assertRaises(TypeError):
             build.ndk_path()
 
+    def test_del_duplicated_NoSourceSince(self):
+        app = {
+            'AntiFeatures': {'Ads': {}, 'NoSourceSince': {DEFAULT_LOCALE: '1.0'}},
+            'NoSourceSince': '1.0',
+        }
+        metadata._del_duplicated_NoSourceSince(app)
+        self.assertEqual(app, {'AntiFeatures': {'Ads': {}}, 'NoSourceSince': '1.0'})
+
+    def test_check_manually_extended_NoSourceSince(self):
+        app = {
+            'AntiFeatures': {'NoSourceSince': {DEFAULT_LOCALE: '1.0', 'de': '1,0'}},
+            'NoSourceSince': '1.0',
+        }
+        metadata._del_duplicated_NoSourceSince(app)
+        self.assertEqual(
+            app,
+            {
+                'AntiFeatures': {'NoSourceSince': {DEFAULT_LOCALE: '1.0', 'de': '1,0'}},
+                'NoSourceSince': '1.0',
+            },
+        )
+
+    def test_make_sure_nosourcesince_does_not_get_written(self):
+        appid = 'com.politedroid'
+        app = metadata.read_metadata({appid: -1})[appid]
+        builds = app['Builds']
+        app['Builds'] = [copy.deepcopy(builds[0])]
+        mf = io.StringIO()
+        metadata.write_yaml(mf, app)
+        mf.seek(0)
+        self.maxDiff = None
+        self.assertEqual(
+            mf.read(),
+            textwrap.dedent(
+                """\
+                AntiFeatures:
+                    NonFreeNet: {}
+                Categories:
+                  - Time
+                License: GPL-3.0-only
+                SourceCode: https://github.com/miguelvps/PoliteDroid
+                IssueTracker: https://github.com/miguelvps/PoliteDroid/issues
+
+                AutoName: Polite Droid
+                Summary: Calendar tool
+                Description: Activates silent mode during calendar events.
+
+                RepoType: git
+                Repo: https://github.com/miguelvps/PoliteDroid.git
+
+                Builds:
+                  - versionName: '1.2'
+                    versionCode: 3
+                    commit: 6a548e4b19
+                    target: android-10
+                    antifeatures:
+                        KnownVuln: {}
+                        UpstreamNonFree: {}
+                        NonFreeAssets: {}
+
+                ArchivePolicy: 4 versions
+                AutoUpdateMode: Version v%v
+                UpdateCheckMode: Tags
+                CurrentVersion: '1.5'
+                CurrentVersionCode: 6
+
+                NoSourceSince: '1.5'
+                """
+            ),
+        )
+
 
 class PostMetadataParseTest(unittest.TestCase):
     """Test the functions that post process the YAML input.

@@ -1033,6 +1033,17 @@ def post_parse_yaml_metadata(yamldata):
         }
 
 
+def _del_duplicated_NoSourceSince(app):
+    # noqa: D403 NoSourceSince is the word.
+    """NoSourceSince gets auto-added to AntiFeatures, but can also be manually added."""
+    key = 'NoSourceSince'
+    if key in app:
+        no_source_since = app.get(key)
+        af_no_source_since = app.get('AntiFeatures', dict()).get(key)
+        if af_no_source_since == {common.DEFAULT_LOCALE: no_source_since}:
+            del app['AntiFeatures'][key]
+
+
 def write_yaml(mf, app):
     """Write metadata in yaml format.
 
@@ -1123,6 +1134,7 @@ def write_yaml(mf, app):
 
         return builds
 
+    _del_duplicated_NoSourceSince(app)
     yaml_app = _app_to_yaml(app)
     yaml = ruamel.yaml.YAML()
     yaml.indent(mapping=4, sequence=4, offset=2)
