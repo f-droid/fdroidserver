@@ -908,6 +908,11 @@ def _normalize_type_string(v):
     numbers.  Like "versionName: 1.0" would be a YAML float, but
     should be a string.
 
+    SHA-256 values are string values, but YAML 1.2 can interpret some
+    unquoted values as decimal ints.  This converts those to a string
+    if they are over 50 digits.  In the wild, the longest 0 padding on
+    a SHA-256 key fingerprint I found was 8 zeros.
+
     """
     if isinstance(v, bool):
         if v:
@@ -921,6 +926,9 @@ def _normalize_type_string(v):
             if v > 0:
                 return '.inf'
             return '-.inf'
+    if v and isinstance(v, int):
+        if math.log10(v) > 50:  # only if the int has this many digits
+            return '%064d' % v
     return str(v)
 
 

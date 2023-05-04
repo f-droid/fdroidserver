@@ -343,6 +343,13 @@ class MetadataTest(unittest.TestCase):
         self.assertEqual('false', metadata._normalize_type_string(False))
         self.assertEqual('true', metadata._normalize_type_string(True))
 
+    def test_normalize_type_string_sha256(self):
+        """SHA-256 values are TYPE_STRING, which YAML can parse as decimal ints."""
+        yaml = ruamel.yaml.YAML(typ='safe')
+        for v in range(1, 1000):
+            s = '%064d' % (v * (10**51))
+            self.assertEqual(s, metadata._normalize_type_string(yaml.load(s)))
+
     def test_normalize_type_stringmap_none(self):
         self.assertEqual(dict(), metadata._normalize_type_stringmap('key', None))
 
@@ -420,13 +427,13 @@ class MetadataTest(unittest.TestCase):
         with self.assertRaises(MetaDataException):
             metadata.post_parse_yaml_metadata(yamldata)
 
-    def test_post_parse_yaml_metadata_0padding_fails(self):
-        """Special case: ideally 0 padding would be kept in string, but it is not."""
+    def test_post_parse_yaml_metadata_0padding_sha256(self):
+        """SHA-256 values are strings, but YAML 1.2 will read some as decimal ints."""
         v = '0027293472934293872934729834729834729834729834792837487293847926'
         yaml = ruamel.yaml.YAML(typ='safe')
         yamldata = yaml.load('AllowedAPKSigningKeys: ' + v)
         metadata.post_parse_yaml_metadata(yamldata)
-        self.assertNotEqual(yamldata['AllowedAPKSigningKeys'], v)
+        self.assertEqual(yamldata['AllowedAPKSigningKeys'], [v])
 
     def test_post_parse_yaml_metadata_builds(self):
         yamldata = OrderedDict()
@@ -542,28 +549,6 @@ class MetadataTest(unittest.TestCase):
         mf = _get_mock_mf('Builds: [{versionCode: 1, rm: {bad: dict-placement}}]')
         with self.assertRaises(MetaDataException):
             metadata.parse_yaml_metadata(mf)
-
-    def test_parse_yaml_metadata_0padding_fails(self):
-        """Special case: ideally this would keep 0 padding in string, but it does not.
-
-        It seems the only option is to quote values like that, or add
-        quirks to the YAML parsing.
-
-        """
-        v = '0027293472934293872934729834729834729834729834792837487293847926'
-        mf = io.StringIO('AllowedAPKSigningKeys: %s' % v)
-        mf.name = 'mock_filename.yaml'
-        self.assertNotEqual(
-            v,
-            metadata.parse_yaml_metadata(mf)['AllowedAPKSigningKeys'][0],
-        )
-
-        mf = io.StringIO('AllowedAPKSigningKeys: "%s"' % v)
-        mf.name = 'mock_filename.yaml'
-        self.assertEqual(
-            v,
-            metadata.parse_yaml_metadata(mf)['AllowedAPKSigningKeys'][0],
-        )
 
     def test_parse_yaml_metadata_unknown_app_field(self):
         mf = io.StringIO(
@@ -2145,6 +2130,24 @@ class PostMetadataParseTest(unittest.TestCase):
         self.assertEqual(*self._post_metadata_parse_build_list(123456, ['123456']))
         self.assertEqual(*self._post_metadata_parse_build_script(123456, ['123456']))
         self.assertEqual(*self._post_metadata_parse_build_string(123456, '123456'))
+
+    def test_post_metadata_parse_sha256(self):
+        """Run a SHA-256 that YAML calls an int through the various types.
+
+        The current f-droid.org signer set has SHA-256 values with a
+        maximum of two leading zeros, but this will handle more.
+
+        """
+        yaml = ruamel.yaml.YAML(typ='safe', pure=True)
+        str_sha256 = '0000000000000498456908409534729834729834729834792837487293847926'
+        sha256 = yaml.load('a: ' + str_sha256)['a']
+        self.assertEqual(*self._post_metadata_parse_app_list(sha256, [str_sha256]))
+        self.assertEqual(*self._post_metadata_parse_app_string(sha256, str_sha256))
+        self.assertEqual(*self._post_metadata_parse_build_bool(sha256, True))
+        self.assertEqual(*self._post_metadata_parse_build_int(sha256, sha256))
+        self.assertEqual(*self._post_metadata_parse_build_list(sha256, [str_sha256]))
+        self.assertEqual(*self._post_metadata_parse_build_script(sha256, [str_sha256]))
+        self.assertEqual(*self._post_metadata_parse_build_string(sha256, str_sha256))
 
     def test_post_metadata_parse_int_0(self):
         """Run the int 0 through the various field and flag types."""
