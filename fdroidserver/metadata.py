@@ -20,6 +20,7 @@
 
 import git
 from pathlib import Path
+import math
 import platform
 import os
 import re
@@ -897,6 +898,14 @@ def _normalize_type_string(v):
         if v:
             return 'true'
         return 'false'
+    if isinstance(v, float):
+        # YAML 1.2 values for NaN, Inf, and -Inf
+        if math.isnan(v):
+            return '.nan'
+        if math.isinf(v):
+            if v > 0:
+                return '.inf'
+            return '-.inf'
     return str(v)
 
 

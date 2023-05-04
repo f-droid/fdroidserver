@@ -965,6 +965,24 @@ class MetadataTest(unittest.TestCase):
             {'AntiFeatures': {'true': {}}},
         )
 
+    def test_parse_yaml_app_antifeatures_float_nan(self):
+        self.assertEqual(
+            metadata.parse_yaml_metadata(io.StringIO('AntiFeatures: .nan')),
+            {'AntiFeatures': {'.nan': {}}},
+        )
+
+    def test_parse_yaml_app_antifeatures_float_inf(self):
+        self.assertEqual(
+            metadata.parse_yaml_metadata(io.StringIO('AntiFeatures: .inf')),
+            {'AntiFeatures': {'.inf': {}}},
+        )
+
+    def test_parse_yaml_app_antifeatures_float_negative_inf(self):
+        self.assertEqual(
+            metadata.parse_yaml_metadata(io.StringIO('AntiFeatures: -.inf')),
+            {'AntiFeatures': {'-.inf': {}}},
+        )
+
     def test_parse_yaml_app_antifeatures_int(self):
         self.assertEqual(
             metadata.parse_yaml_metadata(io.StringIO('AntiFeatures: 1')),
