@@ -588,12 +588,12 @@ docker:
     RELEASE_IMAGE: $CI_REGISTRY_IMAGE:buildserver
   script:
     # git ref names can contain many chars that are not allowed in docker tags
-    - export TEST_IMAGE=$CI_REGISTRY_IMAGE:$(printf $CI_BUILD_REF_NAME | sed 's,[^a-zA-Z0-9_.-],_,g')
+    - export TEST_IMAGE=$CI_REGISTRY_IMAGE:$(printf $CI_COMMIT_REF_NAME | sed 's,[^a-zA-Z0-9_.-],_,g')
     - cd buildserver
     - docker build -t $TEST_IMAGE --build-arg GIT_REV_PARSE_HEAD=$(git rev-parse HEAD) .
     - docker tag $TEST_IMAGE $RELEASE_IMAGE
     - docker tag $TEST_IMAGE ${RELEASE_IMAGE}-bullseye
-    - echo $CI_BUILD_TOKEN | docker login -u gitlab-ci-token --password-stdin registry.gitlab.com
+    - echo $CI_JOB_TOKEN | docker login -u gitlab-ci-token --password-stdin registry.gitlab.com
     # This avoids filling up gitlab.com free tier accounts with unused docker images.
     - if test -z "$FDROID_PUSH_DOCKER_IMAGE"; then
           echo "Skipping docker push to save quota on your gitlab namespace.";
