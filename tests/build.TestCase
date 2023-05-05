@@ -40,6 +40,10 @@ class FakeProcess:
         print('FakeFDroidPopen', args, kwargs)
 
 
+class Options:
+    keep_when_not_allowed = False
+
+
 class BuildTest(unittest.TestCase):
     '''fdroidserver/build.py'''
 
@@ -51,6 +55,7 @@ class BuildTest(unittest.TestCase):
         os.chdir(self.basedir)
         fdroidserver.common.config = None
         fdroidserver.build.config = None
+        fdroidserver.build.options = None
         self._td = mkdtemp()
         self.testdir = self._td.name
 
@@ -604,7 +609,7 @@ class BuildTest(unittest.TestCase):
         sdk_path = os.path.join(self.testdir, 'android-sdk')
         self.create_fake_android_home(sdk_path)
         with open('config.yml', 'w') as fp:
-            yaml.dump({'sdk_path': sdk_path}, fp)
+            yaml.dump({'sdk_path': sdk_path, 'keep_when_not_allowed': True}, fp)
         os.chmod('config.yml', 0o600)
         fdroidserver.common.build = fdroidserver.common.read_config()
 
@@ -919,6 +924,51 @@ class BuildTest(unittest.TestCase):
         fdroidserver.build.build_server(app, build, vcs, '', '', '', False)
         test_flag = ('--skip-scan', True)
         fdroidserver.build.build_server(app, build, vcs, '', '', '', False)
+
+    def test_keep_when_not_allowed_default(self):
+        self.assertFalse(fdroidserver.build.keep_when_not_allowed())
+
+    def test_keep_when_not_allowed_config_true(self):
+        fdroidserver.build.config = {'keep_when_not_allowed': True}
+        self.assertTrue(fdroidserver.build.keep_when_not_allowed())
+
+    def test_keep_when_not_allowed_config_false(self):
+        fdroidserver.build.config = {'keep_when_not_allowed': False}
+        self.assertFalse(fdroidserver.build.keep_when_not_allowed())
+
+    def test_keep_when_not_allowed_options_true(self):
+        fdroidserver.build.options = Options
+        fdroidserver.build.options.keep_when_not_allowed = True
+        self.assertTrue(fdroidserver.build.keep_when_not_allowed())
+
+    def test_keep_when_not_allowed_options_false(self):
+        fdroidserver.build.options = Options
+        fdroidserver.build.options.keep_when_not_allowed = False
+        self.assertFalse(fdroidserver.build.keep_when_not_allowed())
+
+    def test_keep_when_not_allowed_options_true_override_config(self):
+        fdroidserver.build.options = Options
+        fdroidserver.build.options.keep_when_not_allowed = True
+        fdroidserver.build.config = {'keep_when_not_allowed': False}
+        self.assertTrue(fdroidserver.build.keep_when_not_allowed())
+
+    def test_keep_when_not_allowed_options_default_does_not_override(self):
+        fdroidserver.build.options = Options
+        fdroidserver.build.options.keep_when_not_allowed = False
+        fdroidserver.build.config = {'keep_when_not_allowed': True}
+        self.assertTrue(fdroidserver.build.keep_when_not_allowed())
+
+    def test_keep_when_not_allowed_all_true(self):
+        fdroidserver.build.options = Options
+        fdroidserver.build.options.keep_when_not_allowed = True
+        fdroidserver.build.config = {'keep_when_not_allowed': True}
+        self.assertTrue(fdroidserver.build.keep_when_not_allowed())
+
+    def test_keep_when_not_allowed_all_false(self):
+        fdroidserver.build.options = Options
+        fdroidserver.build.options.keep_when_not_allowed = False
+        fdroidserver.build.config = {'keep_when_not_allowed': False}
+        self.assertFalse(fdroidserver.build.keep_when_not_allowed())
 
 
 if __name__ == "__main__":
