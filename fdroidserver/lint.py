@@ -696,6 +696,25 @@ def check_updates_ucm_http_aum_pattern(app):  # noqa: D403
         yield _("AutoUpdateMode with UpdateCheckMode: HTTP must have a pattern.")
 
 
+def check_certificate_pinned_binaries(app):
+    if len(app.get('AllowedAPKSigningKeys')) > 0:
+        return
+    if app.get('Binaries') is not None:
+        yield _(
+            'App has Binaries but does not have corresponding AllowedAPKSigningKeys to pin certificate.'
+        )
+        return
+    builds = app.get('Builds')
+    if builds is None:
+        return
+    for build in builds:
+        if build.get('binary') is not None:
+            yield _(
+                'App version has binary but does not have corresponding AllowedAPKSigningKeys to pin certificate.'
+            )
+            return
+
+
 def main():
     global config, options
 
@@ -803,6 +822,7 @@ def main():
             check_current_version_code,
             check_updates_expected,
             check_updates_ucm_http_aum_pattern,
+            check_certificate_pinned_binaries,
         ]
 
         for check_func in app_check_funcs:

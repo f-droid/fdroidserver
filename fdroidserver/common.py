@@ -128,6 +128,7 @@ default_config = {
     'gradle': os.path.join(FDROID_PATH, 'gradlew-fdroid'),
     'sync_from_local_copy_dir': False,
     'allow_disabled_algorithms': False,
+    'keep_when_not_allowed': False,
     'per_app_repos': False,
     'make_current_version_link': False,
     'current_version_name_source': 'Name',

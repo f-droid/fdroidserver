@@ -826,6 +826,15 @@ def force_halt_build(timeout):
     vm.destroy()
 
 
+def keep_when_not_allowed():
+    """Control if APKs signed by keys not in AllowedAPKSigningKeys are removed."""
+    return (
+        (options is not None and options.keep_when_not_allowed)
+        or (config is not None and config.get('keep_when_not_allowed'))
+        or common.default_config['keep_when_not_allowed']
+    )
+
+
 def parse_commandline():
     """Parse the command line.
 
@@ -863,6 +872,8 @@ def parse_commandline():
                         help=_("Force build of disabled apps, and carries on regardless of scan problems. Only allowed in test mode."))
     parser.add_argument("-a", "--all", action="store_true", default=False,
                         help=_("Build all applications available"))
+    parser.add_argument("--keep-when-not-allowed", default=False, action="store_true",
+                        help=argparse.SUPPRESS)
     parser.add_argument("-w", "--wiki", default=False, action="store_true",
                         help=argparse.SUPPRESS)
     metadata.add_metadata_arguments(parser)
@@ -1111,6 +1122,34 @@ def main():
                                 logging.info('compared built binary to '
                                              'supplied reference binary '
                                              'successfully')
+
+                            used_key = common.apk_signer_fingerprint(of)
+                            expected_keys = app['AllowedAPKSigningKeys']
+                            if used_key is None:
+                                logging.warn(_('reference binary missing '
+                                               'signature'))
+                            elif len(expected_keys) == 0:
+                                logging.warn(_('AllowedAPKSigningKeys missing '
+                                               'but reference binary supplied'))
+                            elif used_key not in expected_keys:
+                                if options.test or keep_when_not_allowed():
+                                    logging.warning(_('Keeping failed build "{apkfilename}"')
+                                                    .format(apkfilename=unsigned_apk))
+                                else:
+                                    logging.debug('removing %s', unsigned_apk)
+                                    os.remove(unsigned_apk)
+                                logging.debug('removing %s', of)
+                                os.remove(of)
+                                raise FDroidException('supplied reference '
+                                                      'binary signed with '
+                                                      '{signer} instead of '
+                                                      'with {expected}'.
+                                                      format(signer=used_key,
+                                                             expected=expected_keys))
+                            else:
+                                logging.info(_('supplied reference binary has '
+                                               'allowed signer {signer}').
+                                             format(signer=used_key))
 
                     build_succeeded_ids.append([app['id'], build.versionCode])
 

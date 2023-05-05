@@ -40,6 +40,10 @@ class FakeProcess:
         print('FakeFDroidPopen', args, kwargs)
 
 
+class Options:
+    keep_when_not_allowed = False
+
+
 class BuildTest(unittest.TestCase):
     '''fdroidserver/build.py'''
 
@@ -51,6 +55,7 @@ class BuildTest(unittest.TestCase):
         os.chdir(self.basedir)
         fdroidserver.common.config = None
         fdroidserver.build.config = None
+        fdroidserver.build.options = None
         self._td = mkdtemp()
         self.testdir = self._td.name
 
@@ -604,9 +609,9 @@ class BuildTest(unittest.TestCase):
         sdk_path = os.path.join(self.testdir, 'android-sdk')
         self.create_fake_android_home(sdk_path)
         with open('config.yml', 'w') as fp:
-            yaml.dump({'sdk_path': sdk_path}, fp)
+            yaml.dump({'sdk_path': sdk_path, 'keep_when_not_allowed': True}, fp)
         os.chmod('config.yml', 0o600)
-        fdroidserver.common.build = fdroidserver.common.read_config()
+        fdroidserver.build.config = fdroidserver.common.read_config()
 
         os.mkdir('metadata')
         appid = 'info.guardianproject.checkey'
@@ -682,6 +687,139 @@ class BuildTest(unittest.TestCase):
                     fdroidserver.build.main()
                 self.assertTrue(os.path.exists(test_result))
                 self.assertTrue(os.path.exists(test_compare_file))
+                self.assertFalse(os.path.exists(production_result))
+                self.assertFalse(os.path.exists(production_compare_file))
+                # failed comparison
+                open(test_result, 'w').close()
+                open(test_compare_file, 'w').close()
+                with mock.patch(
+                    'fdroidserver.common.verify_apks', lambda *args: 'failed'
+                ):
+                    fdroidserver.build.main()
+                self.assertTrue(os.path.exists(test_result))
+                self.assertFalse(os.path.exists(test_compare_file))
+                self.assertFalse(os.path.exists(production_result))
+                self.assertFalse(os.path.exists(production_compare_file))
+
+    def test_failed_allowedapksigningkeys_are_not_in_unsigned(self):
+        os.chdir(self.testdir)
+        os.mkdir('metadata')
+        appid = 'info.guardianproject.checkey'
+        metadata_file = os.path.join('metadata', appid + '.yml')
+        shutil.copy(os.path.join(self.basedir, metadata_file), 'metadata')
+        with open(metadata_file) as fp:
+            app = fdroidserver.metadata.App(yaml.safe_load(fp))
+        app['RepoType'] = 'git'
+        app[
+            'Binaries'
+        ] = 'https://example.com/fdroid/repo/info.guardianproject.checkey_%v.apk'
+        build = fdroidserver.metadata.Build(
+            {
+                'versionCode': 123,
+                'versionName': '1.2.3',
+                'commit': '1.2.3',
+                'disable': False,
+            }
+        )
+        app['Builds'] = [build]
+        expected_key = 'a' * 64
+        bogus_key = 'b' * 64
+        app['AllowedAPKSigningKeys'] = [expected_key]
+        fdroidserver.metadata.write_metadata(metadata_file, app)
+
+        os.makedirs(os.path.join('unsigned', 'binaries'))
+        production_result = os.path.join(
+            'unsigned', '%s_%d.apk' % (appid, build['versionCode'])
+        )
+        production_compare_file = os.path.join(
+            'unsigned', 'binaries', '%s_%d.binary.apk' % (appid, build['versionCode'])
+        )
+        os.makedirs(os.path.join('tmp', 'binaries'))
+        test_result = os.path.join('tmp', '%s_%d.apk' % (appid, build['versionCode']))
+        test_compare_file = os.path.join(
+            'tmp', 'binaries', '%s_%d.binary.apk' % (appid, build['versionCode'])
+        )
+        with mock.patch(
+            'fdroidserver.common.force_exit', lambda *args: None
+        ) as a, mock.patch(
+            'fdroidserver.common.get_android_tools_version_log', lambda: 'fake'
+        ) as b, mock.patch(
+            'fdroidserver.common.FDroidPopen', FakeProcess
+        ) as c, mock.patch(
+            'fdroidserver.build.FDroidPopen', FakeProcess
+        ) as d, mock.patch(
+            'fdroidserver.build.trybuild', lambda *args: True
+        ) as e, mock.patch(
+            'fdroidserver.net.download_file', lambda *args, **kwargs: None
+        ) as f:
+            a, b, c, d, e, f  # silence linters' "unused" warnings
+
+            with mock.patch('sys.argv', ['fdroid build', appid]):
+                # successful comparison, successful signer
+                open(production_result, 'w').close()
+                open(production_compare_file, 'w').close()
+                with mock.patch(
+                    'fdroidserver.common.verify_apks', lambda *args: None
+                ) as g, mock.patch(
+                    'fdroidserver.common.apk_signer_fingerprint',
+                    lambda *args: expected_key,
+                ) as h:
+                    g, h
+                    fdroidserver.build.main()
+                self.assertTrue(os.path.exists(production_result))
+                self.assertTrue(os.path.exists(production_compare_file))
+                # successful comparison, failed signer
+                open(production_result, 'w').close()
+                open(production_compare_file, 'w').close()
+                with mock.patch(
+                    'fdroidserver.common.verify_apks', lambda *args: None
+                ) as g, mock.patch(
+                    'fdroidserver.common.apk_signer_fingerprint',
+                    lambda *args: bogus_key,
+                ) as h:
+                    g, h
+                    fdroidserver.build.main()
+                self.assertFalse(os.path.exists(production_result))
+                self.assertFalse(os.path.exists(production_compare_file))
+                # failed comparison
+                open(production_result, 'w').close()
+                open(production_compare_file, 'w').close()
+                with mock.patch(
+                    'fdroidserver.common.verify_apks', lambda *args: 'failed'
+                ):
+                    fdroidserver.build.main()
+                self.assertFalse(os.path.exists(production_result))
+                self.assertFalse(os.path.exists(production_compare_file))
+
+            with mock.patch('sys.argv', ['fdroid build', '--test', appid]):
+                # successful comparison, successful signer
+                open(test_result, 'w').close()
+                open(test_compare_file, 'w').close()
+                with mock.patch(
+                    'fdroidserver.common.verify_apks', lambda *args: None
+                ) as g, mock.patch(
+                    'fdroidserver.common.apk_signer_fingerprint',
+                    lambda *args: expected_key,
+                ) as h:
+                    g, h
+                    fdroidserver.build.main()
+                self.assertTrue(os.path.exists(test_result))
+                self.assertTrue(os.path.exists(test_compare_file))
+                self.assertFalse(os.path.exists(production_result))
+                self.assertFalse(os.path.exists(production_compare_file))
+                # successful comparison, failed signer
+                open(test_result, 'w').close()
+                open(test_compare_file, 'w').close()
+                with mock.patch(
+                    'fdroidserver.common.verify_apks', lambda *args: None
+                ) as g, mock.patch(
+                    'fdroidserver.common.apk_signer_fingerprint',
+                    lambda *args: bogus_key,
+                ) as h:
+                    g, h
+                    fdroidserver.build.main()
+                self.assertTrue(os.path.exists(test_result))
+                self.assertFalse(os.path.exists(test_compare_file))
                 self.assertFalse(os.path.exists(production_result))
                 self.assertFalse(os.path.exists(production_compare_file))
                 # failed comparison
@@ -779,6 +917,51 @@ class BuildTest(unittest.TestCase):
         fdroidserver.build.build_server(app, build, vcs, '', '', '', False)
         test_flag = ('--skip-scan', True)
         fdroidserver.build.build_server(app, build, vcs, '', '', '', False)
+
+    def test_keep_when_not_allowed_default(self):
+        self.assertFalse(fdroidserver.build.keep_when_not_allowed())
+
+    def test_keep_when_not_allowed_config_true(self):
+        fdroidserver.build.config = {'keep_when_not_allowed': True}
+        self.assertTrue(fdroidserver.build.keep_when_not_allowed())
+
+    def test_keep_when_not_allowed_config_false(self):
+        fdroidserver.build.config = {'keep_when_not_allowed': False}
+        self.assertFalse(fdroidserver.build.keep_when_not_allowed())
+
+    def test_keep_when_not_allowed_options_true(self):
+        fdroidserver.build.options = Options
+        fdroidserver.build.options.keep_when_not_allowed = True
+        self.assertTrue(fdroidserver.build.keep_when_not_allowed())
+
+    def test_keep_when_not_allowed_options_false(self):
+        fdroidserver.build.options = Options
+        fdroidserver.build.options.keep_when_not_allowed = False
+        self.assertFalse(fdroidserver.build.keep_when_not_allowed())
+
+    def test_keep_when_not_allowed_options_true_override_config(self):
+        fdroidserver.build.options = Options
+        fdroidserver.build.options.keep_when_not_allowed = True
+        fdroidserver.build.config = {'keep_when_not_allowed': False}
+        self.assertTrue(fdroidserver.build.keep_when_not_allowed())
+
+    def test_keep_when_not_allowed_options_default_does_not_override(self):
+        fdroidserver.build.options = Options
+        fdroidserver.build.options.keep_when_not_allowed = False
+        fdroidserver.build.config = {'keep_when_not_allowed': True}
+        self.assertTrue(fdroidserver.build.keep_when_not_allowed())
+
+    def test_keep_when_not_allowed_all_true(self):
+        fdroidserver.build.options = Options
+        fdroidserver.build.options.keep_when_not_allowed = True
+        fdroidserver.build.config = {'keep_when_not_allowed': True}
+        self.assertTrue(fdroidserver.build.keep_when_not_allowed())
+
+    def test_keep_when_not_allowed_all_false(self):
+        fdroidserver.build.options = Options
+        fdroidserver.build.options.keep_when_not_allowed = False
+        fdroidserver.build.config = {'keep_when_not_allowed': False}
+        self.assertFalse(fdroidserver.build.keep_when_not_allowed())
 
 
 if __name__ == "__main__":
