@@ -735,7 +735,7 @@ def make_v2(apps, packages, repodir, repodict, requestsdict, fdroid_signing_key_
 
     output = collections.OrderedDict()
     output["repo"] = v2_repo(repodict, repodir, archive)
-    if requestsdict and requestsdict["install"] or requestsdict["uninstall"]:
+    if requestsdict and (requestsdict["install"] or requestsdict["uninstall"]):
         output["repo"]["requests"] = requestsdict
 
     # establish sort order of the index
