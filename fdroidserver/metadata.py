@@ -1100,22 +1100,21 @@ def _app_to_yaml(app):
             # next iteration will need to insert a newline
             insert_newline = True
         else:
-            if app.get(field) or field == 'Builds':
+            value = app.get(field)
+            if value or field == 'Builds':
                 if field == 'Builds':
                     if app.get('Builds'):
                         cm.update({field: _builds_to_yaml(app)})
                 elif field == 'CurrentVersionCode':
-                    cm.update({field: _field_to_yaml(TYPE_INT, getattr(app, field))})
+                    cm[field] = _field_to_yaml(TYPE_INT, value)
                 elif field == 'AllowedAPKSigningKeys':
-                    value = getattr(app, field)
-                    if value:
-                        value = [str(i).lower() for i in value]
-                        if len(value) == 1:
-                            cm.update({field: _field_to_yaml(TYPE_STRING, value[0])})
-                        else:
-                            cm.update({field: _field_to_yaml(TYPE_LIST, value)})
+                    value = [str(i).lower() for i in value]
+                    if len(value) == 1:
+                        cm[field] = _field_to_yaml(TYPE_STRING, value[0])
+                    else:
+                        cm[field] = _field_to_yaml(TYPE_LIST, value)
                 else:
-                    cm.update({field: _field_to_yaml(fieldtype(field), getattr(app, field))})
+                    cm[field] = _field_to_yaml(fieldtype(field), value)
 
                 if insert_newline:
                     # we need to prepend a newline in front of this field
