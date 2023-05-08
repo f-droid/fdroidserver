@@ -1296,6 +1296,87 @@ class MetadataTest(unittest.TestCase):
             ),
         )
 
+    def test_write_yaml_build_antifeatures(self):
+        mf = io.StringIO()
+        app = metadata.App(
+            {
+                'License': 'Apache-2.0',
+                'Builds': [
+                    metadata.Build(
+                        {
+                            'versionCode': 102030,
+                            'versionName': 'v1.2.3',
+                            'gradle': ['yes'],
+                            'antifeatures': {
+                                'a': {},
+                                'b': {'de': 'Probe', 'en-US': 'test'},
+                            },
+                        }
+                    ),
+                ],
+                'id': 'placeholder',
+            }
+        )
+        metadata.write_yaml(mf, app)
+        mf.seek(0)
+        self.assertEqual(
+            mf.read(),
+            textwrap.dedent(
+                """\
+                License: Apache-2.0
+
+                Builds:
+                  - versionName: v1.2.3
+                    versionCode: 102030
+                    gradle:
+                      - yes
+                    antifeatures:
+                        a: {}
+                        b:
+                            de: Probe
+                            en-US: test
+                """
+            ),
+        )
+
+    def test_write_yaml_build_antifeatures_old_style(self):
+        mf = io.StringIO()
+        app = metadata.App(
+            {
+                'License': 'Apache-2.0',
+                'Builds': [
+                    metadata.Build(
+                        {
+                            'versionCode': 102030,
+                            'versionName': 'v1.2.3',
+                            'gradle': ['yes'],
+                            'antifeatures': {'b': {}, 'a': {}},
+                        }
+                    ),
+                ],
+                'id': 'placeholder',
+            }
+        )
+        metadata.write_yaml(mf, app)
+        mf.seek(0)
+        self.assertEqual(
+            mf.read(),
+            textwrap.dedent(
+                """\
+                License: Apache-2.0
+
+                Builds:
+                  - versionName: v1.2.3
+                    versionCode: 102030
+                    gradle:
+                      - yes
+                    antifeatures:
+                      - a
+                      - b
+                """
+            ),
+        )
+
     def test_write_yaml_make_sure_provides_does_not_get_written(self):
         mf = io.StringIO()
         app = fdroidserver.metadata.App()
@@ -1649,7 +1730,7 @@ class MetadataTest(unittest.TestCase):
             textwrap.dedent(
                 """\
                 AntiFeatures:
-                    NonFreeNet: {}
+                  - NonFreeNet
                 Categories:
                   - Time
                 License: GPL-3.0-only
@@ -1669,9 +1750,9 @@ class MetadataTest(unittest.TestCase):
                     commit: 6a548e4b19
                     target: android-10
                     antifeatures:
-                        KnownVuln: {}
-                        UpstreamNonFree: {}
-                        NonFreeAssets: {}
+                      - KnownVuln
+                      - NonFreeAssets
+                      - UpstreamNonFree
 
                 ArchivePolicy: 4 versions
                 AutoUpdateMode: Version v%v
@@ -1726,6 +1807,56 @@ class MetadataTest(unittest.TestCase):
         # TODO it should be possible to use `CurrentVersionCode: 0`
         cm = metadata._app_to_yaml(metadata.App({'CurrentVersionCode': 0}))
         self.assertFalse('CurrentVersionCode' in cm)
+
+    def test_format_stringmap_empty(self):
+        self.assertEqual(
+            metadata._format_stringmap('🔥', 'test', dict()),
+            list(),
+        )
+
+    def test_format_stringmap_one_list(self):
+        self.assertEqual(
+            metadata._format_stringmap('🔥', 'test', {'Tracking': {}, 'Ads': {}}),
+            ['Ads', 'Tracking'],
+        )
+
+    def test_format_stringmap_one_list_empty_desc(self):
+        self.assertEqual(
+            metadata._format_stringmap('🔥', 'test', {'NonFree': {}, 'Ads': {'en': ''}}),
+            ['Ads', 'NonFree'],
+        )
+
+    def test_format_stringmap_three_list(self):
+        self.assertEqual(
+            metadata._format_stringmap('🔥', 'test', {'B': {}, 'A': {}, 'C': {}}),
+            ['A', 'B', 'C'],
+        )
+
+    def test_format_stringmap_two_dict(self):
+        self.assertEqual(
+            metadata._format_stringmap('🔥', 'test', {'1': {'uz': 'a'}, '2': {}}),
+            {'1': {'uz': 'a'}, '2': {}},
+        )
+
+    def test_format_stringmap_three_locales(self):
+        self.assertEqual(
+            metadata._format_stringmap(
+                '🔥', 'test', {'AF': {'uz': 'a', 'ko': 'b', 'zh': 'c'}}
+            ),
+            {'AF': {'ko': 'b', 'uz': 'a', 'zh': 'c'}},
+        )
+
+    def test_format_stringmap_move_build_antifeatures_to_filesystem(self):
+        os.chdir(self.testdir)
+        appid = 'a'
+        yml = Path('metadata/a.yml')
+        yml.parent.mkdir()
+        self.assertEqual(
+            metadata._format_stringmap(
+                appid, 'antifeatures', {'AF': {'uz': 'a', 'ko': 'b', 'zh': 'c'}}
+            ),
+            {'AF': {'ko': 'b', 'uz': 'a', 'zh': 'c'}},
+        )
 
 
 class PostMetadataParseTest(unittest.TestCase):

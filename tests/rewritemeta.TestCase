@@ -180,6 +180,30 @@ class RewriteMetaTest(unittest.TestCase):
             },
         )
 
+    def test_remove_blank_flags_from_builds_app_with_special_build_params_af(self):
+        """Unset fields in Builds: entries should be removed."""
+        appid = 'app.with.special.build.params'
+        app = metadata.read_metadata({appid: -1})[appid]
+        builds = rewritemeta.remove_blank_flags_from_builds(app.get('Builds'))
+        self.assertEqual(
+            builds[-2],
+            {
+                'antifeatures': {
+                    'Ads': {'en-US': 'includes ad lib\n', 'zh-CN': '包括广告图书馆\n'},
+                    'Tracking': {'en-US': 'standard suspects\n'},
+                },
+                'commit': '2.1.1',
+                'maven': '2',
+                'patch': [
+                    'manifest-ads.patch',
+                    'mobilecore.patch',
+                ],
+                'srclibs': ['FacebookSDK@sdk-version-3.0.2'],
+                'versionCode': 50,
+                'versionName': '2.1.1-c',
+            },
+        )
+
     def test_rewrite_scenario_trivial(self):
         sys.argv = ['rewritemeta', 'a', 'b']
 

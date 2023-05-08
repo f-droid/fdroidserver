@@ -99,6 +99,7 @@ def main():
                 print(path)
             continue
 
+        # TODO these should be moved to metadata.write_yaml()
         builds = remove_blank_flags_from_builds(app.get('Builds'))
         if builds:
             app['Builds'] = builds

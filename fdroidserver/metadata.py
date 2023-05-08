@@ -1033,6 +1033,53 @@ def post_parse_yaml_metadata(yamldata):
         }
 
 
+def _format_stringmap(appid, field, stringmap, versionCode=None):
+    """Format TYPE_STRINGMAP taking into account localized files in the metadata dir.
+
+    If there are any localized versions on the filesystem already,
+    then move them all there.  Otherwise, keep them in the .yml file.
+
+    The directory for the localized files that is named after the
+    field is all lower case, following the convention set by Fastlane
+    metadata, and used by fdroidserver.
+
+    """
+    app_dir = Path('metadata', appid)
+    try:
+        next(app_dir.glob('*/%s/*.txt' % field.lower()))
+        files = []
+        for name, descdict in stringmap.items():
+            for locale, desc in descdict.items():
+                outdir = app_dir / locale / field.lower()
+                if versionCode:
+                    filename = '%d_%s.txt' % (versionCode, name)
+                else:
+                    filename = '%s.txt' % name
+                outfile = outdir / filename
+                files.append(str(outfile))
+                with outfile.open('w') as fp:
+                    fp.write(desc)
+        logging.warning(
+            _('Moving Anti-Features declarations to localized files:')
+            + '\n'
+            + '\n'.join(sorted(files))
+        )
+        return
+    except StopIteration:
+        pass
+    make_list = True
+    outlist = []
+    for name in sorted(stringmap):
+        outlist.append(name)
+        descdict = stringmap.get(name)
+        if descdict and any(descdict.values()):
+            make_list = False
+            break
+    if make_list:
+        return outlist
+    return stringmap
+
+
 def _del_duplicated_NoSourceSince(app):
     # noqa: D403 NoSourceSince is the word.
     """NoSourceSince gets auto-added to AntiFeatures, but can also be manually added."""
@@ -1080,8 +1127,13 @@ def _builds_to_yaml(app):
                     ]
                 typ = flagtype(field)
                 # don't check value == True for TYPE_INT as it could be 0
-                if value is not None and (typ == TYPE_INT or value):
+                if value and typ == TYPE_STRINGMAP:
+                    v = _format_stringmap(app['id'], field, value, build['versionCode'])
+                    if v:
+                        b[field] = v
+                elif value is not None and (typ == TYPE_INT or value):
                     b.update({field: _field_to_yaml(typ, value)})
+
         builds.append(b)
 
     # insert extra empty lines between build entries
@@ -1107,6 +1159,10 @@ def _app_to_yaml(app):
                         cm.update({field: _builds_to_yaml(app)})
                 elif field == 'CurrentVersionCode':
                     cm[field] = _field_to_yaml(TYPE_INT, value)
+                elif field == 'AntiFeatures':
+                    v = _format_stringmap(app['id'], field, value)
+                    if v:
+                        cm[field] = v
                 elif field == 'AllowedAPKSigningKeys':
                     value = [str(i).lower() for i in value]
                     if len(value) == 1:
