@@ -214,16 +214,6 @@ fi
 
 
 #------------------------------------------------------------------------------#
-echo_header "TODO remove once buildserver image is upgraded to bullseye with apksigner"
-
-if java -version 2>&1 | grep -F 1.8.0; then
-    echo "Skipping the rest because they require apksigner 30.0.0+ which does not run on Java8"
-    echo SUCCESS
-    exit
-fi
-
-
-#------------------------------------------------------------------------------#
 echo_header "test UTF-8 metadata"
 
 REPOROOT=`create_test_dir`
