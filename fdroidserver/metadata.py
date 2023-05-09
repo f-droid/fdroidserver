@@ -189,6 +189,7 @@ fieldtypes = {
     'MaintainerNotes': TYPE_MULTILINE,
     'Categories': TYPE_LIST,
     'AntiFeatures': TYPE_STRINGMAP,
+    'RequiresRoot': TYPE_BOOL,
     'AllowedAPKSigningKeys': TYPE_LIST,
     'Builds': TYPE_BUILD,
     'VercodeOperation': TYPE_LIST,

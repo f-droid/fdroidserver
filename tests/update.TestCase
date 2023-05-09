@@ -1433,7 +1433,7 @@ class UpdateTest(unittest.TestCase):
                         'NoSourceSince': '',
                         'Repo': '',
                         'RepoType': '',
-                        'RequiresRoot': '',
+                        'RequiresRoot': None,
                         'SourceCode': '',
                         'Summary': 'rocks.janicerand',
                         'Translation': '',
