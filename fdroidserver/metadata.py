@@ -1044,6 +1044,89 @@ def _del_duplicated_NoSourceSince(app):
             del app['AntiFeatures'][key]
 
 
+def _field_to_yaml(typ, value):
+    """Convert data to YAML 1.2 format that keeps the right TYPE_*."""
+    if typ == TYPE_STRING:
+        return str(value)
+    elif typ == TYPE_INT:
+        return int(value)
+    elif typ == TYPE_MULTILINE:
+        if '\n' in value:
+            return ruamel.yaml.scalarstring.preserve_literal(str(value))
+        else:
+            return str(value)
+    elif typ == TYPE_SCRIPT:
+        if type(value) == list:
+            if len(value) == 1:
+                return value[0]
+            else:
+                return value
+    else:
+        return value
+
+
+def _builds_to_yaml(app):
+    builds = ruamel.yaml.comments.CommentedSeq()
+    for build in app.get('Builds', []):
+        if not isinstance(build, Build):
+            build = Build(build)
+        b = ruamel.yaml.comments.CommentedMap()
+        for field in build_flags:
+            if hasattr(build, field):
+                value = getattr(build, field)
+                if field == 'gradle' and value == ['off']:
+                    value = [
+                        ruamel.yaml.scalarstring.SingleQuotedScalarString('off')
+                    ]
+                typ = flagtype(field)
+                # don't check value == True for TYPE_INT as it could be 0
+                if value is not None and (typ == TYPE_INT or value):
+                    b.update({field: _field_to_yaml(typ, value)})
+        builds.append(b)
+
+    # insert extra empty lines between build entries
+    for i in range(1, len(builds)):
+        builds.yaml_set_comment_before_after_key(i, 'bogus')
+        builds.ca.items[i][1][-1].value = '\n'
+
+    return builds
+
+
+def _app_to_yaml(app):
+    cm = ruamel.yaml.comments.CommentedMap()
+    insert_newline = False
+    for field in yaml_app_field_order:
+        if field == '\n':
+            # next iteration will need to insert a newline
+            insert_newline = True
+        else:
+            if app.get(field) or field == 'Builds':
+                if field == 'Builds':
+                    if app.get('Builds'):
+                        cm.update({field: _builds_to_yaml(app)})
+                elif field == 'CurrentVersionCode':
+                    cm.update({field: _field_to_yaml(TYPE_INT, getattr(app, field))})
+                elif field == 'AllowedAPKSigningKeys':
+                    value = getattr(app, field)
+                    if value:
+                        value = [str(i).lower() for i in value]
+                        if len(value) == 1:
+                            cm.update({field: _field_to_yaml(TYPE_STRING, value[0])})
+                        else:
+                            cm.update({field: _field_to_yaml(TYPE_LIST, value)})
+                else:
+                    cm.update({field: _field_to_yaml(fieldtype(field), getattr(app, field))})
+
+                if insert_newline:
+                    # we need to prepend a newline in front of this field
+                    insert_newline = False
+                    # inserting empty lines is not supported so we add a
+                    # bogus comment and over-write its value
+                    cm.yaml_set_comment_before_after_key(field, 'bogus')
+                    cm.ca.items[field][1][-1].value = '\n'
+    return cm
+
+
 def write_yaml(mf, app):
     """Write metadata in yaml format.
 
@@ -1053,87 +1136,8 @@ def write_yaml(mf, app):
       active file discriptor for writing
     app
       app metadata to written to the yaml file
+
     """
-    def _field_to_yaml(typ, value):
-        """Convert data to YAML 1.2 format that keeps the right TYPE_*."""
-        if typ == TYPE_STRING:
-            return str(value)
-        elif typ == TYPE_INT:
-            return int(value)
-        elif typ == TYPE_MULTILINE:
-            if '\n' in value:
-                return ruamel.yaml.scalarstring.preserve_literal(str(value))
-            else:
-                return str(value)
-        elif typ == TYPE_SCRIPT:
-            if type(value) == list:
-                if len(value) == 1:
-                    return value[0]
-                else:
-                    return value
-        else:
-            return value
-
-    def _app_to_yaml(app):
-        cm = ruamel.yaml.comments.CommentedMap()
-        insert_newline = False
-        for field in yaml_app_field_order:
-            if field == '\n':
-                # next iteration will need to insert a newline
-                insert_newline = True
-            else:
-                if app.get(field) or field == 'Builds':
-                    if field == 'Builds':
-                        if app.get('Builds'):
-                            cm.update({field: _builds_to_yaml(app)})
-                    elif field == 'CurrentVersionCode':
-                        cm.update({field: _field_to_yaml(TYPE_INT, getattr(app, field))})
-                    elif field == 'AllowedAPKSigningKeys':
-                        value = getattr(app, field)
-                        if value:
-                            value = [str(i).lower() for i in value]
-                            if len(value) == 1:
-                                cm.update({field: _field_to_yaml(TYPE_STRING, value[0])})
-                            else:
-                                cm.update({field: _field_to_yaml(TYPE_LIST, value)})
-                    else:
-                        cm.update({field: _field_to_yaml(fieldtype(field), getattr(app, field))})
-
-                    if insert_newline:
-                        # we need to prepend a newline in front of this field
-                        insert_newline = False
-                        # inserting empty lines is not supported so we add a
-                        # bogus comment and over-write its value
-                        cm.yaml_set_comment_before_after_key(field, 'bogus')
-                        cm.ca.items[field][1][-1].value = '\n'
-        return cm
-
-    def _builds_to_yaml(app):
-        builds = ruamel.yaml.comments.CommentedSeq()
-        for build in app.get('Builds', []):
-            if not isinstance(build, Build):
-                build = Build(build)
-            b = ruamel.yaml.comments.CommentedMap()
-            for field in build_flags:
-                if hasattr(build, field):
-                    value = getattr(build, field)
-                    if field == 'gradle' and value == ['off']:
-                        value = [
-                            ruamel.yaml.scalarstring.SingleQuotedScalarString('off')
-                        ]
-                    typ = flagtype(field)
-                    # don't check value == True for TYPE_INT as it could be 0
-                    if value is not None and (typ == TYPE_INT or value):
-                        b.update({field: _field_to_yaml(typ, value)})
-            builds.append(b)
-
-        # insert extra empty lines between build entries
-        for i in range(1, len(builds)):
-            builds.yaml_set_comment_before_after_key(i, 'bogus')
-            builds.ca.items[i][1][-1].value = '\n'
-
-        return builds
-
     _del_duplicated_NoSourceSince(app)
     yaml_app = _app_to_yaml(app)
     yaml = ruamel.yaml.YAML()

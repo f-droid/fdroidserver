@@ -1684,6 +1684,49 @@ class MetadataTest(unittest.TestCase):
             ),
         )
 
+    def test_app_to_yaml_smokecheck(self):
+        self.assertTrue(
+            isinstance(metadata._app_to_yaml(dict()), ruamel.yaml.comments.CommentedMap)
+        )
+
+    def test_app_to_yaml_build_list_empty(self):
+        app = metadata.App({'Builds': [metadata.Build({'rm': []})]})
+        self.assertEqual(dict(), metadata._app_to_yaml(app)['Builds'][0])
+
+    def test_app_to_yaml_build_list_string(self):
+        app = metadata.App({'Builds': [metadata.Build({'rm': 'one'})]})
+        self.assertEqual({'rm': 'one'}, metadata._app_to_yaml(app)['Builds'][0])
+
+    def test_app_to_yaml_build_list_one(self):
+        app = metadata.App({'Builds': [metadata.Build({'rm': ['one']})]})
+        self.assertEqual({'rm': ['one']}, metadata._app_to_yaml(app)['Builds'][0])
+
+    def test_app_to_yaml_build_list(self):
+        app = metadata.App({'Builds': [metadata.Build({'rm': ['b2', 'NO1']})]})
+        self.assertEqual({'rm': ['b2', 'NO1']}, metadata._app_to_yaml(app)['Builds'][0])
+
+    def test_app_to_yaml_AllowedAPKSigningKeys_two(self):
+        cm = metadata._app_to_yaml(metadata.App({'AllowedAPKSigningKeys': ['b', 'A']}))
+        self.assertEqual(['b', 'a'], cm['AllowedAPKSigningKeys'])
+
+    def test_app_to_yaml_AllowedAPKSigningKeys_one(self):
+        cm = metadata._app_to_yaml(metadata.App({'AllowedAPKSigningKeys': ['One']}))
+        self.assertEqual('one', cm['AllowedAPKSigningKeys'])
+
+    def test_app_to_yaml_int_hex(self):
+        cm = metadata._app_to_yaml(metadata.App({'CurrentVersionCode': 0xFF}))
+        self.assertEqual(255, cm['CurrentVersionCode'])
+
+    def test_app_to_yaml_int_underscore(self):
+        cm = metadata._app_to_yaml(metadata.App({'CurrentVersionCode': 1_2_3}))
+        self.assertEqual(123, cm['CurrentVersionCode'])
+
+    def test_app_to_yaml_int_0(self):
+        """Document that 0 values fail to make it through."""
+        # TODO it should be possible to use `CurrentVersionCode: 0`
+        cm = metadata._app_to_yaml(metadata.App({'CurrentVersionCode': 0}))
+        self.assertFalse('CurrentVersionCode' in cm)
+
 
 class PostMetadataParseTest(unittest.TestCase):
     """Test the functions that post process the YAML input.
