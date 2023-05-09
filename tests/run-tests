@@ -1129,7 +1129,7 @@ echo_header "setup a new repo from scratch using ANDROID_HOME with git mirror"
 # fake git remote server for repo mirror
 SERVER_GIT_MIRROR=`create_test_dir`
 cd $SERVER_GIT_MIRROR
-$git init
+$git init --initial-branch=master
 $git config receive.denyCurrentBranch updateInstead
 
 REPOROOT=`create_test_dir`
@@ -1191,7 +1191,7 @@ SERVERWEBROOT=`create_test_dir`/fdroid
 cd $OFFLINE_ROOT
 mkdir binary_transparency
 cd binary_transparency
-$git init
+$git init --initial-branch=master
 
 # fake git remote server for binary transparency log
 BINARY_TRANSPARENCY_REMOTE=`create_test_dir`
@@ -1199,7 +1199,7 @@ BINARY_TRANSPARENCY_REMOTE=`create_test_dir`
 # fake git remote server for repo mirror
 SERVER_GIT_MIRROR=`create_test_dir`
 cd $SERVER_GIT_MIRROR
-$git init
+$git init --initial-branch=master
 $git config receive.denyCurrentBranch updateInstead
 
 cd $OFFLINE_ROOT

@@ -125,6 +125,10 @@ ubuntu_lts_ppa:
     - apt-get update
     - apt-get dist-upgrade
     - apt-get install --install-recommends dexdump fdroidserver git jq python3-setuptools sdkmanager
+
+    # Test things work with a default branch other than 'master'
+    - git config --global init.defaultBranch thisisnotmasterormain
+
     - cd tests
     - ./run-tests
 
