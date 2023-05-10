@@ -496,31 +496,41 @@ def file_entry(filename, hash_value=None):
 
 
 def load_localized_config(name, repodir):
-    lst = {}
+    """Load localized config files and put them into internal dict format.
+
+    This will maintain the order as came from the data files, e.g
+    YAML.  The locale comes from unsorted paths on the filesystem, so
+    that is separately sorted.
+
+    """
+    ret = dict()
     for f in Path().glob("config/**/{name}.yml".format(name=name)):
         locale = f.parts[1]
         if len(f.parts) == 2:
             locale = "en-US"
         with open(f, encoding="utf-8") as fp:
             elem = yaml.safe_load(fp)
-            for akey, avalue in elem.items():
-                if akey not in lst:
-                    lst[akey] = {}
-                for key, value in avalue.items():
-                    if key not in lst[akey]:
-                        lst[akey][key] = {}
+            for afname, field_dict in elem.items():
+                if afname not in ret:
+                    ret[afname] = dict()
+                for key, value in field_dict.items():
+                    if key not in ret[afname]:
+                        ret[afname][key] = dict()
                     if key == "icon":
                         icons_dir = os.path.join(repodir, 'icons')
                         if not os.path.exists(icons_dir):
                             os.mkdir(icons_dir)
                         shutil.copy(os.path.join("config", value), icons_dir)
-                        lst[akey][key][locale] = file_entry(
+                        ret[afname][key][locale] = file_entry(
                             os.path.join(icons_dir, value)
                         )
                     else:
-                        lst[akey][key][locale] = value
+                        ret[afname][key][locale] = value
 
-    return lst
+    for elem in ret.values():
+        for afname in elem:
+            elem[afname] = {locale: v for locale, v in sorted(elem[afname].items())}
+    return ret
 
 
 def parse_human_readable_size(size):
