@@ -1049,6 +1049,7 @@ def _format_stringmap(appid, field, stringmap, versionCode=None):
     try:
         next(app_dir.glob('*/%s/*.txt' % field.lower()))
         files = []
+        overwrites = []
         for name, descdict in stringmap.items():
             for locale, desc in descdict.items():
                 outdir = app_dir / locale / field.lower()
@@ -1058,8 +1059,21 @@ def _format_stringmap(appid, field, stringmap, versionCode=None):
                     filename = '%s.txt' % name
                 outfile = outdir / filename
                 files.append(str(outfile))
-                with outfile.open('w') as fp:
-                    fp.write(desc)
+                if outfile.exists():
+                    if desc != outfile.read_text():
+                        overwrites.append(str(outfile))
+                else:
+                    if not outfile.parent.exists():
+                        outfile.parent.mkdir(parents=True)
+                    outfile.write_text(desc)
+        if overwrites:
+            _warn_or_exception(
+                _(
+                    'Conflicting "{field}" definitions between .yml and localized files:'
+                ).format(field=field)
+                + '\n'
+                + '\n'.join(sorted(overwrites))
+            )
         logging.warning(
             _('Moving Anti-Features declarations to localized files:')
             + '\n'

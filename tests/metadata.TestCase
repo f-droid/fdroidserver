@@ -1858,6 +1858,55 @@ class MetadataTest(unittest.TestCase):
             {'AF': {'ko': 'b', 'uz': 'a', 'zh': 'c'}},
         )
 
+    def test_format_stringmap_app_antifeatures_conflict(self):
+        """Raise an error if a YAML Anti-Feature conflicts with a localized file."""
+        os.chdir(self.testdir)
+        appid = 'a'
+        field = 'AntiFeatures'
+        locale = 'ko'
+        yml = Path('metadata/a.yml')
+        antifeatures_ko = yml.parent / appid / locale / field.lower()
+        antifeatures_ko.mkdir(parents=True)
+        afname = 'Anti-🔥'
+        (antifeatures_ko / (afname + '.txt')).write_text('SOMETHING ELSE')
+        with self.assertRaises(MetaDataException):
+            metadata._format_stringmap(
+                appid, field, {afname: {'uz': 'a', locale: 'b', 'zh': 'c'}}
+            )
+
+    def test_format_stringmap_app_antifeatures_conflict_same_contents(self):
+        """Raise an error if a YAML Anti-Feature conflicts with a localized file."""
+        os.chdir(self.testdir)
+        appid = 'a'
+        field = 'AntiFeatures'
+        locale = 'ko'
+        yml = Path('metadata/a.yml')
+        antifeatures_ko = yml.parent / appid / locale / field.lower()
+        antifeatures_ko.mkdir(parents=True)
+        afname = 'Anti-🔥'
+        (antifeatures_ko / (afname + '.txt')).write_text('b')
+        metadata._format_stringmap(
+            appid, field, {afname: {'uz': 'a', locale: 'b', 'zh': 'c'}}
+        )
+
+    def test_format_stringmap_build_antifeatures_conflict(self):
+        """Raise an error if a YAML Anti-Feature conflicts with a localized file."""
+        os.chdir(self.testdir)
+        appid = 'a'
+        field = 'antifeatures'
+        locale = 'ko'
+        versionCode = 123
+        yml = Path('metadata/a.yml')
+        antifeatures_ko = yml.parent / appid / locale / field.lower()
+        antifeatures_ko.mkdir(parents=True)
+        afname = 'Anti-🔥'
+        with (antifeatures_ko / ('%d_%s.txt' % (versionCode, afname))).open('w') as fp:
+            fp.write('SOMETHING ELSE')
+        with self.assertRaises(MetaDataException):
+            metadata._format_stringmap(
+                appid, field, {afname: {'uz': 'a', locale: 'b', 'zh': 'c'}}, versionCode
+            )
+
 
 class PostMetadataParseTest(unittest.TestCase):
     """Test the functions that post process the YAML input.
