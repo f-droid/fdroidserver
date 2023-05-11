@@ -1,0 +1,44 @@
+Ads:
+  description: Aplicația conține reclamă
+  icon: ic_antifeature_ads.xml
+  name: Reclame
+DisabledAlgorithm:
+  description: Aplicația are o semnătură slab securizată
+  icon: ic_antifeature_disabledalgorithm.xml
+  name: Algoritm nesigur semnătură
+KnownVuln:
+  description: Aplicația conține o vulnerabilitate de securitate cunoscută
+  icon: ic_antifeature_knownvuln.xml
+  name: Vulnerabilitate cunoscută
+NSFW:
+  description: Această aplicație conține conținut care nu ar trebui să fie făcut public
+    sau vizibil peste tot
+  icon: ic_antifeature_nsfw.xml
+  name: NSFW
+NoSourceSince:
+  icon: ic_antifeature_nosourcesince.xml
+  name: Codul sursă nu mai este disponibil, nu mai există posibilitatea de a actualiza.
+NonFreeAdd:
+  description: Aplicația promovează anexe ce nu sunt software liber
+  icon: ic_antifeature_nonfreeadd.xml
+  name: Anexe ne-libere
+NonFreeAssets:
+  description: Aceasta aplicație conține resurse ce nu sunt la disponibile la liber
+  icon: ic_antifeature_nonfreeassets.xml
+  name: Resurse ne-libere
+NonFreeDep:
+  description: Aplicația depinde de alte aplicații ce nu sunt software liber
+  icon: ic_antifeature_nonfreedep.xml
+  name: Dependențe ne-libere
+NonFreeNet:
+  description: Aplicația promovează servicii de rețea ce nu sunt accesibile la liber
+  icon: ic_antifeature_nonfreenet.xml
+  name: Servicii de rețea ne-libere
+Tracking:
+  description: Aplicația îți înregistrează și raportează activitatea undeva
+  icon: ic_antifeature_tracking.xml
+  name: Urmărire
+UpstreamNonFree:
+  description: Codul sursa originar nu este în totalitatea lui software liber
+  icon: ic_antifeature_upstreamnonfree.xml
+  name: Surse ne-libere

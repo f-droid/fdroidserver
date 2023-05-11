@@ -41,7 +41,7 @@ metadata_v0:
   image: registry.gitlab.com/fdroid/fdroidserver:buildserver
   variables:
     GIT_DEPTH: 1000
-    RELEASE_COMMIT_ID: 58cfce106b6d68dc8ebde7842cf01225f5adfd1b  # 2.2b
+    RELEASE_COMMIT_ID: 0124b9dde99f9cab19c034cbc7d8cc6005a99b48  # 2.3a0
   script:
     - git fetch https://gitlab.com/fdroid/fdroidserver.git $RELEASE_COMMIT_ID
     - cd tests
@@ -125,6 +125,10 @@ ubuntu_lts_ppa:
     - apt-get update
     - apt-get dist-upgrade
     - apt-get install --install-recommends dexdump fdroidserver git jq python3-setuptools sdkmanager
+
+    # Test things work with a default branch other than 'master'
+    - git config --global init.defaultBranch thisisnotmasterormain
+
     - cd tests
     - ./run-tests
 
@@ -584,12 +588,12 @@ docker:
     RELEASE_IMAGE: $CI_REGISTRY_IMAGE:buildserver
   script:
     # git ref names can contain many chars that are not allowed in docker tags
-    - export TEST_IMAGE=$CI_REGISTRY_IMAGE:$(printf $CI_BUILD_REF_NAME | sed 's,[^a-zA-Z0-9_.-],_,g')
+    - export TEST_IMAGE=$CI_REGISTRY_IMAGE:$(printf $CI_COMMIT_REF_NAME | sed 's,[^a-zA-Z0-9_.-],_,g')
     - cd buildserver
     - docker build -t $TEST_IMAGE --build-arg GIT_REV_PARSE_HEAD=$(git rev-parse HEAD) .
     - docker tag $TEST_IMAGE $RELEASE_IMAGE
     - docker tag $TEST_IMAGE ${RELEASE_IMAGE}-bullseye
-    - echo $CI_BUILD_TOKEN | docker login -u gitlab-ci-token --password-stdin registry.gitlab.com
+    - echo $CI_JOB_TOKEN | docker login -u gitlab-ci-token --password-stdin registry.gitlab.com
     # This avoids filling up gitlab.com free tier accounts with unused docker images.
     - if test -z "$FDROID_PUSH_DOCKER_IMAGE"; then
           echo "Skipping docker push to save quota on your gitlab namespace.";

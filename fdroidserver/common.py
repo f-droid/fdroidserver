@@ -77,6 +77,9 @@ from . import apksigcopier, common
 # The path to this fdroidserver distribution
 FDROID_PATH = os.path.realpath(os.path.join(os.path.dirname(__file__), '..'))
 
+# There needs to be a default, and this is the most common for software.
+DEFAULT_LOCALE = 'en-US'
+
 # this is the build-tools version, aapt has a separate version that
 # has to be manually set in test_aapt_version()
 MINIMUM_AAPT_BUILD_TOOLS_VERSION = '26.0.0'
@@ -485,6 +488,52 @@ def read_config(opts=None):
         del config[configname]
 
     return config
+
+
+def file_entry(filename, hash_value=None):
+    meta = {}
+    meta["name"] = "/" + filename.split("/", 1)[1]
+    meta["sha256"] = hash_value or common.sha256sum(filename)
+    meta["size"] = os.stat(filename).st_size
+    return meta
+
+
+def load_localized_config(name, repodir):
+    """Load localized config files and put them into internal dict format.
+
+    This will maintain the order as came from the data files, e.g
+    YAML.  The locale comes from unsorted paths on the filesystem, so
+    that is separately sorted.
+
+    """
+    ret = dict()
+    for f in Path().glob("config/**/{name}.yml".format(name=name)):
+        locale = f.parts[1]
+        if len(f.parts) == 2:
+            locale = DEFAULT_LOCALE
+        with open(f, encoding="utf-8") as fp:
+            elem = yaml.safe_load(fp)
+            for afname, field_dict in elem.items():
+                if afname not in ret:
+                    ret[afname] = dict()
+                for key, value in field_dict.items():
+                    if key not in ret[afname]:
+                        ret[afname][key] = dict()
+                    if key == "icon":
+                        icons_dir = os.path.join(repodir, 'icons')
+                        if not os.path.exists(icons_dir):
+                            os.mkdir(icons_dir)
+                        shutil.copy(os.path.join("config", value), icons_dir)
+                        ret[afname][key][locale] = file_entry(
+                            os.path.join(icons_dir, value)
+                        )
+                    else:
+                        ret[afname][key][locale] = value
+
+    for elem in ret.values():
+        for afname in elem:
+            elem[afname] = {locale: v for locale, v in sorted(elem[afname].items())}
+    return ret
 
 
 def parse_human_readable_size(size):
@@ -3866,7 +3915,7 @@ def get_app_display_name(app):
     if app.get('Name'):
         return app['Name']
     if app.get('localized'):
-        localized = app['localized'].get('en-US')
+        localized = app['localized'].get(DEFAULT_LOCALE)
         if not localized:
             for v in app['localized'].values():
                 localized = v

@@ -44,6 +44,22 @@ def proper_format(app):
     return content == cur_content
 
 
+def remove_blank_flags_from_builds(builds):
+    """Remove unset entries from Builds so they are not written out."""
+    if not builds:
+        return list()
+    newbuilds = list()
+    for build in builds:
+        new = dict()
+        for k in metadata.build_flags:
+            v = build[k]
+            if v is None or v is False or v == [] or v == '':
+                continue
+            new[k] = v
+        newbuilds.append(new)
+    return newbuilds
+
+
 def main():
     global config, options
 
@@ -82,16 +98,9 @@ def main():
                 print(path)
             continue
 
-        newbuilds = []
-        for build in app.get('Builds', []):
-            new = metadata.Build()
-            for k in metadata.build_flags:
-                v = build[k]
-                if v is None or v is False or v == [] or v == '':
-                    continue
-                new[k] = v
-            newbuilds.append(new)
-        app['Builds'] = newbuilds
+        builds = remove_blank_flags_from_builds(app.get('Builds'))
+        if builds:
+            app['Builds'] = builds
 
         # rewrite to temporary file before overwriting existing
         # file in case there's a bug in write_metadata

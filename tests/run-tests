@@ -214,16 +214,6 @@ fi
 
 
 #------------------------------------------------------------------------------#
-echo_header "TODO remove once buildserver image is upgraded to bullseye with apksigner"
-
-if java -version 2>&1 | grep -F 1.8.0; then
-    echo "Skipping the rest because they require apksigner 30.0.0+ which does not run on Java8"
-    echo SUCCESS
-    exit
-fi
-
-
-#------------------------------------------------------------------------------#
 echo_header "test UTF-8 metadata"
 
 REPOROOT=`create_test_dir`
@@ -271,7 +261,12 @@ REPOROOT=`create_test_dir`
 GNUPGHOME=$REPOROOT/gnupghome
 cd $REPOROOT
 fdroid_init_with_prebuilt_keystore
-cp -a $WORKSPACE/tests/metadata $WORKSPACE/tests/repo $WORKSPACE/tests/stats $REPOROOT/
+cp -a \
+   $WORKSPACE/tests/config \
+   $WORKSPACE/tests/metadata \
+   $WORKSPACE/tests/repo \
+   $WORKSPACE/tests/stats \
+   $REPOROOT/
 cp -a $WORKSPACE/tests/gnupghome $GNUPGHOME
 chmod 0700 $GNUPGHOME
 echo "install_list: org.adaway" >> config.yml
@@ -1139,7 +1134,7 @@ echo_header "setup a new repo from scratch using ANDROID_HOME with git mirror"
 # fake git remote server for repo mirror
 SERVER_GIT_MIRROR=`create_test_dir`
 cd $SERVER_GIT_MIRROR
-$git init
+$git init --initial-branch=master
 $git config receive.denyCurrentBranch updateInstead
 
 REPOROOT=`create_test_dir`
@@ -1201,7 +1196,7 @@ SERVERWEBROOT=`create_test_dir`/fdroid
 cd $OFFLINE_ROOT
 mkdir binary_transparency
 cd binary_transparency
-$git init
+$git init --initial-branch=master
 
 # fake git remote server for binary transparency log
 BINARY_TRANSPARENCY_REMOTE=`create_test_dir`
@@ -1209,7 +1204,7 @@ BINARY_TRANSPARENCY_REMOTE=`create_test_dir`
 # fake git remote server for repo mirror
 SERVER_GIT_MIRROR=`create_test_dir`
 cd $SERVER_GIT_MIRROR
-$git init
+$git init --initial-branch=master
 $git config receive.denyCurrentBranch updateInstead
 
 cd $OFFLINE_ROOT

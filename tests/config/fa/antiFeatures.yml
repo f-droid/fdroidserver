@@ -1,0 +1,43 @@
+Ads:
+  description: این کاره دارای تبلیغات است
+  icon: ic_antifeature_ads.xml
+  name: تبلیغات
+DisabledAlgorithm:
+  description: این کاره، امضای امنیتی ضعیفی دارد
+  icon: ic_antifeature_disabledalgorithm.xml
+  name: امضا شده با الگوریتمی ناامن
+KnownVuln:
+  description: این کاره، آسیب‌پذیری امنیتی شناخته‌شده‌ای دارد
+  icon: ic_antifeature_knownvuln.xml
+  name: آسیب‌پذیری شناخته
+NSFW:
+  description: این کاره محتوایی دارد که نباید عمومی شده یا همه‌حا نمایان باشد
+  icon: ic_antifeature_nsfw.xml
+  name: NSFW
+NoSourceSince:
+  icon: ic_antifeature_nosourcesince.xml
+  name: کد مبدأ دیگر در دسترس نیست. به‌روز رسانی ناممکن است.
+NonFreeAdd:
+  description: این کاره، افزونه‌های ناآزاد را تبلیغ می‌کند
+  icon: ic_antifeature_nonfreeadd.xml
+  name: افزونه‌های ناآزاد
+NonFreeAssets:
+  description: این کاره دارای بخش‌های ناآزاد است
+  icon: ic_antifeature_nonfreeassets.xml
+  name: بخش‌های ناآزاد
+NonFreeDep:
+  description: این کاره به دیگر کاره‌های ناآزاد وابسته است
+  icon: ic_antifeature_nonfreedep.xml
+  name: وابستگی‌های ناآزاد
+NonFreeNet:
+  description: این کاره، خدمات شبکه‌های ناآزاد را ترویج می‌کند
+  icon: ic_antifeature_nonfreenet.xml
+  name: خدمات شبکه‌ای ناآزاد
+Tracking:
+  description: این کاره، فعّالیتتان را ردیابی و گزارش می‌کند
+  icon: ic_antifeature_tracking.xml
+  name: ردیابی
+UpstreamNonFree:
+  description: کد مبدأ بالادستی کاملاً آزاد نیست
+  icon: ic_antifeature_upstreamnonfree.xml
+  name: بالادست ناآزاد

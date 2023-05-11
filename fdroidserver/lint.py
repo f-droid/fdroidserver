@@ -220,6 +220,19 @@ locale_pattern = re.compile(r"[a-z]{2,3}(-([A-Z][a-zA-Z]+|\d+|[a-z]+))*")
 
 versioncode_check_pattern = re.compile(r"(\\d|\[(0-9|\\d)_?(a-fA-F)?])[+]")
 
+ANTIFEATURES_KEYS = None
+ANTIFEATURES_PATTERN = None
+
+
+def load_antiFeatures_config():
+    """Lazy loading, since it might read a lot of files."""
+    global ANTIFEATURES_KEYS, ANTIFEATURES_PATTERN
+    k = 'antiFeatures'  # internal dict uses camelCase key name
+    if not ANTIFEATURES_KEYS or k not in common.config:
+        common.config[k] = common.load_localized_config(k, 'repo')
+        ANTIFEATURES_KEYS = sorted(common.config[k].keys())
+        ANTIFEATURES_PATTERN = ','.join(ANTIFEATURES_KEYS)
+
 
 def check_regexes(app):
     for f, checks in regex_checks.items():
@@ -613,6 +626,26 @@ def check_app_field_types(app):
             )
 
 
+def check_antiFeatures(app):
+    """Check the Anti-Features keys match those declared in the config."""
+    pattern = ANTIFEATURES_PATTERN
+    msg = _("'{value}' is not a valid {field} in {appid}. Regex pattern: {pattern}")
+
+    field = 'AntiFeatures'  # App entries use capitalized CamelCase
+    for value in app.get(field, []):
+        if value not in ANTIFEATURES_KEYS:
+            yield msg.format(value=value, field=field, appid=app.id, pattern=pattern)
+
+    field = 'antifeatures'  # Build entries use all lowercase
+    for build in app.get('Builds', []):
+        build_antiFeatures = build.get(field, [])
+        for value in build_antiFeatures:
+            if value not in ANTIFEATURES_KEYS:
+                yield msg.format(
+                    value=value, field=field, appid=app.id, pattern=pattern
+                )
+
+
 def check_for_unsupported_metadata_files(basedir=""):
     """Check whether any non-metadata files are in metadata/."""
     basedir = Path(basedir)
@@ -745,6 +778,7 @@ def main():
     metadata.warnings_action = options.W
 
     config = common.read_config(options)
+    load_antiFeatures_config()
 
     # Get all apps...
     allapps = metadata.read_metadata(options.appid)
@@ -801,6 +835,7 @@ def main():
 
         app_check_funcs = [
             check_app_field_types,
+            check_antiFeatures,
             check_regexes,
             check_update_check_data_url,
             check_update_check_data_int,

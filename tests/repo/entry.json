@@ -3,8 +3,8 @@
   "version": 20002,
   "index": {
     "name": "/index-v2.json",
-    "sha256": "07fa4500736ae77fcc6434e4d70ab315b8e018aef52c2afca9f2834ddc73747d",
-    "size": 32946,
+    "sha256": "a3c7e88a522a7228937e5c3d760fc239e3578e292035d88478d32fec9ff5eb54",
+    "size": 52314,
     "numPackages": 10
   },
   "diffs": {}

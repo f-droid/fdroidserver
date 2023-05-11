@@ -39,6 +39,8 @@ config = None
 options = None
 start_timestamp = time.gmtime()
 
+GIT_BRANCH = 'master'
+
 BINARY_TRANSPARENCY_DIR = 'binary_transparency'
 
 AUTO_S3CFG = '.fdroid-deploy-s3cfg'
@@ -407,7 +409,7 @@ def update_servergitmirrors(servergitmirrors, repo_section):
         elif 'identity_file' in config:
             ssh_cmd += ' -oIdentitiesOnly=yes -i "%s"' % config['identity_file']
 
-        repo = git.Repo.init(git_mirror_path)
+        repo = git.Repo.init(git_mirror_path, initial_branch=GIT_BRANCH)
 
         enabled_remotes = []
         for remote_url in servergitmirrors:
@@ -480,7 +482,9 @@ def update_servergitmirrors(servergitmirrors, repo_section):
 
             logging.debug(_('Pushing to {url}').format(url=remote.url))
             with repo.git.custom_environment(GIT_SSH_COMMAND=ssh_cmd):
-                pushinfos = remote.push('master', force=True, set_upstream=True, progress=progress)
+                pushinfos = remote.push(
+                    GIT_BRANCH, force=True, set_upstream=True, progress=progress
+                )
                 for pushinfo in pushinfos:
                     if pushinfo.flags & (git.remote.PushInfo.ERROR
                                          | git.remote.PushInfo.REJECTED
@@ -691,7 +695,7 @@ def push_binary_transparency(git_repo_path, git_remote):
         remote_path = os.path.abspath(git_repo_path)
         if not os.path.isdir(os.path.join(git_remote, '.git')):
             os.makedirs(git_remote, exist_ok=True)
-            thumbdriverepo = git.Repo.init(git_remote)
+            thumbdriverepo = git.Repo.init(git_remote, initial_branch=GIT_BRANCH)
             local = thumbdriverepo.create_remote('local', remote_path)
         else:
             thumbdriverepo = git.Repo(git_remote)
@@ -702,7 +706,7 @@ def push_binary_transparency(git_repo_path, git_remote):
                     local.set_url(remote_path)
             else:
                 local = thumbdriverepo.create_remote('local', remote_path)
-        local.pull('master')
+        local.pull(GIT_BRANCH)
     else:
         # from online machine to remote on a server on the internet
         gitrepo = git.Repo(git_repo_path)
@@ -713,7 +717,7 @@ def push_binary_transparency(git_repo_path, git_remote):
                 origin.set_url(git_remote)
         else:
             origin = gitrepo.create_remote('origin', git_remote)
-        origin.push('master')
+        origin.push(GIT_BRANCH)
 
 
 def main():

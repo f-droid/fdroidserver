@@ -29,7 +29,6 @@ import re
 import shutil
 import tempfile
 import urllib.parse
-import yaml
 import zipfile
 import calendar
 import qrcode
@@ -43,7 +42,7 @@ from . import common
 from . import metadata
 from . import net
 from . import signindex
-from fdroidserver.common import FDroidPopen, FDroidPopenBytes, load_stats_fdroid_signing_key_fingerprints
+from fdroidserver.common import DEFAULT_LOCALE, FDroidPopen, FDroidPopenBytes, load_stats_fdroid_signing_key_fingerprints
 from fdroidserver.exception import FDroidException, VerificationException
 
 
@@ -472,37 +471,6 @@ def dict_diff(source, target):
     return result
 
 
-def file_entry(filename, hash_value=None):
-    meta = {}
-    meta["name"] = "/" + filename.split("/", 1)[1]
-    meta["sha256"] = hash_value or common.sha256sum(filename)
-    meta["size"] = os.stat(filename).st_size
-    return meta
-
-
-def load_locale(name, repodir):
-    lst = {}
-    for yml in Path().glob("config/**/{name}.yml".format(name=name)):
-        locale = yml.parts[1]
-        if len(yml.parts) == 2:
-            locale = "en-US"
-        with open(yml, encoding="utf-8") as fp:
-            elem = yaml.safe_load(fp)
-            for akey, avalue in elem.items():
-                if akey not in lst:
-                    lst[akey] = {}
-                for key, value in avalue.items():
-                    if key not in lst[akey]:
-                        lst[akey][key] = {}
-                    if key == "icon":
-                        shutil.copy(os.path.join("config", value), os.path.join(repodir, "icons"))
-                        lst[akey][key][locale] = file_entry(os.path.join(repodir, "icons", value))
-                    else:
-                        lst[akey][key][locale] = value
-
-    return lst
-
-
 def convert_datetime(obj):
     if isinstance(obj, datetime):
         # Java prefers milliseconds
@@ -550,14 +518,14 @@ def package_metadata(app, repodir):
     ):
         element_new = element[:1].lower() + element[1:]
         if element in app and app[element]:
-            meta[element_new] = {"en-US": convert_datetime(app[element])}
+            meta[element_new] = {DEFAULT_LOCALE: convert_datetime(app[element])}
         elif "localized" in app:
             localized = {k: v[element_new] for k, v in app["localized"].items() if element_new in v}
             if localized:
                 meta[element_new] = localized
 
     if "name" not in meta and app["AutoName"]:
-        meta["name"] = {"en-US": app["AutoName"]}
+        meta["name"] = {DEFAULT_LOCALE: app["AutoName"]}
 
     # fdroidserver/metadata.py App default
     if meta["license"] == "Unknown":
@@ -568,7 +536,8 @@ def package_metadata(app, repodir):
 
     # TODO handle different resolutions
     if app.get("icon"):
-        meta["icon"] = {"en-US": file_entry(os.path.join(repodir, "icons", app["icon"]))}
+        icon_path = os.path.join(repodir, "icons", app["icon"])
+        meta["icon"] = {DEFAULT_LOCALE: common.file_entry(icon_path)}
 
     if "iconv2" in app:
         meta["icon"] = app["iconv2"]
@@ -594,16 +563,16 @@ def convert_version(version, app, repodir):
         ver["file"]["ipfsCIDv1"] = ipfsCIDv1
 
     if "srcname" in version:
-        ver["src"] = file_entry(os.path.join(repodir, version["srcname"]))
+        ver["src"] = common.file_entry(os.path.join(repodir, version["srcname"]))
 
     if "obbMainFile" in version:
-        ver["obbMainFile"] = file_entry(
+        ver["obbMainFile"] = common.file_entry(
             os.path.join(repodir, version["obbMainFile"]),
             version["obbMainFileSha256"],
         )
 
     if "obbPatchFile" in version:
-        ver["obbPatchFile"] = file_entry(
+        ver["obbPatchFile"] = common.file_entry(
             os.path.join(repodir, version["obbPatchFile"]),
             version["obbPatchFileSha256"],
         )
@@ -684,11 +653,13 @@ def convert_version(version, app, repodir):
 def v2_repo(repodict, repodir, archive):
     repo = {}
 
-    repo["name"] = {"en-US": repodict["name"]}
-    repo["description"] = {"en-US": repodict["description"]}
-    repo["icon"] = {"en-US": file_entry("{}/icons/{}".format(repodir, repodict["icon"]))}
+    repo["name"] = {DEFAULT_LOCALE: repodict["name"]}
+    repo["description"] = {DEFAULT_LOCALE: repodict["description"]}
+    repo["icon"] = {
+        DEFAULT_LOCALE: common.file_entry("%s/icons/%s" % (repodir, repodict["icon"]))
+    }
 
-    config = load_locale("config", repodir)
+    config = common.load_localized_config("config", repodir)
     if config:
         repo["name"] = config["archive" if archive else "repo"]["name"]
         repo["description"] = config["archive" if archive else "repo"]["description"]
@@ -702,15 +673,15 @@ def v2_repo(repodict, repodir, archive):
 
     repo["timestamp"] = repodict["timestamp"]
 
-    antiFeatures = load_locale("antiFeatures", repodir)
+    antiFeatures = common.load_localized_config("antiFeatures", repodir)
     if antiFeatures:
         repo["antiFeatures"] = antiFeatures
 
-    categories = load_locale("categories", repodir)
+    categories = common.load_localized_config("categories", repodir)
     if categories:
         repo["categories"] = categories
 
-    channels = load_locale("channels", repodir)
+    channels = common.load_localized_config("channels", repodir)
     if channels:
         repo["releaseChannels"] = channels
 
@@ -735,7 +706,7 @@ def make_v2(apps, packages, repodir, repodict, requestsdict, fdroid_signing_key_
 
     output = collections.OrderedDict()
     output["repo"] = v2_repo(repodict, repodir, archive)
-    if requestsdict and requestsdict["install"] or requestsdict["uninstall"]:
+    if requestsdict and (requestsdict["install"] or requestsdict["uninstall"]):
         output["repo"]["requests"] = requestsdict
 
     # establish sort order of the index
@@ -792,7 +763,7 @@ def make_v2(apps, packages, repodir, repodict, requestsdict, fdroid_signing_key_
         else:
             json.dump(output, fp, default=_index_encoder_default, ensure_ascii=False)
 
-    entry["index"] = file_entry(index_file)
+    entry["index"] = common.file_entry(index_file)
     entry["index"]["numPackages"] = len(output.get("packages", []))
 
     indexes = sorted(Path().glob("tmp/{}*.json".format(repodir)), key=lambda x: x.name)
@@ -819,7 +790,7 @@ def make_v2(apps, packages, repodir, repodict, requestsdict, fdroid_signing_key_
             else:
                 json.dump(diff, fp, default=_index_encoder_default, ensure_ascii=False)
 
-        entry["diffs"][old["repo"]["timestamp"]] = file_entry(diff_file)
+        entry["diffs"][old["repo"]["timestamp"]] = common.file_entry(diff_file)
         entry["diffs"][old["repo"]["timestamp"]]["numPackages"] = len(diff.get("packages", []))
 
     json_name = "entry.json"
@@ -872,10 +843,10 @@ def make_v1(apps, packages, repodir, repodict, requestsdict, fdroid_signing_key_
 
     appslist = []
     output['apps'] = appslist
-    for packageName, appdict in apps.items():
+    for packageName, app_dict in apps.items():
         d = collections.OrderedDict()
         appslist.append(d)
-        for k, v in sorted(appdict.items()):
+        for k, v in sorted(app_dict.items()):
             if not v:
                 continue
             if k in ('Builds', 'metadatapath',
@@ -901,20 +872,20 @@ def make_v1(apps, packages, repodir, repodict, requestsdict, fdroid_signing_key_
             d[k] = v
 
     # establish sort order in lists, sets, and localized dicts
-    for app in output['apps']:
-        localized = app.get('localized')
+    for app_dict in output['apps']:
+        localized = app_dict.get('localized')
         if localized:
             lordered = collections.OrderedDict()
             for lkey, lvalue in sorted(localized.items()):
                 lordered[lkey] = collections.OrderedDict()
                 for ikey, iname in sorted(lvalue.items()):
                     lordered[lkey][ikey] = iname
-            app['localized'] = lordered
-        antiFeatures = app.get('antiFeatures', [])
-        if apps[app["packageName"]].get("NoSourceSince"):
+            app_dict['localized'] = lordered
+        antiFeatures = app_dict.get('antiFeatures', [])
+        if apps[app_dict["packageName"]].get("NoSourceSince"):
             antiFeatures.append("NoSourceSince")
         if antiFeatures:
-            app['antiFeatures'] = sorted(set(antiFeatures))
+            app_dict['antiFeatures'] = sorted(set(antiFeatures))
 
     output_packages = collections.OrderedDict()
     output['packages'] = output_packages
@@ -1050,7 +1021,7 @@ def make_v0(apps, apks, repodir, repodict, requestsdict, fdroid_signing_key_fing
         lkey = key[:1].lower() + key[1:]
         localized = app.get('localized')
         if not value and localized:
-            for lang in ['en-US'] + [x for x in localized.keys()]:
+            for lang in [DEFAULT_LOCALE] + [x for x in localized.keys()]:
                 if not lang.startswith('en'):
                     continue
                 if lang in localized:
@@ -1096,8 +1067,8 @@ def make_v0(apps, apks, repodir, repodict, requestsdict, fdroid_signing_key_fing
             root.appendChild(element)
             element.setAttribute('packageName', packageName)
 
-    for appid, appdict in apps.items():
-        app = metadata.App(appdict)
+    for appid, app_dict in apps.items():
+        app = metadata.App(app_dict)
 
         if app.get('Disabled') is not None:
             continue
@@ -1294,7 +1265,7 @@ def make_v0(apps, apks, repodir, repodict, requestsdict, fdroid_signing_key_fing
             namefield = common.config['current_version_name_source']
             name = app.get(namefield)
             if not name and namefield == 'Name':
-                name = app.get('localized', {}).get('en-US', {}).get('name')
+                name = app.get('localized', {}).get(DEFAULT_LOCALE, {}).get('name')
             if not name:
                 name = app.id
             sanitized_name = re.sub(b'''[ '"&%?+=/]''', b'', str(name).encode('utf-8'))

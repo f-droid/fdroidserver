@@ -65,7 +65,7 @@ def make_binary_transparency_log(
     else:
         if not os.path.exists(btrepo):
             os.mkdir(btrepo)
-        gitrepo = git.Repo.init(btrepo)
+        gitrepo = git.Repo.init(btrepo, initial_branch=deploy.GIT_BRANCH)
 
         if not url:
             url = common.config['repo_url'].rstrip('/')

@@ -1,0 +1,45 @@
+Ads:
+  description: This app contains advertising
+  icon: ic_antifeature_ads.xml
+  name: Ads
+DisabledAlgorithm:
+  description: This app has a weak security signature
+  icon: ic_antifeature_disabledalgorithm.xml
+  name: Signed Using An Unsafe Algorithm
+KnownVuln:
+  description: This app contains a known security vulnerability
+  icon: ic_antifeature_knownvuln.xml
+  name: Known Vulnerability
+NSFW:
+  description: This app contains content that should not be publicized or visible
+    everywhere
+  icon: ic_antifeature_nsfw.xml
+  name: NSFW
+NoSourceSince:
+  description: The source code is no longer available, no updates possible.
+  icon: ic_antifeature_nosourcesince.xml
+  name: Newer Source Not Available
+NonFreeAdd:
+  description: This app promotes non-free add-ons
+  icon: ic_antifeature_nonfreeadd.xml
+  name: Non-Free Addons
+NonFreeAssets:
+  description: This app contains non-free assets
+  icon: ic_antifeature_nonfreeassets.xml
+  name: Non-Free Assets
+NonFreeDep:
+  description: This app depends on other non-free apps
+  icon: ic_antifeature_nonfreedep.xml
+  name: Non-Free Dependencies
+NonFreeNet:
+  description: This app promotes or depends entirely on a non-free network service
+  icon: ic_antifeature_nonfreenet.xml
+  name: Non-Free Network Services
+Tracking:
+  description: This app tracks and reports your activity
+  icon: ic_antifeature_tracking.xml
+  name: Tracking
+UpstreamNonFree:
+  description: The upstream source code is not entirely Free
+  icon: ic_antifeature_upstreamnonfree.xml
+  name: Upstream Non-Free

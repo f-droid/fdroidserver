@@ -2667,6 +2667,38 @@ class CommonTest(unittest.TestCase):
             config['smartcardoptions'],
         )
 
+    def test_load_localized_config(self):
+        """It should load"""
+        antiFeatures = fdroidserver.common.load_localized_config('antiFeatures', 'repo')
+        self.assertEqual(
+            [
+                'Ads',
+                'DisabledAlgorithm',
+                'KnownVuln',
+                'NSFW',
+                'NoSourceSince',
+                'NonFreeAdd',
+                'NonFreeAssets',
+                'NonFreeDep',
+                'NonFreeNet',
+                'Tracking',
+                'UpstreamNonFree',
+            ],
+            list(antiFeatures.keys()),
+        )
+        self.assertEqual(
+            ['de', 'en-US', 'fa', 'ro', 'zh-rCN'],
+            list(antiFeatures['Ads']['description'].keys()),
+        )
+        self.assertEqual(
+            ['en-US'],
+            list(antiFeatures['NoSourceSince']['description'].keys()),
+        )
+        # it should have copied the icon files into place
+        for v in antiFeatures.values():
+            p = Path(os.path.dirname(__file__) + '/repo' + v['icon']['en-US']['name'])
+            self.assertTrue(p.exists())
+
 
 if __name__ == "__main__":
     os.chdir(os.path.dirname(__file__))
