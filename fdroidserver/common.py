@@ -522,7 +522,7 @@ def load_localized_config(name, repodir):
                     if key == "icon":
                         icons_dir = os.path.join(repodir, 'icons')
                         if not os.path.exists(icons_dir):
-                            os.mkdir(icons_dir)
+                            os.makedirs(icons_dir, exist_ok=True)
                         shutil.copy(os.path.join("config", value), icons_dir)
                         ret[afname][key][locale] = file_entry(
                             os.path.join(icons_dir, value)
