@@ -3,83 +3,84 @@
 <p><img src="https://gitlab.com/fdroid/artwork/-/raw/master/fdroid-logo-2015/fdroid-logo.svg" width="200"></p>
 
 # F-Droid Server
-### Server tools for maintaining an F-Droid repository system.
+### Tools for maintaining an F-Droid repository system.
 
 </div>
 
 ---
 
-## What is F-Droid?
-
-F-Droid is an installable catalogue of FOSS (Free and Open Source Software)
-applications for the Android platform. The client makes it easy to browse,
-install, and keep track of updates on your device.
-
-
 ## What is F-Droid Server?
 
-The F-Droid server tools provide various scripts and tools that are
-used to maintain the main
-[F-Droid application repository](https://f-droid.org/packages).  You
-can use these same tools to create your own additional or alternative
-repository for publishing, or to assist in creating, testing and
-submitting metadata to the main repository.
+_fdroidserver_ is a suite of tools to publish and work with collections of
+Android apps (APK files) and other kinds of packages.  It is used to maintain
+the [f-droid.org application repository](https://f-droid.org/packages).  These
+same tools can be used to create additional or alternative repositories for
+publishing, or to assist in creating, testing and submitting metadata to the
+f-droid.org repository, also known as
+[_fdroiddata_](https://gitlab.com/fdroid/fdroiddata).
 
-For documentation, please see <https://f-droid.org/docs>, or you can
-find the source for the documentation in
-[fdroid/fdroid-website](https://gitlab.com/fdroid/fdroid-website).
+For documentation, please see <https://f-droid.org/docs>.
+
+In the beginning, _fdroidserver_ was the complete server-side setup that ran
+f-droid.org.  Since then, the website and other parts have been split out into
+their own projects.  The name for this suite of tooling has stayed
+_fdroidserver_ even though it no longer contains any proper server component.
 
 
 ## Installing
 
-There are many ways to install _fdroidserver_, they are documented on
-the website:
+There are many ways to install _fdroidserver_, including using a range of
+package managers.  All of the options are documented on the website:
 https://f-droid.org/docs/Installing_the_Server_and_Repo_Tools
-
-All sorts of other documentation lives there as well.
 
 
 ## Tests
 
-There are many components to all the tests for the components in
-this git repository.  The most commonly used parts of well tested, while
-some parts still lack tests.  This test suite has built over time a
-bit haphazardly, so it is not as clean, organized, or complete as it
-could be.  We welcome contributions.  Before rearchitecting any parts
-of it, be sure to [contact us](https://f-droid.org/about) to discuss
-the changes beforehand.
+To run the full test suite:
 
-### `fdroid` commands
+    tests/run-tests
 
-The test suite for all of the `fdroid` commands is in the _tests/_
-subdir.  _.gitlab-ci.yml_ and _.travis.yml_ run this test suite on
-various configurations.
+To run the tests for individual Python modules, see the _.TestCase_ files, e.g.:
 
-- _tests/run-tests_ runs the whole test suite
-- _tests/*.TestCase_ are individual unit tests for all of the `fdroid`
-  commands, which can be run separately, e.g. `./update.TestCase`.
-- run one test: `tests/common.TestCase CommonTest.test_get_apk_id`
+    tests/metadata.TestCase
+
+It is also possible to run individual tests:
+
+    tests/metadata.TestCase MetadataTest.test_rewrite_yaml_special_build_params
+
+There is a growing test suite that has good coverage on a number of key parts of
+this code base.  It does not yet cover all the code, and there are some parts
+where the technical debt makes it difficult to write unit tests.  New tests
+should be standard Python _unittest_ test cases.  Whenever possible, the old
+tests written in _bash_ in _tests/run-tests_ should be ported to Python.
+
+This test suite has built over time a bit haphazardly, so it is not as clean,
+organized, or complete as it could be.  We welcome contributions.  The goal is
+to move towards standard Python testing patterns and to expand the unit test
+coverage.  Before rearchitecting any parts of it, be sure to [contact
+us](https://f-droid.org/about) to discuss the changes beforehand.
+
 
 ### Additional tests for different linux distributions
 
-These tests are also run on various distributions through GitLab CI. This is
+These tests are also run on various configurations through GitLab CI. This is
 only enabled for `master@fdroid/fdroidserver` because it takes longer to
 complete than the regular CI tests.  Most of the time you won't need to worry
 about them, but sometimes it might make sense to also run them for your merge
-request. In that case you need to remove [these lines from
-.gitlab-ci.yml](https://gitlab.com/fdroid/fdroidserver/blob/master/.gitlab-ci.yml#L34-35)
+request. In that case you need to remove [these lines from .gitlab-ci.yml](https://gitlab.com/fdroid/fdroidserver/-/blob/0124b9dde99f9cab19c034cbc7d8cc6005a99b48/.gitlab-ci.yml#L90-91)
 and push this to a new branch of your fork.
 
 Alternatively [run them
 locally](https://docs.gitlab.com/runner/commands/README.html#gitlab-runner-exec)
 like this: `gitlab-runner exec docker ubuntu_lts`
 
+
 ### Buildserver
 
 The tests for the whole build server setup are entirely separate
 because they require at least 200 GB of disk space, and 8 GB of
 RAM. These test scripts are in the root of the project, all starting
-with _jenkins-_ since they are run on https://jenkins.debian.net.
+with _jenkins-_ since they used to be run on https://jenkins.debian.net.
 
 
 ## Documentation
