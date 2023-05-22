@@ -213,7 +213,8 @@ plugin_v=(8.1.1 8.1 8.0.2 8.0.1 8.0 7.6.1 7.6 7.5.1 7.5 7.4.2 7.4.1 7.4 7.3.3 7.
 
 v_all=${plugin_v[@]}
 
-# Earliest takes priority
+# Earliest file takes priority
+# Last key takes priority if there are duplicates (matching java.util.Properties)
 for f in {.,..}/gradle/wrapper/gradle-wrapper.properties; do
     [[ -f $f ]] || continue
     while IFS='' read -r line || [ -n "$line" ]; do
@@ -221,9 +222,9 @@ for f in {.,..}/gradle/wrapper/gradle-wrapper.properties; do
         if [[ $line == 'distributionUrl='* ]]; then
             wrapper_ver=${line#*/gradle-}
             wrapper_ver=${wrapper_ver%-*.zip}
-            break 2
         fi
     done < $f
+    [[ -n $wrapper_ver ]] && break
 done
 
 if [[ -n $wrapper_ver ]]; then
