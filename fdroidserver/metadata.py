@@ -880,8 +880,7 @@ def parse_localized_antifeatures(app):
                 app['AntiFeatures'] = dict()
             if f.stem not in app['AntiFeatures']:
                 app['AntiFeatures'][f.stem] = dict()
-            with f.open() as fp:
-                app['AntiFeatures'][f.stem][locale] = fp.read()
+            app['AntiFeatures'][f.stem][locale] = f.read_text()
 
 
 def _normalize_type_string(v):
