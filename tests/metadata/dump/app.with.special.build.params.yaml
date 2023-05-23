@@ -1,0 +1,373 @@
+AllowedAPKSigningKeys: []
+AntiFeatures:
+  UpstreamNonFree: {}
+ArchivePolicy: 0 versions
+AuthorEmail: null
+AuthorName: null
+AuthorWebSite: null
+AutoName: UberSync for Facebook
+AutoUpdateMode: None
+Binaries: null
+Bitcoin: null
+Builds:
+- androidupdate: []
+  antcommands: []
+  antifeatures: {}
+  binary: null
+  build: ''
+  buildjni: []
+  commit: b3879c973e7cac3a3319
+  disable: ''
+  encoding: null
+  extlibs: []
+  forcevercode: false
+  forceversion: false
+  gradle: []
+  gradleprops: []
+  init: ''
+  maven: null
+  ndk: null
+  novcheck: false
+  oldsdkloc: false
+  output: null
+  patch: []
+  postbuild: ''
+  preassemble: []
+  prebuild: ''
+  rm: []
+  scandelete: []
+  scanignore: []
+  srclibs: []
+  subdir: null
+  submodules: false
+  sudo: ''
+  target: null
+  timeout: null
+  versionCode: 32
+  versionName: 1.0.0
+- androidupdate: []
+  antcommands: []
+  antifeatures: {}
+  binary: null
+  build: ''
+  buildjni: []
+  commit: 252c8dd4c9
+  disable: ''
+  encoding: null
+  extlibs: []
+  forcevercode: false
+  forceversion: false
+  gradle: []
+  gradleprops: []
+  init: ''
+  maven: null
+  ndk: null
+  novcheck: false
+  oldsdkloc: false
+  output: null
+  patch: []
+  postbuild: ''
+  preassemble: []
+  prebuild: ''
+  rm: []
+  scandelete: []
+  scanignore: []
+  srclibs: []
+  subdir: null
+  submodules: false
+  sudo: ''
+  target: null
+  timeout: null
+  versionCode: 33
+  versionName: 1.0.1
+- androidupdate: []
+  antcommands: []
+  antifeatures: {}
+  binary: null
+  build: ''
+  buildjni: []
+  commit: v1.2.0
+  disable: ''
+  encoding: null
+  extlibs: []
+  forcevercode: false
+  forceversion: false
+  gradle: []
+  gradleprops: []
+  init: ''
+  maven: null
+  ndk: null
+  novcheck: false
+  oldsdkloc: false
+  output: null
+  patch:
+  - appbrain.patch
+  postbuild: ''
+  preassemble: []
+  prebuild:
+  - sed -i 's@\(reference.1=\).*@\1$$FacebookSDK$$@' project.properties
+  - sed -i 's/Class\[\]/Class\<?\>\[\]/g' $$FacebookSDK$$/src/com/facebook/model/GraphObject.java
+  rm:
+  - libs/appbrain-sdk-android.jar
+  scandelete: []
+  scanignore: []
+  srclibs:
+  - FacebookSDK@sdk-version-3.0.1
+  subdir: null
+  submodules: false
+  sudo: ''
+  target: null
+  timeout: null
+  versionCode: 39
+  versionName: 1.2.0
+- androidupdate: []
+  antcommands: []
+  antifeatures: {}
+  binary: null
+  build: ''
+  buildjni: []
+  commit: v1.2.2
+  disable: ''
+  encoding: null
+  extlibs:
+  - android/android-support-v4.jar
+  forcevercode: false
+  forceversion: false
+  gradle: []
+  gradleprops: []
+  init: ''
+  maven: null
+  ndk: null
+  novcheck: false
+  oldsdkloc: false
+  output: null
+  patch:
+  - appbrain.patch
+  postbuild: ''
+  preassemble: []
+  prebuild:
+  - mv libs/android-support-v4.jar $$FacebookSDK$$/libs/
+  - sed -i 's@\(reference.1=\).*@\1$$FacebookSDK$$@' project.properties
+  - sed -i 's/Class\[\]/Class\<?\>\[\]/g'          $$FacebookSDK$$/src/com/facebook/model/GraphObject.java
+  rm:
+  - libs/appbrain-sdk-android.jar
+  scandelete: []
+  scanignore: []
+  srclibs:
+  - FacebookSDK@sdk-version-3.0.2
+  subdir: null
+  submodules: false
+  sudo: ''
+  target: null
+  timeout: null
+  versionCode: 42
+  versionName: 1.2.2
+- androidupdate: []
+  antcommands: []
+  antifeatures: {}
+  binary: null
+  build: ''
+  buildjni: []
+  commit: 2.1.1
+  disable: ''
+  encoding: null
+  extlibs: []
+  forcevercode: false
+  forceversion: false
+  gradle: []
+  gradleprops: []
+  init: ''
+  maven: yes
+  ndk: null
+  novcheck: false
+  oldsdkloc: false
+  output: null
+  patch:
+  - manifest-ads.patch
+  - mobilecore.patch
+  postbuild: ''
+  preassemble: []
+  prebuild: ''
+  rm: []
+  scandelete: []
+  scanignore: []
+  srclibs:
+  - FacebookSDK@sdk-version-3.0.2
+  subdir: null
+  submodules: false
+  sudo: ''
+  target: null
+  timeout: null
+  versionCode: 48
+  versionName: 2.1.1
+- androidupdate: []
+  antcommands: []
+  antifeatures:
+    Tracking:
+      en-US: Uses the Facebook SDK.
+  binary: null
+  build: ''
+  buildjni: []
+  commit: 2.1.1
+  disable: ''
+  encoding: null
+  extlibs: []
+  forcevercode: false
+  forceversion: false
+  gradle: []
+  gradleprops: []
+  init: ''
+  maven: yes@..
+  ndk: null
+  novcheck: false
+  oldsdkloc: false
+  output: null
+  patch:
+  - manifest-ads.patch
+  - mobilecore.patch
+  postbuild: ''
+  preassemble: []
+  prebuild: ''
+  rm: []
+  scandelete: []
+  scanignore: []
+  srclibs:
+  - FacebookSDK@sdk-version-3.0.2
+  subdir: null
+  submodules: false
+  sudo: ''
+  target: null
+  timeout: null
+  versionCode: 49
+  versionName: 2.1.1-b
+- androidupdate: []
+  antcommands: []
+  antifeatures:
+    Ads:
+      en-US: 'includes ad lib
+
+        '
+      zh-CN: '包括广告图书馆
+
+        '
+    Tracking:
+      en-US: 'standard suspects
+
+        '
+  binary: null
+  build: ''
+  buildjni: []
+  commit: 2.1.1
+  disable: ''
+  encoding: null
+  extlibs: []
+  forcevercode: false
+  forceversion: false
+  gradle: []
+  gradleprops: []
+  init: ''
+  maven: '2'
+  ndk: null
+  novcheck: false
+  oldsdkloc: false
+  output: null
+  patch:
+  - manifest-ads.patch
+  - mobilecore.patch
+  postbuild: ''
+  preassemble: []
+  prebuild: ''
+  rm: []
+  scandelete: []
+  scanignore: []
+  srclibs:
+  - FacebookSDK@sdk-version-3.0.2
+  subdir: null
+  submodules: false
+  sudo: ''
+  target: null
+  timeout: null
+  versionCode: 50
+  versionName: 2.1.1-c
+- androidupdate: []
+  antcommands: []
+  antifeatures: {}
+  binary: null
+  build: ''
+  buildjni: []
+  commit: null
+  disable: Labelled as pre-release, so skipped
+  encoding: null
+  extlibs: []
+  forcevercode: false
+  forceversion: false
+  gradle: []
+  gradleprops: []
+  init: ''
+  maven: null
+  ndk: null
+  novcheck: false
+  oldsdkloc: false
+  output: null
+  patch: []
+  postbuild: ''
+  preassemble: []
+  prebuild: ''
+  rm: []
+  scandelete: []
+  scanignore: []
+  srclibs: []
+  subdir: null
+  submodules: false
+  sudo: ''
+  target: null
+  timeout: null
+  versionCode: 51
+  versionName: 2.1.2
+Categories:
+- System
+Changelog: ''
+CurrentVersion: 2.1.2
+CurrentVersionCode: 49
+Description: 'To configure, go to "Settings => Accounts & Sync => Add Account". Depending
+  on
+
+  how many friends you have, the first import might take a while, so be patient.
+
+
+  * Facebook does not allow to export phone numbers or emails: only names, pictures
+  and statuses are synced.
+
+  * Facebook users have the option to block one or all apps: if they opt for that,
+  they will be EXCLUDED from your friends list.
+
+
+  Appbrain SDK was removed before building.'
+Disabled: null
+Donate: null
+FlattrID: null
+IssueTracker: https://github.com/loadrunner/Facebook-Contact-Sync/issues
+Liberapay: null
+License: GPL-3.0-only
+Litecoin: null
+MaintainerNotes: ''
+Name: null
+NoSourceSince: ''
+OpenCollective: null
+Provides: null
+Repo: https://github.com/loadrunner/Facebook-Contact-Sync.git
+RepoType: git
+RequiresRoot: false
+SourceCode: https://github.com/loadrunner/Facebook-Contact-Sync
+Summary: Sync your Facebook Contacts
+Translation: ''
+UpdateCheckData: null
+UpdateCheckIgnore: null
+UpdateCheckMode: None
+UpdateCheckName: null
+VercodeOperation: []
+WebSite: ''
+added: null
+id: app.with.special.build.params
+lastUpdated: null
+metadatapath: metadata/app.with.special.build.params.yml

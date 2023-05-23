@@ -158,7 +158,7 @@ def status_update_json(apps, apks):
 
     for appid in apps:
         app = apps[appid]
-        for af in app.get('AntiFeatures', []):
+        for af in app.get('AntiFeatures', dict()):
             antiFeatures = output['antiFeatures']  # JSON camelCase
             if af not in antiFeatures:
                 antiFeatures[af] = dict()
@@ -351,7 +351,8 @@ def get_cache():
         if not isinstance(v, dict):
             continue
         if 'antiFeatures' in v:
-            v['antiFeatures'] = set(v['antiFeatures'])
+            if not isinstance(v['antiFeatures'], dict):
+                v['antiFeatures'] = {k: {} for k in sorted(v['antiFeatures'])}
         if 'added' in v:
             v['added'] = datetime.fromtimestamp(v['added'])
 
@@ -400,7 +401,7 @@ def has_known_vulnerability(filename):
     Janus is similar to Master Key but is perhaps easier to scan for.
     https://www.guardsquare.com/en/blog/new-android-vulnerability-allows-attackers-modify-apps-without-affecting-their-signatures
     """
-    found_vuln = False
+    found_vuln = ''
 
     # statically load this pattern
     if not hasattr(has_known_vulnerability, "pattern"):
@@ -431,15 +432,23 @@ def has_known_vulnerability(filename):
                             logging.debug(_('"{path}" contains recent {name} ({version})')
                                           .format(path=filename, name=name, version=version))
                         else:
-                            logging.warning(_('"{path}" contains outdated {name} ({version})')
-                                            .format(path=filename, name=name, version=version))
-                            found_vuln = True
+                            msg = '"{path}" contains outdated {name} ({version})'
+                            logging.warning(
+                                _(msg).format(path=filename, name=name, version=version)
+                            )
+                            found_vuln += msg.format(
+                                path=filename, name=name, version=version
+                            )
+                            found_vuln += '\n'
                         break
             elif name == 'AndroidManifest.xml' or name == 'classes.dex' or name.endswith('.so'):
                 if name in files_in_apk:
-                    logging.warning(_('{apkfilename} has multiple {name} files, looks like Master Key exploit!')
-                                    .format(apkfilename=filename, name=name))
-                    found_vuln = True
+                    msg = '{apkfilename} has multiple {name} files, looks like Master Key exploit!'
+                    logging.warning(
+                        _(msg).format(apkfilename=filename, name=name)
+                    )
+                    found_vuln += msg.format(apkfilename=filename, name=name)
+                    found_vuln += '\n'
                 files_in_apk.add(name)
     return found_vuln
 
@@ -545,7 +554,7 @@ def translate_per_build_anti_features(apps, apks):
         if d:
             afl = d.get(apk['versionCode'])
             if afl:
-                apk['antiFeatures'].update(afl)
+                apk['antiFeatures'].update(afl)  # TODO
 
 
 def _get_localized_dict(app, locale):
@@ -1228,7 +1237,7 @@ def scan_apk(apk_file, require_signature=True):
         'features': [],
         'icons_src': {},
         'icons': {},
-        'antiFeatures': set(),
+        'antiFeatures': {},
     }
     ipfsCIDv1 = common.calculate_IPFS_cid(apk_file)
     if ipfsCIDv1:
@@ -1263,8 +1272,9 @@ def scan_apk(apk_file, require_signature=True):
         apk['minSdkVersion'] = 3  # aapt defaults to 3 as the min
 
     # Check for known vulnerabilities
-    if has_known_vulnerability(apk_file):
-        apk['antiFeatures'].add('KnownVuln')
+    hkv = has_known_vulnerability(apk_file)
+    if hkv:
+        apk['antiFeatures']['KnownVuln'] = {DEFAULT_LOCALE: hkv}
 
     return apk
 
@@ -1545,7 +1555,7 @@ def process_apk(apkcache, apkfilename, repodir, knownapks, use_date_from_apk=Fal
             if repodir == 'archive' or allow_disabled_algorithms:
                 try:
                     common.verify_deprecated_jar_signature(apkfile)
-                    apk['antiFeatures'].update(['KnownVuln', 'DisabledAlgorithm'])
+                    apk['antiFeatures'].update(['KnownVuln', 'DisabledAlgorithm'])  # TODO
                 except VerificationException:
                     skipapk = True
             else:
@@ -1885,7 +1895,7 @@ def archive_old_apks(apps, apks, archapks, repodir, archivedir, defaultkeepversi
         for apk in all_app_apks:
             if len(keep) == keepversions:
                 break
-            if 'antiFeatures' not in apk:
+            if 'antiFeatures' not in apk:  # TODO
                 keep.append(apk)
             elif 'DisabledAlgorithm' not in apk['antiFeatures'] or disabled_algorithms_allowed():
                 keep.append(apk)

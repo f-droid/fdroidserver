@@ -1,5 +1,5 @@
 AllowedAPKSigningKeys: []
-AntiFeatures: []
+AntiFeatures: {}
 ArchivePolicy: 9 versions
 AuthorEmail: null
 AuthorName: null
@@ -14,7 +14,7 @@ Builds:
   - ../java-libs/SlidingMenu
   - ../java-libs/ActionBarSherlock
   antcommands: []
-  antifeatures: []
+  antifeatures: {}
   binary: null
   build:
   - cd ../ && ANDROID_ABI=armeabi-v7a ./compile.sh release
@@ -54,7 +54,7 @@ Builds:
   - ../java-libs/SlidingMenu
   - ../java-libs/ActionBarSherlock
   antcommands: []
-  antifeatures: []
+  antifeatures: {}
   binary: null
   build:
   - cd ../ && ANDROID_ABI=armeabi ./compile.sh release
@@ -94,7 +94,7 @@ Builds:
   - ../java-libs/SlidingMenu
   - ../java-libs/ActionBarSherlock
   antcommands: []
-  antifeatures: []
+  antifeatures: {}
   binary: null
   build:
   - cd ../ && ANDROID_ABI=x86 ./compile.sh release
@@ -134,7 +134,7 @@ Builds:
   - ../java-libs/SlidingMenu
   - ../java-libs/ActionBarSherlock
   antcommands: []
-  antifeatures: []
+  antifeatures: {}
   binary: null
   build:
   - cd ../ && ANDROID_ABI=mips ./compile.sh release
@@ -171,7 +171,7 @@ Builds:
   versionName: 0.0.11-mips
 - androidupdate: []
   antcommands: []
-  antifeatures: []
+  antifeatures: {}
   binary: null
   build:
   - cd ../ && ANDROID_ABI=mips ./compile.sh release
@@ -210,7 +210,7 @@ Builds:
   versionName: 0.1.3-MIPS
 - androidupdate: []
   antcommands: []
-  antifeatures: []
+  antifeatures: {}
   binary: null
   build:
   - cd ../ && ANDROID_ABI=x86 ./compile.sh release
@@ -249,7 +249,7 @@ Builds:
   versionName: 0.1.3-x86
 - androidupdate: []
   antcommands: []
-  antifeatures: []
+  antifeatures: {}
   binary: null
   build:
   - cd ../ && ANDROID_ABI=armeabi ./compile.sh release
@@ -288,7 +288,7 @@ Builds:
   versionName: 0.1.3-ARM
 - androidupdate: []
   antcommands: []
-  antifeatures: []
+  antifeatures: {}
   binary: null
   build:
   - cd ../ && ANDROID_ABI=armeabi-v7a ./compile.sh release
@@ -327,7 +327,7 @@ Builds:
   versionName: 0.1.3-ARMv7
 - androidupdate: []
   antcommands: []
-  antifeatures: []
+  antifeatures: {}
   binary: null
   build:
   - cd ../ && ANDROID_ABI=x86 ./compile.sh release
@@ -365,7 +365,7 @@ Builds:
   versionName: 0.9.0
 - androidupdate: []
   antcommands: []
-  antifeatures: []
+  antifeatures: {}
   binary: null
   build:
   - cd ../ && ANDROID_ABI=armeabi-v7a ./compile.sh release
@@ -403,7 +403,7 @@ Builds:
   versionName: 0.9.0
 - androidupdate: []
   antcommands: []
-  antifeatures: []
+  antifeatures: {}
   binary: null
   build:
   - cd ../ && ANDROID_ABI=x86 ./compile.sh release
@@ -441,7 +441,7 @@ Builds:
   versionName: 0.9.1
 - androidupdate: []
   antcommands: []
-  antifeatures: []
+  antifeatures: {}
   binary: null
   build:
   - cd ../ && ANDROID_ABI=armeabi-v7a ./compile.sh release
@@ -479,7 +479,7 @@ Builds:
   versionName: 0.9.1
 - androidupdate: []
   antcommands: []
-  antifeatures: []
+  antifeatures: {}
   binary: null
   build:
   - cd ../ && ANDROID_ABI=x86 ./compile.sh release
@@ -517,7 +517,7 @@ Builds:
   versionName: 0.9.5
 - androidupdate: []
   antcommands: []
-  antifeatures: []
+  antifeatures: {}
   binary: null
   build:
   - cd ../ && ANDROID_ABI=armeabi-v7a ./compile.sh release
@@ -555,7 +555,7 @@ Builds:
   versionName: 0.9.5
 - androidupdate: []
   antcommands: []
-  antifeatures: []
+  antifeatures: {}
   binary: null
   build:
   - cd ../ && ANDROID_ABI=x86 ./compile.sh release
@@ -593,7 +593,7 @@ Builds:
   versionName: 0.9.6
 - androidupdate: []
   antcommands: []
-  antifeatures: []
+  antifeatures: {}
   binary: null
   build:
   - cd ../ && ANDROID_ABI=armeabi-v7a ./compile.sh release
@@ -631,7 +631,7 @@ Builds:
   versionName: 0.9.6
 - androidupdate: []
   antcommands: []
-  antifeatures: []
+  antifeatures: {}
   binary: null
   build:
   - cd ../ && ANDROID_ABI=x86 ./compile.sh release
@@ -669,7 +669,7 @@ Builds:
   versionName: 0.9.7
 - androidupdate: []
   antcommands: []
-  antifeatures: []
+  antifeatures: {}
   binary: null
   build:
   - cd ../ && ANDROID_ABI=armeabi-v7a ./compile.sh release
@@ -707,7 +707,7 @@ Builds:
   versionName: 0.9.7
 - androidupdate: []
   antcommands: []
-  antifeatures: []
+  antifeatures: {}
   binary: null
   build:
   - cd ../ && ANDROID_ABI=mips ./compile.sh release
@@ -745,7 +745,7 @@ Builds:
   versionName: 0.9.7.1
 - androidupdate: []
   antcommands: []
-  antifeatures: []
+  antifeatures: {}
   binary: null
   build:
   - cd ../ && ANDROID_ABI=x86 ./compile.sh release
@@ -783,7 +783,7 @@ Builds:
   versionName: 0.9.7.1
 - androidupdate: []
   antcommands: []
-  antifeatures: []
+  antifeatures: {}
   binary: null
   build:
   - cd ../ && ANDROID_ABI=armeabi-v7a ./compile.sh release
@@ -821,7 +821,7 @@ Builds:
   versionName: 0.9.7.1
 - androidupdate: []
   antcommands: []
-  antifeatures: []
+  antifeatures: {}
   binary: null
   build:
   - cd ../ && ANDROID_ABI=x86 ./compile.sh release
@@ -859,7 +859,7 @@ Builds:
   versionName: 0.9.8
 - androidupdate: []
   antcommands: []
-  antifeatures: []
+  antifeatures: {}
   binary: null
   build:
   - cd ../ && ANDROID_ABI=armeabi ./compile.sh release
@@ -897,7 +897,7 @@ Builds:
   versionName: 0.9.8
 - androidupdate: []
   antcommands: []
-  antifeatures: []
+  antifeatures: {}
   binary: null
   build:
   - cd ../ && ANDROID_ABI=armeabi-v7a ./compile.sh release
@@ -935,7 +935,7 @@ Builds:
   versionName: 0.9.8
 - androidupdate: []
   antcommands: []
-  antifeatures: []
+  antifeatures: {}
   binary: null
   build:
   - cd ../ && ANDROID_ABI=x86 ./compile.sh release
@@ -973,7 +973,7 @@ Builds:
   versionName: 0.9.9
 - androidupdate: []
   antcommands: []
-  antifeatures: []
+  antifeatures: {}
   binary: null
   build:
   - cd ../ && ANDROID_ABI=armeabi ./compile.sh release
@@ -1011,7 +1011,7 @@ Builds:
   versionName: 0.9.9
 - androidupdate: []
   antcommands: []
-  antifeatures: []
+  antifeatures: {}
   binary: null
   build:
   - cd ../ && ANDROID_ABI=armeabi-v7a ./compile.sh release
@@ -1049,7 +1049,7 @@ Builds:
   versionName: 0.9.9
 - androidupdate: []
   antcommands: []
-  antifeatures: []
+  antifeatures: {}
   binary: null
   build:
   - cd ../ && ANDROID_ABI=x86 ./compile.sh release
@@ -1087,7 +1087,7 @@ Builds:
   versionName: 0.9.10
 - androidupdate: []
   antcommands: []
-  antifeatures: []
+  antifeatures: {}
   binary: null
   build:
   - cd ../ && ANDROID_ABI=armeabi ./compile.sh release
@@ -1125,7 +1125,7 @@ Builds:
   versionName: 0.9.10
 - androidupdate: []
   antcommands: []
-  antifeatures: []
+  antifeatures: {}
   binary: null
   build:
   - cd ../ && ANDROID_ABI=armeabi-v7a ./compile.sh release
@@ -1163,7 +1163,7 @@ Builds:
   versionName: 0.9.10
 - androidupdate: []
   antcommands: []
-  antifeatures: []
+  antifeatures: {}
   binary: null
   build:
   - cd ../ && ANDROID_ABI=x86 ./compile.sh release
@@ -1201,7 +1201,7 @@ Builds:
   versionName: 1.0.0
 - androidupdate: []
   antcommands: []
-  antifeatures: []
+  antifeatures: {}
   binary: null
   build:
   - cd ../ && ANDROID_ABI=armeabi ./compile.sh release
@@ -1239,7 +1239,7 @@ Builds:
   versionName: 1.0.0
 - androidupdate: []
   antcommands: []
-  antifeatures: []
+  antifeatures: {}
   binary: null
   build:
   - cd ../ && ANDROID_ABI=armeabi-v7a ./compile.sh release
@@ -1277,7 +1277,7 @@ Builds:
   versionName: 1.0.0
 - androidupdate: []
   antcommands: []
-  antifeatures: []
+  antifeatures: {}
   binary: null
   build:
   - cd ../ && ANDROID_ABI=x86 ./compile.sh release
@@ -1315,7 +1315,7 @@ Builds:
   versionName: 1.0.1
 - androidupdate: []
   antcommands: []
-  antifeatures: []
+  antifeatures: {}
   binary: null
   build:
   - cd ../ && ANDROID_ABI=armeabi ./compile.sh release
@@ -1353,7 +1353,7 @@ Builds:
   versionName: 1.0.1
 - androidupdate: []
   antcommands: []
-  antifeatures: []
+  antifeatures: {}
   binary: null
   build:
   - cd ../ && ANDROID_ABI=armeabi-v7a ./compile.sh release
@@ -1391,7 +1391,7 @@ Builds:
   versionName: 1.0.1
 - androidupdate: []
   antcommands: []
-  antifeatures: []
+  antifeatures: {}
   binary: null
   build:
   - cd ../ && ./compile.sh -a "armeabi" --release
@@ -1431,7 +1431,7 @@ Builds:
   versionName: 1.1.3
 - androidupdate: []
   antcommands: []
-  antifeatures: []
+  antifeatures: {}
   binary: null
   build:
   - cd ../ && ./compile.sh -a "armeabi-v7a" --release
@@ -1471,7 +1471,7 @@ Builds:
   versionName: 1.1.3
 - androidupdate: []
   antcommands: []
-  antifeatures: []
+  antifeatures: {}
   binary: null
   build:
   - cd ../ && ./compile.sh -a "x86" --release
@@ -1511,7 +1511,7 @@ Builds:
   versionName: 1.1.3
 - androidupdate: []
   antcommands: []
-  antifeatures: []
+  antifeatures: {}
   binary: null
   build:
   - cd ../ && ./compile.sh -a "armeabi" --release
@@ -1551,7 +1551,7 @@ Builds:
   versionName: 1.1.5
 - androidupdate: []
   antcommands: []
-  antifeatures: []
+  antifeatures: {}
   binary: null
   build:
   - cd ../ && ./compile.sh -a "armeabi-v7a" --release
@@ -1591,7 +1591,7 @@ Builds:
   versionName: 1.1.5
 - androidupdate: []
   antcommands: []
-  antifeatures: []
+  antifeatures: {}
   binary: null
   build:
   - cd ../ && ./compile.sh -a "x86" --release
@@ -1631,7 +1631,7 @@ Builds:
   versionName: 1.1.5
 - androidupdate: []
   antcommands: []
-  antifeatures: []
+  antifeatures: {}
   binary: null
   build:
   - cd ../ && ./compile.sh -a "armeabi" --release
@@ -1671,7 +1671,7 @@ Builds:
   versionName: 1.1.6
 - androidupdate: []
   antcommands: []
-  antifeatures: []
+  antifeatures: {}
   binary: null
   build:
   - cd ../ && ./compile.sh -a "armeabi-v7a" --release
@@ -1711,7 +1711,7 @@ Builds:
   versionName: 1.1.6
 - androidupdate: []
   antcommands: []
-  antifeatures: []
+  antifeatures: {}
   binary: null
   build:
   - cd ../ && ./compile.sh -a "x86" --release
@@ -1751,7 +1751,7 @@ Builds:
   versionName: 1.1.6
 - androidupdate: []
   antcommands: []
-  antifeatures: []
+  antifeatures: {}
   binary: null
   build:
   - cd ../ && ./compile.sh -a "armeabi" --release
@@ -1791,7 +1791,7 @@ Builds:
   versionName: 1.2.0
 - androidupdate: []
   antcommands: []
-  antifeatures: []
+  antifeatures: {}
   binary: null
   build:
   - cd ../ && ./compile.sh -a "armeabi-v7a" --release
@@ -1831,7 +1831,7 @@ Builds:
   versionName: 1.2.0
 - androidupdate: []
   antcommands: []
-  antifeatures: []
+  antifeatures: {}
   binary: null
   build:
   - cd ../ && ./compile.sh -a "x86" --release
@@ -1871,7 +1871,7 @@ Builds:
   versionName: 1.2.0
 - androidupdate: []
   antcommands: []
-  antifeatures: []
+  antifeatures: {}
   binary: null
   build:
   - cd ../ && ./compile.sh -a "armeabi" --release
@@ -1911,7 +1911,7 @@ Builds:
   versionName: 1.2.1
 - androidupdate: []
   antcommands: []
-  antifeatures: []
+  antifeatures: {}
   binary: null
   build:
   - cd ../ && ./compile.sh -a "armeabi-v7a" --release
@@ -1951,7 +1951,7 @@ Builds:
   versionName: 1.2.1
 - androidupdate: []
   antcommands: []
-  antifeatures: []
+  antifeatures: {}
   binary: null
   build:
   - cd ../ && ./compile.sh -a "x86" --release
@@ -1991,7 +1991,7 @@ Builds:
   versionName: 1.2.1
 - androidupdate: []
   antcommands: []
-  antifeatures: []
+  antifeatures: {}
   binary: null
   build:
   - cd ../ && ./compile.sh -a "armeabi" --release
@@ -2031,7 +2031,7 @@ Builds:
   versionName: 1.2.2
 - androidupdate: []
   antcommands: []
-  antifeatures: []
+  antifeatures: {}
   binary: null
   build:
   - cd ../ && ./compile.sh -a "armeabi-v7a" --release
@@ -2071,7 +2071,7 @@ Builds:
   versionName: 1.2.2
 - androidupdate: []
   antcommands: []
-  antifeatures: []
+  antifeatures: {}
   binary: null
   build:
   - cd ../ && ./compile.sh -a "x86" --release
@@ -2111,7 +2111,7 @@ Builds:
   versionName: 1.2.2
 - androidupdate: []
   antcommands: []
-  antifeatures: []
+  antifeatures: {}
   binary: null
   build:
   - cd ../ && ./compile.sh -a "armeabi" --release
@@ -2151,7 +2151,7 @@ Builds:
   versionName: 1.2.3
 - androidupdate: []
   antcommands: []
-  antifeatures: []
+  antifeatures: {}
   binary: null
   build:
   - cd ../ && ./compile.sh -a "armeabi-v7a" --release
@@ -2191,7 +2191,7 @@ Builds:
   versionName: 1.2.3
 - androidupdate: []
   antcommands: []
-  antifeatures: []
+  antifeatures: {}
   binary: null
   build:
   - cd ../ && ./compile.sh -a "x86" --release
@@ -2231,7 +2231,7 @@ Builds:
   versionName: 1.2.3
 - androidupdate: []
   antcommands: []
-  antifeatures: []
+  antifeatures: {}
   binary: null
   build:
   - cd ../ && ./compile.sh -a "armeabi" --release
@@ -2271,7 +2271,7 @@ Builds:
   versionName: 1.2.4
 - androidupdate: []
   antcommands: []
-  antifeatures: []
+  antifeatures: {}
   binary: null
   build:
   - cd ../ && ./compile.sh -a "armeabi-v7a" --release
@@ -2311,7 +2311,7 @@ Builds:
   versionName: 1.2.4
 - androidupdate: []
   antcommands: []
-  antifeatures: []
+  antifeatures: {}
   binary: null
   build:
   - cd ../ && ./compile.sh -a "x86" --release
@@ -2351,7 +2351,7 @@ Builds:
   versionName: 1.2.4
 - androidupdate: []
   antcommands: []
-  antifeatures: []
+  antifeatures: {}
   binary: null
   build:
   - cd ../ && ./compile.sh -a "armeabi" --release
@@ -2391,7 +2391,7 @@ Builds:
   versionName: 1.2.5
 - androidupdate: []
   antcommands: []
-  antifeatures: []
+  antifeatures: {}
   binary: null
   build:
   - cd ../ && ./compile.sh -a "armeabi-v7a" --release
@@ -2431,7 +2431,7 @@ Builds:
   versionName: 1.2.5
 - androidupdate: []
   antcommands: []
-  antifeatures: []
+  antifeatures: {}
   binary: null
   build:
   - cd ../ && ./compile.sh -a "x86" --release
@@ -2471,7 +2471,7 @@ Builds:
   versionName: 1.2.5
 - androidupdate: []
   antcommands: []
-  antifeatures: []
+  antifeatures: {}
   binary: null
   build:
   - cd ../ && ./compile.sh -a "armeabi" --release
@@ -2511,7 +2511,7 @@ Builds:
   versionName: 1.2.6
 - androidupdate: []
   antcommands: []
-  antifeatures: []
+  antifeatures: {}
   binary: null
   build:
   - cd ../ && ./compile.sh -a "armeabi-v7a" --release
@@ -2551,7 +2551,7 @@ Builds:
   versionName: 1.2.6
 - androidupdate: []
   antcommands: []
-  antifeatures: []
+  antifeatures: {}
   binary: null
   build:
   - cd ../ && ./compile.sh -a "x86" --release

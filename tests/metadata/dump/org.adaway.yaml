@@ -1,5 +1,5 @@
 AllowedAPKSigningKeys: []
-AntiFeatures: []
+AntiFeatures: {}
 ArchivePolicy: null
 AuthorEmail: null
 AuthorName: null
@@ -11,7 +11,7 @@ Bitcoin: null
 Builds:
 - androidupdate: []
   antcommands: []
-  antifeatures: []
+  antifeatures: {}
   binary: null
   build: ''
   buildjni:
@@ -47,7 +47,7 @@ Builds:
   versionName: '1.12'
 - androidupdate: []
   antcommands: []
-  antifeatures: []
+  antifeatures: {}
   binary: null
   build: ''
   buildjni:
@@ -84,7 +84,7 @@ Builds:
   versionName: '1.15'
 - androidupdate: []
   antcommands: []
-  antifeatures: []
+  antifeatures: {}
   binary: null
   build: ''
   buildjni:
@@ -121,7 +121,7 @@ Builds:
   versionName: '1.18'
 - androidupdate: []
   antcommands: []
-  antifeatures: []
+  antifeatures: {}
   binary: null
   build: ''
   buildjni:
@@ -158,7 +158,7 @@ Builds:
   versionName: '1.19'
 - androidupdate: []
   antcommands: []
-  antifeatures: []
+  antifeatures: {}
   binary: null
   build: ''
   buildjni:
@@ -195,7 +195,7 @@ Builds:
   versionName: '1.20'
 - androidupdate: []
   antcommands: []
-  antifeatures: []
+  antifeatures: {}
   binary: null
   build: ''
   buildjni:
@@ -232,7 +232,7 @@ Builds:
   versionName: '1.21'
 - androidupdate: []
   antcommands: []
-  antifeatures: []
+  antifeatures: {}
   binary: null
   build: ''
   buildjni: []
@@ -267,7 +267,7 @@ Builds:
   versionName: '1.23'
 - androidupdate: []
   antcommands: []
-  antifeatures: []
+  antifeatures: {}
   binary: null
   build: ''
   buildjni:
@@ -304,7 +304,7 @@ Builds:
   versionName: '1.24'
 - androidupdate: []
   antcommands: []
-  antifeatures: []
+  antifeatures: {}
   binary: null
   build: ''
   buildjni:
@@ -341,7 +341,7 @@ Builds:
   versionName: '1.25'
 - androidupdate: []
   antcommands: []
-  antifeatures: []
+  antifeatures: {}
   binary: null
   build: ''
   buildjni:
@@ -378,7 +378,7 @@ Builds:
   versionName: '1.26'
 - androidupdate: []
   antcommands: []
-  antifeatures: []
+  antifeatures: {}
   binary: null
   build: ''
   buildjni:
@@ -415,7 +415,7 @@ Builds:
   versionName: '1.27'
 - androidupdate: []
   antcommands: []
-  antifeatures: []
+  antifeatures: {}
   binary: null
   build: ''
   buildjni:
@@ -453,7 +453,7 @@ Builds:
   versionName: '1.29'
 - androidupdate: []
   antcommands: []
-  antifeatures: []
+  antifeatures: {}
   binary: null
   build: ''
   buildjni: []
@@ -491,7 +491,7 @@ Builds:
   versionName: '1.32'
 - androidupdate: []
   antcommands: []
-  antifeatures: []
+  antifeatures: {}
   binary: null
   build: ''
   buildjni: []
@@ -528,7 +528,7 @@ Builds:
   versionName: '1.33'
 - androidupdate: []
   antcommands: []
-  antifeatures: []
+  antifeatures: {}
   binary: null
   build: ''
   buildjni: []
@@ -566,7 +566,7 @@ Builds:
   versionName: '1.34'
 - androidupdate: []
   antcommands: []
-  antifeatures: []
+  antifeatures: {}
   binary: null
   build: ''
   buildjni: []
@@ -604,7 +604,7 @@ Builds:
   versionName: '1.35'
 - androidupdate: []
   antcommands: []
-  antifeatures: []
+  antifeatures: {}
   binary: null
   build: ''
   buildjni: []
@@ -642,7 +642,7 @@ Builds:
   versionName: '1.36'
 - androidupdate: []
   antcommands: []
-  antifeatures: []
+  antifeatures: {}
   binary: null
   build: ''
   buildjni: []
@@ -684,7 +684,7 @@ Builds:
   - android-libs/ActionBarSherlock
   - android-libs/HtmlSpanner/htmlspanner
   antcommands: []
-  antifeatures: []
+  antifeatures: {}
   binary: null
   build: ''
   buildjni:
@@ -734,7 +734,7 @@ Builds:
   - android-libs/ActionBarSherlock
   - android-libs/HtmlSpanner/htmlspanner
   antcommands: []
-  antifeatures: []
+  antifeatures: {}
   binary: null
   build: ''
   buildjni:
@@ -780,7 +780,7 @@ Builds:
   versionName: '2.3'
 - androidupdate: []
   antcommands: []
-  antifeatures: []
+  antifeatures: {}
   binary: null
   build: ''
   buildjni:
@@ -818,7 +818,7 @@ Builds:
   versionName: '2.6'
 - androidupdate: []
   antcommands: []
-  antifeatures: []
+  antifeatures: {}
   binary: null
   build: ''
   buildjni:
@@ -856,7 +856,7 @@ Builds:
   versionName: '2.7'
 - androidupdate: []
   antcommands: []
-  antifeatures: []
+  antifeatures: {}
   binary: null
   build: ''
   buildjni:
@@ -894,7 +894,7 @@ Builds:
   versionName: '2.8'
 - androidupdate: []
   antcommands: []
-  antifeatures: []
+  antifeatures: {}
   binary: null
   build: ''
   buildjni:
@@ -932,7 +932,7 @@ Builds:
   versionName: 2.8.1
 - androidupdate: []
   antcommands: []
-  antifeatures: []
+  antifeatures: {}
   binary: null
   build: ''
   buildjni:
@@ -970,7 +970,7 @@ Builds:
   versionName: '2.9'
 - androidupdate: []
   antcommands: []
-  antifeatures: []
+  antifeatures: {}
   binary: null
   build: ''
   buildjni:
@@ -1008,7 +1008,7 @@ Builds:
   versionName: 2.9.1
 - androidupdate: []
   antcommands: []
-  antifeatures: []
+  antifeatures: {}
   binary: null
   build: ''
   buildjni:
@@ -1046,7 +1046,7 @@ Builds:
   versionName: 2.9.2
 - androidupdate: []
   antcommands: []
-  antifeatures: []
+  antifeatures: {}
   binary: null
   build: ''
   buildjni:
