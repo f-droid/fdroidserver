@@ -918,6 +918,140 @@ class BuildTest(unittest.TestCase):
         test_flag = ('--skip-scan', True)
         fdroidserver.build.build_server(app, build, vcs, '', '', '', False)
 
+    @mock.patch('fdroidserver.vmtools.get_build_vm')
+    @mock.patch('fdroidserver.vmtools.get_clean_builder')
+    @mock.patch('paramiko.SSHClient')
+    @mock.patch('subprocess.check_output')
+    @mock.patch('fdroidserver.common.getsrclib')
+    @mock.patch('fdroidserver.common.prepare_source')
+    @mock.patch('fdroidserver.build.build_local')
+    @mock.patch('fdroidserver.common.get_android_tools_version_log', lambda: 'versions')
+    @mock.patch('fdroidserver.common.deploy_build_log_with_rsync', lambda a, b, c: None)
+    def test_build_server_no_local_prepare(
+        self,
+        build_build_local,
+        common_prepare_source,
+        common_getsrclib,
+        subprocess_check_output,
+        paramiko_SSHClient,
+        fdroidserver_vmtools_get_clean_builder,
+        fdroidserver_vmtools_get_build_vm,
+    ):
+        """srclibs Prepare: should only be executed in the buildserver"""
+
+        def _exec_command(args):
+            print('chan.exec_command', args)
+
+        def _getsrclib(
+            spec,
+            srclib_dir,
+            basepath=False,
+            raw=False,
+            prepare=True,
+            preponly=False,
+            refresh=True,
+            build=None,
+        ):
+            name, ref = spec.split('@')
+            libdir = os.path.join(srclib_dir, name)
+            os.mkdir(libdir)
+            self.assertFalse(prepare, 'Prepare: scripts should never run on host')
+            return name, None, libdir  # TODO
+
+        os.chdir(self.testdir)
+
+        chan = mock.MagicMock()
+        chan.exec_command = _exec_command
+        chan.recv_exit_status = lambda: 0
+        transport = mock.MagicMock()
+        transport.open_session = mock.Mock(return_value=chan)
+        sshs = mock.MagicMock()
+        sshs.get_transport = mock.Mock(return_value=transport)
+        paramiko_SSHClient.return_value = sshs
+        subprocess_check_output.return_value = (
+            b'0123456789abcdef0123456789abcdefcafebabe'
+        )
+        fdroidserver_vmtools_get_clean_builder.side_effect = lambda s: {
+            'hostname': 'example.com',
+            'idfile': '/path/to/id/file',
+            'port': 123,
+            'user': 'fake',
+        }
+
+        fdroidserver.metadata.srclibs = {
+            'flutter': {
+                'RepoType': 'git',
+                'Repo': 'https://github.com/flutter/flutter',
+            }
+        }
+        os.mkdir('srclibs')
+        with open('srclibs/flutter.yml', 'w') as fp:
+            yaml.dump(fdroidserver.metadata.srclibs, fp)
+        common_getsrclib.side_effect = _getsrclib
+
+        options = mock.MagicMock()
+        options.force = False
+        options.notarball = True
+        options.onserver = False
+        options.refresh = False
+        options.scan_binary = False
+        options.server = True
+        options.skipscan = True
+        options.test = False
+        options.verbose = True
+        fdroidserver.build.options = options
+        fdroidserver.build.config = {'sdk_path': '/fake/android/sdk/path'}
+
+        vcs = mock.Mock()
+        vcs.getsrclib = mock.Mock(return_value=None)
+        app = fdroidserver.metadata.App()
+        app['metadatapath'] = 'metadata/fake.id.yml'
+        app['id'] = 'fake.id'
+        app['RepoType'] = 'git'
+        spec = 'flutter@v1.7.8'
+        build = fdroidserver.metadata.Build(
+            {
+                'versionCode': 123,
+                'versionName': '1.2.3',
+                'commit': '1.2.3',
+                'disable': False,
+                'srclibs': [spec],
+            }
+        )
+        app['Builds'] = [build]
+
+        build_dir = 'build'
+        srclib_dir = os.path.join(build_dir, 'srclib')
+        extlib_dir = os.path.join(build_dir, 'extlib')
+        os.mkdir('tmp')
+        os.mkdir(build_dir)
+        os.mkdir(srclib_dir)
+
+        fdroidserver.build.trybuild(
+            app,
+            build,
+            build_dir,
+            'unsigned',
+            'logs',
+            None,
+            srclib_dir,
+            extlib_dir,
+            'tmp',
+            'repo',
+            vcs,
+            options.test,
+            options.server,
+            options.force,
+            options.onserver,
+            options.refresh,
+        )
+
+        common_getsrclib.assert_called_once_with(
+            spec, srclib_dir, basepath=True, prepare=False
+        )
+        common_prepare_source.assert_not_called()
+        build_build_local.assert_not_called()
+
     def test_keep_when_not_allowed_default(self):
         self.assertFalse(fdroidserver.build.keep_when_not_allowed())
 
