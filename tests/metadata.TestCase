@@ -2014,7 +2014,7 @@ class PostMetadataParseTest(unittest.TestCase):
         with self.assertRaises(TypeError):
             self._post_metadata_parse_app_list(123456, TypeError)
         self.assertEqual(*self._post_metadata_parse_app_string(123456, '123456'))
-        self.assertEqual(*self._post_metadata_parse_build_bool(123456, 123456))
+        self.assertEqual(*self._post_metadata_parse_build_bool(123456, True))
         self.assertEqual(*self._post_metadata_parse_build_int(123456, 123456))
         self.assertEqual(*self._post_metadata_parse_build_list(123456, ['123456']))
         self.assertEqual(*self._post_metadata_parse_build_script(123456, ['123456']))
@@ -2024,7 +2024,7 @@ class PostMetadataParseTest(unittest.TestCase):
         """Run the int 0 through the various field and flag types."""
         self.assertEqual(*self._post_metadata_parse_app_list(0, 0))
         self.assertEqual(*self._post_metadata_parse_app_string(0, '0'))
-        self.assertEqual(*self._post_metadata_parse_build_bool(0, 0))
+        self.assertEqual(*self._post_metadata_parse_build_bool(0, False))
         self.assertEqual(*self._post_metadata_parse_build_int(0, 0))
         self.assertEqual(*self._post_metadata_parse_build_list(0, ['0']))
         self.assertEqual(*self._post_metadata_parse_build_script(0, ['0']))
@@ -2034,7 +2034,7 @@ class PostMetadataParseTest(unittest.TestCase):
         """Run the float 0.0 through the various field and flag types."""
         self.assertEqual(*self._post_metadata_parse_app_list(0.0, 0.0))
         self.assertEqual(*self._post_metadata_parse_app_string(0.0, '0.0'))
-        self.assertEqual(*self._post_metadata_parse_build_bool(0.0, 0.0))
+        self.assertEqual(*self._post_metadata_parse_build_bool(0.0, False))
         with self.assertRaises(MetaDataException):
             self._post_metadata_parse_build_int(0.0, MetaDataException)
         self.assertEqual(*self._post_metadata_parse_build_list(0.0, 0.0))
@@ -2046,7 +2046,7 @@ class PostMetadataParseTest(unittest.TestCase):
         with self.assertRaises(TypeError):
             self._post_metadata_parse_app_list(0.1, TypeError)
         self.assertEqual(*self._post_metadata_parse_app_string(0.1, '0.1'))
-        self.assertEqual(*self._post_metadata_parse_build_bool(0.1, 0.1))
+        self.assertEqual(*self._post_metadata_parse_build_bool(0.1, True))
         with self.assertRaises(MetaDataException):
             self._post_metadata_parse_build_int(0.1, MetaDataException)
         self.assertEqual(*self._post_metadata_parse_build_list(0.1, 0.1))
@@ -2058,7 +2058,7 @@ class PostMetadataParseTest(unittest.TestCase):
         with self.assertRaises(TypeError):
             self._post_metadata_parse_app_list(1.0, TypeError)
         self.assertEqual(*self._post_metadata_parse_app_string(1.0, '1.0'))
-        self.assertEqual(*self._post_metadata_parse_build_bool(1.0, 1.0))
+        self.assertEqual(*self._post_metadata_parse_build_bool(1.0, True))
         with self.assertRaises(MetaDataException):
             self._post_metadata_parse_build_int(1.0, MetaDataException)
         self.assertEqual(*self._post_metadata_parse_build_list(1.0, 1.0))
@@ -2068,7 +2068,7 @@ class PostMetadataParseTest(unittest.TestCase):
     def test_post_metadata_parse_empty_list(self):
         self.assertEqual(*self._post_metadata_parse_app_list(list(), list()))
         self.assertEqual(*self._post_metadata_parse_app_string(list(), list()))
-        self.assertEqual(*self._post_metadata_parse_build_bool(list(), list()))
+        self.assertEqual(*self._post_metadata_parse_build_bool(list(), False))
         with self.assertRaises(MetaDataException):
             self._post_metadata_parse_build_int(list(), MetaDataException)
         self.assertEqual(*self._post_metadata_parse_build_list(list(), list()))
@@ -2078,7 +2078,7 @@ class PostMetadataParseTest(unittest.TestCase):
     def test_post_metadata_parse_set_of_1(self):
         self.assertEqual(*self._post_metadata_parse_app_list({1}, ['1']))
         self.assertEqual(*self._post_metadata_parse_app_string({1}, '{1}'))
-        self.assertEqual(*self._post_metadata_parse_build_bool({1}, {1}))
+        self.assertEqual(*self._post_metadata_parse_build_bool({1}, True))
         with self.assertRaises(MetaDataException):
             self._post_metadata_parse_build_int({1}, MetaDataException)
         self.assertEqual(*self._post_metadata_parse_build_list({1}, {1}))
@@ -2088,7 +2088,7 @@ class PostMetadataParseTest(unittest.TestCase):
     def test_post_metadata_parse_empty_dict(self):
         self.assertEqual(*self._post_metadata_parse_app_list(dict(), dict()))
         self.assertEqual(*self._post_metadata_parse_app_string(dict(), dict()))
-        self.assertEqual(*self._post_metadata_parse_build_bool(dict(), dict()))
+        self.assertEqual(*self._post_metadata_parse_build_bool(dict(), False))
         with self.assertRaises(MetaDataException):
             self._post_metadata_parse_build_int(dict(), MetaDataException)
         self.assertEqual(*self._post_metadata_parse_build_list(dict(), dict()))
@@ -2098,7 +2098,7 @@ class PostMetadataParseTest(unittest.TestCase):
     def test_post_metadata_parse_list_int_string(self):
         self.assertEqual(*self._post_metadata_parse_app_list([1, 'a'], ['1', 'a']))
         self.assertEqual(*self._post_metadata_parse_app_string([1, 'a'], "[1, 'a']"))
-        self.assertEqual(*self._post_metadata_parse_build_bool([1, 'a'], [1, 'a']))
+        self.assertEqual(*self._post_metadata_parse_build_bool([1, 'a'], True))
         with self.assertRaises(MetaDataException):
             self._post_metadata_parse_build_int([1, 'a'], MetaDataException)
         self.assertEqual(*self._post_metadata_parse_build_list([1, 'a'], [1, 'a']))
@@ -2108,7 +2108,7 @@ class PostMetadataParseTest(unittest.TestCase):
     def test_post_metadata_parse_dict_int_string(self):
         self.assertEqual(*self._post_metadata_parse_app_list({'k': 1}, ['k']))
         self.assertEqual(*self._post_metadata_parse_app_string({'k': 1}, "{'k': 1}"))
-        self.assertEqual(*self._post_metadata_parse_build_bool({'k': 1}, {'k': 1}))
+        self.assertEqual(*self._post_metadata_parse_build_bool({'k': 1}, True))
         with self.assertRaises(MetaDataException):
             self._post_metadata_parse_build_int({'k': 1}, MetaDataException)
         self.assertEqual(*self._post_metadata_parse_build_list({'k': 1}, {'k': 1}))

@@ -979,6 +979,8 @@ def post_parse_yaml_metadata(yamldata):
         elif _fieldtype == TYPE_STRINGMAP:
             if v or v == 0:  # TODO probably want just `if v:`
                 yamldata[k] = _normalize_type_stringmap(k, v)
+        elif _fieldtype == TYPE_BOOL:
+            yamldata[k] = bool(v)
         else:
             if type(v) in (float, int):
                 yamldata[k] = str(v)
@@ -1017,6 +1019,8 @@ def post_parse_yaml_metadata(yamldata):
             elif _flagtype == TYPE_STRINGMAP:
                 if v or v == 0:
                     build[k] = _normalize_type_stringmap(k, v)
+            elif _flagtype == TYPE_BOOL:
+                build[k] = bool(v)
 
         builds.append(build)
 
