@@ -1920,6 +1920,35 @@ class MetadataTest(unittest.TestCase):
         cm = metadata._app_to_yaml(metadata.App({'CurrentVersionCode': 0}))
         self.assertFalse('CurrentVersionCode' in cm)
 
+    def test_format_multiline(self):
+        self.assertEqual(metadata._format_multiline('description'), 'description')
+
+    def test_format_multiline_empty(self):
+        self.assertEqual(metadata._format_multiline(''), '')
+
+    def test_format_multiline_newline_char(self):
+        self.assertEqual(metadata._format_multiline('one\\ntwo'), 'one\\ntwo')
+
+    def test_format_multiline_newlines(self):
+        self.assertEqual(
+            metadata._format_multiline(
+                textwrap.dedent(
+                    """
+                    one
+                    two
+                    three
+                    """
+                )
+            ),
+            '\none\ntwo\nthree\n',
+        )
+
+    def test_format_script_newline(self):
+        self.assertEqual(metadata._format_script(['one\ntwo']), 'one\ntwo')
+
+    def test_format_script_newline_char(self):
+        self.assertEqual(metadata._format_script(['one\\ntwo']), 'one\\ntwo')
+
     def test_format_stringmap_empty(self):
         self.assertEqual(
             metadata._format_stringmap('🔥', 'test', dict()),

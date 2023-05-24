@@ -1070,6 +1070,20 @@ def post_parse_yaml_metadata(yamldata):
         }
 
 
+def _format_multiline(value):
+    """TYPE_MULTILINE with newlines in them are saved as YAML literal strings."""
+    if '\n' in value:
+        return ruamel.yaml.scalarstring.preserve_literal(str(value))
+    return str(value)
+
+
+def _format_script(value):
+    """TYPE_SCRIPT with one value are converted to YAML string values."""
+    if len(value) == 1:
+        return value[0]
+    return value
+
+
 def _format_stringmap(appid, field, stringmap, versionCode=None):
     """Format TYPE_STRINGMAP taking into account localized files in the metadata dir.
 
@@ -1142,27 +1156,6 @@ def _del_duplicated_NoSourceSince(app):
             del app['AntiFeatures'][key]
 
 
-def _field_to_yaml(typ, value):
-    """Convert data to YAML 1.2 format that keeps the right TYPE_*."""
-    if typ == TYPE_STRING:
-        return str(value)
-    elif typ == TYPE_INT:
-        return int(value)
-    elif typ == TYPE_MULTILINE:
-        if '\n' in value:
-            return ruamel.yaml.scalarstring.preserve_literal(str(value))
-        else:
-            return str(value)
-    elif typ == TYPE_SCRIPT:
-        if type(value) == list:
-            if len(value) == 1:
-                return value[0]
-            else:
-                return value
-    else:
-        return value
-
-
 def _builds_to_yaml(app):
     builds = ruamel.yaml.comments.CommentedSeq()
     for build in app.get('Builds', []):
@@ -1179,7 +1172,7 @@ def _builds_to_yaml(app):
                     if v:
                         b[field] = v
                 elif value is not None and (typ == TYPE_INT or value):
-                    b.update({field: _field_to_yaml(typ, value)})
+                    b[field] = value
 
         builds.append(b)
 
@@ -1201,13 +1194,12 @@ def _app_to_yaml(app):
         else:
             value = app.get(field)
             if value or field == 'Builds':
+                _fieldtype = fieldtype(field)
                 if field == 'Builds':
                     if app.get('Builds'):
                         cm.update({field: _builds_to_yaml(app)})
                 elif field == 'Categories':
                     cm[field] = sorted(value, key=str.lower)
-                elif field == 'CurrentVersionCode':
-                    cm[field] = _field_to_yaml(TYPE_INT, value)
                 elif field == 'AntiFeatures':
                     v = _format_stringmap(app['id'], field, value)
                     if v:
@@ -1215,11 +1207,20 @@ def _app_to_yaml(app):
                 elif field == 'AllowedAPKSigningKeys':
                     value = [str(i).lower() for i in value]
                     if len(value) == 1:
-                        cm[field] = _field_to_yaml(TYPE_STRING, value[0])
+                        cm[field] = value[0]
                     else:
-                        cm[field] = _field_to_yaml(TYPE_LIST, value)
+                        cm[field] = value
+                elif _fieldtype == TYPE_MULTILINE:
+                    v = _format_multiline(value)
+                    if v:
+                        cm[field] = v
+                elif _fieldtype == TYPE_SCRIPT:
+                    v = _format_script(value)
+                    if v:
+                        cm[field] = v
                 else:
-                    cm[field] = _field_to_yaml(fieldtype(field), value)
+                    if value:
+                        cm[field] = value
 
                 if insert_newline:
                     # we need to prepend a newline in front of this field
