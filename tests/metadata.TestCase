@@ -1999,6 +1999,16 @@ class PostMetadataParseTest(unittest.TestCase):
         app['Builds'][0][tested_key] = expected
         return app, post
 
+    def test_post_metadata_parse_none(self):
+        """Run None aka YAML null or blank through the various field and flag types."""
+        self.assertEqual(*self._post_metadata_parse_app_list(None, None))
+        self.assertEqual(*self._post_metadata_parse_app_string(None, None))
+        self.assertEqual(*self._post_metadata_parse_build_bool(None, None))
+        self.assertEqual(*self._post_metadata_parse_build_int(None, None))
+        self.assertEqual(*self._post_metadata_parse_build_list(None, None))
+        self.assertEqual(*self._post_metadata_parse_build_script(None, None))
+        self.assertEqual(*self._post_metadata_parse_build_string(None, None))
+
     def test_post_metadata_parse_int(self):
         """Run the int 123456 through the various field and flag types."""
         with self.assertRaises(TypeError):
