@@ -1894,6 +1894,10 @@ class MetadataTest(unittest.TestCase):
         app = metadata.App({'Builds': [metadata.Build({'rm': ['one']})]})
         self.assertEqual({'rm': ['one']}, metadata._app_to_yaml(app)['Builds'][0])
 
+    def test_app_to_yaml_build_list_two(self):
+        app = metadata.App({'Builds': [metadata.Build({'rm': ['1', '2']})]})
+        self.assertEqual({'rm': ['1', '2']}, metadata._app_to_yaml(app)['Builds'][0])
+
     def test_app_to_yaml_build_list(self):
         app = metadata.App({'Builds': [metadata.Build({'rm': ['b2', 'NO1']})]})
         self.assertEqual({'rm': ['b2', 'NO1']}, metadata._app_to_yaml(app)['Builds'][0])
@@ -2031,6 +2035,63 @@ class MetadataTest(unittest.TestCase):
         self.assertEqual(
             metadata._app_to_yaml({'Categories': ['c', 'a', 'B']}),
             {'Categories': ['a', 'B', 'c']},
+        )
+
+    def test_builds_to_yaml_gradle_yes(self):
+        app = {'Builds': [{'versionCode': 0, 'gradle': ['yes']}]}
+        self.assertEqual(
+            metadata._builds_to_yaml(app), [{'versionCode': 0, 'gradle': ['yes']}]
+        )
+
+    def test_builds_to_yaml_gradle_off(self):
+        app = {'Builds': [{'versionCode': 0, 'gradle': ['off']}]}
+        self.assertEqual(
+            metadata._builds_to_yaml(app), [{'versionCode': 0, 'gradle': ['off']}]
+        )
+
+    def test_builds_to_yaml_gradle_true(self):
+        app = {'Builds': [{'versionCode': 0, 'gradle': ['true']}]}
+        self.assertEqual(
+            metadata._builds_to_yaml(app), [{'versionCode': 0, 'gradle': ['true']}]
+        )
+
+    def test_builds_to_yaml_gradle_false(self):
+        app = {'Builds': [{'versionCode': 0, 'gradle': ['false']}]}
+        self.assertEqual(
+            metadata._builds_to_yaml(app), [{'versionCode': 0, 'gradle': ['false']}]
+        )
+
+    def test_builds_to_yaml(self):
+        """Include one of each flag type with a valid value."""
+        app = {
+            'Builds': [
+                metadata.Build(
+                    {
+                        'versionCode': 0,
+                        'gradle': ['free'],
+                        'rm': ['0', '2'],
+                        'submodules': True,
+                        'timeout': 0,
+                        'init': ['false', 'two'],
+                    }
+                )
+            ]
+        }
+        # check that metadata.Build() inited flag values
+        self.assertEqual(app['Builds'][0]['scanignore'], list())
+        # then unchanged values should be removed by _builds_to_yaml
+        self.assertEqual(
+            metadata._builds_to_yaml(app),
+            [
+                {
+                    'versionCode': 0,
+                    'gradle': ['free'],
+                    'rm': ['0', '2'],
+                    'submodules': True,
+                    'timeout': 0,
+                    'init': ['false', 'two'],
+                }
+            ],
         )
 
 
