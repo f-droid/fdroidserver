@@ -1127,7 +1127,7 @@ def _format_stringmap(appid, field, stringmap, versionCode=None):
             make_list = False
             break
     if make_list:
-        return outlist
+        return sorted(outlist, key=str.lower)
     return stringmap
 
 
@@ -1208,6 +1208,8 @@ def _app_to_yaml(app):
                 if field == 'Builds':
                     if app.get('Builds'):
                         cm.update({field: _builds_to_yaml(app)})
+                elif field == 'Categories':
+                    cm[field] = sorted(value, key=str.lower)
                 elif field == 'CurrentVersionCode':
                     cm[field] = _field_to_yaml(TYPE_INT, value)
                 elif field == 'AntiFeatures':

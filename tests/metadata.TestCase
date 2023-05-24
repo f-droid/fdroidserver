@@ -2019,6 +2019,20 @@ class MetadataTest(unittest.TestCase):
                 appid, field, {afname: {'uz': 'a', locale: 'b', 'zh': 'c'}}, versionCode
             )
 
+    def test_app_to_yaml_one_category(self):
+        """Categories does not get simplified to string when outputting YAML."""
+        self.assertEqual(
+            metadata._app_to_yaml({'Categories': ['one']}),
+            {'Categories': ['one']},
+        )
+
+    def test_app_to_yaml_categories(self):
+        """Sort case-insensitive before outputting YAML."""
+        self.assertEqual(
+            metadata._app_to_yaml({'Categories': ['c', 'a', 'B']}),
+            {'Categories': ['a', 'B', 'c']},
+        )
+
 
 class PostMetadataParseTest(unittest.TestCase):
     """Test the functions that post process the YAML input.
