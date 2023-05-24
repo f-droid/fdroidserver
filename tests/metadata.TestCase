@@ -1943,6 +1943,24 @@ class MetadataTest(unittest.TestCase):
             '\none\ntwo\nthree\n',
         )
 
+    def test_format_list_empty(self):
+        self.assertEqual(metadata._format_list(['', None]), list())
+
+    def test_format_list_one_empty(self):
+        self.assertEqual(metadata._format_list(['foo', None]), ['foo'])
+
+    def test_format_list_two(self):
+        self.assertEqual(metadata._format_list(['2', '1']), ['2', '1'])
+
+    def test_format_list_newline(self):
+        self.assertEqual(metadata._format_list(['one\ntwo']), ['one\ntwo'])
+
+    def test_format_list_newline_char(self):
+        self.assertEqual(metadata._format_list(['one\\ntwo']), ['one\\ntwo'])
+
+    def test_format_script_empty(self):
+        self.assertEqual(metadata._format_script(['', None]), list())
+
     def test_format_script_newline(self):
         self.assertEqual(metadata._format_script(['one\ntwo']), 'one\ntwo')
 
@@ -2084,6 +2102,18 @@ class MetadataTest(unittest.TestCase):
         app = {'Builds': [{'versionCode': 0, 'gradle': ['false']}]}
         self.assertEqual(
             metadata._builds_to_yaml(app), [{'versionCode': 0, 'gradle': ['false']}]
+        )
+
+    def test_builds_to_yaml_stripped(self):
+        self.assertEqual(
+            metadata._builds_to_yaml(
+                {
+                    'Builds': [
+                        metadata.Build({'versionCode': 0, 'rm': [None], 'init': ['']})
+                    ]
+                }
+            ),
+            [{'versionCode': 0}],
         )
 
     def test_builds_to_yaml(self):

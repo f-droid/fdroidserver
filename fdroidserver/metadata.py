@@ -1077,8 +1077,14 @@ def _format_multiline(value):
     return str(value)
 
 
+def _format_list(value):
+    """TYPE_LIST should not contain null values."""
+    return [v for v in value if v]
+
+
 def _format_script(value):
     """TYPE_SCRIPT with one value are converted to YAML string values."""
+    value = [v for v in value if v]
     if len(value) == 1:
         return value[0]
     return value
@@ -1175,6 +1181,8 @@ def _builds_to_yaml(app):
             _flagtype = flagtype(field)
             if _flagtype == TYPE_MULTILINE:
                 v = _format_multiline(v)
+            elif _flagtype == TYPE_LIST:
+                v = _format_list(v)
             elif _flagtype == TYPE_SCRIPT:
                 v = _format_script(v)
             elif _flagtype == TYPE_STRINGMAP:
