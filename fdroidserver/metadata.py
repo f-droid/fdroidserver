@@ -1157,22 +1157,31 @@ def _del_duplicated_NoSourceSince(app):
 
 
 def _builds_to_yaml(app):
+    """Reformat Builds: flags for output to YAML 1.2.
+
+    This will strip any flag/value that is not set or is empty.
+    TYPE_BOOL fields are removed when they are false.  0 is valid
+    value, it should not be stripped, so there are special cases to
+    handle that.
+
+    """
     builds = ruamel.yaml.comments.CommentedSeq()
     for build in app.get('Builds', []):
-        if not isinstance(build, Build):
-            build = Build(build)
         b = ruamel.yaml.comments.CommentedMap()
         for field in build_flags:
-            if hasattr(build, field):
-                value = getattr(build, field)
-                typ = flagtype(field)
-                # don't check value == True for TYPE_INT as it could be 0
-                if value and typ == TYPE_STRINGMAP:
-                    v = _format_stringmap(app['id'], field, value, build['versionCode'])
-                    if v:
-                        b[field] = v
-                elif value is not None and (typ == TYPE_INT or value):
-                    b[field] = value
+            v = build.get(field)
+            if v is None or v is False or v == '' or v == dict() or v == list():
+                continue
+            _flagtype = flagtype(field)
+            if _flagtype == TYPE_MULTILINE:
+                v = _format_multiline(v)
+            elif _flagtype == TYPE_SCRIPT:
+                v = _format_script(v)
+            elif _flagtype == TYPE_STRINGMAP:
+                v = _format_stringmap(app['id'], field, v, build['versionCode'])
+
+            if v or v == 0:
+                b[field] = v
 
         builds.append(b)
 
