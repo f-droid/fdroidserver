@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 1.0.0-95-gd7af22b\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2023-03-09 13:11+0100\n"
+"POT-Creation-Date: 2023-05-24 22:18+0200\n"
 "PO-Revision-Date: 2023-02-23 18:22+0000\n"
 "Last-Translator: Agnieszka C <aga_04@o2.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/f-droid/fdroidserver/pl/>\n"
@@ -186,7 +186,17 @@ msgstr "'{path}' nie udało się wykonać!"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
+msgid "'{path}' has invalid format, it should be a dictionary!"
+msgstr ""
+
+#: ../fdroidserver/metadata.py ../fdroidserver/lint.py
+#, python-brace-format
 msgid "'{value}' is not a valid {field} in {appid}. Regex pattern: {pattern}"
+msgstr "'{value}' nie jest prawidłowy {field} w {appid}. Wzór Regex: {pattern}"
+
+#: ../fdroidserver/metadata.py
+#, fuzzy, python-brace-format
+msgid "'{value}' is not a valid {field}, should be {pattern}"
 msgstr "'{value}' nie jest prawidłowy {field} w {appid}. Wzór Regex: {pattern}"
 
 #: ../fdroidserver/checkupdates.py
@@ -228,6 +238,10 @@ msgstr "Dodaje tylko nowe repozytorium {name}"
 #: ../fdroidserver/init.py
 msgid "Alias of the repo signing key in the keystore"
 msgstr "Alias klucza podpisu repozytorium w magazynie kluczy"
+
+#: ../fdroidserver/build.py
+msgid "AllowedAPKSigningKeys missing but reference binary supplied"
+msgstr ""
 
 #: ../fdroidserver/import_subcommand.py
 msgid "Allows a different revision (or git branch) to be specified for the initial import"
@@ -274,6 +288,10 @@ msgid "Android SDK tool {cmd} not found!"
 msgstr "Nie znaleziono narzędzia Android SDK {cmd}!"
 
 #: ../fdroidserver/lint.py
+msgid "App has Binaries but does not have corresponding AllowedAPKSigningKeys to pin certificate."
+msgstr ""
+
+#: ../fdroidserver/lint.py
 msgid "App has NoSourceSince or ArchivePolicy \"0 versions\" but AutoUpdateMode or UpdateCheckMode are not None"
 msgstr "Aplikacja ma NoSourceSince lub ArchivePolicy „0 versions”, ale AutoUpdateMode lub UpdateCheckMode nie są None"
 
@@ -281,6 +299,10 @@ msgstr "Aplikacja ma NoSourceSince lub ArchivePolicy „0 versions”, ale AutoU
 #, python-brace-format
 msgid "App is in '{repo}' but has a link to {url}"
 msgstr "Aplikacja jest w '{repo}' ale ma link do {url}"
+
+#: ../fdroidserver/lint.py
+msgid "App version has binary but does not have corresponding AllowedAPKSigningKeys to pin certificate."
+msgstr ""
 
 #: ../fdroidserver/lint.py
 msgid "Appending .git is not necessary"
@@ -294,6 +316,11 @@ msgstr "Archiwizacja {apkfilename} z nieprawidłowym podpisem!"
 #: ../fdroidserver/lint.py
 msgid "AutoUpdateMode with UpdateCheckMode: HTTP must have a pattern."
 msgstr "AutoUpdateMode z UpdateCheckMode: HTTP musi mieć wzorzec."
+
+#: ../fdroidserver/index.py
+#, python-brace-format
+msgid "Bad entry type \"{mirrortype}\" in mirrors config: {mirror}"
+msgstr ""
 
 #: ../fdroidserver/mirror.py
 msgid "Base URL to mirror, can include the index signing key using the query string: ?fingerprint="
@@ -390,6 +417,11 @@ msgstr "Polecenie '%s' nie rozpoznane.\n"
 #: ../fdroidserver/checkupdates.py
 msgid "Commit changes"
 msgstr "Scommituj zmiany"
+
+#: ../fdroidserver/metadata.py
+#, python-brace-format
+msgid "Conflicting \"{field}\" definitions between .yml and localized files:"
+msgstr ""
 
 #: ../fdroidserver/__main__.py
 msgid "Conflicting arguments: '--verbose' and '--quiet' can not be specified at the same time."
@@ -577,6 +609,16 @@ msgstr "Pobieranie repozytorium już raz się nie powiodło, nie próbuje ponown
 msgid "Downloading {url} failed. {error}"
 msgstr "Pobieranie {url} nie powiodło się. {error}"
 
+#: ../fdroidserver/metadata.py
+#, python-brace-format
+msgid "Duplicate Anti-Feature declaration at {path} was ignored!"
+msgstr ""
+
+#: ../fdroidserver/index.py
+#, python-format
+msgid "Duplicate entry \"%s\" in mirrors config!"
+msgstr ""
+
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "Duplicate link in '{field}': {url}"
@@ -625,6 +667,10 @@ msgstr "Zmienna środowiskowa {var} z {configname} nie jest ustawiona!"
 #: ../fdroidserver/import_subcommand.py
 msgid "Error while getting repo address"
 msgstr "Błąd podczas uzyskiwania adresu repo"
+
+#: ../fdroidserver/scanner.py
+msgid "Exit with a non-zero code if problems were found"
+msgstr ""
 
 #: ../fdroidserver/__main__.py
 msgid "Extract application metadata from a source repository"
@@ -843,6 +889,11 @@ msgstr "Ignorowanie metadanych '{field}' w '{metapath}' ponieważ są one przest
 msgid "Ignoring FUNDING.yml entry longer than 2048: %s"
 msgstr "Ignorowanie wpisu FUNDING.yml dłuższego niż 2048: %s"
 
+#: ../fdroidserver/update.py
+#, python-format
+msgid "Ignoring bad element in manifest: %s"
+msgstr ""
+
 #: ../fdroidserver/index.py
 msgid "Ignoring package without metadata: "
 msgstr "Ignorowanie pakietu bez metadanych: "
@@ -1053,6 +1104,10 @@ msgstr "Mirror pełnego repo i archiwum, wszystkie typy plików."
 #: ../fdroidserver/gpgsign.py
 msgid "Missing output directory"
 msgstr "Brakujący katalog wyjściowy"
+
+#: ../fdroidserver/metadata.py
+msgid "Moving Anti-Features declarations to localized files:"
+msgstr ""
 
 #: ../fdroidserver/index.py
 msgid "Neither \"repo_pubkey\" nor \"keystorepass\" set in config.yml"
@@ -1824,6 +1879,11 @@ msgstr "Korzystanie z jarsignera Java nie jest zalecane do weryfikacji plików A
 msgid "Using androguard from \"{path}\""
 msgstr "Korzystanie z androguard od \"{path}\""
 
+#: ../fdroidserver/metadata.py
+#, python-brace-format
+msgid "Using blank dictionary instead of contents of {path}!"
+msgstr ""
+
 #: ../fdroidserver/init.py
 #, python-brace-format
 msgid "Using existing keystore \"{path}\""
@@ -2331,6 +2391,10 @@ msgstr "argumenty pozycyjne"
 msgid "process log deploy {path} to {dest} failed!"
 msgstr "proces wdrażania dziennika {path} do {dest} nie powiódł się!"
 
+#: ../fdroidserver/build.py
+msgid "reference binary missing signature"
+msgstr ""
+
 #: ../fdroidserver/signatures.py
 #, python-brace-format
 msgid "refuse downloading via insecure HTTP connection (use HTTPS or specify --no-https-check): {apkfilename}"
@@ -2401,6 +2465,11 @@ msgstr "brak nazwy srclibs i/lub @"
 #: ../fdroidserver/scanner.py
 msgid "static library"
 msgstr "biblioteka statyczna"
+
+#: ../fdroidserver/build.py
+#, python-brace-format
+msgid "supplied reference binary has allowed signer {signer}"
+msgstr ""
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
@@ -2522,6 +2591,11 @@ msgstr "{appid}: {field} musi być '{type}', ale to jest '{fieldtype}'!"
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "{build_flag} must be an integer, found: {value}"
+msgstr "{build_flag} musi być liczbą całkowitą, znaleziono: {value}"
+
+#: ../fdroidserver/metadata.py
+#, fuzzy, python-brace-format
+msgid "{build_flag} must be list or string, found: {value}"
 msgstr "{build_flag} musi być liczbą całkowitą, znaleziono: {value}"
 
 #: ../fdroidserver/metadata.py

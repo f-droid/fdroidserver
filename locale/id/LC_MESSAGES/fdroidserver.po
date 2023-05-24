@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 1.1-680-ge1d3de71\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2023-03-09 13:11+0100\n"
+"POT-Creation-Date: 2023-05-24 22:18+0200\n"
 "PO-Revision-Date: 2021-06-23 23:32+0000\n"
 "Last-Translator: whenwesober <naomi16i_1298q@cikuh.com>\n"
 "Language-Team: Indonesian <https://hosted.weblate.org/projects/f-droid/fdroidserver/id/>\n"
@@ -182,7 +182,17 @@ msgstr "'{path}' gagal dieksekusi!"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
+msgid "'{path}' has invalid format, it should be a dictionary!"
+msgstr ""
+
+#: ../fdroidserver/metadata.py ../fdroidserver/lint.py
+#, python-brace-format
 msgid "'{value}' is not a valid {field} in {appid}. Regex pattern: {pattern}"
+msgstr "'{value}' tidak valid pada {field} dalam {appid}. Pakem regex: {pattern}"
+
+#: ../fdroidserver/metadata.py
+#, fuzzy, python-brace-format
+msgid "'{value}' is not a valid {field}, should be {pattern}"
 msgstr "'{value}' tidak valid pada {field} dalam {appid}. Pakem regex: {pattern}"
 
 #: ../fdroidserver/checkupdates.py
@@ -223,6 +233,10 @@ msgstr "Menambahkan repo baru hanya untuk {name}"
 
 #: ../fdroidserver/init.py
 msgid "Alias of the repo signing key in the keystore"
+msgstr ""
+
+#: ../fdroidserver/build.py
+msgid "AllowedAPKSigningKeys missing but reference binary supplied"
 msgstr ""
 
 #: ../fdroidserver/import_subcommand.py
@@ -270,12 +284,20 @@ msgid "Android SDK tool {cmd} not found!"
 msgstr ""
 
 #: ../fdroidserver/lint.py
+msgid "App has Binaries but does not have corresponding AllowedAPKSigningKeys to pin certificate."
+msgstr ""
+
+#: ../fdroidserver/lint.py
 msgid "App has NoSourceSince or ArchivePolicy \"0 versions\" but AutoUpdateMode or UpdateCheckMode are not None"
 msgstr ""
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "App is in '{repo}' but has a link to {url}"
+msgstr ""
+
+#: ../fdroidserver/lint.py
+msgid "App version has binary but does not have corresponding AllowedAPKSigningKeys to pin certificate."
 msgstr ""
 
 #: ../fdroidserver/lint.py
@@ -289,6 +311,11 @@ msgstr ""
 
 #: ../fdroidserver/lint.py
 msgid "AutoUpdateMode with UpdateCheckMode: HTTP must have a pattern."
+msgstr ""
+
+#: ../fdroidserver/index.py
+#, python-brace-format
+msgid "Bad entry type \"{mirrortype}\" in mirrors config: {mirror}"
 msgstr ""
 
 #: ../fdroidserver/mirror.py
@@ -383,6 +410,11 @@ msgstr "Perintah '%s' tidak dikenal.\n"
 
 #: ../fdroidserver/checkupdates.py
 msgid "Commit changes"
+msgstr ""
+
+#: ../fdroidserver/metadata.py
+#, python-brace-format
+msgid "Conflicting \"{field}\" definitions between .yml and localized files:"
 msgstr ""
 
 #: ../fdroidserver/__main__.py
@@ -571,6 +603,16 @@ msgstr ""
 msgid "Downloading {url} failed. {error}"
 msgstr ""
 
+#: ../fdroidserver/metadata.py
+#, python-brace-format
+msgid "Duplicate Anti-Feature declaration at {path} was ignored!"
+msgstr ""
+
+#: ../fdroidserver/index.py
+#, python-format
+msgid "Duplicate entry \"%s\" in mirrors config!"
+msgstr ""
+
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "Duplicate link in '{field}': {url}"
@@ -614,6 +656,10 @@ msgstr ""
 
 #: ../fdroidserver/import_subcommand.py
 msgid "Error while getting repo address"
+msgstr ""
+
+#: ../fdroidserver/scanner.py
+msgid "Exit with a non-zero code if problems were found"
 msgstr ""
 
 #: ../fdroidserver/__main__.py
@@ -833,6 +879,11 @@ msgstr ""
 msgid "Ignoring FUNDING.yml entry longer than 2048: %s"
 msgstr ""
 
+#: ../fdroidserver/update.py
+#, python-format
+msgid "Ignoring bad element in manifest: %s"
+msgstr ""
+
 #: ../fdroidserver/index.py
 msgid "Ignoring package without metadata: "
 msgstr ""
@@ -1042,6 +1093,10 @@ msgstr ""
 
 #: ../fdroidserver/gpgsign.py
 msgid "Missing output directory"
+msgstr ""
+
+#: ../fdroidserver/metadata.py
+msgid "Moving Anti-Features declarations to localized files:"
 msgstr ""
 
 #: ../fdroidserver/index.py
@@ -1805,6 +1860,11 @@ msgstr ""
 msgid "Using androguard from \"{path}\""
 msgstr ""
 
+#: ../fdroidserver/metadata.py
+#, python-brace-format
+msgid "Using blank dictionary instead of contents of {path}!"
+msgstr ""
+
 #: ../fdroidserver/init.py
 #, python-brace-format
 msgid "Using existing keystore \"{path}\""
@@ -2290,7 +2350,6 @@ msgstr "argumen opsional"
 
 #: /usr/lib/python3.11/argparse.py
 #, fuzzy
-#| msgid "Options"
 msgid "options"
 msgstr "Opsi"
 
@@ -2308,6 +2367,10 @@ msgstr "argumen posisi"
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "process log deploy {path} to {dest} failed!"
+msgstr ""
+
+#: ../fdroidserver/build.py
+msgid "reference binary missing signature"
 msgstr ""
 
 #: ../fdroidserver/signatures.py
@@ -2379,6 +2442,11 @@ msgstr ""
 
 #: ../fdroidserver/scanner.py
 msgid "static library"
+msgstr ""
+
+#: ../fdroidserver/build.py
+#, python-brace-format
+msgid "supplied reference binary has allowed signer {signer}"
 msgstr ""
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
@@ -2503,6 +2571,11 @@ msgstr ""
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
+msgid "{build_flag} must be list or string, found: {value}"
+msgstr ""
+
+#: ../fdroidserver/metadata.py
+#, python-brace-format
 msgid "{file} is blank or corrupt!"
 msgstr ""
 
@@ -2565,75 +2638,3 @@ msgstr[0] ""
 msgid "{} build succeeded"
 msgid_plural "{} builds succeeded"
 msgstr[0] ""
-
-#~ msgid ""
-#~ "\n"
-#~ "        This is a repository of apps to be used with FDroid. Applications in this\n"
-#~ "        repository are either official binaries built by the original application\n"
-#~ "        developers, or are binaries built from source by f-droid.org using the\n"
-#~ "        tools on https://gitlab.com/fdroid.\n"
-#~ "        "
-#~ msgstr ""
-#~ "\n"
-#~ "        Ini adalah repositori aplikasi yang digunakan oleh FDroid. Aplikasi di\n"
-#~ "        repositori ini antara binari resmi yang dibuat oleh pengembang aplikasi\n"
-#~ "        atau binari yang dibuat dari sumbernya oleh f-droid.org menggunakan\n"
-#~ "        alat-alat di https://gitlab.com/fdroid.\n"
-#~ "        "
-
-#~ msgid ""
-#~ "\n"
-#~ "SSH Public Key to be used as Deploy Key:"
-#~ msgstr ""
-#~ "\n"
-#~ "Kunci Publik SSH yang akan digunakan sebagai Kunci Deploy:"
-
-#~ msgid "\"repo_pubkey\" must be present in config.yml when using --nosign!"
-#~ msgstr "\"repo_pubkey\" harus ada di config.yml ketika menggunakan --nosign!"
-
-#, python-brace-format
-#~ msgid "\"{path}\" is not an accepted format, convert to: {formats}"
-#~ msgstr "\"{path}\" bukan format yang diterima, dikonversi ke: {formats}"
-
-#, python-format
-#~ msgid "%(prog)s [options] url"
-#~ msgstr "%(prog)s [opsi] url"
-
-#~ msgid "'sdk_path' not set in 'config.yml'!"
-#~ msgstr "'sdk_path' belum diatur di 'config.yml'!"
-
-#, python-brace-format
-#~ msgid "'{aapt}' is too old, fdroid requires build-tools-23.0.0 or newer!"
-#~ msgstr "'{aapt}' terlalu usang, fdroid memerlukan build-tools-23.0.0 atau yang lebih baru!"
-
-#, python-brace-format
-#~ msgid "'{apkfilename}' is already installed on {dev}."
-#~ msgstr "'{apkfilename}' sudah terpasang di {dev}."
-
-#~ msgid ".fdroid.txt is not supported!  Convert to .fdroid.yml or .fdroid.json."
-#~ msgstr ".fdroid.txt tudak didukung!  Konfersi ke .fdroid.yml atau .fdroid.json."
-
-#~ msgid "Add a new application from its source code"
-#~ msgstr "Tambah aplikasi baru dari kode sumbernya"
-
-#~ msgid "Create skeleton metadata files that are missing"
-#~ msgstr "Membuat kerangka berkas metadata yang hilang"
-
-#~ msgid "Dynamically scan APKs post build"
-#~ msgstr "Pindai APK secara dinamis pasca build"
-
-#~ msgid "Produce human-readable index.xml"
-#~ msgstr "Buat index.xml yang bisa dibaca manusia"
-
-#, python-format
-#~ msgid "can't open '%s': %s"
-#~ msgstr "tidak bisa dibuka '%s': %s"
-
-#~ msgid "force errors to be warnings, or ignore"
-#~ msgstr "paksa untuk mengingatkan adanya error, atau hiraukan"
-
-#~ msgid "usage: fdroid [-h|--help|--version] <command> [<args>]"
-#~ msgstr "penggunaan: fdroid [-h|--help|--version] <perintah> [<argumen>]"
-
-#~ msgid "Update the stats of the repo"
-#~ msgstr "Perbarui status repo"

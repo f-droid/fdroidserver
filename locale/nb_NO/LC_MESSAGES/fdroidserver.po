@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.8-74-ga380b9f\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2023-03-09 13:11+0100\n"
+"POT-Creation-Date: 2023-05-24 22:18+0200\n"
 "PO-Revision-Date: 2022-09-06 14:30+0000\n"
 "Last-Translator: Hans-Christoph Steiner <hans@guardianproject.info>\n"
 "Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects/f-droid/fdroidserver/nb_NO/>\n"
@@ -186,7 +186,17 @@ msgstr "\"{path}\" klarte ikke å kjøre."
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
+msgid "'{path}' has invalid format, it should be a dictionary!"
+msgstr ""
+
+#: ../fdroidserver/metadata.py ../fdroidserver/lint.py
+#, python-brace-format
 msgid "'{value}' is not a valid {field} in {appid}. Regex pattern: {pattern}"
+msgstr "\"{value}\" er ikke et gyldig {field} i {appid}. Mønster for regulært uttrykk: {pattern}"
+
+#: ../fdroidserver/metadata.py
+#, fuzzy, python-brace-format
+msgid "'{value}' is not a valid {field}, should be {pattern}"
 msgstr "\"{value}\" er ikke et gyldig {field} i {appid}. Mønster for regulært uttrykk: {pattern}"
 
 #: ../fdroidserver/checkupdates.py
@@ -229,6 +239,10 @@ msgstr "Legger til ny pakkebrønn kun for {name}"
 #: ../fdroidserver/init.py
 msgid "Alias of the repo signing key in the keystore"
 msgstr "Alias for pakkebrønnssigneringsnøkkel i nøkkellageret"
+
+#: ../fdroidserver/build.py
+msgid "AllowedAPKSigningKeys missing but reference binary supplied"
+msgstr ""
 
 #: ../fdroidserver/import_subcommand.py
 msgid "Allows a different revision (or git branch) to be specified for the initial import"
@@ -276,6 +290,10 @@ msgid "Android SDK tool {cmd} not found!"
 msgstr "Fant ikke Android-SDK-verktøyet {cmd}!"
 
 #: ../fdroidserver/lint.py
+msgid "App has Binaries but does not have corresponding AllowedAPKSigningKeys to pin certificate."
+msgstr ""
+
+#: ../fdroidserver/lint.py
 msgid "App has NoSourceSince or ArchivePolicy \"0 versions\" but AutoUpdateMode or UpdateCheckMode are not None"
 msgstr ""
 
@@ -283,6 +301,10 @@ msgstr ""
 #, python-brace-format
 msgid "App is in '{repo}' but has a link to {url}"
 msgstr "Program finnes i '{repo}', men har en lenke til {url}"
+
+#: ../fdroidserver/lint.py
+msgid "App version has binary but does not have corresponding AllowedAPKSigningKeys to pin certificate."
+msgstr ""
 
 #: ../fdroidserver/lint.py
 msgid "Appending .git is not necessary"
@@ -295,6 +317,11 @@ msgstr "Pakker {apkfilename} med ugyldig signatur."
 
 #: ../fdroidserver/lint.py
 msgid "AutoUpdateMode with UpdateCheckMode: HTTP must have a pattern."
+msgstr ""
+
+#: ../fdroidserver/index.py
+#, python-brace-format
+msgid "Bad entry type \"{mirrortype}\" in mirrors config: {mirror}"
 msgstr ""
 
 #: ../fdroidserver/mirror.py
@@ -393,6 +420,11 @@ msgstr "Kommandoen \"%s\" gjenkjennes ikke.\n"
 #: ../fdroidserver/checkupdates.py
 msgid "Commit changes"
 msgstr "Send inn endringer"
+
+#: ../fdroidserver/metadata.py
+#, python-brace-format
+msgid "Conflicting \"{field}\" definitions between .yml and localized files:"
+msgstr ""
 
 #: ../fdroidserver/__main__.py
 msgid "Conflicting arguments: '--verbose' and '--quiet' can not be specified at the same time."
@@ -589,6 +621,16 @@ msgstr "Nedlasting av pakkebrønn mislyktes én gang, prøver ikke igjen."
 msgid "Downloading {url} failed. {error}"
 msgstr "Nedlasting av {url} mislyktes. {error}"
 
+#: ../fdroidserver/metadata.py
+#, python-brace-format
+msgid "Duplicate Anti-Feature declaration at {path} was ignored!"
+msgstr ""
+
+#: ../fdroidserver/index.py
+#, python-format
+msgid "Duplicate entry \"%s\" in mirrors config!"
+msgstr ""
+
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "Duplicate link in '{field}': {url}"
@@ -641,6 +683,10 @@ msgstr "Miljøvariabelen {var} fra {configname} er ikke satt!"
 #, fuzzy
 msgid "Error while getting repo address"
 msgstr "Kunne ikke hente pakkebrønnsadresse"
+
+#: ../fdroidserver/scanner.py
+msgid "Exit with a non-zero code if problems were found"
+msgstr ""
 
 #: ../fdroidserver/__main__.py
 msgid "Extract application metadata from a source repository"
@@ -866,6 +912,11 @@ msgstr "Ser bort fra «{field}» i «{metapath}» fordi det er er foreldet."
 msgid "Ignoring FUNDING.yml entry longer than 2048: %s"
 msgstr "Ser bort fra FUNDING.yml-oppføring som er lengre enn 2048: %s"
 
+#: ../fdroidserver/update.py
+#, python-format
+msgid "Ignoring bad element in manifest: %s"
+msgstr ""
+
 #: ../fdroidserver/index.py
 msgid "Ignoring package without metadata: "
 msgstr "Ignorerte pakke uten metadata: "
@@ -1087,6 +1138,10 @@ msgstr "Avspeil hele pakkebrønnen og arkivet, alle filtyper."
 #: ../fdroidserver/gpgsign.py
 msgid "Missing output directory"
 msgstr "Manglende utdatamappe"
+
+#: ../fdroidserver/metadata.py
+msgid "Moving Anti-Features declarations to localized files:"
+msgstr ""
 
 #: ../fdroidserver/index.py
 msgid "Neither \"repo_pubkey\" nor \"keystorepass\" set in config.yml"
@@ -1878,6 +1933,11 @@ msgstr "Bruker Java sin jarsigner, ikke anbefalt for bekreftelse av APK-er. Bruk
 msgid "Using androguard from \"{path}\""
 msgstr "Bruker Androguard fra \"{path}\""
 
+#: ../fdroidserver/metadata.py
+#, python-brace-format
+msgid "Using blank dictionary instead of contents of {path}!"
+msgstr ""
+
 #: ../fdroidserver/init.py
 #, fuzzy, python-brace-format
 msgid "Using existing keystore \"{path}\""
@@ -2402,6 +2462,10 @@ msgstr "Posisjonelle argumenter"
 msgid "process log deploy {path} to {dest} failed!"
 msgstr ""
 
+#: ../fdroidserver/build.py
+msgid "reference binary missing signature"
+msgstr ""
+
 #: ../fdroidserver/signatures.py
 #, fuzzy, python-brace-format
 msgid "refuse downloading via insecure HTTP connection (use HTTPS or specify --no-https-check): {apkfilename}"
@@ -2476,6 +2540,11 @@ msgstr "srclibs mangler navn og/eller @"
 #: ../fdroidserver/scanner.py
 msgid "static library"
 msgstr "statisk bibliotek"
+
+#: ../fdroidserver/build.py
+#, python-brace-format
+msgid "supplied reference binary has allowed signer {signer}"
+msgstr ""
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
@@ -2596,6 +2665,11 @@ msgstr "{appid}: {field} må være en '{type}', men er ikke et '{fieldtype}'!"
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "{build_flag} must be an integer, found: {value}"
+msgstr "{build_flag} må være et heltall, fant: {value}"
+
+#: ../fdroidserver/metadata.py
+#, fuzzy, python-brace-format
+msgid "{build_flag} must be list or string, found: {value}"
 msgstr "{build_flag} må være et heltall, fant: {value}"
 
 #: ../fdroidserver/metadata.py
