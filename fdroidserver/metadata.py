@@ -1172,10 +1172,6 @@ def _builds_to_yaml(app):
         for field in build_flags:
             if hasattr(build, field):
                 value = getattr(build, field)
-                if field == 'gradle' and value == ['off']:
-                    value = [
-                        ruamel.yaml.scalarstring.SingleQuotedScalarString('off')
-                    ]
                 typ = flagtype(field)
                 # don't check value == True for TYPE_INT as it could be 0
                 if value and typ == TYPE_STRINGMAP:
