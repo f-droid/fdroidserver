@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.8-135-g16dd6d28\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2023-03-09 13:11+0100\n"
+"POT-Creation-Date: 2023-05-24 22:18+0200\n"
 "PO-Revision-Date: 2022-09-06 14:30+0000\n"
 "Last-Translator: Hans-Christoph Steiner <hans@guardianproject.info>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/f-droid/fdroidserver/ko/>\n"
@@ -181,7 +181,17 @@ msgstr "'{path}'를 실행하는 데 실패했습니다!"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
+msgid "'{path}' has invalid format, it should be a dictionary!"
+msgstr ""
+
+#: ../fdroidserver/metadata.py ../fdroidserver/lint.py
+#, python-brace-format
 msgid "'{value}' is not a valid {field} in {appid}. Regex pattern: {pattern}"
+msgstr "'{value}'는 {appid}에서 올바른 {field}가 아닙니다. 정규식 패턴: {pattern}"
+
+#: ../fdroidserver/metadata.py
+#, fuzzy, python-brace-format
+msgid "'{value}' is not a valid {field}, should be {pattern}"
 msgstr "'{value}'는 {appid}에서 올바른 {field}가 아닙니다. 정규식 패턴: {pattern}"
 
 #: ../fdroidserver/checkupdates.py
@@ -223,6 +233,10 @@ msgstr "{name}를 위해서만 새 저장소를 추가하기"
 #: ../fdroidserver/init.py
 msgid "Alias of the repo signing key in the keystore"
 msgstr "키스토어에서 저장소 서명 키의 별칭"
+
+#: ../fdroidserver/build.py
+msgid "AllowedAPKSigningKeys missing but reference binary supplied"
+msgstr ""
 
 #: ../fdroidserver/import_subcommand.py
 msgid "Allows a different revision (or git branch) to be specified for the initial import"
@@ -269,6 +283,10 @@ msgid "Android SDK tool {cmd} not found!"
 msgstr ""
 
 #: ../fdroidserver/lint.py
+msgid "App has Binaries but does not have corresponding AllowedAPKSigningKeys to pin certificate."
+msgstr ""
+
+#: ../fdroidserver/lint.py
 msgid "App has NoSourceSince or ArchivePolicy \"0 versions\" but AutoUpdateMode or UpdateCheckMode are not None"
 msgstr ""
 
@@ -276,6 +294,10 @@ msgstr ""
 #, python-brace-format
 msgid "App is in '{repo}' but has a link to {url}"
 msgstr "앱은 '{repo}'에 있지만 {url}로의 연결이 있습니다"
+
+#: ../fdroidserver/lint.py
+msgid "App version has binary but does not have corresponding AllowedAPKSigningKeys to pin certificate."
+msgstr ""
 
 #: ../fdroidserver/lint.py
 msgid "Appending .git is not necessary"
@@ -288,6 +310,11 @@ msgstr "올바르지 않은 서명으로 {apkfilename}를 보존 중입니다!"
 
 #: ../fdroidserver/lint.py
 msgid "AutoUpdateMode with UpdateCheckMode: HTTP must have a pattern."
+msgstr ""
+
+#: ../fdroidserver/index.py
+#, python-brace-format
+msgid "Bad entry type \"{mirrortype}\" in mirrors config: {mirror}"
 msgstr ""
 
 #: ../fdroidserver/mirror.py
@@ -383,6 +410,11 @@ msgstr "명령 '%s'은 인식되지 않습니다.\n"
 #: ../fdroidserver/checkupdates.py
 msgid "Commit changes"
 msgstr "번경사항 커밋"
+
+#: ../fdroidserver/metadata.py
+#, python-brace-format
+msgid "Conflicting \"{field}\" definitions between .yml and localized files:"
+msgstr ""
 
 #: ../fdroidserver/__main__.py
 msgid "Conflicting arguments: '--verbose' and '--quiet' can not be specified at the same time."
@@ -570,6 +602,16 @@ msgstr ""
 msgid "Downloading {url} failed. {error}"
 msgstr ""
 
+#: ../fdroidserver/metadata.py
+#, python-brace-format
+msgid "Duplicate Anti-Feature declaration at {path} was ignored!"
+msgstr ""
+
+#: ../fdroidserver/index.py
+#, python-format
+msgid "Duplicate entry \"%s\" in mirrors config!"
+msgstr ""
+
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "Duplicate link in '{field}': {url}"
@@ -613,6 +655,10 @@ msgstr ""
 
 #: ../fdroidserver/import_subcommand.py
 msgid "Error while getting repo address"
+msgstr ""
+
+#: ../fdroidserver/scanner.py
+msgid "Exit with a non-zero code if problems were found"
 msgstr ""
 
 #: ../fdroidserver/__main__.py
@@ -833,6 +879,11 @@ msgstr ""
 msgid "Ignoring FUNDING.yml entry longer than 2048: %s"
 msgstr ""
 
+#: ../fdroidserver/update.py
+#, python-format
+msgid "Ignoring bad element in manifest: %s"
+msgstr ""
+
 #: ../fdroidserver/index.py
 msgid "Ignoring package without metadata: "
 msgstr ""
@@ -1042,6 +1093,10 @@ msgstr ""
 
 #: ../fdroidserver/gpgsign.py
 msgid "Missing output directory"
+msgstr ""
+
+#: ../fdroidserver/metadata.py
+msgid "Moving Anti-Features declarations to localized files:"
 msgstr ""
 
 #: ../fdroidserver/index.py
@@ -1805,6 +1860,11 @@ msgstr "Java의 jarsigner를 사용하여, APK를 검증하는 것은 권장되�
 msgid "Using androguard from \"{path}\""
 msgstr "\"{path}\"에서 androguard를 사용 중"
 
+#: ../fdroidserver/metadata.py
+#, python-brace-format
+msgid "Using blank dictionary instead of contents of {path}!"
+msgstr ""
+
 #: ../fdroidserver/init.py
 #, python-brace-format
 msgid "Using existing keystore \"{path}\""
@@ -2310,6 +2370,10 @@ msgstr "고정적 인수"
 msgid "process log deploy {path} to {dest} failed!"
 msgstr ""
 
+#: ../fdroidserver/build.py
+msgid "reference binary missing signature"
+msgstr ""
+
 #: ../fdroidserver/signatures.py
 #, python-brace-format
 msgid "refuse downloading via insecure HTTP connection (use HTTPS or specify --no-https-check): {apkfilename}"
@@ -2379,6 +2443,11 @@ msgstr "srclibs 없는 이름 및/또는 @"
 
 #: ../fdroidserver/scanner.py
 msgid "static library"
+msgstr ""
+
+#: ../fdroidserver/build.py
+#, python-brace-format
+msgid "supplied reference binary has allowed signer {signer}"
 msgstr ""
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
@@ -2499,6 +2568,11 @@ msgstr ""
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "{build_flag} must be an integer, found: {value}"
+msgstr ""
+
+#: ../fdroidserver/metadata.py
+#, python-brace-format
+msgid "{build_flag} must be list or string, found: {value}"
 msgstr ""
 
 #: ../fdroidserver/metadata.py
