@@ -57,6 +57,7 @@ metadata_v0:
     - cd fdroiddata
     - ../tests/dump_internal_metadata_format.py
     - sed -i
+          -e '/RequiresRoot:/d'
           -e "/buildozer/d"
           -e '/^comments\W /d'
           -e 's,maven\(\W\) false,maven\1 null,'

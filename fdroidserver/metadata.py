@@ -20,6 +20,7 @@
 
 import git
 from pathlib import Path
+import math
 import platform
 import os
 import re
@@ -883,6 +884,21 @@ def parse_localized_antifeatures(app):
             app['AntiFeatures'][f.stem][locale] = f.read_text()
 
 
+def _normalize_type_int(k, v):
+    """Normalize anything that can be reliably converted to an integer."""
+    if isinstance(v, int) and not isinstance(v, bool):
+        return v
+    if v is None:
+        return None
+    if isinstance(v, str):
+        try:
+            return int(v)
+        except ValueError:
+            pass
+    msg = _('{build_flag} must be an integer, found: {value}')
+    _warn_or_exception(msg.format(build_flag=k, value=v))
+
+
 def _normalize_type_string(v):
     """Normalize any data to TYPE_STRING.
 
@@ -892,11 +908,27 @@ def _normalize_type_string(v):
     numbers.  Like "versionName: 1.0" would be a YAML float, but
     should be a string.
 
+    SHA-256 values are string values, but YAML 1.2 can interpret some
+    unquoted values as decimal ints.  This converts those to a string
+    if they are over 50 digits.  In the wild, the longest 0 padding on
+    a SHA-256 key fingerprint I found was 8 zeros.
+
     """
     if isinstance(v, bool):
         if v:
             return 'true'
         return 'false'
+    if isinstance(v, float):
+        # YAML 1.2 values for NaN, Inf, and -Inf
+        if math.isnan(v):
+            return '.nan'
+        if math.isinf(v):
+            if v > 0:
+                return '.inf'
+            return '-.inf'
+    if v and isinstance(v, int):
+        if math.log10(v) > 50:  # only if the int has this many digits
+            return '%064d' % v
     return str(v)
 
 
@@ -955,30 +987,47 @@ def _normalize_type_stringmap(k, v):
     return retdict
 
 
+def _normalize_type_list(k, v):
+    """Normalize any data to TYPE_LIST, which is always a list of strings."""
+    if isinstance(v, dict):
+        msg = _('{build_flag} must be list or string, found: {value}')
+        _warn_or_exception(msg.format(build_flag=k, value=v))
+    elif type(v) not in (list, tuple, set):
+        v = [v]
+    return [_normalize_type_string(i) for i in v]
+
+
 def post_parse_yaml_metadata(yamldata):
     """Convert human-readable metadata data structures into consistent data structures.
+
+    "Be conservative in what is written out, be liberal in what is parsed."
+    https://en.wikipedia.org/wiki/Robustness_principle
 
     This also handles conversions that make metadata YAML behave
     something like StrictYAML.  Specifically, a field should have a
     fixed value type, regardless of YAML 1.2's type auto-detection.
 
+    TODO: None values should probably be treated as the string 'null',
+    since YAML 1.2 uses that for nulls
+
     """
     for k, v in yamldata.items():
         _fieldtype = fieldtype(k)
         if _fieldtype == TYPE_LIST:
-            if isinstance(v, str):
-                yamldata[k] = [v]
-            elif v:
-                yamldata[k] = [str(i) for i in v]
+            if v or v == 0:
+                yamldata[k] = _normalize_type_list(k, v)
         elif _fieldtype == TYPE_INT:
-            if v:
-                yamldata[k] = int(v)
+            v = _normalize_type_int(k, v)
+            if v or v == 0:
+                yamldata[k] = v
         elif _fieldtype == TYPE_STRING:
             if v or v == 0:
                 yamldata[k] = _normalize_type_string(v)
         elif _fieldtype == TYPE_STRINGMAP:
             if v or v == 0:  # TODO probably want just `if v:`
                 yamldata[k] = _normalize_type_stringmap(k, v)
+        elif _fieldtype == TYPE_BOOL:
+            yamldata[k] = bool(v)
         else:
             if type(v) in (float, int):
                 yamldata[k] = str(v)
@@ -994,29 +1043,17 @@ def post_parse_yaml_metadata(yamldata):
                 if v or v == 0:
                     build[k] = _normalize_type_string(v)
             elif _flagtype == TYPE_INT:
-                build[k] = v
-                # versionCode must be int
-                if not isinstance(v, int):
-                    _warn_or_exception(
-                        _('{build_flag} must be an integer, found: {value}').format(
-                            build_flag=k, value=v
-                        )
-                    )
-            elif _flagtype in (TYPE_LIST, TYPE_SCRIPT):
-                if isinstance(v, str) or isinstance(v, int):
-                    build[k] = [_normalize_type_string(v)]
-                else:
+                v = _normalize_type_int(k, v)
+                if v or v == 0:
                     build[k] = v
-                # float and dict are here only to keep things compatible
-                if type(build[k]) not in (list, tuple, set, float, dict):
-                    _warn_or_exception(
-                        _('{build_flag} must be list or string, found: {value}').format(
-                            build_flag=k, value=v
-                        )
-                    )
+            elif _flagtype in (TYPE_LIST, TYPE_SCRIPT):
+                if v or v == 0:
+                    build[k] = _normalize_type_list(k, v)
             elif _flagtype == TYPE_STRINGMAP:
                 if v or v == 0:
                     build[k] = _normalize_type_stringmap(k, v)
+            elif _flagtype == TYPE_BOOL:
+                build[k] = bool(v)
 
         builds.append(build)
 

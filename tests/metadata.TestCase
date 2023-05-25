@@ -343,6 +343,13 @@ class MetadataTest(unittest.TestCase):
         self.assertEqual('false', metadata._normalize_type_string(False))
         self.assertEqual('true', metadata._normalize_type_string(True))
 
+    def test_normalize_type_string_sha256(self):
+        """SHA-256 values are TYPE_STRING, which YAML can parse as decimal ints."""
+        yaml = ruamel.yaml.YAML(typ='safe')
+        for v in range(1, 1000):
+            s = '%064d' % (v * (10**51))
+            self.assertEqual(s, metadata._normalize_type_string(yaml.load(s)))
+
     def test_normalize_type_stringmap_none(self):
         self.assertEqual(dict(), metadata._normalize_type_stringmap('key', None))
 
@@ -355,6 +362,57 @@ class MetadataTest(unittest.TestCase):
             metadata._normalize_type_stringmap('AntiFeatures', ['Ads', 'Tracking']),
         )
 
+    def test_normalize_type_int(self):
+        """TYPE_INT should be an int whenever possible."""
+        self.assertEqual(0, metadata._normalize_type_int('key', 0))
+        self.assertEqual(1, metadata._normalize_type_int('key', 1))
+        self.assertEqual(-5, metadata._normalize_type_int('key', -5))
+        self.assertEqual(0, metadata._normalize_type_int('key', '0'))
+        self.assertEqual(1, metadata._normalize_type_int('key', '1'))
+        self.assertEqual(-5, metadata._normalize_type_int('key', '-5'))
+        self.assertEqual(
+            12345678901234567890,
+            metadata._normalize_type_int('key', 12345678901234567890),
+        )
+
+    def test_normalize_type_int_fails(self):
+        with self.assertRaises(MetaDataException):
+            metadata._normalize_type_int('key', '1a')
+        with self.assertRaises(MetaDataException):
+            metadata._normalize_type_int('key', 1.1)
+        with self.assertRaises(MetaDataException):
+            metadata._normalize_type_int('key', True)
+
+    def test_normalize_type_list(self):
+        """TYPE_LIST is always a list of strings, no matter what YAML thinks."""
+        k = 'placeholder'
+        yaml = ruamel.yaml.YAML(typ='safe')
+        self.assertEqual(['1.0'], metadata._normalize_type_list(k, 1.0))
+        self.assertEqual(['1234567890'], metadata._normalize_type_list(k, 1234567890))
+        self.assertEqual(['false'], metadata._normalize_type_list(k, False))
+        self.assertEqual(['true'], metadata._normalize_type_list(k, True))
+        self.assertEqual(['foo'], metadata._normalize_type_list(k, 'foo'))
+        self.assertEqual([], metadata._normalize_type_list(k, list()))
+        self.assertEqual([], metadata._normalize_type_list(k, tuple()))
+        self.assertEqual([], metadata._normalize_type_list(k, set()))
+        self.assertEqual(['0', '1', '2'], metadata._normalize_type_list(k, {0, 1, 2}))
+        self.assertEqual(
+            ['a', 'b', 'c', '0', '0.0'],
+            metadata._normalize_type_list(k, yaml.load('[a, b, c, 0, 0.0]')),
+        )
+        self.assertEqual(
+            ['1', '1.0', 's', 'true', '{}'],
+            metadata._normalize_type_list(k, yaml.load('[1, 1.0, s, true, {}]')),
+        )
+        self.assertEqual(
+            ['1', '1.0', 's', 'true', '{}'],
+            metadata._normalize_type_list(k, (1, 1.0, 's', True, dict())),
+        )
+
+    def test_normalize_type_list_fails(self):
+        with self.assertRaises(MetaDataException):
+            metadata._normalize_type_list('placeholder', dict())
+
     def test_post_parse_yaml_metadata(self):
         yamldata = dict()
         metadata.post_parse_yaml_metadata(yamldata)
@@ -365,9 +423,17 @@ class MetadataTest(unittest.TestCase):
         metadata.post_parse_yaml_metadata(yamldata)
 
     def test_post_parse_yaml_metadata_fails(self):
-        yamldata = {'AllowedAPKSigningKeys': True}
-        with self.assertRaises(TypeError):
+        yamldata = {'AllowedAPKSigningKeys': {'bad': 'dict-placement'}}
+        with self.assertRaises(MetaDataException):
             metadata.post_parse_yaml_metadata(yamldata)
+
+    def test_post_parse_yaml_metadata_0padding_sha256(self):
+        """SHA-256 values are strings, but YAML 1.2 will read some as decimal ints."""
+        v = '0027293472934293872934729834729834729834729834792837487293847926'
+        yaml = ruamel.yaml.YAML(typ='safe')
+        yamldata = yaml.load('AllowedAPKSigningKeys: ' + v)
+        metadata.post_parse_yaml_metadata(yamldata)
+        self.assertEqual(yamldata['AllowedAPKSigningKeys'], [v])
 
     def test_post_parse_yaml_metadata_builds(self):
         yamldata = OrderedDict()
@@ -383,7 +449,7 @@ class MetadataTest(unittest.TestCase):
             yamldata,
         )
 
-        build['versionCode'] = '1'
+        build['versionCode'] = '1a'
         self.assertRaises(
             fdroidserver.exception.MetaDataException,
             fdroidserver.metadata.post_parse_yaml_metadata,
@@ -475,14 +541,14 @@ class MetadataTest(unittest.TestCase):
         )
 
     def test_parse_yaml_metadata_app_type_list_fails(self):
-        mf = _get_mock_mf('AllowedAPKSigningKeys: true')
-        with self.assertRaises(TypeError):
-            metadata.parse_yaml_metadata(mf)
-        mf = _get_mock_mf('AllowedAPKSigningKeys: 1')
-        with self.assertRaises(TypeError):
+        mf = _get_mock_mf('AllowedAPKSigningKeys: {t: f}')
+        with self.assertRaises(MetaDataException):
             metadata.parse_yaml_metadata(mf)
 
-        self.assertEqual(fdroidserver.metadata.parse_yaml_metadata(mf), dict())
+    def test_parse_yaml_metadata_build_type_list_fails(self):
+        mf = _get_mock_mf('Builds: [{versionCode: 1, rm: {bad: dict-placement}}]')
+        with self.assertRaises(MetaDataException):
+            metadata.parse_yaml_metadata(mf)
 
     def test_parse_yaml_metadata_unknown_app_field(self):
         mf = io.StringIO(
@@ -965,6 +1031,24 @@ class MetadataTest(unittest.TestCase):
             {'AntiFeatures': {'true': {}}},
         )
 
+    def test_parse_yaml_app_antifeatures_float_nan(self):
+        self.assertEqual(
+            metadata.parse_yaml_metadata(io.StringIO('AntiFeatures: .nan')),
+            {'AntiFeatures': {'.nan': {}}},
+        )
+
+    def test_parse_yaml_app_antifeatures_float_inf(self):
+        self.assertEqual(
+            metadata.parse_yaml_metadata(io.StringIO('AntiFeatures: .inf')),
+            {'AntiFeatures': {'.inf': {}}},
+        )
+
+    def test_parse_yaml_app_antifeatures_float_negative_inf(self):
+        self.assertEqual(
+            metadata.parse_yaml_metadata(io.StringIO('AntiFeatures: -.inf')),
+            {'AntiFeatures': {'-.inf': {}}},
+        )
+
     def test_parse_yaml_app_antifeatures_int(self):
         self.assertEqual(
             metadata.parse_yaml_metadata(io.StringIO('AntiFeatures: 1')),
@@ -1104,6 +1188,34 @@ class MetadataTest(unittest.TestCase):
                     'Tracking': {DEFAULT_LOCALE: tracking},
                 }
             },
+        )
+
+    def test_parse_yaml_build_type_int_fail(self):
+        mf = io.StringIO('Builds: [{versionCode: 1a}]')
+        with self.assertRaises(MetaDataException):
+            fdroidserver.metadata.parse_yaml_metadata(mf)
+
+    def test_parse_yaml_int_strict_typing_fails(self):
+        """Things that cannot be preserved when parsing as YAML."""
+        mf = io.StringIO('Builds: [{versionCode: 1, rm: 0xf}]')
+        self.assertEqual(
+            {'Builds': [{'rm': ['15'], 'versionCode': 1}]},  # 15 != 0xf
+            fdroidserver.metadata.parse_yaml_metadata(mf),
+        )
+        mf = io.StringIO('Builds: [{versionCode: 1, rm: 0x010}]')
+        self.assertEqual(
+            {'Builds': [{'rm': ['16'], 'versionCode': 1}]},  # 16 != 0x010
+            fdroidserver.metadata.parse_yaml_metadata(mf),
+        )
+        mf = io.StringIO('Builds: [{versionCode: 1, rm: 0o015}]')
+        self.assertEqual(
+            {'Builds': [{'rm': ['13'], 'versionCode': 1}]},  # 13 != 0o015
+            fdroidserver.metadata.parse_yaml_metadata(mf),
+        )
+        mf = io.StringIO('Builds: [{versionCode: 1, rm: 10_000}]')
+        self.assertEqual(
+            {'Builds': [{'rm': ['10000'], 'versionCode': 1}]},  # 10000 != 10_000
+            fdroidserver.metadata.parse_yaml_metadata(mf),
         )
 
     def test_write_yaml_1_line_scripts_as_string(self):
@@ -1999,22 +2111,49 @@ class PostMetadataParseTest(unittest.TestCase):
         app['Builds'][0][tested_key] = expected
         return app, post
 
+    def test_post_metadata_parse_none(self):
+        """Run None aka YAML null or blank through the various field and flag types."""
+        self.assertEqual(*self._post_metadata_parse_app_list(None, None))
+        self.assertEqual(*self._post_metadata_parse_app_string(None, None))
+        self.assertEqual(*self._post_metadata_parse_build_bool(None, None))
+        self.assertEqual(*self._post_metadata_parse_build_int(None, None))
+        self.assertEqual(*self._post_metadata_parse_build_list(None, None))
+        self.assertEqual(*self._post_metadata_parse_build_script(None, None))
+        self.assertEqual(*self._post_metadata_parse_build_string(None, None))
+
     def test_post_metadata_parse_int(self):
         """Run the int 123456 through the various field and flag types."""
-        with self.assertRaises(TypeError):
-            self._post_metadata_parse_app_list(123456, TypeError)
+        self.assertEqual(*self._post_metadata_parse_app_list(123456, ['123456']))
         self.assertEqual(*self._post_metadata_parse_app_string(123456, '123456'))
-        self.assertEqual(*self._post_metadata_parse_build_bool(123456, 123456))
+        self.assertEqual(*self._post_metadata_parse_build_bool(123456, True))
         self.assertEqual(*self._post_metadata_parse_build_int(123456, 123456))
         self.assertEqual(*self._post_metadata_parse_build_list(123456, ['123456']))
         self.assertEqual(*self._post_metadata_parse_build_script(123456, ['123456']))
         self.assertEqual(*self._post_metadata_parse_build_string(123456, '123456'))
 
+    def test_post_metadata_parse_sha256(self):
+        """Run a SHA-256 that YAML calls an int through the various types.
+
+        The current f-droid.org signer set has SHA-256 values with a
+        maximum of two leading zeros, but this will handle more.
+
+        """
+        yaml = ruamel.yaml.YAML(typ='safe', pure=True)
+        str_sha256 = '0000000000000498456908409534729834729834729834792837487293847926'
+        sha256 = yaml.load('a: ' + str_sha256)['a']
+        self.assertEqual(*self._post_metadata_parse_app_list(sha256, [str_sha256]))
+        self.assertEqual(*self._post_metadata_parse_app_string(sha256, str_sha256))
+        self.assertEqual(*self._post_metadata_parse_build_bool(sha256, True))
+        self.assertEqual(*self._post_metadata_parse_build_int(sha256, sha256))
+        self.assertEqual(*self._post_metadata_parse_build_list(sha256, [str_sha256]))
+        self.assertEqual(*self._post_metadata_parse_build_script(sha256, [str_sha256]))
+        self.assertEqual(*self._post_metadata_parse_build_string(sha256, str_sha256))
+
     def test_post_metadata_parse_int_0(self):
         """Run the int 0 through the various field and flag types."""
-        self.assertEqual(*self._post_metadata_parse_app_list(0, 0))
+        self.assertEqual(*self._post_metadata_parse_app_list(0, ['0']))
         self.assertEqual(*self._post_metadata_parse_app_string(0, '0'))
-        self.assertEqual(*self._post_metadata_parse_build_bool(0, 0))
+        self.assertEqual(*self._post_metadata_parse_build_bool(0, False))
         self.assertEqual(*self._post_metadata_parse_build_int(0, 0))
         self.assertEqual(*self._post_metadata_parse_build_list(0, ['0']))
         self.assertEqual(*self._post_metadata_parse_build_script(0, ['0']))
@@ -2022,43 +2161,41 @@ class PostMetadataParseTest(unittest.TestCase):
 
     def test_post_metadata_parse_float_0_0(self):
         """Run the float 0.0 through the various field and flag types."""
-        self.assertEqual(*self._post_metadata_parse_app_list(0.0, 0.0))
+        self.assertEqual(*self._post_metadata_parse_app_list(0.0, ['0.0']))
         self.assertEqual(*self._post_metadata_parse_app_string(0.0, '0.0'))
-        self.assertEqual(*self._post_metadata_parse_build_bool(0.0, 0.0))
+        self.assertEqual(*self._post_metadata_parse_build_bool(0.0, False))
         with self.assertRaises(MetaDataException):
             self._post_metadata_parse_build_int(0.0, MetaDataException)
-        self.assertEqual(*self._post_metadata_parse_build_list(0.0, 0.0))
-        self.assertEqual(*self._post_metadata_parse_build_script(0.0, 0.0))
+        self.assertEqual(*self._post_metadata_parse_build_list(0.0, ['0.0']))
+        self.assertEqual(*self._post_metadata_parse_build_script(0.0, ['0.0']))
         self.assertEqual(*self._post_metadata_parse_build_string(0.0, '0.0'))
 
     def test_post_metadata_parse_float_0_1(self):
         """Run the float 0.1 through the various field and flag types."""
-        with self.assertRaises(TypeError):
-            self._post_metadata_parse_app_list(0.1, TypeError)
+        self.assertEqual(*self._post_metadata_parse_app_list(0.1, ['0.1']))
         self.assertEqual(*self._post_metadata_parse_app_string(0.1, '0.1'))
-        self.assertEqual(*self._post_metadata_parse_build_bool(0.1, 0.1))
+        self.assertEqual(*self._post_metadata_parse_build_bool(0.1, True))
         with self.assertRaises(MetaDataException):
             self._post_metadata_parse_build_int(0.1, MetaDataException)
-        self.assertEqual(*self._post_metadata_parse_build_list(0.1, 0.1))
-        self.assertEqual(*self._post_metadata_parse_build_script(0.1, 0.1))
+        self.assertEqual(*self._post_metadata_parse_build_list(0.1, ['0.1']))
+        self.assertEqual(*self._post_metadata_parse_build_script(0.1, ['0.1']))
         self.assertEqual(*self._post_metadata_parse_build_string(0.1, '0.1'))
 
     def test_post_metadata_parse_float_1_0(self):
         """Run the float 1.0 through the various field and flag types."""
-        with self.assertRaises(TypeError):
-            self._post_metadata_parse_app_list(1.0, TypeError)
+        self.assertEqual(*self._post_metadata_parse_app_list(1.0, ['1.0']))
         self.assertEqual(*self._post_metadata_parse_app_string(1.0, '1.0'))
-        self.assertEqual(*self._post_metadata_parse_build_bool(1.0, 1.0))
+        self.assertEqual(*self._post_metadata_parse_build_bool(1.0, True))
         with self.assertRaises(MetaDataException):
             self._post_metadata_parse_build_int(1.0, MetaDataException)
-        self.assertEqual(*self._post_metadata_parse_build_list(1.0, 1.0))
-        self.assertEqual(*self._post_metadata_parse_build_script(1.0, 1.0))
+        self.assertEqual(*self._post_metadata_parse_build_list(1.0, ['1.0']))
+        self.assertEqual(*self._post_metadata_parse_build_script(1.0, ['1.0']))
         self.assertEqual(*self._post_metadata_parse_build_string(1.0, '1.0'))
 
     def test_post_metadata_parse_empty_list(self):
         self.assertEqual(*self._post_metadata_parse_app_list(list(), list()))
         self.assertEqual(*self._post_metadata_parse_app_string(list(), list()))
-        self.assertEqual(*self._post_metadata_parse_build_bool(list(), list()))
+        self.assertEqual(*self._post_metadata_parse_build_bool(list(), False))
         with self.assertRaises(MetaDataException):
             self._post_metadata_parse_build_int(list(), MetaDataException)
         self.assertEqual(*self._post_metadata_parse_build_list(list(), list()))
@@ -2068,17 +2205,17 @@ class PostMetadataParseTest(unittest.TestCase):
     def test_post_metadata_parse_set_of_1(self):
         self.assertEqual(*self._post_metadata_parse_app_list({1}, ['1']))
         self.assertEqual(*self._post_metadata_parse_app_string({1}, '{1}'))
-        self.assertEqual(*self._post_metadata_parse_build_bool({1}, {1}))
+        self.assertEqual(*self._post_metadata_parse_build_bool({1}, True))
         with self.assertRaises(MetaDataException):
             self._post_metadata_parse_build_int({1}, MetaDataException)
-        self.assertEqual(*self._post_metadata_parse_build_list({1}, {1}))
-        self.assertEqual(*self._post_metadata_parse_build_script({1}, {1}))
+        self.assertEqual(*self._post_metadata_parse_build_list({1}, ['1']))
+        self.assertEqual(*self._post_metadata_parse_build_script({1}, ['1']))
         self.assertEqual(*self._post_metadata_parse_build_string({1}, '{1}'))
 
     def test_post_metadata_parse_empty_dict(self):
         self.assertEqual(*self._post_metadata_parse_app_list(dict(), dict()))
         self.assertEqual(*self._post_metadata_parse_app_string(dict(), dict()))
-        self.assertEqual(*self._post_metadata_parse_build_bool(dict(), dict()))
+        self.assertEqual(*self._post_metadata_parse_build_bool(dict(), False))
         with self.assertRaises(MetaDataException):
             self._post_metadata_parse_build_int(dict(), MetaDataException)
         self.assertEqual(*self._post_metadata_parse_build_list(dict(), dict()))
@@ -2088,38 +2225,42 @@ class PostMetadataParseTest(unittest.TestCase):
     def test_post_metadata_parse_list_int_string(self):
         self.assertEqual(*self._post_metadata_parse_app_list([1, 'a'], ['1', 'a']))
         self.assertEqual(*self._post_metadata_parse_app_string([1, 'a'], "[1, 'a']"))
-        self.assertEqual(*self._post_metadata_parse_build_bool([1, 'a'], [1, 'a']))
+        self.assertEqual(*self._post_metadata_parse_build_bool([1, 'a'], True))
         with self.assertRaises(MetaDataException):
             self._post_metadata_parse_build_int([1, 'a'], MetaDataException)
-        self.assertEqual(*self._post_metadata_parse_build_list([1, 'a'], [1, 'a']))
-        self.assertEqual(*self._post_metadata_parse_build_script([1, 'a'], [1, 'a']))
+        self.assertEqual(*self._post_metadata_parse_build_list([1, 'a'], ['1', 'a']))
+        self.assertEqual(*self._post_metadata_parse_build_script([1, 'a'], ['1', 'a']))
         self.assertEqual(*self._post_metadata_parse_build_string([1, 'a'], "[1, 'a']"))
 
     def test_post_metadata_parse_dict_int_string(self):
-        self.assertEqual(*self._post_metadata_parse_app_list({'k': 1}, ['k']))
+        with self.assertRaises(MetaDataException):
+            self._post_metadata_parse_app_list({'k': 1}, MetaDataException)
         self.assertEqual(*self._post_metadata_parse_app_string({'k': 1}, "{'k': 1}"))
-        self.assertEqual(*self._post_metadata_parse_build_bool({'k': 1}, {'k': 1}))
+        self.assertEqual(*self._post_metadata_parse_build_bool({'k': 1}, True))
         with self.assertRaises(MetaDataException):
             self._post_metadata_parse_build_int({'k': 1}, MetaDataException)
-        self.assertEqual(*self._post_metadata_parse_build_list({'k': 1}, {'k': 1}))
-        self.assertEqual(*self._post_metadata_parse_build_script({'k': 1}, {'k': 1}))
+        with self.assertRaises(MetaDataException):
+            self._post_metadata_parse_build_list({'k': 1}, MetaDataException)
+        with self.assertRaises(MetaDataException):
+            self._post_metadata_parse_build_script({'k': 1}, MetaDataException)
         self.assertEqual(*self._post_metadata_parse_build_string({'k': 1}, "{'k': 1}"))
 
     def test_post_metadata_parse_false(self):
-        self.assertEqual(*self._post_metadata_parse_app_list(False, False))
+        self.assertEqual(*self._post_metadata_parse_app_list(False, ['false']))
         self.assertEqual(*self._post_metadata_parse_app_string(False, 'false'))
         self.assertEqual(*self._post_metadata_parse_build_bool(False, False))
-        self.assertEqual(*self._post_metadata_parse_build_int(False, False))
+        with self.assertRaises(MetaDataException):
+            self._post_metadata_parse_build_int(False, MetaDataException)
         self.assertEqual(*self._post_metadata_parse_build_list(False, ['false']))
         self.assertEqual(*self._post_metadata_parse_build_script(False, ['false']))
         self.assertEqual(*self._post_metadata_parse_build_string(False, 'false'))
 
     def test_post_metadata_parse_true(self):
-        with self.assertRaises(TypeError):
-            self._post_metadata_parse_app_list(True, TypeError)
+        self.assertEqual(*self._post_metadata_parse_app_list(True, ['true']))
         self.assertEqual(*self._post_metadata_parse_app_string(True, 'true'))
         self.assertEqual(*self._post_metadata_parse_build_bool(True, True))
-        self.assertEqual(*self._post_metadata_parse_build_int(True, True))
+        with self.assertRaises(MetaDataException):
+            self._post_metadata_parse_build_int(True, MetaDataException)
         self.assertEqual(*self._post_metadata_parse_build_list(True, ['true']))
         self.assertEqual(*self._post_metadata_parse_build_script(True, ['true']))
         self.assertEqual(*self._post_metadata_parse_build_string(True, 'true'))
