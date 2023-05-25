@@ -784,9 +784,9 @@ def main():
                         help=_("Force scan of disabled apps and builds."))
     parser.add_argument("--json", action="store_true", default=False,
                         help=_("Output JSON to stdout."))
-    parser.add_argument("--refresh", "-r", action="store_true", default=False,
+    parser.add_argument("-r", "--refresh", action="store_true", default=False,
                         help=_("fetch the latest version of signatures from the web"))
-    parser.add_argument("--exit-code", "-e", action="store_true", default=False,
+    parser.add_argument("-e", "--exit-code", action="store_true", default=False,
                         help=_("Exit with a non-zero code if problems were found"))
     metadata.add_metadata_arguments(parser)
     options = parser.parse_args()
