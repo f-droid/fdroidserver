@@ -804,7 +804,7 @@ def parse_localized_antifeatures(app):
             │
             └── zh-CN/
                 └── antifeatures/
-                    └── 123_Ads.txt       -> "包括广告图书馆"
+                    └── 123_Ads.txt       -> "包括广告库"
 
     Gets parsed into the metadata data structure:
 
@@ -816,7 +816,7 @@ def parse_localized_antifeatures(app):
         antifeatures:
           Ads:
             en-US: includes ad lib
-            zh-CN: 包括广告图书馆
+            zh-CN: 包括广告库
           Tracking:
             en-US: standard suspects
 
