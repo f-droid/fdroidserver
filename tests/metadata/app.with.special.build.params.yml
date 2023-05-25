@@ -94,7 +94,7 @@ Builds:
     versionCode: 51
     disable: Labelled as pre-release, so skipped
 
-ArchivePolicy: 0 versions
+ArchivePolicy: 0
 AutoUpdateMode: None
 UpdateCheckMode: None
 CurrentVersion: 2.1.2

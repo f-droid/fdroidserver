@@ -1866,7 +1866,7 @@ class MetadataTest(unittest.TestCase):
                       - NonFreeAssets
                       - UpstreamNonFree
 
-                ArchivePolicy: 4 versions
+                ArchivePolicy: 4
                 AutoUpdateMode: Version v%v
                 UpdateCheckMode: Tags
                 CurrentVersion: '1.5'

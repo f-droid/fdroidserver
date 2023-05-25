@@ -176,7 +176,7 @@ def status_update_json(apps, apks):
         validapks = 0
         if app.get('Disabled'):
             output['disabled'].append(appid)
-        elif app.get("ArchivePolicy") and int(app["ArchivePolicy"][:-9]) == 0:
+        elif app["ArchivePolicy"] == 0:
             output['archivePolicy0'].append(appid)
         else:
             for build in app.get('Builds', []):
@@ -1877,7 +1877,7 @@ def archive_old_apks(apps, apks, archapks, repodir, archivedir, defaultkeepversi
     for appid, app in apps.items():
 
         if app.get('ArchivePolicy'):
-            keepversions = int(app['ArchivePolicy'][:-9])
+            keepversions = app['ArchivePolicy']
         else:
             keepversions = defaultkeepversions
             if app.get('VercodeOperation'):

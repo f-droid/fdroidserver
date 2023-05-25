@@ -195,6 +195,7 @@ fieldtypes = {
     'Builds': TYPE_BUILD,
     'VercodeOperation': TYPE_LIST,
     'CurrentVersionCode': TYPE_INT,
+    'ArchivePolicy': TYPE_INT,
 }
 
 
@@ -446,10 +447,6 @@ valuetypes = {
     FieldValidator("AllowedAPKSigningKeys",
                    r'^[a-fA-F0-9]{64}$',
                    ["AllowedAPKSigningKeys"]),
-
-    FieldValidator("Archive Policy",
-                   r'^[0-9]+ versions$',
-                   ["ArchivePolicy"]),
 
     FieldValidator("Auto Update Mode",
                    r"^(Version.*|None)$",
@@ -1017,6 +1014,9 @@ def post_parse_yaml_metadata(yamldata):
             if v or v == 0:
                 yamldata[k] = _normalize_type_list(k, v)
         elif _fieldtype == TYPE_INT:
+            # ArchivePolicy used to require " versions" in the value.
+            if k == 'ArchivePolicy' and isinstance(v, str):
+                v = v.split(' ', maxsplit=1)[0]
             v = _normalize_type_int(k, v)
             if v or v == 0:
                 yamldata[k] = v
@@ -1210,7 +1210,7 @@ def _app_to_yaml(app):
             insert_newline = True
         else:
             value = app.get(field)
-            if value or field == 'Builds':
+            if value or field in ('Builds', 'ArchivePolicy'):
                 _fieldtype = fieldtype(field)
                 if field == 'Builds':
                     if app.get('Builds'):
@@ -1226,6 +1226,10 @@ def _app_to_yaml(app):
                     if len(value) == 1:
                         cm[field] = value[0]
                     else:
+                elif field == 'ArchivePolicy':
+                    if value is None:
+                        continue
+                    cm[field] = _field_to_yaml(fieldtype(field), value)
                         cm[field] = value
                 elif _fieldtype == TYPE_MULTILINE:
                     v = _format_multiline(value)

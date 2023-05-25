@@ -1411,7 +1411,7 @@ class UpdateTest(unittest.TestCase):
                 self.assertDictEqual(
                     metadata_content,
                     {
-                        'ArchivePolicy': '',
+                        'ArchivePolicy': None,
                         'AuthorEmail': '',
                         'AuthorName': '',
                         'AuthorWebSite': '',

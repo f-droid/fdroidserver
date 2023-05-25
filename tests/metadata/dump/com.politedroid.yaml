@@ -3,7 +3,7 @@ AntiFeatures:
   NoSourceSince:
     en-US: '1.5'
   NonFreeNet: {}
-ArchivePolicy: 4 versions
+ArchivePolicy: 4
 AuthorEmail: null
 AuthorName: null
 AuthorWebSite: null
