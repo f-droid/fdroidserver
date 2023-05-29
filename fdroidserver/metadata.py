@@ -1070,6 +1070,26 @@ def post_parse_yaml_metadata(yamldata):
         }
 
 
+def _format_multiline(value):
+    """TYPE_MULTILINE with newlines in them are saved as YAML literal strings."""
+    if '\n' in value:
+        return ruamel.yaml.scalarstring.preserve_literal(str(value))
+    return str(value)
+
+
+def _format_list(value):
+    """TYPE_LIST should not contain null values."""
+    return [v for v in value if v]
+
+
+def _format_script(value):
+    """TYPE_SCRIPT with one value are converted to YAML string values."""
+    value = [v for v in value if v]
+    if len(value) == 1:
+        return value[0]
+    return value
+
+
 def _format_stringmap(appid, field, stringmap, versionCode=None):
     """Format TYPE_STRINGMAP taking into account localized files in the metadata dir.
 
@@ -1127,7 +1147,7 @@ def _format_stringmap(appid, field, stringmap, versionCode=None):
             make_list = False
             break
     if make_list:
-        return outlist
+        return sorted(outlist, key=str.lower)
     return stringmap
 
 
@@ -1142,48 +1162,34 @@ def _del_duplicated_NoSourceSince(app):
             del app['AntiFeatures'][key]
 
 
-def _field_to_yaml(typ, value):
-    """Convert data to YAML 1.2 format that keeps the right TYPE_*."""
-    if typ == TYPE_STRING:
-        return str(value)
-    elif typ == TYPE_INT:
-        return int(value)
-    elif typ == TYPE_MULTILINE:
-        if '\n' in value:
-            return ruamel.yaml.scalarstring.preserve_literal(str(value))
-        else:
-            return str(value)
-    elif typ == TYPE_SCRIPT:
-        if type(value) == list:
-            if len(value) == 1:
-                return value[0]
-            else:
-                return value
-    else:
-        return value
-
-
 def _builds_to_yaml(app):
+    """Reformat Builds: flags for output to YAML 1.2.
+
+    This will strip any flag/value that is not set or is empty.
+    TYPE_BOOL fields are removed when they are false.  0 is valid
+    value, it should not be stripped, so there are special cases to
+    handle that.
+
+    """
     builds = ruamel.yaml.comments.CommentedSeq()
     for build in app.get('Builds', []):
-        if not isinstance(build, Build):
-            build = Build(build)
         b = ruamel.yaml.comments.CommentedMap()
         for field in build_flags:
-            if hasattr(build, field):
-                value = getattr(build, field)
-                if field == 'gradle' and value == ['off']:
-                    value = [
-                        ruamel.yaml.scalarstring.SingleQuotedScalarString('off')
-                    ]
-                typ = flagtype(field)
-                # don't check value == True for TYPE_INT as it could be 0
-                if value and typ == TYPE_STRINGMAP:
-                    v = _format_stringmap(app['id'], field, value, build['versionCode'])
-                    if v:
-                        b[field] = v
-                elif value is not None and (typ == TYPE_INT or value):
-                    b.update({field: _field_to_yaml(typ, value)})
+            v = build.get(field)
+            if v is None or v is False or v == '' or v == dict() or v == list():
+                continue
+            _flagtype = flagtype(field)
+            if _flagtype == TYPE_MULTILINE:
+                v = _format_multiline(v)
+            elif _flagtype == TYPE_LIST:
+                v = _format_list(v)
+            elif _flagtype == TYPE_SCRIPT:
+                v = _format_script(v)
+            elif _flagtype == TYPE_STRINGMAP:
+                v = _format_stringmap(app['id'], field, v, build['versionCode'])
+
+            if v or v == 0:
+                b[field] = v
 
         builds.append(b)
 
@@ -1205,11 +1211,12 @@ def _app_to_yaml(app):
         else:
             value = app.get(field)
             if value or field == 'Builds':
+                _fieldtype = fieldtype(field)
                 if field == 'Builds':
                     if app.get('Builds'):
                         cm.update({field: _builds_to_yaml(app)})
-                elif field == 'CurrentVersionCode':
-                    cm[field] = _field_to_yaml(TYPE_INT, value)
+                elif field == 'Categories':
+                    cm[field] = sorted(value, key=str.lower)
                 elif field == 'AntiFeatures':
                     v = _format_stringmap(app['id'], field, value)
                     if v:
@@ -1217,11 +1224,20 @@ def _app_to_yaml(app):
                 elif field == 'AllowedAPKSigningKeys':
                     value = [str(i).lower() for i in value]
                     if len(value) == 1:
-                        cm[field] = _field_to_yaml(TYPE_STRING, value[0])
+                        cm[field] = value[0]
                     else:
-                        cm[field] = _field_to_yaml(TYPE_LIST, value)
+                        cm[field] = value
+                elif _fieldtype == TYPE_MULTILINE:
+                    v = _format_multiline(value)
+                    if v:
+                        cm[field] = v
+                elif _fieldtype == TYPE_SCRIPT:
+                    v = _format_script(value)
+                    if v:
+                        cm[field] = v
                 else:
-                    cm[field] = _field_to_yaml(fieldtype(field), value)
+                    if value:
+                        cm[field] = value
 
                 if insert_newline:
                     # we need to prepend a newline in front of this field
