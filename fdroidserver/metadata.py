@@ -1226,11 +1226,11 @@ def _app_to_yaml(app):
                     if len(value) == 1:
                         cm[field] = value[0]
                     else:
+                        cm[field] = value
                 elif field == 'ArchivePolicy':
                     if value is None:
                         continue
-                    cm[field] = _field_to_yaml(fieldtype(field), value)
-                        cm[field] = value
+                    cm[field] = value
                 elif _fieldtype == TYPE_MULTILINE:
                     v = _format_multiline(value)
                     if v:
