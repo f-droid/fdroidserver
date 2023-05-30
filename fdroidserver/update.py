@@ -1846,15 +1846,6 @@ def apply_info_from_latest_apk(apps, apks):
                 app['CurrentVersionCode'] = bestver
 
 
-def make_categories_txt(repodir, categories):
-    """Write a category list in the repo to allow quick access."""
-    catdata = ''
-    for cat in sorted(categories):
-        catdata += cat + '\n'
-    with open(os.path.join(repodir, 'categories.txt'), 'w') as f:
-        f.write(catdata)
-
-
 def archive_old_apks(apps, apks, archapks, repodir, archivedir, defaultkeepversions):
     def filter_apk_list_sorted(apk_list):
         apkList = []
@@ -2246,11 +2237,6 @@ def main():
     # Get all apps...
     apps = metadata.read_metadata()
 
-    # Generate a list of categories...
-    categories = set()
-    for app in apps.values():
-        categories.update(app.Categories)
-
     # Read known apks data (will be updated and written back when we've finished)
     knownapks = common.KnownApks()
 
@@ -2363,7 +2349,6 @@ def main():
 
     # Make the index for the main repo...
     index.make(repoapps, apks, repodirs[0], False)
-    make_categories_txt(repodirs[0], categories)
 
     git_remote = config.get('binary_transparency_remote')
     if git_remote or os.path.isdir(os.path.join('binary_transparency', '.git')):

@@ -22,6 +22,7 @@ import zipfile
 import textwrap
 from datetime import datetime
 from distutils.version import LooseVersion
+from pathlib import Path
 from testcommon import TmpCwd, mkdtemp
 from unittest import mock
 
@@ -1788,6 +1789,20 @@ class UpdateTest(unittest.TestCase):
             self.assertEqual(cm.output, [
                 "DEBUG:root:Checking archiving for org.smssecure.smssecure - apks:0, keepversions:6, archapks:0"
             ])
+
+    def test_categories_txt_is_removed_by_delete_unknown(self):
+        """categories.txt used to be a part of this system, now its nothing."""
+        os.chdir(self.testdir)
+        Path('config.yml').write_text('repo_pubkey: ffffffffffffffffffffffffffffffffffffffff')
+
+        categories_txt = Path('repo/categories.txt')
+        categories_txt.parent.mkdir()
+        categories_txt.write_text('placeholder')
+
+        self.assertTrue(categories_txt.exists())
+        with mock.patch('sys.argv', ['fdroid update', '--delete-unknown', '--nosign']):
+            fdroidserver.update.main()
+        self.assertFalse(categories_txt.exists())
 
 
 if __name__ == "__main__":
