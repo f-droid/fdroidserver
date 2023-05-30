@@ -10,6 +10,7 @@ import sys
 import tempfile
 import unittest
 from pathlib import Path
+from testcommon import mkdtemp
 
 localmodule = Path(__file__).resolve().parent.parent
 print('localmodule: ' + str(localmodule))
@@ -30,6 +31,14 @@ class LintTest(unittest.TestCase):
         self.tmpdir = localmodule / '.testfiles'
         self.tmpdir.mkdir(exist_ok=True)
         os.chdir(self.basedir)
+        fdroidserver.common.config = None
+        fdroidserver.lint.config = None
+        fdroidserver.lint.CATEGORIES_KEYS = None
+        self._td = mkdtemp()
+        self.testdir = self._td.name
+
+    def tearDown(self):
+        self._td.cleanup()
 
     def test_check_for_unsupported_metadata_files(self):
         self.assertTrue(fdroidserver.lint.check_for_unsupported_metadata_files())
@@ -313,12 +322,58 @@ class LintTest(unittest.TestCase):
             logging.debug(warn)
         self.assertFalse(anywarns)
 
+    def test_check_categories_in_config(self):
+        fdroidserver.lint.config = {'categories': ['InConfig']}
+        fdroidserver.lint.load_categories_config()
+        app = fdroidserver.metadata.App({'Categories': ['InConfig']})
+        self.assertEqual(0, len(list(fdroidserver.lint.check_categories(app))))
+
+    def test_check_categories_not_in_config(self):
+        fdroidserver.lint.config = dict()
+        fdroidserver.lint.load_categories_config()
+        app = fdroidserver.metadata.App({'Categories': ['NotInConfig']})
+        self.assertEqual(1, len(list(fdroidserver.lint.check_categories(app))))
+
+    def test_check_categories_empty_is_error(self):
+        fdroidserver.lint.config = {'categories': []}
+        fdroidserver.lint.load_categories_config()
+        app = fdroidserver.metadata.App({'Categories': ['something']})
+        self.assertEqual(1, len(list(fdroidserver.lint.check_categories(app))))
+
+    def test_check_categories_old_hardcoded_not_defined(self):
+        fdroidserver.lint.config = {'categories': ['foo', 'bar']}
+        fdroidserver.lint.load_categories_config()
+        app = fdroidserver.metadata.App({'Categories': ['Writing']})
+        self.assertEqual(1, len(list(fdroidserver.lint.check_categories(app))))
+
+    def test_check_categories_from_config_yml(self):
+        """In config.yml, categories is a list."""
+        os.chdir(self.testdir)
+        Path('config.yml').write_text('categories: [foo, bar]')
+        fdroidserver.lint.config = fdroidserver.common.read_config()
+        fdroidserver.lint.load_categories_config()
+        self.assertEqual(fdroidserver.lint.CATEGORIES_KEYS, ['foo', 'bar'])
+        app = fdroidserver.metadata.App({'Categories': ['bar']})
+        self.assertEqual(0, len(list(fdroidserver.lint.check_categories(app))))
+
+    def test_check_categories_from_config_categories_yml(self):
+        """In config/categories.yml, categories is a localized STRINGMAP dict."""
+        os.chdir(self.testdir)
+        os.mkdir('config')
+        Path('config/categories.yml').write_text('{foo: {name: foo}, bar: {name: bar}}')
+        fdroidserver.lint.config = fdroidserver.common.read_config()
+        fdroidserver.lint.load_categories_config()
+        self.assertEqual(fdroidserver.lint.CATEGORIES_KEYS, ['foo', 'bar'])
+        app = fdroidserver.metadata.App({'Categories': ['bar']})
+        self.assertEqual(0, len(list(fdroidserver.lint.check_categories(app))))
+
 
 class LintAntiFeaturesTest(unittest.TestCase):
     def setUp(self):
         self.basedir = localmodule / 'tests'
         os.chdir(self.basedir)
         fdroidserver.common.config = dict()
+        fdroidserver.lint.ANTIFEATURES_KEYS = None
         fdroidserver.lint.load_antiFeatures_config()
 
     def test_check_antiFeatures_empty(self):
