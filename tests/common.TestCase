@@ -2694,6 +2694,23 @@ class CommonTest(unittest.TestCase):
             p = Path(os.path.dirname(__file__) + '/repo' + v['icon']['en-US']['name'])
             self.assertTrue(p.exists())
 
+    def test_load_localized_config_categories(self):
+        """It should load"""
+        categories = fdroidserver.common.load_localized_config('categories', 'repo')
+        self.assertEqual(
+            [
+                'Time',
+                'Development',
+                'GuardianProject',
+                'Multimedia',
+                'Phone & SMS',
+                'Security',
+                'System',
+            ],
+            list(categories.keys()),
+        )
+        self.assertEqual(['en-US'], list(categories['GuardianProject']['name'].keys()))
+
 
 if __name__ == "__main__":
     os.chdir(os.path.dirname(__file__))

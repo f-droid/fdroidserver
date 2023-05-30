@@ -702,7 +702,11 @@ echo "Description: |" >> metadata/fake.yml
 echo " this is fake" >> metadata/fake.yml
 
 # fake that no JDKs are available
-echo 'java_paths: {}' > config.yml
+cat > config.yml <<EOF
+categories:
+  - Internet
+java_paths: {}
+EOF
 
 LOCAL_COPY_DIR=`create_test_dir`/fdroid
 mkdir -p $LOCAL_COPY_DIR/repo
