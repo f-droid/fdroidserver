@@ -678,9 +678,9 @@ def v2_repo(repodict, repodir, archive):
     if categories:
         repo["categories"] = categories
 
-    channels = common.load_localized_config("channels", repodir)
-    if channels:
-        repo["releaseChannels"] = channels
+    releaseChannels = common.load_localized_config("releaseChannels", repodir)
+    if releaseChannels:
+        repo["releaseChannels"] = releaseChannels
 
     return repo
 
