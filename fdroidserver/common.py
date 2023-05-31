@@ -28,6 +28,7 @@
 # common.py is imported by all modules, so do not import third-party
 # libraries here as they will become a requirement for all commands.
 
+import difflib
 import git
 import glob
 import io
@@ -519,7 +520,9 @@ def load_localized_config(name, repodir):
 
     """
     ret = dict()
+    found_config_file = False
     for f in Path().glob("config/**/{name}.yml".format(name=name)):
+        found_config_file = True
         locale = f.parts[1]
         if len(f.parts) == 2:
             locale = DEFAULT_LOCALE
@@ -541,6 +544,16 @@ def load_localized_config(name, repodir):
                         )
                     else:
                         ret[afname][key][locale] = value
+
+    if not found_config_file:
+        for f in Path().glob("config/*.yml"):
+            if f.stem not in CONFIG_NAMES:
+                msg = _('{path} is not a standard config file!').format(path=f)
+                m = difflib.get_close_matches(f.stem, CONFIG_NAMES, 1)
+                if m:
+                    msg += ' '
+                    msg += _('Did you mean config/{name}.yml?').format(name=m[0])
+                logging.error(msg)
 
     for elem in ret.values():
         for afname in elem:
