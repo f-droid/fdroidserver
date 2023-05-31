@@ -1,7 +1,7 @@
 AllowedAPKSigningKeys: []
 AntiFeatures:
   UpstreamNonFree: {}
-ArchivePolicy: 0 versions
+ArchivePolicy: 0
 AuthorEmail: null
 AuthorName: null
 AuthorWebSite: null

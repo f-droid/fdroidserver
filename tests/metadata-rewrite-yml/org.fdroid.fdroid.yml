@@ -944,7 +944,7 @@ Builds:
     gradle:
       - yes
 
-ArchivePolicy: 12 versions
+ArchivePolicy: 12
 AutoUpdateMode: None
 UpdateCheckMode: Static
 CurrentVersion: 0.102.3

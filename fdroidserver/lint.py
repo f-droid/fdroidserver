@@ -635,6 +635,17 @@ def check_app_field_types(app):
                     fieldtype=v.__class__.__name__,
                 )
             )
+        elif t == metadata.TYPE_INT and not isinstance(v, int):
+            yield (
+                _(
+                    "{appid}: {field} must be a '{type}', but it is a '{fieldtype}'!"
+                ).format(
+                    appid=app.id,
+                    field=field,
+                    type='int',
+                    fieldtype=v.__class__.__name__,
+                )
+            )
 
 
 def check_antiFeatures(app):
@@ -693,8 +704,7 @@ def check_for_unsupported_metadata_files(basedir=""):
 
 def check_current_version_code(app):
     """Check that the CurrentVersionCode is currently available."""
-    archive_policy = app.get('ArchivePolicy')
-    if archive_policy and archive_policy.split()[0] == "0":
+    if app.get('ArchivePolicy') == 0:
         return
     cv = app.get('CurrentVersionCode')
     if cv is not None and cv == 0:
@@ -724,13 +734,11 @@ def check_current_version_code(app):
 
 def check_updates_expected(app):
     """Check if update checking makes sense."""
-    if (
-        app.get('NoSourceSince') or app.get('ArchivePolicy') == '0 versions'
-    ) and not all(
+    if (app.get('NoSourceSince') or app.get('ArchivePolicy') == 0) and not all(
         app.get(key, 'None') == 'None' for key in ('AutoUpdateMode', 'UpdateCheckMode')
     ):
         yield _(
-            'App has NoSourceSince or ArchivePolicy "0 versions" but AutoUpdateMode or UpdateCheckMode are not None'
+            'App has NoSourceSince or ArchivePolicy "0 versions" or 0 but AutoUpdateMode or UpdateCheckMode are not None'
         )
 
 
