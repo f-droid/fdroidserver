@@ -228,7 +228,7 @@ CATEGORIES_KEYS = list()
 def load_antiFeatures_config():
     """Lazy loading, since it might read a lot of files."""
     global ANTIFEATURES_KEYS, ANTIFEATURES_PATTERN
-    k = 'antiFeatures'  # internal dict uses camelCase key name
+    k = common.ANTIFEATURES_CONFIG_NAME
     if not ANTIFEATURES_KEYS or k not in common.config:
         common.config[k] = common.load_localized_config(k, 'repo')
         ANTIFEATURES_KEYS = sorted(common.config[k].keys())
@@ -238,7 +238,7 @@ def load_antiFeatures_config():
 def load_categories_config():
     """Lazy loading, since it might read a lot of files."""
     global CATEGORIES_KEYS
-    k = 'categories'
+    k = common.CATEGORIES_CONFIG_NAME
     if not CATEGORIES_KEYS:
         if config and k in config:
             CATEGORIES_KEYS = config[k]

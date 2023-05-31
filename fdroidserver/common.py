@@ -112,6 +112,18 @@ XMLNS_ANDROID = '{http://schemas.android.com/apk/res/android}'
 # https://docs.gitlab.com/ee/user/gitlab_com/#gitlab-pages
 GITLAB_COM_PAGES_MAX_SIZE = 1000000000
 
+# the names used for things that are configured per-repo
+ANTIFEATURES_CONFIG_NAME = 'antiFeatures'
+CATEGORIES_CONFIG_NAME = 'categories'
+CONFIG_CONFIG_NAME = 'config'
+RELEASECHANNELS_CONFIG_NAME = "releaseChannels"
+CONFIG_NAMES = (
+    ANTIFEATURES_CONFIG_NAME,
+    CATEGORIES_CONFIG_NAME,
+    CONFIG_CONFIG_NAME,
+    RELEASECHANNELS_CONFIG_NAME,
+)
+
 
 config = None
 options = None

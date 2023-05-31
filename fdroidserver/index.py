@@ -42,7 +42,7 @@ from . import common
 from . import metadata
 from . import net
 from . import signindex
-from fdroidserver.common import DEFAULT_LOCALE, FDroidPopen, FDroidPopenBytes, load_stats_fdroid_signing_key_fingerprints
+from fdroidserver.common import ANTIFEATURES_CONFIG_NAME, CATEGORIES_CONFIG_NAME, CONFIG_CONFIG_NAME, RELEASECHANNELS_CONFIG_NAME, DEFAULT_LOCALE, FDroidPopen, FDroidPopenBytes, load_stats_fdroid_signing_key_fingerprints
 from fdroidserver.exception import FDroidException, VerificationException
 
 
@@ -637,7 +637,7 @@ def convert_version(version, app, repodir):
 
     if "versionCode" in version:
         if version["versionCode"] > app["CurrentVersionCode"]:
-            ver["releaseChannels"] = ["Beta"]
+            ver[RELEASECHANNELS_CONFIG_NAME] = ["Beta"]
 
     for build in app.get('Builds', []):
         if build['versionCode'] == version['versionCode'] and "whatsNew" in build:
@@ -656,7 +656,7 @@ def v2_repo(repodict, repodir, archive):
         DEFAULT_LOCALE: common.file_entry("%s/icons/%s" % (repodir, repodict["icon"]))
     }
 
-    config = common.load_localized_config("config", repodir)
+    config = common.load_localized_config(CONFIG_CONFIG_NAME, repodir)
     if config:
         repo["name"] = config["archive" if archive else "repo"]["name"]
         repo["description"] = config["archive" if archive else "repo"]["description"]
@@ -670,17 +670,17 @@ def v2_repo(repodict, repodir, archive):
 
     repo["timestamp"] = repodict["timestamp"]
 
-    antiFeatures = common.load_localized_config("antiFeatures", repodir)
+    antiFeatures = common.load_localized_config(ANTIFEATURES_CONFIG_NAME, repodir)
     if antiFeatures:
-        repo["antiFeatures"] = antiFeatures
+        repo[ANTIFEATURES_CONFIG_NAME] = antiFeatures
 
-    categories = common.load_localized_config("categories", repodir)
+    categories = common.load_localized_config(CATEGORIES_CONFIG_NAME, repodir)
     if categories:
-        repo["categories"] = categories
+        repo[CATEGORIES_CONFIG_NAME] = categories
 
-    releaseChannels = common.load_localized_config("releaseChannels", repodir)
+    releaseChannels = common.load_localized_config(RELEASECHANNELS_CONFIG_NAME, repodir)
     if releaseChannels:
-        repo["releaseChannels"] = releaseChannels
+        repo[RELEASECHANNELS_CONFIG_NAME] = releaseChannels
 
     return repo
 

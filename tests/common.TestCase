@@ -39,6 +39,7 @@ import fdroidserver.signindex
 import fdroidserver.common
 import fdroidserver.metadata
 from testcommon import TmpCwd, mkdtemp
+from fdroidserver.common import ANTIFEATURES_CONFIG_NAME, CATEGORIES_CONFIG_NAME
 from fdroidserver.exception import FDroidException, VCSException,\
     MetaDataException, VerificationException
 
@@ -2664,7 +2665,9 @@ class CommonTest(unittest.TestCase):
 
     def test_load_localized_config(self):
         """It should load"""
-        antiFeatures = fdroidserver.common.load_localized_config('antiFeatures', 'repo')
+        antiFeatures = fdroidserver.common.load_localized_config(
+            ANTIFEATURES_CONFIG_NAME, 'repo'
+        )
         self.assertEqual(
             [
                 'Ads',
@@ -2696,7 +2699,9 @@ class CommonTest(unittest.TestCase):
 
     def test_load_localized_config_categories(self):
         """It should load"""
-        categories = fdroidserver.common.load_localized_config('categories', 'repo')
+        categories = fdroidserver.common.load_localized_config(
+            CATEGORIES_CONFIG_NAME, 'repo'
+        )
         self.assertEqual(
             [
                 'Time',
