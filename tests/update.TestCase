@@ -1757,6 +1757,17 @@ class UpdateTest(unittest.TestCase):
         apks, cachechanged = fdroidserver.update.process_apks({}, 'repo', knownapks, False, apps)
         self.assertEqual([], apks)
 
+    def test_archive_old_apks_ArchivePolicy_0(self):
+        app = fdroidserver.metadata.App()
+        app.id = 'test'
+        app.ArchivePolicy = 0
+        apps = {app.id: app}
+        with self.assertLogs(level='DEBUG') as cm:
+            fdroidserver.update.archive_old_apks(apps, [], [], '', '', 3)
+            self.assertEqual(cm.output, [
+                "DEBUG:root:Checking archiving for test - apks:0, keepversions:0, archapks:0"
+            ])
+
     def test_archive_old_apks(self):
         app = fdroidserver.metadata.App()
         app.id = 'test'
