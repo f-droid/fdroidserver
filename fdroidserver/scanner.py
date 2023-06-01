@@ -680,7 +680,7 @@ def scan_source(build_dir, build=metadata.Build(), json_per_build=None):
                 count += handleproblem(
                     _('Android DEX code'), path_in_build_dir, filepath, json_per_build
                 )
-            elif curfile.endswith('.gz'):
+            elif curfile.endswith('.gz') or curfile.endswith('.tgz'):
                 count += handleproblem(
                     _('gzip file archive'), path_in_build_dir, filepath, json_per_build
                 )
