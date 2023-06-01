@@ -18,6 +18,7 @@ if localmodule not in sys.path:
 
 import fdroidserver.common
 import fdroidserver.deploy
+from fdroidserver.exception import FDroidException
 from testcommon import TmpCwd, mkdtemp
 
 
@@ -55,6 +56,13 @@ class DeployTest(unittest.TestCase):
         self.assertFalse(dest_apk.is_file())
         fdroidserver.deploy.update_serverwebroot(str(serverwebroot), 'repo')
         self.assertTrue(dest_apk.is_file())
+
+    @mock.patch.dict(os.environ, clear=True)
+    def test_update_serverwebroot_no_rsync_error(self):
+        os.environ['PATH'] = self.testdir
+        os.chdir(self.testdir)
+        with self.assertRaises(FDroidException):
+            fdroidserver.deploy.update_serverwebroot('serverwebroot', 'repo')
 
     def test_update_serverwebroot_make_cur_version_link(self):
         # setup parameters for this test run
