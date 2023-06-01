@@ -627,7 +627,7 @@ def convert_version(version, app, repodir):
                     manifest[en].append({"name": perm[0]})
 
     # index-v2 has only per-version antifeatures, not per package.
-    antiFeatures = app.get('AntiFeatures', {})
+    antiFeatures = app.get('AntiFeatures', {}).copy()
     for name, descdict in version.get('antiFeatures', dict()).items():
         antiFeatures[name] = descdict
     if antiFeatures:
