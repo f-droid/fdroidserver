@@ -39,6 +39,10 @@ Builds:
     sudo: echo 'this is just a test'
     gradle:
       - yes
+    antifeatures:
+      - KnownVuln
+      - UpstreamNonFree
+      - NonFreeAssets
 
 ArchivePolicy: 4 versions
 AutoUpdateMode: Version v%v

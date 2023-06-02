@@ -231,6 +231,11 @@
     "com.politedroid": [
       {
         "added": 1498176000000,
+        "antiFeatures": [
+          "KnownVuln",
+          "NonFreeAssets",
+          "UpstreamNonFree"
+        ],
         "apkName": "com.politedroid_6.apk",
         "hash": "70c2f776a2bac38a58a7d521f96ee0414c6f0fb1de973c3ca8b10862a009247d",
         "hashType": "sha256",
