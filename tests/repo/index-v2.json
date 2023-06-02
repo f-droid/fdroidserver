@@ -568,10 +568,13 @@
             ]
           },
           "antiFeatures": {
+            "KnownVuln": {},
             "NoSourceSince": {
               "en-US": "1.5"
             },
-            "NonFreeNet": {}
+            "NonFreeAssets": {},
+            "NonFreeNet": {},
+            "UpstreamNonFree": {}
           }
         },
         "5bdbfa071cca4b8d05ced41d6b28763595d6e8096cca5bbf0f9253c9a2622e5d": {

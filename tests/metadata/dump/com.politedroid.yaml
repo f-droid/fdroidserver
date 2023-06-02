@@ -122,7 +122,10 @@ Builds:
   versionName: '1.4'
 - androidupdate: []
   antcommands: []
-  antifeatures: {}
+  antifeatures:
+    KnownVuln: {}
+    NonFreeAssets: {}
+    UpstreamNonFree: {}
   binary: null
   build: ''
   buildjni: []
