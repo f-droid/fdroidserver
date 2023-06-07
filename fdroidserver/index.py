@@ -711,6 +711,7 @@ def make_v2(apps, packages, repodir, repodict, requestsdict, fdroid_signing_key_
 
     output_packages = collections.OrderedDict()
     output['packages'] = output_packages
+    categories_used_by_apps = set()
     for package in packages:
         packageName = package['packageName']
         if packageName not in apps:
@@ -730,13 +731,21 @@ def make_v2(apps, packages, repodir, repodict, requestsdict, fdroid_signing_key_
         else:
             packagelist = {}
             output_packages[packageName] = packagelist
-            packagelist["metadata"] = package_metadata(apps[packageName], repodir)
+            app = apps[packageName]
+            categories_used_by_apps.update(app.get('Categories', []))
+            packagelist["metadata"] = package_metadata(app, repodir)
             if "signer" in package:
                 packagelist["metadata"]["preferredSigner"] = package["signer"]
 
             packagelist["versions"] = {}
 
         packagelist["versions"][package["hash"]] = convert_version(package, apps[packageName], repodir)
+
+    if categories_used_by_apps and not output['repo'].get(CATEGORIES_CONFIG_NAME):
+        output['repo'][CATEGORIES_CONFIG_NAME] = dict()
+    for category in sorted(categories_used_by_apps):
+        if category not in output['repo'][CATEGORIES_CONFIG_NAME]:
+            output['repo'][CATEGORIES_CONFIG_NAME][category] = dict()
 
     entry = {}
     entry["timestamp"] = repodict["timestamp"]

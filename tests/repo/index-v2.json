@@ -533,7 +533,10 @@
         "name": {
           "en-US": "System"
         }
-      }
+      },
+      "1": {},
+      "2.0": {},
+      "tests": {}
     },
     "requests": {
       "install": [
