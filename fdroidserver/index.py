@@ -743,9 +743,16 @@ def make_v2(apps, packages, repodir, repodict, requestsdict, fdroid_signing_key_
 
     if categories_used_by_apps and not output['repo'].get(CATEGORIES_CONFIG_NAME):
         output['repo'][CATEGORIES_CONFIG_NAME] = dict()
+    # include definitions for "auto-defined" categories, e.g. just used in app metadata
     for category in sorted(categories_used_by_apps):
         if category not in output['repo'][CATEGORIES_CONFIG_NAME]:
             output['repo'][CATEGORIES_CONFIG_NAME][category] = dict()
+    # do not include defined categories if no apps use them
+    for category in list(output['repo'].get(CATEGORIES_CONFIG_NAME, list())):
+        if category not in categories_used_by_apps:
+            del output['repo'][CATEGORIES_CONFIG_NAME][category]
+            msg = _('Category "{category}" defined but not used for any apps!')
+            logging.warning(msg.format(category=category))
 
     entry = {}
     entry["timestamp"] = repodict["timestamp"]

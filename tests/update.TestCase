@@ -1898,6 +1898,30 @@ class UpdateTest(unittest.TestCase):
             index['repo'][CATEGORIES_CONFIG_NAME],
         )
 
+    def test_empty_categories_not_in_index(self):
+        """A category with no apps should be ignored, even if defined in config."""
+        os.chdir(self.testdir)
+        os.mkdir('config')
+        Path('config/categories.yml').write_text('System: {name: S}\nTime: {name: T}\n')
+        os.mkdir('metadata')
+        os.mkdir('repo')
+        Path('config.yml').write_text(
+            'repo_pubkey: ffffffffffffffffffffffffffffffffffffffff'
+        )
+
+        testapk = os.path.join('repo', 'com.politedroid_6.apk')
+        shutil.copy(os.path.join(self.basedir, testapk), testapk)
+        Path('metadata/com.politedroid.yml').write_text('Categories: [Time]')
+
+        with mock.patch('sys.argv', ['fdroid update', '--delete-unknown', '--nosign']):
+            fdroidserver.update.main()
+        with open('repo/index-v2.json') as fp:
+            index = json.load(fp)
+        self.assertEqual(
+            {'Time': {'name': {'en-US': 'T'}}},
+            index['repo'][CATEGORIES_CONFIG_NAME],
+        )
+
 
 if __name__ == "__main__":
     os.chdir(os.path.dirname(__file__))
