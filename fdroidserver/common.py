@@ -4042,7 +4042,6 @@ def is_repo_file(filename, for_gpg_signing=False):
     if isinstance(filename, str):
         filename = filename.encode('utf-8', errors="surrogateescape")
     ignore_files = [
-        b'categories.txt',
         b'entry.jar',
         b'index-v1.jar',
         b'index.css',

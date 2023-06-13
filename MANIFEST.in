@@ -546,6 +546,7 @@ include tests/checkupdates.TestCase
 include tests/common.TestCase
 include tests/config.py
 include tests/config/antiFeatures.yml
+include tests/config/categories.yml
 include tests/config/de/antiFeatures.yml
 include tests/config/fa/antiFeatures.yml
 include tests/config/ic_antifeature_ads.xml
@@ -662,7 +663,6 @@ include tests/org.bitbucket.tickytacky.mirrormirror_4.apk
 include tests/org.dyndns.fules.ck_20.apk
 include tests/org.sajeg.fallingblocks_3.apk
 include tests/publish.TestCase
-include tests/repo/categories.txt
 include tests/repo/com.example.test.helloworld_1.apk
 include tests/repo/com.politedroid_3.apk
 include tests/repo/com.politedroid_4.apk

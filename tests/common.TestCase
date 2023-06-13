@@ -2509,8 +2509,7 @@ class CommonTest(unittest.TestCase):
                 'repo/index.png',
                 'repo/index.xml',
             ]
-            non_repo_files = ['repo/categories.txt']
-            for f in repo_files + index_files + non_repo_files:
+            for f in repo_files + index_files:
                 open(f, 'w').close()
 
             repo_dirs = [
@@ -2542,10 +2541,6 @@ class CommonTest(unittest.TestCase):
             for d in repo_dirs:
                 self.assertTrue(os.path.exists(d), d + ' was created')
                 self.assertFalse(is_repo_file(d), d + ' not repo file')
-
-            for f in non_repo_files:
-                self.assertTrue(os.path.exists(f), f + ' was created')
-                self.assertFalse(is_repo_file(f), f + ' not repo file')
 
     def test_get_apksigner_smartcardoptions(self):
         os.chdir(self.tmpdir)
@@ -2698,6 +2693,23 @@ class CommonTest(unittest.TestCase):
         for v in antiFeatures.values():
             p = Path(os.path.dirname(__file__) + '/repo' + v['icon']['en-US']['name'])
             self.assertTrue(p.exists())
+
+    def test_load_localized_config_categories(self):
+        """It should load"""
+        categories = fdroidserver.common.load_localized_config('categories', 'repo')
+        self.assertEqual(
+            [
+                'Time',
+                'Development',
+                'GuardianProject',
+                'Multimedia',
+                'Phone & SMS',
+                'Security',
+                'System',
+            ],
+            list(categories.keys()),
+        )
+        self.assertEqual(['en-US'], list(categories['GuardianProject']['name'].keys()))
 
 
 if __name__ == "__main__":

@@ -222,6 +222,7 @@ versioncode_check_pattern = re.compile(r"(\\d|\[(0-9|\\d)_?(a-fA-F)?])[+]")
 
 ANTIFEATURES_KEYS = None
 ANTIFEATURES_PATTERN = None
+CATEGORIES_KEYS = list()
 
 
 def load_antiFeatures_config():
@@ -232,6 +233,18 @@ def load_antiFeatures_config():
         common.config[k] = common.load_localized_config(k, 'repo')
         ANTIFEATURES_KEYS = sorted(common.config[k].keys())
         ANTIFEATURES_PATTERN = ','.join(ANTIFEATURES_KEYS)
+
+
+def load_categories_config():
+    """Lazy loading, since it might read a lot of files."""
+    global CATEGORIES_KEYS
+    k = 'categories'
+    if not CATEGORIES_KEYS:
+        if config and k in config:
+            CATEGORIES_KEYS = config[k]
+        else:
+            config[k] = common.load_localized_config(k, 'repo')
+            CATEGORIES_KEYS = list(config[k].keys())
 
 
 def check_regexes(app):
@@ -371,32 +384,10 @@ def check_empty_fields(app):
         yield _("Categories are not set")
 
 
-all_categories = set(
-    [
-        "Connectivity",
-        "Development",
-        "Games",
-        "Graphics",
-        "Internet",
-        "Money",
-        "Multimedia",
-        "Navigation",
-        "Phone & SMS",
-        "Reading",
-        "Science & Education",
-        "Security",
-        "Sports & Health",
-        "System",
-        "Theming",
-        "Time",
-        "Writing",
-    ]
-)
-
-
 def check_categories(app):
+    """App uses 'Categories' key and parsed config uses 'categories' key."""
     for categ in app.Categories:
-        if categ not in all_categories:
+        if categ not in CATEGORIES_KEYS:
             yield _("Categories '%s' is not valid" % categ)
 
 
@@ -798,6 +789,7 @@ def main():
 
     config = common.read_config(options)
     load_antiFeatures_config()
+    load_categories_config()
 
     # Get all apps...
     allapps = metadata.read_metadata(options.appid)

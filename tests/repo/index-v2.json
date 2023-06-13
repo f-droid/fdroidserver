@@ -498,6 +498,43 @@
         }
       }
     },
+    "categories": {
+      "Time": {
+        "name": {
+          "en-US": "Time"
+        }
+      },
+      "Development": {
+        "name": {
+          "en-US": "Development"
+        }
+      },
+      "GuardianProject": {
+        "name": {
+          "en-US": "Guardian Project"
+        }
+      },
+      "Multimedia": {
+        "name": {
+          "en-US": "Multimedia"
+        }
+      },
+      "Phone & SMS": {
+        "name": {
+          "en-US": "Phone & SMS"
+        }
+      },
+      "Security": {
+        "name": {
+          "en-US": "Security"
+        }
+      },
+      "System": {
+        "name": {
+          "en-US": "System"
+        }
+      }
+    },
     "requests": {
       "install": [
         "org.adaway"
