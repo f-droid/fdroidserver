@@ -252,7 +252,7 @@ def resize_icon(iconpath, density):
 
         if any(length > size for length in im.size):
             oldsize = im.size
-            im.thumbnail((size, size), Image.ANTIALIAS)
+            im.thumbnail((size, size), Image.LANCZOS)
             logging.debug("%s was too large at %s - new size is %s" % (
                 iconpath, oldsize, im.size))
             im.save(iconpath, "PNG", optimize=True,
@@ -1778,7 +1778,7 @@ def fill_missing_icon_densities(empty_densities, icon_filename, apk, repo_dir):
 
             size = dpi_to_px(density)
 
-            im.thumbnail((size, size), Image.ANTIALIAS)
+            im.thumbnail((size, size), Image.LANCZOS)
             im.save(icon_path, "PNG", optimize=True,
                     pnginfo=BLANK_PNG_INFO, icc_profile=None)
             empty_densities.remove(density)
