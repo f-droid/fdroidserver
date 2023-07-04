@@ -170,6 +170,8 @@ arch_pip_install:
     - master@fdroid/fdroidserver
   script:
     - pacman --sync --sysupgrade --refresh --noconfirm gcc git grep python-pip python-virtualenv python-wheel tar
+    - python -m venv venv
+    - source venv/bin/activate
     - pip install -e .[test]
     - fdroid
     - fdroid readmeta
