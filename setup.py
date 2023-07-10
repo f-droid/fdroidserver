@@ -91,7 +91,7 @@ setup(
         'babel',
     ],
     install_requires=[
-        'androguard >= 3.1.0rc2, != 3.3.0, != 3.3.1, != 3.3.2',
+        'androguard >= 3.1.0, != 3.3.0, != 3.3.1, != 3.3.2',
         'clint',
         'defusedxml',
         'GitPython',
