@@ -19,6 +19,7 @@ for section in repo archive; do
         set -x
         # be super careful with the trailing slashes here! if one is wrong, it'll delete the entire section!
         rsync --archive --delay-updates --progress --delete \
+              --timeout=3600 \
               /home/fdroid/public_html/${section} \
               ${host}:/srv/fdroid-mirror.at.or.at/htdocs/fdroid/ &
         set +x
