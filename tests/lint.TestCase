@@ -20,6 +20,7 @@ if localmodule not in sys.path:
 import fdroidserver.common
 import fdroidserver.lint
 import fdroidserver.metadata
+from fdroidserver.common import CATEGORIES_CONFIG_NAME
 
 
 class LintTest(unittest.TestCase):
@@ -323,7 +324,7 @@ class LintTest(unittest.TestCase):
         self.assertFalse(anywarns)
 
     def test_check_categories_in_config(self):
-        fdroidserver.lint.config = {'categories': ['InConfig']}
+        fdroidserver.lint.config = {CATEGORIES_CONFIG_NAME: ['InConfig']}
         fdroidserver.lint.load_categories_config()
         app = fdroidserver.metadata.App({'Categories': ['InConfig']})
         self.assertEqual(0, len(list(fdroidserver.lint.check_categories(app))))
@@ -335,13 +336,13 @@ class LintTest(unittest.TestCase):
         self.assertEqual(1, len(list(fdroidserver.lint.check_categories(app))))
 
     def test_check_categories_empty_is_error(self):
-        fdroidserver.lint.config = {'categories': []}
+        fdroidserver.lint.config = {CATEGORIES_CONFIG_NAME: []}
         fdroidserver.lint.load_categories_config()
         app = fdroidserver.metadata.App({'Categories': ['something']})
         self.assertEqual(1, len(list(fdroidserver.lint.check_categories(app))))
 
     def test_check_categories_old_hardcoded_not_defined(self):
-        fdroidserver.lint.config = {'categories': ['foo', 'bar']}
+        fdroidserver.lint.config = {CATEGORIES_CONFIG_NAME: ['foo', 'bar']}
         fdroidserver.lint.load_categories_config()
         app = fdroidserver.metadata.App({'Categories': ['Writing']})
         self.assertEqual(1, len(list(fdroidserver.lint.check_categories(app))))

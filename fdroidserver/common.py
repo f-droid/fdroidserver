@@ -28,6 +28,7 @@
 # common.py is imported by all modules, so do not import third-party
 # libraries here as they will become a requirement for all commands.
 
+import difflib
 import git
 import glob
 import io
@@ -111,6 +112,18 @@ XMLNS_ANDROID = '{http://schemas.android.com/apk/res/android}'
 
 # https://docs.gitlab.com/ee/user/gitlab_com/#gitlab-pages
 GITLAB_COM_PAGES_MAX_SIZE = 1000000000
+
+# the names used for things that are configured per-repo
+ANTIFEATURES_CONFIG_NAME = 'antiFeatures'
+CATEGORIES_CONFIG_NAME = 'categories'
+CONFIG_CONFIG_NAME = 'config'
+RELEASECHANNELS_CONFIG_NAME = "releaseChannels"
+CONFIG_NAMES = (
+    ANTIFEATURES_CONFIG_NAME,
+    CATEGORIES_CONFIG_NAME,
+    CONFIG_CONFIG_NAME,
+    RELEASECHANNELS_CONFIG_NAME,
+)
 
 
 config = None
@@ -507,7 +520,9 @@ def load_localized_config(name, repodir):
 
     """
     ret = dict()
+    found_config_file = False
     for f in Path().glob("config/**/{name}.yml".format(name=name)):
+        found_config_file = True
         locale = f.parts[1]
         if len(f.parts) == 2:
             locale = DEFAULT_LOCALE
@@ -529,6 +544,16 @@ def load_localized_config(name, repodir):
                         )
                     else:
                         ret[afname][key][locale] = value
+
+    if not found_config_file:
+        for f in Path().glob("config/*.yml"):
+            if f.stem not in CONFIG_NAMES:
+                msg = _('{path} is not a standard config file!').format(path=f)
+                m = difflib.get_close_matches(f.stem, CONFIG_NAMES, 1)
+                if m:
+                    msg += ' '
+                    msg += _('Did you mean config/{name}.yml?').format(name=m[0])
+                logging.error(msg)
 
     for elem in ret.values():
         for afname in elem:
