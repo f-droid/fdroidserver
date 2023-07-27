@@ -39,28 +39,29 @@ if echo $debian_mirror | grep '^https' 2>&1 > /dev/null; then
 fi
 
 cat << EOF > /etc/apt/sources.list
-deb ${debian_mirror} bullseye main
-deb https://security.debian.org/debian-security bullseye-security main
-deb ${debian_mirror} bullseye-updates main
+deb ${debian_mirror} bookworm main
+deb https://security.debian.org/debian-security bookworm-security main
+deb ${debian_mirror} bookworm-updates main
 EOF
-echo "deb ${debian_mirror} bullseye-backports main" > /etc/apt/sources.list.d/backports.list
+echo "deb ${debian_mirror} bookworm-backports main" > /etc/apt/sources.list.d/backports.list
 
 apt-get update || apt-get update
 
 # purge things that might come from the base box, but we don't want
 # https://salsa.debian.org/cloud-team/debian-vagrant-images/-/tree/master/config_space/package_config
 # cat config_space/package_config/* | sort -u | grep -v '[A-Z#]'
+
 purge="
  apt-listchanges
  apt-utils
  bash-completion
  bind9-*
  bsdextrautils
- build-essential
  bzip2
  chrony
  cloud-utils
  cron
+ cron-daemon-common
  dbus
  debconf-i18n
  debian-faq
@@ -69,6 +70,7 @@ purge="
  fdisk
  file
  groff-base
+ inetutils-telnet
  krb5-locales
  less
  locales
@@ -82,14 +84,13 @@ purge="
  reportbug
  rsyslog
  tasksel
- telnet
  traceroute
  unattended-upgrades
+ usr-is-merged
  vim-*
  wamerican
  wget
  whiptail
- xxd
  xz-utils
 "
 # clean up files packages to be purged, then purge the packages
@@ -106,6 +107,7 @@ packages="
  apksigner
  default-jdk-headless
  default-jre-headless
+ curl
  dexdump
  fdroidserver
  git-svn
@@ -116,6 +118,7 @@ packages="
  rsync
  sdkmanager
  sudo
+ unzip
 "
 
 apt-get install $packages --download-only
