@@ -86,7 +86,7 @@ purge="
  tasksel
  traceroute
  unattended-upgrades
- usr-is-merged
+ usrmerge
  vim-*
  wamerican
  wget
