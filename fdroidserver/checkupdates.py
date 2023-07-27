@@ -617,19 +617,17 @@ def checkupdates_app(app: metadata.App) -> None:
             if not gotcur:
                 newbuilds = copy.deepcopy(builds[-len(vercodes):])
 
-                bullseye_blocklist = [
-                    'apt-get install -y openjdk-11-jdk',
-                    'apt-get install openjdk-11-jdk-headless',
-                    'apt-get install -y openjdk-11-jdk-headless',
-                    'apt-get install -t stretch-backports openjdk-11-jdk-headless openjdk-11-jre-headless',
-                    'apt-get install -y -t stretch-backports openjdk-11-jdk-headless openjdk-11-jre-headless',
+                bookworm_blocklist = [
+                    'apt-get install -y openjdk-17-jdk',
+                    'apt-get install openjdk-17-jdk-headless',
+                    'apt-get install -y openjdk-17-jdk-headless',
                     'update-alternatives --auto java',
                 ]
 
                 for build in newbuilds:
                     if "sudo" in build:
                         if any("openjdk-11" in line for line in build["sudo"]):
-                            build["sudo"] = [line for line in build["sudo"] if line not in bullseye_blocklist]
+                            build["sudo"] = [line for line in build["sudo"] if line not in bookworm_blocklist]
                         if build["sudo"] == ['apt-get update']:
                             build["sudo"] = ''
 

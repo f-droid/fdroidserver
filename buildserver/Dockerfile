@@ -1,5 +1,5 @@
 
-FROM debian:bullseye
+FROM debian:bookworm-slim
 
 ENV LANG=C.UTF-8 \
     DEBIAN_FRONTEND=noninteractive
