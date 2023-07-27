@@ -41,7 +41,7 @@ RUN printf "path-exclude=/usr/share/locale/*\npath-exclude=/usr/share/man/*\npat
 	&& mkdir -p /usr/share/man/man1 \
 	&& apt-get update \
 	&& apt-get install ca-certificates \
-	&& sed -i 's,http:,https:,' /etc/apt/sources.list \
+        && sed -i 's,http:,https:,' /etc/apt/sources.list.d/debian.sources \
 	&& apt-get upgrade \
 	&& apt-get dist-upgrade \
 	&& apt-get install openssh-client iproute2 python3 openssh-server sudo \
