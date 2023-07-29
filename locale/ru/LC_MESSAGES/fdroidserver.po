@@ -17,8 +17,8 @@ msgstr ""
 "Project-Id-Version: fdroidserver 1.0.0-95-gd7af22b\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2023-05-24 22:18+0200\n"
-"PO-Revision-Date: 2023-05-26 19:39+0000\n"
-"Last-Translator: Макар Разин <makarrazin14@gmail.com>\n"
+"PO-Revision-Date: 2023-05-28 07:54+0000\n"
+"Last-Translator: Andrey <andrey@mailbox.org>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/f-droid/fdroidserver/ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
@@ -2016,7 +2016,7 @@ msgstr "не удалось разобрать спецификацию scrlib (
 #: /usr/lib/python3.9/argparse.py /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "can't open '%(filename)s': %(error)s"
-msgstr "не удаётся открыть «%(filename)s»: %(error)s"
+msgstr "не удается открыть '%(filename)s': %(error)s"
 
 #: ../fdroidserver/scanner.py
 msgid "can't open non-https url: '{};"
