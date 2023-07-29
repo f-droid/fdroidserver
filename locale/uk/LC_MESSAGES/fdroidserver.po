@@ -13,8 +13,8 @@ msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2023-05-24 22:18+0200\n"
-"PO-Revision-Date: 2023-05-26 19:39+0000\n"
-"Last-Translator: Макар Разин <makarrazin14@gmail.com>\n"
+"PO-Revision-Date: 2023-05-28 07:54+0000\n"
+"Last-Translator: Ihor Hordiichuk <igor_ck@outlook.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/f-droid/fdroidserver/uk/>\n"
 "Language: uk\n"
 "MIME-Version: 1.0\n"
@@ -615,7 +615,7 @@ msgstr "Завантаження {url} не вдалося. {error}"
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Duplicate Anti-Feature declaration at {path} was ignored!"
-msgstr "Дубльована декларація Anti-Feature на {path} була проігнорована!"
+msgstr "Дубльована декларація небажаних функцій у {path} була проігнорована!"
 
 #: ../fdroidserver/index.py
 #, python-format
@@ -1110,7 +1110,7 @@ msgstr "Відсутній вихідний шлях"
 
 #: ../fdroidserver/metadata.py
 msgid "Moving Anti-Features declarations to localized files:"
-msgstr "Переміщення декларацій Anti-Features до локалізованих файлів:"
+msgstr "Переміщення декларацій небажаних функцій до локалізованих файлів:"
 
 #: ../fdroidserver/index.py
 msgid "Neither \"repo_pubkey\" nor \"keystorepass\" set in config.yml"
@@ -2396,7 +2396,7 @@ msgstr "не вдалося розгорнути журнал процесів {
 
 #: ../fdroidserver/build.py
 msgid "reference binary missing signature"
-msgstr "посилання бінарний відсутній підпис"
+msgstr "еталонний двійковий файл з відсутнім підписом"
 
 #: ../fdroidserver/signatures.py
 #, python-brace-format
@@ -2472,7 +2472,7 @@ msgstr "статична бібліотека"
 #: ../fdroidserver/build.py
 #, python-brace-format
 msgid "supplied reference binary has allowed signer {signer}"
-msgstr "наданий бінарний файл посилання дозволив підписувачу {підписувач}"
+msgstr "наданий еталонний двійковий файл дозволив підписувачу {signer}"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
@@ -2597,9 +2597,9 @@ msgid "{build_flag} must be an integer, found: {value}"
 msgstr "{build_flag} має бути цілим числом, знайдено: {value}"
 
 #: ../fdroidserver/metadata.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{build_flag} must be list or string, found: {value}"
-msgstr "{build_flag} має бути цілим числом, знайдено: {value}"
+msgstr "{build_flag} має бути списком або рядком, знайдено: {value}"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
