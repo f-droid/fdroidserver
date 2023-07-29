@@ -1,20 +1,21 @@
 # SOME DESCRIPTIVE TITLE.
 # This file is put in the public domain.
 # Ahmad0a <Ahmad3p@protonmail.com>, 2023.
+# Rex_sa <rex.sa@pm.me>, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 2.1-273-g54e84d87\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2023-05-24 22:18+0200\n"
-"PO-Revision-Date: 2023-01-16 23:52+0000\n"
-"Last-Translator: Ahmad0a <Ahmad3p@protonmail.com>\n"
+"PO-Revision-Date: 2023-07-04 06:54+0000\n"
+"Last-Translator: Rex_sa <rex.sa@pm.me>\n"
 "Language-Team: Arabic <https://hosted.weblate.org/projects/f-droid/fdroidserver/ar/>\n"
 "Language: ar\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 ? 4 : 5;\n"
-"X-Generator: Weblate 4.15.1-dev\n"
+"X-Generator: Weblate 5.0-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -1817,7 +1818,7 @@ msgstr "استخدام"
 #: /usr/lib/python3.11/optparse.py
 #, python-format
 msgid "Usage: %s\n"
-msgstr ""
+msgstr "الاستخدام: %s\n"
 
 #: ../fdroidserver/lint.py
 msgid "Use /HEAD instead of /master to point at a file in the default branch"
@@ -1874,7 +1875,7 @@ msgstr ""
 
 #: ../fdroidserver/__main__.py
 msgid "Valid commands are:"
-msgstr ""
+msgstr "الأوامر الصالحة هي:"
 
 #: ../fdroidserver/verify.py
 msgid "Verify against locally cached copy rather than redownloading."
@@ -2306,14 +2307,14 @@ msgstr ""
 #: /usr/lib/python3.11/getopt.py
 #, python-format
 msgid "option -%s not recognized"
-msgstr ""
+msgstr "لم يتم التعرف على الإختيار -%s"
 
 #: /usr/lib/python3.5/getopt.py /usr/lib/python3.6/getopt.py
 #: /usr/lib/python3.7/getopt.py /usr/lib/python3.9/getopt.py
 #: /usr/lib/python3.11/getopt.py
 #, python-format
 msgid "option -%s requires argument"
-msgstr ""
+msgstr "الخيار - %s يتطلب وسيطة"
 
 #: /usr/lib/python3.5/getopt.py /usr/lib/python3.6/getopt.py
 #: /usr/lib/python3.7/getopt.py /usr/lib/python3.9/getopt.py
@@ -2346,7 +2347,7 @@ msgstr ""
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 msgid "optional arguments"
-msgstr ""
+msgstr "مناقشات اختيارية"
 
 #: /usr/lib/python3.11/argparse.py
 #, fuzzy
@@ -2409,7 +2410,7 @@ msgstr ""
 #: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
 #: /usr/lib/python3.11/optparse.py
 msgid "show program's version number and exit"
-msgstr ""
+msgstr "اظهار رقم واصدار نسخة البرنامج والخروج"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.5/optparse.py
 #: /usr/lib/python3.6/argparse.py /usr/lib/python3.6/optparse.py
@@ -2417,7 +2418,7 @@ msgstr ""
 #: /usr/lib/python3.9/argparse.py /usr/lib/python3.9/optparse.py
 #: /usr/lib/python3.11/argparse.py /usr/lib/python3.11/optparse.py
 msgid "show this help message and exit"
-msgstr ""
+msgstr "اظهر رسالة المساعدة واخرج"
 
 #: ../fdroidserver/signatures.py
 msgid "signed APK, either a file-path or HTTPS URL."
