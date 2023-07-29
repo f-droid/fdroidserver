@@ -27,13 +27,14 @@
 # Eric <hamburger2048@users.noreply.hosted.weblate.org>, 2023.
 # Max Xie <monyxie@gmail.com>, 2023.
 # Kingo Bingo <bingokingosoft@gmail.com>, 2023.
+# zhiqi <lzqlzq21@gmail.com>, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2023-05-24 22:18+0200\n"
-"PO-Revision-Date: 2023-07-24 09:51+0000\n"
-"Last-Translator: Kingo Bingo <bingokingosoft@gmail.com>\n"
+"PO-Revision-Date: 2023-07-27 17:07+0000\n"
+"Last-Translator: zhiqi <lzqlzq21@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/f-droid/fdroidserver/zh_Hans/>\n"
 "Language: zh_Hans\n"
 "MIME-Version: 1.0\n"
@@ -261,7 +262,7 @@ msgstr "密钥库中存储库签名密钥的别名"
 
 #: ../fdroidserver/build.py
 msgid "AllowedAPKSigningKeys missing but reference binary supplied"
-msgstr ""
+msgstr "缺少 AllowedAPKSigningKeys，但提供了参考二进制文件"
 
 #: ../fdroidserver/import_subcommand.py
 msgid "Allows a different revision (or git branch) to be specified for the initial import"
@@ -309,7 +310,7 @@ msgstr "没找到 Android SDK 工具 {cmd}！"
 
 #: ../fdroidserver/lint.py
 msgid "App has Binaries but does not have corresponding AllowedAPKSigningKeys to pin certificate."
-msgstr ""
+msgstr "应用程序具有二进制文件，但没有相应的AllowedAPKSigningKeys 来固定证书。"
 
 #: ../fdroidserver/lint.py
 msgid "App has NoSourceSince or ArchivePolicy \"0 versions\" but AutoUpdateMode or UpdateCheckMode are not None"
@@ -322,7 +323,7 @@ msgstr "应用 在 '{repo}' 中, 但有一个链接到 {url}"
 
 #: ../fdroidserver/lint.py
 msgid "App version has binary but does not have corresponding AllowedAPKSigningKeys to pin certificate."
-msgstr ""
+msgstr "应用程序版本具有二进制文件，但没有相应的 AllowedAPKSigningKeys 来固定证书。"
 
 #: ../fdroidserver/lint.py
 msgid "Appending .git is not necessary"
