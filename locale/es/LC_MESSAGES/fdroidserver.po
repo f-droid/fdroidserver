@@ -12,13 +12,13 @@
 # Iago <iagrivmoa@gmail.com>, 2022.
 # Iago <translate@delthia.com>, 2022.
 # Jaime Marquínez Ferrándiz <weblate@jregistros.fastmail.net>, 2022.
-# gallegonovato <fran-carro@hotmail.es>, 2022.
+# gallegonovato <fran-carro@hotmail.es>, 2022, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2023-05-24 22:18+0200\n"
-"PO-Revision-Date: 2022-12-09 13:49+0000\n"
+"PO-Revision-Date: 2023-06-20 20:50+0000\n"
 "Last-Translator: gallegonovato <fran-carro@hotmail.es>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/f-droid/fdroidserver/es/>\n"
 "Language: es\n"
@@ -26,7 +26,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.15-dev\n"
+"X-Generator: Weblate 4.18.1\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -127,12 +127,12 @@ msgstr "no se puede llamar a %r"
 #: ../fdroidserver/signindex.py
 #, python-format
 msgid "%s did not produce a dict!"
-msgstr ""
+msgstr "¡%s no ha producido un dict!"
 
 #: ../fdroidserver/signindex.py
 #, python-format
 msgid "%s has bad SHA-256: %s"
-msgstr ""
+msgstr "%s tienes mal un SHA-256: %s"
 
 #: ../fdroidserver/lint.py
 #, python-format
@@ -194,7 +194,7 @@ msgstr "¡Falló la ejecución de '{path}'!"
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "'{path}' has invalid format, it should be a dictionary!"
-msgstr ""
+msgstr "'{path}' tiene un formato inválido, ¡debería ser un diccionario!"
 
 #: ../fdroidserver/metadata.py ../fdroidserver/lint.py
 #, python-brace-format
@@ -202,9 +202,9 @@ msgid "'{value}' is not a valid {field} in {appid}. Regex pattern: {pattern}"
 msgstr "'{value}' no es un {field} válido en {appid}. Patrón de expresión regular: {pattern}"
 
 #: ../fdroidserver/metadata.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "'{value}' is not a valid {field}, should be {pattern}"
-msgstr "'{value}' no es un {field} válido en {appid}. Patrón de expresión regular: {pattern}"
+msgstr "'{value}' no es un {field} válido, debería ser {pattern}"
 
 #: ../fdroidserver/checkupdates.py
 #, python-brace-format
@@ -248,7 +248,7 @@ msgstr "Alias de la clave de firma de repositorio en el depósitio de claves"
 
 #: ../fdroidserver/build.py
 msgid "AllowedAPKSigningKeys missing but reference binary supplied"
-msgstr ""
+msgstr "Falta la AllowedAPKSigningKeys, pero se proporcionó un binario de referencia"
 
 #: ../fdroidserver/import_subcommand.py
 msgid "Allows a different revision (or git branch) to be specified for the initial import"
@@ -296,11 +296,11 @@ msgstr "¡No se encontró la herramienta {cmd} del SDK de Android!"
 
 #: ../fdroidserver/lint.py
 msgid "App has Binaries but does not have corresponding AllowedAPKSigningKeys to pin certificate."
-msgstr ""
+msgstr "La aplicación tiene archivos binarios, pero no las AllowedAPKSigningKeys correspondientes para fijat el certificado."
 
 #: ../fdroidserver/lint.py
 msgid "App has NoSourceSince or ArchivePolicy \"0 versions\" but AutoUpdateMode or UpdateCheckMode are not None"
-msgstr ""
+msgstr "La aplicación tiene NoSourceSince o ArchivePolicy \"0 versiones\", pero AutoUpdateMode o UpdateCheckMode no es Ninguno"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
@@ -309,7 +309,7 @@ msgstr "La aplicación está en '{repo}' pero tiene un enlace a {url}"
 
 #: ../fdroidserver/lint.py
 msgid "App version has binary but does not have corresponding AllowedAPKSigningKeys to pin certificate."
-msgstr ""
+msgstr "La versión de la aplicación es binaria pero no tiene las correspondientes AllowedAPKSigningKeys para fijar el certificado."
 
 #: ../fdroidserver/lint.py
 msgid "Appending .git is not necessary"
@@ -322,12 +322,12 @@ msgstr "¡Archivando {apkfilename} con una firma inválida!"
 
 #: ../fdroidserver/lint.py
 msgid "AutoUpdateMode with UpdateCheckMode: HTTP must have a pattern."
-msgstr ""
+msgstr "AutoUpdateMode con UpdateCheckMode: el HTTP debe tener un patrón."
 
 #: ../fdroidserver/index.py
 #, python-brace-format
 msgid "Bad entry type \"{mirrortype}\" in mirrors config: {mirror}"
-msgstr ""
+msgstr "Tipo de entrada incorrecto \"{mirrortype}\" en la configuración de los espejos: {mirror}"
 
 #: ../fdroidserver/mirror.py
 msgid "Base URL to mirror, can include the index signing key using the query string: ?fingerprint="
@@ -427,7 +427,7 @@ msgstr "Aplicar cambios"
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Conflicting \"{field}\" definitions between .yml and localized files:"
-msgstr ""
+msgstr "Definiciones \"{field}\" contradictorias entre los archivos .yml y los archivos localizados:"
 
 #: ../fdroidserver/__main__.py
 msgid "Conflicting arguments: '--verbose' and '--quiet' can not be specified at the same time."
@@ -618,7 +618,7 @@ msgstr "La descarga de {url} falló. {error}"
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Duplicate Anti-Feature declaration at {path} was ignored!"
-msgstr ""
+msgstr "¡Se ignoró la declaración duplicada de Anti-Feature en la {path}!"
 
 #: ../fdroidserver/index.py
 #, python-format
