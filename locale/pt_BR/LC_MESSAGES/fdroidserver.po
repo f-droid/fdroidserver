@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2023-05-24 22:18+0200\n"
-"PO-Revision-Date: 2023-02-01 00:47+0000\n"
+"PO-Revision-Date: 2023-07-09 13:51+0000\n"
 "Last-Translator: The Cats <philosoph@danwin1210.de>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/f-droid/fdroidserver/pt_BR/>\n"
 "Language: pt_BR\n"
@@ -22,7 +22,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.16-dev\n"
+"X-Generator: Weblate 5.0-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -123,12 +123,12 @@ msgstr "%r não é chamável"
 #: ../fdroidserver/signindex.py
 #, python-format
 msgid "%s did not produce a dict!"
-msgstr ""
+msgstr "%s não produziu um dict!"
 
 #: ../fdroidserver/signindex.py
 #, python-format
 msgid "%s has bad SHA-256: %s"
-msgstr ""
+msgstr "%s tem SHA-256 ruim: %s"
 
 #: ../fdroidserver/lint.py
 #, python-format
@@ -190,7 +190,7 @@ msgstr "'{path}' falhou ao executar!"
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "'{path}' has invalid format, it should be a dictionary!"
-msgstr ""
+msgstr "'{path}' tem um formato inválido, deveria ser um dicionário!"
 
 #: ../fdroidserver/metadata.py ../fdroidserver/lint.py
 #, python-brace-format
@@ -198,9 +198,9 @@ msgid "'{value}' is not a valid {field} in {appid}. Regex pattern: {pattern}"
 msgstr "'{value}' não é um{field} válido em {appid}. Regex padrão: {pattern}"
 
 #: ../fdroidserver/metadata.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "'{value}' is not a valid {field}, should be {pattern}"
-msgstr "'{value}' não é um{field} válido em {appid}. Regex padrão: {pattern}"
+msgstr "'{value}' não é um {field} válido, deveria ser {pattern}"
 
 #: ../fdroidserver/checkupdates.py
 #, python-brace-format
@@ -244,7 +244,7 @@ msgstr "Alias (apelido) da chave de assinatura do repositório na keystore"
 
 #: ../fdroidserver/build.py
 msgid "AllowedAPKSigningKeys missing but reference binary supplied"
-msgstr ""
+msgstr "AllowedAPKSigningKeys ausente, mas binário de referência fornecido"
 
 #: ../fdroidserver/import_subcommand.py
 msgid "Allows a different revision (or git branch) to be specified for the initial import"
@@ -292,11 +292,11 @@ msgstr "A ferramenta SDK do Android {cmd} não foi encontrada!"
 
 #: ../fdroidserver/lint.py
 msgid "App has Binaries but does not have corresponding AllowedAPKSigningKeys to pin certificate."
-msgstr ""
+msgstr "O aplicativo tem binários, mas não tem AllowedAPKSigningKeys correspondentes para fixar o certificado."
 
 #: ../fdroidserver/lint.py
 msgid "App has NoSourceSince or ArchivePolicy \"0 versions\" but AutoUpdateMode or UpdateCheckMode are not None"
-msgstr ""
+msgstr "O aplicativo tem NoSourceSince ou ArchivePolicy \"0 versões\", mas AutoUpdateMode ou UpdateCheckMode não são None"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
@@ -305,7 +305,7 @@ msgstr "O App está em '{repo}' mas tem um link para {url}"
 
 #: ../fdroidserver/lint.py
 msgid "App version has binary but does not have corresponding AllowedAPKSigningKeys to pin certificate."
-msgstr ""
+msgstr "A versão do aplicativo tem binário, mas não tem as correspondentes AllowedAPKSigningKeys para fixar o certificado."
 
 #: ../fdroidserver/lint.py
 msgid "Appending .git is not necessary"
@@ -318,12 +318,12 @@ msgstr "Arquivamento {apkfilename} com assinatura inválida!"
 
 #: ../fdroidserver/lint.py
 msgid "AutoUpdateMode with UpdateCheckMode: HTTP must have a pattern."
-msgstr ""
+msgstr "AutoUpdateMode com atualização CheckMode: HTTP deve ter um padrão."
 
 #: ../fdroidserver/index.py
 #, python-brace-format
 msgid "Bad entry type \"{mirrortype}\" in mirrors config: {mirror}"
-msgstr ""
+msgstr "Tipo de entrada incorreto \"{mirrortype}\" na configuração de espelhos: {mirror}"
 
 #: ../fdroidserver/mirror.py
 msgid "Base URL to mirror, can include the index signing key using the query string: ?fingerprint="
@@ -423,7 +423,7 @@ msgstr "Enviar mudanças"
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Conflicting \"{field}\" definitions between .yml and localized files:"
-msgstr ""
+msgstr "Definições conflitantes de \"{field}\" entre arquivos .yml e localizados:"
 
 #: ../fdroidserver/__main__.py
 msgid "Conflicting arguments: '--verbose' and '--quiet' can not be specified at the same time."
@@ -614,12 +614,12 @@ msgstr "Falha ao baixar '{url}'. {error}"
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Duplicate Anti-Feature declaration at {path} was ignored!"
-msgstr ""
+msgstr "A declaração duplicada do Anti-Recurso em {path} foi ignorada!"
 
 #: ../fdroidserver/index.py
 #, python-format
 msgid "Duplicate entry \"%s\" in mirrors config!"
-msgstr ""
+msgstr "Entrada \"%s\" duplicada na configuração de espelhos!"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
@@ -672,7 +672,7 @@ msgstr "Erro ao obter o endereço do repositório"
 
 #: ../fdroidserver/scanner.py
 msgid "Exit with a non-zero code if problems were found"
-msgstr ""
+msgstr "Sair com um código diferente de zero se problemas forem encontrados"
 
 #: ../fdroidserver/__main__.py
 msgid "Extract application metadata from a source repository"
@@ -820,14 +820,14 @@ msgid "Found {apkfilename} at {url}"
 msgstr "Encontrado {apkfilename} em {url}"
 
 #: ../fdroidserver/scanner.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Found {count} problems in {filename}"
-msgstr "O scanner encontrou {count} problemas em {appid}:"
+msgstr "{count} problemas encontrados em {filename}"
 
 #: ../fdroidserver/scanner.py
 #, python-brace-format
 msgid "Found {count} warnings in {filename}"
-msgstr ""
+msgstr "{count} advertências encontradas em {filename}"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -977,9 +977,9 @@ msgid "Invalid VercodeOperation: {field}"
 msgstr "Versão de Operação de Código inválido: {field}"
 
 #: ../fdroidserver/lint.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Invalid VercodeOperation: {invalid_ops}"
-msgstr "Versão de Operação de Código inválido: {field}"
+msgstr "Versão de Operação de Código inválido: {invalid_ops}"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -1109,7 +1109,7 @@ msgstr "Diretório de saída ausente"
 
 #: ../fdroidserver/metadata.py
 msgid "Moving Anti-Features declarations to localized files:"
-msgstr ""
+msgstr "Movendo declarações de Anti-Recursos para arquivos localizados:"
 
 #: ../fdroidserver/index.py
 msgid "Neither \"repo_pubkey\" nor \"keystorepass\" set in config.yml"
@@ -1384,9 +1384,9 @@ msgid "Reading packageName/versionCode/versionName failed, APK invalid: '{apkfil
 msgstr "A leitura de packageName/versionCode/versionName falhou, o APK inválido: '{apkfilename}'"
 
 #: ../fdroidserver/common.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Reading packageName/versionCode/versionName failed,APK invalid: '{apkfilename}'"
-msgstr "A leitura de packageName/versionCode/versionName falhou, o APK inválido: '{apkfilename}'"
+msgstr "Falha ao ler packageName/versionCode/versionName, APK inválido: '{apkfilename}'"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -1456,7 +1456,7 @@ msgstr "Executando o 'wget' em {path}"
 #: ../fdroidserver/index.py
 #, python-brace-format
 msgid "SHA-256 of {url} does not match entry!"
-msgstr ""
+msgstr "O SHA-256 de {url} não corresponde à entrada!"
 
 #: ../fdroidserver/build.py
 msgid "Scan the resulting APK(s) for known non-free classes."
@@ -1467,9 +1467,9 @@ msgid "Scan the source code of a package"
 msgstr "Percorre o código-fonte de um pacote"
 
 #: ../fdroidserver/scanner.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Scanner found {count} problems in {apk}"
-msgstr "O scanner encontrou {count} problemas em {appid}:"
+msgstr "O scanner encontrou {count} problemas em {apk}"
 
 #: ../fdroidserver/scanner.py
 #, python-brace-format
