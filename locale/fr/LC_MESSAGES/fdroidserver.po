@@ -40,7 +40,7 @@ msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2023-05-24 22:18+0200\n"
-"PO-Revision-Date: 2023-02-23 18:22+0000\n"
+"PO-Revision-Date: 2023-06-09 18:48+0000\n"
 "Last-Translator: Translator <kvb@tuta.io>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/f-droid/fdroidserver/fr/>\n"
 "Language: fr\n"
@@ -48,7 +48,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.16-dev\n"
+"X-Generator: Weblate 4.18-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -216,7 +216,7 @@ msgstr "'{path}' n'a pas pu être exécuté !"
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "'{path}' has invalid format, it should be a dictionary!"
-msgstr ""
+msgstr "Le format de '{path}' est incorrect, il devrait s'agir d’un dictionnaire !"
 
 #: ../fdroidserver/metadata.py ../fdroidserver/lint.py
 #, python-brace-format
@@ -224,9 +224,9 @@ msgid "'{value}' is not a valid {field} in {appid}. Regex pattern: {pattern}"
 msgstr "'{value}' n'est pas un(e) {field} valide dans {appid}. Motif regex : {pattern}"
 
 #: ../fdroidserver/metadata.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "'{value}' is not a valid {field}, should be {pattern}"
-msgstr "'{value}' n'est pas un(e) {field} valide dans {appid}. Motif regex : {pattern}"
+msgstr "'{value}' n'est pas un(e) {field} valide et devrait être {pattern}"
 
 #: ../fdroidserver/checkupdates.py
 #, python-brace-format
@@ -270,7 +270,7 @@ msgstr "Alias de la clé de signature du dépôt dans le trousseau"
 
 #: ../fdroidserver/build.py
 msgid "AllowedAPKSigningKeys missing but reference binary supplied"
-msgstr ""
+msgstr "AllowedAPKSigningKeys est manquante mais des références binaires sont indiquées"
 
 #: ../fdroidserver/import_subcommand.py
 msgid "Allows a different revision (or git branch) to be specified for the initial import"
@@ -318,7 +318,7 @@ msgstr "L'outil SDK Android {cmd} n'a pas été trouvé !"
 
 #: ../fdroidserver/lint.py
 msgid "App has Binaries but does not have corresponding AllowedAPKSigningKeys to pin certificate."
-msgstr ""
+msgstr "L’application possède des fichiers binaires mais n'a pas les AllowedAPKSigningKeys correspondantes pour épingler le certificat."
 
 #: ../fdroidserver/lint.py
 msgid "App has NoSourceSince or ArchivePolicy \"0 versions\" but AutoUpdateMode or UpdateCheckMode are not None"
@@ -331,7 +331,7 @@ msgstr "L'application est dans '{repo}' mais a un lien vers {url}"
 
 #: ../fdroidserver/lint.py
 msgid "App version has binary but does not have corresponding AllowedAPKSigningKeys to pin certificate."
-msgstr ""
+msgstr "Des versions de l’application possède des fichiers binaires mais n'ont pas les AllowedAPKSigningKeys correspondantes pour épingler le certificat."
 
 #: ../fdroidserver/lint.py
 msgid "Appending .git is not necessary"
