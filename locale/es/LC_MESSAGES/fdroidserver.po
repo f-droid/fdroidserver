@@ -18,7 +18,7 @@ msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2023-05-24 22:18+0200\n"
-"PO-Revision-Date: 2023-06-20 20:50+0000\n"
+"PO-Revision-Date: 2023-07-31 20:06+0000\n"
 "Last-Translator: gallegonovato <fran-carro@hotmail.es>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/f-droid/fdroidserver/es/>\n"
 "Language: es\n"
@@ -26,7 +26,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.18.1\n"
+"X-Generator: Weblate 5.0-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -623,7 +623,7 @@ msgstr "¡Se ignoró la declaración duplicada de Anti-Feature en la {path}!"
 #: ../fdroidserver/index.py
 #, python-format
 msgid "Duplicate entry \"%s\" in mirrors config!"
-msgstr ""
+msgstr "¡Entrada duplicada \"%s\"en la configuración de los espejos!"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
@@ -824,14 +824,14 @@ msgid "Found {apkfilename} at {url}"
 msgstr "Se encontró {apkfilename} en {url}"
 
 #: ../fdroidserver/scanner.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Found {count} problems in {filename}"
-msgstr "El escáner encontró {count} problemas en {appid}:"
+msgstr "Encontró {count} problemas en {filename}"
 
 #: ../fdroidserver/scanner.py
 #, python-brace-format
 msgid "Found {count} warnings in {filename}"
-msgstr ""
+msgstr "Se encontraron {count} advertencias en {filename}"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -898,7 +898,7 @@ msgstr "Ignorando entrada en FUNDING.yml mayor de 2048: %s"
 #: ../fdroidserver/update.py
 #, python-format
 msgid "Ignoring bad element in manifest: %s"
-msgstr ""
+msgstr "Ignorar el elemento incorrecto en el manifiesto: %s"
 
 #: ../fdroidserver/index.py
 msgid "Ignoring package without metadata: "
@@ -981,9 +981,9 @@ msgid "Invalid VercodeOperation: {field}"
 msgstr "VercodeOperation no válida: {field}"
 
 #: ../fdroidserver/lint.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Invalid VercodeOperation: {invalid_ops}"
-msgstr "VercodeOperation no válida: {field}"
+msgstr "VercodeOperation no válido: {invalid_ops}"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -1113,7 +1113,7 @@ msgstr "Falta el directorio de salida"
 
 #: ../fdroidserver/metadata.py
 msgid "Moving Anti-Features declarations to localized files:"
-msgstr ""
+msgstr "Moviendo las declaraciones de Anti-Features a los archivos localizados:"
 
 #: ../fdroidserver/index.py
 msgid "Neither \"repo_pubkey\" nor \"keystorepass\" set in config.yml"
@@ -1388,9 +1388,9 @@ msgid "Reading packageName/versionCode/versionName failed, APK invalid: '{apkfil
 msgstr "Falló lectura de packageName/versionCode/versionName, APK inválida: '{apkfilename}'"
 
 #: ../fdroidserver/common.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Reading packageName/versionCode/versionName failed,APK invalid: '{apkfilename}'"
-msgstr "Falló lectura de packageName/versionCode/versionName, APK inválida: '{apkfilename}'"
+msgstr "Error al leer packageName/versionCode/versionName,APK inválido: '{apkfilename}'"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -1460,7 +1460,7 @@ msgstr "Ejecutando wget en {path}"
 #: ../fdroidserver/index.py
 #, python-brace-format
 msgid "SHA-256 of {url} does not match entry!"
-msgstr ""
+msgstr "¡El SHA-256 de {url} no coincide con la entrada!"
 
 #: ../fdroidserver/build.py
 msgid "Scan the resulting APK(s) for known non-free classes."
@@ -1471,9 +1471,9 @@ msgid "Scan the source code of a package"
 msgstr "Escanear el código fuente de un paquete"
 
 #: ../fdroidserver/scanner.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Scanner found {count} problems in {apk}"
-msgstr "El escáner encontró {count} problemas en {appid}:"
+msgstr "El escáner encontró {count} problemas en {apk}"
 
 #: ../fdroidserver/scanner.py
 #, python-brace-format
@@ -1802,7 +1802,7 @@ msgstr "UpdateCheckData tiene una URL no válida: {url}"
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "UpdateCheckData must match the version code as integer (\\d or [0-9]): {codeex}"
-msgstr ""
+msgstr "UpdateCheckData debe coincidir con el código de la versión como entero (\\d o [0-9]): {codeex}"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
@@ -1817,7 +1817,7 @@ msgstr "UpdateCheckData tiene una URL no válida: {url}"
 #. Translators: https://developer.android.com/studio/build/application-id
 #: ../fdroidserver/lint.py
 msgid "UpdateCheckMode is set but it looks likecheckupdates hasn't been run yet"
-msgstr ""
+msgstr "UpdateCheckMode está configurado pero parece que checkupdates aún no se ha ejecutado"
 
 #: ../fdroidserver/lint.py
 msgid "UpdateCheckName is set to the known application ID, it can be removed"
@@ -1887,7 +1887,7 @@ msgstr "Usando androguard de \"{path}\""
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Using blank dictionary instead of contents of {path}!"
-msgstr ""
+msgstr "¡Usando un diccionario en blanco en lugar del contenido de la {path}!"
 
 #: ../fdroidserver/init.py
 #, python-brace-format
@@ -2001,7 +2001,7 @@ msgstr "argumento \"-\" con modo %r"
 #: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "argument %(argument_name)s: %(message)s"
-msgstr ""
+msgstr "argumento %(argument_name)s: %(message)s"
 
 #: ../fdroidserver/nightly.py
 msgid "attempting bare SSH connection to test deploy key:"
@@ -2018,7 +2018,7 @@ msgstr "no se puede abrir '%(filename)s': %(error)s"
 
 #: ../fdroidserver/scanner.py
 msgid "can't open non-https url: '{};"
-msgstr ""
+msgstr "no se puede abrir una url que no sea https: '{};"
 
 #: ../fdroidserver/build.py
 #, python-brace-format
@@ -2067,9 +2067,9 @@ msgstr[0] "cadena de opción conflictiva: %s"
 msgstr[1] "cadenas de opción conflictivas: %s"
 
 #: /usr/lib/python3.11/argparse.py
-#, fuzzy, python-format
+#, python-format
 msgid "conflicting subparser alias: %s"
-msgstr "cadena de opción conflictiva: %s"
+msgstr "Alias de los subanalizadores en el conflicto:%s"
 
 #: /usr/lib/python3.11/argparse.py
 #, fuzzy, python-format
