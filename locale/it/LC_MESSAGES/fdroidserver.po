@@ -15,13 +15,14 @@
 # Pixel-Tux <luis.pardus@gmail.com>, 2023.
 # Davide Neri <davnerix@gmail.com>, 2023.
 # Mirko Di <mirko@mirkodi.eu>, 2023.
+# coronabond <coronabond@airmail.cc>, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2023-05-24 22:18+0200\n"
-"PO-Revision-Date: 2023-07-24 09:51+0000\n"
-"Last-Translator: Mirko Di <mirko@mirkodi.eu>\n"
+"PO-Revision-Date: 2023-08-03 16:33+0000\n"
+"Last-Translator: coronabond <coronabond@airmail.cc>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/f-droid/fdroidserver/it/>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
@@ -2424,7 +2425,7 @@ msgstr ""
 
 #: ../fdroidserver/scanner.py
 msgid "shared library"
-msgstr "biblioteca condivisa"
+msgstr "libreria condivisa"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 #: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
@@ -2463,7 +2464,7 @@ msgstr "srclibs manca il nome e/o @"
 
 #: ../fdroidserver/scanner.py
 msgid "static library"
-msgstr "biblioteca statica"
+msgstr "libreria statica"
 
 #: ../fdroidserver/build.py
 #, python-brace-format
