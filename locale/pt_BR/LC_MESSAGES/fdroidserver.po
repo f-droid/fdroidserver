@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2023-05-24 22:18+0200\n"
-"PO-Revision-Date: 2023-07-09 13:51+0000\n"
+"PO-Revision-Date: 2023-08-07 17:51+0000\n"
 "Last-Translator: The Cats <philosoph@danwin1210.de>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/f-droid/fdroidserver/pt_BR/>\n"
 "Language: pt_BR\n"
@@ -894,7 +894,7 @@ msgstr "Ignorando entrada de FUNDING.yml maior que 2048: %s"
 #: ../fdroidserver/update.py
 #, python-format
 msgid "Ignoring bad element in manifest: %s"
-msgstr ""
+msgstr "Ignorando o elemento mau no manifesto: %s"
 
 #: ../fdroidserver/index.py
 msgid "Ignoring package without metadata: "
