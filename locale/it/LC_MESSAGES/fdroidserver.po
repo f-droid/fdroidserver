@@ -16,20 +16,21 @@
 # Davide Neri <davnerix@gmail.com>, 2023.
 # Mirko Di <mirko@mirkodi.eu>, 2023.
 # coronabond <coronabond@airmail.cc>, 2023.
+# Random <random-r@users.noreply.hosted.weblate.org>, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2023-05-24 22:18+0200\n"
-"PO-Revision-Date: 2023-08-03 16:33+0000\n"
-"Last-Translator: coronabond <coronabond@airmail.cc>\n"
+"PO-Revision-Date: 2023-09-04 09:55+0000\n"
+"Last-Translator: Random <random-r@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/f-droid/fdroidserver/it/>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.0-dev\n"
+"X-Generator: Weblate 5.0.1-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -299,7 +300,7 @@ msgstr "Strumento Android SDK {cmd} non trovato!"
 
 #: ../fdroidserver/lint.py
 msgid "App has Binaries but does not have corresponding AllowedAPKSigningKeys to pin certificate."
-msgstr ""
+msgstr "L'app ha Binaries ma non ha AllowedAPKSigningKeys corrispondente per fissare il certificato."
 
 #: ../fdroidserver/lint.py
 msgid "App has NoSourceSince or ArchivePolicy \"0 versions\" but AutoUpdateMode or UpdateCheckMode are not None"
@@ -350,7 +351,7 @@ msgstr "Branch \"{branch}\" usata come commit in srclib \"{srclib}\""
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Broken symlink: {path}"
-msgstr "Collegamento simbolico interrotto: {path}"
+msgstr "Collegamento simbolico orfano: {path}"
 
 #: ../fdroidserver/__main__.py
 msgid "Build a package from source"
