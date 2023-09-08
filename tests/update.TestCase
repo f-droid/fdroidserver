@@ -53,6 +53,7 @@ import fdroidserver.common
 import fdroidserver.exception
 import fdroidserver.metadata
 import fdroidserver.update
+from fdroidserver.common import CATEGORIES_CONFIG_NAME
 
 
 DONATION_FIELDS = ('Donate', 'Liberapay', 'OpenCollective')
@@ -1803,6 +1804,123 @@ class UpdateTest(unittest.TestCase):
         with mock.patch('sys.argv', ['fdroid update', '--delete-unknown', '--nosign']):
             fdroidserver.update.main()
         self.assertFalse(categories_txt.exists())
+
+    def test_no_blank_auto_defined_categories(self):
+        """When no app has Categories, there should be no definitions in the repo."""
+        os.chdir(self.testdir)
+        os.mkdir('metadata')
+        os.mkdir('repo')
+        Path('config.yml').write_text(
+            'repo_pubkey: ffffffffffffffffffffffffffffffffffffffff'
+        )
+
+        testapk = os.path.join('repo', 'com.politedroid_6.apk')
+        shutil.copy(os.path.join(self.basedir, testapk), testapk)
+        Path('metadata/com.politedroid.yml').write_text('Name: Polite')
+
+        with mock.patch('sys.argv', ['fdroid update', '--delete-unknown', '--nosign']):
+            fdroidserver.update.main()
+        with open('repo/index-v2.json') as fp:
+            index = json.load(fp)
+        self.assertFalse(CATEGORIES_CONFIG_NAME in index['repo'])
+
+    def test_auto_defined_categories(self):
+        """Repos that don't define categories in config/ should use auto-generated."""
+        os.chdir(self.testdir)
+        os.mkdir('metadata')
+        os.mkdir('repo')
+        Path('config.yml').write_text(
+            'repo_pubkey: ffffffffffffffffffffffffffffffffffffffff'
+        )
+
+        testapk = os.path.join('repo', 'com.politedroid_6.apk')
+        shutil.copy(os.path.join(self.basedir, testapk), testapk)
+        Path('metadata/com.politedroid.yml').write_text('Categories: [Time]')
+
+        with mock.patch('sys.argv', ['fdroid update', '--delete-unknown', '--nosign']):
+            fdroidserver.update.main()
+        with open('repo/index-v2.json') as fp:
+            index = json.load(fp)
+        self.assertEqual(
+            {'Time': dict()},
+            index['repo'][CATEGORIES_CONFIG_NAME],
+        )
+
+    def test_auto_defined_categories_two_apps(self):
+        """Repos that don't define categories in config/ should use auto-generated."""
+        os.chdir(self.testdir)
+        os.mkdir('metadata')
+        os.mkdir('repo')
+        Path('config.yml').write_text(
+            'repo_pubkey: ffffffffffffffffffffffffffffffffffffffff'
+        )
+
+        testapk = os.path.join('repo', 'com.politedroid_6.apk')
+        shutil.copy(os.path.join(self.basedir, testapk), testapk)
+        Path('metadata/com.politedroid.yml').write_text('Categories: [bar]')
+        testapk = os.path.join('repo', 'souch.smsbypass_9.apk')
+        shutil.copy(os.path.join(self.basedir, testapk), testapk)
+        Path('metadata/souch.smsbypass.yml').write_text('Categories: [foo, bar]')
+
+        with mock.patch('sys.argv', ['fdroid update', '--delete-unknown', '--nosign']):
+            fdroidserver.update.main()
+        with open('repo/index-v2.json') as fp:
+            index = json.load(fp)
+        self.assertEqual(
+            {'bar': dict(), 'foo': dict()},
+            index['repo'][CATEGORIES_CONFIG_NAME],
+        )
+
+    def test_auto_defined_categories_mix_into_config_categories(self):
+        """Repos that don't define all categories in config/ also use auto-generated."""
+        os.chdir(self.testdir)
+        os.mkdir('config')
+        Path('config/categories.yml').write_text('System: {name: System Apps}')
+        os.mkdir('metadata')
+        os.mkdir('repo')
+        Path('config.yml').write_text(
+            'repo_pubkey: ffffffffffffffffffffffffffffffffffffffff'
+        )
+
+        testapk = os.path.join('repo', 'com.politedroid_6.apk')
+        shutil.copy(os.path.join(self.basedir, testapk), testapk)
+        Path('metadata/com.politedroid.yml').write_text('Categories: [Time]')
+        testapk = os.path.join('repo', 'souch.smsbypass_9.apk')
+        shutil.copy(os.path.join(self.basedir, testapk), testapk)
+        Path('metadata/souch.smsbypass.yml').write_text('Categories: [System, Time]')
+
+        with mock.patch('sys.argv', ['fdroid update', '--delete-unknown', '--nosign']):
+            fdroidserver.update.main()
+        with open('repo/index-v2.json') as fp:
+            index = json.load(fp)
+        self.assertEqual(
+            {'System': {'name': {'en-US': 'System Apps'}}, 'Time': dict()},
+            index['repo'][CATEGORIES_CONFIG_NAME],
+        )
+
+    def test_empty_categories_not_in_index(self):
+        """A category with no apps should be ignored, even if defined in config."""
+        os.chdir(self.testdir)
+        os.mkdir('config')
+        Path('config/categories.yml').write_text('System: {name: S}\nTime: {name: T}\n')
+        os.mkdir('metadata')
+        os.mkdir('repo')
+        Path('config.yml').write_text(
+            'repo_pubkey: ffffffffffffffffffffffffffffffffffffffff'
+        )
+
+        testapk = os.path.join('repo', 'com.politedroid_6.apk')
+        shutil.copy(os.path.join(self.basedir, testapk), testapk)
+        Path('metadata/com.politedroid.yml').write_text('Categories: [Time]')
+
+        with mock.patch('sys.argv', ['fdroid update', '--delete-unknown', '--nosign']):
+            fdroidserver.update.main()
+        with open('repo/index-v2.json') as fp:
+            index = json.load(fp)
+        self.assertEqual(
+            {'Time': {'name': {'en-US': 'T'}}},
+            index['repo'][CATEGORIES_CONFIG_NAME],
+        )
 
 
 if __name__ == "__main__":

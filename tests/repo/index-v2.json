@@ -533,7 +533,10 @@
         "name": {
           "en-US": "System"
         }
-      }
+      },
+      "1": {},
+      "2.0": {},
+      "tests": {}
     },
     "requests": {
       "install": [
@@ -550,6 +553,8 @@
       "metadata": {
         "added": 1498176000000,
         "categories": [
+          "Multimedia",
+          "Security",
           "Time"
         ],
         "issueTracker": "https://github.com/miguelvps/PoliteDroid/issues",

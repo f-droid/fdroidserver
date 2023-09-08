@@ -1919,6 +1919,18 @@ class CommonTest(unittest.TestCase):
             config = fdroidserver.common.read_config(fdroidserver.common.options)
             self.assertEqual(os.getenv('SECRET', 'fail'), config.get('keypass'))
 
+    def test_with_config_yml_is_dict(self):
+        os.chdir(self.tmpdir)
+        Path('config.yml').write_text('apksigner = /placeholder/path')
+        with self.assertRaises(TypeError):
+            fdroidserver.common.read_config(fdroidserver.common.options)
+
+    def test_with_config_yml_is_not_mixed_type(self):
+        os.chdir(self.tmpdir)
+        Path('config.yml').write_text('k: v\napksigner = /placeholder/path')
+        with self.assertRaises(yaml.scanner.ScannerError):
+            fdroidserver.common.read_config(fdroidserver.common.options)
+
     def test_with_config_py(self):
         """Make sure it is still possible to use config.py alone."""
         os.chdir(self.tmpdir)
@@ -2715,6 +2727,27 @@ class CommonTest(unittest.TestCase):
             list(categories.keys()),
         )
         self.assertEqual(['en-US'], list(categories['GuardianProject']['name'].keys()))
+
+    def test_load_localized_config_0_file(self):
+        os.chdir(self.testdir)
+        os.mkdir('config')
+        Path('config/categories.yml').write_text('')
+        with self.assertRaises(TypeError):
+            fdroidserver.common.load_localized_config(CATEGORIES_CONFIG_NAME, 'repo')
+
+    def test_load_localized_config_string(self):
+        os.chdir(self.testdir)
+        os.mkdir('config')
+        Path('config/categories.yml').write_text('this is a string')
+        with self.assertRaises(TypeError):
+            fdroidserver.common.load_localized_config(CATEGORIES_CONFIG_NAME, 'repo')
+
+    def test_load_localized_config_list(self):
+        os.chdir(self.testdir)
+        os.mkdir('config')
+        Path('config/categories.yml').write_text('- System')
+        with self.assertRaises(TypeError):
+            fdroidserver.common.load_localized_config(CATEGORIES_CONFIG_NAME, 'repo')
 
 
 if __name__ == "__main__":

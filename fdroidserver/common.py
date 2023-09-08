@@ -399,6 +399,11 @@ def read_config(opts=None):
             config = yaml.safe_load(fp)
         if not config:
             config = {}
+        if not isinstance(config, dict):
+            msg = _('{path} is not "key: value" dict, but a {datatype}!')
+            raise TypeError(
+                msg.format(path=config_file, datatype=type(config).__name__)
+            )
     elif os.path.exists(old_config_file):
         logging.warning(_("""{oldfile} is deprecated, use {newfile}""")
                         .format(oldfile=old_config_file, newfile=config_file))
@@ -528,6 +533,9 @@ def load_localized_config(name, repodir):
             locale = DEFAULT_LOCALE
         with open(f, encoding="utf-8") as fp:
             elem = yaml.safe_load(fp)
+            if not isinstance(elem, dict):
+                msg = _('{path} is not "key: value" dict, but a {datatype}!')
+                raise TypeError(msg.format(path=f, datatype=type(elem).__name__))
             for afname, field_dict in elem.items():
                 if afname not in ret:
                     ret[afname] = dict()

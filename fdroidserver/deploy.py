@@ -277,6 +277,12 @@ def update_serverwebroot(serverwebroot, repo_section):
     has a low resolution timestamp
 
     """
+    try:
+        subprocess.run(['rsync', '--version'], capture_output=True, check=True)
+    except Exception as e:
+        raise FDroidException(
+            _('rsync is missing or broken: {error}').format(error=e)
+        ) from e
     rsyncargs = ['rsync', '--archive', '--delete-after', '--safe-links']
     if not options.no_checksum:
         rsyncargs.append('--checksum')

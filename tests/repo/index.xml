@@ -311,8 +311,8 @@ APK is called F-Droid Privileged Extension.</desc>
 		<icon>com.politedroid.6.png</icon>
 		<desc>Activates silent mode during calendar events.</desc>
 		<license>GPL-3.0-only</license>
-		<categories>Time</categories>
-		<category>Time</category>
+		<categories>Multimedia,Security,Time</categories>
+		<category>Multimedia</category>
 		<web></web>
 		<source>https://github.com/miguelvps/PoliteDroid</source>
 		<tracker>https://github.com/miguelvps/PoliteDroid/issues</tracker>

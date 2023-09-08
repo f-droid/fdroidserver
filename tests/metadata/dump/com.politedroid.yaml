@@ -161,6 +161,8 @@ Builds:
   versionCode: 6
   versionName: '1.5'
 Categories:
+- Multimedia
+- Security
 - Time
 Changelog: ''
 CurrentVersion: '1.5'
