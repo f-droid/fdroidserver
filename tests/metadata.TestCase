@@ -1462,10 +1462,10 @@ class MetadataTest(unittest.TestCase):
                     gradle:
                       - yes
                     antifeatures:
-                        a: {}
-                        b:
-                            de: Probe
-                            en-US: test
+                      a: {}
+                      b:
+                        de: Probe
+                        en-US: test
                 """
             ),
         )

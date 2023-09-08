@@ -9,13 +9,13 @@ IssueTracker: https://github.com/loadrunner/Facebook-Contact-Sync/issues
 AutoName: UberSync for Facebook
 Summary: Sync your Facebook Contacts
 Description: |-
-    To configure, go to "Settings => Accounts & Sync => Add Account". Depending on
-    how many friends you have, the first import might take a while, so be patient.
+  To configure, go to "Settings => Accounts & Sync => Add Account". Depending on
+  how many friends you have, the first import might take a while, so be patient.
 
-    * Facebook does not allow to export phone numbers or emails: only names, pictures and statuses are synced.
-    * Facebook users have the option to block one or all apps: if they opt for that, they will be EXCLUDED from your friends list.
+  * Facebook does not allow to export phone numbers or emails: only names, pictures and statuses are synced.
+  * Facebook users have the option to block one or all apps: if they opt for that, they will be EXCLUDED from your friends list.
 
-    Appbrain SDK was removed before building.
+  Appbrain SDK was removed before building.
 
 RepoType: git
 Repo: https://github.com/loadrunner/Facebook-Contact-Sync.git

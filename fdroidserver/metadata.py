@@ -1267,7 +1267,7 @@ def write_yaml(mf, app):
     _del_duplicated_NoSourceSince(app)
     yaml_app = _app_to_yaml(app)
     yaml = ruamel.yaml.YAML()
-    yaml.indent(mapping=4, sequence=4, offset=2)
+    yaml.indent(mapping=2, sequence=4, offset=2)
     yaml.dump(yaml_app, stream=mf)
 
 
