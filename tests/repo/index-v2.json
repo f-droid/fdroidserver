@@ -534,9 +534,21 @@
           "en-US": "System"
         }
       },
-      "1": {},
-      "2.0": {},
-      "tests": {}
+      "1": {
+        "name": {
+          "en-US": "1"
+        }
+      },
+      "2.0": {
+        "name": {
+          "en-US": "2.0"
+        }
+      },
+      "tests": {
+        "name": {
+          "en-US": "tests"
+        }
+      }
     },
     "requests": {
       "install": [
