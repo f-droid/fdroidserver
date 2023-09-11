@@ -33,15 +33,15 @@ msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2023-05-24 22:18+0200\n"
-"PO-Revision-Date: 2023-07-27 17:07+0000\n"
-"Last-Translator: zhiqi <lzqlzq21@gmail.com>\n"
+"PO-Revision-Date: 2023-09-11 17:39+0000\n"
+"Last-Translator: Xiang Heng Wei <yylteam@hotmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/f-droid/fdroidserver/zh_Hans/>\n"
 "Language: zh_Hans\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.0-dev\n"
+"X-Generator: Weblate 5.0.1-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -336,12 +336,12 @@ msgstr "正使用无效签名归档 {apkfilename}!"
 
 #: ../fdroidserver/lint.py
 msgid "AutoUpdateMode with UpdateCheckMode: HTTP must have a pattern."
-msgstr ""
+msgstr "AutoUpdateMode 和 UpdateCheckMode：HTTP 必须有一个模式。"
 
 #: ../fdroidserver/index.py
 #, python-brace-format
 msgid "Bad entry type \"{mirrortype}\" in mirrors config: {mirror}"
-msgstr ""
+msgstr "镜像配置中的错误条目类型“{mirrortype}”：{mirror}"
 
 #: ../fdroidserver/mirror.py
 msgid "Base URL to mirror, can include the index signing key using the query string: ?fingerprint="
@@ -440,7 +440,7 @@ msgstr "提交更改"
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Conflicting \"{field}\" definitions between .yml and localized files:"
-msgstr ""
+msgstr ".yml 和本地化文件之间的“{field}”定义冲突："
 
 #: ../fdroidserver/__main__.py
 msgid "Conflicting arguments: '--verbose' and '--quiet' can not be specified at the same time."
@@ -631,12 +631,12 @@ msgstr "{url} 下载失败。{error}"
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Duplicate Anti-Feature declaration at {path} was ignored!"
-msgstr ""
+msgstr "{path} 处的重复负面特征声明被忽略！"
 
 #: ../fdroidserver/index.py
 #, python-format
 msgid "Duplicate entry \"%s\" in mirrors config!"
-msgstr ""
+msgstr "镜像配置中的重复条目“%s”！"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
@@ -689,7 +689,7 @@ msgstr "获取存储库地址时出错"
 
 #: ../fdroidserver/scanner.py
 msgid "Exit with a non-zero code if problems were found"
-msgstr ""
+msgstr "如果发现问题，则以非零代码退出"
 
 #: ../fdroidserver/__main__.py
 msgid "Extract application metadata from a source repository"
@@ -911,7 +911,7 @@ msgstr "忽略超过 2048 的 FUNDING.yml 条目：%s"
 #: ../fdroidserver/update.py
 #, python-format
 msgid "Ignoring bad element in manifest: %s"
-msgstr ""
+msgstr "忽略清单中的错误元素： %s"
 
 #: ../fdroidserver/index.py
 msgid "Ignoring package without metadata: "
@@ -1126,7 +1126,7 @@ msgstr "缺少输出目录"
 
 #: ../fdroidserver/metadata.py
 msgid "Moving Anti-Features declarations to localized files:"
-msgstr ""
+msgstr "将负面特征声明移动到本地化文件："
 
 #: ../fdroidserver/index.py
 msgid "Neither \"repo_pubkey\" nor \"keystorepass\" set in config.yml"
@@ -1473,7 +1473,7 @@ msgstr "在 {path} 中运行 wget"
 #: ../fdroidserver/index.py
 #, python-brace-format
 msgid "SHA-256 of {url} does not match entry!"
-msgstr ""
+msgstr "{url} 的 SHA-256 与条目不匹配！"
 
 #: ../fdroidserver/build.py
 msgid "Scan the resulting APK(s) for known non-free classes."
@@ -1776,27 +1776,27 @@ msgstr "发现不支持的图形文件：{path}"
 #: ../fdroidserver/lint.py
 #, python-format
 msgid "Unused extlib at %s"
-msgstr ""
+msgstr "%s 处未使用的扩展库"
 
 #: ../fdroidserver/lint.py
 #, python-format
 msgid "Unused file at %s"
-msgstr ""
+msgstr "%s 处未使用的文件"
 
 #: ../fdroidserver/scanner.py
 #, python-format
 msgid "Unused scandelete path: %s"
-msgstr ""
+msgstr "未使用的扫描删除路径： %s"
 
 #: ../fdroidserver/scanner.py
 #, python-format
 msgid "Unused scanignore path: %s"
-msgstr ""
+msgstr "未使用的扫描忽略路径： %s"
 
 #: ../fdroidserver/common.py
 #, python-format
 msgid "Unzipping to %s"
-msgstr ""
+msgstr "解压缩到 %s"
 
 #: ../fdroidserver/__main__.py
 msgid "Update repo information for new packages"
@@ -1809,12 +1809,12 @@ msgstr "更新 URL 的二进制透明度日志"
 #: ../fdroidserver/checkupdates.py
 #, python-brace-format
 msgid "UpdateCheckData has invalid URL: {url}"
-msgstr ""
+msgstr "UpdateCheckData 具有无效的 URL：{url}"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "UpdateCheckData must match the version code as integer (\\d or [0-9]): {codeex}"
-msgstr ""
+msgstr "UpdateCheckData 必须以整数（\\d 或 [0-9]）的形式匹配版本代码：{codeex}"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
@@ -1824,7 +1824,7 @@ msgstr "UpdateCheckData必须使用HTTPS URL:{url}"
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "UpdateCheckData not a valid URL: {url}"
-msgstr ""
+msgstr "UpdateCheckData 不是有效的网址：{url}"
 
 #. Translators: https://developer.android.com/studio/build/application-id
 #: ../fdroidserver/lint.py
