@@ -1842,7 +1842,7 @@ class UpdateTest(unittest.TestCase):
         with open('repo/index-v2.json') as fp:
             index = json.load(fp)
         self.assertEqual(
-            {'Time': dict()},
+            {'Time': {'name': {'en-US': 'Time'}}},
             index['repo'][CATEGORIES_CONFIG_NAME],
         )
 
@@ -1867,7 +1867,7 @@ class UpdateTest(unittest.TestCase):
         with open('repo/index-v2.json') as fp:
             index = json.load(fp)
         self.assertEqual(
-            {'bar': dict(), 'foo': dict()},
+            {'bar': {'name': {'en-US': 'bar'}}, 'foo': {'name': {'en-US': 'foo'}}},
             index['repo'][CATEGORIES_CONFIG_NAME],
         )
 
@@ -1894,7 +1894,7 @@ class UpdateTest(unittest.TestCase):
         with open('repo/index-v2.json') as fp:
             index = json.load(fp)
         self.assertEqual(
-            {'System': {'name': {'en-US': 'System Apps'}}, 'Time': dict()},
+            {'System': {'name': {'en-US': 'System Apps'}}, 'Time': {'name': {'en-US': 'Time'}}},
             index['repo'][CATEGORIES_CONFIG_NAME],
         )
 
