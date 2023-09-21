@@ -141,7 +141,9 @@ http_checks = (
             re.compile(
                 r'^https://[^/]*(github|gitlab|bitbucket|rawgit|githubusercontent)\.[a-zA-Z]+/([^/]+/){2,3}(master|main)/'
             ),
-            _("Use /HEAD instead of /master or /main to point at a file in the default branch"),
+            _(
+                "Use /HEAD instead of /master or /main to point at a file in the default branch"
+            ),
         ),
     ]
 )
