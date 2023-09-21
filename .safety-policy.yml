@@ -5,3 +5,6 @@ security:
     52495:
       reason: setuptools comes from Debian
       expires: '2025-01-31'
+    60350:
+      reason: GitPython comes from Debian https://security-tracker.debian.org/tracker/CVE-2023-40267
+      expires: '2025-01-31'

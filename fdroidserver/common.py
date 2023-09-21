@@ -728,13 +728,16 @@ def test_aapt_version(aapt):
 
 def test_sdk_exists(thisconfig):
     if 'sdk_path' not in thisconfig:
-        # TODO convert this to apksigner once it is required
-        if 'aapt' in thisconfig and os.path.isfile(thisconfig['aapt']):
-            test_aapt_version(thisconfig['aapt'])
-            return True
-        else:
-            logging.error(_("'sdk_path' not set in config.yml!"))
-            return False
+        # check the 'apksigner' value in the config to see if its new enough
+        f = thisconfig.get('apksigner', '')
+        if os.path.isfile(f):
+            sdk_path = os.path.dirname(os.path.dirname(os.path.dirname(f)))
+            tmpconfig = {'sdk_path': sdk_path}
+            find_apksigner(tmpconfig)
+            if os.path.exists(tmpconfig.get('apksigner', '')):
+                return True
+        logging.error(_("'sdk_path' not set in config.yml!"))
+        return False
     if thisconfig['sdk_path'] == default_config['sdk_path']:
         logging.error(_('No Android SDK found!'))
         logging.error(_('You can use ANDROID_HOME to set the path to your SDK, i.e.:'))
@@ -747,6 +750,9 @@ def test_sdk_exists(thisconfig):
     if not os.path.isdir(thisconfig['sdk_path']):
         logging.critical(_("Android SDK path '{path}' is not a directory!")
                          .format(path=thisconfig['sdk_path']))
+        return False
+    find_apksigner(thisconfig)
+    if not os.path.exists(thisconfig.get('apksigner', '')):
         return False
     return True
 
