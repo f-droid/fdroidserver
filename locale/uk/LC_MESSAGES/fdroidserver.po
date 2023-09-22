@@ -7,12 +7,13 @@
 # DankXylese <dankxylese@slapmywang.com>, 2021.
 # Dan <denqwerta@gmail.com>, 2022.
 # Sergii Horichenko <m@sgg.im>, 2023.
+# Макар Разин <makarrazin14@gmail.com>, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2023-05-24 22:18+0200\n"
-"PO-Revision-Date: 2023-02-23 18:22+0000\n"
+"PO-Revision-Date: 2023-05-28 07:54+0000\n"
 "Last-Translator: Ihor Hordiichuk <igor_ck@outlook.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/f-droid/fdroidserver/uk/>\n"
 "Language: uk\n"
@@ -20,7 +21,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.16-dev\n"
+"X-Generator: Weblate 4.18-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -189,7 +190,7 @@ msgstr "'{path}' не вдалося виконати!"
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "'{path}' has invalid format, it should be a dictionary!"
-msgstr ""
+msgstr "'{path}' має недійсний формат, це має бути словник!"
 
 #: ../fdroidserver/metadata.py ../fdroidserver/lint.py
 #, python-brace-format
@@ -197,9 +198,9 @@ msgid "'{value}' is not a valid {field} in {appid}. Regex pattern: {pattern}"
 msgstr "'{value}' не є правильним {field} у {appid}. Правильний приклад: {pattern}"
 
 #: ../fdroidserver/metadata.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "'{value}' is not a valid {field}, should be {pattern}"
-msgstr "'{value}' не є правильним {field} у {appid}. Правильний приклад: {pattern}"
+msgstr "'{value}' не є дійсним {field}, має бути {pattern}"
 
 #: ../fdroidserver/checkupdates.py
 #, python-brace-format
@@ -243,7 +244,7 @@ msgstr "Псевдонім підписного ключа репозиторі�
 
 #: ../fdroidserver/build.py
 msgid "AllowedAPKSigningKeys missing but reference binary supplied"
-msgstr ""
+msgstr "AllowedAPKSigningKeys відсутні, але надається посилання на двійковий файл"
 
 #: ../fdroidserver/import_subcommand.py
 msgid "Allows a different revision (or git branch) to be specified for the initial import"
@@ -291,7 +292,7 @@ msgstr "Інструмент Android SDK {cmd} не знайдено!"
 
 #: ../fdroidserver/lint.py
 msgid "App has Binaries but does not have corresponding AllowedAPKSigningKeys to pin certificate."
-msgstr ""
+msgstr "Програма має двійкові файли, але не має відповідних AllowedAPKSigningKeys для закріплення сертифіката."
 
 #: ../fdroidserver/lint.py
 msgid "App has NoSourceSince or ArchivePolicy \"0 versions\" but AutoUpdateMode or UpdateCheckMode are not None"
@@ -304,7 +305,7 @@ msgstr "Застосунок '{repo}' але має ланку до {url}"
 
 #: ../fdroidserver/lint.py
 msgid "App version has binary but does not have corresponding AllowedAPKSigningKeys to pin certificate."
-msgstr ""
+msgstr "Версія програми має двійковий код, але не має відповідних AllowedAPKSigningKeys для закріплення сертифіката."
 
 #: ../fdroidserver/lint.py
 msgid "Appending .git is not necessary"
@@ -322,7 +323,7 @@ msgstr "AutoUpdateMode з UpdateCheckMode: HTTP повинен мати шабл
 #: ../fdroidserver/index.py
 #, python-brace-format
 msgid "Bad entry type \"{mirrortype}\" in mirrors config: {mirror}"
-msgstr ""
+msgstr "Неправильний тип запису \"{mirrortype}\" у конфігурації дзеркал: {mirror}"
 
 #: ../fdroidserver/mirror.py
 msgid "Base URL to mirror, can include the index signing key using the query string: ?fingerprint="
@@ -423,7 +424,7 @@ msgstr "Прийняти зміни"
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Conflicting \"{field}\" definitions between .yml and localized files:"
-msgstr ""
+msgstr "Конфлікт визначень \"{field}\" між .yml і локалізованими файлами:"
 
 #: ../fdroidserver/__main__.py
 msgid "Conflicting arguments: '--verbose' and '--quiet' can not be specified at the same time."
@@ -614,12 +615,12 @@ msgstr "Завантаження {url} не вдалося. {error}"
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Duplicate Anti-Feature declaration at {path} was ignored!"
-msgstr ""
+msgstr "Дубльована декларація небажаних функцій у {path} була проігнорована!"
 
 #: ../fdroidserver/index.py
 #, python-format
 msgid "Duplicate entry \"%s\" in mirrors config!"
-msgstr ""
+msgstr "Дубльований запис \"%s\" у конфігурації дзеркал!"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
@@ -672,7 +673,7 @@ msgstr "Помилка отримання адреси репозиторію"
 
 #: ../fdroidserver/scanner.py
 msgid "Exit with a non-zero code if problems were found"
-msgstr ""
+msgstr "Вихід із ненульовим кодом, якщо виявлено проблеми"
 
 #: ../fdroidserver/__main__.py
 msgid "Extract application metadata from a source repository"
@@ -894,7 +895,7 @@ msgstr "Нехтування записом FUNDING.yml з датою після
 #: ../fdroidserver/update.py
 #, python-format
 msgid "Ignoring bad element in manifest: %s"
-msgstr ""
+msgstr "Ігнорування поганого елемента в маніфесті: %s"
 
 #: ../fdroidserver/index.py
 msgid "Ignoring package without metadata: "
@@ -1109,7 +1110,7 @@ msgstr "Відсутній вихідний шлях"
 
 #: ../fdroidserver/metadata.py
 msgid "Moving Anti-Features declarations to localized files:"
-msgstr ""
+msgstr "Переміщення декларацій небажаних функцій до локалізованих файлів:"
 
 #: ../fdroidserver/index.py
 msgid "Neither \"repo_pubkey\" nor \"keystorepass\" set in config.yml"
@@ -1456,7 +1457,7 @@ msgstr "Запуск wget у {path}"
 #: ../fdroidserver/index.py
 #, python-brace-format
 msgid "SHA-256 of {url} does not match entry!"
-msgstr ""
+msgstr "SHA-256 {url} не відповідає запису!"
 
 #: ../fdroidserver/build.py
 msgid "Scan the resulting APK(s) for known non-free classes."
@@ -1884,7 +1885,7 @@ msgstr "Використання androguard від \"{path}\""
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Using blank dictionary instead of contents of {path}!"
-msgstr ""
+msgstr "Використання порожнього словника замість вмісту {path}!"
 
 #: ../fdroidserver/init.py
 #, python-brace-format
@@ -2395,7 +2396,7 @@ msgstr "не вдалося розгорнути журнал процесів {
 
 #: ../fdroidserver/build.py
 msgid "reference binary missing signature"
-msgstr ""
+msgstr "еталонний двійковий файл з відсутнім підписом"
 
 #: ../fdroidserver/signatures.py
 #, python-brace-format
@@ -2471,7 +2472,7 @@ msgstr "статична бібліотека"
 #: ../fdroidserver/build.py
 #, python-brace-format
 msgid "supplied reference binary has allowed signer {signer}"
-msgstr ""
+msgstr "наданий еталонний двійковий файл дозволив підписувачу {signer}"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
@@ -2596,9 +2597,9 @@ msgid "{build_flag} must be an integer, found: {value}"
 msgstr "{build_flag} має бути цілим числом, знайдено: {value}"
 
 #: ../fdroidserver/metadata.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{build_flag} must be list or string, found: {value}"
-msgstr "{build_flag} має бути цілим числом, знайдено: {value}"
+msgstr "{build_flag} має бути списком або рядком, знайдено: {value}"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format

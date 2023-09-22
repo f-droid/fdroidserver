@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: fdroidserver 1.0.0-95-gd7af22b\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2023-05-24 22:18+0200\n"
-"PO-Revision-Date: 2023-02-26 16:37+0000\n"
+"PO-Revision-Date: 2023-05-26 19:39+0000\n"
 "Last-Translator: Fjuro <ifjuro@proton.me>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/f-droid/fdroidserver/cs/>\n"
 "Language: cs\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 4.16-dev\n"
+"X-Generator: Weblate 4.18-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -187,7 +187,7 @@ msgstr "'{path}' nepodařilo se provést!"
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "'{path}' has invalid format, it should be a dictionary!"
-msgstr ""
+msgstr "'{path}' má neplatný formát, měl by to být slovník!"
 
 #: ../fdroidserver/metadata.py ../fdroidserver/lint.py
 #, python-brace-format
@@ -195,9 +195,9 @@ msgid "'{value}' is not a valid {field} in {appid}. Regex pattern: {pattern}"
 msgstr "'{value}' není platný {field} v {appid}. Vzor regulárního výrazu: {pattern}"
 
 #: ../fdroidserver/metadata.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "'{value}' is not a valid {field}, should be {pattern}"
-msgstr "'{value}' není platný {field} v {appid}. Vzor regulárního výrazu: {pattern}"
+msgstr "'{value}' není platný {field}, měl by to být {pattern}"
 
 #: ../fdroidserver/checkupdates.py
 #, python-brace-format
@@ -241,7 +241,7 @@ msgstr "Alias podepisovacího klíče repozitáře v keystore"
 
 #: ../fdroidserver/build.py
 msgid "AllowedAPKSigningKeys missing but reference binary supplied"
-msgstr ""
+msgstr "Chybí AllowedAPKSigningKeys, ale byl dodán referenční binární soubor"
 
 #: ../fdroidserver/import_subcommand.py
 msgid "Allows a different revision (or git branch) to be specified for the initial import"
@@ -289,7 +289,7 @@ msgstr "Nástroj Android SDK {cmd} nenalezen!"
 
 #: ../fdroidserver/lint.py
 msgid "App has Binaries but does not have corresponding AllowedAPKSigningKeys to pin certificate."
-msgstr ""
+msgstr "Aplikace má binární soubory, ale nemá odpovídající AllowedAPKSigningKeys pro připnutí certifikátu."
 
 #: ../fdroidserver/lint.py
 msgid "App has NoSourceSince or ArchivePolicy \"0 versions\" but AutoUpdateMode or UpdateCheckMode are not None"
@@ -302,7 +302,7 @@ msgstr "Aplikace je v repozitáři '{repo}' ale má odkaz na {url}"
 
 #: ../fdroidserver/lint.py
 msgid "App version has binary but does not have corresponding AllowedAPKSigningKeys to pin certificate."
-msgstr ""
+msgstr "Verze aplikace má binární soubor, ale nemá odpovídající AllowedAPKSigningKeys pro připnutí certifikátu."
 
 #: ../fdroidserver/lint.py
 msgid "Appending .git is not necessary"
@@ -320,7 +320,7 @@ msgstr "AutoUpdateMode s UpdateCheckMode: HTTP musí mít vzor."
 #: ../fdroidserver/index.py
 #, python-brace-format
 msgid "Bad entry type \"{mirrortype}\" in mirrors config: {mirror}"
-msgstr ""
+msgstr "Nesprávný typ záznamu \"{mirrortype}\" v konfiguraci zrcadel: {mirror}"
 
 #: ../fdroidserver/mirror.py
 msgid "Base URL to mirror, can include the index signing key using the query string: ?fingerprint="
@@ -421,7 +421,7 @@ msgstr "Odeslat změny"
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Conflicting \"{field}\" definitions between .yml and localized files:"
-msgstr ""
+msgstr "Konfliktní definice \"{field}\" mezi soubory .yml a lokalizovanými soubory:"
 
 #: ../fdroidserver/__main__.py
 msgid "Conflicting arguments: '--verbose' and '--quiet' can not be specified at the same time."
@@ -612,12 +612,12 @@ msgstr "Stahování {url} selhalo. {error}"
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Duplicate Anti-Feature declaration at {path} was ignored!"
-msgstr ""
+msgstr "Duplicitní prohlášení Anti-Vlastností na adrese {path} bylo ignorováno!"
 
 #: ../fdroidserver/index.py
 #, python-format
 msgid "Duplicate entry \"%s\" in mirrors config!"
-msgstr ""
+msgstr "Duplicitní záznam \"%s\" v konfiguraci zrcadel!"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
@@ -670,7 +670,7 @@ msgstr "Chyba při získávání adresy repozitáře"
 
 #: ../fdroidserver/scanner.py
 msgid "Exit with a non-zero code if problems were found"
-msgstr ""
+msgstr "Ukončit s nenulovým kódem při nalezení problémů"
 
 #: ../fdroidserver/__main__.py
 msgid "Extract application metadata from a source repository"
@@ -892,7 +892,7 @@ msgstr "Ignorování vstupu FUNDING.yml delšího než 2048: %s"
 #: ../fdroidserver/update.py
 #, python-format
 msgid "Ignoring bad element in manifest: %s"
-msgstr ""
+msgstr "Ignorování nesprávného prvku v manifestu: %s"
 
 #: ../fdroidserver/index.py
 msgid "Ignoring package without metadata: "
@@ -1107,7 +1107,7 @@ msgstr "Chybějící výstupní adresář"
 
 #: ../fdroidserver/metadata.py
 msgid "Moving Anti-Features declarations to localized files:"
-msgstr ""
+msgstr "Přesun deklarací Anti-Features do lokalizovaných souborů:"
 
 #: ../fdroidserver/index.py
 msgid "Neither \"repo_pubkey\" nor \"keystorepass\" set in config.yml"
@@ -1454,7 +1454,7 @@ msgstr "Spouštění wget v {path}"
 #: ../fdroidserver/index.py
 #, python-brace-format
 msgid "SHA-256 of {url} does not match entry!"
-msgstr ""
+msgstr "SHA-256 z {url} neodpovídá zadání!"
 
 #: ../fdroidserver/build.py
 msgid "Scan the resulting APK(s) for known non-free classes."
@@ -1882,7 +1882,7 @@ msgstr "Používám androguard z „{path}“"
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Using blank dictionary instead of contents of {path}!"
-msgstr ""
+msgstr "Použití prázdného slovníku místo obsahu {path}!"
 
 #: ../fdroidserver/init.py
 #, python-brace-format
@@ -2393,7 +2393,7 @@ msgstr "proces nasazení protokolu {path} do {dest} selhal!"
 
 #: ../fdroidserver/build.py
 msgid "reference binary missing signature"
-msgstr ""
+msgstr "chybějící podpis v referenčním binárním souboru"
 
 #: ../fdroidserver/signatures.py
 #, python-brace-format
@@ -2469,7 +2469,7 @@ msgstr "statická knihovna"
 #: ../fdroidserver/build.py
 #, python-brace-format
 msgid "supplied reference binary has allowed signer {signer}"
-msgstr ""
+msgstr "dodaný referenční binární soubor umožnil podepisujícího {signer}"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
@@ -2594,9 +2594,9 @@ msgid "{build_flag} must be an integer, found: {value}"
 msgstr "{build_flag} musí být celé číslo, nalezeno: {value}"
 
 #: ../fdroidserver/metadata.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{build_flag} must be list or string, found: {value}"
-msgstr "{build_flag} musí být celé číslo, nalezeno: {value}"
+msgstr "{build_flag} musí být seznam nebo řetězec, nalezeno: {value}"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format

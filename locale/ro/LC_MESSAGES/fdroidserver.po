@@ -2,22 +2,22 @@
 # This file is put in the public domain.
 # Daniel Șerbănescu <daniel@serbanescu.dk>, 2021.
 # Christian Eichert <c@zp1.net>, 2021.
-# Simona Iacob <s@zp1.net>, 2021, 2022.
+# Simona Iacob <s@zp1.net>, 2021, 2022, 2023.
 # Licaon Kter <licaon.kter@protonmail.com>, 2021, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 2.0a5-27-gf24eae0f\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2023-05-24 22:18+0200\n"
-"PO-Revision-Date: 2022-09-08 14:15+0000\n"
-"Last-Translator: Licaon Kter <licaon.kter@protonmail.com>\n"
+"PO-Revision-Date: 2023-08-10 18:46+0000\n"
+"Last-Translator: Simona Iacob <s@zp1.net>\n"
 "Language-Team: Romanian <https://hosted.weblate.org/projects/f-droid/fdroidserver/ro/>\n"
 "Language: ro\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < 20)) ? 1 : 2;\n"
-"X-Generator: Weblate 4.14.1-dev\n"
+"X-Generator: Weblate 5.0-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -119,12 +119,12 @@ msgstr "%r nu este apelabil"
 #: ../fdroidserver/signindex.py
 #, python-format
 msgid "%s did not produce a dict!"
-msgstr ""
+msgstr "%s nu a produs un text!"
 
 #: ../fdroidserver/signindex.py
 #, python-format
 msgid "%s has bad SHA-256: %s"
-msgstr ""
+msgstr "%s are un SHA-256 greșit: %s"
 
 #: ../fdroidserver/lint.py
 #, python-format
@@ -186,7 +186,7 @@ msgstr "'{path}' nu a reușit să se execute!"
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "'{path}' has invalid format, it should be a dictionary!"
-msgstr ""
+msgstr "'{path}' are un format invalid, ar trebui să fie un dicționar!"
 
 #: ../fdroidserver/metadata.py ../fdroidserver/lint.py
 #, python-brace-format
@@ -194,9 +194,9 @@ msgid "'{value}' is not a valid {field} in {appid}. Regex pattern: {pattern}"
 msgstr "'{value}' nu este valid {field} în {appid}. Regex model: {pattern}"
 
 #: ../fdroidserver/metadata.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "'{value}' is not a valid {field}, should be {pattern}"
-msgstr "'{value}' nu este valid {field} în {appid}. Regex model: {pattern}"
+msgstr "'{value}' nu este un {field} valid, ar trebui să fie {pattern}"
 
 #: ../fdroidserver/checkupdates.py
 #, python-brace-format
@@ -240,7 +240,7 @@ msgstr "Alias al cheii de semnare repo din magazinul de chei"
 
 #: ../fdroidserver/build.py
 msgid "AllowedAPKSigningKeys missing but reference binary supplied"
-msgstr ""
+msgstr "AllowedAPKSigningKeys lipsește, dar este furnizat un binar de referință"
 
 #: ../fdroidserver/import_subcommand.py
 msgid "Allows a different revision (or git branch) to be specified for the initial import"
@@ -288,11 +288,11 @@ msgstr "Instrumentul Android SDK {cmd} nu a fost găsit!"
 
 #: ../fdroidserver/lint.py
 msgid "App has Binaries but does not have corresponding AllowedAPKSigningKeys to pin certificate."
-msgstr ""
+msgstr "Aplicația are binare, dar nu are AllowedAPKSigningKeys corespunzătoare pentru a fixa certificatul."
 
 #: ../fdroidserver/lint.py
 msgid "App has NoSourceSince or ArchivePolicy \"0 versions\" but AutoUpdateMode or UpdateCheckMode are not None"
-msgstr ""
+msgstr "App are NoSourceSince sau ArchivePolicy \"0 versions\" dar AutoUpdateMode sau UpdateCheckMode nu sunt None"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
@@ -301,7 +301,7 @@ msgstr "Aplicația se află în '{repo}', dar are un link către {url}"
 
 #: ../fdroidserver/lint.py
 msgid "App version has binary but does not have corresponding AllowedAPKSigningKeys to pin certificate."
-msgstr ""
+msgstr "Versiunea aplicației are o versiune binară, dar nu are AllowedAPKSigningKeys corespunzătoare pentru a fixa certificatul."
 
 #: ../fdroidserver/lint.py
 msgid "Appending .git is not necessary"
@@ -824,7 +824,7 @@ msgstr "Scanerul a găsit {count} probleme în {appid}:"
 #: ../fdroidserver/scanner.py
 #, python-brace-format
 msgid "Found {count} warnings in {filename}"
-msgstr ""
+msgstr "Am găsit {count} avertismente în {filename}"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -891,7 +891,7 @@ msgstr "Ignorarea intrării FUNDING.yml mai lungă de 2048: %s"
 #: ../fdroidserver/update.py
 #, python-format
 msgid "Ignoring bad element in manifest: %s"
-msgstr ""
+msgstr "Ignorarea elementului greșit din manifest: %s"
 
 #: ../fdroidserver/index.py
 msgid "Ignoring package without metadata: "
@@ -974,9 +974,9 @@ msgid "Invalid VercodeOperation: {field}"
 msgstr "VercodeOperation invalid: {field}"
 
 #: ../fdroidserver/lint.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Invalid VercodeOperation: {invalid_ops}"
-msgstr "VercodeOperation invalid: {field}"
+msgstr "VercodeOperation invalidă: {invalid_ops}"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -1106,7 +1106,7 @@ msgstr "Lipsește directorul de ieșire"
 
 #: ../fdroidserver/metadata.py
 msgid "Moving Anti-Features declarations to localized files:"
-msgstr ""
+msgstr "Mutarea declarațiilor Anti-Features în fișierele localizate:"
 
 #: ../fdroidserver/index.py
 msgid "Neither \"repo_pubkey\" nor \"keystorepass\" set in config.yml"
