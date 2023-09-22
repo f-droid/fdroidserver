@@ -196,7 +196,7 @@ msgstr "'{value}' nu este valid {field} în {appid}. Regex model: {pattern}"
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "'{value}' is not a valid {field}, should be {pattern}"
-msgstr "'{valoare}' nu este un {câmp} valid, ar trebui să fie {pattern}"
+msgstr "'{value}' nu este un {field} valid, ar trebui să fie {pattern}"
 
 #: ../fdroidserver/checkupdates.py
 #, python-brace-format
