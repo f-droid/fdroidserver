@@ -40,11 +40,32 @@ from . import net
 from .exception import VCSException, NoSubmodulesException, FDroidException, MetaDataException
 
 
-# Check for a new version by looking at a document retrieved via HTTP.
-# The app's Update Check Data field is used to provide the information
-# required.
 def check_http(app):
+    """Check for a new version by looking at a document retrieved via HTTP.
 
+    The app's UpdateCheckData field is used to provide the information
+    required.
+
+    Parameters
+    ----------
+    app : metadata.App
+        The App instance to check for updates for.
+
+    Returns
+    -------
+    version : str or None
+        The found versionName or None if the versionName should be ignored
+        according to UpdateCheckIgnore.
+    vercode : int or None
+        The found versionCode or None if the versionCode should be ignored
+        according to UpdateCheckIgnore.
+
+    Raises
+    ------
+    FDroidException
+        If UpdateCheckData is missing or is an invalid URL or if there is no
+        match for the provided versionName or versionCode regex.
+    """
     if not app.UpdateCheckData:
         raise FDroidException('Missing Update Check Data')
 
@@ -91,6 +112,31 @@ def check_tags(app, pattern):
     Whether this can be used reliably or not depends on
     the development procedures used by the project's developers. Use it with
     caution, because it's inappropriate for many projects.
+
+    Parameters
+    ----------
+    app : metadata.App
+        The App instance to check for updates for.
+    pattern : str
+        The pattern a tag needs to match to be considered.
+
+    Returns
+    -------
+    versionName : str
+        The highest found versionName.
+    versionCode : int
+        The highest found versionCode.
+    ref : str
+        The Git reference, commit hash or tag name, of the highest found
+        versionName, versionCode.
+
+    Raises
+    ------
+    MetaDataException
+        If this function is not suitable for the RepoType of the app or
+        information is missing to perform this type of check.
+    FDroidException
+        If no matching tags or no information whatsoever could be found.
     """
     if app.RepoType == 'srclib':
         build_dir = Path('build/srclib') / app.Repo
@@ -230,6 +276,25 @@ def check_repomanifest(app, branch=None):
     Whether this can be used reliably or not depends on
     the development procedures used by the project's developers. Use it with
     caution, because it's inappropriate for many projects.
+
+    Parameters
+    ----------
+    app : metadata.App
+        The App instance to check for updates for.
+    branch : str
+        The VCS branch where to search for versionCode, versionName.
+
+    Returns
+    -------
+    versionName : str
+        The highest found versionName.
+    versionCode : int
+        The highest found versionCode.
+
+    Raises
+    ------
+    FDroidException
+        If no package id or no version information could be found.
     """
     if app.RepoType == 'srclib':
         build_dir = Path('build/srclib') / app.Repo
@@ -328,7 +393,7 @@ def check_gplay(app):
 
 
 def try_init_submodules(app, last_build, vcs):
-    """Try to init submodules if the last build entry used them.
+    """Try to init submodules if the last build entry uses them.
 
     They might have been removed from the app's repo in the meantime,
     so if we can't find any submodules we continue with the updates check.
@@ -343,19 +408,44 @@ def try_init_submodules(app, last_build, vcs):
             logging.info("submodule broken for {}".format(_getappname(app)))
 
 
-# Return all directories under startdir that contain any of the manifest
-# files, and thus are probably an Android project.
 def dirs_with_manifest(startdir):
+    """Find directories containing a manifest file.
+
+    Yield all directories under startdir that contain any of the manifest
+    files, and thus are probably an Android project.
+
+    Parameters
+    ----------
+    startdir : str
+        Directory to be walked down for search
+
+    Yields
+    ------
+    path : pathlib.Path or None
+        A directory that contains a manifest file of an Android project, None if
+        no directory could be found
+    """
     for root, _dirs, files in os.walk(startdir):
         if any(m in files for m in [
                 'AndroidManifest.xml', 'pom.xml', 'build.gradle', 'build.gradle.kts']):
             yield Path(root)
 
 
-# Tries to find a new subdir starting from the root build_dir. Returns said
-# subdir relative to the build dir if found, None otherwise.
 def possible_subdirs(app):
+    """Try to find a new subdir starting from the root build_dir.
 
+    Yields said subdir relative to the build dir if found, None otherwise.
+
+    Parameters
+    ----------
+    app : metadata.App
+        The app to check for subdirs
+
+    Yields
+    ------
+    subdir : pathlib.Path or None
+        A possible subdir, None if no subdir could be found
+    """
     if app.RepoType == 'srclib':
         build_dir = Path('build/srclib') / app.Repo
     else:
@@ -381,6 +471,24 @@ def _getcvname(app):
 
 
 def fetch_autoname(app, tag):
+    """Fetch AutoName.
+
+    Get the to be displayed name of an app from the source code and adjust the
+    App instance in case it is different name has been found.
+
+    Parameters
+    ----------
+    app : metadata.App
+        The App instance to get the AutoName for.
+    tag : str
+        Tag to fetch AutoName at.
+
+    Returns
+    -------
+    commitmsg : str or None
+        Commit message about the name change.  None in case checking for the
+        name is disabled, a VCSException occured or no name could be found.
+    """
     if not app.RepoType or app.UpdateCheckMode in ('None', 'Static') \
        or app.UpdateCheckName == "Ignore":
         return None
@@ -419,6 +527,25 @@ def fetch_autoname(app, tag):
 
 
 def operate_vercode(operation, vercode):
+    """Calculate a new versionCode from a mathematical operation.
+
+    Parameters
+    ----------
+    operation : str
+        The operation to execute to get the new versionCode.
+    vercode : int
+        The versionCode for replacing "%c" in the operation.
+
+    Returns
+    -------
+    vercode : int
+        The new versionCode obtained by executing the operation.
+
+    Raises
+    ------
+    MetaDataException
+        If the operation is invalid.
+    """
     if not common.VERCODE_OPERATION_RE.match(operation):
         raise MetaDataException(_('Invalid VercodeOperation: {field}')
                                 .format(field=operation))
@@ -430,8 +557,27 @@ def operate_vercode(operation, vercode):
 
 
 def checkupdates_app(app):
+    """Check for new versions and updated name of a single app.
+
+    Also write back changes to the metadata file and create a Git commit if
+    requested.
+
+    Parameters
+    ----------
+    app : metadata.App
+        The app to check for updates for.
+
+    Raises
+    ------
+    MetaDataException
+        If the app has an invalid UpdateCheckMode or AutoUpdateMode.
+    FDroidException
+        If no version information could be found, the current version is newer
+        than the found version, auto-update was requested but an app has no
+        CurrentVersionCode or (Git) commiting the changes failed.
+    """
     # If a change is made, commitmsg should be set to a description of it.
-    # Only if this is set will changes be written back to the metadata.
+    # Only if this is set, changes will be written back to the metadata.
     commitmsg = None
 
     tag = None
@@ -577,6 +723,7 @@ def checkupdates_app(app):
 
 
 def get_last_build_from_app(app):
+    """Get the last build entry of an app."""
     if app.get('Builds'):
         return app['Builds'][-1]
     else:
@@ -600,6 +747,11 @@ start_timestamp = time.gmtime()
 
 
 def main():
+    """Check for updates for one or more apps.
+
+    The behaviour of this function is influenced by the configuration file as
+    well as command line parameters.
+    """
     global config, options
 
     # Parse command line...
