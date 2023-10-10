@@ -1161,7 +1161,7 @@ def main():
                 logging.error("VCS error while building app %s: %s" % (
                     appid, reason))
                 if options.stop:
-                    logging.debug("Error encoutered, stopping by user request.")
+                    logging.debug("Error encountered, stopping by user request.")
                     common.force_exit(1)
                 failed_builds.append((appid, build.versionCode))
                 common.deploy_build_log_with_rsync(
@@ -1182,7 +1182,7 @@ def main():
                     f.write(str(e))
                 logging.error("Could not build app %s: %s" % (appid, e))
                 if options.stop:
-                    logging.debug("Error encoutered, stopping by user request.")
+                    logging.debug("Error encountered, stopping by user request.")
                     common.force_exit(1)
                 failed_builds.append((appid, build.versionCode))
                 common.deploy_build_log_with_rsync(
@@ -1195,7 +1195,7 @@ def main():
                 logging.error("Could not build app %s due to unknown error: %s" % (
                     appid, traceback.format_exc()))
                 if options.stop:
-                    logging.debug("Error encoutered, stopping by user request.")
+                    logging.debug("Error encountered, stopping by user request.")
                     common.force_exit(1)
                 failed_builds.append((appid, build.versionCode))
                 common.deploy_build_log_with_rsync(
