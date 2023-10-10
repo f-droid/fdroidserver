@@ -8,3 +8,9 @@ security:
     60350:
       reason: GitPython comes from Debian https://security-tracker.debian.org/tracker/CVE-2023-40267
       expires: '2025-01-31'
+    60789:
+      reason: GitPython comes from Debian https://security-tracker.debian.org/tracker/CVE-2023-40590
+      expires: '2025-01-31'
+    60841:
+      reason: GitPython comes from Debian https://security-tracker.debian.org/tracker/CVE-2023-41040
+      expires: '2025-01-31'
