@@ -250,13 +250,13 @@ def build_server(app, build, vcs, build_dir, output_dir, log_dir, force):
                 line = cmd_stdout.readline()
                 if line:
                     if options.verbose:
-                        logging.debug("buildserver > " + str(line, 'utf-8').rstrip())
+                        logging.debug("buildserver > " + str(line, 'utf-8', 'replace').rstrip())
                     output += line
                 else:
                     time.sleep(0.05)
             for line in cmd_stdout.readlines():
                 if options.verbose:
-                    logging.debug("buildserver > " + str(line, 'utf-8').rstrip())
+                    logging.debug("buildserver > " + str(line, 'utf-8', 'replace').rstrip())
                 output += line
         finally:
             cmd_stdout.close()
@@ -270,7 +270,7 @@ def build_server(app, build, vcs, build_dir, output_dir, log_dir, force):
             else:
                 message = "Build.py failed on server for {0}:{1}"
             raise BuildException(message.format(app.id, build.versionName),
-                                 str(output, 'utf-8'))
+                                 str(output, 'utf-8', 'replace'))
 
         # Retreive logs...
         toolsversion_log = common.get_toolsversion_logname(app, build)
@@ -296,7 +296,7 @@ def build_server(app, build, vcs, build_dir, output_dir, log_dir, force):
         except Exception as exc:
             raise BuildException(
                 "Build failed for {0}:{1} - missing output files".format(
-                    app.id, build.versionName), str(output, 'utf-8')) from exc
+                    app.id, build.versionName), str(output, 'utf-8', 'replace')) from exc
         ftp.close()
 
     finally:
