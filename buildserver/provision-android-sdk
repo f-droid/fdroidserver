@@ -160,3 +160,8 @@ chmod g+w $ANDROID_HOME/{build-tools,platforms}
 test -d $ANDROID_HOME/extras/m2repository || mkdir -p $ANDROID_HOME/extras/m2repository
 find $ANDROID_HOME/extras/m2repository -type d | xargs chgrp vagrant
 find $ANDROID_HOME/extras/m2repository -type d | xargs chmod g+w
+
+# allow gradle/sdkmanager to install extras;android;m2repository
+test -d $ANDROID_HOME/extras/android || mkdir -p $ANDROID_HOME/extras/android
+find $ANDROID_HOME/extras/android -type d | xargs chgrp vagrant
+find $ANDROID_HOME/extras/android -type d | xargs chmod g+w
