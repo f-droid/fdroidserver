@@ -32,6 +32,7 @@ import logging
 import copy
 import urllib.parse
 from pathlib import Path
+from typing import Optional, Union
 
 from . import _
 from . import common
@@ -40,7 +41,7 @@ from . import net
 from .exception import VCSException, NoSubmodulesException, FDroidException, MetaDataException
 
 
-def check_http(app):
+def check_http(app: metadata.App) -> tuple[Union[str, None], Union[int, None]]:
     """Check for a new version by looking at a document retrieved via HTTP.
 
     The app's UpdateCheckData field is used to provide the information
@@ -48,15 +49,15 @@ def check_http(app):
 
     Parameters
     ----------
-    app : metadata.App
+    app
         The App instance to check for updates for.
 
     Returns
     -------
-    version : str or None
+    version
         The found versionName or None if the versionName should be ignored
         according to UpdateCheckIgnore.
-    vercode : int or None
+    vercode
         The found versionCode or None if the versionCode should be ignored
         according to UpdateCheckIgnore.
 
@@ -106,7 +107,7 @@ def check_http(app):
     return (version, vercode)
 
 
-def check_tags(app, pattern):
+def check_tags(app: metadata.App, pattern: str) -> tuple[str, int, str]:
     """Check for a new version by looking at the tags in the source repo.
 
     Whether this can be used reliably or not depends on
@@ -115,18 +116,18 @@ def check_tags(app, pattern):
 
     Parameters
     ----------
-    app : metadata.App
+    app
         The App instance to check for updates for.
-    pattern : str
+    pattern
         The pattern a tag needs to match to be considered.
 
     Returns
     -------
-    versionName : str
+    versionName
         The highest found versionName.
-    versionCode : int
+    versionCode
         The highest found versionCode.
-    ref : str
+    ref
         The Git reference, commit hash or tag name, of the highest found
         versionName, versionCode.
 
@@ -270,7 +271,7 @@ def check_tags(app, pattern):
     raise FDroidException(_("Couldn't find any version information"))
 
 
-def check_repomanifest(app, branch=None):
+def check_repomanifest(app: metadata.App, branch: Optional[str] = None) -> tuple[str, int]:
     """Check for a new version by looking at the AndroidManifest.xml at the HEAD of the source repo.
 
     Whether this can be used reliably or not depends on
@@ -279,16 +280,16 @@ def check_repomanifest(app, branch=None):
 
     Parameters
     ----------
-    app : metadata.App
+    app
         The App instance to check for updates for.
-    branch : str
+    branch
         The VCS branch where to search for versionCode, versionName.
 
     Returns
     -------
-    versionName : str
+    versionName
         The highest found versionName.
-    versionCode : int
+    versionCode
         The highest found versionCode.
 
     Raises
@@ -392,7 +393,7 @@ def check_gplay(app):
     return (version.strip(), None)
 
 
-def try_init_submodules(app, last_build, vcs):
+def try_init_submodules(app: metadata.App, last_build: metadata.Build, vcs: common.vcs):
     """Try to init submodules if the last build entry uses them.
 
     They might have been removed from the app's repo in the meantime,
@@ -408,7 +409,7 @@ def try_init_submodules(app, last_build, vcs):
             logging.info("submodule broken for {}".format(_getappname(app)))
 
 
-def dirs_with_manifest(startdir):
+def dirs_with_manifest(startdir: str):
     """Find directories containing a manifest file.
 
     Yield all directories under startdir that contain any of the manifest
@@ -416,7 +417,7 @@ def dirs_with_manifest(startdir):
 
     Parameters
     ----------
-    startdir : str
+    startdir
         Directory to be walked down for search
 
     Yields
@@ -431,14 +432,14 @@ def dirs_with_manifest(startdir):
             yield Path(root)
 
 
-def possible_subdirs(app):
+def possible_subdirs(app: metadata.App):
     """Try to find a new subdir starting from the root build_dir.
 
     Yields said subdir relative to the build dir if found, None otherwise.
 
     Parameters
     ----------
-    app : metadata.App
+    app
         The app to check for subdirs
 
     Yields
@@ -462,15 +463,15 @@ def possible_subdirs(app):
             yield subdir
 
 
-def _getappname(app):
+def _getappname(app: metadata.App) -> str:
     return common.get_app_display_name(app)
 
 
-def _getcvname(app):
+def _getcvname(app: metadata.App) -> str:
     return '%s (%s)' % (app.CurrentVersion, app.CurrentVersionCode)
 
 
-def fetch_autoname(app, tag):
+def fetch_autoname(app: metadata.App, tag: str) -> Optional[str]:
     """Fetch AutoName.
 
     Get the to be displayed name of an app from the source code and adjust the
@@ -478,14 +479,14 @@ def fetch_autoname(app, tag):
 
     Parameters
     ----------
-    app : metadata.App
+    app
         The App instance to get the AutoName for.
-    tag : str
+    tag
         Tag to fetch AutoName at.
 
     Returns
     -------
-    commitmsg : str or None
+    commitmsg
         Commit message about the name change.  None in case checking for the
         name is disabled, a VCSException occured or no name could be found.
     """
@@ -526,19 +527,19 @@ def fetch_autoname(app, tag):
     return commitmsg
 
 
-def operate_vercode(operation, vercode):
+def operate_vercode(operation: str, vercode: int) -> int:
     """Calculate a new versionCode from a mathematical operation.
 
     Parameters
     ----------
-    operation : str
+    operation
         The operation to execute to get the new versionCode.
-    vercode : int
+    vercode
         The versionCode for replacing "%c" in the operation.
 
     Returns
     -------
-    vercode : int
+    vercode
         The new versionCode obtained by executing the operation.
 
     Raises
@@ -556,7 +557,7 @@ def operate_vercode(operation, vercode):
     return vercode
 
 
-def checkupdates_app(app):
+def checkupdates_app(app: metadata.App) -> None:
     """Check for new versions and updated name of a single app.
 
     Also write back changes to the metadata file and create a Git commit if
@@ -564,7 +565,7 @@ def checkupdates_app(app):
 
     Parameters
     ----------
-    app : metadata.App
+    app
         The app to check for updates for.
 
     Raises
@@ -722,7 +723,7 @@ def checkupdates_app(app):
                 raise FDroidException("Git commit failed")
 
 
-def get_last_build_from_app(app):
+def get_last_build_from_app(app: metadata.App) -> metadata.Build:
     """Get the last build entry of an app."""
     if app.get('Builds'):
         return app['Builds'][-1]
@@ -730,7 +731,7 @@ def get_last_build_from_app(app):
         return metadata.Build()
 
 
-def status_update_json(processed, failed):
+def status_update_json(processed: list, failed: dict) -> None:
     """Output a JSON file with metadata about this run."""
     logging.debug(_('Outputting JSON'))
     output = common.setup_status_output(start_timestamp)
