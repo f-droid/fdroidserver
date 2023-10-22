@@ -63,7 +63,7 @@ def check_http(app: metadata.App) -> tuple[Union[str, None], Union[int, None]]:
 
     Raises
     ------
-    FDroidException
+    :exc:`~fdroidserver.exception.FDroidException`
         If UpdateCheckData is missing or is an invalid URL or if there is no
         match for the provided versionName or versionCode regex.
     """
@@ -133,10 +133,10 @@ def check_tags(app: metadata.App, pattern: str) -> tuple[str, int, str]:
 
     Raises
     ------
-    MetaDataException
+    :exc:`~fdroidserver.exception.MetaDataException`
         If this function is not suitable for the RepoType of the app or
         information is missing to perform this type of check.
-    FDroidException
+    :exc:`~fdroidserver.exception.FDroidException`
         If no matching tags or no information whatsoever could be found.
     """
     if app.RepoType == 'srclib':
@@ -294,7 +294,7 @@ def check_repomanifest(app: metadata.App, branch: Optional[str] = None) -> tuple
 
     Raises
     ------
-    FDroidException
+    :exc:`~fdroidserver.exception.FDroidException`
         If no package id or no version information could be found.
     """
     if app.RepoType == 'srclib':
@@ -422,7 +422,7 @@ def dirs_with_manifest(startdir: str):
 
     Yields
     ------
-    path : pathlib.Path or None
+    path : :class:`pathlib.Path` or None
         A directory that contains a manifest file of an Android project, None if
         no directory could be found
     """
@@ -444,7 +444,7 @@ def possible_subdirs(app: metadata.App):
 
     Yields
     ------
-    subdir : pathlib.Path or None
+    subdir : :class:`pathlib.Path` or None
         A possible subdir, None if no subdir could be found
     """
     if app.RepoType == 'srclib':
@@ -544,7 +544,7 @@ def operate_vercode(operation: str, vercode: int) -> int:
 
     Raises
     ------
-    MetaDataException
+    :exc:`~fdroidserver.exception.MetaDataException`
         If the operation is invalid.
     """
     if not common.VERCODE_OPERATION_RE.match(operation):
@@ -570,9 +570,9 @@ def checkupdates_app(app: metadata.App) -> None:
 
     Raises
     ------
-    MetaDataException
+    :exc:`~fdroidserver.exception.MetaDataException`
         If the app has an invalid UpdateCheckMode or AutoUpdateMode.
-    FDroidException
+    :exc:`~fdroidserver.exception.FDroidException`
         If no version information could be found, the current version is newer
         than the found version, auto-update was requested but an app has no
         CurrentVersionCode or (Git) commiting the changes failed.
