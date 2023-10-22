@@ -30,6 +30,7 @@ extensions = [
     'numpydoc',
     'sphinx.ext.autodoc',
     'sphinx.ext.autosummary',
+    "sphinx.ext.intersphinx",
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -71,5 +72,6 @@ html_sidebars = {
 html_split_index = True
 #numpydoc_validation_checks = {"all"}
 
-
-
+intersphinx_mapping = {
+    "python": ("https://docs.python.org/3/", None),
+}
