@@ -26,8 +26,6 @@ import subprocess
 import sys
 from argparse import ArgumentParser
 import traceback
-import html
-from distutils.version import LooseVersion
 import logging
 import copy
 import urllib.parse
@@ -361,36 +359,6 @@ def check_repotrunk(app):
 
     ref = vcs.getref()
     return (ref, ref)
-
-
-# Check for a new version by looking at the Google Play Store.
-# Returns (None, "a message") if this didn't work, or (version, None) for
-# the details of the current version.
-def check_gplay(app):
-    time.sleep(15)
-    url = 'https://play.google.com/store/apps/details?id=' + app.id
-    headers = {'User-Agent': 'Mozilla/5.0 (X11; Linux i686; rv:18.0) Gecko/20100101 Firefox/18.0'}
-    req = urllib.request.Request(url, None, headers)
-    try:
-        resp = urllib.request.urlopen(req, None, 20)  # nosec B310 URL base is hardcoded above
-        page = resp.read().decode()
-    except urllib.error.HTTPError as e:
-        return (None, str(e.code))
-    except Exception as e:
-        return (None, 'Failed:' + str(e))
-
-    version = None
-
-    m = re.search('itemprop="softwareVersion">[ ]*([^<]+)[ ]*</div>', page)
-    if m:
-        version = html.unescape(m.group(1))
-
-    if version == 'Varies with device':
-        return (None, 'Device-variable version, cannot use this method')
-
-    if not version:
-        return (None, "Couldn't find version")
-    return (version.strip(), None)
 
 
 def try_init_submodules(app: metadata.App, last_build: metadata.Build, vcs: common.vcs):
@@ -767,8 +735,6 @@ def main():
                         help=_("Commit changes"))
     parser.add_argument("--allow-dirty", action="store_true", default=False,
                         help=_("Run on git repo that has uncommitted changes"))
-    parser.add_argument("--gplay", action="store_true", default=False,
-                        help=_("Only print differences with the Play Store"))
     metadata.add_metadata_arguments(parser)
     options = parser.parse_args()
     metadata.warnings_action = options.W
@@ -785,31 +751,6 @@ def main():
     allapps = metadata.read_metadata()
 
     apps = common.read_app_args(options.appid, allapps, False)
-
-    if options.gplay:
-        for appid, app in apps.items():
-            version, reason = check_gplay(app)
-            if version is None:
-                if reason == '404':
-                    logging.info("{0} is not in the Play Store".format(_getappname(app)))
-                else:
-                    logging.info("{0} encountered a problem: {1}".format(_getappname(app), reason))
-            if version is not None:
-                stored = app.CurrentVersion
-                if not stored:
-                    logging.info("{0} has no Current Version but has version {1} on the Play Store"
-                                 .format(_getappname(app), version))
-                elif LooseVersion(stored) < LooseVersion(version):
-                    logging.info("{0} has version {1} on the Play Store, which is bigger than {2}"
-                                 .format(_getappname(app), version, stored))
-                else:
-                    if stored != version:
-                        logging.info("{0} has version {1} on the Play Store, which differs from {2}"
-                                     .format(_getappname(app), version, stored))
-                    else:
-                        logging.info("{0} has the same version {1} on the Play Store"
-                                     .format(_getappname(app), version))
-        return
 
     processed = []
     failed = dict()
