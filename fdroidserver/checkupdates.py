@@ -341,26 +341,6 @@ def check_repomanifest(app: metadata.App, branch: Optional[str] = None) -> tuple
     raise FDroidException(_("Couldn't find any version information"))
 
 
-def check_repotrunk(app):
-    if app.RepoType == 'srclib':
-        build_dir = Path('build/srclib') / app.Repo
-        repotype = common.getsrclibvcs(app.Repo)
-    else:
-        build_dir = Path('build') / app.id
-        repotype = app.RepoType
-
-    if repotype not in ('git-svn', ):
-        raise MetaDataException(_('RepoTrunk update mode only makes sense in git-svn repositories'))
-
-    # Set up vcs interface and make sure we have the latest code...
-    vcs = common.getvcs(app.RepoType, app.Repo, build_dir)
-
-    vcs.gotorevision(None)
-
-    ref = vcs.getref()
-    return (ref, ref)
-
-
 def try_init_submodules(app: metadata.App, last_build: metadata.Build, vcs: common.vcs):
     """Try to init submodules if the last build entry uses them.
 
@@ -559,8 +539,6 @@ def checkupdates_app(app: metadata.App) -> None:
     elif mode.startswith('RepoManifest/'):
         tag = mode[13:]
         (version, vercode) = check_repomanifest(app, tag)
-    elif mode == 'RepoTrunk':
-        (version, vercode) = check_repotrunk(app)
     elif mode == 'HTTP':
         (version, vercode) = check_http(app)
     elif mode in ('None', 'Static'):
