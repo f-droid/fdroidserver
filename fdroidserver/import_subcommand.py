@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+"""Extract application metadata from a source repository."""
 #
 # import_subcommand.py - part of the FDroid server tools
 # Copyright (C) 2010-13, Ciaran Gultnieks, ciaran@ciarang.com
@@ -30,6 +31,7 @@ import yaml
 from argparse import ArgumentParser
 import logging
 from pathlib import Path
+from typing import Optional
 
 try:
     from yaml import CSafeLoader as SafeLoader
@@ -53,7 +55,19 @@ def handle_retree_error_on_windows(function, path, excinfo):
         function(path)
 
 
-def clone_to_tmp_dir(app):
+def clone_to_tmp_dir(app: metadata.App) -> Path:
+    """Clone the source repository of an app to a temporary directory for further processing.
+
+    Parameters
+    ----------
+    app
+        The App instance to clone the source of.
+
+    Returns
+    -------
+    tmp_dir
+        The (temporary) directory the apps source has been cloned into.
+    """
     tmp_dir = Path('tmp')
     tmp_dir.mkdir(exist_ok=True)
 
@@ -67,7 +81,7 @@ def clone_to_tmp_dir(app):
     return tmp_dir
 
 
-def getrepofrompage(url):
+def getrepofrompage(url: str) -> tuple[Optional[str], str]:
     """Get the repo type and address from the given web page.
 
     The page is scanned in a rather naive manner for 'git clone xxxx',
@@ -75,6 +89,17 @@ def getrepofrompage(url):
     that's the information we want.  Returns repotype, address, or
     None, reason
 
+    Parameters
+    ----------
+    url
+        The url to look for repository information at.
+
+    Returns
+    -------
+    repotype_or_none
+        The found repository type or None if an error occured.
+    address_or_reason
+        The address to the found repository or the reason if an error occured.
     """
     if not url.startswith('http'):
         return (None, _('{url} does not start with "http"!'.format(url=url)))
@@ -120,13 +145,29 @@ def getrepofrompage(url):
     return (None, _("No information found.") + page)
 
 
-def get_app_from_url(url):
+def get_app_from_url(url: str) -> metadata.App:
     """Guess basic app metadata from the URL.
 
     The URL must include a network hostname, unless it is an lp:,
     file:, or git/ssh URL.  This throws ValueError on bad URLs to
     match urlparse().
 
+    Parameters
+    ----------
+    url
+        The URL to look to look for app metadata at.
+
+    Returns
+    -------
+    app
+        App instance with the found metadata.
+
+    Raises
+    ------
+    :exc:`~fdroidserver.exception.FDroidException`
+        If the VCS type could not be determined.
+    :exc:`ValueError`
+        If the URL is invalid.
     """
     parsed = urllib.parse.urlparse(url)
     invalid_url = False
@@ -183,6 +224,19 @@ def get_app_from_url(url):
 
 
 def main():
+    """Extract app metadata and write it to a file.
+
+    The behaviour of this function is influenced by the configuration file as
+    well as command line parameters.
+
+    Raises
+    ------
+    :exc:`~fdroidserver.exception.FDroidException`
+        If the repository already has local metadata, no URL is specified and
+        the current directory is not a Git repository, no application ID could
+        be found, no Gradle project could be found or there is already metadata
+        for the found application ID.
+    """
     global config, options
 
     # Parse command line...
