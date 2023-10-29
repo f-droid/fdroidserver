@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+"""Set up an app build for a nightly build repo."""
 #
 # nightly.py - part of the FDroid server tools
 # Copyright (C) 2017 Hans-Christoph Steiner <hans@eds.org>
@@ -32,6 +33,7 @@ import tempfile
 import yaml
 from urllib.parse import urlparse
 from argparse import ArgumentParser
+from typing import Optional
 
 from . import _
 from . import common
@@ -48,12 +50,38 @@ DISTINGUISHED_NAME = 'CN=Android Debug,O=Android,C=US'
 NIGHTLY = '-nightly'
 
 
-def _get_keystore_secret_var(keystore):
+def _get_keystore_secret_var(keystore: str) -> str:
+    """Get keystore secret as base64.
+
+    Parameters
+    ----------
+    keystore
+        The path of the keystore.
+
+    Returns
+    -------
+    base64_secret
+        The keystore secret as base64 string.
+    """
     with open(keystore, 'rb') as fp:
         return base64.standard_b64encode(fp.read()).decode('ascii')
 
 
-def _ssh_key_from_debug_keystore(keystore=None):
+def _ssh_key_from_debug_keystore(keystore: Optional[str] = None) -> str:
+    """Convert a debug keystore to an SSH private key.
+
+    This leaves the original keystore file in place.
+
+    Parameters
+    ----------
+    keystore
+        The keystore to convert to a SSH private key.
+
+    Returns
+    -------
+    key_path
+        The SSH private key file path in the temporary directory.
+    """
     if keystore is None:
         # set this here so it can be overridden in the tests
         # TODO convert this to a class to get rid of this nonsense
@@ -148,7 +176,23 @@ def _ssh_key_from_debug_keystore(keystore=None):
     return ssh_private_key_file
 
 
-def get_repo_base_url(clone_url, repo_git_base, force_type=None):
+def get_repo_base_url(clone_url: str, repo_git_base: str, force_type: Optional[str] = None) -> str:
+    """Generate the base URL for the F-Droid repository.
+
+    Parameters
+    ----------
+    clone_url
+        The URL to clone the Git repository.
+    repo_git_base
+        The project path of the Git repository at the Git forge.
+    force_type
+        The Git forge of the project.
+
+    Returns
+    -------
+    repo_base_url
+        The base URL of the F-Droid repository.
+    """
     if force_type is None:
         force_type = urlparse(clone_url).netloc
     if force_type == 'gitlab.com':
@@ -160,6 +204,17 @@ def get_repo_base_url(clone_url, repo_git_base, force_type=None):
 
 
 def main():
+    """Deploy to F-Droid repository or generate SSH private key from keystore.
+
+    The behaviour of this function is influenced by the configuration file as
+    well as command line parameters.
+
+    Raises
+    ------
+    :exc:`~fdroidserver.exception.VCSException`
+        If the nightly Git repository could not be cloned during an attempt to
+        deploy.
+    """
     parser = ArgumentParser()
     common.setup_global_opts(parser)
     parser.add_argument(
