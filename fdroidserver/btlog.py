@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+"""Update the binary transparency log for a URL."""
 #
 # btlog.py - part of the FDroid server tools
 # Copyright (C) 2017, Hans-Christoph Steiner <hans@eds.org>
@@ -39,6 +40,7 @@ import shutil
 import tempfile
 import zipfile
 from argparse import ArgumentParser
+from typing import Optional
 
 from . import _
 from . import common
@@ -50,14 +52,30 @@ options = None
 
 
 def make_binary_transparency_log(
-    repodirs, btrepo='binary_transparency', url=None, commit_title='fdroid update'
+    repodirs: collections.abc.Iterable,
+    btrepo: str = 'binary_transparency',
+    url: Optional[str] = None,
+    commit_title: str = 'fdroid update',
 ):
     """Log the indexes in a standalone git repo to serve as a "binary transparency" log.
 
-    References
+    Parameters
     ----------
-    https://www.eff.org/deeplinks/2014/02/open-letter-to-tech-companies
+    repodirs
+        The directories of the F-Droid repository to generate the binary
+        transparency log for.
+    btrepo
+        The path to the Git repository of the binary transparency log.
+    url
+        The URL of the F-Droid repository to generate the binary transparency
+        log for.
+    commit_title
+        The commit title for commits in the binary transparency log Git
+        repository.
 
+    Notes
+    -----
+    Also see https://www.eff.org/deeplinks/2014/02/open-letter-to-tech-companies .
     """
     logging.info('Committing indexes to ' + btrepo)
     if os.path.exists(os.path.join(btrepo, '.git')):
@@ -149,6 +167,16 @@ For more info on this idea:
 
 
 def main():
+    """Generate or update a binary transparency log for a F-Droid repository.
+
+    The behaviour of this function is influenced by the configuration file as
+    well as command line parameters.
+
+    Raises
+    ------
+    :exc:`~fdroidserver.exception.FDroidException`
+        If the specified or default Git repository does not exist.
+    """
     global options
 
     parser = ArgumentParser()
