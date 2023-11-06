@@ -32,7 +32,7 @@ import logging
 import copy
 import urllib.parse
 from pathlib import Path
-from typing import Optional, Union
+from typing import Optional
 
 from . import _
 from . import common
@@ -41,7 +41,7 @@ from . import net
 from .exception import VCSException, NoSubmodulesException, FDroidException, MetaDataException
 
 
-def check_http(app: metadata.App) -> tuple[Union[str, None], Union[int, None]]:
+def check_http(app: metadata.App) -> tuple[Optional[str], Optional[int]]:
     """Check for a new version by looking at a document retrieved via HTTP.
 
     The app's UpdateCheckData field is used to provide the information
