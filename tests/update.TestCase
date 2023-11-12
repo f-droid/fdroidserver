@@ -21,7 +21,7 @@ import yaml
 import zipfile
 import textwrap
 from datetime import datetime
-from distutils.version import LooseVersion
+from packaging.version import Version
 from pathlib import Path
 from testcommon import TmpCwd, mkdtemp
 from unittest import mock
@@ -1041,7 +1041,7 @@ class UpdateTest(unittest.TestCase):
 
                 javac = config['jarsigner'].replace('jarsigner', 'javac')
                 v = subprocess.check_output([javac, '-version'], stderr=subprocess.STDOUT)[6:-1].decode('utf-8')
-                if LooseVersion(v) < LooseVersion('1.8.0_132'):
+                if Version(v) < Version('1.8.0_132'):
                     print('SKIPPING: running tests with old Java (' + v + ')')
                     return
 

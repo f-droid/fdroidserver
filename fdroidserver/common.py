@@ -57,7 +57,7 @@ import defusedxml.ElementTree as XMLElementTree
 from base64 import urlsafe_b64encode
 from binascii import hexlify
 from datetime import datetime, timedelta, timezone
-from distutils.version import LooseVersion
+from packaging.version import Version
 from queue import Queue
 from zipfile import ZipFile
 
@@ -656,7 +656,7 @@ def find_apksigner(config):
         if not os.path.isdir(os.path.join(build_tools_path, f)):
             continue
         try:
-            if LooseVersion(f) < LooseVersion(MINIMUM_APKSIGNER_BUILD_TOOLS_VERSION):
+            if Version(f) < Version(MINIMUM_APKSIGNER_BUILD_TOOLS_VERSION):
                 logging.debug("Local Android SDK only has outdated apksigner versions")
                 return
         except TypeError:
@@ -717,9 +717,9 @@ def test_aapt_version(aapt):
             # the Debian package has the version string like "v0.2-23.0.2"
             too_old = False
             if '.' in bugfix:
-                if LooseVersion(bugfix) < LooseVersion(MINIMUM_AAPT_BUILD_TOOLS_VERSION):
+                if Version(bugfix) < Version(MINIMUM_AAPT_BUILD_TOOLS_VERSION):
                     too_old = True
-            elif LooseVersion('.'.join((major, minor, bugfix))) < LooseVersion('0.2.4062713'):
+            elif Version('.'.join((major, minor, bugfix))) < Version('0.2.4062713'):
                 too_old = True
             if too_old:
                 logging.warning(_("'{aapt}' is too old, fdroid requires build-tools-{version} or newer!")
