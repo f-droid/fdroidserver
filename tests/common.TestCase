@@ -315,6 +315,9 @@ class CommonTest(unittest.TestCase):
             def getsrclib(self):
                 return None
 
+            def deinitsubmodules(self):
+                pass
+
         fdroidserver.common.prepare_source(FakeVcs(), app, build,
                                            fdroidclient_testdir, fdroidclient_testdir, fdroidclient_testdir)
 
@@ -384,6 +387,9 @@ class CommonTest(unittest.TestCase):
             # no srclib info needed, but it could be added...
             def getsrclib(self):
                 return None
+
+            def deinitsubmodules(self):
+                pass
 
         fdroidserver.common.prepare_source(FakeVcs(), app, build,
                                            app_build_dir, srclib_testdir, app_build_dir,

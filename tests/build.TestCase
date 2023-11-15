@@ -586,6 +586,9 @@ class BuildTest(unittest.TestCase):
             def getsrclib(self):
                 return None
 
+            def deinitsubmodules(self):
+                pass
+
         # Test we trigger a scanner error without extlibs
         build.extlibs = []
         os.makedirs('build/libs')

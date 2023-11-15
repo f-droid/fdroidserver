@@ -1174,6 +1174,10 @@ class vcs:
     def initsubmodules(self):
         raise VCSException('Submodules not supported for this vcs type')
 
+    # Deinitialise and update submodules
+    def deinitsubmodules(self):
+        pass
+
     # Get a list of all known tags
     def gettags(self):
         if not self._gettags:
@@ -1337,6 +1341,12 @@ class vcs_git(vcs):
         p = self.git(['submodule', 'update', '--init', '--force', '--recursive'], cwd=self.local)
         if p.returncode != 0:
             raise VCSException(_("Git submodule update failed"), p.output)
+
+    def deinitsubmodules(self):
+        self.checkrepo()
+        p = FDroidPopen(['git', 'submodule', 'deinit', '--all'], cwd=self.local, output=False)
+        if p.returncode != 0:
+            raise VCSException(_("Git submodule deinit failed"), p.output)
 
     def _gettags(self):
         self.checkrepo()
@@ -2188,6 +2198,8 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
     if build.submodules:
         logging.info(_("Initialising submodules"))
         vcs.initsubmodules()
+    else:
+        vcs.deinitsubmodules()
 
     # Check that a subdir (if we're using one) exists. This has to happen
     # after the checkout, since it might not exist elsewhere
