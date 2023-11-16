@@ -438,7 +438,7 @@ plugin_fetchsrclibs:
     - curl https://gitlab.com/fdroid/fdroiddata/-/archive/${commitid}/fdroiddata-${commitid}.tar.gz
           | tar -xz --directory=fdroiddata --strip-components=1
     - cd fdroiddata
-    - fdroid fetchsrclibs freemap.opentrail:9 --verbose
+    - fdroid fetchsrclibs freemap.opentrail:4 --verbose
     - test -d build/freemap.opentrail/.git
     - test -d build/srclib/andromaps/.git
     - test -d build/srclib/freemaplib/.git
