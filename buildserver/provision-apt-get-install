@@ -112,6 +112,7 @@ packages="
  gnupg
  mercurial
  patch
+ python3-packaging
  rsync
  sdkmanager
  sudo
