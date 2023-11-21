@@ -453,7 +453,7 @@ valuetypes = {
                    ["AutoUpdateMode"]),
 
     FieldValidator("Update Check Mode",
-                   r"^(Tags|Tags .+|RepoManifest|RepoManifest/.+|RepoTrunk|HTTP|Static|None)$",
+                   r"^(Tags|Tags .+|RepoManifest|RepoManifest/.+|HTTP|Static|None)$",
                    ["UpdateCheckMode"])
 }
 

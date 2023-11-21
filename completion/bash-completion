@@ -155,7 +155,7 @@ __complete_publish() {
 
 __complete_checkupdates() {
 	opts="-v -q"
-	lopts="--verbose --quiet --auto --autoonly --commit --gplay --allow-dirty"
+	lopts="--verbose --quiet --auto --autoonly --commit --allow-dirty"
 	case "${cur}" in
 		-*)
 			__complete_options
