@@ -301,8 +301,8 @@ $sed -i.tmp -e 's,timestamp="[0-9]*",timestamp="1676634233",' repo/index.xml
 diff -uw $WORKSPACE/tests/repo/index.xml repo/index.xml
 sed -i --expression='s,"timestamp": [0-9]*,"timestamp": 1676634233000,' repo/index-v1.json
 diff -uw $WORKSPACE/tests/repo/index-v1.json repo/index-v1.json
-jq "del(.packages[]|.versions[]|.file.ipfsCIDv1)" $WORKSPACE/tests/repo/index-v2.json > repo/index-v2.org.json
-jq "del(.packages[]|.versions[]|.file.ipfsCIDv1)" repo/index-v2.json > repo/index-v2.mod.json
+sed -z 's/,\s*"ipfsCIDv1": *"[a-z0-9]*"//g' $WORKSPACE/tests/repo/index-v2.json > repo/index-v2.org.json
+sed -z 's/,\s*"ipfsCIDv1": *"[a-z0-9]*"//g' repo/index-v2.json > repo/index-v2.mod.json
 sed -i --expression='s,"timestamp": [0-9]*,"timestamp": 1676634233000,' repo/index-v2.mod.json
 diff -uw repo/index-v2.org.json repo/index-v2.mod.json
 
