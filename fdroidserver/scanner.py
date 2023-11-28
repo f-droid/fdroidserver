@@ -50,7 +50,7 @@ class MessageStore:
     errors: list = field(default_factory=list)
 
 
-MAVEN_URL_REGEX = re.compile(r"""\smaven\s*(?:{.*?(?:setUrl|url)|\((?:url)?)\s*=?\s*(?:uri)?\(?\s*["']?([^\s"']+)["']?[^})]*[)}]""",
+MAVEN_URL_REGEX = re.compile(r"""\smaven\s*(?:{.*?(?:setUrl|url)|\((?:url)?)\s*=?\s*(?:uri|Uri\.create\()?\(?\s*["']?([^\s"']+)["']?[^})]*[)}]""",
                              re.DOTALL)
 
 
