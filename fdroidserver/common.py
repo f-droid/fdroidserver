@@ -1344,7 +1344,7 @@ class vcs_git(vcs):
 
     def deinitsubmodules(self):
         self.checkrepo()
-        p = FDroidPopen(['git', 'submodule', 'deinit', '--all'], cwd=self.local, output=False)
+        p = FDroidPopen(['git', 'submodule', 'deinit', '--all', '--force'], cwd=self.local, output=False)
         if p.returncode != 0:
             raise VCSException(_("Git submodule deinit failed"), p.output)
 
