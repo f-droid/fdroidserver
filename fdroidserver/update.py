@@ -525,7 +525,10 @@ def insert_obbs(repodir, apps, apks):
 
 
 def version_string_to_int(version):
-    """Approximately convert a [Major].[Minor].[Patch] version string
+    """
+    Convert sermver version designation to version code.
+
+    Approximately convert a [Major].[Minor].[Patch] version string
     consisting of numeric characters (0-9) and periods to a number. The
     exponents are chosen such that it still fits in the 64bit JSON/Android range.
     """
@@ -536,46 +539,73 @@ def version_string_to_int(version):
     return major * 10**12 + minor * 10**6 + patch
 
 
-def process_ipa(repodir, apks):
-    """Scan the .ipa files in a given repo directory.
+def parse_ipa(ipa_path, file_size, sha256):
+    from biplist import readPlist
+
+    ipa = {
+        "apkName": os.path.basename(ipa_path),
+        "hash": sha256,
+        "hashType": "sha256",
+        "size": file_size,
+    }
+
+    with zipfile.ZipFile(ipa_path) as ipa_zip:
+        for info in ipa_zip.infolist():
+            if re.match("Payload/[^/]*.app/Info.plist", info.filename):
+                with ipa_zip.open(info) as plist_file:
+                    plist = readPlist(plist_file)
+                    ipa["packageName"] = plist["CFBundleIdentifier"]
+                    # https://developer.apple.com/documentation/bundleresources/information_property_list/cfbundleshortversionstring
+                    ipa["versionCode"] = version_string_to_int(plist["CFBundleShortVersionString"])
+                    ipa["versionName"] = plist["CFBundleShortVersionString"]
+                    ipa["usage"] = {k: v for k, v in plist.items() if 'Usage' in k}
+    return ipa
+
+
+def scan_repo_for_ipas(apkcache, repodir, knownapks):
+    """Scan for IPA files in a given repo directory.
 
     Parameters
     ----------
+    apkcache
+      cache dictionary containting cached file infos from previous runs
     repodir
       repo directory to scan
-    apps
-      list of current, valid apps
-    apks
-      current information on all APKs
+    knownapks
+      list of all known files, as per metadata.read_metadata
+
+    Returns
+    -------
+    ipas
+      list of file infos for ipa files in ./repo folder
+    cachechanged
+      ture if new ipa files were found and added to `apkcache`
     """
-    def ipaWarnDelete(f, msg):
-        logging.warning(msg + ' ' + f)
-        if options.delete_unknown:
-            logging.error(_("Deleting unknown file: {path}").format(path=f))
-            os.remove(f)
+    cachechanged = False
+    ipas = []
+    for ipa_path in glob.glob(os.path.join(repodir, '*.ipa')):
+        ipa_name = os.path.basename(ipa_path)
 
-    ipas = glob.glob(os.path.join(repodir, '*.ipa'))
-    if ipas:
-        from biplist import readPlist
-        for f in ipas:
-            ipa = {}
-            apks.append(ipa)
+        file_size = os.stat(ipa_path).st_size
+        if file_size == 0:
+            raise FDroidException(_('{path} is zero size!')
+                                  .format(path=ipa_path))
 
-            ipa["apkName"] = os.path.basename(f)
-            ipa["hash"] = common.sha256sum(f)
-            ipa["hashType"] = "sha256"
-            ipa["size"] = os.path.getsize(f)
+        sha256 = common.sha256sum(ipa_path)
+        ipa = apkcache.get(ipa_name, {})
 
-            with zipfile.ZipFile(f) as ipa_zip:
-                for info in ipa_zip.infolist():
-                    if re.match("Payload/[^/]*.app/Info.plist", info.filename):
-                        with ipa_zip.open(info) as plist_file:
-                            plist = readPlist(plist_file)
-                            ipa["packageName"] = plist["CFBundleIdentifier"]
-                            # https://developer.apple.com/documentation/bundleresources/information_property_list/cfbundleshortversionstring
-                            ipa["versionCode"] = version_string_to_int(plist["CFBundleShortVersionString"])
-                            ipa["versionName"] = plist["CFBundleShortVersionString"]
-                            ipa["usage"] = {k: v for k, v in plist.items() if 'Usage' in k}
+        if ipa.get('hash') != sha256:
+            ipa = parse_ipa(ipa_path, file_size, sha256)
+            apkcache[ipa_name] = ipa
+            cachechanged = True
+
+        added = knownapks.recordapk(ipa_name, ipa['packageName'])
+        if added:
+            ipa['added'] = added
+
+        ipas.append(ipa)
+
+    return ipas, cachechanged
 
 
 def translate_per_build_anti_features(apps, apks):
@@ -1175,7 +1205,10 @@ def insert_localized_app_metadata(apps):
 
 
 def scan_repo_files(apkcache, repodir, knownapks, use_date_from_file=False):
-    """Scan a repo for all files with an extension except APK/OBB.
+    """Scan a repo for all files with an extension except APK/OBB/IPA.
+
+    This allows putting all kinds of files into repostories. E.g. Media Files,
+    Zip archives, ...
 
     Parameters
     ----------
@@ -1192,22 +1225,29 @@ def scan_repo_files(apkcache, repodir, knownapks, use_date_from_file=False):
     repo_files = []
     repodir = repodir.encode()
     for name in os.listdir(repodir):
+        # skip files based on file extensions, that are handled elsewhere
         file_extension = common.get_file_extension(name)
         if file_extension in ('apk', 'obb', 'ipa'):
             continue
+
+        # skip source tarballs generated by fdroidserver
         filename = os.path.join(repodir, name)
         name_utf8 = name.decode()
         if filename.endswith(b'_src.tar.gz'):
             logging.debug(_('skipping source tarball: {path}')
                           .format(path=filename.decode()))
             continue
+
+        # skip all other files generated by fdroidserver
         if not common.is_repo_file(filename):
             continue
+
         stat = os.stat(filename)
         if stat.st_size == 0:
             raise FDroidException(_('{path} is zero size!')
                                   .format(path=filename))
 
+        # load file infos from cache if not stale
         shasum = common.sha256sum(filename)
         usecache = False
         if name_utf8 in apkcache:
@@ -1220,6 +1260,7 @@ def scan_repo_files(apkcache, repodir, knownapks, use_date_from_file=False):
                 logging.debug(_("Ignoring stale cache data for {apkfilename}")
                               .format(apkfilename=name_utf8))
 
+        # scan file if info wasn't in cache
         if not usecache:
             logging.debug(_("Processing {apkfilename}").format(apkfilename=name_utf8))
             repo_file = collections.OrderedDict()
@@ -2182,7 +2223,6 @@ def prepare_apps(apps, apks, repodir):
     -------
     the relevant subset of apps (as a deepcopy)
     """
-    process_ipa(repodir, apks)
     apps_with_packages = get_apps_with_packages(apps, apks)
     apply_info_from_latest_apk(apps_with_packages, apks)
     insert_funding_yml_donation_links(apps)
@@ -2309,6 +2349,11 @@ def main():
                                            options.use_date_from_apk)
     cachechanged = cachechanged or fcachechanged
     apks += files
+
+    ipas, icachechanged = scan_repo_for_ipas(apkcache, repodirs[0], knownapks)
+    cachechanged = cachechanged or icachechanged
+    apks += ipas
+
     appid_has_apks = set()
     appid_has_repo_files = set()
     remove_apks = []
