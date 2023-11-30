@@ -14,3 +14,6 @@ security:
     60841:
       reason: GitPython comes from Debian https://security-tracker.debian.org/tracker/CVE-2023-41040
       expires: '2025-01-31'
+    62044:
+      reason: "F-Droid doesn't fetch pip dependencies directly from hg/mercurial repositories: https://data.safetycli.com/v/62044/f17/"
+      expires: '2025-01-31'
