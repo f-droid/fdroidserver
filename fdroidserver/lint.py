@@ -435,27 +435,6 @@ def check_mediawiki_links(app):
                 yield _("URL {url} in Description: {error}").format(url=url, error=r)
 
 
-def check_bulleted_lists(app):
-    validchars = ['*', '#']
-    lchar = ''
-    lcount = 0
-    for line in app.Description.splitlines():
-        if len(line) < 1:
-            lcount = 0
-            continue
-
-        if line[0] == lchar and line[1] == ' ':
-            lcount += 1
-            if lcount > 2 and lchar not in validchars:
-                yield _(
-                    "Description has a list (%s) but it isn't bulleted (*) nor numbered (#)"
-                ) % lchar
-                break
-        else:
-            lchar = line[0]
-            lcount = 1
-
-
 def check_builds(app):
     supported_flags = set(metadata.build_flags)
     # needed for YAML and JSON
@@ -862,7 +841,6 @@ def main():
             check_categories,
             check_duplicates,
             check_mediawiki_links,
-            check_bulleted_lists,
             check_builds,
             check_files_dir,
             check_format,
