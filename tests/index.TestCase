@@ -791,6 +791,43 @@ class IndexTest(unittest.TestCase):
             with self.assertRaises(fdroidserver.exception.FDroidException):
                 index.add_mirrors_to_repodict('repo', repodict)
 
+    def test_load_mirrors_config_from_file(self):
+        # empty the dict for *.config, see setUp()
+        for k in sorted(common.config.keys()):
+            del common.config[k]
+
+        os.chdir(self.testdir)
+        os.mkdir('config')
+        primary = 'https://primary.com/fdroid/repo'
+        mirror = 'https://mirror.com/fdroid'
+        with open('config/mirrors.yml', 'w') as fp:
+            yaml.dump([{'url': mirror}], fp)
+        repodict = {'address': primary}
+        index.add_mirrors_to_repodict('repo', repodict)
+        self.assertEqual(
+            repodict['mirrors'],
+            [
+                {'isPrimary': True, 'url': primary},
+                {'url': mirror + '/repo'},
+            ],
+        )
+
+    def test_error_when_load_mirrors_from_config_and_file(self):
+        # empty the dict for *.config, see setUp()
+        for k in sorted(common.config.keys()):
+            del common.config[k]
+
+        os.chdir(self.testdir)
+        os.mkdir('config')
+        with open('config/mirrors.yml', 'w') as fp:
+            yaml.dump([{'url': 'https://foo.com'}], fp)
+        repodict = {
+            'address': 'https://foo.com',
+            'mirrors': {'url': 'http://two/fdroid/repo'},
+        }
+        with self.assertRaises(fdroidserver.exception.FDroidException):
+            index.add_mirrors_to_repodict('repo', repodict)
+
 
 if __name__ == "__main__":
     os.chdir(os.path.dirname(__file__))

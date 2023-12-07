@@ -29,6 +29,7 @@ import re
 import shutil
 import tempfile
 import urllib.parse
+import yaml
 import zipfile
 import calendar
 import qrcode
@@ -42,7 +43,7 @@ from . import common
 from . import metadata
 from . import net
 from . import signindex
-from fdroidserver.common import ANTIFEATURES_CONFIG_NAME, CATEGORIES_CONFIG_NAME, CONFIG_CONFIG_NAME, RELEASECHANNELS_CONFIG_NAME, DEFAULT_LOCALE, FDroidPopen, FDroidPopenBytes, load_stats_fdroid_signing_key_fingerprints
+from fdroidserver.common import ANTIFEATURES_CONFIG_NAME, CATEGORIES_CONFIG_NAME, CONFIG_CONFIG_NAME, MIRRORS_CONFIG_NAME, RELEASECHANNELS_CONFIG_NAME, DEFAULT_LOCALE, FDroidPopen, FDroidPopenBytes, load_stats_fdroid_signing_key_fingerprints
 from fdroidserver.exception import FDroidException, VerificationException
 
 
@@ -1398,6 +1399,26 @@ def add_mirrors_to_repodict(repo_section, repodict):
     mirrors_config = common.config.get('mirrors', [])
     if type(mirrors_config) not in (list, tuple):
         mirrors_config = [mirrors_config]
+
+    mirrors_yml = Path(f'config/{MIRRORS_CONFIG_NAME}.yml')
+    if mirrors_yml.exists():
+        if mirrors_config:
+            raise FDroidException(
+                _('mirrors set twice, in config.yml and {path}!').format(
+                    path=mirrors_yml
+                )
+            )
+        with mirrors_yml.open() as fp:
+            mirrors_config = yaml.safe_load(fp)
+        if not isinstance(mirrors_config, list):
+            msg = _('{path} is not list, but a {datatype}!')
+            raise TypeError(
+                msg.format(path=mirrors_yml, datatype=type(mirrors_config).__name__)
+            )
+
+    if type(mirrors_config) not in (list, tuple, set):
+        msg = 'In config.yml, mirrors: is not list, but a {datatype}!'
+        raise TypeError(msg.format(datatype=type(mirrors_config).__name__))
 
     mirrorcheckfailed = False
     mirrors = []

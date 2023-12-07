@@ -228,6 +228,9 @@
 #     countryCode: BA
 #   - url: http://foobarfoobarfoobar.onion/fdroid
 #
+# The list of mirrors can also be maintained in config/mirrors.yml, a
+# standalone YAML file in the optional configuration directory.  In
+# that case, mirrors: should be removed from this file (config.yml).
 
 
 # optionally specify which identity file to use when using rsync or git over SSH
