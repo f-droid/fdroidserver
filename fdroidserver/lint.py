@@ -772,6 +772,11 @@ def main():
     load_antiFeatures_config()
     load_categories_config()
 
+    if options.force_yamllint:
+        import yamllint  # throw error if it is not installed
+
+        yamllint  # make pyflakes ignore this
+
     # Get all apps...
     allapps = metadata.read_metadata(options.appid)
     apps = common.read_app_args(options.appid, allapps, False)
@@ -790,11 +795,6 @@ def main():
     for appid, app in apps.items():
         if app.Disabled:
             continue
-
-        if options.force_yamllint:
-            import yamllint  # throw error if it is not installed
-
-            yamllint  # make pyflakes ignore this
 
         # only run yamllint when linting individual apps.
         if options.appid or options.force_yamllint:
