@@ -1410,6 +1410,15 @@ def add_mirrors_to_repodict(repo_section, repodict):
             )
         with mirrors_yml.open() as fp:
             mirrors_config = yaml.safe_load(fp)
+        if not isinstance(mirrors_config, list):
+            msg = _('{path} is not list, but a {datatype}!')
+            raise TypeError(
+                msg.format(path=mirrors_yml, datatype=type(mirrors_config).__name__)
+            )
+
+    if type(mirrors_config) not in (list, tuple, set):
+        msg = 'In config.yml, mirrors: is not list, but a {datatype}!'
+        raise TypeError(msg.format(datatype=type(mirrors_config).__name__))
 
     mirrorcheckfailed = False
     mirrors = []
