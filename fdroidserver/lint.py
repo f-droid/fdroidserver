@@ -20,6 +20,7 @@ from argparse import ArgumentParser
 import re
 import sys
 import platform
+import ruamel.yaml
 import urllib.parse
 from pathlib import Path
 
@@ -739,6 +740,21 @@ def check_certificate_pinned_binaries(app):
             return
 
 
+def lint_config(arg):
+    path = Path(arg)
+    passed = True
+    yamllintresult = common.run_yamllint(path)
+    if yamllintresult:
+        print(yamllintresult)
+        passed = False
+
+    with path.open() as fp:
+        data = ruamel.yaml.YAML(typ='safe').load(fp)
+    common.config_type_check(arg, data)
+
+    return passed
+
+
 def main():
     global config, options
 
@@ -777,6 +793,33 @@ def main():
 
         yamllint  # make pyflakes ignore this
 
+    paths = list()
+    for arg in options.appid:
+        if (
+            arg == 'config.yml'
+            or Path(arg).parent.name == 'config'
+            or Path(arg).parent.parent.name == 'config'  # localized
+        ):
+            paths.append(arg)
+
+    failed = 0
+    if paths:
+        for path in paths:
+            options.appid.remove(path)
+            if not lint_config(path):
+                failed += 1
+        # an empty list of appids means check all apps, avoid that if files were given
+        if not options.appid:
+            sys.exit(failed)
+
+    if not lint_metadata(options):
+        failed += 1
+
+    if failed:
+        sys.exit(failed)
+
+
+def lint_metadata(options):
     # Get all apps...
     allapps = metadata.read_metadata(options.appid)
     apps = common.read_app_args(options.appid, allapps, False)
@@ -856,8 +899,7 @@ def main():
                 anywarns = True
                 print("%s: %s" % (appid, warn))
 
-    if anywarns:
-        sys.exit(1)
+    return not anywarns
 
 
 # A compiled, public domain list of official SPDX license tags.  generated
