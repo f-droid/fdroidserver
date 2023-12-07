@@ -15,11 +15,12 @@ variables:
 # * python3-babel for compiling localization files
 # * gnupg-agent for the full signing setup
 # * python3-clint for fancy progress bars for users
+# * python3-pycountry for linting config/mirrors.yml
 buildserver run-tests:
   image: registry.gitlab.com/fdroid/fdroidserver:buildserver
   script:
     - apt-get update
-    - apt-get install gnupg-agent python3-babel python3-clint
+    - apt-get install gnupg-agent python3-babel python3-clint python3-pycountry
     - ./tests/run-tests
     # make sure that translations do not cause stacktraces
     - cd $CI_PROJECT_DIR/locale
@@ -151,6 +152,9 @@ ubuntu_jammy_pip:
     - export ANDROID_HOME=/opt/android-sdk
     - $pip install sdkmanager
     - sdkmanager 'build-tools;33.0.0'
+
+    # pycountry is only for linting config/mirrors.yml, so its not in setup.py
+    - $pip install pycountry
 
     - $pip install dist/fdroidserver-*.tar.gz
     - tar xzf dist/fdroidserver-*.tar.gz

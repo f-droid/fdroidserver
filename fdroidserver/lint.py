@@ -17,6 +17,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from argparse import ArgumentParser
+import difflib
 import re
 import sys
 import platform
@@ -751,6 +752,28 @@ def lint_config(arg):
     with path.open() as fp:
         data = ruamel.yaml.YAML(typ='safe').load(fp)
     common.config_type_check(arg, data)
+
+    if path.name == 'mirrors.yml':
+        import pycountry
+
+        valid_country_codes = [c.alpha_2 for c in pycountry.countries]
+        for mirror in data:
+            code = mirror.get('countryCode')
+            if code and code not in valid_country_codes:
+                passed = False
+                msg = _(
+                    '{path}: "{code}" is not a valid ISO_3166-1 alpha-2 country code!'
+                ).format(path=str(path), code=code)
+                if code.upper() in valid_country_codes:
+                    m = [code.upper()]
+                else:
+                    m = difflib.get_close_matches(
+                        code.upper(), valid_country_codes, 2, 0.5
+                    )
+                if m:
+                    msg += ' '
+                    msg += _('Did you mean {code}?').format(code=', '.join(sorted(m)))
+                print(msg)
 
     return passed
 
