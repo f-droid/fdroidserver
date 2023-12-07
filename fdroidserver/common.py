@@ -429,12 +429,12 @@ def read_config(opts=None):
             code = compile(fp.read(), old_config_file, 'exec')
             exec(code, None, config)  # nosec TODO automatically migrate
 
-    for k in ('mirrors', 'install_list', 'uninstall_list', 'serverwebroot', 'servergitroot'):
-        if k in config:
-            if not type(config[k]) in (str, list, tuple):
-                logging.warning(
-                    _("'{field}' will be in random order! Use () or [] brackets if order is important!")
-                    .format(field=k))
+        for k in ('mirrors', 'install_list', 'uninstall_list', 'serverwebroot', 'servergitroot'):
+            if k in config:
+                if not type(config[k]) in (str, list, tuple):
+                    logging.warning(
+                        _("'{field}' will be in random order! Use () or [] brackets if order is important!")
+                        .format(field=k))
 
     # smartcardoptions must be a list since its command line args for Popen
     smartcardoptions = config.get('smartcardoptions')
