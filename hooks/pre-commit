@@ -90,7 +90,8 @@ if [ "$PY_FILES $PY_TEST_FILES" != " " ]; then
     if ! $PYFLAKES $PY_FILES $PY_TEST_FILES; then
 	err "pyflakes tests failed!"
     fi
-    if ! $PYDOCSTYLE $PY_FILES $PY_TEST_FILES; then
+    # ignore vendored files
+    if ! $PYDOCSTYLE --match='(?!apksigcopier|looseversion).*\.py' $PY_FILES $PY_TEST_FILES; then
 	err "pydocstyle tests failed!"
     fi
 fi

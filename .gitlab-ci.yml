@@ -496,7 +496,8 @@ Build documentation:
   script:
     - apt-get install make python3-sphinx python3-numpydoc python3-pydata-sphinx-theme pydocstyle fdroidserver
     - apt purge fdroidserver
-    - pydocstyle fdroidserver
+    # ignore vendored files
+    - pydocstyle --verbose --match='(?!apksigcopier|looseversion|setup|test_).*\.py' fdroidserver
     - cd docs
     - sphinx-apidoc -o ./source ../fdroidserver -M -e
     - PYTHONPATH=.. sphinx-autogen -o generated source/*.rst
