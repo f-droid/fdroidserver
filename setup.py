@@ -98,7 +98,6 @@ setup(
         'paramiko',
         'Pillow',
         'apache-libcloud >= 0.14.1',
-        'packaging',
         'pyasn1 >=0.4.1, < 0.5.0',
         'pyasn1-modules >= 0.2.1, < 0.3',
         'python-vagrant',
