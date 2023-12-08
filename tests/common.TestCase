@@ -21,7 +21,6 @@ import unittest
 import textwrap
 import yaml
 import gzip
-from packaging.version import Version
 from zipfile import BadZipFile, ZipFile
 from unittest import mock
 from pathlib import Path
@@ -42,6 +41,7 @@ from testcommon import TmpCwd, mkdtemp
 from fdroidserver.common import ANTIFEATURES_CONFIG_NAME, CATEGORIES_CONFIG_NAME
 from fdroidserver.exception import FDroidException, VCSException,\
     MetaDataException, VerificationException
+from fdroidserver.looseversion import LooseVersion
 
 
 class CommonTest(unittest.TestCase):
@@ -852,9 +852,9 @@ class CommonTest(unittest.TestCase):
             v = bt.split('/')[-2]
             if v == 'debian':
                 continue
-            if Version(version) < Version(v):
+            if LooseVersion(version) < LooseVersion(v):
                 version = v
-        if Version(version) < Version(min_version):
+        if LooseVersion(version) < LooseVersion(min_version):
             self.skipTest('SKIPPING since build-tools %s or higher is required!' % min_version)
         fdroidserver.common.config = {'sdk_path': android_home}
         with mock.patch.dict(os.environ, clear=True):
@@ -2374,10 +2374,10 @@ class CommonTest(unittest.TestCase):
         import sdkmanager
         import pkg_resources
 
-        sdkmanager_version = Version(
+        sdkmanager_version = LooseVersion(
             pkg_resources.get_distribution('sdkmanager').version
         )
-        if sdkmanager_version < Version('0.6.4'):
+        if sdkmanager_version < LooseVersion('0.6.4'):
             raise unittest.SkipTest('needs fdroid sdkmanager >= 0.6.4')
 
         fdroidserver.common.config = {'sdk_path': 'placeholder'}
