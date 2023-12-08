@@ -319,6 +319,7 @@ gradle:
           python3-colorama
           python3-git
           python3-gitlab
+          python3-packaging
           python3-requests
     # if this is a merge request fork, then only check if relevant files changed
     - if [ "$CI_PROJECT_NAMESPACE" != "fdroid" ]; then
