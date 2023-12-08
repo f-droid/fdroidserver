@@ -8,7 +8,7 @@ import requests
 import subprocess
 import sys
 from colorama import Fore, Style
-from distutils.version import LooseVersion
+from packaging.version import Version
 
 
 checksums = None
@@ -52,7 +52,7 @@ for url, checksum in config['CACHE_FILES']:
 # error if makebuildserver is missing the latest version
 for version in sorted(versions.keys()):
     if version not in makebuildserver_versions \
-       and LooseVersion(version) > LooseVersion(sorted(makebuildserver_versions)[-1]):
+       and Version(version) > Version(sorted(makebuildserver_versions)[-1]):
         add_before = """    ('https://dl.google.com/android/ndk/android-ndk-r10e-linux-x86_64.bin',"""
         new = to_compile.replace(
             add_before,
@@ -78,14 +78,14 @@ for m in get_sha_pat.finditer(gradlew_fdroid):
               + Style.RESET_ALL)
         errors += 1
 new = ''
-for version in sorted(versions.keys(), key=LooseVersion):
+for version in sorted(versions.keys(), key=Version):
     sha256 = versions[version]
     spaces = ''
     for i in range(6 - len(version)):
         spaces += ' '
     new += """        '%s')%s echo '%s' ;;\n""" % (version, spaces, sha256)
 gradlew_fdroid = gradlew_fdroid.replace(current, new)
-plugin_v = ' '.join(sorted(versions.keys(), key=LooseVersion, reverse=True))
+plugin_v = ' '.join(sorted(versions.keys(), key=Version, reverse=True))
 plugin_v_pat = re.compile(r'\nplugin_v=\(([0-9. ]+)\)')
 with open('gradlew-fdroid', 'w') as fp:
     fp.write(plugin_v_pat.sub('\nplugin_v=(%s)' % plugin_v, gradlew_fdroid))
