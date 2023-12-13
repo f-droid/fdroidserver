@@ -215,6 +215,7 @@ lint_format_safety_bandit_checks:
           python3-nose
           python3-pip
           python3-yaml
+          shellcheck
     - $pip install --break-system-packages bandit safety
     - export EXITVALUE=0
     - function set_error() { export EXITVALUE=1; printf "\x1b[31mERROR `history|tail -2|head -1|cut -b 6-500`\x1b[0m\n"; }
@@ -232,6 +233,8 @@ lint_format_safety_bandit_checks:
             fdroidserver/*.py
             tests/*.py
             tests/*.TestCase
+        || set_error
+    - shellcheck --exclude SC2046,SC2090 --severity=warning --color tests/run-tests
         || set_error
     - exit $EXITVALUE
 

@@ -128,30 +128,31 @@ if [ ! -d "$APKDIR" ]; then
     exit 1
 fi
 
-if [ -z $WORKSPACE ]; then
-    WORKSPACE=`dirname $(pwd)`
+if [ -z "$WORKSPACE" ]; then
+    WORKSPACE="$(dirname "$(pwd)")"
     echo "Setting Workspace to $WORKSPACE"
 fi
 
 # allow the location of the script to be overridden
-if [ -z $fdroid ]; then
+if [ -z "$fdroid" ]; then
     fdroid="$WORKSPACE/fdroid"
 fi
 
 # allow the location of aapt to be overridden
-if [ -z $aapt ]; then
+if [ -z "$aapt" ]; then
     aapt=`ls -1 $ANDROID_HOME/build-tools/*/aapt 2> /dev/null | sort | tail -1`
 fi
 
 # try to use GNU sed on OSX/BSD cuz BSD sed sucks
 if which gsed; then
-    sed=gsed
+    sed="gsed"
 else
-    sed=sed
+    sed="sed"
 fi
 
 # allow the location of git to be overridden
 if [ -z "$git" ]; then
+    # shellcheck disable=SC2089
     git="env HOME= GIT_AUTHOR_NAME='Test' GIT_AUTHOR_EMAIL='no@mail' GIT_COMMITTER_NAME='Test' GIT_COMMITTER_EMAIL='no@mail' git"
 fi
 
@@ -740,8 +741,10 @@ if [ -e .git/config ]; then
     cd $REPOROOT
     tar xzf `ls -1 $WORKSPACE/dist/fdroidserver-*.tar.gz | sort -n | tail -1`
     cd $REPOROOT
+    # shellcheck disable=SC2211
     ./fdroidserver-*/fdroid init
     copy_apks_into_repo $REPOROOT
+    # shellcheck disable=SC2211
     ./fdroidserver-*/fdroid update --create-metadata --verbose
 fi
 
@@ -1299,13 +1302,16 @@ if which wget; then
     http_server_pid=$!
 
     cd $REPOROOT
+    # shellcheck disable=SC1007
     http_proxy= HTTP_PROXY= $fdroid mirror http://127.0.0.1:${port}/
     test -e 127.0.0.1\:${port}/repo/souch.smsbypass_9.apk
     test -e 127.0.0.1\:${port}/repo/icons-640/souch.smsbypass.9.png
     # the index shouldn't be saved unless it was verified
     ! test -e 127.0.0.1\:${port}/repo/index-v1.jar
+    # shellcheck disable=SC1007
     ! http_proxy= HTTP_PROXY= $fdroid mirror "http://127.0.0.1:${port}/?fingerprint=asdfasdf"
     ! test -e 127.0.0.1\:${port}/repo/index-v1.jar
+    # shellcheck disable=SC1007
     http_proxy= HTTP_PROXY= $fdroid mirror "http://127.0.0.1:${port}/?fingerprint=F49AF3F11EFDDF20DFFD70F5E3117B9976674167ADCA280E6B1932A0601B26F6"
     test -e 127.0.0.1\:${port}/repo/index-v1.jar
 
