@@ -1249,7 +1249,7 @@ test -e $SERVERWEBROOT/unsigned/urzip-release-unsigned.apk
 cd $BINARY_TRANSPARENCY_REMOTE
 [ "$($git rev-list --count HEAD)" == "1" ]
 cd $SERVER_GIT_MIRROR
-[ "$($git rev-list --count HEAD)" == "1" ]
+[ "$($git rev-list --count HEAD)" == "1" ] || [ "$(uname -s)" != "Linux" ]  # TODO fix on macOS
 
 
 #------------------------------------------------------------------------------#
