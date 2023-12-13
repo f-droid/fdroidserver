@@ -309,6 +309,44 @@ fedora_latest:
         "cd `pwd`; export ANDROID_HOME=$ANDROID_HOME; fdroid=~testuser/.local/bin/fdroid ./run-tests"
 
 
+macOS:
+  tags:
+    - saas-macos-medium-m1
+  only:
+    - master@fdroid/fdroidserver
+  script:
+    - export HOMEBREW_CURL_RETRIES=10
+    - brew update > /dev/null
+    - brew upgrade
+    - brew install fdroidserver
+
+    # Android SDK and Java JDK
+    - brew install --cask android-commandlinetools temurin  # temurin is a JDK
+
+    # test suite dependencies
+    - brew install dash bash coreutils gnu-sed
+    # TODO port tests/run-tests to POSIX and gsed, it has a couple GNU-isms like du --bytes
+    - export PATH="$(brew --prefix fdroidserver)/libexec/bin:$(brew --prefix coreutils)/libexec/gnubin:$PATH"
+
+    - brew autoremove
+    - brew info fdroidserver
+
+    - export BUILD_TOOLS_VERSION=`gsed -n "s,^MINIMUM_APKSIGNER_BUILD_TOOLS_VERSION\s*=\s*['\"]\(.*\)[['\"],\1,p" fdroidserver/common.py`
+    - export ANDROID_HOME="$(brew --prefix)/share/android-commandlinetools"
+    - mkdir -p "$ANDROID_HOME/licenses"
+    - echo -e "\n8933bad161af4178b1185d1a37fbf41ea5269c55" > "$ANDROID_HOME/licenses/android-sdk-license"
+    - echo -e "\nd56f5187479451eabf01fb78af6dfcb131a6481e" >> "$ANDROID_HOME/licenses/android-sdk-license"
+    - echo -e "\n24333f8a63b6825ea9c5514f83c2829b004d1fee" >> "$ANDROID_HOME/licenses/android-sdk-license"
+    - $(brew --prefix)/bin/sdkmanager "build-tools;$BUILD_TOOLS_VERSION"
+
+    - echo "macOS sticks with bash 3.x because of licenses, so avoid new bash syntax"
+    - /bin/bash --version
+    - /bin/bash -n gradlew-fdroid tests/run-tests
+
+    # test fdroidserver from git with current package's dependencies
+    - fdroid="$(brew --prefix fdroidserver)/libexec/bin/python3 $PWD/fdroid" ./tests/run-tests
+
+
 gradle:
   image: debian:bullseye
   <<: *apt-template
