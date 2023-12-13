@@ -180,7 +180,7 @@ arch_pip_install:
 # The gradlew-fdroid tests are isolated from the rest of the test
 # suite, so they run as their own job.
 gradlew-fdroid:
-  image: debian:bullseye
+  image: debian:bullseye-slim
   <<: *apt-template
   only:
     changes:
@@ -188,7 +188,8 @@ gradlew-fdroid:
       - gradlew-fdroid
       - tests/test-gradlew-fdroid
   script:
-    - apt-get install ca-certificates curl default-jdk-headless unzip
+    - apt-get install ca-certificates curl default-jdk-headless shellcheck unzip
+    - shellcheck --severity=error --color gradlew-fdroid tests/test-gradlew-fdroid
     - ./tests/test-gradlew-fdroid
 
 
