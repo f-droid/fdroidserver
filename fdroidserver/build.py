@@ -101,7 +101,7 @@ def build_server(app, build, vcs, build_dir, output_dir, log_dir, force):
         # Open SSH connection...
         logging.info("Connecting to virtual machine...")
         sshs = paramiko.SSHClient()
-        sshs.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+        sshs.set_missing_host_key_policy(paramiko.AutoAddPolicy())  # nosec B507 only connects to local VM
         sshs.connect(sshinfo['hostname'], username=sshinfo['user'],
                      port=sshinfo['port'], timeout=300,
                      look_for_keys=False, key_filename=sshinfo['idfile'])
