@@ -20,6 +20,7 @@ run_gradle() {
     if [ ! -d "${gradle_version_dir}/${v_found}" ]; then
         download_gradle ${v_found}
     fi
+    # shellcheck disable=SC2145
     echo "Running ${gradle_version_dir}/${v_found}/bin/gradle ${args[@]}"
     "${gradle_version_dir}/${v_found}/bin/gradle" "${args[@]}"
     exit $?
@@ -264,7 +265,7 @@ fi
 if [[ -n $plugin_pver ]]; then
     i=0
     match=false
-    for k in ${d_gradle_plugin_ver_k[@]}; do
+    for k in "${d_gradle_plugin_ver_k[@]}"; do
         if [[ $plugin_pver == ${k}* ]]; then
             plugin_ver=${d_plugin_min_gradle_v[$i]}
             match=true

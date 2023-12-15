@@ -180,7 +180,7 @@ arch_pip_install:
 # The gradlew-fdroid tests are isolated from the rest of the test
 # suite, so they run as their own job.
 gradlew-fdroid:
-  image: debian:bullseye
+  image: debian:bullseye-slim
   <<: *apt-template
   only:
     changes:
@@ -188,7 +188,8 @@ gradlew-fdroid:
       - gradlew-fdroid
       - tests/test-gradlew-fdroid
   script:
-    - apt-get install ca-certificates curl default-jdk-headless unzip
+    - apt-get install ca-certificates curl default-jdk-headless shellcheck unzip
+    - shellcheck --severity=error --color gradlew-fdroid tests/test-gradlew-fdroid
     - ./tests/test-gradlew-fdroid
 
 
@@ -214,6 +215,7 @@ lint_format_safety_bandit_checks:
           python3-nose
           python3-pip
           python3-yaml
+          shellcheck
     - $pip install --break-system-packages bandit safety
     - export EXITVALUE=0
     - function set_error() { export EXITVALUE=1; printf "\x1b[31mERROR `history|tail -2|head -1|cut -b 6-500`\x1b[0m\n"; }
@@ -231,6 +233,8 @@ lint_format_safety_bandit_checks:
             fdroidserver/*.py
             tests/*.py
             tests/*.TestCase
+        || set_error
+    - shellcheck --exclude SC2046,SC2090 --severity=warning --color tests/run-tests
         || set_error
     - exit $EXITVALUE
 
@@ -303,6 +307,44 @@ fedora_latest:
     - cd tests
     - su testuser --login --command
         "cd `pwd`; export ANDROID_HOME=$ANDROID_HOME; fdroid=~testuser/.local/bin/fdroid ./run-tests"
+
+
+macOS:
+  tags:
+    - saas-macos-medium-m1
+  only:
+    - master@fdroid/fdroidserver
+  script:
+    - export HOMEBREW_CURL_RETRIES=10
+    - brew update > /dev/null
+    - brew upgrade
+    - brew install fdroidserver
+
+    # Android SDK and Java JDK
+    - brew install --cask android-commandlinetools temurin  # temurin is a JDK
+
+    # test suite dependencies
+    - brew install dash bash coreutils gnu-sed
+    # TODO port tests/run-tests to POSIX and gsed, it has a couple GNU-isms like du --bytes
+    - export PATH="$(brew --prefix fdroidserver)/libexec/bin:$(brew --prefix coreutils)/libexec/gnubin:$PATH"
+
+    - brew autoremove
+    - brew info fdroidserver
+
+    - export BUILD_TOOLS_VERSION=`gsed -n "s,^MINIMUM_APKSIGNER_BUILD_TOOLS_VERSION\s*=\s*['\"]\(.*\)[['\"],\1,p" fdroidserver/common.py`
+    - export ANDROID_HOME="$(brew --prefix)/share/android-commandlinetools"
+    - mkdir -p "$ANDROID_HOME/licenses"
+    - echo -e "\n8933bad161af4178b1185d1a37fbf41ea5269c55" > "$ANDROID_HOME/licenses/android-sdk-license"
+    - echo -e "\nd56f5187479451eabf01fb78af6dfcb131a6481e" >> "$ANDROID_HOME/licenses/android-sdk-license"
+    - echo -e "\n24333f8a63b6825ea9c5514f83c2829b004d1fee" >> "$ANDROID_HOME/licenses/android-sdk-license"
+    - $(brew --prefix)/bin/sdkmanager "build-tools;$BUILD_TOOLS_VERSION"
+
+    - echo "macOS sticks with bash 3.x because of licenses, so avoid new bash syntax"
+    - /bin/bash --version
+    - /bin/bash -n gradlew-fdroid tests/run-tests
+
+    # test fdroidserver from git with current package's dependencies
+    - fdroid="$(brew --prefix fdroidserver)/libexec/bin/python3 $PWD/fdroid" ./tests/run-tests
 
 
 gradle:
