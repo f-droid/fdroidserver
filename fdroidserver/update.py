@@ -563,7 +563,6 @@ def parse_ipa(ipa_path, file_size, sha256):
                     # https://developer.apple.com/documentation/bundleresources/information_property_list/cfbundleshortversionstring
                     ipa["versionCode"] = version_string_to_int(plist["CFBundleShortVersionString"])
                     ipa["versionName"] = plist["CFBundleShortVersionString"]
-                    ipa["usage"] = {k: v for k, v in plist.items() if 'Usage' in k}
     return ipa
 
 

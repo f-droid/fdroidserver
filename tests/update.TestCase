@@ -1922,6 +1922,19 @@ class UpdateTest(unittest.TestCase):
             index['repo'][CATEGORIES_CONFIG_NAME],
         )
 
+    def test_parse_ipa(self):
+        result = fdroidserver.update.parse_ipa('./com.fake.IpaApp_1000000000001.ipa', 'fake_size', 'fake_sha')
+        self.maxDiff = None
+        self.assertDictEqual(result, {
+            'apkName': 'com.fake.IpaApp_1000000000001.ipa',
+            'hash': 'fake_sha',
+            'hashType': 'sha256',
+            'packageName': 'org.onionshare.OnionShare',
+            'size': 'fake_size',
+            'versionCode': 1000000000001,
+            'versionName': '1.0.1',
+        })
+
 
 class TestUpdateVersionStringToInt(unittest.TestCase):
 
