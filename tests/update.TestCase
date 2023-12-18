@@ -1923,6 +1923,28 @@ class UpdateTest(unittest.TestCase):
         )
 
 
+class TestUpdateVersionStringToInt(unittest.TestCase):
+
+    def test_version_string_to_int(self):
+        self.assertEqual(fdroidserver.update.version_string_to_int("1.2.3"), 1000002000003)
+        self.assertEqual(fdroidserver.update.version_string_to_int("0.0.0003"), 3)
+        self.assertEqual(fdroidserver.update.version_string_to_int("0.0.0"), 0)
+        self.assertEqual(fdroidserver.update.version_string_to_int("4321.321.21"), 4321000321000021)
+        self.assertEqual(fdroidserver.update.version_string_to_int("18446744.073709.551615"), 18446744073709551615)
+
+    def test_version_string_to_int_value_errors(self):
+        with self.assertRaises(ValueError):
+            fdroidserver.update.version_string_to_int("1.2.3a")
+        with self.assertRaises(ValueError):
+            fdroidserver.update.version_string_to_int("asdfasdf")
+        with self.assertRaises(ValueError):
+            fdroidserver.update.version_string_to_int("1.2.-3")
+        with self.assertRaises(ValueError):
+            fdroidserver.update.version_string_to_int("-1.2.-3")
+        with self.assertRaises(ValueError):
+            fdroidserver.update.version_string_to_int("0.0.0x3")
+
+
 if __name__ == "__main__":
     os.chdir(os.path.dirname(__file__))
 
@@ -1938,4 +1960,5 @@ if __name__ == "__main__":
 
     newSuite = unittest.TestSuite()
     newSuite.addTest(unittest.makeSuite(UpdateTest))
+    newSuite.addTest(unittest.makeSuite(TestUpdateVersionStringToInt))
     unittest.main(failfast=False)

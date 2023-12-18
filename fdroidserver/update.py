@@ -524,6 +524,9 @@ def insert_obbs(repodir, apps, apks):
                 break
 
 
+VERSION_STRING_RE = re.compile(r'^([0-9]+)\.([0-9]+)\.([0-9]+)$')
+
+
 def version_string_to_int(version):
     """
     Convert sermver version designation to version code.
@@ -532,10 +535,12 @@ def version_string_to_int(version):
     consisting of numeric characters (0-9) and periods to a number. The
     exponents are chosen such that it still fits in the 64bit JSON/Android range.
     """
-    version = version.split('.')
-    major = int(version.pop(0)) if version else 0
-    minor = int(version.pop(0)) if version else 0
-    patch = int(version.pop(0)) if version else 0
+    m = VERSION_STRING_RE.match(version)
+    if not m:
+        raise ValueError(f"invalid version string '{version}'")
+    major = int(m.group(1))
+    minor = int(m.group(2))
+    patch = int(m.group(3))
     return major * 10**12 + minor * 10**6 + patch
 
 
