@@ -49,10 +49,10 @@ from binascii import hexlify
 
 from . import _
 from . import common
-from . import index
 from . import metadata
 from .common import DEFAULT_LOCALE
 from .exception import BuildException, FDroidException, VerificationException
+import fdroidserver.index
 
 from PIL import Image, PngImagePlugin
 
@@ -599,7 +599,7 @@ def scan_repo_for_ipas(apkcache, repodir, knownapks):
         ipa = apkcache.get(ipa_name, {})
 
         if ipa.get('hash') != sha256:
-            ipa = parse_ipa(ipa_path, file_size, sha256)
+            ipa = fdroidserver.update.parse_ipa(ipa_path, file_size, sha256)
             apkcache[ipa_name] = ipa
             cachechanged = True
 
@@ -2433,7 +2433,7 @@ def main():
     if len(repodirs) > 1:
         archive_old_apks(apps, apks, archapks, repodirs[0], repodirs[1], config['archive_older'])
         archived_apps = prepare_apps(apps, archapks, repodirs[1])
-        index.make(archived_apps, archapks, repodirs[1], True)
+        fdroidserver.index.make(archived_apps, archapks, repodirs[1], True)
 
     repoapps = prepare_apps(apps, apks, repodirs[0])
 
@@ -2446,13 +2446,13 @@ def main():
             app_dict = dict()
             app_dict[appid] = app
             if os.path.isdir(repodir):
-                index.make(app_dict, apks, repodir, False)
+                fdroidserver.index.make(app_dict, apks, repodir, False)
             else:
                 logging.info(_('Skipping index generation for {appid}').format(appid=appid))
         return
 
     # Make the index for the main repo...
-    index.make(repoapps, apks, repodirs[0], False)
+    fdroidserver.index.make(repoapps, apks, repodirs[0], False)
 
     git_remote = config.get('binary_transparency_remote')
     if git_remote or os.path.isdir(os.path.join('binary_transparency', '.git')):

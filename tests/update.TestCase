@@ -1958,6 +1958,54 @@ class TestUpdateVersionStringToInt(unittest.TestCase):
             fdroidserver.update.version_string_to_int("0.0.0x3")
 
 
+class TestScanRepoForIpas(unittest.TestCase):
+
+    def setUp(self):
+        self.maxDiff = None
+
+    def test_scan_repo_for_ipas_no_cache(self):
+        self.maxDiff = None
+        with tempfile.TemporaryDirectory() as tmpdir, TmpCwd(tmpdir):
+            os.mkdir("repo")
+            with open('repo/abc.Def_123.ipa', 'w') as f:
+                f.write('abc')
+            with open('repo/xyz.XXX_123.ipa', 'w') as f:
+                f.write('xyz')
+
+            apkcache = mock.MagicMock()
+            # apkcache['a'] = 1
+            repodir = "repo"
+            knownapks = mock.MagicMock()
+
+            def mocked_parse(p, s, c):
+                return {
+                    'packageName': 'abc' if 'abc' in p else 'xyz'
+                }
+
+            with mock.patch('fdroidserver.update.parse_ipa', mocked_parse):
+                ipas, checkchanged = fdroidserver.update.scan_repo_for_ipas(apkcache, repodir, knownapks)
+
+            self.assertEqual(checkchanged, True)
+            self.assertEqual(len(ipas), 2)
+            self.assertEqual(ipas[0]['packageName'], 'xyz')
+            self.assertEqual(ipas[1]['packageName'], 'abc')
+
+            self.assertEqual(apkcache.__setitem__.mock_calls[0].args[1]['packageName'], 'xyz')
+            self.assertEqual(apkcache.__setitem__.mock_calls[1].args[1]['packageName'], 'abc')
+            self.assertEqual(apkcache.__setitem__.call_count, 2)
+
+            knownapks.recordapk.call_count = 2
+            self.assertEqual(
+                knownapks.recordapk.mock_calls[0],
+                unittest.mock.call('xyz.XXX_123.ipa', 'xyz'),
+            )
+            # skipping one call here, because accessing `if added:` shows up in mock_calls
+            self.assertEqual(
+                knownapks.recordapk.mock_calls[2],
+                unittest.mock.call('abc.Def_123.ipa', 'abc'),
+            )
+
+
 if __name__ == "__main__":
     os.chdir(os.path.dirname(__file__))
 
@@ -1974,4 +2022,5 @@ if __name__ == "__main__":
     newSuite = unittest.TestSuite()
     newSuite.addTest(unittest.makeSuite(UpdateTest))
     newSuite.addTest(unittest.makeSuite(TestUpdateVersionStringToInt))
+    newSuite.addTest(unittest.makeSuite(TestScanRepoForIpas))
     unittest.main(failfast=False)
