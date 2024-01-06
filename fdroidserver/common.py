@@ -2103,7 +2103,7 @@ def getsrclib(spec, srclib_dir, basepath=False,
         name = spec
         ref = None
     else:
-        name, ref = spec.split('@')
+        name, ref = spec.split('@', 1)
         if ':' in name:
             number, name = name.split(':', 1)
         if '/' in name:
