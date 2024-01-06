@@ -2103,11 +2103,7 @@ def getsrclib(spec, srclib_dir, basepath=False,
         name = spec
         ref = None
     else:
-        name, ref = spec.split('@', 1)
-        if ':' in name:
-            number, name = name.split(':', 1)
-        if '/' in name:
-            name, subdir = name.split('/', 1)
+        name, ref, number, subdir = parse_srclib_spec(spec)
 
     if name not in fdroidserver.metadata.srclibs:
         raise VCSException('srclib ' + name + ' not found.')
