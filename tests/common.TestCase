@@ -1514,13 +1514,27 @@ class CommonTest(unittest.TestCase):
         self.assertEqual(fdroidserver.common.parse_srclib_spec('1:Support/v7/appcompat@android-4.4_r1.1'),
                          ('Support', 'android-4.4_r1.1', '1', 'v7/appcompat'))
 
-    def test_parse_srclib_spec_bad(self):
+    def test_parse_srclib_spec_many_ats(self):
+        self.assertEqual(
+            fdroidserver.common.parse_srclib_spec('foo@@v2'), ('foo', '@v2', None, None)
+        )
+        self.assertEqual(
+            fdroidserver.common.parse_srclib_spec('bar@2@f'), ('bar', '2@f', None, None)
+        )
+
+    def test_parse_srclib_spec_none(self):
         with self.assertRaises(MetaDataException):
-            self.assertEqual(fdroidserver.common.parse_srclib_spec(None))
+            fdroidserver.common.parse_srclib_spec(None)
+
+    def test_parse_srclib_spec_no_ref(self):
         with self.assertRaises(MetaDataException):
-            self.assertEqual(fdroidserver.common.parse_srclib_spec('no-ref'))
+            fdroidserver.common.parse_srclib_spec('no-ref')
         with self.assertRaises(MetaDataException):
-            self.assertEqual(fdroidserver.common.parse_srclib_spec('@multi@at-signs@'))
+            fdroidserver.common.parse_srclib_spec('noref@')
+
+    def test_parse_srclib_spec_no_name(self):
+        with self.assertRaises(MetaDataException):
+            fdroidserver.common.parse_srclib_spec('@ref')
 
     def test_remove_signing_keys(self):
         shutil.copytree(

@@ -2059,15 +2059,15 @@ def parse_srclib_spec(spec):
                                   "(not a string): '{}'")
                                 .format(spec))
 
-    tokens = spec.split('@')
-    if len(tokens) > 2:
-        raise MetaDataException(_("could not parse srclib spec "
-                                  "(too many '@' signs): '{}'")
-                                .format(spec))
-    elif len(tokens) < 2:
-        raise MetaDataException(_("could not parse srclib spec "
-                                  "(no ref specified): '{}'")
-                                .format(spec))
+    tokens = spec.split('@', 1)
+    if not tokens[0]:
+        raise MetaDataException(
+            _("could not parse srclib spec (no name specified): '{}'").format(spec)
+        )
+    if len(tokens) < 2 or not tokens[1]:
+        raise MetaDataException(
+            _("could not parse srclib spec (no ref specified): '{}'").format(spec)
+        )
 
     name = tokens[0]
     ref = tokens[1]
