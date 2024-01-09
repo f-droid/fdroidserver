@@ -46,7 +46,7 @@ metadata_v0:
   script:
     - git fetch https://gitlab.com/fdroid/fdroidserver.git $RELEASE_COMMIT_ID
     - cd tests
-    - export GITCOMMIT=`git describe`
+    - export GITCOMMIT=$(git rev-parse HEAD)
     - git checkout $RELEASE_COMMIT_ID
     - cd ..
     - git clone --depth 1 https://gitlab.com/fdroid/fdroiddata.git

@@ -65,7 +65,7 @@ if not os.path.isdir('metadata'):
     sys.exit(1)
 
 repo = git.Repo(localmodule)
-savedir = os.path.join('metadata', 'dump_' + repo.git.describe())
+savedir = os.path.join('metadata', 'dump_' + repo.git.rev_parse('HEAD'))
 if not os.path.isdir(savedir):
     os.mkdir(savedir)
 
