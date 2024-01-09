@@ -26,10 +26,10 @@ import json
 import logging
 import os
 import re
+import ruamel.yaml
 import shutil
 import tempfile
 import urllib.parse
-import yaml
 import zipfile
 import calendar
 import qrcode
@@ -1409,7 +1409,7 @@ def add_mirrors_to_repodict(repo_section, repodict):
                 )
             )
         with mirrors_yml.open() as fp:
-            mirrors_config = yaml.safe_load(fp)
+            mirrors_config = ruamel.yaml.YAML(typ='safe').load(fp)
         if not isinstance(mirrors_config, list):
             msg = _('{path} is not list, but a {datatype}!')
             raise TypeError(

@@ -2838,6 +2838,36 @@ class CommonTest(unittest.TestCase):
         with self.assertRaises(TypeError):
             fdroidserver.common.load_localized_config(CATEGORIES_CONFIG_NAME, 'repo')
 
+    def test_config_type_check_config_yml_dict(self):
+        fdroidserver.common.config_type_check('config.yml', dict())
+
+    def test_config_type_check_config_yml_list(self):
+        with self.assertRaises(TypeError):
+            fdroidserver.common.config_type_check('config.yml', list())
+
+    def test_config_type_check_config_yml_set(self):
+        with self.assertRaises(TypeError):
+            fdroidserver.common.config_type_check('config.yml', set())
+
+    def test_config_type_check_config_yml_str(self):
+        with self.assertRaises(TypeError):
+            fdroidserver.common.config_type_check('config.yml', str())
+
+    def test_config_type_check_mirrors_list(self):
+        fdroidserver.common.config_type_check('config/mirrors.yml', list())
+
+    def test_config_type_check_mirrors_dict(self):
+        with self.assertRaises(TypeError):
+            fdroidserver.common.config_type_check('config/mirrors.yml', dict())
+
+    def test_config_type_check_mirrors_set(self):
+        with self.assertRaises(TypeError):
+            fdroidserver.common.config_type_check('config/mirrors.yml', set())
+
+    def test_config_type_check_mirrors_str(self):
+        with self.assertRaises(TypeError):
+            fdroidserver.common.config_type_check('config/mirrors.yml', str())
+
 
 if __name__ == "__main__":
     os.chdir(os.path.dirname(__file__))

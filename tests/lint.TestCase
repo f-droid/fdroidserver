@@ -5,6 +5,7 @@
 import logging
 import optparse
 import os
+import ruamel.yaml
 import shutil
 import sys
 import tempfile
@@ -367,6 +368,75 @@ class LintTest(unittest.TestCase):
         self.assertEqual(fdroidserver.lint.CATEGORIES_KEYS, ['foo', 'bar'])
         app = fdroidserver.metadata.App({'Categories': ['bar']})
         self.assertEqual(0, len(list(fdroidserver.lint.check_categories(app))))
+
+    def test_lint_config_basic_mirrors_yml(self):
+        os.chdir(self.testdir)
+        yaml = ruamel.yaml.YAML(typ='safe')
+        with Path('mirrors.yml').open('w') as fp:
+            yaml.dump([{'url': 'https://example.com/fdroid/repo'}], fp)
+        self.assertTrue(fdroidserver.lint.lint_config('mirrors.yml'))
+
+    def test_lint_config_mirrors_yml_kenya_countryCode(self):
+        os.chdir(self.testdir)
+        yaml = ruamel.yaml.YAML(typ='safe')
+        with Path('mirrors.yml').open('w') as fp:
+            yaml.dump([{'url': 'https://foo.com/fdroid/repo', 'countryCode': 'KE'}], fp)
+        self.assertTrue(fdroidserver.lint.lint_config('mirrors.yml'))
+
+    def test_lint_config_mirrors_yml_invalid_countryCode(self):
+        """WV is "indeterminately reserved" so it should never be used."""
+        os.chdir(self.testdir)
+        yaml = ruamel.yaml.YAML(typ='safe')
+        with Path('mirrors.yml').open('w') as fp:
+            yaml.dump([{'url': 'https://foo.com/fdroid/repo', 'countryCode': 'WV'}], fp)
+        self.assertFalse(fdroidserver.lint.lint_config('mirrors.yml'))
+
+    def test_lint_config_mirrors_yml_alpha3_countryCode(self):
+        """Only ISO 3166-1 alpha 2 are supported"""
+        os.chdir(self.testdir)
+        yaml = ruamel.yaml.YAML(typ='safe')
+        with Path('mirrors.yml').open('w') as fp:
+            yaml.dump([{'url': 'https://de.com/fdroid/repo', 'countryCode': 'DEU'}], fp)
+        self.assertFalse(fdroidserver.lint.lint_config('mirrors.yml'))
+
+    def test_lint_config_mirrors_yml_one_invalid_countryCode(self):
+        """WV is "indeterminately reserved" so it should never be used."""
+        os.chdir(self.testdir)
+        yaml = ruamel.yaml.YAML(typ='safe')
+        with Path('mirrors.yml').open('w') as fp:
+            yaml.dump(
+                [
+                    {'url': 'https://bar.com/fdroid/repo', 'countryCode': 'BA'},
+                    {'url': 'https://foo.com/fdroid/repo', 'countryCode': 'FO'},
+                    {'url': 'https://wv.com/fdroid/repo', 'countryCode': 'WV'},
+                ],
+                fp,
+            )
+        self.assertFalse(fdroidserver.lint.lint_config('mirrors.yml'))
+
+    def test_lint_config_bad_mirrors_yml_dict(self):
+        os.chdir(self.testdir)
+        Path('mirrors.yml').write_text('baz: [foo, bar]\n')
+        with self.assertRaises(TypeError):
+            fdroidserver.lint.lint_config('mirrors.yml')
+
+    def test_lint_config_bad_mirrors_yml_float(self):
+        os.chdir(self.testdir)
+        Path('mirrors.yml').write_text('1.0\n')
+        with self.assertRaises(TypeError):
+            fdroidserver.lint.lint_config('mirrors.yml')
+
+    def test_lint_config_bad_mirrors_yml_int(self):
+        os.chdir(self.testdir)
+        Path('mirrors.yml').write_text('1\n')
+        with self.assertRaises(TypeError):
+            fdroidserver.lint.lint_config('mirrors.yml')
+
+    def test_lint_config_bad_mirrors_yml_str(self):
+        os.chdir(self.testdir)
+        Path('mirrors.yml').write_text('foo\n')
+        with self.assertRaises(TypeError):
+            fdroidserver.lint.lint_config('mirrors.yml')
 
 
 class LintAntiFeaturesTest(unittest.TestCase):

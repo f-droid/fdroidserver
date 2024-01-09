@@ -361,6 +361,26 @@ def regsub_file(pattern, repl, path):
         f.write(text)
 
 
+def config_type_check(path, data):
+    if Path(path).name == 'mirrors.yml':
+        expected_type = list
+    else:
+        expected_type = dict
+    if expected_type == dict:
+        if not isinstance(data, dict):
+            msg = _('{path} is not "key: value" dict, but a {datatype}!')
+            raise TypeError(msg.format(path=path, datatype=type(data).__name__))
+    elif not isinstance(data, expected_type):
+        msg = _('{path} is not {expected_type}, but a {datatype}!')
+        raise TypeError(
+            msg.format(
+                path=path,
+                expected_type=expected_type.__name__,
+                datatype=type(data).__name__,
+            )
+        )
+
+
 def read_config(opts=None):
     """Read the repository config.
 
@@ -401,11 +421,7 @@ def read_config(opts=None):
             config = yaml.safe_load(fp)
         if not config:
             config = {}
-        if not isinstance(config, dict):
-            msg = _('{path} is not "key: value" dict, but a {datatype}!')
-            raise TypeError(
-                msg.format(path=config_file, datatype=type(config).__name__)
-            )
+        config_type_check(config_file, config)
     elif os.path.exists(old_config_file):
         logging.warning(_("""{oldfile} is deprecated, use {newfile}""")
                         .format(oldfile=old_config_file, newfile=config_file))
@@ -413,12 +429,12 @@ def read_config(opts=None):
             code = compile(fp.read(), old_config_file, 'exec')
             exec(code, None, config)  # nosec TODO automatically migrate
 
-    for k in ('mirrors', 'install_list', 'uninstall_list', 'serverwebroot', 'servergitroot'):
-        if k in config:
-            if not type(config[k]) in (str, list, tuple):
-                logging.warning(
-                    _("'{field}' will be in random order! Use () or [] brackets if order is important!")
-                    .format(field=k))
+        for k in ('mirrors', 'install_list', 'uninstall_list', 'serverwebroot', 'servergitroot'):
+            if k in config:
+                if not type(config[k]) in (str, list, tuple):
+                    logging.warning(
+                        _("'{field}' will be in random order! Use () or [] brackets if order is important!")
+                        .format(field=k))
 
     # smartcardoptions must be a list since its command line args for Popen
     smartcardoptions = config.get('smartcardoptions')
