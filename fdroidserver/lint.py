@@ -1691,7 +1691,6 @@ CHECK_CONFIG_KEYS = (
     'apk_signing_key_block_list',
     'archive',
     'archive_description',
-    'archive_icon',
     'archive_name',
     'archive_older',
     'archive_url',

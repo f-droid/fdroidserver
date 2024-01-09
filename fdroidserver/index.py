@@ -146,6 +146,7 @@ def make(apps, apks, repodir, archive):
     signer_fingerprints = load_publish_signer_fingerprints()
 
     make_v0(sortedapps, apks, repodir, repodict, requestsdict, signer_fingerprints)
+    copy_repo_icon(repodir)
     make_v1(sortedapps, apks, repodir, repodict, requestsdict, signer_fingerprints)
     make_v2(
         sortedapps, apks, repodir, repodict, requestsdict, signer_fingerprints, archive
@@ -1465,34 +1466,38 @@ def make_v0(apps, apks, repodir, repodict, requestsdict, signer_fingerprints):
             signindex.config = common.config
             signindex.sign_jar(signed, use_old_algs=True)
 
-    # Copy the repo icon into the repo directory...
+
+def copy_repo_icon(repodir):
     icon_dir = os.path.join(repodir, 'icons')
     repo_icon = os.path.basename(
         common.config.get('repo_icon', common.default_config['repo_icon'])
     )
     icon_path = os.path.join(icon_dir, repo_icon)
     if not os.path.exists(icon_path):
-        logging.warning(
-            _(
-                'repo_icon "{repo_icon}" does not exist in "{icon_dir}", generating placeholder.'
-            ).format(repo_icon=repo_icon, icon_dir=icon_dir)
-        )
         os.makedirs(icon_dir, exist_ok=True)
-        try:
-            import qrcode
-
-            qrcode.make(common.config['repo_url']).save(icon_path)
-        except Exception as e:
-            if isinstance(e, ModuleNotFoundError):
-                logging.error(
-                    _(
-                        'The "qrcode" Python package is not installed (e.g. apt-get install python3-qrcode)!'
-                    )
-                )
-            exampleicon = os.path.join(
-                common.get_examples_dir(), common.default_config['repo_icon']
+        if os.path.exists(repo_icon):
+            shutil.copy(repo_icon, icon_path)
+        else:
+            logging.warning(
+                _(
+                    'repo_icon "{repo_icon}" does not exist in "{icon_dir}", generating placeholder.'
+                ).format(repo_icon=repo_icon, icon_dir=icon_dir)
             )
-            shutil.copy(exampleicon, icon_path)
+            try:
+                import qrcode
+
+                qrcode.make(common.config['repo_url']).save(icon_path)
+            except Exception as e:
+                if isinstance(e, ModuleNotFoundError):
+                    logging.error(
+                        _(
+                            'The "qrcode" Python package is not installed (e.g. apt-get install python3-qrcode)!'
+                        )
+                    )
+                exampleicon = os.path.join(
+                    common.get_examples_dir(), common.default_config['repo_icon']
+                )
+                shutil.copy(exampleicon, icon_path)
 
 
 def extract_pubkey():
