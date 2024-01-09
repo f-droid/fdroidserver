@@ -34,6 +34,7 @@ import json
 import time
 import yaml
 import copy
+import pathlib
 import defusedxml.ElementTree as ElementTree
 from datetime import datetime, timezone
 from argparse import ArgumentParser
@@ -1208,6 +1209,36 @@ def insert_localized_app_metadata(apps):
                 logging.warning(_('Unsupported graphics file found: {path}').format(path=f))
 
 
+LANG_CODE = re.compile(r'^[a-z]{2}([-_][A-Z][a-zA-Z]{1,3})?$')
+
+
+FASTLANE_IOS_MAP = {
+    "name.txt": 'name',
+    "subtitle.txt": 'summary',
+    "description.txt": 'description',
+}
+
+
+def insert_localized_ios_app_metadata(apps_with_packages):
+
+    for package_name, app in apps_with_packages.items():
+        if not any(pathlib.Path('repo').glob(f'{package_name}*.ipa')):
+            # couldn't find any IPA files for this package_name
+            # so we don't have to look for fastlane data
+            continue
+
+        fastlane_dir = pathlib.Path('build', package_name, 'fastlane')
+
+        for lang_dir in (fastlane_dir / 'metadata').iterdir():
+            lang_code = lang_dir.name
+            m = LANG_CODE.match(lang_code)
+            if m:
+                for metadata_file in (lang_dir).iterdir():
+                    key = FASTLANE_IOS_MAP.get(metadata_file.name)
+                    if key:
+                        _set_localized_text_entry(app, lang_code, key, metadata_file)
+
+
 def scan_repo_files(apkcache, repodir, knownapks, use_date_from_file=False):
     """Scan a repo for all files with an extension except APK/OBB/IPA.
 
@@ -2240,6 +2271,7 @@ def prepare_apps(apps, apks, repodir):
     translate_per_build_anti_features(apps_with_packages, apks)
     if repodir == 'repo':
         insert_localized_app_metadata(apps_with_packages)
+        insert_localized_ios_app_metadata(apps_with_packages)
     insert_missing_app_names_from_apks(apps_with_packages, apks)
     return apps_with_packages
 
