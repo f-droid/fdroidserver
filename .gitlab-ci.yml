@@ -100,6 +100,7 @@ debian_testing:
         gnupg
         ipfs-cid
         python3-defusedxml
+        python3-pycountry
         python3-setuptools
         sdkmanager
     - python3 -c 'import fdroidserver'
@@ -123,7 +124,7 @@ ubuntu_lts_ppa:
     - echo "deb http://ppa.launchpad.net/fdroid/fdroidserver/ubuntu $RELEASE main" >> /etc/apt/sources.list
     - apt-get update
     - apt-get dist-upgrade
-    - apt-get install --install-recommends dexdump fdroidserver git python3-setuptools sdkmanager
+    - apt-get install --install-recommends dexdump fdroidserver git python3-pycountry python3-setuptools sdkmanager
 
     # Test things work with a default branch other than 'master'
     - git config --global init.defaultBranch thisisnotmasterormain
@@ -291,6 +292,7 @@ fedora_latest:
                      python3-babel
                      python3-matplotlib
                      python3-pip
+                     python3-pycountry
                      rsync
                      which
     - $pip install sdkmanager
@@ -346,6 +348,9 @@ macOS:
     - echo "macOS sticks with bash 3.x because of licenses, so avoid new bash syntax"
     - /bin/bash --version
     - /bin/bash -n gradlew-fdroid tests/run-tests
+
+    # TODO remove the packages below once they are included in the Homebrew package
+    - $(brew --prefix fdroidserver)/libexec/bin/python3 -m pip install pycountry
 
     # test fdroidserver from git with current package's dependencies
     - fdroid="$(brew --prefix fdroidserver)/libexec/bin/python3 $PWD/fdroid" ./tests/run-tests
