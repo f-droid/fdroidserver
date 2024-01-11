@@ -1935,6 +1935,12 @@ class UpdateTest(unittest.TestCase):
         )
 
     def test_parse_ipa(self):
+        try:
+            import biplist  # Fedora does not have a biplist package
+
+            biplist  # silence the linters
+        except ImportError as e:
+            self.skipTest(str(e))
         ipa_path = os.path.join(
             os.path.dirname(os.path.abspath(__file__)),
             'com.fake.IpaApp_1000000000001.ipa',

@@ -99,6 +99,7 @@ debian_testing:
         git
         gnupg
         ipfs-cid
+        python3-biplist
         python3-defusedxml
         python3-pycountry
         python3-setuptools
@@ -124,7 +125,14 @@ ubuntu_lts_ppa:
     - echo "deb http://ppa.launchpad.net/fdroid/fdroidserver/ubuntu $RELEASE main" >> /etc/apt/sources.list
     - apt-get update
     - apt-get dist-upgrade
-    - apt-get install --install-recommends dexdump fdroidserver git python3-pycountry python3-setuptools sdkmanager
+    - apt-get install --install-recommends
+        dexdump
+        fdroidserver
+        git
+        python3-biplist
+        python3-pycountry
+        python3-setuptools
+        sdkmanager
 
     # Test things work with a default branch other than 'master'
     - git config --global init.defaultBranch thisisnotmasterormain
@@ -350,7 +358,7 @@ macOS:
     - /bin/bash -n gradlew-fdroid tests/run-tests
 
     # TODO remove the packages below once they are included in the Homebrew package
-    - $(brew --prefix fdroidserver)/libexec/bin/python3 -m pip install pycountry
+    - $(brew --prefix fdroidserver)/libexec/bin/python3 -m pip install biplist pycountry
 
     # test fdroidserver from git with current package's dependencies
     - fdroid="$(brew --prefix fdroidserver)/libexec/bin/python3 $PWD/fdroid" ./tests/run-tests
