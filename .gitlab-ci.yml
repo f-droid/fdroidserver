@@ -42,7 +42,7 @@ metadata_v0:
   image: registry.gitlab.com/fdroid/fdroidserver:buildserver
   variables:
     GIT_DEPTH: 1000
-    RELEASE_COMMIT_ID: a1c4f803de8d4dc92ebd6b571a493183d14a00bf  # after ArchivePolicy: 0
+    RELEASE_COMMIT_ID: 50aa35772b058e76b950c01e16019c072c191b73  # after switching to `git rev-parse`
   script:
     - git fetch https://gitlab.com/fdroid/fdroidserver.git $RELEASE_COMMIT_ID
     - cd tests
