@@ -1922,6 +1922,86 @@ class UpdateTest(unittest.TestCase):
             index['repo'][CATEGORIES_CONFIG_NAME],
         )
 
+    def test_parse_ipa(self):
+        ipa_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'com.fake.IpaApp_1000000000001.ipa')
+        result = fdroidserver.update.parse_ipa(ipa_path, 'fake_size', 'fake_sha')
+        self.maxDiff = None
+        self.assertDictEqual(result, {
+            'apkName': 'com.fake.IpaApp_1000000000001.ipa',
+            'hash': 'fake_sha',
+            'hashType': 'sha256',
+            'packageName': 'org.onionshare.OnionShare',
+            'size': 'fake_size',
+            'versionCode': 1000000000001,
+            'versionName': '1.0.1',
+        })
+
+
+class TestUpdateVersionStringToInt(unittest.TestCase):
+
+    def test_version_string_to_int(self):
+        self.assertEqual(fdroidserver.update.version_string_to_int("1.2.3"), 1000002000003)
+        self.assertEqual(fdroidserver.update.version_string_to_int("0.0.0003"), 3)
+        self.assertEqual(fdroidserver.update.version_string_to_int("0.0.0"), 0)
+        self.assertEqual(fdroidserver.update.version_string_to_int("4321.321.21"), 4321000321000021)
+        self.assertEqual(fdroidserver.update.version_string_to_int("18446744.073709.551615"), 18446744073709551615)
+
+    def test_version_string_to_int_value_errors(self):
+        with self.assertRaises(ValueError):
+            fdroidserver.update.version_string_to_int("1.2.3a")
+        with self.assertRaises(ValueError):
+            fdroidserver.update.version_string_to_int("asdfasdf")
+        with self.assertRaises(ValueError):
+            fdroidserver.update.version_string_to_int("1.2.-3")
+        with self.assertRaises(ValueError):
+            fdroidserver.update.version_string_to_int("-1.2.-3")
+        with self.assertRaises(ValueError):
+            fdroidserver.update.version_string_to_int("0.0.0x3")
+
+
+class TestScanRepoForIpas(unittest.TestCase):
+
+    def setUp(self):
+        self.maxDiff = None
+
+    def test_scan_repo_for_ipas_no_cache(self):
+        self.maxDiff = None
+        with tempfile.TemporaryDirectory() as tmpdir, TmpCwd(tmpdir):
+            os.mkdir("repo")
+            with open('repo/abc.Def_123.ipa', 'w') as f:
+                f.write('abc')
+            with open('repo/xyz.XXX_123.ipa', 'w') as f:
+                f.write('xyz')
+
+            apkcache = mock.MagicMock()
+            # apkcache['a'] = 1
+            repodir = "repo"
+            knownapks = mock.MagicMock()
+
+            def mocked_parse(p, s, c):
+                # pylint: disable=unused-argument
+                return {
+                    'packageName': 'abc' if 'abc' in p else 'xyz'
+                }
+
+            with mock.patch('fdroidserver.update.parse_ipa', mocked_parse):
+                ipas, checkchanged = fdroidserver.update.scan_repo_for_ipas(apkcache, repodir, knownapks)
+
+            self.assertEqual(checkchanged, True)
+            self.assertEqual(len(ipas), 2)
+            package_names_in_ipas = [x['packageName'] for x in ipas]
+            self.assertTrue('abc' in package_names_in_ipas)
+            self.assertTrue('xyz' in package_names_in_ipas)
+
+            apkcache_setter_package_name = [x.args[1]['packageName'] for x in apkcache.__setitem__.mock_calls]
+            self.assertTrue('abc' in apkcache_setter_package_name)
+            self.assertTrue('xyz' in apkcache_setter_package_name)
+            self.assertEqual(apkcache.__setitem__.call_count, 2)
+
+            knownapks.recordapk.call_count = 2
+            self.assertTrue(unittest.mock.call('abc.Def_123.ipa', 'abc') in knownapks.recordapk.mock_calls)
+            self.assertTrue(unittest.mock.call('xyz.XXX_123.ipa', 'xyz') in knownapks.recordapk.mock_calls)
+
 
 if __name__ == "__main__":
     os.chdir(os.path.dirname(__file__))
@@ -1938,4 +2018,6 @@ if __name__ == "__main__":
 
     newSuite = unittest.TestSuite()
     newSuite.addTest(unittest.makeSuite(UpdateTest))
+    newSuite.addTest(unittest.makeSuite(TestUpdateVersionStringToInt))
+    newSuite.addTest(unittest.makeSuite(TestScanRepoForIpas))
     unittest.main(failfast=False)

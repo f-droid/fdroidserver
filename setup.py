@@ -108,7 +108,11 @@ setup(
         'sdkmanager >= 0.6.4',
         'yamllint',
     ],
+    # Some requires are only needed for very limited cases:
+    # * biplist is only used for parsing Apple .ipa files
+    # * pycountry is only for linting config/mirrors.yml
     extras_require={
+        'optional': ['biplist', 'pycountry'],
         'test': ['pyjks', 'html5print'],
         'docs': [
             'sphinx',
