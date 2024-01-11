@@ -167,12 +167,21 @@ class UpdateTest(unittest.TestCase):
         fdroidserver.update.insert_localized_app_metadata(apps)
 
         appdir = os.path.join('repo', 'info.guardianproject.urzip', 'en-US')
-        self.assertTrue(os.path.isfile(os.path.join(
-            appdir,
-            'icon_NJXNzMcyf-v9i5a1ElJi0j9X1LvllibCa48xXYPlOqQ=.png')))
-        self.assertTrue(os.path.isfile(os.path.join(
-            appdir,
-            'featureGraphic_GFRT5BovZsENGpJq1HqPODGWBRPWQsx25B95Ol5w_wU=.png')))
+        self.assertTrue(
+            os.path.isfile(
+                os.path.join(
+                    appdir, 'icon_NJXNzMcyf-v9i5a1ElJi0j9X1LvllibCa48xXYPlOqQ=.png'
+                )
+            )
+        )
+        self.assertTrue(
+            os.path.isfile(
+                os.path.join(
+                    appdir,
+                    'featureGraphic_GFRT5BovZsENGpJq1HqPODGWBRPWQsx25B95Ol5w_wU=.png',
+                )
+            )
+        )
 
         self.assertEqual(6, len(apps))
         for packageName, app in apps.items():
@@ -1894,7 +1903,10 @@ class UpdateTest(unittest.TestCase):
         with open('repo/index-v2.json') as fp:
             index = json.load(fp)
         self.assertEqual(
-            {'System': {'name': {'en-US': 'System Apps'}}, 'Time': {'name': {'en-US': 'Time'}}},
+            {
+                'System': {'name': {'en-US': 'System Apps'}},
+                'Time': {'name': {'en-US': 'Time'}},
+            },
             index['repo'][CATEGORIES_CONFIG_NAME],
         )
 
@@ -1923,28 +1935,40 @@ class UpdateTest(unittest.TestCase):
         )
 
     def test_parse_ipa(self):
-        ipa_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'com.fake.IpaApp_1000000000001.ipa')
+        ipa_path = os.path.join(
+            os.path.dirname(os.path.abspath(__file__)),
+            'com.fake.IpaApp_1000000000001.ipa',
+        )
         result = fdroidserver.update.parse_ipa(ipa_path, 'fake_size', 'fake_sha')
         self.maxDiff = None
-        self.assertDictEqual(result, {
-            'apkName': 'com.fake.IpaApp_1000000000001.ipa',
-            'hash': 'fake_sha',
-            'hashType': 'sha256',
-            'packageName': 'org.onionshare.OnionShare',
-            'size': 'fake_size',
-            'versionCode': 1000000000001,
-            'versionName': '1.0.1',
-        })
+        self.assertDictEqual(
+            result,
+            {
+                'apkName': 'com.fake.IpaApp_1000000000001.ipa',
+                'hash': 'fake_sha',
+                'hashType': 'sha256',
+                'packageName': 'org.onionshare.OnionShare',
+                'size': 'fake_size',
+                'versionCode': 1000000000001,
+                'versionName': '1.0.1',
+            },
+        )
 
 
 class TestUpdateVersionStringToInt(unittest.TestCase):
-
     def test_version_string_to_int(self):
-        self.assertEqual(fdroidserver.update.version_string_to_int("1.2.3"), 1000002000003)
+        self.assertEqual(
+            fdroidserver.update.version_string_to_int("1.2.3"), 1000002000003
+        )
         self.assertEqual(fdroidserver.update.version_string_to_int("0.0.0003"), 3)
         self.assertEqual(fdroidserver.update.version_string_to_int("0.0.0"), 0)
-        self.assertEqual(fdroidserver.update.version_string_to_int("4321.321.21"), 4321000321000021)
-        self.assertEqual(fdroidserver.update.version_string_to_int("18446744.073709.551615"), 18446744073709551615)
+        self.assertEqual(
+            fdroidserver.update.version_string_to_int("4321.321.21"), 4321000321000021
+        )
+        self.assertEqual(
+            fdroidserver.update.version_string_to_int("18446744.073709.551615"),
+            18446744073709551615,
+        )
 
     def test_version_string_to_int_value_errors(self):
         with self.assertRaises(ValueError):
@@ -1960,7 +1984,6 @@ class TestUpdateVersionStringToInt(unittest.TestCase):
 
 
 class TestScanRepoForIpas(unittest.TestCase):
-
     def setUp(self):
         self.maxDiff = None
 
@@ -1980,12 +2003,12 @@ class TestScanRepoForIpas(unittest.TestCase):
 
             def mocked_parse(p, s, c):
                 # pylint: disable=unused-argument
-                return {
-                    'packageName': 'abc' if 'abc' in p else 'xyz'
-                }
+                return {'packageName': 'abc' if 'abc' in p else 'xyz'}
 
             with mock.patch('fdroidserver.update.parse_ipa', mocked_parse):
-                ipas, checkchanged = fdroidserver.update.scan_repo_for_ipas(apkcache, repodir, knownapks)
+                ipas, checkchanged = fdroidserver.update.scan_repo_for_ipas(
+                    apkcache, repodir, knownapks
+                )
 
             self.assertEqual(checkchanged, True)
             self.assertEqual(len(ipas), 2)
@@ -1993,14 +2016,22 @@ class TestScanRepoForIpas(unittest.TestCase):
             self.assertTrue('abc' in package_names_in_ipas)
             self.assertTrue('xyz' in package_names_in_ipas)
 
-            apkcache_setter_package_name = [x.args[1]['packageName'] for x in apkcache.__setitem__.mock_calls]
+            apkcache_setter_package_name = [
+                x.args[1]['packageName'] for x in apkcache.__setitem__.mock_calls
+            ]
             self.assertTrue('abc' in apkcache_setter_package_name)
             self.assertTrue('xyz' in apkcache_setter_package_name)
             self.assertEqual(apkcache.__setitem__.call_count, 2)
 
             knownapks.recordapk.call_count = 2
-            self.assertTrue(unittest.mock.call('abc.Def_123.ipa', 'abc') in knownapks.recordapk.mock_calls)
-            self.assertTrue(unittest.mock.call('xyz.XXX_123.ipa', 'xyz') in knownapks.recordapk.mock_calls)
+            self.assertTrue(
+                unittest.mock.call('abc.Def_123.ipa', 'abc')
+                in knownapks.recordapk.mock_calls
+            )
+            self.assertTrue(
+                unittest.mock.call('xyz.XXX_123.ipa', 'xyz')
+                in knownapks.recordapk.mock_calls
+            )
 
 
 if __name__ == "__main__":
