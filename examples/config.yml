@@ -178,6 +178,12 @@
 # serverwebroot:
 #   - foo.com:/usr/share/nginx/www/fdroid
 #   - bar.info:/var/www/fdroid
+#
+# There is a special mode to only deploy the index file:
+#
+# serverwebroot:
+#   - url: 'me@b.az:/srv/fdroid'
+#     indexOnly: true
 
 
 # When running fdroid processes on a remote server, it is possible to

@@ -1655,8 +1655,8 @@ class CommonTest(unittest.TestCase):
         fdroidserver.common.options.quiet = False
         fdroidserver.common.config = {}
         fdroidserver.common.config['serverwebroot'] = [
-            'example.com:/var/www/fdroid/',
-            'example.com:/var/www/fbot/',
+            {'url': 'example.com:/var/www/fdroid/'},
+            {'url': 'example.com:/var/www/fbot/'},
         ]
         fdroidserver.common.config['deploy_process_logs'] = True
         fdroidserver.common.config['identity_file'] = 'ssh/id_rsa'
@@ -1718,7 +1718,7 @@ class CommonTest(unittest.TestCase):
 
         fdroidserver.common.options = mock.Mock()
         fdroidserver.common.config = {}
-        fdroidserver.common.config['serverwebroot'] = [fakeserver]
+        fdroidserver.common.config['serverwebroot'] = [{'url': fakeserver}]
         fdroidserver.common.config['identity_file'] = 'ssh/id_rsa'
 
         def assert_subprocess_call(cmd):
@@ -2872,7 +2872,7 @@ class CommonTest(unittest.TestCase):
         os.chdir(self.testdir)
         Path('config.yml').write_text("""serverwebroot: 'foo@example.com:/var/www'""")
         self.assertEqual(
-            ['foo@example.com:/var/www/'],
+            [{'url': 'foo@example.com:/var/www/'}],
             fdroidserver.common.read_config()['serverwebroot'],
         )
 
@@ -2880,7 +2880,15 @@ class CommonTest(unittest.TestCase):
         os.chdir(self.testdir)
         Path('config.yml').write_text("""serverwebroot:\n  - foo@example.com:/var/www""")
         self.assertEqual(
-            ['foo@example.com:/var/www/'],
+            [{'url': 'foo@example.com:/var/www/'}],
+            fdroidserver.common.read_config()['serverwebroot'],
+        )
+
+    def test_config_serverwebroot_dict(self):
+        os.chdir(self.testdir)
+        Path('config.yml').write_text("""serverwebroot:\n  - url: 'foo@example.com:/var/www'""")
+        self.assertEqual(
+            [{'url': 'foo@example.com:/var/www/'}],
             fdroidserver.common.read_config()['serverwebroot'],
         )
 

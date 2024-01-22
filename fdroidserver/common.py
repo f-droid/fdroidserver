@@ -462,18 +462,22 @@ def read_config(opts=None):
 
     if 'serverwebroot' in config:
         if isinstance(config['serverwebroot'], str):
-            roots = [config['serverwebroot']]
+            roots = [{'url': config['serverwebroot']}]
         elif all(isinstance(item, str) for item in config['serverwebroot']):
+            roots = [{'url': i} for i in config['serverwebroot']]
+        elif all(isinstance(item, dict) for item in config['serverwebroot']):
             roots = config['serverwebroot']
         else:
             raise TypeError(_('only accepts strings, lists, and tuples'))
         rootlist = []
-        for rootstr in roots:
+        for d in roots:
             # since this is used with rsync, where trailing slashes have
             # meaning, ensure there is always a trailing slash
+            rootstr = d['url']
             if rootstr[-1] != '/':
                 rootstr += '/'
-            rootlist.append(rootstr.replace('//', '/'))
+            d['url'] = rootstr.replace('//', '/')
+            rootlist.append(d)
         config['serverwebroot'] = rootlist
 
     if 'servergitmirrors' in config:
@@ -4052,7 +4056,8 @@ def rsync_status_file_to_repo(path, repo_subdir=None):
         logging.debug(_('skip deploying full build logs: not enabled in config'))
         return
 
-    for webroot in config.get('serverwebroot', []):
+    for d in config.get('serverwebroot', []):
+        webroot = d['url']
         cmd = ['rsync',
                '--archive',
                '--delete-after',

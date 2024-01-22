@@ -294,11 +294,12 @@ def update_serverwebroot(serverwebroot, repo_section):
         rsyncargs += ['-e', 'ssh -oBatchMode=yes -oIdentitiesOnly=yes -i ' + options.identity_file]
     elif 'identity_file' in config:
         rsyncargs += ['-e', 'ssh -oBatchMode=yes -oIdentitiesOnly=yes -i ' + config['identity_file']]
-    logging.info('rsyncing ' + repo_section + ' to ' + serverwebroot)
+    url = serverwebroot['url']
+    logging.info('rsyncing ' + repo_section + ' to ' + url)
     excludes = _get_index_excludes(repo_section)
-    if subprocess.call(rsyncargs + excludes + [repo_section, serverwebroot]) != 0:
+    if subprocess.call(rsyncargs + excludes + [repo_section, url]) != 0:
         raise FDroidException()
-    if subprocess.call(rsyncargs + [repo_section, serverwebroot]) != 0:
+    if subprocess.call(rsyncargs + [repo_section, url]) != 0:
         raise FDroidException()
     # upload "current version" symlinks if requested
     if config['make_current_version_link'] and repo_section == 'repo':
@@ -308,7 +309,7 @@ def update_serverwebroot(serverwebroot, repo_section):
             if os.path.islink(f):
                 links_to_upload.append(f)
         if len(links_to_upload) > 0:
-            if subprocess.call(rsyncargs + links_to_upload + [serverwebroot]) != 0:
+            if subprocess.call(rsyncargs + links_to_upload + [url]) != 0:
                 raise FDroidException()
 
 

@@ -45,16 +45,16 @@ class DeployTest(unittest.TestCase):
         fake_apk = repo / 'fake.apk'
         with fake_apk.open('w') as fp:
             fp.write('not an APK, but has the right filename')
-        serverwebroot = Path('serverwebroot')
-        serverwebroot.mkdir()
+        url = Path('url')
+        url.mkdir()
 
         # setup parameters for this test run
         fdroidserver.deploy.options.identity_file = None
         fdroidserver.deploy.config['make_current_version_link'] = False
 
-        dest_apk = Path(serverwebroot) / fake_apk
+        dest_apk = url / fake_apk
         self.assertFalse(dest_apk.is_file())
-        fdroidserver.deploy.update_serverwebroot(str(serverwebroot), 'repo')
+        fdroidserver.deploy.update_serverwebroot({'url': str(url)}, 'repo')
         self.assertTrue(dest_apk.is_file())
 
     @mock.patch.dict(os.environ, clear=True)
@@ -72,7 +72,7 @@ class DeployTest(unittest.TestCase):
         fdroidserver.deploy.options.quiet = True
         fdroidserver.deploy.options.identity_file = None
         fdroidserver.deploy.config['make_current_version_link'] = True
-        serverwebroot = "example.com:/var/www/fdroid"
+        url = "example.com:/var/www/fdroid"
         repo_section = 'repo'
 
         # setup function for asserting subprocess.call invocations
@@ -123,7 +123,7 @@ class DeployTest(unittest.TestCase):
                         '--safe-links',
                         '--quiet',
                         'repo',
-                        serverwebroot,
+                        url,
                     ],
                 )
             elif call_iteration == 2:
@@ -152,7 +152,7 @@ class DeployTest(unittest.TestCase):
             os.symlink('repo/com.example.sym.apk.asc', 'Sym.apk.asc')
             os.symlink('repo/com.example.sym.apk.sig', 'Sym.apk.sig')
             with mock.patch('subprocess.call', side_effect=update_server_webroot_call):
-                fdroidserver.deploy.update_serverwebroot(serverwebroot, repo_section)
+                fdroidserver.deploy.update_serverwebroot({'url': url}, repo_section)
         self.assertEqual(call_iteration, 3, 'expected 3 invocations of subprocess.call')
 
     def test_update_serverwebroot_with_id_file(self):
@@ -163,7 +163,7 @@ class DeployTest(unittest.TestCase):
         fdroidserver.deploy.options.identity_file = None
         fdroidserver.deploy.config['identity_file'] = './id_rsa'
         fdroidserver.deploy.config['make_current_version_link'] = False
-        serverwebroot = "example.com:/var/www/fdroid"
+        url = "example.com:/var/www/fdroid"
         repo_section = 'archive'
 
         # setup function for asserting subprocess.call invocations
@@ -204,7 +204,7 @@ class DeployTest(unittest.TestCase):
                         '--exclude',
                         'archive/index.xml',
                         'archive',
-                        serverwebroot,
+                        url,
                     ],
                 )
             elif call_iteration == 1:
@@ -220,7 +220,7 @@ class DeployTest(unittest.TestCase):
                         'ssh -oBatchMode=yes -oIdentitiesOnly=yes -i '
                         + fdroidserver.deploy.config['identity_file'],
                         'archive',
-                        serverwebroot,
+                        url,
                     ],
                 )
             else:
@@ -229,7 +229,7 @@ class DeployTest(unittest.TestCase):
             return 0
 
         with mock.patch('subprocess.call', side_effect=update_server_webroot_call):
-            fdroidserver.deploy.update_serverwebroot(serverwebroot, repo_section)
+            fdroidserver.deploy.update_serverwebroot({'url': url}, repo_section)
         self.assertEqual(call_iteration, 2, 'expected 2 invocations of subprocess.call')
 
     @unittest.skipIf(
