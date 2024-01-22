@@ -2868,6 +2868,22 @@ class CommonTest(unittest.TestCase):
         with self.assertRaises(TypeError):
             fdroidserver.common.config_type_check('config/mirrors.yml', str())
 
+    def test_config_serverwebroot_str(self):
+        os.chdir(self.testdir)
+        Path('config.yml').write_text("""serverwebroot: 'foo@example.com:/var/www'""")
+        self.assertEqual(
+            ['foo@example.com:/var/www/'],
+            fdroidserver.common.read_config()['serverwebroot'],
+        )
+
+    def test_config_serverwebroot_list(self):
+        os.chdir(self.testdir)
+        Path('config.yml').write_text("""serverwebroot:\n  - foo@example.com:/var/www""")
+        self.assertEqual(
+            ['foo@example.com:/var/www/'],
+            fdroidserver.common.read_config()['serverwebroot'],
+        )
+
 
 if __name__ == "__main__":
     os.chdir(os.path.dirname(__file__))
