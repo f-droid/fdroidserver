@@ -35,6 +35,59 @@ class DeployTest(unittest.TestCase):
     def tearDown(self):
         self._td.cleanup()
 
+    def test_update_serverwebroots_bad_None(self):
+        with self.assertRaises(TypeError):
+            fdroidserver.deploy.update_serverwebroots(None, 'repo')
+
+    def test_update_serverwebroots_bad_int(self):
+        with self.assertRaises(TypeError):
+            fdroidserver.deploy.update_serverwebroots(9, 'repo')
+
+    def test_update_serverwebroots_bad_float(self):
+        with self.assertRaises(TypeError):
+            fdroidserver.deploy.update_serverwebroots(1.0, 'repo')
+
+    def test_update_serverwebroots(self):
+        """rsync works with file paths, so this test uses paths for the URLs"""
+        os.chdir(self.testdir)
+        repo = Path('repo')
+        repo.mkdir()
+        fake_apk = repo / 'fake.apk'
+        with fake_apk.open('w') as fp:
+            fp.write('not an APK, but has the right filename')
+        url0 = Path('url0/fdroid')
+        url0.mkdir(parents=True)
+        url1 = Path('url1/fdroid')
+        url1.mkdir(parents=True)
+
+        dest_apk0 = url0 / fake_apk
+        dest_apk1 = url1 / fake_apk
+        self.assertFalse(dest_apk0.is_file())
+        self.assertFalse(dest_apk1.is_file())
+        fdroidserver.deploy.update_serverwebroots(
+            [
+                {'url': str(url0)},
+                {'url': str(url1)},
+            ],
+            str(repo),
+        )
+        self.assertTrue(dest_apk0.is_file())
+        self.assertTrue(dest_apk1.is_file())
+
+    def test_update_serverwebroots_url_does_not_end_with_fdroid(self):
+        with self.assertRaises(SystemExit):
+            fdroidserver.deploy.update_serverwebroots([{'url': 'url'}], 'repo')
+
+    def test_update_serverwebroots_bad_ssh_url(self):
+        with self.assertRaises(SystemExit):
+            fdroidserver.deploy.update_serverwebroots(
+                [{'url': 'f@b.ar::/path/to/fdroid'}], 'repo'
+            )
+
+    def test_update_serverwebroots_unsupported_ssh_url(self):
+        with self.assertRaises(SystemExit):
+            fdroidserver.deploy.update_serverwebroots([{'url': 'ssh://nope'}], 'repo')
+
     def test_update_serverwebroot(self):
         """rsync works with file paths, so this test uses paths for the URLs"""
         os.chdir(self.testdir)

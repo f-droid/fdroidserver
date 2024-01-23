@@ -313,6 +313,34 @@ def update_serverwebroot(serverwebroot, repo_section):
                 raise FDroidException()
 
 
+def update_serverwebroots(serverwebroots, repo_section, standardwebroot=True):
+    for d in serverwebroots:
+        # this supports both an ssh host:path and just a path
+        serverwebroot = d['url']
+        s = serverwebroot.rstrip('/').split(':')
+        if len(s) == 1:
+            fdroiddir = s[0]
+        elif len(s) == 2:
+            host, fdroiddir = s
+        else:
+            logging.error(_('Malformed serverwebroot line:') + ' ' + serverwebroot)
+            sys.exit(1)
+        repobase = os.path.basename(fdroiddir)
+        if standardwebroot and repobase != 'fdroid':
+            logging.error(
+                _(
+                    'serverwebroot: path does not end with "fdroid", perhaps you meant one of these:'
+                )
+                + '\n\t'
+                + serverwebroot.rstrip('/')
+                + '/fdroid\n\t'
+                + serverwebroot.rstrip('/').rstrip(repobase)
+                + 'fdroid'
+            )
+            sys.exit(1)
+        update_serverwebroot(d, repo_section)
+
+
 def sync_from_localcopy(repo_section, local_copy_dir):
     """Sync the repo from "local copy dir" filesystem to this box.
 
@@ -748,24 +776,6 @@ def main():
     else:
         standardwebroot = True
 
-    for serverwebroot in config.get('serverwebroot', []):
-        # this supports both an ssh host:path and just a path
-        s = serverwebroot.rstrip('/').split(':')
-        if len(s) == 1:
-            fdroiddir = s[0]
-        elif len(s) == 2:
-            host, fdroiddir = s
-        else:
-            logging.error(_('Malformed serverwebroot line:') + ' ' + serverwebroot)
-            sys.exit(1)
-        repobase = os.path.basename(fdroiddir)
-        if standardwebroot and repobase != 'fdroid':
-            logging.error('serverwebroot path does not end with "fdroid", '
-                          + 'perhaps you meant one of these:\n\t'
-                          + serverwebroot.rstrip('/') + '/fdroid\n\t'
-                          + serverwebroot.rstrip('/').rstrip(repobase) + 'fdroid')
-            sys.exit(1)
-
     if options.local_copy_dir is not None:
         local_copy_dir = options.local_copy_dir
     elif config.get('local_copy_dir'):
@@ -826,8 +836,10 @@ def main():
                 sync_from_localcopy(repo_section, local_copy_dir)
             else:
                 update_localcopy(repo_section, local_copy_dir)
-        for serverwebroot in config.get('serverwebroot', []):
-            update_serverwebroot(serverwebroot, repo_section)
+        if config.get('serverwebroot'):
+            update_serverwebroots(
+                config['serverwebroot'], repo_section, standardwebroot
+            )
         if config.get('servergitmirrors', []):
             # update_servergitmirrors will take care of multiple mirrors so don't need a foreach
             servergitmirrors = config.get('servergitmirrors', [])
