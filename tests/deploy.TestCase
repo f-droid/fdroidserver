@@ -32,13 +32,11 @@ class DeployTest(unittest.TestCase):
         self._td = mkdtemp()
         self.testdir = self._td.name
 
-        fdroidserver.deploy.options = mock.Mock()
-        fdroidserver.deploy.config = {}
-
     def tearDown(self):
         self._td.cleanup()
 
     def test_update_serverwebroot(self):
+        """rsync works with file paths, so this test uses paths for the URLs"""
         os.chdir(self.testdir)
         repo = Path('repo')
         repo.mkdir(parents=True)
@@ -47,10 +45,6 @@ class DeployTest(unittest.TestCase):
             fp.write('not an APK, but has the right filename')
         url = Path('url')
         url.mkdir()
-
-        # setup parameters for this test run
-        fdroidserver.deploy.options.identity_file = None
-        fdroidserver.deploy.config['make_current_version_link'] = False
 
         dest_apk = url / fake_apk
         self.assertFalse(dest_apk.is_file())
@@ -66,12 +60,12 @@ class DeployTest(unittest.TestCase):
 
     def test_update_serverwebroot_make_cur_version_link(self):
         # setup parameters for this test run
+        fdroidserver.deploy.options = mock.Mock()
         fdroidserver.deploy.options.no_checksum = True
         fdroidserver.deploy.options.identity_file = None
         fdroidserver.deploy.options.verbose = False
         fdroidserver.deploy.options.quiet = True
-        fdroidserver.deploy.options.identity_file = None
-        fdroidserver.deploy.config['make_current_version_link'] = True
+        fdroidserver.deploy.config = {'make_current_version_link': True}
         url = "example.com:/var/www/fdroid"
         repo_section = 'repo'
 
@@ -157,12 +151,13 @@ class DeployTest(unittest.TestCase):
 
     def test_update_serverwebroot_with_id_file(self):
         # setup parameters for this test run
-        fdroidserver.deploy.options.no_chcksum = False
+        fdroidserver.deploy.options = mock.Mock()
+        fdroidserver.deploy.options.identity_file = None
+        fdroidserver.deploy.options.no_checksum = True
         fdroidserver.deploy.options.verbose = True
         fdroidserver.deploy.options.quiet = False
         fdroidserver.deploy.options.identity_file = None
-        fdroidserver.deploy.config['identity_file'] = './id_rsa'
-        fdroidserver.deploy.config['make_current_version_link'] = False
+        fdroidserver.deploy.config = {'identity_file': './id_rsa'}
         url = "example.com:/var/www/fdroid"
         repo_section = 'archive'
 

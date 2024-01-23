@@ -284,15 +284,15 @@ def update_serverwebroot(serverwebroot, repo_section):
             _('rsync is missing or broken: {error}').format(error=e)
         ) from e
     rsyncargs = ['rsync', '--archive', '--delete-after', '--safe-links']
-    if not options.no_checksum:
+    if not options or not options.no_checksum:
         rsyncargs.append('--checksum')
-    if options.verbose:
+    if options and options.verbose:
         rsyncargs += ['--verbose']
-    if options.quiet:
+    if options and options.quiet:
         rsyncargs += ['--quiet']
-    if options.identity_file is not None:
+    if options and options.identity_file:
         rsyncargs += ['-e', 'ssh -oBatchMode=yes -oIdentitiesOnly=yes -i ' + options.identity_file]
-    elif 'identity_file' in config:
+    elif config and config.get('identity_file'):
         rsyncargs += ['-e', 'ssh -oBatchMode=yes -oIdentitiesOnly=yes -i ' + config['identity_file']]
     url = serverwebroot['url']
     logging.info('rsyncing ' + repo_section + ' to ' + url)
@@ -302,7 +302,7 @@ def update_serverwebroot(serverwebroot, repo_section):
     if subprocess.call(rsyncargs + [repo_section, url]) != 0:
         raise FDroidException()
     # upload "current version" symlinks if requested
-    if config['make_current_version_link'] and repo_section == 'repo':
+    if config and config.get('make_current_version_link') and repo_section == 'repo':
         links_to_upload = []
         for f in glob.glob('*.apk') \
                 + glob.glob('*.apk.asc') + glob.glob('*.apk.sig'):
