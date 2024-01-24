@@ -923,98 +923,100 @@ if __name__ == "__main__":
     main()
 
 
-SUSS_DEFAULT = '''{
+SUSS_DEFAULT = r'''{
   "cache_duration": 86400,
   "signatures": {
-    "admob": {
-      "gradle_signatures": [
-        "admob.*sdk.*android"
-      ],
-      "license": "NonFree"
-    },
-    "androidx": {
-      "gradle_signatures": [
-        "androidx.navigation:navigation-dynamic-features",
-        "androidx.work:work-gcm"
-      ],
-      "license": "NonFree"
-    },
-    "appcenter-push": {
-      "gradle_signatures": [
-        "appcenter-push"
-      ],
-      "license": "NonFree"
-    },
-    "bugsense": {
-      "gradle_signatures": [
-        "bugsense"
-      ],
-      "license": "NonFree"
-    },
-    "cloudrail": {
-      "gradle_signatures": [
-        "cloudrail"
-      ],
-      "license": "NonFree"
-    },
-    "com.android.billing": {
-      "code_signatures": [
-        "com/android/billing"
-      ],
-      "license": "NonFree"
-    },
     "com.android.billingclient": {
+      "code_signatures": [
+        "com/android/billingclient"
+      ],
       "gradle_signatures": [
-        "com.android.billingclient"
+        "com.android.billingclient",
+        "com.google.androidbrowserhelper:billing",
+        "com.anjlab.android.iab.v3:library",
+        "com.github.penn5:donations",
+        "me.proton.core:payment-iap"
       ],
       "license": "NonFree"
     },
-    "com.anjlab.android.iab.v3": {
+    "com.bugsense": {
+      "code_signatures": [
+        "com/bugsense"
+      ],
       "gradle_signatures": [
-        "com.anjlab.android.iab.v3:library"
+        "com.bugsense"
       ],
       "license": "NonFree"
     },
-    "com.cloudinary": {
+    "com.cloudrail": {
+      "code_signature": [
+        "com/cloudrail"
+      ],
       "gradle_signatures": [
-        "com.cloudinary:cloudinary-android"
+        "com.cloudrail"
       ],
       "license": "NonFree"
     },
-    "com.evernote": {
+    "com.crashlytics.sdk.android": {
+      "code_signatures": [
+        "com/crashlytics"
+      ],
       "gradle_signatures": [
-        "com.evernote:android-job"
+        "crashlytics"
       ],
       "license": "NonFree"
     },
-    "com.facebook": {
+    "com.crittercism": {
+      "code_signatures": [
+        "com/crittercism"
+      ],
       "gradle_signatures": [
-        "[\\"']com.facebook.android['\\":]"
+        "com.crittercism"
+      ],
+      "license": "NonFree"
+    },
+    "com.facebook.android": {
+      "code_signatures": [
+        "com/facebook"
+      ],
+      "gradle_signatures": [
+        "com.facebook.android"
+      ],
+      "license": "NonFree"
+    },
+    "com.flurry.android": {
+      "code_signature": [
+        "com/flurry"
+      ],
+      "gradle_signatures": [
+        "com.flurry.android"
       ],
       "license": "NonFree"
     },
     "com.github.junrar": {
+      "code_signatures": [
+        "com/github/junrar"
+      ],
       "gradle_signatures": [
         "com.github.junrar:junrar"
       ],
       "license": "NonFree"
     },
-    "com.github.penn5": {
+    "com.github.omicronapps.7-Zip-JBinding-4Android": {
       "gradle_signatures": [
-        "com.github.penn5:donations"
+        "com.github.omicronapps:7-Zip-JBinding-4Android"
       ],
-      "license": "NonFree"
+      "license": "NonFree",
+      "name": "7-Zip-JBinding-4Android"
     },
-    "com.google.analytics": {
+    "com.google.ads": {
       "code_signatures": [
-        "com/google/analytics"
+        "com/google/ads"
       ],
-      "license": "NonFree"
-    },
-    "com.google.android.exoplayer": {
       "gradle_signatures": [
-        "com.google.android.exoplayer:extension-cast",
-        "com.google.android.exoplayer:extension-cronet"
+        "com.google.ads",
+        "com.google.android.exoplayer:extension-ima",
+        "androidx.media3:media3-exoplayer-ima"
       ],
       "license": "NonFree"
     },
@@ -1022,198 +1024,256 @@ SUSS_DEFAULT = '''{
       "code_signatures": [
         "com/google/android/gms"
       ],
+      "gradle_signatures": [
+        "com.google.android.gms",
+        "androidx.core:core-google-shortcuts",
+        "androidx.media3:media3-cast",
+        "androidx.media3:media3-datasource-cronet",
+        "androidx.work:work-gcm",
+        "com.google.android.exoplayer:extension-cast",
+        "com.google.android.exoplayer:extension-cronet",
+        "com.evernote:android-job",
+        "com.cloudinary:cloudinary-android.*:2\\.[12]\\.",
+        "com.pierfrancescosoffritti.androidyoutubeplayer:chromecast-sender",
+        "com.yayandroid:locationmanager",
+        "play-services",
+        "xyz.belvi.mobilevision:barcodescanner"
+      ],
       "license": "NonFree"
     },
-    "com.google.android.libraries.places": {
+    "com.google.android.libraries": {
+      "code_signatures": [
+        "com/google/android/libraries"
+      ],
       "gradle_signatures": [
-        "com.google.android.libraries.places:places"
+        "com.google.android.libraries"
       ],
       "license": "NonFree"
     },
     "com.google.android.play": {
-      "gradle_signatures": [
-        "com.google.android.play:app-update",
-        "com.google.android.play:core.*"
+      "anti_features": [
+        "NonFreeDep",
+        "NonFreeNet"
       ],
-      "license": "NonFree"
-    },
-    "com.google.android.play.core": {
       "code_signatures": [
         "com/google/android/play/core"
       ],
-      "license": "NonFree"
-    },
-    "com.google.firebase": {
-      "code_signatures": [
-        "com/google/firebase"
+      "documentation": [
+        "https://developer.android.com/guide/playcore"
       ],
-      "license": "NonFree"
+      "gradle_signatures": [
+        "com.google.android.play:app-update",
+        "com.google.android.play:asset-delivery",
+        "com.google.android.play:core.*",
+        "com.google.android.play:feature-delivery",
+        "com.google.android.play:review",
+        "androidx.navigation:navigation-dynamic-features",
+        "com.github.SanojPunchihewa:InAppUpdater"
+      ],
+      "license": "NonFree",
+      "name": "Google Play Core"
     },
     "com.google.mlkit": {
+      "code_signatures": [
+        "com/google/mlkit"
+      ],
       "gradle_signatures": [
         "com.google.mlkit"
       ],
       "license": "NonFree"
     },
-    "com.google.tagmanager": {
+    "com.heyzap": {
       "code_signatures": [
-        "com/google/tagmanager"
+        "com/heyzap"
       ],
       "license": "NonFree"
     },
     "com.hypertrack": {
+      "code_signatures": [
+        "com/hypertrack/(?!:hyperlog)"
+      ],
       "gradle_signatures": [
-        "com\\\\.hypertrack(?!:hyperlog)"
+        "com.hypertrack(?!:hyperlog)"
+      ],
+      "gradle_signatures_negative_examples": [
+        "com.hypertrack:hyperlog"
       ],
       "license": "NonFree"
     },
     "com.mapbox": {
-      "MaintainerNotes": "com.mapbox.mapboxsdk:mapbox-sdk-services seems to be fully under this license:\\nhttps://github.com/mapbox/mapbox-java/blob/main/LICENSE\\n",
+      "MaintainerNotes": "It seems that all libs in https://github.com/mapbox/mapbox-java is fully FOSS\nsince 3.0.0.\n",
       "gradle_signatures": [
-        "com\\\\.mapbox(?!\\\\.mapboxsdk:mapbox-sdk-services)"
+        "com\\.mapbox(?!\\.mapboxsdk:mapbox-sdk-(services|geojson|turf):([3-5]))"
+      ],
+      "gradle_signatures_negative_examples": [
+        "com.mapbox.mapboxsdk:mapbox-sdk-services:5.0.0",
+        "com.github.johan12345:mapbox-events-android:a21c324501",
+        "implementation(\"com.github.johan12345.AnyMaps:anymaps-mapbox:$anyMapsVersion\")"
+      ],
+      "gradle_signatures_positive_examples": [
+        "com.mapbox.mapboxsdk:mapbox-android-plugin-annotation-v7:0.6.0",
+        "com.mapbox.mapboxsdk:mapbox-android-plugin-annotation-v8:0.7.0",
+        "com.mapbox.mapboxsdk:mapbox-android-plugin-localization-v7:0.7.0",
+        "com.mapbox.mapboxsdk:mapbox-android-plugin-locationlayer:0.4.0",
+        "com.mapbox.mapboxsdk:mapbox-android-plugin-markerview-v8:0.3.0",
+        "com.mapbox.mapboxsdk:mapbox-android-plugin-places-v8:0.9.0",
+        "com.mapbox.mapboxsdk:mapbox-android-plugin-scalebar-v8:0.2.0",
+        "com.mapbox.mapboxsdk:mapbox-android-sdk:7.3.0"
       ],
       "license": "NonFree"
     },
     "com.onesignal": {
+      "code_signatures": [
+        "com/onesignal"
+      ],
       "gradle_signatures": [
         "com.onesignal:OneSignal"
       ],
       "license": "NonFree"
     },
+    "com.paypal.sdk": {
+      "code_signatures": [
+        "com/paypal"
+      ],
+      "gradle_signatures": [
+        "com.paypal.sdk"
+      ],
+      "license": "NonFree"
+    },
     "com.tencent.bugly": {
+      "code_signatures": [
+        "com/tencent/bugly"
+      ],
       "gradle_signatures": [
         "com.tencent.bugly"
       ],
       "license": "NonFree"
     },
     "com.umeng.umsdk": {
+      "code_signatures": [
+        "com/umeng/umsdk"
+      ],
       "gradle_signatures": [
         "com.umeng.umsdk"
       ],
       "license": "NonFree"
     },
     "com.yandex.android": {
-      "gradle_signatures": [
-        "com\\\\.yandex\\\\.android(?!:authsdk)"
+      "code_signatures": [
+        "com/yandex/android/(?!:authsdk)"
       ],
-      "license": "NonFree"
-    },
-    "com.yayandroid": {
       "gradle_signatures": [
-        "com.yayandroid:LocationManager"
+        "com\\.yandex\\.android(?!:authsdk)"
       ],
-      "license": "NonFree"
-    },
-    "crashlytics": {
-      "gradle_signatures": [
-        "crashlytics"
-      ],
-      "license": "NonFree"
-    },
-    "crittercism": {
-      "gradle_signatures": [
-        "crittercism"
+      "gradle_signatures_negative_examples": [
+        "com.yandex.android:authsdk"
       ],
       "license": "NonFree"
     },
     "firebase": {
-      "gradle_signatures": [
-        "com(\\\\.google)?\\\\.firebase[.:](?!firebase-jobdispatcher|geofire-java)"
+      "code_signatures": [
+        "com/google/firebase"
       ],
-      "license": "NonFree"
+      "documentation": [
+        "https://www.firebase.com"
+      ],
+      "gradle_signatures": [
+        "com(\\.google)?\\.firebase[.:](?!firebase-jobdispatcher|geofire-java)",
+        "com.microsoft.appcenter:appcenter-push"
+      ],
+      "gradle_signatures_negative_examples": [
+        "    compile 'com.firebase:firebase-jobdispatcher:0.8.4'",
+        "implementation 'com.firebase:geofire-java:3.0.0'",
+        "    compile 'com.firebaseui:firebase-ui-auth:3.1.3'",
+        "com.firebaseui:firebase-ui-database",
+        "com.firebaseui:firebase-ui-storage",
+        "com.github.axet:android-firebase-fake",
+        "com.github.b3er.rxfirebase:firebase-database",
+        "com.github.b3er.rxfirebase:firebase-database-kotlin",
+        "com.segment.analytics.android.integrations:firebase"
+      ],
+      "gradle_signatures_positive_examples": [
+        "\tcompile 'com.google.firebase:firebase-crash:11.0.8'",
+        "\tcompile 'com.google.firebase:firebase-core:11.0.8'",
+        "com.firebase:firebase-client-android:2.5.2",
+        "com.google.firebase.crashlytics",
+        "com.google.firebase.firebase-perf",
+        "com.google.firebase:firebase-ads",
+        "com.google.firebase:firebase-analytics",
+        "com.google.firebase:firebase-appindexing",
+        "com.google.firebase:firebase-auth",
+        "com.google.firebase:firebase-config",
+        "com.google.firebase:firebase-core",
+        "com.google.firebase:firebase-crash",
+        "com.google.firebase:firebase-crashlytics",
+        "com.google.firebase:firebase-database",
+        "com.google.firebase:firebase-dynamic-links",
+        "com.google.firebase:firebase-firestore",
+        "com.google.firebase:firebase-inappmessaging",
+        "com.google.firebase:firebase-inappmessaging-display",
+        "com.google.firebase:firebase-messaging",
+        "com.google.firebase:firebase-ml-natural-language",
+        "com.google.firebase:firebase-ml-natural-language-smart-reply-model",
+        "com.google.firebase:firebase-ml-vision",
+        "com.google.firebase:firebase-perf",
+        "com.google.firebase:firebase-plugins",
+        "com.google.firebase:firebase-storage"
+      ],
+      "license": "NonFree",
+      "name": "Firebase"
     },
-    "flurryagent": {
-      "gradle_signatures": [
-        "flurryagent"
+    "google-maps": {
+      "anti_features": [
+        "NonFreeDep",
+        "NonFreeNet"
       ],
-      "license": "NonFree"
-    },
-    "google-ad": {
-      "gradle_signatures": [
-        "google.*ad.*view"
+      "api_key_ids": [
+        "com\\.google\\.android\\.geo\\.API_KEY",
+        "com\\.google\\.android\\.maps\\.v2\\.API_KEY"
       ],
-      "license": "NonFree"
-    },
-    "google.admob": {
-      "gradle_signatures": [
-        "google.*admob"
-      ],
-      "license": "NonFree"
-    },
-    "google.play.services": {
-      "gradle_signatures": [
-        "google.*play.*services"
-      ],
-      "license": "NonFree"
-    },
-    "heyzap": {
-      "gradle_signatures": [
-        "heyzap"
-      ],
-      "license": "NonFree"
+      "license": "NonFree",
+      "name": "Google Maps"
     },
     "io.github.sinaweibosdk": {
+      "code_signatures": [
+        "com/sina"
+      ],
       "gradle_signatures": [
         "io.github.sinaweibosdk"
       ],
       "license": "NonFree"
     },
     "io.objectbox": {
+      "Name": "ObjectBox Database",
+      "code_signatures": [
+        "io/objectbox"
+      ],
       "gradle_signatures": [
         "io.objectbox:objectbox-gradle-plugin"
       ],
       "license": "NonFree"
     },
-    "jpct": {
-      "gradle_signatures": [
-        "jpct.*ae"
-      ],
-      "license": "NonFree"
-    },
-    "libspen23": {
-      "gradle_signatures": [
-        "libspen23"
-      ],
-      "license": "NonFree"
-    },
     "me.pushy": {
+      "code_signatures": [
+        "me/pushy"
+      ],
       "gradle_signatures": [
-        "me.pushy:sdk"
+        "me.pushy"
       ],
       "license": "NonFree"
     },
-    "org.jetbrains.kotlinx": {
-      "gradle_signatures": [
-        "org.jetbrains.kotlinx:kotlinx-coroutines-play-services"
+    "org.mariuszgromada.math": {
+      "documentation": [
+        "https://mathparser.org"
       ],
-      "license": "NonFree"
-    },
-    "ouya": {
       "gradle_signatures": [
-        "ouya.*sdk"
+        "org.mariuszgromada.math:MathParser.org-mXparser"
       ],
-      "license": "NonFree"
-    },
-    "paypal": {
-      "gradle_signatures": [
-        "paypal.*mpl"
-      ],
-      "license": "NonFree"
-    },
-    "xyz.belvi.mobilevision": {
-      "gradle_signatures": [
-        "xyz.belvi.mobilevision:barcodescanner"
-      ],
-      "license": "NonFree"
-    },
-    "youtube": {
-      "gradle_signatures": [
-        "youtube.*android.*player.*api"
-      ],
-      "license": "NonFree"
+      "license": "NonFree",
+      "name": "mXparser"
     }
   },
-  "timestamp": 1664480104.875586,
+  "timestamp": 1706002241.887412,
   "version": 1,
-  "last_updated": 1664480104.875586
+  "last_updated": 1706171656.496258
 }'''
