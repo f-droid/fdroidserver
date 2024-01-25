@@ -868,6 +868,8 @@ def parse_commandline():
                         help=_("Don't create a source tarball, useful when testing a build"))
     parser.add_argument("--no-refresh", dest="refresh", action="store_false", default=True,
                         help=_("Don't refresh the repository, useful when testing a build with no internet connection"))
+    parser.add_argument("-r", "--refresh-scanner", dest="refresh_scanner", action="store_true", default=False,
+                        help=_("Refresh and cache scanner rules and signatures from the network"))
     parser.add_argument("-f", "--force", action="store_true", default=False,
                         help=_("Force build of disabled apps, and carries on regardless of scan problems. Only allowed in test mode."))
     parser.add_argument("-a", "--all", action="store_true", default=False,
