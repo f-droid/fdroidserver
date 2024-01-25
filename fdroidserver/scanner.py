@@ -325,15 +325,15 @@ class SUSSDataController(SignatureDataController):
         self.set_data(json.loads(SUSS_DEFAULT))
 
 
-class ScannerTool():
+class ScannerTool:
     def __init__(self):
-
         # we could add support for loading additional signature source
         # definitions from config.yml here
 
         self.scanner_data_lookup()
 
-        if options and options.refresh_scanner:
+        config = common.get_config()
+        if (options and options.refresh_scanner) or config.get('refresh_scanner'):
             self.refresh()
 
         self.load()
