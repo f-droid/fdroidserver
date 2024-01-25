@@ -332,6 +332,10 @@ class ScannerTool():
         # definitions from config.yml here
 
         self.scanner_data_lookup()
+
+        if options and options.refresh_scanner:
+            self.refresh()
+
         self.load()
         self.compile_regexes()
 
@@ -801,9 +805,6 @@ def main():
 
     # initialize/load configuration values
     common.get_config(opts=options)
-
-    if options.refresh:
-        scanner._get_tool().refresh()
 
     probcount = 0
 
