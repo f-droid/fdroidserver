@@ -23,7 +23,9 @@ import sys
 import os
 import pkgutil
 import logging
+import importlib.metadata
 
+import git
 import fdroidserver.common
 import fdroidserver.metadata
 from fdroidserver import _
@@ -142,31 +144,21 @@ def main():
             print(_("""ERROR: The "server" subcommand has been removed, use "deploy"!"""))
             sys.exit(1)
         elif command == '--version':
-            output = _('no version info found!')
-            cmddir = os.path.realpath(os.path.dirname(os.path.dirname(__file__)))
-            moduledir = os.path.realpath(os.path.dirname(fdroidserver.common.__file__) + '/..')
-            if cmddir == moduledir:
-                # running from git
-                os.chdir(cmddir)
-                if os.path.isdir('.git'):
-                    import subprocess
-                    try:
-                        output = subprocess.check_output(['git', 'describe'],
-                                                         stderr=subprocess.STDOUT,
-                                                         universal_newlines=True)
-                    except subprocess.CalledProcessError:
-                        output = 'git commit ' + subprocess.check_output(['git', 'rev-parse', 'HEAD'],
-                                                                         universal_newlines=True)
-                elif os.path.exists('setup.py'):
-                    m = re.search(r'''.*[\s,\(]+version\s*=\s*["']([0-9a-z.]+)["'].*''',
-                                  open('setup.py').read(), flags=re.MULTILINE)
-                    if m:
-                        output = m.group(1) + '\n'
-            else:
-                from pkg_resources import get_distribution
-                output = get_distribution('fdroidserver').version + '\n'
-            print(output)
-            sys.exit(0)
+            try:
+                print(importlib.metadata.version("fdroidserver"))
+                sys.exit(0)
+            except importlib.metadata.PackageNotFoundError:
+                pass
+            try:
+                print(
+                    git.repo.Repo(
+                        os.path.dirname(os.path.dirname(__file__))
+                    ).git.describe(always=True, tags=True)
+                )
+                sys.exit(0)
+            except git.exc.InvalidGitRepositoryError:
+                print(_('No version information could be found.'))
+                sys.exit(1)
         else:
             print(_("Command '%s' not recognised.\n" % command))
             print_help(available_plugins=available_plugins)
