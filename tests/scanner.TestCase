@@ -704,6 +704,20 @@ class Test_SignatureDataController(unittest.TestCase):
 
 
 class Test_ScannerTool(unittest.TestCase):
+    def setUp(self):
+        fdroidserver.common.options = None
+        fdroidserver.common.config = None
+        self.basedir = os.path.join(localmodule, 'tests')
+        os.chdir(self.basedir)
+        self._td = mkdtemp()
+        self.testdir = self._td.name
+
+    def tearDown(self):
+        fdroidserver.common.options = None
+        fdroidserver.common.config = None
+        os.chdir(self.basedir)
+        self._td.cleanup()
+
     def test_load(self):
         st = mock.Mock()
         st.sdcs = [mock.Mock(), mock.Mock()]
@@ -711,7 +725,8 @@ class Test_ScannerTool(unittest.TestCase):
         st.sdcs[0].load.assert_called_once_with()
         st.sdcs[1].load.assert_called_once_with()
 
-    def test_refresh_default(self):
+    def test_refresh_no_options_or_config(self):
+        """This simulates what happens when running something like scan_source()"""
         with mock.patch('fdroidserver.scanner.ScannerTool.refresh') as refresh:
             fdroidserver.scanner.ScannerTool()
             refresh.assert_not_called()
@@ -729,6 +744,22 @@ class Test_ScannerTool(unittest.TestCase):
         with mock.patch('fdroidserver.scanner.ScannerTool.refresh') as refresh:
             fdroidserver.scanner.ScannerTool()
             refresh.assert_not_called()
+
+    def test_refresh_from_config(self):
+        os.chdir(self.testdir)
+        pathlib.Path('config.yml').write_text('refresh_scanner: true')
+        with mock.patch('fdroidserver.scanner.ScannerTool.refresh') as refresh:
+            fdroidserver.scanner.ScannerTool()
+            refresh.assert_called_once()
+
+    def test_refresh_options_overrides_config(self):
+        fdroidserver.scanner.options = mock.Mock()
+        fdroidserver.scanner.options.refresh_scanner = True
+        os.chdir(self.testdir)
+        pathlib.Path('config.yml').write_text('refresh_scanner: false')
+        with mock.patch('fdroidserver.scanner.ScannerTool.refresh') as refresh:
+            fdroidserver.scanner.ScannerTool()
+            refresh.assert_called_once()
 
 
 class Test_main(unittest.TestCase):

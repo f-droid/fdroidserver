@@ -373,3 +373,9 @@
 #   - suss
 #   - exodus
 #   - https://example.com/signatures.json
+
+# The scanner can use signature sources from the internet. These are
+# cached locally.  To force them to be refreshed from the network on
+# every run, set this to true:
+#
+# refresh_scanner: true
