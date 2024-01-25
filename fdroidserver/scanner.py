@@ -332,6 +332,10 @@ class ScannerTool():
         # definitions from config.yml here
 
         self.scanner_data_lookup()
+
+        if options and options.refresh_scanner:
+            self.refresh()
+
         self.load()
         self.compile_regexes()
 
@@ -784,7 +788,7 @@ def main():
                         help=_("Force scan of disabled apps and builds."))
     parser.add_argument("--json", action="store_true", default=False,
                         help=_("Output JSON to stdout."))
-    parser.add_argument("-r", "--refresh", action="store_true", default=False,
+    parser.add_argument("-r", "--refresh", dest="refresh_scanner", action="store_true", default=False,
                         help=_("fetch the latest version of signatures from the web"))
     parser.add_argument("-e", "--exit-code", action="store_true", default=False,
                         help=_("Exit with a non-zero code if problems were found"))
@@ -801,9 +805,6 @@ def main():
 
     # initialize/load configuration values
     common.get_config(opts=options)
-
-    if options.refresh:
-        scanner._get_tool().refresh()
 
     probcount = 0
 
