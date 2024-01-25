@@ -711,6 +711,25 @@ class Test_ScannerTool(unittest.TestCase):
         st.sdcs[0].load.assert_called_once_with()
         st.sdcs[1].load.assert_called_once_with()
 
+    def test_refresh_default(self):
+        with mock.patch('fdroidserver.scanner.ScannerTool.refresh') as refresh:
+            fdroidserver.scanner.ScannerTool()
+            refresh.assert_not_called()
+
+    def test_refresh_true(self):
+        fdroidserver.scanner.options = mock.Mock()
+        fdroidserver.scanner.options.refresh_scanner = True
+        with mock.patch('fdroidserver.scanner.ScannerTool.refresh') as refresh:
+            fdroidserver.scanner.ScannerTool()
+            refresh.assert_called_once()
+
+    def test_refresh_false(self):
+        fdroidserver.scanner.options = mock.Mock()
+        fdroidserver.scanner.options.refresh_scanner = False
+        with mock.patch('fdroidserver.scanner.ScannerTool.refresh') as refresh:
+            fdroidserver.scanner.ScannerTool()
+            refresh.assert_not_called()
+
 
 class Test_main(unittest.TestCase):
     def setUp(self):
