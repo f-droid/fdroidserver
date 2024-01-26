@@ -214,7 +214,7 @@ regex_checks = {
             _("Forbidden HTML tags"),
         ),
         (
-            re.compile(r'''.*\s+src=["']javascript:.*'''),
+            re.compile(r""".*\s+src=["']javascript:.*"""),
             _("Javascript in HTML src attributes"),
         ),
     ],
@@ -459,9 +459,12 @@ def check_builds(app):
                             "Branch '{branch}' used as commit in srclib '{srclib}'"
                         ).format(branch=s, srclib=srclib)
                 else:
-                    yield _(
-                        'srclibs missing name and/or @'
-                    ) + ' (srclibs: ' + srclib + ')'
+                    yield (
+                        _('srclibs missing name and/or @')
+                        + ' (srclibs: '
+                        + srclib
+                        + ')'
+                    )
         for key in build.keys():
             if key not in supported_flags:
                 yield _('%s is not an accepted build field') % key

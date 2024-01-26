@@ -27,7 +27,6 @@
 # client app so its not easy for the server to distinguish this from
 # the F-Droid client.
 
-
 import collections
 import defusedxml.minidom
 import git
