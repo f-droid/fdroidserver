@@ -2390,6 +2390,48 @@ def prepare_apps(apps, apks, repodir):
     return apps_with_packages
 
 
+def altstore_index(apps, apks, config, repodir, indent=None):
+    """build altstore index for iOS (.ipa) apps
+
+    builds index files based on:
+    https://faq.altstore.io/distribute-your-apps/updating-apps
+    """
+
+    for lang in ['en']:
+        idx = {
+            'name': config['repo_name'],
+            'description': config['repo_description'],
+            'apps': [],
+        }
+
+        for packageName, app in apps.items():
+            # print(app.keys())
+            print( app['Name'],'.', app['AutoName'])
+            versions = []
+            for apk in apks:
+                if apk['packageName'] == packageName and apk.get('apkName', '').lower().endswith('.ipa'):
+                    v = {
+                        "version": apk["versionName"],
+                        # "buildVersion": "1",
+                        "date": apk["added"].strftime("%Y-%m-%d"),
+                        "localizedDescription": "",
+                        "downloadURL": f"{config['repo_url']}/{apk['apkName']}",
+                        "size": apk['size'],
+                        "minOSVersion": "1.0",
+                        "maxOSVersion": "18.0",
+                    }
+                    versions.append(v)
+            if len(versions) > 0:
+                idx['apps'].append({
+                    "name": app.get("Name") or app.get("AutoName"),
+                    'bundleIdentifier': packageName,
+                    'versions': versions,
+                })
+
+    with open(os.path.join(repodir, f'altstore-index.json'), "w", encoding="utf-8") as f:
+        json.dump(idx, f, indent=indent)
+
+
 config = None
 options = None
 start_timestamp = time.gmtime()
@@ -2601,6 +2643,14 @@ def main():
 
     # Make the index for the main repo...
     fdroidserver.index.make(repoapps, apks, repodirs[0], False)
+    print(repoapps)
+    altstore_index(
+        repoapps,
+        apks,
+        config,
+        repodirs[0],
+        indent=2 if options.pretty else None
+    )
 
     git_remote = config.get('binary_transparency_remote')
     if git_remote or os.path.isdir(os.path.join('binary_transparency', '.git')):

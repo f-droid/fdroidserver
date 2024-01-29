@@ -71,6 +71,7 @@ def _get_index_excludes(repo_section):
 
     """
     indexes = [
+        os.path.join(repo_section, 'altstore-index.json'),
         os.path.join(repo_section, 'entry.jar'),
         os.path.join(repo_section, 'entry.json'),
         os.path.join(repo_section, 'entry.json.asc'),
