@@ -825,6 +825,8 @@ def main():
     if not appids:
         if options.exit_code and probcount > 0:
             sys.exit(ExitCode.NONFREE_CODE)
+        if options.refresh_scanner:
+            _get_tool()
         return
 
     # Read all app and srclib metadata
