@@ -56,7 +56,7 @@ run_test osmandapp/osmand 2.2.1
 cd $tmpdir
 mkdir -p download_cache_test/gradle/wrapper
 cd download_cache_test
-echo 'distributionUrl=https\://services.gradle.org/distributions/gradle-2.0-bin.zip' \
+echo 'distributionUrl=https\://services.gradle.org/distributions/gradle-5.0-bin.zip' \
      > gradle/wrapper/gradle-wrapper.properties
 printf "task helloWorld {\n\tdoLast {\n\t\tprintln '$TEST_VALUE'\n\t}\n}" > build.gradle
 
@@ -65,11 +65,11 @@ mkdir -p $GRADLE_VERSION_DIR
 
 unset https_proxy
 printf "download, unpack, and run: "
-download_cache_test 2.0
+download_cache_test 5.0
 printf "unpack and run: "
-rm -rf $GRADLE_VERSION_DIR/2.0/
-download_cache_test 2.0
+rm -rf $GRADLE_VERSION_DIR/5.0/
+download_cache_test 5.0
 printf "just run: "
-download_cache_test 2.0
+download_cache_test 5.0
 
 exit $exit_value
