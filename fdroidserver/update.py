@@ -1149,6 +1149,8 @@ def insert_localized_app_metadata(apps):
                             os.makedirs(screenshotdestdir, mode=0o755, exist_ok=True)
                             _strip_and_copy_image(f, screenshotdestdir)
 
+
+def ingest_screenshots_from_repo_dir(apps):
     repodirs = sorted(glob.glob(os.path.join('repo', '[A-Za-z]*', '[a-z][a-z]*')))
     for d in repodirs:
         if not os.path.isdir(d):
@@ -2272,6 +2274,7 @@ def prepare_apps(apps, apks, repodir):
     if repodir == 'repo':
         insert_localized_app_metadata(apps_with_packages)
         insert_localized_ios_app_metadata(apps_with_packages)
+        ingest_screenshots_from_repo_dir(apps_with_packages)
     insert_missing_app_names_from_apks(apps_with_packages, apks)
     return apps_with_packages
 
