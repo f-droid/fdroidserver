@@ -544,6 +544,60 @@ def version_string_to_int(version):
     return major * 10**12 + minor * 10**6 + patch
 
 
+# iOS app permissions, source:
+# https://developer.apple.com/documentation/bundleresources/information_property_list/protected_resources
+IPA_PERMISSIONS = [
+    "NSBluetoothAlwaysUsageDescription",
+    "NSBluetoothPeripheralUsageDescription",
+    "NSCalendarsFullAccessUsageDescription",
+    "NSCalendarsWriteOnlyAccessUsageDescription",
+    "NSRemindersFullAccessUsageDescription",
+    "NSCameraUsageDescription",
+    "NSMicrophoneUsageDescription",
+    "NSContactsUsageDescription",
+    "NSFaceIDUsageDescription",
+    "NSDesktopFolderUsageDescription",
+    "NSDocumentsFolderUsageDescription",
+    "NSDownloadsFolderUsageDescription",
+    "NSNetworkVolumesUsageDescription",
+    "NSNetworkVolumesUsageDescription",
+    "NSRemovableVolumesUsageDescription",
+    "NSRemovableVolumesUsageDescription",
+    "NSFileProviderDomainUsageDescription",
+    "NSGKFriendListUsageDescription",
+    "NSHealthClinicalHealthRecordsShareUsageDescription",
+    "NSHealthShareUsageDescription",
+    "NSHealthUpdateUsageDescription",
+    "NSHomeKitUsageDescription",
+    "NSLocationAlwaysAndWhenInUseUsageDescription",
+    "NSLocationUsageDescription",
+    "NSLocationWhenInUseUsageDescription",
+    "NSLocationAlwaysUsageDescription",
+    "NSAppleMusicUsageDescription",
+    "NSMotionUsageDescription",
+    "NSFallDetectionUsageDescription",
+    "NSLocalNetworkUsageDescription",
+    "NSNearbyInteractionUsageDescription",
+    "NSNearbyInteractionAllowOnceUsageDescription",
+    "NFCReaderUsageDescription",
+    "NSPhotoLibraryAddUsageDescription",
+    "NSPhotoLibraryUsageDescription",
+    "NSAppDataUsageDescription",
+    "NSUserTrackingUsageDescription",
+    "NSAppleEventsUsageDescription",
+    "NSSystemAdministrationUsageDescription",
+    "NSSensorKitUsageDescription",
+    "NSSiriUsageDescription",
+    "NSSpeechRecognitionUsageDescription",
+    "NSVideoSubscriberAccountUsageDescription",
+    "NSWorldSensingUsageDescription",
+    "NSHandsTrackingUsageDescription",
+    "NSIdentityUsageDescription",
+    "NSCalendarsUsageDescription",
+    "NSRemindersUsageDescription",
+]
+
+
 def parse_ipa(ipa_path, file_size, sha256):
     from biplist import readPlist
 
@@ -559,10 +613,17 @@ def parse_ipa(ipa_path, file_size, sha256):
             if re.match("Payload/[^/]*.app/Info.plist", info.filename):
                 with ipa_zip.open(info) as plist_file:
                     plist = readPlist(plist_file)
+                    ipa["name"] = plist['CFBundleName']
                     ipa["packageName"] = plist["CFBundleIdentifier"]
                     # https://developer.apple.com/documentation/bundleresources/information_property_list/cfbundleshortversionstring
                     ipa["versionCode"] = version_string_to_int(plist["CFBundleShortVersionString"])
                     ipa["versionName"] = plist["CFBundleShortVersionString"]
+                    ipa["ipa_MinimumOSVersion"] = plist['MinimumOSVersion']
+                    ipa["ipa_DTPlatformVersion"] = plist['DTPlatformVersion']
+                    ipa["ipa_permissions"] = {}
+                    for ipap in IPA_PERMISSIONS:
+                        if ipap in plist:
+                            ipa["ipa_permissions"][ipap] = str(plist[ipap])
     return ipa
 
 
@@ -1351,6 +1412,21 @@ def insert_localized_ios_app_metadata(apps_with_packages):
         screenshots = fdroidserver.update.discover_ios_screenshots(fastlane_dir)
         fdroidserver.update.copy_ios_screenshots_to_repo(screenshots, package_name)
 
+        # lookup icons, copy them and put them into app
+        icon_path = _get_ipa_icon(pathlib.Path('build') / package_name)
+        icon_dest = pathlib.Path('repo') / package_name / f'icon.png'  # for now just assume png
+        icon_stat = os.stat(icon_path)
+        app['iconv2'] = {
+            DEFAULT_LOCALE: {
+                'name': str(icon_dest).lstrip('repo'),
+                'sha256': common.sha256sum(icon_dest),
+                'size': icon_stat.st_size,
+            }
+        }
+        if not icon_dest.exists():
+            icon_dest.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy(icon_path, icon_dest)
+
 
 def scan_repo_files(apkcache, repodir, knownapks, use_date_from_file=False):
     """Scan a repo for all files with an extension except APK/OBB/IPA.
@@ -1547,6 +1623,55 @@ def _get_apk_icons_src(apkfile, icon_name):
         icons_src['-1'] = icons_src['160']
     return icons_src
 
+
+def _get_ipa_icon(src_dir):
+    """Searches source directory of an IPA project and tires to find an app icon."""
+    # parse app icon name from project config file
+    src_dir = pathlib.Path(src_dir)
+    prj = next(src_dir.glob("**/project.pbxproj"), None)
+    if not prj or not prj.exists():
+        return
+
+    icon_name = _parse_from_pbxproj(prj, 'ASSETCATALOG_COMPILER_APPICON_NAME')
+    if not icon_name:
+        return
+
+    icon_dir = next(src_dir.glob(f'**/{icon_name}.appiconset'), None)
+    if not icon_dir:
+        return
+
+    with open(icon_dir / "Contents.json") as f:
+        cntnt = json.load(f)
+
+    fname = None
+    fsize = 0
+    for image in cntnt['images']:
+        s = float(image.get("size", "0x0").split("x")[0])
+        if image.get('scale') == "1x" and s > fsize and s <= 128:
+            fname = image['filename']
+            fsize = s
+
+    return str(icon_dir / fname)
+
+
+def _parse_from_pbxproj(pbxproj_path, key):
+    """Parse values from apple project files.
+
+    e.g. when looking for key 'ASSETCATALOG_COMPILER_APPICON_NAME'
+    This function will extract 'MyIcon' from if the provided file
+    contains this line:
+
+        ASSETCATALOG_COMPILER_APPICON_NAME = MyIcon;
+
+    returns None if parsing for that value didn't yield anything
+    """
+    r = re.compile(f"\\s*{key}\\s*=\\s*(?P<value>[a-zA-Z0-9-_]+)\\s*;\\s*")
+    with open(pbxproj_path, 'r', encoding='utf-8') as f:
+        for line in f.readlines():
+            m = r.match(line)
+            if m:
+                return m.group("value")
+    return None
 
 def _sanitize_sdk_version(value):
     """Sanitize the raw values from androguard to handle bad values.
@@ -2394,42 +2519,80 @@ def altstore_index(apps, apks, config, repodir, indent=None):
     """build altstore index for iOS (.ipa) apps
 
     builds index files based on:
+    https://faq.altstore.io/distribute-your-apps/make-a-source
     https://faq.altstore.io/distribute-your-apps/updating-apps
     """
 
+    # for now we only support english for alt-store
     for lang in ['en']:
+
+        # prepare minimal altstore index
         idx = {
             'name': config['repo_name'],
-            'description': config['repo_description'],
-            'apps': [],
+            "apps": [],
+            "news": [],
         }
 
+        # add optional values if available
+        # idx["subtitle"] F-Droid doesn't have a corresponding value
+        if config.get("repo_description"):
+            idx['description'] = config['repo_description']
+        if (pathlib.Path(repodir) / 'icons' / config['repo_icon']).exists():
+            idx['iconURL'] = f"{config['repo_url']}/icons/{config['repo_icon']}"
+        # idx["headerURL"] F-Droid doesn't have a corresponding value
+        # idx["website"] F-Droid doesn't have a corresponding value
+        # idx["patreonURL"] F-Droid doesn't have a corresponding value
+        # idx["tintColor"] F-Droid doesn't have a corresponding value
+        # idx["featuredApps"] = [] maybe mappable to F-Droids what's new?
+
+        # assemble "apps"
         for packageName, app in apps.items():
-            # print(app.keys())
-            print( app['Name'],'.', app['AutoName'])
-            versions = []
+            app_name = app.get("Name") or app.get("AutoName")
+            a = {
+                "name": app_name,
+                'bundleIdentifier': packageName,
+                'developerName': app.get("AuthorName") or f"{app_name} team",
+                'iconURL': app.get('iconv2', {}).get(DEFAULT_LOCALE, {}).get('name', ''),
+                "localizedDescription": "",
+                'appPermissions': {
+                    "entitlements": [],
+                    "privacy": {},
+                },
+                'versions': [],
+            }
+
+            if app.get('summary'):
+                a['subtitle'] = app['summary']
+            # a["tintColor"] F-Droid doesn't have a corresponding value
+            # a["category"] F-Droid doesn't have a corresponding value
+            # a['patreon'] F-Droid doesn't have a corresponding value
+            # a["screenshots"] TODO
+
+            # populate 'versions'
             for apk in apks:
                 if apk['packageName'] == packageName and apk.get('apkName', '').lower().endswith('.ipa'):
                     v = {
                         "version": apk["versionName"],
-                        # "buildVersion": "1",
-                        "date": apk["added"].strftime("%Y-%m-%d"),
-                        "localizedDescription": "",
+                        "date": apk["added"].isoformat(),
                         "downloadURL": f"{config['repo_url']}/{apk['apkName']}",
                         "size": apk['size'],
-                        "minOSVersion": "1.0",
-                        "maxOSVersion": "18.0",
                     }
-                    versions.append(v)
-            if len(versions) > 0:
-                idx['apps'].append({
-                    "name": app.get("Name") or app.get("AutoName"),
-                    'bundleIdentifier': packageName,
-                    'versions': versions,
-                })
 
-    with open(os.path.join(repodir, f'altstore-index.json'), "w", encoding="utf-8") as f:
-        json.dump(idx, f, indent=indent)
+                    # v['localizedDescription'] maybe what's new text?
+                    v["minOSVersion"] = apk["ipa_MinimumOSVersion"]
+                    v["maxOSVersion"] = apk["ipa_DTPlatformVersion"]
+
+                    # writing this spot here has the effect that always the
+                    # permissions of the latest processed permissions list used
+                    a['appPermissions']['privacy'] = apk['ipa_permissions']
+
+                    a['versions'].append(v)
+
+            if len(a['versions']) > 0:
+                idx['apps'].append(a)
+
+        with open(os.path.join(repodir, f'altstore-index.json'), "w", encoding="utf-8") as f:
+            json.dump(idx, f, indent=indent)
 
 
 config = None
@@ -2643,7 +2806,6 @@ def main():
 
     # Make the index for the main repo...
     fdroidserver.index.make(repoapps, apks, repodirs[0], False)
-    print(repoapps)
     altstore_index(
         repoapps,
         apks,
