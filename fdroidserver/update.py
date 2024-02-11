@@ -1137,6 +1137,9 @@ def insert_localized_app_metadata(apps):
                         if base not in apps[packageName] or not isinstance(apps[packageName][base], collections.OrderedDict):
                             apps[packageName][base] = collections.OrderedDict()
                         apps[packageName][base][locale] = common.file_entry(dst)
+
+            # copy screenshots from local source code checkout into wellknown
+            # location in repo directory
             for d in dirs:
                 if d in SCREENSHOT_DIRS:
                     if locale == 'images':
@@ -1221,7 +1224,32 @@ FASTLANE_IOS_MAP = {
 }
 
 
+def parse_ios_screenshot_name(path):
+    """
+    Infer type info from screenshot file name.
+
+    Device type/name is part of the file name of iOS fastlane screenshots.
+    Here are some example:
+     * 'iPhone 8+ @ iOS 16-1.png'
+     * 'iPad Pro 12.9" 2gen @ iOS 16-1.png'
+     * '1_ipadPro129_1.1.png'
+     * '1_iphone6Plus_1.1.png'
+    """
+    s = path.stem.split('@')
+    if len(s) >= 2:
+        if "iphone" in s[0].lower():
+            return ("phoneScreenshots", '@'.join(s[1:]))
+        elif "ipad" in s[0].lower():
+            return ("tenInchScreenshots", "@".join(s[1:]))
+    else:
+        return ('phoneScreenshots', s[0])
+
+
 def insert_localized_ios_app_metadata(apps_with_packages):
+
+    if not any(pathlib.Path('repo').glob('*.ipa')):
+        # no IPA files present in repo, nothing to do here, exiting early
+        return
 
     for package_name, app in apps_with_packages.items():
         if not any(pathlib.Path('repo').glob(f'{package_name}*.ipa')):
@@ -1239,6 +1267,31 @@ def insert_localized_ios_app_metadata(apps_with_packages):
                     key = FASTLANE_IOS_MAP.get(metadata_file.name)
                     if key:
                         _set_localized_text_entry(app, lang_code, key, metadata_file)
+
+        # discover available screenshots and put findings in a dict
+        screenshots = {}
+        for lang_sdir in (fastlane_dir / 'screenshots').iterdir():
+            lang_code = lang_sdir.name
+            m = LANG_CODE.match(lang_code)
+            if m:
+                screenshots[lang_code] = {}
+                for screenshot in (lang_sdir).iterdir():
+                    if screenshot.suffix[1:] in ALLOWED_EXTENSIONS:
+                        # asdf #TODO
+                        device_name, screenshot_name = parse_ios_screenshot_name(screenshot)
+
+                        if not screenshots[lang_code].get(device_name):
+                            screenshots[lang_code][device_name] = {}
+                        screenshots[lang_code][device_name][screenshot_name] = screenshot
+
+        # copy screenshots to repo dir
+        for lang_code in screenshots.keys():
+            for device in screenshots[lang_code].keys():
+                dest_dir = pathlib.Path('repo') / package_name / lang_code / device
+                dest_dir.mkdir(mode=0o755, parents=True, exist_ok=True)
+                for name, path in screenshots[lang_code][device].items():
+                    dest = dest_dir / (name.replace(" ", "_").replace("\t", "_") + path.suffix)
+                    _strip_and_copy_image(str(path), str(dest))
 
 
 def scan_repo_files(apkcache, repodir, knownapks, use_date_from_file=False):
