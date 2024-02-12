@@ -598,6 +598,147 @@ IPA_PERMISSIONS = [
 ]
 
 
+# known iOS app entitlements, source:
+# https://developer.apple.com/documentation/bundleresources/entitlements
+IPA_ENTITLEMENTS = [
+    b"aps-environment",
+    b"com.apple.developer.ClassKit-environment",
+    b"com.apple.developer.applesignin",
+    b"com.apple.developer.aps-environment",
+    b"com.apple.developer.associated-appclip-app-identifiers",
+    b"com.apple.developer.associated-domains",
+    b"com.apple.developer.associated-domains.applinks.read-write",
+    b"com.apple.developer.authentication-services.autofill-credential-provider",
+    b"com.apple.developer.automated-device-enrollment.add-devices",
+    b"com.apple.developer.automatic-assessment-configuration",
+    b"com.apple.developer.avfoundation.multitasking-camera-access",
+    b"com.apple.developer.browser.app-installation",
+    b"com.apple.developer.carplay-audio",
+    b"com.apple.developer.carplay-charging",
+    b"com.apple.developer.carplay-communication",
+    b"com.apple.developer.carplay-maps",
+    b"com.apple.developer.carplay-messaging",
+    b"com.apple.developer.carplay-parking",
+    b"com.apple.developer.carplay-quick-ordering",
+    b"com.apple.developer.contacts.notes",
+    b"com.apple.developer.default-data-protection",
+    b"com.apple.developer.device-information.user-assigned-device-name",
+    b"com.apple.developer.devicecheck.appattest-environment",
+    b"com.apple.developer.driverkit",
+    b"com.apple.developer.driverkit.allow-any-userclient-access",
+    b"com.apple.developer.driverkit.allow-third-party-userclients",
+    b"com.apple.developer.driverkit.communicates-with-drivers",
+    b"com.apple.developer.driverkit.family.audio",
+    b"com.apple.developer.driverkit.family.block-storage-device",
+    b"com.apple.developer.driverkit.family.hid.device",
+    b"com.apple.developer.driverkit.family.hid.eventservice",
+    b"com.apple.developer.driverkit.family.networking",
+    b"com.apple.developer.driverkit.family.scsicontroller",
+    b"com.apple.developer.driverkit.family.serial",
+    b"com.apple.developer.driverkit.transport.hid",
+    b"com.apple.developer.driverkit.transport.pci",
+    b"com.apple.developer.driverkit.transport.usb",
+    b"com.apple.developer.driverkit.userclient-access",
+    b"com.apple.developer.endpoint-security.client",
+    b"com.apple.developer.endpoint-security.client",
+    b"com.apple.developer.exposure-notification",
+    b"com.apple.developer.family-controls",
+    b"com.apple.developer.fileprovider.testing-mode",
+    b"com.apple.developer.game-center",
+    b"com.apple.developer.group-session",
+    b"com.apple.developer.healthkit",
+    b"com.apple.developer.healthkit.access",
+    b"com.apple.developer.healthkit.background-delivery",
+    b"com.apple.developer.healthkit.recalibrate-estimates",
+    b"com.apple.developer.hid.virtual.device",
+    b"com.apple.developer.homekit",
+    b"com.apple.developer.icloud-container-development-container-identifiers",
+    b"com.apple.developer.icloud-container-environment",
+    b"com.apple.developer.icloud-container-identifiers",
+    b"com.apple.developer.icloud-services",
+    b"com.apple.developer.in-app-identity-presentment",
+    b"com.apple.developer.in-app-identity-presentment.merchant-identifiers",
+    b"com.apple.developer.in-app-payments",
+    b"com.apple.developer.journal.allow",
+    b"com.apple.developer.kernel.extended-virtual-addressing",
+    b"com.apple.developer.kernel.increased-memory-limit",
+    b"com.apple.developer.location.push",
+    b"com.apple.developer.mail-client",
+    b"com.apple.developer.managed-app-distribution.install-ui",
+    b"com.apple.developer.maps",
+    b"com.apple.developer.marketplace.app-installation",
+    b"com.apple.developer.matter.allow-setup-payload",
+    b"com.apple.developer.media-device-discovery-extension",
+    b"com.apple.developer.networking.HotspotConfiguration",
+    b"com.apple.developer.networking.custom-protocol",
+    b"com.apple.developer.networking.manage-thread-network-credentials",
+    b"com.apple.developer.networking.multicast",
+    b"com.apple.developer.networking.multipath",
+    b"com.apple.developer.networking.networkextension",
+    b"com.apple.developer.networking.networkextension",
+    b"com.apple.developer.networking.slicing.appcategory",
+    b"com.apple.developer.networking.slicing.trafficcategory",
+    b"com.apple.developer.networking.vmnet",
+    b"com.apple.developer.networking.vpn.api",
+    b"com.apple.developer.networking.wifi-info",
+    b"com.apple.developer.nfc.hce",
+    b"com.apple.developer.nfc.hce.default-contactless-app",
+    b"com.apple.developer.nfc.hce.iso7816.select-identifier-prefixes",
+    b"com.apple.developer.nfc.readersession.formats",
+    b"com.apple.developer.on-demand-install-capable",
+    b"com.apple.developer.parent-application-identifiers",
+    b"com.apple.developer.pass-type-identifiers",
+    b"com.apple.developer.playable-content",
+    b"com.apple.developer.proximity-reader.identity.display",
+    b"com.apple.developer.proximity-reader.identity.read",
+    b"com.apple.developer.push-to-talk",
+    b"com.apple.developer.sensitivecontentanalysis.client",
+    b"com.apple.developer.sensorkit.reader.allow",
+    b"com.apple.developer.severe-vehicular-crash-event",
+    b"com.apple.developer.siri",
+    b"com.apple.developer.storekit.external-link.account",
+    b"com.apple.developer.storekit.external-purchase",
+    b"com.apple.developer.storekit.external-purchase-link",
+    b"com.apple.developer.sustained-execution",
+    b"com.apple.developer.system-extension.install",
+    b"com.apple.developer.system-extension.redistributable",
+    b"com.apple.developer.team-identifier",
+    b"com.apple.developer.ubiquity-kvstore-identifier",
+    b"com.apple.developer.upi-device-validation",
+    b"com.apple.developer.user-management",
+    b"com.apple.developer.usernotifications.filtering",
+    b"com.apple.developer.video-subscriber-single-sign-on",
+    b"com.apple.developer.weatherkit",
+    b"com.apple.developer.web-browser",
+    b"com.apple.developer.web-browser.public-key-credential",
+    b"com.apple.external-accessory.wireless-configuration",
+    b"com.apple.security.app-sandbox",
+    b"com.apple.security.application-groups",
+    b"com.apple.security.automation.apple-events",
+    b"com.apple.security.cs.allow-dyld-environment-variables",
+    b"com.apple.security.cs.allow-jit",
+    b"com.apple.security.cs.allow-unsigned-executable-memory",
+    b"com.apple.security.cs.debugger",
+    b"com.apple.security.cs.disable-executable-page-protection",
+    b"com.apple.security.cs.disable-library-validation",
+    b"com.apple.security.device.audio-input",
+    b"com.apple.security.device.camera",
+    b"com.apple.security.hypervisor",
+    b"com.apple.security.personal-information.addressbook",
+    b"com.apple.security.personal-information.calendars",
+    b"com.apple.security.personal-information.location",
+    b"com.apple.security.personal-information.photos-library",
+    b"com.apple.security.smartcard",
+    b"com.apple.security.virtualization",
+    b"com.apple.smoot.subscriptionservice",
+    b"com.apple.vm.device-access",
+    b"com.apple.vm.hypervisor",
+    b"com.apple.vm.networking",
+    b"inter-app-audio",
+    b"keychain-access-groups",
+]
+
+
 def parse_ipa(ipa_path, file_size, sha256):
     from biplist import readPlist
 
@@ -606,6 +747,8 @@ def parse_ipa(ipa_path, file_size, sha256):
         "hash": sha256,
         "hashType": "sha256",
         "size": file_size,
+        "ipa_entitlements": set(),
+        "ipa_permissions": {},
     }
 
     with zipfile.ZipFile(ipa_path) as ipa_zip:
@@ -620,10 +763,17 @@ def parse_ipa(ipa_path, file_size, sha256):
                     ipa["versionName"] = plist["CFBundleShortVersionString"]
                     ipa["ipa_MinimumOSVersion"] = plist['MinimumOSVersion']
                     ipa["ipa_DTPlatformVersion"] = plist['DTPlatformVersion']
-                    ipa["ipa_permissions"] = {}
                     for ipap in IPA_PERMISSIONS:
                         if ipap in plist:
                             ipa["ipa_permissions"][ipap] = str(plist[ipap])
+            if info.filename.endswith("/embedded.mobileprovision"):
+                print("parsing", info.filename)
+                with ipa_zip.open(info) as mopro:
+                    for line in mopro.readlines():
+                        for entitlement in IPA_ENTITLEMENTS:
+                            if entitlement in line:
+                                ipa['ipa_entitlements'].add(str(entitlement, encoding="utf-8"))
+
     return ipa
 
 
@@ -1414,7 +1564,7 @@ def insert_localized_ios_app_metadata(apps_with_packages):
 
         # lookup icons, copy them and put them into app
         icon_path = _get_ipa_icon(pathlib.Path('build') / package_name)
-        icon_dest = pathlib.Path('repo') / package_name / f'icon.png'  # for now just assume png
+        icon_dest = pathlib.Path('repo') / package_name / 'icon.png'  # for now just assume png
         icon_stat = os.stat(icon_path)
         app['iconv2'] = {
             DEFAULT_LOCALE: {
@@ -1625,7 +1775,7 @@ def _get_apk_icons_src(apkfile, icon_name):
 
 
 def _get_ipa_icon(src_dir):
-    """Searches source directory of an IPA project and tires to find an app icon."""
+    """Search source directory of an IPA project for the app icon."""
     # parse app icon name from project config file
     src_dir = pathlib.Path(src_dir)
     prj = next(src_dir.glob("**/project.pbxproj"), None)
@@ -1672,6 +1822,7 @@ def _parse_from_pbxproj(pbxproj_path, key):
             if m:
                 return m.group("value")
     return None
+
 
 def _sanitize_sdk_version(value):
     """Sanitize the raw values from androguard to handle bad values.
@@ -2516,14 +2667,14 @@ def prepare_apps(apps, apks, repodir):
 
 
 def altstore_index(apps, apks, config, repodir, indent=None):
-    """build altstore index for iOS (.ipa) apps
+    """
+    Assemble altstore-index.json for iOS (.ipa) apps.
 
     builds index files based on:
     https://faq.altstore.io/distribute-your-apps/make-a-source
     https://faq.altstore.io/distribute-your-apps/updating-apps
     """
-
-    # for now we only support english for alt-store
+    # for now alt-store support is english only
     for lang in ['en']:
 
         # prepare minimal altstore index
@@ -2555,7 +2706,7 @@ def altstore_index(apps, apks, config, repodir, indent=None):
                 'iconURL': app.get('iconv2', {}).get(DEFAULT_LOCALE, {}).get('name', ''),
                 "localizedDescription": "",
                 'appPermissions': {
-                    "entitlements": [],
+                    "entitlements": set(),
                     "privacy": {},
                 },
                 'versions': [],
@@ -2585,13 +2736,14 @@ def altstore_index(apps, apks, config, repodir, indent=None):
                     # writing this spot here has the effect that always the
                     # permissions of the latest processed permissions list used
                     a['appPermissions']['privacy'] = apk['ipa_permissions']
+                    a['appPermissions']['entitlements'] = list(apk['ipa_entitlements'])
 
                     a['versions'].append(v)
 
             if len(a['versions']) > 0:
                 idx['apps'].append(a)
 
-        with open(os.path.join(repodir, f'altstore-index.json'), "w", encoding="utf-8") as f:
+        with open(os.path.join(repodir, 'altstore-index.json'), "w", encoding="utf-8") as f:
             json.dump(idx, f, indent=indent)
 
 
