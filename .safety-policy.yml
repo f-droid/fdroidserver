@@ -17,3 +17,6 @@ security:
     62044:
       reason: "F-Droid doesn't fetch pip dependencies directly from hg/mercurial repositories: https://data.safetycli.com/v/62044/f17/"
       expires: '2025-01-31'
+    63687:
+      reason: Only affects Windows https://security-tracker.debian.org/tracker/CVE-2024-22190
+      expires: '2026-01-31'
