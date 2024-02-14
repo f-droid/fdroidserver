@@ -542,7 +542,7 @@ servergitmirrors:
     - cp tests/repo/com.politedroid_6.apk /tmp/fdroid/repo/
     - cd /tmp/fdroid
     - touch fdroid-icon.png
-    - printf "\nservergitmirrors\x3a 'git@gitlab.com:fdroid/ci-test-servergitmirrors-repo.git'\n" >> config.yml
+    - printf "\nservergitmirrors = 'git@gitlab.com:fdroid/ci-test-servergitmirrors-repo.git'\n" >> config.py
     - $PYTHONPATH/fdroid update --verbose --create-metadata
     - $PYTHONPATH/fdroid deploy --verbose
     - export DLURL=`grep -Eo 'https://gitlab.com/fdroid/ci-test-servergitmirrors-repo[^"]+' repo/index-v1.json`
