@@ -203,6 +203,10 @@
 #
 # servergitmirrors: https://github.com/user/repo
 # servergitmirrors:
+#   - https://github.com/user/repo
+#   - https://gitlab.com/user/repo
+#
+# servergitmirrors:
 #   - url: https://github.com/user/repo
 #   - url: https://gitlab.com/user/repo
 #     indexOnly: true
