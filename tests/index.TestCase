@@ -575,7 +575,7 @@ class IndexTest(unittest.TestCase):
         ]:
             self.assertEqual(
                 ['https://raw.githubusercontent.com/foo/bar/master/fdroid'],
-                index.get_mirror_service_urls(url),
+                index.get_mirror_service_urls({"url": url}),
             )
 
     @patch.dict(os.environ, clear=True)
@@ -603,13 +603,13 @@ class IndexTest(unittest.TestCase):
                     ]
                     self.assertEqual(
                         expected,
-                        index.get_mirror_service_urls(url),
+                        index.get_mirror_service_urls({"url": url}),
                     )
                     with patch.dict(os.environ, clear=True):
                         os.environ['CI_JOB_ID'] = ci_job_id
                         self.assertEqual(
                             expected + [artifacts_url],
-                            index.get_mirror_service_urls(url),
+                            index.get_mirror_service_urls({"url": url}),
                         )
                 with patch('fdroidserver.common.GITLAB_COM_PAGES_MAX_SIZE', 10):
                     expected = [
@@ -617,13 +617,13 @@ class IndexTest(unittest.TestCase):
                     ]
                     self.assertEqual(
                         expected,
-                        index.get_mirror_service_urls(url),
+                        index.get_mirror_service_urls({"url": url}),
                     )
                     with patch.dict(os.environ, clear=True):
                         os.environ['CI_JOB_ID'] = ci_job_id
                         self.assertEqual(
                             expected + [artifacts_url],
-                            index.get_mirror_service_urls(url),
+                            index.get_mirror_service_urls({"url": url}),
                         )
 
     def test_make_website(self):

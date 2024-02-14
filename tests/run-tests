@@ -1154,7 +1154,7 @@ GIT_MIRROR=$REPOROOT/git-mirror
 cd $REPOROOT
 fdroid_init_with_prebuilt_keystore
 printf '\narchive_older: 3\n' >> config.yml
-echo "servergitmirrors: $SERVER_GIT_MIRROR" >> config.yml
+printf "servergitmirrors: $SERVER_GIT_MIRROR\n" >> config.yml
 
 cp $WORKSPACE/tests/repo/com.politedroid_[345].apk repo/
 $fdroid update --create-metadata

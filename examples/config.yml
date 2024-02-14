@@ -198,14 +198,14 @@
 # deploy_process_logs: true
 
 # The full URL to a git remote repository. You can include
-# multiple servers to mirror to by wrapping the whole thing in {} or [], and
-# including the servergitmirrors strings in a comma-separated list.
+# multiple servers to mirror to by adding strings to a YAML list or map.
 # Servers listed here will also be automatically inserted in the mirrors list.
 #
 # servergitmirrors: https://github.com/user/repo
 # servergitmirrors:
-#   - https://github.com/user/repo
-#   - https://gitlab.com/user/repo
+#   - url: https://github.com/user/repo
+#   - url: https://gitlab.com/user/repo
+#     indexOnly: true
 
 # Most git hosting services have hard size limits for each git repo.
 # `fdroid deploy` will delete the git history when the git mirror repo
