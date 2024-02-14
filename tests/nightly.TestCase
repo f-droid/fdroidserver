@@ -256,7 +256,7 @@ class NightlyTest(unittest.TestCase):
         self.assertEqual(called, [['ssh', '-Tvi'], ['fdroid', 'deploy']])
         self.assertFalse(os.path.exists('config.py'))
         git_url = 'git@github.com:f-droid/test-nightly'
-        mirror_url = index.get_mirror_service_urls(git_url)[0]
+        mirror_url = index.get_mirror_service_urls({"url": git_url})[0]
         expected = {
             'archive_description': 'Old nightly builds that have been archived.',
             'archive_name': 'f-droid/test-nightly archive',
@@ -271,7 +271,7 @@ class NightlyTest(unittest.TestCase):
             'repo_keyalias': 'androiddebugkey',
             'repo_name': 'f-droid/test-nightly',
             'repo_url': mirror_url + '/repo',
-            'servergitmirrors': git_url,
+            'servergitmirrors': [{"url": git_url}],
             'update_stats': True,
         }
         with open('config.yml') as fp:
@@ -344,7 +344,7 @@ class NightlyTest(unittest.TestCase):
             'repo_keyalias': 'androiddebugkey',
             'repo_name': 'fdroid/test-nightly',
             'repo_url': 'https://gitlab.com/fdroid/test-nightly/-/raw/master/fdroid/repo',
-            'servergitmirrors': 'git@gitlab.com:fdroid/test-nightly',
+            'servergitmirrors': [{"url": 'git@gitlab.com:fdroid/test-nightly'}],
             'update_stats': True,
         }
         with open('config.yml') as fp:

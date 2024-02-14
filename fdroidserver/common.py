@@ -67,7 +67,7 @@ from pyasn1.error import PyAsn1Error
 import fdroidserver.metadata
 import fdroidserver.lint
 from fdroidserver import _
-from fdroidserver.exception import FDroidException, VCSException, NoSubmodulesException,\
+from fdroidserver.exception import FDroidException, VCSException, NoSubmodulesException, \
     BuildException, VerificationException, MetaDataException
 from .asynchronousfilereader import AsynchronousFileReader
 from .looseversion import LooseVersion
@@ -482,8 +482,10 @@ def read_config(opts=None):
 
     if 'servergitmirrors' in config:
         if isinstance(config['servergitmirrors'], str):
-            roots = [config['servergitmirrors']]
+            roots = [{"url": config['servergitmirrors']}]
         elif all(isinstance(item, str) for item in config['servergitmirrors']):
+            roots = [{'url': i} for i in config['servergitmirrors']]
+        elif all(isinstance(item, dict) for item in config['servergitmirrors']):
             roots = config['servergitmirrors']
         else:
             raise TypeError(_('only accepts strings, lists, and tuples'))

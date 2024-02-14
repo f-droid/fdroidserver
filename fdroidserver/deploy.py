@@ -47,6 +47,19 @@ AUTO_S3CFG = '.fdroid-deploy-s3cfg'
 USER_S3CFG = 's3cfg'
 REMOTE_HOSTNAME_REGEX = re.compile(r'\W*\w+\W+(\w+).*')
 
+INDEX_FILES = [
+    "entry.jar",
+    "entry.json",
+    "entry.json.asc",
+    "index-v1.jar",
+    "index-v1.json",
+    "index-v1.json.asc",
+    "index-v2.json",
+    "index-v2.json.asc",
+    "index.jar",
+    "index.xml",
+]
+
 
 def _get_index_excludes(repo_section):
     """Return the list of files to be synced last, since they finalize the deploy.
@@ -447,7 +460,8 @@ def update_servergitmirrors(servergitmirrors, repo_section):
         repo = git.Repo.init(git_mirror_path, initial_branch=GIT_BRANCH)
 
         enabled_remotes = []
-        for remote_url in servergitmirrors:
+        for d in servergitmirrors:
+            remote_url = d['url']
             name = REMOTE_HOSTNAME_REGEX.sub(r'\1', remote_url)
             enabled_remotes.append(name)
             r = git.remote.Remote(repo, name)
@@ -840,10 +854,9 @@ def main():
             update_serverwebroots(
                 config['serverwebroot'], repo_section, standardwebroot
             )
-        if config.get('servergitmirrors', []):
+        if config.get('servergitmirrors'):
             # update_servergitmirrors will take care of multiple mirrors so don't need a foreach
-            servergitmirrors = config.get('servergitmirrors', [])
-            update_servergitmirrors(servergitmirrors, repo_section)
+            update_servergitmirrors(config['servergitmirrors'], repo_section)
         if config.get('awsbucket'):
             update_awsbucket(repo_section)
         if config.get('androidobservatory'):

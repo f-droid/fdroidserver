@@ -300,6 +300,86 @@ class DeployTest(unittest.TestCase):
                 name, fdroidserver.deploy.REMOTE_HOSTNAME_REGEX.sub(r'\1', remote_url)
             )
 
+    def test_update_servergitmirrors(self):
+        # setup parameters for this test run
+        fdroidserver.deploy.options = mock.Mock()
+        fdroidserver.deploy.options.identity_file = None
+        fdroidserver.deploy.options.no_keep_git_mirror_archive = False
+        fdroidserver.deploy.options.verbose = False
+        fdroidserver.deploy.options.quiet = True
+        fdroidserver.deploy.options.index_only = False
+
+        config = {}
+        fdroidserver.common.fill_config_defaults(config)
+        fdroidserver.deploy.config = config
+        fdroidserver.deploy.config["servergitmirrors"] = []
+
+        repo_section = 'repo'
+
+        # setup function for asserting subprocess.call invocations
+        update_servergitmirrors_call_iteration = 0
+        remote_push_call_iteration = 0
+
+        os.chdir(self.testdir)
+        repo = Path('repo')
+        repo.mkdir(parents=True)
+        fake_apk = repo / 'Sym.apk'
+        with fake_apk.open('w') as fp:
+            fp.write('not an APK, but has the right filename')
+        fake_index = repo / fdroidserver.deploy.INDEX_FILES[0]
+        with fake_index.open('w') as fp:
+            fp.write('not an index, but has the right filename')
+
+        def update_servergitmirrors_call(cmd):
+            nonlocal update_servergitmirrors_call_iteration
+            if update_servergitmirrors_call_iteration == 0:
+                self.assertListEqual(
+                    cmd,
+                    [
+                        'rsync',
+                        '--recursive',
+                        '--safe-links',
+                        '--times',
+                        '--perms',
+                        '--one-file-system',
+                        '--delete',
+                        '--chmod=Da+rx,Fa-x,a+r,u+w',
+                        '--quiet',
+                        'repo/',
+                        "git-mirror/fdroid/repo/",
+                    ],
+                )
+            else:
+                self.fail('unexpected subprocess.call invocation')
+            update_servergitmirrors_call_iteration += 1
+            return 0
+
+        def remote_push_call(ref, force=False, set_upstream=False, **_args):
+            nonlocal remote_push_call_iteration
+            if remote_push_call_iteration == 0:
+                self.assertEqual([ref, force, set_upstream], ['master', True, True])
+            else:
+                self.fail('unexpected git.Remote.push invocation')
+            remote_push_call_iteration += 1
+            return []
+
+        with mock.patch('subprocess.call', side_effect=update_servergitmirrors_call):
+            with mock.patch(
+                'git.Remote.push', side_effect=remote_push_call
+            ) as mock_remote_push:
+                mock_remote_push.return_value = []
+                fdroidserver.deploy.update_servergitmirrors(
+                    [{'url': 'https://github.com/user/repo'}], repo_section
+                )
+        self.assertEqual(
+            update_servergitmirrors_call_iteration,
+            1,
+            'expected 1 invocations of subprocess.call',
+        )
+        self.assertEqual(
+            remote_push_call_iteration, 1, 'expected 1 invocations of git.Remote.push'
+        )
+
 
 if __name__ == "__main__":
     os.chdir(os.path.dirname(__file__))

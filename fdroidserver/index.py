@@ -1478,7 +1478,7 @@ def add_mirrors_to_repodict(repo_section, repodict):
         repodict['mirrors'].insert(0, {'isPrimary': True, 'url': repodict['address']})
 
 
-def get_mirror_service_urls(url):
+def get_mirror_service_urls(mirror):
     """Get direct URLs from git service for use by fdroidclient.
 
     Via 'servergitmirrors', fdroidserver can create and push a mirror
@@ -1496,6 +1496,7 @@ def get_mirror_service_urls(url):
     information about the repo available to end user.
 
     """
+    url = mirror['url']
     if url.startswith('git@'):
         url = re.sub(r'^git@([^:]+):(.+)', r'https://\1/\2', url)
 
