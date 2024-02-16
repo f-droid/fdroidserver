@@ -232,6 +232,8 @@ def build_server(app, build, vcs, build_dir, output_dir, log_dir, force):
             cmdline += ' --force --test'
         if options.verbose:
             cmdline += ' --verbose'
+        if options.refresh_scanner or config.get('refresh_scanner'):
+            cmdline += ' --refresh-scanner'
         if options.skipscan:
             cmdline += ' --skip-scan'
         if options.notarball:
