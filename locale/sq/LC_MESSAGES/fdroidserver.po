@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fdroidserver 1.0.6-349-g907c04ea\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2023-05-24 22:18+0200\n"
-"PO-Revision-Date: 2024-02-20 16:54+0000\n"
+"PO-Revision-Date: 2024-02-20 18:58+0000\n"
 "Last-Translator: Besnik Bleta <besnik@programeshqip.org>\n"
 "Language-Team: Albanian <https://hosted.weblate.org/projects/f-droid/fdroidserver/sq/>\n"
 "Language: sq\n"
@@ -116,7 +116,7 @@ msgstr "%r s’mund të thirret"
 #: ../fdroidserver/signindex.py
 #, python-format
 msgid "%s did not produce a dict!"
-msgstr ""
+msgstr "%s s’prodhoi një “dict”!"
 
 #: ../fdroidserver/signindex.py
 #, python-format
@@ -183,7 +183,7 @@ msgstr "S’u arrit të përmbushet '{path}'!"
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "'{path}' has invalid format, it should be a dictionary!"
-msgstr ""
+msgstr "'{path}' ka format të pavlefshëm, duhet të jetë një fjalor!"
 
 #: ../fdroidserver/metadata.py ../fdroidserver/lint.py
 #, python-brace-format
@@ -191,9 +191,9 @@ msgid "'{value}' is not a valid {field} in {appid}. Regex pattern: {pattern}"
 msgstr "'{value}' s’është një {field} e vlefshme te {appid}. Rregullsi shprehjeje të rregullt: {pattern}"
 
 #: ../fdroidserver/metadata.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "'{value}' is not a valid {field}, should be {pattern}"
-msgstr "'{value}' s’është një {field} e vlefshme te {appid}. Rregullsi shprehjeje të rregullt: {pattern}"
+msgstr "'{value}' s’është një {field} e vlefshme, duhet të jetë {pattern}"
 
 #: ../fdroidserver/checkupdates.py
 #, python-brace-format
@@ -285,7 +285,7 @@ msgstr "S’u gjet {cmd} mjeti SDK-je Android!"
 
 #: ../fdroidserver/lint.py
 msgid "App has Binaries but does not have corresponding AllowedAPKSigningKeys to pin certificate."
-msgstr ""
+msgstr "Aplikacioni ka Dyorë, por s’ka AllowedAPKSigningKeys përkatës për të fiksuar dëshmi."
 
 #: ../fdroidserver/lint.py
 msgid "App has NoSourceSince or ArchivePolicy \"0 versions\" but AutoUpdateMode or UpdateCheckMode are not None"
@@ -298,7 +298,7 @@ msgstr "Aplikacioni gjendet në '{repo}' por ka një lidhje te {url}"
 
 #: ../fdroidserver/lint.py
 msgid "App version has binary but does not have corresponding AllowedAPKSigningKeys to pin certificate."
-msgstr ""
+msgstr "Aplikacioni ka dyor, por s’ka AllowedAPKSigningKeys përkatës për të fiksuar dëshmi."
 
 #: ../fdroidserver/lint.py
 msgid "Appending .git is not necessary"
@@ -316,7 +316,7 @@ msgstr "AutoUpdateMode me UpdateCheckMode: HTTP duhet të ketë një rregullsi."
 #: ../fdroidserver/index.py
 #, python-brace-format
 msgid "Bad entry type \"{mirrortype}\" in mirrors config: {mirror}"
-msgstr ""
+msgstr "Lloj i gabuar zëri “{mirrortype}” në formësim pasqyrash: {mirror}"
 
 #: ../fdroidserver/mirror.py
 msgid "Base URL to mirror, can include the index signing key using the query string: ?fingerprint="
@@ -416,7 +416,7 @@ msgstr "Depozito ndryshimet"
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Conflicting \"{field}\" definitions between .yml and localized files:"
-msgstr ""
+msgstr "Përkufizime “{field}” me përplasje, mes kartelash .yml dhe të përkthyerash:"
 
 #: ../fdroidserver/__main__.py
 msgid "Conflicting arguments: '--verbose' and '--quiet' can not be specified at the same time."
@@ -612,7 +612,7 @@ msgstr ""
 #: ../fdroidserver/index.py
 #, python-format
 msgid "Duplicate entry \"%s\" in mirrors config!"
-msgstr ""
+msgstr "Zë i përsëdytur “%s” në formësim pasqyrash!"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
@@ -665,7 +665,7 @@ msgstr "Gabim teksa merrej adresë depoje"
 
 #: ../fdroidserver/scanner.py
 msgid "Exit with a non-zero code if problems were found"
-msgstr ""
+msgstr "Dil me një kod jozero, nëse gjenden probleme"
 
 #: ../fdroidserver/__main__.py
 msgid "Extract application metadata from a source repository"
@@ -887,7 +887,7 @@ msgstr "Po shpërfillen zëra FUNDING.yml më të gjatë se 2048: %s"
 #: ../fdroidserver/update.py
 #, python-format
 msgid "Ignoring bad element in manifest: %s"
-msgstr ""
+msgstr "Po shpërfillet element i gabuar në manifest: %s"
 
 #: ../fdroidserver/index.py
 msgid "Ignoring package without metadata: "
@@ -1090,7 +1090,7 @@ msgstr "Rresht serverwebroot i keqformuar:"
 #: ../fdroidserver/scanner.py
 #, python-format
 msgid "Max recursion depth in ZIP file reached: %s"
-msgstr ""
+msgstr "U mbërrit në thellësi maksimum rekursive te kartelë ZIP: %s"
 
 #: ../fdroidserver/mirror.py
 msgid "Mirror the full repo and archive, all file types."
@@ -1102,7 +1102,7 @@ msgstr "Mungon drejtori përfundimesh"
 
 #: ../fdroidserver/metadata.py
 msgid "Moving Anti-Features declarations to localized files:"
-msgstr ""
+msgstr "Po kalohen pohime Anti-Features te kartela të përkthyera:"
 
 #: ../fdroidserver/index.py
 msgid "Neither \"repo_pubkey\" nor \"keystorepass\" set in config.yml"
@@ -1877,7 +1877,7 @@ msgstr "Po përdoret androguard prej “{path}”"
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Using blank dictionary instead of contents of {path}!"
-msgstr ""
+msgstr "Po përdoret fjalor i zbrazët, në vend se lënda e {path}!"
 
 #: ../fdroidserver/init.py
 #, python-brace-format
@@ -2057,14 +2057,14 @@ msgstr[0] "varg mundësie me përplasje: %s"
 msgstr[1] "vargje mundësish me përplasje: %s"
 
 #: /usr/lib/python3.11/argparse.py
-#, fuzzy, python-format
+#, python-format
 msgid "conflicting subparser alias: %s"
-msgstr "varg mundësie me përplasje: %s"
+msgstr ""
 
 #: /usr/lib/python3.11/argparse.py
-#, fuzzy, python-format
+#, python-format
 msgid "conflicting subparser: %s"
-msgstr "varg mundësie me përplasje: %s"
+msgstr ""
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
@@ -2586,9 +2586,9 @@ msgid "{build_flag} must be an integer, found: {value}"
 msgstr "{build_flag} duhet të jetë numër i plotë, u gjet: {value}"
 
 #: ../fdroidserver/metadata.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{build_flag} must be list or string, found: {value}"
-msgstr "{build_flag} duhet të jetë numër i plotë, u gjet: {value}"
+msgstr "{build_flag} duhet të jetë listë, ose varg, u gjet: {value}"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
