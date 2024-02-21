@@ -32,7 +32,7 @@ NonFreeDep:
   icon: ic_antifeature_nonfreedep.xml
   name: Non-Free Dependencies
 NonFreeNet:
-  description: This app promotes or depends entirely on a non-free network service
+  description: This app promotes or depends entirely on a non-changeable or non-free network service
   icon: ic_antifeature_nonfreenet.xml
   name: Non-Free Network Services
 Tracking:
