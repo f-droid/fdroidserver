@@ -28,6 +28,7 @@
 # common.py is imported by all modules, so do not import third-party
 # libraries here as they will become a requirement for all commands.
 
+import copy
 import difflib
 from typing import List
 import git
@@ -60,6 +61,7 @@ from base64 import urlsafe_b64encode
 from binascii import hexlify
 from datetime import datetime, timedelta, timezone
 from queue import Queue
+from urllib.parse import urlparse, urlunparse
 from zipfile import ZipFile
 
 import fdroidserver.metadata
@@ -435,6 +437,14 @@ def get_config():
     return config
 
 
+def get_cachedir():
+    cachedir = config and config.get('cachedir')
+    if cachedir and os.path.exists(cachedir):
+        return Path(cachedir)
+    else:
+        return Path(tempfile.mkdtemp())
+
+
 def regsub_file(pattern, repl, path):
     with open(path, 'rb') as f:
         text = f.read()
@@ -607,6 +617,17 @@ def parse_mirrors_config(mirrors):
         return mirrors
     else:
         raise TypeError(_('only accepts strings, lists, and tuples'))
+
+
+def append_filename_to_mirrors(filename, mirrors):
+    """Append the filename to all "url" entries in the mirrors dict."""
+    appended = copy.deepcopy(mirrors)
+    for mirror in appended:
+        parsed = urlparse(mirror['url'])
+        mirror['url'] = urlunparse(
+            parsed._replace(path=os.path.join(parsed.path, filename))
+        )
+    return appended
 
 
 def file_entry(filename, hash_value=None):
@@ -4620,3 +4641,75 @@ def _install_ndk(ndk):
         logging.info(
             _('Set NDK {release} ({version}) up').format(release=ndk, version=version)
         )
+
+
+FDROIDORG_MIRRORS = [
+    {
+        'isPrimary': True,
+        'url': 'https://f-droid.org/repo',
+        'dnsA': ['65.21.79.229', '136.243.44.143'],
+        'dnsAAAA': ['2a01:4f8:212:c98::2', '2a01:4f9:3b:546d::2'],
+        'worksWithoutSNI': True,
+    },
+    {
+        'url': 'http://fdroidorg6cooksyluodepej4erfctzk7rrjpjbbr6wx24jh3lqyfwyd.onion/fdroid/repo'
+    },
+    {
+        'url': 'http://dotsrccccbidkzg7oc7oj4ugxrlfbt64qebyunxbrgqhxiwj3nl6vcad.onion/fdroid/repo'
+    },
+    {
+        'url': 'http://ftpfaudev4triw2vxiwzf4334e3mynz7osqgtozhbc77fixncqzbyoyd.onion/fdroid/repo'
+    },
+    {
+        'url': 'http://lysator7eknrfl47rlyxvgeamrv7ucefgrrlhk7rouv3sna25asetwid.onion/pub/fdroid/repo'
+    },
+    {
+        'url': 'http://mirror.ossplanetnyou5xifr6liw5vhzwc2g2fmmlohza25wwgnnaw65ytfsad.onion/fdroid/repo'
+    },
+    {'url': 'https://fdroid.tetaneutral.net/fdroid/repo', 'countryCode': 'FR'},
+    {
+        'url': 'https://ftp.agdsn.de/fdroid/repo',
+        'countryCode': 'DE',
+        "dnsA": ["141.30.235.39"],
+        "dnsAAAA": ["2a13:dd85:b00:12::1"],
+        "worksWithoutSNI": True,
+    },
+    {
+        'url': 'https://ftp.fau.de/fdroid/repo',
+        'countryCode': 'DE',
+        "dnsA": ["131.188.12.211"],
+        "dnsAAAA": ["2001:638:a000:1021:21::1"],
+        "worksWithoutSNI": True,
+    },
+    {'url': 'https://ftp.gwdg.de/pub/android/fdroid/repo', 'countryCode': 'DE'},
+    {
+        'url': 'https://ftp.lysator.liu.se/pub/fdroid/repo',
+        'countryCode': 'SE',
+        "dnsA": ["130.236.254.251", "130.236.254.253"],
+        "dnsAAAA": ["2001:6b0:17:f0a0::fb", "2001:6b0:17:f0a0::fd"],
+        "worksWithoutSNI": True,
+    },
+    {'url': 'https://mirror.cyberbits.eu/fdroid/repo', 'countryCode': 'FR'},
+    {
+        'url': 'https://mirror.fcix.net/fdroid/repo',
+        'countryCode': 'US',
+        "dnsA": ["23.152.160.16"],
+        "dnsAAAA": ["2620:13b:0:1000::16"],
+        "worksWithoutSNI": True,
+    },
+    {'url': 'https://mirror.kumi.systems/fdroid/repo', 'countryCode': 'AT'},
+    {'url': 'https://mirror.level66.network/fdroid/repo', 'countryCode': 'DE'},
+    {'url': 'https://mirror.ossplanet.net/fdroid/repo', 'countryCode': 'TW'},
+    {'url': 'https://mirrors.dotsrc.org/fdroid/repo', 'countryCode': 'DK'},
+    {'url': 'https://opencolo.mm.fcix.net/fdroid/repo', 'countryCode': 'US'},
+    {
+        'url': 'https://plug-mirror.rcac.purdue.edu/fdroid/repo',
+        'countryCode': 'US',
+        "dnsA": ["128.211.151.252"],
+        "dnsAAAA": ["2001:18e8:804:35::1337"],
+        "worksWithoutSNI": True,
+    },
+]
+FDROIDORG_FINGERPRINT = (
+    '43238D512C1E5EB2D6569F4A3AFBF5523418B82E0A3ED1552770ABB9A9C9CCAB'
+)

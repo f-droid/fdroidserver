@@ -36,6 +36,7 @@ if localmodule not in sys.path:
     sys.path.insert(0, localmodule)
 
 import fdroidserver.index
+import fdroidserver.install
 import fdroidserver.signindex
 import fdroidserver.common
 import fdroidserver.metadata
@@ -2966,6 +2967,21 @@ class CommonTest(unittest.TestCase):
                 self.assertNotEqual(added, now)
         knownapks.recordapk(fake_apk, default_date=datetime.now(timezone.utc))
         self.assertEqual(knownapks.apks[fake_apk], now)
+
+    def test_append_filename_to_mirrors(self):
+        filename = 'test.apk'
+        url = 'https://example.com/fdroid/repo'
+        mirrors = [{'url': url}]
+        self.assertEqual(
+            [{'url': url + '/' + filename}],
+            fdroidserver.common.append_filename_to_mirrors(filename, mirrors),
+        )
+
+    def test_append_filename_to_mirrors_full(self):
+        filename = 'test.apk'
+        mirrors = fdroidserver.common.FDROIDORG_MIRRORS
+        for mirror in fdroidserver.common.append_filename_to_mirrors(filename, mirrors):
+            self.assertTrue(mirror['url'].endswith('/' + filename))
 
 
 APKS_WITH_JAR_SIGNATURES = (

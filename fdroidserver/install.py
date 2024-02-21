@@ -20,15 +20,56 @@
 import sys
 import os
 import glob
-from argparse import ArgumentParser
 import logging
 
+from argparse import ArgumentParser
+from pathlib import Path
+from urllib.parse import urlencode, urlparse, urlunparse
+
 from . import _
-from . import common
+from . import common, index, net
 from .common import SdkToolsPopen
 from .exception import FDroidException
 
 config = None
+
+
+DEFAULT_IPFS_GATEWAYS = ("https://gateway.ipfs.io/ipfs/",)
+
+
+def download_apk(appid='org.fdroid.fdroid'):
+    """Download an APK from F-Droid via the first mirror that works."""
+    url = urlunparse(
+        urlparse(common.FDROIDORG_MIRRORS[0]['url'])._replace(
+            query=urlencode({'fingerprint': common.FDROIDORG_FINGERPRINT})
+        )
+    )
+
+    data, _ignored = index.download_repo_index_v2(url)
+    app = data.get('packages', dict()).get(appid)
+    preferred_version = None
+    for version in app['versions'].values():
+        if not preferred_version:
+            # if all else fails, use the first one
+            preferred_version = version
+        if not version.get('releaseChannels'):
+            # prefer APK in default release channel
+            preferred_version = version
+            break
+        print('skipping', version)
+
+    mirrors = common.append_filename_to_mirrors(
+        preferred_version['file']['name'][1:], common.FDROIDORG_MIRRORS
+    )
+    ipfsCIDv1 = preferred_version['file'].get('ipfsCIDv1')
+    if ipfsCIDv1:
+        for gateway in DEFAULT_IPFS_GATEWAYS:
+            mirrors.append({'url': os.path.join(gateway, ipfsCIDv1)})
+    f = net.download_using_mirrors(mirrors)
+    if f and os.path.exists(f):
+        versionCode = preferred_version['manifest']['versionCode']
+        f = Path(f)
+        return str(f.rename(f.with_stem(f'{appid}_{versionCode}')).resolve())
 
 
 def devices():
