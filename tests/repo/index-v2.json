@@ -371,7 +371,7 @@
       "NonFreeNet": {
         "description": {
           "de": "Diese App bewirbt nicht-quelloffene Netzwerkdienste",
-          "en-US": "This app promotes or depends entirely on a non-free network service",
+          "en-US": "This app promotes or depends entirely on a non-changeable or non-free network service",
           "fa": "این کاره، خدمات شبکه‌های ناآزاد را ترویج می‌کند",
           "ro": "Aplicația promovează servicii de rețea ce nu sunt accesibile la liber",
           "zh-rCN": "此应用推广非自由的网络服务"
