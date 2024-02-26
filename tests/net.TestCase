@@ -39,10 +39,10 @@ class NetTest(unittest.TestCase):
             return MagicMock()
 
         requests_get.side_effect = _get
-        f = net.download_file('https://f-droid.org/repo/index-v1.jar', retries=0)
+        f = net.download_file('https://f-droid.org/repo/entry.jar', retries=0)
         self.assertTrue(requests_get.called)
         self.assertTrue(os.path.exists(f))
-        self.assertEqual('tmp/index-v1.jar', f)
+        self.assertEqual('tmp/entry.jar', f)
 
         f = net.download_file(
             'https://d-05.example.com/custom/com.downloader.aegis-3175421.apk?_fn=QVBLUHVyZV92My4xNy41NF9hcGtwdXJlLmNvbS5hcGs&_p=Y29tLmFwa3B1cmUuYWVnb24&am=6avvTpfJ1dMl9-K6JYKzQw&arg=downloader%3A%2F%2Fcampaign%2F%3Futm_medium%3Ddownloader%26utm_source%3Daegis&at=1652080635&k=1f6e58465df3a441665e585719ab0b13627a117f&r=https%3A%2F%2Fdownloader.com%2Fdownloader-app.html%3Ficn%3Daegis%26ici%3Dimage_qr&uu=http%3A%2F%2F172.16.82.1%2Fcustom%2Fcom.downloader.aegis-3175421.apk%3Fk%3D3fb9c4ae0be578206f6a1c330736fac1627a117f',
