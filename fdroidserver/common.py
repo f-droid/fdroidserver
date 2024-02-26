@@ -486,14 +486,7 @@ def read_config(opts=None):
     fill_config_defaults(config)
 
     if 'serverwebroot' in config:
-        if isinstance(config['serverwebroot'], str):
-            roots = [{'url': config['serverwebroot']}]
-        elif all(isinstance(item, str) for item in config['serverwebroot']):
-            roots = [{'url': i} for i in config['serverwebroot']]
-        elif all(isinstance(item, dict) for item in config['serverwebroot']):
-            roots = config['serverwebroot']
-        else:
-            raise TypeError(_('only accepts strings, lists, and tuples'))
+        roots = parse_mirrors_config(config['serverwebroot'])
         rootlist = []
         for d in roots:
             # since this is used with rsync, where trailing slashes have
@@ -506,15 +499,7 @@ def read_config(opts=None):
         config['serverwebroot'] = rootlist
 
     if 'servergitmirrors' in config:
-        if isinstance(config['servergitmirrors'], str):
-            roots = [{"url": config['servergitmirrors']}]
-        elif all(isinstance(item, str) for item in config['servergitmirrors']):
-            roots = [{'url': i} for i in config['servergitmirrors']]
-        elif all(isinstance(item, dict) for item in config['servergitmirrors']):
-            roots = config['servergitmirrors']
-        else:
-            raise TypeError(_('only accepts strings, lists, and tuples'))
-        config['servergitmirrors'] = roots
+        config['servergitmirrors'] = parse_mirrors_config(config['servergitmirrors'])
 
         limit = config['git_mirror_size_limit']
         config['git_mirror_size_limit'] = parse_human_readable_size(limit)
@@ -555,6 +540,18 @@ def read_config(opts=None):
         del config[configname]
 
     return config
+
+
+def parse_mirrors_config(mirrors):
+    """Mirrors can be specified as a string, list of strings, or dictionary map."""
+    if isinstance(mirrors, str):
+        return [{"url": mirrors}]
+    elif all(isinstance(item, str) for item in mirrors):
+        return [{'url': i} for i in mirrors]
+    elif all(isinstance(item, dict) for item in mirrors):
+        return mirrors
+    else:
+        raise TypeError(_('only accepts strings, lists, and tuples'))
 
 
 def file_entry(filename, hash_value=None):
