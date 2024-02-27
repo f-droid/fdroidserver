@@ -72,6 +72,18 @@ def download_apk(appid='org.fdroid.fdroid'):
         return str(f.rename(f.with_stem(f'{appid}_{versionCode}')).resolve())
 
 
+def download_fdroid_apk():
+    """Directly download the current F-Droid APK and verify it.
+
+    This downloads the "download button" link, which is the version
+    that is best tested for new installs.
+
+    """
+    mirror = common.FDROIDORG_MIRRORS[0]
+    mirror['url'] = urlunparse(urlparse(mirror['url'])._replace(path='F-Droid.apk'))
+    return net.download_using_mirrors([mirror])
+
+
 def devices():
     p = SdkToolsPopen(['adb', "devices"])
     if p.returncode != 0:

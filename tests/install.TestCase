@@ -7,6 +7,8 @@ import os
 import sys
 import unittest
 
+from pathlib import Path
+
 localmodule = os.path.realpath(
     os.path.join(os.path.dirname(inspect.getfile(inspect.currentframe())), '..')
 )
@@ -32,6 +34,11 @@ class InstallTest(unittest.TestCase):
         self.assertIsInstance(devices, list, 'install.devices() did not return a list!')
         for device in devices:
             self.assertIsInstance(device, str)
+
+    @unittest.skipUnless(os.getenv('test_download_fdroid_apk'), 'requires net access')
+    def test_download_fdroid_apk(self):
+        f = fdroidserver.install.download_fdroid_apk()
+        self.assertTrue(Path(f).exists())
 
 
 if __name__ == "__main__":
