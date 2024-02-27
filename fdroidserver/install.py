@@ -20,6 +20,7 @@
 import sys
 import os
 import glob
+import locale
 import logging
 
 from argparse import ArgumentParser
@@ -81,6 +82,60 @@ def download_fdroid_apk():
     mirror = common.FDROIDORG_MIRRORS[0]
     mirror['url'] = urlunparse(urlparse(mirror['url'])._replace(path='F-Droid.apk'))
     return net.download_using_mirrors([mirror])
+
+
+def install_fdroid_apk(privacy_mode=False):
+    """Download and install F-Droid.apk using all tricks we can muster.
+
+    By default, this first tries to fetch the official install APK
+    which is offered when someone clicks the "download" button on
+    https://f-droid.org/.  Then it will try all the mirrors and
+    methods until it gets something successful, or runs out of
+    options.
+
+    There is privacy_mode which tries to download from mirrors first,
+    so that this downloads from a mirror that has many different kinds
+    of files available, thereby breaking the clear link to F-Droid.
+
+    Returns
+    -------
+    None for success or the error message.
+
+    """
+    if locale.getlocale()[0].split('_')[-1] in ('CN', 'HK', 'IR', 'TM'):
+        logging.warning(_('Privacy mode was enabled based on your locale.'))
+        privacy_mode = True
+
+    if privacy_mode or not (config and config.get('jarsigner')):
+        download_methods = [download_fdroid_apk]
+    else:
+        download_methods = [download_apk, download_fdroid_apk]
+    for method in download_methods:
+        try:
+            f = method()
+            break
+        except Exception as e:
+            logging.info(e)
+    else:
+        return _('F-Droid.apk could not be downloaded from any known source!')
+
+    if config and config['apksigner']:
+        # TODO this should always verify, but that requires APK sig verification in Python #94
+        logging.info(_('Verifying package {path} with apksigner.').format(path=f))
+        common.verify_apk_signature(f)
+    fingerprint = common.apk_signer_fingerprint(f)
+    if fingerprint.upper() != common.FDROIDORG_FINGERPRINT:
+        return _('{path} has the wrong fingerprint ({fingerprint})!').format(
+            path=f, fingerprint=fingerprint
+        )
+
+    if config and config.get('adb'):
+        if devices():
+            install_apks_to_devices([f])
+            os.remove(f)
+        else:
+            os.remove(f)
+            return _('No devices found for `adb install`! Please plug one in.')
 
 
 def devices():
@@ -162,17 +217,16 @@ def main():
     common.set_console_logging(options.verbose)
 
     if not options.appid and not options.all:
-        parser.error(
-            _("option %s: If you really want to install all the signed apps, use --all")
-            % "all"
-        )
+        # TODO implement me, including a -y/--yes flag
+        print('TODO prompt the user if they want to download and install F-Droid.apk')
 
     config = common.read_config()
 
     output_dir = 'repo'
-    if not os.path.isdir(output_dir):
-        logging.info(_("No signed output directory - nothing to do"))
-        sys.exit(0)
+    if (options.appid or options.all) and not os.path.isdir(output_dir):
+        logging.error(_("No signed output directory - nothing to do"))
+        # TODO prompt user if they want to download from f-droid.org
+        sys.exit(1)
 
     if options.appid:
         vercodes = common.read_pkg_args(options.appid, True)
@@ -196,12 +250,15 @@ def main():
                 raise FDroidException(_("No signed APK available for %s") % appid)
         install_apks_to_devices(apks.values())
 
-    else:
+    elif options.all:
         apks = {
             common.publishednameinfo(apkfile)[0]: apkfile
             for apkfile in sorted(glob.glob(os.path.join(output_dir, '*.apk')))
         }
         install_apks_to_devices(apks.values())
+
+    else:
+        sys.exit(install_fdroid_apk())
 
     logging.info('\n' + _('Finished'))
 
