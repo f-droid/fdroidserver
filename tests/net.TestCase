@@ -96,7 +96,7 @@ class NetTest(unittest.TestCase):
 
         requests_get.side_effect = _get
         f = net.download_file('https://f-droid.org/repo/entry.jar', retries=0)
-        self.assertTrue(requests_get.called)
+        requests_get.assert_called()
         self.assertTrue(os.path.exists(f))
         self.assertEqual('tmp/entry.jar', f)
 
