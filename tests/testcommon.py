@@ -20,10 +20,8 @@ import sys
 import tempfile
 
 
-class TmpCwd():
-    """Context-manager for temporarily changing the current working
-    directory.
-    """
+class TmpCwd:
+    """Context-manager for temporarily changing the current working directory."""
 
     def __init__(self, new_cwd):
         self.new_cwd = new_cwd
@@ -36,9 +34,8 @@ class TmpCwd():
         os.chdir(self.orig_cwd)
 
 
-class TmpPyPath():
-    """Context-manager for temporarily adding a direcory to python path
-    """
+class TmpPyPath:
+    """Context-manager for temporarily adding a directory to Python path."""
 
     def __init__(self, additional_path):
         self.additional_path = additional_path
@@ -51,14 +48,11 @@ class TmpPyPath():
 
 
 def mock_open_to_str(mock):
-    """
-    helper function for accessing all data written into a
-    unittest.mock.mock_open() instance as a string.
-    """
+    """For accessing all data written into a unittest.mock.mock_open() instance as a string."""
 
-    return "".join([
-        x.args[0] for x in mock.mock_calls if str(x).startswith("call().write(")
-    ])
+    return "".join(
+        [x.args[0] for x in mock.mock_calls if str(x).startswith("call().write(")]
+    )
 
 
 def mkdtemp():
