@@ -61,7 +61,7 @@ from base64 import urlsafe_b64encode
 from binascii import hexlify
 from datetime import datetime, timedelta, timezone
 from queue import Queue
-from urllib.parse import urlparse, urlunparse
+from urllib.parse import urlparse, urlsplit, urlunparse
 from zipfile import ZipFile
 
 import fdroidserver.metadata
@@ -617,6 +617,23 @@ def parse_mirrors_config(mirrors):
         return mirrors
     else:
         raise TypeError(_('only accepts strings, lists, and tuples'))
+
+
+def get_mirrors(url, filename=None):
+    """Get list of dict entries for mirrors, appending filename if provided."""
+    # TODO use cached index if it exists
+    if isinstance(url, str):
+        url = urlsplit(url)
+
+    if url.netloc == 'f-droid.org':
+        mirrors = FDROIDORG_MIRRORS
+    else:
+        mirrors = parse_mirrors_config(url.geturl())
+
+    if filename:
+        return append_filename_to_mirrors(filename, mirrors)
+    else:
+        return mirrors
 
 
 def append_filename_to_mirrors(filename, mirrors):

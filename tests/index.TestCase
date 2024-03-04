@@ -25,11 +25,8 @@ if localmodule not in sys.path:
 
 import fdroidserver
 from fdroidserver import common, index, publish, signindex, update
-from testcommon import TmpCwd, mkdtemp, parse_args_for_test
+from testcommon import GP_FINGERPRINT, TmpCwd, mkdtemp, parse_args_for_test
 from pathlib import Path
-
-
-GP_FINGERPRINT = 'B7C2EEFD8DAC7806AF67DFCD92EB18126BC08312A7F2D6F3862E46013C7A6135'
 
 
 class Options:
@@ -183,32 +180,11 @@ class IndexTest(unittest.TestCase):
             ilist = index.download_repo_index(url, verify_fingerprint=False)
             self.assertEqual(index_url, ilist[1])  # etag item used to return URL
 
-    @patch('fdroidserver.net.http_get')
-    def test_download_repo_index_v2_url_parsing(self, mock_http_get):
-        """Test whether it is trying to download the right file
-
-        This passes the URL back via the etag return value just as a
-        hack to check which URL was actually attempted.
-
-        """
-        mock_http_get.side_effect = lambda url, etag, timeout: (None, url)
-        repo_url = 'https://fake.url/fdroid/repo'
-        entry_url = 'https://fake.url/fdroid/repo/entry.jar'
-        index_url = 'https://fake.url/fdroid/repo/index-v2.json'
-        fingerprint_url = 'https://fake.url/fdroid/repo?fingerprint=' + GP_FINGERPRINT
-        slash_url = 'https://fake.url/fdroid/repo//?fingerprint=' + GP_FINGERPRINT
-        for url in (repo_url, entry_url, index_url, fingerprint_url, slash_url):
-            ilist = index.download_repo_index_v2(url, verify_fingerprint=False)
-            self.assertEqual(entry_url, ilist[1])  # etag item used to return URL
-
-    @patch('fdroidserver.net.http_get')
-    def test_download_repo_index_v2(self, mock_http_get):
-        def http_get_def(url, etag, timeout):  # pylint: disable=unused-argument
-            f = os.path.basename(url)
-            with open(os.path.join(self.testdir, 'repo', f), 'rb') as fp:
-                return (fp.read(), 'fakeetag')
-
-        mock_http_get.side_effect = http_get_def
+    @patch('fdroidserver.net.download_using_mirrors')
+    def test_download_repo_index_v2(self, mock_download_using_mirrors):
+        mock_download_using_mirrors.side_effect = lambda mirrors: os.path.join(
+            self.testdir, 'repo', os.path.basename(mirrors[0]['url'])
+        )
         os.chdir(self.testdir)
         signindex.config['keystore'] = os.path.join(self.basedir, 'keystore.jks')
         os.mkdir('repo')
@@ -223,15 +199,15 @@ class IndexTest(unittest.TestCase):
         for url in (repo_url, entry_url, index_url, fingerprint_url, slash_url):
             data, _ignored = index.download_repo_index_v2(url, verify_fingerprint=False)
             self.assertEqual(['repo', 'packages'], list(data.keys()))
+            self.assertEqual(
+                'My First F-Droid Repo Demo', data['repo']['name']['en-US']
+            )
 
-    @patch('fdroidserver.net.http_get')
-    def test_download_repo_index_v2_bad_fingerprint(self, mock_http_get):
-        def http_get_def(url, etag, timeout):  # pylint: disable=unused-argument
-            f = os.path.basename(url)
-            with open(os.path.join(self.testdir, 'repo', f), 'rb') as fp:
-                return (fp.read(), 'fakeetag')
-
-        mock_http_get.side_effect = http_get_def
+    @patch('fdroidserver.net.download_using_mirrors')
+    def test_download_repo_index_v2_bad_fingerprint(self, mock_download_using_mirrors):
+        mock_download_using_mirrors.side_effect = lambda mirrors: os.path.join(
+            self.testdir, 'repo', os.path.basename(mirrors[0]['url'])
+        )
         os.chdir(self.testdir)
         signindex.config['keystore'] = os.path.join(self.basedir, 'keystore.jks')
         os.mkdir('repo')
@@ -243,22 +219,26 @@ class IndexTest(unittest.TestCase):
         with self.assertRaises(fdroidserver.exception.VerificationException):
             data, _ignored = index.download_repo_index_v2(bad_fp_url)
 
-    @patch('fdroidserver.net.http_get')
-    def test_download_repo_index_v2_entry_verify(self, mock_http_get):
-        def http_get_def(url, etag, timeout):  # pylint: disable=unused-argument
-            return (b'not the entry.jar file contents', 'fakeetag')
+    @patch('fdroidserver.net.download_using_mirrors')
+    def test_download_repo_index_v2_entry_verify(self, mock_download_using_mirrors):
+        def download_using_mirrors_def(mirrors):
+            f = os.path.join(tempfile.mkdtemp(), os.path.basename(mirrors[0]['url']))
+            Path(f).write_text('not the entry.jar file contents')
+            return f
 
-        mock_http_get.side_effect = http_get_def
+        mock_download_using_mirrors.side_effect = download_using_mirrors_def
         url = 'https://fake.url/fdroid/repo?fingerprint=' + GP_FINGERPRINT
         with self.assertRaises(fdroidserver.exception.VerificationException):
             data, _ignored = index.download_repo_index_v2(url)
 
-    @patch('fdroidserver.net.http_get')
-    def test_download_repo_index_v2_index_verify(self, mock_http_get):
-        def http_get_def(url, etag, timeout):  # pylint: disable=unused-argument
-            return (b'not the index-v2.json file contents', 'fakeetag')
+    @patch('fdroidserver.net.download_using_mirrors')
+    def test_download_repo_index_v2_index_verify(self, mock_download_using_mirrors):
+        def download_using_mirrors_def(mirrors):
+            f = os.path.join(tempfile.mkdtemp(), os.path.basename(mirrors[0]['url']))
+            Path(f).write_text('not the index-v2.json file contents')
+            return f
 
-        mock_http_get.side_effect = http_get_def
+        mock_download_using_mirrors.side_effect = download_using_mirrors_def
         os.chdir(self.testdir)
         signindex.config['keystore'] = os.path.join(self.basedir, 'keystore.jks')
         os.mkdir('repo')

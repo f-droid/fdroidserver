@@ -2968,6 +2968,23 @@ class CommonTest(unittest.TestCase):
         knownapks.recordapk(fake_apk, default_date=datetime.now(timezone.utc))
         self.assertEqual(knownapks.apks[fake_apk], now)
 
+    def test_get_mirrors_fdroidorg(self):
+        mirrors = fdroidserver.common.get_mirrors(
+            'https://f-droid.org/repo', 'entry.jar'
+        )
+        self.assertEqual(
+            'https://f-droid.org/repo/entry.jar',
+            mirrors[0]['url'],
+        )
+
+    def test_get_mirrors_other(self):
+        self.assertEqual(
+            [{'url': 'https://example.com/fdroid/repo/index-v2.json'}],
+            fdroidserver.common.get_mirrors(
+                'https://example.com/fdroid/repo', 'index-v2.json'
+            ),
+        )
+
     def test_append_filename_to_mirrors(self):
         filename = 'test.apk'
         url = 'https://example.com/fdroid/repo'
