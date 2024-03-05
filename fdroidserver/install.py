@@ -28,7 +28,6 @@ from urllib.parse import urlencode, urlparse, urlunparse
 
 from . import _
 from . import common, index, net
-from .common import SdkToolsPopen
 from .exception import FDroidException
 
 config = None
@@ -85,14 +84,57 @@ def download_fdroid_apk():
 
 
 def devices():
-    p = SdkToolsPopen(['adb', "devices"])
+    """Get the list of device serials for use with adb commands."""
+    p = common.SdkToolsPopen(['adb', "devices"])
     if p.returncode != 0:
         raise FDroidException("An error occured when finding devices: %s" % p.output)
-    lines = [line for line in p.output.splitlines() if not line.startswith('* ')]
-    if len(lines) < 3:
-        return []
-    lines = lines[1:-1]
-    return [line.split()[0] for line in lines]
+    serials = list()
+    for line in p.output.splitlines():
+        columns = line.strip().split("\t", maxsplit=1)
+        if len(columns) == 2:
+            serial, status = columns
+            if status == 'device':
+                serials.append(serial)
+            else:
+                d = {'serial': serial, 'status': status}
+                logging.warning(_('adb reports {serial} is "{status}"!'.format(**d)))
+    return serials
+
+
+def install_apks_to_devices(apks):
+    """Install the list of APKs to all Android devices reported by `adb devices`."""
+    for apk in apks:
+        # Get device list each time to avoid device not found errors
+        devs = devices()
+        if not devs:
+            raise FDroidException(_("No attached devices found"))
+        logging.info(_("Installing %s...") % apk)
+        for dev in devs:
+            logging.info(
+                _("Installing '{apkfilename}' on {dev}...").format(
+                    apkfilename=apk, dev=dev
+                )
+            )
+            p = common.SdkToolsPopen(['adb', "-s", dev, "install", apk])
+            fail = ""
+            for line in p.output.splitlines():
+                if line.startswith("Failure"):
+                    fail = line[9:-1]
+            if not fail:
+                continue
+
+            if fail == "INSTALL_FAILED_ALREADY_EXISTS":
+                logging.warning(
+                    _('"{apkfilename}" is already installed on {dev}.').format(
+                        apkfilename=apk, dev=dev
+                    )
+                )
+            else:
+                raise FDroidException(
+                    _("Failed to install '{apkfilename}' on {dev}: {error}").format(
+                        apkfilename=apk, dev=dev, error=fail
+                    )
+                )
 
 
 def main():
@@ -152,45 +194,14 @@ def main():
         for appid, apk in apks.items():
             if not apk:
                 raise FDroidException(_("No signed APK available for %s") % appid)
+        install_apks_to_devices(apks.values())
 
     else:
         apks = {
             common.publishednameinfo(apkfile)[0]: apkfile
             for apkfile in sorted(glob.glob(os.path.join(output_dir, '*.apk')))
         }
-
-    for appid, apk in apks.items():
-        # Get device list each time to avoid device not found errors
-        devs = devices()
-        if not devs:
-            raise FDroidException(_("No attached devices found"))
-        logging.info(_("Installing %s...") % apk)
-        for dev in devs:
-            logging.info(
-                _("Installing '{apkfilename}' on {dev}...").format(
-                    apkfilename=apk, dev=dev
-                )
-            )
-            p = SdkToolsPopen(['adb', "-s", dev, "install", apk])
-            fail = ""
-            for line in p.output.splitlines():
-                if line.startswith("Failure"):
-                    fail = line[9:-1]
-            if not fail:
-                continue
-
-            if fail == "INSTALL_FAILED_ALREADY_EXISTS":
-                logging.warning(
-                    _('"{apkfilename}" is already installed on {dev}.').format(
-                        apkfilename=apk, dev=dev
-                    )
-                )
-            else:
-                raise FDroidException(
-                    _("Failed to install '{apkfilename}' on {dev}: {error}").format(
-                        apkfilename=apk, dev=dev, error=fail
-                    )
-                )
+        install_apks_to_devices(apks.values())
 
     logging.info('\n' + _('Finished'))
 
