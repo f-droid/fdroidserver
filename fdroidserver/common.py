@@ -192,6 +192,31 @@ def setup_global_opts(parser):
                         help=_("Restrict output to warnings and errors"))
 
 
+def set_console_logging(verbose=False):
+    """Globally set logging to output nicely to the console."""
+
+    class _StdOutFilter(logging.Filter):
+        def filter(self, record):
+            return record.levelno < logging.ERROR
+
+    if verbose:
+        level = logging.DEBUG
+    else:
+        level = logging.ERROR
+
+    stdout_handler = logging.StreamHandler(sys.stdout)
+    stdout_handler.addFilter(_StdOutFilter())
+    stdout_handler.setFormatter(logging.Formatter('%(message)s'))
+
+    stderr_handler = logging.StreamHandler(sys.stderr)
+    stderr_handler.setLevel(logging.ERROR)
+    stderr_handler.setFormatter(logging.Formatter(_('ERROR: %(message)s')))
+
+    logging.basicConfig(
+        force=True, level=level, handlers=[stdout_handler, stderr_handler]
+    )
+
+
 def _add_java_paths_to_config(pathlist, thisconfig):
     def path_version_key(s):
         versionlist = []

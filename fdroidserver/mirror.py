@@ -95,6 +95,8 @@ def main():
     )
     options = parser.parse_args()
 
+    common.set_console_logging(options.verbose)
+
     if options.all:
         options.archive = True
         options.build_logs = True
@@ -152,10 +154,10 @@ def main():
     if hostname == 'f-droid.org' or (
         ip is not None and hostname in socket.gethostbyname_ex('f-droid.org')[2]
     ):
-        print(
+        logging.error(
             _(
-                'ERROR: this command should never be used to mirror f-droid.org!\n'
-                'A full mirror of f-droid.org requires more than 200GB.'
+                'This command should never be used to mirror f-droid.org! '
+                'A full copy requires more than 600GB.'
             )
         )
         sys.exit(1)

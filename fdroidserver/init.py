@@ -83,6 +83,8 @@ def main():
     )
     options = parser.parse_args()
 
+    common.set_console_logging(options.verbose)
+
     fdroiddir = os.getcwd()
     test_config = dict()
     examplesdir = common.get_examples_dir()
@@ -290,4 +292,9 @@ and https://f-droid.org/docs/Signing_Process'''
         )
         % os.path.join(fdroiddir, 'repo')
     )
-    logging.info(msg)
+    if not options.quiet:
+        # normally, INFO is only shown with --verbose, but show this unless --quiet
+        logger = logging.getLogger()
+        logger.setLevel(logging.INFO)
+        logger.info(msg)
+    logging.shutdown()

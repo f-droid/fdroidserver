@@ -54,6 +54,8 @@ def main():
                         help=_("Install all signed applications available"))
     options = parser.parse_args()
 
+    common.set_console_logging(options.verbose)
+
     if not options.appid and not options.all:
         parser.error(_("option %s: If you really want to install all the signed apps, use --all") % "all")
 
