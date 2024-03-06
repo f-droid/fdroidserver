@@ -647,7 +647,7 @@ docker:
       - buildserver/*
     variables:
       - $CI_COMMIT_BRANCH == "master" || $CI_PROJECT_NAMESPACE != "fdroid"
-  image: docker:git
+  image: docker:dind
   services:
     - docker:dind
   variables:
