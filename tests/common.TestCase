@@ -12,6 +12,7 @@ import logging
 import optparse
 import os
 import re
+import ruamel.yaml
 import shutil
 import subprocess
 import sys
@@ -2890,6 +2891,27 @@ class CommonTest(unittest.TestCase):
         self.assertEqual(
             [{'url': 'foo@example.com:/var/www/'}],
             fdroidserver.common.read_config()['serverwebroot'],
+        )
+
+    def test_parse_mirrors_config_str(self):
+        s = 'foo@example.com:/var/www'
+        mirrors = ruamel.yaml.YAML(typ='safe').load("""'%s'""" % s)
+        self.assertEqual(
+            [{'url': s}], fdroidserver.common.parse_mirrors_config(mirrors)
+        )
+
+    def test_parse_mirrors_config_list(self):
+        s = 'foo@example.com:/var/www'
+        mirrors = ruamel.yaml.YAML(typ='safe').load("""- '%s'""" % s)
+        self.assertEqual(
+            [{'url': s}], fdroidserver.common.parse_mirrors_config(mirrors)
+        )
+
+    def test_parse_mirrors_config_dict(self):
+        s = 'foo@example.com:/var/www'
+        mirrors = ruamel.yaml.YAML(typ='safe').load("""- url: '%s'""" % s)
+        self.assertEqual(
+            [{'url': s}], fdroidserver.common.parse_mirrors_config(mirrors)
         )
 
 

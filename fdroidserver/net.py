@@ -29,12 +29,20 @@ HEADERS = {'User-Agent': 'F-Droid'}
 
 
 def download_file(url, local_filename=None, dldir='tmp', retries=3, backoff_factor=0.1):
+    """Try hard to download the file, including retrying on failures.
+
+    This has two retry cycles, one inside of the requests session, the
+    other provided by this function.  The requests retry logic applies
+    to failed DNS lookups, socket connections and connection timeouts,
+    never to requests where data has made it to the server. This
+    handles ChunkedEncodingError during transfer in its own retry
+    loop.  This can result in more retries than are specified in the
+    retries parameter.
+
+    """
     filename = urllib.parse.urlparse(url).path.split('/')[-1]
     if local_filename is None:
         local_filename = os.path.join(dldir, filename)
-    # Retry applies to failed DNS lookups, socket connections and connection
-    # timeouts, never to requests where data has made it to the server; so we
-    # handle ChunkedEncodingError during transfer ourselves.
     for i in range(retries + 1):
         if retries:
             max_retries = Retry(total=retries - i, backoff_factor=backoff_factor)

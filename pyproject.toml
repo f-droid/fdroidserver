@@ -41,7 +41,6 @@ force-exclude = '''(
   | fdroidserver/deploy\.py
   | fdroidserver/import_subcommand\.py
   | fdroidserver/index\.py
-  | fdroidserver/install\.py
   | fdroidserver/metadata\.py
   | fdroidserver/nightly\.py
   | fdroidserver/publish\.py
@@ -53,7 +52,6 @@ force-exclude = '''(
   | tests/extra/manual-vmtools-test\.py
   | tests/gradle-release-checksums\.py
   | tests/openssl-version-check-test\.py
-  | tests/testcommon\.py
   | tests/valid-package-names/test\.py
   | tests/checkupdates\.TestCase
   | tests/common\.TestCase

@@ -47,17 +47,31 @@ def main():
     global options, config
 
     # Parse command line...
-    parser = ArgumentParser(usage="%(prog)s [options] [APPID[:VERCODE] [APPID[:VERCODE] ...]]")
+    parser = ArgumentParser(
+        usage="%(prog)s [options] [APPID[:VERCODE] [APPID[:VERCODE] ...]]"
+    )
     common.setup_global_opts(parser)
-    parser.add_argument("appid", nargs='*', help=_("application ID with optional versionCode in the form APPID[:VERCODE]"))
-    parser.add_argument("-a", "--all", action="store_true", default=False,
-                        help=_("Install all signed applications available"))
+    parser.add_argument(
+        "appid",
+        nargs='*',
+        help=_("application ID with optional versionCode in the form APPID[:VERCODE]"),
+    )
+    parser.add_argument(
+        "-a",
+        "--all",
+        action="store_true",
+        default=False,
+        help=_("Install all signed applications available"),
+    )
     options = parser.parse_args()
 
     common.set_console_logging(options.verbose)
 
     if not options.appid and not options.all:
-        parser.error(_("option %s: If you really want to install all the signed apps, use --all") % "all")
+        parser.error(
+            _("option %s: If you really want to install all the signed apps, use --all")
+            % "all"
+        )
 
     config = common.read_config(options)
 
@@ -67,14 +81,12 @@ def main():
         sys.exit(0)
 
     if options.appid:
-
         vercodes = common.read_pkg_args(options.appid, True)
-        common.get_metadata_files(vercodes)     # only check appids
+        common.get_metadata_files(vercodes)  # only check appids
         apks = {appid: None for appid in vercodes}
 
         # Get the signed APK with the highest vercode
         for apkfile in sorted(glob.glob(os.path.join(output_dir, '*.apk'))):
-
             try:
                 appid, vercode = common.publishednameinfo(apkfile)
             except FDroidException:
@@ -90,9 +102,10 @@ def main():
                 raise FDroidException(_("No signed APK available for %s") % appid)
 
     else:
-
-        apks = {common.publishednameinfo(apkfile)[0]: apkfile for apkfile in
-                sorted(glob.glob(os.path.join(output_dir, '*.apk')))}
+        apks = {
+            common.publishednameinfo(apkfile)[0]: apkfile
+            for apkfile in sorted(glob.glob(os.path.join(output_dir, '*.apk')))
+        }
 
     for appid, apk in apks.items():
         # Get device list each time to avoid device not found errors
@@ -101,7 +114,11 @@ def main():
             raise FDroidException(_("No attached devices found"))
         logging.info(_("Installing %s...") % apk)
         for dev in devs:
-            logging.info(_("Installing '{apkfilename}' on {dev}...").format(apkfilename=apk, dev=dev))
+            logging.info(
+                _("Installing '{apkfilename}' on {dev}...").format(
+                    apkfilename=apk, dev=dev
+                )
+            )
             p = SdkToolsPopen(['adb', "-s", dev, "install", apk])
             fail = ""
             for line in p.output.splitlines():
@@ -111,11 +128,17 @@ def main():
                 continue
 
             if fail == "INSTALL_FAILED_ALREADY_EXISTS":
-                logging.warning(_('"{apkfilename}" is already installed on {dev}.')
-                                .format(apkfilename=apk, dev=dev))
+                logging.warning(
+                    _('"{apkfilename}" is already installed on {dev}.').format(
+                        apkfilename=apk, dev=dev
+                    )
+                )
             else:
-                raise FDroidException(_("Failed to install '{apkfilename}' on {dev}: {error}")
-                                      .format(apkfilename=apk, dev=dev, error=fail))
+                raise FDroidException(
+                    _("Failed to install '{apkfilename}' on {dev}: {error}").format(
+                        apkfilename=apk, dev=dev, error=fail
+                    )
+                )
 
     logging.info('\n' + _('Finished'))
 
