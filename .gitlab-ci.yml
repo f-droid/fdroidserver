@@ -76,7 +76,13 @@ metadata_v0:
            'Dpkg::Use-Pty "0";'
            'quiet "1";'
         >> /etc/apt/apt.conf.d/99gitlab
+    # Ubuntu and other distros often lack https:// support
+    - grep Debian /etc/issue.net
+        && { find /etc/apt/sources.list* -type f | xargs sed -i s,http:,https:, ; }
+    - echo 'Acquire::https::Verify-Peer "false";' > /etc/apt/apt.conf.d/99nocacertificates
     - apt-get update
+    - apt-get install ca-certificates
+    - rm /etc/apt/apt.conf.d/99nocacertificates
     - apt-get dist-upgrade
 
 
@@ -641,7 +647,7 @@ docker:
       - buildserver/*
     variables:
       - $CI_COMMIT_BRANCH == "master" || $CI_PROJECT_NAMESPACE != "fdroid"
-  image: docker:git
+  image: docker:dind
   services:
     - docker:dind
   variables:
