@@ -2699,11 +2699,22 @@ def altstore_index(apps, apks, config, repodir, indent=None):
         # assemble "apps"
         for packageName, app in apps.items():
             app_name = app.get("Name") or app.get("AutoName")
+            icon_url = "{}{}".format(
+                config['repo_url'],
+                app.get('iconv2', {}).get(DEFAULT_LOCALE, {}).get('name', ''),
+            )
+            screenshot_urls = [
+                "{}{}".format(config["repo_url"], s["name"])
+                for s in app.get("screenshots", {})
+                .get("phone", {})
+                .get(DEFAULT_LOCALE, {})
+            ]
+
             a = {
                 "name": app_name,
                 'bundleIdentifier': packageName,
                 'developerName': app.get("AuthorName") or f"{app_name} team",
-                'iconURL': app.get('iconv2', {}).get(DEFAULT_LOCALE, {}).get('name', ''),
+                'iconURL': icon_url,
                 "localizedDescription": "",
                 'appPermissions': {
                     "entitlements": set(),
@@ -2717,7 +2728,7 @@ def altstore_index(apps, apks, config, repodir, indent=None):
             # a["tintColor"] F-Droid doesn't have a corresponding value
             # a["category"] F-Droid doesn't have a corresponding value
             # a['patreon'] F-Droid doesn't have a corresponding value
-            # a["screenshots"] TODO
+            a["screenshots"] = screenshot_urls
 
             # populate 'versions'
             for apk in apks:
