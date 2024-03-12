@@ -18,6 +18,16 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+"""Sign APKs using keys or via reproducible builds signature copying.
+
+This command takes unsigned APKs and signs them.  It looks for
+unsigned APKs in the unsigned/ directory and puts successfully signed
+APKs into the repo/ directory.  The default is to run in a kind of
+batch mode, where it will only quit on certain kinds of errors. It
+mostly reports success by moving an APK from unsigned/ to repo/
+
+"""
+
 import sys
 import os
 import re
@@ -267,6 +277,13 @@ def main():
     )
     common.setup_global_opts(parser)
     parser.add_argument(
+        "-e",
+        "--error-on-failed",
+        action="store_true",
+        default=False,
+        help=_("When signing or verifying fails, exit with an error code."),
+    )
+    parser.add_argument(
         "appid",
         nargs='*',
         help=_("application ID with optional versionCode in the form APPID[:VERCODE]"),
@@ -322,6 +339,7 @@ def main():
         ).format(len(allapps), len(allaliases))
     )
 
+    failed = 0
     # Process any APKs or ZIPs that are waiting to be signed...
     for apkfile in sorted(
         glob.glob(os.path.join(unsigned_dir, '*.apk'))
@@ -364,12 +382,14 @@ def main():
             if not os.path.isfile(srcapk):
                 logging.error("...reference binary missing - publish skipped: "
                               "'{refpath}'".format(refpath=srcapk))
+                failed += 1
             else:
                 # Compare our unsigned one with the downloaded one...
                 compare_result = common.verify_apks(srcapk, apkfile, tmp_dir)
                 if compare_result:
                     logging.error("...verification failed - publish skipped : "
                                   "{result}".format(result=compare_result))
+                    failed += 1
                 else:
                     # Success! So move the downloaded file to the repo, and remove
                     # our built version.
@@ -415,6 +435,7 @@ def main():
                     os.remove(devsignedtmp)
                     logging.error('...verification failed - skipping: %s', devsigned)
                     skipsigning = True
+                    failed += 1
 
             # Now we sign with the F-Droid key.
             if not skipsigning:
@@ -443,6 +464,11 @@ def main():
     store_stats_fdroid_signing_key_fingerprints(allapps.keys())
     status_update_json(generated_keys, signed_apks)
     logging.info('published list signing-key fingerprints')
+
+    if failed:
+        logging.error(_('%d APKs failed to be signed or verified!') % failed)
+        if options.error_on_failed:
+            sys.exit(failed)
 
 
 if __name__ == "__main__":
