@@ -640,7 +640,15 @@ def convert_version(version, app, repodir):
         if version["versionCode"] > app["CurrentVersionCode"]:
             ver[RELEASECHANNELS_CONFIG_NAME] = ["Beta"]
 
-    for build in app.get('Builds', []):
+    builds = app.get("Builds", [])
+
+    if len(builds) > 0 and version["versionCode"] == builds[-1]["versionCode"]:
+        if "localized" in app:
+            localized = {k: v["whatsNew"] for k, v in app["localized"].items() if "whatsNew" in v}
+            if localized:
+                ver["whatsNew"] = localized
+
+    for build in builds:
         if build['versionCode'] == version['versionCode'] and "whatsNew" in build:
             ver["whatsNew"] = build["whatsNew"]
             break
