@@ -759,6 +759,7 @@
 - ' maven { url ''libs'' }'
 - ' maven { url = uri("https://jitpack.io") }'
 - ' maven { url = uri("https://maven.fabric.io/public") }'
+- ' maven { url = URI("https://jitpack.io") }'
 - ' maven { url MAVEN_REPO_CACHE }'
 - ' maven { url(''http://releases.marmeladburk.fidesmo.com/'') }'
 - ' maven {url "http://dl.bintray.com/tbruyelle/tbruyelle" }'
@@ -778,3 +779,5 @@
 - ' maven{url "https://plugins.gradle.org/m2/"}'
 - ' maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")'
 - ' maven(url = "https://maven.pkg.jetbrains.space/public/p/kotlinx-html/maven")'
+- ' maven ( url = "https://jitpack.io")'
+- ' maven( url = "https://oss.sonatype.org/content/repositories/snapshots/" )'
