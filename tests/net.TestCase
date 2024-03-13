@@ -107,6 +107,7 @@ class NetTest(unittest.TestCase):
         self.assertTrue(os.path.exists(f))
         self.assertEqual('tmp/com.downloader.aegis-3175421.apk', f)
 
+    @patch.dict(os.environ, clear=True)
     def test_download_file_retries(self):
         server = RetryServer()
         f = net.download_file('http://localhost:%d/f.txt' % server.port)
@@ -114,6 +115,7 @@ class NetTest(unittest.TestCase):
         self.assertEqual(server.reply.split(b'\n\n')[1], Path(f).read_bytes())
         server.stop()
 
+    @patch.dict(os.environ, clear=True)
     def test_download_file_retries_not_forever(self):
         """The retry logic should eventually exit with an error."""
         server = RetryServer(failures=5)
