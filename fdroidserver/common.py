@@ -134,11 +134,27 @@ env = None
 orig_path = None
 
 
+def get_default_cachedir():
+    """Get a cachedir, using appdirs for cross-platform, but works without.
+
+    Once appdirs is installed everywhere, this function can be
+    removed.
+
+    """
+    appname = __name__.split('.')[0]
+    try:
+        import appdirs
+
+        return appdirs.user_cache_dir(appname, 'F-Droid')
+    except ImportError:
+        return str(Path.home() / '.cache' / appname)
+
+
 # All paths in the config must be strings, never pathlib.Path instances
 default_config = {
     'sdk_path': "$ANDROID_HOME",
     'ndk_paths': {},
-    'cachedir': str(Path.home() / '.cache/fdroidserver'),
+    'cachedir': get_default_cachedir(),
     'java_paths': None,
     'scan_binary': False,
     'ant': "ant",
