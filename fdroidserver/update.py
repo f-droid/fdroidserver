@@ -1260,34 +1260,34 @@ def insert_localized_ios_app_metadata(apps_with_packages):
         fastlane_dir = pathlib.Path('build', package_name, 'fastlane')
 
         for lang_dir in (fastlane_dir / 'metadata').iterdir():
-            lang_code = lang_dir.name
-            m = LANG_CODE.match(lang_code)
+            locale = lang_dir.name
+            m = LANG_CODE.match(locale)
             if m:
                 for metadata_file in (lang_dir).iterdir():
                     key = FASTLANE_IOS_MAP.get(metadata_file.name)
                     if key:
-                        _set_localized_text_entry(app, lang_code, key, metadata_file)
+                        _set_localized_text_entry(app, locale, key, metadata_file)
 
         # discover available screenshots and put findings in a dict
         screenshots = {}
         for lang_sdir in (fastlane_dir / 'screenshots').iterdir():
-            lang_code = lang_sdir.name
-            m = LANG_CODE.match(lang_code)
+            locale = lang_sdir.name
+            m = LANG_CODE.match(locale)
             if m:
-                screenshots[lang_code] = {}
+                screenshots[locale] = {}
                 for screenshot in (lang_sdir).iterdir():
                     if screenshot.suffix[1:] in ALLOWED_EXTENSIONS:
                         # asdf #TODO
                         device_name, screenshot_name = parse_ios_screenshot_name(screenshot)
 
-                        if not screenshots[lang_code].get(device_name):
-                            screenshots[lang_code][device_name] = {}
-                        screenshots[lang_code][device_name][screenshot_name] = screenshot
+                        if not screenshots[locale].get(device_name):
+                            screenshots[locale][device_name] = {}
+                        screenshots[locale][device_name][screenshot_name] = screenshot
 
         # copy screenshots to repo dir
-        for lang_code, translated_screenshots in screenshots.items():
+        for locale, translated_screenshots in screenshots.items():
             for device, translated_device_screenthos in translated_screenshots.items():
-                dest_dir = pathlib.Path('repo') / package_name / lang_code / device
+                dest_dir = pathlib.Path('repo') / package_name / locale / device
                 dest_dir.mkdir(mode=0o755, parents=True, exist_ok=True)
                 for name, path in translated_device_screenshots.items():
                     dest = dest_dir / (name.replace(" ", "_").replace("\t", "_") + path.suffix)
