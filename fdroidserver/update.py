@@ -1285,11 +1285,11 @@ def insert_localized_ios_app_metadata(apps_with_packages):
                         screenshots[lang_code][device_name][screenshot_name] = screenshot
 
         # copy screenshots to repo dir
-        for lang_code in screenshots.keys():
-            for device in screenshots[lang_code].keys():
+        for lang_code, translated_screenshots in screenshots.items():
+            for device, translated_device_screenthos in translated_screenshots.items():
                 dest_dir = pathlib.Path('repo') / package_name / lang_code / device
                 dest_dir.mkdir(mode=0o755, parents=True, exist_ok=True)
-                for name, path in screenshots[lang_code][device].items():
+                for name, path in translated_device_screenshots.items():
                     dest = dest_dir / (name.replace(" ", "_").replace("\t", "_") + path.suffix)
                     _strip_and_copy_image(str(path), str(dest))
 
