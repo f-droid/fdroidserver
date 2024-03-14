@@ -199,7 +199,7 @@ arch_pip_install:
 # The gradlew-fdroid tests are isolated from the rest of the test
 # suite, so they run as their own job.
 gradlew-fdroid:
-  image: debian:bullseye-slim
+  image: debian:bookworm-slim
   <<: *apt-template
   only:
     changes:
@@ -371,7 +371,7 @@ macOS:
 
 
 gradle:
-  image: debian:bullseye
+  image: debian:bookworm-slim
   <<: *apt-template
   variables:
     GIT_DEPTH: 1000
@@ -469,7 +469,7 @@ fdroid build:
 # fdroiddata because that one is known to work, and this is a CI job,
 # so it should be isolated from the normal churn of fdroiddata.
 plugin_fetchsrclibs:
-  image: debian:bullseye
+  image: debian:bookworm-slim
   <<: *apt-template
   only:
     changes:
@@ -513,7 +513,7 @@ plugin_fetchsrclibs:
 
 # test a full update and deploy cycle to gitlab.com
 servergitmirrors:
-  image: debian:bullseye-backports
+  image: debian:bookworm-slim
   <<: *apt-template
   only:
     - master@fdroid/fdroidserver
@@ -534,7 +534,7 @@ servergitmirrors:
         python3-venv
         rsync
         wget
-    - apt-get install -t bullseye-backports apksigner
+    - apt-get install apksigner
     - python3 -m venv --system-site-packages env
     - . env/bin/activate
     - export PYTHONPATH=`pwd`
@@ -557,7 +557,7 @@ servergitmirrors:
     - diff repo/index-v1.jar index-v1.jar
 
 Build documentation:
-  image: debian:bookworm
+  image: debian:bookworm-slim
   <<: *apt-template
   script:
     - apt-get install make python3-sphinx python3-numpydoc python3-pydata-sphinx-theme pydocstyle fdroidserver
@@ -658,7 +658,7 @@ docker:
     - cd buildserver
     - docker build -t $TEST_IMAGE --build-arg GIT_REV_PARSE_HEAD=$(git rev-parse HEAD) .
     - docker tag $TEST_IMAGE $RELEASE_IMAGE
-    - docker tag $TEST_IMAGE ${RELEASE_IMAGE}-bullseye
+    - docker tag $TEST_IMAGE ${RELEASE_IMAGE}-bookworm
     - echo $CI_JOB_TOKEN | docker login -u gitlab-ci-token --password-stdin registry.gitlab.com
     # This avoids filling up gitlab.com free tier accounts with unused docker images.
     - if test -z "$FDROID_PUSH_DOCKER_IMAGE"; then
@@ -668,4 +668,4 @@ docker:
           exit 0;
       fi
     - docker push $RELEASE_IMAGE
-    - docker push $RELEASE_IMAGE-bullseye
+    - docker push $RELEASE_IMAGE-bookworm

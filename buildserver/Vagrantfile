@@ -35,7 +35,7 @@ Vagrant.configure("2") do |config|
     config.cache.enable :chef
   end
 
-  config.vm.box = "fdroid/bullseye64"
+  config.vm.box = "debian/bookworm64"
 
   if not configfile.has_key? "vm_provider" or configfile["vm_provider"] == "virtualbox"
     # default to VirtualBox if not set
@@ -53,6 +53,8 @@ Vagrant.configure("2") do |config|
       libvirt.uri = "qemu:///system"
       libvirt.cpus = configfile["cpus"]
       libvirt.memory = configfile["memory"]
+      # Debian Vagrant image is only 20G, so allocate more
+      libvirt.machine_virtual_size = 1024
       if configfile.has_key? "libvirt_disk_bus"
         libvirt.disk_bus = configfile["libvirt_disk_bus"]
       end
@@ -85,6 +87,12 @@ Vagrant.configure("2") do |config|
   # automatically mounted as /vagrant in the guest VM. This is more
   # necessary with 9p synced folders
   Dir.mkdir('cache') unless File.exists?('cache')
+
+  # Root partition needs to be resized to the new allocated space
+  config.vm.provision "shell", inline: <<-SHELL
+    growpart -v -u auto /dev/vda 1
+    resize2fs /dev/vda1
+  SHELL
 
   config.vm.provision "shell", name: "setup-env-vars", path: "setup-env-vars",
     args: ["/opt/android-sdk"]
