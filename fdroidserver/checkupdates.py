@@ -628,6 +628,7 @@ def checkupdates_app(app: metadata.App) -> None:
                     'apt-get install openjdk-17-jdk-headless',
                     'apt-get install -y openjdk-17-jdk-headless',
                     'update-alternatives --auto java',
+                    'update-java-alternatives -a',
                 ]
 
                 for build in newbuilds:
