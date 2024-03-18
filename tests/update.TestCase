@@ -2042,6 +2042,35 @@ class TestScanRepoForIpas(unittest.TestCase):
             )
 
 
+class TestParseIosScreenShotName(unittest.TestCase):
+    def setUp(self):
+        self.maxDiff = None
+
+    def test_parse_ios_screenshot_name_atforamt_iphone8(self):
+        self.assertEqual(
+            fdroidserver.update.parse_ios_screenshot_name(Path("iPhone 8+ @ iOS 16-1.png")),
+            ("phoneScreenshots", "iPhone 8+", "iOS 16",),
+        )
+
+    def test_parse_ios_screenshot_name_atforamt_ipad13(self):
+        self.assertEqual(
+            fdroidserver.update.parse_ios_screenshot_name(Path("iPad Pro 12.9\" 2gen @ iOS 16-1.png")),
+            ("tenInchScreenshots", "iPad Pro 12.9\" 2gen", "iOS 16",),
+        )
+
+    def test_parse_ios_screenshot_name_underscoreforamt_ipad(self):
+        self.assertEqual(
+            fdroidserver.update.parse_ios_screenshot_name(Path("1_ipadPro129_1.1.png")),
+            ("tenInchScreenshots", "ipadpro129", "unknown",),
+        )
+
+    def test_parse_ios_screenshot_name_underscoreforamt_iphone(self):
+        self.assertEqual(
+            fdroidserver.update.parse_ios_screenshot_name(Path("1_iphone6Plus_1.1.png")),
+            ("phoneScreenshots", "iphone6plus", "unknown",),
+        )
+
+
 if __name__ == "__main__":
     os.chdir(os.path.dirname(__file__))
 

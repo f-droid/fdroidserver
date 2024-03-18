@@ -1226,23 +1226,34 @@ FASTLANE_IOS_MAP = {
 
 def parse_ios_screenshot_name(path):
     """
-    Infer type info from screenshot file name.
+    Infer type and categorization info from screenshot file name.
 
-    Device type/name is part of the file name of iOS fastlane screenshots.
-    Here are some example:
-     * 'iPhone 8+ @ iOS 16-1.png'
-     * 'iPad Pro 12.9" 2gen @ iOS 16-1.png'
-     * '1_ipadPro129_1.1.png'
-     * '1_iphone6Plus_1.1.png'
+    This is not really an exact algorithm, it's based on filenames observed in
+    the wild.
     """
     s = path.stem.split('@')
     if len(s) >= 2:
         if "iphone" in s[0].lower():
-            return ("phoneScreenshots", '@'.join(s[1:]))
+            return ("phoneScreenshots", s[0].strip(), ('@'.join(s[1:])).split('-')[0].strip())
         elif "ipad" in s[0].lower():
-            return ("tenInchScreenshots", "@".join(s[1:]))
+            return ("tenInchScreenshots", s[0].strip(), ('@'.join(s[1:])).split('-')[0].strip())
     else:
-        return ('phoneScreenshots', s[0])
+        fragments = path.stem.lower().split("_")
+        device = "unknown"
+        os = "unknown"
+        screenshot_type = "phoneScreenshots"
+        for f in fragments:
+            if "iphone" in f:
+                device = f
+                continue
+            if "ipad" in f:
+                screenshot_type = "tenInchScreenshots"
+                device = f
+            if "ios" in f:
+                os = f
+        return (screenshot_type, device, os)
+
+    return ("phoneScreenshots", 'unknown', 'unknown')
 
 
 def insert_localized_ios_app_metadata(apps_with_packages):
@@ -1275,18 +1286,24 @@ def insert_localized_ios_app_metadata(apps_with_packages):
             m = LANG_CODE.match(locale)
             if m:
                 screenshots[locale] = {}
+                fcfs_idevice = None
+                fcfs_ios = None
                 for screenshot in (lang_sdir).iterdir():
                     if screenshot.suffix[1:] in ALLOWED_EXTENSIONS:
-                        # asdf #TODO
-                        device_name, screenshot_name = parse_ios_screenshot_name(screenshot)
+                        screenshot_type, idevice_name, ios_name = parse_ios_screenshot_name(screenshot)
 
-                        if not screenshots[locale].get(device_name):
-                            screenshots[locale][device_name] = {}
-                        screenshots[locale][device_name][screenshot_name] = screenshot
+                        if not fcfs_idevice:
+                            fcfs_idevice = idevice_name
+                            fcfs_ios = ios_name
+
+                        if fcfs_idevice == idevice_name and fcfs_ios == ios_name:
+                            if not screenshots[locale].get(screenshot_type):
+                                screenshots[locale][screenshot_type] = {}
+                            screenshots[locale][screenshot_type][screenshot] = screenshot
 
         # copy screenshots to repo dir
         for locale, translated_screenshots in screenshots.items():
-            for device, translated_device_screenthos in translated_screenshots.items():
+            for device, translated_device_screenshots in translated_screenshots.items():
                 dest_dir = pathlib.Path('repo') / package_name / locale / device
                 dest_dir.mkdir(mode=0o755, parents=True, exist_ok=True)
                 for name, path in translated_device_screenshots.items():
