@@ -306,7 +306,10 @@ def main():
         readme = '''
 # {repo_git_base}
 
-[![{repo_url}]({repo_url}/icons/icon.png)]({repo_url})
+This is an app repository for nightly versions.
+You can use it with the [F-Droid](https://f-droid.org/) Android app.
+
+[![{repo_url}]({repo_url}/icons/icon.png)](https://fdroid.link/#{repo_url})
 
 Last updated: {date}'''.format(repo_git_base=repo_git_base,
                                repo_url=repo_url,
