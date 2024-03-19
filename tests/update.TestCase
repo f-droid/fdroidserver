@@ -2071,6 +2071,136 @@ class TestParseIosScreenShotName(unittest.TestCase):
         )
 
 
+class TestInsertLocalizedIosAppMetadata(unittest.TestCase):
+
+    def test_insert_localized_ios_app_metadata(self):
+        self.maxDiff = None
+
+        self.apps_with_packages = {
+            "org.fake": {}
+        }
+
+        def _mock_discover(fastlane_dir):
+            self.assertEqual(
+                fastlane_dir,
+                Path('build/org.fake/fastlane'),
+            )
+            return {"fake screenshots": "fake"}
+
+        def _mock_copy(screenshots, package_name):
+            self.assertEqual(screenshots, {"fake screenshots": "fake"})
+            self.assertEqual(package_name, "org.fake")
+
+        with mock.patch('fdroidserver.update.discover_ios_screenshots', _mock_discover):
+            self.set_localized_mock = mock.Mock()
+            with mock.patch('fdroidserver.update.copy_ios_screenshots_to_repo', _mock_copy):
+                with mock.patch("fdroidserver.update._set_localized_text_entry", self.set_localized_mock):
+                    return fdroidserver.update.insert_localized_ios_app_metadata(
+                        self.apps_with_packages
+                    )
+
+        self.assertListEqual(
+            self.set_localized_mock.call_args_list,
+            [
+                mock.call({}, 'en-US', 'name', Path('build/org.fake/fastlane/metadata/en-US/name.txt')),
+                mock.call({}, 'en-US', 'summary', Path('build/org.fake/fastlane/metadata/en-US/subtitle.txt')),
+                mock.call({}, 'en-US', 'description', Path('build/org.fake/fastlane/metadata/en-US/description.txt')),
+                mock.call({}, 'de-DE', 'name', Path('build/org.fake/fastlane/metadata/de-DE/name.txt')),
+                mock.call({}, 'de-DE', 'summary', Path('build/org.fake/fastlane/metadata/de-DE/subtitle.txt')),
+                mock.call({}, 'de-DE', 'description', Path('build/org.fake/fastlane/metadata/de-DE/description.txt')),
+            ],
+        )
+
+
+class TestDiscoverIosScreenshots(unittest.TestCase):
+    def test_discover_ios_screenshots(self):
+        self.maxDiff = None
+
+        with tempfile.TemporaryDirectory() as fastlane_dir:
+            fastlane_dir = Path(fastlane_dir)
+            (fastlane_dir / "screenshots/en-US").mkdir(parents=True)
+            with open(fastlane_dir / "screenshots/en-US/iPhone 8+ @ iOS 16-1.png", 'w') as f:
+                f.write("1")
+            with open(fastlane_dir / "screenshots/en-US/iPad Pro 12.9\" 2gen @ iOS 16-1.png", "w") as f:
+                f.write("2")
+            with open(fastlane_dir / "screenshots/en-US/iPad Pro 12.9\" 2gen @ iOS 16-2.png", "w") as f:
+                f.write("3")
+            (fastlane_dir / "screenshots/de-DE").mkdir(parents=True)
+            with open(fastlane_dir / "screenshots/de-DE/1_ipadPro129_1.1.png", "w") as f:
+                f.write("4")
+
+            screenshots = fdroidserver.update.discover_ios_screenshots(fastlane_dir)
+
+            self.assertDictEqual(
+                screenshots,
+                {
+                    "en-US": {
+                        "phoneScreenshots": [
+                            fastlane_dir / "screenshots/en-US/iPhone 8+ @ iOS 16-1.png",
+                        ],
+                        "tenInchScreenshots": [
+                            fastlane_dir / "screenshots/en-US/iPad Pro 12.9\" 2gen @ iOS 16-1.png",
+                            fastlane_dir / "screenshots/en-US/iPad Pro 12.9\" 2gen @ iOS 16-2.png",
+                        ],
+                    },
+                    "de-DE": {
+                        "tenInchScreenshots": [
+                            fastlane_dir / "screenshots/de-DE/1_ipadPro129_1.1.png",
+                        ],
+                    },
+                },
+            )
+
+
+class TestCopyIosScreenshotsToRepo(unittest.TestCase):
+    def test_copy_ios_screenshots_to_repo(self):
+        self.maxDiff = None
+
+        screenshot_dir_en = Path("build/org.fake/fastlane/screenshots/en-US")
+        s1 = screenshot_dir_en / "iPhone 8+ @ iOS 16-1.png"
+        s2 = screenshot_dir_en / "iPad Pro 12.9\" 2gen @ iOS 16-1.png"
+        s3 = screenshot_dir_en / "iPad Pro 12.9\" 2gen @ iOS 16-2.png"
+        screenshot_dir_de = Path("build/org.fake/fastlane/screenshots/de-DE")
+        s4 = screenshot_dir_de / "1_ipadPro129_1.1.png"
+
+        cmock = mock.Mock()
+        with mock.patch("fdroidserver.update._strip_and_copy_image", cmock):
+            fdroidserver.update.copy_ios_screenshots_to_repo(
+                {
+                    "en-US": {
+                        "phoneScreenshots": [s1],
+                        "tenInchScreenshots": [s2, s3],
+                    },
+                    "de-DE": {
+                        "tenInchScreenshots": [s4],
+                    },
+                },
+                "org.fake",
+            )
+
+        self.assertListEqual(
+            cmock.call_args_list,
+            [
+                mock.call(
+                    'build/org.fake/fastlane/screenshots/en-US/iPhone 8+ @ iOS 16-1.png',
+                    'repo/org.fake/en-US/phoneScreenshots/iPhone_8+_@_iOS_16-1.png',
+                ),
+                mock.call(
+                    'build/org.fake/fastlane/screenshots/en-US/iPad Pro 12.9" 2gen @ iOS 16-1.png',
+                    'repo/org.fake/en-US/tenInchScreenshots/iPad_Pro_12.9"_2gen_@_iOS_16-1.png',
+                ),
+                mock.call(
+                    'build/org.fake/fastlane/screenshots/en-US/iPad Pro 12.9" 2gen @ iOS 16-2.png',
+                    'repo/org.fake/en-US/tenInchScreenshots/iPad_Pro_12.9"_2gen_@_iOS_16-2.png',
+                ),
+                mock.call(
+                    'build/org.fake/fastlane/screenshots/de-DE/1_ipadPro129_1.1.png',
+                    'repo/org.fake/de-DE/tenInchScreenshots/1_ipadPro129_1.1.png',
+                ),
+            ],
+        )
+
+
 if __name__ == "__main__":
     os.chdir(os.path.dirname(__file__))
 
@@ -2088,4 +2218,7 @@ if __name__ == "__main__":
     newSuite.addTest(unittest.makeSuite(UpdateTest))
     newSuite.addTest(unittest.makeSuite(TestUpdateVersionStringToInt))
     newSuite.addTest(unittest.makeSuite(TestScanRepoForIpas))
+    newSuite.addTest(unittest.makeSuite(TestParseIosScreenShotName))
+    newSuite.addTest(unittest.makeSuite(TestInsertLocalizedIosAppMetadata))
+    newSuite.addTest(unittest.makeSuite(TestDiscoverIosScreenshots))
     unittest.main(failfast=False)
