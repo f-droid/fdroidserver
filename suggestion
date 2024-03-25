@@ -1,0 +1,13 @@
+# Preambel / Meta
+
+This is an issue intended for https://gitlab.com/fdroid/fdroidserver.
+Gitlab requries phone and credit card information when one simply wants to bring ideas to open source projects.
+
+I suggest moving to some truly open platform such as https://codeberg.org/.
+
+# Issue
+
+Updates for apps von F-Droid are provided in build cycles.
+Some applications such as browser are especially sensitive to security vulnerabilities and require immediate patches.
+
+Idea: Critical applications (I mostly think of browsers) use a separate build cycle / pipeline such that updates can be provided much faster.
