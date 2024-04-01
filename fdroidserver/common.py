@@ -2647,7 +2647,7 @@ def use_androguard():
 use_androguard.show_path = True  # type: ignore
 
 
-def _get_androguard_APK(apkfile):
+def get_androguard_APK(apkfile):
     try:
         from androguard.core.bytecodes.apk import APK
     except ImportError as exc:
@@ -2793,7 +2793,7 @@ def get_apk_id_androguard(apkfile):
                                        .format(path=apkfile))
 
     if not versionName or versionName[0] == '@':
-        a = _get_androguard_APK(apkfile)
+        a = get_androguard_APK(apkfile)
         versionName = ensure_final_value(a.package, a.get_android_resources(), a.get_androidversion_name())
     if not versionName:
         versionName = ''  # versionName is expected to always be a str
@@ -3160,7 +3160,7 @@ def get_first_signer_certificate(apkpath):
             cert_encoded = get_certificate(apk.read(cert_files[0]))
 
     if not cert_encoded and use_androguard():
-        apkobject = _get_androguard_APK(apkpath)
+        apkobject = get_androguard_APK(apkpath)
         certs = apkobject.get_certificates_der_v2()
         if len(certs) > 0:
             logging.debug(_('Using APK Signature v2'))

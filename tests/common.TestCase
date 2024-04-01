@@ -902,7 +902,7 @@ class CommonTest(unittest.TestCase):
         self.assertTrue(os.path.isfile(signed))
         self.assertFalse(os.path.isfile(unsigned))
         self.assertTrue(fdroidserver.common.verify_apk_signature(signed))
-        self.assertEqual('18', fdroidserver.common._get_androguard_APK(signed).get_min_sdk_version())
+        self.assertEqual('18', fdroidserver.common.get_androguard_APK(signed).get_min_sdk_version())
 
         shutil.copy(os.path.join(self.basedir, 'minimal_targetsdk_30_unsigned.apk'), self.testdir)
         unsigned = os.path.join(self.testdir, 'minimal_targetsdk_30_unsigned.apk')
@@ -915,7 +915,7 @@ class CommonTest(unittest.TestCase):
         self.assertFalse(os.path.isfile(unsigned))
         self.assertTrue(fdroidserver.common.verify_apk_signature(signed))
         # verify it has a v2 signature
-        self.assertTrue(fdroidserver.common._get_androguard_APK(signed).is_signed_v2())
+        self.assertTrue(fdroidserver.common.get_androguard_APK(signed).is_signed_v2())
 
         shutil.copy(os.path.join(self.basedir, 'no_targetsdk_minsdk30_unsigned.apk'), self.testdir)
         unsigned = os.path.join(self.testdir, 'no_targetsdk_minsdk30_unsigned.apk')
@@ -923,7 +923,7 @@ class CommonTest(unittest.TestCase):
 
         fdroidserver.common.sign_apk(unsigned, signed, config['keyalias'])
         self.assertTrue(fdroidserver.common.verify_apk_signature(signed))
-        self.assertTrue(fdroidserver.common._get_androguard_APK(signed).is_signed_v2())
+        self.assertTrue(fdroidserver.common.get_androguard_APK(signed).is_signed_v2())
 
         shutil.copy(os.path.join(self.basedir, 'no_targetsdk_minsdk1_unsigned.apk'), self.testdir)
         unsigned = os.path.join(self.testdir, 'no_targetsdk_minsdk1_unsigned.apk')
@@ -1146,11 +1146,11 @@ class CommonTest(unittest.TestCase):
         """This is a sanity test that androguard isn't broken"""
 
         def get_minSdkVersion(apkfile):
-            apk = fdroidserver.common._get_androguard_APK(apkfile)
+            apk = fdroidserver.common.get_androguard_APK(apkfile)
             return fdroidserver.common.get_min_sdk_version(apk)
 
         def get_targetSdkVersion(apkfile):
-            apk = fdroidserver.common._get_androguard_APK(apkfile)
+            apk = fdroidserver.common.get_androguard_APK(apkfile)
             return apk.get_effective_target_sdk_version()
 
         self.assertEqual(4, get_minSdkVersion('bad-unicode-πÇÇ现代通用字-български-عربي1.apk'))
