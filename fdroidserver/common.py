@@ -2677,10 +2677,13 @@ def ensure_final_value(packageName, arsc, value):
     return ''
 
 
-def is_apk_and_debuggable(apkfile):
-    """Return True if the given file is an APK and is debuggable.
+def is_debuggable_or_testOnly(apkfile):
+    """Return True if the given file is an APK and is debuggable or testOnly.
 
-    Parse only <application android:debuggable=""> from the APK.
+    These two settings should never be enabled in release builds. This
+    parses <application android:debuggable="" android:testOnly="">
+    from the APK and nothing else to run fast, since it is run on
+    every APK as part of update.
 
     Parameters
     ----------
@@ -2699,7 +2702,7 @@ def is_apk_and_debuggable(apkfile):
                 if _type == START_TAG and axml.getName() == 'application':
                     for i in range(0, axml.getAttributeCount()):
                         name = axml.getAttributeName(i)
-                        if name == 'debuggable':
+                        if name in ('debuggable', 'testOnly'):
                             _type = axml.getAttributeValueType(i)
                             _data = axml.getAttributeValueData(i)
                             value = format_value(_type, _data, lambda _: axml.getAttributeValue(i))

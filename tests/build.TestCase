@@ -221,7 +221,7 @@ class BuildTest(unittest.TestCase):
 
     @mock.patch('fdroidserver.common.get_apk_id')
     @mock.patch('fdroidserver.build.FDroidPopen')
-    @mock.patch('fdroidserver.common.is_apk_and_debuggable', lambda f: False)
+    @mock.patch('fdroidserver.common.is_debuggable_or_testOnly', lambda f: False)
     @mock.patch('fdroidserver.common.get_native_code', lambda f: 'x86')
     def test_build_local_maven(self, fake_FDroidPopen, fake_get_apk_id):
         """Test build_local() with a maven project"""
@@ -342,7 +342,8 @@ class BuildTest(unittest.TestCase):
                 'fdroidserver.common.sha256sum',
                 return_value='ad7ce5467e18d40050dc51b8e7affc3e635c85bd8c59be62de32352328ed467e',
             ) as _ignored, mock.patch(
-                'fdroidserver.common.is_apk_and_debuggable', return_value=False
+                'fdroidserver.common.is_debuggable_or_testOnly',
+                return_value=False,
             ) as _ignored, mock.patch(
                 'fdroidserver.build.FDroidPopen', FakeProcess
             ) as _ignored, mock.patch(
@@ -394,7 +395,7 @@ class BuildTest(unittest.TestCase):
     @mock.patch('sdkmanager.build_package_list', lambda use_net: None)
     @mock.patch('fdroidserver.build.FDroidPopen', FakeProcess)
     @mock.patch('fdroidserver.common.get_native_code', lambda _ignored: 'x86')
-    @mock.patch('fdroidserver.common.is_apk_and_debuggable', lambda _ignored: False)
+    @mock.patch('fdroidserver.common.is_debuggable_or_testOnly', lambda _ignored: False)
     @mock.patch(
         'fdroidserver.common.sha256sum',
         lambda f: 'ad7ce5467e18d40050dc51b8e7affc3e635c85bd8c59be62de32352328ed467e',
@@ -531,7 +532,8 @@ class BuildTest(unittest.TestCase):
                     return_value=(app.id, build.versionCode, build.versionName),
                 ):
                     with mock.patch(
-                        'fdroidserver.common.is_apk_and_debuggable', return_value=False
+                        'fdroidserver.common.is_debuggable_or_testOnly',
+                        return_value=False,
                     ):
                         fdroidserver.build.build_local(
                             app,

@@ -185,7 +185,7 @@ class CommonTest(unittest.TestCase):
             fdroidserver.common._add_java_paths_to_config(pathlist, config)
             self.assertEqual(config['java_paths']['8'], choice[1:])
 
-    def test_is_apk_and_debuggable(self):
+    def test_is_debuggable_or_testOnly(self):
         config = dict()
         fdroidserver.common.fill_config_defaults(config)
         fdroidserver.common.config = config
@@ -197,7 +197,7 @@ class CommonTest(unittest.TestCase):
         testfiles.append(os.path.join(self.basedir, 'urzip-badcert.apk'))
         for apkfile in testfiles:
             self.assertTrue(
-                fdroidserver.common.is_apk_and_debuggable(apkfile),
+                fdroidserver.common.is_debuggable_or_testOnly(apkfile),
                 "debuggable APK state was not properly parsed!",
             )
 
@@ -208,7 +208,7 @@ class CommonTest(unittest.TestCase):
         testfiles.append(os.path.join(self.basedir, 'v2.only.sig_2.apk'))
         for apkfile in testfiles:
             self.assertFalse(
-                fdroidserver.common.is_apk_and_debuggable(apkfile),
+                fdroidserver.common.is_debuggable_or_testOnly(apkfile),
                 "debuggable APK state was not properly parsed!",
             )
 

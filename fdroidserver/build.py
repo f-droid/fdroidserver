@@ -720,8 +720,10 @@ def build_local(app, build, vcs, build_dir, output_dir, log_dir, srclib_dir, ext
                                  f"{app.id}:{build.versionName}", p.output)
 
     # Make sure it's not debuggable...
-    if common.is_apk_and_debuggable(src):
-        raise BuildException("APK is debuggable")
+    if common.is_debuggable_or_testOnly(src):
+        raise BuildException(
+            "%s: debuggable or testOnly set in AndroidManifest.xml" % src
+        )
 
     # By way of a sanity check, make sure the version and version
     # code in our new APK match what we expect...

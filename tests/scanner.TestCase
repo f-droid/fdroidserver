@@ -276,7 +276,8 @@ class ScannerTest(unittest.TestCase):
                     return_value=(app.id, build.versionCode, build.versionName),
                 ):
                     with mock.patch(
-                        'fdroidserver.common.is_apk_and_debuggable', return_value=False
+                        'fdroidserver.common.is_debuggable_or_testOnly',
+                        return_value=False,
                     ):
                         fdroidserver.build.build_local(
                             app,
