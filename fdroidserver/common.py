@@ -2629,29 +2629,12 @@ def get_file_extension(filename):
     return os.path.splitext(filename)[1].lower()[1:]
 
 
-def use_androguard():
-    """Report if androguard is available, and config its debug logging."""
-    try:
-        import androguard
-        if use_androguard.show_path:
-            logging.debug(_('Using androguard from "{path}"').format(path=androguard.__file__))
-            use_androguard.show_path = False
-        if options and options.verbose:
-            logging.getLogger("androguard.axml").setLevel(logging.INFO)
-        logging.getLogger("androguard.core.api_specific_resources").setLevel(logging.ERROR)
-        return True
-    except ImportError:
-        return False
-
-
-use_androguard.show_path = True  # type: ignore
-
-
 def get_androguard_APK(apkfile):
     try:
+        # these were moved in androguard 4.0
+        from androguard.core.apk import APK
+    except ImportError:
         from androguard.core.bytecodes.apk import APK
-    except ImportError as exc:
-        raise FDroidException("androguard library is not installed") from exc
 
     return APK(apkfile)
 
@@ -2693,7 +2676,11 @@ def is_debuggable_or_testOnly(apkfile):
     """
     if get_file_extension(apkfile) != 'apk':
         return False
-    from androguard.core.bytecodes.axml import AXMLParser, format_value, START_TAG
+    try:
+        # these were moved in androguard 4.0
+        from androguard.core.axml import AXMLParser, format_value, START_TAG
+    except ImportError:
+        from androguard.core.bytecodes.axml import AXMLParser, format_value, START_TAG
     with ZipFile(apkfile) as apk:
         with apk.open('AndroidManifest.xml') as manifest:
             axml = AXMLParser(manifest.read())
@@ -2753,12 +2740,19 @@ def get_apk_id_androguard(apkfile):
     versionName is set to a Android String Resource (e.g. an integer
     hex value that starts with @).
 
+    This function is part of androguard as get_apkid(), so this
+    vendored and modified to return versionCode as an integer.
+
     """
     if not os.path.exists(apkfile):
         raise FDroidException(_("Reading packageName/versionCode/versionName failed, APK invalid: '{apkfilename}'")
                               .format(apkfilename=apkfile))
 
-    from androguard.core.bytecodes.axml import AXMLParser, format_value, START_TAG, END_TAG, TEXT, END_DOCUMENT
+    try:
+        # these were moved in androguard 4.0
+        from androguard.core.axml import AXMLParser, format_value, START_TAG, END_TAG, TEXT, END_DOCUMENT
+    except ImportError:
+        from androguard.core.bytecodes.axml import AXMLParser, format_value, START_TAG, END_TAG, TEXT, END_DOCUMENT
 
     appid = None
     versionCode = None
@@ -3159,7 +3153,7 @@ def get_first_signer_certificate(apkpath):
         elif len(cert_files) == 1:
             cert_encoded = get_certificate(apk.read(cert_files[0]))
 
-    if not cert_encoded and use_androguard():
+    if not cert_encoded:
         apkobject = get_androguard_APK(apkpath)
         certs = apkobject.get_certificates_der_v2()
         if len(certs) > 0:

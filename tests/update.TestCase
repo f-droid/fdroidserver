@@ -5,6 +5,7 @@
 import copy
 import git
 import glob
+import hashlib
 import inspect
 import json
 import logging
@@ -20,10 +21,17 @@ import unittest
 import yaml
 import zipfile
 import textwrap
+from binascii import hexlify
 from datetime import datetime
 from pathlib import Path
 from testcommon import TmpCwd, mkdtemp
 from unittest import mock
+
+try:
+    # these were moved in androguard 4.0
+    from androguard.core.apk import APK
+except ImportError:
+    from androguard.core.bytecodes.apk import APK
 
 try:
     from yaml import CSafeLoader as SafeLoader
@@ -581,13 +589,6 @@ class UpdateTest(unittest.TestCase):
         self.assertEqual(good_fingerprint, sig,
                          'python sig was: ' + str(sig))
         # check that v1 and v2 have the same certificate
-        try:
-            import hashlib
-            from binascii import hexlify
-            from androguard.core.bytecodes.apk import APK
-        except ImportError:
-            print('WARNING: skipping rest of test since androguard is missing!')
-            return
         apkobject = APK(apkpath)
         cert_encoded = apkobject.get_certificates_der_v2()[0]
         self.assertEqual(good_fingerprint, sig,
