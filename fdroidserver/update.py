@@ -1136,6 +1136,9 @@ def insert_localized_app_metadata(apps):
                         if base not in apps[packageName] or not isinstance(apps[packageName][base], collections.OrderedDict):
                             apps[packageName][base] = collections.OrderedDict()
                         apps[packageName][base][locale] = common.file_entry(dst)
+
+            # copy screenshots from local source code checkout into wellknown
+            # location in repo directory
             for d in dirs:
                 if d in SCREENSHOT_DIRS:
                     if locale == 'images':
@@ -1148,6 +1151,8 @@ def insert_localized_app_metadata(apps):
                             os.makedirs(screenshotdestdir, mode=0o755, exist_ok=True)
                             _strip_and_copy_image(f, screenshotdestdir)
 
+
+def ingest_screenshots_from_repo_dir(apps):
     repodirs = sorted(glob.glob(os.path.join('repo', '[A-Za-z]*', '[a-z][a-z]*')))
     for d in repodirs:
         if not os.path.isdir(d):
@@ -1206,6 +1211,127 @@ def insert_localized_app_metadata(apps):
                 apps[packageName]["screenshots"][newKey][locale].append(common.file_entry(f))
             else:
                 logging.warning(_('Unsupported graphics file found: {path}').format(path=f))
+
+
+LANG_CODE = re.compile(r'^[a-z]{2}([-_][A-Z][a-zA-Z]{1,3})?$')
+
+
+FASTLANE_IOS_MAP = {
+    "name.txt": 'name',
+    "subtitle.txt": 'summary',
+    "description.txt": 'description',
+}
+
+
+def parse_ios_screenshot_name(path):
+    """
+    Infer type and categorization info from screenshot file name.
+
+    This is not really an exact algorithm, it's based on filenames observed in
+    the wild.
+    """
+    s = path.stem.split('@')
+    if len(s) >= 2:
+        if "iphone" in s[0].lower():
+            return ("phoneScreenshots", s[0].strip(), ('@'.join(s[1:])).split('-')[0].strip())
+        elif "ipad" in s[0].lower():
+            return ("tenInchScreenshots", s[0].strip(), ('@'.join(s[1:])).split('-')[0].strip())
+    else:
+        fragments = path.stem.lower().split("_")
+        device = "unknown"
+        os = "unknown"
+        screenshot_type = "phoneScreenshots"
+        for f in fragments:
+            if "iphone" in f:
+                device = f
+                continue
+            if "ipad" in f:
+                screenshot_type = "tenInchScreenshots"
+                device = f
+            if "ios" in f:
+                os = f
+        return (screenshot_type, device, os)
+
+    return ("phoneScreenshots", 'unknown', 'unknown')
+
+
+def discover_ios_screenshots(fastlane_dir):
+    """Traverse git checkouts in build dir, search for fastlane-screenshots and put findings into a dict."""
+    fastlane_screenshot_dir = fastlane_dir / 'screenshots'
+    screenshots = {}
+    if fastlane_screenshot_dir.is_dir():
+        for lang_sdir in fastlane_screenshot_dir.iterdir():
+            locale = lang_sdir.name
+            m = LANG_CODE.match(locale)
+            if m:
+                screenshots[locale] = {}
+                fifo_idevice = {}
+                fifo_ios = {}
+                for screenshot in lang_sdir.iterdir():
+                    if screenshot.suffix[1:] in ALLOWED_EXTENSIONS:
+                        screenshot_type, idevice_name, ios_name = parse_ios_screenshot_name(screenshot)
+
+                        # since there is no easy mapping here, we're just
+                        # resorting to fifo here, so ieg. if there's 2
+                        # screenshots categorized for more than one
+                        # iPhone/iOS combinations we just remember the
+                        # first combination, use them as screenshots in
+                        # F-Droid and ignore all other screenshots, for
+                        # this screenshot type
+                        if not fifo_idevice.get(screenshot_type):
+                            fifo_idevice[screenshot_type] = idevice_name
+                            fifo_ios[screenshot_type] = ios_name
+
+                        if fifo_idevice[screenshot_type] == idevice_name and fifo_ios[screenshot_type] == ios_name:
+                            if screenshot_type not in screenshots[locale]:
+                                screenshots[locale][screenshot_type] = []
+                            screenshots[locale][screenshot_type].append(screenshot)
+
+    # sort all found screenshots alphanumerically
+    for locale, translated_screenshots in screenshots.items():
+        for device in translated_screenshots.keys():
+            translated_screenshots[device].sort()
+
+    return screenshots
+
+
+def copy_ios_screenshots_to_repo(screenshots, package_name):
+    for locale, translated_screenshots in screenshots.items():
+        for device, translated_device_screenshots in translated_screenshots.items():
+            dest_dir = Path('repo') / package_name / locale / device
+            dest_dir.mkdir(mode=0o755, parents=True, exist_ok=True)
+            for path in translated_device_screenshots:
+                dest = dest_dir / (path.name.replace(" ", "_").replace("\t", "_"))
+                fdroidserver.update._strip_and_copy_image(str(path), str(dest))
+
+
+def insert_localized_ios_app_metadata(apps_with_packages):
+
+    if not any(Path('repo').glob('*.ipa')):
+        # no IPA files present in repo, nothing to do here, exiting early
+        return
+
+    for package_name, app in apps_with_packages.items():
+        if not any(Path('repo').glob(f'{package_name}*.ipa')):
+            # couldn't find any IPA files for this package_name
+            # so we don't have to look for fastlane data
+            continue
+
+        fastlane_dir = Path('build', package_name, 'fastlane')
+        fastlane_meta_dir = (fastlane_dir / "metadata")
+
+        if fastlane_meta_dir.is_dir():
+            for lang_dir in fastlane_meta_dir.iterdir():
+                locale = lang_dir.name
+                m = LANG_CODE.match(locale)
+                if m:
+                    for metadata_file in (lang_dir).iterdir():
+                        key = FASTLANE_IOS_MAP.get(metadata_file.name)
+                        if key:
+                            fdroidserver.update._set_localized_text_entry(app, locale, key, metadata_file)
+
+        screenshots = fdroidserver.update.discover_ios_screenshots(fastlane_dir)
+        fdroidserver.update.copy_ios_screenshots_to_repo(screenshots, package_name)
 
 
 def scan_repo_files(apkcache, repodir, knownapks, use_date_from_file=False):
@@ -2240,6 +2366,8 @@ def prepare_apps(apps, apks, repodir):
     translate_per_build_anti_features(apps_with_packages, apks)
     if repodir == 'repo':
         insert_localized_app_metadata(apps_with_packages)
+        insert_localized_ios_app_metadata(apps_with_packages)
+        ingest_screenshots_from_repo_dir(apps_with_packages)
     insert_missing_app_names_from_apks(apps_with_packages, apks)
     return apps_with_packages
 
