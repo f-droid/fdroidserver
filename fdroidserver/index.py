@@ -195,10 +195,10 @@ def make_website(apps, repodir, repodict):
         <kbd>
           {number_of_apps}
         </kbd>
-        apps. To add it to your F-Droid client, scan the QR code (click it to enlarge) or use this URL:
+        apps. To add it to your F-Droid app, scan the QR code (click it to enlarge) or use this link:
       </p>
       <p class="center" style="margin-top:.5em">
-        <a href="{link_fingerprinted}">
+        <a href="https://fdroid.link/#{link_fingerprinted}">
           <code style="color:#000000;font-weight:bold;">
             {link}
           </code>
