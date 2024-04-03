@@ -324,6 +324,91 @@ class PublishTest(unittest.TestCase):
         self.assertFalse(os.path.exists(unsigned))
         self.assertTrue(os.path.exists(signed))
 
+    def test_exit_on_error(self):
+        """Exits properly on errors, with and without --error-on-failed.
+
+        `fdroid publish` runs on the signing server and does large
+        batches.  In that case, it shouldn't exit after a single
+        failure since it should try to complete the whole batch.  For
+        CI and other use cases, there is --error-on-failed to force it
+        to exit after a failure.
+
+        """
+
+        class Options:
+            error_on_failed = True
+            verbose = False
+
+        os.chdir(self.testdir)
+
+        config = common.read_config(Options)
+        if 'apksigner' not in config:
+            self.skipTest('SKIPPING test_error_on_failed, apksigner not installed!')
+        config['repo_keyalias'] = 'sova'
+        config['keystorepass'] = 'r9aquRHYoI8+dYz6jKrLntQ5/NJNASFBacJh7Jv2BlI='
+        config['keypass'] = 'r9aquRHYoI8+dYz6jKrLntQ5/NJNASFBacJh7Jv2BlI='
+        shutil.copy(os.path.join(self.basedir, 'keystore.jks'), self.testdir)
+        config['keystore'] = 'keystore.jks'
+        config[
+            'keydname'
+        ] = 'CN=Birdman, OU=Cell, O=Alcatraz, L=Alcatraz, S=California, C=US'
+        publish.config = config
+        common.config = config
+
+        app = metadata.App()
+        app.id = 'org.fdroid.ci'
+        versionCode = 1
+        build = metadata.Build(
+            {
+                'versionCode': versionCode,
+                'versionName': '1.0',
+            }
+        )
+        app.Builds = [build]
+        os.mkdir('metadata')
+        metadata.write_metadata(os.path.join('metadata', '%s.yml' % app.id), app)
+
+        os.mkdir('unsigned')
+        testapk = os.path.join(self.basedir, 'no_targetsdk_minsdk1_unsigned.apk')
+        unsigned = os.path.join('unsigned', common.get_release_filename(app, build))
+        signed = os.path.join('repo', common.get_release_filename(app, build))
+        shutil.copy(testapk, unsigned)
+
+        # sign the unsigned APK
+        self.assertTrue(os.path.exists(unsigned))
+        self.assertFalse(os.path.exists(signed))
+        with mock.patch(
+            'sys.argv', ['fdroid publish', '%s:%d' % (app.id, versionCode)]
+        ):
+            publish.main()
+        self.assertFalse(os.path.exists(unsigned))
+        self.assertTrue(os.path.exists(signed))
+
+        with mock.patch('sys.argv', ['fdroid signatures', signed]):
+            signatures.main()
+        mf = os.path.join('metadata', 'org.fdroid.ci', 'signatures', '1', 'MANIFEST.MF')
+        self.assertTrue(os.path.exists(mf))
+        os.remove(signed)
+
+        with open(mf, 'a') as fp:
+            fp.write('appended to break signature')
+
+        # implant the signature into the unsigned APK
+        shutil.copy(testapk, unsigned)
+        self.assertTrue(os.path.exists(unsigned))
+        self.assertFalse(os.path.exists(signed))
+        apk_id = '%s:%d' % (app.id, versionCode)
+
+        # by default, it should complete without exiting
+        with mock.patch('sys.argv', ['fdroid publish', apk_id]):
+            publish.main()
+
+        # --error-on-failed should make it exit
+        with mock.patch('sys.argv', ['fdroid publish', '--error-on-failed', apk_id]):
+            with self.assertRaises(SystemExit) as e:
+                publish.main()
+            self.assertEqual(e.exception.code, 1)
+
 
 if __name__ == "__main__":
     os.chdir(os.path.dirname(__file__))
