@@ -34,7 +34,6 @@ import json
 import time
 import yaml
 import copy
-import pathlib
 import defusedxml.ElementTree as ElementTree
 from datetime import datetime, timezone
 from argparse import ArgumentParser
@@ -1299,7 +1298,7 @@ def discover_ios_screenshots(fastlane_dir):
 def copy_ios_screenshots_to_repo(screenshots, package_name):
     for locale, translated_screenshots in screenshots.items():
         for device, translated_device_screenshots in translated_screenshots.items():
-            dest_dir = pathlib.Path('repo') / package_name / locale / device
+            dest_dir = Path('repo') / package_name / locale / device
             dest_dir.mkdir(mode=0o755, parents=True, exist_ok=True)
             for path in translated_device_screenshots:
                 dest = dest_dir / (path.name.replace(" ", "_").replace("\t", "_"))
@@ -1308,17 +1307,17 @@ def copy_ios_screenshots_to_repo(screenshots, package_name):
 
 def insert_localized_ios_app_metadata(apps_with_packages):
 
-    if not any(pathlib.Path('repo').glob('*.ipa')):
+    if not any(Path('repo').glob('*.ipa')):
         # no IPA files present in repo, nothing to do here, exiting early
         return
 
     for package_name, app in apps_with_packages.items():
-        if not any(pathlib.Path('repo').glob(f'{package_name}*.ipa')):
+        if not any(Path('repo').glob(f'{package_name}*.ipa')):
             # couldn't find any IPA files for this package_name
             # so we don't have to look for fastlane data
             continue
 
-        fastlane_dir = pathlib.Path('build', package_name, 'fastlane')
+        fastlane_dir = Path('build', package_name, 'fastlane')
         fastlane_meta_dir = (fastlane_dir / "metadata")
 
         if fastlane_meta_dir.is_dir():
