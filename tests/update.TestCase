@@ -1936,7 +1936,10 @@ class UpdateTest(unittest.TestCase):
             index['repo'][CATEGORIES_CONFIG_NAME],
         )
 
+
+class TestParseIpa(unittest.TestCase):
     def test_parse_ipa(self):
+        self.maxDiff = None
         try:
             import biplist  # Fedora does not have a biplist package
 
@@ -1959,6 +1962,27 @@ class UpdateTest(unittest.TestCase):
                 'size': 'fake_size',
                 'versionCode': 1000000000001,
                 'versionName': '1.0.1',
+                'ipa_DTPlatformVersion': '16.4',
+                'ipa_MinimumOSVersion': '15.0',
+                'ipa_entitlements': set(),
+                'ipa_permissions': {
+                    'NSCameraUsageDescription':
+                        'Please allow access to your '
+                        'camera, if you want to '
+                        'create photos or videos for '
+                        'direct sharing.',
+                    'NSMicrophoneUsageDescription':
+                        'Please allow access to '
+                        'your microphone, if you '
+                        'want to create videos '
+                        'for direct sharing.',
+                    'NSPhotoLibraryUsageDescription':
+                        'Please allow access to '
+                        'your photo library, if '
+                        'you want to share '
+                        'photos.',
+                },
+                'name': 'OnionShare',
             },
         )
 
