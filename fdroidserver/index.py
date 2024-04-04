@@ -1847,5 +1847,5 @@ def make_altstore(apps, apks, config, repodir, indent=None):
             if len(a['versions']) > 0:
                 idx['apps'].append(a)
 
-        with open(os.path.join(repodir, 'altstore-index.json'), "w", encoding="utf-8") as f:
+        with open(Path(repodir) / 'altstore-index.json', "w", encoding="utf-8") as f:
             json.dump(idx, f, indent=indent)
