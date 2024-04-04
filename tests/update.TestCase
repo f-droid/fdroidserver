@@ -2201,6 +2201,33 @@ class TestCopyIosScreenshotsToRepo(unittest.TestCase):
         )
 
 
+class TestGetIpaIcon(unittest.TestCase):
+    def test_get_ipa_icon(self):
+        self.maxDiff = None
+
+        with tempfile.TemporaryDirectory() as tmpdir:
+            tmpdir = Path(tmpdir)
+            (tmpdir / 'OnionBrowser.xcodeproj').mkdir()
+            with open(tmpdir / 'OnionBrowser.xcodeproj/project.pbxproj', "w") as f:
+                f.write("")
+            icondir = tmpdir / "fake_icon.appiconset"
+            icondir.mkdir()
+            with open(icondir / "Contents.json", "w", encoding="utf-8") as f:
+                f.write("""
+                    {"images": [
+                        {"scale": "2x", "size": "128x128", "filename": "nope"},
+                        {"scale": "1x", "size": "512x512", "filename": "nope"},
+                        {"scale": "1x", "size": "16x16", "filename": "nope"},
+                        {"scale": "1x", "size": "32x32", "filename": "yep"}
+                    ]}
+                """)
+
+            pfp = mock.Mock(return_value="fake_icon")
+            with(mock.patch("fdroidserver.update._parse_from_pbxproj", pfp)):
+                p = fdroidserver.update._get_ipa_icon(tmpdir)
+                self.assertEqual(str(icondir / "yep"), p)
+
+
 if __name__ == "__main__":
     os.chdir(os.path.dirname(__file__))
 
@@ -2221,4 +2248,5 @@ if __name__ == "__main__":
     newSuite.addTest(unittest.makeSuite(TestParseIosScreenShotName))
     newSuite.addTest(unittest.makeSuite(TestInsertLocalizedIosAppMetadata))
     newSuite.addTest(unittest.makeSuite(TestDiscoverIosScreenshots))
+    newSuite.addTest(unittest.makeSuite(TestGetIpaIcon))
     unittest.main(failfast=False)
