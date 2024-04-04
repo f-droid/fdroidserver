@@ -2529,98 +2529,6 @@ def prepare_apps(apps, apks, repodir):
     return apps_with_packages
 
 
-def altstore_index(apps, apks, config, repodir, indent=None):
-    """
-    Assemble altstore-index.json for iOS (.ipa) apps.
-
-    builds index files based on:
-    https://faq.altstore.io/distribute-your-apps/make-a-source
-    https://faq.altstore.io/distribute-your-apps/updating-apps
-    """
-    # for now alt-store support is english only
-    for lang in ['en']:
-
-        # prepare minimal altstore index
-        idx = {
-            'name': config['repo_name'],
-            "apps": [],
-            "news": [],
-        }
-
-        # add optional values if available
-        # idx["subtitle"] F-Droid doesn't have a corresponding value
-        if config.get("repo_description"):
-            idx['description'] = config['repo_description']
-        if (Path(repodir) / 'icons' / config['repo_icon']).exists():
-            idx['iconURL'] = f"{config['repo_url']}/icons/{config['repo_icon']}"
-        # idx["headerURL"] F-Droid doesn't have a corresponding value
-        # idx["website"] F-Droid doesn't have a corresponding value
-        # idx["patreonURL"] F-Droid doesn't have a corresponding value
-        # idx["tintColor"] F-Droid doesn't have a corresponding value
-        # idx["featuredApps"] = [] maybe mappable to F-Droids what's new?
-
-        # assemble "apps"
-        for packageName, app in apps.items():
-            app_name = app.get("Name") or app.get("AutoName")
-            icon_url = "{}{}".format(
-                config['repo_url'],
-                app.get('iconv2', {}).get(DEFAULT_LOCALE, {}).get('name', ''),
-            )
-            screenshot_urls = [
-                "{}{}".format(config["repo_url"], s["name"])
-                for s in app.get("screenshots", {})
-                .get("phone", {})
-                .get(DEFAULT_LOCALE, {})
-            ]
-
-            a = {
-                "name": app_name,
-                'bundleIdentifier': packageName,
-                'developerName': app.get("AuthorName") or f"{app_name} team",
-                'iconURL': icon_url,
-                "localizedDescription": "",
-                'appPermissions': {
-                    "entitlements": set(),
-                    "privacy": {},
-                },
-                'versions': [],
-            }
-
-            if app.get('summary'):
-                a['subtitle'] = app['summary']
-            # a["tintColor"] F-Droid doesn't have a corresponding value
-            # a["category"] F-Droid doesn't have a corresponding value
-            # a['patreon'] F-Droid doesn't have a corresponding value
-            a["screenshots"] = screenshot_urls
-
-            # populate 'versions'
-            for apk in apks:
-                if apk['packageName'] == packageName and apk.get('apkName', '').lower().endswith('.ipa'):
-                    v = {
-                        "version": apk["versionName"],
-                        "date": apk["added"].isoformat(),
-                        "downloadURL": f"{config['repo_url']}/{apk['apkName']}",
-                        "size": apk['size'],
-                    }
-
-                    # v['localizedDescription'] maybe what's new text?
-                    v["minOSVersion"] = apk["ipa_MinimumOSVersion"]
-                    v["maxOSVersion"] = apk["ipa_DTPlatformVersion"]
-
-                    # writing this spot here has the effect that always the
-                    # permissions of the latest processed permissions list used
-                    a['appPermissions']['privacy'] = apk['ipa_permissions']
-                    a['appPermissions']['entitlements'] = list(apk['ipa_entitlements'])
-
-                    a['versions'].append(v)
-
-            if len(a['versions']) > 0:
-                idx['apps'].append(a)
-
-        with open(os.path.join(repodir, 'altstore-index.json'), "w", encoding="utf-8") as f:
-            json.dump(idx, f, indent=indent)
-
-
 config = None
 options = None
 start_timestamp = time.gmtime()
@@ -2832,13 +2740,6 @@ def main():
 
     # Make the index for the main repo...
     fdroidserver.index.make(repoapps, apks, repodirs[0], False)
-    altstore_index(
-        repoapps,
-        apks,
-        config,
-        repodirs[0],
-        indent=2 if options.pretty else None
-    )
 
     git_remote = config.get('binary_transparency_remote')
     if git_remote or os.path.isdir(os.path.join('binary_transparency', '.git')):
