@@ -1762,14 +1762,14 @@ def get_public_key_from_jar(jar):
 def make_altstore(apps, apks, config, repodir, indent=None):
     """
     Assemble altstore-index.json for iOS (.ipa) apps.
-    
+
     builds index files based on:
     https://faq.altstore.io/distribute-your-apps/make-a-source
     https://faq.altstore.io/distribute-your-apps/updating-apps
     """
     # for now alt-store support is english only
     for lang in ['en']:
-    
+
         # prepare minimal altstore index
         idx = {
             'name': config['repo_name'],

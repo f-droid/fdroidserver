@@ -2223,9 +2223,27 @@ class TestGetIpaIcon(unittest.TestCase):
                 """)
 
             pfp = mock.Mock(return_value="fake_icon")
-            with(mock.patch("fdroidserver.update._parse_from_pbxproj", pfp)):
+            with mock.patch("fdroidserver.update._parse_from_pbxproj", pfp):
                 p = fdroidserver.update._get_ipa_icon(tmpdir)
                 self.assertEqual(str(icondir / "yep"), p)
+
+
+class TestParseFromPbxproj(unittest.TestCase):
+    def test_parse_from_pbxproj(self):
+        self.maxDiff = None
+
+        with tempfile.TemporaryDirectory() as tmpdir:
+            with open(Path(tmpdir) / "asdf.pbxproj", 'w', encoding="utf-8") as f:
+                f.write("""
+                    230jfaod=flc'
+                    ASSETCATALOG_COMPILER_APPICON_NAME = MyIcon;
+                    cm opa1c p[m
+                """)
+            v = fdroidserver.update._parse_from_pbxproj(
+                Path(tmpdir) / "asdf.pbxproj",
+                "ASSETCATALOG_COMPILER_APPICON_NAME"
+            )
+            self.assertEqual(v, "MyIcon")
 
 
 if __name__ == "__main__":

@@ -629,7 +629,7 @@ def parse_ipa(ipa_path, file_size, sha256):
             if info.filename.endswith("/embedded.mobileprovision"):
                 print("parsing", info.filename)
                 with ipa_zip.open(info) as mopro_file:
-                    mopro_content_info = cms.ContentInfo.load(mopro_file.read())
+                    mopro_content_info = asn1crypto.cms.ContentInfo.load(mopro_file.read())
                     mopro_payload_info = mopro_content_info['content']
                     mopro_payload = mopro_payload_info['encap_content_info']['content'].native
                     mopro = biplist.readPlistFromString(mopro_payload)
@@ -1669,6 +1669,10 @@ def _get_ipa_icon(src_dir):
 
 def _parse_from_pbxproj(pbxproj_path, key):
     """Parse values from apple project files.
+
+    This is a naive regex based parser. Should this proofe to unreliable we
+    might want to consider using a dedicated pbxproj parser:
+    https://pypi.org/project/pbxproj/
 
     e.g. when looking for key 'ASSETCATALOG_COMPILER_APPICON_NAME'
     This function will extract 'MyIcon' from if the provided file
