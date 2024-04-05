@@ -211,6 +211,28 @@
 #   - url: https://gitlab.com/user/repo
 #     index_only: true
 
+
+# These settings allows using `fdroid deploy` for publishing APK files from
+# your repository to GitHub Releases. (You should also run `fdroid update`
+# every time before deploying to GitHub releases to update index files.) Here's
+# an example for this deployment automation:
+# https://github.com/f-droid/fdroidclient/releases/
+#
+# It is highly recommended to use a "Fine-grained personal access token", which
+# is restriced to the minimum required permissions, which are:
+#  * Metadata - read
+#  * Contents - read/write
+# Also make sure to limit access only to the GitHub repository you're deploying
+# to. (https://github.com/settings/personal-access-tokens/new)
+#
+# github_releases:
+#   - repo: f-droid/fdroidclient
+#     token: {env: GITHUB_TOKEN}
+#     packages:
+#       - org.fdroid.basic
+#       - org.fdroid.fdroid
+
+
 # Most git hosting services have hard size limits for each git repo.
 # `fdroid deploy` will delete the git history when the git mirror repo
 # approaches this limit to ensure that the repo will still fit when

@@ -31,9 +31,10 @@ import yaml
 from argparse import ArgumentParser
 import logging
 from shlex import split
+import pathlib
 import shutil
 import git
-from pathlib import Path
+import fdroidserver.github
 
 from . import _
 from . import common
@@ -663,7 +664,7 @@ def update_servergitmirrors(servergitmirrors, repo_section):
         return
 
     options = common.get_options()
-    workspace_dir = Path(os.getcwd())
+    workspace_dir = pathlib.Path(os.getcwd())
 
     # right now we support only 'repo' git-mirroring
     if repo_section == 'repo':
@@ -1115,6 +1116,76 @@ def push_binary_transparency(git_repo_path, git_remote):
             raise FDroidException(_("Pushing to remote server failed!"))
 
 
+def upload_to_github_releases(repo_section, gh_config):
+    repo_dir = pathlib.Path(repo_section)
+    idx_path = repo_dir / 'index-v2.json'
+    if not idx_path.is_file():
+        logging.waring(
+            _(
+                "Error deploying 'github_releases', {} not present. (You might "
+                "need to run `fdroid update` first.)"
+            ).format(idx_path)
+        )
+        return
+
+    known_packages = {}
+    with open(idx_path, 'r') as f:
+        idx = json.load(f)
+        for repo_conf in gh_config:
+            for package_name in repo_conf.get('packages', []):
+                package = idx.get('packages', {}).get(package_name, {})
+                for version in package.get('versions', {}).values():
+                    if package_name not in known_packages:
+                        known_packages[package_name] = {}
+                    ver_name = version['manifest']['versionName']
+                    apk_path = repo_dir / version['file']['name'][1:]
+                    files = [apk_path]
+                    asc_path = pathlib.Path(str(apk_path) + '.asc')
+                    if asc_path.is_file():
+                        files.append(asc_path)
+                    idsig_path = pathlib.Path(str(apk_path) + '.idsig')
+                    if idsig_path.is_file():
+                        files.append(idsig_path)
+                    known_packages[package_name][ver_name] = files
+
+    for repo_conf in gh_config:
+        upload_to_github_releases_repo(repo_conf, known_packages)
+
+
+def upload_to_github_releases_repo(repo_conf, known_packages):
+    repo = repo_conf.get('repo')
+    if not repo:
+        logging.warning(_("One of the 'github_releases' config items is missing the 'repo' value. skipping ..."))
+        return
+    token = repo_conf.get('token')
+    if not token:
+        logging.warning(_("One of the 'github_releases' config itmes is missing the 'token' value. skipping ..."))
+        return
+    packages = repo_conf.get('packages', [])
+    if not packages:
+        logging.warning(_("One of the 'github_releases' config itmes is missing the 'packages' value. skipping ..."))
+        return
+
+    # lookup all versionNames (git tags) for all packages available in the
+    # local fdroid repo
+    all_local_versions = set()
+    for package_name in repo_conf['packages']:
+        for version in known_packages.get(package_name, {}).keys():
+            all_local_versions.add(version)
+
+    gh = fdroidserver.github.GithubApi(token, repo)
+    unreleased_tags = gh.list_unreleased_tags()
+
+    for version in all_local_versions:
+        if version in unreleased_tags:
+            # collect files associated with this github release
+            files = []
+            for package in packages:
+                files.extend(known_packages.get(package, {}).get(version, []))
+            # create new release on github and upload all associated files
+            gh.create_release(version, files)
+
+
 def main():
     global config
 
@@ -1194,6 +1265,7 @@ def main():
         and not config.get('androidobservatory')
         and not config.get('binary_transparency_remote')
         and not config.get('virustotal_apikey')
+        and not config.get('github_releases')
         and local_copy_dir is None
     ):
         logging.warning(
@@ -1236,6 +1308,8 @@ def main():
             upload_to_android_observatory(repo_section)
         if config.get('virustotal_apikey'):
             upload_to_virustotal(repo_section, config.get('virustotal_apikey'))
+        if config.get('github_releases'):
+            upload_to_github_releases(repo_section, config.get('github_releases'))
 
     binary_transparency_remote = config.get('binary_transparency_remote')
     if binary_transparency_remote:
