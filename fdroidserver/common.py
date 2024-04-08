@@ -3179,30 +3179,38 @@ def signer_fingerprint(cert_encoded):
 
 def get_first_signer_certificate(apkpath):
     """Get the first signing certificate from the APK, DER-encoded."""
-    certs = None
-    cert_encoded = None
+    cert_encoded_v1 = None
+    cert_encoded_v2 = None
+    cert_encoded_v3 = None
     with zipfile.ZipFile(apkpath, 'r') as apk:
-        cert_files = [n for n in apk.namelist() if SIGNATURE_BLOCK_FILE_REGEX.match(n)]
-        if len(cert_files) > 1:
+        certs_v1 = [n for n in apk.namelist() if SIGNATURE_BLOCK_FILE_REGEX.match(n)]
+        if len(certs_v1) > 1:
             logging.error(_("Found multiple JAR Signature Block Files in {path}").format(path=apkpath))
             return None
-        elif len(cert_files) == 1:
-            cert_encoded = get_certificate(apk.read(cert_files[0]))
+        elif len(certs_v1) == 1:
+            cert_encoded_v1 = get_certificate(apk.read(certs_v1[0]))
 
-    if not cert_encoded:
+    if True
         apkobject = get_androguard_APK(apkpath)
-        certs = apkobject.get_certificates_der_v2()
-        if len(certs) > 0:
+        certs_v2 = apkobject.get_certificates_der_v2()
+        if len(certs_v2) > 0:
             logging.debug(_('Using APK Signature v2'))
-            cert_encoded = certs[0]
-        if not cert_encoded:
-            certs = apkobject.get_certificates_der_v3()
-            if len(certs) > 0:
-                logging.debug(_('Using APK Signature v3'))
-                cert_encoded = certs[0]
+            cert_encoded_v2 = certs_v2[0]
 
+        certs_v3 = apkobject.get_certificates_der_v3()
+        if len(certs_v3) > 0:
+            logging.debug(_('Using APK Signature v3'))
+            cert_encoded_v3 = certs_v3[0]
+
+    cert_encoded = cert_encoded_v3 or cert_encoded_v2 or cert_encoded_v1
     if not cert_encoded:
         logging.error(_("No signing certificates found in {path}").format(path=apkpath))
+        return None
+    if (
+        (cert_encoded_v2 and cert_encoded_v2 != cert_encoded)
+        or (cert_encoded_v1 and cert_encoded_v1 != cert_encoded)
+    ):
+        logging.error(_("Different certificates found in {path}").format(path=apkpath))
         return None
     return cert_encoded
 
