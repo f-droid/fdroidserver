@@ -863,7 +863,7 @@ class AltstoreIndexTest(unittest.TestCase):
         config = {
             "repo_icon": "fake_repo_icon.png",
             "repo_name": "fake_repo",
-            "repo_url": "gopher://fake-repo.com/fdroid/repo"
+            "repo_url": "gopher://fake-repo.com/fdroid/repo",
         }
 
         with tempfile.TemporaryDirectory() as tmpdir, TmpCwd(tmpdir):
@@ -915,7 +915,7 @@ class AltstoreIndexTest(unittest.TestCase):
                         'name': 'fake_repo',
                         'news': [],
                     },
-                    json.load(f)
+                    json.load(f),
                 )
 
 

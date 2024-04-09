@@ -112,6 +112,8 @@ class DeployTest(unittest.TestCase):
             fdroidserver.deploy.update_serverwebroot('serverwebroot', 'repo')
 
     def test_update_serverwebroot_make_cur_version_link(self):
+        self.maxDiff = None
+
         # setup parameters for this test run
         fdroidserver.deploy.options = mock.Mock()
         fdroidserver.deploy.options.no_checksum = True
@@ -136,6 +138,8 @@ class DeployTest(unittest.TestCase):
                         '--delete-after',
                         '--safe-links',
                         '--quiet',
+                        '--exclude',
+                        'repo/altstore-index.json',
                         '--exclude',
                         'repo/entry.jar',
                         '--exclude',
@@ -231,6 +235,8 @@ class DeployTest(unittest.TestCase):
                         '-e',
                         'ssh -oBatchMode=yes -oIdentitiesOnly=yes -i '
                         + fdroidserver.deploy.config['identity_file'],
+                        '--exclude',
+                        'archive/altstore-index.json',
                         '--exclude',
                         'archive/entry.jar',
                         '--exclude',
