@@ -3179,6 +3179,12 @@ def signer_fingerprint(cert_encoded):
 
 def get_first_signer_certificate(apkpath):
     """Get the first signing certificate from the APK, DER-encoded."""
+
+    class NoOverwriteDict(dict):
+        def __setitem__(self, k, v):
+            if k not in self:
+                super().__setitem__(k, v)
+
     cert_encoded_v1 = None
     cert_encoded_v2 = None
     cert_encoded_v3 = None
@@ -3191,6 +3197,7 @@ def get_first_signer_certificate(apkpath):
             cert_encoded_v1 = get_certificate(apk.read(certs_v1[0]))
 
     apkobject = get_androguard_APK(apkpath)
+    apkobject._v2_blocks = NoOverwriteDict()
     certs_v2 = apkobject.get_certificates_der_v2()
     if len(certs_v2) > 0:
         logging.debug(_('Using APK Signature v2'))
