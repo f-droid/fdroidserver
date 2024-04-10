@@ -1,22 +1,22 @@
 # SOME DESCRIPTIVE TITLE.
 # This file is put in the public domain.
 # Balázs Meskó <meskobalazs@mailbox.org>, 2020, 2021.
-# Hans-Christoph Steiner <hans@guardianproject.info>, 2020, 2021, 2022.
+# Hans-Christoph Steiner <hans@guardianproject.info>, 2020, 2021, 2022, 2024.
 # KissPandur <zoltankiss.web@gmail.com>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 1.0.6-70-g54bc858\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2023-05-24 22:18+0200\n"
-"PO-Revision-Date: 2022-10-05 06:16+0000\n"
-"Last-Translator: KissPandur <zoltankiss.web@gmail.com>\n"
+"PO-Revision-Date: 2024-04-10 13:33+0000\n"
+"Last-Translator: Hans-Christoph Steiner <hans@guardianproject.info>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/f-droid/fdroidserver/hu/>\n"
 "Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.14.1\n"
+"X-Generator: Weblate 5.5-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -194,7 +194,7 @@ msgstr "A(z) „{value}” nem érvényes {field} érték itt: {appid}. Regex mi
 #: ../fdroidserver/metadata.py
 #, fuzzy, python-brace-format
 msgid "'{value}' is not a valid {field}, should be {pattern}"
-msgstr "A(z) „{value}” nem érvényes {field} érték itt: {appid}. Regex minta: {pattern}"
+msgstr "A(z) „{value}” nem érvényes {field} érték itt: minta: {pattern}"
 
 #: ../fdroidserver/checkupdates.py
 #, python-brace-format
@@ -818,7 +818,7 @@ msgstr "{apkfilename} található itt: {url}"
 #: ../fdroidserver/scanner.py
 #, fuzzy, python-brace-format
 msgid "Found {count} problems in {filename}"
-msgstr "Az átvizsgáló {count} problémát talált a(z) „{appid}” alkalmazásban:"
+msgstr "Az átvizsgáló {count} problémát talált a(z) „{filename}” alkalmazásban"
 
 #: ../fdroidserver/scanner.py
 #, python-brace-format
@@ -976,7 +976,7 @@ msgstr "Érvénytelen VercodeOperation: {field}"
 #: ../fdroidserver/lint.py
 #, fuzzy, python-brace-format
 msgid "Invalid VercodeOperation: {invalid_ops}"
-msgstr "Érvénytelen VercodeOperation: {field}"
+msgstr "Érvénytelen VercodeOperation: {invalid_ops}"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -1468,7 +1468,7 @@ msgstr "A csomag forráskódjának átvizsgálása"
 #: ../fdroidserver/scanner.py
 #, fuzzy, python-brace-format
 msgid "Scanner found {count} problems in {apk}"
-msgstr "Az átvizsgáló {count} problémát talált a(z) „{appid}” alkalmazásban:"
+msgstr "Az átvizsgáló {count} problémát talált a(z) „{apk}” alkalmazásban"
 
 #: ../fdroidserver/scanner.py
 #, python-brace-format
@@ -1805,7 +1805,7 @@ msgstr ""
 
 #. Translators: https://developer.android.com/studio/build/application-id
 #: ../fdroidserver/lint.py
-msgid "UpdateCheckMode is set but it looks likecheckupdates hasn't been run yet"
+msgid "UpdateCheckMode is set but it looks like checkupdates hasn't been run yet."
 msgstr ""
 
 #: ../fdroidserver/lint.py
@@ -2182,7 +2182,7 @@ msgstr "az index-v1-nek kell legyen aláírása, használja az „fdroid signind
 #: ../fdroidserver/index.py
 #, fuzzy
 msgid "index-v2 must have a signature, use `fdroid signindex` to create it!"
-msgstr "az index-v1-nek kell legyen aláírása, használja az „fdroid signindex” parancsot a létrehozásához."
+msgstr "az index-v1-nek kell legyen aláírása, használja az `fdroid signindex` parancsot a létrehozásához!"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 #: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py

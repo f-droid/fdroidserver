@@ -5,20 +5,21 @@
 # Fjuro <fjuro@seznam.cz>, 2022.
 # Filip Klopec <filipklopec@gmail.com>, 2022.
 # Fjuro <ifjuro@proton.me>, 2022, 2023.
+# Daniel Hejduk <jellymail@protonmail.com>, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 1.0.0-95-gd7af22b\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2023-05-24 22:18+0200\n"
-"PO-Revision-Date: 2023-05-26 19:39+0000\n"
-"Last-Translator: Fjuro <ifjuro@proton.me>\n"
+"PO-Revision-Date: 2023-10-20 14:22+0000\n"
+"Last-Translator: Daniel Hejduk <jellymail@protonmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/f-droid/fdroidserver/cs/>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 4.18-dev\n"
+"X-Generator: Weblate 5.1\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -1070,7 +1071,7 @@ msgstr "Poslední použitá revize ‚{commit}‘ vypadá jako značka, ale Upda
 
 #: ../fdroidserver/lint.py
 msgid "Liberapay donation methods belong in the Liberapay: field"
-msgstr "Darovací metody Liberapay patří do pole Liberapay:"
+msgstr "Darovací metody Liberapay patří do pole Liberapay: pole"
 
 #: ../fdroidserver/rewritemeta.py
 msgid "List files that would be reformatted (dry run)"
@@ -1250,7 +1251,7 @@ msgstr "Zpracovat pouze aplikace s automatickými aktualizacemi"
 
 #: ../fdroidserver/lint.py
 msgid "OpenCollective donation methods belong in the OpenCollective: field"
-msgstr "Darovací metody OpenCollective patří do pole OpenCollective:"
+msgstr "Darovací metody OpenCollective patří do pole OpenCollective: pole"
 
 #: /usr/lib/python3.11/optparse.py
 msgid "Options"
@@ -1811,7 +1812,7 @@ msgstr "UpdateCheckData není platná URL: {url}"
 
 #. Translators: https://developer.android.com/studio/build/application-id
 #: ../fdroidserver/lint.py
-msgid "UpdateCheckMode is set but it looks likecheckupdates hasn't been run yet"
+msgid "UpdateCheckMode is set but it looks like checkupdates hasn't been run yet."
 msgstr "UpdateCheckMode je nastaven, ale vypadá to, že checkupdates ještě nebylo spuštěno"
 
 #: ../fdroidserver/lint.py

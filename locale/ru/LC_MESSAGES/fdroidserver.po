@@ -12,20 +12,21 @@
 # Чтабс <chtabs2k19@gmail.com>, 2021.
 # Andrei Stepanov <adem4ik@gmail.com>, 2022.
 # Макар Разин <makarrazin14@gmail.com>, 2023.
+# Alexander Ivanov <saiv46.dev@gmail.com>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 1.0.0-95-gd7af22b\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2023-05-24 22:18+0200\n"
-"PO-Revision-Date: 2023-05-28 07:54+0000\n"
-"Last-Translator: Andrey <andrey@mailbox.org>\n"
+"PO-Revision-Date: 2024-02-23 12:59+0000\n"
+"Last-Translator: Alexander Ivanov <saiv46.dev@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/f-droid/fdroidserver/ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.18-dev\n"
+"X-Generator: Weblate 5.5-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -42,7 +43,7 @@ msgid ""
 "{path} encoded for the DEBUG_KEYSTORE secret variable:"
 msgstr ""
 "\n"
-"зашифрованный путь {path}, который будет присвоен скрытой переменной DEBUG_KEYSTORE:"
+"{path} закодирован в скрытую переменную DEBUG_KEYSTORE:"
 
 #: ../fdroidserver/lint.py
 #, python-format
@@ -109,7 +110,7 @@ msgstr "%(prog)s: ошибка: %(message)s\n"
 #: ../fdroidserver/scanner.py
 #, python-format
 msgid "%d problems found"
-msgstr "найдено %d ошибок"
+msgstr "%d ошибок найдено"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 #: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
@@ -156,15 +157,15 @@ msgstr "Значение 'keystore` — NONE, но 'smartcardoptions' не за�
 
 #: ../fdroidserver/common.py
 msgid "'keystore' not found in config.yml!"
-msgstr "В config.yml нет переменной 'keystore'!"
+msgstr "'keystore' не найден в config.yml!"
 
 #: ../fdroidserver/common.py
 msgid "'keystorepass' not found in config.yml!"
-msgstr "В config.yml нет переменной 'keystorepass'!"
+msgstr "'keystorepass' не найден в config.yml!"
 
 #: ../fdroidserver/common.py
 msgid "'repo_keyalias' not found in config.yml!"
-msgstr "В config.yml нет переменной 'repo_ keyalias'!"
+msgstr "'repo_keyalias' не найден в config.yml!"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
@@ -529,7 +530,7 @@ msgstr "Переменная DEBUG_KEYSTORE пустая или заполнен
 
 #: ../fdroidserver/update.py
 msgid "Delete APKs and/or OBBs without metadata from the repo"
-msgstr "Удалить из репозитория APK и/или OBB файлы без метаданных"
+msgstr "Удалить APK и/или OBB без метаданных из репозитория"
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
@@ -1372,7 +1373,7 @@ msgstr "Публикация в {url}"
 
 #: ../fdroidserver/__main__.py
 msgid "Quickly start a new repository"
-msgstr "Создать новый репозиторий (укороченная процедура)"
+msgstr "Быстро создать новый репозиторий"
 
 #: ../fdroidserver/__main__.py
 msgid "Read all the metadata files and exit"
@@ -1534,7 +1535,7 @@ msgstr "Подписать пакеты и поместить в репозит�
 
 #: ../fdroidserver/__main__.py
 msgid "Sign indexes created using update --nosign"
-msgstr "Подписать индексы, созданные с флагом \"update --nosign\""
+msgstr "Подписать индексы созданные с \"update --nosign\""
 
 #: ../fdroidserver/build.py
 msgid "Skip scanning the source code for binaries and other problems"
@@ -1818,7 +1819,7 @@ msgstr "UpdateCheckData содержит некорректный URL-адрес
 
 #. Translators: https://developer.android.com/studio/build/application-id
 #: ../fdroidserver/lint.py
-msgid "UpdateCheckMode is set but it looks likecheckupdates hasn't been run yet"
+msgid "UpdateCheckMode is set but it looks like checkupdates hasn't been run yet."
 msgstr "UpdateCheckMode настроен, но похоже, что команда checkupdates еще не была запущена"
 
 #: ../fdroidserver/lint.py
@@ -1911,7 +1912,7 @@ msgstr "Сверяться с закешированной копией вмес
 
 #: ../fdroidserver/__main__.py
 msgid "Verify the integrity of downloaded packages"
-msgstr "Проверить загруженные пакеты на повреждения"
+msgstr "Проверить целостность загруженных пакетов"
 
 #: ../fdroidserver/index.py
 msgid "Verifying index signature:"

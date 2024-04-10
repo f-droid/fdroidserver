@@ -1,12 +1,12 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR Free Software Foundation, Inc.
-# Hans-Christoph Steiner <hans@guardianproject.info>, 2020, 2021, 2022.
+# Hans-Christoph Steiner <hans@guardianproject.info>, 2020, 2021, 2022, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2023-05-24 22:18+0200\n"
-"PO-Revision-Date: 2022-09-06 14:30+0000\n"
+"PO-Revision-Date: 2024-04-10 13:33+0000\n"
 "Last-Translator: Hans-Christoph Steiner <hans@guardianproject.info>\n"
 "Language-Team: Tibetan <https://hosted.weblate.org/projects/f-droid/fdroidserver/bo/>\n"
 "Language: bo\n"
@@ -14,7 +14,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.14.1-dev\n"
+"X-Generator: Weblate 5.5-dev\n"
 
 #: ../fdroidserver/nightly.py
 #, fuzzy
@@ -191,9 +191,9 @@ msgid "'{value}' is not a valid {field} in {appid}. Regex pattern: {pattern}"
 msgstr "'{value}' ཁུངས་ལྡན་རེད་མིན་འདུག{field} འདི་ནང་ {appid}. Regex འགྲོ་ལུགས་: {pattern}"
 
 #: ../fdroidserver/metadata.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "'{value}' is not a valid {field}, should be {pattern}"
-msgstr "'{value}' ཁུངས་ལྡན་རེད་མིན་འདུག{field} འདི་ནང་ {appid}. Regex འགྲོ་ལུགས་: {pattern}"
+msgstr ""
 
 #: ../fdroidserver/checkupdates.py
 #, python-brace-format
@@ -1147,7 +1147,7 @@ msgstr "གནས་ཚུལ་རྙེད་མ་སོང་།."
 #: ../fdroidserver/checkupdates.py
 #, fuzzy
 msgid "No matching tags found"
-msgstr "གནས་ཚུལ་རྙེད་མ་སོང་།."
+msgstr "གནས་ཚུལ་རྙེད་མ་སོང་།"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -1470,9 +1470,9 @@ msgid "Scan the source code of a package"
 msgstr "ཐུམ་སྒྲིལ་བྱས་པའི་འབྱུང་ཁུངས་ཨང་རྟགས་འཚག་རྒྱབ"
 
 #: ../fdroidserver/scanner.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Scanner found {count} problems in {apk}"
-msgstr "འཚག་རྒྱབ་ལ་སྐྱོན་རྙེད་པ།"
+msgstr ""
 
 #: ../fdroidserver/scanner.py
 #, python-brace-format
@@ -1808,7 +1808,7 @@ msgstr ""
 
 #. Translators: https://developer.android.com/studio/build/application-id
 #: ../fdroidserver/lint.py
-msgid "UpdateCheckMode is set but it looks likecheckupdates hasn't been run yet"
+msgid "UpdateCheckMode is set but it looks like checkupdates hasn't been run yet."
 msgstr ""
 
 #: ../fdroidserver/lint.py
@@ -2166,7 +2166,7 @@ msgstr "གཡེང་ཚེག"
 #: ../fdroidserver/metadata.py
 #, fuzzy
 msgid "force metadata errors (default) to be warnings, or to be ignored."
-msgstr "སྐྱོན་ཤོར་བ་ལ་ཉེན་བརྡ་ངེས་པར་དུ་གཏོང་དགོས་པ་དང་། ཡང་ན་ཡ་མ་བྱེད།"
+msgstr "སྐྱོན་ཤོར་བ་ལ་ཉེན་བརྡ་ངེས་པར་དུ་གཏོང་དགོས་པ་དང་། ཡང་ན་ཡ་མ་བྱེད།."
 
 #: ../fdroidserver/common.py
 #, fuzzy
@@ -2288,7 +2288,7 @@ msgstr "ཆ་རྒྱུས་མེད་པའི་དམིགས་བས
 #: ../fdroidserver/checkupdates.py
 #, fuzzy
 msgid "no version information found"
-msgstr "ཆ་རྒྱུས་མེད་པའི་དམིགས་བསལ་ཞིག་རྙེད་སོང་།!"
+msgstr "ཆ་རྒྱུས་མེད་པའི་དམིགས་བསལ་ཞིག་རྙེད་སོང་།"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
