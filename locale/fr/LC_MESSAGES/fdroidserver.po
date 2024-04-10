@@ -1840,7 +1840,7 @@ msgstr "UpdateCheckData URL non valide : {url}"
 
 #. Translators: https://developer.android.com/studio/build/application-id
 #: ../fdroidserver/lint.py
-msgid "UpdateCheckMode is set but it looks likecheckupdates hasn't been run yet"
+msgid "UpdateCheckMode is set but it looks like checkupdates hasn't been run yet."
 msgstr "UpdateCheckMode est configuré mais on dirait que checkupdates n'a pas encore été lancé"
 
 #: ../fdroidserver/lint.py

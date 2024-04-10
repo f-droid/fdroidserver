@@ -378,8 +378,7 @@ def check_checkupdates_ran(app):
     if filling_ucms.match(app.UpdateCheckMode):
         if not app.AutoName and not app.CurrentVersion and app.CurrentVersionCode == 0:
             yield _(
-                "UpdateCheckMode is set but it looks like"
-                "checkupdates hasn't been run yet"
+                "UpdateCheckMode is set but it looks like checkupdates hasn't been run yet."
             )
 
 

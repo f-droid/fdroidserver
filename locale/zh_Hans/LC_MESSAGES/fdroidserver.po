@@ -1894,7 +1894,7 @@ msgstr "UpdateCheckData 不是有效的网址：{url}"
 #. Translators: https://developer.android.com/studio/build/application-id
 #: ../fdroidserver/lint.py
 msgid ""
-"UpdateCheckMode is set but it looks likecheckupdates hasn't been run yet"
+"UpdateCheckMode is set but it looks like checkupdates hasn't been run yet."
 msgstr ""
 
 #: ../fdroidserver/lint.py

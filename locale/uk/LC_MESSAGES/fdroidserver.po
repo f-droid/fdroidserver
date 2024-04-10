@@ -1814,7 +1814,7 @@ msgstr "UpdateCheckData не є дійсною URL-адресою: {url}"
 
 #. Translators: https://developer.android.com/studio/build/application-id
 #: ../fdroidserver/lint.py
-msgid "UpdateCheckMode is set but it looks likecheckupdates hasn't been run yet"
+msgid "UpdateCheckMode is set but it looks like checkupdates hasn't been run yet."
 msgstr "UpdateCheckMode налаштовано, але схоже, що команду checkupdates ще не було запущено"
 
 #: ../fdroidserver/lint.py
