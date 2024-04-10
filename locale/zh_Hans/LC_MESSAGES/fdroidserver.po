@@ -1904,12 +1904,12 @@ msgstr ""
 #: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "Uploading {apkfilename} to androidobservatory.org"
-msgstr "上传{apkfilename}到androidobservatory.org"
+msgstr "上传 {apkfilename} 到 androidobservatory.org"
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "Uploading {apkfilename} to virustotal"
-msgstr "上传{apkfilename}到virustotal"
+msgstr "上传 {apkfilename} 到 virustotal"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 #: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
@@ -1947,11 +1947,11 @@ msgstr ""
 
 #: ../fdroidserver/common.py
 msgid "Using APK Signature v2"
-msgstr "使用APK签名 v2"
+msgstr "使用 APK 签名 v2"
 
 #: ../fdroidserver/common.py
 msgid "Using APK Signature v3"
-msgstr "使用APK签名 v3"
+msgstr "使用 APK 签名 v3"
 
 #: ../fdroidserver/common.py
 msgid ""
@@ -1961,7 +1961,7 @@ msgstr ""
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Using androguard from \"{path}\""
-msgstr "使用androguard从{path}"
+msgstr "使用 {path} 中的 androguard"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
