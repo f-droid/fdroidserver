@@ -902,6 +902,11 @@ def insert_funding_yml_donation_links(apps):
                         if s:
                             app['Donate'] = 'https://www.buymeacoffee.com/' + s
                             break
+                    elif k == 'polar':
+                        s = sanitize_funding_yml_name(v)
+                        if s:
+                            app['Donate'] = 'https://polar.sh/' + s
+                            break
 
 
 def copy_triple_t_store_metadata(apps):
