@@ -92,7 +92,7 @@ setup(
     ],
     install_requires=[
         'appdirs',
-        'androguard >= 3.3.3',
+        'androguard >= 3.3.5',
         'clint',
         'defusedxml',
         'GitPython',

@@ -1778,7 +1778,7 @@ def scan_apk_androguard(apk, apkfile):
     if maxSdkVersion is not None:
         apk['maxSdkVersion'] = maxSdkVersion
 
-    icon_id_str = apkobject.get_element("application", "icon")
+    icon_id_str = apkobject.get_attribute_value("application", "icon")
     if icon_id_str:
         try:
             icon_id = int(icon_id_str.replace("@", "0x"), 16)
