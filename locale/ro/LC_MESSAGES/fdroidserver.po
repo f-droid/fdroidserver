@@ -4,20 +4,21 @@
 # Christian Eichert <c@zp1.net>, 2021.
 # Simona Iacob <s@zp1.net>, 2021, 2022, 2023, 2024.
 # Licaon Kter <licaon.kter@protonmail.com>, 2021, 2022, 2023.
+# Hans-Christoph Steiner <hans@guardianproject.info>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 2.0a5-27-gf24eae0f\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2023-05-24 22:18+0200\n"
-"PO-Revision-Date: 2024-02-07 22:51+0000\n"
-"Last-Translator: Simona Iacob <s@zp1.net>\n"
+"PO-Revision-Date: 2024-04-10 13:33+0000\n"
+"Last-Translator: Hans-Christoph Steiner <hans@guardianproject.info>\n"
 "Language-Team: Romanian <https://hosted.weblate.org/projects/f-droid/fdroidserver/ro/>\n"
 "Language: ro\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < 20)) ? 1 : 2;\n"
-"X-Generator: Weblate 5.4-dev\n"
+"X-Generator: Weblate 5.5-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -74,7 +75,7 @@ msgstr "\"{path}\" nu este un format de fișier acceptat (utilizați: metadata/*
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "\"{path}\" is signed by a key that is not allowed:"
-msgstr "\"{path}\" \"{path}\" este semnat de o cheie care nu este permisă:"
+msgstr "\"{path}\" este semnat de o cheie care nu este permisă:"
 
 #: ../fdroidserver/import_subcommand.py
 #, python-brace-format
@@ -1995,7 +1996,7 @@ msgstr "argumentul \"-\" cu modul %r"
 #: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "argument %(argument_name)s: %(message)s"
-msgstr "argument %(nume_argument)s: %(mesaj)e"
+msgstr "argument %(argument_name)s: %(message)s"
 
 #: ../fdroidserver/nightly.py
 msgid "attempting bare SSH connection to test deploy key:"

@@ -1,13 +1,13 @@
 # SOME DESCRIPTIVE TITLE.
 # This file is put in the public domain.
-# Hans-Christoph Steiner <hans@guardianproject.info>, 2020, 2021, 2022.
+# Hans-Christoph Steiner <hans@guardianproject.info>, 2020, 2021, 2022, 2024.
 # Myeongjin Lee <aranet100@gmail.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.8-135-g16dd6d28\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2023-05-24 22:18+0200\n"
-"PO-Revision-Date: 2022-09-06 14:30+0000\n"
+"PO-Revision-Date: 2024-04-10 13:33+0000\n"
 "Last-Translator: Hans-Christoph Steiner <hans@guardianproject.info>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/f-droid/fdroidserver/ko/>\n"
 "Language: ko\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.14.1-dev\n"
+"X-Generator: Weblate 5.5-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -192,7 +192,7 @@ msgstr "'{value}'는 {appid}에서 올바른 {field}가 아닙니다. 정규식 
 #: ../fdroidserver/metadata.py
 #, fuzzy, python-brace-format
 msgid "'{value}' is not a valid {field}, should be {pattern}"
-msgstr "'{value}'는 {appid}에서 올바른 {field}가 아닙니다. 정규식 패턴: {pattern}"
+msgstr "'{value}'에서 올바른 {field}가 아닙니다. 정규식 패턴: {pattern}"
 
 #: ../fdroidserver/checkupdates.py
 #, python-brace-format
@@ -967,7 +967,7 @@ msgstr "잘못된 Vercode연산: {field}"
 #: ../fdroidserver/lint.py
 #, fuzzy, python-brace-format
 msgid "Invalid VercodeOperation: {invalid_ops}"
-msgstr "잘못된 Vercode연산: {field}"
+msgstr "잘못된 VercodeOperation연산: {invalid_ops}"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
