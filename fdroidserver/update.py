@@ -872,10 +872,10 @@ def insert_funding_yml_donation_links(apps):
                         if s:
                             app['Donate'] = s
                             break
-                    elif k == 'community_bridge':
+                    elif k in ('community_bridge', 'lfx_crowdfunding'):
                         s = sanitize_funding_yml_name(v)
                         if s:
-                            app['Donate'] = 'https://funding.communitybridge.org/projects/' + s
+                            app['Donate'] = 'https://crowdfunding.lfx.linuxfoundation.org/projects/' + s
                             break
                     elif k == 'github':
                         s = sanitize_funding_yml_name(v)
@@ -901,6 +901,11 @@ def insert_funding_yml_donation_links(apps):
                         s = sanitize_funding_yml_name(v)
                         if s:
                             app['Donate'] = 'https://www.buymeacoffee.com/' + s
+                            break
+                    elif k == 'polar':
+                        s = sanitize_funding_yml_name(v)
+                        if s:
+                            app['Donate'] = 'https://polar.sh/' + s
                             break
 
 
