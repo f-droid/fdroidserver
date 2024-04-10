@@ -855,7 +855,15 @@ def insert_funding_yml_donation_links(apps):
                 if 'open_collective' in data:
                     del data['open_collective']
                 # this tuple provides a preference ordering
-                for k in ('custom', 'github', 'patreon', 'community_bridge', 'ko_fi', 'issuehunt'):
+                for k in (
+                    'custom',
+                    'github',
+                    'patreon',
+                    'community_bridge',
+                    'ko_fi',
+                    'issuehunt',
+                    'buy_me_a_coffee'
+                ):
                     v = data.get(k)
                     if not v:
                         continue
@@ -888,6 +896,11 @@ def insert_funding_yml_donation_links(apps):
                         s = sanitize_funding_yml_name(v)
                         if s:
                             app['Donate'] = 'https://patreon.com/' + s
+                            break
+                    elif k == 'buy_me_a_coffee':
+                        s = sanitize_funding_yml_name(v)
+                        if s:
+                            app['Donate'] = 'https://www.buymeacoffee.com/' + s
                             break
 
 
