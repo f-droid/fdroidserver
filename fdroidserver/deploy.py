@@ -1116,43 +1116,64 @@ def push_binary_transparency(git_repo_path, git_remote):
             raise FDroidException(_("Pushing to remote server failed!"))
 
 
+def find_release_files(index_v2_path, repo_dir, package_names):
+    """
+    Find files for uploading to a release page.
+
+    This function parses index-v2.json for file-paths elegible for deployment
+    to release pages. (e.g. GitHub releases) It also groups these files by
+    packageName and versionName. e.g. to get a list of files for all specific
+    release of fdroid client you may call:
+
+    find_binary_release_files()['org.fdroid.fdroid']['0.19.2']
+
+    All paths in the returned data-structure are of type pathlib.Path.
+    """
+    release_files = {}
+    with open(index_v2_path, 'r') as f:
+        idx = json.load(f)
+        for package_name in package_names:
+            package = idx.get('packages', {}).get(package_name, {})
+            for version in package.get('versions', {}).values():
+                if package_name not in release_files:
+                    release_files[package_name] = {}
+                ver_name = version['manifest']['versionName']
+                apk_path = repo_dir / version['file']['name'][1:]
+                files = [apk_path]
+                asc_path = pathlib.Path(str(apk_path) + '.asc')
+                if asc_path.is_file():
+                    files.append(asc_path)
+                idsig_path = pathlib.Path(str(apk_path) + '.idsig')
+                if idsig_path.is_file():
+                    files.append(idsig_path)
+                release_files[package_name][ver_name] = files
+    return release_files
+
+
 def upload_to_github_releases(repo_section, gh_config):
     repo_dir = pathlib.Path(repo_section)
-    idx_path = repo_dir / 'index-v2.json'
-    if not idx_path.is_file():
+    index_v2_path = repo_dir / 'index-v2.json'
+    if not index_v2_path.is_file():
         logging.waring(
             _(
                 "Error deploying 'github_releases', {} not present. (You might "
                 "need to run `fdroid update` first.)"
-            ).format(idx_path)
+            ).format(index_v2_path)
         )
         return
 
-    known_packages = {}
-    with open(idx_path, 'r') as f:
-        idx = json.load(f)
-        for repo_conf in gh_config:
-            for package_name in repo_conf.get('packages', []):
-                package = idx.get('packages', {}).get(package_name, {})
-                for version in package.get('versions', {}).values():
-                    if package_name not in known_packages:
-                        known_packages[package_name] = {}
-                    ver_name = version['manifest']['versionName']
-                    apk_path = repo_dir / version['file']['name'][1:]
-                    files = [apk_path]
-                    asc_path = pathlib.Path(str(apk_path) + '.asc')
-                    if asc_path.is_file():
-                        files.append(asc_path)
-                    idsig_path = pathlib.Path(str(apk_path) + '.idsig')
-                    if idsig_path.is_file():
-                        files.append(idsig_path)
-                    known_packages[package_name][ver_name] = files
+    package_names = []
+    for repo_conf in gh_config:
+        for package_name in repo_conf.get('packages', []):
+            package_names.append(package_name)
+
+    release_files = find_release_files(index_v2_path, repo_dir, package_names)
 
     for repo_conf in gh_config:
-        upload_to_github_releases_repo(repo_conf, known_packages)
+        upload_to_github_releases_repo(repo_conf, release_files)
 
 
-def upload_to_github_releases_repo(repo_conf, known_packages):
+def upload_to_github_releases_repo(repo_conf, release_files):
     repo = repo_conf.get('repo')
     if not repo:
         logging.warning(_("One of the 'github_releases' config items is missing the 'repo' value. skipping ..."))
@@ -1170,7 +1191,7 @@ def upload_to_github_releases_repo(repo_conf, known_packages):
     # local fdroid repo
     all_local_versions = set()
     for package_name in repo_conf['packages']:
-        for version in known_packages.get(package_name, {}).keys():
+        for version in release_files.get(package_name, {}).keys():
             all_local_versions.add(version)
 
     gh = fdroidserver.github.GithubApi(token, repo)
@@ -1181,7 +1202,7 @@ def upload_to_github_releases_repo(repo_conf, known_packages):
             # collect files associated with this github release
             files = []
             for package in packages:
-                files.extend(known_packages.get(package, {}).get(version, []))
+                files.extend(release_files.get(package, {}).get(version, []))
             # create new release on github and upload all associated files
             gh.create_release(version, files)
 
