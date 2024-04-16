@@ -1150,7 +1150,7 @@ def find_release_files(index_v2_path, repo_dir, package_names):
     return release_files
 
 
-def upload_to_github_releases(repo_section, gh_config):
+def upload_to_github_releases(repo_section, gh_config, global_gh_token):
     repo_dir = pathlib.Path(repo_section)
     index_v2_path = repo_dir / 'index-v2.json'
     if not index_v2_path.is_file():
@@ -1170,15 +1170,15 @@ def upload_to_github_releases(repo_section, gh_config):
     release_files = find_release_files(index_v2_path, repo_dir, package_names)
 
     for repo_conf in gh_config:
-        upload_to_github_releases_repo(repo_conf, release_files)
+        upload_to_github_releases_repo(repo_conf, release_files, global_gh_token)
 
 
-def upload_to_github_releases_repo(repo_conf, release_files):
+def upload_to_github_releases_repo(repo_conf, release_files, global_gh_token):
     repo = repo_conf.get('repo')
     if not repo:
         logging.warning(_("One of the 'github_releases' config items is missing the 'repo' value. skipping ..."))
         return
-    token = repo_conf.get('token')
+    token = repo_conf.get('token') or global_gh_token
     if not token:
         logging.warning(_("One of the 'github_releases' config itmes is missing the 'token' value. skipping ..."))
         return
@@ -1330,7 +1330,7 @@ def main():
         if config.get('virustotal_apikey'):
             upload_to_virustotal(repo_section, config.get('virustotal_apikey'))
         if config.get('github_releases'):
-            upload_to_github_releases(repo_section, config.get('github_releases'))
+            upload_to_github_releases(repo_section, config.get('github_releases'), config.get('github_token'))
 
     binary_transparency_remote = config.get('binary_transparency_remote')
     if binary_transparency_remote:

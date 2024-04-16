@@ -225,12 +225,16 @@
 # Also make sure to limit access only to the GitHub repository you're deploying
 # to. (https://github.com/settings/personal-access-tokens/new)
 #
+# github_token: {env: GITHUB_TOKEN}
 # github_releases:
 #   - repo: f-droid/fdroidclient
-#     token: {env: GITHUB_TOKEN}
 #     packages:
 #       - org.fdroid.basic
 #       - org.fdroid.fdroid
+#   - repo: example/app
+#     token: {env: GITHUB_TOKEN_EXAMPLE}
+#     packages:
+#       - com.example.app
 
 
 # Most git hosting services have hard size limits for each git repo.
