@@ -85,7 +85,7 @@ class GithubApi:
         with urllib.request.urlopen(req) as resp:
             refs = json.load(resp)
             for ref in refs:
-                r = ref['ref']
+                r = ref.get('ref', '')
                 if r.startswith('refs/tags/'):
                     tags.append(r[10:])
         return tags

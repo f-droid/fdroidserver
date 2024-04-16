@@ -19,9 +19,9 @@ import os
 import sys
 import tempfile
 import unittest
+import unittest.mock
 
 from pathlib import Path
-from unittest import mock
 
 
 class TmpCwd:
@@ -84,5 +84,13 @@ def parse_args_for_test(parser, args):
     for arg in args:
         if arg[0] == '-':
             flags.append(flags)
-    with mock.patch('sys.argv', flags):
+    with unittest.mock.patch('sys.argv', flags):
         parse_args(parser)
+
+
+def mock_urlopen(status=200, body=None):
+    resp = unittest.mock.MagicMock()
+    resp.getcode.return_value = status
+    resp.read.return_value = body
+    resp.__enter__.return_value = resp
+    return unittest.mock.Mock(return_value=resp)
