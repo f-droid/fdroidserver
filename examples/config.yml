@@ -218,12 +218,13 @@
 # an example for this deployment automation:
 # https://github.com/f-droid/fdroidclient/releases/
 #
-# It is highly recommended to use a "Fine-grained personal access token", which
-# is restriced to the minimum required permissions, which are:
+# In the examble below tokens are read from environment variables. Putting
+# tokens directly into the config file is also supported but discouraged. It is
+# highly recommended to use a "Fine-grained personal access token", which is
+# restriced to the minimum required permissions, which are:
 #  * Metadata - read
 #  * Contents - read/write
-# Also make sure to limit access only to the GitHub repository you're deploying
-# to. (https://github.com/settings/personal-access-tokens/new)
+# (https://github.com/settings/personal-access-tokens/new)
 #
 # github_token: {env: GITHUB_TOKEN}
 # github_releases:
@@ -231,6 +232,8 @@
 #     packages:
 #       - org.fdroid.basic
 #       - org.fdroid.fdroid
+#     release_notes_prepend: |
+#       Re-post of official F-Droid App release from https://f-droid.org
 #   - repo: example/app
 #     token: {env: GITHUB_TOKEN_EXAMPLE}
 #     packages:

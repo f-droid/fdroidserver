@@ -90,7 +90,7 @@ class GithubApi:
                     tags.append(r[10:])
         return tags
 
-    def create_release(self, tag, files):
+    def create_release(self, tag, files, body=''):
         """
         Create a new release on github.
 
@@ -113,6 +113,7 @@ class GithubApi:
             data=json.dumps(
                 {
                     "tag_name": tag,
+                    "body": body,
                 }
             ).encode("utf-8"),
         )

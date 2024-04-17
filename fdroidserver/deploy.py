@@ -1116,27 +1116,27 @@ def push_binary_transparency(git_repo_path, git_remote):
             raise FDroidException(_("Pushing to remote server failed!"))
 
 
-def find_release_files(index_v2_path, repo_dir, package_names):
+def find_release_infos(index_v2_path, repo_dir, package_names):
     """
-    Find files for uploading to a release page.
+    Find files, texts, etc. for uploading to a release page.
 
     This function parses index-v2.json for file-paths elegible for deployment
     to release pages. (e.g. GitHub releases) It also groups these files by
     packageName and versionName. e.g. to get a list of files for all specific
     release of fdroid client you may call:
 
-    find_binary_release_files()['org.fdroid.fdroid']['0.19.2']
+    find_binary_release_infos()['org.fdroid.fdroid']['0.19.2']
 
     All paths in the returned data-structure are of type pathlib.Path.
     """
-    release_files = {}
+    release_infos = {}
     with open(index_v2_path, 'r') as f:
         idx = json.load(f)
         for package_name in package_names:
             package = idx.get('packages', {}).get(package_name, {})
             for version in package.get('versions', {}).values():
-                if package_name not in release_files:
-                    release_files[package_name] = {}
+                if package_name not in release_infos:
+                    release_infos[package_name] = {}
                 ver_name = version['manifest']['versionName']
                 apk_path = repo_dir / version['file']['name'][1:]
                 files = [apk_path]
@@ -1146,8 +1146,11 @@ def find_release_files(index_v2_path, repo_dir, package_names):
                 idsig_path = pathlib.Path(str(apk_path) + '.idsig')
                 if idsig_path.is_file():
                     files.append(idsig_path)
-                release_files[package_name][ver_name] = files
-    return release_files
+                release_infos[package_name][ver_name] = {
+                    'files': files,
+                    'whatsNew': version.get('whatsNew', {}).get("en-US"),
+                }
+    return release_infos
 
 
 def upload_to_github_releases(repo_section, gh_config, global_gh_token):
@@ -1167,13 +1170,13 @@ def upload_to_github_releases(repo_section, gh_config, global_gh_token):
         for package_name in repo_conf.get('packages', []):
             package_names.append(package_name)
 
-    release_files = find_release_files(index_v2_path, repo_dir, package_names)
+    release_infos = find_release_infos(index_v2_path, repo_dir, package_names)
 
     for repo_conf in gh_config:
-        upload_to_github_releases_repo(repo_conf, release_files, global_gh_token)
+        upload_to_github_releases_repo(repo_conf, release_infos, global_gh_token)
 
 
-def upload_to_github_releases_repo(repo_conf, release_files, global_gh_token):
+def upload_to_github_releases_repo(repo_conf, release_infos, global_gh_token):
     repo = repo_conf.get('repo')
     if not repo:
         logging.warning(_("One of the 'github_releases' config items is missing the 'repo' value. skipping ..."))
@@ -1191,7 +1194,7 @@ def upload_to_github_releases_repo(repo_conf, release_files, global_gh_token):
     # local fdroid repo
     all_local_versions = set()
     for package_name in repo_conf['packages']:
-        for version in release_files.get(package_name, {}).keys():
+        for version in release_infos.get(package_name, {}).keys():
             all_local_versions.add(version)
 
     gh = fdroidserver.github.GithubApi(token, repo)
@@ -1202,9 +1205,14 @@ def upload_to_github_releases_repo(repo_conf, release_files, global_gh_token):
             # collect files associated with this github release
             files = []
             for package in packages:
-                files.extend(release_files.get(package, {}).get(version, []))
+                files.extend(release_infos.get(package, {}).get(version, {}).get('files', []))
+            # always use the whatsNew text from the first app listed in
+            # config.qml github_releases.packages
+            text = release_infos.get(packages[0], {}).get(version, {}).get('whatsNew') or ''
+            if 'release_notes_prepend' in repo_conf:
+                text = repo_conf['release_notes_prepend'] + "\n\n" + text
             # create new release on github and upload all associated files
-            gh.create_release(version, files)
+            gh.create_release(version, files, text)
 
 
 def main():

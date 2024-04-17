@@ -94,7 +94,7 @@ class GithubApiTest(unittest.TestCase):
         api._create_release_asset = unittest.mock.Mock()
 
         with unittest.mock.patch("urllib.request.urlopen", uomock):
-            success = api.create_release('faketag', ['file_a', 'file_b'])
+            success = api.create_release('faketag', ['file_a', 'file_b'], body="bdy")
         self.assertTrue(success)
 
         req = uomock.call_args_list[0][0][0]
@@ -105,7 +105,7 @@ class GithubApiTest(unittest.TestCase):
             req.full_url,
             'https://api.github.com/repos/fakerepopath/releases',
         )
-        self.assertEqual(req.data, b'{"tag_name": "faketag"}')
+        self.assertEqual(req.data, b'{"tag_name": "faketag", "body": "bdy"}')
         self.assertListEqual(
             api._create_release_asset.call_args_list,
             [
