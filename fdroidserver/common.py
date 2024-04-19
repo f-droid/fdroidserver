@@ -2661,7 +2661,7 @@ def _androguard_logging_level(level=logging.ERROR):
         pass
 
 
-def get_androguard_APK(apkfile):
+def get_androguard_APK(apkfile, skip_analysis=False):
     try:
         # these were moved in androguard 4.0
         from androguard.core.apk import APK
@@ -2669,7 +2669,7 @@ def get_androguard_APK(apkfile):
         from androguard.core.bytecodes.apk import APK
     _androguard_logging_level()
 
-    return APK(apkfile)
+    return APK(apkfile, skip_analysis=skip_analysis)
 
 
 def ensure_final_value(packageName, arsc, value):
