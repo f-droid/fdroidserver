@@ -1039,6 +1039,7 @@ class CommonTest(unittest.TestCase):
             ('org.bitbucket.tickytacky.mirrormirror_3.apk', 'org.bitbucket.tickytacky.mirrormirror', 3, '1.0.2'),
             ('org.bitbucket.tickytacky.mirrormirror_4.apk', 'org.bitbucket.tickytacky.mirrormirror', 4, '1.0.3'),
             ('org.dyndns.fules.ck_20.apk', 'org.dyndns.fules.ck', 20, 'v1.6pre2'),
+            ('issue-1128-min-sdk-30-poc.apk', 'org.fdroid.ci', 1, '1.0'),
             ('urzip.apk', 'info.guardianproject.urzip', 100, '0.1'),
             ('urzip-badcert.apk', 'info.guardianproject.urzip', 100, '0.1'),
             ('urzip-badsig.apk', 'info.guardianproject.urzip', 100, '0.1'),
@@ -1154,6 +1155,7 @@ class CommonTest(unittest.TestCase):
             return apk.get_effective_target_sdk_version()
 
         self.assertEqual(4, get_minSdkVersion('bad-unicode-πÇÇ现代通用字-български-عربي1.apk'))
+        self.assertEqual(30, get_minSdkVersion('issue-1128-min-sdk-30-poc.apk'))
         self.assertEqual(14, get_minSdkVersion('org.bitbucket.tickytacky.mirrormirror_1.apk'))
         self.assertEqual(14, get_minSdkVersion('org.bitbucket.tickytacky.mirrormirror_2.apk'))
         self.assertEqual(14, get_minSdkVersion('org.bitbucket.tickytacky.mirrormirror_3.apk'))
@@ -1164,6 +1166,7 @@ class CommonTest(unittest.TestCase):
         self.assertEqual(4, get_minSdkVersion('urzip-badsig.apk'))
         self.assertEqual(4, get_minSdkVersion('urzip-release.apk'))
         self.assertEqual(4, get_minSdkVersion('urzip-release-unsigned.apk'))
+        self.assertEqual(27, get_minSdkVersion('v2.only.sig_2.apk'))
         self.assertEqual(3, get_minSdkVersion('repo/com.politedroid_3.apk'))
         self.assertEqual(3, get_minSdkVersion('repo/com.politedroid_4.apk'))
         self.assertEqual(3, get_minSdkVersion('repo/com.politedroid_5.apk'))
@@ -3033,6 +3036,16 @@ APKS_WITH_JAR_SIGNATURES = (
         '7eabd8c15de883d1e82b5df2fd4f7f769e498078e9ad6dc901f0e96db77ceac3',
     ),
 )
+APKS_WITHOUT_JAR_SIGNATURES = (
+    (
+        'issue-1128-min-sdk-30-poc.apk',  # APK v3 Signature only
+        '09350d5f3460a8a0ea5cf6b68ccd296a58754f7e683ba6aa08c19be8353504f3',
+    ),
+    (
+        'v2.only.sig_2.apk',
+        '32a23624c201b949f085996ba5ed53d40f703aca4989476949cae891022e0ed6',
+    ),
+)
 
 
 class SignerExtractionTest(unittest.TestCase):
@@ -3090,7 +3103,7 @@ class SignerExtractionTest(unittest.TestCase):
         unittest.skipUnless(self.apksigner, 'requires apksigner to run')
         pat = re.compile(r'\s[0-9a-f]{64}\s')
         cmd = [self.apksigner, 'verify', '--print-certs']
-        for apk, fingerprint in APKS_WITH_JAR_SIGNATURES:
+        for apk, fingerprint in APKS_WITH_JAR_SIGNATURES + APKS_WITHOUT_JAR_SIGNATURES:
             output = subprocess.check_output(cmd + [apk], text=True)
             self.assertEqual(
                 fingerprint,
@@ -3100,6 +3113,14 @@ class SignerExtractionTest(unittest.TestCase):
 
     def test_apk_signer_fingerprint_with_v1_apks(self):
         for apk, fingerprint in APKS_WITH_JAR_SIGNATURES:
+            self.assertEqual(
+                fingerprint,
+                fdroidserver.common.apk_signer_fingerprint(apk),
+                f'apk_signer_fingerprint should match stored fingerprint for {apk}',
+            )
+
+    def test_apk_signer_fingerprint_without_v1_apks(self):
+        for apk, fingerprint in APKS_WITHOUT_JAR_SIGNATURES:
             self.assertEqual(
                 fingerprint,
                 fdroidserver.common.apk_signer_fingerprint(apk),
