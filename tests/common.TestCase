@@ -615,6 +615,27 @@ class CommonTest(unittest.TestCase):
         self.assertFalse(fdroidserver.common.verify_apk_signature(twosigapk))
         self.assertIsNone(fdroidserver.common.verify_apks(sourceapk, twosigapk, self.tmpdir))
 
+    def test_get_certificate_with_chain_sandisk(self):
+        """Test that APK signatures with a cert chain are parsed like apksigner.
+
+        SanDisk signs their APKs with a X.509 certificate chain of
+        trust, so there are actually three certificates
+        included. apksigner only cares about the certificate in the
+        chain that actually signs the manifest.
+
+        The correct value comes from:
+        apksigner verify --print-certs 883cbdae7aeb2e4b122e8ee8d89966c7062d0d49107a130235fa220a5b994a79.apk
+
+        """
+        cert = fdroidserver.common.get_certificate(
+            signature_block_file=Path('SANAPPSI.RSA').read_bytes(),
+            signature_file=Path('SANAPPSI.SF').read_bytes(),
+        )
+        self.assertEqual(
+            'ea0abbf2a142e4b167405d516b2cc408c4af4b29cd50ba281aa4470d4aab3e53',
+            fdroidserver.common.signer_fingerprint(cert),
+        )
+
     def test_write_to_config(self):
         with tempfile.TemporaryDirectory() as tmpPath:
             cfgPath = os.path.join(tmpPath, 'config.py')

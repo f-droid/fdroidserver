@@ -724,6 +724,8 @@ include tests/repo/urzip-*.apk
 include tests/repo/v1.v2.sig_1020.apk
 include tests/rewritemeta.TestCase
 include tests/run-tests
+include tests/SANAPPSI.RSA
+include tests/SANAPPSI.SF
 include tests/scanner.TestCase
 include tests/signatures.TestCase
 include tests/signindex.TestCase
