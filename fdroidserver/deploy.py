@@ -1118,7 +1118,7 @@ def push_binary_transparency(git_repo_path, git_remote):
 
 def find_release_infos(index_v2_path, repo_dir, package_names):
     """
-    Find files, texts, etc. for uploading to a release page.
+    Find files, texts, etc. for uploading to a release page in index-v2.json.
 
     This function parses index-v2.json for file-paths elegible for deployment
     to release pages. (e.g. GitHub releases) It also groups these files by
@@ -1149,6 +1149,7 @@ def find_release_infos(index_v2_path, repo_dir, package_names):
                 release_infos[package_name][ver_name] = {
                     'files': files,
                     'whatsNew': version.get('whatsNew', {}).get("en-US"),
+                    'hasReleaseChannels': len(version.get('releaseChannels', [])) > 0,
                 }
     return release_infos
 
@@ -1202,17 +1203,21 @@ def upload_to_github_releases_repo(repo_conf, release_infos, global_gh_token):
 
     for version in all_local_versions:
         if version in unreleased_tags:
-            # collect files associated with this github release
-            files = []
-            for package in packages:
-                files.extend(release_infos.get(package, {}).get(version, {}).get('files', []))
-            # always use the whatsNew text from the first app listed in
-            # config.qml github_releases.packages
-            text = release_infos.get(packages[0], {}).get(version, {}).get('whatsNew') or ''
-            if 'release_notes_prepend' in repo_conf:
-                text = repo_conf['release_notes_prepend'] + "\n\n" + text
-            # create new release on github and upload all associated files
-            gh.create_release(version, files, text)
+            # Making sure we're not uploading this version when releaseChannels
+            # is set. (releaseChannels usually mean it's e.g. an alpha or beta
+            # version)
+            if not release_infos.get(packages[0], {}).get(version, {}).get('hasReleaseChannels'):
+                # collect files associated with this github release
+                files = []
+                for package in packages:
+                    files.extend(release_infos.get(package, {}).get(version, {}).get('files', []))
+                # always use the whatsNew text from the first app listed in
+                # config.qml github_releases.packages
+                text = release_infos.get(packages[0], {}).get(version, {}).get('whatsNew') or ''
+                if 'release_notes_prepend' in repo_conf:
+                    text = repo_conf['release_notes_prepend'] + "\n\n" + text
+                # create new release on github and upload all associated files
+                gh.create_release(version, files, text)
 
 
 def main():
