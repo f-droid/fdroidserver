@@ -1210,6 +1210,259 @@ class DeployTest(unittest.TestCase):
             )
 
 
+class GitHubReleasesTest(unittest.TestCase):
+
+    def test_find_release_infos(self):
+        self.maxDiff = None
+
+        index_mock = b"""
+            {
+                "packages": {
+                    "com.example.app": {
+                        "versions": {
+                            "2e6f263c1927506015bfc98bce0818247836f2e7fe29a04e1af2b33c97848750": {
+                                "file": {
+                                    "name": "/com.example.app_123.apk"
+                                },
+                                "whatsNew": {
+                                    "en-US": "fake what's new"
+                                },
+                                "manifest": {
+                                    "versionName": "1.2.3",
+                                    "versionCode": "123"
+                                }
+                            },
+                            "8a6f263c8327506015bfc98bce0815247836f2e7fe29a04e1af2bffa6409998d": {
+                                "file": {
+                                    "name": "/com.example.app_100.apk"
+                                },
+                                "manifest": {
+                                    "versionName": "1.0-alpha",
+                                    "versionCode": "123"
+                                },
+                                "releaseChannels": ["alpha"]
+                            }
+                        }
+                    },
+                    "another.app": {
+                        "versions": {
+                            "30602ffc19a7c0601bbfa93bce00082c78a6f2ddfe29a04e1af253fc9f84eda0": {
+                                "file": {
+                                    "name": "/another.app_1.apk"
+                                },
+                                "manifest": {
+                                    "versionName": "1",
+                                    "versionCode": "1"
+                                }
+                            }
+                        }
+                    },
+                    "fildered.app": {
+                        "versions": {
+                            "93ae02fc19a7c0601adfa93bce0443fc78a6f2ddfe3df04e1af093fca9a1ff09": {
+                                "file": {
+                                    "name": "/another.app_1.apk"
+                                },
+                                "manifest": {
+                                    "versionName": "1",
+                                    "versionCode": "1"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        """
+        with unittest.mock.patch(
+            "fdroidserver.deploy.open", unittest.mock.mock_open(read_data=index_mock)
+        ):
+            release_infos = fdroidserver.deploy.find_release_infos(
+                "fake_path",
+                Path('fake_repo'),
+                ["com.example.app", "another.app"],
+            )
+
+        self.assertDictEqual(
+            release_infos,
+            {
+                "another.app": {
+                    "1": {
+                        "files": [Path('fake_repo') / "another.app_1.apk"],
+                        "hasReleaseChannels": False,
+                        "whatsNew": None,
+                    },
+                },
+                "com.example.app": {
+                    "1.0-alpha": {
+                        "files": [
+                            Path("fake_repo") / "com.example.app_100.apk",
+                        ],
+                        "hasReleaseChannels": True,
+                        "whatsNew": None,
+                    },
+                    "1.2.3": {
+                        "files": [
+                            Path("fake_repo") / "com.example.app_123.apk",
+                        ],
+                        "hasReleaseChannels": False,
+                        "whatsNew": "fake what's new",
+                    },
+                },
+            },
+        )
+
+    def test_upload_to_github_releases(self):
+        gh_config = [
+            {
+                "repo": "example/app",
+                "packages": ["com.example.app", "another.app"],
+            },
+            {
+                "repo": "custom/app",
+                "packages": ["more.custom.app"],
+                "token": "custom_token",
+            },
+        ]
+
+        fri_mock = unittest.mock.Mock(return_value="fri_result")
+        urr_mock = unittest.mock.Mock()
+        with unittest.mock.patch(
+            "fdroidserver.deploy.find_release_infos", fri_mock
+        ), unittest.mock.patch(
+            "fdroidserver.deploy.upload_to_github_releases_repo", urr_mock
+        ), tempfile.TemporaryDirectory() as tmpdir:
+
+            with open(Path(tmpdir) / "index-v2.json", "w") as f:
+                f.write("")
+
+            fdroidserver.deploy.upload_to_github_releases(
+                tmpdir, gh_config, "fake_global_token"
+            )
+
+            fri_mock.assert_called_once_with(
+                Path(tmpdir) / "index-v2.json",
+                Path(tmpdir),
+                ["com.example.app", "another.app", "more.custom.app"],
+            )
+
+        self.assertListEqual(
+            urr_mock.call_args_list,
+            [
+                unittest.mock.call(
+                    {
+                        "repo": "example/app",
+                        "packages": ["com.example.app", "another.app"],
+                    },
+                    "fri_result",
+                    "fake_global_token",
+                ),
+                unittest.mock.call(
+                    {
+                        "repo": "custom/app",
+                        "packages": ["more.custom.app"],
+                        "token": "custom_token",
+                    },
+                    "fri_result",
+                    "fake_global_token",
+                ),
+            ],
+        )
+
+
+class Test_UploadToGithubReleasesRepo(unittest.TestCase):
+
+    def setUp(self):
+        self.repo_conf = {
+            "repo": "example/app",
+            "packages": ["com.example.app", "com.example.altapp", "another.app"],
+        }
+        self.release_infos = {
+            "com.example.app": {
+                "1.0.0": {
+                    "files": [
+                        Path("fake_repo") / "com.example.app_100100.apk",
+                    ],
+                    "hasReleaseChannels": False,
+                    "whatsNew": "what's new com.example.app 1.0.0",
+                },
+                "1.0.0-beta1": {
+                    "files": [
+                        Path("fake_repo") / "com.example.app_100007.apk",
+                    ],
+                    "hasReleaseChannels": True,
+                    "whatsNew": None,
+                },
+            },
+            "com.example.altapp": {
+                "1.0.0": {
+                    "files": [
+                        Path("fake_repo") / "com.example.altapp_100100.apk",
+                        Path("fake_repo") / "com.example.altapp_100100.apk.asc",
+                        Path("fake_repo") / "com.example.altapp_100100.apk.idsig",
+                    ],
+                    "whatsNew": "what's new com.example.altapp 1.0.0",
+                },
+            },
+        }
+
+        self.api = unittest.mock.Mock()
+        self.api.list_unreleased_tags = lambda: ["1.0.0", "1.0.0-beta1"]
+        self.api_constructor = unittest.mock.Mock(return_value=self.api)
+
+    def test_global_token(self):
+        with unittest.mock.patch("fdroidserver.github.GithubApi", self.api_constructor):
+            fdroidserver.deploy.upload_to_github_releases_repo(
+                self.repo_conf,
+                self.release_infos,
+                "global_token",
+            )
+
+        self.api_constructor.assert_called_once_with("global_token", "example/app")
+
+        self.assertListEqual(
+            self.api.create_release.call_args_list,
+            [
+                unittest.mock.call(
+                    "1.0.0",
+                    [
+                        Path("fake_repo/com.example.app_100100.apk"),
+                        Path("fake_repo/com.example.altapp_100100.apk"),
+                        Path("fake_repo/com.example.altapp_100100.apk.asc"),
+                        Path("fake_repo/com.example.altapp_100100.apk.idsig"),
+                    ],
+                    "what's new com.example.app 1.0.0",
+                ),
+            ],
+        )
+
+    def test_local_token(self):
+        self.repo_conf["token"] = "local_token"
+        with unittest.mock.patch("fdroidserver.github.GithubApi", self.api_constructor):
+            fdroidserver.deploy.upload_to_github_releases_repo(
+                self.repo_conf,
+                self.release_infos,
+                "global_token",
+            )
+
+        self.api_constructor.assert_called_once_with("local_token", "example/app")
+
+        self.assertListEqual(
+            self.api.create_release.call_args_list,
+            [
+                unittest.mock.call(
+                    "1.0.0",
+                    [
+                        Path("fake_repo/com.example.app_100100.apk"),
+                        Path("fake_repo/com.example.altapp_100100.apk"),
+                        Path("fake_repo/com.example.altapp_100100.apk.asc"),
+                        Path("fake_repo/com.example.altapp_100100.apk.idsig"),
+                    ],
+                    "what's new com.example.app 1.0.0",
+                ),
+            ],
+        )
+
+
 if __name__ == "__main__":
     os.chdir(os.path.dirname(__file__))
 
@@ -1227,4 +1480,6 @@ if __name__ == "__main__":
 
     newSuite = unittest.TestSuite()
     newSuite.addTest(unittest.makeSuite(DeployTest))
+    newSuite.addTest(unittest.makeSuite(GitHubReleasesTest))
+    newSuite.addTest(unittest.makeSuite(Test_UploadToGithubReleasesRepo))
     unittest.main(failfast=False)

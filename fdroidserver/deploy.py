@@ -1138,7 +1138,10 @@ def find_release_infos(index_v2_path, repo_dir, package_names):
                 if package_name not in release_infos:
                     release_infos[package_name] = {}
                 ver_name = version['manifest']['versionName']
-                apk_path = repo_dir / version['file']['name'][1:]
+                apk_path = version['file']['name']
+                if apk_path.startswith('/'):
+                    apk_path = apk_path[1:]
+                apk_path = repo_dir / apk_path
                 files = [apk_path]
                 asc_path = pathlib.Path(str(apk_path) + '.asc')
                 if asc_path.is_file():
@@ -1158,7 +1161,7 @@ def upload_to_github_releases(repo_section, gh_config, global_gh_token):
     repo_dir = pathlib.Path(repo_section)
     index_v2_path = repo_dir / 'index-v2.json'
     if not index_v2_path.is_file():
-        logging.waring(
+        logging.warning(
             _(
                 "Error deploying 'github_releases', {} not present. (You might "
                 "need to run `fdroid update` first.)"
@@ -1171,7 +1174,7 @@ def upload_to_github_releases(repo_section, gh_config, global_gh_token):
         for package_name in repo_conf.get('packages', []):
             package_names.append(package_name)
 
-    release_infos = find_release_infos(index_v2_path, repo_dir, package_names)
+    release_infos = fdroidserver.deploy.find_release_infos(index_v2_path, repo_dir, package_names)
 
     for repo_conf in gh_config:
         upload_to_github_releases_repo(repo_conf, release_infos, global_gh_token)
