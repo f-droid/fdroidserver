@@ -130,7 +130,7 @@ def make(apps, apks, repodir, archive):
         apks,
         common.config,
         repodir,
-        indent=2 if common.options.pretty else None
+        pretty=common.options.pretty,
     )
 
 
@@ -1759,14 +1759,14 @@ def get_public_key_from_jar(jar):
     return public_key, public_key_fingerprint
 
 
-def make_altstore(apps, apks, config, repodir, indent=None):
-    """
-    Assemble altstore-index.json for iOS (.ipa) apps.
+def make_altstore(apps, apks, config, repodir, pretty=False):
+    """Assemble altstore-index.json for iOS (.ipa) apps.
 
     builds index files based on:
     https://faq.altstore.io/distribute-your-apps/make-a-source
     https://faq.altstore.io/distribute-your-apps/updating-apps
     """
+    indent = 2 if pretty else None
     # for now alt-store support is english only
     for lang in ['en']:
 
@@ -1825,7 +1825,9 @@ def make_altstore(apps, apks, config, repodir, indent=None):
 
             # populate 'versions'
             for apk in apks:
-                if apk['packageName'] == packageName and apk.get('apkName', '').lower().endswith('.ipa'):
+                if apk['packageName'] == packageName and apk.get(
+                    'apkName', ''
+                ).lower().endswith('.ipa'):
                     v = {
                         "version": apk["versionName"],
                         "date": apk["added"].isoformat(),

@@ -629,13 +629,20 @@ def parse_ipa(ipa_path, file_size, sha256):
             if info.filename.endswith("/embedded.mobileprovision"):
                 print("parsing", info.filename)
                 with ipa_zip.open(info) as mopro_file:
-                    mopro_content_info = asn1crypto.cms.ContentInfo.load(mopro_file.read())
+                    mopro_content_info = asn1crypto.cms.ContentInfo.load(
+                        mopro_file.read()
+                    )
                     mopro_payload_info = mopro_content_info['content']
-                    mopro_payload = mopro_payload_info['encap_content_info']['content'].native
+                    mopro_payload = mopro_payload_info['encap_content_info'][
+                        'content'
+                    ].native
                     mopro = biplist.readPlistFromString(mopro_payload)
                     # https://faq.altstore.io/distribute-your-apps/make-a-source#entitlements-array-of-strings
                     for entitlement in mopro.get('Entitlements', {}).keys():
-                        if entitlement not in ["com.app.developer.team-identifier", 'application-identifier']:
+                        if entitlement not in [
+                            "com.app.developer.team-identifier",
+                            'application-identifier'
+                        ]:
                             ipa["ipa_entitlements"].add(entitlement)
     return ipa
 
@@ -666,8 +673,7 @@ def scan_repo_for_ipas(apkcache, repodir, knownapks):
 
         file_size = os.stat(ipa_path).st_size
         if file_size == 0:
-            raise FDroidException(_('{path} is zero size!')
-                                  .format(path=ipa_path))
+            raise FDroidException(_('{path} is zero size!').format(path=ipa_path))
 
         sha256 = common.sha256sum(ipa_path)
         ipa = apkcache.get(ipa_name, {})
@@ -1420,7 +1426,9 @@ def insert_localized_ios_app_metadata(apps_with_packages):
                     for metadata_file in (lang_dir).iterdir():
                         key = FASTLANE_IOS_MAP.get(metadata_file.name)
                         if key:
-                            fdroidserver.update._set_localized_text_entry(app, locale, key, metadata_file)
+                            fdroidserver.update._set_localized_text_entry(
+                                app, locale, key, metadata_file
+                            )
 
         screenshots = fdroidserver.update.discover_ios_screenshots(fastlane_dir)
         fdroidserver.update.copy_ios_screenshots_to_repo(screenshots, package_name)
