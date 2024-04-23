@@ -98,8 +98,9 @@ def update_awsbucket(repo_section):
 
     Requires AWS credentials set in config.yml: awsaccesskeyid, awssecretkey
     """
-    logging.debug('Syncing "' + repo_section + '" to Amazon S3 bucket "'
-                  + config['awsbucket'] + '"')
+    logging.debug(
+        f'''Syncing "{repo_section}" to Amazon S3 bucket "{config['awsbucket']}"'''
+    )
 
     if common.set_command_in_config('s3cmd'):
         update_awsbucket_s3cmd(repo_section)
@@ -256,8 +257,8 @@ def update_awsbucket_libcloud(repo_section):
                     extra['content_type'] = 'application/pgp-signature'
                 elif file_to_upload.endswith('.asc'):
                     extra['content_type'] = 'application/pgp-signature'
-                logging.info(' uploading ' + os.path.relpath(file_to_upload)
-                             + ' to s3://' + awsbucket + '/' + object_name)
+                path = os.path.relpath(file_to_upload)
+                logging.info(f' uploading {path} to s3://{awsbucket}/{object_name}')
                 with open(file_to_upload, 'rb') as iterator:
                     obj = driver.upload_object_via_stream(iterator=iterator,
                                                           container=container,
@@ -544,8 +545,13 @@ def update_servergitmirrors(servergitmirrors, repo_section):
                         for line in progress.other_lines:
                             if line.startswith('remote:'):
                                 logging.debug(line)
-                        raise FDroidException(remote.url + ' push failed: ' + str(pushinfo.flags)
-                                              + ' ' + pushinfo.summary)
+                        raise FDroidException(
+                            '{url} push failed: {flags} {summary}'.format(
+                                url=remote.url,
+                                flags=pushinfo.flags,
+                                summary=pushinfo.summary,
+                            )
+                        )
                     else:
                         logging.debug(remote.url + ': ' + pushinfo.summary)
 
@@ -621,7 +627,8 @@ def upload_to_virustotal(repo_section, virustotal_apikey):
             with open(os.path.join(repo_section, 'index-v1.json')) as fp:
                 data = json.load(fp)
         else:
-            data, _ignored, _ignored = index.get_index_from_jar(os.path.join(repo_section, 'index-v1.jar'))
+            local_jar = os.path.join(repo_section, 'index-v1.jar')
+            data, _ignored, _ignored = index.get_index_from_jar(local_jar)
 
         for packageName, packages in data['packages'].items():
             for package in packages:
@@ -651,14 +658,17 @@ def upload_apk_to_virustotal(virustotal_apikey, packageName, apkName, hash,
         for k, v in kwargs['headers'].items():
             headers[k] = v
 
-    data = {
+    apikey = {
         'apikey': virustotal_apikey,
         'resource': hash,
     }
     needs_file_upload = False
     while True:
-        r = requests.get('https://www.virustotal.com/vtapi/v2/file/report?'
-                         + urllib.parse.urlencode(data), headers=headers, timeout=300)
+        report_url = (
+            'https://www.virustotal.com/vtapi/v2/file/report?'
+            + urllib.parse.urlencode(apikey)
+        )
+        r = requests.get(report_url, headers=headers, timeout=300)
         if r.status_code == 200:
             response = r.json()
             if response['response_code'] == 0:
@@ -673,9 +683,12 @@ def upload_apk_to_virustotal(virustotal_apikey, packageName, apkName, hash,
                     json.dump(response, fp, indent=2, sort_keys=True)
 
             if response.get('positives', 0) > 0:
-                logging.warning(repofilename + ' has been flagged by virustotal '
-                                + str(response['positives']) + ' times:'
-                                + '\n\t' + response['permalink'])
+                logging.warning(
+                    _('{path} has been flagged by virustotal {count} times:').format(
+                        path=repofilename, count=response['positives']
+                    ),
+                    +'\n\t' + response['permalink'],
+                )
             break
         if r.status_code == 204:
             logging.warning(_('virustotal.com is rate limiting, waiting to retry...'))
@@ -691,8 +704,11 @@ def upload_apk_to_virustotal(virustotal_apikey, packageName, apkName, hash,
                           .format(path=repofilename, url=manual_url))
         elif size > 32000000:
             # VirusTotal API requires fetching a URL to upload bigger files
-            r = requests.get('https://www.virustotal.com/vtapi/v2/file/scan/upload_url?'
-                             + urllib.parse.urlencode(data), headers=headers, timeout=300)
+            query_url = (
+                'https://www.virustotal.com/vtapi/v2/file/scan/upload_url?'
+                + urllib.parse.urlencode(apikey)
+            )
+            r = requests.get(query_url, headers=headers, timeout=300)
             if r.status_code == 200:
                 upload_url = r.json().get('upload_url')
             elif r.status_code == 403:
@@ -707,10 +723,13 @@ def upload_apk_to_virustotal(virustotal_apikey, packageName, apkName, hash,
     if upload_url:
         logging.info(_('Uploading {apkfilename} to virustotal')
                      .format(apkfilename=repofilename))
-        files = {
-            'file': (apkName, open(repofilename, 'rb'))
-        }
-        r = requests.post(upload_url, data=data, headers=headers, files=files, timeout=300)
+        r = requests.post(
+            upload_url,
+            data=apikey,
+            headers=headers,
+            files={'file': (apkName, open(repofilename, 'rb'))},
+            timeout=300,
+        )
         logging.debug(_('If this upload fails, try manually uploading to {url}')
                       .format(url=manual_url))
         r.raise_for_status()
