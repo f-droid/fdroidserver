@@ -592,6 +592,10 @@ include tests/init.TestCase
 include tests/install.TestCase
 include tests/IsMD5Disabled.java
 include tests/issue-1128-min-sdk-30-poc.apk
+include tests/issue-1128-poc1.apk
+include tests/issue-1128-poc2.apk
+include tests/issue-1128-poc3a.apk
+include tests/issue-1128-poc3b.apk
 include tests/janus.apk
 include tests/keystore.jks
 include tests/key-tricks.py

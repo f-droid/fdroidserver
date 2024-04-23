@@ -1061,6 +1061,10 @@ class CommonTest(unittest.TestCase):
             ('org.bitbucket.tickytacky.mirrormirror_4.apk', 'org.bitbucket.tickytacky.mirrormirror', 4, '1.0.3'),
             ('org.dyndns.fules.ck_20.apk', 'org.dyndns.fules.ck', 20, 'v1.6pre2'),
             ('issue-1128-min-sdk-30-poc.apk', 'org.fdroid.ci', 1, '1.0'),
+            ('issue-1128-poc1.apk', 'android.appsecurity.cts.tinyapp', 10, '1.0'),
+            ('issue-1128-poc2.apk', 'android.appsecurity.cts.tinyapp', 10, '1.0'),
+            ('issue-1128-poc3a.apk', 'android.appsecurity.cts.tinyapp', 10, '1.0'),
+            ('issue-1128-poc3b.apk', 'android.appsecurity.cts.tinyapp', 10, '1.0'),
             ('urzip.apk', 'info.guardianproject.urzip', 100, '0.1'),
             ('urzip-badcert.apk', 'info.guardianproject.urzip', 100, '0.1'),
             ('urzip-badsig.apk', 'info.guardianproject.urzip', 100, '0.1'),
@@ -1177,6 +1181,10 @@ class CommonTest(unittest.TestCase):
 
         self.assertEqual(4, get_minSdkVersion('bad-unicode-πÇÇ现代通用字-български-عربي1.apk'))
         self.assertEqual(30, get_minSdkVersion('issue-1128-min-sdk-30-poc.apk'))
+        self.assertEqual(29, get_minSdkVersion('issue-1128-poc1.apk'))
+        self.assertEqual(29, get_minSdkVersion('issue-1128-poc2.apk'))
+        self.assertEqual(23, get_minSdkVersion('issue-1128-poc3a.apk'))
+        self.assertEqual(23, get_minSdkVersion('issue-1128-poc3b.apk'))
         self.assertEqual(14, get_minSdkVersion('org.bitbucket.tickytacky.mirrormirror_1.apk'))
         self.assertEqual(14, get_minSdkVersion('org.bitbucket.tickytacky.mirrormirror_2.apk'))
         self.assertEqual(14, get_minSdkVersion('org.bitbucket.tickytacky.mirrormirror_3.apk'))
@@ -2953,6 +2961,14 @@ APKS_WITH_JAR_SIGNATURES = (
         '32a23624c201b949f085996ba5ed53d40f703aca4989476949cae891022e0ed6',
     ),
     (
+        'issue-1128-poc3a.apk',
+        '1dbb8be012293e988a0820f7d455b07abd267d2c0b500fc793fcfd80141cb5ce',
+    ),
+    (
+        'issue-1128-poc3b.apk',
+        '1dbb8be012293e988a0820f7d455b07abd267d2c0b500fc793fcfd80141cb5ce',
+    ),
+    (
         'janus.apk',
         'ebb0fedf1942a099b287c3db00ff732162152481abb2b6c7cbcdb2ba5894a768',
     ),
@@ -3058,6 +3074,14 @@ APKS_WITH_JAR_SIGNATURES = (
     ),
 )
 APKS_WITHOUT_JAR_SIGNATURES = (
+    (
+        'issue-1128-poc1.apk',  # APK v3 Signature only
+        '1dbb8be012293e988a0820f7d455b07abd267d2c0b500fc793fcfd80141cb5ce',
+    ),
+    (
+        'issue-1128-poc2.apk',  # APK v3 Signature only
+        '1dbb8be012293e988a0820f7d455b07abd267d2c0b500fc793fcfd80141cb5ce',
+    ),
     (
         'issue-1128-min-sdk-30-poc.apk',  # APK v3 Signature only
         '09350d5f3460a8a0ea5cf6b68ccd296a58754f7e683ba6aa08c19be8353504f3',
