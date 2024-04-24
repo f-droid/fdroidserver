@@ -1211,7 +1211,6 @@ class DeployTest(unittest.TestCase):
 
 
 class GitHubReleasesTest(unittest.TestCase):
-
     def test_find_release_infos(self):
         self.maxDiff = None
 
@@ -1331,7 +1330,6 @@ class GitHubReleasesTest(unittest.TestCase):
         ), unittest.mock.patch(
             "fdroidserver.deploy.upload_to_github_releases_repo", urr_mock
         ), tempfile.TemporaryDirectory() as tmpdir:
-
             with open(Path(tmpdir) / "index-v2.json", "w") as f:
                 f.write("")
 
@@ -1370,7 +1368,6 @@ class GitHubReleasesTest(unittest.TestCase):
 
 
 class Test_UploadToGithubReleasesRepo(unittest.TestCase):
-
     def setUp(self):
         self.repo_conf = {
             "repo": "example/app",

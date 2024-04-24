@@ -212,19 +212,19 @@
 #     index_only: true
 
 
-# These settings allows using `fdroid deploy` for publishing APK files from
+# These settings allow using `fdroid deploy` for publishing APK files from
 # your repository to GitHub Releases. (You should also run `fdroid update`
 # every time before deploying to GitHub releases to update index files.) Here's
 # an example for this deployment automation:
 # https://github.com/f-droid/fdroidclient/releases/
 #
-# Currently versions which are assigned to a release channel (e.g. alpha or
+# Currently, versions which are assigned to a release channel (e.g. alpha or
 # beta releases) are ignored.
 #
-# In the examble below tokens are read from environment variables. Putting
+# In the example below, tokens are read from environment variables. Putting
 # tokens directly into the config file is also supported but discouraged. It is
 # highly recommended to use a "Fine-grained personal access token", which is
-# restriced to the minimum required permissions, which are:
+# restricted to the minimum required permissions, which are:
 #  * Metadata - read
 #  * Contents - read/write
 # (https://github.com/settings/personal-access-tokens/new)
