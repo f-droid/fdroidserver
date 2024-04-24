@@ -34,6 +34,7 @@ import json
 import time
 import yaml
 import copy
+import asn1crypto.cms
 import defusedxml.ElementTree as ElementTree
 from datetime import datetime, timezone
 from argparse import ArgumentParser
@@ -544,25 +545,105 @@ def version_string_to_int(version):
     return major * 10**12 + minor * 10**6 + patch
 
 
+# iOS app permissions, source:
+# https://developer.apple.com/documentation/bundleresources/information_property_list/protected_resources
+IPA_PERMISSIONS = [
+    "NSBluetoothAlwaysUsageDescription",
+    "NSBluetoothPeripheralUsageDescription",
+    "NSCalendarsFullAccessUsageDescription",
+    "NSCalendarsWriteOnlyAccessUsageDescription",
+    "NSRemindersFullAccessUsageDescription",
+    "NSCameraUsageDescription",
+    "NSMicrophoneUsageDescription",
+    "NSContactsUsageDescription",
+    "NSFaceIDUsageDescription",
+    "NSDesktopFolderUsageDescription",
+    "NSDocumentsFolderUsageDescription",
+    "NSDownloadsFolderUsageDescription",
+    "NSNetworkVolumesUsageDescription",
+    "NSNetworkVolumesUsageDescription",
+    "NSRemovableVolumesUsageDescription",
+    "NSRemovableVolumesUsageDescription",
+    "NSFileProviderDomainUsageDescription",
+    "NSGKFriendListUsageDescription",
+    "NSHealthClinicalHealthRecordsShareUsageDescription",
+    "NSHealthShareUsageDescription",
+    "NSHealthUpdateUsageDescription",
+    "NSHomeKitUsageDescription",
+    "NSLocationAlwaysAndWhenInUseUsageDescription",
+    "NSLocationUsageDescription",
+    "NSLocationWhenInUseUsageDescription",
+    "NSLocationAlwaysUsageDescription",
+    "NSAppleMusicUsageDescription",
+    "NSMotionUsageDescription",
+    "NSFallDetectionUsageDescription",
+    "NSLocalNetworkUsageDescription",
+    "NSNearbyInteractionUsageDescription",
+    "NSNearbyInteractionAllowOnceUsageDescription",
+    "NFCReaderUsageDescription",
+    "NSPhotoLibraryAddUsageDescription",
+    "NSPhotoLibraryUsageDescription",
+    "NSAppDataUsageDescription",
+    "NSUserTrackingUsageDescription",
+    "NSAppleEventsUsageDescription",
+    "NSSystemAdministrationUsageDescription",
+    "NSSensorKitUsageDescription",
+    "NSSiriUsageDescription",
+    "NSSpeechRecognitionUsageDescription",
+    "NSVideoSubscriberAccountUsageDescription",
+    "NSWorldSensingUsageDescription",
+    "NSHandsTrackingUsageDescription",
+    "NSIdentityUsageDescription",
+    "NSCalendarsUsageDescription",
+    "NSRemindersUsageDescription",
+]
+
+
 def parse_ipa(ipa_path, file_size, sha256):
-    from biplist import readPlist
+    import biplist
 
     ipa = {
         "apkName": os.path.basename(ipa_path),
         "hash": sha256,
         "hashType": "sha256",
         "size": file_size,
+        "ipa_entitlements": set(),
+        "ipa_permissions": {},
     }
 
     with zipfile.ZipFile(ipa_path) as ipa_zip:
         for info in ipa_zip.infolist():
             if re.match("Payload/[^/]*.app/Info.plist", info.filename):
                 with ipa_zip.open(info) as plist_file:
-                    plist = readPlist(plist_file)
+                    plist = biplist.readPlist(plist_file)
+                    ipa["name"] = plist['CFBundleName']
                     ipa["packageName"] = plist["CFBundleIdentifier"]
                     # https://developer.apple.com/documentation/bundleresources/information_property_list/cfbundleshortversionstring
                     ipa["versionCode"] = version_string_to_int(plist["CFBundleShortVersionString"])
                     ipa["versionName"] = plist["CFBundleShortVersionString"]
+                    ipa["ipa_MinimumOSVersion"] = plist['MinimumOSVersion']
+                    ipa["ipa_DTPlatformVersion"] = plist['DTPlatformVersion']
+                    for ipap in IPA_PERMISSIONS:
+                        if ipap in plist:
+                            ipa["ipa_permissions"][ipap] = str(plist[ipap])
+            if info.filename.endswith("/embedded.mobileprovision"):
+                print("parsing", info.filename)
+                with ipa_zip.open(info) as mopro_file:
+                    mopro_content_info = asn1crypto.cms.ContentInfo.load(
+                        mopro_file.read()
+                    )
+                    mopro_payload_info = mopro_content_info['content']
+                    mopro_payload = mopro_payload_info['encap_content_info'][
+                        'content'
+                    ].native
+                    mopro = biplist.readPlistFromString(mopro_payload)
+                    # https://faq.altstore.io/distribute-your-apps/make-a-source#entitlements-array-of-strings
+                    for entitlement in mopro.get('Entitlements', {}).keys():
+                        if entitlement not in [
+                            "com.app.developer.team-identifier",
+                            'application-identifier'
+                        ]:
+                            ipa["ipa_entitlements"].add(entitlement)
     return ipa
 
 
@@ -592,8 +673,7 @@ def scan_repo_for_ipas(apkcache, repodir, knownapks):
 
         file_size = os.stat(ipa_path).st_size
         if file_size == 0:
-            raise FDroidException(_('{path} is zero size!')
-                                  .format(path=ipa_path))
+            raise FDroidException(_('{path} is zero size!').format(path=ipa_path))
 
         sha256 = common.sha256sum(ipa_path)
         ipa = apkcache.get(ipa_name, {})
@@ -1346,10 +1426,27 @@ def insert_localized_ios_app_metadata(apps_with_packages):
                     for metadata_file in (lang_dir).iterdir():
                         key = FASTLANE_IOS_MAP.get(metadata_file.name)
                         if key:
-                            fdroidserver.update._set_localized_text_entry(app, locale, key, metadata_file)
+                            fdroidserver.update._set_localized_text_entry(
+                                app, locale, key, metadata_file
+                            )
 
         screenshots = fdroidserver.update.discover_ios_screenshots(fastlane_dir)
         fdroidserver.update.copy_ios_screenshots_to_repo(screenshots, package_name)
+
+        # lookup icons, copy them and put them into app
+        icon_path = _get_ipa_icon(Path('build') / package_name)
+        icon_dest = Path('repo') / package_name / 'icon.png'  # for now just assume png
+        icon_stat = os.stat(icon_path)
+        app['iconv2'] = {
+            DEFAULT_LOCALE: {
+                'name': str(icon_dest).lstrip('repo'),
+                'sha256': common.sha256sum(icon_dest),
+                'size': icon_stat.st_size,
+            }
+        }
+        if not icon_dest.exists():
+            icon_dest.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy(icon_path, icon_dest)
 
 
 def scan_repo_files(apkcache, repodir, knownapks, use_date_from_file=False):
@@ -1546,6 +1643,60 @@ def _get_apk_icons_src(apkfile, icon_name):
     if icons_src.get('-1') is None and '160' in icons_src:
         icons_src['-1'] = icons_src['160']
     return icons_src
+
+
+def _get_ipa_icon(src_dir):
+    """Search source directory of an IPA project for the app icon."""
+    # parse app icon name from project config file
+    src_dir = Path(src_dir)
+    prj = next(src_dir.glob("**/project.pbxproj"), None)
+    if not prj or not prj.exists():
+        return
+
+    icon_name = _parse_from_pbxproj(prj, 'ASSETCATALOG_COMPILER_APPICON_NAME')
+    if not icon_name:
+        return
+
+    icon_dir = next(src_dir.glob(f'**/{icon_name}.appiconset'), None)
+    if not icon_dir:
+        return
+
+    with open(icon_dir / "Contents.json") as f:
+        cntnt = json.load(f)
+
+    fname = None
+    fsize = 0
+    for image in cntnt['images']:
+        s = float(image.get("size", "0x0").split("x")[0])
+        if image.get('scale') == "1x" and s > fsize and s <= 128:
+            fname = image['filename']
+            fsize = s
+
+    return str(icon_dir / fname)
+
+
+def _parse_from_pbxproj(pbxproj_path, key):
+    """Parse values from apple project files.
+
+    This is a naive regex based parser. Should this proofe to unreliable we
+    might want to consider using a dedicated pbxproj parser:
+    https://pypi.org/project/pbxproj/
+
+    e.g. when looking for key 'ASSETCATALOG_COMPILER_APPICON_NAME'
+    This function will extract 'MyIcon' from if the provided file
+    contains this line:
+
+        ASSETCATALOG_COMPILER_APPICON_NAME = MyIcon;
+
+    returns None if parsing for that value didn't yield anything
+    """
+    r = re.compile(f"\\s*{key}\\s*=\\s*(?P<value>[a-zA-Z0-9-_]+)\\s*;\\s*")
+    with open(pbxproj_path, 'r', encoding='utf-8') as f:
+        for line in f.readlines():
+            m = r.match(line)
+            if m:
+                return m.group("value")
+    return None
 
 
 def _sanitize_sdk_version(value):

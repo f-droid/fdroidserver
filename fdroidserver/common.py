@@ -4165,7 +4165,12 @@ def is_repo_file(filename, for_gpg_signing=False):
         b'index_unsigned.jar',
     ]
     if not for_gpg_signing:
-        ignore_files += [b'entry.json', b'index-v1.json', b'index-v2.json']
+        ignore_files += [
+            b'altstore-index.json',
+            b'entry.json',
+            b'index-v1.json',
+            b'index-v2.json',
+        ]
 
     return (
         os.path.isfile(filename)

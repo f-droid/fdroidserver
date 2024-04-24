@@ -1936,7 +1936,10 @@ class UpdateTest(unittest.TestCase):
             index['repo'][CATEGORIES_CONFIG_NAME],
         )
 
+
+class TestParseIpa(unittest.TestCase):
     def test_parse_ipa(self):
+        self.maxDiff = None
         try:
             import biplist  # Fedora does not have a biplist package
 
@@ -1959,6 +1962,27 @@ class UpdateTest(unittest.TestCase):
                 'size': 'fake_size',
                 'versionCode': 1000000000001,
                 'versionName': '1.0.1',
+                'ipa_DTPlatformVersion': '16.4',
+                'ipa_MinimumOSVersion': '15.0',
+                'ipa_entitlements': set(),
+                'ipa_permissions': {
+                    'NSCameraUsageDescription':
+                        'Please allow access to your '
+                        'camera, if you want to '
+                        'create photos or videos for '
+                        'direct sharing.',
+                    'NSMicrophoneUsageDescription':
+                        'Please allow access to '
+                        'your microphone, if you '
+                        'want to create videos '
+                        'for direct sharing.',
+                    'NSPhotoLibraryUsageDescription':
+                        'Please allow access to '
+                        'your photo library, if '
+                        'you want to share '
+                        'photos.',
+                },
+                'name': 'OnionShare',
             },
         )
 
@@ -2201,6 +2225,51 @@ class TestCopyIosScreenshotsToRepo(unittest.TestCase):
         )
 
 
+class TestGetIpaIcon(unittest.TestCase):
+    def test_get_ipa_icon(self):
+        self.maxDiff = None
+
+        with tempfile.TemporaryDirectory() as tmpdir:
+            tmpdir = Path(tmpdir)
+            (tmpdir / 'OnionBrowser.xcodeproj').mkdir()
+            with open(tmpdir / 'OnionBrowser.xcodeproj/project.pbxproj', "w") as f:
+                f.write("")
+            icondir = tmpdir / "fake_icon.appiconset"
+            icondir.mkdir()
+            with open(icondir / "Contents.json", "w", encoding="utf-8") as f:
+                f.write("""
+                    {"images": [
+                        {"scale": "2x", "size": "128x128", "filename": "nope"},
+                        {"scale": "1x", "size": "512x512", "filename": "nope"},
+                        {"scale": "1x", "size": "16x16", "filename": "nope"},
+                        {"scale": "1x", "size": "32x32", "filename": "yep"}
+                    ]}
+                """)
+
+            pfp = mock.Mock(return_value="fake_icon")
+            with mock.patch("fdroidserver.update._parse_from_pbxproj", pfp):
+                p = fdroidserver.update._get_ipa_icon(tmpdir)
+                self.assertEqual(str(icondir / "yep"), p)
+
+
+class TestParseFromPbxproj(unittest.TestCase):
+    def test_parse_from_pbxproj(self):
+        self.maxDiff = None
+
+        with tempfile.TemporaryDirectory() as tmpdir:
+            with open(Path(tmpdir) / "asdf.pbxproj", 'w', encoding="utf-8") as f:
+                f.write("""
+                    230jfaod=flc'
+                    ASSETCATALOG_COMPILER_APPICON_NAME = MyIcon;
+                    cm opa1c p[m
+                """)
+            v = fdroidserver.update._parse_from_pbxproj(
+                Path(tmpdir) / "asdf.pbxproj",
+                "ASSETCATALOG_COMPILER_APPICON_NAME"
+            )
+            self.assertEqual(v, "MyIcon")
+
+
 if __name__ == "__main__":
     os.chdir(os.path.dirname(__file__))
 
@@ -2221,4 +2290,5 @@ if __name__ == "__main__":
     newSuite.addTest(unittest.makeSuite(TestParseIosScreenShotName))
     newSuite.addTest(unittest.makeSuite(TestInsertLocalizedIosAppMetadata))
     newSuite.addTest(unittest.makeSuite(TestDiscoverIosScreenshots))
+    newSuite.addTest(unittest.makeSuite(TestGetIpaIcon))
     unittest.main(failfast=False)

@@ -829,6 +829,96 @@ class IndexTest(unittest.TestCase):
             index.add_mirrors_to_repodict('repo', repodict)
 
 
+class AltstoreIndexTest(unittest.TestCase):
+    def test_make_altstore(self):
+        self.maxDiff = None
+
+        apps = {
+            "app.fake": {
+                "AutoName": "Fake App",
+                "AuthorName": "Fake Author",
+                "iconv2": {"en_US": "fake_icon.png"},
+            }
+        }
+        apks = [
+            {
+                "packageName": "app.fake",
+                "apkName": "app.fake_123.ipa",
+                "versionName": "v123",
+                "added": datetime.datetime(2000, 2, 2, 2, 2, 2),
+                "size": 123,
+                "ipa_MinimumOSVersion": "10.0",
+                "ipa_DTPlatformVersion": "12.0",
+                "ipa_permissions": [
+                    "NSCameraUsageDescription",
+                    "NSDocumentsFolderUsageDescription",
+                ],
+                "ipa_entitlements": [
+                    "com.apple.developer.team-identifier",
+                    "com.apple.developer.web-browser",
+                    "keychain-access-groups",
+                ],
+            },
+        ]
+        config = {
+            "repo_icon": "fake_repo_icon.png",
+            "repo_name": "fake_repo",
+            "repo_url": "gopher://fake-repo.com/fdroid/repo",
+        }
+
+        with tempfile.TemporaryDirectory() as tmpdir, TmpCwd(tmpdir):
+            repodir = Path(tmpdir) / 'repo'
+            repodir.mkdir()
+
+            fdroidserver.index.make_altstore(
+                apps,
+                apks,
+                config,
+                repodir,
+                True,
+            )
+
+            with open(repodir / "altstore-index.json", 'r') as f:
+                self.assertDictEqual(
+                    {
+                        "apps": [
+                            {
+                                "appPermissions": {
+                                    "entitlements": [
+                                        'com.apple.developer.team-identifier',
+                                        'com.apple.developer.web-browser',
+                                        'keychain-access-groups',
+                                    ],
+                                    'privacy': [
+                                        'NSCameraUsageDescription',
+                                        'NSDocumentsFolderUsageDescription',
+                                    ],
+                                },
+                                'bundleIdentifier': 'app.fake',
+                                'developerName': 'Fake Author',
+                                'iconURL': 'gopher://fake-repo.com/fdroid/repo',
+                                'localizedDescription': '',
+                                'name': 'Fake App',
+                                'screenshots': [],
+                                'versions': [
+                                    {
+                                        'date': '2000-02-02T02:02:02',
+                                        'downloadURL': 'gopher://fake-repo.com/fdroid/repo/app.fake_123.ipa',
+                                        'maxOSVersion': '12.0',
+                                        'minOSVersion': '10.0',
+                                        'size': 123,
+                                        'version': 'v123',
+                                    }
+                                ],
+                            },
+                        ],
+                        'name': 'fake_repo',
+                        'news': [],
+                    },
+                    json.load(f),
+                )
+
+
 if __name__ == "__main__":
     os.chdir(os.path.dirname(__file__))
 
@@ -845,4 +935,5 @@ if __name__ == "__main__":
 
     newSuite = unittest.TestSuite()
     newSuite.addTest(unittest.makeSuite(IndexTest))
+    newSuite.addTest(unittest.makeSuite(AltstoreIndexTest))
     unittest.main(failfast=False)
