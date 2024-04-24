@@ -15,6 +15,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 * The `maven:` field is now always a string, with `yes` as a legacy special
   value.  It is no longer treated like a boolean in any case.
 
+## [2.2.2] - 2024-04-24
+
+### Added
+
+* Include sdkmanager as dep in setup.py for Homebrew package.
+  https://github.com/Homebrew/homebrew-core/pull/164510
+
 ## [2.2.1] - 2023-03-09
 
 ### Added
