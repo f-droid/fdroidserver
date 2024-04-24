@@ -869,6 +869,8 @@ class AltstoreIndexTest(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmpdir, TmpCwd(tmpdir):
             repodir = Path(tmpdir) / 'repo'
             repodir.mkdir()
+            with open(repodir / "fake.ipa", "w") as f:
+                f.write("")
 
             fdroidserver.index.make_altstore(
                 apps,
