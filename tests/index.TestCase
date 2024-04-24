@@ -701,8 +701,14 @@ class IndexTest(unittest.TestCase):
         app = apps[appid]
         metadata = index.package_metadata(app, 'repo')
         # files
-        self.assertEqual(36027, metadata['featureGraphic']['en-US']['size'])
-        self.assertEqual(1413, metadata['icon']['en-US']['size'])
+        self.assertEqual(
+            os.path.getsize(f'repo/{appid}/en-US/featureGraphic.png'),
+            metadata['featureGraphic']['en-US']['size'],
+        )
+        self.assertEqual(
+            os.path.getsize(f'repo/{appid}/en-US/icon.png'),
+            metadata['icon']['en-US']['size'],
+        )
         # localized strings
         self.assertEqual({'en-US': 'title'}, metadata['name'])
         self.assertEqual({'en-US': 'video'}, metadata['video'])
