@@ -98,8 +98,9 @@ def update_awsbucket(repo_section):
 
     Requires AWS credentials set in config.yml: awsaccesskeyid, awssecretkey
     """
-    logging.debug('Syncing "' + repo_section + '" to Amazon S3 bucket "'
-                  + config['awsbucket'] + '"')
+    logging.debug(
+        f'''Syncing "{repo_section}" to Amazon S3 bucket "{config['awsbucket']}"'''
+    )
 
     if common.set_command_in_config('s3cmd'):
         update_awsbucket_s3cmd(repo_section)
@@ -118,17 +119,20 @@ def update_awsbucket_s3cmd(repo_section):
     files are deleted from the server.  The last pass is the only pass
     to use a full MD5 checksum of all files to detect changes.
     """
-    logging.debug(_('Using s3cmd to sync with: {url}')
-                  .format(url=config['awsbucket']))
+    logging.debug(_('Using s3cmd to sync with: {url}').format(url=config['awsbucket']))
 
     if os.path.exists(USER_S3CFG):
         logging.info(_('Using "{path}" for configuring s3cmd.').format(path=USER_S3CFG))
         configfilename = USER_S3CFG
     else:
         fd = os.open(AUTO_S3CFG, os.O_CREAT | os.O_TRUNC | os.O_WRONLY, 0o600)
-        logging.debug(_('Creating "{path}" for configuring s3cmd.').format(path=AUTO_S3CFG))
+        logging.debug(
+            _('Creating "{path}" for configuring s3cmd.').format(path=AUTO_S3CFG)
+        )
         os.write(fd, '[default]\n'.encode('utf-8'))
-        os.write(fd, ('access_key = ' + config['awsaccesskeyid'] + '\n').encode('utf-8'))
+        os.write(
+            fd, ('access_key = ' + config['awsaccesskeyid'] + '\n').encode('utf-8')
+        )
         os.write(fd, ('secret_key = ' + config['awssecretkey'] + '\n').encode('utf-8'))
         os.close(fd)
         configfilename = AUTO_S3CFG
@@ -136,11 +140,11 @@ def update_awsbucket_s3cmd(repo_section):
     s3bucketurl = 's3://' + config['awsbucket']
     s3cmd = [config['s3cmd'], '--config=' + configfilename]
     if subprocess.call(s3cmd + ['info', s3bucketurl]) != 0:
-        logging.warning(_('Creating new S3 bucket: {url}')
-                        .format(url=s3bucketurl))
+        logging.warning(_('Creating new S3 bucket: {url}').format(url=s3bucketurl))
         if subprocess.call(s3cmd + ['mb', s3bucketurl]) != 0:
-            logging.error(_('Failed to create S3 bucket: {url}')
-                          .format(url=s3bucketurl))
+            logging.error(
+                _('Failed to create S3 bucket: {url}').format(url=s3bucketurl)
+            )
             raise FDroidException()
 
     s3cmd_sync = s3cmd + ['sync', '--acl-public']
@@ -167,8 +171,11 @@ def update_awsbucket_s3cmd(repo_section):
     if returncode != 0:
         raise FDroidException()
 
-    logging.debug(_('s3cmd sync indexes {path} to {url} and delete')
-                  .format(path=repo_section, url=s3url))
+    logging.debug(
+        _('s3cmd sync indexes {path} to {url} and delete').format(
+            path=repo_section, url=s3url
+        )
+    )
     s3cmd_sync.append('--delete-removed')
     s3cmd_sync.append('--delete-after')
     if options.no_checksum:
@@ -190,22 +197,28 @@ def update_awsbucket_libcloud(repo_section):
 
     Requires AWS credentials set in config.yml: awsaccesskeyid, awssecretkey
     """
-    logging.debug(_('using Apache libcloud to sync with {url}')
-                  .format(url=config['awsbucket']))
+    logging.debug(
+        _('using Apache libcloud to sync with {url}').format(url=config['awsbucket'])
+    )
 
     import libcloud.security
+
     libcloud.security.VERIFY_SSL_CERT = True
     from libcloud.storage.types import Provider, ContainerDoesNotExistError
     from libcloud.storage.providers import get_driver
 
     if not config.get('awsaccesskeyid') or not config.get('awssecretkey'):
         raise FDroidException(
-            _('To use awsbucket, awssecretkey and awsaccesskeyid must also be set in config.yml!'))
+            _(
+                'To use awsbucket, awssecretkey and awsaccesskeyid must also be set in config.yml!'
+            )
+        )
     awsbucket = config['awsbucket']
 
     if os.path.exists(USER_S3CFG):
-        raise FDroidException(_('"{path}" exists but s3cmd is not installed!')
-                              .format(path=USER_S3CFG))
+        raise FDroidException(
+            _('"{path}" exists but s3cmd is not installed!').format(path=USER_S3CFG)
+        )
 
     cls = get_driver(Provider.S3)
     driver = cls(config['awsaccesskeyid'], config['awssecretkey'])
@@ -213,8 +226,7 @@ def update_awsbucket_libcloud(repo_section):
         container = driver.get_container(container_name=awsbucket)
     except ContainerDoesNotExistError:
         container = driver.create_container(container_name=awsbucket)
-        logging.info(_('Created new container "{name}"')
-                     .format(name=container.name))
+        logging.info(_('Created new container "{name}"').format(name=container.name))
 
     upload_dir = 'fdroid/' + repo_section
     objs = dict()
@@ -256,13 +268,15 @@ def update_awsbucket_libcloud(repo_section):
                     extra['content_type'] = 'application/pgp-signature'
                 elif file_to_upload.endswith('.asc'):
                     extra['content_type'] = 'application/pgp-signature'
-                logging.info(' uploading ' + os.path.relpath(file_to_upload)
-                             + ' to s3://' + awsbucket + '/' + object_name)
+                path = os.path.relpath(file_to_upload)
+                logging.info(f' uploading {path} to s3://{awsbucket}/{object_name}')
                 with open(file_to_upload, 'rb') as iterator:
-                    obj = driver.upload_object_via_stream(iterator=iterator,
-                                                          container=container,
-                                                          object_name=object_name,
-                                                          extra=extra)
+                    obj = driver.upload_object_via_stream(
+                        iterator=iterator,
+                        container=container,
+                        object_name=object_name,
+                        extra=extra,
+                    )
     # delete the remnants in the bucket, they do not exist locally
     while objs:
         object_name, obj = objs.popitem()
@@ -305,9 +319,15 @@ def update_serverwebroot(serverwebroot, repo_section):
     if options and options.quiet:
         rsyncargs += ['--quiet']
     if options and options.identity_file:
-        rsyncargs += ['-e', 'ssh -oBatchMode=yes -oIdentitiesOnly=yes -i ' + options.identity_file]
+        rsyncargs += [
+            '-e',
+            'ssh -oBatchMode=yes -oIdentitiesOnly=yes -i ' + options.identity_file,
+        ]
     elif config and config.get('identity_file'):
-        rsyncargs += ['-e', 'ssh -oBatchMode=yes -oIdentitiesOnly=yes -i ' + config['identity_file']]
+        rsyncargs += [
+            '-e',
+            'ssh -oBatchMode=yes -oIdentitiesOnly=yes -i ' + config['identity_file'],
+        ]
     url = serverwebroot['url']
     logging.info('rsyncing ' + repo_section + ' to ' + url)
     excludes = _get_index_excludes(repo_section)
@@ -318,8 +338,7 @@ def update_serverwebroot(serverwebroot, repo_section):
     # upload "current version" symlinks if requested
     if config and config.get('make_current_version_link') and repo_section == 'repo':
         links_to_upload = []
-        for f in glob.glob('*.apk') \
-                + glob.glob('*.apk.asc') + glob.glob('*.apk.sig'):
+        for f in glob.glob('*.apk') + glob.glob('*.apk.asc') + glob.glob('*.apk.sig'):
             if os.path.islink(f):
                 links_to_upload.append(f)
         if len(links_to_upload) > 0:
@@ -367,9 +386,11 @@ def sync_from_localcopy(repo_section, local_copy_dir):
     logging.info('Syncing from local_copy_dir to this repo.')
     # trailing slashes have a meaning in rsync which is not needed here, so
     # make sure both paths have exactly one trailing slash
-    common.local_rsync(options,
-                       os.path.join(local_copy_dir, repo_section).rstrip('/') + '/',
-                       repo_section.rstrip('/') + '/')
+    common.local_rsync(
+        options,
+        os.path.join(local_copy_dir, repo_section).rstrip('/') + '/',
+        repo_section.rstrip('/') + '/',
+    )
 
     offline_copy = os.path.join(local_copy_dir, BINARY_TRANSPARENCY_DIR)
     if os.path.exists(os.path.join(offline_copy, '.git')):
@@ -418,9 +439,11 @@ def update_servergitmirrors(servergitmirrors, repo_section):
     """
     import git
     from clint.textui import progress
-    if config.get('local_copy_dir') \
-       and not config.get('sync_from_local_copy_dir'):
-        logging.debug(_('Offline machine, skipping git mirror generation until `fdroid deploy`'))
+
+    if config.get('local_copy_dir') and not config.get('sync_from_local_copy_dir'):
+        logging.debug(
+            _('Offline machine, skipping git mirror generation until `fdroid deploy`')
+        )
         return
 
     # right now we support only 'repo' git-mirroring
@@ -437,19 +460,25 @@ def update_servergitmirrors(servergitmirrors, repo_section):
         dotgit_size = _get_size(dotgit)
         dotgit_over_limit = dotgit_size > config['git_mirror_size_limit']
         if os.path.isdir(dotgit) and dotgit_over_limit:
-            logging.warning(_('Deleting git-mirror history, repo is too big ({size} max {limit})')
-                            .format(size=dotgit_size, limit=config['git_mirror_size_limit']))
+            logging.warning(
+                _(
+                    'Deleting git-mirror history, repo is too big ({size} max {limit})'
+                ).format(size=dotgit_size, limit=config['git_mirror_size_limit'])
+            )
             shutil.rmtree(dotgit)
         if options.no_keep_git_mirror_archive and dotgit_over_limit:
-            logging.warning(_('Deleting archive, repo is too big ({size} max {limit})')
-                            .format(size=dotgit_size, limit=config['git_mirror_size_limit']))
+            logging.warning(
+                _('Deleting archive, repo is too big ({size} max {limit})').format(
+                    size=dotgit_size, limit=config['git_mirror_size_limit']
+                )
+            )
             archive_path = os.path.join(git_mirror_path, 'fdroid', 'archive')
             shutil.rmtree(archive_path, ignore_errors=True)
 
         # rsync is very particular about trailing slashes
-        common.local_rsync(options,
-                           repo_section.rstrip('/') + '/',
-                           git_repodir.rstrip('/') + '/')
+        common.local_rsync(
+            options, repo_section.rstrip('/') + '/', git_repodir.rstrip('/') + '/'
+        )
 
         # use custom SSH command if identity_file specified
         ssh_cmd = 'ssh -oBatchMode=yes'
@@ -487,6 +516,7 @@ def update_servergitmirrors(servergitmirrors, repo_section):
                 def update(self, op_code, current, maximum=None, message=None):
                     if isinstance(maximum, float):
                         progressbar.show(current, maximum)
+
             progress = MyProgressPrinter()
         else:
             progress = None
@@ -536,16 +566,23 @@ def update_servergitmirrors(servergitmirrors, repo_section):
                     GIT_BRANCH, force=True, set_upstream=True, progress=progress
                 )
                 for pushinfo in pushinfos:
-                    if pushinfo.flags & (git.remote.PushInfo.ERROR
-                                         | git.remote.PushInfo.REJECTED
-                                         | git.remote.PushInfo.REMOTE_FAILURE
-                                         | git.remote.PushInfo.REMOTE_REJECTED):
+                    if pushinfo.flags & (
+                        git.remote.PushInfo.ERROR
+                        | git.remote.PushInfo.REJECTED
+                        | git.remote.PushInfo.REMOTE_FAILURE
+                        | git.remote.PushInfo.REMOTE_REJECTED
+                    ):
                         # Show potentially useful messages from git remote
                         for line in progress.other_lines:
                             if line.startswith('remote:'):
                                 logging.debug(line)
-                        raise FDroidException(remote.url + ' push failed: ' + str(pushinfo.flags)
-                                              + ' ' + pushinfo.summary)
+                        raise FDroidException(
+                            '{url} push failed: {flags} {summary}'.format(
+                                url=remote.url,
+                                flags=pushinfo.flags,
+                                summary=pushinfo.summary,
+                            )
+                        )
                     else:
                         logging.debug(remote.url + ': ' + pushinfo.summary)
 
@@ -555,6 +592,7 @@ def update_servergitmirrors(servergitmirrors, repo_section):
 
 def upload_to_android_observatory(repo_section):
     import requests
+
     requests  # stop unused import warning
 
     if options.verbose:
@@ -576,9 +614,12 @@ def upload_apk_to_android_observatory(path):
     from lxml.html import fromstring
 
     apkfilename = os.path.basename(path)
-    r = requests.post('https://androidobservatory.org/',
-                      data={'q': common.sha256sum(path), 'searchby': 'hash'},
-                      headers=net.HEADERS, timeout=300)
+    r = requests.post(
+        'https://androidobservatory.org/',
+        data={'q': common.sha256sum(path), 'searchby': 'hash'},
+        headers=net.HEADERS,
+        timeout=300,
+    )
     if r.status_code == 200:
         # from now on XPath will be used to retrieve the message in the HTML
         # androidobservatory doesn't have a nice API to talk with
@@ -595,22 +636,30 @@ def upload_apk_to_android_observatory(path):
 
         page = 'https://androidobservatory.org'
         if href:
-            message = (_('Found {apkfilename} at {url}')
-                       .format(apkfilename=apkfilename, url=(page + href)))
+            message = _('Found {apkfilename} at {url}').format(
+                apkfilename=apkfilename, url=(page + href)
+            )
             logging.debug(message)
             return
 
     # upload the file with a post request
-    logging.info(_('Uploading {apkfilename} to androidobservatory.org')
-                 .format(apkfilename=apkfilename))
-    r = requests.post('https://androidobservatory.org/upload',
-                      files={'apk': (apkfilename, open(path, 'rb'))},
-                      headers=net.HEADERS,
-                      allow_redirects=False, timeout=300)
+    logging.info(
+        _('Uploading {apkfilename} to androidobservatory.org').format(
+            apkfilename=apkfilename
+        )
+    )
+    r = requests.post(
+        'https://androidobservatory.org/upload',
+        files={'apk': (apkfilename, open(path, 'rb'))},
+        headers=net.HEADERS,
+        allow_redirects=False,
+        timeout=300,
+    )
 
 
 def upload_to_virustotal(repo_section, virustotal_apikey):
     import requests
+
     requests  # stop unused import warning
 
     if repo_section == 'repo':
@@ -621,44 +670,47 @@ def upload_to_virustotal(repo_section, virustotal_apikey):
             with open(os.path.join(repo_section, 'index-v1.json')) as fp:
                 data = json.load(fp)
         else:
-            data, _ignored, _ignored = index.get_index_from_jar(os.path.join(repo_section, 'index-v1.jar'))
+            local_jar = os.path.join(repo_section, 'index-v1.jar')
+            data, _ignored, _ignored = index.get_index_from_jar(local_jar)
 
         for packageName, packages in data['packages'].items():
             for package in packages:
                 upload_apk_to_virustotal(virustotal_apikey, **package)
 
 
-def upload_apk_to_virustotal(virustotal_apikey, packageName, apkName, hash,
-                             versionCode, **kwargs):
+def upload_apk_to_virustotal(
+    virustotal_apikey, packageName, apkName, hash, versionCode, **kwargs
+):
     import requests
 
     logging.getLogger("urllib3").setLevel(logging.WARNING)
     logging.getLogger("requests").setLevel(logging.WARNING)
 
-    outputfilename = os.path.join('virustotal',
-                                  packageName + '_' + str(versionCode)
-                                  + '_' + hash + '.json')
+    outputfilename = os.path.join(
+        'virustotal', packageName + '_' + str(versionCode) + '_' + hash + '.json'
+    )
     if os.path.exists(outputfilename):
         logging.debug(apkName + ' results are in ' + outputfilename)
         return outputfilename
     repofilename = os.path.join('repo', apkName)
     logging.info('Checking if ' + repofilename + ' is on virustotal')
 
-    headers = {
-        "User-Agent": "F-Droid"
-    }
+    headers = {"User-Agent": "F-Droid"}
     if 'headers' in kwargs:
         for k, v in kwargs['headers'].items():
             headers[k] = v
 
-    data = {
+    apikey = {
         'apikey': virustotal_apikey,
         'resource': hash,
     }
     needs_file_upload = False
     while True:
-        r = requests.get('https://www.virustotal.com/vtapi/v2/file/report?'
-                         + urllib.parse.urlencode(data), headers=headers, timeout=300)
+        report_url = (
+            'https://www.virustotal.com/vtapi/v2/file/report?'
+            + urllib.parse.urlencode(apikey)
+        )
+        r = requests.get(report_url, headers=headers, timeout=300)
         if r.status_code == 200:
             response = r.json()
             if response['response_code'] == 0:
@@ -673,9 +725,12 @@ def upload_apk_to_virustotal(virustotal_apikey, packageName, apkName, hash,
                     json.dump(response, fp, indent=2, sort_keys=True)
 
             if response.get('positives', 0) > 0:
-                logging.warning(repofilename + ' has been flagged by virustotal '
-                                + str(response['positives']) + ' times:'
-                                + '\n\t' + response['permalink'])
+                logging.warning(
+                    _('{path} has been flagged by virustotal {count} times:').format(
+                        path=repofilename, count=response['positives']
+                    ),
+                    +'\n\t' + response['permalink'],
+                )
             break
         if r.status_code == 204:
             logging.warning(_('virustotal.com is rate limiting, waiting to retry...'))
@@ -687,32 +742,48 @@ def upload_apk_to_virustotal(virustotal_apikey, packageName, apkName, hash,
         size = os.path.getsize(repofilename)
         if size > 200000000:
             # VirusTotal API 200MB hard limit
-            logging.error(_('{path} more than 200MB, manually upload: {url}')
-                          .format(path=repofilename, url=manual_url))
+            logging.error(
+                _('{path} more than 200MB, manually upload: {url}').format(
+                    path=repofilename, url=manual_url
+                )
+            )
         elif size > 32000000:
             # VirusTotal API requires fetching a URL to upload bigger files
-            r = requests.get('https://www.virustotal.com/vtapi/v2/file/scan/upload_url?'
-                             + urllib.parse.urlencode(data), headers=headers, timeout=300)
+            query_url = (
+                'https://www.virustotal.com/vtapi/v2/file/scan/upload_url?'
+                + urllib.parse.urlencode(apikey)
+            )
+            r = requests.get(query_url, headers=headers, timeout=300)
             if r.status_code == 200:
                 upload_url = r.json().get('upload_url')
             elif r.status_code == 403:
-                logging.error(_('VirusTotal API key cannot upload files larger than 32MB, '
-                                + 'use {url} to upload {path}.')
-                              .format(path=repofilename, url=manual_url))
+                logging.error(
+                    _(
+                        'VirusTotal API key cannot upload files larger than 32MB, '
+                        + 'use {url} to upload {path}.'
+                    ).format(path=repofilename, url=manual_url)
+                )
             else:
                 r.raise_for_status()
         else:
             upload_url = 'https://www.virustotal.com/vtapi/v2/file/scan'
 
     if upload_url:
-        logging.info(_('Uploading {apkfilename} to virustotal')
-                     .format(apkfilename=repofilename))
-        files = {
-            'file': (apkName, open(repofilename, 'rb'))
-        }
-        r = requests.post(upload_url, data=data, headers=headers, files=files, timeout=300)
-        logging.debug(_('If this upload fails, try manually uploading to {url}')
-                      .format(url=manual_url))
+        logging.info(
+            _('Uploading {apkfilename} to virustotal').format(apkfilename=repofilename)
+        )
+        r = requests.post(
+            upload_url,
+            data=apikey,
+            headers=headers,
+            files={'file': (apkName, open(repofilename, 'rb'))},
+            timeout=300,
+        )
+        logging.debug(
+            _('If this upload fails, try manually uploading to {url}').format(
+                url=manual_url
+            )
+        )
         r.raise_for_status()
         response = r.json()
         logging.info(response['verbose_msg'] + " " + response['permalink'])
@@ -737,8 +808,7 @@ def push_binary_transparency(git_repo_path, git_remote):
     """
     import git
 
-    logging.info(_('Pushing binary transparency log to {url}')
-                 .format(url=git_remote))
+    logging.info(_('Pushing binary transparency log to {url}').format(url=git_remote))
 
     if os.path.isdir(os.path.dirname(git_remote)):
         # from offline machine to thumbdrive
@@ -775,14 +845,29 @@ def main():
 
     parser = ArgumentParser()
     common.setup_global_opts(parser)
-    parser.add_argument("-i", "--identity-file", default=None,
-                        help=_("Specify an identity file to provide to SSH for rsyncing"))
-    parser.add_argument("--local-copy-dir", default=None,
-                        help=_("Specify a local folder to sync the repo to"))
-    parser.add_argument("--no-checksum", action="store_true", default=False,
-                        help=_("Don't use rsync checksums"))
-    parser.add_argument("--no-keep-git-mirror-archive", action="store_true", default=False,
-                        help=_("If a git mirror gets to big, allow the archive to be deleted"))
+    parser.add_argument(
+        "-i",
+        "--identity-file",
+        default=None,
+        help=_("Specify an identity file to provide to SSH for rsyncing"),
+    )
+    parser.add_argument(
+        "--local-copy-dir",
+        default=None,
+        help=_("Specify a local folder to sync the repo to"),
+    )
+    parser.add_argument(
+        "--no-checksum",
+        action="store_true",
+        default=False,
+        help=_("Don't use rsync checksums"),
+    )
+    parser.add_argument(
+        "--no-keep-git-mirror-archive",
+        action="store_true",
+        default=False,
+        help=_("If a git mirror gets to big, allow the archive to be deleted"),
+    )
     options = parser.parse_args()
     config = common.read_config(options)
 
@@ -803,17 +888,23 @@ def main():
             logging.error(_('local_copy_dir must be directory, not a file!'))
             sys.exit(1)
         if not os.path.exists(os.path.dirname(fdroiddir)):
-            logging.error(_('The root dir for local_copy_dir "{path}" does not exist!')
-                          .format(path=os.path.dirname(fdroiddir)))
+            logging.error(
+                _('The root dir for local_copy_dir "{path}" does not exist!').format(
+                    path=os.path.dirname(fdroiddir)
+                )
+            )
             sys.exit(1)
         if not os.path.isabs(fdroiddir):
             logging.error(_('local_copy_dir must be an absolute path!'))
             sys.exit(1)
         repobase = os.path.basename(fdroiddir)
         if standardwebroot and repobase != 'fdroid':
-            logging.error(_('local_copy_dir does not end with "fdroid", '
-                            + 'perhaps you meant: "{path}"')
-                          .format(path=fdroiddir + '/fdroid'))
+            logging.error(
+                _(
+                    'local_copy_dir does not end with "fdroid", '
+                    + 'perhaps you meant: "{path}"'
+                ).format(path=fdroiddir + '/fdroid')
+            )
             sys.exit(1)
         if local_copy_dir[-1] != '/':
             local_copy_dir += '/'
@@ -821,16 +912,20 @@ def main():
         if not os.path.exists(fdroiddir):
             os.mkdir(fdroiddir)
 
-    if not config.get('awsbucket') \
-            and not config.get('serverwebroot') \
-            and not config.get('servergitmirrors') \
-            and not config.get('androidobservatory') \
-            and not config.get('binary_transparency_remote') \
-            and not config.get('virustotal_apikey') \
-            and local_copy_dir is None:
-        logging.warning(_('No option set! Edit your config.yml to set at least one of these:')
-                        + '\nserverwebroot, servergitmirrors, local_copy_dir, awsbucket, '
-                        + 'virustotal_apikey, androidobservatory, or binary_transparency_remote')
+    if (
+        not config.get('awsbucket')
+        and not config.get('serverwebroot')
+        and not config.get('servergitmirrors')
+        and not config.get('androidobservatory')
+        and not config.get('binary_transparency_remote')
+        and not config.get('virustotal_apikey')
+        and local_copy_dir is None
+    ):
+        logging.warning(
+            _('No option set! Edit your config.yml to set at least one of these:')
+            + '\nserverwebroot, servergitmirrors, local_copy_dir, awsbucket, '
+            + 'virustotal_apikey, androidobservatory, or binary_transparency_remote'
+        )
         sys.exit(1)
 
     repo_sections = ['repo']
@@ -841,8 +936,10 @@ def main():
     if config['per_app_repos']:
         repo_sections += common.get_per_app_repos()
 
-    if os.path.isdir('unsigned') or (local_copy_dir is not None
-                                     and os.path.isdir(os.path.join(local_copy_dir, 'unsigned'))):
+    if os.path.isdir('unsigned') or (
+        local_copy_dir is not None
+        and os.path.isdir(os.path.join(local_copy_dir, 'unsigned'))
+    ):
         repo_sections.append('unsigned')
 
     for repo_section in repo_sections:
@@ -867,8 +964,7 @@ def main():
 
     binary_transparency_remote = config.get('binary_transparency_remote')
     if binary_transparency_remote:
-        push_binary_transparency(BINARY_TRANSPARENCY_DIR,
-                                 binary_transparency_remote)
+        push_binary_transparency(BINARY_TRANSPARENCY_DIR, binary_transparency_remote)
 
     common.write_status_json(common.setup_status_output(start_timestamp))
     sys.exit(0)

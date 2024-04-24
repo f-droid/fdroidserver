@@ -38,7 +38,6 @@ force-exclude = '''(
   | fdroidserver/build\.py
   | fdroidserver/checkupdates\.py
   | fdroidserver/common\.py
-  | fdroidserver/deploy\.py
   | fdroidserver/import_subcommand\.py
   | fdroidserver/index\.py
   | fdroidserver/metadata\.py
