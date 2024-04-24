@@ -2654,6 +2654,13 @@ def _androguard_logging_level(level=logging.ERROR):
     ):
         logging.getLogger(name).setLevel(level)
 
+    # some parts of androguard 4.x use loguru instead of logging
+    try:
+        from loguru import logger
+        logger.remove()
+    except ImportError:
+        pass
+
 
 def get_androguard_APK(apkfile):
     try:
