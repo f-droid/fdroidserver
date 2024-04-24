@@ -1766,6 +1766,10 @@ def make_altstore(apps, apks, config, repodir, pretty=False):
     https://faq.altstore.io/distribute-your-apps/make-a-source
     https://faq.altstore.io/distribute-your-apps/updating-apps
     """
+    if not any(Path('repo').glob('*.ipa')):
+        # no IPA files present in repo, nothing to do here, exiting early
+        return
+
     indent = 2 if pretty else None
     # for now alt-store support is english only
     for lang in ['en']:
