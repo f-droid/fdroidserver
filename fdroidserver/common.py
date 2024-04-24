@@ -2629,12 +2629,39 @@ def get_file_extension(filename):
     return os.path.splitext(filename)[1].lower()[1:]
 
 
+def _androguard_logging_level(level=logging.ERROR):
+    """Tames androguard's default debug output.
+
+    There should be no debug output when the functions are being used
+    via the API.  Otherwise, the output is controlled by the --verbose
+    flag.
+
+    To get coverage across the full range of androguard >= 3.3.5, this
+    includes all known logger names that are relevant.  So some of
+    these names might not be present in the version of androguard
+    currently in use.
+
+    """
+    if options and options.verbose:
+        level = logging.WARNING
+
+    for name in (
+        'androguard.apk',
+        'androguard.axml',
+        'androguard.core.api_specific_resources',
+        'androguard.core.apk',
+        'androguard.core.axml',
+    ):
+        logging.getLogger(name).setLevel(level)
+
+
 def get_androguard_APK(apkfile):
     try:
         # these were moved in androguard 4.0
         from androguard.core.apk import APK
     except ImportError:
         from androguard.core.bytecodes.apk import APK
+    _androguard_logging_level()
 
     return APK(apkfile)
 
@@ -2681,6 +2708,8 @@ def is_debuggable_or_testOnly(apkfile):
         from androguard.core.axml import AXMLParser, format_value, START_TAG
     except ImportError:
         from androguard.core.bytecodes.axml import AXMLParser, format_value, START_TAG
+    _androguard_logging_level()
+
     with ZipFile(apkfile) as apk:
         with apk.open('AndroidManifest.xml') as manifest:
             axml = AXMLParser(manifest.read())
@@ -2753,6 +2782,7 @@ def get_apk_id_androguard(apkfile):
         from androguard.core.axml import AXMLParser, format_value, START_TAG, END_TAG, TEXT, END_DOCUMENT
     except ImportError:
         from androguard.core.bytecodes.axml import AXMLParser, format_value, START_TAG, END_TAG, TEXT, END_DOCUMENT
+    _androguard_logging_level()
 
     appid = None
     versionCode = None

@@ -82,9 +82,6 @@ class UpdateTest(unittest.TestCase):
 
     def setUp(self):
         logging.basicConfig(level=logging.INFO)
-        logging.getLogger('androguard.apk').setLevel(logging.WARNING)
-        logging.getLogger('androguard.axml').setLevel(logging.INFO)
-        logging.getLogger('androguard.core.api_specific_resources').setLevel(logging.INFO)
         from PIL import PngImagePlugin
 
         logging.getLogger(PngImagePlugin.__name__).setLevel(logging.INFO)
