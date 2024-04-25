@@ -49,8 +49,6 @@ class BuildTest(unittest.TestCase):
 
     def setUp(self):
         logging.basicConfig(level=logging.DEBUG)
-        logger = logging.getLogger('androguard.axml')
-        logger.setLevel(logging.INFO)  # tame the axml debug messages
         self.basedir = os.path.join(localmodule, 'tests')
         os.chdir(self.basedir)
         fdroidserver.common.config = None

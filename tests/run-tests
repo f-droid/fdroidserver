@@ -8,7 +8,9 @@ echo_header() {
 
 get_fdroid_apk_filename() {
     if [ -z $aapt ]; then
-        python3 -c "from androguard.core.bytecodes.apk import APK; a=APK('$1'); print(a.package+'_'+a.get_androidversion_code()+'.apk')"
+        appid=$(androguard apkid "$1" | sed -En 's/ +"([a-z][^"]+)",$/\1/ip')
+        versionCode=$(androguard apkid "$1" | sed -En 's/ +"([0-9]+)",$/\1/p')
+        echo "${appid}_${versionCode}.apk"
     else
         $aapt dump badging "$1" | sed -n "s,^package: name='\(.*\)' versionCode='\([0-9][0-9]*\)' .*,\1_\2.apk,p"
     fi

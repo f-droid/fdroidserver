@@ -1722,8 +1722,7 @@ def _sanitize_sdk_version(value):
 
 def scan_apk_androguard(apk, apkfile):
     try:
-        from androguard.core.bytecodes.apk import APK
-        apkobject = APK(apkfile)
+        apkobject = common.get_androguard_APK(apkfile)
         if apkobject.is_valid_APK():
             arsc = apkobject.get_android_resources()
         else:
@@ -1739,7 +1738,7 @@ def scan_apk_androguard(apk, apkfile):
                 logging.error(_("Failed to get APK information, skipping {path}")
                               .format(path=apkfile))
             raise BuildException(_("Invalid APK"))
-    except (FileNotFoundError, zipfile.BadZipFile) as e:
+    except (FileNotFoundError, ValueError, zipfile.BadZipFile) as e:
         logging.error(_("Could not open APK {path} for analysis: ").format(path=apkfile)
                       + str(e))
         raise BuildException(_("Invalid APK")) from e
@@ -1779,7 +1778,7 @@ def scan_apk_androguard(apk, apkfile):
     if maxSdkVersion is not None:
         apk['maxSdkVersion'] = maxSdkVersion
 
-    icon_id_str = apkobject.get_element("application", "icon")
+    icon_id_str = apkobject.get_attribute_value("application", "icon")
     if icon_id_str:
         try:
             icon_id = int(icon_id_str.replace("@", "0x"), 16)
@@ -2581,7 +2580,6 @@ def main():
     config = common.read_config(options)
     common.setup_status_output(start_timestamp)
 
-    common.use_androguard()
     if not (('jarsigner' in config or 'apksigner' in config)
             and 'keytool' in config):
         raise FDroidException(_('Java JDK not found! Install in standard location or set java_paths!'))
