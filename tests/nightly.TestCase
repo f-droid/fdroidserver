@@ -70,7 +70,10 @@ class NightlyTest(unittest.TestCase):
 
     def tearDown(self):
         self.tempdir.cleanup()
-        os.rmdir(self.testroot)
+        try:
+            os.rmdir(self.testroot)
+        except OSError:  # other test modules might have left stuff around
+            pass
 
     def _copy_test_debug_keystore(self):
         self.dot_android.mkdir()

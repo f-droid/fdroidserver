@@ -18,6 +18,9 @@
 import os
 import sys
 import tempfile
+import unittest
+
+from pathlib import Path
 
 
 class TmpCwd:
@@ -60,3 +63,12 @@ def mkdtemp():
         return tempfile.TemporaryDirectory()
     else:
         return tempfile.TemporaryDirectory(ignore_cleanup_errors=True)
+
+
+def mkdir_testfiles(localmodule, test):
+    """Keep the test files in a labeled test dir for easy reference"""
+    testroot = Path(localmodule) / '.testfiles'
+    testroot.mkdir(exist_ok=True)
+    testdir = testroot / unittest.TestCase.id(test)
+    testdir.mkdir(exist_ok=True)
+    return tempfile.mkdtemp(dir=testdir)
