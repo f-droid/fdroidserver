@@ -3161,10 +3161,7 @@ def signer_fingerprint_short(cert_encoded):
 
 
 def signer_fingerprint(cert_encoded):
-    """Obtain sha256 signing-key fingerprint for pkcs7 DER certificate.
-
-    Extracts hexadecimal sha256 signing-key fingerprint string
-    for a given pkcs7 signature.
+    """Return SHA-256 signer fingerprint for PKCS#7 DER-encoded signature.
 
     Parameters
     ----------
@@ -3172,60 +3169,113 @@ def signer_fingerprint(cert_encoded):
 
     Returns
     -------
-    shortened signature fingerprint.
+    Standard SHA-256 signer fingerprint.
+
     """
     return hashlib.sha256(cert_encoded).hexdigest()
 
 
 def get_first_signer_certificate(apkpath):
-    """Get the first signing certificate from the APK, DER-encoded."""
+    """Get the first signing certificate from the APK, DER-encoded.
+
+    JAR and APK Signatures allow for multiple signers, though it is
+    rarely used, and this is poorly documented.  So this method only
+    fetches the first certificate, and errors out if there are more.
+
+    Starting with targetSdkVersion 30, APK v2 Signatures are required.
+    https://developer.android.com/about/versions/11/behavior-changes-11#minimum-signature-scheme
+
+    When a APK v2+ signature is present, the JAR signature is not
+    verified.  The verifier parses the signers from the v2+ signature
+    and does not seem to look at the JAR signature.
+    https://source.android.com/docs/security/features/apksigning/v2#apk-signature-scheme-v2-block
+    https://android.googlesource.com/platform/tools/apksig/+/refs/tags/android-13.0.0_r3/src/main/java/com/android/apksig/ApkVerifier.java#270
+
+    apksigner checks that the signers from all the APK signatures match:
+    https://android.googlesource.com/platform/tools/apksig/+/refs/tags/android-13.0.0_r3/src/main/java/com/android/apksig/ApkVerifier.java#383
+
+    apksigner verifies each signer's signature block file
+    .(RSA|DSA|EC) against the corresponding signature file .SF
+    https://android.googlesource.com/platform/tools/apksig/+/refs/tags/android-13.0.0_r3/src/main/java/com/android/apksig/internal/apk/v1/V1SchemeVerifier.java#280
+
+    NoOverwriteDict is a workaround for:
+    https://github.com/androguard/androguard/issues/1030
+
+    Lots more discusion here:
+    https://gitlab.com/fdroid/fdroidserver/-/issues/1128
+
+    """
 
     class NoOverwriteDict(dict):
         def __setitem__(self, k, v):
             if k not in self:
                 super().__setitem__(k, v)
 
-    cert_encoded_v1 = None
-    cert_encoded_v2 = None
-    cert_encoded_v3 = None
-    with zipfile.ZipFile(apkpath, 'r') as apk:
-        certs_v1 = [n for n in apk.namelist() if SIGNATURE_BLOCK_FILE_REGEX.match(n)]
-        if len(certs_v1) > 1:
-            logging.error(_("Found multiple JAR Signature Block Files in {path}").format(path=apkpath))
-            return None
-        elif len(certs_v1) == 1:
-            cert_encoded_v1 = get_certificate(apk.read(certs_v1[0]))
-
+    cert_encoded = None
+    found_certs = []
     apkobject = get_androguard_APK(apkpath)
     apkobject._v2_blocks = NoOverwriteDict()
-    certs_v2 = apkobject.get_certificates_der_v2()
-    if len(certs_v2) > 0:
-        logging.debug(_('Using APK Signature v2'))
-        cert_encoded_v2 = certs_v2[0]
-
     certs_v3 = apkobject.get_certificates_der_v3()
-    if len(certs_v3) > 0:
-        logging.debug(_('Using APK Signature v3'))
-        cert_encoded_v3 = certs_v3[0]
+    if certs_v3:
+        cert_v3 = certs_v3[0]
+        found_certs.append(cert_v3)
+        if not cert_encoded:
+            logging.debug(_('Using APK Signature v3'))
+            cert_encoded = cert_v3
 
-    cert_encoded = cert_encoded_v3 or cert_encoded_v2 or cert_encoded_v1
+    certs_v2 = apkobject.get_certificates_der_v2()
+    if certs_v2:
+        cert_v2 = certs_v2[0]
+        found_certs.append(cert_v2)
+        if not cert_encoded:
+            logging.debug(_('Using APK Signature v2'))
+            cert_encoded = cert_v2
+
+    if get_min_sdk_version(apkobject) < 24 or (
+        not (certs_v3 or certs_v2) and get_effective_target_sdk_version(apkobject) < 30
+    ):
+        with zipfile.ZipFile(apkpath, 'r') as apk:
+            cert_files = [
+                n for n in apk.namelist() if SIGNATURE_BLOCK_FILE_REGEX.match(n)
+            ]
+            if len(cert_files) > 1:
+                logging.error(
+                    _("Found multiple JAR Signature Block Files in {path}").format(
+                        path=apkpath
+                    )
+                )
+                return
+            elif len(cert_files) == 1:
+                signature_block_file = cert_files[0]
+                signature_file = (
+                    cert_files[0][: signature_block_file.rindex('.')] + '.SF'
+                )
+                cert_v1 = get_certificate(
+                    apk.read(signature_block_file),
+                    apk.read(signature_file),
+                )
+                found_certs.append(cert_v1)
+                if not cert_encoded:
+                    logging.debug(_('Using JAR Signature'))
+                    cert_encoded = cert_v1
+
     if not cert_encoded:
         logging.error(_("No signing certificates found in {path}").format(path=apkpath))
-        return None
-    if (
-        (cert_encoded_v2 and cert_encoded_v2 != cert_encoded)
-        or (cert_encoded_v1 and cert_encoded_v1 != cert_encoded)
-    ):
-        logging.error(_("Different certificates found in {path}").format(path=apkpath))
-        return None
+        return
+
+    if not all(cert == found_certs[0] for cert in found_certs):
+        logging.error(
+            _("APK signatures have different certificates in {path}:").format(
+                path=apkpath
+            )
+        )
+        return
+
     return cert_encoded
 
 
 def apk_signer_fingerprint(apk_path):
-    """Obtain sha256 signing-key fingerprint for APK.
-
-    Extracts hexadecimal sha256 signing-key fingerprint string
-    for a given APK.
+    """Get SHA-256 fingerprint string for the first signer from given APK.
 
     Parameters
     ----------
@@ -3234,7 +3284,8 @@ def apk_signer_fingerprint(apk_path):
 
     Returns
     -------
-    signature fingerprint
+    Standard SHA-256 signer fingerprint
+
     """
     cert_encoded = get_first_signer_certificate(apk_path)
     if not cert_encoded:
@@ -3243,10 +3294,7 @@ def apk_signer_fingerprint(apk_path):
 
 
 def apk_signer_fingerprint_short(apk_path):
-    """Obtain shortened sha256 signing-key fingerprint for APK.
-
-    Extracts the first 7 hexadecimal digits of sha256 signing-key fingerprint
-    for a given pkcs7 APK.
+    """Get 7 hex digit SHA-256 fingerprint string for the first signer from given APK.
 
     Parameters
     ----------
@@ -3255,7 +3303,8 @@ def apk_signer_fingerprint_short(apk_path):
 
     Returns
     -------
-    shortened signing-key fingerprint
+    first 7 chars of the standard SHA-256 signer fingerprint
+
     """
     return apk_signer_fingerprint(apk_path)[:7]
 
@@ -3474,7 +3523,7 @@ def apk_extract_signatures(apkpath, outdir):
 
 
 def get_min_sdk_version(apk):
-    """Wrap the androguard function to always return and int.
+    """Wrap the androguard function to always return an integer.
 
     Fall back to 1 if we can't get a valid minsdk version.
 
@@ -3485,12 +3534,30 @@ def get_min_sdk_version(apk):
 
     Returns
     -------
-    minsdk: int
+    minSdkVersion: int
     """
     try:
         return int(apk.get_min_sdk_version())
     except TypeError:
         return 1
+
+
+def get_effective_target_sdk_version(apk):
+    """Wrap the androguard function to always return an integer.
+
+    Parameters
+    ----------
+    apk
+        androguard APK object
+
+    Returns
+    -------
+    targetSdkVersion: int
+    """
+    try:
+        return int(apk.get_effective_target_sdk_version())
+    except TypeError:
+        return get_min_sdk_version(apk)
 
 
 def get_apksigner_smartcardoptions(smartcardoptions):
@@ -3904,14 +3971,33 @@ def get_cert_fingerprint(pubkey):
     return " ".join(ret)
 
 
-def get_certificate(signature_block_file):
-    """Extract a DER certificate from JAR Signature's "Signature Block File".
+def get_certificate(signature_block_file, signature_file=None):
+    """Extract a single DER certificate from JAR Signature's "Signature Block File".
+
+    If there is more than one signer certificate, this exits with an
+    error, unless the signature_file is provided.  If that is set, it
+    will return the certificate that matches the Signature File, for
+    example, if there is a certificate chain, like TLS does.  In the
+    fdroidserver use cases, there should always be a single signer.
+    But rarely, some APKs include certificate chains.
+
+    This could be replaced by androguard's APK.get_certificate_der()
+    provided the cert chain fix was merged there.  Maybe in 4.1.2?
+    https://github.com/androguard/androguard/pull/1038
+
+    https://docs.oracle.com/en/java/javase/21/docs/specs/man/jarsigner.html#the-signed-jar-file
 
     Parameters
     ----------
     signature_block_file
-        file bytes (as string) representing the
-        certificate, as read directly out of the APK/ZIP
+        Bytes representing the PKCS#7 signer certificate and
+        signature, as read directly out of the JAR/APK, e.g. CERT.RSA.
+
+    signature_file
+        Bytes representing the manifest signed by the Signature Block
+        File, e.g. CERT.SF.  If this is not given, the assumption is
+        there will be only a single certificate in
+        signature_block_file, otherwise it is an error.
 
     Returns
     -------
@@ -3920,7 +4006,106 @@ def get_certificate(signature_block_file):
 
     """
     pkcs7obj = cms.ContentInfo.load(signature_block_file)
-    return pkcs7obj['content']['certificates'][0].chosen.dump()
+    certificates = pkcs7obj['content']['certificates']
+    if len(certificates) == 1:
+        return certificates[0].chosen.dump()
+    elif not signature_file:
+        logging.error(_('Found multiple Signer Certificates!'))
+        return
+    certificate = get_jar_signer_certificate(pkcs7obj, signature_file)
+    if certificate:
+        return certificate.chosen.dump()
+
+
+def _find_matching_certificate(signer_info, certificate):
+    """Find the certificates that matches signer_info using issuer and serial number.
+
+    https://android.googlesource.com/platform/tools/apksig/+/refs/tags/android-13.0.0_r3/src/main/java/com/android/apksig/internal/apk/v1/V1SchemeVerifier.java#590
+    https://android.googlesource.com/platform/tools/apksig/+/refs/tags/android-13.0.0_r3/src/main/java/com/android/apksig/internal/x509/Certificate.java#55
+
+    """
+    certificate_serial = certificate.chosen['tbs_certificate']['serial_number']
+    expected_issuer_serial = signer_info['sid'].chosen
+    return (
+        expected_issuer_serial['issuer'] == certificate.chosen.issuer
+        and expected_issuer_serial['serial_number'] == certificate_serial
+    )
+
+
+def get_jar_signer_certificate(pkcs7obj: cms.ContentInfo, signature_file: bytes):
+    """Return the one certificate in a chain that actually signed the manifest.
+
+    PKCS#7-signed data can include certificate chains for use cases
+    where an Certificate Authority (CA) is used.  Android does not
+    validate the certificate chain on APK signatures, so neither does
+    this.
+    https://android.googlesource.com/platform/tools/apksig/+/refs/tags/android-13.0.0_r3/src/main/java/com/android/apksig/internal/apk/v1/V1SchemeVerifier.java#512
+
+    Some useful fodder for understanding all this:
+    https://docs.oracle.com/javase/tutorial/deployment/jar/intro.html
+    https://technotes.shemyak.com/posts/jar-signature-block-file-format/
+    https://docs.oracle.com/en/java/javase/21/docs/specs/man/jarsigner.html#the-signed-jar-file
+    https://qistoph.blogspot.com/2012/01/manual-verify-pkcs7-signed-data-with.html
+
+    """
+    import oscrypto.asymmetric
+    import oscrypto.errors
+
+    # Android attempts to verify all SignerInfos and then picks the first verified SignerInfo.
+    first_verified_signer_info = None
+    first_verified_signer_info_signing_certificate = None
+    for signer_info in pkcs7obj['content']['signer_infos']:
+        signature = signer_info['signature'].contents
+        digest_algorithm = signer_info["digest_algorithm"]["algorithm"].native
+        public_key = None
+        for certificate in pkcs7obj['content']['certificates']:
+            if _find_matching_certificate(signer_info, certificate):
+                public_key = oscrypto.asymmetric.load_public_key(certificate.chosen.public_key)
+                break
+        if public_key is None:
+            logging.info('No certificate found that matches signer info!')
+            continue
+
+        signature_algo = signer_info['signature_algorithm'].signature_algo
+        if signature_algo == 'rsassa_pkcs1v15':
+            # ASN.1 - 1.2.840.113549.1.1.1
+            verify_func = oscrypto.asymmetric.rsa_pkcs1v15_verify
+        elif signature_algo == 'rsassa_pss':
+            # ASN.1 - 1.2.840.113549.1.1.10
+            verify_func = oscrypto.asymmetric.rsa_pss_verify
+        elif signature_algo == 'dsa':
+            # ASN.1 - 1.2.840.10040.4.1
+            verify_func = oscrypto.asymmetric.dsa_verify
+        elif signature_algo == 'ecdsa':
+            # ASN.1 - 1.2.840.10045.4
+            verify_func = oscrypto.asymmetric.ecdsa_verify
+        else:
+            logging.error(
+                'Unknown signature algorithm %s:\n  %s\n  %s'
+                % (
+                    signature_algo,
+                    hexlify(certificate.chosen.sha256).decode(),
+                    certificate.chosen.subject.human_friendly,
+                ),
+            )
+            return
+
+        try:
+            verify_func(public_key, signature, signature_file, digest_algorithm)
+            if not first_verified_signer_info:
+                first_verified_signer_info = signer_info
+                first_verified_signer_info_signing_certificate = certificate
+
+        except oscrypto.errors.SignatureError as e:
+            logging.error(
+                '"%s", skipping:\n  %s\n  %s' % (
+                    e,
+                    hexlify(certificate.chosen.sha256).decode(),
+                    certificate.chosen.subject.human_friendly),
+            )
+
+    if first_verified_signer_info_signing_certificate:
+        return first_verified_signer_info_signing_certificate
 
 
 def load_stats_fdroid_signing_key_fingerprints():

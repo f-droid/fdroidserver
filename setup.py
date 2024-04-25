@@ -97,6 +97,7 @@ setup(
         'clint',
         'defusedxml',
         'GitPython',
+        'oscrypto',
         'paramiko',
         'Pillow',
         'apache-libcloud >= 0.14.1',
