@@ -3190,17 +3190,16 @@ def get_first_signer_certificate(apkpath):
         elif len(certs_v1) == 1:
             cert_encoded_v1 = get_certificate(apk.read(certs_v1[0]))
 
-    if True
-        apkobject = get_androguard_APK(apkpath)
-        certs_v2 = apkobject.get_certificates_der_v2()
-        if len(certs_v2) > 0:
-            logging.debug(_('Using APK Signature v2'))
-            cert_encoded_v2 = certs_v2[0]
+    apkobject = get_androguard_APK(apkpath)
+    certs_v2 = apkobject.get_certificates_der_v2()
+    if len(certs_v2) > 0:
+        logging.debug(_('Using APK Signature v2'))
+        cert_encoded_v2 = certs_v2[0]
 
-        certs_v3 = apkobject.get_certificates_der_v3()
-        if len(certs_v3) > 0:
-            logging.debug(_('Using APK Signature v3'))
-            cert_encoded_v3 = certs_v3[0]
+    certs_v3 = apkobject.get_certificates_der_v3()
+    if len(certs_v3) > 0:
+        logging.debug(_('Using APK Signature v3'))
+        cert_encoded_v3 = certs_v3[0]
 
     cert_encoded = cert_encoded_v3 or cert_encoded_v2 or cert_encoded_v1
     if not cert_encoded:
