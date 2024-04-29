@@ -51,7 +51,7 @@ class GithubApi:
         """List of all tags that are associated with a release for this repo on GitHub."""
         names = []
         req = self._req(f"https://api.github.com/repos/{self._repo_path}/releases")
-        with urllib.request.urlopen(req) as resp:
+        with urllib.request.urlopen(req) as resp:  # nosec CWE-22 disable bandit warning
             releases = json.load(resp)
             for release in releases:
                 names.append(release['tag_name'])
@@ -71,7 +71,7 @@ class GithubApi:
         req = self._req(
             f"https://api.github.com/repos/{self._repo_path}/git/matching-refs/tags/{tag}"
         )
-        with urllib.request.urlopen(req) as resp:
+        with urllib.request.urlopen(req) as resp:  # nosec CWE-22 disable bandit warning
             rd = json.load(resp)
             return len(rd) == 1 and rd[0].get("ref", False) == f"refs/tags/{tag}"
         return False
@@ -82,7 +82,7 @@ class GithubApi:
         req = self._req(
             f"https://api.github.com/repos/{self._repo_path}/git/matching-refs/tags/"
         )
-        with urllib.request.urlopen(req) as resp:
+        with urllib.request.urlopen(req) as resp:  # nosec CWE-22 disable bandit warning
             refs = json.load(resp)
             for ref in refs:
                 r = ref.get('ref', '')
@@ -118,7 +118,9 @@ class GithubApi:
             ).encode("utf-8"),
         )
         try:
-            with urllib.request.urlopen(req) as resp:
+            with urllib.request.urlopen(  # nosec CWE-22 disable bandit warning
+                req
+            ) as resp:
                 release_id = json.load(resp)['id']
         except urllib.error.HTTPError as e:
             if e.status == 422:
@@ -153,6 +155,6 @@ class GithubApi:
                 },
                 data=f.read(),
             )
-            with urllib.request.urlopen(req):
+            with urllib.request.urlopen(req):  # nosec CWE-22 disable bandit warning
                 return True
             return False
