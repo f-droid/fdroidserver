@@ -54,15 +54,12 @@ from pathlib import Path
 
 import defusedxml.ElementTree as XMLElementTree
 
+from asn1crypto import cms
 from base64 import urlsafe_b64encode
 from binascii import hexlify
 from datetime import datetime, timedelta, timezone
 from queue import Queue
 from zipfile import ZipFile
-
-from pyasn1.codec.der import decoder, encoder
-from pyasn1_modules import rfc2315
-from pyasn1.error import PyAsn1Error
 
 import fdroidserver.metadata
 import fdroidserver.lint
@@ -3908,18 +3905,8 @@ def get_certificate(signature_block_file):
     or None in case of error
 
     """
-    content = decoder.decode(signature_block_file, asn1Spec=rfc2315.ContentInfo())[0]
-    if content.getComponentByName('contentType') != rfc2315.signedData:
-        return None
-    content = decoder.decode(content.getComponentByName('content'),
-                             asn1Spec=rfc2315.SignedData())[0]
-    try:
-        certificates = content.getComponentByName('certificates')
-        cert = certificates[0].getComponentByName('certificate')
-    except PyAsn1Error:
-        logging.error("Certificates not found.")
-        return None
-    return encoder.encode(cert)
+    pkcs7obj = cms.ContentInfo.load(signature_block_file)
+    return pkcs7obj['content']['certificates'][0].chosen.dump()
 
 
 def load_stats_fdroid_signing_key_fingerprints():
