@@ -749,8 +749,11 @@ def build_local(app, build, vcs, build_dir, output_dir, log_dir, srclib_dir, ext
         # If we build with gradle flavors with gradle plugin >= 3.0 the APK will be in
         # a subdirectory corresponding to the flavor command used, but with different
         # capitalization.
-        if flavors_cmd:
-            apk_dirs.append(os.path.join(root_dir, 'build', 'outputs', 'apk', transform_first_char(flavors_cmd, str.lower), 'release'))
+        if flavors:
+            root = os.path.join(root_dir, 'build', 'outputs', 'apk')
+            for d in os.listdir(root):
+                if d.lower() == flavors_cmd.lower():
+                    apk_dirs.append(os.path.join(root, d, 'release'))
         for apks_dir in apk_dirs:
             for apkglob in ['*-release-unsigned.apk', '*-unsigned.apk', '*.apk']:
                 apks = glob.glob(os.path.join(apks_dir, apkglob))

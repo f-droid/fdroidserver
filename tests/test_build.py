@@ -387,6 +387,71 @@ class BuildTest(unittest.TestCase):
                 # All paths in the config must be strings, never pathlib.Path instances
                 self.assertIsInstance(config['ndk_paths'][ndk_version], str)
 
+    def test_build_local_gradle(self):
+        """Test if `fdroid build` finds gradle build apk"""
+        with (
+            tempfile.TemporaryDirectory() as testdir,
+            TmpCwd(testdir),
+            tempfile.TemporaryDirectory() as sdk_path,
+        ):
+            config = {'ndk_paths': {}, 'sdk_path': sdk_path, 'gradle': 'gradle'}
+            fdroidserver.common.config = config
+            fdroidserver.build.config = config
+            fdroidserver.build.options = mock.Mock()
+            fdroidserver.build.options.scan_binary = False
+            fdroidserver.build.options.notarball = True
+            fdroidserver.build.options.skipscan = True
+
+            app = fdroidserver.metadata.App()
+            app.id = 'mocked.app.id'
+            build = fdroidserver.metadata.Build()
+            build.commit = '1.0'
+            build.versionCode = 1
+            build.versionName = '1.0'
+            vcs = mock.Mock()
+
+            # use "as _ignored" just to make a pretty layout
+            with (
+                mock.patch('fdroidserver.common.get_native_code', return_value='x86'),
+                mock.patch(
+                    'fdroidserver.common.get_apk_id',
+                    return_value=(app.id, build.versionCode, build.versionName),
+                ),
+                mock.patch(
+                    'fdroidserver.common.is_debuggable_or_testOnly',
+                    return_value=False,
+                ),
+                mock.patch('fdroidserver.build.FDroidPopen', FakeProcess),
+                mock.patch(
+                    'fdroidserver.common.get_source_date_epoch', lambda f: '1234567890'
+                ),
+            ):
+                for gradle, output in [
+                    (['yes'], 'build/outputs/apk/release/out.apk'),
+                    (['foss'], 'build/outputs/apk/foss/release/out.apk'),
+                    (['foss', 'prod'], 'build/outputs/apk/fossProd/release/out.apk'),
+                    (['FOSS'], 'build/outputs/apk/FOSS/release/out.apk'),
+                    (['Prod', 'foss'], 'build/outputs/apk/ProdFoss/release/out.apk'),
+                ]:
+                    build.gradle = gradle
+                    Path(output).parent.mkdir(parents=True, exist_ok=True)
+                    Path(output).write_text("OUTPUT")
+                    fdroidserver.build.build_local(
+                        app,
+                        build,
+                        vcs,
+                        build_dir=testdir,
+                        output_dir=testdir,
+                        log_dir=None,
+                        srclib_dir=None,
+                        extlib_dir=None,
+                        tmp_dir=None,
+                        force=False,
+                        onserver=False,
+                        refresh=False,
+                    )
+                    Path(output).unlink()
+
     @mock.patch('sdkmanager.build_package_list', lambda use_net: None)
     @mock.patch('fdroidserver.build.FDroidPopen', FakeProcess)
     @mock.patch('fdroidserver.common.get_native_code', lambda _ignored: 'x86')
