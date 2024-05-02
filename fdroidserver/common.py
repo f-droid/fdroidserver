@@ -380,7 +380,7 @@ def get_config(opts=None):
     if config is not None:
         return config
 
-    common.read_config(opts=opts)
+    read_config(opts=opts)
 
     # make sure these values are available in common.py even if they didn't
     # declare global in a scope
@@ -570,7 +570,7 @@ def parse_mirrors_config(mirrors):
 def file_entry(filename, hash_value=None):
     meta = {}
     meta["name"] = "/" + Path(filename).as_posix().split("/", 1)[1]
-    meta["sha256"] = hash_value or common.sha256sum(filename)
+    meta["sha256"] = hash_value or sha256sum(filename)
     meta["size"] = os.stat(filename).st_size
     return meta
 
