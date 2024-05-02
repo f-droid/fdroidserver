@@ -45,6 +45,12 @@ from fdroidserver.exception import FDroidException, VCSException,\
 from fdroidserver.looseversion import LooseVersion
 
 
+def _mock_common_module_options_instance():
+    """Helper method to deal with difficult visibility of the module-level options."""
+    fdroidserver.common.options = mock.Mock()
+    fdroidserver.common.options.verbose = False
+
+
 class CommonTest(unittest.TestCase):
     '''fdroidserver/common.py'''
 
@@ -57,14 +63,18 @@ class CommonTest(unittest.TestCase):
         if not os.path.exists(self.tmpdir):
             os.makedirs(self.tmpdir)
         os.chdir(self.basedir)
+
+        # these are declared as None at the top of the module file
         fdroidserver.common.config = None
-        fdroidserver.common.options = mock.Mock()
-        fdroidserver.common.options.verbose = False
+        fdroidserver.common.options = None
         fdroidserver.metadata.srclibs = None
+
         self._td = mkdtemp()
         self.testdir = self._td.name
 
     def tearDown(self):
+        fdroidserver.common.config = None
+        fdroidserver.common.options = None
         os.chdir(self.basedir)
         self._td.cleanup()
         shutil.rmtree(self.tmpdir)
@@ -356,6 +366,7 @@ class CommonTest(unittest.TestCase):
         config = dict()
         fdroidserver.common.fill_config_defaults(config)
         fdroidserver.common.config = config
+        _mock_common_module_options_instance()
 
         srclibname = 'FakeSrcLib'
         srclib_testdir = os.path.join(self.testdir, 'build', 'srclib')
@@ -397,6 +408,7 @@ class CommonTest(unittest.TestCase):
                                            onserver=True, refresh=False)  # do not clone in this test
 
     def test_prepare_sources_refresh(self):
+        _mock_common_module_options_instance()
         packageName = 'org.fdroid.ci.test.app'
         os.chdir(self.tmpdir)
         os.mkdir('build')
@@ -467,6 +479,7 @@ class CommonTest(unittest.TestCase):
         config = dict()
         fdroidserver.common.fill_config_defaults(config)
         fdroidserver.common.config = config
+        _mock_common_module_options_instance()
 
         commands = ['sh', '-c', 'echo stdout message && echo stderr message 1>&2']
 
@@ -477,6 +490,7 @@ class CommonTest(unittest.TestCase):
         self.assertEqual(p.output, 'stdout message\n')
 
     def test_signjar(self):
+        _mock_common_module_options_instance()
         config = fdroidserver.common.read_config(fdroidserver.common.options)
         config['jarsigner'] = fdroidserver.common.find_sdk_tools_cmd('jarsigner')
         fdroidserver.common.config = config
@@ -497,6 +511,7 @@ class CommonTest(unittest.TestCase):
                 )
 
     def test_verify_apk_signature(self):
+        _mock_common_module_options_instance()
         config = fdroidserver.common.read_config(fdroidserver.common.options)
         fdroidserver.common.config = config
 
@@ -519,6 +534,7 @@ class CommonTest(unittest.TestCase):
         self.assertFalse(fdroidserver.common.verify_apk_signature('urzip-release-unsigned.apk'))
 
     def test_verify_old_apk_signature(self):
+        _mock_common_module_options_instance()
         config = fdroidserver.common.read_config(fdroidserver.common.options)
         config['jarsigner'] = fdroidserver.common.find_sdk_tools_cmd('jarsigner')
         fdroidserver.common.config = config
@@ -583,6 +599,7 @@ class CommonTest(unittest.TestCase):
     def test_verify_apks(self):
         config = fdroidserver.common.read_config(fdroidserver.common.options)
         fdroidserver.common.config = config
+        _mock_common_module_options_instance()
 
         sourceapk = os.path.join(self.basedir, 'urzip.apk')
 
@@ -889,6 +906,7 @@ class CommonTest(unittest.TestCase):
             )
 
     def test_sign_apk(self):
+        _mock_common_module_options_instance()
         config = fdroidserver.common.read_config(fdroidserver.common.options)
         if 'apksigner' not in config:
             self.skipTest('SKIPPING test_sign_apk, apksigner not installed!')
@@ -959,6 +977,7 @@ class CommonTest(unittest.TestCase):
 
     @unittest.skipIf(os.getuid() == 0, 'This is meaningless when run as root')
     def test_sign_apk_fail(self):
+        _mock_common_module_options_instance()
         config = fdroidserver.common.read_config(fdroidserver.common.options)
         if 'apksigner' not in config:
             self.skipTest('SKIPPING test_sign_apk_fail, apksigner not installed!')
@@ -982,6 +1001,7 @@ class CommonTest(unittest.TestCase):
         self.assertFalse(os.path.isfile(signed))
 
     def test_sign_apk_corrupt(self):
+        _mock_common_module_options_instance()
         config = fdroidserver.common.read_config(fdroidserver.common.options)
         if 'apksigner' not in config:
             self.skipTest('SKIPPING test_sign_apk_corrupt, apksigner not installed!')
@@ -1008,6 +1028,7 @@ class CommonTest(unittest.TestCase):
     )
     def test_resign_apk(self):
         """When using apksigner, it should resign signed APKs"""
+        _mock_common_module_options_instance()
         config = fdroidserver.common.read_config(fdroidserver.common.options)
         if 'apksigner' not in config:
             self.skipTest('SKIPPING test_resign_apk, apksigner not installed!')
@@ -2532,6 +2553,7 @@ class CommonTest(unittest.TestCase):
 
     @mock.patch.dict(os.environ, clear=True)
     def test_FDroidPopen_envs_paths_can_be_pathlib(self):
+        _mock_common_module_options_instance()
         os.environ['PATH'] = '/usr/bin:/usr/sbin'
         envs = {'PATHLIB': Path('/pathlib/path'), 'STRING': '/string/path'}
         p = fdroidserver.common.FDroidPopen(['/bin/sh', '-c', 'export'], envs=envs)
