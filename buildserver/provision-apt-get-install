@@ -116,7 +116,7 @@ packages="
  patch
  python3-packaging
  rsync
- sdkmanager
+ sdkmanager/bookworm-backports
  sudo
  unzip
 "
