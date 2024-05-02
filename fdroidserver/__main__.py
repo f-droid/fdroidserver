@@ -182,7 +182,7 @@ def main():
                            "can not be specified at the same time."))
         sys.exit(1)
 
-    # Trick optparse into displaying the right usage when --help is used.
+    # Trick argparse into displaying the right usage when --help is used.
     sys.argv[0] += ' ' + command
 
     del sys.argv[1]

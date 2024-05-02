@@ -3,7 +3,6 @@
 # http://www.drdobbs.com/testing/unit-testing-with-python/240165163
 
 import inspect
-import optparse
 import os
 import sys
 import unittest
@@ -38,15 +37,17 @@ class InstallTest(unittest.TestCase):
 if __name__ == "__main__":
     os.chdir(os.path.dirname(__file__))
 
-    parser = optparse.OptionParser()
-    parser.add_option(
+    import argparse
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
         "-v",
         "--verbose",
         action="store_true",
         default=False,
         help="Spew out even more information than normal",
     )
-    (fdroidserver.install.options, args) = parser.parse_args(['--verbose'])
+    fdroidserver.install.options = parser.parse_args(['--verbose'])
     fdroidserver.common.options = fdroidserver.install.options
 
     newSuite = unittest.TestSuite()

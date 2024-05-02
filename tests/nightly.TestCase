@@ -2,7 +2,6 @@
 
 import inspect
 import logging
-import optparse
 import os
 import requests
 import shutil
@@ -364,15 +363,17 @@ class NightlyTest(unittest.TestCase):
 if __name__ == "__main__":
     os.chdir(os.path.dirname(__file__))
 
-    parser = optparse.OptionParser()
-    parser.add_option(
+    import argparse
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
         "-v",
         "--verbose",
         action="store_true",
         default=False,
         help="Spew out even more information than normal",
     )
-    (common.options, args) = parser.parse_args(['--verbose'])
+    common.options = parser.parse_args(['--verbose'])
 
     newSuite = unittest.TestSuite()
     newSuite.addTest(unittest.makeSuite(NightlyTest))

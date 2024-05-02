@@ -3,7 +3,6 @@
 import copy
 import io
 import logging
-import optparse
 import os
 import random
 import ruamel.yaml
@@ -2447,15 +2446,17 @@ class PostMetadataParseTest(unittest.TestCase):
 
 
 if __name__ == "__main__":
-    parser = optparse.OptionParser()
-    parser.add_option(
+    import argparse
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
         "-v",
         "--verbose",
         action="store_true",
         default=False,
         help="Spew out even more information than normal",
     )
-    (fdroidserver.common.options, args) = parser.parse_args(['--verbose'])
+    fdroidserver.common.options = parser.parse_args(['--verbose'])
 
     newSuite = unittest.TestSuite()
     newSuite.addTest(unittest.makeSuite(MetadataTest))

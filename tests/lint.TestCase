@@ -3,7 +3,6 @@
 # http://www.drdobbs.com/testing/unit-testing-with-python/240165163
 
 import logging
-import optparse
 import os
 import ruamel.yaml
 import shutil
@@ -527,15 +526,17 @@ class LintAntiFeaturesTest(unittest.TestCase):
 
 
 if __name__ == "__main__":
-    parser = optparse.OptionParser()
-    parser.add_option(
+    import argparse
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
         "-v",
         "--verbose",
         action="store_true",
         default=False,
         help="Spew out even more information than normal",
     )
-    (fdroidserver.lint.options, args) = parser.parse_args(['--verbose'])
+    fdroidserver.lint.options = parser.parse_args(['--verbose'])
     fdroidserver.common.options = fdroidserver.lint.options
 
     newSuite = unittest.TestSuite()
