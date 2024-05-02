@@ -374,7 +374,27 @@ def fill_config_defaults(thisconfig):
 
 
 def get_config(opts=None):
-    """Get config instace. This function takes care of initializing config data before returning it."""
+    """Get the initalized, singleton config instance.
+
+    config and options are intertwined in read_config(), so they have
+    to be here too.  In the current ugly state of things, there are
+    multiple potential instances of config and options in use:
+
+    * global
+    * module-level in the subcommand module (e.g. fdroidserver/build.py)
+    * module-level in fdroidserver.common
+
+    There are some insane parts of the code that are probably
+    referring to multiple instances of these at different points.
+    This can be super confusing and maddening.
+
+    The current intermediate refactoring step is to move all
+    subcommands to always get/set config and options via this function
+    so that there is no longer a distinction between the global and
+    module-level instances.  Then there can be only one module-level
+    instance in fdroidserver.common.
+
+    """
     global config, options
 
     if config is not None:

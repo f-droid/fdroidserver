@@ -3237,6 +3237,60 @@ class SignerExtractionTest(unittest.TestCase):
                 )
 
 
+class ConfigOptionsScopeTest(unittest.TestCase):
+    """Test assumptions about variable scope for "config" and "options".
+
+    The ancient architecture of config and options in fdroidserver has
+    weird issues around unexpected scope, like there are cases where
+    the global config is not the same as the module-level config, and
+    more.
+
+    This is about describing what is happening, it is not about
+    documenting behaviors that are good design. The config and options
+    handling should really be refactored into a well-known, workable
+    Pythonic pattern.
+
+    """
+
+    def setUp(self):
+        # these are declared as None at the top of the module file
+        fdroidserver.common.config = None
+        fdroidserver.common.options = None
+
+    def tearDown(self):
+        fdroidserver.common.config = None
+        fdroidserver.common.options = None
+        if 'config' in globals():
+            global config
+            del config
+        if 'options' in globals():
+            global options
+            del options
+
+    def test_get_config(self):
+        """Show how the module-level variables are initialized."""
+        self.assertTrue('config' not in vars() and 'config' not in globals())
+        self.assertIsNone(fdroidserver.common.config)
+        config = fdroidserver.common.get_config()
+        self.assertIsNotNone(fdroidserver.common.config)
+        self.assertEqual(dict, type(config))
+        self.assertEqual(config, fdroidserver.common.config)
+
+    def test_get_config_global(self):
+        """Test assumptions about variable scope using global keyword."""
+        global config
+        self.assertTrue('config' not in vars() and 'config' not in globals())
+        self.assertIsNone(fdroidserver.common.config)
+        c = fdroidserver.common.get_config()
+        self.assertIsNotNone(fdroidserver.common.config)
+        self.assertEqual(dict, type(c))
+        self.assertEqual(c, fdroidserver.common.config)
+        self.assertTrue(
+            'config' not in vars() and 'config' not in globals(),
+            "The config should not be set in the global context, only module-level.",
+        )
+
+
 if __name__ == "__main__":
     os.chdir(os.path.dirname(__file__))
 
