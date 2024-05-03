@@ -722,7 +722,13 @@ def check_updates_ucm_http_aum_pattern(app):  # noqa: D403
 
 
 def check_certificate_pinned_binaries(app):
-    if len(app.get('AllowedAPKSigningKeys')) > 0:
+    keys = app.get('AllowedAPKSigningKeys')
+    known_keys = common.config.get('apk_signing_key_block_list', [])
+    if keys:
+        if known_keys:
+            for key in keys:
+                if key in known_keys:
+                    yield _('Known debug key is used in AllowedAPKSigningKeys: ') + key
         return
     if app.get('Binaries') is not None:
         yield _(
