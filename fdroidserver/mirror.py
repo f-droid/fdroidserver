@@ -268,7 +268,8 @@ def main():
                 urls[icondir].append(url)
 
         for icondir in icondirs:
-            _run_wget(os.path.join(basedir, section, icondir), urls[icondir])
+            if icondir in urls:
+                _run_wget(os.path.join(basedir, section, icondir), urls[icondir])
 
 
 if __name__ == "__main__":
