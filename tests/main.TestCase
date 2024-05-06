@@ -8,7 +8,6 @@ import textwrap
 import unittest
 import tempfile
 from unittest import mock
-from testcommon import TmpCwd, TmpPyPath
 
 localmodule = os.path.realpath(
     os.path.join(os.path.dirname(inspect.getfile(inspect.currentframe())), '..')
@@ -19,6 +18,7 @@ if localmodule not in sys.path:
 
 from fdroidserver import common
 import fdroidserver.__main__
+from testcommon import TmpCwd, TmpPyPath
 
 
 class MainTest(unittest.TestCase):

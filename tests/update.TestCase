@@ -23,7 +23,6 @@ import textwrap
 from binascii import hexlify
 from datetime import datetime
 from pathlib import Path
-from testcommon import TmpCwd, mkdtemp
 from unittest import mock
 
 try:
@@ -61,6 +60,7 @@ import fdroidserver.metadata
 import fdroidserver.update
 from fdroidserver.common import CATEGORIES_CONFIG_NAME
 from fdroidserver.looseversion import LooseVersion
+from testcommon import TmpCwd, mkdtemp
 
 
 DONATION_FIELDS = ('Donate', 'Liberapay', 'OpenCollective')

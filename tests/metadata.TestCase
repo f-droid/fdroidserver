@@ -15,8 +15,6 @@ from collections import OrderedDict
 from pathlib import Path
 from unittest import mock
 
-from testcommon import TmpCwd, mkdtemp
-
 localmodule = Path(__file__).resolve().parent.parent
 print('localmodule: ' + str(localmodule))
 if localmodule not in sys.path:
@@ -26,6 +24,7 @@ import fdroidserver
 from fdroidserver import metadata
 from fdroidserver.exception import MetaDataException
 from fdroidserver.common import DEFAULT_LOCALE
+from testcommon import TmpCwd, mkdtemp
 
 
 def _get_mock_mf(s):

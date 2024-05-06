@@ -8,14 +8,13 @@ import tempfile
 import textwrap
 from pathlib import Path
 
-from testcommon import TmpCwd, mkdtemp
-
 localmodule = Path(__file__).resolve().parent.parent
 print('localmodule: ' + str(localmodule))
 if localmodule not in sys.path:
     sys.path.insert(0, str(localmodule))
 
 from fdroidserver import common, metadata, rewritemeta
+from testcommon import TmpCwd, mkdtemp
 
 
 class RewriteMetaTest(unittest.TestCase):

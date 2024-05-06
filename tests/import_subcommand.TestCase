@@ -14,7 +14,6 @@ from unittest import mock
 from pathlib import Path
 
 import requests
-from testcommon import TmpCwd, mkdtemp
 
 localmodule = Path(__file__).resolve().parent.parent
 print('localmodule: ' + str(localmodule))
@@ -25,6 +24,7 @@ import fdroidserver.common
 import fdroidserver.import_subcommand
 import fdroidserver.metadata
 from fdroidserver.exception import FDroidException
+from testcommon import TmpCwd, mkdtemp
 
 
 class ImportTest(unittest.TestCase):

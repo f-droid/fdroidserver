@@ -10,7 +10,6 @@ import sys
 import tempfile
 import unittest
 from pathlib import Path
-from testcommon import mkdtemp
 
 localmodule = Path(__file__).resolve().parent.parent
 print('localmodule: ' + str(localmodule))
@@ -21,6 +20,7 @@ import fdroidserver.common
 import fdroidserver.lint
 import fdroidserver.metadata
 from fdroidserver.common import CATEGORIES_CONFIG_NAME
+from testcommon import mkdtemp
 
 
 class LintTest(unittest.TestCase):
