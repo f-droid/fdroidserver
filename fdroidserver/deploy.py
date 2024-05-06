@@ -837,7 +837,15 @@ def push_binary_transparency(git_repo_path, git_remote):
                 origin.set_url(git_remote)
         else:
             origin = gitrepo.create_remote('origin', git_remote)
-        origin.push(GIT_BRANCH)
+        for _i in range(3):
+            try:
+                origin.push(GIT_BRANCH)
+            except git.GitCommandError as e:
+                logging.error(e)
+                continue
+            break
+        else:
+            raise FDroidException(_("Pushing to remote server failed!"))
 
 
 def main():
