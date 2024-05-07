@@ -285,9 +285,7 @@ black:
     - black --check --diff --color $CI_PROJECT_DIR
 
 fedora_latest:
-  image: fedora:latest
-  only:
-    - master@fdroid/fdroidserver
+  image: fedora:39  # support ends on 2024-11-12
   script:
     # tricks to hopefully make runs more reliable
     - echo "timeout=600" >> /etc/dnf/dnf.conf
