@@ -2354,6 +2354,8 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
                 gradlefile = build_gradle
             elif os.path.exists(build_gradle_kts):
                 gradlefile = build_gradle_kts
+            else:
+                raise BuildException("No gradle file found")
             regsub_file(r'compileSdkVersion[ =]+[0-9]+',
                         r'compileSdkVersion %s' % n,
                         gradlefile)
