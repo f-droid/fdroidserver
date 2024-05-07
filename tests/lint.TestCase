@@ -465,19 +465,13 @@ class LintTest(unittest.TestCase):
         )
 
     def test_lint_known_debug_keys(self):
-        config = dict()
-        fdroidserver.common.fill_config_defaults(config)
-        config['apk_signing_key_block_list'] = [
-            'a40da80a59d170caa950cf15c18c454d47a39b26989d8b640ecd745ba71bf5dc'
-        ]
-        fdroidserver.common.config = config
-        fdroidserver.lint.config = config
-
+        fdroidserver.common.config = {
+            'apk_signing_key_block_list': 'a40da80a59d170caa950cf15c18c454d47a39b26989d8b640ecd745ba71bf5dc'
+        }
         app = fdroidserver.metadata.App()
         app.AllowedAPKSigningKeys = [
             'a40da80a59d170caa950cf15c18c454d47a39b26989d8b640ecd745ba71bf5dc'
         ]
-
         for warn in fdroidserver.lint.check_certificate_pinned_binaries(app):
             anywarns = True
             logging.debug(warn)
