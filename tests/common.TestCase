@@ -77,7 +77,8 @@ class CommonTest(unittest.TestCase):
         fdroidserver.common.options = None
         os.chdir(self.basedir)
         self._td.cleanup()
-        shutil.rmtree(self.tmpdir)
+        if os.path.exists(self.tmpdir):
+            shutil.rmtree(self.tmpdir)
 
     def test_parse_human_readable_size(self):
         for k, v in (
