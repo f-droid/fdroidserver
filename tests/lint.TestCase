@@ -438,6 +438,45 @@ class LintTest(unittest.TestCase):
         with self.assertRaises(TypeError):
             fdroidserver.lint.lint_config('mirrors.yml')
 
+    def test_check_certificate_pinned_binaries_empty(self):
+        fdroidserver.common.config = {}
+        app = fdroidserver.metadata.App()
+        app.AllowedAPKSigningKeys = [
+            'a40da80a59d170caa950cf15c18c454d47a39b26989d8b640ecd745ba71bf5dc'
+        ]
+        self.assertEqual(
+            [],
+            list(fdroidserver.lint.check_certificate_pinned_binaries(app)),
+            "when the config is empty, any signing key should be allowed",
+        )
+
+    def test_lint_known_debug_keys_no_match(self):
+        fdroidserver.common.config = {
+            "apk_signing_key_block_list": "a40da80a59d170caa950cf15c18c454d47a39b26989d8b640ecd745ba71bf5dc"
+        }
+        app = fdroidserver.metadata.App()
+        app.AllowedAPKSigningKeys = [
+            '2fd4fd5f54babba4bcb21237809bb653361d0d2583c80964ec89b28a26e9539e'
+        ]
+        self.assertEqual(
+            [],
+            list(fdroidserver.lint.check_certificate_pinned_binaries(app)),
+            "A signing key that does not match one in the config should be allowed",
+        )
+
+    def test_lint_known_debug_keys(self):
+        fdroidserver.common.config = {
+            'apk_signing_key_block_list': 'a40da80a59d170caa950cf15c18c454d47a39b26989d8b640ecd745ba71bf5dc'
+        }
+        app = fdroidserver.metadata.App()
+        app.AllowedAPKSigningKeys = [
+            'a40da80a59d170caa950cf15c18c454d47a39b26989d8b640ecd745ba71bf5dc'
+        ]
+        for warn in fdroidserver.lint.check_certificate_pinned_binaries(app):
+            anywarns = True
+            logging.debug(warn)
+        self.assertTrue(anywarns)
+
 
 class LintAntiFeaturesTest(unittest.TestCase):
     def setUp(self):
