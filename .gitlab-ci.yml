@@ -127,7 +127,7 @@ ubuntu_lts_ppa:
     - export ANDROID_HOME=/usr/lib/android-sdk
     - apt-get install gnupg
     - while ! apt-key adv --keyserver keyserver.ubuntu.com --recv-key 9AAC253193B65D4DF1D0A13EEC4632C79C5E0151; do sleep 15; done
-    - export RELEASE=`sed -n 's,^deb [^ ][^ ]* \([a-z]*\).*,\1,p' /etc/apt/sources.list | head -1`
+    - export RELEASE=$(sed -n 's,^Suites\x3a \([a-z]*\).*,\1,p' /etc/apt/sources.list.d/*.sources | head -1)
     - echo "deb http://ppa.launchpad.net/fdroid/fdroidserver/ubuntu $RELEASE main" >> /etc/apt/sources.list
     - apt-get update
     - apt-get dist-upgrade
