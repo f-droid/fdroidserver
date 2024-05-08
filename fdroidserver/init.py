@@ -282,13 +282,13 @@ def main():
     msg += '\n\n'
     msg += (
         _(
-            '''To complete the setup, add your APKs to "%s"
+            """To complete the setup, add your APKs to "%s"
 then run "fdroid update -c; fdroid update".  You might also want to edit
 "config.yml" to set the URL, repo name, and more.  You should also set up
 a signing key (a temporary one might have been automatically generated).
 
 For more info: https://f-droid.org/docs/Setup_an_F-Droid_App_Repo
-and https://f-droid.org/docs/Signing_Process'''
+and https://f-droid.org/docs/Signing_Process"""
         )
         % os.path.join(fdroiddir, 'repo')
     )

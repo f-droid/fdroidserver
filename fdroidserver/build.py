@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+"""Build a package from source."""
 #
 # build.py - part of the FDroid server tools
 # Copyright (C) 2010-2014, Ciaran Gultnieks, ciaran@ciarang.com
@@ -59,15 +60,30 @@ def build_server(app, build, vcs, build_dir, output_dir, log_dir, force):
     Parameters
     ----------
     app
-        app metadata dict
+        The metadata of the app to build.
     build
+        The build of the app to build.
     vcs
-        version control system controller object
+        The version control system controller object of the app.
     build_dir
-        local source-code checkout of app
+        The local source-code checkout directory of the app.
     output_dir
-        target folder for the build result
+        The target folder for the build result.
+    log_dir
+        The directory in the VM where the build logs are getting stored.
     force
+        Don't refresh the already cloned repository and make the build stop on
+        exceptions.
+
+    Raises
+    ------
+    :exc:`~fdroidserver.exception.BuildException`
+        If Paramiko is not installed, a srclib directory or srclib metadata
+        file is unexpectedly missing, the build process in the VM failed or
+        output files of the build process are missing.
+    :exc:`~fdroidserver.exception.FDroidException`
+        If the Buildserver ID could not be obtained or copying a directory to
+        the server failed.
     """
     global buildserverid, ssh_channel
 
@@ -115,8 +131,8 @@ def build_server(app, build, vcs, build_dir, output_dir, log_dir, force):
         # Put all the necessary files in place...
         ftp.chdir(homedir)
 
-        # Helper to copy the contents of a directory to the server...
         def send_dir(path):
+            """Copy the contents of a directory to the server."""
             logging.debug("rsyncing %s to %s" % (path, ftp.getcwd()))
             # TODO this should move to `vagrant rsync` from >= v1.5
             try:
@@ -316,6 +332,15 @@ def build_server(app, build, vcs, build_dir, output_dir, log_dir, force):
 
 
 def force_gradle_build_tools(build_dir, build_tools):
+    """Manipulate build tools version used in top level gradle file.
+
+    Parameters
+    ----------
+    build_dir
+        The directory to start looking for gradle files.
+    build_tools
+        The build tools version that should be forced to use.
+    """
     for root, dirs, files in os.walk(build_dir):
         for filename in files:
             if not filename.endswith('.gradle'):
@@ -342,6 +367,31 @@ def get_metadata_from_apk(app, build, apkfile):
     """Get the required metadata from the built APK.
 
     VersionName is allowed to be a blank string, i.e. ''
+
+    Parameters
+    ----------
+    app
+        The app metadata used to build the APK.
+    build
+        The build that resulted in the APK.
+    apkfile
+        The path of the APK file.
+
+    Returns
+    -------
+    versionCode
+        The versionCode from the APK or from the metadata is build.novcheck is
+        set.
+    versionName
+        The versionName from the APK or from the metadata is build.novcheck is
+        set.
+
+    Raises
+    ------
+    :exc:`~fdroidserver.exception.BuildException`
+        If native code should have been built but was not packaged, no version
+        information or no package ID could be found or there is a mismatch
+        between the package ID in the metadata and the one found in the APK.
     """
     appid, versionCode, versionName = common.get_apk_id(apkfile)
     native_code = common.get_native_code(apkfile)
@@ -362,7 +412,56 @@ def get_metadata_from_apk(app, build, apkfile):
 
 
 def build_local(app, build, vcs, build_dir, output_dir, log_dir, srclib_dir, extlib_dir, tmp_dir, force, onserver, refresh):
-    """Do a build locally."""
+    """Do a build locally.
+
+    Parameters
+    ----------
+    app
+        The metadata of the app to build.
+    build
+        The build of the app to build.
+    vcs
+        The version control system controller object of the app.
+    build_dir
+        The local source-code checkout directory of the app.
+    output_dir
+        The target folder for the build result.
+    log_dir
+        The directory in the VM where the build logs are getting stored.
+    srclib_dir
+        The path to the srclibs directory, usually 'build/srclib'.
+    extlib_dir
+        The path to the extlibs directory, usually 'build/extlib'.
+    tmp_dir
+        The temporary directory for building the source tarball.
+    force
+        Don't refresh the already cloned repository and make the build stop on
+        exceptions.
+    onserver
+        Assume the build is happening inside the VM.
+    refresh
+        Enable fetching the latest refs from the VCS remote.
+
+    Raises
+    ------
+    :exc:`~fdroidserver.exception.BuildException`
+        If running a `sudo` command failed, locking the root account failed,
+        `sudo` couldn't be removed, cleaning the build environment failed,
+        skipping the scanning has been requested but `scandelete` is present,
+        errors occurred during scanning, running the `build` commands from the
+        metadata failed, building native code failed, building with the
+        specified build method failed, no output could be found with build
+        method `maven`, more or less than one APK were found with build method
+        `gradle`, less or more than one APKs match the `output` glob specified
+        in the metadata, running a `postbuild` command specified in the
+        metadata failed, the built APK is debuggable, the unsigned APK is not
+        at the expected location, the APK does not contain the expected
+        `versionName` and `versionCode` or undesired package names have been
+        found in the APK.
+    :exc:`~fdroidserver.exception.FDroidException`
+        If no Android NDK version could be found and the build isn't run in a
+        builder VM, the selected Android NDK is not a directory.
+    """
     ndk_path = build.ndk_path()
     if build.ndk or (build.buildjni and build.buildjni != ['no']):
         if not ndk_path:
@@ -766,23 +865,47 @@ def trybuild(app, build, build_dir, output_dir, log_dir, also_check_dir,
 
     Parameters
     ----------
+    app
+        The metadata of the app to build.
+    build
+        The build of the app to build.
+    build_dir
+        The local source-code checkout directory of the app.
     output_dir
-        The directory where the build output will go.
-        Usually this is the 'unsigned' directory.
+        The directory where the build output will go.  Usually this is the
+        'unsigned' directory.
+    log_dir
+        The directory in the VM where the build logs are getting stored.
+    also_check_dir
+        An additional location for checking if the build is necessary (usually
+        the archive repo).
+    srclib_dir
+        The path to the srclibs directory, usually 'build/srclib'.
+    extlib_dir
+        The path to the extlibs directory, usually 'build/extlib'.
+    tmp_dir
+        The temporary directory for building the source tarball of the app to
+        build.
     repo_dir
         The repo directory - used for checking if the build is necessary.
-    also_check_dir
-        An additional location for checking if the build
-        is necessary (usually the archive repo)
+    vcs
+        The version control system controller object of the app to build.
     test
-        True if building in test mode, in which case the build will
-        always happen, even if the output already exists. In test mode, the
-        output directory should be a temporary location, not any of the real
-        ones.
+        True if building in test mode, in which case the build will always
+        happen, even if the output already exists.  In test mode, the output
+        directory should be a temporary location, not any of the real ones.
+    server
+        Use buildserver VM for building.
+    force
+        Build app regardless of disabled state or scanner errors.
+    onserver
+        Assume the build is happening inside the VM.
+    refresh
+        Enable fetching the latest refs from the VCS remote.
 
     Returns
     -------
-    Boolean
+    status
         True if the build was done, False if it wasn't necessary.
     """
     dest_file = common.get_release_filename(app, build)
@@ -821,7 +944,13 @@ def trybuild(app, build, build_dir, output_dir, log_dir, also_check_dir,
 
 
 def force_halt_build(timeout):
-    """Halt the currently running Vagrant VM, to be called from a Timer."""
+    """Halt the currently running Vagrant VM, to be called from a Timer.
+
+    Parameters
+    ----------
+    timeout
+        The timeout in seconds.
+    """
     logging.error(_('Force halting build after {0} sec timeout!').format(timeout))
     timeout_event.set()
     if ssh_channel:
@@ -845,7 +974,9 @@ def parse_commandline():
     Returns
     -------
     options
+        The resulting options parsed from the command line arguments.
     parser
+        The argument parser.
     """
     parser = argparse.ArgumentParser(usage="%(prog)s [options] [APPID[:VERCODE] [APPID[:VERCODE] ...]]")
     common.setup_global_opts(parser)
@@ -905,6 +1036,22 @@ timeout_event = threading.Event()
 
 
 def main():
+    """Build a package from source.
+
+    The behaviour of this function is influenced by the configuration file as
+    well as command line parameters.
+
+    Raises
+    ------
+    :exc:`~fdroidserver.exception.FDroidException`
+        If more than one local metadata file has been found, no app metadata
+        has been found, there are no apps to process, downloading binaries for
+        checking the reproducibility of a built binary failed, the built binary
+        is different from supplied reference binary, the reference binary is
+        signed with a different signing key than expected, a VCS error occured
+        while building an app or a different error occured while building an
+        app.
+    """
     global options, config, buildserverid, fdroidserverid
 
     options, parser = parse_commandline()

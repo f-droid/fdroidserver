@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+"""Check for updates to applications."""
 #
 # checkupdates.py - part of the FDroid server tools
 # Copyright (C) 2010-2015, Ciaran Gultnieks, ciaran@ciarang.com
