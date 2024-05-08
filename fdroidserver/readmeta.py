@@ -20,8 +20,6 @@ from argparse import ArgumentParser
 from . import common
 from . import metadata
 
-options = None
-
 
 def main():
     parser = ArgumentParser()
@@ -29,7 +27,7 @@ def main():
     metadata.add_metadata_arguments(parser)
     options = parser.parse_args()
     metadata.warnings_action = options.W
-    common.read_config(None)
+    common.read_config()
 
     metadata.read_metadata()
 

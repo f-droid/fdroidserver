@@ -18,7 +18,7 @@ if localmodule not in sys.path:
 import fdroidserver.common
 import fdroidserver.deploy
 from fdroidserver.exception import FDroidException
-from testcommon import TmpCwd, mkdtemp
+from testcommon import TmpCwd, mkdtemp, parse_args_for_test
 
 
 class DeployTest(unittest.TestCase):
@@ -114,11 +114,11 @@ class DeployTest(unittest.TestCase):
         self.maxDiff = None
 
         # setup parameters for this test run
-        fdroidserver.deploy.options = mock.Mock()
-        fdroidserver.deploy.options.no_checksum = True
-        fdroidserver.deploy.options.identity_file = None
-        fdroidserver.deploy.options.verbose = False
-        fdroidserver.deploy.options.quiet = True
+        fdroidserver.common.options = mock.Mock()
+        fdroidserver.common.options.no_checksum = True
+        fdroidserver.common.options.identity_file = None
+        fdroidserver.common.options.verbose = False
+        fdroidserver.common.options.quiet = True
         fdroidserver.deploy.config = {'make_current_version_link': True}
         url = "example.com:/var/www/fdroid"
         repo_section = 'repo'
@@ -207,12 +207,12 @@ class DeployTest(unittest.TestCase):
 
     def test_update_serverwebroot_with_id_file(self):
         # setup parameters for this test run
-        fdroidserver.deploy.options = mock.Mock()
-        fdroidserver.deploy.options.identity_file = None
-        fdroidserver.deploy.options.no_checksum = True
-        fdroidserver.deploy.options.verbose = True
-        fdroidserver.deploy.options.quiet = False
-        fdroidserver.deploy.options.identity_file = None
+        fdroidserver.common.options = mock.Mock()
+        fdroidserver.common.options.identity_file = None
+        fdroidserver.common.options.no_checksum = True
+        fdroidserver.common.options.verbose = True
+        fdroidserver.common.options.quiet = False
+        fdroidserver.common.options.identity_file = None
         fdroidserver.deploy.config = {'identity_file': './id_rsa'}
         url = "example.com:/var/www/fdroid"
         repo_section = 'archive'
@@ -289,7 +289,7 @@ class DeployTest(unittest.TestCase):
         not os.getenv('VIRUSTOTAL_API_KEY'), 'VIRUSTOTAL_API_KEY is not set'
     )
     def test_upload_to_virustotal(self):
-        fdroidserver.deploy.options.verbose = True
+        fdroidserver.common.options.verbose = True
         virustotal_apikey = os.getenv('VIRUSTOTAL_API_KEY')
         fdroidserver.deploy.upload_to_virustotal('repo', virustotal_apikey)
 
@@ -307,12 +307,12 @@ class DeployTest(unittest.TestCase):
 
     def test_update_servergitmirrors(self):
         # setup parameters for this test run
-        fdroidserver.deploy.options = mock.Mock()
-        fdroidserver.deploy.options.identity_file = None
-        fdroidserver.deploy.options.no_keep_git_mirror_archive = False
-        fdroidserver.deploy.options.verbose = False
-        fdroidserver.deploy.options.quiet = True
-        fdroidserver.deploy.options.index_only = False
+        fdroidserver.common.options = mock.Mock()
+        fdroidserver.common.options.identity_file = None
+        fdroidserver.common.options.no_keep_git_mirror_archive = False
+        fdroidserver.common.options.verbose = False
+        fdroidserver.common.options.quiet = True
+        fdroidserver.common.options.index_only = False
 
         config = {}
         fdroidserver.common.fill_config_defaults(config)
@@ -399,7 +399,7 @@ if __name__ == "__main__":
         default=False,
         help="Spew out even more information than normal",
     )
-    fdroidserver.common.options = parser.parse_args(['--verbose'])
+    parse_args_for_test(parser, sys.argv)
 
     newSuite = unittest.TestSuite()
     newSuite.addTest(unittest.makeSuite(DeployTest))

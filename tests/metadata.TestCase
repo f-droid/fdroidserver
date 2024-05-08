@@ -24,7 +24,7 @@ import fdroidserver
 from fdroidserver import metadata
 from fdroidserver.exception import MetaDataException
 from fdroidserver.common import DEFAULT_LOCALE
-from testcommon import TmpCwd, mkdtemp
+from testcommon import TmpCwd, mkdtemp, parse_args_for_test
 
 
 def _get_mock_mf(s):
@@ -2455,7 +2455,7 @@ if __name__ == "__main__":
         default=False,
         help="Spew out even more information than normal",
     )
-    fdroidserver.common.options = parser.parse_args(['--verbose'])
+    parse_args_for_test(parser, sys.argv)
 
     newSuite = unittest.TestSuite()
     newSuite.addTest(unittest.makeSuite(MetadataTest))

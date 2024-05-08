@@ -29,7 +29,6 @@ from . import metadata
 from .exception import FDroidException
 
 config = None
-options = None
 start_timestamp = time.gmtime()
 
 
@@ -175,13 +174,13 @@ def status_update_json(signed):
 
 
 def main():
-    global config, options
+    global config
 
     parser = ArgumentParser()
     common.setup_global_opts(parser)
-    options = parser.parse_args()
+    common.parse_args(parser)
 
-    config = common.read_config(options)
+    config = common.read_config()
 
     if 'jarsigner' not in config:
         raise FDroidException(

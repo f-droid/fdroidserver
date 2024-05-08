@@ -1014,7 +1014,7 @@ def parse_commandline():
     parser.add_argument("-w", "--wiki", default=False, action="store_true",
                         help=argparse.SUPPRESS)
     metadata.add_metadata_arguments(parser)
-    options = parser.parse_args()
+    options = common.parse_args(parser)
     metadata.warnings_action = options.W
 
     # Force --stop with --on-server to get correct exit code
@@ -1076,7 +1076,7 @@ def main():
         if not options.appid and not options.all:
             parser.error("option %s: If you really want to build all the apps, use --all" % "all")
 
-    config = common.read_config(opts=options)
+    config = common.read_config()
 
     if config['build_server_always']:
         options.server = True

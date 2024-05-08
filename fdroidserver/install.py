@@ -28,7 +28,6 @@ from . import common
 from .common import SdkToolsPopen
 from .exception import FDroidException
 
-options = None
 config = None
 
 
@@ -44,7 +43,7 @@ def devices():
 
 
 def main():
-    global options, config
+    global config
 
     # Parse command line...
     parser = ArgumentParser(
@@ -63,7 +62,7 @@ def main():
         default=False,
         help=_("Install all signed applications available"),
     )
-    options = parser.parse_args()
+    options = common.parse_args(parser)
 
     common.set_console_logging(options.verbose)
 
@@ -73,7 +72,7 @@ def main():
             % "all"
         )
 
-    config = common.read_config(options)
+    config = common.read_config()
 
     output_dir = 'repo'
     if not os.path.isdir(output_dir):

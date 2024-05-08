@@ -60,7 +60,7 @@ import fdroidserver.metadata
 import fdroidserver.update
 from fdroidserver.common import CATEGORIES_CONFIG_NAME
 from fdroidserver.looseversion import LooseVersion
-from testcommon import TmpCwd, mkdtemp
+from testcommon import TmpCwd, mkdtemp, parse_args_for_test
 
 
 DONATION_FIELDS = ('Donate', 'Liberapay', 'OpenCollective')
@@ -1207,7 +1207,7 @@ class UpdateTest(unittest.TestCase):
 
         # Set up options
         fdroidserver.common.options = Options
-        config = fdroidserver.common.read_config(fdroidserver.common.options)
+        config = fdroidserver.common.read_config()
         if 'apksigner' not in config:  # TODO remove me for buildserver-bullseye
             self.skipTest('SKIPPING test_update_with_AllowedAPKSigningKeys, apksigner not installed!')
         config['repo_keyalias'] = 'sova'
@@ -2280,7 +2280,7 @@ if __name__ == "__main__":
         default=False,
         help="Spew out even more information than normal",
     )
-    fdroidserver.common.options = parser.parse_args(['--verbose'])
+    parse_args_for_test(parser, sys.argv)
 
     newSuite = unittest.TestSuite()
     newSuite.addTest(unittest.makeSuite(UpdateTest))

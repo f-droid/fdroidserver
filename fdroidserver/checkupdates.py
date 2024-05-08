@@ -506,7 +506,7 @@ def operate_vercode(operation: str, vercode: int) -> int:
     return vercode
 
 
-def checkupdates_app(app: metadata.App) -> None:
+def checkupdates_app(app: metadata.App, auto: bool, commit: bool = False) -> None:
     """Check for new versions and updated name of a single app.
 
     Also write back changes to the metadata file and create a Git commit if
@@ -582,7 +582,7 @@ def checkupdates_app(app: metadata.App) -> None:
         logging.info('...updating to version %s' % ver)
         commitmsg = 'Update CurrentVersion of %s to %s' % (name, ver)
 
-    if options.auto:
+    if auto:
         mode = app.AutoUpdateMode
         if not app.CurrentVersionCode:
             raise MetaDataException(
@@ -665,7 +665,7 @@ def checkupdates_app(app: metadata.App) -> None:
 
     if commitmsg:
         metadata.write_metadata(app.metadatapath, app)
-        if options.commit:
+        if commit:
             logging.info("Commiting update for " + app.metadatapath)
             gitcmd = ["git", "commit", "-m", commitmsg]
             if 'auto_author' in config:
@@ -695,7 +695,6 @@ def status_update_json(processed: list, failed: dict) -> None:
 
 
 config = None
-options = None
 start_timestamp = time.gmtime()
 
 
@@ -705,7 +704,7 @@ def main():
     The behaviour of this function is influenced by the configuration file as
     well as command line parameters.
     """
-    global config, options
+    global config
 
     # Parse command line...
     parser = ArgumentParser()
@@ -720,10 +719,10 @@ def main():
     parser.add_argument("--allow-dirty", action="store_true", default=False,
                         help=_("Run on git repo that has uncommitted changes"))
     metadata.add_metadata_arguments(parser)
-    options = parser.parse_args()
+    options = common.parse_args(parser)
     metadata.warnings_action = options.W
 
-    config = common.read_config(options)
+    config = common.read_config()
 
     if not options.allow_dirty:
         status = subprocess.check_output(['git', 'status', '--porcelain'])
@@ -749,7 +748,7 @@ def main():
         logging.info(msg)
 
         try:
-            checkupdates_app(app)
+            checkupdates_app(app, options.auto, options.commit)
             processed.append(appid)
         except Exception as e:
             msg = _("...checkupdate failed for {appid} : {error}").format(appid=appid, error=e)

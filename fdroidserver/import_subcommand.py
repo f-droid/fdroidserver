@@ -45,7 +45,6 @@ from .exception import FDroidException
 
 
 config = None
-options = None
 
 
 def handle_retree_error_on_windows(function, path, excinfo):
@@ -55,7 +54,7 @@ def handle_retree_error_on_windows(function, path, excinfo):
         function(path)
 
 
-def clone_to_tmp_dir(app: metadata.App) -> Path:
+def clone_to_tmp_dir(app: metadata.App, rev=None) -> Path:
     """Clone the source repository of an app to a temporary directory for further processing.
 
     Parameters
@@ -67,6 +66,7 @@ def clone_to_tmp_dir(app: metadata.App) -> Path:
     -------
     tmp_dir
         The (temporary) directory the apps source has been cloned into.
+
     """
     tmp_dir = Path('tmp')
     tmp_dir.mkdir(exist_ok=True)
@@ -76,7 +76,7 @@ def clone_to_tmp_dir(app: metadata.App) -> Path:
     if tmp_dir.exists():
         shutil.rmtree(str(tmp_dir), onerror=handle_retree_error_on_windows)
     vcs = common.getvcs(app.RepoType, app.Repo, tmp_dir)
-    vcs.gotorevision(options.rev)
+    vcs.gotorevision(rev)
 
     return tmp_dir
 
@@ -236,8 +236,9 @@ def main():
         the current directory is not a Git repository, no application ID could
         be found, no Gradle project could be found or there is already metadata
         for the found application ID.
+
     """
-    global config, options
+    global config
 
     # Parse command line...
     parser = ArgumentParser()
@@ -255,10 +256,10 @@ def main():
     parser.add_argument("--rev", default=None,
                         help=_("Allows a different revision (or git branch) to be specified for the initial import"))
     metadata.add_metadata_arguments(parser)
-    options = parser.parse_args()
+    options = common.parse_args(parser)
     metadata.warnings_action = options.W
 
-    config = common.read_config(options)
+    config = common.read_config()
 
     apps = metadata.read_metadata()
     app = None
@@ -289,7 +290,7 @@ def main():
         write_local_file = True
     elif options.url:
         app = get_app_from_url(options.url)
-        tmp_importer_dir = clone_to_tmp_dir(app)
+        tmp_importer_dir = clone_to_tmp_dir(app, options.rev)
         git_repo = git.Repo(tmp_importer_dir)
 
         if not options.omit_disable:

@@ -273,7 +273,7 @@ if __name__ == "__main__":
         default=False,
         help="Spew out even more information than normal",
     )
-    common.options = parser.parse_args(['--verbose'])
+    common.options = common.parse_args(parser)
 
     newSuite = unittest.TestSuite()
     newSuite.addTest(unittest.makeSuite(RewriteMetaTest))

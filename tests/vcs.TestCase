@@ -21,7 +21,7 @@ import fdroidserver.build
 import fdroidserver.common
 import fdroidserver.metadata
 import fdroidserver.scanner
-from testcommon import mkdtemp
+from testcommon import mkdtemp, parse_args_for_test
 
 
 class VCSTest(unittest.TestCase):
@@ -97,7 +97,7 @@ if __name__ == "__main__":
         default=False,
         help="Spew out even more information than normal",
     )
-    fdroidserver.common.options = parser.parse_args(['--verbose'])
+    parse_args_for_test(parser, sys.argv)
 
     newSuite = unittest.TestSuite()
     newSuite.addTest(unittest.makeSuite(VCSTest))

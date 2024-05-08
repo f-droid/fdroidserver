@@ -23,7 +23,7 @@ class SignaturesTest(unittest.TestCase):
     def setUp(self):
         logging.basicConfig(level=logging.DEBUG)
         common.config = None
-        config = common.read_config(common.options)
+        config = common.read_config()
         config['jarsigner'] = common.find_sdk_tools_cmd('jarsigner')
         config['verbose'] = True
         common.config = config
@@ -68,7 +68,7 @@ if __name__ == "__main__":
         default=False,
         help="Spew out even more information than normal",
     )
-    common.options = parser.parse_args(['--verbose'])
+    common.options = common.parse_args(parser)
 
     newSuite = unittest.TestSuite()
     newSuite.addTest(unittest.makeSuite(SignaturesTest))

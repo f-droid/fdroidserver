@@ -12,8 +12,8 @@ fdroid_summary = 'export the keystore in standard PEM format'
 def main():
     parser = ArgumentParser()
     common.setup_global_opts(parser)
-    options = parser.parse_args()
-    common.config = common.read_config(options)
+    common.parse_args(parser)
+    common.read_config()
     pubkey, repo_pubkey_fingerprint = index.extract_pubkey()
     print('repo_pubkey = "%s"' % pubkey.decode())
 

@@ -31,7 +31,6 @@ from . import metadata
 from . import rewritemeta
 
 config = None
-options = None
 
 
 def enforce_https(domain):
@@ -503,7 +502,7 @@ def check_files_dir(app):
 
 
 def check_format(app):
-    if options.format and not rewritemeta.proper_format(app):
+    if common.options.format and not rewritemeta.proper_format(app):
         yield _("Run rewritemeta to fix formatting")
 
 
@@ -787,7 +786,7 @@ def lint_config(arg):
 
 
 def main():
-    global config, options
+    global config
 
     # Parse command line...
     parser = ArgumentParser()
@@ -812,10 +811,10 @@ def main():
         "appid", nargs='*', help=_("application ID of file to operate on")
     )
     metadata.add_metadata_arguments(parser)
-    options = parser.parse_args()
+    options = common.parse_args(parser)
     metadata.warnings_action = options.W
 
-    config = common.read_config(options)
+    config = common.read_config()
     load_antiFeatures_config()
     load_categories_config()
 

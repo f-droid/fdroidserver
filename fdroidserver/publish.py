@@ -49,7 +49,6 @@ from .common import FDroidPopen
 from .exception import BuildException, FDroidException
 
 config = None
-options = None
 start_timestamp = time.gmtime()
 
 
@@ -269,7 +268,7 @@ def create_key_if_not_existing(keyalias):
 
 
 def main():
-    global config, options
+    global config
 
     # Parse command line...
     parser = ArgumentParser(
@@ -289,10 +288,10 @@ def main():
         help=_("application ID with optional versionCode in the form APPID[:VERCODE]"),
     )
     metadata.add_metadata_arguments(parser)
-    options = parser.parse_args()
+    options = common.parse_args(parser)
     metadata.warnings_action = options.W
 
-    config = common.read_config(options)
+    config = common.read_config()
 
     if not ('jarsigner' in config and 'keytool' in config):
         logging.critical(

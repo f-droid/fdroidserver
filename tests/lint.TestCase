@@ -20,7 +20,7 @@ import fdroidserver.common
 import fdroidserver.lint
 import fdroidserver.metadata
 from fdroidserver.common import CATEGORIES_CONFIG_NAME
-from testcommon import mkdtemp
+from testcommon import mkdtemp, parse_args_for_test
 
 
 class LintTest(unittest.TestCase):
@@ -536,8 +536,7 @@ if __name__ == "__main__":
         default=False,
         help="Spew out even more information than normal",
     )
-    fdroidserver.lint.options = parser.parse_args(['--verbose'])
-    fdroidserver.common.options = fdroidserver.lint.options
+    fdroidserver.lint.options = parse_args_for_test(parser, sys.argv)
 
     newSuite = unittest.TestSuite()
     newSuite.addTest(unittest.makeSuite(LintTest))

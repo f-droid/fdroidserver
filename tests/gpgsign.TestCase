@@ -32,7 +32,7 @@ class GpgsignTest(unittest.TestCase):
         self.repodir.mkdir()
 
         gpgsign.config = None
-        config = common.read_config(common.options)
+        config = common.read_config()
         config['verbose'] = True
         config['gpghome'] = str((self.basedir / 'gnupghome').resolve())
         config['gpgkey'] = '1DBA2E89'
@@ -84,7 +84,7 @@ if __name__ == "__main__":
         default=False,
         help="Spew out even more information than normal",
     )
-    common.options = parser.parse_args(['--verbose'])
+    common.parse_args(parser)
 
     newSuite = unittest.TestSuite()
     newSuite.addTest(unittest.makeSuite(GpgsignTest))

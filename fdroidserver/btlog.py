@@ -47,9 +47,6 @@ from . import deploy
 from .exception import FDroidException
 
 
-options = None
-
-
 def make_binary_transparency_log(
     repodirs: collections.abc.Iterable,
     btrepo: str = 'binary_transparency',
@@ -175,9 +172,8 @@ def main():
     ------
     :exc:`~fdroidserver.exception.FDroidException`
         If the specified or default Git repository does not exist.
-    """
-    global options
 
+    """
     parser = ArgumentParser()
     common.setup_global_opts(parser)
     parser.add_argument(
@@ -196,7 +192,7 @@ def main():
         default=None,
         help=_("Push the log to this git remote repository"),
     )
-    options = parser.parse_args()
+    options = common.parse_args(parser)
 
     if options.verbose:
         logging.getLogger("requests").setLevel(logging.INFO)

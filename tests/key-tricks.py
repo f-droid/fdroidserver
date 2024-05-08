@@ -11,7 +11,7 @@ if os.getenv('CI') is None:
     sys.exit(1)
 
 os.chdir(os.path.dirname(__file__))
-config = fdroidserver.common.read_config(common.options)
+config = fdroidserver.common.read_config()
 nightly.PASSWORD = config['keystorepass']
 nightly.KEY_ALIAS = config['repo_keyalias']
 

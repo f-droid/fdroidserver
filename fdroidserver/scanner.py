@@ -40,8 +40,6 @@ from . import metadata
 from .exception import BuildException, VCSException, ConfigurationException
 from . import scanner
 
-options = None
-
 
 @dataclass
 class MessageStore:
@@ -332,8 +330,9 @@ class ScannerTool:
 
         self.scanner_data_lookup()
 
-        config = common.get_config()
-        if (options and options.refresh_scanner) or config.get('refresh_scanner'):
+        options = common.get_options()
+        options_refresh_scanner = options and options.refresh_scanner
+        if options_refresh_scanner or common.get_config().get('refresh_scanner'):
             self.refresh()
 
         self.load()
@@ -589,6 +588,7 @@ def scan_source(build_dir, build=metadata.Build(), json_per_build=None):
         -------
         0 if the problem was ignored/deleted/is only a warning, 1 otherwise
         """
+        options = common.get_options()
         if toignore(path_in_build_dir):
             return ignoreproblem(what, path_in_build_dir, json_per_build)
         if todelete(path_in_build_dir):
@@ -776,9 +776,6 @@ def scan_source(build_dir, build=metadata.Build(), json_per_build=None):
 
 
 def main():
-    global options
-
-    # Parse command line...
     parser = ArgumentParser(
         usage="%(prog)s [options] [(APPID[:VERCODE] | path/to.apk) ...]"
     )
@@ -793,7 +790,7 @@ def main():
     parser.add_argument("-e", "--exit-code", action="store_true", default=False,
                         help=_("Exit with a non-zero code if problems were found"))
     metadata.add_metadata_arguments(parser)
-    options = parser.parse_args()
+    options = common.parse_args(parser)
     metadata.warnings_action = options.W
 
     json_output = dict()
@@ -804,7 +801,7 @@ def main():
             logging.getLogger().setLevel(logging.ERROR)
 
     # initialize/load configuration values
-    common.get_config(opts=options)
+    common.get_config()
 
     probcount = 0
 

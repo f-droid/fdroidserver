@@ -32,7 +32,6 @@ from . import common
 from .exception import FDroidException
 
 config = {}
-options = None
 
 
 def disable_in_config(key, value):
@@ -49,7 +48,7 @@ def disable_in_config(key, value):
 
 
 def main():
-    global options, config
+    global config
 
     # Parse command line...
     parser = ArgumentParser()
@@ -81,7 +80,7 @@ def main():
         default=False,
         help=_("Do not prompt for Android SDK path, just fail"),
     )
-    options = parser.parse_args()
+    options = common.parse_args(parser)
 
     common.set_console_logging(options.verbose)
 
@@ -171,7 +170,7 @@ def main():
         raise FDroidException('Repository already exists.')
 
     # now that we have a local config.yml, read configuration...
-    config = common.read_config(options)
+    config = common.read_config()
 
     # the NDK is optional and there may be multiple versions of it, so it's
     # left for the user to configure

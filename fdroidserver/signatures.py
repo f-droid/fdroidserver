@@ -103,11 +103,8 @@ def main():
         "APK", nargs='*', help=_("signed APK, either a file-path or HTTPS URL.")
     )
     parser.add_argument("--no-check-https", action="store_true", default=False)
-    options = parser.parse_args()
-
+    options = common.parse_args(parser)
     common.set_console_logging(options.verbose)
-
-    # Read config.py...
-    common.read_config(options)
+    common.read_config()
 
     extract(options)
