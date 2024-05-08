@@ -3,7 +3,6 @@
 import glob
 import inspect
 import logging
-import optparse
 import os
 import re
 import shutil
@@ -31,7 +30,7 @@ import fdroidserver.build
 import fdroidserver.common
 import fdroidserver.metadata
 import fdroidserver.scanner
-from testcommon import TmpCwd, mkdtemp, mock_open_to_str
+from testcommon import TmpCwd, mkdtemp, mock_open_to_str, parse_args_for_test
 
 
 class ScannerTest(unittest.TestCase):
@@ -47,8 +46,8 @@ class ScannerTest(unittest.TestCase):
         self._td.cleanup()
 
     def test_scan_source_files(self):
-        fdroidserver.scanner.options = mock.Mock()
-        fdroidserver.scanner.options.json = False
+        fdroidserver.common.options = mock.Mock()
+        fdroidserver.common.options.json = False
         source_files = os.path.join(self.basedir, 'source-files')
         projects = {
             'OtakuWorld': 2,
@@ -103,8 +102,8 @@ class ScannerTest(unittest.TestCase):
         """Check for sneaking in banned maven repos"""
         os.chdir(self.testdir)
         fdroidserver.scanner.config = None
-        fdroidserver.scanner.options = mock.Mock()
-        fdroidserver.scanner.options.json = True
+        fdroidserver.common.options = mock.Mock()
+        fdroidserver.common.options.json = True
         with open('build.gradle', 'w', encoding='utf-8') as fp:
             fp.write(
                 textwrap.dedent(
@@ -136,8 +135,8 @@ class ScannerTest(unittest.TestCase):
         os.chdir(abs_build_dir)
 
         fdroidserver.scanner.config = None
-        fdroidserver.scanner.options = mock.Mock()
-        fdroidserver.scanner.options.json = True
+        fdroidserver.common.options = mock.Mock()
+        fdroidserver.common.options.json = True
 
         keep = [
             'arg.jar',
@@ -236,7 +235,7 @@ class ScannerTest(unittest.TestCase):
         fdroidserver.build.options.scan_binary = False
         fdroidserver.build.options.notarball = True
         fdroidserver.build.options.skipscan = False
-        fdroidserver.scanner.options = fdroidserver.build.options
+        fdroidserver.common.options = fdroidserver.build.options
 
         app = fdroidserver.metadata.App()
         app.id = 'mocked.app.id'
@@ -315,7 +314,7 @@ class ScannerTest(unittest.TestCase):
         """Check that the scanner can handle scandelete with gradle files with multiple problems"""
         os.chdir(self.testdir)
         fdroidserver.scanner.config = None
-        fdroidserver.scanner.options = mock.Mock()
+        fdroidserver.common.options = mock.Mock()
         build = fdroidserver.metadata.Build()
         build.scandelete = ['build.gradle']
         with open('build.gradle', 'w', encoding='utf-8') as fp:
@@ -733,15 +732,15 @@ class Test_ScannerTool(unittest.TestCase):
             refresh.assert_not_called()
 
     def test_refresh_true(self):
-        fdroidserver.scanner.options = mock.Mock()
-        fdroidserver.scanner.options.refresh_scanner = True
+        fdroidserver.common.options = mock.Mock()
+        fdroidserver.common.options.refresh_scanner = True
         with mock.patch('fdroidserver.scanner.ScannerTool.refresh') as refresh:
             fdroidserver.scanner.ScannerTool()
             refresh.assert_called_once()
 
     def test_refresh_false(self):
-        fdroidserver.scanner.options = mock.Mock()
-        fdroidserver.scanner.options.refresh_scanner = False
+        fdroidserver.common.options = mock.Mock()
+        fdroidserver.common.options.refresh_scanner = False
         with mock.patch('fdroidserver.scanner.ScannerTool.refresh') as refresh:
             fdroidserver.scanner.ScannerTool()
             refresh.assert_not_called()
@@ -754,8 +753,8 @@ class Test_ScannerTool(unittest.TestCase):
             refresh.assert_called_once()
 
     def test_refresh_options_overrides_config(self):
-        fdroidserver.scanner.options = mock.Mock()
-        fdroidserver.scanner.options.refresh_scanner = True
+        fdroidserver.common.options = mock.Mock()
+        fdroidserver.common.options.refresh_scanner = True
         os.chdir(self.testdir)
         pathlib.Path('config.yml').write_text('refresh_scanner: false')
         with mock.patch('fdroidserver.scanner.ScannerTool.refresh') as refresh:
@@ -815,15 +814,17 @@ class Test_main(unittest.TestCase):
 if __name__ == "__main__":
     os.chdir(os.path.dirname(__file__))
 
-    parser = optparse.OptionParser()
-    parser.add_option(
+    import argparse
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
         "-v",
         "--verbose",
         action="store_true",
         default=False,
         help="Spew out even more information than normal",
     )
-    (fdroidserver.common.options, args) = parser.parse_args(['--verbose'])
+    parse_args_for_test(parser, sys.argv)
 
     newSuite = unittest.TestSuite()
     newSuite.addTests(

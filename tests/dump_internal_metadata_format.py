@@ -56,9 +56,9 @@ def _build_yaml_representer(dumper, data):
 parser = ArgumentParser()
 fdroidserver.common.setup_global_opts(parser)
 fdroidserver.metadata.add_metadata_arguments(parser)
-options = parser.parse_args()
+options = fdroidserver.common.parse_args(parser)
 fdroidserver.metadata.warnings_action = options.W
-fdroidserver.common.read_config(None)
+fdroidserver.common.read_config()
 
 if not os.path.isdir('metadata'):
     print("This script must be run in an F-Droid data folder with a 'metadata' subdir!")

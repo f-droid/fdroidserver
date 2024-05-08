@@ -9,7 +9,6 @@ import hashlib
 import inspect
 import json
 import logging
-import optparse
 import os
 import random
 import shutil
@@ -24,7 +23,6 @@ import textwrap
 from binascii import hexlify
 from datetime import datetime
 from pathlib import Path
-from testcommon import TmpCwd, mkdtemp
 from unittest import mock
 
 try:
@@ -62,6 +60,7 @@ import fdroidserver.metadata
 import fdroidserver.update
 from fdroidserver.common import CATEGORIES_CONFIG_NAME
 from fdroidserver.looseversion import LooseVersion
+from testcommon import TmpCwd, mkdtemp, parse_args_for_test
 
 
 DONATION_FIELDS = ('Donate', 'Liberapay', 'OpenCollective')
@@ -1208,7 +1207,7 @@ class UpdateTest(unittest.TestCase):
 
         # Set up options
         fdroidserver.common.options = Options
-        config = fdroidserver.common.read_config(fdroidserver.common.options)
+        config = fdroidserver.common.read_config()
         if 'apksigner' not in config:  # TODO remove me for buildserver-bullseye
             self.skipTest('SKIPPING test_update_with_AllowedAPKSigningKeys, apksigner not installed!')
         config['repo_keyalias'] = 'sova'
@@ -2271,15 +2270,17 @@ class TestParseFromPbxproj(unittest.TestCase):
 if __name__ == "__main__":
     os.chdir(os.path.dirname(__file__))
 
-    parser = optparse.OptionParser()
-    parser.add_option(
+    import argparse
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
         "-v",
         "--verbose",
         action="store_true",
         default=False,
         help="Spew out even more information than normal",
     )
-    (fdroidserver.common.options, args) = parser.parse_args(['--verbose'])
+    parse_args_for_test(parser, sys.argv)
 
     newSuite = unittest.TestSuite()
     newSuite.addTest(unittest.makeSuite(UpdateTest))

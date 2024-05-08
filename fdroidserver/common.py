@@ -191,6 +191,34 @@ default_config = {
 }
 
 
+def get_options():
+    """Return options as set up by parse_args().
+
+    This provides an easy way to get the global instance without
+    having to think about very confusing import and submodule
+    visibility.  The code should be probably refactored so it does not
+    need this.  If each individual option value was always passed to
+    functions as args, for example.
+
+    https://docs.python.org/3/reference/import.html#submodules
+
+    """
+    return fdroidserver.common.options
+
+
+def parse_args(parser):
+    """Call parser.parse_args(), store result in module-level variable and return it.
+
+    This is needed to set up the copy of the options instance in the
+    fdroidserver.common module.  A subcommand only needs to call this
+    if it uses functions from fdroidserver.common that expect the
+    "options" variable to be initialized.
+
+    """
+    fdroidserver.common.options = parser.parse_args()
+    return fdroidserver.common.options
+
+
 def setup_global_opts(parser):
     try:  # the buildserver VM might not have PIL installed
         from PIL import PngImagePlugin
@@ -373,20 +401,38 @@ def fill_config_defaults(thisconfig):
         thisconfig['gradle_version_dir'] = str(Path(thisconfig['cachedir']) / 'gradle')
 
 
-def get_config(opts=None):
-    """Get config instace. This function takes care of initializing config data before returning it."""
-    global config, options
+def get_config():
+    """Get the initalized, singleton config instance.
+
+    config and options are intertwined in read_config(), so they have
+    to be here too.  In the current ugly state of things, there are
+    multiple potential instances of config and options in use:
+
+    * global
+    * module-level in the subcommand module (e.g. fdroidserver/build.py)
+    * module-level in fdroidserver.common
+
+    There are some insane parts of the code that are probably
+    referring to multiple instances of these at different points.
+    This can be super confusing and maddening.
+
+    The current intermediate refactoring step is to move all
+    subcommands to always get/set config and options via this function
+    so that there is no longer a distinction between the global and
+    module-level instances.  Then there can be only one module-level
+    instance in fdroidserver.common.
+
+    """
+    global config
 
     if config is not None:
         return config
 
-    common.read_config(opts=opts)
+    read_config()
 
     # make sure these values are available in common.py even if they didn't
     # declare global in a scope
     common.config = config
-    if opts is not None:
-        common.options = opts
 
     return config
 
@@ -419,7 +465,7 @@ def config_type_check(path, data):
         )
 
 
-def read_config(opts=None):
+def read_config():
     """Read the repository config.
 
     The config is read from config_file, which is in the current
@@ -438,12 +484,10 @@ def read_config(opts=None):
     in git, it makes sense to use a globally standard encoding.
 
     """
-    global config, options
+    global config
 
     if config is not None:
         return config
-
-    options = opts
 
     config = {}
     config_file = 'config.yml'
@@ -477,8 +521,8 @@ def read_config(opts=None):
     # smartcardoptions must be a list since its command line args for Popen
     smartcardoptions = config.get('smartcardoptions')
     if isinstance(smartcardoptions, str):
-        options = re.sub(r'\s+', r' ', config['smartcardoptions']).split(' ')
-        config['smartcardoptions'] = [i.strip() for i in options if i]
+        sco_items = re.sub(r'\s+', r' ', config['smartcardoptions']).split(' ')
+        config['smartcardoptions'] = [i.strip() for i in sco_items if i]
     elif not smartcardoptions and 'keystore' in config and config['keystore'] == 'NONE':
         # keystore='NONE' means use smartcard, these are required defaults
         config['smartcardoptions'] = ['-storetype', 'PKCS11', '-providerName',
@@ -570,7 +614,7 @@ def parse_mirrors_config(mirrors):
 def file_entry(filename, hash_value=None):
     meta = {}
     meta["name"] = "/" + Path(filename).as_posix().split("/", 1)[1]
-    meta["sha256"] = hash_value or common.sha256sum(filename)
+    meta["sha256"] = hash_value or sha256sum(filename)
     meta["size"] = os.stat(filename).st_size
     return meta
 

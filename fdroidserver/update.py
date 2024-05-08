@@ -2574,10 +2574,10 @@ def main():
     parser.add_argument("--allow-disabled-algorithms", action="store_true", default=False,
                         help=_("Include APKs that are signed with disabled algorithms like MD5"))
     metadata.add_metadata_arguments(parser)
-    options = parser.parse_args()
+    options = common.parse_args(parser)
     metadata.warnings_action = options.W
 
-    config = common.read_config(options)
+    config = common.read_config()
     common.setup_status_output(start_timestamp)
 
     if not (('jarsigner' in config or 'apksigner' in config)

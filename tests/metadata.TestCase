@@ -3,7 +3,6 @@
 import copy
 import io
 import logging
-import optparse
 import os
 import random
 import ruamel.yaml
@@ -16,8 +15,6 @@ from collections import OrderedDict
 from pathlib import Path
 from unittest import mock
 
-from testcommon import TmpCwd, mkdtemp
-
 localmodule = Path(__file__).resolve().parent.parent
 print('localmodule: ' + str(localmodule))
 if localmodule not in sys.path:
@@ -27,6 +24,7 @@ import fdroidserver
 from fdroidserver import metadata
 from fdroidserver.exception import MetaDataException
 from fdroidserver.common import DEFAULT_LOCALE
+from testcommon import TmpCwd, mkdtemp, parse_args_for_test
 
 
 def _get_mock_mf(s):
@@ -2447,15 +2445,17 @@ class PostMetadataParseTest(unittest.TestCase):
 
 
 if __name__ == "__main__":
-    parser = optparse.OptionParser()
-    parser.add_option(
+    import argparse
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
         "-v",
         "--verbose",
         action="store_true",
         default=False,
         help="Spew out even more information than normal",
     )
-    (fdroidserver.common.options, args) = parser.parse_args(['--verbose'])
+    parse_args_for_test(parser, sys.argv)
 
     newSuite = unittest.TestSuite()
     newSuite.addTest(unittest.makeSuite(MetadataTest))

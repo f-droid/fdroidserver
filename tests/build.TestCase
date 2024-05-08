@@ -4,7 +4,6 @@
 
 import inspect
 import logging
-import optparse
 import os
 import shutil
 import sys
@@ -29,7 +28,7 @@ import fdroidserver.common
 import fdroidserver.metadata
 import fdroidserver.scanner
 import fdroidserver.vmtools
-from testcommon import mkdtemp
+from testcommon import mkdtemp, parse_args_for_test
 
 
 class FakeProcess:
@@ -562,7 +561,7 @@ class BuildTest(unittest.TestCase):
         os.chdir(self.testdir)
         os.mkdir("build")
 
-        config = fdroidserver.common.get_config()
+        config = fdroidserver.common.read_config()
         config['sdk_path'] = os.getenv('ANDROID_HOME')
         config['ndk_paths'] = {'r10d': os.getenv('ANDROID_NDK_HOME')}
         fdroidserver.common.config = config
@@ -1104,15 +1103,17 @@ class BuildTest(unittest.TestCase):
 if __name__ == "__main__":
     os.chdir(os.path.dirname(__file__))
 
-    parser = optparse.OptionParser()
-    parser.add_option(
+    import argparse
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
         "-v",
         "--verbose",
         action="store_true",
         default=False,
         help="Spew out even more information than normal",
     )
-    (fdroidserver.common.options, args) = parser.parse_args(['--verbose'])
+    parse_args_for_test(parser, sys.argv)
 
     newSuite = unittest.TestSuite()
     newSuite.addTest(unittest.makeSuite(BuildTest))

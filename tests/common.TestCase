@@ -9,7 +9,6 @@ import importlib
 import inspect
 import json
 import logging
-import optparse
 import os
 import re
 import ruamel.yaml
@@ -22,6 +21,7 @@ import unittest
 import textwrap
 import yaml
 import gzip
+from argparse import ArgumentParser
 from zipfile import BadZipFile, ZipFile
 from unittest import mock
 from pathlib import Path
@@ -38,11 +38,17 @@ import fdroidserver.index
 import fdroidserver.signindex
 import fdroidserver.common
 import fdroidserver.metadata
-from testcommon import TmpCwd, mkdtemp
+from testcommon import TmpCwd, mkdtemp, parse_args_for_test
 from fdroidserver.common import ANTIFEATURES_CONFIG_NAME, CATEGORIES_CONFIG_NAME
 from fdroidserver.exception import FDroidException, VCSException,\
     MetaDataException, VerificationException
 from fdroidserver.looseversion import LooseVersion
+
+
+def _mock_common_module_options_instance():
+    """Helper method to deal with difficult visibility of the module-level options."""
+    fdroidserver.common.options = mock.Mock()
+    fdroidserver.common.options.verbose = False
 
 
 class CommonTest(unittest.TestCase):
@@ -57,17 +63,22 @@ class CommonTest(unittest.TestCase):
         if not os.path.exists(self.tmpdir):
             os.makedirs(self.tmpdir)
         os.chdir(self.basedir)
+
+        # these are declared as None at the top of the module file
         fdroidserver.common.config = None
-        fdroidserver.common.options = mock.Mock()
-        fdroidserver.common.options.verbose = False
+        fdroidserver.common.options = None
         fdroidserver.metadata.srclibs = None
+
         self._td = mkdtemp()
         self.testdir = self._td.name
 
     def tearDown(self):
+        fdroidserver.common.config = None
+        fdroidserver.common.options = None
         os.chdir(self.basedir)
         self._td.cleanup()
-        shutil.rmtree(self.tmpdir)
+        if os.path.exists(self.tmpdir):
+            shutil.rmtree(self.tmpdir)
 
     def test_parse_human_readable_size(self):
         for k, v in (
@@ -356,6 +367,7 @@ class CommonTest(unittest.TestCase):
         config = dict()
         fdroidserver.common.fill_config_defaults(config)
         fdroidserver.common.config = config
+        _mock_common_module_options_instance()
 
         srclibname = 'FakeSrcLib'
         srclib_testdir = os.path.join(self.testdir, 'build', 'srclib')
@@ -397,6 +409,7 @@ class CommonTest(unittest.TestCase):
                                            onserver=True, refresh=False)  # do not clone in this test
 
     def test_prepare_sources_refresh(self):
+        _mock_common_module_options_instance()
         packageName = 'org.fdroid.ci.test.app'
         os.chdir(self.tmpdir)
         os.mkdir('build')
@@ -467,6 +480,7 @@ class CommonTest(unittest.TestCase):
         config = dict()
         fdroidserver.common.fill_config_defaults(config)
         fdroidserver.common.config = config
+        _mock_common_module_options_instance()
 
         commands = ['sh', '-c', 'echo stdout message && echo stderr message 1>&2']
 
@@ -477,7 +491,8 @@ class CommonTest(unittest.TestCase):
         self.assertEqual(p.output, 'stdout message\n')
 
     def test_signjar(self):
-        config = fdroidserver.common.read_config(fdroidserver.common.options)
+        _mock_common_module_options_instance()
+        config = fdroidserver.common.read_config()
         config['jarsigner'] = fdroidserver.common.find_sdk_tools_cmd('jarsigner')
         fdroidserver.common.config = config
         fdroidserver.signindex.config = config
@@ -497,7 +512,8 @@ class CommonTest(unittest.TestCase):
                 )
 
     def test_verify_apk_signature(self):
-        config = fdroidserver.common.read_config(fdroidserver.common.options)
+        _mock_common_module_options_instance()
+        config = fdroidserver.common.read_config()
         fdroidserver.common.config = config
 
         self.assertTrue(fdroidserver.common.verify_apk_signature('bad-unicode-πÇÇ现代通用字-български-عربي1.apk'))
@@ -519,7 +535,8 @@ class CommonTest(unittest.TestCase):
         self.assertFalse(fdroidserver.common.verify_apk_signature('urzip-release-unsigned.apk'))
 
     def test_verify_old_apk_signature(self):
-        config = fdroidserver.common.read_config(fdroidserver.common.options)
+        _mock_common_module_options_instance()
+        config = fdroidserver.common.read_config()
         config['jarsigner'] = fdroidserver.common.find_sdk_tools_cmd('jarsigner')
         fdroidserver.common.config = config
 
@@ -540,7 +557,7 @@ class CommonTest(unittest.TestCase):
 
     def test_verify_jar_signature(self):
         """Sign entry.jar and make sure it validates"""
-        config = fdroidserver.common.read_config(fdroidserver.common.options)
+        config = fdroidserver.common.read_config()
         config['jarsigner'] = fdroidserver.common.find_sdk_tools_cmd('jarsigner')
         config['keystore'] = os.path.join(self.basedir, 'keystore.jks')
         config['repo_keyalias'] = 'sova'
@@ -558,7 +575,7 @@ class CommonTest(unittest.TestCase):
 
     def test_verify_jar_signature_fails(self):
         """Test verify_jar_signature fails on unsigned and deprecated algorithms"""
-        config = fdroidserver.common.read_config(fdroidserver.common.options)
+        config = fdroidserver.common.read_config()
         config['jarsigner'] = fdroidserver.common.find_sdk_tools_cmd('jarsigner')
         fdroidserver.common.config = config
         source_dir = os.path.join(self.basedir, 'signindex')
@@ -568,7 +585,7 @@ class CommonTest(unittest.TestCase):
                 fdroidserver.common.verify_jar_signature(testfile)
 
     def test_verify_deprecated_jar_signature(self):
-        config = fdroidserver.common.read_config(fdroidserver.common.options)
+        config = fdroidserver.common.read_config()
         config['jarsigner'] = fdroidserver.common.find_sdk_tools_cmd('jarsigner')
         fdroidserver.common.config = config
         source_dir = os.path.join(self.basedir, 'signindex')
@@ -581,8 +598,9 @@ class CommonTest(unittest.TestCase):
             fdroidserver.common.verify_deprecated_jar_signature(testfile)
 
     def test_verify_apks(self):
-        config = fdroidserver.common.read_config(fdroidserver.common.options)
+        config = fdroidserver.common.read_config()
         fdroidserver.common.config = config
+        _mock_common_module_options_instance()
 
         sourceapk = os.path.join(self.basedir, 'urzip.apk')
 
@@ -889,7 +907,8 @@ class CommonTest(unittest.TestCase):
             )
 
     def test_sign_apk(self):
-        config = fdroidserver.common.read_config(fdroidserver.common.options)
+        _mock_common_module_options_instance()
+        config = fdroidserver.common.read_config()
         if 'apksigner' not in config:
             self.skipTest('SKIPPING test_sign_apk, apksigner not installed!')
 
@@ -959,7 +978,8 @@ class CommonTest(unittest.TestCase):
 
     @unittest.skipIf(os.getuid() == 0, 'This is meaningless when run as root')
     def test_sign_apk_fail(self):
-        config = fdroidserver.common.read_config(fdroidserver.common.options)
+        _mock_common_module_options_instance()
+        config = fdroidserver.common.read_config()
         if 'apksigner' not in config:
             self.skipTest('SKIPPING test_sign_apk_fail, apksigner not installed!')
 
@@ -982,7 +1002,8 @@ class CommonTest(unittest.TestCase):
         self.assertFalse(os.path.isfile(signed))
 
     def test_sign_apk_corrupt(self):
-        config = fdroidserver.common.read_config(fdroidserver.common.options)
+        _mock_common_module_options_instance()
+        config = fdroidserver.common.read_config()
         if 'apksigner' not in config:
             self.skipTest('SKIPPING test_sign_apk_corrupt, apksigner not installed!')
 
@@ -1008,7 +1029,8 @@ class CommonTest(unittest.TestCase):
     )
     def test_resign_apk(self):
         """When using apksigner, it should resign signed APKs"""
-        config = fdroidserver.common.read_config(fdroidserver.common.options)
+        _mock_common_module_options_instance()
+        config = fdroidserver.common.read_config()
         if 'apksigner' not in config:
             self.skipTest('SKIPPING test_resign_apk, apksigner not installed!')
 
@@ -1914,7 +1936,7 @@ class CommonTest(unittest.TestCase):
         os.chdir(self.tmpdir)
         self.assertFalse(os.path.exists('config.yml'))
         self.assertFalse(os.path.exists('config.py'))
-        config = fdroidserver.common.read_config(fdroidserver.common.options)
+        config = fdroidserver.common.read_config()
         self.assertFalse(config.get('update_stats'))
         self.assertIsNotNone(config.get('char_limits'))
 
@@ -1924,7 +1946,7 @@ class CommonTest(unittest.TestCase):
         open('config.yml', 'w').close()
         self.assertTrue(os.path.exists('config.yml'))
         self.assertFalse(os.path.exists('config.py'))
-        config = fdroidserver.common.read_config(fdroidserver.common.options)
+        config = fdroidserver.common.read_config()
         self.assertFalse(config.get('update_stats'))
         self.assertIsNotNone(config.get('char_limits'))
 
@@ -1935,7 +1957,7 @@ class CommonTest(unittest.TestCase):
             fp.write('apksigner: yml')
         self.assertTrue(os.path.exists('config.yml'))
         self.assertFalse(os.path.exists('config.py'))
-        config = fdroidserver.common.read_config(fdroidserver.common.options)
+        config = fdroidserver.common.read_config()
         self.assertEqual('yml', config.get('apksigner'))
 
     def test_with_config_yml_utf8(self):
@@ -1946,7 +1968,7 @@ class CommonTest(unittest.TestCase):
             fp.write('apksigner: ' + teststr)
         self.assertTrue(os.path.exists('config.yml'))
         self.assertFalse(os.path.exists('config.py'))
-        config = fdroidserver.common.read_config(fdroidserver.common.options)
+        config = fdroidserver.common.read_config()
         self.assertEqual(teststr, config.get('apksigner'))
 
     def test_with_config_yml_utf8_as_ascii(self):
@@ -1957,7 +1979,7 @@ class CommonTest(unittest.TestCase):
             yaml.dump({'apksigner': teststr}, fp)
         self.assertTrue(os.path.exists('config.yml'))
         self.assertFalse(os.path.exists('config.py'))
-        config = fdroidserver.common.read_config(fdroidserver.common.options)
+        config = fdroidserver.common.read_config()
         self.assertEqual(teststr, config.get('apksigner'))
 
     def test_with_config_yml_with_env_var(self):
@@ -1969,20 +1991,20 @@ class CommonTest(unittest.TestCase):
                 fp.write("""keypass: {'env': 'SECRET'}""")
             self.assertTrue(os.path.exists('config.yml'))
             self.assertFalse(os.path.exists('config.py'))
-            config = fdroidserver.common.read_config(fdroidserver.common.options)
+            config = fdroidserver.common.read_config()
             self.assertEqual(os.getenv('SECRET', 'fail'), config.get('keypass'))
 
     def test_with_config_yml_is_dict(self):
         os.chdir(self.tmpdir)
         Path('config.yml').write_text('apksigner = /placeholder/path')
         with self.assertRaises(TypeError):
-            fdroidserver.common.read_config(fdroidserver.common.options)
+            fdroidserver.common.read_config()
 
     def test_with_config_yml_is_not_mixed_type(self):
         os.chdir(self.tmpdir)
         Path('config.yml').write_text('k: v\napksigner = /placeholder/path')
         with self.assertRaises(yaml.scanner.ScannerError):
-            fdroidserver.common.read_config(fdroidserver.common.options)
+            fdroidserver.common.read_config()
 
     def test_with_config_py(self):
         """Make sure it is still possible to use config.py alone."""
@@ -1991,7 +2013,7 @@ class CommonTest(unittest.TestCase):
             fp.write('apksigner = "py"')
         self.assertFalse(os.path.exists('config.yml'))
         self.assertTrue(os.path.exists('config.py'))
-        config = fdroidserver.common.read_config(fdroidserver.common.options)
+        config = fdroidserver.common.read_config()
         self.assertEqual("py", config.get('apksigner'))
 
     def test_config_perm_warning(self):
@@ -2001,7 +2023,7 @@ class CommonTest(unittest.TestCase):
             fp.write('keystore: foo.jks')
         self.assertTrue(os.path.exists(fp.name))
         os.chmod(fp.name, 0o666)
-        fdroidserver.common.read_config(fdroidserver.common.options)
+        fdroidserver.common.read_config()
         os.remove(fp.name)
         fdroidserver.common.config = None
 
@@ -2009,7 +2031,7 @@ class CommonTest(unittest.TestCase):
             fp.write('keystore = "foo.jks"')
         self.assertTrue(os.path.exists(fp.name))
         os.chmod(fp.name, 0o666)
-        fdroidserver.common.read_config(fdroidserver.common.options)
+        fdroidserver.common.read_config()
 
     def test_with_both_config_yml_py(self):
         """If config.yml and config.py are present, config.py should be ignored."""
@@ -2020,7 +2042,7 @@ class CommonTest(unittest.TestCase):
             fp.write('apksigner = "py"')
         self.assertTrue(os.path.exists('config.yml'))
         self.assertTrue(os.path.exists('config.py'))
-        config = fdroidserver.common.read_config(fdroidserver.common.options)
+        config = fdroidserver.common.read_config()
         self.assertEqual('yml', config.get('apksigner'))
 
     def test_config_repo_url(self):
@@ -2071,14 +2093,14 @@ class CommonTest(unittest.TestCase):
             fp.write('apksigner: yml')
         self.assertTrue(os.path.exists(fp.name))
         self.assertFalse(os.path.exists('config.py'))
-        config = fdroidserver.common.read_config(fdroidserver.common.options)
+        config = fdroidserver.common.read_config()
         self.assertFalse('keypass' in config)
         self.assertEqual('yml', config.get('apksigner'))
         fdroidserver.common.write_to_config(config, 'keypass', 'mysecretpassword')
         with open(fp.name) as fp:
             print(fp.read())
         fdroidserver.common.config = None
-        config = fdroidserver.common.read_config(fdroidserver.common.options)
+        config = fdroidserver.common.read_config()
         self.assertEqual('mysecretpassword', config['keypass'])
 
     def test_write_to_config_py(self):
@@ -2087,12 +2109,12 @@ class CommonTest(unittest.TestCase):
             fp.write('apksigner = "py"')
         self.assertTrue(os.path.exists(fp.name))
         self.assertFalse(os.path.exists('config.yml'))
-        config = fdroidserver.common.read_config(fdroidserver.common.options)
+        config = fdroidserver.common.read_config()
         self.assertFalse('keypass' in config)
         self.assertEqual('py', config.get('apksigner'))
         fdroidserver.common.write_to_config(config, 'keypass', 'mysecretpassword')
         fdroidserver.common.config = None
-        config = fdroidserver.common.read_config(fdroidserver.common.options)
+        config = fdroidserver.common.read_config()
         self.assertEqual('mysecretpassword', config['keypass'])
 
     def test_config_dict_with_int_keys(self):
@@ -2101,7 +2123,7 @@ class CommonTest(unittest.TestCase):
             fp.write('java_paths:\n  8: /usr/lib/jvm/java-8-openjdk\n')
         self.assertTrue(os.path.exists(fp.name))
         self.assertFalse(os.path.exists('config.py'))
-        config = fdroidserver.common.read_config(fdroidserver.common.options)
+        config = fdroidserver.common.read_config()
         self.assertEqual('/usr/lib/jvm/java-8-openjdk', config.get('java_paths', {}).get('8'))
 
     @mock.patch.dict(os.environ, {'PATH': os.getenv('PATH')}, clear=True)
@@ -2179,7 +2201,7 @@ class CommonTest(unittest.TestCase):
         shutil.copy(os.path.join(self.basedir, '..', 'buildserver', 'config.buildserver.yml'),
                     'config.yml')
         self.assertFalse(os.path.exists('config.py'))
-        fdroidserver.common.read_config(fdroidserver.common.options)
+        fdroidserver.common.read_config()
 
     def test_setup_status_output(self):
         os.chdir(self.tmpdir)
@@ -2532,6 +2554,7 @@ class CommonTest(unittest.TestCase):
 
     @mock.patch.dict(os.environ, clear=True)
     def test_FDroidPopen_envs_paths_can_be_pathlib(self):
+        _mock_common_module_options_instance()
         os.environ['PATH'] = '/usr/bin:/usr/sbin'
         envs = {'PATHLIB': Path('/pathlib/path'), 'STRING': '/string/path'}
         p = fdroidserver.common.FDroidPopen(['/bin/sh', '-c', 'export'], envs=envs)
@@ -3215,18 +3238,104 @@ class SignerExtractionTest(unittest.TestCase):
                 )
 
 
+class ConfigOptionsScopeTest(unittest.TestCase):
+    """Test assumptions about variable scope for "config" and "options".
+
+    The ancient architecture of config and options in fdroidserver has
+    weird issues around unexpected scope, like there are cases where
+    the global config is not the same as the module-level config, and
+    more.
+
+    This is about describing what is happening, it is not about
+    documenting behaviors that are good design. The config and options
+    handling should really be refactored into a well-known, workable
+    Pythonic pattern.
+
+    """
+
+    def setUp(self):
+        # these are declared as None at the top of the module file
+        fdroidserver.common.config = None
+        fdroidserver.common.options = None
+
+    def tearDown(self):
+        fdroidserver.common.config = None
+        fdroidserver.common.options = None
+        if 'config' in globals():
+            global config
+            del config
+        if 'options' in globals():
+            global options
+            del options
+
+    def test_parse_args(self):
+        """Test that options is properly set up at the module-level and not global."""
+        self.assertFalse('options' in globals())
+        self.assertIsNone(fdroidserver.common.options)
+        parser = ArgumentParser()
+        fdroidserver.common.setup_global_opts(parser)
+        with mock.patch('sys.argv', ['$0']):
+            o = fdroidserver.common.parse_args(parser)
+        self.assertEqual(o, fdroidserver.common.options)
+
+        # No function should set options as a global, and the global
+        # keyword does not create the variable.
+        global options
+        with self.assertRaises(NameError):
+            options
+        self.assertFalse('options' in globals())
+
+    def test_parse_args_without_args(self):
+        """Test that the parsing function works fine when there are no args."""
+        parser = ArgumentParser()
+        fdroidserver.common.setup_global_opts(parser)
+        with mock.patch('sys.argv', ['$0']):
+            o = fdroidserver.common.parse_args(parser)
+        self.assertFalse(o.verbose)
+
+    def test_parse_args_with_args(self):
+        parser = ArgumentParser()
+        fdroidserver.common.setup_global_opts(parser)
+        with mock.patch('sys.argv', ['$0', '-v']):
+            o = fdroidserver.common.parse_args(parser)
+        self.assertTrue(o.verbose)
+
+    def test_get_config(self):
+        """Show how the module-level variables are initialized."""
+        self.assertTrue('config' not in vars() and 'config' not in globals())
+        self.assertIsNone(fdroidserver.common.config)
+        config = fdroidserver.common.read_config()
+        self.assertIsNotNone(fdroidserver.common.config)
+        self.assertEqual(dict, type(config))
+        self.assertEqual(config, fdroidserver.common.config)
+
+    def test_get_config_global(self):
+        """Test assumptions about variable scope using global keyword."""
+        global config
+        self.assertTrue('config' not in vars() and 'config' not in globals())
+        self.assertIsNone(fdroidserver.common.config)
+        c = fdroidserver.common.read_config()
+        self.assertIsNotNone(fdroidserver.common.config)
+        self.assertEqual(dict, type(c))
+        self.assertEqual(c, fdroidserver.common.config)
+        self.assertTrue(
+            'config' not in vars() and 'config' not in globals(),
+            "The config should not be set in the global context, only module-level.",
+        )
+
+
 if __name__ == "__main__":
     os.chdir(os.path.dirname(__file__))
 
-    parser = optparse.OptionParser()
-    parser.add_option(
+    parser = ArgumentParser()
+    parser.add_argument(
         "-v",
         "--verbose",
         action="store_true",
         default=False,
         help="Spew out even more information than normal",
     )
-    (fdroidserver.common.options, args) = parser.parse_args(['--verbose'])
+    parse_args_for_test(parser, sys.argv)
 
     newSuite = unittest.TestSuite()
     newSuite.addTest(unittest.makeSuite(CommonTest))

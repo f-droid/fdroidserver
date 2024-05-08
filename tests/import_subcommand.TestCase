@@ -4,7 +4,6 @@
 
 import git
 import logging
-import optparse
 import os
 import shutil
 import sys
@@ -15,7 +14,6 @@ from unittest import mock
 from pathlib import Path
 
 import requests
-from testcommon import TmpCwd, mkdtemp
 
 localmodule = Path(__file__).resolve().parent.parent
 print('localmodule: ' + str(localmodule))
@@ -26,6 +24,7 @@ import fdroidserver.common
 import fdroidserver.import_subcommand
 import fdroidserver.metadata
 from fdroidserver.exception import FDroidException
+from testcommon import TmpCwd, mkdtemp, parse_args_for_test
 
 
 class ImportTest(unittest.TestCase):
@@ -34,8 +33,6 @@ class ImportTest(unittest.TestCase):
     def setUp(self):
         logging.basicConfig(level=logging.DEBUG)
         self.basedir = localmodule / 'tests'
-        fdroidserver.import_subcommand.options = mock.Mock()
-        fdroidserver.import_subcommand.options.rev = None
         os.chdir(self.basedir)
         self._td = mkdtemp()
         self.testdir = self._td.name
@@ -146,7 +143,9 @@ class ImportTest(unittest.TestCase):
             fdroidserver.import_subcommand.main()
 
     @mock.patch('sys.argv', ['fdroid import', '-u', 'https://fake/git/url.git'])
-    @mock.patch('fdroidserver.import_subcommand.clone_to_tmp_dir', lambda a: Path('td'))
+    @mock.patch(
+        'fdroidserver.import_subcommand.clone_to_tmp_dir', lambda a, r: Path('td')
+    )
     def test_main_local_git(self):
         os.chdir(self.testdir)
         git.Repo.init('td')
@@ -161,15 +160,17 @@ class ImportTest(unittest.TestCase):
 
 
 if __name__ == "__main__":
-    parser = optparse.OptionParser()
-    parser.add_option(
+    import argparse
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
         "-v",
         "--verbose",
         action="store_true",
         default=False,
         help="Spew out even more information than normal",
     )
-    (fdroidserver.common.options, args) = parser.parse_args(['--verbose'])
+    parse_args_for_test(parser, sys.argv)
 
     newSuite = unittest.TestSuite()
     newSuite.addTest(unittest.makeSuite(ImportTest))

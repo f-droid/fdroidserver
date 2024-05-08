@@ -11,8 +11,8 @@ fdroid_summary = 'import the local keystore into a SmartCard HSM'
 def main():
     parser = ArgumentParser()
     common.setup_global_opts(parser)
-    options = parser.parse_args()
-    config = common.read_config(options)
+    common.parse_args(parser)
+    config = common.read_config()
     env_vars = {
         'LC_ALL': 'C.UTF-8',
         'FDROID_KEY_STORE_PASS': config['keystorepass'],

@@ -29,7 +29,6 @@ from . import common
 from . import metadata
 
 config = None
-options = None
 
 
 def proper_format(app):
@@ -62,7 +61,7 @@ def remove_blank_flags_from_builds(builds):
 
 
 def main():
-    global config, options
+    global config
 
     parser = ArgumentParser()
     common.setup_global_opts(parser)
@@ -77,10 +76,10 @@ def main():
         "appid", nargs='*', help=_("application ID of file to operate on")
     )
     metadata.add_metadata_arguments(parser)
-    options = parser.parse_args()
+    options = common.parse_args(parser)
     metadata.warnings_action = options.W
 
-    config = common.read_config(options)
+    config = common.read_config()
 
     # Get all apps...
     allapps = metadata.read_metadata(options.appid)

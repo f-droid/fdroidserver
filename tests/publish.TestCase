@@ -13,7 +13,6 @@
 import inspect
 import json
 import logging
-import optparse
 import os
 import shutil
 import sys
@@ -34,7 +33,7 @@ from fdroidserver import common
 from fdroidserver import metadata
 from fdroidserver import signatures
 from fdroidserver.exception import FDroidException
-from testcommon import mkdtemp
+from testcommon import mkdtemp, parse_args_for_test
 
 
 class PublishTest(unittest.TestCase):
@@ -267,7 +266,8 @@ class PublishTest(unittest.TestCase):
 
         os.chdir(self.testdir)
 
-        config = common.read_config(Options)
+        common.options = Options
+        config = common.read_config()
         if 'apksigner' not in config:
             self.skipTest('SKIPPING test_sign_then_implant_signature, apksigner not installed!')
         config['repo_keyalias'] = 'sova'
@@ -341,7 +341,8 @@ class PublishTest(unittest.TestCase):
 
         os.chdir(self.testdir)
 
-        config = common.read_config(Options)
+        common.options = Options
+        config = common.read_config()
         if 'apksigner' not in config:
             self.skipTest('SKIPPING test_error_on_failed, apksigner not installed!')
         config['repo_keyalias'] = 'sova'
@@ -413,15 +414,17 @@ class PublishTest(unittest.TestCase):
 if __name__ == "__main__":
     os.chdir(os.path.dirname(__file__))
 
-    parser = optparse.OptionParser()
-    parser.add_option(
+    import argparse
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
         "-v",
         "--verbose",
         action="store_true",
         default=False,
         help="Spew out even more information than normal",
     )
-    (common.options, args) = parser.parse_args(['--verbose'])
+    parse_args_for_test(parser, sys.argv)
 
     newSuite = unittest.TestSuite()
     newSuite.addTest(unittest.makeSuite(PublishTest))

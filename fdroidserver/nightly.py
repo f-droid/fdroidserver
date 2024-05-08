@@ -259,8 +259,7 @@ def main():
         help=_("Set maximum releases in repo before older ones are archived"),
     )
     # TODO add --with-btlog
-    options = parser.parse_args()
-    common.options = options
+    options = common.parse_args(parser)
 
     # force a tighter umask since this writes private key material
     umask = os.umask(0o077)
@@ -428,7 +427,7 @@ Last updated: {date}'''.format(repo_git_base=repo_git_base,
         with open('config.yml', 'w') as fp:
             yaml.dump(config, fp, default_flow_style=False)
         os.chmod('config.yml', 0o600)
-        config = common.read_config(options)
+        config = common.read_config()
         common.assert_config_keystore(config)
 
         for root, dirs, files in os.walk(cibase):

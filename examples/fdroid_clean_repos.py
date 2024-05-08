@@ -23,12 +23,11 @@ def main():
         help=_("applicationId with optional versionCode in the form APPID[:VERCODE]"),
     )
     metadata.add_metadata_arguments(parser)
-    options = parser.parse_args()
-    common.options = options
+    options = common.parse_args(parser)
     pkgs = common.read_pkg_args(options.appid, True)
     allapps = metadata.read_metadata(pkgs)
     apps = common.read_app_args(options.appid, allapps, True)
-    common.read_config(options)
+    common.read_config()
 
     for appid, app in apps.items():
         if "Builds" in app and len(app["Builds"]) > 0:

@@ -14,8 +14,8 @@ fdroid_summary = 'export the keystore in standard PEM format'
 def main():
     parser = ArgumentParser()
     common.setup_global_opts(parser)
-    options = parser.parse_args()
-    config = common.read_config(options)
+    common.parse_args(parser)
+    config = common.read_config()
     env_vars = {'LC_ALL': 'C.UTF-8',
                 'FDROID_KEY_STORE_PASS': config['keystorepass'],
                 'FDROID_KEY_PASS': config['keypass']}

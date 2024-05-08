@@ -15,11 +15,9 @@ from . import common
 from . import index
 from . import update
 
-options = None
 
-
-def _run_wget(path, urls):
-    if options.verbose:
+def _run_wget(path, urls, verbose=False):
+    if verbose:
         verbose = '--verbose'
     else:
         verbose = '--no-verbose'
@@ -48,8 +46,6 @@ def _run_wget(path, urls):
 
 
 def main():
-    global options
-
     parser = ArgumentParser()
     common.setup_global_opts(parser)
     parser.add_argument(
@@ -93,7 +89,7 @@ def main():
     parser.add_argument(
         "--output-dir", default=None, help=_("The directory to write the mirror to")
     )
-    options = parser.parse_args()
+    options = common.parse_args(parser)
 
     common.set_console_logging(options.verbose)
 
@@ -119,7 +115,7 @@ def main():
         )
 
     if fingerprint:
-        config = common.read_config(options)
+        config = common.read_config()
         if not ('jarsigner' in config or 'apksigner' in config):
             logging.error(
                 _('Java JDK not found! Install in standard location or set java_paths!')
@@ -229,7 +225,7 @@ def main():
                                 _append_to_url_path(section, f[:-4] + '.log.gz')
                             )
 
-        _run_wget(sectiondir, urls)
+        _run_wget(sectiondir, urls, options.verbose)
 
         for app in data['apps']:
             localized = app.get('localized')
@@ -242,7 +238,7 @@ def main():
                         if f:
                             filepath_tuple = components + (f,)
                             urls.append(_append_to_url_path(*filepath_tuple))
-                    _run_wget(os.path.join(basedir, *components), urls)
+                    _run_wget(os.path.join(basedir, *components), urls, options.verbose)
                     for k in update.SCREENSHOT_DIRS:
                         urls = []
                         filelist = d.get(k)
@@ -251,7 +247,11 @@ def main():
                             for f in filelist:
                                 filepath_tuple = components + (f,)
                                 urls.append(_append_to_url_path(*filepath_tuple))
-                            _run_wget(os.path.join(basedir, *components), urls)
+                            _run_wget(
+                                os.path.join(basedir, *components),
+                                urls,
+                                options.verbose,
+                            )
 
         urls = dict()
         for app in data['apps']:
@@ -269,7 +269,11 @@ def main():
 
         for icondir in icondirs:
             if icondir in urls:
-                _run_wget(os.path.join(basedir, section, icondir), urls[icondir])
+                _run_wget(
+                    os.path.join(basedir, section, icondir),
+                    urls[icondir],
+                    options.verbose,
+                )
 
 
 if __name__ == "__main__":

@@ -3,7 +3,6 @@
 import inspect
 import json
 import logging
-import optparse
 import os
 import shutil
 import sys
@@ -33,7 +32,7 @@ class GpgsignTest(unittest.TestCase):
         self.repodir.mkdir()
 
         gpgsign.config = None
-        config = common.read_config(common.options)
+        config = common.read_config()
         config['verbose'] = True
         config['gpghome'] = str((self.basedir / 'gnupghome').resolve())
         config['gpgkey'] = '1DBA2E89'
@@ -75,15 +74,17 @@ class GpgsignTest(unittest.TestCase):
 if __name__ == "__main__":
     os.chdir(os.path.dirname(__file__))
 
-    parser = optparse.OptionParser()
-    parser.add_option(
+    import argparse
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
         "-v",
         "--verbose",
         action="store_true",
         default=False,
         help="Spew out even more information than normal",
     )
-    (common.options, args) = parser.parse_args(['--verbose'])
+    common.parse_args(parser)
 
     newSuite = unittest.TestSuite()
     newSuite.addTest(unittest.makeSuite(GpgsignTest))

@@ -18,12 +18,11 @@ def main():
     common.setup_global_opts(parser)
     parser.add_argument("appid", nargs='*', help=_("applicationId with optional versionCode in the form APPID[:VERCODE]"))
     metadata.add_metadata_arguments(parser)
-    options = parser.parse_args()
-    common.options = options
+    options = common.parse_args(parser)
     pkgs = common.read_pkg_args(options.appid, True)
     allapps = metadata.read_metadata(pkgs)
     apps = common.read_app_args(options.appid, allapps, True)
-    common.read_config(options)
+    common.read_config()
     srclib_dir = os.path.join('build', 'srclib')
     os.makedirs(srclib_dir, exist_ok=True)
     srclibpaths = []

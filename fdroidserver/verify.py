@@ -30,7 +30,6 @@ from . import common
 from . import net
 from .exception import FDroidException
 
-options = None
 config = None
 
 
@@ -146,7 +145,7 @@ def write_json_report(url, remote_apk, unsigned_apk, compare_result):
 
 
 def main():
-    global options, config
+    global config
 
     # Parse command line...
     parser = ArgumentParser(
@@ -170,9 +169,9 @@ def main():
         default=False,
         help=_("Output JSON report to file named after APK."),
     )
-    options = parser.parse_args()
+    options = common.parse_args(parser)
 
-    config = common.read_config(options)
+    config = common.read_config()
 
     tmp_dir = 'tmp'
     if not os.path.isdir(tmp_dir):

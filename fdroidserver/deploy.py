@@ -36,7 +36,6 @@ from . import index
 from .exception import FDroidException
 
 config = None
-options = None
 start_timestamp = time.gmtime()
 
 GIT_BRANCH = 'master'
@@ -148,9 +147,10 @@ def update_awsbucket_s3cmd(repo_section):
             raise FDroidException()
 
     s3cmd_sync = s3cmd + ['sync', '--acl-public']
-    if options.verbose:
+    options = common.get_options()
+    if options and options.verbose:
         s3cmd_sync += ['--verbose']
-    if options.quiet:
+    if options and options.quiet:
         s3cmd_sync += ['--quiet']
 
     s3url = s3bucketurl + '/fdroid/'
@@ -312,6 +312,7 @@ def update_serverwebroot(serverwebroot, repo_section):
             _('rsync is missing or broken: {error}').format(error=e)
         ) from e
     rsyncargs = ['rsync', '--archive', '--delete-after', '--safe-links']
+    options = common.get_options()
     if not options or not options.no_checksum:
         rsyncargs.append('--checksum')
     if options and options.verbose:
@@ -387,7 +388,7 @@ def sync_from_localcopy(repo_section, local_copy_dir):
     # trailing slashes have a meaning in rsync which is not needed here, so
     # make sure both paths have exactly one trailing slash
     common.local_rsync(
-        options,
+        common.get_options(),
         os.path.join(local_copy_dir, repo_section).rstrip('/') + '/',
         repo_section.rstrip('/') + '/',
     )
@@ -407,7 +408,7 @@ def update_localcopy(repo_section, local_copy_dir):
 
     """
     # local_copy_dir is guaranteed to have a trailing slash in main() below
-    common.local_rsync(options, repo_section, local_copy_dir)
+    common.local_rsync(common.get_options(), repo_section, local_copy_dir)
 
     offline_copy = os.path.join(os.getcwd(), BINARY_TRANSPARENCY_DIR)
     if os.path.isdir(os.path.join(offline_copy, '.git')):
@@ -445,6 +446,8 @@ def update_servergitmirrors(servergitmirrors, repo_section):
             _('Offline machine, skipping git mirror generation until `fdroid deploy`')
         )
         return
+
+    options = common.get_options()
 
     # right now we support only 'repo' git-mirroring
     if repo_section == 'repo':
@@ -595,7 +598,7 @@ def upload_to_android_observatory(repo_section):
 
     requests  # stop unused import warning
 
-    if options.verbose:
+    if common.get_options().verbose:
         logging.getLogger("requests").setLevel(logging.INFO)
         logging.getLogger("urllib3").setLevel(logging.INFO)
     else:
@@ -849,7 +852,7 @@ def push_binary_transparency(git_repo_path, git_remote):
 
 
 def main():
-    global config, options
+    global config
 
     parser = ArgumentParser()
     common.setup_global_opts(parser)
@@ -876,8 +879,8 @@ def main():
         default=False,
         help=_("If a git mirror gets to big, allow the archive to be deleted"),
     )
-    options = parser.parse_args()
-    config = common.read_config(options)
+    options = common.parse_args(parser)
+    config = common.read_config()
 
     if config.get('nonstandardwebroot') is True:
         standardwebroot = False

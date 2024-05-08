@@ -25,8 +25,8 @@ def main():
     global config
     parser = ArgumentParser()
     common.setup_global_opts(parser)
-    options = parser.parse_args()
-    config = common.read_config(options)
+    common.parse_args(parser)
+    config = common.read_config()
     destkeystore = config['keystore'].replace('.jks', '.p12').replace('/', '_')
     exportkeystore = config['keystore'].replace('.jks', '.pem').replace('/', '_')
     if os.path.exists(destkeystore) or os.path.exists(exportkeystore):

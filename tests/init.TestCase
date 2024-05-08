@@ -5,7 +5,6 @@
 import inspect
 import logging
 import os
-import optparse
 import shutil
 import sys
 import unittest
@@ -19,7 +18,7 @@ if localmodule not in sys.path:
     sys.path.insert(0, localmodule)
 
 import fdroidserver.init
-from testcommon import mkdtemp
+from testcommon import mkdtemp, parse_args_for_test
 
 
 class InitTest(unittest.TestCase):
@@ -43,14 +42,14 @@ class InitTest(unittest.TestCase):
             fp.write('keystore: NONE\n')
             fp.write('keypass: mysupersecrets\n')
         os.chmod('config.yml', 0o600)
-        config = fdroidserver.common.read_config(fdroidserver.common.options)
+        config = fdroidserver.common.read_config()
         self.assertEqual('NONE', config['keystore'])
         self.assertEqual('mysupersecrets', config['keypass'])
         fdroidserver.init.disable_in_config('keypass', 'comment')
         with open(fp.name) as fp:
             self.assertTrue('#keypass:' in fp.read())
         fdroidserver.common.config = None
-        config = fdroidserver.common.read_config(fdroidserver.common.options)
+        config = fdroidserver.common.read_config()
         self.assertIsNone(config.get('keypass'))
 
     @unittest.skipIf(os.name == 'nt', "calling main() like this hangs on Windows")
@@ -75,15 +74,17 @@ class InitTest(unittest.TestCase):
 if __name__ == "__main__":
     os.chdir(os.path.dirname(__file__))
 
-    parser = optparse.OptionParser()
-    parser.add_option(
+    import argparse
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
         "-v",
         "--verbose",
         action="store_true",
         default=False,
         help="Spew out even more information than normal",
     )
-    (fdroidserver.init.options, args) = parser.parse_args(['--verbose'])
+    fdroidserver.init.options = parse_args_for_test(parser, sys.argv)
 
     newSuite = unittest.TestSuite()
     newSuite.addTest(unittest.makeSuite(InitTest))
