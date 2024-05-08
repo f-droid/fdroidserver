@@ -2,6 +2,7 @@
 
 import copy
 import datetime
+import glob
 import inspect
 import logging
 import optparse
@@ -417,6 +418,17 @@ class IndexTest(unittest.TestCase):
             )
             self.maxDiff = None
             self.assertEqual(json.dumps(i, indent=2), json.dumps(o, indent=2))
+
+            # and test it still works with get_first_signer_certificate
+            outdir = os.path.join(self.testdir, 'publishsigkeys')
+            os.mkdir(outdir)
+            common.apk_extract_signatures(jarfile, outdir)
+            certs = glob.glob(os.path.join(outdir, '*.RSA'))
+            with open(certs[0], 'rb') as fp:
+                self.assertEqual(
+                    common.get_certificate(fp.read()),
+                    common.get_first_signer_certificate(jarfile),
+                )
 
     def test_make_v0_repo_only(self):
         os.chdir(self.testdir)

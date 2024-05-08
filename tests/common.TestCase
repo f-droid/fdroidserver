@@ -615,6 +615,27 @@ class CommonTest(unittest.TestCase):
         self.assertFalse(fdroidserver.common.verify_apk_signature(twosigapk))
         self.assertIsNone(fdroidserver.common.verify_apks(sourceapk, twosigapk, self.tmpdir))
 
+    def test_get_certificate_with_chain_sandisk(self):
+        """Test that APK signatures with a cert chain are parsed like apksigner.
+
+        SanDisk signs their APKs with a X.509 certificate chain of
+        trust, so there are actually three certificates
+        included. apksigner only cares about the certificate in the
+        chain that actually signs the manifest.
+
+        The correct value comes from:
+        apksigner verify --print-certs 883cbdae7aeb2e4b122e8ee8d89966c7062d0d49107a130235fa220a5b994a79.apk
+
+        """
+        cert = fdroidserver.common.get_certificate(
+            signature_block_file=Path('SANAPPSI.RSA').read_bytes(),
+            signature_file=Path('SANAPPSI.SF').read_bytes(),
+        )
+        self.assertEqual(
+            'ea0abbf2a142e4b167405d516b2cc408c4af4b29cd50ba281aa4470d4aab3e53',
+            fdroidserver.common.signer_fingerprint(cert),
+        )
+
     def test_write_to_config(self):
         with tempfile.TemporaryDirectory() as tmpPath:
             cfgPath = os.path.join(tmpPath, 'config.py')
@@ -1039,6 +1060,11 @@ class CommonTest(unittest.TestCase):
             ('org.bitbucket.tickytacky.mirrormirror_3.apk', 'org.bitbucket.tickytacky.mirrormirror', 3, '1.0.2'),
             ('org.bitbucket.tickytacky.mirrormirror_4.apk', 'org.bitbucket.tickytacky.mirrormirror', 4, '1.0.3'),
             ('org.dyndns.fules.ck_20.apk', 'org.dyndns.fules.ck', 20, 'v1.6pre2'),
+            ('issue-1128-min-sdk-30-poc.apk', 'org.fdroid.ci', 1, '1.0'),
+            ('issue-1128-poc1.apk', 'android.appsecurity.cts.tinyapp', 10, '1.0'),
+            ('issue-1128-poc2.apk', 'android.appsecurity.cts.tinyapp', 10, '1.0'),
+            ('issue-1128-poc3a.apk', 'android.appsecurity.cts.tinyapp', 10, '1.0'),
+            ('issue-1128-poc3b.apk', 'android.appsecurity.cts.tinyapp', 10, '1.0'),
             ('urzip.apk', 'info.guardianproject.urzip', 100, '0.1'),
             ('urzip-badcert.apk', 'info.guardianproject.urzip', 100, '0.1'),
             ('urzip-badsig.apk', 'info.guardianproject.urzip', 100, '0.1'),
@@ -1154,6 +1180,11 @@ class CommonTest(unittest.TestCase):
             return apk.get_effective_target_sdk_version()
 
         self.assertEqual(4, get_minSdkVersion('bad-unicode-πÇÇ现代通用字-български-عربي1.apk'))
+        self.assertEqual(30, get_minSdkVersion('issue-1128-min-sdk-30-poc.apk'))
+        self.assertEqual(29, get_minSdkVersion('issue-1128-poc1.apk'))
+        self.assertEqual(29, get_minSdkVersion('issue-1128-poc2.apk'))
+        self.assertEqual(23, get_minSdkVersion('issue-1128-poc3a.apk'))
+        self.assertEqual(23, get_minSdkVersion('issue-1128-poc3b.apk'))
         self.assertEqual(14, get_minSdkVersion('org.bitbucket.tickytacky.mirrormirror_1.apk'))
         self.assertEqual(14, get_minSdkVersion('org.bitbucket.tickytacky.mirrormirror_2.apk'))
         self.assertEqual(14, get_minSdkVersion('org.bitbucket.tickytacky.mirrormirror_3.apk'))
@@ -1164,6 +1195,7 @@ class CommonTest(unittest.TestCase):
         self.assertEqual(4, get_minSdkVersion('urzip-badsig.apk'))
         self.assertEqual(4, get_minSdkVersion('urzip-release.apk'))
         self.assertEqual(4, get_minSdkVersion('urzip-release-unsigned.apk'))
+        self.assertEqual(27, get_minSdkVersion('v2.only.sig_2.apk'))
         self.assertEqual(3, get_minSdkVersion('repo/com.politedroid_3.apk'))
         self.assertEqual(3, get_minSdkVersion('repo/com.politedroid_4.apk'))
         self.assertEqual(3, get_minSdkVersion('repo/com.politedroid_5.apk'))
@@ -2913,6 +2945,274 @@ class CommonTest(unittest.TestCase):
         self.assertEqual(
             [{'url': s}], fdroidserver.common.parse_mirrors_config(mirrors)
         )
+
+
+APKS_WITH_JAR_SIGNATURES = (
+    (
+        'SpeedoMeterApp.main_1.apk',
+        '2e6b3126fb7e0db6a9d4c2a06df690620655454d6e152cf244cc9efe9787a77d',
+    ),
+    (
+        'apk.embedded_1.apk',
+        '764f0eaac0cdcde35023658eea865c4383ab580f9827c62fdd3daf9e654199ee',
+    ),
+    (
+        'bad-unicode-πÇÇ现代通用字-български-عربي1.apk',
+        '32a23624c201b949f085996ba5ed53d40f703aca4989476949cae891022e0ed6',
+    ),
+    (
+        'issue-1128-poc3a.apk',
+        '1dbb8be012293e988a0820f7d455b07abd267d2c0b500fc793fcfd80141cb5ce',
+    ),
+    (
+        'issue-1128-poc3b.apk',
+        '1dbb8be012293e988a0820f7d455b07abd267d2c0b500fc793fcfd80141cb5ce',
+    ),
+    (
+        'janus.apk',
+        'ebb0fedf1942a099b287c3db00ff732162152481abb2b6c7cbcdb2ba5894a768',
+    ),
+    (
+        'org.bitbucket.tickytacky.mirrormirror_1.apk',
+        'feaa63df35b4635cf091513dfcd6d11209632555efdfc47e33b70d4e4eb5ba28',
+    ),
+    (
+        'org.bitbucket.tickytacky.mirrormirror_2.apk',
+        'feaa63df35b4635cf091513dfcd6d11209632555efdfc47e33b70d4e4eb5ba28',
+    ),
+    (
+        'org.bitbucket.tickytacky.mirrormirror_3.apk',
+        'feaa63df35b4635cf091513dfcd6d11209632555efdfc47e33b70d4e4eb5ba28',
+    ),
+    (
+        'org.bitbucket.tickytacky.mirrormirror_4.apk',
+        'feaa63df35b4635cf091513dfcd6d11209632555efdfc47e33b70d4e4eb5ba28',
+    ),
+    (
+        'org.dyndns.fules.ck_20.apk',
+        '9326a2cc1a2f148202bc7837a0af3b81200bd37fd359c9e13a2296a71d342056',
+    ),
+    (
+        'org.sajeg.fallingblocks_3.apk',
+        '033389681f4288fdb3e72a28058c8506233ca50de75452ab6c9c76ea1ca2d70f',
+    ),
+    (
+        'repo/com.example.test.helloworld_1.apk',
+        'c3a5ca5465a7585a1bda30218ae4017083605e3576867aa897d724208d99696c',
+    ),
+    (
+        'repo/com.politedroid_3.apk',
+        '32a23624c201b949f085996ba5ed53d40f703aca4989476949cae891022e0ed6',
+    ),
+    (
+        'repo/com.politedroid_4.apk',
+        '32a23624c201b949f085996ba5ed53d40f703aca4989476949cae891022e0ed6',
+    ),
+    (
+        'repo/com.politedroid_5.apk',
+        '32a23624c201b949f085996ba5ed53d40f703aca4989476949cae891022e0ed6',
+    ),
+    (
+        'repo/com.politedroid_6.apk',
+        '32a23624c201b949f085996ba5ed53d40f703aca4989476949cae891022e0ed6',
+    ),
+    (
+        'repo/duplicate.permisssions_9999999.apk',
+        '659e1fd284549f70d13fb02c620100e27eeea3420558cce62b0f5d4cf2b77d84',
+    ),
+    (
+        'repo/info.zwanenburg.caffeinetile_4.apk',
+        '51cfa5c8a743833ad89acf81cb755936876a5c8b8eca54d1ffdcec0cdca25d0e',
+    ),
+    (
+        'repo/no.min.target.sdk_987.apk',
+        '32a23624c201b949f085996ba5ed53d40f703aca4989476949cae891022e0ed6',
+    ),
+    (
+        'repo/obb.main.oldversion_1444412523.apk',
+        '818e469465f96b704e27be2fee4c63ab9f83ddf30e7a34c7371a4728d83b0bc1',
+    ),
+    (
+        'repo/obb.main.twoversions_1101613.apk',
+        '32a23624c201b949f085996ba5ed53d40f703aca4989476949cae891022e0ed6',
+    ),
+    (
+        'repo/obb.main.twoversions_1101615.apk',
+        '32a23624c201b949f085996ba5ed53d40f703aca4989476949cae891022e0ed6',
+    ),
+    (
+        'repo/obb.main.twoversions_1101617.apk',
+        '32a23624c201b949f085996ba5ed53d40f703aca4989476949cae891022e0ed6',
+    ),
+    (
+        'repo/obb.mainpatch.current_1619.apk',
+        '32a23624c201b949f085996ba5ed53d40f703aca4989476949cae891022e0ed6',
+    ),
+    (
+        'repo/obb.mainpatch.current_1619_another-release-key.apk',
+        'ce9e200667f02d96d49891a2e08a3c178870e91853d61bdd33ef5f0b54701aa5',
+    ),
+    (
+        'repo/souch.smsbypass_9.apk',
+        'd3aec784b1fd71549fc22c999789122e3639895db6bd585da5835fbe3db6985c',
+    ),
+    (
+        'repo/urzip-; Рахма́, [rɐxˈmanʲɪnəf] سيرجي_رخمانينوف 谢·.apk',
+        '32a23624c201b949f085996ba5ed53d40f703aca4989476949cae891022e0ed6',
+    ),
+    (
+        'repo/v1.v2.sig_1020.apk',
+        '32a23624c201b949f085996ba5ed53d40f703aca4989476949cae891022e0ed6',
+    ),
+    (
+        'urzip-release.apk',
+        '32a23624c201b949f085996ba5ed53d40f703aca4989476949cae891022e0ed6',
+    ),
+    (
+        'urzip.apk',
+        '7eabd8c15de883d1e82b5df2fd4f7f769e498078e9ad6dc901f0e96db77ceac3',
+    ),
+)
+APKS_WITHOUT_JAR_SIGNATURES = (
+    (
+        'issue-1128-poc1.apk',  # APK v3 Signature only
+        '1dbb8be012293e988a0820f7d455b07abd267d2c0b500fc793fcfd80141cb5ce',
+    ),
+    (
+        'issue-1128-poc2.apk',  # APK v3 Signature only
+        '1dbb8be012293e988a0820f7d455b07abd267d2c0b500fc793fcfd80141cb5ce',
+    ),
+    (
+        'issue-1128-min-sdk-30-poc.apk',  # APK v3 Signature only
+        '09350d5f3460a8a0ea5cf6b68ccd296a58754f7e683ba6aa08c19be8353504f3',
+    ),
+    (
+        'v2.only.sig_2.apk',
+        '32a23624c201b949f085996ba5ed53d40f703aca4989476949cae891022e0ed6',
+    ),
+)
+
+
+class SignerExtractionTest(unittest.TestCase):
+    """Test extraction of the signer certificate from JARs and APKs
+
+    These fingerprints can be confirmed with:
+    apksigner verify --print-certs foo.apk | grep SHA-256
+    keytool -printcert -file ____.RSA
+    """
+
+    def setUp(self):
+        os.chdir(os.path.join(localmodule, 'tests'))
+        self._td = mkdtemp()
+        self.testdir = self._td.name
+
+        self.apksigner = shutil.which('apksigner')
+        self.keytool = shutil.which('keytool')
+
+    def tearDown(self):
+        self._td.cleanup()
+
+    def test_get_first_signer_certificate_with_jars(self):
+        for jar in (
+            'signindex/guardianproject-v1.jar',
+            'signindex/guardianproject.jar',
+            'signindex/testy.jar',
+        ):
+            outdir = os.path.join(self.testdir, jar[:-4].replace('/', '_'))
+            os.mkdir(outdir)
+            fdroidserver.common.apk_extract_signatures(jar, outdir)
+            certs = glob.glob(os.path.join(outdir, '*.RSA'))
+            with open(certs[0], 'rb') as fp:
+                self.assertEqual(
+                    fdroidserver.common.get_certificate(fp.read()),
+                    fdroidserver.common.get_first_signer_certificate(jar),
+                )
+
+    @unittest.skip("slow and only needed when adding to APKS_WITH_JAR_SIGNATURES")
+    def test_vs_keytool(self):
+        unittest.skipUnless(self.keytool, 'requires keytool to run')
+        pat = re.compile(r'[0-9A-F:]{95}')
+        cmd = [self.keytool, '-printcert', '-jarfile']
+        for apk, fingerprint in APKS_WITH_JAR_SIGNATURES:
+            o = subprocess.check_output(cmd + [apk], text=True)
+            try:
+                self.assertEqual(
+                    fingerprint,
+                    pat.search(o).group().replace(':', '').lower(),
+                )
+            except AttributeError as e:
+                print(e, o)
+
+    @unittest.skip("slow and only needed when adding to APKS_WITH_JAR_SIGNATURES")
+    def test_vs_apksigner(self):
+        unittest.skipUnless(self.apksigner, 'requires apksigner to run')
+        pat = re.compile(r'\s[0-9a-f]{64}\s')
+        cmd = [self.apksigner, 'verify', '--print-certs']
+        for apk, fingerprint in APKS_WITH_JAR_SIGNATURES + APKS_WITHOUT_JAR_SIGNATURES:
+            output = subprocess.check_output(cmd + [apk], text=True)
+            self.assertEqual(
+                fingerprint,
+                pat.search(output).group().strip(),
+                apk + " should have matching signer fingerprints",
+            )
+
+    def test_apk_signer_fingerprint_with_v1_apks(self):
+        for apk, fingerprint in APKS_WITH_JAR_SIGNATURES:
+            self.assertEqual(
+                fingerprint,
+                fdroidserver.common.apk_signer_fingerprint(apk),
+                f'apk_signer_fingerprint should match stored fingerprint for {apk}',
+            )
+
+    def test_apk_signer_fingerprint_without_v1_apks(self):
+        for apk, fingerprint in APKS_WITHOUT_JAR_SIGNATURES:
+            self.assertEqual(
+                fingerprint,
+                fdroidserver.common.apk_signer_fingerprint(apk),
+                f'apk_signer_fingerprint should match stored fingerprint for {apk}',
+            )
+
+    def test_get_first_signer_certificate_with_unsigned_jar(self):
+        self.assertIsNone(
+            fdroidserver.common.get_first_signer_certificate('signindex/unsigned.jar')
+        )
+
+    def test_apk_extract_fingerprint(self):
+        """Test extraction of JAR signatures (does not cover APK v2+ extraction)."""
+        for apk, fingerprint in APKS_WITH_JAR_SIGNATURES:
+            outdir = os.path.join(self.testdir, apk[:-4].replace('/', '_'))
+            os.mkdir(outdir)
+            try:
+                fdroidserver.common.apk_extract_signatures(apk, outdir)
+            except fdroidserver.apksigcopier.APKSigCopierError:
+                # nothing to test here when this error is thrown
+                continue
+            v1_certs = [str(cert) for cert in Path(outdir).glob('*.[DR]SA')]
+            cert = fdroidserver.common.get_certificate(
+                signature_block_file=Path(v1_certs[0]).read_bytes(),
+                signature_file=Path(v1_certs[0][:-4] + '.SF').read_bytes(),
+            )
+            self.assertEqual(
+                fingerprint,
+                fdroidserver.common.signer_fingerprint(cert),
+            )
+            apkobject = fdroidserver.common.get_androguard_APK(apk, skip_analysis=True)
+            v2_certs = apkobject.get_certificates_der_v2()
+            if v2_certs:
+                if v1_certs:
+                    self.assertEqual(len(v1_certs), len(v2_certs))
+                self.assertEqual(
+                    fingerprint,
+                    fdroidserver.common.signer_fingerprint(v2_certs[0]),
+                )
+            v3_certs = apkobject.get_certificates_der_v3()
+            if v3_certs:
+                if v2_certs:
+                    self.assertEqual(len(v2_certs), len(v3_certs))
+                self.assertEqual(
+                    fingerprint,
+                    fdroidserver.common.signer_fingerprint(v3_certs[0]),
+                )
 
 
 if __name__ == "__main__":
