@@ -16,13 +16,13 @@
 # Davide Neri <davnerix@gmail.com>, 2023.
 # Mirko Di <mirko@mirkodi.eu>, 2023.
 # coronabond <coronabond@airmail.cc>, 2023.
-# Random <random-r@users.noreply.hosted.weblate.org>, 2023.
+# Random <random-r@users.noreply.hosted.weblate.org>, 2023, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2023-05-24 22:18+0200\n"
-"PO-Revision-Date: 2023-09-06 17:31+0000\n"
+"PO-Revision-Date: 2024-04-13 17:01+0000\n"
 "Last-Translator: Random <random-r@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/f-droid/fdroidserver/it/>\n"
 "Language: it\n"
@@ -30,7 +30,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.0.1-dev\n"
+"X-Generator: Weblate 5.5-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -1821,7 +1821,7 @@ msgstr "UpdateCheckData non è un URL valido: {url}"
 #. Translators: https://developer.android.com/studio/build/application-id
 #: ../fdroidserver/lint.py
 msgid "UpdateCheckMode is set but it looks like checkupdates hasn't been run yet."
-msgstr "UpdateCheckMode impostato ma sembra che checkupdates non sia ancora stato eseguito"
+msgstr "UpdateCheckMode impostato ma sembra che checkupdates non sia ancora stato eseguito."
 
 #: ../fdroidserver/lint.py
 msgid "UpdateCheckName is set to the known application ID, it can be removed"
