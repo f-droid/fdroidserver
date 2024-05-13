@@ -29,21 +29,21 @@
 # Kingo Bingo <bingokingosoft@gmail.com>, 2023.
 # zhiqi <lzqlzq21@gmail.com>, 2023.
 # David Jiang <david.jiang2024@gmail.com>, 2023.
+# ALoLo_527 <ALoLo@users.noreply.hosted.weblate.org>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2023-05-24 22:18+0200\n"
-"PO-Revision-Date: 2023-11-05 08:05+0000\n"
-"Last-Translator: David Jiang <david.jiang2024@gmail.com>\n"
-"Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/f-"
-"droid/fdroidserver/zh_Hans/>\n"
+"PO-Revision-Date: 2024-04-13 17:01+0000\n"
+"Last-Translator: ALoLo_527 <ALoLo@users.noreply.hosted.weblate.org>\n"
+"Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/f-droid/fdroidserver/zh_Hans/>\n"
 "Language: zh_Hans\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.2-dev\n"
+"X-Generator: Weblate 5.5-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -2639,12 +2639,12 @@ msgstr ""
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "{appid} from {path} is not a valid Android application ID!"
-msgstr ""
+msgstr "{appid}来自{path}不是一个有效的Android应用ID！"
 
 #: ../fdroidserver/metadata.py ../fdroidserver/update.py
 #, python-brace-format
 msgid "{appid} from {path} is not a valid Java Package Name!"
-msgstr ""
+msgstr "{appid}来自{path}不是一个有效的Java安装包名称！"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -2654,7 +2654,7 @@ msgstr ""
 #: ../fdroidserver/mirror.py
 #, python-brace-format
 msgid "{appid} is missing {name}"
-msgstr ""
+msgstr "{appid}缺失了{name}"
 
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vname
 #: ../fdroidserver/lint.py
@@ -2670,12 +2670,12 @@ msgstr ""
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "{appid}: {field} must be a '{type}', but it is a '{fieldtype}!'"
-msgstr ""
+msgstr "{appid}：{field}必须为‘{type}’，但它是‘{fieldtype}！’"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "{appid}: {field} must be a '{type}', but it is a '{fieldtype}'!"
-msgstr ""
+msgstr "{appid}：{field}必须为‘{type}’，但它是‘{fieldtype}’！"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
@@ -2720,12 +2720,12 @@ msgstr ""
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "{path} is zero size!"
-msgstr ""
+msgstr "{path}的大小为零！"
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "{path} more than 200MB, manually upload: {url}"
-msgstr ""
+msgstr "{path}的大小超过200MB，请手动上传：{url}"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -2735,12 +2735,12 @@ msgstr "{path}：{error}"
 #: ../fdroidserver/mirror.py
 #, python-brace-format
 msgid "{url} does not end with \"fdroid\", check the URL path!"
-msgstr ""
+msgstr "{url}不是以“fdroid”结尾的，请检查链接路径！"
 
 #: ../fdroidserver/import_subcommand.py
 #, python-brace-format
 msgid "{url} does not start with \"http\"!"
-msgstr ""
+msgstr "{url}不是以“http”为开头！"
 
 #: ../fdroidserver/build.py
 msgid "{} build failed"

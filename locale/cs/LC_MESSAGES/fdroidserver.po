@@ -6,20 +6,21 @@
 # Filip Klopec <filipklopec@gmail.com>, 2022.
 # Fjuro <ifjuro@proton.me>, 2022, 2023.
 # Daniel Hejduk <jellymail@protonmail.com>, 2023.
+# Fjuro <fjuro@alius.cz>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 1.0.0-95-gd7af22b\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2023-05-24 22:18+0200\n"
-"PO-Revision-Date: 2023-10-20 14:22+0000\n"
-"Last-Translator: Daniel Hejduk <jellymail@protonmail.com>\n"
+"PO-Revision-Date: 2024-04-23 10:07+0000\n"
+"Last-Translator: Fjuro <fjuro@alius.cz>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/f-droid/fdroidserver/cs/>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 5.1\n"
+"Plural-Forms: nplurals=3; plural=((n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2);\n"
+"X-Generator: Weblate 5.5-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -1813,7 +1814,7 @@ msgstr "UpdateCheckData není platná URL: {url}"
 #. Translators: https://developer.android.com/studio/build/application-id
 #: ../fdroidserver/lint.py
 msgid "UpdateCheckMode is set but it looks like checkupdates hasn't been run yet."
-msgstr "UpdateCheckMode je nastaven, ale vypadá to, že checkupdates ještě nebylo spuštěno"
+msgstr "UpdateCheckMode je nastaven, ale vypadá to, že akce checkupdates ještě nebyla spuštěna."
 
 #: ../fdroidserver/lint.py
 msgid "UpdateCheckName is set to the known application ID, it can be removed"
