@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2023-05-24 22:18+0200\n"
+"POT-Creation-Date: 2024-05-13 13:50+0200\n"
 "PO-Revision-Date: 2024-04-11 20:02+0000\n"
 "Last-Translator: Oğuz Ersen <oguz@ersen.moe>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/f-droid/fdroidserver/tr/>\n"
@@ -96,6 +96,11 @@ msgstr[1] "%(option)s seçeneği %(number)d argüman gerektirir"
 #, python-format
 msgid "%(prog)s: error: %(message)s\n"
 msgstr "%(prog)s: hata: %(message)s\n"
+
+#: ../fdroidserver/publish.py
+#, python-format
+msgid "%d APKs failed to be signed or verified!"
+msgstr ""
 
 #: ../fdroidserver/scanner.py
 #, python-format
@@ -216,6 +221,11 @@ msgstr "/issues eksik"
 msgid "A URL is required as an argument!"
 msgstr "Bir URL, argüman olarak gereklidir!"
 
+#: ../fdroidserver/common.py
+#, fuzzy, python-brace-format
+msgid "APK signatures have different certificates in {path}:"
+msgstr "{path} içinde imzalama sertifikaları bulunamadı"
+
 #: ../fdroidserver/__main__.py
 msgid "Add PGP signatures using GnuPG for packages in repo"
 msgstr "Depodaki paketler için GnuPG ile PGP imzaları ekle"
@@ -291,6 +301,11 @@ msgstr "Uygulama İkili Dosyalara sahip ancak sertifikayı sabitlemek için kar�
 
 #: ../fdroidserver/lint.py
 msgid "App has NoSourceSince or ArchivePolicy \"0 versions\" but AutoUpdateMode or UpdateCheckMode are not None"
+msgstr "Uygulamanın NoSourceSince veya ArchivePolicy \"0 sürümü\" var ancak AutoUpdateMode veya UpdateCheckMode Yok değil"
+
+#: ../fdroidserver/lint.py
+#, fuzzy
+msgid "App has NoSourceSince or ArchivePolicy \"0 versions\" or 0 but AutoUpdateMode or UpdateCheckMode are not None"
 msgstr "Uygulamanın NoSourceSince veya ArchivePolicy \"0 sürümü\" var ancak AutoUpdateMode veya UpdateCheckMode Yok değil"
 
 #: ../fdroidserver/lint.py
@@ -388,6 +403,11 @@ msgstr "'%s' kategorileri geçersiz"
 #: ../fdroidserver/lint.py
 msgid "Categories are not set"
 msgstr "Kategoriler ayarlı değil"
+
+#: ../fdroidserver/index.py
+#, python-brace-format
+msgid "Category \"{category}\" defined but not used for any apps!"
+msgstr ""
 
 #: ../fdroidserver/__main__.py
 msgid "Check for updates to applications"
@@ -555,6 +575,16 @@ msgstr "Açıklamanın bir listesi (%s) var fakat madde imli (*) veya numaralı(
 msgid "Description of length {length} is over the {limit} char limit"
 msgstr "{length} uzunluğundaki açıklama, {limit} karakter sınırının üstünde"
 
+#: ../fdroidserver/common.py
+#, python-brace-format
+msgid "Did you mean config/{name}.yml?"
+msgstr ""
+
+#: ../fdroidserver/lint.py
+#, python-brace-format
+msgid "Did you mean {code}?"
+msgstr ""
+
 #: ../fdroidserver/import_subcommand.py
 msgid "Do not add 'disable:' to the generated build entries"
 msgstr "Oluşturulan derleme girdilerine 'disable:' ekleme"
@@ -620,6 +650,11 @@ msgstr "Aynalar yapılandırmasında yinelenen \"%s\" girişi!"
 #, python-brace-format
 msgid "Duplicate link in '{field}': {url}"
 msgstr "'{field}' içinde yinelenen bağlantı: {url}"
+
+#: ../fdroidserver/common.py
+#, python-format
+msgid "ERROR: %(message)s"
+msgstr ""
 
 #: ../fdroidserver/__main__.py
 msgid "ERROR: The \"server\" subcommand has been removed, use \"deploy\"!"
@@ -791,6 +826,11 @@ msgstr "Bazı uygulamalar için geçersiz versionCodes bulundu"
 msgid "Found multiple JAR Signature Block Files in {path}"
 msgstr "{path} içinde birden fazla JAR İmza Blok Dosyası bulundu"
 
+#: ../fdroidserver/common.py
+#, fuzzy
+msgid "Found multiple Signer Certificates!"
+msgstr "Depo için birden çok imzalama sertifikası bulundu."
+
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Found multiple metadata files for {appid}"
@@ -854,6 +894,11 @@ msgstr "Git remote set-head başarısız: \"%s\""
 #: ../fdroidserver/common.py
 msgid "Git reset failed"
 msgstr "Git reset başarısız"
+
+#: ../fdroidserver/common.py
+#, fuzzy
+msgid "Git submodule deinit failed"
+msgstr "Git alt modülü güncellemesi başarısız oldu"
 
 #: ../fdroidserver/common.py
 msgid "Git submodule sync failed"
@@ -1061,6 +1106,10 @@ msgid "Keystore for signing key:\t"
 msgstr "İmzalama için anahtar deposu:\t"
 
 #: ../fdroidserver/lint.py
+msgid "Known debug key is used in AllowedAPKSigningKeys: "
+msgstr ""
+
+#: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "Last used commit '{commit}' looks like a tag, but UpdateCheckMode is '{ucm}'"
 msgstr "Son kullanılan işleme '{commit}' bir etiket gibi görünüyor, ama UpdateCheckMode '{ucm}'"
@@ -1196,6 +1245,11 @@ msgstr "Etiket bulunamadı"
 #: ../fdroidserver/publish.py ../fdroidserver/verify.py
 msgid "No unsigned directory - nothing to do"
 msgstr "İmzalanmamış dizin yok - yapılacak işlem yok"
+
+#: ../fdroidserver/__main__.py
+#, fuzzy
+msgid "No version information could be found."
+msgstr "sürüm bilgisi bulunamadı"
 
 #: ../fdroidserver/common.py
 msgid "Not a valid size definition: \"{}\""
@@ -1356,6 +1410,11 @@ msgid "Pushing binary transparency log to {url}"
 msgstr "İkili şeffaflık günlüğü {url} konumuna gönderiliyor"
 
 #: ../fdroidserver/deploy.py
+#, fuzzy
+msgid "Pushing to remote server failed!"
+msgstr "Git remote set-head başarısız: \"%s\""
+
+#: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "Pushing to {url}"
 msgstr "{url} adresine itiliyor"
@@ -1387,6 +1446,11 @@ msgstr "packageName/versionCode/versionName okuma başarısız, APK geçersiz: '
 #, python-brace-format
 msgid "Reading {apkfilename} from cache"
 msgstr "{apkfilename} önbellekten okunuyor"
+
+#: ../fdroidserver/build.py
+#, fuzzy
+msgid "Refresh and cache scanner rules and signatures from the network"
+msgstr "imzaların en son sürümünü internetten al"
 
 #: ../fdroidserver/common.py
 msgid "Removing specified files"
@@ -1637,6 +1701,13 @@ msgstr "Bir keyalias çakışması var - yayımlama durdu"
 msgid "These are the apps that have been archived from the main repo."
 msgstr "Bunlar ana depodan arşivlenmiş uygulamalardır."
 
+#: ../fdroidserver/mirror.py
+#, fuzzy
+msgid "This command should never be used to mirror f-droid.org! A full copy requires more than 600GB."
+msgstr ""
+"HATA: bu komut asla f-droid.org'u yansıtmak için kullanılmamalıdır!\n"
+"f-droid.org'un tam bir yansıması 200GB'tan çok yer gerektirir."
+
 #: ../fdroidserver/common.py
 msgid "This is a repository of apps to be used with F-Droid. Applications in this repository are either official binaries built by the original application developers, or are binaries built from source by the admin of f-droid.org using the tools on https://gitlab.com/fdroid."
 msgstr "Bu, F-Droid ile kullanılacak uygulamaların bir deposudur. Bu depodaki uygulamalar ya gerçek uygulama geliştiricileri tarafından oluşturulan resmi ikili dosyalardır ya da https://gitlab.com/fdroid adresindeki araçlar kullanılarak f-droid.org yöneticisi tarafından kaynaktan oluşturulan ikili dosyalardır."
@@ -1805,9 +1876,14 @@ msgstr "UpdateCheckData, HTTPS URL'sini kullanmalıdır: {url}"
 msgid "UpdateCheckData not a valid URL: {url}"
 msgstr "UpdateCheckData geçerli bir URL değil: {url}"
 
-#. Translators: https://developer.android.com/studio/build/application-id
 #: ../fdroidserver/lint.py
 msgid "UpdateCheckMode is set but it looks like checkupdates hasn't been run yet."
+msgstr "UpdateCheckMode ayarlı ancak checkupdates henüz çalıştırılmamış gibi görünüyor."
+
+#. Translators: https://developer.android.com/studio/build/application-id
+#: ../fdroidserver/lint.py
+#, fuzzy
+msgid "UpdateCheckMode is set but it looks likecheckupdates hasn't been run yet"
 msgstr "UpdateCheckMode ayarlı ancak checkupdates henüz çalıştırılmamış gibi görünüyor."
 
 #: ../fdroidserver/lint.py
@@ -1838,6 +1914,11 @@ msgid "Usage: %s\n"
 msgstr "Kullanım: %s\n"
 
 #: ../fdroidserver/lint.py
+#, fuzzy
+msgid "Use /HEAD instead of /master or /main to point at a file in the default branch"
+msgstr "Öntanımlı daldaki bir dosyaya işaret etmek için /master yerine /HEAD kullanın"
+
+#: ../fdroidserver/lint.py
 msgid "Use /HEAD instead of /master to point at a file in the default branch"
 msgstr "Öntanımlı daldaki bir dosyaya işaret etmek için /master yerine /HEAD kullanın"
 
@@ -1865,6 +1946,11 @@ msgstr "APK İmza v2 kullanılıyor"
 #: ../fdroidserver/common.py
 msgid "Using APK Signature v3"
 msgstr "APK İmza v3 kullanılıyor"
+
+#: ../fdroidserver/common.py
+#, fuzzy
+msgid "Using JAR Signature"
+msgstr "APK İmza v2 kullanılıyor"
 
 #: ../fdroidserver/common.py
 msgid "Using Java's jarsigner, not recommended for verifying APKs! Use apksigner"
@@ -1922,6 +2008,10 @@ msgstr "İmzalı indeksler için yapılandırıldığında, bu aşamada sadece i
 #: ../fdroidserver/lint.py
 msgid "When linting the entire repository yamllint is disabled by default. This option forces yamllint regardless."
 msgstr "Tüm depo denetlenirken yamllint öntanımlı olarak devre dışı bırakılır. Bu seçenek, yamllint kullanımını ne olursa olsun zorlar."
+
+#: ../fdroidserver/publish.py
+msgid "When signing or verifying fails, exit with an error code."
+msgstr ""
 
 #: ../fdroidserver/init.py
 msgid "X.509 'Distinguished Name' used when generating keys"
@@ -2071,6 +2161,11 @@ msgstr "çakışan alt ayrıştırıcı: %s"
 #, python-brace-format
 msgid "could not parse '{path}'"
 msgstr "'{path}' ayrıştırılamadı"
+
+#: ../fdroidserver/common.py
+#, fuzzy
+msgid "could not parse srclib spec (no name specified): '{}'"
+msgstr "srclib belirtimi ayrıştırılamadı (referans belirtilmedi): '{}'"
 
 #: ../fdroidserver/common.py
 msgid "could not parse srclib spec (no ref specified): '{}'"
@@ -2246,6 +2341,11 @@ msgstr "local_copy_dir bir dizin olmalı, dosya değil!"
 msgid "mirror '%s' does not end with 'fdroid'!"
 msgstr "Yansıma '%s' 'fdroid' ile bitmiyor!"
 
+#: ../fdroidserver/index.py
+#, fuzzy, python-brace-format
+msgid "mirrors set twice, in config.yml and {path}!"
+msgstr "Şimdi bunları config.yml içinde ayarlayın:"
+
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #: /usr/lib/python3.11/argparse.py
@@ -2403,6 +2503,11 @@ msgstr "repo_icon \"repo/icons/%s\" yok, yer tutucu oluşturuyor."
 msgid "repo_url needs to end with /repo"
 msgstr "repo_url'nin /repo ile bitmesi gerekiyor"
 
+#: ../fdroidserver/deploy.py
+#, python-brace-format
+msgid "rsync is missing or broken: {error}"
+msgstr ""
+
 #: ../fdroidserver/metadata.py
 msgid "ruamel.yaml not installed, can not write metadata."
 msgstr "ruamel.yaml kurulu değil, üst veriler yazılamıyor."
@@ -2416,6 +2521,11 @@ msgstr "s3cmd sync {path} konumunu {url} adresine indeksler ve siler"
 #, python-brace-format
 msgid "scanner cache is malformed! You can clear it with: '{clear}'"
 msgstr "tarayıcı önbelleği bozuk! Şu şekilde temizleyebilirsiniz: '{clear}'"
+
+#: ../fdroidserver/deploy.py
+#, fuzzy
+msgid "serverwebroot: path does not end with \"fdroid\", perhaps you meant one of these:"
+msgstr "local_copy_dir \"fdroid\" ile sonlanmıyor, belki de \"{path}\" demek istediniz"
 
 #: ../fdroidserver/scanner.py
 msgid "shared library"
@@ -2621,6 +2731,31 @@ msgstr "{path} yok!  Şunu çalıştırarak oluşturun:"
 msgid "{path} has bad file signature \"{pattern}\", possible Janus exploit!"
 msgstr "{path} konumunun bozuk imzası \"{pattern}\" var, olası Janus istismarı!"
 
+#: ../fdroidserver/deploy.py
+#, python-brace-format
+msgid "{path} has been flagged by virustotal {count} times:"
+msgstr ""
+
+#: ../fdroidserver/common.py
+#, python-brace-format
+msgid "{path} is not \"key: value\" dict, but a {datatype}!"
+msgstr ""
+
+#: ../fdroidserver/common.py
+#, fuzzy, python-brace-format
+msgid "{path} is not a standard config file!"
+msgstr "'sdk_path' config.yml içinde ayarlı değil!"
+
+#: ../fdroidserver/index.py
+#, python-brace-format
+msgid "{path} is not list, but a {datatype}!"
+msgstr ""
+
+#: ../fdroidserver/common.py
+#, python-brace-format
+msgid "{path} is not {expected_type}, but a {datatype}!"
+msgstr ""
+
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "{path} is zero size!"
@@ -2630,6 +2765,11 @@ msgstr "{path} boyutu sıfır!"
 #, python-brace-format
 msgid "{path} more than 200MB, manually upload: {url}"
 msgstr "{path} 200MB'den fazla, elle yükleyin: {url}"
+
+#: ../fdroidserver/lint.py
+#, python-brace-format
+msgid "{path}: \"{code}\" is not a valid ISO_3166-1 alpha-2 country code!"
+msgstr ""
 
 #: ../fdroidserver/update.py
 #, python-brace-format
