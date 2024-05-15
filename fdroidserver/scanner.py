@@ -332,7 +332,7 @@ class ScannerTool:
         self.scanner_data_lookup()
 
         options = common.get_options()
-        options_refresh_scanner = options and options.refresh_scanner
+        options_refresh_scanner = hasattr(options, "refresh_scanner") and options.refresh_scanner
         if options_refresh_scanner or common.get_config().get('refresh_scanner'):
             self.refresh()
 
