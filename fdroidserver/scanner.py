@@ -60,13 +60,14 @@ class ExitCode(IntEnum):
 
 
 def get_gradle_compile_commands(build):
-    compileCommands = ['compile',
-                       'provided',
+    compileCommands = ['api',
                        'apk',
-                       'implementation',
                        'classpath',
-                       'api',
+                       'compile',
                        'compileOnly',
+                       'id',
+                       'implementation',
+                       'provided',
                        'runtimeOnly']
     buildTypes = ['', 'release']
     flavors = ['']
