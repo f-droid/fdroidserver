@@ -53,7 +53,7 @@ class ScannerTest(unittest.TestCase):
             'OtakuWorld': 2,
             'Zillode': 1,
             'cn.wildfirechat.chat': 4,
-            'com.github.shadowsocks': 10,
+            'com.github.shadowsocks': 9,
             'com.integreight.onesheeld': 16,
             'com.jens.automation2': 3,
             'firebase-suspect': 1,
@@ -82,7 +82,7 @@ class ScannerTest(unittest.TestCase):
             ('source-files/osmandapp/osmand/build.gradle', 'free', 5),
             ('source-files/eu.siacs.conversations/build.gradle', 'free', 24),
             ('source-files/org.mozilla.rocket/app/build.gradle', 'focus', 42),
-            ('source-files/com.jens.automation2/app/build.gradle', 'fdroidFlavor', 8),
+            ('source-files/com.jens.automation2/app/build.gradle', 'fdroidFlavor', 9),
         ]
 
         for f, flavor, count in test_files:
