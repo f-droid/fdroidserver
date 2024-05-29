@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
 
+import configparser
 import inspect
 import logging
 import os
+import shutil
 import sys
 import tempfile
 import unittest
@@ -21,6 +23,11 @@ from fdroidserver.exception import FDroidException
 from testcommon import TmpCwd, mkdtemp, parse_args_for_test
 
 
+class Options:
+    quiet = False
+    verbose = False
+
+
 class DeployTest(unittest.TestCase):
     '''fdroidserver/deploy.py'''
 
@@ -30,6 +37,10 @@ class DeployTest(unittest.TestCase):
         os.chdir(self.basedir)
         self._td = mkdtemp()
         self.testdir = self._td.name
+
+        fdroidserver.deploy.options = mock.Mock()
+        fdroidserver.deploy.config = {}
+        fdroidserver.deploy.USER_RCLONE_CONF = False
 
     def tearDown(self):
         self._td.cleanup()
@@ -87,6 +98,44 @@ class DeployTest(unittest.TestCase):
         with self.assertRaises(SystemExit):
             fdroidserver.deploy.update_serverwebroots([{'url': 'ssh://nope'}], 'repo')
 
+    @unittest.skipUnless(shutil.which('rclone'), '/usr/bin/rclone')
+    def test_update_remote_storage_with_rclone(self):
+        os.chdir(self.testdir)
+        repo = Path('repo')
+        repo.mkdir(parents=True, exist_ok=True)
+
+        fake_apk = repo / 'another_fake.apk'
+        with fake_apk.open('w') as fp:
+            fp.write('not an APK, but has the right filename')
+
+        # write out rclone config for test use
+        rclone_config = configparser.ConfigParser()
+        rclone_config.add_section("test-local-config")
+        rclone_config.set("test-local-config", "type", "local")
+
+        rclone_config_path = Path('rclone_config_path')
+        rclone_config_path.mkdir(parents=True, exist_ok=True)
+        rclone_file = rclone_config_path / 'rclone.conf'
+        with open(rclone_file, 'w') as configfile:
+            rclone_config.write(configfile)
+
+        # setup parameters for this test run
+        fdroidserver.deploy.config['awsbucket'] = 'test_bucket_folder'
+        fdroidserver.deploy.config['rclone'] = True
+        fdroidserver.deploy.config['rclone_config'] = 'test-local-config'
+        fdroidserver.deploy.config['path_to_custom_rclone_config'] = str(rclone_file)
+        fdroidserver.deploy.options = Options
+
+        # write out destination path
+        destination = Path('some_bucket_folder/fdroid')
+        destination.mkdir(parents=True, exist_ok=True)
+        dest_path = Path(destination) / fake_apk
+        self.assertFalse(dest_path.is_file())
+        repo_section = str(repo)
+        # fdroidserver.deploy.USER_RCLONE_CONF = str(rclone_file)
+        fdroidserver.deploy.update_remote_storage_with_rclone(repo_section)
+        self.assertFalse(dest_path.is_file())
+
     def test_update_serverwebroot(self):
         """rsync works with file paths, so this test uses paths for the URLs"""
         os.chdir(self.testdir)
@@ -100,6 +149,8 @@ class DeployTest(unittest.TestCase):
 
         dest_apk = url / fake_apk
         self.assertFalse(dest_apk.is_file())
+        fdroidserver.deploy.options = mock.Mock()
+        fdroidserver.deploy.options.identity_file = None
         fdroidserver.deploy.update_serverwebroot({'url': str(url)}, 'repo')
         self.assertTrue(dest_apk.is_file())
 
