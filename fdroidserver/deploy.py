@@ -28,6 +28,7 @@ import urllib
 import yaml
 from argparse import ArgumentParser
 import logging
+from shlex import split
 import shutil
 
 from . import _
@@ -44,6 +45,7 @@ BINARY_TRANSPARENCY_DIR = 'binary_transparency'
 
 AUTO_S3CFG = '.fdroid-deploy-s3cfg'
 USER_S3CFG = 's3cfg'
+USER_RCLONE_CONF = None
 REMOTE_HOSTNAME_REGEX = re.compile(r'\W*\w+\W+(\w+).*')
 
 INDEX_FILES = [
@@ -89,7 +91,7 @@ def _get_index_excludes(repo_section):
     return index_excludes
 
 
-def update_awsbucket(repo_section):
+def update_awsbucket(repo_section, verbose=False, quiet=False):
     """Upload the contents of the directory `repo_section` (including subdirectories) to the AWS S3 "bucket".
 
     The contents of that subdir of the
@@ -101,8 +103,29 @@ def update_awsbucket(repo_section):
         f'''Syncing "{repo_section}" to Amazon S3 bucket "{config['awsbucket']}"'''
     )
 
-    if common.set_command_in_config('s3cmd'):
+    if common.set_command_in_config('s3cmd') and common.set_command_in_config('rclone'):
+        logging.info(
+            'Both rclone and s3cmd are installed. Checking config.yml for preference.'
+        )
+        if config['s3cmd'] is not True and config['rclone'] is not True:
+            logging.warning(
+                'No syncing tool set in config.yml!. Defaulting to using s3cmd'
+            )
+            update_awsbucket_s3cmd(repo_section)
+        if config['s3cmd'] is True and config['rclone'] is True:
+            logging.warning(
+                'Both syncing tools set in config.yml!. Defaulting to using s3cmd'
+            )
+            update_awsbucket_s3cmd(repo_section)
+        if config['s3cmd'] is True and config['rclone'] is not True:
+            update_awsbucket_s3cmd(repo_section)
+        if config['rclone'] is True and config['s3cmd'] is not True:
+            update_remote_storage_with_rclone(repo_section, verbose, quiet)
+
+    elif common.set_command_in_config('s3cmd'):
         update_awsbucket_s3cmd(repo_section)
+    elif common.set_command_in_config('rclone'):
+        update_remote_storage_with_rclone(repo_section, verbose, quiet)
     else:
         update_awsbucket_libcloud(repo_section)
 
@@ -184,6 +207,129 @@ def update_awsbucket_s3cmd(repo_section):
         s3cmd_sync.append('--check-md5')
     if subprocess.call(s3cmd_sync + [repo_section, s3url]) != 0:
         raise FDroidException()
+
+
+def update_remote_storage_with_rclone(repo_section, verbose=False, quiet=False):
+    """
+    Upload fdroid repo folder to remote storage using rclone sync.
+
+    Rclone sync can send the files to any supported remote storage
+    service once without numerous polling.
+    If remote storage is s3 e.g aws s3, wasabi, filebase then path will be
+    bucket_name/fdroid/repo where bucket_name will be an s3 bucket
+    If remote storage is storage drive/sftp e.g google drive, rsync.net
+    the new path will be bucket_name/fdroid/repo where bucket_name
+    will be a folder
+
+    Better than the s3cmd command as it does the syncing in one command
+    Check https://rclone.org/docs/#config-config-file (optional config file)
+    """
+    logging.debug(_('Using rclone to sync with: {url}').format(url=config['awsbucket']))
+
+    if config.get('path_to_custom_rclone_config') is not None:
+        USER_RCLONE_CONF = config['path_to_custom_rclone_config']
+        if os.path.exists(USER_RCLONE_CONF):
+            logging.info("'path_to_custom_rclone_config' found in config.yml")
+            logging.info(
+                _('Using "{path}" for syncing with remote storage.').format(
+                    path=USER_RCLONE_CONF
+                )
+            )
+            configfilename = USER_RCLONE_CONF
+        else:
+            logging.info('Custom configuration not found.')
+            logging.info(
+                'Using default configuration at {}'.format(
+                    subprocess.check_output('rclone config file')
+                )
+            )
+            configfilename = None
+    else:
+        logging.warning("'path_to_custom_rclone_config' not found in config.yml")
+        logging.info('Custom configuration not found.')
+        logging.info(
+            'Using default configuration at {}'.format(
+                subprocess.check_output('rclone config file')
+            )
+        )
+        configfilename = None
+
+    upload_dir = 'fdroid/' + repo_section
+
+    if not config.get('rclone_config') or not config.get('awsbucket'):
+        raise FDroidException(
+            _('To use rclone, rclone_config and awsbucket must be set in config.yml!')
+        )
+
+    if isinstance(config['rclone_config'], str):
+        rclone_sync_command = (
+            'rclone sync '
+            + repo_section
+            + ' '
+            + config['rclone_config']
+            + ':'
+            + config['awsbucket']
+            + '/'
+            + upload_dir
+        )
+
+        rclone_sync_command = split(rclone_sync_command)
+
+        if verbose:
+            rclone_sync_command += ['--verbose']
+        elif quiet:
+            rclone_sync_command += ['--quiet']
+
+        if configfilename:
+            rclone_sync_command += split('--config=' + configfilename)
+
+        complete_remote_path = (
+            config['rclone_config'] + ':' + config['awsbucket'] + '/' + upload_dir
+        )
+
+        logging.debug(
+            "rclone sync all files in " + repo_section + ' to ' + complete_remote_path
+        )
+
+        if subprocess.call(rclone_sync_command) != 0:
+            raise FDroidException()
+
+    if isinstance(config['rclone_config'], list):
+        for remote_config in config['rclone_config']:
+            rclone_sync_command = (
+                'rclone sync '
+                + repo_section
+                + ' '
+                + remote_config
+                + ':'
+                + config['awsbucket']
+                + '/'
+                + upload_dir
+            )
+
+            rclone_sync_command = split(rclone_sync_command)
+
+            if verbose:
+                rclone_sync_command += ['--verbose']
+            elif quiet:
+                rclone_sync_command += ['--quiet']
+
+            if configfilename:
+                rclone_sync_command += split('--config=' + configfilename)
+
+            complete_remote_path = (
+                remote_config + ':' + config['awsbucket'] + '/' + upload_dir
+            )
+
+            logging.debug(
+                "rclone sync all files in "
+                + repo_section
+                + ' to '
+                + complete_remote_path
+            )
+
+            if subprocess.call(rclone_sync_command) != 0:
+                raise FDroidException()
 
 
 def update_awsbucket_libcloud(repo_section):
@@ -967,7 +1113,7 @@ def main():
             # update_servergitmirrors will take care of multiple mirrors so don't need a foreach
             update_servergitmirrors(config['servergitmirrors'], repo_section)
         if config.get('awsbucket'):
-            update_awsbucket(repo_section)
+            update_awsbucket(repo_section, options.verbose, options.quiet)
         if config.get('androidobservatory'):
             upload_to_android_observatory(repo_section)
         if config.get('virustotal_apikey'):
