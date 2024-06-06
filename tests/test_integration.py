@@ -105,11 +105,6 @@ class IntegrationTest(unittest.TestCase):
                 f.write(line)
 
     @staticmethod
-    def get_fdroid_apk_filename(file):
-        id, version_code, _ = get_apkid(file)
-        return f"{id}_{version_code}.apk"
-
-    @staticmethod
     def copy_apks_into_repo():
         def to_skip(name):
             for str in [
@@ -126,8 +121,10 @@ class IntegrationTest(unittest.TestCase):
 
         for f in FILES.glob("*.apk"):
             if not to_skip(f.name):
+                appid, versionCode, _ignored = get_apkid(f)
                 shutil.copy(
-                    f, Path("repo") / IntegrationTest.get_fdroid_apk_filename(f)
+                    f,
+                    Path("repo") / common.get_release_apk_filename(appid, versionCode),
                 )
 
     @staticmethod

@@ -1126,13 +1126,23 @@ def apk_parse_release_filename(apkname):
     return None, None, None
 
 
+def get_output_extension(build):
+    if build.output:
+        return get_file_extension(replace_build_vars(build.output, build))
+    return 'apk'
+
+
+def get_release_apk_filename(appid, versionCode):
+    return f"{appid}_{versionCode}.apk"
+
+
 def get_release_filename(app, build, extension=None):
     if extension:
         return "%s_%s.%s" % (app.id, build.versionCode, extension)
     if build.output and get_file_extension(build.output):
         return "%s_%s.%s" % (app.id, build.versionCode, get_file_extension(build.output))
     else:
-        return "%s_%s.apk" % (app.id, build.versionCode)
+        return get_release_apk_filename(app.id, build.versionCode)
 
 
 def get_toolsversion_logname(app, build):
