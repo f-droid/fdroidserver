@@ -23,3 +23,6 @@ security:
     67599:
       reason: Only affects pip when using --extra-index-url, which is never the case in fdroidserver CI.
       expires: '2026-05-31'
+    70612:
+      reason: jinja2 is not used by fdroidserver, nor any dependencies I could find via debtree and pipdeptree.
+      expires: '2026-05-31'
