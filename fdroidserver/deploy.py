@@ -797,7 +797,10 @@ def upload_to_servergitmirror(
     local_repo.index.commit("fdroidserver git-mirror")
 
     # only deploy to GitLab Artifacts if too big for GitLab Pages
-    if common.get_dir_size(fdroid_dir) <= common.GITLAB_COM_PAGES_MAX_SIZE:
+    if (
+        is_index_only
+        or common.get_dir_size(fdroid_dir) <= common.GITLAB_COM_PAGES_MAX_SIZE
+    ):
         gitlab_ci_job_name = 'pages'
     else:
         gitlab_ci_job_name = 'GitLab Artifacts'

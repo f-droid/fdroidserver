@@ -1534,7 +1534,10 @@ def get_mirror_service_urls(mirror):
         urls.append('/'.join(segments))
     elif hostname == "gitlab.com":
         git_mirror_path = os.path.join('git-mirror', folder)
-        if common.get_dir_size(git_mirror_path) <= common.GITLAB_COM_PAGES_MAX_SIZE:
+        if (
+            mirror.get('index_only')
+            or common.get_dir_size(git_mirror_path) <= common.GITLAB_COM_PAGES_MAX_SIZE
+        ):
             # Gitlab-like Pages segments "https://user.gitlab.io/repo/folder"
             gitlab_pages = ["https:", "", user + ".gitlab.io", repo, folder]
             urls.append('/'.join(gitlab_pages))
