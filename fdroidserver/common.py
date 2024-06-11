@@ -29,6 +29,7 @@
 # libraries here as they will become a requirement for all commands.
 
 import difflib
+from typing import List
 import git
 import glob
 import io
@@ -4300,7 +4301,7 @@ def get_app_display_name(app):
     return app.get('AutoName') or app['id']
 
 
-def local_rsync(options, fromdir, todir):
+def local_rsync(options, from_paths: List[str], todir: str):
     """Rsync method for local to local copying of things.
 
     This is an rsync wrapper with all the settings for safe use within
@@ -4317,8 +4318,8 @@ def local_rsync(options, fromdir, todir):
         rsyncargs += ['--verbose']
     if options.quiet:
         rsyncargs += ['--quiet']
-    logging.debug(' '.join(rsyncargs + [fromdir, todir]))
-    if subprocess.call(rsyncargs + [fromdir, todir]) != 0:
+    logging.debug(' '.join(rsyncargs + from_paths + [todir]))
+    if subprocess.call(rsyncargs + from_paths + [todir]) != 0:
         raise FDroidException()
 
 
@@ -4413,27 +4414,39 @@ def get_per_app_repos():
     return repos
 
 
+# list of index files that are never gpg-signed
+NO_GPG_INDEX_FILES = [
+    "entry.jar",
+    "index-v1.jar",
+    "index.css",
+    "index.html",
+    "index.jar",
+    "index.png",
+    "index.xml",
+]
+
+# list of index files that are signed by gpgsign.py to make a .asc file
+GPG_INDEX_FILES = [
+    "altstore-index.json",
+    "entry.json",
+    "index-v1.json",
+    "index-v2.json",
+]
+
+
+INDEX_FILES = sorted(
+    NO_GPG_INDEX_FILES + GPG_INDEX_FILES + [i + '.asc' for i in GPG_INDEX_FILES]
+)
+
+
 def is_repo_file(filename, for_gpg_signing=False):
     """Whether the file in a repo is a build product to be delivered to users."""
     if isinstance(filename, str):
         filename = filename.encode('utf-8', errors="surrogateescape")
-    ignore_files = [
-        b'entry.jar',
-        b'index-v1.jar',
-        b'index.css',
-        b'index.html',
-        b'index.jar',
-        b'index.png',
-        b'index.xml',
-        b'index_unsigned.jar',
-    ]
+    ignore_files = [i.encode() for i in NO_GPG_INDEX_FILES]
+    ignore_files.append(b'index_unsigned.jar')
     if not for_gpg_signing:
-        ignore_files += [
-            b'altstore-index.json',
-            b'entry.json',
-            b'index-v1.json',
-            b'index-v2.json',
-        ]
+        ignore_files += [i.encode() for i in GPG_INDEX_FILES]
 
     return (
         os.path.isfile(filename)
