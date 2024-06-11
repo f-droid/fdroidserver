@@ -25,11 +25,15 @@ import re
 import subprocess
 import time
 import urllib
+from typing import Dict, List
+from git import Repo
 import yaml
 from argparse import ArgumentParser
 import logging
 from shlex import split
 import shutil
+import git
+from pathlib import Path
 
 from . import _
 from . import common
@@ -48,42 +52,20 @@ USER_S3CFG = 's3cfg'
 USER_RCLONE_CONF = None
 REMOTE_HOSTNAME_REGEX = re.compile(r'\W*\w+\W+(\w+).*')
 
-INDEX_FILES = [
-    "entry.jar",
-    "entry.json",
-    "entry.json.asc",
-    "index-v1.jar",
-    "index-v1.json",
-    "index-v1.json.asc",
-    "index-v2.json",
-    "index-v2.json.asc",
-    "index.jar",
-    "index.xml",
-]
 
-
-def _get_index_excludes(repo_section):
+def _get_index_file_paths(base_dir):
     """Return the list of files to be synced last, since they finalize the deploy.
 
     The process of pushing all the new packages to the various
     services can take a while.  So the index files should be updated
     last.  That ensures that the package files are available when the
     client learns about them from the new index files.
-
     """
-    indexes = [
-        os.path.join(repo_section, 'altstore-index.json'),
-        os.path.join(repo_section, 'entry.jar'),
-        os.path.join(repo_section, 'entry.json'),
-        os.path.join(repo_section, 'entry.json.asc'),
-        os.path.join(repo_section, 'index-v1.jar'),
-        os.path.join(repo_section, 'index-v1.json'),
-        os.path.join(repo_section, 'index-v1.json.asc'),
-        os.path.join(repo_section, 'index-v2.json'),
-        os.path.join(repo_section, 'index-v2.json.asc'),
-        os.path.join(repo_section, 'index.jar'),
-        os.path.join(repo_section, 'index.xml'),
-    ]
+    return [os.path.join(base_dir, filename) for filename in common.INDEX_FILES]
+
+
+def _get_index_excludes(base_dir):
+    indexes = _get_index_file_paths(base_dir)
     index_excludes = []
     for f in indexes:
         index_excludes.append('--exclude')
@@ -91,7 +73,25 @@ def _get_index_excludes(repo_section):
     return index_excludes
 
 
-def update_awsbucket(repo_section, verbose=False, quiet=False):
+def _get_index_includes(base_dir):
+    indexes = _get_index_file_paths(base_dir)
+    index_includes = []
+    for f in indexes:
+        index_includes.append('--include')
+        index_includes.append(f)
+    return index_includes
+
+
+def _remove_missing_files(files: List[str]) -> List[str]:
+    """Remove files that are missing from the file system."""
+    existing = []
+    for f in files:
+        if os.path.exists(f):
+            existing.append(f)
+    return existing
+
+
+def update_awsbucket(repo_section, is_index_only=False, verbose=False, quiet=False):
     """Upload the contents of the directory `repo_section` (including subdirectories) to the AWS S3 "bucket".
 
     The contents of that subdir of the
@@ -111,26 +111,28 @@ def update_awsbucket(repo_section, verbose=False, quiet=False):
             logging.warning(
                 'No syncing tool set in config.yml!. Defaulting to using s3cmd'
             )
-            update_awsbucket_s3cmd(repo_section)
+            update_awsbucket_s3cmd(repo_section, is_index_only)
         if config['s3cmd'] is True and config['rclone'] is True:
             logging.warning(
                 'Both syncing tools set in config.yml!. Defaulting to using s3cmd'
             )
-            update_awsbucket_s3cmd(repo_section)
+            update_awsbucket_s3cmd(repo_section, is_index_only)
         if config['s3cmd'] is True and config['rclone'] is not True:
-            update_awsbucket_s3cmd(repo_section)
+            update_awsbucket_s3cmd(repo_section, is_index_only)
         if config['rclone'] is True and config['s3cmd'] is not True:
-            update_remote_storage_with_rclone(repo_section, verbose, quiet)
+            update_remote_storage_with_rclone(
+                repo_section, is_index_only, verbose, quiet
+            )
 
     elif common.set_command_in_config('s3cmd'):
-        update_awsbucket_s3cmd(repo_section)
+        update_awsbucket_s3cmd(repo_section, is_index_only)
     elif common.set_command_in_config('rclone'):
-        update_remote_storage_with_rclone(repo_section, verbose, quiet)
+        update_remote_storage_with_rclone(repo_section, is_index_only, verbose, quiet)
     else:
-        update_awsbucket_libcloud(repo_section)
+        update_awsbucket_libcloud(repo_section, is_index_only)
 
 
-def update_awsbucket_s3cmd(repo_section):
+def update_awsbucket_s3cmd(repo_section, is_index_only=False):
     """Upload using the CLI tool s3cmd, which provides rsync-like sync.
 
     The upload is done in multiple passes to reduce the chance of
@@ -177,39 +179,68 @@ def update_awsbucket_s3cmd(repo_section):
         s3cmd_sync += ['--quiet']
 
     s3url = s3bucketurl + '/fdroid/'
-    logging.debug('s3cmd sync new files in ' + repo_section + ' to ' + s3url)
-    logging.debug(_('Running first pass with MD5 checking disabled'))
-    excludes = _get_index_excludes(repo_section)
-    returncode = subprocess.call(
-        s3cmd_sync
-        + excludes
-        + ['--no-check-md5', '--skip-existing', repo_section, s3url]
-    )
-    if returncode != 0:
-        raise FDroidException()
-    logging.debug('s3cmd sync all files in ' + repo_section + ' to ' + s3url)
-    returncode = subprocess.call(
-        s3cmd_sync + excludes + ['--no-check-md5', repo_section, s3url]
-    )
-    if returncode != 0:
-        raise FDroidException()
 
     logging.debug(
         _('s3cmd sync indexes {path} to {url} and delete').format(
             path=repo_section, url=s3url
         )
     )
-    s3cmd_sync.append('--delete-removed')
-    s3cmd_sync.append('--delete-after')
-    if options.no_checksum:
-        s3cmd_sync.append('--no-check-md5')
+
+    if is_index_only:
+        logging.debug(
+            _('s3cmd syncs indexes from {path} to {url} and deletes removed').format(
+                path=repo_section, url=s3url
+            )
+        )
+        sync_indexes_flags = []
+        sync_indexes_flags.extend(_get_index_includes(repo_section))
+        sync_indexes_flags.append('--delete-removed')
+        sync_indexes_flags.append('--delete-after')
+        if options.no_checksum:
+            sync_indexes_flags.append('--no-check-md5')
+        else:
+            sync_indexes_flags.append('--check-md5')
+        returncode = subprocess.call(
+            s3cmd_sync + sync_indexes_flags + [repo_section, s3url]
+        )
+        if returncode != 0:
+            raise FDroidException()
     else:
-        s3cmd_sync.append('--check-md5')
-    if subprocess.call(s3cmd_sync + [repo_section, s3url]) != 0:
-        raise FDroidException()
+        logging.debug('s3cmd sync new files in ' + repo_section + ' to ' + s3url)
+        logging.debug(_('Running first pass with MD5 checking disabled'))
+        excludes = _get_index_excludes(repo_section)
+        returncode = subprocess.call(
+            s3cmd_sync
+            + excludes
+            + ['--no-check-md5', '--skip-existing', repo_section, s3url]
+        )
+        if returncode != 0:
+            raise FDroidException()
+        logging.debug('s3cmd sync all files in ' + repo_section + ' to ' + s3url)
+        returncode = subprocess.call(
+            s3cmd_sync + excludes + ['--no-check-md5', repo_section, s3url]
+        )
+        if returncode != 0:
+            raise FDroidException()
+
+        logging.debug(
+            _('s3cmd sync indexes {path} to {url} and delete').format(
+                path=repo_section, url=s3url
+            )
+        )
+        s3cmd_sync.append('--delete-removed')
+        s3cmd_sync.append('--delete-after')
+        if options.no_checksum:
+            s3cmd_sync.append('--no-check-md5')
+        else:
+            s3cmd_sync.append('--check-md5')
+        if subprocess.call(s3cmd_sync + [repo_section, s3url]) != 0:
+            raise FDroidException()
 
 
-def update_remote_storage_with_rclone(repo_section, verbose=False, quiet=False):
+def update_remote_storage_with_rclone(
+    repo_section, is_index_only=False, verbose=False, quiet=False
+):
     """
     Upload fdroid repo folder to remote storage using rclone sync.
 
@@ -261,46 +292,19 @@ def update_remote_storage_with_rclone(repo_section, verbose=False, quiet=False):
             _('To use rclone, rclone_config and awsbucket must be set in config.yml!')
         )
 
-    if isinstance(config['rclone_config'], str):
-        rclone_sync_command = (
-            'rclone sync '
-            + repo_section
-            + ' '
-            + config['rclone_config']
-            + ':'
-            + config['awsbucket']
-            + '/'
-            + upload_dir
-        )
+    if is_index_only:
+        sources = _get_index_file_paths(repo_section)
+        sources = _remove_missing_files(sources)
+    else:
+        sources = [repo_section]
 
-        rclone_sync_command = split(rclone_sync_command)
-
-        if verbose:
-            rclone_sync_command += ['--verbose']
-        elif quiet:
-            rclone_sync_command += ['--quiet']
-
-        if configfilename:
-            rclone_sync_command += split('--config=' + configfilename)
-
-        complete_remote_path = (
-            config['rclone_config'] + ':' + config['awsbucket'] + '/' + upload_dir
-        )
-
-        logging.debug(
-            "rclone sync all files in " + repo_section + ' to ' + complete_remote_path
-        )
-
-        if subprocess.call(rclone_sync_command) != 0:
-            raise FDroidException()
-
-    if isinstance(config['rclone_config'], list):
-        for remote_config in config['rclone_config']:
+    for source in sources:
+        if isinstance(config['rclone_config'], str):
             rclone_sync_command = (
                 'rclone sync '
-                + repo_section
+                + source
                 + ' '
-                + remote_config
+                + config['rclone_config']
                 + ':'
                 + config['awsbucket']
                 + '/'
@@ -318,21 +322,52 @@ def update_remote_storage_with_rclone(repo_section, verbose=False, quiet=False):
                 rclone_sync_command += split('--config=' + configfilename)
 
             complete_remote_path = (
-                remote_config + ':' + config['awsbucket'] + '/' + upload_dir
+                config['rclone_config'] + ':' + config['awsbucket'] + '/' + upload_dir
             )
 
             logging.debug(
-                "rclone sync all files in "
-                + repo_section
-                + ' to '
-                + complete_remote_path
+                "rclone sync all files in " + source + ' to ' + complete_remote_path
             )
 
             if subprocess.call(rclone_sync_command) != 0:
                 raise FDroidException()
 
+        if isinstance(config['rclone_config'], list):
+            for remote_config in config['rclone_config']:
+                rclone_sync_command = (
+                    'rclone sync '
+                    + source
+                    + ' '
+                    + remote_config
+                    + ':'
+                    + config['awsbucket']
+                    + '/'
+                    + upload_dir
+                )
 
-def update_awsbucket_libcloud(repo_section):
+                rclone_sync_command = split(rclone_sync_command)
+
+                if verbose:
+                    rclone_sync_command += ['--verbose']
+                elif quiet:
+                    rclone_sync_command += ['--quiet']
+
+                if configfilename:
+                    rclone_sync_command += split('--config=' + configfilename)
+
+                complete_remote_path = (
+                    remote_config + ':' + config['awsbucket'] + '/' + upload_dir
+                )
+
+                logging.debug(
+                    "rclone sync all files in " + source + ' to ' + complete_remote_path
+                )
+
+                if subprocess.call(rclone_sync_command) != 0:
+                    raise FDroidException()
+
+
+def update_awsbucket_libcloud(repo_section, is_index_only=False):
     """No summary.
 
     Upload the contents of the directory `repo_section` (including
@@ -380,49 +415,66 @@ def update_awsbucket_libcloud(repo_section):
         if obj.name.startswith(upload_dir + '/'):
             objs[obj.name] = obj
 
-    for root, dirs, files in os.walk(os.path.join(os.getcwd(), repo_section)):
-        for name in files:
-            upload = False
-            file_to_upload = os.path.join(root, name)
-            object_name = 'fdroid/' + os.path.relpath(file_to_upload, os.getcwd())
-            if object_name not in objs:
+    if is_index_only:
+        index_files = [
+            f"{os.getcwd()}/{name}" for name in _get_index_file_paths(repo_section)
+        ]
+        files_to_upload = [
+            os.path.join(root, name)
+            for root, dirs, files in os.walk(os.path.join(os.getcwd(), repo_section))
+            for name in files
+        ]
+        files_to_upload = list(set(files_to_upload) & set(index_files))
+        files_to_upload = _remove_missing_files(files_to_upload)
+
+    else:
+        files_to_upload = [
+            os.path.join(root, name)
+            for root, dirs, files in os.walk(os.path.join(os.getcwd(), repo_section))
+            for name in files
+        ]
+
+    for file_to_upload in files_to_upload:
+        upload = False
+        object_name = 'fdroid/' + os.path.relpath(file_to_upload, os.getcwd())
+        if object_name not in objs:
+            upload = True
+        else:
+            obj = objs.pop(object_name)
+            if obj.size != os.path.getsize(file_to_upload):
                 upload = True
             else:
-                obj = objs.pop(object_name)
-                if obj.size != os.path.getsize(file_to_upload):
+                # if the sizes match, then compare by MD5
+                md5 = hashlib.md5()  # nosec AWS uses MD5
+                with open(file_to_upload, 'rb') as f:
+                    while True:
+                        data = f.read(8192)
+                        if not data:
+                            break
+                        md5.update(data)
+                if obj.hash != md5.hexdigest():
+                    s3url = 's3://' + awsbucket + '/' + obj.name
+                    logging.info(' deleting ' + s3url)
+                    if not driver.delete_object(obj):
+                        logging.warning('Could not delete ' + s3url)
                     upload = True
-                else:
-                    # if the sizes match, then compare by MD5
-                    md5 = hashlib.md5()  # nosec AWS uses MD5
-                    with open(file_to_upload, 'rb') as f:
-                        while True:
-                            data = f.read(8192)
-                            if not data:
-                                break
-                            md5.update(data)
-                    if obj.hash != md5.hexdigest():
-                        s3url = 's3://' + awsbucket + '/' + obj.name
-                        logging.info(' deleting ' + s3url)
-                        if not driver.delete_object(obj):
-                            logging.warning('Could not delete ' + s3url)
-                        upload = True
 
-            if upload:
-                logging.debug(' uploading "' + file_to_upload + '"...')
-                extra = {'acl': 'public-read'}
-                if file_to_upload.endswith('.sig'):
-                    extra['content_type'] = 'application/pgp-signature'
-                elif file_to_upload.endswith('.asc'):
-                    extra['content_type'] = 'application/pgp-signature'
-                path = os.path.relpath(file_to_upload)
-                logging.info(f' uploading {path} to s3://{awsbucket}/{object_name}')
-                with open(file_to_upload, 'rb') as iterator:
-                    obj = driver.upload_object_via_stream(
-                        iterator=iterator,
-                        container=container,
-                        object_name=object_name,
-                        extra=extra,
-                    )
+        if upload:
+            logging.debug(' uploading "' + file_to_upload + '"...')
+            extra = {'acl': 'public-read'}
+            if file_to_upload.endswith('.sig'):
+                extra['content_type'] = 'application/pgp-signature'
+            elif file_to_upload.endswith('.asc'):
+                extra['content_type'] = 'application/pgp-signature'
+            path = os.path.relpath(file_to_upload)
+            logging.info(f' uploading {path} to s3://{awsbucket}/{object_name}')
+            with open(file_to_upload, 'rb') as iterator:
+                obj = driver.upload_object_via_stream(
+                    iterator=iterator,
+                    container=container,
+                    object_name=object_name,
+                    extra=extra,
+                )
     # delete the remnants in the bucket, they do not exist locally
     while objs:
         object_name, obj = objs.popitem()
@@ -476,21 +528,38 @@ def update_serverwebroot(serverwebroot, repo_section):
             'ssh -oBatchMode=yes -oIdentitiesOnly=yes -i ' + config['identity_file'],
         ]
     url = serverwebroot['url']
+    is_index_only = serverwebroot.get('index_only', False)
     logging.info('rsyncing ' + repo_section + ' to ' + url)
-    excludes = _get_index_excludes(repo_section)
-    if subprocess.call(rsyncargs + excludes + [repo_section, url]) != 0:
-        raise FDroidException()
-    if subprocess.call(rsyncargs + [repo_section, url]) != 0:
-        raise FDroidException()
-    # upload "current version" symlinks if requested
-    if config and config.get('make_current_version_link') and repo_section == 'repo':
-        links_to_upload = []
-        for f in glob.glob('*.apk') + glob.glob('*.apk.asc') + glob.glob('*.apk.sig'):
-            if os.path.islink(f):
-                links_to_upload.append(f)
-        if len(links_to_upload) > 0:
-            if subprocess.call(rsyncargs + links_to_upload + [url]) != 0:
-                raise FDroidException()
+    if is_index_only:
+        files_to_upload = _get_index_file_paths(repo_section)
+        files_to_upload = _remove_missing_files(files_to_upload)
+
+        rsyncargs += files_to_upload
+        rsyncargs += [f'{url}/{repo_section}/']
+        logging.info(rsyncargs)
+        if subprocess.call(rsyncargs) != 0:
+            raise FDroidException()
+    else:
+        excludes = _get_index_excludes(repo_section)
+        if subprocess.call(rsyncargs + excludes + [repo_section, url]) != 0:
+            raise FDroidException()
+        if subprocess.call(rsyncargs + [repo_section, url]) != 0:
+            raise FDroidException()
+        # upload "current version" symlinks if requested
+        if (
+            config
+            and config.get('make_current_version_link')
+            and repo_section == 'repo'
+        ):
+            links_to_upload = []
+            for f in (
+                glob.glob('*.apk') + glob.glob('*.apk.asc') + glob.glob('*.apk.sig')
+            ):
+                if os.path.islink(f):
+                    links_to_upload.append(f)
+            if len(links_to_upload) > 0:
+                if subprocess.call(rsyncargs + links_to_upload + [url]) != 0:
+                    raise FDroidException()
 
 
 def update_serverwebroots(serverwebroots, repo_section, standardwebroot=True):
@@ -531,11 +600,12 @@ def sync_from_localcopy(repo_section, local_copy_dir):
 
     """
     logging.info('Syncing from local_copy_dir to this repo.')
+
     # trailing slashes have a meaning in rsync which is not needed here, so
     # make sure both paths have exactly one trailing slash
     common.local_rsync(
         common.get_options(),
-        os.path.join(local_copy_dir, repo_section).rstrip('/') + '/',
+        [os.path.join(local_copy_dir, repo_section).rstrip('/') + '/'],
         repo_section.rstrip('/') + '/',
     )
 
@@ -554,7 +624,7 @@ def update_localcopy(repo_section, local_copy_dir):
 
     """
     # local_copy_dir is guaranteed to have a trailing slash in main() below
-    common.local_rsync(common.get_options(), repo_section, local_copy_dir)
+    common.local_rsync(common.get_options(), [repo_section], local_copy_dir)
 
     offline_copy = os.path.join(os.getcwd(), BINARY_TRANSPARENCY_DIR)
     if os.path.isdir(os.path.join(offline_copy, '.git')):
@@ -584,7 +654,6 @@ def update_servergitmirrors(servergitmirrors, repo_section):
     transparency log.
 
     """
-    import git
     from clint.textui import progress
 
     if config.get('local_copy_dir') and not config.get('sync_from_local_copy_dir'):
@@ -594,10 +663,11 @@ def update_servergitmirrors(servergitmirrors, repo_section):
         return
 
     options = common.get_options()
+    workspace_dir = Path(os.getcwd())
 
     # right now we support only 'repo' git-mirroring
     if repo_section == 'repo':
-        git_mirror_path = 'git-mirror'
+        git_mirror_path = workspace_dir / 'git-mirror'
         dotgit = os.path.join(git_mirror_path, '.git')
         git_fdroiddir = os.path.join(git_mirror_path, 'fdroid')
         git_repodir = os.path.join(git_fdroiddir, repo_section)
@@ -624,39 +694,12 @@ def update_servergitmirrors(servergitmirrors, repo_section):
             archive_path = os.path.join(git_mirror_path, 'fdroid', 'archive')
             shutil.rmtree(archive_path, ignore_errors=True)
 
-        # rsync is very particular about trailing slashes
-        common.local_rsync(
-            options, repo_section.rstrip('/') + '/', git_repodir.rstrip('/') + '/'
-        )
-
         # use custom SSH command if identity_file specified
         ssh_cmd = 'ssh -oBatchMode=yes'
         if options.identity_file is not None:
             ssh_cmd += ' -oIdentitiesOnly=yes -i "%s"' % options.identity_file
         elif 'identity_file' in config:
             ssh_cmd += ' -oIdentitiesOnly=yes -i "%s"' % config['identity_file']
-
-        repo = git.Repo.init(git_mirror_path, initial_branch=GIT_BRANCH)
-
-        enabled_remotes = []
-        for d in servergitmirrors:
-            remote_url = d['url']
-            name = REMOTE_HOSTNAME_REGEX.sub(r'\1', remote_url)
-            enabled_remotes.append(name)
-            r = git.remote.Remote(repo, name)
-            if r in repo.remotes:
-                r = repo.remote(name)
-                if 'set_url' in dir(r):  # force remote URL if using GitPython 2.x
-                    r.set_url(remote_url)
-            else:
-                repo.create_remote(name, remote_url)
-            logging.info('Mirroring to: ' + remote_url)
-
-        # sadly index.add don't allow the --all parameter
-        logging.debug('Adding all files to git mirror')
-        repo.git.add(all=True)
-        logging.debug('Committing all files into git mirror')
-        repo.index.commit("fdroidserver git-mirror")
 
         if options.verbose:
             progressbar = progress.Bar()
@@ -670,73 +713,150 @@ def update_servergitmirrors(servergitmirrors, repo_section):
         else:
             progress = None
 
-        # only deploy to GitLab Artifacts if too big for GitLab Pages
-        if common.get_dir_size(git_fdroiddir) <= common.GITLAB_COM_PAGES_MAX_SIZE:
-            gitlab_ci_job_name = 'pages'
-        else:
-            gitlab_ci_job_name = 'GitLab Artifacts'
-            logging.warning(
-                _(
-                    'Skipping GitLab Pages mirror because the repo is too large (>%.2fGB)!'
-                )
-                % (common.GITLAB_COM_PAGES_MAX_SIZE / 1000000000)
+        repo = git.Repo.init(git_mirror_path, initial_branch=GIT_BRANCH)
+
+        enabled_remotes = []
+        for d in servergitmirrors:
+            is_index_only = d.get('index_only', False)
+
+            # Use a separate branch for the index only mode as it needs a different set of files to commit
+            if is_index_only:
+                local_branch_name = 'index_only'
+            else:
+                local_branch_name = 'full'
+            if local_branch_name in repo.heads:
+                repo.git.switch(local_branch_name)
+            else:
+                repo.git.switch('--orphan', local_branch_name)
+
+            # trailing slashes have a meaning in rsync which is not needed here, so
+            # make sure both paths have exactly one trailing slash
+            if is_index_only:
+                files_to_sync = _get_index_file_paths(str(workspace_dir / repo_section))
+                files_to_sync = _remove_missing_files(files_to_sync)
+            else:
+                files_to_sync = [str(workspace_dir / repo_section).rstrip('/') + '/']
+            common.local_rsync(
+                common.get_options(), files_to_sync, git_repodir.rstrip('/') + '/'
             )
 
-        # push for every remote. This will overwrite the git history
-        for remote in repo.remotes:
-            if remote.name not in enabled_remotes:
-                repo.delete_remote(remote)
-                continue
-            if remote.name == 'gitlab':
-                logging.debug('Writing .gitlab-ci.yml to deploy to GitLab Pages')
-                with open(os.path.join(git_mirror_path, ".gitlab-ci.yml"), "wt") as fp:
-                    yaml.dump(
-                        {
-                            gitlab_ci_job_name: {
-                                'script': [
-                                    'mkdir .public',
-                                    'cp -r * .public/',
-                                    'mv .public public',
-                                ],
-                                'artifacts': {'paths': ['public']},
-                                'variables': {'GIT_DEPTH': 1},
-                            }
-                        },
-                        fp,
-                        default_flow_style=False,
-                    )
-
-                repo.git.add(all=True)
-                repo.index.commit("fdroidserver git-mirror: Deploy to GitLab Pages")
-
-            logging.debug(_('Pushing to {url}').format(url=remote.url))
-            with repo.git.custom_environment(GIT_SSH_COMMAND=ssh_cmd):
-                pushinfos = remote.push(
-                    GIT_BRANCH, force=True, set_upstream=True, progress=progress
-                )
-                for pushinfo in pushinfos:
-                    if pushinfo.flags & (
-                        git.remote.PushInfo.ERROR
-                        | git.remote.PushInfo.REJECTED
-                        | git.remote.PushInfo.REMOTE_FAILURE
-                        | git.remote.PushInfo.REMOTE_REJECTED
-                    ):
-                        # Show potentially useful messages from git remote
-                        for line in progress.other_lines:
-                            if line.startswith('remote:'):
-                                logging.debug(line)
-                        raise FDroidException(
-                            '{url} push failed: {flags} {summary}'.format(
-                                url=remote.url,
-                                flags=pushinfo.flags,
-                                summary=pushinfo.summary,
-                            )
-                        )
-                    else:
-                        logging.debug(remote.url + ': ' + pushinfo.summary)
-
+            upload_to_servergitmirror(
+                mirror_config=d,
+                local_repo=repo,
+                enabled_remotes=enabled_remotes,
+                repo_section=repo_section,
+                is_index_only=is_index_only,
+                fdroid_dir=git_fdroiddir,
+                git_mirror_path=str(git_mirror_path),
+                ssh_cmd=ssh_cmd,
+                progress=progress,
+            )
         if progress:
             progressbar.done()
+
+
+def upload_to_servergitmirror(
+    mirror_config: Dict[str, str],
+    local_repo: Repo,
+    enabled_remotes: List[str],
+    repo_section: str,
+    is_index_only: bool,
+    fdroid_dir: str,
+    git_mirror_path: str,
+    ssh_cmd: str,
+    progress: git.RemoteProgress,
+) -> None:
+    remote_branch_name = GIT_BRANCH
+    local_branch_name = local_repo.active_branch.name
+
+    remote_url = mirror_config['url']
+    name = REMOTE_HOSTNAME_REGEX.sub(r'\1', remote_url)
+    enabled_remotes.append(name)
+    r = git.remote.Remote(local_repo, name)
+    if r in local_repo.remotes:
+        r = local_repo.remote(name)
+        if 'set_url' in dir(r):  # force remote URL if using GitPython 2.x
+            r.set_url(remote_url)
+    else:
+        local_repo.create_remote(name, remote_url)
+    logging.info('Mirroring to: ' + remote_url)
+
+    if is_index_only:
+        files_to_upload = _get_index_file_paths(
+            os.path.join(local_repo.working_tree_dir, 'fdroid', repo_section)
+        )
+        files_to_upload = _remove_missing_files(files_to_upload)
+        local_repo.index.add(files_to_upload)
+    else:
+        # sadly index.add don't allow the --all parameter
+        logging.debug('Adding all files to git mirror')
+        local_repo.git.add(all=True)
+
+    logging.debug('Committing files into git mirror')
+    local_repo.index.commit("fdroidserver git-mirror")
+
+    # only deploy to GitLab Artifacts if too big for GitLab Pages
+    if common.get_dir_size(fdroid_dir) <= common.GITLAB_COM_PAGES_MAX_SIZE:
+        gitlab_ci_job_name = 'pages'
+    else:
+        gitlab_ci_job_name = 'GitLab Artifacts'
+        logging.warning(
+            _('Skipping GitLab Pages mirror because the repo is too large (>%.2fGB)!')
+            % (common.GITLAB_COM_PAGES_MAX_SIZE / 1000000000)
+        )
+
+    # push. This will overwrite the git history
+    remote = local_repo.remote(name)
+    if remote.name == 'gitlab':
+        logging.debug('Writing .gitlab-ci.yml to deploy to GitLab Pages')
+        with open(os.path.join(git_mirror_path, ".gitlab-ci.yml"), "wt") as fp:
+            yaml.dump(
+                {
+                    gitlab_ci_job_name: {
+                        'script': [
+                            'mkdir .public',
+                            'cp -r * .public/',
+                            'mv .public public',
+                        ],
+                        'artifacts': {'paths': ['public']},
+                        'variables': {'GIT_DEPTH': 1},
+                    }
+                },
+                fp,
+                default_flow_style=False,
+            )
+
+        local_repo.index.add(['.gitlab-ci.yml'])
+        local_repo.index.commit("fdroidserver git-mirror: Deploy to GitLab Pages")
+
+    logging.debug(_('Pushing to {url}').format(url=remote.url))
+    with local_repo.git.custom_environment(GIT_SSH_COMMAND=ssh_cmd):
+        pushinfos = remote.push(
+            f"{local_branch_name}:{remote_branch_name}",
+            force=True,
+            set_upstream=True,
+            progress=progress,
+        )
+        for pushinfo in pushinfos:
+            if pushinfo.flags & (
+                git.remote.PushInfo.ERROR
+                | git.remote.PushInfo.REJECTED
+                | git.remote.PushInfo.REMOTE_FAILURE
+                | git.remote.PushInfo.REMOTE_REJECTED
+            ):
+                # Show potentially useful messages from git remote
+                for line in progress.other_lines:
+                    if line.startswith('remote:'):
+                        logging.debug(line)
+                raise FDroidException(
+                    remote.url
+                    + ' push failed: '
+                    + str(pushinfo.flags)
+                    + ' '
+                    + pushinfo.summary
+                )
+            else:
+                logging.debug(remote.url + ': ' + pushinfo.summary)
 
 
 def upload_to_android_observatory(repo_section):
@@ -955,8 +1075,6 @@ def push_binary_transparency(git_repo_path, git_remote):
     drive.
 
     """
-    import git
-
     logging.info(_('Pushing binary transparency log to {url}').format(url=git_remote))
 
     if os.path.isdir(os.path.dirname(git_remote)):

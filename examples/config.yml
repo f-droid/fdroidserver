@@ -183,7 +183,7 @@
 #
 # serverwebroot:
 #   - url: 'me@b.az:/srv/fdroid'
-#     indexOnly: true
+#     index_only: true
 
 
 # When running fdroid processes on a remote server, it is possible to
@@ -209,7 +209,7 @@
 # servergitmirrors:
 #   - url: https://github.com/user/repo
 #   - url: https://gitlab.com/user/repo
-#     indexOnly: true
+#     index_only: true
 
 # Most git hosting services have hard size limits for each git repo.
 # `fdroid deploy` will delete the git history when the git mirror repo

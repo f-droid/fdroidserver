@@ -378,11 +378,11 @@ Last updated: {date}'''.format(repo_git_base=repo_git_base,
 
         os.chdir(repo_basedir)
         if os.path.isdir(git_mirror_repodir):
-            common.local_rsync(options, git_mirror_repodir + '/', 'repo/')
+            common.local_rsync(options, [git_mirror_repodir + '/'], 'repo/')
         if os.path.isdir(git_mirror_metadatadir):
-            common.local_rsync(options, git_mirror_metadatadir + '/', 'metadata/')
+            common.local_rsync(options, [git_mirror_metadatadir + '/'], 'metadata/')
         if os.path.isdir(git_mirror_statsdir):
-            common.local_rsync(options, git_mirror_statsdir + '/', 'stats/')
+            common.local_rsync(options, [git_mirror_statsdir + '/'], 'stats/')
 
         ssh_private_key_file = _ssh_key_from_debug_keystore()
         # this is needed for GitPython to find the SSH key
@@ -484,9 +484,9 @@ Last updated: {date}'''.format(repo_git_base=repo_git_base,
             cwd=repo_basedir,
         )
         common.local_rsync(
-            options, repo_basedir + '/metadata/', git_mirror_metadatadir + '/'
+            options, [repo_basedir + '/metadata/'], git_mirror_metadatadir + '/'
         )
-        common.local_rsync(options, repo_basedir + '/stats/', git_mirror_statsdir + '/')
+        common.local_rsync(options, [repo_basedir + '/stats/'], git_mirror_statsdir + '/')
         mirror_git_repo.git.add(all=True)
         mirror_git_repo.index.commit("update app metadata")
 
