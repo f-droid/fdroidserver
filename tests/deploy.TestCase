@@ -1313,12 +1313,12 @@ class GitHubReleasesTest(unittest.TestCase):
     def test_upload_to_github_releases(self):
         gh_config = [
             {
-                "repo": "example/app",
-                "packages": ["com.example.app", "another.app"],
+                "projectUrl": "https://github.com/example/app",
+                "packageNames": ["com.example.app", "another.app"],
             },
             {
-                "repo": "custom/app",
-                "packages": ["more.custom.app"],
+                "projectUrl": "https://github.com/custom/app",
+                "packageNames": ["more.custom.app"],
                 "token": "custom_token",
             },
         ]
@@ -1343,21 +1343,22 @@ class GitHubReleasesTest(unittest.TestCase):
                 ["com.example.app", "another.app", "more.custom.app"],
             )
 
+        self.maxDiff = None
         self.assertListEqual(
             urr_mock.call_args_list,
             [
                 unittest.mock.call(
                     {
-                        "repo": "example/app",
-                        "packages": ["com.example.app", "another.app"],
+                        "projectUrl": "https://github.com/example/app",
+                        "packageNames": ["com.example.app", "another.app"],
                     },
                     "fri_result",
                     "fake_global_token",
                 ),
                 unittest.mock.call(
                     {
-                        "repo": "custom/app",
-                        "packages": ["more.custom.app"],
+                        "projectUrl": "https://github.com/custom/app",
+                        "packageNames": ["more.custom.app"],
                         "token": "custom_token",
                     },
                     "fri_result",
@@ -1370,8 +1371,8 @@ class GitHubReleasesTest(unittest.TestCase):
 class Test_UploadToGithubReleasesRepo(unittest.TestCase):
     def setUp(self):
         self.repo_conf = {
-            "repo": "example/app",
-            "packages": ["com.example.app", "com.example.altapp", "another.app"],
+            "projectUrl": "https://github.com/example/app",
+            "packageNames": ["com.example.app", "com.example.altapp", "another.app"],
         }
         self.release_infos = {
             "com.example.app": {
@@ -1414,7 +1415,9 @@ class Test_UploadToGithubReleasesRepo(unittest.TestCase):
                 "global_token",
             )
 
-        self.api_constructor.assert_called_once_with("global_token", "example/app")
+        self.api_constructor.assert_called_once_with(
+            "global_token", "https://github.com/example/app"
+        )
 
         self.assertListEqual(
             self.api.create_release.call_args_list,
@@ -1441,7 +1444,9 @@ class Test_UploadToGithubReleasesRepo(unittest.TestCase):
                 "global_token",
             )
 
-        self.api_constructor.assert_called_once_with("local_token", "example/app")
+        self.api_constructor.assert_called_once_with(
+            "local_token", "https://github.com/example/app"
+        )
 
         self.assertListEqual(
             self.api.create_release.call_args_list,

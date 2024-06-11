@@ -33,7 +33,10 @@ class GithubApi:
 
     def __init__(self, api_token, repo_path):
         self._api_token = api_token
-        self._repo_path = repo_path
+        if repo_path.startswith("https://github.com/"):
+            self._repo_path = repo_path[19:]
+        else:
+            self._repo_path = repo_path
 
     def _req(self, url, data=None):
         h = {

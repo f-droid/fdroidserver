@@ -231,16 +231,15 @@
 #
 # github_token: {env: GITHUB_TOKEN}
 # github_releases:
-#   - repo: f-droid/fdroidclient
-#     packages:
+#   - projectUrl: https://github.com/f-droid/fdroidclient
+#     packageNames:
 #       - org.fdroid.basic
 #       - org.fdroid.fdroid
 #     release_notes_prepend: |
 #       Re-post of official F-Droid App release from https://f-droid.org
-#   - repo: example/app
+#   - projectUrl: https://github.com/example/app
+#     packageNames: com.example.app
 #     token: {env: GITHUB_TOKEN_EXAMPLE}
-#     packages:
-#       - com.example.app
 
 
 # Most git hosting services have hard size limits for each git repo.

@@ -1167,7 +1167,7 @@ def upload_to_github_releases(repo_section, gh_config, global_gh_token):
 
     package_names = []
     for repo_conf in gh_config:
-        for package_name in repo_conf.get('packages', []):
+        for package_name in repo_conf.get('packageNames', []):
             package_names.append(package_name)
 
     release_infos = fdroidserver.deploy.find_release_infos(
@@ -1179,12 +1179,12 @@ def upload_to_github_releases(repo_section, gh_config, global_gh_token):
 
 
 def upload_to_github_releases_repo(repo_conf, release_infos, global_gh_token):
-    repo = repo_conf.get("repo")
-    if not repo:
+    projectUrl = repo_conf.get("projectUrl")
+    if not projectUrl:
         logging.warning(
             _(
                 "One of the 'github_releases' config items is missing the "
-                "'repo' value. skipping ..."
+                "'projectUrl' value. skipping ..."
             )
         )
         return
@@ -1197,12 +1197,14 @@ def upload_to_github_releases_repo(repo_conf, release_infos, global_gh_token):
             )
         )
         return
-    packages = repo_conf.get("packages", [])
-    if not packages:
+    conf_package_names = repo_conf.get("packageNames", [])
+    if type(conf_package_names) == str:
+        conf_package_names = [conf_package_names]
+    if not conf_package_names:
         logging.warning(
             _(
                 "One of the 'github_releases' config itmes is missing the "
-                "'packages' value. skipping ..."
+                "'packageNames' value. skipping ..."
             )
         )
         return
@@ -1210,11 +1212,11 @@ def upload_to_github_releases_repo(repo_conf, release_infos, global_gh_token):
     # lookup all versionNames (git tags) for all packages available in the
     # local fdroid repo
     all_local_versions = set()
-    for package_name in repo_conf['packages']:
+    for package_name in conf_package_names:
         for version in release_infos.get(package_name, {}).keys():
             all_local_versions.add(version)
 
-    gh = fdroidserver.github.GithubApi(token, repo)
+    gh = fdroidserver.github.GithubApi(token, projectUrl)
     unreleased_tags = gh.list_unreleased_tags()
 
     for version in all_local_versions:
@@ -1223,20 +1225,22 @@ def upload_to_github_releases_repo(repo_conf, release_infos, global_gh_token):
             # is set. (releaseChannels usually mean it's e.g. an alpha or beta
             # version)
             if (
-                not release_infos.get(packages[0], {})
+                not release_infos.get(conf_package_names[0], {})
                 .get(version, {})
                 .get('hasReleaseChannels')
             ):
                 # collect files associated with this github release
                 files = []
-                for package in packages:
+                for package in conf_package_names:
                     files.extend(
                         release_infos.get(package, {}).get(version, {}).get('files', [])
                     )
                 # always use the whatsNew text from the first app listed in
-                # config.qml github_releases.packages
+                # config.yml github_releases.packageNames
                 text = (
-                    release_infos.get(packages[0], {}).get(version, {}).get('whatsNew')
+                    release_infos.get(conf_package_names[0], {})
+                    .get(version, {})
+                    .get('whatsNew')
                     or ''
                 )
                 if 'release_notes_prepend' in repo_conf:
@@ -1330,7 +1334,8 @@ def main():
         logging.warning(
             _('No option set! Edit your config.yml to set at least one of these:')
             + '\nserverwebroot, servergitmirrors, local_copy_dir, awsbucket, '
-            + 'virustotal_apikey, androidobservatory, or binary_transparency_remote'
+            + 'virustotal_apikey, androidobservatory, github_releases '
+            + 'or binary_transparency_remote'
         )
         sys.exit(1)
 
