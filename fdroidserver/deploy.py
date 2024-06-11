@@ -1367,7 +1367,8 @@ def main():
             # update_servergitmirrors will take care of multiple mirrors so don't need a foreach
             update_servergitmirrors(config['servergitmirrors'], repo_section)
         if config.get('awsbucket'):
-            update_awsbucket(repo_section, options.verbose, options.quiet)
+            index_only = config.get('awsbucket_index_only')
+            update_awsbucket(repo_section, index_only, options.verbose, options.quiet)
         if config.get('androidobservatory'):
             upload_to_android_observatory(repo_section)
         if config.get('virustotal_apikey'):
