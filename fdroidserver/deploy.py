@@ -268,21 +268,19 @@ def update_remote_storage_with_rclone(
             )
             configfilename = USER_RCLONE_CONF
         else:
-            rclone_conf_str = split("rclone config file")
             logging.info('Custom configuration not found.')
             logging.info(
                 'Using default configuration at {}'.format(
-                    subprocess.check_output(rclone_conf_str).decode("utf-8")
+                    subprocess.check_output(split("rclone config file")).decode("utf-8")
                 )
             )
             configfilename = None
     else:
-        rclone_conf_str = split("rclone config file")
         logging.warning("'path_to_custom_rclone_config' not found in config.yml")
         logging.info('Custom configuration not found.')
         logging.info(
             'Using default configuration at {}'.format(
-                subprocess.check_output(rclone_conf_str).decode("utf-8")
+                subprocess.check_output(split("rclone config file")).decode("utf-8")
             )
         )
         configfilename = None
