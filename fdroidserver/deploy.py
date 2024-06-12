@@ -30,7 +30,6 @@ from git import Repo
 import yaml
 from argparse import ArgumentParser
 import logging
-from shlex import split
 import pathlib
 import shutil
 import git
@@ -272,7 +271,7 @@ def update_remote_storage_with_rclone(
             logging.info('Custom configuration not found.')
             logging.info(
                 'Using default configuration at {}'.format(
-                    subprocess.check_output(split("rclone config file")).decode("utf-8")
+                    subprocess.check_output(['rclone', 'config', 'file'], text=True)
                 )
             )
             configfilename = None
@@ -281,7 +280,7 @@ def update_remote_storage_with_rclone(
         logging.info('Custom configuration not found.')
         logging.info(
             'Using default configuration at {}'.format(
-                subprocess.check_output(split("rclone config file")).decode("utf-8")
+                subprocess.check_output(['rclone', 'config', 'file'], text=True)
             )
         )
         configfilename = None
@@ -306,18 +305,8 @@ def update_remote_storage_with_rclone(
 
     for source in sources:
         for remote_config in rclone_config:
-            rclone_sync_command = (
-                'rclone sync '
-                + source
-                + ' '
-                + config['rclone_config']
-                + ':'
-                + config['awsbucket']
-                + '/'
-                + upload_dir
-            )
-
-            rclone_sync_command = split(rclone_sync_command)
+            complete_remote_path = f'{remote_config}:{config["awsbucket"]}/{upload_dir}'
+            rclone_sync_command = ['rclone', 'sync', source, complete_remote_path]
 
             if verbose:
                 rclone_sync_command += ['--verbose']
@@ -325,11 +314,7 @@ def update_remote_storage_with_rclone(
                 rclone_sync_command += ['--quiet']
 
             if configfilename:
-                rclone_sync_command += split('--config=' + configfilename)
-
-            complete_remote_path = (
-                config['rclone_config'] + ':' + config['awsbucket'] + '/' + upload_dir
-            )
+                rclone_sync_command += ['--config=' + configfilename]
 
             logging.debug(
                 "rclone sync all files in " + source + ' to ' + complete_remote_path
