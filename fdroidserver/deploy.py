@@ -271,7 +271,7 @@ def update_remote_storage_with_rclone(
             logging.info('Custom configuration not found.')
             logging.info(
                 'Using default configuration at {}'.format(
-                    subprocess.check_output('rclone config file')
+                    subprocess.check_output(split("rclone config file")).decode("utf-8")
                 )
             )
             configfilename = None
@@ -280,7 +280,7 @@ def update_remote_storage_with_rclone(
         logging.info('Custom configuration not found.')
         logging.info(
             'Using default configuration at {}'.format(
-                subprocess.check_output('rclone config file')
+                subprocess.check_output(split("rclone config file")).decode("utf-8")
             )
         )
         configfilename = None
