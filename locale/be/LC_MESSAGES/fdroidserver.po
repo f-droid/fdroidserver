@@ -1,26 +1,29 @@
 # SOME DESCRIPTIVE TITLE.
 # This file is put in the public domain.
 # Макар Разин <makarrazin14@gmail.com>, 2023.
+# flac <flac_twin@keemail.me>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 2.2.1-143-g1a5ee449\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2023-05-24 22:18+0200\n"
-"PO-Revision-Date: 2023-06-09 18:48+0000\n"
-"Last-Translator: Макар Разин <makarrazin14@gmail.com>\n"
+"PO-Revision-Date: 2024-01-21 00:08+0000\n"
+"Last-Translator: flac <flac_twin@keemail.me>\n"
 "Language-Team: Belarusian <https://hosted.weblate.org/projects/f-droid/fdroidserver/be/>\n"
 "Language: be\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.18-dev\n"
+"X-Generator: Weblate 5.4-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
 "\n"
 "SSH public key to be used as deploy key:"
 msgstr ""
+"\n"
+"публічны ключ SSH будзе ключом разгортвання:"
 
 #: ../fdroidserver/nightly.py
 #, python-brace-format
@@ -28,11 +31,13 @@ msgid ""
 "\n"
 "{path} encoded for the DEBUG_KEYSTORE secret variable:"
 msgstr ""
+"\n"
+"файл {path} зашыфраваны для сакрэтнай зменнай DEBUG_KEYSTORE:"
 
 #: ../fdroidserver/lint.py
 #, python-format
 msgid "\"%s/\" has no matching metadata file!"
-msgstr ""
+msgstr "\"%s/\" не супадае з файлам метаданных!"
 
 #: ../fdroidserver/index.py
 #, python-brace-format
@@ -2473,12 +2478,12 @@ msgstr ""
 #: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "unrecognized arguments: %s"
-msgstr ""
+msgstr "незнаёмыя аргументы: %s"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "unsafe permissions on '{config_file}' (should be 0600)!"
-msgstr ""
+msgstr "небяспечныя дазволы доступу для '{config_file}' (патрэбна быць 0600)!"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py ../fdroid
 #: /usr/lib/python3.7/argparse.py ../fdroidserver/__main__.py
