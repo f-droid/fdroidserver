@@ -14,13 +14,14 @@
 # Макар Разин <makarrazin14@gmail.com>, 2023.
 # Alexander Ivanov <saiv46.dev@gmail.com>, 2024.
 # gfbdrgng <hnaofegnp@hldrive.com>, 2024.
+# neverender <audiolunaire@getgoogleoff.me>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 1.0.0-95-gd7af22b\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2024-05-13 13:50+0200\n"
-"PO-Revision-Date: 2024-05-26 07:09+0000\n"
-"Last-Translator: gfbdrgng <hnaofegnp@hldrive.com>\n"
+"PO-Revision-Date: 2024-06-07 10:15+0000\n"
+"Last-Translator: neverender <audiolunaire@getgoogleoff.me>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/f-droid/fdroidserver/ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
@@ -907,9 +908,8 @@ msgid "Git reset failed"
 msgstr "Не удалось отменить изменения (git reset)"
 
 #: ../fdroidserver/common.py
-#, fuzzy
 msgid "Git submodule deinit failed"
-msgstr "Git-подмодуль deinit не удался"
+msgstr "Деинициализация подмодуля Git не удалась"
 
 #: ../fdroidserver/common.py
 msgid "Git submodule sync failed"
