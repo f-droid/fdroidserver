@@ -3,22 +3,22 @@
 # Daniel Șerbănescu <daniel@serbanescu.dk>, 2021.
 # Christian Eichert <c@zp1.net>, 2021.
 # Simona Iacob <s@zp1.net>, 2021, 2022, 2023, 2024.
-# Licaon Kter <licaon.kter@protonmail.com>, 2021, 2022, 2023.
+# Licaon Kter <licaon.kter@protonmail.com>, 2021, 2022, 2023, 2024.
 # Hans-Christoph Steiner <hans@guardianproject.info>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 2.0a5-27-gf24eae0f\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2024-05-13 13:50+0200\n"
-"PO-Revision-Date: 2024-04-10 13:33+0000\n"
-"Last-Translator: Hans-Christoph Steiner <hans@guardianproject.info>\n"
+"PO-Revision-Date: 2024-05-17 08:01+0000\n"
+"Last-Translator: Licaon Kter <licaon.kter@protonmail.com>\n"
 "Language-Team: Romanian <https://hosted.weblate.org/projects/f-droid/fdroidserver/ro/>\n"
 "Language: ro\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < 20)) ? 1 : 2;\n"
-"X-Generator: Weblate 5.5-dev\n"
+"X-Generator: Weblate 5.6-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -102,7 +102,7 @@ msgstr "%(prog)s: eroare: %(message)s\n"
 #: ../fdroidserver/publish.py
 #, python-format
 msgid "%d APKs failed to be signed or verified!"
-msgstr ""
+msgstr "%d fișiere APK nu au putut fi semnate sau verificate!"
 
 #: ../fdroidserver/scanner.py
 #, python-format
@@ -224,9 +224,9 @@ msgid "A URL is required as an argument!"
 msgstr "Un URL este necesar ca argument!"
 
 #: ../fdroidserver/common.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "APK signatures have different certificates in {path}:"
-msgstr "Nu s-au găsit certificate de semnare în {path}"
+msgstr "Semnăturile APK au certificate diferite în {path}"
 
 #: ../fdroidserver/__main__.py
 msgid "Add PGP signatures using GnuPG for packages in repo"
@@ -306,9 +306,8 @@ msgid "App has NoSourceSince or ArchivePolicy \"0 versions\" but AutoUpdateMode 
 msgstr "App are NoSourceSince sau ArchivePolicy \"0 versions\" dar AutoUpdateMode sau UpdateCheckMode nu sunt None"
 
 #: ../fdroidserver/lint.py
-#, fuzzy
 msgid "App has NoSourceSince or ArchivePolicy \"0 versions\" or 0 but AutoUpdateMode or UpdateCheckMode are not None"
-msgstr "App are NoSourceSince sau ArchivePolicy \"0 versions\" dar AutoUpdateMode sau UpdateCheckMode nu sunt None"
+msgstr "Aplicatia are NoSourceSince sau ArchivePolicy \"0 versions\" dar AutoUpdateMode sau UpdateCheckMode nu sunt None"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
@@ -410,7 +409,7 @@ msgstr "Categoriile nu sunt setate"
 #: ../fdroidserver/index.py
 #, python-brace-format
 msgid "Category \"{category}\" defined but not used for any apps!"
-msgstr ""
+msgstr "Categoria \"{category}\" este definită dar nu este folosită de nici o aplicație!"
 
 #: ../fdroidserver/__main__.py
 msgid "Check for updates to applications"
@@ -581,12 +580,12 @@ msgstr "Descrierea lungimii {length} este peste limita {limit} limitei de caract
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Did you mean config/{name}.yml?"
-msgstr ""
+msgstr "Ați vrut de fapt config/{name}.yml?"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "Did you mean {code}?"
-msgstr ""
+msgstr "Ați vrut de fapt {code}?"
 
 #: ../fdroidserver/import_subcommand.py
 msgid "Do not add 'disable:' to the generated build entries"
@@ -657,7 +656,7 @@ msgstr "Legătură duplicată în \"{field}\": {url}"
 #: ../fdroidserver/common.py
 #, python-format
 msgid "ERROR: %(message)s"
-msgstr ""
+msgstr "EROARE: %(message)s"
 
 #: ../fdroidserver/__main__.py
 msgid "ERROR: The \"server\" subcommand has been removed, use \"deploy\"!"
@@ -830,9 +829,8 @@ msgid "Found multiple JAR Signature Block Files in {path}"
 msgstr "Am găsit mai multe fișiere JAR Signature Block în {path}"
 
 #: ../fdroidserver/common.py
-#, fuzzy
 msgid "Found multiple Signer Certificates!"
-msgstr "S-au găsit mai multe certificate de semnare pentru depozit."
+msgstr "S-au găsit mai multe certificate de semnare!"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
@@ -899,9 +897,8 @@ msgid "Git reset failed"
 msgstr "Resetarea Git a eșuat"
 
 #: ../fdroidserver/common.py
-#, fuzzy
 msgid "Git submodule deinit failed"
-msgstr "Actualizarea submodulelor Git a eșuat"
+msgstr "Eliminarea submodulelor Git a eșuat"
 
 #: ../fdroidserver/common.py
 msgid "Git submodule sync failed"
@@ -1110,7 +1107,7 @@ msgstr "Keystore pentru cheia de semnare:\t"
 
 #: ../fdroidserver/lint.py
 msgid "Known debug key is used in AllowedAPKSigningKeys: "
-msgstr ""
+msgstr "Cheie de depanare cunoscută este utilizată în AllowedAPKSigningKeys: "
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
@@ -1250,9 +1247,8 @@ msgid "No unsigned directory - nothing to do"
 msgstr "Niciun director nesemnat - nimic de făcut"
 
 #: ../fdroidserver/__main__.py
-#, fuzzy
 msgid "No version information could be found."
-msgstr "nu s-au găsit informații despre versiune"
+msgstr "Nu s-au găsit informații despre versiune."
 
 #: ../fdroidserver/common.py
 msgid "Not a valid size definition: \"{}\""
@@ -1413,9 +1409,8 @@ msgid "Pushing binary transparency log to {url}"
 msgstr "Trimiterea jurnalului de transparență binară la {url}"
 
 #: ../fdroidserver/deploy.py
-#, fuzzy
 msgid "Pushing to remote server failed!"
-msgstr "Git remote set-head a eșuat: \"%s\""
+msgstr "Încărcarea la serverul de la distanță a eșuat!"
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
@@ -1451,9 +1446,8 @@ msgid "Reading {apkfilename} from cache"
 msgstr "Citirea {apkfilename} din memoria cache"
 
 #: ../fdroidserver/build.py
-#, fuzzy
 msgid "Refresh and cache scanner rules and signatures from the network"
-msgstr "extrage cea mai recentă versiune de semnături de pe web"
+msgstr "Actualizează și stochează în memorie regulile și semnăturilor de scanare din rețea"
 
 #: ../fdroidserver/common.py
 msgid "Removing specified files"
@@ -1706,11 +1700,8 @@ msgid "These are the apps that have been archived from the main repo."
 msgstr "Acestea sunt aplicațiile care au fost arhivate din depozitul principal."
 
 #: ../fdroidserver/mirror.py
-#, fuzzy
 msgid "This command should never be used to mirror f-droid.org! A full copy requires more than 600GB."
-msgstr ""
-"ERROR: această comandă nu ar trebui să fie folosită niciodată pentru a oglindi f-droid.org!\n"
-"O oglindă completă a f-droid.org necesită mai mult de 200GB."
+msgstr "Această comandă nu trebuie folosită niciodată pentru a seta un server de rezervă f-droid.org! O copie completă necesită mai mult de 600GB."
 
 #: ../fdroidserver/common.py
 msgid "This is a repository of apps to be used with F-Droid. Applications in this repository are either official binaries built by the original application developers, or are binaries built from source by the admin of f-droid.org using the tools on https://gitlab.com/fdroid."
@@ -1886,9 +1877,8 @@ msgstr "UpdateCheckMode este setat, dar se pare că checkupdates nu a fost înc�
 
 #. Translators: https://developer.android.com/studio/build/application-id
 #: ../fdroidserver/lint.py
-#, fuzzy
 msgid "UpdateCheckMode is set but it looks likecheckupdates hasn't been run yet"
-msgstr "UpdateCheckMode este setat, dar se pare că checkupdates nu a fost încă rulat."
+msgstr "UpdateCheckMode este setat, dar se pare că checkupdates nu a fost încă rulat"
 
 #: ../fdroidserver/lint.py
 msgid "UpdateCheckName is set to the known application ID, it can be removed"
@@ -1918,9 +1908,8 @@ msgid "Usage: %s\n"
 msgstr "Utilizare: %s\n"
 
 #: ../fdroidserver/lint.py
-#, fuzzy
 msgid "Use /HEAD instead of /master or /main to point at a file in the default branch"
-msgstr "Folosiți /HEAD în loc de /master pentru a indica un fișier din ramura implicită"
+msgstr "Folosiți /HEAD în loc de /master sau /main pentru a indica un fișier din ramura implicită"
 
 #: ../fdroidserver/lint.py
 msgid "Use /HEAD instead of /master to point at a file in the default branch"
@@ -1952,9 +1941,8 @@ msgid "Using APK Signature v3"
 msgstr "Folosind APK Signature v3"
 
 #: ../fdroidserver/common.py
-#, fuzzy
 msgid "Using JAR Signature"
-msgstr "Folosind APK Signature v2"
+msgstr "Folosind JAR Signature"
 
 #: ../fdroidserver/common.py
 msgid "Using Java's jarsigner, not recommended for verifying APKs! Use apksigner"
@@ -2015,7 +2003,7 @@ msgstr "Atunci când se face linting pentru întregul depozit, yamllint este dez
 
 #: ../fdroidserver/publish.py
 msgid "When signing or verifying fails, exit with an error code."
-msgstr ""
+msgstr "În cazul în care semnarea sau verificarea eșuează, ieșiți cu un cod de eroare."
 
 #: ../fdroidserver/init.py
 msgid "X.509 'Distinguished Name' used when generating keys"
@@ -2168,9 +2156,8 @@ msgid "could not parse '{path}'"
 msgstr "nu s-a putut analiza '{path}'"
 
 #: ../fdroidserver/common.py
-#, fuzzy
 msgid "could not parse srclib spec (no name specified): '{}'"
-msgstr "nu a putut analiza specificația srclib (nu a fost specificat niciun ref): '{}'"
+msgstr "nu a putut analiza specificația srclib (nu a fost specificat niciun nume): '{}'"
 
 #: ../fdroidserver/common.py
 msgid "could not parse srclib spec (no ref specified): '{}'"
@@ -2348,9 +2335,9 @@ msgid "mirror '%s' does not end with 'fdroid'!"
 msgstr "oglinda '%s' nu se termină cu 'fdroid'!"
 
 #: ../fdroidserver/index.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "mirrors set twice, in config.yml and {path}!"
-msgstr "Acum setați-le în config.yml:"
+msgstr "servere de rezervă duplicat, în config.yml și {path}!"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
@@ -2512,7 +2499,7 @@ msgstr "repo_url trebuie să se termine cu /repo"
 #: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "rsync is missing or broken: {error}"
-msgstr ""
+msgstr "rsync lipsește sau este nefuncțional: {error}"
 
 #: ../fdroidserver/metadata.py
 msgid "ruamel.yaml not installed, can not write metadata."
@@ -2529,9 +2516,8 @@ msgid "scanner cache is malformed! You can clear it with: '{clear}'"
 msgstr "cache-ul scanerului este deformat! Puteți să o ștergeți cu: '{clear}'"
 
 #: ../fdroidserver/deploy.py
-#, fuzzy
 msgid "serverwebroot: path does not end with \"fdroid\", perhaps you meant one of these:"
-msgstr "local_copy_dir nu se termină cu \"fdroid\", poate ai vrut să spui: \"{path}\""
+msgstr "serverwebroot: calea nu se termină cu \"fdroid\", poate că v-ați referit la una dintre acestea:"
 
 #: ../fdroidserver/scanner.py
 msgid "shared library"
@@ -2741,27 +2727,27 @@ msgstr "{path} are o semnătură proastă a fișierului \"{pattern}\", posibil e
 #: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "{path} has been flagged by virustotal {count} times:"
-msgstr ""
+msgstr "{path} a fost marcat de virustotal de {count} ori:"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "{path} is not \"key: value\" dict, but a {datatype}!"
-msgstr ""
+msgstr "{path} nu este de tip \"key: value\", ci {datatype}!"
 
 #: ../fdroidserver/common.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{path} is not a standard config file!"
-msgstr "'sdk_path' nu este setat în 'config.yml'!"
+msgstr "{path} nu este un fișier de configurare standard!"
 
 #: ../fdroidserver/index.py
 #, python-brace-format
 msgid "{path} is not list, but a {datatype}!"
-msgstr ""
+msgstr "{path} nu este o listă, ci {datatype}!"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "{path} is not {expected_type}, but a {datatype}!"
-msgstr ""
+msgstr "{path} nu este {expected_type}, ci {datatype}!"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -2776,7 +2762,7 @@ msgstr "{path} mai mult de 200MB, încărcați manual: {url}"
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "{path}: \"{code}\" is not a valid ISO_3166-1 alpha-2 country code!"
-msgstr ""
+msgstr "{path}: \"{code}\" nu este un cod de țară valid conform ISO_3166-1 alpha-2!"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
