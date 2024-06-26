@@ -22,7 +22,7 @@
 # Yang Yulin <yylteam@hotmail.com>, 2022.
 # Eric <hamburger1024@mailbox.org>, 2022.
 # Xu ZhuoHan <yylteam@hotmail.com>, 2022.
-# Xiang Heng Wei <yylteam@hotmail.com>, 2022, 2023.
+# Xiang Heng Wei <yylteam@hotmail.com>, 2022, 2023, 2024.
 # RainSlide <RainSlide@outlook.com>, 2023.
 # Eric <hamburger2048@users.noreply.hosted.weblate.org>, 2023.
 # Max Xie <monyxie@gmail.com>, 2023.
@@ -36,15 +36,15 @@ msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2024-05-13 13:50+0200\n"
-"PO-Revision-Date: 2024-05-15 18:13+0000\n"
-"Last-Translator: 大王叫我来巡山 <hamburger2048@users.noreply.hosted.weblate.org>\n"
+"PO-Revision-Date: 2024-06-26 11:09+0000\n"
+"Last-Translator: Xiang Heng Wei <yylteam@hotmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/f-droid/fdroidserver/zh_Hans/>\n"
 "Language: zh_Hans\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.6-dev\n"
+"X-Generator: Weblate 5.6-rc\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -126,7 +126,7 @@ msgstr "%(prog)s：错误：%(message)s\n"
 #: ../fdroidserver/publish.py
 #, python-format
 msgid "%d APKs failed to be signed or verified!"
-msgstr ""
+msgstr "%d 个 APK 无法签名或验证！"
 
 #: ../fdroidserver/scanner.py
 #, python-format
@@ -431,7 +431,7 @@ msgstr "没有设置类别"
 #: ../fdroidserver/index.py
 #, python-brace-format
 msgid "Category \"{category}\" defined but not used for any apps!"
-msgstr ""
+msgstr "类别“{category}”已定义，但未被用于任何应用程序！"
 
 #: ../fdroidserver/__main__.py
 msgid "Check for updates to applications"
@@ -602,12 +602,12 @@ msgstr "简介长度 {length} 超过 {limit} 字限制"
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Did you mean config/{name}.yml?"
-msgstr ""
+msgstr "您是指 config/{name}.yml 吗？"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "Did you mean {code}?"
-msgstr ""
+msgstr "您是指 {code} 吗？"
 
 #: ../fdroidserver/import_subcommand.py
 msgid "Do not add 'disable:' to the generated build entries"
@@ -678,7 +678,7 @@ msgstr "“{field}”中有重复的链接：{url}"
 #: ../fdroidserver/common.py
 #, python-format
 msgid "ERROR: %(message)s"
-msgstr ""
+msgstr "错误：%(message)s"
 
 #: ../fdroidserver/__main__.py
 msgid "ERROR: The \"server\" subcommand has been removed, use \"deploy\"!"
@@ -1129,7 +1129,7 @@ msgstr "签名密钥的密钥库:\t"
 
 #: ../fdroidserver/lint.py
 msgid "Known debug key is used in AllowedAPKSigningKeys: "
-msgstr ""
+msgstr "AllowedAPKSigningKeys 中使用的已知调试密钥： "
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
@@ -1469,7 +1469,7 @@ msgstr "从缓存读取 {apkfilename}"
 
 #: ../fdroidserver/build.py
 msgid "Refresh and cache scanner rules and signatures from the network"
-msgstr ""
+msgstr "刷新和缓存来自网络的扫描程序规则和签名"
 
 #: ../fdroidserver/common.py
 msgid "Removing specified files"
@@ -1893,16 +1893,16 @@ msgstr "UpdateCheckData 不是有效的网址：{url}"
 
 #: ../fdroidserver/lint.py
 msgid "UpdateCheckMode is set but it looks like checkupdates hasn't been run yet."
-msgstr ""
+msgstr "UpdateCheckMode 已设置，但看起来尚未运行检查更新。"
 
 #. Translators: https://developer.android.com/studio/build/application-id
 #: ../fdroidserver/lint.py
 msgid "UpdateCheckMode is set but it looks likecheckupdates hasn't been run yet"
-msgstr ""
+msgstr "UpdateCheckMode 已设置，但看起来尚未运行检查更新"
 
 #: ../fdroidserver/lint.py
 msgid "UpdateCheckName is set to the known application ID, it can be removed"
-msgstr ""
+msgstr "UpdateCheckName 已设置为已知的应用 ID，可以将其删除"
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
@@ -1937,7 +1937,7 @@ msgstr ""
 
 #: ../fdroidserver/update.py
 msgid "Use `fdroid update -c` to create it."
-msgstr ""
+msgstr "使用 `fdroid update -c` 命令以创建它。"
 
 #: ../fdroidserver/build.py
 msgid "Use build server"
@@ -1950,7 +1950,7 @@ msgstr "对于新添加的 APK 文件，使用来自 APK 文件的时间，而�
 #: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "Using \"{path}\" for configuring s3cmd."
-msgstr ""
+msgstr "使用“{path}”配置 s3cmd。"
 
 #: ../fdroidserver/common.py
 msgid "Using APK Signature v2"
@@ -1966,7 +1966,7 @@ msgstr "使用 JAR 签名"
 
 #: ../fdroidserver/common.py
 msgid "Using Java's jarsigner, not recommended for verifying APKs! Use apksigner"
-msgstr ""
+msgstr "不建议使用 Java 的 jar 签名器来验证 APK！使用 apk 签名器"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -1976,12 +1976,12 @@ msgstr "使用 {path} 中的 androguard"
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Using blank dictionary instead of contents of {path}!"
-msgstr ""
+msgstr "使用空白字典而不是 {path} 的内容！"
 
 #: ../fdroidserver/init.py
 #, python-brace-format
 msgid "Using existing keystore \"{path}\""
-msgstr ""
+msgstr "使用现有密钥库“{path}”"
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
@@ -2007,7 +2007,7 @@ msgstr "验证目录签名中："
 #: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "VirusTotal API key cannot upload files larger than 32MB, use {url} to upload {path}."
-msgstr ""
+msgstr "VirusTotal 的 API 密钥无法用于上传大于 32MB 的文件，请使用 {url} 上传 {path}。"
 
 #: ../fdroidserver/__main__.py
 msgid "Warn about possible metadata errors"
@@ -2023,7 +2023,7 @@ msgstr ""
 
 #: ../fdroidserver/publish.py
 msgid "When signing or verifying fails, exit with an error code."
-msgstr ""
+msgstr "签名或验证失败时，退出并显示错误代码。"
 
 #: ../fdroidserver/init.py
 msgid "X.509 'Distinguished Name' used when generating keys"
@@ -2031,21 +2031,21 @@ msgstr "生成密钥时使用了X.509 ‘可识别名’"
 
 #: ../fdroidserver/common.py
 msgid "You can use ANDROID_HOME to set the path to your SDK, i.e.:"
-msgstr ""
+msgstr "您可以使用 ANDROID_HOME 设置 SDK 的路径，也就是说："
 
 #: ../fdroidserver/scanner.py
 msgid "ZIP file archive"
-msgstr ""
+msgstr "ZIP 压缩包"
 
 #: ../fdroidserver/nightly.py
 #, python-brace-format
 msgid "adding IdentityFile to {path}"
-msgstr ""
+msgstr "将 IdentityFile 添加到 {path}"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "adding to {name}: {path}"
-msgstr ""
+msgstr "添加到 {name}： {path}"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
@@ -2063,11 +2063,11 @@ msgstr "模糊的选项：%s(%s?)"
 
 #: ../fdroidserver/common.py
 msgid "apksigner not found! Cannot sign or verify modern APKs"
-msgstr ""
+msgstr "找不到 APK 签名器！无法对新式 APK 进行签名或验证"
 
 #: ../fdroidserver/common.py
 msgid "apksigner not found, it's required for signing!"
-msgstr ""
+msgstr "找不到 APK 签名器，这是签名所必需的！"
 
 #: ../fdroidserver/checkupdates.py ../fdroidserver/lint.py
 #: ../fdroidserver/rewritemeta.py
@@ -2082,27 +2082,27 @@ msgstr "带APPID[:VERCODE]格式可选的versionCode的应用 ID"
 
 #: ../fdroidserver/common.py
 msgid "archive_url needs to end with /archive"
-msgstr ""
+msgstr "archive_url 需要以 /archive 结尾"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "argument \"-\" with mode %r"
-msgstr ""
+msgstr "参数 “-” 带有模式 %r"
 
 #: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "argument %(argument_name)s: %(message)s"
-msgstr ""
+msgstr "参数 %(argument_name)s：%(message)s"
 
 #: ../fdroidserver/nightly.py
 msgid "attempting bare SSH connection to test deploy key:"
-msgstr ""
+msgstr "尝试使用裸 SSH 连接测试部署密钥："
 
 #: ../fdroidserver/common.py
 msgid "can not parse scrlib spec (not a string): '{}'"
-msgstr ""
+msgstr "无法解析 scrlib 规范（不是字符串）：“{}”"
 
 #: /usr/lib/python3.9/argparse.py /usr/lib/python3.11/argparse.py
 #, python-format
@@ -2111,29 +2111,29 @@ msgstr "无法打开 '%(filename)s'：%(error)s"
 
 #: ../fdroidserver/scanner.py
 msgid "can't open non-https url: '{};"
-msgstr ""
+msgstr "无法打开非 HTTPS URL： '{};"
 
 #: ../fdroidserver/build.py
 #, python-brace-format
 msgid "cannot find required srclibs: \"{path}\""
-msgstr ""
+msgstr "找不到所需的源库：“{path}”"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #: /usr/lib/python3.11/argparse.py
 msgid "cannot have multiple subparser arguments"
-msgstr ""
+msgstr "不能有多个子解析器参数"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "cannot merge actions - two groups are named %r"
-msgstr ""
+msgstr "无法合并操作 - 两个组被命名为 %r"
 
 #: ../fdroidserver/nightly.py
 msgid "cannot publish update, did you set the deploy key?"
-msgstr ""
+msgstr "无法发布更新，是否设置了部署密钥？"
 
 #: ../fdroidserver/nightly.py
 #, python-brace-format
@@ -2142,7 +2142,7 @@ msgstr "正在克隆 {url}"
 
 #: ../fdroidserver/__main__.py
 msgid "commands from plugin modules:"
-msgstr ""
+msgstr "来自插件模块的命令："
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 #: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
@@ -2188,29 +2188,29 @@ msgstr ""
 #: ../fdroidserver/nightly.py
 #, python-brace-format
 msgid "created {path}"
-msgstr ""
+msgstr "已创建 {path}"
 
 #: ../fdroidserver/checkupdates.py
 #, python-brace-format
 msgid "current version is newer: old vercode={old}, new vercode={new}"
-msgstr ""
+msgstr "当前版本较新：旧的 vercode={old}，新的 vercode={new}"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "deleting: repo/{apkfilename}"
-msgstr ""
+msgstr "正在删除：repo/{apkfilename}"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "deployed process log {path} to {dest}"
-msgstr ""
+msgstr "已部署进程日志 {path} 到 {dest}"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "dest= is required for options like %r"
-msgstr ""
+msgstr "对于像 %r 这样的选项，dest= 是必需的"
 
 #: ../fdroidserver/scanner.py
 msgid "downloading '{}'"
@@ -2222,7 +2222,7 @@ msgstr "从 '{}' 下载扫描仪特征失败了"
 
 #: ../fdroidserver/scanner.py
 msgid "executable binary, possibly code"
-msgstr ""
+msgstr "可执行二进制文件，可能是代码"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
@@ -2230,25 +2230,25 @@ msgstr ""
 #, python-format
 msgid "expected %s argument"
 msgid_plural "expected %s arguments"
-msgstr[0] ""
+msgstr[0] "预期的 %s 个参数"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #: /usr/lib/python3.11/argparse.py
 msgid "expected at least one argument"
-msgstr ""
+msgstr "预期至少有一个参数"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #: /usr/lib/python3.11/argparse.py
 msgid "expected at most one argument"
-msgstr ""
+msgstr "预期最多有一个参数"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #: /usr/lib/python3.11/argparse.py
 msgid "expected one argument"
-msgstr ""
+msgstr "预期的一个参数"
 
 #: ../fdroidserver/__main__.py
 msgid "fdroid [<command>] [-h|--help|--version|<args>]"
@@ -2256,11 +2256,11 @@ msgstr "用法：fdroid [-h|--help|--version] <command> [<args>]"
 
 #: ../fdroidserver/scanner.py
 msgid "fetch the latest version of signatures from the web"
-msgstr ""
+msgstr "从网络获取最新版本的签名"
 
 #: /usr/lib/python3.11/optparse.py
 msgid "floating-point"
-msgstr ""
+msgstr "浮点"
 
 #: ../fdroidserver/metadata.py
 msgid "force metadata errors (default) to be warnings, or to be ignored."
@@ -2268,32 +2268,32 @@ msgstr "将元数据错误（默认）强制设为警告，或忽略。"
 
 #: ../fdroidserver/common.py
 msgid "git svn clone failed"
-msgstr ""
+msgstr "git svn 克隆失败"
 
 #: ../fdroidserver/scanner.py
 msgid "gzip file archive"
-msgstr ""
+msgstr "gzip 压缩包"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "ignored explicit argument %r"
-msgstr ""
+msgstr "被忽略的显式参数 %r"
 
 #: ../fdroidserver/index.py
 msgid "index-v1 must have a signature, use `fdroid signindex` to create it!"
-msgstr ""
+msgstr "index-v1 必须有签名，使用 `fdroid signindex` 命令创建它！"
 
 #: ../fdroidserver/index.py
 msgid "index-v2 must have a signature, use `fdroid signindex` to create it!"
-msgstr ""
+msgstr "index-v2 必须有签名，使用 `fdroid signindex` 命令创建它！"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 #: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
 #: /usr/lib/python3.11/optparse.py
 msgid "integer"
-msgstr ""
+msgstr "整数"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
