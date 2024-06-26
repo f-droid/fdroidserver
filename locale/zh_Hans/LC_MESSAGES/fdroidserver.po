@@ -30,20 +30,21 @@
 # zhiqi <lzqlzq21@gmail.com>, 2023.
 # David Jiang <david.jiang2024@gmail.com>, 2023.
 # ALoLo_527 <ALoLo@users.noreply.hosted.weblate.org>, 2024.
+# 大王叫我来巡山 <hamburger2048@users.noreply.hosted.weblate.org>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2024-05-13 13:50+0200\n"
-"PO-Revision-Date: 2024-04-13 17:01+0000\n"
-"Last-Translator: ALoLo_527 <ALoLo@users.noreply.hosted.weblate.org>\n"
+"PO-Revision-Date: 2024-05-15 18:13+0000\n"
+"Last-Translator: 大王叫我来巡山 <hamburger2048@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/f-droid/fdroidserver/zh_Hans/>\n"
 "Language: zh_Hans\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.5-dev\n"
+"X-Generator: Weblate 5.6-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -247,9 +248,9 @@ msgid "A URL is required as an argument!"
 msgstr "需要有一个链接作为参数!"
 
 #: ../fdroidserver/common.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "APK signatures have different certificates in {path}:"
-msgstr "在 {path} 中找不到签名证书"
+msgstr "APK 签名在 {path} 中有不同的证书："
 
 #: ../fdroidserver/__main__.py
 msgid "Add PGP signatures using GnuPG for packages in repo"
@@ -329,9 +330,8 @@ msgid "App has NoSourceSince or ArchivePolicy \"0 versions\" but AutoUpdateMode 
 msgstr "应用的 NoSourceSince 或 ArchivePolicy 为 “0 versions” 但 AutoUpdateMode 或 UpdateCheckMode 不是 None"
 
 #: ../fdroidserver/lint.py
-#, fuzzy
 msgid "App has NoSourceSince or ArchivePolicy \"0 versions\" or 0 but AutoUpdateMode or UpdateCheckMode are not None"
-msgstr "应用的 NoSourceSince 或 ArchivePolicy 为 “0 versions” 但 AutoUpdateMode 或 UpdateCheckMode 不是 None"
+msgstr "APK 有 NoSourceSince 或 ArchivePolicy \"0 versions\" 或 0 但 AutoUpdateMode 或 UpdateCheckMode 不是 None"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
@@ -851,9 +851,8 @@ msgid "Found multiple JAR Signature Block Files in {path}"
 msgstr "在{path}中发现多个JAR签名块文件"
 
 #: ../fdroidserver/common.py
-#, fuzzy
 msgid "Found multiple Signer Certificates!"
-msgstr "发现存储库的多个签名证书。"
+msgstr "找到了多个签署者证书！"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
@@ -920,9 +919,8 @@ msgid "Git reset failed"
 msgstr "Git reset 失败"
 
 #: ../fdroidserver/common.py
-#, fuzzy
 msgid "Git submodule deinit failed"
-msgstr "Git 子模块更新失败"
+msgstr "Git 子模块去初始化失败"
 
 #: ../fdroidserver/common.py
 msgid "Git submodule sync failed"
@@ -1271,9 +1269,8 @@ msgid "No unsigned directory - nothing to do"
 msgstr "没有未签名的目录 - 无操作"
 
 #: ../fdroidserver/__main__.py
-#, fuzzy
 msgid "No version information could be found."
-msgstr "没有找到版本信息"
+msgstr "找不到版本信息。"
 
 #: ../fdroidserver/common.py
 msgid "Not a valid size definition: \"{}\""
@@ -1434,9 +1431,8 @@ msgid "Pushing binary transparency log to {url}"
 msgstr "正推送二进制文件透明日志到{url}"
 
 #: ../fdroidserver/deploy.py
-#, fuzzy
 msgid "Pushing to remote server failed!"
-msgstr "Git remote set-head 失败：\"%s\""
+msgstr "推送到远程服务器失败了！"
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
@@ -1724,11 +1720,8 @@ msgid "These are the apps that have been archived from the main repo."
 msgstr "这些是已从主存储库存档的应用。"
 
 #: ../fdroidserver/mirror.py
-#, fuzzy
 msgid "This command should never be used to mirror f-droid.org! A full copy requires more than 600GB."
-msgstr ""
-"错误：请不要使用此命令来镜像 f-droid.org！\n"
-"对 f-droid.org 进行完整镜像至少需要超过 200GB 的储存空间。"
+msgstr "此命令永远不应该被用来镜像 f-droid.org！完整的拷贝需要至少 600GB。"
 
 #: ../fdroidserver/common.py
 msgid "This is a repository of apps to be used with F-Droid. Applications in this repository are either official binaries built by the original application developers, or are binaries built from source by the admin of f-droid.org using the tools on https://gitlab.com/fdroid."
@@ -1968,9 +1961,8 @@ msgid "Using APK Signature v3"
 msgstr "使用 APK 签名 v3"
 
 #: ../fdroidserver/common.py
-#, fuzzy
 msgid "Using JAR Signature"
-msgstr "使用 APK 签名 v2"
+msgstr "使用 JAR 签名"
 
 #: ../fdroidserver/common.py
 msgid "Using Java's jarsigner, not recommended for verifying APKs! Use apksigner"
@@ -2359,9 +2351,9 @@ msgid "mirror '%s' does not end with 'fdroid'!"
 msgstr ""
 
 #: ../fdroidserver/index.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "mirrors set twice, in config.yml and {path}!"
-msgstr "现在在 config.yml 中设置这些："
+msgstr "设置了两次镜像，分别在 config.xml 和 {path} 中!"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
@@ -2540,9 +2532,8 @@ msgid "scanner cache is malformed! You can clear it with: '{clear}'"
 msgstr ""
 
 #: ../fdroidserver/deploy.py
-#, fuzzy
 msgid "serverwebroot: path does not end with \"fdroid\", perhaps you meant one of these:"
-msgstr "local_copy_dir未以“ fdroid”结尾，也许你指的是：“ {path}”"
+msgstr "serverwebroot：路径没有以 \"fdroid\"结尾，可能你想表达的是这些当中的一个："
 
 #: ../fdroidserver/scanner.py
 msgid "shared library"
@@ -2758,9 +2749,9 @@ msgid "{path} is not \"key: value\" dict, but a {datatype}!"
 msgstr ""
 
 #: ../fdroidserver/common.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{path} is not a standard config file!"
-msgstr "未在 config.yml 中设置 'sdk_path'!"
+msgstr "{path} 不是标准的配置文件！"
 
 #: ../fdroidserver/index.py
 #, python-brace-format
