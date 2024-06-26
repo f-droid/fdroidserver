@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: fdroidserver 1.0.0-95-gd7af22b\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2024-05-13 13:50+0200\n"
-"PO-Revision-Date: 2024-04-10 18:44+0000\n"
+"PO-Revision-Date: 2024-05-15 18:13+0000\n"
 "Last-Translator: Agnieszka C <aga_04@o2.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/f-droid/fdroidserver/pl/>\n"
 "Language: pl\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 5.5-dev\n"
+"X-Generator: Weblate 5.6-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -102,7 +102,7 @@ msgstr "%(prog)s: błąd: %(message)s\n"
 #: ../fdroidserver/publish.py
 #, python-format
 msgid "%d APKs failed to be signed or verified!"
-msgstr ""
+msgstr "Nie udało się podpisać lub zweryfikować %d plików APK!"
 
 #: ../fdroidserver/scanner.py
 #, python-format
@@ -224,9 +224,9 @@ msgid "A URL is required as an argument!"
 msgstr "Adres URL jest wymagany jako argument!"
 
 #: ../fdroidserver/common.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "APK signatures have different certificates in {path}:"
-msgstr "Nie znaleziono certyfikatów do podpisu w {path}"
+msgstr "Podpisy plików APK mają różne certyfikaty w {ścieżce}:"
 
 #: ../fdroidserver/__main__.py
 msgid "Add PGP signatures using GnuPG for packages in repo"
@@ -306,7 +306,6 @@ msgid "App has NoSourceSince or ArchivePolicy \"0 versions\" but AutoUpdateMode 
 msgstr "Aplikacja ma NoSourceSince lub ArchivePolicy „0 versions”, ale AutoUpdateMode lub UpdateCheckMode nie są None"
 
 #: ../fdroidserver/lint.py
-#, fuzzy
 msgid "App has NoSourceSince or ArchivePolicy \"0 versions\" or 0 but AutoUpdateMode or UpdateCheckMode are not None"
 msgstr "Aplikacja ma NoSourceSince lub ArchivePolicy „0 versions”, ale AutoUpdateMode lub UpdateCheckMode nie są None"
 
@@ -410,7 +409,7 @@ msgstr "Kategorie nie są ustawione"
 #: ../fdroidserver/index.py
 #, python-brace-format
 msgid "Category \"{category}\" defined but not used for any apps!"
-msgstr ""
+msgstr "Kategoria „{category}” zdefiniowana, ale nieużywana dla żadnej aplikacji!"
 
 #: ../fdroidserver/__main__.py
 msgid "Check for updates to applications"
@@ -581,12 +580,12 @@ msgstr "Opis długości {length} przekracza limit {limit} char"
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Did you mean config/{name}.yml?"
-msgstr ""
+msgstr "Czy miałeś na myśli config/{name}.yml?"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "Did you mean {code}?"
-msgstr ""
+msgstr "Czy miałeś na myśli {code}?"
 
 #: ../fdroidserver/import_subcommand.py
 msgid "Do not add 'disable:' to the generated build entries"
@@ -657,7 +656,7 @@ msgstr "Zduplikowany link w '{field}': {url}"
 #: ../fdroidserver/common.py
 #, python-format
 msgid "ERROR: %(message)s"
-msgstr ""
+msgstr "BŁĄD: %(message)s"
 
 #: ../fdroidserver/__main__.py
 msgid "ERROR: The \"server\" subcommand has been removed, use \"deploy\"!"
@@ -830,9 +829,8 @@ msgid "Found multiple JAR Signature Block Files in {path}"
 msgstr "Znaleziono wiele plików bloków podpisów JAR w {path}"
 
 #: ../fdroidserver/common.py
-#, fuzzy
 msgid "Found multiple Signer Certificates!"
-msgstr "Znaleziono wiele certyfikatów do podpisywania dla repozytorium."
+msgstr "Znaleziono wiele certyfikatów do podpisywania!"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
@@ -1250,9 +1248,8 @@ msgid "No unsigned directory - nothing to do"
 msgstr "Brak katalogu bez podpisu - nic nie można zrobić"
 
 #: ../fdroidserver/__main__.py
-#, fuzzy
 msgid "No version information could be found."
-msgstr "nie znaleziono informacji o wersji"
+msgstr "Nie udało się znaleźć informacji o wersji."
 
 #: ../fdroidserver/common.py
 msgid "Not a valid size definition: \"{}\""
@@ -1413,9 +1410,8 @@ msgid "Pushing binary transparency log to {url}"
 msgstr "Przesyłanie dziennika przejrzystości plików binarnych do {url}"
 
 #: ../fdroidserver/deploy.py
-#, fuzzy
 msgid "Pushing to remote server failed!"
-msgstr "Błąd zdalnego ustawiania Git: \"%s\""
+msgstr "Przesyłanie na serwer zdalny nie powiodło się!"
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
