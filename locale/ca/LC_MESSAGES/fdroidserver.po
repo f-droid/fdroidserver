@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fdroidserver 2.1-273-g54e84d87\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2024-05-13 13:50+0200\n"
-"PO-Revision-Date: 2024-05-05 12:37+0000\n"
+"PO-Revision-Date: 2024-05-27 18:43+0000\n"
 "Last-Translator: pitroig <ona@riseup.net>\n"
 "Language-Team: Catalan <https://hosted.weblate.org/projects/f-droid/fdroidserver/ca/>\n"
 "Language: ca\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.5.3\n"
+"X-Generator: Weblate 5.6-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -2111,7 +2111,7 @@ msgstr ""
 #: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
 #: /usr/lib/python3.11/optparse.py
 msgid "complex"
-msgstr ""
+msgstr "complex"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
