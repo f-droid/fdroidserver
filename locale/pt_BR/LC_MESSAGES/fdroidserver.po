@@ -9,20 +9,21 @@
 # Eduardo Rodrigues <edu.rodrigues2580@gmail.com>, 2021.
 # Flavio F. M. <flavius_androiduser@protonmail.com>, 2022.
 # The Cats <philosoph@danwin1210.de>, 2023.
+# lucasmz-dev <git@lucasmz.dev>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2024-05-13 13:50+0200\n"
-"PO-Revision-Date: 2023-08-18 15:51+0000\n"
-"Last-Translator: The Cats <philosoph@danwin1210.de>\n"
+"PO-Revision-Date: 2024-05-24 20:12+0000\n"
+"Last-Translator: lucasmz-dev <git@lucasmz.dev>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/f-droid/fdroidserver/pt_BR/>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.0-dev\n"
+"X-Generator: Weblate 5.6-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -105,7 +106,7 @@ msgstr "%(prog)s: erro: %(message)s\n"
 #: ../fdroidserver/publish.py
 #, python-format
 msgid "%d APKs failed to be signed or verified!"
-msgstr ""
+msgstr "%d APKs falharam em serem assinados ou verificados!"
 
 #: ../fdroidserver/scanner.py
 #, python-format
