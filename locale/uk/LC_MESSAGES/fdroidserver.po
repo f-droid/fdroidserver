@@ -8,20 +8,21 @@
 # Dan <denqwerta@gmail.com>, 2022.
 # Sergii Horichenko <m@sgg.im>, 2023.
 # Макар Разин <makarrazin14@gmail.com>, 2023.
+# Tymofii Lytvynenko <till.svit@gmail.com>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2024-05-13 13:50+0200\n"
-"PO-Revision-Date: 2023-05-28 07:54+0000\n"
-"Last-Translator: Ihor Hordiichuk <igor_ck@outlook.com>\n"
+"PO-Revision-Date: 2024-06-09 16:09+0000\n"
+"Last-Translator: Tymofii Lytvynenko <till.svit@gmail.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/f-droid/fdroidserver/uk/>\n"
 "Language: uk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.18-dev\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Generator: Weblate 5.6-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -105,7 +106,7 @@ msgstr "%(prog)s: помилка: %(message)s\n"
 #: ../fdroidserver/publish.py
 #, python-format
 msgid "%d APKs failed to be signed or verified!"
-msgstr ""
+msgstr "%d APK не вдалося підписати або перевірити!"
 
 #: ../fdroidserver/scanner.py
 #, python-format
@@ -227,9 +228,9 @@ msgid "A URL is required as an argument!"
 msgstr "URL потребується як аргумент!"
 
 #: ../fdroidserver/common.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "APK signatures have different certificates in {path}:"
-msgstr "У {path} не знайдено сертифікатів для підписання"
+msgstr "APK-підписи мають різні сертифікати у {path}:"
 
 #: ../fdroidserver/__main__.py
 msgid "Add PGP signatures using GnuPG for packages in repo"
@@ -309,7 +310,6 @@ msgid "App has NoSourceSince or ArchivePolicy \"0 versions\" but AutoUpdateMode 
 msgstr "Застосунок має NoSourceSince або ArchivePolicy «0 версій», але AutoUpdateMode або UpdateCheckMode не дорівнюють None"
 
 #: ../fdroidserver/lint.py
-#, fuzzy
 msgid "App has NoSourceSince or ArchivePolicy \"0 versions\" or 0 but AutoUpdateMode or UpdateCheckMode are not None"
 msgstr "Застосунок має NoSourceSince або ArchivePolicy «0 версій», але AutoUpdateMode або UpdateCheckMode не дорівнюють None"
 
@@ -413,7 +413,7 @@ msgstr "Категорії не встановлено"
 #: ../fdroidserver/index.py
 #, python-brace-format
 msgid "Category \"{category}\" defined but not used for any apps!"
-msgstr ""
+msgstr "Категорія «{category}» визначена, але не використовується для жодного застосунку!"
 
 #: ../fdroidserver/__main__.py
 msgid "Check for updates to applications"
@@ -584,12 +584,12 @@ msgstr "Довжина опису {length} перевищує ліміт {limit}
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Did you mean config/{name}.yml?"
-msgstr ""
+msgstr "Ви мали на увазі config/{name}.yml?"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "Did you mean {code}?"
-msgstr ""
+msgstr "Ви мали на увазі {code}?"
 
 #: ../fdroidserver/import_subcommand.py
 msgid "Do not add 'disable:' to the generated build entries"
@@ -660,7 +660,7 @@ msgstr "Дублікат посилання в '{field}': {url}"
 #: ../fdroidserver/common.py
 #, python-format
 msgid "ERROR: %(message)s"
-msgstr ""
+msgstr "ПОМИЛКА: %(message)s"
 
 #: ../fdroidserver/__main__.py
 msgid "ERROR: The \"server\" subcommand has been removed, use \"deploy\"!"
@@ -833,9 +833,8 @@ msgid "Found multiple JAR Signature Block Files in {path}"
 msgstr "Знайдено кілька файлів блоку підписів JAR у {path}"
 
 #: ../fdroidserver/common.py
-#, fuzzy
 msgid "Found multiple Signer Certificates!"
-msgstr "Знайдено кілька сертифікатів підписування для репозиторію."
+msgstr "Знайдено декілька сертифікатів підписувача!"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
@@ -902,9 +901,8 @@ msgid "Git reset failed"
 msgstr "Скидання Git не вдалося"
 
 #: ../fdroidserver/common.py
-#, fuzzy
 msgid "Git submodule deinit failed"
-msgstr "Не вдалося оновити підмодуль Git"
+msgstr "Деініціалізація підмодуля Git не вдалася"
 
 #: ../fdroidserver/common.py
 msgid "Git submodule sync failed"
@@ -1113,7 +1111,7 @@ msgstr "Шлях до сховища ключів для ключа підпис
 
 #: ../fdroidserver/lint.py
 msgid "Known debug key is used in AllowedAPKSigningKeys: "
-msgstr ""
+msgstr "Відомий налагоджувальний ключ використовується у AllowedAPKSigningKeys: "
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
@@ -1253,9 +1251,8 @@ msgid "No unsigned directory - nothing to do"
 msgstr "Немає непідписаної теки — нічого виконувати"
 
 #: ../fdroidserver/__main__.py
-#, fuzzy
 msgid "No version information could be found."
-msgstr "не знайдено відомостей про версію"
+msgstr "Відомості про версію знайти не вдалося."
 
 #: ../fdroidserver/common.py
 msgid "Not a valid size definition: \"{}\""
@@ -1416,9 +1413,8 @@ msgid "Pushing binary transparency log to {url}"
 msgstr "Оновити двійковий журнал прозорості для {url}"
 
 #: ../fdroidserver/deploy.py
-#, fuzzy
 msgid "Pushing to remote server failed!"
-msgstr "Помилка налаштування remote set-head для Git: «%s»"
+msgstr "Пушинг на віддалений сервер не вдався!"
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
@@ -1454,9 +1450,8 @@ msgid "Reading {apkfilename} from cache"
 msgstr "Читання {apkfilename} з кешу"
 
 #: ../fdroidserver/build.py
-#, fuzzy
 msgid "Refresh and cache scanner rules and signatures from the network"
-msgstr "отримати останню версію підписів з інтернету"
+msgstr "Оновлення та кешування правил і сигнатур сканера з мережі"
 
 #: ../fdroidserver/common.py
 msgid "Removing specified files"
@@ -1709,11 +1704,8 @@ msgid "These are the apps that have been archived from the main repo."
 msgstr "Ці застосунки, заархівовано з основного репозиторію."
 
 #: ../fdroidserver/mirror.py
-#, fuzzy
 msgid "This command should never be used to mirror f-droid.org! A full copy requires more than 600GB."
-msgstr ""
-"ПОМИЛКА: ця команда ніколи не повинна використовуватися для створення дзеркала f-droid.org!\n"
-"Повне дзеркало f-droid.org вимагає понад 200GB."
+msgstr "Цю команду ніколи не слід використовувати для віддзеркалення f-droid.org! Для повної копії потрібно понад 600 ГБ."
 
 #: ../fdroidserver/common.py
 msgid "This is a repository of apps to be used with F-Droid. Applications in this repository are either official binaries built by the original application developers, or are binaries built from source by the admin of f-droid.org using the tools on https://gitlab.com/fdroid."
@@ -1889,9 +1881,8 @@ msgstr "UpdateCheckMode налаштовано, але схоже, що кома
 
 #. Translators: https://developer.android.com/studio/build/application-id
 #: ../fdroidserver/lint.py
-#, fuzzy
 msgid "UpdateCheckMode is set but it looks likecheckupdates hasn't been run yet"
-msgstr "UpdateCheckMode налаштовано, але схоже, що команду checkupdates ще не було запущено"
+msgstr "UpdateCheckMode встановлено, але схоже, що команду checkupdates ще не було запущено"
 
 #: ../fdroidserver/lint.py
 msgid "UpdateCheckName is set to the known application ID, it can be removed"
@@ -1921,9 +1912,8 @@ msgid "Usage: %s\n"
 msgstr "Використання: %s\n"
 
 #: ../fdroidserver/lint.py
-#, fuzzy
 msgid "Use /HEAD instead of /master or /main to point at a file in the default branch"
-msgstr "Використовуйте /HEAD замість /master для вказання на файл типовій гілці"
+msgstr "Використовуйте /HEAD замість /master або /main, щоб вказати на файл у типовій гілці"
 
 #: ../fdroidserver/lint.py
 msgid "Use /HEAD instead of /master to point at a file in the default branch"
@@ -1955,9 +1945,8 @@ msgid "Using APK Signature v3"
 msgstr "Використання підпису APK v3"
 
 #: ../fdroidserver/common.py
-#, fuzzy
 msgid "Using JAR Signature"
-msgstr "Використання підпису APK v2"
+msgstr "Використання JAR-підпису"
 
 #: ../fdroidserver/common.py
 msgid "Using Java's jarsigner, not recommended for verifying APKs! Use apksigner"
@@ -2018,7 +2007,7 @@ msgstr "Під час перевірки всього репозиторію, ya
 
 #: ../fdroidserver/publish.py
 msgid "When signing or verifying fails, exit with an error code."
-msgstr ""
+msgstr "Якщо підписати або перевірити не вдається, виходить з кодом помилки."
 
 #: ../fdroidserver/init.py
 msgid "X.509 'Distinguished Name' used when generating keys"
@@ -2171,9 +2160,8 @@ msgid "could not parse '{path}'"
 msgstr "не вдалося проаналізувати '{path}'"
 
 #: ../fdroidserver/common.py
-#, fuzzy
 msgid "could not parse srclib spec (no name specified): '{}'"
-msgstr "не вдалося проаналізувати специфікацію srclib (посилання не вказано): '{}'"
+msgstr "не вдалося розібрати специфікацію srclib (не вказано назву): '{}'"
 
 #: ../fdroidserver/common.py
 msgid "could not parse srclib spec (no ref specified): '{}'"
@@ -2351,9 +2339,9 @@ msgid "mirror '%s' does not end with 'fdroid'!"
 msgstr "дзеркало '%s' не закінчується на 'fdroid'!"
 
 #: ../fdroidserver/index.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "mirrors set twice, in config.yml and {path}!"
-msgstr "Тепер встановіть їх у config.yml:"
+msgstr "дзеркала задано двічі, в config.yml та {path}!"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
@@ -2515,7 +2503,7 @@ msgstr "repo_url повинен закінчуватися на /repo"
 #: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "rsync is missing or broken: {error}"
-msgstr ""
+msgstr "rsync відсутній або несправний: {error}"
 
 #: ../fdroidserver/metadata.py
 msgid "ruamel.yaml not installed, can not write metadata."
@@ -2532,9 +2520,8 @@ msgid "scanner cache is malformed! You can clear it with: '{clear}'"
 msgstr "кеш сканера пошкоджено! Ви можете очистити його за допомогою: '{clear}'"
 
 #: ../fdroidserver/deploy.py
-#, fuzzy
 msgid "serverwebroot: path does not end with \"fdroid\", perhaps you meant one of these:"
-msgstr "local_copy_dir мусить закінчуватися на \"fdroid\", ймовірно, малося на увазі: \"{path}\""
+msgstr "serverwebroot: шлях не закінчується на «fdroid», можливо, ви мали на увазі один з цих:"
 
 #: ../fdroidserver/scanner.py
 msgid "shared library"
@@ -2744,27 +2731,27 @@ msgstr "{path}: недійсний підпис \"{pattern}\". Виглядає 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "{path} has been flagged by virustotal {count} times:"
-msgstr ""
+msgstr "{path} було позначено virustotal {count} разів:"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "{path} is not \"key: value\" dict, but a {datatype}!"
-msgstr ""
+msgstr "{path} - це не словник «ключ: значення», а {datatype}!"
 
 #: ../fdroidserver/common.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{path} is not a standard config file!"
-msgstr "'sdk_path' не встановлено в config.yml!"
+msgstr "{path} не є стандартним конфігураційним файлом!"
 
 #: ../fdroidserver/index.py
 #, python-brace-format
 msgid "{path} is not list, but a {datatype}!"
-msgstr ""
+msgstr "{path} - це не список, а {datatype}!"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "{path} is not {expected_type}, but a {datatype}!"
-msgstr ""
+msgstr "{path} - це не {expected_type}, а {datatype}!"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -2779,7 +2766,7 @@ msgstr "{path} понад 200 МБ, вивантажити власноруч: {
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "{path}: \"{code}\" is not a valid ISO_3166-1 alpha-2 country code!"
-msgstr ""
+msgstr "{path}: «{code}» не є дійсним кодом країни за стандартом ISO_3166-1 alpha-2!"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
