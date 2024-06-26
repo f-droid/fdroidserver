@@ -1,6 +1,6 @@
 # SOME DESCRIPTIVE TITLE.
 # This file is put in the public domain.
-# WaldiS <sto@tutanota.de>, 2020, 2021.
+# WaldiS <sto@tutanota.de>, 2020, 2021, 2024.
 # Michal L <michalrmsmi@wp.pl>, 2020, 2021.
 # mondstern <mondstern@snopyta.org>, 2021.
 # Hans-Christoph Steiner <hans@guardianproject.info>, 2021.
@@ -10,15 +10,15 @@ msgstr ""
 "Project-Id-Version: fdroidserver 1.0.0-95-gd7af22b\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2024-05-13 13:50+0200\n"
-"PO-Revision-Date: 2024-05-15 18:13+0000\n"
-"Last-Translator: Agnieszka C <aga_04@o2.pl>\n"
+"PO-Revision-Date: 2024-06-26 11:09+0000\n"
+"Last-Translator: WaldiS <sto@tutanota.de>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/f-droid/fdroidserver/pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 5.6-dev\n"
+"X-Generator: Weblate 5.6-rc\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -226,7 +226,7 @@ msgstr "Adres URL jest wymagany jako argument!"
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "APK signatures have different certificates in {path}:"
-msgstr "Podpisy plików APK mają różne certyfikaty w {ścieżce}:"
+msgstr "Podpisy plików APK mają różne certyfikaty w {path}:"
 
 #: ../fdroidserver/__main__.py
 msgid "Add PGP signatures using GnuPG for packages in repo"
@@ -1107,8 +1107,9 @@ msgid "Keystore for signing key:\t"
 msgstr "Magazyn kluczy do podpisywania klucza:\t"
 
 #: ../fdroidserver/lint.py
+#, fuzzy
 msgid "Known debug key is used in AllowedAPKSigningKeys: "
-msgstr ""
+msgstr "Znany klucz debugowania jest używany w AllowedAPKSigningKeys: "
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
@@ -1447,9 +1448,8 @@ msgid "Reading {apkfilename} from cache"
 msgstr "Czytanie {apkfilename} z pamięci podręcznej"
 
 #: ../fdroidserver/build.py
-#, fuzzy
 msgid "Refresh and cache scanner rules and signatures from the network"
-msgstr "pobierz najnowszą wersję sygnatur z sieci"
+msgstr "Odświeżanie i buforowanie reguł skanera i sygnatur z sieci"
 
 #: ../fdroidserver/common.py
 msgid "Removing specified files"
@@ -1702,11 +1702,8 @@ msgid "These are the apps that have been archived from the main repo."
 msgstr "To są aplikacje, które zostały zarchiwizowane w głównym repozytorium."
 
 #: ../fdroidserver/mirror.py
-#, fuzzy
 msgid "This command should never be used to mirror f-droid.org! A full copy requires more than 600GB."
-msgstr ""
-"BŁĄD: tego polecenia nigdy nie należy używać do zwierciadlania f-droid.org!\n"
-"Pełne lustro f-droid.org wymaga ponad 200 GB."
+msgstr "To polecenie nigdy nie powinno być używane do tworzenia kopii lustrzanej f-droid.org! Pełna kopia wymaga więcej niż 600 GB."
 
 #: ../fdroidserver/common.py
 msgid "This is a repository of apps to be used with F-Droid. Applications in this repository are either official binaries built by the original application developers, or are binaries built from source by the admin of f-droid.org using the tools on https://gitlab.com/fdroid."
@@ -2011,7 +2008,7 @@ msgstr "Podczas linkowania całego repozytorium yamllint jest domyślnie wyłąc
 
 #: ../fdroidserver/publish.py
 msgid "When signing or verifying fails, exit with an error code."
-msgstr ""
+msgstr "Jeśli podpisanie lub weryfikacja nie powiedzie się, zakończ z kodem błędu."
 
 #: ../fdroidserver/init.py
 msgid "X.509 'Distinguished Name' used when generating keys"
@@ -2164,9 +2161,8 @@ msgid "could not parse '{path}'"
 msgstr "nie można przeanalizować '{path}'"
 
 #: ../fdroidserver/common.py
-#, fuzzy
 msgid "could not parse srclib spec (no name specified): '{}'"
-msgstr "could not parse srclib spec (no ref specified):' {}'"
+msgstr "nie można przeanalizować specyfikacji srclib (nie podano nazwy): '{}'"
 
 #: ../fdroidserver/common.py
 msgid "could not parse srclib spec (no ref specified): '{}'"
@@ -2346,7 +2342,7 @@ msgstr "mirror '%s'nie kończy się na 'fdroid'!"
 #: ../fdroidserver/index.py
 #, fuzzy, python-brace-format
 msgid "mirrors set twice, in config.yml and {path}!"
-msgstr "Teraz ustaw je w config.yml:"
+msgstr "lustra ustawione dwukrotnie, w config.yml i {path}!"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
@@ -2508,7 +2504,7 @@ msgstr "repo_url musi kończyć się na /repo"
 #: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "rsync is missing or broken: {error}"
-msgstr ""
+msgstr "rsync nie działa lub działa nieprawidłowo: {error}"
 
 #: ../fdroidserver/metadata.py
 msgid "ruamel.yaml not installed, can not write metadata."
@@ -2525,9 +2521,8 @@ msgid "scanner cache is malformed! You can clear it with: '{clear}'"
 msgstr "pamięć podręczna skanera jest zniszczona! Możesz to wyczyścić poleceniem: „{clear}”"
 
 #: ../fdroidserver/deploy.py
-#, fuzzy
 msgid "serverwebroot: path does not end with \"fdroid\", perhaps you meant one of these:"
-msgstr "local_copy_dir nie kończy się na \"fdroid\", może masz na myśli: \"{path}\""
+msgstr "serverwebroot: ścieżka nie kończy się na \"fdroid\", być może miałeś na myśli jedno z tych:"
 
 #: ../fdroidserver/scanner.py
 msgid "shared library"
@@ -2735,9 +2730,9 @@ msgid "{path} has bad file signature \"{pattern}\", possible Janus exploit!"
 msgstr "{path} ma zły podpis pliku \"{pattern}\", możliwe wykorzystanie Janusa!"
 
 #: ../fdroidserver/deploy.py
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "{path} has been flagged by virustotal {count} times:"
-msgstr ""
+msgstr "{ścieżka} została oznaczona przez virustotal {liczba} razy:"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -2745,9 +2740,9 @@ msgid "{path} is not \"key: value\" dict, but a {datatype}!"
 msgstr ""
 
 #: ../fdroidserver/common.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{path} is not a standard config file!"
-msgstr "'sdk_path' nie jest ustawiony w config.yml!"
+msgstr "{path} nie jest standardowym plikiem konfiguracyjnym!"
 
 #: ../fdroidserver/index.py
 #, python-brace-format
