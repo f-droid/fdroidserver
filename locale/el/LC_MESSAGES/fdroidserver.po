@@ -3,20 +3,21 @@
 # THANOS SIOURDAKIS <siourdakisthanos@gmail.com>, 2020.
 # fresh <fresh190@protonmail.com>, 2020, 2021.
 # Michalis <michalisntovas@yahoo.gr>, 2021.
+# ΣΤΑΥΡΟΣ ΔΑΛΙΑΚΟΠΟΥΛΟΣ <stavros.daliakopoulos@gmail.com>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 2.0a0-62-gc63c4b3d\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2023-05-24 22:18+0200\n"
-"PO-Revision-Date: 2021-02-18 17:50+0000\n"
-"Last-Translator: Michalis <michalisntovas@yahoo.gr>\n"
+"PO-Revision-Date: 2024-05-10 13:24+0000\n"
+"Last-Translator: ΣΤΑΥΡΟΣ ΔΑΛΙΑΚΟΠΟΥΛΟΣ <stavros.daliakopoulos@gmail.com>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/f-droid/fdroidserver/el/>\n"
 "Language: el\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.5\n"
+"X-Generator: Weblate 5.5.4\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -71,9 +72,9 @@ msgid "\"{path}\" is not a supported file format (use: metadata/*.yml)"
 msgstr "Το \"{path}\" δεν είναι υποστηριζόμενη μορφή αρχείου (χρήση: μεταδεδομένα/*.yml)"
 
 #: ../fdroidserver/update.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "\"{path}\" is signed by a key that is not allowed:"
-msgstr "Το \"{path}\" υπάρχει, αλλά το s3cmd δεν έχει εγκατασταθεί!"
+msgstr "Το \"{path}\" έχει υπογραφή από ένα κλειδί που δεν επιτρέπεται:"
 
 #: ../fdroidserver/import_subcommand.py
 #, python-brace-format
@@ -931,7 +932,7 @@ msgstr ""
 
 #: ../fdroidserver/__main__.py
 msgid "Install built packages on devices"
-msgstr ""
+msgstr "Εγκατάσταση έτοιμων πακέτων σε συσκευές"
 
 #: ../fdroidserver/install.py
 #, python-format
