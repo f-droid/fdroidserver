@@ -31,9 +31,10 @@ import yaml
 from argparse import ArgumentParser
 import logging
 from shlex import split
+import pathlib
 import shutil
 import git
-from pathlib import Path
+import fdroidserver.github
 
 from . import _
 from . import common
@@ -663,7 +664,7 @@ def update_servergitmirrors(servergitmirrors, repo_section):
         return
 
     options = common.get_options()
-    workspace_dir = Path(os.getcwd())
+    workspace_dir = pathlib.Path(os.getcwd())
 
     # right now we support only 'repo' git-mirroring
     if repo_section == 'repo':
@@ -1115,6 +1116,139 @@ def push_binary_transparency(git_repo_path, git_remote):
             raise FDroidException(_("Pushing to remote server failed!"))
 
 
+def find_release_infos(index_v2_path, repo_dir, package_names):
+    """Find files, texts, etc. for uploading to a release page in index-v2.json.
+
+    This function parses index-v2.json for file-paths elegible for deployment
+    to release pages. (e.g. GitHub releases) It also groups these files by
+    packageName and versionName. e.g. to get a list of files for all specific
+    release of fdroid client you may call:
+
+    find_binary_release_infos()['org.fdroid.fdroid']['0.19.2']
+
+    All paths in the returned data-structure are of type pathlib.Path.
+    """
+    release_infos = {}
+    with open(index_v2_path, 'r') as f:
+        idx = json.load(f)
+        for package_name in package_names:
+            package = idx.get('packages', {}).get(package_name, {})
+            for version in package.get('versions', {}).values():
+                if package_name not in release_infos:
+                    release_infos[package_name] = {}
+                version_name = version['manifest']['versionName']
+                version_path = repo_dir / version['file']['name'].lstrip("/")
+                files = [version_path]
+                asc_path = pathlib.Path(str(version_path) + '.asc')
+                if asc_path.is_file():
+                    files.append(asc_path)
+                sig_path = pathlib.Path(str(version_path) + '.sig')
+                if sig_path.is_file():
+                    files.append(sig_path)
+                release_infos[package_name][version_name] = {
+                    'files': files,
+                    'whatsNew': version.get('whatsNew', {}).get("en-US"),
+                    'hasReleaseChannels': len(version.get('releaseChannels', [])) > 0,
+                }
+    return release_infos
+
+
+def upload_to_github_releases(repo_section, gh_config, global_gh_token):
+    repo_dir = pathlib.Path(repo_section)
+    index_v2_path = repo_dir / 'index-v2.json'
+    if not index_v2_path.is_file():
+        logging.warning(
+            _(
+                "Error deploying 'github_releases', {} not present. (You might "
+                "need to run `fdroid update` first.)"
+            ).format(index_v2_path)
+        )
+        return
+
+    package_names = []
+    for repo_conf in gh_config:
+        for package_name in repo_conf.get('packageNames', []):
+            package_names.append(package_name)
+
+    release_infos = fdroidserver.deploy.find_release_infos(
+        index_v2_path, repo_dir, package_names
+    )
+
+    for repo_conf in gh_config:
+        upload_to_github_releases_repo(repo_conf, release_infos, global_gh_token)
+
+
+def upload_to_github_releases_repo(repo_conf, release_infos, global_gh_token):
+    projectUrl = repo_conf.get("projectUrl")
+    if not projectUrl:
+        logging.warning(
+            _(
+                "One of the 'github_releases' config items is missing the "
+                "'projectUrl' value. skipping ..."
+            )
+        )
+        return
+    token = repo_conf.get("token") or global_gh_token
+    if not token:
+        logging.warning(
+            _(
+                "One of the 'github_releases' config itmes is missing the "
+                "'token' value. skipping ..."
+            )
+        )
+        return
+    conf_package_names = repo_conf.get("packageNames", [])
+    if type(conf_package_names) == str:
+        conf_package_names = [conf_package_names]
+    if not conf_package_names:
+        logging.warning(
+            _(
+                "One of the 'github_releases' config itmes is missing the "
+                "'packageNames' value. skipping ..."
+            )
+        )
+        return
+
+    # lookup all versionNames (git tags) for all packages available in the
+    # local fdroid repo
+    all_local_versions = set()
+    for package_name in conf_package_names:
+        for version in release_infos.get(package_name, {}).keys():
+            all_local_versions.add(version)
+
+    gh = fdroidserver.github.GithubApi(token, projectUrl)
+    unreleased_tags = gh.list_unreleased_tags()
+
+    for version in all_local_versions:
+        if version in unreleased_tags:
+            # Making sure we're not uploading this version when releaseChannels
+            # is set. (releaseChannels usually mean it's e.g. an alpha or beta
+            # version)
+            if (
+                not release_infos.get(conf_package_names[0], {})
+                .get(version, {})
+                .get('hasReleaseChannels')
+            ):
+                # collect files associated with this github release
+                files = []
+                for package in conf_package_names:
+                    files.extend(
+                        release_infos.get(package, {}).get(version, {}).get('files', [])
+                    )
+                # always use the whatsNew text from the first app listed in
+                # config.yml github_releases.packageNames
+                text = (
+                    release_infos.get(conf_package_names[0], {})
+                    .get(version, {})
+                    .get('whatsNew')
+                    or ''
+                )
+                if 'release_notes_prepend' in repo_conf:
+                    text = repo_conf['release_notes_prepend'] + "\n\n" + text
+                # create new release on github and upload all associated files
+                gh.create_release(version, files, text)
+
+
 def main():
     global config
 
@@ -1194,12 +1328,14 @@ def main():
         and not config.get('androidobservatory')
         and not config.get('binary_transparency_remote')
         and not config.get('virustotal_apikey')
+        and not config.get('github_releases')
         and local_copy_dir is None
     ):
         logging.warning(
             _('No option set! Edit your config.yml to set at least one of these:')
             + '\nserverwebroot, servergitmirrors, local_copy_dir, awsbucket, '
-            + 'virustotal_apikey, androidobservatory, or binary_transparency_remote'
+            + 'virustotal_apikey, androidobservatory, github_releases '
+            + 'or binary_transparency_remote'
         )
         sys.exit(1)
 
@@ -1236,6 +1372,10 @@ def main():
             upload_to_android_observatory(repo_section)
         if config.get('virustotal_apikey'):
             upload_to_virustotal(repo_section, config.get('virustotal_apikey'))
+        if config.get('github_releases'):
+            upload_to_github_releases(
+                repo_section, config.get('github_releases'), config.get('github_token')
+            )
 
     binary_transparency_remote = config.get('binary_transparency_remote')
     if binary_transparency_remote:
