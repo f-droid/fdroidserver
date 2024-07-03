@@ -797,7 +797,10 @@ def upload_to_servergitmirror(
     local_repo.index.commit("fdroidserver git-mirror")
 
     # only deploy to GitLab Artifacts if too big for GitLab Pages
-    if common.get_dir_size(fdroid_dir) <= common.GITLAB_COM_PAGES_MAX_SIZE:
+    if (
+        is_index_only
+        or common.get_dir_size(fdroid_dir) <= common.GITLAB_COM_PAGES_MAX_SIZE
+    ):
         gitlab_ci_job_name = 'pages'
     else:
         gitlab_ci_job_name = 'GitLab Artifacts'
@@ -1367,7 +1370,8 @@ def main():
             # update_servergitmirrors will take care of multiple mirrors so don't need a foreach
             update_servergitmirrors(config['servergitmirrors'], repo_section)
         if config.get('awsbucket'):
-            update_awsbucket(repo_section, options.verbose, options.quiet)
+            index_only = config.get('awsbucket_index_only')
+            update_awsbucket(repo_section, index_only, options.verbose, options.quiet)
         if config.get('androidobservatory'):
             upload_to_android_observatory(repo_section)
         if config.get('virustotal_apikey'):
