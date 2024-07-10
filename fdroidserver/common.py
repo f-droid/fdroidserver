@@ -1390,12 +1390,9 @@ class vcs_git(vcs):
                 raise VCSException(_("Git clean failed"), p.output)
             if not self.refreshed:
                 # Get latest commits and tags from remote
-                p = self.git(['fetch', 'origin'], cwd=self.local)
+                p = self.git(['fetch', '--prune', '--prune-tags', '--force', 'origin'], cwd=self.local)
                 if p.returncode != 0:
                     raise VCSException(_("Git fetch failed"), p.output)
-                p = self.git(['remote', 'prune', 'origin'], output=False, cwd=self.local)
-                if p.returncode != 0:
-                    raise VCSException(_("Git prune failed"), p.output)
                 p = self.git(['fetch', '--prune', '--tags', '--force', 'origin'], output=False, cwd=self.local)
                 if p.returncode != 0:
                     raise VCSException(_("Git fetch failed"), p.output)
