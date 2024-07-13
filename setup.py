@@ -91,7 +91,7 @@ setup(
         'babel',
     ],
     install_requires=[
-        'appdirs',
+        'platformdirs',
         'androguard >= 3.3.5',
         'asn1crypto',
         'clint',

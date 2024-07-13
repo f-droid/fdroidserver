@@ -133,17 +133,17 @@ orig_path = None
 
 
 def get_default_cachedir():
-    """Get a cachedir, using appdirs for cross-platform, but works without.
+    """Get a cachedir, using platformdirs for cross-platform, but works without.
 
-    Once appdirs is installed everywhere, this function can be
+    Once platformdirs is installed everywhere, this function can be
     removed.
 
     """
     appname = __name__.split('.')[0]
     try:
-        import appdirs
+        import platformdirs
 
-        return appdirs.user_cache_dir(appname, 'F-Droid')
+        return platformdirs.user_cache_dir(appname, 'F-Droid')
     except ImportError:
         return str(Path.home() / '.cache' / appname)
 
