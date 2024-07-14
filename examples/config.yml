@@ -56,7 +56,7 @@
 #
 # repo_maxage: 0
 
-# Canonical URL of the repositoy, needs to end in /repo. Is is used to identity
+# Canonical URL of the repository, needs to end in /repo. Is is used to identity
 # the repo in the client, as well.
 # repo_url: https://example.com/fdroid/repo
 #
@@ -426,7 +426,7 @@
 # it's configured to only use F-Droids official SUSS collection. We have
 # support for these special collections:
 #  * 'exodus' - official exodus-privacy.org signatures
-#  * 'etip' - exodus privacy investigation platfrom community contributed
+#  * 'etip' - exodus privacy investigation platform community contributed
 #           signatures
 #  * 'suss' - official F-Droid: Suspicious or Unwanted Software Signatures
 # You can also configure scanner to use custom collections of signatures here.
