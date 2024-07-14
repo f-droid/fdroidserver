@@ -16,12 +16,15 @@
 # debian_mirror: https://debian.osuosl.org/debian/
 
 # The amount of RAM the build server will have (default: 2048)
+#
 # memory: 3584
 
 # The number of CPUs the build server will have
+#
 # cpus: 1
 
 # Debian package proxy server - if you have one
+#
 # aptproxy: http://192.168.0.19:8000
 
 # If this is running on an older machine or on a virtualized system,
