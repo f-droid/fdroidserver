@@ -261,16 +261,19 @@ def main():
     logging.info("Packaging")
     boxfile = os.path.join(os.getcwd(), 'buildserver.box')
     if os.path.exists(boxfile):
+        logging.debug("Deleting box: %s", boxfile)
         os.remove(boxfile)
 
     v.package(output=boxfile)
 
-    logging.info("Adding box")
+    logging.info("Adding box: %s" % boxfile)
     vm.box_add('buildserver', boxfile, force=True)
+    logging.debug("Added box: %s", boxfile)
 
     if 'buildserver' not in subprocess.check_output(['vagrant', 'box', 'list']).decode('utf-8'):
         logging.critical('could not add box \'%s\' as \'buildserver\', terminating', boxfile)
         sys.exit(1)
+    logging.debug("Found box")
 
     # Boxes are stored in two places when using vagrant-libvirt:
     #
@@ -283,10 +286,13 @@ def main():
     # keeps the second one around until the new box is ready in case
     # `fdroid build` is using it while this script is running.
     img = 'buildserver_vagrant_box_image_0_box.img'
-    if os.path.exists(os.path.join('/var/lib/libvirt/images', img)):
+    imgpath = os.path.join('/var/lib/libvirt/images', img)
+    if os.path.exists(imgpath):
+        logging.debug("Found img: %s", imgpath)
         subprocess.call(
             ['virsh', '-c', 'qemu:///system', 'vol-delete', '--pool', 'default', '--vol', img]
         )
+    logging.debug("Processed vagrant-libvirt")
 
     if not options.keep_box_file:
         logging.debug("""box added to vagrant, removing generated box file '%s'""",
@@ -294,7 +300,10 @@ def main():
         os.remove(boxfile)
 
         # This was needed just to create the box, after that, it is unused.
+        logging.debug("destroying box")
         vm.destroy()
+
+    logging.info("Done")
 
 
 if __name__ == '__main__':
