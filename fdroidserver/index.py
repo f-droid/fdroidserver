@@ -1467,31 +1467,32 @@ def make_v0(apps, apks, repodir, repodict, requestsdict, signer_fingerprints):
 
     # Copy the repo icon into the repo directory...
     icon_dir = os.path.join(repodir, 'icons')
-    repo_icon = common.config.get('repo_icon', common.default_config['repo_icon'])
-    iconfilename = os.path.join(icon_dir, os.path.basename(repo_icon))
-    if os.path.exists(repo_icon):
-        shutil.copyfile(common.config['repo_icon'], iconfilename)
-    else:
+    repo_icon = os.path.basename(
+        common.config.get('repo_icon', common.default_config['repo_icon'])
+    )
+    icon_path = os.path.join(icon_dir, repo_icon)
+    if not os.path.exists(icon_path):
         logging.warning(
-            _('repo_icon "repo/icons/%s" does not exist, generating placeholder.')
-            % repo_icon
+            _(
+                'repo_icon "{repo_icon}" does not exist in "{icon_dir}", generating placeholder.'
+            ).format(repo_icon=repo_icon, icon_dir=icon_dir)
         )
-        os.makedirs(os.path.dirname(iconfilename), exist_ok=True)
+        os.makedirs(icon_dir, exist_ok=True)
         try:
             import qrcode
 
-            qrcode.make(common.config['repo_url']).save(iconfilename)
-        except ModuleNotFoundError as e:
-            raise ModuleNotFoundError(
-                _(
-                    'The "qrcode" Python package is not installed (e.g. apt-get install python3-qrcode)!'
+            qrcode.make(common.config['repo_url']).save(icon_path)
+        except Exception as e:
+            if isinstance(e, ModuleNotFoundError):
+                logging.error(
+                    _(
+                        'The "qrcode" Python package is not installed (e.g. apt-get install python3-qrcode)!'
+                    )
                 )
-            ) from e
-        except Exception:
             exampleicon = os.path.join(
                 common.get_examples_dir(), common.default_config['repo_icon']
             )
-            shutil.copy(exampleicon, iconfilename)
+            shutil.copy(exampleicon, icon_path)
 
 
 def extract_pubkey():
