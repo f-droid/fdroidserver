@@ -2096,7 +2096,8 @@ def process_apk(apkcache, apkfilename, repodir, knownapks, use_date_from_apk=Fal
             if repodir == 'archive' or allow_disabled_algorithms:
                 try:
                     common.verify_deprecated_jar_signature(apkfile)
-                    apk['antiFeatures'].update(['KnownVuln', 'DisabledAlgorithm'])  # TODO
+                    apk['antiFeatures']['DisabledAlgorithm'] = {DEFAULT_LOCALE: 'This app has a weak security signature'}
+                    apk['antiFeatures']['KnownVuln'] = {DEFAULT_LOCALE: 'This app has a weak security signature'}
                 except VerificationException:
                     skipapk = True
             else:
