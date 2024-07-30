@@ -406,7 +406,7 @@ def possible_subdirs(app: metadata.App):
     for d in dirs_with_manifest(build_dir):
         m_paths = common.manifest_paths(d, last_build.gradle)
         package = common.parse_androidmanifests(m_paths, app)[2]
-        if package is not None:
+        if package is not None or app.UpdateCheckName == "Ignore":
             subdir = d.relative_to(build_dir)
             logging.debug("Adding possible subdir %s" % subdir)
             yield subdir
