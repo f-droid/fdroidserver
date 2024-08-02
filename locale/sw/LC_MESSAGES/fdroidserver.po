@@ -2,20 +2,21 @@
 # This file is put in the public domain.
 # Test Account <ta2464666@gmail.com>, 2024.
 # abelbiwott-dev <abelbiwott@outlook.com>, 2024.
+# paul mayero <pmmayero@gmail.com>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 2.3a1\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2024-05-13 13:50+0200\n"
-"PO-Revision-Date: 2024-05-27 08:09+0000\n"
-"Last-Translator: abelbiwott-dev <abelbiwott@outlook.com>\n"
+"PO-Revision-Date: 2024-08-02 16:18+0000\n"
+"Last-Translator: paul mayero <pmmayero@gmail.com>\n"
 "Language-Team: Swahili <https://hosted.weblate.org/projects/f-droid/fdroidserver/sw/>\n"
 "Language: sw\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.6-dev\n"
+"X-Generator: Weblate 5.7-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -67,7 +68,7 @@ msgstr "\"{path}\" ipo lakini s3cmd haijasakinishwa!"
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "\"{path}\" is not a supported file format (use: metadata/*.yml)"
-msgstr "\"{path}\" si muundo wa faili inayotumika (tumia: metadata/*.yml)"
+msgstr "\"{path}\" si muundo wa faili inayokubalika (tumia: metadata/*.yml)"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -93,7 +94,7 @@ msgstr[1] "Chaguo %(option)s linahitaji hoja %(number)d"
 #: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "%(prog)s: error: %(message)s\n"
-msgstr "%(prog)s: kosa: %(message)s\n"
+msgstr "%(prog)s: kasoro: %(message)s\n"
 
 #: ../fdroidserver/publish.py
 #, python-format
@@ -121,7 +122,7 @@ msgstr "%r haiwezi kuitwa"
 #: ../fdroidserver/signindex.py
 #, python-format
 msgid "%s did not produce a dict!"
-msgstr "%s haikutoa amri!"
+msgstr "%s haikutoa \"dict\"!"
 
 #: ../fdroidserver/signindex.py
 #, python-format
@@ -213,7 +214,7 @@ msgstr ".__call__() haijafafanuliwa"
 
 #: ../fdroidserver/lint.py
 msgid "/issues is missing"
-msgstr "/issues hayapo"
+msgstr "/issues haipo"
 
 #: ../fdroidserver/mirror.py
 msgid "A URL is required as an argument!"
@@ -976,7 +977,7 @@ msgstr "Sakinisha apu zote zilizosainiwa zinazopatikana"
 
 #: ../fdroidserver/__main__.py
 msgid "Install built packages on devices"
-msgstr "Sakinisha vifurushi vilivyojengwa kwenye vifaa"
+msgstr "Sakinisha vifurushi kwenye vifaa"
 
 #: ../fdroidserver/install.py
 #, python-format
@@ -2026,7 +2027,7 @@ msgstr "Inaongeza kwa {name}: {path}"
 #: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "ambiguous option: %(option)s could match %(matches)s"
-msgstr "chaguo lisiloeleweka: %(option)s inaweza kulingana na %(matches)s"
+msgstr "chaguo lisiloeleweka: %(option)s linaweza kulingana na %(matches)s"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 #: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
@@ -2408,14 +2409,14 @@ msgstr "chaguo %s: chaguo batili: %r(choose from %s)"
 #: /usr/lib/python3.11/getopt.py
 #, python-format
 msgid "option -%s not recognized"
-msgstr "chaguo -%s haitambuliki"
+msgstr "chaguo -%s halitambuliki"
 
 #: /usr/lib/python3.5/getopt.py /usr/lib/python3.6/getopt.py
 #: /usr/lib/python3.7/getopt.py /usr/lib/python3.9/getopt.py
 #: /usr/lib/python3.11/getopt.py
 #, python-format
 msgid "option -%s requires argument"
-msgstr "chaguo -%s inahitaji hoja"
+msgstr "chaguo -%s linahitaji hoja"
 
 #: /usr/lib/python3.5/getopt.py /usr/lib/python3.6/getopt.py
 #: /usr/lib/python3.7/getopt.py /usr/lib/python3.9/getopt.py
@@ -2436,7 +2437,7 @@ msgstr "chaguo --%s sio kiambishi awali cha kipekee"
 #: /usr/lib/python3.11/getopt.py
 #, python-format
 msgid "option --%s not recognized"
-msgstr "chaguo --%s haitambuliki"
+msgstr "chaguo --%s halitambuliki"
 
 #: /usr/lib/python3.5/getopt.py /usr/lib/python3.6/getopt.py
 #: /usr/lib/python3.7/getopt.py /usr/lib/python3.9/getopt.py
