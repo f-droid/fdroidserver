@@ -141,3 +141,6 @@ max-nested-blocks = 5
 [tool.pylint.format]
 # Maximum number of characters on a single line.
 max-line-length = 88
+
+[tool.ruff.format]
+quote-style = "preserve"
