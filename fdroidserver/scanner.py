@@ -50,6 +50,11 @@ MAVEN_URL_REGEX = re.compile(
     re.DOTALL,
 )
 
+DEPFILE = {
+    "Cargo.toml": ["Cargo.lock"],
+    "pubspec.yaml": ["pubspec.lock"],
+    "package.json": ["package.lock", "yarn.lock", "pnpm-lock.yaml"],
+}
 
 SCANNER_CACHE_VERSION = 1
 
@@ -811,6 +816,18 @@ def scan_source(build_dir, build=metadata.Build(), json_per_build=None):
                 if is_binary(filepath):
                     count += handleproblem(
                         'binary', path_in_build_dir, filepath, json_per_build
+                    )
+
+            elif curfile in DEPFILE:
+                for lockfile in DEPFILE[curfile]:
+                    if os.path.isfile(os.path.join(root, lockfile)):
+                        break
+                else:
+                    count += handleproblem(
+                        _('dependency file without lock'),
+                        path_in_build_dir,
+                        filepath,
+                        json_per_build,
                     )
 
             elif is_executable(filepath):
