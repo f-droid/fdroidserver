@@ -989,8 +989,6 @@ def parse_commandline():
                         help=_("Test mode - put output in the tmp directory only, and always build, even if the output already exists."))
     parser.add_argument("--server", action="store_true", default=False,
                         help=_("Use build server"))
-    parser.add_argument("--reset-server", action="store_true", default=False,
-                        help=_("Reset and create a brand new build server, even if the existing one appears to be ok."))
     # this option is internal API for telling fdroid that
     # it's running inside a buildserver vm.
     parser.add_argument("--on-server", dest="onserver", action="store_true", default=False,
@@ -1080,8 +1078,6 @@ def main():
 
     if config['build_server_always']:
         options.server = True
-    if options.reset_server and not options.server:
-        parser.error("option %s: Using --reset-server without --server makes no sense" % "reset-server")
 
     log_dir = 'logs'
     if not os.path.isdir(log_dir):
