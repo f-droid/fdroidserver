@@ -1,13 +1,13 @@
 # SOME DESCRIPTIVE TITLE.
 # This file is put in the public domain.
 # bobwww <noambro199@gmail.com>, 2022.
-# Yaron Shahrabani <sh.yaron@gmail.com>, 2022, 2023.
+# Yaron Shahrabani <sh.yaron@gmail.com>, 2022, 2023, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 2.1b0\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2024-05-13 13:50+0200\n"
-"PO-Revision-Date: 2023-09-21 08:05+0000\n"
+"PO-Revision-Date: 2024-08-18 06:27+0000\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: Hebrew <https://hosted.weblate.org/projects/f-droid/fdroidserver/he/>\n"
 "Language: he\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n == 1) ? 0 : ((n == 2) ? 1 : ((n > 10 && n % 10 == 0) ? 2 : 3));\n"
-"X-Generator: Weblate 5.1-dev\n"
+"X-Generator: Weblate 5.7\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -1447,7 +1447,7 @@ msgstr ""
 
 #: ../fdroidserver/update.py
 msgid "Rename APK files that do not match package.name_123.apk"
-msgstr ""
+msgstr "לשנות שמות של קובצי APK שאינם בתבנית package.name_123.apk"
 
 #: ../fdroidserver/checkupdates.py
 msgid "RepoTrunk update mode only makes sense in git-svn repositories"
@@ -1472,7 +1472,7 @@ msgstr ""
 
 #: ../fdroidserver/__main__.py
 msgid "Rewrite all the metadata files"
-msgstr ""
+msgstr "לשכתב את כל קובצי נתוני העל"
 
 #: ../fdroidserver/rewritemeta.py
 #, python-brace-format
