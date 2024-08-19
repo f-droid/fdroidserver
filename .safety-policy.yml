@@ -26,3 +26,6 @@ security:
     70612:
       reason: jinja2 is not used by fdroidserver, nor any dependencies I could find via debtree and pipdeptree.
       expires: '2026-05-31'
+    72132:
+      reason: We get these packages from Debian, zipp is not used in production, and its only a DoS.
+      expires: '2026-08-31'
