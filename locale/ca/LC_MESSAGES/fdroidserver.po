@@ -4,13 +4,14 @@
 # pitroig <ona@riseup.net>, 2024.
 # raulmagdalena <4omoald1a@mozmail.com>, 2024.
 # Adrià Martín <adriamartinmor@gmail.com>, 2024.
+# unmes <jordi.guiu.pujols@gmail.com>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 2.1-273-g54e84d87\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2024-05-13 13:50+0200\n"
-"PO-Revision-Date: 2024-08-20 15:23+0000\n"
-"Last-Translator: Adrià Martín <adriamartinmor@gmail.com>\n"
+"PO-Revision-Date: 2024-08-21 16:21+0000\n"
+"Last-Translator: unmes <jordi.guiu.pujols@gmail.com>\n"
 "Language-Team: Catalan <https://hosted.weblate.org/projects/f-droid/fdroidserver/ca/>\n"
 "Language: ca\n"
 "MIME-Version: 1.0\n"
@@ -118,7 +119,7 @@ msgstr "%prog [options]"
 #: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "%r is not callable"
-msgstr ""
+msgstr "no es pot cridar a %r"
 
 #: ../fdroidserver/signindex.py
 #, python-format
@@ -211,7 +212,7 @@ msgstr ""
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #: /usr/lib/python3.11/argparse.py
 msgid ".__call__() not defined"
-msgstr ""
+msgstr ".__call__() no definida"
 
 #: ../fdroidserver/lint.py
 msgid "/issues is missing"
