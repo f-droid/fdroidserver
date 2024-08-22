@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: fdroidserver 1.0.0-95-gd7af22b\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2024-05-13 13:50+0200\n"
-"PO-Revision-Date: 2024-06-26 11:09+0000\n"
+"PO-Revision-Date: 2024-08-23 10:34+0000\n"
 "Last-Translator: WaldiS <sto@tutanota.de>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/f-droid/fdroidserver/pl/>\n"
 "Language: pl\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 5.6-rc\n"
+"X-Generator: Weblate 5.7.1-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -899,7 +899,7 @@ msgstr "Resetowanie Git nie powiodło się"
 #: ../fdroidserver/common.py
 #, fuzzy
 msgid "Git submodule deinit failed"
-msgstr "Aktualizacja submodułu Git nie powiodła się"
+msgstr "Deinit podmodułu Git nie powiódł się"
 
 #: ../fdroidserver/common.py
 msgid "Git submodule sync failed"
@@ -2747,7 +2747,7 @@ msgstr "{path} nie jest standardowym plikiem konfiguracyjnym!"
 #: ../fdroidserver/index.py
 #, python-brace-format
 msgid "{path} is not list, but a {datatype}!"
-msgstr ""
+msgstr "{path} inie jest listą, lecz {datatype}!"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
