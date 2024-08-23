@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: fdroidserver 2.3a1\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2024-05-13 13:50+0200\n"
-"PO-Revision-Date: 2024-08-23 10:34+0000\n"
+"PO-Revision-Date: 2024-08-25 00:09+0000\n"
 "Last-Translator: paul mayero <pmmayero@gmail.com>\n"
 "Language-Team: Swahili <https://hosted.weblate.org/projects/f-droid/fdroidserver/sw/>\n"
 "Language: sw\n"
@@ -1179,6 +1179,7 @@ msgid "No fingerprint in URL."
 msgstr "Hakuna alama ya kidole kwenye URL."
 
 #: ../fdroidserver/common.py
+#, fuzzy
 msgid "No git submodules available"
 msgstr "Hakuna submodule ya git inayopatikana"
 
@@ -1188,11 +1189,11 @@ msgstr "Hakuna mradi wa gradle imeweza kupatikana. Bainisha --subdir?"
 
 #: ../fdroidserver/import_subcommand.py
 msgid "No information found."
-msgstr "Hakuna habari imepatikana."
+msgstr "Hakuna taarifa imepatikana."
 
 #: ../fdroidserver/checkupdates.py
 msgid "No matching tags found"
-msgstr "Hakuna tagi zinazolingana imepatikana"
+msgstr "Hakuna tagi zimepatikana zinazolingana"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -1209,7 +1210,7 @@ msgstr "Hiana haja ya kubainisha kuwa apu hio ni ya Android"
 
 #: ../fdroidserver/deploy.py
 msgid "No option set! Edit your config.yml to set at least one of these:"
-msgstr "Hakuna chaguo lililowekwa! Hariri config.yml iseti angalau moja ya hizi:"
+msgstr "Hakuna chaguo lililowekwa! Hariri config.yml iweke angalau moja ya hizi:"
 
 #: ../fdroidserver/common.py
 msgid "No packages specified"
