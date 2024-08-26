@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: fdroidserver 2.3a1\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2024-05-13 13:50+0200\n"
-"PO-Revision-Date: 2024-08-25 00:09+0000\n"
+"PO-Revision-Date: 2024-08-26 17:39+0000\n"
 "Last-Translator: paul mayero <pmmayero@gmail.com>\n"
 "Language-Team: Swahili <https://hosted.weblate.org/projects/f-droid/fdroidserver/sw/>\n"
 "Language: sw\n"
@@ -2460,12 +2460,12 @@ msgstr "hoja za hiari"
 
 #: /usr/lib/python3.11/argparse.py
 msgid "options"
-msgstr "chaguzi"
+msgstr "uchaguzi"
 
 #: ../fdroidserver/nightly.py
 #, python-brace-format
 msgid "overwriting existing {path}"
-msgstr "inaandika upya {path} inayopo"
+msgstr "inaandika upya {path} iliyopo"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
@@ -2494,7 +2494,7 @@ msgstr "repo_icon \"repo/icons/%s\" haipo, inazalisha kishika nafasi."
 
 #: ../fdroidserver/common.py
 msgid "repo_url needs to end with /repo"
-msgstr "repo_url ina haja ya kuisha na /repo"
+msgstr "repo_url ina haja ya kuisha na /ghala"
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
@@ -2503,7 +2503,7 @@ msgstr "rsync inakosa au imevunjika: {error}"
 
 #: ../fdroidserver/metadata.py
 msgid "ruamel.yaml not installed, can not write metadata."
-msgstr "ruamel.yaml haijasakinishwa, haiwezi kuandika metadata."
+msgstr "ruamel.yaml haijasimikwa, haiwezi kuandika metadata."
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
