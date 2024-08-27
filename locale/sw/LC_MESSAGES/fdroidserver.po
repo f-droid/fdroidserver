@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: fdroidserver 2.3a1\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2024-05-13 13:50+0200\n"
-"PO-Revision-Date: 2024-08-26 17:39+0000\n"
+"PO-Revision-Date: 2024-08-28 08:09+0000\n"
 "Last-Translator: paul mayero <pmmayero@gmail.com>\n"
 "Language-Team: Swahili <https://hosted.weblate.org/projects/f-droid/fdroidserver/sw/>\n"
 "Language: sw\n"
@@ -508,7 +508,7 @@ msgstr "Inaunda saraka ya kumbukumbu"
 #: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "Creating new S3 bucket: {url}"
-msgstr "Inaunda S3 bucket mpya: {url}"
+msgstr "Inaunda ndoo mpya ya S3: {url}"
 
 #: ../fdroidserver/publish.py
 #, fuzzy
@@ -2521,7 +2521,7 @@ msgstr "serverwebroot: njia haikamiliki na \"fdroid\", labda ulimaanisha moja ka
 
 #: ../fdroidserver/scanner.py
 msgid "shared library"
-msgstr "maktaba inayoshirikiwa"
+msgstr "maktaba inayoshirikishwa"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 #: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
@@ -2543,7 +2543,7 @@ msgstr "APK iliyosainiwa, aidha file-path au HTTPS URL."
 
 #: ../fdroidserver/common.py
 msgid "skip deploying full build logs: log content is empty"
-msgstr "ruka kupeleka logi kamili za jenga: mauthui ya logi ni tupu"
+msgstr "ruka kupeleka logi kamili za jenga: maudhui ya logi ni tupu"
 
 #: ../fdroidserver/common.py
 msgid "skip deploying full build logs: not enabled in config"
