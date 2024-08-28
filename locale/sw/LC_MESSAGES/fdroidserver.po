@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: fdroidserver 2.3a1\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2024-05-13 13:50+0200\n"
-"PO-Revision-Date: 2024-08-28 08:09+0000\n"
+"PO-Revision-Date: 2024-08-28 11:43+0000\n"
 "Last-Translator: paul mayero <pmmayero@gmail.com>\n"
 "Language-Team: Swahili <https://hosted.weblate.org/projects/f-droid/fdroidserver/sw/>\n"
 "Language: sw\n"
@@ -2201,7 +2201,7 @@ msgstr "Inapakua '{}'"
 
 #: ../fdroidserver/scanner.py
 msgid "downloading scanner signatures from '{}' failed"
-msgstr "Inapakua sahihi za skana kutoka '{}' imefeli"
+msgstr "Inapakua sahihi za skena kutoka '{}' imefeli"
 
 #: ../fdroidserver/scanner.py
 msgid "executable binary, possibly code"
@@ -2213,14 +2213,14 @@ msgstr "binari inayoweza kutekelezwa, ikiwezekana msimbo"
 #, python-format
 msgid "expected %s argument"
 msgid_plural "expected %s arguments"
-msgstr[0] "ilitaraji hoja %s"
-msgstr[1] "zilitaraji hoja %s"
+msgstr[0] "hoja %s iliyotarajiwa"
+msgstr[1] "hoja %s zilizotarajiwa"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #: /usr/lib/python3.11/argparse.py
 msgid "expected at least one argument"
-msgstr "ilitaraji angalau hoja moja"
+msgstr "ilitarajia angalau hoja moja"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
@@ -2232,15 +2232,15 @@ msgstr "Imetarajiwa isiwe zaidi ya hoja moja"
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #: /usr/lib/python3.11/argparse.py
 msgid "expected one argument"
-msgstr "Ilitaraji hoja moja"
+msgstr "Ilitarajia hoja moja"
 
 #: ../fdroidserver/__main__.py
 msgid "fdroid [<command>] [-h|--help|--version|<args>]"
-msgstr "fdroid [<command>] [-h|--help|--toleo|<args>]"
+msgstr "fdroid [<command>] [-h|--msaada|--toleo|<args>]"
 
 #: ../fdroidserver/scanner.py
 msgid "fetch the latest version of signatures from the web"
-msgstr "Pakua toleo jipya zaidi za saini kutoka mtandao"
+msgstr "Pakua toleo jipya zaidi za saini kutoka kwenye mtandao"
 
 #: /usr/lib/python3.11/optparse.py
 msgid "floating-point"
