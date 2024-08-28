@@ -430,7 +430,22 @@ Last updated: {date}'''.format(repo_git_base=repo_git_base,
         config = common.read_config()
         common.assert_config_keystore(config)
 
+        logging.debug(
+            _('Run over {cibase} to find -debug.apk. PS: repo_basedir is {repo_basedir}').format(
+                cibase=cibase,
+                repo_basedir=repo_basedir
+            )
+        )
+
         for root, dirs, files in os.walk(cibase):
+            if root.startswith(repo_basedir):
+                logging.error(
+                    _('Broken dirs.remove.d(d): {root} is part of {repo_basedir} and should not be scanned').format(
+                        root=root,
+                        repo_basedir=repo_basedir
+                    )
+                )
+                continue
             for d in dirs:
                 if d == '.git' or d == '.gradle' or (d == 'fdroid' and root == cibase):
                     dirs.remove(d)
