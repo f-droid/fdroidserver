@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: fdroidserver 2.3a1\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2024-05-13 13:50+0200\n"
-"PO-Revision-Date: 2024-08-28 11:43+0000\n"
+"PO-Revision-Date: 2024-08-28 16:06+0000\n"
 "Last-Translator: paul mayero <pmmayero@gmail.com>\n"
 "Language-Team: Swahili <https://hosted.weblate.org/projects/f-droid/fdroidserver/sw/>\n"
 "Language: sw\n"
@@ -304,7 +304,7 @@ msgstr "Apu ina NoSourceSince au ArchivePolicy \"0 versions\" lakini AutoUpdateM
 
 #: ../fdroidserver/lint.py
 msgid "App has NoSourceSince or ArchivePolicy \"0 versions\" or 0 but AutoUpdateMode or UpdateCheckMode are not None"
-msgstr "Apu ina NoSourceSince au ArchivePolicy \"0 versions\" au 0 lakini AutoUpdateMode au UpdateCheckMode sio None"
+msgstr "Apu ina NoSourceSince au ArchivePolicy \"matoleo 0\" au 0 lakini AutoUpdateMode au UpdateCheckMode sio Hakuna"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
@@ -322,11 +322,11 @@ msgstr "Kuambata .git sio lazima"
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Archiving {apkfilename} with invalid signature!"
-msgstr "Kuhifadhi {apkfilename} yenye sahihi batili!"
+msgstr "Kuhifadhi {apkfilename} yenye saini batili!"
 
 #: ../fdroidserver/lint.py
 msgid "AutoUpdateMode with UpdateCheckMode: HTTP must have a pattern."
-msgstr "AutoUpdateMode na UpdateCheckMode: HTTP lazima iwe na muundo."
+msgstr "AutoUpdateMode na UpdateCheckMode: HTTP lazima iwe na mpangilio."
 
 #: ../fdroidserver/index.py
 #, python-brace-format
@@ -335,13 +335,13 @@ msgstr "Aina mbaya ya ingizo \"{mirrortype}\" katika usanidi wa vioo: {mirror}"
 
 #: ../fdroidserver/mirror.py
 msgid "Base URL to mirror, can include the index signing key using the query string: ?fingerprint="
-msgstr "URL ya msingi ya kioo, inaweza kujumuisha ufunguo wa saini ya index kwa kutumia mfuatano wa uulizi: ?fingerprint="
+msgstr "URL ya msingi ya kioo, inaweza kujumuisha ufunguo wa saini ya faharasa kwa kutumia mfuatano wa saili: ?fingerprint="
 
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vname
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "Branch '{branch}' used as commit in build '{versionName}'"
-msgstr "Tawi '{branch}' limefanyiwa matumizi kama ahadi katika ujenzi wa '{versionName}'"
+msgstr "Tawi '{branch}' limetumika kupeleka katika ujenzi wa '{versionName}'"
 
 #: ../fdroidserver/lint.py
 #, fuzzy, python-brace-format
@@ -870,7 +870,7 @@ msgstr "Imeunda kiunzi cha metadata kwa {appid}"
 #: ../fdroidserver/common.py
 #, python-format
 msgid "Git checkout of '%s' failed"
-msgstr "Git checkout ya '%s' ilishindwa"
+msgstr "Git toa ya '%s' ilishindwa"
 
 #: ../fdroidserver/common.py
 msgid "Git clean failed"
@@ -1243,15 +1243,15 @@ msgstr "Hakuna versionCode kama hio {versionCode} kwa apu {appid}"
 
 #: ../fdroidserver/checkupdates.py
 msgid "No tags found"
-msgstr "Hakuna tagi zilizopatikana"
+msgstr "Hakuna vishikozo vilivyopatikana"
 
 #: ../fdroidserver/publish.py ../fdroidserver/verify.py
 msgid "No unsigned directory - nothing to do"
-msgstr "Hakuna saraka isiyotiwa sahihi - hakuna la kufanya"
+msgstr "Hakuna saraka isiyotiwa saini - hakuna la kufanya"
 
 #: ../fdroidserver/__main__.py
 msgid "No version information could be found."
-msgstr "Hakuna maelezo ya toleo iiliyopatikana."
+msgstr "Hakuna taarifa ya toleo iliyoweza kupatikana."
 
 #: ../fdroidserver/common.py
 msgid "Not a valid size definition: \"{}\""
@@ -1291,7 +1291,7 @@ msgstr "Machini iliyo nje ya mtandao, inapuuza uundaji wa kioo cha git mpaka 'fd
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Only PNG and JPEG are supported for graphics, found: {path}"
-msgstr "PNG na JPEG pekee inakubalika katika mchoro, imepata: {path}"
+msgstr "PNG na JPEG pekee zinakubalika katika mchoro, zimepata: {path}"
 
 #: ../fdroidserver/checkupdates.py
 msgid "Only print differences with the Play Store"
@@ -1299,7 +1299,7 @@ msgstr "Chapisha tofauti pekee na Play Store"
 
 #: ../fdroidserver/checkupdates.py
 msgid "Only process apps with auto-updates"
-msgstr "Chakata pekee apu zilizo na masasisho ya kiotomatiki"
+msgstr "Chakata apu zilizo na masasisho ya kiotomatiki pekee"
 
 #: ../fdroidserver/lint.py
 msgid "OpenCollective donation methods belong in the OpenCollective: field"
@@ -1335,7 +1335,7 @@ msgstr "Kubatilisha toleo la jina tupu katika {apkfilename} kutoka kwa metadata:
 #: ../fdroidserver/import_subcommand.py
 #, python-brace-format
 msgid "Package \"{appid}\" already exists"
-msgstr "Kifurushi \"{appid}\" tayari ipo"
+msgstr "Kifurushi \"{appid}\" tayari kipo"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
