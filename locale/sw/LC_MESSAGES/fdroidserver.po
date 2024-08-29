@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: fdroidserver 2.3a1\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2024-05-13 13:50+0200\n"
-"PO-Revision-Date: 2024-08-28 16:06+0000\n"
+"PO-Revision-Date: 2024-08-30 09:09+0000\n"
 "Last-Translator: paul mayero <pmmayero@gmail.com>\n"
 "Language-Team: Swahili <https://hosted.weblate.org/projects/f-droid/fdroidserver/sw/>\n"
 "Language: sw\n"
@@ -1497,7 +1497,7 @@ msgstr "Kuandika upya '{appid}'"
 
 #: ../fdroidserver/checkupdates.py
 msgid "Run on git repo that has uncommitted changes"
-msgstr "Tekeleza kwenye ghala ya git ambalo lina mabadiliko yasiyohifadhiwa"
+msgstr "Endesha kwenye ghala la git ambalo lina mabadiliko yasiyohifadhiwa"
 
 #: ../fdroidserver/lint.py
 msgid "Run rewritemeta to fix formatting"
@@ -1510,7 +1510,7 @@ msgstr "Kutekeleza pasi ya kwanza na kuangalia kwa MD5 ikiwa imezimwa"
 #: ../fdroidserver/mirror.py
 #, python-brace-format
 msgid "Running wget in {path}"
-msgstr "Kutekeleza wget katika {path}"
+msgstr "Kuendesha wget katika {path}"
 
 #: ../fdroidserver/index.py
 #, python-brace-format
@@ -1519,7 +1519,7 @@ msgstr "SHA-256 ya {url} hailingani ingizo!"
 
 #: ../fdroidserver/build.py
 msgid "Scan the resulting APK(s) for known non-free classes."
-msgstr "Skani APK Skani APK zilizotokana na mchakato kwa madarasa yasiyo huru yanayojulikana."
+msgstr "Changanua APK zilizotokana na mchakato kwa madarasa yasiyo huru yanayojulikana."
 
 #: ../fdroidserver/__main__.py
 msgid "Scan the source code of a package"
@@ -1528,23 +1528,23 @@ msgstr "Changanua msimbo chanzo cha kifurushi"
 #: ../fdroidserver/scanner.py
 #, python-brace-format
 msgid "Scanner found {count} problems in {apk}"
-msgstr "Skana imepata matatizo {count} katika {apk}"
+msgstr "Skena imepata matatizo {count} katika {apk}"
 
 #: ../fdroidserver/scanner.py
 #, python-brace-format
 msgid "Scanner found {count} problems in {appid}:"
-msgstr "Skana imepata matatizo {count} katika {appid}:"
+msgstr "Skena imepata matatizo {count} katika {appid}:"
 
 #: ../fdroidserver/scanner.py
 #, python-brace-format
 msgid "Scanner found {count} problems in {appid}:{versionCode}:"
-msgstr "Skana imepata matatizo {count} katika {appid}:{versionCode}:"
+msgstr "Skena imepata matatizo {count} katika {appid}:{versionCode}:"
 
 #: ../fdroidserver/build.py
 msgid "Scanner found {} problem"
 msgid_plural "Scanner found {} problems"
-msgstr[0] "Skana imepata tatizo {}"
-msgstr[1] "Skana zimepata tatizo {}"
+msgstr[0] "Skena imepata tatizo {}"
+msgstr[1] "Skena zimepata matatizo {}"
 
 #: ../fdroidserver/scanner.py
 msgid "Scanning APK with dexdump for known non-free classes."
@@ -1566,20 +1566,20 @@ msgstr "Weka idadi ya juu ya matoleo katika ghala kabla zile mzee zimehifadhiwa 
 #: ../fdroidserver/build.py
 #, python-brace-format
 msgid "Set open file limit to {integer}"
-msgstr "Seti kikomo cha faili iliyo wazi kwa {integer}"
+msgstr "Weka kikomo cha faili iliyo wazi kwa {integer}"
 
 #: ../fdroidserver/__main__.py
 msgid "Set up an app build for a nightly build repo"
-msgstr "Sanidha uundaji wa apu kwa ajili ya ghala la uundaji wa kila usiku"
+msgstr "Sanidisha ujenzi wa apu kwa ajili ya ghala la ujenzi wa usiku"
 
 #: ../fdroidserver/build.py
 msgid "Setting open file limit failed: "
-msgstr "Kuseti kikomo cha faili iliyo wazi imefeli: "
+msgstr "Weka kikomo cha faili iliyo wazi imefeli: "
 
 #: ../fdroidserver/build.py
 #, python-brace-format
 msgid "Setting {0} sec timeout for this build"
-msgstr "Kuseti muda wa sekunde {0} kwa ajili ya ujenzi huu"
+msgstr "Kuweka muda wa sekunde {0} kwa ajili ya ujenzi huu"
 
 #: ../fdroidserver/__main__.py
 msgid "Sign and place packages in the repo"
@@ -1596,7 +1596,7 @@ msgstr "Ruka kuchanganua msimbo wa chanzo kwa binari na tatizo zingine"
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Skipping '{apkfilename}' with invalid signature!"
-msgstr "Kuruka '{apkfilename}' iliyo na sahihi batili!"
+msgstr "Kuruka '{apkfilename}' iliyo na saini batili!"
 
 #: ../fdroidserver/deploy.py ../fdroidserver/index.py
 #, python-format
@@ -1606,12 +1606,12 @@ msgstr "Kuruka kioo cha GitLab Pages kwa sababu ghala ni kubwa mno (>%.2fGB)!"
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Skipping index generation for {appid}"
-msgstr "Inaruka uzalishaji wa index kwa {appid}"
+msgstr "Inaruka uzalishaji wa faharasa kwa {appid}"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Skipping {apkfilename} with invalid signature!"
-msgstr "Inaruka {apkfilename} yenye sahihi batili!"
+msgstr "Inaruka {apkfilename} yenye saini batili!"
 
 #: ../fdroidserver/scanner.py
 #, python-brace-format
@@ -1647,7 +1647,7 @@ msgstr "Muhtasari '%s' ni jina tu ya apu hio"
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "Summary of length {length} is over the {limit} char limit"
-msgstr "Muhtasari ya urefu {length} ni juu ya {limit} kikomo cha char"
+msgstr "Muhtasari wa urefu {length} ni juu ya {limit} kikomo cha char"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -1790,7 +1790,7 @@ msgstr "Fomati ya metadata isiyojulikana: {path} (tumia: *.yml)"
 
 #: ../fdroidserver/common.py
 msgid "Unknown version of aapt, might cause problems: "
-msgstr "Toleo lisilojulikana la aapt, inaweza kuleta matatizo: "
+msgstr "Toleo lisilojulikana la aapt, linaweza kuleta matatizo: "
 
 #: ../fdroidserver/lint.py
 msgid "Unnecessary leading space"
@@ -1803,22 +1803,22 @@ msgstr "Nafasi ya mwisho isiyo ya lazima"
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Unrecognised app field '{fieldname}' in '{path}'"
-msgstr "nafasi ya apu isiyotambulika '{fieldname}' katika '{path}'"
+msgstr "Nafasi ya apu isiyotambulika '{fieldname}' katika '{path}'"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Unrecognised build flag '{build_flag}' in '{path}'"
-msgstr "Bendera ya jenga isiyotambulika '{build_flag}' katika '{path}'"
+msgstr "Bendera ya kujenga isiyotambulika '{build_flag}' katika '{path}'"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Unsupported file type \"{extension}\" for repo graphic"
-msgstr "Aina ya faili isiyoungwa mkono \"{extension}\" kwa ghala ya mchoro"
+msgstr "Aina ya faili isiyoungwa mkono \"{extension}\" kwa ghala la mchoro"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Unsupported graphics file found: {path}"
-msgstr "Faili ya michoro usioungwa mkono umepatikana: {path}"
+msgstr "Faili ya michoro isiyoungwa mkono imepatikana: {path}"
 
 #: ../fdroidserver/lint.py
 #, python-format
@@ -1997,7 +1997,7 @@ msgstr "Onya kuhusu hitilafu ya metadata yanayoweza kutokea"
 
 #: ../fdroidserver/update.py
 msgid "When configured for signed indexes, create only unsigned indexes at this stage"
-msgstr "Ikiwa imesanidiwa kwa viashiria vilivyosainiwa, unda pekee indexes zisizosainiwa katika hatua hii"
+msgstr "Ikiwa imesanidiwa kwa faharasa zilizosainiwa, unda pekee faharasa zisizosainiwa katika hatua hii"
 
 #: ../fdroidserver/lint.py
 msgid "When linting the entire repository yamllint is disabled by default. This option forces yamllint regardless."
@@ -2263,15 +2263,15 @@ msgstr "kumbukumbu ya faili ya gzip"
 #: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "ignored explicit argument %r"
-msgstr "Ilipuuza hoja ya wazi %r"
+msgstr "Ilipuuza hoja ya dhahiri %r"
 
 #: ../fdroidserver/index.py
 msgid "index-v1 must have a signature, use `fdroid signindex` to create it!"
-msgstr "index-v1 lazima iwe na sahihi, tumia `fdroid signindex` kuiunda!"
+msgstr "index-v1 lazima iwe na saini, tumia `fdroid signindex` kuiunda!"
 
 #: ../fdroidserver/index.py
 msgid "index-v2 must have a signature, use `fdroid signindex` to create it!"
-msgstr "index-v2 lazima iwe na sahihi, tumia `fdroid signindex` kuiunda!"
+msgstr "index-v2 lazima iwe na saini, tumia `fdroid signindex` kuiunda!"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 #: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
@@ -2314,7 +2314,7 @@ msgstr "ipfs haikupatikana, inaruka kuzalisha CIDcv1"
 #: ../fdroidserver/checkupdates.py
 #, python-brace-format
 msgid "latest build recipe is newer: old vercode={old}, new vercode={new}"
-msgstr "recipe ya jenga ya hivi karibuni ni mpya zaidi: old vercode={old}, new vercode={new}"
+msgstr "mbinu ya jenga ya hivi karibuni ni mpya zaidi: old vercode={old}, new vercode={new}"
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
@@ -2323,7 +2323,7 @@ msgstr "local_copy_dir haikiwishi na \"fdroid\", labda ulimanisha: {path}"
 
 #: ../fdroidserver/deploy.py
 msgid "local_copy_dir must be an absolute path!"
-msgstr "local_copy_dir lazima iwe njia kamilifu!"
+msgstr "local_copy_dir lazima iwe njia kamili!"
 
 #: ../fdroidserver/deploy.py
 msgid "local_copy_dir must be directory, not a file!"
@@ -2332,7 +2332,7 @@ msgstr "local_copy_dir lazima iwe saraka, si faili!"
 #: ../fdroidserver/index.py
 #, python-format
 msgid "mirror '%s' does not end with 'fdroid'!"
-msgstr "kioo %s haikwishi na 'fdroid'!"
+msgstr "kioo %s haikwishia na 'fdroid'!"
 
 #: ../fdroidserver/index.py
 #, python-brace-format
@@ -2342,6 +2342,7 @@ msgstr "vioo vimesetiwa mara mbili, katika config.yml na {path}!"
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #: /usr/lib/python3.11/argparse.py
+#, fuzzy
 msgid "mutually exclusive arguments must be optional"
 msgstr "Hoja zisizounganishika lazima iwe ya hiari"
 
@@ -2619,8 +2620,8 @@ msgstr "virustotal.com inapunguza kiwango, inangojea kujaribu tena..."
 #, python-brace-format
 msgid "{0} app, {1} key aliases"
 msgid_plural "{0} apps, {1} key aliases"
-msgstr[0] "apu {0}, lakabu ya funguo {1}"
-msgstr[1] "apu {0}, lakabu za funguo {1}"
+msgstr[0] "apu {0}, lakabu muhimu{1}"
+msgstr[1] "apu {0}, lakabu muhimu{1}"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -2640,12 +2641,12 @@ msgstr "AndroidManifest.xml ya {apkfilename} ina tarehe mbaya: "
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "{appid} does not have a name! Using application ID instead."
-msgstr "{appid} hiana jina! Inatumia kitambulisho cha apu badala yake."
+msgstr "{appid} haina jina! Inatumia kitambulisho cha apu badala yake."
 
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "{appid} from {path} is not a valid Android application ID!"
-msgstr "{appid} kutoka {path} si kitambulisho halali cha apu ya android!"
+msgstr "{appid} kutoka {path} si kitambulisho halali cha apu ya Android!"
 
 #: ../fdroidserver/metadata.py ../fdroidserver/update.py
 #, python-brace-format
@@ -2671,7 +2672,7 @@ msgstr "{appid}: extlib isiyojulikana {path} katika jenga '{versionName}'"
 #: ../fdroidserver/scanner.py
 #, python-brace-format
 msgid "{appid}: no builds specified, running on current source state"
-msgstr "{appid}: hakuna jenga zilizobainishwa, inakimbia kwa hali ya sasa ya chanzo"
+msgstr "{appid}: hakuna jenga zilizobainishwa, inaendeshwa kwa hali ya sasa ya chanzo"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
@@ -2711,17 +2712,17 @@ msgstr "{oldfile} imewacha kutumika, tumia {newfile}"
 #: ../fdroidserver/import_subcommand.py
 #, python-brace-format
 msgid "{path} already exists, ignoring import results!"
-msgstr "{path} tayari ipo, inapuuza matokeo ya kuagiza!"
+msgstr "{path} tayari ipo, inapuuza matokeo ya uingizaji!"
 
 #: ../fdroidserver/nightly.py
 #, python-brace-format
 msgid "{path} does not exist!  Create it by running:"
-msgstr "{path} haipo!  Iunde kwa kukimbiza:"
+msgstr "{path} haipo!  Iunde kwa kuendesha:"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "{path} has bad file signature \"{pattern}\", possible Janus exploit!"
-msgstr "{path} ina sahihi mbaya ya faili \"{pattern}\", Uwezekano wa kunyonywa la Janus!"
+msgstr "{path} ina saini mbaya ya faili \"{pattern}\", Uwezekano wa kunyonywa la Janus!"
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
@@ -2731,7 +2732,7 @@ msgstr "{path} imealamishwa na virustotal mara {count}:"
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "{path} is not \"key: value\" dict, but a {datatype}!"
-msgstr "{path} sio kamusi ya \"key: value\" , lakini ni {datatype}!"
+msgstr "{path} sio \"key: value\" dict, lakini ni {datatype}!"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -2751,7 +2752,7 @@ msgstr "{path} sio {expected_type}, lakini ni {datatype}!"
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "{path} is zero size!"
-msgstr "{path} ni saizi ya sefuri!"
+msgstr "{path} ni saizi ya sifuri!"
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
@@ -2761,7 +2762,7 @@ msgstr "{path} zaidi ya 200MB , pakia kwa mkono: {url}"
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "{path}: \"{code}\" is not a valid ISO_3166-1 alpha-2 country code!"
-msgstr "{path}: \"{code}\" ni msimbo wa nchi ya ISO_3166-1 alpha-2 batili!"
+msgstr "{path}: \"{code}\" msimbo wa nchi ya ISO_3166-1 alpha-2 ni batili!"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
