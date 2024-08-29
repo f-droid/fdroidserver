@@ -29,3 +29,6 @@ security:
     72132:
       reason: We get these packages from Debian, zipp is not used in production, and its only a DoS.
       expires: '2026-08-31'
+    72236:
+      reason: setuptools comes from Debian
+      expires: '2026-08-31'
