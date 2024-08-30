@@ -503,38 +503,35 @@ def scan_source(build_dir, build=metadata.Build(), json_per_build=None):
             if r.match(s):
                 yield n
 
-    allowed_repos = (
-        [
-            re.compile(r'^https://' + re.escape(repo) + r'/*')
-            for repo in [
-                'repo1.maven.org/maven2',  # mavenCentral()
-                'jcenter.bintray.com',  # jcenter()
-                'jitpack.io',
-                'www.jitpack.io',
-                'repo.maven.apache.org/maven2',
-                'oss.jfrog.org/artifactory/oss-snapshot-local',
-                'oss.sonatype.org/content/repositories/snapshots',
-                'oss.sonatype.org/content/repositories/releases',
-                'oss.sonatype.org/content/groups/public',
-                'oss.sonatype.org/service/local/staging/deploy/maven2',
-                's01.oss.sonatype.org/content/repositories/snapshots',
-                's01.oss.sonatype.org/content/repositories/releases',
-                's01.oss.sonatype.org/content/groups/public',
-                's01.oss.sonatype.org/service/local/staging/deploy/maven2',
-                'clojars.org/repo',  # Clojure free software libs
-                'repo.clojars.org',  # Clojure free software libs
-                's3.amazonaws.com/repo.commonsware.com',  # CommonsWare
-                'plugins.gradle.org/m2',  # Gradle plugin repo
-                'maven.google.com',  # Google Maven Repo, https://developer.android.com/studio/build/dependencies.html#google-maven
-            ]
+    allowed_repos = [
+        re.compile(r'^https://' + re.escape(repo) + r'/*')
+        for repo in [
+            'repo1.maven.org/maven2',  # mavenCentral()
+            'jcenter.bintray.com',  # jcenter()
+            'jitpack.io',
+            'www.jitpack.io',
+            'repo.maven.apache.org/maven2',
+            'oss.jfrog.org/artifactory/oss-snapshot-local',
+            'oss.sonatype.org/content/repositories/snapshots',
+            'oss.sonatype.org/content/repositories/releases',
+            'oss.sonatype.org/content/groups/public',
+            'oss.sonatype.org/service/local/staging/deploy/maven2',
+            's01.oss.sonatype.org/content/repositories/snapshots',
+            's01.oss.sonatype.org/content/repositories/releases',
+            's01.oss.sonatype.org/content/groups/public',
+            's01.oss.sonatype.org/service/local/staging/deploy/maven2',
+            'clojars.org/repo',  # Clojure free software libs
+            'repo.clojars.org',  # Clojure free software libs
+            's3.amazonaws.com/repo.commonsware.com',  # CommonsWare
+            'plugins.gradle.org/m2',  # Gradle plugin repo
+            'maven.google.com',  # google()
         ]
-        + [
-            re.compile(r'^file://' + re.escape(repo) + r'/*')
-            for repo in [
-                '/usr/share/maven-repo',  # local repo on Debian installs
-            ]
+    ] + [
+        re.compile(r'^file://' + re.escape(repo) + r'/*')
+        for repo in [
+            '/usr/share/maven-repo',  # local repo on Debian installs
         ]
-    )
+    ]
 
     scanignore = common.getpaths_map(build_dir, build.scanignore)
     scandelete = common.getpaths_map(build_dir, build.scandelete)
