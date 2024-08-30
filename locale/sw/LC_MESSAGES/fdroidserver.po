@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: fdroidserver 2.3a1\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2024-05-13 13:50+0200\n"
-"PO-Revision-Date: 2024-08-30 09:09+0000\n"
+"PO-Revision-Date: 2024-08-30 10:23+0000\n"
 "Last-Translator: paul mayero <pmmayero@gmail.com>\n"
 "Language-Team: Swahili <https://hosted.weblate.org/projects/f-droid/fdroidserver/sw/>\n"
 "Language: sw\n"
@@ -2064,7 +2064,7 @@ msgstr "Kitambulisho cha apu yenye versionCode iliyo ya hiari katika fomu APPID[
 
 #: ../fdroidserver/common.py
 msgid "archive_url needs to end with /archive"
-msgstr "archive_url ina haja ya kumaliza na with /archive"
+msgstr "archive_url inahitaji kumalizia na /archive"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
