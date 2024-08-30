@@ -664,7 +664,7 @@ def scan_source(build_dir, build=metadata.Build(), json_per_build=None):
     def is_executable(path):
         return os.path.exists(path) and os.access(path, os.X_OK)
 
-    textchars = bytearray({7, 8, 9, 10, 12, 13, 27} | set(range(0x20, 0x100)) - {0x7F})
+    textchars = bytearray({7, 8, 9, 10, 12, 13, 27} | set(range(0x20, 0x100)) - {0x7f})  # fmt: skip
 
     def is_binary(path):
         d = None
