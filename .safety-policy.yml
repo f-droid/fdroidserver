@@ -1,34 +1,55 @@
 ---
 
-security:
-  ignore-vulnerabilities:
-    52495:
-      reason: setuptools comes from Debian
-      expires: '2025-01-31'
-    60350:
-      reason: GitPython comes from Debian https://security-tracker.debian.org/tracker/CVE-2023-40267
-      expires: '2025-01-31'
-    60789:
-      reason: GitPython comes from Debian https://security-tracker.debian.org/tracker/CVE-2023-40590
-      expires: '2025-01-31'
-    60841:
-      reason: GitPython comes from Debian https://security-tracker.debian.org/tracker/CVE-2023-41040
-      expires: '2025-01-31'
-    62044:
-      reason: "F-Droid doesn't fetch pip dependencies directly from hg/mercurial repositories: https://data.safetycli.com/v/62044/f17/"
-      expires: '2025-01-31'
-    63687:
-      reason: Only affects Windows https://security-tracker.debian.org/tracker/CVE-2024-22190
-      expires: '2026-01-31'
-    67599:
-      reason: Only affects pip when using --extra-index-url, which is never the case in fdroidserver CI.
-      expires: '2026-05-31'
-    70612:
-      reason: jinja2 is not used by fdroidserver, nor any dependencies I could find via debtree and pipdeptree.
-      expires: '2026-05-31'
-    72132:
-      reason: We get these packages from Debian, zipp is not used in production, and its only a DoS.
-      expires: '2026-08-31'
-    72236:
-      reason: setuptools comes from Debian
-      expires: '2026-08-31'
+version: '3.0'
+
+scanning-settings:
+  max-depth: 6
+  exclude:
+
+report:
+  dependency-vulnerabilities:
+    enabled: true
+    auto-ignore-in-report:
+      vulnerabilities:
+        52495:
+          reason: setuptools comes from Debian
+          expires: '2025-01-31'
+        60350:
+          reason: GitPython comes from Debian https://security-tracker.debian.org/tracker/CVE-2023-40267
+          expires: '2025-01-31'
+        60789:
+          reason: GitPython comes from Debian https://security-tracker.debian.org/tracker/CVE-2023-40590
+          expires: '2025-01-31'
+        60841:
+          reason: GitPython comes from Debian https://security-tracker.debian.org/tracker/CVE-2023-41040
+          expires: '2025-01-31'
+        62044:
+          reason: "F-Droid doesn't fetch pip dependencies directly from hg/mercurial repositories: https://data.safetycli.com/v/62044/f17/"
+          expires: '2025-01-31'
+        63687:
+          reason: Only affects Windows https://security-tracker.debian.org/tracker/CVE-2024-22190
+          expires: '2026-01-31'
+        67599:
+          reason: Only affects pip when using --extra-index-url, which is never the case in fdroidserver CI.
+          expires: '2026-05-31'
+        70612:
+          reason: jinja2 is not used by fdroidserver, nor any dependencies I could find via debtree and pipdeptree.
+          expires: '2026-05-31'
+        72132:
+          reason: We get these packages from Debian, zipp is not used in production, and its only a DoS.
+          expires: '2026-08-31'
+        72236:
+          reason: setuptools comes from Debian
+          expires: '2026-08-31'
+
+fail-scan-with-exit-code:
+  dependency-vulnerabilities:
+    enabled: true
+    fail-on-any-of:
+      cvss-severity:
+        - critical
+        - high
+        - medium
+
+security-updates:
+  dependency-vulnerabilities:

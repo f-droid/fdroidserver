@@ -213,7 +213,7 @@ gradlew-fdroid:
 
 
 # Run all the various linters and static analysis tools.
-lint_format_safety_bandit_checks:
+lint_format_bandit_checks:
   image: debian:bookworm-slim
   variables:
     LANG: C.UTF-8
@@ -235,7 +235,7 @@ lint_format_safety_bandit_checks:
           python3-pip
           python3-yaml
           shellcheck
-    - $pip install --break-system-packages bandit safety
+    - $pip install --break-system-packages bandit
     - export EXITVALUE=0
     - function set_error() { export EXITVALUE=1; printf "\x1b[31mERROR `history|tail -2|head -1|cut -b 6-500`\x1b[0m\n"; }
     - ./hooks/pre-commit || set_error
@@ -244,7 +244,6 @@ lint_format_safety_bandit_checks:
         -ii
         --ini .bandit
         || set_error
-    - safety check --full-report || set_error
     - pylint --output-format=colorized --reports=n
             fdroid
             makebuildserver
@@ -256,6 +255,34 @@ lint_format_safety_bandit_checks:
     - shellcheck --exclude SC2046,SC2090 --severity=warning --color tests/run-tests
         || set_error
     - exit $EXITVALUE
+
+
+# Check all the dependencies in Debian to mirror production.  CVEs are
+# generally fixed in the latest versions in pip/pypi.org, so it isn't
+# so important to scan that kind of install in CI.
+# https://docs.safetycli.com/safety-docs/installation/gitlab
+safety:
+  only:
+    changes:
+      - .gitlab-ci.yml
+      - .safety-policy.yml
+      - pyproject.toml
+      - setup.py
+  image: debian:bookworm-slim
+  <<: *apt-template
+  variables:
+    LANG: C.UTF-8
+  script:
+    - test -n "$SAFETY_API_KEY" || exit 0
+    - apt-get install
+        fdroidserver
+        python3-biplist
+        python3-pip
+        python3-pycountry
+    - $pip install --break-system-packages .
+
+    - $pip install --break-system-packages safety
+    - python3 -m safety --key "$SAFETY_API_KEY" --stage cicd scan
 
 
 # Run all the various linters and static analysis tools.
