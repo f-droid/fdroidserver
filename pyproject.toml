@@ -43,7 +43,6 @@ force-exclude = '''(
   | fdroidserver/metadata\.py
   | fdroidserver/nightly\.py
   | fdroidserver/publish\.py
-  | fdroidserver/scanner\.py
   | fdroidserver/update\.py
   | fdroidserver/vmtools\.py
   | locale/pick-complete-translations\.py
