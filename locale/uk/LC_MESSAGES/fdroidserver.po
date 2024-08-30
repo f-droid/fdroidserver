@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2024-05-13 13:50+0200\n"
-"PO-Revision-Date: 2024-08-14 17:28+0000\n"
+"PO-Revision-Date: 2024-08-31 11:09+0000\n"
 "Last-Translator: Ihor Hordiichuk <igor_ck@outlook.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/f-droid/fdroidserver/uk/>\n"
 "Language: uk\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 5.7-dev\n"
+"X-Generator: Weblate 5.8-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -1112,7 +1112,7 @@ msgstr "Шлях до сховища ключів для ключа підпис
 
 #: ../fdroidserver/lint.py
 msgid "Known debug key is used in AllowedAPKSigningKeys: "
-msgstr "Відомий налагоджувальний ключ використовується у AllowedAPKSigningKeys: "
+msgstr "Відомий ключ налагодження використовується в AllowedAPKSigningKeys: "
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
@@ -1253,7 +1253,7 @@ msgstr "Немає непідписаної теки — нічого викон
 
 #: ../fdroidserver/__main__.py
 msgid "No version information could be found."
-msgstr "Відомості про версію знайти не вдалося."
+msgstr "Не вдалося знайти відомості про версію."
 
 #: ../fdroidserver/common.py
 msgid "Not a valid size definition: \"{}\""
@@ -1284,11 +1284,11 @@ msgstr "Назва файлу OBB повинна починатися з \"main.
 
 #: ../fdroidserver/update.py
 msgid "OBB's packagename does not match a supported APK:"
-msgstr "Назва пакунку OBB не відповідає підтримуваному APK:"
+msgstr "Назва пакунка OBB не відповідає підтримуваному APK:"
 
 #: ../fdroidserver/deploy.py
 msgid "Offline machine, skipping git mirror generation until `fdroid deploy`"
-msgstr "Автономна машина, пропускання генерації дзеркал git до `fdroid deploy`"
+msgstr "Автономна машина, пропускання генерування дзеркал git до `fdroid deploy`"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -1297,7 +1297,7 @@ msgstr "Підтримуються лише PNG та JPEG зображення, 
 
 #: ../fdroidserver/checkupdates.py
 msgid "Only print differences with the Play Store"
-msgstr "Друкувати відмінності тільки з Play Store"
+msgstr "Показувати лише ті застосунки, версія яких відрізняється від версії з Play Store"
 
 #: ../fdroidserver/checkupdates.py
 msgid "Only process apps with auto-updates"
@@ -1362,7 +1362,7 @@ msgstr "Шлях до git-репозиторію, який використов�
 
 #: ../fdroidserver/init.py
 msgid "Path to the keystore for the repo signing key"
-msgstr "Шлях до сховища ключів для підписного ключа репозиторія"
+msgstr "Шлях до сховища ключів для підписного ключа репозиторію"
 
 #: ../fdroidserver/nightly.py
 msgid "Print the secret variable to the terminal for easy copy/paste"
@@ -1415,12 +1415,12 @@ msgstr "Оновити двійковий журнал прозорості дл
 
 #: ../fdroidserver/deploy.py
 msgid "Pushing to remote server failed!"
-msgstr "Пушинг на віддалений сервер не вдався!"
+msgstr "Не вдалося передати на віддалений сервер!"
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "Pushing to {url}"
-msgstr "Оприлюднення до {url}"
+msgstr "Передано до {url}"
 
 #: ../fdroidserver/__main__.py
 msgid "Quickly start a new repository"
@@ -1473,7 +1473,7 @@ msgstr "Режим оновлення RepoTrunk має сенс лише в ре
 
 #: ../fdroidserver/build.py
 msgid "Reset and create a brand new build server, even if the existing one appears to be ok."
-msgstr "Перезавантажте та створіть новий сервер створення, навіть якщо наявний існує."
+msgstr "Скиньте та створіть новий сервер збирання, навіть якщо з наявним усе гаразд."
 
 #: ../fdroidserver/nightly.py
 #, python-brace-format
@@ -1482,7 +1482,7 @@ msgstr "Повторне підписання {apkfilename} з наданим de
 
 #: ../fdroidserver/update.py
 msgid "Resize all the icons exceeding the max pixel size and exit"
-msgstr "Змінити розмір усіх значків, що перевищують максимальний розмір пікселя та вийти"
+msgstr "Змінити розмір усіх піктограм, що перевищують максимальний розмір у пікселях та вийти"
 
 #: ../fdroidserver/common.py
 msgid "Restrict output to warnings and errors"
@@ -1499,11 +1499,11 @@ msgstr "Перезапис '{appid}'"
 
 #: ../fdroidserver/checkupdates.py
 msgid "Run on git repo that has uncommitted changes"
-msgstr "Запустити для git-репозиторію з не подаинми змінами"
+msgstr "Запустити для git-репозиторію з неподаними змінами"
 
 #: ../fdroidserver/lint.py
 msgid "Run rewritemeta to fix formatting"
-msgstr "Запустити rewritemeta виправити форматування"
+msgstr "Запустити rewritemeta, щоб виправити форматування"
 
 #: ../fdroidserver/deploy.py
 msgid "Running first pass with MD5 checking disabled"
