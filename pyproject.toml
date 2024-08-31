@@ -43,7 +43,6 @@ force-exclude = '''(
   | fdroidserver/metadata\.py
   | fdroidserver/nightly\.py
   | fdroidserver/publish\.py
-  | fdroidserver/scanner\.py
   | fdroidserver/update\.py
   | fdroidserver/vmtools\.py
   | locale/pick-complete-translations\.py
@@ -141,3 +140,6 @@ max-nested-blocks = 5
 [tool.pylint.format]
 # Maximum number of characters on a single line.
 max-line-length = 88
+
+[tool.ruff.format]
+quote-style = "preserve"

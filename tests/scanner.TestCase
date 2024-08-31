@@ -60,7 +60,8 @@ class ScannerTest(unittest.TestCase):
             'org.mozilla.rocket': 2,
             'org.tasks': 2,
             'realm': 1,
-            'se.manyver': 2,
+            'se.manyver': 3,
+            'lockfile.test': 1,
         }
         for d in glob.glob(os.path.join(source_files, '*')):
             build = fdroidserver.metadata.Build()
