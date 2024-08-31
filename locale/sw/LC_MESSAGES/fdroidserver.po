@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: fdroidserver 2.3a1\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2024-05-13 13:50+0200\n"
-"PO-Revision-Date: 2024-08-30 10:23+0000\n"
+"PO-Revision-Date: 2024-08-31 11:09+0000\n"
 "Last-Translator: paul mayero <pmmayero@gmail.com>\n"
 "Language-Team: Swahili <https://hosted.weblate.org/projects/f-droid/fdroidserver/sw/>\n"
 "Language: sw\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.7.1-dev\n"
+"X-Generator: Weblate 5.8-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -1735,7 +1735,7 @@ msgstr ""
 
 #: ../fdroidserver/deploy.py
 msgid "To use awsbucket, awssecretkey and awsaccesskeyid must also be set in config.yml!"
-msgstr "Ili kutumia awsbucket, awssecretkey na awsaccesskeiid lazima pia isetiwe katika config.yml!"
+msgstr "Ili kutumia awsbucket, awssecretkey na awsaccesskeiid lazima pia iwekwe katika config.yml!"
 
 #: ../fdroidserver/lint.py
 msgid "URL must start with https:// or http://"
@@ -1761,7 +1761,7 @@ msgstr "tagi ya leseni isiyotarajiwa \"{}\"! Tumia pekee tagi za leseni zilizosa
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Unexpected symlink target: {link} -> {target}"
-msgstr "lengo la symlink lisiyotarajiwa:{link} -> {target}"
+msgstr "Lengo la symlink lisiyotarajiwa:{link} -> {target}"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -1781,12 +1781,12 @@ msgstr "Faili isiyojulikana '{filename}' katika jenga '{versionName}'"
 #: ../fdroidserver/metadata.py
 #, python-format
 msgid "Unknown metadata format: %s"
-msgstr "Fomati ya metadata isiyojulikana: %s"
+msgstr "Muundo wa metadata usiojulikana: %s"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Unknown metadata format: {path} (use: *.yml)"
-msgstr "Fomati ya metadata isiyojulikana: {path} (tumia: *.yml)"
+msgstr "Muundo wa metadata usiojulikana: {path} (tumia: *.yml)"
 
 #: ../fdroidserver/common.py
 msgid "Unknown version of aapt, might cause problems: "
@@ -1861,7 +1861,7 @@ msgstr "UpdateCheckData ina URL batili: {url}"
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "UpdateCheckData must match the version code as integer (\\d or [0-9]): {codeex}"
-msgstr "UpdateCheckData lazima ilingane na msimbo wa toleo kama nambari (\\d or [0-9]): {codeex}"
+msgstr "UpdateCheckData lazima ilingane na msimbo wa toleo kama nambari kamili (\\d or [0-9]): {codeex}"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
@@ -1875,16 +1875,16 @@ msgstr "UpdateCheckData si URL iliyo halali: {url}"
 
 #: ../fdroidserver/lint.py
 msgid "UpdateCheckMode is set but it looks like checkupdates hasn't been run yet."
-msgstr "UpdateCheckMode imewekwa lakini inaonekana kama checkupdates haijatekelezwa bado."
+msgstr "UpdateCheckMode imewekwa lakini inaonekana kama checkupdates haijaendeshwa bado."
 
 #. Translators: https://developer.android.com/studio/build/application-id
 #: ../fdroidserver/lint.py
 msgid "UpdateCheckMode is set but it looks likecheckupdates hasn't been run yet"
-msgstr "UpdateCheckMode imewekwa lakini inaonekana kama likecheckupdates haijatekelezwa bado"
+msgstr "UpdateCheckMode imewekwa lakini inaonekana kama likecheckupdates haijaendeshwa bado"
 
 #: ../fdroidserver/lint.py
 msgid "UpdateCheckName is set to the known application ID, it can be removed"
-msgstr "UpdateCheckName imesetiwa katika kitambulisho cha apu kinachojulikana. inaweza kutolewa"
+msgstr "UpdateCheckName imewekwa katika kitambulisho cha apu kinachojulikana, inaweza kutolewa"
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
@@ -1932,7 +1932,7 @@ msgstr "Tumia tarehe kutoka APK badala ya wakati uliopo kwa APK mpya zilizoongez
 #: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "Using \"{path}\" for configuring s3cmd."
-msgstr "Kutumia \"{path}\" kwa kusanidi s3cmd."
+msgstr "Kutumia \"{path}\" kusanidi s3cmd."
 
 #: ../fdroidserver/common.py
 msgid "Using APK Signature v2"
@@ -1944,7 +1944,7 @@ msgstr "Kutumia Sahihi ya APK toleo la 3"
 
 #: ../fdroidserver/common.py
 msgid "Using JAR Signature"
-msgstr "Kutumia sahihi ya JAR"
+msgstr "Kutumia saini ya JAR"
 
 #: ../fdroidserver/common.py
 msgid "Using Java's jarsigner, not recommended for verifying APKs! Use apksigner"
@@ -1984,12 +1984,12 @@ msgstr "Thibitisha uadilifu wa furushi zilizopakuliwa"
 
 #: ../fdroidserver/index.py
 msgid "Verifying index signature:"
-msgstr "Inathibitisha sahihi ya faharasa:"
+msgstr "Kuthibitisha saini ya faharasa:"
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "VirusTotal API key cannot upload files larger than 32MB, use {url} to upload {path}."
-msgstr "ufunguo wa API ya VirusTotal haiwezi kupakia faili zaidi ya 32MB, tumia {url} kupakia {path}."
+msgstr "Ufunguo wa API ya VirusTotal haiwezi kupakia faili zaidi ya 32MB, tumia {url} kupakia {path}."
 
 #: ../fdroidserver/__main__.py
 msgid "Warn about possible metadata errors"
@@ -2089,7 +2089,7 @@ msgstr "Haiwezi kuchanganua speci ya scrlib (sio kamba): '{}'"
 #: /usr/lib/python3.9/argparse.py /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "can't open '%(filename)s': %(error)s"
-msgstr "Hiwezi kufungua '%(filename)s':%(error)s"
+msgstr "Haiwezi kufungua '%(filename)s':%(error)s"
 
 #: ../fdroidserver/scanner.py
 msgid "can't open non-https url: '{};"
@@ -2124,7 +2124,7 @@ msgstr "kukaririsha {url}"
 
 #: ../fdroidserver/__main__.py
 msgid "commands from plugin modules:"
-msgstr "amri kutoka moduli za plugin:"
+msgstr "amri kutoka kwa kiunzi huru cha programu-jalizi:"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 #: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
@@ -2139,7 +2139,7 @@ msgstr "changamani"
 msgid "conflicting option string: %s"
 msgid_plural "conflicting option strings: %s"
 msgstr[0] "kamba ya chaguo inayokinzana: %s"
-msgstr[1] "kamba za chaguo inayokinzana: %s"
+msgstr[1] "kamba za chaguo zinazokinzana: %s"
 
 #: /usr/lib/python3.11/argparse.py
 #, python-format
@@ -2157,14 +2157,17 @@ msgid "could not parse '{path}'"
 msgstr "haikuweza kuchanganua '{path}'"
 
 #: ../fdroidserver/common.py
+#, fuzzy
 msgid "could not parse srclib spec (no name specified): '{}'"
 msgstr "haikuweza kuchanganua specifisheni ya srclib (hakuna jina limebainishwa): '{}'"
 
 #: ../fdroidserver/common.py
+#, fuzzy
 msgid "could not parse srclib spec (no ref specified): '{}'"
 msgstr "haikuweza kuchanganua specifisheni ya srclib (hakuna rejeleo imebainishwa): '{}'"
 
 #: ../fdroidserver/common.py
+#, fuzzy
 msgid "could not parse srclib spec (too many '@' signs): '{}'"
 msgstr "haikuweza kuchanganua specifisheni ya srclib (saini nyingi mno za '@'): '{}'"
 
@@ -2248,7 +2251,7 @@ msgstr "hatua ya kuelea"
 
 #: ../fdroidserver/metadata.py
 msgid "force metadata errors (default) to be warnings, or to be ignored."
-msgstr "lazimisha hitilafu za metadata (chaguo msingi) iwe maonyo, au iwe wa kupuuzwa."
+msgstr "lazimisha hitilafu za metadata (chaguo msingi) ziwe maonyo, au ziwe za kupuuzwa."
 
 #: ../fdroidserver/common.py
 msgid "git svn clone failed"
