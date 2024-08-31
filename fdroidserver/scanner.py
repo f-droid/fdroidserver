@@ -816,9 +816,15 @@ def scan_source(build_dir, build=metadata.Build(), json_per_build=None):
                     )
 
             elif curfile in DEPFILE:
-                for lockfile in DEPFILE[curfile]:
-                    if os.path.isfile(os.path.join(root, lockfile)):
-                        break
+                d = root
+                while d.startswith(build_dir):
+                    for lockfile in DEPFILE[curfile]:
+                        if os.path.isfile(os.path.join(d, lockfile)):
+                            break
+                    else:
+                        d = os.path.dirname(d)
+                        continue
+                    break
                 else:
                     count += handleproblem(
                         _('dependency file without lock'),
