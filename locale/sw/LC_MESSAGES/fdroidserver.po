@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: fdroidserver 2.3a1\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2024-05-13 13:50+0200\n"
-"PO-Revision-Date: 2024-08-31 11:09+0000\n"
-"Last-Translator: paul mayero <pmmayero@gmail.com>\n"
+"PO-Revision-Date: 2024-09-02 14:06+0000\n"
+"Last-Translator: abelbiwott-dev <abelbiwott@outlook.com>\n"
 "Language-Team: Swahili <https://hosted.weblate.org/projects/f-droid/fdroidserver/sw/>\n"
 "Language: sw\n"
 "MIME-Version: 1.0\n"
@@ -511,7 +511,6 @@ msgid "Creating new S3 bucket: {url}"
 msgstr "Inaunda ndoo mpya ya S3: {url}"
 
 #: ../fdroidserver/publish.py
-#, fuzzy
 msgid "Creating output directory"
 msgstr "Inaunda saraka ya pato"
 
@@ -863,9 +862,9 @@ msgid "Found {count} warnings in {filename}"
 msgstr "Imepata onyo {count} katika {filename}"
 
 #: ../fdroidserver/update.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Generated skeleton metadata for {appid}"
-msgstr "Imeunda kiunzi cha metadata kwa {appid}"
+msgstr "Imeunda metadata ya kiunzi kwa {appid}"
 
 #: ../fdroidserver/common.py
 #, python-format
@@ -929,9 +928,9 @@ msgid "Ignoring FUNDING.yml entry longer than 2048: %s"
 msgstr "Inapuuza ingizo la FUNDING.yml iliyo ndefu kuliko 2048: %s"
 
 #: ../fdroidserver/update.py
-#, fuzzy, python-format
+#, python-format
 msgid "Ignoring bad element in manifest: %s"
-msgstr "Inapuuza kipengee kibaya katika manisfest: %s"
+msgstr "Inapuuza kipengele kibaya katika manifest: %s"
 
 #: ../fdroidserver/index.py
 msgid "Ignoring package without metadata: "
@@ -1082,9 +1081,8 @@ msgid "Java JDK not found! Install in standard location or set java_paths!"
 msgstr "JDK ya Java haijapatikana! Simika katika sehemu ya kiwango au seti java_paths!"
 
 #: ../fdroidserver/scanner.py
-#, fuzzy
 msgid "Java compiled class"
-msgstr "Darasa lililoharirirwa la Java"
+msgstr "Darasa lililokusanywa la Java"
 
 #: ../fdroidserver/signindex.py
 msgid "Java jarsigner not found! Install in standard location or set java_paths!"
@@ -1100,9 +1098,8 @@ msgid "Keeping failed build \"{apkfilename}\""
 msgstr "Kuweka jenga zilizofeli \"{apkfilename}\""
 
 #: ../fdroidserver/init.py
-#, fuzzy
 msgid "Keystore for signing key:\t"
-msgstr "Hifadhi ya funguo ya ufunguo wa kusaini:\t"
+msgstr "Hifadhi ya ufunguo ya kusaini ufunguo:\t"
 
 #: ../fdroidserver/lint.py
 msgid "Known debug key is used in AllowedAPKSigningKeys: "
@@ -1114,9 +1111,8 @@ msgid "Last used commit '{commit}' looks like a tag, but UpdateCheckMode is '{uc
 msgstr "Mabadiliko ya mwisho yaliyotumika ya '{commit}' yanafanana na tagi, lakini UpdateCheckMode ni '{ucm}'"
 
 #: ../fdroidserver/lint.py
-#, fuzzy
 msgid "Liberapay donation methods belong in the Liberapay: field"
-msgstr "Njia za mchango ya Liberapay inapatikana kwa Liberapay: field"
+msgstr "Njia za mchango ya Liberapay ipo ndani ya Liberapay: field"
 
 #: ../fdroidserver/rewritemeta.py
 msgid "List files that would be reformatted (dry run)"
@@ -1148,14 +1144,12 @@ msgid "Mirror the full repo and archive, all file types."
 msgstr "Akisi ghala mzima na uhifadhi, aina zote za faili."
 
 #: ../fdroidserver/gpgsign.py
-#, fuzzy
 msgid "Missing output directory"
-msgstr "Inakosa saraka ya pato"
+msgstr "Saraka ya pato haipo"
 
 #: ../fdroidserver/metadata.py
-#, fuzzy
 msgid "Moving Anti-Features declarations to localized files:"
-msgstr "Inasongesha tamko la Anti-Features kwa faili zilizolocaliziwa:"
+msgstr "Inasongesha tamko la Anti-Features hadi kwa faili zilizolocaliziwa:"
 
 #: ../fdroidserver/index.py
 msgid "Neither \"repo_pubkey\" nor \"keystorepass\" set in config.yml"
@@ -1179,9 +1173,8 @@ msgid "No fingerprint in URL."
 msgstr "Hakuna alama ya kidole kwenye URL."
 
 #: ../fdroidserver/common.py
-#, fuzzy
 msgid "No git submodules available"
-msgstr "Hakuna submodule ya git inayopatikana"
+msgstr "Hakuna submodule za git inayopatikana"
 
 #: ../fdroidserver/import_subcommand.py
 msgid "No gradle project could be found. Specify --subdir?"
@@ -2157,17 +2150,14 @@ msgid "could not parse '{path}'"
 msgstr "haikuweza kuchanganua '{path}'"
 
 #: ../fdroidserver/common.py
-#, fuzzy
 msgid "could not parse srclib spec (no name specified): '{}'"
 msgstr "haikuweza kuchanganua specifisheni ya srclib (hakuna jina limebainishwa): '{}'"
 
 #: ../fdroidserver/common.py
-#, fuzzy
 msgid "could not parse srclib spec (no ref specified): '{}'"
-msgstr "haikuweza kuchanganua specifisheni ya srclib (hakuna rejeleo imebainishwa): '{}'"
+msgstr "haikuweza kuchanganua specifisheni ya srclib (hakuna rejeleo limebainishwa): '{}'"
 
 #: ../fdroidserver/common.py
-#, fuzzy
 msgid "could not parse srclib spec (too many '@' signs): '{}'"
 msgstr "haikuweza kuchanganua specifisheni ya srclib (saini nyingi mno za '@'): '{}'"
 
