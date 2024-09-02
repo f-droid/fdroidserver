@@ -53,7 +53,7 @@ MAVEN_URL_REGEX = re.compile(
 DEPFILE = {
     "Cargo.toml": ["Cargo.lock"],
     "pubspec.yaml": ["pubspec.lock"],
-    "package.json": ["package.lock", "yarn.lock", "pnpm-lock.yaml"],
+    "package.json": ["package-lock.json", "yarn.lock", "pnpm-lock.yaml"],
 }
 
 SCANNER_CACHE_VERSION = 1
