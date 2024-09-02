@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: fdroidserver 2.3a1\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2024-05-13 13:50+0200\n"
-"PO-Revision-Date: 2024-09-02 14:06+0000\n"
+"PO-Revision-Date: 2024-09-02 15:02+0000\n"
 "Last-Translator: abelbiwott-dev <abelbiwott@outlook.com>\n"
 "Language-Team: Swahili <https://hosted.weblate.org/projects/f-droid/fdroidserver/sw/>\n"
 "Language: sw\n"
@@ -2335,9 +2335,8 @@ msgstr "vioo vimesetiwa mara mbili, katika config.yml na {path}!"
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #: /usr/lib/python3.11/argparse.py
-#, fuzzy
 msgid "mutually exclusive arguments must be optional"
-msgstr "Hoja zisizounganishika lazima iwe ya hiari"
+msgstr "Hoja zinazokinzana lazima ziwe za hiari"
 
 #: ../fdroidserver/scanner.py
 #, python-brace-format
