@@ -15,7 +15,7 @@
 # JY3 <GeeyunJY3@gmail.com>, 2021, 2022.
 # Eric <alchemillatruth@purelymail.com>, 2022.
 # shenzhui007 <12231252@bjtu.edu.cn>, 2022.
-# linsui <linsui@inbox.lv>, 2022.
+# linsui <linsui@inbox.lv>, 2022, 2024.
 # YangYulin <yylteam@icloud.com>, 2022.
 # Yang Yulin <yylteam@icloud.com>, 2022.
 # yangyangdaji <1504305527@qq.com>, 2022.
@@ -37,15 +37,15 @@ msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2024-05-13 13:50+0200\n"
-"PO-Revision-Date: 2024-07-23 06:25+0000\n"
-"Last-Translator: chumoer <k17733196511@gmail.com>\n"
-"Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/f-droid/fdroidserver/zh_Hans/>\n"
+"PO-Revision-Date: 2024-09-03 15:47+0000\n"
+"Last-Translator: linsui <linsui@inbox.lv>\n"
+"Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/projects/f-droid/fdroidserver/zh_Hans/>\n"
 "Language: zh_Hans\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.7-dev\n"
+"X-Generator: Weblate 5.8-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -324,7 +324,7 @@ msgstr "没找到 Android SDK 工具 {cmd}！"
 
 #: ../fdroidserver/lint.py
 msgid "App has Binaries but does not have corresponding AllowedAPKSigningKeys to pin certificate."
-msgstr "应用程序具有二进制文件，但没有相应的AllowedAPKSigningKeys 来固定证书。"
+msgstr "应用具有二进制文件，但没有相应的AllowedAPKSigningKeys 来固定证书。"
 
 #: ../fdroidserver/lint.py
 msgid "App has NoSourceSince or ArchivePolicy \"0 versions\" but AutoUpdateMode or UpdateCheckMode are not None"
@@ -341,7 +341,7 @@ msgstr "应用 在 '{repo}' 中, 但有一个链接到 {url}"
 
 #: ../fdroidserver/lint.py
 msgid "App version has binary but does not have corresponding AllowedAPKSigningKeys to pin certificate."
-msgstr "应用程序版本具有二进制文件，但没有相应的 AllowedAPKSigningKeys 来固定证书。"
+msgstr "应用版本具有二进制文件，但没有相应的 AllowedAPKSigningKeys 来固定证书。"
 
 #: ../fdroidserver/lint.py
 msgid "Appending .git is not necessary"
@@ -408,7 +408,7 @@ msgstr "使用此配置并基于 \"%s\" 的构建存储库："
 
 #: ../fdroidserver/checkupdates.py
 msgid "Can't auto-update app with no CurrentVersionCode"
-msgstr "在没有CurrentVersionCode的情况下不能自动更新应用程序"
+msgstr "在没有CurrentVersionCode的情况下不能自动更新应用"
 
 #: ../fdroidserver/build.py
 msgid "Can't build due to {} error while scanning"
@@ -432,7 +432,7 @@ msgstr "没有设置类别"
 #: ../fdroidserver/index.py
 #, python-brace-format
 msgid "Category \"{category}\" defined but not used for any apps!"
-msgstr "类别“{category}”已定义，但未被用于任何应用程序！"
+msgstr "类别“{category}”已定义，但未被用于任何应用！"
 
 #: ../fdroidserver/__main__.py
 msgid "Check for updates to applications"
@@ -731,7 +731,7 @@ msgstr "如果发现问题，则以非零代码退出"
 
 #: ../fdroidserver/__main__.py
 msgid "Extract application metadata from a source repository"
-msgstr "从源存储库中提取应用程序元数据"
+msgstr "从源存储库中提取应用元数据"
 
 #: ../fdroidserver/__main__.py
 msgid "Extract signatures from APKs"
@@ -783,7 +783,7 @@ msgstr "无法在 {dev} 上安装 '{apkfilename}'：{error}"
 
 #: ../fdroidserver/common.py
 msgid "Failed to sign application"
-msgstr "未能对应用程序进行签名"
+msgstr "未能对应用进行签名"
 
 #: ../fdroidserver/build.py
 #, python-brace-format
@@ -830,7 +830,7 @@ msgstr "强制扫描已禁用的应用和内部版本。"
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Found \"{path}\" graphic without metadata for app \"{name}\"!"
-msgstr "为应用程序“{name}”找到了没有元数据的“{path}”图形！"
+msgstr "为应用“{name}”找到了没有元数据的“{path}”图形！"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -1259,7 +1259,7 @@ msgstr "没有这样的包：%s"
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "No such versionCode {versionCode} for app {appid}"
-msgstr "应用程序 {appid} 没有此类版本代码 {versionCode}"
+msgstr "应用 {appid} 没有此类版本代码 {versionCode}"
 
 #: ../fdroidserver/checkupdates.py
 msgid "No tags found"
@@ -1661,7 +1661,7 @@ msgstr "从 {apkfilename} 中剥离神秘签名"
 #: ../fdroidserver/lint.py
 #, python-format
 msgid "Summary '%s' is just the app's name"
-msgstr "摘要“%s”只是应用程序的名称"
+msgstr "摘要“%s”只是应用的名称"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
@@ -2412,7 +2412,7 @@ msgstr "只接受字符串、列表和元组"
 #: ../fdroidserver/install.py
 #, python-format
 msgid "option %s: If you really want to install all the signed apps, use --all"
-msgstr "选项 %s： 如果您真的想安装所有已签名的应用程序，请使用 --all"
+msgstr "选项 %s： 如果您真的想安装所有已签名的应用，请使用 --all"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 #: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
