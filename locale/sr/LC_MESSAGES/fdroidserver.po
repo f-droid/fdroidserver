@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: fdroidserver 2.1b0\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2024-05-13 13:50+0200\n"
-"PO-Revision-Date: 2024-09-02 18:28+0000\n"
+"PO-Revision-Date: 2024-09-03 08:17+0000\n"
 "Last-Translator: Reno Tx <renotx@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Serbian <https://hosted.weblate.org/projects/f-droid/fdroidserver/sr/>\n"
 "Language: sr\n"
@@ -1622,78 +1622,78 @@ msgstr "Наведите датотеку идентитета коју ћете
 
 #: ../fdroidserver/nightly.py
 msgid "Specify which debug keystore file to use."
-msgstr ""
+msgstr "Наведи који debug keystore фајл да се користи."
 
 #: ../fdroidserver/common.py
 msgid "Spew out even more information than normal"
-msgstr ""
+msgstr "Испљунути још више информација него обично"
 
 #: ../fdroidserver/nightly.py
 #, python-brace-format
 msgid "Stripping mystery signature from {apkfilename}"
-msgstr ""
+msgstr "Скидање мистериозног потписа са {apkfilename}"
 
 #: ../fdroidserver/lint.py
 #, python-format
 msgid "Summary '%s' is just the app's name"
-msgstr ""
+msgstr "Сажетак '%s' је само име апликације"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "Summary of length {length} is over the {limit} char limit"
-msgstr ""
+msgstr "Резиме дужине {length} премашује {limit} знакова"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "System clock is older than date in {path}!"
-msgstr ""
+msgstr "Системски сат је старији од датума у {path}!"
 
 #: ../fdroidserver/checkupdates.py
 msgid "Tags update mode only works for git, hg, bzr and git-svn repositories currently"
-msgstr ""
+msgstr "Режим ажурирања етикета тренутно ради само за git, hg, bzr и git-svn репозиторијуме"
 
 #: ../fdroidserver/checkupdates.py
 msgid "Tags update mode used in git-svn, but the repo was not set up with tags"
-msgstr ""
+msgstr "Режим ажурирања ознака коришћен у git-svn, али репо није подешен са ознакама"
 
 #: ../fdroidserver/build.py
 msgid "Test mode - put output in the tmp directory only, and always build, even if the output already exists."
-msgstr ""
+msgstr "Тест режим - стави излаз у tmp директоријум само, и увек компајлирај, чак и ако излаз већ постоји."
 
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "The OBB version code must come after \"{name}.\":"
-msgstr ""
+msgstr "Код верзије OBB мора бити након \"{name}.\":"
 
 #: ../fdroidserver/btlog.py
 msgid "The base URL for the repo to log (default: https://f-droid.org)"
-msgstr ""
+msgstr "Основни URL за репо за логовање (подразумевано: https://f-droid.org)"
 
 #: ../fdroidserver/mirror.py
 msgid "The directory to write the mirror to"
-msgstr ""
+msgstr "Директоријум у који ће се написати огледало"
 
 #: ../fdroidserver/nightly.py
 msgid "The file to be included in the repo (path or glob)"
-msgstr ""
+msgstr "Фајл који треба да буде укључен у репо (путања или глоб)"
 
 #: ../fdroidserver/index.py
 msgid "The repository's fingerprint does not match."
-msgstr ""
+msgstr "Отисак репозиторијума се не поклапа."
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "The root dir for local_copy_dir \"{path}\" does not exist!"
-msgstr ""
+msgstr "Коренски директоријум за local_copy_dir \"{path}\" не постоји!"
 
 #: ../fdroidserver/publish.py
 msgid "There is a keyalias collision - publishing halted"
-msgstr ""
+msgstr "Дошло је до колизије кључа - објављивање је обустављено"
 
 #: ../fdroidserver/common.py
 msgid "These are the apps that have been archived from the main repo."
-msgstr ""
+msgstr "Ово су апликације које су архивиране из главног репозиторијума."
 
 #: ../fdroidserver/mirror.py
 msgid "This command should never be used to mirror f-droid.org! A full copy requires more than 600GB."
@@ -1701,12 +1701,12 @@ msgstr ""
 
 #: ../fdroidserver/common.py
 msgid "This is a repository of apps to be used with F-Droid. Applications in this repository are either official binaries built by the original application developers, or are binaries built from source by the admin of f-droid.org using the tools on https://gitlab.com/fdroid."
-msgstr ""
+msgstr "Ово је репозиторијум апликација које се користе са F-Droid. Апликације у овом репозиторијуму су или званичне бинарне верзије које су развили оригинални програмери апликација, или су бинарне верзије састављене из извора од стране администратора f-droid.org коришћењем алата на https://gitlab.com/fdroid."
 
 #: ../fdroidserver/import_subcommand.py
 #, python-format
 msgid "This repo already has local metadata: %s"
-msgstr ""
+msgstr "Овај репо већ има локалне метаподатке: %s"
 
 #: ../fdroidserver/init.py
 #, python-format
@@ -1719,31 +1719,38 @@ msgid ""
 "For more info: https://f-droid.org/docs/Setup_an_F-Droid_App_Repo\n"
 "and https://f-droid.org/docs/Signing_Process"
 msgstr ""
+"Да бисте завршили подешавање, додајте своје АПК-ове у \"%s\"  \n"
+"затим покрените \"fdroid update -c; fdroid update\".  Такође можете желети да измените  \n"
+"\"config.yml\" да поставите УРЛ, име репозиторију и још много тога.  Такође бисте требали  \n"
+"наподесити кључ за потписивање (можда је привремени већ аутоматски генерисан).  \n"
+"  \n"
+"За више информација: https://f-droid.org/docs/Setup_an_F-Droid_App_Repo  \n"
+"и https://f-droid.org/docs/Signing_Process"
 
 #: ../fdroidserver/deploy.py
 msgid "To use awsbucket, awssecretkey and awsaccesskeyid must also be set in config.yml!"
-msgstr ""
+msgstr "Да бисте користили awsbucket, awssecretkey и awsaccesskeyid морају бити подешени у config.yml!"
 
 #: ../fdroidserver/lint.py
 msgid "URL must start with https:// or http://"
-msgstr ""
+msgstr "URL мора почети са https:// или http://"
 
 #: ../fdroidserver/lint.py
 msgid "URL shorteners should not be used"
-msgstr ""
+msgstr "URL скраћивачи не би требало да се користе"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "URL {url} in Description: {error}"
-msgstr ""
+msgstr "URL {url} у Опису: {error}"
 
 #: ../fdroidserver/lint.py
 msgid "Unexpected license tag \"{}\"! Only use FSF or OSI approved tags from https://spdx.org/license-list"
-msgstr ""
+msgstr "Неочекивана ознака лиценце \"{}\"! Користите само ознаке одобрене од стране FSF или OSI са https://spdx.org/license-list"
 
 #: ../fdroidserver/lint.py
 msgid "Unexpected license tag \"{}\"! Only use license tags configured in your config file"
-msgstr ""
+msgstr "Неочекивана ознака лиценце \"{}\"! Користите само ознаке лиценце конфигурисане у вашем конфигурационом фајлу"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -1753,7 +1760,7 @@ msgstr ""
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Unknown entry {key} in {configname}"
-msgstr ""
+msgstr "Непознати унос {key} у {configname}"
 
 #: ../fdroidserver/__main__.py
 msgid "Unknown exception found!"
