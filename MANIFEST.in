@@ -797,6 +797,14 @@ include tests/source-files/firebase-allowlisted/build.gradle
 include tests/source-files/firebase-suspect/app/build.gradle
 include tests/source-files/firebase-suspect/build.gradle
 include tests/source-files/info.guardianproject.ripple/build.gradle
+include tests/source-files/lockfile.test/flutter/pubspec.lock
+include tests/source-files/lockfile.test/flutter/pubspec.yaml
+include tests/source-files/lockfile.test/javascript/package.json
+include tests/source-files/lockfile.test/javascript/yarn.lock
+include tests/source-files/lockfile.test/rust/subdir2/Cargo.toml
+include tests/source-files/lockfile.test/rust/subdir/Cargo.lock
+include tests/source-files/lockfile.test/rust/subdir/Cargo.toml
+include tests/source-files/lockfile.test/rust/subdir/subdir/subdir/Cargo.toml
 include tests/source-files/open-keychain/open-keychain/build.gradle
 include tests/source-files/open-keychain/open-keychain/OpenKeychain/build.gradle
 include tests/source-files/org.mozilla.rocket/app/build.gradle
