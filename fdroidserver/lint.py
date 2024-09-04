@@ -749,6 +749,12 @@ def check_certificate_pinned_binaries(app):
 def lint_config(arg):
     path = Path(arg)
     passed = True
+
+    mirrors_name = f'{common.MIRRORS_CONFIG_NAME}.yml'
+    config_name = f'{common.CONFIG_CONFIG_NAME}.yml'
+    categories_name = f'{common.CATEGORIES_CONFIG_NAME}.yml'
+    antifeatures_name = f'{common.ANTIFEATURES_CONFIG_NAME}.yml'
+
     yamllintresult = common.run_yamllint(path)
     if yamllintresult:
         print(yamllintresult)
@@ -758,7 +764,7 @@ def lint_config(arg):
         data = ruamel.yaml.YAML(typ='safe').load(fp)
     common.config_type_check(arg, data)
 
-    if path.name == 'mirrors.yml':
+    if path.name == mirrors_name:
         import pycountry
 
         valid_country_codes = [c.alpha_2 for c in pycountry.countries]
@@ -779,6 +785,34 @@ def lint_config(arg):
                     msg += ' '
                     msg += _('Did you mean {code}?').format(code=', '.join(sorted(m)))
                 print(msg)
+    elif path.name in (config_name, categories_name, antifeatures_name):
+        for key in data:
+            if path.name == config_name and key not in ('archive', 'repo'):
+                passed = False
+                print(
+                    _('ERROR: {key} in {path} is not "archive" or "repo"!').format(
+                        key=key, path=path
+                    )
+                )
+            allowed_keys = ['name']
+            if path.name in [config_name, antifeatures_name]:
+                allowed_keys.append('description')
+            # only for source strings currently
+            if path.parent.name == 'config':
+                allowed_keys.append('icon')
+            for subkey in data[key]:
+                if subkey not in allowed_keys:
+                    passed = False
+                    print(
+                        _(
+                            'ERROR: {key}:{subkey} in {path} is not in allowed keys: {allowed_keys}!'
+                        ).format(
+                            key=key,
+                            subkey=subkey,
+                            path=path,
+                            allowed_keys=', '.join(allowed_keys),
+                        )
+                    )
 
     return passed
 
