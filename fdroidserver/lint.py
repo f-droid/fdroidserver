@@ -16,19 +16,17 @@
 # You should have received a copy of the GNU Affero General Public Licen
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from argparse import ArgumentParser
 import difflib
+import platform
 import re
 import sys
-import platform
-import ruamel.yaml
 import urllib.parse
+from argparse import ArgumentParser
 from pathlib import Path
 
-from . import _
-from . import common
-from . import metadata
-from . import rewritemeta
+import ruamel.yaml
+
+from . import _, common, metadata, rewritemeta
 
 config = None
 
@@ -588,7 +586,7 @@ def check_app_field_types(app):
                     fieldtype=v.__class__.__name__,
                 )
             )
-        elif t == metadata.TYPE_STRING and not type(v) in (str, bool, dict):
+        elif t == metadata.TYPE_STRING and type(v) not in (str, bool, dict):
             yield (
                 _(
                     "{appid}: {field} must be a '{type}', but it is a '{fieldtype}'!"
