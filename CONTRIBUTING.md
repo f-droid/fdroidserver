@@ -44,7 +44,8 @@ guidelines:
   formatted as _black_. Some files are not yet fully in _black_ format (see
   _pyproject.toml_), our goal is to opportunistically convert the code whenever
   possible. As of the time of this writing, forcing the code format on all files
-  would be too disruptive.
+  would be too disruptive.  The officially supported _black_ version is the one
+  in Debian/stable.
 
 * Many of the tests run very fast and can be run interactively in isolation.
   Some of the essential test cases run slowly because they do things like
