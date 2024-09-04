@@ -817,7 +817,7 @@ def scan_source(build_dir, build=metadata.Build(), json_per_build=None):
 
             elif curfile in DEPFILE:
                 d = root
-                while d.startswith(build_dir):
+                while d.startswith(str(build_dir)):
                     for lockfile in DEPFILE[curfile]:
                         if os.path.isfile(os.path.join(d, lockfile)):
                             break
