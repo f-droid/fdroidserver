@@ -4,23 +4,25 @@
 
 import logging
 import os
-import ruamel.yaml
 import shutil
 import sys
 import tempfile
 import unittest
 from pathlib import Path
 
+import ruamel.yaml
+
 localmodule = Path(__file__).resolve().parent.parent
 print('localmodule: ' + str(localmodule))
 if localmodule not in sys.path:
     sys.path.insert(0, str(localmodule))
 
+from testcommon import mkdtemp, parse_args_for_test
+
 import fdroidserver.common
 import fdroidserver.lint
 import fdroidserver.metadata
 from fdroidserver.common import CATEGORIES_CONFIG_NAME
-from testcommon import mkdtemp, parse_args_for_test
 
 
 class LintTest(unittest.TestCase):
@@ -436,6 +438,18 @@ class LintTest(unittest.TestCase):
         Path('mirrors.yml').write_text('foo\n')
         with self.assertRaises(TypeError):
             fdroidserver.lint.lint_config('mirrors.yml')
+
+    def test_lint_invalid_config_keys(self):
+        os.chdir(self.testdir)
+        Path('config').mkdir()
+        Path('config/config.yml').write_text('repo:\n  invalid_key: test')
+        self.assertFalse(fdroidserver.lint.lint_config('config/config.yml'))
+
+    def test_lint_invalid_localized_config_keys(self):
+        os.chdir(self.testdir)
+        Path('config/en').mkdir(parents=True)
+        Path('config/en/antiFeatures.yml').write_text('NonFreeNet:\n  icon: test.png')
+        self.assertFalse(fdroidserver.lint.lint_config('config/en/antiFeatures.yml'))
 
     def test_check_certificate_pinned_binaries_empty(self):
         fdroidserver.common.config = {}
