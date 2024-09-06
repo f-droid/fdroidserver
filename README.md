@@ -88,14 +88,6 @@ locally](https://docs.gitlab.com/runner/commands/README.html#gitlab-runner-exec)
 like this: `gitlab-runner exec docker ubuntu_lts`
 
 
-### Buildserver
-
-The tests for the whole build server setup are entirely separate
-because they require at least 200 GB of disk space, and 8 GB of
-RAM. These test scripts are in the root of the project, all starting
-with _jenkins-_ since they used to be run on https://jenkins.debian.net.
-
-
 ## Documentation
 
 The API documentation based on the docstrings gets automatically
