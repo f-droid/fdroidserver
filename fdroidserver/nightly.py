@@ -438,17 +438,12 @@ Last updated: {date}'''.format(repo_git_base=repo_git_base,
         )
 
         for root, dirs, files in os.walk(cibase):
-            if root.startswith(repo_basedir):
-                logging.error(
-                    _('Broken dirs.remove(d): {root} is part of {repo_basedir} and should not be scanned').format(
-                        root=root,
-                        repo_basedir=repo_basedir
-                    )
-                )
-                continue
-            for d in dirs:
-                if d == '.git' or d == '.gradle' or (d == 'fdroid' and root == cibase):
+            for d in ('.git', '.gradle'):
+                if d in dirs:
                     dirs.remove(d)
+            if root == cibase and 'fdroid' in dirs:
+                dirs.remove('fdroid')
+
             for f in files:
                 if f.endswith('-debug.apk'):
                     apkfilename = os.path.join(root, f)
