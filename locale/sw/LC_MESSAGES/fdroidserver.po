@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: fdroidserver 2.3a1\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2024-05-13 13:50+0200\n"
-"PO-Revision-Date: 2024-09-02 15:02+0000\n"
+"PO-Revision-Date: 2024-09-08 11:09+0000\n"
 "Last-Translator: abelbiwott-dev <abelbiwott@outlook.com>\n"
 "Language-Team: Swahili <https://hosted.weblate.org/projects/f-droid/fdroidserver/sw/>\n"
 "Language: sw\n"
@@ -344,9 +344,9 @@ msgid "Branch '{branch}' used as commit in build '{versionName}'"
 msgstr "Tawi '{branch}' limetumika kupeleka katika ujenzi wa '{versionName}'"
 
 #: ../fdroidserver/lint.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Branch '{branch}' used as commit in srclib '{srclib}'"
-msgstr "Tawi {branch} limetumika kama kufanya katika srclib '{srclib}'"
+msgstr "Tawi {branch} linalotumika kama commit katika srclib '{srclib}'"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
