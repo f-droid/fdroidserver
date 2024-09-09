@@ -34,6 +34,19 @@ package managers.  All of the options are documented on the website:
 https://f-droid.org/docs/Installing_the_Server_and_Repo_Tools
 
 
+## Releases
+
+The production setup of _fdroidserver_ for f-droid.org is run directly from the
+_master_ branch.  This is put into production on an schedule (currently weekly).
+So development and testing happens in the branches. We track branches using
+merge requests.  Therefore, there are many WIP and long-lived merge requests.
+
+There are also stable releases of _fdroidserver_.  This is mostly intended for
+running custom repositories, where the build process is separate.  It can also
+be useful as a simple way to get started contributing packages to _fdroiddata_,
+since the stable releases are available in package managers.
+
+
 ## Tests
 
 To run the full test suite:
@@ -73,14 +86,6 @@ and push this to a new branch of your fork.
 Alternatively [run them
 locally](https://docs.gitlab.com/runner/commands/README.html#gitlab-runner-exec)
 like this: `gitlab-runner exec docker ubuntu_lts`
-
-
-### Buildserver
-
-The tests for the whole build server setup are entirely separate
-because they require at least 200 GB of disk space, and 8 GB of
-RAM. These test scripts are in the root of the project, all starting
-with _jenkins-_ since they used to be run on https://jenkins.debian.net.
 
 
 ## Documentation
