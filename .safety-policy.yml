@@ -39,7 +39,7 @@ report:
           reason: We get these packages from Debian, zipp is not used in production, and its only a DoS.
           expires: '2026-08-31'
         72236:
-          reason: setuptools comes from Debian
+          reason: setuptools is not used in production to download or install packages, they come from Debian.
           expires: '2026-08-31'
 
 fail-scan-with-exit-code:

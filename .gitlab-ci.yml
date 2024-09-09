@@ -262,18 +262,21 @@ lint_format_bandit_checks:
 # so important to scan that kind of install in CI.
 # https://docs.safetycli.com/safety-docs/installation/gitlab
 safety:
-  only:
-    changes:
-      - .gitlab-ci.yml
-      - .safety-policy.yml
-      - pyproject.toml
-      - setup.py
   image: debian:bookworm-slim
+  rules:
+    # once only:/changes: are ported to rules:, this could be removed:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      when: never
+    - if: $CI_PIPELINE_SOURCE == "push" && $SAFETY_API_KEY
+      changes:
+        - .gitlab-ci.yml
+        - .safety-policy.yml
+        - pyproject.toml
+        - setup.py
   <<: *apt-template
   variables:
     LANG: C.UTF-8
   script:
-    - test -n "$SAFETY_API_KEY" || exit 0
     - apt-get install
         fdroidserver
         python3-biplist
