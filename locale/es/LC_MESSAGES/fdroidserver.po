@@ -1310,11 +1310,11 @@ msgid "One of the 'github_releases' config items is missing the 'projectUrl' val
 msgstr "A uno de los elementos de configuración 'github_releases' le falta el valor 'projectUrl'. omitiendo ..."
 
 #: ../fdroidserver/deploy.py
-msgid "One of the 'github_releases' config itmes is missing the 'packageNames' value. skipping ..."
+msgid "One of the 'github_releases' config items is missing the 'packageNames' value. skipping ..."
 msgstr "A uno de los elementos de configuración de 'github_releases' le falta el valor 'packageNames'. omitiendo ..."
 
 #: ../fdroidserver/deploy.py
-msgid "One of the 'github_releases' config itmes is missing the 'token' value. skipping ..."
+msgid "One of the 'github_releases' config items is missing the 'token' value. skipping ..."
 msgstr "A uno de los elementos de configuración 'github_releases' le falta el valor 'token'. Omitiendo ..."
 
 #: ../fdroidserver/update.py
