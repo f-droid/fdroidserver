@@ -11,13 +11,14 @@
 # The Cats <philosoph@danwin1210.de>, 2023.
 # lucasmz-dev <git@lucasmz.dev>, 2024.
 # Jose Delvani <delvani.eletricista@gmail.com>, 2024.
+# Jose Delvani <jsdelvani@users.noreply.hosted.weblate.org>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2024-09-10 10:50+0200\n"
-"PO-Revision-Date: 2024-09-10 09:27+0000\n"
-"Last-Translator: Hans-Christoph Steiner <hans@guardianproject.info>\n"
+"PO-Revision-Date: 2024-09-10 13:17+0000\n"
+"Last-Translator: Jose Delvani <jsdelvani@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/f-droid/fdroidserver/pt_BR/>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
@@ -686,12 +687,12 @@ msgstr "ERRO: host de git \"%s\" não suportado, patches são bem-vindos!"
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "ERROR: {key} in {path} is not \"archive\" or \"repo\"!"
-msgstr ""
+msgstr "ERRO: {key} em {path} não é um \"arquivamento\" ou \"repositório\"!"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "ERROR: {key}:{subkey} in {path} is not in allowed keys: {allowed_keys}!"
-msgstr ""
+msgstr "ERRO: {key}:{subkey} em {path} não está nas chaves permitidas: {allowed_keys}!"
 
 #: ../fdroidserver/__main__.py
 #, python-brace-format
@@ -714,7 +715,7 @@ msgstr "A variável de ambiente {var} de {configname} não está definida!"
 
 #: ../fdroidserver/deploy.py
 msgid "Error deploying 'github_releases', {} not present. (You might need to run `fdroid update` first.)"
-msgstr ""
+msgstr "Erro ao implementar 'github_releases', {} não está presente. (Talvez seja necessário executar `fdroid update` primeiro)"
 
 #: ../fdroidserver/import_subcommand.py
 msgid "Error while getting repo address"
@@ -1305,15 +1306,15 @@ msgstr "A máquina está desconectada, pulando geração de espelhos de git até
 
 #: ../fdroidserver/deploy.py
 msgid "One of the 'github_releases' config items is missing the 'projectUrl' value. skipping ..."
-msgstr ""
+msgstr "Um dos itens de configuração 'github_releases' está faltando o valor 'projectUrl'. ignorando ..."
 
 #: ../fdroidserver/deploy.py
 msgid "One of the 'github_releases' config itmes is missing the 'packageNames' value. skipping ..."
-msgstr ""
+msgstr "Um dos itens de configuração 'github_releases' está faltando o valor 'packageNames'. ignorando ..."
 
 #: ../fdroidserver/deploy.py
 msgid "One of the 'github_releases' config itmes is missing the 'token' value. skipping ..."
-msgstr ""
+msgstr "Um dos itens de configuração 'github_releases' está faltando o valor 'token'. ignorando ..."
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -1529,7 +1530,7 @@ msgstr "Executar no repositório do Git que tenha alterações não confirmadas"
 #: ../fdroidserver/nightly.py
 #, python-brace-format
 msgid "Run over {cibase} to find -debug.apk. and skip repo_basedir {repo_basedir}"
-msgstr ""
+msgstr "Execute {cibase} para encontrar -debug.apk. e ignore repo_basedir {repo_basedir}"
 
 #: ../fdroidserver/lint.py
 msgid "Run rewritemeta to fix formatting"
@@ -1770,9 +1771,8 @@ msgid "To use awsbucket, awssecretkey and awsaccesskeyid must also be set in con
 msgstr "Para usar awsbucket, os awssecretkey e awsaccesskeyid também devem ser definidos no config.yml!"
 
 #: ../fdroidserver/deploy.py
-#, fuzzy
 msgid "To use rclone, rclone_config and awsbucket must be set in config.yml!"
-msgstr "Para usar awsbucket, os awssecretkey e awsaccesskeyid também devem ser definidos no config.yml!"
+msgstr "Para usar rclone, rclone_config e awsbucket devem ser configurados em config.yml!"
 
 #: ../fdroidserver/lint.py
 msgid "URL must start with https:// or http://"
@@ -1972,9 +1972,9 @@ msgid "Using \"{path}\" for configuring s3cmd."
 msgstr "Usando \"{path}\" para configurar s3cmd."
 
 #: ../fdroidserver/deploy.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Using \"{path}\" for syncing with remote storage."
-msgstr "Usando \"{path}\" para configurar s3cmd."
+msgstr "Usando \"{path}\" para sincronização com armazenamento remoto."
 
 #: ../fdroidserver/common.py
 msgid "Using APK Signature v2"
@@ -2008,9 +2008,9 @@ msgid "Using existing keystore \"{path}\""
 msgstr "Utilizando armazenamento de chave existente \"{path}\""
 
 #: ../fdroidserver/deploy.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Using rclone to sync with: {url}"
-msgstr "Usando s3cmd para sincronizar com: {url}"
+msgstr "Usando rclone para sincronizar com: {url}"
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
@@ -2232,7 +2232,7 @@ msgstr "apagando: repo/{apkfilename}"
 
 #: ../fdroidserver/scanner.py
 msgid "dependency file without lock"
-msgstr ""
+msgstr "arquivo de dependência sem bloqueio"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -2562,9 +2562,9 @@ msgid "s3cmd sync indexes {path} to {url} and delete"
 msgstr "s3cmd sincroniza índices {path} para {url} e exclui"
 
 #: ../fdroidserver/deploy.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "s3cmd syncs indexes from {path} to {url} and deletes removed"
-msgstr "s3cmd sincroniza índices {path} para {url} e exclui"
+msgstr "s3cmd sincroniza os índices de {path} para {url} e exclui os índices removidos"
 
 #: ../fdroidserver/scanner.py
 #, python-brace-format
