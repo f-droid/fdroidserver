@@ -21,6 +21,7 @@ include examples/Vagrantfile.yaml
 include gradlew-fdroid
 include LICENSE
 include locale/bo/LC_MESSAGES/fdroidserver.po
+include locale/ca/LC_MESSAGES/fdroidserver.po
 include locale/cs/LC_MESSAGES/fdroidserver.po
 include locale/de/LC_MESSAGES/fdroidserver.po
 include locale/es/LC_MESSAGES/fdroidserver.po
@@ -36,6 +37,8 @@ include locale/pt_PT/LC_MESSAGES/fdroidserver.po
 include locale/ro/LC_MESSAGES/fdroidserver.po
 include locale/ru/LC_MESSAGES/fdroidserver.po
 include locale/sq/LC_MESSAGES/fdroidserver.po
+include locale/sr/LC_MESSAGES/fdroidserver.po
+include locale/sw/LC_MESSAGES/fdroidserver.po
 include locale/tr/LC_MESSAGES/fdroidserver.po
 include locale/uk/LC_MESSAGES/fdroidserver.po
 include locale/zh_Hans/LC_MESSAGES/fdroidserver.po
