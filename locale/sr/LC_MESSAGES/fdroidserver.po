@@ -3,13 +3,14 @@
 # Саша Петровић <salepetronije@gmail.com>, 2022.
 # Đorđe Vasiljević <djordje.vasiljevich@gmail.com>, 2022.
 # Reno Tx <renotx@users.noreply.hosted.weblate.org>, 2024.
+# Hans-Christoph Steiner <hans@guardianproject.info>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 2.1b0\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2024-09-10 10:50+0200\n"
-"PO-Revision-Date: 2024-09-07 00:41+0000\n"
-"Last-Translator: Reno Tx <renotx@users.noreply.hosted.weblate.org>\n"
+"PO-Revision-Date: 2024-09-10 09:27+0000\n"
+"Last-Translator: Hans-Christoph Steiner <hans@guardianproject.info>\n"
 "Language-Team: Serbian <https://hosted.weblate.org/projects/f-droid/fdroidserver/sr/>\n"
 "Language: sr\n"
 "MIME-Version: 1.0\n"
@@ -1202,7 +1203,7 @@ msgstr "Нема информација."
 
 #: ../fdroidserver/checkupdates.py
 msgid "No matching tags found"
-msgstr "Нема одговарајућих ознака."
+msgstr "Нема одговарајућих ознака"
 
 #: ../fdroidserver/update.py
 #, python-brace-format

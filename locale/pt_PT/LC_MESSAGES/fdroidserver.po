@@ -3,22 +3,22 @@
 # This file is distributed under the same license as the PACKAGE package.
 # Manuela Silva <mmsrs@sky.com>, 2020.
 # ssantos <ssantos@web.de>, 2020, 2021, 2022, 2023, 2024.
-# Hans-Christoph Steiner <hans@guardianproject.info>, 2020, 2022.
+# Hans-Christoph Steiner <hans@guardianproject.info>, 2020, 2022, 2024.
 # Peter J. Mello <admin@petermello.net>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2024-09-10 10:50+0200\n"
-"PO-Revision-Date: 2024-08-12 18:05+0000\n"
-"Last-Translator: ssantos <ssantos@web.de>\n"
+"PO-Revision-Date: 2024-09-10 09:27+0000\n"
+"Last-Translator: Hans-Christoph Steiner <hans@guardianproject.info>\n"
 "Language-Team: Portuguese (Portugal) <https://hosted.weblate.org/projects/f-droid/fdroidserver/pt_PT/>\n"
 "Language: pt_PT\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.7-dev\n"
+"X-Generator: Weblate 5.8-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -1906,7 +1906,7 @@ msgstr "UpdateCheckData não é uma URL válida: {url}"
 
 #: ../fdroidserver/lint.py
 msgid "UpdateCheckMode is set but it looks like checkupdates hasn't been run yet."
-msgstr "UpdateCheckMode é definido, mas parece que likecheckupdates ainda não foi executado"
+msgstr "UpdateCheckMode é definido, mas parece que likecheckupdates ainda não foi executado."
 
 #. Translators: https://developer.android.com/studio/build/application-id
 #: ../fdroidserver/lint.py
