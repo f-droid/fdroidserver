@@ -7,8 +7,8 @@ msgstr ""
 "Project-Id-Version: fdroidserver 1.0.6-349-g907c04ea\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2024-09-10 10:50+0200\n"
-"PO-Revision-Date: 2024-09-10 09:27+0000\n"
-"Last-Translator: Hans-Christoph Steiner <hans@guardianproject.info>\n"
+"PO-Revision-Date: 2024-09-10 10:20+0000\n"
+"Last-Translator: Besnik Bleta <besnik@programeshqip.org>\n"
 "Language-Team: Albanian <https://hosted.weblate.org/projects/f-droid/fdroidserver/sq/>\n"
 "Language: sq\n"
 "MIME-Version: 1.0\n"
@@ -222,7 +222,7 @@ msgstr "Lypset një URL si argument!"
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "APK signatures have different certificates in {path}:"
-msgstr ""
+msgstr "Nënshkrimet APK kanë dëshmi të ndryshme te {path}:"
 
 #: ../fdroidserver/__main__.py
 msgid "Add PGP signatures using GnuPG for packages in repo"
@@ -302,9 +302,8 @@ msgid "App has NoSourceSince or ArchivePolicy \"0 versions\" but AutoUpdateMode 
 msgstr "Aplikacioni ka NoSourceSince ose ArchivePolicy “0 versione”, por AutoUpdateMode ose UpdateCheckMode janë vënë si “Asnjë”"
 
 #: ../fdroidserver/lint.py
-#, fuzzy
 msgid "App has NoSourceSince or ArchivePolicy \"0 versions\" or 0 but AutoUpdateMode or UpdateCheckMode are not None"
-msgstr "Aplikacioni ka NoSourceSince ose ArchivePolicy “0 versione”, por AutoUpdateMode ose UpdateCheckMode janë vënë si “Asnjë”"
+msgstr "Aplikacioni ka NoSourceSince ose ArchivePolicy “0 versione”, ose 0, por AutoUpdateMode ose UpdateCheckMode janë vënë si “Asnjë”"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
@@ -839,9 +838,8 @@ msgid "Found multiple JAR Signature Block Files in {path}"
 msgstr "Te {path} u gjetën Kartela të shumta JAR Blloqesh Nënshkrimi"
 
 #: ../fdroidserver/common.py
-#, fuzzy
 msgid "Found multiple Signer Certificates!"
-msgstr "U gjetën dëshmi të shumta nënshkrimi për depon!"
+msgstr "U gjetën Dëshmi të shumta Nënshkruesi!"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
@@ -908,9 +906,8 @@ msgid "Git reset failed"
 msgstr "Veprimi “git reset” dështoi"
 
 #: ../fdroidserver/common.py
-#, fuzzy
 msgid "Git submodule deinit failed"
-msgstr "Veprimi “git submodule update” dështoi"
+msgstr "Veprimi “git submodule deinit” dështoi"
 
 #: ../fdroidserver/common.py
 msgid "Git submodule sync failed"
@@ -1259,9 +1256,8 @@ msgid "No unsigned directory - nothing to do"
 msgstr "S’ka drejtori të panënshkruar - s’ka ç’bëhet"
 
 #: ../fdroidserver/__main__.py
-#, fuzzy
 msgid "No version information could be found."
-msgstr "s’u gjetën hollësi versioni."
+msgstr "S’u gjetën hollësi versioni."
 
 #: ../fdroidserver/common.py
 msgid "Not a valid size definition: \"{}\""
@@ -1471,9 +1467,8 @@ msgid "Reading {apkfilename} from cache"
 msgstr "Po lexohet {apkfilename} prej fshehtine"
 
 #: ../fdroidserver/build.py
-#, fuzzy
 msgid "Refresh and cache scanner rules and signatures from the network"
-msgstr "sill nga interneti versionin më të ri të nënshkrimeve"
+msgstr "Rifresko dhe ruaj në fshehtinë rregulla skaneri nga rrjeti"
 
 #: ../fdroidserver/common.py
 msgid "Removing specified files"
@@ -1730,9 +1725,8 @@ msgid "These are the apps that have been archived from the main repo."
 msgstr "Këto janë aplikacionet që janë arkivuar nga depoja kryesore."
 
 #: ../fdroidserver/mirror.py
-#, fuzzy
 msgid "This command should never be used to mirror f-droid.org! A full copy requires more than 600GB."
-msgstr "Ky urdhër s’duhet përdorur kurrë për krijimin e një pasqyre të f-droid.org! Një pasqyrë e plotë lyp më tepër se 600GB."
+msgstr "Ky urdhër s’duhet përdorur kurrë për krijimin e një pasqyre të f-droid.org! Një kopje e plotë lyp më tepër se 600GB."
 
 #: ../fdroidserver/common.py
 msgid "This is a repository of apps to be used with F-Droid. Applications in this repository are either official binaries built by the original application developers, or are binaries built from source by the admin of f-droid.org using the tools on https://gitlab.com/fdroid."
@@ -1768,9 +1762,8 @@ msgid "To use awsbucket, awssecretkey and awsaccesskeyid must also be set in con
 msgstr "Për të përdorur awsbucket, te config.yml duhen ujdisur edhe awssecretkey dhe awsaccesskey!"
 
 #: ../fdroidserver/deploy.py
-#, fuzzy
 msgid "To use rclone, rclone_config and awsbucket must be set in config.yml!"
-msgstr "Për të përdorur awsbucket, te config.yml duhen ujdisur edhe awssecretkey dhe awsaccesskey!"
+msgstr "Që të përdorni rclone, rclone_config dhe awsbucket duhen ujdisur te config.yml!"
 
 #: ../fdroidserver/lint.py
 msgid "URL must start with https:// or http://"
@@ -1914,7 +1907,6 @@ msgstr "UpdateCheckMode është ujdisur, por duket sikur checkupdates s’ësht�
 
 #. Translators: https://developer.android.com/studio/build/application-id
 #: ../fdroidserver/lint.py
-#, fuzzy
 msgid "UpdateCheckMode is set but it looks likecheckupdates hasn't been run yet"
 msgstr "UpdateCheckMode është ujdisur, por duket sikur checkupdates s’është xhiruar ende"
 
@@ -1946,9 +1938,8 @@ msgid "Usage: %s\n"
 msgstr "Përdorim: %s\n"
 
 #: ../fdroidserver/lint.py
-#, fuzzy
 msgid "Use /HEAD instead of /master or /main to point at a file in the default branch"
-msgstr "Për të treguar një kartelë te dega parazgjedhje, përdorni /HEAD, në vend se /master"
+msgstr "Për të treguar një kartelë te dega parazgjedhje, përdorni /HEAD, në vend se /master apo /main"
 
 #: ../fdroidserver/lint.py
 msgid "Use /HEAD instead of /master to point at a file in the default branch"
@@ -1972,9 +1963,9 @@ msgid "Using \"{path}\" for configuring s3cmd."
 msgstr "Po përdoret “{path}” për formësim të s3cmd."
 
 #: ../fdroidserver/deploy.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Using \"{path}\" for syncing with remote storage."
-msgstr "Po përdoret “{path}” për formësim të s3cmd."
+msgstr "Po përdoret “{path}” për njëkohësim me depozitë të largët."
 
 #: ../fdroidserver/common.py
 msgid "Using APK Signature v2"
@@ -1985,9 +1976,8 @@ msgid "Using APK Signature v3"
 msgstr "Po përdoret Nënshkrimi APK-je v3"
 
 #: ../fdroidserver/common.py
-#, fuzzy
 msgid "Using JAR Signature"
-msgstr "Po përdoret Nënshkrimi APK-je v2"
+msgstr "Po përdoret Nënshkrim JAR"
 
 #: ../fdroidserver/common.py
 msgid "Using Java's jarsigner, not recommended for verifying APKs! Use apksigner"
@@ -2009,9 +1999,9 @@ msgid "Using existing keystore \"{path}\""
 msgstr "Po përdoret depo ekzistuese kyçesh “{path}”"
 
 #: ../fdroidserver/deploy.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Using rclone to sync with: {url}"
-msgstr "Po përdoret s3cmd për njëkohësim me: {url}"
+msgstr "Po përdoret rclone për njëkohësim me: {url}"
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
@@ -2205,9 +2195,8 @@ msgid "could not parse '{path}'"
 msgstr "s’u përtyp dot '{path}'"
 
 #: ../fdroidserver/common.py
-#, fuzzy
 msgid "could not parse srclib spec (no name specified): '{}'"
-msgstr "s’u përtyp dot specifikim scrlib (s’u dha referencë): '{}'"
+msgstr "s’u përtyp dot specifikim scrlib (s’u dha emër): '{}'"
 
 #: ../fdroidserver/common.py
 msgid "could not parse srclib spec (no ref specified): '{}'"
@@ -2561,12 +2550,12 @@ msgstr "ruamel.yaml s’është i instaluar, s’mund të shkruhen tejtëdhëna.
 #: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "s3cmd sync indexes {path} to {url} and delete"
-msgstr "s3cmd sync indexes {path} to {url} and delete"
+msgstr ""
 
 #: ../fdroidserver/deploy.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "s3cmd syncs indexes from {path} to {url} and deletes removed"
-msgstr "s3cmd sync indexes {path} to {url} and delete"
+msgstr ""
 
 #: ../fdroidserver/scanner.py
 #, python-brace-format
@@ -2794,17 +2783,17 @@ msgstr ""
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "{path} is not a standard config file!"
-msgstr ""
+msgstr "{path} s’është kartelë standarde formësimi!"
 
 #: ../fdroidserver/index.py
 #, python-brace-format
 msgid "{path} is not list, but a {datatype}!"
-msgstr ""
+msgstr "{path} s’është listë, por një {datatype}!"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "{path} is not {expected_type}, but a {datatype}!"
-msgstr ""
+msgstr "{path} s’është {expected_type}, por një {datatype}!"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
