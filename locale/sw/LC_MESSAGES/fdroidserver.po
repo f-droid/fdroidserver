@@ -1,29 +1,30 @@
 # SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR Free Software Foundation, Inc.
-# Hans-Christoph Steiner <hans@guardianproject.info>, 2020, 2021, 2022, 2024.
+# This file is put in the public domain.
+# Test Account <ta2464666@gmail.com>, 2024.
+# abelbiwott-dev <abelbiwott@outlook.com>, 2024.
+# paul mayero <pmmayero@gmail.com>, 2024.
 msgid ""
 msgstr ""
-"Project-Id-Version: fdroidserver 0.9\n"
+"Project-Id-Version: fdroidserver 2.3a1\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2024-09-10 10:50+0200\n"
-"PO-Revision-Date: 2024-04-10 13:33+0000\n"
-"Last-Translator: Hans-Christoph Steiner <hans@guardianproject.info>\n"
-"Language-Team: Tibetan <https://hosted.weblate.org/projects/f-droid/fdroidserver/bo/>\n"
-"Language: bo\n"
+"PO-Revision-Date: 2024-09-08 11:09+0000\n"
+"Last-Translator: abelbiwott-dev <abelbiwott@outlook.com>\n"
+"Language-Team: Swahili <https://hosted.weblate.org/projects/f-droid/fdroidserver/sw/>\n"
+"Language: sw\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.5-dev\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.8-dev\n"
 
 #: ../fdroidserver/nightly.py
-#, fuzzy
 msgid ""
 "\n"
 "SSH public key to be used as deploy key:"
 msgstr ""
 "\n"
-"SSHདམངས་ཀྱི་ལྡེ་མིག་དེ་ཕྱོགས་སྐྱོད་ལྡ་ེམིག་ལ་བེད་སྤྱོད་བྱེད།:"
+"Kitufe cha umma cha SSH kitatumika kama ufunguo wa kupeleka:"
 
 #: ../fdroidserver/nightly.py
 #, python-brace-format
@@ -32,52 +33,52 @@ msgid ""
 "{path} encoded for the DEBUG_KEYSTORE secret variable:"
 msgstr ""
 "\n"
-"{path} DEBUG_KEYSTOREགསང་རྟགས་ཀྱི་ཆེད་དུ་ཨང་སྒྲིག:"
+"{path} iliyosimbwa kwa utofauti wa siri wa DEBUG_KEYSTORE:"
 
 #: ../fdroidserver/lint.py
 #, python-format
 msgid "\"%s/\" has no matching metadata file!"
-msgstr "\"%s/\" འདི་དང་མཐུན་པའི་རྒྱབ་ལྗོངས་ཡིག་ཆ་མིན་འདུག!"
+msgstr "\"%s/\" haina faili ya metadata inayolingana!"
 
 #: ../fdroidserver/index.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "\"local_copy_dir\" {path} does not exist!"
-msgstr "dir གྱི་རྩ་བ་ for local_copy_dir \"{path}\" མིན་འདུག!"
+msgstr "\"local_copy_dir\" {path} haipo!"
 
 #: ../fdroidserver/install.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "\"{apkfilename}\" is already installed on {dev}."
-msgstr "'{apkfilename}' འདི་{dev}.ནང་སྔོན་ཚོད་ནས་སྒྲིག་བཅུག་བྱས་ཟིན།."
+msgstr "Tayari \"{apkfilename}\" imesakinishwa kwenye {dev}."
 
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "\"{path}\" contains outdated {name} ({version})"
-msgstr "\"{path}\"དུས་ཚོད་ཡོལ་ཟིན་པའི་{name} ({version})ཚུད་ཡོད།"
+msgstr "\"{path}\" ina {name} ({version}) iliyopitwa na wakati"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "\"{path}\" contains recent {name} ({version})"
-msgstr "\"{path}\" ཉེ་ཆར་{name} ({version})རྣམས་ཚུད་ཡོད།"
+msgstr "\"{path}\" ina {name} ({version}) ya hivi majuzi"
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "\"{path}\" exists but s3cmd is not installed!"
-msgstr ""
+msgstr "\"{path}\" ipo lakini s3cmd haijasakinishwa!"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "\"{path}\" is not a supported file format (use: metadata/*.yml)"
-msgstr ""
+msgstr "\"{path}\" si muundo wa faili inayokubalika (tumia: metadata/*.yml)"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "\"{path}\" is signed by a key that is not allowed:"
-msgstr ""
+msgstr "\"{path}\" imetiwa saini na ufunguo ambao hauruhusiwi:"
 
 #: ../fdroidserver/import_subcommand.py
 #, python-brace-format
 msgid "\"{url}\" is not a valid URL!"
-msgstr ""
+msgstr "\"{url}\" si URL halali!"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 #: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
@@ -85,595 +86,594 @@ msgstr ""
 #, python-format
 msgid "%(option)s option requires %(number)d argument"
 msgid_plural "%(option)s option requires %(number)d arguments"
-msgstr[0] "%(option)s གདམ་ཀ་དགོས་ %(number)d རྩོད་པ།"
+msgstr[0] "Chaguo %(option)s linahitaji hoja %(number)d"
+msgstr[1] "Chaguo %(option)s linahitaji hoja %(number)d"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "%(prog)s: error: %(message)s\n"
-msgstr "%(prog)s: ནོར་སྐྱོན: %(message)s\n"
+msgstr "%(prog)s: kasoro: %(message)s\n"
 
 #: ../fdroidserver/publish.py
 #, python-format
 msgid "%d APKs failed to be signed or verified!"
-msgstr ""
+msgstr "APK %d hazijatiwa saini au kuthibitishwa!"
 
 #: ../fdroidserver/scanner.py
 #, python-format
 msgid "%d problems found"
-msgstr "%d དཀའ་རྙོག་ཐོན་སོང་།"
+msgstr "%d matatizo yamepatikana"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 #: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
 #: /usr/lib/python3.11/optparse.py
 msgid "%prog [options]"
-msgstr "%prog [གདམ་ཀ།]"
+msgstr "%prog [chaguo]"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "%r is not callable"
-msgstr "%r 1 བྱེད་ལས་མིན་འདུག"
+msgstr "%r haiwezi kuitwa"
 
 #: ../fdroidserver/signindex.py
 #, python-format
 msgid "%s did not produce a dict!"
-msgstr ""
+msgstr "%s haikutoa \"dict\"!"
 
 #: ../fdroidserver/signindex.py
 #, python-format
 msgid "%s has bad SHA-256: %s"
-msgstr ""
+msgstr "%s ina SHA-256 mbaya: %s"
 
 #: ../fdroidserver/lint.py
 #, python-format
 msgid "%s is not an accepted build field"
-msgstr "%s 1འདི་ཁས་ལེན་ཐུབ་པའི་བཟོ་སྐྲུན་རྭ་བ་མ་རེད།"
+msgstr "%s sio sehemu ya kujenga inayokubalika"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 #: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
 #: /usr/lib/python3.11/optparse.py
 #, python-format
 msgid "%s option does not take a value"
-msgstr "%sགདམ་ཀ་ནུས་མེད་རེད་འདུག"
+msgstr "chaguo la %s halichukui thamani"
 
 #: ../fdroidserver/common.py
 msgid "'keypass' not found in config.yml!"
-msgstr "'keypass' འདི་config.yml ནང་རྙེད་མ་སོང་།!"
+msgstr "'keypass' haipatikani kwenye config.yml!"
 
 #: ../fdroidserver/common.py
 msgid "'keystore' is NONE and 'smartcardoptions' is blank!"
-msgstr ""
+msgstr "'keystore' HAKUNA na 'smartcardoptions' ni tupu!"
 
 #: ../fdroidserver/common.py
 msgid "'keystore' not found in config.yml!"
-msgstr "'keystore' འདི་ config.yml ནང་རྙེད་མ་སོང་།!"
+msgstr "'keystore' haipatikani kwenye config.yml!"
 
 #: ../fdroidserver/common.py
 msgid "'keystorepass' not found in config.yml!"
-msgstr "'keystorepass' འདི་ config.yml ནང་རྙེད་མ་སོང་།!"
+msgstr "'keystorepass' haipatikani kwenye config.yml!"
 
 #: ../fdroidserver/common.py
 msgid "'repo_keyalias' not found in config.yml!"
-msgstr "'repo_keyalias' འདི་ config.yml ནང་རྙེད་མ་སོང་།!"
+msgstr "'repo_keyalias' haipatikani kwenye config.yml!"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #: /usr/lib/python3.11/argparse.py
 msgid "'required' is an invalid argument for positionals"
-msgstr "'དགསོ་མཁོ།' ནི་གནས་སྟངས་འདི་ལ་ཁུངས་ལྡན་གྱི་རྩོད་པ་རེད་མིན་འདུག"
+msgstr "\"required\" ni hoja batili kwa vipengee vya nafasi"
 
 #: ../fdroidserver/common.py
-#, fuzzy
 msgid "'sdk_path' not set in config.yml!"
-msgstr "'sdk_path' འདི་ 'config.yml' ནང་སྒྲིག་ཐུབ་མ་སོང་།!"
+msgstr "'sdk_path' haijawekwa kwenye config.yml!"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "'{aapt}' is too old, fdroid requires build-tools-{version} or newer!"
-msgstr ""
+msgstr "'{aapt}' ni ya zamani sana, fdroid inahitaji zana za kujenga-{version} au mpya!"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "'{field}' will be in random order! Use () or [] brackets if order is important!"
-msgstr "'{field}1' ནི་གོ་རིམ་ངེས་མེད།! བེད་སྤྱོད། () ཡང་ན། [] གོ་རིམ་གལ་ཆེན་པོའི་རིགས་ལ་གུག་རྟགས་ནང་བཅུག!"
+msgstr "'{field}' itakuwa katika mpangilio nasibu! Tumia mabano () au [] ikiwa agizo ni muhimu!"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "'{path}' failed to execute!"
-msgstr "'{path}1' ལག་བསྟར་ཐུབ་མ་སོང་།!"
+msgstr "{path} imeshindwa kutekeleza!"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "'{path}' has invalid format, it should be a dictionary!"
-msgstr ""
+msgstr "'{path}' ina muundo batili, inapaswa kuwa kamusi!"
 
 #: ../fdroidserver/metadata.py ../fdroidserver/lint.py
 #, python-brace-format
 msgid "'{value}' is not a valid {field} in {appid}. Regex pattern: {pattern}"
-msgstr "'{value}' ཁུངས་ལྡན་རེད་མིན་འདུག{field} འདི་ནང་ {appid}. Regex འགྲོ་ལུགས་: {pattern}"
+msgstr "'{value}' si {field} halali katika {appid}. Muundo wa regex: {pattern}"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "'{value}' is not a valid {field}, should be {pattern}"
-msgstr ""
+msgstr "'{value}' si {field} halali, inapaswa kuwa {pattern}"
 
 #: ../fdroidserver/checkupdates.py
 #, python-brace-format
 msgid "...checkupdate failed for {appid} : {error}"
-msgstr "...{appid} གྱི་ཆེད་དུ་གསར་བསྒྱུར་འཚོལ་མི་ཐུབ།་: {error}"
+msgstr "...sasisho la ukaguzi limeshindwa la{appid} : {error}"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #: /usr/lib/python3.11/argparse.py
 msgid ".__call__() not defined"
-msgstr ".__call__() ངོས་འཛིན་ཐུབ་མེད།"
+msgstr ".__call__() haijafafanuliwa"
 
 #: ../fdroidserver/lint.py
 msgid "/issues is missing"
-msgstr "/གནས་དོན་བོར་བརླག་སོང་འདུག"
+msgstr "/issues haipo"
 
 #: ../fdroidserver/mirror.py
 msgid "A URL is required as an argument!"
-msgstr ""
+msgstr "URL inahitajika kama hoja!"
 
 #: ../fdroidserver/common.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "APK signatures have different certificates in {path}:"
-msgstr "{path}མིང་རྟགས་བཀོད་པའི་ཆོག་མཆན་ལག་ཁྱེར་འདིའི་ནང་རྙེད་མ་སོང་།"
+msgstr "Sahihi za APK zina vyeti tofauti katika {path}:"
 
 #: ../fdroidserver/__main__.py
 msgid "Add PGP signatures using GnuPG for packages in repo"
-msgstr "PGP གྱི་མིང་རྟགས་དེ་རེ་པོ་ཐུམ་སྒྲིལ་ནང་GnuPG ཁ་སྣོན་བྱས་ནས་རེ་པོ་ནང་ལ་བཅུག"
+msgstr "Ongeza saini za PGP kwa kutumia GnuPG kwa vifurushi kwenye ghala"
 
 #: ../fdroidserver/update.py
 msgid "Add a repo signing key to an unsigned repo"
-msgstr "མིང་རྟགས་མི་བཀོད་པའི་རེ་པོ་ནང་ལ་རེ་པོ་མིང་རྟགས་ལྡེ་མིག་འདི་ཁ་སྣོན་བྱེད།"
+msgstr "Ongeza kitufe cha kusaini ghala kwenye ghala ambayo haijatiwa saini"
 
 #: ../fdroidserver/update.py
 msgid "Add skeleton metadata files for APKs that are missing them"
-msgstr "APKsནང་ལ་ཡིག་ཚགས་ཀྱི་རྒྱབ་ལྗོངས་ལོ་རྒྱུས་ཁ་སྣོན་བྱེད།"
+msgstr "Ongeza faili za metadata za kiunzi za APK ambazo hazina"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Adding new repo for only {name}"
-msgstr "{name}ཁོ་ནའི་ཆེད་དུ་རེ་པོ་གསར་པ་ཁ་སྣོན།"
+msgstr "Kuongeza ghala mpya kwa {name} pekee"
 
 #: ../fdroidserver/init.py
 msgid "Alias of the repo signing key in the keystore"
-msgstr "ལྡེ་མིག་གསོག་ཉར་ཁང་ནང་རེ་པོ་མིང་རྟགས་ལྡེ་མིག་བཀོད་པའི་གསང་མིང་།"
+msgstr "Lakabu la ufunguo wa kusaini ghala kwenye duka la vitufe"
 
 #: ../fdroidserver/build.py
 msgid "AllowedAPKSigningKeys missing but reference binary supplied"
-msgstr ""
+msgstr "AllowedAPKSigningKeys haipo lakini binari ya marejeleo imewasilishwa"
 
 #: ../fdroidserver/import_subcommand.py
 msgid "Allows a different revision (or git branch) to be specified for the initial import"
-msgstr "ཐོག་མའི་ནང་འདྲེན་བྱེད་པའི་སྐབས་གསལ་པོའི་ཐོག་ནས་སྐྱར་སྦྱོང་(ཡང་ན་གིཊ་ཡན་ལག་)མི་འདྲ་བ་རྣམས་ལ་ཆོག་མཆན་སྤྲོད།"
+msgstr "Inaruhusu marekebisho tofauti (au tawi la git) litajwe kwa uagizaji wa awali"
 
 #: ../fdroidserver/mirror.py
 msgid "Also mirror the full archive section"
-msgstr ""
+msgstr "Pia onyesha sehemu kamili ya kumbukumbu"
 
 #: ../fdroidserver/lint.py
 msgid "Also warn about formatting issues, like rewritemeta -l"
-msgstr "མ་ཟད་བཀོད་སྒྲིག་བྱས་པའི་གནད་དོན་རྣམས་ལ་ཉེན་བརྡ་སྟོན། དཔེར་ན་rewritemeta -l"
+msgstr "Pia onya kuhusu masuala ya uumbizaji, kama rewritemeta -l"
 
 #: ../fdroidserver/scanner.py
 msgid "Android AAR library"
-msgstr ""
+msgstr "Maktaba ya Android AAR"
 
 #: ../fdroidserver/scanner.py
 msgid "Android APK file"
-msgstr ""
+msgstr "faili ya APK ya Android"
 
 #: ../fdroidserver/scanner.py
 msgid "Android DEX code"
-msgstr ""
+msgstr "Msimbo wa DEX ya Android"
 
 #: ../fdroidserver/init.py
 #, python-brace-format
 msgid "Android SDK not found at {path}!"
-msgstr ""
+msgstr "SDK ya Android haipatikani katika {path}!"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Android SDK path '{path}' does not exist!"
-msgstr "ཨེན་ཀྲོཌ་SDK ཐབས་ལམ་ '{path}'མིན་འདུག!"
+msgstr "Njia ya SDK ya android {path} haipo!"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Android SDK path '{path}' is not a directory!"
-msgstr "ཨེན་ཀྲོཌSDKཐབས་ལམ་ '{path}1' ཡིག་ཆ་གསོག་ཉར་རེད་མིན་འདུག!"
+msgstr "Njia ya SDK ya Android {path} sio saraka!"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Android SDK tool {cmd} not found!"
-msgstr ""
+msgstr "Zana ya SDK ya Android {cmd} haijapatikana!"
 
 #: ../fdroidserver/lint.py
 msgid "App has Binaries but does not have corresponding AllowedAPKSigningKeys to pin certificate."
-msgstr ""
+msgstr "Apu ina Binari lakini haina AllowedAPKSigningKeys zinazolingana ili kubandika cheti."
 
 #: ../fdroidserver/lint.py
 msgid "App has NoSourceSince or ArchivePolicy \"0 versions\" but AutoUpdateMode or UpdateCheckMode are not None"
-msgstr ""
+msgstr "Apu ina NoSourceSince au ArchivePolicy \"0 versions\" lakini AutoUpdateMode au UpdateCheckMode sio None"
 
 #: ../fdroidserver/lint.py
 msgid "App has NoSourceSince or ArchivePolicy \"0 versions\" or 0 but AutoUpdateMode or UpdateCheckMode are not None"
-msgstr ""
+msgstr "Apu ina NoSourceSince au ArchivePolicy \"matoleo 0\" au 0 lakini AutoUpdateMode au UpdateCheckMode sio Hakuna"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "App is in '{repo}' but has a link to {url}"
-msgstr "མཉེན་ཆས་འདི་'{repo}1ནང་འདུག འོན་ཀྱང་སྦྲེལ་མཐུད་དེ་ {url}2ཡོད།"
+msgstr "Apu iko katika {repo} lakini ina kiungo cha {url}"
 
 #: ../fdroidserver/lint.py
 msgid "App version has binary but does not have corresponding AllowedAPKSigningKeys to pin certificate."
-msgstr ""
+msgstr "Toleo la Apu ina binari lakini haina AllowedAPKSigningKeys inayolingana ili kubandika cheti."
 
 #: ../fdroidserver/lint.py
 msgid "Appending .git is not necessary"
-msgstr "Appending .git ངེས་པར་དགོས་ཀྱི་མེད།"
+msgstr "Kuambata .git sio lazima"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Archiving {apkfilename} with invalid signature!"
-msgstr "མཛོད་ཁང་{apkfilename} ལ་ཁུངས་ལྡན་མིན་པའི་མིང་རྟགས་!"
+msgstr "Kuhifadhi {apkfilename} yenye saini batili!"
 
 #: ../fdroidserver/lint.py
 msgid "AutoUpdateMode with UpdateCheckMode: HTTP must have a pattern."
-msgstr ""
+msgstr "AutoUpdateMode na UpdateCheckMode: HTTP lazima iwe na mpangilio."
 
 #: ../fdroidserver/index.py
 #, python-brace-format
 msgid "Bad entry type \"{mirrortype}\" in mirrors config: {mirror}"
-msgstr ""
+msgstr "Aina mbaya ya ingizo \"{mirrortype}\" katika usanidi wa vioo: {mirror}"
 
 #: ../fdroidserver/mirror.py
 msgid "Base URL to mirror, can include the index signing key using the query string: ?fingerprint="
-msgstr ""
+msgstr "URL ya msingi ya kioo, inaweza kujumuisha ufunguo wa saini ya faharasa kwa kutumia mfuatano wa saili: ?fingerprint="
 
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vname
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "Branch '{branch}' used as commit in build '{versionName}'"
-msgstr "ཡན་ལག '{branch}1' བཟོ་སྐྲུན་ནང་བེད་སྤྱོད་བྱས་རྒྱུ་ཁས་ལེན་ཡོད།'{versionName}2'"
+msgstr "Tawi '{branch}' limetumika kupeleka katika ujenzi wa '{versionName}'"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "Branch '{branch}' used as commit in srclib '{srclib}'"
-msgstr "ཡན་ལག '{branch}1'' srclib ནང་བེད་སྤྱོད་བྱེད་རྒྱུ་ཁས་ལེན་ཡོད་།'{srclib}'"
+msgstr "Tawi {branch} linalotumika kama commit katika srclib '{srclib}'"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Broken symlink: {path}"
-msgstr ""
+msgstr "symlink iliyovunjika: {path}"
 
 #: ../fdroidserver/__main__.py
 msgid "Build a package from source"
-msgstr "འབྱུང་ཁུངས་ནས་ཐུམ་སྒྲིལ་བཟོས་འདུག"
+msgstr "Unda kifurushi kutoka kwa chanzo"
 
 #: ../fdroidserver/build.py
 msgid "Build all applications available"
-msgstr "མཉེན་ཆས་ཡོད་བཞིན་པ་ཆ་ཚང་ལ་ཐོན་སྐྱེད་བཟོས།"
+msgstr "Jenga apu zote zinazopatikana"
 
 #: ../fdroidserver/lint.py
 msgid "Build generated by `fdroid import` - remove disable line once ready"
-msgstr "བཟོ་སྐྲུན་འདི་ཐོན་སྐྱེད་བྱེད་མཁན་ 'ཨེཕ་རོཌ་ནང་འདྲེན།' -གལ་སྲིད་གྲ་སྒྲིག་ཟིན་ན་ནུས་མེད་ཀྱི་རིམ་པ་དེ་མེད་པ་བཟོས།"
+msgstr "Jenga linalotokana na `fdroid import` - ondoa laini ya kulemaza mara tu ikiwa tayari"
 
 #: ../fdroidserver/checkupdates.py
 msgid "Build metadata git repo has uncommited changes!"
-msgstr ""
+msgstr "Jenga ghala ya metadata ya git ina mabadiliko ambayo hayajahifadhiwa!"
 
 #: ../fdroidserver/build.py
 msgid "Build only the latest version of each package"
-msgstr "ཐུམ་སྒྲིལ་རེ་རེ་ལ་ཁོ་ནར་བཟོས་པའི་ཐོན་རིམ་གསར་ཤོས།"
+msgstr "Jenga toleo la karibuni pekee la kila kifurishi"
 
 #: ../fdroidserver/init.py
 #, python-format
 msgid "Built repo based in \"%s\" with this config:"
-msgstr "རེ་པོ་བཟོ་སྐྲུན་གཞི་རྩ་ \"%s\" སྒྲིག་བཀོད་འདི་དང་མཉམ་དུ་ཡོད།:"
+msgstr "Imejenga ghala yenye msingi katika \"%s\" na usanidi huu:"
 
 #: ../fdroidserver/checkupdates.py
 msgid "Can't auto-update app with no CurrentVersionCode"
-msgstr ""
+msgstr "Haiwezi kusasisha apu kiotomatiki ikiwa haina CurrentVersionCode"
 
 #: ../fdroidserver/build.py
 msgid "Can't build due to {} error while scanning"
 msgid_plural "Can't build due to {} errors while scanning"
-msgstr[0] "ཚགས་རྒྱབ་པའི་སྐབས་སུ་ནོར་སྐྱོན་ {} ཤོར་བས་བཟོ་སྐྲུན་བྱེད་ཐུབ་མེད།"
+msgstr[0] "Haiwezi kujenga kutokana na kosa la {} wakati wa uchanganuzi"
+msgstr[1] "Haiwezi kujenga kutokana na makosa ya {} wakati wa uchanganuzi"
 
 #: ../fdroidserver/rewritemeta.py
 #, python-brace-format
 msgid "Cannot rewrite \"{path}\""
-msgstr ""
+msgstr "Haiwezi kuandika upya \"{path}\""
 
 #: ../fdroidserver/lint.py
-#, fuzzy, python-format
+#, python-format
 msgid "Categories '%s' is not valid"
-msgstr "སྡེ་ཚན་'%s' ཁུངས་ལྡན་མ་རེད།"
+msgstr "Makundi ‘%s’ sio halali"
 
 #: ../fdroidserver/lint.py
 msgid "Categories are not set"
-msgstr "སྡེ་ཚན་རྣམས་སྒྲིག་མེད།"
+msgstr "Makundi hayajawekwa"
 
 #: ../fdroidserver/index.py
 #, python-brace-format
 msgid "Category \"{category}\" defined but not used for any apps!"
-msgstr ""
+msgstr "Makundi \"{category}\" yamefafanuliwa lakini haitumiki kwa apu yoyote!"
 
 #: ../fdroidserver/__main__.py
 msgid "Check for updates to applications"
-msgstr "མཉེན་ཆས་རྣམས་གསར་བསྒྱུར་བྱས་མིན་གཟིགས་ཞིབ་གནང་དང་།"
+msgstr "Angalia masasisho ya programu"
 
 #: ../fdroidserver/update.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Checking archiving for {appid} - apks:{integer}, keepversions:{keep}, archapks:{arch}"
-msgstr "མཛོད་ཁང་ཚོད་ལྟའི་ཆེད་དུ།{appid} - APKs:{integer},ཐོན་རིམ་ཉར་ཚགས།:{keep},archapks:{arch}"
+msgstr "Kuangalia uhifadhi kwa {appid} - apks:{integer}, keepversions: {keep}, archapks: {arch}"
 
 #: ../fdroidserver/update.py
 msgid "Clean update - don't uses caches, reprocess all APKs"
-msgstr "གསར་བསྒྱུར་གཙང་བཟོ།-ཡིག་ཆ་གསོག་ཉར་བེད་སྤྱོ་མ་བྱེད། APKs ཚང་མ་སྐྱར་སྤྱོད་བྱེད།"
+msgstr "Sasisho safi - usitumie cache, chakata tena APK zote"
 
 #: ../fdroidserver/import_subcommand.py
 msgid "Comma separated list of categories."
-msgstr "སྡེ་ཚན་སོ་སོའི་ཐོ་གཞུང་ལ་བར་མཚམས་རེ་འཇོག།."
+msgstr "Orodha ya makundi iliyotenganishwa kwa koma."
 
 #: ../fdroidserver/__main__.py
 #, python-format
 msgid "Command '%s' not recognised.\n"
-msgstr "བཀའ་ཁྱབ་ '%s 1'ངོས་འཛིན་ཐུབ་མ་སོང་།\n"
+msgstr "Amri '%s' haitambuliki.\n"
 
 #: ../fdroidserver/checkupdates.py
 msgid "Commit changes"
-msgstr "བསྒྱུར་བ་གཏོང་བར་མོས་མཐུན་ཡོད།"
+msgstr "Fanya mabadiliko"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Conflicting \"{field}\" definitions between .yml and localized files:"
-msgstr ""
+msgstr "Ukinzani kati ya ufafanuzi wa \"{field}\" kati ya .yml na faili zilizojanibishwa:"
 
 #: ../fdroidserver/__main__.py
 msgid "Conflicting arguments: '--verbose' and '--quiet' can not be specified at the same time."
-msgstr ""
+msgstr "Hoja zinazokinzana: '--verbose' na '--quiet' haiwezi kubainishwa kwa wakati mmoja."
 
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Conflicting config files! Using {newfile}, ignoring {oldfile}!"
-msgstr ""
+msgstr "Faili za usanidi zinazokinzana! Kwa kutumia {newfile}, ukipuuza {oldfile}!"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Could not find '{command}' on your system"
-msgstr "ཁྱེད་རང་གི་མ་ལག་སྒང་ལ་'{command}1' རྙེད་མ་སོང་།"
+msgstr "Haikuweza kupata '{command}' kwenya mfumo wako"
 
 #: ../fdroidserver/import_subcommand.py
-#, fuzzy
 msgid "Could not find latest version code"
-msgstr "ཐོན་རིམ་གསར་གསར་ཤོས་ཀྱི་ཨང་རྟགས་འདི་འདི་རྙེད་མ་སོང་།"
+msgstr "Haikuweza kupata msimbo wa toleo wa hivi karibuni"
 
 #: ../fdroidserver/import_subcommand.py
-#, fuzzy
 msgid "Could not find latest version name"
-msgstr "ཐོན་རིམ་གསར་ཤོས་འདིའི་མིང་རྙེད་མ་སོང་།"
+msgstr "Haikuweza kupata jina la toleo la hivi karibuni"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Could not find {path} to remove it"
-msgstr "{path}མེད་པ་བཟོས་པ་ལ་རྙེད་མ་སོང་།"
+msgstr "Haikuweza kupata {path} ili kuiondoa"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Could not open APK {path} for analysis: "
-msgstr ""
+msgstr "Haikuweza kufungua APK {path} kwa uchambuzi: "
 
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Could not parse size \"{size}\", wrong type \"{type}\""
-msgstr ""
+msgstr "Haikuweza kuchanganua ukubwa \"{size}\", aina isiyo sahihi \"{type}\""
 
 #: ../fdroidserver/import_subcommand.py
-#, fuzzy
 msgid "Couldn't find Application ID"
-msgstr "ཐུམ་སྒྲིལ་ངོས་འཛིན་རྙེད་སོན་བྱུང་མ་སོང་།"
+msgstr "Haikuweza kupata Kitambulisho cha apu"
 
 #: ../fdroidserver/checkupdates.py
-#, fuzzy
 msgid "Couldn't find any version information"
-msgstr "ཐོན་རིམ་གསར་ཤོས་འདིའི་མིང་རྙེད་མ་སོང་།"
+msgstr "Haikuweza kupata habari yoyote ya toleo"
 
 #: ../fdroidserver/checkupdates.py
 msgid "Couldn't find package ID"
-msgstr "ཐུམ་སྒྲིལ་ངོས་འཛིན་རྙེད་སོན་བྱུང་མ་སོང་།"
+msgstr "Haikuweza kupata kitambulisho cha kifurushi"
 
 #: ../fdroidserver/update.py
 msgid "Cowardily refusing to overwrite existing signing key setup!"
-msgstr "མིང་རྟགས་ལྡེ་མིག་སྒྲིག་བཀོད་ལ་སྐྱར་བྲིས་བྱེད་མི་བདེ་བ།!"
+msgstr "Kwa uoga inakataa kuandika upya usanidi wa ufunguo wa saini uliopo!"
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "Created new container \"{name}\""
-msgstr "དྲྭ་སྣོད་གསར་པ་བཟོས་\"{name}\""
+msgstr "Imeunda kontena mpya \"{name}\""
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "Creating \"{path}\" for configuring s3cmd."
-msgstr ""
+msgstr "Kuunda \"{path}\" kwa ajili ya kusanidi s3cmd."
 
 #: ../fdroidserver/publish.py
 msgid "Creating log directory"
-msgstr "ཉིན་ཐོ་ཕྱོགས་དེབ་བཟོ་བཞིན་པ།"
+msgstr "Inaunda saraka ya kumbukumbu"
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "Creating new S3 bucket: {url}"
-msgstr "S3 སྣོད་གསར་པ་བཟོ་བཞིན་པ།:{url}"
+msgstr "Inaunda ndoo mpya ya S3: {url}"
 
 #: ../fdroidserver/publish.py
 msgid "Creating output directory"
-msgstr "ཐོན་སྐྱེད་ཕྱོགས་དེབ་བཟོ་བཞིན་པ།"
+msgstr "Inaunda saraka ya pato"
 
 #: ../fdroidserver/index.py
 msgid "Creating signed index with this key (SHA256):"
-msgstr "ལྡེ་མིག་འདི་(SHA256)དང་མཉམ་དུ་མིང་རྟགས་ཕྱོགས་སྟོན་བཟོ་བཞིན་པ།:"
+msgstr "Inaunda kielezo kilichotiwa sahihi na ufunguo huu (SHA256):"
 
 #: ../fdroidserver/publish.py ../fdroidserver/verify.py
 msgid "Creating temporary directory"
-msgstr "གནས་སྐབས་ཕྱོགས་དེབ་བཟོ་བཞིན་པ།"
+msgstr "Inaunda saraka ya muda mfupi"
 
 #: ../fdroidserver/index.py
 msgid "Creating unsigned index in preparation for signing"
-msgstr "མིང་རྟགས་གྲ་སྒྲིག་གི་ཆེད་དུ་མིང་རྟགས་མ་བཀོད་པའི་ཕྱོགས་སྟོན་བཟོ་བཞིན་པ།"
+msgstr "Inaunda kielezo isiyotiwa sahihi kwa maandalizi ya kutiwa sahihi"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "CurrentVersionCode {cv} is less than oldest build entry {versionCode}"
-msgstr ""
+msgstr "CurrentVersionCode {cv} ni chini kuliko kuingia ya ujenzi wa zamani {versionCode}"
 
 #: ../fdroidserver/nightly.py
 msgid "DEBUG_KEYSTORE is not set or the value is incomplete"
-msgstr "DEBUG_KEYSTORE སྒྲིག་བཀོད་བྱེད་མིན་འདུག ཡང་ན་ཚད་ལོངས་མིན་འདུག"
+msgstr "DEBUG_KEYSTORE haijawekwa au thamani yake haijakamilika"
 
 #: ../fdroidserver/update.py
 msgid "Delete APKs and/or OBBs without metadata from the repo"
-msgstr "APKs དང/ཡང་ནOBBs གཉིས་ལ་རེ་པོ་ནས་འགྲེལ་ཡིག་ཚགས་ཀྱི་རྒྱབ་ལྗོངས་ལོ་རྒྱུས་མེད་པ་རྣམས་སུབས།"
+msgstr "Futa APK na/au OBB bila metadata kutoka kwa ghala"
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "Deleting archive, repo is too big ({size} max {limit})"
-msgstr ""
+msgstr "Kufuta kumbukumbu, ghala ni kubwa mno ({size} upeo {limit})"
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "Deleting git-mirror history, repo is too big ({size} max {limit})"
-msgstr ""
+msgstr "Kufuta historia ya git-mirror, ghala ni kubwa mno ({size} upeo {limit})"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Deleting unknown file: {path}"
-msgstr "ངོས་འཛིན་མི་ཐུབ་པའི་ཡིག་ཆ་རྣམས་སུབས་བཞིན་པ།: {path}"
+msgstr "Kufuta faili isiyojulikana: {path}"
 
 #: ../fdroidserver/lint.py
 #, python-format
 msgid "Description '%s' is just the app's summary"
-msgstr "འགྲེལ་བཤད་'%s 1' ནི་མཉེན་ཆས་མདོར་བསྡུས་ཤིག་རེད།"
+msgstr "Maelezo %s ni muhtasari ya apu tu"
 
 #: ../fdroidserver/lint.py
 msgid "Description has a duplicate line"
-msgstr "འགྲེལ་བཤད་འདི་ལ་རིམ་པ་རྫུན་མ་ཡོད།"
+msgstr "Maelezo ina mstari wa nakala"
 
 #: ../fdroidserver/lint.py
 #, python-format
 msgid "Description has a list (%s) but it isn't bulleted (*) nor numbered (#)"
-msgstr "འགྲེལ་བཤད་འདི་ལ་ཐོ་གཞུང་ཡོད། (%s 1) འོན་ཀྱང་འདི་ལ་ཚགས་རྒྱབ་མིན་འདུག(*)གྲངས་ཀྱང་མེད། (#)"
+msgstr "Maelezo ina orodha (%s) lakini sio yenye vitone (*) wala nambari (#)"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "Description of length {length} is over the {limit} char limit"
-msgstr "རིང་ཐུང་གི་འགྲེལ་བཤད་ {length} {limit} ལས་བརྒལ་འདུག char limit"
+msgstr "Maelezo ya urefu {length} iko juu ya {limit} kikomo cha char"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Did you mean config/{name}.yml?"
-msgstr ""
+msgstr "Je, ulimaanisha config/{name}.yml?"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "Did you mean {code}?"
-msgstr ""
+msgstr "Je, ulimaanisha {code}?"
 
 #: ../fdroidserver/import_subcommand.py
 msgid "Do not add 'disable:' to the generated build entries"
-msgstr ""
+msgstr "Usiongeze 'disable:' kwa maingizo ya kujenga yaliyotokana nayo"
 
 #: ../fdroidserver/nightly.py
 msgid "Do not deploy the new files to the repo"
-msgstr ""
+msgstr "Usipeleke faili mpya kwenye ghala"
 
 #: ../fdroidserver/mirror.py
 #, python-brace-format
 msgid "Do not include \"{path}\" in URL!"
-msgstr ""
+msgstr "Usijumuishe \"{path}\" katika URL!"
 
 #: ../fdroidserver/init.py
 msgid "Do not prompt for Android SDK path, just fail"
-msgstr "དེ་མ་ཐག་ཏུ་ཨེན་ཀྲོཌ་SDK གྱི་ལམ་མ་སྟོན། ད་ལྟ་བྱེད་ཐུབ་མ་སོང་།"
+msgstr "Usiulize kuhusu njia ya SDK ya Android, feli tu"
 
 #: ../fdroidserver/nightly.py
 msgid "Do not remove the private keys generated from the keystore"
-msgstr ""
+msgstr "Usiondoe funguo za kibinafsi zilizotokana na keystore"
 
 #: ../fdroidserver/build.py
 msgid "Don't create a source tarball, useful when testing a build"
-msgstr "ཊར་བོལ་གྱི་འབྱུང་ཁུངས་མ་བཟོས། འདིས་ཐོན་སྐྱེད་ཚོད་ལྟ་བྱེད་པ་ལ་ཕན་ཐོགས།"
+msgstr "Usiunde tarball ya chanzo, muhimu wakati wa kujaribu jengo"
 
 #: ../fdroidserver/build.py
 msgid "Don't refresh the repository, useful when testing a build with no internet connection"
-msgstr "མཛོད་ཁང་སྐྱར་སོས་མ་བྱེད། དྲྭ་རྒྱ་མེད་པའི་སྐབས་ལ་ཐོན་སྐྱེད་ཚོད་ལྟ་བྱེད་པར་ཕན་ཐོགས་ཡོང་།"
+msgstr "Usionyeshe upya ghala hio, muhimu wakati wa kujaribu jengo isiyo na muunganisho wa mtandao"
 
 #: ../fdroidserver/deploy.py ../fdroidserver/nightly.py
 msgid "Don't use rsync checksums"
-msgstr "rsync ཡིག་ཚགས་བརྟག་དཔྱད་ཀྱི་གསོག་ཉར་ཁང་འདི་བེད་སྤྱོད་མ་བྱེད།"
+msgstr "Usitumie rsync checksums"
 
 #: ../fdroidserver/__main__.py
 msgid "Download complete mirrors of small repos"
-msgstr ""
+msgstr "Pakua vioo kamili vya maghala madogo"
 
 #: ../fdroidserver/common.py
 #, python-format
 msgid "Downloading %s"
-msgstr ""
+msgstr "Inapakua %s"
 
 #: ../fdroidserver/common.py
 msgid "Downloading the repository already failed once, not trying again."
-msgstr "མཛོད་ཁང་ཕབ་ལེན་ཐེངས་གཅིག་བྱས་པ་འདི་ཐུབ་མ་སོང་། ཡང་སྐྱར་ཐབས་ཤེས་བྱེད་ཀྱི་མིན་།."
+msgstr "Kupakua ghala hio tayari imefeli mara moja, haijaribu tena."
 
 #: ../fdroidserver/verify.py
 #, python-brace-format
 msgid "Downloading {url} failed. {error}"
-msgstr "{url} ཕབ་ལེན་ཐུབ་མ་སོང་།{error}"
+msgstr "Kupakua {url} kulifeli. {error}"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Duplicate Anti-Feature declaration at {path} was ignored!"
-msgstr ""
+msgstr "Nakala ingine ya tamko la kipengele kisichopendelewa katika {path} ilipuuzwa!"
 
 #: ../fdroidserver/index.py
 #, python-format
 msgid "Duplicate entry \"%s\" in mirrors config!"
-msgstr ""
+msgstr "Nakala ingine ya kuingia \"%s\" katika vioo vya usanidi!"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "Duplicate link in '{field}': {url}"
-msgstr "'{field}'ནང་གི་ངོ་བཤུས་སྦྲེལ་མཐུད།: {url}"
+msgstr "Nakala ingine ya kiungo katika '{field}': {url}"
 
 #: ../fdroidserver/common.py
 #, python-format
 msgid "ERROR: %(message)s"
-msgstr ""
+msgstr "HITILAFU: %(message)s"
 
 #: ../fdroidserver/__main__.py
 msgid "ERROR: The \"server\" subcommand has been removed, use \"deploy\"!"
-msgstr ""
+msgstr "HITILAFU: Amri ndogo ya \"server\" imetolewa, tumia \"deploy\"!"
 
 #: ../fdroidserver/mirror.py
 msgid ""
 "ERROR: this command should never be used to mirror f-droid.org!\n"
 "A full mirror of f-droid.org requires more than 200GB."
 msgstr ""
+"HITILAFU: amri hii haipaswi kutumika kama kioo kwa f-droid.org!\n"
+"Kioo kamili cha f-droid.org kinahitaji zaidi ya 200GB."
 
 #: ../fdroidserver/nightly.py
 msgid "ERROR: unsupported CI type, patches welcome!"
-msgstr "ནོར་འཁྲུལ།: རྒྱབ་སྐྱོར་མེད་པའི་CI རྣམ་གྲངས་དང་ལྷན་པ་རྒྱབ་ནའང་འགྲིག་གི་ཡོད།!"
+msgstr "HITILAFU: aina ya CI isiyoungwa mkono, marekebisho yanakaribishwa!"
 
 #: ../fdroidserver/nightly.py
 #, python-format
 msgid "ERROR: unsupported git host \"%s\", patches welcome!"
-msgstr ""
+msgstr "HITILAFU: mwenyeji wa git isiyoungwa mkono \"%s\", marekebisho yanakaribishwa!"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
@@ -688,7 +688,7 @@ msgstr ""
 #: ../fdroidserver/__main__.py
 #, python-brace-format
 msgid "Encoding is set to '{enc}' fdroid might run into encoding issues. Please set it to 'UTF-8' for best results."
-msgstr ""
+msgstr "Usimbaji umewekwa kwa '{enc}' fdroid yaweza kupata matatizo ya usimbaji. Tafadhali iweke kwenye 'UTF-8' kwa matokeo bora."
 
 #: ../fdroidserver/init.py
 #, python-format
@@ -696,13 +696,13 @@ msgid ""
 "Enter the path to the Android SDK (%s) here:\n"
 "> "
 msgstr ""
-"ཨེན་ཀྲོཌ་SDKགྱི་ལམ་འདིར་ཡོད་པས་ནང་འཛུལ་བྱེད། (%s) :\n"
+"Ingiza njia ya SDK ya Android (%s) hapa:\n"
 "> "
 
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Environment variable {var} from {configname} is not set!"
-msgstr ""
+msgstr "Vigezo vya mazingira {var} kutoka {configname} haijawekwa!"
 
 #: ../fdroidserver/deploy.py
 msgid "Error deploying 'github_releases', {} not present. (You might need to run `fdroid update` first.)"
@@ -710,601 +710,590 @@ msgstr ""
 
 #: ../fdroidserver/import_subcommand.py
 msgid "Error while getting repo address"
-msgstr "རེ་པོ་ཁ་བྱང་ལེན་སྐབས་ནོར་སྐྱོན།"
+msgstr "Kuna hitilafu wakati wa kupata anwani ya ghala"
 
 #: ../fdroidserver/scanner.py
 msgid "Exit with a non-zero code if problems were found"
-msgstr ""
+msgstr "Ondoka na msimbo usio wa sufuri ikiwa matatizo yalipatikana"
 
 #: ../fdroidserver/__main__.py
 msgid "Extract application metadata from a source repository"
-msgstr ""
+msgstr "Pata metadata ya apu kutoka kwa ghala ya chanzo"
 
 #: ../fdroidserver/__main__.py
 msgid "Extract signatures from APKs"
-msgstr "APKs ནས་མིང་རྟགས་ཕྱིར་སྟོན་བྱེད།"
+msgstr "Pata sahihi kutoka kwa APKs"
 
 #: ../fdroidserver/update.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Failed copying {path}: {error}"
-msgstr "ཀློག་མི་ཐུབ།{path}: {error}"
+msgstr "Imeshindwa kunakili {path}:{error}"
 
 #: ../fdroidserver/signatures.py
 #, python-brace-format
 msgid "Failed fetching signatures for '{apkfilename}': {error}"
-msgstr "'{apkfilename}'གྱི་ཆེད་དུ་འཚོལ་བཞིན་པའི་མིང་རྟགས་རྙེད་མ་སོང་།: {error}"
+msgstr "Imeshindwa kupakua sahihi za '{apkfilename}':{error}"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Failed reading {path}: {error}"
-msgstr "ཀློག་མི་ཐུབ།{path}: {error}"
+msgstr "Imeshindwa kusoma {path}: {error}"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Failed resizing {path}: {error}"
-msgstr "ཆེ་ཆུང་སྐྱར་སྒྲིག་ཐུབ་མ་སོང་། {path}: {error}"
+msgstr "Imeshindwa kubadilisha ukubwa {path}: {error}"
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "Failed to create S3 bucket: {url}"
-msgstr "S3 དྲྭ་སྣོད་བཟོས་ཐུབ་མ་སོང་། :{url}"
+msgstr "Imeshindwa kuunda ndoo ya S3: {url}"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Failed to get APK information, deleting {path}"
-msgstr "APK གནས་ཚུལ་རག་གི་མིན་འདུག {path}སུབ་བཞིན་པ།"
+msgstr "Imeshindwa kupata maelezo ya APK, kufuta {path}"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Failed to get APK information, skipping {path}"
-msgstr "APK གནས་ཚུལ་རག་གི་མིན་འདུག {path}མཆོང་།"
+msgstr "Imeshindwa kupata maelezo ya APK. inaruka {path}"
 
 #: ../fdroidserver/update.py
-#, fuzzy
 msgid "Failed to get APK signing key fingerprint"
-msgstr "APKནང་གསལ་བའི་གནས་ཚུལ་རྣམས་ལེན་ཐུབ་མ་སོང་།"
+msgstr "Imeshindwa kupata alama ya kidole ya ufunguo wa kusaini APK"
 
 #: ../fdroidserver/install.py
 #, python-brace-format
 msgid "Failed to install '{apkfilename}' on {dev}: {error}"
-msgstr "སྒྲིག་བཅུག་བྱེད་མ་སོང་། '{apkfilename}' སྒང་ལ་ {dev}: {error}"
+msgstr "Imeshindwa kusimika '{apkfilename}' kwenye {dev}: {error}"
 
 #: ../fdroidserver/common.py
 msgid "Failed to sign application"
-msgstr "མཉེན་ཆས་མིང་རྟགས་བཀོད་མིན་འདུག"
+msgstr "Imeshindwa kusaini apu"
 
 #: ../fdroidserver/build.py
 #, python-brace-format
 msgid "Fetched buildserverid from VM: {buildserverid}"
-msgstr ""
+msgstr "buildserverid imepakiwa kutoka kwa VM: {buildserverid}"
 
 #: ../fdroidserver/signatures.py
 #, python-brace-format
 msgid "Fetched signatures for '{apkfilename}' -> '{sigdir}'"
-msgstr "'{apkfilename}' ཆེད་དུ་མིང་རྟགས་འཚོལ་བཞིན་པ།་> '{sigdir}'"
+msgstr "Saini zimepakiwa kwa '{apkfilename}' -> '{sigdir}'"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "File disappeared while processing it: {path}"
-msgstr ""
+msgstr "Faili ilipotea wakati wa kuichakata: {path}"
 
 #: ../fdroidserver/build.py ../fdroidserver/install.py
 #: ../fdroidserver/rewritemeta.py ../fdroidserver/scanner.py
 #: ../fdroidserver/update.py
 msgid "Finished"
-msgstr "ཚར་སོང་།"
+msgstr "Imekamilika"
 
 #: ../fdroidserver/lint.py
-#, fuzzy
 msgid "Flattr donation methods belong in the FlattrID: field"
-msgstr "Flattr ཞལ་འདེབས་ཐབས་ལམ་འདི་བཞིན་FlattrID flag ལ་ཐོབ་ཀྱི་ཡོད་།"
+msgstr "Njia za mchango ya Flattr ni za FlattrID: eneo"
 
 #: ../fdroidserver/lint.py
 msgid "Forbidden HTML tags"
-msgstr ""
+msgstr "Tagi za HTML zilizokatazwa"
 
 #: ../fdroidserver/build.py
 msgid "Force build of disabled apps, and carries on regardless of scan problems. Only allowed in test mode."
-msgstr "ནུས་མེད་མཉེན་ཆས་ལ་ཐོན་སྐྱེད་ཆེད་དུ་མངགས་ཏེ་བཟོས། འདི་འཚག་རྒྱབ་ཀྱི་དཀའ་ངལ་ཡོད་མིན་ལ་མ་ལྟོས་པར་མུ་མཐུད་དུ་འགྲོ་ཐུབ། འདི་ཚོད་ལྟའི་ཚུལ་ཁ་ོནར་ཆོག་མཆན་སྤྲད།."
+msgstr "Kulazimisha ujenzi wa apu zilizozimwa, na kuendelea bila kujali matatizo ya uchanganuzi. Inaruhusiwa tu katika hali ya majaribio."
 
 #: ../fdroidserver/build.py
 #, python-brace-format
 msgid "Force halting build after {0} sec timeout!"
-msgstr ""
+msgstr "Kulazimisha kusitisha ujenzi baada ya muda wa sekunde {0} kumalizika!"
 
 #: ../fdroidserver/scanner.py
 msgid "Force scan of disabled apps and builds."
-msgstr ""
+msgstr "Kulazimisha kuchanganua kwa apu zilizozimwa na kujenga."
 
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Found \"{path}\" graphic without metadata for app \"{name}\"!"
-msgstr "\"{name}\" བརྐོད་རིས་མེད་པའི་མཉེས་ཆས་ཀྱི་རྒྱབ་ལྗོངས་ཡིག་ཆ་\"{path}\"རྙེད་སོང་།!"
+msgstr "Imepata mchoro wa \"{path}\" bila metadata kwa apu \"{name}\"!"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Found bad funding file \"{path}\" for \"{name}\":"
-msgstr ""
+msgstr "Imepata faili ya fedha mbaya \"{path}\" ya \"{name}\":"
 
 #: ../fdroidserver/common.py
 msgid "Found invalid appids in arguments"
-msgstr "རྩོད་པའི་ནང་ཁུངས་ལྡན་མིན་པའི་appids རྙེད་འདུག"
+msgstr "Imepata appids batili katika hoja"
 
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
 #: ../fdroidserver/common.py
 msgid "Found invalid versionCodes for some apps"
-msgstr "མཉེན་ཆས་ཁ་ཤས་ཀྱི་ཁུངས་ལྡན་མིན་པའི་ཐོན་རིམ་ཨང་རྟགས་རྙེད་འདུག"
+msgstr "Ilipata versionCodes batili katika baadhi ya apu"
 
 #: ../fdroidserver/common.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Found multiple JAR Signature Block Files in {path}"
-msgstr "{path}ནང་ལ་སྣ་མང་མིང་རྟགས་ཆོག་མཆན་ལག་ཁྱེར་རྙེད་སོང་།"
+msgstr "Imepata faili nyingi za JAR Signature Block katika {path}"
 
 #: ../fdroidserver/common.py
-#, fuzzy
 msgid "Found multiple Signer Certificates!"
-msgstr "མཛོད་ཁང་ཆེད་དུ་་མིང་རྟགས་བཀོད་པའི་ལག་ཁྱེར་མང་པོ་རྙེད་འདུག."
+msgstr "Imepata Vyeti vingi vya Signer!"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Found multiple metadata files for {appid}"
-msgstr "རྒྱབ་ལྗོངས་ཡིག་ཚགས་སྣ་མང་{appid}ནང་ཐོན།"
+msgstr "Imepata faili nyingi za metadata kwa {appid}"
 
 #: ../fdroidserver/index.py
 msgid "Found multiple signing certificates for repository."
-msgstr "མཛོད་ཁང་ཆེད་དུ་་མིང་རྟགས་བཀོད་པའི་ལག་ཁྱེར་མང་པོ་རྙེད་འདུག."
+msgstr "Imepata vyeti vingi vya kusaini ya ghala."
 
 #: ../fdroidserver/index.py
 msgid "Found no signing certificates for repository."
-msgstr "མཛོད་ཁང་ཆེད་དུ་མིང་རྟགས་བཀོད་པའི་ལག་ཁྱེར་རྙེད་མ་སོང་།."
+msgstr "Haikupata vyeti vyovyote vya kusaini ya ghala."
 
 #: ../fdroidserver/lint.py
 #, python-format
 msgid "Found non-file at %s"
-msgstr "འདི་ལ་%s 1 ཡིག་ཆ་མིན་པ་རྙེད་སོང་།"
+msgstr "Imepata kitu kisicho faili katika %s"
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "Found {apkfilename} at {url}"
-msgstr "{url} ནང་ལ་ {apkfilename}ཤུས་བཞིན་པ།"
+msgstr "Imepata {apkfilename} katika {url}"
 
 #: ../fdroidserver/scanner.py
 #, python-brace-format
 msgid "Found {count} problems in {filename}"
-msgstr ""
+msgstr "Imepata matatizo ya {count} katika {filename}"
 
 #: ../fdroidserver/scanner.py
 #, python-brace-format
 msgid "Found {count} warnings in {filename}"
-msgstr ""
+msgstr "Imepata onyo {count} katika {filename}"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Generated skeleton metadata for {appid}"
-msgstr "{appid}ཆེད་དུ་རྒྱབ་ལྗོངས་ཡིག་ཚགས་བཟོས།"
+msgstr "Imeunda metadata ya kiunzi kwa {appid}"
 
 #: ../fdroidserver/common.py
 #, python-format
 msgid "Git checkout of '%s' failed"
-msgstr "གིཊ་ཕྱིར་འཐེན་'%s 1' ཐུབ་མ་སོང་།"
+msgstr "Git toa ya '%s' ilishindwa"
 
 #: ../fdroidserver/common.py
 msgid "Git clean failed"
-msgstr "གིཊ་གཙང་བཟོ་ཐུབ་མ་སོང་།"
+msgstr "Git clean imeshindwa"
 
 #: ../fdroidserver/common.py
 msgid "Git fetch failed"
-msgstr "གིཊ་འཚོལ་ཐུབ་མ་སོང་།"
+msgstr "Git fetch imeshindwa"
 
 #: ../fdroidserver/common.py
-#, fuzzy
 msgid "Git prune failed"
-msgstr "གིཊ་སྐྱར་སྒྲིག་ཐུབ་མ་སོང་།"
+msgstr "Git prune imeshindwa"
 
 #: ../fdroidserver/common.py
 #, python-format
 msgid "Git remote set-head failed: \"%s\""
-msgstr ""
+msgstr "Git remote set-head imeshindwa: \"%s\""
 
 #: ../fdroidserver/common.py
 msgid "Git reset failed"
-msgstr "གིཊ་སྐྱར་སྒྲིག་ཐུབ་མ་སོང་།"
+msgstr "Git reset imeshindwa"
 
 #: ../fdroidserver/common.py
-#, fuzzy
 msgid "Git submodule deinit failed"
-msgstr "གིཊ་ཡན་ལག་རྒྱ་ཁྱོན་གསར་བསྒྱུར་ཐུབ་མ་སོང་།"
+msgstr "Git submodule deinit imefeli"
 
 #: ../fdroidserver/common.py
 msgid "Git submodule sync failed"
-msgstr "གིཊ་རྒྱ་ཁྱོན་མཉམ་བསྲེ་ཐུབ་མ་སོང་།"
+msgstr "Git Submodule sync imefeli"
 
 #: ../fdroidserver/common.py
 msgid "Git submodule update failed"
-msgstr "གིཊ་ཡན་ལག་རྒྱ་ཁྱོན་གསར་བསྒྱུར་ཐུབ་མ་སོང་།"
+msgstr "Git submodule update imefeli"
 
 #: ../fdroidserver/common.py
 msgid "HTTPS must be used with Subversion URLs!"
-msgstr ""
+msgstr "HTTPS lazima zitumike na URL za Subversion!"
 
 #: ../fdroidserver/deploy.py
 msgid "If a git mirror gets to big, allow the archive to be deleted"
-msgstr ""
+msgstr "Ikiwa kioo cha git kinakua kikubwa, ruhusu kumbukumbu ifutwe"
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "If this upload fails, try manually uploading to {url}"
-msgstr ""
+msgstr "Ikiwa kupakia hii inafeli, jaribu kupakia mwenyewe kwa {url}"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Ignoring '{field}' in '{metapath}' metadata because it is deprecated."
-msgstr ""
+msgstr "Inapuuza '{field}' katika metadata ya '{metapath}' kwa sababu imepitwa na wakati."
 
 #: ../fdroidserver/update.py
 #, python-format
 msgid "Ignoring FUNDING.yml entry longer than 2048: %s"
-msgstr ""
+msgstr "Inapuuza ingizo la FUNDING.yml iliyo ndefu kuliko 2048: %s"
 
 #: ../fdroidserver/update.py
 #, python-format
 msgid "Ignoring bad element in manifest: %s"
-msgstr ""
+msgstr "Inapuuza kipengele kibaya katika manifest: %s"
 
 #: ../fdroidserver/index.py
 msgid "Ignoring package without metadata: "
-msgstr "རྒྱབ་ལྗོངས་ཡིག་ཆ་མེད་པའི་ཐུམ་སྒྲིལ་ཡ་ལན་མ་བྱས། "
+msgstr "Inapuuza kifurushi kisicho na metadata: "
 
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Ignoring stale cache data for {apkfilename}"
-msgstr "{apkfilename}ཡིག་ཆ་སྦས་ཁུང་རྙིང་པ་ལ་ཡ་ལན་མ་བྱས་"
+msgstr "Inapuuza data ya cache isiyo na maana kwa {apkfilename}"
 
 #: ../fdroidserver/update.py
 msgid "Include APKs that are signed with disabled algorithms like MD5"
-msgstr "MD5ལྟ་བུའི་མཚན་རྟགས་ཡོད་པའི་APKs ནང་ཚུད།"
+msgstr "Jumuisha APK ambazo zimesainiwa na algoriti zilizozimwa kama MD5"
 
 #: ../fdroidserver/mirror.py
 msgid "Include the PGP signature .asc files in the mirror"
-msgstr ""
+msgstr "Jumuisha faili za sahihi za PGP .asc kwenye kioo"
 
 #: ../fdroidserver/mirror.py
 msgid "Include the build logs in the mirror"
-msgstr ""
+msgstr "Jumuisha logi za ujenzi kwenye kioo"
 
 #: ../fdroidserver/mirror.py
 msgid "Include the source tarballs in the mirror"
-msgstr ""
+msgstr "Jumuisha tarballs za chanzo kwenye kioo"
 
 #: ../fdroidserver/metadata.py
 #, python-format
 msgid "Including metadata from %s@%s"
-msgstr ""
+msgstr "Inajumuisha metadata kutoka %s@%s"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Including metadata from {path}"
-msgstr ""
+msgstr "Inajumuisha metadata kutoka {path}"
 
 #: ../fdroidserver/common.py
 msgid "Initialising submodules"
-msgstr "ཐོག་མིའི་ཡན་ལག་རྒྱ་ཁྱོན།"
+msgstr "Kuanzisha submodules"
 
 #: ../fdroidserver/install.py
 msgid "Install all signed applications available"
-msgstr "ཡོད་བཞིན་པའི་མིང་རྟགས་བཀོད་པའི་མཉེན་ཆས་ཆ་ཚང་འགྲིག་བཅུག་བྱེད།"
+msgstr "Simika apu zote zilizosainiwa zinazopatikana"
 
 #: ../fdroidserver/__main__.py
 msgid "Install built packages on devices"
-msgstr "ཡོ་བྱད་སྒང་གི་ཐུམ་སྒྲིལ་བཟོས་པ་རྣམས་འགྲིག་བཅུག་བྱེད།"
+msgstr "Sakinisha vifurushi kwenye vifaa"
 
 #: ../fdroidserver/install.py
-#, fuzzy, python-format
+#, python-format
 msgid "Installing %s..."
-msgstr "སྒྲིག་བཅུག་བྱེད་བཞིན་པ།%s 1…"
+msgstr "Inasimika %s..."
 
 #: ../fdroidserver/install.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Installing '{apkfilename}' on {dev}..."
-msgstr "'{apkfilename}' སྒྲིག་བཅུག་བྱེད་བཞིན་པ{dev}གྱི་སྒང་ལ་…"
+msgstr "Inasimika '{apkfilename}' kwenye {dev}..."
 
 #: ../fdroidserver/__main__.py
 msgid "Interact with the repo HTTP server"
-msgstr "རེ་པོ་HTTP ཞབས་ཞུ་འཕྲུལ་ཆས་དང་ཐུགས་ཕྲད།"
+msgstr "Wasiliana na seva ya ghala ya HTTP"
 
 #: ../fdroidserver/update.py
 msgid "Invalid APK"
-msgstr "ཁུངས་ལྡན་མིན་པའི་APK"
+msgstr "APK batili"
 
 #: ../fdroidserver/checkupdates.py
 #, python-brace-format
 msgid "Invalid AutoUpdateMode: {mode}"
-msgstr ""
+msgstr "AutoUpdateMode batili: {mode}"
 
 #: ../fdroidserver/checkupdates.py
 #, python-brace-format
 msgid "Invalid UpdateCheckMode: {mode}"
-msgstr ""
+msgstr "UpdateCheckMode batili: {mode}"
 
 #: ../fdroidserver/checkupdates.py
 #, python-brace-format
 msgid "Invalid VercodeOperation: {field}"
-msgstr ""
+msgstr "VercodeOperation batili: {field}"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "Invalid VercodeOperation: {invalid_ops}"
-msgstr ""
+msgstr "VercodeOperation batili: {invalid_ops}"
 
 #: ../fdroidserver/common.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Invalid application ID {appid}"
-msgstr "ལས་ཀ་བྱེད་བཞིན་པ།{appid}"
+msgstr "Kitambulisho batili cha apu {appid}"
 
 #: ../fdroidserver/metadata.py
 #, python-format
 msgid "Invalid boolean '%s'"
-msgstr "ཁུངས་ལྡན་མིན་པའི་boolean '%s 1'"
+msgstr "Boolean batili '%s'"
 
 #: ../fdroidserver/lint.py
 msgid "Invalid bulleted list"
-msgstr "ཚད་ལྡན་མིན་པའི་ཚགས་ཀྱི་ཐོ་གཞུང་།"
+msgstr "Orodha ya vitone batili"
 
 #: ../fdroidserver/common.py
 #, python-format
 msgid "Invalid name for published file: %s"
-msgstr "པར་སྐྲུན་ཡིག་ཆའི་ཆེད་དུ་ཁུངས་ལྡན་མིན་པའིན་མིང་།: %s 1"
+msgstr "Jina batili kwa faili zilizochapishwa: %s"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Invalid ndk: entry in build: \"{ndk}\""
-msgstr ""
+msgstr "ndk batili: ingizo la jenga: \"{ndk}\""
 
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Invalid redirect to non-HTTPS: {before} -> {after} "
-msgstr ""
+msgstr "Elekezo mpya batili kwa non-HTTPS:{before} -> {after} "
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Invalid scrlib metadata: '{file}' does not exist"
-msgstr ""
+msgstr "metadata ya scrlib batili: '{file}' haipo"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Invalid srclib metadata: could not parse '{file}'"
-msgstr ""
+msgstr "Metadata ya srclib batili: haikuweza kuchambua '{file}'"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Invalid srclib metadata: unknown key '{key}' in '{file}'"
-msgstr ""
+msgstr "Metadata batili ya srclib: ufunguo usiojulikana '{key}' katika '{file}'"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "JAR signature failed to verify: {path}"
-msgstr ""
+msgstr "Uthibitisho wa sahihi wa JAR ulishindwa: {path}"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "JAR signature verified: {path}"
-msgstr ""
+msgstr "Sahihi ya JAR imethibitishwa: {path}"
 
 #: ../fdroidserver/scanner.py
 msgid "Java JAR file"
-msgstr ""
+msgstr "Faili ya JAR ya Java"
 
 #: ../fdroidserver/mirror.py ../fdroidserver/publish.py
 #: ../fdroidserver/update.py
 msgid "Java JDK not found! Install in standard location or set java_paths!"
-msgstr "Java JDK རྙེད་མ་སོང་།! ཚད་ལྡན་གྱི་ས་གནས་ནང་སྒྲིག་བཅུག་བྱེད་པའམ་ཡང་ན་java_paths སྒྲིག!"
+msgstr "JDK ya Java haijapatikana! Simika katika sehemu ya kiwango au seti java_paths!"
 
 #: ../fdroidserver/scanner.py
 msgid "Java compiled class"
-msgstr ""
+msgstr "Darasa lililokusanywa la Java"
 
 #: ../fdroidserver/signindex.py
 msgid "Java jarsigner not found! Install in standard location or set java_paths!"
-msgstr "Java jarsigner རྙེད་མ་སོང་། !ཚད་ལྡན་གྱི་ས་གནས་ནང་སྒྲིག་བཅུག་བྱེད་པའམ་ཡང་ན་java_paths སྒྲིག!"
+msgstr "jarsigner ya Java haijapatikana! Simika katika sehemu ya kawaida au seti java_paths!"
 
 #: ../fdroidserver/lint.py
 msgid "Javascript in HTML src attributes"
-msgstr ""
+msgstr "Javascript katika sifa za HTML src"
 
 #: ../fdroidserver/build.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Keeping failed build \"{apkfilename}\""
-msgstr "ཐུམ་སྒྲིལ་གྱི་མིང་ཀློག་བཞིནཔ།/ཐོན་རིམ་ཨང་རྟགས་/ཐོན་རིམ་གྱི་མིང་བདེ་སྤྱོད་མེད། APK ཁུངས་ལྡན་མིན།: '{apkfilename}'"
+msgstr "Kuweka jenga zilizofeli \"{apkfilename}\""
 
 #: ../fdroidserver/init.py
 msgid "Keystore for signing key:\t"
-msgstr "མིང་རྟགས་བཀོད་པའི་ལྡེ་མིག་ཆེད་དུ་སྟོན་པའི་ལྡེ་མིག་གསོག་ཉར་ཁང་གི་ལམ།\t"
+msgstr "Hifadhi ya ufunguo ya kusaini ufunguo:\t"
 
 #: ../fdroidserver/lint.py
 msgid "Known debug key is used in AllowedAPKSigningKeys: "
-msgstr ""
+msgstr "Ufunguo wa utatuzi unaojulikana inatumika kwa AllowedAPKSigningKeys: "
 
 #: ../fdroidserver/lint.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Last used commit '{commit}' looks like a tag, but UpdateCheckMode is '{ucm}'"
-msgstr "ཁས་ལེན་བྱས་པའི་བེད་སྤྱོད་ཐ་མ་ '{commit}' སྦྱར་བ་འདྲ་པོ་འདུག, འོན་ཀྱང་གསར་བསྒྱུར་ཡོད་མེད་འཚོལ་བྱེད་ནི།'{ucm}'"
+msgstr "Mabadiliko ya mwisho yaliyotumika ya '{commit}' yanafanana na tagi, lakini UpdateCheckMode ni '{ucm}'"
 
 #: ../fdroidserver/lint.py
-#, fuzzy
 msgid "Liberapay donation methods belong in the Liberapay: field"
-msgstr "Flattr ཞལ་འདེབས་ཐབས་ལམ་འདི་བཞིན་FlattrID flag ལ་ཐོབ་ཀྱི་ཡོད་།"
+msgstr "Njia za mchango ya Liberapay ipo ndani ya Liberapay: field"
 
 #: ../fdroidserver/rewritemeta.py
-#, fuzzy
 msgid "List files that would be reformatted (dry run)"
-msgstr "སྐྱར་དུ་བཀོད་སྒྲིག་བྱེད་དགོས་པའི་ཡག་ཆ་རྣམས་ཀྱི་ཐོ་གཞུང་།"
+msgstr "Orodhesha faili ambazo zitarekebishwa muundo (dry run)"
 
 #: ../fdroidserver/lint.py
 msgid "Locale included in f-droid.org URL"
-msgstr ""
+msgstr "Eneo limejumuishwa katika URL ya f-droid.org"
 
 #: ../fdroidserver/build.py
 msgid "Make the build stop on exceptions"
-msgstr "དམིགས་བསལ་གྱི་གནས་སྐབས་ལ་ཐོན་སྐྱེད་དེ་བཀག་ཆོག"
+msgstr "Fanya ujenzi kuacha kwa ubaguzi"
 
 #: ../fdroidserver/index.py
 msgid "Malformed repository mirrors."
-msgstr "བཟོ་ལྟ་མེད་པའི་མཛོད་ཁང་ཤེལ་སྒོ་རྣམས།."
+msgstr "Vioo vya ghala yenye umbo mbovu."
 
 #: ../fdroidserver/deploy.py
 msgid "Malformed serverwebroot line:"
-msgstr "བཟོ་ལྟ་ཤོར་བའི་ serverwebroot line:"
+msgstr "Laini ya serverwebroot yenye umbo bovu:"
 
 #: ../fdroidserver/scanner.py
 #, python-format
 msgid "Max recursion depth in ZIP file reached: %s"
-msgstr ""
+msgstr "Upeo wa kina cha urejeshaji katika faili ya ZIP umefikiwa: %s"
 
 #: ../fdroidserver/mirror.py
 msgid "Mirror the full repo and archive, all file types."
-msgstr ""
+msgstr "Akisi ghala mzima na uhifadhi, aina zote za faili."
 
 #: ../fdroidserver/gpgsign.py
 msgid "Missing output directory"
-msgstr "ཕྱོགས་དེབ་ཐོན་སྐྱེད་བོར་བརླག"
+msgstr "Saraka ya pato haipo"
 
 #: ../fdroidserver/metadata.py
 msgid "Moving Anti-Features declarations to localized files:"
-msgstr ""
+msgstr "Inasongesha tamko la Anti-Features hadi kwa faili zilizolocaliziwa:"
 
 #: ../fdroidserver/index.py
 msgid "Neither \"repo_pubkey\" nor \"keystorepass\" set in config.yml"
-msgstr ""
+msgstr "Si \"repo_pubkey\" wala \"keystorepass\" iliyowekwa kwenye config.yml"
 
 #: ../fdroidserver/verify.py
-#, fuzzy, python-format
+#, python-format
 msgid "No APK for package: %s"
-msgstr "ཐུམ་སྒྲིལ་དེ་འདྲ་མིན་འདུག: %s 1"
+msgstr "Hakuna APK ya kifurushi: %s"
 
 #: ../fdroidserver/common.py
 msgid "No Android SDK found!"
-msgstr "ཨེན་ཀྲོཌ་ SDK རྙེད་མ་སོང་།!"
+msgstr "Hakuna SDK ya Android Iliyopatikana!"
 
 #: ../fdroidserver/install.py
 msgid "No attached devices found"
-msgstr "ཟུར་སྣོན་ཡོ་བྱད་རྙེད་མ་སོང་།"
+msgstr "Hakuna vifaa vilivyoambatanishwa vimepatikana"
 
 #: ../fdroidserver/index.py
 msgid "No fingerprint in URL."
-msgstr "URL ནང་ལག་མཐིལ་པར་ཤུས་རྙེད་མ་སོང་།."
+msgstr "Hakuna alama ya kidole kwenye URL."
 
 #: ../fdroidserver/common.py
 msgid "No git submodules available"
-msgstr "གིཊ་ཡན་ལག་རྒྱ་ཁྱོན་མིན་འདུག"
+msgstr "Hakuna submodule za git inayopatikana"
 
 #: ../fdroidserver/import_subcommand.py
-#, fuzzy
 msgid "No gradle project could be found. Specify --subdir?"
-msgstr "ཨེན་ཀྲོཌ་དང་ཡང་ན་ཀི་བི་ལས་འཆར་གང་ཡང་རྙེད་ས་མ་རེད། དམིགས་སྟོན་བྱེད་--subdir?"
+msgstr "Hakuna mradi wa gradle imeweza kupatikana. Bainisha --subdir?"
 
 #: ../fdroidserver/import_subcommand.py
 msgid "No information found."
-msgstr "གནས་ཚུལ་རྙེད་མ་སོང་།."
+msgstr "Hakuna taarifa imepatikana."
 
 #: ../fdroidserver/checkupdates.py
-#, fuzzy
 msgid "No matching tags found"
-msgstr "གནས་ཚུལ་རྙེད་མ་སོང་།"
+msgstr "Hakuna tagi zimepatikana zinazolingana"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "No minimum SDK version found in {0}, using default (3)."
-msgstr ""
+msgstr "Hakuna toleo la chini zaidi la SDK limepatikana katika {0}, kutumia chaguo-msingi (3)."
 
 #: ../fdroidserver/lint.py
 msgid "No need to specify that the app is Free Software"
-msgstr "མཉེས་ཆས་འདི་རིན་མེད་མཉེན་ཆས་ཡིན་པ་དམིགས་སྟོན་བྱེད་དགོས་དོན་མེད་།"
+msgstr "Hakuna haja ya kubainisha kuwa apu ni apu Huru"
 
 #: ../fdroidserver/lint.py
 msgid "No need to specify that the app is for Android"
-msgstr "མཉེན་ཆས་འདི་ཨེན་ཀྲོཌ་ཆེད་དུ་ཡིན་པ་དམིགས་སྟོན་བྱེད་དགོས་དོན་མེད།"
+msgstr "Hiana haja ya kubainisha kuwa apu hio ni ya Android"
 
 #: ../fdroidserver/deploy.py
 msgid "No option set! Edit your config.yml to set at least one of these:"
-msgstr "གདམ་ཀ་མེད་པ་སྒྲིག།! ཁྱེད་རང་གི་config.yml འདིའི་ནང་ནས་མ་མཐའ་ཡིན་ཡང་གང་རུང་ཞིག་རྩོམ་སྒྲིག་བྱེད་:"
+msgstr "Hakuna chaguo lililowekwa! Hariri config.yml iweke angalau moja ya hizi:"
 
 #: ../fdroidserver/common.py
 msgid "No packages specified"
-msgstr "ཐུམ་སྒྲིལ་དམིགས་སྟོན་བྱེད་མེད།"
+msgstr "Hakuna vifurishi vilivyobainishwa"
 
 #: ../fdroidserver/install.py
 #, python-format
 msgid "No signed APK available for %s"
-msgstr "%s 1ཆེད་དུ་མིང་རྟགས་བཀོད་པའི་ APK མེད།"
+msgstr "Hakuna APK iliyosainiwa inayopatikana ya %s"
 
 #: ../fdroidserver/install.py
 msgid "No signed output directory - nothing to do"
-msgstr "མིང་རྟགས་མ་བཀོད་པའི་ཕྱོགས་དེབ་ཐོན་སྐྱེད། -བྱ་རྒྱུ་གང་ཡང་མེད།"
+msgstr "Hakuna saraka la pato lililosainiwa - hakuna cha kufanya"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "No signing certificates found in {path}"
-msgstr "{path}མིང་རྟགས་བཀོད་པའི་ཆོག་མཆན་ལག་ཁྱེར་འདིའི་ནང་རྙེད་མ་སོང་།"
+msgstr "Hakuna vyeti vya kusaini vimepatikana katika {path}"
 
 #: ../fdroidserver/common.py
 #, python-format
 msgid "No such package: %s"
-msgstr "ཐུམ་སྒྲིལ་དེ་འདྲ་མིན་འདུག: %s 1"
+msgstr "Hakuna kifurushi kama vile: %s"
 
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "No such versionCode {versionCode} for app {appid}"
-msgstr "ཐོན་རིམ་ཨང་རྟགས་དེ་འདྲ་མིན་འདུག {versionCode} མཉེན་ཆས་ཆེད་དུ།{appid}"
+msgstr "Hakuna versionCode kama hio {versionCode} kwa apu {appid}"
 
 #: ../fdroidserver/checkupdates.py
-#, fuzzy
 msgid "No tags found"
-msgstr "ཟུར་སྣོན་ཡོ་བྱད་རྙེད་མ་སོང་།"
+msgstr "Hakuna vishikozo vilivyopatikana"
 
 #: ../fdroidserver/publish.py ../fdroidserver/verify.py
 msgid "No unsigned directory - nothing to do"
-msgstr "མིང་རྟགས་མ་བཀོད་པའི་ཕྱོགས་དེབ་མིན་འདུག-བྱ་རྒྱུ་གང་ཡང་མེད།"
+msgstr "Hakuna saraka isiyotiwa saini - hakuna la kufanya"
 
 #: ../fdroidserver/__main__.py
-#, fuzzy
 msgid "No version information could be found."
-msgstr "ཆ་རྒྱུས་མེད་པའི་དམིགས་བསལ་ཞིག་རྙེད་སོང་།"
+msgstr "Hakuna taarifa ya toleo iliyoweza kupatikana."
 
 #: ../fdroidserver/common.py
 msgid "Not a valid size definition: \"{}\""
-msgstr ""
+msgstr "Sio ufafanuzi halali wa ukubwa: \"{}\""
 
 #: ../fdroidserver/signindex.py
 msgid "Nothing to do"
-msgstr "བྱ་རྒྱུ་གང་ཡང་མེད་།"
+msgstr "Hakuna la kufanya"
 
 #: ../fdroidserver/checkupdates.py
 #, python-brace-format
 msgid "Nothing to do for {appid}."
-msgstr "{appid} ཆེད་དུ་བྱ་རྒྱུ་གང་ཡང་མེད་།."
+msgstr "Hakuna la kufanya kwa {appid}."
 
 #: ../fdroidserver/init.py
 msgid "Now set these in config.yml:"
-msgstr ""
+msgstr "Sasa seti hizi katika config.yml:"
 
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "OBB file has newer versionCode({integer}) than any APK:"
-msgstr "OBB ཡིག་ཆ་ལ་ཐོན་རིམ་ཨང་རྟགས་གསར་པ་ཡོད་རེད་། ({integer}) APK གཞན།:"
+msgstr "Faili ya OBB ina versionCode mpya ({integer}) kuliko APK yoyote:"
 
 #: ../fdroidserver/update.py
 msgid "OBB filename must start with \"main.\" or \"patch.\":"
-msgstr "OBB ཡིག་ཆའི་མིང་ངེས་པར་དུ་\"གཙོ་བོ་\" ཡང་ན \"ལྷན་པ་.\"མཉམ་དུ་འགོ་བཙུགས:"
+msgstr "Jina la faili ya OBB lazima ianze na \"main.\" au \"patch.\":"
 
 #: ../fdroidserver/update.py
 msgid "OBB's packagename does not match a supported APK:"
-msgstr "OBB's ཐུམ་སྒྲིལ་མིང་འདིས་APK རྒྱབ་སྐྱོར་ཡོད་པ་དང་མཐུན་གྱི་མིན་འདུག:"
+msgstr "Jina la kifurushi cha OBB hailingani na APK inayoungwa mkono:"
 
 #: ../fdroidserver/deploy.py
 msgid "Offline machine, skipping git mirror generation until `fdroid deploy`"
-msgstr ""
+msgstr "Machini iliyo nje ya mtandao, inapuuza uundaji wa kioo cha git mpaka 'fdroid deploy'"
 
 #: ../fdroidserver/deploy.py
 msgid "One of the 'github_releases' config items is missing the 'projectUrl' value. skipping ..."
@@ -1321,214 +1310,213 @@ msgstr ""
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Only PNG and JPEG are supported for graphics, found: {path}"
-msgstr "PNG དང་ JPEG ཁོ་ན་བརྐོས་རིས་རྒྱབ་སྐྱོར་རྙེད་སོང་། :{path}"
+msgstr "PNG na JPEG pekee zinakubalika katika mchoro, zimepata: {path}"
 
 #: ../fdroidserver/checkupdates.py
 msgid "Only print differences with the Play Store"
-msgstr "མཉེས་ཆས་གསོག་ཉར་ཁང་དང་མི་འདྲ་པ་ཡོད་པ་ཁོ་ནར་པར་ཤུས་བྱེད།"
+msgstr "Chapisha tofauti pekee na Play Store"
 
 #: ../fdroidserver/checkupdates.py
 msgid "Only process apps with auto-updates"
-msgstr "མཉེན་ཆས་ཁོ་ནར་རང་འགུལ་གསར་བསྒྱུར་བྱེད།"
+msgstr "Chakata apu zilizo na masasisho ya kiotomatiki pekee"
 
 #: ../fdroidserver/lint.py
-#, fuzzy
 msgid "OpenCollective donation methods belong in the OpenCollective: field"
-msgstr "Flattr ཞལ་འདེབས་ཐབས་ལམ་འདི་བཞིན་FlattrID flag ལ་ཐོབ་ཀྱི་ཡོད་།"
+msgstr "Njia za Mchango wa OpenCollective inapatikana kwenye OpenCollective: uwanja"
 
 #: /usr/lib/python3.11/optparse.py
 msgid "Options"
-msgstr "གདམ་ཀ།"
+msgstr "Chaguo"
 
 #: ../fdroidserver/verify.py
 msgid "Output JSON report to file named after APK."
-msgstr ""
+msgstr "Toa ripoti ya JSON kwa faili iliyopewa jina la APK."
 
 #: ../fdroidserver/scanner.py
 msgid "Output JSON to stdout."
-msgstr ""
+msgstr "Toa JSON kwa stdout."
 
 #: ../fdroidserver/checkupdates.py ../fdroidserver/gpgsign.py
 #: ../fdroidserver/publish.py ../fdroidserver/signindex.py
 #: ../fdroidserver/update.py
 msgid "Outputting JSON"
-msgstr ""
+msgstr "Kuzalisha JSON"
 
 #: ../fdroidserver/import_subcommand.py
 msgid "Overall license of the project."
-msgstr "ལས་འཆར་འདིའི་ཁྱོན་ཡོངས་ཀྱི་ཆོག་མཆན་ལག་ཁྱེར།."
+msgstr "Leseni ya jumla ya mradi ."
 
 #: ../fdroidserver/index.py
 #, python-brace-format
 msgid "Overriding blank versionName in {apkfilename} from metadata: {version}"
-msgstr ""
+msgstr "Kubatilisha toleo la jina tupu katika {apkfilename} kutoka kwa metadata: {version}"
 
 #: ../fdroidserver/import_subcommand.py
 #, python-brace-format
 msgid "Package \"{appid}\" already exists"
-msgstr ""
+msgstr "Kifurushi \"{appid}\" tayari kipo"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Parsing manifest at '{path}'"
-msgstr "'{path}'འདིའི་ནང་དབྱེ་མཚམས་མངོན་གྱི་འདུག"
+msgstr "Kuchambua manifest katika '{path}'"
 
 #: ../fdroidserver/common.py
 msgid "Password required with username"
-msgstr "སྤྱོད་མིང་དང་མཉམ་དུ་གསང་ཨང་དགོས།"
+msgstr "Nenosiri linahitajika pamoja na jina la mtumiaji"
 
 #: ../fdroidserver/import_subcommand.py
 msgid "Path to main Android project subdirectory, if not in root."
-msgstr "གལ་སྲིད་ཆོག་མཆན་ཨ་མའི་ནང་ལ་མེད་ན། ལམ་གྱི་གཙོ་བོ་འདི་ཨེན་ཀྲོཌ་ལས་འཆར་གྱི་ཕྱོགས་དེབ་ཡན་ལག་སྟོན་ཡོད།."
+msgstr "Ielekeze kwenye saraka ndogo ya mradi kuu wa Android, ikiwa haipo kwenye mzizi."
 
 #: ../fdroidserver/init.py
 msgid "Path to the Android SDK (sometimes set in ANDROID_HOME)"
-msgstr "ཨེན་ཀྲོཌ་SDK ཀྱི་ལམ། (སྐབས་རེ་ཨེན་ཀྲོཌ_ཁྱིམ་དུ་སྒྲིག་ཡོད།)"
+msgstr "Ielekeze kwa SDK ya Android (mara nyingine husetiwa katika ANDROID_HOME)"
 
 #: ../fdroidserver/btlog.py
 msgid "Path to the git repo to use as the log"
-msgstr "གིཊ་རེ་པོའི་ཆེད་དུ་བདེ་སྤྱོད་བྱས་པའི་ཐོ་གཞུང་གི་ལམ།"
+msgstr "Ielekeze kwa ghala ya git ili kutumia kama logi"
 
 #: ../fdroidserver/init.py
 msgid "Path to the keystore for the repo signing key"
-msgstr "རེ་པོ་མིང་རྟགས་བཀོད་པའི་ལྡེ་མིག་ཆེད་དུ་སྟོན་པའི་ལྡེ་མིག་གསོག་ཉར་ཁང་གི་ལམ།"
+msgstr "Ielekeze kwa keystore kwa ufunguo wa kusaini ghala"
 
 #: ../fdroidserver/nightly.py
 msgid "Print the secret variable to the terminal for easy copy/paste"
-msgstr "ས་ཚིགས་ཀྱི་གསང་ཁྱབ་ངོ་བཤུས་དང་/སྦྱར་བ་སྟབས་བདེ་ཡོང་བའི་ཆེད་དུ་འདྲ་བཤུས་"
+msgstr "Chapisha kigezo hicho cha siri kwa kidirisha cha amri kwa urahisi wa kunakili/kubandika"
 
 #: ../fdroidserver/scanner.py
 #, python-format
 msgid "Problem with ZIP file: %s, error %s"
-msgstr ""
+msgstr "Tatizo na faili ya ZIP:%s, hitilafu %s"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Problem with xml at '{path}'"
-msgstr "'{path}'ལ་xml མཉམ་དུ་སྐྱོན་འདུག"
+msgstr "Tatiza na xml katika '{path}'"
 
 #: ../fdroidserver/checkupdates.py
 msgid "Process auto-updates"
-msgstr "རང་འགུལ་གྱི་གསར་བསྒྱུར་རྣམས་བྱེད།"
+msgstr "Chakata masasisho ya kiotomatiki"
 
 #: ../fdroidserver/publish.py ../fdroidserver/update.py
 #, python-brace-format
 msgid "Processing {apkfilename}"
-msgstr "ལས་ཀ་བྱེད་བཞིན་པ་{apkfilename}"
+msgstr "Kuchakata {apkfilename}"
 
 #: ../fdroidserver/checkupdates.py ../fdroidserver/scanner.py
 #, python-brace-format
 msgid "Processing {appid}"
-msgstr "ལས་ཀ་བྱེད་བཞིན་པ།{appid}"
+msgstr "Kuchakata {appid}"
 
 #: ../fdroidserver/update.py
 msgid "Produce human-readable XML/JSON for index files"
-msgstr "མིས་ཀློག་ཐུབ་པའི་XML/JSON ཕྱོགས་སྟོན་གྱི་ཡིག་ཆ་བཟོས།"
+msgstr "Chakata XML/JSON inayosomeka na binadamu kwa faili za index"
 
 #: ../fdroidserver/import_subcommand.py
 msgid "Project URL to import from."
-msgstr "URL ལས་འཆར་ནང་འདྲེན།."
+msgstr "URL ya Mradi wa kuagiza kutoka."
 
 #: ../fdroidserver/lint.py
 msgid "Punctuation should be avoided"
-msgstr "ཡི་གེའི་བར་རྟགས་རིགས་ངེས་པར་མེད་པ་དགོས་།"
+msgstr "Uakifishaji unapaswa kuepukwa"
 
 #: ../fdroidserver/btlog.py
 msgid "Push the log to this git remote repository"
-msgstr "ཐོ་གཞུད་འདི་གིཊ་ཐག་རིང་གི་མཛོད་ཁང་ནང་འབུད་རྒྱག་གཏོང་།"
+msgstr "Sukuma logi hio kwa ghala hili la mbali la git"
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "Pushing binary transparency log to {url}"
-msgstr "{url}ཆེད་དུ་ཨང་གྲངས་ཀྱི་ཐོ་གཞུང་གསར་བསྒྱུར།"
+msgstr "Kusukuma logi ya uwazi ya binari kwa {url}"
 
 #: ../fdroidserver/deploy.py
 msgid "Pushing to remote server failed!"
-msgstr ""
+msgstr "Kusukuma kwa seva ya mbali imefeli!"
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "Pushing to {url}"
-msgstr "{url}ཕྱོགས་ལ་འབུད་རྒྱབ་རྒྱོབ།"
+msgstr "Kusukuma kwa {url}"
 
 #: ../fdroidserver/__main__.py
 msgid "Quickly start a new repository"
-msgstr "མཛོད་ཁང་གསར་པ་ཞིག་མྱུར་དུ་འགོ་བཙུགས།"
+msgstr "Anzisha ghala mpya kwa haraka"
 
 #: ../fdroidserver/__main__.py
 msgid "Read all the metadata files and exit"
-msgstr "ཡིག་ཚགས་ཀྱི་རྒྱབ་ལྗོངས་ལོ་རྒྱུས་ཀློག་ནས་ཕྱིར་ཐོན།"
+msgstr "Soma faili zote za metadata na uondoke"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Reading '{config_file}'"
-msgstr "ཀློག་བཞིན་པ་། '{config_file}'"
+msgstr "Kusoma '{config_file}'"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Reading packageName/versionCode/versionName failed, APK invalid: '{apkfilename}'"
-msgstr "ཐུམ་སྒྲིལ་གྱི་མིང་ཀློག་བཞིནཔ།/ཐོན་རིམ་ཨང་རྟགས་/ཐོན་རིམ་གྱི་མིང་བདེ་སྤྱོད་མེད། APK ཁུངས་ལྡན་མིན།: '{apkfilename}'"
+msgstr "Kusoma packageName/versionCode/versionName ilifeli, APK batili: '{apkfilename}'"
 
 #: ../fdroidserver/common.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Reading packageName/versionCode/versionName failed,APK invalid: '{apkfilename}'"
-msgstr "ཐུམ་སྒྲིལ་གྱི་མིང་ཀློག་བཞིནཔ།/ཐོན་རིམ་ཨང་རྟགས་/ཐོན་རིམ་གྱི་མིང་བདེ་སྤྱོད་མེད། APK ཁུངས་ལྡན་མིན།: '{apkfilename}'"
+msgstr "Kusoma packageName/versionCode/versionName ilifeli,APK batili: '{apkfilename}'"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Reading {apkfilename} from cache"
-msgstr "སྦས་ཁུང་ནས་ {apkfilename}ཀློག་བཞིན་པ།"
+msgstr "Kusoma {apkfilename} kutoka kwa hifadhi ya muda"
 
 #: ../fdroidserver/build.py
 msgid "Refresh and cache scanner rules and signatures from the network"
-msgstr ""
+msgstr "Onyesha upya na uweke kwenye hifadhi ya muda kanuni za skana na sahihi kutoka kwenye mtandao"
 
 #: ../fdroidserver/common.py
 msgid "Removing specified files"
-msgstr "དམིགས་སྟོན་བྱས་པའི་ཡིག་ཆ་རྣམས་མེད་པ་བཟོ་བཞིན་པ།"
+msgstr "Kuondoa faili zilizobainishwa"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Removing {path}\""
-msgstr ""
+msgstr "Kuondoa {path}\""
 
 #: ../fdroidserver/update.py
 msgid "Rename APK files that do not match package.name_123.apk"
-msgstr "package.name_123.apk དང་མི་འདྲ་བའི་APK ཡིག་ཆ་དེ་ཚོར་མིང་སྐྱར་ཏུ་བཏགས།"
+msgstr "Badilisha jina la faili za APK ambazo hazilingani na package.name_123.apk"
 
 #: ../fdroidserver/checkupdates.py
 msgid "RepoTrunk update mode only makes sense in git-svn repositories"
-msgstr ""
+msgstr "Hali ya kisasa ya RepoTrunk ni ya maana tu katika ghala za git-svn"
 
 #: ../fdroidserver/build.py
 msgid "Reset and create a brand new build server, even if the existing one appears to be ok."
-msgstr "ཡོད་བཞིན་པའི་ཞབས་ཞུ་འཕྲུལ་ཆས་འདི་ལ་སྐྱོན་མེད་པ་ཡིན་རུང་། ཐོན་སྐྱེད་ཞབས་ཞུ་འཕྲུལ་ཆས་གསར་པ་ཞིག་སྐྱར་སྒྲིག་དང་བཟོས།."
+msgstr "Weka upya na uunde seva mpya ya kujenga, hata ikiwa ile iliopo inaonekana kuwa sawa."
 
 #: ../fdroidserver/nightly.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Resigning {apkfilename} with provided debug.keystore"
-msgstr "{apkfilename} མཆོང་རྒྱབ་མཉམ་དུ་ཁུངས་ལྡན་མིན་པའི་མིང་རྟགས།"
+msgstr "Saini upya {apkfilename} kwa debug.keystore ulizopewa"
 
 #: ../fdroidserver/update.py
 msgid "Resize all the icons exceeding the max pixel size and exit"
-msgstr "པར་གྱི་རྒྱུ་ཆེ་ཆུང་ཚད་ལས་བརྒལ་ན་ཚད་གཞི་ཡང་སྐྱར་འགྱུར་བ་བཏང་ནས་ཕྱིར་ཐོན།"
+msgstr "Badilisha ukubwa wa ikoni zote zinazopita saizi kubwa ya pixel kisha uondoke"
 
 #: ../fdroidserver/common.py
 msgid "Restrict output to warnings and errors"
-msgstr "ཡིག་ཚགས་ལ་ཉེན་བརྡ་དང་སྐྱོན་ཅན་རྣམས་དམ་བསྒྲགས་བྱེད།"
+msgstr "Zuia pato iwe onyo na hitilafu"
 
 #: ../fdroidserver/__main__.py
 msgid "Rewrite all the metadata files"
-msgstr "ཡིག་ཚགས་ཀྱི་རྒྱབ་ལྗོངས་ལོ་རྒྱུས་ཚང་མ་སྐྱར་ཟིན།"
+msgstr "Andika upya faili zote za metadata"
 
 #: ../fdroidserver/rewritemeta.py
 #, python-brace-format
 msgid "Rewriting '{appid}'"
-msgstr "སྐྱར་བྲིས། '{appid}'"
+msgstr "Kuandika upya '{appid}'"
 
 #: ../fdroidserver/checkupdates.py
 msgid "Run on git repo that has uncommitted changes"
-msgstr ""
+msgstr "Endesha kwenye ghala la git ambalo lina mabadiliko yasiyohifadhiwa"
 
 #: ../fdroidserver/nightly.py
 #, python-brace-format
@@ -1537,217 +1525,218 @@ msgstr ""
 
 #: ../fdroidserver/lint.py
 msgid "Run rewritemeta to fix formatting"
-msgstr "བཀོད་སྒྲིག་འདི་ག་རང་ལ་སྐྱར་བྲིས་བྱེད།"
+msgstr "Tekeleza rewritemeta ili kurekebisha uumbizaji"
 
 #: ../fdroidserver/deploy.py
 msgid "Running first pass with MD5 checking disabled"
-msgstr "MD5 ཚོད་ལྟ་བེད་སྤྱོད་མེད་པ་དང་མཉམ་དུ་ཐེངས་དང་པོ་འཁོར་སྐྱོད་བྱེད་བཞིན་པ།"
+msgstr "Kutekeleza pasi ya kwanza na kuangalia kwa MD5 ikiwa imezimwa"
 
 #: ../fdroidserver/mirror.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Running wget in {path}"
-msgstr "སྐྱར་བྲིས་ཡོད་།{path}"
+msgstr "Kuendesha wget katika {path}"
 
 #: ../fdroidserver/index.py
 #, python-brace-format
 msgid "SHA-256 of {url} does not match entry!"
-msgstr ""
+msgstr "SHA-256 ya {url} hailingani ingizo!"
 
 #: ../fdroidserver/build.py
 msgid "Scan the resulting APK(s) for known non-free classes."
-msgstr ""
+msgstr "Changanua APK zilizotokana na mchakato kwa madarasa yasiyo huru yanayojulikana."
 
 #: ../fdroidserver/__main__.py
 msgid "Scan the source code of a package"
-msgstr "ཐུམ་སྒྲིལ་བྱས་པའི་འབྱུང་ཁུངས་ཨང་རྟགས་འཚག་རྒྱབ"
+msgstr "Changanua msimbo chanzo cha kifurushi"
 
 #: ../fdroidserver/scanner.py
 #, python-brace-format
 msgid "Scanner found {count} problems in {apk}"
-msgstr ""
+msgstr "Skena imepata matatizo {count} katika {apk}"
 
 #: ../fdroidserver/scanner.py
 #, python-brace-format
 msgid "Scanner found {count} problems in {appid}:"
-msgstr ""
+msgstr "Skena imepata matatizo {count} katika {appid}:"
 
 #: ../fdroidserver/scanner.py
 #, python-brace-format
 msgid "Scanner found {count} problems in {appid}:{versionCode}:"
-msgstr ""
+msgstr "Skena imepata matatizo {count} katika {appid}:{versionCode}:"
 
 #: ../fdroidserver/build.py
 msgid "Scanner found {} problem"
 msgid_plural "Scanner found {} problems"
-msgstr[0] "འཚག་རྒྱབ་ལ་སྐྱོན་རྙེད་པ།"
+msgstr[0] "Skena imepata tatizo {}"
+msgstr[1] "Skena zimepata matatizo {}"
 
 #: ../fdroidserver/scanner.py
 msgid "Scanning APK with dexdump for known non-free classes."
-msgstr ""
+msgstr "Kuchanganua APK kwa kutumia dexdump kwa madarasa yanayojulikana kuwa si huru."
 
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Set NDK {release} ({version}) up"
-msgstr ""
+msgstr "Seti {release} ya NDK ( {version}) iwe juu"
 
 #: ../fdroidserver/common.py
 msgid "Set clock to that time using:"
-msgstr ""
+msgstr "Weka saa kwa wakati huo ukitumia:"
 
 #: ../fdroidserver/nightly.py
 msgid "Set maximum releases in repo before older ones are archived"
-msgstr ""
+msgstr "Weka idadi ya juu ya matoleo katika ghala kabla zile mzee zimehifadhiwa kwenye kumbukumbu"
 
 #: ../fdroidserver/build.py
 #, python-brace-format
 msgid "Set open file limit to {integer}"
-msgstr ""
+msgstr "Weka kikomo cha faili iliyo wazi kwa {integer}"
 
 #: ../fdroidserver/__main__.py
 msgid "Set up an app build for a nightly build repo"
-msgstr "མཚན་མོའི་རེ་པོ་བཟོ་སྐྲུན་ཆེད་དུ་སྒྲིག་བཀོད་བྱས་པའི་མཉེན་ཆས་བཟོ་སྐྲུན།"
+msgstr "Sanidisha ujenzi wa apu kwa ajili ya ghala la ujenzi wa usiku"
 
 #: ../fdroidserver/build.py
 msgid "Setting open file limit failed: "
-msgstr ""
+msgstr "Weka kikomo cha faili iliyo wazi imefeli: "
 
 #: ../fdroidserver/build.py
 #, python-brace-format
 msgid "Setting {0} sec timeout for this build"
-msgstr ""
+msgstr "Kuweka muda wa sekunde {0} kwa ajili ya ujenzi huu"
 
 #: ../fdroidserver/__main__.py
 msgid "Sign and place packages in the repo"
-msgstr "མིང་རྟགས་བཀོད་ནས་ཐུམ་སྒྲིལ་རྣམས་རེ་པོ་ནང་བཞག"
+msgstr "Saini na uweke vifurushi kwenye ghala"
 
 #: ../fdroidserver/__main__.py
 msgid "Sign indexes created using update --nosign"
-msgstr "གསར་བསྒྱུར་བེད་སྤྱོད་བྱས་ཏེ་བཟོས་པའི་མིང་རྟགས་བརྡ་སྟོན། --མིང་རྟགས་མེད།"
+msgstr "Saini faharasa zilizoundwa kwa kutumia sasisho --nosign"
 
 #: ../fdroidserver/build.py
 msgid "Skip scanning the source code for binaries and other problems"
-msgstr "འབྱུང་ཁུངས་ཨ་རྟགས་དང་དཀའ་ངལ་གཞན་རྣམས་འཚག་རྒྱབ་མ་དགོས་པར་མཆོང་།"
+msgstr "Ruka kuchanganua msimbo wa chanzo kwa binari na tatizo zingine"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Skipping '{apkfilename}' with invalid signature!"
-msgstr "'{apkfilename}'མཆོང་ནས་ཁུངས་ལྡན་མ་ཡིན་པའི་མིང་རྟགས་དང་མཉམ་དུ།!"
+msgstr "Kuruka '{apkfilename}' iliyo na saini batili!"
 
 #: ../fdroidserver/deploy.py ../fdroidserver/index.py
 #, python-format
 msgid "Skipping GitLab Pages mirror because the repo is too large (>%.2fGB)!"
-msgstr ""
+msgstr "Kuruka kioo cha GitLab Pages kwa sababu ghala ni kubwa mno (>%.2fGB)!"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Skipping index generation for {appid}"
-msgstr "{appid}གྱི་ཆེད་དུ་མཆོང་བའི་མི་རབས་ཀྱི་ཕྱོགས་སྟོན།"
+msgstr "Inaruka uzalishaji wa faharasa kwa {appid}"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Skipping {apkfilename} with invalid signature!"
-msgstr "{apkfilename} མཆོང་རྒྱབ་མཉམ་དུ་ཁུངས་ལྡན་མིན་པའི་མིང་རྟགས།!"
+msgstr "Inaruka {apkfilename} yenye saini batili!"
 
 #: ../fdroidserver/scanner.py
 #, python-brace-format
 msgid "Skipping {appid}: disabled"
-msgstr "མཆོང་བཞིན་པ་ {appid}: བེད་མེད།"
+msgstr "Inaruka {appid}: Imezimwa"
 
 #: ../fdroidserver/deploy.py
 msgid "Specify a local folder to sync the repo to"
-msgstr "བསྟི་གནས་ཀྱི་ཡིག་ཁུག་གཅིག་ཁ་ཕྱེས་ནས་རེ་པོ་འདི་ལ་མཉམ་བསྲེས།"
+msgstr "Bainisha folda ya ndani ya kusawazisha hio ghala kwa"
 
 #: ../fdroidserver/deploy.py
 msgid "Specify an identity file to provide to SSH for rsyncing"
-msgstr "rsync གྱི་ཆེད་དུ་SSH འདི་ངོ་ཐག་ཆོད་པའི་ཡིག་ཆ་ཞིག་དམིགས་སུ་བཀར་ནས་སྟེར།"
+msgstr "Bainisha faili ya kutambuliwa ili kutoa kwa SSH kwa ajili ya kusawazisha tena"
 
 #: ../fdroidserver/nightly.py
 msgid "Specify which debug keystore file to use."
-msgstr ""
+msgstr "Bainisha ni faili ya ufunguo wa debug wa kijaribio kutumia."
 
 #: ../fdroidserver/common.py
 msgid "Spew out even more information than normal"
-msgstr "ནམ་རྒྱུན་ལས་ཀྱང་མང་བའི་གནས་ཚུལ་ཕྱིར་སྟོན།"
+msgstr "Toa habari hata zaidi ya kawaida"
 
 #: ../fdroidserver/nightly.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Stripping mystery signature from {apkfilename}"
-msgstr "{apkfilename}ཡིག་ཆ་སྦས་ཁུང་རྙིང་པ་ལ་ཡ་ལན་མ་བྱས་"
+msgstr "Kuondoa saini ya siri kutoka {apkfilename}"
 
 #: ../fdroidserver/lint.py
 #, python-format
 msgid "Summary '%s' is just the app's name"
-msgstr "སྙིང་བསྔུས་ '%s 1' ནི་མཉེན་ཆས་ཀྱི་མིང་ཞིག་རེད་།"
+msgstr "Muhtasari '%s' ni jina tu ya apu hio"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "Summary of length {length} is over the {limit} char limit"
-msgstr "སྙིང་བསྔུས་ཀྱི་རིང་ཐུང་། {length} charཚད་{limit} ལས་བརྒལ་འདུག"
+msgstr "Muhtasari wa urefu {length} ni juu ya {limit} kikomo cha char"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "System clock is older than date in {path}!"
-msgstr ""
+msgstr "Saa ya mfumo ni mzee kuliko tarehe katika {path}!"
 
 #: ../fdroidserver/checkupdates.py
 msgid "Tags update mode only works for git, hg, bzr and git-svn repositories currently"
-msgstr ""
+msgstr "Modi ya sasisho la tagi inafanya kazi tu kwa ghala za git,hg, bzr na git-svn kwa sasa"
 
 #: ../fdroidserver/checkupdates.py
 msgid "Tags update mode used in git-svn, but the repo was not set up with tags"
-msgstr ""
+msgstr "Hali ya usasisho ya tagi imetumika katika git-svn, lakini ghala haikusetiwa kwa kutumia tagi"
 
 #: ../fdroidserver/build.py
 msgid "Test mode - put output in the tmp directory only, and always build, even if the output already exists."
-msgstr "ཚོད་ལྟའི་ཚུལ་-གལ་སྲིད་ཡིག་ཚགས་འདི་སྔོན་ཚོད་ནས་ཡོད་ནའང་། ཡིག་ཚགས་འདི་སྐབས་ཕྲལ་གྱི་ཕྱོགས་དེབ་ཁོ་ནའི་ནང་ལ་བླུགས་པ་དང་རྟག་ཏུ་ཐོན་སྐྱེད་བཟོས།."
+msgstr "Hali ya majaribio - weka pato kwenye saraka ya tmp pekee, na uunde kila mara, hata kama pato tayari ipo."
 
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "The OBB version code must come after \"{name}.\":"
-msgstr "OBB ཐོན་རིམ་ཨང་རྟགས་འདི་ངེས་པར་དུ་ \"{name}\"གྱི་རྗེས་སུ་་བྱུང་བ་རེད་།:"
+msgstr "Msimbo wa toleo la OBB lazima ije baada ya \"{name}.\":"
 
 #: ../fdroidserver/btlog.py
 msgid "The base URL for the repo to log (default: https://f-droid.org)"
-msgstr "གཞི་རྩའི་URL དེ་རེ་པོ་ཡི་ཐོ་གཞུང་བཀོད་པའི་ཆེད་དུ་(སོར་བཞག: https://f-droid.org)"
+msgstr "URL ya msingi kwa ghala hio kuweka kwenye logi (default: https://f-droid.org)"
 
 #: ../fdroidserver/mirror.py
 msgid "The directory to write the mirror to"
-msgstr ""
+msgstr "Saraka ya kuandika kioo hicho kwa"
 
 #: ../fdroidserver/nightly.py
 msgid "The file to be included in the repo (path or glob)"
-msgstr "(path or glob)རེ་པོ་ནང་ཚུད་པའི་ཡིག་ཆ།"
+msgstr "Faili hio ya kujumuishwa kwenye ghala (path or glob)"
 
 #: ../fdroidserver/index.py
 msgid "The repository's fingerprint does not match."
-msgstr "མཛོད་ཁང་གི་མཛུབ་མཐིལ་དང་མཐུན་གྱི་མིན་འདུག."
+msgstr "Alama ya kidole ya ghala hailingani."
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "The root dir for local_copy_dir \"{path}\" does not exist!"
-msgstr "dir གྱི་རྩ་བ་ for local_copy_dir \"{path}\" མིན་འདུག!"
+msgstr "Saraka ya mzizi ya local_copy_dir \"{path}\" haipo!"
 
 #: ../fdroidserver/publish.py
 msgid "There is a keyalias collision - publishing halted"
-msgstr "ལྡེ་མིག་གཞན་ལ་སྐྱོན་ཆ་འདུག། -པར་སྐྲུན་བཀག"
+msgstr "Kuna mgongano wa keyalias - uchapishaji umesitishwa"
 
 #: ../fdroidserver/common.py
 msgid "These are the apps that have been archived from the main repo."
-msgstr ""
+msgstr "Hizi ndizo apu zilizohifadhiwa kwenye kumbukumbu kutoka kwa ghala kuu."
 
 #: ../fdroidserver/mirror.py
 msgid "This command should never be used to mirror f-droid.org! A full copy requires more than 600GB."
-msgstr ""
+msgstr "Amri hii haipaswi kamwe kutumika kuakisa f-droid.org! Nakala mzima inahitaji juu ya 600GB."
 
 #: ../fdroidserver/common.py
 msgid "This is a repository of apps to be used with F-Droid. Applications in this repository are either official binaries built by the original application developers, or are binaries built from source by the admin of f-droid.org using the tools on https://gitlab.com/fdroid."
-msgstr ""
+msgstr "Hii ni ghala ya apu ya kutumika na F-Droid. Apu katika ghala hii ni binaries rasmi zilizojengwa na wasanidi wa asili wa apu, au binaires zilizoundwa kutoka kwa chanzo na admin ya f-droid.org kutumia vifaa kwenye https://gitlab.com/fdroid."
 
 #: ../fdroidserver/import_subcommand.py
 #, python-format
 msgid "This repo already has local metadata: %s"
-msgstr "རེ་པོ་འདི་ལ་སྔོན་ཚོད་ནས་ས་གནས་ཀྱི་རྒྱབ་ལྗོངས་ཡིག་ཆ་འདུག: %s 1"
+msgstr "Ghala hii tayari in metadata ya ndani: %s"
 
 #: ../fdroidserver/init.py
 #, python-format
@@ -1760,426 +1749,427 @@ msgid ""
 "For more info: https://f-droid.org/docs/Setup_an_F-Droid_App_Repo\n"
 "and https://f-droid.org/docs/Signing_Process"
 msgstr ""
+"Ili kumaliza unsanidi huo, ongeza APK zako kwa \"%s\"\n"
+"kisha kimbiza \"fdroid update -c; fdroid update\".  Unawezataka pia kuhariri\n"
+"\"config.yml\" ili kuseti URL, jina ya ghala, na zaidi.  Unapaswa pia kusanidi\n"
+"ufunguo wa kusaini (ya muda unawezakua umezalishwa kiotomatiki).\n"
+"\n"
+"Kwa maelezo zaidi: https://f-droid.org/docs/Setup_an_F-Droid_App_Repo\n"
+"na https://f-droid.org/docs/Signing_Process"
 
 #: ../fdroidserver/deploy.py
 msgid "To use awsbucket, awssecretkey and awsaccesskeyid must also be set in config.yml!"
-msgstr "awsbucket, awssecretkey དང་། awsaccesskeyid བེད་སྤྱོད་བྱེད་པའི་ཆེད་དུ་ config.yml ནང་དུ་ངེས་པར་དུ་སྒྲིག་དགོས།!"
+msgstr "Ili kutumia awsbucket, awssecretkey na awsaccesskeiid lazima pia iwekwe katika config.yml!"
 
 #: ../fdroidserver/deploy.py
 #, fuzzy
 msgid "To use rclone, rclone_config and awsbucket must be set in config.yml!"
-msgstr "awsbucket, awssecretkey དང་། awsaccesskeyid བེད་སྤྱོད་བྱེད་པའི་ཆེད་དུ་ config.yml ནང་དུ་ངེས་པར་དུ་སྒྲིག་དགོས།!"
+msgstr "Ili kutumia awsbucket, awssecretkey na awsaccesskeiid lazima pia iwekwe katika config.yml!"
 
 #: ../fdroidserver/lint.py
 msgid "URL must start with https:// or http://"
-msgstr ""
+msgstr "URL lazima ianze na https:// or http://"
 
 #: ../fdroidserver/lint.py
 msgid "URL shorteners should not be used"
-msgstr "URL ཐུང་དུ་གཏོང་མཁན་ངེས་པར་དུ་བེད་སྤྱོད་བྱེད།"
+msgstr "Vifupishaji vya URL havipaswi kutumika"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "URL {url} in Description: {error}"
-msgstr "URL {url} ནང་འགྲེལ་བཤད་རྒྱབ་པ་: {error}"
+msgstr "URL {url} katika Maelezo:{error}"
 
 #: ../fdroidserver/lint.py
-#, fuzzy
 msgid "Unexpected license tag \"{}\"! Only use FSF or OSI approved tags from https://spdx.org/license-list"
-msgstr "ཁུངས་ལྡན་མིན་པའི་ཆོག་མཆན་ལག་ཁྱེར་སྦྱར་ \"%s 1\"! https://spdx.org/license-list ཁོ་ན་ནས་ཡིན་པ་སྦྱར་ཏེ་བེད་སྤྱོད་བྱེད་།"
+msgstr "tagi ya leseni lisilotarajiwa \"{}\"! Tumia pekee tagi zilizoidhinishwa na FSF au OSI kutoka https://spdx.org/license-list"
 
 #: ../fdroidserver/lint.py
 msgid "Unexpected license tag \"{}\"! Only use license tags configured in your config file"
-msgstr ""
+msgstr "tagi ya leseni isiyotarajiwa \"{}\"! Tumia pekee tagi za leseni zilizosanidiwa katika faili yako ya usanidi"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Unexpected symlink target: {link} -> {target}"
-msgstr ""
+msgstr "Lengo la symlink lisiyotarajiwa:{link} -> {target}"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Unknown entry {key} in {configname}"
-msgstr ""
+msgstr "ingilio lisilojulikana {key} katika {configname}"
 
 #: ../fdroidserver/__main__.py
 msgid "Unknown exception found!"
-msgstr "ཆ་རྒྱུས་མེད་པའི་དམིགས་བསལ་ཞིག་རྙེད་སོང་།!"
+msgstr "Kighairi kisichojulikana kimepatikana!"
 
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vname
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "Unknown file '{filename}' in build '{versionName}'"
-msgstr "ངོས་འཛིན་མི་ཐུབ་པའི་ཡིག་ཆ། '{filename}' བཟོ་སྐྲུན་གྱི་ནང་། '{versionName}'"
+msgstr "Faili isiyojulikana '{filename}' katika jenga '{versionName}'"
 
 #: ../fdroidserver/metadata.py
 #, python-format
 msgid "Unknown metadata format: %s"
-msgstr "ངོས་འཛིན་མ་བྱས་པའི་རྒྱབ་ལྗོངས་ཡིག་ཆའི་སྒྲིག་བཀོད།:%s 1"
+msgstr "Muundo wa metadata usiojulikana: %s"
 
 #: ../fdroidserver/metadata.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Unknown metadata format: {path} (use: *.yml)"
-msgstr "ངོས་འཛིན་མི་ཐུབ་པའི་རྒྱབ་ལྗོངས་ཡིག་ཆའི་སྒྲིག་བཀོད། : {path}"
+msgstr "Muundo wa metadata usiojulikana: {path} (tumia: *.yml)"
 
 #: ../fdroidserver/common.py
 msgid "Unknown version of aapt, might cause problems: "
-msgstr "aapt གྱི་ངོས་འཛིན་མ་ཐུབ་པའི་ཐོན་རིམ། དཀའ་ངལ་ཕྲད་སྲིད་པ།: "
+msgstr "Toleo lisilojulikana la aapt, linaweza kuleta matatizo: "
 
 #: ../fdroidserver/lint.py
 msgid "Unnecessary leading space"
-msgstr "དགོས་མེད་ཀྱི་སྣེ་ཁྲིད་བར་མཚམས།"
+msgstr "Nafasi ya mwanzo isiyo ya lazima"
 
 #: ../fdroidserver/lint.py
 msgid "Unnecessary trailing space"
-msgstr "དགོས་མེད་ཀྱི་རྫེས་ཤུལ་བར་མཚམས།"
+msgstr "Nafasi ya mwisho isiyo ya lazima"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Unrecognised app field '{fieldname}' in '{path}'"
-msgstr ""
+msgstr "Nafasi ya apu isiyotambulika '{fieldname}' katika '{path}'"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Unrecognised build flag '{build_flag}' in '{path}'"
-msgstr ""
+msgstr "Bendera ya kujenga isiyotambulika '{build_flag}' katika '{path}'"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Unsupported file type \"{extension}\" for repo graphic"
-msgstr ""
+msgstr "Aina ya faili isiyoungwa mkono \"{extension}\" kwa ghala la mchoro"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Unsupported graphics file found: {path}"
-msgstr "རྒྱབ་སྐྱོར་མེད་པའི་བརྐོས་རིས་ཡིག་ཆ་རྙེད་སོང་།: {path}"
+msgstr "Faili ya michoro isiyoungwa mkono imepatikana: {path}"
 
 #: ../fdroidserver/lint.py
 #, python-format
 msgid "Unused extlib at %s"
-msgstr "བེད་སྤྱོད་མེད་པའི་ extlib at %s 1"
+msgstr "extlib isiyotumika katika %s"
 
 #: ../fdroidserver/lint.py
 #, python-format
 msgid "Unused file at %s"
-msgstr "%s 1 དེ་ལ་བེད་སྤྱོད་མེད་པའི་ཡིག་ཆ།"
+msgstr "Faili lisilotumika katika %s"
 
 #: ../fdroidserver/scanner.py
-#, fuzzy, python-format
+#, python-format
 msgid "Unused scandelete path: %s"
-msgstr "%s 1 དེ་ལ་བེད་སྤྱོད་མེད་པའི་ཡིག་ཆ།"
+msgstr "Njia ya scandelete isiyotumika: %s"
 
 #: ../fdroidserver/scanner.py
-#, fuzzy, python-format
+#, python-format
 msgid "Unused scanignore path: %s"
-msgstr "%s 1 དེ་ལ་བེད་སྤྱོད་མེད་པའི་ཡིག་ཆ།"
+msgstr "Njia ya scanignore isiyotumika: %s"
 
 #: ../fdroidserver/common.py
 #, python-format
 msgid "Unzipping to %s"
-msgstr ""
+msgstr "Kufungua zipu kwa %s"
 
 #: ../fdroidserver/__main__.py
 msgid "Update repo information for new packages"
-msgstr "ཐུམ་སྒྲིལ་གསར་པའི་ཆེད་དུ་རེ་པོ་གནས་ཚུལ་གསར་བསྒྱུར་བྱེད།"
+msgstr "Sasisha maelezo ya repo kwa vifurushi vipya"
 
 #: ../fdroidserver/__main__.py
 msgid "Update the binary transparency log for a URL"
-msgstr "URLཆེད་དུ་ཨང་གྲངས་ཀྱི་ཐོ་གཞུང་གསར་བསྒྱུར།"
+msgstr "Sasisha logi ya uwazi ya binary kwa URL"
 
 #: ../fdroidserver/checkupdates.py
 #, python-brace-format
 msgid "UpdateCheckData has invalid URL: {url}"
-msgstr ""
+msgstr "UpdateCheckData ina URL batili: {url}"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "UpdateCheckData must match the version code as integer (\\d or [0-9]): {codeex}"
-msgstr ""
+msgstr "UpdateCheckData lazima ilingane na msimbo wa toleo kama nambari kamili (\\d or [0-9]): {codeex}"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "UpdateCheckData must use HTTPS URL: {url}"
-msgstr ""
+msgstr "UpdateCheckData lazima itumie URL ya HTTPS: {url}"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "UpdateCheckData not a valid URL: {url}"
-msgstr ""
+msgstr "UpdateCheckData si URL iliyo halali: {url}"
 
 #: ../fdroidserver/lint.py
 msgid "UpdateCheckMode is set but it looks like checkupdates hasn't been run yet."
-msgstr ""
+msgstr "UpdateCheckMode imewekwa lakini inaonekana kama checkupdates haijaendeshwa bado."
 
 #. Translators: https://developer.android.com/studio/build/application-id
 #: ../fdroidserver/lint.py
 msgid "UpdateCheckMode is set but it looks likecheckupdates hasn't been run yet"
-msgstr ""
+msgstr "UpdateCheckMode imewekwa lakini inaonekana kama likecheckupdates haijaendeshwa bado"
 
 #: ../fdroidserver/lint.py
-#, fuzzy
 msgid "UpdateCheckName is set to the known application ID, it can be removed"
-msgstr "མཉེན་ཆས་ཁ་བྱང་ནང་ལ་གསར་བསྒྱུར་འཚོལ་བའི་མིང་སྒྲིག་ཚར་འདུག -འདི་སུབས་ཆོག་གི་རེད།"
+msgstr "UpdateCheckName imewekwa katika kitambulisho cha apu kinachojulikana, inaweza kutolewa"
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "Uploading {apkfilename} to androidobservatory.org"
-msgstr ""
+msgstr "Kupakia {apkfilename} kwa androidobservatory.org"
 
 #: ../fdroidserver/deploy.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Uploading {apkfilename} to virustotal"
-msgstr "སྦས་ཁུང་ནས་ {apkfilename}ཀློག་བཞིན་པ།"
+msgstr "Kupakia {apkfilename} kwa virustotal"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 #: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
 #: /usr/lib/python3.11/optparse.py
 msgid "Usage"
-msgstr "བེད་སྤྱོད།"
+msgstr "Matumizi"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 #: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
 #: /usr/lib/python3.11/optparse.py
 #, python-format
 msgid "Usage: %s\n"
-msgstr "བེད་སྤྱོད།:%s 1\n"
+msgstr "Matumizi: %s\n"
 
 #: ../fdroidserver/lint.py
-#, fuzzy
 msgid "Use /HEAD instead of /master or /main to point at a file in the default branch"
-msgstr "བེད་སྤྱོད།/HEAD གྱི་ཚབ་ཏུ།/ སོར་བཞག་ཡན་ལག་ནང་དུ་ཡོད་པའི་དོན་ཚན་ཨ་མ།"
+msgstr "Tumia /HEAD badala ya /master au /main kuashiria faili kwenye tawi la msingi"
 
 #: ../fdroidserver/lint.py
 msgid "Use /HEAD instead of /master to point at a file in the default branch"
-msgstr "བེད་སྤྱོད།/HEAD གྱི་ཚབ་ཏུ།/ སོར་བཞག་ཡན་ལག་ནང་དུ་ཡོད་པའི་དོན་ཚན་ཨ་མ།"
+msgstr "Tumia /HEAD badala ya /master kuashiria kwa fiaili katika tawi la msingi"
 
 #: ../fdroidserver/update.py
 msgid "Use `fdroid update -c` to create it."
-msgstr "`fdroid update -c`བེད་སྤྱོད་བྱས་ནས་འདི་བཟོས།."
+msgstr "Tumia `fdroid update -C` kuiunda."
 
 #: ../fdroidserver/build.py
 msgid "Use build server"
-msgstr "ཐོན་སྐྱེད་ཞབས་ཞུ་འཕྲུལ་ཆས་བེད་སྤྱོད་བྱེད།"
+msgstr "Tumia seva ya ujenzi"
 
 #: ../fdroidserver/update.py
 msgid "Use date from APK instead of current time for newly added APKs"
-msgstr "APK རང་གི་ཚེས་གྲངས་དེ་བེད་སྤྱོད་བྱས་པ་ལས་ཁ་སྣོན་བྱས་པའི་ APKs གསར་པའི་དུས་ཚོས་བེད་སྤྱོད་མ་བྱེད།"
+msgstr "Tumia tarehe kutoka APK badala ya wakati uliopo kwa APK mpya zilizoongezwa"
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "Using \"{path}\" for configuring s3cmd."
-msgstr ""
+msgstr "Kutumia \"{path}\" kusanidi s3cmd."
 
 #: ../fdroidserver/deploy.py
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Using \"{path}\" for syncing with remote storage."
-msgstr ""
+msgstr "Kutumia \"{path}\" kusanidi s3cmd."
 
 #: ../fdroidserver/common.py
 msgid "Using APK Signature v2"
-msgstr ""
+msgstr "Kutumia Sahihi ya APK toleo la 2"
 
 #: ../fdroidserver/common.py
 msgid "Using APK Signature v3"
-msgstr ""
+msgstr "Kutumia Sahihi ya APK toleo la 3"
 
 #: ../fdroidserver/common.py
 msgid "Using JAR Signature"
-msgstr ""
+msgstr "Kutumia saini ya JAR"
 
 #: ../fdroidserver/common.py
 msgid "Using Java's jarsigner, not recommended for verifying APKs! Use apksigner"
-msgstr ""
+msgstr "Kutumia jarsigner ya Java, haipendekezwi kwa kuthibitisha APK! Tumia apksigner"
 
 #: ../fdroidserver/common.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Using androguard from \"{path}\""
-msgstr "སྐྱར་བྲིས་ཡོད་།{path}"
+msgstr "Kutumia androguard kutoka \"{path}\""
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Using blank dictionary instead of contents of {path}!"
-msgstr ""
+msgstr "Kutumia kamusi tupu badala ya maudhui ya {path}!"
 
 #: ../fdroidserver/init.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Using existing keystore \"{path}\""
-msgstr "སྐྱར་བྲིས་ཡོད་།{path}"
+msgstr "Kutumia keystore iliyopo \"{path}\""
 
 #: ../fdroidserver/deploy.py
 #, fuzzy, python-brace-format
 msgid "Using rclone to sync with: {url}"
-msgstr "s3cmd བེད་སྤྱོད་བྱས་ནས་: {url}1དང་མཉམ་དུ་sync"
+msgstr "Kutumia s3cmd kusawazisha na: {url}"
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "Using s3cmd to sync with: {url}"
-msgstr "s3cmd བེད་སྤྱོད་བྱས་ནས་: {url}1དང་མཉམ་དུ་sync"
+msgstr "Kutumia s3cmd kusawazisha na: {url}"
 
 #: ../fdroidserver/__main__.py
 msgid "Valid commands are:"
-msgstr "ཁུངས་ལྡན་གྱི་བཀའ་ཁྱབ་ནི།:"
+msgstr "Amri halali ni:"
 
 #: ../fdroidserver/verify.py
 msgid "Verify against locally cached copy rather than redownloading."
-msgstr ""
+msgstr "Thibitisha dhidi ya nakala iliyoakibishwa ndani afadhali kuliko kupakua upya."
 
 #: ../fdroidserver/__main__.py
 msgid "Verify the integrity of downloaded packages"
-msgstr "ཕབ་ལེན་བྱས་པའི་ཐུམ་སྒྲིལ་གྱི་སྤུས་ཚད་ར་སྤྲོད།"
+msgstr "Thibitisha uadilifu wa furushi zilizopakuliwa"
 
 #: ../fdroidserver/index.py
 msgid "Verifying index signature:"
-msgstr ""
+msgstr "Kuthibitisha saini ya faharasa:"
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "VirusTotal API key cannot upload files larger than 32MB, use {url} to upload {path}."
-msgstr ""
+msgstr "Ufunguo wa API ya VirusTotal haiwezi kupakia faili zaidi ya 32MB, tumia {url} kupakia {path}."
 
 #: ../fdroidserver/__main__.py
 msgid "Warn about possible metadata errors"
-msgstr "ཡིག་ཚགས་ཀྱི་རྒྱབ་ལྗོངས་ལོ་རྒྱུས་སྐྱོན་སྲིད་པ་རྣམས་པ་ཉེན་བརྡ་གཏོང་།"
+msgstr "Onya kuhusu hitilafu ya metadata yanayoweza kutokea"
 
 #: ../fdroidserver/update.py
 msgid "When configured for signed indexes, create only unsigned indexes at this stage"
-msgstr "བརྡ་སྟོན་པའི་མིང་རྟགས་དེ་སྒྲིག་བཀོད་བྱས་ཚར་ན། གནས་སྐབས་མིང་རྟགས་མ་བཀོད་པའི་བརྡ་སྟོན་རྣམས་བཟོས།"
+msgstr "Ikiwa imesanidiwa kwa faharasa zilizosainiwa, unda pekee faharasa zisizosainiwa katika hatua hii"
 
 #: ../fdroidserver/lint.py
 msgid "When linting the entire repository yamllint is disabled by default. This option forces yamllint regardless."
-msgstr ""
+msgstr "Wakati unapochambua msimbo wa ghala mzima yamllint inalemazwa kwa chaguo msingi. Chaguo hili linalazimisha yamllint bila kujali."
 
 #: ../fdroidserver/publish.py
 msgid "When signing or verifying fails, exit with an error code."
-msgstr ""
+msgstr "Wakati kusaini au kuthibitisha umefeli, toka na msimbo wa hitilafu."
 
 #: ../fdroidserver/init.py
 msgid "X.509 'Distinguished Name' used when generating keys"
-msgstr "X.509 'ཁྱད་པར་ཅན་གྱི་མིང་' ལྡེ་མིག་བཟོས་པའི་སྐབས་ལ་བེད་སྤྱོད་བྱེད།"
+msgstr "X.509 'Distinguished Name' inayotumika wakati wa kuzalisha funguo"
 
 #: ../fdroidserver/common.py
 msgid "You can use ANDROID_HOME to set the path to your SDK, i.e.:"
-msgstr "ཁྱེད་རང་གིས་ཨེན་ཀྲོཌ་མདུན་ངོས་བེད་སྤྱོད་བྱས་ནས་ཁྱེད་རང་གི་SDKའགྲོ་ལམ་སྒྲིག་བཀོད་བྱེད། དེ་ནི།:"
+msgstr "Unaweza kutumia ANDROID_HOME kuseti njia ya SDK yako, kwa mfano:"
 
 #: ../fdroidserver/scanner.py
 msgid "ZIP file archive"
-msgstr ""
+msgstr "kumbukumbu ya faili ya ZIP"
 
 #: ../fdroidserver/nightly.py
 #, python-brace-format
 msgid "adding IdentityFile to {path}"
-msgstr "{path}ལ་ངོས་འཛིན་ཡིག་ཆ་ཁ་སྣོན་བྱེད་བཞིན་པ།"
+msgstr "Inaongeza IdentityFile kwa {path}"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "adding to {name}: {path}"
-msgstr "{name}ལ་ཁ་སྣོན་བྱེད།: {path}"
+msgstr "Inaongeza kwa {name}: {path}"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "ambiguous option: %(option)s could match %(matches)s"
-msgstr "གསལ་ཁ་མེད་པའི་གདམ་ཀ: %(option)s མཐུན་མི་སོང་།%(matches)s"
+msgstr "chaguo lisiloeleweka: %(option)s linaweza kulingana na %(matches)s"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 #: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
 #: /usr/lib/python3.11/optparse.py
 #, python-format
 msgid "ambiguous option: %s (%s?)"
-msgstr "གསལ་ཁ་མེད་པའི་གདམ་ཀ:%s 1 (%s 2?)"
+msgstr "chaguo lisiloeleweka: %s (%s?)"
 
 #: ../fdroidserver/common.py
 msgid "apksigner not found! Cannot sign or verify modern APKs"
-msgstr ""
+msgstr "apksigner haijapatikana! Haiwezi kusaini au kutibitisha APK ya kisasa"
 
 #: ../fdroidserver/common.py
 msgid "apksigner not found, it's required for signing!"
-msgstr ""
+msgstr "apksigner haikupatikana, inahitajika kwa ajili ya kusaini!"
 
 #: ../fdroidserver/checkupdates.py ../fdroidserver/lint.py
 #: ../fdroidserver/rewritemeta.py
-#, fuzzy
 msgid "application ID of file to operate on"
-msgstr "མཉེས་ཆས་ཁ་བྱང་རྒྱུད་གསར་བསྒྱར་ཡོད་མིན་ལྟོས།"
+msgstr "Kitambulisho cha apu cha faili kufanyia kazi"
 
 #: ../fdroidserver/build.py ../fdroidserver/install.py
 #: ../fdroidserver/publish.py ../fdroidserver/scanner.py
 #: ../fdroidserver/verify.py
-#, fuzzy
 msgid "application ID with optional versionCode in the form APPID[:VERCODE]"
-msgstr "མཉེན་ཆས་ཀྱི་ངོ་བོ་དང་མཉམ་དུ་གདམ་ཀ་ཅན་གྱི་ཐོན་རིམ་ཨང་རྟགས་APPID[:VERCODE]"
+msgstr "Kitambulisho cha apu yenye versionCode iliyo ya hiari katika fomu APPID[:VERCODE]"
 
 #: ../fdroidserver/common.py
 msgid "archive_url needs to end with /archive"
-msgstr ""
+msgstr "archive_url inahitaji kumalizia na /archive"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "argument \"-\" with mode %r"
-msgstr "རྩོད་པ།\"-\" འགྲོ་ལུགས་འདི་དང་མཉམ་དུ། %r 1"
+msgstr "hoja \"-\" na modi %r"
 
 #: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "argument %(argument_name)s: %(message)s"
-msgstr ""
+msgstr "hoja %(argument_name)s: %(message)s"
 
 #: ../fdroidserver/nightly.py
-#, fuzzy
 msgid "attempting bare SSH connection to test deploy key:"
-msgstr "ཕྱོགས་སྐྱོད་ལྡེ་མིག་ཚོད་ལྟ་ལ་bare ssh མཐུད་ཀ་་རྒྱབ་བཞིན་པ།:"
+msgstr "inajaribu uhusiano wa SSH ulio tupu ili kujaribu ufunguo wa kupeleka:"
 
 #: ../fdroidserver/common.py
 msgid "can not parse scrlib spec (not a string): '{}'"
-msgstr ""
+msgstr "Haiwezi kuchanganua speci ya scrlib (sio kamba): '{}'"
 
 #: /usr/lib/python3.9/argparse.py /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "can't open '%(filename)s': %(error)s"
-msgstr "ཁ་ཕྱེས་ཐུབ་མ་སོང་།'%(filename)s': %(error)s"
+msgstr "Haiwezi kufungua '%(filename)s':%(error)s"
 
 #: ../fdroidserver/scanner.py
 msgid "can't open non-https url: '{};"
-msgstr ""
+msgstr "Haiwezi kufungua URL isiyo ya https: '{};"
 
 #: ../fdroidserver/build.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "cannot find required srclibs: \"{path}\""
-msgstr "{path}!གྱི་ཆེད་དུ་ཐུམ་སྒྲིལ་གྱི་མིང་རྙེད་མ་སོང་།"
+msgstr "Haiwezi kupata srclibs inayohitajika: \"{path}\""
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #: /usr/lib/python3.11/argparse.py
 msgid "cannot have multiple subparser arguments"
-msgstr "subparser རྩོད་པ་དུ་མ་ཡོད་ཐབས་མེད།"
+msgstr "Haiwezi kuwa na hoja za subparser nyingi"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "cannot merge actions - two groups are named %r"
-msgstr "བྱ་བ་ཟླ་སྒྲིལ་བཏང་ཐུབ་མ་སོང་། - སྡེ་ཚན་གཉིས་ཀྱི་མིང་ལ་%r 1"
+msgstr "Haiwezi kuunganisha vitendo - vikundi viwili vimepewa jina %r"
 
 #: ../fdroidserver/nightly.py
 msgid "cannot publish update, did you set the deploy key?"
-msgstr "པར་སྐྲུན་གསར་བསྒྱུར་བྱེད་མི་ཐུབ། ཁྱེད་ཀྱིས་ཕྱོགས་སྐྱོད་ལྡེ་མིག་སྒྲིག་བཀོད་བྱེད་ཡོད་དམ།?"
+msgstr "Haiwezi kuchapisha sasisho, je, uliseti ufunguo wa kupeleka?"
 
 #: ../fdroidserver/nightly.py
 #, python-brace-format
 msgid "cloning {url}"
-msgstr "འདྲ་བཟོས་{url}"
+msgstr "kukaririsha {url}"
 
 #: ../fdroidserver/__main__.py
 msgid "commands from plugin modules:"
-msgstr ""
+msgstr "amri kutoka kwa kiunzi huru cha programu-jalizi:"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 #: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
 #: /usr/lib/python3.11/optparse.py
 msgid "complex"
-msgstr "མགོ་རྙོག"
+msgstr "changamani"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
@@ -2187,49 +2177,50 @@ msgstr "མགོ་རྙོག"
 #, python-format
 msgid "conflicting option string: %s"
 msgid_plural "conflicting option strings: %s"
-msgstr[0] "ཚིག་སྒྲུབ་ཀྱི་གདམ་ཀའི་རྙོག་ཕྲ།: %s 1"
+msgstr[0] "kamba ya chaguo inayokinzana: %s"
+msgstr[1] "kamba za chaguo zinazokinzana: %s"
 
 #: /usr/lib/python3.11/argparse.py
-#, fuzzy, python-format
+#, python-format
 msgid "conflicting subparser alias: %s"
-msgstr "ཚིག་སྒྲུབ་ཀྱི་གདམ་ཀའི་རྙོག་ཕྲ།: %s 1"
+msgstr "lakabu la subparser inayokinzana: %s"
 
 #: /usr/lib/python3.11/argparse.py
-#, fuzzy, python-format
+#, python-format
 msgid "conflicting subparser: %s"
-msgstr "ཚིག་སྒྲུབ་ཀྱི་གདམ་ཀའི་རྙོག་ཕྲ།: %s 1"
+msgstr "subparser inayokinzana: %s"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "could not parse '{path}'"
-msgstr ""
+msgstr "haikuweza kuchanganua '{path}'"
 
 #: ../fdroidserver/common.py
 msgid "could not parse srclib spec (no name specified): '{}'"
-msgstr ""
+msgstr "haikuweza kuchanganua specifisheni ya srclib (hakuna jina limebainishwa): '{}'"
 
 #: ../fdroidserver/common.py
 msgid "could not parse srclib spec (no ref specified): '{}'"
-msgstr ""
+msgstr "haikuweza kuchanganua specifisheni ya srclib (hakuna rejeleo limebainishwa): '{}'"
 
 #: ../fdroidserver/common.py
 msgid "could not parse srclib spec (too many '@' signs): '{}'"
-msgstr ""
+msgstr "haikuweza kuchanganua specifisheni ya srclib (saini nyingi mno za '@'): '{}'"
 
 #: ../fdroidserver/nightly.py
 #, python-brace-format
 msgid "created {path}"
-msgstr ""
+msgstr "iliunda {path}"
 
 #: ../fdroidserver/checkupdates.py
 #, python-brace-format
 msgid "current version is newer: old vercode={old}, new vercode={new}"
-msgstr ""
+msgstr "toleo la sasa ni jipya: old vercode={old}, new vercode={new}"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "deleting: repo/{apkfilename}"
-msgstr "སུབ་བཞིན་པ།:རེ་པོ་/{apkfilename}"
+msgstr "kufuta: ghala/{apkfilename}"
 
 #: ../fdroidserver/scanner.py
 msgid "dependency file without lock"
@@ -2238,27 +2229,26 @@ msgstr ""
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "deployed process log {path} to {dest}"
-msgstr ""
+msgstr "logi ya mchakato uliosambazwa {path} hadi {dest}"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "dest= is required for options like %r"
-msgstr "dest= ནི་གདམ་ཀ་འདི་འདྲ་ལ་%r 1དགོས་པ་ཡོད།"
+msgstr "dest= inahitajika kwa chaguo kama %r"
 
 #: ../fdroidserver/scanner.py
 msgid "downloading '{}'"
-msgstr ""
+msgstr "Inapakua '{}'"
 
 #: ../fdroidserver/scanner.py
-#, fuzzy
 msgid "downloading scanner signatures from '{}' failed"
-msgstr "{apkfilename}ཡིག་ཆ་སྦས་ཁུང་རྙིང་པ་ལ་ཡ་ལན་མ་བྱས་"
+msgstr "Inapakua sahihi za skena kutoka '{}' imefeli"
 
 #: ../fdroidserver/scanner.py
 msgid "executable binary, possibly code"
-msgstr ""
+msgstr "binari inayoweza kutekelezwa, ikiwezekana msimbo"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
@@ -2266,332 +2256,326 @@ msgstr ""
 #, python-format
 msgid "expected %s argument"
 msgid_plural "expected %s arguments"
-msgstr[0] "ཚོད་དཔག་བྱེད་པའི་%s 1 རྩོད་པ་"
+msgstr[0] "hoja %s iliyotarajiwa"
+msgstr[1] "hoja %s zilizotarajiwa"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #: /usr/lib/python3.11/argparse.py
 msgid "expected at least one argument"
-msgstr "མ་མཐའ་ཡིན་ནའང་རེ་བ་བྱེད་པའི་རྩོད་པ།"
+msgstr "ilitarajia angalau hoja moja"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #: /usr/lib/python3.11/argparse.py
 msgid "expected at most one argument"
-msgstr "རེ་བ་བྱས་པའི་རྩོད་པ་ཆེ་ཤེོས་གཅིག"
+msgstr "Imetarajiwa isiwe zaidi ya hoja moja"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #: /usr/lib/python3.11/argparse.py
 msgid "expected one argument"
-msgstr "རེ་བ་བྱས་པའི་རྩོད་པ་གཅིག"
+msgstr "Ilitarajia hoja moja"
 
 #: ../fdroidserver/__main__.py
-#, fuzzy
 msgid "fdroid [<command>] [-h|--help|--version|<args>]"
-msgstr "བེད་སྤྱོད་: ཨེཕ་རོཌ་ [-h|-རོགས་པ་|--ཐོན་རིམ་] <command> [<args>]"
+msgstr "fdroid [<command>] [-h|--msaada|--toleo|<args>]"
 
 #: ../fdroidserver/scanner.py
 msgid "fetch the latest version of signatures from the web"
-msgstr ""
+msgstr "Pakua toleo jipya zaidi za saini kutoka kwenye mtandao"
 
 #: /usr/lib/python3.11/optparse.py
 msgid "floating-point"
-msgstr "གཡེང་ཚེག"
+msgstr "hatua ya kuelea"
 
 #: ../fdroidserver/metadata.py
-#, fuzzy
 msgid "force metadata errors (default) to be warnings, or to be ignored."
-msgstr "སྐྱོན་ཤོར་བ་ལ་ཉེན་བརྡ་ངེས་པར་དུ་གཏོང་དགོས་པ་དང་། ཡང་ན་ཡ་མ་བྱེད།."
+msgstr "lazimisha hitilafu za metadata (chaguo msingi) ziwe maonyo, au ziwe za kupuuzwa."
 
 #: ../fdroidserver/common.py
-#, fuzzy
 msgid "git svn clone failed"
-msgstr "གིཊ་གཙང་བཟོ་ཐུབ་མ་སོང་།"
+msgstr "svn clone ya git ilifeli"
 
 #: ../fdroidserver/scanner.py
 msgid "gzip file archive"
-msgstr ""
+msgstr "kumbukumbu ya faili ya gzip"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "ignored explicit argument %r"
-msgstr "དངོས་སུ་རྩོད་པ་པ་ལ་ཡ་ལན་མེད། %r 1"
+msgstr "Ilipuuza hoja ya dhahiri %r"
 
 #: ../fdroidserver/index.py
 msgid "index-v1 must have a signature, use `fdroid signindex` to create it!"
-msgstr "index-v1 ངེས་པར་དུ་མིང་རྟགས་དགོས། བེད་སྤྱོད་`fdroid signindex`འདི་བཟོས་པ་རེད།!"
+msgstr "index-v1 lazima iwe na saini, tumia `fdroid signindex` kuiunda!"
 
 #: ../fdroidserver/index.py
-#, fuzzy
 msgid "index-v2 must have a signature, use `fdroid signindex` to create it!"
-msgstr "index-v1 ངེས་པར་དུ་མིང་རྟགས་དགོས། བེད་སྤྱོད་`fdroid signindex`འདི་བཟོས་པ་རེད།!"
+msgstr "index-v2 lazima iwe na saini, tumia `fdroid signindex` kuiunda!"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 #: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
 #: /usr/lib/python3.11/optparse.py
 msgid "integer"
-msgstr "གོང་བུ།"
+msgstr "nambari kamili"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "invalid %(type)s value: %(value)r"
-msgstr "ཁུངས་ལྡན་མིན་པ་ %(type)s value: %(value)r"
+msgstr "Thamani batili ya %(type)s: %(value)r"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "invalid choice: %(value)r (choose from %(choices)s)"
-msgstr "ཁུངས་ལྡན་མིན་པའི་གདམ་ཀ: %(value)r (དེ་ནས་གདམ་ཀ་%(choices)s)"
+msgstr "chaguo iliyo batili: %(value)r (chagua kutoka %(choices)s)"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "invalid conflict_resolution value: %r"
-msgstr "ཁུངས་ལྡན་མིན་པའི་རྙོག་ཕྲ།_resolution value: %r"
+msgstr "thamani ya conflict_resolution iliyo batili: %r"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "invalid option string %(option)r: must start with a character %(prefix_chars)r"
-msgstr "ཁུངས་ལྡན་མིན་པའི་ཚིག་སྒྲུབ་གདམ་ཀ། %(option)r: ཁྱད་ཆོས་དང་མཉམ་དུ་འགོ་བཙུགས། %(prefix_chars)r"
+msgstr "kamba ya chaguo iliyo batili %(option)r: lazima ianze na char %(prefix_chars)r"
 
 #: ../fdroidserver/common.py
 msgid "ipfs_cid not found, skipping CIDv1 generation"
-msgstr ""
+msgstr "ipfs haikupatikana, inaruka kuzalisha CIDcv1"
 
 #: ../fdroidserver/checkupdates.py
 #, python-brace-format
 msgid "latest build recipe is newer: old vercode={old}, new vercode={new}"
-msgstr ""
+msgstr "mbinu ya jenga ya hivi karibuni ni mpya zaidi: old vercode={old}, new vercode={new}"
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "local_copy_dir does not end with \"fdroid\", perhaps you meant: \"{path}\""
-msgstr "local_copy_dir \"fdroid\"གིས་མཇུག་སྐྱོང་མིན་འདུག་ : \"{path}1\""
+msgstr "local_copy_dir haikiwishi na \"fdroid\", labda ulimanisha: {path}"
 
 #: ../fdroidserver/deploy.py
 msgid "local_copy_dir must be an absolute path!"
-msgstr "local_copy_dir ནི་ངེས་པར་དུ་མཐའ་མའི་འགྲོ་ལམ་དེ་ཆགས་ཡོད།!"
+msgstr "local_copy_dir lazima iwe njia kamili!"
 
 #: ../fdroidserver/deploy.py
 msgid "local_copy_dir must be directory, not a file!"
-msgstr "local_copy_dir ངེས་པར་ཕྱོགས་དེབ་ཡིན་དགོས། ཡིག་ཆ་མ་རེད།!"
+msgstr "local_copy_dir lazima iwe saraka, si faili!"
 
 #: ../fdroidserver/index.py
 #, python-format
 msgid "mirror '%s' does not end with 'fdroid'!"
-msgstr "མེ་ལོང་། '%s 1' 'fdroid'དང་མཉམ་དུ་མཇུག་སྐྱོང་མི་ཐུབ།!"
+msgstr "kioo %s haikwishia na 'fdroid'!"
 
 #: ../fdroidserver/index.py
 #, python-brace-format
 msgid "mirrors set twice, in config.yml and {path}!"
-msgstr ""
+msgstr "vioo vimesetiwa mara mbili, katika config.yml na {path}!"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #: /usr/lib/python3.11/argparse.py
 msgid "mutually exclusive arguments must be optional"
-msgstr "ནང་ཕན་ཚུན་རྩོད་པ་དེ་གདམ་ཀ་ཅན་ངེས་པར་དུ་བཞག་དགོས་།"
+msgstr "Hoja zinazokinzana lazima ziwe za hiari"
 
 #: ../fdroidserver/scanner.py
 #, python-brace-format
 msgid "next {name} cache update due in {time}"
-msgstr ""
+msgstr "sasisho ya cache Ijayo {name} inatakiwa katika {time}"
 
 #: ../fdroidserver/mirror.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "no \"icon\" in {appid}"
-msgstr "ལས་ཀ་བྱེད་བཞིན་པ།{appid}"
+msgstr "hakuna \"icon\" katika {appid}"
 
 #: ../fdroidserver/signatures.py
 msgid "no APK supplied"
-msgstr "APK མཁོ་སྤྲོད་མིན་འདུག"
+msgstr "hakuna APK iliyowasilishwa"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 #: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
 #: /usr/lib/python3.11/optparse.py
 #, python-format
 msgid "no such option: %s"
-msgstr "གདམ་ཀ་དེ་འདྲ་མིན་འདུག: %s"
+msgstr "hakuna chaguo kama hilo: %s"
 
 #: ../fdroidserver/__main__.py
 msgid "no version info found!"
-msgstr "ཆ་རྒྱུས་མེད་པའི་དམིགས་བསལ་ཞིག་རྙེད་སོང་།!"
+msgstr "hakuna maelezo ya toleo imepatikana!"
 
 #: ../fdroidserver/checkupdates.py
-#, fuzzy
 msgid "no version information found"
-msgstr "ཆ་རྒྱུས་མེད་པའི་དམིགས་བསལ་ཞིག་རྙེད་སོང་།"
+msgstr "hakuna maelezo ya toleo zimepatikana"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "not allowed with argument %s"
-msgstr "རྩོད་པ་དང་མཉམ་དུ་ཆོག་མཆན་མེད། %s 1"
+msgstr "haikubaliki na hoja %s"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "one of the arguments %s is required"
-msgstr "རྩོད་པ་གཅིག་དགོས་ཀྱི་ཡོད། %s 1"
+msgstr "moja ya hoja %s inahitajika"
 
 #: ../fdroidserver/common.py ../fdroidserver/index.py
 msgid "only accepts strings, lists, and tuples"
-msgstr "ཚིག་སྒྲུབ་དང་ཐོ་གཞུང་། ཡིག་ཚགས་ཁོ་ན་ངོས་ལེན་བྱེད།"
+msgstr "inakubali pekee kamba, orodha, na jozi"
 
 #: ../fdroidserver/install.py
 #, python-format
 msgid "option %s: If you really want to install all the signed apps, use --all"
-msgstr "གདམ་ཀ %s 1: གལ་ཏེ་ཁྱེད་ཀྱིས་མིང་རྟགས་བཀོད་པའི་མཉེན་ཆས་རིགས་ཚང་མ་ངེས་པར་དུ་སྒྲིག་བཅུག་བྱེད་འདོད་ཡོད་། བེད་སྤྱོད་ --ཚང་མ།"
+msgstr "chaguo %s: Ikiwa kweli unataka kusakinisha apu zote zilizosainiwa, tumia --all"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 #: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
 #: /usr/lib/python3.11/optparse.py
 #, python-format
 msgid "option %s: invalid %s value: %r"
-msgstr "གདམ་ཀ %s 1: ཁུངས་ལྡན་མིན་པ་ %s 2 རིན་ཐང་།: %r 3"
+msgstr "chaguo %s: thamani %s iliyo batili: %r"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 #: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
 #: /usr/lib/python3.11/optparse.py
 #, python-format
 msgid "option %s: invalid choice: %r (choose from %s)"
-msgstr "གདམ་ཀ %s 1: ཁུངས་ལྡན་མིན་པའི་གདམ་ཀ: %r 2 (choose from %s 3)"
+msgstr "chaguo %s: chaguo batili: %r(choose from %s)"
 
 #: /usr/lib/python3.5/getopt.py /usr/lib/python3.6/getopt.py
 #: /usr/lib/python3.7/getopt.py /usr/lib/python3.9/getopt.py
 #: /usr/lib/python3.11/getopt.py
 #, python-format
 msgid "option -%s not recognized"
-msgstr "གདམ་ཀ། '%s 1'ངོས་འཛིན་ཐུབ་མ་སོང་།"
+msgstr "chaguo -%s halitambuliki"
 
 #: /usr/lib/python3.5/getopt.py /usr/lib/python3.6/getopt.py
 #: /usr/lib/python3.7/getopt.py /usr/lib/python3.9/getopt.py
 #: /usr/lib/python3.11/getopt.py
 #, python-format
 msgid "option -%s requires argument"
-msgstr "གདམ་ཀ། -%s 1 རྩོད་དགོས།"
+msgstr "chaguo -%s linahitaji hoja"
 
 #: /usr/lib/python3.5/getopt.py /usr/lib/python3.6/getopt.py
 #: /usr/lib/python3.7/getopt.py /usr/lib/python3.9/getopt.py
 #: /usr/lib/python3.11/getopt.py
 #, python-format
 msgid "option --%s must not have an argument"
-msgstr "གདམ་ཀ། --%s 1གང་བྱས་ཀྱང་རྩོད་པ་མེད།"
+msgstr "chaguo --%s ni lazima isiwe na hoja"
 
 #: /usr/lib/python3.5/getopt.py /usr/lib/python3.6/getopt.py
 #: /usr/lib/python3.7/getopt.py /usr/lib/python3.9/getopt.py
 #: /usr/lib/python3.11/getopt.py
 #, python-format
 msgid "option --%s not a unique prefix"
-msgstr "གདམ་ཀ་--%s ཐུན་མོང་མ་ཡིན་པའི་སྔོན་འཇུག་མ་རེད།"
+msgstr "chaguo --%s sio kiambishi awali cha kipekee"
 
 #: /usr/lib/python3.5/getopt.py /usr/lib/python3.6/getopt.py
 #: /usr/lib/python3.7/getopt.py /usr/lib/python3.9/getopt.py
 #: /usr/lib/python3.11/getopt.py
 #, python-format
 msgid "option --%s not recognized"
-msgstr "གདམ་ཀ།--%s 1 ངོས་འཛིན་ཐུབ་མ་སོང་།"
+msgstr "chaguo --%s halitambuliki"
 
 #: /usr/lib/python3.5/getopt.py /usr/lib/python3.6/getopt.py
 #: /usr/lib/python3.7/getopt.py /usr/lib/python3.9/getopt.py
 #: /usr/lib/python3.11/getopt.py
 #, python-format
 msgid "option --%s requires argument"
-msgstr "གདམ་ཀ། --%s རྩོད་དགོས།"
+msgstr "chaguo --%s linahitaji hoja"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 msgid "optional arguments"
-msgstr "གདམ་ཀ་ཅན་གྱི་རྩོད་པ།"
+msgstr "hoja za hiari"
 
 #: /usr/lib/python3.11/argparse.py
-#, fuzzy
 msgid "options"
-msgstr "གདམ་ཀ།"
+msgstr "uchaguzi"
 
 #: ../fdroidserver/nightly.py
 #, python-brace-format
 msgid "overwriting existing {path}"
-msgstr "སྐྱར་བྲིས་ཡོད་།{path}"
+msgstr "inaandika upya {path} iliyopo"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #: /usr/lib/python3.11/argparse.py
 msgid "positional arguments"
-msgstr "གནས་སྟངས་ལ་གཞིགས་པའི་རྩོད་པ།"
+msgstr "hoja ya msimamo"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "process log deploy {path} to {dest} failed!"
-msgstr ""
+msgstr "Mchakato wa kupeleka kwa logi {path} kwa {dest} imefeli!"
 
 #: ../fdroidserver/build.py
 msgid "reference binary missing signature"
-msgstr ""
+msgstr "binari ya rejeleo inakosa saini"
 
 #: ../fdroidserver/signatures.py
 #, python-brace-format
 msgid "refuse downloading via insecure HTTP connection (use HTTPS or specify --no-https-check): {apkfilename}"
-msgstr "བདེ་ཆགས་མེད་པའི་HTTPMམཐུད་ཀ་རྒྱུད་དེ་ཕབ་བཤུས་ངོས་ལེན་མེད། (HTTPS བེད་སྤྱོད་དང་ཡང་ན་དམིགས་སྟོན་། --no-https-check){apkfilename}"
+msgstr "kataa kupakua kupitia muunganisho wa HTTP isiyo salama (tumia HTTPS au bainisha --no-https-check):{apkfilename}"
 
 #: ../fdroidserver/index.py
 #, python-format
 msgid "repo_icon \"repo/icons/%s\" does not exist, generating placeholder."
-msgstr ""
+msgstr "repo_icon \"repo/icons/%s\" haipo, inazalisha kishika nafasi."
 
 #: ../fdroidserver/common.py
 msgid "repo_url needs to end with /repo"
-msgstr ""
+msgstr "repo_url ina haja ya kuisha na /ghala"
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "rsync is missing or broken: {error}"
-msgstr ""
+msgstr "rsync inakosa au imevunjika: {error}"
 
 #: ../fdroidserver/metadata.py
 msgid "ruamel.yaml not installed, can not write metadata."
-msgstr ""
+msgstr "ruamel.yaml haijasimikwa, haiwezi kuandika metadata."
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "s3cmd sync indexes {path} to {url} and delete"
-msgstr "s3cmd sync ཕྱོགས་སྟོན།{path}1 དེ་ནས {url} དང་སུབས།"
+msgstr "s3cmd kusawazisha indexes {path} hadi {url} na kufuta"
 
 #: ../fdroidserver/deploy.py
 #, fuzzy, python-brace-format
 msgid "s3cmd syncs indexes from {path} to {url} and deletes removed"
-msgstr "s3cmd sync ཕྱོགས་སྟོན།{path}1 དེ་ནས {url} དང་སུབས།"
+msgstr "s3cmd kusawazisha indexes {path} hadi {url} na kufuta"
 
 #: ../fdroidserver/scanner.py
 #, python-brace-format
 msgid "scanner cache is malformed! You can clear it with: '{clear}'"
-msgstr ""
+msgstr "cache ya skana in umbo bovu! Unaweza kufuta kwa: '{clear}'"
 
 #: ../fdroidserver/deploy.py
-#, fuzzy
 msgid "serverwebroot: path does not end with \"fdroid\", perhaps you meant one of these:"
-msgstr "local_copy_dir \"fdroid\"གིས་མཇུག་སྐྱོང་མིན་འདུག་ : \"{path}1\""
+msgstr "serverwebroot: njia haikamiliki na \"fdroid\", labda ulimaanisha moja kati ya hizi:"
 
 #: ../fdroidserver/scanner.py
 msgid "shared library"
-msgstr ""
+msgstr "maktaba inayoshirikishwa"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 #: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
 #: /usr/lib/python3.11/optparse.py
 msgid "show program's version number and exit"
-msgstr "ལས་རིམ་རྣམ་གཞག་གི་ཐོན་རིམ་ཨང་གྲངས་སྟོན་ནས་ཕྱིར་ཐོན་བྱེད།"
+msgstr "onyesha nambari ya toleo la programu kisha uondoke"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.5/optparse.py
 #: /usr/lib/python3.6/argparse.py /usr/lib/python3.6/optparse.py
@@ -2599,254 +2583,257 @@ msgstr "ལས་རིམ་རྣམ་གཞག་གི་ཐོན་རི
 #: /usr/lib/python3.9/argparse.py /usr/lib/python3.9/optparse.py
 #: /usr/lib/python3.11/argparse.py /usr/lib/python3.11/optparse.py
 msgid "show this help message and exit"
-msgstr "རོགས་པ་བྱེད་པའི་འཕྲིན་ཐུང་སྟོན་ནས་ཕྱིར་ཐོན།"
+msgstr "onyesha ujumbe huu wa usaidizi na uondoke"
 
 #: ../fdroidserver/signatures.py
 msgid "signed APK, either a file-path or HTTPS URL."
-msgstr "APK མིང་རྟགས་, ཡིག་ཆའི་འགྲོ་ལམ་མམ་ཡང་ན། HTTPS URL."
+msgstr "APK iliyosainiwa, aidha file-path au HTTPS URL."
 
 #: ../fdroidserver/common.py
 msgid "skip deploying full build logs: log content is empty"
-msgstr ""
+msgstr "ruka kupeleka logi kamili za jenga: maudhui ya logi ni tupu"
 
 #: ../fdroidserver/common.py
 msgid "skip deploying full build logs: not enabled in config"
-msgstr ""
+msgstr "ruka kupeleka logi kamili za jenga: haijawezeshwa kwa config"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "skipping source tarball: {path}"
-msgstr "tarballའབྱུང་ཁུངས་མཆོང་རྒྱག་རྒྱབ་བཞིན་པ།:{path}"
+msgstr "inaruka tarball ya chanzo: {path}"
 
 #: ../fdroidserver/lint.py
 msgid "srclibs missing name and/or @"
-msgstr ""
+msgstr "srclibs inakosa jina na/au @"
 
 #: ../fdroidserver/scanner.py
 msgid "static library"
-msgstr ""
+msgstr "maktaba tuli"
 
 #: ../fdroidserver/build.py
 #, python-brace-format
 msgid "supplied reference binary has allowed signer {signer}"
-msgstr ""
+msgstr "binari ya rejeleo lililowasilishwa imeruhusu signer {signer}"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "the following arguments are required: %s"
-msgstr "གཤམ་གྱི་རྩོད་པ་དེ་དག་དགོས།:%s"
+msgstr "hoja zifuatazo zinahitajika: %s"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "unexpected option string: %s"
-msgstr "རེ་བ་མེད་པའི་གདམ་ཀ་ཅན་གྱི་ཚིག་སྒྲུབ།:%s"
+msgstr "Chaguo lisilotarajiwa: %s"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "unknown parser %(parser_name)r (choices: %(choices)s)"
-msgstr "ངོས་འཛིན་མི་ཐུབ་པའི་ parser %(parser_name)r (གདམ་ཀ།: %(choices)s)"
+msgstr "kichanganuzi isiyojulikana %(parser_name)r (chaguo: %(choices)s)"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "unrecognized arguments: %s"
-msgstr "ངོས་འཛིན་མི་ཐུབ་པའི་རྩོད་པ།: %s"
+msgstr "hoja zisizotambulika: %s"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "unsafe permissions on '{config_file}' (should be 0600)!"
-msgstr "'{config_file}' སྒང་གི་བདེ་ཆགས་མེད་པའི་ཆོག་མཆན་ (ངེས་པར་དུ། 0600)!"
+msgstr "ruhusa zisizo salama kwenye '{config_file}' (inapaswa kuwa 0600)!"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py ../fdroid
 #: /usr/lib/python3.7/argparse.py ../fdroidserver/__main__.py
 #: /usr/lib/python3.9/argparse.py /usr/lib/python3.11/argparse.py
 msgid "usage: "
-msgstr "བེད་སྤྱོད།: "
+msgstr "matumizi: "
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "using Apache libcloud to sync with {url}"
-msgstr "Apache libcloud བེད་སྤྱོད་བྱས་པའི་ཐོག་ {url}1དང་མཉམ་དུ་ཟླ་སྒྲིལ་གཏོང་།"
+msgstr "kutumia Apache libcloud kulandanisha na {url}"
 
 #: ../fdroidserver/deploy.py
 msgid "virustotal.com is rate limiting, waiting to retry..."
-msgstr ""
+msgstr "virustotal.com inapunguza kiwango, inangojea kujaribu tena..."
 
 #: ../fdroidserver/publish.py
 #, python-brace-format
 msgid "{0} app, {1} key aliases"
 msgid_plural "{0} apps, {1} key aliases"
-msgstr[0] "{0} མཉེས་ཆས་, {1} key aliases"
+msgstr[0] "apu {0}, lakabu muhimu{1}"
+msgstr[1] "apu {0}, lakabu muhimu{1}"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "{apkfilename} ({appid}) has no metadata!"
-msgstr "{apkfilename} ({appid}) ལ་རྒྱབ་ལྗོངས་ཡིག་ཆ་མིན་འདུག!"
+msgstr "{apkfilename} ({appid}) haina metadata!"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "{apkfilename} has multiple {name} files, looks like Master Key exploit!"
-msgstr ""
+msgstr "{apkfilename} ina faili nyingi za {name}, inaonekana kama shambulio la Master Key!"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "{apkfilename}'s AndroidManifest.xml has a bad date: "
-msgstr ""
+msgstr "AndroidManifest.xml ya {apkfilename} ina tarehe mbaya: "
 
 #: ../fdroidserver/update.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{appid} does not have a name! Using application ID instead."
-msgstr "{appid} ལ་མིང་ཡོད་མ་རེད། !དེའི་ཚབ་ལ་ཐུམ་སྒྲིལ་མིང་བེད་སྤྱོད་བྱེད།."
+msgstr "{appid} haina jina! Inatumia kitambulisho cha apu badala yake."
 
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "{appid} from {path} is not a valid Android application ID!"
-msgstr ""
+msgstr "{appid} kutoka {path} si kitambulisho halali cha apu ya Android!"
 
 #: ../fdroidserver/metadata.py ../fdroidserver/update.py
 #, python-brace-format
 msgid "{appid} from {path} is not a valid Java Package Name!"
-msgstr ""
+msgstr "{appid} kutoka {path} sio Jina halali la kifurushi cha Java!"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "{appid} has both APKs and files: {files}"
-msgstr ""
+msgstr "{appid} ina vyote viwili APK pamoja na faili: {files}"
 
 #: ../fdroidserver/mirror.py
 #, python-brace-format
 msgid "{appid} is missing {name}"
-msgstr ""
+msgstr "{appid} inakosa {name}"
 
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vname
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "{appid}: Unknown extlib {path} in build '{versionName}'"
-msgstr "{appid}1: ངོས་འཛིན་མི་ཐུབ་པའི་ extlib {path}2 བཟོ་སྐྲུན་ནང་ལ '{versionName}3'"
+msgstr "{appid}: extlib isiyojulikana {path} katika jenga '{versionName}'"
 
 #: ../fdroidserver/scanner.py
 #, python-brace-format
 msgid "{appid}: no builds specified, running on current source state"
-msgstr ""
+msgstr "{appid}: hakuna jenga zilizobainishwa, inaendeshwa kwa hali ya sasa ya chanzo"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "{appid}: {field} must be a '{type}', but it is a '{fieldtype}!'"
-msgstr ""
+msgstr "{appid}: {field} lazima iwe '{type}', bali ni '{fieldtype}!'"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "{appid}: {field} must be a '{type}', but it is a '{fieldtype}'!"
-msgstr ""
+msgstr "{appid}: {field} lazima iwe '{type}', bali ni '{fieldtype}'!"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "{build_flag} must be an integer, found: {value}"
-msgstr ""
+msgstr "{build_flag} lazima iwe nambari kamili, imepatikana: {value}"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "{build_flag} must be list or string, found: {value}"
-msgstr ""
+msgstr "{build_flag} lazima iwe orodha au kamba, imepatikana: {value}"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "{file} is blank or corrupt!"
-msgstr ""
+msgstr "{file} ni tupu au fisadi!"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "{name} \"{section}/icons/{path}\" does not exist! Check \"config.yml\"."
-msgstr ""
+msgstr "{name} \"{section}/icons/{path}\" haipo! Angalia \"config.yml\"."
 
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "{oldfile} is deprecated, use {newfile}"
-msgstr ""
+msgstr "{oldfile} imewacha kutumika, tumia {newfile}"
 
 #: ../fdroidserver/import_subcommand.py
 #, python-brace-format
 msgid "{path} already exists, ignoring import results!"
-msgstr ""
+msgstr "{path} tayari ipo, inapuuza matokeo ya uingizaji!"
 
 #: ../fdroidserver/nightly.py
 #, python-brace-format
 msgid "{path} does not exist!  Create it by running:"
-msgstr ""
+msgstr "{path} haipo!  Iunde kwa kuendesha:"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "{path} has bad file signature \"{pattern}\", possible Janus exploit!"
-msgstr ""
+msgstr "{path} ina saini mbaya ya faili \"{pattern}\", Uwezekano wa kunyonywa la Janus!"
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "{path} has been flagged by virustotal {count} times:"
-msgstr ""
+msgstr "{path} imealamishwa na virustotal mara {count}:"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "{path} is not \"key: value\" dict, but a {datatype}!"
-msgstr ""
+msgstr "{path} sio \"key: value\" dict, lakini ni {datatype}!"
 
 #: ../fdroidserver/common.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{path} is not a standard config file!"
-msgstr "'sdk_path' འདི་ 'config.yml' ནང་སྒྲིག་ཐུབ་མ་སོང་།!"
+msgstr "{path} sio faili ya usanidi ulio na kiwango!"
 
 #: ../fdroidserver/index.py
 #, python-brace-format
 msgid "{path} is not list, but a {datatype}!"
-msgstr ""
+msgstr "{path} sio orodha, lakini ni {datatype}!"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "{path} is not {expected_type}, but a {datatype}!"
-msgstr ""
+msgstr "{path} sio {expected_type}, lakini ni {datatype}!"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "{path} is zero size!"
-msgstr "{path} ལ་ཆེ་ཆུང་མེད།!"
+msgstr "{path} ni saizi ya sifuri!"
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "{path} more than 200MB, manually upload: {url}"
-msgstr ""
+msgstr "{path} zaidi ya 200MB , pakia kwa mkono: {url}"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "{path}: \"{code}\" is not a valid ISO_3166-1 alpha-2 country code!"
-msgstr ""
+msgstr "{path}: \"{code}\" msimbo wa nchi ya ISO_3166-1 alpha-2 ni batili!"
 
 #: ../fdroidserver/update.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{path}: {error}"
-msgstr "ཀློག་མི་ཐུབ།{path}: {error}"
+msgstr "{path}: {error}"
 
 #: ../fdroidserver/mirror.py
 #, python-brace-format
 msgid "{url} does not end with \"fdroid\", check the URL path!"
-msgstr ""
+msgstr "{url} haimaliziki na \"fdroid\", angalia njia ya URL!"
 
 #: ../fdroidserver/import_subcommand.py
 #, python-brace-format
 msgid "{url} does not start with \"http\"!"
-msgstr ""
+msgstr "{url} haianzi na \"http\"!"
 
 #: ../fdroidserver/build.py
 msgid "{} build failed"
 msgid_plural "{} builds failed"
-msgstr[0] "{} བཟོ་སྐྲུན་བྱེད་མི་ཐུབ།"
+msgstr[0] "{} jenga imefeli"
+msgstr[1] "{} jenga zimefeli"
 
 #: ../fdroidserver/build.py
 msgid "{} build succeeded"
 msgid_plural "{} builds succeeded"
-msgstr[0] "{} བཟོ་སྐྲུན་ལེགས་སྒྲུབ།"
+msgstr[0] "{} jenga imefaulu"
+msgstr[1] "{} jenga zimefaulu"
