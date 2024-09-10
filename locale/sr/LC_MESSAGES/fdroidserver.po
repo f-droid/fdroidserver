@@ -180,7 +180,7 @@ msgstr "'{aapt}' је превише стар, fdroid захтева build-tools
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "'{field}' will be in random order! Use () or [] brackets if order is important!"
-msgstr "'{поље}' ће бити у насумичном редоследу! Користите () или [] заграде ако је редослед важан!"
+msgstr "'{field}' ће бити у насумичном редоследу! Користите () или [] заграде ако је редослед важан!"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -205,7 +205,7 @@ msgstr "'{value}' није важећи {field}, треба да буде {patte
 #: ../fdroidserver/checkupdates.py
 #, python-brace-format
 msgid "...checkupdate failed for {appid} : {error}"
-msgstr "...провера ажурирања није успела за {appid} : {грешка}"
+msgstr "...провера ажурирања није успела за {appid} : {error}"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
@@ -278,7 +278,7 @@ msgstr "Андроид DEX код"
 #: ../fdroidserver/init.py
 #, python-brace-format
 msgid "Android SDK not found at {path}!"
-msgstr "Андроид SDK није пронађен на {путањи}!"
+msgstr "Андроид SDK није пронађен на {path}!"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -447,7 +447,7 @@ msgstr "Контрадикторни аргументи: '--verbose' и '--quiet
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Conflicting config files! Using {newfile}, ignoring {oldfile}!"
-msgstr "Конфликтни конфигурациони фајлови! Користи се {новифајл}, игнорише се {старифајл}!"
+msgstr "Конфликтни конфигурациони фајлови! Користи се {newfile}, игнорише се {oldfile}!"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -470,7 +470,7 @@ msgstr "Није могуће пронаћи {path} да би се уклони�
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Could not open APK {path} for analysis: "
-msgstr "Није могуће отворити APK {путања} за анализу: "
+msgstr "Није могуће отворити APK {path} за анализу: "
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -554,7 +554,7 @@ msgstr "Брисање историје git-mirror, репозиторијум �
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Deleting unknown file: {path}"
-msgstr "Брисање непознате датотеке: {путања}"
+msgstr "Брисање непознате датотеке: {path}"
 
 #: ../fdroidserver/lint.py
 #, python-format
@@ -715,7 +715,7 @@ msgstr "Извуците потписе из АПК-ова"
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Failed copying {path}: {error}"
-msgstr "Неуспело копирање {путања}: {грешка}"
+msgstr "Неуспело копирање {path}: {error}"
 
 #: ../fdroidserver/signatures.py
 #, python-brace-format
@@ -730,7 +730,7 @@ msgstr "Није успело читање {path}: {error}"
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Failed resizing {path}: {error}"
-msgstr "Неуспешно мењање величине {путања}: {грешка}"
+msgstr "Неуспешно мењање величине {path}: {error}"
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
@@ -967,7 +967,7 @@ msgstr "Укључујући метаподатке из %s@%s"
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Including metadata from {path}"
-msgstr "Укључујући метаподатке из {путанје}"
+msgstr "Укључујући метаподатке из {path}"
 
 #: ../fdroidserver/common.py
 msgid "Initialising submodules"
@@ -1454,7 +1454,7 @@ msgstr "Уклањање наведених датотека"
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Removing {path}\""
-msgstr "Уклањање {пут}"
+msgstr "Уклањање {path}"
 
 #: ../fdroidserver/update.py
 msgid "Rename APK files that do not match package.name_123.apk"
@@ -1549,7 +1549,7 @@ msgstr "Скенирање APK са dexdump за познате неслобод
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Set NDK {release} ({version}) up"
-msgstr "Поставите NDK {издање} ({верзија}) нагоре"
+msgstr "Поставите NDK {release} ({version}) нагоре"
 
 #: ../fdroidserver/common.py
 msgid "Set clock to that time using:"
@@ -1562,7 +1562,7 @@ msgstr "Поставите максимални број издања у реп�
 #: ../fdroidserver/build.py
 #, python-brace-format
 msgid "Set open file limit to {integer}"
-msgstr "Поставите лимит за отворене фајлове на {целоброј}"
+msgstr "Поставите лимит за отворене фајлове на {integer}"
 
 #: ../fdroidserver/__main__.py
 msgid "Set up an app build for a nightly build repo"
