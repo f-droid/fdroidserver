@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 1.1-681-gc19e8952\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2024-05-13 13:50+0200\n"
+"POT-Creation-Date: 2024-09-10 10:50+0200\n"
 "PO-Revision-Date: 2020-10-29 08:32+0000\n"
 "Last-Translator: Hakim Oubouali <hakim.oubouali.skr@gmail.com>\n"
 "Language-Team: Central Atlas Tamazight <https://hosted.weblate.org/projects/f-droid/fdroidserver/tzm/>\n"
@@ -667,6 +667,16 @@ msgstr ""
 msgid "ERROR: unsupported git host \"%s\", patches welcome!"
 msgstr ""
 
+#: ../fdroidserver/lint.py
+#, python-brace-format
+msgid "ERROR: {key} in {path} is not \"archive\" or \"repo\"!"
+msgstr ""
+
+#: ../fdroidserver/lint.py
+#, python-brace-format
+msgid "ERROR: {key}:{subkey} in {path} is not in allowed keys: {allowed_keys}!"
+msgstr ""
+
 #: ../fdroidserver/__main__.py
 #, python-brace-format
 msgid "Encoding is set to '{enc}' fdroid might run into encoding issues. Please set it to 'UTF-8' for best results."
@@ -682,6 +692,10 @@ msgstr ""
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Environment variable {var} from {configname} is not set!"
+msgstr ""
+
+#: ../fdroidserver/deploy.py
+msgid "Error deploying 'github_releases', {} not present. (You might need to run `fdroid update` first.)"
 msgstr ""
 
 #: ../fdroidserver/import_subcommand.py
@@ -1271,6 +1285,18 @@ msgstr ""
 msgid "Offline machine, skipping git mirror generation until `fdroid deploy`"
 msgstr ""
 
+#: ../fdroidserver/deploy.py
+msgid "One of the 'github_releases' config items is missing the 'projectUrl' value. skipping ..."
+msgstr ""
+
+#: ../fdroidserver/deploy.py
+msgid "One of the 'github_releases' config items is missing the 'packageNames' value. skipping ..."
+msgstr ""
+
+#: ../fdroidserver/deploy.py
+msgid "One of the 'github_releases' config items is missing the 'token' value. skipping ..."
+msgstr ""
+
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Only PNG and JPEG are supported for graphics, found: {path}"
@@ -1480,6 +1506,11 @@ msgstr ""
 
 #: ../fdroidserver/checkupdates.py
 msgid "Run on git repo that has uncommitted changes"
+msgstr ""
+
+#: ../fdroidserver/nightly.py
+#, python-brace-format
+msgid "Run over {cibase} to find -debug.apk. and skip repo_basedir {repo_basedir}"
 msgstr ""
 
 #: ../fdroidserver/lint.py
@@ -1713,6 +1744,10 @@ msgstr ""
 msgid "To use awsbucket, awssecretkey and awsaccesskeyid must also be set in config.yml!"
 msgstr ""
 
+#: ../fdroidserver/deploy.py
+msgid "To use rclone, rclone_config and awsbucket must be set in config.yml!"
+msgstr ""
+
 #: ../fdroidserver/lint.py
 msgid "URL must start with https:// or http://"
 msgstr ""
@@ -1910,6 +1945,11 @@ msgstr ""
 msgid "Using \"{path}\" for configuring s3cmd."
 msgstr ""
 
+#: ../fdroidserver/deploy.py
+#, python-brace-format
+msgid "Using \"{path}\" for syncing with remote storage."
+msgstr ""
+
 #: ../fdroidserver/common.py
 msgid "Using APK Signature v2"
 msgstr ""
@@ -1939,6 +1979,11 @@ msgstr ""
 #: ../fdroidserver/init.py
 #, python-brace-format
 msgid "Using existing keystore \"{path}\""
+msgstr ""
+
+#: ../fdroidserver/deploy.py
+#, python-brace-format
+msgid "Using rclone to sync with: {url}"
 msgstr ""
 
 #: ../fdroidserver/deploy.py
@@ -2157,6 +2202,10 @@ msgstr ""
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "deleting: repo/{apkfilename}"
+msgstr ""
+
+#: ../fdroidserver/scanner.py
+msgid "dependency file without lock"
 msgstr ""
 
 #: ../fdroidserver/common.py
@@ -2485,6 +2534,11 @@ msgstr ""
 #: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "s3cmd sync indexes {path} to {url} and delete"
+msgstr ""
+
+#: ../fdroidserver/deploy.py
+#, python-brace-format
+msgid "s3cmd syncs indexes from {path} to {url} and deletes removed"
 msgstr ""
 
 #: ../fdroidserver/scanner.py

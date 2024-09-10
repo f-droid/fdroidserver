@@ -10,15 +10,15 @@ msgstr ""
 "Project-Id-Version: fdroidserver 2.0a5-27-gf24eae0f\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2024-09-10 10:50+0200\n"
-"PO-Revision-Date: 2024-05-17 08:01+0000\n"
-"Last-Translator: Licaon Kter <licaon.kter@protonmail.com>\n"
+"PO-Revision-Date: 2024-09-10 09:27+0000\n"
+"Last-Translator: Hans-Christoph Steiner <hans@guardianproject.info>\n"
 "Language-Team: Romanian <https://hosted.weblate.org/projects/f-droid/fdroidserver/ro/>\n"
 "Language: ro\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < 20)) ? 1 : 2;\n"
-"X-Generator: Weblate 5.6-dev\n"
+"X-Generator: Weblate 5.8-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -226,7 +226,7 @@ msgstr "Un URL este necesar ca argument!"
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "APK signatures have different certificates in {path}:"
-msgstr "Semnăturile APK au certificate diferite în {path}"
+msgstr "Semnăturile APK au certificate diferite în {path}:"
 
 #: ../fdroidserver/__main__.py
 msgid "Add PGP signatures using GnuPG for packages in repo"
@@ -1304,11 +1304,11 @@ msgid "One of the 'github_releases' config items is missing the 'projectUrl' val
 msgstr ""
 
 #: ../fdroidserver/deploy.py
-msgid "One of the 'github_releases' config itmes is missing the 'packageNames' value. skipping ..."
+msgid "One of the 'github_releases' config items is missing the 'packageNames' value. skipping ..."
 msgstr ""
 
 #: ../fdroidserver/deploy.py
-msgid "One of the 'github_releases' config itmes is missing the 'token' value. skipping ..."
+msgid "One of the 'github_releases' config items is missing the 'token' value. skipping ..."
 msgstr ""
 
 #: ../fdroidserver/update.py

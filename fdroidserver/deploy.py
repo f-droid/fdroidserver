@@ -1195,7 +1195,7 @@ def upload_to_github_releases_repo(repo_conf, release_infos, global_gh_token):
     if not token:
         logging.warning(
             _(
-                "One of the 'github_releases' config itmes is missing the "
+                "One of the 'github_releases' config items is missing the "
                 "'token' value. skipping ..."
             )
         )
@@ -1206,7 +1206,7 @@ def upload_to_github_releases_repo(repo_conf, release_infos, global_gh_token):
     if not conf_package_names:
         logging.warning(
             _(
-                "One of the 'github_releases' config itmes is missing the "
+                "One of the 'github_releases' config items is missing the "
                 "'packageNames' value. skipping ..."
             )
         )
