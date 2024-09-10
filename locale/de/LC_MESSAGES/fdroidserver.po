@@ -26,7 +26,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2024-05-13 13:50+0200\n"
+"POT-Creation-Date: 2024-09-10 10:50+0200\n"
 "PO-Revision-Date: 2024-05-20 09:01+0000\n"
 "Last-Translator: Maxi <maxitendo01@proton.me>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/f-droid/fdroidserver/de/>\n"
@@ -694,6 +694,16 @@ msgstr "FEHLER: nicht unterstützter CI-Typ, Patches willkommen!"
 msgid "ERROR: unsupported git host \"%s\", patches welcome!"
 msgstr "FEHLER: nicht unterstützter Git-Host \"%s\", Patches willkommen!"
 
+#: ../fdroidserver/lint.py
+#, python-brace-format
+msgid "ERROR: {key} in {path} is not \"archive\" or \"repo\"!"
+msgstr ""
+
+#: ../fdroidserver/lint.py
+#, python-brace-format
+msgid "ERROR: {key}:{subkey} in {path} is not in allowed keys: {allowed_keys}!"
+msgstr ""
+
 #: ../fdroidserver/__main__.py
 #, python-brace-format
 msgid "Encoding is set to '{enc}' fdroid might run into encoding issues. Please set it to 'UTF-8' for best results."
@@ -712,6 +722,10 @@ msgstr ""
 #, python-brace-format
 msgid "Environment variable {var} from {configname} is not set!"
 msgstr "Umgebungsvariable {var} von {configname} ist nicht gesetzt!"
+
+#: ../fdroidserver/deploy.py
+msgid "Error deploying 'github_releases', {} not present. (You might need to run `fdroid update` first.)"
+msgstr ""
 
 #: ../fdroidserver/import_subcommand.py
 msgid "Error while getting repo address"
@@ -1300,6 +1314,18 @@ msgstr "Der OBB-Packetname stimmt mit keinem unterstützten APK überein:"
 msgid "Offline machine, skipping git mirror generation until `fdroid deploy`"
 msgstr "Maschine offline, überspringe git-Spiegelgeneration bis `fdroid deploy`"
 
+#: ../fdroidserver/deploy.py
+msgid "One of the 'github_releases' config items is missing the 'projectUrl' value. skipping ..."
+msgstr ""
+
+#: ../fdroidserver/deploy.py
+msgid "One of the 'github_releases' config itmes is missing the 'packageNames' value. skipping ..."
+msgstr ""
+
+#: ../fdroidserver/deploy.py
+msgid "One of the 'github_releases' config itmes is missing the 'token' value. skipping ..."
+msgstr ""
+
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Only PNG and JPEG are supported for graphics, found: {path}"
@@ -1510,6 +1536,11 @@ msgstr "Schreibe '{appid}' neu"
 #: ../fdroidserver/checkupdates.py
 msgid "Run on git repo that has uncommitted changes"
 msgstr "Auf Git Repo, das nicht committete Änderungen hat, laufen lassen"
+
+#: ../fdroidserver/nightly.py
+#, python-brace-format
+msgid "Run over {cibase} to find -debug.apk. and skip repo_basedir {repo_basedir}"
+msgstr ""
 
 #: ../fdroidserver/lint.py
 msgid "Run rewritemeta to fix formatting"
@@ -1749,6 +1780,11 @@ msgstr ""
 msgid "To use awsbucket, awssecretkey and awsaccesskeyid must also be set in config.yml!"
 msgstr "Um awsbucket zu benutzen, müssen awssecretkey und awsaccesskeyid auch in der config.yml gesetzt sein!"
 
+#: ../fdroidserver/deploy.py
+#, fuzzy
+msgid "To use rclone, rclone_config and awsbucket must be set in config.yml!"
+msgstr "Um awsbucket zu benutzen, müssen awssecretkey und awsaccesskeyid auch in der config.yml gesetzt sein!"
+
 #: ../fdroidserver/lint.py
 msgid "URL must start with https:// or http://"
 msgstr "URL muss mit https:// oder http:// beginnen"
@@ -1946,6 +1982,11 @@ msgstr "APK-Datum statt der aktuellen Zeit für neu hinzugefügte APKs verwenden
 msgid "Using \"{path}\" for configuring s3cmd."
 msgstr "Verwende {path} zur Konfiguration von s3cmd."
 
+#: ../fdroidserver/deploy.py
+#, fuzzy, python-brace-format
+msgid "Using \"{path}\" for syncing with remote storage."
+msgstr "Verwende {path} zur Konfiguration von s3cmd."
+
 #: ../fdroidserver/common.py
 msgid "Using APK Signature v2"
 msgstr "Verwende APK-Signatur v2"
@@ -1976,6 +2017,11 @@ msgstr "Verwende leeres Verzeichnis statt der Inhalte von {path}!"
 #, python-brace-format
 msgid "Using existing keystore \"{path}\""
 msgstr "Verwende vorhandenen Schlüsselspeicher \"{path}\""
+
+#: ../fdroidserver/deploy.py
+#, fuzzy, python-brace-format
+msgid "Using rclone to sync with: {url}"
+msgstr "Verwende s3cmd zum Synchronisieren mit: {url}"
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
@@ -2194,6 +2240,10 @@ msgstr "die aktuelle Version ist neuer: alter vercode={old}, neuer vercode={new}
 #, python-brace-format
 msgid "deleting: repo/{apkfilename}"
 msgstr "Lösche: repo/{apkfilename}"
+
+#: ../fdroidserver/scanner.py
+msgid "dependency file without lock"
+msgstr ""
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -2520,6 +2570,11 @@ msgstr "ruamel.yaml ist nicht installiert, kann Metadaten nicht schreiben."
 #: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "s3cmd sync indexes {path} to {url} and delete"
+msgstr "s3cmd-Sync {path} indizieren auf {url} und dann löschen"
+
+#: ../fdroidserver/deploy.py
+#, fuzzy, python-brace-format
+msgid "s3cmd syncs indexes from {path} to {url} and deletes removed"
 msgstr "s3cmd-Sync {path} indizieren auf {url} und dann löschen"
 
 #: ../fdroidserver/scanner.py

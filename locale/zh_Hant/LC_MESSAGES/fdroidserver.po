@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2024-05-13 13:50+0200\n"
+"POT-Creation-Date: 2024-09-10 10:50+0200\n"
 "PO-Revision-Date: 2024-05-29 05:09+0000\n"
 "Last-Translator: hugoalh <hugoalh@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/f-droid/fdroidserver/zh_Hant/>\n"
@@ -677,6 +677,16 @@ msgstr "出錯：未支援 CI 類型，歡迎補強！"
 msgid "ERROR: unsupported git host \"%s\", patches welcome!"
 msgstr "錯誤：不支援的 git 主機「%s」，歡迎提交修補！"
 
+#: ../fdroidserver/lint.py
+#, python-brace-format
+msgid "ERROR: {key} in {path} is not \"archive\" or \"repo\"!"
+msgstr ""
+
+#: ../fdroidserver/lint.py
+#, python-brace-format
+msgid "ERROR: {key}:{subkey} in {path} is not in allowed keys: {allowed_keys}!"
+msgstr ""
+
 #: ../fdroidserver/__main__.py
 #, python-brace-format
 msgid "Encoding is set to '{enc}' fdroid might run into encoding issues. Please set it to 'UTF-8' for best results."
@@ -695,6 +705,10 @@ msgstr ""
 #, fuzzy, python-brace-format
 msgid "Environment variable {var} from {configname} is not set!"
 msgstr "配置文件 {configname} 中的 環境變量 {var} 還沒有設置 ！"
+
+#: ../fdroidserver/deploy.py
+msgid "Error deploying 'github_releases', {} not present. (You might need to run `fdroid update` first.)"
+msgstr ""
 
 #: ../fdroidserver/import_subcommand.py
 msgid "Error while getting repo address"
@@ -1298,6 +1312,18 @@ msgstr "OBB 的套件包名稱與支援的 APK 並不相符："
 msgid "Offline machine, skipping git mirror generation until `fdroid deploy`"
 msgstr "因為機器是離線的， 跳過 git mirror 的生成直到 `fdroid deploy`"
 
+#: ../fdroidserver/deploy.py
+msgid "One of the 'github_releases' config items is missing the 'projectUrl' value. skipping ..."
+msgstr ""
+
+#: ../fdroidserver/deploy.py
+msgid "One of the 'github_releases' config itmes is missing the 'packageNames' value. skipping ..."
+msgstr ""
+
+#: ../fdroidserver/deploy.py
+msgid "One of the 'github_releases' config itmes is missing the 'token' value. skipping ..."
+msgstr ""
+
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Only PNG and JPEG are supported for graphics, found: {path}"
@@ -1512,6 +1538,11 @@ msgstr "重覆寫入 '{appid}'"
 #: ../fdroidserver/checkupdates.py
 msgid "Run on git repo that has uncommitted changes"
 msgstr "在有未遞交變更的 git 倉庫上執行"
+
+#: ../fdroidserver/nightly.py
+#, python-brace-format
+msgid "Run over {cibase} to find -debug.apk. and skip repo_basedir {repo_basedir}"
+msgstr ""
 
 #: ../fdroidserver/lint.py
 msgid "Run rewritemeta to fix formatting"
@@ -1751,6 +1782,11 @@ msgstr ""
 msgid "To use awsbucket, awssecretkey and awsaccesskeyid must also be set in config.yml!"
 msgstr "要使用 awsbucket, awssecretkey 與 awsaccesskeyid 必須在 config.yml 進行設定！"
 
+#: ../fdroidserver/deploy.py
+#, fuzzy
+msgid "To use rclone, rclone_config and awsbucket must be set in config.yml!"
+msgstr "要使用 awsbucket, awssecretkey 與 awsaccesskeyid 必須在 config.yml 進行設定！"
+
 #: ../fdroidserver/lint.py
 #, fuzzy
 msgid "URL must start with https:// or http://"
@@ -1953,6 +1989,11 @@ msgstr "使用來自 APK 的日期，而不是新增之 APK 目前的時間"
 msgid "Using \"{path}\" for configuring s3cmd."
 msgstr "使用 \"{path}\" 對 s3cmd 組態。"
 
+#: ../fdroidserver/deploy.py
+#, fuzzy, python-brace-format
+msgid "Using \"{path}\" for syncing with remote storage."
+msgstr "使用 \"{path}\" 對 s3cmd 組態。"
+
 #: ../fdroidserver/common.py
 #, fuzzy
 msgid "Using APK Signature v2"
@@ -1986,6 +2027,11 @@ msgstr ""
 #, python-brace-format
 msgid "Using existing keystore \"{path}\""
 msgstr "使用現有的金鑰庫 \"{path}\""
+
+#: ../fdroidserver/deploy.py
+#, fuzzy, python-brace-format
+msgid "Using rclone to sync with: {url}"
+msgstr "使用 s3cmd 來同步：{url}"
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
@@ -2215,6 +2261,10 @@ msgstr ""
 #, python-brace-format
 msgid "deleting: repo/{apkfilename}"
 msgstr "刪除：repo/{apkfilename}"
+
+#: ../fdroidserver/scanner.py
+msgid "dependency file without lock"
+msgstr ""
 
 #: ../fdroidserver/common.py
 #, fuzzy, python-brace-format
@@ -2547,6 +2597,11 @@ msgstr "因為沒有設置 ruamel.yaml， 無法寫入 metadata 。"
 #: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "s3cmd sync indexes {path} to {url} and delete"
+msgstr "s3cmd 同步索引 {path} 到 {url} 並刪除"
+
+#: ../fdroidserver/deploy.py
+#, fuzzy, python-brace-format
+msgid "s3cmd syncs indexes from {path} to {url} and deletes removed"
 msgstr "s3cmd 同步索引 {path} 到 {url} 並刪除"
 
 #: ../fdroidserver/scanner.py

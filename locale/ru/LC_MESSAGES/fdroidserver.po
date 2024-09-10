@@ -19,7 +19,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 1.0.0-95-gd7af22b\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2024-05-13 13:50+0200\n"
+"POT-Creation-Date: 2024-09-10 10:50+0200\n"
 "PO-Revision-Date: 2024-06-07 10:15+0000\n"
 "Last-Translator: neverender <audiolunaire@getgoogleoff.me>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/f-droid/fdroidserver/ru/>\n"
@@ -690,6 +690,16 @@ msgstr "ОШИБКА: этот тип CI не поддерживается, на
 msgid "ERROR: unsupported git host \"%s\", patches welcome!"
 msgstr "ОШИБКА: неподдерживаемый хост git «%s», патчи приветствуются!"
 
+#: ../fdroidserver/lint.py
+#, python-brace-format
+msgid "ERROR: {key} in {path} is not \"archive\" or \"repo\"!"
+msgstr ""
+
+#: ../fdroidserver/lint.py
+#, python-brace-format
+msgid "ERROR: {key}:{subkey} in {path} is not in allowed keys: {allowed_keys}!"
+msgstr ""
+
 #: ../fdroidserver/__main__.py
 #, python-brace-format
 msgid "Encoding is set to '{enc}' fdroid might run into encoding issues. Please set it to 'UTF-8' for best results."
@@ -708,6 +718,10 @@ msgstr ""
 #, python-brace-format
 msgid "Environment variable {var} from {configname} is not set!"
 msgstr "Переменная среды {var} из {configname} не установлена!"
+
+#: ../fdroidserver/deploy.py
+msgid "Error deploying 'github_releases', {} not present. (You might need to run `fdroid update` first.)"
+msgstr ""
 
 #: ../fdroidserver/import_subcommand.py
 msgid "Error while getting repo address"
@@ -1296,6 +1310,18 @@ msgstr "Указанный в OBB файле packagename не соответст
 msgid "Offline machine, skipping git mirror generation until `fdroid deploy`"
 msgstr "Автономная система, пропуск генерации git-зеркала до `fdroid deploy`"
 
+#: ../fdroidserver/deploy.py
+msgid "One of the 'github_releases' config items is missing the 'projectUrl' value. skipping ..."
+msgstr ""
+
+#: ../fdroidserver/deploy.py
+msgid "One of the 'github_releases' config itmes is missing the 'packageNames' value. skipping ..."
+msgstr ""
+
+#: ../fdroidserver/deploy.py
+msgid "One of the 'github_releases' config itmes is missing the 'token' value. skipping ..."
+msgstr ""
+
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Only PNG and JPEG are supported for graphics, found: {path}"
@@ -1506,6 +1532,11 @@ msgstr "Перезапись '{appid}'"
 #: ../fdroidserver/checkupdates.py
 msgid "Run on git repo that has uncommitted changes"
 msgstr "Запустить для репозитория git с несохраненными изменениями"
+
+#: ../fdroidserver/nightly.py
+#, python-brace-format
+msgid "Run over {cibase} to find -debug.apk. and skip repo_basedir {repo_basedir}"
+msgstr ""
 
 #: ../fdroidserver/lint.py
 msgid "Run rewritemeta to fix formatting"
@@ -1746,6 +1777,11 @@ msgstr ""
 msgid "To use awsbucket, awssecretkey and awsaccesskeyid must also be set in config.yml!"
 msgstr "Необходимо определить переменные awsbucket, awssecretkey и awsaccesskeyid в config.yml!"
 
+#: ../fdroidserver/deploy.py
+#, fuzzy
+msgid "To use rclone, rclone_config and awsbucket must be set in config.yml!"
+msgstr "Необходимо определить переменные awsbucket, awssecretkey и awsaccesskeyid в config.yml!"
+
 #: ../fdroidserver/lint.py
 msgid "URL must start with https:// or http://"
 msgstr "URL должна начинаться с https:// или http://"
@@ -1943,6 +1979,11 @@ msgstr "Использовать время date из APK вместо теку�
 msgid "Using \"{path}\" for configuring s3cmd."
 msgstr "Для конфигурации s3cmd используется \"{path}\"."
 
+#: ../fdroidserver/deploy.py
+#, fuzzy, python-brace-format
+msgid "Using \"{path}\" for syncing with remote storage."
+msgstr "Для конфигурации s3cmd используется \"{path}\"."
+
 #: ../fdroidserver/common.py
 msgid "Using APK Signature v2"
 msgstr "Используется схема подписи APK v2"
@@ -1973,6 +2014,11 @@ msgstr "Использование пустого словаря вместо с
 #, python-brace-format
 msgid "Using existing keystore \"{path}\""
 msgstr "Используются ключи из \"{path}\""
+
+#: ../fdroidserver/deploy.py
+#, fuzzy, python-brace-format
+msgid "Using rclone to sync with: {url}"
+msgstr "s3cmd синхронизация с: {url}"
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
@@ -2192,6 +2238,10 @@ msgstr "текущая версия новее: old vercode={old}, new vercode={
 #, python-brace-format
 msgid "deleting: repo/{apkfilename}"
 msgstr "удаление: repo/{apkfilename}"
+
+#: ../fdroidserver/scanner.py
+msgid "dependency file without lock"
+msgstr ""
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -2519,6 +2569,11 @@ msgstr "ruamel.yaml не установлен, не получается зап�
 #: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "s3cmd sync indexes {path} to {url} and delete"
+msgstr "s3cmd синхронизировать индексы из {path} в {url} и удалить их"
+
+#: ../fdroidserver/deploy.py
+#, fuzzy, python-brace-format
+msgid "s3cmd syncs indexes from {path} to {url} and deletes removed"
 msgstr "s3cmd синхронизировать индексы из {path} в {url} и удалить их"
 
 #: ../fdroidserver/scanner.py
