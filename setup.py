@@ -71,7 +71,7 @@ with open("README.md", "r") as fh:
 
 setup(
     name='fdroidserver',
-    version='2.3a1',
+    version='2.3a2',
     description='F-Droid Server Tools',
     long_description=long_description,
     long_description_content_type='text/markdown',
