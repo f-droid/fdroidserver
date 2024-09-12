@@ -43,6 +43,46 @@ from .exception import FDroidException
 
 config = None
 
+SETTINGS_GRADLE_REGEX = re.compile(r'settings\.gradle(?:\.kts)?')
+GRADLE_SUBPROJECT_REGEX = re.compile(r'''['"]:?([^'"]+)['"]''')
+APPLICATION_ID_REGEX = re.compile(r'''\s*applicationId\s=?\s?['"].*['"]''')
+
+
+def get_all_gradle_and_manifests(build_dir):
+    paths = []
+    # TODO: Python3.6: Accepts a path-like object.
+    for root, dirs, files in os.walk(str(build_dir)):
+        for f in sorted(files):
+            if (
+                f == 'AndroidManifest.xml'
+                or f.endswith('.gradle')
+                or f.endswith('.gradle.kts')
+            ):
+                full = Path(root) / f
+                paths.append(full)
+    return paths
+
+
+def get_gradle_subdir(build_dir, paths):
+    """Get the subdir where the gradle build is based."""
+    first_gradle_dir = None
+    for path in paths:
+        if not first_gradle_dir:
+            first_gradle_dir = path.parent.relative_to(build_dir)
+        if path.exists() and SETTINGS_GRADLE_REGEX.match(path.name):
+            for m in GRADLE_SUBPROJECT_REGEX.finditer(path.read_text(encoding='utf-8')):
+                for f in (path.parent / m.group(1)).glob('build.gradle*'):
+                    with f.open(encoding='utf-8') as fp:
+                        for line in fp.readlines():
+                            if common.ANDROID_PLUGIN_REGEX.match(
+                                line
+                            ) or APPLICATION_ID_REGEX.match(line):
+                                return f.parent.relative_to(build_dir)
+    if first_gradle_dir and first_gradle_dir != Path('.'):
+        return first_gradle_dir
+
+    return
+
 
 def handle_retree_error_on_windows(function, path, excinfo):
     """Python can't remove a readonly file on Windows so chmod first."""
@@ -323,8 +363,8 @@ def main():
     build.commit = common.get_head_commit_id(git_repo)
 
     # Extract some information...
-    paths = common.get_all_gradle_and_manifests(tmp_importer_dir)
-    subdir = common.get_gradle_subdir(tmp_importer_dir, paths)
+    paths = get_all_gradle_and_manifests(tmp_importer_dir)
+    gradle_subdir = get_gradle_subdir(tmp_importer_dir, paths)
     if paths:
         versionName, versionCode, appid = common.parse_androidmanifests(paths, app)
         if not appid:
