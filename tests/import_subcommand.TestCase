@@ -2,29 +2,30 @@
 
 # http://www.drdobbs.com/testing/unit-testing-with-python/240165163
 
-import git
 import logging
 import os
 import shutil
 import sys
 import tempfile
 import unittest
-import yaml
-from unittest import mock
 from pathlib import Path
+from unittest import mock
 
+import git
 import requests
+import yaml
 
 localmodule = Path(__file__).resolve().parent.parent
 print('localmodule: ' + str(localmodule))
 if localmodule not in sys.path:
     sys.path.insert(0, str(localmodule))
 
+from testcommon import TmpCwd, mkdtemp, parse_args_for_test
+
 import fdroidserver.common
 import fdroidserver.import_subcommand
 import fdroidserver.metadata
 from fdroidserver.exception import FDroidException
-from testcommon import TmpCwd, mkdtemp, parse_args_for_test
 
 
 class ImportTest(unittest.TestCase):
