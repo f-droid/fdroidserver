@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
 
+import collections
 import glob
 import inspect
 import logging
 import os
+import pathlib
 import re
 import shutil
 import sys
@@ -11,13 +13,12 @@ import tempfile
 import textwrap
 import unittest
 import uuid
-import yaml
 import zipfile
-import collections
-import pathlib
-from unittest import mock
 from dataclasses import asdict
 from datetime import datetime, timedelta
+from unittest import mock
+
+import yaml
 
 localmodule = os.path.realpath(
     os.path.join(os.path.dirname(inspect.getfile(inspect.currentframe())), '..')
@@ -26,11 +27,12 @@ print('localmodule: ' + localmodule)
 if localmodule not in sys.path:
     sys.path.insert(0, localmodule)
 
+from testcommon import TmpCwd, mkdtemp, mock_open_to_str, parse_args_for_test
+
 import fdroidserver.build
 import fdroidserver.common
 import fdroidserver.metadata
 import fdroidserver.scanner
-from testcommon import TmpCwd, mkdtemp, mock_open_to_str, parse_args_for_test
 
 
 # Always use built-in default rules so changes in downloaded rules don't break tests.
@@ -783,12 +785,13 @@ class Test_main(unittest.TestCase):
         (doesn't test how they get processed)
         """
         self.args = ["com.example.app"]
-        with tempfile.TemporaryDirectory() as tmpdir, TmpCwd(tmpdir), mock.patch(
-            "sys.exit", self.exit_func
-        ), mock.patch("sys.argv", ["fdroid scanner", *self.args]), mock.patch(
-            "fdroidserver.common.read_app_args", self.read_app_args_func
-        ), mock.patch(
-            "fdroidserver.scanner.scan_binary", self.scan_binary_func
+        with (
+            tempfile.TemporaryDirectory() as tmpdir,
+            TmpCwd(tmpdir),
+            mock.patch("sys.exit", self.exit_func),
+            mock.patch("sys.argv", ["fdroid scanner", *self.args]),
+            mock.patch("fdroidserver.common.read_app_args", self.read_app_args_func),
+            mock.patch("fdroidserver.scanner.scan_binary", self.scan_binary_func),
         ):
             fdroidserver.scanner.main()
 
@@ -804,12 +807,13 @@ class Test_main(unittest.TestCase):
         (doesn't test how they get processed)
         """
         self.args = ["local.application.apk"]
-        with tempfile.TemporaryDirectory() as tmpdir, TmpCwd(tmpdir), mock.patch(
-            "sys.exit", self.exit_func
-        ), mock.patch("sys.argv", ["fdroid scanner", *self.args]), mock.patch(
-            "fdroidserver.common.read_app_args", self.read_app_args_func
-        ), mock.patch(
-            "fdroidserver.scanner.scan_binary", self.scan_binary_func
+        with (
+            tempfile.TemporaryDirectory() as tmpdir,
+            TmpCwd(tmpdir),
+            mock.patch("sys.exit", self.exit_func),
+            mock.patch("sys.argv", ["fdroid scanner", *self.args]),
+            mock.patch("fdroidserver.common.read_app_args", self.read_app_args_func),
+            mock.patch("fdroidserver.scanner.scan_binary", self.scan_binary_func),
         ):
             pathlib.Path(self.args[0]).touch()
             fdroidserver.scanner.main()
