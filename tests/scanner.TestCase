@@ -18,6 +18,10 @@ from dataclasses import asdict
 from datetime import datetime, timedelta
 from unittest import mock
 
+if sys.version_info >= (3, 11):
+    import tomllib
+else:
+    import tomli as tomllib
 import yaml
 
 localmodule = os.path.realpath(
@@ -70,6 +74,8 @@ class ScannerTest(unittest.TestCase):
             'realm': 1,
             'se.manyver': 3,
             'lockfile.test': 1,
+            'com.lolo.io.onelist': 6,
+            'catalog.test': 10,
         }
         for d in glob.glob(os.path.join(source_files, '*')):
             build = fdroidserver.metadata.Build()
@@ -79,26 +85,28 @@ class ScannerTest(unittest.TestCase):
                 should, fatal_problems, "%s should have %d errors!" % (d, should)
             )
 
-    def test_get_gradle_compile_commands(self):
+    def test_get_gradle_compile_commands_without_catalog(self):
         test_files = [
-            ('source-files/fdroid/fdroidclient/build.gradle', 'yes', 18),
-            ('source-files/com.nextcloud.client/build.gradle', 'generic', 28),
-            ('source-files/com.kunzisoft.testcase/build.gradle', 'libre', 4),
-            ('source-files/cn.wildfirechat.chat/chat/build.gradle', 'yes', 33),
-            ('source-files/org.tasks/app/build.gradle.kts', 'generic', 43),
-            ('source-files/at.bitfire.davdroid/build.gradle', 'standard', 16),
-            ('source-files/se.manyver/android/app/build.gradle', 'indie', 29),
-            ('source-files/osmandapp/osmand/build.gradle', 'free', 5),
-            ('source-files/eu.siacs.conversations/build.gradle', 'free', 24),
-            ('source-files/org.mozilla.rocket/app/build.gradle', 'focus', 42),
-            ('source-files/com.jens.automation2/app/build.gradle', 'fdroidFlavor', 9),
+            ('source-files/fdroid/fdroidclient/build.gradle', 'yes', 15),
+            ('source-files/com.nextcloud.client/build.gradle', 'generic', 24),
+            ('source-files/com.kunzisoft.testcase/build.gradle', 'libre', 3),
+            ('source-files/cn.wildfirechat.chat/chat/build.gradle', 'yes', 30),
+            ('source-files/org.tasks/app/build.gradle.kts', 'generic', 41),
+            ('source-files/at.bitfire.davdroid/build.gradle', 'standard', 15),
+            ('source-files/se.manyver/android/app/build.gradle', 'indie', 26),
+            ('source-files/osmandapp/osmand/build.gradle', 'free', 2),
+            ('source-files/eu.siacs.conversations/build.gradle', 'free', 21),
+            ('source-files/org.mozilla.rocket/app/build.gradle', 'focus', 40),
+            ('source-files/com.jens.automation2/app/build.gradle', 'fdroidFlavor', 5),
         ]
 
         for f, flavor, count in test_files:
             i = 0
             build = fdroidserver.metadata.Build()
             build.gradle = [flavor]
-            regexs = fdroidserver.scanner.get_gradle_compile_commands(build)
+            regexs = fdroidserver.scanner.get_gradle_compile_commands_without_catalog(
+                build
+            )
             with open(f, encoding='utf-8') as fp:
                 for line in fp.readlines():
                     for regex in regexs:
@@ -106,6 +114,56 @@ class ScannerTest(unittest.TestCase):
                         if m:
                             i += 1
             self.assertEqual(count, i)
+
+    def test_get_gradle_compile_commands_with_catalog(self):
+        test_files = [
+            ('source-files/com.lolo.io.onelist/build.gradle.kts', 'yes', 5),
+            ('source-files/com.lolo.io.onelist/app/build.gradle.kts', 'yes', 26),
+            ('source-files/catalog.test/build.gradle.kts', 'yes', 3),
+            ('source-files/catalog.test/app/build.gradle', 'yes', 2),
+        ]
+
+        for f, flavor, count in test_files:
+            i = 0
+            build = fdroidserver.metadata.Build()
+            build.gradle = [flavor]
+            regexs = fdroidserver.scanner.get_gradle_compile_commands_with_catalog(
+                build, "libs"
+            )
+            with open(f, encoding='utf-8') as fp:
+                for line in fp.readlines():
+                    for regex in regexs:
+                        m = regex.match(line)
+                        if m:
+                            i += 1
+            self.assertEqual(count, i)
+
+    def test_catalog(self):
+        accessor_coordinate_pairs = {
+            'firebase.crash': ['com.google.firebase:firebase-crash:1.1.1'],
+            'firebase.core': ['com.google.firebase:firebase-core:2.2.2'],
+            'play.service.ads': ['com.google.android.gms:play-services-ads:1.2.1'],
+            'plugins.google.services': ['com.google.gms.google-services:1.2.1'],
+            'plugins.firebase.crashlytics': ['com.google.firebase.crashlytics:1.1.1'],
+            'bundles.firebase': [
+                'com.google.firebase:firebase-crash:1.1.1',
+                'com.google.firebase:firebase-core:2.2.2',
+            ],
+        }
+        with open('source-files/catalog.test/gradle/libs.versions.toml', 'rb') as f:
+            catalog = fdroidserver.scanner.GradleVersionCatalog(tomllib.load(f))
+        for accessor, coordinate in accessor_coordinate_pairs.items():
+            self.assertEqual(catalog.get_coordinate(accessor), coordinate)
+
+    def test_get_catalogs(self):
+        test_files = [
+            ('source-files/com.lolo.io.onelist/', 1),
+            ('source-files/catalog.test/', 3),
+            ('source-files/org.piepmeyer.gauguin/', 1),
+        ]
+
+        for root, count in test_files:
+            self.assertEqual(count, len(fdroidserver.scanner.get_catalogs(root)))
 
     def test_scan_source_files_sneaky_maven(self):
         """Check for sneaking in banned maven repos"""
@@ -780,8 +838,7 @@ class Test_main(unittest.TestCase):
         self.scan_binary_func = mock.Mock(return_value=0)
 
     def test_parsing_appid(self):
-        """
-        This test verifies that app id get parsed correctly
+        """This test verifies that app id get parsed correctly
         (doesn't test how they get processed)
         """
         self.args = ["com.example.app"]
@@ -802,8 +859,7 @@ class Test_main(unittest.TestCase):
             self.scan_binary_func.assert_not_called()
 
     def test_parsing_apkpath(self):
-        """
-        This test verifies that apk paths get parsed correctly
+        """This test verifies that apk paths get parsed correctly
         (doesn't test how they get processed)
         """
         self.args = ["local.application.apk"]

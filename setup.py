@@ -4,8 +4,7 @@ import re
 import subprocess
 import sys
 
-from setuptools import Command
-from setuptools import setup
+from setuptools import Command, setup
 from setuptools.command.install import install
 
 
@@ -108,6 +107,7 @@ setup(
         'requests >= 2.5.2, != 2.11.0, != 2.12.2, != 2.18.0',
         'sdkmanager >= 0.6.4',
         'yamllint',
+        'tomli >= 1.1.0; python_version < "3.11"',
     ],
     # Some requires are only needed for very limited cases:
     # * biplist is only used for parsing Apple .ipa files
