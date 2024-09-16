@@ -13,8 +13,8 @@ msgstr ""
 "Project-Id-Version: fdroidserver 1.0.0-95-gd7af22b\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2024-09-10 10:50+0200\n"
-"PO-Revision-Date: 2024-09-13 09:52+0000\n"
-"Last-Translator: Jakub Boukal <www.bagr@gmail.com>\n"
+"PO-Revision-Date: 2024-09-14 23:47+0000\n"
+"Last-Translator: Fjuro <fjuro@alius.cz>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/f-droid/fdroidserver/cs/>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
@@ -1528,7 +1528,7 @@ msgstr "Spustit v repozitáři git s nezveřejněnými změnami"
 #: ../fdroidserver/nightly.py
 #, python-brace-format
 msgid "Run over {cibase} to find -debug.apk. and skip repo_basedir {repo_basedir}"
-msgstr ""
+msgstr "Spustit přes {cibase} pro nalezení -debug.apk. a přeskočit repo_basedir {repo_basedir}"
 
 #: ../fdroidserver/lint.py
 msgid "Run rewritemeta to fix formatting"
@@ -1770,9 +1770,8 @@ msgid "To use awsbucket, awssecretkey and awsaccesskeyid must also be set in con
 msgstr "Chcete-li používat awsbucket, musí být v souboru config.yml nastaven také awssecretkey a awsaccesskeyid!"
 
 #: ../fdroidserver/deploy.py
-#, fuzzy
 msgid "To use rclone, rclone_config and awsbucket must be set in config.yml!"
-msgstr "Chcete-li používat awsbucket, musí být v souboru config.yml nastaven také awssecretkey a awsaccesskeyid!"
+msgstr "Chcete-li používat rclone, musí být v souboru config.yml nastaven rclone_config a awsbucket!"
 
 #: ../fdroidserver/lint.py
 msgid "URL must start with https:// or http://"
@@ -1972,9 +1971,9 @@ msgid "Using \"{path}\" for configuring s3cmd."
 msgstr "Používám „{path}“ pro konfiguraci s3cmd."
 
 #: ../fdroidserver/deploy.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Using \"{path}\" for syncing with remote storage."
-msgstr "Používám „{path}“ pro konfiguraci s3cmd."
+msgstr "Používám „{path}“ pro synchronizaci se vzdáleným úložištěm."
 
 #: ../fdroidserver/common.py
 msgid "Using APK Signature v2"
@@ -2008,9 +2007,9 @@ msgid "Using existing keystore \"{path}\""
 msgstr "Používám existující keystore „{path}“"
 
 #: ../fdroidserver/deploy.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Using rclone to sync with: {url}"
-msgstr "Používám s3cmd pro synchronizaci s: {url}"
+msgstr "Používám rclone pro synchronizaci s: {url}"
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
@@ -2564,9 +2563,9 @@ msgid "s3cmd sync indexes {path} to {url} and delete"
 msgstr "s3cmd sync indexes {path} do {url} a odstranit"
 
 #: ../fdroidserver/deploy.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "s3cmd syncs indexes from {path} to {url} and deletes removed"
-msgstr "s3cmd sync indexes {path} do {url} a odstranit"
+msgstr "s3cmd synchronizuje indexy z {path} do {url} a odstraní smazané"
 
 #: ../fdroidserver/scanner.py
 #, python-brace-format
