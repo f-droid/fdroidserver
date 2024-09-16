@@ -2,29 +2,30 @@
 
 # http://www.drdobbs.com/testing/unit-testing-with-python/240165163
 
-import git
 import logging
 import os
 import shutil
 import sys
 import tempfile
 import unittest
-import yaml
-from unittest import mock
 from pathlib import Path
+from unittest import mock
 
+import git
 import requests
+import yaml
 
 localmodule = Path(__file__).resolve().parent.parent
 print('localmodule: ' + str(localmodule))
 if localmodule not in sys.path:
     sys.path.insert(0, str(localmodule))
 
+from testcommon import TmpCwd, mkdtemp, parse_args_for_test
+
 import fdroidserver.common
 import fdroidserver.import_subcommand
 import fdroidserver.metadata
 from fdroidserver.exception import FDroidException
-from testcommon import TmpCwd, mkdtemp, parse_args_for_test
 
 
 class ImportTest(unittest.TestCase):
@@ -40,6 +41,49 @@ class ImportTest(unittest.TestCase):
     def tearDown(self):
         os.chdir(self.basedir)
         self._td.cleanup()
+
+    def test_get_all_gradle_and_manifests(self):
+        """Test whether the function works with relative and absolute paths"""
+        a = fdroidserver.import_subcommand.get_all_gradle_and_manifests(
+            Path('source-files/cn.wildfirechat.chat')
+        )
+        paths = [
+            'avenginekit/build.gradle',
+            'build.gradle',
+            'chat/build.gradle',
+            'client/build.gradle',
+            'client/src/main/AndroidManifest.xml',
+            'emojilibrary/build.gradle',
+            'gradle/build_libraries.gradle',
+            'imagepicker/build.gradle',
+            'mars-core-release/build.gradle',
+            'push/build.gradle',
+            'settings.gradle',
+        ]
+        paths = [Path('source-files/cn.wildfirechat.chat') / path for path in paths]
+        self.assertEqual(sorted(paths), sorted(a))
+
+        abspath = Path(self.basedir) / 'source-files/realm'
+        p = fdroidserver.import_subcommand.get_all_gradle_and_manifests(abspath)
+        self.assertEqual(1, len(p))
+        self.assertTrue(p[0].is_relative_to(abspath))
+
+    def test_get_gradle_subdir(self):
+        subdirs = {
+            'cn.wildfirechat.chat': 'chat',
+            'com.anpmech.launcher': 'app',
+            'org.tasks': 'app',
+            'ut.ewh.audiometrytest': 'app',
+            'org.noise_planet.noisecapture': 'app',
+        }
+        for k, v in subdirs.items():
+            build_dir = Path('source-files') / k
+            paths = fdroidserver.import_subcommand.get_all_gradle_and_manifests(
+                build_dir
+            )
+            logging.info(paths)
+            subdir = fdroidserver.import_subcommand.get_gradle_subdir(build_dir, paths)
+            self.assertEqual(v, str(subdir))
 
     def test_import_gitlab(self):
         with tempfile.TemporaryDirectory() as testdir, TmpCwd(testdir):
@@ -106,7 +150,9 @@ class ImportTest(unittest.TestCase):
                 self.assertEqual(url, app.Repo)
                 self.assertEqual(url, app.SourceCode)
                 logging.info(build_dir)
-                paths = fdroidserver.common.get_all_gradle_and_manifests(build_dir)
+                paths = fdroidserver.import_subcommand.get_all_gradle_and_manifests(
+                    build_dir
+                )
                 self.assertNotEqual(paths, [])
                 (
                     versionName,

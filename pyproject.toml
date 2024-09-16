@@ -1,4 +1,3 @@
-
 # We ignore the following PEP8 warnings
 # * E123: closing bracket does not match indentation of opening bracket's line
 #   - Broken if multiple indentation levels start on a single line
@@ -38,7 +37,6 @@ force-exclude = '''(
   | fdroidserver/build\.py
   | fdroidserver/checkupdates\.py
   | fdroidserver/common\.py
-  | fdroidserver/import_subcommand\.py
   | fdroidserver/index\.py
   | fdroidserver/metadata\.py
   | fdroidserver/nightly\.py

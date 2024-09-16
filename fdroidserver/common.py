@@ -101,9 +101,6 @@ VALID_APPLICATION_ID_REGEX = re.compile(r'''(?:^[a-z_]+(?:\d*[a-zA-Z_]*)*)(?:\.[
                                         re.IGNORECASE)
 ANDROID_PLUGIN_REGEX = re.compile(r'''\s*(:?apply plugin:|id)\(?\s*['"](android|com\.android\.application)['"]\s*\)?''')
 
-SETTINGS_GRADLE_REGEX = re.compile(r'settings\.gradle(?:\.kts)?')
-GRADLE_SUBPROJECT_REGEX = re.compile(r'''['"]:?([^'"]+)['"]''')
-
 MAX_VERSION_CODE = 0x7fffffff  # Java's Integer.MAX_VALUE (2147483647)
 
 XMLNS_ANDROID = '{http://schemas.android.com/apk/res/android}'
@@ -2118,37 +2115,6 @@ def is_strict_application_id(name):
     """
     return STRICT_APPLICATION_ID_REGEX.match(name) is not None \
         and '.' in name
-
-
-def get_all_gradle_and_manifests(build_dir):
-    paths = []
-    # TODO: Python3.6: Accepts a path-like object.
-    for root, dirs, files in os.walk(str(build_dir)):
-        for f in sorted(files):
-            if f == 'AndroidManifest.xml' \
-               or f.endswith('.gradle') or f.endswith('.gradle.kts'):
-                full = Path(root) / f
-                paths.append(full)
-    return paths
-
-
-def get_gradle_subdir(build_dir, paths):
-    """Get the subdir where the gradle build is based."""
-    first_gradle_dir = None
-    for path in paths:
-        if not first_gradle_dir:
-            first_gradle_dir = path.parent.relative_to(build_dir)
-        if path.exists() and SETTINGS_GRADLE_REGEX.match(str(path.name)):
-            for m in GRADLE_SUBPROJECT_REGEX.finditer(path.read_text(encoding='utf-8')):
-                for f in (path.parent / m.group(1)).glob('build.gradle*'):
-                    with f.open(encoding='utf-8') as fp:
-                        for line in fp.readlines():
-                            if ANDROID_PLUGIN_REGEX.match(line):
-                                return f.parent.relative_to(build_dir)
-    if first_gradle_dir and first_gradle_dir != Path('.'):
-        return first_gradle_dir
-
-    return
 
 
 def parse_srclib_spec(spec):
