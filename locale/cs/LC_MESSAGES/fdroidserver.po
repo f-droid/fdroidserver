@@ -7,20 +7,21 @@
 # Fjuro <ifjuro@proton.me>, 2022, 2023.
 # Daniel Hejduk <jellymail@protonmail.com>, 2023.
 # Fjuro <fjuro@alius.cz>, 2024.
+# Jakub Boukal <www.bagr@gmail.com>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 1.0.0-95-gd7af22b\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2024-09-10 10:50+0200\n"
-"PO-Revision-Date: 2024-05-15 04:32+0000\n"
-"Last-Translator: Fjuro <fjuro@alius.cz>\n"
+"PO-Revision-Date: 2024-09-13 09:52+0000\n"
+"Last-Translator: Jakub Boukal <www.bagr@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/f-droid/fdroidserver/cs/>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=((n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2);\n"
-"X-Generator: Weblate 5.6-dev\n"
+"X-Generator: Weblate 5.8-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -684,12 +685,12 @@ msgstr "CHYBA: nepodporovaný git host \"%s\", opravy vítány!"
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "ERROR: {key} in {path} is not \"archive\" or \"repo\"!"
-msgstr ""
+msgstr "CHYBA: {key} v {path} není \"archive\" nebo \"repo\"!"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "ERROR: {key}:{subkey} in {path} is not in allowed keys: {allowed_keys}!"
-msgstr ""
+msgstr "CHYBA: {key}:{subkey} v {path} není v povolených klíčích: {allowed_keys}!"
 
 #: ../fdroidserver/__main__.py
 #, python-brace-format
@@ -712,7 +713,7 @@ msgstr "Proměnná prostředí {var} z {configname} není nastavena!"
 
 #: ../fdroidserver/deploy.py
 msgid "Error deploying 'github_releases', {} not present. (You might need to run `fdroid update` first.)"
-msgstr ""
+msgstr "Chyba při nasazení 'github_releases', {} není k dispozici. (Možná budete muset nejprve spustit `fdroid update`.)"
 
 #: ../fdroidserver/import_subcommand.py
 msgid "Error while getting repo address"
@@ -1303,15 +1304,15 @@ msgstr "Offline počítač, přeskočení generování mirroru git až do `fdroi
 
 #: ../fdroidserver/deploy.py
 msgid "One of the 'github_releases' config items is missing the 'projectUrl' value. skipping ..."
-msgstr ""
+msgstr "V jedné z položek konfigurace 'github_releases' chybí hodnota 'projectUrl'. přeskakuji ..."
 
 #: ../fdroidserver/deploy.py
 msgid "One of the 'github_releases' config items is missing the 'packageNames' value. skipping ..."
-msgstr ""
+msgstr "V jedné z položek konfigurace 'github_releases' chybí hodnota 'packageNames'. přeskakuji ..."
 
 #: ../fdroidserver/deploy.py
 msgid "One of the 'github_releases' config items is missing the 'token' value. skipping ..."
-msgstr ""
+msgstr "V jedné z položek konfigurace 'github_releases' chybí hodnota 'token'. přeskakuji ..."
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -2232,7 +2233,7 @@ msgstr "mazání: repo/{apkfilename}"
 
 #: ../fdroidserver/scanner.py
 msgid "dependency file without lock"
-msgstr ""
+msgstr "soubor závislostí bez zámku"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
