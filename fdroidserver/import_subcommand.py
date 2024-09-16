@@ -50,14 +50,9 @@ APPLICATION_ID_REGEX = re.compile(r'''\s*applicationId\s=?\s?['"].*['"]''')
 
 def get_all_gradle_and_manifests(build_dir):
     paths = []
-    # TODO: Python3.6: Accepts a path-like object.
-    for root, dirs, files in os.walk(str(build_dir)):
+    for root, dirs, files in os.walk(build_dir):
         for f in sorted(files):
-            if (
-                f == 'AndroidManifest.xml'
-                or f.endswith('.gradle')
-                or f.endswith('.gradle.kts')
-            ):
+            if f == 'AndroidManifest.xml' or f.endswith(('.gradle', '.gradle.kts')):
                 full = Path(root) / f
                 paths.append(full)
     return paths
@@ -73,15 +68,13 @@ def get_gradle_subdir(build_dir, paths):
             for m in GRADLE_SUBPROJECT_REGEX.finditer(path.read_text(encoding='utf-8')):
                 for f in (path.parent / m.group(1)).glob('build.gradle*'):
                     with f.open(encoding='utf-8') as fp:
-                        for line in fp.readlines():
+                        for line in fp:
                             if common.ANDROID_PLUGIN_REGEX.match(
                                 line
                             ) or APPLICATION_ID_REGEX.match(line):
                                 return f.parent.relative_to(build_dir)
     if first_gradle_dir and first_gradle_dir != Path('.'):
         return first_gradle_dir
-
-    return
 
 
 def handle_retree_error_on_windows(function, path, excinfo):
@@ -137,6 +130,7 @@ def getrepofrompage(url: str) -> tuple[Optional[str], str]:
         The found repository type or None if an error occured.
     address_or_reason
         The address to the found repository or the reason if an error occured.
+
     """
     if not url.startswith('http'):
         return (None, _('{url} does not start with "http"!'.format(url=url)))
@@ -205,6 +199,7 @@ def get_app_from_url(url: str) -> metadata.App:
         If the VCS type could not be determined.
     :exc:`ValueError`
         If the URL is invalid.
+
     """
     parsed = urllib.parse.urlparse(url)
     invalid_url = False
@@ -280,33 +275,25 @@ def main():
     # Parse command line...
     parser = ArgumentParser()
     common.setup_global_opts(parser)
-    parser.add_argument(
-        "-u", "--url", default=None, help=_("Project URL to import from.")
-    )
+    parser.add_argument("-u", "--url", help=_("Project URL to import from."))
     parser.add_argument(
         "-s",
         "--subdir",
-        default=None,
         help=_("Path to main Android project subdirectory, if not in root."),
     )
     parser.add_argument(
         "-c",
         "--categories",
-        default=None,
         help=_("Comma separated list of categories."),
     )
-    parser.add_argument(
-        "-l", "--license", default=None, help=_("Overall license of the project.")
-    )
+    parser.add_argument("-l", "--license", help=_("Overall license of the project."))
     parser.add_argument(
         "--omit-disable",
         action="store_true",
-        default=False,
         help=_("Do not add 'disable:' to the generated build entries"),
     )
     parser.add_argument(
         "--rev",
-        default=None,
         help=_(
             "Allows a different revision (or git branch) to be specified for the initial import"
         ),
@@ -329,21 +316,15 @@ def main():
         )
 
     build = metadata.Build()
+    app = metadata.App()
     if options.url is None and Path('.git').is_dir():
-        app = metadata.App()
-        app.AutoName = Path.cwd().name
         app.RepoType = 'git'
-
-        if Path('build.gradle').exists() or Path('build.gradle.kts').exists():
-            build.gradle = ['yes']
-
-        git_repo = git.Repo(Path.cwd())
+        tmp_importer_dir = Path.cwd()
+        git_repo = git.Repo(tmp_importer_dir)
         for remote in git.Remote.iter_items(git_repo):
             if remote.name == 'origin':
                 url = git_repo.remotes.origin.url
-                if url.startswith('https://git'):  # github, gitlab
-                    app.SourceCode = url.rstrip('.git')
-                app.Repo = url
+                app = get_app_from_url(url)
                 break
         write_local_file = True
     elif options.url:
@@ -359,6 +340,7 @@ def main():
     else:
         raise FDroidException("Specify project url.")
 
+    app.AutoUpdateMode = 'Version'
     app.UpdateCheckMode = 'Tags'
     build.commit = common.get_head_commit_id(git_repo)
 
@@ -382,16 +364,15 @@ def main():
 
     # Create a build line...
     build.versionName = versionName or 'Unknown'
+    app.CurrentVersion = build.versionName
     build.versionCode = versionCode or 0
+    app.CurrentVersionCode = build.versionCode
     if options.subdir:
         build.subdir = options.subdir
-        build.gradle = ['yes']
-    elif subdir:
-        build.subdir = subdir.as_posix()
-        build.gradle = ['yes']
-    else:
-        # subdir might be None
-        subdir = Path()
+    elif gradle_subdir:
+        build.subdir = gradle_subdir.as_posix()
+    # subdir might be None
+    subdir = Path(tmp_importer_dir / build.subdir) if build.subdir else tmp_importer_dir
 
     if options.license:
         app.License = options.license
@@ -399,23 +380,23 @@ def main():
         app.Categories = options.categories.split(',')
     if (subdir / 'jni').exists():
         build.buildjni = ['yes']
-    if (subdir / 'build.gradle').exists() or (subdir / 'build.gradle').exists():
+    if (subdir / 'build.gradle').exists() or (subdir / 'build.gradle.kts').exists():
         build.gradle = ['yes']
+
+    app.AutoName = common.fetch_real_name(subdir, build.gradle)
 
     package_json = tmp_importer_dir / 'package.json'  # react-native
     pubspec_yaml = tmp_importer_dir / 'pubspec.yaml'  # flutter
     if package_json.exists():
         build.sudo = [
             'sysctl fs.inotify.max_user_watches=524288 || true',
-            'curl -Lo node.tar.gz https://nodejs.org/download/release/v19.3.0/node-v19.3.0-linux-x64.tar.gz',
-            'echo "b525028ae5bb71b5b32cb7fce903ccce261dbfef4c7dd0f3e0ffc27cd6fc0b3f node.tar.gz" | sha256sum -c -',
-            'tar xzf node.tar.gz --strip-components=1 -C /usr/local/',
-            'npm -g install yarn',
+            'apt-get update',
+            'apt-get install -y npm',
         ]
         build.init = ['npm install --build-from-source']
         with package_json.open() as fp:
             data = json.load(fp)
-        app.AutoName = data.get('name', app.AutoName)
+        app.AutoName = app.AutoName or data.get('name')
         app.License = data.get('license', app.License)
         app.Description = data.get('description', app.Description)
         app.WebSite = data.get('homepage', app.WebSite)
@@ -425,11 +406,11 @@ def main():
         if app_json.exists():
             with app_json.open() as fp:
                 data = json.load(fp)
-            app.AutoName = data.get('name', app.AutoName)
+            app.AutoName = app.AutoName or data.get('name')
     if pubspec_yaml.exists():
         with pubspec_yaml.open() as fp:
             data = yaml.load(fp, Loader=SafeLoader)
-        app.AutoName = data.get('name', app.AutoName)
+        app.AutoName = app.AutoName or data.get('name')
         app.License = data.get('license', app.License)
         app.Description = data.get('description', app.Description)
         app.UpdateCheckData = 'pubspec.yaml|version:\\s.+\\+(\\d+)|.|version:\\s(.+)\\+'
