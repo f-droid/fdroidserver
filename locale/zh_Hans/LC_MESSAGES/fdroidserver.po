@@ -37,8 +37,8 @@ msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2024-09-10 10:50+0200\n"
-"PO-Revision-Date: 2024-09-03 15:47+0000\n"
-"Last-Translator: linsui <linsui@inbox.lv>\n"
+"PO-Revision-Date: 2024-09-12 00:02+0000\n"
+"Last-Translator: 大王叫我来巡山 <hamburger2048@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/projects/f-droid/fdroidserver/zh_Hans/>\n"
 "Language: zh_Hans\n"
 "MIME-Version: 1.0\n"
@@ -1788,9 +1788,8 @@ msgid "To use awsbucket, awssecretkey and awsaccesskeyid must also be set in con
 msgstr "要使用 awsbucket，还必须在 config.yml 中设置 awssecretkey 和 awsaccesskeyid！"
 
 #: ../fdroidserver/deploy.py
-#, fuzzy
 msgid "To use rclone, rclone_config and awsbucket must be set in config.yml!"
-msgstr "要使用 awsbucket，还必须在 config.yml 中设置 awssecretkey 和 awsaccesskeyid！"
+msgstr "要使用 rclone，必须在 config.yml 中设置 rclone_config 和 awsbucket！"
 
 #: ../fdroidserver/lint.py
 msgid "URL must start with https:// or http://"
@@ -1990,9 +1989,9 @@ msgid "Using \"{path}\" for configuring s3cmd."
 msgstr "使用“{path}”配置 s3cmd。"
 
 #: ../fdroidserver/deploy.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Using \"{path}\" for syncing with remote storage."
-msgstr "使用“{path}”配置 s3cmd。"
+msgstr "使用 \"{path}\" 用于和远程存储同步。"
 
 #: ../fdroidserver/common.py
 msgid "Using APK Signature v2"
@@ -2026,9 +2025,9 @@ msgid "Using existing keystore \"{path}\""
 msgstr "使用现有密钥库“{path}”"
 
 #: ../fdroidserver/deploy.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Using rclone to sync with: {url}"
-msgstr "正使用 s3cmd 与 {url} 同步"
+msgstr "使用 rclone 进行同步：{url}"
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
@@ -2578,9 +2577,9 @@ msgid "s3cmd sync indexes {path} to {url} and delete"
 msgstr "s3cmd 同步索引 {path} 至 {url} 并删除"
 
 #: ../fdroidserver/deploy.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "s3cmd syncs indexes from {path} to {url} and deletes removed"
-msgstr "s3cmd 同步索引 {path} 至 {url} 并删除"
+msgstr "s3cmd 将索引从 {path} 同步至 {url} 并删除已下架的"
 
 #: ../fdroidserver/scanner.py
 #, python-brace-format
