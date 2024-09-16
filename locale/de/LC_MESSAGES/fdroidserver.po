@@ -18,7 +18,7 @@
 # VfBFan <drop0815@posteo.de>, 2021, 2023.
 # Roman Leo <roman.leo@gmx.de>, 2021.
 # Follpvosten <wolfi@karpador.xyz>, 2021.
-# ssantos <ssantos@web.de>, 2022, 2023.
+# ssantos <ssantos@web.de>, 2022, 2023, 2024.
 # "C. Rüdinger" <Mail-an-CR@web.de>, 2023.
 # VfBFan <VfBFan@users.noreply.hosted.weblate.org>, 2024.
 # Maxi <maxitendo01@proton.me>, 2024.
@@ -27,8 +27,8 @@ msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2024-09-10 10:50+0200\n"
-"PO-Revision-Date: 2024-09-12 20:48+0000\n"
-"Last-Translator: VfBFan <VfBFan@users.noreply.hosted.weblate.org>\n"
+"PO-Revision-Date: 2024-09-13 23:35+0000\n"
+"Last-Translator: ssantos <ssantos@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/f-droid/fdroidserver/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -702,7 +702,7 @@ msgstr "FEHLER: {key} in {path} ist nicht \"archive\" oder \"repo\"!"
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "ERROR: {key}:{subkey} in {path} is not in allowed keys: {allowed_keys}!"
-msgstr ""
+msgstr "ERROR: {key}:{subkey} in {path} ist keiner der erlaubten Schlüssel: {allowed_keys}!"
 
 #: ../fdroidserver/__main__.py
 #, python-brace-format
@@ -725,7 +725,7 @@ msgstr "Umgebungsvariable {var} von {configname} ist nicht gesetzt!"
 
 #: ../fdroidserver/deploy.py
 msgid "Error deploying 'github_releases', {} not present. (You might need to run `fdroid update` first.)"
-msgstr ""
+msgstr "Fehler bei der Bereitstellung von 'github_releases', {} nicht vorhanden. (Sie müssen zuerst `fdroid update` ausführen.)"
 
 #: ../fdroidserver/import_subcommand.py
 msgid "Error while getting repo address"
@@ -1316,15 +1316,15 @@ msgstr "Maschine offline, überspringe git-Spiegelgeneration bis `fdroid deploy`
 
 #: ../fdroidserver/deploy.py
 msgid "One of the 'github_releases' config items is missing the 'projectUrl' value. skipping ..."
-msgstr ""
+msgstr "Einem der Konfigurationselemente von 'github_releases' fehlt der Wert 'projectUrl'. Überspringe..."
 
 #: ../fdroidserver/deploy.py
 msgid "One of the 'github_releases' config items is missing the 'packageNames' value. skipping ..."
-msgstr ""
+msgstr "Einem der Konfigurationselemente von 'github_releases' fehlt der Wert 'packageNames'. Überspringe..."
 
 #: ../fdroidserver/deploy.py
 msgid "One of the 'github_releases' config items is missing the 'token' value. skipping ..."
-msgstr ""
+msgstr "Einem der Konfigurationselemente von 'github_releases' fehlt der Wert 'token'. Überspringe..."
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -1982,9 +1982,9 @@ msgid "Using \"{path}\" for configuring s3cmd."
 msgstr "Verwende {path} zur Konfiguration von s3cmd."
 
 #: ../fdroidserver/deploy.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Using \"{path}\" for syncing with remote storage."
-msgstr "Verwende {path} zur Konfiguration von s3cmd."
+msgstr "Verwende \"{path}\" zur Synchronisation mit Remote-Speicher."
 
 #: ../fdroidserver/common.py
 msgid "Using APK Signature v2"
@@ -2242,7 +2242,7 @@ msgstr "Lösche: repo/{apkfilename}"
 
 #: ../fdroidserver/scanner.py
 msgid "dependency file without lock"
-msgstr ""
+msgstr "Abhängigkeitsdatei ohne Sperre"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
