@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fdroidserver 1.0.6-349-g907c04ea\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2024-09-10 10:50+0200\n"
-"PO-Revision-Date: 2024-09-10 10:20+0000\n"
+"PO-Revision-Date: 2024-09-12 00:02+0000\n"
 "Last-Translator: Besnik Bleta <besnik@programeshqip.org>\n"
 "Language-Team: Albanian <https://hosted.weblate.org/projects/f-droid/fdroidserver/sq/>\n"
 "Language: sq\n"
@@ -98,7 +98,7 @@ msgstr "%(prog)s: gabim: %(message)s\n"
 #: ../fdroidserver/publish.py
 #, python-format
 msgid "%d APKs failed to be signed or verified!"
-msgstr ""
+msgstr "S’u arrit të nënshkruhen ose verifikohen %d APK!"
 
 #: ../fdroidserver/scanner.py
 #, python-format
@@ -404,7 +404,7 @@ msgstr "S’janë ujdisur kategori"
 #: ../fdroidserver/index.py
 #, python-brace-format
 msgid "Category \"{category}\" defined but not used for any apps!"
-msgstr ""
+msgstr "Kategori “{category}” e përkufizuar, por jo e përdorur për ndonjë aplikacion!"
 
 #: ../fdroidserver/__main__.py
 msgid "Check for updates to applications"
@@ -575,12 +575,12 @@ msgstr "Përshkrimi me gjatësi {length} është mbi kufirin prej {limit} shenja
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Did you mean config/{name}.yml?"
-msgstr ""
+msgstr "Mos kishit në mendje config/{name}.yml?"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "Did you mean {code}?"
-msgstr ""
+msgstr "Mos kishit në mendje {code}?"
 
 #: ../fdroidserver/import_subcommand.py
 msgid "Do not add 'disable:' to the generated build entries"
@@ -636,7 +636,7 @@ msgstr "Shkarkimi i {url} dështoi. {error}"
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Duplicate Anti-Feature declaration at {path} was ignored!"
-msgstr ""
+msgstr "U shpërfill deklarim i përsëdytur Anti-Veçorie te {path}!"
 
 #: ../fdroidserver/index.py
 #, python-format
@@ -651,7 +651,7 @@ msgstr "Lidhje e përsëdytur te '{field}': {url}"
 #: ../fdroidserver/common.py
 #, python-format
 msgid "ERROR: %(message)s"
-msgstr ""
+msgstr "GABIM: %(message)s"
 
 #: ../fdroidserver/__main__.py
 msgid "ERROR: The \"server\" subcommand has been removed, use \"deploy\"!"
@@ -677,12 +677,12 @@ msgstr "GABIM: strehë git “%s” që nuk mbulohet, arnimet janë të mirëpri
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "ERROR: {key} in {path} is not \"archive\" or \"repo\"!"
-msgstr ""
+msgstr "GABIM: {key} te {path} s’është “archive” apo “repo”!"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "ERROR: {key}:{subkey} in {path} is not in allowed keys: {allowed_keys}!"
-msgstr ""
+msgstr "GABIM: {key}:{subkey} te {path} s’është te kyçet e lejuar: {allowed_keys}!"
 
 #: ../fdroidserver/__main__.py
 #, python-brace-format
@@ -705,7 +705,7 @@ msgstr "S’është ujdisur ndryshore {var} nga {configname}!"
 
 #: ../fdroidserver/deploy.py
 msgid "Error deploying 'github_releases', {} not present. (You might need to run `fdroid update` first.)"
-msgstr ""
+msgstr "Gabim në sendërtim të 'github_releases', {} s’është e pranishme. (Mund t’ju duhet të xhironi `fdroid update` së pari.)"
 
 #: ../fdroidserver/import_subcommand.py
 msgid "Error while getting repo address"
@@ -1116,7 +1116,7 @@ msgstr "Depo kyçesh për kyç nënshkrimi:\t"
 
 #: ../fdroidserver/lint.py
 msgid "Known debug key is used in AllowedAPKSigningKeys: "
-msgstr ""
+msgstr "Te AllowedAPKSigningKeys është përdorur kyç i ditur diagnostikimi: "
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
@@ -1296,15 +1296,15 @@ msgstr "Makinë jo në linjë, po anashkalohet prodhim pasqyre git, deri sa `fdr
 
 #: ../fdroidserver/deploy.py
 msgid "One of the 'github_releases' config items is missing the 'projectUrl' value. skipping ..."
-msgstr ""
+msgstr "Njërit prej zërave të formësimit të 'github_releases' i mungon vlera 'projectUrl'. Po anashkalohet…"
 
 #: ../fdroidserver/deploy.py
 msgid "One of the 'github_releases' config items is missing the 'packageNames' value. skipping ..."
-msgstr ""
+msgstr "Një nga zërat e formësimit të 'github_releases'mungon te vlera 'packageNames' value. Po anashkalohet…"
 
 #: ../fdroidserver/deploy.py
 msgid "One of the 'github_releases' config items is missing the 'token' value. skipping ..."
-msgstr ""
+msgstr "Një nga zërat e formësimit të 'github_releases' mungon te vlera 'token' value. Po anashkalohet…"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -1431,7 +1431,7 @@ msgstr ""
 
 #: ../fdroidserver/deploy.py
 msgid "Pushing to remote server failed!"
-msgstr ""
+msgstr "Depozitimi te shërbyesi i largët dështoi!"
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
@@ -1538,7 +1538,7 @@ msgstr "Po xhirohet wget te {path}"
 #: ../fdroidserver/index.py
 #, python-brace-format
 msgid "SHA-256 of {url} does not match entry!"
-msgstr ""
+msgstr "SHA-256 e {url} nuk përkon me zërin!"
 
 #: ../fdroidserver/build.py
 msgid "Scan the resulting APK(s) for known non-free classes."
@@ -2043,7 +2043,7 @@ msgstr ""
 
 #: ../fdroidserver/publish.py
 msgid "When signing or verifying fails, exit with an error code."
-msgstr ""
+msgstr "Kur nënshkrimi, ose verifikimi dështon, dil me një kod gabimi."
 
 #: ../fdroidserver/init.py
 msgid "X.509 'Distinguished Name' used when generating keys"
@@ -2223,7 +2223,7 @@ msgstr "po fshihet: repo/{apkfilename}"
 
 #: ../fdroidserver/scanner.py
 msgid "dependency file without lock"
-msgstr ""
+msgstr "kartelë varësie pa kyç"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -2379,7 +2379,7 @@ msgstr "pasqyra '%s' s’përfundon me 'fdroid'!"
 #: ../fdroidserver/index.py
 #, python-brace-format
 msgid "mirrors set twice, in config.yml and {path}!"
-msgstr ""
+msgstr "pasqyra të ujdisura dy herë, te config.yml dhe {path}!"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
@@ -2541,7 +2541,7 @@ msgstr "repo_url lypset të përfundojë me /repo"
 #: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "rsync is missing or broken: {error}"
-msgstr ""
+msgstr "rsync-u mungon, ose është i dëmtuar: {error}"
 
 #: ../fdroidserver/metadata.py
 msgid "ruamel.yaml not installed, can not write metadata."
@@ -2564,7 +2564,7 @@ msgstr "fshehtina e kontrollorit është e keqformuar! Mund ta spastroni me: “
 
 #: ../fdroidserver/deploy.py
 msgid "serverwebroot: path does not end with \"fdroid\", perhaps you meant one of these:"
-msgstr ""
+msgstr "serverwebroot: shtegu nuk mbaron me “fdroid”, ndoshta kishit në mendje një nga këto:"
 
 #: ../fdroidserver/scanner.py
 msgid "shared library"
@@ -2773,12 +2773,12 @@ msgstr "{path} ka “{pattern}” të gabuar nënshkrimi kartele, ka gjasa të j
 #: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "{path} has been flagged by virustotal {count} times:"
-msgstr ""
+msgstr "për {path} ka {count} herë sinjalizime nga virustotal:"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "{path} is not \"key: value\" dict, but a {datatype}!"
-msgstr ""
+msgstr "{path} s’është “key: value”, por një {datatype}!"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -2808,7 +2808,7 @@ msgstr "{path} më tepër se 200MB, ngarkojeni dorazi: {url}"
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "{path}: \"{code}\" is not a valid ISO_3166-1 alpha-2 country code!"
-msgstr ""
+msgstr "{path}: “{code}” s’është kod i vlefshëm vendi ISO_3166-1 alpha-2!"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
