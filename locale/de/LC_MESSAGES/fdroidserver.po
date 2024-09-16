@@ -27,15 +27,15 @@ msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2024-09-10 10:50+0200\n"
-"PO-Revision-Date: 2024-05-20 09:01+0000\n"
-"Last-Translator: Maxi <maxitendo01@proton.me>\n"
+"PO-Revision-Date: 2024-09-12 20:48+0000\n"
+"Last-Translator: VfBFan <VfBFan@users.noreply.hosted.weblate.org>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/f-droid/fdroidserver/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.6-dev\n"
+"X-Generator: Weblate 5.8-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -661,12 +661,12 @@ msgstr "Doppelte Anti-Feature-Deklaration in {path} wurde ignoriert!"
 #: ../fdroidserver/index.py
 #, python-format
 msgid "Duplicate entry \"%s\" in mirrors config!"
-msgstr "Doppelter „%s“-Eintrag in Spiegelserver-Konfiguration!"
+msgstr "Doppelter Eintrag \"%s\" in Spiegelserver-Konfiguration!"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "Duplicate link in '{field}': {url}"
-msgstr "Link in „{field}” duplizieren: {url}"
+msgstr "Link in '{field}' duplizieren: {url}"
 
 #: ../fdroidserver/common.py
 #, python-format
@@ -697,7 +697,7 @@ msgstr "FEHLER: nicht unterstützter Git-Host \"%s\", Patches willkommen!"
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "ERROR: {key} in {path} is not \"archive\" or \"repo\"!"
-msgstr ""
+msgstr "FEHLER: {key} in {path} ist nicht \"archive\" oder \"repo\"!"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
@@ -751,7 +751,7 @@ msgstr "Kopieren von {path} fehlgeschlagen: {error}"
 #: ../fdroidserver/signatures.py
 #, python-brace-format
 msgid "Failed fetching signatures for '{apkfilename}': {error}"
-msgstr "Abrufen von Signaturen für „{apkfilename}” fehlgeschlagen: {error}"
+msgstr "Abrufen von Signaturen für '{apkfilename}' fehlgeschlagen: {error}"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -785,7 +785,7 @@ msgstr "Abrufen des APK-Signierschlüssel-Fingerabdrucks fehlgeschlagen"
 #: ../fdroidserver/install.py
 #, python-brace-format
 msgid "Failed to install '{apkfilename}' on {dev}: {error}"
-msgstr "Installation von „{apkfilename}” auf {dev} fehlgeschlagen: {error}"
+msgstr "Installation von '{apkfilename}' auf {dev} fehlgeschlagen: {error}"
 
 #: ../fdroidserver/common.py
 msgid "Failed to sign application"
@@ -799,7 +799,7 @@ msgstr "BuildServerID von VM abgerufen: {buildserverid}"
 #: ../fdroidserver/signatures.py
 #, python-brace-format
 msgid "Fetched signatures for '{apkfilename}' -> '{sigdir}'"
-msgstr "Signaturen für {apkfilename} -> {sigdir} abgerufen"
+msgstr "Signaturen für '{apkfilename} '-> '{sigdir}' abgerufen"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -931,11 +931,11 @@ msgstr "Git-Submodul deinit fehlgeschlagen"
 
 #: ../fdroidserver/common.py
 msgid "Git submodule sync failed"
-msgstr "Git submodule sync fehlgeschlagen"
+msgstr "Git-Submodul sync fehlgeschlagen"
 
 #: ../fdroidserver/common.py
 msgid "Git submodule update failed"
-msgstr "Git submodule update fehlgeschlagen"
+msgstr "Git-Submodul update fehlgeschlagen"
 
 #: ../fdroidserver/common.py
 msgid "HTTPS must be used with Subversion URLs!"
@@ -958,7 +958,7 @@ msgstr "'{field}' in '{metapath}' Metadaten wird ignoriert, da es veraltet ist."
 #: ../fdroidserver/update.py
 #, python-format
 msgid "Ignoring FUNDING.yml entry longer than 2048: %s"
-msgstr "Ignoriere FUNDING.yml Einträge länger als 2048: %s"
+msgstr "Ignoriere FUNDING.yml-Einträge länger als 2048: %s"
 
 #: ../fdroidserver/update.py
 #, python-format
@@ -1165,7 +1165,7 @@ msgstr "Fehlerhafte Paketquellen-Spiegelserver."
 
 #: ../fdroidserver/deploy.py
 msgid "Malformed serverwebroot line:"
-msgstr "Fehlerhafte serverwebroot Zeile:"
+msgstr "Fehlerhafte serverwebroot-Zeile:"
 
 #: ../fdroidserver/scanner.py
 #, python-format
@@ -1191,11 +1191,11 @@ msgstr "Weder \"repo_pubkey\" noch \"keystorepass\" in config.yml gesetzt"
 #: ../fdroidserver/verify.py
 #, python-format
 msgid "No APK for package: %s"
-msgstr "Keine APK für das Paket: %s"
+msgstr "Kein APK für das Paket: %s"
 
 #: ../fdroidserver/common.py
 msgid "No Android SDK found!"
-msgstr "Kein Android SDK gefunden!"
+msgstr "Kein Android-SDK gefunden!"
 
 #: ../fdroidserver/install.py
 msgid "No attached devices found"
@@ -1781,9 +1781,8 @@ msgid "To use awsbucket, awssecretkey and awsaccesskeyid must also be set in con
 msgstr "Um awsbucket zu benutzen, müssen awssecretkey und awsaccesskeyid auch in der config.yml gesetzt sein!"
 
 #: ../fdroidserver/deploy.py
-#, fuzzy
 msgid "To use rclone, rclone_config and awsbucket must be set in config.yml!"
-msgstr "Um awsbucket zu benutzen, müssen awssecretkey und awsaccesskeyid auch in der config.yml gesetzt sein!"
+msgstr "Um rclone zu benutzen, müssen rclone_config und awsbucket auch in der config.yml gesetzt sein!"
 
 #: ../fdroidserver/lint.py
 msgid "URL must start with https:// or http://"
@@ -1824,7 +1823,7 @@ msgstr "Unbekannter Fehler aufgetreten!"
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "Unknown file '{filename}' in build '{versionName}'"
-msgstr "Unbekannte Datei '{filename}' im Build '{versionName}''"
+msgstr "Unbekannte Datei '{filename}' im Build '{versionName}'"
 
 #: ../fdroidserver/metadata.py
 #, python-format
@@ -1856,7 +1855,7 @@ msgstr "Nicht erkanntes App-Feld '{fieldname}' in '{path}'"
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Unrecognised build flag '{build_flag}' in '{path}'"
-msgstr "NIcht erkannte Build Flag '{build_flag}' in '{path}'"
+msgstr "Nicht erkanntes Build-Flag '{build_flag}' in '{path}'"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -1881,12 +1880,12 @@ msgstr "Nicht verwendete Datei bei %s"
 #: ../fdroidserver/scanner.py
 #, python-format
 msgid "Unused scandelete path: %s"
-msgstr "Nicht verwendeter „scandelete“ Pfad: %s"
+msgstr "Nicht verwendeter „scandelete“-Pfad: %s"
 
 #: ../fdroidserver/scanner.py
 #, python-format
 msgid "Unused scanignore path: %s"
-msgstr "Nicht verwendeter „scanignore“ Pfad: %s"
+msgstr "Nicht verwendeter „scanignore“-Pfad: %s"
 
 #: ../fdroidserver/common.py
 #, python-format
@@ -2019,9 +2018,9 @@ msgid "Using existing keystore \"{path}\""
 msgstr "Verwende vorhandenen Schlüsselspeicher \"{path}\""
 
 #: ../fdroidserver/deploy.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Using rclone to sync with: {url}"
-msgstr "Verwende s3cmd zum Synchronisieren mit: {url}"
+msgstr "Verwende rclone zum Synchronisieren mit: {url}"
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
