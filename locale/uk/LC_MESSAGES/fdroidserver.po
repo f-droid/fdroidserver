@@ -16,8 +16,8 @@ msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2024-09-10 10:50+0200\n"
-"PO-Revision-Date: 2024-09-13 09:52+0000\n"
-"Last-Translator: Nazar <balaraz@tuta.io>\n"
+"PO-Revision-Date: 2024-09-13 23:35+0000\n"
+"Last-Translator: Ihor Hordiichuk <igor_ck@outlook.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/f-droid/fdroidserver/uk/>\n"
 "Language: uk\n"
 "MIME-Version: 1.0\n"
@@ -1782,7 +1782,7 @@ msgstr "URL-адреса має починатися з https:// або http://"
 
 #: ../fdroidserver/lint.py
 msgid "URL shorteners should not be used"
-msgstr "Скорочувачі URL-адрес не варто використовувати"
+msgstr "Вкорочувачі URL-адрес не варто використовувати"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
@@ -2568,7 +2568,7 @@ msgstr "s3cmd синхронізувати індекси з {path} до {url} �
 #: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "s3cmd syncs indexes from {path} to {url} and deletes removed"
-msgstr "s3cmd синхронізує індекси з {path} до {url} і видаляє видалені"
+msgstr "s3cmd синхронізує індекси з {path} до {url} і видаляє вилучені"
 
 #: ../fdroidserver/scanner.py
 #, python-brace-format
@@ -2599,11 +2599,11 @@ msgstr "показати довідку та вийти"
 
 #: ../fdroidserver/signatures.py
 msgid "signed APK, either a file-path or HTTPS URL."
-msgstr "підписаний APK файл, шлях до файлу або URL-адреса HTTPS)."
+msgstr "підписаний APK файл, шлях до файлу або URL-адреса HTTPS."
 
 #: ../fdroidserver/common.py
 msgid "skip deploying full build logs: log content is empty"
-msgstr "пропустити розгортання усіх журналів збірки: журнал порожній"
+msgstr "пропустити розгортання всіх журналів збірки: журнал порожній"
 
 #: ../fdroidserver/common.py
 msgid "skip deploying full build logs: not enabled in config"
