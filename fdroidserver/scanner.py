@@ -507,7 +507,6 @@ def scan_source(build_dir, build=metadata.Build(), json_per_build=None):
         re.compile(r'^https://' + re.escape(repo) + r'/*')
         for repo in [
             'repo1.maven.org/maven2',  # mavenCentral()
-            'jcenter.bintray.com',  # jcenter()
             'jitpack.io',
             'www.jitpack.io',
             'repo.maven.apache.org/maven2',
