@@ -757,6 +757,8 @@ include tests/source-files/com.anpmech.launcher/app/src/main/AndroidManifest.xml
 include tests/source-files/com.anpmech.launcher/build.gradle
 include tests/source-files/com.anpmech.launcher/settings.gradle
 include tests/source-files/com.github.jameshnsears.quoteunquote/build.gradle
+include tests/source-files/com.github.shadowsocks/core/build.gradle.kts
+include tests/source-files/com.github.shadowsocks/mobile/build.gradle.kts
 include tests/source-files/com.integreight.onesheeld/build.gradle
 include tests/source-files/com.integreight.onesheeld/gradle/wrapper/gradle-wrapper.properties
 include tests/source-files/com.integreight.onesheeld/localeapi/build.gradle
@@ -800,6 +802,7 @@ include tests/source-files/firebase-allowlisted/build.gradle
 include tests/source-files/firebase-suspect/app/build.gradle
 include tests/source-files/firebase-suspect/build.gradle
 include tests/source-files/info.guardianproject.ripple/build.gradle
+include tests/source-files/lockfile.test/flutter/.dart_tool/flutter_gen/pubspec.yaml
 include tests/source-files/lockfile.test/flutter/pubspec.lock
 include tests/source-files/lockfile.test/flutter/pubspec.yaml
 include tests/source-files/lockfile.test/javascript/package.json
@@ -821,6 +824,7 @@ include tests/source-files/org.tasks/buildSrc/build.gradle.kts
 include tests/source-files/org.tasks/settings.gradle.kts
 include tests/source-files/osmandapp/osmand/build.gradle
 include tests/source-files/osmandapp/osmand/gradle/wrapper/gradle-wrapper.properties
+include tests/source-files/OtakuWorld/build.gradle
 include tests/source-files/realm/react-native/android/build.gradle
 include tests/source-files/se.manyver/android/app/build.gradle
 include tests/source-files/se.manyver/android/build.gradle
