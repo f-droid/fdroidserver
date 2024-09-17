@@ -30,7 +30,6 @@ from git import Repo
 import yaml
 from argparse import ArgumentParser
 import logging
-from shlex import split
 import pathlib
 import shutil
 import git
@@ -272,7 +271,7 @@ def update_remote_storage_with_rclone(
             logging.info('Custom configuration not found.')
             logging.info(
                 'Using default configuration at {}'.format(
-                    subprocess.check_output(split("rclone config file")).decode("utf-8")
+                    subprocess.check_output(['rclone', 'config', 'file'], text=True)
                 )
             )
             configfilename = None
@@ -281,7 +280,7 @@ def update_remote_storage_with_rclone(
         logging.info('Custom configuration not found.')
         logging.info(
             'Using default configuration at {}'.format(
-                subprocess.check_output(split("rclone config file")).decode("utf-8")
+                subprocess.check_output(['rclone', 'config', 'file'], text=True)
             )
         )
         configfilename = None
@@ -299,20 +298,15 @@ def update_remote_storage_with_rclone(
     else:
         sources = [repo_section]
 
-    for source in sources:
-        if isinstance(config['rclone_config'], str):
-            rclone_sync_command = (
-                'rclone sync '
-                + source
-                + ' '
-                + config['rclone_config']
-                + ':'
-                + config['awsbucket']
-                + '/'
-                + upload_dir
-            )
+    if isinstance(config['rclone_config'], str):
+        rclone_config = [config['rclone_config']]
+    else:
+        rclone_config = config['rclone_config']
 
-            rclone_sync_command = split(rclone_sync_command)
+    for source in sources:
+        for remote_config in rclone_config:
+            complete_remote_path = f'{remote_config}:{config["awsbucket"]}/{upload_dir}'
+            rclone_sync_command = ['rclone', 'sync', source, complete_remote_path]
 
             if verbose:
                 rclone_sync_command += ['--verbose']
@@ -320,11 +314,7 @@ def update_remote_storage_with_rclone(
                 rclone_sync_command += ['--quiet']
 
             if configfilename:
-                rclone_sync_command += split('--config=' + configfilename)
-
-            complete_remote_path = (
-                config['rclone_config'] + ':' + config['awsbucket'] + '/' + upload_dir
-            )
+                rclone_sync_command += ['--config=' + configfilename]
 
             logging.debug(
                 "rclone sync all files in " + source + ' to ' + complete_remote_path
@@ -332,40 +322,6 @@ def update_remote_storage_with_rclone(
 
             if subprocess.call(rclone_sync_command) != 0:
                 raise FDroidException()
-
-        if isinstance(config['rclone_config'], list):
-            for remote_config in config['rclone_config']:
-                rclone_sync_command = (
-                    'rclone sync '
-                    + source
-                    + ' '
-                    + remote_config
-                    + ':'
-                    + config['awsbucket']
-                    + '/'
-                    + upload_dir
-                )
-
-                rclone_sync_command = split(rclone_sync_command)
-
-                if verbose:
-                    rclone_sync_command += ['--verbose']
-                elif quiet:
-                    rclone_sync_command += ['--quiet']
-
-                if configfilename:
-                    rclone_sync_command += split('--config=' + configfilename)
-
-                complete_remote_path = (
-                    remote_config + ':' + config['awsbucket'] + '/' + upload_dir
-                )
-
-                logging.debug(
-                    "rclone sync all files in " + source + ' to ' + complete_remote_path
-                )
-
-                if subprocess.call(rclone_sync_command) != 0:
-                    raise FDroidException()
 
 
 def update_awsbucket_libcloud(repo_section, is_index_only=False):

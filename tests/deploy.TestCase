@@ -194,6 +194,31 @@ class DeployTest(unittest.TestCase):
         self.assertFalse(dest_apk.is_file())
         self.assertTrue(dest_index.is_file())
 
+    @mock.patch('subprocess.call')
+    @mock.patch('subprocess.check_output', lambda cmd, text: '/path/to/rclone.conf')
+    def test_update_remote_storage_with_rclone_mock(self, mock_call):
+        def _mock_subprocess_call(cmd):
+            self.assertEqual(
+                cmd,
+                [
+                    'rclone',
+                    'sync',
+                    'repo',
+                    'test_local_config:test_bucket_folder/fdroid/repo',
+                ],
+            )
+            return 0
+
+        mock_call.side_effect = _mock_subprocess_call
+
+        fdroidserver.deploy.config = {
+            'awsbucket': 'test_bucket_folder',
+            'rclone': True,
+            'rclone_config': 'test_local_config',
+        }
+        fdroidserver.deploy.update_remote_storage_with_rclone('repo')
+        mock_call.assert_called_once()
+
     def test_update_serverwebroot(self):
         """rsync works with file paths, so this test uses paths for the URLs"""
         os.chdir(self.testdir)
