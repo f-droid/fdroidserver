@@ -27,8 +27,8 @@ msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2024-09-10 10:50+0200\n"
-"PO-Revision-Date: 2024-09-13 23:35+0000\n"
-"Last-Translator: ssantos <ssantos@web.de>\n"
+"PO-Revision-Date: 2024-09-18 23:55+0000\n"
+"Last-Translator: VfBFan <VfBFan@users.noreply.hosted.weblate.org>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/f-droid/fdroidserver/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -162,7 +162,7 @@ msgstr "Option %s verfügt über keinen Wert"
 
 #: ../fdroidserver/common.py
 msgid "'keypass' not found in config.yml!"
-msgstr "„keypass” nicht in config.yml vorhanden!"
+msgstr "'keypass' nicht in config.yml vorhanden!"
 
 #: ../fdroidserver/common.py
 msgid "'keystore' is NONE and 'smartcardoptions' is blank!"
@@ -170,21 +170,21 @@ msgstr "'keystore' ist NONE und 'smartcardoptions' ist leer!"
 
 #: ../fdroidserver/common.py
 msgid "'keystore' not found in config.yml!"
-msgstr "„keystore” nicht in config.yml vorhanden!"
+msgstr "'keystore' nicht in config.yml vorhanden!"
 
 #: ../fdroidserver/common.py
 msgid "'keystorepass' not found in config.yml!"
-msgstr "„keystorepass” nicht in config.yml vorhanden!"
+msgstr "'keystorepass' nicht in config.yml vorhanden!"
 
 #: ../fdroidserver/common.py
 msgid "'repo_keyalias' not found in config.yml!"
-msgstr "„repo_keyalias” nicht in config.yml vorhanden!"
+msgstr "'repo_keyalias' nicht in config.yml vorhanden!"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #: /usr/lib/python3.11/argparse.py
 msgid "'required' is an invalid argument for positionals"
-msgstr "„required” ist ein ungültiges Argument für Positionsangaben"
+msgstr "'required' ist ein ungültiges Argument für Positionsangaben"
 
 #: ../fdroidserver/common.py
 msgid "'sdk_path' not set in config.yml!"
@@ -193,17 +193,17 @@ msgstr "Kein 'sdk_path' in 'config.yml' festgelegt!"
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "'{aapt}' is too old, fdroid requires build-tools-{version} or newer!"
-msgstr "„{aapt}” ist veraltet, fdroid benötigt build-tools-{version} oder neuer!"
+msgstr "'{aapt}' ist veraltet, fdroid benötigt build-tools-{version} oder neuer!"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "'{field}' will be in random order! Use () or [] brackets if order is important!"
-msgstr "Das Feld „{field}” wird in zufälliger Reihenfolge angezeigt! Verwenden Sie runde ( ) oder eckige [ ] Klammern, wenn die Reihenfolge wichtig ist!"
+msgstr "Das Feld '{field}' wird in zufälliger Reihenfolge angezeigt! Verwenden Sie runde ( ) oder eckige [ ] Klammern, wenn die Reihenfolge wichtig ist!"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "'{path}' failed to execute!"
-msgstr "„{path}” konnte nicht ausgeführt werden!"
+msgstr "'{path}' konnte nicht ausgeführt werden!"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
@@ -213,12 +213,12 @@ msgstr "'{path}' in ungültigem Format, sollte ein Wörterbuch sein!"
 #: ../fdroidserver/metadata.py ../fdroidserver/lint.py
 #, python-brace-format
 msgid "'{value}' is not a valid {field} in {appid}. Regex pattern: {pattern}"
-msgstr "„{value}” ist kein gültiges {field} in {appid}. Regex-Muster: {pattern}"
+msgstr "'{value}' ist kein gültiges {field} in {appid}. Regex-Muster: {pattern}"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "'{value}' is not a valid {field}, should be {pattern}"
-msgstr "„{value}” ist kein gültiges {field}, sollte {pattern} sein"
+msgstr "'{value}' ist kein gültiges {field}, sollte {pattern} sein"
 
 #: ../fdroidserver/checkupdates.py
 #, python-brace-format
@@ -259,7 +259,7 @@ msgstr "Füge eine Metadaten-Vorlage für APKs hinzu, die keine haben"
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Adding new repo for only {name}"
-msgstr "Nur für {name} eine neue Repro hinzufügen"
+msgstr "Nur für {name} eine neues Repo hinzufügen"
 
 #: ../fdroidserver/init.py
 msgid "Alias of the repo signing key in the keystore"
@@ -301,12 +301,12 @@ msgstr "Android-SDK nicht unter {path} gefunden!"
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Android SDK path '{path}' does not exist!"
-msgstr "Android-SDK-Pfad »{path}« nicht vorhanden!"
+msgstr "Android-SDK-Pfad '{path}' nicht vorhanden!"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Android SDK path '{path}' is not a directory!"
-msgstr "Android-SDK-Pfad »{path}« ist kein Verzeichnis!"
+msgstr "Android-SDK-Pfad '{path}' ist kein Verzeichnis!"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -328,7 +328,7 @@ msgstr "App hat NoSourceSince oder ArchivePolicy \"0 versions\" oder 0, aber Aut
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "App is in '{repo}' but has a link to {url}"
-msgstr "App befindet sich in „{repo}”, enthält aber einen Verweis auf {url}"
+msgstr "App befindet sich in '{repo}', enthält aber einen Verweis auf {url}"
 
 #: ../fdroidserver/lint.py
 msgid "App version has binary but does not have corresponding AllowedAPKSigningKeys to pin certificate."
@@ -350,7 +350,7 @@ msgstr "AutoUpdateMode mit UpdateCheckMode: HTTP muss ein Muster haben."
 #: ../fdroidserver/index.py
 #, python-brace-format
 msgid "Bad entry type \"{mirrortype}\" in mirrors config: {mirror}"
-msgstr "Falscher Typeneintrag „{mirrortype}“ in Spiegelserver-Konfiguration von: {mirror}"
+msgstr "Falscher Typeneintrag \"{mirrortype}\" in Spiegelserver-Konfiguration von: {mirror}"
 
 #: ../fdroidserver/mirror.py
 msgid "Base URL to mirror, can include the index signing key using the query string: ?fingerprint="
@@ -360,12 +360,12 @@ msgstr "Basis-URL zum Spiegeln, kann den Index-Signierungsschlüssel mit Hilfe d
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "Branch '{branch}' used as commit in build '{versionName}'"
-msgstr "Zweig „{branch}”, der als Bestätigung im Build verwendet wird „{versionName}”"
+msgstr "Branch '{branch}', der als Bestätigung im Build verwendet wird '{versionName}'"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "Branch '{branch}' used as commit in srclib '{srclib}'"
-msgstr "Zweig „{branch}” wird als Bestätigung in srclib verwendet „{srclib}”"
+msgstr "Branch '{branch}' wird als Bestätigung in srclib verwendet '{srclib}'"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -395,7 +395,7 @@ msgstr "Nur die neueste Version jedes Programmpakets erstellen"
 #: ../fdroidserver/init.py
 #, python-format
 msgid "Built repo based in \"%s\" with this config:"
-msgstr "Built-Repo basiert in „%s” auf der Konfiguration von:"
+msgstr "Built-Repo basiert in \"%s\" auf der Konfiguration von:"
 
 #: ../fdroidserver/checkupdates.py
 msgid "Can't auto-update app with no CurrentVersionCode"
@@ -415,11 +415,11 @@ msgstr "\"{path}\" konnte nicht überschrieben werden"
 #: ../fdroidserver/lint.py
 #, python-format
 msgid "Categories '%s' is not valid"
-msgstr "Kategorie »%s« ist nicht gültig"
+msgstr "Kategorie '%s' ist nicht gültig"
 
 #: ../fdroidserver/lint.py
 msgid "Categories are not set"
-msgstr "Kategorien sind nicht festgelegt"
+msgstr "Keine Kategorien festgelegt"
 
 #: ../fdroidserver/index.py
 #, python-brace-format
@@ -455,7 +455,7 @@ msgstr "Änderungen übergeben"
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Conflicting \"{field}\" definitions between .yml and localized files:"
-msgstr "Widersprüchliche „{field}“-Definitionen in .yml- bzw. übersetzten Dateien:"
+msgstr "Widersprüchliche \"{field}\"-Definitionen in .yml- bzw. übersetzten Dateien:"
 
 #: ../fdroidserver/__main__.py
 msgid "Conflicting arguments: '--verbose' and '--quiet' can not be specified at the same time."
@@ -469,7 +469,7 @@ msgstr "Konflikt in der Konfiguration. Verwende {newfile}, ignoriere {oldfile}!"
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Could not find '{command}' on your system"
-msgstr "„{command}” konnte auf Ihrem System nicht gefunden werden"
+msgstr "'{command}' konnte auf Ihrem System nicht gefunden werden"
 
 #: ../fdroidserver/import_subcommand.py
 msgid "Could not find latest version code"
@@ -513,12 +513,12 @@ msgstr "Es ist ungehörig, bestehende Signaturschlüssel-Einstellungen zu übers
 #: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "Created new container \"{name}\""
-msgstr "Neuer Container „{name}” wurde erstellt"
+msgstr "Neuer Container \"{name}\" wurde erstellt"
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "Creating \"{path}\" for configuring s3cmd."
-msgstr "„{path}” für die Konfiguration von S3cmd wird erstellt."
+msgstr "\"{path}\" für die Konfiguration von S3cmd wird erstellt."
 
 #: ../fdroidserver/publish.py
 msgid "Creating log directory"
@@ -613,7 +613,7 @@ msgstr "Verteilen Sie die neuen Dateien nicht in das Repo"
 #: ../fdroidserver/mirror.py
 #, python-brace-format
 msgid "Do not include \"{path}\" in URL!"
-msgstr "„{path}” nicht in die URL einfügen!"
+msgstr "\"{path}\" nicht in die URL einfügen!"
 
 #: ../fdroidserver/init.py
 msgid "Do not prompt for Android SDK path, just fail"
@@ -702,7 +702,7 @@ msgstr "FEHLER: {key} in {path} ist nicht \"archive\" oder \"repo\"!"
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "ERROR: {key}:{subkey} in {path} is not in allowed keys: {allowed_keys}!"
-msgstr "ERROR: {key}:{subkey} in {path} ist keiner der erlaubten Schlüssel: {allowed_keys}!"
+msgstr "FEHLER: {key}:{subkey} in {path} ist keiner der erlaubten Schlüssel: {allowed_keys}!"
 
 #: ../fdroidserver/__main__.py
 #, python-brace-format
@@ -725,7 +725,7 @@ msgstr "Umgebungsvariable {var} von {configname} ist nicht gesetzt!"
 
 #: ../fdroidserver/deploy.py
 msgid "Error deploying 'github_releases', {} not present. (You might need to run `fdroid update` first.)"
-msgstr "Fehler bei der Bereitstellung von 'github_releases', {} nicht vorhanden. (Sie müssen zuerst `fdroid update` ausführen.)"
+msgstr "Fehler beim Bereitstellen von 'github_releases', {} nicht vorhanden. (Sie müssen zuerst `fdroid update` ausführen.)"
 
 #: ../fdroidserver/import_subcommand.py
 msgid "Error while getting repo address"
@@ -1316,15 +1316,15 @@ msgstr "Maschine offline, überspringe git-Spiegelgeneration bis `fdroid deploy`
 
 #: ../fdroidserver/deploy.py
 msgid "One of the 'github_releases' config items is missing the 'projectUrl' value. skipping ..."
-msgstr "Einem der Konfigurationselemente von 'github_releases' fehlt der Wert 'projectUrl'. Überspringe..."
+msgstr "Einem der Konfigurationselemente von 'github_releases' fehlt der Wert 'projectUrl'. Überspringe …"
 
 #: ../fdroidserver/deploy.py
 msgid "One of the 'github_releases' config items is missing the 'packageNames' value. skipping ..."
-msgstr "Einem der Konfigurationselemente von 'github_releases' fehlt der Wert 'packageNames'. Überspringe..."
+msgstr "Einem der Konfigurationselemente von 'github_releases' fehlt der Wert 'packageNames'. Überspringe …"
 
 #: ../fdroidserver/deploy.py
 msgid "One of the 'github_releases' config items is missing the 'token' value. skipping ..."
-msgstr "Einem der Konfigurationselemente von 'github_releases' fehlt der Wert 'token'. Überspringe..."
+msgstr "Einem der Konfigurationselemente von 'github_releases' fehlt der Wert 'token'. Überspringe …"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -1540,7 +1540,7 @@ msgstr "Auf Git Repo, das nicht committete Änderungen hat, laufen lassen"
 #: ../fdroidserver/nightly.py
 #, python-brace-format
 msgid "Run over {cibase} to find -debug.apk. and skip repo_basedir {repo_basedir}"
-msgstr ""
+msgstr "{cibase} ausführen, um -debug.apk zu finden. und repo_basedir {repo_basedir} überspringen"
 
 #: ../fdroidserver/lint.py
 msgid "Run rewritemeta to fix formatting"
@@ -1958,33 +1958,33 @@ msgstr "Syntax: %s\n"
 
 #: ../fdroidserver/lint.py
 msgid "Use /HEAD instead of /master or /main to point at a file in the default branch"
-msgstr "Verwenden Sie /HEAD anstelle von /master oder /main, um auf eine Datei im Hauptzweig zu verweisen"
+msgstr "Verwende /HEAD anstelle von /master oder /main, um auf eine Datei im Hauptzweig zu verweisen"
 
 #: ../fdroidserver/lint.py
 msgid "Use /HEAD instead of /master to point at a file in the default branch"
-msgstr "Verwenden Sie /HEAD anstelle von /master, um auf eine Datei im Hauptzweig zu verweisen"
+msgstr "Verwende /HEAD anstelle von /master, um auf eine Datei im Hauptzweig zu verweisen"
 
 #: ../fdroidserver/update.py
 msgid "Use `fdroid update -c` to create it."
-msgstr "Verwenden Sie `fdroid update -c´ zum Erstellen."
+msgstr "Verwende `fdroid update -c` zum Erstellen."
 
 #: ../fdroidserver/build.py
 msgid "Use build server"
-msgstr "Build-Server verwenden"
+msgstr "Verwende Build-Server"
 
 #: ../fdroidserver/update.py
 msgid "Use date from APK instead of current time for newly added APKs"
-msgstr "APK-Datum statt der aktuellen Zeit für neu hinzugefügte APKs verwenden"
+msgstr "Verwende APK-Datum statt der aktuellen Zeit für neu hinzugefügte APKs"
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "Using \"{path}\" for configuring s3cmd."
-msgstr "Verwende {path} zur Konfiguration von s3cmd."
+msgstr "Verwende \"{path}\" zur Konfiguration von s3cmd."
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "Using \"{path}\" for syncing with remote storage."
-msgstr "Verwende \"{path}\" zur Synchronisation mit Remote-Speicher."
+msgstr "Verwende „{path}“ zur Synchronisation mit Remote-Speicher."
 
 #: ../fdroidserver/common.py
 msgid "Using APK Signature v2"
@@ -2569,12 +2569,12 @@ msgstr "ruamel.yaml ist nicht installiert, kann Metadaten nicht schreiben."
 #: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "s3cmd sync indexes {path} to {url} and delete"
-msgstr "s3cmd-Sync {path} indizieren auf {url} und dann löschen"
+msgstr "s3cmd synchronisiert Indizes von {path} nach {url} und löscht diese"
 
 #: ../fdroidserver/deploy.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "s3cmd syncs indexes from {path} to {url} and deletes removed"
-msgstr "s3cmd-Sync {path} indizieren auf {url} und dann löschen"
+msgstr "s3cmd synchronisiert Indizes von {path} nach {url} und löscht entfernte"
 
 #: ../fdroidserver/scanner.py
 #, python-brace-format
