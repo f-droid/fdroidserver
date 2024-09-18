@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fdroidserver 0.8-224-g4b0ade7\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2024-09-10 10:50+0200\n"
-"PO-Revision-Date: 2024-02-25 05:52+0000\n"
+"PO-Revision-Date: 2024-09-18 23:55+0000\n"
 "Last-Translator: Suguru Hirahara <shirahara@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/f-droid/fdroidserver/ja/>\n"
 "Language: ja\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.5-dev\n"
+"X-Generator: Weblate 5.8-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -33,17 +33,17 @@ msgstr ""
 #: ../fdroidserver/lint.py
 #, python-format
 msgid "\"%s/\" has no matching metadata file!"
-msgstr ""
+msgstr "「\"%s/」に合致するメタデータのファイルはありません！"
 
 #: ../fdroidserver/index.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "\"local_copy_dir\" {path} does not exist!"
-msgstr "local_copy_dir は絶対パスの必要があります！"
+msgstr "\"local_copy_dir\" {path} は存在しません！"
 
 #: ../fdroidserver/install.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "\"{apkfilename}\" is already installed on {dev}."
-msgstr "'{apkfilename}'はすでに{dev}にインストールされています。"
+msgstr "「{apkfilename}」はすでに{dev}にインストールされています。"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -53,7 +53,7 @@ msgstr ""
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "\"{path}\" contains recent {name} ({version})"
-msgstr ""
+msgstr "「{path}」には最近の{name}（{version}）が含まれています"
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
@@ -88,12 +88,12 @@ msgstr[0] ""
 #: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "%(prog)s: error: %(message)s\n"
-msgstr ""
+msgstr "%(prog)s: エラー: %(message)s\n"
 
 #: ../fdroidserver/publish.py
 #, python-format
 msgid "%d APKs failed to be signed or verified!"
-msgstr ""
+msgstr "%d個のAPKが署名されておらず検証できませんでした！"
 
 #: ../fdroidserver/scanner.py
 #, python-format
@@ -104,14 +104,14 @@ msgstr "%d個の問題が見つかりました"
 #: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
 #: /usr/lib/python3.11/optparse.py
 msgid "%prog [options]"
-msgstr ""
+msgstr "%prog [オプション]"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "%r is not callable"
-msgstr ""
+msgstr "%rは呼び出せません"
 
 #: ../fdroidserver/signindex.py
 #, python-format
@@ -137,7 +137,7 @@ msgstr ""
 
 #: ../fdroidserver/common.py
 msgid "'keypass' not found in config.yml!"
-msgstr ""
+msgstr "「keypass」がconfig.ymlにありません！"
 
 #: ../fdroidserver/common.py
 msgid "'keystore' is NONE and 'smartcardoptions' is blank!"
@@ -145,11 +145,11 @@ msgstr ""
 
 #: ../fdroidserver/common.py
 msgid "'keystore' not found in config.yml!"
-msgstr ""
+msgstr "「keystore」がconfig.ymlにありません！"
 
 #: ../fdroidserver/common.py
 msgid "'keystorepass' not found in config.yml!"
-msgstr ""
+msgstr "「keystorepass」がconfig.ymlにありません！"
 
 #: ../fdroidserver/common.py
 msgid "'repo_keyalias' not found in config.yml!"
@@ -204,7 +204,7 @@ msgstr ""
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #: /usr/lib/python3.11/argparse.py
 msgid ".__call__() not defined"
-msgstr ""
+msgstr ".__call__() は定義されていません"
 
 #: ../fdroidserver/lint.py
 msgid "/issues is missing"
@@ -349,7 +349,7 @@ msgstr ""
 
 #: ../fdroidserver/__main__.py
 msgid "Build a package from source"
-msgstr ""
+msgstr "パッケージをソースコードからビルド"
 
 #: ../fdroidserver/build.py
 msgid "Build all applications available"
@@ -402,7 +402,7 @@ msgstr ""
 
 #: ../fdroidserver/__main__.py
 msgid "Check for updates to applications"
-msgstr ""
+msgstr "アプリケーションの更新を確認"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -420,7 +420,7 @@ msgstr ""
 #: ../fdroidserver/__main__.py
 #, python-format
 msgid "Command '%s' not recognised.\n"
-msgstr ""
+msgstr "コマンド '%s' は認識されません。\n"
 
 #: ../fdroidserver/checkupdates.py
 msgid "Commit changes"
@@ -530,7 +530,7 @@ msgstr ""
 
 #: ../fdroidserver/update.py
 msgid "Delete APKs and/or OBBs without metadata from the repo"
-msgstr ""
+msgstr "メタデータの無いAPKとOBBをリポジトリから削除"
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
@@ -980,7 +980,7 @@ msgstr ""
 
 #: ../fdroidserver/__main__.py
 msgid "Install built packages on devices"
-msgstr ""
+msgstr "ビルドしたパッケージを端末にインストール"
 
 #: ../fdroidserver/install.py
 #, python-format
@@ -994,7 +994,7 @@ msgstr ""
 
 #: ../fdroidserver/__main__.py
 msgid "Interact with the repo HTTP server"
-msgstr ""
+msgstr "リポジトリのHTTPサーバーと通信"
 
 #: ../fdroidserver/update.py
 msgid "Invalid APK"
@@ -1315,7 +1315,7 @@ msgstr ""
 
 #: /usr/lib/python3.11/optparse.py
 msgid "Options"
-msgstr ""
+msgstr "オプション"
 
 #: ../fdroidserver/verify.py
 msgid "Output JSON report to file named after APK."
@@ -1430,11 +1430,11 @@ msgstr ""
 
 #: ../fdroidserver/__main__.py
 msgid "Quickly start a new repository"
-msgstr ""
+msgstr "新しいリポジトリをすぐに開始"
 
 #: ../fdroidserver/__main__.py
 msgid "Read all the metadata files and exit"
-msgstr ""
+msgstr "メタデータの全てのファイルを読み込んで終了"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -1471,7 +1471,7 @@ msgstr ""
 
 #: ../fdroidserver/update.py
 msgid "Rename APK files that do not match package.name_123.apk"
-msgstr ""
+msgstr "package.name_123.apkに合致しないAPKファイルの名前を変更"
 
 #: ../fdroidserver/checkupdates.py
 msgid "RepoTrunk update mode only makes sense in git-svn repositories"
@@ -1496,7 +1496,7 @@ msgstr ""
 
 #: ../fdroidserver/__main__.py
 msgid "Rewrite all the metadata files"
-msgstr ""
+msgstr "メタデータの全てのファイルを書き換える"
 
 #: ../fdroidserver/rewritemeta.py
 #, python-brace-format
@@ -1536,7 +1536,7 @@ msgstr ""
 
 #: ../fdroidserver/__main__.py
 msgid "Scan the source code of a package"
-msgstr ""
+msgstr "パッケージのソースコードを読み込む"
 
 #: ../fdroidserver/scanner.py
 #, python-brace-format
@@ -1595,11 +1595,11 @@ msgstr ""
 
 #: ../fdroidserver/__main__.py
 msgid "Sign and place packages in the repo"
-msgstr ""
+msgstr "パッケージに署名してリポジトリに設置"
 
 #: ../fdroidserver/__main__.py
 msgid "Sign indexes created using update --nosign"
-msgstr ""
+msgstr "「update --nosign」で作成したインデックスに署名"
 
 #: ../fdroidserver/build.py
 msgid "Skip scanning the source code for binaries and other problems"
@@ -1779,7 +1779,7 @@ msgstr ""
 
 #: ../fdroidserver/__main__.py
 msgid "Unknown exception found!"
-msgstr ""
+msgstr "不明な例外が発生しました！"
 
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vname
 #: ../fdroidserver/lint.py
@@ -1856,11 +1856,11 @@ msgstr ""
 
 #: ../fdroidserver/__main__.py
 msgid "Update repo information for new packages"
-msgstr ""
+msgstr "新しいパッケージに関するリポジトリの情報を更新"
 
 #: ../fdroidserver/__main__.py
 msgid "Update the binary transparency log for a URL"
-msgstr ""
+msgstr "URLに関するバイナリーの透明性のログを更新"
 
 #: ../fdroidserver/checkupdates.py
 #, python-brace-format
@@ -1909,14 +1909,14 @@ msgstr ""
 #: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
 #: /usr/lib/python3.11/optparse.py
 msgid "Usage"
-msgstr ""
+msgstr "使い方"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 #: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
 #: /usr/lib/python3.11/optparse.py
 #, python-format
 msgid "Usage: %s\n"
-msgstr ""
+msgstr "使い方: %s\n"
 
 #: ../fdroidserver/lint.py
 msgid "Use /HEAD instead of /master or /main to point at a file in the default branch"
@@ -1991,7 +1991,7 @@ msgstr ""
 
 #: ../fdroidserver/__main__.py
 msgid "Valid commands are:"
-msgstr ""
+msgstr "正しいコマンド："
 
 #: ../fdroidserver/verify.py
 msgid "Verify against locally cached copy rather than redownloading."
@@ -1999,7 +1999,7 @@ msgstr ""
 
 #: ../fdroidserver/__main__.py
 msgid "Verify the integrity of downloaded packages"
-msgstr ""
+msgstr "ダウンロードしたパッケージの一貫性を検証"
 
 #: ../fdroidserver/index.py
 msgid "Verifying index signature:"
@@ -2012,7 +2012,7 @@ msgstr ""
 
 #: ../fdroidserver/__main__.py
 msgid "Warn about possible metadata errors"
-msgstr ""
+msgstr "潜在的なメタデータのエラーに関して警告"
 
 #: ../fdroidserver/update.py
 msgid "When configured for signed indexes, create only unsigned indexes at this stage"
@@ -2053,14 +2053,14 @@ msgstr ""
 #: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "ambiguous option: %(option)s could match %(matches)s"
-msgstr ""
+msgstr "オプションが曖昧です。%(option)sは%(matches)sに一致しませんでした"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 #: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
 #: /usr/lib/python3.11/optparse.py
 #, python-format
 msgid "ambiguous option: %s (%s?)"
-msgstr ""
+msgstr "オプションが曖昧です：%s（%s？）"
 
 #: ../fdroidserver/common.py
 msgid "apksigner not found! Cannot sign or verify modern APKs"
@@ -2385,7 +2385,7 @@ msgstr ""
 #: /usr/lib/python3.11/optparse.py
 #, python-format
 msgid "no such option: %s"
-msgstr ""
+msgstr "そうしたオプションはありません：%s"
 
 #: ../fdroidserver/__main__.py
 msgid "no version info found!"
@@ -2437,21 +2437,21 @@ msgstr ""
 #: /usr/lib/python3.11/getopt.py
 #, python-format
 msgid "option -%s not recognized"
-msgstr ""
+msgstr "オプション -%s は認識されません"
 
 #: /usr/lib/python3.5/getopt.py /usr/lib/python3.6/getopt.py
 #: /usr/lib/python3.7/getopt.py /usr/lib/python3.9/getopt.py
 #: /usr/lib/python3.11/getopt.py
 #, python-format
 msgid "option -%s requires argument"
-msgstr ""
+msgstr "オプション -%s は引数が必要です"
 
 #: /usr/lib/python3.5/getopt.py /usr/lib/python3.6/getopt.py
 #: /usr/lib/python3.7/getopt.py /usr/lib/python3.9/getopt.py
 #: /usr/lib/python3.11/getopt.py
 #, python-format
 msgid "option --%s must not have an argument"
-msgstr ""
+msgstr "オプション --%s に引数は指定できません"
 
 #: /usr/lib/python3.5/getopt.py /usr/lib/python3.6/getopt.py
 #: /usr/lib/python3.7/getopt.py /usr/lib/python3.9/getopt.py
@@ -2465,19 +2465,19 @@ msgstr ""
 #: /usr/lib/python3.11/getopt.py
 #, python-format
 msgid "option --%s not recognized"
-msgstr ""
+msgstr "オプション --%s は認識されません"
 
 #: /usr/lib/python3.5/getopt.py /usr/lib/python3.6/getopt.py
 #: /usr/lib/python3.7/getopt.py /usr/lib/python3.9/getopt.py
 #: /usr/lib/python3.11/getopt.py
 #, python-format
 msgid "option --%s requires argument"
-msgstr ""
+msgstr "オプション --%s には引数が必要です"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 msgid "optional arguments"
-msgstr ""
+msgstr "オプションの引数"
 
 #: /usr/lib/python3.11/argparse.py
 msgid "options"
@@ -2542,20 +2542,18 @@ msgid "scanner cache is malformed! You can clear it with: '{clear}'"
 msgstr ""
 
 #: ../fdroidserver/deploy.py
-#, fuzzy
-#| msgid "local_copy_dir does not end with \"fdroid\", perhaps you meant: \"{path}\""
 msgid "serverwebroot: path does not end with \"fdroid\", perhaps you meant one of these:"
-msgstr "local_copy_dir は「froid」で終わっていません、もしかして: 「{path}」"
+msgstr "serverwebroot: パスが「fdroid」で終わっていません。もしかして："
 
 #: ../fdroidserver/scanner.py
 msgid "shared library"
-msgstr ""
+msgstr "共有ライブラリー"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 #: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
 #: /usr/lib/python3.11/optparse.py
 msgid "show program's version number and exit"
-msgstr ""
+msgstr "プログラムのバージョン番号を表示して終了"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.5/optparse.py
 #: /usr/lib/python3.6/argparse.py /usr/lib/python3.6/optparse.py
@@ -2563,11 +2561,11 @@ msgstr ""
 #: /usr/lib/python3.9/argparse.py /usr/lib/python3.9/optparse.py
 #: /usr/lib/python3.11/argparse.py /usr/lib/python3.11/optparse.py
 msgid "show this help message and exit"
-msgstr ""
+msgstr "このヘルプメッセージを表示して終了"
 
 #: ../fdroidserver/signatures.py
 msgid "signed APK, either a file-path or HTTPS URL."
-msgstr ""
+msgstr "サイン済みのAPK。ファイルのパスかHTTPSのURL。"
 
 #: ../fdroidserver/common.py
 msgid "skip deploying full build logs: log content is empty"
@@ -2588,7 +2586,7 @@ msgstr ""
 
 #: ../fdroidserver/scanner.py
 msgid "static library"
-msgstr ""
+msgstr "静的ライブラリー"
 
 #: ../fdroidserver/build.py
 #, python-brace-format
@@ -2600,14 +2598,14 @@ msgstr ""
 #: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "the following arguments are required: %s"
-msgstr ""
+msgstr "次の引数が必要です：%s"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "unexpected option string: %s"
-msgstr ""
+msgstr "予期しないオプションの文字列です：%s"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
@@ -2621,18 +2619,18 @@ msgstr ""
 #: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "unrecognized arguments: %s"
-msgstr ""
+msgstr "認識されない引数です：%s"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "unsafe permissions on '{config_file}' (should be 0600)!"
-msgstr ""
+msgstr "「{config_file}」のパーミッションが安全ではありません（0600に設定すべきです）！"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py ../fdroid
 #: /usr/lib/python3.7/argparse.py ../fdroidserver/__main__.py
 #: /usr/lib/python3.9/argparse.py /usr/lib/python3.11/argparse.py
 msgid "usage: "
-msgstr ""
+msgstr "使い方: "
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
