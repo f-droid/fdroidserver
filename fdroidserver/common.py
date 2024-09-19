@@ -3854,7 +3854,7 @@ def compare_apks(apk1, apk2, tmp_dir, log_dir=None):
     if len(lines) != 1 or 'META-INF' not in lines[0]:
         if set_command_in_config('meld'):
             p = FDroidPopen([config['meld'], apk1dir, apk2dir], output=False)
-        return "Unexpected diff output:\n" + p.output
+        return "Unexpected diff output:\n" + p.output.replace("\r", "^M")
 
     # since everything verifies, delete the comparison to keep cruft down
     shutil.rmtree(apk1dir)
