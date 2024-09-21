@@ -33,6 +33,11 @@ import fdroidserver.scanner
 from testcommon import TmpCwd, mkdtemp, mock_open_to_str, parse_args_for_test
 
 
+# Always use built-in default rules so changes in downloaded rules don't break tests.
+@mock.patch(
+    'fdroidserver.scanner.SUSSDataController.load',
+    fdroidserver.scanner.SUSSDataController.load_from_defaults,
+)
 class ScannerTest(unittest.TestCase):
     def setUp(self):
         logging.basicConfig(level=logging.INFO)
@@ -40,6 +45,7 @@ class ScannerTest(unittest.TestCase):
         os.chdir(self.basedir)
         self._td = mkdtemp()
         self.testdir = self._td.name
+        fdroidserver.scanner.ScannerTool.refresh_allowed = False
 
     def tearDown(self):
         os.chdir(self.basedir)
@@ -712,6 +718,7 @@ class Test_ScannerTool(unittest.TestCase):
         os.chdir(self.basedir)
         self._td = mkdtemp()
         self.testdir = self._td.name
+        fdroidserver.scanner.ScannerTool.refresh_allowed = True
 
     def tearDown(self):
         fdroidserver.common.options = None

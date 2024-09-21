@@ -354,6 +354,8 @@ class SUSSDataController(SignatureDataController):
 
 
 class ScannerTool:
+    refresh_allowed = True
+
     def __init__(self):
         # we could add support for loading additional signature source
         # definitions from config.yml here
@@ -362,7 +364,9 @@ class ScannerTool:
 
         options = common.get_options()
         options_refresh_scanner = (
-            hasattr(options, "refresh_scanner") and options.refresh_scanner
+            hasattr(options, "refresh_scanner")
+            and options.refresh_scanner
+            and ScannerTool.refresh_allowed
         )
         if options_refresh_scanner or common.get_config().get('refresh_scanner'):
             self.refresh()
