@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: fdroidserver 1.0.0-95-gd7af22b\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2024-09-10 10:50+0200\n"
-"PO-Revision-Date: 2024-09-22 11:02+0000\n"
+"PO-Revision-Date: 2024-09-22 23:34+0000\n"
 "Last-Translator: Fjuro <fjuro@alius.cz>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/f-droid/fdroidserver/cs/>\n"
 "Language: cs\n"
@@ -480,7 +480,7 @@ msgstr "Nepodařilo se otevřít APK {path} pro analýzu: "
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Could not parse size \"{size}\", wrong type \"{type}\""
-msgstr "Nepodařilo se zpracovat velikost „{size}“, nesprávný typ „{type}“"
+msgstr "Nepodařilo se parsovat velikost „{size}“, nesprávný typ „{type}“"
 
 #: ../fdroidserver/import_subcommand.py
 msgid "Couldn't find Application ID"
@@ -654,7 +654,7 @@ msgstr "Duplicitní záznam „%s“ v konfiguraci zrcadel!"
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "Duplicate link in '{field}': {url}"
-msgstr "Duplicitní odkaz v '{field}': {url}"
+msgstr "Duplicitní odkaz v „{field}“: {url}"
 
 #: ../fdroidserver/common.py
 #, python-format
@@ -680,12 +680,12 @@ msgstr "CHYBA: nepodporovaný typ CI, opravy vítány!"
 #: ../fdroidserver/nightly.py
 #, python-format
 msgid "ERROR: unsupported git host \"%s\", patches welcome!"
-msgstr "CHYBA: nepodporovaný git host \"%s\", opravy vítány!"
+msgstr "CHYBA: nepodporovaný git host „%s“, opravy vítány!"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "ERROR: {key} in {path} is not \"archive\" or \"repo\"!"
-msgstr "CHYBA: {key} v {path} není \"archive\" nebo \"repo\"!"
+msgstr "CHYBA: {key} v {path} není „archive“ nebo „repo“!"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
@@ -695,7 +695,7 @@ msgstr "CHYBA: {key}:{subkey} v {path} není v povolených klíčích: {allowed_
 #: ../fdroidserver/__main__.py
 #, python-brace-format
 msgid "Encoding is set to '{enc}' fdroid might run into encoding issues. Please set it to 'UTF-8' for best results."
-msgstr "Kódování je nastaveno na ‚{enc}‘ fdroid může mít problémy s kódováním. Pro dosažení nejlepších výsledků jej prosím nastavte na ‚UTF-8‘."
+msgstr "Kódování je nastaveno na „{enc}“, fdroid může mít problémy s kódováním. Pro dosažení nejlepších výsledků jej prosím nastavte na „UTF-8“."
 
 #: ../fdroidserver/init.py
 #, python-format
@@ -713,7 +713,7 @@ msgstr "Proměnná prostředí {var} z {configname} není nastavena!"
 
 #: ../fdroidserver/deploy.py
 msgid "Error deploying 'github_releases', {} not present. (You might need to run `fdroid update` first.)"
-msgstr "Chyba při nasazení 'github_releases', {} není k dispozici. (Možná budete muset nejprve spustit `fdroid update`.)"
+msgstr "Chyba při nasazení „github_releases“, {} není k dispozici. (Možná budete muset nejprve spustit `fdroid update`.)"
 
 #: ../fdroidserver/import_subcommand.py
 msgid "Error while getting repo address"
@@ -739,7 +739,7 @@ msgstr "Chyba při kopírování {path}: {error}"
 #: ../fdroidserver/signatures.py
 #, python-brace-format
 msgid "Failed fetching signatures for '{apkfilename}': {error}"
-msgstr "Chyba při načítání podpisů pro ‚{apkfilename}‘: {error}"
+msgstr "Chyba při načítání podpisů pro „{apkfilename}“: {error}"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -754,7 +754,7 @@ msgstr "Chyba při změně velikosti {path}: {error}"
 #: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "Failed to create S3 bucket: {url}"
-msgstr "Nepodařilo se vytvořit bucket S3: {url}"
+msgstr "Chyba při vytváření bucketu S3: {url}"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -773,7 +773,7 @@ msgstr "Nepodařilo se získat otisk podpisového klíče APK"
 #: ../fdroidserver/install.py
 #, python-brace-format
 msgid "Failed to install '{apkfilename}' on {dev}: {error}"
-msgstr "Nepodařilo se nainstalovat ‚{apkfilename}‘ na {dev}: {error}"
+msgstr "Nepodařilo se nainstalovat „{apkfilename}“ na {dev}: {error}"
 
 #: ../fdroidserver/common.py
 msgid "Failed to sign application"
@@ -787,7 +787,7 @@ msgstr "Načteno buildserverid z VM: {buildserverid}"
 #: ../fdroidserver/signatures.py
 #, python-brace-format
 msgid "Fetched signatures for '{apkfilename}' -> '{sigdir}'"
-msgstr "Načteny podpisy pro ‚{apkfilename}‘ -> ‚{sigdir}‘"
+msgstr "Načteny podpisy pro „{apkfilename}“ -> „{sigdir}“"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -843,7 +843,7 @@ msgstr "U některých aplikací nalezeny neplatné versionCodes"
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Found multiple JAR Signature Block Files in {path}"
-msgstr "V {path} nalezeno několik podpisových bloků JAR"
+msgstr "V {path} nalezeno několik souborů podpisových bloků JAR"
 
 #: ../fdroidserver/common.py
 msgid "Found multiple Signer Certificates!"
@@ -890,7 +890,7 @@ msgstr "Vygenerována kostra metadat pro {appid}"
 #: ../fdroidserver/common.py
 #, python-format
 msgid "Git checkout of '%s' failed"
-msgstr "Git checkout '%s' se nezdařil"
+msgstr "Git checkout „%s“ se nezdařil"
 
 #: ../fdroidserver/common.py
 msgid "Git clean failed"
@@ -941,7 +941,7 @@ msgstr "Pokud toto nahrání selže, zkuste manuálně nahrát na {url}"
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Ignoring '{field}' in '{metapath}' metadata because it is deprecated."
-msgstr "Ignorování pole ‚{field}‘ v metadatech ‚{metapath}‘, protože je zastaralé."
+msgstr "Ignorování pole „{field}“ v metadatech „{metapath}“, protože je zastaralé."
 
 #: ../fdroidserver/update.py
 #, python-format
@@ -964,7 +964,7 @@ msgstr "Ignorování zastaralých dat mezipaměti {apkfilename}"
 
 #: ../fdroidserver/update.py
 msgid "Include APKs that are signed with disabled algorithms like MD5"
-msgstr "Zahrnout soubory APK, které jsou podepsané zakázanými algoritmy jako MD5"
+msgstr "Zahrnout soubory APK, které jsou podepsané vypnutými algoritmy jako MD5"
 
 #: ../fdroidserver/mirror.py
 msgid "Include the PGP signature .asc files in the mirror"
@@ -1008,7 +1008,7 @@ msgstr "Instalace %s..."
 #: ../fdroidserver/install.py
 #, python-brace-format
 msgid "Installing '{apkfilename}' on {dev}..."
-msgstr "Instalace ‚{apkfilename}‘ na {dev}..."
+msgstr "Instalace „{apkfilename}“ na {dev}..."
 
 #: ../fdroidserver/__main__.py
 msgid "Interact with the repo HTTP server"
@@ -1046,7 +1046,7 @@ msgstr "Neplatné ID aplikace {appid}"
 #: ../fdroidserver/metadata.py
 #, python-format
 msgid "Invalid boolean '%s'"
-msgstr "Neplatná logická hodnota ‚%s‘"
+msgstr "Neplatná logická hodnota „%s“"
 
 #: ../fdroidserver/lint.py
 msgid "Invalid bulleted list"
@@ -1070,17 +1070,17 @@ msgstr "Neplatné přesměrování na jiný než HTTPS: {before} -> {after} "
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Invalid scrlib metadata: '{file}' does not exist"
-msgstr "Neplatná metadata scrlib: ‚{file}‘ neexistuje"
+msgstr "Neplatná metadata scrlib: „{file}“ neexistuje"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Invalid srclib metadata: could not parse '{file}'"
-msgstr "Neplatná srclib metadata: nelze parsovat ‚{file}‘"
+msgstr "Neplatná srclib metadata: nelze parsovat „{file}“"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Invalid srclib metadata: unknown key '{key}' in '{file}'"
-msgstr "Neplatná srclib metadata: neznámý klíč ‚{key}‘ v ‚{file}‘"
+msgstr "Neplatná srclib metadata: neznámý klíč „{key}“ v „{file}“"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -1129,15 +1129,15 @@ msgstr "V AllowedAPKSigningKeys je použit známý ladicí klíč: "
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "Last used commit '{commit}' looks like a tag, but UpdateCheckMode is '{ucm}'"
-msgstr "Poslední použitá revize ‚{commit}‘ vypadá jako značka, ale UpdateCheckMode je ‚{ucm}‘"
+msgstr "Poslední použitá revize „{commit}“ vypadá jako značka, ale UpdateCheckMode je „{ucm}“"
 
 #: ../fdroidserver/lint.py
 msgid "Liberapay donation methods belong in the Liberapay: field"
-msgstr "Darovací metody Liberapay patří do pole Liberapay: pole"
+msgstr "Darovací metody Liberapay patří do pole „Liberapay:“"
 
 #: ../fdroidserver/rewritemeta.py
 msgid "List files that would be reformatted (dry run)"
-msgstr "Seznam souborů, které budou přeformátovány (zkušební provoz)"
+msgstr "Seznam souborů, které budou přeformátovány (zkušební spuštění)"
 
 #: ../fdroidserver/lint.py
 msgid "Locale included in f-droid.org URL"
@@ -1170,11 +1170,11 @@ msgstr "Chybějící výstupní adresář"
 
 #: ../fdroidserver/metadata.py
 msgid "Moving Anti-Features declarations to localized files:"
-msgstr "Přesun deklarací Anti-Features do lokalizovaných souborů:"
+msgstr "Přesun deklarací anti-funkcí do lokalizovaných souborů:"
 
 #: ../fdroidserver/index.py
 msgid "Neither \"repo_pubkey\" nor \"keystorepass\" set in config.yml"
-msgstr "V souboru config.yml není nastaven \"repo_pubkey\" ani \"keystorepass\""
+msgstr "V souboru config.yml není nastaven „repo_pubkey“ ani „keystorepass“"
 
 #: ../fdroidserver/verify.py
 #, python-format
@@ -1191,7 +1191,7 @@ msgstr "Nebyla nalezena žádná připojená zařízení"
 
 #: ../fdroidserver/index.py
 msgid "No fingerprint in URL."
-msgstr "V adrese URL není otisk prstu."
+msgstr "V adrese URL není otisk."
 
 #: ../fdroidserver/common.py
 msgid "No git submodules available"
@@ -1228,7 +1228,7 @@ msgstr "Není nastavena žádná možnost! Upravte svůj config.yml a nastavte a
 
 #: ../fdroidserver/common.py
 msgid "No packages specified"
-msgstr "Nebyly zadány žádné balíčky"
+msgstr "Nebyly upřesněny žádné balíčky"
 
 #: ../fdroidserver/install.py
 #, python-format
@@ -1269,7 +1269,7 @@ msgstr "Nenalezeny žádné informace o verzi."
 
 #: ../fdroidserver/common.py
 msgid "Not a valid size definition: \"{}\""
-msgstr "Neplatná definice velikosti: \"{}\""
+msgstr "Neplatná definice velikosti: „{}“"
 
 #: ../fdroidserver/signindex.py
 msgid "Nothing to do"
@@ -1292,7 +1292,7 @@ msgstr "Soubor OBB má novější versionCode({integer}) než jakýkoli APK:"
 
 #: ../fdroidserver/update.py
 msgid "OBB filename must start with \"main.\" or \"patch.\":"
-msgstr "Název souboru OBB musí začínat s \"main.\" nebo \"patch.\":"
+msgstr "Název souboru OBB musí začínat s „main.“ nebo „patch.“:"
 
 #: ../fdroidserver/update.py
 msgid "OBB's packagename does not match a supported APK:"
@@ -1300,19 +1300,19 @@ msgstr "Packagename souboru OBB neodpovídá podporovanému souboru APK:"
 
 #: ../fdroidserver/deploy.py
 msgid "Offline machine, skipping git mirror generation until `fdroid deploy`"
-msgstr "Offline počítač, přeskočení generování mirroru git až do `fdroid deploy`"
+msgstr "Offline počítač, přeskakuji generování mirroru gitu až do `fdroid deploy`"
 
 #: ../fdroidserver/deploy.py
 msgid "One of the 'github_releases' config items is missing the 'projectUrl' value. skipping ..."
-msgstr "V jedné z položek konfigurace 'github_releases' chybí hodnota 'projectUrl'. přeskakuji ..."
+msgstr "Jedné z položek konfigurace „github_releases“ chybí hodnota „projectUrl“. Přeskakuji ..."
 
 #: ../fdroidserver/deploy.py
 msgid "One of the 'github_releases' config items is missing the 'packageNames' value. skipping ..."
-msgstr "V jedné z položek konfigurace 'github_releases' chybí hodnota 'packageNames'. přeskakuji ..."
+msgstr "Jedné z položek konfigurace „github_releases“ chybí hodnota „packageNames“. Přeskakuji ..."
 
 #: ../fdroidserver/deploy.py
 msgid "One of the 'github_releases' config items is missing the 'token' value. skipping ..."
-msgstr "V jedné z položek konfigurace 'github_releases' chybí hodnota 'token'. přeskakuji ..."
+msgstr "Jedné z položek konfigurace „github_releases“ chybí hodnota „token“. Přeskakuji ..."
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -1329,7 +1329,7 @@ msgstr "Zpracovat pouze aplikace s automatickými aktualizacemi"
 
 #: ../fdroidserver/lint.py
 msgid "OpenCollective donation methods belong in the OpenCollective: field"
-msgstr "Darovací metody OpenCollective patří do pole OpenCollective: pole"
+msgstr "Darovací metody OpenCollective patří do pole „OpenCollective:“"
 
 #: /usr/lib/python3.11/optparse.py
 msgid "Options"
@@ -1366,7 +1366,7 @@ msgstr "Balíček „{appid}“ již existuje"
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Parsing manifest at '{path}'"
-msgstr "Parsování manifestu v ‚{path}‘"
+msgstr "Parsování manifestu v „{path}“"
 
 #: ../fdroidserver/common.py
 msgid "Password required with username"
@@ -1400,21 +1400,21 @@ msgstr "Problém se souborem ZIP: %s, chyba %s"
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Problem with xml at '{path}'"
-msgstr "Problém s xml v '{path}'"
+msgstr "Problém s xml v „{path}“"
 
 #: ../fdroidserver/checkupdates.py
 msgid "Process auto-updates"
-msgstr "Zpracovat auto-aktualizace"
+msgstr "Zpracovávat auto-aktualizace"
 
 #: ../fdroidserver/publish.py ../fdroidserver/update.py
 #, python-brace-format
 msgid "Processing {apkfilename}"
-msgstr "Zpracování {apkfilename}"
+msgstr "Zpracovávání {apkfilename}"
 
 #: ../fdroidserver/checkupdates.py ../fdroidserver/scanner.py
 #, python-brace-format
 msgid "Processing {appid}"
-msgstr "Zpracování {appid}"
+msgstr "Zpracovávání {appid}"
 
 #: ../fdroidserver/update.py
 msgid "Produce human-readable XML/JSON for index files"
@@ -1457,17 +1457,17 @@ msgstr "Přečíst všechny soubory metadat a ukončit program"
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Reading '{config_file}'"
-msgstr "Čtení ‚{config_file}‘"
+msgstr "Čtení „{config_file}“"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Reading packageName/versionCode/versionName failed, APK invalid: '{apkfilename}'"
-msgstr "Čtení packageName/versionCode/versionName se nezdařilo, APK nepatné: ‚{apkfilename}‘"
+msgstr "Čtení packageName/versionCode/versionName se nezdařilo, APK neplatné: „{apkfilename}“"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Reading packageName/versionCode/versionName failed,APK invalid: '{apkfilename}'"
-msgstr "Čtení packageName/versionCode/versionName se nezdařilo, APK nepatné: ‚{apkfilename}‘"
+msgstr "Čtení packageName/versionCode/versionName se nezdařilo, APK neplatné: „{apkfilename}“"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -1519,7 +1519,7 @@ msgstr "Přepsat všechny soubory metadat"
 #: ../fdroidserver/rewritemeta.py
 #, python-brace-format
 msgid "Rewriting '{appid}'"
-msgstr "Přepisování ‚{appid}‘"
+msgstr "Přepisování „{appid}“"
 
 #: ../fdroidserver/checkupdates.py
 msgid "Run on git repo that has uncommitted changes"
@@ -1611,7 +1611,7 @@ msgstr "Nastavení limitu otevřených souborů se nezdařilo: "
 #: ../fdroidserver/build.py
 #, python-brace-format
 msgid "Setting {0} sec timeout for this build"
-msgstr "Nastavení časového limitu {0} sek pro toto sestavení"
+msgstr "Nastavení časového limitu {0} sekund pro toto sestavení"
 
 #: ../fdroidserver/__main__.py
 msgid "Sign and place packages in the repo"
@@ -1628,7 +1628,7 @@ msgstr "Přeskočení kontroly zdrojového kódu binárních souborů a dalšíc
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Skipping '{apkfilename}' with invalid signature!"
-msgstr "Přeskakování ‚{apkfilename}‘ s neplatným podpisem!"
+msgstr "Přeskakování „{apkfilename}“ s neplatným podpisem!"
 
 #: ../fdroidserver/deploy.py ../fdroidserver/index.py
 #, python-format
@@ -1674,7 +1674,7 @@ msgstr "Odstraňování tajemného podpisu z {apkfilename}"
 #: ../fdroidserver/lint.py
 #, python-format
 msgid "Summary '%s' is just the app's name"
-msgstr "Shrnutí ‚%s‘ je pouze název aplikace"
+msgstr "Shrnutí „%s“ je pouze název aplikace"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
@@ -1718,7 +1718,7 @@ msgstr "Soubor, který má být zahrnut do repozitáře (cesta nebo glob)"
 
 #: ../fdroidserver/index.py
 msgid "The repository's fingerprint does not match."
-msgstr "Otisk prstu repozitáře se neshoduje."
+msgstr "Otisk repozitáře se neshoduje."
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
@@ -1757,10 +1757,10 @@ msgid ""
 "For more info: https://f-droid.org/docs/Setup_an_F-Droid_App_Repo\n"
 "and https://f-droid.org/docs/Signing_Process"
 msgstr ""
-"Chcete-li dokončit nastavení, přidejte soubory APK na adresu \"%s\".\n"
+"Chcete-li dokončit nastavení, přidejte soubory APK na adresu „%s“.\n"
 "poté spusťte příkaz „fdroid update -c; fdroid update“.  Možná budete chtít také upravit\n"
-"„config.yml“, abyste nastavili adresu URL, název repozitáře a další údaje.  Měli byste také nastavit\n"
-"podpisový klíč (dočasný klíč již mohl být vygenerován automaticky).\n"
+"„config.yml“, abyste nastavili adresu URL, název repozitáře a další údaje.  Měli byste také\n"
+"nastavit podpisový klíč (dočasný klíč již mohl být vygenerován automaticky).\n"
 "\n"
 "Další informace: https://f-droid.org/docs/Setup_an_F-Droid_App_Repo\n"
 "a https://f-droid.org/docs/Signing_Process"
@@ -1812,7 +1812,7 @@ msgstr "Došlo k neznámé chybě!"
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "Unknown file '{filename}' in build '{versionName}'"
-msgstr "Neznámý soubor ‚{filename}‘ v sestavení ‚{versionName}‘"
+msgstr "Neznámý soubor „{filename}“ v sestavení „{versionName}“"
 
 #: ../fdroidserver/metadata.py
 #, python-format
@@ -1839,12 +1839,12 @@ msgstr "Zbytečná mezera na konci"
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Unrecognised app field '{fieldname}' in '{path}'"
-msgstr "Nerozpoznané pole aplikace ‚{fieldname}‘ v ‚{path}‘"
+msgstr "Nerozpoznané pole aplikace „{fieldname}“ v „{path}“"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Unrecognised build flag '{build_flag}' in '{path}'"
-msgstr "Nerozpoznaný příznak sestavení ‚{build_flag}‘ v ‚{path}‘"
+msgstr "Nerozpoznaný příznak sestavení „{build_flag}“ v „{path}“"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -1930,7 +1930,7 @@ msgstr "Nahrávání {apkfilename} na androidobservatory.org"
 #: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "Uploading {apkfilename} to virustotal"
-msgstr "Nahrávání {apkfilename} na virustotal"
+msgstr "Nahrávání {apkfilename} na VirusTotal"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 #: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
@@ -2055,7 +2055,7 @@ msgstr "Pokud podpis nebo ověření selže, ukončit proces s chybovým kódem.
 
 #: ../fdroidserver/init.py
 msgid "X.509 'Distinguished Name' used when generating keys"
-msgstr "X.509 'Distinguished Name' používané při generování klíčů"
+msgstr "X.509 „Distinguished Name“ používané při generování klíčů"
 
 #: ../fdroidserver/common.py
 msgid "You can use ANDROID_HOME to set the path to your SDK, i.e.:"
@@ -2117,7 +2117,7 @@ msgstr "archive_url musí končit na /archive"
 #: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "argument \"-\" with mode %r"
-msgstr "argument \"-\" s režimem %r"
+msgstr "argument „-“ s režimem %r"
 
 #: /usr/lib/python3.11/argparse.py
 #, python-format
@@ -2130,12 +2130,12 @@ msgstr "pokus o holé připojení SSH k testování klíče pro nasazení:"
 
 #: ../fdroidserver/common.py
 msgid "can not parse scrlib spec (not a string): '{}'"
-msgstr "nelze parsovat specifikaci scrlib (není to řetězec): ‚{}‘"
+msgstr "nelze zpracovat specifikaci scrlib (není to řetězec): „{}“"
 
 #: /usr/lib/python3.9/argparse.py /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "can't open '%(filename)s': %(error)s"
-msgstr "nelze otevřít '%(filename)s': %(error)s"
+msgstr "nelze otevřít „%(filename)s“: %(error)s"
 
 #: ../fdroidserver/scanner.py
 msgid "can't open non-https url: '{};"
@@ -2201,19 +2201,19 @@ msgstr "konfliktní subparser: %s"
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "could not parse '{path}'"
-msgstr "nepodařilo se parsovat '{path}'"
+msgstr "nepodařilo se parsovat „{path}“"
 
 #: ../fdroidserver/common.py
 msgid "could not parse srclib spec (no name specified): '{}'"
-msgstr "nepodařilo se parsovat srclib spec (není určen název): '{}'"
+msgstr "nepodařilo se parsovat srclib spec (není určen název): „{}“"
 
 #: ../fdroidserver/common.py
 msgid "could not parse srclib spec (no ref specified): '{}'"
-msgstr "nepodařilo se parsovat srclib spec (není určen ref): '{}'"
+msgstr "nepodařilo se parsovat srclib spec (není určen ref): „{}“"
 
 #: ../fdroidserver/common.py
 msgid "could not parse srclib spec (too many '@' signs): '{}'"
-msgstr "nepodařilo se parsovat srclib spec (příliš mnoho značek '@'): '{}'"
+msgstr "nepodařilo se parsovat srclib spec (příliš mnoho značek „@“): „{}“"
 
 #: ../fdroidserver/nightly.py
 #, python-brace-format
@@ -2248,11 +2248,11 @@ msgstr "dest= je vyžadován pro možnosti jako %r"
 
 #: ../fdroidserver/scanner.py
 msgid "downloading '{}'"
-msgstr "stahování ‚{}‘"
+msgstr "stahování „{}“"
 
 #: ../fdroidserver/scanner.py
 msgid "downloading scanner signatures from '{}' failed"
-msgstr "stahování podpisů skeneru z ‚{}‘ se nezdařilo"
+msgstr "stahování podpisů skeneru z „{}“ se nezdařilo"
 
 #: ../fdroidserver/scanner.py
 msgid "executable binary, possibly code"
@@ -2300,7 +2300,7 @@ msgstr "floating-point"
 
 #: ../fdroidserver/metadata.py
 msgid "force metadata errors (default) to be warnings, or to be ignored."
-msgstr "vynutit, aby chyby metadat (výchozí) byly varovány nebo vyly ignorovány."
+msgstr "vynutit, aby chyby metadat (výchozí) byly varování nebo byly ignorovány."
 
 #: ../fdroidserver/common.py
 msgid "git svn clone failed"
@@ -2371,7 +2371,7 @@ msgstr "poslední recept sestavení je novější: starý vercode={old}, nový v
 #: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "local_copy_dir does not end with \"fdroid\", perhaps you meant: \"{path}\""
-msgstr "local_copy_dir nekončí s \"fdroid\", možná jste měli na mysli: \"{path}\""
+msgstr "local_copy_dir nekončí s „fdroid“, možná jste měli na mysli: „{path}“"
 
 #: ../fdroidserver/deploy.py
 msgid "local_copy_dir must be an absolute path!"
@@ -2384,7 +2384,7 @@ msgstr "local_copy_dir musí být adresář, ne soubor!"
 #: ../fdroidserver/index.py
 #, python-format
 msgid "mirror '%s' does not end with 'fdroid'!"
-msgstr "mirror '%s' nekončí s 'fdroid'!"
+msgstr "mirror „%s“ nekončí s „fdroid“!"
 
 #: ../fdroidserver/index.py
 #, python-brace-format
@@ -2405,7 +2405,7 @@ msgstr "příští aktualizace mezipaměti {name} proběhne za {time}"
 #: ../fdroidserver/mirror.py
 #, python-brace-format
 msgid "no \"icon\" in {appid}"
-msgstr "žádná \"icon\" v {appid}"
+msgstr "žádná „icon“ v {appid}"
 
 #: ../fdroidserver/signatures.py
 msgid "no APK supplied"
@@ -2537,12 +2537,12 @@ msgstr "chybějící podpis v referenčním binárním souboru"
 #: ../fdroidserver/signatures.py
 #, python-brace-format
 msgid "refuse downloading via insecure HTTP connection (use HTTPS or specify --no-https-check): {apkfilename}"
-msgstr "odmítnout stahování přes nezabezpečené spojení HTTP (použít HTTPS nebo upřesnit --no-https-check): {apkfilename}"
+msgstr "odmítnout stahování přes nezabezpečené spojení HTTP (použijte HTTPS nebo upřesněte --no-https-check): {apkfilename}"
 
 #: ../fdroidserver/index.py
 #, python-format
 msgid "repo_icon \"repo/icons/%s\" does not exist, generating placeholder."
-msgstr "repo_icon \"repo/icons/%s\" neexistuje, generování placeholderu."
+msgstr "repo_icon „repo/icons/%s“ neexistuje, generování placeholderu."
 
 #: ../fdroidserver/common.py
 msgid "repo_url needs to end with /repo"
@@ -2570,7 +2570,7 @@ msgstr "s3cmd synchronizuje indexy z {path} do {url} a odstraní smazané"
 #: ../fdroidserver/scanner.py
 #, python-brace-format
 msgid "scanner cache is malformed! You can clear it with: '{clear}'"
-msgstr "mezipaměť skeneru je poškozena! Můžete ji vymazat pomocí: ‚{clear}‘"
+msgstr "mezipaměť skeneru je poškozena! Můžete ji vymazat pomocí: „{clear}“"
 
 #: ../fdroidserver/deploy.py
 msgid "serverwebroot: path does not end with \"fdroid\", perhaps you meant one of these:"
@@ -2724,7 +2724,7 @@ msgstr "{appid} chybí {name}"
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "{appid}: Unknown extlib {path} in build '{versionName}'"
-msgstr "{appid}: Neznámá extlib {path} v sestavení '{versionName}'"
+msgstr "{appid}: Neznámá extlib {path} v sestavení „{versionName}“"
 
 #: ../fdroidserver/scanner.py
 #, python-brace-format
@@ -2734,12 +2734,12 @@ msgstr "{appid}: žádná určená sestavení, běžím na současném stavu zdr
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "{appid}: {field} must be a '{type}', but it is a '{fieldtype}!'"
-msgstr "{appid}: {field} musí být '{type}', ale je '{fieldtype}!'"
+msgstr "{appid}: {field} musí být „{type}“, ale je „{fieldtype}!“"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "{appid}: {field} must be a '{type}', but it is a '{fieldtype}'!"
-msgstr "{appid}: {field} musí být '{type}', ale je '{fieldtype}'!"
+msgstr "{appid}: {field} musí být „{type}“, ale je „{fieldtype}“!"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
@@ -2759,7 +2759,7 @@ msgstr "{file} je prázdný nebo poškozený!"
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "{name} \"{section}/icons/{path}\" does not exist! Check \"config.yml\"."
-msgstr "{name} \"{section}/icons/{path}\" neexistuje! Zkontrolujte \"config.yml\"."
+msgstr "{name} „{section}/icons/{path}“ neexistuje! Zkontrolujte „config.yml“."
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -2779,7 +2779,7 @@ msgstr "{path} neexistuje!  Vytvořte ji spuštěním:"
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "{path} has bad file signature \"{pattern}\", possible Janus exploit!"
-msgstr "{path} má nesprávný podpis balíčku \"{pattern}\", možný exploit Janus!"
+msgstr "{path} má nesprávný podpis balíčku „{pattern}“, možný exploit Janus!"
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
@@ -2829,12 +2829,12 @@ msgstr "{path}: {error}"
 #: ../fdroidserver/mirror.py
 #, python-brace-format
 msgid "{url} does not end with \"fdroid\", check the URL path!"
-msgstr "{url} nekončí s \"fdroid\", zkontrolujte cestu URL!"
+msgstr "{url} nekončí s „fdroid“, zkontrolujte cestu URL!"
 
 #: ../fdroidserver/import_subcommand.py
 #, python-brace-format
 msgid "{url} does not start with \"http\"!"
-msgstr "{url} nezačíná s \"http\"!"
+msgstr "{url} nezačíná s „http“!"
 
 #: ../fdroidserver/build.py
 msgid "{} build failed"
