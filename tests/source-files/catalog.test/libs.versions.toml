@@ -1,0 +1,15 @@
+[versions]
+firebase = "1.1.1"
+gms = "1.2.1"
+
+[libraries]
+firebase-crash = { module = "com.google.firebase:firebase-crash", version.ref = "firebase" }
+firebase_core = { module = "com.google.firebase:firebase-core", version = "2.2.2" }
+"play.service.ads" = { module = "com.google.android.gms:play-services-ads", version.ref = "gms"}
+
+[plugins]
+google-services = { id = "com.google.gms.google-services", version.ref = "gms" }
+firebase-crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "firebase" }
+
+[bundles]
+firebase = ["firebase-crash", "firebase_core"]

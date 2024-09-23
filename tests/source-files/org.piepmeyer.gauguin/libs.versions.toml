@@ -1,0 +1,91 @@
+[versions]
+
+kotlin = "1.9.23"
+koin = "3.5.6"
+koin-annotations="1.3.1"
+kotest = "5.9.1"
+kotest-extensions = "1.3.0"
+kotlin-coroutines = "1.8.1"
+android-gradle-plugin = "8.6.0"
+androidUiTestingUtils = "2.3.3"
+roborazzi = "1.26.0"
+
+[libraries]
+
+kotlin-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "kotlin-coroutines" }
+kotlin-coroutines-debug = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-debug", version.ref = "kotlin-coroutines" }
+kotlin-serialization = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version = "1.6.3" }
+
+logging-kotlin = { group = "io.github.oshai", name = "kotlin-logging-jvm", version = "6.0.9" }
+logging-slf = { group = "org.slf4j", name = "slf4j-api", version = "2.0.13" }
+logging-logback-android = { group = "com.github.tony19", name = "logback-android", version = "3.0.0" }
+logging-logback-kotlin = { group = "ch.qos.logback", name = "logback-classic", version = "1.5.6" }
+
+android-material = { group = "com.google.android.material", name = "material", version = "1.12.0" }
+
+androidx-annotation = { group = "androidx.annotation", name = "annotation", version = "1.8.2" }
+androidx-ktx = { group = "androidx.core", name = "core-ktx", version = "1.13.1" }
+androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version = "2.1.4" }
+androidx-drawerlayout = { group = "androidx.drawerlayout", name = "drawerlayout", version = "1.2.0" }
+androidx-fragment = { group = "androidx.fragment", name = "fragment-ktx", version = "1.8.3" }
+androidx-gridlayout = { group = "androidx.gridlayout", name = "gridlayout", version = "1.0.0" }
+androidx-lifecycle-runtime = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version = "2.8.5" }
+androidx-lifecycle-viewmodel = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-ktx", version = "2.8.5" }
+androidx-preference = { group = "androidx.preference", name = "preference-ktx", version = "1.2.1" }
+androidx-recyclerview = { group = "androidx.recyclerview", name = "recyclerview", version = "1.3.2" }
+androidx-transition = { group = "androidx.transition", name = "transition", version = "1.5.1" }
+androidx-window = { group = "androidx.window", name = "window", version = "1.3.0" }
+androidx-window-core = { group = "androidx.window", name = "window-core", version = "1.3.0" }
+
+androidx-test-junit-ktx = { group = "androidx.test.ext", name = "junit-ktx", version = "1.2.1" }
+androidx-test-rules = { group = "androidx.test", name = "rules", version = "1.6.1" }
+androidx-test-runner = { group = "androidx.test", name = "runner", version = "1.6.2" }
+
+koin-core = { group = "io.insert-koin", name = "koin-core", version.ref = "koin" }
+koin-annotations = { group = "io.insert-koin", name = "koin-annotations", version.ref = "koin-annotations" }
+koin-ksp-compiler = { group = "io.insert-koin", name = "koin-ksp-compiler", version.ref = "koin-annotations" }
+koin-test = { group = "io.insert-koin", name = "koin-test", version.ref = "koin" }
+koin-android = { group = "io.insert-koin", name = "koin-android", version.ref = "koin" }
+
+kotest-runner = { group = "io.kotest", name = "kotest-runner-junit5", version.ref = "kotest" }
+kotest-assertions = { group = "io.kotest", name = "kotest-assertions-core", version.ref = "kotest" }
+kotest-parametrizedtests = { group = "io.kotest", name = "kotest-framework-datatest", version.ref = "kotest" }
+kotest-koin = { group = "io.kotest.extensions", name = "kotest-extensions-koin", version.ref = "kotest-extensions" }
+
+test-mockk = { group = "io.mockk", name = "mockk", version = "1.13.11" }
+
+androiduitestingutils-utils = { group = "com.github.sergio-sastre.AndroidUiTestingUtils", name = "utils", version.ref = "androidUiTestingUtils" }
+androiduitestingutils-robolectric = { group = "com.github.sergio-sastre.AndroidUiTestingUtils", name = "robolectric", version.ref = "androidUiTestingUtils" }
+roboelectric = { group = "org.robolectric", name = "robolectric", version = "4.13" }
+roborazzi = { group = "io.github.takahirom.roborazzi", name = "roborazzi", version.ref = "roborazzi" }
+roborazzi-junit = { group = "io.github.takahirom.roborazzi", name = "roborazzi-junit-rule", version.ref = "roborazzi" }
+junit-vintage-engine = { group = "org.junit.vintage", name = "junit-vintage-engine", version = "5.10.3" }
+
+thirdparty-konfetti = { group = "nl.dionsegijn", name = "konfetti-xml", version = "2.0.4" }
+#thirdparty-ferriswheel = { group = "ru.github.igla", name = "ferriswheel", version = "1.2" }
+thirdparty-navigationdrawer = { group = "com.mikepenz", name = "materialdrawer", version = "9.0.2" }
+thirdparty-balloon = { group = "com.github.skydoves", name = "balloon", version = "1.6.7" }
+thirdparty-vico = { group = "com.patrykandpatrick.vico", name = "views", version = "2.0.0-alpha.25" }
+thirdparty-androidplot = { group = "com.androidplot", name = "androidplot-core", version = "1.5.11" }
+thirdparty-leakcanary = { group = "com.squareup.leakcanary", name = "leakcanary-android", version = "2.14" }
+
+[plugins]
+
+android-application = { id = "com.android.application", version.ref = "android-gradle-plugin" }
+android-library = { id = "com.android.library", version.ref = "android-gradle-plugin" }
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+sonarqube = { id = "org.sonarqube", version = "5.0.0.4638" }
+ktlint = { id = "org.jlleitschuh.gradle.ktlint", version = "12.1.1" }
+ksp = { id = "com.google.devtools.ksp", version = "1.9.23-1.0.20" }
+roborazzi = { id = "io.github.takahirom.roborazzi", version.ref = "roborazzi" }
+gms = { id = "com.google.gms.google-services", version = "1" }
+
+[bundles]
+
+logging = ["logging-kotlin", "logging-slf"]
+kotest = ["kotest-runner", "kotest-assertions", "kotest-parametrizedtests", "kotest-koin"]
+koin = ["koin-core", "koin-annotations", "koin-ksp-compiler"]
+androidx-test = ["androidx-test-junit-ktx", "androidx-test-rules", "androidx-test-runner"]
+screenshotTests = ["androiduitestingutils-utils", "androiduitestingutils-robolectric", "roboelectric", "roborazzi", "roborazzi-junit", "junit-vintage-engine"]
+

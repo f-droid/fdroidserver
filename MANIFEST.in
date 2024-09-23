@@ -741,6 +741,11 @@ include tests/signindex/guardianproject-v1.jar
 include tests/signindex/testy.jar
 include tests/signindex/unsigned.jar
 include tests/source-files/at.bitfire.davdroid/build.gradle
+include tests/source-files/catalog.test/app/build.gradle
+include tests/source-files/catalog.test/build.gradle.kts
+include tests/source-files/catalog.test/libs.versions.toml
+include tests/source-files/catalog.test/gradle/libs.versions.toml
+include tests/source-files/catalog.test/settings.gradle.kts
 include tests/source-files/cn.wildfirechat.chat/avenginekit/build.gradle
 include tests/source-files/cn.wildfirechat.chat/build.gradle
 include tests/source-files/cn.wildfirechat.chat/chat/build.gradle
@@ -775,6 +780,11 @@ include tests/source-files/com.integreight.onesheeld/settings.gradle
 include tests/source-files/com.jens.automation2/build.gradle
 include tests/source-files/com.jens.automation2/app/build.gradle
 include tests/source-files/com.kunzisoft.testcase/build.gradle
+include tests/source-files/com.lolo.io.onelist/app/build.gradle.kts
+include tests/source-files/com.lolo.io.onelist/build.gradle.kts
+include tests/source-files/com.lolo.io.onelist/gradle/libs.versions.toml
+include tests/source-files/com.lolo.io.onelist/gradle/wrapper/gradle-wrapper.properties
+include tests/source-files/com.lolo.io.onelist/settings.gradle
 include tests/source-files/com.nextcloud.client/build.gradle
 include tests/source-files/com.nextcloud.client.dev/src/generic/fastlane/metadata/android/en-US/full_description.txt
 include tests/source-files/com.nextcloud.client.dev/src/generic/fastlane/metadata/android/en-US/short_description.txt
@@ -817,6 +827,9 @@ include tests/source-files/org.mozilla.rocket/app/build.gradle
 include tests/source-files/org.noise_planet.noisecapture/app/build.gradle
 include tests/source-files/org.noise_planet.noisecapture/settings.gradle
 include tests/source-files/org.noise_planet.noisecapture/sosfilter/build.gradle
+include tests/source-files/org.piepmeyer.gauguin/build.gradle.kts
+include tests/source-files/org.piepmeyer.gauguin/libs.versions.toml
+include tests/source-files/org.piepmeyer.gauguin/settings.gradle.kts
 include tests/source-files/org.tasks/app/build.gradle.kts
 include tests/source-files/org.tasks/build.gradle
 include tests/source-files/org.tasks/build.gradle.kts

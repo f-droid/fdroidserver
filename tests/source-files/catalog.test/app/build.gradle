@@ -1,0 +1,2 @@
+implementation libs.bundles.firebase
+implementation libs.play.service.ads

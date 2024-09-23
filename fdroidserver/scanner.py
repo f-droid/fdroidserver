@@ -34,6 +34,11 @@ from enum import IntEnum
 from pathlib import Path
 from tempfile import TemporaryDirectory
 
+if sys.version_info >= (3, 11):
+    import tomllib
+else:
+    import tomli as tomllib
+
 from . import _, common, metadata, scanner
 from .exception import BuildException, ConfigurationException, VCSException
 
@@ -58,13 +63,177 @@ DEPFILE = {
 
 SCANNER_CACHE_VERSION = 1
 
+DEFAULT_CATALOG_PREFIX_REGEX = re.compile(
+    r'''defaultLibrariesExtensionName\s*=\s*['"](\w+)['"]'''
+)
+GRADLE_KTS_CATALOG_FILE_REGEX = re.compile(
+    r'''create\("(\w+)"\)\s*\{[^}]*from\(files\(['"]([^"]+)['"]\)\)'''
+)
+GRADLE_CATALOG_FILE_REGEX = re.compile(
+    r'''(\w+)\s*\{[^}]*from\(files\(['"]([^"]+)['"]\)\)'''
+)
+VERSION_CATALOG_REGEX = re.compile(
+    r'dependencyResolutionManagement\s*\{[^}]*versionCatalogs\s*\{'
+)
+
 
 class ExitCode(IntEnum):
     NONFREE_CODE = 1
 
 
+class GradleVersionCatalog:
+    """Parse catalog from libs.versions.toml.
+
+    https://docs.gradle.org/current/userguide/platforms.html
+    """
+
+    def __init__(self, catalog):
+        self.version = {
+            alias: self.get_version(version)
+            for alias, version in catalog.get("versions", {}).items()
+        }
+        self.libraries = {
+            self.alias_to_accessor(alias): self.library_to_coordinate(library)
+            for alias, library in catalog.get("libraries", {}).items()
+        }
+        self.plugins = {
+            self.alias_to_accessor(alias): self.plugin_to_coordinate(plugin)
+            for alias, plugin in catalog.get("plugins", {}).items()
+        }
+        self.bundles = {
+            self.alias_to_accessor(alias): self.bundle_to_coordinates(bundle)
+            for alias, bundle in catalog.get("bundles", {}).items()
+        }
+
+    @staticmethod
+    def alias_to_accessor(alias: str) -> str:
+        """Covert alias to accessor.
+
+        https://docs.gradle.org/current/userguide/platforms.html#sub:mapping-aliases-to-accessors
+        Alias is used to define a lib in catalog. Accessor is used to access it.
+        """
+        return alias.replace("-", ".").replace("_", ".")
+
+    def get_version(self, version: dict) -> str:
+        if isinstance(version, str):
+            return version
+        ref = version.get("ref")
+        if ref:
+            return self.version.get(ref, "")
+        return (
+            version.get("prefer", "")
+            or version.get("require", "")
+            or version.get("strictly", "")
+        )
+
+    def library_to_coordinate(self, library: dict) -> str:
+        """Generate the Gradle dependency coordinate from catalog."""
+        module = library.get("module")
+        if not module:
+            group = library.get("group")
+            name = library.get("name")
+            if group and name:
+                module = f"{group}:{name}"
+            else:
+                return ""
+
+        version = library.get("version")
+        if version:
+            return f"{module}:{self.get_version(version)}"
+        else:
+            return module
+
+    def plugin_to_coordinate(self, plugin: dict) -> str:
+        """Generate the Gradle plugin coordinate from catalog."""
+        id = plugin.get("id")
+        if not id:
+            return ""
+
+        version = plugin.get("version")
+        if version:
+            return f"{id}:{self.get_version(version)}"
+        else:
+            return id
+
+    def bundle_to_coordinates(self, bundle) -> list[str]:
+        """Generate the Gradle dependency bundle coordinate from catalog."""
+        coordinates = []
+        for alias in bundle:
+            library = self.libraries.get(self.alias_to_accessor(alias))
+            if library:
+                coordinates.append(library)
+        return coordinates
+
+    def get_coordinate(self, accessor: str) -> list[str]:
+        """Get the Gradle coordinate from the catalog with an accessor."""
+        if accessor.startswith("plugins."):
+            return [self.plugins.get(accessor[8:], "")]
+        if accessor.startswith("bundles."):
+            return self.bundles.get(accessor[8:], [])
+        return [self.libraries.get(accessor, "")]
+
+
+def get_catalogs(root: str) -> dict[str, GradleVersionCatalog]:
+    """Get all Gradle dependency catalogs from settings.gradle[.kts].
+
+    Returns a dict with the extension and the corresponding catalog.
+    The extension is used as the prefix of the accessor to access libs in the catalog.
+    """
+    root = Path(root)
+    catalogs = {}
+    default_prefix = "libs"
+    catalog_files_m = []
+
+    def find_block_end(s, start):
+        pat = re.compile("[{}]")
+        depth = 1
+        for m in pat.finditer(s, pos=start):
+            if m.group() == "{":
+                depth += 1
+            else:
+                depth -= 1
+            if depth == 0:
+                return m.start()
+        else:
+            return -1
+
+    groovy_file = root / "settings.gradle"
+    kotlin_file = root / "settings.gradle.kts"
+    if groovy_file.is_file():
+        s = groovy_file.read_text(encoding="utf-8")
+        version_catalogs_m = VERSION_CATALOG_REGEX.search(s)
+        if version_catalogs_m:
+            start = version_catalogs_m.end()
+            end = find_block_end(s, start)
+            catalog_files_m = GRADLE_CATALOG_FILE_REGEX.finditer(s, start, end)
+    elif kotlin_file.is_file():
+        s = kotlin_file.read_text(encoding="utf-8")
+        version_catalogs_m = VERSION_CATALOG_REGEX.search(s)
+        if version_catalogs_m:
+            start = version_catalogs_m.end()
+            end = find_block_end(s, start)
+            catalog_files_m = GRADLE_KTS_CATALOG_FILE_REGEX.finditer(s, start, end)
+    else:
+        return {}
+
+    m_default = DEFAULT_CATALOG_PREFIX_REGEX.search(s)
+    if m_default:
+        default_prefix = m_default.group(1)
+    default_catalog_file = Path(root) / "gradle/libs.versions.toml"
+    if default_catalog_file.is_file():
+        with default_catalog_file.open("rb") as f:
+            catalogs[default_prefix] = GradleVersionCatalog(tomllib.load(f))
+    for m in catalog_files_m:
+        catalog_file = Path(root) / m.group(2).replace("$rootDir/", "")
+        if catalog_file.is_file():
+            with catalog_file.open("rb") as f:
+                catalogs[m.group(1)] = GradleVersionCatalog(tomllib.load(f))
+    return catalogs
+
+
 def get_gradle_compile_commands(build):
     compileCommands = [
+        'alias',
         'api',
         'apk',
         'classpath',
@@ -80,15 +249,25 @@ def get_gradle_compile_commands(build):
     if build.gradle and build.gradle != ['yes']:
         flavors += build.gradle
 
-    commands = [
-        ''.join(c) for c in itertools.product(flavors, buildTypes, compileCommands)
+    return [''.join(c) for c in itertools.product(flavors, buildTypes, compileCommands)]
+
+
+def get_gradle_compile_commands_without_catalog(build):
+    return [
+        re.compile(rf'''\s*{c}.*\s*\(?['"].*['"]''', re.IGNORECASE)
+        for c in get_gradle_compile_commands(build)
     ]
-    return [re.compile(r'\s*' + c, re.IGNORECASE) for c in commands]
+
+
+def get_gradle_compile_commands_with_catalog(build, prefix):
+    return [
+        re.compile(rf'\s*{c}.*\s*\(?{prefix}\.([a-z0-9.]+)', re.IGNORECASE)
+        for c in get_gradle_compile_commands(build)
+    ]
 
 
 def get_embedded_classes(apkfile, depth=0):
-    """
-    Get the list of Java classes embedded into all DEX files.
+    """Get the list of Java classes embedded into all DEX files.
 
     :return: set of Java classes names as string
     """
@@ -183,8 +362,7 @@ class SignatureDataController:
             raise SignatureDataVersionMismatchException()
 
     def check_last_updated(self):
-        """
-        Check if the last_updated value is ok and raise an exception if expired or inaccessible.
+        """Check if the last_updated value is ok and raise an exception if expired or inaccessible.
 
         :raises SignatureDataMalformedException: when timestamp value is
                                                  inaccessible or not parse-able
@@ -259,8 +437,7 @@ class SignatureDataController:
         logging.debug("write '{}' to cache".format(self.filename))
 
     def verify_data(self):
-        """
-        Clean and validate `self.data`.
+        """Clean and validate `self.data`.
 
         Right now this function does just a basic key sanitation.
         """
@@ -451,8 +628,7 @@ _SCANNER_TOOL = None
 
 
 def _get_tool():
-    """
-    Lazy loading function for getting a ScannerTool instance.
+    """Lazy loading function for getting a ScannerTool instance.
 
     ScannerTool initialization need to access `common.config` values. Those are only available after initialization through `common.read_config()`. So this factory assumes config was called at an erlier point in time.
     """
@@ -496,6 +672,7 @@ def scan_source(build_dir, build=metadata.Build(), json_per_build=None):
     Returns
     -------
     the number of fatal problems encountered.
+
     """
     count = 0
 
@@ -571,6 +748,7 @@ def scan_source(build_dir, build=metadata.Build(), json_per_build=None):
         Returns
         -------
         0 as we explicitly ignore the file, so don't count an error
+
         """
         msg = 'Ignoring %s at %s' % (what, path_in_build_dir)
         logging.info(msg)
@@ -593,6 +771,7 @@ def scan_source(build_dir, build=metadata.Build(), json_per_build=None):
         Returns
         -------
         0 as we deleted the offending file
+
         """
         msg = 'Removing %s at %s' % (what, path_in_build_dir)
         logging.info(msg)
@@ -620,6 +799,7 @@ def scan_source(build_dir, build=metadata.Build(), json_per_build=None):
         Returns
         -------
         0, as warnings don't count as errors
+
         """
         if toignore(path_in_build_dir):
             return 0
@@ -645,6 +825,7 @@ def scan_source(build_dir, build=metadata.Build(), json_per_build=None):
         Returns
         -------
         0 if the problem was ignored/deleted/is only a warning, 1 otherwise
+
         """
         options = common.get_options()
         if toignore(path_in_build_dir):
@@ -691,17 +872,30 @@ def scan_source(build_dir, build=metadata.Build(), json_per_build=None):
                 return True
         return False
 
-    gradle_compile_commands = get_gradle_compile_commands(build)
+    def is_used_by_gradle_without_catalog(line):
+        return any(
+            command.match(line)
+            for command in get_gradle_compile_commands_without_catalog(build)
+        )
 
-    def is_used_by_gradle(line):
-        return any(command.match(line) for command in gradle_compile_commands)
+    def is_used_by_gradle_with_catalog(line, prefix):
+        for m in (
+            command.match(line)
+            for command in get_gradle_compile_commands_with_catalog(build, prefix)
+        ):
+            if m:
+                return m
 
+    catalogs = {}
     # Iterate through all files in the source code
     for root, dirs, files in os.walk(build_dir, topdown=True):
         # It's topdown, so checking the basename is enough
         for ignoredir in ('.hg', '.git', '.svn', '.bzr'):
             if ignoredir in dirs:
                 dirs.remove(ignoredir)
+
+        if "settings.gradle" in files or "settings.gradle.kts" in files:
+            catalogs = get_catalogs(root)
 
         for curfile in files:
             if curfile in ['.DS_Store']:
@@ -789,14 +983,28 @@ def scan_source(build_dir, build=metadata.Build(), json_per_build=None):
                 with open(filepath, 'r', errors='replace') as f:
                     lines = f.readlines()
                 for i, line in enumerate(lines):
-                    if is_used_by_gradle(line):
+                    if is_used_by_gradle_without_catalog(line):
                         for name in suspects_found(line):
                             count += handleproblem(
-                                "usual suspect '%s'" % (name),
+                                f"usual suspect '{name}'",
                                 path_in_build_dir,
                                 filepath,
                                 json_per_build,
                             )
+                    for prefix, catalog in catalogs.items():
+                        m = is_used_by_gradle_with_catalog(line, prefix)
+                        if not m:
+                            continue
+                        accessor = m[1]
+                        coordinates = catalog.get_coordinate(accessor)
+                        for coordinate in coordinates:
+                            for name in suspects_found(coordinate):
+                                count += handleproblem(
+                                    f"usual suspect '{prefix}.{accessor}: {name}'",
+                                    path_in_build_dir,
+                                    filepath,
+                                    json_per_build,
+                                )
                 noncomment_lines = [
                     line for line in lines if not common.gradle_comment.match(line)
                 ]
