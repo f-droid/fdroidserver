@@ -48,17 +48,17 @@ logging.basicConfig(format=logformat, level=loglevel)
 tail = None
 
 BASEBOX_DEFAULT = 'debian/bookworm64'
-BASEBOX_VERSION_DEFAULT = "12.20231211.1"
+BASEBOX_VERSION_DEFAULT = "12.20240905.1"
 BASEBOX_CHECKSUMS = {
-    "12.20231211.1": {
+    "12.20240905.1": {
         "libvirt": {
-            "box.img": "80b048312c423b7fbbbac934c348f9a29bdf2f98fae96dd13b3af70ddfe7f12a",
+            "box.img": "a7aa8c7a8c4a214afb597d0ffd20d63cd3cf5464a1fc3791ed6f2674b8783b54",
             "Vagrantfile": "f9c6fcbb47a4d0d33eb066859c8e87efd642287a638bd7da69a9e7a6f25fec47",
-            "metadata.json": "9d717678c19bb81d077e4e7eeb3602c168b6568cc38fee8fd3aa9d8f3cfe639b",
+            "metadata.json": "20dc0268a79410dbf01c7e544ba5138f6f695a298b53c56c87a25f68c5031173",
         },
         "virtualbox": {
-            "box.ovf": "8ad49ba600fbd1027e35c8fd41d37383c04bad30fdbafa860a29911d207a3e7b",
-            "box.vmdk": "57602a776860805e82bd3f61cdca9711f39781011db0f8f1dee9b2a614b2c889",
+            "box.ovf": "9c32ca53a110fa7ff91bc0a5f42e012b9bd5986b029ae6d0f68edd274c8a53e2",
+            "box.vmdk": "abe945cfb0f60db44b52454046c16c209a3c85fcc72c82124ef525badeff0931",
             "Vagrantfile": "0bbc2ae97668d8da27ab97b766752dcd0bf9e41900e21057de15a58ee7fae47d",
             "metadata.json": "ffdaa989f2f6932cd8042e1102371f405cc7ad38e324210a1326192e4689e83a",
         }
