@@ -108,6 +108,7 @@ debian_testing:
         ipfs-cid
         python3-biplist
         python3-defusedxml
+        python3-libcloud
         python3-pycountry
         python3-setuptools
         sdkmanager
