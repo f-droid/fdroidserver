@@ -868,13 +868,13 @@ def get_local_metadata_files():
     return glob.glob('.fdroid.[a-jl-z]*[a-rt-z]')
 
 
-def read_pkg_args(appid_versionCode_pairs, allow_vercodes=False):
+def read_pkg_args(appid_versionCode_pairs, allow_version_codes=False):
     """No summary.
 
     Parameters
     ----------
     appids
-        arguments in the form of multiple appid:[vc] strings
+        arguments in the form of multiple appid:[versionCode] strings
 
     Returns
     -------
@@ -884,13 +884,18 @@ def read_pkg_args(appid_versionCode_pairs, allow_vercodes=False):
     if not appid_versionCode_pairs:
         return vercodes
 
+    error = False
     apk_regex = re.compile(r'_(\d+)\.apk$')
     for p in appid_versionCode_pairs:
         # Convert the apk name to a appid:versioncode pair
         p = apk_regex.sub(r':\1', p)
-        if allow_vercodes and ':' in p:
+        if allow_version_codes and ':' in p:
             package, vercode = p.split(':')
-            vercode = version_code_string_to_int(vercode)
+            try:
+                vercode = version_code_string_to_int(vercode)
+            except ValueError as e:
+                logging.error('"%s": %s' % (p, str(e)))
+                error = True
         else:
             package, vercode = p, None
         if package not in vercodes:
@@ -898,6 +903,9 @@ def read_pkg_args(appid_versionCode_pairs, allow_vercodes=False):
             continue
         elif vercode and vercode not in vercodes[package]:
             vercodes[package] += [vercode] if vercode else []
+
+    if error:
+        raise FDroidException(_("Found invalid versionCodes for some apps"))
 
     return vercodes
 
@@ -930,7 +938,7 @@ def get_metadata_files(vercodes):
     return metadatafiles
 
 
-def read_app_args(appid_versionCode_pairs, allapps, allow_vercodes=False):
+def read_app_args(appid_versionCode_pairs, allapps, allow_version_codes=False):
     """Build a list of App instances for processing.
 
     On top of what read_pkg_args does, this returns the whole app
@@ -940,7 +948,7 @@ def read_app_args(appid_versionCode_pairs, allapps, allow_vercodes=False):
     returned.
 
     """
-    vercodes = read_pkg_args(appid_versionCode_pairs, allow_vercodes)
+    vercodes = read_pkg_args(appid_versionCode_pairs, allow_version_codes)
 
     if not vercodes:
         return allapps

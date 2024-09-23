@@ -2321,6 +2321,13 @@ class CommonTest(unittest.TestCase):
             fdroidserver.common.read_pkg_args(appid_versionCode_pairs, allow_vercodes),
         )
 
+    def test_read_pkg_args_errors(self):
+        allow_vercodes = True
+        with self.assertRaises(FDroidException):
+            fdroidserver.common.read_pkg_args(['org.fdroid.fdroid:'], allow_vercodes),
+        with self.assertRaises(FDroidException):
+            fdroidserver.common.read_pkg_args(['org.fdroid.fdroid:foo'], allow_vercodes),
+
     def test_apk_strip_v1_signatures(self):
         before = os.path.join(self.basedir, 'no_targetsdk_minsdk1_unsigned.apk')
         after = os.path.join(self.testdir, 'after.apk')
