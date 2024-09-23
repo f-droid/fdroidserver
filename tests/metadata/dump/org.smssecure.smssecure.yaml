@@ -383,7 +383,6 @@ Description: 'SMSSecure is an SMS/MMS application that allows you to protect you
   security by auditing the code.'
 Disabled: null
 Donate: null
-FlattrID: null
 IssueTracker: https://github.com/SMSSecure/SMSSecure/issues
 Liberapay: null
 License: GPL-3.0-only

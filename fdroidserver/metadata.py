@@ -67,7 +67,6 @@ yaml_app_field_order = [
     'Translation',
     'Changelog',
     'Donate',
-    'FlattrID',
     'Liberapay',
     'OpenCollective',
     'Bitcoin',
@@ -128,7 +127,6 @@ class App(dict):
         self.Translation = ''
         self.Changelog = ''
         self.Donate = None
-        self.FlattrID = None
         self.Liberapay = None
         self.OpenCollective = None
         self.Bitcoin = None
@@ -408,10 +406,6 @@ class FieldValidator:
 
 # Generic value types
 valuetypes = {
-    FieldValidator("Flattr ID",
-                   r'^[0-9a-z]+$',
-                   ['FlattrID']),
-
     FieldValidator("Liberapay",
                    VALID_USERNAME_REGEX,
                    ['Liberapay']),
