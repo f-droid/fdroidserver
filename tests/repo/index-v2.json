@@ -1392,7 +1392,6 @@
         "license": "GPL-3.0-only",
         "sourceCode": "https://gitlab.com/souch/SMSbypass/tree/HEAD",
         "webSite": "https://gitlab.com/souch/SMSbypass",
-        "flattrID": "cad90e036b975ed129a3ce80a0750466",
         "name": {
           "en-US": "Battery level"
         },

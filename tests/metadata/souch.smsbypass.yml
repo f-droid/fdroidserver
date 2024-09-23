@@ -5,7 +5,6 @@ WebSite: https://gitlab.com/souch/SMSbypass
 SourceCode: https://gitlab.com/souch/SMSbypass/tree/HEAD
 IssueTracker: https://gitlab.com/souch/SMSbypass/issues
 Donate: http://rodolphe.souchaud.free.fr/donate
-FlattrID: cad90e036b975ed129a3ce80a0750466
 
 AutoName: Battery level
 Summary: Filter SMS and show them in a fake app

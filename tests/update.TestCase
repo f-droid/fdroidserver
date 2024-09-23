@@ -1390,7 +1390,6 @@ class UpdateTest(unittest.TestCase):
                     Translation:
                     Changelog:
                     Donate:
-                    FlattrID:
                     Bitcoin:
                     Litecoin:
                     Name:
@@ -1435,7 +1434,6 @@ class UpdateTest(unittest.TestCase):
                         'CurrentVersionCode': None,
                         'Disabled': '',
                         'Donate': '',
-                        'FlattrID': '',
                         'IssueTracker': '',
                         'License': '',
                         'Litecoin': '',

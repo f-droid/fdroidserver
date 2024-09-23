@@ -29,7 +29,6 @@
       "suggestedVersionCode": "9",
       "description": "In order to keep away curious eyes, SMS-bypass filters incoming SMS messages\nbefore they reach your inbox. Based on bughunter2.smsfilter.\n\nFeatures:\n\n* Discrete fake app \"Battery level\": Long tap on Battery percentage will show SMS.\n* Filter incoming SMS specified address: redirect the SMS to SMS-bypass messages list; remove SMS arrival sound or vibration; show a discreet notification icon (battery level); vibrate if checked in settings\n* Add contact from contact list\n* Export messages to a text file",
       "donate": "http://rodolphe.souchaud.free.fr/donate",
-      "flattrID": "cad90e036b975ed129a3ce80a0750466",
       "issueTracker": "https://gitlab.com/souch/SMSbypass/issues",
       "license": "GPL-3.0-only",
       "sourceCode": "https://gitlab.com/souch/SMSbypass/tree/HEAD",
