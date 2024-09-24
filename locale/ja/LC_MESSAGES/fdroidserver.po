@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fdroidserver 0.8-224-g4b0ade7\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2024-09-10 10:50+0200\n"
-"PO-Revision-Date: 2024-09-24 15:48+0000\n"
+"PO-Revision-Date: 2024-09-24 18:20+0000\n"
 "Last-Translator: Suguru Hirahara <shirahara@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/f-droid/fdroidserver/ja/>\n"
 "Language: ja\n"
@@ -63,7 +63,7 @@ msgstr ""
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "\"{path}\" is not a supported file format (use: metadata/*.yml)"
-msgstr ""
+msgstr "「{path}」はサポートされているファイルフォーマットではありません（metadata/*.ymlを使用してください）"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -121,7 +121,7 @@ msgstr ""
 #: ../fdroidserver/signindex.py
 #, python-format
 msgid "%s has bad SHA-256: %s"
-msgstr ""
+msgstr "%sのSHA-256は誤っています：%s"
 
 #: ../fdroidserver/lint.py
 #, python-format
@@ -178,7 +178,7 @@ msgstr ""
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "'{path}' failed to execute!"
-msgstr ""
+msgstr "「{path}」を実行できませんでした！"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
@@ -208,11 +208,11 @@ msgstr ".__call__() は定義されていません"
 
 #: ../fdroidserver/lint.py
 msgid "/issues is missing"
-msgstr ""
+msgstr "/issuesがありません"
 
 #: ../fdroidserver/mirror.py
 msgid "A URL is required as an argument!"
-msgstr ""
+msgstr "URLを引数として指定してください！"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -225,7 +225,7 @@ msgstr ""
 
 #: ../fdroidserver/update.py
 msgid "Add a repo signing key to an unsigned repo"
-msgstr ""
+msgstr "署名されていないリポジトリに、リポジトリの署名鍵を追加"
 
 #: ../fdroidserver/update.py
 msgid "Add skeleton metadata files for APKs that are missing them"
@@ -234,15 +234,15 @@ msgstr ""
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Adding new repo for only {name}"
-msgstr ""
+msgstr "{name}にのみ新しいリポジトリを追加"
 
 #: ../fdroidserver/init.py
 msgid "Alias of the repo signing key in the keystore"
-msgstr ""
+msgstr "キーストアのリポジトリの署名鍵のエイリアス"
 
 #: ../fdroidserver/build.py
 msgid "AllowedAPKSigningKeys missing but reference binary supplied"
-msgstr ""
+msgstr "AllowedAPKSigningKeysが指定されていませんが、参照用バイナリーは指定されています"
 
 #: ../fdroidserver/import_subcommand.py
 msgid "Allows a different revision (or git branch) to be specified for the initial import"
@@ -262,11 +262,11 @@ msgstr ""
 
 #: ../fdroidserver/scanner.py
 msgid "Android APK file"
-msgstr ""
+msgstr "AndroidのAPKファイル"
 
 #: ../fdroidserver/scanner.py
 msgid "Android DEX code"
-msgstr ""
+msgstr "AndroidのDEXコード"
 
 #: ../fdroidserver/init.py
 #, python-brace-format
@@ -2430,7 +2430,7 @@ msgstr ""
 #: /usr/lib/python3.11/optparse.py
 #, python-format
 msgid "option %s: invalid choice: %r (choose from %s)"
-msgstr ""
+msgstr "オプション %s：選択が正しくありません：%r（%sから選択してください）"
 
 #: /usr/lib/python3.5/getopt.py /usr/lib/python3.6/getopt.py
 #: /usr/lib/python3.7/getopt.py /usr/lib/python3.9/getopt.py
@@ -2458,7 +2458,7 @@ msgstr "オプション --%s に引数は指定できません"
 #: /usr/lib/python3.11/getopt.py
 #, python-format
 msgid "option --%s not a unique prefix"
-msgstr ""
+msgstr "オプション --%s は一意のプリフィックスではありません"
 
 #: /usr/lib/python3.5/getopt.py /usr/lib/python3.6/getopt.py
 #: /usr/lib/python3.7/getopt.py /usr/lib/python3.9/getopt.py
