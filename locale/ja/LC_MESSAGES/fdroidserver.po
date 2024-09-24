@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fdroidserver 0.8-224-g4b0ade7\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2024-09-10 10:50+0200\n"
-"PO-Revision-Date: 2024-09-24 19:32+0000\n"
+"PO-Revision-Date: 2024-09-24 19:33+0000\n"
 "Last-Translator: Suguru Hirahara <shirahara@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/f-droid/fdroidserver/ja/>\n"
 "Language: ja\n"
@@ -954,7 +954,7 @@ msgstr ""
 
 #: ../fdroidserver/mirror.py
 msgid "Include the build logs in the mirror"
-msgstr ""
+msgstr "ミラーのビルド時のログを含める"
 
 #: ../fdroidserver/mirror.py
 msgid "Include the source tarballs in the mirror"
@@ -985,7 +985,7 @@ msgstr "ビルドしたパッケージを端末にインストール"
 #: ../fdroidserver/install.py
 #, python-format
 msgid "Installing %s..."
-msgstr ""
+msgstr "%sをインストールしています…"
 
 #: ../fdroidserver/install.py
 #, python-brace-format
