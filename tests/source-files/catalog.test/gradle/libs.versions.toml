@@ -6,6 +6,7 @@ gms = "1.2.1"
 firebase-crash = { module = "com.google.firebase:firebase-crash", version.ref = "firebase" }
 firebase_core = { module = "com.google.firebase:firebase-core", version = "2.2.2" }
 "play.service.ads" = { module = "com.google.android.gms:play-services-ads", version.ref = "gms"}
+jacoco = "org.jacoco:org.jacoco.core:0.8.7"
 
 [plugins]
 google-services = { id = "com.google.gms.google-services", version.ref = "gms" }

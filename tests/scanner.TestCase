@@ -143,6 +143,7 @@ class ScannerTest(unittest.TestCase):
             'firebase.crash': ['com.google.firebase:firebase-crash:1.1.1'],
             'firebase.core': ['com.google.firebase:firebase-core:2.2.2'],
             'play.service.ads': ['com.google.android.gms:play-services-ads:1.2.1'],
+            'jacoco': ['org.jacoco:org.jacoco.core:0.8.7'],
             'plugins.google.services': ['com.google.gms.google-services:1.2.1'],
             'plugins.firebase.crashlytics': ['com.google.firebase.crashlytics:1.1.1'],
             'bundles.firebase': [
