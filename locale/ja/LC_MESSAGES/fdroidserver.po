@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fdroidserver 0.8-224-g4b0ade7\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2024-09-10 10:50+0200\n"
-"PO-Revision-Date: 2024-09-24 10:12+0000\n"
+"PO-Revision-Date: 2024-09-24 15:48+0000\n"
 "Last-Translator: Suguru Hirahara <shirahara@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/f-droid/fdroidserver/ja/>\n"
 "Language: ja\n"
@@ -1928,15 +1928,15 @@ msgstr ""
 
 #: ../fdroidserver/update.py
 msgid "Use `fdroid update -c` to create it."
-msgstr ""
+msgstr "`fdroid update -c`で作成。"
 
 #: ../fdroidserver/build.py
 msgid "Use build server"
-msgstr ""
+msgstr "ビルド用サーバーを使用"
 
 #: ../fdroidserver/update.py
 msgid "Use date from APK instead of current time for newly added APKs"
-msgstr ""
+msgstr "現在の時間の代わりにAPKの時間を、新しく追加されたAPKに使用"
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
@@ -1954,20 +1954,20 @@ msgstr "APK署名バージョン2を使用"
 
 #: ../fdroidserver/common.py
 msgid "Using APK Signature v3"
-msgstr ""
+msgstr "APK署名バージョン3を使用"
 
 #: ../fdroidserver/common.py
 msgid "Using JAR Signature"
-msgstr ""
+msgstr "JAR署名を使用"
 
 #: ../fdroidserver/common.py
 msgid "Using Java's jarsigner, not recommended for verifying APKs! Use apksigner"
-msgstr ""
+msgstr "JavaのjarsignerでAPKを検証することは推奨されません！apksignerを使ってください"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Using androguard from \"{path}\""
-msgstr ""
+msgstr "「{path}」のandroguardを使用"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
@@ -1977,17 +1977,17 @@ msgstr ""
 #: ../fdroidserver/init.py
 #, python-brace-format
 msgid "Using existing keystore \"{path}\""
-msgstr ""
+msgstr "\"{path}\"にある既存のキーストアを使用"
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "Using rclone to sync with: {url}"
-msgstr ""
+msgstr "Rcloneを使って {url} と同期"
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "Using s3cmd to sync with: {url}"
-msgstr ""
+msgstr "s3cmdを使って {url} と同期"
 
 #: ../fdroidserver/__main__.py
 msgid "Valid commands are:"
@@ -1995,7 +1995,7 @@ msgstr "正しいコマンド："
 
 #: ../fdroidserver/verify.py
 msgid "Verify against locally cached copy rather than redownloading."
-msgstr ""
+msgstr "再ダウンロードする代わりにローカルにキャッシュ済のコピーで検証。"
 
 #: ../fdroidserver/__main__.py
 msgid "Verify the integrity of downloaded packages"
@@ -2003,12 +2003,12 @@ msgstr "ダウンロードしたパッケージの一貫性を検証"
 
 #: ../fdroidserver/index.py
 msgid "Verifying index signature:"
-msgstr ""
+msgstr "インデックスの署名を検証："
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "VirusTotal API key cannot upload files larger than 32MB, use {url} to upload {path}."
-msgstr ""
+msgstr "VirusTotalのAPI鍵は32メガバイトより大きいファイルをアップロードできません。{url}から{path}をアップロードしてください。"
 
 #: ../fdroidserver/__main__.py
 msgid "Warn about possible metadata errors"
@@ -2016,7 +2016,7 @@ msgstr "潜在的なメタデータのエラーに関して警告"
 
 #: ../fdroidserver/update.py
 msgid "When configured for signed indexes, create only unsigned indexes at this stage"
-msgstr ""
+msgstr "署名済のインデックスに関して設定されている場合、この段階では署名されていないインデックスのみを作成します"
 
 #: ../fdroidserver/lint.py
 msgid "When linting the entire repository yamllint is disabled by default. This option forces yamllint regardless."
@@ -2036,12 +2036,12 @@ msgstr ""
 
 #: ../fdroidserver/scanner.py
 msgid "ZIP file archive"
-msgstr ""
+msgstr "ZIPファイルアーカイブ"
 
 #: ../fdroidserver/nightly.py
 #, python-brace-format
 msgid "adding IdentityFile to {path}"
-msgstr ""
+msgstr "IdentityFileを{path}に追加"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -2199,11 +2199,11 @@ msgstr ""
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "deleting: repo/{apkfilename}"
-msgstr ""
+msgstr "削除しています：repo/{apkfilename}"
 
 #: ../fdroidserver/scanner.py
 msgid "dependency file without lock"
-msgstr ""
+msgstr "ロックの存在しない依存ファイル"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -2219,7 +2219,7 @@ msgstr ""
 
 #: ../fdroidserver/scanner.py
 msgid "downloading '{}'"
-msgstr ""
+msgstr "'{}'をダウンロードしています"
 
 #: ../fdroidserver/scanner.py
 msgid "downloading scanner signatures from '{}' failed"
@@ -2227,7 +2227,7 @@ msgstr ""
 
 #: ../fdroidserver/scanner.py
 msgid "executable binary, possibly code"
-msgstr ""
+msgstr "実行可能なバイナリー、おそらくコードです"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
@@ -2235,29 +2235,29 @@ msgstr ""
 #, python-format
 msgid "expected %s argument"
 msgid_plural "expected %s arguments"
-msgstr[0] ""
+msgstr[0] "%s個の引数が必要"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #: /usr/lib/python3.11/argparse.py
 msgid "expected at least one argument"
-msgstr ""
+msgstr "1つ以上の引数が必要です"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #: /usr/lib/python3.11/argparse.py
 msgid "expected at most one argument"
-msgstr ""
+msgstr "多くても1つの引数が必要です"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #: /usr/lib/python3.11/argparse.py
 msgid "expected one argument"
-msgstr ""
+msgstr "1つの引数が必要です"
 
 #: ../fdroidserver/__main__.py
 msgid "fdroid [<command>] [-h|--help|--version|<args>]"
-msgstr ""
+msgstr "fdroid [<command>] [-h|--help|--version|<args>]"
 
 #: ../fdroidserver/scanner.py
 msgid "fetch the latest version of signatures from the web"
@@ -2265,19 +2265,19 @@ msgstr ""
 
 #: /usr/lib/python3.11/optparse.py
 msgid "floating-point"
-msgstr ""
+msgstr "浮動小数点"
 
 #: ../fdroidserver/metadata.py
 msgid "force metadata errors (default) to be warnings, or to be ignored."
-msgstr ""
+msgstr "メタデータのエラー（既定）を警告として扱うよう強制するか、無視するよう強制。"
 
 #: ../fdroidserver/common.py
 msgid "git svn clone failed"
-msgstr ""
+msgstr "git svn clone を実行できませんでした"
 
 #: ../fdroidserver/scanner.py
 msgid "gzip file archive"
-msgstr ""
+msgstr "gzipファイルアーカイブ"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
@@ -2298,7 +2298,7 @@ msgstr ""
 #: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
 #: /usr/lib/python3.11/optparse.py
 msgid "integer"
-msgstr ""
+msgstr "整数"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
@@ -2330,7 +2330,7 @@ msgstr ""
 
 #: ../fdroidserver/common.py
 msgid "ipfs_cid not found, skipping CIDv1 generation"
-msgstr ""
+msgstr "ipfs_cid が見つかりません。CIDv1の生成をスキップします"
 
 #: ../fdroidserver/checkupdates.py
 #, python-brace-format
@@ -2358,7 +2358,7 @@ msgstr ""
 #: ../fdroidserver/index.py
 #, python-brace-format
 msgid "mirrors set twice, in config.yml and {path}!"
-msgstr ""
+msgstr "config.ymlと{path}で2回ミラーが設定されています！"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
@@ -2389,11 +2389,11 @@ msgstr "そうしたオプションはありません：%s"
 
 #: ../fdroidserver/__main__.py
 msgid "no version info found!"
-msgstr ""
+msgstr "バージョンの情報が見つかりません！"
 
 #: ../fdroidserver/checkupdates.py
 msgid "no version information found"
-msgstr ""
+msgstr "バージョンの情報が見つかりません"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
@@ -2407,7 +2407,7 @@ msgstr ""
 #: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "one of the arguments %s is required"
-msgstr ""
+msgstr "引数 %s の1つが必要です"
 
 #: ../fdroidserver/common.py ../fdroidserver/index.py
 msgid "only accepts strings, lists, and tuples"
@@ -2481,7 +2481,7 @@ msgstr "オプションの引数"
 
 #: /usr/lib/python3.11/argparse.py
 msgid "options"
-msgstr ""
+msgstr "オプション"
 
 #: ../fdroidserver/nightly.py
 #, python-brace-format
@@ -2515,16 +2515,16 @@ msgstr ""
 
 #: ../fdroidserver/common.py
 msgid "repo_url needs to end with /repo"
-msgstr ""
+msgstr "repo_urlは/repoで終わる必要があります"
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "rsync is missing or broken: {error}"
-msgstr ""
+msgstr "rsyncが無いか壊れています：{error}"
 
 #: ../fdroidserver/metadata.py
 msgid "ruamel.yaml not installed, can not write metadata."
-msgstr ""
+msgstr "ruamel.yamlがインストールされていません。メタデータを書き込めません。"
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
@@ -2539,7 +2539,7 @@ msgstr ""
 #: ../fdroidserver/scanner.py
 #, python-brace-format
 msgid "scanner cache is malformed! You can clear it with: '{clear}'"
-msgstr ""
+msgstr "スキャナーのキャッシュの形式が正しくありません！「{clear}」で消去してください"
 
 #: ../fdroidserver/deploy.py
 msgid "serverwebroot: path does not end with \"fdroid\", perhaps you meant one of these:"
@@ -2635,7 +2635,7 @@ msgstr "使い方: "
 #: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "using Apache libcloud to sync with {url}"
-msgstr ""
+msgstr "Apache libcloudを使って{url}と同期"
 
 #: ../fdroidserver/deploy.py
 msgid "virustotal.com is rate limiting, waiting to retry..."
