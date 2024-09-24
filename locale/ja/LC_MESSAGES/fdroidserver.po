@@ -893,7 +893,7 @@ msgstr ""
 
 #: ../fdroidserver/common.py
 msgid "Git reset failed"
-msgstr ""
+msgstr "Git resetを実行できませんでした"
 
 #: ../fdroidserver/common.py
 msgid "Git submodule deinit failed"
