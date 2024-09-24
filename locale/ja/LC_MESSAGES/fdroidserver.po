@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fdroidserver 0.8-224-g4b0ade7\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2024-09-10 10:50+0200\n"
-"PO-Revision-Date: 2024-09-18 23:55+0000\n"
+"PO-Revision-Date: 2024-09-24 10:12+0000\n"
 "Last-Translator: Suguru Hirahara <shirahara@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/f-droid/fdroidserver/ja/>\n"
 "Language: ja\n"
@@ -1852,7 +1852,7 @@ msgstr ""
 #: ../fdroidserver/common.py
 #, python-format
 msgid "Unzipping to %s"
-msgstr ""
+msgstr "%sに解凍しています"
 
 #: ../fdroidserver/__main__.py
 msgid "Update repo information for new packages"
@@ -1898,12 +1898,12 @@ msgstr ""
 #: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "Uploading {apkfilename} to androidobservatory.org"
-msgstr ""
+msgstr "{apkfilename}をandroidobservatory.orgにアップロードしています"
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "Uploading {apkfilename} to virustotal"
-msgstr ""
+msgstr "{apkfilename}をvirustotalにアップロードしています"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 #: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
@@ -1950,7 +1950,7 @@ msgstr ""
 
 #: ../fdroidserver/common.py
 msgid "Using APK Signature v2"
-msgstr ""
+msgstr "APK署名バージョン2を使用"
 
 #: ../fdroidserver/common.py
 msgid "Using APK Signature v3"
@@ -2344,11 +2344,11 @@ msgstr "local_copy_dir は「froid」で終わっていません、もしかし�
 
 #: ../fdroidserver/deploy.py
 msgid "local_copy_dir must be an absolute path!"
-msgstr "local_copy_dir は絶対パスの必要があります！"
+msgstr "local_copy_dir には絶対パスを指定してください！"
 
 #: ../fdroidserver/deploy.py
 msgid "local_copy_dir must be directory, not a file!"
-msgstr "local_copy_dir はファイルではなくディレクトリにする必要があります！"
+msgstr "local_copy_dir にはファイルではなくディレクトリーを指定してください！"
 
 #: ../fdroidserver/index.py
 #, python-format
@@ -2378,7 +2378,7 @@ msgstr ""
 
 #: ../fdroidserver/signatures.py
 msgid "no APK supplied"
-msgstr ""
+msgstr "APKが指定されていません"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 #: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
