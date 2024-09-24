@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fdroidserver 0.8-224-g4b0ade7\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2024-09-10 10:50+0200\n"
-"PO-Revision-Date: 2024-09-24 19:31+0000\n"
+"PO-Revision-Date: 2024-09-24 19:32+0000\n"
 "Last-Translator: Suguru Hirahara <shirahara@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/f-droid/fdroidserver/ja/>\n"
 "Language: ja\n"
@@ -876,7 +876,7 @@ msgstr ""
 
 #: ../fdroidserver/common.py
 msgid "Git clean failed"
-msgstr ""
+msgstr "Git cleanを実行できませんでした"
 
 #: ../fdroidserver/common.py
 msgid "Git fetch failed"
