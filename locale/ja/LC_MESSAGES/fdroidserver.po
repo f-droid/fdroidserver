@@ -990,7 +990,7 @@ msgstr "%sをインストールしています…"
 #: ../fdroidserver/install.py
 #, python-brace-format
 msgid "Installing '{apkfilename}' on {dev}..."
-msgstr ""
+msgstr "{dev}に「{apkfilename}」をインストールしています…"
 
 #: ../fdroidserver/__main__.py
 msgid "Interact with the repo HTTP server"
