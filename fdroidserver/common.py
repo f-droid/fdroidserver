@@ -366,7 +366,8 @@ def fill_config_defaults(thisconfig):
 
     if 'ipfs_cid' not in thisconfig and shutil.which('ipfs_cid'):
         thisconfig['ipfs_cid'] = shutil.which('ipfs_cid')
-    if not thisconfig.get('ipfs_cid'):
+    cmd = sys.argv[1] if len(sys.argv) >= 2 else ''
+    if cmd == 'update' and not thisconfig.get('ipfs_cid'):
         logging.debug(_("ipfs_cid not found, skipping CIDv1 generation"))
 
     for k in ['ndk_paths', 'java_paths']:
