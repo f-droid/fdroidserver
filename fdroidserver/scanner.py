@@ -33,6 +33,7 @@ from datetime import datetime, timedelta
 from enum import IntEnum
 from pathlib import Path
 from tempfile import TemporaryDirectory
+from typing import Union
 
 if sys.version_info >= (3, 11):
     import tomllib
@@ -114,7 +115,7 @@ class GradleVersionCatalog:
         """
         return alias.replace("-", ".").replace("_", ".")
 
-    def get_version(self, version: dict) -> str:
+    def get_version(self, version: Union[dict, str]) -> str:
         if isinstance(version, str):
             return version
         ref = version.get("ref")
@@ -126,8 +127,10 @@ class GradleVersionCatalog:
             or version.get("strictly", "")
         )
 
-    def library_to_coordinate(self, library: dict) -> str:
+    def library_to_coordinate(self, library: Union[dict, str]) -> str:
         """Generate the Gradle dependency coordinate from catalog."""
+        if isinstance(library, str):
+            return library
         module = library.get("module")
         if not module:
             group = library.get("group")
@@ -143,8 +146,10 @@ class GradleVersionCatalog:
         else:
             return module
 
-    def plugin_to_coordinate(self, plugin: dict) -> str:
+    def plugin_to_coordinate(self, plugin: Union[dict, str]) -> str:
         """Generate the Gradle plugin coordinate from catalog."""
+        if isinstance(plugin, str):
+            return plugin
         id = plugin.get("id")
         if not id:
             return ""
@@ -155,7 +160,7 @@ class GradleVersionCatalog:
         else:
             return id
 
-    def bundle_to_coordinates(self, bundle) -> list[str]:
+    def bundle_to_coordinates(self, bundle: list[str]) -> list[str]:
         """Generate the Gradle dependency bundle coordinate from catalog."""
         coordinates = []
         for alias in bundle:
