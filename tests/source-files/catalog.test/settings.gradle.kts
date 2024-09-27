@@ -1,4 +1,7 @@
 dependencyResolutionManagement {
+    repositories {
+        mavenCentral()
+    }
     defaultLibrariesExtensionName = "projectLibs"
     versionCatalogs {
         create("libs") {

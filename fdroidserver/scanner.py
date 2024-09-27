@@ -73,9 +73,7 @@ GRADLE_KTS_CATALOG_FILE_REGEX = re.compile(
 GRADLE_CATALOG_FILE_REGEX = re.compile(
     r'''(\w+)\s*\{[^}]*from\(files\(['"]([^"]+)['"]\)\)'''
 )
-VERSION_CATALOG_REGEX = re.compile(
-    r'dependencyResolutionManagement\s*\{[^}]*versionCatalogs\s*\{'
-)
+VERSION_CATALOG_REGEX = re.compile(r'versionCatalogs\s*\{')
 
 
 class ExitCode(IntEnum):
