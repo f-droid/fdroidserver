@@ -891,7 +891,7 @@ def scan_source(build_dir, build=metadata.Build(), json_per_build=None):
             if m:
                 return m
 
-    catalogs = {}
+    all_catalogs = {}
     # Iterate through all files in the source code
     for root, dirs, files in os.walk(build_dir, topdown=True):
         # It's topdown, so checking the basename is enough
@@ -900,7 +900,7 @@ def scan_source(build_dir, build=metadata.Build(), json_per_build=None):
                 dirs.remove(ignoredir)
 
         if "settings.gradle" in files or "settings.gradle.kts" in files:
-            catalogs = get_catalogs(root)
+            all_catalogs[str(root)] = get_catalogs(root)
 
         for curfile in files:
             if curfile in ['.DS_Store']:
@@ -983,6 +983,13 @@ def scan_source(build_dir, build=metadata.Build(), json_per_build=None):
                             break
 
             elif curfile.endswith('.gradle') or curfile.endswith('.gradle.kts'):
+                catalog_path = str(build_dir)
+                # Find the longest path of dir that the curfile is in
+                for p in all_catalogs:
+                    if os.path.commonpath([root, p]) == p:
+                        catalog_path = p
+                catalogs = all_catalogs.get(catalog_path, {})
+
                 if not os.path.isfile(filepath):
                     continue
                 with open(filepath, 'r', errors='replace') as f:

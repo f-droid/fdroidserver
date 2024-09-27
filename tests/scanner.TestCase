@@ -74,7 +74,7 @@ class ScannerTest(unittest.TestCase):
             'se.manyver': 3,
             'lockfile.test': 1,
             'com.lolo.io.onelist': 6,
-            'catalog.test': 10,
+            'catalog.test': 22,
         }
         for d in glob.glob(os.path.join(source_files, '*')):
             build = fdroidserver.metadata.Build()
