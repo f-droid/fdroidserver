@@ -33,13 +33,14 @@
 # 大王叫我来巡山 <hamburger2048@users.noreply.hosted.weblate.org>, 2024.
 # chumoer <k17733196511@gmail.com>, 2024.
 # Wang <wang@plasma.ac.cn>, 2024.
+# Lily Chou <lily-develop@outlook.com>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2024-09-10 10:50+0200\n"
-"PO-Revision-Date: 2024-09-16 13:09+0000\n"
-"Last-Translator: Wang <wang@plasma.ac.cn>\n"
+"PO-Revision-Date: 2024-10-02 14:16+0000\n"
+"Last-Translator: Lily Chou <lily-develop@outlook.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/projects/f-droid/fdroidserver/zh_Hans/>\n"
 "Language: zh_Hans\n"
 "MIME-Version: 1.0\n"
@@ -706,12 +707,12 @@ msgstr "错误：不支持的 git 主机类型 \"%s\"，欢迎提交补丁添加
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "ERROR: {key} in {path} is not \"archive\" or \"repo\"!"
-msgstr ""
+msgstr "错误: {path}中的{key}不是“archive”或“repo”！"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "ERROR: {key}:{subkey} in {path} is not in allowed keys: {allowed_keys}!"
-msgstr ""
+msgstr "错误: {path}中的{key}:{subkey}不再被允许的值的范围内: {allowed_keys}！"
 
 #: ../fdroidserver/__main__.py
 #, python-brace-format
@@ -1549,7 +1550,7 @@ msgstr "在具有未提交更改的 git 存储库上运行"
 #: ../fdroidserver/nightly.py
 #, python-brace-format
 msgid "Run over {cibase} to find -debug.apk. and skip repo_basedir {repo_basedir}"
-msgstr ""
+msgstr "在{cibase}中挨个寻找 -debug.apk，并跳过了仓库目录{repo_basedir}"
 
 #: ../fdroidserver/lint.py
 msgid "Run rewritemeta to fix formatting"
@@ -2249,7 +2250,7 @@ msgstr "正在删除：repo/{apkfilename}"
 
 #: ../fdroidserver/scanner.py
 msgid "dependency file without lock"
-msgstr ""
+msgstr "没有锁的依赖文件"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -2726,7 +2727,7 @@ msgstr "{appid}来自{path}不是一个有效的Java安装包名称！"
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "{appid} has both APKs and files: {files}"
-msgstr ""
+msgstr "{appid}有两个apk文件：{files}"
 
 #: ../fdroidserver/mirror.py
 #, python-brace-format
@@ -2737,7 +2738,7 @@ msgstr "{appid}缺失了{name}"
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "{appid}: Unknown extlib {path} in build '{versionName}'"
-msgstr ""
+msgstr "{appid}：在构建版本‘{versionName}’时在{path}中遇到了未知的extlib"
 
 #: ../fdroidserver/scanner.py
 #, python-brace-format
@@ -2757,12 +2758,12 @@ msgstr "{appid}：{field}必须为‘{type}’，但它是‘{fieldtype}’！"
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "{build_flag} must be an integer, found: {value}"
-msgstr ""
+msgstr "{build_flag}变量必须为整型，但是找到了{value}"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "{build_flag} must be list or string, found: {value}"
-msgstr ""
+msgstr "{build_flag}变量必须为列表或字符串，但是找到了{value}"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
@@ -2772,7 +2773,7 @@ msgstr "{file} 是空的或已损坏！"
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "{name} \"{section}/icons/{path}\" does not exist! Check \"config.yml\"."
-msgstr ""
+msgstr "{name}的“{section}/icons/{path}”不存在！请检查配置文件“config.yml”。"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -2792,17 +2793,17 @@ msgstr "{path} 不存在！通过运行以下命令创建它："
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "{path} has bad file signature \"{pattern}\", possible Janus exploit!"
-msgstr ""
+msgstr "{path}有损坏的签名“{pattern}”，也许是Janus的漏洞！"
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "{path} has been flagged by virustotal {count} times:"
-msgstr ""
+msgstr "{path}被virustotal标记了{count}次："
 
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "{path} is not \"key: value\" dict, but a {datatype}!"
-msgstr ""
+msgstr "{path}不是“键：值”模式，而是一个{datatype}！"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
