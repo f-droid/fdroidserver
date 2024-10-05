@@ -5,13 +5,14 @@
 # mondstern <mondstern@snopyta.org>, 2021.
 # Hans-Christoph Steiner <hans@guardianproject.info>, 2021, 2024.
 # Agnieszka C <aga_04@o2.pl>, 2021, 2022, 2023, 2024.
+# Eryk Michalak <gnu.ewm@protonmail.com>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 1.0.0-95-gd7af22b\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2024-09-10 10:50+0200\n"
-"PO-Revision-Date: 2024-09-10 09:27+0000\n"
-"Last-Translator: Hans-Christoph Steiner <hans@guardianproject.info>\n"
+"PO-Revision-Date: 2024-10-06 07:23+0000\n"
+"Last-Translator: Eryk Michalak <gnu.ewm@protonmail.com>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/f-droid/fdroidserver/pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
@@ -682,12 +683,12 @@ msgstr "BŁĄD: nieobsługiwany host git „%s”, łatki mile widziane!"
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "ERROR: {key} in {path} is not \"archive\" or \"repo\"!"
-msgstr ""
+msgstr "BŁĄD: {key} w {path} nie jest \"archive\" lub \"repo\"!"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "ERROR: {key}:{subkey} in {path} is not in allowed keys: {allowed_keys}!"
-msgstr ""
+msgstr "BŁĄD: {key}:{subkey} w {path} nie jest jednym z dozwolonych kluczy: {allowed_keys}!"
 
 #: ../fdroidserver/__main__.py
 #, python-brace-format
@@ -1121,7 +1122,6 @@ msgid "Keystore for signing key:\t"
 msgstr "Magazyn kluczy do podpisywania klucza:\t"
 
 #: ../fdroidserver/lint.py
-#, fuzzy
 msgid "Known debug key is used in AllowedAPKSigningKeys: "
 msgstr "Znany klucz debugowania jest używany w AllowedAPKSigningKeys: "
 
@@ -1303,15 +1303,15 @@ msgstr "Maszyna Offline, pomijając generowanie git mirror aż do ' fdroid deplo
 
 #: ../fdroidserver/deploy.py
 msgid "One of the 'github_releases' config items is missing the 'projectUrl' value. skipping ..."
-msgstr ""
+msgstr "Jeden z elementów 'github_releases' nie posiada wartości 'projectUrl'. pomijanie..."
 
 #: ../fdroidserver/deploy.py
 msgid "One of the 'github_releases' config items is missing the 'packageNames' value. skipping ..."
-msgstr ""
+msgstr "Jeden z elementów 'github_releases' nie posiada wartości 'packageNames'. pomijanie..."
 
 #: ../fdroidserver/deploy.py
 msgid "One of the 'github_releases' config items is missing the 'token' value. skipping ..."
-msgstr ""
+msgstr "Jeden z elementów 'github_releases' nie posiada wartości 'token'. pomijanie..."
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -1769,9 +1769,8 @@ msgid "To use awsbucket, awssecretkey and awsaccesskeyid must also be set in con
 msgstr "Aby użyć awsbucket, awssecretkey i awsaccesskeyid muszą być również ustawione w config.yml!"
 
 #: ../fdroidserver/deploy.py
-#, fuzzy
 msgid "To use rclone, rclone_config and awsbucket must be set in config.yml!"
-msgstr "Aby użyć awsbucket, awssecretkey i awsaccesskeyid muszą być również ustawione w config.yml!"
+msgstr "Aby używać rclone, rclone_config i awsbucket muszą być one również ustawione w config.yml!"
 
 #: ../fdroidserver/lint.py
 msgid "URL must start with https:// or http://"
@@ -1947,9 +1946,8 @@ msgid "Usage: %s\n"
 msgstr "Użycie: %s\n"
 
 #: ../fdroidserver/lint.py
-#, fuzzy
 msgid "Use /HEAD instead of /master or /main to point at a file in the default branch"
-msgstr "Użyj /HEAD zamiast/ master, aby wskazać plik w domyślnej gałęzi"
+msgstr "Użyj /HEAD zamiast /master czy /main, aby wskazać plik w domyślnej gałęzi"
 
 #: ../fdroidserver/lint.py
 msgid "Use /HEAD instead of /master to point at a file in the default branch"
@@ -1973,9 +1971,9 @@ msgid "Using \"{path}\" for configuring s3cmd."
 msgstr "Użyj \"{path}\" do konfiguracji s3cmd."
 
 #: ../fdroidserver/deploy.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Using \"{path}\" for syncing with remote storage."
-msgstr "Użyj \"{path}\" do konfiguracji s3cmd."
+msgstr "Używanie \"{path}\" do synchronizacji ze zdalnym dyskiem."
 
 #: ../fdroidserver/common.py
 msgid "Using APK Signature v2"
@@ -1986,9 +1984,8 @@ msgid "Using APK Signature v3"
 msgstr "Używając APK Signature v3"
 
 #: ../fdroidserver/common.py
-#, fuzzy
 msgid "Using JAR Signature"
-msgstr "Używając APK Signature v2"
+msgstr "Używanie podpisu JAR"
 
 #: ../fdroidserver/common.py
 msgid "Using Java's jarsigner, not recommended for verifying APKs! Use apksigner"
@@ -2010,9 +2007,9 @@ msgid "Using existing keystore \"{path}\""
 msgstr "Korzystanie z istniejącego magazynu kluczy \"{path}\""
 
 #: ../fdroidserver/deploy.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Using rclone to sync with: {url}"
-msgstr "Użyj s3cmd do synchronizacji z: {url}"
+msgstr "Używanie rsync do synchronizacji z: {url}"
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
@@ -2235,7 +2232,7 @@ msgstr "usuwanie: repo/{apkfilename}"
 
 #: ../fdroidserver/scanner.py
 msgid "dependency file without lock"
-msgstr ""
+msgstr "plik zależności bez blokady"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -2390,9 +2387,9 @@ msgid "mirror '%s' does not end with 'fdroid'!"
 msgstr "mirror '%s'nie kończy się na 'fdroid'!"
 
 #: ../fdroidserver/index.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "mirrors set twice, in config.yml and {path}!"
-msgstr "lustra ustawione dwukrotnie, w config.yml i {path}!"
+msgstr "serwery lustrzane zostały ustawione dwukrotnie w config.yml i {path}!"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
@@ -2566,9 +2563,9 @@ msgid "s3cmd sync indexes {path} to {url} and delete"
 msgstr "s3cmd zsynchronizuj indeksy {path} do {url} i usuń"
 
 #: ../fdroidserver/deploy.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "s3cmd syncs indexes from {path} to {url} and deletes removed"
-msgstr "s3cmd zsynchronizuj indeksy {path} do {url} i usuń"
+msgstr "s3cmd synchronizuje indeksy z {path} do {url} i usuwa usunięte"
 
 #: ../fdroidserver/scanner.py
 #, python-brace-format
@@ -2792,7 +2789,7 @@ msgstr "{path} została oznaczona przez virustotal {count} razy:"
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "{path} is not \"key: value\" dict, but a {datatype}!"
-msgstr ""
+msgstr "{path} nie jest słownikiem \"klucz: wartość\", lecz {datatype}!"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -2807,7 +2804,7 @@ msgstr "{path} inie jest listą, lecz {datatype}!"
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "{path} is not {expected_type}, but a {datatype}!"
-msgstr ""
+msgstr "{path} nie jest {expected_type}, lecz {datatype}!"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -2822,7 +2819,7 @@ msgstr "{path} więcej niż 200MB, przesłane ręcznie: {url}"
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "{path}: \"{code}\" is not a valid ISO_3166-1 alpha-2 country code!"
-msgstr ""
+msgstr "{path}: \"{code}\" nie jest prawidłowym kodem ISO_3166-1 alpha-2 country!"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
