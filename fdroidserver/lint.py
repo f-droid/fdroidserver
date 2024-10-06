@@ -878,9 +878,7 @@ def main():
 
 
 def lint_metadata(options):
-    # Get all apps...
-    allapps = metadata.read_metadata(options.appid)
-    apps = common.read_app_args(options.appid, allapps, False)
+    apps = common.read_app_args(options.appid)
 
     anywarns = check_for_unsupported_metadata_files()
 

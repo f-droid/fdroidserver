@@ -730,10 +730,7 @@ def main():
             logging.error(_('Build metadata git repo has uncommited changes!'))
             sys.exit(1)
 
-    # Get all apps...
-    allapps = metadata.read_metadata()
-
-    apps = common.read_app_args(options.appid, allapps, False)
+    apps = common.read_app_args(options.appid)
 
     processed = []
     failed = dict()

@@ -1117,10 +1117,7 @@ def main():
     srclib_dir = os.path.join(build_dir, 'srclib')
     extlib_dir = os.path.join(build_dir, 'extlib')
 
-    # Read all app and srclib metadata
-    pkgs = common.read_pkg_args(options.appid, True)
-    allapps = metadata.read_metadata(pkgs, sort_by_time=True)
-    apps = common.read_app_args(options.appid, allapps, True)
+    apps = common.read_app_args(options.appid, allow_version_codes=True, sort_by_time=True)
 
     for appid, app in list(apps.items()):
         if (app.get('Disabled') and not options.force) or not app.get('RepoType') or not app.get('Builds', []):
