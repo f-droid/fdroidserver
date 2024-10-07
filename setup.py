@@ -100,6 +100,7 @@ setup(
         'paramiko',
         'Pillow',
         'apache-libcloud >= 0.14.1',
+        'puremagic',
         'python-vagrant',
         'PyYAML',
         'qrcode',
