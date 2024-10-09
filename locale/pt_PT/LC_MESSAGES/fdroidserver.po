@@ -5,13 +5,14 @@
 # ssantos <ssantos@web.de>, 2020, 2021, 2022, 2023, 2024.
 # Hans-Christoph Steiner <hans@guardianproject.info>, 2020, 2022, 2024.
 # Peter J. Mello <admin@petermello.net>, 2021.
+# Fat Potato <mjwany48@gmail.com>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2024-09-10 10:50+0200\n"
-"PO-Revision-Date: 2024-09-10 09:27+0000\n"
-"Last-Translator: Hans-Christoph Steiner <hans@guardianproject.info>\n"
+"PO-Revision-Date: 2024-10-10 00:37+0000\n"
+"Last-Translator: Fat Potato <mjwany48@gmail.com>\n"
 "Language-Team: Portuguese (Portugal) <https://hosted.weblate.org/projects/f-droid/fdroidserver/pt_PT/>\n"
 "Language: pt_PT\n"
 "MIME-Version: 1.0\n"
@@ -680,12 +681,12 @@ msgstr "ERRO: host de git \"%s\" não suportado, patches são bem-vindos!"
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "ERROR: {key} in {path} is not \"archive\" or \"repo\"!"
-msgstr ""
+msgstr "ERRO: {key} em {path} não é \"arquivo\" ou \"repositório\"!"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "ERROR: {key}:{subkey} in {path} is not in allowed keys: {allowed_keys}!"
-msgstr ""
+msgstr "ERRO: {key}:{subkey} em {path} não está nas chaves permitidas: {allowed_keys}!"
 
 #: ../fdroidserver/__main__.py
 #, python-brace-format
