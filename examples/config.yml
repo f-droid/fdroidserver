@@ -51,6 +51,13 @@
 # Canonical URL of the repositoy, needs to end in /repo. Is is used to identity
 # the repo in the client, as well.
 # repo_url: https://MyFirstFDroidRepo.org/fdroid/repo
+#
+# Base URL for per-package pages on the website of this repo,
+# i.e. https://f-droid.org/packages/<appid>/ This should be accessible
+# with a browser. Setting it to null or not setting this disables the
+# feature.
+# repo_web_base_url: https://MyFirstFDroidRepo.org/packages/
+#
 # repo_name: My First F-Droid Repo Demo
 # repo_description: >-
 #   This is a repository of apps to be used with F-Droid. Applications
@@ -62,6 +69,7 @@
 # As above, but for the archive repo.
 #
 # archive_url: https://f-droid.org/archive
+# archive_web_base_url:
 # archive_name: My First F-Droid Archive Demo
 # archive_description: >-
 #   The repository of older versions of packages from the main demo repository.
