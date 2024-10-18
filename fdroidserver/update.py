@@ -316,6 +316,13 @@ def get_cache_file():
     return os.path.join('tmp', 'apkcache.json')
 
 
+def get_cache_mtime():
+    apkcachefile = get_cache_file()
+    if os.path.exists(apkcachefile):
+        return os.stat(apkcachefile).st_mtime
+    return 0
+
+
 def get_cache():
     """Get the cached dict of the APK index.
 
@@ -1853,7 +1860,7 @@ def scan_apk_androguard(apk, apkfile):
 
 
 def process_apk(apkcache, apkfilename, repodir, knownapks, use_date_from_apk=False,
-                allow_disabled_algorithms=False, archive_bad_sig=False, apps=None):
+                allow_disabled_algorithms=False, archive_bad_sig=False, apps=None, cache_timestamp=0):
     """Process the apk with the given filename in the given repo directory.
 
     This also extracts the icons.
@@ -1875,6 +1882,8 @@ def process_apk(apkcache, apkfilename, repodir, knownapks, use_date_from_apk=Fal
       disabled algorithms in the signature (e.g. MD5)
     archive_bad_sig
       move APKs with a bad signature to the archive
+    cache_timestamp
+      the timestamp of the cache file
 
     Returns
     -------
@@ -1888,7 +1897,8 @@ def process_apk(apkcache, apkfilename, repodir, knownapks, use_date_from_apk=Fal
     usecache = False
     if apkfilename in apkcache:
         apk = apkcache[apkfilename]
-        if apk.get('hash') == common.sha256sum(apkfile):
+        stat = os.stat(apkfile)
+        if apk.get('size') == stat.st_size and stat.st_mtime < cache_timestamp:
             logging.debug(_("Reading {apkfilename} from cache")
                           .format(apkfilename=apkfilename))
             usecache = True
@@ -2007,7 +2017,7 @@ def process_apk(apkcache, apkfilename, repodir, knownapks, use_date_from_apk=Fal
     return False, apk, cachechanged
 
 
-def process_apks(apkcache, repodir, knownapks, use_date_from_apk=False, apps=None):
+def process_apks(apkcache, repodir, knownapks, use_date_from_apk=False, apps=None, cache_timestamp=0):
     """Process the apks in the given repo directory.
 
     This also extracts the icons.
@@ -2022,6 +2032,8 @@ def process_apks(apkcache, repodir, knownapks, use_date_from_apk=False, apps=Non
      b known apks info
     use_date_from_apk
       use date from APK (instead of current date) for newly added APKs
+    cache_timestamp
+      the timestamp of the cache file
 
     Returns
     -------
@@ -2043,7 +2055,7 @@ def process_apks(apkcache, repodir, knownapks, use_date_from_apk=False, apps=Non
         apkfilename = apkfile[len(repodir) + 1:]
         ada = disabled_algorithms_allowed()
         (skip, apk, cachethis) = process_apk(apkcache, apkfilename, repodir, knownapks,
-                                             use_date_from_apk, ada, True, apps)
+                                             use_date_from_apk, ada, True, apps, cache_timestamp)
         if skip:
             continue
         apks.append(apk)
@@ -2641,13 +2653,14 @@ def main():
 
     # Get APK cache
     apkcache = get_cache()
+    cache_timestamp = get_cache_mtime()
 
     # Delete builds for disabled apps
     delete_disabled_builds(apps, apkcache, repodirs)
 
     # Scan all apks in the main repo
     apks, cachechanged = process_apks(apkcache, repodirs[0], knownapks,
-                                      options.use_date_from_apk, apps)
+                                      options.use_date_from_apk, apps, cache_timestamp)
 
     files, fcachechanged = scan_repo_files(apkcache, repodirs[0], knownapks,
                                            options.use_date_from_apk)
@@ -2716,7 +2729,7 @@ def main():
     # Scan the archive repo for apks as well
     if len(repodirs) > 1:
         archapks, cc = process_apks(apkcache, repodirs[1], knownapks,
-                                    options.use_date_from_apk, apps)
+                                    options.use_date_from_apk, apps, cache_timestamp)
         if cc:
             cachechanged = True
     else:
