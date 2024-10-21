@@ -30,7 +30,7 @@ from pathlib import Path
 from urllib.parse import urlencode, urlparse, urlunparse
 
 from . import _
-from . import common, index, net
+from . import common, github, index, net
 from .exception import FDroidException
 
 
@@ -106,6 +106,17 @@ def download_fdroid_apk(privacy_mode=False):  # pylint: disable=unused-argument
     return net.download_using_mirrors([mirror])
 
 
+def download_fdroid_apk_from_github(privacy_mode=False):
+    """Download F-Droid.apk from F-Droid's GitHub Releases."""
+    if common.config and not privacy_mode:
+        token = common.config.get('github_token')
+    else:
+        token = None
+    gh = github.GithubApi(token, 'https://github.com/f-droid/fdroidclient')
+    latest_apk = gh.get_latest_apk()
+    return net.download_file(latest_apk)
+
+
 def download_fdroid_apk_from_ipns(privacy_mode=False):
     """Download the F-Droid APK from an IPNS repo."""
     cid = 'k51qzi5uqu5dl4hbcksbdmplanu9n4hivnqsupqe6vzve1pdbeh418ssptldd3'
@@ -161,11 +172,13 @@ def install_fdroid_apk(privacy_mode=False):
         download_methods = [
             download_fdroid_apk_from_maven,
             download_fdroid_apk_from_ipns,
+            download_fdroid_apk_from_github,
         ]
     else:
         download_methods = [
             download_apk,
             download_fdroid_apk_from_maven,
+            download_fdroid_apk_from_github,
             download_fdroid_apk_from_ipns,
             download_fdroid_apk,
         ]
