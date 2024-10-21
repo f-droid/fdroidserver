@@ -37,7 +37,8 @@ config = None
 DEFAULT_IPFS_GATEWAYS = ("https://gateway.ipfs.io/ipfs/",)
 
 
-def download_apk(appid='org.fdroid.fdroid'):
+# pylint: disable=unused-argument
+def download_apk(appid='org.fdroid.fdroid', privacy_mode=False):
     """Download an APK from F-Droid via the first mirror that works."""
     url = urlunparse(
         urlparse(common.FDROIDORG_MIRRORS[0]['url'])._replace(
@@ -72,7 +73,7 @@ def download_apk(appid='org.fdroid.fdroid'):
         return str(f.rename(f.with_stem(f'{appid}_{versionCode}')).resolve())
 
 
-def download_fdroid_apk():
+def download_fdroid_apk(privacy_mode=False):  # pylint: disable=unused-argument
     """Directly download the current F-Droid APK and verify it.
 
     This downloads the "download button" link, which is the version
@@ -112,7 +113,7 @@ def install_fdroid_apk(privacy_mode=False):
         download_methods = [download_apk, download_fdroid_apk]
     for method in download_methods:
         try:
-            f = method()
+            f = method(privacy_mode=privacy_mode)
             break
         except Exception as e:
             logging.info(e)
@@ -212,6 +213,13 @@ def main():
         default=False,
         help=_("Install all signed applications available"),
     )
+    parser.add_argument(
+        "-p",
+        "--privacy-mode",
+        action="store_true",
+        default=False,
+        help=_("Download F-Droid.apk using mirrors that leak less to the network"),
+    )
     options = common.parse_args(parser)
 
     common.set_console_logging(options.verbose)
@@ -258,7 +266,7 @@ def main():
         install_apks_to_devices(apks.values())
 
     else:
-        sys.exit(install_fdroid_apk())
+        sys.exit(install_fdroid_apk(options.privacy_mode))
 
     logging.info('\n' + _('Finished'))
 
