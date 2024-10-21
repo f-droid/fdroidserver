@@ -106,6 +106,17 @@ def download_fdroid_apk(privacy_mode=False):  # pylint: disable=unused-argument
     return net.download_using_mirrors([mirror])
 
 
+def download_fdroid_apk_from_ipns(privacy_mode=False):
+    """Download the F-Droid APK from an IPNS repo."""
+    cid = 'k51qzi5uqu5dl4hbcksbdmplanu9n4hivnqsupqe6vzve1pdbeh418ssptldd3'
+    mirrors = [
+        {"url": f"https://ipfs.io/ipns/{cid}/F-Droid.apk"},
+    ]
+    if not privacy_mode:
+        mirrors.append({"url": f"https://{cid}.ipns.dweb.link/F-Droid.apk"})
+    return net.download_using_mirrors(mirrors)
+
+
 def download_fdroid_apk_from_maven(privacy_mode=False):
     """Download F-Droid.apk from Maven Central and official mirrors."""
     path = 'org/fdroid/fdroid/F-Droid'
@@ -149,11 +160,13 @@ def install_fdroid_apk(privacy_mode=False):
     if privacy_mode or not (common.config and common.config.get('jarsigner')):
         download_methods = [
             download_fdroid_apk_from_maven,
+            download_fdroid_apk_from_ipns,
         ]
     else:
         download_methods = [
             download_apk,
             download_fdroid_apk_from_maven,
+            download_fdroid_apk_from_ipns,
             download_fdroid_apk,
         ]
     for method in download_methods:
