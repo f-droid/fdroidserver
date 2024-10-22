@@ -730,7 +730,7 @@ $fdroid scanner
 # run these to get their output, but the are not setup, so don't fail
 $fdroid build || true
 $fdroid import || true
-$fdroid install || true
+$fdroid install --no || true
 
 
 #------------------------------------------------------------------------------#

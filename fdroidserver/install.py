@@ -22,6 +22,8 @@ import os
 import glob
 import locale
 import logging
+import termios
+import tty
 
 import defusedxml.ElementTree as XMLElementTree
 
@@ -264,6 +266,23 @@ def install_apks_to_devices(apks):
                 )
 
 
+def read_char():
+    """Read input from the terminal prompt one char at a time."""
+    fd = sys.stdin.fileno()
+    old_settings = termios.tcgetattr(fd)
+    try:
+        tty.setraw(fd)
+        ch = sys.stdin.read(1)
+    finally:
+        termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
+    return ch
+
+
+def strtobool(val):
+    """Convert a localized string representation of truth to True or False."""
+    return val.lower() in ('', 'y', 'yes', _('yes'), _('true'))  # '' is pressing Enter
+
+
 def main():
     parser = ArgumentParser(
         usage="%(prog)s [options] [APPID[:VERCODE] [APPID[:VERCODE] ...]]"
@@ -288,15 +307,48 @@ def main():
         default=False,
         help=_("Download F-Droid.apk using mirrors that leak less to the network"),
     )
+    parser.add_argument(
+        "-y",
+        "--yes",
+        action="store_true",
+        default=None,
+        help=_("Automatic yes to all prompts."),
+    )
+    parser.add_argument(
+        "-n",
+        "--no",
+        action="store_false",
+        dest='yes',
+        help=_("Automatic no to all prompts."),
+    )
     options = common.parse_args(parser)
 
     common.set_console_logging(options.verbose)
-
-    if not options.appid and not options.all:
-        # TODO implement me, including a -y/--yes flag
-        print('TODO prompt the user if they want to download and install F-Droid.apk')
+    logging.captureWarnings(True)  # for SNIMissingWarning
 
     common.get_config()
+
+    if not options.appid and not options.all:
+        run_install = options.yes
+        if options.yes is None and sys.stdout.isatty():
+            print(
+                _(
+                    'Would you like to download and install F-Droid.apk via adb? (YES/no)'
+                ),
+                flush=True,
+            )
+            answer = ''
+            while True:
+                in_char = read_char()
+                if in_char == '\r':  # Enter key
+                    break
+                if not in_char.isprintable():
+                    sys.exit(1)
+                answer += in_char
+            run_install = strtobool(answer)
+        if run_install:
+            sys.exit(install_fdroid_apk(options.privacy_mode))
+        sys.exit(1)
 
     output_dir = 'repo'
     if (options.appid or options.all) and not os.path.isdir(output_dir):
@@ -332,9 +384,6 @@ def main():
             for apkfile in sorted(glob.glob(os.path.join(output_dir, '*.apk')))
         }
         install_apks_to_devices(apks.values())
-
-    else:
-        sys.exit(install_fdroid_apk(options.privacy_mode))
 
     logging.info('\n' + _('Finished'))
 
