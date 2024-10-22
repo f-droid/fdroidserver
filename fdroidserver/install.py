@@ -27,7 +27,7 @@ import tty
 
 import defusedxml.ElementTree as XMLElementTree
 
-from argparse import ArgumentParser
+from argparse import ArgumentParser, BooleanOptionalAction
 from pathlib import Path
 from urllib.parse import urlencode, urlparse, urlunparse
 
@@ -166,8 +166,13 @@ def install_fdroid_apk(privacy_mode=False):
     None for success or the error message.
 
     """
-    if locale.getlocale()[0].split('_')[-1] in ('CN', 'HK', 'IR', 'TM'):
-        logging.warning(_('Privacy mode was enabled based on your locale.'))
+    country_code = locale.getlocale()[0].split('_')[-1]
+    if privacy_mode is None and country_code in ('CN', 'HK', 'IR', 'TM'):
+        logging.warning(
+            _('Privacy mode was enabled based on your locale ({country_code}).').format(
+                country_code=country_code
+            )
+        )
         privacy_mode = True
 
     if privacy_mode or not (common.config and common.config.get('jarsigner')):
@@ -303,8 +308,8 @@ def main():
     parser.add_argument(
         "-p",
         "--privacy-mode",
-        action="store_true",
-        default=False,
+        action=BooleanOptionalAction,
+        default=None,
         help=_("Download F-Droid.apk using mirrors that leak less to the network"),
     )
     parser.add_argument(
