@@ -33,7 +33,10 @@ class InstallTest(unittest.TestCase):
         config = dict()
         fdroidserver.common.fill_config_defaults(config)
         fdroidserver.common.config = config
-        config['adb'] = fdroidserver.common.find_sdk_tools_cmd('adb')
+        try:
+            config['adb'] = fdroidserver.common.find_sdk_tools_cmd('adb')
+        except FDroidException as e:
+            self.skipTest(f'Skipping test because: {e}')
         self.assertTrue(os.path.exists(config['adb']))
         self.assertTrue(os.path.isfile(config['adb']))
         devices = fdroidserver.install.devices()
