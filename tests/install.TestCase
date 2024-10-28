@@ -196,7 +196,7 @@ class InstallTest(unittest.TestCase):
         download_fdroid_apk.side_effect = self._download_raise
         fdroidserver.common.config = {'jarsigner': 'fakepath'}
         install.install_fdroid_apk(privacy_mode=False)
-        download_apk.assert_not_called()
+        download_apk.assert_called_once()
         download_fdroid_apk.assert_called_once()
 
     @patch('fdroidserver.install.download_apk')

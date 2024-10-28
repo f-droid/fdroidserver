@@ -31,8 +31,6 @@ from . import _
 from . import common, index, net
 from .exception import FDroidException
 
-config = None
-
 
 DEFAULT_IPFS_GATEWAYS = ("https://gateway.ipfs.io/ipfs/",)
 
@@ -107,7 +105,7 @@ def install_fdroid_apk(privacy_mode=False):
         logging.warning(_('Privacy mode was enabled based on your locale.'))
         privacy_mode = True
 
-    if privacy_mode or not (config and config.get('jarsigner')):
+    if privacy_mode or not (common.config and common.config.get('jarsigner')):
         download_methods = [download_fdroid_apk]
     else:
         download_methods = [download_apk, download_fdroid_apk]
@@ -120,7 +118,7 @@ def install_fdroid_apk(privacy_mode=False):
     else:
         return _('F-Droid.apk could not be downloaded from any known source!')
 
-    if config and config['apksigner']:
+    if common.config and common.config.get('apksigner'):
         # TODO this should always verify, but that requires APK sig verification in Python #94
         logging.info(_('Verifying package {path} with apksigner.').format(path=f))
         common.verify_apk_signature(f)
@@ -130,7 +128,7 @@ def install_fdroid_apk(privacy_mode=False):
             path=f, fingerprint=fingerprint
         )
 
-    if config and config.get('adb'):
+    if common.config and common.config.get('adb'):
         if devices():
             install_apks_to_devices([f])
             os.remove(f)
@@ -194,9 +192,6 @@ def install_apks_to_devices(apks):
 
 
 def main():
-    global config
-
-    # Parse command line...
     parser = ArgumentParser(
         usage="%(prog)s [options] [APPID[:VERCODE] [APPID[:VERCODE] ...]]"
     )
@@ -228,7 +223,7 @@ def main():
         # TODO implement me, including a -y/--yes flag
         print('TODO prompt the user if they want to download and install F-Droid.apk')
 
-    config = common.read_config()
+    common.get_config()
 
     output_dir = 'repo'
     if (options.appid or options.all) and not os.path.isdir(output_dir):
