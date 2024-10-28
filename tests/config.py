@@ -25,8 +25,6 @@ mirrors = (
     'https://foo.bar/fdroid',
 )
 
-update_stats = True
-
 install_list = 'org.adaway'
 uninstall_list = ('com.android.vending', 'com.facebook.orca', )
 

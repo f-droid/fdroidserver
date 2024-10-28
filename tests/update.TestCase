@@ -697,14 +697,10 @@ class UpdateTest(unittest.TestCase):
 
         os.chdir(self.testdir)
         os.mkdir('repo')
-        os.mkdir('stats')
-        with open(os.path.join('stats', 'known_apks.txt'), 'w') as fp:
-            fp.write('se.manyver_30.apk se.manyver 2018-10-10\n')
         filename = 'Norway_bouvet_europe_2.obf.zip'
         shutil.copy(os.path.join(self.basedir, filename), 'repo')
         knownapks = fdroidserver.common.KnownApks()
         files, fcachechanged = fdroidserver.update.scan_repo_files(dict(), 'repo', knownapks, False)
-        knownapks.writeifchanged()
         self.assertTrue(fcachechanged)
 
         info = files[0]

@@ -29,7 +29,7 @@ import urllib.request
 import zipfile
 from argparse import ArgumentParser
 from dataclasses import dataclass, field, fields
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from enum import IntEnum
 from pathlib import Path
 from tempfile import TemporaryDirectory
@@ -330,7 +330,7 @@ def get_embedded_classes(apkfile, depth=0):
 
 def _datetime_now():
     """Get datetime.now(), using this funciton allows mocking it for testing."""
-    return datetime.utcnow()
+    return datetime.now(timezone.utc)
 
 
 def _scanner_cachedir():
@@ -389,7 +389,7 @@ class SignatureDataController:
         last_updated = self.data.get("last_updated", None)
         if last_updated:
             try:
-                last_updated = datetime.fromtimestamp(last_updated)
+                last_updated = datetime.fromtimestamp(last_updated, timezone.utc)
             except ValueError as e:
                 raise SignatureDataMalformedException() from e
             except TypeError as e:

@@ -362,7 +362,7 @@ def get_cache():
             if not isinstance(v['antiFeatures'], dict):
                 v['antiFeatures'] = {k: {} for k in sorted(v['antiFeatures'])}
         if 'added' in v:
-            v['added'] = datetime.fromtimestamp(v['added'])
+            v['added'] = datetime.fromtimestamp(v['added'], tz=timezone.utc)
 
     return apkcache
 
@@ -2001,7 +2001,7 @@ def process_apk(apkcache, apkfilename, repodir, knownapks, use_date_from_apk=Fal
         fill_missing_icon_densities(empty_densities, iconfilename, apk, repodir)
 
         if use_date_from_apk:
-            default_date_param = datetime.fromtimestamp(os.stat(apkfile).st_mtime)
+            default_date_param = datetime.fromtimestamp(os.stat(apkfile).st_mtime, tz=timezone.utc)
         else:
             default_date_param = None
 
@@ -2420,12 +2420,12 @@ def create_metadata_from_template(apk):
 def read_added_date_from_all_apks(apps, apks):
     """No summary.
 
-    Added dates come from the stats/known_apks.txt file but are
+    Added dates come from the repo/index-v2.json file but are
     read when scanning apks and thus need to be applied form apk
     level to app level for _all_ apps and not only from non-archived
     ones
 
-    TODO: read the added dates directly from known_apks.txt instead of
+    TODO: read the added dates directly from index-v2.json instead of
           going through apks that way it also works for for repos that
           don't keep an archive of apks.
     """
@@ -2771,10 +2771,6 @@ def main():
     if git_remote or os.path.isdir(os.path.join('binary_transparency', '.git')):
         from . import btlog
         btlog.make_binary_transparency_log(repodirs)
-
-    if config['update_stats']:
-        # Update known apks info...
-        knownapks.writeifchanged()
 
     status_update_json(apps, apks + archapks)
 

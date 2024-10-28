@@ -274,7 +274,6 @@ class NightlyTest(unittest.TestCase):
             'repo_name': 'f-droid/test-nightly',
             'repo_url': mirror_url + '/repo',
             'servergitmirrors': [{"url": git_url}],
-            'update_stats': True,
         }
         with open('config.yml') as fp:
             config = yaml.safe_load(fp)
@@ -347,7 +346,6 @@ class NightlyTest(unittest.TestCase):
             'repo_name': 'fdroid/test-nightly',
             'repo_url': 'https://gitlab.com/fdroid/test-nightly/-/raw/master/fdroid/repo',
             'servergitmirrors': [{"url": 'git@gitlab.com:fdroid/test-nightly'}],
-            'update_stats': True,
         }
         with open('config.yml') as fp:
             config = yaml.safe_load(fp)

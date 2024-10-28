@@ -367,7 +367,7 @@ You can use it with the [F-Droid](https://f-droid.org/) Android app.
 
 Last updated: {date}'''.format(repo_git_base=repo_git_base,
                                repo_url=repo_url,
-                               date=datetime.datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S UTC'))
+                               date=datetime.datetime.now(datetime.timezone.utc).strftime('%Y-%m-%d %H:%M:%S UTC'))
         with open(readme_path, 'w') as fp:
             fp.write(readme)
         mirror_git_repo.git.add(all=True)
@@ -422,7 +422,6 @@ Last updated: {date}'''.format(repo_git_base=repo_git_base,
             'keypass': PASSWORD,
             'keydname': DISTINGUISHED_NAME,
             'make_current_version_link': False,
-            'update_stats': True,
         }
         with open('config.yml', 'w') as fp:
             yaml.dump(config, fp, default_flow_style=False)
@@ -496,7 +495,9 @@ Last updated: {date}'''.format(repo_git_base=repo_git_base,
         common.local_rsync(
             options, [repo_basedir + '/metadata/'], git_mirror_metadatadir + '/'
         )
-        common.local_rsync(options, [repo_basedir + '/stats/'], git_mirror_statsdir + '/')
+        stats = repo_basedir + '/stats/'
+        if os.path.exists(stats):
+            common.local_rsync(options, [stats], git_mirror_statsdir + '/')
         mirror_git_repo.git.add(all=True)
         mirror_git_repo.index.commit("update app metadata")
 
