@@ -712,8 +712,9 @@ def push_commits(remote_name='origin', branch_name='checkupdates', verbose=False
     git_repo, default = get_git_repo_and_main_branch()
     files = set()
     upstream_main = default if default in git_repo.remotes.upstream.refs else 'main'
-    local_main = default if default in git_repo.refs else 'main'
-    for commit in git_repo.iter_commits(f'upstream/{upstream_main}...{local_main}'):
+    for commit in git_repo.iter_commits(
+        f'upstream/{upstream_main}...HEAD', right_only=True
+    ):
         files.update(commit.stats.files.keys())
 
     files = list(files)
