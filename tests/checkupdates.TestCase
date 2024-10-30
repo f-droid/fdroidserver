@@ -463,6 +463,55 @@ class CheckupdatesTest(unittest.TestCase):
                 fdroidserver.checkupdates.main()
         sys_exit.assert_not_called()
 
+    def test_get_git_repo_and_main_branch(self):
+        os.chdir(self.testdir.name)
+        git_repo = git.Repo.init()
+        open('foo', 'w').close()
+        git_repo.git.add(all=True)
+        git_repo.index.commit("all files")
+
+        repo, branch = fdroidserver.checkupdates.get_git_repo_and_main_branch()
+        self.assertTrue(branch in ('main', 'master'))
+        self.assertTrue(branch in repo.heads)
+
+    @mock.patch('sys.exit')
+    @mock.patch('fdroidserver.common.read_app_args')
+    @mock.patch('fdroidserver.checkupdates.checkupdates_app')
+    def test_merge_requests_branch(self, checkupdates_app, read_app_args, sys_exit):
+        def _sys_exit(return_code=0):
+            assert return_code == 0
+
+        def _checkupdates_app(app, auto, commit):  # pylint: disable=unused-argument
+            os.mkdir('metadata')
+            Path(f'metadata/{app["packageName"]}.yml').write_text('AutoName: Example')
+            git_repo.git.add(all=True)
+            git_repo.index.commit("Example")
+
+        def _read_app_args(apps=[]):
+            appid = apps[0]
+            return {appid: {'packageName': appid}}
+
+        appid = 'com.example'
+        read_app_args.side_effect = _read_app_args
+        checkupdates_app.side_effect = _checkupdates_app
+        sys_exit.side_effect = _sys_exit
+
+        # set up clean git repo
+        os.chdir(self.testdir.name)
+        git_repo = git.Repo.init()
+        open('foo', 'w').close()
+        git_repo.git.add(all=True)
+        git_repo.index.commit("all files")
+        # --merge-request assumes remotes called 'origin' and 'upstream'
+        git_repo.create_remote('origin', os.getcwd()).fetch()
+        git_repo.create_remote('upstream', os.getcwd()).fetch()
+
+        assert appid not in git_repo.heads
+        with mock.patch('sys.argv', ['fdroid checkupdates', '--merge-request', appid]):
+            fdroidserver.checkupdates.main()
+        sys_exit.assert_called_once()
+        assert appid in git_repo.heads
+
 
 if __name__ == "__main__":
     import argparse

@@ -684,7 +684,15 @@ def get_last_build_from_app(app: metadata.App) -> metadata.Build:
         return metadata.Build()
 
 
-def push_commits(remote_name='origin', verbose=False):
+def get_git_repo_and_main_branch():
+    git_repo = git.Repo.init('.')
+    main_branch = 'main'
+    if main_branch not in git_repo.heads:
+        main_branch = 'master'
+    return git_repo, main_branch
+
+
+def push_commits(remote_name='origin', branch_name='checkupdates', verbose=False):
     """Make git branch then push commits as merge request.
 
     This uses the appid as the standard branch name so that there is
@@ -701,17 +709,16 @@ def push_commits(remote_name='origin', verbose=False):
     * https://docs.gitlab.com/ee/user/project/push_options.html
 
     """
-    git_repo = git.Repo.init('.')
+    git_repo, default = get_git_repo_and_main_branch()
     files = set()
-    upstream_main = 'main' if 'main' in git_repo.remotes.upstream.refs else 'master'
-    local_main = 'main' if 'main' in git_repo.refs else 'master'
+    upstream_main = default if default in git_repo.remotes.upstream.refs else 'main'
+    local_main = default if default in git_repo.refs else 'main'
     for commit in git_repo.iter_commits(f'upstream/{upstream_main}...{local_main}'):
         files.update(commit.stats.files.keys())
 
-    branch_name = 'checkupdates'
     files = list(files)
     if len(files) == 1:
-        m = re.match(r'metadata/([^\s]+)\.yml', files[0])
+        m = re.match(r'metadata/(\S+)\.yml', files[0])
         if m:
             branch_name = m.group(1)  # appid
     if not files:
@@ -767,13 +774,10 @@ def push_commits(remote_name='origin', verbose=False):
             logging.debug(remote.url + ': ' + pushinfo.summary)
 
 
-def prune_empty_appid_branches(git_repo=None):
+def prune_empty_appid_branches(git_repo=None, main_branch='main'):
     """Remove empty branches from checkupdates-bot git remote."""
     if git_repo is None:
-        git_repo = git.Repo.init('.')
-    main_branch = 'main'
-    if main_branch not in git_repo.remotes.upstream.refs:
-        main_branch = 'master'
+        git_repo, main_branch = get_git_repo_and_main_branch()
     upstream_main = 'upstream/' + main_branch
 
     remote = git_repo.remotes.origin
@@ -856,6 +860,12 @@ def main():
         logging.info(msg)
 
         try:
+            if options.merge_request:
+                logging.info(f'Creating merge request branch for {appid}')
+                git_repo, main_branch = get_git_repo_and_main_branch()
+                git_repo.create_head(appid, f"upstream/{main_branch}", force=True)
+                git_repo.git.checkout(appid)
+
             checkupdates_app(app, options.auto, options.commit or options.merge_request)
             processed.append(appid)
         except Exception as e:
