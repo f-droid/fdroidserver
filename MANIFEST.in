@@ -742,7 +742,12 @@ include tests/signindex/testy.jar
 include tests/signindex/unsigned.jar
 include tests/source-files/at.bitfire.davdroid/build.gradle
 include tests/source-files/catalog.test/app/build.gradle
+include tests/source-files/catalog.test/buildSrc/build.gradle.kts
+include tests/source-files/catalog.test/buildSrc/settings.gradle.kts
+include tests/source-files/catalog.test/buildSrc2/build.gradle.kts
+include tests/source-files/catalog.test/buildSrc2/settings.gradle.kts
 include tests/source-files/catalog.test/build.gradle.kts
+include tests/source-files/catalog.test/core/build.gradle
 include tests/source-files/catalog.test/libs.versions.toml
 include tests/source-files/catalog.test/gradle/libs.versions.toml
 include tests/source-files/catalog.test/settings.gradle.kts
