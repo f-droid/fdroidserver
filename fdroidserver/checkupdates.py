@@ -41,6 +41,10 @@ from . import net
 from .exception import VCSException, NoSubmodulesException, FDroidException, MetaDataException
 
 
+# https://gitlab.com/fdroid/checkupdates-runner/-/blob/1861899262a62a4ed08fa24e5449c0368dfb7617/.gitlab-ci.yml#L36
+BOT_EMAIL = 'fdroidci@bubu1.eu'
+
+
 def check_http(app: metadata.App) -> tuple[Optional[str], Optional[int]]:
     """Check for a new version by looking at a document retrieved via HTTP.
 
@@ -692,6 +696,45 @@ def get_git_repo_and_main_branch():
     return git_repo, main_branch
 
 
+def checkout_appid_branch(appid):
+    """Prepare the working branch named after the appid.
+
+    This sets up everything for checkupdates_app() to run and add
+    commits.  If there is an existing branch named after the appid,
+    and it has commits from users other than the checkupdates-bot,
+    then this will return False.  Otherwise, it returns True.
+
+    The checkupdates-runner must set the committer email address in
+    the git config.  Then any commit with a committer or author that
+    does not match that will be considered to have human edits.  That
+    email address is currently set in:
+    https://gitlab.com/fdroid/checkupdates-runner/-/blob/1861899262a62a4ed08fa24e5449c0368dfb7617/.gitlab-ci.yml#L36
+
+    """
+    logging.debug(f'Creating merge request branch for {appid}')
+    git_repo, main_branch = get_git_repo_and_main_branch()
+    for remote in git_repo.remotes:
+        remote.fetch()
+    try:
+        git_repo.remotes.origin.fetch(f'{appid}:refs/remotes/origin/{appid}')
+    except Exception as e:
+        logging.warning('"%s" branch not found on origin remote:\n\t%s', appid, e)
+    if appid in git_repo.remotes.origin.refs:
+        start_point = f"origin/{appid}"
+        for commit in git_repo.iter_commits(
+            f'upstream/{main_branch}...{start_point}', right_only=True
+        ):
+            if commit.committer.email != BOT_EMAIL or commit.author.email != BOT_EMAIL:
+                return False
+    else:
+        start_point = f"upstream/{main_branch}"
+    git_repo.git.checkout('-B', appid, start_point)
+    git_repo.git.rebase(
+        f'upstream/{main_branch}', strategy_option='ours', kill_after_timeout=120
+    )
+    return True
+
+
 def push_commits(remote_name='origin', branch_name='checkupdates', verbose=False):
     """Make git branch then push commits as merge request.
 
@@ -859,10 +902,14 @@ def main():
 
         try:
             if options.merge_request:
-                logging.info(f'Creating merge request branch for {appid}')
-                git_repo, main_branch = get_git_repo_and_main_branch()
-                git_repo.create_head(appid, f"upstream/{main_branch}", force=True)
-                git_repo.git.checkout(appid)
+                if not checkout_appid_branch(appid):
+                    msg = _("...checkupdate failed for {appid} : {error}").format(
+                        appid=appid,
+                        error='Open merge request with human edits, skipped.',
+                    )
+                    logging.warning(msg)
+                    failed[appid] = msg
+                    continue
 
             checkupdates_app(app, options.auto, options.commit or options.merge_request)
             processed.append(appid)
