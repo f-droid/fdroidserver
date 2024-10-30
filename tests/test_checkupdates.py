@@ -464,10 +464,13 @@ class CheckupdatesTest(unittest.TestCase):
         self.assertTrue(branch in ('main', 'master'))
         self.assertTrue(branch in repo.heads)
 
+    @mock.patch('git.remote.Remote.push')
     @mock.patch('sys.exit')
     @mock.patch('fdroidserver.common.read_app_args')
     @mock.patch('fdroidserver.checkupdates.checkupdates_app')
-    def test_merge_requests_branch(self, checkupdates_app, read_app_args, sys_exit):
+    def test_merge_requests_branch(
+        self, checkupdates_app, read_app_args, sys_exit, push
+    ):
         def _sys_exit(return_code=0):
             self.assertEqual(return_code, 0)
 
@@ -499,5 +502,6 @@ class CheckupdatesTest(unittest.TestCase):
         self.assertNotIn(appid, git_repo.heads)
         with mock.patch('sys.argv', ['fdroid checkupdates', '--merge-request', appid]):
             fdroidserver.checkupdates.main()
+        push.assert_called_once()
         sys_exit.assert_called_once()
         self.assertIn(appid, git_repo.heads)

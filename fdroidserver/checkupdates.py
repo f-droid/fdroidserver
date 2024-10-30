@@ -740,9 +740,6 @@ def push_commits(remote_name='origin', branch_name='checkupdates', verbose=False
     git_repo.create_head(branch_name, force=True)
     remote = git_repo.remotes[remote_name]
     pushinfos = remote.push(
-        branch_name, force=True, set_upstream=True, progress=progress
-    )
-    pushinfos = remote.push(
         branch_name,
         progress=progress,
         force=True,
