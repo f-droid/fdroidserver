@@ -2048,12 +2048,10 @@ class TestScanRepoForIpas(unittest.TestCase):
 
             knownapks.recordapk.call_count = 2
             self.assertTrue(
-                unittest.mock.call('abc.Def_123.ipa', 'abc')
-                in knownapks.recordapk.mock_calls
+                unittest.mock.call('abc.Def_123.ipa') in knownapks.recordapk.mock_calls
             )
             self.assertTrue(
-                unittest.mock.call('xyz.XXX_123.ipa', 'xyz')
-                in knownapks.recordapk.mock_calls
+                unittest.mock.call('xyz.XXX_123.ipa') in knownapks.recordapk.mock_calls
             )
 
 

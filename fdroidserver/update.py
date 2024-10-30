@@ -690,7 +690,7 @@ def scan_repo_for_ipas(apkcache, repodir, knownapks):
             apkcache[ipa_name] = ipa
             cachechanged = True
 
-        added = knownapks.recordapk(ipa_name, ipa['packageName'])
+        added = knownapks.recordapk(ipa_name)
         if added:
             ipa['added'] = added
 
@@ -1549,8 +1549,9 @@ def scan_repo_files(apkcache, repodir, knownapks, use_date_from_file=False):
             default_date_param = None
 
         # Record in knownapks, getting the added date at the same time..
-        added = knownapks.recordapk(repo_file['apkName'], repo_file['packageName'],
-                                    default_date=default_date_param)
+        added = knownapks.recordapk(
+            repo_file['apkName'], default_date=default_date_param
+        )
         if added:
             repo_file['added'] = added
 
@@ -2006,8 +2007,7 @@ def process_apk(apkcache, apkfilename, repodir, knownapks, use_date_from_apk=Fal
             default_date_param = None
 
         # Record in known apks, getting the added date at the same time..
-        added = knownapks.recordapk(apk['apkName'], apk['packageName'],
-                                    default_date=default_date_param)
+        added = knownapks.recordapk(apk['apkName'], default_date=default_date_param)
         if added:
             apk['added'] = added
 

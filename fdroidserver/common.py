@@ -2564,9 +2564,9 @@ class KnownApks:
                         for version in data["versions"].values():
                             filename = version["file"]["name"][1:]
                             date = datetime.fromtimestamp(version["added"] // 1000, tz=timezone.utc)
-                            self.apks[filename] = (appid, date)
+                            self.apks[filename] = date
 
-    def recordapk(self, apkName, app, default_date=None):
+    def recordapk(self, apkName, default_date=None):
         """
         Record an APK (if it's new, otherwise does nothing).
 
@@ -2578,10 +2578,9 @@ class KnownApks:
         if apkName not in self.apks:
             if default_date is None:
                 default_date = datetime.now(timezone.utc)
-            self.apks[apkName] = (app, default_date)
+            self.apks[apkName] = default_date
             self.changed = True
-        _ignored, added = self.apks[apkName]
-        return added
+        return self.apks[apkName]
 
 
 def get_file_extension(filename):

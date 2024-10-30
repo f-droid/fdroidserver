@@ -2945,8 +2945,8 @@ class CommonTest(unittest.TestCase):
         now = datetime.now(timezone.utc)
         knownapks = fdroidserver.common.KnownApks()
         for apkName in knownapks.apks:
-            knownapks.recordapk(apkName, 'ignored', default_date=now)
-        for appid, added in knownapks.apks.values():
+            knownapks.recordapk(apkName, default_date=now)
+        for added in knownapks.apks.values():
             self.assertNotEqual(added, now)
 
     def test_KnownApks_recordapk_new(self):
@@ -2958,14 +2958,14 @@ class CommonTest(unittest.TestCase):
         now = datetime.now(timezone.utc)
         knownapks = fdroidserver.common.KnownApks()
         fake_apk = 'fake.apk'
-        knownapks.recordapk(fake_apk, 'ignored', default_date=now)
-        for apk, (appid, added) in knownapks.apks.items():
+        knownapks.recordapk(fake_apk, default_date=now)
+        for apk, added in knownapks.apks.items():
             if apk == fake_apk:
                 self.assertEqual(added, now)
             else:
                 self.assertNotEqual(added, now)
-        knownapks.recordapk(fake_apk, 'ignored', default_date=datetime.now(timezone.utc))
-        self.assertEqual(knownapks.apks[fake_apk][1], now)
+        knownapks.recordapk(fake_apk, default_date=datetime.now(timezone.utc))
+        self.assertEqual(knownapks.apks[fake_apk], now)
 
 
 APKS_WITH_JAR_SIGNATURES = (
