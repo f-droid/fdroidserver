@@ -2579,7 +2579,6 @@ class KnownApks:
             if default_date is None:
                 default_date = datetime.now(timezone.utc)
             self.apks[apkName] = default_date
-            self.changed = True
         return self.apks[apkName]
 
 
