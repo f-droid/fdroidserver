@@ -49,7 +49,6 @@ force-exclude = '''(
   | tests/gradle-release-checksums\.py
   | tests/openssl-version-check-test\.py
   | tests/valid-package-names/test\.py
-  | tests/checkupdates\.TestCase
   | tests/common\.TestCase
   | tests/publish\.TestCase
   | tests/signatures\.TestCase

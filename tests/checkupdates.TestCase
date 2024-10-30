@@ -2,9 +2,13 @@
 
 # http://www.drdobbs.com/testing/unit-testing-with-python/240165163
 
+import git
 import logging
 import os
+import shutil
 import sys
+import tempfile
+import time
 import unittest
 from unittest import mock
 from pathlib import Path
@@ -27,6 +31,12 @@ class CheckupdatesTest(unittest.TestCase):
         logging.basicConfig(level=logging.DEBUG)
         self.basedir = localmodule / 'tests'
         os.chdir(self.basedir)
+        self.testdir = tempfile.TemporaryDirectory(
+            str(time.time()), self._testMethodName + '_'
+        )
+
+    def tearDown(self):
+        self.testdir.cleanup()
 
     def test_autoupdatemode_no_suffix(self):
         fdroidserver.checkupdates.config = {}
@@ -257,9 +267,9 @@ class CheckupdatesTest(unittest.TestCase):
         vcs.latesttags.return_value = ['1.1.9', '1.1.8']
         with mock.patch(
             'pathlib.Path.read_text', lambda a: 'v1.1.9\nc10109'
-        ) as _ignored, mock.patch.object(
-            Path, 'is_file'
-        ) as mock_path, mock.patch('fdroidserver.common.getvcs', return_value=vcs):
+        ) as _ignored, mock.patch.object(Path, 'is_file') as mock_path, mock.patch(
+            'fdroidserver.common.getvcs', return_value=vcs
+        ):
             _ignored  # silence the linters
             mock_path.is_file.return_falue = True
             vername, vercode, _tag = fdroidserver.checkupdates.check_tags(app, None)
@@ -269,9 +279,9 @@ class CheckupdatesTest(unittest.TestCase):
         app.UpdateCheckData = r'b.txt|c(.*)|.|v(.*)'
         with mock.patch(
             'pathlib.Path.read_text', lambda a: 'v1.1.0\nc10109'
-        ) as _ignored, mock.patch.object(
-            Path, 'is_file'
-        ) as mock_path, mock.patch('fdroidserver.common.getvcs', return_value=vcs):
+        ) as _ignored, mock.patch.object(Path, 'is_file') as mock_path, mock.patch(
+            'fdroidserver.common.getvcs', return_value=vcs
+        ):
             _ignored  # silence the linters
             mock_path.is_file.return_falue = True
             vername, vercode, _tag = fdroidserver.checkupdates.check_tags(app, None)
@@ -281,9 +291,9 @@ class CheckupdatesTest(unittest.TestCase):
         app.UpdateCheckData = r'b.txt|c(.*)||'
         with mock.patch(
             'pathlib.Path.read_text', lambda a: 'v1.1.9\nc10109'
-        ) as _ignored, mock.patch.object(
-            Path, 'is_file'
-        ) as mock_path, mock.patch('fdroidserver.common.getvcs', return_value=vcs):
+        ) as _ignored, mock.patch.object(Path, 'is_file') as mock_path, mock.patch(
+            'fdroidserver.common.getvcs', return_value=vcs
+        ):
             _ignored  # silence the linters
             mock_path.is_file.return_falue = True
             vername, vercode, _tag = fdroidserver.checkupdates.check_tags(app, None)
@@ -294,9 +304,9 @@ class CheckupdatesTest(unittest.TestCase):
         app.UpdateCheckData = r'b.txt|c(.*)||Android-([\d.]+)'
         with mock.patch(
             'pathlib.Path.read_text', lambda a: 'v1.1.9\nc10109'
-        ) as _ignored, mock.patch.object(
-            Path, 'is_file'
-        ) as mock_path, mock.patch('fdroidserver.common.getvcs', return_value=vcs):
+        ) as _ignored, mock.patch.object(Path, 'is_file') as mock_path, mock.patch(
+            'fdroidserver.common.getvcs', return_value=vcs
+        ):
             _ignored  # silence the linters
             mock_path.is_file.return_falue = True
             vername, vercode, _tag = fdroidserver.checkupdates.check_tags(app, None)
@@ -316,6 +326,142 @@ class CheckupdatesTest(unittest.TestCase):
             vername, vercode, _tag = fdroidserver.checkupdates.check_tags(app, None)
         self.assertEqual(vername, '2')
         self.assertEqual(vercode, 2)
+
+    def _get_test_git_repos(self):
+        testdir = self.testdir.name
+        os.chdir(testdir)
+        os.mkdir('metadata')
+        for f in (self.basedir / 'metadata').glob('*.yml'):
+            shutil.copy(f, 'metadata')
+        git_repo = git.Repo.init(testdir)
+        git_repo.git.add(all=True)
+        git_repo.index.commit("all metadata files")
+
+        git_remote_upstream = os.path.join(testdir, 'git_remote_upstream')
+        upstream_repo = git.Repo.init(git_remote_upstream, bare=True)
+        with upstream_repo.config_writer() as cw:
+            cw.set_value('receive', 'advertisePushOptions', True)
+        git_repo.create_remote('upstream', 'file://' + git_remote_upstream)
+
+        git_remote_origin = os.path.join(testdir, 'git_remote_origin')
+        origin_repo = git.Repo.init(git_remote_origin, bare=True)
+        with origin_repo.config_writer() as cw:
+            cw.set_value('receive', 'advertisePushOptions', True)
+        git_repo.create_remote('origin', 'file://' + git_remote_origin)
+
+        return git_repo, origin_repo, upstream_repo
+
+    def test_push_commits(self):
+        git_repo, origin_repo, upstream_repo = self._get_test_git_repos()
+        for remote in git_repo.remotes:
+            remote.push(git_repo.active_branch)
+        self.assertEqual(git_repo.head, upstream_repo.head)
+        self.assertEqual(origin_repo.head, upstream_repo.head)
+        # pretend that checkupdates ran but didn't create any new commits
+        fdroidserver.checkupdates.push_commits()
+
+        appid = 'org.adaway'
+        self.assertNotIn(appid, git_repo.branches)
+        self.assertNotIn(appid, origin_repo.branches)
+        self.assertNotIn(appid, upstream_repo.branches)
+        self.assertNotIn('checkupdates', git_repo.branches)
+
+        # now make commit
+        app = fdroidserver.metadata.read_metadata({appid: -1})[appid]
+        build = fdroidserver.metadata.Build()
+        build.versionName = 'fake'
+        build.versionCode = 999999999
+        app.Builds.append(build)
+        metadata_file = 'metadata/%s.yml' % appid
+        fdroidserver.metadata.write_metadata(metadata_file, app)
+        git_repo.index.add(metadata_file)
+        git_repo.index.commit('changed ' + appid)
+
+        # and push the new commit to the dynamic branch
+        fdroidserver.checkupdates.push_commits()
+        self.assertIn(appid, git_repo.branches)
+        self.assertIn(appid, git_repo.remotes.origin.refs)
+        self.assertNotIn('checkupdates', git_repo.branches)
+        self.assertNotIn(appid, git_repo.remotes.upstream.refs)
+
+    def test_push_commits_verbose(self):
+        class Options:
+            verbose = True
+
+        fdroidserver.checkupdates.options = Options
+        repos = self._get_test_git_repos()
+        git_repo = repos[0]
+        git_repo.remotes.origin.push(git_repo.active_branch)
+        git_repo.remotes.upstream.push(git_repo.active_branch)
+
+        # make commit
+        appid = 'org.adaway'
+        app = fdroidserver.metadata.read_metadata({appid: -1})[appid]
+        build = fdroidserver.metadata.Build()
+        build.versionName = 'fake'
+        build.versionCode = 999999999
+        app.Builds.append(build)
+        metadata_file = 'metadata/%s.yml' % appid
+        fdroidserver.metadata.write_metadata(metadata_file, app)
+        git_repo.index.add(metadata_file)
+        git_repo.index.commit('changed ' + appid)
+
+        # and push the new commit to the dynamic branch
+        fdroidserver.checkupdates.push_commits()
+        self.assertIn(appid, git_repo.branches)
+        self.assertIn(appid, git_repo.remotes.origin.refs)
+
+    def test_prune_empty_appid_branches(self):
+        git_repo, origin_repo, upstream_repo = self._get_test_git_repos()
+        for remote in git_repo.remotes:
+            remote.push(git_repo.active_branch)
+        self.assertEqual(git_repo.head, upstream_repo.head)
+        self.assertEqual(origin_repo.head, upstream_repo.head)
+
+        appid = 'org.adaway'
+        git_repo.create_head(appid, force=True)
+        git_repo.remotes.origin.push(appid, force=True)
+        self.assertIn(appid, git_repo.branches)
+        self.assertIn(appid, origin_repo.branches)
+        self.assertIn(appid, git_repo.remotes.origin.refs)
+        self.assertNotIn(appid, git_repo.remotes.upstream.refs)
+        fdroidserver.checkupdates.prune_empty_appid_branches()
+        self.assertNotIn(appid, origin_repo.branches)
+        self.assertNotIn(appid, git_repo.remotes.origin.refs)
+        self.assertNotIn(appid, git_repo.remotes.upstream.refs)
+
+    @mock.patch('sys.exit')
+    @mock.patch('fdroidserver.metadata.read_metadata')
+    def test_merge_requests_flag(self, read_metadata, sys_exit):
+        def _sys_exit(return_code=0):
+            assert return_code != 0
+            raise fdroidserver.exception.FDroidException('sys.exit() ran')
+
+        def _read_metadata(a=None, b=None):
+            raise StopIteration('read_metadata() ran, test is successful')
+
+        appid = 'com.example'
+        # read_metadata.return_value = dict()  # {appid: dict()}
+        read_metadata.side_effect = _read_metadata
+        sys_exit.side_effect = _sys_exit
+
+        # set up clean git repo
+        os.chdir(self.testdir.name)
+        git_repo = git.Repo.init()
+        open('foo', 'w').close()
+        git_repo.git.add(all=True)
+        git_repo.index.commit("all files")
+
+        with mock.patch('sys.argv', ['fdroid checkupdates', '--merge-request']):
+            with self.assertRaises(fdroidserver.exception.FDroidException):
+                fdroidserver.checkupdates.main()
+        sys_exit.assert_called()
+
+        sys_exit.reset_mock()
+        with mock.patch('sys.argv', ['fdroid checkupdates', '--merge-request', appid]):
+            with self.assertRaises(StopIteration):
+                fdroidserver.checkupdates.main()
+        sys_exit.assert_not_called()
 
 
 if __name__ == "__main__":
