@@ -22,6 +22,7 @@ import textwrap
 import yaml
 import gzip
 from argparse import ArgumentParser
+from datetime import datetime, timezone
 from zipfile import BadZipFile, ZipFile
 from unittest import mock
 from pathlib import Path
@@ -2934,6 +2935,37 @@ class CommonTest(unittest.TestCase):
         self.assertEqual(
             [{'url': s}], fdroidserver.common.parse_mirrors_config(mirrors)
         )
+
+    def test_KnownApks_recordapk(self):
+        """Test that added dates are being fetched from the index.
+
+        There are more related tests in tests/run-tests.
+
+        """
+        now = datetime.now(timezone.utc)
+        knownapks = fdroidserver.common.KnownApks()
+        for apkName in knownapks.apks:
+            knownapks.recordapk(apkName, 'ignored', default_date=now)
+        for appid, added in knownapks.apks.values():
+            self.assertNotEqual(added, now)
+
+    def test_KnownApks_recordapk_new(self):
+        """Test that new added dates work, and are not replaced later.
+
+        There are more related tests in tests/run-tests.
+
+        """
+        now = datetime.now(timezone.utc)
+        knownapks = fdroidserver.common.KnownApks()
+        fake_apk = 'fake.apk'
+        knownapks.recordapk(fake_apk, 'ignored', default_date=now)
+        for apk, (appid, added) in knownapks.apks.items():
+            if apk == fake_apk:
+                self.assertEqual(added, now)
+            else:
+                self.assertNotEqual(added, now)
+        knownapks.recordapk(fake_apk, 'ignored', default_date=datetime.now(timezone.utc))
+        self.assertEqual(knownapks.apks[fake_apk][1], now)
 
 
 APKS_WITH_JAR_SIGNATURES = (
