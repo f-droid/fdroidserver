@@ -23,6 +23,8 @@ import glob
 import locale
 import logging
 
+import defusedxml.ElementTree as XMLElementTree
+
 from argparse import ArgumentParser
 from pathlib import Path
 from urllib.parse import urlencode, urlparse, urlunparse
@@ -33,6 +35,27 @@ from .exception import FDroidException
 
 
 DEFAULT_IPFS_GATEWAYS = ("https://gateway.ipfs.io/ipfs/",)
+MAVEN_CENTRAL_MIRRORS = [
+    {
+        "url": "https://repo1.maven.org/maven2/",
+        "dnsA": ["199.232.16.209"],
+        "worksWithoutSNI": True,
+    },
+    {
+        "url": "https://repo.maven.apache.org/maven2/",
+        "dnsA": ["199.232.16.215"],
+        "worksWithoutSNI": True,
+    },
+    {
+        "url": "https://maven-central-asia.storage-download.googleapis.com/maven2/",
+    },
+    {
+        "url": "https://maven-central-eu.storage-download.googleapis.com/maven2/",
+    },
+    {
+        "url": "https://maven-central.storage-download.googleapis.com/maven2/",
+    },
+]
 
 
 # pylint: disable=unused-argument
@@ -83,6 +106,24 @@ def download_fdroid_apk(privacy_mode=False):  # pylint: disable=unused-argument
     return net.download_using_mirrors([mirror])
 
 
+def download_fdroid_apk_from_maven(privacy_mode=False):
+    """Download F-Droid.apk from Maven Central and official mirrors."""
+    path = 'org/fdroid/fdroid/F-Droid'
+    if privacy_mode:
+        mirrors = MAVEN_CENTRAL_MIRRORS[:2]  # skip the Google servers
+    else:
+        mirrors = MAVEN_CENTRAL_MIRRORS
+    mirrors = common.append_filename_to_mirrors(
+        os.path.join(path, 'maven-metadata.xml'), mirrors
+    )
+    metadata = net.download_using_mirrors(mirrors)
+    version = XMLElementTree.parse(metadata).getroot().findall('*.//latest')[0].text
+    mirrors = common.append_filename_to_mirrors(
+        os.path.join(path, version, f'F-Droid-{version}.apk'), mirrors
+    )
+    return net.download_using_mirrors(mirrors)
+
+
 def install_fdroid_apk(privacy_mode=False):
     """Download and install F-Droid.apk using all tricks we can muster.
 
@@ -106,9 +147,15 @@ def install_fdroid_apk(privacy_mode=False):
         privacy_mode = True
 
     if privacy_mode or not (common.config and common.config.get('jarsigner')):
-        download_methods = [download_fdroid_apk]
+        download_methods = [
+            download_fdroid_apk_from_maven,
+        ]
     else:
-        download_methods = [download_apk, download_fdroid_apk]
+        download_methods = [
+            download_apk,
+            download_fdroid_apk_from_maven,
+            download_fdroid_apk,
+        ]
     for method in download_methods:
         try:
             f = method(privacy_mode=privacy_mode)

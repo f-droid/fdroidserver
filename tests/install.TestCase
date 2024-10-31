@@ -177,40 +177,49 @@ class InstallTest(unittest.TestCase):
 
     @patch('fdroidserver.install.download_apk')
     @patch('fdroidserver.install.download_fdroid_apk')
+    @patch('fdroidserver.install.download_fdroid_apk_from_maven')
     def test_install_fdroid_apk_privacy_mode_true(
-        self, download_fdroid_apk, download_apk
+        self, maven, download_fdroid_apk, download_apk
     ):
         download_apk.side_effect = self._download_raise
         download_fdroid_apk.side_effect = self._download_raise
+        maven.side_effect = self._download_raise
         fdroidserver.common.config = {'jarsigner': 'fakepath'}
         install.install_fdroid_apk(privacy_mode=True)
         download_apk.assert_not_called()
-        download_fdroid_apk.assert_called_once()
+        download_fdroid_apk.assert_not_called()
+        maven.assert_called_once()
 
     @patch('fdroidserver.install.download_apk')
     @patch('fdroidserver.install.download_fdroid_apk')
+    @patch('fdroidserver.install.download_fdroid_apk_from_maven')
     def test_install_fdroid_apk_privacy_mode_false(
-        self, download_fdroid_apk, download_apk
+        self, maven, download_fdroid_apk, download_apk
     ):
         download_apk.side_effect = self._download_raise
         download_fdroid_apk.side_effect = self._download_raise
+        maven.side_effect = self._download_raise
         fdroidserver.common.config = {'jarsigner': 'fakepath'}
         install.install_fdroid_apk(privacy_mode=False)
         download_apk.assert_called_once()
         download_fdroid_apk.assert_called_once()
+        maven.assert_called_once()
 
     @patch('fdroidserver.install.download_apk')
     @patch('fdroidserver.install.download_fdroid_apk')
+    @patch('fdroidserver.install.download_fdroid_apk_from_maven')
     @patch('locale.getlocale', lambda: ('zh_CN', 'UTF-8'))
     def test_install_fdroid_apk_privacy_mode_locale_auto(
-        self, download_fdroid_apk, download_apk
+        self, maven, download_fdroid_apk, download_apk
     ):
         download_apk.side_effect = self._download_raise
         download_fdroid_apk.side_effect = self._download_raise
+        maven.side_effect = self._download_raise
         fdroidserver.common.config = {'jarsigner': 'fakepath'}
         install.install_fdroid_apk(privacy_mode=None)
         download_apk.assert_not_called()
-        download_fdroid_apk.assert_called_once()
+        download_fdroid_apk.assert_not_called()
+        maven.assert_called_once()
 
     @patch('fdroidserver.net.download_using_mirrors', lambda m: 'testvalue')
     def test_download_fdroid_apk_smokecheck(self):
@@ -219,6 +228,11 @@ class InstallTest(unittest.TestCase):
     @unittest.skipUnless(os.getenv('test_download_fdroid_apk'), 'requires net access')
     def test_download_fdroid_apk(self):
         f = install.download_fdroid_apk()
+        self.assertTrue(Path(f).exists())
+
+    @unittest.skipUnless(os.getenv('test_download_fdroid_apk'), 'requires net access')
+    def test_download_fdroid_apk_from_maven(self):
+        f = install.download_fdroid_apk_from_maven()
         self.assertTrue(Path(f).exists())
 
 
