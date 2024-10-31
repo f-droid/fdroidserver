@@ -14,7 +14,7 @@ import unittest
 import uuid
 import zipfile
 from dataclasses import asdict
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from unittest import mock
 
 if sys.version_info >= (3, 11):
@@ -592,7 +592,7 @@ class Test_SignatureDataController(unittest.TestCase):
         sdc = fdroidserver.scanner.SignatureDataController(
             'nnn', 'fff.yml', 'https://example.com/test.json'
         )
-        sdc.data['last_updated'] = datetime.utcnow().timestamp()
+        sdc.data['last_updated'] = datetime.now(timezone.utc).timestamp()
         sdc.check_last_updated()
 
     def test_check_last_updated_exception_cache_outdated(self):
@@ -600,7 +600,9 @@ class Test_SignatureDataController(unittest.TestCase):
             'nnn', 'fff.yml', 'https://example.com/test.json'
         )
         sdc.cache_duration = timedelta(days=7)
-        sdc.data['last_updated'] = (datetime.utcnow() - timedelta(days=30)).timestamp()
+        sdc.data['last_updated'] = (
+            datetime.now(timezone.utc) - timedelta(days=30)
+        ).timestamp()
         with self.assertRaises(fdroidserver.scanner.SignatureDataOutdatedException):
             sdc.check_last_updated()
 

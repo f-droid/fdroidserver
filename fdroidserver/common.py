@@ -162,7 +162,6 @@ default_config = {
     'make_current_version_link': False,
     'current_version_name_source': 'Name',
     'deploy_process_logs': False,
-    'update_stats': False,
     'repo_maxage': 0,
     'build_server_always': False,
     'keystore': 'keystore.p12',
@@ -2555,42 +2554,19 @@ class KnownApks:
         this is parsed as a list from the end to allow the filename to
         have any combo of spaces.
         """
-        self.path = os.path.join('stats', 'known_apks.txt')
         self.apks = {}
-        if os.path.isfile(self.path):
-            with open(self.path, 'r', encoding='utf-8') as f:
-                for line in f:
-                    t = line.rstrip().split(' ')
-                    if len(t) == 2:
-                        self.apks[t[0]] = (t[1], None)
-                    else:
-                        appid = t[-2]
-                        date = datetime.strptime(t[-1], '%Y-%m-%d')
-                        filename = line[0:line.rfind(appid) - 1]
-                        self.apks[filename] = (appid, date)
-                        check_system_clock(date, self.path)
-        self.changed = False
+        for part in ('repo', 'archive'):
+            path = os.path.join(part, 'index-v2.json')
+            if os.path.isfile(path):
+                with open(path, 'r', encoding='utf-8') as f:
+                    index = json.load(f)
+                    for appid, data in index["packages"].items():
+                        for version in data["versions"].values():
+                            filename = version["file"]["name"][1:]
+                            date = datetime.fromtimestamp(version["added"] // 1000, tz=timezone.utc)
+                            self.apks[filename] = date
 
-    def writeifchanged(self):
-        if not self.changed:
-            return
-
-        if not os.path.exists('stats'):
-            os.mkdir('stats')
-
-        lst = []
-        for apk, app in self.apks.items():
-            appid, added = app
-            line = apk + ' ' + appid
-            if added:
-                line += ' ' + added.strftime('%Y-%m-%d')
-            lst.append(line)
-
-        with open(self.path, 'w') as f:
-            for line in sorted(lst, key=natural_key):
-                f.write(line + '\n')
-
-    def recordapk(self, apkName, app, default_date=None):
+    def recordapk(self, apkName, default_date=None):
         """
         Record an APK (if it's new, otherwise does nothing).
 
@@ -2601,37 +2577,9 @@ class KnownApks:
         """
         if apkName not in self.apks:
             if default_date is None:
-                default_date = datetime.utcnow()
-            self.apks[apkName] = (app, default_date)
-            self.changed = True
-        _ignored, added = self.apks[apkName]
-        return added
-
-    def getapp(self, apkname):
-        """Look up information - given the 'apkname'.
-
-        Returns (app id, date added/None).
-        Or returns None for an unknown apk.
-        """
-        if apkname in self.apks:
-            return self.apks[apkname]
-        return None
-
-    def getlatest(self, num):
-        """Get the most recent 'num' apps added to the repo, as a list of package ids with the most recent first."""
-        apps = {}
-        for apk, app in self.apks.items():
-            appid, added = app
-            if added:
-                if appid in apps:
-                    if apps[appid] > added:
-                        apps[appid] = added
-                else:
-                    apps[appid] = added
-        sortedapps = sorted(apps.items(), key=operator.itemgetter(1))[-num:]
-        lst = [app for app, _ignored in sortedapps]
-        lst.reverse()
-        return lst
+                default_date = datetime.now(timezone.utc)
+            self.apks[apkName] = default_date
+        return self.apks[apkName]
 
 
 def get_file_extension(filename):

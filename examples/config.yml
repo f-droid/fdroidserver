@@ -401,11 +401,6 @@
 # configured to allow push access (e.g. ssh key, username/password, etc)
 # binary_transparency_remote: git@gitlab.com:fdroid/binary-transparency-log.git
 
-# If you want to keep the "added" and "last updated" dates for each
-# app and APK in your repo, enable this.  The name comes from an old
-# system for tracking statistics that is no longer included.
-# update_stats: true
-
 # Set this to true to always use a build server. This saves specifying the
 # --server option on dedicated secure build server hosts.
 # build_server_always: true

@@ -77,7 +77,7 @@ def make(apps, apks, repodir, archive):
         sortedapps[appid] = apps[appid]
 
     repodict = collections.OrderedDict()
-    repodict['timestamp'] = datetime.utcnow().replace(tzinfo=timezone.utc)
+    repodict['timestamp'] = datetime.now(timezone.utc)
     repodict['version'] = METADATA_VERSION
 
     if common.config['repo_maxage'] != 0:

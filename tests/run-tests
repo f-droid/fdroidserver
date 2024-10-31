@@ -273,7 +273,6 @@ cp -a \
    $WORKSPACE/tests/config \
    $WORKSPACE/tests/metadata \
    $WORKSPACE/tests/repo \
-   $WORKSPACE/tests/stats \
    $REPOROOT/
 cp -a $WORKSPACE/tests/gnupghome $GNUPGHOME
 chmod 0700 $GNUPGHOME
@@ -645,14 +644,13 @@ printf '\narchive_older: 3\n' >> config.yml
 mkdir -p {repo,archive,metadata,stats}
 cp $WORKSPACE/tests/repo/com.politedroid_5.apk archive
 cp $WORKSPACE/tests/repo/com.politedroid_6.apk repo
+cp $WORKSPACE/tests/repo/index-v2.json repo
 cp $WORKSPACE/tests/metadata/com.politedroid.yml metadata
 #TODO: the timestamp of the oldest apk in the file should be used, even if that
 # doesn't exist anymore
-echo "com.politedroid_4.apk com.politedroid 2016-01-01" > stats/known_apks.txt
-echo "com.politedroid_5.apk com.politedroid 2017-01-01" >> stats/known_apks.txt
-echo "com.politedroid_6.apk com.politedroid 2018-01-01" >> stats/known_apks.txt
 $sed -i -e 's/ArchivePolicy:.*/ArchivePolicy: 1 versions/' metadata/com.politedroid.yml
-timestamp=1483228800  # $(date -u --date=2017-01-01 +%s)000
+timestamp=1498176000000  # $(date -u --date=2017-01-01 +%s)000
+pwd
 
 $fdroid update --pretty --nosign
 grep -F "\"added\": $timestamp" repo/index-v1.json
@@ -1078,7 +1076,7 @@ GIT_REMOTE=`create_test_dir`
 GNUPGHOME=$REPOROOT/gnupghome
 cd $REPOROOT
 fdroid_init_with_prebuilt_keystore
-cp -a $WORKSPACE/tests/metadata $WORKSPACE/tests/repo $WORKSPACE/tests/stats $REPOROOT/
+cp -a $WORKSPACE/tests/metadata $WORKSPACE/tests/repo $REPOROOT/
 echo "binary_transparency_remote: $GIT_REMOTE" >> config.yml
 $fdroid update --verbose
 $fdroid deploy --verbose
@@ -1224,7 +1222,7 @@ $git config receive.denyCurrentBranch updateInstead
 cd $OFFLINE_ROOT
 fdroid_init_with_prebuilt_keystore
 printf '\narchive_older: 3\n' >> config.yml
-cp -a $WORKSPACE/tests/metadata $WORKSPACE/tests/repo $WORKSPACE/tests/stats $OFFLINE_ROOT/
+cp -a $WORKSPACE/tests/metadata $WORKSPACE/tests/repo $OFFLINE_ROOT/
 mkdir $OFFLINE_ROOT/unsigned
 cp $WORKSPACE/tests/urzip-release-unsigned.apk $OFFLINE_ROOT/unsigned
 
