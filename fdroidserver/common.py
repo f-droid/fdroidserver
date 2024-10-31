@@ -221,15 +221,26 @@ def parse_args(parser):
 def setup_global_opts(parser):
     try:  # the buildserver VM might not have PIL installed
         from PIL import PngImagePlugin
+
         logger = logging.getLogger(PngImagePlugin.__name__)
         logger.setLevel(logging.INFO)  # tame the "STREAM" debug messages
     except ImportError:
         pass
 
-    parser.add_argument("-v", "--verbose", action="store_true", default=False,
-                        help=_("Spew out even more information than normal"))
-    parser.add_argument("-q", "--quiet", action="store_true", default=False,
-                        help=_("Restrict output to warnings and errors"))
+    parser.add_argument(
+        "-v",
+        "--verbose",
+        action="store_true",
+        default=False,
+        help=_("Spew out even more information than normal"),
+    )
+    parser.add_argument(
+        "-q",
+        "--quiet",
+        action="store_true",
+        default=False,
+        help=_("Restrict output to warnings and errors"),
+    )
 
 
 def set_console_logging(verbose=False):
