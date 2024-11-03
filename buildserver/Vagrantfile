@@ -14,7 +14,7 @@ configfile = {
 
 srvpath = Pathname.new(File.dirname(__FILE__)).realpath
 configpath = File.join(srvpath, "/Vagrantfile.yaml")
-if File.exists? configpath
+if File.exist? configpath
   c = YAML.load_file(configpath)
   if c and not c.empty?
     c.each do |k,v|
@@ -86,7 +86,7 @@ Vagrant.configure("2") do |config|
   # Make sure dir exists to mount to, since buildserver/ is
   # automatically mounted as /vagrant in the guest VM. This is more
   # necessary with 9p synced folders
-  Dir.mkdir('cache') unless File.exists?('cache')
+  Dir.mkdir('cache') unless File.exist?('cache')
 
   # Root partition needs to be resized to the new allocated space
   config.vm.provision "shell", inline: <<-SHELL
