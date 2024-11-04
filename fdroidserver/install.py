@@ -207,7 +207,10 @@ def install_fdroid_apk(privacy_mode=False):
         return _('{path} has the wrong fingerprint ({fingerprint})!').format(
             path=f, fingerprint=fingerprint
         )
+    install_apk(f)
 
+
+def install_apk(f):
     if common.config and common.config.get('adb'):
         if devices():
             install_apks_to_devices([f])
@@ -288,6 +291,23 @@ def strtobool(val):
     return val.lower() in ('', 'y', 'yes', _('yes'), _('true'))  # '' is pressing Enter
 
 
+def prompt_user(yes, msg):
+    """Prompt user for yes/no, supporting Enter and Esc as accepted answers."""
+    run_install = yes
+    if yes is None and sys.stdout.isatty():
+        print(msg, flush=True)
+        answer = ''
+        while True:
+            in_char = read_char()
+            if in_char == '\r':  # Enter key
+                break
+            if not in_char.isprintable():
+                sys.exit(1)
+            answer += in_char
+        run_install = strtobool(answer)
+    return run_install
+
+
 def main():
     parser = ArgumentParser(
         usage="%(prog)s [options] [APPID[:VERCODE] [APPID[:VERCODE] ...]]"
@@ -334,23 +354,10 @@ def main():
     common.get_config()
 
     if not options.appid and not options.all:
-        run_install = options.yes
-        if options.yes is None and sys.stdout.isatty():
-            print(
-                _(
-                    'Would you like to download and install F-Droid.apk via adb? (YES/no)'
-                ),
-                flush=True,
-            )
-            answer = ''
-            while True:
-                in_char = read_char()
-                if in_char == '\r':  # Enter key
-                    break
-                if not in_char.isprintable():
-                    sys.exit(1)
-                answer += in_char
-            run_install = strtobool(answer)
+        run_install = prompt_user(
+            options.yes,
+            _('Would you like to download and install F-Droid.apk via adb? (YES/no)'),
+        )
         if run_install:
             sys.exit(install_fdroid_apk(options.privacy_mode))
         sys.exit(1)
@@ -358,7 +365,15 @@ def main():
     output_dir = 'repo'
     if (options.appid or options.all) and not os.path.isdir(output_dir):
         logging.error(_("No signed output directory - nothing to do"))
-        # TODO prompt user if they want to download from f-droid.org
+        run_install = prompt_user(
+            options.yes,
+            _('Would you like to download the app(s) from f-droid.org? (YES/no)'),
+        )
+        if run_install:
+            for appid in options.appid:
+                f = download_apk(appid)
+                install_apk(f)
+            sys.exit(install_fdroid_apk(options.privacy_mode))
         sys.exit(1)
 
     if options.appid:
