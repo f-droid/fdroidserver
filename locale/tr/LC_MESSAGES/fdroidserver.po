@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2024-09-10 10:50+0200\n"
-"PO-Revision-Date: 2024-05-15 04:32+0000\n"
+"PO-Revision-Date: 2024-09-10 23:49+0000\n"
 "Last-Translator: Oğuz Ersen <oguz@ersen.moe>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/f-droid/fdroidserver/tr/>\n"
 "Language: tr\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.6-dev\n"
+"X-Generator: Weblate 5.8-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -679,12 +679,12 @@ msgstr "HATA: desteklenmeyen git ana makinesi \"%s\", yama gönderebilirsiniz!"
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "ERROR: {key} in {path} is not \"archive\" or \"repo\"!"
-msgstr ""
+msgstr "HATA: {path} içindeki {key} \"archive\" veya \"repo\" değil!"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "ERROR: {key}:{subkey} in {path} is not in allowed keys: {allowed_keys}!"
-msgstr ""
+msgstr "HATA: {path} içindeki {key}:{subkey} izin verilen anahtarlar içinde değil: {allowed_keys}!"
 
 #: ../fdroidserver/__main__.py
 #, python-brace-format
@@ -707,7 +707,7 @@ msgstr "{configname} içinden {var} ortam değişkeni ayarlı değil!"
 
 #: ../fdroidserver/deploy.py
 msgid "Error deploying 'github_releases', {} not present. (You might need to run `fdroid update` first.)"
-msgstr ""
+msgstr "'github_releases' dağıtılırken hata oluştu, {} yok. (Önce `fdroid update` komutunu çalıştırmanız gerekebilir.)"
 
 #: ../fdroidserver/import_subcommand.py
 msgid "Error while getting repo address"
@@ -1298,15 +1298,15 @@ msgstr "Çevrim dışı makine, `fdroid deploy` komutuna kadar git yansı oluşt
 
 #: ../fdroidserver/deploy.py
 msgid "One of the 'github_releases' config items is missing the 'projectUrl' value. skipping ..."
-msgstr ""
+msgstr "'github_releases' yapılandırma ögelerinden birinde 'projectUrl' değeri eksik. atlanıyor..."
 
 #: ../fdroidserver/deploy.py
 msgid "One of the 'github_releases' config items is missing the 'packageNames' value. skipping ..."
-msgstr ""
+msgstr "'github_releases' yapılandırma ögelerinden birinde 'packageNames' değeri eksik. atlanıyor..."
 
 #: ../fdroidserver/deploy.py
 msgid "One of the 'github_releases' config items is missing the 'token' value. skipping ..."
-msgstr ""
+msgstr "'github_releases' yapılandırma ögelerinden birinde 'token' değeri eksik. atlanıyor..."
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -1522,7 +1522,7 @@ msgstr "Değişiklikleri olmayan git repo üzerinde çalış"
 #: ../fdroidserver/nightly.py
 #, python-brace-format
 msgid "Run over {cibase} to find -debug.apk. and skip repo_basedir {repo_basedir}"
-msgstr ""
+msgstr "-debug.apk'yı bulmak için {cibase} üzerinden çalıştırın ve {repo_basedir} repo_basedir'i atlayın"
 
 #: ../fdroidserver/lint.py
 msgid "Run rewritemeta to fix formatting"
@@ -1763,9 +1763,8 @@ msgid "To use awsbucket, awssecretkey and awsaccesskeyid must also be set in con
 msgstr "Awsbucket kullanmak için, awssecretkey ve awsaccesskeyid de config.yml içinde ayarlanmalı!"
 
 #: ../fdroidserver/deploy.py
-#, fuzzy
 msgid "To use rclone, rclone_config and awsbucket must be set in config.yml!"
-msgstr "Awsbucket kullanmak için, awssecretkey ve awsaccesskeyid de config.yml içinde ayarlanmalı!"
+msgstr "rclone kullanmak için, rclone_config ve awsbucket config.yml içinde ayarlanmalı!"
 
 #: ../fdroidserver/lint.py
 msgid "URL must start with https:// or http://"
@@ -1965,9 +1964,9 @@ msgid "Using \"{path}\" for configuring s3cmd."
 msgstr "s3cmd yapılandırması için \"{path}\" kullanılıyor."
 
 #: ../fdroidserver/deploy.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Using \"{path}\" for syncing with remote storage."
-msgstr "s3cmd yapılandırması için \"{path}\" kullanılıyor."
+msgstr "Uzak depolama ile eşitlemek için \"{path}\" kullanılıyor."
 
 #: ../fdroidserver/common.py
 msgid "Using APK Signature v2"
@@ -2001,9 +2000,9 @@ msgid "Using existing keystore \"{path}\""
 msgstr "Var olan anahtar deposu \"{path}\" kullanılıyor"
 
 #: ../fdroidserver/deploy.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Using rclone to sync with: {url}"
-msgstr "{url} ile eşitleme için s3cmd kullanılıyor"
+msgstr "{url} ile eşitleme için rclone kullanılıyor"
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
@@ -2225,7 +2224,7 @@ msgstr "siliniyor: repo/{apkfilename}"
 
 #: ../fdroidserver/scanner.py
 msgid "dependency file without lock"
-msgstr ""
+msgstr "kilitsiz bağımlılık dosyası"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -2555,9 +2554,9 @@ msgid "s3cmd sync indexes {path} to {url} and delete"
 msgstr "s3cmd sync {path} konumunu {url} adresine indeksler ve siler"
 
 #: ../fdroidserver/deploy.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "s3cmd syncs indexes from {path} to {url} and deletes removed"
-msgstr "s3cmd sync {path} konumunu {url} adresine indeksler ve siler"
+msgstr "s3cmd {path} ile {url} arasındaki dizinleri indeksler ve kaldırılanları siler"
 
 #: ../fdroidserver/scanner.py
 #, python-brace-format
