@@ -198,10 +198,6 @@ def install_fdroid_apk(privacy_mode=False):
     else:
         return _('F-Droid.apk could not be downloaded from any known source!')
 
-    if common.config and common.config.get('apksigner'):
-        # TODO this should always verify, but that requires APK sig verification in Python #94
-        logging.info(_('Verifying package {path} with apksigner.').format(path=f))
-        common.verify_apk_signature(f)
     fingerprint = common.apk_signer_fingerprint(f)
     if fingerprint.upper() != common.FDROIDORG_FINGERPRINT:
         return _('{path} has the wrong fingerprint ({fingerprint})!').format(
@@ -211,6 +207,10 @@ def install_fdroid_apk(privacy_mode=False):
 
 
 def install_apk(f):
+    if common.config and common.config.get('apksigner'):
+        # TODO this should always verify, but that requires APK sig verification in Python #94
+        logging.info(_('Verifying package {path} with apksigner.').format(path=f))
+        common.verify_apk_signature(f)
     if common.config and common.config.get('adb'):
         if devices():
             install_apks_to_devices([f])
