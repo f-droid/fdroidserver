@@ -295,7 +295,7 @@ def prompt_user(yes, msg):
     """Prompt user for yes/no, supporting Enter and Esc as accepted answers."""
     run_install = yes
     if yes is None and sys.stdout.isatty():
-        print(msg, flush=True)
+        print(msg, end=' ', flush=True)
         answer = ''
         while True:
             in_char = read_char()
@@ -303,8 +303,10 @@ def prompt_user(yes, msg):
                 break
             if not in_char.isprintable():
                 sys.exit(1)
+            print(in_char, end='', flush=True)
             answer += in_char
         run_install = strtobool(answer)
+        print()
     return run_install
 
 
