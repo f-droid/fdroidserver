@@ -91,7 +91,7 @@ def main():
     )
     options = common.parse_args(parser)
 
-    common.set_console_logging(options.verbose)
+    common.set_console_logging(options.verbose, options.color)
 
     if options.all:
         options.archive = True

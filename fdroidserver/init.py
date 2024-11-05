@@ -82,7 +82,7 @@ def main():
     )
     options = common.parse_args(parser)
 
-    common.set_console_logging(options.verbose)
+    common.set_console_logging(options.verbose, options.color)
 
     fdroiddir = os.getcwd()
     test_config = dict()
