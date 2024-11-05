@@ -172,10 +172,6 @@ echo_header "run unit tests"
 
 cd $WORKSPACE/tests
 for testcase in $WORKSPACE/tests/*.TestCase; do
-    if [ $testcase == $WORKSPACE/tests/install.TestCase ]; then
-        echo "skipping install.TestCase, its too troublesome in CI builds"
-        continue
-    fi
     if [ $(uname) != "Linux" ] && [ $testcase == $WORKSPACE/tests/nightly.TestCase ]; then
         echo "skipping nightly.TestCase, it currently only works GNU/Linux"
         continue
@@ -730,7 +726,7 @@ $fdroid scanner
 # run these to get their output, but the are not setup, so don't fail
 $fdroid build || true
 $fdroid import || true
-$fdroid install || true
+$fdroid install --no || true
 
 
 #------------------------------------------------------------------------------#

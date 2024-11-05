@@ -109,8 +109,8 @@ __complete_gpgsign() {
 }
 
 __complete_install() {
-	opts="-v -q"
-	lopts="--verbose --quiet --all"
+	opts="-v -q -a -p -n -y"
+	lopts="--verbose --quiet --all --privacy-mode --no --yes"
 	case "${cur}" in
 		-*)
 			__complete_options

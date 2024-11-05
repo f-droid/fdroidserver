@@ -23,12 +23,15 @@ import urllib.parse
 
 
 class GithubApi:
-    """
-    Warpper for some select calls to GitHub Json/REST API.
+    """Wrapper for some select calls to GitHub Json/REST API.
 
     This class wraps some calls to api.github.com. This is not intended to be a
     general API wrapper. Instead it's purpose is to return pre-filtered and
     transformed data that's playing well with other fdroidserver functions.
+
+    With the GitHub API, the token is optional, but it has pretty
+    severe rate limiting.
+
     """
 
     def __init__(self, api_token, repo_path):
@@ -41,9 +44,10 @@ class GithubApi:
     def _req(self, url, data=None):
         h = {
             "Accept": "application/vnd.github+json",
-            "Authorization": f"Bearer {self._api_token}",
             "X-GitHub-Api-Version": "2022-11-28",
         }
+        if self._api_token:
+            h["Authorization"] = f"Bearer {self._api_token}"
         return urllib.request.Request(
             url,
             headers=h,
@@ -64,6 +68,17 @@ class GithubApi:
         all_tags = self.list_all_tags()
         released_tags = self.list_released_tags()
         return [x for x in all_tags if x not in released_tags]
+
+    def get_latest_apk(self):
+        req = self._req(
+            f"https://api.github.com/repos/{self._repo_path}/releases/latest"
+        )
+        with urllib.request.urlopen(req) as resp:  # nosec CWE-22 disable bandit warning
+            assets = json.load(resp)['assets']
+            for asset in assets:
+                url = asset.get('browser_download_url')
+                if url and url.endswith('.apk'):
+                    return url
 
     def tag_exists(self, tag):
         """
