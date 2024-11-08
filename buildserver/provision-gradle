@@ -26,8 +26,8 @@ chmod -R a+rX /opt/gradle
 
 test -e /opt/gradle/bin || mkdir -p /opt/gradle/bin
 ln -fs /home/vagrant/fdroidserver/gradlew-fdroid /opt/gradle/bin/gradle
-chown -h vagrant.vagrant /opt/gradle/bin/gradle
-chown vagrant.vagrant /opt/gradle/versions
+chown -h vagrant:vagrant /opt/gradle/bin/gradle
+chown vagrant:vagrant /opt/gradle/versions
 chmod 0755 /opt/gradle/versions
 
 GRADLE_HOME=/home/vagrant/.gradle
@@ -44,5 +44,5 @@ systemProp.org.gradle.internal.http.connectionTimeout=600000
 systemProp.org.gradle.internal.http.socketTimeout=600000
 EOF
 
-chown -R vagrant.vagrant $GRADLE_HOME/
+chown -R vagrant:vagrant $GRADLE_HOME/
 chmod -R a+rX $GRADLE_HOME/

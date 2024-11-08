@@ -10,6 +10,6 @@ cat <<EOF > $flutter_conf
   "enabled": false
 }
 EOF
-chown -R vagrant.vagrant $flutter_conf
+chown -R vagrant:vagrant $flutter_conf
 chmod -R 0644 $flutter_conf
 
