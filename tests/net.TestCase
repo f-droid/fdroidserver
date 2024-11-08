@@ -49,7 +49,7 @@ class RetryServer:
     def run_fake_server(self):
         server_sock = socket.socket()
         server_sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-        server_sock.bind(('127.0.0.1', self.port))
+        server_sock.bind(('localhost', self.port))
         server_sock.listen(5)
         server_sock.settimeout(5)
         time.sleep(0.001)  # wait for it to start
