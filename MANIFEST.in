@@ -662,6 +662,7 @@ include tests/metadata-rewrite-yml/org.fdroid.fdroid.yml
 include tests/metadata/souch.smsbypass.yml
 include tests/metadata.TestCase
 include tests/minimal_targetsdk_30_unsigned.apk
+include tests/net.TestCase
 include tests/nightly.TestCase
 include tests/Norway_bouvet_europe_2.obf.zip
 include tests/no_targetsdk_minsdk1_unsigned.apk
