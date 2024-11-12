@@ -790,9 +790,9 @@ def push_commits(remote_name='origin', branch_name='checkupdates', verbose=False
         push_option=[
             'merge_request.create',
             'merge_request.remove_source_branch',
-            'merge_request.title=' + 'bot: checkupdates for ' + branch_name,
+            'merge_request.title=bot: ' + git_repo.branches[branch_name].commit.summary,
             'merge_request.description='
-            + 'checkupdates-bot run %s' % os.getenv('CI_JOB_URL'),
+            + '~%s checkupdates-bot run %s' % (branch_name, os.getenv('CI_JOB_URL')),
         ],
     )
 
