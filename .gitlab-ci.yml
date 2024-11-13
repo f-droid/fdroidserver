@@ -356,7 +356,7 @@ fedora_latest:
     - chown -R testuser .
     - cd tests
     - su testuser --login --command
-        "cd `pwd`; export ANDROID_HOME=$ANDROID_HOME; fdroid=~testuser/.local/bin/fdroid ./run-tests"
+        "cd `pwd`; export CI=$CI ANDROID_HOME=$ANDROID_HOME; fdroid=~testuser/.local/bin/fdroid ./run-tests"
 
 
 macOS:
