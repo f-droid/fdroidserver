@@ -1697,11 +1697,11 @@ class vcs_hg(vcs):
                 self.clone_failed = True
                 raise VCSException("Hg clone failed", p.output)
         else:
-            p = FDroidPopen(['hg', 'status', '-uS'], cwd=self.local, output=False)
+            p = FDroidPopen(['hg', 'status', '-uiS'], cwd=self.local, output=False)
             if p.returncode != 0:
                 raise VCSException("Hg status failed", p.output)
             for line in p.output.splitlines():
-                if not line.startswith('? '):
+                if not line.startswith('? ') and not line.startswith('I '):
                     raise VCSException("Unexpected output from hg status -uS: " + line)
                 FDroidPopen(['rm', '-rf', '--', line[2:]], cwd=self.local, output=False)
             if not self.refreshed:
