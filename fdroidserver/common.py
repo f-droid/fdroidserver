@@ -1716,16 +1716,6 @@ class vcs_hg(vcs):
         p = FDroidPopen(['hg', 'update', '-C', '--', rev], cwd=self.local, output=False)
         if p.returncode != 0:
             raise VCSException("Hg checkout of '%s' failed" % rev, p.output)
-        p = FDroidPopen(['hg', 'purge', '--all'], cwd=self.local, output=False)
-        # Also delete untracked files, we have to enable purge extension for that:
-        if "'purge' is provided by the following extension" in p.output:
-            with open(os.path.join(self.local, '.hg', 'hgrc'), "a") as myfile:
-                myfile.write("\n[extensions]\nhgext.purge=\n")
-            p = FDroidPopen(['hg', 'purge', '--all'], cwd=self.local, output=False)
-            if p.returncode != 0:
-                raise VCSException("HG purge failed", p.output)
-        elif p.returncode != 0:
-            raise VCSException("HG purge failed", p.output)
 
     def _gettags(self):
         p = FDroidPopen(['hg', 'tags', '-q'], cwd=self.local, output=False)
