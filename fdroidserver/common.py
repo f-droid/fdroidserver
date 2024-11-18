@@ -1697,11 +1697,11 @@ class vcs_hg(vcs):
                 self.clone_failed = True
                 raise VCSException("Hg clone failed", p.output)
         else:
-            p = FDroidPopen(['hg', 'status', '-uS'], cwd=self.local, output=False)
+            p = FDroidPopen(['hg', 'status', '-uiS'], cwd=self.local, output=False)
             if p.returncode != 0:
                 raise VCSException("Hg status failed", p.output)
             for line in p.output.splitlines():
-                if not line.startswith('? '):
+                if not line.startswith('? ') and not line.startswith('I '):
                     raise VCSException("Unexpected output from hg status -uS: " + line)
                 FDroidPopen(['rm', '-rf', '--', line[2:]], cwd=self.local, output=False)
             if not self.refreshed:
@@ -1716,16 +1716,6 @@ class vcs_hg(vcs):
         p = FDroidPopen(['hg', 'update', '-C', '--', rev], cwd=self.local, output=False)
         if p.returncode != 0:
             raise VCSException("Hg checkout of '%s' failed" % rev, p.output)
-        p = FDroidPopen(['hg', 'purge', '--all'], cwd=self.local, output=False)
-        # Also delete untracked files, we have to enable purge extension for that:
-        if "'purge' is provided by the following extension" in p.output:
-            with open(os.path.join(self.local, '.hg', 'hgrc'), "a") as myfile:
-                myfile.write("\n[extensions]\nhgext.purge=\n")
-            p = FDroidPopen(['hg', 'purge', '--all'], cwd=self.local, output=False)
-            if p.returncode != 0:
-                raise VCSException("HG purge failed", p.output)
-        elif p.returncode != 0:
-            raise VCSException("HG purge failed", p.output)
 
     def _gettags(self):
         p = FDroidPopen(['hg', 'tags', '-q'], cwd=self.local, output=False)
