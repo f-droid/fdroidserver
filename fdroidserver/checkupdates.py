@@ -766,6 +766,31 @@ def push_commits(remote_name='origin', branch_name='checkupdates', verbose=False
             branch_name = m.group(1)  # appid
     if not files:
         return
+
+    git_repo.create_head(branch_name, force=True)
+    push_options = [
+        'merge_request.create',
+        'merge_request.remove_source_branch',
+        'merge_request.title=bot: ' + git_repo.branches[branch_name].commit.summary,
+        'merge_request.description='
+        + '~%s checkupdates-bot run %s' % (branch_name, os.getenv('CI_JOB_URL')),
+    ]
+
+    # mark as draft if there are only changes to CurrentVersion:
+    current_version_only = True
+    for m in re.findall(
+        r"^[+-].*",
+        git_repo.git.diff(f"upstream/{upstream_main}...HEAD"),
+        flags=re.MULTILINE,
+    ):
+        if re.match(r"^(\+\+\+|---) ", m):
+            continue
+        if not re.match(r"^[-+]CurrentVersion", m):
+            current_version_only = False
+            break
+    if current_version_only:
+        push_options.append('merge_request.draft')
+
     progress = None
     if verbose:
         import clint.textui
@@ -779,20 +804,13 @@ def push_commits(remote_name='origin', branch_name='checkupdates', verbose=False
 
         progress = MyProgressPrinter()
 
-    git_repo.create_head(branch_name, force=True)
     remote = git_repo.remotes[remote_name]
     pushinfos = remote.push(
         branch_name,
         progress=progress,
         force=True,
         set_upstream=True,
-        push_option=[
-            'merge_request.create',
-            'merge_request.remove_source_branch',
-            'merge_request.title=bot: ' + git_repo.branches[branch_name].commit.summary,
-            'merge_request.description='
-            + '~%s checkupdates-bot run %s' % (branch_name, os.getenv('CI_JOB_URL')),
-        ],
+        push_option=push_options,
     )
 
     for pushinfo in pushinfos:
