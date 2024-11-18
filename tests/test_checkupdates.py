@@ -461,7 +461,6 @@ class CheckupdatesTest(unittest.TestCase):
         git_repo.index.commit("all files")
 
         repo, branch = fdroidserver.checkupdates.get_git_repo_and_main_branch()
-        self.assertTrue(branch in ('main', 'master'))
         self.assertTrue(branch in repo.heads)
 
     def test_checkout_appid_branch_does_not_exist(self):

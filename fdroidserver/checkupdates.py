@@ -690,9 +690,8 @@ def get_last_build_from_app(app: metadata.App) -> metadata.Build:
 
 def get_git_repo_and_main_branch():
     git_repo = git.Repo.init('.')
-    main_branch = 'main'
-    if main_branch not in git_repo.heads:
-        main_branch = 'master'
+    with git_repo.config_reader() as reader:
+        main_branch = reader.get_value('init', 'defaultBranch')
     return git_repo, main_branch
 
 
