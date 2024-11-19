@@ -1,22 +1,11 @@
 #!/usr/bin/env python3
 
-# http://www.drdobbs.com/testing/unit-testing-with-python/240165163
-
-import inspect
 import os
-import sys
 import textwrap
 import unittest
 
 from pathlib import Path
 from unittest.mock import Mock, patch
-
-localmodule = os.path.realpath(
-    os.path.join(os.path.dirname(inspect.getfile(inspect.currentframe())), '..')
-)
-print('localmodule: ' + localmodule)
-if localmodule not in sys.path:
-    sys.path.insert(0, localmodule)
 
 import fdroidserver
 from fdroidserver import common, install
@@ -265,24 +254,3 @@ class InstallTest(unittest.TestCase):
     def test_download_fdroid_apk_from_github(self):
         f = install.download_fdroid_apk_from_github()
         self.assertTrue(Path(f).exists())
-
-
-if __name__ == "__main__":
-    os.chdir(os.path.dirname(__file__))
-
-    import argparse
-    from testcommon import parse_args_for_test
-
-    parser = argparse.ArgumentParser()
-    parser.add_argument(
-        "-v",
-        "--verbose",
-        action="store_true",
-        default=False,
-        help="Spew out even more information than normal",
-    )
-    fdroidserver.install.options = parse_args_for_test(parser, sys.argv)
-
-    newSuite = unittest.TestSuite()
-    newSuite.addTest(unittest.makeSuite(InstallTest))
-    unittest.main(failfast=False)

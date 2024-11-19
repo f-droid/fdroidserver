@@ -10,45 +10,36 @@
 #        -keypass 123456 -dname 'CN=test, OU=F-Droid'; done
 #
 
-import inspect
 import json
-import logging
 import os
+import pathlib
 import shutil
 import sys
 import unittest
 import tempfile
-import textwrap
 from unittest import mock
-
-localmodule = os.path.realpath(
-    os.path.join(os.path.dirname(inspect.getfile(inspect.currentframe())), '..')
-)
-print('localmodule: ' + localmodule)
-if localmodule not in sys.path:
-    sys.path.insert(0, localmodule)
 
 from fdroidserver import publish
 from fdroidserver import common
 from fdroidserver import metadata
 from fdroidserver import signatures
 from fdroidserver.exception import FDroidException
-from testcommon import mkdtemp, parse_args_for_test
+from .testcommon import mkdtemp
+
+basedir = pathlib.Path(__file__).parent
 
 
 class PublishTest(unittest.TestCase):
     '''fdroidserver/publish.py'''
 
     def setUp(self):
-        logging.basicConfig(level=logging.DEBUG)
-        self.basedir = os.path.join(localmodule, 'tests')
-        os.chdir(self.basedir)
+        os.chdir(basedir)
         self._td = mkdtemp()
         self.testdir = self._td.name
 
     def tearDown(self):
         self._td.cleanup()
-        os.chdir(self.basedir)
+        os.chdir(basedir)
 
     def test_key_alias(self):
         publish.config = {}
@@ -91,7 +82,7 @@ class PublishTest(unittest.TestCase):
         publish.config = common.config
         publish.config['keystorepass'] = '123456'
         publish.config['keypass'] = '123456'
-        publish.config['keystore'] = os.path.join(self.basedir, 'dummy-keystore.jks')
+        publish.config['keystore'] = os.path.join(basedir, 'dummy-keystore.jks')
         publish.config['repo_keyalias'] = 'repokey'
 
         appids = [
@@ -127,12 +118,7 @@ class PublishTest(unittest.TestCase):
 
         with open('config.py', 'r') as f:
             self.assertEqual(
-                textwrap.dedent(
-                    '''\
-
-                repo_key_sha256 = "c58460800c7b250a619c30c13b07b7359a43e5af71a4352d86c58ae18c9f6d41"
-                '''
-                ),
+                '\nrepo_key_sha256 = "c58460800c7b250a619c30c13b07b7359a43e5af71a4352d86c58ae18c9f6d41"\n',
                 f.read(),
             )
 
@@ -142,7 +128,7 @@ class PublishTest(unittest.TestCase):
         publish.config = common.config
         publish.config['keystorepass'] = '123456'
         publish.config['keypass'] = '123456'
-        publish.config['keystore'] = os.path.join(self.basedir, 'dummy-keystore.jks')
+        publish.config['keystore'] = os.path.join(basedir, 'dummy-keystore.jks')
         publish.config['repo_keyalias'] = 'repokey'
         publish.config['repo_key_sha256'] = 'bad bad bad bad bad bad bad bad bad bad bad bad'
 
@@ -273,7 +259,7 @@ class PublishTest(unittest.TestCase):
         config['repo_keyalias'] = 'sova'
         config['keystorepass'] = 'r9aquRHYoI8+dYz6jKrLntQ5/NJNASFBacJh7Jv2BlI='
         config['keypass'] = 'r9aquRHYoI8+dYz6jKrLntQ5/NJNASFBacJh7Jv2BlI='
-        shutil.copy(os.path.join(self.basedir, 'keystore.jks'), self.testdir)
+        shutil.copy(basedir / 'keystore.jks', self.testdir)
         config['keystore'] = 'keystore.jks'
         config['keydname'] = 'CN=Birdman, OU=Cell, O=Alcatraz, L=Alcatraz, S=California, C=US'
         publish.config = config
@@ -293,7 +279,7 @@ class PublishTest(unittest.TestCase):
         metadata.write_metadata(os.path.join('metadata', '%s.yml' % app.id), app)
 
         os.mkdir('unsigned')
-        testapk = os.path.join(self.basedir, 'no_targetsdk_minsdk1_unsigned.apk')
+        testapk = basedir / 'no_targetsdk_minsdk1_unsigned.apk'
         unsigned = os.path.join('unsigned', common.get_release_filename(app, build))
         signed = os.path.join('repo', common.get_release_filename(app, build))
         shutil.copy(testapk, unsigned)
@@ -348,7 +334,7 @@ class PublishTest(unittest.TestCase):
         config['repo_keyalias'] = 'sova'
         config['keystorepass'] = 'r9aquRHYoI8+dYz6jKrLntQ5/NJNASFBacJh7Jv2BlI='
         config['keypass'] = 'r9aquRHYoI8+dYz6jKrLntQ5/NJNASFBacJh7Jv2BlI='
-        shutil.copy(os.path.join(self.basedir, 'keystore.jks'), self.testdir)
+        shutil.copy(basedir / 'keystore.jks', self.testdir)
         config['keystore'] = 'keystore.jks'
         config[
             'keydname'
@@ -370,7 +356,7 @@ class PublishTest(unittest.TestCase):
         metadata.write_metadata(os.path.join('metadata', '%s.yml' % app.id), app)
 
         os.mkdir('unsigned')
-        testapk = os.path.join(self.basedir, 'no_targetsdk_minsdk1_unsigned.apk')
+        testapk = basedir / 'no_targetsdk_minsdk1_unsigned.apk'
         unsigned = os.path.join('unsigned', common.get_release_filename(app, build))
         signed = os.path.join('repo', common.get_release_filename(app, build))
         shutil.copy(testapk, unsigned)
@@ -409,23 +395,3 @@ class PublishTest(unittest.TestCase):
             with self.assertRaises(SystemExit) as e:
                 publish.main()
             self.assertEqual(e.exception.code, 1)
-
-
-if __name__ == "__main__":
-    os.chdir(os.path.dirname(__file__))
-
-    import argparse
-
-    parser = argparse.ArgumentParser()
-    parser.add_argument(
-        "-v",
-        "--verbose",
-        action="store_true",
-        default=False,
-        help="Spew out even more information than normal",
-    )
-    parse_args_for_test(parser, sys.argv)
-
-    newSuite = unittest.TestSuite()
-    newSuite.addTest(unittest.makeSuite(PublishTest))
-    unittest.main(failfast=False)

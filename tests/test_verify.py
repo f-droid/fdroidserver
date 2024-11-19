@@ -1,25 +1,15 @@
 #!/usr/bin/env python3
 
-import inspect
 import json
-import logging
 import os
 import shutil
-import sys
 import tempfile
 import unittest
 
 from pathlib import Path
 from unittest.mock import patch
 
-localmodule = os.path.realpath(
-    os.path.join(os.path.dirname(inspect.getfile(inspect.currentframe())), '..')
-)
-print('localmodule: ' + localmodule)
-if localmodule not in sys.path:
-    sys.path.insert(0, localmodule)
-
-from fdroidserver import common, verify
+from fdroidserver import verify
 
 
 TEST_APP_ENTRY = {
@@ -45,12 +35,11 @@ TEST_APP_ENTRY = {
     }
 }
 
+basedir = Path(__file__).parent
+
 
 class VerifyTest(unittest.TestCase):
-    basedir = Path(__file__).resolve().parent
-
     def setUp(self):
-        logging.basicConfig(level=logging.DEBUG)
         self.tempdir = tempfile.TemporaryDirectory()
         os.chdir(self.tempdir.name)
         self.repodir = Path('repo')
@@ -72,8 +61,8 @@ class VerifyTest(unittest.TestCase):
         remote_apk = 'tmp/' + apk_name
         unsigned_apk = 'unsigned/' + apk_name
         # TODO common.use apk_strip_v1_signatures() on unsigned_apk
-        shutil.copy(str(self.basedir / 'repo' / apk_name), remote_apk)
-        shutil.copy(str(self.basedir / 'repo' / apk_name), unsigned_apk)
+        shutil.copy(basedir / 'repo' / apk_name, remote_apk)
+        shutil.copy(basedir / 'repo' / apk_name, unsigned_apk)
         url = TEST_APP_ENTRY['1539780240.3885746']['url']
 
         self.assertFalse(verified_json.exists())
@@ -88,23 +77,3 @@ class VerifyTest(unittest.TestCase):
             secondpass = json.load(fp)
 
         self.assertEqual(firstpass, secondpass)
-
-
-if __name__ == "__main__":
-    os.chdir(os.path.dirname(__file__))
-
-    import argparse
-
-    parser = argparse.ArgumentParser()
-    parser.add_argument(
-        "-v",
-        "--verbose",
-        action="store_true",
-        default=False,
-        help="Spew out even more information than normal",
-    )
-    common.options = common.parse_args(parser)
-
-    newSuite = unittest.TestSuite()
-    newSuite.addTest(unittest.makeSuite(VerifyTest))
-    unittest.main(failfast=False)

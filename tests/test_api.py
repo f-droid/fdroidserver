@@ -1,22 +1,17 @@
 #!/usr/bin/env python3
 
-import inspect
 import os
 import shutil
-import sys
 import unittest
+from pathlib import Path
 from unittest import mock
-
-localmodule = os.path.realpath(
-    os.path.join(os.path.dirname(inspect.getfile(inspect.currentframe())), '..')
-)
-print('localmodule: ' + localmodule)
-if localmodule not in sys.path:
-    sys.path.insert(0, localmodule)
 
 import fdroidserver
 from fdroidserver import common, signindex
-from testcommon import GP_FINGERPRINT, mkdtemp
+from .testcommon import GP_FINGERPRINT, mkdtemp
+
+
+basedir = Path(__file__).parent
 
 
 class ApiTest(unittest.TestCase):
@@ -29,8 +24,7 @@ class ApiTest(unittest.TestCase):
     """
 
     def setUp(self):
-        self.basedir = os.path.join(localmodule, 'tests')
-        os.chdir(self.basedir)
+        os.chdir(basedir)
 
         self._td = mkdtemp()
         self.testdir = self._td.name
@@ -89,10 +83,10 @@ class ApiTest(unittest.TestCase):
             self.testdir, 'repo', os.path.basename(mirrors[0]['url'])
         )
         os.chdir(self.testdir)
-        signindex.config['keystore'] = os.path.join(self.basedir, 'keystore.jks')
+        signindex.config['keystore'] = os.path.join(basedir, 'keystore.jks')
         os.mkdir('repo')
-        shutil.copy(os.path.join(self.basedir, 'repo', 'entry.json'), 'repo')
-        shutil.copy(os.path.join(self.basedir, 'repo', 'index-v2.json'), 'repo')
+        shutil.copy(basedir / 'repo' / 'entry.json', 'repo')
+        shutil.copy(basedir / 'repo' / 'index-v2.json', 'repo')
         signindex.sign_index('repo', 'entry.json')
         repo_url = 'https://fake.url/fdroid/repo'
         entry_url = 'https://fake.url/fdroid/repo/entry.jar'
@@ -107,9 +101,3 @@ class ApiTest(unittest.TestCase):
             self.assertEqual(
                 'My First F-Droid Repo Demo', data['repo']['name']['en-US']
             )
-
-
-if __name__ == "__main__":
-    newSuite = unittest.TestSuite()
-    newSuite.addTest(unittest.makeSuite(ApiTest))
-    unittest.main(failfast=False)

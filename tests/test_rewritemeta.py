@@ -1,29 +1,23 @@
 #!/usr/bin/env python3
 
-import logging
 import os
-import sys
 import unittest
 import tempfile
 import textwrap
 from pathlib import Path
+from unittest import mock
 
-localmodule = Path(__file__).resolve().parent.parent
-print('localmodule: ' + str(localmodule))
-if localmodule not in sys.path:
-    sys.path.insert(0, str(localmodule))
+from fdroidserver import metadata, rewritemeta
+from .testcommon import TmpCwd, mkdtemp
 
-from fdroidserver import common, metadata, rewritemeta
-from testcommon import TmpCwd, mkdtemp
+basedir = Path(__file__).parent
 
 
 class RewriteMetaTest(unittest.TestCase):
     '''fdroidserver/publish.py'''
 
     def setUp(self):
-        logging.basicConfig(level=logging.DEBUG)
-        self.basedir = localmodule / 'tests'
-        os.chdir(self.basedir)
+        os.chdir(basedir)
         metadata.warnings_action = 'error'
         self._td = mkdtemp()
         self.testdir = self._td.name
@@ -132,6 +126,7 @@ class RewriteMetaTest(unittest.TestCase):
             [{'versionCode': 0}, {'versionCode': 1}, {'versionCode': 2}],
         )
 
+    @mock.patch('sys.argv', ['fdroid rewritemeta', 'a'])
     def test_rewrite_no_builds(self):
         os.chdir(self.testdir)
         Path('metadata').mkdir()
@@ -152,6 +147,7 @@ class RewriteMetaTest(unittest.TestCase):
             ),
         )
 
+    @mock.patch('sys.argv', ['fdroid rewritemeta', 'a'])
     def test_rewrite_empty_build_field(self):
         os.chdir(self.testdir)
         Path('metadata').mkdir()
@@ -221,9 +217,8 @@ class RewriteMetaTest(unittest.TestCase):
             },
         )
 
+    @mock.patch('sys.argv', ['fdroid rewritemeta', 'a', 'b'])
     def test_rewrite_scenario_trivial(self):
-        sys.argv = ['rewritemeta', 'a', 'b']
-
         with tempfile.TemporaryDirectory() as tmpdir, TmpCwd(tmpdir):
             Path('metadata').mkdir()
             with Path('metadata/a.yml').open('w') as f:
@@ -260,21 +255,3 @@ class RewriteMetaTest(unittest.TestCase):
                     '''
                 ),
             )
-
-
-if __name__ == "__main__":
-    import argparse
-
-    parser = argparse.ArgumentParser()
-    parser.add_argument(
-        "-v",
-        "--verbose",
-        action="store_true",
-        default=False,
-        help="Spew out even more information than normal",
-    )
-    common.options = common.parse_args(parser)
-
-    newSuite = unittest.TestSuite()
-    newSuite.addTest(unittest.makeSuite(RewriteMetaTest))
-    unittest.main(failfast=False)

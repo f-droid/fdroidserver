@@ -1,11 +1,8 @@
 #!/usr/bin/env python3
 
 import configparser
-import inspect
-import logging
 import os
 import shutil
-import sys
 import tempfile
 import unittest
 from pathlib import Path
@@ -13,16 +10,10 @@ from unittest import mock
 
 import git
 
-localmodule = os.path.realpath(
-    os.path.join(os.path.dirname(inspect.getfile(inspect.currentframe())), '..')
-)
-if localmodule not in sys.path:
-    sys.path.insert(0, localmodule)
+import fdroidserver
+from .testcommon import TmpCwd, mkdtemp
 
-import fdroidserver.common
-import fdroidserver.deploy
-from fdroidserver.exception import FDroidException
-from testcommon import TmpCwd, mkdtemp, parse_args_for_test
+basedir = Path(__file__).parent
 
 
 class Options:
@@ -34,9 +25,7 @@ class DeployTest(unittest.TestCase):
     '''fdroidserver/deploy.py'''
 
     def setUp(self):
-        logging.basicConfig(level=logging.DEBUG)
-        self.basedir = os.path.join(localmodule, 'tests')
-        os.chdir(self.basedir)
+        os.chdir(basedir)
         self._td = mkdtemp()
         self.testdir = self._td.name
 
@@ -281,7 +270,7 @@ class DeployTest(unittest.TestCase):
     def test_update_serverwebroot_no_rsync_error(self):
         os.environ['PATH'] = self.testdir
         os.chdir(self.testdir)
-        with self.assertRaises(FDroidException):
+        with self.assertRaises(fdroidserver.exception.FDroidException):
             fdroidserver.deploy.update_serverwebroot('serverwebroot', 'repo')
 
     def test_update_serverwebroot_make_cur_version_link(self):
@@ -981,7 +970,7 @@ class DeployTest(unittest.TestCase):
                 for file in files_to_upload
             ]
             mock_driver.upload_object_via_stream.assert_has_calls(calls, any_order=True)
-            assert mock_driver.upload_object_via_stream.call_count == 2
+            self.assertEqual(mock_driver.upload_object_via_stream.call_count, 2)
 
     def test_update_awsbucket_libcloud_in_index_only_mode(self):
         from libcloud.storage.base import Container
@@ -1047,7 +1036,7 @@ class DeployTest(unittest.TestCase):
                 calls,
                 any_order=False,
             )
-            assert mock_driver.upload_object_via_stream.call_count == 1
+            self.assertEqual(mock_driver.upload_object_via_stream.call_count, 1)
 
     def test_update_servergitmirrors(self):
         # setup parameters for this test run
@@ -1461,7 +1450,7 @@ class Test_UploadToGithubReleasesRepo(unittest.TestCase):
         )
 
     def test_local_token(self):
-        self.repo_conf["token"] = "local_token"
+        self.repo_conf["token"] = "local_token"  # nosec B105
         with unittest.mock.patch("fdroidserver.github.GithubApi", self.api_constructor):
             fdroidserver.deploy.upload_to_github_releases_repo(
                 self.repo_conf,
@@ -1488,25 +1477,3 @@ class Test_UploadToGithubReleasesRepo(unittest.TestCase):
                 ),
             ],
         )
-
-
-if __name__ == "__main__":
-    os.chdir(os.path.dirname(__file__))
-
-    import argparse
-
-    parser = argparse.ArgumentParser()
-    parser.add_argument(
-        "-v",
-        "--verbose",
-        action="store_true",
-        default=False,
-        help="Spew out even more information than normal",
-    )
-    parse_args_for_test(parser, sys.argv)
-
-    newSuite = unittest.TestSuite()
-    newSuite.addTest(unittest.makeSuite(DeployTest))
-    newSuite.addTest(unittest.makeSuite(GitHubReleasesTest))
-    newSuite.addTest(unittest.makeSuite(Test_UploadToGithubReleasesRepo))
-    unittest.main(failfast=False)

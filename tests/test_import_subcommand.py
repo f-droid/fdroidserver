@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
 
-# http://www.drdobbs.com/testing/unit-testing-with-python/240165163
-
 import logging
 import os
 import shutil
@@ -15,31 +13,25 @@ import git
 import requests
 import yaml
 
-localmodule = Path(__file__).resolve().parent.parent
-print('localmodule: ' + str(localmodule))
-if localmodule not in sys.path:
-    sys.path.insert(0, str(localmodule))
+from .testcommon import TmpCwd, mkdtemp
 
-from testcommon import TmpCwd, mkdtemp, parse_args_for_test
-
-import fdroidserver.common
+import fdroidserver
 import fdroidserver.import_subcommand
-import fdroidserver.metadata
-from fdroidserver.exception import FDroidException
+
+basedir = Path(__file__).parent
+logging.basicConfig(level=logging.DEBUG)
 
 
 class ImportTest(unittest.TestCase):
     '''fdroid import'''
 
     def setUp(self):
-        logging.basicConfig(level=logging.DEBUG)
-        self.basedir = localmodule / 'tests'
-        os.chdir(self.basedir)
+        os.chdir(basedir)
         self._td = mkdtemp()
         self.testdir = self._td.name
 
     def tearDown(self):
-        os.chdir(self.basedir)
+        os.chdir(basedir)
         self._td.cleanup()
 
     def test_get_all_gradle_and_manifests(self):
@@ -63,7 +55,7 @@ class ImportTest(unittest.TestCase):
         paths = [Path('source-files/cn.wildfirechat.chat') / path for path in paths]
         self.assertEqual(sorted(paths), sorted(a))
 
-        abspath = Path(self.basedir) / 'source-files/realm'
+        abspath = basedir / 'source-files/realm'
         p = fdroidserver.import_subcommand.get_all_gradle_and_manifests(abspath)
         self.assertEqual(1, len(p))
         self.assertTrue(p[0].is_relative_to(abspath))
@@ -99,6 +91,7 @@ class ImportTest(unittest.TestCase):
                 print('Skipping ImportTest!')
                 return
 
+            fdroidserver.common.options = type('Options', (), {'verbose': False})
             app = fdroidserver.import_subcommand.get_app_from_url(url)
             fdroidserver.import_subcommand.clone_to_tmp_dir(app)
             self.assertEqual(app.RepoType, 'git')
@@ -134,7 +127,7 @@ class ImportTest(unittest.TestCase):
                     tmp_importer,
                     onerror=fdroidserver.import_subcommand.handle_retree_error_on_windows,
                 )
-                shutil.copytree(self.basedir / 'source-files' / appid, tmp_importer)
+                shutil.copytree(basedir / 'source-files' / appid, tmp_importer)
 
                 app = fdroidserver.import_subcommand.get_app_from_url(url)
                 with mock.patch(
@@ -185,7 +178,7 @@ class ImportTest(unittest.TestCase):
         the network, if it gets past the code that throws the error.
 
         """
-        with self.assertRaises(FDroidException):
+        with self.assertRaises(fdroidserver.exception.FDroidException):
             fdroidserver.import_subcommand.main()
 
     @mock.patch('sys.argv', ['fdroid import', '-u', 'https://fake/git/url.git'])
@@ -195,29 +188,12 @@ class ImportTest(unittest.TestCase):
     def test_main_local_git(self):
         os.chdir(self.testdir)
         git.Repo.init('td')
-        with Path('td/build.gradle').open('w') as fp:
-            fp.write('android { defaultConfig { applicationId "com.example" } }')
+        Path('td/build.gradle').write_text(
+            'android { defaultConfig { applicationId "com.example" } }'
+        )
         fdroidserver.import_subcommand.main()
         with open('metadata/com.example.yml') as fp:
             data = yaml.safe_load(fp)
         self.assertEqual(data['Repo'], sys.argv[2])
         self.assertEqual(data['RepoType'], 'git')
         self.assertEqual(1, len(data['Builds']))
-
-
-if __name__ == "__main__":
-    import argparse
-
-    parser = argparse.ArgumentParser()
-    parser.add_argument(
-        "-v",
-        "--verbose",
-        action="store_true",
-        default=False,
-        help="Spew out even more information than normal",
-    )
-    parse_args_for_test(parser, sys.argv)
-
-    newSuite = unittest.TestSuite()
-    newSuite.addTest(unittest.makeSuite(ImportTest))
-    unittest.main(failfast=False)

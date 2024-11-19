@@ -1,31 +1,20 @@
 #!/usr/bin/env python3
 
-import inspect
 import json
-import logging
 import os
 import shutil
-import sys
 import tempfile
 import unittest
-
-localmodule = os.path.realpath(
-    os.path.join(os.path.dirname(inspect.getfile(inspect.currentframe())), '..')
-)
-print('localmodule: ' + localmodule)
-if localmodule not in sys.path:
-    sys.path.insert(0, localmodule)
 
 from fdroidserver import common, gpgsign
 from pathlib import Path
 from unittest.mock import MagicMock, patch
 
+basedir = Path(__file__).parent
+
 
 class GpgsignTest(unittest.TestCase):
-    basedir = Path(__file__).resolve().parent
-
     def setUp(self):
-        logging.basicConfig(level=logging.DEBUG)
         self.tempdir = tempfile.TemporaryDirectory()
         os.chdir(self.tempdir.name)
         self.repodir = Path('repo')
@@ -34,7 +23,7 @@ class GpgsignTest(unittest.TestCase):
         gpgsign.config = None
         config = common.read_config()
         config['verbose'] = True
-        config['gpghome'] = str((self.basedir / 'gnupghome').resolve())
+        config['gpghome'] = str((basedir / 'gnupghome').resolve())
         config['gpgkey'] = '1DBA2E89'
         gpgsign.config = config
 
@@ -46,8 +35,8 @@ class GpgsignTest(unittest.TestCase):
     def test_sign_index(self, FDroidPopen):
         """This skips running gpg because its hard to setup in a test env"""
         index_v1_json = 'repo/index-v1.json'
-        shutil.copy(str(self.basedir / index_v1_json), 'repo')
-        shutil.copy(str(self.basedir / 'SpeedoMeterApp.main_1.apk'), 'repo')
+        shutil.copy(basedir / index_v1_json, 'repo')
+        shutil.copy(basedir / 'SpeedoMeterApp.main_1.apk', 'repo')
 
         def _side_effect(gpg):
             f = gpg[-1]
@@ -68,24 +57,4 @@ class GpgsignTest(unittest.TestCase):
         # smoke check status JSON
         with (self.repodir / 'status/gpgsign.json').open() as fp:
             data = json.load(fp)
-        self.assertTrue('index-v1.json' in data['signed'])
-
-
-if __name__ == "__main__":
-    os.chdir(os.path.dirname(__file__))
-
-    import argparse
-
-    parser = argparse.ArgumentParser()
-    parser.add_argument(
-        "-v",
-        "--verbose",
-        action="store_true",
-        default=False,
-        help="Spew out even more information than normal",
-    )
-    common.parse_args(parser)
-
-    newSuite = unittest.TestSuite()
-    newSuite.addTest(unittest.makeSuite(GpgsignTest))
-    unittest.main(failfast=False)
+        self.assertIn('index-v1.json', data['signed'])

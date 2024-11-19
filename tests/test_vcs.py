@@ -1,45 +1,26 @@
 #!/usr/bin/env python3
 
-# http://www.drdobbs.com/testing/unit-testing-with-python/240165163
-
-import inspect
-import logging
 import os
-import sys
 import unittest
 
 from git import Repo
 
-localmodule = os.path.realpath(
-    os.path.join(os.path.dirname(inspect.getfile(inspect.currentframe())), '..')
-)
-print('localmodule: ' + localmodule)
-if localmodule not in sys.path:
-    sys.path.insert(0, localmodule)
-
-import fdroidserver.build
 import fdroidserver.common
 import fdroidserver.metadata
-import fdroidserver.scanner
-from testcommon import mkdtemp, parse_args_for_test
+from .testcommon import mkdtemp
 
 
 class VCSTest(unittest.TestCase):
     """For some reason the VCS classes are in fdroidserver/common.py"""
 
     def setUp(self):
-        logging.basicConfig(level=logging.DEBUG)
-        self.basedir = os.path.join(localmodule, 'tests')
-        os.chdir(self.basedir)
         self._td = mkdtemp()
-        self.testdir = self._td.name
+        os.chdir(self._td.name)
 
     def tearDown(self):
         self._td.cleanup()
-        os.chdir(self.basedir)
 
     def test_remote_set_head_can_fail(self):
-        os.chdir(self.testdir)
         # First create an upstream repo with one commit
         upstream_repo = Repo.init("upstream_repo")
         with open(upstream_repo.working_dir + "/file", 'w') as f:
@@ -72,6 +53,8 @@ class VCSTest(unittest.TestCase):
         build.androidupdate = ['no']
         vcs, build_dir = fdroidserver.common.setup_vcs(app)
         # force an init of the repo, the remote head error only occurs on the second gotorevision call
+
+        fdroidserver.common.options = type('Options', (), {'verbose': False})
         vcs.gotorevision(build.commit)
         fdroidserver.common.prepare_source(
             vcs,
@@ -82,23 +65,3 @@ class VCSTest(unittest.TestCase):
             extlib_dir="ignore",
         )
         self.assertTrue(os.path.isfile("build/com.gpl.rpg.AndorsTrail/file"))
-
-
-if __name__ == "__main__":
-    os.chdir(os.path.dirname(__file__))
-
-    import argparse
-
-    parser = argparse.ArgumentParser()
-    parser.add_argument(
-        "-v",
-        "--verbose",
-        action="store_true",
-        default=False,
-        help="Spew out even more information than normal",
-    )
-    parse_args_for_test(parser, sys.argv)
-
-    newSuite = unittest.TestSuite()
-    newSuite.addTest(unittest.makeSuite(VCSTest))
-    unittest.main(failfast=False)

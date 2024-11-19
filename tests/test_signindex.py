@@ -1,21 +1,11 @@
 #!/usr/bin/env python3
 
-import inspect
 import json
-import logging
 import os
 import shutil
 import subprocess
-import sys
 import tempfile
 import unittest
-
-localmodule = os.path.realpath(
-    os.path.join(os.path.dirname(inspect.getfile(inspect.currentframe())), '..')
-)
-print('localmodule: ' + localmodule)
-if localmodule not in sys.path:
-    sys.path.insert(0, localmodule)
 
 from fdroidserver import apksigcopier, common, exception, signindex, update
 from pathlib import Path
@@ -46,7 +36,6 @@ class SignindexTest(unittest.TestCase):
         config['keypass'] = 'r9aquRHYoI8+dYz6jKrLntQ5/NJNASFBacJh7Jv2BlI='
         signindex.config = config
 
-        logging.basicConfig(level=logging.DEBUG)
         self.tempdir = tempfile.TemporaryDirectory()
         os.chdir(self.tempdir.name)
         self.repodir = Path('repo')
@@ -187,23 +176,3 @@ class SignindexTest(unittest.TestCase):
             ['jarsigner', '-verify', '-verbose', f], stdout=subprocess.PIPE
         )
         self.assertFalse(b'SHA1withRSA' in cp.stdout)
-
-
-if __name__ == "__main__":
-    os.chdir(os.path.dirname(__file__))
-
-    import argparse
-
-    parser = argparse.ArgumentParser()
-    parser.add_argument(
-        "-v",
-        "--verbose",
-        action="store_true",
-        default=False,
-        help="Spew out even more information than normal",
-    )
-    common.options = common.parse_args(parser)
-
-    newSuite = unittest.TestSuite()
-    newSuite.addTest(unittest.makeSuite(SignindexTest))
-    unittest.main(failfast=False)

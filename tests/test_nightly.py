@@ -1,12 +1,10 @@
 #!/usr/bin/env python3
 
-import inspect
-import logging
 import os
+import platform
 import requests
 import shutil
 import subprocess
-import sys
 import tempfile
 import time
 import unittest
@@ -14,13 +12,6 @@ import yaml
 
 from pathlib import Path
 from unittest.mock import patch
-
-localmodule = os.path.realpath(
-    os.path.join(os.path.dirname(inspect.getfile(inspect.currentframe())), '..')
-)
-print('localmodule: ' + localmodule)
-if localmodule not in sys.path:
-    sys.path.insert(0, localmodule)
 
 from fdroidserver import common, exception, index, nightly
 
@@ -35,6 +26,9 @@ AOSP_TESTKEY_DEBUG_KEYSTORE_KEY_FILE_NAME = (
     'debug_keystore_k47SVrA85+oMZAexHc62PkgvIgO8TJBYN00U82xSlxc_id_rsa'
 )
 
+basedir = Path(__file__).parent
+testroot = basedir.with_name('.testfiles')
+
 
 class Options:
     allow_disabled_algorithms = False
@@ -46,20 +40,20 @@ class Options:
     verbose = False
 
 
+@unittest.skipUnless(
+    platform.system() == 'Linux',
+    'skipping test_nightly, it currently only works GNU/Linux',
+)
 class NightlyTest(unittest.TestCase):
-    basedir = Path(__file__).resolve().parent
     path = os.environ['PATH']
 
     def setUp(self):
         common.config = None
         nightly.config = None
-        logging.basicConfig(level=logging.WARNING)
-        self.basedir = Path(localmodule) / 'tests'
-        self.testroot = Path(localmodule) / '.testfiles'
-        self.testroot.mkdir(exist_ok=True)
-        os.chdir(self.basedir)
+        testroot.mkdir(exist_ok=True)
+        os.chdir(basedir)
         self.tempdir = tempfile.TemporaryDirectory(
-            str(time.time()), self._testMethodName + '_', self.testroot
+            str(time.time()), self._testMethodName + '_', testroot
         )
         self.testdir = Path(self.tempdir.name)
         self.home = self.testdir / 'home'
@@ -70,21 +64,21 @@ class NightlyTest(unittest.TestCase):
     def tearDown(self):
         self.tempdir.cleanup()
         try:
-            os.rmdir(self.testroot)
+            os.rmdir(testroot)
         except OSError:  # other test modules might have left stuff around
             pass
 
     def _copy_test_debug_keystore(self):
         self.dot_android.mkdir()
         shutil.copy(
-            self.basedir / 'aosp_testkey_debug.keystore',
+            basedir / 'aosp_testkey_debug.keystore',
             self.dot_android / 'debug.keystore',
         )
 
     def _copy_debug_apk(self):
         outputdir = Path('app/build/output/apk/debug')
         outputdir.mkdir(parents=True)
-        shutil.copy(self.basedir / 'urzip.apk', outputdir / 'urzip-debug.apk')
+        shutil.copy(basedir / 'urzip.apk', outputdir / 'urzip-debug.apk')
 
     def test_get_repo_base_url(self):
         for clone_url, repo_git_base, result in [
@@ -108,9 +102,7 @@ class NightlyTest(unittest.TestCase):
     def test_get_keystore_secret_var(self):
         self.assertEqual(
             AOSP_TESTKEY_DEBUG_KEYSTORE,
-            nightly._get_keystore_secret_var(
-                self.basedir / 'aosp_testkey_debug.keystore'
-            ),
+            nightly._get_keystore_secret_var(basedir / 'aosp_testkey_debug.keystore'),
         )
 
     @patch.dict(os.environ, clear=True)
@@ -118,12 +110,12 @@ class NightlyTest(unittest.TestCase):
         os.environ['HOME'] = str(self.home)
         os.environ['PATH'] = self.path
         ssh_private_key_file = nightly._ssh_key_from_debug_keystore(
-            self.basedir / 'aosp_testkey_debug.keystore'
+            basedir / 'aosp_testkey_debug.keystore'
         )
         with open(ssh_private_key_file) as fp:
-            assert '-----BEGIN RSA PRIVATE KEY-----' in fp.read()
+            self.assertIn('-----BEGIN RSA PRIVATE KEY-----', fp.read())
         with open(ssh_private_key_file + '.pub') as fp:
-            assert fp.read(8) == 'ssh-rsa '
+            self.assertEqual(fp.read(8), 'ssh-rsa ')
         shutil.rmtree(os.path.dirname(ssh_private_key_file))
 
     @patch.dict(os.environ, clear=True)
@@ -149,9 +141,9 @@ class NightlyTest(unittest.TestCase):
         self._copy_test_debug_keystore()
         os.environ['HOME'] = str(self.home)
         os.environ['PATH'] = self.path
-        assert not dot_ssh.exists()
+        self.assertFalse(dot_ssh.exists())
         nightly.main()
-        assert not dot_ssh.exists()
+        self.assertFalse(dot_ssh.exists())
 
     @patch.dict(os.environ, clear=True)
     @patch('sys.argv', ['fdroid nightly', '--verbose'])
@@ -168,8 +160,10 @@ class NightlyTest(unittest.TestCase):
         os.environ['HOME'] = str(self.home)
         os.environ['PATH'] = self.path
         nightly.main()
-        assert (dot_ssh / AOSP_TESTKEY_DEBUG_KEYSTORE_KEY_FILE_NAME).exists()
-        assert (dot_ssh / (AOSP_TESTKEY_DEBUG_KEYSTORE_KEY_FILE_NAME + '.pub')).exists()
+        self.assertTrue((dot_ssh / AOSP_TESTKEY_DEBUG_KEYSTORE_KEY_FILE_NAME).exists())
+        self.assertTrue(
+            (dot_ssh / (AOSP_TESTKEY_DEBUG_KEYSTORE_KEY_FILE_NAME + '.pub')).exists()
+        )
 
     @patch('fdroidserver.common.vcs_git.git', lambda args, e: common.PopenResult(1))
     @patch('sys.argv', ['fdroid nightly', '--verbose'])
@@ -200,7 +194,7 @@ class NightlyTest(unittest.TestCase):
 
     def _put_fdroid_in_args(self, args):
         """Find fdroid command that belongs to this source code tree"""
-        fdroid = os.path.join(localmodule, 'fdroid')
+        fdroid = os.path.join(basedir.parent, 'fdroid')
         if not os.path.exists(fdroid):
             fdroid = os.getenv('fdroid')
         return [fdroid] + args[1:]
@@ -245,7 +239,7 @@ class NightlyTest(unittest.TestCase):
             },
             clear=True,
         ):
-            self.assertTrue(self.testroot == Path.home().parent)
+            self.assertTrue(testroot == Path.home().parent)
             with patch('subprocess.check_call', _subprocess_check_call):
                 try:
                     nightly.main()
@@ -319,7 +313,7 @@ class NightlyTest(unittest.TestCase):
             },
             clear=True,
         ):
-            self.assertTrue(self.testroot == Path.home().parent)
+            self.assertTrue(testroot == Path.home().parent)
             with patch('subprocess.check_call', _subprocess_check_call):
                 try:
                     nightly.main()
@@ -356,23 +350,3 @@ class NightlyTest(unittest.TestCase):
             )
             del config['identity_file']
             self.assertEqual(expected, config)
-
-
-if __name__ == "__main__":
-    os.chdir(os.path.dirname(__file__))
-
-    import argparse
-
-    parser = argparse.ArgumentParser()
-    parser.add_argument(
-        "-v",
-        "--verbose",
-        action="store_true",
-        default=False,
-        help="Spew out even more information than normal",
-    )
-    common.options = common.parse_args(parser)
-
-    newSuite = unittest.TestSuite()
-    newSuite.addTest(unittest.makeSuite(NightlyTest))
-    unittest.main(failfast=False)

@@ -1,21 +1,10 @@
 #!/usr/bin/env python3
 
-import inspect
-import optparse
-import os
-import sys
+import unittest
 import unittest.mock
-import testcommon
 
-localmodule = os.path.realpath(
-    os.path.join(os.path.dirname(inspect.getfile(inspect.currentframe())), '..')
-)
-print('localmodule: ' + localmodule)
-if localmodule not in sys.path:
-    sys.path.insert(0, localmodule)
-
-import fdroidserver.github
-import fdroidserver.common
+from .testcommon import mock_urlopen
+import fdroidserver
 
 
 class GithubApiTest(unittest.TestCase):
@@ -40,7 +29,7 @@ class GithubApiTest(unittest.TestCase):
 
     def test_list_released_tags(self):
         api = fdroidserver.github.GithubApi('faketoken', 'fakerepopath')
-        uomock = testcommon.mock_urlopen(
+        uomock = mock_urlopen(
             body='[{"tag_name": "fake"}, {"tag_name": "double_fake"}]'
         )
         with unittest.mock.patch("urllib.request.urlopen", uomock):
@@ -59,7 +48,7 @@ class GithubApiTest(unittest.TestCase):
 
     def test_tag_exists(self):
         api = fdroidserver.github.GithubApi('faketoken', 'fakerepopath')
-        uomock = testcommon.mock_urlopen(body='[{"ref": "refs/tags/fake_tag"}]')
+        uomock = mock_urlopen(body='[{"ref": "refs/tags/fake_tag"}]')
         with unittest.mock.patch("urllib.request.urlopen", uomock):
             result = api.tag_exists('fake_tag')
         self.assertTrue(result)
@@ -67,7 +56,7 @@ class GithubApiTest(unittest.TestCase):
     def test_tag_exists_failure(self):
         api = fdroidserver.github.GithubApi('faketoken', 'fakerepopath')
 
-        uomock = testcommon.mock_urlopen(body='[{"error": "failure"}]')
+        uomock = mock_urlopen(body='[{"error": "failure"}]')
 
         with unittest.mock.patch("urllib.request.urlopen", uomock):
             success = api.tag_exists('fake_tag')
@@ -77,7 +66,7 @@ class GithubApiTest(unittest.TestCase):
     def test_list_all_tags(self):
         api = fdroidserver.github.GithubApi('faketoken', 'fakerepopath')
 
-        uomock = testcommon.mock_urlopen(
+        uomock = mock_urlopen(
             body='[{"ref": "refs/tags/fake"}, {"ref": "refs/tags/double_fake"}]'
         )
 
@@ -89,7 +78,7 @@ class GithubApiTest(unittest.TestCase):
     def test_create_release(self):
         api = fdroidserver.github.GithubApi('faketoken', 'fakerepopath')
 
-        uomock = testcommon.mock_urlopen(body='{"id": "fakeid"}')
+        uomock = mock_urlopen(body='{"id": "fakeid"}')
         api.tag_exists = lambda x: True
         api._create_release_asset = unittest.mock.Mock()
 
@@ -116,7 +105,7 @@ class GithubApiTest(unittest.TestCase):
 
     def test__create_release_asset(self):
         api = fdroidserver.github.GithubApi('faketoken', 'fakerepopath')
-        uomock = testcommon.mock_urlopen()
+        uomock = mock_urlopen()
 
         with unittest.mock.patch(
             'fdroidserver.github.open',
@@ -144,21 +133,3 @@ class GithubApiTest(unittest.TestCase):
             },
         )
         self.assertEqual(req.data, b'fake_content')
-
-
-if __name__ == "__main__":
-    os.chdir(os.path.dirname(__file__))
-
-    parser = optparse.OptionParser()
-    parser.add_option(
-        "-v",
-        "--verbose",
-        action="store_true",
-        default=False,
-        help="Spew out even more information than normal",
-    )
-    (fdroidserver.common.options, args) = parser.parse_args(["--verbose"])
-
-    newSuite = unittest.TestSuite()
-    newSuite.addTest(unittest.makeSuite(GithubApiTest))
-    unittest.main(failfast=False)

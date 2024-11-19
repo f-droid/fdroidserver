@@ -1,39 +1,28 @@
 #!/usr/bin/env python3
 
-# http://www.drdobbs.com/testing/unit-testing-with-python/240165163
-
 import logging
 import os
 import shutil
-import sys
 import tempfile
 import unittest
 from pathlib import Path
 
 import ruamel.yaml
 
-localmodule = Path(__file__).resolve().parent.parent
-print('localmodule: ' + str(localmodule))
-if localmodule not in sys.path:
-    sys.path.insert(0, str(localmodule))
-
-from testcommon import mkdtemp, parse_args_for_test
+from .testcommon import mkdtemp
 
 import fdroidserver.common
 import fdroidserver.lint
 import fdroidserver.metadata
-from fdroidserver.common import CATEGORIES_CONFIG_NAME
+
+basedir = Path(__file__).parent
 
 
 class LintTest(unittest.TestCase):
     '''fdroidserver/lint.py'''
 
     def setUp(self):
-        logging.basicConfig(level=logging.DEBUG)
-        self.basedir = localmodule / 'tests'
-        self.tmpdir = localmodule / '.testfiles'
-        self.tmpdir.mkdir(exist_ok=True)
-        os.chdir(self.basedir)
+        os.chdir(basedir)
         fdroidserver.common.config = None
         fdroidserver.lint.config = None
         fdroidserver.lint.CATEGORIES_KEYS = None
@@ -46,13 +35,13 @@ class LintTest(unittest.TestCase):
     def test_check_for_unsupported_metadata_files(self):
         self.assertTrue(fdroidserver.lint.check_for_unsupported_metadata_files())
 
-        with tempfile.TemporaryDirectory(dir=str(self.tmpdir)) as testdir:
+        with tempfile.TemporaryDirectory() as testdir:
             testdir = Path(testdir)
             self.assertFalse(
                 fdroidserver.lint.check_for_unsupported_metadata_files(testdir)
             )
             shutil.copytree(
-                self.basedir / 'metadata',
+                basedir / 'metadata',
                 testdir / 'metadata',
                 ignore=shutil.ignore_patterns('apk', 'dump', '*.json'),
             )
@@ -326,7 +315,9 @@ class LintTest(unittest.TestCase):
         self.assertFalse(anywarns)
 
     def test_check_categories_in_config(self):
-        fdroidserver.lint.config = {CATEGORIES_CONFIG_NAME: ['InConfig']}
+        fdroidserver.lint.config = {
+            fdroidserver.common.CATEGORIES_CONFIG_NAME: ['InConfig']
+        }
         fdroidserver.lint.load_categories_config()
         app = fdroidserver.metadata.App({'Categories': ['InConfig']})
         self.assertEqual(0, len(list(fdroidserver.lint.check_categories(app))))
@@ -338,13 +329,15 @@ class LintTest(unittest.TestCase):
         self.assertEqual(1, len(list(fdroidserver.lint.check_categories(app))))
 
     def test_check_categories_empty_is_error(self):
-        fdroidserver.lint.config = {CATEGORIES_CONFIG_NAME: []}
+        fdroidserver.lint.config = {fdroidserver.common.CATEGORIES_CONFIG_NAME: []}
         fdroidserver.lint.load_categories_config()
         app = fdroidserver.metadata.App({'Categories': ['something']})
         self.assertEqual(1, len(list(fdroidserver.lint.check_categories(app))))
 
     def test_check_categories_old_hardcoded_not_defined(self):
-        fdroidserver.lint.config = {CATEGORIES_CONFIG_NAME: ['foo', 'bar']}
+        fdroidserver.lint.config = {
+            fdroidserver.common.CATEGORIES_CONFIG_NAME: ['foo', 'bar']
+        }
         fdroidserver.lint.load_categories_config()
         app = fdroidserver.metadata.App({'Categories': ['Writing']})
         self.assertEqual(1, len(list(fdroidserver.lint.check_categories(app))))
@@ -493,8 +486,7 @@ class LintTest(unittest.TestCase):
 
 class LintAntiFeaturesTest(unittest.TestCase):
     def setUp(self):
-        self.basedir = localmodule / 'tests'
-        os.chdir(self.basedir)
+        os.chdir(basedir)
         fdroidserver.common.config = dict()
         fdroidserver.lint.ANTIFEATURES_KEYS = None
         fdroidserver.lint.load_antiFeatures_config()
@@ -537,21 +529,3 @@ class LintAntiFeaturesTest(unittest.TestCase):
         app = fdroidserver.metadata.App()
         app['Builds'] = [{'antifeatures': ['Ads', 'Tracker']}]
         self.assertEqual(1, len(list(fdroidserver.lint.check_antiFeatures(app))))
-
-
-if __name__ == "__main__":
-    import argparse
-
-    parser = argparse.ArgumentParser()
-    parser.add_argument(
-        "-v",
-        "--verbose",
-        action="store_true",
-        default=False,
-        help="Spew out even more information than normal",
-    )
-    fdroidserver.lint.options = parse_args_for_test(parser, sys.argv)
-
-    newSuite = unittest.TestSuite()
-    newSuite.addTest(unittest.makeSuite(LintTest))
-    unittest.main(failfast=False)
