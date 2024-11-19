@@ -40,10 +40,9 @@ msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2024-09-10 10:50+0200\n"
-"PO-Revision-Date: 2024-11-08 15:09+0000\n"
-"Last-Translator: ygsk10 <yogaskung@protonmail.ch>\n"
-"Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
-"projects/f-droid/fdroidserver/zh_Hans/>\n"
+"PO-Revision-Date: 2024-11-08 17:42+0000\n"
+"Last-Translator: linsui <linsui@inbox.lv>\n"
+"Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/projects/f-droid/fdroidserver/zh_Hans/>\n"
 "Language: zh_Hans\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -2161,9 +2160,7 @@ msgstr "如果已配置为使用签名索引，该阶段仅创建未签名索引
 msgid ""
 "When linting the entire repository yamllint is disabled by default. This "
 "option forces yamllint regardless."
-msgstr ""
-"对整个版本库进行 lint 时，默认禁用 yamllint。 无论如何，该选项都会强制 "
-"yamllint。"
+msgstr "对整个版本库进行 lint 时，默认禁用 yamllint。 无论如何，该选项都会强制 yamllint。"
 
 #: ../fdroidserver/publish.py
 msgid "When signing or verifying fails, exit with an error code."
@@ -2647,7 +2644,7 @@ msgstr "进程日志将 {path} 部署到 {dest} 失败！"
 
 #: ../fdroidserver/build.py
 msgid "reference binary missing signature"
-msgstr "引用的二进制文件缺少签名"
+msgstr "参考二进制缺少签名"
 
 #: ../fdroidserver/signatures.py
 #, python-brace-format
