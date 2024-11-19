@@ -803,7 +803,7 @@ def _strip_and_copy_image(in_file, outpath):
     Potential source of Python code to strip JPEGs without dependencies:
     http://www.fetidcascade.com/public/minimal_exif_writer.py
     """
-    logging.debug('copying ' + in_file + ' ' + outpath)
+    logging.debug('copying %s %s', in_file, outpath)
 
     if not os.path.exists(in_file):
         if os.path.islink(in_file):
