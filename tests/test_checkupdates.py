@@ -324,6 +324,9 @@ class CheckupdatesTest(unittest.TestCase):
         for f in (basedir / 'metadata').glob('*.yml'):
             shutil.copy(f, 'metadata')
         git_repo = git.Repo.init(testdir)
+        with git_repo.config_writer() as cw:
+            cw.set_value('user', 'name', 'Foo Bar')
+            cw.set_value('user', 'email', 'foo@bar.com')
         git_repo.git.add(all=True)
         git_repo.index.commit("all metadata files")
 
@@ -340,6 +343,40 @@ class CheckupdatesTest(unittest.TestCase):
         git_repo.create_remote('origin', 'file://' + git_remote_origin)
 
         return git_repo, origin_repo, upstream_repo
+
+    def test_get_changes_versus_ref(self):
+        def _make_commit_new_app(git_repo, metadata_file):
+            app = fdroidserver.metadata.App()
+            fdroidserver.metadata.write_metadata(metadata_file, app)
+            git_repo.git.add(metadata_file)
+            git_repo.git.commit(metadata_file, message=f'changed {metadata_file}')
+
+        git_repo, origin_repo, upstream_repo = self._get_test_git_repos()
+        for remote in git_repo.remotes:
+            remote.push(git_repo.active_branch)
+        appid = 'com.testvalue'
+        metadata_file = f'metadata/{appid}.yml'
+
+        # set up remote branch with change to app
+        git_repo.git.checkout('-b', appid)
+        _make_commit_new_app(git_repo, metadata_file)
+        git_repo.remotes.origin.push(appid)
+
+        # reset local branch and there should be differences
+        upstream_main = fdroidserver.checkupdates.get_upstream_main_branch(git_repo)
+        git_repo.git.reset(upstream_main)
+        self.assertTrue(
+            fdroidserver.checkupdates.get_changes_versus_ref(
+                git_repo, f'origin/{appid}', metadata_file
+            )
+        )
+        # make new commit that matches the previous, different commit, no diff
+        _make_commit_new_app(git_repo, metadata_file)
+        self.assertFalse(
+            fdroidserver.checkupdates.get_changes_versus_ref(
+                git_repo, f'origin/{appid}', metadata_file
+            )
+        )
 
     def test_push_commits(self):
         git_repo, origin_repo, upstream_repo = self._get_test_git_repos()

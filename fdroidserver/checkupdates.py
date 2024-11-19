@@ -740,8 +740,21 @@ def checkout_appid_branch(appid):
     return True
 
 
-def push_commits(remote_name='origin', branch_name='checkupdates', verbose=False):
+def get_changes_versus_ref(git_repo, ref, f):
+    changes = []
+    for m in re.findall(
+        r"^[+-].*", git_repo.git.diff(f"{ref}", '--', f), flags=re.MULTILINE
+    ):
+        if not re.match(r"^(\+\+\+|---) ", m):
+            changes.append(m)
+    return changes
+
+
+def push_commits(branch_name='checkupdates', verbose=False):
     """Make git branch then push commits as merge request.
+
+    The appid is parsed from the actual file that was changed so that
+    only the right branch is ever updated.
 
     This uses the appid as the standard branch name so that there is
     only ever one open merge request per-app.  If multiple apps are
@@ -760,9 +773,7 @@ def push_commits(remote_name='origin', branch_name='checkupdates', verbose=False
     git_repo = git.Repo.init('.')
     upstream_main = get_upstream_main_branch(git_repo)
     files = set()
-    for commit in git_repo.iter_commits(
-        f'{upstream_main}...HEAD', right_only=True
-    ):
+    for commit in git_repo.iter_commits(f'{upstream_main}...HEAD', right_only=True):
         files.update(commit.stats.files.keys())
 
     files = list(files)
@@ -772,6 +783,11 @@ def push_commits(remote_name='origin', branch_name='checkupdates', verbose=False
             branch_name = m.group(1)  # appid
     if not files:
         return
+
+    remote = git_repo.remotes.origin
+    if branch_name in remote.refs:
+        if not get_changes_versus_ref(git_repo, f'origin/{branch_name}', files[0]):
+            return
 
     git_repo.create_head(branch_name, force=True)
     push_options = [
@@ -784,13 +800,7 @@ def push_commits(remote_name='origin', branch_name='checkupdates', verbose=False
 
     # mark as draft if there are only changes to CurrentVersion:
     current_version_only = True
-    for m in re.findall(
-        r"^[+-].*",
-        git_repo.git.diff(f"{upstream_main}...HEAD"),
-        flags=re.MULTILINE,
-    ):
-        if re.match(r"^(\+\+\+|---) ", m):
-            continue
+    for m in get_changes_versus_ref(git_repo, upstream_main, files[0]):
         if not re.match(r"^[-+]CurrentVersion", m):
             current_version_only = False
             break
@@ -810,7 +820,6 @@ def push_commits(remote_name='origin', branch_name='checkupdates', verbose=False
 
         progress = MyProgressPrinter()
 
-    remote = git_repo.remotes[remote_name]
     pushinfos = remote.push(
         branch_name,
         progress=progress,
