@@ -207,11 +207,11 @@ gradlew-fdroid:
     changes:
       - .gitlab-ci.yml
       - gradlew-fdroid
-      - tests/test-gradlew-fdroid
+      - tests/test_gradlew-fdroid
   script:
     - apt-get install ca-certificates curl default-jdk-headless shellcheck unzip
-    - shellcheck --severity=error --color gradlew-fdroid tests/test-gradlew-fdroid
-    - ./tests/test-gradlew-fdroid
+    - shellcheck --severity=error --color gradlew-fdroid tests/test_gradlew-fdroid
+    - ./tests/test_gradlew-fdroid
 
 
 # Run all the various linters and static analysis tools.

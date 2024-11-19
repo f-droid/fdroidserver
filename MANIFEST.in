@@ -864,7 +864,7 @@ include tests/source-files/yuriykulikov/AlarmClock/gradle/wrapper/gradle-wrapper
 include tests/source-files/Zillode/syncthing-silk/build.gradle
 include tests/SpeedoMeterApp.main_1.apk
 include tests/testcommon.py
-include tests/test-gradlew-fdroid
+include tests/test_gradlew-fdroid
 include tests/triple-t-2/build/org.piwigo.android/app/build.gradle
 include tests/triple-t-2/build/org.piwigo.android/app/.gitignore
 include tests/triple-t-2/build/org.piwigo.android/app/src/debug/res/values/constants.xml
