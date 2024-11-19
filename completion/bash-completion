@@ -110,7 +110,7 @@ __complete_gpgsign() {
 
 __complete_install() {
 	opts="-v -q -a -p -n -y"
-	lopts="--verbose --quiet --all --privacy-mode --no --yes"
+	lopts="--verbose --quiet --all --color --no-color --privacy-mode --no-privacy-mode --no --yes"
 	case "${cur}" in
 		-*)
 			__complete_options
@@ -251,7 +251,7 @@ __complete_btlog() {
 
 __complete_mirror() {
 	opts="-v"
-	lopts="--all --archive --build-logs --pgp-signatures --src-tarballs --output-dir"
+	lopts="--all --archive --build-logs --color --no-color --pgp-signatures --src-tarballs --output-dir"
 	__complete_options
 }
 
@@ -270,7 +270,7 @@ __complete_deploy() {
 
 __complete_signatures() {
 	opts="-v -q"
-	lopts="--verbose --no-check-https"
+	lopts="--verbose --color --no-color --no-check-https"
 	case "${cur}" in
 		-*)
 			__complete_options
@@ -289,7 +289,7 @@ __complete_signindex() {
 __complete_init() {
 	opts="-v -q -d"
 	lopts="--verbose --quiet --distinguished-name --keystore
- --repo-keyalias --android-home --no-prompt"
+ --repo-keyalias --android-home --no-prompt --color --no-color"
 	__complete_options
 }
 

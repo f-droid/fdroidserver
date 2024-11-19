@@ -104,7 +104,7 @@ def main():
     )
     parser.add_argument("--no-check-https", action="store_true", default=False)
     options = common.parse_args(parser)
-    common.set_console_logging(options.verbose)
+    common.set_console_logging(options.verbose, options.color)
     common.read_config()
 
     extract(options)

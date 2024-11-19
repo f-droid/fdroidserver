@@ -56,6 +56,7 @@ from pathlib import Path
 
 import defusedxml.ElementTree as XMLElementTree
 
+from argparse import BooleanOptionalAction
 from asn1crypto import cms
 from base64 import urlsafe_b64encode
 from binascii import hexlify
@@ -221,18 +222,60 @@ def parse_args(parser):
 def setup_global_opts(parser):
     try:  # the buildserver VM might not have PIL installed
         from PIL import PngImagePlugin
+
         logger = logging.getLogger(PngImagePlugin.__name__)
         logger.setLevel(logging.INFO)  # tame the "STREAM" debug messages
     except ImportError:
         pass
 
-    parser.add_argument("-v", "--verbose", action="store_true", default=False,
-                        help=_("Spew out even more information than normal"))
-    parser.add_argument("-q", "--quiet", action="store_true", default=False,
-                        help=_("Restrict output to warnings and errors"))
+    parser.add_argument(
+        "-v",
+        "--verbose",
+        action="store_true",
+        default=False,
+        help=_("Spew out even more information than normal"),
+    )
+    parser.add_argument(
+        "-q",
+        "--quiet",
+        action="store_true",
+        default=False,
+        help=_("Restrict output to warnings and errors"),
+    )
+    parser.add_argument(
+        "--color",
+        action=BooleanOptionalAction,
+        default=None,
+        help=_("Color the log output"),
+    )
 
 
-def set_console_logging(verbose=False):
+class ColorFormatter(logging.Formatter):
+
+    def __init__(self, msg):
+        logging.Formatter.__init__(self, msg)
+
+        bright_black = "\x1b[90;20m"
+        yellow = "\x1b[33;20m"
+        red = "\x1b[31;20m"
+        bold_red = "\x1b[31;1m"
+        reset = "\x1b[0m"
+
+        self.FORMATS = {
+            logging.DEBUG: bright_black + msg + reset,
+            logging.INFO: reset + msg + reset,  # use default color
+            logging.WARNING: yellow + msg + reset,
+            logging.ERROR: red + msg + reset,
+            logging.CRITICAL: bold_red + msg + reset
+        }
+
+    def format(self, record):
+        log_fmt = self.FORMATS.get(record.levelno)
+        formatter = logging.Formatter(log_fmt)
+        return formatter.format(record)
+
+
+def set_console_logging(verbose=False, color=False):
     """Globally set logging to output nicely to the console."""
 
     class _StdOutFilter(logging.Filter):
@@ -244,13 +287,18 @@ def set_console_logging(verbose=False):
     else:
         level = logging.ERROR
 
+    if color or (color is None and sys.stdout.isatty()):
+        formatter = ColorFormatter
+    else:
+        formatter = logging.Formatter
+
     stdout_handler = logging.StreamHandler(sys.stdout)
     stdout_handler.addFilter(_StdOutFilter())
-    stdout_handler.setFormatter(logging.Formatter('%(message)s'))
+    stdout_handler.setFormatter(formatter('%(message)s'))
 
     stderr_handler = logging.StreamHandler(sys.stderr)
     stderr_handler.setLevel(logging.ERROR)
-    stderr_handler.setFormatter(logging.Formatter(_('ERROR: %(message)s')))
+    stderr_handler.setFormatter(formatter(_('ERROR: %(message)s')))
 
     logging.basicConfig(
         force=True, level=level, handlers=[stdout_handler, stderr_handler]
