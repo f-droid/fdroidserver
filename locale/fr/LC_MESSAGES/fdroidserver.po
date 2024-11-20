@@ -36,20 +36,21 @@
 # John Donne <akheron@zaclys.net>, 2022, 2023.
 # Deleted User <noreply+22825@weblate.org>, 2023.
 # Christopher Forzy <christopher.forzy@ecomail.fr>, 2024.
+# Phantomwise <phantomwise67@protonmail.com>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2024-09-10 10:50+0200\n"
-"PO-Revision-Date: 2024-09-10 09:27+0000\n"
-"Last-Translator: Hans-Christoph Steiner <hans@guardianproject.info>\n"
+"PO-Revision-Date: 2024-11-19 13:04+0000\n"
+"Last-Translator: Phantomwise <phantomwise67@protonmail.com>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/f-droid/fdroidserver/fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.8-dev\n"
+"X-Generator: Weblate 5.9-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -439,7 +440,7 @@ msgstr "Catégories non définies"
 #: ../fdroidserver/index.py
 #, python-brace-format
 msgid "Category \"{category}\" defined but not used for any apps!"
-msgstr ""
+msgstr "La catégorie « {category} » est définie mais n'est utilisée par aucune application !"
 
 #: ../fdroidserver/__main__.py
 msgid "Check for updates to applications"
@@ -610,12 +611,12 @@ msgstr "La longueur de la description {length} dépasser la limite du nombre de 
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Did you mean config/{name}.yml?"
-msgstr ""
+msgstr "Vouliez-vous dire config/{name}.yml ?"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "Did you mean {code}?"
-msgstr ""
+msgstr "Vouliez-vous dire {code} ?"
 
 #: ../fdroidserver/import_subcommand.py
 msgid "Do not add 'disable:' to the generated build entries"
@@ -686,7 +687,7 @@ msgstr "Lien dupliqué dans « {field} » : {url}"
 #: ../fdroidserver/common.py
 #, python-format
 msgid "ERROR: %(message)s"
-msgstr ""
+msgstr "ERREUR : %(message)s"
 
 #: ../fdroidserver/__main__.py
 msgid "ERROR: The \"server\" subcommand has been removed, use \"deploy\"!"
@@ -2587,7 +2588,7 @@ msgstr "repo_url doit se terminer par /repo"
 #: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "rsync is missing or broken: {error}"
-msgstr ""
+msgstr "rsync n'est pas présent ou ne fonctionne pas : {error}"
 
 #: ../fdroidserver/metadata.py
 msgid "ruamel.yaml not installed, can not write metadata."
@@ -2839,7 +2840,7 @@ msgstr ""
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "{path} is not {expected_type}, but a {datatype}!"
-msgstr ""
+msgstr "{path} n'est pas un {expected_type}, mais un {datatype} !"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -2854,7 +2855,7 @@ msgstr "{path} supérieur à 200MB, envoi manuel : {url}"
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "{path}: \"{code}\" is not a valid ISO_3166-1 alpha-2 country code!"
-msgstr ""
+msgstr "{path} : \"{code}\" n'est pas un code de pays ISO_3166-1 alpha-2 valide !"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
