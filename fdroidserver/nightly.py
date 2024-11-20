@@ -21,6 +21,7 @@ import base64
 import datetime
 import git
 import hashlib
+import inspect
 import logging
 import os
 import paramiko
@@ -204,12 +205,38 @@ def get_repo_base_url(clone_url: str, repo_git_base: str, force_type: Optional[s
 
 
 def clone_git_repo(clone_url, git_mirror_path):
+    """Clone a git repo into the given path, failing if a password is required.
+
+    If GitPython's safe mode is present, this will use that.  Otherwise,
+    this includes a very limited version of the safe mode just to ensure
+    this won't hang on password prompts.
+
+    https://github.com/gitpython-developers/GitPython/pull/2029
+
+    """
     logging.debug(_('cloning {url}').format(url=clone_url))
-    vcs = common.getvcs('git', clone_url, git_mirror_path)
-    p = vcs.git(['clone', '--', vcs.remote, str(vcs.local)])
-    if p.returncode != 0:
-        print('WARNING: only public git repos are supported!')
-        raise VCSException('git clone %s failed:' % clone_url, p.output)
+    try:
+        sig = inspect.signature(git.Repo.clone_from)
+        if 'safe' in sig.parameters:
+            git.Repo.clone_from(clone_url, git_mirror_path, safe=True)
+        else:
+            git.Repo.clone_from(
+                clone_url,
+                git_mirror_path,
+                env={
+                    'GIT_ASKPASS': '/bin/true',
+                    'SSH_ASKPASS': '/bin/true',
+                    'GIT_USERNAME': 'u',
+                    'GIT_PASSWORD': 'p',
+                    'GIT_HTTP_USERNAME': 'u',
+                    'GIT_HTTP_PASSWORD': 'p',
+                    'GIT_SSH': '/bin/false',  # for git < 2.3
+                    'GIT_TERMINAL_PROMPT': '0',
+                },
+            )
+    except git.exc.GitCommandError as e:
+        logging.warning(_('WARNING: only public git repos are supported!'))
+        raise VCSException(f'git clone {clone_url} failed:', str(e)) from e
 
 
 def main():
