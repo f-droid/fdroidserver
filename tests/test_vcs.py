@@ -7,7 +7,7 @@ from git import Repo
 
 import fdroidserver.common
 import fdroidserver.metadata
-from .testcommon import mkdtemp
+from .testcommon import mkdtemp, VerboseFalseOptions
 
 
 class VCSTest(unittest.TestCase):
@@ -54,7 +54,7 @@ class VCSTest(unittest.TestCase):
         vcs, build_dir = fdroidserver.common.setup_vcs(app)
         # force an init of the repo, the remote head error only occurs on the second gotorevision call
 
-        fdroidserver.common.options = type('Options', (), {'verbose': False})
+        fdroidserver.common.options = VerboseFalseOptions
         vcs.gotorevision(build.commit)
         fdroidserver.common.prepare_source(
             vcs,

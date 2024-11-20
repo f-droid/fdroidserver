@@ -24,7 +24,7 @@ from fdroidserver import common
 from fdroidserver import metadata
 from fdroidserver import signatures
 from fdroidserver.exception import FDroidException
-from .testcommon import mkdtemp
+from .testcommon import mkdtemp, VerboseFalseOptions
 
 basedir = pathlib.Path(__file__).parent
 
@@ -247,12 +247,9 @@ class PublishTest(unittest.TestCase):
                 self.assertEqual(publish.config['keytool'], data['keytool'])
 
     def test_sign_then_implant_signature(self):
-        class Options:
-            verbose = False
-
         os.chdir(self.testdir)
 
-        common.options = Options
+        common.options = VerboseFalseOptions
         config = common.read_config()
         if 'apksigner' not in config:
             self.skipTest('SKIPPING test_sign_then_implant_signature, apksigner not installed!')

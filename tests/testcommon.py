@@ -27,6 +27,10 @@ from pathlib import Path
 GP_FINGERPRINT = 'B7C2EEFD8DAC7806AF67DFCD92EB18126BC08312A7F2D6F3862E46013C7A6135'
 
 
+class VerboseFalseOptions:
+    verbose = False
+
+
 class TmpCwd:
     """Context-manager for temporarily changing the current working directory."""
 

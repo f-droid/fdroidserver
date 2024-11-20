@@ -13,7 +13,7 @@ import git
 import requests
 import yaml
 
-from .testcommon import TmpCwd, mkdtemp
+from .testcommon import TmpCwd, mkdtemp, VerboseFalseOptions
 
 import fdroidserver
 import fdroidserver.import_subcommand
@@ -91,7 +91,7 @@ class ImportTest(unittest.TestCase):
                 print('Skipping ImportTest!')
                 return
 
-            fdroidserver.common.options = type('Options', (), {'verbose': False})
+            fdroidserver.common.options = VerboseFalseOptions
             app = fdroidserver.import_subcommand.get_app_from_url(url)
             fdroidserver.import_subcommand.clone_to_tmp_dir(app)
             self.assertEqual(app.RepoType, 'git')

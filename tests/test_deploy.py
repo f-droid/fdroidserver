@@ -11,14 +11,9 @@ from unittest import mock
 import git
 
 import fdroidserver
-from .testcommon import TmpCwd, mkdtemp
+from .testcommon import TmpCwd, mkdtemp, VerboseFalseOptions
 
 basedir = Path(__file__).parent
-
-
-class Options:
-    quiet = False
-    verbose = False
 
 
 class DeployTest(unittest.TestCase):
@@ -122,7 +117,7 @@ class DeployTest(unittest.TestCase):
         fdroidserver.deploy.config['rclone'] = True
         fdroidserver.deploy.config['rclone_config'] = 'test-local-config'
         fdroidserver.deploy.config['path_to_custom_rclone_config'] = str(rclone_file)
-        fdroidserver.common.options = Options
+        fdroidserver.common.options = VerboseFalseOptions
 
         # write out destination path
         destination = Path('test_bucket_folder/fdroid')
@@ -166,7 +161,7 @@ class DeployTest(unittest.TestCase):
         fdroidserver.deploy.config['rclone'] = True
         fdroidserver.deploy.config['rclone_config'] = 'test-local-config'
         fdroidserver.deploy.config['path_to_custom_rclone_config'] = str(rclone_file)
-        fdroidserver.common.options = Options
+        fdroidserver.common.options = VerboseFalseOptions
 
         # write out destination path
         destination = Path('test_bucket_folder/fdroid')
