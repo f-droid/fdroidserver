@@ -203,6 +203,15 @@ def get_repo_base_url(clone_url: str, repo_git_base: str, force_type: Optional[s
     sys.exit(1)
 
 
+def clone_git_repo(clone_url, git_mirror_path):
+    logging.debug(_('cloning {url}').format(url=clone_url))
+    vcs = common.getvcs('git', clone_url, git_mirror_path)
+    p = vcs.git(['clone', '--', vcs.remote, str(vcs.local)])
+    if p.returncode != 0:
+        print('WARNING: only public git repos are supported!')
+        raise VCSException('git clone %s failed:' % clone_url, p.output)
+
+
 def main():
     """Deploy to F-Droid repository or generate SSH private key from keystore.
 
@@ -338,12 +347,7 @@ def main():
         git_mirror_repodir = os.path.join(git_mirror_fdroiddir, 'repo')
         git_mirror_metadatadir = os.path.join(git_mirror_fdroiddir, 'metadata')
         if not os.path.isdir(git_mirror_repodir):
-            logging.debug(_('cloning {url}').format(url=clone_url))
-            vcs = common.getvcs('git', clone_url, git_mirror_path)
-            p = vcs.git(['clone', '--', vcs.remote, str(vcs.local)])
-            if p.returncode != 0:
-                print('WARNING: only public git repos are supported!')
-                raise VCSException('git clone %s failed:' % clone_url, p.output)
+            clone_git_repo(clone_url, git_mirror_repodir)
         if not os.path.isdir(git_mirror_repodir):
             os.makedirs(git_mirror_repodir, mode=0o755)
 

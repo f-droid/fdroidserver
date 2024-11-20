@@ -192,6 +192,29 @@ class NightlyTest(unittest.TestCase):
             with self.assertRaises(exception.VCSException):
                 nightly.main()
 
+    def test_clone_git_repo(self):
+        os.chdir(self.testdir)
+        common.options = Options
+        d = 'fakeappid'
+        nightly.clone_git_repo('https://gitlab.com/fdroid/ci-test-tiny-repo.git', d)
+        self.assertTrue(os.path.isdir(Path(d) / '.git'))
+
+    def test_clone_git_repo_fails_on_gitlab_password_prompt(self):
+        os.chdir(self.testdir)
+        common.options = Options
+        d = 'shouldnotbecreated'
+        with self.assertRaises(exception.VCSException):
+            nightly.clone_git_repo(f'https://gitlab.com/{d}/{d}.git', d)
+        self.assertFalse(os.path.isdir(Path(d)))
+
+    def test_clone_git_repo_fails_on_github_password_prompt(self):
+        os.chdir(self.testdir)
+        common.options = Options
+        d = 'shouldnotbecreated'
+        with self.assertRaises(exception.VCSException):
+            nightly.clone_git_repo(f'https://github.com/{d}/{d}.git', d)
+        self.assertFalse(os.path.isdir(Path(d)))
+
     def _put_fdroid_in_args(self, args):
         """Find fdroid command that belongs to this source code tree"""
         fdroid = os.path.join(basedir.parent, 'fdroid')
