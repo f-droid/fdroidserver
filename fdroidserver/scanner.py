@@ -994,6 +994,13 @@ def scan_source(build_dir, build=metadata.Build(), json_per_build=None):
                 count += handleproblem(
                     _('Java JAR file'), path_in_build_dir, filepath, json_per_build
                 )
+            elif curfile.endswith('.wasm'):
+                count += handleproblem(
+                    _('WebAssembly binary file'),
+                    path_in_build_dir,
+                    filepath,
+                    json_per_build,
+                )
 
             elif curfile.endswith('.java'):
                 if not os.path.isfile(filepath):
