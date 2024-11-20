@@ -170,15 +170,7 @@ test -x ./hooks/pre-commit && ./hooks/pre-commit
 #------------------------------------------------------------------------------#
 echo_header "run unit tests"
 
-cd $WORKSPACE/tests
-for testcase in $WORKSPACE/tests/*.TestCase; do
-    if [ $(uname) != "Linux" ] && [ $testcase == $WORKSPACE/tests/nightly.TestCase ]; then
-        echo "skipping nightly.TestCase, it currently only works GNU/Linux"
-        continue
-    fi
-    $testcase
-done
-
+python3 -m unittest -v
 
 #------------------------------------------------------------------------------#
 echo_header "print fdroid version"

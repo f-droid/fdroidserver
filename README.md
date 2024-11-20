@@ -53,13 +53,13 @@ To run the full test suite:
 
     tests/run-tests
 
-To run the tests for individual Python modules, see the _.TestCase_ files, e.g.:
+To run the tests for individual Python modules, see the `tests/test_*.py` files, e.g.:
 
-    tests/metadata.TestCase
+    python -m unittest tests/test_metadata.py
 
 It is also possible to run individual tests:
 
-    tests/metadata.TestCase MetadataTest.test_rewrite_yaml_special_build_params
+    python -m unittest tests.test_metadata.MetadataTest.test_rewrite_yaml_special_build_params
 
 There is a growing test suite that has good coverage on a number of key parts of
 this code base.  It does not yet cover all the code, and there are some parts

@@ -1,24 +1,14 @@
 #!/usr/bin/env python3
 
-import inspect
 import os
-import sys
 import pkgutil
 import textwrap
 import unittest
 import tempfile
 from unittest import mock
 
-localmodule = os.path.realpath(
-    os.path.join(os.path.dirname(inspect.getfile(inspect.currentframe())), '..')
-)
-print('localmodule: ' + localmodule)
-if localmodule not in sys.path:
-    sys.path.insert(0, localmodule)
-
-from fdroidserver import common
 import fdroidserver.__main__
-from testcommon import TmpCwd, TmpPyPath
+from .testcommon import TmpCwd, TmpPyPath
 
 
 class MainTest(unittest.TestCase):
@@ -27,7 +17,7 @@ class MainTest(unittest.TestCase):
     def test_COMMANDS_check(self):
         """make sure the built in sub-command defs didn't change unintentionally"""
         self.assertListEqual(
-            [x for x in fdroidserver.__main__.COMMANDS.keys()],
+            [x for x in fdroidserver.__main__.COMMANDS],
             [
                 'build',
                 'init',
@@ -206,12 +196,7 @@ class MainTest(unittest.TestCase):
     def test_preparse_plugin_lookup_summary_missing(self):
         with tempfile.TemporaryDirectory() as tmpdir, TmpCwd(tmpdir):
             with open('fdroid_testy6.py', 'w') as f:
-                f.write(
-                    textwrap.dedent(
-                        """\
-                        main = lambda: print('all good')"""
-                    )
-                )
+                f.write("main = lambda: print('all good')")
             with TmpPyPath(tmpdir):
                 p = [x for x in pkgutil.iter_modules() if x[1].startswith('fdroid_')]
                 module_dir = p[0][0].path
@@ -259,23 +244,3 @@ class MainTest(unittest.TestCase):
                 module_name = p[0][1]
                 d = fdroidserver.__main__.preparse_plugin(module_name, module_path)
             self.assertDictEqual(d, {'name': 'fdroid_testy8', 'summary': 'ttt'})
-
-
-if __name__ == "__main__":
-    os.chdir(os.path.dirname(__file__))
-
-    import argparse
-
-    parser = argparse.ArgumentParser()
-    parser.add_argument(
-        "-v",
-        "--verbose",
-        action="store_true",
-        default=False,
-        help="Spew out even more information than normal",
-    )
-    common.options = common.parse_args(parser)
-
-    newSuite = unittest.TestSuite()
-    newSuite.addTest(unittest.makeSuite(MainTest))
-    unittest.main(failfast=False)

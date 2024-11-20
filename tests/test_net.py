@@ -1,26 +1,16 @@
 #!/usr/bin/env python3
 
-import inspect
-import logging
 import os
 import random
 import requests
 import socket
-import sys
 import tempfile
 import threading
 import time
 import unittest
 from unittest.mock import MagicMock, patch
 
-localmodule = os.path.realpath(
-    os.path.join(os.path.dirname(inspect.getfile(inspect.currentframe())), '..')
-)
-print('localmodule: ' + localmodule)
-if localmodule not in sys.path:
-    sys.path.insert(0, localmodule)
-
-from fdroidserver import common, net
+from fdroidserver import net
 from pathlib import Path
 
 
@@ -38,7 +28,7 @@ class RetryServer:
     def __init__(self, port=None, failures=3):
         self.port = port
         if self.port is None:
-            self.port = random.randint(1024, 65535)
+            self.port = random.randint(1024, 65535)  # nosec B311
         self.failures = failures
         self.stop_event = threading.Event()
         threading.Thread(target=self.run_fake_server).start()
@@ -84,10 +74,7 @@ class RetryServer:
 
 
 class NetTest(unittest.TestCase):
-    basedir = Path(__file__).resolve().parent
-
     def setUp(self):
-        logging.basicConfig(level=logging.DEBUG)
         self.tempdir = tempfile.TemporaryDirectory()
         os.chdir(self.tempdir.name)
         Path('tmp').mkdir()
@@ -155,23 +142,3 @@ class NetTest(unittest.TestCase):
         with self.assertRaises(requests.exceptions.ConnectionError):
             net.download_using_mirrors(['http://localhost:%d/' % server.port])
         server.stop()
-
-
-if __name__ == "__main__":
-    os.chdir(os.path.dirname(__file__))
-
-    import argparse
-
-    parser = argparse.ArgumentParser()
-    parser.add_argument(
-        "-v",
-        "--verbose",
-        action="store_true",
-        default=False,
-        help="Spew out even more information than normal",
-    )
-    common.options = common.parse_args(parser)
-
-    newSuite = unittest.TestSuite()
-    newSuite.addTest(unittest.makeSuite(NetTest))
-    unittest.main(failfast=False)

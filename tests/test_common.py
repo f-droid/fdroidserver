@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
 
-# http://www.drdobbs.com/testing/unit-testing-with-python/240165163
-
 import difflib
 import git
 import glob
@@ -28,23 +26,18 @@ from unittest import mock
 from pathlib import Path
 
 
-localmodule = os.path.realpath(
-    os.path.join(os.path.dirname(inspect.getfile(inspect.currentframe())), '..')
-)
-print('localmodule: ' + localmodule)
-if localmodule not in sys.path:
-    sys.path.insert(0, localmodule)
-
-import fdroidserver.index
-import fdroidserver.install
+import fdroidserver
 import fdroidserver.signindex
 import fdroidserver.common
 import fdroidserver.metadata
-from testcommon import TmpCwd, mkdtemp, parse_args_for_test
+from .testcommon import TmpCwd, mkdtemp
 from fdroidserver.common import ANTIFEATURES_CONFIG_NAME, CATEGORIES_CONFIG_NAME
 from fdroidserver.exception import FDroidException, VCSException,\
     MetaDataException, VerificationException
 from fdroidserver.looseversion import LooseVersion
+
+
+basedir = Path(__file__).parent
 
 
 def _mock_common_module_options_instance():
@@ -60,11 +53,10 @@ class CommonTest(unittest.TestCase):
         logging.basicConfig(level=logging.DEBUG)
         logger = logging.getLogger('androguard.axml')
         logger.setLevel(logging.INFO)  # tame the axml debug messages
-        self.basedir = os.path.join(localmodule, 'tests')
-        self.tmpdir = os.path.abspath(os.path.join(self.basedir, '..', '.testfiles'))
+        self.tmpdir = os.path.abspath(os.path.join(basedir, '..', '.testfiles'))
         if not os.path.exists(self.tmpdir):
             os.makedirs(self.tmpdir)
-        os.chdir(self.basedir)
+        os.chdir(basedir)
 
         # these are declared as None at the top of the module file
         fdroidserver.common.config = None
@@ -77,7 +69,7 @@ class CommonTest(unittest.TestCase):
     def tearDown(self):
         fdroidserver.common.config = None
         fdroidserver.common.options = None
-        os.chdir(self.basedir)
+        os.chdir(basedir)
         self._td.cleanup()
         if os.path.exists(self.tmpdir):
             shutil.rmtree(self.tmpdir)
@@ -187,11 +179,11 @@ class CommonTest(unittest.TestCase):
             # create test file used in common._add_java_paths_to_config()
             for p in pathlist:
                 if p.startswith('/System') or p.startswith('/Library'):
-                    basedir = os.path.join(p, 'Contents', 'Home', 'bin')
+                    _dir = os.path.join(p, 'Contents', 'Home', 'bin')
                 else:
-                    basedir = os.path.join(p, 'bin')
-                os.makedirs(basedir)
-                open(os.path.join(basedir, 'javac'), 'w').close()
+                    _dir = os.path.join(p, 'bin')
+                os.makedirs(_dir)
+                open(os.path.join(_dir, 'javac'), 'w').close()
 
             config = dict()
             config['java_paths'] = dict()
@@ -204,21 +196,14 @@ class CommonTest(unittest.TestCase):
         fdroidserver.common.config = config
 
         # these are set debuggable
-        testfiles = []
-        testfiles.append(os.path.join(self.basedir, 'urzip.apk'))
-        testfiles.append(os.path.join(self.basedir, 'urzip-badsig.apk'))
-        testfiles.append(os.path.join(self.basedir, 'urzip-badcert.apk'))
-        for apkfile in testfiles:
+        for apkfile in ('urzip.apk', 'urzip-badsig.apk', 'urzip-badcert.apk'):
             self.assertTrue(
-                fdroidserver.common.is_debuggable_or_testOnly(apkfile),
+                fdroidserver.common.is_debuggable_or_testOnly(str(basedir / apkfile)),
                 "debuggable APK state was not properly parsed!",
             )
 
         # these are set NOT debuggable
-        testfiles = []
-        testfiles.append(os.path.join(self.basedir, 'urzip-release.apk'))
-        testfiles.append(os.path.join(self.basedir, 'urzip-release-unsigned.apk'))
-        testfiles.append(os.path.join(self.basedir, 'v2.only.sig_2.apk'))
+        testfiles = 'urzip-release.apk', 'urzip-release-unsigned.apk', 'v2.only.sig_2.apk'
         for apkfile in testfiles:
             self.assertFalse(
                 fdroidserver.common.is_debuggable_or_testOnly(apkfile),
@@ -297,7 +282,7 @@ class CommonTest(unittest.TestCase):
         teststr = 'FAKE_STR_FOR_TESTING'
 
         shutil.copytree(
-            os.path.join(self.basedir, 'source-files'),
+            os.path.join(basedir, 'source-files'),
             os.path.join(self.tmpdir, 'source-files'),
         )
 
@@ -356,7 +341,7 @@ class CommonTest(unittest.TestCase):
     def test_prepare_sources_with_prebuild_subdir(self):
         app_build_dir = os.path.join(self.testdir, 'build', 'com.example')
         shutil.copytree(
-            os.path.join(self.basedir, 'source-files', 'fdroid', 'fdroidclient'),
+            basedir / 'source-files' / 'fdroid' / 'fdroidclient',
             app_build_dir,
         )
 
@@ -418,7 +403,7 @@ class CommonTest(unittest.TestCase):
         os.mkdir('metadata')
 
         # use a local copy if available to avoid hitting the network
-        tmprepo = os.path.join(self.basedir, 'tmp', 'importer')
+        tmprepo = os.path.join(basedir, 'tmp', 'importer')
         if os.path.exists(tmprepo):
             git_url = tmprepo
         else:
@@ -499,7 +484,7 @@ class CommonTest(unittest.TestCase):
         fdroidserver.common.config = config
         fdroidserver.signindex.config = config
 
-        sourcedir = os.path.join(self.basedir, 'signindex')
+        sourcedir = os.path.join(basedir, 'signindex')
         with tempfile.TemporaryDirectory(
             prefix=inspect.currentframe().f_code.co_name, dir=self.tmpdir
         ) as testsdir:
@@ -561,7 +546,7 @@ class CommonTest(unittest.TestCase):
         """Sign entry.jar and make sure it validates"""
         config = fdroidserver.common.read_config()
         config['jarsigner'] = fdroidserver.common.find_sdk_tools_cmd('jarsigner')
-        config['keystore'] = os.path.join(self.basedir, 'keystore.jks')
+        config['keystore'] = os.path.join(basedir, 'keystore.jks')
         config['repo_keyalias'] = 'sova'
         config['keystorepass'] = 'r9aquRHYoI8+dYz6jKrLntQ5/NJNASFBacJh7Jv2BlI='
         config['keypass'] = 'r9aquRHYoI8+dYz6jKrLntQ5/NJNASFBacJh7Jv2BlI='
@@ -580,7 +565,7 @@ class CommonTest(unittest.TestCase):
         config = fdroidserver.common.read_config()
         config['jarsigner'] = fdroidserver.common.find_sdk_tools_cmd('jarsigner')
         fdroidserver.common.config = config
-        source_dir = os.path.join(self.basedir, 'signindex')
+        source_dir = os.path.join(basedir, 'signindex')
         for f in ('unsigned.jar', 'testy.jar', 'guardianproject.jar', 'guardianproject-v1.jar'):
             testfile = os.path.join(source_dir, f)
             with self.assertRaises(fdroidserver.index.VerificationException):
@@ -590,7 +575,7 @@ class CommonTest(unittest.TestCase):
         config = fdroidserver.common.read_config()
         config['jarsigner'] = fdroidserver.common.find_sdk_tools_cmd('jarsigner')
         fdroidserver.common.config = config
-        source_dir = os.path.join(self.basedir, 'signindex')
+        source_dir = os.path.join(basedir, 'signindex')
         for f in ('testy.jar', 'guardianproject.jar'):
             testfile = os.path.join(source_dir, f)
             fdroidserver.common.verify_deprecated_jar_signature(testfile)
@@ -604,7 +589,7 @@ class CommonTest(unittest.TestCase):
         fdroidserver.common.config = config
         _mock_common_module_options_instance()
 
-        sourceapk = os.path.join(self.basedir, 'urzip.apk')
+        sourceapk = os.path.join(basedir, 'urzip.apk')
 
         copyapk = os.path.join(self.testdir, 'urzip-copy.apk')
         shutil.copy(sourceapk, copyapk)
@@ -624,7 +609,7 @@ class CommonTest(unittest.TestCase):
         )
 
         twosigapk = os.path.join(self.testdir, 'urzip-twosig.apk')
-        otherapk = ZipFile(os.path.join(self.basedir, 'urzip-release.apk'), 'r')
+        otherapk = ZipFile(os.path.join(basedir, 'urzip-release.apk'), 'r')
         with ZipFile(sourceapk, 'r') as apk:
             with ZipFile(twosigapk, 'w') as testapk:
                 for info in apk.infolist():
@@ -825,7 +810,7 @@ class CommonTest(unittest.TestCase):
         os.makedirs(os.path.dirname(do_not_use))
         with open(do_not_use, 'w') as fp:
             fp.write('#!/bin/sh\ndate\n')
-        os.chmod(do_not_use, 0o0755)
+        os.chmod(do_not_use, 0o0755)  # nosec B103
         apksigner = os.path.join(self.tmpdir, 'apksigner')
         config = {'apksigner': apksigner}
         with mock.patch.dict(os.environ, clear=True):
@@ -840,14 +825,14 @@ class CommonTest(unittest.TestCase):
         apksigner = os.path.join(self.tmpdir, 'apksigner')
         with open(apksigner, 'w') as fp:
             fp.write('#!/bin/sh\ndate\n')
-        os.chmod(apksigner, 0o0755)
+        os.chmod(apksigner, 0o0755)  # nosec B103
 
         android_home = os.path.join(self.tmpdir, 'ANDROID_HOME')
         do_not_use = os.path.join(android_home, 'build-tools', '30.0.3', 'apksigner')
         os.makedirs(os.path.dirname(do_not_use))
         with open(do_not_use, 'w') as fp:
             fp.write('#!/bin/sh\ndate\n')
-        os.chmod(do_not_use, 0o0755)
+        os.chmod(do_not_use, 0o0755)  # nosec B103
 
         config = {'sdk_path': android_home}
         with mock.patch.dict(os.environ, clear=True):
@@ -865,13 +850,13 @@ class CommonTest(unittest.TestCase):
         os.makedirs(os.path.dirname(apksigner))
         with open(apksigner, 'w') as fp:
             fp.write('#!/bin/sh\necho 30.0.3\n')
-        os.chmod(apksigner, 0o0755)
+        os.chmod(apksigner, 0o0755)  # nosec B103
 
         do_not_use = os.path.join(android_home, 'build-tools', '29.0.3', 'apksigner')
         os.makedirs(os.path.dirname(do_not_use))
         with open(do_not_use, 'w') as fp:
             fp.write('#!/bin/sh\necho 29.0.3\n')
-        os.chmod(do_not_use, 0o0755)
+        os.chmod(do_not_use, 0o0755)  # nosec B103
 
         config = {'sdk_path': android_home}
         with mock.patch.dict(os.environ, clear=True):
@@ -917,13 +902,13 @@ class CommonTest(unittest.TestCase):
         config['keyalias'] = 'sova'
         config['keystorepass'] = 'r9aquRHYoI8+dYz6jKrLntQ5/NJNASFBacJh7Jv2BlI='
         config['keypass'] = 'r9aquRHYoI8+dYz6jKrLntQ5/NJNASFBacJh7Jv2BlI='
-        config['keystore'] = os.path.join(self.basedir, 'keystore.jks')
+        config['keystore'] = os.path.join(basedir, 'keystore.jks')
         fdroidserver.common.config = config
         fdroidserver.signindex.config = config
 
         unsigned = os.path.join(self.testdir, 'urzip-release-unsigned.apk')
         signed = os.path.join(self.testdir, 'urzip-release.apk')
-        shutil.copy(os.path.join(self.basedir, 'urzip-release-unsigned.apk'), self.testdir)
+        shutil.copy(os.path.join(basedir, 'urzip-release-unsigned.apk'), self.testdir)
 
         self.assertFalse(fdroidserver.common.verify_apk_signature(unsigned))
 
@@ -936,7 +921,7 @@ class CommonTest(unittest.TestCase):
         unsigned = os.path.join(self.testdir, 'duplicate.permisssions_9999999-unsigned.apk')
         signed = os.path.join(self.testdir, 'duplicate.permisssions_9999999.apk')
         shutil.copy(
-            os.path.join(self.basedir, 'repo', 'duplicate.permisssions_9999999.apk'),
+            os.path.join(basedir, 'repo', 'duplicate.permisssions_9999999.apk'),
             os.path.join(unsigned),
         )
         fdroidserver.common.apk_strip_v1_signatures(unsigned, strip_manifest=True)
@@ -946,7 +931,7 @@ class CommonTest(unittest.TestCase):
         self.assertTrue(fdroidserver.common.verify_apk_signature(signed))
         self.assertEqual('18', fdroidserver.common.get_androguard_APK(signed).get_min_sdk_version())
 
-        shutil.copy(os.path.join(self.basedir, 'minimal_targetsdk_30_unsigned.apk'), self.testdir)
+        shutil.copy(os.path.join(basedir, 'minimal_targetsdk_30_unsigned.apk'), self.testdir)
         unsigned = os.path.join(self.testdir, 'minimal_targetsdk_30_unsigned.apk')
         signed = os.path.join(self.testdir, 'minimal_targetsdk_30.apk')
 
@@ -959,7 +944,7 @@ class CommonTest(unittest.TestCase):
         # verify it has a v2 signature
         self.assertTrue(fdroidserver.common.get_androguard_APK(signed).is_signed_v2())
 
-        shutil.copy(os.path.join(self.basedir, 'no_targetsdk_minsdk30_unsigned.apk'), self.testdir)
+        shutil.copy(os.path.join(basedir, 'no_targetsdk_minsdk30_unsigned.apk'), self.testdir)
         unsigned = os.path.join(self.testdir, 'no_targetsdk_minsdk30_unsigned.apk')
         signed = os.path.join(self.testdir, 'no_targetsdk_minsdk30_signed.apk')
 
@@ -967,7 +952,7 @@ class CommonTest(unittest.TestCase):
         self.assertTrue(fdroidserver.common.verify_apk_signature(signed))
         self.assertTrue(fdroidserver.common.get_androguard_APK(signed).is_signed_v2())
 
-        shutil.copy(os.path.join(self.basedir, 'no_targetsdk_minsdk1_unsigned.apk'), self.testdir)
+        shutil.copy(os.path.join(basedir, 'no_targetsdk_minsdk1_unsigned.apk'), self.testdir)
         unsigned = os.path.join(self.testdir, 'no_targetsdk_minsdk1_unsigned.apk')
         signed = os.path.join(self.testdir, 'no_targetsdk_minsdk1_signed.apk')
 
@@ -988,18 +973,18 @@ class CommonTest(unittest.TestCase):
         config['keyalias'] = 'sova'
         config['keystorepass'] = 'r9aquRHYoI8+dYz6jKrLntQ5/NJNASFBacJh7Jv2BlI='
         config['keypass'] = 'r9aquRHYoI8+dYz6jKrLntQ5/NJNASFBacJh7Jv2BlI='
-        config['keystore'] = os.path.join(self.basedir, 'keystore.jks')
+        config['keystore'] = os.path.join(basedir, 'keystore.jks')
         fdroidserver.common.config = config
         fdroidserver.signindex.config = config
 
         unsigned = os.path.join(self.testdir, 'urzip-release-unsigned.apk')
         signed = os.path.join(self.testdir, 'urzip-release.apk')
-        shutil.copy(os.path.join(self.basedir, 'urzip-release-unsigned.apk'), self.testdir)
+        shutil.copy(os.path.join(basedir, 'urzip-release-unsigned.apk'), self.testdir)
 
         os.chmod(unsigned, 0o000)
         with self.assertRaises(fdroidserver.exception.BuildException):
             fdroidserver.common.sign_apk(unsigned, signed, config['keyalias'])
-        os.chmod(unsigned, 0o777)
+        os.chmod(unsigned, 0o777)  # nosec B103
         self.assertTrue(os.path.isfile(unsigned))
         self.assertFalse(os.path.isfile(signed))
 
@@ -1012,7 +997,7 @@ class CommonTest(unittest.TestCase):
         config['keyalias'] = 'sova'
         config['keystorepass'] = 'r9aquRHYoI8+dYz6jKrLntQ5/NJNASFBacJh7Jv2BlI='
         config['keypass'] = 'r9aquRHYoI8+dYz6jKrLntQ5/NJNASFBacJh7Jv2BlI='
-        config['keystore'] = os.path.join(self.basedir, 'keystore.jks')
+        config['keystore'] = os.path.join(basedir, 'keystore.jks')
         fdroidserver.common.config = config
         fdroidserver.signindex.config = config
 
@@ -1039,7 +1024,7 @@ class CommonTest(unittest.TestCase):
         config['keyalias'] = 'sova'
         config['keystorepass'] = 'r9aquRHYoI8+dYz6jKrLntQ5/NJNASFBacJh7Jv2BlI='
         config['keypass'] = 'r9aquRHYoI8+dYz6jKrLntQ5/NJNASFBacJh7Jv2BlI='
-        config['keystore'] = os.path.join(self.basedir, 'keystore.jks')
+        config['keystore'] = os.path.join(basedir, 'keystore.jks')
         fdroidserver.common.config = config
         fdroidserver.signindex.config = config
 
@@ -1052,7 +1037,7 @@ class CommonTest(unittest.TestCase):
             'v2.only.sig_2.apk',
             'SystemWebView-repack.apk',
         ):
-            original = os.path.join(self.basedir, apk)
+            original = os.path.join(basedir, apk)
             unsigned = os.path.join('unsigned', apk)
             resign = os.path.join('repo', apk)
             shutil.copy(original, unsigned)
@@ -1149,7 +1134,7 @@ class CommonTest(unittest.TestCase):
             fdroidserver.common.get_apk_id(badzip)
 
     def test_get_apk_id_aapt_regex(self):
-        files = glob.glob(os.path.join(self.basedir, 'build-tools', '[1-9]*.*', '*.txt'))
+        files = glob.glob(os.path.join(basedir, 'build-tools', '[1-9]*.*', '*.txt'))
         self.assertNotEqual(0, len(files))
         for f in files:
             appid, versionCode = os.path.splitext(os.path.basename(f))[0][12:].split('_')
@@ -1556,7 +1541,7 @@ class CommonTest(unittest.TestCase):
 
     def test_remove_signing_keys(self):
         shutil.copytree(
-            os.path.join(self.basedir, 'source-files'),
+            os.path.join(basedir, 'source-files'),
             os.path.join(self.tmpdir, 'source-files'),
         )
         os.chdir(self.tmpdir)
@@ -1575,7 +1560,7 @@ class CommonTest(unittest.TestCase):
             if not os.path.isdir(build_dir):
                 continue
             fdroidserver.common.remove_signing_keys(build_dir)
-            fromfile = os.path.join(self.basedir, f)
+            fromfile = os.path.join(basedir, f)
             with open(f) as fp:
                 content = fp.read()
             if 'signingConfig' in content:
@@ -1605,7 +1590,7 @@ class CommonTest(unittest.TestCase):
             if not os.path.isdir(build_dir):
                 continue
             fdroidserver.common.remove_signing_keys(build_dir)
-            fromfile = os.path.join(self.basedir, f)
+            fromfile = os.path.join(basedir, f)
             with open(fromfile) as fp:
                 a = fp.readlines()
             with open(f) as fp:
@@ -1947,7 +1932,7 @@ class CommonTest(unittest.TestCase):
         """Make sure it is possible to use config.yml alone."""
         os.chdir(self.tmpdir)
         with mock.patch.dict(os.environ):
-            os.environ['SECRET'] = 'mysecretpassword'
+            os.environ['SECRET'] = 'mysecretpassword'  # nosec B105
             with open('config.yml', 'w') as fp:
                 fp.write("""keypass: {'env': 'SECRET'}""")
             self.assertTrue(os.path.exists('config.yml'))
@@ -1983,7 +1968,7 @@ class CommonTest(unittest.TestCase):
         with open('config.yml', 'w') as fp:
             fp.write('keystore: foo.jks')
         self.assertTrue(os.path.exists(fp.name))
-        os.chmod(fp.name, 0o666)
+        os.chmod(fp.name, 0o666)  # nosec B103
         fdroidserver.common.read_config()
         os.remove(fp.name)
         fdroidserver.common.config = None
@@ -1991,7 +1976,7 @@ class CommonTest(unittest.TestCase):
         with open('config.py', 'w') as fp:
             fp.write('keystore = "foo.jks"')
         self.assertTrue(os.path.exists(fp.name))
-        os.chmod(fp.name, 0o666)
+        os.chmod(fp.name, 0o666)  # nosec B103
         fdroidserver.common.read_config()
 
     def test_with_both_config_yml_py(self):
@@ -2119,7 +2104,7 @@ class CommonTest(unittest.TestCase):
         os.makedirs(os.path.dirname(apksigner))
         with open(apksigner, 'w') as fp:
             fp.write('#!/bin/sh\ndate\n')
-        os.chmod(apksigner, 0o0755)
+        os.chmod(apksigner, 0o0755)  # nosec B103
         config = {'apksigner': apksigner}
         self.assertTrue(fdroidserver.common.test_sdk_exists(config))
 
@@ -2129,7 +2114,7 @@ class CommonTest(unittest.TestCase):
         os.makedirs(os.path.dirname(apksigner))
         with open(apksigner, 'w') as fp:
             fp.write('#!/bin/sh\ndate\n')
-        os.chmod(apksigner, 0o0755)
+        os.chmod(apksigner, 0o0755)  # nosec B103
         config = {'apksigner': apksigner}
         self.assertFalse(fdroidserver.common.test_sdk_exists(config))
 
@@ -2159,7 +2144,7 @@ class CommonTest(unittest.TestCase):
     def test_loading_config_buildserver_yml(self):
         """Smoke check to make sure this file is properly parsed"""
         os.chdir(self.tmpdir)
-        shutil.copy(os.path.join(self.basedir, '..', 'buildserver', 'config.buildserver.yml'),
+        shutil.copy(os.path.join(basedir, '..', 'buildserver', 'config.buildserver.yml'),
                     'config.yml')
         self.assertFalse(os.path.exists('config.py'))
         fdroidserver.common.read_config()
@@ -2238,7 +2223,7 @@ class CommonTest(unittest.TestCase):
 
     @mock.patch.dict(os.environ, {'PATH': os.getenv('PATH')}, clear=True)
     def test_get_android_tools_versions(self):
-        sdk_path = os.path.join(self.basedir, 'get_android_tools_versions/android-sdk')
+        sdk_path = os.path.join(basedir, 'get_android_tools_versions/android-sdk')
         config = {
             'ndk_paths': {'r10e': os.path.join(sdk_path, '..', 'android-ndk-r10e')},
             'sdk_path': sdk_path,
@@ -2264,7 +2249,7 @@ class CommonTest(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmpdir:
             sdk_path = Path(tmpdir) / 'get_android_tools_versions'
             shutil.copytree(
-                os.path.join(self.basedir, 'get_android_tools_versions'), sdk_path
+                os.path.join(basedir, 'get_android_tools_versions'), sdk_path
             )
             shutil.rmtree(sdk_path / 'android-ndk-r10e')
             shutil.rmtree(sdk_path / 'android-sdk/ndk')
@@ -2329,7 +2314,7 @@ class CommonTest(unittest.TestCase):
             fdroidserver.common.read_pkg_args(['org.fdroid.fdroid:foo'], allow_vercodes),
 
     def test_apk_strip_v1_signatures(self):
-        before = os.path.join(self.basedir, 'no_targetsdk_minsdk1_unsigned.apk')
+        before = os.path.join(basedir, 'no_targetsdk_minsdk1_unsigned.apk')
         after = os.path.join(self.testdir, 'after.apk')
         shutil.copy(before, after)
         fdroidserver.common.apk_strip_v1_signatures(after, strip_manifest=False)
@@ -3156,7 +3141,7 @@ class SignerExtractionTest(unittest.TestCase):
     """
 
     def setUp(self):
-        os.chdir(os.path.join(localmodule, 'tests'))
+        os.chdir(basedir)
         self._td = mkdtemp()
         self.testdir = self._td.name
 
@@ -3184,7 +3169,8 @@ class SignerExtractionTest(unittest.TestCase):
 
     @unittest.skip("slow and only needed when adding to APKS_WITH_JAR_SIGNATURES")
     def test_vs_keytool(self):
-        unittest.skipUnless(self.keytool, 'requires keytool to run')
+        if not self.keytool:
+            self.skipTest('requires keytool to run')
         pat = re.compile(r'[0-9A-F:]{95}')
         cmd = [self.keytool, '-printcert', '-jarfile']
         for apk, fingerprint in APKS_WITH_JAR_SIGNATURES:
@@ -3199,7 +3185,8 @@ class SignerExtractionTest(unittest.TestCase):
 
     @unittest.skip("slow and only needed when adding to APKS_WITH_JAR_SIGNATURES")
     def test_vs_apksigner(self):
-        unittest.skipUnless(self.apksigner, 'requires apksigner to run')
+        if not self.apksigner:
+            self.skipTest('requires apksigner to run')
         pat = re.compile(r'\s[0-9a-f]{64}\s')
         cmd = [self.apksigner, 'verify', '--print-certs']
         for apk, fingerprint in APKS_WITH_JAR_SIGNATURES + APKS_WITHOUT_JAR_SIGNATURES:
@@ -3353,21 +3340,3 @@ class ConfigOptionsScopeTest(unittest.TestCase):
             'config' not in vars() and 'config' not in globals(),
             "The config should not be set in the global context, only module-level.",
         )
-
-
-if __name__ == "__main__":
-    os.chdir(os.path.dirname(__file__))
-
-    parser = ArgumentParser()
-    parser.add_argument(
-        "-v",
-        "--verbose",
-        action="store_true",
-        default=False,
-        help="Spew out even more information than normal",
-    )
-    parse_args_for_test(parser, sys.argv)
-
-    newSuite = unittest.TestSuite()
-    newSuite.addTest(unittest.makeSuite(CommonTest))
-    unittest.main(failfast=False)

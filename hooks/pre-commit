@@ -9,7 +9,7 @@ exec 1>&2
 files=`git diff-index --cached HEAD 2>&1 | sed 's/^:.*     //' | uniq | cut -b100-500`
 if [ -z "$files" ]; then
     PY_FILES="fdroid makebuildserver setup.py fdroidserver/*.py examples/*.py tests/*-release-checksums.py"
-    PY_TEST_FILES="tests/*.TestCase"
+    PY_TEST_FILES="tests/test_*.py"
     SH_FILES="hooks/pre-commit"
     BASH_FILES="gradlew-fdroid jenkins-build-all jenkins-setup-build-environment jenkins-test completion/bash-completion buildserver/provision-*"
     RB_FILES="buildserver/Vagrantfile"
@@ -27,11 +27,11 @@ else
     for f in $files; do
         test -e $f || continue
         case $f in
+            test_*.py)
+                PY_TEST_FILES+=" $f"
+                ;;
             *.py)
                 PY_FILES+=" $f"
-                ;;
-            *.TestCase)
-                PY_TEST_FILES+=" $f"
                 ;;
             *.rb)
                 RB_FILES+=" $f"

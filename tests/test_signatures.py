@@ -1,27 +1,18 @@
 #!/usr/bin/env python3
 
-import inspect
-import os
-import sys
-import unittest
 import hashlib
-import logging
+import os
+import unittest
 from tempfile import TemporaryDirectory
 
-localmodule = os.path.realpath(
-    os.path.join(os.path.dirname(inspect.getfile(inspect.currentframe())), '..')
-)
-print('localmodule: ' + localmodule)
-if localmodule not in sys.path:
-    sys.path.insert(0, localmodule)
-
-from testcommon import TmpCwd
+from .testcommon import TmpCwd
 from fdroidserver import common, signatures
+
+basedir = os.path.dirname(__file__)
 
 
 class SignaturesTest(unittest.TestCase):
     def setUp(self):
-        logging.basicConfig(level=logging.DEBUG)
         common.config = None
         config = common.read_config()
         config['jarsigner'] = common.find_sdk_tools_cmd('jarsigner')
@@ -30,12 +21,11 @@ class SignaturesTest(unittest.TestCase):
 
     def test_main(self):
 
-        # option fixture class:
         class OptionsFixture:
-            APK = [os.path.abspath(os.path.join('repo', 'com.politedroid_3.apk'))]
+            APK = [os.path.join(basedir, 'repo', 'com.politedroid_3.apk')]
 
         with TemporaryDirectory() as tmpdir, TmpCwd(tmpdir):
-            signatures.extract(OptionsFixture())
+            signatures.extract(OptionsFixture)
 
             # check if extracted signatures are where they are supposed to be
             # also verify weather if extracted file contian what they should
@@ -49,27 +39,6 @@ class SignaturesTest(unittest.TestCase):
             )
             for path, checksum in filesAndHashes:
                 self.assertTrue(os.path.isfile(path),
-                                msg="check whether '{path}' was extracted "
-                                    "correctly.".format(path=path))
+                                f'check whether {path!r} was extracted correctly.')
                 with open(path, 'rb') as f:
                     self.assertEqual(hashlib.sha256(f.read()).hexdigest(), checksum)
-
-
-if __name__ == "__main__":
-    os.chdir(os.path.dirname(__file__))
-
-    import argparse
-
-    parser = argparse.ArgumentParser()
-    parser.add_argument(
-        "-v",
-        "--verbose",
-        action="store_true",
-        default=False,
-        help="Spew out even more information than normal",
-    )
-    common.options = common.parse_args(parser)
-
-    newSuite = unittest.TestSuite()
-    newSuite.addTest(unittest.makeSuite(SignaturesTest))
-    unittest.main(failfast=False)

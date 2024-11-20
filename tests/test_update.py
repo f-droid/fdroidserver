@@ -1,12 +1,9 @@
 #!/usr/bin/env python3
 
-# http://www.drdobbs.com/testing/unit-testing-with-python/240165163
-
 import copy
 import git
 import glob
 import hashlib
-import inspect
 import json
 import logging
 import os
@@ -14,8 +11,6 @@ import random
 import shutil
 import string
 import subprocess
-import sys
-import tempfile
 import unittest
 import yaml
 import zipfile
@@ -47,23 +42,20 @@ except ImportError:
     except ImportError:
         from yaml import Loader as FullLoader
 
-localmodule = os.path.realpath(
-    os.path.join(os.path.dirname(inspect.getfile(inspect.currentframe())), '..')
-)
-print('localmodule: ' + localmodule)
-if localmodule not in sys.path:
-    sys.path.insert(0, localmodule)
-
 import fdroidserver.common
 import fdroidserver.exception
 import fdroidserver.metadata
 import fdroidserver.update
 from fdroidserver.common import CATEGORIES_CONFIG_NAME
 from fdroidserver.looseversion import LooseVersion
-from testcommon import TmpCwd, mkdtemp, parse_args_for_test
+from .testcommon import TmpCwd, mkdtemp
+from PIL import PngImagePlugin
 
 
 DONATION_FIELDS = ('Donate', 'Liberapay', 'OpenCollective')
+
+logging.getLogger(PngImagePlugin.__name__).setLevel(logging.INFO)
+basedir = Path(__file__).parent
 
 
 class Options:
@@ -80,12 +72,7 @@ class UpdateTest(unittest.TestCase):
     '''fdroid update'''
 
     def setUp(self):
-        logging.basicConfig(level=logging.INFO)
-        from PIL import PngImagePlugin
-
-        logging.getLogger(PngImagePlugin.__name__).setLevel(logging.INFO)
-        self.basedir = os.path.join(localmodule, 'tests')
-        os.chdir(self.basedir)
+        os.chdir(basedir)
         self._td = mkdtemp()
         self.testdir = self._td.name
 
@@ -93,7 +80,7 @@ class UpdateTest(unittest.TestCase):
         fdroidserver.common.options = None
 
     def tearDown(self):
-        os.chdir(self.basedir)
+        os.chdir(basedir)
         self._td.cleanup()
 
     def test_insert_store_metadata(self):
@@ -103,24 +90,22 @@ class UpdateTest(unittest.TestCase):
         fdroidserver.common.fill_config_defaults(config)
         fdroidserver.update.config = config
 
-        repo_dir = os.path.join(self.basedir, 'repo')
+        repo_dir = basedir / 'repo'
         os.mkdir('metadata')
         for packageName in (
             'obb.mainpatch.current',
             'org.videolan.vlc',
         ):
             shutil.copytree(
-                os.path.join(repo_dir, packageName), os.path.join('repo', packageName)
+                repo_dir / packageName, os.path.join('repo', packageName)
             )
         for packageName in (
             'info.guardianproject.checkey',
             'info.guardianproject.urzip',
             'org.smssecure.smssecure',
         ):
-            if not os.path.exists('metadata'):
-                os.mkdir('metadata')
             shutil.copytree(
-                os.path.join(self.basedir, 'metadata', packageName),
+                basedir / 'metadata' / packageName,
                 os.path.join('metadata', packageName),
             )
         for packageName in (
@@ -129,12 +114,12 @@ class UpdateTest(unittest.TestCase):
             'eu.siacs.conversations',
         ):
             shutil.copytree(
-                os.path.join(self.basedir, 'source-files', packageName),
+                basedir / 'source-files' / packageName,
                 os.path.join(self.testdir, 'build', packageName),
             )
 
         testfilename = 'icon_yAfSvPRJukZzMMfUzvbYqwaD1XmHXNtiPBtuPVHW-6s=.png'
-        testfile = os.path.join(repo_dir, 'org.videolan.vlc', 'en-US', 'icon.png')
+        testfile = repo_dir / 'org.videolan.vlc/en-US/icon.png'
         cpdir = os.path.join('metadata', 'org.videolan.vlc', 'en-US')
         cpfile = os.path.join(cpdir, testfilename)
         os.makedirs(cpdir, exist_ok=True)
@@ -171,7 +156,7 @@ class UpdateTest(unittest.TestCase):
         fdroidserver.update.insert_localized_app_metadata(apps)
         fdroidserver.update.ingest_screenshots_from_repo_dir(apps)
 
-        appdir = os.path.join('repo', 'info.guardianproject.urzip', 'en-US')
+        appdir = Path('repo/info.guardianproject.urzip/en-US')
         self.assertTrue(
             os.path.isfile(
                 os.path.join(
@@ -190,8 +175,8 @@ class UpdateTest(unittest.TestCase):
 
         self.assertEqual(6, len(apps))
         for packageName, app in apps.items():
-            self.assertTrue('localized' in app, packageName)
-            self.assertTrue('en-US' in app['localized'])
+            self.assertIn('localized', app, packageName)
+            self.assertIn('en-US', app['localized'])
             self.assertEqual(1, len(app['localized']))
             if packageName == 'info.guardianproject.urzip':
                 self.assertEqual(7, len(app['localized']['en-US']))
@@ -267,7 +252,7 @@ class UpdateTest(unittest.TestCase):
 
     def test_name_title_scraping(self):
         """metadata file --> fdroiddata localized files --> fastlane/triple-t in app source --> APK"""
-        shutil.copytree(self.basedir, self.testdir, dirs_exist_ok=True)
+        shutil.copytree(basedir, self.testdir, dirs_exist_ok=True)
         config = dict()
         fdroidserver.common.fill_config_defaults(config)
         fdroidserver.common.config = config
@@ -356,7 +341,7 @@ class UpdateTest(unittest.TestCase):
 
     def test_insert_missing_app_names_from_apks_from_repo(self):
         os.chdir(self.testdir)
-        shutil.copytree(self.basedir, self.testdir, dirs_exist_ok=True)
+        shutil.copytree(basedir, self.testdir, dirs_exist_ok=True)
         config = dict()
         fdroidserver.common.fill_config_defaults(config)
         fdroidserver.common.config = config
@@ -405,10 +390,10 @@ class UpdateTest(unittest.TestCase):
                          repoapps['info.guardianproject.urzip']['localized']['en-US']['name'])
 
     def test_insert_triple_t_metadata(self):
-        importer = os.path.join(self.basedir, 'tmp', 'importer')
+        importer = basedir / 'tmp/importer'
         packageName = 'org.fdroid.ci.test.app'
         if not os.path.isdir(importer):
-            logging.warning('skipping test_insert_triple_t_metadata, import.TestCase must run first!')
+            logging.warning('skipping test_insert_triple_t_metadata, test_import.py must run first!')
             return
         packageDir = os.path.join(self.testdir, 'build', packageName)
         shutil.copytree(importer, packageDir)
@@ -435,7 +420,7 @@ class UpdateTest(unittest.TestCase):
         apps = fdroidserver.metadata.read_metadata()
         fdroidserver.update.copy_triple_t_store_metadata(apps)
 
-        # TODO ideally, this would compare the whole dict like in metadata.TestCase's test_read_metadata()
+        # TODO ideally, this would compare the whole dict like in test_metadata.test_read_metadata()
         correctlocales = [
             'ar', 'ast_ES', 'az', 'ca', 'ca_ES', 'cs-CZ', 'cs_CZ', 'da',
             'da-DK', 'de', 'de-DE', 'el', 'en-US', 'es', 'es-ES', 'es_ES', 'et',
@@ -446,12 +431,12 @@ class UpdateTest(unittest.TestCase):
             'ru_RU', 'sv-SE', 'sv_SE', 'te', 'tr', 'tr-TR', 'uk', 'uk_UA', 'vi',
             'vi_VN', 'zh-CN', 'zh_CN', 'zh_TW',
         ]
-        locales = sorted(list(apps['org.fdroid.ci.test.app']['localized'].keys()))
+        locales = sorted(apps['org.fdroid.ci.test.app']['localized'])
         self.assertEqual(correctlocales, locales)
 
     def test_insert_triple_t_2_metadata(self):
         packageName = 'org.piwigo.android'
-        shutil.copytree(os.path.join(self.basedir, 'triple-t-2'), self.testdir, dirs_exist_ok=True)
+        shutil.copytree(basedir / 'triple-t-2', self.testdir, dirs_exist_ok=True)
         os.chdir(self.testdir)
 
         config = dict()
@@ -489,7 +474,7 @@ class UpdateTest(unittest.TestCase):
         packages = ('com.anysoftkeyboard.languagepack.dutch', 'com.menny.android.anysoftkeyboard')
         names = ('Dutch for AnySoftKeyboard', 'AnySoftKeyboard')
 
-        shutil.copytree(os.path.join(self.basedir, 'triple-t-anysoftkeyboard'), self.testdir, dirs_exist_ok=True)
+        shutil.copytree(basedir / 'triple-t-anysoftkeyboard', self.testdir, dirs_exist_ok=True)
         os.chdir(self.testdir)
 
         for packageName, name in zip(packages, names):
@@ -510,7 +495,7 @@ class UpdateTest(unittest.TestCase):
         packages = ('verifier', 'wallet')
         names = dict(verifier='COVID Certificate Check', wallet='COVID Certificate')
 
-        shutil.copytree(os.path.join(self.basedir, 'triple-t-multiple'), self.testdir, dirs_exist_ok=True)
+        shutil.copytree(basedir / 'triple-t-multiple', self.testdir, dirs_exist_ok=True)
         os.chdir(self.testdir)
 
         for p in packages:
@@ -530,7 +515,7 @@ class UpdateTest(unittest.TestCase):
     def test_insert_triple_t_flutter(self):
         packageName = 'fr.emersion.goguma'
 
-        shutil.copytree(os.path.join(self.basedir, 'triple-t-flutter'), self.testdir, dirs_exist_ok=True)
+        shutil.copytree(basedir / 'triple-t-flutter', self.testdir, dirs_exist_ok=True)
         os.chdir(self.testdir)
 
         config = dict()
@@ -602,8 +587,8 @@ class UpdateTest(unittest.TestCase):
 
     def testScanApksAndObbs(self):
         os.chdir(self.testdir)
-        shutil.copytree(os.path.join(self.basedir, 'repo'), 'repo')
-        shutil.copytree(os.path.join(self.basedir, 'metadata'), 'metadata')
+        shutil.copytree(basedir / 'repo', 'repo')
+        shutil.copytree(basedir / 'metadata', 'metadata')
         config = dict()
         fdroidserver.common.fill_config_defaults(config)
         config['ndk_paths'] = dict()
@@ -657,7 +642,7 @@ class UpdateTest(unittest.TestCase):
     def test_apkcache_json(self):
         """test the migration from pickle to json"""
         os.chdir(self.testdir)
-        shutil.copytree(os.path.join(self.basedir, 'repo'), 'repo')
+        shutil.copytree(basedir / 'repo', 'repo')
         config = dict()
         fdroidserver.common.fill_config_defaults(config)
         config['ndk_paths'] = dict()
@@ -698,7 +683,7 @@ class UpdateTest(unittest.TestCase):
         os.chdir(self.testdir)
         os.mkdir('repo')
         filename = 'Norway_bouvet_europe_2.obf.zip'
-        shutil.copy(os.path.join(self.basedir, filename), 'repo')
+        shutil.copy(basedir / filename, 'repo')
         knownapks = fdroidserver.common.KnownApks()
         files, fcachechanged = fdroidserver.update.scan_repo_files(dict(), 'repo', knownapks, False)
         self.assertTrue(fcachechanged)
@@ -714,7 +699,7 @@ class UpdateTest(unittest.TestCase):
 
     def test_read_added_date_from_all_apks(self):
         os.chdir(self.testdir)
-        shutil.copytree(os.path.join(self.basedir, 'repo'), 'repo')
+        shutil.copytree(basedir / 'repo', 'repo')
         config = dict()
         fdroidserver.common.fill_config_defaults(config)
         fdroidserver.common.config = config
@@ -727,7 +712,7 @@ class UpdateTest(unittest.TestCase):
 
     def test_apply_info_from_latest_apk(self):
         os.chdir(self.testdir)
-        shutil.copytree(os.path.join(self.basedir, 'repo'), 'repo')
+        shutil.copytree(basedir / 'repo', 'repo')
         config = dict()
         fdroidserver.common.fill_config_defaults(config)
         fdroidserver.common.config = config
@@ -744,7 +729,7 @@ class UpdateTest(unittest.TestCase):
         fdroidserver.common.fill_config_defaults(config)
         fdroidserver.common.config = config
         fdroidserver.update.config = config
-        os.chdir(self.basedir)
+        os.chdir(basedir)
 
         if 'apksigner' in config:
             apk_info = fdroidserver.update.scan_apk('v2.only.sig_2.apk')
@@ -852,7 +837,7 @@ class UpdateTest(unittest.TestCase):
         fdroidserver.common.fill_config_defaults(config)
         fdroidserver.common.config = config
         fdroidserver.update.config = config
-        os.chdir(self.basedir)
+        os.chdir(basedir)
         if os.path.basename(os.getcwd()) != 'tests':
             raise Exception('This test must be run in the "tests/" subdir')
 
@@ -900,10 +885,10 @@ class UpdateTest(unittest.TestCase):
         fdroidserver.common.fill_config_defaults(config)
         fdroidserver.common.config = config
         fdroidserver.update.config = config
-        with tempfile.TemporaryDirectory() as tmpdir, TmpCwd(tmpdir):
+        with mkdtemp() as tmpdir, TmpCwd(tmpdir):
             os.mkdir('repo')
             apkfile = 'repo/SystemWebView-repack.apk'
-            shutil.copy(os.path.join(self.basedir, os.path.basename(apkfile)), apkfile)
+            shutil.copy(basedir / os.path.basename(apkfile), apkfile)
             fdroidserver.update.scan_apk(apkfile)
 
     def test_scan_apk_bad_namespace_in_manifest(self):
@@ -923,10 +908,10 @@ class UpdateTest(unittest.TestCase):
         fdroidserver.common.fill_config_defaults(config)
         fdroidserver.common.config = config
         fdroidserver.update.config = config
-        with tempfile.TemporaryDirectory() as tmpdir, TmpCwd(tmpdir):
+        with mkdtemp() as tmpdir, TmpCwd(tmpdir):
             os.mkdir('repo')
             apkfile = 'repo/org.sajeg.fallingblocks_3.apk'
-            shutil.copy(os.path.join(self.basedir, os.path.basename(apkfile)), apkfile)
+            shutil.copy(basedir / os.path.basename(apkfile), apkfile)
             fdroidserver.update.scan_apk(apkfile)
 
     def test_process_apk(self):
@@ -935,7 +920,7 @@ class UpdateTest(unittest.TestCase):
             return dumper.represent_dict(data)
 
         os.chdir(self.testdir)
-        shutil.copytree(self.basedir, 'tests')
+        shutil.copytree(basedir, 'tests')
         config = dict()
         fdroidserver.common.fill_config_defaults(config)
         fdroidserver.common.config = config
@@ -989,12 +974,12 @@ class UpdateTest(unittest.TestCase):
             TestLoader = FullLoader
             try:
                 testyaml = '- !!python/object/new:fdroidserver.update.UsesPermission\n  - test\n  - null'
-                from_yaml = yaml.load(testyaml, Loader=TestLoader)
+                from_yaml = yaml.load(testyaml, Loader=TestLoader)  # nosec B506
             except yaml.constructor.ConstructorError:
                 from yaml import UnsafeLoader as TestLoader
 
             with open(savepath, 'r') as f:
-                from_yaml = yaml.load(f, Loader=TestLoader)
+                from_yaml = yaml.load(f, Loader=TestLoader)  # nosec B506
             self.maxDiff = None
             if not config.get('ipfs_cid'):
                 del from_yaml['ipfsCIDv1']  # handle when ipfs_cid is not installed
@@ -1017,7 +1002,7 @@ class UpdateTest(unittest.TestCase):
 
         knownapks = fdroidserver.common.KnownApks()
 
-        with tempfile.TemporaryDirectory() as tmptestsdir, TmpCwd(tmptestsdir):
+        with mkdtemp() as tmptestsdir, TmpCwd(tmptestsdir):
             os.mkdir('repo')
             os.mkdir('archive')
             # setup the repo, create icons dirs, etc.
@@ -1026,7 +1011,7 @@ class UpdateTest(unittest.TestCase):
 
             disabledsigs = ['org.bitbucket.tickytacky.mirrormirror_2.apk']
             for apkName in disabledsigs:
-                shutil.copy(os.path.join(self.basedir, apkName),
+                shutil.copy(basedir / apkName,
                             os.path.join(tmptestsdir, 'repo'))
 
                 skip, apk, cachechanged = fdroidserver.update.process_apk({}, apkName, 'repo',
@@ -1081,7 +1066,7 @@ class UpdateTest(unittest.TestCase):
 
             badsigs = ['urzip-badcert.apk', 'urzip-badsig.apk', 'urzip-release-unsigned.apk', ]
             for apkName in badsigs:
-                shutil.copy(os.path.join(self.basedir, apkName),
+                shutil.copy(basedir / apkName,
                             os.path.join(self.testdir, 'repo'))
 
                 skip, apk, cachechanged = fdroidserver.update.process_apk({}, apkName, 'repo',
@@ -1093,7 +1078,7 @@ class UpdateTest(unittest.TestCase):
                 self.assertFalse(cachechanged)
 
     def test_process_invalid_apk(self):
-        os.chdir(self.basedir)
+        os.chdir(basedir)
         if os.path.basename(os.getcwd()) != 'tests':
             raise Exception('This test must be run in the "tests/" subdir')
 
@@ -1117,7 +1102,7 @@ class UpdateTest(unittest.TestCase):
     def test_get_apks_without_allowed_signatures(self):
         """Test when no AllowedAPKSigningKeys is specified"""
         os.chdir(self.testdir)
-        shutil.copytree(os.path.join(self.basedir, 'repo'), 'repo')
+        shutil.copytree(basedir / 'repo', 'repo')
         config = dict()
         fdroidserver.common.fill_config_defaults(config)
         fdroidserver.common.config = config
@@ -1128,6 +1113,11 @@ class UpdateTest(unittest.TestCase):
         knownapks = fdroidserver.common.KnownApks()
         apks, cachechanged = fdroidserver.update.process_apks({}, 'repo', knownapks)
         apkfile = 'v1.v2.sig_1020.apk'
+        self.assertIn(
+            apkfile,
+            os.listdir('repo'),
+            f'{apkfile} was archived or otherwise removed from "repo"',
+        )
         (skip, apk, cachechanged) = fdroidserver.update.process_apk(
             {}, apkfile, 'repo', knownapks, False
         )
@@ -1138,7 +1128,7 @@ class UpdateTest(unittest.TestCase):
     def test_get_apks_without_allowed_signatures_allowed(self):
         """Test when the APK matches the specified AllowedAPKSigningKeys"""
         os.chdir(self.testdir)
-        shutil.copytree(os.path.join(self.basedir, 'repo'), 'repo')
+        shutil.copytree(basedir / 'repo', 'repo')
         config = dict()
         fdroidserver.common.fill_config_defaults(config)
         fdroidserver.common.config = config
@@ -1163,7 +1153,7 @@ class UpdateTest(unittest.TestCase):
     def test_get_apks_without_allowed_signatures_blocked(self):
         """Test when the APK does not match any specified AllowedAPKSigningKeys"""
         os.chdir(self.testdir)
-        shutil.copytree(os.path.join(self.basedir, 'repo'), 'repo')
+        shutil.copytree(basedir / 'repo', 'repo')
         config = dict()
         fdroidserver.common.fill_config_defaults(config)
         fdroidserver.common.config = config
@@ -1190,12 +1180,12 @@ class UpdateTest(unittest.TestCase):
         os.chdir(self.testdir)
         os.mkdir('repo')
         testapk = os.path.join('repo', 'com.politedroid_6.apk')
-        shutil.copy(os.path.join(self.basedir, testapk), testapk)
+        shutil.copy(basedir / testapk, testapk)
         os.mkdir('metadata')
         metadatafile = os.path.join('metadata', 'com.politedroid.yml')
 
         # Copy and manipulate metadata file
-        shutil.copy(os.path.join(self.basedir, metadatafile), metadatafile)
+        shutil.copy(basedir / metadatafile, metadatafile)
         with open(metadatafile, 'a') as fp:
             fp.write(
                 '\n\nAllowedAPKSigningKeys: 32a23624c201b949f085996ba5ed53d40f703aca4989476949cae891022e0ed6\n'
@@ -1209,7 +1199,7 @@ class UpdateTest(unittest.TestCase):
         config['repo_keyalias'] = 'sova'
         config['keystorepass'] = 'r9aquRHYoI8+dYz6jKrLntQ5/NJNASFBacJh7Jv2BlI='
         config['keypass'] = 'r9aquRHYoI8+dYz6jKrLntQ5/NJNASFBacJh7Jv2BlI='
-        config['keystore'] = os.path.join(self.basedir, 'keystore.jks')
+        config['keystore'] = os.path.join(basedir, 'keystore.jks')
 
         self.assertTrue(os.path.exists(testapk))
 
@@ -1219,7 +1209,7 @@ class UpdateTest(unittest.TestCase):
         self.assertTrue(os.path.exists(testapk))
 
         # Copy and manipulate metadata file again
-        shutil.copy(os.path.join(self.basedir, metadatafile), metadatafile)
+        shutil.copy(basedir / metadatafile, metadatafile)
         with open(metadatafile, 'a') as fp:
             fp.write(
                 '\n\nAllowedAPKSigningKeys: fa4edeadfa4edeadfa4edeadfa4edeadfa4edeadfa4edeadfa4edeadfa4edead\n'
@@ -1232,8 +1222,8 @@ class UpdateTest(unittest.TestCase):
 
     def test_translate_per_build_anti_features(self):
         os.chdir(self.testdir)
-        shutil.copytree(os.path.join(self.basedir, 'repo'), 'repo')
-        shutil.copytree(os.path.join(self.basedir, 'metadata'), 'metadata')
+        shutil.copytree(basedir / 'repo', 'repo')
+        shutil.copytree(basedir / 'metadata', 'metadata')
         config = dict()
         fdroidserver.common.fill_config_defaults(config)
         config['ndk_paths'] = dict()
@@ -1263,7 +1253,7 @@ class UpdateTest(unittest.TestCase):
         os.chdir(self.testdir)
         os.mkdir('repo')
         os.mkdir('metadata')
-        shutil.copy(os.path.join(localmodule, 'tests', 'urzip.apk'), 'repo')
+        shutil.copy(basedir / 'urzip.apk', 'repo')
 
         config = dict()
         fdroidserver.common.fill_config_defaults(config)
@@ -1302,7 +1292,7 @@ class UpdateTest(unittest.TestCase):
         # test using external template.yml
         os.remove(testfile)
         self.assertFalse(os.path.exists(testfile))
-        shutil.copy(os.path.join(localmodule, 'examples', 'template.yml'), self.testdir)
+        shutil.copy(basedir.with_name('examples') / 'template.yml', self.testdir)
         fdroidserver.update.create_metadata_from_template(apk)
         self.assertTrue(os.path.exists(testfile))
         apps = fdroidserver.metadata.read_metadata()
@@ -1354,22 +1344,23 @@ class UpdateTest(unittest.TestCase):
 
         # pylint: disable=protected-access
         icons_src = fdroidserver.update._get_apk_icons_src('urzip-release.apk', None)
-        assert not icons_src
+        self.assertFalse(icons_src)
 
     def test_strip_and_copy_image(self):
-        in_file = os.path.join(self.basedir, 'metadata', 'info.guardianproject.urzip', 'en-US', 'images', 'icon.png')
+        in_file = basedir / 'metadata/info.guardianproject.urzip/en-US/images/icon.png'
         out_file = os.path.join(self.testdir, 'icon.png')
         fdroidserver.update._strip_and_copy_image(in_file, out_file)
         self.assertTrue(os.path.exists(out_file))
 
-        in_file = os.path.join(self.basedir, 'corrupt-featureGraphic.png')
+    def test_strip_and_copy_image_bad_filename(self):
+        in_file = basedir / 'corrupt-featureGraphic.png'
         out_file = os.path.join(self.testdir, 'corrupt-featureGraphic.png')
         fdroidserver.update._strip_and_copy_image(in_file, out_file)
         self.assertFalse(os.path.exists(out_file))
 
     def test_create_metadata_from_template_empty_keys(self):
         apk = {'packageName': 'rocks.janicerand'}
-        with tempfile.TemporaryDirectory() as tmpdir, TmpCwd(tmpdir):
+        with mkdtemp() as tmpdir, TmpCwd(tmpdir):
             os.mkdir('metadata')
             with open('template.yml', 'w') as f:
                 f.write(
@@ -1554,7 +1545,7 @@ class UpdateTest(unittest.TestCase):
             self.assertIsNone(app.get(field))
 
     def test_sanitize_funding_yml(self):
-        with open(os.path.join(self.basedir, 'funding-usernames.yaml')) as fp:
+        with open(basedir / 'funding-usernames.yaml') as fp:
             data = yaml.load(fp, Loader=SafeLoader)
         for k, entries in data.items():
             for entry in entries:
@@ -1568,7 +1559,7 @@ class UpdateTest(unittest.TestCase):
                     self.assertIsNotNone(m)
         self.assertIsNone(fdroidserver.update.sanitize_funding_yml_entry('foo\nbar'))
         self.assertIsNone(fdroidserver.update.sanitize_funding_yml_entry(
-            ''.join(chr(random.randint(65, 90)) for _ in range(2049))))
+            ''.join(chr(random.randint(65, 90)) for _ in range(2049))))  # nosec B311
 
         # not recommended but valid entries
         self.assertIsNotNone(fdroidserver.update.sanitize_funding_yml_entry(12345))
@@ -1593,7 +1584,7 @@ class UpdateTest(unittest.TestCase):
         for f, key in files.items():
             limit = config['char_limits'][key]
             with open(f, 'w') as fp:
-                fp.write(''.join(random.choice(string.ascii_letters) for i in range(limit + 100)))
+                fp.write(''.join(random.choice(string.ascii_letters) for i in range(limit + 100)))  # nosec B311
             locale = 'ru_US'
             app = dict()
             fdroidserver.update._set_localized_text_entry(app, locale, key, f)
@@ -1628,7 +1619,7 @@ class UpdateTest(unittest.TestCase):
         limit = config['char_limits']['author']
         for key in ('authorEmail', 'authorPhone', 'authorWebSite'):
             with open(f, 'w') as fp:
-                fp.write(''.join(random.choice(string.ascii_letters) for i in range(limit + 100)))
+                fp.write(''.join(random.choice(string.ascii_letters) for i in range(limit + 100)))  # nosec B311
             app = dict()
             fdroidserver.update._set_author_entry(app, key, f)
             self.assertEqual(limit, len(app[key]))
@@ -1643,7 +1634,7 @@ class UpdateTest(unittest.TestCase):
         fdroidserver.common.config = {}
         fdroidserver.update.config = {}
         fdroidserver.update.options = Options
-        with tempfile.TemporaryDirectory() as tmpdir:
+        with mkdtemp() as tmpdir:
             os.chdir(tmpdir)
             with mock.patch('sys.argv', ['fdroid update', '']):
                 fdroidserver.update.status_update_json([], [])
@@ -1737,7 +1728,7 @@ class UpdateTest(unittest.TestCase):
         os.mkdir('repo')
         testapk = os.path.join('repo', 'com.politedroid_6.apk')
         testapk_new = os.path.join('repo', 'Politedroid-1.5.apk')
-        shutil.copy(os.path.join(self.basedir, testapk), testapk_new)
+        shutil.copy(basedir / testapk, testapk_new)
 
         config = dict()
         fdroidserver.common.fill_config_defaults(config)
@@ -1817,14 +1808,14 @@ class UpdateTest(unittest.TestCase):
         )
 
         testapk = os.path.join('repo', 'com.politedroid_6.apk')
-        shutil.copy(os.path.join(self.basedir, testapk), testapk)
+        shutil.copy(basedir / testapk, testapk)
         Path('metadata/com.politedroid.yml').write_text('Name: Polite')
 
         with mock.patch('sys.argv', ['fdroid update', '--delete-unknown', '--nosign']):
             fdroidserver.update.main()
         with open('repo/index-v2.json') as fp:
             index = json.load(fp)
-        self.assertFalse(CATEGORIES_CONFIG_NAME in index['repo'])
+        self.assertNotIn(CATEGORIES_CONFIG_NAME, index['repo'])
 
     def test_auto_defined_categories(self):
         """Repos that don't define categories in config/ should use auto-generated."""
@@ -1836,7 +1827,7 @@ class UpdateTest(unittest.TestCase):
         )
 
         testapk = os.path.join('repo', 'com.politedroid_6.apk')
-        shutil.copy(os.path.join(self.basedir, testapk), testapk)
+        shutil.copy(basedir / testapk, testapk)
         Path('metadata/com.politedroid.yml').write_text('Categories: [Time]')
 
         with mock.patch('sys.argv', ['fdroid update', '--delete-unknown', '--nosign']):
@@ -1858,10 +1849,10 @@ class UpdateTest(unittest.TestCase):
         )
 
         testapk = os.path.join('repo', 'com.politedroid_6.apk')
-        shutil.copy(os.path.join(self.basedir, testapk), testapk)
+        shutil.copy(basedir / testapk, testapk)
         Path('metadata/com.politedroid.yml').write_text('Categories: [bar]')
         testapk = os.path.join('repo', 'souch.smsbypass_9.apk')
-        shutil.copy(os.path.join(self.basedir, testapk), testapk)
+        shutil.copy(basedir / testapk, testapk)
         Path('metadata/souch.smsbypass.yml').write_text('Categories: [foo, bar]')
 
         with mock.patch('sys.argv', ['fdroid update', '--delete-unknown', '--nosign']):
@@ -1885,10 +1876,10 @@ class UpdateTest(unittest.TestCase):
         )
 
         testapk = os.path.join('repo', 'com.politedroid_6.apk')
-        shutil.copy(os.path.join(self.basedir, testapk), testapk)
+        shutil.copy(basedir / testapk, testapk)
         Path('metadata/com.politedroid.yml').write_text('Categories: [Time]')
         testapk = os.path.join('repo', 'souch.smsbypass_9.apk')
-        shutil.copy(os.path.join(self.basedir, testapk), testapk)
+        shutil.copy(basedir / testapk, testapk)
         Path('metadata/souch.smsbypass.yml').write_text('Categories: [System, Time]')
 
         with mock.patch('sys.argv', ['fdroid update', '--delete-unknown', '--nosign']):
@@ -1915,7 +1906,7 @@ class UpdateTest(unittest.TestCase):
         )
 
         testapk = os.path.join('repo', 'com.politedroid_6.apk')
-        shutil.copy(os.path.join(self.basedir, testapk), testapk)
+        shutil.copy(basedir / testapk, testapk)
         Path('metadata/com.politedroid.yml').write_text('Categories: [Time]')
 
         with mock.patch('sys.argv', ['fdroid update', '--delete-unknown', '--nosign']):
@@ -1937,12 +1928,8 @@ class TestParseIpa(unittest.TestCase):
             biplist  # silence the linters
         except ImportError as e:
             self.skipTest(str(e))
-        ipa_path = os.path.join(
-            os.path.dirname(os.path.abspath(__file__)),
-            'com.fake.IpaApp_1000000000001.ipa',
-        )
+        ipa_path = os.path.join(basedir, 'com.fake.IpaApp_1000000000001.ipa')
         result = fdroidserver.update.parse_ipa(ipa_path, 'fake_size', 'fake_sha')
-        self.maxDiff = None
         self.assertDictEqual(
             result,
             {
@@ -2007,12 +1994,10 @@ class TestUpdateVersionStringToInt(unittest.TestCase):
 
 
 class TestScanRepoForIpas(unittest.TestCase):
-    def setUp(self):
-        self.maxDiff = None
-
     def test_scan_repo_for_ipas_no_cache(self):
         self.maxDiff = None
-        with tempfile.TemporaryDirectory() as tmpdir, TmpCwd(tmpdir):
+        with mkdtemp() as tmpdir:
+            os.chdir(tmpdir)
             os.mkdir("repo")
             with open('repo/abc.Def_123.ipa', 'w') as f:
                 f.write('abc')
@@ -2020,7 +2005,6 @@ class TestScanRepoForIpas(unittest.TestCase):
                 f.write('xyz')
 
             apkcache = mock.MagicMock()
-            # apkcache['a'] = 1
             repodir = "repo"
             knownapks = mock.MagicMock()
 
@@ -2129,7 +2113,7 @@ class TestDiscoverIosScreenshots(unittest.TestCase):
     def test_discover_ios_screenshots(self):
         self.maxDiff = None
 
-        with tempfile.TemporaryDirectory() as fastlane_dir:
+        with mkdtemp() as fastlane_dir:
             fastlane_dir = Path(fastlane_dir)
             (fastlane_dir / "screenshots/en-US").mkdir(parents=True)
             with open(fastlane_dir / "screenshots/en-US/iPhone 8+ @ iOS 16-1.png", 'w') as f:
@@ -2166,6 +2150,14 @@ class TestDiscoverIosScreenshots(unittest.TestCase):
 
 
 class TestCopyIosScreenshotsToRepo(unittest.TestCase):
+    def setUp(self):
+        self._td = mkdtemp()
+        os.chdir(self._td.name)
+
+    def tearDown(self):
+        os.chdir(basedir)
+        self._td.cleanup()
+
     def test_copy_ios_screenshots_to_repo(self):
         self.maxDiff = None
 
@@ -2218,7 +2210,7 @@ class TestGetIpaIcon(unittest.TestCase):
     def test_get_ipa_icon(self):
         self.maxDiff = None
 
-        with tempfile.TemporaryDirectory() as tmpdir:
+        with mkdtemp() as tmpdir:
             tmpdir = Path(tmpdir)
             (tmpdir / 'OnionBrowser.xcodeproj').mkdir()
             with open(tmpdir / 'OnionBrowser.xcodeproj/project.pbxproj', "w") as f:
@@ -2245,7 +2237,7 @@ class TestParseFromPbxproj(unittest.TestCase):
     def test_parse_from_pbxproj(self):
         self.maxDiff = None
 
-        with tempfile.TemporaryDirectory() as tmpdir:
+        with mkdtemp() as tmpdir:
             with open(Path(tmpdir) / "asdf.pbxproj", 'w', encoding="utf-8") as f:
                 f.write("""
                     230jfaod=flc'
@@ -2257,29 +2249,3 @@ class TestParseFromPbxproj(unittest.TestCase):
                 "ASSETCATALOG_COMPILER_APPICON_NAME"
             )
             self.assertEqual(v, "MyIcon")
-
-
-if __name__ == "__main__":
-    os.chdir(os.path.dirname(__file__))
-
-    import argparse
-
-    parser = argparse.ArgumentParser()
-    parser.add_argument(
-        "-v",
-        "--verbose",
-        action="store_true",
-        default=False,
-        help="Spew out even more information than normal",
-    )
-    parse_args_for_test(parser, sys.argv)
-
-    newSuite = unittest.TestSuite()
-    newSuite.addTest(unittest.makeSuite(UpdateTest))
-    newSuite.addTest(unittest.makeSuite(TestUpdateVersionStringToInt))
-    newSuite.addTest(unittest.makeSuite(TestScanRepoForIpas))
-    newSuite.addTest(unittest.makeSuite(TestParseIosScreenShotName))
-    newSuite.addTest(unittest.makeSuite(TestInsertLocalizedIosAppMetadata))
-    newSuite.addTest(unittest.makeSuite(TestDiscoverIosScreenshots))
-    newSuite.addTest(unittest.makeSuite(TestGetIpaIcon))
-    unittest.main(failfast=False)

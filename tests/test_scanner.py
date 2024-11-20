@@ -1,8 +1,5 @@
 #!/usr/bin/env python3
 
-import glob
-import inspect
-import logging
 import os
 import pathlib
 import re
@@ -23,19 +20,13 @@ else:
     import tomli as tomllib
 import yaml
 
-localmodule = os.path.realpath(
-    os.path.join(os.path.dirname(inspect.getfile(inspect.currentframe())), '..')
-)
-print('localmodule: ' + localmodule)
-if localmodule not in sys.path:
-    sys.path.insert(0, localmodule)
-
-from testcommon import TmpCwd, mkdtemp, mock_open_to_str, parse_args_for_test
-
 import fdroidserver.build
 import fdroidserver.common
 import fdroidserver.metadata
 import fdroidserver.scanner
+from .testcommon import TmpCwd, mkdtemp, mock_open_to_str
+
+basedir = pathlib.Path(__file__).parent
 
 
 # Always use built-in default rules so changes in downloaded rules don't break tests.
@@ -45,21 +36,18 @@ import fdroidserver.scanner
 )
 class ScannerTest(unittest.TestCase):
     def setUp(self):
-        logging.basicConfig(level=logging.INFO)
-        self.basedir = os.path.join(localmodule, 'tests')
-        os.chdir(self.basedir)
+        os.chdir(basedir)
         self._td = mkdtemp()
         self.testdir = self._td.name
         fdroidserver.scanner.ScannerTool.refresh_allowed = False
 
     def tearDown(self):
-        os.chdir(self.basedir)
+        os.chdir(basedir)
         self._td.cleanup()
 
     def test_scan_source_files(self):
         fdroidserver.common.options = mock.Mock()
         fdroidserver.common.options.json = False
-        source_files = os.path.join(self.basedir, 'source-files')
         projects = {
             'OtakuWorld': 2,
             'Zillode': 1,
@@ -76,12 +64,12 @@ class ScannerTest(unittest.TestCase):
             'com.lolo.io.onelist': 6,
             'catalog.test': 22,
         }
-        for d in glob.glob(os.path.join(source_files, '*')):
+        for d in (basedir / 'source-files').iterdir():
             build = fdroidserver.metadata.Build()
             fatal_problems = fdroidserver.scanner.scan_source(d, build)
-            should = projects.get(os.path.basename(d), 0)
+            should = projects.get(d.name, 0)
             self.assertEqual(
-                should, fatal_problems, "%s should have %d errors!" % (d, should)
+                should, fatal_problems, f'{d} should have {should} errors!'
             )
 
     def test_get_gradle_compile_commands_without_catalog(self):
@@ -225,8 +213,7 @@ class ScannerTest(unittest.TestCase):
             fp.write(b'\x00\x00')
             fp.write(uuid.uuid4().bytes)
         shutil.copyfile('binary.out', 'fake.png')
-        os.chmod('fake.png', 0o755)
-        os.system('ls -l binary.out')
+        os.chmod('fake.png', 0o755)  # nosec B103
         with open('snippet.png', 'wb') as fp:
             fp.write(
                 b'\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR\x00\x00\x000\x00\x00'
@@ -234,8 +221,7 @@ class ScannerTest(unittest.TestCase):
                 b'IT\x08\x08\x08\x08|\x08d\x88\x00\x00\x00\tpHYs\x00\x00\n'
                 b'a\x00\x00\na\x01\xfc\xccJ%\x00\x00\x00\x19tEXtSoftware'
             )
-        os.chmod('snippet.png', 0o755)
-        os.system('ls -l fake.png')
+        os.chmod('snippet.png', 0o755)  # nosec B103
 
         # run scanner as if from `fdroid build`
         os.chdir(self.testdir)
@@ -365,7 +351,7 @@ class ScannerTest(unittest.TestCase):
 
     def test_gradle_maven_url_regex(self):
         """Check the regex can find all the cases"""
-        with open(os.path.join(self.basedir, 'gradle-maven-blocks.yaml')) as fp:
+        with open(basedir / 'gradle-maven-blocks.yaml') as fp:
             data = yaml.safe_load(fp)
 
         urls = []
@@ -472,7 +458,7 @@ class ScannerTest(unittest.TestCase):
         apk = 'urzip.apk'
         mapzip = 'Norway_bouvet_europe_2.obf.zip'
         secretfile = os.path.join(
-            self.basedir, 'org.bitbucket.tickytacky.mirrormirror_1.apk'
+            basedir, 'org.bitbucket.tickytacky.mirrormirror_1.apk'
         )
         with tempfile.TemporaryDirectory() as tmpdir:
             shutil.copy(apk, tmpdir)
@@ -503,7 +489,6 @@ class ScannerTest(unittest.TestCase):
 
 class Test_scan_binary(unittest.TestCase):
     def setUp(self):
-        self.basedir = os.path.join(localmodule, 'tests')
         config = dict()
         fdroidserver.common.fill_config_defaults(config)
         fdroidserver.common.config = config
@@ -519,7 +504,7 @@ class Test_scan_binary(unittest.TestCase):
         fdroidserver.scanner._SCANNER_TOOL.regexs['warn_code_signatures'] = {}
 
     def test_code_signature_match(self):
-        apkfile = os.path.join(self.basedir, 'no_targetsdk_minsdk1_unsigned.apk')
+        apkfile = os.path.join(basedir, 'no_targetsdk_minsdk1_unsigned.apk')
         self.assertEqual(
             1,
             fdroidserver.scanner.scan_binary(apkfile),
@@ -538,7 +523,7 @@ class Test_scan_binary(unittest.TestCase):
         "https://gitlab.com/fdroid/fdroidserver/-/merge_requests/1110#note_932026766",
     )
     def test_bottom_level_embedded_apk_code_signature(self):
-        apkfile = os.path.join(self.basedir, 'apk.embedded_1.apk')
+        apkfile = os.path.join(basedir, 'apk.embedded_1.apk')
         fdroidserver.scanner._SCANNER_TOOL.regexs['err_code_signatures'] = {
             "org/bitbucket/tickytacky/mirrormirror/MainActivity": re.compile(
                 r'.*org/bitbucket/tickytacky/mirrormirror/MainActivity',
@@ -558,7 +543,7 @@ class Test_scan_binary(unittest.TestCase):
         )
 
     def test_top_level_signature_embedded_apk_present(self):
-        apkfile = os.path.join(self.basedir, 'apk.embedded_1.apk')
+        apkfile = os.path.join(basedir, 'apk.embedded_1.apk')
         fdroidserver.scanner._SCANNER_TOOL.regexs['err_code_signatures'] = {
             "org/fdroid/ci/BuildConfig": re.compile(
                 r'.*org/fdroid/ci/BuildConfig', re.IGNORECASE | re.UNICODE
@@ -577,7 +562,6 @@ class Test_scan_binary(unittest.TestCase):
 
 
 class Test_SignatureDataController(unittest.TestCase):
-    # __init__
     def test_init(self):
         sdc = fdroidserver.scanner.SignatureDataController(
             'nnn', 'fff.yml', 'https://example.com/test.json'
@@ -776,8 +760,7 @@ class Test_ScannerTool(unittest.TestCase):
     def setUp(self):
         fdroidserver.common.options = None
         fdroidserver.common.config = None
-        self.basedir = os.path.join(localmodule, 'tests')
-        os.chdir(self.basedir)
+        os.chdir(basedir)
         self._td = mkdtemp()
         self.testdir = self._td.name
         fdroidserver.scanner.ScannerTool.refresh_allowed = True
@@ -785,7 +768,7 @@ class Test_ScannerTool(unittest.TestCase):
     def tearDown(self):
         fdroidserver.common.options = None
         fdroidserver.common.config = None
-        os.chdir(self.basedir)
+        os.chdir(basedir)
         self._td.cleanup()
 
     def test_load(self):
@@ -879,30 +862,3 @@ class Test_main(unittest.TestCase):
             self.exit_func.assert_not_called()
             self.read_app_args_func.assert_not_called()
             self.scan_binary_func.assert_called_once_with('local.application.apk')
-
-
-if __name__ == "__main__":
-    os.chdir(os.path.dirname(__file__))
-
-    import argparse
-
-    parser = argparse.ArgumentParser()
-    parser.add_argument(
-        "-v",
-        "--verbose",
-        action="store_true",
-        default=False,
-        help="Spew out even more information than normal",
-    )
-    parse_args_for_test(parser, sys.argv)
-
-    newSuite = unittest.TestSuite()
-    newSuite.addTests(
-        [
-            unittest.makeSuite(ScannerTest),
-            unittest.makeSuite(Test_scan_binary),
-            unittest.makeSuite(Test_SignatureDataController),
-            unittest.makeSuite(Test_main),
-        ]
-    )
-    unittest.main(failfast=False)

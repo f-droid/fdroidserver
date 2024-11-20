@@ -20,7 +20,7 @@ ignore = "E123,E203,E402,E501,W503"
 [tool.black]
 skip-string-normalization = true
 target-version = ["py38"]
-include = '(^fdroid|\.pyi?|\.TestCase)$'
+include = '(^fdroid|\.pyi?)$'
 # These files will never be included in black runs.  To run black on
 # one of thes files, remove it from this list.
 force-exclude = '''(
@@ -49,10 +49,10 @@ force-exclude = '''(
   | tests/gradle-release-checksums\.py
   | tests/openssl-version-check-test\.py
   | tests/valid-package-names/test\.py
-  | tests/common\.TestCase
-  | tests/publish\.TestCase
-  | tests/signatures\.TestCase
-  | tests/update\.TestCase
+  | tests/test_common\.py
+  | tests/test_publish\.py
+  | tests/test_signatures\.py
+  | tests/test_update\.py
 )$'''
 
 

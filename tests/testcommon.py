@@ -27,6 +27,10 @@ from pathlib import Path
 GP_FINGERPRINT = 'B7C2EEFD8DAC7806AF67DFCD92EB18126BC08312A7F2D6F3862E46013C7A6135'
 
 
+class VerboseFalseOptions:
+    verbose = False
+
+
 class TmpCwd:
     """Context-manager for temporarily changing the current working directory."""
 
@@ -76,19 +80,6 @@ def mkdir_testfiles(localmodule, test):
     testdir = testroot / unittest.TestCase.id(test)
     testdir.mkdir(exist_ok=True)
     return tempfile.mkdtemp(dir=testdir)
-
-
-def parse_args_for_test(parser, args):
-    """Only send --flags to the ArgumentParser, not test classes, etc."""
-
-    from fdroidserver.common import parse_args
-
-    flags = []
-    for arg in args:
-        if arg[0] == '-':
-            flags.append(flags)
-    with unittest.mock.patch('sys.argv', flags):
-        parse_args(parser)
 
 
 def mock_urlopen(status=200, body=None):

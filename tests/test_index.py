@@ -3,11 +3,9 @@
 import copy
 import datetime
 import glob
-import inspect
-import logging
 import os
-import sys
 import unittest
+from pathlib import Path
 import yaml
 import zipfile
 from unittest.mock import patch
@@ -16,17 +14,12 @@ import tempfile
 import json
 import shutil
 
-localmodule = os.path.realpath(
-    os.path.join(os.path.dirname(inspect.getfile(inspect.currentframe())), '..')
-)
-print('localmodule: ' + localmodule)
-if localmodule not in sys.path:
-    sys.path.insert(0, localmodule)
-
 import fdroidserver
 from fdroidserver import common, index, publish, signindex, update
-from testcommon import GP_FINGERPRINT, TmpCwd, mkdtemp, parse_args_for_test
-from pathlib import Path
+from .testcommon import GP_FINGERPRINT, TmpCwd, mkdtemp
+
+
+basedir = Path(__file__).parent
 
 
 class Options:
@@ -38,17 +31,15 @@ class Options:
 class IndexTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.basedir = os.path.join(localmodule, 'tests')
         # TODO something should remove cls.index_v1_jar, but it was
         # causing the tests to be flaky.  There seems to be something
         # that is running the background somehow, maybe sign_index()
         # exits before jarsigner actually finishes?
-        cls.index_v1_jar = os.path.join(cls.basedir, 'repo', 'index-v1.jar')
+        cls.index_v1_jar = basedir / 'repo' / 'index-v1.jar'
 
     def setUp(self):
-        logging.basicConfig(level=logging.ERROR)
-        os.chmod(os.path.join(self.basedir, 'config.py'), 0o600)
-        os.chdir(self.basedir)  # so read_config() can find config.py
+        (basedir / 'config.py').chmod(0o600)
+        os.chdir(basedir)  # so read_config() can find config.py
 
         common.config = None
         common.options = Options
@@ -65,11 +56,11 @@ class IndexTest(unittest.TestCase):
         self._td.cleanup()
 
     def _sign_test_index_v1_jar(self):
-        if not os.path.exists(self.index_v1_jar):
-            signindex.sign_index(os.path.dirname(self.index_v1_jar), 'index-v1.json')
+        if not self.index_v1_jar.exists():
+            signindex.sign_index(self.index_v1_jar.parent, 'index-v1.json')
 
     def test_get_public_key_from_jar_succeeds(self):
-        source_dir = os.path.join(self.basedir, 'signindex')
+        source_dir = basedir / 'signindex'
         for f in ('testy.jar', 'guardianproject.jar'):
             testfile = os.path.join(source_dir, f)
             jar = zipfile.ZipFile(testfile)
@@ -85,7 +76,7 @@ class IndexTest(unittest.TestCase):
                 self.assertTrue(fingerprint == GP_FINGERPRINT)
 
     def test_get_public_key_from_jar_fails(self):
-        source_dir = os.path.join(self.basedir, 'signindex')
+        source_dir = basedir / 'signindex'
         testfile = os.path.join(source_dir, 'unsigned.jar')
         jar = zipfile.ZipFile(testfile)
         with self.assertRaises(index.VerificationException):
@@ -186,10 +177,10 @@ class IndexTest(unittest.TestCase):
             self.testdir, 'repo', os.path.basename(mirrors[0]['url'])
         )
         os.chdir(self.testdir)
-        signindex.config['keystore'] = os.path.join(self.basedir, 'keystore.jks')
+        signindex.config['keystore'] = os.path.join(basedir, 'keystore.jks')
         os.mkdir('repo')
-        shutil.copy(os.path.join(self.basedir, 'repo', 'entry.json'), 'repo')
-        shutil.copy(os.path.join(self.basedir, 'repo', 'index-v2.json'), 'repo')
+        shutil.copy(basedir / 'repo' / 'entry.json', 'repo')
+        shutil.copy(basedir / 'repo' / 'index-v2.json', 'repo')
         signindex.sign_index('repo', 'entry.json')
         repo_url = 'https://fake.url/fdroid/repo'
         entry_url = 'https://fake.url/fdroid/repo/entry.jar'
@@ -209,10 +200,10 @@ class IndexTest(unittest.TestCase):
             self.testdir, 'repo', os.path.basename(mirrors[0]['url'])
         )
         os.chdir(self.testdir)
-        signindex.config['keystore'] = os.path.join(self.basedir, 'keystore.jks')
+        signindex.config['keystore'] = os.path.join(basedir, 'keystore.jks')
         os.mkdir('repo')
-        shutil.copy(os.path.join(self.basedir, 'repo', 'entry.json'), 'repo')
-        shutil.copy(os.path.join(self.basedir, 'repo', 'index-v2.json'), 'repo')
+        shutil.copy(basedir / 'repo' / 'entry.json', 'repo')
+        shutil.copy(basedir / 'repo' / 'index-v2.json', 'repo')
         signindex.sign_index('repo', 'entry.json')
         bad_fp = '0123456789001234567890012345678900123456789001234567890012345678'
         bad_fp_url = 'https://fake.url/fdroid/repo?fingerprint=' + bad_fp
@@ -240,10 +231,10 @@ class IndexTest(unittest.TestCase):
 
         mock_download_using_mirrors.side_effect = download_using_mirrors_def
         os.chdir(self.testdir)
-        signindex.config['keystore'] = os.path.join(self.basedir, 'keystore.jks')
+        signindex.config['keystore'] = os.path.join(basedir, 'keystore.jks')
         os.mkdir('repo')
-        shutil.copy(os.path.join(self.basedir, 'repo', 'entry.json'), 'repo')
-        shutil.copy(os.path.join(self.basedir, 'repo', 'index-v2.json'), 'repo')
+        shutil.copy(basedir / 'repo' / 'entry.json', 'repo')
+        shutil.copy(basedir / 'repo' / 'index-v2.json', 'repo')
         signindex.sign_index('repo', 'entry.json')
         url = 'https://fake.url/fdroid/repo?fingerprint=' + GP_FINGERPRINT
         with self.assertRaises(fdroidserver.exception.VerificationException):
@@ -438,7 +429,7 @@ class IndexTest(unittest.TestCase):
         os.mkdir('metadata')
         os.mkdir('repo')
         metadatafile = 'metadata/info.zwanenburg.caffeinetile.yml'
-        shutil.copy(os.path.join(self.basedir, metadatafile), metadatafile)
+        shutil.copy(os.path.join(basedir, metadatafile), metadatafile)
         repo_icons_dir = os.path.join('repo', 'icons')
         self.assertFalse(os.path.isdir(repo_icons_dir))
         repodict = {
@@ -648,13 +639,13 @@ class IndexTest(unittest.TestCase):
             html = f.read()
             pretty_html = HTMLBeautifier.beautify(html)
             self.maxDiff = None
-            self.assertEquals(html, pretty_html)
+            self.assertEqual(html, pretty_html)
 
         with open(os.path.join("repo", "index.css")) as f:
             css = f.read()
             pretty_css = CSSBeautifier.beautify(css)
             self.maxDiff = None
-            self.assertEquals(css, pretty_css)
+            self.assertEqual(css, pretty_css)
 
     def test_v1_sort_packages_with_invalid(self):
         i = [
@@ -729,7 +720,6 @@ class IndexTest(unittest.TestCase):
         c = {'repo_url': repo_url, 'mirrors': ['http://one/fdroid']}
         with open('config.yml', 'w') as fp:
             yaml.dump(c, fp)
-        os.system('cat config.yml')
         common.config = None
         common.read_config()
         repodict = {'address': common.config['repo_url']}
@@ -866,8 +856,7 @@ class AltstoreIndexTest(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmpdir, TmpCwd(tmpdir):
             repodir = Path(tmpdir) / 'repo'
             repodir.mkdir()
-            with open(repodir / "fake.ipa", "w") as f:
-                f.write("")
+            (repodir / "fake.ipa").touch()
 
             fdroidserver.index.make_altstore(
                 apps,
@@ -916,24 +905,3 @@ class AltstoreIndexTest(unittest.TestCase):
                     },
                     json.load(f),
                 )
-
-
-if __name__ == "__main__":
-    os.chdir(os.path.dirname(__file__))
-
-    import argparse
-
-    parser = argparse.ArgumentParser()
-    parser.add_argument(
-        "-v",
-        "--verbose",
-        action="store_true",
-        default=False,
-        help="Spew out even more information than normal",
-    )
-    parse_args_for_test(parser, sys.argv)
-
-    newSuite = unittest.TestSuite()
-    newSuite.addTest(unittest.makeSuite(IndexTest))
-    newSuite.addTest(unittest.makeSuite(AltstoreIndexTest))
-    unittest.main(failfast=False)

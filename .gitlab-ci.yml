@@ -207,11 +207,11 @@ gradlew-fdroid:
     changes:
       - .gitlab-ci.yml
       - gradlew-fdroid
-      - tests/test-gradlew-fdroid
+      - tests/test_gradlew-fdroid
   script:
     - apt-get install ca-certificates curl default-jdk-headless shellcheck unzip
-    - shellcheck --severity=error --color gradlew-fdroid tests/test-gradlew-fdroid
-    - ./tests/test-gradlew-fdroid
+    - shellcheck --severity=error --color gradlew-fdroid tests/test_gradlew-fdroid
+    - ./tests/test_gradlew-fdroid
 
 
 # Run all the various linters and static analysis tools.
@@ -252,7 +252,6 @@ lint_format_bandit_checks:
             setup.py
             fdroidserver/*.py
             tests/*.py
-            tests/*.TestCase
         || set_error
     - shellcheck --exclude SC2046,SC2090 --severity=warning --color tests/run-tests
         || set_error
@@ -619,10 +618,10 @@ Windows:
     - python -m pip install --upgrade babel pip setuptools
     - python -m pip install -e .
 
-    - $files = @(Get-ChildItem tests\*.TestCase)
+    - $files = @(Get-ChildItem tests\test_*.py)
     - foreach ($f in $files) {
           write-output $f;
-          python $f;
+          python -m unittest $f;
           if( $LASTEXITCODE -eq 0 ) {
               write-output "SUCCESS $f";
           } else {
@@ -631,15 +630,16 @@ Windows:
       }
 
     # these are the tests that must pass
-    - python tests\checkupdates.TestCase
-    - python tests\exception.TestCase
-    - python tests\import_subcommand.TestCase
-    - python tests\init.TestCase
-    - python tests\lint.TestCase
-    - python tests\main.TestCase
-    - python tests\metadata.TestCase
-    - python tests\rewritemeta.TestCase
-    - python tests\vcs.TestCase
+    - python -m unittest -k
+        checkupdates
+        exception
+        import_subcommand
+        test_lint
+        test_metadata
+        test_rewritemeta
+        test_vcs
+        tests.test_init
+        tests.test_main
   after_script:
     - Copy-Item C:\ProgramData\chocolatey\logs\chocolatey.log
   artifacts:
