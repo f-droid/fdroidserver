@@ -18,6 +18,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import configparser
 import git
 import os
 import re
@@ -688,11 +689,17 @@ def get_last_build_from_app(app: metadata.App) -> metadata.Build:
         return metadata.Build()
 
 
-def get_git_repo_and_main_branch():
-    git_repo = git.Repo.init('.')
-    with git_repo.config_reader() as reader:
-        main_branch = reader.get_value('init', 'defaultBranch')
-    return git_repo, main_branch
+def get_upstream_main_branch(git_repo):
+    if len(git_repo.remotes.upstream.refs) == 1:
+        return git_repo.remotes.upstream.refs[0].name
+    for name in ('main', 'master'):
+        if name in git_repo.remotes.upstream.refs:
+            return f'upstream/{name}'
+    try:
+        with git_repo.config_reader() as reader:
+            return 'upstream/%s' % reader.get_value('init', 'defaultBranch')
+    except configparser.NoSectionError:
+        return 'upstream/main'
 
 
 def checkout_appid_branch(appid):
@@ -711,7 +718,8 @@ def checkout_appid_branch(appid):
 
     """
     logging.debug(f'Creating merge request branch for {appid}')
-    git_repo, main_branch = get_git_repo_and_main_branch()
+    git_repo = git.Repo.init('.')
+    upstream_main = get_upstream_main_branch(git_repo)
     for remote in git_repo.remotes:
         remote.fetch()
     try:
@@ -721,16 +729,14 @@ def checkout_appid_branch(appid):
     if appid in git_repo.remotes.origin.refs:
         start_point = f"origin/{appid}"
         for commit in git_repo.iter_commits(
-            f'upstream/{main_branch}...{start_point}', right_only=True
+            f'{upstream_main}...{start_point}', right_only=True
         ):
             if commit.committer.email != BOT_EMAIL or commit.author.email != BOT_EMAIL:
                 return False
     else:
-        start_point = f"upstream/{main_branch}"
+        start_point = upstream_main
     git_repo.git.checkout('-B', appid, start_point)
-    git_repo.git.rebase(
-        f'upstream/{main_branch}', strategy_option='ours', kill_after_timeout=120
-    )
+    git_repo.git.rebase(upstream_main, strategy_option='ours', kill_after_timeout=120)
     return True
 
 
@@ -751,11 +757,11 @@ def push_commits(remote_name='origin', branch_name='checkupdates', verbose=False
     * https://docs.gitlab.com/ee/user/project/push_options.html
 
     """
-    git_repo, default = get_git_repo_and_main_branch()
+    git_repo = git.Repo.init('.')
+    upstream_main = get_upstream_main_branch(git_repo)
     files = set()
-    upstream_main = default if default in git_repo.remotes.upstream.refs else 'main'
     for commit in git_repo.iter_commits(
-        f'upstream/{upstream_main}...HEAD', right_only=True
+        f'{upstream_main}...HEAD', right_only=True
     ):
         files.update(commit.stats.files.keys())
 
@@ -780,7 +786,7 @@ def push_commits(remote_name='origin', branch_name='checkupdates', verbose=False
     current_version_only = True
     for m in re.findall(
         r"^[+-].*",
-        git_repo.git.diff(f"upstream/{upstream_main}...HEAD"),
+        git_repo.git.diff(f"{upstream_main}...HEAD"),
         flags=re.MULTILINE,
     ):
         if re.match(r"^(\+\+\+|---) ", m):
@@ -835,8 +841,9 @@ def push_commits(remote_name='origin', branch_name='checkupdates', verbose=False
 def prune_empty_appid_branches(git_repo=None, main_branch='main'):
     """Remove empty branches from checkupdates-bot git remote."""
     if git_repo is None:
-        git_repo, main_branch = get_git_repo_and_main_branch()
-    upstream_main = 'upstream/' + main_branch
+        git_repo = git.Repo.init('.')
+    upstream_main = get_upstream_main_branch(git_repo)
+    main_branch = upstream_main.split('/')[1]
 
     remote = git_repo.remotes.origin
     remote.update(prune=True)

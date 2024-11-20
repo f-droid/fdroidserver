@@ -453,20 +453,47 @@ class CheckupdatesTest(unittest.TestCase):
                 fdroidserver.checkupdates.main()
         sys_exit.assert_not_called()
 
-    def test_get_git_repo_and_main_branch(self):
+    def test_get_upstream_main_branch(self):
         os.chdir(self.testdir.name)
-        git_repo = git.Repo.init()
+        testvalue = 'foo'
+        git_repo = git.Repo.init('.', initial_branch=testvalue)
+
         open('foo', 'w').close()
         git_repo.git.add(all=True)
         git_repo.index.commit("all files")
+        git_repo.create_remote('upstream', os.getcwd()).fetch()
 
-        repo, branch = fdroidserver.checkupdates.get_git_repo_and_main_branch()
-        self.assertTrue(branch in repo.heads)
+        branch = fdroidserver.checkupdates.get_upstream_main_branch(git_repo)
+        self.assertEqual(
+            f'upstream/{testvalue}',
+            branch,
+            f'The default branch should be called {testvalue}!',
+        )
+
+    def test_get_upstream_main_branch_git_config(self):
+        os.chdir(self.testdir.name)
+        testvalue = 'foo'
+        git_repo = git.Repo.init('.', initial_branch=testvalue)
+        with git_repo.config_writer() as cw:
+            cw.set_value('init', 'defaultBranch', testvalue)
+
+        open('foo', 'w').close()
+        git_repo.git.add(all=True)
+        git_repo.index.commit("all files")
+        git_repo.git.branch('somethingelse')  # make another remote branch
+        git_repo.create_remote('upstream', os.getcwd()).fetch()
+
+        branch = fdroidserver.checkupdates.get_upstream_main_branch(git_repo)
+        self.assertEqual(
+            f'upstream/{testvalue}',
+            branch,
+            f'The default branch should be called {testvalue}!',
+        )
 
     def test_checkout_appid_branch_does_not_exist(self):
         appid = 'com.example'
         os.chdir(self.testdir.name)
-        git_repo, main_branch = fdroidserver.checkupdates.get_git_repo_and_main_branch()
+        git_repo = git.Repo.init('.')
         open('foo', 'w').close()
         git_repo.git.add(all=True)
         git_repo.index.commit("all files")
@@ -491,7 +518,7 @@ class CheckupdatesTest(unittest.TestCase):
         local_dir = os.path.join(self.testdir.name, 'local_git')
         git.Repo.clone_from(upstream_dir, local_dir)
         os.chdir(local_dir)
-        git_repo, main_branch = fdroidserver.checkupdates.get_git_repo_and_main_branch()
+        git_repo = git.Repo.init('.')
         # --merge-request assumes remotes called 'origin' and 'upstream'
         git_repo.create_remote('upstream', upstream_dir).fetch()
 
@@ -513,7 +540,7 @@ class CheckupdatesTest(unittest.TestCase):
         local_dir = os.path.join(self.testdir.name, 'local_git')
         git.Repo.clone_from(upstream_dir, local_dir)
         os.chdir(local_dir)
-        git_repo, main_branch = fdroidserver.checkupdates.get_git_repo_and_main_branch()
+        git_repo = git.Repo.init('.')
         # --merge-request assumes remotes called 'origin' and 'upstream'
         git_repo.create_remote('upstream', upstream_dir).fetch()
 
@@ -530,7 +557,8 @@ class CheckupdatesTest(unittest.TestCase):
 
         # set up starting from remote branch
         git_repo.remotes.origin.push(appid)
-        git_repo.git.checkout(main_branch)
+        upstream_main = fdroidserver.checkupdates.get_upstream_main_branch(git_repo)
+        git_repo.git.checkout(upstream_main.split('/')[1])
         git_repo.delete_head(appid, force=True)
 
         self.assertTrue(
@@ -552,7 +580,7 @@ class CheckupdatesTest(unittest.TestCase):
         local_dir = os.path.join(self.testdir.name, 'local_git')
         git.Repo.clone_from(upstream_dir, local_dir)
         os.chdir(local_dir)
-        git_repo, main_branch = fdroidserver.checkupdates.get_git_repo_and_main_branch()
+        git_repo = git.Repo.init('.')
         # --merge-request assumes remotes called 'origin' and 'upstream'
         git_repo.create_remote('upstream', upstream_dir).fetch()
 
@@ -577,7 +605,8 @@ class CheckupdatesTest(unittest.TestCase):
 
         # set up starting from remote branch
         git_repo.remotes.origin.push(appid)
-        git_repo.git.reset(main_branch)
+        upstream_main = fdroidserver.checkupdates.get_upstream_main_branch(git_repo)
+        git_repo.git.reset(upstream_main.split('/')[1])
 
         self.assertFalse(
             fdroidserver.checkupdates.checkout_appid_branch(appid),
