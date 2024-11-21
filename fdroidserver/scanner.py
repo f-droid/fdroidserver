@@ -2209,10 +2209,10 @@ SUSS_DEFAULT = r'''{
         "https://www.android.com/gms/"
       ],
       "gradle_signatures": [
+        "com.google.gms(?!.google-services)",
         "com.google.android.gms(?!.oss-licenses-plugin)",
         "com.google.android.ump",
         "androidx.core:core-google-shortcuts",
-        "androidx.credentials:credentials",
         "androidx.credentials:credentials-play-services-auth",
         "androidx.media3:media3-cast",
         "androidx.media3:media3-datasource-cronet",
@@ -2937,7 +2937,7 @@ SUSS_DEFAULT = r'''{
       "license": "NonFree"
     }
   },
-  "timestamp": 1725205987.66681,
+  "timestamp": 1728920062.92063,
   "version": 1,
-  "last_updated": 1725950235.569432
+  "last_updated": 1732198944.559238
 }'''
