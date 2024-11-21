@@ -47,6 +47,7 @@ include locale/zh_Hans/LC_MESSAGES/fdroidserver.po
 include locale/zh_Hant/LC_MESSAGES/fdroidserver.po
 include makebuildserver
 include README.md
+include tests/__init__.py
 include tests/aosp_testkey_debug.keystore
 include tests/apk.embedded_1.apk
 include tests/bad-unicode-*.apk
