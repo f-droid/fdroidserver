@@ -3,20 +3,21 @@
 # signz signotorez <signotorez@gmail.com>, 2020, 2021.
 # Reza Almanda <rezaalmanda27@gmail.com>, 2021.
 # whenwesober <naomi16i_1298q@cikuh.com>, 2021.
+# Doctorredits_here <alkaf.alkaf2018@tutamail.com>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 1.1-680-ge1d3de71\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2024-09-10 10:50+0200\n"
-"PO-Revision-Date: 2021-06-23 23:32+0000\n"
-"Last-Translator: whenwesober <naomi16i_1298q@cikuh.com>\n"
+"POT-Creation-Date: 2024-11-21 21:34+0100\n"
+"PO-Revision-Date: 2024-10-04 04:26+0000\n"
+"Last-Translator: Doctorredits_here <alkaf.alkaf2018@tutamail.com>\n"
 "Language-Team: Indonesian <https://hosted.weblate.org/projects/f-droid/fdroidserver/id/>\n"
 "Language: id\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.7.1-dev\n"
+"X-Generator: Weblate 5.8-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -98,7 +99,7 @@ msgstr "%(prog)s: galat: %(message)s\n"
 #: ../fdroidserver/publish.py
 #, python-format
 msgid "%d APKs failed to be signed or verified!"
-msgstr ""
+msgstr "%d APK gagal ditandatangani atau diverifikasi!"
 
 #: ../fdroidserver/scanner.py
 #, python-format
@@ -121,12 +122,12 @@ msgstr "%r tidak bisa dipanggil"
 #: ../fdroidserver/signindex.py
 #, python-format
 msgid "%s did not produce a dict!"
-msgstr ""
+msgstr "%s terdapat sebuah kesalahan!"
 
 #: ../fdroidserver/signindex.py
 #, python-format
 msgid "%s has bad SHA-256: %s"
-msgstr ""
+msgstr "%s checksum yg dihitung untuk file tersebut tidak cocok dengan yang diharapkan %s"
 
 #: ../fdroidserver/lint.py
 #, python-format
@@ -164,7 +165,7 @@ msgstr "'repo_keyalias' tidak ditemukan dalam config.yml!"
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #: /usr/lib/python3.11/argparse.py
 msgid "'required' is an invalid argument for positionals"
-msgstr ""
+msgstr "'diperlukan' adalah argumen yang tidak valid untuk posisi"
 
 #: ../fdroidserver/common.py
 msgid "'sdk_path' not set in config.yml!"
@@ -188,7 +189,7 @@ msgstr "'{path}' gagal dieksekusi!"
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "'{path}' has invalid format, it should be a dictionary!"
-msgstr ""
+msgstr "'{path}' memiliki format yang tidak valid, seharusnya kamus!"
 
 #: ../fdroidserver/metadata.py ../fdroidserver/lint.py
 #, python-brace-format
@@ -196,14 +197,18 @@ msgid "'{value}' is not a valid {field} in {appid}. Regex pattern: {pattern}"
 msgstr "'{value}' tidak valid pada {field} dalam {appid}. Pakem regex: {pattern}"
 
 #: ../fdroidserver/metadata.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "'{value}' is not a valid {field}, should be {pattern}"
-msgstr "'{value}' tidak valid pada {field} dalam {appid}. Pakem regex: {pattern}"
+msgstr "'{value}' bukan {field} yang valid, seharusnya {pattern}"
+
+#: ../fdroidserver/checkupdates.py
+msgid "--merge-request only runs on a single appid!"
+msgstr ""
 
 #: ../fdroidserver/checkupdates.py
 #, python-brace-format
 msgid "...checkupdate failed for {appid} : {error}"
-msgstr ""
+msgstr "...checkupdate gagal untuk {appid} : {error}"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
@@ -222,7 +227,7 @@ msgstr "URL diperlukan sebagai argumen!"
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "APK signatures have different certificates in {path}:"
-msgstr ""
+msgstr "Tanda tangan APK memiliki sertifikat berbeda di {path}:"
 
 #: ../fdroidserver/__main__.py
 msgid "Add PGP signatures using GnuPG for packages in repo"
@@ -234,7 +239,7 @@ msgstr "Tambahkan sebuah kunci penandatangan repo ke repo yang tidak ditandatang
 
 #: ../fdroidserver/update.py
 msgid "Add skeleton metadata files for APKs that are missing them"
-msgstr ""
+msgstr "Tambahkan file metadata kerangka untuk APK yang tidak memilikinya"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -243,67 +248,67 @@ msgstr "Menambahkan repo baru hanya untuk {name}"
 
 #: ../fdroidserver/init.py
 msgid "Alias of the repo signing key in the keystore"
-msgstr ""
+msgstr "Alias kunci penandatanganan repo di keystore"
 
 #: ../fdroidserver/build.py
 msgid "AllowedAPKSigningKeys missing but reference binary supplied"
-msgstr ""
+msgstr "AllowedAPKSigningKeys hilang tetapi biner referensi disediakan"
 
 #: ../fdroidserver/import_subcommand.py
 msgid "Allows a different revision (or git branch) to be specified for the initial import"
-msgstr ""
+msgstr "Mengizinkan revisi berbeda (atau cabang git) ditentukan untuk impor awal"
 
 #: ../fdroidserver/mirror.py
 msgid "Also mirror the full archive section"
-msgstr ""
+msgstr "Juga cerminkan bagian arsip lengkap"
 
 #: ../fdroidserver/lint.py
 msgid "Also warn about formatting issues, like rewritemeta -l"
-msgstr ""
+msgstr "Juga peringatkan tentang masalah pemformatan, seperti rewritemeta -l"
 
 #: ../fdroidserver/scanner.py
 msgid "Android AAR library"
-msgstr ""
+msgstr "Perpustakaan AAR Android"
 
 #: ../fdroidserver/scanner.py
 msgid "Android APK file"
-msgstr ""
+msgstr "Android APK file"
 
 #: ../fdroidserver/scanner.py
 msgid "Android DEX code"
-msgstr ""
+msgstr "format file Android DEX"
 
 #: ../fdroidserver/init.py
 #, python-brace-format
 msgid "Android SDK not found at {path}!"
-msgstr ""
+msgstr "Android SDK tidak ditemukan di {path}!"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Android SDK path '{path}' does not exist!"
-msgstr ""
+msgstr "Jalur Android SDK '{path}' tidak ada!"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Android SDK path '{path}' is not a directory!"
-msgstr ""
+msgstr "Jalur Android SDK '{path}' bukan direktori!"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Android SDK tool {cmd} not found!"
-msgstr ""
+msgstr "Alat Android SDK {cmd} tidak ditemukan!"
 
 #: ../fdroidserver/lint.py
 msgid "App has Binaries but does not have corresponding AllowedAPKSigningKeys to pin certificate."
-msgstr ""
+msgstr "Aplikasi memiliki Biner tetapi tidak memiliki AllowedAPKSigningKeys yang sesuai untuk menyematkan sertifikat."
 
 #: ../fdroidserver/lint.py
 msgid "App has NoSourceSince or ArchivePolicy \"0 versions\" but AutoUpdateMode or UpdateCheckMode are not None"
-msgstr ""
+msgstr "Aplikasi memiliki NoSource Since atau ArchivePolicy \"0 versi\" tetapi AutoUpdateMode atau UpdateCheckMode bukan Tidak Ada"
 
 #: ../fdroidserver/lint.py
 msgid "App has NoSourceSince or ArchivePolicy \"0 versions\" or 0 but AutoUpdateMode or UpdateCheckMode are not None"
-msgstr ""
+msgstr "Aplikasi memiliki NoSource Since atau ArchivePolicy \"0 versi\" atau 0 tetapi AutoUpdateMode atau UpdateCheckMode bukan Tidak Ada"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
@@ -325,6 +330,14 @@ msgstr ""
 
 #: ../fdroidserver/lint.py
 msgid "AutoUpdateMode with UpdateCheckMode: HTTP must have a pattern."
+msgstr ""
+
+#: ../fdroidserver/install.py
+msgid "Automatic no to all prompts."
+msgstr ""
+
+#: ../fdroidserver/install.py
+msgid "Automatic yes to all prompts."
 msgstr ""
 
 #: ../fdroidserver/index.py
@@ -418,6 +431,10 @@ msgstr ""
 msgid "Clean update - don't uses caches, reprocess all APKs"
 msgstr ""
 
+#: ../fdroidserver/common.py
+msgid "Color the log output"
+msgstr ""
+
 #: ../fdroidserver/import_subcommand.py
 msgid "Comma separated list of categories."
 msgstr ""
@@ -429,6 +446,10 @@ msgstr "Perintah '%s' tidak dikenal.\n"
 
 #: ../fdroidserver/checkupdates.py
 msgid "Commit changes"
+msgstr ""
+
+#: ../fdroidserver/checkupdates.py
+msgid "Commit changes, push, then make a merge request"
 msgstr ""
 
 #: ../fdroidserver/metadata.py
@@ -614,6 +635,10 @@ msgstr ""
 msgid "Don't use rsync checksums"
 msgstr ""
 
+#: ../fdroidserver/install.py
+msgid "Download F-Droid.apk using mirrors that leak less to the network"
+msgstr ""
+
 #: ../fdroidserver/__main__.py
 msgid "Download complete mirrors of small repos"
 msgstr ""
@@ -716,6 +741,10 @@ msgstr ""
 
 #: ../fdroidserver/__main__.py
 msgid "Extract signatures from APKs"
+msgstr ""
+
+#: ../fdroidserver/install.py
+msgid "F-Droid.apk could not be downloaded from any known source!"
 msgstr ""
 
 #: ../fdroidserver/update.py
@@ -1176,6 +1205,10 @@ msgstr ""
 msgid "No attached devices found"
 msgstr ""
 
+#: ../fdroidserver/install.py
+msgid "No devices found for `adb install`! Please plug one in."
+msgstr ""
+
 #: ../fdroidserver/index.py
 msgid "No fingerprint in URL."
 msgstr ""
@@ -1290,11 +1323,11 @@ msgid "Offline machine, skipping git mirror generation until `fdroid deploy`"
 msgstr ""
 
 #: ../fdroidserver/deploy.py
-msgid "One of the 'github_releases' config items is missing the 'projectUrl' value. skipping ..."
+msgid "One of the 'github_releases' config items is missing the 'packageNames' value. skipping ..."
 msgstr ""
 
 #: ../fdroidserver/deploy.py
-msgid "One of the 'github_releases' config items is missing the 'packageNames' value. skipping ..."
+msgid "One of the 'github_releases' config items is missing the 'projectUrl' value. skipping ..."
 msgstr ""
 
 #: ../fdroidserver/deploy.py
@@ -1377,6 +1410,11 @@ msgstr ""
 
 #: ../fdroidserver/nightly.py
 msgid "Print the secret variable to the terminal for easy copy/paste"
+msgstr ""
+
+#: ../fdroidserver/install.py
+#, python-brace-format
+msgid "Privacy mode was enabled based on your locale ({country_code})."
 msgstr ""
 
 #: ../fdroidserver/scanner.py
@@ -1499,6 +1537,11 @@ msgstr ""
 msgid "Restrict output to warnings and errors"
 msgstr ""
 
+#: ../fdroidserver/net.py
+#, python-format
+msgid "Retrying failed download: %s"
+msgstr ""
+
 #: ../fdroidserver/__main__.py
 msgid "Rewrite all the metadata files"
 msgstr "Tulis ulang semua berkas metadata"
@@ -1562,6 +1605,10 @@ msgstr ""
 msgid "Scanner found {} problem"
 msgid_plural "Scanner found {} problems"
 msgstr[0] ""
+
+#: ../fdroidserver/scanner.py
+msgid "Scanning APK for extra signing blocks."
+msgstr ""
 
 #: ../fdroidserver/scanner.py
 msgid "Scanning APK with dexdump for known non-free classes."
@@ -2010,6 +2057,11 @@ msgstr "Verifikasi integritas paket yang didownload"
 msgid "Verifying index signature:"
 msgstr ""
 
+#: ../fdroidserver/install.py
+#, python-brace-format
+msgid "Verifying package {path} with apksigner."
+msgstr ""
+
 #: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "VirusTotal API key cannot upload files larger than 32MB, use {url} to upload {path}."
@@ -2018,6 +2070,10 @@ msgstr ""
 #: ../fdroidserver/__main__.py
 msgid "Warn about possible metadata errors"
 msgstr "Peringatkan mengenai kemungkinan error pada metadata"
+
+#: ../fdroidserver/scanner.py
+msgid "WebAssembly binary file"
+msgstr ""
 
 #: ../fdroidserver/update.py
 msgid "When configured for signed indexes, create only unsigned indexes at this stage"
@@ -2031,6 +2087,14 @@ msgstr ""
 msgid "When signing or verifying fails, exit with an error code."
 msgstr ""
 
+#: ../fdroidserver/install.py
+msgid "Would you like to download and install F-Droid.apk via adb? (YES/no)"
+msgstr ""
+
+#: ../fdroidserver/install.py
+msgid "Would you like to download the app(s) from f-droid.org? (YES/no)"
+msgstr ""
+
 #: ../fdroidserver/init.py
 msgid "X.509 'Distinguished Name' used when generating keys"
 msgstr ""
@@ -2041,6 +2105,11 @@ msgstr ""
 
 #: ../fdroidserver/scanner.py
 msgid "ZIP file archive"
+msgstr ""
+
+#: ../fdroidserver/install.py
+#, python-brace-format
+msgid "adb reports {serial} is \"{status}\"!"
 msgstr ""
 
 #: ../fdroidserver/nightly.py
@@ -2606,6 +2675,10 @@ msgstr ""
 msgid "the following arguments are required: %s"
 msgstr "argumen berikut ini diperlukan: %s"
 
+#: ../fdroidserver/install.py
+msgid "true"
+msgstr ""
+
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #: /usr/lib/python3.11/argparse.py
@@ -2645,6 +2718,10 @@ msgstr ""
 
 #: ../fdroidserver/deploy.py
 msgid "virustotal.com is rate limiting, waiting to retry..."
+msgstr ""
+
+#: ../fdroidserver/install.py
+msgid "yes"
 msgstr ""
 
 #: ../fdroidserver/publish.py
@@ -2757,6 +2834,11 @@ msgstr ""
 #: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "{path} has been flagged by virustotal {count} times:"
+msgstr ""
+
+#: ../fdroidserver/install.py
+#, python-brace-format
+msgid "{path} has the wrong fingerprint ({fingerprint})!"
 msgstr ""
 
 #: ../fdroidserver/common.py
