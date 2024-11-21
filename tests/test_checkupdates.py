@@ -324,6 +324,9 @@ class CheckupdatesTest(unittest.TestCase):
         for f in (basedir / 'metadata').glob('*.yml'):
             shutil.copy(f, 'metadata')
         git_repo = git.Repo.init(testdir)
+        with git_repo.config_writer() as cw:
+            cw.set_value('user', 'name', 'Foo Bar')
+            cw.set_value('user', 'email', 'foo@bar.com')
         git_repo.git.add(all=True)
         git_repo.index.commit("all metadata files")
 
@@ -340,6 +343,40 @@ class CheckupdatesTest(unittest.TestCase):
         git_repo.create_remote('origin', 'file://' + git_remote_origin)
 
         return git_repo, origin_repo, upstream_repo
+
+    def test_get_changes_versus_ref(self):
+        def _make_commit_new_app(git_repo, metadata_file):
+            app = fdroidserver.metadata.App()
+            fdroidserver.metadata.write_metadata(metadata_file, app)
+            git_repo.git.add(metadata_file)
+            git_repo.git.commit(metadata_file, message=f'changed {metadata_file}')
+
+        git_repo, origin_repo, upstream_repo = self._get_test_git_repos()
+        for remote in git_repo.remotes:
+            remote.push(git_repo.active_branch)
+        appid = 'com.testvalue'
+        metadata_file = f'metadata/{appid}.yml'
+
+        # set up remote branch with change to app
+        git_repo.git.checkout('-b', appid)
+        _make_commit_new_app(git_repo, metadata_file)
+        git_repo.remotes.origin.push(appid)
+
+        # reset local branch and there should be differences
+        upstream_main = fdroidserver.checkupdates.get_upstream_main_branch(git_repo)
+        git_repo.git.reset(upstream_main)
+        self.assertTrue(
+            fdroidserver.checkupdates.get_changes_versus_ref(
+                git_repo, f'origin/{appid}', metadata_file
+            )
+        )
+        # make new commit that matches the previous, different commit, no diff
+        _make_commit_new_app(git_repo, metadata_file)
+        self.assertFalse(
+            fdroidserver.checkupdates.get_changes_versus_ref(
+                git_repo, f'origin/{appid}', metadata_file
+            )
+        )
 
     def test_push_commits(self):
         git_repo, origin_repo, upstream_repo = self._get_test_git_repos()
@@ -453,21 +490,173 @@ class CheckupdatesTest(unittest.TestCase):
                 fdroidserver.checkupdates.main()
         sys_exit.assert_not_called()
 
-    def test_get_git_repo_and_main_branch(self):
+    def test_get_upstream_main_branch(self):
         os.chdir(self.testdir.name)
-        git_repo = git.Repo.init()
+        testvalue = 'foo'
+        git_repo = git.Repo.init('.', initial_branch=testvalue)
+
         open('foo', 'w').close()
         git_repo.git.add(all=True)
         git_repo.index.commit("all files")
+        git_repo.create_remote('upstream', os.getcwd()).fetch()
 
-        repo, branch = fdroidserver.checkupdates.get_git_repo_and_main_branch()
-        self.assertTrue(branch in ('main', 'master'))
-        self.assertTrue(branch in repo.heads)
+        branch = fdroidserver.checkupdates.get_upstream_main_branch(git_repo)
+        self.assertEqual(
+            f'upstream/{testvalue}',
+            branch,
+            f'The default branch should be called {testvalue}!',
+        )
 
+    def test_get_upstream_main_branch_git_config(self):
+        os.chdir(self.testdir.name)
+        testvalue = 'foo'
+        git_repo = git.Repo.init('.', initial_branch=testvalue)
+        with git_repo.config_writer() as cw:
+            cw.set_value('init', 'defaultBranch', testvalue)
+
+        open('foo', 'w').close()
+        git_repo.git.add(all=True)
+        git_repo.index.commit("all files")
+        git_repo.git.branch('somethingelse')  # make another remote branch
+        git_repo.create_remote('upstream', os.getcwd()).fetch()
+
+        branch = fdroidserver.checkupdates.get_upstream_main_branch(git_repo)
+        self.assertEqual(
+            f'upstream/{testvalue}',
+            branch,
+            f'The default branch should be called {testvalue}!',
+        )
+
+    def test_checkout_appid_branch_does_not_exist(self):
+        appid = 'com.example'
+        os.chdir(self.testdir.name)
+        git_repo = git.Repo.init('.')
+        open('foo', 'w').close()
+        git_repo.git.add(all=True)
+        git_repo.index.commit("all files")
+        # --merge-request assumes remotes called 'origin' and 'upstream'
+        git_repo.create_remote('origin', os.getcwd()).fetch()
+        git_repo.create_remote('upstream', os.getcwd()).fetch()
+        self.assertNotIn(appid, git_repo.heads)
+        fdroidserver.checkupdates.checkout_appid_branch(appid)
+        self.assertIn(appid, git_repo.heads)
+
+    def test_checkout_appid_branch_exists(self):
+        appid = 'com.example'
+
+        upstream_dir = os.path.join(self.testdir.name, 'upstream_git')
+        os.mkdir(upstream_dir)
+        upstream_repo = git.Repo.init(upstream_dir)
+        (Path(upstream_dir) / 'README').write_text('README')
+        upstream_repo.git.add(all=True)
+        upstream_repo.index.commit("README")
+        upstream_repo.create_head(appid)
+
+        local_dir = os.path.join(self.testdir.name, 'local_git')
+        git.Repo.clone_from(upstream_dir, local_dir)
+        os.chdir(local_dir)
+        git_repo = git.Repo.init('.')
+        # --merge-request assumes remotes called 'origin' and 'upstream'
+        git_repo.create_remote('upstream', upstream_dir).fetch()
+
+        self.assertNotIn(appid, git_repo.heads)
+        fdroidserver.checkupdates.checkout_appid_branch(appid)
+        self.assertIn(appid, git_repo.heads)
+
+    def test_checkout_appid_branch_skip_bot_commit(self):
+        appid = 'com.example'
+
+        upstream_dir = os.path.join(self.testdir.name, 'upstream_git')
+        os.mkdir(upstream_dir)
+        upstream_repo = git.Repo.init(upstream_dir)
+        (Path(upstream_dir) / 'README').write_text('README')
+        upstream_repo.git.add(all=True)
+        upstream_repo.index.commit("README")
+        upstream_repo.create_head(appid)
+
+        local_dir = os.path.join(self.testdir.name, 'local_git')
+        git.Repo.clone_from(upstream_dir, local_dir)
+        os.chdir(local_dir)
+        git_repo = git.Repo.init('.')
+        # --merge-request assumes remotes called 'origin' and 'upstream'
+        git_repo.create_remote('upstream', upstream_dir).fetch()
+
+        os.mkdir('metadata')
+        git_repo.create_head(appid, f'origin/{appid}', force=True)
+        git_repo.git.checkout(appid)
+
+        # fake checkupdates-bot commit
+        Path(f'metadata/{appid}.yml').write_text('AutoName: Example\n')
+        with git_repo.config_writer() as cw:
+            cw.set_value('user', 'email', fdroidserver.checkupdates.BOT_EMAIL)
+        git_repo.git.add(all=True)
+        git_repo.index.commit("Example")
+
+        # set up starting from remote branch
+        git_repo.remotes.origin.push(appid)
+        upstream_main = fdroidserver.checkupdates.get_upstream_main_branch(git_repo)
+        git_repo.git.checkout(upstream_main.split('/')[1])
+        git_repo.delete_head(appid, force=True)
+
+        self.assertTrue(
+            fdroidserver.checkupdates.checkout_appid_branch(appid),
+            'This should have been true since there are only bot commits.',
+        )
+
+    def test_checkout_appid_branch_skip_human_edits(self):
+        appid = 'com.example'
+
+        upstream_dir = os.path.join(self.testdir.name, 'upstream_git')
+        os.mkdir(upstream_dir)
+        upstream_repo = git.Repo.init(upstream_dir)
+        (Path(upstream_dir) / 'README').write_text('README')
+        upstream_repo.git.add(all=True)
+        upstream_repo.index.commit("README")
+        upstream_repo.create_head(appid)
+
+        local_dir = os.path.join(self.testdir.name, 'local_git')
+        git.Repo.clone_from(upstream_dir, local_dir)
+        os.chdir(local_dir)
+        git_repo = git.Repo.init('.')
+        # --merge-request assumes remotes called 'origin' and 'upstream'
+        git_repo.create_remote('upstream', upstream_dir).fetch()
+
+        os.mkdir('metadata')
+        git_repo.create_head(appid, f'origin/{appid}', force=True)
+        git_repo.git.checkout(appid)
+
+        with git_repo.config_writer() as cw:
+            cw.set_value('user', 'email', fdroidserver.checkupdates.BOT_EMAIL)
+
+        # fake checkupdates-bot commit
+        Path(f'metadata/{appid}.yml').write_text('AutoName: Example\n')
+        git_repo.git.add(all=True)
+        git_repo.index.commit("Example")
+
+        # fake commit added on top by a human
+        Path(f'metadata/{appid}.yml').write_text('AutoName: Example\nName: Foo\n')
+        with git_repo.config_writer() as cw:
+            cw.set_value('user', 'email', 'human@bar.com')
+        git_repo.git.add(all=True)
+        git_repo.index.commit("Example")
+
+        # set up starting from remote branch
+        git_repo.remotes.origin.push(appid)
+        upstream_main = fdroidserver.checkupdates.get_upstream_main_branch(git_repo)
+        git_repo.git.reset(upstream_main.split('/')[1])
+
+        self.assertFalse(
+            fdroidserver.checkupdates.checkout_appid_branch(appid),
+            'This should have been false since there are human edits.',
+        )
+
+    @mock.patch('git.remote.Remote.push')
     @mock.patch('sys.exit')
     @mock.patch('fdroidserver.common.read_app_args')
     @mock.patch('fdroidserver.checkupdates.checkupdates_app')
-    def test_merge_requests_branch(self, checkupdates_app, read_app_args, sys_exit):
+    def test_merge_requests_branch(
+        self, checkupdates_app, read_app_args, sys_exit, push
+    ):
         def _sys_exit(return_code=0):
             self.assertEqual(return_code, 0)
 
@@ -499,5 +688,6 @@ class CheckupdatesTest(unittest.TestCase):
         self.assertNotIn(appid, git_repo.heads)
         with mock.patch('sys.argv', ['fdroid checkupdates', '--merge-request', appid]):
             fdroidserver.checkupdates.main()
+        push.assert_called_once()
         sys_exit.assert_called_once()
         self.assertIn(appid, git_repo.heads)

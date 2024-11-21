@@ -18,6 +18,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import configparser
 import git
 import os
 import re
@@ -39,6 +40,10 @@ from . import common
 from . import metadata
 from . import net
 from .exception import VCSException, NoSubmodulesException, FDroidException, MetaDataException
+
+
+# https://gitlab.com/fdroid/checkupdates-runner/-/blob/1861899262a62a4ed08fa24e5449c0368dfb7617/.gitlab-ci.yml#L36
+BOT_EMAIL = 'fdroidci@bubu1.eu'
 
 
 def check_http(app: metadata.App) -> tuple[Optional[str], Optional[int]]:
@@ -684,16 +689,72 @@ def get_last_build_from_app(app: metadata.App) -> metadata.Build:
         return metadata.Build()
 
 
-def get_git_repo_and_main_branch():
+def get_upstream_main_branch(git_repo):
+    if len(git_repo.remotes.upstream.refs) == 1:
+        return git_repo.remotes.upstream.refs[0].name
+    for name in ('main', 'master'):
+        if name in git_repo.remotes.upstream.refs:
+            return f'upstream/{name}'
+    try:
+        with git_repo.config_reader() as reader:
+            return 'upstream/%s' % reader.get_value('init', 'defaultBranch')
+    except configparser.NoSectionError:
+        return 'upstream/main'
+
+
+def checkout_appid_branch(appid):
+    """Prepare the working branch named after the appid.
+
+    This sets up everything for checkupdates_app() to run and add
+    commits.  If there is an existing branch named after the appid,
+    and it has commits from users other than the checkupdates-bot,
+    then this will return False.  Otherwise, it returns True.
+
+    The checkupdates-runner must set the committer email address in
+    the git config.  Then any commit with a committer or author that
+    does not match that will be considered to have human edits.  That
+    email address is currently set in:
+    https://gitlab.com/fdroid/checkupdates-runner/-/blob/1861899262a62a4ed08fa24e5449c0368dfb7617/.gitlab-ci.yml#L36
+
+    """
+    logging.debug(f'Creating merge request branch for {appid}')
     git_repo = git.Repo.init('.')
-    main_branch = 'main'
-    if main_branch not in git_repo.heads:
-        main_branch = 'master'
-    return git_repo, main_branch
+    upstream_main = get_upstream_main_branch(git_repo)
+    for remote in git_repo.remotes:
+        remote.fetch()
+    try:
+        git_repo.remotes.origin.fetch(f'{appid}:refs/remotes/origin/{appid}')
+    except Exception as e:
+        logging.warning('"%s" branch not found on origin remote:\n\t%s', appid, e)
+    if appid in git_repo.remotes.origin.refs:
+        start_point = f"origin/{appid}"
+        for commit in git_repo.iter_commits(
+            f'{upstream_main}...{start_point}', right_only=True
+        ):
+            if commit.committer.email != BOT_EMAIL or commit.author.email != BOT_EMAIL:
+                return False
+    else:
+        start_point = upstream_main
+    git_repo.git.checkout('-B', appid, start_point)
+    git_repo.git.rebase(upstream_main, strategy_option='ours', kill_after_timeout=120)
+    return True
 
 
-def push_commits(remote_name='origin', branch_name='checkupdates', verbose=False):
+def get_changes_versus_ref(git_repo, ref, f):
+    changes = []
+    for m in re.findall(
+        r"^[+-].*", git_repo.git.diff(f"{ref}", '--', f), flags=re.MULTILINE
+    ):
+        if not re.match(r"^(\+\+\+|---) ", m):
+            changes.append(m)
+    return changes
+
+
+def push_commits(branch_name='checkupdates', verbose=False):
     """Make git branch then push commits as merge request.
+
+    The appid is parsed from the actual file that was changed so that
+    only the right branch is ever updated.
 
     This uses the appid as the standard branch name so that there is
     only ever one open merge request per-app.  If multiple apps are
@@ -709,11 +770,10 @@ def push_commits(remote_name='origin', branch_name='checkupdates', verbose=False
     * https://docs.gitlab.com/ee/user/project/push_options.html
 
     """
-    git_repo, default = get_git_repo_and_main_branch()
+    git_repo = git.Repo.init('.')
+    upstream_main = get_upstream_main_branch(git_repo)
     files = set()
-    upstream_main = default if default in git_repo.remotes.upstream.refs else 'main'
-    local_main = default if default in git_repo.refs else 'main'
-    for commit in git_repo.iter_commits(f'upstream/{upstream_main}...{local_main}'):
+    for commit in git_repo.iter_commits(f'{upstream_main}...HEAD', right_only=True):
         files.update(commit.stats.files.keys())
 
     files = list(files)
@@ -723,6 +783,30 @@ def push_commits(remote_name='origin', branch_name='checkupdates', verbose=False
             branch_name = m.group(1)  # appid
     if not files:
         return
+
+    remote = git_repo.remotes.origin
+    if branch_name in remote.refs:
+        if not get_changes_versus_ref(git_repo, f'origin/{branch_name}', files[0]):
+            return
+
+    git_repo.create_head(branch_name, force=True)
+    push_options = [
+        'merge_request.create',
+        'merge_request.remove_source_branch',
+        'merge_request.title=bot: ' + git_repo.branches[branch_name].commit.summary,
+        'merge_request.description='
+        + '~%s checkupdates-bot run %s' % (branch_name, os.getenv('CI_JOB_URL')),
+    ]
+
+    # mark as draft if there are only changes to CurrentVersion:
+    current_version_only = True
+    for m in get_changes_versus_ref(git_repo, upstream_main, files[0]):
+        if not re.match(r"^[-+]CurrentVersion", m):
+            current_version_only = False
+            break
+    if current_version_only:
+        push_options.append('merge_request.draft')
+
     progress = None
     if verbose:
         import clint.textui
@@ -736,23 +820,12 @@ def push_commits(remote_name='origin', branch_name='checkupdates', verbose=False
 
         progress = MyProgressPrinter()
 
-    git_repo.create_head(branch_name, force=True)
-    remote = git_repo.remotes[remote_name]
-    pushinfos = remote.push(
-        branch_name, force=True, set_upstream=True, progress=progress
-    )
     pushinfos = remote.push(
         branch_name,
         progress=progress,
         force=True,
         set_upstream=True,
-        push_option=[
-            'merge_request.create',
-            'merge_request.remove_source_branch',
-            'merge_request.title=' + 'bot: checkupdates for ' + branch_name,
-            'merge_request.description='
-            + 'checkupdates-bot run %s' % os.getenv('CI_JOB_URL'),
-        ],
+        push_option=push_options,
     )
 
     for pushinfo in pushinfos:
@@ -777,8 +850,9 @@ def push_commits(remote_name='origin', branch_name='checkupdates', verbose=False
 def prune_empty_appid_branches(git_repo=None, main_branch='main'):
     """Remove empty branches from checkupdates-bot git remote."""
     if git_repo is None:
-        git_repo, main_branch = get_git_repo_and_main_branch()
-    upstream_main = 'upstream/' + main_branch
+        git_repo = git.Repo.init('.')
+    upstream_main = get_upstream_main_branch(git_repo)
+    main_branch = upstream_main.split('/')[1]
 
     remote = git_repo.remotes.origin
     remote.update(prune=True)
@@ -861,10 +935,14 @@ def main():
 
         try:
             if options.merge_request:
-                logging.info(f'Creating merge request branch for {appid}')
-                git_repo, main_branch = get_git_repo_and_main_branch()
-                git_repo.create_head(appid, f"upstream/{main_branch}", force=True)
-                git_repo.git.checkout(appid)
+                if not checkout_appid_branch(appid):
+                    msg = _("...checkupdate failed for {appid} : {error}").format(
+                        appid=appid,
+                        error='Open merge request with human edits, skipped.',
+                    )
+                    logging.warning(msg)
+                    failed[appid] = msg
+                    continue
 
             checkupdates_app(app, options.auto, options.commit or options.merge_request)
             processed.append(appid)
