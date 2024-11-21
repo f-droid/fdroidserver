@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 2.3a1-162-gfbb3cc59\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2024-09-10 10:50+0200\n"
+"POT-Creation-Date: 2024-11-21 21:34+0100\n"
 "PO-Revision-Date: 2024-09-13 23:36+0000\n"
 "Last-Translator: Aindriú Mac Giolla Eoin <aindriu80@gmail.com>\n"
 "Language-Team: Irish <https://hosted.weblate.org/projects/f-droid/fdroidserver/ga/>\n"
@@ -203,6 +203,10 @@ msgid "'{value}' is not a valid {field}, should be {pattern}"
 msgstr "Ní '{field} bailí é '{value}', ba chóir go mbeadh {pattern}"
 
 #: ../fdroidserver/checkupdates.py
+msgid "--merge-request only runs on a single appid!"
+msgstr ""
+
+#: ../fdroidserver/checkupdates.py
 #, python-brace-format
 msgid "...checkupdate failed for {appid} : {error}"
 msgstr "... theip ar checkupdate le haghaidh {appid} : {error}"
@@ -329,6 +333,14 @@ msgstr "Cartlannú {apkfilename} le síniú neamhbhailí!"
 msgid "AutoUpdateMode with UpdateCheckMode: HTTP must have a pattern."
 msgstr "AutoUpdateMode le UpdateCheckMode: Caithfidh patrún a bheith ag HTTP."
 
+#: ../fdroidserver/install.py
+msgid "Automatic no to all prompts."
+msgstr ""
+
+#: ../fdroidserver/install.py
+msgid "Automatic yes to all prompts."
+msgstr ""
+
 #: ../fdroidserver/index.py
 #, python-brace-format
 msgid "Bad entry type \"{mirrortype}\" in mirrors config: {mirror}"
@@ -424,6 +436,10 @@ msgstr "Ag seiceáil cartlannú le haghaidh {appid} - apks:{integer}, keepversio
 msgid "Clean update - don't uses caches, reprocess all APKs"
 msgstr "Nuashonrú glan - ná húsáid taisce, athphróiseáil gach APKs"
 
+#: ../fdroidserver/common.py
+msgid "Color the log output"
+msgstr ""
+
 #: ../fdroidserver/import_subcommand.py
 msgid "Comma separated list of categories."
 msgstr "Camóga scartha liosta de chatagóirí."
@@ -436,6 +452,10 @@ msgstr "Níor aithníodh ordú '%s'.\n"
 #: ../fdroidserver/checkupdates.py
 msgid "Commit changes"
 msgstr "Cuir athruithe i bhfeidhm"
+
+#: ../fdroidserver/checkupdates.py
+msgid "Commit changes, push, then make a merge request"
+msgstr ""
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
@@ -620,6 +640,10 @@ msgstr "Ná athnuaigh an stór, úsáideach agus tú ag tástáil tógála gan a
 msgid "Don't use rsync checksums"
 msgstr "Ná húsáid seiceálacha rsync"
 
+#: ../fdroidserver/install.py
+msgid "Download F-Droid.apk using mirrors that leak less to the network"
+msgstr ""
+
 #: ../fdroidserver/__main__.py
 msgid "Download complete mirrors of small repos"
 msgstr "Íoslódáil scátháin iomlána de repos beag"
@@ -727,6 +751,10 @@ msgstr "Bain meiteashonraí feidhmchláir as stór foinseach"
 #: ../fdroidserver/__main__.py
 msgid "Extract signatures from APKs"
 msgstr "Sleachta sínithe ó APKs"
+
+#: ../fdroidserver/install.py
+msgid "F-Droid.apk could not be downloaded from any known source!"
+msgstr ""
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -1186,6 +1214,10 @@ msgstr "Níor aimsíodh SDK Android!"
 msgid "No attached devices found"
 msgstr "Níor aimsíodh aon ghléas ceangailte"
 
+#: ../fdroidserver/install.py
+msgid "No devices found for `adb install`! Please plug one in."
+msgstr ""
+
 #: ../fdroidserver/index.py
 msgid "No fingerprint in URL."
 msgstr "Gan méarlorg in URL."
@@ -1300,12 +1332,12 @@ msgid "Offline machine, skipping git mirror generation until `fdroid deploy`"
 msgstr "Meaisín as líne, gan bacadh le giniúint scáthán git go dtí 'imscaradh fdroid'"
 
 #: ../fdroidserver/deploy.py
-msgid "One of the 'github_releases' config items is missing the 'projectUrl' value. skipping ..."
-msgstr "Tá luach 'projectUrl' in easnamh ar cheann de na míreanna cumraíochta 'github_releases'. gan bacadh ..."
-
-#: ../fdroidserver/deploy.py
 msgid "One of the 'github_releases' config items is missing the 'packageNames' value. skipping ..."
 msgstr "Tá luach 'packageNames' in easnamh ar cheann de na míreanna cumraíochta 'github_releases'. gan bacadh ..."
+
+#: ../fdroidserver/deploy.py
+msgid "One of the 'github_releases' config items is missing the 'projectUrl' value. skipping ..."
+msgstr "Tá luach 'projectUrl' in easnamh ar cheann de na míreanna cumraíochta 'github_releases'. gan bacadh ..."
 
 #: ../fdroidserver/deploy.py
 msgid "One of the 'github_releases' config items is missing the 'token' value. skipping ..."
@@ -1388,6 +1420,11 @@ msgstr "Conair chuig an siopa eochrach don eochair sínithe repo"
 #: ../fdroidserver/nightly.py
 msgid "Print the secret variable to the terminal for easy copy/paste"
 msgstr "Priontáil an athróg rúnda chuig an teirminéal le haghaidh cóip / greamaigh éasca"
+
+#: ../fdroidserver/install.py
+#, python-brace-format
+msgid "Privacy mode was enabled based on your locale ({country_code})."
+msgstr ""
 
 #: ../fdroidserver/scanner.py
 #, python-format
@@ -1509,6 +1546,11 @@ msgstr "Athraigh méid na ndeilbhíní go léir a sháraíonn an t-uasmhéid pic
 msgid "Restrict output to warnings and errors"
 msgstr "Cuir srian le haschur le rabhaidh agus earráidí"
 
+#: ../fdroidserver/net.py
+#, python-format
+msgid "Retrying failed download: %s"
+msgstr ""
+
 #: ../fdroidserver/__main__.py
 msgid "Rewrite all the metadata files"
 msgstr "Athscríobh na comhaid mheiteashonraí go léir"
@@ -1576,6 +1618,10 @@ msgstr[1] "Fuair an scanóir {} fadhbanna"
 msgstr[2] "Fuair an scanóir {} fadhbanna"
 msgstr[3] "Fuair an scanóir {} fadhbanna"
 msgstr[4] "Fuair an scanóir {} fadhbanna"
+
+#: ../fdroidserver/scanner.py
+msgid "Scanning APK for extra signing blocks."
+msgstr ""
 
 #: ../fdroidserver/scanner.py
 msgid "Scanning APK with dexdump for known non-free classes."
@@ -2031,6 +2077,11 @@ msgstr "Fíoraigh sláine na bpacáistí íoslódáilte"
 msgid "Verifying index signature:"
 msgstr "Síniú an innéacs á fhíorú:"
 
+#: ../fdroidserver/install.py
+#, python-brace-format
+msgid "Verifying package {path} with apksigner."
+msgstr ""
+
 #: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "VirusTotal API key cannot upload files larger than 32MB, use {url} to upload {path}."
@@ -2039,6 +2090,10 @@ msgstr "Ní féidir le heochair API VirusTotal comhaid níos mó ná 32MB a uasl
 #: ../fdroidserver/__main__.py
 msgid "Warn about possible metadata errors"
 msgstr "Tabhair rabhadh faoi earráidí meiteashonraí a d'fhéadfadh a bheith ann"
+
+#: ../fdroidserver/scanner.py
+msgid "WebAssembly binary file"
+msgstr ""
 
 #: ../fdroidserver/update.py
 msgid "When configured for signed indexes, create only unsigned indexes at this stage"
@@ -2052,6 +2107,14 @@ msgstr "Nuair a linting an yamllint stór ar fad faoi mhíchumas de réir réamh
 msgid "When signing or verifying fails, exit with an error code."
 msgstr "Nuair a theipeann ar shíniú nó ar fhíorú, scoir le cód earráide."
 
+#: ../fdroidserver/install.py
+msgid "Would you like to download and install F-Droid.apk via adb? (YES/no)"
+msgstr ""
+
+#: ../fdroidserver/install.py
+msgid "Would you like to download the app(s) from f-droid.org? (YES/no)"
+msgstr ""
+
 #: ../fdroidserver/init.py
 msgid "X.509 'Distinguished Name' used when generating keys"
 msgstr "X.509 'Ainm Oirirce' a úsáidtear agus eochracha á nginiúint"
@@ -2063,6 +2126,11 @@ msgstr "Is féidir leat ANDROID_HOME a úsáid chun an cosán a shocrú chuig do
 #: ../fdroidserver/scanner.py
 msgid "ZIP file archive"
 msgstr "Cartlann comhad ZIP"
+
+#: ../fdroidserver/install.py
+#, python-brace-format
+msgid "adb reports {serial} is \"{status}\"!"
+msgstr ""
 
 #: ../fdroidserver/nightly.py
 #, python-brace-format
@@ -2634,6 +2702,10 @@ msgstr "tá dénártha tagartha soláthraithe ceadaithe signer {signer}"
 msgid "the following arguments are required: %s"
 msgstr "Tá na hargóintí seo a leanas ag teastáil: %s"
 
+#: ../fdroidserver/install.py
+msgid "true"
+msgstr ""
+
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #: /usr/lib/python3.11/argparse.py
@@ -2674,6 +2746,10 @@ msgstr "ag baint úsáide as Apache libcloud chun sioncronú le {url}"
 #: ../fdroidserver/deploy.py
 msgid "virustotal.com is rate limiting, waiting to retry..."
 msgstr "Tá virustotal.com ag teorannú ráta, ag fanacht le triail a bhaint as ..."
+
+#: ../fdroidserver/install.py
+msgid "yes"
+msgstr ""
 
 #: ../fdroidserver/publish.py
 #, python-brace-format
@@ -2790,6 +2866,11 @@ msgstr "{path} Tá síniú comhad dona \"{pattern}\", is féidir Janus leas a bh
 #, python-brace-format
 msgid "{path} has been flagged by virustotal {count} times:"
 msgstr "{path} curtha faoi bhratach ag virustotal {count} times:"
+
+#: ../fdroidserver/install.py
+#, python-brace-format
+msgid "{path} has the wrong fingerprint ({fingerprint})!"
+msgstr ""
 
 #: ../fdroidserver/common.py
 #, python-brace-format

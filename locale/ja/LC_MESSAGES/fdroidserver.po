@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.8-224-g4b0ade7\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2024-09-10 10:50+0200\n"
+"POT-Creation-Date: 2024-11-21 21:34+0100\n"
 "PO-Revision-Date: 2024-09-26 13:16+0000\n"
 "Last-Translator: Suguru Hirahara <shirahara@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/f-droid/fdroidserver/ja/>\n"
@@ -200,6 +200,10 @@ msgid "'{value}' is not a valid {field}, should be {pattern}"
 msgstr "「{value}」は正しい{field}ではありません。{pattern}としてください"
 
 #: ../fdroidserver/checkupdates.py
+msgid "--merge-request only runs on a single appid!"
+msgstr ""
+
+#: ../fdroidserver/checkupdates.py
 #, python-brace-format
 msgid "...checkupdate failed for {appid} : {error}"
 msgstr "…{appid}についてcheckupdateを実行できませんでした：{error}"
@@ -326,6 +330,14 @@ msgstr "{apkfilename}のアーカイブの署名が正しくありません！"
 msgid "AutoUpdateMode with UpdateCheckMode: HTTP must have a pattern."
 msgstr "UpdateCheckModeが有効になっているAutoUpdateMode：HTTPにパターンを設定してください。"
 
+#: ../fdroidserver/install.py
+msgid "Automatic no to all prompts."
+msgstr ""
+
+#: ../fdroidserver/install.py
+msgid "Automatic yes to all prompts."
+msgstr ""
+
 #: ../fdroidserver/index.py
 #, python-brace-format
 msgid "Bad entry type \"{mirrortype}\" in mirrors config: {mirror}"
@@ -417,6 +429,10 @@ msgstr "{appid}のアーカイブをチェックしています - apks:{integer}
 msgid "Clean update - don't uses caches, reprocess all APKs"
 msgstr "クリーンアップデート - キャッシュを使用せず、全てのAPKの再処理を行います"
 
+#: ../fdroidserver/common.py
+msgid "Color the log output"
+msgstr ""
+
 #: ../fdroidserver/import_subcommand.py
 msgid "Comma separated list of categories."
 msgstr "コンマで区切られたカテゴリーの一覧。"
@@ -429,6 +445,10 @@ msgstr "コマンド '%s' は認識されません。\n"
 #: ../fdroidserver/checkupdates.py
 msgid "Commit changes"
 msgstr "変更をcommit"
+
+#: ../fdroidserver/checkupdates.py
+msgid "Commit changes, push, then make a merge request"
+msgstr ""
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
@@ -613,6 +633,10 @@ msgstr "リポジトリを更新しない。インターネットに接続して
 msgid "Don't use rsync checksums"
 msgstr "rsyncのチェックサムを使用しない"
 
+#: ../fdroidserver/install.py
+msgid "Download F-Droid.apk using mirrors that leak less to the network"
+msgstr ""
+
 #: ../fdroidserver/__main__.py
 msgid "Download complete mirrors of small repos"
 msgstr "小さいリポジトリのミラーを完全にダウンロード"
@@ -720,6 +744,10 @@ msgstr "ソースリポジトリからアプリケーションのメタデータ
 #: ../fdroidserver/__main__.py
 msgid "Extract signatures from APKs"
 msgstr "APKから署名を抽出"
+
+#: ../fdroidserver/install.py
+msgid "F-Droid.apk could not be downloaded from any known source!"
+msgstr ""
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -1179,6 +1207,10 @@ msgstr "AndroidのSDKが見つかりません！"
 msgid "No attached devices found"
 msgstr "接続している端末が見つかりません"
 
+#: ../fdroidserver/install.py
+msgid "No devices found for `adb install`! Please plug one in."
+msgstr ""
+
 #: ../fdroidserver/index.py
 msgid "No fingerprint in URL."
 msgstr "URLにフィンガープリントがありません。"
@@ -1293,12 +1325,12 @@ msgid "Offline machine, skipping git mirror generation until `fdroid deploy`"
 msgstr "オフラインのマシンです。`fdroid deploy` を実行するまでgitのミラーの生成はスキップします"
 
 #: ../fdroidserver/deploy.py
-msgid "One of the 'github_releases' config items is missing the 'projectUrl' value. skipping ..."
-msgstr "「github_releases」の設定項目の1つに「projectUrl」の値が設定されていません。スキップします…"
-
-#: ../fdroidserver/deploy.py
 msgid "One of the 'github_releases' config items is missing the 'packageNames' value. skipping ..."
 msgstr "「github_releases」の設定項目の1つに「packageNames」の値が設定されていません。スキップします…"
+
+#: ../fdroidserver/deploy.py
+msgid "One of the 'github_releases' config items is missing the 'projectUrl' value. skipping ..."
+msgstr "「github_releases」の設定項目の1つに「projectUrl」の値が設定されていません。スキップします…"
 
 #: ../fdroidserver/deploy.py
 msgid "One of the 'github_releases' config items is missing the 'token' value. skipping ..."
@@ -1381,6 +1413,11 @@ msgstr "リポジトリの署名鍵のキーストアへのパス"
 #: ../fdroidserver/nightly.py
 msgid "Print the secret variable to the terminal for easy copy/paste"
 msgstr "簡単にコピー、ペーストできるように秘密の変数をターミナルに出力"
+
+#: ../fdroidserver/install.py
+#, python-brace-format
+msgid "Privacy mode was enabled based on your locale ({country_code})."
+msgstr ""
 
 #: ../fdroidserver/scanner.py
 #, python-format
@@ -1502,6 +1539,11 @@ msgstr "最大のピクセルの大きさを超えている全てのアイコン
 msgid "Restrict output to warnings and errors"
 msgstr "警告とエラーのみを出力"
 
+#: ../fdroidserver/net.py
+#, python-format
+msgid "Retrying failed download: %s"
+msgstr ""
+
 #: ../fdroidserver/__main__.py
 msgid "Rewrite all the metadata files"
 msgstr "メタデータの全てのファイルを書き換える"
@@ -1565,6 +1607,10 @@ msgstr "スキャナーは{appid}：{versionCode}に{count}個の問題を発見
 msgid "Scanner found {} problem"
 msgid_plural "Scanner found {} problems"
 msgstr[0] "スキャナーは{}個の問題を発見しました"
+
+#: ../fdroidserver/scanner.py
+msgid "Scanning APK for extra signing blocks."
+msgstr ""
 
 #: ../fdroidserver/scanner.py
 msgid "Scanning APK with dexdump for known non-free classes."
@@ -2020,6 +2066,11 @@ msgstr "ダウンロードしたパッケージの一貫性を検証"
 msgid "Verifying index signature:"
 msgstr "インデックスの署名を検証："
 
+#: ../fdroidserver/install.py
+#, python-brace-format
+msgid "Verifying package {path} with apksigner."
+msgstr ""
+
 #: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "VirusTotal API key cannot upload files larger than 32MB, use {url} to upload {path}."
@@ -2028,6 +2079,10 @@ msgstr "VirusTotalのAPI鍵は32メガバイトより大きいファイルをア
 #: ../fdroidserver/__main__.py
 msgid "Warn about possible metadata errors"
 msgstr "潜在的なメタデータのエラーに関して警告"
+
+#: ../fdroidserver/scanner.py
+msgid "WebAssembly binary file"
+msgstr ""
 
 #: ../fdroidserver/update.py
 msgid "When configured for signed indexes, create only unsigned indexes at this stage"
@@ -2041,6 +2096,14 @@ msgstr "リポジトリ全体をチェックする際、yamllintは既定で無�
 msgid "When signing or verifying fails, exit with an error code."
 msgstr "署名または検証ができなかった場合、エラーコードを出力して終了します。"
 
+#: ../fdroidserver/install.py
+msgid "Would you like to download and install F-Droid.apk via adb? (YES/no)"
+msgstr ""
+
+#: ../fdroidserver/install.py
+msgid "Would you like to download the app(s) from f-droid.org? (YES/no)"
+msgstr ""
+
 #: ../fdroidserver/init.py
 msgid "X.509 'Distinguished Name' used when generating keys"
 msgstr "鍵の生成時に使用する X.509 'Distinguished Name'"
@@ -2052,6 +2115,11 @@ msgstr "以下のようにANDROID_HOMEでSDKへのパスを設定できます。
 #: ../fdroidserver/scanner.py
 msgid "ZIP file archive"
 msgstr "ZIPファイルアーカイブ"
+
+#: ../fdroidserver/install.py
+#, python-brace-format
+msgid "adb reports {serial} is \"{status}\"!"
+msgstr ""
 
 #: ../fdroidserver/nightly.py
 #, python-brace-format
@@ -2615,6 +2683,10 @@ msgstr "指定された参照バイナリーには許可された署名者 {sign
 msgid "the following arguments are required: %s"
 msgstr "次の引数が必要です：%s"
 
+#: ../fdroidserver/install.py
+msgid "true"
+msgstr ""
+
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #: /usr/lib/python3.11/argparse.py
@@ -2655,6 +2727,10 @@ msgstr "Apache libcloudを使って{url}と同期"
 #: ../fdroidserver/deploy.py
 msgid "virustotal.com is rate limiting, waiting to retry..."
 msgstr "virustotal.comはレート制限を行っています。再試行を待機しています…"
+
+#: ../fdroidserver/install.py
+msgid "yes"
+msgstr ""
 
 #: ../fdroidserver/publish.py
 #, python-brace-format
@@ -2767,6 +2843,11 @@ msgstr "{path}のファイル署名「{pattern}」は正しくありません。
 #, python-brace-format
 msgid "{path} has been flagged by virustotal {count} times:"
 msgstr "{path}はvirustotalにより{count}回マークされました。"
+
+#: ../fdroidserver/install.py
+#, python-brace-format
+msgid "{path} has the wrong fingerprint ({fingerprint})!"
+msgstr ""
 
 #: ../fdroidserver/common.py
 #, python-brace-format
