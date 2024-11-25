@@ -93,6 +93,8 @@ setup(
         'platformdirs',
         'androguard >= 3.3.5',
         'asn1crypto',
+        # TODO use biplist on all platforms once IPA support is stable
+        'biplist ; sys_platform=="darwin"',
         'clint',
         'defusedxml',
         'GitPython',
@@ -101,6 +103,7 @@ setup(
         'Pillow',
         'apache-libcloud >= 0.14.1',
         'puremagic',
+        'pycountry ; sys_platform=="darwin"',
         'python-vagrant',
         'PyYAML',
         'qrcode',

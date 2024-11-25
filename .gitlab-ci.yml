@@ -392,9 +392,6 @@ macOS:
     - /bin/bash --version
     - /bin/bash -n gradlew-fdroid tests/run-tests
 
-    # TODO remove the packages below once they are included in the Homebrew package
-    - $(brew --prefix fdroidserver)/libexec/bin/python3 -m pip install biplist oscrypto pycountry
-
     # test fdroidserver from git with current package's dependencies
     - fdroid="$(brew --prefix fdroidserver)/libexec/bin/python3 $PWD/fdroid" ./tests/run-tests
 
