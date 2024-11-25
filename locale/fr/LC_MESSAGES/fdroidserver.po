@@ -38,13 +38,14 @@
 # Christopher Forzy <christopher.forzy@ecomail.fr>, 2024.
 # Phantomwise <phantomwise67@protonmail.com>, 2024.
 # Sylvain Pichon <service@spichon.fr>, 2024.
+# Sylvain Pichon <Sp_@users.noreply.hosted.weblate.org>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2024-11-21 21:34+0100\n"
-"PO-Revision-Date: 2024-11-23 10:38+0000\n"
-"Last-Translator: Sylvain Pichon <service@spichon.fr>\n"
+"PO-Revision-Date: 2024-11-24 18:41+0000\n"
+"Last-Translator: Sylvain Pichon <Sp_@users.noreply.hosted.weblate.org>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/f-droid/fdroidserver/fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
@@ -469,7 +470,7 @@ msgstr "Mise à jour propre — n'utilise pas les caches, traite à nouveau tous
 
 #: ../fdroidserver/common.py
 msgid "Color the log output"
-msgstr ""
+msgstr "Colorer l'affichage des journaux"
 
 #: ../fdroidserver/import_subcommand.py
 msgid "Comma separated list of categories."
