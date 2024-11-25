@@ -16,7 +16,6 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import imghdr
 import itertools
 import json
 import logging
@@ -34,6 +33,11 @@ from enum import IntEnum
 from pathlib import Path
 from tempfile import TemporaryDirectory
 from typing import Union
+
+try:
+    import magic
+except ImportError:
+    import puremagic as magic
 
 if sys.version_info >= (3, 11):
     import tomllib
@@ -895,8 +899,12 @@ def scan_source(build_dir, build=metadata.Build(), json_per_build=None):
     ]
 
     def is_image_file(path):
-        if imghdr.what(path) is not None:
-            return True
+        try:
+            mimetype = magic.from_file(path, mime=True)
+            if mimetype and mimetype.startswith('image/'):
+                return True
+        except Exception as e:
+            logging.info(e)
 
     def safe_path(path_in_build_dir):
         for sp in safe_paths:
