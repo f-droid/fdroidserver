@@ -20,15 +20,15 @@ msgstr ""
 "Project-Id-Version: fdroidserver 1.0.0-95-gd7af22b\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2024-11-21 21:34+0100\n"
-"PO-Revision-Date: 2024-10-27 03:53+0000\n"
-"Last-Translator: Golubev Alexander <fatzer2@gmail.com>\n"
+"PO-Revision-Date: 2024-11-25 13:57+0000\n"
+"Last-Translator: gfbdrgng <hnaofegnp@hldrive.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/f-droid/fdroidserver/ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 5.8.2-dev\n"
+"X-Generator: Weblate 5.9-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -216,7 +216,7 @@ msgstr "'{value}' не является допустимым {field}, должн
 
 #: ../fdroidserver/checkupdates.py
 msgid "--merge-request only runs on a single appid!"
-msgstr ""
+msgstr "--merge-request работает только с одним appid!"
 
 #: ../fdroidserver/checkupdates.py
 #, python-brace-format
@@ -347,11 +347,11 @@ msgstr "AutoUpdateMode с UpdateCheckMode: HTTP должен иметь шабл
 
 #: ../fdroidserver/install.py
 msgid "Automatic no to all prompts."
-msgstr ""
+msgstr "Автоматическое \"нет\" на все запросы."
 
 #: ../fdroidserver/install.py
 msgid "Automatic yes to all prompts."
-msgstr ""
+msgstr "Автоматическое \"да\" на все запросы."
 
 #: ../fdroidserver/index.py
 #, python-brace-format
@@ -448,7 +448,7 @@ msgstr "Очистка с обновлением: не использовать 
 
 #: ../fdroidserver/common.py
 msgid "Color the log output"
-msgstr ""
+msgstr "Раскрасьте вывод журнала"
 
 #: ../fdroidserver/import_subcommand.py
 msgid "Comma separated list of categories."
@@ -465,7 +465,7 @@ msgstr "Сохранить изменения (commit)"
 
 #: ../fdroidserver/checkupdates.py
 msgid "Commit changes, push, then make a merge request"
-msgstr ""
+msgstr "Зафиксируйте изменения, вытолкните, затем сделайте запрос на слияние"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
@@ -652,7 +652,7 @@ msgstr "Не использовать контрольные суммы rsync"
 
 #: ../fdroidserver/install.py
 msgid "Download F-Droid.apk using mirrors that leak less to the network"
-msgstr ""
+msgstr "Загрузите F-Droid.apk с помощью зеркал, которые меньше просачиваются в сеть"
 
 #: ../fdroidserver/__main__.py
 msgid "Download complete mirrors of small repos"
@@ -764,7 +764,7 @@ msgstr "Извлечь подписи из APK файлов"
 
 #: ../fdroidserver/install.py
 msgid "F-Droid.apk could not be downloaded from any known source!"
-msgstr ""
+msgstr "F-Droid.apk не может быть загружен ни из одного известного источника!"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -1226,7 +1226,7 @@ msgstr "Подключенных устройств не найдено"
 
 #: ../fdroidserver/install.py
 msgid "No devices found for `adb install`! Please plug one in."
-msgstr ""
+msgstr "Для `adb install` не найдено ни одного устройства! Пожалуйста, подключите одно."
 
 #: ../fdroidserver/index.py
 msgid "No fingerprint in URL."
@@ -1434,7 +1434,7 @@ msgstr "Отобразить секретную переменную в терм
 #: ../fdroidserver/install.py
 #, python-brace-format
 msgid "Privacy mode was enabled based on your locale ({country_code})."
-msgstr ""
+msgstr "Режим конфиденциальности был включен в соответствии с вашей локалью ({country_code})."
 
 #: ../fdroidserver/scanner.py
 #, python-format
