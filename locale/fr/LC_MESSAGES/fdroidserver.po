@@ -37,13 +37,14 @@
 # Deleted User <noreply+22825@weblate.org>, 2023.
 # Christopher Forzy <christopher.forzy@ecomail.fr>, 2024.
 # Phantomwise <phantomwise67@protonmail.com>, 2024.
+# Sylvain Pichon <service@spichon.fr>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2024-11-21 21:34+0100\n"
-"PO-Revision-Date: 2024-11-19 13:04+0000\n"
-"Last-Translator: Phantomwise <phantomwise67@protonmail.com>\n"
+"PO-Revision-Date: 2024-11-23 10:38+0000\n"
+"Last-Translator: Sylvain Pichon <service@spichon.fr>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/f-droid/fdroidserver/fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
@@ -131,9 +132,9 @@ msgid "%(prog)s: error: %(message)s\n"
 msgstr "%(prog)s : erreur : %(message)s\n"
 
 #: ../fdroidserver/publish.py
-#, fuzzy, python-format
+#, python-format
 msgid "%d APKs failed to be signed or verified!"
-msgstr "%d APK n'ont pas pu être signés ou vérifiés !"
+msgstr "Les APK %d n'ont pas pu être signés ou vérifiés !"
 
 #: ../fdroidserver/scanner.py
 #, python-format
@@ -237,7 +238,7 @@ msgstr "'{value}' n'est pas un(e) {field} valide et devrait être {pattern}"
 
 #: ../fdroidserver/checkupdates.py
 msgid "--merge-request only runs on a single appid!"
-msgstr ""
+msgstr "--merge-request fonctionne seulement sur un unique appid !"
 
 #: ../fdroidserver/checkupdates.py
 #, python-brace-format
@@ -261,7 +262,7 @@ msgstr "Une URL est requise en argument !"
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "APK signatures have different certificates in {path}:"
-msgstr ""
+msgstr "Les signatures des APK ont des certificats différents dans {path} :"
 
 #: ../fdroidserver/__main__.py
 msgid "Add PGP signatures using GnuPG for packages in repo"
@@ -341,9 +342,8 @@ msgid "App has NoSourceSince or ArchivePolicy \"0 versions\" but AutoUpdateMode 
 msgstr "L'application a NoSourceSince ou ArchivePolicy « 0 version » mais AutoUpdateMode ou UpdateCheckMode ne valent pas None"
 
 #: ../fdroidserver/lint.py
-#, fuzzy
 msgid "App has NoSourceSince or ArchivePolicy \"0 versions\" or 0 but AutoUpdateMode or UpdateCheckMode are not None"
-msgstr "L'application a NoSourceSince ou ArchivePolicy « 0 version » mais AutoUpdateMode ou UpdateCheckMode ne valent pas None"
+msgstr "L'application a NoSourceSince ou ArchivePolicy à « 0 version » mais AutoUpdateMode ou UpdateCheckMode ne valent pas None"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
@@ -369,11 +369,11 @@ msgstr "AutoUpdateMode avec UpdateCheckMode : HTTP doit avoir un modèle."
 
 #: ../fdroidserver/install.py
 msgid "Automatic no to all prompts."
-msgstr ""
+msgstr "Répondre automatiquement Non à toutes les demandes."
 
 #: ../fdroidserver/install.py
 msgid "Automatic yes to all prompts."
-msgstr ""
+msgstr "Répondre automatiquement Oui à toutes les demandes."
 
 #: ../fdroidserver/index.py
 #, python-brace-format
@@ -486,7 +486,7 @@ msgstr "Sauvegarder les changements (commit)"
 
 #: ../fdroidserver/checkupdates.py
 msgid "Commit changes, push, then make a merge request"
-msgstr ""
+msgstr "Sauvegarder les changements, les pousser sur le dépôt et faire une demande d'intégration"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
