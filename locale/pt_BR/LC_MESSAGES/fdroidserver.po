@@ -12,20 +12,21 @@
 # lucasmz-dev <git@lucasmz.dev>, 2024.
 # Jose Delvani <delvani.eletricista@gmail.com>, 2024.
 # Jose Delvani <jsdelvani@users.noreply.hosted.weblate.org>, 2024.
+# LucasMZ <git@lucasmz.dev>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2024-11-21 21:34+0100\n"
-"PO-Revision-Date: 2024-09-10 13:17+0000\n"
-"Last-Translator: Jose Delvani <jsdelvani@users.noreply.hosted.weblate.org>\n"
+"PO-Revision-Date: 2024-11-23 10:38+0000\n"
+"Last-Translator: LucasMZ <git@lucasmz.dev>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/f-droid/fdroidserver/pt_BR/>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.8-dev\n"
+"X-Generator: Weblate 5.9-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -212,7 +213,7 @@ msgstr "'{value}' não é um {field} válido, deveria ser {pattern}"
 
 #: ../fdroidserver/checkupdates.py
 msgid "--merge-request only runs on a single appid!"
-msgstr ""
+msgstr "--merge-request roda somente com um único appid!"
 
 #: ../fdroidserver/checkupdates.py
 #, python-brace-format
@@ -343,11 +344,11 @@ msgstr "AutoUpdateMode com atualização CheckMode: HTTP deve ter um padrão."
 
 #: ../fdroidserver/install.py
 msgid "Automatic no to all prompts."
-msgstr ""
+msgstr "Não automático à todas as perguntas."
 
 #: ../fdroidserver/install.py
 msgid "Automatic yes to all prompts."
-msgstr ""
+msgstr "Sim automático à todas as perguntas."
 
 #: ../fdroidserver/index.py
 #, python-brace-format
@@ -443,7 +444,7 @@ msgstr "Atualização limpa - não utiliza o cache, reprocessa todos os APKs"
 
 #: ../fdroidserver/common.py
 msgid "Color the log output"
-msgstr ""
+msgstr "Colorir a saída de registros"
 
 #: ../fdroidserver/import_subcommand.py
 msgid "Comma separated list of categories."
@@ -460,7 +461,7 @@ msgstr "Enviar mudanças"
 
 #: ../fdroidserver/checkupdates.py
 msgid "Commit changes, push, then make a merge request"
-msgstr ""
+msgstr "Fazer commit das mudanças, push, e então faça uma merge request"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
