@@ -114,6 +114,7 @@ packages="
  gnupg
  mercurial
  patch
+ python3-magic
  python3-packaging
  rsync
  sdkmanager/bookworm-backports
