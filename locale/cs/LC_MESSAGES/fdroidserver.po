@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: fdroidserver 1.0.0-95-gd7af22b\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2024-11-21 21:34+0100\n"
-"PO-Revision-Date: 2024-09-22 23:34+0000\n"
+"PO-Revision-Date: 2024-11-23 18:58+0000\n"
 "Last-Translator: Fjuro <fjuro@alius.cz>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/f-droid/fdroidserver/cs/>\n"
 "Language: cs\n"
@@ -21,7 +21,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=((n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2);\n"
-"X-Generator: Weblate 5.8-dev\n"
+"X-Generator: Weblate 5.9-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -209,7 +209,7 @@ msgstr "„{value}“ není platný {field}, měl by to být {pattern}"
 
 #: ../fdroidserver/checkupdates.py
 msgid "--merge-request only runs on a single appid!"
-msgstr ""
+msgstr "--merge-request beží pouze u jednoho appid!"
 
 #: ../fdroidserver/checkupdates.py
 #, python-brace-format
@@ -340,11 +340,11 @@ msgstr "AutoUpdateMode s UpdateCheckMode: HTTP musí mít vzor."
 
 #: ../fdroidserver/install.py
 msgid "Automatic no to all prompts."
-msgstr ""
+msgstr "Automatické ne na všechny výzvy."
 
 #: ../fdroidserver/install.py
 msgid "Automatic yes to all prompts."
-msgstr ""
+msgstr "Automatické ano na všechny výzvy."
 
 #: ../fdroidserver/index.py
 #, python-brace-format
@@ -441,7 +441,7 @@ msgstr "Čistá aktualizace - nepoužívat mezipaměti, znovu zpracovat všechny
 
 #: ../fdroidserver/common.py
 msgid "Color the log output"
-msgstr ""
+msgstr "Obarvit výstup protokolu"
 
 #: ../fdroidserver/import_subcommand.py
 msgid "Comma separated list of categories."
@@ -458,7 +458,7 @@ msgstr "Odeslat změny"
 
 #: ../fdroidserver/checkupdates.py
 msgid "Commit changes, push, then make a merge request"
-msgstr ""
+msgstr "Commitněte změny, proveďte a push a poté vytvořte žádost o sloučení"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
@@ -645,7 +645,7 @@ msgstr "Nepoužívat kontrolní součty rsync"
 
 #: ../fdroidserver/install.py
 msgid "Download F-Droid.apk using mirrors that leak less to the network"
-msgstr ""
+msgstr "Stáhnout F-Droid.apk pomocí zrcadel, která do sítě vypouštějí méně informací"
 
 #: ../fdroidserver/__main__.py
 msgid "Download complete mirrors of small repos"
@@ -757,7 +757,7 @@ msgstr "Extrahovat podpisy ze souborů APK"
 
 #: ../fdroidserver/install.py
 msgid "F-Droid.apk could not be downloaded from any known source!"
-msgstr ""
+msgstr "F-Droid.apk se nepodařilo stáhnout z žádného známého zdroje!"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -1219,7 +1219,7 @@ msgstr "Nebyla nalezena žádná připojená zařízení"
 
 #: ../fdroidserver/install.py
 msgid "No devices found for `adb install`! Please plug one in."
-msgstr ""
+msgstr "Nenalezena žádná zařízení pro `adb install`! Zapojte prosím alespoň jedno."
 
 #: ../fdroidserver/index.py
 msgid "No fingerprint in URL."
@@ -1427,7 +1427,7 @@ msgstr "Zobrazit tajnou proměnnou v terminálu pro jednoduché kopírování/vl
 #: ../fdroidserver/install.py
 #, python-brace-format
 msgid "Privacy mode was enabled based on your locale ({country_code})."
-msgstr ""
+msgstr "Režim ochrany osobních údajů byl povolen na základě vaší lokality ({country_code})."
 
 #: ../fdroidserver/scanner.py
 #, python-format
@@ -1552,7 +1552,7 @@ msgstr "Omezit výstup na varování a chyby"
 #: ../fdroidserver/net.py
 #, python-format
 msgid "Retrying failed download: %s"
-msgstr ""
+msgstr "Opakování nezdařeného stahování: %s"
 
 #: ../fdroidserver/__main__.py
 msgid "Rewrite all the metadata files"
@@ -1622,7 +1622,7 @@ msgstr[2] "Skener našel {} problémů"
 
 #: ../fdroidserver/scanner.py
 msgid "Scanning APK for extra signing blocks."
-msgstr ""
+msgstr "Skenování APK na další podpisové bloky."
 
 #: ../fdroidserver/scanner.py
 msgid "Scanning APK with dexdump for known non-free classes."
@@ -2081,7 +2081,7 @@ msgstr "Ověřování podpisu indexu:"
 #: ../fdroidserver/install.py
 #, python-brace-format
 msgid "Verifying package {path} with apksigner."
-msgstr ""
+msgstr "Ověřování balíčku {path} pomocí apksigner."
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
@@ -2094,7 +2094,7 @@ msgstr "Varovat ohledně možných chyb metadat"
 
 #: ../fdroidserver/scanner.py
 msgid "WebAssembly binary file"
-msgstr ""
+msgstr "Binární soubor WebAssembly"
 
 #: ../fdroidserver/update.py
 msgid "When configured for signed indexes, create only unsigned indexes at this stage"
@@ -2110,11 +2110,11 @@ msgstr "Pokud podpis nebo ověření selže, ukončit proces s chybovým kódem.
 
 #: ../fdroidserver/install.py
 msgid "Would you like to download and install F-Droid.apk via adb? (YES/no)"
-msgstr ""
+msgstr "Chcete stáhnout a nainstalovat F-Droid.apk skrze adb? (ANO/ne)"
 
 #: ../fdroidserver/install.py
 msgid "Would you like to download the app(s) from f-droid.org? (YES/no)"
-msgstr ""
+msgstr "Chcete stáhnout aplikace z f-droid.org? (ANO/ne)"
 
 #: ../fdroidserver/init.py
 msgid "X.509 'Distinguished Name' used when generating keys"
@@ -2131,7 +2131,7 @@ msgstr "Archiv souborů ZIP"
 #: ../fdroidserver/install.py
 #, python-brace-format
 msgid "adb reports {serial} is \"{status}\"!"
-msgstr ""
+msgstr "adb hlásí, že {serial} je „{status}“!"
 
 #: ../fdroidserver/nightly.py
 #, python-brace-format
@@ -2701,7 +2701,7 @@ msgstr "jsou vyžadovány následující argumenty: %s"
 
 #: ../fdroidserver/install.py
 msgid "true"
-msgstr ""
+msgstr "pravda"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
@@ -2746,7 +2746,7 @@ msgstr "virustotal.com omezuje rychlost, čekám na opětovný pokus..."
 
 #: ../fdroidserver/install.py
 msgid "yes"
-msgstr ""
+msgstr "ano"
 
 #: ../fdroidserver/publish.py
 #, python-brace-format
@@ -2865,7 +2865,7 @@ msgstr "{path} byl označen službou VirusTotal {count}krát:"
 #: ../fdroidserver/install.py
 #, python-brace-format
 msgid "{path} has the wrong fingerprint ({fingerprint})!"
-msgstr ""
+msgstr "{path} má nesprávný otisk ({fingerprint})!"
 
 #: ../fdroidserver/common.py
 #, python-brace-format

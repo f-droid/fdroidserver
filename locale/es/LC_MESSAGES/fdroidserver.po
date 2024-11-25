@@ -18,7 +18,7 @@ msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2024-11-21 21:34+0100\n"
-"PO-Revision-Date: 2024-09-10 13:17+0000\n"
+"PO-Revision-Date: 2024-11-21 23:18+0000\n"
 "Last-Translator: gallegonovato <fran-carro@hotmail.es>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/f-droid/fdroidserver/es/>\n"
 "Language: es\n"
@@ -26,7 +26,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.8-dev\n"
+"X-Generator: Weblate 5.9-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -213,7 +213,7 @@ msgstr "'{value}' no es un {field} válido, debería ser {pattern}"
 
 #: ../fdroidserver/checkupdates.py
 msgid "--merge-request only runs on a single appid!"
-msgstr ""
+msgstr "¡--merge-request solo se ejecuta en un único ID de aplicación!"
 
 #: ../fdroidserver/checkupdates.py
 #, python-brace-format
@@ -344,11 +344,11 @@ msgstr "AutoUpdateMode con UpdateCheckMode: el HTTP debe tener un patrón."
 
 #: ../fdroidserver/install.py
 msgid "Automatic no to all prompts."
-msgstr ""
+msgstr "No automático a todos las solicitudes."
 
 #: ../fdroidserver/install.py
 msgid "Automatic yes to all prompts."
-msgstr ""
+msgstr "No automático a todos los avisos."
 
 #: ../fdroidserver/index.py
 #, python-brace-format
@@ -444,7 +444,7 @@ msgstr "Actualización limpia, no usa la caché, procesa todas las APKs"
 
 #: ../fdroidserver/common.py
 msgid "Color the log output"
-msgstr ""
+msgstr "Colorear el registro de salida"
 
 #: ../fdroidserver/import_subcommand.py
 msgid "Comma separated list of categories."
@@ -461,7 +461,7 @@ msgstr "Aplicar cambios"
 
 #: ../fdroidserver/checkupdates.py
 msgid "Commit changes, push, then make a merge request"
-msgstr ""
+msgstr "Confirmar los cambios, empujar, a continuación, hacer una solicitud de fusión"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
@@ -648,7 +648,7 @@ msgstr "No use rsync checksums"
 
 #: ../fdroidserver/install.py
 msgid "Download F-Droid.apk using mirrors that leak less to the network"
-msgstr ""
+msgstr "Descarga F-Droid.apk usando espejos que filtren menos a la red"
 
 #: ../fdroidserver/__main__.py
 msgid "Download complete mirrors of small repos"
@@ -760,7 +760,7 @@ msgstr "Extraer firmas de APKs"
 
 #: ../fdroidserver/install.py
 msgid "F-Droid.apk could not be downloaded from any known source!"
-msgstr ""
+msgstr "¡F-Droid.apk no pudo ser descargado de ninguna fuente conocida!"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -1222,7 +1222,7 @@ msgstr "No se han encontrado dispositivos asociados"
 
 #: ../fdroidserver/install.py
 msgid "No devices found for `adb install`! Please plug one in."
-msgstr ""
+msgstr "¡No se han encontrado dispositivos para `adb install`! Por favor, conecte uno."
 
 #: ../fdroidserver/index.py
 msgid "No fingerprint in URL."
@@ -1430,7 +1430,7 @@ msgstr "Mostrar la variable secreta en el terminal para copiar/pegar fácilmente
 #: ../fdroidserver/install.py
 #, python-brace-format
 msgid "Privacy mode was enabled based on your locale ({country_code})."
-msgstr ""
+msgstr "Se ha activado el modo de privacidad en función de su configuración regional ({country_code})."
 
 #: ../fdroidserver/scanner.py
 #, python-format
@@ -1555,7 +1555,7 @@ msgstr "Restringir los resultados a advertencias y errores"
 #: ../fdroidserver/net.py
 #, python-format
 msgid "Retrying failed download: %s"
-msgstr ""
+msgstr "Reintentando descarga fallida: %s"
 
 #: ../fdroidserver/__main__.py
 msgid "Rewrite all the metadata files"
@@ -1624,7 +1624,7 @@ msgstr[1] "El escáner encontró {} problemas"
 
 #: ../fdroidserver/scanner.py
 msgid "Scanning APK for extra signing blocks."
-msgstr ""
+msgstr "Escaneando el APK en busca de bloques de firma adicionales."
 
 #: ../fdroidserver/scanner.py
 msgid "Scanning APK with dexdump for known non-free classes."
@@ -2083,7 +2083,7 @@ msgstr "Verificar el índice de la firma:"
 #: ../fdroidserver/install.py
 #, python-brace-format
 msgid "Verifying package {path} with apksigner."
-msgstr ""
+msgstr "Verificando el paquete {path} con apksigner."
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
@@ -2096,7 +2096,7 @@ msgstr "Alertar sobre posibles errores de metadatos"
 
 #: ../fdroidserver/scanner.py
 msgid "WebAssembly binary file"
-msgstr ""
+msgstr "Archivo binario WebAssembly"
 
 #: ../fdroidserver/update.py
 msgid "When configured for signed indexes, create only unsigned indexes at this stage"
@@ -2112,11 +2112,11 @@ msgstr "Cuando falla la firma o la verificación, sale con un código de error."
 
 #: ../fdroidserver/install.py
 msgid "Would you like to download and install F-Droid.apk via adb? (YES/no)"
-msgstr ""
+msgstr "¿Desea descargar e instalar F-Droid.apk mediante adb? (SÍ/no)"
 
 #: ../fdroidserver/install.py
 msgid "Would you like to download the app(s) from f-droid.org? (YES/no)"
-msgstr ""
+msgstr "¿Desea descargar la(s) aplicación(es) de f-droid.org? (SÍ/no)"
 
 #: ../fdroidserver/init.py
 msgid "X.509 'Distinguished Name' used when generating keys"
@@ -2133,7 +2133,7 @@ msgstr "Archivo de ficheros ZIP"
 #: ../fdroidserver/install.py
 #, python-brace-format
 msgid "adb reports {serial} is \"{status}\"!"
-msgstr ""
+msgstr "¡adb informa que {serial} es \"{status}\"!"
 
 #: ../fdroidserver/nightly.py
 #, python-brace-format
@@ -2701,7 +2701,7 @@ msgstr "se requieren los siguientes argumentos: %s"
 
 #: ../fdroidserver/install.py
 msgid "true"
-msgstr ""
+msgstr "verdadero"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
@@ -2746,7 +2746,7 @@ msgstr "virustotal.com está limitando el consumo, esperando para reintentar..."
 
 #: ../fdroidserver/install.py
 msgid "yes"
-msgstr ""
+msgstr "sí"
 
 #: ../fdroidserver/publish.py
 #, python-brace-format
@@ -2864,7 +2864,7 @@ msgstr "{path} ha sido marcado por virustotal {count} veces:"
 #: ../fdroidserver/install.py
 #, python-brace-format
 msgid "{path} has the wrong fingerprint ({fingerprint})!"
-msgstr ""
+msgstr "¡{path} tiene la huella incorrecta ({fingerprint})!"
 
 #: ../fdroidserver/common.py
 #, python-brace-format

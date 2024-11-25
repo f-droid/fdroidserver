@@ -40,15 +40,15 @@ msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2024-11-21 21:34+0100\n"
-"PO-Revision-Date: 2024-11-08 17:42+0000\n"
-"Last-Translator: linsui <linsui@inbox.lv>\n"
+"PO-Revision-Date: 2024-11-24 18:41+0000\n"
+"Last-Translator: 大王叫我来巡山 <hamburger2048@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/projects/f-droid/fdroidserver/zh_Hans/>\n"
 "Language: zh_Hans\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.8.2\n"
+"X-Generator: Weblate 5.9-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -234,7 +234,7 @@ msgstr "'{value}' 不是有效 {field}，应为 {pattern}"
 
 #: ../fdroidserver/checkupdates.py
 msgid "--merge-request only runs on a single appid!"
-msgstr ""
+msgstr "--merge-request 只运行在单个 appid 上！"
 
 #: ../fdroidserver/checkupdates.py
 #, python-brace-format
@@ -365,11 +365,11 @@ msgstr "AutoUpdateMode 和 UpdateCheckMode：HTTP 必须有一个模式。"
 
 #: ../fdroidserver/install.py
 msgid "Automatic no to all prompts."
-msgstr ""
+msgstr "对所有提示自动回复 no。"
 
 #: ../fdroidserver/install.py
 msgid "Automatic yes to all prompts."
-msgstr ""
+msgstr "对所有提示自动回复 yes。"
 
 #: ../fdroidserver/index.py
 #, python-brace-format
@@ -464,7 +464,7 @@ msgstr "干净的更新 - 不使用缓存，重新处理全部 APK 文件"
 
 #: ../fdroidserver/common.py
 msgid "Color the log output"
-msgstr ""
+msgstr "给日志输出添加颜色"
 
 #: ../fdroidserver/import_subcommand.py
 msgid "Comma separated list of categories."
@@ -481,7 +481,7 @@ msgstr "提交更改"
 
 #: ../fdroidserver/checkupdates.py
 msgid "Commit changes, push, then make a merge request"
-msgstr ""
+msgstr "提交改动、推动，然后提出合并请求"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
@@ -668,7 +668,7 @@ msgstr "请勿使用 rsync 校验和"
 
 #: ../fdroidserver/install.py
 msgid "Download F-Droid.apk using mirrors that leak less to the network"
-msgstr ""
+msgstr "使用向网络泄露较少信息的镜像下载 F-Droid apk"
 
 #: ../fdroidserver/__main__.py
 msgid "Download complete mirrors of small repos"
@@ -780,7 +780,7 @@ msgstr "从 APK 中提取签名"
 
 #: ../fdroidserver/install.py
 msgid "F-Droid.apk could not be downloaded from any known source!"
-msgstr ""
+msgstr "无法从任何已知的来源下载 F-Droid apk！"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -1242,7 +1242,7 @@ msgstr "未找到连接的设备"
 
 #: ../fdroidserver/install.py
 msgid "No devices found for `adb install`! Please plug one in."
-msgstr ""
+msgstr "没有找到 `adb install` 设备！请插入一台设备。"
 
 #: ../fdroidserver/index.py
 msgid "No fingerprint in URL."
@@ -1450,7 +1450,7 @@ msgstr "将秘密变量打印到终端以便于复制/粘贴"
 #: ../fdroidserver/install.py
 #, python-brace-format
 msgid "Privacy mode was enabled based on your locale ({country_code})."
-msgstr ""
+msgstr "根据你的语言环境（{country_code}）启用了隐私模式。"
 
 #: ../fdroidserver/scanner.py
 #, python-format
@@ -1575,7 +1575,7 @@ msgstr "仅输出警告和出错信息"
 #: ../fdroidserver/net.py
 #, python-format
 msgid "Retrying failed download: %s"
-msgstr ""
+msgstr "正在重试失败的下载：%s"
 
 #: ../fdroidserver/__main__.py
 msgid "Rewrite all the metadata files"
@@ -1643,7 +1643,7 @@ msgstr[0] "扫描仪发现 {} 个问题"
 
 #: ../fdroidserver/scanner.py
 msgid "Scanning APK for extra signing blocks."
-msgstr ""
+msgstr "正在扫描 APK 是否有额外的签名块。"
 
 #: ../fdroidserver/scanner.py
 msgid "Scanning APK with dexdump for known non-free classes."
@@ -2102,7 +2102,7 @@ msgstr "验证目录签名中："
 #: ../fdroidserver/install.py
 #, python-brace-format
 msgid "Verifying package {path} with apksigner."
-msgstr ""
+msgstr "使用 apksigner 验证包 {path}。"
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
@@ -2115,7 +2115,7 @@ msgstr "警告元数据中可能存在的错误"
 
 #: ../fdroidserver/scanner.py
 msgid "WebAssembly binary file"
-msgstr ""
+msgstr "WebAssembly 二进制文件"
 
 #: ../fdroidserver/update.py
 msgid "When configured for signed indexes, create only unsigned indexes at this stage"
@@ -2131,11 +2131,11 @@ msgstr "签名或验证失败时，退出并显示错误代码。"
 
 #: ../fdroidserver/install.py
 msgid "Would you like to download and install F-Droid.apk via adb? (YES/no)"
-msgstr ""
+msgstr "你要通过 adb 下载并安装 F-Droid apk 吗？(YES/no)"
 
 #: ../fdroidserver/install.py
 msgid "Would you like to download the app(s) from f-droid.org? (YES/no)"
-msgstr ""
+msgstr "你要从 f-droid 下载应用吗？(YES/no)"
 
 #: ../fdroidserver/init.py
 msgid "X.509 'Distinguished Name' used when generating keys"
@@ -2152,7 +2152,7 @@ msgstr "ZIP 压缩包"
 #: ../fdroidserver/install.py
 #, python-brace-format
 msgid "adb reports {serial} is \"{status}\"!"
-msgstr ""
+msgstr "adb 报告 {serial} 为 \"{status}\"状态！"
 
 #: ../fdroidserver/nightly.py
 #, python-brace-format
@@ -2718,7 +2718,7 @@ msgstr "需要此下参数：%s"
 
 #: ../fdroidserver/install.py
 msgid "true"
-msgstr ""
+msgstr "true"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
@@ -2763,7 +2763,7 @@ msgstr "virustotal.com正在限制速率，等待重试..."
 
 #: ../fdroidserver/install.py
 msgid "yes"
-msgstr ""
+msgstr "yes"
 
 #: ../fdroidserver/publish.py
 #, python-brace-format
@@ -2880,7 +2880,7 @@ msgstr "{path}被virustotal标记了{count}次："
 #: ../fdroidserver/install.py
 #, python-brace-format
 msgid "{path} has the wrong fingerprint ({fingerprint})!"
-msgstr ""
+msgstr "{path} 有错误的指纹 ({fingerprint})！"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
