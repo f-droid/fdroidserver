@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: fdroidserver 2.3a1-162-gfbb3cc59\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2024-11-21 21:34+0100\n"
-"PO-Revision-Date: 2024-09-13 23:36+0000\n"
+"PO-Revision-Date: 2024-11-22 21:03+0000\n"
 "Last-Translator: Aindriú Mac Giolla Eoin <aindriu80@gmail.com>\n"
 "Language-Team: Irish <https://hosted.weblate.org/projects/f-droid/fdroidserver/ga/>\n"
 "Language: ga\n"
@@ -14,7 +14,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=5; plural=n==1 ? 0 : n==2 ? 1 : (n>2 && n<7) ? 2 :(n>6 && n<11) ? 3 : 4;\n"
-"X-Generator: Weblate 5.8-dev\n"
+"X-Generator: Weblate 5.9-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -204,7 +204,7 @@ msgstr "Ní '{field} bailí é '{value}', ba chóir go mbeadh {pattern}"
 
 #: ../fdroidserver/checkupdates.py
 msgid "--merge-request only runs on a single appid!"
-msgstr ""
+msgstr "Ní ritheann --merge-request ach ar aip amháin!"
 
 #: ../fdroidserver/checkupdates.py
 #, python-brace-format
@@ -335,11 +335,11 @@ msgstr "AutoUpdateMode le UpdateCheckMode: Caithfidh patrún a bheith ag HTTP."
 
 #: ../fdroidserver/install.py
 msgid "Automatic no to all prompts."
-msgstr ""
+msgstr "Uimh uathoibríoch do gach leideanna."
 
 #: ../fdroidserver/install.py
 msgid "Automatic yes to all prompts."
-msgstr ""
+msgstr "Tá go huathoibríoch le gach leideanna."
 
 #: ../fdroidserver/index.py
 #, python-brace-format
@@ -438,7 +438,7 @@ msgstr "Nuashonrú glan - ná húsáid taisce, athphróiseáil gach APKs"
 
 #: ../fdroidserver/common.py
 msgid "Color the log output"
-msgstr ""
+msgstr "Dathaigh an t-aschur loga"
 
 #: ../fdroidserver/import_subcommand.py
 msgid "Comma separated list of categories."
@@ -455,7 +455,7 @@ msgstr "Cuir athruithe i bhfeidhm"
 
 #: ../fdroidserver/checkupdates.py
 msgid "Commit changes, push, then make a merge request"
-msgstr ""
+msgstr "Déan athruithe, brúigh, ansin déan iarratas cumaisc"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
@@ -642,7 +642,7 @@ msgstr "Ná húsáid seiceálacha rsync"
 
 #: ../fdroidserver/install.py
 msgid "Download F-Droid.apk using mirrors that leak less to the network"
-msgstr ""
+msgstr "Íoslódáil F-Droid.apk ag baint úsáide as scátháin a sceitheann níos lú don líonra"
 
 #: ../fdroidserver/__main__.py
 msgid "Download complete mirrors of small repos"
@@ -754,7 +754,7 @@ msgstr "Sleachta sínithe ó APKs"
 
 #: ../fdroidserver/install.py
 msgid "F-Droid.apk could not be downloaded from any known source!"
-msgstr ""
+msgstr "Níorbh fhéidir F-Droid.apk a íoslódáil ó fhoinse aitheanta ar bith!"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -1216,7 +1216,7 @@ msgstr "Níor aimsíodh aon ghléas ceangailte"
 
 #: ../fdroidserver/install.py
 msgid "No devices found for `adb install`! Please plug one in."
-msgstr ""
+msgstr "Níor aimsíodh aon ghléas le haghaidh `adb install`! Cuir ceann isteach le do thoil."
 
 #: ../fdroidserver/index.py
 msgid "No fingerprint in URL."
@@ -1424,7 +1424,7 @@ msgstr "Priontáil an athróg rúnda chuig an teirminéal le haghaidh cóip / gr
 #: ../fdroidserver/install.py
 #, python-brace-format
 msgid "Privacy mode was enabled based on your locale ({country_code})."
-msgstr ""
+msgstr "Cumasaíodh mód príobháideachta bunaithe ar do logán ({country_code})."
 
 #: ../fdroidserver/scanner.py
 #, python-format
@@ -1549,7 +1549,7 @@ msgstr "Cuir srian le haschur le rabhaidh agus earráidí"
 #: ../fdroidserver/net.py
 #, python-format
 msgid "Retrying failed download: %s"
-msgstr ""
+msgstr "Theip ar íosluchtú arís: %s"
 
 #: ../fdroidserver/__main__.py
 msgid "Rewrite all the metadata files"
@@ -1621,7 +1621,7 @@ msgstr[4] "Fuair an scanóir {} fadhbanna"
 
 #: ../fdroidserver/scanner.py
 msgid "Scanning APK for extra signing blocks."
-msgstr ""
+msgstr "Scanadh APK le haghaidh bloic sínithe breise."
 
 #: ../fdroidserver/scanner.py
 msgid "Scanning APK with dexdump for known non-free classes."
@@ -2080,7 +2080,7 @@ msgstr "Síniú an innéacs á fhíorú:"
 #: ../fdroidserver/install.py
 #, python-brace-format
 msgid "Verifying package {path} with apksigner."
-msgstr ""
+msgstr "Pacáiste {path} á fhíorú le apksigner."
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
@@ -2093,7 +2093,7 @@ msgstr "Tabhair rabhadh faoi earráidí meiteashonraí a d'fhéadfadh a bheith a
 
 #: ../fdroidserver/scanner.py
 msgid "WebAssembly binary file"
-msgstr ""
+msgstr "Comhad dénártha WebAssembly"
 
 #: ../fdroidserver/update.py
 msgid "When configured for signed indexes, create only unsigned indexes at this stage"
@@ -2109,11 +2109,11 @@ msgstr "Nuair a theipeann ar shíniú nó ar fhíorú, scoir le cód earráide."
 
 #: ../fdroidserver/install.py
 msgid "Would you like to download and install F-Droid.apk via adb? (YES/no)"
-msgstr ""
+msgstr "Ar mhaith leat F-Droid.apk a íoslódáil agus a shuiteáil trí adb? (TÁ/Níl)"
 
 #: ../fdroidserver/install.py
 msgid "Would you like to download the app(s) from f-droid.org? (YES/no)"
-msgstr ""
+msgstr "Ar mhaith leat na haipeanna/na haipeanna a íoslódáil ó f-droid.org? (TÁ/Níl)"
 
 #: ../fdroidserver/init.py
 msgid "X.509 'Distinguished Name' used when generating keys"
@@ -2130,7 +2130,7 @@ msgstr "Cartlann comhad ZIP"
 #: ../fdroidserver/install.py
 #, python-brace-format
 msgid "adb reports {serial} is \"{status}\"!"
-msgstr ""
+msgstr "tuarascálacha adb {serial} is \"{status}\"!"
 
 #: ../fdroidserver/nightly.py
 #, python-brace-format
@@ -2704,7 +2704,7 @@ msgstr "Tá na hargóintí seo a leanas ag teastáil: %s"
 
 #: ../fdroidserver/install.py
 msgid "true"
-msgstr ""
+msgstr "fíor"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
@@ -2749,7 +2749,7 @@ msgstr "Tá virustotal.com ag teorannú ráta, ag fanacht le triail a bhaint as 
 
 #: ../fdroidserver/install.py
 msgid "yes"
-msgstr ""
+msgstr "tá"
 
 #: ../fdroidserver/publish.py
 #, python-brace-format
@@ -2870,7 +2870,7 @@ msgstr "{path} curtha faoi bhratach ag virustotal {count} times:"
 #: ../fdroidserver/install.py
 #, python-brace-format
 msgid "{path} has the wrong fingerprint ({fingerprint})!"
-msgstr ""
+msgstr "Tá an méarloirg mícheart ag {path} ({fingerprint})!"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
