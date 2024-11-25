@@ -12,8 +12,79 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 
 ### Removed
 
+## [2.3.1] - 2024-11-25
+
+### Fixed
+
+* Sync all translations for: cs de es fr ga pt_BR ru sq zh_Hans.
+* Drop use of deprecated imghdr library to support Python 3.13.
+* Install biplist and pycountry by default on macOS.
+* Fixed running test suite out of dist tarball.
+
+## [2.3.0] - 2024-11-21
+
+### Added
+
+* YAML 1.2 as native format for all _.yml_ files, including metadata and config.
+* install: will now fetch _F-Droid.apk_ and install it via `adb`.
+  https://gitlab.com/fdroid/fdroidserver/-/merge_requests/1546
+* scanner: scan APK Signing Block for known block types like Google Play
+  Signature aka "Frosting".
+  https://gitlab.com/fdroid/fdroidserver/-/merge_requests/1555
+* Support Rclone for deploying to many different cloud services.
+* deploy: support deploying to GitHub Releases.
+  https://gitlab.com/fdroid/fdroidserver/-/merge_requests/1471
+* scanner: support libs.versions.toml
+  https://gitlab.com/fdroid/fdroidserver/-/merge_requests/1526
+* Consider subdir for triple-t metadata discovery in Flutter apps.
+  https://gitlab.com/fdroid/fdroidserver/-/merge_requests/1541
+* deploy: added `index_only:` mode for mirroring the index to small hosting
+  locations. https://gitlab.com/fdroid/fdroidserver/-/merge_requests/1420
+* Support publishing repos in AltStore format.
+  https://gitlab.com/fdroid/fdroidserver/-/merge_requests/1465
+* Support indexing iOS IPA app files.
+  https://gitlab.com/fdroid/fdroidserver/-/merge_requests/1413
+* deploy: _config/mirrors.yml_ file with support for adding per-mirror metadata,
+  like `countryCode:`.
+* Repo's categories are now set in the config files.
+* lint: check syntax of config files.
+* publish: ``--error-on-failed` to exit when signing/verifying fails.
+* scanner: `--refresh` and `refresh_config:` to control triggering a refresh of
+  the rule sets.
+* Terminal output colorization and `--color` argument to control it.
+* New languages: Catalan (ca), Irish (ga), Japanese (ja), Serbian (sr), and
+  Swahili (sw).
+* Support donation links from `community_bridge`, `buy_me_a_coffee`.
+
+### Fixed
+
+* Use last modified time and file size for caching data about scanned APKs
+  instead of SHA-256 checksum.
+  https://gitlab.com/fdroid/fdroidserver/-/merge_requests/1542
+* `repo_web_base_url:` config for generating per-app URLs for viewing in
+  browsers.  https://gitlab.com/fdroid/fdroidserver/-/merge_requests/1178
+* `fdroid scanner` flags WebAssembly binary _.wasm_ files.
+  https://gitlab.com/fdroid/fdroidserver/-/merge_requests/1562
+* Test suite as standard Python `unittest` setup (thanks @ghost.adh).
+* scanner: error on dependency files without lock file.
+  https://gitlab.com/fdroid/fdroidserver/-/merge_requests/1504
+* nightly: finding APKs in the wrong directory. (thanks @WrenIX)
+  https://gitlab.com/fdroid/fdroidserver/-/merge_requests/1512
+* `AllowedAPKSigningKeys` works with all single-signer APK signatures.
+  https://gitlab.com/fdroid/fdroidserver/-/merge_requests/1466
+* Sync all translations for: cs de it ko pl pt pt_BR pt_PT ro ru sq tr uk
+  zh_Hans zh_Hant.
+* Support Androguard 4.x.
+* Support Python 3.12.
+
+### Removed
+
+* Drop all uses of _stats/known_apks.txt_ and the `update_stats:` config key.
+  https://gitlab.com/fdroid/fdroidserver/-/merge_requests/1547
 * The `maven:` field is now always a string, with `yes` as a legacy special
   value.  It is no longer treated like a boolean in any case.
+* scanner: jcenter is no longer an allowed Maven repo.
+* build: `--reset-server` removed (thanks @gotmi1k).
 
 ## [2.2.2] - 2024-04-24
 
