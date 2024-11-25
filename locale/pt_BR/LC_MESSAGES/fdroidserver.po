@@ -13,13 +13,14 @@
 # Jose Delvani <delvani.eletricista@gmail.com>, 2024.
 # Jose Delvani <jsdelvani@users.noreply.hosted.weblate.org>, 2024.
 # LucasMZ <git@lucasmz.dev>, 2024.
+# dedakir923 <dedakir923@exoular.com>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2024-11-21 21:34+0100\n"
-"PO-Revision-Date: 2024-11-23 10:38+0000\n"
-"Last-Translator: LucasMZ <git@lucasmz.dev>\n"
+"PO-Revision-Date: 2024-11-25 13:28+0000\n"
+"Last-Translator: dedakir923 <dedakir923@exoular.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/f-droid/fdroidserver/pt_BR/>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
@@ -648,7 +649,7 @@ msgstr "Não usar as somas de verificação (checksums) do rsync"
 
 #: ../fdroidserver/install.py
 msgid "Download F-Droid.apk using mirrors that leak less to the network"
-msgstr ""
+msgstr "Faça o download do F-Droid.apk usando mirrors (sites espelhos) que vazam menos privacidade na rede"
 
 #: ../fdroidserver/__main__.py
 msgid "Download complete mirrors of small repos"
@@ -760,7 +761,7 @@ msgstr "Extrair assinaturas de APKs"
 
 #: ../fdroidserver/install.py
 msgid "F-Droid.apk could not be downloaded from any known source!"
-msgstr ""
+msgstr "F-Droid.apk não pode ser baixado de nenhuma fonte conhecida!"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -1222,7 +1223,7 @@ msgstr "Nenhum dispositivo conectado encontrado"
 
 #: ../fdroidserver/install.py
 msgid "No devices found for `adb install`! Please plug one in."
-msgstr ""
+msgstr "Nenhum dispositivo foi encontrado usando o comando `adb install`! Por favor, conecte um."
 
 #: ../fdroidserver/index.py
 msgid "No fingerprint in URL."
@@ -1430,7 +1431,7 @@ msgstr "Imprima a variável secreta no terminal para facilitar a cópia/colagem"
 #: ../fdroidserver/install.py
 #, python-brace-format
 msgid "Privacy mode was enabled based on your locale ({country_code})."
-msgstr ""
+msgstr "O modo de privacidade foi ativado com base em sua localidade ({country_code})."
 
 #: ../fdroidserver/scanner.py
 #, python-format
@@ -1555,7 +1556,7 @@ msgstr "Restringir a saída a erros e avisos"
 #: ../fdroidserver/net.py
 #, python-format
 msgid "Retrying failed download: %s"
-msgstr ""
+msgstr "Nova tentativa de download com falha: %s"
 
 #: ../fdroidserver/__main__.py
 msgid "Rewrite all the metadata files"
@@ -1624,7 +1625,7 @@ msgstr[1] "O Scanner encontrou {} problemas"
 
 #: ../fdroidserver/scanner.py
 msgid "Scanning APK for extra signing blocks."
-msgstr ""
+msgstr "Verificando o APK em busca de blocos de assinatura adicionais."
 
 #: ../fdroidserver/scanner.py
 msgid "Scanning APK with dexdump for known non-free classes."
@@ -2083,7 +2084,7 @@ msgstr "Verificar o índice de assinatura:"
 #: ../fdroidserver/install.py
 #, python-brace-format
 msgid "Verifying package {path} with apksigner."
-msgstr ""
+msgstr "Verificando o pacote {path} com apksigner."
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
@@ -2096,7 +2097,7 @@ msgstr "Avisa sobre possíveis erros de metadados"
 
 #: ../fdroidserver/scanner.py
 msgid "WebAssembly binary file"
-msgstr ""
+msgstr "Arquivo binário WebAssembly"
 
 #: ../fdroidserver/update.py
 msgid "When configured for signed indexes, create only unsigned indexes at this stage"
@@ -2112,11 +2113,11 @@ msgstr "Ao assinar ou verificar falhar, um código de erro será lançado."
 
 #: ../fdroidserver/install.py
 msgid "Would you like to download and install F-Droid.apk via adb? (YES/no)"
-msgstr ""
+msgstr "Gostaria de baixar e instalar F-Droid.apk via adb? (SIM/NÃO)"
 
 #: ../fdroidserver/install.py
 msgid "Would you like to download the app(s) from f-droid.org? (YES/no)"
-msgstr ""
+msgstr "Gostaria de baixar aplicativo(s) de f-droid.org? (SIM/NÃO)"
 
 #: ../fdroidserver/init.py
 msgid "X.509 'Distinguished Name' used when generating keys"
@@ -2133,7 +2134,7 @@ msgstr "Arquivo ZIP"
 #: ../fdroidserver/install.py
 #, python-brace-format
 msgid "adb reports {serial} is \"{status}\"!"
-msgstr ""
+msgstr "O adb informa que {serial} é \"{status}\"!"
 
 #: ../fdroidserver/nightly.py
 #, python-brace-format
@@ -2701,7 +2702,7 @@ msgstr "os seguintes argumentos são necessários: %s"
 
 #: ../fdroidserver/install.py
 msgid "true"
-msgstr ""
+msgstr "verdadeiro"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
@@ -2746,7 +2747,7 @@ msgstr "o virustotal.com está limitando a taxa, esperando para tentar novamente
 
 #: ../fdroidserver/install.py
 msgid "yes"
-msgstr ""
+msgstr "sim"
 
 #: ../fdroidserver/publish.py
 #, python-brace-format
@@ -2864,7 +2865,7 @@ msgstr "{path} foi sinalizado pelo virustotal {count} vezes:"
 #: ../fdroidserver/install.py
 #, python-brace-format
 msgid "{path} has the wrong fingerprint ({fingerprint})!"
-msgstr ""
+msgstr "{path} tem a impressão digital errada ({fingerprint})!"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
