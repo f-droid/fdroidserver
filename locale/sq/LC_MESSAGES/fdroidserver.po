@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fdroidserver 1.0.6-349-g907c04ea\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2024-11-21 21:34+0100\n"
-"PO-Revision-Date: 2024-09-12 00:02+0000\n"
+"PO-Revision-Date: 2024-11-22 05:58+0000\n"
 "Last-Translator: Besnik Bleta <besnik@programeshqip.org>\n"
 "Language-Team: Albanian <https://hosted.weblate.org/projects/f-droid/fdroidserver/sq/>\n"
 "Language: sq\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.8-dev\n"
+"X-Generator: Weblate 5.9-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -202,7 +202,7 @@ msgstr "'{value}' s’është një {field} e vlefshme, duhet të jetë {pattern}
 
 #: ../fdroidserver/checkupdates.py
 msgid "--merge-request only runs on a single appid!"
-msgstr ""
+msgstr "--merge-request xhiron vetëm me një appid!"
 
 #: ../fdroidserver/checkupdates.py
 #, python-brace-format
@@ -251,7 +251,7 @@ msgstr "Alias i kyçit të nënshkrimeve të depos te depo kyçesh"
 
 #: ../fdroidserver/build.py
 msgid "AllowedAPKSigningKeys missing but reference binary supplied"
-msgstr ""
+msgstr "Mungon AllowedAPKSigningKeys, por u dha dyor reference"
 
 #: ../fdroidserver/import_subcommand.py
 msgid "Allows a different revision (or git branch) to be specified for the initial import"
@@ -333,11 +333,11 @@ msgstr "AutoUpdateMode me UpdateCheckMode: HTTP duhet të ketë një rregullsi."
 
 #: ../fdroidserver/install.py
 msgid "Automatic no to all prompts."
-msgstr ""
+msgstr "“Jo” e automatizuar për krejt hapat."
 
 #: ../fdroidserver/install.py
 msgid "Automatic yes to all prompts."
-msgstr ""
+msgstr "“Po” e automatizuar për krejt hapat."
 
 #: ../fdroidserver/index.py
 #, python-brace-format
@@ -433,7 +433,7 @@ msgstr "Përditësim nha e para - mos përdor fshehtina, ripërpuno krejt APK-t�
 
 #: ../fdroidserver/common.py
 msgid "Color the log output"
-msgstr ""
+msgstr "Ngjyros ç’jep regjistri"
 
 #: ../fdroidserver/import_subcommand.py
 msgid "Comma separated list of categories."
@@ -450,7 +450,7 @@ msgstr "Depozito ndryshimet"
 
 #: ../fdroidserver/checkupdates.py
 msgid "Commit changes, push, then make a merge request"
-msgstr ""
+msgstr "Parashtro ndryshimet, depozitoji, mandej bëj një kërkesë për përzierje"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
@@ -637,7 +637,7 @@ msgstr "Mos përdorni checksum-e rsync-u"
 
 #: ../fdroidserver/install.py
 msgid "Download F-Droid.apk using mirrors that leak less to the network"
-msgstr ""
+msgstr "Shkarkojeni F-Droid.apk duke përdorur pasqyra që kanë më pak rrjedhje te rrjeti"
 
 #: ../fdroidserver/__main__.py
 msgid "Download complete mirrors of small repos"
@@ -749,7 +749,7 @@ msgstr "Përfto nënshkrime prej APK-sh"
 
 #: ../fdroidserver/install.py
 msgid "F-Droid.apk could not be downloaded from any known source!"
-msgstr ""
+msgstr "F-Droid.apk s’u shkarkua dot nga ndonjë burim i njohur!"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -1211,7 +1211,7 @@ msgstr "S’u gjetën pajisje të bashkëngjitura"
 
 #: ../fdroidserver/install.py
 msgid "No devices found for `adb install`! Please plug one in."
-msgstr ""
+msgstr "S’u gjetën pajisje për `adb install`! Ju lutemi, vendosni një të tillë."
 
 #: ../fdroidserver/index.py
 msgid "No fingerprint in URL."
@@ -1419,7 +1419,7 @@ msgstr "Shtype ndryshoren e fshehtë te terminali, për kopjim/ngjitje të kolla
 #: ../fdroidserver/install.py
 #, python-brace-format
 msgid "Privacy mode was enabled based on your locale ({country_code})."
-msgstr ""
+msgstr "Mënyra “Privatësi” qe aktivizuar bazuar në vendoren tuaj ({country_code})."
 
 #: ../fdroidserver/scanner.py
 #, python-format
@@ -1544,7 +1544,7 @@ msgstr "Kufizoje output-in në sinjalizime dhe gabime"
 #: ../fdroidserver/net.py
 #, python-format
 msgid "Retrying failed download: %s"
-msgstr ""
+msgstr "Po riprovohet shkarkim i dështuar: %s"
 
 #: ../fdroidserver/__main__.py
 msgid "Rewrite all the metadata files"
@@ -1562,7 +1562,7 @@ msgstr "Xhirojeni në depo git që ka ndryshime të padepozituara te dega vendor
 #: ../fdroidserver/nightly.py
 #, python-brace-format
 msgid "Run over {cibase} to find -debug.apk. and skip repo_basedir {repo_basedir}"
-msgstr ""
+msgstr "Kalo nëpër {cibase} për të gjetur -debug.apk. dhe anashkalo repo_basedir {repo_basedir}"
 
 #: ../fdroidserver/lint.py
 msgid "Run rewritemeta to fix formatting"
@@ -1613,7 +1613,7 @@ msgstr[1] "Kontrolli gjeti {} probleme"
 
 #: ../fdroidserver/scanner.py
 msgid "Scanning APK for extra signing blocks."
-msgstr ""
+msgstr "Po kontrollohet te APK për blloqe ekstra nënshkrimi."
 
 #: ../fdroidserver/scanner.py
 msgid "Scanning APK with dexdump for known non-free classes."
@@ -2073,7 +2073,7 @@ msgstr "Po verifikohet nënshkrim treguesi:"
 #: ../fdroidserver/install.py
 #, python-brace-format
 msgid "Verifying package {path} with apksigner."
-msgstr ""
+msgstr "Po verifikohet paketë {path} me apksigner."
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
@@ -2086,7 +2086,7 @@ msgstr "Sinjalizo rreth gabimesh të mundshëm tejtëdhënash"
 
 #: ../fdroidserver/scanner.py
 msgid "WebAssembly binary file"
-msgstr ""
+msgstr "Kartelë dyore WebAssembly"
 
 #: ../fdroidserver/update.py
 msgid "When configured for signed indexes, create only unsigned indexes at this stage"
@@ -2102,11 +2102,11 @@ msgstr "Kur nënshkrimi, ose verifikimi dështon, dil me një kod gabimi."
 
 #: ../fdroidserver/install.py
 msgid "Would you like to download and install F-Droid.apk via adb? (YES/no)"
-msgstr ""
+msgstr "Doni të shkarkohet dhe instalohet F-Droid.apk përmes adb-je? (PO/jo)"
 
 #: ../fdroidserver/install.py
 msgid "Would you like to download the app(s) from f-droid.org? (YES/no)"
-msgstr ""
+msgstr "Doni të shkarkohet aplikacioni(et) që nga f-droid.org? (PO/jo)"
 
 #: ../fdroidserver/init.py
 msgid "X.509 'Distinguished Name' used when generating keys"
@@ -2123,7 +2123,7 @@ msgstr "Arkiv kartelash ZIP"
 #: ../fdroidserver/install.py
 #, python-brace-format
 msgid "adb reports {serial} is \"{status}\"!"
-msgstr ""
+msgstr "adb-ja njofton se {serial} është “{status}”!"
 
 #: ../fdroidserver/nightly.py
 #, python-brace-format
@@ -2590,7 +2590,7 @@ msgstr ""
 
 #: ../fdroidserver/build.py
 msgid "reference binary missing signature"
-msgstr ""
+msgstr "dyorit të refrencës i mungon nënshkrimi"
 
 #: ../fdroidserver/signatures.py
 #, python-brace-format
@@ -2736,7 +2736,7 @@ msgstr "virustotal.com i kufizon shpejtësitë, po pritet për riprovim…"
 
 #: ../fdroidserver/install.py
 msgid "yes"
-msgstr ""
+msgstr "po"
 
 #: ../fdroidserver/publish.py
 #, python-brace-format
@@ -2854,7 +2854,7 @@ msgstr "për {path} ka {count} herë sinjalizime nga virustotal:"
 #: ../fdroidserver/install.py
 #, python-brace-format
 msgid "{path} has the wrong fingerprint ({fingerprint})!"
-msgstr ""
+msgstr "{path} ka shenja gishtash të gabuara ({fingerprint})!"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
