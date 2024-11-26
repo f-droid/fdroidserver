@@ -80,7 +80,6 @@ def download_apk(appid='org.fdroid.fdroid', privacy_mode=False):
             # prefer APK in default release channel
             preferred_version = version
             break
-        print('skipping', version)
 
     mirrors = common.append_filename_to_mirrors(
         preferred_version['file']['name'][1:], common.FDROIDORG_MIRRORS
@@ -116,7 +115,8 @@ def download_fdroid_apk_from_github(privacy_mode=False):
         token = None
     gh = github.GithubApi(token, 'https://github.com/f-droid/fdroidclient')
     latest_apk = gh.get_latest_apk()
-    return net.download_file(latest_apk)
+    filename = os.path.basename(latest_apk)
+    return net.download_file(latest_apk, os.path.join(common.get_cachedir(), filename))
 
 
 def download_fdroid_apk_from_ipns(privacy_mode=False):
@@ -137,10 +137,11 @@ def download_fdroid_apk_from_maven(privacy_mode=False):
         mirrors = MAVEN_CENTRAL_MIRRORS[:2]  # skip the Google servers
     else:
         mirrors = MAVEN_CENTRAL_MIRRORS
-    mirrors = common.append_filename_to_mirrors(
-        os.path.join(path, 'maven-metadata.xml'), mirrors
+    metadata = net.download_using_mirrors(
+        common.append_filename_to_mirrors(
+            os.path.join(path, 'maven-metadata.xml'), mirrors
+        )
     )
-    metadata = net.download_using_mirrors(mirrors)
     version = XMLElementTree.parse(metadata).getroot().findall('*.//latest')[0].text
     mirrors = common.append_filename_to_mirrors(
         os.path.join(path, version, f'F-Droid-{version}.apk'), mirrors

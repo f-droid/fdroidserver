@@ -2976,7 +2976,7 @@ def FDroidPopenBytes(commands, cwd=None, envs=None, output=True, stderr_to_stdou
     while not stdout_reader.eof():
         while not stdout_queue.empty():
             line = stdout_queue.get()
-            if output and options.verbose:
+            if output and options and options.verbose:
                 # Output directly to console
                 sys.stderr.buffer.write(line)
                 sys.stderr.flush()
