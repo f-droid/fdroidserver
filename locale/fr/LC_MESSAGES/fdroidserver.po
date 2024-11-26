@@ -31,7 +31,7 @@
 # translator <kvb@tuta.io>, 2022.
 # Julien Maulny <julien.maulny@protonmail.com>, 2022.
 # Translator <kvb@tuta.io>, 2022, 2023.
-# Ldm Public <ldmpub@gmail.com>, 2022, 2023.
+# Ldm Public <ldmpub@gmail.com>, 2022, 2023, 2024.
 # TopFox <Arnaud.Savary@etu.unige.ch>, 2022.
 # John Donne <akheron@zaclys.net>, 2022, 2023.
 # Deleted User <noreply+22825@weblate.org>, 2023.
@@ -44,8 +44,8 @@ msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2024-11-21 21:34+0100\n"
-"PO-Revision-Date: 2024-11-24 18:41+0000\n"
-"Last-Translator: Sylvain Pichon <Sp_@users.noreply.hosted.weblate.org>\n"
+"PO-Revision-Date: 2024-11-26 15:16+0000\n"
+"Last-Translator: Ldm Public <ldmpub@gmail.com>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/f-droid/fdroidserver/fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
@@ -674,7 +674,7 @@ msgstr "Ne pas utiliser les sommes de contrôle rsync"
 
 #: ../fdroidserver/install.py
 msgid "Download F-Droid.apk using mirrors that leak less to the network"
-msgstr ""
+msgstr "Téléchager F-Droid.apk en utilisant des miroirs avec moins de fuites réseaux"
 
 #: ../fdroidserver/__main__.py
 msgid "Download complete mirrors of small repos"
@@ -738,12 +738,12 @@ msgstr "ERREUR : hébergeur git « %s » non supporté, les corrections sont 
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "ERROR: {key} in {path} is not \"archive\" or \"repo\"!"
-msgstr ""
+msgstr "ERREUR : {key} dans {path} n'est pas \"archive\" ou \"repo\"."
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "ERROR: {key}:{subkey} in {path} is not in allowed keys: {allowed_keys}!"
-msgstr ""
+msgstr "ERREUR : {key} :{subkey} dans {path} n'est pas une clé valide parmi : {allowed_keys}."
 
 #: ../fdroidserver/__main__.py
 #, python-brace-format
@@ -766,7 +766,7 @@ msgstr "La variable d'environnent {var} de {configname} n'est pas configurée !"
 
 #: ../fdroidserver/deploy.py
 msgid "Error deploying 'github_releases', {} not present. (You might need to run `fdroid update` first.)"
-msgstr ""
+msgstr "Erreur lors du déploiement 'github_releases' : {} est absent (vous devriez peut-être d'abord lancer `fdroid update`)."
 
 #: ../fdroidserver/import_subcommand.py
 msgid "Error while getting repo address"
@@ -786,7 +786,7 @@ msgstr "Extraction des signatures à partir des APKs"
 
 #: ../fdroidserver/install.py
 msgid "F-Droid.apk could not be downloaded from any known source!"
-msgstr ""
+msgstr "F-Droid.apk ne peut pas être téléchargé depuis les source connues !"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -905,7 +905,7 @@ msgstr "Plusieurs fichiers de bloc de signature JAR trouvé à {path}"
 #: ../fdroidserver/common.py
 #, fuzzy
 msgid "Found multiple Signer Certificates!"
-msgstr "Plusieurs certificats de signature ont étés trouvés!"
+msgstr "Plusieurs signataires de certificats ont été trouvés !"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
@@ -1250,7 +1250,7 @@ msgstr "Aucun périphérique connecté trouvé"
 
 #: ../fdroidserver/install.py
 msgid "No devices found for `adb install`! Please plug one in."
-msgstr ""
+msgstr "Aucun appareil trouvé pour `adb install` ! Veuillez en branchez un."
 
 #: ../fdroidserver/index.py
 msgid "No fingerprint in URL."

@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2024-11-21 21:34+0100\n"
-"PO-Revision-Date: 2024-07-23 04:12+0000\n"
+"PO-Revision-Date: 2024-11-26 15:16+0000\n"
 "Last-Translator: Danial Behzadi <dani.behzi@ubuntu.com>\n"
 "Language-Team: Persian <https://hosted.weblate.org/projects/f-droid/fdroidserver/fa/>\n"
 "Language: fa\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.7-dev\n"
+"X-Generator: Weblate 5.9-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -40,12 +40,12 @@ msgstr ""
 #: ../fdroidserver/index.py
 #, python-brace-format
 msgid "\"local_copy_dir\" {path} does not exist!"
-msgstr "\"local_copy_dir\" {path} وجود ندارد!"
+msgstr "{path} ‏local_copy_dir وجود ندارد!"
 
 #: ../fdroidserver/install.py
 #, python-brace-format
 msgid "\"{apkfilename}\" is already installed on {dev}."
-msgstr "\"{apkfilename}\" قبلا در {dev} نصب شده است."
+msgstr "{apkfilename} از پیش روی {dev} نصب شده."
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -60,22 +60,22 @@ msgstr ""
 #: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "\"{path}\" exists but s3cmd is not installed!"
-msgstr "\"{path}\" وجود دارد اما s3cmd نصب نشده است!"
+msgstr "\"{path}\" وجود دارد ولی s3cmd نصب نیست!"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "\"{path}\" is not a supported file format (use: metadata/*.yml)"
-msgstr "\"{path}\" از فرمتِ پرونده پشتیبانی نمی‌کند (استفاده کنید از: metadata/*.yml)"
+msgstr "{path} قالب پروندهٔ پشتیبانی شده‌ای نیست (استفاده: ‪metadata/*.yml‬)"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "\"{path}\" is signed by a key that is not allowed:"
-msgstr "\"{path}\" توسط کلیدی که مجاز نیست امضاء می‌شود:"
+msgstr "{path} به دست کلیدی که مجاز نیست امضا شده:"
 
 #: ../fdroidserver/import_subcommand.py
 #, python-brace-format
 msgid "\"{url}\" is not a valid URL!"
-msgstr "\"{url}\" یک نشانی وب معتبر نیست!"
+msgstr "{url} نشانی معتبری نیست!"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 #: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
@@ -83,8 +83,8 @@ msgstr "\"{url}\" یک نشانی وب معتبر نیست!"
 #, python-format
 msgid "%(option)s option requires %(number)d argument"
 msgid_plural "%(option)s option requires %(number)d arguments"
-msgstr[0] "گزینه %(option)s نیاز به آرگومان %(number)d دارد"
-msgstr[1] "گزینه %(option)s نیاز به آرگومان‌های %(number)d دارد"
+msgstr[0] "گزینهٔ %(option)s نیاز به %(number)d آرگومان دارد"
+msgstr[1] "گزینهٔ %(option)s نیاز به %(number)d آرگومان دارد"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
@@ -101,20 +101,20 @@ msgstr ""
 #: ../fdroidserver/scanner.py
 #, python-format
 msgid "%d problems found"
-msgstr ""
+msgstr "%d مشکل پیدا شد"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 #: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
 #: /usr/lib/python3.11/optparse.py
 msgid "%prog [options]"
-msgstr "کاوش کردن"
+msgstr "%prog [گزینه‌ها]"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "%r is not callable"
-msgstr "‏%r قابل صدا زدن نیست"
+msgstr "‏%r قابل فراخوانی نیست"
 
 #: ../fdroidserver/signindex.py
 #, python-format
@@ -136,11 +136,11 @@ msgstr ""
 #: /usr/lib/python3.11/optparse.py
 #, python-format
 msgid "%s option does not take a value"
-msgstr "گزینۀ %s مقداری را نمی‌گیرد"
+msgstr "گزینۀ %s مقدار نمی‌گیرد"
 
 #: ../fdroidserver/common.py
 msgid "'keypass' not found in config.yml!"
-msgstr "'keypass' وجود ندارد در config.yml!"
+msgstr "keypass در config.yml پیدا نشد!"
 
 #: ../fdroidserver/common.py
 msgid "'keystore' is NONE and 'smartcardoptions' is blank!"
@@ -148,40 +148,40 @@ msgstr ""
 
 #: ../fdroidserver/common.py
 msgid "'keystore' not found in config.yml!"
-msgstr "'keystore' وجود ندارد در config.yml!"
+msgstr "keystore در config.yml پیدا نشد!"
 
 #: ../fdroidserver/common.py
 msgid "'keystorepass' not found in config.yml!"
-msgstr "'keystorepass' وجود ندارد در config.yml!"
+msgstr "keystorepass در config.yml پیدا نشد!"
 
 #: ../fdroidserver/common.py
 msgid "'repo_keyalias' not found in config.yml!"
-msgstr "'repo_keyalias' وجود ندارد در config.yml!"
+msgstr "repo_keyalias در config.yml پیدا نشد!"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #: /usr/lib/python3.11/argparse.py
 msgid "'required' is an invalid argument for positionals"
-msgstr "'required' یک آرگومان نامعتبر برای موقعیت‌ها است"
+msgstr "required آرگومانی نامعتبر برای موقعیتی‌هاست"
 
 #: ../fdroidserver/common.py
 msgid "'sdk_path' not set in config.yml!"
-msgstr "'sdk_path' تنظیم نشده است در config.yml!"
+msgstr "sdk_path در config.yml تنظیم نشده!"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "'{aapt}' is too old, fdroid requires build-tools-{version} or newer!"
-msgstr "'{aapt}' خیلی قدیمی است، اف‌دروید بهbuild- tools-{version} یا جدیدتر نیاز دارد!"
+msgstr "'{aapt}' بیش از حد قدیمی است. اف‌دروید به build- tools-{version} یا جدیدتر نیاز دارد!"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "'{field}' will be in random order! Use () or [] brackets if order is important!"
-msgstr "'{field}' به ترتیب تصادفی خواهد بود! اگر مهم است از () یا [] کروشه‌ها استفاده کنید!"
+msgstr "ترتیب {field} کاتوره‌ای خواهد بود! اگر ترتیب مهم است از () یا [] استفاده کنید!"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "'{path}' failed to execute!"
-msgstr "'{path}' اجرا نشد!"
+msgstr "اجرای {path} شکست خورد!"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
@@ -211,11 +211,11 @@ msgstr ""
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #: /usr/lib/python3.11/argparse.py
 msgid ".__call__() not defined"
-msgstr ".__call__() تعریف نشده است"
+msgstr "‪.__call__()‬ تعریف نشده است"
 
 #: ../fdroidserver/lint.py
 msgid "/issues is missing"
-msgstr ""
+msgstr "‪/issues‬ موجود نیست"
 
 #: ../fdroidserver/mirror.py
 msgid "A URL is required as an argument!"
@@ -265,15 +265,15 @@ msgstr ""
 
 #: ../fdroidserver/scanner.py
 msgid "Android AAR library"
-msgstr ""
+msgstr "کتابخانهٔ AAR اندروید"
 
 #: ../fdroidserver/scanner.py
 msgid "Android APK file"
-msgstr ""
+msgstr "پروندهٔ APK اندروید"
 
 #: ../fdroidserver/scanner.py
 msgid "Android DEX code"
-msgstr ""
+msgstr "کد DEX اندروید"
 
 #: ../fdroidserver/init.py
 #, python-brace-format
@@ -360,11 +360,11 @@ msgstr ""
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Broken symlink: {path}"
-msgstr ""
+msgstr "پیوند نمادین خراب: {path}"
 
 #: ../fdroidserver/__main__.py
 msgid "Build a package from source"
-msgstr "بسته‌ای را از کد منبع می‌سازد"
+msgstr "ساخت بسته از کد مبدأ"
 
 #: ../fdroidserver/build.py
 msgid "Build all applications available"
@@ -400,7 +400,7 @@ msgstr[1] ""
 #: ../fdroidserver/rewritemeta.py
 #, python-brace-format
 msgid "Cannot rewrite \"{path}\""
-msgstr ""
+msgstr "نمی‌توان {path} را بازنویسی کرد"
 
 #: ../fdroidserver/lint.py
 #, python-format
@@ -418,7 +418,7 @@ msgstr ""
 
 #: ../fdroidserver/__main__.py
 msgid "Check for updates to applications"
-msgstr "به‌روزرسانی‌ها برای برنامه‌ها را بررسی می‌کند"
+msgstr "بررسی برای به‌روز رسانی‌های برنامه‌ها"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -444,7 +444,7 @@ msgstr "فرمان «%s» شناسایی نشد.\n"
 
 #: ../fdroidserver/checkupdates.py
 msgid "Commit changes"
-msgstr ""
+msgstr "ثبت دگرگونی‌ها"
 
 #: ../fdroidserver/checkupdates.py
 msgid "Commit changes, push, then make a merge request"
@@ -520,7 +520,7 @@ msgstr ""
 
 #: ../fdroidserver/publish.py
 msgid "Creating log directory"
-msgstr ""
+msgstr "ایجاد کردن شاخهٔ log"
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
@@ -529,7 +529,7 @@ msgstr ""
 
 #: ../fdroidserver/publish.py
 msgid "Creating output directory"
-msgstr ""
+msgstr "ایجاد کردن شاخهٔ output"
 
 #: ../fdroidserver/index.py
 msgid "Creating signed index with this key (SHA256):"
@@ -537,7 +537,7 @@ msgstr ""
 
 #: ../fdroidserver/publish.py ../fdroidserver/verify.py
 msgid "Creating temporary directory"
-msgstr ""
+msgstr "ایجاد کردن شاخهٔ temporary"
 
 #: ../fdroidserver/index.py
 msgid "Creating unsigned index in preparation for signing"
@@ -554,7 +554,7 @@ msgstr ""
 
 #: ../fdroidserver/update.py
 msgid "Delete APKs and/or OBBs without metadata from the repo"
-msgstr "پرونده‌های APK و یا OBB فاقد فراداده را از مخزن پاک می‌کند"
+msgstr "حذف APKها و یا OBBهای بدون فراداده از مخزن"
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
@@ -644,7 +644,7 @@ msgstr ""
 #: ../fdroidserver/common.py
 #, python-format
 msgid "Downloading %s"
-msgstr "در حال بارگیری %s"
+msgstr "بار گرفتن %s"
 
 #: ../fdroidserver/common.py
 msgid "Downloading the repository already failed once, not trying again."
@@ -673,7 +673,7 @@ msgstr ""
 #: ../fdroidserver/common.py
 #, python-format
 msgid "ERROR: %(message)s"
-msgstr ""
+msgstr "خطا: %(message)s"
 
 #: ../fdroidserver/__main__.py
 msgid "ERROR: The \"server\" subcommand has been removed, use \"deploy\"!"
@@ -820,7 +820,7 @@ msgstr ""
 
 #: ../fdroidserver/lint.py
 msgid "Forbidden HTML tags"
-msgstr ""
+msgstr "برچسب‌های HTML ممنوعه"
 
 #: ../fdroidserver/build.py
 msgid "Force build of disabled apps, and carries on regardless of scan problems. Only allowed in test mode."
@@ -908,11 +908,11 @@ msgstr ""
 
 #: ../fdroidserver/common.py
 msgid "Git clean failed"
-msgstr ""
+msgstr "پاک سازی گیت شکست خورد"
 
 #: ../fdroidserver/common.py
 msgid "Git fetch failed"
-msgstr ""
+msgstr "واکشی گیت شکست خورد"
 
 #: ../fdroidserver/common.py
 msgid "Git prune failed"
@@ -925,7 +925,7 @@ msgstr ""
 
 #: ../fdroidserver/common.py
 msgid "Git reset failed"
-msgstr ""
+msgstr "بازنشانی گیت شکست خورد"
 
 #: ../fdroidserver/common.py
 msgid "Git submodule deinit failed"
@@ -1004,7 +1004,7 @@ msgstr ""
 
 #: ../fdroidserver/common.py
 msgid "Initialising submodules"
-msgstr ""
+msgstr "مقداردهی نخستین زیرپیمانه‌ها"
 
 #: ../fdroidserver/install.py
 msgid "Install all signed applications available"
@@ -1012,12 +1012,12 @@ msgstr ""
 
 #: ../fdroidserver/__main__.py
 msgid "Install built packages on devices"
-msgstr "نصب بسته های ساخته شده روی دستگاه ها"
+msgstr "نصب بسته های ساخته روی افزاره‌ها"
 
 #: ../fdroidserver/install.py
 #, python-format
 msgid "Installing %s..."
-msgstr ""
+msgstr "نصب کردن %s…"
 
 #: ../fdroidserver/install.py
 #, python-brace-format
@@ -1030,7 +1030,7 @@ msgstr "تعامل با کارساز HTTP مخزن"
 
 #: ../fdroidserver/update.py
 msgid "Invalid APK"
-msgstr ""
+msgstr "APK نامعتبر"
 
 #: ../fdroidserver/checkupdates.py
 #, python-brace-format
@@ -1045,7 +1045,7 @@ msgstr ""
 #: ../fdroidserver/checkupdates.py
 #, python-brace-format
 msgid "Invalid VercodeOperation: {field}"
-msgstr ""
+msgstr "VercodeOperation نامعتبر: {field}"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
@@ -1060,11 +1060,11 @@ msgstr ""
 #: ../fdroidserver/metadata.py
 #, python-format
 msgid "Invalid boolean '%s'"
-msgstr ""
+msgstr "دودویی نامعتبر %s"
 
 #: ../fdroidserver/lint.py
 msgid "Invalid bulleted list"
-msgstr ""
+msgstr "سیاههٔ گلوله‌ای نامعتبر"
 
 #: ../fdroidserver/common.py
 #, python-format
@@ -1108,7 +1108,7 @@ msgstr ""
 
 #: ../fdroidserver/scanner.py
 msgid "Java JAR file"
-msgstr ""
+msgstr "پروندهٔ JAR جاوا"
 
 #: ../fdroidserver/mirror.py ../fdroidserver/publish.py
 #: ../fdroidserver/update.py
@@ -1117,7 +1117,7 @@ msgstr ""
 
 #: ../fdroidserver/scanner.py
 msgid "Java compiled class"
-msgstr ""
+msgstr "کلاس ترجمه شدهٔ جاوا"
 
 #: ../fdroidserver/signindex.py
 msgid "Java jarsigner not found! Install in standard location or set java_paths!"
@@ -1163,11 +1163,11 @@ msgstr ""
 
 #: ../fdroidserver/index.py
 msgid "Malformed repository mirrors."
-msgstr ""
+msgstr "آینه‌های مخزن بدریخت."
 
 #: ../fdroidserver/deploy.py
 msgid "Malformed serverwebroot line:"
-msgstr ""
+msgstr "خط ریشهٔ وب کارساز بدریخت:"
 
 #: ../fdroidserver/scanner.py
 #, python-format
@@ -1180,7 +1180,7 @@ msgstr ""
 
 #: ../fdroidserver/gpgsign.py
 msgid "Missing output directory"
-msgstr ""
+msgstr "شاخهٔ output نیست"
 
 #: ../fdroidserver/metadata.py
 msgid "Moving Anti-Features declarations to localized files:"
@@ -1221,7 +1221,7 @@ msgstr ""
 
 #: ../fdroidserver/import_subcommand.py
 msgid "No information found."
-msgstr ""
+msgstr "هیچ طّلاعاتی وجود ندارد."
 
 #: ../fdroidserver/checkupdates.py
 msgid "No matching tags found"
@@ -1246,7 +1246,7 @@ msgstr ""
 
 #: ../fdroidserver/common.py
 msgid "No packages specified"
-msgstr ""
+msgstr "هیچ بسته‌ای مشخّص نشده"
 
 #: ../fdroidserver/install.py
 #, python-format
@@ -1291,7 +1291,7 @@ msgstr ""
 
 #: ../fdroidserver/signindex.py
 msgid "Nothing to do"
-msgstr ""
+msgstr "کاری برای انجام نیست"
 
 #: ../fdroidserver/checkupdates.py
 #, python-brace-format
@@ -1351,7 +1351,7 @@ msgstr ""
 
 #: /usr/lib/python3.11/optparse.py
 msgid "Options"
-msgstr "انتخاب‌ها"
+msgstr "گزینه‌ها"
 
 #: ../fdroidserver/verify.py
 msgid "Output JSON report to file named after APK."
@@ -1365,7 +1365,7 @@ msgstr ""
 #: ../fdroidserver/publish.py ../fdroidserver/signindex.py
 #: ../fdroidserver/update.py
 msgid "Outputting JSON"
-msgstr ""
+msgstr "خروجی دادن JSON"
 
 #: ../fdroidserver/import_subcommand.py
 msgid "Overall license of the project."
@@ -1427,17 +1427,17 @@ msgstr ""
 
 #: ../fdroidserver/checkupdates.py
 msgid "Process auto-updates"
-msgstr ""
+msgstr "پردازش به‌روز رسانی‌های خودکار"
 
 #: ../fdroidserver/publish.py ../fdroidserver/update.py
 #, python-brace-format
 msgid "Processing {apkfilename}"
-msgstr ""
+msgstr "پردازش {apkfilename}"
 
 #: ../fdroidserver/checkupdates.py ../fdroidserver/scanner.py
 #, python-brace-format
 msgid "Processing {appid}"
-msgstr ""
+msgstr "پردازش {appid}"
 
 #: ../fdroidserver/update.py
 msgid "Produce human-readable XML/JSON for index files"
@@ -1467,7 +1467,7 @@ msgstr ""
 #: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "Pushing to {url}"
-msgstr ""
+msgstr "فرستادن به {url}"
 
 #: ../fdroidserver/__main__.py
 msgid "Quickly start a new repository"
@@ -1480,7 +1480,7 @@ msgstr ""
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Reading '{config_file}'"
-msgstr ""
+msgstr "خواندن {config_file}"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -1503,12 +1503,12 @@ msgstr ""
 
 #: ../fdroidserver/common.py
 msgid "Removing specified files"
-msgstr ""
+msgstr "برداشتن پرونده‌های مشخّص"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Removing {path}\""
-msgstr ""
+msgstr "برداشتن {path}"
 
 #: ../fdroidserver/update.py
 msgid "Rename APK files that do not match package.name_123.apk"
@@ -1547,7 +1547,7 @@ msgstr ""
 #: ../fdroidserver/rewritemeta.py
 #, python-brace-format
 msgid "Rewriting '{appid}'"
-msgstr ""
+msgstr "بازنویسی {appid}"
 
 #: ../fdroidserver/checkupdates.py
 msgid "Run on git repo that has uncommitted changes"
@@ -1679,7 +1679,7 @@ msgstr ""
 #: ../fdroidserver/scanner.py
 #, python-brace-format
 msgid "Skipping {appid}: disabled"
-msgstr ""
+msgstr "پرش از {appid}: از کار افتاده"
 
 #: ../fdroidserver/deploy.py
 msgid "Specify a local folder to sync the repo to"
@@ -1830,7 +1830,7 @@ msgstr ""
 
 #: ../fdroidserver/__main__.py
 msgid "Unknown exception found!"
-msgstr "خطای ناشناخته‌ای یافت شد!"
+msgstr "استثنایی ناشناخته پیدا شد!"
 
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vname
 #: ../fdroidserver/lint.py
@@ -1854,11 +1854,11 @@ msgstr ""
 
 #: ../fdroidserver/lint.py
 msgid "Unnecessary leading space"
-msgstr ""
+msgstr "فضای پیشین نالازم"
 
 #: ../fdroidserver/lint.py
 msgid "Unnecessary trailing space"
-msgstr ""
+msgstr "فضای پسین نالازم"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
@@ -1967,7 +1967,7 @@ msgstr "استفاده"
 #: /usr/lib/python3.11/optparse.py
 #, python-format
 msgid "Usage: %s\n"
-msgstr "مصرف: %s\n"
+msgstr "استفاده: %s\n"
 
 #: ../fdroidserver/lint.py
 msgid "Use /HEAD instead of /master or /main to point at a file in the default branch"
@@ -1983,7 +1983,7 @@ msgstr ""
 
 #: ../fdroidserver/build.py
 msgid "Use build server"
-msgstr ""
+msgstr "استفاده از کارساز ساخت"
 
 #: ../fdroidserver/update.py
 msgid "Use date from APK instead of current time for newly added APKs"
@@ -2054,7 +2054,7 @@ msgstr ""
 
 #: ../fdroidserver/index.py
 msgid "Verifying index signature:"
-msgstr ""
+msgstr "تأیید کردن امضای نمایه:"
 
 #: ../fdroidserver/install.py
 #, python-brace-format
@@ -2104,7 +2104,7 @@ msgstr ""
 
 #: ../fdroidserver/scanner.py
 msgid "ZIP file archive"
-msgstr ""
+msgstr "بایگانی پروندهٔ ZIP"
 
 #: ../fdroidserver/install.py
 #, python-brace-format
@@ -2212,7 +2212,7 @@ msgstr ""
 #: ../fdroidserver/nightly.py
 #, python-brace-format
 msgid "cloning {url}"
-msgstr ""
+msgstr "شبیه‌سازی {url}"
 
 #: ../fdroidserver/__main__.py
 msgid "commands from plugin modules:"
@@ -2263,7 +2263,7 @@ msgstr ""
 #: ../fdroidserver/nightly.py
 #, python-brace-format
 msgid "created {path}"
-msgstr ""
+msgstr "{path} را ایجاد کرد"
 
 #: ../fdroidserver/checkupdates.py
 #, python-brace-format
@@ -2273,7 +2273,7 @@ msgstr ""
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "deleting: repo/{apkfilename}"
-msgstr ""
+msgstr "حذف کردن: ‪repo/{apkfilename}‬"
 
 #: ../fdroidserver/scanner.py
 msgid "dependency file without lock"
@@ -2309,8 +2309,8 @@ msgstr ""
 #, python-format
 msgid "expected %s argument"
 msgid_plural "expected %s arguments"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "انتظار %s آرگومان می‌رفت"
+msgstr[1] "انتظار %s آرگومان می‌رفت"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
@@ -2328,11 +2328,11 @@ msgstr ""
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #: /usr/lib/python3.11/argparse.py
 msgid "expected one argument"
-msgstr ""
+msgstr "انتظار آرگومان می‌رفت"
 
 #: ../fdroidserver/__main__.py
 msgid "fdroid [<command>] [-h|--help|--version|<args>]"
-msgstr ""
+msgstr "fdroid [<command>] [-h|--help|--version|<args>]"
 
 #: ../fdroidserver/scanner.py
 msgid "fetch the latest version of signatures from the web"
@@ -2352,7 +2352,7 @@ msgstr ""
 
 #: ../fdroidserver/scanner.py
 msgid "gzip file archive"
-msgstr ""
+msgstr "بایگانی پروندهٔ gzip"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
@@ -2453,7 +2453,7 @@ msgstr ""
 
 #: ../fdroidserver/signatures.py
 msgid "no APK supplied"
-msgstr ""
+msgstr "هیج APKای داده نشده"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 #: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
@@ -2561,13 +2561,13 @@ msgstr "گزینه‌ها"
 #: ../fdroidserver/nightly.py
 #, python-brace-format
 msgid "overwriting existing {path}"
-msgstr ""
+msgstr "پایمالی {path} موجود"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #: /usr/lib/python3.11/argparse.py
 msgid "positional arguments"
-msgstr ""
+msgstr "آرگومان‌های موقعیتی"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -2622,13 +2622,13 @@ msgstr ""
 
 #: ../fdroidserver/scanner.py
 msgid "shared library"
-msgstr ""
+msgstr "کتابخانهٔ اشتراکی"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 #: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
 #: /usr/lib/python3.11/optparse.py
 msgid "show program's version number and exit"
-msgstr "نسخه برنامه را نمایش داده و خارج می‌شود"
+msgstr "نمایش نگارش برنامه و خروج"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.5/optparse.py
 #: /usr/lib/python3.6/argparse.py /usr/lib/python3.6/optparse.py
@@ -2636,7 +2636,7 @@ msgstr "نسخه برنامه را نمایش داده و خارج می‌شود
 #: /usr/lib/python3.9/argparse.py /usr/lib/python3.9/optparse.py
 #: /usr/lib/python3.11/argparse.py /usr/lib/python3.11/optparse.py
 msgid "show this help message and exit"
-msgstr "این پیام راهنما را نمایش داده و خارج می‌شود"
+msgstr "نمایش این پیام راهنما و خروج"
 
 #: ../fdroidserver/signatures.py
 msgid "signed APK, either a file-path or HTTPS URL."
@@ -2661,7 +2661,7 @@ msgstr ""
 
 #: ../fdroidserver/scanner.py
 msgid "static library"
-msgstr ""
+msgstr "کتابخانهٔ ایستا"
 
 #: ../fdroidserver/build.py
 #, python-brace-format
@@ -2677,7 +2677,7 @@ msgstr ""
 
 #: ../fdroidserver/install.py
 msgid "true"
-msgstr ""
+msgstr "درست"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
@@ -2698,7 +2698,7 @@ msgstr ""
 #: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "unrecognized arguments: %s"
-msgstr ""
+msgstr "آرگومان‌های ناشناخته: %s"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -2709,7 +2709,7 @@ msgstr ""
 #: /usr/lib/python3.7/argparse.py ../fdroidserver/__main__.py
 #: /usr/lib/python3.9/argparse.py /usr/lib/python3.11/argparse.py
 msgid "usage: "
-msgstr "مصرف: "
+msgstr "استفاده: "
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
@@ -2722,7 +2722,7 @@ msgstr ""
 
 #: ../fdroidserver/install.py
 msgid "yes"
-msgstr ""
+msgstr "بله"
 
 #: ../fdroidserver/publish.py
 #, python-brace-format
@@ -2848,9 +2848,9 @@ msgid "{path} is not \"key: value\" dict, but a {datatype}!"
 msgstr ""
 
 #: ../fdroidserver/common.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{path} is not a standard config file!"
-msgstr "'sdk_path' تنظیم نشده است در config.yml!"
+msgstr "{path} پروندهٔ پیکربندی استانداردی نیست!"
 
 #: ../fdroidserver/index.py
 #, python-brace-format
@@ -2880,7 +2880,7 @@ msgstr ""
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "{path}: {error}"
-msgstr ""
+msgstr "{path}: {error}"
 
 #: ../fdroidserver/mirror.py
 #, python-brace-format
@@ -2895,11 +2895,11 @@ msgstr ""
 #: ../fdroidserver/build.py
 msgid "{} build failed"
 msgid_plural "{} builds failed"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{} ساخت شکست خورد"
+msgstr[1] "{} ساخت شکست خوردند"
 
 #: ../fdroidserver/build.py
 msgid "{} build succeeded"
 msgid_plural "{} builds succeeded"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{} ساخت موفّق شد"
+msgstr[1] "{} ساخت موفّق شدند"

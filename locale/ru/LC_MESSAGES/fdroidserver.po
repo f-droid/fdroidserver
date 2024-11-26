@@ -20,7 +20,7 @@ msgstr ""
 "Project-Id-Version: fdroidserver 1.0.0-95-gd7af22b\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2024-11-21 21:34+0100\n"
-"PO-Revision-Date: 2024-11-25 13:57+0000\n"
+"PO-Revision-Date: 2024-11-26 10:18+0000\n"
 "Last-Translator: gfbdrgng <hnaofegnp@hldrive.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/f-droid/fdroidserver/ru/>\n"
 "Language: ru\n"
@@ -1559,7 +1559,7 @@ msgstr "Показывать в выводе только предупрежде
 #: ../fdroidserver/net.py
 #, python-format
 msgid "Retrying failed download: %s"
-msgstr ""
+msgstr "Повторная попытка неудачной загрузки: %s"
 
 #: ../fdroidserver/__main__.py
 msgid "Rewrite all the metadata files"
@@ -1629,7 +1629,7 @@ msgstr[2] "Сканирование обнаружило {} ошибок"
 
 #: ../fdroidserver/scanner.py
 msgid "Scanning APK for extra signing blocks."
-msgstr ""
+msgstr "Проверка APK на наличие дополнительных блоков подписи."
 
 #: ../fdroidserver/scanner.py
 msgid "Scanning APK with dexdump for known non-free classes."
@@ -2088,7 +2088,7 @@ msgstr "Проверка подписи индекса:"
 #: ../fdroidserver/install.py
 #, python-brace-format
 msgid "Verifying package {path} with apksigner."
-msgstr ""
+msgstr "Проверка пакета {path} с помощью apksigner."
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
@@ -2101,7 +2101,7 @@ msgstr "Предупреждать о возможных ошибках в ме�
 
 #: ../fdroidserver/scanner.py
 msgid "WebAssembly binary file"
-msgstr ""
+msgstr "Двоичный файл WebAssembly"
 
 #: ../fdroidserver/update.py
 msgid "When configured for signed indexes, create only unsigned indexes at this stage"
@@ -2117,11 +2117,11 @@ msgstr "При неудачном подписании или проверке �
 
 #: ../fdroidserver/install.py
 msgid "Would you like to download and install F-Droid.apk via adb? (YES/no)"
-msgstr ""
+msgstr "Вы хотите скачать и установить F-Droid.apk через adb? (Да/нет)"
 
 #: ../fdroidserver/install.py
 msgid "Would you like to download the app(s) from f-droid.org? (YES/no)"
-msgstr ""
+msgstr "Хотите ли вы загрузить приложение(я) с сайта f-droid.org? (ДА/НЕТ)"
 
 #: ../fdroidserver/init.py
 msgid "X.509 'Distinguished Name' used when generating keys"
@@ -2138,7 +2138,7 @@ msgstr "Архив ZIP"
 #: ../fdroidserver/install.py
 #, python-brace-format
 msgid "adb reports {serial} is \"{status}\"!"
-msgstr ""
+msgstr "adb сообщает, что {serial} - это \"{status}\"!"
 
 #: ../fdroidserver/nightly.py
 #, python-brace-format
@@ -2708,7 +2708,7 @@ msgstr "требуются аргументы: %s"
 
 #: ../fdroidserver/install.py
 msgid "true"
-msgstr ""
+msgstr "истина"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
@@ -2753,7 +2753,7 @@ msgstr "virustotal.com ограничивает траффик, ждем пов�
 
 #: ../fdroidserver/install.py
 msgid "yes"
-msgstr ""
+msgstr "Да"
 
 #: ../fdroidserver/publish.py
 #, python-brace-format
@@ -2872,7 +2872,7 @@ msgstr "{path} был отмечен virustotal {count} раз:"
 #: ../fdroidserver/install.py
 #, python-brace-format
 msgid "{path} has the wrong fingerprint ({fingerprint})!"
-msgstr ""
+msgstr "У {path} неправильный отпечаток пальца ({fingerprint})!"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
