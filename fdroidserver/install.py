@@ -136,10 +136,11 @@ def download_fdroid_apk_from_maven(privacy_mode=False):
         mirrors = MAVEN_CENTRAL_MIRRORS[:2]  # skip the Google servers
     else:
         mirrors = MAVEN_CENTRAL_MIRRORS
-    mirrors = common.append_filename_to_mirrors(
-        os.path.join(path, 'maven-metadata.xml'), mirrors
+    metadata = net.download_using_mirrors(
+        common.append_filename_to_mirrors(
+            os.path.join(path, 'maven-metadata.xml'), mirrors
+        )
     )
-    metadata = net.download_using_mirrors(mirrors)
     version = XMLElementTree.parse(metadata).getroot().findall('*.//latest')[0].text
     mirrors = common.append_filename_to_mirrors(
         os.path.join(path, version, f'F-Droid-{version}.apk'), mirrors
