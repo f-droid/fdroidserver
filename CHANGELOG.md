@@ -12,6 +12,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 
 ### Removed
 
+## [2.3.2] - 2024-11-26
+
+### Fixed
+
+* install: fix downloading from GitHub Releases and Maven Central.
+* Sync translations for: ca fa fr pt ru sr ta zh_Hant
+
 ## [2.3.1] - 2024-11-25
 
 ### Fixed
