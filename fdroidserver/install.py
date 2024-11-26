@@ -115,7 +115,8 @@ def download_fdroid_apk_from_github(privacy_mode=False):
         token = None
     gh = github.GithubApi(token, 'https://github.com/f-droid/fdroidclient')
     latest_apk = gh.get_latest_apk()
-    return net.download_file(latest_apk)
+    filename = os.path.basename(latest_apk)
+    return net.download_file(latest_apk, os.path.join(common.get_cachedir(), filename))
 
 
 def download_fdroid_apk_from_ipns(privacy_mode=False):
