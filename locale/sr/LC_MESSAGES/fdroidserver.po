@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: fdroidserver 2.1b0\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2024-11-21 21:34+0100\n"
-"PO-Revision-Date: 2024-09-20 19:23+0000\n"
+"PO-Revision-Date: 2024-11-22 21:03+0000\n"
 "Last-Translator: Reno Tx <renotx@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Serbian <https://hosted.weblate.org/projects/f-droid/fdroidserver/sr/>\n"
 "Language: sr\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 5.8-dev\n"
+"X-Generator: Weblate 5.9-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -204,8 +204,9 @@ msgid "'{value}' is not a valid {field}, should be {pattern}"
 msgstr "'{value}' није важећи {field}, треба да буде {pattern}"
 
 #: ../fdroidserver/checkupdates.py
+#, fuzzy
 msgid "--merge-request only runs on a single appid!"
-msgstr ""
+msgstr "--спојити-захтев ради само на једном appid!"
 
 #: ../fdroidserver/checkupdates.py
 #, python-brace-format
@@ -335,12 +336,14 @@ msgid "AutoUpdateMode with UpdateCheckMode: HTTP must have a pattern."
 msgstr "AutoUpdateMode са UpdateCheckMode: HTTP мора имати образац."
 
 #: ../fdroidserver/install.py
+#, fuzzy
 msgid "Automatic no to all prompts."
-msgstr ""
+msgstr "Аутоматски нема до свих упита."
 
 #: ../fdroidserver/install.py
+#, fuzzy
 msgid "Automatic yes to all prompts."
-msgstr ""
+msgstr "Аутоматски да до свих упита."
 
 #: ../fdroidserver/index.py
 #, python-brace-format
@@ -436,8 +439,9 @@ msgid "Clean update - don't uses caches, reprocess all APKs"
 msgstr "Чисто ажурирање – не користите кешеве, поново обрађујте све АПК-ове"
 
 #: ../fdroidserver/common.py
+#, fuzzy
 msgid "Color the log output"
-msgstr ""
+msgstr "Обојите лог излаз."
 
 #: ../fdroidserver/import_subcommand.py
 msgid "Comma separated list of categories."
@@ -453,8 +457,9 @@ msgid "Commit changes"
 msgstr "Потврди измене"
 
 #: ../fdroidserver/checkupdates.py
+#, fuzzy
 msgid "Commit changes, push, then make a merge request"
-msgstr ""
+msgstr "Унесите промене, пошаљите, а затим уверите се да спојите захтев."
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
@@ -640,8 +645,9 @@ msgid "Don't use rsync checksums"
 msgstr "Не користите rsync чексуме"
 
 #: ../fdroidserver/install.py
+#, fuzzy
 msgid "Download F-Droid.apk using mirrors that leak less to the network"
-msgstr ""
+msgstr "Преузмите F-Droid.apk користећи резервне изворе који мање цуре у мрежу."
 
 #: ../fdroidserver/__main__.py
 msgid "Download complete mirrors of small repos"
@@ -752,8 +758,9 @@ msgid "Extract signatures from APKs"
 msgstr "Извуците потписе из АПК-ова"
 
 #: ../fdroidserver/install.py
+#, fuzzy
 msgid "F-Droid.apk could not be downloaded from any known source!"
-msgstr ""
+msgstr "F-Droid.apk није могао бити преузет из било ког познатог извора!"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -1214,8 +1221,9 @@ msgid "No attached devices found"
 msgstr "Није пронађен ниједан прикључени уређај"
 
 #: ../fdroidserver/install.py
+#, fuzzy
 msgid "No devices found for `adb install`! Please plug one in."
-msgstr ""
+msgstr "Нема уређаја пронађених за `adb install`! Молимо вас да укључите један."
 
 #: ../fdroidserver/index.py
 msgid "No fingerprint in URL."
@@ -1421,9 +1429,9 @@ msgid "Print the secret variable to the terminal for easy copy/paste"
 msgstr "Штампај тајну променљиву на терминал за лако копирање/налепљивање"
 
 #: ../fdroidserver/install.py
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Privacy mode was enabled based on your locale ({country_code})."
-msgstr ""
+msgstr "Режим приватности је био омогућен на основу ваше локализације ({country_code})."
 
 #: ../fdroidserver/scanner.py
 #, python-format
@@ -1546,9 +1554,9 @@ msgid "Restrict output to warnings and errors"
 msgstr "Ограничите излаз на упозорења и грешке"
 
 #: ../fdroidserver/net.py
-#, python-format
+#, fuzzy, python-format
 msgid "Retrying failed download: %s"
-msgstr ""
+msgstr "Поновно покушавање неуспелог преузимања: %s"
 
 #: ../fdroidserver/__main__.py
 msgid "Rewrite all the metadata files"
@@ -1617,8 +1625,9 @@ msgstr[1] "Скенирање је пронашло {} проблема"
 msgstr[2] "Скенирање је пронашло {} проблема"
 
 #: ../fdroidserver/scanner.py
+#, fuzzy
 msgid "Scanning APK for extra signing blocks."
-msgstr ""
+msgstr "Скенирање APK за додатне блокове потписивања."
 
 #: ../fdroidserver/scanner.py
 msgid "Scanning APK with dexdump for known non-free classes."
@@ -2075,9 +2084,9 @@ msgid "Verifying index signature:"
 msgstr "Верификација потписа индекса:"
 
 #: ../fdroidserver/install.py
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Verifying package {path} with apksigner."
-msgstr ""
+msgstr "Потврђивање пакета {path} са apksigner-ом."
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
@@ -2089,8 +2098,9 @@ msgid "Warn about possible metadata errors"
 msgstr "Упозорење о могућим грешкама у метаподацима"
 
 #: ../fdroidserver/scanner.py
+#, fuzzy
 msgid "WebAssembly binary file"
-msgstr ""
+msgstr "WebAssembly бинарна датотека."
 
 #: ../fdroidserver/update.py
 msgid "When configured for signed indexes, create only unsigned indexes at this stage"
@@ -2105,12 +2115,14 @@ msgid "When signing or verifying fails, exit with an error code."
 msgstr "Када потписивање или верификација не успеју, излазите са кодом грешке."
 
 #: ../fdroidserver/install.py
+#, fuzzy
 msgid "Would you like to download and install F-Droid.apk via adb? (YES/no)"
-msgstr ""
+msgstr "Да ли желите да преузмете и инсталирате F-Droid.apk преко adb? (ДА/не)"
 
 #: ../fdroidserver/install.py
+#, fuzzy
 msgid "Would you like to download the app(s) from f-droid.org? (YES/no)"
-msgstr ""
+msgstr "Да ли желите да преузмете апликацију(е) са f-droid.org? (ДА/не)"
 
 #: ../fdroidserver/init.py
 msgid "X.509 'Distinguished Name' used when generating keys"
@@ -2125,9 +2137,9 @@ msgid "ZIP file archive"
 msgstr "ZIP архивска датотека"
 
 #: ../fdroidserver/install.py
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "adb reports {serial} is \"{status}\"!"
-msgstr ""
+msgstr "adb извештава {serial} је \"{status}\"!"
 
 #: ../fdroidserver/nightly.py
 #, python-brace-format
@@ -2696,8 +2708,9 @@ msgid "the following arguments are required: %s"
 msgstr "следећи аргументи су обавезни: %s"
 
 #: ../fdroidserver/install.py
+#, fuzzy
 msgid "true"
-msgstr ""
+msgstr "истина"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
@@ -2741,8 +2754,9 @@ msgid "virustotal.com is rate limiting, waiting to retry..."
 msgstr "virustotal.com ограничава брзину, чекање на поновни покушај..."
 
 #: ../fdroidserver/install.py
+#, fuzzy
 msgid "yes"
-msgstr ""
+msgstr "да"
 
 #: ../fdroidserver/publish.py
 #, python-brace-format
@@ -2859,9 +2873,9 @@ msgid "{path} has been flagged by virustotal {count} times:"
 msgstr "{path} је означен од стране virustotal {count} пута:"
 
 #: ../fdroidserver/install.py
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "{path} has the wrong fingerprint ({fingerprint})!"
-msgstr ""
+msgstr "{path} има погрешан отисак прста ({fingerprint})!"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
