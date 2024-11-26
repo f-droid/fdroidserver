@@ -80,7 +80,6 @@ def download_apk(appid='org.fdroid.fdroid', privacy_mode=False):
             # prefer APK in default release channel
             preferred_version = version
             break
-        print('skipping', version)
 
     mirrors = common.append_filename_to_mirrors(
         preferred_version['file']['name'][1:], common.FDROIDORG_MIRRORS
