@@ -158,6 +158,12 @@ def main():
         help=_("application ID with optional versionCode in the form APPID[:VERCODE]"),
     )
     parser.add_argument(
+        "--clean-up-verified",
+        action="store_true",
+        default=False,
+        help=_("Remove source tarball and any APKs if successfully verified."),
+    )
+    parser.add_argument(
         "--reuse-remote-apk",
         action="store_true",
         default=False,
@@ -224,11 +230,25 @@ def main():
                         ) from e
 
             unsigned_apk = os.path.join(unsigned_dir, apkfilename)
-            compare_result = common.verify_apks(remote_apk, unsigned_apk, tmp_dir)
+            compare_result = common.verify_apks(
+                remote_apk,
+                unsigned_apk,
+                tmp_dir,
+                clean_up_verified=options.clean_up_verified,
+            )
             if options.output_json:
                 write_json_report(url, remote_apk, unsigned_apk, compare_result)
             if compare_result:
                 raise FDroidException(compare_result)
+
+            if options.clean_up_verified:
+                src_tarball = os.path.join(
+                    unsigned_dir, common.get_src_tarball_name(appid, vercode)
+                )
+                for f in (remote_apk, unsigned_apk, src_tarball):
+                    if os.path.exists(f):
+                        logging.info(f"...cleaned up {f} after successful verification")
+                        os.remove(f)
 
             logging.info("...successfully verified")
             verified += 1

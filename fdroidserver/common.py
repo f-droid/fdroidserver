@@ -3649,7 +3649,9 @@ def sign_apk(unsigned_path, signed_path, keyalias):
     os.remove(unsigned_path)
 
 
-def verify_apks(signed_apk, unsigned_apk, tmp_dir, v1_only=None):
+def verify_apks(
+    signed_apk, unsigned_apk, tmp_dir, v1_only=None, clean_up_verified=False
+):
     """Verify that two apks are the same.
 
     One of the inputs is signed, the other is unsigned. The signature metadata
@@ -3669,6 +3671,8 @@ def verify_apks(signed_apk, unsigned_apk, tmp_dir, v1_only=None):
     v1_only
         True for v1-only signatures, False for v1 and v2 signatures,
         or None for autodetection
+    clean_up_verified
+        Remove any files created here if the verification succeeded.
 
     Returns
     -------
@@ -3705,6 +3709,9 @@ def verify_apks(signed_apk, unsigned_apk, tmp_dir, v1_only=None):
         if result is not None:
             error += '\nComparing reference APK to APK with copied signature...\n' + result
         return error
+    if clean_up_verified and os.path.exists(tmp_apk):
+        logging.info(f"...cleaned up {tmp_apk} after successful verification")
+        os.remove(tmp_apk)
 
     logging.info('...successfully verified')
     return None
