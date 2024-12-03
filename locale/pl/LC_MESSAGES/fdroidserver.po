@@ -11,15 +11,15 @@ msgstr ""
 "Project-Id-Version: fdroidserver 1.0.0-95-gd7af22b\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2024-11-21 21:34+0100\n"
-"PO-Revision-Date: 2024-10-27 03:53+0000\n"
-"Last-Translator: WaldiS <sto@tutanota.de>\n"
+"PO-Revision-Date: 2024-11-28 08:34+0000\n"
+"Last-Translator: Eryk Michalak <gnu.ewm@protonmail.com>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/f-droid/fdroidserver/pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 5.8.2-dev\n"
+"X-Generator: Weblate 5.9-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -439,7 +439,7 @@ msgstr "Czysta aktualizacja - nie używa pamięci podręcznych, przetwarzaj pono
 
 #: ../fdroidserver/common.py
 msgid "Color the log output"
-msgstr ""
+msgstr "Koloruj wpisy w dzienniku zdarzeń"
 
 #: ../fdroidserver/import_subcommand.py
 msgid "Comma separated list of categories."
@@ -1960,7 +1960,6 @@ msgstr "UpdateCheckMode jest ustawiony, ale wygląda na to, że checkupdates nie
 
 #. Translators: https://developer.android.com/studio/build/application-id
 #: ../fdroidserver/lint.py
-#, fuzzy
 msgid "UpdateCheckMode is set but it looks likecheckupdates hasn't been run yet"
 msgstr "UpdateCheckMode jest ustawiony, ale wygląda na to, że checkupdates nie został jeszcze uruchomiony"
 
@@ -2094,7 +2093,7 @@ msgstr "Ostrzegaj o możliwych błędach metadanych"
 
 #: ../fdroidserver/scanner.py
 msgid "WebAssembly binary file"
-msgstr ""
+msgstr "Plik binarny WebAssembly"
 
 #: ../fdroidserver/update.py
 msgid "When configured for signed indexes, create only unsigned indexes at this stage"
@@ -2701,7 +2700,7 @@ msgstr "wymagane są następujące argumenty: %s"
 
 #: ../fdroidserver/install.py
 msgid "true"
-msgstr ""
+msgstr "prawda"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
@@ -2746,7 +2745,7 @@ msgstr "virustotal.com jest ograniczenie stawki, czeka na ponowną próbę..."
 
 #: ../fdroidserver/install.py
 msgid "yes"
-msgstr ""
+msgstr "tak"
 
 #: ../fdroidserver/publish.py
 #, python-brace-format
