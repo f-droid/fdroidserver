@@ -11,8 +11,8 @@ msgstr ""
 "Project-Id-Version: fdroidserver 1.0.0-95-gd7af22b\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2024-11-21 21:34+0100\n"
-"PO-Revision-Date: 2024-11-28 08:34+0000\n"
-"Last-Translator: Eryk Michalak <gnu.ewm@protonmail.com>\n"
+"PO-Revision-Date: 2024-11-30 20:00+0000\n"
+"Last-Translator: WaldiS <sto@tutanota.de>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/f-droid/fdroidserver/pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
@@ -207,7 +207,7 @@ msgstr "'{value}' nie jest prawidłowym {field}, powinno być {pattern}"
 
 #: ../fdroidserver/checkupdates.py
 msgid "--merge-request only runs on a single appid!"
-msgstr ""
+msgstr "--merge-request działa tylko na pojedynczym appid!"
 
 #: ../fdroidserver/checkupdates.py
 #, python-brace-format
@@ -456,7 +456,7 @@ msgstr "Scommituj zmiany"
 
 #: ../fdroidserver/checkupdates.py
 msgid "Commit changes, push, then make a merge request"
-msgstr ""
+msgstr "Zatwierdź zmiany, wypchnij, a następnie utwórz żądanie scalenia"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
@@ -643,7 +643,7 @@ msgstr "Nie używaj sum kontrolnych rsync"
 
 #: ../fdroidserver/install.py
 msgid "Download F-Droid.apk using mirrors that leak less to the network"
-msgstr ""
+msgstr "Pobierz F-Droid.apk za pomocą serwerów lustrzanych, które wyciekają mniej do sieci"
 
 #: ../fdroidserver/__main__.py
 msgid "Download complete mirrors of small repos"
@@ -755,7 +755,7 @@ msgstr "Wyciągnij podpisy z plików APK"
 
 #: ../fdroidserver/install.py
 msgid "F-Droid.apk could not be downloaded from any known source!"
-msgstr ""
+msgstr "F-Droid.apk nie może być pobrany z żadnego znanego źródła!"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -1218,7 +1218,7 @@ msgstr "Nie znaleziono podłączonych urządzeń"
 
 #: ../fdroidserver/install.py
 msgid "No devices found for `adb install`! Please plug one in."
-msgstr ""
+msgstr "Nie znaleziono urządzeń dla `adb install`! Podłącz jedno urządzenie."
 
 #: ../fdroidserver/index.py
 msgid "No fingerprint in URL."
@@ -1426,7 +1426,7 @@ msgstr "Wydrukuj tajną zmienną do terminala, aby ułatwić kopiowanie/wklejani
 #: ../fdroidserver/install.py
 #, python-brace-format
 msgid "Privacy mode was enabled based on your locale ({country_code})."
-msgstr ""
+msgstr "Tryb prywatności został włączony w oparciu o ustawienia regionalne ({country_code})."
 
 #: ../fdroidserver/scanner.py
 #, python-format
@@ -1551,7 +1551,7 @@ msgstr "Ogranicz wyjście do ostrzeżeń i błędów"
 #: ../fdroidserver/net.py
 #, python-format
 msgid "Retrying failed download: %s"
-msgstr ""
+msgstr "Ponowna próba pobrania nie powiodła się: %s"
 
 #: ../fdroidserver/__main__.py
 msgid "Rewrite all the metadata files"
@@ -1621,7 +1621,7 @@ msgstr[2] "Skaner znalazł {} problemy"
 
 #: ../fdroidserver/scanner.py
 msgid "Scanning APK for extra signing blocks."
-msgstr ""
+msgstr "Skanowanie APK w poszukiwaniu dodatkowych bloków podpisywania."
 
 #: ../fdroidserver/scanner.py
 msgid "Scanning APK with dexdump for known non-free classes."
@@ -2080,7 +2080,7 @@ msgstr "Weryfikowanie podpisu indeksu:"
 #: ../fdroidserver/install.py
 #, python-brace-format
 msgid "Verifying package {path} with apksigner."
-msgstr ""
+msgstr "Weryfikacja pakietu {path} za pomocą apksigner."
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
@@ -2109,11 +2109,11 @@ msgstr "Jeśli podpisanie lub weryfikacja nie powiedzie się, zakończ z kodem b
 
 #: ../fdroidserver/install.py
 msgid "Would you like to download and install F-Droid.apk via adb? (YES/no)"
-msgstr ""
+msgstr "Czy chcesz pobrać i zainstalować F-Droid.apk przez adb? (TAK/NIE)"
 
 #: ../fdroidserver/install.py
 msgid "Would you like to download the app(s) from f-droid.org? (YES/no)"
-msgstr ""
+msgstr "Czy chcesz pobrać aplikacje ze strony f-droid.org? (TAK/NIE)"
 
 #: ../fdroidserver/init.py
 msgid "X.509 'Distinguished Name' used when generating keys"
@@ -2864,7 +2864,7 @@ msgstr "{path} została oznaczona przez virustotal {count} razy:"
 #: ../fdroidserver/install.py
 #, python-brace-format
 msgid "{path} has the wrong fingerprint ({fingerprint})!"
-msgstr ""
+msgstr "{path} ma niewłaściwy odcisk palca {fingerprint}!"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
