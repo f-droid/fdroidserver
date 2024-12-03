@@ -10,15 +10,15 @@ msgstr ""
 "Project-Id-Version: fdroidserver 2.0a5-27-gf24eae0f\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2024-11-21 21:34+0100\n"
-"PO-Revision-Date: 2024-09-10 09:27+0000\n"
-"Last-Translator: Hans-Christoph Steiner <hans@guardianproject.info>\n"
+"PO-Revision-Date: 2024-12-02 17:00+0000\n"
+"Last-Translator: Licaon Kter <licaon.kter@protonmail.com>\n"
 "Language-Team: Romanian <https://hosted.weblate.org/projects/f-droid/fdroidserver/ro/>\n"
 "Language: ro\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < 20)) ? 1 : 2;\n"
-"X-Generator: Weblate 5.8-dev\n"
+"X-Generator: Weblate 5.9-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -2629,9 +2629,9 @@ msgid "s3cmd sync indexes {path} to {url} and delete"
 msgstr "s3cmd sincronizează indexurile {path} cu {url} și șterge"
 
 #: ../fdroidserver/deploy.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "s3cmd syncs indexes from {path} to {url} and deletes removed"
-msgstr "s3cmd sincronizează indexurile {path} cu {url} și șterge"
+msgstr "s3cmd sincronizează indexurile {path} cu {url} și le șterge pe cele eliminate"
 
 #: ../fdroidserver/scanner.py
 #, python-brace-format
@@ -2699,7 +2699,7 @@ msgstr "sunt necesare următoarele argumente: %s"
 
 #: ../fdroidserver/install.py
 msgid "true"
-msgstr ""
+msgstr "adevărat"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
@@ -2744,7 +2744,7 @@ msgstr "virustotal.com limitează rata, așteptând o nouă încercare..."
 
 #: ../fdroidserver/install.py
 msgid "yes"
-msgstr ""
+msgstr "da"
 
 #: ../fdroidserver/publish.py
 #, python-brace-format
