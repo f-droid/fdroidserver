@@ -1130,8 +1130,8 @@ def get_toolsversion_logname(app, build):
     return "%s_%s_toolsversion.log" % (app.id, build.versionCode)
 
 
-def getsrcname(app, build):
-    return "%s_%s_src.tar.gz" % (app.id, build.versionCode)
+def get_src_tarball_name(appid, versionCode):
+    return f"{appid}_{versionCode}_src.tar.gz"
 
 
 def get_build_dir(app):
