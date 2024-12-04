@@ -155,12 +155,11 @@ def make_website(apps, repodir, repodict):
     if not os.path.exists(repodir):
         os.makedirs(repodir)
 
-    qrcode.make(link_fingerprinted).save(os.path.join(repodir, "index.png"))
-
     html_name = 'index.html'
     html_file = os.path.join(repodir, html_name)
 
     if _should_file_be_generated(html_file, autogenerate_comment):
+        qrcode.make(link_fingerprinted).save(os.path.join(repodir, "index.png"))
         with open(html_file, 'w') as f:
             name = repodict["name"]
             description = repodict["description"]
