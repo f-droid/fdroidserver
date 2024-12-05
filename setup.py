@@ -116,8 +116,13 @@ setup(
     # Some requires are only needed for very limited cases:
     # * biplist is only used for parsing Apple .ipa files
     # * pycountry is only for linting config/mirrors.yml
+    # * python-magic is preferred when libmagic is available, but its not in pypi.org
     extras_require={
-        'optional': ['biplist', 'pycountry'],
+        'optional': [
+            'biplist',
+            'pycountry',
+            'python-magic',
+        ],
         'test': ['pyjks', 'html5print'],
         'docs': [
             'sphinx',
