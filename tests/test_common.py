@@ -2394,11 +2394,9 @@ class CommonTest(unittest.TestCase):
     def test_auto_install_ndk_mock_dl(self):
         """Test NDK installs by actually calling sdkmanager"""
         import sdkmanager
-        import pkg_resources
+        import importlib.metadata
 
-        sdkmanager_version = LooseVersion(
-            pkg_resources.get_distribution('sdkmanager').version
-        )
+        sdkmanager_version = LooseVersion(importlib.metadata.version('sdkmanager'))
         if sdkmanager_version < LooseVersion('0.6.4'):
             raise unittest.SkipTest('needs fdroid sdkmanager >= 0.6.4')
 
