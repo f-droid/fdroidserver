@@ -28,6 +28,7 @@ import os
 import re
 import ruamel.yaml
 import shutil
+import sys
 import tempfile
 import urllib.parse
 import zipfile
@@ -1308,6 +1309,29 @@ def make_v0(apps, apks, repodir, repodict, requestsdict, fdroid_signing_key_fing
                     if os.path.islink(siglinkname):
                         os.remove(siglinkname)
                     os.symlink(sigfile_path, siglinkname)
+
+    if sys.version_info.minor >= 13:
+        # Python 3.13 changed minidom so it no longer converts " to an XML entity.
+        # https://github.com/python/cpython/commit/154477be722ae5c4e18d22d0860e284006b09c4f
+        # This just puts back the previous implementation, with black code format.
+        import inspect
+        import xml.dom.minidom
+
+        def _write_data(writer, text, attr):  # pylint: disable=unused-argument
+            if text:
+                text = (
+                    text.replace('&', '&amp;')
+                    .replace('<', '&lt;')
+                    .replace('"', '&quot;')
+                    .replace('>', '&gt;')
+                )
+            writer.write(text)
+
+        argnames = tuple(inspect.signature(xml.dom.minidom._write_data).parameters)
+        if argnames == ('writer', 'text', 'attr'):
+            xml.dom.minidom._write_data = _write_data
+        else:
+            logging.warning('Failed to monkey patch minidom for index.xml support!')
 
     if common.options.pretty:
         output = doc.toprettyxml(encoding='utf-8')
