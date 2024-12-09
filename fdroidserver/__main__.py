@@ -69,6 +69,7 @@ COMMANDS_INTERNAL = [
     "destroy",
     "exec",
     "execute_sudo",
+    "fetch_repo",
     "install_ndk",
     "make_source_tarball",
     "prepare_source",
