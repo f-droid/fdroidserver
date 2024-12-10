@@ -35,6 +35,7 @@ class Push_main(PushTest):
     @mock.patch('sys.argv', ['fdroid push', APPID_VERCODE])
     @mock.patch('fdroidserver.push.create_build_dirs')
     @mock.patch('fdroidserver.push.podman_push')
+    @mock.patch('fdroidserver.common.inside_exec', mock.Mock())
     def test_podman(self, podman_push, create_build_dirs):
         common.config['virt_container_type'] = 'podman'
         push.main()
@@ -44,6 +45,7 @@ class Push_main(PushTest):
     @mock.patch('sys.argv', ['fdroid push', APPID_VERCODE])
     @mock.patch('fdroidserver.push.create_build_dirs')
     @mock.patch('fdroidserver.push.vagrant_push')
+    @mock.patch('fdroidserver.common.inside_exec', mock.Mock())
     def test_vagrant(self, vagrant_push, create_build_dirs):
         common.config['virt_container_type'] = 'vagrant'
         push.main()

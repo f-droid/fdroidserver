@@ -191,6 +191,15 @@ def full_push_sequence(appid, vercode, virt_container_type):
             vercode,
             virt_container_type,
         )
+
+        # fix owner after pushing files
+        common.inside_exec(
+            appid,
+            vercode,
+            ['chown', '-R', 'vagrant:vagrant', '/home/vagrant'],
+            virt_container_type,
+            as_root=True,
+        )
     finally:
         os.chdir(cwd)
 
