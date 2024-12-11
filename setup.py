@@ -116,8 +116,13 @@ setup(
     # Some requires are only needed for very limited cases:
     # * biplist is only used for parsing Apple .ipa files
     # * pycountry is only for linting config/mirrors.yml
+    # * python-magic is preferred when libmagic is available, but its not in pypi.org
     extras_require={
-        'optional': ['biplist', 'pycountry'],
+        'optional': [
+            'biplist',
+            'pycountry',
+            'python-magic',
+        ],
         'test': ['pyjks', 'html5print'],
         'docs': [
             'sphinx',
@@ -127,7 +132,7 @@ setup(
         ],
     },
     classifiers=[
-        'Development Status :: 4 - Beta',
+        'Development Status :: 5 - Production/Stable',
         'Intended Audience :: Developers',
         'Intended Audience :: Information Technology',
         'Intended Audience :: System Administrators',
@@ -136,6 +141,13 @@ setup(
         'Operating System :: POSIX',
         'Operating System :: MacOS :: MacOS X',
         'Operating System :: Unix',
+        'Programming Language :: Python :: 3',
+        'Programming Language :: Python :: 3.9',
+        "Programming Language :: Python :: 3.10",
+        "Programming Language :: Python :: 3.11",
+        "Programming Language :: Python :: 3.12",
+        "Programming Language :: Python :: 3.13",
+        'Programming Language :: Python :: 3 :: Only',
         'Topic :: Utilities',
     ],
 )
