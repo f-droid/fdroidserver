@@ -26,7 +26,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2024-11-21 21:34+0100\n"
+"POT-Creation-Date: 2024-12-11 14:37+0100\n"
 "PO-Revision-Date: 2024-12-03 09:22+0000\n"
 "Last-Translator: VfBFan <VfBFan@users.noreply.hosted.weblate.org>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/f-droid/fdroidserver/de/>\n"
@@ -1526,6 +1526,10 @@ msgstr "Lese {apkfilename} aus dem Cache"
 #: ../fdroidserver/build.py
 msgid "Refresh and cache scanner rules and signatures from the network"
 msgstr "Aktualisieren und Zwischenspeichern von Scannerregeln und Signaturen aus dem Netzwerk"
+
+#: ../fdroidserver/verify.py
+msgid "Remove source tarball and any APKs if successfully verified."
+msgstr ""
 
 #: ../fdroidserver/common.py
 msgid "Removing specified files"

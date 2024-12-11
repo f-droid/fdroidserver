@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 2.1-273-g54e84d87\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2024-11-21 21:34+0100\n"
+"POT-Creation-Date: 2024-12-11 14:37+0100\n"
 "PO-Revision-Date: 2024-11-27 18:26+0000\n"
 "Last-Translator: Ecron <ecron_89@hotmail.com>\n"
 "Language-Team: Catalan <https://hosted.weblate.org/projects/f-droid/fdroidserver/ca/>\n"
@@ -1511,6 +1511,10 @@ msgstr "S'està llegint {apkfilename} des de la memòria cau"
 #: ../fdroidserver/build.py
 msgid "Refresh and cache scanner rules and signatures from the network"
 msgstr "Actualitza i cau les regles de l'escàner i les signatures de la xarxa"
+
+#: ../fdroidserver/verify.py
+msgid "Remove source tarball and any APKs if successfully verified."
+msgstr ""
 
 #: ../fdroidserver/common.py
 msgid "Removing specified files"

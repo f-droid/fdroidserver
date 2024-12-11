@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 1.1-681-gc19e8952\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2024-11-21 21:34+0100\n"
+"POT-Creation-Date: 2024-12-11 14:37+0100\n"
 "PO-Revision-Date: 2020-10-29 08:32+0000\n"
 "Last-Translator: Hakim Oubouali <hakim.oubouali.skr@gmail.com>\n"
 "Language-Team: Central Atlas Tamazight <https://hosted.weblate.org/projects/f-droid/fdroidserver/tzm/>\n"
@@ -1496,6 +1496,10 @@ msgstr ""
 
 #: ../fdroidserver/build.py
 msgid "Refresh and cache scanner rules and signatures from the network"
+msgstr ""
+
+#: ../fdroidserver/verify.py
+msgid "Remove source tarball and any APKs if successfully verified."
 msgstr ""
 
 #: ../fdroidserver/common.py

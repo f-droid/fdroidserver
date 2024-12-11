@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 2.3a1\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2024-11-21 21:34+0100\n"
+"POT-Creation-Date: 2024-12-11 14:37+0100\n"
 "PO-Revision-Date: 2024-09-08 11:09+0000\n"
 "Last-Translator: abelbiwott-dev <abelbiwott@outlook.com>\n"
 "Language-Team: Swahili <https://hosted.weblate.org/projects/f-droid/fdroidserver/sw/>\n"
@@ -1507,6 +1507,10 @@ msgstr "Kusoma {apkfilename} kutoka kwa hifadhi ya muda"
 #: ../fdroidserver/build.py
 msgid "Refresh and cache scanner rules and signatures from the network"
 msgstr "Onyesha upya na uweke kwenye hifadhi ya muda kanuni za skana na sahihi kutoka kwenye mtandao"
+
+#: ../fdroidserver/verify.py
+msgid "Remove source tarball and any APKs if successfully verified."
+msgstr ""
 
 #: ../fdroidserver/common.py
 msgid "Removing specified files"

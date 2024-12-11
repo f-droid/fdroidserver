@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 2.1-273-g54e84d87\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2024-11-21 21:34+0100\n"
+"POT-Creation-Date: 2024-12-11 14:37+0100\n"
 "PO-Revision-Date: 2024-12-02 17:00+0000\n"
 "Last-Translator: தமிழ்நேரம் <anishprabu.t@gmail.com>\n"
 "Language-Team: Tamil <https://hosted.weblate.org/projects/f-droid/fdroidserver/ta/>\n"
@@ -1507,6 +1507,10 @@ msgstr "தற்காலிக சேமிப்பிலிருந்த�
 #: ../fdroidserver/build.py
 msgid "Refresh and cache scanner rules and signatures from the network"
 msgstr "நெட்வொர்க்கிலிருந்து ச்கேனர் விதிகள் மற்றும் கையொப்பங்களை புதுப்பித்து கேச்"
+
+#: ../fdroidserver/verify.py
+msgid "Remove source tarball and any APKs if successfully verified."
+msgstr ""
 
 #: ../fdroidserver/common.py
 msgid "Removing specified files"

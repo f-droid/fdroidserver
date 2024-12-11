@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 2.1b0\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2024-11-21 21:34+0100\n"
+"POT-Creation-Date: 2024-12-11 14:37+0100\n"
 "PO-Revision-Date: 2024-11-29 10:00+0000\n"
 "Last-Translator: Reno Tx <renotx@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Serbian <https://hosted.weblate.org/projects/f-droid/fdroidserver/sr/>\n"
@@ -1510,6 +1510,10 @@ msgstr "Читање {apkfilename} из кеша→"
 #: ../fdroidserver/build.py
 msgid "Refresh and cache scanner rules and signatures from the network"
 msgstr "Освежите и кеширајте правила и потписе скенера са мреже"
+
+#: ../fdroidserver/verify.py
+msgid "Remove source tarball and any APKs if successfully verified."
+msgstr ""
 
 #: ../fdroidserver/common.py
 msgid "Removing specified files"
