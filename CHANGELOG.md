@@ -12,6 +12,20 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 
 ### Removed
 
+## [2.3.3] - 2024-12-11
+
+### Added
+
+* verify: `--clean-up-verified` to delete files used when verifying an APK if
+  the verification was successful.
+
+### Fixed
+
+* Support Python 3.13 in the full test suite.
+* Sync translations for: ca de fr ja pl ro ru sr ta
+* update: only generate _index.png_ when making _index.html_, allowing the repo
+  operator to set a different repo icon, e.g. not the QR Code.
+
 ## [2.3.2] - 2024-11-26
 
 ### Fixed
@@ -55,7 +69,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
   like `countryCode:`.
 * Repo's categories are now set in the config files.
 * lint: check syntax of config files.
-* publish: ``--error-on-failed` to exit when signing/verifying fails.
+* publish: `--error-on-failed` to exit when signing/verifying fails.
 * scanner: `--refresh` and `refresh_config:` to control triggering a refresh of
   the rule sets.
 * Terminal output colorization and `--color` argument to control it.
