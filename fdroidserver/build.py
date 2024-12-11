@@ -306,7 +306,7 @@ def build_server(app, build, vcs, build_dir, output_dir, log_dir, force):
         else:
             ftp.chdir(posixpath.join(homedir, 'unsigned'))
         apkfile = common.get_release_filename(app, build)
-        tarball = common.getsrcname(app, build)
+        tarball = common.get_src_tarball_name(app.id, build.versionCode)
         try:
             ftp.get(apkfile, os.path.join(output_dir, apkfile))
             if not options.notarball:
@@ -619,7 +619,7 @@ def build_local(app, build, vcs, build_dir, output_dir, log_dir, srclib_dir, ext
     if not options.notarball:
         # Build the source tarball right before we build the release...
         logging.info("Creating source tarball...")
-        tarname = common.getsrcname(app, build)
+        tarname = common.get_src_tarball_name(app.id, build.versionCode)
         tarball = tarfile.open(os.path.join(tmp_dir, tarname), "w:gz")
 
         def tarexc(t):
