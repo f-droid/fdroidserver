@@ -526,13 +526,23 @@ def check_extlib_dir(apps):
 
     used = set()
     for app in apps:
-        for build in app.get('Builds', []):
+        if app.Disabled:
+            continue
+        archive_policy = common.calculate_archive_policy(
+            app, common.config['archive_older']
+        )
+        builds = [build for build in app.Builds if not build.disable]
+
+        for i in range(len(builds)):
+            build = builds[i]
             for path in build.extlibs:
                 path = Path(path)
                 if path not in extlib_files:
-                    yield _(
-                        "{appid}: Unknown extlib {path} in build '{versionName}'"
-                    ).format(appid=app.id, path=path, versionName=build.versionName)
+                    # Don't show error on archived versions
+                    if i >= len(builds) - archive_policy:
+                        yield _(
+                            "{appid}: Unknown extlib {path} in build '{versionName}'"
+                        ).format(appid=app.id, path=path, versionName=build.versionName)
                 else:
                     used.add(path)
 
