@@ -2,20 +2,21 @@
 # This file is put in the public domain.
 # Hinaloe <hina@hinaloe.net>, 2020.
 # Suguru Hirahara <shirahara@users.noreply.hosted.weblate.org>, 2024.
+# "Shuuji TAKAHASHI (shuuji3)" <shuuji3@gmail.com>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.8-224-g4b0ade7\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2024-11-21 21:34+0100\n"
-"PO-Revision-Date: 2024-09-26 13:16+0000\n"
-"Last-Translator: Suguru Hirahara <shirahara@users.noreply.hosted.weblate.org>\n"
+"PO-Revision-Date: 2024-11-28 08:34+0000\n"
+"Last-Translator: \"Shuuji TAKAHASHI (shuuji3)\" <shuuji3@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/f-droid/fdroidserver/ja/>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.8-dev\n"
+"X-Generator: Weblate 5.9-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -128,9 +129,9 @@ msgid "%s has bad SHA-256: %s"
 msgstr "%sのSHA-256は誤っています：%s"
 
 #: ../fdroidserver/lint.py
-#, fuzzy, python-format
+#, python-format
 msgid "%s is not an accepted build field"
-msgstr "%sは承諾されたビルドの欄ではありません"
+msgstr "%sは承認されたビルドフィールドではありません"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 #: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
@@ -201,7 +202,7 @@ msgstr "「{value}」は正しい{field}ではありません。{pattern}とし�
 
 #: ../fdroidserver/checkupdates.py
 msgid "--merge-request only runs on a single appid!"
-msgstr ""
+msgstr "--merge-requestは単一のappidでのみ実行されます！"
 
 #: ../fdroidserver/checkupdates.py
 #, python-brace-format
@@ -332,11 +333,11 @@ msgstr "UpdateCheckModeが有効になっているAutoUpdateMode：HTTPにパタ
 
 #: ../fdroidserver/install.py
 msgid "Automatic no to all prompts."
-msgstr ""
+msgstr "すべてのプロンプトに対して自動的にnoを選択します。"
 
 #: ../fdroidserver/install.py
 msgid "Automatic yes to all prompts."
-msgstr ""
+msgstr "すべてのプロンプトに対して自動的にyesを選択します。"
 
 #: ../fdroidserver/index.py
 #, python-brace-format
@@ -431,7 +432,7 @@ msgstr "クリーンアップデート - キャッシュを使用せず、全て
 
 #: ../fdroidserver/common.py
 msgid "Color the log output"
-msgstr ""
+msgstr "ログ出力に色を付ける"
 
 #: ../fdroidserver/import_subcommand.py
 msgid "Comma separated list of categories."
@@ -448,7 +449,7 @@ msgstr "変更をcommit"
 
 #: ../fdroidserver/checkupdates.py
 msgid "Commit changes, push, then make a merge request"
-msgstr ""
+msgstr "変更をコミット、プッシュしてから、マージリクエストを作成してください"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
@@ -635,7 +636,7 @@ msgstr "rsyncのチェックサムを使用しない"
 
 #: ../fdroidserver/install.py
 msgid "Download F-Droid.apk using mirrors that leak less to the network"
-msgstr ""
+msgstr "ネットワークへの情報漏洩が少ないミラーを使用してF-Droid.apkをダウンロードする"
 
 #: ../fdroidserver/__main__.py
 msgid "Download complete mirrors of small repos"
@@ -747,7 +748,7 @@ msgstr "APKから署名を抽出"
 
 #: ../fdroidserver/install.py
 msgid "F-Droid.apk could not be downloaded from any known source!"
-msgstr ""
+msgstr "既知のソースからF-Droid.apkをダウンロードできませんでした！"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -1209,7 +1210,7 @@ msgstr "接続している端末が見つかりません"
 
 #: ../fdroidserver/install.py
 msgid "No devices found for `adb install`! Please plug one in."
-msgstr ""
+msgstr "`adb install`を実行するデバイスが見つかりません！デバイスを接続してください。"
 
 #: ../fdroidserver/index.py
 msgid "No fingerprint in URL."
@@ -1417,7 +1418,7 @@ msgstr "簡単にコピー、ペーストできるように秘密の変数をタ
 #: ../fdroidserver/install.py
 #, python-brace-format
 msgid "Privacy mode was enabled based on your locale ({country_code})."
-msgstr ""
+msgstr "ロケール（{country_code}）に基づいてプライバシー モードが有効になりました。"
 
 #: ../fdroidserver/scanner.py
 #, python-format
@@ -1542,7 +1543,7 @@ msgstr "警告とエラーのみを出力"
 #: ../fdroidserver/net.py
 #, python-format
 msgid "Retrying failed download: %s"
-msgstr ""
+msgstr "失敗したダウンロードを再試行しています: %s"
 
 #: ../fdroidserver/__main__.py
 msgid "Rewrite all the metadata files"
@@ -1610,7 +1611,7 @@ msgstr[0] "スキャナーは{}個の問題を発見しました"
 
 #: ../fdroidserver/scanner.py
 msgid "Scanning APK for extra signing blocks."
-msgstr ""
+msgstr "追加の署名ブロックがないかAPKをスキャンしています。"
 
 #: ../fdroidserver/scanner.py
 msgid "Scanning APK with dexdump for known non-free classes."
@@ -1871,9 +1872,9 @@ msgid "Unnecessary trailing space"
 msgstr "不要なスペースが末尾にあります"
 
 #: ../fdroidserver/metadata.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Unrecognised app field '{fieldname}' in '{path}'"
-msgstr "認識されないアプリの欄「{fieldname}」が「{path}」にあります"
+msgstr "「{path}」に未認識のアプリのフィールド「{fieldname}」があります"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
@@ -2069,7 +2070,7 @@ msgstr "インデックスの署名を検証："
 #: ../fdroidserver/install.py
 #, python-brace-format
 msgid "Verifying package {path} with apksigner."
-msgstr ""
+msgstr "apksignerを使用してパッケージ{path}を検証しています。"
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
@@ -2082,7 +2083,7 @@ msgstr "潜在的なメタデータのエラーに関して警告"
 
 #: ../fdroidserver/scanner.py
 msgid "WebAssembly binary file"
-msgstr ""
+msgstr "WebAssemblyバイナリ ファイル"
 
 #: ../fdroidserver/update.py
 msgid "When configured for signed indexes, create only unsigned indexes at this stage"
@@ -2098,11 +2099,11 @@ msgstr "署名または検証ができなかった場合、エラーコードを
 
 #: ../fdroidserver/install.py
 msgid "Would you like to download and install F-Droid.apk via adb? (YES/no)"
-msgstr ""
+msgstr "adb経由でF-Droid.apkをダウンロードしてインストールしますか？（YES/no）"
 
 #: ../fdroidserver/install.py
 msgid "Would you like to download the app(s) from f-droid.org? (YES/no)"
-msgstr ""
+msgstr "f-droid.orgからアプリをダウンロードしますか？（YES/no）"
 
 #: ../fdroidserver/init.py
 msgid "X.509 'Distinguished Name' used when generating keys"
@@ -2119,7 +2120,7 @@ msgstr "ZIPファイルアーカイブ"
 #: ../fdroidserver/install.py
 #, python-brace-format
 msgid "adb reports {serial} is \"{status}\"!"
-msgstr ""
+msgstr "adbは、{serial}が「{status}」であると報告しています！"
 
 #: ../fdroidserver/nightly.py
 #, python-brace-format
@@ -2685,7 +2686,7 @@ msgstr "次の引数が必要です：%s"
 
 #: ../fdroidserver/install.py
 msgid "true"
-msgstr ""
+msgstr "true"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
@@ -2730,7 +2731,7 @@ msgstr "virustotal.comはレート制限を行っています。再試行を待�
 
 #: ../fdroidserver/install.py
 msgid "yes"
-msgstr ""
+msgstr "yes"
 
 #: ../fdroidserver/publish.py
 #, python-brace-format
@@ -2847,7 +2848,7 @@ msgstr "{path}はvirustotalにより{count}回マークされました。"
 #: ../fdroidserver/install.py
 #, python-brace-format
 msgid "{path} has the wrong fingerprint ({fingerprint})!"
-msgstr ""
+msgstr "{path}のフィンガープリント（{fingerprint}）が間違っています！"
 
 #: ../fdroidserver/common.py
 #, python-brace-format

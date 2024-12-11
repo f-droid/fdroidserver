@@ -20,8 +20,8 @@ msgstr ""
 "Project-Id-Version: fdroidserver 1.0.0-95-gd7af22b\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2024-11-21 21:34+0100\n"
-"PO-Revision-Date: 2024-11-26 10:18+0000\n"
-"Last-Translator: gfbdrgng <hnaofegnp@hldrive.com>\n"
+"PO-Revision-Date: 2024-12-02 17:00+0000\n"
+"Last-Translator: Golubev Alexander <fatzer2@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/f-droid/fdroidserver/ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
@@ -347,11 +347,11 @@ msgstr "AutoUpdateMode с UpdateCheckMode: HTTP должен иметь шабл
 
 #: ../fdroidserver/install.py
 msgid "Automatic no to all prompts."
-msgstr "Автоматическое \"нет\" на все запросы."
+msgstr "Автоматически отвечать \"нет\" на все запросы."
 
 #: ../fdroidserver/install.py
 msgid "Automatic yes to all prompts."
-msgstr "Автоматическое \"да\" на все запросы."
+msgstr "Автоматически отвечать \"да\" на все запросы."
 
 #: ../fdroidserver/index.py
 #, python-brace-format
@@ -448,7 +448,7 @@ msgstr "Очистка с обновлением: не использовать 
 
 #: ../fdroidserver/common.py
 msgid "Color the log output"
-msgstr "Раскрасьте вывод журнала"
+msgstr "Раскрашивать сообщения журнала при выводе"
 
 #: ../fdroidserver/import_subcommand.py
 msgid "Comma separated list of categories."
@@ -461,11 +461,11 @@ msgstr "Команда '%s' не распознана.\n"
 
 #: ../fdroidserver/checkupdates.py
 msgid "Commit changes"
-msgstr "Сохранить изменения (commit)"
+msgstr "Зафиксировать изменения (commit)"
 
 #: ../fdroidserver/checkupdates.py
 msgid "Commit changes, push, then make a merge request"
-msgstr "Зафиксируйте изменения, вытолкните, затем сделайте запрос на слияние"
+msgstr "Зафиксировать изменения (commit), отправить (push) их в удалённый репозиторий, и затем создать запрос на слияние"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
@@ -652,7 +652,7 @@ msgstr "Не использовать контрольные суммы rsync"
 
 #: ../fdroidserver/install.py
 msgid "Download F-Droid.apk using mirrors that leak less to the network"
-msgstr "Загрузите F-Droid.apk с помощью зеркал, которые меньше просачиваются в сеть"
+msgstr "Загружать F-Droid.apk с помощью тех зеркал, из которые в сеть утекает меньше данных"
 
 #: ../fdroidserver/__main__.py
 msgid "Download complete mirrors of small repos"
@@ -1226,7 +1226,7 @@ msgstr "Подключенных устройств не найдено"
 
 #: ../fdroidserver/install.py
 msgid "No devices found for `adb install`! Please plug one in."
-msgstr "Для `adb install` не найдено ни одного устройства! Пожалуйста, подключите одно."
+msgstr "Для `adb install` не найдено ни одного устройства! Пожалуйста, подключите какое-нибудь."
 
 #: ../fdroidserver/index.py
 msgid "No fingerprint in URL."
@@ -2117,11 +2117,11 @@ msgstr "При неудачном подписании или проверке �
 
 #: ../fdroidserver/install.py
 msgid "Would you like to download and install F-Droid.apk via adb? (YES/no)"
-msgstr "Вы хотите скачать и установить F-Droid.apk через adb? (Да/нет)"
+msgstr "Вы хотите скачать и установить F-Droid.apk через adb? (ДА/нет)"
 
 #: ../fdroidserver/install.py
 msgid "Would you like to download the app(s) from f-droid.org? (YES/no)"
-msgstr "Хотите ли вы загрузить приложение(я) с сайта f-droid.org? (ДА/НЕТ)"
+msgstr "Хотите ли вы загрузить приложение(я) с сайта f-droid.org? (ДА/нет)"
 
 #: ../fdroidserver/init.py
 msgid "X.509 'Distinguished Name' used when generating keys"
@@ -2138,7 +2138,7 @@ msgstr "Архив ZIP"
 #: ../fdroidserver/install.py
 #, python-brace-format
 msgid "adb reports {serial} is \"{status}\"!"
-msgstr "adb сообщает, что {serial} - это \"{status}\"!"
+msgstr "adb сообщает, что устройство «{serial}» находится в состоянии «{status}»!"
 
 #: ../fdroidserver/nightly.py
 #, python-brace-format
@@ -2753,7 +2753,7 @@ msgstr "virustotal.com ограничивает траффик, ждем пов�
 
 #: ../fdroidserver/install.py
 msgid "yes"
-msgstr "Да"
+msgstr "да"
 
 #: ../fdroidserver/publish.py
 #, python-brace-format
@@ -2872,7 +2872,7 @@ msgstr "{path} был отмечен virustotal {count} раз:"
 #: ../fdroidserver/install.py
 #, python-brace-format
 msgid "{path} has the wrong fingerprint ({fingerprint})!"
-msgstr "У {path} неправильный отпечаток пальца ({fingerprint})!"
+msgstr "У {path} неправильный отпечаток ({fingerprint})!"
 
 #: ../fdroidserver/common.py
 #, python-brace-format

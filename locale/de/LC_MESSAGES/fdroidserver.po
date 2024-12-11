@@ -27,7 +27,7 @@ msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2024-11-21 21:34+0100\n"
-"PO-Revision-Date: 2024-11-22 21:03+0000\n"
+"PO-Revision-Date: 2024-12-03 09:22+0000\n"
 "Last-Translator: VfBFan <VfBFan@users.noreply.hosted.weblate.org>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/f-droid/fdroidserver/de/>\n"
 "Language: de\n"
@@ -1546,7 +1546,7 @@ msgstr "Der RepoTrunk-Aktualisierungsmodus ist nur bei git-svn-Paketquellen sinn
 
 #: ../fdroidserver/build.py
 msgid "Reset and create a brand new build server, even if the existing one appears to be ok."
-msgstr "Zurücksetzen und ganz neuen Build-Server einrichten, auch wenn der bestehende in Ordnung zu sein scheint."
+msgstr "Zurücksetzen und ganz neuen Buildserver einrichten, auch wenn der bestehende in Ordnung zu sein scheint."
 
 #: ../fdroidserver/nightly.py
 #, python-brace-format
@@ -2016,7 +2016,7 @@ msgstr "Verwende `fdroid update -c` zum Erstellen."
 
 #: ../fdroidserver/build.py
 msgid "Use build server"
-msgstr "Verwende Build-Server"
+msgstr "Verwende Buildserver"
 
 #: ../fdroidserver/update.py
 msgid "Use date from APK instead of current time for newly added APKs"

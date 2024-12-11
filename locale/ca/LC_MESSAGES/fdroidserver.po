@@ -6,13 +6,14 @@
 # Adrià Martín <adriamartinmor@gmail.com>, 2024.
 # unmes <jordi.guiu.pujols@gmail.com>, 2024.
 # Joan Pujolar <joan.pujolar@gmail.com>, 2024.
+# Ecron <ecron_89@hotmail.com>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 2.1-273-g54e84d87\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2024-11-21 21:34+0100\n"
-"PO-Revision-Date: 2024-11-26 15:16+0000\n"
-"Last-Translator: Joan Pujolar <joan.pujolar@gmail.com>\n"
+"PO-Revision-Date: 2024-11-27 18:26+0000\n"
+"Last-Translator: Ecron <ecron_89@hotmail.com>\n"
 "Language-Team: Catalan <https://hosted.weblate.org/projects/f-droid/fdroidserver/ca/>\n"
 "Language: ca\n"
 "MIME-Version: 1.0\n"
@@ -206,7 +207,7 @@ msgstr "'{value}' no és un {field} vàlid; hauria de ser {pattern}"
 
 #: ../fdroidserver/checkupdates.py
 msgid "--merge-request only runs on a single appid!"
-msgstr "--merge-request només funciona amb un sol ID d'app!"
+msgstr "--merge-request només funciona amb un sol ID d'aplicació!"
 
 #: ../fdroidserver/checkupdates.py
 #, python-brace-format
@@ -454,7 +455,7 @@ msgstr "Publicar els canvis"
 
 #: ../fdroidserver/checkupdates.py
 msgid "Commit changes, push, then make a merge request"
-msgstr "Sancioneu els canvis, pitgeu i després feu la, sol·licitud de fusió"
+msgstr "Sancioneu els canvis, publiqueu-los i després feu una sol·licitud de fusió"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
@@ -641,7 +642,7 @@ msgstr "No usis les sumes de verificació \"rsync\""
 
 #: ../fdroidserver/install.py
 msgid "Download F-Droid.apk using mirrors that leak less to the network"
-msgstr "Descarregar F-Droid.apk amb els miralls que presenten menys filtracions a la xarxa"
+msgstr "Baixeu l'F-Droid.apk amb els miralls que filtren menys dades a la xarxa"
 
 #: ../fdroidserver/__main__.py
 msgid "Download complete mirrors of small repos"
@@ -753,7 +754,7 @@ msgstr "Extreu les signatures dels APKs"
 
 #: ../fdroidserver/install.py
 msgid "F-Droid.apk could not be downloaded from any known source!"
-msgstr "F-Droid.apk no s'ha pogut descarregar de cap font coneguda!"
+msgstr "No s'ha pogut baixar l'F-Droid.apk des de cap font coneguda!"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -1215,7 +1216,7 @@ msgstr "No s'ha trobat cap dispositiu adjunt"
 
 #: ../fdroidserver/install.py
 msgid "No devices found for `adb install`! Please plug one in."
-msgstr "No s'han trobat dispositius per a `adb install`! Sisplau, connecteu-ne algun."
+msgstr "No s'han trobat dispositius per a `adb install`! Connecteu-ne algun."
 
 #: ../fdroidserver/index.py
 msgid "No fingerprint in URL."
@@ -1423,7 +1424,7 @@ msgstr "Imprimeix la variable secreta al terminal per a copiar/enganxar fàcilme
 #: ../fdroidserver/install.py
 #, python-brace-format
 msgid "Privacy mode was enabled based on your locale ({country_code})."
-msgstr "El mode privat s'ha habilitat en base al vostre ({country_code})."
+msgstr "El mode privat s'ha habilitat d'acord amb el vostre codi regional ({country_code})."
 
 #: ../fdroidserver/scanner.py
 #, python-format
@@ -1548,7 +1549,7 @@ msgstr "Restringeix la sortida a avisos i errors"
 #: ../fdroidserver/net.py
 #, python-format
 msgid "Retrying failed download: %s"
-msgstr "Reintent fallit de descàrrega de: %s"
+msgstr "S'està tornant a baixar: %s"
 
 #: ../fdroidserver/__main__.py
 msgid "Rewrite all the metadata files"
@@ -1617,7 +1618,7 @@ msgstr[1] "L'escàner ha trobat {} problemes"
 
 #: ../fdroidserver/scanner.py
 msgid "Scanning APK for extra signing blocks."
-msgstr "Pentinant L'APK en busca de blocs signants addicionals."
+msgstr "S'està escanejant l'APK en cerca de blocs signants addicionals."
 
 #: ../fdroidserver/scanner.py
 msgid "Scanning APK with dexdump for known non-free classes."
@@ -2076,7 +2077,7 @@ msgstr "Verificació de la signatura de l'índex:"
 #: ../fdroidserver/install.py
 #, python-brace-format
 msgid "Verifying package {path} with apksigner."
-msgstr "Verificant la {path} del paquet amb el signador d'apk apksigner."
+msgstr "S'està verificant el paquet {path} l'apksigner."
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
@@ -2089,7 +2090,7 @@ msgstr "Avisa de possibles errors a les metadades"
 
 #: ../fdroidserver/scanner.py
 msgid "WebAssembly binary file"
-msgstr "Document binari d'AssemblatgeWeb"
+msgstr "Fitxer binari WebAssembly"
 
 #: ../fdroidserver/update.py
 msgid "When configured for signed indexes, create only unsigned indexes at this stage"
@@ -2105,11 +2106,11 @@ msgstr "Quan signar o verificar falla, sortiu amb un codi d'error."
 
 #: ../fdroidserver/install.py
 msgid "Would you like to download and install F-Droid.apk via adb? (YES/no)"
-msgstr "Us va bé de descarregar i instal·lar F-Droid.apk via adb? (SÍ/no)"
+msgstr "Voleu baixar i instal·lar l'F-Droid.apk mitjançant adb? (SÍ/no)"
 
 #: ../fdroidserver/install.py
 msgid "Would you like to download the app(s) from f-droid.org? (YES/no)"
-msgstr "Us va bé de descarregar la/es app/s des de f-droid.org? (SÍ/no)"
+msgstr "Voleu baixar les aplicacions des de f-droid.org? (SÍ/no)"
 
 #: ../fdroidserver/init.py
 msgid "X.509 'Distinguished Name' used when generating keys"
@@ -2126,7 +2127,7 @@ msgstr "arxiu de fitxers ZIP"
 #: ../fdroidserver/install.py
 #, python-brace-format
 msgid "adb reports {serial} is \"{status}\"!"
-msgstr "adb informa que {serial} està en \"{status}\"!"
+msgstr "adb informa que {serial} és: «{status}»!"
 
 #: ../fdroidserver/nightly.py
 #, python-brace-format
@@ -2694,7 +2695,7 @@ msgstr "els arguments següents són obligatoris: %s"
 
 #: ../fdroidserver/install.py
 msgid "true"
-msgstr "ver"
+msgstr "vertader"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
@@ -2857,7 +2858,7 @@ msgstr "{path} ha estat marcat pel virustotal {count} vegades:"
 #: ../fdroidserver/install.py
 #, python-brace-format
 msgid "{path} has the wrong fingerprint ({fingerprint})!"
-msgstr "{path} no té la ditada correcta ({fingerprint})!"
+msgstr "{path} no té l'emprempta correcta ({fingerprint})!"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
