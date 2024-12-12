@@ -4705,6 +4705,20 @@ def _install_ndk(ndk):
         )
 
 
+def calculate_archive_policy(app, default):
+    """Calculate the archive policy from the metadata and default config."""
+    if app.get('ArchivePolicy') is not None:
+        archive_policy = app['ArchivePolicy']
+    else:
+        archive_policy = default
+        if app.get('VercodeOperation'):
+            archive_policy *= len(app['VercodeOperation'])
+    builds = [build for build in app.Builds if not build.disable]
+    if app.Builds and archive_policy > len(builds):
+        archive_policy = len(builds)
+    return archive_policy
+
+
 FDROIDORG_MIRRORS = [
     {
         'isPrimary': True,

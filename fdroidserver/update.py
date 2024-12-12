@@ -2276,15 +2276,9 @@ def archive_old_apks(apps, apks, archapks, repodir, archivedir, defaultkeepversi
         return sorted_list
 
     for appid, app in apps.items():
-
-        if app.get('ArchivePolicy') is not None:
-            keepversions = app['ArchivePolicy']
-        else:
-            keepversions = defaultkeepversions
-            if app.get('VercodeOperation'):
-                keepversions *= len(app['VercodeOperation'])
-            if common.metadata_find_developer_signing_files(appid, app['CurrentVersionCode']):
-                keepversions *= 2
+        keepversions = common.calculate_archive_policy(app, defaultkeepversions)
+        if common.metadata_find_developer_signing_files(appid, app['CurrentVersionCode']):
+            keepversions *= 2
 
         logging.debug(_("Checking archiving for {appid} - apks:{integer}, keepversions:{keep}, archapks:{arch}")
                       .format(appid=appid, integer=len(apks), keep=keepversions, arch=len(archapks)))
