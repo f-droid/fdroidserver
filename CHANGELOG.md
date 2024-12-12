@@ -12,6 +12,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 
 ### Removed
 
+## [2.3.4] - 2024-12-12
+
+### Fixed
+
+* Fix localhost network tests on systems with IPv6.
+* lint: only error out on missing extlib on versions not archived.
+
 ## [2.3.3] - 2024-12-11
 
 ### Added
