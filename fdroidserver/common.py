@@ -3942,11 +3942,13 @@ def compare_apks(apk1, apk2, tmp_dir, log_dir=None):
         f.extractall(path=os.path.join(apk2dir, 'content'))
 
     if set_command_in_config('apktool'):
-        if subprocess.call([config['apktool'], 'd', absapk1, '--output', 'apktool'],
-                           cwd=apk1dir) != 0:
+        if subprocess.call(
+            [config['apktool'], 'd', absapk1, '--output', 'apktool'], cwd=apk1dir
+        ):
             return "Failed to run apktool " + apk1
-        if subprocess.call([config['apktool'], 'd', absapk2, '--output', 'apktool'],
-                           cwd=apk2dir) != 0:
+        if subprocess.call(
+            [config['apktool'], 'd', absapk2, '--output', 'apktool'], cwd=apk2dir
+        ):
             return "Failed to run apktool " + apk2
 
     p = FDroidPopen(['diff', '-r', apk1dir, apk2dir], output=False)
