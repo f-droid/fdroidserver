@@ -145,22 +145,26 @@ def write_json_report(url, remote_apk, unsigned_apk, compare_result):
         json.dump(data, fp, sort_keys=True)
 
     if output['verified']:
-        jsonfile = 'unsigned/verified.json'
-        data = get_verified_json(jsonfile)
-        packageName = output['local']['packageName']
+        write_verified_json(output)
 
-        if packageName not in data['packages']:
-            data['packages'][packageName] = []
-        found = False
-        output_dump = json.dumps(output, sort_keys=True)
-        for p in data['packages'][packageName]:
-            if output_dump == json.dumps(p, sort_keys=True):
-                found = True
-                break
-        if not found:
-            data['packages'][packageName].insert(0, json.loads(output_dump))
-        with open(jsonfile, 'w') as fp:
-            json.dump(data, fp, cls=common.Encoder, sort_keys=True)
+
+def write_verified_json(output):
+    jsonfile = 'unsigned/verified.json'
+    data = get_verified_json(jsonfile)
+    packageName = output['local']['packageName']
+
+    if packageName not in data['packages']:
+        data['packages'][packageName] = []
+    found = False
+    output_dump = json.dumps(output, sort_keys=True)
+    for p in data['packages'][packageName]:
+        if output_dump == json.dumps(p, sort_keys=True):
+            found = True
+            break
+    if not found:
+        data['packages'][packageName].insert(0, json.loads(output_dump))
+    with open(jsonfile, 'w') as fp:
+        json.dump(data, fp, cls=common.Encoder, sort_keys=True)
 
 
 def main():
