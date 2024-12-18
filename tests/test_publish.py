@@ -24,7 +24,7 @@ from fdroidserver import common
 from fdroidserver import metadata
 from fdroidserver import signatures
 from fdroidserver.exception import FDroidException
-from .testcommon import mkdtemp, VerboseFalseOptions
+from .shared_test_code import mkdtemp, VerboseFalseOptions
 
 basedir = pathlib.Path(__file__).parent
 

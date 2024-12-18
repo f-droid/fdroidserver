@@ -721,6 +721,7 @@ include tests/repo/v1.v2.sig_1020.apk
 include tests/run-tests
 include tests/SANAPPSI.RSA
 include tests/SANAPPSI.SF
+include tests/shared_test_code.py
 include tests/signindex/guardianproject.jar
 include tests/signindex/guardianproject-v1.jar
 include tests/signindex/testy.jar
@@ -845,7 +846,6 @@ include tests/source-files/ut.ewh.audiometrytest/settings.gradle
 include tests/source-files/yuriykulikov/AlarmClock/gradle/wrapper/gradle-wrapper.properties
 include tests/source-files/Zillode/syncthing-silk/build.gradle
 include tests/SpeedoMeterApp.main_1.apk
-include tests/testcommon.py
 include tests/test_build.py
 include tests/test_checkupdates.py
 include tests/test_common.py

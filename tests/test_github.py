@@ -3,7 +3,7 @@
 import unittest
 import unittest.mock
 
-from .testcommon import mock_urlopen
+from .shared_test_code import mock_urlopen
 import fdroidserver
 
 

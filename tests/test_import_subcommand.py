@@ -13,7 +13,7 @@ import git
 import requests
 import yaml
 
-from .testcommon import TmpCwd, mkdtemp, VerboseFalseOptions
+from .shared_test_code import TmpCwd, mkdtemp, VerboseFalseOptions
 
 import fdroidserver
 import fdroidserver.import_subcommand

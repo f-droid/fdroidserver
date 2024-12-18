@@ -30,7 +30,7 @@ import fdroidserver
 import fdroidserver.signindex
 import fdroidserver.common
 import fdroidserver.metadata
-from .testcommon import TmpCwd, mkdtemp
+from .shared_test_code import TmpCwd, mkdtemp
 from fdroidserver.common import ANTIFEATURES_CONFIG_NAME, CATEGORIES_CONFIG_NAME
 from fdroidserver.exception import FDroidException, VCSException,\
     MetaDataException, VerificationException

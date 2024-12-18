@@ -48,7 +48,7 @@ import fdroidserver.metadata
 import fdroidserver.update
 from fdroidserver.common import CATEGORIES_CONFIG_NAME
 from fdroidserver.looseversion import LooseVersion
-from .testcommon import TmpCwd, mkdtemp
+from .shared_test_code import TmpCwd, mkdtemp
 from PIL import PngImagePlugin
 
 

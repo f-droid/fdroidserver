@@ -8,7 +8,7 @@ import tempfile
 from unittest import mock
 
 import fdroidserver.__main__
-from .testcommon import TmpCwd, TmpPyPath
+from .shared_test_code import TmpCwd, TmpPyPath
 
 
 class MainTest(unittest.TestCase):
