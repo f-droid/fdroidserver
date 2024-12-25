@@ -7,11 +7,11 @@ import subprocess
 import sys
 import threading
 import unittest
+from datetime import datetime, timezone
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
 import loguru
-from datetime import UTC, datetime
 from androguard.core.apk import get_apkid
 from ruamel.yaml import YAML
 
@@ -740,7 +740,7 @@ class IntegrationTest(unittest.TestCase):
         self.update_yaml("metadata/com.politedroid.yml", {"ArchivePolicy": 1})
 
         self.assert_run(self.fdroid_cmd + ["update", "--pretty", "--nosign"])
-        timestamp = int(datetime(2017, 6, 23, tzinfo=UTC).timestamp()) * 1000
+        timestamp = int(datetime(2017, 6, 23, tzinfo=timezone.utc).timestamp()) * 1000
         index_v1_json = Path("repo/index-v1.json").read_text()
         self.assertIn(f'"added": {timestamp}', index_v1_json)
         # the archive will have the added timestamp for the app and for the apk,
