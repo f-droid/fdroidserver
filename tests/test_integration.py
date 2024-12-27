@@ -45,6 +45,16 @@ class IntegrationTest(unittest.TestCase):
         cls.tmp = WORKSPACE / ".testfiles"
         cls.tmp_repo = cls.tmp / "repo"
 
+        os.environ.update(
+            {
+                "GIT_AUTHOR_NAME": "Test",
+                "GIT_AUTHOR_EMAIL": "no@mail",
+                "GIT_COMMITTER_NAME": "Test",
+                "GIT_COMMITTER_EMAIL": "no@mail",
+                "GIT_ALLOW_PROTOCOL": "file:https",
+            }
+        )
+
     def setUp(self):
         self.prev_cwd = Path()
         self.tmp_repo.mkdir(parents=True)
@@ -1389,8 +1399,7 @@ class IntegrationTest(unittest.TestCase):
         os.chdir("../bar")
         self.assert_run(["git", "init"])
         self.assert_run(
-            ["git", "submodule", "add", f"file://{Path().resolve()}/../foo", "baz"],
-            env=os.environ | {"GIT_ALLOW_PROTOCOL": "file"},
+            ["git", "submodule", "add", f"file://{Path().resolve()}/../foo", "baz"]
         )
         Path(".gitmodules").unlink()
         self.assert_run(["git", "commit", "-am", "a"])
@@ -1428,8 +1437,7 @@ class IntegrationTest(unittest.TestCase):
         os.chdir("../bar")
         self.assert_run(["git", "init"])
         self.assert_run(
-            ["git", "submodule", "add", f"file://{Path().resolve()}/../foo", "baz"],
-            env=os.environ | {"GIT_ALLOW_PROTOCOL": "file"},
+            ["git", "submodule", "add", f"file://{Path().resolve()}/../foo", "baz"]
         )
         self.assert_run(["git", "commit", "-am", "a"])
         self.assert_run(["git", "tag", "2"])
@@ -1472,8 +1480,7 @@ class IntegrationTest(unittest.TestCase):
         os.chdir("../app")
         self.assert_run(["git", "init"])
         self.assert_run(
-            ["git", "submodule", "add", f"file://{Path().resolve()}/../sub"],
-            env=os.environ | {"GIT_ALLOW_PROTOCOL": "file"},
+            ["git", "submodule", "add", f"file://{Path().resolve()}/../sub"]
         )
         self.assert_run(["git", "commit", "-am", "1"])
         self.assert_run(["git", "tag", "1"])
@@ -1484,10 +1491,7 @@ class IntegrationTest(unittest.TestCase):
 
         os.chdir("../app")
         self.assert_run(["git", "init"])
-        self.assert_run(
-            ["git", "submodule", "update", "--remote"],
-            env=os.environ | {"GIT_ALLOW_PROTOCOL": "file"},
-        )
+        self.assert_run(["git", "submodule", "update", "--remote"])
         self.assert_run(["git", "commit", "-am", "2"])
 
         os.chdir("..")
@@ -1507,7 +1511,6 @@ class IntegrationTest(unittest.TestCase):
             },
         )
         self.assert_run(
-            self.fdroid_cmd + ["checkupdates", "--allow-dirty", "--auto", "-v"],
-            env=os.environ | {"GIT_ALLOW_PROTOCOL": "file"},
+            self.fdroid_cmd + ["checkupdates", "--allow-dirty", "--auto", "-v"]
         )
         self.assertIn("CurrentVersionCode: 1", Path("metadata/fake.yml").read_text())
