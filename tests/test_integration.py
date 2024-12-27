@@ -11,12 +11,12 @@ from datetime import datetime, timezone
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
-import loguru
-from androguard.core.apk import get_apkid
 from ruamel.yaml import YAML
 
-# suppress unnecessary logging output from get_apkid
-loguru.logger.disable("androguard")
+try:
+    from androguard.core.bytecodes.apk import get_apkid  # androguard <4
+except ModuleNotFoundError:
+    from androguard.core.apk import get_apkid
 
 
 basedir = Path(__file__).parent
