@@ -40,13 +40,14 @@
 # Sylvain Pichon <service@spichon.fr>, 2024.
 # Sylvain Pichon <Sp_@users.noreply.hosted.weblate.org>, 2024.
 # Lzebulon <lzebulon@crans.org>, 2024.
+# Armand Camponovo <contact@camarm.dev>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2024-12-11 14:37+0100\n"
-"PO-Revision-Date: 2024-12-29 07:26+0000\n"
-"Last-Translator: Sylvain Pichon <Sp_@users.noreply.hosted.weblate.org>\n"
+"PO-Revision-Date: 2024-12-31 00:24+0000\n"
+"Last-Translator: Armand Camponovo <contact@camarm.dev>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/f-droid/fdroidserver/fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
@@ -904,7 +905,6 @@ msgid "Found multiple JAR Signature Block Files in {path}"
 msgstr "Plusieurs fichiers de bloc de signature JAR trouvé à {path}"
 
 #: ../fdroidserver/common.py
-#, fuzzy
 msgid "Found multiple Signer Certificates!"
 msgstr "Plusieurs certificats de signatures ont été trouvés !"
 
@@ -975,7 +975,7 @@ msgstr "Reset de Git échouée"
 #: ../fdroidserver/common.py
 #, fuzzy
 msgid "Git submodule deinit failed"
-msgstr "Échec de la mise à jour du sous-module Git"
+msgstr "Échec de la suppression du sous-module Git"
 
 #: ../fdroidserver/common.py
 msgid "Git submodule sync failed"
