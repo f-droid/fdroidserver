@@ -94,7 +94,7 @@ MINIMUM_APKSIGNER_BUILD_TOOLS_VERSION = '30.0.0'
 VERCODE_OPERATION_RE = re.compile(r'^([ 0-9/*+-]|%c)+$')
 
 # A signature block file with a .DSA, .RSA, or .EC extension
-SIGNATURE_BLOCK_FILE_REGEX = re.compile(r'^META-INF/.*\.(DSA|EC|RSA)$')
+SIGNATURE_BLOCK_FILE_REGEX = re.compile(r'\AMETA-INF/.*\.(DSA|EC|RSA)\Z', re.DOTALL)
 APK_NAME_REGEX = re.compile(r'^([a-zA-Z][\w.]*)_(-?[0-9]+)_?([0-9a-f]{7})?\.apk')
 APK_ID_TRIPLET_REGEX = re.compile(r"^package: name='(\w[^']*)' versionCode='([^']+)' versionName='([^']*)'")
 STANDARD_FILE_NAME_REGEX = re.compile(r'^(\w[\w.]*)_(-?[0-9]+)\.\w+')
