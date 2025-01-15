@@ -15,7 +15,7 @@
 # fossdd <fossdd@tutanota.com>, 2021.
 # Ceeee <marius.romanus@gmx.de>, 2021.
 # C. Rüdinger <Mail-an-CR@web.de>, 2021, 2022.
-# VfBFan <drop0815@posteo.de>, 2021, 2023.
+# VfBFan <drop0815@posteo.de>, 2021, 2023, 2024.
 # Roman Leo <roman.leo@gmx.de>, 2021.
 # Follpvosten <wolfi@karpador.xyz>, 2021.
 # ssantos <ssantos@web.de>, 2022, 2023, 2024.
@@ -27,8 +27,8 @@ msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2024-12-11 14:37+0100\n"
-"PO-Revision-Date: 2024-12-03 09:22+0000\n"
-"Last-Translator: VfBFan <VfBFan@users.noreply.hosted.weblate.org>\n"
+"PO-Revision-Date: 2024-12-12 14:43+0000\n"
+"Last-Translator: VfBFan <drop0815@posteo.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/f-droid/fdroidserver/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -1529,7 +1529,7 @@ msgstr "Aktualisieren und Zwischenspeichern von Scannerregeln und Signaturen aus
 
 #: ../fdroidserver/verify.py
 msgid "Remove source tarball and any APKs if successfully verified."
-msgstr ""
+msgstr "Den Quell-Tarball und alle APKs entfernen, wenn sie erfolgreich verifiziert wurden."
 
 #: ../fdroidserver/common.py
 msgid "Removing specified files"
