@@ -3253,6 +3253,34 @@ class SignerExtractionTest(unittest.TestCase):
                     fdroidserver.common.signer_fingerprint(v3_certs[0]),
                 )
 
+    def test_signature_block_file_regex(self):
+        for apkpath, fingerprint in APKS_WITH_JAR_SIGNATURES:
+            with ZipFile(apkpath, 'r') as apk:
+                cert_files = [
+                    n
+                    for n in apk.namelist()
+                    if fdroidserver.common.SIGNATURE_BLOCK_FILE_REGEX.match(n)
+                ]
+                self.assertEqual(1, len(cert_files))
+
+    def test_signature_block_file_regex_malicious(self):
+        apkpath = os.path.join(self.testdir, 'malicious.apk')
+        with ZipFile(apkpath, 'w') as apk:
+            apk.writestr('META-INF/MANIFEST.MF', 'this is fake sig data')
+            apk.writestr('META-INF/CERT.SF\n', 'this is fake sig data')
+            apk.writestr('META-INF/AFTER.SF', 'this is fake sig data')
+            apk.writestr('META-INF/CERT.RSA\n', 'this is fake sig data')
+            apk.writestr('META-INF/AFTER.RSA', 'this is fake sig data')
+        with ZipFile(apkpath, 'r') as apk:
+            self.assertEqual(
+                ['META-INF/AFTER.RSA'],
+                [
+                    n
+                    for n in apk.namelist()
+                    if fdroidserver.common.SIGNATURE_BLOCK_FILE_REGEX.match(n)
+                ],
+            )
+
 
 class ConfigOptionsScopeTest(unittest.TestCase):
     """Test assumptions about variable scope for "config" and "options".
