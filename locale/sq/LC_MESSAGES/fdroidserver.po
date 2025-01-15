@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fdroidserver 1.0.6-349-g907c04ea\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2024-12-11 14:37+0100\n"
-"PO-Revision-Date: 2024-11-22 05:58+0000\n"
+"PO-Revision-Date: 2024-12-12 14:43+0000\n"
 "Last-Translator: Besnik Bleta <besnik@programeshqip.org>\n"
 "Language-Team: Albanian <https://hosted.weblate.org/projects/f-droid/fdroidserver/sq/>\n"
 "Language: sq\n"
@@ -1509,7 +1509,7 @@ msgstr "Rifresko dhe ruaj në fshehtinë rregulla skaneri nga rrjeti"
 
 #: ../fdroidserver/verify.py
 msgid "Remove source tarball and any APKs if successfully verified."
-msgstr ""
+msgstr "Hiqni paketimin e burimit dhe çfarëdo APK-sh, nëse verifikimi është i suksesshëm."
 
 #: ../fdroidserver/common.py
 msgid "Removing specified files"
@@ -2627,7 +2627,7 @@ msgstr ""
 #: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "s3cmd syncs indexes from {path} to {url} and deletes removed"
-msgstr ""
+msgstr "s3cmd njëkohëson tregues nga {path} te {url} dhe fshin të hequrit"
 
 #: ../fdroidserver/scanner.py
 #, python-brace-format
