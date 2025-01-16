@@ -38,12 +38,9 @@ class RetryServer:
 
     def run_fake_server(self):
         addr = ('localhost', self.port)
-        if socket.has_dualstack_ipv6():
-            server_sock = socket.create_server(
-                addr, family=socket.AF_INET6, dualstack_ipv6=True
-            )
-        else:
-            server_sock = socket.create_server(addr)
+        # localhost might not be a valid name for all families, use the first available
+        family = socket.getaddrinfo(addr[0], addr[1], type=socket.SOCK_STREAM)[0][0]
+        server_sock = socket.create_server(addr, family=family)
         server_sock.listen(5)
         server_sock.settimeout(5)
         time.sleep(0.001)  # wait for it to start
