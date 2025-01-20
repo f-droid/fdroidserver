@@ -2,6 +2,7 @@
 #
 # add completed translations from weblate to MANIFEST.in
 
+import git
 import json
 import os
 import re
@@ -37,14 +38,41 @@ for locale in sorted(data, key=lambda locale: locale['code']):
 
 manifest_file = os.path.join(projectbasedir, 'MANIFEST.in')
 with open(manifest_file) as fp:
-    for line in fp.readlines():
-        m = re.match(r'include locale/([^/]+)/.*', line)
-        if m:
-            active.add(m.group(1))
+    manifest_in = fp.read()
+for m in re.findall(r'include locale/([^/]+)/LC_MESSAGES/fdroidserver.po', manifest_in):
+    active.add(m)
 
+repo = git.Repo(projectbasedir)
+weblate = repo.remotes.weblate
+weblate.fetch()
+upstream = repo.remotes.upstream
+upstream.fetch()
+
+if 'merge_weblate' in repo.heads:
+    merge_weblate = repo.heads['merge_weblate']
+    repo.create_tag(
+        'previous_merge_weblate',
+        ref=merge_weblate,
+        message=('Automatically created by %s' % __file__),
+    )
+else:
+    merge_weblate = repo.create_head('merge_weblate')
+merge_weblate.set_commit(upstream.refs.master)
+merge_weblate.checkout()
+
+active = sorted(active)
 manifest_lines = set()
 for locale in active:
-    manifest_lines.add('include locale/%s/LC_MESSAGES/fdroidserver.po\n' % locale)
+    po_file = f'locale/{locale}/LC_MESSAGES/fdroidserver.po'
+    manifest_lines.add(f'include {po_file}\n')
+    for commit in repo.iter_commits(
+        str(weblate.refs.master) + '...' + str(upstream.refs.master),
+        paths=[po_file],
+        max_count=10,
+        reverse=True,
+    ):
+        print(f'{locale}: git cherry-pick', commit)
+        repo.git.cherry_pick(commit)
 
 with open(manifest_file, 'a') as fp:
     for line in manifest_lines:
@@ -52,3 +80,10 @@ with open(manifest_file, 'a') as fp:
             fp.write(line)
 
 subprocess.run(['sort', '-u', '-o', manifest_file, manifest_file])
+
+print('\tIf all else fails, try:')
+print('\tgit checkout -B merge_weblate weblate/master')
+print('\tgit rebase -i upstream/master')
+print('\t# select all in editor and cut all commit lines')
+print('\twl-paste | grep -Eo ".* \((%s)\) .*" | wl-copy' % '|'.join(active))
+print('\t# paste into editor, and make rebase\n')
