@@ -4,7 +4,6 @@ import re
 import shlex
 import shutil
 import subprocess
-import sys
 import threading
 import unittest
 from datetime import datetime, timezone
@@ -261,21 +260,17 @@ class IntegrationTest(unittest.TestCase):
         self.assertTrue(Path("repo/index.jar").is_file())
         self.assertTrue(Path("repo/index-v1.jar").is_file())
 
-        # OSX tests are run on Travis-CI, and gpg fails to launch gpg-agent there
-        if os.getenv("TRAVIS_OS_NAME") != "osx":
-            self.assert_run(self.fdroid_cmd + ["gpgsign", "--verbose"])
+        self.assert_run(self.fdroid_cmd + ["gpgsign", "--verbose"])
 
-            self.assertTrue(Path("repo/obb.mainpatch.current_1619.apk.asc").is_file())
-            self.assertTrue(
-                Path("repo/obb.main.twoversions_1101617_src.tar.gz.asc").is_file()
-            )
-            self.assertFalse(
-                Path("repo/obb.mainpatch.current_1619.apk.asc.asc").exists()
-            )
-            self.assertFalse(
-                Path("repo/obb.main.twoversions_1101617_src.tar.gz.asc.asc").exists()
-            )
-            self.assertFalse(Path("repo/index.xml.asc").exists())
+        self.assertTrue(Path("repo/obb.mainpatch.current_1619.apk.asc").is_file())
+        self.assertTrue(
+            Path("repo/obb.main.twoversions_1101617_src.tar.gz.asc").is_file()
+        )
+        self.assertFalse(Path("repo/obb.mainpatch.current_1619.apk.asc.asc").exists())
+        self.assertFalse(
+            Path("repo/obb.main.twoversions_1101617_src.tar.gz.asc.asc").exists()
+        )
+        self.assertFalse(Path("repo/index.xml.asc").exists())
 
         index_v1_json = Path("repo/index-v1.json").read_text()
         v0_timestamp = re.search(r'timestamp="(\d+)"', index_xml).group(1)
@@ -1306,8 +1301,7 @@ class IntegrationTest(unittest.TestCase):
         proc = self.assert_run(
             ["git", "rev-list", "--count", "HEAD"], capture_output=True
         )
-        if sys.platform != "darwin":  # TODO: fix on macOS
-            self.assertEqual(int(proc.stdout), 1)
+        self.assertEqual(int(proc.stdout), 1)
 
     @unittest.skipUnless(USE_APKSIGNER, "requires apksigner")
     def test_extracting_and_publishing_with_developer_signature(self):
