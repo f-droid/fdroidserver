@@ -44,9 +44,52 @@ class VerifyTest(unittest.TestCase):
         os.chdir(self.tempdir.name)
         self.repodir = Path('repo')
         self.repodir.mkdir()
+        self.apk_reports_json = basedir / 'org.fdroid.fdroid_1019051.apk.json'
 
     def tearDown(self):
         self.tempdir.cleanup()
+
+    def test_get_verified_json_creation(self):
+        self.assertEqual({'packages': {}}, verify.get_verified_json('does-not-exist'))
+
+    def test_get_verified_json_existing(self):
+        f = 'verified.json'
+        reports = {'packages': {'placeholder': {}}}
+        with open(f, 'w') as fp:
+            json.dump(reports, fp)
+        self.assertEqual(reports, verify.get_verified_json(f))
+
+    def test_get_verified_json_pull_in_one_report(self):
+        shutil.copy(self.apk_reports_json, self.tempdir.name)
+        with open(self.apk_reports_json) as fp:
+            reports = json.load(fp)
+        self.assertEqual(
+            {'packages': {'org.fdroid.fdroid': [reports['1708238023.6572325']]}},
+            verify.get_verified_json('does-not-exist'),
+        )
+
+    def test_get_verified_json_ignore_corrupt(self):
+        f = 'verified.json'
+        with open(f, 'w') as fp:
+            fp.write("""{"packages": {"placeholder": {""")
+        shutil.copy(self.apk_reports_json, self.tempdir.name)
+        with open(self.apk_reports_json) as fp:
+            reports = json.load(fp)
+        self.assertEqual(
+            {'packages': {'org.fdroid.fdroid': [reports['1708238023.6572325']]}},
+            verify.get_verified_json(f),
+        )
+
+    def test_get_verified_json_ignore_apk_reports(self):
+        """When an intact verified.json exists, it should ignore the .apk.json reports."""
+        f = 'verified.json'
+        placeholder = {'packages': {'placeholder': {}}}
+        with open(f, 'w') as fp:
+            json.dump(placeholder, fp)
+        shutil.copy(self.apk_reports_json, self.tempdir.name)
+        with open(self.apk_reports_json) as fp:
+            json.load(fp)
+        self.assertEqual(placeholder, verify.get_verified_json(f))
 
     @patch('fdroidserver.common.sha256sum')
     def test_write_json_report(self, sha256sum):

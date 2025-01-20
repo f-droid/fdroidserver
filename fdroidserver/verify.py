@@ -80,6 +80,30 @@ def _add_diffoscope_info(d):
         pass
 
 
+def get_verified_json(path):
+    """Get the full collection of reports that is written out to verified.json."""
+    if os.path.exists(path):
+        try:
+            with open(path) as fp:
+                return json.load(fp)
+        except Exception as e:
+            logging.info(f'{path}: {e}')
+
+    data = OrderedDict()
+    data['packages'] = OrderedDict()
+
+    for f in glob.glob(os.path.join(os.path.dirname(path), '*.apk.json')):
+        with open(f) as fp:
+            reports = json.load(fp)
+        for report in reports.values():
+            packageName = report['local']['packageName']
+            if packageName not in data['packages']:
+                data['packages'][packageName] = []
+            data['packages'][packageName].append(report)
+
+    return data
+
+
 def write_json_report(url, remote_apk, unsigned_apk, compare_result):
     """Write out the results of the verify run to JSON.
 
@@ -122,12 +146,7 @@ def write_json_report(url, remote_apk, unsigned_apk, compare_result):
 
     if output['verified']:
         jsonfile = 'unsigned/verified.json'
-        if os.path.exists(jsonfile):
-            with open(jsonfile) as fp:
-                data = json.load(fp)
-        else:
-            data = OrderedDict()
-            data['packages'] = OrderedDict()
+        data = get_verified_json(jsonfile)
         packageName = output['local']['packageName']
 
         if packageName not in data['packages']:

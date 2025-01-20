@@ -1,0 +1,43 @@
+{
+  "1708238023.6572325": {
+    "diffoscope": {
+      "Available-in-Debian-packages": [
+        "coreboot-utils",
+        "ghc",
+        "libxmlb-dev",
+        "radare2"
+      ],
+      "External-Tools-Required": [
+        "cbfstool",
+        "ghc",
+        "lipo",
+        "otool",
+        "radare2",
+        "xb-tool"
+      ],
+      "Missing-Python-Modules": [
+        "pypdf",
+        "r2pipe"
+      ],
+      "VERSION": "240"
+    },
+    "local": {
+      "file": "unsigned/org.fdroid.fdroid_1019051.apk",
+      "packageName": "org.fdroid.fdroid",
+      "sha256": "0eec78236ec5ebb8f416c611717bd659b75d2b6600ef71a50c922efc99dbdca2",
+      "timestamp": 1708238023.6572325,
+      "versionCode": 1019051,
+      "versionName": "1.19.1"
+    },
+    "remote": {
+      "file": "tmp/org.fdroid.fdroid_1019051.apk",
+      "packageName": "org.fdroid.fdroid",
+      "sha256": "162cb14b93bd9b665fff4256b4fc91cfe75fb72335a02b1d0febe606220b50f4",
+      "timestamp": 1715356428.522411,
+      "versionCode": 1019051,
+      "versionName": "1.19.1"
+    },
+    "url": "https://f-droid.org/repo/org.fdroid.fdroid_1019051.apk",
+    "verified": true
+  }
+}
