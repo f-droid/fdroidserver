@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: fdroidserver 2.3a1-162-gfbb3cc59\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2024-12-11 14:37+0100\n"
-"PO-Revision-Date: 2024-11-22 21:03+0000\n"
+"PO-Revision-Date: 2024-12-14 19:00+0000\n"
 "Last-Translator: Aindriú Mac Giolla Eoin <aindriu80@gmail.com>\n"
 "Language-Team: Irish <https://hosted.weblate.org/projects/f-droid/fdroidserver/ga/>\n"
 "Language: ga\n"
@@ -14,7 +14,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=5; plural=n==1 ? 0 : n==2 ? 1 : (n>2 && n<7) ? 2 :(n>6 && n<11) ? 3 : 4;\n"
-"X-Generator: Weblate 5.9-dev\n"
+"X-Generator: Weblate 5.9-rc\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -1514,7 +1514,7 @@ msgstr "Athnuaigh agus cuir rialacha agus sínithe scanóirí taisce ón líonra
 
 #: ../fdroidserver/verify.py
 msgid "Remove source tarball and any APKs if successfully verified."
-msgstr ""
+msgstr "Bain tarball foinse agus aon APKanna má fhíoraítear go rathúil é."
 
 #: ../fdroidserver/common.py
 msgid "Removing specified files"

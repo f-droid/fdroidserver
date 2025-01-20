@@ -40,20 +40,21 @@
 # Sylvain Pichon <service@spichon.fr>, 2024.
 # Sylvain Pichon <Sp_@users.noreply.hosted.weblate.org>, 2024.
 # Lzebulon <lzebulon@crans.org>, 2024.
+# Armand Camponovo <contact@camarm.dev>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2024-12-11 14:37+0100\n"
-"PO-Revision-Date: 2024-11-27 13:22+0000\n"
-"Last-Translator: Ldm Public <ldmpub@gmail.com>\n"
+"PO-Revision-Date: 2024-12-31 00:24+0000\n"
+"Last-Translator: Armand Camponovo <contact@camarm.dev>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/f-droid/fdroidserver/fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.9-dev\n"
+"X-Generator: Weblate 5.10-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -904,9 +905,8 @@ msgid "Found multiple JAR Signature Block Files in {path}"
 msgstr "Plusieurs fichiers de bloc de signature JAR trouvé à {path}"
 
 #: ../fdroidserver/common.py
-#, fuzzy
 msgid "Found multiple Signer Certificates!"
-msgstr "Plusieurs signataires de certificats ont été trouvés !"
+msgstr "Plusieurs certificats de signatures ont été trouvés !"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
@@ -975,7 +975,7 @@ msgstr "Reset de Git échouée"
 #: ../fdroidserver/common.py
 #, fuzzy
 msgid "Git submodule deinit failed"
-msgstr "Échec de la mise à jour du sous-module Git"
+msgstr "Échec de la suppression du sous-module Git"
 
 #: ../fdroidserver/common.py
 msgid "Git submodule sync failed"
@@ -1201,7 +1201,7 @@ msgstr "Lister les fichiers qui seront reformater (test à blanc)"
 
 #: ../fdroidserver/lint.py
 msgid "Locale included in f-droid.org URL"
-msgstr "Les paramètres de lieu sont inclus dans f-droid.org URL"
+msgstr "Les paramètres de localisation sont inclus dans l'URL f-droid.org"
 
 #: ../fdroidserver/build.py
 msgid "Make the build stop on exceptions"
@@ -1328,7 +1328,6 @@ msgid "No unsigned directory - nothing to do"
 msgstr "Aucun dossier non signé — il n'y a rien à faire"
 
 #: ../fdroidserver/__main__.py
-#, fuzzy
 msgid "No version information could be found."
 msgstr "Aucune information sur la version n’a été trouvée."
 
@@ -1459,9 +1458,9 @@ msgid "Print the secret variable to the terminal for easy copy/paste"
 msgstr "Afficher la variable secrète dans le terminal pour un copier/coller facilité"
 
 #: ../fdroidserver/install.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Privacy mode was enabled based on your locale ({country_code})."
-msgstr "Le mode de confidentialité a été activé, dû à votre position ({country_code})."
+msgstr "Le mode de confidentialité a été activé, dû à votre localisation ({country_code})."
 
 #: ../fdroidserver/scanner.py
 #, python-format
@@ -1546,7 +1545,6 @@ msgid "Reading {apkfilename} from cache"
 msgstr "Lecture de {apkfilename} à partir du cache"
 
 #: ../fdroidserver/build.py
-#, fuzzy
 msgid "Refresh and cache scanner rules and signatures from the network"
 msgstr "Actualisation et mise en cache des règles et signature à partir du réseau."
 
@@ -1589,9 +1587,9 @@ msgid "Restrict output to warnings and errors"
 msgstr "Limiter la sortie aux avertissements et aux erreurs"
 
 #: ../fdroidserver/net.py
-#, fuzzy, python-format
+#, python-format
 msgid "Retrying failed download: %s"
-msgstr "Réessaie de téléchargement échoué : %s"
+msgstr "Nouvel essai de téléchargement suite à échec : %s"
 
 #: ../fdroidserver/__main__.py
 msgid "Rewrite all the metadata files"
@@ -1818,7 +1816,6 @@ msgid "These are the apps that have been archived from the main repo."
 msgstr "Voici les applications qui ont été archivées à partir du dépôt principal."
 
 #: ../fdroidserver/mirror.py
-#, fuzzy
 msgid "This command should never be used to mirror f-droid.org! A full copy requires more than 600GB."
 msgstr "Cette commande ne devrait jamais être utilisée pour copier f-droid.org ! Une copie occupe plus de 600GB."
 

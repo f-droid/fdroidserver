@@ -18,7 +18,7 @@ msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2024-12-11 14:37+0100\n"
-"PO-Revision-Date: 2024-11-21 23:18+0000\n"
+"PO-Revision-Date: 2024-12-20 13:00+0000\n"
 "Last-Translator: gallegonovato <fran-carro@hotmail.es>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/f-droid/fdroidserver/es/>\n"
 "Language: es\n"
@@ -26,7 +26,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.9-dev\n"
+"X-Generator: Weblate 5.9.2-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -1520,7 +1520,7 @@ msgstr "Actualización y almacenamiento en caché de las reglas y firmas del esc
 
 #: ../fdroidserver/verify.py
 msgid "Remove source tarball and any APKs if successfully verified."
-msgstr ""
+msgstr "Elimine el archivo tar de origen y todos los APK si se verifican correctamente."
 
 #: ../fdroidserver/common.py
 msgid "Removing specified files"

@@ -3,7 +3,7 @@
 # Golubev Alexander <fatzer2@gmail.com>, 2020, 2021, 2024.
 # Mingun <Alexander_Sergey@mail.ru>, 2020.
 # anonymous <noreply@weblate.org>, 2020.
-# Andrey <andrey@mailbox.org>, 2020, 2021, 2022, 2023.
+# Andrey <andrey@mailbox.org>, 2020, 2021, 2022, 2023, 2025.
 # gardenapple <gardenapple@posteo.net>, 2020.
 # Boris Timofeev <mashin87@gmail.com>, 2020.
 # Hans-Christoph Steiner <hans@guardianproject.info>, 2020.
@@ -15,20 +15,21 @@
 # Alexander Ivanov <saiv46.dev@gmail.com>, 2024.
 # gfbdrgng <hnaofegnp@hldrive.com>, 2024.
 # neverender <audiolunaire@getgoogleoff.me>, 2024.
+# Dmitry <dmitrydmitry761@gmail.com>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 1.0.0-95-gd7af22b\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2024-12-11 14:37+0100\n"
-"PO-Revision-Date: 2024-12-02 17:00+0000\n"
-"Last-Translator: Golubev Alexander <fatzer2@gmail.com>\n"
+"PO-Revision-Date: 2025-01-08 16:30+0000\n"
+"Last-Translator: Andrey <andrey@mailbox.org>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/f-droid/fdroidserver/ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 5.9-dev\n"
+"X-Generator: Weblate 5.10-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -465,7 +466,7 @@ msgstr "Зафиксировать изменения (commit)"
 
 #: ../fdroidserver/checkupdates.py
 msgid "Commit changes, push, then make a merge request"
-msgstr "Зафиксировать изменения (commit), отправить (push) их в удалённый репозиторий, и затем создать запрос на слияние"
+msgstr "Зафиксировать изменения (commit), отправить (push) их в удаленный репозиторий, и затем создать запрос на слияние"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
@@ -744,7 +745,7 @@ msgstr "Переменная среды {var} из {configname} не устан�
 
 #: ../fdroidserver/deploy.py
 msgid "Error deploying 'github_releases', {} not present. (You might need to run `fdroid update` first.)"
-msgstr "Ошибка развёртывания 'github_releases', {} отсутствует. (Возможно, сначала вам нужно запустить `fdroid update`.)"
+msgstr "Ошибка развертывания 'github_releases', {} отсутствует. (Возможно, сначала вам нужно запустить `fdroid update`.)"
 
 #: ../fdroidserver/import_subcommand.py
 msgid "Error while getting repo address"
@@ -1524,7 +1525,7 @@ msgstr "Обновление и кэширование правил и сигн�
 
 #: ../fdroidserver/verify.py
 msgid "Remove source tarball and any APKs if successfully verified."
-msgstr ""
+msgstr "Удалить tar-архив с исходным кодом и все APK-файлы, если проверка для них прошла успешно."
 
 #: ../fdroidserver/common.py
 msgid "Removing specified files"
@@ -2030,7 +2031,7 @@ msgstr "Для конфигурации s3cmd используется \"{path}\
 #: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "Using \"{path}\" for syncing with remote storage."
-msgstr "Для синхронизации с удалённым хранилищем используется путь \"{path}\"."
+msgstr "Для синхронизации с удаленным хранилищем используется путь \"{path}\"."
 
 #: ../fdroidserver/common.py
 msgid "Using APK Signature v2"
@@ -2644,7 +2645,7 @@ msgstr "s3cmd синхронизировать индексы из {path} в {ur
 #: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "s3cmd syncs indexes from {path} to {url} and deletes removed"
-msgstr "s3cmd синхронизирует индексы из {path} в {url} и удаляет стёртые"
+msgstr "s3cmd синхронизирует индексы из {path} в {url} и удаляет стертые"
 
 #: ../fdroidserver/scanner.py
 #, python-brace-format

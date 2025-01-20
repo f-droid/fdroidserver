@@ -3,13 +3,14 @@
 # Hinaloe <hina@hinaloe.net>, 2020.
 # Suguru Hirahara <shirahara@users.noreply.hosted.weblate.org>, 2024.
 # "Shuuji TAKAHASHI (shuuji3)" <shuuji3@gmail.com>, 2024.
+# Liner Seven <linour7gmekiblo@gmail.com>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.8-224-g4b0ade7\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2024-12-11 14:37+0100\n"
-"PO-Revision-Date: 2024-11-28 08:34+0000\n"
-"Last-Translator: \"Shuuji TAKAHASHI (shuuji3)\" <shuuji3@gmail.com>\n"
+"PO-Revision-Date: 2024-12-12 01:41+0000\n"
+"Last-Translator: Liner Seven <linour7gmekiblo@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/f-droid/fdroidserver/ja/>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
@@ -1508,7 +1509,7 @@ msgstr "スキャナーのルールと署名をネットワークから取得し
 
 #: ../fdroidserver/verify.py
 msgid "Remove source tarball and any APKs if successfully verified."
-msgstr ""
+msgstr "検証成功時にソースのTAR・APKを削除する。"
 
 #: ../fdroidserver/common.py
 msgid "Removing specified files"

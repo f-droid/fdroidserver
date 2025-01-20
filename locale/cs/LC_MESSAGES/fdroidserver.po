@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: fdroidserver 1.0.0-95-gd7af22b\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2024-12-11 14:37+0100\n"
-"PO-Revision-Date: 2024-11-23 18:58+0000\n"
+"PO-Revision-Date: 2024-12-12 01:41+0000\n"
 "Last-Translator: Fjuro <fjuro@alius.cz>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/f-droid/fdroidserver/cs/>\n"
 "Language: cs\n"
@@ -1517,7 +1517,7 @@ msgstr "Obnovit a uložit pravidla a podpisy skeneru ze sítě do mezipaměti"
 
 #: ../fdroidserver/verify.py
 msgid "Remove source tarball and any APKs if successfully verified."
-msgstr ""
+msgstr "Odstranit zdrojový tarball a všechny soubory APK při úspěšném ověření."
 
 #: ../fdroidserver/common.py
 msgid "Removing specified files"

@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: fdroidserver 2.1b0\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2024-12-11 14:37+0100\n"
-"PO-Revision-Date: 2024-11-29 10:00+0000\n"
+"PO-Revision-Date: 2024-12-30 22:00+0000\n"
 "Last-Translator: Reno Tx <renotx@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Serbian <https://hosted.weblate.org/projects/f-droid/fdroidserver/sr/>\n"
 "Language: sr\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 5.9-dev\n"
+"X-Generator: Weblate 5.10-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -1513,7 +1513,7 @@ msgstr "Освежите и кеширајте правила и потписе 
 
 #: ../fdroidserver/verify.py
 msgid "Remove source tarball and any APKs if successfully verified."
-msgstr ""
+msgstr "Уклони изворни tarball и све APK-ове ако су успешно проверени."
 
 #: ../fdroidserver/common.py
 msgid "Removing specified files"

@@ -11,20 +11,21 @@
 # Tymofii Lytvynenko <till.svit@gmail.com>, 2024.
 # Fqwe1 <Fqwe1@users.noreply.hosted.weblate.org>, 2024.
 # Nazar <balaraz@tuta.io>, 2024.
+# Максим Горпиніч <mgorpinic2005@gmail.com>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2024-12-11 14:37+0100\n"
-"PO-Revision-Date: 2024-09-13 23:35+0000\n"
-"Last-Translator: Ihor Hordiichuk <igor_ck@outlook.com>\n"
+"PO-Revision-Date: 2024-12-20 13:00+0000\n"
+"Last-Translator: Максим Горпиніч <mgorpinic2005@gmail.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/f-droid/fdroidserver/uk/>\n"
 "Language: uk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 5.8-dev\n"
+"X-Generator: Weblate 5.9.2-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -212,7 +213,7 @@ msgstr "'{value}' не є дійсним {field}, має бути {pattern}"
 
 #: ../fdroidserver/checkupdates.py
 msgid "--merge-request only runs on a single appid!"
-msgstr ""
+msgstr "--merge-request працює лише в одній програмі!"
 
 #: ../fdroidserver/checkupdates.py
 #, python-brace-format
@@ -343,11 +344,11 @@ msgstr "AutoUpdateMode з UpdateCheckMode: HTTP повинен мати шабл
 
 #: ../fdroidserver/install.py
 msgid "Automatic no to all prompts."
-msgstr ""
+msgstr "Автоматичне ні для всіх підказок."
 
 #: ../fdroidserver/install.py
 msgid "Automatic yes to all prompts."
-msgstr ""
+msgstr "Автоматичне «так» на всі підказки."
 
 #: ../fdroidserver/index.py
 #, python-brace-format
@@ -444,7 +445,7 @@ msgstr "Очистити оновлення - не використовує ке
 
 #: ../fdroidserver/common.py
 msgid "Color the log output"
-msgstr ""
+msgstr "Розфарбуйте результат журналу"
 
 #: ../fdroidserver/import_subcommand.py
 msgid "Comma separated list of categories."
@@ -461,7 +462,7 @@ msgstr "Прийняти зміни"
 
 #: ../fdroidserver/checkupdates.py
 msgid "Commit changes, push, then make a merge request"
-msgstr ""
+msgstr "Зафіксуйте зміни, натисніть, а потім зробіть запит на злиття"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
@@ -648,7 +649,7 @@ msgstr "Не використовуйте контрольні суми rsync"
 
 #: ../fdroidserver/install.py
 msgid "Download F-Droid.apk using mirrors that leak less to the network"
-msgstr ""
+msgstr "Завантажуйте F-Droid.apk за допомогою дзеркал, які менше витікають у мережу"
 
 #: ../fdroidserver/__main__.py
 msgid "Download complete mirrors of small repos"
@@ -760,7 +761,7 @@ msgstr "Експортування підписів з APK"
 
 #: ../fdroidserver/install.py
 msgid "F-Droid.apk could not be downloaded from any known source!"
-msgstr ""
+msgstr "F-Droid.apk не вдалося завантажити з жодного відомого джерела!"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -1222,7 +1223,7 @@ msgstr "Не знайдено приєднаних пристроїв"
 
 #: ../fdroidserver/install.py
 msgid "No devices found for `adb install`! Please plug one in."
-msgstr ""
+msgstr "Не знайдено пристроїв для `adb install`! Будь ласка, підключіть один."
 
 #: ../fdroidserver/index.py
 msgid "No fingerprint in URL."
@@ -1430,7 +1431,7 @@ msgstr "Вивести таємну змінну до термінала для 
 #: ../fdroidserver/install.py
 #, python-brace-format
 msgid "Privacy mode was enabled based on your locale ({country_code})."
-msgstr ""
+msgstr "Режим конфіденційності було ввімкнено на основі вашої мови ({country_code})."
 
 #: ../fdroidserver/scanner.py
 #, python-format
@@ -1520,7 +1521,7 @@ msgstr "Оновлення та кешування правил і сигнат�
 
 #: ../fdroidserver/verify.py
 msgid "Remove source tarball and any APKs if successfully verified."
-msgstr ""
+msgstr "Видаліть вихідний архів та будь-які файли APK, якщо успішно перевірено."
 
 #: ../fdroidserver/common.py
 msgid "Removing specified files"
@@ -1559,7 +1560,7 @@ msgstr "Обмеження виводу на попередження і пом�
 #: ../fdroidserver/net.py
 #, python-format
 msgid "Retrying failed download: %s"
-msgstr ""
+msgstr "Повторна спроба невдалого завантаження: %s"
 
 #: ../fdroidserver/__main__.py
 msgid "Rewrite all the metadata files"
@@ -1629,7 +1630,7 @@ msgstr[2] "Знайдено {} проблем"
 
 #: ../fdroidserver/scanner.py
 msgid "Scanning APK for extra signing blocks."
-msgstr ""
+msgstr "Сканування APK на наявність додаткових блоків підпису."
 
 #: ../fdroidserver/scanner.py
 msgid "Scanning APK with dexdump for known non-free classes."
@@ -2088,7 +2089,7 @@ msgstr "Перевірка підпису індексу:"
 #: ../fdroidserver/install.py
 #, python-brace-format
 msgid "Verifying package {path} with apksigner."
-msgstr ""
+msgstr "Перевірка пакета {path} за допомогою apksigner."
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
@@ -2101,7 +2102,7 @@ msgstr "Попереджати про можливі помилки метада
 
 #: ../fdroidserver/scanner.py
 msgid "WebAssembly binary file"
-msgstr ""
+msgstr "Бінарний файл WebAssembly"
 
 #: ../fdroidserver/update.py
 msgid "When configured for signed indexes, create only unsigned indexes at this stage"
@@ -2117,11 +2118,11 @@ msgstr "Якщо підписати або перевірити не вдаєт�
 
 #: ../fdroidserver/install.py
 msgid "Would you like to download and install F-Droid.apk via adb? (YES/no)"
-msgstr ""
+msgstr "Бажаєте завантажити та встановити F-Droid.apk через adb? (ТАК/Ні)"
 
 #: ../fdroidserver/install.py
 msgid "Would you like to download the app(s) from f-droid.org? (YES/no)"
-msgstr ""
+msgstr "Бажаєте завантажити програму(и) з f-droid.org? (ТАК/Ні)"
 
 #: ../fdroidserver/init.py
 msgid "X.509 'Distinguished Name' used when generating keys"
@@ -2138,7 +2139,7 @@ msgstr "ZIP-архів"
 #: ../fdroidserver/install.py
 #, python-brace-format
 msgid "adb reports {serial} is \"{status}\"!"
-msgstr ""
+msgstr "adb звітує {serial} як \"{status}\"!"
 
 #: ../fdroidserver/nightly.py
 #, python-brace-format
@@ -2708,7 +2709,7 @@ msgstr "такі аргументи зобов'язані: %s"
 
 #: ../fdroidserver/install.py
 msgid "true"
-msgstr ""
+msgstr "правда"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
@@ -2753,7 +2754,7 @@ msgstr "virustotal.com обмежує швидкість, очікування �
 
 #: ../fdroidserver/install.py
 msgid "yes"
-msgstr ""
+msgstr "так"
 
 #: ../fdroidserver/publish.py
 #, python-brace-format
@@ -2872,7 +2873,7 @@ msgstr "{path} було позначено virustotal {count} разів:"
 #: ../fdroidserver/install.py
 #, python-brace-format
 msgid "{path} has the wrong fingerprint ({fingerprint})!"
-msgstr ""
+msgstr "{path} має неправильний відбиток пальця ({fingerprint})!"
 
 #: ../fdroidserver/common.py
 #, python-brace-format

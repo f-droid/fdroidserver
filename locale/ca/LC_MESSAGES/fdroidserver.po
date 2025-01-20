@@ -1,7 +1,7 @@
 # SOME DESCRIPTIVE TITLE.
 # This file is put in the public domain.
 # Rubén <rubenx@mail.com>, 2023.
-# pitroig <ona@riseup.net>, 2024.
+# pitroig <ona@riseup.net>, 2024, 2025.
 # raulmagdalena <4omoald1a@mozmail.com>, 2024.
 # Adrià Martín <adriamartinmor@gmail.com>, 2024.
 # unmes <jordi.guiu.pujols@gmail.com>, 2024.
@@ -12,15 +12,15 @@ msgstr ""
 "Project-Id-Version: fdroidserver 2.1-273-g54e84d87\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2024-12-11 14:37+0100\n"
-"PO-Revision-Date: 2024-11-27 18:26+0000\n"
-"Last-Translator: Ecron <ecron_89@hotmail.com>\n"
+"PO-Revision-Date: 2025-01-03 17:37+0000\n"
+"Last-Translator: pitroig <ona@riseup.net>\n"
 "Language-Team: Catalan <https://hosted.weblate.org/projects/f-droid/fdroidserver/ca/>\n"
 "Language: ca\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.9-dev\n"
+"X-Generator: Weblate 5.10-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -1514,7 +1514,7 @@ msgstr "Actualitza i cau les regles de l'escàner i les signatures de la xarxa"
 
 #: ../fdroidserver/verify.py
 msgid "Remove source tarball and any APKs if successfully verified."
-msgstr ""
+msgstr "Elimina el fitxer tar d'origen i qualsevol APKs si s'ha verificat correctament."
 
 #: ../fdroidserver/common.py
 msgid "Removing specified files"
