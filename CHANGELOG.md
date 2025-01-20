@@ -12,6 +12,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 
 ### Removed
 
+## [2.3.5] - 2025-01-20
+
+### Fixed
+
+* Fix issue where APKs with v1-only signatures and targetSdkVersion < 30 could
+  be maliciously crafted to bypass AllowedAPKSigningKeys
+  https://gitlab.com/fdroid/fdroidserver/-/merge_requests/1588
+* Ignore apksigner v33.x, it has bugs verifying APKs with v3/v3.1 sigs.
+  https://gitlab.com/fdroid/fdroidserver/-/merge_requests/1593
+* Sync translations for: ca cs de es fr ga ja pt_BR pt_PT ru sq sr uk zh_Hans
+
 ## [2.3.4] - 2024-12-12
 
 ### Fixed
