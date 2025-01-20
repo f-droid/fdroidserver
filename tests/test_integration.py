@@ -252,7 +252,7 @@ class IntegrationTest(unittest.TestCase):
         )
         self.assert_run(
             self.fdroid_cmd + ["update", "--verbose", "--pretty"],
-            env=os.environ | {"LC_MESSAGES": "en_US.UTF-8"},
+            env=os.environ | {"LC_MESSAGES": "C.UTF-8"},
         )
         index_xml = Path("repo/index.xml").read_text()
         self.assertIn("<application id=", index_xml)
