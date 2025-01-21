@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 2.3a1-162-gfbb3cc59\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2024-12-11 14:37+0100\n"
+"POT-Creation-Date: 2025-01-21 17:02+0100\n"
 "PO-Revision-Date: 2024-12-14 19:00+0000\n"
 "Last-Translator: Aindriú Mac Giolla Eoin <aindriu80@gmail.com>\n"
 "Language-Team: Irish <https://hosted.weblate.org/projects/f-droid/fdroidserver/ga/>\n"
@@ -2159,6 +2159,11 @@ msgstr "Rogha dhébhríoch: D'fhéadfadh %(option)s %(matches)s a mheaitseáil"
 #, python-format
 msgid "ambiguous option: %s (%s?)"
 msgstr "Rogha dhébhríoch: %s (%s?)"
+
+#: ../fdroidserver/common.py
+#, python-brace-format
+msgid "apksigner in build-tools;{version} passes APKs with invalid v3 signatures, ignoring."
+msgstr ""
 
 #: ../fdroidserver/common.py
 msgid "apksigner not found! Cannot sign or verify modern APKs"

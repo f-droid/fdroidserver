@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 1.0.0-95-gd7af22b\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2024-12-11 14:37+0100\n"
+"POT-Creation-Date: 2025-01-21 17:02+0100\n"
 "PO-Revision-Date: 2018-06-08 03:44+0000\n"
 "Last-Translator: ۋولقان <nureliosman@gmail.com>\n"
 "Language-Team: Uyghur <https://hosted.weblate.org/projects/f-droid/fdroidserver/ug/>\n"
@@ -2136,6 +2136,11 @@ msgstr ""
 #: /usr/lib/python3.11/optparse.py
 #, python-format
 msgid "ambiguous option: %s (%s?)"
+msgstr ""
+
+#: ../fdroidserver/common.py
+#, python-brace-format
+msgid "apksigner in build-tools;{version} passes APKs with invalid v3 signatures, ignoring."
 msgstr ""
 
 #: ../fdroidserver/common.py

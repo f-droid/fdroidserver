@@ -20,7 +20,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 1.0.0-95-gd7af22b\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2024-12-11 14:37+0100\n"
+"POT-Creation-Date: 2025-01-21 17:02+0100\n"
 "PO-Revision-Date: 2025-01-08 16:30+0000\n"
 "Last-Translator: Andrey <andrey@mailbox.org>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/f-droid/fdroidserver/ru/>\n"
@@ -2168,6 +2168,11 @@ msgstr "неоднозначный выбор: %(option)s совпадает с 
 #, python-format
 msgid "ambiguous option: %s (%s?)"
 msgstr "неоднозначный выбор: %s (%s?)"
+
+#: ../fdroidserver/common.py
+#, python-brace-format
+msgid "apksigner in build-tools;{version} passes APKs with invalid v3 signatures, ignoring."
+msgstr ""
 
 #: ../fdroidserver/common.py
 msgid "apksigner not found! Cannot sign or verify modern APKs"

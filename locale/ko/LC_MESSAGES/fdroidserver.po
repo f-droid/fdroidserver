@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.8-135-g16dd6d28\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2024-12-11 14:37+0100\n"
+"POT-Creation-Date: 2025-01-21 17:02+0100\n"
 "PO-Revision-Date: 2024-09-06 14:57+0000\n"
 "Last-Translator: Cxnfl1ct <wind0wso2o2@naver.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/f-droid/fdroidserver/ko/>\n"
@@ -2141,6 +2141,11 @@ msgstr "모호한 옵션: %(option)s은 %(matches)s와 일치했을 수 있습�
 #, python-format
 msgid "ambiguous option: %s (%s?)"
 msgstr "모호한 옵션: %s (%s?)"
+
+#: ../fdroidserver/common.py
+#, python-brace-format
+msgid "apksigner in build-tools;{version} passes APKs with invalid v3 signatures, ignoring."
+msgstr ""
 
 #: ../fdroidserver/common.py
 msgid "apksigner not found! Cannot sign or verify modern APKs"

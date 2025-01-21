@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 2.0a0-62-gc63c4b3d\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2024-12-11 14:37+0100\n"
+"POT-Creation-Date: 2025-01-21 17:02+0100\n"
 "PO-Revision-Date: 2024-05-10 13:24+0000\n"
 "Last-Translator: ΣΤΑΥΡΟΣ ΔΑΛΙΑΚΟΠΟΥΛΟΣ <stavros.daliakopoulos@gmail.com>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/f-droid/fdroidserver/el/>\n"
@@ -2142,6 +2142,11 @@ msgstr "Ασαφής επιλογή: %(option)s θα μπορούσε να τα�
 #, python-format
 msgid "ambiguous option: %s (%s?)"
 msgstr "ασαφής επιλογή: %s (%s;)"
+
+#: ../fdroidserver/common.py
+#, python-brace-format
+msgid "apksigner in build-tools;{version} passes APKs with invalid v3 signatures, ignoring."
+msgstr ""
 
 #: ../fdroidserver/common.py
 msgid "apksigner not found! Cannot sign or verify modern APKs"
