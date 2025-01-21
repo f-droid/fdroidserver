@@ -168,7 +168,7 @@ ubuntu_jammy_pip:
     # back to bare machine to act as user's install machine
     - export ANDROID_HOME=/opt/android-sdk
     - $pip install sdkmanager
-    - sdkmanager 'build-tools;33.0.0'
+    - sdkmanager 'build-tools;35.0.0'
 
     # Install extras_require.optional from setup.py
     - $pip install biplist pycountry
@@ -176,7 +176,7 @@ ubuntu_jammy_pip:
     - $pip install dist/fdroidserver-*.tar.gz
     - tar xzf dist/fdroidserver-*.tar.gz
     - cd fdroidserver-*
-    - export PATH=$PATH:$ANDROID_HOME/build-tools/33.0.0
+    - export PATH=$PATH:$ANDROID_HOME/build-tools/35.0.0
     - fdroid=`which fdroid` ./tests/run-tests
 
     # check localization was properly installed

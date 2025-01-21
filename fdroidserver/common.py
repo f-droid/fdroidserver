@@ -85,6 +85,7 @@ DEFAULT_LOCALE = 'en-US'
 # this is the build-tools version, aapt has a separate version that
 # has to be manually set in test_aapt_version()
 MINIMUM_AAPT_BUILD_TOOLS_VERSION = '26.0.0'
+# 33.0.x has a bug that verifies APKs it shouldn't https://gitlab.com/fdroid/fdroidserver/-/issues/1253
 # 31.0.0 is the first version to support --v4-signing-enabled.
 # we only require 30.0.0 for now as that's the version in buster-backports, see also signindex.py
 # 26.0.2 is the first version recognizing md5 based signatures as valid again
@@ -841,7 +842,15 @@ def find_apksigner(config):
         if not os.path.isdir(os.path.join(build_tools_path, f)):
             continue
         try:
-            if LooseVersion(f) < LooseVersion(MINIMUM_APKSIGNER_BUILD_TOOLS_VERSION):
+            version = LooseVersion(f)
+            if version >= LooseVersion('33') and version < LooseVersion('34'):
+                logging.warning(
+                    _('apksigner in build-tools;{version} passes APKs with invalid v3 signatures, ignoring.').format(
+                        version=version
+                    )
+                )
+                continue
+            if version < LooseVersion(MINIMUM_APKSIGNER_BUILD_TOOLS_VERSION):
                 logging.debug("Local Android SDK only has outdated apksigner versions")
                 return
         except TypeError:
