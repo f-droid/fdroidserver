@@ -3282,6 +3282,55 @@ class SignerExtractionTest(unittest.TestCase):
             )
 
 
+class IgnoreApksignerV33Test(CommonTest):
+    """apksigner v33 should be entirely ignored
+
+    https://gitlab.com/fdroid/fdroidserver/-/issues/1253
+    """
+
+    BAD_VERSIONS = [
+        '33.0.0-rc1',
+        '33.0.0-rc2',
+        '33.0.0-rc3',
+        '33.0.0-rc4',
+        '33.0.0',
+        '33.0.1',
+        '33.0.2',
+        '33.0.3',
+    ]
+
+    def setUp(self):
+        super().setUp()
+        self.config = {'sdk_path': self.testdir}
+
+    def _create_fake_build_tools(self, version):
+        for v in self.BAD_VERSIONS + [version]:
+            apksigner = os.path.join(self.testdir, 'build-tools', v, 'apksigner')
+            os.makedirs(os.path.dirname(apksigner))
+            with open(apksigner, 'w') as fp:
+                fp.write(f'#!/bin/sh\necho {v}[\n')
+            os.chmod(apksigner, 0o0755)  # nosec B103
+
+    def test_find_apksigner_choose_version_32_over_any_33(self):
+        good = '32.0.0'
+        self._create_fake_build_tools(good)
+        with mock.patch.dict(os.environ, clear=True):
+            os.environ['PATH'] = '/fake/path/to/avoid/conflicts'
+            fdroidserver.common.find_apksigner(self.config)
+            self.assertEqual(
+                os.path.join(self.testdir, 'build-tools', good, 'apksigner'),
+                self.config.get('apksigner'),
+            )
+
+    def test_find_apksigner_choose_no_version_over_any_33(self):
+        """apksigner v33 should be entirely ignored"""
+        self._create_fake_build_tools('29.0.0')  # too old a version
+        with mock.patch.dict(os.environ, clear=True):
+            os.environ['PATH'] = '/fake/path/to/avoid/conflicts'
+            fdroidserver.common.find_apksigner(self.config)
+            self.assertIsNone(self.config.get('apksigner'))
+
+
 class ConfigOptionsScopeTest(unittest.TestCase):
     """Test assumptions about variable scope for "config" and "options".
 
