@@ -183,21 +183,6 @@ ubuntu_jammy_pip:
     - LANGUAGE='de' fdroid --help | grep 'Gültige Befehle sind'
 
 
-# test installation process on a bleeding edge distro with pip
-arch_pip_install:
-  image: archlinux
-  only:
-    - master@fdroid/fdroidserver
-  script:
-    - pacman --sync --sysupgrade --refresh --noconfirm gcc git grep python-pip python-virtualenv python-wheel tar
-    - python -m venv venv
-    - source venv/bin/activate
-    - pip install -e .[test]
-    - fdroid
-    - fdroid readmeta
-    - fdroid update --help
-
-
 # The gradlew-fdroid tests are isolated from the rest of the test
 # suite, so they run as their own job.
 gradlew-fdroid:

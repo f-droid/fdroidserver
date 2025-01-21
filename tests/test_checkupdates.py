@@ -2,6 +2,7 @@
 
 import git
 import os
+import platform
 import shutil
 import tempfile
 import time
@@ -490,6 +491,10 @@ class CheckupdatesTest(unittest.TestCase):
                 fdroidserver.checkupdates.main()
         sys_exit.assert_not_called()
 
+    @unittest.skipIf(
+        platform.system() == 'Darwin',
+        'It is difficult to configure the base system for this test.',
+    )
     def test_get_upstream_main_branch(self):
         os.chdir(self.testdir.name)
         testvalue = 'foo'
