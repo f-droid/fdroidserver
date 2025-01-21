@@ -262,6 +262,7 @@ def main():
     # https://phoenhex.re/2018-03-25/not-a-vagrant-bug
     os_env = os.environ.copy()
     os_env['VAGRANT_DISABLE_VBOXSYMLINKCREATE'] = '1'
+    os_env['VAGRANT_SERVER_URL'] = 'https://vagrantcloud.com/api/v2/vagrant'
     v.env = os_env
 
     if options.verbosity >= 2:
