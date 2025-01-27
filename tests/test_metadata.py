@@ -17,7 +17,7 @@ import fdroidserver
 from fdroidserver import metadata
 from fdroidserver.exception import MetaDataException
 from fdroidserver.common import DEFAULT_LOCALE
-from .testcommon import TmpCwd, mkdtemp
+from .shared_test_code import TmpCwd, mkdtemp
 
 
 basedir = Path(__file__).parent

@@ -9,7 +9,7 @@ import yaml
 from pathlib import Path
 from unittest import mock
 
-from .testcommon import TmpCwd, mkdtemp
+from .shared_test_code import TmpCwd, mkdtemp
 
 import fdroidserver.build
 import fdroidserver.common

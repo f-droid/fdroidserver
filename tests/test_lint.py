@@ -9,7 +9,7 @@ from pathlib import Path
 
 import ruamel.yaml
 
-from .testcommon import mkdtemp
+from .shared_test_code import mkdtemp
 
 import fdroidserver.common
 import fdroidserver.lint

@@ -16,7 +16,7 @@ import shutil
 
 import fdroidserver
 from fdroidserver import common, index, publish, signindex, update
-from .testcommon import GP_FINGERPRINT, TmpCwd, mkdtemp
+from .shared_test_code import GP_FINGERPRINT, TmpCwd, mkdtemp
 
 
 basedir = Path(__file__).parent

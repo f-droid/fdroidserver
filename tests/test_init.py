@@ -8,7 +8,7 @@ import unittest
 
 import fdroidserver.common
 import fdroidserver.init
-from . import testcommon
+from .shared_test_code import mkdtemp
 
 basedir = pathlib.Path(__file__).parent
 
@@ -19,7 +19,7 @@ class InitTest(unittest.TestCase):
     def setUp(self):
         fdroidserver.common.config = None
         fdroidserver.init.config = None
-        self._td = testcommon.mkdtemp()
+        self._td = mkdtemp()
         self.testdir = self._td.name
         os.chdir(self.testdir)
 

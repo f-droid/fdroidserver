@@ -24,7 +24,7 @@ import fdroidserver.build
 import fdroidserver.common
 import fdroidserver.metadata
 import fdroidserver.scanner
-from .testcommon import TmpCwd, mkdtemp, mock_open_to_str
+from .shared_test_code import TmpCwd, mkdtemp, mock_open_to_str
 
 basedir = pathlib.Path(__file__).parent
 

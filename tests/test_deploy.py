@@ -11,7 +11,7 @@ from unittest import mock
 import git
 
 import fdroidserver
-from .testcommon import TmpCwd, mkdtemp, VerboseFalseOptions
+from .shared_test_code import TmpCwd, mkdtemp, VerboseFalseOptions
 
 basedir = Path(__file__).parent
 
