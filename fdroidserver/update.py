@@ -1026,19 +1026,20 @@ def copy_triple_t_store_metadata(apps):
     for packageName, app in apps.items():
         builds = app.get('Builds', [])
         gradle_subdirs = set()
-        if builds and builds[-1].subdir:
+        if builds:
+            subdir = builds[-1].subdir or ''
             for flavor in builds[-1].gradle:
                 if flavor not in ('yes', 'no', True, False):
-                    p = os.path.join('build', packageName, builds[-1].subdir, 'src', flavor, 'play')
+                    p = os.path.join('build', packageName, subdir, 'src', flavor, 'play')
                     if os.path.exists(p):
                         gradle_subdirs.add(p)
             if not gradle_subdirs:
-                gradle_subdirs.update(glob.glob(os.path.join('build', packageName, builds[-1].subdir, 'src', '*', 'play')))
+                gradle_subdirs.update(glob.glob(os.path.join('build', packageName, subdir, 'src', '*', 'play')))
             if not gradle_subdirs:
-                gradle_subdirs.update(glob.glob(os.path.join('build', packageName, builds[-1].subdir, '*', 'src', '*', 'play')))
+                gradle_subdirs.update(glob.glob(os.path.join('build', packageName, subdir, '*', 'src', '*', 'play')))
             if not gradle_subdirs:
                 # Flutter-style android subdir
-                gradle_subdirs.update(glob.glob(os.path.join('build', packageName, builds[-1].subdir, 'android', 'app', 'src', '*', 'play')))
+                gradle_subdirs.update(glob.glob(os.path.join('build', packageName, subdir, 'android', 'app', 'src', '*', 'play')))
         if not gradle_subdirs:
             sg_list = sorted(glob.glob(os.path.join('build', packageName, 'settings.gradle*')))
             if sg_list:
