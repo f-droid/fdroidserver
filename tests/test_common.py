@@ -794,18 +794,6 @@ class CommonTest(SetUpTearDownMixin, unittest.TestCase):
             self.assertEqual(keytoolcertfingerprint,
                              fdroidserver.common.apk_signer_fingerprint(apkfile))
 
-    @unittest.skipIf(sys.byteorder == 'big', 'androguard is not ported to big-endian')
-    def test_apk_signer_fingerprint_short(self):
-
-        # fingerprints fetched with: keytool -printcert -file ____.RSA
-        testapks = (('repo/obb.main.oldversion_1444412523.apk', '818e469'),
-                    ('repo/obb.main.twoversions_1101613.apk', '32a2362'),
-                    ('repo/obb.main.twoversions_1101617.apk', '32a2362'))
-
-        for apkfile, keytoolcertfingerprint in testapks:
-            self.assertEqual(keytoolcertfingerprint,
-                             fdroidserver.common.apk_signer_fingerprint_short(apkfile))
-
     def test_find_apksigner_system_package_default_path(self):
         """apksigner should be automatically used from the PATH"""
         usr_bin_apksigner = '/usr/bin/apksigner'

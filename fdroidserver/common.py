@@ -3410,22 +3410,6 @@ def apk_signer_fingerprint(apk_path):
     return signer_fingerprint(cert_encoded)
 
 
-def apk_signer_fingerprint_short(apk_path):
-    """Get 7 hex digit SHA-256 fingerprint string for the first signer from given APK.
-
-    Parameters
-    ----------
-    apk_path
-        path to APK
-
-    Returns
-    -------
-    first 7 chars of the standard SHA-256 signer fingerprint
-
-    """
-    return apk_signer_fingerprint(apk_path)[:7]
-
-
 def metadata_get_sigdir(appid, vercode=None):
     """Get signature directory for app."""
     if vercode:
