@@ -68,6 +68,7 @@ COMMANDS_INTERNAL = [
     "build_local_run",
     "destroy",
     "exec",
+    "install_ndk",
     "prepare_source",
     "pull",
     "push",
