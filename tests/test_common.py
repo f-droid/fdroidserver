@@ -2522,6 +2522,7 @@ class CommonTest(SetUpTearDownMixin, unittest.TestCase):
     def test_ndk_paths_in_config_must_be_strings(self):
         """All paths in config must be strings, and never pathlib.Path instances"""
         fdroidserver.common.config = {
+            'sdk_path': 'ignored',
             'ndk_paths': {'r21d': Path('/opt/android-sdk/ndk/r21d')}
         }
         build = fdroidserver.metadata.Build()
@@ -2610,7 +2611,7 @@ class CommonTest(SetUpTearDownMixin, unittest.TestCase):
         )
 
     def test_no_zero_length_ndk_path_prefixes(self):
-        fdroidserver.common.config = {'ndk_paths': {}}
+        fdroidserver.common.config = {'sdk_path': 'ignored', 'ndk_paths': dict()}
         build = fdroidserver.metadata.Build()
 
         with mock.patch.dict(os.environ, clear=True):
@@ -3705,3 +3706,54 @@ class VirtContainerTypeTest(unittest.TestCase):
             with self.assertRaises(SystemExit):
                 fdroidserver.common.get_virt_container_type(self.options)
             self.assertIn(testvalue, logs.output[0])
+
+
+class ParseNdkTest(unittest.TestCase):
+    """Test parsing installed NDKs."""
+
+    def setUp(self):
+        os.chdir(os.path.join(basedir, 'source-files/ndk'))
+
+    def tearDown(self):
+        fdroidserver.common.config = None
+
+    def test_parse_ndk_revision_release_release(self):
+        testvalue = '29.0.14206865'
+        self.assertEqual(
+            (testvalue, 'r29'),
+            fdroidserver.common._parse_ndk_revision_release(testvalue),
+        )
+
+    def test_parse_ndk_revision_release_beta(self):
+        testvalue = '29.0.14033849'
+        self.assertEqual(
+            (testvalue, 'r29-beta4'),
+            fdroidserver.common._parse_ndk_revision_release(testvalue),
+        )
+
+    def test_init_ndk_paths(self):
+        sdk_path = os.path.dirname(os.getcwd())
+        fdroidserver.common.config = {'sdk_path': sdk_path}
+        fdroidserver.common.init_ndk_paths()
+        self.assertEqual(
+            fdroidserver.common.config,
+            {
+                'ndk_paths': {
+                    '11.1.2683735': f'{sdk_path}/ndk/11.1.2683735',
+                    '29.0.14033849': f'{sdk_path}/ndk/29.0.14033849',
+                    '29.0.14206865': f'{sdk_path}/ndk/29.0.14206865',
+                    'r11b': f'{sdk_path}/ndk/11.1.2683735',
+                    'r29': f'{sdk_path}/ndk/29.0.14206865',
+                    'r29-beta4': f'{sdk_path}/ndk/29.0.14033849',
+                },
+                'sdk_path': sdk_path,
+            },
+        )
+
+    def test_build_ndk_path(self):
+        testvalue = '29.0.14033849'
+        sdk_path = os.path.dirname(os.getcwd())
+        fdroidserver.common.config = {'sdk_path': sdk_path}
+        build = fdroidserver.metadata.Build()
+        build.ndk = testvalue
+        self.assertEqual(build.ndk_path(), f'{sdk_path}/ndk/{testvalue}')

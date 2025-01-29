@@ -1850,7 +1850,7 @@ class MetadataTest(unittest.TestCase):
 
     def test_build_ndk_path_only_accepts_str(self):
         """Paths in the config must be strings, never pathlib.Path instances"""
-        config = {'ndk_paths': {'r24': Path('r24')}}
+        config = {'sdk_path': 'ignored', 'ndk_paths': {'r24': Path('r24')}}
         fdroidserver.common.config = config
         build = fdroidserver.metadata.Build()
         build.ndk = 'r24'

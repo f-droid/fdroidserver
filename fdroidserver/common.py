@@ -4963,15 +4963,121 @@ def _install_ndk(ndk):
 
     sdk_path = config['sdk_path']
     sdkmanager.install(f'ndk;{ndk}', sdk_path)
+    # we've installed a new NDK so add it to known paths in config
+    init_ndk_paths()
+
+
+def init_ndk_paths():
+    """Scan sdkmanager's NDK path for installs and add them to global config."""
+    sdk_path = config['sdk_path']
     for found in glob.glob(f'{sdk_path}/ndk/*'):
-        version = get_ndk_version(found)
+        revision, release = _parse_ndk_revision_release(found)
         if 'ndk_paths' not in config:
             config['ndk_paths'] = dict()
-        config['ndk_paths'][ndk] = found
-        config['ndk_paths'][version] = found
+        if revision:
+            config['ndk_paths'][revision] = found
+        if release:
+            config['ndk_paths'][release] = found
         logging.info(
-            _('Set NDK {release} ({version}) up').format(release=ndk, version=version)
+            _('Set up NDK {release} ({revision})').format(
+                release=release, revision=revision
+            )
         )
+
+
+# Pkg.ReleaseName was not included in source.properties until r26d
+# (26.3.11579264), so this provides a static map of ReleaseName to
+# Revision for the earlier NDK releases.
+#
+# Past NDK releases will never change, we have a log of them here:
+# https://gitlab.com/fdroid/android-sdk-transparency-log/-/blob/master/checksums.json
+NDK_REVISION_RELEASE = {
+    "11.0.2655954": "r11",
+    "11.1.2683735": "r11b",
+    "11.2.2725575": "r11c",
+    "12.0.2931149": "r12",
+    "12.1.2977051": "r12b",
+    "13.0.3315539": "r13",
+    "13.1.3345770": "r13b",
+    "14.0.3770861": "r14",
+    "14.1.3816874": "r14b",
+    "15.0.4075724": "r15",
+    "15.1.4119039": "r15b",
+    "15.2.4203891": "r15c",
+    "16.0.4442984": "r16",
+    "16.1.4479499": "r16b",
+    "17.0.4754217": "r17",
+    "17.1.4828580": "r17b",
+    "17.2.4988734": "r17c",
+    "18.1.5063045": "r18b",
+    "19.0.5232133": "r19",
+    "19.1.5304403": "r19b",
+    "19.2.5345600": "r19c",
+    "20.0.5392854-beta2": "r20-beta2",
+    "20.0.5471264-beta3": "r20-beta3",
+    "20.0.5594570": "r20",
+    "20.1.5948944": "r20b",
+    "21.0.6011959-beta2": "r21-beta2",
+    "21.0.6113669": "r21",
+    "21.1.6210238-beta1": "r21b-beta1",
+    "21.1.6273396-beta2": "r21b-beta2",
+    "21.1.6363665-beta3": "r21b-beta3",
+    "21.1.6352462": "r21b",
+    "21.2.6472646": "r21c",
+    "21.3.6528147": "r21d",
+    "21.4.7075529": "r21e",
+    "22.0.6917172-beta1": "r22-beta1",
+    "22.0.7026061": "r22",
+    "22.1.7171670": "r22b",
+    "23.0.7123448-beta1": "r23-beta1",
+    "23.0.7196353-beta2": "r23-beta2",
+    "23.0.7272597-beta3": "r23-beta3",
+    "23.0.7344513-beta4": "r23-beta4",
+    "23.0.7421159-beta5": "r23-beta5",
+    "23.0.7530507-beta6": "r23-beta6",
+    "23.0.7599858": "r23",
+    "23.1.7779620": "r23b",
+    "23.2.8568313": "r23c",
+    "24.0.7856742-beta1": "r24-beta1",
+    "24.0.7956693-beta2": "r24-beta2",
+    "24.0.8215888": "r24",
+    "24.0.8079956-beta3": "r24-rc1",
+    "25.0.8141415-beta1": "r25-beta1",
+    "25.0.8151533-beta1": "r25-beta1",
+    "25.0.8221429-beta2": "r25-beta2",
+    "25.0.8355429-beta3": "r25-beta3",
+    "25.0.8528842-beta4": "r25-beta4",
+    "25.0.8775105": "r25",
+    "25.1.8937393": "r25b",
+    "25.2.9519653": "r25c",
+    "26.0.10404224-beta1": "r26-beta1",
+    "26.0.10792818": "r26",
+    "26.0.10636728-beta2": "r26-rc1",
+    "26.1.10909125": "r26b",
+    "26.2.11394342": "r26c",
+}
+
+
+def _parse_ndk_revision_release(path):
+    """Parse NDK at path for revision and release versions.
+
+    When Google started labeling NDK releases as "beta", they added
+    "-betaX" to the pkg.revision string, but kept using only the semver
+    revision value for the path, so they added pkg.baserevision for the
+    path.
+
+    """
+    import sdkmanager
+
+    with open(os.path.join(path, 'source.properties')) as fp:
+        source_properties = sdkmanager.get_properties_dict(fp.read())
+        revision = source_properties.get(
+            'pkg.baserevision', source_properties.get('pkg.revision')
+        )
+        release = source_properties.get(
+            'pkg.releasename', NDK_REVISION_RELEASE.get(revision)
+        )
+        return revision, release
 
 
 def calculate_archive_policy(app, default):
