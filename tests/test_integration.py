@@ -833,7 +833,11 @@ class IntegrationTest(unittest.TestCase):
         # this should fail because the path doesn't end with "fdroid"
         self.assert_run_fail(
             self.fdroid_cmd
-            + ["deploy", "--local-copy-dir", "/tmp/IReallyDoubtThisPathExistsasdfasdf"]
+            + [
+                "deploy",
+                "--local-copy-dir",
+                "/tmp/IReallyDoubtThisPathExistsasdfasdf",  # nosec B108
+            ]
         )
         # this should fail because the dirname path does not exist
         self.assert_run_fail(
@@ -841,7 +845,7 @@ class IntegrationTest(unittest.TestCase):
             + [
                 "deploy",
                 "--local-copy-dir",
-                "/tmp/IReallyDoubtThisPathExistsasdfasdf/fdroid",
+                "/tmp/IReallyDoubtThisPathExistsasdfasdf/fdroid",  # nosec B108
             ]
         )
 
