@@ -381,7 +381,8 @@ def dirs_with_manifest(startdir: str):
         A directory that contains a manifest file of an Android project, None if
         no directory could be found
     """
-    for root, _dirs, files in os.walk(startdir):
+    for root, dirs, files in os.walk(startdir):
+        dirs.sort()
         if any(m in files for m in [
                 'AndroidManifest.xml', 'pom.xml', 'build.gradle', 'build.gradle.kts']):
             yield Path(root)
