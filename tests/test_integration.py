@@ -1375,7 +1375,7 @@ class IntegrationTest(unittest.TestCase):
         tmp_test.mkdir()
         shutil.copytree(FILES, tmp_test, dirs_exist_ok=True)
         os.chdir(tmp_test)
-        Path("archive").mkdir()
+        Path("archive").mkdir(exist_ok=True)
         shutil.copy("repo/index-v1.json", self.tmp_repo)
         self.assert_run(self.fdroid_cmd + ["update"])
         self.assert_run(self.fdroid_cmd + ["signindex"])
