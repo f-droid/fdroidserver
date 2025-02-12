@@ -233,6 +233,7 @@ class IntegrationTest(unittest.TestCase):
             self.fdroid_cmd + ["scanner", "org.fdroid.ci.test.app", "--verbose"]
         )
 
+    @unittest.skipUnless(shutil.which("gpg"), "requires command line gpg")
     def test_copy_repo_generate_java_gpg_keys_update_and_gpgsign(self):
         self.fdroid_init_with_prebuilt_keystore()
         shutil.copytree(FILES / "repo", "repo", dirs_exist_ok=True)
