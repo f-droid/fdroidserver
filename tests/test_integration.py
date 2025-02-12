@@ -17,6 +17,8 @@ try:
 except ModuleNotFoundError:
     from androguard.core.apk import get_apkid
 
+from .shared_test_code import mkdir_testfiles
+
 # TODO: port generic tests that use index.xml to index-v2 (test that
 #       explicitly test index-v0 should still use index.xml)
 
@@ -44,9 +46,6 @@ class IntegrationTest(unittest.TestCase):
         except KeyError:
             cls.fdroid_cmd = [WORKSPACE / "fdroid"]
 
-        cls.tmp = WORKSPACE / ".testfiles"
-        cls.tmp_repo = cls.tmp / "repo"
-
         os.environ.update(
             {
                 "GIT_AUTHOR_NAME": "Test",
@@ -59,12 +58,14 @@ class IntegrationTest(unittest.TestCase):
 
     def setUp(self):
         self.prev_cwd = Path()
-        self.tmp_repo.mkdir(parents=True)
-        os.chdir(self.tmp_repo)
+        self.testdir = mkdir_testfiles(WORKSPACE, self)
+        self.tmp_repo_root = self.testdir / "fdroid"
+        self.tmp_repo_root.mkdir(parents=True)
+        os.chdir(self.tmp_repo_root)
 
     def tearDown(self):
         os.chdir(self.prev_cwd)
-        shutil.rmtree(self.tmp)
+        shutil.rmtree(self.testdir)
 
     def assert_run(self, *args, **kwargs):
         proc = subprocess.run(*args, **kwargs)
@@ -795,7 +796,7 @@ class IntegrationTest(unittest.TestCase):
         self.update_yaml(
             "config.yml", {"categories": ["Internet"], "java_paths": {}}, replace=True
         )
-        local_copy_dir = self.tmp / "fdroid"
+        local_copy_dir = self.testdir / "local_copy_dir/fdroid"
         (local_copy_dir / "repo").mkdir(parents=True)
         self.update_yaml(
             "config.yml", {"local_copy_dir": str(local_copy_dir.resolve())}
@@ -819,8 +820,8 @@ class IntegrationTest(unittest.TestCase):
         self.assert_run(self.fdroid_cmd + ["init"])
         self.assert_run(self.fdroid_cmd + ["update", "--create-metadata", "--verbose"])
         self.assert_run(self.fdroid_cmd + ["readmeta"])
-        local_copy_dir = (self.tmp / "fdroid").resolve()
-        local_copy_dir.mkdir()
+        local_copy_dir = (self.testdir / "local_copy_dir/fdroid").resolve()
+        local_copy_dir.mkdir(parents=True)
         self.assert_run(
             self.fdroid_cmd + ["deploy", "--local-copy-dir", local_copy_dir]
         )
@@ -859,12 +860,13 @@ class IntegrationTest(unittest.TestCase):
         self.assert_run(self.fdroid_cmd + ["readmeta"])
         self.assertIn("<application id=", Path("repo/index.xml").read_text())
 
-        local_copy_dir = self.tmp / "fdroid"
+        local_copy_dir = self.testdir / "local_copy_dir/fdroid"
+        local_copy_dir.parent.mkdir()
         self.assert_run(
             self.fdroid_cmd + ["deploy", "--local-copy-dir", local_copy_dir]
         )
 
-        new_tmp_repo = self.tmp / "new_repo"
+        new_tmp_repo = self.testdir / "new_repo"
         new_tmp_repo.mkdir()
         os.chdir(new_tmp_repo)
         self.fdroid_init_with_prebuilt_keystore()
@@ -895,7 +897,7 @@ class IntegrationTest(unittest.TestCase):
         )
 
     def test_check_that_fake_android_home_passes_fdroid_init(self):
-        android_home = self.tmp / "android-sdk"
+        android_home = self.testdir / "android-sdk"
         android_home.mkdir()
         self.create_fake_android_home(android_home)
         self.assert_run(
@@ -905,7 +907,7 @@ class IntegrationTest(unittest.TestCase):
 
     @unittest.skip
     def test_check_that_fdroid_init_fails_when_build_tools_cannot_be_found(self):
-        fake_android_home = self.tmp / "android-sdk"
+        fake_android_home = self.testdir / "android-sdk"
         fake_android_home.mkdir()
         self.create_fake_android_home(fake_android_home)
         (fake_android_home / "build-tools/34.0.0/aapt").unlink()
@@ -921,7 +923,7 @@ class IntegrationTest(unittest.TestCase):
         )
 
     def check_that_android_home_opt_overrides_android_home_env_var(self):
-        fake_android_home = self.tmp / "android-sdk"
+        fake_android_home = self.testdir / "android-sdk"
         fake_android_home.mkdir()
         self.create_fake_android_home(fake_android_home)
         self.assert_run(
@@ -954,7 +956,7 @@ class IntegrationTest(unittest.TestCase):
 
         """
         real_android_home = os.environ["ANDROID_HOME"]
-        fake_android_home = self.tmp / "android-sdk"
+        fake_android_home = self.testdir / "android-sdk"
         fake_android_home.mkdir()
         env = os.environ.copy()
         env["ANDROID_HOME"] = str(fake_android_home)
@@ -1103,7 +1105,7 @@ class IntegrationTest(unittest.TestCase):
         self.fdroid_init_with_prebuilt_keystore()
         shutil.copytree(FILES / "repo", "repo", dirs_exist_ok=True)
         shutil.copytree(FILES / "metadata", "metadata")
-        git_remote = self.tmp / "git_remote"
+        git_remote = self.testdir / "git_remote"
         self.update_yaml("config.yml", {"binary_transparency_remote": str(git_remote)})
         self.assert_run(self.fdroid_cmd + ["update", "--verbose"])
         self.assert_run(self.fdroid_cmd + ["deploy", "--verbose"])
@@ -1150,7 +1152,7 @@ class IntegrationTest(unittest.TestCase):
     def test_setup_a_new_repo_from_scratch_using_android_home_env_var_with_git_mirror(
         self,
     ):
-        server_git_mirror = self.tmp / "server_git_mirror"
+        server_git_mirror = self.testdir / "server_git_mirror"
         server_git_mirror.mkdir()
         self.assert_run(
             ["git", "-C", server_git_mirror, "init", "--initial-branch", "master"]
@@ -1231,13 +1233,13 @@ class IntegrationTest(unittest.TestCase):
         self.assertGreater(before, after)
 
     def test_sign_binary_repo_in_offline_box_then_publishing_from_online_box(self):
-        offline_root = self.tmp / "offline_root"
+        offline_root = self.testdir / "offline_root"
         offline_root.mkdir()
-        local_copy_dir = self.tmp / "local_copy_dir/fdroid"
+        local_copy_dir = self.testdir / "local_copy_dir/fdroid"
         local_copy_dir.mkdir(parents=True)
-        online_root = self.tmp / "online_root"
+        online_root = self.testdir / "online_root"
         online_root.mkdir()
-        server_web_root = self.tmp / "server_web_root/fdroid"
+        server_web_root = self.testdir / "server_web_root/fdroid"
         server_web_root.mkdir(parents=True)
 
         # create offline binary transparency log
@@ -1246,11 +1248,11 @@ class IntegrationTest(unittest.TestCase):
         self.assert_run(["git", "init", "--initial-branch", "master"])
 
         # fake git remote server for binary transparency log
-        binary_transparency_remote = self.tmp / "binary_transparency_remote"
+        binary_transparency_remote = self.testdir / "binary_transparency_remote"
         binary_transparency_remote.mkdir()
 
         # fake git remote server for repo mirror
-        server_git_mirror = self.tmp / "server_git_mirror"
+        server_git_mirror = self.testdir / "server_git_mirror"
         server_git_mirror.mkdir()
         os.chdir(server_git_mirror)
         self.assert_run(["git", "init", "--initial-branch", "master"])
@@ -1371,15 +1373,15 @@ class IntegrationTest(unittest.TestCase):
         others.
 
         """
-        tmp_test = self.tmp / "test"
+        tmp_test = self.testdir / "tests"
         tmp_test.mkdir()
         shutil.copytree(FILES, tmp_test, dirs_exist_ok=True)
         os.chdir(tmp_test)
         Path("archive").mkdir(exist_ok=True)
-        shutil.copy("repo/index-v1.json", self.tmp_repo)
+        shutil.copy("repo/index-v1.json", self.tmp_repo_root)
         self.assert_run(self.fdroid_cmd + ["update"])
         self.assert_run(self.fdroid_cmd + ["signindex"])
-        shutil.move(self.tmp_repo / "index-v1.json", "repo/index-v1.json")
+        shutil.move(self.tmp_repo_root / "index-v1.json", "repo/index-v1.json")
 
         class RequestHandler(SimpleHTTPRequestHandler):
             def __init__(self, *args, **kwargs):
@@ -1388,7 +1390,7 @@ class IntegrationTest(unittest.TestCase):
         httpd = ThreadingHTTPServer(("127.0.0.1", 0), RequestHandler)
         threading.Thread(target=httpd.serve_forever).start()
 
-        os.chdir(self.tmp_repo)
+        os.chdir(self.tmp_repo_root)
         host, port = httpd.socket.getsockname()
         url, output_dir = f"http://{host}:{port}/", Path(f"{host}:{port}")
         env = os.environ.copy()
