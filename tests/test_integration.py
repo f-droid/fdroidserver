@@ -124,10 +124,10 @@ class IntegrationTest(unittest.TestCase):
                     return True
             return False
 
-        for file in FILES.glob("*.apk"):
-            if not to_skip(file.name):
+        for f in FILES.glob("*.apk"):
+            if not to_skip(f.name):
                 shutil.copy(
-                    file, Path("repo") / IntegrationTest.get_fdroid_apk_filename(file)
+                    f, Path("repo") / IntegrationTest.get_fdroid_apk_filename(f)
                 )
 
     @staticmethod
@@ -312,15 +312,15 @@ class IntegrationTest(unittest.TestCase):
             {"Summary": "good MD5 sig, which is disabled algorithm"},
             replace=True,
         )
-        for file in Path("metadata").glob("*.yml"):
-            self.remove_lines(file, ["ArchivePolicy:"])
-        for file in itertools.chain(
+        for f in Path("metadata").glob("*.yml"):
+            self.remove_lines(f, ["ArchivePolicy:"])
+        for f in itertools.chain(
             FILES.glob("urzip.apk"),
             FILES.glob("org.bitbucket.tickytacky.mirrormirror_[0-9].apk"),
             FILES.glob("repo/com.politedroid_[0-9].apk"),
             FILES.glob("repo/obb.main.twoversions_110161[357].apk"),
         ):
-            shutil.copy(file, "repo")
+            shutil.copy(f, "repo")
         self.update_yaml("config.yml", {"archive_older": 3})
 
         self.assert_run(self.fdroid_cmd + ["update", "--pretty", "--nosign"])
@@ -341,8 +341,8 @@ class IntegrationTest(unittest.TestCase):
         self.fdroid_init_with_prebuilt_keystore()
         Path("metadata").mkdir()
         shutil.copy(FILES / "metadata/com.politedroid.yml", "metadata")
-        for file in FILES.glob("repo/com.politedroid_[0-9].apk"):
-            shutil.copy(file, "repo")
+        for f in FILES.glob("repo/com.politedroid_[0-9].apk"):
+            shutil.copy(f, "repo")
         self.update_yaml("config.yml", {"archive_older": 3})
 
         self.assert_run(self.fdroid_cmd + ["update", "--pretty", "--nosign"])
@@ -441,8 +441,8 @@ class IntegrationTest(unittest.TestCase):
         Path("metadata").mkdir()
         shutil.copy(FILES / "metadata/com.politedroid.yml", "metadata")
         self.remove_lines("metadata/com.politedroid.yml", ["ArchivePolicy:"])
-        for file in FILES.glob("repo/com.politedroid_[0-9].apk"):
-            shutil.copy(file, "repo")
+        for f in FILES.glob("repo/com.politedroid_[0-9].apk"):
+            shutil.copy(f, "repo")
         self.update_yaml("config.yml", {"archive_older": 3})
 
         self.assert_run(self.fdroid_cmd + ["update", "--pretty", "--nosign"])
@@ -556,14 +556,14 @@ class IntegrationTest(unittest.TestCase):
             {"Summary": "good MD5 sig, disabled algorithm"},
             replace=True,
         )
-        for file in Path("metadata").glob("*.yml"):
-            self.remove_lines(file, ["ArchivePolicy:"])
-        for file in itertools.chain(
+        for f in Path("metadata").glob("*.yml"):
+            self.remove_lines(f, ["ArchivePolicy:"])
+        for f in itertools.chain(
             FILES.glob("urzip-badsig.apk"),
             FILES.glob("org.bitbucket.tickytacky.mirrormirror_[0-9].apk"),
             FILES.glob("repo/com.politedroid_[0-9].apk"),
         ):
-            shutil.copy(file, "repo")
+            shutil.copy(f, "repo")
 
         self.assert_run(self.fdroid_cmd + ["update", "--pretty", "--nosign"])
         repo = Path("repo/index.xml").read_text()
@@ -1163,8 +1163,8 @@ class IntegrationTest(unittest.TestCase):
             "config.yml",
             {"archive_older": 3, "servergitmirrors": str(server_git_mirror)},
         )
-        for file in FILES.glob("repo/com.politedroid_[345].apk"):
-            shutil.copy(file, "repo")
+        for f in FILES.glob("repo/com.politedroid_[345].apk"):
+            shutil.copy(f, "repo")
         self.assert_run(self.fdroid_cmd + ["update", "--create-metadata"])
         self.assert_run(self.fdroid_cmd + ["deploy"])
         git_mirror = Path("git-mirror")
