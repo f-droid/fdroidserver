@@ -17,6 +17,9 @@ try:
 except ModuleNotFoundError:
     from androguard.core.apk import get_apkid
 
+# TODO: port generic tests that use index.xml to index-v2 (test that
+#       explicitly test index-v0 should still use index.xml)
+
 
 basedir = Path(__file__).parent
 FILES = basedir
@@ -75,6 +78,7 @@ class IntegrationTest(unittest.TestCase):
 
     @staticmethod
     def update_yaml(path, items, replace=False):
+        """Update a .yml file, e.g. config.yml, with the given items."""
         yaml = YAML()
         doc = {}
         if not replace:
@@ -89,6 +93,8 @@ class IntegrationTest(unittest.TestCase):
 
     @staticmethod
     def remove_lines(path, unwanted_strings):
+        """Remove the lines in the path that contain the unwanted strings."""
+
         def contains_unwanted(line, unwanted_strings):
             for str in unwanted_strings:
                 if str in line:
@@ -937,11 +943,16 @@ class IntegrationTest(unittest.TestCase):
     def setup_a_new_repo_from_scratch_with_keystore_and_android_home_opt_set_on_cmd_line(
         self,
     ):
-        # In this case, ANDROID_HOME is set to a fake, non-working version that
-        # will be detected by fdroid as an Android SDK install. It should use
-        # the path set by --android-home over the one in ANDROID_HOME, therefore
-        # if it uses the one in ANDROID_HOME, it won't work because it is a fake
-        # one.  Only --android-home provides a working one.
+        """Test with broken setup in ANDROID_HOME.
+
+        In this case, ANDROID_HOME is set to a fake, non-working
+        version that will be detected by fdroid as an Android SDK
+        install. It should use the path set by --android-home over the
+        one in ANDROID_HOME, therefore if it uses the one in
+        ANDROID_HOME, it won't work because it is a fake one.  Only
+        --android-home provides a working one.
+
+        """
         real_android_home = os.environ["ANDROID_HOME"]
         fake_android_home = self.tmp / "android-sdk"
         fake_android_home.mkdir()
@@ -1350,6 +1361,16 @@ class IntegrationTest(unittest.TestCase):
 
     @unittest.skipUnless(shutil.which("wget"), "requires wget")
     def test_mirroring_a_repo(self):
+        """Start a local webserver to mirror a fake repo from.
+
+        Proxy settings via environment variables can interfere with
+        this test. The requests library will automatically pick up
+        proxy settings from environment variables. Proxy settings can
+        force the local connection over the proxy, which might not
+        support that, then this fails with an error like 405 or
+        others.
+
+        """
         tmp_test = self.tmp / "test"
         tmp_test.mkdir()
         shutil.copytree(FILES, tmp_test, dirs_exist_ok=True)
