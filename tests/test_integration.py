@@ -1393,15 +1393,13 @@ class IntegrationTest(unittest.TestCase):
         os.chdir(self.tmp_repo_root)
         host, port = httpd.socket.getsockname()
         url, output_dir = f"http://{host}:{port}/", Path(f"{host}:{port}")
-        env = os.environ.copy()
-        env.pop("http_proxy", None)
-        self.assert_run(self.fdroid_cmd + ["mirror", url], env=env)
+        self.assert_run(self.fdroid_cmd + ["mirror", url])
         self.assertTrue((output_dir / "repo/souch.smsbypass_9.apk").is_file())
         self.assertTrue((output_dir / "repo/icons-640/souch.smsbypass.9.png").is_file())
         # the index shouldn't be saved unless it was verified
         self.assertFalse((output_dir / "repo/index-v1.jar").exists())
         self.assert_run_fail(
-            self.fdroid_cmd + ["mirror", f"{url}?fingerprint=asdfasdf"], env=env
+            self.fdroid_cmd + ["mirror", f"{url}?fingerprint=asdfasdf"]
         )
         self.assertFalse((output_dir / "repo/index-v1.jar").exists())
         self.assert_run(
@@ -1410,7 +1408,6 @@ class IntegrationTest(unittest.TestCase):
                 "mirror",
                 f"{url}?fingerprint=F49AF3F11EFDDF20DFFD70F5E3117B9976674167ADCA280E6B1932A0601B26F6",
             ],
-            env=env,
         )
         self.assertTrue((output_dir / "repo/index-v1.jar").is_file())
 
