@@ -861,7 +861,8 @@ class IntegrationTest(unittest.TestCase):
             self.fdroid_cmd + ["deploy", "--local-copy-dir", local_copy_dir]
         )
 
-        (new_tmp_repo := self.tmp / "new_repo").mkdir()
+        new_tmp_repo = self.tmp / "new_repo"
+        new_tmp_repo.mkdir()
         os.chdir(new_tmp_repo)
         self.fdroid_init_with_prebuilt_keystore()
         self.update_yaml("config.yml", {"sync_from_local_copy_dir": True})
@@ -901,7 +902,8 @@ class IntegrationTest(unittest.TestCase):
 
     @unittest.skip
     def test_check_that_fdroid_init_fails_when_build_tools_cannot_be_found(self):
-        (fake_android_home := self.tmp / "android-sdk").mkdir()
+        fake_android_home = self.tmp / "android-sdk"
+        fake_android_home.mkdir()
         self.create_fake_android_home(fake_android_home)
         (fake_android_home / "build-tools/34.0.0/aapt").unlink()
         self.assert_run_fail(
@@ -916,7 +918,8 @@ class IntegrationTest(unittest.TestCase):
         )
 
     def check_that_android_home_opt_overrides_android_home_env_var(self):
-        (fake_android_home := self.tmp / "android-sdk").mkdir()
+        fake_android_home = self.tmp / "android-sdk"
+        fake_android_home.mkdir()
         self.create_fake_android_home(fake_android_home)
         self.assert_run(
             self.fdroid_cmd
@@ -943,7 +946,8 @@ class IntegrationTest(unittest.TestCase):
         # if it uses the one in ANDROID_HOME, it won't work because it is a fake
         # one.  Only --android-home provides a working one.
         real_android_home = os.environ["ANDROID_HOME"]
-        (fake_android_home := self.tmp / "android-sdk").mkdir()
+        fake_android_home = self.tmp / "android-sdk"
+        fake_android_home.mkdir()
         env = os.environ.copy()
         env["ANDROID_HOME"] = str(fake_android_home)
         self.assert_run(
@@ -1138,7 +1142,8 @@ class IntegrationTest(unittest.TestCase):
     def test_setup_a_new_repo_from_scratch_using_android_home_env_var_with_git_mirror(
         self,
     ):
-        (server_git_mirror := self.tmp / "server_git_mirror").mkdir()
+        server_git_mirror = self.tmp / "server_git_mirror"
+        server_git_mirror.mkdir()
         self.assert_run(
             ["git", "-C", server_git_mirror, "init", "--initial-branch", "master"]
         )
@@ -1218,10 +1223,14 @@ class IntegrationTest(unittest.TestCase):
         self.assertGreater(before, after)
 
     def test_sign_binary_repo_in_offline_box_then_publishing_from_online_box(self):
-        (offline_root := self.tmp / "offline_root").mkdir()
-        (local_copy_dir := self.tmp / "local_copy_dir/fdroid").mkdir(parents=True)
-        (online_root := self.tmp / "online_root").mkdir()
-        (server_web_root := self.tmp / "server_web_root/fdroid").mkdir(parents=True)
+        offline_root = self.tmp / "offline_root"
+        offline_root.mkdir()
+        local_copy_dir = self.tmp / "local_copy_dir/fdroid"
+        local_copy_dir.mkdir(parents=True)
+        online_root = self.tmp / "online_root"
+        online_root.mkdir()
+        server_web_root = self.tmp / "server_web_root/fdroid"
+        server_web_root.mkdir(parents=True)
 
         # create offline binary transparency log
         (offline_root / "binary_transparency").mkdir()
@@ -1229,10 +1238,12 @@ class IntegrationTest(unittest.TestCase):
         self.assert_run(["git", "init", "--initial-branch", "master"])
 
         # fake git remote server for binary transparency log
-        (binary_transparency_remote := self.tmp / "binary_transparency_remote").mkdir()
+        binary_transparency_remote = self.tmp / "binary_transparency_remote"
+        binary_transparency_remote.mkdir()
 
         # fake git remote server for repo mirror
-        (server_git_mirror := self.tmp / "server_git_mirror").mkdir()
+        server_git_mirror = self.tmp / "server_git_mirror"
+        server_git_mirror.mkdir()
         os.chdir(server_git_mirror)
         self.assert_run(["git", "init", "--initial-branch", "master"])
         self.assert_run(["git", "config", "receive.denyCurrentBranch", "updateInstead"])
