@@ -2668,8 +2668,20 @@ def main():
 
     appid_has_apks = set()
     appid_has_repo_files = set()
+    sha256_has_files = collections.defaultdict(list)
+    errors = 0
     remove_apks = []
     for apk in apks:
+        sha256 = apk['hash']
+        if sha256 in sha256_has_files:
+            errors += 1
+            for path2 in sha256_has_files[sha256]:
+                logging.error(
+                    _('{path1} is a duplicate of {path2}, remove one!').format(
+                        path1=apk["apkName"], path2=path2
+                    )
+                )
+        sha256_has_files[sha256].append(apk['apkName'])
         to_remove = get_apks_without_allowed_signatures(apps.get(apk['packageName']), apk)
         if to_remove:
             remove_apks.append(apk)
@@ -2712,14 +2724,17 @@ def main():
     for apk in remove_apks:
         apks.remove(apk)
 
-    mismatch_errors = ''
     for appid in appid_has_apks:
         if appid in appid_has_repo_files:
             appid_files = ', '.join(glob.glob(os.path.join('repo', appid + '_[0-9]*.*')))
-            mismatch_errors += (_('{appid} has both APKs and files: {files}')
-                                .format(appid=appid, files=appid_files)) + '\n'
-    if mismatch_errors:
-        raise FDroidException(mismatch_errors)
+            errors += 1
+            logging.error(
+                _('{appid} has both APKs and files: {files}').format(
+                    appid=appid, files=appid_files
+                )
+            )
+    if errors:
+        sys.exit(errors)
 
     # Scan the archive repo for apks as well
     if len(repodirs) > 1:
