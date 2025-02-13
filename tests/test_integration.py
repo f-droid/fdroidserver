@@ -235,11 +235,15 @@ class IntegrationTest(unittest.TestCase):
 
     @unittest.skipUnless(shutil.which("gpg"), "requires command line gpg")
     def test_copy_repo_generate_java_gpg_keys_update_and_gpgsign(self):
+        """Needs tricks to make gpg-agent run in a test harness."""
         self.fdroid_init_with_prebuilt_keystore()
         shutil.copytree(FILES / "repo", "repo", dirs_exist_ok=True)
-        for dir in ["config", "metadata", "gnupghome"]:
+        for dir in ["config", "metadata"]:
             shutil.copytree(FILES / dir, dir)
-        gnupghome = Path("gnupghome").resolve()
+        # gpg requires a short path to the socket to talk to gpg-agent
+        gnupghome = (WORKSPACE / '.testfiles/gnupghome').resolve()
+        shutil.rmtree(gnupghome, ignore_errors=True)
+        shutil.copytree(FILES / "gnupghome", gnupghome)
         os.chmod(gnupghome, 0o700)
         self.update_yaml(
             "config.yml",
@@ -266,6 +270,9 @@ class IntegrationTest(unittest.TestCase):
         self.assertTrue(Path("repo/index-v1.jar").is_file())
 
         self.assert_run(self.fdroid_cmd + ["gpgsign", "--verbose"])
+        env = os.environ.copy()
+        env["GNUPGHOME"] = gnupghome
+        self.assert_run(['gpgconf', '--kill', 'gpg-agent'], env=env)
 
         self.assertTrue(Path("repo/obb.mainpatch.current_1619.apk.asc").is_file())
         self.assertTrue(
