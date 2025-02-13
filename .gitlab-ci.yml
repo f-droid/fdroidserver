@@ -98,6 +98,14 @@ metadata_v0:
     # Ubuntu and other distros often lack https:// support
     - grep Debian /etc/issue.net
         && { find /etc/apt/sources.list* -type f | xargs sed -i s,http:,https:, ; }
+    # The official Debian docker images ship without ca-certificates,
+    # TLS certificates cannot be verified until that is installed. The
+    # following code turns off TLS verification, and enables HTTPS, so
+    # at least unverified TLS is used for apt-get instead of plain
+    # HTTP.  Once ca-certificates is installed, the CA verification is
+    # enabled by removing this config.  This set up makes the initial
+    # `apt-get update` and `apt-get install` look the same as verified
+    # TLS to the network observer and hides the metadata.
     - echo 'Acquire::https::Verify-Peer "false";' > /etc/apt/apt.conf.d/99nocacertificates
     - apt-get update
     - apt-get install ca-certificates

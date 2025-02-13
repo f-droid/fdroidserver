@@ -37,11 +37,22 @@ RUN useradd --create-home -s /bin/bash vagrant && echo -n 'vagrant:vagrant' | ch
 #
 # Ensure fdroidserver's dependencies are marked manual before purging
 # unneeded packages, otherwise, all its dependencies get purged.
+#
+# The official Debian docker images ship without ca-certificates, so
+# TLS certificates cannot be verified until that is installed. The
+# following code temporarily turns off TLS verification, and enables
+# HTTPS, so at least unverified TLS is used for apt-get instead of
+# plain HTTP.  Once ca-certificates is installed, the CA verification
+# is enabled by removing the newly created config file.  This set up
+# makes the initial `apt-get update` and `apt-get install` look the
+# same as verified TLS to the network observer and hides the metadata.
 RUN printf "path-exclude=/usr/share/locale/*\npath-exclude=/usr/share/man/*\npath-exclude=/usr/share/doc/*\npath-include=/usr/share/doc/*/copyright\n" >/etc/dpkg/dpkg.cfg.d/01_nodoc \
 	&& mkdir -p /usr/share/man/man1 \
+	&& echo 'Acquire::https::Verify-Peer "false";' > /etc/apt/apt.conf.d/99nocacertificates \
+	&& find /etc/apt/sources.list* -type f -exec sed -i s,http:,https:, {} \; \
 	&& apt-get update \
 	&& apt-get install ca-certificates \
-        && sed -i 's,http:,https:,' /etc/apt/sources.list.d/debian.sources \
+	&& rm /etc/apt/apt.conf.d/99nocacertificates \
 	&& apt-get upgrade \
 	&& apt-get dist-upgrade \
 	&& apt-get install openssh-client iproute2 python3 openssh-server sudo \
