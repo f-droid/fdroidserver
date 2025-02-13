@@ -79,7 +79,7 @@ def mkdir_testfiles(localmodule, test):
     testroot.mkdir(exist_ok=True)
     testdir = testroot / unittest.TestCase.id(test)
     testdir.mkdir(exist_ok=True)
-    return tempfile.mkdtemp(dir=testdir)
+    return Path(tempfile.mkdtemp(dir=testdir))
 
 
 def mock_urlopen(status=200, body=None):
