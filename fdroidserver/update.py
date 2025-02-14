@@ -1936,8 +1936,8 @@ def scan_apk_androguard(apk, apkfile):
     arch_re = re.compile("^lib/(.*)/.*$")
     arch = set([arch_re.match(file).group(1) for file in apkobject.get_files() if arch_re.match(file)])
     if len(arch) >= 1:
-        apk['nativecode'] = []
-        apk['nativecode'].extend(sorted(list(arch)))
+        manifest['nativecode'] = []
+        manifest['nativecode'].extend(sorted(list(arch)))
 
     for item in xml.findall('uses-permission'):
         name = item.attrib.get(xmlns + 'name')

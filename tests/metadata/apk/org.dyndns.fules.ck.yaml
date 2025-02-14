@@ -15,20 +15,20 @@ icons_src:
   '240': res/drawable-hdpi-v4/icon_launcher.png
 ipfsCIDv1: bafybeifijmr5ygvfvig4vzbmdc3ysj6m46ddohaol4vgp4qoyooqpc27zu
 manifest:
+  nativecode:
+    - arm64-v8a
+    - armeabi
+    - armeabi-v7a
+    - mips
+    - mips64
+    - x86
+    - x86_64
   usesPermission:
     - name: android.permission.BIND_INPUT_METHOD
     - name: android.permission.READ_EXTERNAL_STORAGE
     - name: android.permission.VIBRATE
 minSdkVersion: 7
 name: Compass Keyboard
-nativecode:
-- arm64-v8a
-- armeabi
-- armeabi-v7a
-- mips
-- mips64
-- x86
-- x86_64
 packageName: org.dyndns.fules.ck
 sig: 9bf7a6a67f95688daec75eab4b1436ac
 signer: 9326a2cc1a2f148202bc7837a0af3b81200bd37fd359c9e13a2296a71d342056

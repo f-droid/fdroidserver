@@ -923,8 +923,10 @@ class UpdateTest(unittest.TestCase):
         self.assertEqual(apk_info['packageName'], 'org.dyndns.fules.ck')
         self.assertEqual(apk_info['versionCode'], 20)
         self.assertEqual(apk_info['size'], 132453)
-        self.assertEqual(apk_info['nativecode'],
-                         ['arm64-v8a', 'armeabi', 'armeabi-v7a', 'mips', 'mips64', 'x86', 'x86_64'])
+        self.assertEqual(
+            apk_info['manifest']['nativecode'],
+            ['arm64-v8a', 'armeabi', 'armeabi-v7a', 'mips', 'mips64', 'x86', 'x86_64'],
+        )
         self.assertEqual(apk_info['minSdkVersion'], 7)
         self.assertEqual(apk_info['sig'], '9bf7a6a67f95688daec75eab4b1436ac')
         self.assertEqual(apk_info['hashType'], 'sha256')
@@ -1907,6 +1909,15 @@ class UpdateTest(unittest.TestCase):
                         '-1': 'res/drawable-mdpi-v4/icon_launcher.png',
                     },
                     'manifest': {
+                        'nativecode': [
+                            'arm64-v8a',
+                            'armeabi',
+                            'armeabi-v7a',
+                            'mips',
+                            'mips64',
+                            'x86',
+                            'x86_64',
+                        ],
                         'usesPermission': [
                             {'name': 'android.permission.BIND_INPUT_METHOD'},
                             {'name': 'android.permission.READ_EXTERNAL_STORAGE'},
@@ -1919,15 +1930,6 @@ class UpdateTest(unittest.TestCase):
                     'minSdkVersion': 7,
                     'name': 'Compass Keyboard',
                     'targetSdkVersion': 8,
-                    'nativecode': [
-                        'arm64-v8a',
-                        'armeabi',
-                        'armeabi-v7a',
-                        'mips',
-                        'mips64',
-                        'x86',
-                        'x86_64',
-                    ],
                 },
             )
         ]

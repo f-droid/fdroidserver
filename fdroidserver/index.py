@@ -634,7 +634,6 @@ def convert_version(version, app, repodir):
 
     manifest = version.get("manifest", dict())
     for element in (
-        "nativecode",
         "versionName",
         "maxSdkVersion",
     ):
@@ -1412,8 +1411,12 @@ def make_v0(apps, apks, repodir, repodict, requestsdict, signer_fingerprints):
                         permel.setAttribute('maxSdkVersion', str(p23['maxSdkVersion']))
                         apkel.appendChild(permel)
                     permel.setAttribute('name', p23['name'])
-                if 'nativecode' in apk:
-                    addElement('nativecode', ','.join(sorted(apk['nativecode'])), doc, apkel)  # fmt: skip
+                addElementNonEmpty(
+                    'nativecode',
+                    ','.join(sorted(manifest.get('nativecode', list()))),
+                    doc,
+                    apkel,
+                )
                 addElementNonEmpty('features', ','.join(sorted(apk['features'])), doc, apkel)  # fmt: skip
 
         if (
