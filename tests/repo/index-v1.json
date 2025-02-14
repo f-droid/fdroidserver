@@ -1,7 +1,7 @@
 {
   "repo": {
     "timestamp": 1676634233000,
-    "version": 20002,
+    "version": 30000,
     "name": "My First F-Droid Repo Demo",
     "icon": "icon.png",
     "address": "https://example.com/fdroid/repo",

@@ -68,7 +68,7 @@ if hasattr(Image, 'DecompressionBombWarning'):
     warnings.simplefilter('error', Image.DecompressionBombWarning)
 Image.MAX_IMAGE_PIXELS = 0xFFFFFF  # 4096x4096
 
-METADATA_VERSION = 20002
+METADATA_VERSION = 30000
 
 # less than the valid range of versionCode, i.e. Java's Integer.MIN_VALUE
 UNSET_VERSION_CODE = -0x100000000
