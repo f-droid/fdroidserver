@@ -2038,8 +2038,8 @@ def make_altstore(apps, apks, config, repodir, pretty=False):
 
             # populate 'versions'
             for apk in apks:
-                last4 = apk.get('apkName', '').lower()[-4:]
-                if apk['packageName'] == packageName and last4 == '.ipa':
+                file_extension = common.get_file_extension(apk['apkName'])
+                if apk['packageName'] == packageName and file_extension == 'ipa':
                     v = {
                         "version": apk["manifest"]["versionName"],
                         "date": apk["added"].isoformat(),
