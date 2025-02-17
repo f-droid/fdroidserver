@@ -3,9 +3,9 @@
   "version": 20002,
   "index": {
     "name": "/index-v2.json",
-    "sha256": "bef31251dd4bdfc34f9a9e7b93dbf3e0bc7172e17d1d72a550c10d1bc183c01c",
-    "size": 53527,
-    "numPackages": 10
+    "sha256": "f0912b64db80168ee807f43ab3470bb709b6659aee05ad63057dcbcd1c97dc5e",
+    "size": 55186,
+    "numPackages": 11
   },
   "diffs": {}
 }

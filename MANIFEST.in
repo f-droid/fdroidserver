@@ -637,6 +637,7 @@ include tests/metadata/obb.main.twoversions.yml
 include tests/metadata/org.adaway.yml
 include tests/metadata/org.fdroid.ci.test.app.yml
 include tests/metadata/org.fdroid.fdroid.yml
+include tests/metadata/org.maxsdkversion.yml
 include tests/metadata/org.smssecure.smssecure/signatures/134/28969C09.RSA
 include tests/metadata/org.smssecure.smssecure/signatures/134/28969C09.SF
 include tests/metadata/org.smssecure.smssecure/signatures/134/MANIFEST.MF
@@ -689,6 +690,7 @@ include tests/repo/obb.main.twoversions_1101613.apk
 include tests/repo/obb.main.twoversions_1101615.apk
 include tests/repo/obb.main.twoversions_1101617.apk
 include tests/repo/obb.main.twoversions_1101617_src.tar.gz
+include tests/repo/org.maxsdkversion_4.apk
 include tests/repo/org.videolan.vlc/en-US/icon.png
 include tests/repo/org.videolan.vlc/en-US/phoneScreenshots/screenshot10.png
 include tests/repo/org.videolan.vlc/en-US/phoneScreenshots/screenshot12.png

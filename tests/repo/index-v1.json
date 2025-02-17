@@ -92,6 +92,16 @@
       }
     },
     {
+      "suggestedVersionCode": "4",
+      "license": "Unknown",
+      "name": "maxSdkVersion",
+      "summary": "Test setting maxSdkVersion in an APK",
+      "added": 1739805810000,
+      "icon": "org.maxsdkversion.4.png",
+      "packageName": "org.maxsdkversion",
+      "lastUpdated": 1739805810000
+    },
+    {
       "categories": [
         "Development"
       ],
@@ -650,6 +660,32 @@
         "targetSdkVersion": 18,
         "versionCode": 1619,
         "versionName": "0.1"
+      }
+    ],
+    "org.maxsdkversion": [
+      {
+        "added": 1739805810000,
+        "apkName": "org.maxsdkversion_4.apk",
+        "features": [
+          "android.hardware.camera.front"
+        ],
+        "hash": "877d582369d2840fc0d6892e44feaaad21419b0e35af42f22b3e127bcd08274d",
+        "hashType": "sha256",
+        "maxSdkVersion": 25,
+        "minSdkVersion": 14,
+        "packageName": "org.maxsdkversion",
+        "sig": "1a5e67bcef6b2d6242f2d36982b54589",
+        "signer": "401a3a5843a3d5cebc22e6de5cb76d08eaa6797122d7fe1283df1d192e132f5e",
+        "size": 12768,
+        "targetSdkVersion": 19,
+        "uses-permission": [
+          [
+            "android.permission.CAMERA",
+            null
+          ]
+        ],
+        "versionCode": 4,
+        "versionName": "1.0.3"
       }
     ],
     "souch.smsbypass": [

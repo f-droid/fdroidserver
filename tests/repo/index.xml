@@ -147,6 +147,35 @@ APK is called F-Droid Privileged Extension.</desc>
 			<added>2016-03-10</added>
 		</package>
 	</application>
+	<application id="org.maxsdkversion">
+		<id>org.maxsdkversion</id>
+		<added>2025-02-17</added>
+		<lastupdated>2025-02-17</lastupdated>
+		<name>maxSdkVersion</name>
+		<summary>Test setting maxSdkVersion in an APK</summary>
+		<icon>org.maxsdkversion.4.png</icon>
+		<desc>No description available</desc>
+		<license>Unknown</license>
+		<web></web>
+		<source></source>
+		<tracker></tracker>
+		<marketversion></marketversion>
+		<marketvercode>4</marketvercode>
+		<package>
+			<version>1.0.3</version>
+			<versioncode>4</versioncode>
+			<apkname>org.maxsdkversion_4.apk</apkname>
+			<hash type="sha256">877d582369d2840fc0d6892e44feaaad21419b0e35af42f22b3e127bcd08274d</hash>
+			<size>12768</size>
+			<sdkver>14</sdkver>
+			<targetSdkVersion>19</targetSdkVersion>
+			<maxsdkver>25</maxsdkver>
+			<added>2025-02-17</added>
+			<sig>1a5e67bcef6b2d6242f2d36982b54589</sig>
+			<permissions>CAMERA</permissions>
+			<features>android.hardware.camera.front</features>
+		</package>
+	</application>
 	<application id="no.min.target.sdk">
 		<id>no.min.target.sdk</id>
 		<added>2018-10-10</added>
