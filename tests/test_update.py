@@ -874,29 +874,31 @@ class UpdateTest(unittest.TestCase):
             fdroidserver.update._uses_permission('foo', '12z'),
         )
 
-    def test_scan_apk(self):
+    def test_scan_apk_v2_only(self):
         config = dict()
         fdroidserver.common.fill_config_defaults(config)
         fdroidserver.common.config = config
-        fdroidserver.update.config = config
-        os.chdir(basedir)
+        if 'apksigner' not in fdroidserver.common.config:
+            self.skipTest(
+                'skipping v2-only test since apksigner cannot be found',
+            )
+        apk_info = fdroidserver.update.scan_apk('v2.only.sig_2.apk')
+        self.assertIsNone(apk_info.get('maxSdkVersion'))
+        self.assertEqual(apk_info.get('versionName'), 'v2-only')
+        self.assertEqual(apk_info.get('versionCode'), 2)
 
-        if 'apksigner' in config:
-            apk_info = fdroidserver.update.scan_apk('v2.only.sig_2.apk')
-            self.assertIsNone(apk_info.get('maxSdkVersion'))
-            self.assertEqual(apk_info.get('versionName'), 'v2-only')
-            self.assertEqual(apk_info.get('versionCode'), 2)
-        else:
-            print('WARNING: skipping v2-only test since apksigner cannot be found')
+    def test_scan_apk_v1_v2(self):
         apk_info = fdroidserver.update.scan_apk('repo/v1.v2.sig_1020.apk')
         self.assertIsNone(apk_info.get('maxSdkVersion'))
         self.assertEqual(apk_info.get('versionName'), 'v1+2')
         self.assertEqual(apk_info.get('versionCode'), 1020)
 
+    def test_scan_apk_no_maxSdkVersion(self):
         apk_info = fdroidserver.update.scan_apk('repo/souch.smsbypass_9.apk')
         self.assertIsNone(apk_info.get('maxSdkVersion'))
         self.assertEqual(apk_info.get('versionName'), '0.9')
 
+    def test_scan_apk_features(self):
         apk_info = fdroidserver.update.scan_apk('repo/duplicate.permisssions_9999999.apk')
         self.assertEqual(apk_info.get('versionName'), '')
         self.assertEqual(apk_info['icons_src'], {'160': 'res/drawable/ic_launcher.png',
@@ -906,6 +908,7 @@ class UpdateTest(unittest.TestCase):
             ['android.hardware.telephony'],
         )
 
+    def test_scan_apk_lots_of_data(self):
         apk_info = fdroidserver.update.scan_apk('org.dyndns.fules.ck_20.apk')
         self.assertEqual(apk_info['icons_src'], {'240': 'res/drawable-hdpi-v4/icon_launcher.png',
                                                  '120': 'res/drawable-ldpi-v4/icon_launcher.png',
@@ -927,15 +930,18 @@ class UpdateTest(unittest.TestCase):
         self.assertEqual(apk_info['hashType'], 'sha256')
         self.assertEqual(apk_info['targetSdkVersion'], 8)
 
+    def test_scan_apk_two_icons(self):
         apk_info = fdroidserver.update.scan_apk('org.bitbucket.tickytacky.mirrormirror_4.apk')
         self.assertEqual(apk_info.get('versionName'), '1.0.3')
         self.assertEqual(apk_info['icons_src'], {'160': 'res/drawable-mdpi/mirror.png',
                                                  '-1': 'res/drawable-mdpi/mirror.png'})
 
+    def test_scan_apk_xml_icon(self):
         apk_info = fdroidserver.update.scan_apk('repo/info.zwanenburg.caffeinetile_4.apk')
         self.assertEqual(apk_info.get('versionName'), '1.3')
         self.assertEqual(apk_info['icons_src'], {})
 
+    def test_scan_apk_old_icons(self):
         apk_info = fdroidserver.update.scan_apk('repo/com.politedroid_6.apk')
         self.assertEqual(apk_info.get('versionName'), '1.5')
         self.assertEqual(apk_info['icons_src'], {'120': 'res/drawable-ldpi-v4/icon.png',
@@ -944,6 +950,7 @@ class UpdateTest(unittest.TestCase):
                                                  '320': 'res/drawable-xhdpi-v4/icon.png',
                                                  '-1': 'res/drawable-mdpi-v4/icon.png'})
 
+    def test_scan_apk_no_icons(self):
         apk_info = fdroidserver.update.scan_apk('SpeedoMeterApp.main_1.apk')
         self.assertEqual(apk_info.get('versionName'), '1.0')
         self.assertEqual(apk_info['icons_src'], {})
@@ -952,9 +959,7 @@ class UpdateTest(unittest.TestCase):
         config = dict()
         fdroidserver.common.fill_config_defaults(config)
         fdroidserver.common.config = config
-        fdroidserver.update.config = config
         apk_info = fdroidserver.update.scan_apk('repo/no.min.target.sdk_987.apk')
-        self.maxDiff = None
         expected = {
             'icons': {},
             'icons_src': {
@@ -987,22 +992,10 @@ class UpdateTest(unittest.TestCase):
         self.assertDictEqual(apk_info, expected)
 
     def test_scan_apk_no_sig(self):
-        config = dict()
-        fdroidserver.common.fill_config_defaults(config)
-        fdroidserver.common.config = config
-        fdroidserver.update.config = config
-        os.chdir(basedir)
-        if os.path.basename(os.getcwd()) != 'tests':
-            raise Exception('This test must be run in the "tests/" subdir')
-
         with self.assertRaises(fdroidserver.exception.BuildException):
             fdroidserver.update.scan_apk('urzip-release-unsigned.apk')
 
     def test_scan_apk_bad_zip(self):
-        config = dict()
-        fdroidserver.common.fill_config_defaults(config)
-        fdroidserver.common.config = config
-        fdroidserver.update.config = config
         os.chdir(self.testdir)
         os.mkdir('repo')
         apkfile = 'repo/badzip_1.apk'
@@ -1035,10 +1028,6 @@ class UpdateTest(unittest.TestCase):
         * jar cf ../SystemWebView-repack.apk *
         """
         # reset the state, perhaps this should be in setUp()
-        config = dict()
-        fdroidserver.common.fill_config_defaults(config)
-        fdroidserver.common.config = config
-        fdroidserver.update.config = config
         with mkdtemp() as tmpdir, TmpCwd(tmpdir):
             os.mkdir('repo')
             apkfile = 'repo/SystemWebView-repack.apk'
@@ -1057,11 +1046,6 @@ class UpdateTest(unittest.TestCase):
         <uses-permission xmlns:n1="android" n1:name="android.permission.VIBRATE"/>
 
         """
-        # reset the state, perhaps this should be in setUp()
-        config = dict()
-        fdroidserver.common.fill_config_defaults(config)
-        fdroidserver.common.config = config
-        fdroidserver.update.config = config
         with mkdtemp() as tmpdir, TmpCwd(tmpdir):
             os.mkdir('repo')
             apkfile = 'repo/org.sajeg.fallingblocks_3.apk'
