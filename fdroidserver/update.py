@@ -1709,14 +1709,6 @@ def scan_apk(apk_file, require_signature=True):
     # Get size of the APK
     apk['size'] = os.path.getsize(apk_file)
 
-    if 'minSdkVersion' not in apk:
-        logging.warning(
-            _("No minimum SDK version found in {0}, using default (3).").format(
-                apk_file
-            )
-        )
-        apk['minSdkVersion'] = 3  # aapt defaults to 3 as the min
-
     # Check for known vulnerabilities
     hkv = has_known_vulnerability(apk_file)
     if hkv:
@@ -1871,7 +1863,10 @@ def scan_apk_androguard(apk, apkfile):
         )
         raise BuildException(_("Invalid APK")) from e
 
-    manifest = dict()
+    # https://developer.android.com/guide/topics/manifest/uses-sdk-element
+    usesSdk = dict()
+    # https://developer.android.com/guide/topics/manifest/manifest-element
+    manifest = {'usesSdk': usesSdk}
     apk['manifest'] = manifest
 
     apk['packageName'] = apkobject.get_package()
@@ -1908,15 +1903,23 @@ def scan_apk_androguard(apk, apkfile):
 
     minSdkVersion = _sanitize_sdk_version(apkobject.get_min_sdk_version())
     if minSdkVersion is not None:
-        apk['minSdkVersion'] = minSdkVersion
+        usesSdk['minSdkVersion'] = minSdkVersion
+    else:
+        usesSdk['minSdkVersion'] = 3  # aapt defaults to 3 as the min
+        logging.warning(
+            _("No minimum SDK version found in {0}, using default (3).").format(
+                apkfile
+            )
+        )
 
     targetSdkVersion = _sanitize_sdk_version(apkobject.get_target_sdk_version())
     if targetSdkVersion is not None:
-        apk['targetSdkVersion'] = targetSdkVersion
+        usesSdk['targetSdkVersion'] = targetSdkVersion
 
     maxSdkVersion = _sanitize_sdk_version(apkobject.get_max_sdk_version())
     if maxSdkVersion is not None:
-        apk['maxSdkVersion'] = maxSdkVersion
+        # mistakenly put in 'manifest' in index-v2, TODO move to useSdk for index-v3
+        manifest['maxSdkVersion'] = maxSdkVersion
 
     icon_id_str = apkobject.get_attribute_value("application", "icon")
     if icon_id_str:

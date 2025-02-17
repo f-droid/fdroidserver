@@ -635,7 +635,6 @@ def convert_version(version, app, repodir):
     manifest = version.get("manifest", dict())
     for element in (
         "versionName",
-        "maxSdkVersion",
     ):
         if element in version:
             manifest[element] = version[element]
@@ -643,14 +642,11 @@ def convert_version(version, app, repodir):
     if "versionCode" in version:
         manifest["versionCode"] = version["versionCode"]
 
-    if "minSdkVersion" in version:
-        manifest["usesSdk"] = {}
-        manifest["usesSdk"]["minSdkVersion"] = version["minSdkVersion"]
-        if "targetSdkVersion" in version:
-            manifest["usesSdk"]["targetSdkVersion"] = version["targetSdkVersion"]
-        else:
-            # https://developer.android.com/guide/topics/manifest/uses-sdk-element.html#target
-            manifest["usesSdk"]["targetSdkVersion"] = manifest["usesSdk"]["minSdkVersion"]  # fmt: skip
+    # If targetSdkVersion not set, the default value equals that given to minSdkVersion
+    # https://developer.android.com/guide/topics/manifest/uses-sdk-element.html#target
+    usesSdk = manifest.get('usesSdk', dict())
+    if not usesSdk.get('targetSdkVersion') and 'minSdkVersion' in usesSdk:
+        usesSdk["targetSdkVersion"] = usesSdk['minSdkVersion']
 
     if "signer" in version:
         manifest["signer"] = {"sha256": [version["signer"]]}
@@ -666,8 +662,6 @@ def convert_version(version, app, repodir):
             "maxSdkVersion",
             "versionCode",
             "features",
-            "minSdkVersion",
-            "targetSdkVersion",
             "usesSdk",
             "signer",
             "usesPermission",
@@ -1057,6 +1051,8 @@ def make_v1(apps, packages, repodir, repodict, requestsdict, signer_fingerprints
 
                     if mk == 'features':
                         d[mk] = _get_sorted_name_list_from_dict(mv)
+                    elif mk in ('maxSdkVersion', ):
+                        d[mk] = mv
                     elif mk == 'usesPermission':
                         up_list = list()
                         for p in mv:
@@ -1067,6 +1063,9 @@ def make_v1(apps, packages, repodir, repodict, requestsdict, signer_fingerprints
                         for p in mv:
                             ups23_list.append((p['name'], p.get('maxSdkVersion')))
                         d['uses-permission-sdk-23'] = ups23_list
+                    elif mk == 'usesSdk':
+                        for usk, usv in mv.items():
+                            d[usk] = usv
                 continue
             d[k] = v
         packagelist.append(dict(sorted(d.items())))
@@ -1342,6 +1341,8 @@ def make_v0(apps, apks, repodir, repodict, requestsdict, signer_fingerprints):
         current_version_file = None
         for apk in apklist:
             file_extension = common.get_file_extension(apk['apkName'])
+            manifest = apk.get('manifest', dict())
+            usesSdk = manifest.get('usesSdk', dict())
             # find the APK for the "Current Version"
             if current_version_code < app.CurrentVersionCode:
                 current_version_file = apk['apkName']
@@ -1373,9 +1374,11 @@ def make_v0(apps, apks, repodir, repodict, requestsdict, signer_fingerprints):
             apkel.appendChild(hashel)
 
             addElement('size', str(apk['size']), doc, apkel)
-            addElementIfInApk('sdkver', apk, 'minSdkVersion', doc, apkel)
-            addElementIfInApk('targetSdkVersion', apk, 'targetSdkVersion', doc, apkel)
-            addElementIfInApk('maxsdkver', apk, 'maxSdkVersion', doc, apkel)
+            addElementIfInApk('sdkver', usesSdk, 'minSdkVersion', doc, apkel)
+            addElementIfInApk(
+                'targetSdkVersion', usesSdk, 'targetSdkVersion', doc, apkel
+            )
+            addElementIfInApk('maxsdkver', manifest, 'maxSdkVersion', doc, apkel)
             addElementIfInApk('obbMainFile', apk, 'obbMainFile', doc, apkel)
             addElementIfInApk('obbMainFileSha256', apk, 'obbMainFileSha256', doc, apkel)
             addElementIfInApk('obbPatchFile', apk, 'obbPatchFile', doc, apkel)
@@ -1388,7 +1391,6 @@ def make_v0(apps, apks, repodir, repodict, requestsdict, signer_fingerprints):
             if file_extension == 'apk':  # sig is required for APKs, but only APKs
                 addElement('sig', apk['sig'], doc, apkel)
 
-                manifest = apk.get('manifest', dict())
                 old_permissions = set()
                 sorted_permissions = sorted(
                     manifest.get('usesPermission', list()),

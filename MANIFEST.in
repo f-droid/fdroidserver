@@ -598,6 +598,7 @@ include tests/metadata-rewrite-yml/fake.ota.update.yml
 include tests/metadata-rewrite-yml/org.fdroid.fdroid.yml
 include tests/metadata/apk/info.guardianproject.urzip.yaml
 include tests/metadata/apk/org.dyndns.fules.ck.yaml
+include tests/metadata/apk/org.maxsdkversion.yaml
 include tests/metadata/app.with.special.build.params.yml
 include tests/metadata/app.with.special.build.params/en-US/antifeatures/50_Ads.txt
 include tests/metadata/app.with.special.build.params/en-US/antifeatures/50_Tracking.txt

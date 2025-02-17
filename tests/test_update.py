@@ -725,17 +725,21 @@ class UpdateTest(unittest.TestCase):
         apks, cachechanged = fdroidserver.update.process_apks({}, 'repo', knownapks, False)
         self.assertEqual(len(apks), 18)
         apk = apks[1]
+        manifest = apk['manifest']
+        usesSdk = manifest['usesSdk']
         self.assertEqual(apk['packageName'], 'com.politedroid')
         self.assertEqual(apk['versionCode'], 3)
-        self.assertEqual(apk['minSdkVersion'], 3)
-        self.assertIsNone(apk.get('targetSdkVersion'))
-        self.assertFalse('maxSdkVersion' in apk)
+        self.assertEqual(usesSdk['minSdkVersion'], 3)
+        self.assertIsNone(usesSdk.get('targetSdkVersion'))
+        self.assertFalse('maxSdkVersion' in manifest)
         apk = apks[8]
+        manifest = apk['manifest']
+        usesSdk = manifest['usesSdk']
         self.assertEqual(apk['packageName'], 'obb.main.oldversion')
         self.assertEqual(apk['versionCode'], 1444412523)
-        self.assertEqual(apk['minSdkVersion'], 4)
-        self.assertEqual(apk['targetSdkVersion'], 18)
-        self.assertFalse('maxSdkVersion' in apk)
+        self.assertEqual(usesSdk['minSdkVersion'], 4)
+        self.assertEqual(usesSdk['targetSdkVersion'], 18)
+        self.assertFalse('maxSdkVersion' in manifest)
 
         fdroidserver.update.insert_obbs('repo', apps, apks)
         for apk in apks:
@@ -883,19 +887,19 @@ class UpdateTest(unittest.TestCase):
                 'skipping v2-only test since apksigner cannot be found',
             )
         apk_info = fdroidserver.update.scan_apk('v2.only.sig_2.apk')
-        self.assertIsNone(apk_info.get('maxSdkVersion'))
+        self.assertIsNone(apk_info['manifest'].get('maxSdkVersion'))
         self.assertEqual(apk_info.get('versionName'), 'v2-only')
         self.assertEqual(apk_info.get('versionCode'), 2)
 
     def test_scan_apk_v1_v2(self):
         apk_info = fdroidserver.update.scan_apk('repo/v1.v2.sig_1020.apk')
-        self.assertIsNone(apk_info.get('maxSdkVersion'))
+        self.assertIsNone(apk_info['manifest'].get('maxSdkVersion'))
         self.assertEqual(apk_info.get('versionName'), 'v1+2')
         self.assertEqual(apk_info.get('versionCode'), 1020)
 
     def test_scan_apk_no_maxSdkVersion(self):
         apk_info = fdroidserver.update.scan_apk('repo/souch.smsbypass_9.apk')
-        self.assertIsNone(apk_info.get('maxSdkVersion'))
+        self.assertIsNone(apk_info['manifest'].get('maxSdkVersion'))
         self.assertEqual(apk_info.get('versionName'), '0.9')
 
     def test_scan_apk_features(self):
@@ -926,10 +930,10 @@ class UpdateTest(unittest.TestCase):
             apk_info['manifest']['nativecode'],
             ['arm64-v8a', 'armeabi', 'armeabi-v7a', 'mips', 'mips64', 'x86', 'x86_64'],
         )
-        self.assertEqual(apk_info['minSdkVersion'], 7)
+        self.assertEqual(apk_info['manifest']['usesSdk']['minSdkVersion'], 7)
         self.assertEqual(apk_info['sig'], '9bf7a6a67f95688daec75eab4b1436ac')
         self.assertEqual(apk_info['hashType'], 'sha256')
-        self.assertEqual(apk_info['targetSdkVersion'], 8)
+        self.assertEqual(apk_info['manifest']['usesSdk']['targetSdkVersion'], 8)
 
     def test_scan_apk_two_icons(self):
         apk_info = fdroidserver.update.scan_apk('org.bitbucket.tickytacky.mirrormirror_4.apk')
@@ -956,6 +960,18 @@ class UpdateTest(unittest.TestCase):
         self.assertEqual(apk_info.get('versionName'), '1.0')
         self.assertEqual(apk_info['icons_src'], {})
 
+    def test_scan_apk_maxSdkVersion(self):
+        apk_info = fdroidserver.update.scan_apk('repo/org.maxsdkversion_4.apk')
+        self.assertEqual(
+            apk_info['manifest'],
+            {
+                'features': [{'name': 'android.hardware.camera.front'}],
+                'maxSdkVersion': 25,
+                'usesPermission': [{'name': 'android.permission.CAMERA'}],
+                'usesSdk': {'minSdkVersion': 14, 'targetSdkVersion': 19},
+            },
+        )
+
     def test_scan_apk_no_min_target(self):
         config = dict()
         fdroidserver.common.fill_config_defaults(config)
@@ -973,6 +989,9 @@ class UpdateTest(unittest.TestCase):
                     {'name': 'android.permission.READ_PHONE_STATE'},
                     {'name': 'android.permission.READ_EXTERNAL_STORAGE'},
                 ],
+                'usesSdk': {
+                    'minSdkVersion': 3,
+                }
             },
             'name': 'No minSdkVersion or targetSdkVersion',
             'signer': '32a23624c201b949f085996ba5ed53d40f703aca4989476949cae891022e0ed6',
@@ -984,7 +1003,6 @@ class UpdateTest(unittest.TestCase):
             'versionName': '1.2-fake',
             'hash': 'e2e1dc1d550df2b5bc383860139207258645b5540abeccd305ed8b2cb6459d2c',
             'versionCode': 987,
-            'minSdkVersion': 3,
         }
         if config.get('ipfs_cid'):
             expected['ipfsCIDv1'] = 'bafybeidwxseoagnew3gtlasttqovl7ciuwxaud5a5p4a5pzpbrfcfj2gaa'
@@ -1079,7 +1097,7 @@ class UpdateTest(unittest.TestCase):
                 os.makedirs(icon_dir)
 
         knownapks = fdroidserver.common.KnownApks()
-        apkList = ['../urzip.apk', '../org.dyndns.fules.ck_20.apk']
+        apkList = ['../urzip.apk', '../org.dyndns.fules.ck_20.apk', 'org.maxsdkversion_4.apk']
 
         for apkName in apkList:
             _, apk, cachechanged = fdroidserver.update.process_apk({}, apkName, 'repo', knownapks,
@@ -1919,13 +1937,15 @@ class UpdateTest(unittest.TestCase):
                             {'name': 'android.permission.READ_EXTERNAL_STORAGE'},
                             {'name': 'android.permission.VIBRATE'},
                         ],
+                        'usesSdk': {
+                            'minSdkVersion': 7,
+                            'targetSdkVersion': 8,
+                        },
                     },
                     'packageName': 'org.dyndns.fules.ck',
                     'versionCode': 20,
                     'versionName': 'v1.6pre2',
-                    'minSdkVersion': 7,
                     'name': 'Compass Keyboard',
-                    'targetSdkVersion': 8,
                 },
             )
         ]
