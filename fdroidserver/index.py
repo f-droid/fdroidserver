@@ -643,13 +643,6 @@ def convert_version(version, app, repodir):
     if "versionCode" in version:
         manifest["versionCode"] = version["versionCode"]
 
-    if "features" in version and version["features"]:
-        manifest["features"] = features = []
-        for feature in version["features"]:
-            # TODO get version from manifest, default (0) is omitted
-            # features.append({"name": feature, "version": 1})
-            features.append({"name": feature})
-
     if "minSdkVersion" in version:
         manifest["usesSdk"] = {}
         manifest["usesSdk"]["minSdkVersion"] = version["minSdkVersion"]
@@ -906,6 +899,16 @@ def make_v2(
         signindex.sign_index(repodir, json_name)
 
 
+def _get_sorted_name_list_from_dict(l_of_d):
+    """Return a sorted list of strings from a index-v2 list of dicts."""
+    if not l_of_d:
+        return list()
+    name_list = list()
+    for d in l_of_d:
+        name_list.append(d['name'])
+    return sorted(name_list)
+
+
 def make_v1(apps, packages, repodir, repodict, requestsdict, signer_fingerprints):
     def _index_encoder_default(obj):
         if isinstance(obj, set):
@@ -1052,7 +1055,9 @@ def make_v1(apps, packages, repodir, repodict, requestsdict, signer_fingerprints
                     if not mv:
                         continue
 
-                    if mk == 'usesPermission':
+                    if mk == 'features':
+                        d[mk] = _get_sorted_name_list_from_dict(mv)
+                    elif mk == 'usesPermission':
                         up_list = list()
                         for p in mv:
                             up_list.append((p['name'], p.get('maxSdkVersion')))
@@ -1417,7 +1422,12 @@ def make_v0(apps, apks, repodir, repodict, requestsdict, signer_fingerprints):
                     doc,
                     apkel,
                 )
-                addElementNonEmpty('features', ','.join(sorted(apk['features'])), doc, apkel)  # fmt: skip
+                addElementNonEmpty(
+                    'features',
+                    ','.join(_get_sorted_name_list_from_dict(manifest.get('features'))),
+                    doc,
+                    apkel,
+                )
 
         if (
             current_version_file is not None

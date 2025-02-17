@@ -1671,7 +1671,6 @@ def scan_apk(apk_file, require_signature=True):
     apk = {
         'hash': common.sha256sum(apk_file),
         'hashType': 'sha256',
-        'features': [],
         'icons_src': {},
         'icons': {},
         'antiFeatures': {},
@@ -1982,10 +1981,12 @@ def scan_apk_androguard(apk, apkfile):
             'android.hardware.screen.landscape',
         ):
             if feature.startswith("android.feature."):
-                feature = feature[16:]
+                feature = feature[16:]  # TODO delete this madness in index-v3
         required = item.attrib.get(xmlns + 'required')
         if required is None or required == 'true':
-            apk['features'].append(feature)
+            if 'features' not in apk:
+                manifest['features'] = list()
+            manifest['features'].append({'name': feature})
 
 
 _DISABLED_ALGORITHM_REASON = None

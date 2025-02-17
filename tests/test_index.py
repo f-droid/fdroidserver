@@ -875,6 +875,26 @@ class IndexTest(unittest.TestCase):
         with self.assertRaises(fdroidserver.exception.FDroidException):
             index.add_mirrors_to_repodict('repo', repodict)
 
+    def test_get_sorted_name_list_from_dict(self):
+        self.assertEqual(
+            ['bar', 'foo'],
+            fdroidserver.index._get_sorted_name_list_from_dict(
+                [{'name': 'foo'}, {'name': 'bar', 'max': 123}]
+            ),
+        )
+
+    def test_get_sorted_name_list_from_dict_none(self):
+        self.assertEqual(
+            [],
+            fdroidserver.index._get_sorted_name_list_from_dict(None),
+        )
+
+    def test_get_sorted_name_list_from_dict_empty(self):
+        self.assertEqual(
+            [],
+            fdroidserver.index._get_sorted_name_list_from_dict(list()),
+        )
+
 
 class AltstoreIndexTest(unittest.TestCase):
     def test_make_altstore(self):

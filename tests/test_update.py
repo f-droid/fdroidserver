@@ -904,8 +904,8 @@ class UpdateTest(unittest.TestCase):
         self.assertEqual(apk_info['icons_src'], {'160': 'res/drawable/ic_launcher.png',
                                                  '-1': 'res/drawable/ic_launcher.png'})
         self.assertEqual(
-            apk_info['features'],
-            ['android.hardware.telephony'],
+            apk_info['manifest']['features'],
+            [{'name': 'android.hardware.telephony'}],
         )
 
     def test_scan_apk_lots_of_data(self):
@@ -915,7 +915,6 @@ class UpdateTest(unittest.TestCase):
                                                  '160': 'res/drawable-mdpi-v4/icon_launcher.png',
                                                  '-1': 'res/drawable-mdpi-v4/icon_launcher.png'})
         self.assertEqual(apk_info['icons'], {})
-        self.assertEqual(apk_info['features'], [])
         self.assertEqual(apk_info['antiFeatures'], dict())
         self.assertEqual(apk_info['versionName'], 'v1.6pre2')
         self.assertEqual(apk_info['hash'],
@@ -979,7 +978,6 @@ class UpdateTest(unittest.TestCase):
             'signer': '32a23624c201b949f085996ba5ed53d40f703aca4989476949cae891022e0ed6',
             'hashType': 'sha256',
             'packageName': 'no.min.target.sdk',
-            'features': [],
             'antiFeatures': dict(),
             'size': 14102,
             'sig': 'b4964fd759edaa54e65bb476d0276880',
@@ -1892,7 +1890,6 @@ class UpdateTest(unittest.TestCase):
             """Create an empty apk metadata object."""
             apk = {}
             apk['apkName'] = apkName
-            apk['features'] = []
             apk['icons_src'] = {}
             return apk
 
@@ -1901,7 +1898,6 @@ class UpdateTest(unittest.TestCase):
                 'org.dyndns.fules.ck_20.apk',
                 {
                     'apkName': 'org.dyndns.fules.ck_20.apk',
-                    'features': [],
                     'icons_src': {
                         '240': 'res/drawable-hdpi-v4/icon_launcher.png',
                         '120': 'res/drawable-ldpi-v4/icon_launcher.png',
