@@ -1,6 +1,9 @@
 antiFeatures: {}
-hash: abfb3adb7496611749e7abfb014c5c789e3a02489e48a5c3665110d1b1acd931
-hashType: sha256
+file:
+  name: urzip.apk
+  sha256: abfb3adb7496611749e7abfb014c5c789e3a02489e48a5c3665110d1b1acd931
+  size: 9969
+  ipfsCIDv1: bafybeigmtgrwyvj77jaflje2rf533haeqtpu2wtwsctryjusjnsawacsam
 icon: info.guardianproject.urzip.100.png
 icons:
   '0': info.guardianproject.urzip.100.png
@@ -8,7 +11,6 @@ icons:
 icons_src:
   '-1': res/drawable/ic_launcher.png
   '160': res/drawable/ic_launcher.png
-ipfsCIDv1: bafybeigmtgrwyvj77jaflje2rf533haeqtpu2wtwsctryjusjnsawacsam
 manifest:
   usesSdk:
     minSdkVersion: 4
@@ -18,5 +20,4 @@ name: urzip
 packageName: info.guardianproject.urzip
 sig: e0ecb5fc2d63088e4a07ae410a127722
 signer: 7eabd8c15de883d1e82b5df2fd4f7f769e498078e9ad6dc901f0e96db77ceac3
-size: 9969
 versionCode: 100

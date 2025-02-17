@@ -495,8 +495,11 @@ class IndexTest(unittest.TestCase):
         apps = {app.id: app}
         orig_apps = copy.deepcopy(apps)
         apk = {
-            'hash': 'dbbdd7deadb038862f426b71efe4a64df8c3edf25d669e935f349510e16f65db',
-            'hashType': 'sha256',
+            "file": {
+                'name': 'info.zwanenburg.caffeinetile_4.apk',
+                'sha256': 'dbbdd7deadb038862f426b71efe4a64df8c3edf25d669e935f349510e16f65db',
+                'size': 11740,
+            },
             'features': [],
             'icons_src': {
                 '160': 'res/drawable/ic_coffee_on.xml',
@@ -515,8 +518,6 @@ class IndexTest(unittest.TestCase):
             'targetSdkVersion': 25,
             'sig': '03f9b2f848d22fd1d8d1331e8b1b486d',
             'signer': '51cfa5c8a743833ad89acf81cb755936876a5c8b8eca54d1ffdcec0cdca25d0e',
-            'size': 11740,
-            'apkName': 'info.zwanenburg.caffeinetile_4.apk',
             'icon': 'info.zwanenburg.caffeinetile.4.xml',
             'added': datetime.datetime.fromtimestamp(1539122400),
         }
@@ -910,12 +911,14 @@ class AltstoreIndexTest(unittest.TestCase):
         apks = [
             {
                 "packageName": "app.fake",
-                "apkName": "app.fake_123.ipa",
+                "file": {
+                    "name": "app.fake_123.ipa",
+                    "size": 123,
+                },
                 "manifest": {
                     "versionName": "v123",
                 },
                 "added": datetime.datetime(2000, 2, 2, 2, 2, 2),
-                "size": 123,
                 "ipa_MinimumOSVersion": "10.0",
                 "ipa_DTPlatformVersion": "12.0",
                 "ipa_permissions": [

@@ -604,11 +604,8 @@ def convert_version(version, app, repodir):
     else:
         ver["added"] = 0
 
-    ver["file"] = {
-        "name": "/{}".format(version["apkName"]),
-        version["hashType"]: version["hash"],
-        "size": version["size"],
-    }
+    ver["file"] = version["file"]
+    ver["file"]["name"] = f'/{version["file"]["name"]}'  # TODO remove for index-v3
 
     ipfsCIDv1 = version.get("ipfsCIDv1")
     if ipfsCIDv1:
@@ -812,7 +809,9 @@ def make_v2(
 
             packagelist["versions"] = {}
 
-        packagelist["versions"][package["hash"]] = convert_version(package, apps[packageName], repodir)  # fmt: skip
+        packagelist["versions"][package["file"]["sha256"]] = convert_version(
+            package, apps[packageName], repodir
+        )
 
     if categories_used_by_apps and not output['repo'].get(CATEGORIES_CONFIG_NAME):
         output['repo'][CATEGORIES_CONFIG_NAME] = dict()
@@ -1001,6 +1000,11 @@ def make_v1(apps, packages, repodir, repodict, requestsdict, signer_fingerprints
     output['packages'] = output_packages
     for package in packages:
         packageName = package['packageName']
+        file_d = package['file']
+        package['apkName'] = file_d['name']
+        package['hash'] = file_d['sha256']
+        package['hashType'] = 'sha256'
+        package['size'] = file_d['size']
         if packageName not in apps:
             logging.info(_('Ignoring package without metadata: ') + package['apkName'])
             continue
@@ -1064,7 +1068,11 @@ def make_v1(apps, packages, repodir, repodict, requestsdict, signer_fingerprints
                             d[usk] = usv
                 continue
             d[k] = v
-        packagelist.append(dict(sorted(d.items())))
+        newd = dict()
+        for k, v in sorted(d.items()):
+            if k != 'file':
+                newd[k] = v
+        packagelist.append(newd)
 
     json_name = 'index-v1.json'
     index_file = os.path.join(repodir, json_name)
@@ -1325,9 +1333,12 @@ def make_v0(apps, apks, repodir, repodict, requestsdict, signer_fingerprints):
                 first['versionCode'] == second['versionCode']
                 and first['sig'] == second['sig']
             ):
-                if first['hash'] == second['hash']:
-                    raise FDroidException('"{0}/{1}" and "{0}/{2}" are exact duplicates!'.format(
-                        repodir, first['apkName'], second['apkName']))
+                if first['file']['sha256'] == second['file']['sha256']:
+                    raise FDroidException(
+                        '"{0}/{1}" and "{0}/{2}" are exact duplicates!'.format(
+                            repodir, first['file']['name'], second['file']['name']
+                        )
+                    )
                 else:
                     raise FDroidException('duplicates: "{0}/{1}" - "{0}/{2}"'.format(
                         repodir, first['apkName'], second['apkName']))
@@ -1336,12 +1347,12 @@ def make_v0(apps, apks, repodir, repodict, requestsdict, signer_fingerprints):
         current_version_code = 0
         current_version_file = None
         for apk in apklist:
-            file_extension = common.get_file_extension(apk['apkName'])
+            file_extension = common.get_file_extension(apk['file']['name'])
             manifest = apk.get('manifest', dict())
             usesSdk = manifest.get('usesSdk', dict())
             # find the APK for the "Current Version"
             if current_version_code < app.CurrentVersionCode:
-                current_version_file = apk['apkName']
+                current_version_file = apk['file']['name']
             if current_version_code < apk['versionCode']:
                 current_version_code = apk['versionCode']
 
@@ -1361,15 +1372,15 @@ def make_v0(apps, apks, repodir, repodict, requestsdict, signer_fingerprints):
                 addElement('version', versionName, doc, apkel)
 
             addElement('versioncode', str(apk['versionCode']), doc, apkel)
-            addElement('apkname', apk['apkName'], doc, apkel)
+            addElement('apkname', apk['file']['name'], doc, apkel)
             addElementIfInApk('srcname', apk, 'srcname', doc, apkel)
 
             hashel = doc.createElement("hash")
             hashel.setAttribute('type', 'sha256')
-            hashel.appendChild(doc.createTextNode(apk['hash']))
+            hashel.appendChild(doc.createTextNode(apk['file']['sha256']))
             apkel.appendChild(hashel)
 
-            addElement('size', str(apk['size']), doc, apkel)
+            addElement('size', str(apk['file']['size']), doc, apkel)
             addElementIfInApk('sdkver', usesSdk, 'minSdkVersion', doc, apkel)
             addElementIfInApk(
                 'targetSdkVersion', usesSdk, 'targetSdkVersion', doc, apkel
@@ -2038,13 +2049,13 @@ def make_altstore(apps, apks, config, repodir, pretty=False):
 
             # populate 'versions'
             for apk in apks:
-                file_extension = common.get_file_extension(apk['apkName'])
+                file_extension = common.get_file_extension(apk['file']['name'])
                 if apk['packageName'] == packageName and file_extension == 'ipa':
                     v = {
                         "version": apk["manifest"]["versionName"],
                         "date": apk["added"].isoformat(),
-                        "downloadURL": f"{config['repo_url']}/{apk['apkName']}",
-                        "size": apk['size'],
+                        "downloadURL": f"{config['repo_url']}/{apk['file']['name']}",
+                        "size": apk['file']['size'],
                     }
 
                     # v['localizedDescription'] maybe what's new text?

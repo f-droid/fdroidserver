@@ -813,12 +813,15 @@ class UpdateTest(unittest.TestCase):
         self.assertTrue(fcachechanged)
 
         info = files[0]
-        self.assertEqual(filename, info['apkName'])
+        self.assertEqual(filename, info['file']['name'])
         self.assertEqual(datetime, type(info['added']))
-        self.assertEqual(os.path.getsize(os.path.join('repo', filename)), info['size'])
+        self.assertEqual(
+            os.path.getsize(os.path.join('repo', filename)),
+            info['file']['size'],
+        )
         self.assertEqual(
             '531190bdbc07e77d5577249949106f32dac7f62d38d66d66c3ae058be53a729d',
-            info['hash'],
+            info['file']['sha256'],
         )
 
     def test_read_added_date_from_all_apks(self):
@@ -921,18 +924,22 @@ class UpdateTest(unittest.TestCase):
         self.assertEqual(apk_info['icons'], {})
         self.assertEqual(apk_info['antiFeatures'], dict())
         self.assertEqual(apk_info['manifest']['versionName'], 'v1.6pre2')
-        self.assertEqual(apk_info['hash'],
-                         '897486e1f857c6c0ee32ccbad0e1b8cd82f6d0e65a44a23f13f852d2b63a18c8')
+        self.assertEqual(
+            apk_info['file'],
+            {
+                'name': 'org.dyndns.fules.ck_20.apk',
+                'sha256': '897486e1f857c6c0ee32ccbad0e1b8cd82f6d0e65a44a23f13f852d2b63a18c8',
+                'size': 132453,
+            }
+        )
         self.assertEqual(apk_info['packageName'], 'org.dyndns.fules.ck')
         self.assertEqual(apk_info['versionCode'], 20)
-        self.assertEqual(apk_info['size'], 132453)
         self.assertEqual(
             apk_info['manifest']['nativecode'],
             ['arm64-v8a', 'armeabi', 'armeabi-v7a', 'mips', 'mips64', 'x86', 'x86_64'],
         )
         self.assertEqual(apk_info['manifest']['usesSdk']['minSdkVersion'], 7)
         self.assertEqual(apk_info['sig'], '9bf7a6a67f95688daec75eab4b1436ac')
-        self.assertEqual(apk_info['hashType'], 'sha256')
         self.assertEqual(apk_info['manifest']['usesSdk']['targetSdkVersion'], 8)
 
     def test_scan_apk_two_icons(self):
@@ -978,11 +985,17 @@ class UpdateTest(unittest.TestCase):
         fdroidserver.common.fill_config_defaults(config)
         fdroidserver.common.config = config
         apk_info = fdroidserver.update.scan_apk('repo/no.min.target.sdk_987.apk')
+        self.maxDiff = None
         expected = {
             'icons': {},
             'icons_src': {
                 '-1': 'res/drawable/ic_launcher.png',
                 '160': 'res/drawable/ic_launcher.png',
+            },
+            'file': {
+                'name': 'no.min.target.sdk_987.apk',
+                'sha256': 'e2e1dc1d550df2b5bc383860139207258645b5540abeccd305ed8b2cb6459d2c',
+                'size': 14102,
             },
             'manifest': {
                 'usesPermission': [
@@ -997,16 +1010,13 @@ class UpdateTest(unittest.TestCase):
             },
             'name': 'No minSdkVersion or targetSdkVersion',
             'signer': '32a23624c201b949f085996ba5ed53d40f703aca4989476949cae891022e0ed6',
-            'hashType': 'sha256',
             'packageName': 'no.min.target.sdk',
             'antiFeatures': dict(),
-            'size': 14102,
             'sig': 'b4964fd759edaa54e65bb476d0276880',
-            'hash': 'e2e1dc1d550df2b5bc383860139207258645b5540abeccd305ed8b2cb6459d2c',
             'versionCode': 987,
         }
         if config.get('ipfs_cid'):
-            expected['ipfsCIDv1'] = 'bafybeidwxseoagnew3gtlasttqovl7ciuwxaud5a5p4a5pzpbrfcfj2gaa'
+            expected['file']['ipfsCIDv1'] = 'bafybeidwxseoagnew3gtlasttqovl7ciuwxaud5a5p4a5pzpbrfcfj2gaa'
 
         self.assertDictEqual(apk_info, expected)
 
@@ -1106,7 +1116,6 @@ class UpdateTest(unittest.TestCase):
             # Don't care about the date added to the repo and relative apkName
             self.assertEqual(datetime, type(apk['added']))
             del apk['added']
-            del apk['apkName']
 
             # ensure that icons have been extracted properly
             if apkName == '../urzip.apk':
@@ -1130,7 +1139,7 @@ class UpdateTest(unittest.TestCase):
                 from_yaml = yaml.safe_load(f)
             self.maxDiff = None
             if not config.get('ipfs_cid'):
-                del from_yaml['ipfsCIDv1']  # handle when ipfs_cid is not installed
+                del from_yaml['file']['ipfsCIDv1']  # when ipfs_cid is not installed
             self.assertEqual(apk, from_yaml)
 
     def test_process_apk_signed_by_disabled_algorithms(self):
@@ -1907,16 +1916,21 @@ class UpdateTest(unittest.TestCase):
 
         def _create_apkmetadata_object(apkName):
             """Create an empty apk metadata object."""
-            apk = {}
-            apk['apkName'] = apkName
-            apk['icons_src'] = {}
+            apk = {
+                'file': {
+                    'name': apkName,
+                },
+                'icons_src': {},
+            }
             return apk
 
         apkList = [
             (
                 'org.dyndns.fules.ck_20.apk',
                 {
-                    'apkName': 'org.dyndns.fules.ck_20.apk',
+                    'file': {
+                        'name': 'org.dyndns.fules.ck_20.apk',
+                    },
                     'icons_src': {
                         '240': 'res/drawable-hdpi-v4/icon_launcher.png',
                         '120': 'res/drawable-ldpi-v4/icon_launcher.png',
@@ -2205,11 +2219,12 @@ class TestParseIpa(unittest.TestCase):
         self.assertDictEqual(
             result,
             {
-                'apkName': 'com.fake.IpaApp_1000000000001.ipa',
-                'hash': 'fake_sha',
-                'hashType': 'sha256',
+                'file': {
+                    'name': 'com.fake.IpaApp_1000000000001.ipa',
+                    'sha256': 'fake_sha',
+                    'size': 'fake_size',
+                },
                 'packageName': 'org.onionshare.OnionShare',
-                'size': 'fake_size',
                 'versionCode': 1000000000001,
                 'manifest': {
                     'versionName': '1.0.1',
