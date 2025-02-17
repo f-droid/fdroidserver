@@ -3192,7 +3192,7 @@ APKS_WITH_JAR_SIGNATURES = (
     ),
     (
         'repo/duplicate.permisssions_9999999.apk',
-        '659e1fd284549f70d13fb02c620100e27eeea3420558cce62b0f5d4cf2b77d84',
+        '1355ae301394f6ce0a21976bacde65d5fbed48b96518121f52f45a31829cee76',
     ),
     (
         'repo/info.zwanenburg.caffeinetile_4.apk',

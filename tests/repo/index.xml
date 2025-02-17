@@ -93,16 +93,17 @@ Features:
 		<package>
 			<versioncode>9999999</versioncode>
 			<apkname>duplicate.permisssions_9999999.apk</apkname>
-			<hash type="sha256">8367857fe75f85321ce2c344b34804d0bc193707f6ba03710d025d9030803434</hash>
-			<size>27446</size>
+			<hash type="sha256">4b1c702b202e09ac73e72e372e6dd182e70d2e28dd6324194823c8abbc38bfbc</hash>
+			<size>33412</size>
 			<sdkver>18</sdkver>
 			<targetSdkVersion>27</targetSdkVersion>
 			<added>2017-12-22</added>
-			<sig>056c9f1554c40ba59a2103009c82b420</sig>
+			<sig>13fb9f984052b8974881ae1577a62d7c</sig>
 			<permissions>ACCESS_NETWORK_STATE,ACCESS_WIFI_STATE,CHANGE_WIFI_MULTICAST_STATE,INTERNET,READ_EXTERNAL_STORAGE,WRITE_EXTERNAL_STORAGE</permissions>
 			<uses-permission maxSdkVersion="18" name="android.permission.READ_EXTERNAL_STORAGE"/>
 			<uses-permission maxSdkVersion="18" name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 			<uses-permission-sdk-23 maxSdkVersion="27" name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS"/>
+			<features>android.hardware.telephony</features>
 		</package>
 	</application>
 	<application id="fake.ota.update">

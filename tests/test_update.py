@@ -882,6 +882,10 @@ class UpdateTest(unittest.TestCase):
         self.assertEqual(apk_info.get('versionName'), '')
         self.assertEqual(apk_info['icons_src'], {'160': 'res/drawable/ic_launcher.png',
                                                  '-1': 'res/drawable/ic_launcher.png'})
+        self.assertEqual(
+            apk_info['features'],
+            ['android.hardware.telephony'],
+        )
 
         apk_info = fdroidserver.update.scan_apk('org.dyndns.fules.ck_20.apk')
         self.assertEqual(apk_info['icons_src'], {'240': 'res/drawable-hdpi-v4/icon_launcher.png',

@@ -737,27 +737,32 @@
             "size": 1301
           }
         },
-        "preferredSigner": "659e1fd284549f70d13fb02c620100e27eeea3420558cce62b0f5d4cf2b77d84"
+        "preferredSigner": "1355ae301394f6ce0a21976bacde65d5fbed48b96518121f52f45a31829cee76"
       },
       "versions": {
-        "8367857fe75f85321ce2c344b34804d0bc193707f6ba03710d025d9030803434": {
+        "4b1c702b202e09ac73e72e372e6dd182e70d2e28dd6324194823c8abbc38bfbc": {
           "added": 1513900800000,
           "file": {
             "name": "/duplicate.permisssions_9999999.apk",
-            "sha256": "8367857fe75f85321ce2c344b34804d0bc193707f6ba03710d025d9030803434",
-            "size": 27446,
-            "ipfsCIDv1": "bafybeicucr4lk7fynyde4fpxubudpl6m6wqnuq2j6vjroutjyryw24en3u"
+            "sha256": "4b1c702b202e09ac73e72e372e6dd182e70d2e28dd6324194823c8abbc38bfbc",
+            "size": 33412,
+            "ipfsCIDv1": "bafybeidln6pvif3wsmkl2w5n7lpynnzwpjv5xw2kwideyorqkbofn3arum"
           },
           "manifest": {
             "versionName": "",
             "versionCode": 9999999,
+            "features": [
+              {
+                "name": "android.hardware.telephony"
+              }
+            ],
             "usesSdk": {
               "minSdkVersion": 18,
               "targetSdkVersion": 27
             },
             "signer": {
               "sha256": [
-                "659e1fd284549f70d13fb02c620100e27eeea3420558cce62b0f5d4cf2b77d84"
+                "1355ae301394f6ce0a21976bacde65d5fbed48b96518121f52f45a31829cee76"
               ]
             },
             "usesPermission": [
@@ -831,8 +836,8 @@
             "size": 233
           },
           "manifest": {
-            "versionName": "897a92a",
-            "versionCode": 1234
+            "versionCode": 1234,
+            "versionName": "897a92a"
           }
         }
       }

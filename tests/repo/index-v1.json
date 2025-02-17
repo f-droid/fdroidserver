@@ -371,13 +371,16 @@
       {
         "added": 1513900800000,
         "apkName": "duplicate.permisssions_9999999.apk",
-        "hash": "8367857fe75f85321ce2c344b34804d0bc193707f6ba03710d025d9030803434",
+        "features": [
+          "android.hardware.telephony"
+        ],
+        "hash": "4b1c702b202e09ac73e72e372e6dd182e70d2e28dd6324194823c8abbc38bfbc",
         "hashType": "sha256",
         "minSdkVersion": 18,
         "packageName": "duplicate.permisssions",
-        "sig": "056c9f1554c40ba59a2103009c82b420",
-        "signer": "659e1fd284549f70d13fb02c620100e27eeea3420558cce62b0f5d4cf2b77d84",
-        "size": 27446,
+        "sig": "13fb9f984052b8974881ae1577a62d7c",
+        "signer": "1355ae301394f6ce0a21976bacde65d5fbed48b96518121f52f45a31829cee76",
+        "size": 33412,
         "targetSdkVersion": 27,
         "uses-permission": [
           [
