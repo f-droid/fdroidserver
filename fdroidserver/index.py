@@ -633,11 +633,6 @@ def convert_version(version, app, repodir):
         )
 
     manifest = version.get("manifest", dict())
-    for element in (
-        "versionName",
-    ):
-        if element in version:
-            manifest[element] = version[element]
 
     if "versionCode" in version:
         manifest["versionCode"] = version["versionCode"]
@@ -788,7 +783,8 @@ def make_v2(
         if packageName not in apps:
             logging.info(_('Ignoring package without metadata: ') + package['apkName'])
             continue
-        if not package.get('versionName'):
+        manifest = package['manifest']
+        if not manifest.get('versionName'):
             app = apps[packageName]
             for build in app.get('Builds', []):
                 if build['versionCode'] == package['versionCode']:
@@ -801,7 +797,7 @@ def make_v2(
                                 apkfilename=package['apkName'], version=versionName
                             )
                         )
-                        package['versionName'] = versionName
+                        manifest['versionName'] = versionName
                     break
         if packageName in output_packages:
             packagelist = output_packages[packageName]
@@ -1008,7 +1004,7 @@ def make_v1(apps, packages, repodir, repodict, requestsdict, signer_fingerprints
         if packageName not in apps:
             logging.info(_('Ignoring package without metadata: ') + package['apkName'])
             continue
-        if not package.get('versionName'):
+        if not package['manifest'].get('versionName'):
             app = apps[packageName]
             for build in app.get('Builds', []):
                 if build['versionCode'] == package['versionCode']:
@@ -1051,7 +1047,7 @@ def make_v1(apps, packages, repodir, repodict, requestsdict, signer_fingerprints
 
                     if mk == 'features':
                         d[mk] = _get_sorted_name_list_from_dict(mv)
-                    elif mk in ('maxSdkVersion', ):
+                    elif mk in ('maxSdkVersion', 'versionName'):
                         d[mk] = mv
                     elif mk == 'usesPermission':
                         up_list = list()
@@ -1352,7 +1348,7 @@ def make_v0(apps, apks, repodir, repodict, requestsdict, signer_fingerprints):
             apkel = doc.createElement("package")
             apel.appendChild(apkel)
 
-            versionName = apk.get('versionName')
+            versionName = manifest.get('versionName')
             if not versionName:
                 for build in app.get('Builds', []):
                     if (
@@ -2045,7 +2041,7 @@ def make_altstore(apps, apks, config, repodir, pretty=False):
                 last4 = apk.get('apkName', '').lower()[-4:]
                 if apk['packageName'] == packageName and last4 == '.ipa':
                     v = {
-                        "version": apk["versionName"],
+                        "version": apk["manifest"]["versionName"],
                         "date": apk["added"].isoformat(),
                         "downloadURL": f"{config['repo_url']}/{apk['apkName']}",
                         "size": apk['size'],

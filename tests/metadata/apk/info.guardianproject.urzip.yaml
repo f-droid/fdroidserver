@@ -13,10 +13,10 @@ manifest:
   usesSdk:
     minSdkVersion: 4
     targetSdkVersion: 18
+  versionName: '0.1'
 name: urzip
 packageName: info.guardianproject.urzip
 sig: e0ecb5fc2d63088e4a07ae410a127722
 signer: 7eabd8c15de883d1e82b5df2fd4f7f769e498078e9ad6dc901f0e96db77ceac3
 size: 9969
 versionCode: 100
-versionName: '0.1'

@@ -18,10 +18,10 @@ manifest:
   usesSdk:
     minSdkVersion: 14
     targetSdkVersion: 19
+  versionName: 1.0.3
 name: Mirror Mirror
 packageName: org.maxsdkversion
 sig: 1a5e67bcef6b2d6242f2d36982b54589
 signer: 401a3a5843a3d5cebc22e6de5cb76d08eaa6797122d7fe1283df1d192e132f5e
 size: 12768
 versionCode: 4
-versionName: 1.0.3

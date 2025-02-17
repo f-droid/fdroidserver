@@ -911,7 +911,9 @@ class AltstoreIndexTest(unittest.TestCase):
             {
                 "packageName": "app.fake",
                 "apkName": "app.fake_123.ipa",
-                "versionName": "v123",
+                "manifest": {
+                    "versionName": "v123",
+                },
                 "added": datetime.datetime(2000, 2, 2, 2, 2, 2),
                 "size": 123,
                 "ipa_MinimumOSVersion": "10.0",

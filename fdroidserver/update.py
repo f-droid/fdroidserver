@@ -656,7 +656,7 @@ def parse_ipa(ipa_path, file_size, sha256):
                     ipa["packageName"] = plist["CFBundleIdentifier"]
                     # https://developer.apple.com/documentation/bundleresources/information_property_list/cfbundleshortversionstring
                     ipa["versionCode"] = version_string_to_int(plist["CFBundleShortVersionString"])
-                    ipa["versionName"] = plist["CFBundleShortVersionString"]
+                    ipa["manifest"] = {"versionName": plist["CFBundleShortVersionString"]}
                     ipa["ipa_MinimumOSVersion"] = plist['MinimumOSVersion']
                     ipa["ipa_DTPlatformVersion"] = plist['DTPlatformVersion']
                     for ipap in IPA_PERMISSIONS:
@@ -1612,7 +1612,7 @@ def scan_repo_files(apkcache, repodir, knownapks, use_date_from_file=False):
             repo_file['hashType'] = 'sha256'
             repo_file['ipfsCIDv1'] = common.calculate_IPFS_cid(name_utf8)
             repo_file['versionCode'] = 0
-            repo_file['versionName'] = shasum[0:7]
+            repo_file['manifest'] = {'versionName': shasum[0:7]}
             # the static ID is the SHA256 unless it is set in the metadata
             repo_file['packageName'] = shasum
 
@@ -1897,7 +1897,7 @@ def scan_apk_androguard(apk, apkfile):
         apk['versionCode'] = int(vcstr)
     apk['name'] = apkobject.get_app_name()
 
-    apk['versionName'] = common.ensure_final_value(
+    manifest['versionName'] = common.ensure_final_value(
         apk['packageName'], arsc, androidmanifest_xml.get(xmlns + 'versionName')
     )
 

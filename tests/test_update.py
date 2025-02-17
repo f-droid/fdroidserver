@@ -888,23 +888,23 @@ class UpdateTest(unittest.TestCase):
             )
         apk_info = fdroidserver.update.scan_apk('v2.only.sig_2.apk')
         self.assertIsNone(apk_info['manifest'].get('maxSdkVersion'))
-        self.assertEqual(apk_info.get('versionName'), 'v2-only')
+        self.assertEqual(apk_info['manifest']['versionName'], 'v2-only')
         self.assertEqual(apk_info.get('versionCode'), 2)
 
     def test_scan_apk_v1_v2(self):
         apk_info = fdroidserver.update.scan_apk('repo/v1.v2.sig_1020.apk')
         self.assertIsNone(apk_info['manifest'].get('maxSdkVersion'))
-        self.assertEqual(apk_info.get('versionName'), 'v1+2')
+        self.assertEqual(apk_info['manifest']['versionName'], 'v1+2')
         self.assertEqual(apk_info.get('versionCode'), 1020)
 
     def test_scan_apk_no_maxSdkVersion(self):
         apk_info = fdroidserver.update.scan_apk('repo/souch.smsbypass_9.apk')
         self.assertIsNone(apk_info['manifest'].get('maxSdkVersion'))
-        self.assertEqual(apk_info.get('versionName'), '0.9')
+        self.assertEqual(apk_info['manifest']['versionName'], '0.9')
 
     def test_scan_apk_features(self):
         apk_info = fdroidserver.update.scan_apk('repo/duplicate.permisssions_9999999.apk')
-        self.assertEqual(apk_info.get('versionName'), '')
+        self.assertEqual(apk_info['manifest']['versionName'], '')
         self.assertEqual(apk_info['icons_src'], {'160': 'res/drawable/ic_launcher.png',
                                                  '-1': 'res/drawable/ic_launcher.png'})
         self.assertEqual(
@@ -920,7 +920,7 @@ class UpdateTest(unittest.TestCase):
                                                  '-1': 'res/drawable-mdpi-v4/icon_launcher.png'})
         self.assertEqual(apk_info['icons'], {})
         self.assertEqual(apk_info['antiFeatures'], dict())
-        self.assertEqual(apk_info['versionName'], 'v1.6pre2')
+        self.assertEqual(apk_info['manifest']['versionName'], 'v1.6pre2')
         self.assertEqual(apk_info['hash'],
                          '897486e1f857c6c0ee32ccbad0e1b8cd82f6d0e65a44a23f13f852d2b63a18c8')
         self.assertEqual(apk_info['packageName'], 'org.dyndns.fules.ck')
@@ -937,18 +937,18 @@ class UpdateTest(unittest.TestCase):
 
     def test_scan_apk_two_icons(self):
         apk_info = fdroidserver.update.scan_apk('org.bitbucket.tickytacky.mirrormirror_4.apk')
-        self.assertEqual(apk_info.get('versionName'), '1.0.3')
+        self.assertEqual(apk_info['manifest']['versionName'], '1.0.3')
         self.assertEqual(apk_info['icons_src'], {'160': 'res/drawable-mdpi/mirror.png',
                                                  '-1': 'res/drawable-mdpi/mirror.png'})
 
     def test_scan_apk_xml_icon(self):
         apk_info = fdroidserver.update.scan_apk('repo/info.zwanenburg.caffeinetile_4.apk')
-        self.assertEqual(apk_info.get('versionName'), '1.3')
+        self.assertEqual(apk_info['manifest']['versionName'], '1.3')
         self.assertEqual(apk_info['icons_src'], {})
 
     def test_scan_apk_old_icons(self):
         apk_info = fdroidserver.update.scan_apk('repo/com.politedroid_6.apk')
-        self.assertEqual(apk_info.get('versionName'), '1.5')
+        self.assertEqual(apk_info['manifest']['versionName'], '1.5')
         self.assertEqual(apk_info['icons_src'], {'120': 'res/drawable-ldpi-v4/icon.png',
                                                  '160': 'res/drawable-mdpi-v4/icon.png',
                                                  '240': 'res/drawable-hdpi-v4/icon.png',
@@ -957,7 +957,7 @@ class UpdateTest(unittest.TestCase):
 
     def test_scan_apk_no_icons(self):
         apk_info = fdroidserver.update.scan_apk('SpeedoMeterApp.main_1.apk')
-        self.assertEqual(apk_info.get('versionName'), '1.0')
+        self.assertEqual(apk_info['manifest']['versionName'], '1.0')
         self.assertEqual(apk_info['icons_src'], {})
 
     def test_scan_apk_maxSdkVersion(self):
@@ -969,6 +969,7 @@ class UpdateTest(unittest.TestCase):
                 'maxSdkVersion': 25,
                 'usesPermission': [{'name': 'android.permission.CAMERA'}],
                 'usesSdk': {'minSdkVersion': 14, 'targetSdkVersion': 19},
+                'versionName': '1.0.3',
             },
         )
 
@@ -991,7 +992,8 @@ class UpdateTest(unittest.TestCase):
                 ],
                 'usesSdk': {
                     'minSdkVersion': 3,
-                }
+                },
+                'versionName': '1.2-fake',
             },
             'name': 'No minSdkVersion or targetSdkVersion',
             'signer': '32a23624c201b949f085996ba5ed53d40f703aca4989476949cae891022e0ed6',
@@ -1000,7 +1002,6 @@ class UpdateTest(unittest.TestCase):
             'antiFeatures': dict(),
             'size': 14102,
             'sig': 'b4964fd759edaa54e65bb476d0276880',
-            'versionName': '1.2-fake',
             'hash': 'e2e1dc1d550df2b5bc383860139207258645b5540abeccd305ed8b2cb6459d2c',
             'versionCode': 987,
         }
@@ -1941,10 +1942,10 @@ class UpdateTest(unittest.TestCase):
                             'minSdkVersion': 7,
                             'targetSdkVersion': 8,
                         },
+                        'versionName': 'v1.6pre2',
                     },
                     'packageName': 'org.dyndns.fules.ck',
                     'versionCode': 20,
-                    'versionName': 'v1.6pre2',
                     'name': 'Compass Keyboard',
                 },
             )
@@ -2210,7 +2211,9 @@ class TestParseIpa(unittest.TestCase):
                 'packageName': 'org.onionshare.OnionShare',
                 'size': 'fake_size',
                 'versionCode': 1000000000001,
-                'versionName': '1.0.1',
+                'manifest': {
+                    'versionName': '1.0.1',
+                },
                 'ipa_DTPlatformVersion': '16.4',
                 'ipa_MinimumOSVersion': '15.0',
                 'ipa_entitlements': set(),
