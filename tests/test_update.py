@@ -366,7 +366,7 @@ class UpdateTest(unittest.TestCase):
 
         apps = fdroidserver.metadata.read_metadata()
         apps['info.guardianproject.urzip']['CurrentVersionCode'] = 100
-        package_added_cache = fdroidserver.common.PackageAddedCache()
+        package_added_cache = fdroidserver.update.PackageAddedCache()
         apks, cachechanged = fdroidserver.update.process_apks({}, 'repo', package_added_cache, False)
         fdroidserver.update.insert_localized_app_metadata(apps)
         fdroidserver.update.ingest_screenshots_from_repo_dir(apps)
@@ -453,7 +453,7 @@ class UpdateTest(unittest.TestCase):
         fdroidserver.update.options.delete_unknown = True
 
         apps = fdroidserver.metadata.read_metadata()
-        package_added_cache = fdroidserver.common.PackageAddedCache()
+        package_added_cache = fdroidserver.update.PackageAddedCache()
         apks, cachechanged = fdroidserver.update.process_apks({}, 'repo', package_added_cache, False)
 
         appid = 'info.guardianproject.checkey'
@@ -720,7 +720,7 @@ class UpdateTest(unittest.TestCase):
         fdroidserver.update.options.delete_unknown = True
 
         apps = fdroidserver.metadata.read_metadata()
-        package_added_cache = fdroidserver.common.PackageAddedCache()
+        package_added_cache = fdroidserver.update.PackageAddedCache()
         apks, cachechanged = fdroidserver.update.process_apks({}, 'repo', package_added_cache, False)
         self.assertEqual(len(apks), 18)
         apk = apks[1]
@@ -778,7 +778,7 @@ class UpdateTest(unittest.TestCase):
         fdroidserver.update.options.delete_unknown = True
 
         fdroidserver.metadata.read_metadata()
-        package_added_cache = fdroidserver.common.PackageAddedCache()
+        package_added_cache = fdroidserver.update.PackageAddedCache()
         apkcache = fdroidserver.update.get_cache()
         self.assertEqual(2, len(apkcache))
         self.assertEqual(fdroidserver.update.METADATA_VERSION, apkcache["METADATA_VERSION"])
@@ -807,8 +807,10 @@ class UpdateTest(unittest.TestCase):
         os.mkdir('repo')
         filename = 'Norway_bouvet_europe_2.obf.zip'
         shutil.copy(basedir / filename, 'repo')
-        package_added_cache = fdroidserver.common.PackageAddedCache()
-        files, fcachechanged = fdroidserver.update.scan_repo_files(dict(), 'repo', package_added_cache, False)
+        package_added_cache = fdroidserver.update.PackageAddedCache()
+        files, fcachechanged = fdroidserver.update.scan_repo_files(
+            dict(), 'repo', package_added_cache, False
+        )
         self.assertTrue(fcachechanged)
 
         info = files[0]
@@ -832,7 +834,7 @@ class UpdateTest(unittest.TestCase):
         fdroidserver.update.config = config
         fdroidserver.common.options = Options
         apps = fdroidserver.metadata.read_metadata()
-        package_added_cache = fdroidserver.common.PackageAddedCache()
+        package_added_cache = fdroidserver.update.PackageAddedCache()
         apks, cachechanged = fdroidserver.update.process_apks({}, 'repo', package_added_cache)
         fdroidserver.update.read_added_date_from_all_apks(apps, apks)
 
@@ -846,7 +848,7 @@ class UpdateTest(unittest.TestCase):
         fdroidserver.common.options = Options
         fdroidserver.update.options = fdroidserver.common.options
         apps = fdroidserver.metadata.read_metadata()
-        package_added_cache = fdroidserver.common.PackageAddedCache()
+        package_added_cache = fdroidserver.update.PackageAddedCache()
         apks, cachechanged = fdroidserver.update.process_apks({}, 'repo', package_added_cache)
         fdroidserver.update.apply_info_from_latest_apk(apps, apks)
 
@@ -1106,7 +1108,7 @@ class UpdateTest(unittest.TestCase):
             if not os.path.exists(icon_dir):
                 os.makedirs(icon_dir)
 
-        package_added_cache = fdroidserver.common.PackageAddedCache()
+        package_added_cache = fdroidserver.update.PackageAddedCache()
         apkList = ['../urzip.apk', '../org.dyndns.fules.ck_20.apk', 'org.maxsdkversion_4.apk']
 
         for apkName in apkList:
@@ -1156,7 +1158,7 @@ class UpdateTest(unittest.TestCase):
         fdroidserver.update.options.verbose = True
         fdroidserver.update.options.delete_unknown = True
 
-        package_added_cache = fdroidserver.common.PackageAddedCache()
+        package_added_cache = fdroidserver.update.PackageAddedCache()
 
         with mkdtemp() as tmptestsdir, TmpCwd(tmptestsdir):
             os.mkdir('repo')
@@ -1246,7 +1248,7 @@ class UpdateTest(unittest.TestCase):
         fdroidserver.update.options = fdroidserver.common.options
         fdroidserver.update.options.delete_unknown = False
 
-        package_added_cache = fdroidserver.common.PackageAddedCache()
+        package_added_cache = fdroidserver.update.PackageAddedCache()
         apk = 'fake.ota.update_1234.zip'  # this is not an APK, scanning should fail
         (skip, apk, cachechanged) = fdroidserver.update.process_apk(
             {}, apk, 'repo', package_added_cache, False
@@ -1279,9 +1281,9 @@ class UpdateTest(unittest.TestCase):
         fdroidserver.update.options = fdroidserver.common.options
         fdroidserver.update.options.delete_unknown = False
 
-        knownapks = fdroidserver.common.KnownApks()
+        package_added_cache = fdroidserver.update.PackageAddedCache()
         (skip, apk, cachechanged) = fdroidserver.update.process_apk(
-            {}, apk, 'archive', knownapks, False
+            {}, apk, 'archive', package_added_cache, False
         )
         self.assertFalse(skip)
         self.assertTrue(cachechanged)
@@ -1290,6 +1292,37 @@ class UpdateTest(unittest.TestCase):
         if 'ro' in da and platform.system() != 'Darwin':
             # translations only available if compiled locally: make -C locale compile
             self.assertNotEqual(da['en-US'], da['ro'])
+
+    def test_PackageAddedCache_get(self):
+        """Test that added dates are being fetched from the index.
+
+        There are more related tests in tests/test_integration.py.
+
+        """
+        package_added_cache = fdroidserver.update.PackageAddedCache()
+        package_added_cache.now = 1234567890
+        for filename in package_added_cache.versions:
+            package_added_cache.get(filename)
+        for added in package_added_cache.versions.values():
+            self.assertNotEqual(added, package_added_cache.now)
+
+    def test_PackageAddedCache_get_new(self):
+        """Test that new added dates work, and are not replaced later.
+
+        There are more related tests in tests/test_integration.py.
+
+        """
+        package_added_cache = fdroidserver.update.PackageAddedCache()
+        package_added_cache.now = 1234567890
+        fake_apk = 'fake.apk'
+        package_added_cache.get(fake_apk)
+        for apk, added in package_added_cache.versions.items():
+            if apk == fake_apk:
+                self.assertEqual(added, package_added_cache.now)
+            else:
+                self.assertNotEqual(added, package_added_cache.now)
+        package_added_cache.get(fake_apk)
+        self.assertEqual(package_added_cache.versions[fake_apk], package_added_cache.now)
 
     def test_get_apks_without_allowed_signatures(self):
         """Test when no AllowedAPKSigningKeys is specified"""
@@ -1302,7 +1335,7 @@ class UpdateTest(unittest.TestCase):
         fdroidserver.update.options = fdroidserver.common.options
 
         app = fdroidserver.metadata.App()
-        package_added_cache = fdroidserver.common.PackageAddedCache()
+        package_added_cache = fdroidserver.update.PackageAddedCache()
         apks, cachechanged = fdroidserver.update.process_apks({}, 'repo', package_added_cache)
         apkfile = 'v1.v2.sig_1020.apk'
         self.assertIn(
@@ -1332,7 +1365,7 @@ class UpdateTest(unittest.TestCase):
                 'AllowedAPKSigningKeys': '32a23624c201b949f085996ba5ed53d40f703aca4989476949cae891022e0ed6'
             }
         )
-        package_added_cache = fdroidserver.common.PackageAddedCache()
+        package_added_cache = fdroidserver.update.PackageAddedCache()
         apks, cachechanged = fdroidserver.update.process_apks({}, 'repo', package_added_cache)
         apkfile = 'v1.v2.sig_1020.apk'
         (skip, apk, cachechanged) = fdroidserver.update.process_apk(
@@ -1357,7 +1390,7 @@ class UpdateTest(unittest.TestCase):
                 'AllowedAPKSigningKeys': 'fa4edeadfa4edeadfa4edeadfa4edeadfa4edeadfa4edeadfa4edeadfa4edead'
             }
         )
-        package_added_cache = fdroidserver.common.PackageAddedCache()
+        package_added_cache = fdroidserver.update.PackageAddedCache()
         apks, cachechanged = fdroidserver.update.process_apks({}, 'repo', package_added_cache)
         apkfile = 'v1.v2.sig_1020.apk'
         (skip, apk, cachechanged) = fdroidserver.update.process_apk(
@@ -1428,7 +1461,7 @@ class UpdateTest(unittest.TestCase):
         fdroidserver.update.options.delete_unknown = True
 
         apps = fdroidserver.metadata.read_metadata()
-        package_added_cache = fdroidserver.common.PackageAddedCache()
+        package_added_cache = fdroidserver.update.PackageAddedCache()
         apks, cachechanged = fdroidserver.update.process_apks({}, 'repo', package_added_cache, False)
         fdroidserver.update.translate_per_build_anti_features(apps, apks)
         self.assertEqual(len(apks), 18)
@@ -1457,7 +1490,7 @@ class UpdateTest(unittest.TestCase):
         fdroidserver.update.options = fdroidserver.common.options
         fdroidserver.update.options.clean = True
 
-        package_added_cache = fdroidserver.common.PackageAddedCache()
+        package_added_cache = fdroidserver.update.PackageAddedCache()
         apks, cachechanged = fdroidserver.update.process_apks({}, 'repo', package_added_cache, False)
         self.assertEqual(1, len(apks))
         apk = apks[0]
@@ -1997,7 +2030,7 @@ class UpdateTest(unittest.TestCase):
         build.disable = "disabled"
         app['Builds'] = [build]
 
-        package_added_cache = fdroidserver.common.PackageAddedCache()
+        package_added_cache = fdroidserver.update.PackageAddedCache()
         apks, cachechanged = fdroidserver.update.process_apks({}, 'repo', package_added_cache, False, apps)
         self.assertEqual([], apks)
 

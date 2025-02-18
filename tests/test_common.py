@@ -3005,37 +3005,6 @@ class CommonTest(SetUpTearDownMixin, unittest.TestCase):
             [{'url': s}], fdroidserver.common.parse_list_of_dicts(mirrors)
         )
 
-    def test_PackageAddedCache_get(self):
-        """Test that added dates are being fetched from the index.
-
-        There are more related tests in tests/test_integration.py.
-
-        """
-        package_added_cache = fdroidserver.common.PackageAddedCache()
-        package_added_cache.now = 1234567890
-        for filename in package_added_cache.versions:
-            package_added_cache.get(filename)
-        for added in package_added_cache.versions.values():
-            self.assertNotEqual(added, package_added_cache.now)
-
-    def test_PackageAddedCache_get_new(self):
-        """Test that new added dates work, and are not replaced later.
-
-        There are more related tests in tests/test_integration.py.
-
-        """
-        package_added_cache = fdroidserver.common.PackageAddedCache()
-        package_added_cache.now = 1234567890
-        fake_apk = 'fake.apk'
-        package_added_cache.get(fake_apk)
-        for apk, added in package_added_cache.versions.items():
-            if apk == fake_apk:
-                self.assertEqual(added, package_added_cache.now)
-            else:
-                self.assertNotEqual(added, package_added_cache.now)
-        package_added_cache.get(fake_apk)
-        self.assertEqual(package_added_cache.versions[fake_apk], package_added_cache.now)
-
     def test_get_mirrors_fdroidorg(self):
         mirrors = fdroidserver.common.get_mirrors(
             'https://f-droid.org/repo', 'entry.jar'

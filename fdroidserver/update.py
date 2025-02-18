@@ -111,6 +111,55 @@ SCREENSHOT_DIRS = (
 BLANK_PNG_INFO = PngImagePlugin.PngInfo()
 
 
+class PackageAddedCache:
+    """Store/fetch the added timestamp of packages.
+
+    This uses a cached value for "now" that is set once to avoid
+    preferencing apps based on any particular sort, like alpha sort of
+    file name or Application ID.  This way all new apps in a single
+    run get the same "added" time.
+
+    """
+
+    def __init__(self, use_date_from_file=False):
+        """Load filename/date info about previously seen Versions."""
+        self.now = int(time.time() * 1000)
+        self.use_date_from_file = use_date_from_file
+        self.versions = {}
+        for part in ('repo', 'archive'):
+            path = os.path.join(part, 'index-v2.json')
+            if os.path.isfile(path):
+                with open(path, 'r', encoding='utf-8') as f:
+                    index = json.load(f)
+                    for appid, data in index["packages"].items():
+                        for version in data["versions"].values():
+                            vpath = os.path.join(
+                                part,
+                                version["file"]["name"][1:],
+                            )
+                            self.versions[vpath] = version["added"]
+
+    def get(self, vpath, use_date_from_file=False):  # TODO do this based on sha256
+        """Get 'added' time, set current time as 'added' if file is new.
+
+        Parameters
+        ----------
+        vpath
+          path to file that is being added to the index
+
+        Returns
+        -------
+        int
+          timestamp as Java milliseconds since UNIX epoch
+        """
+        if vpath not in self.versions:
+            if use_date_from_file or self.use_date_from_file:
+                self.versions[vpath] = int(os.stat(vpath).st_mtime * 1000)
+            else:
+                self.versions[vpath] = self.now
+        return self.versions[vpath]
+
+
 def dpi_to_px(density):
     return (int(density) * 48) / 160
 
@@ -2872,7 +2921,7 @@ def main():
     apps = metadata.read_metadata()
 
     # Read known apks data (will be updated and written back when we've finished)
-    package_added_cache = common.PackageAddedCache(options.use_date_from_apk)
+    package_added_cache = PackageAddedCache(options.use_date_from_apk)
 
     # Get APK cache
     apkcache = get_cache()
