@@ -2903,21 +2903,21 @@ def check_system_clock(dt_obj, path):
                         + 'sudo date -s "' + str(dt_obj) + '"')
 
 
-class KnownApks:
-    """Permanent store of existing APKs with the date they were added.
+class PackageAddedCache:
+    """Store/fetch the added timestamp of packages.
 
-    This is currently the only way to permanently store the "updated"
-    date of APKs.
+    This uses a cached value for "now" that is set once to avoid
+    preferencing apps based on any particular sort, like alpha sort of
+    file name or Application ID.  This way all new apps in a single
+    run get the same "added" time.
+
     """
 
-    def __init__(self):
-        """Load filename/date info about previously seen APKs.
-
-        Since the appid and date strings both will never have spaces,
-        this is parsed as a list from the end to allow the filename to
-        have any combo of spaces.
-        """
-        self.apks = {}
+    def __init__(self, use_date_from_file=False):
+        """Load filename/date info about previously seen Versions."""
+        self.now = int(time.time() * 1000)
+        self.use_date_from_file = use_date_from_file
+        self.versions = {}
         for part in ('repo', 'archive'):
             path = os.path.join(part, 'index-v2.json')
             if os.path.isfile(path):
@@ -2925,24 +2925,31 @@ class KnownApks:
                     index = json.load(f)
                     for appid, data in index["packages"].items():
                         for version in data["versions"].values():
-                            filename = version["file"]["name"][1:]
-                            date = datetime.fromtimestamp(version["added"] // 1000, tz=timezone.utc)
-                            self.apks[filename] = date
+                            vpath = os.path.join(
+                                part,
+                                version["file"]["name"][1:],
+                            )
+                            self.versions[vpath] = version["added"]
 
-    def recordapk(self, apkName, default_date=None):
-        """
-        Record an APK (if it's new, otherwise does nothing).
+    def get(self, vpath, use_date_from_file=False):  # TODO do this based on sha256
+        """Get 'added' time, set current time as 'added' if file is new.
+
+        Parameters
+        ----------
+        vpath
+          path to file that is being added to the index
 
         Returns
         -------
-        datetime
-          the date it was added as a datetime instance.
+        int
+          timestamp as Java milliseconds since UNIX epoch
         """
-        if apkName not in self.apks:
-            if default_date is None:
-                default_date = datetime.now(timezone.utc)
-            self.apks[apkName] = default_date
-        return self.apks[apkName]
+        if vpath not in self.versions:
+            if use_date_from_file or self.use_date_from_file:
+                self.versions[vpath] = int(os.stat(vpath).st_mtime * 1000)
+            else:
+                self.versions[vpath] = self.now
+        return self.versions[vpath]
 
 
 def get_file_extension(filename):

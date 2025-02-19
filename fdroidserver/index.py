@@ -513,6 +513,19 @@ def dict_diff(source, target):
     return result
 
 
+def datetime_from_millis(millis):
+    """Convert epoch milliseconds to datetime instance.
+
+    This is the format returned by Java's System.currentTimeMillis().
+
+    Parameters
+    ----------
+    millis
+      Java-style integer time since UNIX epoch in milliseconds
+    """
+    return datetime.utcfromtimestamp(millis / 1000)
+
+
 def convert_datetime(obj):
     if isinstance(obj, datetime):
         # Java prefers milliseconds
@@ -598,13 +611,10 @@ def convert_version(version, app, repodir):
     metadata file.
 
     """
-    ver = {}
-    if "added" in version:
-        ver["added"] = convert_datetime(version["added"])
-    else:
-        ver["added"] = 0
-
-    ver["file"] = version["file"]
+    ver = {
+        "added": version["added"],
+        "file": version["file"],
+    }
     ver["file"]["name"] = f'/{version["file"]["name"]}'  # TODO remove for index-v3
 
     ipfsCIDv1 = version.get("ipfsCIDv1")
@@ -1269,9 +1279,11 @@ def make_v0(apps, apks, repodir, repodict, requestsdict, signer_fingerprints):
 
         addElement('id', app.id, doc, apel)
         if app.added:
-            addElement('added', app.added.strftime('%Y-%m-%d'), doc, apel)
+            added = datetime_from_millis(app.added)
+            addElement('added', added.strftime('%Y-%m-%d'), doc, apel)
         if app.lastUpdated:
-            addElement('lastupdated', app.lastUpdated.strftime('%Y-%m-%d'), doc, apel)
+            lastUpdated = datetime_from_millis(app.lastUpdated)
+            addElement('lastupdated', lastUpdated.strftime('%Y-%m-%d'), doc, apel)
 
         addElementCheckLocalized('name', app, 'Name', doc, apel, name_from_apk)
         addElementCheckLocalized('summary', app, 'Summary', doc, apel)
@@ -1393,7 +1405,8 @@ def make_v0(apps, apks, repodir, repodict, requestsdict, signer_fingerprints):
                 'obbPatchFileSha256', apk, 'obbPatchFileSha256', doc, apkel
             )
             if 'added' in apk:
-                addElement('added', apk['added'].strftime('%Y-%m-%d'), doc, apkel)
+                added = datetime_from_millis(apk['added'])
+                addElement('added', added.strftime('%Y-%m-%d'), doc, apkel)
 
             if file_extension == 'apk':  # sig is required for APKs, but only APKs
                 addElement('sig', apk['sig'], doc, apkel)
@@ -2053,7 +2066,7 @@ def make_altstore(apps, apks, config, repodir, pretty=False):
                 if apk['packageName'] == packageName and file_extension == 'ipa':
                     v = {
                         "version": apk["manifest"]["versionName"],
-                        "date": apk["added"].isoformat(),
+                        "date": datetime_from_millis(apk["added"]).isoformat(),
                         "downloadURL": f"{config['repo_url']}/{apk['file']['name']}",
                         "size": apk['file']['size'],
                     }

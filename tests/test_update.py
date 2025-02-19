@@ -17,7 +17,6 @@ import time
 import unittest
 import zipfile
 from binascii import hexlify
-from datetime import datetime
 from pathlib import Path
 from unittest import mock
 
@@ -367,8 +366,8 @@ class UpdateTest(unittest.TestCase):
 
         apps = fdroidserver.metadata.read_metadata()
         apps['info.guardianproject.urzip']['CurrentVersionCode'] = 100
-        knownapks = fdroidserver.common.KnownApks()
-        apks, cachechanged = fdroidserver.update.process_apks({}, 'repo', knownapks, False)
+        package_added_cache = fdroidserver.common.PackageAddedCache()
+        apks, cachechanged = fdroidserver.update.process_apks({}, 'repo', package_added_cache, False)
         fdroidserver.update.insert_localized_app_metadata(apps)
         fdroidserver.update.ingest_screenshots_from_repo_dir(apps)
         fdroidserver.update.apply_info_from_latest_apk(apps, apks)
@@ -454,8 +453,8 @@ class UpdateTest(unittest.TestCase):
         fdroidserver.update.options.delete_unknown = True
 
         apps = fdroidserver.metadata.read_metadata()
-        knownapks = fdroidserver.common.KnownApks()
-        apks, cachechanged = fdroidserver.update.process_apks({}, 'repo', knownapks, False)
+        package_added_cache = fdroidserver.common.PackageAddedCache()
+        apks, cachechanged = fdroidserver.update.process_apks({}, 'repo', package_added_cache, False)
 
         appid = 'info.guardianproject.checkey'
         testapps = {appid: copy.copy(apps[appid])}
@@ -721,8 +720,8 @@ class UpdateTest(unittest.TestCase):
         fdroidserver.update.options.delete_unknown = True
 
         apps = fdroidserver.metadata.read_metadata()
-        knownapks = fdroidserver.common.KnownApks()
-        apks, cachechanged = fdroidserver.update.process_apks({}, 'repo', knownapks, False)
+        package_added_cache = fdroidserver.common.PackageAddedCache()
+        apks, cachechanged = fdroidserver.update.process_apks({}, 'repo', package_added_cache, False)
         self.assertEqual(len(apks), 18)
         apk = apks[1]
         manifest = apk['manifest']
@@ -779,13 +778,13 @@ class UpdateTest(unittest.TestCase):
         fdroidserver.update.options.delete_unknown = True
 
         fdroidserver.metadata.read_metadata()
-        knownapks = fdroidserver.common.KnownApks()
+        package_added_cache = fdroidserver.common.PackageAddedCache()
         apkcache = fdroidserver.update.get_cache()
         self.assertEqual(2, len(apkcache))
         self.assertEqual(fdroidserver.update.METADATA_VERSION, apkcache["METADATA_VERSION"])
         self.assertEqual(fdroidserver.update.options.allow_disabled_algorithms,
                          apkcache['allow_disabled_algorithms'])
-        apks, cachechanged = fdroidserver.update.process_apks(apkcache, 'repo', knownapks, False)
+        apks, cachechanged = fdroidserver.update.process_apks(apkcache, 'repo', package_added_cache, False)
         fdroidserver.update.write_cache(apkcache)
 
         fdroidserver.update.options.clean = False
@@ -808,13 +807,13 @@ class UpdateTest(unittest.TestCase):
         os.mkdir('repo')
         filename = 'Norway_bouvet_europe_2.obf.zip'
         shutil.copy(basedir / filename, 'repo')
-        knownapks = fdroidserver.common.KnownApks()
-        files, fcachechanged = fdroidserver.update.scan_repo_files(dict(), 'repo', knownapks, False)
+        package_added_cache = fdroidserver.common.PackageAddedCache()
+        files, fcachechanged = fdroidserver.update.scan_repo_files(dict(), 'repo', package_added_cache, False)
         self.assertTrue(fcachechanged)
 
         info = files[0]
         self.assertEqual(filename, info['file']['name'])
-        self.assertEqual(datetime, type(info['added']))
+        self.assertEqual(int, type(info['added']))
         self.assertEqual(
             os.path.getsize(os.path.join('repo', filename)),
             info['file']['size'],
@@ -833,8 +832,8 @@ class UpdateTest(unittest.TestCase):
         fdroidserver.update.config = config
         fdroidserver.common.options = Options
         apps = fdroidserver.metadata.read_metadata()
-        knownapks = fdroidserver.common.KnownApks()
-        apks, cachechanged = fdroidserver.update.process_apks({}, 'repo', knownapks)
+        package_added_cache = fdroidserver.common.PackageAddedCache()
+        apks, cachechanged = fdroidserver.update.process_apks({}, 'repo', package_added_cache)
         fdroidserver.update.read_added_date_from_all_apks(apps, apks)
 
     def test_apply_info_from_latest_apk(self):
@@ -847,8 +846,8 @@ class UpdateTest(unittest.TestCase):
         fdroidserver.common.options = Options
         fdroidserver.update.options = fdroidserver.common.options
         apps = fdroidserver.metadata.read_metadata()
-        knownapks = fdroidserver.common.KnownApks()
-        apks, cachechanged = fdroidserver.update.process_apks({}, 'repo', knownapks)
+        package_added_cache = fdroidserver.common.PackageAddedCache()
+        apks, cachechanged = fdroidserver.update.process_apks({}, 'repo', package_added_cache)
         fdroidserver.update.apply_info_from_latest_apk(apps, apks)
 
     def test_uses_permission_empty(self):
@@ -1107,14 +1106,14 @@ class UpdateTest(unittest.TestCase):
             if not os.path.exists(icon_dir):
                 os.makedirs(icon_dir)
 
-        knownapks = fdroidserver.common.KnownApks()
+        package_added_cache = fdroidserver.common.PackageAddedCache()
         apkList = ['../urzip.apk', '../org.dyndns.fules.ck_20.apk', 'org.maxsdkversion_4.apk']
 
         for apkName in apkList:
-            _, apk, cachechanged = fdroidserver.update.process_apk({}, apkName, 'repo', knownapks,
+            _, apk, cachechanged = fdroidserver.update.process_apk({}, apkName, 'repo', package_added_cache,
                                                                    False)
             # Don't care about the date added to the repo and relative apkName
-            self.assertEqual(datetime, type(apk['added']))
+            self.assertEqual(int, type(apk['added']))
             del apk['added']
 
             # ensure that icons have been extracted properly
@@ -1157,14 +1156,14 @@ class UpdateTest(unittest.TestCase):
         fdroidserver.update.options.verbose = True
         fdroidserver.update.options.delete_unknown = True
 
-        knownapks = fdroidserver.common.KnownApks()
+        package_added_cache = fdroidserver.common.PackageAddedCache()
 
         with mkdtemp() as tmptestsdir, TmpCwd(tmptestsdir):
             os.mkdir('repo')
             os.mkdir('archive')
             # setup the repo, create icons dirs, etc.
-            fdroidserver.update.process_apks({}, 'repo', knownapks)
-            fdroidserver.update.process_apks({}, 'archive', knownapks)
+            fdroidserver.update.process_apks({}, 'repo', package_added_cache)
+            fdroidserver.update.process_apks({}, 'archive', package_added_cache)
 
             disabledsigs = ['org.bitbucket.tickytacky.mirrormirror_2.apk']
             for apkName in disabledsigs:
@@ -1172,7 +1171,7 @@ class UpdateTest(unittest.TestCase):
                             os.path.join(tmptestsdir, 'repo'))
 
                 skip, apk, cachechanged = fdroidserver.update.process_apk({}, apkName, 'repo',
-                                                                          knownapks,
+                                                                          package_added_cache,
                                                                           allow_disabled_algorithms=True,
                                                                           archive_bad_sig=False)
                 self.assertFalse(skip)
@@ -1195,7 +1194,7 @@ class UpdateTest(unittest.TestCase):
                 # that has MD5 listed in jdk.jar.disabledAlgorithms in java.security
                 # https://blogs.oracle.com/java-platform-group/oracle-jre-will-no-longer-trust-md5-signed-code-by-default
                 skip, apk, cachechanged = fdroidserver.update.process_apk({}, apkName, 'repo',
-                                                                          knownapks,
+                                                                          package_added_cache,
                                                                           allow_disabled_algorithms=False,
                                                                           archive_bad_sig=True)
                 self.assertTrue(skip)
@@ -1205,7 +1204,7 @@ class UpdateTest(unittest.TestCase):
                 self.assertFalse(os.path.exists(os.path.join('repo', apkName)))
 
                 skip, apk, cachechanged = fdroidserver.update.process_apk({}, apkName, 'archive',
-                                                                          knownapks,
+                                                                          package_added_cache,
                                                                           allow_disabled_algorithms=False,
                                                                           archive_bad_sig=False)
                 self.assertFalse(skip)
@@ -1227,7 +1226,7 @@ class UpdateTest(unittest.TestCase):
                             os.path.join(self.testdir, 'repo'))
 
                 skip, apk, cachechanged = fdroidserver.update.process_apk({}, apkName, 'repo',
-                                                                          knownapks,
+                                                                          package_added_cache,
                                                                           allow_disabled_algorithms=False,
                                                                           archive_bad_sig=False)
                 self.assertTrue(skip)
@@ -1247,10 +1246,11 @@ class UpdateTest(unittest.TestCase):
         fdroidserver.update.options = fdroidserver.common.options
         fdroidserver.update.options.delete_unknown = False
 
-        knownapks = fdroidserver.common.KnownApks()
+        package_added_cache = fdroidserver.common.PackageAddedCache()
         apk = 'fake.ota.update_1234.zip'  # this is not an APK, scanning should fail
-        (skip, apk, cachechanged) = fdroidserver.update.process_apk({}, apk, 'repo', knownapks,
-                                                                    False)
+        (skip, apk, cachechanged) = fdroidserver.update.process_apk(
+            {}, apk, 'repo', package_added_cache, False
+        )
 
         self.assertTrue(skip)
         self.assertIsNone(apk)
@@ -1302,8 +1302,8 @@ class UpdateTest(unittest.TestCase):
         fdroidserver.update.options = fdroidserver.common.options
 
         app = fdroidserver.metadata.App()
-        knownapks = fdroidserver.common.KnownApks()
-        apks, cachechanged = fdroidserver.update.process_apks({}, 'repo', knownapks)
+        package_added_cache = fdroidserver.common.PackageAddedCache()
+        apks, cachechanged = fdroidserver.update.process_apks({}, 'repo', package_added_cache)
         apkfile = 'v1.v2.sig_1020.apk'
         self.assertIn(
             apkfile,
@@ -1311,7 +1311,7 @@ class UpdateTest(unittest.TestCase):
             f'{apkfile} was archived or otherwise removed from "repo"',
         )
         (skip, apk, cachechanged) = fdroidserver.update.process_apk(
-            {}, apkfile, 'repo', knownapks, False
+            {}, apkfile, 'repo', package_added_cache, False
         )
 
         r = fdroidserver.update.get_apks_without_allowed_signatures(app, apk)
@@ -1332,11 +1332,11 @@ class UpdateTest(unittest.TestCase):
                 'AllowedAPKSigningKeys': '32a23624c201b949f085996ba5ed53d40f703aca4989476949cae891022e0ed6'
             }
         )
-        knownapks = fdroidserver.common.KnownApks()
-        apks, cachechanged = fdroidserver.update.process_apks({}, 'repo', knownapks)
+        package_added_cache = fdroidserver.common.PackageAddedCache()
+        apks, cachechanged = fdroidserver.update.process_apks({}, 'repo', package_added_cache)
         apkfile = 'v1.v2.sig_1020.apk'
         (skip, apk, cachechanged) = fdroidserver.update.process_apk(
-            {}, apkfile, 'repo', knownapks, False
+            {}, apkfile, 'repo', package_added_cache, False
         )
 
         r = fdroidserver.update.get_apks_without_allowed_signatures(app, apk)
@@ -1357,11 +1357,11 @@ class UpdateTest(unittest.TestCase):
                 'AllowedAPKSigningKeys': 'fa4edeadfa4edeadfa4edeadfa4edeadfa4edeadfa4edeadfa4edeadfa4edead'
             }
         )
-        knownapks = fdroidserver.common.KnownApks()
-        apks, cachechanged = fdroidserver.update.process_apks({}, 'repo', knownapks)
+        package_added_cache = fdroidserver.common.PackageAddedCache()
+        apks, cachechanged = fdroidserver.update.process_apks({}, 'repo', package_added_cache)
         apkfile = 'v1.v2.sig_1020.apk'
         (skip, apk, cachechanged) = fdroidserver.update.process_apk(
-            {}, apkfile, 'repo', knownapks, False
+            {}, apkfile, 'repo', package_added_cache, False
         )
 
         r = fdroidserver.update.get_apks_without_allowed_signatures(app, apk)
@@ -1428,8 +1428,8 @@ class UpdateTest(unittest.TestCase):
         fdroidserver.update.options.delete_unknown = True
 
         apps = fdroidserver.metadata.read_metadata()
-        knownapks = fdroidserver.common.KnownApks()
-        apks, cachechanged = fdroidserver.update.process_apks({}, 'repo', knownapks, False)
+        package_added_cache = fdroidserver.common.PackageAddedCache()
+        apks, cachechanged = fdroidserver.update.process_apks({}, 'repo', package_added_cache, False)
         fdroidserver.update.translate_per_build_anti_features(apps, apks)
         self.assertEqual(len(apks), 18)
         foundtest = False
@@ -1457,8 +1457,8 @@ class UpdateTest(unittest.TestCase):
         fdroidserver.update.options = fdroidserver.common.options
         fdroidserver.update.options.clean = True
 
-        knownapks = fdroidserver.common.KnownApks()
-        apks, cachechanged = fdroidserver.update.process_apks({}, 'repo', knownapks, False)
+        package_added_cache = fdroidserver.common.PackageAddedCache()
+        apks, cachechanged = fdroidserver.update.process_apks({}, 'repo', package_added_cache, False)
         self.assertEqual(1, len(apks))
         apk = apks[0]
 
@@ -1997,8 +1997,8 @@ class UpdateTest(unittest.TestCase):
         build.disable = "disabled"
         app['Builds'] = [build]
 
-        knownapks = fdroidserver.common.KnownApks()
-        apks, cachechanged = fdroidserver.update.process_apks({}, 'repo', knownapks, False, apps)
+        package_added_cache = fdroidserver.common.PackageAddedCache()
+        apks, cachechanged = fdroidserver.update.process_apks({}, 'repo', package_added_cache, False, apps)
         self.assertEqual([], apks)
 
     def test_archive_old_apks_ArchivePolicy_0(self):
@@ -2295,7 +2295,7 @@ class TestScanRepoForIpas(unittest.TestCase):
 
             apkcache = mock.MagicMock()
             repodir = "repo"
-            knownapks = mock.MagicMock()
+            package_added_cache = mock.MagicMock()
 
             def mocked_parse(p, s, c):
                 # pylint: disable=unused-argument
@@ -2303,7 +2303,7 @@ class TestScanRepoForIpas(unittest.TestCase):
 
             with mock.patch('fdroidserver.update.parse_ipa', mocked_parse):
                 ipas, checkchanged = fdroidserver.update.scan_repo_for_ipas(
-                    apkcache, repodir, knownapks
+                    apkcache, repodir, package_added_cache
                 )
 
             self.assertEqual(checkchanged, True)
@@ -2319,12 +2319,14 @@ class TestScanRepoForIpas(unittest.TestCase):
             self.assertTrue('xyz' in apkcache_setter_package_name)
             self.assertEqual(apkcache.__setitem__.call_count, 2)
 
-            knownapks.recordapk.call_count = 2
+            package_added_cache.get.call_count = 2
             self.assertTrue(
-                unittest.mock.call('abc.Def_123.ipa') in knownapks.recordapk.mock_calls
+                unittest.mock.call('repo/abc.Def_123.ipa')
+                in package_added_cache.get.mock_calls
             )
             self.assertTrue(
-                unittest.mock.call('xyz.XXX_123.ipa') in knownapks.recordapk.mock_calls
+                unittest.mock.call('repo/xyz.XXX_123.ipa')
+                in package_added_cache.get.mock_calls
             )
 
 

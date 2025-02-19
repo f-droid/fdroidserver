@@ -771,20 +771,28 @@ class IntegrationTest(unittest.TestCase):
         self.update_yaml("metadata/com.politedroid.yml", {"ArchivePolicy": 1})
 
         self.assert_run(self.fdroid_cmd + ["update", "--pretty", "--nosign"])
-        timestamp = 1498176000000
+        timestamp = 1498176000000  # value cached in repo/index-v2.json
         index_v1_json = json.loads(Path("repo/index-v1.json").read_text())
         self.assertEqual(timestamp, index_v1_json['apps'][0]['added'])
-        self.assertEqual(timestamp, index_v1_json['apps'][0]['lastUpdated'])
         self.assertEqual(
             timestamp, index_v1_json['packages']['com.politedroid'][0]['added']
         )
-        # the archive will have the added timestamp for the app and for the apk,
-        # both need to be there
+        # Since there is no archive/index-v2.json, a cached 'added'
+        # value cannot be loaded from it. Therefore, the archive APK's
+        # 'added' value is "now" which is newer than 'timestamp',
+        # which was loaded from repo/index-v2.json.
         archive_json = json.loads(Path("archive/index-v1.json").read_text())
-        self.assertEqual(timestamp, archive_json['apps'][0]['added'])
-        self.assertEqual(timestamp, archive_json['apps'][0]['lastUpdated'])
         self.assertEqual(
-            timestamp, archive_json['packages']['com.politedroid'][0]['added']
+            index_v1_json['apps'][0]['added'],
+            archive_json['apps'][0]['added'],
+        )
+        self.assertEqual(
+            archive_json['apps'][0]['lastUpdated'],
+            archive_json['packages']['com.politedroid'][0]['added'],
+        )
+        self.assertEqual(
+            archive_json['apps'][0]['lastUpdated'],
+            index_v1_json['apps'][0]['lastUpdated'],
         )
 
     def test_whatsnew_from_fastlane_without_cvc_set(self):

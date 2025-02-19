@@ -519,7 +519,7 @@ class IndexTest(unittest.TestCase):
             'sig': '03f9b2f848d22fd1d8d1331e8b1b486d',
             'signer': '51cfa5c8a743833ad89acf81cb755936876a5c8b8eca54d1ffdcec0cdca25d0e',
             'icon': 'info.zwanenburg.caffeinetile.4.xml',
-            'added': datetime.datetime.fromtimestamp(1539122400),
+            'added': 1539122400000,
         }
         requestsdict = {'install': [], 'uninstall': []}
         common.config['repo_pubkey'] = 'ffffffffffffffffffffffffffffffffff'
@@ -918,7 +918,7 @@ class AltstoreIndexTest(unittest.TestCase):
                 "manifest": {
                     "versionName": "v123",
                 },
-                "added": datetime.datetime(2000, 2, 2, 2, 2, 2),
+                "added": 949456922000,
                 "ipa_MinimumOSVersion": "10.0",
                 "ipa_DTPlatformVersion": "12.0",
                 "ipa_permissions": [

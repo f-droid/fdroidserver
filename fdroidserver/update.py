@@ -36,7 +36,7 @@ import time
 import warnings
 import zipfile
 from argparse import ArgumentParser
-from datetime import datetime, timezone
+from datetime import datetime
 from pathlib import Path
 
 import asn1crypto.cms
@@ -383,8 +383,6 @@ def get_cache():
         if 'antiFeatures' in v:
             if not isinstance(v['antiFeatures'], dict):
                 v['antiFeatures'] = {k: {} for k in sorted(v['antiFeatures'])}
-        if 'added' in v:
-            v['added'] = datetime.fromtimestamp(v['added'], tz=timezone.utc)
         if v.get('srcname') and not v.get('srcnameSha256'):
             f = f'archive/{v["srcname"]}'
             if not os.path.exists(f):
@@ -684,7 +682,7 @@ def parse_ipa(ipa_path, file_size, sha256):
     return ipa
 
 
-def scan_repo_for_ipas(apkcache, repodir, knownapks):
+def scan_repo_for_ipas(apkcache, repodir, package_added_cache):
     """Scan for IPA files in a given repo directory.
 
     Parameters
@@ -693,7 +691,7 @@ def scan_repo_for_ipas(apkcache, repodir, knownapks):
       cache dictionary containting cached file infos from previous runs
     repodir
       repo directory to scan
-    knownapks
+    package_added_cache
       list of all known files, as per metadata.read_metadata
 
     Returns
@@ -720,9 +718,7 @@ def scan_repo_for_ipas(apkcache, repodir, knownapks):
             apkcache[ipa_name] = ipa
             cachechanged = True
 
-        added = knownapks.recordapk(ipa_name)
-        if added:
-            ipa['added'] = added
+        ipa['added'] = package_added_cache.get(ipa_path)
 
         ipas.append(ipa)
 
@@ -1542,7 +1538,7 @@ def insert_localized_ios_app_metadata(apps_with_packages):
             shutil.copy2(icon_src, icon_dest)
 
 
-def scan_repo_files(apkcache, repodir, knownapks, use_date_from_file=False):
+def scan_repo_files(apkcache, repodir, package_added_cache, use_date_from_file=False):
     """Scan a repo for all files with an extension except APK/OBB/IPA.
 
     This allows putting all kinds of files into repostories. E.g. Media Files,
@@ -1554,7 +1550,7 @@ def scan_repo_files(apkcache, repodir, knownapks, use_date_from_file=False):
       current cached info about all repo files
     repodir
       repo directory to scan
-    knownapks
+    package_added_cache
       list of all known files, as per metadata.read_metadata
     use_date_from_file
       use date from file (instead of current date) for newly added files
@@ -1633,18 +1629,7 @@ def scan_repo_files(apkcache, repodir, knownapks, use_date_from_file=False):
             apkcache[name_utf8] = repo_file
             cachechanged = True
 
-        if use_date_from_file:
-            timestamp = stat.st_ctime
-            default_date_param = datetime.fromtimestamp(timestamp, tz=timezone.utc)
-        else:
-            default_date_param = None
-
-        # Record in knownapks, getting the added date at the same time..
-        added = knownapks.recordapk(
-            repo_file['file']['name'], default_date=default_date_param
-        )
-        if added:
-            repo_file['added'] = added
+        repo_file['added'] = package_added_cache.get(filename.decode(), use_date_from_file)
 
         repo_files.append(repo_file)
 
@@ -2011,7 +1996,7 @@ def _fill_reason(msg):
     return d
 
 
-def process_apk(apkcache, apkfilename, repodir, knownapks, use_date_from_apk=False,
+def process_apk(apkcache, apkfilename, repodir, package_added_cache, use_date_from_apk=False,
                 allow_disabled_algorithms=False, archive_bad_sig=False, apps=None, cache_timestamp=0):
     """Process the apk with the given filename in the given repo directory.
 
@@ -2025,8 +2010,8 @@ def process_apk(apkcache, apkfilename, repodir, knownapks, use_date_from_apk=Fal
       the filename of the apk to scan
     repodir
       repo directory to scan
-    knownapks
-      known apks info
+    package_added_cache
+      list of all known files, as per metadata.read_metadata
     use_date_from_apk
       use date from APK (instead of current date) for newly added APKs
     allow_disabled_algorithms
@@ -2187,15 +2172,7 @@ def process_apk(apkcache, apkfilename, repodir, knownapks, use_date_from_apk=Fal
         # resize existing icons for densities missing in the APK
         fill_missing_icon_densities(empty_densities, iconfilename, apk, repodir)
 
-        if use_date_from_apk:
-            default_date_param = datetime.fromtimestamp(os.stat(apkfile).st_mtime, tz=timezone.utc)
-        else:
-            default_date_param = None
-
-        # Record in known apks, getting the added date at the same time..
-        added = knownapks.recordapk(apk['file']['name'], default_date=default_date_param)
-        if added:
-            apk['added'] = added
+        apk['added'] = package_added_cache.get(apkfile, use_date_from_apk)
 
         apkcache[apkfilename] = apk
         cachechanged = True
@@ -2203,7 +2180,7 @@ def process_apk(apkcache, apkfilename, repodir, knownapks, use_date_from_apk=Fal
     return False, apk, cachechanged
 
 
-def process_apks(apkcache, repodir, knownapks, use_date_from_apk=False, apps=None, cache_timestamp=0):
+def process_apks(apkcache, repodir, package_added_cache, use_date_from_apk=False, apps=None, cache_timestamp=0):
     """Process the apks in the given repo directory.
 
     This also extracts the icons.
@@ -2214,8 +2191,8 @@ def process_apks(apkcache, repodir, knownapks, use_date_from_apk=False, apps=Non
       current apk cache information
     repodir
       repo directory to scan
-    knownapks
-     b known apks info
+    package_added_cache
+      list of all known files, as per metadata.read_metadata
     use_date_from_apk
       use date from APK (instead of current date) for newly added APKs
     cache_timestamp
@@ -2240,7 +2217,7 @@ def process_apks(apkcache, repodir, knownapks, use_date_from_apk=False, apps=Non
     for apkfile in sorted(glob.glob(os.path.join(repodir, '*.apk'))):
         apkfilename = apkfile[len(repodir) + 1 :]
         ada = disabled_algorithms_allowed()
-        (skip, apk, cachethis) = process_apk(apkcache, apkfilename, repodir, knownapks,
+        (skip, apk, cachethis) = process_apk(apkcache, apkfilename, repodir, package_added_cache,
                                              use_date_from_apk, ada, True, apps, cache_timestamp)
         if skip:
             continue
@@ -2895,7 +2872,7 @@ def main():
     apps = metadata.read_metadata()
 
     # Read known apks data (will be updated and written back when we've finished)
-    knownapks = common.KnownApks()
+    package_added_cache = common.PackageAddedCache(options.use_date_from_apk)
 
     # Get APK cache
     apkcache = get_cache()
@@ -2910,20 +2887,18 @@ def main():
     apks, cachechanged = process_apks(
         apkcache,
         repodirs[0],
-        knownapks,
+        package_added_cache,
         options.use_date_from_apk,
         apps,
         cache_timestamp,
     )
 
     output_status_stage(status_output, 'scan_repo_files')
-    files, fcachechanged = scan_repo_files(
-        apkcache, repodirs[0], knownapks, options.use_date_from_apk
-    )
+    files, fcachechanged = scan_repo_files(apkcache, repodirs[0], package_added_cache)
     cachechanged = cachechanged or fcachechanged
     apks += files
 
-    ipas, icachechanged = scan_repo_for_ipas(apkcache, repodirs[0], knownapks)
+    ipas, icachechanged = scan_repo_for_ipas(apkcache, repodirs[0], package_added_cache)
     cachechanged = cachechanged or icachechanged
     apks += ipas
 
@@ -3003,7 +2978,7 @@ def main():
 
     # Scan the archive repo for apks as well
     if len(repodirs) > 1:
-        archapks, cc = process_apks(apkcache, repodirs[1], knownapks,
+        archapks, cc = process_apks(apkcache, repodirs[1], package_added_cache,
                                     options.use_date_from_apk, apps, cache_timestamp)
         if cc:
             cachechanged = True
