@@ -24,6 +24,9 @@ manifest:
     - mips64
     - x86
     - x86_64
+  signer:
+    sha256:
+      - 9326a2cc1a2f148202bc7837a0af3b81200bd37fd359c9e13a2296a71d342056
   usesPermission:
     - name: android.permission.BIND_INPUT_METHOD
     - name: android.permission.READ_EXTERNAL_STORAGE
@@ -35,5 +38,4 @@ manifest:
 name: Compass Keyboard
 packageName: org.dyndns.fules.ck
 sig: 9bf7a6a67f95688daec75eab4b1436ac
-signer: 9326a2cc1a2f148202bc7837a0af3b81200bd37fd359c9e13a2296a71d342056
 versionCode: 20

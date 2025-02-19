@@ -1683,7 +1683,7 @@ def scan_repo_files(apkcache, repodir, package_added_cache, use_date_from_file=F
     return repo_files, cachechanged
 
 
-def scan_apk(apk_file, require_signature=True):
+def scan_apk(apk_file):
     """Scan an APK file and returns dictionary with metadata of the APK.
 
     Attention: This does *not* verify that the APK signature is correct.
@@ -1692,8 +1692,6 @@ def scan_apk(apk_file, require_signature=True):
     ----------
     apk_file
       The (ideally absolute) path to the APK file
-    require_signature
-      Raise an exception is there is no valid signature. Default to True.
 
     Raises
     ------
@@ -1735,14 +1733,8 @@ def scan_apk(apk_file, require_signature=True):
     # Get the signature, or rather the signing key fingerprints
     logging.debug('Getting signature of {0}'.format(os.path.basename(apk_file)))
     apk['sig'] = getsig(apk_file)
-    if require_signature:
-        if not apk['sig']:
-            raise BuildException(_("Failed to get APK signing key fingerprint"))
-        apk['signer'] = common.apk_signer_fingerprint(
-            os.path.join(os.getcwd(), apk_file)
-        )
-        if not apk.get('signer'):
-            raise BuildException(_("Failed to get APK signing key fingerprint"))
+    if not apk['sig']:
+        raise BuildException(_("Failed to get APK signing key fingerprint"))
 
     # Check for known vulnerabilities
     hkv = has_known_vulnerability(apk_file)
@@ -1868,6 +1860,15 @@ def _uses_permission(name=None, maxSdkVersion=None):
 
 
 def scan_apk_androguard(apk, apkfile):
+    """Parse an APK file for essential information and the signer fingerprint.
+
+    These are some of the core bits of information parsed here:
+    * https://developer.android.com/guide/topics/manifest/manifest-element
+    * https://developer.android.com/guide/topics/manifest/uses-feature-element
+    * https://developer.android.com/guide/topics/manifest/uses-permission-element
+    * https://developer.android.com/guide/topics/manifest/uses-sdk-element
+
+    """
     try:
         apkobject = common.get_androguard_APK(apkfile)
         if apkobject.is_valid_APK():
@@ -1898,10 +1899,12 @@ def scan_apk_androguard(apk, apkfile):
         )
         raise BuildException(_("Invalid APK")) from e
 
-    # https://developer.android.com/guide/topics/manifest/uses-sdk-element
+    signer = common.apk_signer_fingerprint(apkfile)
+    if not signer:
+        raise BuildException(_("Failed to get APK signing key fingerprint"))
+
     usesSdk = dict()
-    # https://developer.android.com/guide/topics/manifest/manifest-element
-    manifest = {'usesSdk': usesSdk}
+    manifest = {'signer': {'sha256': [signer]}, 'usesSdk': usesSdk}
     apk['manifest'] = manifest
 
     apk['packageName'] = apkobject.get_package()
@@ -2734,8 +2737,9 @@ def get_apks_without_allowed_signatures(app, apk):
     allowed_signer_keys = app.get('AllowedAPKSigningKeys', [])
     if not allowed_signer_keys:
         return
-    if apk['signer'] not in allowed_signer_keys:
-        return apk['file']['name']
+    for sha256 in apk['manifest']['signer']['sha256']:
+        if sha256 not in allowed_signer_keys:
+            return apk['file']['name']
 
 
 def prepare_apps(apps, apks, repodir):
@@ -2976,7 +2980,7 @@ def main():
                     path=to_remove
                 )
                 + '\n'
-                + apk['signer']
+                + '\n'.join(apk['manifest']['signer']['sha256'])
             )
             if options.delete_unknown:
                 for d in repodirs:

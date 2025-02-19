@@ -642,9 +642,6 @@ def convert_version(version, app, repodir):
     if not usesSdk.get('targetSdkVersion') and 'minSdkVersion' in usesSdk:
         usesSdk["targetSdkVersion"] = usesSdk['minSdkVersion']
 
-    if "signer" in version:
-        manifest["signer"] = {"sha256": [version["signer"]]}
-
     # The manifest entry was unfortunately not alpha-sorted, so this
     # is required to maintain the existing sort order to minimize
     # diffs in the index-v2.json.  TODO index-v3 should sort everything.
@@ -802,8 +799,9 @@ def make_v2(
             app = apps[packageName]
             categories_used_by_apps.update(app.get('Categories', []))
             packagelist["metadata"] = package_metadata(app, repodir)
-            if "signer" in package:
-                packagelist["metadata"]["preferredSigner"] = package["signer"]
+            mani = package["manifest"]
+            if "signer" in mani:
+                packagelist["metadata"]["preferredSigner"] = mani["signer"]["sha256"][0]
 
             packagelist["versions"] = {}
 
@@ -999,6 +997,9 @@ def make_v1(apps, packages, repodir, repodict, requestsdict, signer_fingerprints
         package['hash'] = file_d['sha256']
         package['hashType'] = 'sha256'
         package['size'] = file_d['size']
+        signer = package['manifest'].get('signer', dict()).get('sha256', list())
+        if signer:
+            package['signer'] = signer[0]
         if packageName not in apps:
             logging.info(_('Ignoring package without metadata: ') + package['apkName'])
             continue
@@ -1118,7 +1119,11 @@ def sort_package_versions(packages, signer_fingerprints):
     def v1_sort_keys(package):
         packageName = package.get('packageName', None)
 
-        signer = package.get('signer', None)
+        signers = package['manifest'].get('signer', dict()).get('sha256', list())
+        if signers:
+            signer = signers[0]
+        else:
+            signer = None
 
         dev_signer = common.metadata_find_developer_signature(packageName)
         group = GROUP_OTHER_SIGNED

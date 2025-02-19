@@ -975,6 +975,11 @@ class UpdateTest(unittest.TestCase):
             {
                 'features': [{'name': 'android.hardware.camera.front'}],
                 'maxSdkVersion': 25,
+                'signer': {
+                    'sha256': [
+                        '401a3a5843a3d5cebc22e6de5cb76d08eaa6797122d7fe1283df1d192e132f5e'
+                    ]
+                },
                 'usesPermission': [{'name': 'android.permission.CAMERA'}],
                 'usesSdk': {'minSdkVersion': 14, 'targetSdkVersion': 19},
                 'versionName': '1.0.3',
@@ -999,6 +1004,11 @@ class UpdateTest(unittest.TestCase):
                 'size': 14102,
             },
             'manifest': {
+                'signer': {
+                    'sha256': [
+                        '32a23624c201b949f085996ba5ed53d40f703aca4989476949cae891022e0ed6'
+                    ]
+                },
                 'usesPermission': [
                     {'name': 'android.permission.WRITE_EXTERNAL_STORAGE'},
                     {'name': 'android.permission.READ_PHONE_STATE'},
@@ -1010,7 +1020,6 @@ class UpdateTest(unittest.TestCase):
                 'versionName': '1.2-fake',
             },
             'name': 'No minSdkVersion or targetSdkVersion',
-            'signer': '32a23624c201b949f085996ba5ed53d40f703aca4989476949cae891022e0ed6',
             'packageName': 'no.min.target.sdk',
             'antiFeatures': dict(),
             'sig': 'b4964fd759edaa54e65bb476d0276880',
@@ -1980,6 +1989,11 @@ class UpdateTest(unittest.TestCase):
                             'x86',
                             'x86_64',
                         ],
+                        'signer': {
+                            'sha256': [
+                                '9326a2cc1a2f148202bc7837a0af3b81200bd37fd359c9e13a2296a71d342056'
+                            ]
+                        },
                         'usesPermission': [
                             {'name': 'android.permission.BIND_INPUT_METHOD'},
                             {'name': 'android.permission.READ_EXTERNAL_STORAGE'},

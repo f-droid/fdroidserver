@@ -15,6 +15,9 @@ manifest:
   features:
     - name: android.hardware.camera.front
   maxSdkVersion: 25
+  signer:
+    sha256:
+      - 401a3a5843a3d5cebc22e6de5cb76d08eaa6797122d7fe1283df1d192e132f5e
   usesPermission:
     - name: android.permission.CAMERA
   usesSdk:
@@ -24,5 +27,4 @@ manifest:
 name: Mirror Mirror
 packageName: org.maxsdkversion
 sig: 1a5e67bcef6b2d6242f2d36982b54589
-signer: 401a3a5843a3d5cebc22e6de5cb76d08eaa6797122d7fe1283df1d192e132f5e
 versionCode: 4
