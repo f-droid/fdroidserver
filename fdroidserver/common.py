@@ -361,7 +361,7 @@ def fill_config_defaults(thisconfig):
 
     # Expand paths (~users and $vars)
     def expand_path(path):
-        if path is None:
+        if not path or not isinstance(path, str):
             return None
         orig = path
         path = os.path.expanduser(path)
