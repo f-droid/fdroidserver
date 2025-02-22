@@ -213,6 +213,83 @@ regex_checks = {
     ],
 }
 
+# config keys that are currently ignored by lint, but could be supported.
+ignore_config_keys = (
+    'github_releases',
+    'java_paths',
+)
+
+bool_keys = (
+    'allow_disabled_algorithms',
+    'androidobservatory',
+    'build_server_always',
+    'deploy_process_logs',
+    'keep_when_not_allowed',
+    'make_current_version_link',
+    'nonstandardwebroot',
+    'per_app_repos',
+    'rclone',
+    'refresh_scanner',
+    's3cmd',
+    'scan_binary',
+    'sync_from_local_copy_dir',
+)
+
+check_config_keys = (
+    'ant',
+    'archive',
+    'archive_description',
+    'archive_icon',
+    'archive_name',
+    'archive_older',
+    'archive_url',
+    'archive_web_base_url',
+    'awsaccesskeyid',
+    'awsbucket',
+    'awssecretkey',
+    'binary_transparency_remote',
+    'cachedir',
+    'char_limits',
+    'current_version_name_source',
+    'git_mirror_size_limit',
+    'github_token',
+    'gpghome',
+    'gpgkey',
+    'gradle',
+    'identity_file',
+    'install_list',
+    'java_paths',
+    'keyaliases',
+    'keydname',
+    'keypass',
+    'keystore',
+    'keystorepass',
+    'lint_licenses',
+    'local_copy_dir',
+    'mirrors',
+    'mvn3',
+    'ndk_paths',
+    'path_to_custom_rclone_config',
+    'rclone_config',
+    'repo',
+    'repo_description',
+    'repo_icon',
+    'repo_keyalias',
+    'repo_maxage',
+    'repo_name',
+    'repo_pubkey',
+    'repo_url',
+    'repo_web_base_url',
+    'scanner_signature_sources',
+    'sdk_path',
+    'servergitmirrors',
+    'serverwebroot',
+    'smartcardoptions',
+    'sync_from_local_copy_dir',
+    'uninstall_list',
+    'virustotal_apikey',
+)
+
 locale_pattern = re.compile(r"[a-z]{2,3}(-([A-Z][a-zA-Z]+|\d+|[a-z]+))*")
 
 versioncode_check_pattern = re.compile(r"(\\d|\[(0-9|\\d)_?(a-fA-F)?])[+]")
@@ -791,6 +868,41 @@ def lint_config(arg):
                     msg += ' '
                     msg += _('Did you mean {code}?').format(code=', '.join(sorted(m)))
                 print(msg)
+    elif path.name == config_name and path.parent.name != 'config':
+        valid_keys = set(tuple(common.default_config) + bool_keys + check_config_keys)
+        for key in ignore_config_keys:
+            if key in valid_keys:
+                valid_keys.remove(key)
+        for key in data:
+            if key not in valid_keys:
+                passed = False
+                msg = _("ERROR: {key} not a valid key!").format(key=key)
+                m = difflib.get_close_matches(key.lower(), valid_keys, 2, 0.5)
+                if m:
+                    msg += ' '
+                    msg += _('Did you mean {code}?').format(code=', '.join(sorted(m)))
+                print(msg)
+                continue
+
+            if key in bool_keys:
+                t = bool
+            else:
+                t = type(common.default_config.get(key, ""))
+
+            show_error = False
+            if t is str:
+                if type(data[key]) not in (str, dict):
+                    passed = False
+                    show_error = True
+            elif type(data[key]) != t:
+                passed = False
+                show_error = True
+            if show_error:
+                print(
+                    _("ERROR: {key}'s value should be of type {t}!").format(
+                        key=key, t=t.__name__
+                    )
+                )
     elif path.name in (config_name, categories_name, antifeatures_name):
         for key in data:
             if path.name == config_name and key not in ('archive', 'repo'):

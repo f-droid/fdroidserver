@@ -529,3 +529,62 @@ class LintAntiFeaturesTest(unittest.TestCase):
         app = fdroidserver.metadata.App()
         app['Builds'] = [{'antifeatures': ['Ads', 'Tracker']}]
         self.assertEqual(1, len(list(fdroidserver.lint.check_antiFeatures(app))))
+
+
+class ConfigYmlTest(LintTest):
+    def setUp(self):
+        super().setUp()
+        self.config_yml = Path(self.testdir) / 'config.yml'
+
+    def test_config_yml_int(self):
+        self.config_yml.write_text('repo_maxage: 1\n')
+        self.assertTrue(fdroidserver.lint.lint_config(self.config_yml))
+
+    def test_config_yml_int_bad(self):
+        self.config_yml.write_text('repo_maxage: "1"\n')
+        self.assertFalse(fdroidserver.lint.lint_config(self.config_yml))
+
+    def test_config_yml_str(self):
+        self.config_yml.write_text('sdk_path: /opt/android-sdk\n')
+        self.assertTrue(fdroidserver.lint.lint_config(self.config_yml))
+
+    def test_config_yml_str_dict(self):
+        self.config_yml.write_text('sdk_path: {env: ANDROID_HOME}\n')
+        self.assertTrue(fdroidserver.lint.lint_config(self.config_yml))
+
+    def test_config_yml_str_bad(self):
+        self.config_yml.write_text('sdk_path: 1.0\n')
+        self.assertFalse(fdroidserver.lint.lint_config(self.config_yml))
+
+    def test_config_yml_bool(self):
+        self.config_yml.write_text("deploy_process_logs: true\n")
+        self.assertTrue(fdroidserver.lint.lint_config(self.config_yml))
+
+    def test_config_yml_bool_bad(self):
+        self.config_yml.write_text('deploy_process_logs: 2342fe23\n')
+        self.assertFalse(fdroidserver.lint.lint_config(self.config_yml))
+
+    def test_config_yml_dict(self):
+        self.config_yml.write_text("keyaliases: {com.example: '@com.foo'}\n")
+        self.assertTrue(fdroidserver.lint.lint_config(self.config_yml))
+
+    def test_config_yml_dict_bad(self):
+        self.config_yml.write_text('keyaliases: 2342fe23\n')
+        self.assertFalse(fdroidserver.lint.lint_config(self.config_yml))
+
+    def test_config_yml_bad_key_name(self):
+        self.config_yml.write_text('keyalias: 2342fe23\n')
+        self.assertFalse(fdroidserver.lint.lint_config(self.config_yml))
+
+    def test_config_yml_bad_value_for_all_keys(self):
+        """Check all config keys with a bad value."""
+        for key in fdroidserver.lint.check_config_keys:
+            if key in fdroidserver.lint.bool_keys:
+                value = 'foobar'
+            else:
+                value = 'false'
+            self.config_yml.write_text(f'{key}: {value}\n')
+            self.assertFalse(
+                fdroidserver.lint.lint_config(self.config_yml),
+                f'{key} should fail on value of "{value}"',
+            )
