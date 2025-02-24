@@ -3,10 +3,10 @@ AutoUpdateMode: None
 Bitcoin: 1Fi5xUHiAPRKxHvyUGVFGt9extBe8Srdbk
 OpenCollective: f-droid-just-testing
 Categories:
-- Development
-- GuardianProject
-- 1
-- 2.0
+  - Development
+  - GuardianProject
+  - 1
+  - 2.0
 CurrentVersionCode: 2147483647
 AuthorWebSite: https://guardianproject.info
 Description: |

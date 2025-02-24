@@ -317,7 +317,7 @@ Builds:
     prebuild: sed -i '/ant/d' ../Makefile && ln -s vlc-android/$$VLC-2.2$$ ../vlc
     build: cd ../ && ANDROID_ABI=armeabi-v7a ./compile.sh release
 
-#0.9.10 vercodes were off
+  # 0.9.10 vercodes were off
   - versionName: 1.0.0
     versionCode: 10006
     disable: doesn't build
@@ -328,7 +328,7 @@ Builds:
     prebuild: sed -i '/ant/d' ../Makefile && ln -s vlc-android/$$VLC-2.2$$ ../vlc
     build: cd ../ && ANDROID_ABI=x86 ./compile.sh release
 
-#0.9.10 vercodes were off
+  # 0.9.10 vercodes were off
   - versionName: 1.0.0
     versionCode: 10007
     disable: doesn't build
@@ -339,7 +339,7 @@ Builds:
     prebuild: sed -i '/ant/d' ../Makefile && ln -s vlc-android/$$VLC-2.2$$ ../vlc
     build: cd ../ && ANDROID_ABI=armeabi ./compile.sh release
 
-#0.9.10 vercodes were off
+  # 0.9.10 vercodes were off
   - versionName: 1.0.0
     versionCode: 10008
     disable: doesn't build

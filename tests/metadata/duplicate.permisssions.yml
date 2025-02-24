@@ -1,4 +1,4 @@
 Categories:
-- tests
+  - tests
 Name: Duplicate Permisssions
 Summary: 'Test app for all possible <uses-permissions>'
