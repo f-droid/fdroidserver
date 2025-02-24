@@ -345,7 +345,7 @@ class LintTest(unittest.TestCase):
     def test_check_categories_from_config_yml(self):
         """In config.yml, categories is a list."""
         os.chdir(self.testdir)
-        Path('config.yml').write_text('categories: [foo, bar]')
+        Path('config.yml').write_text('categories: [foo, bar]\n')
         fdroidserver.lint.config = fdroidserver.common.read_config()
         fdroidserver.lint.load_categories_config()
         self.assertEqual(fdroidserver.lint.CATEGORIES_KEYS, ['foo', 'bar'])
@@ -435,13 +435,13 @@ class LintTest(unittest.TestCase):
     def test_lint_invalid_config_keys(self):
         os.chdir(self.testdir)
         Path('config').mkdir()
-        Path('config/config.yml').write_text('repo:\n  invalid_key: test')
+        Path('config/config.yml').write_text('repo:\n  invalid_key: test\n')
         self.assertFalse(fdroidserver.lint.lint_config('config/config.yml'))
 
     def test_lint_invalid_localized_config_keys(self):
         os.chdir(self.testdir)
         Path('config/en').mkdir(parents=True)
-        Path('config/en/antiFeatures.yml').write_text('NonFreeNet:\n  icon: test.png')
+        Path('config/en/antiFeatures.yml').write_text('NonFreeNet:\n  icon: test.png\n')
         self.assertFalse(fdroidserver.lint.lint_config('config/en/antiFeatures.yml'))
 
     def test_check_certificate_pinned_binaries_empty(self):
