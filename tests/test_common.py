@@ -58,6 +58,9 @@ class CommonTest(unittest.TestCase):
             os.makedirs(self.tmpdir)
         os.chdir(basedir)
 
+        self.verbose = '-v' in sys.argv or '--verbose' in sys.argv
+        fdroidserver.common.set_console_logging(self.verbose)
+
         # these are declared as None at the top of the module file
         fdroidserver.common.config = None
         fdroidserver.common.options = None
@@ -642,65 +645,65 @@ class CommonTest(unittest.TestCase):
         )
 
     def test_write_to_config(self):
-        with tempfile.TemporaryDirectory() as tmpPath:
-            cfgPath = os.path.join(tmpPath, 'config.py')
-            with open(cfgPath, 'w') as f:
-                f.write(
-                    textwrap.dedent(
-                        """\
+        """Test that config items can be added without messing up config.yml.
+
+        The '_orig' key are where the original string values of paths
+        are stored.  Paths have tilde expansion and env vars replaced
+        in fill_config_defaults().
+
+        """
+        os.chdir(self.testdir)
+        config_yml = 'config.yml'
+        Path(config_yml).write_text(
+            textwrap.dedent(
+                """\
+                # abc
+                # test: 'example value'
+                a_path: ~/android-sdk
+
+                # comment
+                do_not_touch: good value
+                a_path: "!!!"
+
+                key: "123"    # inline"""
+            )
+        )
+
+        config = {'key': 111, 'a_path_orig': '~/android-sdk'}
+        fdroidserver.common.write_to_config(config, 'key', config_file=config_yml)
+        fdroidserver.common.write_to_config(
+            config, 'a_path', config_file=config_yml
+        )
+        fdroidserver.common.write_to_config(
+            config, 'test', value='test value', config_file=config_yml
+        )
+        fdroidserver.common.write_to_config(
+            config, 'new_key', value='new', config_file=config_yml
+        )
+
+        with open(config_yml) as fp:
+            self.assertEqual(
+                fp.read(),
+                textwrap.dedent(
+                    """\
                     # abc
-                    # test = 'example value'
-                    default_me= '%%%'
+                    test: test value
+                    a_path: ~/android-sdk
 
                     # comment
-                    do_not_touch = "good value"
-                    default_me="!!!"
+                    do_not_touch: good value
 
-                    key="123"    # inline"""
-                    )
-                )
-
-            cfg = {'key': '111', 'default_me_orig': 'orig'}
-            fdroidserver.common.write_to_config(cfg, 'key', config_file=cfgPath)
-            fdroidserver.common.write_to_config(cfg, 'default_me', config_file=cfgPath)
-            fdroidserver.common.write_to_config(cfg, 'test', value='test value', config_file=cfgPath)
-            fdroidserver.common.write_to_config(cfg, 'new_key', value='new', config_file=cfgPath)
-
-            with open(cfgPath, 'r') as f:
-                self.assertEqual(
-                    f.read(),
-                    textwrap.dedent(
-                        """\
-                    # abc
-                    test = 'test value'
-                    default_me = 'orig'
-
-                    # comment
-                    do_not_touch = "good value"
-
-                    key = "111"    # inline
-
-                    new_key = "new"
+                    key: 111
+                    new_key: new
                     """
-                    ),
-                )
+                ),
+            )
 
     def test_write_to_config_when_empty(self):
-        with tempfile.TemporaryDirectory() as tmpPath:
-            cfgPath = os.path.join(tmpPath, 'config.py')
-            with open(cfgPath, 'w') as f:
-                pass
-            fdroidserver.common.write_to_config({}, 'key', 'val', cfgPath)
-            with open(cfgPath, 'r') as f:
-                self.assertEqual(
-                    f.read(),
-                    textwrap.dedent(
-                        """\
-
-                key = "val"
-                """
-                    ),
-                )
+        config_yml = Path(self.testdir) / 'config.yml'
+        config_yml.write_text('')
+        fdroidserver.common.write_to_config({}, 'key', 'val', config_yml)
+        self.assertEqual(config_yml.read_text(), 'key: val\n')
 
     def test_apk_name_regex(self):
         good = [
@@ -1883,7 +1886,6 @@ class CommonTest(unittest.TestCase):
         """It should set defaults if no config file is found"""
         os.chdir(self.tmpdir)
         self.assertFalse(os.path.exists('config.yml'))
-        self.assertFalse(os.path.exists('config.py'))
         config = fdroidserver.common.read_config()
         self.assertIsNotNone(config.get('char_limits'))
 
@@ -1892,7 +1894,6 @@ class CommonTest(unittest.TestCase):
         os.chdir(self.tmpdir)
         open('config.yml', 'w').close()
         self.assertTrue(os.path.exists('config.yml'))
-        self.assertFalse(os.path.exists('config.py'))
         config = fdroidserver.common.read_config()
         self.assertIsNotNone(config.get('char_limits'))
 
@@ -1902,7 +1903,6 @@ class CommonTest(unittest.TestCase):
         with open('config.yml', 'w') as fp:
             fp.write('apksigner: yml')
         self.assertTrue(os.path.exists('config.yml'))
-        self.assertFalse(os.path.exists('config.py'))
         config = fdroidserver.common.read_config()
         self.assertEqual('yml', config.get('apksigner'))
 
@@ -1913,7 +1913,6 @@ class CommonTest(unittest.TestCase):
         with open('config.yml', 'w', encoding='utf-8') as fp:
             fp.write('apksigner: ' + teststr)
         self.assertTrue(os.path.exists('config.yml'))
-        self.assertFalse(os.path.exists('config.py'))
         config = fdroidserver.common.read_config()
         self.assertEqual(teststr, config.get('apksigner'))
 
@@ -1924,7 +1923,6 @@ class CommonTest(unittest.TestCase):
         with open('config.yml', 'w') as fp:
             yaml.dump({'apksigner': teststr}, fp)
         self.assertTrue(os.path.exists('config.yml'))
-        self.assertFalse(os.path.exists('config.py'))
         config = fdroidserver.common.read_config()
         self.assertEqual(teststr, config.get('apksigner'))
 
@@ -1936,7 +1934,6 @@ class CommonTest(unittest.TestCase):
             with open('config.yml', 'w') as fp:
                 fp.write("""keypass: {'env': 'SECRET'}""")
             self.assertTrue(os.path.exists('config.yml'))
-            self.assertFalse(os.path.exists('config.py'))
             config = fdroidserver.common.read_config()
             self.assertEqual(os.getenv('SECRET', 'fail'), config.get('keypass'))
 
@@ -1952,16 +1949,6 @@ class CommonTest(unittest.TestCase):
         with self.assertRaises(yaml.scanner.ScannerError):
             fdroidserver.common.read_config()
 
-    def test_with_config_py(self):
-        """Make sure it is still possible to use config.py alone."""
-        os.chdir(self.tmpdir)
-        with open('config.py', 'w') as fp:
-            fp.write('apksigner = "py"')
-        self.assertFalse(os.path.exists('config.yml'))
-        self.assertTrue(os.path.exists('config.py'))
-        config = fdroidserver.common.read_config()
-        self.assertEqual("py", config.get('apksigner'))
-
     def test_config_perm_warning(self):
         """Exercise the code path that issues a warning about unsafe permissions."""
         os.chdir(self.tmpdir)
@@ -1972,24 +1959,6 @@ class CommonTest(unittest.TestCase):
         fdroidserver.common.read_config()
         os.remove(fp.name)
         fdroidserver.common.config = None
-
-        with open('config.py', 'w') as fp:
-            fp.write('keystore = "foo.jks"')
-        self.assertTrue(os.path.exists(fp.name))
-        os.chmod(fp.name, 0o666)  # nosec B103
-        fdroidserver.common.read_config()
-
-    def test_with_both_config_yml_py(self):
-        """If config.yml and config.py are present, config.py should be ignored."""
-        os.chdir(self.tmpdir)
-        with open('config.yml', 'w') as fp:
-            fp.write('apksigner: yml')
-        with open('config.py', 'w') as fp:
-            fp.write('apksigner = "py"')
-        self.assertTrue(os.path.exists('config.yml'))
-        self.assertTrue(os.path.exists('config.py'))
-        config = fdroidserver.common.read_config()
-        self.assertEqual('yml', config.get('apksigner'))
 
     def test_config_repo_url(self):
         """repo_url ends in /repo, archive_url ends in /archive."""
@@ -2037,27 +2006,11 @@ class CommonTest(unittest.TestCase):
         os.chdir(self.tmpdir)
         with open('config.yml', 'w') as fp:
             fp.write('apksigner: yml')
+        os.chmod('config.yml', 0o0600)
         self.assertTrue(os.path.exists(fp.name))
-        self.assertFalse(os.path.exists('config.py'))
         config = fdroidserver.common.read_config()
         self.assertFalse('keypass' in config)
         self.assertEqual('yml', config.get('apksigner'))
-        fdroidserver.common.write_to_config(config, 'keypass', 'mysecretpassword')
-        with open(fp.name) as fp:
-            print(fp.read())
-        fdroidserver.common.config = None
-        config = fdroidserver.common.read_config()
-        self.assertEqual('mysecretpassword', config['keypass'])
-
-    def test_write_to_config_py(self):
-        os.chdir(self.tmpdir)
-        with open('config.py', 'w') as fp:
-            fp.write('apksigner = "py"')
-        self.assertTrue(os.path.exists(fp.name))
-        self.assertFalse(os.path.exists('config.yml'))
-        config = fdroidserver.common.read_config()
-        self.assertFalse('keypass' in config)
-        self.assertEqual('py', config.get('apksigner'))
         fdroidserver.common.write_to_config(config, 'keypass', 'mysecretpassword')
         fdroidserver.common.config = None
         config = fdroidserver.common.read_config()
@@ -2068,7 +2021,6 @@ class CommonTest(unittest.TestCase):
         with open('config.yml', 'w') as fp:
             fp.write('java_paths:\n  8: /usr/lib/jvm/java-8-openjdk\n')
         self.assertTrue(os.path.exists(fp.name))
-        self.assertFalse(os.path.exists('config.py'))
         config = fdroidserver.common.read_config()
         self.assertEqual('/usr/lib/jvm/java-8-openjdk', config.get('java_paths', {}).get('8'))
 
@@ -2143,10 +2095,11 @@ class CommonTest(unittest.TestCase):
 
     def test_loading_config_buildserver_yml(self):
         """Smoke check to make sure this file is properly parsed"""
-        os.chdir(self.tmpdir)
-        shutil.copy(os.path.join(basedir, '..', 'buildserver', 'config.buildserver.yml'),
-                    'config.yml')
-        self.assertFalse(os.path.exists('config.py'))
+        os.chdir(self.testdir)
+        shutil.copy(
+            os.path.join(basedir, '..', 'buildserver', 'config.buildserver.yml'),
+            'config.yml',
+        )
         fdroidserver.common.read_config()
 
     def test_setup_status_output(self):
@@ -2730,35 +2683,6 @@ class CommonTest(unittest.TestCase):
         config = fdroidserver.common.read_config()
         fdroidserver.common.config = config
         self.assertTrue(isinstance(config['smartcardoptions'], list))
-        self.assertEqual(
-            [
-                '-storetype',
-                'PKCS11',
-                '-providerClass',
-                'sun.security.pkcs11.SunPKCS11',
-                '-providerArg',
-                '/etc/pkcs11_java.cfg',
-            ],
-            config['smartcardoptions'],
-        )
-
-    def test_get_smartcardoptions_config_py(self):
-        os.chdir(self.tmpdir)
-        with open('config.py', 'w') as fp:
-            fp.write(
-                textwrap.dedent(
-                    """
-                    smartcardoptions = '''
-                    \t-storetype\tPKCS11
-                    \t-providerClass\tsun.security.pkcs11.SunPKCS11
-                    \t-providerArg\t/etc/pkcs11_java.cfg
-
-                     '''
-                    """
-                )
-            )
-        config = fdroidserver.common.read_config()
-        fdroidserver.common.config = config
         self.assertEqual(
             [
                 '-storetype',

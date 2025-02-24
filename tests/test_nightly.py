@@ -250,7 +250,6 @@ class NightlyTest(unittest.TestCase):
                         raise
 
         self.assertEqual(called, [['ssh', '-Tvi'], ['fdroid', 'deploy']])
-        self.assertFalse(os.path.exists('config.py'))
         git_url = 'git@github.com:f-droid/test-nightly'
         mirror_url = index.get_mirror_service_urls({"url": git_url})[0]
         expected = {
@@ -324,7 +323,6 @@ class NightlyTest(unittest.TestCase):
                         raise
 
         self.assertEqual(called, [['ssh', '-Tvi'], ['fdroid', 'deploy']])
-        self.assertFalse(os.path.exists('config.py'))
         expected = {
             'archive_description': 'Old nightly builds that have been archived.',
             'archive_name': 'fdroid/test-nightly archive',

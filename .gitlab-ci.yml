@@ -555,11 +555,11 @@ servergitmirrors:
     - ./tests/key-tricks.py
     - ssh-keyscan gitlab.com >> /root/.ssh/known_hosts
     - test -d /tmp/fdroid/repo || mkdir -p /tmp/fdroid/repo
-    - cp tests/config.py tests/keystore.jks /tmp/fdroid/
+    - cp tests/config.yml tests/keystore.jks /tmp/fdroid/
     - cp tests/repo/com.politedroid_6.apk /tmp/fdroid/repo/
     - cd /tmp/fdroid
     - touch fdroid-icon.png
-    - printf "\nservergitmirrors = 'git@gitlab.com:fdroid/ci-test-servergitmirrors-repo.git'\n" >> config.py
+    - printf "\nservergitmirrors\x3a 'git@gitlab.com:fdroid/ci-test-servergitmirrors-repo.git'\n" >> config.yml
     - $PYTHONPATH/fdroid update --verbose --create-metadata
     - $PYTHONPATH/fdroid deploy --verbose
     - export DLURL=`grep -Eo 'https://gitlab.com/fdroid/ci-test-servergitmirrors-repo[^"]+' repo/index-v1.json`

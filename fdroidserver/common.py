@@ -531,8 +531,7 @@ def read_config():
     not required, just use defaults.
 
     config.yml is the preferred form because no code is executed when
-    reading it.  config.py is deprecated and supported for backwards
-    compatibility.
+    reading it.  config.py is deprecated and no longer supported.
 
     config.yml requires ASCII or UTF-8 encoding because this code does
     not auto-detect the file's encoding.  That is left up to the YAML
@@ -550,10 +549,6 @@ def read_config():
     config_file = 'config.yml'
     old_config_file = 'config.py'
 
-    if os.path.exists(config_file) and os.path.exists(old_config_file):
-        logging.error(_("""Conflicting config files! Using {newfile}, ignoring {oldfile}!""")
-                      .format(oldfile=old_config_file, newfile=config_file))
-
     if os.path.exists(config_file):
         logging.debug(_("Reading '{config_file}'").format(config_file=config_file))
         with open(config_file, encoding='utf-8') as fp:
@@ -561,19 +556,13 @@ def read_config():
         if not config:
             config = {}
         config_type_check(config_file, config)
-    elif os.path.exists(old_config_file):
-        logging.warning(_("""{oldfile} is deprecated, use {newfile}""")
-                        .format(oldfile=old_config_file, newfile=config_file))
-        with io.open(old_config_file, "rb") as fp:
-            code = compile(fp.read(), old_config_file, 'exec')
-            exec(code, None, config)  # nosec TODO automatically migrate
 
-        for k in ('mirrors', 'install_list', 'uninstall_list', 'serverwebroot', 'servergitroot'):
-            if k in config:
-                if not type(config[k]) in (str, list, tuple):
-                    logging.warning(
-                        _("'{field}' will be in random order! Use () or [] brackets if order is important!")
-                        .format(field=k))
+    if os.path.exists(old_config_file):
+        logging.warning(
+            _("""Ignoring deprecated {oldfile}, use {newfile}!""").format(
+                oldfile=old_config_file, newfile=config_file
+            )
+        )
 
     # smartcardoptions must be a list since its command line args for Popen
     smartcardoptions = config.get('smartcardoptions')
@@ -4203,7 +4192,7 @@ def load_stats_fdroid_signing_key_fingerprints():
 
 
 def write_to_config(thisconfig, key, value=None, config_file=None):
-    """Write a key/value to the local config.yml or config.py.
+    """Write a key/value to the local config.yml.
 
     NOTE: only supports writing string variables.
 
@@ -4222,8 +4211,6 @@ def write_to_config(thisconfig, key, value=None, config_file=None):
         value = thisconfig[origkey] if origkey in thisconfig else thisconfig[key]
     if config_file:
         cfg = config_file
-    elif os.path.exists('config.py') and not os.path.exists('config.yml'):
-        cfg = 'config.py'
     else:
         cfg = 'config.yml'
 
@@ -4239,19 +4226,8 @@ def write_to_config(thisconfig, key, value=None, config_file=None):
         if not lines[-1].endswith('\n'):
             lines[-1] += '\n'
 
-    # regex for finding and replacing python string variable
-    # definitions/initializations
-    if cfg.endswith('.py'):
-        pattern = re.compile(r'^[\s#]*' + key + r'\s*=\s*"[^"]*"')
-        repl = key + ' = "' + value + '"'
-        pattern2 = re.compile(r'^[\s#]*' + key + r"\s*=\s*'[^']*'")
-        repl2 = key + " = '" + value + "'"
-    else:
-        # assume .yml as default
-        pattern = re.compile(r'^[\s#]*' + key + r':.*')
-        repl = yaml.dump({key: value}, default_flow_style=False)
-        pattern2 = pattern
-        repl2 = repl
+    pattern = re.compile(r'^[\s#]*' + key + r':.*\n')
+    repl = yaml.dump({key: value})
 
     # If we replaced this line once, we make sure won't be a
     # second instance of this line for this key in the document.
@@ -4259,18 +4235,15 @@ def write_to_config(thisconfig, key, value=None, config_file=None):
     # edit config file
     with open(cfg, 'w') as f:
         for line in lines:
-            if pattern.match(line) or pattern2.match(line):
+            if pattern.match(line):
                 if not didRepl:
                     line = pattern.sub(repl, line)
-                    line = pattern2.sub(repl2, line)
                     f.write(line)
                     didRepl = True
             else:
                 f.write(line)
         if not didRepl:
-            f.write('\n')
             f.write(repl)
-            f.write('\n')
 
 
 def parse_xml(path):

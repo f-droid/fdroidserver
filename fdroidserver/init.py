@@ -138,7 +138,7 @@ def main():
             _("Android SDK not found at {path}!").format(path=test_config['sdk_path'])
         )
 
-    if not os.path.exists('config.yml') and not os.path.exists('config.py'):
+    if not os.path.exists('config.yml'):
         # 'metadata' and 'tmp' are created in fdroid
         if not os.path.exists('repo'):
             os.mkdir('repo')

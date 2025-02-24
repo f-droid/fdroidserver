@@ -13,10 +13,12 @@
 import json
 import os
 import pathlib
+import ruamel.yaml
 import shutil
 import sys
 import unittest
 import tempfile
+from pathlib import Path
 from unittest import mock
 
 from fdroidserver import publish
@@ -94,8 +96,7 @@ class PublishTest(unittest.TestCase):
         ]
 
         os.chdir(self.testdir)
-        with open('config.py', 'w') as f:
-            pass
+        Path('config.yml').write_text('')
 
         publish.store_stats_fdroid_signing_key_fingerprints(appids, indent=2)
 
@@ -116,11 +117,13 @@ class PublishTest(unittest.TestCase):
         }
         self.assertEqual(expected, common.load_stats_fdroid_signing_key_fingerprints())
 
-        with open('config.py', 'r') as f:
-            self.assertEqual(
-                '\nrepo_key_sha256 = "c58460800c7b250a619c30c13b07b7359a43e5af71a4352d86c58ae18c9f6d41"\n',
-                f.read(),
-            )
+        yaml = ruamel.yaml.YAML(typ='safe')
+        with open('config.yml') as fp:
+            config = yaml.load(fp)
+        self.assertEqual(
+            'c58460800c7b250a619c30c13b07b7359a43e5af71a4352d86c58ae18c9f6d41',
+            config['repo_key_sha256'],
+        )
 
     def test_store_and_load_fdroid_signing_key_fingerprints_with_missmatch(self):
         common.config = {}

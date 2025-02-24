@@ -548,7 +548,7 @@ include tests/build-tools/28.0.3/aapt-output-souch.smsbypass_9.txt
 include tests/build-tools/generate.sh
 include tests/check-fdroid-apk
 include tests/com.fake.IpaApp_1000000000001.ipa
-include tests/config.py
+include tests/config.yml
 include tests/config/antiFeatures.yml
 include tests/config/categories.yml
 include tests/config/de/antiFeatures.yml

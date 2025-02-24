@@ -27,7 +27,6 @@ tmp/
 /tests/repo/status
 
 # files used in manual testing
-/config.py
 /config.yml
 /tmp/
 /logs/
