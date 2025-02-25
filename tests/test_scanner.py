@@ -47,21 +47,39 @@ def _dexdump_found():
     return False
 
 
+class SetUpTearDownMixin:
+    """A mixin with no tests in it for shared setUp and tearDown."""
+
+    def setUp(self):
+        os.chdir(basedir)
+        self._td = mkdtemp()
+        self.testdir = self._td.name
+
+        # these are declared as None at the top of the module file
+        fdroidserver.common.config = None
+        fdroidserver.common.options = None
+
+    def tearDown(self):
+        os.chdir(basedir)
+        self._td.cleanup()
+        fdroidserver.common.config = None
+        fdroidserver.common.options = None
+
+    @classmethod
+    def setUpClass(cls):
+        # suppress "WARNING:root:unsafe permissions on 'config.yml' (should be 0600)!"
+        os.chmod(os.path.join(basedir, fdroidserver.common.CONFIG_FILE), 0o600)
+
+
 # Always use built-in default rules so changes in downloaded rules don't break tests.
 @mock.patch(
     'fdroidserver.scanner.SUSSDataController.load',
     fdroidserver.scanner.SUSSDataController.load_from_defaults,
 )
-class ScannerTest(unittest.TestCase):
+class ScannerTest(SetUpTearDownMixin, unittest.TestCase):
     def setUp(self):
-        os.chdir(basedir)
-        self._td = mkdtemp()
-        self.testdir = self._td.name
+        super().setUp()
         fdroidserver.scanner.ScannerTool.refresh_allowed = False
-
-    def tearDown(self):
-        os.chdir(basedir)
-        self._td.cleanup()
 
     def test_scan_source_files(self):
         fdroidserver.common.options = mock.Mock()
@@ -601,6 +619,49 @@ class Test_scan_binary(unittest.TestCase):
                 ].values(),
                 apkfile,
             ),
+        )
+
+
+class Test_scan_source_bad_perms(SetUpTearDownMixin, unittest.TestCase):
+    def setUp(self):
+        super().setUp()
+        os.chdir(self.testdir)
+        testfile = pathlib.Path('build/fake.app/binary')
+        testfile.parent.mkdir(parents=True)
+        testfile.write_text('0000')
+        os.chmod(testfile, 0o001)  # nosec B103
+        self.testfile = testfile
+
+    def test_scan_source_bad_perms_fails_with_error(self):
+        fdroidserver.common.options = mock.Mock()
+        fdroidserver.common.options.verbose = True
+        # no error message without options.verbose
+        with self.assertLogs(level=logging.ERROR):
+            count = fdroidserver.scanner.scan_source(self.testfile.parent)
+        self.assertEqual(1, count, 'there should be one error')
+        self.assertTrue(
+            self.testfile.exists(),
+            f'{self.testfile} should not have been removed',
+        )
+
+    def test_scan_source_bad_perms_delete(self):
+        build = fdroidserver.metadata.Build()
+        build.scandelete = [self.testfile.name]
+        count = fdroidserver.scanner.scan_source(self.testfile.parent, build)
+        self.assertEqual(0, count, 'there should be no errors')
+        self.assertFalse(
+            self.testfile.exists(),
+            f'{self.testfile} should have been removed',
+        )
+
+    def test_scan_source_bad_perms_ignore(self):
+        build = fdroidserver.metadata.Build()
+        build.scanignore = [self.testfile.name]
+        count = fdroidserver.scanner.scan_source(self.testfile.parent, build)
+        self.assertEqual(0, count, 'error should have been ignored')
+        self.assertTrue(
+            self.testfile.exists(),
+            f'{self.testfile} should not have been removed',
         )
 
 
