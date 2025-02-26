@@ -675,8 +675,6 @@ def checkupdates_app(app: metadata.App, auto: bool, commit: bool = False) -> Non
         if commit:
             logging.info("Commiting update for " + app.metadatapath)
             gitcmd = ["git", "commit", "-m", commitmsg]
-            if 'auto_author' in config:
-                gitcmd.extend(['--author', config['auto_author']])
             gitcmd.extend(["--", app.metadatapath])
             if subprocess.call(gitcmd) != 0:
                 raise FDroidException("Git commit failed")
