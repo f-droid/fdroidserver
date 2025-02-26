@@ -1787,7 +1787,9 @@ class UpdateTest(unittest.TestCase):
     def test_categories_txt_is_removed_by_delete_unknown(self):
         """categories.txt used to be a part of this system, now its nothing."""
         os.chdir(self.testdir)
-        Path('config.yml').write_text('repo_pubkey: ffffffffffffffffffffffffffffffffffffffff')
+        fdroidserver.common.write_config_file(
+            'repo_pubkey: ffffffffffffffffffffffffffffffffffffffff\n'
+        )
 
         categories_txt = Path('repo/categories.txt')
         categories_txt.parent.mkdir()
@@ -1803,8 +1805,8 @@ class UpdateTest(unittest.TestCase):
         os.chdir(self.testdir)
         os.mkdir('metadata')
         os.mkdir('repo')
-        Path('config.yml').write_text(
-            'repo_pubkey: ffffffffffffffffffffffffffffffffffffffff'
+        fdroidserver.common.write_config_file(
+            'repo_pubkey: ffffffffffffffffffffffffffffffffffffffff\n'
         )
 
         testapk = os.path.join('repo', 'com.politedroid_6.apk')
@@ -1822,8 +1824,8 @@ class UpdateTest(unittest.TestCase):
         os.chdir(self.testdir)
         os.mkdir('metadata')
         os.mkdir('repo')
-        Path('config.yml').write_text(
-            'repo_pubkey: ffffffffffffffffffffffffffffffffffffffff'
+        fdroidserver.common.write_config_file(
+            'repo_pubkey: ffffffffffffffffffffffffffffffffffffffff\n'
         )
 
         testapk = os.path.join('repo', 'com.politedroid_6.apk')
@@ -1844,8 +1846,8 @@ class UpdateTest(unittest.TestCase):
         os.chdir(self.testdir)
         os.mkdir('metadata')
         os.mkdir('repo')
-        Path('config.yml').write_text(
-            'repo_pubkey: ffffffffffffffffffffffffffffffffffffffff'
+        fdroidserver.common.write_config_file(
+            'repo_pubkey: ffffffffffffffffffffffffffffffffffffffff\n'
         )
 
         testapk = os.path.join('repo', 'com.politedroid_6.apk')
@@ -1871,8 +1873,8 @@ class UpdateTest(unittest.TestCase):
         Path('config/categories.yml').write_text('System: {name: System Apps}')
         os.mkdir('metadata')
         os.mkdir('repo')
-        Path('config.yml').write_text(
-            'repo_pubkey: ffffffffffffffffffffffffffffffffffffffff'
+        fdroidserver.common.write_config_file(
+            'repo_pubkey: ffffffffffffffffffffffffffffffffffffffff\n'
         )
 
         testapk = os.path.join('repo', 'com.politedroid_6.apk')
@@ -1901,8 +1903,8 @@ class UpdateTest(unittest.TestCase):
         Path('config/categories.yml').write_text('System: {name: S}\nTime: {name: T}\n')
         os.mkdir('metadata')
         os.mkdir('repo')
-        Path('config.yml').write_text(
-            'repo_pubkey: ffffffffffffffffffffffffffffffffffffffff'
+        fdroidserver.common.write_config_file(
+            'repo_pubkey: ffffffffffffffffffffffffffffffffffffffff\n'
         )
 
         testapk = os.path.join('repo', 'com.politedroid_6.apk')

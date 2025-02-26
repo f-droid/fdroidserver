@@ -976,7 +976,7 @@ def main():
     paths = list()
     for arg in options.appid:
         if (
-            arg == 'config.yml'
+            arg == common.CONFIG_FILE
             or Path(arg).parent.name == 'config'
             or Path(arg).parent.parent.name == 'config'  # localized
         ):

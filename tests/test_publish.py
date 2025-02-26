@@ -18,7 +18,6 @@ import shutil
 import sys
 import unittest
 import tempfile
-from pathlib import Path
 from unittest import mock
 
 from fdroidserver import publish
@@ -96,7 +95,7 @@ class PublishTest(unittest.TestCase):
         ]
 
         os.chdir(self.testdir)
-        Path('config.yml').write_text('')
+        common.write_config_file('')
 
         publish.store_stats_fdroid_signing_key_fingerprints(appids, indent=2)
 
@@ -118,7 +117,7 @@ class PublishTest(unittest.TestCase):
         self.assertEqual(expected, common.load_stats_fdroid_signing_key_fingerprints())
 
         yaml = ruamel.yaml.YAML(typ='safe')
-        with open('config.yml') as fp:
+        with open(common.CONFIG_FILE) as fp:
             config = yaml.load(fp)
         self.assertEqual(
             'c58460800c7b250a619c30c13b07b7359a43e5af71a4352d86c58ae18c9f6d41',

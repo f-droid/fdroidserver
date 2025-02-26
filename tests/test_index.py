@@ -38,7 +38,7 @@ class IndexTest(unittest.TestCase):
         cls.index_v1_jar = basedir / 'repo' / 'index-v1.jar'
 
     def setUp(self):
-        (basedir / 'config.yml').chmod(0o600)
+        (basedir / common.CONFIG_FILE).chmod(0o600)
         os.chdir(basedir)  # so read_config() can find config.yml
 
         common.config = None
@@ -380,7 +380,7 @@ class IndexTest(unittest.TestCase):
             with zipfile.ZipFile(jarfile, 'w', zipfile.ZIP_DEFLATED) as jar:
                 jar.writestr('publishsigkeys.json', json.dumps(sigkeyfps))
             publish.sign_sig_key_fingerprint_list(jarfile)
-            Path('config.yml').write_text('')
+            common.write_config_file('')
 
             index.v1_sort_packages(
                 i, common.load_stats_fdroid_signing_key_fingerprints()
@@ -717,7 +717,7 @@ class IndexTest(unittest.TestCase):
         os.chdir(self.testdir)
         repo_url = 'https://example.com/fdroid/repo'
         c = {'repo_url': repo_url, 'mirrors': ['http://one/fdroid']}
-        with open('config.yml', 'w') as fp:
+        with open(common.CONFIG_FILE, 'w', encoding='utf-8') as fp:
             yaml.dump(c, fp)
         common.config = None
         common.read_config()

@@ -38,13 +38,13 @@ def disable_in_config(key, value):
     """Write a key/value to the local config.yml, then comment it out."""
     import yaml
 
-    with open('config.yml') as f:
-        data = f.read()
+    with open(common.CONFIG_FILE) as fp:
+        data = fp.read()
     pattern = r'\n[\s#]*' + key + r':.*'
     repl = '\n#' + yaml.dump({key: value}, default_flow_style=False)
     data = re.sub(pattern, repl, data)
-    with open('config.yml', 'w') as f:
-        f.writelines(data)
+    with open(common.CONFIG_FILE, 'w') as fp:
+        fp.writelines(data)
 
 
 def main():
@@ -138,24 +138,24 @@ def main():
             _("Android SDK not found at {path}!").format(path=test_config['sdk_path'])
         )
 
-    if not os.path.exists('config.yml'):
+    if not os.path.exists(common.CONFIG_FILE):
         # 'metadata' and 'tmp' are created in fdroid
         if not os.path.exists('repo'):
             os.mkdir('repo')
-        example_config_yml = os.path.join(examplesdir, 'config.yml')
+        example_config_yml = os.path.join(examplesdir, common.CONFIG_FILE)
         if os.path.exists(example_config_yml):
-            shutil.copyfile(example_config_yml, 'config.yml')
+            shutil.copyfile(example_config_yml, common.CONFIG_FILE)
         else:
             from pkg_resources import get_distribution
 
             versionstr = get_distribution('fdroidserver').version
             if not versionstr:
                 versionstr = 'master'
-            with open('config.yml', 'w') as fp:
+            with open(common.CONFIG_FILE, 'w') as fp:
                 fp.write('# see https://gitlab.com/fdroid/fdroidserver/blob/')
                 fp.write(versionstr)
-                fp.write('/examples/config.yml\n')
-        os.chmod('config.yml', 0o0600)
+                fp.write(f'/examples/{common.CONFIG_FILE}\n')
+        os.chmod(common.CONFIG_FILE, 0o0600)
         # If android_home is None, test_config['sdk_path'] will be used and
         # "$ANDROID_HOME" may be used if the env var is set up correctly.
         # If android_home is not None, the path given from the command line

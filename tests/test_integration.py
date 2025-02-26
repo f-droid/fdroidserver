@@ -148,7 +148,7 @@ class IntegrationTest(unittest.TestCase):
             + ["init", "--keystore", keystore_path, "--repo-keyalias", "sova"]
         )
         self.update_yaml(
-            "config.yml",
+            common.CONFIG_FILE,
             {
                 "keystorepass": "r9aquRHYoI8+dYz6jKrLntQ5/NJNASFBacJh7Jv2BlI=",
                 "keypass": "r9aquRHYoI8+dYz6jKrLntQ5/NJNASFBacJh7Jv2BlI=",
@@ -160,7 +160,7 @@ class IntegrationTest(unittest.TestCase):
         shutil.copy(FILES / "keystore.jks", "keystore.jks")
         self.fdroid_init_with_prebuilt_keystore("keystore.jks")
         self.update_yaml(
-            "config.yml",
+            common.CONFIG_FILE,
             {
                 "make_current_version_link": True,
                 "keydname": "CN=Birdman, OU=Cell, O=Alcatraz, L=Alcatraz, S=California, C=US",
@@ -193,7 +193,7 @@ class IntegrationTest(unittest.TestCase):
     def test_utf8_metadata(self):
         self.fdroid_init_with_prebuilt_keystore()
         self.update_yaml(
-            "config.yml",
+            common.CONFIG_FILE,
             {
                 "repo_description": "获取已安装在您的设备上的应用的",
                 "mirrors": ["https://foo.bar/fdroid", "http://secret.onion/fdroid"],
@@ -247,7 +247,7 @@ class IntegrationTest(unittest.TestCase):
         shutil.copytree(FILES / "gnupghome", gnupghome)
         os.chmod(gnupghome, 0o700)
         self.update_yaml(
-            "config.yml",
+            common.CONFIG_FILE,
             {
                 "install_list": "org.adaway",
                 "uninstall_list": ["com.android.vending", "com.facebook.orca"],
@@ -334,7 +334,7 @@ class IntegrationTest(unittest.TestCase):
             FILES.glob("repo/obb.main.twoversions_110161[357].apk"),
         ):
             shutil.copy(f, "repo")
-        self.update_yaml("config.yml", {"archive_older": 3})
+        self.update_yaml(common.CONFIG_FILE, {"archive_older": 3})
 
         self.assert_run(self.fdroid_cmd + ["update", "--pretty", "--nosign"])
         with open("archive/index.xml") as f:
@@ -356,7 +356,7 @@ class IntegrationTest(unittest.TestCase):
         shutil.copy(FILES / "metadata/com.politedroid.yml", "metadata")
         for f in FILES.glob("repo/com.politedroid_[0-9].apk"):
             shutil.copy(f, "repo")
-        self.update_yaml("config.yml", {"archive_older": 3})
+        self.update_yaml(common.CONFIG_FILE, {"archive_older": 3})
 
         self.assert_run(self.fdroid_cmd + ["update", "--pretty", "--nosign"])
         repo = Path("repo/index.xml").read_text()
@@ -456,7 +456,7 @@ class IntegrationTest(unittest.TestCase):
         self.remove_lines("metadata/com.politedroid.yml", ["ArchivePolicy:"])
         for f in FILES.glob("repo/com.politedroid_[0-9].apk"):
             shutil.copy(f, "repo")
-        self.update_yaml("config.yml", {"archive_older": 3})
+        self.update_yaml(common.CONFIG_FILE, {"archive_older": 3})
 
         self.assert_run(self.fdroid_cmd + ["update", "--pretty", "--nosign"])
         repo = Path("repo/index.xml").read_text()
@@ -474,7 +474,7 @@ class IntegrationTest(unittest.TestCase):
         self.assertIn("com.politedroid_3.apk", archive)
         self.assertTrue(Path("archive/com.politedroid_3.apk").is_file())
 
-        self.update_yaml("config.yml", {"archive_older": 1})
+        self.update_yaml(common.CONFIG_FILE, {"archive_older": 1})
         self.assert_run(self.fdroid_cmd + ["update", "--pretty", "--nosign"])
         repo = Path("repo/index.xml").read_text()
         repo_cnt = sum(1 for line in repo.splitlines() if "<package>" in line)
@@ -555,7 +555,7 @@ class IntegrationTest(unittest.TestCase):
     def test_allowing_disabled_signatures_in_repo_and_archive(self):
         self.fdroid_init_with_prebuilt_keystore()
         self.update_yaml(
-            "config.yml", {"allow_disabled_algorithms": True, "archive_older": 3}
+            common.CONFIG_FILE, {"allow_disabled_algorithms": True, "archive_older": 3}
         )
         Path("metadata").mkdir()
         shutil.copy(FILES / "metadata/com.politedroid.yml", "metadata")
@@ -650,7 +650,7 @@ class IntegrationTest(unittest.TestCase):
             self.assertTrue(Path("archive/urzip-badsig.apk").is_file())
 
         # test unarchiving when disabled_algorithms are allowed again
-        self.update_yaml("config.yml", {"allow_disabled_algorithms": True})
+        self.update_yaml(common.CONFIG_FILE, {"allow_disabled_algorithms": True})
         self.assert_run(self.fdroid_cmd + ["update", "--pretty", "--nosign"])
         with open("archive/index.xml") as f:
             archive_cnt = sum(1 for line in f if "<package>" in line)
@@ -689,7 +689,7 @@ class IntegrationTest(unittest.TestCase):
     def test_rename_apks_with_fdroid_update_rename_apks_opt_nosign_opt_for_speed(self):
         self.fdroid_init_with_prebuilt_keystore()
         self.update_yaml(
-            "config.yml",
+            common.CONFIG_FILE,
             {
                 "keydname": "CN=Birdman, OU=Cell, O=Alcatraz, L=Alcatraz, S=California, C=US"
             },
@@ -744,7 +744,7 @@ class IntegrationTest(unittest.TestCase):
 
     def test_for_added_date_being_set_correctly_for_repo_and_archive(self):
         self.fdroid_init_with_prebuilt_keystore()
-        self.update_yaml("config.yml", {"archive_older": 3})
+        self.update_yaml(common.CONFIG_FILE, {"archive_older": 3})
         Path("metadata").mkdir()
         Path("archive").mkdir()
         Path("stats").mkdir()
@@ -803,12 +803,14 @@ class IntegrationTest(unittest.TestCase):
         )
         # fake that no JDKs are available
         self.update_yaml(
-            "config.yml", {"categories": ["Internet"], "java_paths": {}}, replace=True
+            common.CONFIG_FILE,
+            {"categories": ["Internet"], "java_paths": {}},
+            replace=True,
         )
         local_copy_dir = self.testdir / "local_copy_dir/fdroid"
         (local_copy_dir / "repo").mkdir(parents=True)
         self.update_yaml(
-            "config.yml", {"local_copy_dir": str(local_copy_dir.resolve())}
+            common.CONFIG_FILE, {"local_copy_dir": str(local_copy_dir.resolve())}
         )
 
         subprocess.run(self.fdroid_cmd + ["checkupdates", "--allow-dirty"])
@@ -879,7 +881,7 @@ class IntegrationTest(unittest.TestCase):
         new_tmp_repo.mkdir()
         os.chdir(new_tmp_repo)
         self.fdroid_init_with_prebuilt_keystore()
-        self.update_yaml("config.yml", {"sync_from_local_copy_dir": True})
+        self.update_yaml(common.CONFIG_FILE, {"sync_from_local_copy_dir": True})
         self.assert_run(
             self.fdroid_cmd + ["deploy", "--local-copy-dir", local_copy_dir]
         )
@@ -946,7 +948,7 @@ class IntegrationTest(unittest.TestCase):
             ]
         )
         # the value set in --android-home should override $ANDROID_HOME
-        self.assertIn(str(fake_android_home), Path("config.yml").read_text())
+        self.assertIn(str(fake_android_home), Path(common.CONFIG_FILE).read_text())
 
     @unittest.skipUnless(
         "ANDROID_HOME" in os.environ, "runs only with ANDROID_HOME set"
@@ -1097,7 +1099,7 @@ class IntegrationTest(unittest.TestCase):
         # now set up fake, non-working keystore setup
         Path("keystore.p12").touch()
         self.update_yaml(
-            "config.yml",
+            common.CONFIG_FILE,
             {
                 "keystore": "keystore.p12",
                 "repo_keyalias": "foo",
@@ -1115,7 +1117,9 @@ class IntegrationTest(unittest.TestCase):
         shutil.copytree(FILES / "repo", "repo", dirs_exist_ok=True)
         shutil.copytree(FILES / "metadata", "metadata")
         git_remote = self.testdir / "git_remote"
-        self.update_yaml("config.yml", {"binary_transparency_remote": str(git_remote)})
+        self.update_yaml(
+            common.CONFIG_FILE, {"binary_transparency_remote": str(git_remote)}
+        )
         self.assert_run(self.fdroid_cmd + ["update", "--verbose"])
         self.assert_run(self.fdroid_cmd + ["deploy", "--verbose"])
         self.assertIn("<application id=", Path("repo/index.xml").read_text())
@@ -1146,7 +1150,7 @@ class IntegrationTest(unittest.TestCase):
         self.assertTrue(apkcache.stat().st_size > 0)
 
         # now set fake repo_keyalias
-        self.update_yaml("config.yml", {"repo_keyalias": "fake"})
+        self.update_yaml(common.CONFIG_FILE, {"repo_keyalias": "fake"})
         # this should fail because this repo has a bad repo_keyalias
         self.assert_run_fail(self.fdroid_cmd + ["update"])
 
@@ -1179,7 +1183,7 @@ class IntegrationTest(unittest.TestCase):
 
         self.fdroid_init_with_prebuilt_keystore()
         self.update_yaml(
-            "config.yml",
+            common.CONFIG_FILE,
             {"archive_older": 3, "servergitmirrors": str(server_git_mirror)},
         )
         for f in FILES.glob("repo/com.politedroid_[345].apk"):
@@ -1226,7 +1230,7 @@ class IntegrationTest(unittest.TestCase):
             f.stat().st_size for f in (git_mirror / ".git").glob("**/*") if f.is_file()
         )
 
-        self.update_yaml("config.yml", {"git_mirror_size_limit": "60kb"})
+        self.update_yaml(common.CONFIG_FILE, {"git_mirror_size_limit": "60kb"})
         self.assert_run(self.fdroid_cmd + ["update"])
         self.assert_run(self.fdroid_cmd + ["deploy"])
         self.assertTrue(Path("archive/com.politedroid_3.apk").is_file())
@@ -1274,7 +1278,7 @@ class IntegrationTest(unittest.TestCase):
         Path("unsigned").mkdir()
         shutil.copy(FILES / "urzip-release-unsigned.apk", "unsigned")
         self.update_yaml(
-            "config.yml",
+            common.CONFIG_FILE,
             {
                 "archive_older": 3,
                 "mirrors": [
@@ -1312,7 +1316,7 @@ class IntegrationTest(unittest.TestCase):
         )
         os.chdir(online_root)
         self.update_yaml(
-            "config.yml",
+            common.CONFIG_FILE,
             {
                 "local_copy_dir": str(local_copy_dir),
                 "sync_from_local_copy_dir": True,
@@ -1344,7 +1348,7 @@ class IntegrationTest(unittest.TestCase):
     def test_extracting_and_publishing_with_developer_signature(self):
         self.fdroid_init_with_prebuilt_keystore()
         self.update_yaml(
-            "config.yml",
+            common.CONFIG_FILE,
             {
                 "keydname": "CN=Birdman, OU=Cell, O=Alcatraz, L=Alcatraz, S=California, C=US"
             },

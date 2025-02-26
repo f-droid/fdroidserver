@@ -423,9 +423,9 @@ Last updated: {date}'''.format(repo_git_base=repo_git_base,
             'keydname': DISTINGUISHED_NAME,
             'make_current_version_link': False,
         }
-        with open('config.yml', 'w') as fp:
+        with open(common.CONFIG_FILE, 'w', encoding='utf-8') as fp:
             yaml.dump(config, fp, default_flow_style=False)
-        os.chmod('config.yml', 0o600)
+        os.chmod(common.CONFIG_FILE, 0o600)
         config = common.read_config()
         common.assert_config_keystore(config)
 

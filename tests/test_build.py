@@ -593,9 +593,9 @@ class BuildTest(unittest.TestCase):
         os.chdir(self.testdir)
         sdk_path = os.path.join(self.testdir, 'android-sdk')
         self.create_fake_android_home(sdk_path)
-        with open('config.yml', 'w') as fp:
+        with open(fdroidserver.common.CONFIG_FILE, 'w') as fp:
             yaml.dump({'sdk_path': sdk_path, 'keep_when_not_allowed': True}, fp)
-        os.chmod('config.yml', 0o600)
+        os.chmod(fdroidserver.common.CONFIG_FILE, 0o600)
         fdroidserver.build.config = fdroidserver.common.read_config()
 
         os.mkdir('metadata')

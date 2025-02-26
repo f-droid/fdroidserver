@@ -268,7 +268,7 @@ class NightlyTest(unittest.TestCase):
             'repo_url': mirror_url + '/repo',
             'servergitmirrors': [{"url": git_url}],
         }
-        with open('config.yml') as fp:
+        with open(common.CONFIG_FILE) as fp:
             config = yaml.safe_load(fp)
             # .ssh is random tmpdir set in nightly.py, so test basename only
             self.assertEqual(
@@ -339,7 +339,7 @@ class NightlyTest(unittest.TestCase):
             'repo_url': 'https://gitlab.com/fdroid/test-nightly/-/raw/master/fdroid/repo',
             'servergitmirrors': [{"url": 'git@gitlab.com:fdroid/test-nightly'}],
         }
-        with open('config.yml') as fp:
+        with open(common.CONFIG_FILE) as fp:
             config = yaml.safe_load(fp)
             # .ssh is random tmpdir set in nightly.py, so test basename only
             self.assertEqual(
