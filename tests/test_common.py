@@ -2122,6 +2122,27 @@ class CommonTest(unittest.TestCase):
         )
         fdroidserver.common.read_config()
 
+    @mock.patch.dict(os.environ, {'PATH': os.getenv('PATH')}, clear=True)
+    def test_config_with_env_string(self):
+        """Test whether env works in keys with string values."""
+        os.chdir(self.testdir)
+        testvalue = 'this is just a test'
+        Path('config.yml').write_text('keypass: {env: foo}')
+        os.environ['foo'] = testvalue
+        self.assertEqual(testvalue, fdroidserver.common.get_config()['keypass'])
+
+    @mock.patch.dict(os.environ, {'PATH': os.getenv('PATH')}, clear=True)
+    def test_config_with_env_path(self):
+        """Test whether env works in keys with path values."""
+        os.chdir(self.testdir)
+        path = 'user@server:/path/to/bar/'
+        os.environ['foo'] = path
+        Path('config.yml').write_text('serverwebroot: {env: foo}')
+        self.assertEqual(
+            [{'url': path}],
+            fdroidserver.common.get_config()['serverwebroot'],
+        )
+
     def test_setup_status_output(self):
         os.chdir(self.tmpdir)
         start_timestamp = time.gmtime()
@@ -2847,6 +2868,41 @@ class CommonTest(unittest.TestCase):
             fdroidserver.common.read_config()['serverwebroot'],
         )
 
+    @mock.patch.dict(os.environ, {'PATH': os.getenv('PATH')}, clear=True)
+    def test_config_serverwebroot_list_of_dicts_env(self):
+        os.chdir(self.testdir)
+        url = 'foo@example.com:/var/www/'
+        os.environ['serverwebroot'] = url
+        fdroidserver.common.write_config_file(
+            textwrap.dedent(
+                """\
+                serverwebroot:
+                  - url: {env: serverwebroot}
+                    index_only: true
+                """
+            )
+        )
+        self.assertEqual(
+            [{'url': url, 'index_only': True}],
+            fdroidserver.common.read_config()['serverwebroot'],
+        )
+
+    def test_expand_env_dict_fake_str(self):
+        testvalue = '"{env: foo}"'
+        self.assertEqual(testvalue, fdroidserver.common.expand_env_dict(testvalue))
+
+    @mock.patch.dict(os.environ, {'PATH': os.getenv('PATH')}, clear=True)
+    def test_expand_env_dict_good(self):
+        name = 'foo'
+        value = 'bar'
+        os.environ[name] = value
+        self.assertEqual(value, fdroidserver.common.expand_env_dict({'env': name}))
+
+    @mock.patch.dict(os.environ, {'PATH': os.getenv('PATH')}, clear=True)
+    def test_expand_env_dict_bad_dict(self):
+        with self.assertRaises(TypeError):
+            fdroidserver.common.expand_env_dict({'env': 'foo', 'foo': 'bar'})
+
     def test_parse_mirrors_config_str(self):
         s = 'foo@example.com:/var/www'
         mirrors = yaml.load("""'%s'""" % s)
@@ -2862,6 +2918,27 @@ class CommonTest(unittest.TestCase):
         )
 
     def test_parse_mirrors_config_dict(self):
+        s = 'foo@example.com:/var/www'
+        mirrors = yaml.load("""- url: '%s'""" % s)
+        self.assertEqual(
+            [{'url': s}], fdroidserver.common.parse_mirrors_config(mirrors)
+        )
+
+    @mock.patch.dict(os.environ, {'PATH': os.getenv('PATH'), 'foo': 'bar'}, clear=True)
+    def test_parse_mirrors_config_env_str(self):
+        mirrors = yaml.load('{env: foo}')
+        self.assertEqual(
+            [{'url': 'bar'}], fdroidserver.common.parse_mirrors_config(mirrors)
+        )
+
+    def test_parse_mirrors_config_env_list(self):
+        s = 'foo@example.com:/var/www'
+        mirrors = yaml.load("""- '%s'""" % s)
+        self.assertEqual(
+            [{'url': s}], fdroidserver.common.parse_mirrors_config(mirrors)
+        )
+
+    def test_parse_mirrors_config_env_dict(self):
         s = 'foo@example.com:/var/www'
         mirrors = yaml.load("""- url: '%s'""" % s)
         self.assertEqual(

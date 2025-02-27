@@ -642,16 +642,43 @@ def read_config():
     return config
 
 
+def expand_env_dict(s):
+    """Expand env var dict to a string value.
+
+    {env: varName} syntax can be used to replace any string value in the
+    config with the value of an environment variable "varName".  This
+    allows for secrets management when commiting the config file to a
+    public git repo.
+
+    """
+    if not s or type(s) not in (str, dict):
+        return
+    if isinstance(s, dict):
+        if 'env' not in s or len(s) > 1:
+            raise TypeError(_('Only accepts a single key "env"'))
+        var = s['env']
+        s = os.getenv(var)
+        if not s:
+            logging.error(
+                _('Environment variable {{env: {var}}} is not set!').format(var=var)
+            )
+            return
+    return os.path.expanduser(s)
+
+
 def parse_mirrors_config(mirrors):
     """Mirrors can be specified as a string, list of strings, or dictionary map."""
     if isinstance(mirrors, str):
-        return [{"url": mirrors}]
-    elif all(isinstance(item, str) for item in mirrors):
-        return [{'url': i} for i in mirrors]
-    elif all(isinstance(item, dict) for item in mirrors):
+        return [{"url": expand_env_dict(mirrors)}]
+    if isinstance(mirrors, dict):
+        return [{"url": expand_env_dict(mirrors)}]
+    if all(isinstance(item, str) for item in mirrors):
+        return [{'url': expand_env_dict(i)} for i in mirrors]
+    if all(isinstance(item, dict) for item in mirrors):
+        for item in mirrors:
+            item['url'] = expand_env_dict(item['url'])
         return mirrors
-    else:
-        raise TypeError(_('only accepts strings, lists, and tuples'))
+    raise TypeError(_('only accepts strings, lists, and tuples'))
 
 
 def get_mirrors(url, filename=None):

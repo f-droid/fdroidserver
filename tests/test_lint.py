@@ -550,7 +550,12 @@ class ConfigYmlTest(LintTest):
         self.config_yml.write_text('sdk_path: /opt/android-sdk\n')
         self.assertTrue(fdroidserver.lint.lint_config(self.config_yml))
 
-    def test_config_yml_str_dict(self):
+    def test_config_yml_str_list_of_dicts_env(self):
+        """serverwebroot can be str, list of str, or list of dicts."""
+        self.config_yml.write_text('serverwebroot: {env: ANDROID_HOME}\n')
+        self.assertTrue(fdroidserver.lint.lint_config(self.config_yml))
+
+    def test_config_yml_str_env(self):
         self.config_yml.write_text('sdk_path: {env: ANDROID_HOME}\n')
         self.assertTrue(fdroidserver.lint.lint_config(self.config_yml))
 
