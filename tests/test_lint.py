@@ -7,6 +7,7 @@ import tempfile
 import textwrap
 import unittest
 from pathlib import Path
+from unittest import mock
 
 from .shared_test_code import mkdtemp
 
@@ -550,6 +551,7 @@ class ConfigYmlTest(LintTest):
         self.config_yml.write_text('repo_maxage: 1\n')
         self.assertTrue(fdroidserver.lint.lint_config(self.config_yml))
 
+    @mock.patch('builtins.print', mock.Mock())  # hide error message
     def test_config_yml_int_bad(self):
         self.config_yml.write_text('repo_maxage: "1"\n')
         self.assertFalse(fdroidserver.lint.lint_config(self.config_yml))
@@ -583,6 +585,7 @@ class ConfigYmlTest(LintTest):
         self.config_yml.write_text('sdk_path: {env: ANDROID_HOME}\n')
         self.assertTrue(fdroidserver.lint.lint_config(self.config_yml))
 
+    @mock.patch('builtins.print', mock.Mock())  # hide error message
     def test_config_yml_str_bad(self):
         self.config_yml.write_text('sdk_path: 1.0\n')
         self.assertFalse(fdroidserver.lint.lint_config(self.config_yml))
@@ -591,6 +594,7 @@ class ConfigYmlTest(LintTest):
         self.config_yml.write_text("deploy_process_logs: true\n")
         self.assertTrue(fdroidserver.lint.lint_config(self.config_yml))
 
+    @mock.patch('builtins.print', mock.Mock())  # hide error message
     def test_config_yml_bool_bad(self):
         self.config_yml.write_text('deploy_process_logs: 2342fe23\n')
         self.assertFalse(fdroidserver.lint.lint_config(self.config_yml))
@@ -599,14 +603,17 @@ class ConfigYmlTest(LintTest):
         self.config_yml.write_text("keyaliases: {com.example: '@com.foo'}\n")
         self.assertTrue(fdroidserver.lint.lint_config(self.config_yml))
 
+    @mock.patch('builtins.print', mock.Mock())  # hide error message
     def test_config_yml_dict_bad(self):
         self.config_yml.write_text('keyaliases: 2342fe23\n')
         self.assertFalse(fdroidserver.lint.lint_config(self.config_yml))
 
+    @mock.patch('builtins.print', mock.Mock())  # hide error message
     def test_config_yml_bad_key_name(self):
         self.config_yml.write_text('keyalias: 2342fe23\n')
         self.assertFalse(fdroidserver.lint.lint_config(self.config_yml))
 
+    @mock.patch('builtins.print', mock.Mock())  # hide error message
     def test_config_yml_bad_value_for_all_keys(self):
         """Check all config keys with a bad value."""
         for key in fdroidserver.lint.check_config_keys:
@@ -632,11 +639,13 @@ class ConfigYmlTest(LintTest):
         )
         self.assertTrue(fdroidserver.lint.lint_config(self.config_yml))
 
+    @mock.patch('builtins.print', mock.Mock())  # hide error message
     def test_config_yml_keyaliases_bad_str(self):
         """The keyaliases: value is a dict not a str."""
         self.config_yml.write_text("keyaliases: '@com.example'\n")
         self.assertFalse(fdroidserver.lint.lint_config(self.config_yml))
 
+    @mock.patch('builtins.print', mock.Mock())  # hide error message
     def test_config_yml_keyaliases_bad_list(self):
         """The keyaliases: value is a dict not a list."""
         self.config_yml.write_text(
