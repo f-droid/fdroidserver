@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
 import copy
-import datetime
 import glob
 import json
 import os
@@ -408,7 +407,7 @@ class IndexTest(unittest.TestCase):
             'description': 'This is just a test',
             'icon': 'blahblah',
             'name': 'test',
-            'timestamp': datetime.datetime.now(),
+            'timestamp': common.epoch_millis_now(),
             'version': 12,
         }
         requestsdict = {'install': [], 'uninstall': []}
@@ -486,7 +485,7 @@ class IndexTest(unittest.TestCase):
                 {'url': 'http://two/fdroid/repo'},
             ],
             'name': 'test',
-            'timestamp': datetime.datetime.now(),
+            'timestamp': common.epoch_millis_now(),
             'version': 12,
         }
         app = fdroidserver.metadata.parse_metadata(metadatafile)
@@ -554,7 +553,7 @@ class IndexTest(unittest.TestCase):
             'description': 'This is just a test',
             'icon': 'blahblah',
             'name': 'test',
-            'timestamp': datetime.datetime.now(),
+            'timestamp': common.epoch_millis_now(),
             'version': 12,
         }
         requestsdict = {'install': [], 'uninstall': []}
@@ -666,7 +665,7 @@ class IndexTest(unittest.TestCase):
             'description': 'This is just a test',
             'icon': 'blahblah',
             'name': 'test',
-            'timestamp': datetime.datetime.now(),
+            'timestamp': common.epoch_millis_now(),
             'version': 12,
         }
 

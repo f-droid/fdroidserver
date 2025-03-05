@@ -123,7 +123,7 @@ class PackageAddedCache:
 
     def __init__(self, use_date_from_file=False):
         """Load filename/date info about previously seen Versions."""
-        self.now = int(time.time() * 1000)
+        self.now = common.epoch_millis_now()
         self.use_date_from_file = use_date_from_file
         self.versions = {}
         for part in ('repo', 'archive'):
@@ -447,8 +447,6 @@ def write_cache(apkcache):
         def default(self, obj):
             if isinstance(obj, set):
                 return list(obj)
-            elif isinstance(obj, datetime):
-                return obj.timestamp()
             return super().default(obj)
 
     apkcachefile = get_cache_file()

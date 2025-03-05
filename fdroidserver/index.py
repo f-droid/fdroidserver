@@ -30,7 +30,6 @@ these installed on the signing server.
 
 """
 
-import calendar
 import collections
 import hashlib
 import json
@@ -42,8 +41,9 @@ import sys
 import tempfile
 import urllib.parse
 import zipfile
+
 from binascii import hexlify, unhexlify
-from datetime import datetime, timezone
+from datetime import datetime
 from pathlib import Path
 from xml.dom.minidom import Document
 
@@ -96,7 +96,7 @@ def make(apps, apks, repodir, archive):
         sortedapps[appid] = apps[appid]
 
     repodict = collections.OrderedDict()
-    repodict['timestamp'] = datetime.now(timezone.utc)
+    repodict['timestamp'] = common.epoch_millis_now()
     repodict['version'] = METADATA_VERSION
 
     if common.config['repo_maxage'] != 0:
@@ -526,14 +526,6 @@ def datetime_from_millis(millis):
     return datetime.utcfromtimestamp(millis / 1000)
 
 
-def convert_datetime(obj):
-    if isinstance(obj, datetime):
-        # Java prefers milliseconds
-        # we also need to account for time zone/daylight saving time
-        return int(calendar.timegm(obj.timetuple()) * 1000)
-    return obj
-
-
 def package_metadata(app, repodir):
     meta = {}
     for element in (
@@ -562,7 +554,7 @@ def package_metadata(app, repodir):
     ):
         if element in app and app[element]:
             element_new = element[:1].lower() + element[1:]
-            meta[element_new] = convert_datetime(app[element])
+            meta[element_new] = app[element]
 
     for element in (
         "Name",
@@ -572,7 +564,7 @@ def package_metadata(app, repodir):
     ):
         element_new = element[:1].lower() + element[1:]
         if element in app and app[element]:
-            meta[element_new] = {DEFAULT_LOCALE: convert_datetime(app[element])}
+            meta[element_new] = {DEFAULT_LOCALE: app[element]}
         elif "localized" in app:
             localized = {
                 k: v[element_new]
@@ -754,10 +746,6 @@ def make_v2(
     def _index_encoder_default(obj):
         if isinstance(obj, set):
             return sorted(list(obj))
-        if isinstance(obj, datetime):
-            # Java prefers milliseconds
-            # we also need to account for time zone/daylight saving time
-            return int(calendar.timegm(obj.timetuple()) * 1000)
         if isinstance(obj, dict):
             d = collections.OrderedDict()
             for key in sorted(obj.keys()):
@@ -852,7 +840,7 @@ def make_v2(
     with open(index_file, "w", encoding="utf-8") as fp:
         _v2_json_dump(output, fp)
 
-    json_name = f"""tmp/{repodir}_{convert_datetime(repodict["timestamp"])}.json"""
+    json_name = f"""tmp/{repodir}_{repodict["timestamp"]}.json"""
     with open(json_name, "w", encoding="utf-8") as fp:
         _v2_json_dump(output, fp)
 
@@ -912,10 +900,6 @@ def make_v1(apps, packages, repodir, repodict, requestsdict, signer_fingerprints
     def _index_encoder_default(obj):
         if isinstance(obj, set):
             return sorted(list(obj))
-        if isinstance(obj, datetime):
-            # Java prefers milliseconds
-            # we also need to account for time zone/daylight saving time
-            return int(calendar.timegm(obj.timetuple()) * 1000)
         if isinstance(obj, dict):
             d = collections.OrderedDict()
             for key in sorted(obj.keys()):
@@ -1218,7 +1202,9 @@ def make_v0(apps, apks, repodir, repodict, requestsdict, signer_fingerprints):
     repoel.setAttribute("name", repodict['name'])
     pubkey, repo_pubkey_fingerprint = extract_pubkey()
     repoel.setAttribute("pubkey", pubkey.decode('utf-8'))
-    repoel.setAttribute("timestamp", '%d' % repodict['timestamp'].timestamp())
+    repoel.setAttribute(
+        "timestamp", '%d' % datetime_from_millis(repodict['timestamp']).timestamp()
+    )
     repoel.setAttribute("url", repodict['address'])
     repoel.setAttribute("version", str(repodict['version']))
 
