@@ -598,15 +598,6 @@ def read_config():
                                       'sun.security.pkcs11.SunPKCS11',
                                       '-providerArg', 'opensc-fdroid.cfg']
 
-    if any(k in config for k in ["keystore", "keystorepass", "keypass"]):
-        st = os.stat(CONFIG_FILE)
-        if st.st_mode & stat.S_IRWXG or st.st_mode & stat.S_IRWXO:
-            logging.warning(
-                _("unsafe permissions on '{config_file}' (should be 0600)!").format(
-                    config_file=CONFIG_FILE
-                )
-            )
-
     fill_config_defaults(config)
 
     if 'serverwebroot' in config:
@@ -665,6 +656,18 @@ def read_config():
 
     for configname in confignames_to_delete:
         del config[configname]
+
+    if any(
+        k in config and config.get(k)
+        for k in ["awssecretkey", "keystorepass", "keypass"]
+    ):
+        st = os.stat(CONFIG_FILE)
+        if st.st_mode & stat.S_IRWXG or st.st_mode & stat.S_IRWXO:
+            logging.warning(
+                _("unsafe permissions on '{config_file}' (should be 0600)!").format(
+                    config_file=CONFIG_FILE
+                )
+            )
 
     return config
 

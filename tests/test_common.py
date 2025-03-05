@@ -1964,16 +1964,6 @@ class CommonTest(SetUpTearDownMixin, unittest.TestCase):
         with self.assertRaises(ruamel.yaml.scanner.ScannerError):
             fdroidserver.common.read_config()
 
-    def test_config_perm_warning(self):
-        """Exercise the code path that issues a warning about unsafe permissions."""
-        os.chdir(self.tmpdir)
-        fdroidserver.common.write_config_file('keystore: foo.jks')
-        self.assertTrue(os.path.exists(fdroidserver.common.CONFIG_FILE))
-        os.chmod(fdroidserver.common.CONFIG_FILE, 0o666)  # nosec B103
-        fdroidserver.common.read_config()
-        os.remove(fdroidserver.common.CONFIG_FILE)
-        fdroidserver.common.config = None
-
     def test_config_repo_url(self):
         """repo_url ends in /repo, archive_url ends in /archive."""
         os.chdir(self.tmpdir)
@@ -3444,3 +3434,44 @@ class ConfigOptionsScopeTest(unittest.TestCase):
             'config' not in vars() and 'config' not in globals(),
             "The config should not be set in the global context, only module-level.",
         )
+
+
+class UnsafePermissionsTest(SetUpTearDownMixin, unittest.TestCase):
+    def setUp(self):
+        config = dict()
+        fdroidserver.common.find_apksigner(config)
+        if not config.get('apksigner'):
+            self.skipTest('SKIPPING, apksigner not installed!')
+
+        super().setUp()
+        os.chdir(self.testdir)
+        fdroidserver.common.write_config_file('keypass: {env: keypass}')
+        os.chmod(fdroidserver.common.CONFIG_FILE, 0o666)  # nosec B103
+
+    def test_config_perm_no_warning(self):
+        fdroidserver.common.write_config_file('keystore: foo.jks')
+        with self.assertNoLogs(level=logging.WARNING):
+            fdroidserver.common.read_config()
+
+    def test_config_perm_keypass_warning(self):
+        fdroidserver.common.write_config_file('keypass: supersecret')
+        with self.assertLogs(level=logging.WARNING) as lw:
+            fdroidserver.common.read_config()
+            self.assertTrue('unsafe' in lw.output[0])
+
+    @mock.patch.dict(os.environ, {'PATH': os.getenv('PATH')}, clear=True)
+    def test_config_perm_env_warning(self):
+        os.environ['keypass'] = 'supersecret'
+        fdroidserver.common.write_config_file('keypass: {env: keypass}')
+        with self.assertLogs(level=logging.WARNING) as lw:
+            fdroidserver.common.read_config()
+            self.assertTrue('unsafe' in lw.output[0])
+            self.assertEqual(1, len(lw.output))
+
+    @mock.patch.dict(os.environ, {'PATH': os.getenv('PATH')}, clear=True)
+    def test_config_perm_unset_env_no_warning(self):
+        fdroidserver.common.write_config_file('keypass: {env: keypass}')
+        with self.assertLogs(level=logging.WARNING) as lw:
+            fdroidserver.common.read_config()
+            self.assertTrue('unsafe' not in lw.output[0])
+            self.assertEqual(1, len(lw.output))
