@@ -345,7 +345,7 @@ class LintTest(unittest.TestCase):
     def test_check_categories_from_config_yml(self):
         """In config.yml, categories is a list."""
         os.chdir(self.testdir)
-        Path('config.yml').write_text('categories: [foo, bar]\n')
+        fdroidserver.common.write_config_file('categories: [foo, bar]\n')
         fdroidserver.lint.config = fdroidserver.common.read_config()
         fdroidserver.lint.load_categories_config()
         self.assertEqual(fdroidserver.lint.CATEGORIES_KEYS, ['foo', 'bar'])
@@ -434,9 +434,11 @@ class LintTest(unittest.TestCase):
 
     def test_lint_invalid_config_keys(self):
         os.chdir(self.testdir)
-        Path('config').mkdir()
-        Path('config/config.yml').write_text('repo:\n  invalid_key: test\n')
-        self.assertFalse(fdroidserver.lint.lint_config('config/config.yml'))
+        os.mkdir('config')
+        config_yml = fdroidserver.common.CONFIG_FILE
+        with open(f'config/{config_yml}', 'w', encoding='utf-8') as fp:
+            fp.write('repo:\n  invalid_key: test\n')
+        self.assertFalse(fdroidserver.lint.lint_config(f'config/{config_yml}'))
 
     def test_lint_invalid_localized_config_keys(self):
         os.chdir(self.testdir)
@@ -534,7 +536,7 @@ class LintAntiFeaturesTest(unittest.TestCase):
 class ConfigYmlTest(LintTest):
     def setUp(self):
         super().setUp()
-        self.config_yml = Path(self.testdir) / 'config.yml'
+        self.config_yml = Path(self.testdir) / fdroidserver.common.CONFIG_FILE
 
     def test_config_yml_int(self):
         self.config_yml.write_text('repo_maxage: 1\n')

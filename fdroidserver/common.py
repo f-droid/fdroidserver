@@ -126,6 +126,7 @@ CONFIG_NAMES = (
     RELEASECHANNELS_CONFIG_NAME,
 )
 
+CONFIG_FILE = 'config.yml'
 
 config = None
 options = None
@@ -525,14 +526,13 @@ def config_type_check(path, data):
 def read_config():
     """Read the repository config.
 
-    The config is read from config_file, which is in the current
+    The config is read from config.yml, which is in the current
     directory when any of the repo management commands are used. If
     there is a local metadata file in the git repo, then the config is
     not required, just use defaults.
 
     config.yml is the preferred form because no code is executed when
-    reading it.  config.py is deprecated and supported for backwards
-    compatibility.
+    reading it.  config.py is deprecated and no longer supported.
 
     config.yml requires ASCII or UTF-8 encoding because this code does
     not auto-detect the file's encoding.  That is left up to the YAML
@@ -547,33 +547,22 @@ def read_config():
         return config
 
     config = {}
-    config_file = 'config.yml'
-    old_config_file = 'config.py'
 
-    if os.path.exists(config_file) and os.path.exists(old_config_file):
-        logging.error(_("""Conflicting config files! Using {newfile}, ignoring {oldfile}!""")
-                      .format(oldfile=old_config_file, newfile=config_file))
-
-    if os.path.exists(config_file):
-        logging.debug(_("Reading '{config_file}'").format(config_file=config_file))
-        with open(config_file, encoding='utf-8') as fp:
+    if os.path.exists(CONFIG_FILE):
+        logging.debug(_("Reading '{config_file}'").format(config_file=CONFIG_FILE))
+        with open(CONFIG_FILE, encoding='utf-8') as fp:
             config = yaml.safe_load(fp)
         if not config:
             config = {}
-        config_type_check(config_file, config)
-    elif os.path.exists(old_config_file):
-        logging.warning(_("""{oldfile} is deprecated, use {newfile}""")
-                        .format(oldfile=old_config_file, newfile=config_file))
-        with io.open(old_config_file, "rb") as fp:
-            code = compile(fp.read(), old_config_file, 'exec')
-            exec(code, None, config)  # nosec TODO automatically migrate
+        config_type_check(CONFIG_FILE, config)
 
-        for k in ('mirrors', 'install_list', 'uninstall_list', 'serverwebroot', 'servergitroot'):
-            if k in config:
-                if not type(config[k]) in (str, list, tuple):
-                    logging.warning(
-                        _("'{field}' will be in random order! Use () or [] brackets if order is important!")
-                        .format(field=k))
+    old_config_file = 'config.py'
+    if os.path.exists(old_config_file):
+        logging.warning(
+            _("""Ignoring deprecated {oldfile}, use {newfile}!""").format(
+                oldfile=old_config_file, newfile=CONFIG_FILE
+            )
+        )
 
     # smartcardoptions must be a list since its command line args for Popen
     smartcardoptions = config.get('smartcardoptions')
@@ -588,14 +577,13 @@ def read_config():
                                       '-providerArg', 'opensc-fdroid.cfg']
 
     if any(k in config for k in ["keystore", "keystorepass", "keypass"]):
-        if os.path.exists(config_file):
-            f = config_file
-        elif os.path.exists(old_config_file):
-            f = old_config_file
-        st = os.stat(f)
+        st = os.stat(CONFIG_FILE)
         if st.st_mode & stat.S_IRWXG or st.st_mode & stat.S_IRWXO:
-            logging.warning(_("unsafe permissions on '{config_file}' (should be 0600)!")
-                            .format(config_file=f))
+            logging.warning(
+                _("unsafe permissions on '{config_file}' (should be 0600)!").format(
+                    config_file=CONFIG_FILE
+                )
+            )
 
     fill_config_defaults(config)
 
@@ -4202,8 +4190,16 @@ def load_stats_fdroid_signing_key_fingerprints():
         return json.loads(str(f.read('publishsigkeys.json'), 'utf-8'))
 
 
-def write_to_config(thisconfig, key, value=None, config_file=None):
-    """Write a key/value to the local config.yml or config.py.
+def write_config_file(config):
+    """Write the provided string to config.yml with the right path and encoding."""
+    Path(CONFIG_FILE).write_text(config, encoding='utf-8')
+
+
+def write_to_config(thisconfig, key, value=None):
+    """Write a key/value to the local config.yml.
+
+    The config.yml is defined as YAML 1.2 in UTF-8 encoding on all
+    platforms.
 
     NOTE: only supports writing string variables.
 
@@ -4216,61 +4212,42 @@ def write_to_config(thisconfig, key, value=None, config_file=None):
     value
         optional value to be written, instead of fetched
         from 'thisconfig' dictionary.
+
     """
     if value is None:
         origkey = key + '_orig'
         value = thisconfig[origkey] if origkey in thisconfig else thisconfig[key]
-    if config_file:
-        cfg = config_file
-    elif os.path.exists('config.py') and not os.path.exists('config.yml'):
-        cfg = 'config.py'
-    else:
-        cfg = 'config.yml'
 
     # load config file, create one if it doesn't exist
-    if not os.path.exists(cfg):
-        open(cfg, 'a').close()
-        logging.info("Creating empty " + cfg)
-    with open(cfg, 'r') as f:
-        lines = f.readlines()
+    if not os.path.exists(CONFIG_FILE):
+        write_config_file('')
+        logging.info(_("Creating empty {config_file}").format(config_file=CONFIG_FILE))
+    with open(CONFIG_FILE) as fp:
+        lines = fp.readlines()
 
     # make sure the file ends with a carraige return
     if len(lines) > 0:
         if not lines[-1].endswith('\n'):
             lines[-1] += '\n'
 
-    # regex for finding and replacing python string variable
-    # definitions/initializations
-    if cfg.endswith('.py'):
-        pattern = re.compile(r'^[\s#]*' + key + r'\s*=\s*"[^"]*"')
-        repl = key + ' = "' + value + '"'
-        pattern2 = re.compile(r'^[\s#]*' + key + r"\s*=\s*'[^']*'")
-        repl2 = key + " = '" + value + "'"
-    else:
-        # assume .yml as default
-        pattern = re.compile(r'^[\s#]*' + key + r':.*')
-        repl = yaml.dump({key: value}, default_flow_style=False)
-        pattern2 = pattern
-        repl2 = repl
+    pattern = re.compile(r'^[\s#]*' + key + r':.*\n')
+    repl = yaml.dump({key: value})
 
     # If we replaced this line once, we make sure won't be a
     # second instance of this line for this key in the document.
     didRepl = False
     # edit config file
-    with open(cfg, 'w') as f:
+    with open(CONFIG_FILE, 'w', encoding='utf-8') as f:
         for line in lines:
-            if pattern.match(line) or pattern2.match(line):
+            if pattern.match(line):
                 if not didRepl:
                     line = pattern.sub(repl, line)
-                    line = pattern2.sub(repl2, line)
                     f.write(line)
                     didRepl = True
             else:
                 f.write(line)
         if not didRepl:
-            f.write('\n')
             f.write(repl)
-            f.write('\n')
 
 
 def parse_xml(path):

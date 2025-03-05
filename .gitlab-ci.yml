@@ -274,6 +274,35 @@ safety:
     - python3 -m safety --key "$SAFETY_API_KEY" --stage cicd scan
 
 
+# TODO tests/*/*/*.yaml are not covered
+yamllint:
+  image: debian:bookworm-slim
+  rules:
+    # once only:/changes: are ported to rules:, this could be removed:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      when: never
+    - if: $CI_PIPELINE_SOURCE == "push"
+      changes:
+        - .gitlab-ci.yml
+        - .safety-policy.yml
+        - .yamllint
+        - tests/*.yml
+        - tests/*/*.yml
+        - tests/*/*/.*.yml
+  <<: *apt-template
+  variables:
+    LANG: C.UTF-8
+  script:
+    - apt-get install yamllint
+    - yamllint
+        .gitlab-ci.yml
+        .safety-policy.yml
+        .yamllint
+        tests/*.yml
+        tests/*/*.yml
+        tests/*/*/.*.yml
+
+
 # Run all the various linters and static analysis tools.
 locales:
   image: debian:bookworm-slim
@@ -555,11 +584,11 @@ servergitmirrors:
     - ./tests/key-tricks.py
     - ssh-keyscan gitlab.com >> /root/.ssh/known_hosts
     - test -d /tmp/fdroid/repo || mkdir -p /tmp/fdroid/repo
-    - cp tests/config.py tests/keystore.jks /tmp/fdroid/
+    - cp tests/config.yml tests/keystore.jks /tmp/fdroid/
     - cp tests/repo/com.politedroid_6.apk /tmp/fdroid/repo/
     - cd /tmp/fdroid
     - touch fdroid-icon.png
-    - printf "\nservergitmirrors = 'git@gitlab.com:fdroid/ci-test-servergitmirrors-repo.git'\n" >> config.py
+    - printf "\nservergitmirrors\x3a 'git@gitlab.com:fdroid/ci-test-servergitmirrors-repo.git'\n" >> config.yml
     - $PYTHONPATH/fdroid update --verbose --create-metadata
     - $PYTHONPATH/fdroid deploy --verbose
     - export DLURL=`grep -Eo 'https://gitlab.com/fdroid/ci-test-servergitmirrors-repo[^"]+' repo/index-v1.json`

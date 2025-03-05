@@ -28,12 +28,13 @@ class InitTest(unittest.TestCase):
         self._td.cleanup()
 
     def test_disable_in_config(self):
-        configfile = pathlib.Path('config.yml')
-        configfile.write_text('keystore: NONE\nkeypass: mysupersecrets\n')
+        test = 'mysupersecrets'
+        configfile = pathlib.Path(fdroidserver.common.CONFIG_FILE)
+        configfile.write_text(f'keystore: NONE\nkeypass: {test}\n', encoding='utf-8')
         configfile.chmod(0o600)
         config = fdroidserver.common.read_config()
         self.assertEqual('NONE', config['keystore'])
-        self.assertEqual('mysupersecrets', config['keypass'])
+        self.assertEqual(test, config['keypass'])
         fdroidserver.init.disable_in_config('keypass', 'comment')
         self.assertIn('#keypass:', configfile.read_text())
         fdroidserver.common.config = None

@@ -800,7 +800,7 @@ class Test_ScannerTool(unittest.TestCase):
 
     def test_refresh_from_config(self):
         os.chdir(self.testdir)
-        pathlib.Path('config.yml').write_text('refresh_scanner: true')
+        fdroidserver.common.write_config_file('refresh_scanner: true\n')
         with mock.patch('fdroidserver.scanner.ScannerTool.refresh') as refresh:
             fdroidserver.scanner.ScannerTool()
             refresh.assert_called_once()
@@ -809,7 +809,7 @@ class Test_ScannerTool(unittest.TestCase):
         fdroidserver.common.options = mock.Mock()
         fdroidserver.common.options.refresh_scanner = True
         os.chdir(self.testdir)
-        pathlib.Path('config.yml').write_text('refresh_scanner: false')
+        fdroidserver.common.write_config_file('refresh_scanner: false\n')
         with mock.patch('fdroidserver.scanner.ScannerTool.refresh') as refresh:
             fdroidserver.scanner.ScannerTool()
             refresh.assert_called_once()

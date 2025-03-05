@@ -250,7 +250,6 @@ class NightlyTest(unittest.TestCase):
                         raise
 
         self.assertEqual(called, [['ssh', '-Tvi'], ['fdroid', 'deploy']])
-        self.assertFalse(os.path.exists('config.py'))
         git_url = 'git@github.com:f-droid/test-nightly'
         mirror_url = index.get_mirror_service_urls({"url": git_url})[0]
         expected = {
@@ -269,7 +268,7 @@ class NightlyTest(unittest.TestCase):
             'repo_url': mirror_url + '/repo',
             'servergitmirrors': [{"url": git_url}],
         }
-        with open('config.yml') as fp:
+        with open(common.CONFIG_FILE) as fp:
             config = yaml.safe_load(fp)
             # .ssh is random tmpdir set in nightly.py, so test basename only
             self.assertEqual(
@@ -324,7 +323,6 @@ class NightlyTest(unittest.TestCase):
                         raise
 
         self.assertEqual(called, [['ssh', '-Tvi'], ['fdroid', 'deploy']])
-        self.assertFalse(os.path.exists('config.py'))
         expected = {
             'archive_description': 'Old nightly builds that have been archived.',
             'archive_name': 'fdroid/test-nightly archive',
@@ -341,7 +339,7 @@ class NightlyTest(unittest.TestCase):
             'repo_url': 'https://gitlab.com/fdroid/test-nightly/-/raw/master/fdroid/repo',
             'servergitmirrors': [{"url": 'git@gitlab.com:fdroid/test-nightly'}],
         }
-        with open('config.yml') as fp:
+        with open(common.CONFIG_FILE) as fp:
             config = yaml.safe_load(fp)
             # .ssh is random tmpdir set in nightly.py, so test basename only
             self.assertEqual(
