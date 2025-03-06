@@ -19,8 +19,8 @@ from fdroidserver._yaml import config_dump
 basedir = Path(__file__).parent
 
 
-class LintTest(unittest.TestCase):
-    '''fdroidserver/lint.py'''
+class SetUpTearDownMixin:
+    """A base class with no test in it for shared setUp and tearDown."""
 
     def setUp(self):
         os.chdir(basedir)
@@ -32,6 +32,10 @@ class LintTest(unittest.TestCase):
 
     def tearDown(self):
         self._td.cleanup()
+
+
+class LintTest(SetUpTearDownMixin, unittest.TestCase):
+    '''fdroidserver/lint.py'''
 
     def test_check_for_unsupported_metadata_files(self):
         self.assertTrue(fdroidserver.lint.check_for_unsupported_metadata_files())

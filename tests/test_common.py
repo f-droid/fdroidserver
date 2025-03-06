@@ -46,8 +46,8 @@ def _mock_common_module_options_instance():
     fdroidserver.common.options.verbose = False
 
 
-class CommonTest(unittest.TestCase):
-    '''fdroidserver/common.py'''
+class SetUpTearDownMixin:
+    """A mixin with no tests in it for shared setUp and tearDown."""
 
     def setUp(self):
         logging.basicConfig(level=logging.DEBUG)
@@ -76,6 +76,10 @@ class CommonTest(unittest.TestCase):
         self._td.cleanup()
         if os.path.exists(self.tmpdir):
             shutil.rmtree(self.tmpdir)
+
+
+class CommonTest(SetUpTearDownMixin, unittest.TestCase):
+    '''fdroidserver/common.py'''
 
     def test_yaml_1_2(self):
         """Return a ruamel.yaml instance that supports YAML 1.2
@@ -3307,7 +3311,7 @@ class SignerExtractionTest(unittest.TestCase):
             )
 
 
-class IgnoreApksignerV33Test(CommonTest):
+class IgnoreApksignerV33Test(SetUpTearDownMixin, unittest.TestCase):
     """apksigner v33 should be entirely ignored
 
     https://gitlab.com/fdroid/fdroidserver/-/issues/1253
