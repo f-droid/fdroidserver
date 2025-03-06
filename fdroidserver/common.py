@@ -25,8 +25,32 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-# common.py is imported by all modules, so do not import third-party
-# libraries here as they will become a requirement for all commands.
+
+"""Collection of functions shared by subcommands.
+
+This is basically the "shared library" for all the fdroid subcommands.
+The contains core functionality and a number of utility functions.
+This is imported by all modules, so do not import third-party
+libraries here as they will become a requirement for all commands.
+
+Config
+------
+
+Parsing and using the configuration settings from config.yml is
+handled here. The data format is YAML 1.2. The config has its own
+supported data types:
+
+* Boolean (e.g. deploy_process_logs:)
+* Integer (e.g. archive_older:, repo_maxage:)
+* String-only (e.g. repo_name:, sdk_path:)
+* Multi-String (string, list of strings, or list of dicts with
+  strings, e.g. serverwebroot:, mirrors:)
+
+String-only fields can also use a special value {env: varname}, which
+is a dict with a single key 'env' and a value that is the name of the
+environment variable to include.
+
+"""
 
 import copy
 import difflib
@@ -586,12 +610,15 @@ def read_config():
     fill_config_defaults(config)
 
     if 'serverwebroot' in config:
-        roots = parse_mirrors_config(config['serverwebroot'])
+        roots = parse_list_of_dicts(config['serverwebroot'])
         rootlist = []
         for d in roots:
             # since this is used with rsync, where trailing slashes have
             # meaning, ensure there is always a trailing slash
-            rootstr = d['url']
+            rootstr = d.get('url')
+            if not rootstr:
+                logging.error('serverwebroot: has blank value!')
+                continue
             if rootstr[-1] != '/':
                 rootstr += '/'
             d['url'] = rootstr.replace('//', '/')
@@ -599,7 +626,7 @@ def read_config():
         config['serverwebroot'] = rootlist
 
     if 'servergitmirrors' in config:
-        config['servergitmirrors'] = parse_mirrors_config(config['servergitmirrors'])
+        config['servergitmirrors'] = parse_list_of_dicts(config['servergitmirrors'])
 
         limit = config['git_mirror_size_limit']
         config['git_mirror_size_limit'] = parse_human_readable_size(limit)
@@ -666,18 +693,23 @@ def expand_env_dict(s):
     return os.path.expanduser(s)
 
 
-def parse_mirrors_config(mirrors):
-    """Mirrors can be specified as a string, list of strings, or dictionary map."""
-    if isinstance(mirrors, str):
-        return [{"url": expand_env_dict(mirrors)}]
-    if isinstance(mirrors, dict):
-        return [{"url": expand_env_dict(mirrors)}]
-    if all(isinstance(item, str) for item in mirrors):
-        return [{'url': expand_env_dict(i)} for i in mirrors]
-    if all(isinstance(item, dict) for item in mirrors):
-        for item in mirrors:
+def parse_list_of_dicts(l_of_d):
+    """Parse config data structure that is a list of dicts of strings.
+
+    The value can be specified as a string, list of strings, or list of dictionary maps
+    where the values are strings.
+
+    """
+    if isinstance(l_of_d, str):
+        return [{"url": expand_env_dict(l_of_d)}]
+    if isinstance(l_of_d, dict):
+        return [{"url": expand_env_dict(l_of_d)}]
+    if all(isinstance(item, str) for item in l_of_d):
+        return [{'url': expand_env_dict(i)} for i in l_of_d]
+    if all(isinstance(item, dict) for item in l_of_d):
+        for item in l_of_d:
             item['url'] = expand_env_dict(item['url'])
-        return mirrors
+        return l_of_d
     raise TypeError(_('only accepts strings, lists, and tuples'))
 
 
@@ -690,7 +722,7 @@ def get_mirrors(url, filename=None):
     if url.netloc == 'f-droid.org':
         mirrors = FDROIDORG_MIRRORS
     else:
-        mirrors = parse_mirrors_config(url.geturl())
+        mirrors = parse_list_of_dicts(url.geturl())
 
     if filename:
         return append_filename_to_mirrors(filename, mirrors)

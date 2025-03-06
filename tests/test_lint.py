@@ -4,6 +4,7 @@ import logging
 import os
 import shutil
 import tempfile
+import textwrap
 import unittest
 from pathlib import Path
 
@@ -534,6 +535,13 @@ class LintAntiFeaturesTest(unittest.TestCase):
 
 
 class ConfigYmlTest(LintTest):
+    """Test data formats used in config.yml.
+
+    lint.py uses print() and not logging so hacks are used to control
+    the output when running in the test runner.
+
+    """
+
     def setUp(self):
         super().setUp()
         self.config_yml = Path(self.testdir) / fdroidserver.common.CONFIG_FILE
@@ -548,6 +556,22 @@ class ConfigYmlTest(LintTest):
 
     def test_config_yml_str(self):
         self.config_yml.write_text('sdk_path: /opt/android-sdk\n')
+        self.assertTrue(fdroidserver.lint.lint_config(self.config_yml))
+
+    def test_config_yml_str_list(self):
+        self.config_yml.write_text('serverwebroot: [server1, server2]\n')
+        self.assertTrue(fdroidserver.lint.lint_config(self.config_yml))
+
+    def test_config_yml_str_list_of_dicts(self):
+        self.config_yml.write_text(
+            textwrap.dedent(
+                """\
+                serverwebroot:
+                  - url: 'me@b.az:/srv/fdroid'
+                    index_only: true
+                """
+            )
+        )
         self.assertTrue(fdroidserver.lint.lint_config(self.config_yml))
 
     def test_config_yml_str_list_of_dicts_env(self):
@@ -595,3 +619,32 @@ class ConfigYmlTest(LintTest):
                 fdroidserver.lint.lint_config(self.config_yml),
                 f'{key} should fail on value of "{value}"',
             )
+
+    def test_config_yml_keyaliases(self):
+        self.config_yml.write_text(
+            textwrap.dedent(
+                """\
+                keyaliases:
+                  com.example: myalias
+                  com.foo: '@com.example'
+                """
+            )
+        )
+        self.assertTrue(fdroidserver.lint.lint_config(self.config_yml))
+
+    def test_config_yml_keyaliases_bad_str(self):
+        """The keyaliases: value is a dict not a str."""
+        self.config_yml.write_text("keyaliases: '@com.example'\n")
+        self.assertFalse(fdroidserver.lint.lint_config(self.config_yml))
+
+    def test_config_yml_keyaliases_bad_list(self):
+        """The keyaliases: value is a dict not a list."""
+        self.config_yml.write_text(
+            textwrap.dedent(
+                """\
+                keyaliases:
+                  - com.example: myalias
+                """
+            )
+        )
+        self.assertFalse(fdroidserver.lint.lint_config(self.config_yml))

@@ -2903,46 +2903,46 @@ class CommonTest(unittest.TestCase):
         with self.assertRaises(TypeError):
             fdroidserver.common.expand_env_dict({'env': 'foo', 'foo': 'bar'})
 
-    def test_parse_mirrors_config_str(self):
+    def test_parse_list_of_dicts_str(self):
         s = 'foo@example.com:/var/www'
         mirrors = yaml.load("""'%s'""" % s)
         self.assertEqual(
-            [{'url': s}], fdroidserver.common.parse_mirrors_config(mirrors)
+            [{'url': s}], fdroidserver.common.parse_list_of_dicts(mirrors)
         )
 
-    def test_parse_mirrors_config_list(self):
+    def test_parse_list_of_dicts_list(self):
         s = 'foo@example.com:/var/www'
         mirrors = yaml.load("""- '%s'""" % s)
         self.assertEqual(
-            [{'url': s}], fdroidserver.common.parse_mirrors_config(mirrors)
+            [{'url': s}], fdroidserver.common.parse_list_of_dicts(mirrors)
         )
 
-    def test_parse_mirrors_config_dict(self):
+    def test_parse_list_of_dicts_dict(self):
         s = 'foo@example.com:/var/www'
         mirrors = yaml.load("""- url: '%s'""" % s)
         self.assertEqual(
-            [{'url': s}], fdroidserver.common.parse_mirrors_config(mirrors)
+            [{'url': s}], fdroidserver.common.parse_list_of_dicts(mirrors)
         )
 
     @mock.patch.dict(os.environ, {'PATH': os.getenv('PATH'), 'foo': 'bar'}, clear=True)
-    def test_parse_mirrors_config_env_str(self):
+    def test_parse_list_of_dicts_env_str(self):
         mirrors = yaml.load('{env: foo}')
         self.assertEqual(
-            [{'url': 'bar'}], fdroidserver.common.parse_mirrors_config(mirrors)
+            [{'url': 'bar'}], fdroidserver.common.parse_list_of_dicts(mirrors)
         )
 
-    def test_parse_mirrors_config_env_list(self):
+    def test_parse_list_of_dicts_env_list(self):
         s = 'foo@example.com:/var/www'
         mirrors = yaml.load("""- '%s'""" % s)
         self.assertEqual(
-            [{'url': s}], fdroidserver.common.parse_mirrors_config(mirrors)
+            [{'url': s}], fdroidserver.common.parse_list_of_dicts(mirrors)
         )
 
-    def test_parse_mirrors_config_env_dict(self):
+    def test_parse_list_of_dicts_env_dict(self):
         s = 'foo@example.com:/var/www'
         mirrors = yaml.load("""- url: '%s'""" % s)
         self.assertEqual(
-            [{'url': s}], fdroidserver.common.parse_mirrors_config(mirrors)
+            [{'url': s}], fdroidserver.common.parse_list_of_dicts(mirrors)
         )
 
     def test_KnownApks_recordapk(self):
