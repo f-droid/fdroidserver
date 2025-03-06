@@ -578,11 +578,20 @@ def check_format(app):
 
 
 def check_license_tag(app):
-    """Ensure all license tags contain only valid/approved values."""
-    if config['lint_licenses'] is None:
-        return
-    if app.License not in config['lint_licenses']:
-        if config['lint_licenses'] == APPROVED_LICENSES:
+    """Ensure all license tags contain only valid/approved values.
+
+    It is possible to disable license checking by setting a null or empty value,
+    e.g. `lint_licenses: ` or `lint_licenses: []`
+
+    """
+    if 'lint_licenses' in config:
+        lint_licenses = config['lint_licenses']
+        if lint_licenses is None:
+            return
+    else:
+        lint_licenses = APPROVED_LICENSES
+    if app.License not in lint_licenses:
+        if lint_licenses == APPROVED_LICENSES:
             yield _(
                 'Unexpected license tag "{}"! Only use FSF or OSI '
                 'approved tags from https://spdx.org/license-list'

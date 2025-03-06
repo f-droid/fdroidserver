@@ -66,7 +66,6 @@ from urllib.parse import urlparse, urlsplit, urlunparse
 from zipfile import ZipFile
 
 import fdroidserver.metadata
-import fdroidserver.lint
 from fdroidserver import _
 from fdroidserver.exception import FDroidException, VCSException, NoSubmodulesException, \
     BuildException, VerificationException, MetaDataException
@@ -187,7 +186,6 @@ default_config = {
     'archive_name': 'My First F-Droid Archive Demo',
     'archive_description': _('These are the apps that have been archived from the main repo.'),  # type: ignore
     'archive_older': 0,
-    'lint_licenses': fdroidserver.lint.APPROVED_LICENSES,  # type: ignore
     'git_mirror_size_limit': 10000000000,
     'scanner_signature_sources': ['suss'],
 }
