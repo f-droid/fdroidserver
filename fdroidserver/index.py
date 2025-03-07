@@ -26,7 +26,6 @@ import json
 import logging
 import os
 import re
-import ruamel.yaml
 import shutil
 import sys
 import tempfile
@@ -45,6 +44,7 @@ from . import metadata
 from . import net
 from . import signindex
 from fdroidserver.common import ANTIFEATURES_CONFIG_NAME, CATEGORIES_CONFIG_NAME, CONFIG_CONFIG_NAME, MIRRORS_CONFIG_NAME, RELEASECHANNELS_CONFIG_NAME, DEFAULT_LOCALE, FDroidPopen, FDroidPopenBytes, load_stats_fdroid_signing_key_fingerprints
+from fdroidserver._yaml import yaml
 from fdroidserver.exception import FDroidException, VerificationException
 
 
@@ -1445,7 +1445,7 @@ def add_mirrors_to_repodict(repo_section, repodict):
                 )
             )
         with mirrors_yml.open() as fp:
-            mirrors_config = ruamel.yaml.YAML(typ='safe').load(fp)
+            mirrors_config = yaml.load(fp)
         if not isinstance(mirrors_config, list):
             msg = _('{path} is not list, but a {datatype}!')
             raise TypeError(

@@ -24,9 +24,8 @@ import urllib.parse
 from argparse import ArgumentParser
 from pathlib import Path
 
-import ruamel.yaml
-
 from . import _, common, metadata, rewritemeta
+from fdroidserver._yaml import yaml
 
 config = None
 
@@ -853,7 +852,7 @@ def lint_config(arg):
         passed = False
 
     with path.open() as fp:
-        data = ruamel.yaml.YAML(typ='safe').load(fp)
+        data = yaml.load(fp)
     common.config_type_check(arg, data)
 
     if path.name == mirrors_name:

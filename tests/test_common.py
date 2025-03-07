@@ -17,7 +17,6 @@ import tempfile
 import time
 import unittest
 import textwrap
-import yaml
 import gzip
 from argparse import ArgumentParser
 from datetime import datetime, timezone
@@ -32,6 +31,7 @@ import fdroidserver.common
 import fdroidserver.metadata
 from .shared_test_code import TmpCwd, mkdtemp
 from fdroidserver.common import ANTIFEATURES_CONFIG_NAME, CATEGORIES_CONFIG_NAME
+from fdroidserver._yaml import yaml, yaml_dumper
 from fdroidserver.exception import FDroidException, VCSException,\
     MetaDataException, VerificationException
 from fdroidserver.looseversion import LooseVersion
@@ -76,6 +76,26 @@ class CommonTest(unittest.TestCase):
         self._td.cleanup()
         if os.path.exists(self.tmpdir):
             shutil.rmtree(self.tmpdir)
+
+    def test_yaml_1_2(self):
+        """Return a ruamel.yaml instance that supports YAML 1.2
+
+        There should be no "Norway Problem", and other things like this:
+        https://yaml.org/spec/1.2.2/ext/changes/
+
+        YAML 1.2 says "underlines _ cannot be used within numerical
+        values", but ruamel.yaml seems to ignore that. 1_0 should be a
+        string, but it is read as a 10.
+
+        """
+        os.chdir(self.testdir)
+        yaml12file = Path('YAML 1.2.yml')
+        yaml12file.write_text('[true, no, 0b010, 010, 0o10, "\\/"]', encoding='utf-8')
+        with yaml12file.open() as fp:
+            self.assertEqual(
+                [True, 'no', 2, 10, 8, '/'],
+                yaml.load(fp),
+            )
 
     def test_parse_human_readable_size(self):
         for k, v in (
@@ -417,7 +437,7 @@ class CommonTest(unittest.TestCase):
         metadata['RepoType'] = 'git'
         metadata['Repo'] = git_url
         with open(os.path.join('metadata', packageName + '.yml'), 'w') as fp:
-            yaml.dump(metadata, fp)
+            yaml_dumper.dump(metadata, fp)
 
         gitrepo = os.path.join(self.tmpdir, 'build', packageName)
         vcs0 = fdroidserver.common.getvcs('git', git_url, gitrepo)
@@ -1913,7 +1933,7 @@ class CommonTest(unittest.TestCase):
         os.chdir(self.tmpdir)
         teststr = '/πÇÇ现代通用字-български-عربي1/ö/yml'
         with open(fdroidserver.common.CONFIG_FILE, 'w', encoding='utf-8') as fp:
-            yaml.dump({'apksigner': teststr}, fp)
+            yaml_dumper.dump({'apksigner': teststr}, fp)
         self.assertTrue(os.path.exists(fdroidserver.common.CONFIG_FILE))
         config = fdroidserver.common.read_config()
         self.assertEqual(teststr, config.get('apksigner'))
@@ -1937,7 +1957,7 @@ class CommonTest(unittest.TestCase):
     def test_with_config_yml_is_not_mixed_type(self):
         os.chdir(self.tmpdir)
         Path(fdroidserver.common.CONFIG_FILE).write_text('k: v\napksigner = /bin/apk')
-        with self.assertRaises(yaml.scanner.ScannerError):
+        with self.assertRaises(ruamel.yaml.scanner.ScannerError):
             fdroidserver.common.read_config()
 
     def test_config_perm_warning(self):
@@ -2613,7 +2633,7 @@ class CommonTest(unittest.TestCase):
                 ' -providerClass sun.security.pkcs11.SunPKCS11'
                 ' -providerArg opensc-fdroid.cfg'
             }
-            yaml.dump(d, fp)
+            yaml_dumper.dump(d, fp)
         config = fdroidserver.common.read_config()
         fdroidserver.common.config = config
         self.assertTrue(isinstance(d['smartcardoptions'], str))
@@ -2829,21 +2849,21 @@ class CommonTest(unittest.TestCase):
 
     def test_parse_mirrors_config_str(self):
         s = 'foo@example.com:/var/www'
-        mirrors = ruamel.yaml.YAML(typ='safe').load("""'%s'""" % s)
+        mirrors = yaml.load("""'%s'""" % s)
         self.assertEqual(
             [{'url': s}], fdroidserver.common.parse_mirrors_config(mirrors)
         )
 
     def test_parse_mirrors_config_list(self):
         s = 'foo@example.com:/var/www'
-        mirrors = ruamel.yaml.YAML(typ='safe').load("""- '%s'""" % s)
+        mirrors = yaml.load("""- '%s'""" % s)
         self.assertEqual(
             [{'url': s}], fdroidserver.common.parse_mirrors_config(mirrors)
         )
 
     def test_parse_mirrors_config_dict(self):
         s = 'foo@example.com:/var/www'
-        mirrors = ruamel.yaml.YAML(typ='safe').load("""- url: '%s'""" % s)
+        mirrors = yaml.load("""- url: '%s'""" % s)
         self.assertEqual(
             [{'url': s}], fdroidserver.common.parse_mirrors_config(mirrors)
         )

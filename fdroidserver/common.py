@@ -39,6 +39,7 @@ import sys
 import re
 import ast
 import gzip
+import ruamel.yaml
 import shutil
 import stat
 import subprocess
@@ -48,7 +49,6 @@ import logging
 import hashlib
 import socket
 import base64
-import yaml
 import zipfile
 import tempfile
 import json
@@ -67,6 +67,7 @@ from zipfile import ZipFile
 
 import fdroidserver.metadata
 from fdroidserver import _
+from fdroidserver._yaml import yaml, yaml_dumper
 from fdroidserver.exception import FDroidException, VCSException, NoSubmodulesException, \
     BuildException, VerificationException, MetaDataException
 from .asynchronousfilereader import AsynchronousFileReader
@@ -549,7 +550,7 @@ def read_config():
     if os.path.exists(CONFIG_FILE):
         logging.debug(_("Reading '{config_file}'").format(config_file=CONFIG_FILE))
         with open(CONFIG_FILE, encoding='utf-8') as fp:
-            config = yaml.safe_load(fp)
+            config = yaml.load(fp)
         if not config:
             config = {}
         config_type_check(CONFIG_FILE, config)
@@ -706,7 +707,7 @@ def load_localized_config(name, repodir):
         if len(f.parts) == 2:
             locale = DEFAULT_LOCALE
         with open(f, encoding="utf-8") as fp:
-            elem = yaml.safe_load(fp)
+            elem = yaml.load(fp)
             if not isinstance(elem, dict):
                 msg = _('{path} is not "key: value" dict, but a {datatype}!')
                 raise TypeError(msg.format(path=f, datatype=type(elem).__name__))
@@ -4229,7 +4230,9 @@ def write_to_config(thisconfig, key, value=None):
             lines[-1] += '\n'
 
     pattern = re.compile(r'^[\s#]*' + key + r':.*\n')
-    repl = yaml.dump({key: value})
+    with ruamel.yaml.compat.StringIO() as fp:
+        yaml_dumper.dump({key: value}, fp)
+        repl = fp.getvalue()
 
     # If we replaced this line once, we make sure won't be a
     # second instance of this line for this key in the document.

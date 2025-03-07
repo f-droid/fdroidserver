@@ -31,6 +31,7 @@ from collections import OrderedDict
 from . import common
 from . import _
 from .exception import MetaDataException
+from ._yaml import yaml
 
 srclibs = None
 warnings_action = None
@@ -472,7 +473,6 @@ def parse_yaml_srclib(metadatapath):
 
     with metadatapath.open("r", encoding="utf-8") as f:
         try:
-            yaml = ruamel.yaml.YAML(typ='safe')
             data = yaml.load(f)
             if type(data) is not dict:
                 if platform.system() == 'Windows':
@@ -709,8 +709,7 @@ def parse_yaml_metadata(mf):
 
     """
     try:
-        yaml = ruamel.yaml.YAML(typ='safe')
-        yamldata = yaml.load(mf)
+        yamldata = common.yaml.load(mf)
     except ruamel.yaml.YAMLError as e:
         _warn_or_exception(
             _("could not parse '{path}'").format(path=mf.name)
@@ -1249,19 +1248,24 @@ def _app_to_yaml(app):
 def write_yaml(mf, app):
     """Write metadata in yaml format.
 
+    This requires the 'rt' round trip dumper to maintain order and needs
+    custom indent settings, so it needs to instantiate its own YAML
+    instance.  Therefore, this function deliberately avoids using any of
+    the common YAML parser setups.
+
     Parameters
     ----------
     mf
       active file discriptor for writing
     app
-      app metadata to written to the yaml file
+      app metadata to written to the YAML file
 
     """
     _del_duplicated_NoSourceSince(app)
     yaml_app = _app_to_yaml(app)
-    yaml = ruamel.yaml.YAML()
-    yaml.indent(mapping=2, sequence=4, offset=2)
-    yaml.dump(yaml_app, stream=mf)
+    yamlmf = ruamel.yaml.YAML(typ='rt')
+    yamlmf.indent(mapping=2, sequence=4, offset=2)
+    yamlmf.dump(yaml_app, stream=mf)
 
 
 def write_metadata(metadatapath, app):

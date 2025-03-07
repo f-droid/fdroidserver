@@ -11,13 +11,12 @@ from datetime import datetime, timezone
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
-from ruamel.yaml import YAML
-
 try:
     from androguard.core.bytecodes.apk import get_apkid  # androguard <4
 except ModuleNotFoundError:
     from androguard.core.apk import get_apkid
 
+from fdroidserver._yaml import yaml, yaml_dumper
 from .shared_test_code import mkdir_testfiles
 
 # TODO: port generic tests that use index.xml to index-v2 (test that
@@ -81,7 +80,6 @@ class IntegrationTest(unittest.TestCase):
     @staticmethod
     def update_yaml(path, items, replace=False):
         """Update a .yml file, e.g. config.yml, with the given items."""
-        yaml = YAML()
         doc = {}
         if not replace:
             try:
@@ -91,7 +89,7 @@ class IntegrationTest(unittest.TestCase):
                 pass
         doc.update(items)
         with open(path, "w") as f:
-            yaml.dump(doc, f)
+            yaml_dumper.dump(doc, f)
 
     @staticmethod
     def remove_lines(path, unwanted_strings):

@@ -7,13 +7,12 @@ import tempfile
 import unittest
 from pathlib import Path
 
-import ruamel.yaml
-
 from .shared_test_code import mkdtemp
 
 import fdroidserver.common
 import fdroidserver.lint
 import fdroidserver.metadata
+from fdroidserver._yaml import yaml_dumper
 
 basedir = Path(__file__).parent
 
@@ -365,40 +364,41 @@ class LintTest(unittest.TestCase):
 
     def test_lint_config_basic_mirrors_yml(self):
         os.chdir(self.testdir)
-        yaml = ruamel.yaml.YAML(typ='safe')
         with Path('mirrors.yml').open('w') as fp:
-            yaml.dump([{'url': 'https://example.com/fdroid/repo'}], fp)
+            yaml_dumper.dump([{'url': 'https://example.com/fdroid/repo'}], fp)
         self.assertTrue(fdroidserver.lint.lint_config('mirrors.yml'))
 
     def test_lint_config_mirrors_yml_kenya_countryCode(self):
         os.chdir(self.testdir)
-        yaml = ruamel.yaml.YAML(typ='safe')
         with Path('mirrors.yml').open('w') as fp:
-            yaml.dump([{'url': 'https://foo.com/fdroid/repo', 'countryCode': 'KE'}], fp)
+            yaml_dumper.dump(
+                [{'url': 'https://foo.com/fdroid/repo', 'countryCode': 'KE'}], fp
+            )
         self.assertTrue(fdroidserver.lint.lint_config('mirrors.yml'))
 
     def test_lint_config_mirrors_yml_invalid_countryCode(self):
         """WV is "indeterminately reserved" so it should never be used."""
         os.chdir(self.testdir)
-        yaml = ruamel.yaml.YAML(typ='safe')
         with Path('mirrors.yml').open('w') as fp:
-            yaml.dump([{'url': 'https://foo.com/fdroid/repo', 'countryCode': 'WV'}], fp)
+            yaml_dumper.dump(
+                [{'url': 'https://foo.com/fdroid/repo', 'countryCode': 'WV'}], fp
+            )
         self.assertFalse(fdroidserver.lint.lint_config('mirrors.yml'))
 
     def test_lint_config_mirrors_yml_alpha3_countryCode(self):
         """Only ISO 3166-1 alpha 2 are supported"""
         os.chdir(self.testdir)
-        yaml = ruamel.yaml.YAML(typ='safe')
         with Path('mirrors.yml').open('w') as fp:
-            yaml.dump([{'url': 'https://de.com/fdroid/repo', 'countryCode': 'DEU'}], fp)
+            yaml_dumper.dump(
+                [{'url': 'https://de.com/fdroid/repo', 'countryCode': 'DEU'}], fp
+            )
         self.assertFalse(fdroidserver.lint.lint_config('mirrors.yml'))
 
     def test_lint_config_mirrors_yml_one_invalid_countryCode(self):
         """WV is "indeterminately reserved" so it should never be used."""
         os.chdir(self.testdir)
-        yaml = ruamel.yaml.YAML(typ='safe')
         with Path('mirrors.yml').open('w') as fp:
-            yaml.dump(
+            yaml_dumper.dump(
                 [
                     {'url': 'https://bar.com/fdroid/repo', 'countryCode': 'BA'},
                     {'url': 'https://foo.com/fdroid/repo', 'countryCode': 'FO'},

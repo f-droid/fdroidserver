@@ -13,7 +13,6 @@
 import json
 import os
 import pathlib
-import ruamel.yaml
 import shutil
 import sys
 import unittest
@@ -24,6 +23,7 @@ from fdroidserver import publish
 from fdroidserver import common
 from fdroidserver import metadata
 from fdroidserver import signatures
+from fdroidserver._yaml import yaml
 from fdroidserver.exception import FDroidException
 from .shared_test_code import mkdtemp, VerboseFalseOptions
 
@@ -116,7 +116,6 @@ class PublishTest(unittest.TestCase):
         }
         self.assertEqual(expected, common.load_stats_fdroid_signing_key_fingerprints())
 
-        yaml = ruamel.yaml.YAML(typ='safe')
         with open(common.CONFIG_FILE) as fp:
             config = yaml.load(fp)
         self.assertEqual(
