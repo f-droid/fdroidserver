@@ -31,7 +31,7 @@ import fdroidserver.common
 import fdroidserver.metadata
 from .shared_test_code import TmpCwd, mkdtemp
 from fdroidserver.common import ANTIFEATURES_CONFIG_NAME, CATEGORIES_CONFIG_NAME
-from fdroidserver._yaml import yaml, yaml_dumper
+from fdroidserver._yaml import yaml, yaml_dumper, config_dump
 from fdroidserver.exception import FDroidException, VCSException,\
     MetaDataException, VerificationException
 from fdroidserver.looseversion import LooseVersion
@@ -1933,7 +1933,7 @@ class CommonTest(unittest.TestCase):
         os.chdir(self.tmpdir)
         teststr = '/πÇÇ现代通用字-български-عربي1/ö/yml'
         with open(fdroidserver.common.CONFIG_FILE, 'w', encoding='utf-8') as fp:
-            yaml_dumper.dump({'apksigner': teststr}, fp)
+            config_dump({'apksigner': teststr}, fp)
         self.assertTrue(os.path.exists(fdroidserver.common.CONFIG_FILE))
         config = fdroidserver.common.read_config()
         self.assertEqual(teststr, config.get('apksigner'))
@@ -2633,7 +2633,7 @@ class CommonTest(unittest.TestCase):
                 ' -providerClass sun.security.pkcs11.SunPKCS11'
                 ' -providerArg opensc-fdroid.cfg'
             }
-            yaml_dumper.dump(d, fp)
+            config_dump(d, fp)
         config = fdroidserver.common.read_config()
         fdroidserver.common.config = config
         self.assertTrue(isinstance(d['smartcardoptions'], str))

@@ -38,3 +38,27 @@ yaml = ruamel.yaml.YAML(typ='safe')
 yaml.version = (1, 2)
 
 yaml_dumper = ruamel.yaml.YAML(typ='rt')
+
+
+def config_dump(config, fp=None):
+    """Dump config data in YAML 1.2 format without headers.
+
+    This outputs YAML in a string that is suitable for use in regexps
+    and string replacements, as well as complete files.  It is therefore
+    explicitly set up to avoid writing out headers and footers.
+
+    This is modeled after PyYAML's yaml.dump(), which can dump to a file
+    or return a string.
+
+    https://yaml.dev/doc/ruamel.yaml/example/#Output_of_%60dump()%60_as_a_string
+
+    """
+    dumper = ruamel.yaml.YAML(typ='rt')
+    dumper.default_flow_style = False
+    dumper.explicit_start = False
+    dumper.explicit_end = False
+    if fp is None:
+        with ruamel.yaml.compat.StringIO() as fp:
+            dumper.dump(config, fp)
+            return fp.getvalue()
+    dumper.dump(config, fp)

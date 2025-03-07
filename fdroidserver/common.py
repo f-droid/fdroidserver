@@ -39,7 +39,6 @@ import sys
 import re
 import ast
 import gzip
-import ruamel.yaml
 import shutil
 import stat
 import subprocess
@@ -67,7 +66,7 @@ from zipfile import ZipFile
 
 import fdroidserver.metadata
 from fdroidserver import _
-from fdroidserver._yaml import yaml, yaml_dumper
+from fdroidserver._yaml import yaml, config_dump
 from fdroidserver.exception import FDroidException, VCSException, NoSubmodulesException, \
     BuildException, VerificationException, MetaDataException
 from .asynchronousfilereader import AsynchronousFileReader
@@ -4230,9 +4229,7 @@ def write_to_config(thisconfig, key, value=None):
             lines[-1] += '\n'
 
     pattern = re.compile(r'^[\s#]*' + key + r':.*\n')
-    with ruamel.yaml.compat.StringIO() as fp:
-        yaml_dumper.dump({key: value}, fp)
-        repl = fp.getvalue()
+    repl = config_dump({key: value})
 
     # If we replaced this line once, we make sure won't be a
     # second instance of this line for this key in the document.

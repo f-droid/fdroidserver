@@ -12,7 +12,7 @@ from .shared_test_code import mkdtemp
 import fdroidserver.common
 import fdroidserver.lint
 import fdroidserver.metadata
-from fdroidserver._yaml import yaml_dumper
+from fdroidserver._yaml import config_dump
 
 basedir = Path(__file__).parent
 
@@ -365,13 +365,13 @@ class LintTest(unittest.TestCase):
     def test_lint_config_basic_mirrors_yml(self):
         os.chdir(self.testdir)
         with Path('mirrors.yml').open('w') as fp:
-            yaml_dumper.dump([{'url': 'https://example.com/fdroid/repo'}], fp)
+            config_dump([{'url': 'https://example.com/fdroid/repo'}], fp)
         self.assertTrue(fdroidserver.lint.lint_config('mirrors.yml'))
 
     def test_lint_config_mirrors_yml_kenya_countryCode(self):
         os.chdir(self.testdir)
         with Path('mirrors.yml').open('w') as fp:
-            yaml_dumper.dump(
+            config_dump(
                 [{'url': 'https://foo.com/fdroid/repo', 'countryCode': 'KE'}], fp
             )
         self.assertTrue(fdroidserver.lint.lint_config('mirrors.yml'))
@@ -380,7 +380,7 @@ class LintTest(unittest.TestCase):
         """WV is "indeterminately reserved" so it should never be used."""
         os.chdir(self.testdir)
         with Path('mirrors.yml').open('w') as fp:
-            yaml_dumper.dump(
+            config_dump(
                 [{'url': 'https://foo.com/fdroid/repo', 'countryCode': 'WV'}], fp
             )
         self.assertFalse(fdroidserver.lint.lint_config('mirrors.yml'))
@@ -389,7 +389,7 @@ class LintTest(unittest.TestCase):
         """Only ISO 3166-1 alpha 2 are supported"""
         os.chdir(self.testdir)
         with Path('mirrors.yml').open('w') as fp:
-            yaml_dumper.dump(
+            config_dump(
                 [{'url': 'https://de.com/fdroid/repo', 'countryCode': 'DEU'}], fp
             )
         self.assertFalse(fdroidserver.lint.lint_config('mirrors.yml'))
@@ -398,7 +398,7 @@ class LintTest(unittest.TestCase):
         """WV is "indeterminately reserved" so it should never be used."""
         os.chdir(self.testdir)
         with Path('mirrors.yml').open('w') as fp:
-            yaml_dumper.dump(
+            config_dump(
                 [
                     {'url': 'https://bar.com/fdroid/repo', 'countryCode': 'BA'},
                     {'url': 'https://foo.com/fdroid/repo', 'countryCode': 'FO'},
