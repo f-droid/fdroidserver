@@ -100,6 +100,111 @@ class CommonTest(SetUpTearDownMixin, unittest.TestCase):
                 yaml.load(fp),
             )
 
+    def test_config_yaml_1_2(self):
+        """Config YAML should follow YAML 1.2 types.
+
+        https://yaml.org/spec/1.2.2/#1032-tag-resolution
+
+        """
+        os.chdir(self.testdir)
+        yaml12file = Path('YAML 1.2.yml')
+        text = textwrap.dedent(
+            """\
+            - null
+            - true
+            - True
+            - FALSE
+            - FAlse
+            - on
+            - Yes
+            - OFF
+            - no
+            - 23.1
+            - 42
+        """
+        )
+        yaml12file.write_text(text, encoding='utf-8')
+        with yaml12file.open() as fp:
+            config = yaml.load(fp)
+        self.assertEqual(
+            [None, True, True, False, 'FAlse', 'on', 'Yes', 'OFF', 'no', 23.1, 42],
+            config,
+        )
+
+    def test_config_yaml_convert_to_1_2(self):
+        """Config YAML should be dumped as clean YAML 1.2."""
+        os.chdir(self.testdir)
+        yaml12file = Path('YAML 1.2.yml')
+        text = textwrap.dedent(
+            """\
+            - null
+            - True
+            - False
+            - FALse
+            - on
+            - yes
+            - OFF
+            - No
+            - -42.042
+            - 1234
+        """
+        )
+        yaml12file.write_text(text, encoding='utf-8')
+        with yaml12file.open() as fp:
+            config = yaml.load(fp)
+        self.assertEqual(
+            [None, True, False, 'FALse', 'on', 'yes', 'OFF', 'No', -42.042, 1234],
+            config,
+        )
+        self.assertEqual(
+            textwrap.dedent(
+                """\
+            - 
+            - true
+            - false
+            - FALse
+            - on
+            - yes
+            - OFF
+            - No
+            - -42.042
+            - 1234
+        """
+            ),
+            config_dump(config),
+        )
+
+    def test_config_yaml_1_2_roundtrip(self):
+        """Config YAML should support roundtrip with clean YAML 1.2 input."""
+        os.chdir(self.testdir)
+        yaml12file = Path('YAML 1.2.yml')
+        text = textwrap.dedent(
+            """\
+            list:
+            - 
+            - true
+            - false
+            - on
+            - OFF
+            - no
+            - 23.1
+            - 42
+            mirrors:
+            - url: https://foo.com
+            """
+        )
+        yaml12file.write_text(text, encoding='utf-8')
+        with yaml12file.open() as fp:
+            config = yaml.load(fp)
+        self.assertEqual(
+            {
+                'list': [None, True, False, 'on', 'OFF', 'no', 23.1, 42],
+                'mirrors': [{'url': 'https://foo.com'}],
+            },
+            config,
+        )
+        self.assertEqual(text, config_dump(config))
+
     def test_parse_human_readable_size(self):
         for k, v in (
             (9827, 9827),
