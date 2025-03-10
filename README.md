@@ -1,11 +1,9 @@
-<div align="center">
+<p align="center">
+  <img src="https://gitlab.com/fdroid/artwork/-/raw/master/fdroid-logo-2015/fdroid-logo.svg" width="200">
+</p>
 
-<p><img src="https://gitlab.com/fdroid/artwork/-/raw/master/fdroid-logo-2015/fdroid-logo.svg" width="200"></p>
-
-# F-Droid Server
-### Tools for maintaining an F-Droid repository system.
-
-</div>
+<h1 align="center">F-Droid Server</h1>
+<h3 align="center">Tools for maintaining an F-Droid repository system.</h3>
 
 ---
 
@@ -121,13 +119,17 @@ for more info.
 
 <div align="center">
 
-[![](https://hosted.weblate.org/widgets/f-droid/-/287x66-white.png)](https://hosted.weblate.org/engage/f-droid)
+<p align="center">
+  <a href="https://hosted.weblate.org/engage/f-droid">
+    <img src="https://hosted.weblate.org/widgets/f-droid/-/287x66-white.png" alt="Translation status">
+  </a>
+</p>
 
-<details>
-<summary>View translation status for all languages.</summary>
-
-[![](https://hosted.weblate.org/widgets/f-droid/-/fdroidserver/multi-auto.svg)](https://hosted.weblate.org/engage/f-droid/?utm_source=widget)
-
+<details align="center">
+  <summary>View translation status for all languages.</summary>
+  <p align="center">
+    <a href="https://hosted.weblate.org/engage/f-droid/?utm_source=widget">
+      <img src="https://hosted.weblate.org/widgets/f-droid/-/fdroidserver/multi-auto.svg" alt="Translation status for all languages">
+    </a>
+  </p>
 </details>
-
-</div>
