@@ -17,6 +17,7 @@ import fdroidserver
 from fdroidserver import metadata
 from fdroidserver.exception import MetaDataException
 from fdroidserver.common import DEFAULT_LOCALE
+from fdroidserver._yaml import yaml
 from .shared_test_code import TmpCwd, mkdtemp
 
 
@@ -178,7 +179,6 @@ class MetadataTest(unittest.TestCase):
     def test_valid_funding_yml_regex(self):
         """Check the regex can find all the cases"""
         with (basedir / 'funding-usernames.yaml').open() as fp:
-            yaml = ruamel.yaml.YAML(typ='safe')
             data = yaml.load(fp)
 
         for k, entries in data.items():
@@ -207,7 +207,6 @@ class MetadataTest(unittest.TestCase):
         fdroidserver.common.config = config
         fdroidserver.metadata.warnings_action = None
 
-        yaml = ruamel.yaml.YAML(typ='safe')
         apps = fdroidserver.metadata.read_metadata()
         for appid in (
             'app.with.special.build.params',
@@ -337,7 +336,6 @@ class MetadataTest(unittest.TestCase):
 
     def test_normalize_type_string_sha256(self):
         """SHA-256 values are TYPE_STRING, which YAML can parse as decimal ints."""
-        yaml = ruamel.yaml.YAML(typ='safe')
         for v in range(1, 1000):
             s = '%064d' % (v * (10**51))
             self.assertEqual(s, metadata._normalize_type_string(yaml.load(s)))
@@ -378,7 +376,6 @@ class MetadataTest(unittest.TestCase):
     def test_normalize_type_list(self):
         """TYPE_LIST is always a list of strings, no matter what YAML thinks."""
         k = 'placeholder'
-        yaml = ruamel.yaml.YAML(typ='safe')
         self.assertEqual(['1.0'], metadata._normalize_type_list(k, 1.0))
         self.assertEqual(['1234567890'], metadata._normalize_type_list(k, 1234567890))
         self.assertEqual(['false'], metadata._normalize_type_list(k, False))
@@ -441,7 +438,6 @@ class MetadataTest(unittest.TestCase):
     def test_post_parse_yaml_metadata_0padding_sha256(self):
         """SHA-256 values are strings, but YAML 1.2 will read some as decimal ints."""
         v = '0027293472934293872934729834729834729834729834792837487293847926'
-        yaml = ruamel.yaml.YAML(typ='safe')
         yamldata = yaml.load('AllowedAPKSigningKeys: ' + v)
         metadata.post_parse_yaml_metadata(yamldata)
         self.assertEqual(yamldata['AllowedAPKSigningKeys'], [v])
@@ -2287,7 +2283,6 @@ class PostMetadataParseTest(unittest.TestCase):
         maximum of two leading zeros, but this will handle more.
 
         """
-        yaml = ruamel.yaml.YAML(typ='safe', pure=True)
         str_sha256 = '0000000000000498456908409534729834729834729834792837487293847926'
         sha256 = yaml.load('a: ' + str_sha256)['a']
         self.assertEqual(*self._post_metadata_parse_app_int(sha256, int(str_sha256)))
