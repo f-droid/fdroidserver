@@ -25,3 +25,5 @@ install_list: org.adaway
 uninstall_list: ['com.android.vending', 'com.facebook.orca']
 
 repo_key_sha256: f49af3f11efddf20dffd70f5e3117b9976674167adca280e6b1932a0601b26f6
+
+gpgkey: F9A6B8DF7566FCAB173AAB3516D6C4D3CE71F7FB
