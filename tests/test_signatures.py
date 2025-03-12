@@ -17,7 +17,6 @@ class SignaturesTest(unittest.TestCase):
         common.config = None
         config = common.read_config()
         config['jarsigner'] = common.find_sdk_tools_cmd('jarsigner')
-        config['verbose'] = True
         common.config = config
 
     @unittest.skipIf(sys.byteorder == 'big', "androguard is not ported to big-endian")
