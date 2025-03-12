@@ -3894,11 +3894,11 @@ def verify_apk_signature(apk, min_sdk_version=None):
         args = [config['apksigner'], 'verify']
         if min_sdk_version:
             args += ['--min-sdk-version=' + min_sdk_version]
-        if options.verbose:
+        if options and options.verbose:
             args += ['--verbose']
         try:
             output = subprocess.check_output(args + [apk])
-            if options.verbose:
+            if options and options.verbose:
                 logging.debug(apk + ': ' + output.decode('utf-8'))
             return True
         except subprocess.CalledProcessError as e:

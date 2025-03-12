@@ -739,6 +739,7 @@ PUBLISH:
         tests/test_gpgsign.py
         tests/test_metadata.py
         tests/test_publish.py
+        tests/test_signatures.py
         tests/test_signindex.py
 
     - cd tests
