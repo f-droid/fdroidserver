@@ -236,6 +236,7 @@ bool_keys = (
 
 check_config_keys = (
     'ant',
+    'apk_signing_key_block_list',
     'archive',
     'archive_description',
     'archive_icon',
