@@ -205,8 +205,7 @@ gradlew-fdroid:
         - gradlew-fdroid
         - tests/test_gradlew-fdroid
   script:
-    - apt-get install ca-certificates curl default-jdk-headless shellcheck unzip
-    - shellcheck --severity=error --color gradlew-fdroid tests/test_gradlew-fdroid
+    - apt-get install ca-certificates curl default-jdk-headless unzip
     - ./tests/test_gradlew-fdroid
 
 
@@ -232,7 +231,6 @@ lint_format_bandit_checks:
           python3-nose
           python3-pip
           python3-yaml
-          shellcheck
     - $pip install --break-system-packages bandit pylint-gitlab
     - export EXITVALUE=0
     - function set_error() { export EXITVALUE=1; printf "\x1b[31mERROR `history|tail -2|head -1|cut -b 6-500`\x1b[0m\n"; }
@@ -250,14 +248,35 @@ lint_format_bandit_checks:
             tests/*.py
             > pylint-report.json
         || set_error
-    - shellcheck --exclude SC2046,SC2090 --severity=warning --color tests/run-tests
-        || set_error
     - exit $EXITVALUE
   artifacts:
     reports:
       codequality: pylint-report.json
     when: always
 
+
+shellcheck:
+  image: debian:bookworm-slim
+  rules:
+    - changes:
+        - .gitlab-ci.yml
+        - gradlew-fdroid
+        - hooks/install-hooks.sh
+        - hooks/pre-commit
+        - tests/run-tests
+        - tests/test_gradlew-fdroid
+  <<: *apt-template
+  script:
+    - apt-get install shellcheck
+    # TODO GitLab Code Quality report https://github.com/koalaman/shellcheck/issues/3155
+    - shellcheck --exclude SC2046,SC2090 --severity=warning --color
+        hooks/install-hooks.sh
+        hooks/pre-commit
+        tests/run-tests
+    # TODO make the gradlew things pass the standard above
+    - shellcheck --severity=error --color
+        gradlew-fdroid
+        tests/test_gradlew-fdroid
 
 # Check all the dependencies in Debian to mirror production.  CVEs are
 # generally fixed in the latest versions in pip/pypi.org, so it isn't

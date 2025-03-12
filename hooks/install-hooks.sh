@@ -2,7 +2,7 @@
 #
 # Install all the client hooks
 
-BASE_DIR="$(cd $(dirname $0); pwd -P)"
+BASE_DIR="$(cd $(dirname $0) || exit; pwd -P)"
 HOOK_NAMES="applypatch-msg pre-applypatch post-applypatch pre-commit prepare-commit-msg commit-msg post-commit pre-rebase post-checkout post-merge pre-receive update post-receive post-update pre-auto-gc"
 HOOK_DIR="$(git rev-parse --show-toplevel)/.git/hooks"
 
