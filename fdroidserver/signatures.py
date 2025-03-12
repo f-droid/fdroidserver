@@ -24,7 +24,6 @@ import logging
 
 from . import _
 from . import common
-from . import net
 from .exception import FDroidException
 
 
@@ -68,6 +67,8 @@ def extract(options):
             elif httpre.match(apk):
                 if apk.startswith('https') or options.no_check_https:
                     try:
+                        from . import net
+
                         tmp_apk = os.path.join(tmp_dir, 'signed.apk')
                         net.download_file(apk, tmp_apk)
                         sigdir = extract_signature(tmp_apk)
