@@ -221,7 +221,7 @@ gradlew-fdroid:
 
 
 # Run all the various linters and static analysis tools.
-lint_format_bandit_checks:
+hooks/pre-commit:
   image: debian:bookworm-slim
   variables:
     LANG: C.UTF-8
@@ -241,17 +241,16 @@ lint_format_bandit_checks:
           python3-nose
           python3-pip
           python3-yaml
-    - $pip install --break-system-packages bandit
-    - export EXITVALUE=0
-    - function set_error() { export EXITVALUE=1; printf "\x1b[31mERROR `history|tail -2|head -1|cut -b 6-500`\x1b[0m\n"; }
-    - ./hooks/pre-commit || set_error
-    - bandit
-        -r
-        -ii
-        --ini .bandit
-        || set_error
-    - exit $EXITVALUE
+    - ./hooks/pre-commit
 
+bandit:
+  image: debian:bookworm-slim
+  <<: *python-rules-changes
+  <<: *apt-template
+  script:
+    - apt-get install python3-pip
+    - $pip install --break-system-packages bandit
+    - bandit -r -ii --ini .bandit
 
 pylint:
   image: debian:bookworm-slim
