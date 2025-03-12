@@ -49,7 +49,6 @@ force-exclude = '''(
   | tests/openssl-version-check-test\.py
   | tests/valid-package-names/test\.py
   | tests/test_common\.py
-  | tests/test_signatures\.py
   | tests/test_update\.py
 )$'''
 
