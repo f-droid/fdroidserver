@@ -25,8 +25,32 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-# common.py is imported by all modules, so do not import third-party
-# libraries here as they will become a requirement for all commands.
+
+"""Collection of functions shared by subcommands.
+
+This is basically the "shared library" for all the fdroid subcommands.
+The contains core functionality and a number of utility functions.
+This is imported by all modules, so do not import third-party
+libraries here as they will become a requirement for all commands.
+
+Config
+------
+
+Parsing and using the configuration settings from config.yml is
+handled here. The data format is YAML 1.2. The config has its own
+supported data types:
+
+* Boolean (e.g. deploy_process_logs:)
+* Integer (e.g. archive_older:, repo_maxage:)
+* String-only (e.g. repo_name:, sdk_path:)
+* Multi-String (string, list of strings, or list of dicts with
+  strings, e.g. serverwebroot:, mirrors:)
+
+String-only fields can also use a special value {env: varname}, which
+is a dict with a single key 'env' and a value that is the name of the
+environment variable to include.
+
+"""
 
 import copy
 import difflib
@@ -574,24 +598,18 @@ def read_config():
                                       'sun.security.pkcs11.SunPKCS11',
                                       '-providerArg', 'opensc-fdroid.cfg']
 
-    if any(k in config for k in ["keystore", "keystorepass", "keypass"]):
-        st = os.stat(CONFIG_FILE)
-        if st.st_mode & stat.S_IRWXG or st.st_mode & stat.S_IRWXO:
-            logging.warning(
-                _("unsafe permissions on '{config_file}' (should be 0600)!").format(
-                    config_file=CONFIG_FILE
-                )
-            )
-
     fill_config_defaults(config)
 
     if 'serverwebroot' in config:
-        roots = parse_mirrors_config(config['serverwebroot'])
+        roots = parse_list_of_dicts(config['serverwebroot'])
         rootlist = []
         for d in roots:
             # since this is used with rsync, where trailing slashes have
             # meaning, ensure there is always a trailing slash
-            rootstr = d['url']
+            rootstr = d.get('url')
+            if not rootstr:
+                logging.error('serverwebroot: has blank value!')
+                continue
             if rootstr[-1] != '/':
                 rootstr += '/'
             d['url'] = rootstr.replace('//', '/')
@@ -599,7 +617,7 @@ def read_config():
         config['serverwebroot'] = rootlist
 
     if 'servergitmirrors' in config:
-        config['servergitmirrors'] = parse_mirrors_config(config['servergitmirrors'])
+        config['servergitmirrors'] = parse_list_of_dicts(config['servergitmirrors'])
 
         limit = config['git_mirror_size_limit']
         config['git_mirror_size_limit'] = parse_human_readable_size(limit)
@@ -639,19 +657,63 @@ def read_config():
     for configname in confignames_to_delete:
         del config[configname]
 
+    if any(
+        k in config and config.get(k)
+        for k in ["awssecretkey", "keystorepass", "keypass"]
+    ):
+        st = os.stat(CONFIG_FILE)
+        if st.st_mode & stat.S_IRWXG or st.st_mode & stat.S_IRWXO:
+            logging.warning(
+                _("unsafe permissions on '{config_file}' (should be 0600)!").format(
+                    config_file=CONFIG_FILE
+                )
+            )
+
     return config
 
 
-def parse_mirrors_config(mirrors):
-    """Mirrors can be specified as a string, list of strings, or dictionary map."""
-    if isinstance(mirrors, str):
-        return [{"url": mirrors}]
-    elif all(isinstance(item, str) for item in mirrors):
-        return [{'url': i} for i in mirrors]
-    elif all(isinstance(item, dict) for item in mirrors):
-        return mirrors
-    else:
-        raise TypeError(_('only accepts strings, lists, and tuples'))
+def expand_env_dict(s):
+    """Expand env var dict to a string value.
+
+    {env: varName} syntax can be used to replace any string value in the
+    config with the value of an environment variable "varName".  This
+    allows for secrets management when commiting the config file to a
+    public git repo.
+
+    """
+    if not s or type(s) not in (str, dict):
+        return
+    if isinstance(s, dict):
+        if 'env' not in s or len(s) > 1:
+            raise TypeError(_('Only accepts a single key "env"'))
+        var = s['env']
+        s = os.getenv(var)
+        if not s:
+            logging.error(
+                _('Environment variable {{env: {var}}} is not set!').format(var=var)
+            )
+            return
+    return os.path.expanduser(s)
+
+
+def parse_list_of_dicts(l_of_d):
+    """Parse config data structure that is a list of dicts of strings.
+
+    The value can be specified as a string, list of strings, or list of dictionary maps
+    where the values are strings.
+
+    """
+    if isinstance(l_of_d, str):
+        return [{"url": expand_env_dict(l_of_d)}]
+    if isinstance(l_of_d, dict):
+        return [{"url": expand_env_dict(l_of_d)}]
+    if all(isinstance(item, str) for item in l_of_d):
+        return [{'url': expand_env_dict(i)} for i in l_of_d]
+    if all(isinstance(item, dict) for item in l_of_d):
+        for item in l_of_d:
+            item['url'] = expand_env_dict(item['url'])
+        return l_of_d
+    raise TypeError(_('only accepts strings, lists, and tuples'))
 
 
 def get_mirrors(url, filename=None):
@@ -663,7 +725,7 @@ def get_mirrors(url, filename=None):
     if url.netloc == 'f-droid.org':
         mirrors = FDROIDORG_MIRRORS
     else:
-        mirrors = parse_mirrors_config(url.geturl())
+        mirrors = parse_list_of_dicts(url.geturl())
 
     if filename:
         return append_filename_to_mirrors(filename, mirrors)

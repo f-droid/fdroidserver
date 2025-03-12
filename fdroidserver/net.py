@@ -92,7 +92,7 @@ def download_using_mirrors(mirrors, local_filename=None):
     logic will try it twice: first without SNI, then again with SNI.
 
     """
-    mirrors = common.parse_mirrors_config(mirrors)
+    mirrors = common.parse_list_of_dicts(mirrors)
     mirror_configs_to_try = []
     for mirror in mirrors:
         mirror_configs_to_try.append(mirror)

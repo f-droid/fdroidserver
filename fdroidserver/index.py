@@ -20,6 +20,16 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+"""Process the index files.
+
+This module is loaded by all fdroid subcommands since it is loaded in
+fdroidserver/__init__.py.  Any narrowly used dependencies should be
+imported where they are used to limit dependencies for subcommands
+like publish/signindex/gpgsign.  This eliminates the need to have
+these installed on the signing server.
+
+"""
+
 import collections
 import hashlib
 import json
@@ -32,7 +42,6 @@ import tempfile
 import urllib.parse
 import zipfile
 import calendar
-import qrcode
 from binascii import hexlify, unhexlify
 from datetime import datetime, timezone
 from pathlib import Path
@@ -41,7 +50,6 @@ from xml.dom.minidom import Document
 from . import _
 from . import common
 from . import metadata
-from . import net
 from . import signindex
 from fdroidserver.common import ANTIFEATURES_CONFIG_NAME, CATEGORIES_CONFIG_NAME, CONFIG_CONFIG_NAME, MIRRORS_CONFIG_NAME, RELEASECHANNELS_CONFIG_NAME, DEFAULT_LOCALE, FDroidPopen, FDroidPopenBytes, load_stats_fdroid_signing_key_fingerprints
 from fdroidserver._yaml import yaml
@@ -160,6 +168,7 @@ def make_website(apps, repodir, repodict):
     html_file = os.path.join(repodir, html_name)
 
     if _should_file_be_generated(html_file, autogenerate_comment):
+        import qrcode
         qrcode.make(link_fingerprinted).save(os.path.join(repodir, "index.png"))
         with open(html_file, 'w') as f:
             name = repodict["name"]
@@ -1378,7 +1387,15 @@ def make_v0(apps, apks, repodir, repodict, requestsdict, fdroid_signing_key_fing
                         % repo_icon)
         os.makedirs(os.path.dirname(iconfilename), exist_ok=True)
         try:
+            import qrcode
+
             qrcode.make(common.config['repo_url']).save(iconfilename)
+        except ModuleNotFoundError as e:
+            raise ModuleNotFoundError(
+                _(
+                    'The "qrcode" Python package is not installed (e.g. apt-get install python3-qrcode)!'
+                )
+            ) from e
         except Exception:
             exampleicon = os.path.join(common.get_examples_dir(),
                                        common.default_config['repo_icon'])
@@ -1624,6 +1641,8 @@ def download_repo_index_v1(url_str, etag=None, verify_fingerprint=True, timeout=
         - The new eTag as returned by the HTTP request
 
     """
+    from . import net
+
     url = urllib.parse.urlsplit(url_str)
 
     fingerprint = None
@@ -1675,6 +1694,8 @@ def download_repo_index_v2(url_str, etag=None, verify_fingerprint=True, timeout=
         - The new eTag as returned by the HTTP request
 
     """
+    from . import net
+
     etag  # etag is unused but needs to be there to keep the same API as the earlier functions.
 
     url = urllib.parse.urlsplit(url_str)
