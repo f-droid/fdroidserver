@@ -710,3 +710,67 @@ docker:
       fi
     - docker push $RELEASE_IMAGE
     - docker push $RELEASE_IMAGE-bookworm
+
+
+# PUBLISH is the signing server.  It has a very minimal manual setup.
+PUBLISH:
+  image: debian:bullseye-backports
+  script:
+    - apt-get update
+    - apt-get -qy upgrade
+    - apt-get -qy install --no-install-recommends -t bullseye-backports
+        androguard
+        apksigner
+        curl
+        default-jdk-headless
+        git
+        gpg
+        gpg-agent
+        python3-asn1crypto
+        python3-defusedxml
+        python3-git
+        python3-ruamel.yaml
+        python3-yaml
+        rsync
+
+    # Run only relevant parts of the test suite, other parts will fail
+    # because of this minimal base setup.
+    - python3 -m unittest
+        tests/test_gpgsign.py
+        tests/test_metadata.py
+        tests/test_publish.py
+        tests/test_signindex.py
+
+    - cd tests
+    - mkdir archive
+    - mkdir unsigned
+    - cp urzip-release-unsigned.apk unsigned/info.guardianproject.urzip_100.apk
+    - grep '^key.*pass' config.yml | sed 's,\x3a ,=,' > $CI_PROJECT_DIR/variables
+    - sed -Ei 's,^(key.*pass|keystore)\x3a.*,\1\x3a {env\x3a \1},' config.yml
+    - printf '\ngpghome\x3a {env\x3a gpghome}\n' >> config.yml
+    - |
+      tee --append $CI_PROJECT_DIR/variables <<EOF
+          gpghome=$CI_PROJECT_DIR/tests/gnupghome
+          keystore=$CI_PROJECT_DIR/tests/keystore.jks
+          serverwebroot=/tmp
+          export gpghome keypass keystorepass keystore serverwebroot
+      EOF
+    - source $CI_PROJECT_DIR/variables
+    # silence warnings
+    - chmod 0600 config.yml config/*.yml config/*/*.yml
+    - chmod 0700 $gpghome
+    # make fake 'ciarang' index signing key
+    - keytool -keyclone -alias 4e7da5b7 -dest ciarang
+        -keypass:env keypass -new:env keypass -storepass:env keystorepass -keystore $keystore
+
+    - export PATH=$CI_PROJECT_DIR:$PATH
+
+    # run signpkg.sh
+    - fdroid publish --verbose
+    - fdroid gpgsign --verbose
+    - rsync --progress repo/* $serverwebroot/
+
+    # run signindex.sh
+    - fdroid gpgsign --verbose
+    - fdroid signindex --verbose
+    - rsync --stats repo/* $serverwebroot/
