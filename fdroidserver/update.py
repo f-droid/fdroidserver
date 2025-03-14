@@ -202,6 +202,13 @@ def status_update_json(apps, apks):
     common.write_status_json(output, options.pretty)
 
 
+def output_status_stage(output, stage):
+    if 'stages' not in output:
+        output['stages'] = dict()
+    output['stages'][stage] = common.epoch_millis_now()
+    common.write_running_status_json(output)
+
+
 def delete_disabled_builds(apps, apkcache, repodirs):
     """Delete disabled build outputs.
 
@@ -2588,7 +2595,7 @@ def main():
     metadata.warnings_action = options.W
 
     config = common.read_config()
-    common.setup_status_output(start_timestamp)
+    status_output = common.setup_status_output(start_timestamp)
 
     if not (('jarsigner' in config or 'apksigner' in config)
             and 'keytool' in config):
@@ -2651,12 +2658,15 @@ def main():
     cache_timestamp = get_cache_mtime()
 
     # Delete builds for disabled apps
+    output_status_stage(status_output, 'delete_disabled_builds')
     delete_disabled_builds(apps, apkcache, repodirs)
 
     # Scan all apks in the main repo
+    output_status_stage(status_output, 'process_apks')
     apks, cachechanged = process_apks(apkcache, repodirs[0], knownapks,
                                       options.use_date_from_apk, apps, cache_timestamp)
 
+    output_status_stage(status_output, 'scan_repo_files')
     files, fcachechanged = scan_repo_files(apkcache, repodirs[0], knownapks,
                                            options.use_date_from_apk)
     cachechanged = cachechanged or fcachechanged
@@ -2666,6 +2676,7 @@ def main():
     cachechanged = cachechanged or icachechanged
     apks += ipas
 
+    output_status_stage(status_output, 'remove_apks')
     appid_has_apks = set()
     appid_has_repo_files = set()
     sha256_has_files = collections.defaultdict(list)
@@ -2748,17 +2759,24 @@ def main():
     if cachechanged:
         write_cache(apkcache)
 
+    output_status_stage(status_output, 'read_added_date_from_all_apks')
     # The added date currently comes from the oldest apk which might be in the archive.
     # So we need this populated at app level before continuing with only processing /repo
     # or /archive
     read_added_date_from_all_apks(apps, apks + archapks)
 
     if len(repodirs) > 1:
+        output_status_stage(status_output, 'archive_old_apks archive')
         archive_old_apks(apps, apks, archapks, repodirs[0], repodirs[1], config['archive_older'])
+        output_status_stage(status_output, 'prepare_apps archive')
         archived_apps = prepare_apps(apps, archapks, repodirs[1])
+        output_status_stage(status_output, 'index.make archive')
         fdroidserver.index.make(archived_apps, archapks, repodirs[1], True)
 
+    output_status_stage(status_output, 'prepare_apps repo')
     repoapps = prepare_apps(apps, apks, repodirs[0])
+
+    output_status_stage(status_output, 'index.make repo')
 
     # APKs are placed into multiple repos based on the app package, providing
     # per-app subscription feeds for nightly builds and things like it
@@ -2780,6 +2798,7 @@ def main():
     git_remote = config.get('binary_transparency_remote')
     if git_remote or os.path.isdir(os.path.join('binary_transparency', '.git')):
         from . import btlog
+        output_status_stage(status_output, 'make_binary_transparency_log')
         btlog.make_binary_transparency_log(repodirs)
 
     status_update_json(apps, apks + archapks)
