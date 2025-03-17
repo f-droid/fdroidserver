@@ -15,7 +15,7 @@
 # fossdd <fossdd@tutanota.com>, 2021.
 # Ceeee <marius.romanus@gmx.de>, 2021.
 # C. Rüdinger <Mail-an-CR@web.de>, 2021, 2022.
-# VfBFan <drop0815@posteo.de>, 2021, 2023, 2024.
+# VfBFan <drop0815@posteo.de>, 2021, 2023, 2024, 2025.
 # Roman Leo <roman.leo@gmx.de>, 2021.
 # Follpvosten <wolfi@karpador.xyz>, 2021.
 # ssantos <ssantos@web.de>, 2022, 2023, 2024.
@@ -27,7 +27,7 @@ msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2025-01-21 17:02+0100\n"
-"PO-Revision-Date: 2024-12-12 14:43+0000\n"
+"PO-Revision-Date: 2025-01-23 09:05+0000\n"
 "Last-Translator: VfBFan <drop0815@posteo.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/f-droid/fdroidserver/de/>\n"
 "Language: de\n"
@@ -35,7 +35,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.9-dev\n"
+"X-Generator: Weblate 5.10-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -2175,7 +2175,7 @@ msgstr "Mehrdeutige Option: %s (%s?)"
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "apksigner in build-tools;{version} passes APKs with invalid v3 signatures, ignoring."
-msgstr ""
+msgstr "apksigner in build-tools;{version} übergibt APKs mit ungültigen v3-Signaturen und ignoriert sie."
 
 #: ../fdroidserver/common.py
 msgid "apksigner not found! Cannot sign or verify modern APKs"
