@@ -3,13 +3,13 @@
 # Hinaloe <hina@hinaloe.net>, 2020.
 # Suguru Hirahara <shirahara@users.noreply.hosted.weblate.org>, 2024.
 # "Shuuji TAKAHASHI (shuuji3)" <shuuji3@gmail.com>, 2024.
-# Liner Seven <linour7gmekiblo@gmail.com>, 2024.
+# Liner Seven <linour7gmekiblo@gmail.com>, 2024, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.8-224-g4b0ade7\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2025-01-21 17:02+0100\n"
-"PO-Revision-Date: 2024-12-12 01:41+0000\n"
+"PO-Revision-Date: 2025-02-08 06:22+0000\n"
 "Last-Translator: Liner Seven <linour7gmekiblo@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/f-droid/fdroidserver/ja/>\n"
 "Language: ja\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.9-dev\n"
+"X-Generator: Weblate 5.10-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -2154,7 +2154,7 @@ msgstr "オプションが曖昧です：%s（%s？）"
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "apksigner in build-tools;{version} passes APKs with invalid v3 signatures, ignoring."
-msgstr ""
+msgstr "ビルドツール群のapkサイナー;{version}は、無効なv3署名がなされたAPKを無視します。"
 
 #: ../fdroidserver/common.py
 msgid "apksigner not found! Cannot sign or verify modern APKs"
