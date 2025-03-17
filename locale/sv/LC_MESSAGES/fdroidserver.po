@@ -3,14 +3,14 @@
 # Hans-Christoph Steiner <hans@guardianproject.info>, 2020.
 # Elias Mårtenson <elias@dhsdevelopments.com>, 2021.
 # Joel A <joeax910@student.liu.se>, 2021.
-# Kristoffer Grundström <swedishsailfishosuser@tutanota.com>, 2021, 2024.
+# Kristoffer Grundström <swedishsailfishosuser@tutanota.com>, 2021, 2024, 2025.
 # "P.O" <rasmusson.mikael@protonmail.com>, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 1.0.0-95-gd7af22b\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2024-12-11 14:37+0100\n"
-"PO-Revision-Date: 2024-04-24 08:39+0000\n"
+"PO-Revision-Date: 2025-01-15 15:19+0000\n"
 "Last-Translator: Kristoffer Grundström <swedishsailfishosuser@tutanota.com>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/f-droid/fdroidserver/sv/>\n"
 "Language: sv\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.5.1-dev\n"
+"X-Generator: Weblate 5.10-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -122,12 +122,12 @@ msgstr "%r kan inte kallas"
 #: ../fdroidserver/signindex.py
 #, python-format
 msgid "%s did not produce a dict!"
-msgstr ""
+msgstr "%s producerade inte en dict!"
 
 #: ../fdroidserver/signindex.py
 #, python-format
 msgid "%s has bad SHA-256: %s"
-msgstr ""
+msgstr "%s har felaktig SHA-256: %s"
 
 #: ../fdroidserver/lint.py
 #, python-format
