@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 1.0.0-95-gd7af22b\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2024-12-11 14:37+0100\n"
+"POT-Creation-Date: 2025-01-21 17:02+0100\n"
 "PO-Revision-Date: 2025-01-16 22:54+0000\n"
 "Last-Translator: Kristoffer Grundström <swedishsailfishosuser@tutanota.com>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/f-droid/fdroidserver/sv/>\n"
@@ -2144,6 +2144,11 @@ msgstr "tvetydigt alternativ: %(option)s kunde motsvara %(matches)s"
 #, python-format
 msgid "ambiguous option: %s (%s?)"
 msgstr "tvetydig option: %s (%s?)"
+
+#: ../fdroidserver/common.py
+#, python-brace-format
+msgid "apksigner in build-tools;{version} passes APKs with invalid v3 signatures, ignoring."
+msgstr ""
 
 #: ../fdroidserver/common.py
 msgid "apksigner not found! Cannot sign or verify modern APKs"
