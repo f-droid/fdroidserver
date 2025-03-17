@@ -12,7 +12,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2024-12-11 14:37+0100\n"
 "PO-Revision-Date: 2025-01-16 22:54+0000\n"
-"Last-Translator: Marcus skoding <ggd7cnc9m@mozmail.com>\n"
+"Last-Translator: Kristoffer Grundström <swedishsailfishosuser@tutanota.com>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/f-droid/fdroidserver/sv/>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
@@ -89,8 +89,8 @@ msgstr "\"{url}\" är inte en giltig URL!"
 #, python-format
 msgid "%(option)s option requires %(number)d argument"
 msgid_plural "%(option)s option requires %(number)d arguments"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%(option)s-valet kräver %(number)d argument"
+msgstr[1] "%(option)s-valen kräver %(number)d argument"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
