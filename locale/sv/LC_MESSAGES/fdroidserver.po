@@ -5,13 +5,14 @@
 # Joel A <joeax910@student.liu.se>, 2021.
 # Kristoffer Grundström <swedishsailfishosuser@tutanota.com>, 2021, 2024, 2025.
 # "P.O" <rasmusson.mikael@protonmail.com>, 2023.
+# Marcus skoding <ggd7cnc9m@mozmail.com>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 1.0.0-95-gd7af22b\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2024-12-11 14:37+0100\n"
-"PO-Revision-Date: 2025-01-15 15:19+0000\n"
-"Last-Translator: Kristoffer Grundström <swedishsailfishosuser@tutanota.com>\n"
+"PO-Revision-Date: 2025-01-16 22:54+0000\n"
+"Last-Translator: Marcus skoding <ggd7cnc9m@mozmail.com>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/f-droid/fdroidserver/sv/>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
@@ -34,6 +35,8 @@ msgid ""
 "\n"
 "{path} encoded for the DEBUG_KEYSTORE secret variable:"
 msgstr ""
+"\n"
+"{path} kodad för den hemliga variabeln DEBUG_KEYSTORE:"
 
 #: ../fdroidserver/lint.py
 #, python-format
@@ -99,7 +102,7 @@ msgstr "%(prog)s: fel: %(message)s\n"
 #: ../fdroidserver/publish.py
 #, python-format
 msgid "%d APKs failed to be signed or verified!"
-msgstr ""
+msgstr "%d APK:er kunde inte signeras eller verifieras!"
 
 #: ../fdroidserver/scanner.py
 #, python-format
