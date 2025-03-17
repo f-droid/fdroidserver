@@ -12,14 +12,14 @@
 # lucasmz-dev <git@lucasmz.dev>, 2024.
 # Jose Delvani <delvani.eletricista@gmail.com>, 2024.
 # Jose Delvani <jsdelvani@users.noreply.hosted.weblate.org>, 2024.
-# LucasMZ <git@lucasmz.dev>, 2024.
+# LucasMZ <git@lucasmz.dev>, 2024, 2025.
 # dedakir923 <dedakir923@exoular.com>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2025-01-21 17:02+0100\n"
-"PO-Revision-Date: 2024-12-24 01:00+0000\n"
+"PO-Revision-Date: 2025-01-23 16:02+0000\n"
 "Last-Translator: LucasMZ <git@lucasmz.dev>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/f-droid/fdroidserver/pt_BR/>\n"
 "Language: pt_BR\n"
@@ -2167,7 +2167,7 @@ msgstr "opção ambígua: %s (%s?)"
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "apksigner in build-tools;{version} passes APKs with invalid v3 signatures, ignoring."
-msgstr ""
+msgstr "apksigner no builds-tools;{version} passa APKs com assinaturas v3 inválidas, ignorando."
 
 #: ../fdroidserver/common.py
 msgid "apksigner not found! Cannot sign or verify modern APKs"
