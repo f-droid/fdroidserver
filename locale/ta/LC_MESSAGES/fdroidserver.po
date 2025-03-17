@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: fdroidserver 2.1-273-g54e84d87\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2024-12-11 14:37+0100\n"
-"PO-Revision-Date: 2024-12-02 17:00+0000\n"
+"PO-Revision-Date: 2024-12-25 17:10+0000\n"
 "Last-Translator: தமிழ்நேரம் <anishprabu.t@gmail.com>\n"
 "Language-Team: Tamil <https://hosted.weblate.org/projects/f-droid/fdroidserver/ta/>\n"
 "Language: ta\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.9-dev\n"
+"X-Generator: Weblate 5.10-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -1510,7 +1510,7 @@ msgstr "நெட்வொர்க்கிலிருந்து ச்க�
 
 #: ../fdroidserver/verify.py
 msgid "Remove source tarball and any APKs if successfully verified."
-msgstr ""
+msgstr "வெற்றிகரமாக சரிபார்க்கப்பட்டால் மூல நாடாகாப்பகபந்து மற்றும் ஏதேனும் APK களை அகற்றவும்."
 
 #: ../fdroidserver/common.py
 msgid "Removing specified files"
@@ -2031,7 +2031,7 @@ msgstr "குடுவை கையொப்பத்தைப் பயன்�
 
 #: ../fdroidserver/common.py
 msgid "Using Java's jarsigner, not recommended for verifying APKs! Use apksigner"
-msgstr "Using Java's jarsigner, not recommended for verifying APKs! Use apksigner"
+msgstr "சாவாவின் சார்சிக்னரைப் பயன்படுத்துதல், APKS ஐ சரிபார்க்க பரிந்துரைக்கப்படவில்லை! Apksigner ஐப் பயன்படுத்தவும்"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
