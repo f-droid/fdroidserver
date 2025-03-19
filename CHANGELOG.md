@@ -8,9 +8,29 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 
 ### Added
 
+* lint: support the base _config.yml_.
+  https://gitlab.com/fdroid/fdroidserver/-/merge_requests/1606
+
 ### Fixed
 
+* Expand {env: foo} config syntax to be allowed any place a string is.
+  https://gitlab.com/fdroid/fdroidserver/-/merge_requests/1610
+* Only show "unsafe permissions on config.yml" when secrets are present.
+* Standardized config files on ruamel.yaml with a YAML 1.2 data format.
+  https://gitlab.com/fdroid/fdroidserver/-/merge_requests/1611
+* Brought back error when a package has multiple package types (e.g. xapk and
+  apk).  https://gitlab.com/fdroid/fdroidserver/-/merge_requests/1602
+* Reworked test suite to be entirely based on Python unittest (thanks @mindston).
+  https://gitlab.com/fdroid/fdroidserver/-/merge_requests/1587
+* publish/signindex/gpgsign no longer load the _qrcode_ and _requests_ modules,
+  and can operate without them installed.
+
 ### Removed
+
+* checkupdates: remove auto_author: config, it is no longer used.
+* Purge support for the long-deprecated _config.py_ config file.
+  https://gitlab.com/fdroid/fdroidserver/-/merge_requests/1607
+
 
 ## [2.3.5] - 2025-01-20
 
