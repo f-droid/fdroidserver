@@ -20,7 +20,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 1.0.0-95-gd7af22b\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2025-01-21 17:02+0100\n"
+"POT-Creation-Date: 2025-03-19 17:56+0100\n"
 "PO-Revision-Date: 2025-01-25 15:42+0000\n"
 "Last-Translator: Golubev Alexander <fatzer2@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/f-droid/fdroidserver/ru/>\n"
@@ -536,6 +536,11 @@ msgstr "Новый контейнер \"{name}\" создан"
 msgid "Creating \"{path}\" for configuring s3cmd."
 msgstr "Создание \"{path}\" для конфигурации s3cmd."
 
+#: ../fdroidserver/common.py
+#, fuzzy, python-brace-format
+msgid "Creating empty {config_file}"
+msgstr "Чтение '{config_file}'"
+
 #: ../fdroidserver/publish.py
 msgid "Creating log directory"
 msgstr "Создание директории для хранения логов"
@@ -721,6 +726,16 @@ msgstr "ОШИБКА: {key} в {path} должен быть или \"archive\", 
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
+msgid "ERROR: {key} not a valid key!"
+msgstr ""
+
+#: ../fdroidserver/lint.py
+#, python-brace-format
+msgid "ERROR: {key}'s value should be of type {t}!"
+msgstr ""
+
+#: ../fdroidserver/lint.py
+#, python-brace-format
 msgid "ERROR: {key}:{subkey} in {path} is not in allowed keys: {allowed_keys}!"
 msgstr "ОШИБКА: {key}:{subkey} в {path} не входит в список допустимых значений: {allowed_keys}!"
 
@@ -741,6 +756,11 @@ msgstr ""
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Environment variable {var} from {configname} is not set!"
+msgstr "Переменная среды {var} из {configname} не установлена!"
+
+#: ../fdroidserver/common.py
+#, fuzzy, python-brace-format
+msgid "Environment variable {{env: {var}}} is not set!"
 msgstr "Переменная среды {var} из {configname} не установлена!"
 
 #: ../fdroidserver/deploy.py
@@ -988,6 +1008,11 @@ msgstr "Проигнорировано: запись в FUNDING.yml длинне
 #, python-format
 msgid "Ignoring bad element in manifest: %s"
 msgstr "Проигнорировано: плохой элемент в манифесте: %s"
+
+#: ../fdroidserver/common.py
+#, fuzzy, python-brace-format
+msgid "Ignoring deprecated {oldfile}, use {newfile}!"
+msgstr "{oldfile} признан устаревшим; используйте {newfile}"
 
 #: ../fdroidserver/index.py
 msgid "Ignoring package without metadata: "
@@ -1358,6 +1383,10 @@ msgstr "В одном из 'github_releases' отсутствует значен
 #, python-brace-format
 msgid "Only PNG and JPEG are supported for graphics, found: {path}"
 msgstr "Допускаются изображения только в форматах PNG и JPEG: {path}"
+
+#: ../fdroidserver/common.py
+msgid "Only accepts a single key \"env\""
+msgstr ""
 
 #: ../fdroidserver/checkupdates.py
 msgid "Only print differences with the Play Store"
@@ -1755,6 +1784,10 @@ msgstr "Режим обновления тегов используется в g
 #: ../fdroidserver/build.py
 msgid "Test mode - put output in the tmp directory only, and always build, even if the output already exists."
 msgstr "Тестовый режим. Все собранное попадает во временную директорию; сборка запускается снова в любом случае."
+
+#: ../fdroidserver/index.py
+msgid "The \"qrcode\" Python package is not installed (e.g. apt-get install python3-qrcode)!"
+msgstr ""
 
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
 #: ../fdroidserver/update.py
@@ -2858,6 +2891,11 @@ msgstr "{name}: \"{section}/icons/{path}\" не существует! Попра
 #, python-brace-format
 msgid "{oldfile} is deprecated, use {newfile}"
 msgstr "{oldfile} признан устаревшим; используйте {newfile}"
+
+#: ../fdroidserver/update.py
+#, python-brace-format
+msgid "{path1} is a duplicate of {path2}, remove one!"
+msgstr ""
 
 #: ../fdroidserver/import_subcommand.py
 #, python-brace-format

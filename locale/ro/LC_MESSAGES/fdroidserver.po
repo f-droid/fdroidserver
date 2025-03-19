@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 2.0a5-27-gf24eae0f\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2025-01-21 17:02+0100\n"
+"POT-Creation-Date: 2025-03-19 17:56+0100\n"
 "PO-Revision-Date: 2024-12-02 17:00+0000\n"
 "Last-Translator: Licaon Kter <licaon.kter@protonmail.com>\n"
 "Language-Team: Romanian <https://hosted.weblate.org/projects/f-droid/fdroidserver/ro/>\n"
@@ -525,6 +525,11 @@ msgstr "Creat un nou container \"{name}\""
 msgid "Creating \"{path}\" for configuring s3cmd."
 msgstr "Crearea \"{path}\" pentru configurarea s3cmd."
 
+#: ../fdroidserver/common.py
+#, fuzzy, python-brace-format
+msgid "Creating empty {config_file}"
+msgstr "Citirea '{config_file}'"
+
 #: ../fdroidserver/publish.py
 msgid "Creating log directory"
 msgstr "Crearea directorului de jurnal"
@@ -710,6 +715,16 @@ msgstr ""
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
+msgid "ERROR: {key} not a valid key!"
+msgstr ""
+
+#: ../fdroidserver/lint.py
+#, python-brace-format
+msgid "ERROR: {key}'s value should be of type {t}!"
+msgstr ""
+
+#: ../fdroidserver/lint.py
+#, python-brace-format
 msgid "ERROR: {key}:{subkey} in {path} is not in allowed keys: {allowed_keys}!"
 msgstr ""
 
@@ -730,6 +745,11 @@ msgstr ""
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Environment variable {var} from {configname} is not set!"
+msgstr "Variabila de mediu {var} din {configname} nu este setată!"
+
+#: ../fdroidserver/common.py
+#, fuzzy, python-brace-format
+msgid "Environment variable {{env: {var}}} is not set!"
 msgstr "Variabila de mediu {var} din {configname} nu este setată!"
 
 #: ../fdroidserver/deploy.py
@@ -977,6 +997,11 @@ msgstr "Ignorarea intrării FUNDING.yml mai lungă de 2048: %s"
 #, python-format
 msgid "Ignoring bad element in manifest: %s"
 msgstr "Ignorarea elementului greșit din manifest: %s"
+
+#: ../fdroidserver/common.py
+#, fuzzy, python-brace-format
+msgid "Ignoring deprecated {oldfile}, use {newfile}!"
+msgstr "{oldfile} este depreciat, folosiți {newfile}"
 
 #: ../fdroidserver/index.py
 msgid "Ignoring package without metadata: "
@@ -1347,6 +1372,10 @@ msgstr ""
 #, python-brace-format
 msgid "Only PNG and JPEG are supported for graphics, found: {path}"
 msgstr "Doar PNG și JPEG sunt acceptate pentru grafică, găsite: {path}"
+
+#: ../fdroidserver/common.py
+msgid "Only accepts a single key \"env\""
+msgstr ""
 
 #: ../fdroidserver/checkupdates.py
 msgid "Only print differences with the Play Store"
@@ -1744,6 +1773,10 @@ msgstr "Modul de actualizare a etichetelor folosit în git-svn, dar repo-ul nu a
 #: ../fdroidserver/build.py
 msgid "Test mode - put output in the tmp directory only, and always build, even if the output already exists."
 msgstr "Modul test - puneți ieșirea numai în directorul tmp și construiți întotdeauna, chiar dacă ieșirea există deja."
+
+#: ../fdroidserver/index.py
+msgid "The \"qrcode\" Python package is not installed (e.g. apt-get install python3-qrcode)!"
+msgstr ""
 
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
 #: ../fdroidserver/update.py
@@ -2848,6 +2881,11 @@ msgstr "{name} \"{section}/icons/{path}\" nu există! Verificați \"config.yml\"
 #, python-brace-format
 msgid "{oldfile} is deprecated, use {newfile}"
 msgstr "{oldfile} este depreciat, folosiți {newfile}"
+
+#: ../fdroidserver/update.py
+#, python-brace-format
+msgid "{path1} is a duplicate of {path2}, remove one!"
+msgstr ""
 
 #: ../fdroidserver/import_subcommand.py
 #, python-brace-format

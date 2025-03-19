@@ -1,20 +1,21 @@
 # SOME DESCRIPTIVE TITLE.
 # This file is put in the public domain.
 # "Coool (github.com/Coool)" <coool@mail.lv>, 2024.
+# Edgars Andersons <Edgars+Weblate@gaitenis.id.lv>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 2.3a1\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2024-11-21 21:34+0100\n"
-"PO-Revision-Date: 2024-08-14 18:07+0000\n"
-"Last-Translator: \"Coool (github.com/Coool)\" <coool@mail.lv>\n"
+"POT-Creation-Date: 2025-03-19 17:56+0100\n"
+"PO-Revision-Date: 2024-11-22 21:03+0000\n"
+"Last-Translator: Edgars Andersons <Edgars+Weblate@gaitenis.id.lv>\n"
 "Language-Team: Latvian <https://hosted.weblate.org/projects/f-droid/fdroidserver/lv/>\n"
 "Language: lv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n % 10 == 0 || n % 100 >= 11 && n % 100 <= 19) ? 0 : ((n % 10 == 1 && n % 100 != 11) ? 1 : 2);\n"
-"X-Generator: Weblate 5.7-dev\n"
+"X-Generator: Weblate 5.9-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -104,7 +105,7 @@ msgstr ""
 #: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
 #: /usr/lib/python3.11/optparse.py
 msgid "%prog [options]"
-msgstr "%prog [opcijas]"
+msgstr "%prog [iespējas]"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
@@ -197,7 +198,7 @@ msgstr ""
 
 #: ../fdroidserver/checkupdates.py
 msgid "--merge-request only runs on a single appid!"
-msgstr ""
+msgstr "--merge-request darbojas tikai ar vienu appid."
 
 #: ../fdroidserver/checkupdates.py
 #, python-brace-format
@@ -328,11 +329,11 @@ msgstr ""
 
 #: ../fdroidserver/install.py
 msgid "Automatic no to all prompts."
-msgstr ""
+msgstr "Visām uzvednēm automātiski atbildēt ar \"Nē\"."
 
 #: ../fdroidserver/install.py
 msgid "Automatic yes to all prompts."
-msgstr ""
+msgstr "Visām uzvednēm automātiski atbildēt ar \"Jā\"."
 
 #: ../fdroidserver/index.py
 #, python-brace-format
@@ -428,11 +429,11 @@ msgstr ""
 
 #: ../fdroidserver/common.py
 msgid "Color the log output"
-msgstr ""
+msgstr "Iekrāsot žurnāla izvadi"
 
 #: ../fdroidserver/import_subcommand.py
 msgid "Comma separated list of categories."
-msgstr ""
+msgstr "Ar komatu atdalītu kategoriju saraksts."
 
 #: ../fdroidserver/__main__.py
 #, python-format
@@ -441,11 +442,11 @@ msgstr ""
 
 #: ../fdroidserver/checkupdates.py
 msgid "Commit changes"
-msgstr ""
+msgstr "Iesūtīt izmaiņas"
 
 #: ../fdroidserver/checkupdates.py
 msgid "Commit changes, push, then make a merge request"
-msgstr ""
+msgstr "Jāiesūta izmaiņas, jāaizgādā tās, tad jāizveido izmaiņu pieprasījums"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
@@ -513,6 +514,11 @@ msgstr ""
 #: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "Creating \"{path}\" for configuring s3cmd."
+msgstr ""
+
+#: ../fdroidserver/common.py
+#, python-brace-format
+msgid "Creating empty {config_file}"
 msgstr ""
 
 #: ../fdroidserver/publish.py
@@ -632,25 +638,25 @@ msgstr ""
 
 #: ../fdroidserver/install.py
 msgid "Download F-Droid.apk using mirrors that leak less to the network"
-msgstr ""
+msgstr "Lejupielādēt F-Droid.apk no spoguļserveriem, kas tīklā nopludina mazāk"
 
 #: ../fdroidserver/__main__.py
 msgid "Download complete mirrors of small repos"
-msgstr ""
+msgstr "Lejupielādēt pilnīgu mazu glabātavu spoguļojumu"
 
 #: ../fdroidserver/common.py
 #, python-format
 msgid "Downloading %s"
-msgstr ""
+msgstr "Lejupielādē %s"
 
 #: ../fdroidserver/common.py
 msgid "Downloading the repository already failed once, not trying again."
-msgstr ""
+msgstr "Glabātavas lejupielāde jau vienreiz neizdevās, tas atkārtoti netiks mēģināts."
 
 #: ../fdroidserver/verify.py
 #, python-brace-format
 msgid "Downloading {url} failed. {error}"
-msgstr ""
+msgstr "{url} lejupielāde neizdevās. {error}"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
@@ -698,6 +704,16 @@ msgstr ""
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
+msgid "ERROR: {key} not a valid key!"
+msgstr ""
+
+#: ../fdroidserver/lint.py
+#, python-brace-format
+msgid "ERROR: {key}'s value should be of type {t}!"
+msgstr ""
+
+#: ../fdroidserver/lint.py
+#, python-brace-format
 msgid "ERROR: {key}:{subkey} in {path} is not in allowed keys: {allowed_keys}!"
 msgstr ""
 
@@ -716,6 +732,11 @@ msgstr ""
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Environment variable {var} from {configname} is not set!"
+msgstr ""
+
+#: ../fdroidserver/common.py
+#, python-brace-format
+msgid "Environment variable {{env: {var}}} is not set!"
 msgstr ""
 
 #: ../fdroidserver/deploy.py
@@ -740,7 +761,7 @@ msgstr ""
 
 #: ../fdroidserver/install.py
 msgid "F-Droid.apk could not be downloaded from any known source!"
-msgstr ""
+msgstr "F-Droid.apk nevarēja lejupielādēt ne no viena zināmā avota."
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -962,6 +983,11 @@ msgstr ""
 #: ../fdroidserver/update.py
 #, python-format
 msgid "Ignoring bad element in manifest: %s"
+msgstr ""
+
+#: ../fdroidserver/common.py
+#, python-brace-format
+msgid "Ignoring deprecated {oldfile}, use {newfile}!"
 msgstr ""
 
 #: ../fdroidserver/index.py
@@ -1202,53 +1228,53 @@ msgstr ""
 
 #: ../fdroidserver/install.py
 msgid "No devices found for `adb install`! Please plug one in."
-msgstr ""
+msgstr "Netika atrasta neviena ierīce, kurā izpildīt `adb install`. Lūgums piespraust kādu."
 
 #: ../fdroidserver/index.py
 msgid "No fingerprint in URL."
-msgstr ""
+msgstr "URL nesatur pirkstu nospiedumu."
 
 #: ../fdroidserver/common.py
 msgid "No git submodules available"
-msgstr ""
+msgstr "Nav pieejams neviens git apakšmodulis"
 
 #: ../fdroidserver/import_subcommand.py
 msgid "No gradle project could be found. Specify --subdir?"
-msgstr ""
+msgstr "Nevarēja atrast nevienu gradle projektu. Norādīt --subdir?"
 
 #: ../fdroidserver/import_subcommand.py
 msgid "No information found."
-msgstr ""
+msgstr "Informācija netika atrasta."
 
 #: ../fdroidserver/checkupdates.py
 msgid "No matching tags found"
-msgstr ""
+msgstr "Netika atrastas atbilstošas birkas"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "No minimum SDK version found in {0}, using default (3)."
-msgstr ""
+msgstr "{0} netika atrasta zemākā pieļaujamā SDK versija, izmanto noklusējumu (3)."
 
 #: ../fdroidserver/lint.py
 msgid "No need to specify that the app is Free Software"
-msgstr ""
+msgstr "Nav nepieciešams norādīt, ka lietotne ir brīva programmatūra"
 
 #: ../fdroidserver/lint.py
 msgid "No need to specify that the app is for Android"
-msgstr ""
+msgstr "Nav nepieciešams norādīt, ka lietotne ir paredzēta Android"
 
 #: ../fdroidserver/deploy.py
 msgid "No option set! Edit your config.yml to set at least one of these:"
-msgstr ""
+msgstr "Nav iestatīta neviena iespēja. Jālabo config.yml, lai iestatītu vismaz vienu no šiem:"
 
 #: ../fdroidserver/common.py
 msgid "No packages specified"
-msgstr ""
+msgstr "Nav norādīta neviena pakotne"
 
 #: ../fdroidserver/install.py
 #, python-format
 msgid "No signed APK available for %s"
-msgstr ""
+msgstr "%s nav pieejams neviens parakstīts APK"
 
 #: ../fdroidserver/install.py
 msgid "No signed output directory - nothing to do"
@@ -1332,6 +1358,10 @@ msgstr ""
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Only PNG and JPEG are supported for graphics, found: {path}"
+msgstr ""
+
+#: ../fdroidserver/common.py
+msgid "Only accepts a single key \"env\""
 msgstr ""
 
 #: ../fdroidserver/checkupdates.py
@@ -1498,6 +1528,10 @@ msgstr ""
 msgid "Refresh and cache scanner rules and signatures from the network"
 msgstr ""
 
+#: ../fdroidserver/verify.py
+msgid "Remove source tarball and any APKs if successfully verified."
+msgstr "Noņemt avota arhīvu un jebkādus APK, ja sekmīgi apliecināta."
+
 #: ../fdroidserver/common.py
 msgid "Removing specified files"
 msgstr ""
@@ -1535,7 +1569,7 @@ msgstr ""
 #: ../fdroidserver/net.py
 #, python-format
 msgid "Retrying failed download: %s"
-msgstr ""
+msgstr "Atkārtoti mēģina neizdevušos lejupielādi: %s"
 
 #: ../fdroidserver/__main__.py
 msgid "Rewrite all the metadata files"
@@ -1544,7 +1578,7 @@ msgstr ""
 #: ../fdroidserver/rewritemeta.py
 #, python-brace-format
 msgid "Rewriting '{appid}'"
-msgstr ""
+msgstr "Pārraksta \"{appid}\""
 
 #: ../fdroidserver/checkupdates.py
 msgid "Run on git repo that has uncommitted changes"
@@ -1604,7 +1638,7 @@ msgstr[1] ""
 
 #: ../fdroidserver/scanner.py
 msgid "Scanning APK for extra signing blocks."
-msgstr ""
+msgstr "Caurskata APK, vai ir papildu paraksta bloki."
 
 #: ../fdroidserver/scanner.py
 msgid "Scanning APK with dexdump for known non-free classes."
@@ -1724,6 +1758,10 @@ msgstr ""
 
 #: ../fdroidserver/build.py
 msgid "Test mode - put output in the tmp directory only, and always build, even if the output already exists."
+msgstr ""
+
+#: ../fdroidserver/index.py
+msgid "The \"qrcode\" Python package is not installed (e.g. apt-get install python3-qrcode)!"
 msgstr ""
 
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
@@ -2056,12 +2094,12 @@ msgstr ""
 #: ../fdroidserver/install.py
 #, python-brace-format
 msgid "Verifying package {path} with apksigner."
-msgstr ""
+msgstr "Pārbauda pakotni {path} ar apksigner."
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "VirusTotal API key cannot upload files larger than 32MB, use {url} to upload {path}."
-msgstr ""
+msgstr "VirusTotal API atslēga nevar augšupielādēt datnes, kas ir lielākas par 32 MB. Jāizmanto {url}, lai augšupielādētu {path}."
 
 #: ../fdroidserver/__main__.py
 msgid "Warn about possible metadata errors"
@@ -2069,7 +2107,7 @@ msgstr ""
 
 #: ../fdroidserver/scanner.py
 msgid "WebAssembly binary file"
-msgstr ""
+msgstr "WebAssebly binārā datne"
 
 #: ../fdroidserver/update.py
 msgid "When configured for signed indexes, create only unsigned indexes at this stage"
@@ -2085,11 +2123,11 @@ msgstr ""
 
 #: ../fdroidserver/install.py
 msgid "Would you like to download and install F-Droid.apk via adb? (YES/no)"
-msgstr ""
+msgstr "Vai lejupielādēt un uzstādīt F-Droid.apk ar adb? (YES/no)"
 
 #: ../fdroidserver/install.py
 msgid "Would you like to download the app(s) from f-droid.org? (YES/no)"
-msgstr ""
+msgstr "Vai lejupielādēt lietotni(es) no f-drodi.org? (YES/no)"
 
 #: ../fdroidserver/init.py
 msgid "X.509 'Distinguished Name' used when generating keys"
@@ -2106,7 +2144,7 @@ msgstr ""
 #: ../fdroidserver/install.py
 #, python-brace-format
 msgid "adb reports {serial} is \"{status}\"!"
-msgstr ""
+msgstr "adb ziņo, ka {serial} ir \"{status}\"."
 
 #: ../fdroidserver/nightly.py
 #, python-brace-format
@@ -2130,6 +2168,11 @@ msgstr ""
 #: /usr/lib/python3.11/optparse.py
 #, python-format
 msgid "ambiguous option: %s (%s?)"
+msgstr ""
+
+#: ../fdroidserver/common.py
+#, python-brace-format
+msgid "apksigner in build-tools;{version} passes APKs with invalid v3 signatures, ignoring."
 msgstr ""
 
 #: ../fdroidserver/common.py
@@ -2674,7 +2717,7 @@ msgstr ""
 
 #: ../fdroidserver/install.py
 msgid "true"
-msgstr ""
+msgstr "patiess"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
@@ -2688,7 +2731,7 @@ msgstr ""
 #: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "unknown parser %(parser_name)r (choices: %(choices)s)"
-msgstr ""
+msgstr "nezināms parsētājs %(parser_name)r (izvēles: %(choices)s)"
 
 #: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
 #: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
@@ -2715,11 +2758,11 @@ msgstr ""
 
 #: ../fdroidserver/deploy.py
 msgid "virustotal.com is rate limiting, waiting to retry..."
-msgstr ""
+msgstr "virustotal.com ierobežo pieprasījumus, gaida, lai mēģinātu atkārtoti..."
 
 #: ../fdroidserver/install.py
 msgid "yes"
-msgstr ""
+msgstr "jā"
 
 #: ../fdroidserver/publish.py
 #, python-brace-format
@@ -2814,6 +2857,11 @@ msgstr ""
 msgid "{oldfile} is deprecated, use {newfile}"
 msgstr ""
 
+#: ../fdroidserver/update.py
+#, python-brace-format
+msgid "{path1} is a duplicate of {path2}, remove one!"
+msgstr ""
+
 #: ../fdroidserver/import_subcommand.py
 #, python-brace-format
 msgid "{path} already exists, ignoring import results!"
@@ -2837,12 +2885,12 @@ msgstr ""
 #: ../fdroidserver/install.py
 #, python-brace-format
 msgid "{path} has the wrong fingerprint ({fingerprint})!"
-msgstr ""
+msgstr "{path} ir nepareizs pirkstu nospiedums ({fingerprint})."
 
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "{path} is not \"key: value\" dict, but a {datatype}!"
-msgstr ""
+msgstr "{path} nav \"atslēga: vērtība\" vārdnīca, bet gan {datatype}."
 
 #: ../fdroidserver/common.py
 #, python-brace-format

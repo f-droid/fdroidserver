@@ -2,20 +2,21 @@
 # This file is put in the public domain.
 # A <ville.mourujarvi@hostedweblate.mail.kapsi.fi>, 2020.
 # Kaantaja <ufdbvgoljrjkrkyyub@ianvvn.com>, 2021.
+# Ricky Tigg <ricky.tigg@gmail.com>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 2.0a0-62-gc63c4b3d\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2025-01-21 17:02+0100\n"
-"PO-Revision-Date: 2021-08-23 01:29+0000\n"
-"Last-Translator: Kaantaja <ufdbvgoljrjkrkyyub@ianvvn.com>\n"
+"POT-Creation-Date: 2025-03-19 17:55+0100\n"
+"PO-Revision-Date: 2025-01-31 14:19+0000\n"
+"Last-Translator: Ricky Tigg <ricky.tigg@gmail.com>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/f-droid/fdroidserver/fi/>\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.8.1-dev\n"
+"X-Generator: Weblate 5.10-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -43,7 +44,7 @@ msgstr ""
 #: ../fdroidserver/install.py
 #, python-brace-format
 msgid "\"{apkfilename}\" is already installed on {dev}."
-msgstr ""
+msgstr "\"{apkfilename}\" on jo asennettu kohteeseen {dev}."
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -321,7 +322,7 @@ msgstr ""
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Archiving {apkfilename} with invalid signature!"
-msgstr ""
+msgstr "Arkistoidaan {apkfilename} virheellisellä allekirjoituksella!"
 
 #: ../fdroidserver/lint.py
 msgid "AutoUpdateMode with UpdateCheckMode: HTTP must have a pattern."
@@ -516,6 +517,11 @@ msgstr ""
 msgid "Creating \"{path}\" for configuring s3cmd."
 msgstr ""
 
+#: ../fdroidserver/common.py
+#, python-brace-format
+msgid "Creating empty {config_file}"
+msgstr ""
+
 #: ../fdroidserver/publish.py
 msgid "Creating log directory"
 msgstr ""
@@ -699,6 +705,16 @@ msgstr ""
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
+msgid "ERROR: {key} not a valid key!"
+msgstr ""
+
+#: ../fdroidserver/lint.py
+#, python-brace-format
+msgid "ERROR: {key}'s value should be of type {t}!"
+msgstr ""
+
+#: ../fdroidserver/lint.py
+#, python-brace-format
 msgid "ERROR: {key}:{subkey} in {path} is not in allowed keys: {allowed_keys}!"
 msgstr ""
 
@@ -717,6 +733,11 @@ msgstr ""
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Environment variable {var} from {configname} is not set!"
+msgstr ""
+
+#: ../fdroidserver/common.py
+#, python-brace-format
+msgid "Environment variable {{env: {var}}} is not set!"
 msgstr ""
 
 #: ../fdroidserver/deploy.py
@@ -751,7 +772,7 @@ msgstr ""
 #: ../fdroidserver/signatures.py
 #, python-brace-format
 msgid "Failed fetching signatures for '{apkfilename}': {error}"
-msgstr ""
+msgstr "Allekirjoitusten nouto '{apkfilename}':lle epäonnistui: {error}"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -785,7 +806,7 @@ msgstr ""
 #: ../fdroidserver/install.py
 #, python-brace-format
 msgid "Failed to install '{apkfilename}' on {dev}: {error}"
-msgstr ""
+msgstr "'{apkfilename}':n asentaminen kohteelle {dev} epäonnistui: {error}"
 
 #: ../fdroidserver/common.py
 msgid "Failed to sign application"
@@ -799,7 +820,7 @@ msgstr ""
 #: ../fdroidserver/signatures.py
 #, python-brace-format
 msgid "Fetched signatures for '{apkfilename}' -> '{sigdir}'"
-msgstr ""
+msgstr "Haetut allekirjoitukset kohteelle '{apkfilename}' -> '{sigdir}'"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -882,17 +903,17 @@ msgstr ""
 #: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "Found {apkfilename} at {url}"
-msgstr ""
+msgstr "{apkfilename} löytyi {url}:lla"
 
 #: ../fdroidserver/scanner.py
 #, python-brace-format
 msgid "Found {count} problems in {filename}"
-msgstr ""
+msgstr "Löytyi {count} ongelmaa {filename}:ssa"
 
 #: ../fdroidserver/scanner.py
 #, python-brace-format
 msgid "Found {count} warnings in {filename}"
-msgstr ""
+msgstr "Löytyi {count} varoitusta {filename}:ssa"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -965,6 +986,11 @@ msgstr ""
 msgid "Ignoring bad element in manifest: %s"
 msgstr ""
 
+#: ../fdroidserver/common.py
+#, python-brace-format
+msgid "Ignoring deprecated {oldfile}, use {newfile}!"
+msgstr ""
+
 #: ../fdroidserver/index.py
 msgid "Ignoring package without metadata: "
 msgstr ""
@@ -972,7 +998,7 @@ msgstr ""
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Ignoring stale cache data for {apkfilename}"
-msgstr ""
+msgstr "Ohitetaan vanhentuneet välimuistitiedot kohteelle {apkfilename}"
 
 #: ../fdroidserver/update.py
 msgid "Include APKs that are signed with disabled algorithms like MD5"
@@ -1020,7 +1046,7 @@ msgstr ""
 #: ../fdroidserver/install.py
 #, python-brace-format
 msgid "Installing '{apkfilename}' on {dev}..."
-msgstr ""
+msgstr "Asennetaan '{apkfilename}' kohteelle {dev}..."
 
 #: ../fdroidserver/__main__.py
 msgid "Interact with the repo HTTP server"
@@ -1128,7 +1154,7 @@ msgstr ""
 #: ../fdroidserver/build.py
 #, python-brace-format
 msgid "Keeping failed build \"{apkfilename}\""
-msgstr ""
+msgstr "Säilytetään epäonnistunut koonti \"{apkfilename}\""
 
 #: ../fdroidserver/init.py
 msgid "Keystore for signing key:\t"
@@ -1308,7 +1334,7 @@ msgstr ""
 
 #: ../fdroidserver/update.py
 msgid "OBB filename must start with \"main.\" or \"patch.\":"
-msgstr ""
+msgstr "OBB-tiedoston nimen alussa on oltava \"main\". tai \"patch\".:"
 
 #: ../fdroidserver/update.py
 msgid "OBB's packagename does not match a supported APK:"
@@ -1333,6 +1359,10 @@ msgstr ""
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Only PNG and JPEG are supported for graphics, found: {path}"
+msgstr ""
+
+#: ../fdroidserver/common.py
+msgid "Only accepts a single key \"env\""
 msgstr ""
 
 #: ../fdroidserver/checkupdates.py
@@ -1372,7 +1402,7 @@ msgstr ""
 #: ../fdroidserver/index.py
 #, python-brace-format
 msgid "Overriding blank versionName in {apkfilename} from metadata: {version}"
-msgstr ""
+msgstr "Tyhjän versionName:n ohittaminen kohteessa {apkfilename} metatiedoista: {version}"
 
 #: ../fdroidserver/import_subcommand.py
 #, python-brace-format
@@ -1430,7 +1460,7 @@ msgstr ""
 #: ../fdroidserver/publish.py ../fdroidserver/update.py
 #, python-brace-format
 msgid "Processing {apkfilename}"
-msgstr ""
+msgstr "Käsitellään {apkfilename}"
 
 #: ../fdroidserver/checkupdates.py ../fdroidserver/scanner.py
 #, python-brace-format
@@ -1483,17 +1513,17 @@ msgstr ""
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Reading packageName/versionCode/versionName failed, APK invalid: '{apkfilename}'"
-msgstr ""
+msgstr "Kohteen packageName/versionCode/versionName lukeminen epäonnistui, APK virheellinen: '{apkfilename}'"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Reading packageName/versionCode/versionName failed,APK invalid: '{apkfilename}'"
-msgstr ""
+msgstr "Kohteen packageName/versionCode/versionName lukeminen epäonnistui, APK virheellinen: '{apkfilename}'"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Reading {apkfilename} from cache"
-msgstr ""
+msgstr "Luetaan {apkfilename} välimuistista"
 
 #: ../fdroidserver/build.py
 msgid "Refresh and cache scanner rules and signatures from the network"
@@ -1527,7 +1557,7 @@ msgstr ""
 #: ../fdroidserver/nightly.py
 #, python-brace-format
 msgid "Resigning {apkfilename} with provided debug.keystore"
-msgstr ""
+msgstr "Allekirjoitetaan {apkfilename} uudelleen toimitetulla debug.keystore:lla"
 
 #: ../fdroidserver/update.py
 msgid "Resize all the icons exceeding the max pixel size and exit"
@@ -1661,7 +1691,7 @@ msgstr ""
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Skipping '{apkfilename}' with invalid signature!"
-msgstr ""
+msgstr "Ohitetaan '{apkfilename}' virheellisellä allekirjoituksella!"
 
 #: ../fdroidserver/deploy.py ../fdroidserver/index.py
 #, python-format
@@ -1676,7 +1706,7 @@ msgstr ""
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Skipping {apkfilename} with invalid signature!"
-msgstr ""
+msgstr "Ohitetaan {apkfilename} virheellisellä allekirjoituksella!"
 
 #: ../fdroidserver/scanner.py
 #, python-brace-format
@@ -1702,7 +1732,7 @@ msgstr ""
 #: ../fdroidserver/nightly.py
 #, python-brace-format
 msgid "Stripping mystery signature from {apkfilename}"
-msgstr ""
+msgstr "Salaperäisen allekirjoituksen poistaminen kohteesta {apkfilename}"
 
 #: ../fdroidserver/lint.py
 #, python-format
@@ -1729,6 +1759,10 @@ msgstr ""
 
 #: ../fdroidserver/build.py
 msgid "Test mode - put output in the tmp directory only, and always build, even if the output already exists."
+msgstr ""
+
+#: ../fdroidserver/index.py
+msgid "The \"qrcode\" Python package is not installed (e.g. apt-get install python3-qrcode)!"
 msgstr ""
 
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
@@ -1838,7 +1872,7 @@ msgstr ""
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "Unknown file '{filename}' in build '{versionName}'"
-msgstr ""
+msgstr "Tuntematon tiedosto '{filename}' koonnissa '{versionName}'"
 
 #: ../fdroidserver/metadata.py
 #, python-format
@@ -1951,12 +1985,12 @@ msgstr ""
 #: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "Uploading {apkfilename} to androidobservatory.org"
-msgstr ""
+msgstr "Ulosladataan {apkfilename}:a osoitteeseen androidobservatory.org"
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "Uploading {apkfilename} to virustotal"
-msgstr ""
+msgstr "Ulosladataan {apkfilename} virustotaliin"
 
 #: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
 #: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
@@ -2188,7 +2222,7 @@ msgstr ""
 #: /usr/lib/python3.9/argparse.py /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "can't open '%(filename)s': %(error)s"
-msgstr ""
+msgstr "%(filename)s:a ei voi avata: %(error)s"
 
 #: ../fdroidserver/scanner.py
 msgid "can't open non-https url: '{};"
@@ -2280,7 +2314,7 @@ msgstr ""
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "deleting: repo/{apkfilename}"
-msgstr ""
+msgstr "Poistetaan: repo/{apkfilename}"
 
 #: ../fdroidserver/scanner.py
 msgid "dependency file without lock"
@@ -2588,7 +2622,7 @@ msgstr ""
 #: ../fdroidserver/signatures.py
 #, python-brace-format
 msgid "refuse downloading via insecure HTTP connection (use HTTPS or specify --no-https-check): {apkfilename}"
-msgstr ""
+msgstr "kieltäydy lataamisesta suojaamattoman HTTP-yhteyden kautta; käytä HTTPS:a tai määritä '--no-https-check': {apkfilename}"
 
 #: ../fdroidserver/index.py
 #, python-format
@@ -2741,17 +2775,17 @@ msgstr[1] ""
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "{apkfilename} ({appid}) has no metadata!"
-msgstr ""
+msgstr "{apkfilename}:lla ({appid}) ei ole metatietoja!"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "{apkfilename} has multiple {name} files, looks like Master Key exploit!"
-msgstr ""
+msgstr "{apkfilename} sisältää useita {name} tiedostoja, näyttää Pääavaimen hyväksikäytöltä!"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "{apkfilename}'s AndroidManifest.xml has a bad date: "
-msgstr ""
+msgstr "{apkfilename}:n AndroidManifest.xml:ssa on väärä päivämäärä: "
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -2822,6 +2856,11 @@ msgstr ""
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "{oldfile} is deprecated, use {newfile}"
+msgstr ""
+
+#: ../fdroidserver/update.py
+#, python-brace-format
+msgid "{path1} is a duplicate of {path2}, remove one!"
 msgstr ""
 
 #: ../fdroidserver/import_subcommand.py

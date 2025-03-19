@@ -18,7 +18,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2025-01-21 17:02+0100\n"
+"POT-Creation-Date: 2025-03-19 17:55+0100\n"
 "PO-Revision-Date: 2025-03-16 22:47+0000\n"
 "Last-Translator: Nicolás Pérez <ccnicolasperez@gmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/f-droid/fdroidserver/es/>\n"
@@ -532,6 +532,11 @@ msgstr "Se ha creado el contenedor nuevo \"{name}\""
 msgid "Creating \"{path}\" for configuring s3cmd."
 msgstr "Creando \"{path}\" para configurar s3cmd."
 
+#: ../fdroidserver/common.py
+#, fuzzy, python-brace-format
+msgid "Creating empty {config_file}"
+msgstr "Leyendo '{config_file}'"
+
 #: ../fdroidserver/publish.py
 msgid "Creating log directory"
 msgstr "Creando el directorio de registro (\"log\")"
@@ -717,6 +722,16 @@ msgstr "ERROR: ¡{key} en {path} no es un \"archivo\" o un \"repositorio\"!"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
+msgid "ERROR: {key} not a valid key!"
+msgstr ""
+
+#: ../fdroidserver/lint.py
+#, python-brace-format
+msgid "ERROR: {key}'s value should be of type {t}!"
+msgstr ""
+
+#: ../fdroidserver/lint.py
+#, python-brace-format
 msgid "ERROR: {key}:{subkey} in {path} is not in allowed keys: {allowed_keys}!"
 msgstr "ERROR: ¡{key}:{subkey} en {path} no está en las claves permitidas: {allowed_keys}!"
 
@@ -737,6 +752,11 @@ msgstr ""
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Environment variable {var} from {configname} is not set!"
+msgstr "¡La variable de entorno {var} de {configname} no tiene valor asignado!"
+
+#: ../fdroidserver/common.py
+#, fuzzy, python-brace-format
+msgid "Environment variable {{env: {var}}} is not set!"
 msgstr "¡La variable de entorno {var} de {configname} no tiene valor asignado!"
 
 #: ../fdroidserver/deploy.py
@@ -984,6 +1004,11 @@ msgstr "Ignorando entrada en FUNDING.yml mayor de 2048: %s"
 #, python-format
 msgid "Ignoring bad element in manifest: %s"
 msgstr "Ignorar el elemento incorrecto en el manifiesto: %s"
+
+#: ../fdroidserver/common.py
+#, fuzzy, python-brace-format
+msgid "Ignoring deprecated {oldfile}, use {newfile}!"
+msgstr "{oldfile} está obsoleto, use {newfile}"
 
 #: ../fdroidserver/index.py
 msgid "Ignoring package without metadata: "
@@ -1354,6 +1379,10 @@ msgstr "A uno de los elementos de configuración 'github_releases' le falta el v
 #, python-brace-format
 msgid "Only PNG and JPEG are supported for graphics, found: {path}"
 msgstr "Sólo PNG y JPEG son compatibles con los gráficos, encontrados: {path}"
+
+#: ../fdroidserver/common.py
+msgid "Only accepts a single key \"env\""
+msgstr ""
 
 #: ../fdroidserver/checkupdates.py
 msgid "Only print differences with the Play Store"
@@ -1750,6 +1779,10 @@ msgstr "El modo de actualización de etiquetas se utilizó en git-svn, pero el r
 #: ../fdroidserver/build.py
 msgid "Test mode - put output in the tmp directory only, and always build, even if the output already exists."
 msgstr "Modo de prueba: ponga la salida solo en el directorio tmp y siga desarrollando, incluso si la salida ya existe."
+
+#: ../fdroidserver/index.py
+msgid "The \"qrcode\" Python package is not installed (e.g. apt-get install python3-qrcode)!"
+msgstr ""
 
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
 #: ../fdroidserver/update.py
@@ -2850,6 +2883,11 @@ msgstr "¡{name} \"{section}/icons/{path}\" no existe! Corrijalo en config.yml."
 #, python-brace-format
 msgid "{oldfile} is deprecated, use {newfile}"
 msgstr "{oldfile} está obsoleto, use {newfile}"
+
+#: ../fdroidserver/update.py
+#, python-brace-format
+msgid "{path1} is a duplicate of {path2}, remove one!"
+msgstr ""
 
 #: ../fdroidserver/import_subcommand.py
 #, python-brace-format
