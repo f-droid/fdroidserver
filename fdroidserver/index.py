@@ -51,7 +51,7 @@ from . import _
 from . import common
 from . import metadata
 from . import signindex
-from fdroidserver.common import ANTIFEATURES_CONFIG_NAME, CATEGORIES_CONFIG_NAME, CONFIG_CONFIG_NAME, MIRRORS_CONFIG_NAME, RELEASECHANNELS_CONFIG_NAME, DEFAULT_LOCALE, FDroidPopen, FDroidPopenBytes, load_stats_fdroid_signing_key_fingerprints
+from fdroidserver.common import ANTIFEATURES_CONFIG_NAME, CATEGORIES_CONFIG_NAME, CONFIG_CONFIG_NAME, MIRRORS_CONFIG_NAME, RELEASECHANNELS_CONFIG_NAME, DEFAULT_LOCALE, FDroidPopen, FDroidPopenBytes, load_publish_signer_fingerprints
 from fdroidserver._yaml import yaml
 from fdroidserver.exception import FDroidException, VerificationException
 
@@ -125,14 +125,13 @@ def make(apps, apks, repodir, archive):
                 raise TypeError(_('only accepts strings, lists, and tuples'))
         requestsdict[command] = packageNames
 
-    fdroid_signing_key_fingerprints = load_stats_fdroid_signing_key_fingerprints()
+    signer_fingerprints = load_publish_signer_fingerprints()
 
-    make_v0(sortedapps, apks, repodir, repodict, requestsdict,
-            fdroid_signing_key_fingerprints)
-    make_v1(sortedapps, apks, repodir, repodict, requestsdict,
-            fdroid_signing_key_fingerprints)
-    make_v2(sortedapps, apks, repodir, repodict, requestsdict,
-            fdroid_signing_key_fingerprints, archive)
+    make_v0(sortedapps, apks, repodir, repodict, requestsdict, signer_fingerprints)
+    make_v1(sortedapps, apks, repodir, repodict, requestsdict, signer_fingerprints)
+    make_v2(
+        sortedapps, apks, repodir, repodict, requestsdict, signer_fingerprints, archive
+    )
     make_website(sortedapps, repodir, repodict)
     make_altstore(
         sortedapps,
@@ -709,7 +708,7 @@ def v2_repo(repodict, repodir, archive):
     return repo
 
 
-def make_v2(apps, packages, repodir, repodict, requestsdict, fdroid_signing_key_fingerprints, archive):
+def make_v2(apps, packages, repodir, repodict, requestsdict, signer_fingerprints, archive):
 
     def _index_encoder_default(obj):
         if isinstance(obj, set):
@@ -731,7 +730,7 @@ def make_v2(apps, packages, repodir, repodict, requestsdict, fdroid_signing_key_
         output["repo"]["requests"] = requestsdict
 
     # establish sort order of the index
-    v1_sort_packages(packages, fdroid_signing_key_fingerprints)
+    v1_sort_packages(packages, signer_fingerprints)
 
     output_packages = collections.OrderedDict()
     output['packages'] = output_packages
@@ -846,7 +845,7 @@ def make_v2(apps, packages, repodir, repodict, requestsdict, fdroid_signing_key_
         signindex.sign_index(repodir, json_name)
 
 
-def make_v1(apps, packages, repodir, repodict, requestsdict, fdroid_signing_key_fingerprints):
+def make_v1(apps, packages, repodir, repodict, requestsdict, signer_fingerprints):
 
     def _index_encoder_default(obj):
         if isinstance(obj, set):
@@ -876,7 +875,7 @@ def make_v1(apps, packages, repodir, repodict, requestsdict, fdroid_signing_key_
         output['repo']['mirrors'] = mirrors
 
     # establish sort order of the index
-    v1_sort_packages(packages, fdroid_signing_key_fingerprints)
+    v1_sort_packages(packages, signer_fingerprints)
 
     appslist = []
     output['apps'] = appslist
@@ -984,7 +983,7 @@ def _copy_to_local_copy_dir(repodir, f):
                               .format(path=local_copy_dir))
 
 
-def v1_sort_packages(packages, fdroid_signing_key_fingerprints):
+def v1_sort_packages(packages, signer_fingerprints):
     """Sort the supplied list to ensure a deterministic sort order for package entries in the index file.
 
     This sort-order also expresses
@@ -1010,7 +1009,7 @@ def v1_sort_packages(packages, fdroid_signing_key_fingerprints):
         if dev_signer and dev_signer == signer:
             group = GROUP_DEV_SIGNED
         else:
-            fdroid_signer = fdroid_signing_key_fingerprints.get(packageName, {}).get('signer')
+            fdroid_signer = signer_fingerprints.get(packageName, {}).get('signer')
             if fdroid_signer and fdroid_signer == signer:
                 group = GROUP_FDROID_SIGNED
 
@@ -1023,7 +1022,7 @@ def v1_sort_packages(packages, fdroid_signing_key_fingerprints):
     packages.sort(key=v1_sort_keys)
 
 
-def make_v0(apps, apks, repodir, repodict, requestsdict, fdroid_signing_key_fingerprints):
+def make_v0(apps, apks, repodir, repodict, requestsdict, signer_fingerprints):
     """Aka index.jar aka index.xml."""
     doc = Document()
 
@@ -1122,7 +1121,7 @@ def make_v0(apps, apks, repodir, repodict, requestsdict, fdroid_signing_key_fing
                 if name_from_apk is None:
                     name_from_apk = apk.get('name')
         for versionCode, apksforver in apksbyversion.items():
-            fdroid_signer = fdroid_signing_key_fingerprints.get(appid, {}).get('signer')
+            fdroid_signer = signer_fingerprints.get(appid, {}).get('signer')
             fdroid_signed_apk = None
             name_match_apk = None
             for x in apksforver:

@@ -383,7 +383,7 @@ class IndexTest(unittest.TestCase):
             common.write_config_file('')
 
             index.v1_sort_packages(
-                i, common.load_stats_fdroid_signing_key_fingerprints()
+                i, common.load_publish_signer_fingerprints()
             )
             self.maxDiff = None
             self.assertEqual(json.dumps(i, indent=2), json.dumps(o, indent=2))
@@ -656,7 +656,7 @@ class IndexTest(unittest.TestCase):
             }
         ]
 
-        index.v1_sort_packages(i, common.load_stats_fdroid_signing_key_fingerprints())
+        index.v1_sort_packages(i, common.load_publish_signer_fingerprints())
 
     def test_package_metadata(self):
         """A smoke check and format check of index.package_metadata()"""

@@ -139,7 +139,7 @@ def sign_sig_key_fingerprint_list(jar_file):
         raise FDroidException("Failed to sign '{}'!".format(jar_file))
 
 
-def store_stats_fdroid_signing_key_fingerprints(appids, indent=None):
+def store_publish_signer_fingerprints(appids, indent=None):
     """Store list of all signing-key fingerprints for given appids to HD.
 
     This list will later on be needed by fdroid update.
@@ -460,7 +460,7 @@ def main():
                 publish_source_tarball(apkfilename, unsigned_dir, output_dir)
                 logging.info('Published ' + apkfilename)
 
-    store_stats_fdroid_signing_key_fingerprints(allapps.keys())
+    store_publish_signer_fingerprints(allapps.keys())
     status_update_json(generated_keys, signed_apks)
     logging.info('published list signing-key fingerprints')
 
