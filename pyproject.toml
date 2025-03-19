@@ -40,7 +40,6 @@ force-exclude = '''(
   | fdroidserver/index\.py
   | fdroidserver/metadata\.py
   | fdroidserver/nightly\.py
-  | fdroidserver/publish\.py
   | fdroidserver/update\.py
   | fdroidserver/vmtools\.py
   | locale/pick-complete-translations\.py
@@ -50,7 +49,6 @@ force-exclude = '''(
   | tests/openssl-version-check-test\.py
   | tests/valid-package-names/test\.py
   | tests/test_common\.py
-  | tests/test_publish\.py
   | tests/test_signatures\.py
   | tests/test_update\.py
 )$'''
