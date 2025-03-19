@@ -60,8 +60,15 @@ def _get_index_file_paths(base_dir):
     services can take a while.  So the index files should be updated
     last.  That ensures that the package files are available when the
     client learns about them from the new index files.
+
+    signer-index.* are only published in the repo/ section.
+
     """
-    return [os.path.join(base_dir, filename) for filename in common.INDEX_FILES]
+    return [
+        os.path.join(base_dir, filename)
+        for filename in common.INDEX_FILES
+        if not (filename.startswith('signer-index.') and base_dir.endswith('archive'))
+    ]
 
 
 def _get_index_excludes(base_dir):

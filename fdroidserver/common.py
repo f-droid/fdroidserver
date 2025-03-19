@@ -4227,7 +4227,7 @@ def load_publish_signer_fingerprints():
     dict
         containing the signing-key fingerprints.
     """
-    jar_file = os.path.join('stats', 'publishsigkeys.jar')
+    jar_file = os.path.join('repo', 'signer-index.jar')
     if not os.path.isfile(jar_file):
         return {}
     try:
@@ -4247,7 +4247,7 @@ def load_publish_signer_fingerprints():
         write_to_config(config, 'repo_key_sha256')
 
     with zipfile.ZipFile(jar_file, 'r') as f:
-        return json.loads(str(f.read('publishsigkeys.json'), 'utf-8'))
+        return json.loads(str(f.read('signer-index.json'), 'utf-8'))
 
 
 def write_config_file(config):
@@ -4478,6 +4478,7 @@ NO_GPG_INDEX_FILES = [
     "index.jar",
     "index.png",
     "index.xml",
+    "signer-index.jar",
 ]
 
 # list of index files that are signed by gpgsign.py to make a .asc file
@@ -4486,6 +4487,7 @@ GPG_INDEX_FILES = [
     "entry.json",
     "index-v1.json",
     "index-v2.json",
+    "signer-index.json",
 ]
 
 

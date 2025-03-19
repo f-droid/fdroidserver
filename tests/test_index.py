@@ -375,10 +375,10 @@ class IndexTest(unittest.TestCase):
                     "signer": "b33a601a9da97c82e6eb121eb6b90adab561f396602ec4dc8b0019fb587e2af6"
                 }
             }
-            os.makedirs('stats')
-            jarfile = 'stats/publishsigkeys.jar'
+            os.mkdir('repo')
+            jarfile = 'repo/signer-index.jar'
             with zipfile.ZipFile(jarfile, 'w', zipfile.ZIP_DEFLATED) as jar:
-                jar.writestr('publishsigkeys.json', json.dumps(sigkeyfps))
+                jar.writestr('signer-index.json', json.dumps(sigkeyfps))
             publish.sign_sig_key_fingerprint_list(jarfile)
             common.write_config_file('')
 
@@ -387,7 +387,7 @@ class IndexTest(unittest.TestCase):
             self.assertEqual(json.dumps(i, indent=2), json.dumps(o, indent=2))
 
             # and test it still works with get_first_signer_certificate
-            outdir = os.path.join(self.testdir, 'publishsigkeys')
+            outdir = os.path.join(self.testdir, 'index-signer-fingerprints')
             os.mkdir(outdir)
             common.apk_extract_signatures(jarfile, outdir)
             certs = glob.glob(os.path.join(outdir, '*.RSA'))

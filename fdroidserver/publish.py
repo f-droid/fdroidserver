@@ -144,8 +144,8 @@ def store_publish_signer_fingerprints(appids, indent=None):
 
     This list will later on be needed by fdroid update.
     """
-    if not os.path.exists('stats'):
-        os.makedirs('stats')
+    if not os.path.exists('repo'):
+        os.makedirs('repo')
     data = OrderedDict()
     fps = read_fingerprints_from_keystore()
     for appid in sorted(appids):
@@ -153,9 +153,12 @@ def store_publish_signer_fingerprints(appids, indent=None):
         if alias in fps:
             data[appid] = {'signer': fps[key_alias(appid)]}
 
-    jar_file = os.path.join('stats', 'publishsigkeys.jar')
+    jar_file = os.path.join('repo', 'signer-index.jar')
+    output = json.dumps(data, indent=indent)
     with zipfile.ZipFile(jar_file, 'w', zipfile.ZIP_DEFLATED) as jar:
-        jar.writestr('publishsigkeys.json', json.dumps(data, indent=indent))
+        jar.writestr('signer-index.json', output)
+    with open(os.path.join('repo', 'signer-index.json'), 'w') as fp:
+        fp.write(output)
     sign_sig_key_fingerprint_list(jar_file)
 
 

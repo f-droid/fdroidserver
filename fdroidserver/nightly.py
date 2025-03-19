@@ -337,7 +337,6 @@ def main():
         git_mirror_fdroiddir = os.path.join(git_mirror_path, 'fdroid')
         git_mirror_repodir = os.path.join(git_mirror_fdroiddir, 'repo')
         git_mirror_metadatadir = os.path.join(git_mirror_fdroiddir, 'metadata')
-        git_mirror_statsdir = os.path.join(git_mirror_fdroiddir, 'stats')
         if not os.path.isdir(git_mirror_repodir):
             logging.debug(_('cloning {url}').format(url=clone_url))
             vcs = common.getvcs('git', clone_url, git_mirror_path)
@@ -381,8 +380,6 @@ Last updated: {date}'''.format(repo_git_base=repo_git_base,
             common.local_rsync(options, [git_mirror_repodir + '/'], 'repo/')
         if os.path.isdir(git_mirror_metadatadir):
             common.local_rsync(options, [git_mirror_metadatadir + '/'], 'metadata/')
-        if os.path.isdir(git_mirror_statsdir):
-            common.local_rsync(options, [git_mirror_statsdir + '/'], 'stats/')
 
         ssh_private_key_file = _ssh_key_from_debug_keystore()
         # this is needed for GitPython to find the SSH key
@@ -495,9 +492,6 @@ Last updated: {date}'''.format(repo_git_base=repo_git_base,
         common.local_rsync(
             options, [repo_basedir + '/metadata/'], git_mirror_metadatadir + '/'
         )
-        stats = repo_basedir + '/stats/'
-        if os.path.exists(stats):
-            common.local_rsync(options, [stats], git_mirror_statsdir + '/')
         mirror_git_repo.git.add(all=True)
         mirror_git_repo.index.commit("update app metadata")
 
