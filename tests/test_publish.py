@@ -247,6 +247,7 @@ class PublishTest(unittest.TestCase):
                 self.assertEqual(publish.config['jarsigner'], data['jarsigner'])
                 self.assertEqual(publish.config['keytool'], data['keytool'])
 
+    @unittest.skipIf(sys.byteorder == 'big', 'androguard is not ported to big-endian')
     def test_sign_then_implant_signature(self):
         os.chdir(self.testdir)
 
@@ -308,6 +309,7 @@ class PublishTest(unittest.TestCase):
         self.assertFalse(os.path.exists(unsigned))
         self.assertTrue(os.path.exists(signed))
 
+    @unittest.skipIf(sys.byteorder == 'big', 'androguard is not ported to big-endian')
     def test_exit_on_error(self):
         """Exits properly on errors, with and without --error-on-failed.
 

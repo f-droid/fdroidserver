@@ -2,6 +2,7 @@
 
 import os
 import shutil
+import sys
 import tempfile
 import textwrap
 import unittest
@@ -48,6 +49,7 @@ class BuildTest(unittest.TestCase):
         os.makedirs(os.path.join(d, 'platform-tools'), exist_ok=True)
         os.makedirs(os.path.join(d, 'tools'), exist_ok=True)
 
+    @unittest.skipIf(sys.byteorder == 'big', "androguard is not ported to big-endian")
     def test_get_apk_metadata(self):
         config = dict()
         fdroidserver.common.fill_config_defaults(config)
