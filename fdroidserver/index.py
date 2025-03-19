@@ -1516,6 +1516,7 @@ def add_mirrors_to_repodict(repo_section, repodict):
     repodict['mirrors'] = []
     canonical_url = repodict['address']
     found_primary = False
+    errors = 0
     for mirror in mirrors:
         if canonical_url == mirror['url']:
             found_primary = True
@@ -1524,8 +1525,18 @@ def add_mirrors_to_repodict(repo_section, repodict):
             for k in sorted(mirror.keys()):
                 sortedmirror[k] = mirror[k]
             repodict['mirrors'].insert(0, sortedmirror)
+        elif mirror.get('isPrimary'):
+            errors += 1
+            logging.error(
+                _('Mirror config for {url} contains "isPrimary" key!').format(
+                    url=mirror['url']
+                )
+            )
         else:
             repodict['mirrors'].append(mirror)
+
+    if errors:
+        raise FDroidException(_('"isPrimary" key should not be added to mirrors!'))
 
     if repodict['mirrors'] and not found_primary:
         repodict['mirrors'].insert(0, {'isPrimary': True, 'url': repodict['address']})
