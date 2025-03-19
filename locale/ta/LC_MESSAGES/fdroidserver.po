@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 2.1-273-g54e84d87\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2025-01-21 17:02+0100\n"
+"POT-Creation-Date: 2025-03-19 17:56+0100\n"
 "PO-Revision-Date: 2025-01-20 14:04+0000\n"
 "Last-Translator: Hans-Christoph Steiner <hans@guardianproject.info>\n"
 "Language-Team: Tamil <https://hosted.weblate.org/projects/f-droid/fdroidserver/ta/>\n"
@@ -522,6 +522,11 @@ msgstr "புதிய கொள்கலனை உருவாக்கிய�
 msgid "Creating \"{path}\" for configuring s3cmd."
 msgstr "S3CMD ஐ கட்டமைக்க \"{path}\" ஐ உருவாக்குதல்."
 
+#: ../fdroidserver/common.py
+#, fuzzy, python-brace-format
+msgid "Creating empty {config_file}"
+msgstr "'{config_file}'"
+
 #: ../fdroidserver/publish.py
 msgid "Creating log directory"
 msgstr "பதிவு கோப்பகத்தை உருவாக்குதல்"
@@ -707,6 +712,16 @@ msgstr "பிழை: {path} இல் {key} என்பது \"காப்�
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
+msgid "ERROR: {key} not a valid key!"
+msgstr ""
+
+#: ../fdroidserver/lint.py
+#, python-brace-format
+msgid "ERROR: {key}'s value should be of type {t}!"
+msgstr ""
+
+#: ../fdroidserver/lint.py
+#, python-brace-format
 msgid "ERROR: {key}:{subkey} in {path} is not in allowed keys: {allowed_keys}!"
 msgstr "பிழை: {key}: {path} இல் {subkey} அனுமதிக்கப்பட்ட விசைகளில் இல்லை: {allowed_keys}!"
 
@@ -727,6 +742,11 @@ msgstr ""
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Environment variable {var} from {configname} is not set!"
+msgstr "{configname} இருந்து இலிருந்து சுற்றுச்சூழல் மாறி {var} அமைக்கப்படவில்லை!"
+
+#: ../fdroidserver/common.py
+#, fuzzy, python-brace-format
+msgid "Environment variable {{env: {var}}} is not set!"
 msgstr "{configname} இருந்து இலிருந்து சுற்றுச்சூழல் மாறி {var} அமைக்கப்படவில்லை!"
 
 #: ../fdroidserver/deploy.py
@@ -974,6 +994,11 @@ msgstr "நிதியுதவியை புறக்கணித்தல�
 #, python-format
 msgid "Ignoring bad element in manifest: %s"
 msgstr "வெளிப்படையான மோசமான உறுப்பை புறக்கணித்தல்: %s"
+
+#: ../fdroidserver/common.py
+#, fuzzy, python-brace-format
+msgid "Ignoring deprecated {oldfile}, use {newfile}!"
+msgstr "{oldfile} நீக்கப்பட்டது, {newfile} ஐப் பயன்படுத்தவும்"
 
 #: ../fdroidserver/index.py
 msgid "Ignoring package without metadata: "
@@ -1344,6 +1369,10 @@ msgstr "'Github_releases' கட்டமைப்பு உருப்பட�
 #, python-brace-format
 msgid "Only PNG and JPEG are supported for graphics, found: {path}"
 msgstr "கிராபிக்ச் மற்றும் காணப்படும் பி.என்.சி மற்றும் சே.பி.சி மட்டுமே ஆதரிக்கப்படுகின்றன: {path}"
+
+#: ../fdroidserver/common.py
+msgid "Only accepts a single key \"env\""
+msgstr ""
 
 #: ../fdroidserver/checkupdates.py
 msgid "Only print differences with the Play Store"
@@ -1740,6 +1769,10 @@ msgstr "குறிச்சொற்கள் git-svn இல் பயன்�
 #: ../fdroidserver/build.py
 msgid "Test mode - put output in the tmp directory only, and always build, even if the output already exists."
 msgstr "சோதனை பயன்முறை - வெளியீடு ஏற்கனவே இருந்தாலும், வெளியீட்டை மட்டும் வைக்கவும், எப்போதும் உருவாக்குங்கள்."
+
+#: ../fdroidserver/index.py
+msgid "The \"qrcode\" Python package is not installed (e.g. apt-get install python3-qrcode)!"
+msgstr ""
 
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
 #: ../fdroidserver/update.py
@@ -2840,6 +2873,11 @@ msgstr "{name} \"{section}/ஐகான்கள்/{path}\" இல்லை! \"
 #, python-brace-format
 msgid "{oldfile} is deprecated, use {newfile}"
 msgstr "{oldfile} நீக்கப்பட்டது, {newfile} ஐப் பயன்படுத்தவும்"
+
+#: ../fdroidserver/update.py
+#, python-brace-format
+msgid "{path1} is a duplicate of {path2}, remove one!"
+msgstr ""
 
 #: ../fdroidserver/import_subcommand.py
 #, python-brace-format

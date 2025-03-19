@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 2.1-273-g54e84d87\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2025-01-21 17:02+0100\n"
+"POT-Creation-Date: 2025-03-19 17:55+0100\n"
 "PO-Revision-Date: 2024-09-21 19:31+0000\n"
 "Last-Translator: Cool Man <mcool3273@gmail.com>\n"
 "Language-Team: Arabic <https://hosted.weblate.org/projects/f-droid/fdroidserver/ar/>\n"
@@ -519,6 +519,11 @@ msgstr ""
 msgid "Creating \"{path}\" for configuring s3cmd."
 msgstr ""
 
+#: ../fdroidserver/common.py
+#, python-brace-format
+msgid "Creating empty {config_file}"
+msgstr ""
+
 #: ../fdroidserver/publish.py
 msgid "Creating log directory"
 msgstr ""
@@ -702,6 +707,16 @@ msgstr ""
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
+msgid "ERROR: {key} not a valid key!"
+msgstr ""
+
+#: ../fdroidserver/lint.py
+#, python-brace-format
+msgid "ERROR: {key}'s value should be of type {t}!"
+msgstr ""
+
+#: ../fdroidserver/lint.py
+#, python-brace-format
 msgid "ERROR: {key}:{subkey} in {path} is not in allowed keys: {allowed_keys}!"
 msgstr ""
 
@@ -720,6 +735,11 @@ msgstr ""
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Environment variable {var} from {configname} is not set!"
+msgstr ""
+
+#: ../fdroidserver/common.py
+#, python-brace-format
+msgid "Environment variable {{env: {var}}} is not set!"
 msgstr ""
 
 #: ../fdroidserver/deploy.py
@@ -966,6 +986,11 @@ msgstr ""
 #: ../fdroidserver/update.py
 #, python-format
 msgid "Ignoring bad element in manifest: %s"
+msgstr ""
+
+#: ../fdroidserver/common.py
+#, python-brace-format
+msgid "Ignoring deprecated {oldfile}, use {newfile}!"
 msgstr ""
 
 #: ../fdroidserver/index.py
@@ -1337,6 +1362,10 @@ msgstr ""
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Only PNG and JPEG are supported for graphics, found: {path}"
+msgstr ""
+
+#: ../fdroidserver/common.py
+msgid "Only accepts a single key \"env\""
 msgstr ""
 
 #: ../fdroidserver/checkupdates.py
@@ -1733,6 +1762,10 @@ msgstr ""
 
 #: ../fdroidserver/build.py
 msgid "Test mode - put output in the tmp directory only, and always build, even if the output already exists."
+msgstr ""
+
+#: ../fdroidserver/index.py
+msgid "The \"qrcode\" Python package is not installed (e.g. apt-get install python3-qrcode)!"
 msgstr ""
 
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
@@ -2828,6 +2861,11 @@ msgstr ""
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "{oldfile} is deprecated, use {newfile}"
+msgstr ""
+
+#: ../fdroidserver/update.py
+#, python-brace-format
+msgid "{path1} is a duplicate of {path2}, remove one!"
 msgstr ""
 
 #: ../fdroidserver/import_subcommand.py

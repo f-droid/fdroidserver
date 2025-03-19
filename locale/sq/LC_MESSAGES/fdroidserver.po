@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 1.0.6-349-g907c04ea\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2025-01-21 17:02+0100\n"
+"POT-Creation-Date: 2025-03-19 17:56+0100\n"
 "PO-Revision-Date: 2024-12-12 14:43+0000\n"
 "Last-Translator: Besnik Bleta <besnik@programeshqip.org>\n"
 "Language-Team: Albanian <https://hosted.weblate.org/projects/f-droid/fdroidserver/sq/>\n"
@@ -520,6 +520,11 @@ msgstr "U krijua kontejner i ri “{name}”"
 msgid "Creating \"{path}\" for configuring s3cmd."
 msgstr "Po krijohet “{path}” për formësim të s3cmd."
 
+#: ../fdroidserver/common.py
+#, fuzzy, python-brace-format
+msgid "Creating empty {config_file}"
+msgstr "Po lexohet '{config_file}'"
+
 #: ../fdroidserver/publish.py
 msgid "Creating log directory"
 msgstr "Po krijohet drejtori regjistrash"
@@ -705,6 +710,16 @@ msgstr "GABIM: {key} te {path} s’është “archive” apo “repo”!"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
+msgid "ERROR: {key} not a valid key!"
+msgstr ""
+
+#: ../fdroidserver/lint.py
+#, python-brace-format
+msgid "ERROR: {key}'s value should be of type {t}!"
+msgstr ""
+
+#: ../fdroidserver/lint.py
+#, python-brace-format
 msgid "ERROR: {key}:{subkey} in {path} is not in allowed keys: {allowed_keys}!"
 msgstr "GABIM: {key}:{subkey} te {path} s’është te kyçet e lejuar: {allowed_keys}!"
 
@@ -725,6 +740,11 @@ msgstr ""
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Environment variable {var} from {configname} is not set!"
+msgstr "S’është ujdisur ndryshore {var} nga {configname}!"
+
+#: ../fdroidserver/common.py
+#, fuzzy, python-brace-format
+msgid "Environment variable {{env: {var}}} is not set!"
 msgstr "S’është ujdisur ndryshore {var} nga {configname}!"
 
 #: ../fdroidserver/deploy.py
@@ -972,6 +992,11 @@ msgstr "Po shpërfillen zëra FUNDING.yml më të gjatë se 2048: %s"
 #, python-format
 msgid "Ignoring bad element in manifest: %s"
 msgstr "Po shpërfillet element i gabuar në manifest: %s"
+
+#: ../fdroidserver/common.py
+#, fuzzy, python-brace-format
+msgid "Ignoring deprecated {oldfile}, use {newfile}!"
+msgstr "{oldfile} është nxjerrë nga përdorimi, përdorni {newfile}"
 
 #: ../fdroidserver/index.py
 msgid "Ignoring package without metadata: "
@@ -1342,6 +1367,10 @@ msgstr "Një nga zërat e formësimit të 'github_releases' mungon te vlera 'tok
 #, python-brace-format
 msgid "Only PNG and JPEG are supported for graphics, found: {path}"
 msgstr "Si formate grafike mbulohen vetëm PNG dhe JPEG, u gjet: {path}"
+
+#: ../fdroidserver/common.py
+msgid "Only accepts a single key \"env\""
+msgstr ""
 
 #: ../fdroidserver/checkupdates.py
 msgid "Only print differences with the Play Store"
@@ -1738,6 +1767,10 @@ msgstr "U përdor mënyra “tags update” në git-svn, por depoja s’qe ujdis
 #: ../fdroidserver/build.py
 msgid "Test mode - put output in the tmp directory only, and always build, even if the output already exists."
 msgstr "Mënyra testim - hidhe output-in vetëm te drejtoria tmp, dhe monto përherë, edhe nëse output-i ekziston tashmë."
+
+#: ../fdroidserver/index.py
+msgid "The \"qrcode\" Python package is not installed (e.g. apt-get install python3-qrcode)!"
+msgstr ""
 
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
 #: ../fdroidserver/update.py
@@ -2839,6 +2872,11 @@ msgstr "{name} “{section}/icons/{path}” s’ekziston! Kontrolloni “config.
 #, python-brace-format
 msgid "{oldfile} is deprecated, use {newfile}"
 msgstr "{oldfile} është nxjerrë nga përdorimi, përdorni {newfile}"
+
+#: ../fdroidserver/update.py
+#, python-brace-format
+msgid "{path1} is a duplicate of {path2}, remove one!"
+msgstr ""
 
 #: ../fdroidserver/import_subcommand.py
 #, python-brace-format

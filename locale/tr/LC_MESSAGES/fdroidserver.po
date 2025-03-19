@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2025-01-21 17:02+0100\n"
+"POT-Creation-Date: 2025-03-19 17:56+0100\n"
 "PO-Revision-Date: 2024-09-10 23:49+0000\n"
 "Last-Translator: Oğuz Ersen <oguz@ersen.moe>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/f-droid/fdroidserver/tr/>\n"
@@ -522,6 +522,11 @@ msgstr "Yeni kapsayıcı \"{name}\" oluşturuldu"
 msgid "Creating \"{path}\" for configuring s3cmd."
 msgstr "s3cmd yapılandırması için \"{path}\" oluşturuluyor."
 
+#: ../fdroidserver/common.py
+#, fuzzy, python-brace-format
+msgid "Creating empty {config_file}"
+msgstr "'{config_file}' okunuyor"
+
 #: ../fdroidserver/publish.py
 msgid "Creating log directory"
 msgstr "Günlük dizini oluşturuluyor"
@@ -707,6 +712,16 @@ msgstr "HATA: {path} içindeki {key} \"archive\" veya \"repo\" değil!"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
+msgid "ERROR: {key} not a valid key!"
+msgstr ""
+
+#: ../fdroidserver/lint.py
+#, python-brace-format
+msgid "ERROR: {key}'s value should be of type {t}!"
+msgstr ""
+
+#: ../fdroidserver/lint.py
+#, python-brace-format
 msgid "ERROR: {key}:{subkey} in {path} is not in allowed keys: {allowed_keys}!"
 msgstr "HATA: {path} içindeki {key}:{subkey} izin verilen anahtarlar içinde değil: {allowed_keys}!"
 
@@ -727,6 +742,11 @@ msgstr ""
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Environment variable {var} from {configname} is not set!"
+msgstr "{configname} içinden {var} ortam değişkeni ayarlı değil!"
+
+#: ../fdroidserver/common.py
+#, fuzzy, python-brace-format
+msgid "Environment variable {{env: {var}}} is not set!"
 msgstr "{configname} içinden {var} ortam değişkeni ayarlı değil!"
 
 #: ../fdroidserver/deploy.py
@@ -974,6 +994,11 @@ msgstr "2048'den uzun FUNDING.yml girdisi yok sayılıyor: %s"
 #, python-format
 msgid "Ignoring bad element in manifest: %s"
 msgstr "Manifestteki hatalı öğe yok sayılıyor: %s"
+
+#: ../fdroidserver/common.py
+#, fuzzy, python-brace-format
+msgid "Ignoring deprecated {oldfile}, use {newfile}!"
+msgstr "{oldfile} kullanımdan kaldırıldı, {newfile} kullanın"
 
 #: ../fdroidserver/index.py
 msgid "Ignoring package without metadata: "
@@ -1344,6 +1369,10 @@ msgstr "'github_releases' yapılandırma ögelerinden birinde 'token' değeri ek
 #, python-brace-format
 msgid "Only PNG and JPEG are supported for graphics, found: {path}"
 msgstr "Grafikler için yalnızca PNG ve JPEG desteklenir, bulunan: {path}"
+
+#: ../fdroidserver/common.py
+msgid "Only accepts a single key \"env\""
+msgstr ""
 
 #: ../fdroidserver/checkupdates.py
 msgid "Only print differences with the Play Store"
@@ -1740,6 +1769,10 @@ msgstr "git-svn'de etiket güncelleme modu kullanıldı, ancak depo etiketlerle 
 #: ../fdroidserver/build.py
 msgid "Test mode - put output in the tmp directory only, and always build, even if the output already exists."
 msgstr "Sınama kipi - çıkışı sadece tmp dizinine koy, ve her zaman inşa et, çıkış zaten var olsa bile."
+
+#: ../fdroidserver/index.py
+msgid "The \"qrcode\" Python package is not installed (e.g. apt-get install python3-qrcode)!"
+msgstr ""
 
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
 #: ../fdroidserver/update.py
@@ -2840,6 +2873,11 @@ msgstr "{name} \"{section}/icons/{path}\" yok! config.yml içinde düzeltin."
 #, python-brace-format
 msgid "{oldfile} is deprecated, use {newfile}"
 msgstr "{oldfile} kullanımdan kaldırıldı, {newfile} kullanın"
+
+#: ../fdroidserver/update.py
+#, python-brace-format
+msgid "{path1} is a duplicate of {path2}, remove one!"
+msgstr ""
 
 #: ../fdroidserver/import_subcommand.py
 #, python-brace-format
