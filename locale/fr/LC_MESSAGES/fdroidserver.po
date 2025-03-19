@@ -41,20 +41,21 @@
 # Sylvain Pichon <Sp_@users.noreply.hosted.weblate.org>, 2024.
 # Lzebulon <lzebulon@crans.org>, 2024.
 # Armand Camponovo <contact@camarm.dev>, 2024.
+# Lula Bye <translate.cylinder716@passinbox.com>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2025-01-21 17:02+0100\n"
-"PO-Revision-Date: 2024-12-31 00:24+0000\n"
-"Last-Translator: Armand Camponovo <contact@camarm.dev>\n"
+"PO-Revision-Date: 2025-03-02 16:42+0000\n"
+"Last-Translator: Lula Bye <translate.cylinder716@passinbox.com>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/f-droid/fdroidserver/fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.10-dev\n"
+"X-Generator: Weblate 5.10.3-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -973,9 +974,8 @@ msgid "Git reset failed"
 msgstr "Reset de Git échouée"
 
 #: ../fdroidserver/common.py
-#, fuzzy
 msgid "Git submodule deinit failed"
-msgstr "Échec de la suppression du sous-module Git"
+msgstr "Échec du sous-module Git deinit"
 
 #: ../fdroidserver/common.py
 msgid "Git submodule sync failed"
@@ -1375,9 +1375,8 @@ msgid "One of the 'github_releases' config items is missing the 'projectUrl' val
 msgstr "L'un des éléments de configuration 'github_releases' ne contient pas la valeur 'projectUrl'. ignoré..."
 
 #: ../fdroidserver/deploy.py
-#, fuzzy
 msgid "One of the 'github_releases' config items is missing the 'token' value. skipping ..."
-msgstr "L'un des éléments de configuration 'github_releases' ne contient pas la valeur 'token'. ignoré..."
+msgstr "L'un des éléments de configuration 'github_releases' ne contient pas la valeur 'token'. suivant ..."
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -1550,7 +1549,7 @@ msgstr "Actualisation et mise en cache des règles et signature à partir du ré
 
 #: ../fdroidserver/verify.py
 msgid "Remove source tarball and any APKs if successfully verified."
-msgstr ""
+msgstr "Supprimer l'archive d'origine et les APKs si la vérification est effectuée avec succès."
 
 #: ../fdroidserver/common.py
 msgid "Removing specified files"
@@ -1999,9 +1998,8 @@ msgstr "UpdateCheckMode est configuré mais on dirait que checkupdates n'a pas e
 
 #. Translators: https://developer.android.com/studio/build/application-id
 #: ../fdroidserver/lint.py
-#, fuzzy
 msgid "UpdateCheckMode is set but it looks likecheckupdates hasn't been run yet"
-msgstr "UpdateCheckMode est configuré mais on dirait que checkupdates n'a pas encore été lancé"
+msgstr "UpdateCheckMode est configuré mais il semble que checkupdates n'a pas encore été lancé"
 
 #: ../fdroidserver/lint.py
 msgid "UpdateCheckName is set to the known application ID, it can be removed"
@@ -2147,7 +2145,7 @@ msgstr "Lors du linting, tout le dépôt yamllint est désactivé par défaut. C
 
 #: ../fdroidserver/publish.py
 msgid "When signing or verifying fails, exit with an error code."
-msgstr ""
+msgstr "En cas d'échec de la signature ou de la vérification, fermer en indiquant un code d'erreur."
 
 #: ../fdroidserver/install.py
 msgid "Would you like to download and install F-Droid.apk via adb? (YES/no)"

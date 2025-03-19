@@ -1,6 +1,6 @@
 # SOME DESCRIPTIVE TITLE.
 # This file is put in the public domain.
-# Golubev Alexander <fatzer2@gmail.com>, 2020, 2021, 2024.
+# Golubev Alexander <fatzer2@gmail.com>, 2020, 2021, 2024, 2025.
 # Mingun <Alexander_Sergey@mail.ru>, 2020.
 # anonymous <noreply@weblate.org>, 2020.
 # Andrey <andrey@mailbox.org>, 2020, 2021, 2022, 2023, 2025.
@@ -21,8 +21,8 @@ msgstr ""
 "Project-Id-Version: fdroidserver 1.0.0-95-gd7af22b\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2025-01-21 17:02+0100\n"
-"PO-Revision-Date: 2025-01-08 16:30+0000\n"
-"Last-Translator: Andrey <andrey@mailbox.org>\n"
+"PO-Revision-Date: 2025-01-25 15:42+0000\n"
+"Last-Translator: Golubev Alexander <fatzer2@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/f-droid/fdroidserver/ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
@@ -987,11 +987,11 @@ msgstr "Проигнорировано: запись в FUNDING.yml длинне
 #: ../fdroidserver/update.py
 #, python-format
 msgid "Ignoring bad element in manifest: %s"
-msgstr "Игнорирование плохого элемента в манифесте: %s"
+msgstr "Проигнорировано: плохой элемент в манифесте: %s"
 
 #: ../fdroidserver/index.py
 msgid "Ignoring package without metadata: "
-msgstr "Проигнорировано, пакеты без метаданных: "
+msgstr "Проигнорировано: пакеты без метаданных: "
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -2172,7 +2172,7 @@ msgstr "неоднозначный выбор: %s (%s?)"
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "apksigner in build-tools;{version} passes APKs with invalid v3 signatures, ignoring."
-msgstr ""
+msgstr "apksigner из build-tools;{version} пропускает APK-пакеты с некорректными подписями v3; проигнорировано."
 
 #: ../fdroidserver/common.py
 msgid "apksigner not found! Cannot sign or verify modern APKs"

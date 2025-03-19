@@ -1,6 +1,6 @@
 # SOME DESCRIPTIVE TITLE.
 # This file is put in the public domain.
-# WaldiS <sto@tutanota.de>, 2020, 2021, 2024.
+# WaldiS <sto@tutanota.de>, 2020, 2021, 2024, 2025.
 # Michal L <michalrmsmi@wp.pl>, 2020, 2021.
 # mondstern <mondstern@snopyta.org>, 2021.
 # Hans-Christoph Steiner <hans@guardianproject.info>, 2021, 2024.
@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: fdroidserver 1.0.0-95-gd7af22b\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2025-01-21 17:02+0100\n"
-"PO-Revision-Date: 2024-11-30 20:00+0000\n"
+"PO-Revision-Date: 2025-03-13 20:43+0000\n"
 "Last-Translator: WaldiS <sto@tutanota.de>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/f-droid/fdroidserver/pl/>\n"
 "Language: pl\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 5.9-dev\n"
+"X-Generator: Weblate 5.11-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -338,11 +338,11 @@ msgstr "AutoUpdateMode z UpdateCheckMode: HTTP musi mieć wzorzec."
 
 #: ../fdroidserver/install.py
 msgid "Automatic no to all prompts."
-msgstr ""
+msgstr "Automatyczna odmowa na wszystkie monity."
 
 #: ../fdroidserver/install.py
 msgid "Automatic yes to all prompts."
-msgstr ""
+msgstr "Automatyczna odpowiedź twierdząca na wszystkie monity."
 
 #: ../fdroidserver/index.py
 #, python-brace-format
@@ -940,7 +940,6 @@ msgid "Git reset failed"
 msgstr "Resetowanie Git nie powiodło się"
 
 #: ../fdroidserver/common.py
-#, fuzzy
 msgid "Git submodule deinit failed"
 msgstr "Deinit podmodułu Git nie powiódł się"
 
@@ -1516,7 +1515,7 @@ msgstr "Odświeżanie i buforowanie reguł skanera i sygnatur z sieci"
 
 #: ../fdroidserver/verify.py
 msgid "Remove source tarball and any APKs if successfully verified."
-msgstr ""
+msgstr "Usuń źródłowy plik tarball i wszystkie pliki APK, jeśli pomyślnie zweryfikowano."
 
 #: ../fdroidserver/common.py
 msgid "Removing specified files"
@@ -2134,7 +2133,7 @@ msgstr "Plik archiwum ZIP"
 #: ../fdroidserver/install.py
 #, python-brace-format
 msgid "adb reports {serial} is \"{status}\"!"
-msgstr ""
+msgstr "adb zgłasza, że {serial} to \"{status}\"!"
 
 #: ../fdroidserver/nightly.py
 #, python-brace-format
@@ -2163,7 +2162,7 @@ msgstr "niejednoznaczna opcja: %s (%s?)"
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "apksigner in build-tools;{version} passes APKs with invalid v3 signatures, ignoring."
-msgstr ""
+msgstr "apksigner w build-tools;{version} przekazuje pliki APK z nieprawidłowymi podpisami v3, ignorując je."
 
 #: ../fdroidserver/common.py
 msgid "apksigner not found! Cannot sign or verify modern APKs"

@@ -30,7 +30,7 @@
 # zhiqi <lzqlzq21@gmail.com>, 2023.
 # David Jiang <david.jiang2024@gmail.com>, 2023.
 # ALoLo_527 <ALoLo@users.noreply.hosted.weblate.org>, 2024.
-# 大王叫我来巡山 <hamburger2048@users.noreply.hosted.weblate.org>, 2024.
+# 大王叫我来巡山 <hamburger2048@users.noreply.hosted.weblate.org>, 2024, 2025.
 # chumoer <k17733196511@gmail.com>, 2024.
 # Wang <wang@plasma.ac.cn>, 2024.
 # Lily Chou <lily-develop@outlook.com>, 2024.
@@ -40,7 +40,7 @@ msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2025-01-21 17:02+0100\n"
-"PO-Revision-Date: 2024-12-12 14:43+0000\n"
+"PO-Revision-Date: 2025-01-23 09:05+0000\n"
 "Last-Translator: 大王叫我来巡山 <hamburger2048@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/projects/f-droid/fdroidserver/zh_Hans/>\n"
 "Language: zh_Hans\n"
@@ -48,7 +48,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.9-dev\n"
+"X-Generator: Weblate 5.10-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -2185,7 +2185,7 @@ msgstr "模糊的选项：%s(%s?)"
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "apksigner in build-tools;{version} passes APKs with invalid v3 signatures, ignoring."
-msgstr ""
+msgstr "{version} 版本 build-tools 中的 apksigner 不处理带无效 v3 签名的 APK 文件，忽略中。"
 
 #: ../fdroidserver/common.py
 msgid "apksigner not found! Cannot sign or verify modern APKs"
