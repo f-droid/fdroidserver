@@ -19,10 +19,10 @@ if os.path.exists(cached_file):
     with open(cached_file) as fp:
         data = json.load(fp)
 else:
-    url = 'https://hosted.weblate.org/exports/stats/f-droid/fdroidserver/?format=json'
+    url = 'https://hosted.weblate.org/api/components/f-droid/fdroidserver/statistics/?format=json'
     r = requests.get(url)
     r.raise_for_status()
-    data = r.json()
+    data = r.json()['results']
 
 active = set()
 print('name                               locale   translated approved error-free')
