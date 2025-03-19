@@ -2224,6 +2224,7 @@ SUSS_DEFAULT = r'''{
         "androidx.credentials:credentials-play-services-auth",
         "androidx.media3:media3-cast",
         "androidx.media3:media3-datasource-cronet",
+        "androidx.wear:wear-remote-interactions",
         "androidx.work:work-gcm",
         "com.google.android.exoplayer:extension-cast",
         "com.google.android.exoplayer:extension-cronet",
@@ -2231,7 +2232,7 @@ SUSS_DEFAULT = r'''{
         "com.cloudinary:cloudinary-android.*:2\\.[12]\\.",
         "com.pierfrancescosoffritti.androidyoutubeplayer:chromecast-sender",
         "com.yayandroid:locationmanager",
-        "play-services",
+        "(?<!org.microg.gms:)play-services",
         "xyz.belvi.mobilevision:barcodescanner",
         "com.google.api-client:google-api-client-android"
       ],
@@ -2251,7 +2252,10 @@ SUSS_DEFAULT = r'''{
     },
     "com.google.android.libraries": {
       "code_signatures": [
-        "com/google/android/libraries"
+        "com/google/android/libraries(?!/accessibility)"
+      ],
+      "code_signatures_negative_examples": [
+        "com/google/android/libraries/accessibility"
       ],
       "gradle_signatures": [
         "com.google.android.libraries(?!.mapsplatform.secrets-gradle-plugin)"
@@ -2372,7 +2376,8 @@ SUSS_DEFAULT = r'''{
         "https://developers.google.com/ml-kit"
       ],
       "gradle_signatures": [
-        "com.google.mlkit"
+        "com.google.mlkit",
+        "io.github.g00fy2.quickie"
       ],
       "license": "NonFree",
       "name": "ML Kit"
@@ -2597,6 +2602,19 @@ SUSS_DEFAULT = r'''{
       "description": "processes real-time data at the intersection of commerce and culture, providing useful, actionable insights for brands and publishers. See <a rel='nofollow' href='https://www.crunchbase.com/organization/quantcast'>Crunchbase</a> and <a href='https://reports.exodus-privacy.eu.org/en/trackers/133/'>Exodus Privacy</a>.",
       "license": "NonFree"
     },
+    "com.revenuecat.purchases": {
+      "code_signatures": [
+        "com/revenuecat/purchases"
+      ],
+      "documentation": [
+        "https://www.revenuecat.com/"
+      ],
+      "gradle_signatures": [
+        "com.revenuecat.purchases"
+      ],
+      "license": "NonFree",
+      "name": "RevenueCat Purchases"
+    },
     "com.samsung.accessory": {
       "anti_features": [
         "NonFreeComp"
@@ -2729,6 +2747,9 @@ SUSS_DEFAULT = r'''{
       "gradle_signatures": [
         "com.wei.android.lib:fingerprintidentify",
         "com.github.uccmawei:FingerprintIdentify"
+      ],
+      "gradle_signatures_positive_examples": [
+        "implementation \"com.github.uccmawei:fingerprintidentify:${safeExtGet(\"fingerprintidentify\", \"1.2.6\")}\""
       ],
       "license": "NonFree",
       "name": "FingerprintIdentify"
@@ -2945,7 +2966,7 @@ SUSS_DEFAULT = r'''{
       "license": "NonFree"
     }
   },
-  "timestamp": 1728920062.92063,
+  "timestamp": 1733823271.362948,
   "version": 1,
-  "last_updated": 1732198944.559238
+  "last_updated": 1742401014.503398
 }'''
