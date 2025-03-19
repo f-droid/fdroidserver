@@ -2,6 +2,7 @@
 
 import hashlib
 import os
+import sys
 import unittest
 from tempfile import TemporaryDirectory
 
@@ -19,6 +20,7 @@ class SignaturesTest(unittest.TestCase):
         config['verbose'] = True
         common.config = config
 
+    @unittest.skipIf(sys.byteorder == 'big', "androguard is not ported to big-endian")
     def test_main(self):
 
         class OptionsFixture:

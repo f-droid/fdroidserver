@@ -211,6 +211,7 @@ class CommonTest(SetUpTearDownMixin, unittest.TestCase):
             fdroidserver.common._add_java_paths_to_config(pathlist, config)
             self.assertEqual(config['java_paths']['8'], choice[1:])
 
+    @unittest.skipIf(sys.byteorder == 'big', 'androguard is not ported to big-endian')
     def test_is_debuggable_or_testOnly(self):
         config = dict()
         fdroidserver.common.fill_config_defaults(config)
@@ -778,6 +779,7 @@ class CommonTest(SetUpTearDownMixin, unittest.TestCase):
         for name in bad:
             self.assertIsNone(fdroidserver.common.STANDARD_FILE_NAME_REGEX.match(name))
 
+    @unittest.skipIf(sys.byteorder == 'big', 'androguard is not ported to big-endian')
     def test_apk_signer_fingerprint(self):
 
         # fingerprints fetched with: keytool -printcert -file ____.RSA
@@ -792,6 +794,7 @@ class CommonTest(SetUpTearDownMixin, unittest.TestCase):
             self.assertEqual(keytoolcertfingerprint,
                              fdroidserver.common.apk_signer_fingerprint(apkfile))
 
+    @unittest.skipIf(sys.byteorder == 'big', 'androguard is not ported to big-endian')
     def test_apk_signer_fingerprint_short(self):
 
         # fingerprints fetched with: keytool -printcert -file ____.RSA
@@ -905,6 +908,7 @@ class CommonTest(SetUpTearDownMixin, unittest.TestCase):
                 os.path.dirname(os.path.dirname(config.get('apksigner'))),
             )
 
+    @unittest.skipIf(sys.byteorder == 'big', 'androguard is not ported to big-endian')
     def test_sign_apk(self):
         _mock_common_module_options_instance()
         config = fdroidserver.common.read_config()
@@ -1032,6 +1036,8 @@ class CommonTest(SetUpTearDownMixin, unittest.TestCase):
         config = fdroidserver.common.read_config()
         if 'apksigner' not in config:
             self.skipTest('SKIPPING test_resign_apk, apksigner not installed!')
+        if sys.byteorder == 'big':
+            self.skipTest('SKIPPING androguard is not ported to big-endian')
 
         config['keyalias'] = 'sova'
         config['keystorepass'] = 'r9aquRHYoI8+dYz6jKrLntQ5/NJNASFBacJh7Jv2BlI='
@@ -1064,6 +1070,7 @@ class CommonTest(SetUpTearDownMixin, unittest.TestCase):
                 fdroidserver.common.get_first_signer_certificate(resign)
             )
 
+    @unittest.skipIf(sys.byteorder == 'big', 'androguard is not ported to big-endian')
     def test_get_apk_id(self):
         config = dict()
         fdroidserver.common.fill_config_defaults(config)
@@ -1116,6 +1123,7 @@ class CommonTest(SetUpTearDownMixin, unittest.TestCase):
                 self.assertEqual(versionCode, vc, 'aapt versionCode parsing failed for ' + apkfilename)
                 self.assertEqual(versionName, vn, 'aapt versionName parsing failed for ' + apkfilename)
 
+    @unittest.skipIf(sys.byteorder == 'big', 'androguard is not ported to big-endian')
     def test_get_apk_id_bad_apk(self):
         """get_apk_id should never return None on error, only raise exceptions"""
         with self.assertRaises(KeyError):
@@ -1127,16 +1135,19 @@ class CommonTest(SetUpTearDownMixin, unittest.TestCase):
         with self.assertRaises(KeyError):
             fdroidserver.common.get_apk_id('Norway_bouvet_europe_2.obf.zip')
 
+    @unittest.skipIf(sys.byteorder == 'big', 'androguard is not ported to big-endian')
     def test_get_apk_id_bad_path(self):
         with self.assertRaises(FDroidException):
             fdroidserver.common.get_apk_id('nope')
 
+    @unittest.skipIf(sys.byteorder == 'big', 'androguard is not ported to big-endian')
     def test_get_apk_id_api_call(self):
         self.assertEqual(
             ('info.guardianproject.urzip', 100, '0.1'),
             fdroidserver.common.get_apk_id('urzip.apk'),
         )
 
+    @unittest.skipIf(sys.byteorder == 'big', 'androguard is not ported to big-endian')
     def test_get_apk_id_bad_zip(self):
         os.chdir(self.testdir)
         badzip = 'badzip.apk'
@@ -1189,6 +1200,7 @@ class CommonTest(SetUpTearDownMixin, unittest.TestCase):
             nc = fdroidserver.common.get_native_code(apkfilename)
             self.assertEqual(native_code, nc)
 
+    @unittest.skipIf(sys.byteorder == 'big', 'androguard is not ported to big-endian')
     def test_get_sdkversions_androguard(self):
         """This is a sanity test that androguard isn't broken"""
 
@@ -3159,6 +3171,7 @@ class SignerExtractionTest(unittest.TestCase):
     def tearDown(self):
         self._td.cleanup()
 
+    @unittest.skipIf(sys.byteorder == 'big', 'androguard is not ported to big-endian')
     def test_get_first_signer_certificate_with_jars(self):
         for jar in (
             'signindex/guardianproject-v1.jar',
@@ -3205,6 +3218,7 @@ class SignerExtractionTest(unittest.TestCase):
                 apk + " should have matching signer fingerprints",
             )
 
+    @unittest.skipIf(sys.byteorder == 'big', 'androguard is not ported to big-endian')
     def test_apk_signer_fingerprint_with_v1_apks(self):
         for apk, fingerprint in APKS_WITH_JAR_SIGNATURES:
             self.assertEqual(
@@ -3213,6 +3227,7 @@ class SignerExtractionTest(unittest.TestCase):
                 f'apk_signer_fingerprint should match stored fingerprint for {apk}',
             )
 
+    @unittest.skipIf(sys.byteorder == 'big', 'androguard is not ported to big-endian')
     def test_apk_signer_fingerprint_without_v1_apks(self):
         for apk, fingerprint in APKS_WITHOUT_JAR_SIGNATURES:
             self.assertEqual(
@@ -3221,6 +3236,7 @@ class SignerExtractionTest(unittest.TestCase):
                 f'apk_signer_fingerprint should match stored fingerprint for {apk}',
             )
 
+    @unittest.skipIf(sys.byteorder == 'big', 'androguard is not ported to big-endian')
     def test_get_first_signer_certificate_with_unsigned_jar(self):
         self.assertIsNone(
             fdroidserver.common.get_first_signer_certificate('signindex/unsigned.jar')

@@ -387,6 +387,7 @@ class ScannerTest(unittest.TestCase):
         self.assertFalse(os.path.exists("build.gradle"))
         self.assertEqual(0, count, 'there should be this many errors')
 
+    @unittest.skipIf(os.uname().machine == 's390x', 'dexdump is not ported to s390x')
     def test_get_embedded_classes(self):
         config = dict()
         fdroidserver.common.config = config
@@ -447,6 +448,7 @@ class ScannerTest(unittest.TestCase):
                 'should return not results for ' + f,
             )
 
+    @unittest.skipIf(os.uname().machine == 's390x', 'dexdump is not ported to s390x')
     def test_get_embedded_classes_secret_apk(self):
         """Try to hide an APK+DEX in an APK and see if we can find it"""
         config = dict()
@@ -500,6 +502,7 @@ class Test_scan_binary(unittest.TestCase):
         }
         fdroidserver.scanner._SCANNER_TOOL.regexs['warn_code_signatures'] = {}
 
+    @unittest.skipIf(os.uname().machine == 's390x', 'dexdump is not ported to s390x')
     def test_code_signature_match(self):
         apkfile = os.path.join(basedir, 'no_targetsdk_minsdk1_unsigned.apk')
         self.assertEqual(
@@ -513,6 +516,7 @@ class Test_scan_binary(unittest.TestCase):
             ),
         )
 
+    @unittest.skipIf(os.uname().machine == 's390x', 'dexdump is not ported to s390x')
     def test_bottom_level_embedded_apk_code_signature(self):
         apkfile = os.path.join(basedir, 'apk.embedded_1.apk')
         fdroidserver.scanner._SCANNER_TOOL.regexs['err_code_signatures'] = {
@@ -533,6 +537,7 @@ class Test_scan_binary(unittest.TestCase):
             ),
         )
 
+    @unittest.skipIf(os.uname().machine == 's390x', 'dexdump is not ported to s390x')
     def test_top_level_signature_embedded_apk_present(self):
         apkfile = os.path.join(basedir, 'apk.embedded_1.apk')
         fdroidserver.scanner._SCANNER_TOOL.regexs['err_code_signatures'] = {

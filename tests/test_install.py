@@ -12,6 +12,7 @@ from fdroidserver import common, install
 from fdroidserver.exception import BuildException, FDroidException
 
 
+@unittest.skipIf(os.uname().machine == 's390x', 'adb is not ported to s390x')
 class InstallTest(unittest.TestCase):
     '''fdroidserver/install.py'''
 

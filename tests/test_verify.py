@@ -3,6 +3,7 @@
 import json
 import os
 import shutil
+import sys
 import tempfile
 import unittest
 
@@ -91,6 +92,7 @@ class VerifyTest(unittest.TestCase):
             json.load(fp)
         self.assertEqual(placeholder, verify.get_verified_json(f))
 
+    @unittest.skipIf(sys.byteorder == 'big', 'androguard is not ported to big-endian')
     @patch('fdroidserver.common.sha256sum')
     def test_write_json_report(self, sha256sum):
         sha256sum.return_value = (

@@ -11,6 +11,7 @@ import random
 import shutil
 import string
 import subprocess
+import sys
 import unittest
 import yaml
 import zipfile
@@ -68,6 +69,7 @@ class Options:
     verbose = False
 
 
+@unittest.skipIf(sys.byteorder == 'big', 'androguard is not ported to big-endian')
 class UpdateTest(unittest.TestCase):
     '''fdroid update'''
 

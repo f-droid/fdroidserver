@@ -5,6 +5,7 @@ import re
 import shlex
 import shutil
 import subprocess
+import sys
 import threading
 import unittest
 from datetime import datetime, timezone
@@ -38,6 +39,7 @@ common.find_apksigner(conf)
 USE_APKSIGNER = "apksigner" in conf
 
 
+@unittest.skipIf(sys.byteorder == 'big', 'androguard is not ported to big-endian')
 class IntegrationTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
