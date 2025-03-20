@@ -1294,7 +1294,7 @@ def main():
     logging.info(_("Finished"))
     if options.json:
         print(json.dumps(json_output))
-    else:
+    elif probcount or options.verbose:
         print(_("%d problems found") % probcount)
 
 
