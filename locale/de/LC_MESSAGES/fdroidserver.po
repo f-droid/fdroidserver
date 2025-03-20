@@ -27,7 +27,7 @@ msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2025-03-19 17:56+0100\n"
-"PO-Revision-Date: 2025-01-23 09:05+0000\n"
+"PO-Revision-Date: 2025-03-20 10:14+0000\n"
 "Last-Translator: VfBFan <drop0815@posteo.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/f-droid/fdroidserver/de/>\n"
 "Language: de\n"
@@ -35,7 +35,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.10-dev\n"
+"X-Generator: Weblate 5.11-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -541,9 +541,9 @@ msgid "Creating \"{path}\" for configuring s3cmd."
 msgstr "\"{path}\" für die Konfiguration von S3cmd wird erstellt."
 
 #: ../fdroidserver/common.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Creating empty {config_file}"
-msgstr "Lese '{config_file}'"
+msgstr "Erstelle leere {config_file}"
 
 #: ../fdroidserver/publish.py
 msgid "Creating log directory"
@@ -731,12 +731,12 @@ msgstr "FEHLER: {key} in {path} ist nicht \"archive\" oder \"repo\"!"
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "ERROR: {key} not a valid key!"
-msgstr ""
+msgstr "FEHLER: {key} ist kein gültiger Schlüssel!"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "ERROR: {key}'s value should be of type {t}!"
-msgstr ""
+msgstr "FEHLER: {key}s Wert sollte vom Typ {t} sein!"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
@@ -763,9 +763,9 @@ msgid "Environment variable {var} from {configname} is not set!"
 msgstr "Umgebungsvariable {var} von {configname} ist nicht gesetzt!"
 
 #: ../fdroidserver/common.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Environment variable {{env: {var}}} is not set!"
-msgstr "Umgebungsvariable {var} von {configname} ist nicht gesetzt!"
+msgstr "Umgebungsvariable {{env: {var}}} ist nicht gesetzt!"
 
 #: ../fdroidserver/deploy.py
 msgid "Error deploying 'github_releases', {} not present. (You might need to run `fdroid update` first.)"
@@ -1014,9 +1014,9 @@ msgid "Ignoring bad element in manifest: %s"
 msgstr "Ignoriere schlechtes Element im Manifest: %s"
 
 #: ../fdroidserver/common.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Ignoring deprecated {oldfile}, use {newfile}!"
-msgstr "{oldfile} ist veraltet, benutze {newfile}"
+msgstr "Ignoriere veraltete {oldfile}, benutze {newfile}!"
 
 #: ../fdroidserver/index.py
 msgid "Ignoring package without metadata: "
@@ -1306,7 +1306,7 @@ msgstr "Keine signierte Apk für %s verfügbar"
 
 #: ../fdroidserver/install.py
 msgid "No signed output directory - nothing to do"
-msgstr "Kein signiertes Ausgabeverzeichnis - nichts zu tun"
+msgstr "Kein signiertes Ausgabeverzeichnis – nichts zu tun"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -1330,7 +1330,7 @@ msgstr "Keine Tags gefunden"
 
 #: ../fdroidserver/publish.py ../fdroidserver/verify.py
 msgid "No unsigned directory - nothing to do"
-msgstr "Kein unsigniertes Verzeichnis - nichts zu tun"
+msgstr "Kein unsigniertes Verzeichnis – nichts zu tun"
 
 #: ../fdroidserver/__main__.py
 msgid "No version information could be found."
@@ -1390,7 +1390,7 @@ msgstr "Nur PNG und JPEG werden für Grafiken unterstützt, gefunden wurde: {pat
 
 #: ../fdroidserver/common.py
 msgid "Only accepts a single key \"env\""
-msgstr ""
+msgstr "Nur ein einziger Schlüssel \"env\" wird akzeptiert"
 
 #: ../fdroidserver/checkupdates.py
 msgid "Only print differences with the Play Store"
@@ -1439,7 +1439,7 @@ msgstr "Paket \"{appid}\" existiert bereits"
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Parsing manifest at '{path}'"
-msgstr "Analysiere Manifest bei {path}"
+msgstr "Analysiere Manifest bei '{path}'"
 
 #: ../fdroidserver/common.py
 msgid "Password required with username"
@@ -1478,7 +1478,7 @@ msgstr "Problem mit der ZIP-Datei: %s, Fehler %s"
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Problem with xml at '{path}'"
-msgstr "Problem mit xml bei {path}"
+msgstr "Problem mit xml bei '{path}'"
 
 #: ../fdroidserver/checkupdates.py
 msgid "Process auto-updates"
@@ -1786,11 +1786,11 @@ msgstr "Aktualisierungsmodus mit Tags in git-svn verwendet, aber das Repo wurde 
 
 #: ../fdroidserver/build.py
 msgid "Test mode - put output in the tmp directory only, and always build, even if the output already exists."
-msgstr "Testmodus - Ausgabe nur ins tmp-Verzeichnis einfügen, immer erstellen, selbst wenn die Ausgabe bereits vorhanden ist."
+msgstr "Testmodus – Ausgabe nur ins tmp-Verzeichnis einfügen, immer erstellen, selbst wenn die Ausgabe bereits vorhanden ist."
 
 #: ../fdroidserver/index.py
 msgid "The \"qrcode\" Python package is not installed (e.g. apt-get install python3-qrcode)!"
-msgstr ""
+msgstr "Das Python-Paket \"qrcode\" ist nicht installiert (z. B. apt-get install python3-qrcode)!"
 
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
 #: ../fdroidserver/update.py
@@ -1821,7 +1821,7 @@ msgstr "Das Wurzelverzeichnis für local_copy_dir \"{path}\" existiert nicht!"
 
 #: ../fdroidserver/publish.py
 msgid "There is a keyalias collision - publishing halted"
-msgstr "Es gibt eine Keyalias-Kollision - Veröffentlichung gestoppt"
+msgstr "Es gibt eine Keyalias-Kollision – Veröffentlichung gestoppt"
 
 #: ../fdroidserver/common.py
 msgid "These are the apps that have been archived from the main repo."
@@ -2890,12 +2890,12 @@ msgstr "{name} \"{section}/icons/{path}\" existiert nicht! Überprüfe \"config.
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "{oldfile} is deprecated, use {newfile}"
-msgstr "{oldfile} ist veraltet, benutze {newfile}"
+msgstr "{oldfile} ist veraltet, verwenden Sie {newfile}"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "{path1} is a duplicate of {path2}, remove one!"
-msgstr ""
+msgstr "{path1} ist ein Duplikat von {path2}, entfernen Sie eines!"
 
 #: ../fdroidserver/import_subcommand.py
 #, python-brace-format
