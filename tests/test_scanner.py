@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import logging
 import os
 import pathlib
 import re
@@ -27,6 +28,17 @@ import fdroidserver.scanner
 from .shared_test_code import TmpCwd, mkdtemp, mock_open_to_str
 
 basedir = pathlib.Path(__file__).parent
+
+
+def _dexdump_found():
+    """Find if dexdump is available in the PATH or in an Android SDK install.
+
+    This must be run after common.config is setup.
+
+    """
+    dexdump = fdroidserver.common.find_sdk_tools_cmd("dexdump")
+    logging.debug('Found dexdump: %s', dexdump)
+    return dexdump is not None
 
 
 # Always use built-in default rules so changes in downloaded rules don't break tests.
@@ -387,11 +399,12 @@ class ScannerTest(unittest.TestCase):
         self.assertFalse(os.path.exists("build.gradle"))
         self.assertEqual(0, count, 'there should be this many errors')
 
-    @unittest.skipIf(os.uname().machine == 's390x', 'dexdump is not ported to s390x')
     def test_get_embedded_classes(self):
         config = dict()
         fdroidserver.common.config = config
         fdroidserver.common.fill_config_defaults(config)
+        if not _dexdump_found():
+            self.skipTest('Some Debian arches lack dexdump')
         for f in (
             'apk.embedded_1.apk',
             'bad-unicode-πÇÇ现代通用字-български-عربي1.apk',
@@ -448,12 +461,13 @@ class ScannerTest(unittest.TestCase):
                 'should return not results for ' + f,
             )
 
-    @unittest.skipIf(os.uname().machine == 's390x', 'dexdump is not ported to s390x')
     def test_get_embedded_classes_secret_apk(self):
         """Try to hide an APK+DEX in an APK and see if we can find it"""
         config = dict()
         fdroidserver.common.config = config
         fdroidserver.common.fill_config_defaults(config)
+        if not _dexdump_found():
+            self.skipTest('Some Debian arches lack dexdump')
         apk = 'urzip.apk'
         mapzip = 'Norway_bouvet_europe_2.obf.zip'
         secretfile = os.path.join(
@@ -493,6 +507,9 @@ class Test_scan_binary(unittest.TestCase):
         fdroidserver.common.config = config
         fdroidserver.common.options = mock.Mock()
 
+        if not _dexdump_found():
+            self.skipTest('Some Debian arches lack dexdump')
+
         fdroidserver.scanner._SCANNER_TOOL = mock.Mock()
         fdroidserver.scanner._SCANNER_TOOL.regexs = {}
         fdroidserver.scanner._SCANNER_TOOL.regexs['err_code_signatures'] = {
@@ -502,7 +519,6 @@ class Test_scan_binary(unittest.TestCase):
         }
         fdroidserver.scanner._SCANNER_TOOL.regexs['warn_code_signatures'] = {}
 
-    @unittest.skipIf(os.uname().machine == 's390x', 'dexdump is not ported to s390x')
     def test_code_signature_match(self):
         apkfile = os.path.join(basedir, 'no_targetsdk_minsdk1_unsigned.apk')
         self.assertEqual(
@@ -516,7 +532,6 @@ class Test_scan_binary(unittest.TestCase):
             ),
         )
 
-    @unittest.skipIf(os.uname().machine == 's390x', 'dexdump is not ported to s390x')
     def test_bottom_level_embedded_apk_code_signature(self):
         apkfile = os.path.join(basedir, 'apk.embedded_1.apk')
         fdroidserver.scanner._SCANNER_TOOL.regexs['err_code_signatures'] = {
@@ -537,7 +552,6 @@ class Test_scan_binary(unittest.TestCase):
             ),
         )
 
-    @unittest.skipIf(os.uname().machine == 's390x', 'dexdump is not ported to s390x')
     def test_top_level_signature_embedded_apk_present(self):
         apkfile = os.path.join(basedir, 'apk.embedded_1.apk')
         fdroidserver.scanner._SCANNER_TOOL.regexs['err_code_signatures'] = {
