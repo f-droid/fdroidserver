@@ -14,20 +14,21 @@
 # Jose Delvani <jsdelvani@users.noreply.hosted.weblate.org>, 2024.
 # LucasMZ <git@lucasmz.dev>, 2024, 2025.
 # dedakir923 <dedakir923@exoular.com>, 2024.
+# Igor Rückert <igorruckert@yahoo.com.br>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2025-03-19 17:56+0100\n"
-"PO-Revision-Date: 2025-01-23 16:02+0000\n"
-"Last-Translator: LucasMZ <git@lucasmz.dev>\n"
+"PO-Revision-Date: 2025-03-20 01:45+0000\n"
+"Last-Translator: Igor Rückert <igorruckert@yahoo.com.br>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/f-droid/fdroidserver/pt_BR/>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.10-dev\n"
+"X-Generator: Weblate 5.11-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -533,9 +534,9 @@ msgid "Creating \"{path}\" for configuring s3cmd."
 msgstr "Criando \"{path}\" para configurar s3cmd."
 
 #: ../fdroidserver/common.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Creating empty {config_file}"
-msgstr "Lendo '{config_file}'"
+msgstr "Criando '{config_file}' vazio"
 
 #: ../fdroidserver/publish.py
 msgid "Creating log directory"
@@ -723,12 +724,12 @@ msgstr "ERRO: {key} em {path} não é um \"arquivamento\" ou \"repositório\"!"
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "ERROR: {key} not a valid key!"
-msgstr ""
+msgstr "ERRO: {key} não é uma chave válida!"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "ERROR: {key}'s value should be of type {t}!"
-msgstr ""
+msgstr "ERRO: o valor de {key} deve ser do tipo {t}!"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
@@ -755,9 +756,9 @@ msgid "Environment variable {var} from {configname} is not set!"
 msgstr "A variável de ambiente {var} de {configname} não está definida!"
 
 #: ../fdroidserver/common.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Environment variable {{env: {var}}} is not set!"
-msgstr "A variável de ambiente {var} de {configname} não está definida!"
+msgstr "A variável de ambiente {{env: {var} não está definida!"
 
 #: ../fdroidserver/deploy.py
 msgid "Error deploying 'github_releases', {} not present. (You might need to run `fdroid update` first.)"
@@ -1006,9 +1007,9 @@ msgid "Ignoring bad element in manifest: %s"
 msgstr "Ignorando o elemento mau no manifesto: %s"
 
 #: ../fdroidserver/common.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Ignoring deprecated {oldfile}, use {newfile}!"
-msgstr "{oldfile} foi descontinuado, use {newfile}"
+msgstr "Ignorando {oldfile} obsoleto, use {newfile}!"
 
 #: ../fdroidserver/index.py
 msgid "Ignoring package without metadata: "
@@ -1382,7 +1383,7 @@ msgstr "Apenas PNG e JPEG são suportados para gráficos, encontrados: {path}"
 
 #: ../fdroidserver/common.py
 msgid "Only accepts a single key \"env\""
-msgstr ""
+msgstr "Aceita apenas uma única chave \"env\""
 
 #: ../fdroidserver/checkupdates.py
 msgid "Only print differences with the Play Store"
@@ -1782,7 +1783,7 @@ msgstr "Modo de teste - coloque a saída apenas no diretório tmp e sempre compi
 
 #: ../fdroidserver/index.py
 msgid "The \"qrcode\" Python package is not installed (e.g. apt-get install python3-qrcode)!"
-msgstr ""
+msgstr "O pacote Python \"qrcode\" não está instalado (por exemplo, apt-get install python3-qrcode)!"
 
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
 #: ../fdroidserver/update.py
@@ -2887,7 +2888,7 @@ msgstr "{oldfile} foi descontinuado, use {newfile}"
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "{path1} is a duplicate of {path2}, remove one!"
-msgstr ""
+msgstr "{path1} é uma duplicata de {path2}, remova uma!"
 
 #: ../fdroidserver/import_subcommand.py
 #, python-brace-format
