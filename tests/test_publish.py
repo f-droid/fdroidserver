@@ -77,7 +77,7 @@ class PublishTest(unittest.TestCase):
         self.maxDiff = None
         self.assertEqual(expected, result)
 
-    def test_store_and_load_fdroid_signing_key_fingerprints(self):
+    def test_store_and_load_signer_fingerprints(self):
         common.config = {}
         common.fill_config_defaults(common.config)
         publish.config = common.config
@@ -97,7 +97,7 @@ class PublishTest(unittest.TestCase):
         os.chdir(self.testdir)
         common.write_config_file('')
 
-        publish.store_stats_fdroid_signing_key_fingerprints(appids, indent=2)
+        publish.store_publish_signer_fingerprints(appids, indent=2)
 
         self.maxDiff = None
         expected = {
@@ -114,7 +114,7 @@ class PublishTest(unittest.TestCase):
                 "signer": "6ae5355157a47ddcc3834a71f57f6fb5a8c2621c8e0dc739e9ddf59f865e497c"
             },
         }
-        self.assertEqual(expected, common.load_stats_fdroid_signing_key_fingerprints())
+        self.assertEqual(expected, common.load_publish_signer_fingerprints())
 
         with open(common.CONFIG_FILE) as fp:
             config = yaml.load(fp)
@@ -123,7 +123,7 @@ class PublishTest(unittest.TestCase):
             config['repo_key_sha256'],
         )
 
-    def test_store_and_load_fdroid_signing_key_fingerprints_with_missmatch(self):
+    def test_store_and_load_signer_fingerprints_with_missmatch(self):
         common.config = {}
         common.fill_config_defaults(common.config)
         publish.config = common.config
@@ -134,9 +134,9 @@ class PublishTest(unittest.TestCase):
         publish.config['repo_key_sha256'] = 'bad bad bad bad bad bad bad bad bad bad bad bad'
 
         os.chdir(self.testdir)
-        publish.store_stats_fdroid_signing_key_fingerprints({}, indent=2)
+        publish.store_publish_signer_fingerprints({}, indent=2)
         with self.assertRaises(FDroidException):
-            common.load_stats_fdroid_signing_key_fingerprints()
+            common.load_publish_signer_fingerprints()
 
     def test_reproducible_binaries_process(self):
         common.config = {}

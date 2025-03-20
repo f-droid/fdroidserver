@@ -139,13 +139,13 @@ def sign_sig_key_fingerprint_list(jar_file):
         raise FDroidException("Failed to sign '{}'!".format(jar_file))
 
 
-def store_stats_fdroid_signing_key_fingerprints(appids, indent=None):
+def store_publish_signer_fingerprints(appids, indent=None):
     """Store list of all signing-key fingerprints for given appids to HD.
 
     This list will later on be needed by fdroid update.
     """
-    if not os.path.exists('stats'):
-        os.makedirs('stats')
+    if not os.path.exists('repo'):
+        os.makedirs('repo')
     data = OrderedDict()
     fps = read_fingerprints_from_keystore()
     for appid in sorted(appids):
@@ -153,9 +153,12 @@ def store_stats_fdroid_signing_key_fingerprints(appids, indent=None):
         if alias in fps:
             data[appid] = {'signer': fps[key_alias(appid)]}
 
-    jar_file = os.path.join('stats', 'publishsigkeys.jar')
+    jar_file = os.path.join('repo', 'signer-index.jar')
+    output = json.dumps(data, indent=indent)
     with zipfile.ZipFile(jar_file, 'w', zipfile.ZIP_DEFLATED) as jar:
-        jar.writestr('publishsigkeys.json', json.dumps(data, indent=indent))
+        jar.writestr('signer-index.json', output)
+    with open(os.path.join('repo', 'signer-index.json'), 'w') as fp:
+        fp.write(output)
     sign_sig_key_fingerprint_list(jar_file)
 
 
@@ -460,7 +463,7 @@ def main():
                 publish_source_tarball(apkfilename, unsigned_dir, output_dir)
                 logging.info('Published ' + apkfilename)
 
-    store_stats_fdroid_signing_key_fingerprints(allapps.keys())
+    store_publish_signer_fingerprints(allapps.keys())
     status_update_json(generated_keys, signed_apks)
     logging.info('published list signing-key fingerprints')
 

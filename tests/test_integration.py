@@ -747,7 +747,6 @@ class IntegrationTest(unittest.TestCase):
         self.update_yaml(common.CONFIG_FILE, {"archive_older": 3})
         Path("metadata").mkdir()
         Path("archive").mkdir()
-        Path("stats").mkdir()
         shutil.copy(FILES / "repo/com.politedroid_6.apk", "repo")
         shutil.copy(FILES / "repo/index-v2.json", "repo")
         shutil.copy(FILES / "repo/com.politedroid_5.apk", "archive")
