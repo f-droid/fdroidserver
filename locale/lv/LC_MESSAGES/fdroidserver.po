@@ -1,13 +1,13 @@
 # SOME DESCRIPTIVE TITLE.
 # This file is put in the public domain.
 # "Coool (github.com/Coool)" <coool@mail.lv>, 2024.
-# Edgars Andersons <Edgars+Weblate@gaitenis.id.lv>, 2024.
+# Edgars Andersons <Edgars+Weblate@gaitenis.id.lv>, 2024, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 2.3a1\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2025-03-19 17:56+0100\n"
-"PO-Revision-Date: 2024-11-22 21:03+0000\n"
+"PO-Revision-Date: 2025-03-20 10:14+0000\n"
 "Last-Translator: Edgars Andersons <Edgars+Weblate@gaitenis.id.lv>\n"
 "Language-Team: Latvian <https://hosted.weblate.org/projects/f-droid/fdroidserver/lv/>\n"
 "Language: lv\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n % 10 == 0 || n % 100 >= 11 && n % 100 <= 19) ? 0 : ((n % 10 == 1 && n % 100 != 11) ? 1 : 2);\n"
-"X-Generator: Weblate 5.9-dev\n"
+"X-Generator: Weblate 5.11-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -519,41 +519,41 @@ msgstr ""
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Creating empty {config_file}"
-msgstr ""
+msgstr "Izveido tukšu {config_file}"
 
 #: ../fdroidserver/publish.py
 msgid "Creating log directory"
-msgstr ""
+msgstr "Izveido žurnālu mapi"
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "Creating new S3 bucket: {url}"
-msgstr ""
+msgstr "Izveido jaunu S3 kŗājumu: {url}"
 
 #: ../fdroidserver/publish.py
 msgid "Creating output directory"
-msgstr ""
+msgstr "Izveido izvades mapi"
 
 #: ../fdroidserver/index.py
 msgid "Creating signed index with this key (SHA256):"
-msgstr ""
+msgstr "Izveido parakstītu indeksu ar šo atslēgu (SHA256):"
 
 #: ../fdroidserver/publish.py ../fdroidserver/verify.py
 msgid "Creating temporary directory"
-msgstr ""
+msgstr "Izveido pagaidu mapi"
 
 #: ../fdroidserver/index.py
 msgid "Creating unsigned index in preparation for signing"
-msgstr ""
+msgstr "Izveido neparakstītu indeksu, lai sagatavotos parakstīšanai"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "CurrentVersionCode {cv} is less than oldest build entry {versionCode}"
-msgstr ""
+msgstr "CurrentVersionCode {cv} ir mazāks par vecāko būvējuma ierakstu {versionCode}"
 
 #: ../fdroidserver/nightly.py
 msgid "DEBUG_KEYSTORE is not set or the value is incomplete"
-msgstr ""
+msgstr "DEBUG_KEYSTORE nav iestatīts vai vērtība ir nepilnīga"
 
 #: ../fdroidserver/update.py
 msgid "Delete APKs and/or OBBs without metadata from the repo"
@@ -562,17 +562,17 @@ msgstr ""
 #: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "Deleting archive, repo is too big ({size} max {limit})"
-msgstr ""
+msgstr "Izdzēš arhīvu, glabātava ir pārāk liela ({size}; pieļaujamais izmērs ir {limit})"
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "Deleting git-mirror history, repo is too big ({size} max {limit})"
-msgstr ""
+msgstr "Izdzēš git-mirror vēsturi, glabātava ir pārāk liela ({size}; pieļaujamais izmērs ir {limit})"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Deleting unknown file: {path}"
-msgstr ""
+msgstr "Izdzēš nezināmu datni: {path}"
 
 #: ../fdroidserver/lint.py
 #, python-format
@@ -705,12 +705,12 @@ msgstr ""
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "ERROR: {key} not a valid key!"
-msgstr ""
+msgstr "KĻŪDA: {key} nav derīga atslēga."
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "ERROR: {key}'s value should be of type {t}!"
-msgstr ""
+msgstr "KĻŪDA: {key} vērtībai vajadzētu būt ar veidu \"{t}\"."
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
@@ -737,7 +737,7 @@ msgstr ""
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Environment variable {{env: {var}}} is not set!"
-msgstr ""
+msgstr "Vides mainīgais {{env: {var}}} nav iestatīts."
 
 #: ../fdroidserver/deploy.py
 msgid "Error deploying 'github_releases', {} not present. (You might need to run `fdroid update` first.)"
@@ -988,7 +988,7 @@ msgstr ""
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Ignoring deprecated {oldfile}, use {newfile}!"
-msgstr ""
+msgstr "Neņem vērā novecojušo {oldfile}, jāizmanto {newfile}."
 
 #: ../fdroidserver/index.py
 msgid "Ignoring package without metadata: "
@@ -1362,15 +1362,15 @@ msgstr ""
 
 #: ../fdroidserver/common.py
 msgid "Only accepts a single key \"env\""
-msgstr ""
+msgstr "Pieņem tikai vienas atslēgas \"env\""
 
 #: ../fdroidserver/checkupdates.py
 msgid "Only print differences with the Play Store"
-msgstr ""
+msgstr "Drukāt tikai atšķirības no Play Store"
 
 #: ../fdroidserver/checkupdates.py
 msgid "Only process apps with auto-updates"
-msgstr ""
+msgstr "Apstrādāt tikai lietotnes ar automātiskajiem atjauninājumiem"
 
 #: ../fdroidserver/lint.py
 msgid "OpenCollective donation methods belong in the OpenCollective: field"
@@ -1762,7 +1762,7 @@ msgstr ""
 
 #: ../fdroidserver/index.py
 msgid "The \"qrcode\" Python package is not installed (e.g. apt-get install python3-qrcode)!"
-msgstr ""
+msgstr "Python pakotne \"qrcode\" nav uzstādīta (piemēram, `apt-get install python3-qrcode`)."
 
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
 #: ../fdroidserver/update.py
@@ -2173,15 +2173,15 @@ msgstr ""
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "apksigner in build-tools;{version} passes APKs with invalid v3 signatures, ignoring."
-msgstr ""
+msgstr "apksigner būvēšanas rīkos {version} izlaiž APK ar nederīgiem v3 parakstiem, neņem vērā."
 
 #: ../fdroidserver/common.py
 msgid "apksigner not found! Cannot sign or verify modern APKs"
-msgstr ""
+msgstr "apksigner nav atrasts. Nevar parakstīt vai apliecināt mūsdienīgus APK"
 
 #: ../fdroidserver/common.py
 msgid "apksigner not found, it's required for signing!"
-msgstr ""
+msgstr "apksigner nav atrasts, tas ir nepieciešams parakstīšanai."
 
 #: ../fdroidserver/checkupdates.py ../fdroidserver/lint.py
 #: ../fdroidserver/rewritemeta.py
@@ -2860,7 +2860,7 @@ msgstr ""
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "{path1} is a duplicate of {path2}, remove one!"
-msgstr ""
+msgstr "{path1} ir tāds pats kā {path2}, viens no tiem ir jānoņem."
 
 #: ../fdroidserver/import_subcommand.py
 #, python-brace-format
