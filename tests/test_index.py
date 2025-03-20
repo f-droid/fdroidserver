@@ -814,6 +814,19 @@ class IndexTest(unittest.TestCase):
         with self.assertRaises(fdroidserver.exception.FDroidException):
             index.add_mirrors_to_repodict('repo', repodict)
 
+    def test_erroneous_isPrimary_in_mirrors_config(self):
+        """There can be only one primary mirror aka canonical URL"""
+        common.config = {
+            'repo_url': 'http://one/fdroid',
+            'mirrors': [
+                {'url': 'http://one/fdroid', 'countryCode': 'SA'},
+                {'url': 'http://two/fdroid', 'isPrimary': True},
+            ],
+        }
+        repodict = {'address': common.config['repo_url']}
+        with self.assertRaises(fdroidserver.exception.FDroidException):
+            index.add_mirrors_to_repodict('repo', repodict)
+
 
 class AltstoreIndexTest(unittest.TestCase):
     def test_make_altstore(self):
