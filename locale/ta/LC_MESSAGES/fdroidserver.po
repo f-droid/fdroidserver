@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 2.1-273-g54e84d87\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2025-03-19 17:56+0100\n"
+"POT-Creation-Date: 2025-03-20 15:05+0100\n"
 "PO-Revision-Date: 2025-01-20 14:04+0000\n"
 "Last-Translator: Hans-Christoph Steiner <hans@guardianproject.info>\n"
 "Language-Team: Tamil <https://hosted.weblate.org/projects/f-droid/fdroidserver/ta/>\n"
@@ -40,6 +40,10 @@ msgstr ""
 #, python-format
 msgid "\"%s/\" has no matching metadata file!"
 msgstr "\"%s/\" க்கு பொருந்தக்கூடிய மேனிலை தரவு கோப்பு இல்லை!"
+
+#: ../fdroidserver/index.py
+msgid "\"isPrimary\" key should not be added to mirrors!"
+msgstr ""
 
 #: ../fdroidserver/index.py
 #, python-brace-format
@@ -1206,6 +1210,11 @@ msgstr "தவறாக சேவையகமானது:"
 #, python-format
 msgid "Max recursion depth in ZIP file reached: %s"
 msgstr "சிப் கோப்பில் அதிகபட்ச மறுசீரமைப்பு ஆழம் எட்டப்பட்டது: %s"
+
+#: ../fdroidserver/index.py
+#, python-brace-format
+msgid "Mirror config for {url} contains \"isPrimary\" key!"
+msgstr ""
 
 #: ../fdroidserver/mirror.py
 msgid "Mirror the full repo and archive, all file types."

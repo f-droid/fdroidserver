@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 1.0.0-95-gd7af22b\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2025-03-19 17:56+0100\n"
+"POT-Creation-Date: 2025-03-20 15:05+0100\n"
 "PO-Revision-Date: 2025-03-13 20:43+0000\n"
 "Last-Translator: WaldiS <sto@tutanota.de>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/f-droid/fdroidserver/pl/>\n"
@@ -42,6 +42,10 @@ msgstr ""
 #, python-format
 msgid "\"%s/\" has no matching metadata file!"
 msgstr "\"%s/\" nie ma pasującego pliku metadanych!"
+
+#: ../fdroidserver/index.py
+msgid "\"isPrimary\" key should not be added to mirrors!"
+msgstr ""
 
 #: ../fdroidserver/index.py
 #, python-brace-format
@@ -1210,6 +1214,11 @@ msgstr "Nieprawidłowy wiersz serverwebroot:"
 #, python-format
 msgid "Max recursion depth in ZIP file reached: %s"
 msgstr "Osiągnięto maksymalną głębokość rekurencji w pliku ZIP: %s"
+
+#: ../fdroidserver/index.py
+#, python-brace-format
+msgid "Mirror config for {url} contains \"isPrimary\" key!"
+msgstr ""
 
 #: ../fdroidserver/mirror.py
 msgid "Mirror the full repo and archive, all file types."

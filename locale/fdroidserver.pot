@@ -5,9 +5,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: fdroidserver 2.4a1-12-g4448aeb5\n"
+"Project-Id-Version: fdroidserver 2.4a2\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2025-03-19 17:56+0100\n"
+"POT-Creation-Date: 2025-03-20 15:05+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -33,6 +33,10 @@ msgstr ""
 #: ../fdroidserver/lint.py
 #, python-format
 msgid "\"%s/\" has no matching metadata file!"
+msgstr ""
+
+#: ../fdroidserver/index.py
+msgid "\"isPrimary\" key should not be added to mirrors!"
 msgstr ""
 
 #: ../fdroidserver/index.py
@@ -1195,6 +1199,11 @@ msgstr ""
 #: ../fdroidserver/scanner.py
 #, python-format
 msgid "Max recursion depth in ZIP file reached: %s"
+msgstr ""
+
+#: ../fdroidserver/index.py
+#, python-brace-format
+msgid "Mirror config for {url} contains \"isPrimary\" key!"
 msgstr ""
 
 #: ../fdroidserver/mirror.py

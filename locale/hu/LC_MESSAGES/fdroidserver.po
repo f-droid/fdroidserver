@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 1.0.6-70-g54bc858\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2025-03-19 17:56+0100\n"
+"POT-Creation-Date: 2025-03-20 15:05+0100\n"
 "PO-Revision-Date: 2024-04-10 13:33+0000\n"
 "Last-Translator: Hans-Christoph Steiner <hans@guardianproject.info>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/f-droid/fdroidserver/hu/>\n"
@@ -39,6 +39,10 @@ msgstr ""
 #, python-format
 msgid "\"%s/\" has no matching metadata file!"
 msgstr "A(z) „%s/” nem rendelkezik megfelelő metaadatfájllal."
+
+#: ../fdroidserver/index.py
+msgid "\"isPrimary\" key should not be added to mirrors!"
+msgstr ""
 
 #: ../fdroidserver/index.py
 #, python-brace-format
@@ -1210,6 +1214,11 @@ msgstr "Rosszul formázott serverwebroot sor:"
 #: ../fdroidserver/scanner.py
 #, python-format
 msgid "Max recursion depth in ZIP file reached: %s"
+msgstr ""
+
+#: ../fdroidserver/index.py
+#, python-brace-format
+msgid "Mirror config for {url} contains \"isPrimary\" key!"
 msgstr ""
 
 #: ../fdroidserver/mirror.py

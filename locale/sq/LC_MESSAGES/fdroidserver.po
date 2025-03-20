@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 1.0.6-349-g907c04ea\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2025-03-19 17:56+0100\n"
+"POT-Creation-Date: 2025-03-20 15:05+0100\n"
 "PO-Revision-Date: 2024-12-12 14:43+0000\n"
 "Last-Translator: Besnik Bleta <besnik@programeshqip.org>\n"
 "Language-Team: Albanian <https://hosted.weblate.org/projects/f-droid/fdroidserver/sq/>\n"
@@ -38,6 +38,10 @@ msgstr ""
 #, python-format
 msgid "\"%s/\" has no matching metadata file!"
 msgstr "“%s/”\" s’ka kartelë tejtëdhënash me përputhje!"
+
+#: ../fdroidserver/index.py
+msgid "\"isPrimary\" key should not be added to mirrors!"
+msgstr ""
 
 #: ../fdroidserver/index.py
 #, python-brace-format
@@ -1204,6 +1208,11 @@ msgstr "Rresht serverwebroot i keqformuar:"
 #, python-format
 msgid "Max recursion depth in ZIP file reached: %s"
 msgstr "U mbërrit në thellësi maksimum rekursive te kartelë ZIP: %s"
+
+#: ../fdroidserver/index.py
+#, python-brace-format
+msgid "Mirror config for {url} contains \"isPrimary\" key!"
+msgstr ""
 
 #: ../fdroidserver/mirror.py
 msgid "Mirror the full repo and archive, all file types."
