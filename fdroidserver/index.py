@@ -730,7 +730,7 @@ def make_v2(apps, packages, repodir, repodict, requestsdict, signer_fingerprints
         output["repo"]["requests"] = requestsdict
 
     # establish sort order of the index
-    v1_sort_packages(packages, signer_fingerprints)
+    sort_package_versions(packages, signer_fingerprints)
 
     output_packages = collections.OrderedDict()
     output['packages'] = output_packages
@@ -875,7 +875,7 @@ def make_v1(apps, packages, repodir, repodict, requestsdict, signer_fingerprints
         output['repo']['mirrors'] = mirrors
 
     # establish sort order of the index
-    v1_sort_packages(packages, signer_fingerprints)
+    sort_package_versions(packages, signer_fingerprints)
 
     appslist = []
     output['apps'] = appslist
@@ -983,8 +983,8 @@ def _copy_to_local_copy_dir(repodir, f):
                               .format(path=local_copy_dir))
 
 
-def v1_sort_packages(packages, signer_fingerprints):
-    """Sort the supplied list to ensure a deterministic sort order for package entries in the index file.
+def sort_package_versions(packages, signer_fingerprints):
+    """Sort to ensure a deterministic order for package versions in the index file.
 
     This sort-order also expresses
     installation preference to the clients.

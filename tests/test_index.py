@@ -240,7 +240,7 @@ class IndexTest(unittest.TestCase):
         with self.assertRaises(fdroidserver.exception.VerificationException):
             data, _ignored = index.download_repo_index_v2(url)
 
-    def test_v1_sort_packages(self):
+    def test_sort_package_versions(self):
         i = [
             {
                 'packageName': 'org.smssecure.smssecure',
@@ -382,9 +382,7 @@ class IndexTest(unittest.TestCase):
             publish.sign_sig_key_fingerprint_list(jarfile)
             common.write_config_file('')
 
-            index.v1_sort_packages(
-                i, common.load_publish_signer_fingerprints()
-            )
+            index.sort_package_versions(i, common.load_publish_signer_fingerprints())
             self.maxDiff = None
             self.assertEqual(json.dumps(i, indent=2), json.dumps(o, indent=2))
 
@@ -646,7 +644,7 @@ class IndexTest(unittest.TestCase):
             self.maxDiff = None
             self.assertEqual(css, pretty_css)
 
-    def test_v1_sort_packages_with_invalid(self):
+    def test_sort_package_versions_with_invalid(self):
         i = [
             {
                 'packageName': 'org.smssecure.smssecure',
@@ -656,7 +654,7 @@ class IndexTest(unittest.TestCase):
             }
         ]
 
-        index.v1_sort_packages(i, common.load_publish_signer_fingerprints())
+        index.sort_package_versions(i, common.load_publish_signer_fingerprints())
 
     def test_package_metadata(self):
         """A smoke check and format check of index.package_metadata()"""
