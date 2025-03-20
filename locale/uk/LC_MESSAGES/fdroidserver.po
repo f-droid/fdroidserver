@@ -18,7 +18,7 @@ msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2025-03-19 17:56+0100\n"
-"PO-Revision-Date: 2025-01-21 18:50+0000\n"
+"PO-Revision-Date: 2025-03-20 10:14+0000\n"
 "Last-Translator: Максим Горпиніч <maksimgorpinic2005a@gmail.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/f-droid/fdroidserver/uk/>\n"
 "Language: uk\n"
@@ -26,7 +26,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 5.10-dev\n"
+"X-Generator: Weblate 5.11-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -534,9 +534,9 @@ msgid "Creating \"{path}\" for configuring s3cmd."
 msgstr "Створення \"{path}\" для налаштування s3cmd."
 
 #: ../fdroidserver/common.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Creating empty {config_file}"
-msgstr "Читання '{config_file}'"
+msgstr "Створення пустого {config_file}"
 
 #: ../fdroidserver/publish.py
 msgid "Creating log directory"
@@ -724,12 +724,12 @@ msgstr "Помилка: {key} в {path} це не «архів» чи «репо
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "ERROR: {key} not a valid key!"
-msgstr ""
+msgstr "ПОМИЛКА: {key} недійсний ключ!"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "ERROR: {key}'s value should be of type {t}!"
-msgstr ""
+msgstr "ПОМИЛКА: значення {key} має бути типу {t}!"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
@@ -756,9 +756,9 @@ msgid "Environment variable {var} from {configname} is not set!"
 msgstr "Змінну середовища {var} від {configname} не налаштованоно!"
 
 #: ../fdroidserver/common.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Environment variable {{env: {var}}} is not set!"
-msgstr "Змінну середовища {var} від {configname} не налаштованоно!"
+msgstr "Змінна середовища {{env: {var}}} не встановлена!"
 
 #: ../fdroidserver/deploy.py
 msgid "Error deploying 'github_releases', {} not present. (You might need to run `fdroid update` first.)"
@@ -1007,9 +1007,9 @@ msgid "Ignoring bad element in manifest: %s"
 msgstr "Ігнорування поганого елемента в маніфесті: %s"
 
 #: ../fdroidserver/common.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Ignoring deprecated {oldfile}, use {newfile}!"
-msgstr "{oldfile} вилучено, використовується {newfile}"
+msgstr "Ігноруючи застарілий {oldfile}, використовуйте {newfile}!"
 
 #: ../fdroidserver/index.py
 msgid "Ignoring package without metadata: "
@@ -1383,7 +1383,7 @@ msgstr "Підтримуються лише PNG та JPEG зображення, 
 
 #: ../fdroidserver/common.py
 msgid "Only accepts a single key \"env\""
-msgstr ""
+msgstr "Приймає лише один ключ \"env\""
 
 #: ../fdroidserver/checkupdates.py
 msgid "Only print differences with the Play Store"
@@ -1784,7 +1784,7 @@ msgstr "Тестовий режим - надсилайте випуск лише
 
 #: ../fdroidserver/index.py
 msgid "The \"qrcode\" Python package is not installed (e.g. apt-get install python3-qrcode)!"
-msgstr ""
+msgstr "Пакет Python \"qrcode\" не встановлено (наприклад, apt-get install python3-qrcode)!"
 
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
 #: ../fdroidserver/update.py
@@ -2892,7 +2892,7 @@ msgstr "{oldfile} вилучено, використовується {newfile}"
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "{path1} is a duplicate of {path2}, remove one!"
-msgstr ""
+msgstr "{path1} є дублікатом {path2}, видаліть один!"
 
 #: ../fdroidserver/import_subcommand.py
 #, python-brace-format
