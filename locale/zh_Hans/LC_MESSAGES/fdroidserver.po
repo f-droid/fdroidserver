@@ -40,7 +40,7 @@ msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2025-03-19 17:56+0100\n"
-"PO-Revision-Date: 2025-01-23 09:05+0000\n"
+"PO-Revision-Date: 2025-03-20 02:51+0000\n"
 "Last-Translator: 大王叫我来巡山 <hamburger2048@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/projects/f-droid/fdroidserver/zh_Hans/>\n"
 "Language: zh_Hans\n"
@@ -48,7 +48,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.10-dev\n"
+"X-Generator: Weblate 5.11-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -552,9 +552,9 @@ msgid "Creating \"{path}\" for configuring s3cmd."
 msgstr "创建用于配置 s3cmd 的 \"{path}\"。"
 
 #: ../fdroidserver/common.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Creating empty {config_file}"
-msgstr "读取 '{config_file}'"
+msgstr "正在创建空的 {config_file} 文件"
 
 #: ../fdroidserver/publish.py
 msgid "Creating log directory"
@@ -742,12 +742,12 @@ msgstr "错误: {path}中的{key}不是“archive”或“repo”！"
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "ERROR: {key} not a valid key!"
-msgstr ""
+msgstr "错误：{key} 不是有效的密钥！"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "ERROR: {key}'s value should be of type {t}!"
-msgstr ""
+msgstr "错误：{key} 的值的类型应为 {t}！"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
@@ -774,9 +774,9 @@ msgid "Environment variable {var} from {configname} is not set!"
 msgstr "没有设置 {configname} 中的环境变量 {var}！"
 
 #: ../fdroidserver/common.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Environment variable {{env: {var}}} is not set!"
-msgstr "没有设置 {configname} 中的环境变量 {var}！"
+msgstr "没有设置环境变量 {{env: {var}}} ！"
 
 #: ../fdroidserver/deploy.py
 msgid "Error deploying 'github_releases', {} not present. (You might need to run `fdroid update` first.)"
@@ -1025,9 +1025,9 @@ msgid "Ignoring bad element in manifest: %s"
 msgstr "忽略清单中的错误元素： %s"
 
 #: ../fdroidserver/common.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Ignoring deprecated {oldfile}, use {newfile}!"
-msgstr "{oldfile} 已弃用，请使用 {newfile}"
+msgstr "正在忽略已弃用的 {oldfile} 文件，请使用 {newfile}！"
 
 #: ../fdroidserver/index.py
 msgid "Ignoring package without metadata: "
@@ -1401,7 +1401,7 @@ msgstr "图形仅支持 PNG 和 JPEG，发现：{path}"
 
 #: ../fdroidserver/common.py
 msgid "Only accepts a single key \"env\""
-msgstr ""
+msgstr "只接受单一密钥 “env\""
 
 #: ../fdroidserver/checkupdates.py
 msgid "Only print differences with the Play Store"
@@ -1800,7 +1800,7 @@ msgstr "测试模式：仅将输出保存至 tmp 目录，即使输出已存在�
 
 #: ../fdroidserver/index.py
 msgid "The \"qrcode\" Python package is not installed (e.g. apt-get install python3-qrcode)!"
-msgstr ""
+msgstr "\"qrcode\" Python 包未安装 （如 apt-get install python3-qrcode）！"
 
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
 #: ../fdroidserver/update.py
@@ -2902,7 +2902,7 @@ msgstr "{oldfile} 已弃用，请使用 {newfile}"
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "{path1} is a duplicate of {path2}, remove one!"
-msgstr ""
+msgstr "{path1} 与 {path2} 重复，请删除一个！"
 
 #: ../fdroidserver/import_subcommand.py
 #, python-brace-format
