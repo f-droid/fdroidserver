@@ -24,6 +24,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
   https://gitlab.com/fdroid/fdroidserver/-/merge_requests/1587
 * publish/signindex/gpgsign no longer load the _qrcode_ and _requests_ modules,
   and can operate without them installed.
+* scanner: add bun.lock as lock file of package.json
+  https://gitlab.com/fdroid/fdroidserver/-/merge_requests/1615
+* index: fail if user sets mirrors:isPrimary wrong
+  https://gitlab.com/fdroid/fdroidserver/-/merge_requests/1617
+  https://gitlab.com/fdroid/fdroidserver/-/issues/1125
 
 ### Removed
 
