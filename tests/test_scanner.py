@@ -78,8 +78,13 @@ class ScannerTest(unittest.TestCase):
         }
         for d in (basedir / 'source-files').iterdir():
             build = fdroidserver.metadata.Build()
-            fatal_problems = fdroidserver.scanner.scan_source(d, build)
             should = projects.get(d.name, 0)
+            if should > 0:
+                with self.assertLogs(level=logging.ERROR):
+                    fatal_problems = fdroidserver.scanner.scan_source(d, build)
+            else:
+                with self.assertNoLogs():
+                    fatal_problems = fdroidserver.scanner.scan_source(d, build)
             self.assertEqual(
                 should, fatal_problems, f'{d} should have {should} errors!'
             )
@@ -186,7 +191,8 @@ class ScannerTest(unittest.TestCase):
             """
                 )
             )
-        count = fdroidserver.scanner.scan_source(self.testdir)
+        with self.assertLogs(level=logging.ERROR):
+            count = fdroidserver.scanner.scan_source(self.testdir)
         self.assertEqual(2, count, 'there should be this many errors')
 
     def test_scan_source_file_types(self):
@@ -238,9 +244,10 @@ class ScannerTest(unittest.TestCase):
         # run scanner as if from `fdroid build`
         os.chdir(self.testdir)
         json_per_build = fdroidserver.scanner.MessageStore()
-        count = fdroidserver.scanner.scan_source(
-            build_dir, json_per_build=json_per_build
-        )
+        with self.assertLogs(level=logging.ERROR):
+            count = fdroidserver.scanner.scan_source(
+                build_dir, json_per_build=json_per_build
+            )
         self.assertEqual(6, count, 'there should be this many errors')
         os.chdir(build_dir)
 
@@ -450,7 +457,6 @@ class ScannerTest(unittest.TestCase):
         config = dict()
         fdroidserver.common.config = config
         fdroidserver.common.fill_config_defaults(config)
-        print('basedir')
         for f in (
             'Norway_bouvet_europe_2.obf.zip',
             'repo/fake.ota.update_1234.zip',
@@ -521,9 +527,11 @@ class Test_scan_binary(unittest.TestCase):
 
     def test_code_signature_match(self):
         apkfile = os.path.join(basedir, 'no_targetsdk_minsdk1_unsigned.apk')
+        with self.assertLogs(level=logging.CRITICAL):
+            problems = fdroidserver.scanner.scan_binary(apkfile)
         self.assertEqual(
             1,
-            fdroidserver.scanner.scan_binary(apkfile),
+            problems,
             "Did not find expected code signature '{}' in binary '{}'".format(
                 fdroidserver.scanner._SCANNER_TOOL.regexs[
                     'err_code_signatures'
@@ -541,9 +549,11 @@ class Test_scan_binary(unittest.TestCase):
             )
         }
 
+        with self.assertLogs(level=logging.CRITICAL):
+            problems = fdroidserver.scanner.scan_binary(apkfile)
         self.assertEqual(
             1,
-            fdroidserver.scanner.scan_binary(apkfile),
+            problems,
             "Did not find expected code signature '{}' in binary '{}'".format(
                 fdroidserver.scanner._SCANNER_TOOL.regexs[
                     'err_code_signatures'
@@ -559,9 +569,11 @@ class Test_scan_binary(unittest.TestCase):
                 r'.*org/fdroid/ci/BuildConfig', re.IGNORECASE | re.UNICODE
             )
         }
+        with self.assertLogs(level=logging.CRITICAL):
+            problems = fdroidserver.scanner.scan_binary(apkfile)
         self.assertEqual(
             1,
-            fdroidserver.scanner.scan_binary(apkfile),
+            problems,
             "Did not find expected code signature '{}' in binary '{}'".format(
                 fdroidserver.scanner._SCANNER_TOOL.regexs[
                     'err_code_signatures'
