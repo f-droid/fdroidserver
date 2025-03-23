@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 2.1-273-g54e84d87\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2025-03-20 15:05+0100\n"
+"POT-Creation-Date: 2025-03-23 21:45+0100\n"
 "PO-Revision-Date: 2025-01-20 14:04+0000\n"
 "Last-Translator: Hans-Christoph Steiner <hans@guardianproject.info>\n"
 "Language-Team: Tamil <https://hosted.weblate.org/projects/f-droid/fdroidserver/ta/>\n"
@@ -57,11 +57,6 @@ msgstr "\"{apkfilename}\" ஏற்கனவே {dev} இல் நிறுவ�
 
 #: ../fdroidserver/update.py
 #, python-brace-format
-msgid "\"{path}\" contains outdated {name} ({version})"
-msgstr "\"{path}\" காலாவதியான {name} ({version}) உள்ளது"
-
-#: ../fdroidserver/update.py
-#, python-brace-format
 msgid "\"{path}\" contains recent {name} ({version})"
 msgstr "\"{path}\" அண்மைக் கால {name} ({version})"
 
@@ -85,17 +80,6 @@ msgstr "\"{path}\" அனுமதிக்கப்படாத ஒரு வ�
 msgid "\"{url}\" is not a valid URL!"
 msgstr "\"{url}\" சரியான முகவரி அல்ல!"
 
-#: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
-#: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
-#: /usr/lib/python3.11/optparse.py
-#, python-format
-msgid "%(option)s option requires %(number)d argument"
-msgid_plural "%(option)s option requires %(number)d arguments"
-msgstr[0] "%(option)s விருப்பத்திற்கு %(number)d உரையாடல் தேவைப்படுகிறது"
-msgstr[1] "%(option)s விருப்பத்திற்கு %(number)d வாதங்கள் தேவை"
-
-#: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "%(prog)s: error: %(message)s\n"
@@ -111,14 +95,6 @@ msgstr "%d apks கையொப்பமிடவோ சரிபார்க்
 msgid "%d problems found"
 msgstr "%d சிக்கல்கள் காணப்படுகின்றன"
 
-#: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
-#: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
-#: /usr/lib/python3.11/optparse.py
-msgid "%prog [options]"
-msgstr "%prog [விருப்பங்கள்]"
-
-#: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "%r is not callable"
@@ -138,13 +114,6 @@ msgstr "%s மோசமான SHA-256: %s"
 #, python-format
 msgid "%s is not an accepted build field"
 msgstr "%s ஏற்றுக்கொள்ளப்பட்ட கட்டட புலம் அல்ல"
-
-#: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
-#: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
-#: /usr/lib/python3.11/optparse.py
-#, python-format
-msgid "%s option does not take a value"
-msgstr "%s விருப்பம் ஒரு மதிப்பை எடுக்காது"
 
 #: ../fdroidserver/common.py
 msgid "'keypass' not found in config.yml!"
@@ -166,8 +135,6 @@ msgstr "'கீச்டோர்பாச்' config.yml இல் காணப
 msgid "'repo_keyalias' not found in config.yml!"
 msgstr "config.yml இல் 'ரெப்போ_காலியாச்' காணப்படவில்லை!"
 
-#: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #: /usr/lib/python3.11/argparse.py
 msgid "'required' is an invalid argument for positionals"
 msgstr "'தேவை' என்பது நிலைப்பாடுகளுக்கு தவறான வாதமாகும்"
@@ -183,11 +150,6 @@ msgstr "'{aapt}' மிகவும் பழையது, fdroid க்கு �
 
 #: ../fdroidserver/common.py
 #, python-brace-format
-msgid "'{field}' will be in random order! Use () or [] brackets if order is important!"
-msgstr "'{field}' சீரற்ற வரிசையில் இருக்கும்! ஆர்டர் முக்கியத்துவம் வாய்ந்ததாக இருந்தால் () அல்லது [] அடைப்புக்குறிகளைப் பயன்படுத்தவும்!"
-
-#: ../fdroidserver/common.py
-#, python-brace-format
 msgid "'{path}' failed to execute!"
 msgstr "'{path}' செயல்படுத்தத் தவறிவிட்டது!"
 
@@ -196,7 +158,7 @@ msgstr "'{path}' செயல்படுத்தத் தவறிவிட�
 msgid "'{path}' has invalid format, it should be a dictionary!"
 msgstr "'{path}' தவறான வடிவத்தைக் கொண்டுள்ளது, அது ஒரு அகராதியாக இருக்க வேண்டும்!"
 
-#: ../fdroidserver/metadata.py ../fdroidserver/lint.py
+#: ../fdroidserver/lint.py ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "'{value}' is not a valid {field} in {appid}. Regex pattern: {pattern}"
 msgstr "'{value}' என்பது {appid} இல் செல்லுபடியாகும் {field} அல்ல. ரீசெக்ச் முறை: {pattern}"
@@ -215,8 +177,6 @@ msgstr "-மெர்ச்-கோருதல் ஒரு பயன்பா�
 msgid "...checkupdate failed for {appid} : {error}"
 msgstr "... {appid}: {error} க்கு செக்அப்டேட் தோல்வியுற்றது"
 
-#: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #: /usr/lib/python3.11/argparse.py
 msgid ".__call__() not defined"
 msgstr ".__ அழைப்பு __ () வரையறுக்கப்படவில்லை"
@@ -308,10 +268,6 @@ msgid "App has Binaries but does not have corresponding AllowedAPKSigningKeys to
 msgstr "பயன்பாட்டில் பைனரிகள் உள்ளன, ஆனால் சான்றிதழுடன் தொடர்புடைய AllowedAPKSigningKeys இல்லை."
 
 #: ../fdroidserver/lint.py
-msgid "App has NoSourceSince or ArchivePolicy \"0 versions\" but AutoUpdateMode or UpdateCheckMode are not None"
-msgstr "பயன்பாட்டில் Nosourcencens அல்லது காப்பகப் போலிசி \"0 பதிப்புகள்\" உள்ளன, ஆனால் ஆட்டோப்டேட்மோட் அல்லது புதுப்பிப்பு தொழில்நுட்பம் எதுவும் இல்லை"
-
-#: ../fdroidserver/lint.py
 msgid "App has NoSourceSince or ArchivePolicy \"0 versions\" or 0 but AutoUpdateMode or UpdateCheckMode are not None"
 msgstr "பயன்பாட்டில் Nosourcencence அல்லது காப்பகப் போலிசி \"0 பதிப்புகள்\" அல்லது 0 உள்ளது, ஆனால் ஆட்டோப்டேட்மோட் அல்லது புதுப்பிப்பு தொழில்நுட்பம் எதுவும் இல்லை"
 
@@ -354,7 +310,6 @@ msgstr "கண்ணாடியில் \"{mirrortype}\" மோசமான �
 msgid "Base URL to mirror, can include the index signing key using the query string: ?fingerprint="
 msgstr "அடிப்படை முகவரி கண்ணாடிக்கு, வினவல் சரம் பயன்படுத்தி குறியீட்டு கையொப்பமிடும் விசையை சேர்க்கலாம்:? கைரேகை ="
 
-#. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vname
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "Branch '{branch}' used as commit in build '{versionName}'"
@@ -410,11 +365,13 @@ msgstr[1] "ச்கேன் செய்யும் போது {} பிழ
 msgid "Cannot rewrite \"{path}\""
 msgstr "\"{path}\" ஐ மீண்டும் எழுத முடியாது"
 
+#. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vname
 #: ../fdroidserver/lint.py
 #, python-format
 msgid "Categories '%s' is not valid"
 msgstr "வகைகள் '%s' செல்லுபடியாகாது"
 
+#. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vname
 #: ../fdroidserver/lint.py
 msgid "Categories are not set"
 msgstr "வகைகள் அமைக்கப்படவில்லை"
@@ -469,18 +426,15 @@ msgstr "முரண்பட்ட வாதங்கள்: '--verbose' மற
 
 #: ../fdroidserver/common.py
 #, python-brace-format
-msgid "Conflicting config files! Using {newfile}, ignoring {oldfile}!"
-msgstr "முரண்பட்ட கட்டமைப்பு கோப்புகள்! {newfile} ஐப் பயன்படுத்துதல், {oldfile} ஐ புறக்கணித்து!"
-
-#: ../fdroidserver/common.py
-#, python-brace-format
 msgid "Could not find '{command}' on your system"
 msgstr "உங்கள் கணினியில் '{command}' கண்டுபிடிக்க முடியவில்லை"
 
+#. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
 #: ../fdroidserver/import_subcommand.py
 msgid "Could not find latest version code"
 msgstr "அண்மைக் கால பதிப்பு குறியீட்டைக் கண்டுபிடிக்க முடியவில்லை"
 
+#. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vname
 #: ../fdroidserver/import_subcommand.py
 msgid "Could not find latest version name"
 msgstr "அண்மைக் கால பதிப்பு பெயரைக் கண்டுபிடிக்க முடியவில்லை"
@@ -500,6 +454,7 @@ msgstr "பகுப்பாய்விற்கு பயன்பாடு {
 msgid "Could not parse size \"{size}\", wrong type \"{type}\""
 msgstr "அளவை \"{size}\", தவறான வகை \"{type}\""
 
+#. Translators: https://developer.android.com/build/configure-app-module#set-application-id
 #: ../fdroidserver/import_subcommand.py
 msgid "Couldn't find Application ID"
 msgstr "பயன்பாட்டு ஐடியைக் கண்டுபிடிக்க முடியவில்லை"
@@ -594,11 +549,6 @@ msgid "Description has a duplicate line"
 msgstr "விளக்கம் ஒரு நகல் கோடு உள்ளது"
 
 #: ../fdroidserver/lint.py
-#, python-format
-msgid "Description has a list (%s) but it isn't bulleted (*) nor numbered (#)"
-msgstr "விளக்கத்தில் ஒரு பட்டியல் (%s) உள்ளது, ஆனால் அது புல்லட் (*) அல்லது எண்ணற்ற (#)"
-
-#: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "Description of length {length} is over the {limit} char limit"
 msgstr "நீளம் {length} இன் விளக்கம் {limit} கரி வரம்புக்கு மேல் உள்ளது"
@@ -655,11 +605,6 @@ msgid "Download complete mirrors of small repos"
 msgstr "சிறிய களஞ்சியங்களின் முழுமையான கண்ணாடியைப் பதிவிறக்கவும்"
 
 #: ../fdroidserver/common.py
-#, python-format
-msgid "Downloading %s"
-msgstr "%s பதிவிறக்குதல்"
-
-#: ../fdroidserver/common.py
 msgid "Downloading the repository already failed once, not trying again."
 msgstr "களஞ்சியத்தை பதிவிறக்குவது ஏற்கனவே ஒரு முறை தோல்வியடைந்தது, மீண்டும் முயற்சிக்கவில்லை."
 
@@ -691,14 +636,6 @@ msgstr "பிழை: %(message)s"
 #: ../fdroidserver/__main__.py
 msgid "ERROR: The \"server\" subcommand has been removed, use \"deploy\"!"
 msgstr "பிழை: \"சேவையகம்\" துணைக்குழு அகற்றப்பட்டது, \"வரிசைப்படுத்தல்\" ஐப் பயன்படுத்தவும்!"
-
-#: ../fdroidserver/mirror.py
-msgid ""
-"ERROR: this command should never be used to mirror f-droid.org!\n"
-"A full mirror of f-droid.org requires more than 200GB."
-msgstr ""
-"பிழை: F-droid.org ஐ பிரதிபலிக்க இந்த கட்டளை ஒருபோதும் பயன்படுத்தப்படக்கூடாது!\n"
-" F-droid.org இன் முழு கண்ணாடிக்கு 200 சிபிக்கு மேல் தேவைப்படுகிறது."
 
 #: ../fdroidserver/nightly.py
 msgid "ERROR: unsupported CI type, patches welcome!"
@@ -847,10 +784,6 @@ msgid "Finished"
 msgstr "முடிந்தது"
 
 #: ../fdroidserver/lint.py
-msgid "Flattr donation methods belong in the FlattrID: field"
-msgstr "பிளாட்ட்ரிடில் பிளாட் ட்ரிட்டில் பெல்லாங்: புலம்"
-
-#: ../fdroidserver/lint.py
 msgid "Forbidden HTML tags"
 msgstr "தடைசெய்யப்பட்ட உஉகுமொ குறிச்சொற்கள்"
 
@@ -881,7 +814,6 @@ msgstr "\"{name}\" க்கு \"{path}\" மோசமான பொருள்
 msgid "Found invalid appids in arguments"
 msgstr "வாதங்களில் தவறான பயன்பாடுகளைக் கண்டறிந்தது"
 
-#. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
 #: ../fdroidserver/common.py
 msgid "Found invalid versionCodes for some apps"
 msgstr "சில பயன்பாடுகளுக்கான தவறான பதிப்புக் குறியீடுகளைக் கண்டறிந்தது"
@@ -946,15 +878,13 @@ msgstr "அறிவிலி தூய்மையான தோல்விய�
 msgid "Git fetch failed"
 msgstr "Git fetch தோல்வியுற்றது"
 
-#: ../fdroidserver/common.py
-msgid "Git prune failed"
-msgstr "அறிவிலி ப்ரூன் தோல்வியடைந்தது"
-
+#. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
 #: ../fdroidserver/common.py
 #, python-format
 msgid "Git remote set-head failed: \"%s\""
 msgstr "அறிவிலி ரிமோட் செட்-எட் தோல்வியடைந்தது: \"%s\""
 
+#. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
 #: ../fdroidserver/common.py
 msgid "Git reset failed"
 msgstr "அறிவிலி மீட்டமைப்பு தோல்வியடைந்தது"
@@ -1089,15 +1019,11 @@ msgstr "தவறான VERCODEOPERATION: {field}"
 msgid "Invalid VercodeOperation: {invalid_ops}"
 msgstr "தவறான VERCODEOPERATION: {invalid_ops}"
 
+#. Translators: https://developer.android.com/build/configure-app-module#set-application-id
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Invalid application ID {appid}"
 msgstr "தவறான பயன்பாட்டு ஐடி {appid}"
-
-#: ../fdroidserver/metadata.py
-#, python-format
-msgid "Invalid boolean '%s'"
-msgstr "தவறான பூலியன் '%s'"
 
 #: ../fdroidserver/lint.py
 msgid "Invalid bulleted list"
@@ -1309,7 +1235,6 @@ msgstr "{path} இல் கையொப்பமிடும் சான்ற
 msgid "No such package: %s"
 msgstr "அத்தகைய தொகுப்பு இல்லை: %s"
 
-#. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
 #: ../fdroidserver/common.py
 #, fuzzy, python-brace-format
 msgid "No such versionCode {versionCode} for app {appid}"
@@ -1344,7 +1269,6 @@ msgstr "{appid}க்கு எதுவும் செய்ய முடி�
 msgid "Now set these in config.yml:"
 msgstr "இப்போது இவற்றை config.yml இல் அமைக்கவும்:"
 
-#. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
 #: ../fdroidserver/update.py
 #, fuzzy, python-brace-format
 msgid "OBB file has newer versionCode({integer}) than any APK:"
@@ -1374,18 +1298,16 @@ msgstr "'Github_releases' கட்டமைப்பு உருப்பட�
 msgid "One of the 'github_releases' config items is missing the 'token' value. skipping ..."
 msgstr "'Github_releases' கட்டமைப்பு உருப்படிகளில் ஒன்று 'கிள்ளாக்கு' மதிப்பைக் காணவில்லை. ச்கிப்பிங் ..."
 
+#. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Only PNG and JPEG are supported for graphics, found: {path}"
 msgstr "கிராபிக்ச் மற்றும் காணப்படும் பி.என்.சி மற்றும் சே.பி.சி மட்டுமே ஆதரிக்கப்படுகின்றன: {path}"
 
+#. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
 #: ../fdroidserver/common.py
 msgid "Only accepts a single key \"env\""
 msgstr ""
-
-#: ../fdroidserver/checkupdates.py
-msgid "Only print differences with the Play Store"
-msgstr "பிளே ச்டோருடன் மட்டுமே வேறுபாடுகளை அச்சிடுங்கள்"
 
 #: ../fdroidserver/checkupdates.py
 msgid "Only process apps with auto-updates"
@@ -1394,10 +1316,6 @@ msgstr "தானியங்கு புதுப்பிப்புகள�
 #: ../fdroidserver/lint.py
 msgid "OpenCollective donation methods belong in the OpenCollective: field"
 msgstr "OpenCollective நன்கொடை முறைகள் OpenCollective: புலம்"
-
-#: /usr/lib/python3.11/optparse.py
-msgid "Options"
-msgstr "விருப்பங்கள்"
 
 #: ../fdroidserver/verify.py
 msgid "Output JSON report to file named after APK."
@@ -1563,14 +1481,6 @@ msgstr "{path} \"ஐ நீக்குதல்"
 #: ../fdroidserver/update.py
 msgid "Rename APK files that do not match package.name_123.apk"
 msgstr "தொகுப்புடன் பொருந்தாத APK கோப்புகளை மறுபெயரிடுங்கள். NAME_123.APK"
-
-#: ../fdroidserver/checkupdates.py
-msgid "RepoTrunk update mode only makes sense in git-svn repositories"
-msgstr "Git-svn களஞ்சியங்களில் மட்டுமே ரெபோட்ரங்க் புதுப்பிப்பு முறை அர்த்தமுள்ளதாக இருக்கும்"
-
-#: ../fdroidserver/build.py
-msgid "Reset and create a brand new build server, even if the existing one appears to be ok."
-msgstr "தற்போதுள்ள ஒன்று சரியாகத் தோன்றினாலும், ஒரு புதிய உருவாக்க சேவையகத்தை மீட்டமைத்து உருவாக்கவும்."
 
 #: ../fdroidserver/nightly.py
 #, python-brace-format
@@ -1881,11 +1791,6 @@ msgstr "எதிர்பாராத உரிமக் குறிச்ச�
 
 #: ../fdroidserver/common.py
 #, python-brace-format
-msgid "Unexpected symlink target: {link} -> {target}"
-msgstr "எதிர்பாராத சிம்லிங்க் இலக்கு: {link} -> {target}"
-
-#: ../fdroidserver/common.py
-#, python-brace-format
 msgid "Unknown entry {key} in {configname}"
 msgstr "{configname} இல் அறியப்படாத நுழைவு {key}"
 
@@ -1893,7 +1798,6 @@ msgstr "{configname} இல் அறியப்படாத நுழைவு
 msgid "Unknown exception found!"
 msgstr "அறியப்படாத விதிவிலக்கு கண்டறியப்பட்டது!"
 
-#. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vname
 #: ../fdroidserver/lint.py
 #, fuzzy, python-brace-format
 msgid "Unknown file '{filename}' in build '{versionName}'"
@@ -1931,6 +1835,7 @@ msgstr "அங்கீகரிக்கப்படாத பயன்பா�
 msgid "Unrecognised build flag '{build_flag}' in '{path}'"
 msgstr "அங்கீகரிக்கப்படாத கட்டமைப்புக் கொடி '{build_flag}' '{path}'"
 
+#. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Unsupported file type \"{extension}\" for repo graphic"
@@ -1961,11 +1866,6 @@ msgstr "பயன்படுத்தப்படாத ச்கேண்ட�
 msgid "Unused scanignore path: %s"
 msgstr "பயன்படுத்தப்படாத ச்கேனிக்னர் பாதை: %s"
 
-#: ../fdroidserver/common.py
-#, python-format
-msgid "Unzipping to %s"
-msgstr "%s க்கு அன்சிங்"
-
 #: ../fdroidserver/__main__.py
 msgid "Update repo information for new packages"
 msgstr "புதிய தொகுப்புகளுக்கான ரெப்போ தகவல்களைப் புதுப்பிக்கவும்"
@@ -1979,6 +1879,7 @@ msgstr "முகவரி க்கான பைனரி வெளிப்ப
 msgid "UpdateCheckData has invalid URL: {url}"
 msgstr "UpdateCheckData இல் தவறான முகவரி உள்ளது: {url}"
 
+#. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "UpdateCheckData must match the version code as integer (\\d or [0-9]): {codeex}"
@@ -1998,11 +1899,7 @@ msgstr "புதுப்பிப்பு தொழில்நுட்ப�
 msgid "UpdateCheckMode is set but it looks like checkupdates hasn't been run yet."
 msgstr "UpdateCheckMode அமைக்கப்பட்டுள்ளது, ஆனால் சரிபார்ப்புகள் இன்னும் இயக்கப்படவில்லை என்று தெரிகிறது."
 
-#. Translators: https://developer.android.com/studio/build/application-id
-#: ../fdroidserver/lint.py
-msgid "UpdateCheckMode is set but it looks likecheckupdates hasn't been run yet"
-msgstr "UpdateCheckMode அமைக்கப்பட்டுள்ளது, ஆனால் இது சாத்தியம் இன்னும் இயக்கப்படவில்லை"
-
+#. Translators: https://developer.android.com/build/configure-app-module#set-application-id
 #: ../fdroidserver/lint.py
 msgid "UpdateCheckName is set to the known application ID, it can be removed"
 msgstr "புதுப்பிப்பு சோதனை பெயர் அறியப்பட்ட பயன்பாட்டு ஐடிக்கு அமைக்கப்பட்டுள்ளது, அதை அகற்றலாம்"
@@ -2017,26 +1914,9 @@ msgstr "Uploading {apkfilename} பெறுநர் androidobservatory.org"
 msgid "Uploading {apkfilename} to virustotal"
 msgstr "Uploading {apkfilename} பெறுநர் virustotal"
 
-#: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
-#: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
-#: /usr/lib/python3.11/optparse.py
-msgid "Usage"
-msgstr "பயன்பாடு"
-
-#: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
-#: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
-#: /usr/lib/python3.11/optparse.py
-#, python-format
-msgid "Usage: %s\n"
-msgstr "பயன்பாடு: %s\n"
-
 #: ../fdroidserver/lint.py
 msgid "Use /HEAD instead of /master or /main to point at a file in the default branch"
 msgstr "Use /HEAD instead of /master or /main பெறுநர் புள்ளியம் at a கோப்பு in the இயல்புநிலை branch"
-
-#: ../fdroidserver/lint.py
-msgid "Use /HEAD instead of /master to point at a file in the default branch"
-msgstr "Use /HEAD instead of /master பெறுநர் புள்ளியம் at a கோப்பு in the இயல்புநிலை branch"
 
 #: ../fdroidserver/update.py
 msgid "Use `fdroid update -c` to create it."
@@ -2075,11 +1955,6 @@ msgstr "குடுவை கையொப்பத்தைப் பயன்�
 #: ../fdroidserver/common.py
 msgid "Using Java's jarsigner, not recommended for verifying APKs! Use apksigner"
 msgstr "சாவாவின் சார்சிக்னரைப் பயன்படுத்துதல், APKS ஐ சரிபார்க்க பரிந்துரைக்கப்படவில்லை! Apksigner ஐப் பயன்படுத்தவும்"
-
-#: ../fdroidserver/common.py
-#, python-brace-format
-msgid "Using androguard from \"{path}\""
-msgstr "Using androguard இருந்து \"{path}\""
 
 #: ../fdroidserver/metadata.py
 #, fuzzy, python-brace-format
@@ -2182,19 +2057,10 @@ msgstr "{path} க்கு அடையாள கோப்பைச் சே�
 msgid "adding to {name}: {path}"
 msgstr "{name}: {path} உடன் சேர்க்கிறது"
 
-#: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "ambiguous option: %(option)s could match %(matches)s"
 msgstr "தெளிவற்ற விருப்பம்: %(option)s %(matches)s உடன் பொருந்தக்கூடும்"
-
-#: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
-#: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
-#: /usr/lib/python3.11/optparse.py
-#, python-format
-msgid "ambiguous option: %s (%s?)"
-msgstr "தெளிவற்ற விருப்பம்: %s ( %s?)"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -2209,11 +2075,13 @@ msgstr "apksigner கண்டுபிடிக்கப்படவில்�
 msgid "apksigner not found, it's required for signing!"
 msgstr "apksigner கண்டுபிடிக்கப்படவில்லை, கையெழுத்திட இது தேவை!"
 
+#. Translators: https://developer.android.com/build/configure-app-module#set-application-id
 #: ../fdroidserver/checkupdates.py ../fdroidserver/lint.py
 #: ../fdroidserver/rewritemeta.py
 msgid "application ID of file to operate on"
 msgstr "இயக்க வேண்டிய கோப்பின் பயன்பாட்டு ஐடி"
 
+#. Translators: https://developer.android.com/build/configure-app-module#set-application-id
 #: ../fdroidserver/build.py ../fdroidserver/install.py
 #: ../fdroidserver/publish.py ../fdroidserver/scanner.py
 #: ../fdroidserver/verify.py
@@ -2224,8 +2092,6 @@ msgstr "Appid [: VERCODE] படிவத்தில் விருப்ப �
 msgid "archive_url needs to end with /archive"
 msgstr "காப்பகம்_ஆர்ல் /காப்பகத்துடன் முடிவடைய வேண்டும்"
 
-#: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "argument \"-\" with mode %r"
@@ -2244,7 +2110,7 @@ msgstr "சோதனை வரிசைப்படுத்துவதற்�
 msgid "can not parse scrlib spec (not a string): '{}'"
 msgstr "ச்க்ர்லிப் ச்பெக்கை அலச முடியாது (ஒரு சரம் அல்ல): '{}'"
 
-#: /usr/lib/python3.9/argparse.py /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "can't open '%(filename)s': %(error)s"
 msgstr "' %(error)s கள்' ஐ திறக்க முடியாது: %(filename)s"
@@ -2258,14 +2124,10 @@ msgstr "HTTPS அல்லாத முகவரி ஐ திறக்க ம�
 msgid "cannot find required srclibs: \"{path}\""
 msgstr "தேவையான SRCLIBS ஐக் கண்டுபிடிக்க முடியவில்லை: \"{path}\""
 
-#: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #: /usr/lib/python3.11/argparse.py
 msgid "cannot have multiple subparser arguments"
 msgstr "பல சப் பார்சர் வாதங்கள் இருக்க முடியாது"
 
-#: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "cannot merge actions - two groups are named %r"
@@ -2284,14 +2146,6 @@ msgstr "குளோனிங் {url}"
 msgid "commands from plugin modules:"
 msgstr "சொருகி தொகுதிகளிலிருந்து கட்டளைகள்:"
 
-#: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
-#: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
-#: /usr/lib/python3.11/optparse.py
-msgid "complex"
-msgstr "அணைவு"
-
-#: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "conflicting option string: %s"
@@ -2322,10 +2176,6 @@ msgstr "SRCLIB ச்பெக்கை அலச முடியவில்ல
 msgid "could not parse srclib spec (no ref specified): '{}'"
 msgstr "SRCLIB ச்பெக்கை அலச முடியவில்லை (குறிப்பு எதுவும் குறிப்பிடப்படவில்லை): '{}'"
 
-#: ../fdroidserver/common.py
-msgid "could not parse srclib spec (too many '@' signs): '{}'"
-msgstr "SRCLIB ச்பெக்கை அலச முடியவில்லை (அதிகமான '@' அறிகுறிகள்): '{}'"
-
 #: ../fdroidserver/nightly.py
 #, python-brace-format
 msgid "created {path}"
@@ -2350,8 +2200,6 @@ msgstr "பூட்டு இல்லாமல் சார்பு கோப
 msgid "deployed process log {path} to {dest}"
 msgstr "பயன்படுத்தப்பட்ட செயல்முறை பதிவு {path} முதல் {dest} வரை"
 
-#: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "dest= is required for options like %r"
@@ -2369,8 +2217,6 @@ msgstr "'{}' இலிருந்து ச்கேனர் கையொப�
 msgid "executable binary, possibly code"
 msgstr "இயங்கக்கூடிய பைனரி, ஒருவேளை குறியீடு"
 
-#: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "expected %s argument"
@@ -2378,20 +2224,14 @@ msgid_plural "expected %s arguments"
 msgstr[0] "எதிர்பார்க்கப்படும் %s உரையாடல்"
 msgstr[1] "எதிர்பார்க்கப்படும் %s வாதங்கள்"
 
-#: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #: /usr/lib/python3.11/argparse.py
 msgid "expected at least one argument"
 msgstr "குறைந்தது ஒரு வாதத்தை எதிர்பார்க்கலாம்"
 
-#: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #: /usr/lib/python3.11/argparse.py
 msgid "expected at most one argument"
 msgstr "பெரும்பாலான ஒரு வாதத்தில் எதிர்பார்க்கப்படுகிறது"
 
-#: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #: /usr/lib/python3.11/argparse.py
 msgid "expected one argument"
 msgstr "ஒரு வாதத்தை எதிர்பார்க்கலாம்"
@@ -2403,10 +2243,6 @@ msgstr "fdroid [<கட்டளை>] [-h |--help | --version | <args>]]"
 #: ../fdroidserver/scanner.py
 msgid "fetch the latest version of signatures from the web"
 msgstr "வலையிலிருந்து கையொப்பங்களின் அண்மைக் கால பதிப்பைப் பெறுங்கள்"
-
-#: /usr/lib/python3.11/optparse.py
-msgid "floating-point"
-msgstr "மிதக்கும் புள்ளி"
 
 #: ../fdroidserver/metadata.py
 msgid "force metadata errors (default) to be warnings, or to be ignored."
@@ -2420,8 +2256,6 @@ msgstr "அறிவிலி எச்.வி.என் நகலி தோல�
 msgid "gzip file archive"
 msgstr "GZIP கோப்பு காப்பகம்"
 
-#: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "ignored explicit argument %r"
@@ -2435,35 +2269,21 @@ msgstr "Index-V1 ஒரு கையொப்பத்தைக் கொண்�
 msgid "index-v2 must have a signature, use `fdroid signindex` to create it!"
 msgstr "Index-V2 ஒரு கையொப்பத்தைக் கொண்டிருக்க வேண்டும், அதை உருவாக்க `fdroid சிக்னின்டெக்ச்` ஐப் பயன்படுத்தவும்!"
 
-#: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
-#: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
-#: /usr/lib/python3.11/optparse.py
-msgid "integer"
-msgstr "முழு எண்"
-
-#: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "invalid %(type)s value: %(value)r"
 msgstr "தவறான %(type)s மதிப்பு: %(value)r"
 
-#: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "invalid choice: %(value)r (choose from %(choices)s)"
 msgstr "தவறான தேர்வு: %(value)r ஆர் ( %(choices)s இலிருந்து தேர்வு செய்யவும்)"
 
-#: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "invalid conflict_resolution value: %r"
 msgstr "தவறான மோதல்_ -ரசல் மதிப்பு: %r"
 
-#: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "invalid option string %(option)r: must start with a character %(prefix_chars)r"
@@ -2501,8 +2321,6 @@ msgstr "கண்ணாடியின் '%s' 'fdroid' உடன் முட�
 msgid "mirrors set twice, in config.yml and {path}!"
 msgstr "கண்ணாடிகள் இரண்டு முறை அமைக்கப்பட்டன, config.yml மற்றும் {path}!"
 
-#: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #: /usr/lib/python3.11/argparse.py
 msgid "mutually exclusive arguments must be optional"
 msgstr "பரச்பர வாதங்கள் விருப்பமாக இருக்க வேண்டும்"
@@ -2521,30 +2339,15 @@ msgstr "{appid} in இல் \"படவுரு\" இல்லை"
 msgid "no APK supplied"
 msgstr "APK வழங்கப்படவில்லை"
 
-#: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
-#: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
-#: /usr/lib/python3.11/optparse.py
-#, python-format
-msgid "no such option: %s"
-msgstr "அத்தகைய விருப்பம் இல்லை: %s"
-
-#: ../fdroidserver/__main__.py
-msgid "no version info found!"
-msgstr "பதிப்பு செய்தி எதுவும் கிடைக்கவில்லை!"
-
 #: ../fdroidserver/checkupdates.py
 msgid "no version information found"
 msgstr "பதிப்பு தகவல்கள் எதுவும் கிடைக்கவில்லை"
 
-#: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "not allowed with argument %s"
 msgstr "உரையாடல் %s உடன் அனுமதிக்கப்படவில்லை"
 
-#: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "one of the arguments %s is required"
@@ -2553,72 +2356,6 @@ msgstr "%s வாதங்களில் ஒன்று தேவை"
 #: ../fdroidserver/common.py ../fdroidserver/index.py
 msgid "only accepts strings, lists, and tuples"
 msgstr "சரங்கள், பட்டியல்கள் மற்றும் டூப்பிள்களை மட்டுமே ஏற்றுக்கொள்கிறது"
-
-#: ../fdroidserver/install.py
-#, python-format
-msgid "option %s: If you really want to install all the signed apps, use --all"
-msgstr "விருப்பம் %s: கையொப்பமிடப்பட்ட அனைத்து பயன்பாடுகளையும் நீங்கள் உண்மையில் நிறுவ விரும்பினால், பயன்படுத்தவும் -அனைவருக்கும்"
-
-#: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
-#: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
-#: /usr/lib/python3.11/optparse.py
-#, python-format
-msgid "option %s: invalid %s value: %r"
-msgstr "விருப்பம் %s: தவறான %s மதிப்பு: %r"
-
-#: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
-#: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
-#: /usr/lib/python3.11/optparse.py
-#, python-format
-msgid "option %s: invalid choice: %r (choose from %s)"
-msgstr "விருப்பம் %s: தவறான தேர்வு: %r ( %s இலிருந்து தேர்வு)"
-
-#: /usr/lib/python3.5/getopt.py /usr/lib/python3.6/getopt.py
-#: /usr/lib/python3.7/getopt.py /usr/lib/python3.9/getopt.py
-#: /usr/lib/python3.11/getopt.py
-#, python-format
-msgid "option -%s not recognized"
-msgstr "விருப்பம் -%s அங்கீகரிக்கப்படவில்லை"
-
-#: /usr/lib/python3.5/getopt.py /usr/lib/python3.6/getopt.py
-#: /usr/lib/python3.7/getopt.py /usr/lib/python3.9/getopt.py
-#: /usr/lib/python3.11/getopt.py
-#, python-format
-msgid "option -%s requires argument"
-msgstr "விருப்பம் -%s க்கு வாதம் தேவை"
-
-#: /usr/lib/python3.5/getopt.py /usr/lib/python3.6/getopt.py
-#: /usr/lib/python3.7/getopt.py /usr/lib/python3.9/getopt.py
-#: /usr/lib/python3.11/getopt.py
-#, python-format
-msgid "option --%s must not have an argument"
-msgstr "விருப்பம் -%s க்கு ஒரு உரையாடல் இருக்கக்கூடாது"
-
-#: /usr/lib/python3.5/getopt.py /usr/lib/python3.6/getopt.py
-#: /usr/lib/python3.7/getopt.py /usr/lib/python3.9/getopt.py
-#: /usr/lib/python3.11/getopt.py
-#, python-format
-msgid "option --%s not a unique prefix"
-msgstr "விருப்பம் -%s ஒரு தனித்துவமான முன்னொட்டு அல்ல"
-
-#: /usr/lib/python3.5/getopt.py /usr/lib/python3.6/getopt.py
-#: /usr/lib/python3.7/getopt.py /usr/lib/python3.9/getopt.py
-#: /usr/lib/python3.11/getopt.py
-#, python-format
-msgid "option --%s not recognized"
-msgstr "விருப்பம் --%s அங்கீகரிக்கப்படவில்லை"
-
-#: /usr/lib/python3.5/getopt.py /usr/lib/python3.6/getopt.py
-#: /usr/lib/python3.7/getopt.py /usr/lib/python3.9/getopt.py
-#: /usr/lib/python3.11/getopt.py
-#, python-format
-msgid "option --%s requires argument"
-msgstr "விருப்பம் -%s க்கு உரையாடல் தேவை"
-
-#: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
-msgid "optional arguments"
-msgstr "விருப்ப வாதங்கள்"
 
 #: /usr/lib/python3.11/argparse.py
 msgid "options"
@@ -2629,8 +2366,6 @@ msgstr "விருப்பங்கள்"
 msgid "overwriting existing {path}"
 msgstr "இருக்கும் {path} ஐ மேலெழுதும்"
 
-#: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #: /usr/lib/python3.11/argparse.py
 msgid "positional arguments"
 msgstr "நிலை வாதங்கள்"
@@ -2663,10 +2398,6 @@ msgstr "ரெப்போ_ஆர்ல் /ரெப்போவுடன் �
 msgid "rsync is missing or broken: {error}"
 msgstr "RSYNC காணவில்லை அல்லது உடைந்தது: {error}"
 
-#: ../fdroidserver/metadata.py
-msgid "ruamel.yaml not installed, can not write metadata."
-msgstr "ருவாமெல்.யம்ல் நிறுவப்படவில்லை, மெட்டாடேட்டாவை எழுத முடியாது."
-
 #: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "s3cmd sync indexes {path} to {url} and delete"
@@ -2690,17 +2421,7 @@ msgstr "ServerWebroot: பாதை \"fdroid\" உடன் முடிவட�
 msgid "shared library"
 msgstr "பகிரப்பட்ட நூலகம்"
 
-#: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
-#: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
-#: /usr/lib/python3.11/optparse.py
-msgid "show program's version number and exit"
-msgstr "நிரலின் பதிப்பு எண்ணைக் காண்பி வெளியேறவும்"
-
-#: /usr/lib/python3.5/argparse.py /usr/lib/python3.5/optparse.py
-#: /usr/lib/python3.6/argparse.py /usr/lib/python3.6/optparse.py
-#: /usr/lib/python3.7/argparse.py /usr/lib/python3.7/optparse.py
-#: /usr/lib/python3.9/argparse.py /usr/lib/python3.9/optparse.py
-#: /usr/lib/python3.11/argparse.py /usr/lib/python3.11/optparse.py
+#: /usr/lib/python3.11/argparse.py
 msgid "show this help message and exit"
 msgstr "இந்த உதவி செய்தியை காட்டிவிட்டு வெளியேறு"
 
@@ -2734,8 +2455,6 @@ msgstr "நிலையான நூலகம்"
 msgid "supplied reference binary has allowed signer {signer}"
 msgstr "வழங்கப்பட்ட குறிப்பு பைனரி கையொப்பத்தை அனுமதித்துள்ளது {signer}"
 
-#: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "the following arguments are required: %s"
@@ -2745,22 +2464,16 @@ msgstr "பின்வரும் வாதங்கள் தேவை: %s"
 msgid "true"
 msgstr "உண்மை"
 
-#: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "unexpected option string: %s"
 msgstr "எதிர்பாராத விருப்ப சரம்: %s"
 
-#: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "unknown parser %(parser_name)r (choices: %(choices)s)"
 msgstr "அறியப்படாத பாகுபடுத்தி %(parser_name)r (தேர்வுகள்: %(choices)s)"
 
-#: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "unrecognized arguments: %s"
@@ -2771,9 +2484,7 @@ msgstr "அங்கீகரிக்கப்படாத வாதங்க�
 msgid "unsafe permissions on '{config_file}' (should be 0600)!"
 msgstr "'{config_file}' இல் பாதுகாப்பற்ற அனுமதிகள் (0600 ஆக இருக்க வேண்டும்)!"
 
-#: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py ../fdroid
-#: /usr/lib/python3.7/argparse.py ../fdroidserver/__main__.py
-#: /usr/lib/python3.9/argparse.py /usr/lib/python3.11/argparse.py
+#: ../fdroidserver/__main__.py /usr/lib/python3.11/argparse.py
 msgid "usage: "
 msgstr "பயன்பாடு: "
 
@@ -2802,21 +2513,19 @@ msgstr[1] "{0} பயன்பாடுகள், {1} முக்கிய ம�
 msgid "{apkfilename} ({appid}) has no metadata!"
 msgstr "{apkfilename} ({appid}) மேனிலை தரவு இல்லை!"
 
-#: ../fdroidserver/update.py
-#, fuzzy, python-brace-format
-msgid "{apkfilename} has multiple {name} files, looks like Master Key exploit!"
-msgstr "{apkfilename the பல {apkfilename} கோப்புகளைக் கொண்டுள்ளது, முதன்மை விசை சுரண்டல் போல் தெரிகிறது!"
-
+#. Translators: https://developer.android.com/build/configure-app-module#set-application-id
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "{apkfilename}'s AndroidManifest.xml has a bad date: "
 msgstr "{apkfilename} இன் androidmanifest.xml க்கு மோசமான தேதி உள்ளது: "
 
+#. Translators: https://developer.android.com/build/configure-app-module#set-application-id
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "{appid} does not have a name! Using application ID instead."
 msgstr "{appid} ஒரு பெயர் இல்லை! அதற்கு பதிலாக பயன்பாட்டு ஐடியைப் பயன்படுத்துதல்."
 
+#. Translators: https://developer.android.com/build/configure-app-module#set-application-id
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "{appid} from {path} is not a valid Android application ID!"
@@ -2837,7 +2546,6 @@ msgstr "{appid} பயன்பாடுகள் மற்றும் கோ�
 msgid "{appid} is missing {name}"
 msgstr "{appid} காணவில்லை {name}"
 
-#. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vname
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "{appid}: Unknown extlib {path} in build '{versionName}'"
@@ -2877,11 +2585,6 @@ msgstr "{file} வெற்று அல்லது ஊழல் நிறை�
 #, python-brace-format
 msgid "{name} \"{section}/icons/{path}\" does not exist! Check \"config.yml\"."
 msgstr "{name} \"{section}/ஐகான்கள்/{path}\" இல்லை! \"Config.yml\" ஐ சரிபார்க்கவும்."
-
-#: ../fdroidserver/common.py
-#, python-brace-format
-msgid "{oldfile} is deprecated, use {newfile}"
-msgstr "{oldfile} நீக்கப்பட்டது, {newfile} ஐப் பயன்படுத்தவும்"
 
 #: ../fdroidserver/update.py
 #, python-brace-format

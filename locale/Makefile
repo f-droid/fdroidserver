@@ -1,8 +1,7 @@
 
-FILES = ../fdroid $(wildcard ../fdroidserver/*.py) \
+FILES = $(wildcard ../fdroidserver/*.py) \
 	$(wildcard /usr/lib/python3.*/argparse.py) \
-	$(wildcard /usr/lib/python3.*/optparse.py) \
-	$(wildcard /usr/lib/python3.*/getopt.py)
+	../fdroid
 
 # these are the supported languages
 ALL_LINGUAS = $(shell sed -En 's,include locale/([^/]+)/.*,\1,p' ../MANIFEST.in)
