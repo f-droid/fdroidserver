@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 2.3a1\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2025-03-20 15:05+0100\n"
+"POT-Creation-Date: 2025-03-23 21:45+0100\n"
 "PO-Revision-Date: 2024-09-08 11:09+0000\n"
 "Last-Translator: abelbiwott-dev <abelbiwott@outlook.com>\n"
 "Language-Team: Swahili <https://hosted.weblate.org/projects/f-droid/fdroidserver/sw/>\n"
@@ -56,11 +56,6 @@ msgstr "Tayari \"{apkfilename}\" imesakinishwa kwenye {dev}."
 
 #: ../fdroidserver/update.py
 #, python-brace-format
-msgid "\"{path}\" contains outdated {name} ({version})"
-msgstr "\"{path}\" ina {name} ({version}) iliyopitwa na wakati"
-
-#: ../fdroidserver/update.py
-#, python-brace-format
 msgid "\"{path}\" contains recent {name} ({version})"
 msgstr "\"{path}\" ina {name} ({version}) ya hivi majuzi"
 
@@ -84,17 +79,6 @@ msgstr "\"{path}\" imetiwa saini na ufunguo ambao hauruhusiwi:"
 msgid "\"{url}\" is not a valid URL!"
 msgstr "\"{url}\" si URL halali!"
 
-#: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
-#: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
-#: /usr/lib/python3.11/optparse.py
-#, python-format
-msgid "%(option)s option requires %(number)d argument"
-msgid_plural "%(option)s option requires %(number)d arguments"
-msgstr[0] "Chaguo %(option)s linahitaji hoja %(number)d"
-msgstr[1] "Chaguo %(option)s linahitaji hoja %(number)d"
-
-#: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "%(prog)s: error: %(message)s\n"
@@ -110,14 +94,6 @@ msgstr "APK %d hazijatiwa saini au kuthibitishwa!"
 msgid "%d problems found"
 msgstr "%d matatizo yamepatikana"
 
-#: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
-#: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
-#: /usr/lib/python3.11/optparse.py
-msgid "%prog [options]"
-msgstr "%prog [chaguo]"
-
-#: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "%r is not callable"
@@ -137,13 +113,6 @@ msgstr "%s ina SHA-256 mbaya: %s"
 #, python-format
 msgid "%s is not an accepted build field"
 msgstr "%s sio sehemu ya kujenga inayokubalika"
-
-#: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
-#: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
-#: /usr/lib/python3.11/optparse.py
-#, python-format
-msgid "%s option does not take a value"
-msgstr "chaguo la %s halichukui thamani"
 
 #: ../fdroidserver/common.py
 msgid "'keypass' not found in config.yml!"
@@ -165,8 +134,6 @@ msgstr "'keystorepass' haipatikani kwenye config.yml!"
 msgid "'repo_keyalias' not found in config.yml!"
 msgstr "'repo_keyalias' haipatikani kwenye config.yml!"
 
-#: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #: /usr/lib/python3.11/argparse.py
 msgid "'required' is an invalid argument for positionals"
 msgstr "\"required\" ni hoja batili kwa vipengee vya nafasi"
@@ -182,11 +149,6 @@ msgstr "'{aapt}' ni ya zamani sana, fdroid inahitaji zana za kujenga-{version} a
 
 #: ../fdroidserver/common.py
 #, python-brace-format
-msgid "'{field}' will be in random order! Use () or [] brackets if order is important!"
-msgstr "'{field}' itakuwa katika mpangilio nasibu! Tumia mabano () au [] ikiwa agizo ni muhimu!"
-
-#: ../fdroidserver/common.py
-#, python-brace-format
 msgid "'{path}' failed to execute!"
 msgstr "{path} imeshindwa kutekeleza!"
 
@@ -195,7 +157,7 @@ msgstr "{path} imeshindwa kutekeleza!"
 msgid "'{path}' has invalid format, it should be a dictionary!"
 msgstr "'{path}' ina muundo batili, inapaswa kuwa kamusi!"
 
-#: ../fdroidserver/metadata.py ../fdroidserver/lint.py
+#: ../fdroidserver/lint.py ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "'{value}' is not a valid {field} in {appid}. Regex pattern: {pattern}"
 msgstr "'{value}' si {field} halali katika {appid}. Muundo wa regex: {pattern}"
@@ -214,8 +176,6 @@ msgstr ""
 msgid "...checkupdate failed for {appid} : {error}"
 msgstr "...sasisho la ukaguzi limeshindwa la{appid} : {error}"
 
-#: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #: /usr/lib/python3.11/argparse.py
 msgid ".__call__() not defined"
 msgstr ".__call__() haijafafanuliwa"
@@ -307,10 +267,6 @@ msgid "App has Binaries but does not have corresponding AllowedAPKSigningKeys to
 msgstr "Apu ina Binari lakini haina AllowedAPKSigningKeys zinazolingana ili kubandika cheti."
 
 #: ../fdroidserver/lint.py
-msgid "App has NoSourceSince or ArchivePolicy \"0 versions\" but AutoUpdateMode or UpdateCheckMode are not None"
-msgstr "Apu ina NoSourceSince au ArchivePolicy \"0 versions\" lakini AutoUpdateMode au UpdateCheckMode sio None"
-
-#: ../fdroidserver/lint.py
 msgid "App has NoSourceSince or ArchivePolicy \"0 versions\" or 0 but AutoUpdateMode or UpdateCheckMode are not None"
 msgstr "Apu ina NoSourceSince au ArchivePolicy \"matoleo 0\" au 0 lakini AutoUpdateMode au UpdateCheckMode sio Hakuna"
 
@@ -353,7 +309,6 @@ msgstr "Aina mbaya ya ingizo \"{mirrortype}\" katika usanidi wa vioo: {mirror}"
 msgid "Base URL to mirror, can include the index signing key using the query string: ?fingerprint="
 msgstr "URL ya msingi ya kioo, inaweza kujumuisha ufunguo wa saini ya faharasa kwa kutumia mfuatano wa saili: ?fingerprint="
 
-#. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vname
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "Branch '{branch}' used as commit in build '{versionName}'"
@@ -409,11 +364,13 @@ msgstr[1] "Haiwezi kujenga kutokana na makosa ya {} wakati wa uchanganuzi"
 msgid "Cannot rewrite \"{path}\""
 msgstr "Haiwezi kuandika upya \"{path}\""
 
+#. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vname
 #: ../fdroidserver/lint.py
 #, python-format
 msgid "Categories '%s' is not valid"
 msgstr "Makundi ‘%s’ sio halali"
 
+#. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vname
 #: ../fdroidserver/lint.py
 msgid "Categories are not set"
 msgstr "Makundi hayajawekwa"
@@ -468,18 +425,15 @@ msgstr "Hoja zinazokinzana: '--verbose' na '--quiet' haiwezi kubainishwa kwa wak
 
 #: ../fdroidserver/common.py
 #, python-brace-format
-msgid "Conflicting config files! Using {newfile}, ignoring {oldfile}!"
-msgstr "Faili za usanidi zinazokinzana! Kwa kutumia {newfile}, ukipuuza {oldfile}!"
-
-#: ../fdroidserver/common.py
-#, python-brace-format
 msgid "Could not find '{command}' on your system"
 msgstr "Haikuweza kupata '{command}' kwenya mfumo wako"
 
+#. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
 #: ../fdroidserver/import_subcommand.py
 msgid "Could not find latest version code"
 msgstr "Haikuweza kupata msimbo wa toleo wa hivi karibuni"
 
+#. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vname
 #: ../fdroidserver/import_subcommand.py
 msgid "Could not find latest version name"
 msgstr "Haikuweza kupata jina la toleo la hivi karibuni"
@@ -499,6 +453,7 @@ msgstr "Haikuweza kufungua APK {path} kwa uchambuzi: "
 msgid "Could not parse size \"{size}\", wrong type \"{type}\""
 msgstr "Haikuweza kuchanganua ukubwa \"{size}\", aina isiyo sahihi \"{type}\""
 
+#. Translators: https://developer.android.com/build/configure-app-module#set-application-id
 #: ../fdroidserver/import_subcommand.py
 msgid "Couldn't find Application ID"
 msgstr "Haikuweza kupata Kitambulisho cha apu"
@@ -593,11 +548,6 @@ msgid "Description has a duplicate line"
 msgstr "Maelezo ina mstari wa nakala"
 
 #: ../fdroidserver/lint.py
-#, python-format
-msgid "Description has a list (%s) but it isn't bulleted (*) nor numbered (#)"
-msgstr "Maelezo ina orodha (%s) lakini sio yenye vitone (*) wala nambari (#)"
-
-#: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "Description of length {length} is over the {limit} char limit"
 msgstr "Maelezo ya urefu {length} iko juu ya {limit} kikomo cha char"
@@ -654,11 +604,6 @@ msgid "Download complete mirrors of small repos"
 msgstr "Pakua vioo kamili vya maghala madogo"
 
 #: ../fdroidserver/common.py
-#, python-format
-msgid "Downloading %s"
-msgstr "Inapakua %s"
-
-#: ../fdroidserver/common.py
 msgid "Downloading the repository already failed once, not trying again."
 msgstr "Kupakua ghala hio tayari imefeli mara moja, haijaribu tena."
 
@@ -690,14 +635,6 @@ msgstr "HITILAFU: %(message)s"
 #: ../fdroidserver/__main__.py
 msgid "ERROR: The \"server\" subcommand has been removed, use \"deploy\"!"
 msgstr "HITILAFU: Amri ndogo ya \"server\" imetolewa, tumia \"deploy\"!"
-
-#: ../fdroidserver/mirror.py
-msgid ""
-"ERROR: this command should never be used to mirror f-droid.org!\n"
-"A full mirror of f-droid.org requires more than 200GB."
-msgstr ""
-"HITILAFU: amri hii haipaswi kutumika kama kioo kwa f-droid.org!\n"
-"Kioo kamili cha f-droid.org kinahitaji zaidi ya 200GB."
 
 #: ../fdroidserver/nightly.py
 msgid "ERROR: unsupported CI type, patches welcome!"
@@ -846,10 +783,6 @@ msgid "Finished"
 msgstr "Imekamilika"
 
 #: ../fdroidserver/lint.py
-msgid "Flattr donation methods belong in the FlattrID: field"
-msgstr "Njia za mchango ya Flattr ni za FlattrID: eneo"
-
-#: ../fdroidserver/lint.py
 msgid "Forbidden HTML tags"
 msgstr "Tagi za HTML zilizokatazwa"
 
@@ -880,7 +813,6 @@ msgstr "Imepata faili ya fedha mbaya \"{path}\" ya \"{name}\":"
 msgid "Found invalid appids in arguments"
 msgstr "Imepata appids batili katika hoja"
 
-#. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
 #: ../fdroidserver/common.py
 msgid "Found invalid versionCodes for some apps"
 msgstr "Ilipata versionCodes batili katika baadhi ya apu"
@@ -945,15 +877,13 @@ msgstr "Git clean imeshindwa"
 msgid "Git fetch failed"
 msgstr "Git fetch imeshindwa"
 
-#: ../fdroidserver/common.py
-msgid "Git prune failed"
-msgstr "Git prune imeshindwa"
-
+#. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
 #: ../fdroidserver/common.py
 #, python-format
 msgid "Git remote set-head failed: \"%s\""
 msgstr "Git remote set-head imeshindwa: \"%s\""
 
+#. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
 #: ../fdroidserver/common.py
 msgid "Git reset failed"
 msgstr "Git reset imeshindwa"
@@ -1088,15 +1018,11 @@ msgstr "VercodeOperation batili: {field}"
 msgid "Invalid VercodeOperation: {invalid_ops}"
 msgstr "VercodeOperation batili: {invalid_ops}"
 
+#. Translators: https://developer.android.com/build/configure-app-module#set-application-id
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Invalid application ID {appid}"
 msgstr "Kitambulisho batili cha apu {appid}"
-
-#: ../fdroidserver/metadata.py
-#, python-format
-msgid "Invalid boolean '%s'"
-msgstr "Boolean batili '%s'"
 
 #: ../fdroidserver/lint.py
 msgid "Invalid bulleted list"
@@ -1308,7 +1234,6 @@ msgstr "Hakuna vyeti vya kusaini vimepatikana katika {path}"
 msgid "No such package: %s"
 msgstr "Hakuna kifurushi kama vile: %s"
 
-#. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "No such versionCode {versionCode} for app {appid}"
@@ -1343,7 +1268,6 @@ msgstr "Hakuna la kufanya kwa {appid}."
 msgid "Now set these in config.yml:"
 msgstr "Sasa seti hizi katika config.yml:"
 
-#. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "OBB file has newer versionCode({integer}) than any APK:"
@@ -1373,18 +1297,16 @@ msgstr ""
 msgid "One of the 'github_releases' config items is missing the 'token' value. skipping ..."
 msgstr ""
 
+#. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Only PNG and JPEG are supported for graphics, found: {path}"
 msgstr "PNG na JPEG pekee zinakubalika katika mchoro, zimepata: {path}"
 
+#. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
 #: ../fdroidserver/common.py
 msgid "Only accepts a single key \"env\""
 msgstr ""
-
-#: ../fdroidserver/checkupdates.py
-msgid "Only print differences with the Play Store"
-msgstr "Chapisha tofauti pekee na Play Store"
 
 #: ../fdroidserver/checkupdates.py
 msgid "Only process apps with auto-updates"
@@ -1393,10 +1315,6 @@ msgstr "Chakata apu zilizo na masasisho ya kiotomatiki pekee"
 #: ../fdroidserver/lint.py
 msgid "OpenCollective donation methods belong in the OpenCollective: field"
 msgstr "Njia za Mchango wa OpenCollective inapatikana kwenye OpenCollective: uwanja"
-
-#: /usr/lib/python3.11/optparse.py
-msgid "Options"
-msgstr "Chaguo"
 
 #: ../fdroidserver/verify.py
 msgid "Output JSON report to file named after APK."
@@ -1562,14 +1480,6 @@ msgstr "Kuondoa {path}\""
 #: ../fdroidserver/update.py
 msgid "Rename APK files that do not match package.name_123.apk"
 msgstr "Badilisha jina la faili za APK ambazo hazilingani na package.name_123.apk"
-
-#: ../fdroidserver/checkupdates.py
-msgid "RepoTrunk update mode only makes sense in git-svn repositories"
-msgstr "Hali ya kisasa ya RepoTrunk ni ya maana tu katika ghala za git-svn"
-
-#: ../fdroidserver/build.py
-msgid "Reset and create a brand new build server, even if the existing one appears to be ok."
-msgstr "Weka upya na uunde seva mpya ya kujenga, hata ikiwa ile iliopo inaonekana kuwa sawa."
 
 #: ../fdroidserver/nightly.py
 #, python-brace-format
@@ -1881,11 +1791,6 @@ msgstr "tagi ya leseni isiyotarajiwa \"{}\"! Tumia pekee tagi za leseni zilizosa
 
 #: ../fdroidserver/common.py
 #, python-brace-format
-msgid "Unexpected symlink target: {link} -> {target}"
-msgstr "Lengo la symlink lisiyotarajiwa:{link} -> {target}"
-
-#: ../fdroidserver/common.py
-#, python-brace-format
 msgid "Unknown entry {key} in {configname}"
 msgstr "ingilio lisilojulikana {key} katika {configname}"
 
@@ -1893,7 +1798,6 @@ msgstr "ingilio lisilojulikana {key} katika {configname}"
 msgid "Unknown exception found!"
 msgstr "Kighairi kisichojulikana kimepatikana!"
 
-#. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vname
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "Unknown file '{filename}' in build '{versionName}'"
@@ -1931,6 +1835,7 @@ msgstr "Nafasi ya apu isiyotambulika '{fieldname}' katika '{path}'"
 msgid "Unrecognised build flag '{build_flag}' in '{path}'"
 msgstr "Bendera ya kujenga isiyotambulika '{build_flag}' katika '{path}'"
 
+#. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Unsupported file type \"{extension}\" for repo graphic"
@@ -1961,11 +1866,6 @@ msgstr "Njia ya scandelete isiyotumika: %s"
 msgid "Unused scanignore path: %s"
 msgstr "Njia ya scanignore isiyotumika: %s"
 
-#: ../fdroidserver/common.py
-#, python-format
-msgid "Unzipping to %s"
-msgstr "Kufungua zipu kwa %s"
-
 #: ../fdroidserver/__main__.py
 msgid "Update repo information for new packages"
 msgstr "Sasisha maelezo ya repo kwa vifurushi vipya"
@@ -1979,6 +1879,7 @@ msgstr "Sasisha logi ya uwazi ya binary kwa URL"
 msgid "UpdateCheckData has invalid URL: {url}"
 msgstr "UpdateCheckData ina URL batili: {url}"
 
+#. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "UpdateCheckData must match the version code as integer (\\d or [0-9]): {codeex}"
@@ -1998,11 +1899,7 @@ msgstr "UpdateCheckData si URL iliyo halali: {url}"
 msgid "UpdateCheckMode is set but it looks like checkupdates hasn't been run yet."
 msgstr "UpdateCheckMode imewekwa lakini inaonekana kama checkupdates haijaendeshwa bado."
 
-#. Translators: https://developer.android.com/studio/build/application-id
-#: ../fdroidserver/lint.py
-msgid "UpdateCheckMode is set but it looks likecheckupdates hasn't been run yet"
-msgstr "UpdateCheckMode imewekwa lakini inaonekana kama likecheckupdates haijaendeshwa bado"
-
+#. Translators: https://developer.android.com/build/configure-app-module#set-application-id
 #: ../fdroidserver/lint.py
 msgid "UpdateCheckName is set to the known application ID, it can be removed"
 msgstr "UpdateCheckName imewekwa katika kitambulisho cha apu kinachojulikana, inaweza kutolewa"
@@ -2017,26 +1914,9 @@ msgstr "Kupakia {apkfilename} kwa androidobservatory.org"
 msgid "Uploading {apkfilename} to virustotal"
 msgstr "Kupakia {apkfilename} kwa virustotal"
 
-#: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
-#: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
-#: /usr/lib/python3.11/optparse.py
-msgid "Usage"
-msgstr "Matumizi"
-
-#: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
-#: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
-#: /usr/lib/python3.11/optparse.py
-#, python-format
-msgid "Usage: %s\n"
-msgstr "Matumizi: %s\n"
-
 #: ../fdroidserver/lint.py
 msgid "Use /HEAD instead of /master or /main to point at a file in the default branch"
 msgstr "Tumia /HEAD badala ya /master au /main kuashiria faili kwenye tawi la msingi"
-
-#: ../fdroidserver/lint.py
-msgid "Use /HEAD instead of /master to point at a file in the default branch"
-msgstr "Tumia /HEAD badala ya /master kuashiria kwa fiaili katika tawi la msingi"
 
 #: ../fdroidserver/update.py
 msgid "Use `fdroid update -c` to create it."
@@ -2075,11 +1955,6 @@ msgstr "Kutumia saini ya JAR"
 #: ../fdroidserver/common.py
 msgid "Using Java's jarsigner, not recommended for verifying APKs! Use apksigner"
 msgstr "Kutumia jarsigner ya Java, haipendekezwi kwa kuthibitisha APK! Tumia apksigner"
-
-#: ../fdroidserver/common.py
-#, python-brace-format
-msgid "Using androguard from \"{path}\""
-msgstr "Kutumia androguard kutoka \"{path}\""
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
@@ -2182,19 +2057,10 @@ msgstr "Inaongeza IdentityFile kwa {path}"
 msgid "adding to {name}: {path}"
 msgstr "Inaongeza kwa {name}: {path}"
 
-#: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "ambiguous option: %(option)s could match %(matches)s"
 msgstr "chaguo lisiloeleweka: %(option)s linaweza kulingana na %(matches)s"
-
-#: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
-#: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
-#: /usr/lib/python3.11/optparse.py
-#, python-format
-msgid "ambiguous option: %s (%s?)"
-msgstr "chaguo lisiloeleweka: %s (%s?)"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -2209,11 +2075,13 @@ msgstr "apksigner haijapatikana! Haiwezi kusaini au kutibitisha APK ya kisasa"
 msgid "apksigner not found, it's required for signing!"
 msgstr "apksigner haikupatikana, inahitajika kwa ajili ya kusaini!"
 
+#. Translators: https://developer.android.com/build/configure-app-module#set-application-id
 #: ../fdroidserver/checkupdates.py ../fdroidserver/lint.py
 #: ../fdroidserver/rewritemeta.py
 msgid "application ID of file to operate on"
 msgstr "Kitambulisho cha apu cha faili kufanyia kazi"
 
+#. Translators: https://developer.android.com/build/configure-app-module#set-application-id
 #: ../fdroidserver/build.py ../fdroidserver/install.py
 #: ../fdroidserver/publish.py ../fdroidserver/scanner.py
 #: ../fdroidserver/verify.py
@@ -2224,8 +2092,6 @@ msgstr "Kitambulisho cha apu yenye versionCode iliyo ya hiari katika fomu APPID[
 msgid "archive_url needs to end with /archive"
 msgstr "archive_url inahitaji kumalizia na /archive"
 
-#: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "argument \"-\" with mode %r"
@@ -2244,7 +2110,7 @@ msgstr "inajaribu uhusiano wa SSH ulio tupu ili kujaribu ufunguo wa kupeleka:"
 msgid "can not parse scrlib spec (not a string): '{}'"
 msgstr "Haiwezi kuchanganua speci ya scrlib (sio kamba): '{}'"
 
-#: /usr/lib/python3.9/argparse.py /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "can't open '%(filename)s': %(error)s"
 msgstr "Haiwezi kufungua '%(filename)s':%(error)s"
@@ -2258,14 +2124,10 @@ msgstr "Haiwezi kufungua URL isiyo ya https: '{};"
 msgid "cannot find required srclibs: \"{path}\""
 msgstr "Haiwezi kupata srclibs inayohitajika: \"{path}\""
 
-#: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #: /usr/lib/python3.11/argparse.py
 msgid "cannot have multiple subparser arguments"
 msgstr "Haiwezi kuwa na hoja za subparser nyingi"
 
-#: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "cannot merge actions - two groups are named %r"
@@ -2284,14 +2146,6 @@ msgstr "kukaririsha {url}"
 msgid "commands from plugin modules:"
 msgstr "amri kutoka kwa kiunzi huru cha programu-jalizi:"
 
-#: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
-#: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
-#: /usr/lib/python3.11/optparse.py
-msgid "complex"
-msgstr "changamani"
-
-#: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "conflicting option string: %s"
@@ -2322,10 +2176,6 @@ msgstr "haikuweza kuchanganua specifisheni ya srclib (hakuna jina limebainishwa)
 msgid "could not parse srclib spec (no ref specified): '{}'"
 msgstr "haikuweza kuchanganua specifisheni ya srclib (hakuna rejeleo limebainishwa): '{}'"
 
-#: ../fdroidserver/common.py
-msgid "could not parse srclib spec (too many '@' signs): '{}'"
-msgstr "haikuweza kuchanganua specifisheni ya srclib (saini nyingi mno za '@'): '{}'"
-
 #: ../fdroidserver/nightly.py
 #, python-brace-format
 msgid "created {path}"
@@ -2350,8 +2200,6 @@ msgstr ""
 msgid "deployed process log {path} to {dest}"
 msgstr "logi ya mchakato uliosambazwa {path} hadi {dest}"
 
-#: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "dest= is required for options like %r"
@@ -2369,8 +2217,6 @@ msgstr "Inapakua sahihi za skena kutoka '{}' imefeli"
 msgid "executable binary, possibly code"
 msgstr "binari inayoweza kutekelezwa, ikiwezekana msimbo"
 
-#: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "expected %s argument"
@@ -2378,20 +2224,14 @@ msgid_plural "expected %s arguments"
 msgstr[0] "hoja %s iliyotarajiwa"
 msgstr[1] "hoja %s zilizotarajiwa"
 
-#: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #: /usr/lib/python3.11/argparse.py
 msgid "expected at least one argument"
 msgstr "ilitarajia angalau hoja moja"
 
-#: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #: /usr/lib/python3.11/argparse.py
 msgid "expected at most one argument"
 msgstr "Imetarajiwa isiwe zaidi ya hoja moja"
 
-#: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #: /usr/lib/python3.11/argparse.py
 msgid "expected one argument"
 msgstr "Ilitarajia hoja moja"
@@ -2403,10 +2243,6 @@ msgstr "fdroid [<command>] [-h|--msaada|--toleo|<args>]"
 #: ../fdroidserver/scanner.py
 msgid "fetch the latest version of signatures from the web"
 msgstr "Pakua toleo jipya zaidi za saini kutoka kwenye mtandao"
-
-#: /usr/lib/python3.11/optparse.py
-msgid "floating-point"
-msgstr "hatua ya kuelea"
 
 #: ../fdroidserver/metadata.py
 msgid "force metadata errors (default) to be warnings, or to be ignored."
@@ -2420,8 +2256,6 @@ msgstr "svn clone ya git ilifeli"
 msgid "gzip file archive"
 msgstr "kumbukumbu ya faili ya gzip"
 
-#: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "ignored explicit argument %r"
@@ -2435,35 +2269,21 @@ msgstr "index-v1 lazima iwe na saini, tumia `fdroid signindex` kuiunda!"
 msgid "index-v2 must have a signature, use `fdroid signindex` to create it!"
 msgstr "index-v2 lazima iwe na saini, tumia `fdroid signindex` kuiunda!"
 
-#: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
-#: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
-#: /usr/lib/python3.11/optparse.py
-msgid "integer"
-msgstr "nambari kamili"
-
-#: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "invalid %(type)s value: %(value)r"
 msgstr "Thamani batili ya %(type)s: %(value)r"
 
-#: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "invalid choice: %(value)r (choose from %(choices)s)"
 msgstr "chaguo iliyo batili: %(value)r (chagua kutoka %(choices)s)"
 
-#: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "invalid conflict_resolution value: %r"
 msgstr "thamani ya conflict_resolution iliyo batili: %r"
 
-#: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "invalid option string %(option)r: must start with a character %(prefix_chars)r"
@@ -2501,8 +2321,6 @@ msgstr "kioo %s haikwishia na 'fdroid'!"
 msgid "mirrors set twice, in config.yml and {path}!"
 msgstr "vioo vimesetiwa mara mbili, katika config.yml na {path}!"
 
-#: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #: /usr/lib/python3.11/argparse.py
 msgid "mutually exclusive arguments must be optional"
 msgstr "Hoja zinazokinzana lazima ziwe za hiari"
@@ -2521,30 +2339,15 @@ msgstr "hakuna \"icon\" katika {appid}"
 msgid "no APK supplied"
 msgstr "hakuna APK iliyowasilishwa"
 
-#: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
-#: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
-#: /usr/lib/python3.11/optparse.py
-#, python-format
-msgid "no such option: %s"
-msgstr "hakuna chaguo kama hilo: %s"
-
-#: ../fdroidserver/__main__.py
-msgid "no version info found!"
-msgstr "hakuna maelezo ya toleo imepatikana!"
-
 #: ../fdroidserver/checkupdates.py
 msgid "no version information found"
 msgstr "hakuna maelezo ya toleo zimepatikana"
 
-#: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "not allowed with argument %s"
 msgstr "haikubaliki na hoja %s"
 
-#: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "one of the arguments %s is required"
@@ -2553,72 +2356,6 @@ msgstr "moja ya hoja %s inahitajika"
 #: ../fdroidserver/common.py ../fdroidserver/index.py
 msgid "only accepts strings, lists, and tuples"
 msgstr "inakubali pekee kamba, orodha, na jozi"
-
-#: ../fdroidserver/install.py
-#, python-format
-msgid "option %s: If you really want to install all the signed apps, use --all"
-msgstr "chaguo %s: Ikiwa kweli unataka kusakinisha apu zote zilizosainiwa, tumia --all"
-
-#: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
-#: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
-#: /usr/lib/python3.11/optparse.py
-#, python-format
-msgid "option %s: invalid %s value: %r"
-msgstr "chaguo %s: thamani %s iliyo batili: %r"
-
-#: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
-#: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
-#: /usr/lib/python3.11/optparse.py
-#, python-format
-msgid "option %s: invalid choice: %r (choose from %s)"
-msgstr "chaguo %s: chaguo batili: %r(choose from %s)"
-
-#: /usr/lib/python3.5/getopt.py /usr/lib/python3.6/getopt.py
-#: /usr/lib/python3.7/getopt.py /usr/lib/python3.9/getopt.py
-#: /usr/lib/python3.11/getopt.py
-#, python-format
-msgid "option -%s not recognized"
-msgstr "chaguo -%s halitambuliki"
-
-#: /usr/lib/python3.5/getopt.py /usr/lib/python3.6/getopt.py
-#: /usr/lib/python3.7/getopt.py /usr/lib/python3.9/getopt.py
-#: /usr/lib/python3.11/getopt.py
-#, python-format
-msgid "option -%s requires argument"
-msgstr "chaguo -%s linahitaji hoja"
-
-#: /usr/lib/python3.5/getopt.py /usr/lib/python3.6/getopt.py
-#: /usr/lib/python3.7/getopt.py /usr/lib/python3.9/getopt.py
-#: /usr/lib/python3.11/getopt.py
-#, python-format
-msgid "option --%s must not have an argument"
-msgstr "chaguo --%s ni lazima isiwe na hoja"
-
-#: /usr/lib/python3.5/getopt.py /usr/lib/python3.6/getopt.py
-#: /usr/lib/python3.7/getopt.py /usr/lib/python3.9/getopt.py
-#: /usr/lib/python3.11/getopt.py
-#, python-format
-msgid "option --%s not a unique prefix"
-msgstr "chaguo --%s sio kiambishi awali cha kipekee"
-
-#: /usr/lib/python3.5/getopt.py /usr/lib/python3.6/getopt.py
-#: /usr/lib/python3.7/getopt.py /usr/lib/python3.9/getopt.py
-#: /usr/lib/python3.11/getopt.py
-#, python-format
-msgid "option --%s not recognized"
-msgstr "chaguo --%s halitambuliki"
-
-#: /usr/lib/python3.5/getopt.py /usr/lib/python3.6/getopt.py
-#: /usr/lib/python3.7/getopt.py /usr/lib/python3.9/getopt.py
-#: /usr/lib/python3.11/getopt.py
-#, python-format
-msgid "option --%s requires argument"
-msgstr "chaguo --%s linahitaji hoja"
-
-#: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
-msgid "optional arguments"
-msgstr "hoja za hiari"
 
 #: /usr/lib/python3.11/argparse.py
 msgid "options"
@@ -2629,8 +2366,6 @@ msgstr "uchaguzi"
 msgid "overwriting existing {path}"
 msgstr "inaandika upya {path} iliyopo"
 
-#: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #: /usr/lib/python3.11/argparse.py
 msgid "positional arguments"
 msgstr "hoja ya msimamo"
@@ -2663,10 +2398,6 @@ msgstr "repo_url ina haja ya kuisha na /ghala"
 msgid "rsync is missing or broken: {error}"
 msgstr "rsync inakosa au imevunjika: {error}"
 
-#: ../fdroidserver/metadata.py
-msgid "ruamel.yaml not installed, can not write metadata."
-msgstr "ruamel.yaml haijasimikwa, haiwezi kuandika metadata."
-
 #: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "s3cmd sync indexes {path} to {url} and delete"
@@ -2690,17 +2421,7 @@ msgstr "serverwebroot: njia haikamiliki na \"fdroid\", labda ulimaanisha moja ka
 msgid "shared library"
 msgstr "maktaba inayoshirikishwa"
 
-#: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
-#: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
-#: /usr/lib/python3.11/optparse.py
-msgid "show program's version number and exit"
-msgstr "onyesha nambari ya toleo la programu kisha uondoke"
-
-#: /usr/lib/python3.5/argparse.py /usr/lib/python3.5/optparse.py
-#: /usr/lib/python3.6/argparse.py /usr/lib/python3.6/optparse.py
-#: /usr/lib/python3.7/argparse.py /usr/lib/python3.7/optparse.py
-#: /usr/lib/python3.9/argparse.py /usr/lib/python3.9/optparse.py
-#: /usr/lib/python3.11/argparse.py /usr/lib/python3.11/optparse.py
+#: /usr/lib/python3.11/argparse.py
 msgid "show this help message and exit"
 msgstr "onyesha ujumbe huu wa usaidizi na uondoke"
 
@@ -2734,8 +2455,6 @@ msgstr "maktaba tuli"
 msgid "supplied reference binary has allowed signer {signer}"
 msgstr "binari ya rejeleo lililowasilishwa imeruhusu signer {signer}"
 
-#: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "the following arguments are required: %s"
@@ -2745,22 +2464,16 @@ msgstr "hoja zifuatazo zinahitajika: %s"
 msgid "true"
 msgstr ""
 
-#: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "unexpected option string: %s"
 msgstr "Chaguo lisilotarajiwa: %s"
 
-#: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "unknown parser %(parser_name)r (choices: %(choices)s)"
 msgstr "kichanganuzi isiyojulikana %(parser_name)r (chaguo: %(choices)s)"
 
-#: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "unrecognized arguments: %s"
@@ -2771,9 +2484,7 @@ msgstr "hoja zisizotambulika: %s"
 msgid "unsafe permissions on '{config_file}' (should be 0600)!"
 msgstr "ruhusa zisizo salama kwenye '{config_file}' (inapaswa kuwa 0600)!"
 
-#: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py ../fdroid
-#: /usr/lib/python3.7/argparse.py ../fdroidserver/__main__.py
-#: /usr/lib/python3.9/argparse.py /usr/lib/python3.11/argparse.py
+#: ../fdroidserver/__main__.py /usr/lib/python3.11/argparse.py
 msgid "usage: "
 msgstr "matumizi: "
 
@@ -2802,21 +2513,19 @@ msgstr[1] "apu {0}, lakabu muhimu{1}"
 msgid "{apkfilename} ({appid}) has no metadata!"
 msgstr "{apkfilename} ({appid}) haina metadata!"
 
-#: ../fdroidserver/update.py
-#, python-brace-format
-msgid "{apkfilename} has multiple {name} files, looks like Master Key exploit!"
-msgstr "{apkfilename} ina faili nyingi za {name}, inaonekana kama shambulio la Master Key!"
-
+#. Translators: https://developer.android.com/build/configure-app-module#set-application-id
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "{apkfilename}'s AndroidManifest.xml has a bad date: "
 msgstr "AndroidManifest.xml ya {apkfilename} ina tarehe mbaya: "
 
+#. Translators: https://developer.android.com/build/configure-app-module#set-application-id
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "{appid} does not have a name! Using application ID instead."
 msgstr "{appid} haina jina! Inatumia kitambulisho cha apu badala yake."
 
+#. Translators: https://developer.android.com/build/configure-app-module#set-application-id
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "{appid} from {path} is not a valid Android application ID!"
@@ -2837,7 +2546,6 @@ msgstr "{appid} ina vyote viwili APK pamoja na faili: {files}"
 msgid "{appid} is missing {name}"
 msgstr "{appid} inakosa {name}"
 
-#. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vname
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "{appid}: Unknown extlib {path} in build '{versionName}'"
@@ -2877,11 +2585,6 @@ msgstr "{file} ni tupu au fisadi!"
 #, python-brace-format
 msgid "{name} \"{section}/icons/{path}\" does not exist! Check \"config.yml\"."
 msgstr "{name} \"{section}/icons/{path}\" haipo! Angalia \"config.yml\"."
-
-#: ../fdroidserver/common.py
-#, python-brace-format
-msgid "{oldfile} is deprecated, use {newfile}"
-msgstr "{oldfile} imewacha kutumika, tumia {newfile}"
 
 #: ../fdroidserver/update.py
 #, python-brace-format

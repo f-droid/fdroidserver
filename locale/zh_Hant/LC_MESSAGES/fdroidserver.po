@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2025-03-20 15:05+0100\n"
+"POT-Creation-Date: 2025-03-23 21:45+0100\n"
 "PO-Revision-Date: 2024-11-26 15:16+0000\n"
 "Last-Translator: Peter Dave Hello <hsu@peterdavehello.org>\n"
 "Language-Team: Chinese (Traditional Han script) <https://hosted.weblate.org/projects/f-droid/fdroidserver/zh_Hant/>\n"
@@ -60,11 +60,6 @@ msgstr "\"{apkfilename}\" 已經安裝在 {dev} 上了。"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
-msgid "\"{path}\" contains outdated {name} ({version})"
-msgstr "\"{path}\" 包含過時的 {name} ({version})"
-
-#: ../fdroidserver/update.py
-#, python-brace-format
 msgid "\"{path}\" contains recent {name} ({version})"
 msgstr "\"{path}\" 包含近期的 {name} ({version})"
 
@@ -88,16 +83,6 @@ msgstr "「{path}」由不允許的金鑰簽署："
 msgid "\"{url}\" is not a valid URL!"
 msgstr "\"{url}\" 不是一個有效的網址!"
 
-#: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
-#: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
-#: /usr/lib/python3.11/optparse.py
-#, python-format
-msgid "%(option)s option requires %(number)d argument"
-msgid_plural "%(option)s option requires %(number)d arguments"
-msgstr[0] "%(option)s 的選項需要 %(number)d 參數"
-
-#: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "%(prog)s: error: %(message)s\n"
@@ -113,14 +98,6 @@ msgstr "%d 個 APK 無法簽署或驗證！"
 msgid "%d problems found"
 msgstr "發現 %d 個問題"
 
-#: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
-#: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
-#: /usr/lib/python3.11/optparse.py
-msgid "%prog [options]"
-msgstr "%prog [選項]"
-
-#: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "%r is not callable"
@@ -140,13 +117,6 @@ msgstr "%s 的 SHA-256 值不正確：%s"
 #, python-format
 msgid "%s is not an accepted build field"
 msgstr "%s 為不可編譯欄位"
-
-#: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
-#: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
-#: /usr/lib/python3.11/optparse.py
-#, python-format
-msgid "%s option does not take a value"
-msgstr "%s 選項不帶值"
 
 #: ../fdroidserver/common.py
 msgid "'keypass' not found in config.yml!"
@@ -168,8 +138,6 @@ msgstr "config.yml 找不到 'keystorepass'！"
 msgid "'repo_keyalias' not found in config.yml!"
 msgstr "config.yml 找不到 'repo_keyalias'！"
 
-#: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #: /usr/lib/python3.11/argparse.py
 msgid "'required' is an invalid argument for positionals"
 msgstr "這些地方的 '必填' 為無效引數"
@@ -185,11 +153,6 @@ msgstr "'{aapt}' 太過老舊，fdroid 需要 build-tools-{version} 或以上版
 
 #: ../fdroidserver/common.py
 #, python-brace-format
-msgid "'{field}' will be in random order! Use () or [] brackets if order is important!"
-msgstr "'{field}'　將會隨機排列！如果次序重很重要，請使用 () 或 []符號！"
-
-#: ../fdroidserver/common.py
-#, python-brace-format
 msgid "'{path}' failed to execute!"
 msgstr "'{path}' 無法執行！"
 
@@ -198,7 +161,7 @@ msgstr "'{path}' 無法執行！"
 msgid "'{path}' has invalid format, it should be a dictionary!"
 msgstr "「{path}」的格式無效，它應該是一個字典！"
 
-#: ../fdroidserver/metadata.py ../fdroidserver/lint.py
+#: ../fdroidserver/lint.py ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "'{value}' is not a valid {field} in {appid}. Regex pattern: {pattern}"
 msgstr "{appid} 的 {value}' 為無效 {field}。正規表遠格式：{pattern}"
@@ -217,8 +180,6 @@ msgstr ""
 msgid "...checkupdate failed for {appid} : {error}"
 msgstr "{appid} 檢查更新失敗：{error}"
 
-#: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #: /usr/lib/python3.11/argparse.py
 msgid ".__call__() not defined"
 msgstr ".__call__() 未定義"
@@ -310,10 +271,6 @@ msgid "App has Binaries but does not have corresponding AllowedAPKSigningKeys to
 msgstr "應用程式具有二進位文件，但是沒有相應的 AllowedAPKSigningKeys 來固定憑證。"
 
 #: ../fdroidserver/lint.py
-msgid "App has NoSourceSince or ArchivePolicy \"0 versions\" but AutoUpdateMode or UpdateCheckMode are not None"
-msgstr "應用程式有 NoSourceSince 或 ArchivePolicy「0 versions」，但是 AutoUpdateMode 或 UpdateCheckMode 不是「None」"
-
-#: ../fdroidserver/lint.py
 msgid "App has NoSourceSince or ArchivePolicy \"0 versions\" or 0 but AutoUpdateMode or UpdateCheckMode are not None"
 msgstr "應用程式有 NoSourceSince 或 ArchivePolicy「0 versions」或「0」，但是 AutoUpdateMode 或 UpdateCheckMode 不是「None」"
 
@@ -356,7 +313,6 @@ msgstr "鏡像配置中的錯誤條目類型「{mirrortype}」：{mirror}"
 msgid "Base URL to mirror, can include the index signing key using the query string: ?fingerprint="
 msgstr "基本的 URL 到鏡像，可以包含索引簽署金鑰使用查詢字串：?fingerprint="
 
-#. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vname
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "Branch '{branch}' used as commit in build '{versionName}'"
@@ -411,11 +367,13 @@ msgstr[0] "掃描時由於 {} 出錯，無法進行編譯"
 msgid "Cannot rewrite \"{path}\""
 msgstr "無法重寫到 \"{path}\""
 
+#. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vname
 #: ../fdroidserver/lint.py
 #, python-format
 msgid "Categories '%s' is not valid"
 msgstr "'%s' 類別無效"
 
+#. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vname
 #: ../fdroidserver/lint.py
 msgid "Categories are not set"
 msgstr "類別未設定"
@@ -471,18 +429,15 @@ msgstr "衝突的參數：無法同時使用 '--verbose' 和 '--quiet' 參數。
 
 #: ../fdroidserver/common.py
 #, python-brace-format
-msgid "Conflicting config files! Using {newfile}, ignoring {oldfile}!"
-msgstr "設定檔衝突！使用 {newfile}，忽略 {oldfile}！"
-
-#: ../fdroidserver/common.py
-#, python-brace-format
 msgid "Could not find '{command}' on your system"
 msgstr "在您的系統上找不到 '{command}'"
 
+#. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
 #: ../fdroidserver/import_subcommand.py
 msgid "Could not find latest version code"
 msgstr "找不到最新版本程式碼"
 
+#. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vname
 #: ../fdroidserver/import_subcommand.py
 msgid "Could not find latest version name"
 msgstr "找不到最新版本名稱"
@@ -502,6 +457,7 @@ msgstr "無法開啟 APK 檔{path}案作分析 : "
 msgid "Could not parse size \"{size}\", wrong type \"{type}\""
 msgstr "無法解析大小「{size}」，錯誤類型「{type}」"
 
+#. Translators: https://developer.android.com/build/configure-app-module#set-application-id
 #: ../fdroidserver/import_subcommand.py
 msgid "Couldn't find Application ID"
 msgstr "找不到應用程式 ID"
@@ -596,11 +552,6 @@ msgid "Description has a duplicate line"
 msgstr "描述中出現重覆行"
 
 #: ../fdroidserver/lint.py
-#, python-format
-msgid "Description has a list (%s) but it isn't bulleted (*) nor numbered (#)"
-msgstr "描述中有一個列表 (%s) 但它並未被編排 (*) 或作編號 (#)"
-
-#: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "Description of length {length} is over the {limit} char limit"
 msgstr "描述的長度 {length} 已超過 {limit} 個字符限制"
@@ -657,11 +608,6 @@ msgid "Download complete mirrors of small repos"
 msgstr "下載小型軟體庫完整的鏡像"
 
 #: ../fdroidserver/common.py
-#, python-format
-msgid "Downloading %s"
-msgstr "正在下載 %s"
-
-#: ../fdroidserver/common.py
 msgid "Downloading the repository already failed once, not trying again."
 msgstr "下載軟體庫已失敗過一次，尚未重試。"
 
@@ -693,14 +639,6 @@ msgstr "錯誤：%(message)s"
 #: ../fdroidserver/__main__.py
 msgid "ERROR: The \"server\" subcommand has been removed, use \"deploy\"!"
 msgstr "錯誤：「server」子指令已經刪除，請使用「deploy」！"
-
-#: ../fdroidserver/mirror.py
-msgid ""
-"ERROR: this command should never be used to mirror f-droid.org!\n"
-"A full mirror of f-droid.org requires more than 200GB."
-msgstr ""
-"錯誤：此命令絕不該用於鏡像 f-droid.org！\n"
-"完整的 f-droid.org 鏡像需要超過 200GB。"
 
 #: ../fdroidserver/nightly.py
 msgid "ERROR: unsupported CI type, patches welcome!"
@@ -849,10 +787,6 @@ msgid "Finished"
 msgstr "已完成"
 
 #: ../fdroidserver/lint.py
-msgid "Flattr donation methods belong in the FlattrID: field"
-msgstr "Flattr 捐贈方法屬於 FlattrID: field"
-
-#: ../fdroidserver/lint.py
 msgid "Forbidden HTML tags"
 msgstr "禁用 HTML 標籤"
 
@@ -883,7 +817,6 @@ msgstr "找到了 \"{name}\" 的錯誤的籌款檔案 \"{path}\":"
 msgid "Found invalid appids in arguments"
 msgstr "引數中找到無效的 appids"
 
-#. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
 #: ../fdroidserver/common.py
 msgid "Found invalid versionCodes for some apps"
 msgstr "有些應用的版本代號無效"
@@ -948,15 +881,13 @@ msgstr "Git 清理失敗"
 msgid "Git fetch failed"
 msgstr "Git 抓取失敗"
 
-#: ../fdroidserver/common.py
-msgid "Git prune failed"
-msgstr "Git 修剪失敗"
-
+#. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
 #: ../fdroidserver/common.py
 #, python-format
 msgid "Git remote set-head failed: \"%s\""
 msgstr "Git 遠端 set-head 失敗: \"%s\""
 
+#. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
 #: ../fdroidserver/common.py
 msgid "Git reset failed"
 msgstr "Git 重置失敗"
@@ -1095,15 +1026,11 @@ msgstr "無效的 VercodeOperation：{field}"
 msgid "Invalid VercodeOperation: {invalid_ops}"
 msgstr "無效的 VercodeOperation：{invalid_ops}"
 
+#. Translators: https://developer.android.com/build/configure-app-module#set-application-id
 #: ../fdroidserver/common.py
 #, fuzzy, python-brace-format
 msgid "Invalid application ID {appid}"
 msgstr "無效的 application ID {appid}"
-
-#: ../fdroidserver/metadata.py
-#, python-format
-msgid "Invalid boolean '%s'"
-msgstr "無效的布林 '%s'"
 
 #: ../fdroidserver/lint.py
 msgid "Invalid bulleted list"
@@ -1322,7 +1249,6 @@ msgstr "{path} 找不到簽署證書"
 msgid "No such package: %s"
 msgstr "無此套件包：%s"
 
-#. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "No such versionCode {versionCode} for app {appid}"
@@ -1360,7 +1286,6 @@ msgstr "{appid} 無須採取行動."
 msgid "Now set these in config.yml:"
 msgstr "現在設定這些在 config.yml 中："
 
-#. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "OBB file has newer versionCode({integer}) than any APK:"
@@ -1391,18 +1316,16 @@ msgstr "其中一個「github_releases」設定項目缺少「projectUrl」值�
 msgid "One of the 'github_releases' config items is missing the 'token' value. skipping ..."
 msgstr "其中一個「github_releases」設定項目缺少「token」值。略過..."
 
+#. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Only PNG and JPEG are supported for graphics, found: {path}"
 msgstr "圖像僅支援 PNG 和 JPEG，可在下方找到：{path}"
 
+#. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
 #: ../fdroidserver/common.py
 msgid "Only accepts a single key \"env\""
 msgstr ""
-
-#: ../fdroidserver/checkupdates.py
-msgid "Only print differences with the Play Store"
-msgstr "僅印出與 Play Store 的不同處"
 
 #: ../fdroidserver/checkupdates.py
 msgid "Only process apps with auto-updates"
@@ -1412,10 +1335,6 @@ msgstr "只處理具有自動更新的應用程式"
 #, fuzzy
 msgid "OpenCollective donation methods belong in the OpenCollective: field"
 msgstr "OpenCollective 的捐款方式在 OpenCollective: 的標誌下面"
-
-#: /usr/lib/python3.11/optparse.py
-msgid "Options"
-msgstr "選項"
 
 #: ../fdroidserver/verify.py
 msgid "Output JSON report to file named after APK."
@@ -1584,14 +1503,6 @@ msgstr "正在移除 {path}\""
 #: ../fdroidserver/update.py
 msgid "Rename APK files that do not match package.name_123.apk"
 msgstr "為不符合 package.name_123.apk 格式的 APK 檔案更名"
-
-#: ../fdroidserver/checkupdates.py
-msgid "RepoTrunk update mode only makes sense in git-svn repositories"
-msgstr "RepoTrunk 更新模式僅適用於 git-svn 儲存庫"
-
-#: ../fdroidserver/build.py
-msgid "Reset and create a brand new build server, even if the existing one appears to be ok."
-msgstr "即使現有的伺服器明顯是好的，仍重置並建立一個新的構建伺服器。"
 
 #: ../fdroidserver/nightly.py
 #, python-brace-format
@@ -1912,11 +1823,6 @@ msgid "Unexpected license tag \"{}\"! Only use license tags configured in your c
 msgstr "這個許可證標籤不符合預期 \"{}\"！ 只能使用你的配置文檔裡面配置好的許可證標籤啦"
 
 #: ../fdroidserver/common.py
-#, python-brace-format
-msgid "Unexpected symlink target: {link} -> {target}"
-msgstr "未預期的符號連結目標：{link} -> {target}"
-
-#: ../fdroidserver/common.py
 #, fuzzy, python-brace-format
 msgid "Unknown entry {key} in {configname}"
 msgstr "配置文檔 {configname} 裡面登記的密鑰 {key} 是未知的"
@@ -1925,7 +1831,6 @@ msgstr "配置文檔 {configname} 裡面登記的密鑰 {key} 是未知的"
 msgid "Unknown exception found!"
 msgstr "發現未知的異常！"
 
-#. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vname
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "Unknown file '{filename}' in build '{versionName}'"
@@ -1963,6 +1868,7 @@ msgstr "在 '{path}' 中無法辨識的 app 欄位 '{fieldname}'"
 msgid "Unrecognised build flag '{build_flag}' in '{path}'"
 msgstr "在 '{path}' 中無法辨識的構建旗標 '{build_flag}'"
 
+#. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Unsupported file type \"{extension}\" for repo graphic"
@@ -1993,11 +1899,6 @@ msgstr "路徑: %s 被標記為掃描並刪除，但並未執行"
 msgid "Unused scanignore path: %s"
 msgstr "檔案路徑: %s 被標記為不掃描，但並未出現"
 
-#: ../fdroidserver/common.py
-#, python-format
-msgid "Unzipping to %s"
-msgstr "正在解壓縮到 %s"
-
 #: ../fdroidserver/__main__.py
 msgid "Update repo information for new packages"
 msgstr "為新的套件包更新軟體庫資訊"
@@ -2011,6 +1912,7 @@ msgstr "為網址更新二進制的透明日誌"
 msgid "UpdateCheckData has invalid URL: {url}"
 msgstr "UpdateCheckData 有無效的 URL：{url}"
 
+#. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "UpdateCheckData must match the version code as integer (\\d or [0-9]): {codeex}"
@@ -2030,11 +1932,7 @@ msgstr "UpdateCheckData 不是有效的 URL：{url}"
 msgid "UpdateCheckMode is set but it looks like checkupdates hasn't been run yet."
 msgstr "已設定 UpdateCheckMode，但似乎尚未執行 checkupdates。"
 
-#. Translators: https://developer.android.com/studio/build/application-id
-#: ../fdroidserver/lint.py
-msgid "UpdateCheckMode is set but it looks likecheckupdates hasn't been run yet"
-msgstr "已設定 UpdateCheckMode，但似乎尚未執行 checkupdates"
-
+#. Translators: https://developer.android.com/build/configure-app-module#set-application-id
 #: ../fdroidserver/lint.py
 #, fuzzy
 msgid "UpdateCheckName is set to the known application ID, it can be removed"
@@ -2050,26 +1948,9 @@ msgstr "正在將軟體檔案 {apkfilename} 上傳到 androidobservatory.org"
 msgid "Uploading {apkfilename} to virustotal"
 msgstr "正在將軟體檔案 {apkfilename} 上傳到 virustotal"
 
-#: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
-#: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
-#: /usr/lib/python3.11/optparse.py
-msgid "Usage"
-msgstr "使用方法"
-
-#: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
-#: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
-#: /usr/lib/python3.11/optparse.py
-#, python-format
-msgid "Usage: %s\n"
-msgstr "使用方法：%s\n"
-
 #: ../fdroidserver/lint.py
 #, fuzzy
 msgid "Use /HEAD instead of /master or /main to point at a file in the default branch"
-msgstr "使用 /HEAD 取代 /master 來指向默認分支的一個檔案"
-
-#: ../fdroidserver/lint.py
-msgid "Use /HEAD instead of /master to point at a file in the default branch"
 msgstr "使用 /HEAD 取代 /master 來指向默認分支的一個檔案"
 
 #: ../fdroidserver/update.py
@@ -2112,11 +1993,6 @@ msgstr "使用 APK Signature v2"
 #: ../fdroidserver/common.py
 msgid "Using Java's jarsigner, not recommended for verifying APKs! Use apksigner"
 msgstr "使用 Java 的 jarsigner，這並不建議用於驗證 APK！使用 apksigner"
-
-#: ../fdroidserver/common.py
-#, python-brace-format
-msgid "Using androguard from \"{path}\""
-msgstr "使用從「{path}」而來的 androguard"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
@@ -2221,19 +2097,10 @@ msgstr "添增 IdentityFile 到 {path}"
 msgid "adding to {name}: {path}"
 msgstr "添加到 {name}：{path}"
 
-#: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "ambiguous option: %(option)s could match %(matches)s"
 msgstr "模糊選項：%(option)s 可以相配 %(matches)s"
-
-#: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
-#: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
-#: /usr/lib/python3.11/optparse.py
-#, python-format
-msgid "ambiguous option: %s (%s?)"
-msgstr "不明確的選項：%s (%s？)"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -2250,12 +2117,14 @@ msgstr "apksigner 不見了 ， 我們需要用它來生成數字簽名 ！"
 msgid "apksigner not found, it's required for signing!"
 msgstr "apksigner 不見了 ， 我們需要用它來生成數字簽名 ！"
 
+#. Translators: https://developer.android.com/build/configure-app-module#set-application-id
 #: ../fdroidserver/checkupdates.py ../fdroidserver/lint.py
 #: ../fdroidserver/rewritemeta.py
 #, fuzzy
 msgid "application ID of file to operate on"
 msgstr "從檔案的 application ID 著手"
 
+#. Translators: https://developer.android.com/build/configure-app-module#set-application-id
 #: ../fdroidserver/build.py ../fdroidserver/install.py
 #: ../fdroidserver/publish.py ../fdroidserver/scanner.py
 #: ../fdroidserver/verify.py
@@ -2267,8 +2136,6 @@ msgstr "application ID 具有任選的 versionCode 在此的格式為 APPID [:VE
 msgid "archive_url needs to end with /archive"
 msgstr "archive_url 必須以 /archive 結尾"
 
-#: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "argument \"-\" with mode %r"
@@ -2289,7 +2156,7 @@ msgstr "試圖用裸的 ssh 連線來測試佈署金鑰："
 msgid "can not parse scrlib spec (not a string): '{}'"
 msgstr "無法解析 scrlib spec （不是字符）: '{}'"
 
-#: /usr/lib/python3.9/argparse.py /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "can't open '%(filename)s': %(error)s"
 msgstr "無法打開 '%(filename)s'：%(error)s"
@@ -2303,14 +2170,10 @@ msgstr "無法開啟非 HTTPS 網址：'{};"
 msgid "cannot find required srclibs: \"{path}\""
 msgstr "找不到必須的 scrlibs: \"{path}\""
 
-#: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #: /usr/lib/python3.11/argparse.py
 msgid "cannot have multiple subparser arguments"
 msgstr "無法有多個子解析器引數"
 
-#: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "cannot merge actions - two groups are named %r"
@@ -2330,14 +2193,6 @@ msgstr "複製 {url}"
 msgid "commands from plugin modules:"
 msgstr "來自插換式模塊的命令："
 
-#: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
-#: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
-#: /usr/lib/python3.11/optparse.py
-msgid "complex"
-msgstr "複雜"
-
-#: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "conflicting option string: %s"
@@ -2369,11 +2224,6 @@ msgstr "無法解析 scrlib spec （沒有指定參考文獻）： '{}'"
 msgid "could not parse srclib spec (no ref specified): '{}'"
 msgstr "無法解析 scrlib spec （沒有指定參考文獻）： '{}'"
 
-#: ../fdroidserver/common.py
-#, fuzzy
-msgid "could not parse srclib spec (too many '@' signs): '{}'"
-msgstr "無法解析 scrlib spec （符號 '@' 出現太多次了）： '{}'"
-
 #: ../fdroidserver/nightly.py
 #, python-brace-format
 msgid "created {path}"
@@ -2398,8 +2248,6 @@ msgstr "依存檔案未上鎖"
 msgid "deployed process log {path} to {dest}"
 msgstr "將進程日誌 {path} 部署到 {dest}"
 
-#: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "dest= is required for options like %r"
@@ -2419,28 +2267,20 @@ msgstr "正從軟體 {apkfilename} 除去未知的簽名"
 msgid "executable binary, possibly code"
 msgstr "可執行二進制檔案， 估計是代碼"
 
-#: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "expected %s argument"
 msgid_plural "expected %s arguments"
 msgstr[0] "預期的 %s 引數"
 
-#: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #: /usr/lib/python3.11/argparse.py
 msgid "expected at least one argument"
 msgstr "預期至少有一個引數"
 
-#: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #: /usr/lib/python3.11/argparse.py
 msgid "expected at most one argument"
 msgstr "最多一個引數"
 
-#: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #: /usr/lib/python3.11/argparse.py
 msgid "expected one argument"
 msgstr "預期有一個引數"
@@ -2452,10 +2292,6 @@ msgstr "用法：fdroid [-h|--help|--version] <命令> [<args>]"
 #: ../fdroidserver/scanner.py
 msgid "fetch the latest version of signatures from the web"
 msgstr "從網路擷取最新版本的簽章"
-
-#: /usr/lib/python3.11/optparse.py
-msgid "floating-point"
-msgstr "浮點"
 
 #: ../fdroidserver/metadata.py
 msgid "force metadata errors (default) to be warnings, or to be ignored."
@@ -2470,8 +2306,6 @@ msgstr "Git svn 複製失敗"
 msgid "gzip file archive"
 msgstr "gzip 壓縮檔案"
 
-#: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "ignored explicit argument %r"
@@ -2486,35 +2320,21 @@ msgstr "index-v1 必須要有簽名, 使用 `fdroid signindex`來建立一組簽
 msgid "index-v2 must have a signature, use `fdroid signindex` to create it!"
 msgstr "index-v1 必須要有簽名, 使用 `fdroid signindex`來建立一組簽名！"
 
-#: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
-#: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
-#: /usr/lib/python3.11/optparse.py
-msgid "integer"
-msgstr "整數"
-
-#: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "invalid %(type)s value: %(value)r"
 msgstr "無效 %(type)s 值：%(value)r"
 
-#: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "invalid choice: %(value)r (choose from %(choices)s)"
 msgstr "無效選項：%(value)r (選取自 %(choices)s)"
 
-#: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "invalid conflict_resolution value: %r"
 msgstr "無效 conflict_resolution 值：%r"
 
-#: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "invalid option string %(option)r: must start with a character %(prefix_chars)r"
@@ -2552,8 +2372,6 @@ msgstr "鏡像 '%s' 並不是以 'fdroid' 作結尾！"
 msgid "mirrors set twice, in config.yml and {path}!"
 msgstr "設定了兩次鏡像，分別在 config.xml 和 {path} 中!"
 
-#: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #: /usr/lib/python3.11/argparse.py
 msgid "mutually exclusive arguments must be optional"
 msgstr "相互獨佔的引數必須為可選的"
@@ -2572,31 +2390,16 @@ msgstr "在 {appid} 中沒有 \"icon\""
 msgid "no APK supplied"
 msgstr "無 APK 被供應"
 
-#: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
-#: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
-#: /usr/lib/python3.11/optparse.py
-#, python-format
-msgid "no such option: %s"
-msgstr "沒這樣的選項：%s"
-
-#: ../fdroidserver/__main__.py
-msgid "no version info found!"
-msgstr "未發現版本資訊！"
-
 #: ../fdroidserver/checkupdates.py
 #, fuzzy
 msgid "no version information found"
 msgstr "未發現版本資訊"
 
-#: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "not allowed with argument %s"
 msgstr "不許可帶引數 %s"
 
-#: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "one of the arguments %s is required"
@@ -2605,72 +2408,6 @@ msgstr "引數 %s 必須要有一個"
 #: ../fdroidserver/common.py ../fdroidserver/index.py
 msgid "only accepts strings, lists, and tuples"
 msgstr "只接受字串,列表和元組"
-
-#: ../fdroidserver/install.py
-#, python-format
-msgid "option %s: If you really want to install all the signed apps, use --all"
-msgstr "選項 %s: 如果真要安裝全部的簽署應用, 請使用 --all"
-
-#: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
-#: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
-#: /usr/lib/python3.11/optparse.py
-#, python-format
-msgid "option %s: invalid %s value: %r"
-msgstr "選項 %s: 無效的 %s 值: %r"
-
-#: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
-#: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
-#: /usr/lib/python3.11/optparse.py
-#, python-format
-msgid "option %s: invalid choice: %r (choose from %s)"
-msgstr "選項 %s: 無效選項: %r (選自 %s )"
-
-#: /usr/lib/python3.5/getopt.py /usr/lib/python3.6/getopt.py
-#: /usr/lib/python3.7/getopt.py /usr/lib/python3.9/getopt.py
-#: /usr/lib/python3.11/getopt.py
-#, python-format
-msgid "option -%s not recognized"
-msgstr "不能識別選項 -%s"
-
-#: /usr/lib/python3.5/getopt.py /usr/lib/python3.6/getopt.py
-#: /usr/lib/python3.7/getopt.py /usr/lib/python3.9/getopt.py
-#: /usr/lib/python3.11/getopt.py
-#, python-format
-msgid "option -%s requires argument"
-msgstr "選項 -%s 需要參數"
-
-#: /usr/lib/python3.5/getopt.py /usr/lib/python3.6/getopt.py
-#: /usr/lib/python3.7/getopt.py /usr/lib/python3.9/getopt.py
-#: /usr/lib/python3.11/getopt.py
-#, python-format
-msgid "option --%s must not have an argument"
-msgstr "選項 --%s 不能有參數"
-
-#: /usr/lib/python3.5/getopt.py /usr/lib/python3.6/getopt.py
-#: /usr/lib/python3.7/getopt.py /usr/lib/python3.9/getopt.py
-#: /usr/lib/python3.11/getopt.py
-#, python-format
-msgid "option --%s not a unique prefix"
-msgstr "選項 --%s 不是單獨的字首"
-
-#: /usr/lib/python3.5/getopt.py /usr/lib/python3.6/getopt.py
-#: /usr/lib/python3.7/getopt.py /usr/lib/python3.9/getopt.py
-#: /usr/lib/python3.11/getopt.py
-#, python-format
-msgid "option --%s not recognized"
-msgstr "不能識別選項 --%s"
-
-#: /usr/lib/python3.5/getopt.py /usr/lib/python3.6/getopt.py
-#: /usr/lib/python3.7/getopt.py /usr/lib/python3.9/getopt.py
-#: /usr/lib/python3.11/getopt.py
-#, python-format
-msgid "option --%s requires argument"
-msgstr "選項 --%s 需要參數"
-
-#: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
-msgid "optional arguments"
-msgstr "可選參數"
 
 #: /usr/lib/python3.11/argparse.py
 #, fuzzy
@@ -2682,8 +2419,6 @@ msgstr "選項"
 msgid "overwriting existing {path}"
 msgstr "覆寫現有的 {path}"
 
-#: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #: /usr/lib/python3.11/argparse.py
 msgid "positional arguments"
 msgstr "位置參數"
@@ -2716,11 +2451,6 @@ msgstr "repo_url 必須以 /repo 結尾"
 msgid "rsync is missing or broken: {error}"
 msgstr "rsync 遺失或損壞：{error}"
 
-#: ../fdroidserver/metadata.py
-#, fuzzy
-msgid "ruamel.yaml not installed, can not write metadata."
-msgstr "因為沒有設置 ruamel.yaml， 無法寫入 metadata 。"
-
 #: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "s3cmd sync indexes {path} to {url} and delete"
@@ -2745,17 +2475,7 @@ msgstr "serverwebroot: 路徑沒有以「fdroid」結尾，也許你想表達的
 msgid "shared library"
 msgstr "共享庫 (shared library)"
 
-#: /usr/lib/python3.5/optparse.py /usr/lib/python3.6/optparse.py
-#: /usr/lib/python3.7/optparse.py /usr/lib/python3.9/optparse.py
-#: /usr/lib/python3.11/optparse.py
-msgid "show program's version number and exit"
-msgstr "顯示程式的版本號碼並離開"
-
-#: /usr/lib/python3.5/argparse.py /usr/lib/python3.5/optparse.py
-#: /usr/lib/python3.6/argparse.py /usr/lib/python3.6/optparse.py
-#: /usr/lib/python3.7/argparse.py /usr/lib/python3.7/optparse.py
-#: /usr/lib/python3.9/argparse.py /usr/lib/python3.9/optparse.py
-#: /usr/lib/python3.11/argparse.py /usr/lib/python3.11/optparse.py
+#: /usr/lib/python3.11/argparse.py
 msgid "show this help message and exit"
 msgstr "顯示此說明訊息並離開"
 
@@ -2790,8 +2510,6 @@ msgstr "靜態庫 (static library)"
 msgid "supplied reference binary has allowed signer {signer}"
 msgstr "提供的參考二進位檔具有允許的簽署者 {signer}"
 
-#: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "the following arguments are required: %s"
@@ -2801,22 +2519,16 @@ msgstr "需要下列參數：%s"
 msgid "true"
 msgstr ""
 
-#: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "unexpected option string: %s"
 msgstr "非預期選項字串： %s"
 
-#: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "unknown parser %(parser_name)r (choices: %(choices)s)"
 msgstr "不明解析器 %(parser_name)r (選項: %(choices)s)"
 
-#: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py
-#: /usr/lib/python3.7/argparse.py /usr/lib/python3.9/argparse.py
 #: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "unrecognized arguments: %s"
@@ -2827,9 +2539,7 @@ msgstr "無法辨識的引數：%s"
 msgid "unsafe permissions on '{config_file}' (should be 0600)!"
 msgstr "'{config_file}' 檔案不安全的權限(應為 0600)！"
 
-#: /usr/lib/python3.5/argparse.py /usr/lib/python3.6/argparse.py ../fdroid
-#: /usr/lib/python3.7/argparse.py ../fdroidserver/__main__.py
-#: /usr/lib/python3.9/argparse.py /usr/lib/python3.11/argparse.py
+#: ../fdroidserver/__main__.py /usr/lib/python3.11/argparse.py
 msgid "usage: "
 msgstr "使用方法： "
 
@@ -2858,21 +2568,19 @@ msgstr[0] "{0} 應用, {1} 主要別名"
 msgid "{apkfilename} ({appid}) has no metadata!"
 msgstr "{apkfilename} ({appid}) 沒有中介資料!"
 
-#: ../fdroidserver/update.py
-#, python-brace-format
-msgid "{apkfilename} has multiple {name} files, looks like Master Key exploit!"
-msgstr "{apkfilename} 有多個 {name} 檔案，看起來可能是主金鑰洩漏了！"
-
+#. Translators: https://developer.android.com/build/configure-app-module#set-application-id
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "{apkfilename}'s AndroidManifest.xml has a bad date: "
 msgstr "{apkfilename} AndroidManifest.xml 有一個無效的日期： "
 
+#. Translators: https://developer.android.com/build/configure-app-module#set-application-id
 #: ../fdroidserver/update.py
 #, fuzzy, python-brace-format
 msgid "{appid} does not have a name! Using application ID instead."
 msgstr "軟體 {appid} 沒有名字! 使用 application ID 代替。"
 
+#. Translators: https://developer.android.com/build/configure-app-module#set-application-id
 #: ../fdroidserver/update.py
 #, fuzzy, python-brace-format
 msgid "{appid} from {path} is not a valid Android application ID!"
@@ -2893,7 +2601,6 @@ msgstr "{appid} 同時具有 APK 和檔案：{files}"
 msgid "{appid} is missing {name}"
 msgstr "{appid} 缺少 {name}"
 
-#. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vname
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "{appid}: Unknown extlib {path} in build '{versionName}'"
@@ -2933,11 +2640,6 @@ msgstr "檔案 {file} 是空的或損壞的 ！"
 #, fuzzy, python-brace-format
 msgid "{name} \"{section}/icons/{path}\" does not exist! Check \"config.yml\"."
 msgstr "{name} \"{section}/icons/{path}\" 不存在! 請檢查 \"config.yml\"."
-
-#: ../fdroidserver/common.py
-#, fuzzy, python-brace-format
-msgid "{oldfile} is deprecated, use {newfile}"
-msgstr "檔案 {oldfile} 已經過時了， 請使用檔案 {newfile}"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
