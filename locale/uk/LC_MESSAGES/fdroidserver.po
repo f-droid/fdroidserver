@@ -18,7 +18,7 @@ msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2025-03-20 15:05+0100\n"
-"PO-Revision-Date: 2025-03-20 10:14+0000\n"
+"PO-Revision-Date: 2025-03-20 14:13+0000\n"
 "Last-Translator: Максим Горпиніч <maksimgorpinic2005a@gmail.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/f-droid/fdroidserver/uk/>\n"
 "Language: uk\n"
@@ -52,7 +52,7 @@ msgstr "\"%s/\" не має відповідного файлу метадани
 
 #: ../fdroidserver/index.py
 msgid "\"isPrimary\" key should not be added to mirrors!"
-msgstr ""
+msgstr "\"isPrimary\" ключ не слід додавати до дзеркал!"
 
 #: ../fdroidserver/index.py
 #, python-brace-format
@@ -1225,7 +1225,7 @@ msgstr "Досягнуто максимальної глибини рекурс�
 #: ../fdroidserver/index.py
 #, python-brace-format
 msgid "Mirror config for {url} contains \"isPrimary\" key!"
-msgstr ""
+msgstr "Конфігурація дзеркала для {url} містить ключ \"isPrimary\"!"
 
 #: ../fdroidserver/mirror.py
 msgid "Mirror the full repo and archive, all file types."
