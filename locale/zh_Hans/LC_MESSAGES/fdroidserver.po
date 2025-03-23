@@ -40,7 +40,7 @@ msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2025-03-20 15:05+0100\n"
-"PO-Revision-Date: 2025-03-20 02:51+0000\n"
+"PO-Revision-Date: 2025-03-21 03:03+0000\n"
 "Last-Translator: 大王叫我来巡山 <hamburger2048@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/projects/f-droid/fdroidserver/zh_Hans/>\n"
 "Language: zh_Hans\n"
@@ -74,7 +74,7 @@ msgstr "\"%s/\" 没有与之匹配的元数据文件!"
 
 #: ../fdroidserver/index.py
 msgid "\"isPrimary\" key should not be added to mirrors!"
-msgstr ""
+msgstr "\"isPrimary\" 密钥不应被添加到镜像！"
 
 #: ../fdroidserver/index.py
 #, python-brace-format
@@ -1243,7 +1243,7 @@ msgstr "达到 ZIP 文件中的最大递归深度：%s"
 #: ../fdroidserver/index.py
 #, python-brace-format
 msgid "Mirror config for {url} contains \"isPrimary\" key!"
-msgstr ""
+msgstr "{url} 的镜像配置包含 \"isPrimary\" 密钥！"
 
 #: ../fdroidserver/mirror.py
 msgid "Mirror the full repo and archive, all file types."
