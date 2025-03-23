@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fdroidserver 2.3a1\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2025-03-20 15:05+0100\n"
-"PO-Revision-Date: 2025-03-20 10:14+0000\n"
+"PO-Revision-Date: 2025-03-21 08:46+0000\n"
 "Last-Translator: Edgars Andersons <Edgars+Weblate@gaitenis.id.lv>\n"
 "Language-Team: Latvian <https://hosted.weblate.org/projects/f-droid/fdroidserver/lv/>\n"
 "Language: lv\n"
@@ -37,7 +37,7 @@ msgstr ""
 
 #: ../fdroidserver/index.py
 msgid "\"isPrimary\" key should not be added to mirrors!"
-msgstr ""
+msgstr "Atslēgu \"isPrimary\" nevajadzētu pievienot spoguļglabātavām."
 
 #: ../fdroidserver/index.py
 #, python-brace-format
@@ -1204,7 +1204,7 @@ msgstr ""
 #: ../fdroidserver/index.py
 #, python-brace-format
 msgid "Mirror config for {url} contains \"isPrimary\" key!"
-msgstr ""
+msgstr "Spoguļglabātavas konfigurācija {url} satur \"isPrimary\" key."
 
 #: ../fdroidserver/mirror.py
 msgid "Mirror the full repo and archive, all file types."
