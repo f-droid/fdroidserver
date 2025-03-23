@@ -1,13 +1,13 @@
 # SOME DESCRIPTIVE TITLE.
 # This file is put in the public domain.
-# Besnik Bleta <besnik@programeshqip.org>, 2020, 2021, 2022, 2023, 2024.
+# Besnik Bleta <besnik@programeshqip.org>, 2020, 2021, 2022, 2023, 2024, 2025.
 # Hans-Christoph Steiner <hans@guardianproject.info>, 2020, 2021, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 1.0.6-349-g907c04ea\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2025-03-20 15:05+0100\n"
-"PO-Revision-Date: 2024-12-12 14:43+0000\n"
+"PO-Revision-Date: 2025-03-21 08:45+0000\n"
 "Last-Translator: Besnik Bleta <besnik@programeshqip.org>\n"
 "Language-Team: Albanian <https://hosted.weblate.org/projects/f-droid/fdroidserver/sq/>\n"
 "Language: sq\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.9-dev\n"
+"X-Generator: Weblate 5.11-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -41,7 +41,7 @@ msgstr "“%s/”\" s’ka kartelë tejtëdhënash me përputhje!"
 
 #: ../fdroidserver/index.py
 msgid "\"isPrimary\" key should not be added to mirrors!"
-msgstr ""
+msgstr "Kyçi “isPrimary” s’duhet shtuar te pasqyra!"
 
 #: ../fdroidserver/index.py
 #, python-brace-format
@@ -525,9 +525,9 @@ msgid "Creating \"{path}\" for configuring s3cmd."
 msgstr "Po krijohet “{path}” për formësim të s3cmd."
 
 #: ../fdroidserver/common.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Creating empty {config_file}"
-msgstr "Po lexohet '{config_file}'"
+msgstr "Po krijohet '{config_file}' e zbrazët"
 
 #: ../fdroidserver/publish.py
 msgid "Creating log directory"
@@ -715,12 +715,12 @@ msgstr "GABIM: {key} te {path} s’është “archive” apo “repo”!"
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "ERROR: {key} not a valid key!"
-msgstr ""
+msgstr "GABIM: {key} s’është kyç i vlefshëm!"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "ERROR: {key}'s value should be of type {t}!"
-msgstr ""
+msgstr "GABIM: Vlera e {key} duhet të jetë e llojit {t}!"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
@@ -747,9 +747,9 @@ msgid "Environment variable {var} from {configname} is not set!"
 msgstr "S’është ujdisur ndryshore {var} nga {configname}!"
 
 #: ../fdroidserver/common.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Environment variable {{env: {var}}} is not set!"
-msgstr "S’është ujdisur ndryshore {var} nga {configname}!"
+msgstr "S’është ujdisur ndryshore {{env: {var}}}!"
 
 #: ../fdroidserver/deploy.py
 msgid "Error deploying 'github_releases', {} not present. (You might need to run `fdroid update` first.)"
@@ -998,9 +998,9 @@ msgid "Ignoring bad element in manifest: %s"
 msgstr "Po shpërfillet element i gabuar në manifest: %s"
 
 #: ../fdroidserver/common.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Ignoring deprecated {oldfile}, use {newfile}!"
-msgstr "{oldfile} është nxjerrë nga përdorimi, përdorni {newfile}"
+msgstr "Po shpërfillet {oldfile} e nxjerrë nga përdorimi, përdorni {newfile}!"
 
 #: ../fdroidserver/index.py
 msgid "Ignoring package without metadata: "
@@ -1212,7 +1212,7 @@ msgstr "U mbërrit në thellësi maksimum rekursive te kartelë ZIP: %s"
 #: ../fdroidserver/index.py
 #, python-brace-format
 msgid "Mirror config for {url} contains \"isPrimary\" key!"
-msgstr ""
+msgstr "Formësimi i pasqyrës për {url} përmban kyç “isPrimary”!"
 
 #: ../fdroidserver/mirror.py
 msgid "Mirror the full repo and archive, all file types."
@@ -1379,7 +1379,7 @@ msgstr "Si formate grafike mbulohen vetëm PNG dhe JPEG, u gjet: {path}"
 
 #: ../fdroidserver/common.py
 msgid "Only accepts a single key \"env\""
-msgstr ""
+msgstr "Pranon vetëm një “env” të vetëm kyçi"
 
 #: ../fdroidserver/checkupdates.py
 msgid "Only print differences with the Play Store"
@@ -1779,7 +1779,7 @@ msgstr "Mënyra testim - hidhe output-in vetëm te drejtoria tmp, dhe monto për
 
 #: ../fdroidserver/index.py
 msgid "The \"qrcode\" Python package is not installed (e.g. apt-get install python3-qrcode)!"
-msgstr ""
+msgstr "Paketa Python “qrcode” s’është e instaluar (p.sh., apt-get install python3-qrcode)!"
 
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
 #: ../fdroidserver/update.py
@@ -2198,7 +2198,7 @@ msgstr "mundësi e dykuptimtë: %s (%s?)"
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "apksigner in build-tools;{version} passes APKs with invalid v3 signatures, ignoring."
-msgstr ""
+msgstr "apksigner te build-tools;{version} përcjell APK-ra ne nënshkrime v3 të pavlefshme, po shpërfillet."
 
 #: ../fdroidserver/common.py
 msgid "apksigner not found! Cannot sign or verify modern APKs"
@@ -2885,7 +2885,7 @@ msgstr "{oldfile} është nxjerrë nga përdorimi, përdorni {newfile}"
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "{path1} is a duplicate of {path2}, remove one!"
-msgstr ""
+msgstr "{path1} është përsëdytje e {path2}, hiqeni njërin!"
 
 #: ../fdroidserver/import_subcommand.py
 #, python-brace-format
