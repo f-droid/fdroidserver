@@ -23,6 +23,7 @@ import yaml
 
 import fdroidserver.build
 import fdroidserver.common
+import fdroidserver.exception
 import fdroidserver.metadata
 import fdroidserver.scanner
 from .shared_test_code import TmpCwd, mkdtemp, mock_open_to_str
@@ -36,9 +37,13 @@ def _dexdump_found():
     This must be run after common.config is setup.
 
     """
-    dexdump = fdroidserver.common.find_sdk_tools_cmd("dexdump")
-    logging.debug('Found dexdump: %s', dexdump)
-    return dexdump is not None
+    try:
+        dexdump = fdroidserver.common.find_sdk_tools_cmd("dexdump")
+        logging.debug('Found dexdump: %s', dexdump)
+        return dexdump is not None
+    except fdroidserver.exception.FDroidException:
+        pass
+    return False
 
 
 # Always use built-in default rules so changes in downloaded rules don't break tests.
