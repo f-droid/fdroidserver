@@ -453,7 +453,7 @@ def main():
                 if os.path.exists(signed_apk_path):
                     raise BuildException(
                         _(
-                            "Refusing to sign '{path}' file exists in both {dir1} and {dir2} folder."
+                            "Refusing to sign '{path}', file exists in both {dir1} and {dir2} folder."
                         ).format(path=apkfilename, dir1=unsigned_dir, dir2=output_dir)
                     )
 
