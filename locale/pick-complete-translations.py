@@ -27,12 +27,14 @@ else:
 active = set()
 print('name                               locale   translated approved error-free')
 for locale in sorted(data, key=lambda locale: locale['code']):
-    print('%26s' % locale['name'],
-          '%8s' % locale['code'],
-          '%0.1f%%' % locale['translated_percent'],
-          '%0.1f%%' % locale['approved_percent'],
-          '%0.1f%%' % (100 - locale['failing_percent']),
-          sep='\t')
+    print(
+        '%26s' % locale['name'],
+        '%8s' % locale['code'],
+        '%0.1f%%' % locale['translated_percent'],
+        '%0.1f%%' % locale['approved_percent'],
+        '%0.1f%%' % (100 - locale['failing_percent']),
+        sep='\t',
+    )
     if locale['translated_percent'] >= 90 and locale['failing'] < 5:
         active.add(locale['code'])
 

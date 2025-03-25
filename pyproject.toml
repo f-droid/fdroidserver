@@ -42,7 +42,6 @@ force-exclude = '''(
   | fdroidserver/nightly\.py
   | fdroidserver/update\.py
   | fdroidserver/vmtools\.py
-  | locale/pick-complete-translations\.py
   | tests/config\.py
   | tests/extra/manual-vmtools-test\.py
   | tests/gradle-release-checksums\.py
