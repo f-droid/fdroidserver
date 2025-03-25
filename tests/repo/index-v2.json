@@ -1381,6 +1381,61 @@
         }
       }
     },
+    "org.maxsdkversion": {
+      "metadata": {
+        "added": 1739805810000,
+        "lastUpdated": 1739805810000,
+        "name": {
+          "en-US": "maxSdkVersion"
+        },
+        "summary": {
+          "en-US": "Test setting maxSdkVersion in an APK"
+        },
+        "icon": {
+          "en-US": {
+            "name": "/icons/org.maxsdkversion.4.png",
+            "sha256": "428442a0b75be04af3191a066041341f8a0b289972f99868687f43e02055a348",
+            "size": 91
+          }
+        },
+        "preferredSigner": "401a3a5843a3d5cebc22e6de5cb76d08eaa6797122d7fe1283df1d192e132f5e"
+      },
+      "versions": {
+        "877d582369d2840fc0d6892e44feaaad21419b0e35af42f22b3e127bcd08274d": {
+          "added": 1739805810000,
+          "file": {
+            "name": "/org.maxsdkversion_4.apk",
+            "sha256": "877d582369d2840fc0d6892e44feaaad21419b0e35af42f22b3e127bcd08274d",
+            "size": 12768,
+            "ipfsCIDv1": "bafybeibdls2h4mpfw5gks3iirsne2qaez6uefwb5xmqkhahqbakvdszk6y"
+          },
+          "manifest": {
+            "versionName": "1.0.3",
+            "maxSdkVersion": 25,
+            "versionCode": 4,
+            "features": [
+              {
+                "name": "android.hardware.camera.front"
+              }
+            ],
+            "usesSdk": {
+              "minSdkVersion": 14,
+              "targetSdkVersion": 19
+            },
+            "signer": {
+              "sha256": [
+                "401a3a5843a3d5cebc22e6de5cb76d08eaa6797122d7fe1283df1d192e132f5e"
+              ]
+            },
+            "usesPermission": [
+              {
+                "name": "android.permission.CAMERA"
+              }
+            ]
+          }
+        }
+      }
+    },
     "souch.smsbypass": {
       "metadata": {
         "added": 1524700800000,

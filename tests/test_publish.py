@@ -131,7 +131,7 @@ class PublishTest(unittest.TestCase):
         publish.config['keypass'] = '123456'
         publish.config['keystore'] = os.path.join(basedir, 'dummy-keystore.jks')
         publish.config['repo_keyalias'] = 'repokey'
-        publish.config['repo_key_sha256'] = 'bad bad bad bad bad bad bad bad bad bad bad bad'
+        publish.config['repo_key_sha256'] = 'bad bad bad bad bad bad bad bad bad bad'
 
         os.chdir(self.testdir)
         publish.store_publish_signer_fingerprints({}, indent=2)
@@ -154,10 +154,16 @@ class PublishTest(unittest.TestCase):
         with open(os.path.join(metadata_dir, 'com.politedroid.yml'), 'a') as fp:
             fp.write('\nBinaries: https://placeholder/foo%v.apk\n')
         os.mkdir(os.path.join(self.testdir, 'unsigned'))
-        shutil.copy('repo/com.politedroid_6.apk', os.path.join(self.testdir, 'unsigned'))
+        shutil.copy(
+            'repo/com.politedroid_6.apk', os.path.join(self.testdir, 'unsigned')
+        )
         os.mkdir(os.path.join(self.testdir, 'unsigned', 'binaries'))
-        shutil.copy('repo/com.politedroid_6.apk',
-                    os.path.join(self.testdir, 'unsigned', 'binaries', 'com.politedroid_6.binary.apk'))
+        shutil.copy(
+            'repo/com.politedroid_6.apk',
+            os.path.join(
+                self.testdir, 'unsigned', 'binaries', 'com.politedroid_6.binary.apk'
+            ),
+        )
 
         os.chdir(self.testdir)
         with mock.patch.object(sys, 'argv', ['fdroid fakesubcommand']):
@@ -201,7 +207,9 @@ class PublishTest(unittest.TestCase):
         publish.config['keystorepass'] = '123456'
         publish.config['keypass'] = '654321'
         publish.config['keystore'] = "keystore.jks"
-        publish.config['keydname'] = 'CN=Birdman, OU=Cell, O=Alcatraz, L=Alcatraz, S=California, C=US'
+        publish.config[
+            'keydname'
+        ] = 'CN=Birdman, OU=Cell, O=Alcatraz, L=Alcatraz, S=CA, C=US'
         os.chdir(self.testdir)
         keystore = jks.KeyStore.new("jks", [])
         keystore.save(publish.config['keystore'], publish.config['keystorepass'])
@@ -211,7 +219,9 @@ class PublishTest(unittest.TestCase):
         self.assertFalse(publish.create_key_if_not_existing("newalias"))
         self.assertTrue(publish.create_key_if_not_existing("anotheralias"))
 
-        keystore = jks.KeyStore.load(publish.config['keystore'], publish.config['keystorepass'])
+        keystore = jks.KeyStore.load(
+            publish.config['keystore'], publish.config['keystorepass']
+        )
         self.assertCountEqual(keystore.private_keys, ["newalias", "anotheralias"])
         for alias, pk in keystore.private_keys.items():
             self.assertFalse(pk.is_decrypted())
@@ -236,7 +246,9 @@ class PublishTest(unittest.TestCase):
                 publish.status_update_json([], [])
                 with open('repo/status/publish.json') as fp:
                     data = json.load(fp)
-                self.assertEqual(shutil.which(publish.config['apksigner']), data['apksigner'])
+                self.assertEqual(
+                    shutil.which(publish.config['apksigner']), data['apksigner']
+                )
 
                 publish.config = {}
                 common.fill_config_defaults(publish.config)
@@ -254,13 +266,15 @@ class PublishTest(unittest.TestCase):
         common.options = VerboseFalseOptions
         config = common.read_config()
         if 'apksigner' not in config:
-            self.skipTest('SKIPPING test_sign_then_implant_signature, apksigner not installed!')
+            self.skipTest(
+                'SKIPPING test_sign_then_implant_signature, apksigner not installed!'
+            )
         config['repo_keyalias'] = 'sova'
         config['keystorepass'] = 'r9aquRHYoI8+dYz6jKrLntQ5/NJNASFBacJh7Jv2BlI='
         config['keypass'] = 'r9aquRHYoI8+dYz6jKrLntQ5/NJNASFBacJh7Jv2BlI='
         shutil.copy(basedir / 'keystore.jks', self.testdir)
         config['keystore'] = 'keystore.jks'
-        config['keydname'] = 'CN=Birdman, OU=Cell, O=Alcatraz, L=Alcatraz, S=California, C=US'
+        config['keydname'] = 'CN=Birdman, OU=Cell, O=Alcatraz, L=Alcatraz, S=CA, C=US'
         publish.config = config
         common.config = config
 
@@ -286,7 +300,9 @@ class PublishTest(unittest.TestCase):
         # sign the unsigned APK
         self.assertTrue(os.path.exists(unsigned))
         self.assertFalse(os.path.exists(signed))
-        with mock.patch('sys.argv', ['fdroid publish', '%s:%d' % (app.id, versionCode)]):
+        with mock.patch(
+            'sys.argv', ['fdroid publish', '%s:%d' % (app.id, versionCode)]
+        ):
             publish.main()
         self.assertFalse(os.path.exists(unsigned))
         self.assertTrue(os.path.exists(signed))
@@ -295,7 +311,9 @@ class PublishTest(unittest.TestCase):
             signatures.main()
         self.assertTrue(
             os.path.exists(
-                os.path.join('metadata', 'org.fdroid.ci', 'signatures', '1', 'MANIFEST.MF')
+                os.path.join(
+                    'metadata', 'org.fdroid.ci', 'signatures', '1', 'MANIFEST.MF'
+                )
             )
         )
         os.remove(signed)
@@ -304,7 +322,9 @@ class PublishTest(unittest.TestCase):
         shutil.copy(testapk, unsigned)
         self.assertTrue(os.path.exists(unsigned))
         self.assertFalse(os.path.exists(signed))
-        with mock.patch('sys.argv', ['fdroid publish', '%s:%d' % (app.id, versionCode)]):
+        with mock.patch(
+            'sys.argv', ['fdroid publish', '%s:%d' % (app.id, versionCode)]
+        ):
             publish.main()
         self.assertFalse(os.path.exists(unsigned))
         self.assertTrue(os.path.exists(signed))
@@ -336,9 +356,7 @@ class PublishTest(unittest.TestCase):
         config['keypass'] = 'r9aquRHYoI8+dYz6jKrLntQ5/NJNASFBacJh7Jv2BlI='
         shutil.copy(basedir / 'keystore.jks', self.testdir)
         config['keystore'] = 'keystore.jks'
-        config[
-            'keydname'
-        ] = 'CN=Birdman, OU=Cell, O=Alcatraz, L=Alcatraz, S=California, C=US'
+        config['keydname'] = 'CN=Birdman, OU=Cell, O=Alcatraz, L=Alcatraz, S=CA, C=US'
         publish.config = config
         common.config = config
 

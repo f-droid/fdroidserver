@@ -739,6 +739,7 @@ PUBLISH:
         tests/test_gpgsign.py
         tests/test_metadata.py
         tests/test_publish.py
+        tests/test_signatures.py
         tests/test_signindex.py
 
     - cd tests
@@ -759,9 +760,6 @@ PUBLISH:
     # silence warnings
     - chmod 0600 config.yml config/*.yml config/*/*.yml
     - chmod 0700 $gpghome
-    # make fake 'ciarang' index signing key
-    - keytool -keyclone -alias 4e7da5b7 -dest ciarang
-        -keypass:env keypass -new:env keypass -storepass:env keystorepass -keystore $keystore
 
     - export PATH=$CI_PROJECT_DIR:$PATH
 

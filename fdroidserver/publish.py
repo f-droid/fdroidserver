@@ -347,7 +347,6 @@ def main():
         glob.glob(os.path.join(unsigned_dir, '*.apk'))
         + glob.glob(os.path.join(unsigned_dir, '*.zip'))
     ):
-
         appid, vercode = common.publishednameinfo(apkfile)
         apkfilename = os.path.basename(apkfile)
         if vercodes and appid not in vercodes:
@@ -371,7 +370,6 @@ def main():
             if b.get("versionCode") == vercode:
                 build = b
         if app.Binaries or (build and build.binary):
-
             # It's an app where we build from source, and verify the apk
             # contents against a developer's binary, and then publish their
             # version if everything checks out.
@@ -382,15 +380,21 @@ def main():
             srcapk = srcapk.replace(unsigned_dir, binaries_dir)
 
             if not os.path.isfile(srcapk):
-                logging.error("...reference binary missing - publish skipped: "
-                              "'{refpath}'".format(refpath=srcapk))
+                logging.error(
+                    "...reference binary missing - publish skipped: '{refpath}'".format(
+                        refpath=srcapk
+                    )
+                )
                 failed += 1
             else:
                 # Compare our unsigned one with the downloaded one...
                 compare_result = common.verify_apks(srcapk, apkfile, tmp_dir)
                 if compare_result:
-                    logging.error("...verification failed - publish skipped : "
-                                  "{result}".format(result=compare_result))
+                    logging.error(
+                        "...verification failed - publish skipped : {result}".format(
+                            result=compare_result
+                        )
+                    )
                     failed += 1
                 else:
                     # Success! So move the downloaded file to the repo, and remove
@@ -402,7 +406,6 @@ def main():
                     logging.info('Published ' + apkfilename)
 
         elif apkfile.endswith('.zip'):
-
             # OTA ZIPs built by fdroid do not need to be signed by jarsigner,
             # just to be moved into place in the repo
             shutil.move(apkfile, os.path.join(output_dir, apkfilename))
@@ -410,7 +413,6 @@ def main():
             logging.info('Published ' + apkfilename)
 
         else:
-
             # It's a 'normal' app, i.e. we sign and publish it...
             skipsigning = False
 
@@ -449,10 +451,11 @@ def main():
 
                 signed_apk_path = os.path.join(output_dir, apkfilename)
                 if os.path.exists(signed_apk_path):
-                    raise BuildException("Refusing to sign '{0}' file exists in both "
-                                         "{1} and {2} folder.".format(apkfilename,
-                                                                      unsigned_dir,
-                                                                      output_dir))
+                    raise BuildException(
+                        _(
+                            "Refusing to sign '{path}' file exists in both {dir1} and {dir2} folder."
+                        ).format(path=apkfilename, dir1=unsigned_dir, dir2=output_dir)
+                    )
 
                 # Sign the application...
                 common.sign_apk(apkfile, signed_apk_path, keyalias)
