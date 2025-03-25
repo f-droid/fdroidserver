@@ -22,7 +22,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2025-03-23 21:45+0100\n"
+"POT-Creation-Date: 2025-03-25 11:36+0100\n"
 "PO-Revision-Date: 2025-03-20 16:21+0000\n"
 "Last-Translator: Champ0999 <champ0999@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/f-droid/fdroidserver/it/>\n"
@@ -1481,6 +1481,11 @@ msgstr "Lettura di {apkfilename} dalla cache"
 #, fuzzy
 msgid "Refresh and cache scanner rules and signatures from the network"
 msgstr "recupera l'ultima versione delle firme dal web"
+
+#: ../fdroidserver/publish.py
+#, python-brace-format
+msgid "Refusing to sign '{path}', file exists in both {dir1} and {dir2} folder."
+msgstr ""
 
 #: ../fdroidserver/verify.py
 msgid "Remove source tarball and any APKs if successfully verified."

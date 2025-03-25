@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 2.1-273-g54e84d87\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2025-03-23 21:45+0100\n"
+"POT-Creation-Date: 2025-03-25 11:36+0100\n"
 "PO-Revision-Date: 2025-01-20 14:04+0000\n"
 "Last-Translator: Hans-Christoph Steiner <hans@guardianproject.info>\n"
 "Language-Team: Tamil <https://hosted.weblate.org/projects/f-droid/fdroidserver/ta/>\n"
@@ -1464,6 +1464,11 @@ msgstr "தற்காலிக சேமிப்பிலிருந்த�
 #: ../fdroidserver/build.py
 msgid "Refresh and cache scanner rules and signatures from the network"
 msgstr "நெட்வொர்க்கிலிருந்து ச்கேனர் விதிகள் மற்றும் கையொப்பங்களை புதுப்பித்து கேச்"
+
+#: ../fdroidserver/publish.py
+#, python-brace-format
+msgid "Refusing to sign '{path}', file exists in both {dir1} and {dir2} folder."
+msgstr ""
 
 #: ../fdroidserver/verify.py
 msgid "Remove source tarball and any APKs if successfully verified."

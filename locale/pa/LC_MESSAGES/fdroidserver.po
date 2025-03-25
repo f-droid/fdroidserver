@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 2.3.3\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2025-03-23 21:45+0100\n"
+"POT-Creation-Date: 2025-03-25 11:36+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -1453,6 +1453,11 @@ msgstr ""
 
 #: ../fdroidserver/build.py
 msgid "Refresh and cache scanner rules and signatures from the network"
+msgstr ""
+
+#: ../fdroidserver/publish.py
+#, python-brace-format
+msgid "Refusing to sign '{path}', file exists in both {dir1} and {dir2} folder."
 msgstr ""
 
 #: ../fdroidserver/verify.py

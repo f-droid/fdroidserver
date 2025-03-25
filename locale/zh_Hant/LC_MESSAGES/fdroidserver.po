@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2025-03-23 21:45+0100\n"
+"POT-Creation-Date: 2025-03-25 11:36+0100\n"
 "PO-Revision-Date: 2024-11-26 15:16+0000\n"
 "Last-Translator: Peter Dave Hello <hsu@peterdavehello.org>\n"
 "Language-Team: Chinese (Traditional Han script) <https://hosted.weblate.org/projects/f-droid/fdroidserver/zh_Hant/>\n"
@@ -1486,6 +1486,11 @@ msgstr "從緩存讀取 {apkfilename}"
 #: ../fdroidserver/build.py
 msgid "Refresh and cache scanner rules and signatures from the network"
 msgstr "從網路重新整理並快取掃描器規則與簽章"
+
+#: ../fdroidserver/publish.py
+#, python-brace-format
+msgid "Refusing to sign '{path}', file exists in both {dir1} and {dir2} folder."
+msgstr ""
 
 #: ../fdroidserver/verify.py
 msgid "Remove source tarball and any APKs if successfully verified."
