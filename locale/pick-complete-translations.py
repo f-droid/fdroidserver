@@ -79,7 +79,13 @@ with open(manifest_file, 'a') as fp:
         if line:
             fp.write(line)
 
+# first filter duplicates
 subprocess.run(['sort', '-u', '-o', manifest_file, manifest_file])
+# then use a stable sort order
+subprocess.run(
+    ['sort', '--ignore-case', '--stable', '-o', manifest_file, manifest_file],
+    env={'LC_ALL': 'C'},
+)
 
 print('\tIf all else fails, try:')
 print('\tgit checkout -B merge_weblate weblate/master')
