@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 
-## unreleased
+## [2.4.0] - 2025-03-25
 
 ### Added
 
@@ -29,6 +29,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 * index: fail if user sets mirrors:isPrimary wrong
   https://gitlab.com/fdroid/fdroidserver/-/merge_requests/1617
   https://gitlab.com/fdroid/fdroidserver/-/issues/1125
+* Sync translations for all supported languages: bo ca cs de es fr ga hu it ja
+  ko nb_NO pl pt pt_BR pt_PT ro ru sq sr sw tr uk zh_Hans zh_Hant
 
 ### Removed
 
