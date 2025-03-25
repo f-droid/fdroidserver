@@ -1216,6 +1216,19 @@ class Encoder(json.JSONEncoder):
         return super().default(obj)
 
 
+def epoch_millis_now():
+    """Get the current time in epoch milliseconds.
+
+    This is the format returned by Java's System.currentTimeMillis().
+
+    Parameters
+    ----------
+    millis
+      Java-style integer time since UNIX epoch in milliseconds
+    """
+    return int(datetime.now(timezone.utc).timestamp() * 1000)
+
+
 def setup_status_output(start_timestamp):
     """Create the common output dictionary for public status updates."""
     output = {
@@ -1258,7 +1271,7 @@ def write_status_json(output, pretty=False, name=None):
     if not os.path.exists(status_dir):
         os.makedirs(status_dir)
     if not name:
-        output['endTimestamp'] = int(datetime.now(timezone.utc).timestamp() * 1000)
+        output['endTimestamp'] = epoch_millis_now()
         names = ['running', sys.argv[0].split()[1]]  # fdroid subcommand
     else:
         names = [name]
