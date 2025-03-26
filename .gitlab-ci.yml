@@ -222,7 +222,7 @@ lint_format_bandit_checks:
           python3-pip
           python3-yaml
           shellcheck
-    - $pip install --break-system-packages bandit
+    - $pip install --break-system-packages bandit pylint-gitlab
     - export EXITVALUE=0
     - function set_error() { export EXITVALUE=1; printf "\x1b[31mERROR `history|tail -2|head -1|cut -b 6-500`\x1b[0m\n"; }
     - ./hooks/pre-commit || set_error
@@ -231,16 +231,21 @@ lint_format_bandit_checks:
         -ii
         --ini .bandit
         || set_error
-    - pylint --output-format=colorized --reports=n
+    - pylint --output-format=pylint_gitlab.GitlabCodeClimateReporter
             fdroid
             makebuildserver
             setup.py
             fdroidserver/*.py
             tests/*.py
+            > pylint-report.json
         || set_error
     - shellcheck --exclude SC2046,SC2090 --severity=warning --color tests/run-tests
         || set_error
     - exit $EXITVALUE
+  artifacts:
+    reports:
+      codequality: pylint-report.json
+    when: always
 
 
 # Check all the dependencies in Debian to mirror production.  CVEs are
