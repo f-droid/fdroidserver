@@ -397,9 +397,13 @@ def execute_build(app, build, config, gradletasks):
         if build.gradleprops:
             cmd += ['-P' + kv for kv in build.gradleprops]
 
-        cmd += gradletasks
-
-        p = common.FDroidPopen(cmd, cwd=root_dir)
+        for task in gradletasks:
+            p = common.FDroidPopen(
+                cmd + [task],
+                cwd=root_dir,
+            )
+            if p is not None and p.returncode != 0:
+                return p, bindir
 
     elif bmethod == 'ant':
         logging.info("Building Ant project...")
