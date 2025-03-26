@@ -97,6 +97,17 @@ metadata_v0:
     - rm /etc/apt/apt.conf.d/99nocacertificates
     - apt-get dist-upgrade
 
+# For jobs that only need to run when there are changes to Python files.
+.python-rules-changes: &python-rules-changes
+  rules:
+    - changes:
+        - .gitlab-ci.yml
+        - fdroid
+        - makebuildserver
+        - setup.py
+        - fdroidserver/*.py
+        - tests/*.py
+
 
 # Since F-Droid uses Debian as its default platform, from production
 # servers to CI to contributor machines, it is important to know when
@@ -225,13 +236,12 @@ lint_format_bandit_checks:
           make
           pycodestyle
           pyflakes3
-          pylint
           python3-dev
           python3-git
           python3-nose
           python3-pip
           python3-yaml
-    - $pip install --break-system-packages bandit pylint-gitlab
+    - $pip install --break-system-packages bandit
     - export EXITVALUE=0
     - function set_error() { export EXITVALUE=1; printf "\x1b[31mERROR `history|tail -2|head -1|cut -b 6-500`\x1b[0m\n"; }
     - ./hooks/pre-commit || set_error
@@ -240,6 +250,16 @@ lint_format_bandit_checks:
         -ii
         --ini .bandit
         || set_error
+    - exit $EXITVALUE
+
+
+pylint:
+  image: debian:bookworm-slim
+  <<: *python-rules-changes
+  <<: *apt-template
+  script:
+    - apt-get install pylint python3-pip
+    - $pip install --break-system-packages pylint-gitlab
     - pylint --output-format=pylint_gitlab.GitlabCodeClimateReporter
             fdroid
             makebuildserver
@@ -247,8 +267,6 @@ lint_format_bandit_checks:
             fdroidserver/*.py
             tests/*.py
             > pylint-report.json
-        || set_error
-    - exit $EXITVALUE
   artifacts:
     reports:
       codequality: pylint-report.json
