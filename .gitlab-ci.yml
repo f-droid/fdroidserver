@@ -642,6 +642,7 @@ servergitmirrors:
 
 Build documentation:
   image: debian:bookworm-slim
+  <<: *python-rules-changes
   <<: *apt-template
   script:
     - apt-get install make python3-sphinx python3-numpydoc python3-pydata-sphinx-theme pydocstyle fdroidserver
@@ -758,6 +759,7 @@ docker:
 # PUBLISH is the signing server.  It has a very minimal manual setup.
 PUBLISH:
   image: debian:bullseye-backports
+  <<: *python-rules-changes
   script:
     - apt-get update
     - apt-get -qy upgrade
