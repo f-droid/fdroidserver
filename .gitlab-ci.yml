@@ -11,6 +11,12 @@ workflow:
     - if: $CI_COMMIT_BRANCH
 
 
+stages:
+  - lint
+  - test  # default for jobs that do not specify stage:
+  - deploy
+
+
 variables:
   pip: pip3 --timeout 100 --retries 10
   # speed up git checkout phase
@@ -222,6 +228,7 @@ gradlew-fdroid:
 
 # Run all the various linters and static analysis tools.
 hooks/pre-commit:
+  stage: lint
   image: debian:bookworm-slim
   variables:
     LANG: C.UTF-8
@@ -253,6 +260,7 @@ bandit:
     - bandit -r -ii --ini .bandit
 
 pylint:
+  stage: lint
   image: debian:bookworm-slim
   <<: *python-rules-changes
   <<: *apt-template
@@ -273,6 +281,7 @@ pylint:
 
 
 shellcheck:
+  stage: lint
   image: debian:bookworm-slim
   rules:
     - changes:
@@ -325,6 +334,7 @@ safety:
 
 # TODO tests/*/*/*.yaml are not covered
 yamllint:
+  stage: lint
   image: debian:bookworm-slim
   rules:
     - changes:
@@ -349,6 +359,7 @@ yamllint:
 
 
 locales:
+  stage: lint
   image: debian:bookworm-slim
   variables:
     LANG: C.UTF-8
@@ -367,6 +378,7 @@ locales:
 
 
 black:
+  stage: lint
   image: debian:bookworm-slim
   <<: *apt-template
   script:
