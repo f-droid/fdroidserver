@@ -18,7 +18,6 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import git
 from pathlib import Path
 import math
 import platform
@@ -658,14 +657,12 @@ def parse_metadata(metadatapath):
         build_dir = common.get_build_dir(app)
         metadata_in_repo = build_dir / '.fdroid.yml'
         if metadata_in_repo.is_file():
-            try:
-                commit_id = common.get_head_commit_id(git.Repo(build_dir))
+            commit_id = common.get_head_commit_id(build_dir)
+            if commit_id is not None:
                 logging.debug(
                     _('Including metadata from %s@%s') % (metadata_in_repo, commit_id)
                 )
-            # See https://github.com/PyCQA/pylint/issues/2856 .
-            # pylint: disable-next=no-member
-            except git.exc.InvalidGitRepositoryError:
+            else:
                 logging.debug(
                     _('Including metadata from {path}').format(path=metadata_in_repo)
                 )

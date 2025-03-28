@@ -1286,12 +1286,29 @@ def write_status_json(output, pretty=False, name=None):
         rsync_status_file_to_repo(path, repo_subdir='status')
 
 
-def get_head_commit_id(git_repo):
-    """Get git commit ID for HEAD as a str."""
+def get_head_commit_id(git_repo_dir):
+    """Get git commit ID for HEAD as a str.
+
+    This only reads files, so it should be safe to use on untrusted
+    repos.  It was created to avoid running the git executable, no
+    matter what. It uses a tiny subset of the git.Repo class to avoid
+    setting up the git executable.
+
+    """
     try:
-        return git_repo.head.commit.hexsha
-    except ValueError:
-        return "None"
+        if type(git_repo_dir) is git.Repo:
+            d = git_repo_dir.git_dir
+        else:
+            d = os.path.join(git_repo_dir, '.git')
+        repo = type(
+            'Repo',
+            (object,),
+            {'common_dir': d, 'git_dir': d, 're_hexsha_only': git.Repo.re_hexsha_only},
+        )()
+        return git.refs.symbolic.SymbolicReference.dereference_recursive(repo, 'HEAD')
+    except (FileNotFoundError, ValueError) as e:
+        msg = _("Cannot read {path}: {error}").format(path=os.getcwd(), error=str(e))
+        logging.debug(msg)
 
 
 def setup_vcs(app):

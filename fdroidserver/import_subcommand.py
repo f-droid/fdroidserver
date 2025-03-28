@@ -342,7 +342,7 @@ def main():
 
     app.AutoUpdateMode = 'Version'
     app.UpdateCheckMode = 'Tags'
-    build.commit = common.get_head_commit_id(git_repo)
+    build.commit = common.get_head_commit_id(tmp_importer_dir)
 
     # Extract some information...
     paths = get_all_gradle_and_manifests(tmp_importer_dir)

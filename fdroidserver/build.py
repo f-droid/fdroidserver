@@ -721,8 +721,7 @@ def build_local(app, build, vcs, build_dir, output_dir, log_dir, srclib_dir, ext
         bindir = os.path.join(root_dir, 'bin')
 
     if os.path.isdir(os.path.join(build_dir, '.git')):
-        import git
-        commit_id = common.get_head_commit_id(git.repo.Repo(build_dir))
+        commit_id = str(common.get_head_commit_id(build_dir))
     else:
         commit_id = build.commit
 
