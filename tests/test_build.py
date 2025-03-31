@@ -205,6 +205,7 @@ class BuildTest(unittest.TestCase):
     @mock.patch('fdroidserver.build.FDroidPopen')
     @mock.patch('fdroidserver.common.is_debuggable_or_testOnly', lambda f: False)
     @mock.patch('fdroidserver.common.get_native_code', lambda f: 'x86')
+    @mock.patch('fdroidserver.common.get_source_date_epoch', lambda f: '1234567890')
     def test_build_local_maven(self, fake_FDroidPopen, fake_get_apk_id):
         """Test build_local() with a maven project"""
 
@@ -330,6 +331,8 @@ class BuildTest(unittest.TestCase):
                 'fdroidserver.build.FDroidPopen', FakeProcess
             ) as _ignored, mock.patch(
                 'sdkmanager.install', wraps=fake_sdkmanager_install
+            ) as _ignored, mock.patch(
+                'fdroidserver.common.get_source_date_epoch', lambda f: '1234567890'
             ) as _ignored:
                 _ignored  # silence the linters
                 with self.assertRaises(
@@ -378,6 +381,7 @@ class BuildTest(unittest.TestCase):
     @mock.patch('fdroidserver.build.FDroidPopen', FakeProcess)
     @mock.patch('fdroidserver.common.get_native_code', lambda _ignored: 'x86')
     @mock.patch('fdroidserver.common.is_debuggable_or_testOnly', lambda _ignored: False)
+    @mock.patch('fdroidserver.common.get_source_date_epoch', lambda f: '1234567890')
     @mock.patch(
         'fdroidserver.common.sha256sum',
         lambda f: 'ad7ce5467e18d40050dc51b8e7affc3e635c85bd8c59be62de32352328ed467e',
@@ -453,6 +457,7 @@ class BuildTest(unittest.TestCase):
                 self.assertTrue(ndk_dir.exists())
                 self.assertTrue(os.path.exists(config['ndk_paths'][ndk_version]))
 
+    @mock.patch('fdroidserver.common.get_source_date_epoch', lambda f: '1234567890')
     def test_build_local_clean(self):
         """Test if `fdroid build` cleans ant and gradle build products"""
         os.chdir(self.testdir)
