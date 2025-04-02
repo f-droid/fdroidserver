@@ -1528,7 +1528,7 @@ class vcs_git(vcs):
         result = p.output.rstrip()
         if p.returncode > 0:
             raise VCSException(
-                f"error: `{' '.join(cmd)}` failed, (in '{os.path.abspath(self.local)}') {result}"
+                f"`{' '.join(cmd)}` failed, (in '{os.path.abspath(self.local)}') {result}"
             )
         if Path(result) != Path(self.local).resolve():
             raise VCSException(f"Repository mismatch ('{self.local}' != '{result}')")
