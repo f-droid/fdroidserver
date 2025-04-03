@@ -538,10 +538,10 @@ def read_srclibs():
 
     srclibs = {}
 
-    srcdir = Path('srclibs')
-    srcdir.mkdir(exist_ok=True)
+    srclibs_dir = Path('srclibs')
+    srclibs_dir.mkdir(exist_ok=True)
 
-    for metadatapath in sorted(srcdir.glob('*.yml')):
+    for metadatapath in sorted(srclibs_dir.glob('*.yml')):
         srclibs[metadatapath.stem] = parse_yaml_srclib(metadatapath)
 
 

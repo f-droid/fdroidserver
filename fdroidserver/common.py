@@ -1523,10 +1523,15 @@ class vcs_git(vcs):
         it!  This is called as a safety check.
 
         """
-        p = FDroidPopen(['git', 'rev-parse', '--show-toplevel'], cwd=self.local, output=False)
+        cmd = ['git', 'rev-parse', '--show-toplevel']
+        p = FDroidPopen(cmd, cwd=self.local, output=False)
         result = p.output.rstrip()
+        if p.returncode > 0:
+            raise VCSException(
+                f"`{' '.join(cmd)}` failed, (in '{os.path.abspath(self.local)}') {result}"
+            )
         if Path(result) != Path(self.local).resolve():
-            raise VCSException('Repository mismatch')
+            raise VCSException(f"Repository mismatch ('{self.local}' != '{result}')")
 
     def gotorevisionx(self, rev):
         if not os.path.exists(self.local):
