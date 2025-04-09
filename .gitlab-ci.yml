@@ -1,5 +1,22 @@
 ---
 
+# Use merge request pipelines when a merge request is open for the branch.
+# Use branch pipelines when a merge request is not open for the branch.
+# https://docs.gitlab.com/ci/yaml/workflow/#switch-between-branch-pipelines-and-merge-request-pipelines
+workflow:
+  rules:
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
+    - if: $CI_COMMIT_BRANCH && $CI_OPEN_MERGE_REQUESTS
+      when: never
+    - if: $CI_COMMIT_BRANCH
+
+
+stages:
+  - lint
+  - test  # default for jobs that do not specify stage:
+  - deploy
+
+
 variables:
   pip: pip3 --timeout 100 --retries 10
   # speed up git checkout phase
@@ -86,6 +103,17 @@ metadata_v0:
     - rm /etc/apt/apt.conf.d/99nocacertificates
     - apt-get dist-upgrade
 
+# For jobs that only need to run when there are changes to Python files.
+.python-rules-changes: &python-rules-changes
+  rules:
+    - changes:
+        - .gitlab-ci.yml
+        - fdroid
+        - makebuildserver
+        - setup.py
+        - fdroidserver/*.py
+        - tests/*.py
+
 
 # Since F-Droid uses Debian as its default platform, from production
 # servers to CI to contributor machines, it is important to know when
@@ -94,8 +122,8 @@ metadata_v0:
 debian_testing:
   image: debian:testing
   <<: *apt-template
-  only:
-    - master@fdroid/fdroidserver
+  rules:
+    - if: $CI_COMMIT_BRANCH == "master" && $CI_PROJECT_PATH == "fdroid/fdroidserver"
   script:
     - apt-get install
         aapt
@@ -123,8 +151,8 @@ debian_testing:
 ubuntu_lts_ppa:
   image: ubuntu:latest
   <<: *apt-template
-  only:
-    - master@fdroid/fdroidserver
+  rules:
+    - if: $CI_COMMIT_BRANCH == "master" && $CI_PROJECT_PATH == "fdroid/fdroidserver"
   script:
     - export ANDROID_HOME=/usr/lib/android-sdk
     - apt-get install gnupg
@@ -188,19 +216,19 @@ ubuntu_jammy_pip:
 gradlew-fdroid:
   image: debian:bookworm-slim
   <<: *apt-template
-  only:
-    changes:
-      - .gitlab-ci.yml
-      - gradlew-fdroid
-      - tests/test_gradlew-fdroid
+  rules:
+    - changes:
+        - .gitlab-ci.yml
+        - gradlew-fdroid
+        - tests/test_gradlew-fdroid
   script:
-    - apt-get install ca-certificates curl default-jdk-headless shellcheck unzip
-    - shellcheck --severity=error --color gradlew-fdroid tests/test_gradlew-fdroid
+    - apt-get install ca-certificates curl default-jdk-headless unzip
     - ./tests/test_gradlew-fdroid
 
 
 # Run all the various linters and static analysis tools.
-lint_format_bandit_checks:
+hooks/pre-commit:
+  stage: lint
   image: debian:bookworm-slim
   variables:
     LANG: C.UTF-8
@@ -215,22 +243,30 @@ lint_format_bandit_checks:
           make
           pycodestyle
           pyflakes3
-          pylint
           python3-dev
           python3-git
           python3-nose
           python3-pip
           python3-yaml
-          shellcheck
-    - $pip install --break-system-packages bandit pylint-gitlab
-    - export EXITVALUE=0
-    - function set_error() { export EXITVALUE=1; printf "\x1b[31mERROR `history|tail -2|head -1|cut -b 6-500`\x1b[0m\n"; }
-    - ./hooks/pre-commit || set_error
-    - bandit
-        -r
-        -ii
-        --ini .bandit
-        || set_error
+    - ./hooks/pre-commit
+
+bandit:
+  image: debian:bookworm-slim
+  <<: *python-rules-changes
+  <<: *apt-template
+  script:
+    - apt-get install python3-pip
+    - $pip install --break-system-packages bandit
+    - bandit -r -ii --ini .bandit
+
+pylint:
+  stage: lint
+  image: debian:bookworm-slim
+  <<: *python-rules-changes
+  <<: *apt-template
+  script:
+    - apt-get install pylint python3-pip
+    - $pip install --break-system-packages pylint-gitlab
     - pylint --output-format=pylint_gitlab.GitlabCodeClimateReporter
             fdroid
             makebuildserver
@@ -238,15 +274,35 @@ lint_format_bandit_checks:
             fdroidserver/*.py
             tests/*.py
             > pylint-report.json
-        || set_error
-    - shellcheck --exclude SC2046,SC2090 --severity=warning --color tests/run-tests
-        || set_error
-    - exit $EXITVALUE
   artifacts:
     reports:
       codequality: pylint-report.json
     when: always
 
+
+shellcheck:
+  stage: lint
+  image: debian:bookworm-slim
+  rules:
+    - changes:
+        - .gitlab-ci.yml
+        - gradlew-fdroid
+        - hooks/install-hooks.sh
+        - hooks/pre-commit
+        - tests/run-tests
+        - tests/test_gradlew-fdroid
+  <<: *apt-template
+  script:
+    - apt-get install shellcheck
+    # TODO GitLab Code Quality report https://github.com/koalaman/shellcheck/issues/3155
+    - shellcheck --exclude SC2046,SC2090 --severity=warning --color
+        hooks/install-hooks.sh
+        hooks/pre-commit
+        tests/run-tests
+    # TODO make the gradlew things pass the standard above
+    - shellcheck --severity=error --color
+        gradlew-fdroid
+        tests/test_gradlew-fdroid
 
 # Check all the dependencies in Debian to mirror production.  CVEs are
 # generally fixed in the latest versions in pip/pypi.org, so it isn't
@@ -255,10 +311,7 @@ lint_format_bandit_checks:
 safety:
   image: debian:bookworm-slim
   rules:
-    # once only:/changes: are ported to rules:, this could be removed:
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-      when: never
-    - if: $CI_PIPELINE_SOURCE == "push" && $SAFETY_API_KEY
+    - if: $SAFETY_API_KEY
       changes:
         - .gitlab-ci.yml
         - .safety-policy.yml
@@ -281,13 +334,10 @@ safety:
 
 # TODO tests/*/*/*.yaml are not covered
 yamllint:
+  stage: lint
   image: debian:bookworm-slim
   rules:
-    # once only:/changes: are ported to rules:, this could be removed:
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-      when: never
-    - if: $CI_PIPELINE_SOURCE == "push"
-      changes:
+    - changes:
         - .gitlab-ci.yml
         - .safety-policy.yml
         - .yamllint
@@ -308,8 +358,8 @@ yamllint:
         tests/*/*/.*.yml
 
 
-# Run all the various linters and static analysis tools.
 locales:
+  stage: lint
   image: debian:bookworm-slim
   variables:
     LANG: C.UTF-8
@@ -328,6 +378,7 @@ locales:
 
 
 black:
+  stage: lint
   image: debian:bookworm-slim
   <<: *apt-template
   script:
@@ -380,8 +431,8 @@ fedora_latest:
 macOS:
   tags:
     - saas-macos-medium-m1
-  only:
-    - master@fdroid/fdroidserver
+  rules:
+    - if: $CI_COMMIT_BRANCH == "master" && $CI_PROJECT_PATH == "fdroid/fdroidserver"
   script:
     - export HOMEBREW_CURL_RETRIES=10
     - brew update > /dev/null
@@ -446,16 +497,16 @@ gradle:
 # Run an actual build in a simple, faked version of the buildserver guest VM.
 fdroid build:
   image: registry.gitlab.com/fdroid/fdroidserver:buildserver
-  only:
-    changes:
-      - .gitlab-ci.yml
-      - fdroidserver/build.py
-      - fdroidserver/common.py
-      - fdroidserver/exception.py
-      - fdroidserver/metadata.py
-      - fdroidserver/net.py
-      - fdroidserver/scanner.py
-      - fdroidserver/vmtools.py
+  rules:
+    - changes:
+        - .gitlab-ci.yml
+        - fdroidserver/build.py
+        - fdroidserver/common.py
+        - fdroidserver/exception.py
+        - fdroidserver/metadata.py
+        - fdroidserver/net.py
+        - fdroidserver/scanner.py
+        - fdroidserver/vmtools.py
   cache:
     key: "$CI_JOB_NAME"
     paths:
@@ -516,11 +567,11 @@ fdroid build:
 plugin_fetchsrclibs:
   image: debian:bookworm-slim
   <<: *apt-template
-  only:
-    changes:
-      - .gitlab-ci.yml
-      - examples/fdroid_fetchsrclibs.py
-      - fdroidserver/__main__.py
+  rules:
+    - changes:
+        - .gitlab-ci.yml
+        - examples/fdroid_fetchsrclibs.py
+        - fdroidserver/__main__.py
   script:
     - apt-get install
         curl
@@ -560,8 +611,8 @@ plugin_fetchsrclibs:
 servergitmirrors:
   image: debian:bookworm-slim
   <<: *apt-template
-  only:
-    - master@fdroid/fdroidserver
+  rules:
+    - if: $CI_COMMIT_BRANCH == "master" && $CI_PROJECT_PATH == "fdroid/fdroidserver"
   script:
     - apt-get install
         default-jdk-headless
@@ -603,6 +654,7 @@ servergitmirrors:
 
 Build documentation:
   image: debian:bookworm-slim
+  <<: *python-rules-changes
   <<: *apt-template
   script:
     - apt-get install make python3-sphinx python3-numpydoc python3-pydata-sphinx-theme pydocstyle fdroidserver
@@ -622,8 +674,8 @@ Build documentation:
 Windows:
   tags:
     - windows
-  only:
-    - windows
+  rules:
+    - if: $CI_COMMIT_BRANCH == "windows"
   script:
     - Import-Module "$env:ChocolateyInstall\helpers\chocolateyProfile.psm1"
     - choco install --no-progress -y git --force --params "/GitAndUnixToolsOnPath"
@@ -686,13 +738,12 @@ pages:
 docker:
   dependencies:
     - fdroid build
-  only:
-    changes:
-      - .gitlab-ci.yml
-      - makebuildserver
-      - buildserver/*
-    variables:
-      - $CI_COMMIT_BRANCH == "master" || $CI_PROJECT_NAMESPACE != "fdroid"
+  rules:
+    - if: $CI_COMMIT_BRANCH == "master" && $CI_PROJECT_PATH == "fdroid/fdroidserver"
+      changes:
+        - .gitlab-ci.yml
+        - makebuildserver
+        - buildserver/*
   image: docker:dind
   services:
     - docker:dind
@@ -720,6 +771,7 @@ docker:
 # PUBLISH is the signing server.  It has a very minimal manual setup.
 PUBLISH:
   image: debian:bullseye-backports
+  <<: *python-rules-changes
   script:
     - apt-get update
     - apt-get -qy upgrade
