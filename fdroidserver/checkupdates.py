@@ -749,7 +749,7 @@ def get_changes_versus_ref(git_repo, ref, f):
     return changes
 
 
-def push_commits(branch_name='checkupdates', verbose=False):
+def push_commits(branch_name='checkupdates'):
     """Make git branch then push commits as merge request.
 
     The appid is parsed from the actual file that was changed so that
@@ -806,21 +806,10 @@ def push_commits(branch_name='checkupdates', verbose=False):
     if current_version_only:
         push_options.append('merge_request.draft')
 
-    progress = None
-    if verbose:
-        import clint.textui
-
-        progress_bar = clint.textui.progress.Bar()
-
-        class MyProgressPrinter(git.RemoteProgress):
-            def update(self, op_code, current, maximum=None, message=None):
-                if isinstance(maximum, float):
-                    progress_bar.show(current, maximum)
-
-        progress = MyProgressPrinter()
+    progress = git.RemoteProgress()
 
     pushinfos = remote.push(
-        branch_name,
+        f"{branch_name}:{branch_name}",
         progress=progress,
         force=True,
         set_upstream=True,
@@ -828,17 +817,17 @@ def push_commits(branch_name='checkupdates', verbose=False):
     )
 
     for pushinfo in pushinfos:
+        logging.info(pushinfo.summary)
+        # Show potentially useful messages from git remote
+        if progress:
+            for line in progress.other_lines:
+                logging.info(line)
         if pushinfo.flags & (
             git.remote.PushInfo.ERROR
             | git.remote.PushInfo.REJECTED
             | git.remote.PushInfo.REMOTE_FAILURE
             | git.remote.PushInfo.REMOTE_REJECTED
         ):
-            # Show potentially useful messages from git remote
-            if progress:
-                for line in progress.other_lines:
-                    if line.startswith('remote:'):
-                        logging.info(line)
             raise FDroidException(
                 f'{remote.url} push failed: {pushinfo.flags} {pushinfo.summary}'
             )
@@ -953,7 +942,7 @@ def main():
             exit_code = 1
 
     if options.appid and options.merge_request:
-        push_commits(verbose=options.verbose)
+        push_commits()
         prune_empty_appid_branches()
 
     status_update_json(processed, failed)
