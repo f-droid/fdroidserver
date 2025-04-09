@@ -87,10 +87,6 @@ py-version = "3.9"
 # Files or directories to be skipped. They should be base names, not paths.
 ignore = ["apksigcopier.py", "looseversion.py"]
 
-[tool.pylint.basic]
-# Good variable names which should always be accepted, separated by a comma.
-good-names = ["i", "j", "k", "ex", "Run", "f", "fp"]
-
 [tool.pylint."messages control"]
 # Only show warnings with the listed confidence levels. Leave empty to show all.
 # Valid levels: HIGH, CONTROL_FLOW, INFERENCE, INFERENCE_FAILURE, UNDEFINED.
