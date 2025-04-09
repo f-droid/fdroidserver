@@ -724,7 +724,7 @@ def checkout_appid_branch(appid):
     try:
         git_repo.remotes.origin.fetch(f'{appid}:refs/remotes/origin/{appid}')
     except Exception as e:
-        logging.warning('"%s" branch not found on origin remote:\n\t%s', appid, e)
+        logging.debug('"%s" branch not found on origin remote:\n\t%s', appid, e)
     if appid in git_repo.remotes.origin.refs:
         start_point = f"origin/{appid}"
         for commit in git_repo.iter_commits(
@@ -838,12 +838,12 @@ def push_commits(branch_name='checkupdates', verbose=False):
             if progress:
                 for line in progress.other_lines:
                     if line.startswith('remote:'):
-                        logging.debug(line)
+                        logging.info(line)
             raise FDroidException(
                 f'{remote.url} push failed: {pushinfo.flags} {pushinfo.summary}'
             )
         else:
-            logging.debug(remote.url + ': ' + pushinfo.summary)
+            logging.info(remote.url + ': ' + pushinfo.summary)
 
 
 def prune_empty_appid_branches(git_repo=None, main_branch='main'):
