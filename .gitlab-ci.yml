@@ -268,13 +268,12 @@ pylint:
   script:
     - apt-get install pylint python3-pip
     - $pip install --break-system-packages pylint-gitlab
-    - pylint --output-format=pylint_gitlab.GitlabCodeClimateReporter
+    - pylint --output-format=colorized,pylint_gitlab.GitlabCodeClimateReporter:pylint-report.json
             fdroid
             makebuildserver
             setup.py
             fdroidserver/*.py
             tests/*.py
-            > pylint-report.json
   artifacts:
     reports:
       codequality: pylint-report.json
