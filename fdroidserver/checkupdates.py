@@ -809,7 +809,7 @@ def push_commits(branch_name='checkupdates'):
     progress = git.RemoteProgress()
 
     pushinfos = remote.push(
-        f"{branch_name}:{branch_name}",
+        f"HEAD:refs/heads/{branch_name}",
         progress=progress,
         force=True,
         set_upstream=True,
