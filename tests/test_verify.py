@@ -122,3 +122,50 @@ class VerifyTest(unittest.TestCase):
             secondpass = json.load(fp)
 
         self.assertEqual(firstpass, secondpass)
+
+    @patch('fdroidserver.common.sha256sum')
+    @patch('fdroidserver.verify.write_verified_json', lambda s: s)
+    def test_write_json_report_appid_json(self, sha256sum):
+        sha256sum.return_value = (
+            '70c2f776a2bac38a58a7d521f96ee0414c6f0fb1de973c3ca8b10862a009247d'
+        )
+        os.mkdir('tmp')
+        os.mkdir('unsigned')
+        appid = 'com.politedroid'
+        apk_name = f'{appid}_6.apk'
+        remote_apk = 'tmp/' + apk_name
+        unsigned_apk = 'unsigned/' + apk_name
+        shutil.copy(basedir / 'repo' / apk_name, remote_apk)
+        shutil.copy(basedir / 'repo' / apk_name, unsigned_apk)
+        url = TEST_APP_ENTRY['1539780240.3885746']['url']
+        with open(f'unsigned/{apk_name}.json', 'w') as fp:
+            json.dump(TEST_APP_ENTRY, fp)
+
+        # make a fake existing report where the newer one broke verifiability
+        with open(f'unsigned/{appid}_16.apk.json', 'w') as fp:
+            json.dump(
+                {
+                    "1444444444.4444444": {
+                        'local': {'versionCode': 16},
+                        'verified': False,
+                    },
+                    "1333333333.3333333": {
+                        'local': {'versionCode': 16},
+                        'verified': True,
+                    },
+                },
+                fp,
+            )
+
+        verify.write_json_report(url, remote_apk, unsigned_apk, {'fake': 'fail'})
+        with open(f'unsigned/{appid}.json') as fp:
+            self.assertEqual(
+                {
+                    'apkReports': [
+                        'unsigned/com.politedroid_6.apk.json',
+                        'unsigned/com.politedroid_16.apk.json',
+                    ],
+                    'lastRunVerified': False,
+                },
+                json.load(fp),
+            )

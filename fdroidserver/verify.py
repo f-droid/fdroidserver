@@ -144,23 +144,44 @@ def write_json_report(url, remote_apk, unsigned_apk, compare_result):
     with open(jsonfile, 'w') as fp:
         json.dump(data, fp, sort_keys=True)
 
-    if output['verified']:
-        jsonfile = 'unsigned/verified.json'
-        data = get_verified_json(jsonfile)
-        packageName = output['local']['packageName']
+    appid, version_code = os.path.basename(unsigned_apk[:-4]).rsplit('_', 1)
+    appid_base = unsigned_apk.rsplit('_', 1)[0]
+    apkReports = sorted(
+        glob.glob(f'{appid_base}_[0-9]*.json'),  # don't include <appid>.json
+        key=lambda s: int(s[:-9].rsplit('_', 1)[1]),  # numeric sort by versionCode
+    )
+    with open(apkReports[-1]) as fp:
+        reports = json.load(fp)
+    appid_output = {'apkReports': apkReports}
+    most_recent = 0
+    for report_time, run in reports.items():
+        if float(report_time) > most_recent:
+            most_recent = float(report_time)
+            appid_output['lastRunVerified'] = run['verified']
+    with open(f'{appid_base}.json', 'w') as fp:
+        json.dump(appid_output, fp, cls=common.Encoder, sort_keys=True)
 
-        if packageName not in data['packages']:
-            data['packages'][packageName] = []
-        found = False
-        output_dump = json.dumps(output, sort_keys=True)
-        for p in data['packages'][packageName]:
-            if output_dump == json.dumps(p, sort_keys=True):
-                found = True
-                break
-        if not found:
-            data['packages'][packageName].insert(0, json.loads(output_dump))
-        with open(jsonfile, 'w') as fp:
-            json.dump(data, fp, cls=common.Encoder, sort_keys=True)
+    if output['verified']:
+        write_verified_json(output)
+
+
+def write_verified_json(output):
+    jsonfile = 'unsigned/verified.json'
+    data = get_verified_json(jsonfile)
+    packageName = output['local']['packageName']
+
+    if packageName not in data['packages']:
+        data['packages'][packageName] = []
+    found = False
+    output_dump = json.dumps(output, sort_keys=True)
+    for p in data['packages'][packageName]:
+        if output_dump == json.dumps(p, sort_keys=True):
+            found = True
+            break
+    if not found:
+        data['packages'][packageName].insert(0, json.loads(output_dump))
+    with open(jsonfile, 'w') as fp:
+        json.dump(data, fp, cls=common.Encoder, sort_keys=True)
 
 
 def main():
