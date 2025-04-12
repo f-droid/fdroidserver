@@ -440,7 +440,7 @@ black:
     - black --check --diff --color $CI_PROJECT_DIR
 
 fedora_latest:
-  image: fedora:39  # support ends on 2024-11-12
+  image: fedora:43  # support ends on approximately May 2026
   script:
     # tricks to hopefully make runs more reliable
     - echo "timeout=600" >> /etc/dnf/dnf.conf
@@ -449,23 +449,52 @@ fedora_latest:
 
     - dnf -y update || dnf -y update
     - dnf -y install @development-tools
+                     ca-certificates
                      diffutils
+                     dnf-plugins-core
                      findutils
                      git
                      gnupg
-                     java-17-openjdk-devel
+                     java-21-openjdk-devel
                      openssl
-                     python3
+                     podman
+                     python3-devel
+                     python3-androguard
+                     python3-asn1crypto
                      python3-babel
+                     python3-defusedxml
+                     python3-file-magic
+                     python3-libcloud
                      python3-matplotlib
+                     python3-paramiko
                      python3-pip
+                     python3-pillow
+                     python3-platformdirs
+                     python3-puremagic
                      python3-pycountry
+                     python3-pyyaml
+                     python3-qrcode+all
+                     python3-requests
+                     python3-ruamel-yaml
+                     python3-sdkmanager
+                     python3-setuptools
+                     python3-GitPython
                      rsync
+                     wget
                      which
-    - $pip install sdkmanager
+                     yamllint
+    - wget https://download.copr.fedorainfracloud.org/results/fed500/zlib/fedora-43-x86_64/10199202-zlib/zlib-1.3.2-1.fc43.x86_64.rpm
+    - wget https://download.copr.fedorainfracloud.org/results/fed500/zlib/fedora-43-x86_64/10199202-zlib/zlib-devel-1.3.2-1.fc43.x86_64.rpm
+    - wget https://console.redhat.com/api/pulp-content/public-copr/fed500/zlib/fedora-43-x86_64/Packages/p/python3-pillow-12.1.1-1.fc43.x86_64.rpm
+    - wget https://console.redhat.com/api/pulp-content/public-copr/fed500/zlib/fedora-43-x86_64/Packages/p/python3-pillow-devel-12.1.1-1.fc43.x86_64.rpm
+    - wget https://console.redhat.com/api/pulp-content/public-copr/fed500/zlib/fedora-43-x86_64/Packages/p/python3-pillow-qt-12.1.1-1.fc43.x86_64.rpm
+    - wget https://console.redhat.com/api/pulp-content/public-copr/fed500/zlib/fedora-43-x86_64/Packages/p/python3-pillow-tk-12.1.1-1.fc43.x86_64.rpm
+    - dnf -y install --nobest --allowerasing *.rpm
     - ./setup.py sdist
     - useradd -m -c "test account" --password "fakepassword"  testuser
-    - su testuser --login --command "cd `pwd`; $pip install --user dist/fdroidserver-*.tar.gz"
+    - su testuser --login --command "cd `pwd`; $pip install --user dist/fdroidserver-*.tar.gz; $pip install --user clint; $pip install --user git+https://github.com/wbond/oscrypto.git@1547f535001ba568b239b8797465536759c742a3"
+    - export OPENSSL_ENABLE_SHA1_SIGNATURES=1
+    - export OPENSSL_ENABLE_MD5_VERIFY=1
     - test -e ~testuser/.local/share/locale/de/LC_MESSAGES/fdroidserver.mo
     - export BUILD_TOOLS_VERSION=`sed -n "s,^MINIMUM_APKSIGNER_BUILD_TOOLS_VERSION\s*=\s*['\"]\(.*\)[['\"],\1,p" fdroidserver/common.py`
     - export ANDROID_HOME=`pwd`/android-sdk
@@ -479,7 +508,7 @@ fedora_latest:
     - chown -R testuser .
     - cd tests
     - su testuser --login --command
-        "cd `pwd`; export CI=$CI ANDROID_HOME=$ANDROID_HOME; fdroid=~testuser/.local/bin/fdroid ./run-tests"
+        "cd `pwd`; export CI=$CI ANDROID_HOME=$ANDROID_HOME; export OPENSSL_ENABLE_SHA1_SIGNATURES=1; export OPENSSL_ENABLE_MD5_VERIFY=1; fdroid=~testuser/.local/bin/fdroid ./run-tests"
 
 
 macOS:
