@@ -67,6 +67,7 @@ metadata_v0:
     - git checkout $RELEASE_COMMIT_ID
     - cd ..
     - git clone --depth 1 https://gitlab.com/fdroid/fdroiddata.git
+    - rm -f fdroiddata/config.yml  # ignore config for this test
     - cd fdroiddata
     - ../tests/dump_internal_metadata_format.py
     - cd ..
