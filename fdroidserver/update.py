@@ -133,7 +133,7 @@ def disabled_algorithms_allowed():
             or common.default_config['allow_disabled_algorithms'])
 
 
-def status_update_json(apps, apks):
+def status_update_json(output, apps, apks):
     """Output a JSON file with metadata about this `fdroid update` run.
 
     Parameters
@@ -145,7 +145,6 @@ def status_update_json(apps, apks):
 
     """
     logging.debug(_('Outputting JSON'))
-    output = common.setup_status_output(start_timestamp)
     output['antiFeatures'] = dict()
     output['disabled'] = []
     output['archivePolicy0'] = []
@@ -2801,7 +2800,7 @@ def main():
         output_status_stage(status_output, 'make_binary_transparency_log')
         btlog.make_binary_transparency_log(repodirs)
 
-    status_update_json(apps, apks + archapks)
+    status_update_json(status_output, apps, apks + archapks)
 
     logging.info(_("Finished"))
 
