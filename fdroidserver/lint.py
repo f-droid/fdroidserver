@@ -274,6 +274,7 @@ check_config_keys = (
     'repo',
     'repo_description',
     'repo_icon',
+    'repo_key_sha256',
     'repo_keyalias',
     'repo_maxage',
     'repo_name',
