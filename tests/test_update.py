@@ -1639,7 +1639,7 @@ class UpdateTest(unittest.TestCase):
         with mkdtemp() as tmpdir:
             os.chdir(tmpdir)
             with mock.patch('sys.argv', ['fdroid update', '']):
-                fdroidserver.update.status_update_json([], [])
+                fdroidserver.update.status_update_json({}, [], [])
                 with open('repo/status/update.json') as fp:
                     data = json.load(fp)
                 self.assertTrue('apksigner' in data)
@@ -1647,14 +1647,14 @@ class UpdateTest(unittest.TestCase):
                 fdroidserver.update.config = {
                     'apksigner': 'apksigner',
                 }
-                fdroidserver.update.status_update_json([], [])
+                fdroidserver.update.status_update_json({}, [], [])
                 with open('repo/status/update.json') as fp:
                     data = json.load(fp)
                 self.assertEqual(shutil.which(fdroidserver.update.config['apksigner']), data['apksigner'])
 
                 fdroidserver.update.config = {}
                 fdroidserver.common.fill_config_defaults(fdroidserver.update.config)
-                fdroidserver.update.status_update_json([], [])
+                fdroidserver.update.status_update_json({}, [], [])
                 with open('repo/status/update.json') as fp:
                     data = json.load(fp)
                 self.assertEqual(fdroidserver.update.config.get('apksigner'), data['apksigner'])
