@@ -58,6 +58,7 @@ from typing import List
 import git
 import glob
 import io
+import itertools
 import os
 import sys
 import re
@@ -4821,6 +4822,20 @@ def calculate_archive_policy(app, default):
     if app.Builds and archive_policy > len(builds):
         archive_policy = len(builds)
     return archive_policy
+
+
+def calculate_gradle_flavor_combination(flavors):
+    """Calculate all combinations of gradle flavors."""
+    combination_lists = itertools.product(*[[flavor, ''] for flavor in flavors])
+    combinations = [
+        re.sub(
+            r' +\w',
+            lambda pat: pat.group(0)[-1].upper(),
+            ' '.join(combination_list).strip(),
+        )
+        for combination_list in combination_lists
+    ]
+    return combinations
 
 
 FDROIDORG_MIRRORS = [
