@@ -1987,7 +1987,7 @@ def retrieve_string_singleline(app_dir, string, xmlfiles=None):
     return retrieve_string(app_dir, string, xmlfiles).replace('\n', ' ').strip()
 
 
-def manifest_paths(app_dir, flavours):
+def manifest_paths(app_dir, flavors):
     """Return list of existing files that will be used to find the highest vercode."""
     possible_manifests = \
         [Path(app_dir) / 'AndroidManifest.xml',
@@ -1997,18 +1997,18 @@ def manifest_paths(app_dir, flavours):
          Path(app_dir) / 'build-extras.gradle',
          Path(app_dir) / 'build.gradle.kts']
 
-    for flavour in flavours:
-        if flavour == 'yes':
+    for flavor in flavors:
+        if flavor == 'yes':
             continue
         possible_manifests.append(
-            Path(app_dir) / 'src' / flavour / 'AndroidManifest.xml')
+            Path(app_dir) / 'src' / flavor / 'AndroidManifest.xml')
 
     return [path for path in possible_manifests if path.is_file()]
 
 
-def fetch_real_name(app_dir, flavours):
+def fetch_real_name(app_dir, flavors):
     """Retrieve the package name. Returns the name, or None if not found."""
-    for path in manifest_paths(app_dir, flavours):
+    for path in manifest_paths(app_dir, flavors):
         if not path.suffix == '.xml' or not path.is_file():
             continue
         logging.debug("fetch_real_name: Checking manifest at %s" % path)
@@ -2126,17 +2126,17 @@ def parse_androidmanifests(paths, app):
         vercode = None
         package = None
 
-        flavours = None
+        flavors = None
         temp_app_id = None
         temp_version_name = None
         if len(app.get('Builds', [])) > 0 and 'gradle' in app['Builds'][-1] and app['Builds'][-1].gradle:
-            flavours = app['Builds'][-1].gradle
+            flavors = app['Builds'][-1].gradle
 
         if path.suffix == '.gradle' or path.name.endswith('.gradle.kts'):
             with open(path, 'r', encoding='utf-8') as f:
                 android_plugin_file = False
-                inside_flavour_group = 0
-                inside_required_flavour = 0
+                inside_flavor_group = 0
+                inside_required_flavor = 0
                 for line in f:
                     if gradle_comment.match(line):
                         continue
@@ -2151,8 +2151,8 @@ def parse_androidmanifests(paths, app):
                         if matches:
                             temp_version_name = matches
 
-                    if inside_flavour_group > 0:
-                        if inside_required_flavour > 1:
+                    if inside_flavor_group > 0:
+                        if inside_required_flavor > 1:
                             matches = psearch_g(line)
                             if matches:
                                 s = matches.group(2)
@@ -2182,29 +2182,29 @@ def parse_androidmanifests(paths, app):
                             if matches:
                                 vercode = version_code_string_to_int(matches.group(1))
 
-                        if inside_required_flavour > 0:
+                        if inside_required_flavor > 0:
                             if '{' in line:
-                                inside_required_flavour += 1
+                                inside_required_flavor += 1
                             if '}' in line:
-                                inside_required_flavour -= 1
-                                if inside_required_flavour == 1:
-                                    inside_required_flavour -= 1
-                        elif flavours:
-                            for flavour in flavours:
-                                if re.match(r'.*[\'"\s]{flavour}[\'"\s].*\{{.*'.format(flavour=flavour), line):
-                                    inside_required_flavour = 2
+                                inside_required_flavor -= 1
+                                if inside_required_flavor == 1:
+                                    inside_required_flavor -= 1
+                        elif flavors:
+                            for flavor in flavors:
+                                if re.match(r'.*[\'"\s]{flavor}[\'"\s].*\{{.*'.format(flavor=flavor), line):
+                                    inside_required_flavor = 2
                                     break
-                                if re.match(r'.*[\'"\s]{flavour}[\'"\s].*'.format(flavour=flavour), line):
-                                    inside_required_flavour = 1
+                                if re.match(r'.*[\'"\s]{flavor}[\'"\s].*'.format(flavor=flavor), line):
+                                    inside_required_flavor = 1
                                     break
 
                         if '{' in line:
-                            inside_flavour_group += 1
+                            inside_flavor_group += 1
                         if '}' in line:
-                            inside_flavour_group -= 1
+                            inside_flavor_group -= 1
                     else:
                         if "productFlavors" in line:
-                            inside_flavour_group = 1
+                            inside_flavor_group = 1
                         if not package:
                             matches = psearch_g(line)
                             if matches:
@@ -2548,9 +2548,9 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
         with open(path, 'w', encoding='iso-8859-1') as f:
             f.write(props)
 
-    flavours = []
+    flavors = []
     if build.build_method() == 'gradle':
-        flavours = build.gradle
+        flavors = build.gradle
 
         if build.target:
             n = build.target.split('-')[1]
@@ -2572,7 +2572,7 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
     # Insert version code and number into the manifest if necessary
     if build.forceversion:
         logging.info("Changing the version name")
-        for path in manifest_paths(root_dir, flavours):
+        for path in manifest_paths(root_dir, flavors):
             if not os.path.isfile(path):
                 continue
             if path.suffix == '.xml':
@@ -2586,7 +2586,7 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
 
     if build.forcevercode:
         logging.info("Changing the version code")
-        for path in manifest_paths(root_dir, flavours):
+        for path in manifest_paths(root_dir, flavors):
             if not path.is_file():
                 continue
             if path.suffix == '.xml':

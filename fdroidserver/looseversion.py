@@ -115,7 +115,7 @@ __license__ = "Python License 2.0"
 # been done in the StrictVersion class above.  This works great as long
 # as everyone can go along with bondage and discipline.  Hopefully a
 # (large) subset of Python module programmers will agree that the
-# particular flavour of bondage and discipline provided by StrictVersion
+# particular flavor of bondage and discipline provided by StrictVersion
 # provides enough benefit to be worth using, and will submit their
 # version numbering scheme to its domination.  The free-thinking
 # anarchists in the lot will never give in, though, and something needs

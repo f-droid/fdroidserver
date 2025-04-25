@@ -1179,17 +1179,17 @@ def insert_localized_app_metadata(apps):
             locale = segments[-1]
             destdir = os.path.join('repo', packageName, locale)
 
-            # flavours specified in build receipt
-            build_flavours = ""
+            # flavors specified in build receipt
+            build_flavors = ""
             if (
                 apps[packageName]
                 and len(apps[packageName].get('Builds', [])) > 0
                 and 'gradle' in apps[packageName]['Builds'][-1]
             ):
-                build_flavours = apps[packageName]['Builds'][-1]['gradle']
+                build_flavors = apps[packageName]['Builds'][-1]['gradle']
 
-            if len(segments) >= 5 and segments[4] == "fastlane" and segments[3] not in build_flavours:
-                logging.debug("ignoring due to wrong flavour")
+            if len(segments) >= 5 and segments[4] == "fastlane" and segments[3] not in build_flavors:
+                logging.debug("ignoring due to wrong flavor")
                 continue
 
             for f in files:
