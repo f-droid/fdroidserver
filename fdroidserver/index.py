@@ -681,9 +681,13 @@ def v2_repo(repodict, repodir, archive):
 
     config = common.load_localized_config(CONFIG_CONFIG_NAME, repodir)
     if config:
-        repo["name"] = config["archive" if archive else "repo"]["name"]
-        repo["description"] = config["archive" if archive else "repo"]["description"]
-        repo["icon"] = config["archive" if archive else "repo"]["icon"]
+        localized_config = config["archive" if archive else "repo"]
+        if "name" in localized_config:
+            repo["name"] = localized_config["name"]
+        if "description" in localized_config:
+            repo["description"] = localized_config["description"]
+        if "icon" in localized_config:
+            repo["icon"] = localized_config["icon"]
 
     repo["address"] = repodict["address"]
     if "mirrors" in repodict:
