@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: fdroidserver 0.8-224-g4b0ade7\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2025-03-25 11:36+0100\n"
-"PO-Revision-Date: 2025-02-08 06:22+0000\n"
+"PO-Revision-Date: 2025-04-30 04:07+0000\n"
 "Last-Translator: Liner Seven <linour7gmekiblo@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/f-droid/fdroidserver/ja/>\n"
 "Language: ja\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.10-dev\n"
+"X-Generator: Weblate 5.12-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -43,7 +43,7 @@ msgstr "「\"%s/」に合致するメタデータのファイルはありませ�
 
 #: ../fdroidserver/index.py
 msgid "\"isPrimary\" key should not be added to mirrors!"
-msgstr ""
+msgstr "\"isPrimary\" キーはミラーに追加すべきではありません！"
 
 #: ../fdroidserver/index.py
 #, python-brace-format
@@ -481,9 +481,9 @@ msgid "Creating \"{path}\" for configuring s3cmd."
 msgstr "s3cmdの設定用に「{path}」を作成します。"
 
 #: ../fdroidserver/common.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Creating empty {config_file}"
-msgstr "「{config_file}」を読み込みます"
+msgstr "素の {config_file} を作成"
 
 #: ../fdroidserver/publish.py
 msgid "Creating log directory"
@@ -653,12 +653,12 @@ msgstr "エラー：{path}の{key}は「archive」でも「repo」でもあり�
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "ERROR: {key} not a valid key!"
-msgstr ""
+msgstr "エラー：{key} が無効な値です！"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "ERROR: {key}'s value should be of type {t}!"
-msgstr ""
+msgstr "エラー：{key} の値は {t} 型でなければいけません！"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
@@ -685,9 +685,9 @@ msgid "Environment variable {var} from {configname} is not set!"
 msgstr "{configname}の環境変数 {var} が設定されていません！"
 
 #: ../fdroidserver/common.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Environment variable {{env: {var}}} is not set!"
-msgstr "{configname}の環境変数 {var} が設定されていません！"
+msgstr "環境変数{{env: {var}}}が未設定です！"
 
 #: ../fdroidserver/deploy.py
 msgid "Error deploying 'github_releases', {} not present. (You might need to run `fdroid update` first.)"
@@ -929,9 +929,9 @@ msgid "Ignoring bad element in manifest: %s"
 msgstr "manifestの正しくない要素を無視します：%s"
 
 #: ../fdroidserver/common.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Ignoring deprecated {oldfile}, use {newfile}!"
-msgstr "{oldfile}は非推奨です。{newfile}を使用してください"
+msgstr "{oldfile}は非推奨です。{newfile}を使用してください！"
 
 #: ../fdroidserver/index.py
 msgid "Ignoring package without metadata: "
@@ -1139,7 +1139,7 @@ msgstr "ZIPファイルの最大の再帰階層に到達しました：%s"
 #: ../fdroidserver/index.py
 #, python-brace-format
 msgid "Mirror config for {url} contains \"isPrimary\" key!"
-msgstr ""
+msgstr "{url} のミラー設定に \"isPrimary\" キーが含まれています！"
 
 #: ../fdroidserver/mirror.py
 msgid "Mirror the full repo and archive, all file types."
@@ -1306,7 +1306,7 @@ msgstr "画像にはPNGとJPEGのみをサポートします。これが見つ�
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
 #: ../fdroidserver/common.py
 msgid "Only accepts a single key \"env\""
-msgstr ""
+msgstr "単一キー \"env\" のみを受け付けます"
 
 #: ../fdroidserver/checkupdates.py
 msgid "Only process apps with auto-updates"
@@ -1467,7 +1467,7 @@ msgstr "スキャナーのルールと署名をネットワークから取得し
 #: ../fdroidserver/publish.py
 #, python-brace-format
 msgid "Refusing to sign '{path}', file exists in both {dir1} and {dir2} folder."
-msgstr ""
+msgstr "{dir1} と {dir2} のどちらにもファイルが存在するため、'{path}'への署名は拒否されました。"
 
 #: ../fdroidserver/verify.py
 msgid "Remove source tarball and any APKs if successfully verified."
@@ -1694,7 +1694,7 @@ msgstr "テストモード - 既に出力が存在する場合でも、一時デ
 
 #: ../fdroidserver/index.py
 msgid "The \"qrcode\" Python package is not installed (e.g. apt-get install python3-qrcode)!"
-msgstr ""
+msgstr "\"qrcode\"のPythonパッケージが未導入です( 例えば apt-get install python3-qrcode します)！"
 
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
 #: ../fdroidserver/update.py
@@ -2589,7 +2589,7 @@ msgstr "{name}「{section}/icons/{path}」がありません！「config.yml」�
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "{path1} is a duplicate of {path2}, remove one!"
-msgstr ""
+msgstr "{path1} は {path2} と重複しています、片方を除外してください！"
 
 #: ../fdroidserver/import_subcommand.py
 #, python-brace-format
