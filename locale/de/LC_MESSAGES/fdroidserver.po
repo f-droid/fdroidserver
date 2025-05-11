@@ -13,7 +13,7 @@
 # TobiGr <tobigr@mail.de>, 2021.
 # FW <weblate.scordium@slmail.me>, 2021.
 # fossdd <fossdd@tutanota.com>, 2021.
-# Ceeee <marius.romanus@gmx.de>, 2021.
+# Ceeee <marius.romanus@gmx.de>, 2021, 2025.
 # C. Rüdinger <Mail-an-CR@web.de>, 2021, 2022.
 # VfBFan <drop0815@posteo.de>, 2021, 2023, 2024, 2025.
 # Roman Leo <roman.leo@gmx.de>, 2021.
@@ -28,7 +28,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2025-03-25 11:36+0100\n"
 "PO-Revision-Date: 2025-03-26 10:00+0000\n"
-"Last-Translator: VfBFan <drop0815@posteo.de>\n"
+"Last-Translator: Ceeee <marius.romanus@gmx.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/f-droid/fdroidserver/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -2528,8 +2528,8 @@ msgstr "ja"
 #, python-brace-format
 msgid "{0} app, {1} key aliases"
 msgid_plural "{0} apps, {1} key aliases"
-msgstr[0] "{0} app, {1} Schlüsselaliase"
-msgstr[1] "{0} apps, {1} Schlüsselaliase"
+msgstr[0] "{0} App, {1} Schlüssel-Aliase"
+msgstr[1] "{0} Apps, {1} Schlüssel-Aliase"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
