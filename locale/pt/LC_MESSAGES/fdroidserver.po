@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: fdroidserver 1.1-680-ge1d3de71\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2025-03-25 11:36+0100\n"
-"PO-Revision-Date: 2025-03-02 21:32+0000\n"
+"PO-Revision-Date: 2025-04-06 16:45+0000\n"
 "Last-Translator: ssantos <ssantos@web.de>\n"
 "Language-Team: Portuguese <https://hosted.weblate.org/projects/f-droid/fdroidserver/pt/>\n"
 "Language: pt\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.10.3-dev\n"
+"X-Generator: Weblate 5.11-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -44,7 +44,7 @@ msgstr "\"%s/\" não tem ficheiro de metadados correspondente!"
 
 #: ../fdroidserver/index.py
 msgid "\"isPrimary\" key should not be added to mirrors!"
-msgstr ""
+msgstr "A chave \"isPrimary\" não deve ser adicionada em espelhos!"
 
 #: ../fdroidserver/index.py
 #, python-brace-format
@@ -483,9 +483,9 @@ msgid "Creating \"{path}\" for configuring s3cmd."
 msgstr "Criando \"{path}\" para configurar s3cmd."
 
 #: ../fdroidserver/common.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Creating empty {config_file}"
-msgstr "A ler '{config_file}'"
+msgstr "A criar '{config_file}' vazio"
 
 #: ../fdroidserver/publish.py
 msgid "Creating log directory"
@@ -655,12 +655,12 @@ msgstr "ERRO: {key} em {path} não é \"arquivo\" ou \"repositório\"!"
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "ERROR: {key} not a valid key!"
-msgstr ""
+msgstr "ERRO: {key} não é uma chave válida!"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "ERROR: {key}'s value should be of type {t}!"
-msgstr ""
+msgstr "ERRO: o valor de {key} deve ser do tipo {t}!"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
@@ -687,9 +687,9 @@ msgid "Environment variable {var} from {configname} is not set!"
 msgstr "A variável de ambiente {var} de {configname} não está definida!"
 
 #: ../fdroidserver/common.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Environment variable {{env: {var}}} is not set!"
-msgstr "A variável de ambiente {var} de {configname} não está definida!"
+msgstr "A variável de ambiente {{env: {var} não está definida!"
 
 #: ../fdroidserver/deploy.py
 msgid "Error deploying 'github_releases', {} not present. (You might need to run `fdroid update` first.)"
@@ -931,9 +931,9 @@ msgid "Ignoring bad element in manifest: %s"
 msgstr "A ignorar o elemento mau no manifesto: %s"
 
 #: ../fdroidserver/common.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Ignoring deprecated {oldfile}, use {newfile}!"
-msgstr "{oldfile} está obsoleto, use {newfile}"
+msgstr "A ignorar {oldfile} obsoleto, use {newfile}!"
 
 #: ../fdroidserver/index.py
 msgid "Ignoring package without metadata: "
@@ -1141,7 +1141,7 @@ msgstr "Profundidade máxima de recursão no ficheiro ZIP atingida: %s"
 #: ../fdroidserver/index.py
 #, python-brace-format
 msgid "Mirror config for {url} contains \"isPrimary\" key!"
-msgstr ""
+msgstr "A configuração de espelho de {url} contém a chave \"isPrimary\"!"
 
 #: ../fdroidserver/mirror.py
 msgid "Mirror the full repo and archive, all file types."
@@ -1308,7 +1308,7 @@ msgstr "Somente PNG e JPEG são suportados para gráficos, encontrado: {path}"
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
 #: ../fdroidserver/common.py
 msgid "Only accepts a single key \"env\""
-msgstr ""
+msgstr "Aceita apenas uma única chave \"env\""
 
 #: ../fdroidserver/checkupdates.py
 msgid "Only process apps with auto-updates"
@@ -1469,7 +1469,7 @@ msgstr "Atualizar e armazenar as regras e assinaturas do scanner da rede no cach
 #: ../fdroidserver/publish.py
 #, python-brace-format
 msgid "Refusing to sign '{path}', file exists in both {dir1} and {dir2} folder."
-msgstr ""
+msgstr "Recuso assinar '{path}', o ficheiro existe nas pastas {dir1} e {dir2}."
 
 #: ../fdroidserver/verify.py
 msgid "Remove source tarball and any APKs if successfully verified."
@@ -1697,7 +1697,7 @@ msgstr "Modo de teste - ponha a saída apenas no diretório tmp e sempre compile
 
 #: ../fdroidserver/index.py
 msgid "The \"qrcode\" Python package is not installed (e.g. apt-get install python3-qrcode)!"
-msgstr ""
+msgstr "O pacote Python \"qrcode\" não está instalado (por exemplo, apt-get install python3-qrcode)!"
 
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
 #: ../fdroidserver/update.py
@@ -2595,7 +2595,7 @@ msgstr "{name} \"{section}/icons/{path}\" não existe! Corrija-o no \"config.yml
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "{path1} is a duplicate of {path2}, remove one!"
-msgstr ""
+msgstr "{path1} é uma duplicata de {path2}, remova uma!"
 
 #: ../fdroidserver/import_subcommand.py
 #, python-brace-format

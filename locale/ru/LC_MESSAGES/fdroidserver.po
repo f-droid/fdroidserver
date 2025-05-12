@@ -21,15 +21,15 @@ msgstr ""
 "Project-Id-Version: fdroidserver 1.0.0-95-gd7af22b\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2025-03-25 11:36+0100\n"
-"PO-Revision-Date: 2025-01-25 15:42+0000\n"
-"Last-Translator: Golubev Alexander <fatzer2@gmail.com>\n"
+"PO-Revision-Date: 2025-03-27 19:35+0000\n"
+"Last-Translator: Andrey <andrey@mailbox.org>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/f-droid/fdroidserver/ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 5.10-dev\n"
+"X-Generator: Weblate 5.11-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -495,9 +495,9 @@ msgid "Creating \"{path}\" for configuring s3cmd."
 msgstr "Создание \"{path}\" для конфигурации s3cmd."
 
 #: ../fdroidserver/common.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Creating empty {config_file}"
-msgstr "Чтение '{config_file}'"
+msgstr "Создание пустого '{config_file}'"
 
 #: ../fdroidserver/publish.py
 msgid "Creating log directory"
@@ -667,7 +667,7 @@ msgstr "ОШИБКА: {key} в {path} должен быть или \"archive\", 
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "ERROR: {key} not a valid key!"
-msgstr ""
+msgstr "ОШИБКА: {key} недействительный ключ!"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
