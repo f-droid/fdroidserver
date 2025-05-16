@@ -3470,3 +3470,53 @@ class UnsafePermissionsTest(SetUpTearDownMixin, unittest.TestCase):
             fdroidserver.common.read_config()
             self.assertTrue('unsafe' not in lw.output[0])
             self.assertEqual(1, len(lw.output))
+
+
+class GetHeadCommitIdTest(unittest.TestCase):
+    """Test and compare two methods of getting the commit ID."""
+
+    def setUp(self):
+        self._td = mkdtemp()
+        self.testdir = self._td.name
+        os.chdir(self.testdir)
+        logging.getLogger('git.cmd').setLevel(logging.INFO)
+
+    def tearDown(self):
+        os.chdir(basedir)
+        self._td.cleanup()
+
+    @unittest.skipUnless((basedir.parent / '.git').exists(), 'Needs a working git repo')
+    def test_get_head_commit_id_compare(self):
+        """Run on this git repo to get some real world noise in there."""
+        git_dir = basedir.parent
+        self.assertIsNotNone(fdroidserver.common.get_head_commit_id(git_dir))
+
+    def test_get_head_commit_id_error_bare_repo(self):
+        """Error because it is an empty, bare git repo."""
+        git_repo = git.Repo.init(self.testdir)
+        self.assertIsNone(fdroidserver.common.get_head_commit_id(git_repo))
+
+    def test_get_head_commit_id_error_no_repo(self):
+        """Error because there is no .git/ dir."""
+        with self.assertLogs('root', level=logging.DEBUG):
+            self.assertIsNone(fdroidserver.common.get_head_commit_id(self.testdir))
+
+    def test_get_head_commit_id_detached_and_branch(self):
+        """Fetching commit ID must work from detached HEADs and branches."""
+        git_repo = git.Repo.init(self.testdir)
+        Path('README').write_text('this is just a test')
+        git_repo.git.add(all=True)
+        git_repo.index.commit("add README")
+        Path('LICENSE').write_text('free!')
+        git_repo.git.add(all=True)
+        git_repo.index.commit("add LICENSE")
+        self.assertIsNotNone(fdroidserver.common.get_head_commit_id(git_repo))
+        # detached HEAD
+        git_repo.git.checkout('HEAD^')
+        self.assertIsNotNone(fdroidserver.common.get_head_commit_id(git_repo))
+        # on a branch with a new commits
+        git_repo.git.checkout('test', b=True)
+        Path('foo.py').write_text('print("code!")')
+        git_repo.git.add(all=True)
+        git_repo.index.commit("add code")
+        self.assertIsNotNone(fdroidserver.common.get_head_commit_id(git_repo))
