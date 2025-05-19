@@ -237,7 +237,7 @@ v_all=${plugin_v[@]}
 
 # Earliest file takes priority
 # Last key takes priority if there are duplicates (matching java.util.Properties)
-for f in {.,..}/gradle/wrapper/gradle-wrapper.properties; do
+for f in {.,..,../..}/gradle/wrapper/gradle-wrapper.properties; do
     [[ -f $f ]] || continue
     while IFS='' read -r line || [ -n "$line" ]; do
         line=$(printf "$line" | tr -d '\r') # strip Windows linefeeds
