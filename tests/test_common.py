@@ -2468,7 +2468,7 @@ class CommonTest(SetUpTearDownMixin, unittest.TestCase):
         fdroidserver.common.fill_config_defaults(config)
         build = fdroidserver.metadata.Build()
         with self.assertRaises(TypeError):
-            fdroidserver.common.set_FDroidPopen_env(build)
+            fdroidserver.common.set_FDroidPopen_env(build=build)
 
     @mock.patch.dict(os.environ, clear=True)
     def test_ndk_paths_in_config_must_be_strings(self):
@@ -2480,7 +2480,7 @@ class CommonTest(SetUpTearDownMixin, unittest.TestCase):
         build.ndk = 'r21d'
         os.environ['PATH'] = '/usr/bin:/usr/sbin'
         with self.assertRaises(TypeError):
-            fdroidserver.common.set_FDroidPopen_env(build)
+            fdroidserver.common.set_FDroidPopen_env(build=build)
 
     @mock.patch.dict(os.environ, clear=True)
     def test_FDroidPopen_envs_paths_can_be_pathlib(self):
@@ -2567,7 +2567,7 @@ class CommonTest(SetUpTearDownMixin, unittest.TestCase):
 
         with mock.patch.dict(os.environ, clear=True):
             os.environ['PATH'] = '/usr/bin:/usr/sbin'
-            fdroidserver.common.set_FDroidPopen_env(build)
+            fdroidserver.common.set_FDroidPopen_env(build=build)
             self.assertNotIn('', os.getenv('PATH').split(os.pathsep))
 
     def test_is_repo_file(self):
@@ -2992,6 +2992,53 @@ class CommonTest(SetUpTearDownMixin, unittest.TestCase):
         mirrors = fdroidserver.common.FDROIDORG_MIRRORS
         for mirror in fdroidserver.common.append_filename_to_mirrors(filename, mirrors):
             self.assertTrue(mirror['url'].endswith('/' + filename))
+
+    def test_get_source_date_epoch(self):
+        git_repo = git.Repo.init(self.testdir)
+        Path('README').write_text('file to commit')
+        git_repo.git.add(all=True)
+        git_repo.index.commit("README")
+        self.assertEqual(
+            git_repo.git.log(n=1, pretty='%ct'),
+            fdroidserver.common.get_source_date_epoch(self.testdir),
+        )
+
+    def test_get_source_date_epoch_no_scm(self):
+        self.assertIsNone(fdroidserver.common.get_source_date_epoch(self.testdir))
+
+    def test_get_source_date_epoch_not_git(self):
+        """Test when build_dir is not a git repo, e.g. hg, svn, etc."""
+        appid = 'com.example'
+        build_dir = Path(self.testdir) / 'build' / appid
+        fdroiddata = build_dir.parent.parent
+        (fdroiddata / 'metadata').mkdir()
+        build_dir.mkdir(parents=True)
+        os.chdir(build_dir)
+        git_repo = git.Repo.init(fdroiddata)  # fdroiddata is always a git repo
+        with (fdroiddata / f'metadata/{appid}.yml').open('w') as fp:
+            fp.write('AutoName: Example App\n')
+        git_repo.git.add(all=True)
+        git_repo.index.commit("update README")
+        self.assertEqual(
+            git.repo.Repo(fdroiddata).git.log(n=1, pretty='%ct'),
+            fdroidserver.common.get_source_date_epoch(build_dir),
+        )
+
+    @mock.patch.dict(os.environ, {'PATH': os.getenv('PATH')}, clear=True)
+    def test_set_FDroidPopen_env_with_app(self):
+        """Test SOURCE_DATE_EPOCH in FDroidPopen when build_dir is a git repo."""
+        os.chdir(self.testdir)
+        app = fdroidserver.metadata.App()
+        app.id = 'com.example'
+        build_dir = Path(self.testdir) / 'build' / app.id
+        git_repo = git.Repo.init(build_dir)
+        Path('README').write_text('file to commit')
+        git_repo.git.add(all=True)
+        now = datetime.now(timezone.utc)
+        git_repo.index.commit("README", commit_date=now)
+        fdroidserver.common.set_FDroidPopen_env(app)
+        p = fdroidserver.common.FDroidPopen(['printenv', 'SOURCE_DATE_EPOCH'])
+        self.assertEqual(int(p.output), int(now.timestamp()))
 
 
 APKS_WITH_JAR_SIGNATURES = (

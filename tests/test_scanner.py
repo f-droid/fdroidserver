@@ -350,6 +350,8 @@ class ScannerTest(unittest.TestCase):
                 with mock.patch(
                     'fdroidserver.common.get_apk_id',
                     return_value=(app.id, build.versionCode, build.versionName),
+                ), mock.patch(
+                    'fdroidserver.common.get_source_date_epoch', lambda f: '1234567890'
                 ):
                     with mock.patch(
                         'fdroidserver.common.is_debuggable_or_testOnly',

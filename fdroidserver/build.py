@@ -479,7 +479,7 @@ def build_local(app, build, vcs, build_dir, output_dir, log_dir, srclib_dir, ext
             logging.critical("Android NDK '%s' is not a directory!" % ndk_path)
             raise FDroidException()
 
-    common.set_FDroidPopen_env(build)
+    common.set_FDroidPopen_env(app, build)
 
     # create ..._toolsversion.log when running in builder vm
     if onserver:

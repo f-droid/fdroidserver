@@ -1201,6 +1201,25 @@ def get_src_tarball_name(appid, versionCode):
     return f"{appid}_{versionCode}_src.tar.gz"
 
 
+def get_source_date_epoch(build_dir):
+    """Return timestamp suitable for the SOURCE_DATE_EPOCH variable.
+
+    https://reproducible-builds.org/docs/source-date-epoch/
+
+    """
+    try:
+        return git.repo.Repo(build_dir).git.log(n=1, pretty='%ct')
+    except Exception as e:
+        logging.warning('%s: %s', e.__class__.__name__, build_dir)
+        build_dir = Path(build_dir)
+        appid = build_dir.name
+        data_dir = build_dir.parent.parent
+        metadata_file = f'metadata/{appid}.yml'
+        if (data_dir / '.git').exists() and (data_dir / metadata_file).exists():
+            repo = git.repo.Repo(data_dir)
+            return repo.git.log('-n1', '--pretty=%ct', '--', metadata_file)
+
+
 def get_build_dir(app):
     """Get the dir that this app will be built in."""
     if app.RepoType == 'srclib':
@@ -3202,12 +3221,16 @@ def remove_signing_keys(build_dir):
                     logging.info("Cleaned %s of keysigning configs at %s" % (propfile, path))
 
 
-def set_FDroidPopen_env(build=None):
+def set_FDroidPopen_env(app=None, build=None):
     """Set up the environment variables for the build environment.
 
     There is only a weak standard, the variables used by gradle, so also set
     up the most commonly used environment variables for SDK and NDK.  Also, if
     there is no locale set, this will set the locale (e.g. LANG) to en_US.UTF-8.
+
+    If an App instance is provided, then the SOURCE_DATE_EPOCH
+    environment variable will be set based on that app's source repo.
+
     """
     global env, orig_path
 
@@ -3230,6 +3253,8 @@ def set_FDroidPopen_env(build=None):
     if missinglocale:
         env['LANG'] = 'en_US.UTF-8'
 
+    if app:
+        env['SOURCE_DATE_EPOCH'] = get_source_date_epoch(get_build_dir(app))
     if build is not None:
         path = build.ndk_path()
         paths = orig_path.split(os.pathsep)
