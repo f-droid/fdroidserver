@@ -436,6 +436,24 @@ class UpdateTest(unittest.TestCase):
         locales = sorted(apps['org.fdroid.ci.test.app']['localized'])
         self.assertEqual(correctlocales, locales)
 
+    def test_insert_triple_t_1_graphics(self):
+        packageName = 'de.wivewa.dialer'
+        shutil.copytree(basedir / 'triple-t-1-graphics', self.testdir, dirs_exist_ok=True)
+        os.chdir(self.testdir)
+
+        config = dict()
+        fdroidserver.common.fill_config_defaults(config)
+        fdroidserver.common.config = config
+        fdroidserver.update.config = config
+
+        apps = fdroidserver.metadata.read_metadata()
+        fdroidserver.update.copy_triple_t_store_metadata(apps)
+
+        os.chdir(os.path.join('repo', packageName))
+        self.assertTrue(os.path.exists(os.path.join('en-US', 'icon.png')))
+        self.assertTrue(os.path.exists(os.path.join('en-US', 'featureGraphic.png')))
+        self.assertTrue(os.path.exists(os.path.join('en-US', 'phoneScreenshots', '1.png')))
+
     def test_insert_triple_t_2_metadata(self):
         packageName = 'org.piwigo.android'
         shutil.copytree(basedir / 'triple-t-2', self.testdir, dirs_exist_ok=True)
