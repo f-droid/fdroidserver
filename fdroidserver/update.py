@@ -1114,6 +1114,9 @@ def copy_triple_t_store_metadata(apps):
                             repofilename = os.path.basename(f)
                             if segments[-2] == 'listing':
                                 locale = segments[-3]
+                                if dirname in GRAPHIC_NAMES:
+                                    repofilename = dirname + '.' + extension
+                                    dirname = ''
                             elif segments[-4] == 'listings':  # v2.x
                                 locale = segments[-3]
                                 if dirname in tt_graphic_names:

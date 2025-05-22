@@ -1,0 +1,25 @@
+Categories:
+  - Phone & SMS
+  - System
+License: GPL-3.0-only
+AuthorEmail: welefon@jolo.software
+SourceCode: https://codeberg.org/wivewa/wivewa-dialer-android
+IssueTracker: https://codeberg.org/wivewa/wivewa-dialer-android/issues
+
+AutoName: Welefon
+
+RepoType: git
+Repo: https://codeberg.org/wivewa/wivewa-dialer-android.git
+
+Builds:
+  - versionName: 1.7.0
+    versionCode: 13
+    commit: 3550193fa6b6f7836876f2ca9bf5819a34eef404
+    subdir: app
+    gradle:
+      - yes
+
+AutoUpdateMode: Version
+UpdateCheckMode: Tags
+CurrentVersion: 1.7.0
+CurrentVersionCode: 13

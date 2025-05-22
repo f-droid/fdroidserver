@@ -868,6 +868,10 @@ include tests/test_signatures.py
 include tests/test_signindex.py
 include tests/test_update.py
 include tests/test_vcs.py
+include tests/triple-t-1-graphics/build/de.wivewa.dialer/app/src/main/play/en-US/listing/featureGraphic/play_store_feature_graphic.png
+include tests/triple-t-1-graphics/build/de.wivewa.dialer/app/src/main/play/en-US/listing/icon/icon.png
+include tests/triple-t-1-graphics/build/de.wivewa.dialer/app/src/main/play/en-US/listing/phoneScreenshots/1.png
+include tests/triple-t-1-graphics/metadata/de.wivewa.dialer.yml
 include tests/triple-t-2/build/org.piwigo.android/app/.gitignore
 include tests/triple-t-2/build/org.piwigo.android/app/build.gradle
 include tests/triple-t-2/build/org.piwigo.android/app/src/debug/res/values/constants.xml
