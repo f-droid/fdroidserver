@@ -696,3 +696,12 @@ class CheckupdatesTest(unittest.TestCase):
         push.assert_called_once()
         sys_exit.assert_called_once()
         self.assertIn(appid, git_repo.heads)
+
+    def test_push_commits_invalid_branch_name(self):
+        git_repo, origin_repo, upstream_repo = self._get_test_git_repos()
+        for remote in git_repo.remotes:
+            remote.push(git_repo.active_branch)
+        self.assertEqual(git_repo.head, upstream_repo.head)
+        self.assertEqual(origin_repo.head, upstream_repo.head)
+        # pretend that checkupdates ran but didn't create any new commits
+        fdroidserver.checkupdates.push_commits('')

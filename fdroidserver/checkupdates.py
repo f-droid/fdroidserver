@@ -769,6 +769,10 @@ def push_commits(branch_name='checkupdates'):
     * https://docs.gitlab.com/ee/user/project/push_options.html
 
     """
+    if branch_name != "checkupdates":
+        if callable(getattr(git.SymbolicReference, "_check_ref_name_valid", None)):
+            git.SymbolicReference._check_ref_name_valid(branch_name)
+
     git_repo = git.Repo.init('.')
     upstream_main = get_upstream_main_branch(git_repo)
     files = set()
@@ -782,6 +786,10 @@ def push_commits(branch_name='checkupdates'):
             branch_name = m.group(1)  # appid
     if not files:
         return
+
+    # https://git-scm.com/docs/git-check-ref-format Git refname can't end with .lock
+    if branch_name.endswith(".lock"):
+        branch_name = f"{branch_name}_"
 
     remote = git_repo.remotes.origin
     if branch_name in remote.refs:
@@ -809,7 +817,7 @@ def push_commits(branch_name='checkupdates'):
     progress = git.RemoteProgress()
 
     pushinfos = remote.push(
-        f"{branch_name}:{branch_name}",
+        f"HEAD:refs/heads/{branch_name}",
         progress=progress,
         force=True,
         set_upstream=True,
