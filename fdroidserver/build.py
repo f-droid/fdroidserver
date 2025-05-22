@@ -541,13 +541,13 @@ def build_local(app, build, vcs, build_dir, output_dir, log_dir, srclib_dir, ext
         if build.preassemble:
             gradletasks += build.preassemble
 
-        flavours = build.gradle
-        if flavours == ['yes']:
-            flavours = []
+        flavors = build.gradle
+        if flavors == ['yes']:
+            flavors = []
 
-        flavours_cmd = ''.join([transform_first_char(flav, str.upper) for flav in flavours])
+        flavors_cmd = ''.join([transform_first_char(flav, str.upper) for flav in flavors])
 
-        gradletasks += ['assemble' + flavours_cmd + 'Release']
+        gradletasks += ['assemble' + flavors_cmd + 'Release']
 
         cmd = [config['gradle']]
         if build.gradleprops:
@@ -763,11 +763,11 @@ def build_local(app, build, vcs, build_dir, output_dir, log_dir, srclib_dir, ext
             # really old path
             os.path.join(root_dir, 'build', 'apk'),
             ]
-        # If we build with gradle flavours with gradle plugin >= 3.0 the APK will be in
-        # a subdirectory corresponding to the flavour command used, but with different
+        # If we build with gradle flavors with gradle plugin >= 3.0 the APK will be in
+        # a subdirectory corresponding to the flavor command used, but with different
         # capitalization.
-        if flavours_cmd:
-            apk_dirs.append(os.path.join(root_dir, 'build', 'outputs', 'apk', transform_first_char(flavours_cmd, str.lower), 'release'))
+        if flavors_cmd:
+            apk_dirs.append(os.path.join(root_dir, 'build', 'outputs', 'apk', transform_first_char(flavors_cmd, str.lower), 'release'))
         for apks_dir in apk_dirs:
             for apkglob in ['*-release-unsigned.apk', '*-unsigned.apk', '*.apk']:
                 apks = glob.glob(os.path.join(apks_dir, apkglob))

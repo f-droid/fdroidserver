@@ -270,9 +270,10 @@ def get_gradle_compile_commands(build):
         'runtimeOnly',
     ]
     buildTypes = ['', 'release']
-    flavors = ['']
     if build.gradle and build.gradle != ['yes']:
-        flavors += build.gradle
+        flavors = common.calculate_gradle_flavor_combination(build.gradle)
+    else:
+        flavors = ['']
 
     return [''.join(c) for c in itertools.product(flavors, buildTypes, compileCommands)]
 

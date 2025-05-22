@@ -3040,6 +3040,11 @@ class CommonTest(SetUpTearDownMixin, unittest.TestCase):
         p = fdroidserver.common.FDroidPopen(['printenv', 'SOURCE_DATE_EPOCH'])
         self.assertEqual(int(p.output), int(now.timestamp()))
 
+    def test_calculate_gradle_flavor_combination(self):
+        flavors = ['aa', 'BB', 'δδ']
+        combinations = ['aaBBΔδ', 'aaBB', 'aaΔδ', 'aa', 'BBΔδ', 'BB', 'δδ', '']
+        self.assertEqual(fdroidserver.common.calculate_gradle_flavor_combination(flavors), combinations)
+
 
 APKS_WITH_JAR_SIGNATURES = (
     (

@@ -107,12 +107,16 @@ class ScannerTest(unittest.TestCase):
             ('source-files/eu.siacs.conversations/build.gradle', 'free', 21),
             ('source-files/org.mozilla.rocket/app/build.gradle', 'focus', 40),
             ('source-files/com.jens.automation2/app/build.gradle', 'fdroidFlavor', 5),
+            ('source-files/flavor.test/build.gradle', ['foss', 'prod'], 7),
         ]
 
         for f, flavor, count in test_files:
             i = 0
             build = fdroidserver.metadata.Build()
-            build.gradle = [flavor]
+            if isinstance(flavor, list):
+                build.gradle = flavor
+            else:
+                build.gradle = [flavor]
             regexs = fdroidserver.scanner.get_gradle_compile_commands_without_catalog(
                 build
             )
