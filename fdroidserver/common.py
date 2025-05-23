@@ -1355,6 +1355,7 @@ def getvcs(vcstype, remote, local):
     """
     if vcstype == 'git':
         return vcs_git(remote, local)
+    logging.warning(_("RepoType {type} is deprecated, please switch to git.").format(type=vcstype))
     if vcstype == 'git-svn':
         return vcs_gitsvn(remote, local)
     if vcstype == 'hg':
