@@ -469,6 +469,8 @@ macOS:
 
 gradle:
   image: debian:bookworm-slim
+  rules:
+    - if: "$PERSONAL_ACCESS_TOKEN"
   <<: *apt-template
   variables:
     GIT_DEPTH: 1000
@@ -485,12 +487,15 @@ gradle:
           python3-requests
     # if this is a merge request fork, then only check if relevant files changed
     - if [ "$CI_PROJECT_NAMESPACE" != "fdroid" ]; then
+        set -x;
         git fetch https://gitlab.com/fdroid/fdroidserver.git;
         for f in `git diff --name-only --diff-filter=d FETCH_HEAD...HEAD`; do
-           test "$f" == "makebuildserver" && export CHANGED="yes";
-           test "$f" == "gradlew-fdroid" && export CHANGED="yes";
+           test "$f" == "makebuildserver" && export CHANGED="$f $CHANGED";
+           test "$f" == "gradlew-fdroid" && export CHANGED="$f $CHANGED";
         done;
         test -z "$CHANGED" && exit;
+        echo $CHANGED;
+        set +x;
       fi
     - ./tests/gradle-release-checksums.py
 

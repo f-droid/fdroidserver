@@ -152,11 +152,6 @@ def _should_file_be_generated(path, magic_string):
 
 
 def make_website(apps, repodir, repodict):
-    _ignored, repo_pubkey_fingerprint = extract_pubkey()
-    repo_pubkey_fingerprint_stripped = repo_pubkey_fingerprint.replace(" ", "")
-    link = repodict["address"]
-    link_fingerprinted = ('{link}?fingerprint={fingerprint}'
-                          .format(link=link, fingerprint=repo_pubkey_fingerprint_stripped))
     # do not change this string, as it will break updates for files with older versions of this string
     autogenerate_comment = "auto-generated - fdroid index updates will overwrite this file"
 
@@ -168,6 +163,13 @@ def make_website(apps, repodir, repodict):
 
     if _should_file_be_generated(html_file, autogenerate_comment):
         import qrcode
+
+        _ignored, repo_pubkey_fingerprint = extract_pubkey()
+        repo_pubkey_fingerprint_stripped = repo_pubkey_fingerprint.replace(" ", "")
+        link = repodict["address"]
+        link_fingerprinted = '{link}?fingerprint={fingerprint}'.format(
+            link=link, fingerprint=repo_pubkey_fingerprint_stripped
+        )
         qrcode.make(link_fingerprinted).save(os.path.join(repodir, "index.png"))
         with open(html_file, 'w') as f:
             name = repodict["name"]
