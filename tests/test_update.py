@@ -12,6 +12,7 @@ import shutil
 import string
 import subprocess
 import sys
+import time
 import unittest
 import yaml
 import zipfile
@@ -1369,14 +1370,65 @@ class UpdateTest(unittest.TestCase):
     def test_strip_and_copy_image(self):
         in_file = basedir / 'metadata/info.guardianproject.urzip/en-US/images/icon.png'
         out_file = os.path.join(self.testdir, 'icon.png')
-        fdroidserver.update._strip_and_copy_image(in_file, out_file)
+        with self.assertLogs(level=logging.DEBUG):
+            fdroidserver.update._strip_and_copy_image(in_file, out_file)
         self.assertTrue(os.path.exists(out_file))
 
     def test_strip_and_copy_image_bad_filename(self):
         in_file = basedir / 'corrupt-featureGraphic.png'
         out_file = os.path.join(self.testdir, 'corrupt-featureGraphic.png')
-        fdroidserver.update._strip_and_copy_image(in_file, out_file)
+        with self.assertLogs(level=logging.DEBUG):
+            fdroidserver.update._strip_and_copy_image(in_file, out_file)
         self.assertFalse(os.path.exists(out_file))
+
+    def test_strip_and_copy_image_unchanged(self):
+        in_file = basedir / 'metadata/info.guardianproject.urzip/en-US/images/icon.png'
+        out_file = os.path.join(self.testdir, 'icon.png')
+        shutil.copy2(in_file, out_file)
+        ctime = os.path.getctime(out_file)
+        delta = 0.01
+        time.sleep(delta)  # ensure reliable failure if file isn't preserved
+        with self.assertLogs(level=logging.DEBUG):  # suppress log output
+            fdroidserver.update._strip_and_copy_image(in_file, out_file)
+        self.assertAlmostEqual(ctime, os.path.getctime(out_file), delta=delta)
+
+    def test_strip_and_copy_image_in_file_ctime_changed(self):
+        out_file = os.path.join(self.testdir, 'icon.png')
+        with open(out_file, 'w') as fp:
+            fp.write('to be replaced')
+        size = os.path.getsize(out_file)
+        delta = 0.01
+        time.sleep(delta)  # ensure reliable failure when testing ctime
+        src_file = basedir / 'metadata/info.guardianproject.urzip/en-US/images/icon.png'
+        in_file = os.path.join(self.testdir, 'in-icon.png')
+        shutil.copy(src_file, in_file)
+        time.sleep(delta)  # ensure reliable failure when testing ctime
+        with self.assertLogs(level=logging.DEBUG):  # suppress log output
+            fdroidserver.update._strip_and_copy_image(in_file, out_file)
+        self.assertNotEqual(size, os.path.getsize(out_file))
+        self.assertNotAlmostEqual(
+            os.path.getctime(in_file), os.path.getctime(out_file), delta=delta
+        )
+        # _strip_and_copy_image syncs mtime from in_file to out_file
+        self.assertAlmostEqual(
+            os.path.getmtime(in_file), os.path.getmtime(out_file), delta=delta
+        )
+
+    def test_strip_and_copy_image_in_file_mtime_changed(self):
+        in_file = basedir / 'metadata/info.guardianproject.urzip/en-US/images/icon.png'
+        out_file = os.path.join(self.testdir, 'icon.png')
+        shutil.copy(in_file, out_file)
+        os.utime(out_file, (12345, 12345))  # set atime/mtime to something old
+        with self.assertLogs(level=logging.DEBUG):  # suppress log output
+            fdroidserver.update._strip_and_copy_image(in_file, out_file)
+        delta = 0.01
+        self.assertNotAlmostEqual(
+            os.path.getctime(in_file), os.path.getctime(out_file), delta=delta
+        )
+        # _strip_and_copy_image syncs mtime from in_file to out_file
+        self.assertAlmostEqual(
+            os.path.getmtime(in_file), os.path.getmtime(out_file), delta=delta
+        )
 
     def test_create_metadata_from_template_empty_keys(self):
         apk = {'packageName': 'rocks.janicerand'}
