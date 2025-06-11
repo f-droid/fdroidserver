@@ -2815,6 +2815,46 @@ class CommonTest(SetUpTearDownMixin, unittest.TestCase):
         )
         self.assertEqual(['en-US'], list(categories['GuardianProject']['name'].keys()))
 
+    def test_load_localized_config_copy_icon(self):
+        os.chdir(self.testdir)
+        os.mkdir('config')
+        Path('config/categories.yml').write_text('System:\n  icon: system.png')
+        source_file = 'config/system.png'
+        Path(source_file).write_text('placeholder')
+        time.sleep(0.01)  # ensure reliable failure if mtime isn't preserved
+        fdroidserver.common.load_localized_config(CATEGORIES_CONFIG_NAME, 'repo')
+        dest_file = f'repo/icons/{os.path.basename(source_file)}'
+        self.assertEqual(os.path.getsize(source_file), os.path.getsize(dest_file))
+        self.assertEqual(os.path.getmtime(source_file), os.path.getmtime(dest_file))
+
+    def test_load_localized_config_copy_unchanged(self):
+        """The destination file should only change if the source file did."""
+        os.chdir(self.testdir)
+        os.mkdir('config')
+        Path('config/categories.yml').write_text('System:\n  icon: system.png')
+        source_file = 'config/system.png'
+        Path(source_file).write_text('placeholder')
+        fdroidserver.common.load_localized_config(CATEGORIES_CONFIG_NAME, 'repo')
+        delta = 0.01
+        time.sleep(delta)  # ensure reliable failure if file isn't preserved
+        fdroidserver.common.load_localized_config(CATEGORIES_CONFIG_NAME, 'repo')
+        dest_file = f'repo/icons/{os.path.basename(source_file)}'
+        self.assertAlmostEqual(
+            os.path.getctime(source_file), os.path.getctime(dest_file), delta=delta
+        )
+
+    def test_load_localized_config_copy_over_dest(self):
+        os.chdir(self.testdir)
+        os.mkdir('config')
+        Path('config/categories.yml').write_text('System:\n  icon: system.png')
+        source_file = Path('config/system.png')
+        dest_file = Path(f'repo/icons/{os.path.basename(source_file)}')
+        source_file.write_text('placeholder')
+        dest_file.parent.mkdir(parents=True)
+        dest_file.write_text('different contents')
+        fdroidserver.common.load_localized_config(CATEGORIES_CONFIG_NAME, 'repo')
+        self.assertEqual(os.path.getsize(source_file), os.path.getsize(dest_file))
+
     def test_load_localized_config_0_file(self):
         os.chdir(self.testdir)
         os.mkdir('config')
