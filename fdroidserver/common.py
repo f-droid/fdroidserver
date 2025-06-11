@@ -546,6 +546,60 @@ def config_type_check(path, data):
         )
 
 
+class _Config(dict):
+    def __init__(self, default={}):
+        super(_Config, self).__init__(default)
+        self.loaded = {}
+
+    def lazyget(self, key):
+        if key not in self.loaded:
+            value = super(_Config, self).__getitem__(key)
+
+            if key == 'serverwebroot':
+                roots = parse_list_of_dicts(value)
+                rootlist = []
+                for d in roots:
+                    # since this is used with rsync, where trailing slashes have
+                    # meaning, ensure there is always a trailing slash
+                    rootstr = d.get('url')
+                    if not rootstr:
+                        logging.error('serverwebroot: has blank value!')
+                        continue
+                    if rootstr[-1] != '/':
+                        rootstr += '/'
+                    d['url'] = rootstr.replace('//', '/')
+                    rootlist.append(d)
+                self.loaded[key] = rootlist
+
+            elif key == 'servergitmirrors':
+                self.loaded[key] = parse_list_of_dicts(value)
+
+            elif isinstance(value, dict) and 'env' in value and len(value) == 1:
+                var = value['env']
+                if var in os.environ:
+                    self.loaded[key] = os.getenv(var)
+                else:
+                    logging.error(
+                        _(
+                            'Environment variable {var} from {configname} is not set!'
+                        ).format(var=value['env'], configname=key)
+                    )
+                    self.loaded[key] = None
+            else:
+                self.loaded[key] = value
+
+        return self.loaded[key]
+
+    def __getitem__(self, key):
+        return self.lazyget(key)
+
+    def get(self, key, default=None, /):
+        try:
+            return self.lazyget(key)
+        except KeyError:
+            return default
+
+
 def read_config():
     """Read the repository config.
 
@@ -601,25 +655,7 @@ def read_config():
 
     fill_config_defaults(config)
 
-    if 'serverwebroot' in config:
-        roots = parse_list_of_dicts(config['serverwebroot'])
-        rootlist = []
-        for d in roots:
-            # since this is used with rsync, where trailing slashes have
-            # meaning, ensure there is always a trailing slash
-            rootstr = d.get('url')
-            if not rootstr:
-                logging.error('serverwebroot: has blank value!')
-                continue
-            if rootstr[-1] != '/':
-                rootstr += '/'
-            d['url'] = rootstr.replace('//', '/')
-            rootlist.append(d)
-        config['serverwebroot'] = rootlist
-
     if 'servergitmirrors' in config:
-        config['servergitmirrors'] = parse_list_of_dicts(config['servergitmirrors'])
-
         limit = config['git_mirror_size_limit']
         config['git_mirror_size_limit'] = parse_human_readable_size(limit)
 
@@ -642,15 +678,7 @@ def read_config():
             continue
         elif isinstance(dictvalue, dict):
             for k, v in dictvalue.items():
-                if k == 'env':
-                    env = os.getenv(v)
-                    if env:
-                        config[configname] = env
-                    else:
-                        confignames_to_delete.add(configname)
-                        logging.error(_('Environment variable {var} from {configname} is not set!')
-                                      .format(var=k, configname=configname))
-                else:
+                if k != 'env':
                     confignames_to_delete.add(configname)
                     logging.error(_('Unknown entry {key} in {configname}')
                                   .format(key=k, configname=configname))
@@ -670,6 +698,7 @@ def read_config():
                 )
             )
 
+    config = _Config(config)
     return config
 
 

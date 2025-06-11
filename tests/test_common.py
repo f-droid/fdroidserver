@@ -2030,6 +2030,49 @@ class CommonTest(SetUpTearDownMixin, unittest.TestCase):
         self.assertEqual('/usr/lib/jvm/java-8-openjdk', config['java_paths']['8'])
 
     @mock.patch.dict(os.environ, {'PATH': os.getenv('PATH')}, clear=True)
+    def test_config_lazy_load_env_vars(self):
+        """Test the environment variables in config.yml is lazy loaded.
+
+        It shouldn't throw errors when read the config if the environment variables are
+        not set. It should throw errors when the variables are get from the config.
+        """
+        os.chdir(self.testdir)
+        fdroidserver.common.write_config_file(
+            textwrap.dedent(
+                """
+                serverwebroot: {env: serverwebroot}
+                servergitmirrors:
+                  - url: {env: mirror1}
+                  - url: {env: mirror2}
+                keypass: {env: keypass}
+                keystorepass: {env: keystorepass}
+                """
+            )
+        )
+        with self.assertNoLogs(level=logging.ERROR):
+            config = fdroidserver.common.read_config()
+
+        # KeyError should be raised if a key is not in the config.yml
+        with self.assertRaises(KeyError):
+            config['gpghome']
+
+        self.assertEqual(config.get('gpghome', 'gpg'), 'gpg')
+        os.environ.update({key: f"{key}supersecret" for key in ["serverwebroot", "mirror1", "mirror2", "keystorepass"]})
+        self.assertEqual(config['keystorepass'], 'keystorepasssupersecret')
+        self.assertEqual(config['serverwebroot'], [{'url': 'serverwebrootsupersecret/'}])
+        self.assertEqual(config['servergitmirrors'], [{'url': 'mirror1supersecret'}, {'url': 'mirror2supersecret'}])
+
+    @mock.patch.dict(os.environ, {'PATH': os.getenv('PATH')}, clear=True)
+    def test_config_lazy_load_env_vars_not_set(self):
+        os.chdir(self.testdir)
+        fdroidserver.common.write_config_file('keypass: {env: keypass}')
+        fdroidserver.common.read_config()
+        with self.assertLogs(level=logging.ERROR) as lw:
+            fdroidserver.common.config['keypass']
+            self.assertTrue('is not set' in lw.output[0])
+            self.assertEqual(1, len(lw.output))
+
+    @mock.patch.dict(os.environ, {'PATH': os.getenv('PATH')}, clear=True)
     def test_test_sdk_exists_fails_on_bad_sdk_path(self):
         config = {'sdk_path': 'nothinghere'}
         self.assertFalse(fdroidserver.common.test_sdk_exists(config))
@@ -3465,7 +3508,7 @@ class ConfigOptionsScopeTest(unittest.TestCase):
         self.assertIsNone(fdroidserver.common.config)
         config = fdroidserver.common.read_config()
         self.assertIsNotNone(fdroidserver.common.config)
-        self.assertEqual(dict, type(config))
+        self.assertTrue(isinstance(config, dict))
         self.assertEqual(config, fdroidserver.common.config)
 
     def test_get_config_global(self):
@@ -3475,7 +3518,7 @@ class ConfigOptionsScopeTest(unittest.TestCase):
         self.assertIsNone(fdroidserver.common.config)
         c = fdroidserver.common.read_config()
         self.assertIsNotNone(fdroidserver.common.config)
-        self.assertEqual(dict, type(c))
+        self.assertTrue(isinstance(c, dict))
         self.assertEqual(c, fdroidserver.common.config)
         self.assertTrue(
             'config' not in vars() and 'config' not in globals(),
@@ -3513,14 +3556,6 @@ class UnsafePermissionsTest(SetUpTearDownMixin, unittest.TestCase):
         with self.assertLogs(level=logging.WARNING) as lw:
             fdroidserver.common.read_config()
             self.assertTrue('unsafe' in lw.output[0])
-            self.assertEqual(1, len(lw.output))
-
-    @mock.patch.dict(os.environ, {'PATH': os.getenv('PATH')}, clear=True)
-    def test_config_perm_unset_env_no_warning(self):
-        fdroidserver.common.write_config_file('keypass: {env: keypass}')
-        with self.assertLogs(level=logging.WARNING) as lw:
-            fdroidserver.common.read_config()
-            self.assertTrue('unsafe' not in lw.output[0])
             self.assertEqual(1, len(lw.output))
 
 
