@@ -800,14 +800,18 @@ def _strip_and_copy_image(in_file, outpath):
     It is not used at all in the F-Droid ecosystem, so its much safer
     just to remove it entirely.
 
-    This uses size+mtime to check for a new file since this process
-    actually modifies the resulting file to strip out the EXIF.
+    This only uses ctime/mtime to check for a new file since this
+    process actually modifies the resulting file to strip out the EXIF.
+    Therefore, whenever the file needs to be stripped, it will have a
+    newer ctime and most likely a different size.  The mtime is copied
+    from the source to the destination, so it can be the same.
 
     outpath can be path to either a file or dir.  The dir that outpath
     refers to must exist before calling this.
 
     Potential source of Python code to strip JPEGs without dependencies:
     http://www.fetidcascade.com/public/minimal_exif_writer.py
+
     """
     logging.debug('copying %s %s', in_file, outpath)
 
@@ -823,12 +827,11 @@ def _strip_and_copy_image(in_file, outpath):
     else:
         out_file = outpath
 
-    if os.path.exists(out_file):
-        in_stat = os.stat(in_file)
-        out_stat = os.stat(out_file)
-        if in_stat.st_size == out_stat.st_size \
-           and in_stat.st_mtime == out_stat.st_mtime:
-            return
+    if os.path.exists(out_file) and (
+        os.path.getmtime(in_file) <= os.path.getmtime(out_file)
+        and os.path.getctime(in_file) <= os.path.getctime(out_file)
+    ):
+        return
 
     extension = common.get_extension(in_file)[1]
     if extension == 'png':
