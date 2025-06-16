@@ -1913,6 +1913,41 @@ class UpdateTest(unittest.TestCase):
             index['repo'][CATEGORIES_CONFIG_NAME],
         )
 
+    def test_categories_with_only_icon_defined(self):
+        """If cateogories.yml only includes the icon, the name should be added."""
+        os.chdir(self.testdir)
+        os.mkdir('config')
+        os.mkdir('metadata')
+        os.mkdir('repo')
+        fdroidserver.common.write_config_file(
+            'repo_pubkey: ffffffffffffffffffffffffffffffffffffffff\n'
+        )
+        testvalue = 'Time'
+        Path('config/time.png').write_text('placeholder')
+        Path('config/categories.yml').write_text(testvalue + ': {icon: time.png}')
+
+        testapk = os.path.join('repo', 'com.politedroid_6.apk')
+        shutil.copy(basedir / testapk, testapk)
+        Path('metadata/com.politedroid.yml').write_text(f'Categories: [{testvalue}]')
+
+        with mock.patch('sys.argv', ['fdroid update', '--delete-unknown', '--nosign']):
+            fdroidserver.update.main()
+        with open('repo/index-v2.json') as fp:
+            index = json.load(fp)
+        self.assertEqual(
+            {
+                'icon': {
+                    'en-US': {
+                        'name': '/icons/time.png',
+                        'sha256': '4097889236a2af26c293033feb964c4cf118c0224e0d063fec0a89e9d0569ef2',
+                        'size': 11,
+                    }
+                },
+                'name': {'en-US': testvalue},
+            },
+            index['repo'][CATEGORIES_CONFIG_NAME][testvalue],
+        )
+
     def test_auto_defined_categories_two_apps(self):
         """Repos that don't define categories in config/ should use auto-generated."""
         os.chdir(self.testdir)
