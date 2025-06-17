@@ -325,14 +325,13 @@ def main():
         if 'CI_PROJECT_PATH' in os.environ and 'CI_PROJECT_URL' in os.environ:
             # we are in GitLab CI
             repo_git_base = os.getenv('CI_PROJECT_PATH') + NIGHTLY
-            clone_url = os.getenv('CI_PROJECT_URL') + NIGHTLY
+            base_url = f"{os.getenv('CI_PROJECT_URL')}{NIGHTLY}"
+            clone_url = f'{base_url}.git'  # avoid redirects while cloning
             repo_base = get_repo_base_url(
-                clone_url, repo_git_base, force_type='gitlab.com'
+                base_url, repo_git_base, force_type='gitlab.com'
             )
-            servergitmirror = 'git@' + urlparse(clone_url).netloc + ':' + repo_git_base
-            deploy_key_url = (
-                f'{clone_url}/-/settings/repository#js-deploy-keys-settings'
-            )
+            servergitmirror = f'git@{urlparse(base_url).netloc}:{repo_git_base}.git'
+            deploy_key_url = f'{base_url}/-/settings/repository#js-deploy-keys-settings'
             git_user_name = os.getenv('GITLAB_USER_NAME')
             git_user_email = os.getenv('GITLAB_USER_EMAIL')
         elif 'TRAVIS_REPO_SLUG' in os.environ:

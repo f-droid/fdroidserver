@@ -359,7 +359,7 @@ class NightlyTest(unittest.TestCase):
             'repo_keyalias': 'androiddebugkey',
             'repo_name': 'fdroid/test-nightly',
             'repo_url': 'https://gitlab.com/fdroid/test-nightly/-/raw/master/fdroid/repo',
-            'servergitmirrors': [{"url": 'git@gitlab.com:fdroid/test-nightly'}],
+            'servergitmirrors': [{"url": 'git@gitlab.com:fdroid/test-nightly.git'}],
         }
         with open(common.CONFIG_FILE) as fp:
             config = yaml.safe_load(fp)
