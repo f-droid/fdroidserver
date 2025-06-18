@@ -837,6 +837,30 @@ class TestServerGitMirrors(unittest.TestCase):
             remote_file = f"fdroid/{self.repo_section}/{filename}"
             self.assertTrue((Path(verify_repo.working_tree_dir) / remote_file).exists())
 
+    def test_update_servergitmirrors_with_existing_git_repo(self):
+        """Confirm it works with clones done manually or with nightly."""
+        fdroidserver.deploy.update_servergitmirrors(
+            fdroidserver.common.config["servergitmirrors"], self.repo_section
+        )
+
+        # now delete the local setup, clone the remote, and add a new APK
+        git_mirror = os.path.join(self.testdir, 'git-mirror')
+        shutil.rmtree(git_mirror)
+        self.remote_git_repo.clone(git_mirror)
+        new_fake_apk = 'Sym2.apk'
+        self.fake_files.append(new_fake_apk)
+        (Path(self.repo_section) / new_fake_apk).write_text('a new fake APK')
+
+        fdroidserver.deploy.update_servergitmirrors(
+            fdroidserver.common.config["servergitmirrors"], self.repo_section
+        )
+
+        verify_repo = self.remote_git_repo.clone(Path(self.testdir) / 'verify')
+        self.assertIsNotNone(verify_repo.working_tree_dir)
+        for filename in self.fake_files:
+            remote_file = f"fdroid/{self.repo_section}/{filename}"
+            self.assertTrue((Path(verify_repo.working_tree_dir) / remote_file).exists())
+
     def test_update_servergitmirrors_in_index_only_mode(self):
         fdroidserver.common.config["servergitmirrors"][0]["index_only"] = True
 
