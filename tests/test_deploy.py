@@ -805,59 +805,52 @@ class TestServerGitMirrors(unittest.TestCase):
         fdroidserver.common.get_config()
         fdroidserver.common.config["servergitmirrors"] = [{"url": str(remote_repo)}]
 
+        self.repo_section = 'repo'
+        repo = Path(self.repo_section)
+        repo.mkdir()
+        self.fake_apk = 'Sym.apk'
+        self.fake_files = fdroidserver.common.INDEX_FILES + [self.fake_apk]
+        for filename in self.fake_files:
+            fake_file = repo / filename
+            with fake_file.open('w') as fp:
+                fp.write('not a real one, but has the right filename')
+
     def tearDown(self):
         fdroidserver.common.config = None
         fdroidserver.common.options = None
         self._td.cleanup()
 
     def test_update_servergitmirrors(self):
-        repo_section = 'repo'
-        repo = Path('repo')
-        repo.mkdir(parents=True)
-        fake_apk = 'Sym.apk'
-        fake_files = fdroidserver.common.INDEX_FILES + [fake_apk]
-        for filename in fake_files:
-            fake_file = repo / filename
-            with fake_file.open('w') as fp:
-                fp.write('not a real one, but has the right filename')
-
         fdroidserver.deploy.update_servergitmirrors(
-            fdroidserver.common.config["servergitmirrors"], repo_section
+            fdroidserver.common.config["servergitmirrors"], self.repo_section
         )
 
         verify_repo = self.remote_git_repo.clone(Path(self.testdir) / 'verify')
         self.assertIsNotNone(verify_repo.working_tree_dir)
-        for filename in fake_files:
-            remote_file = f"fdroid/{repo_section}/{filename}"
+        for filename in self.fake_files:
+            remote_file = f"fdroid/{self.repo_section}/{filename}"
             self.assertTrue((Path(verify_repo.working_tree_dir) / remote_file).exists())
 
     def test_update_servergitmirrors_in_index_only_mode(self):
         fdroidserver.common.config["servergitmirrors"][0]["index_only"] = True
-        repo_section = 'repo'
-        repo = Path('repo')
-        repo.mkdir(parents=True)
-        fake_apk = 'Sym.apk'
-        fake_files = fdroidserver.common.INDEX_FILES + [fake_apk]
-        for filename in fake_files:
-            fake_file = repo / filename
-            with fake_file.open('w') as fp:
-                fp.write('not a real one, but has the right filename')
 
         fdroidserver.deploy.update_servergitmirrors(
-            fdroidserver.common.config["servergitmirrors"], repo_section
+            fdroidserver.common.config["servergitmirrors"], self.repo_section
         )
 
         verify_repo = self.remote_git_repo.clone(Path(self.testdir) / 'verify')
         self.assertIsNotNone(verify_repo.working_tree_dir)
         for filename in fdroidserver.common.INDEX_FILES:
-            remote_file = f"fdroid/{repo_section}/{filename}"
+            remote_file = f"fdroid/{self.repo_section}/{filename}"
             self.assertTrue((Path(verify_repo.working_tree_dir) / remote_file).exists())
 
         # Should not have the APK file
-        remote_file = f"fdroid/{repo_section}/{fake_apk}"
+        remote_file = f"fdroid/{self.repo_section}/{self.fake_apk}"
         self.assertFalse((Path(verify_repo.working_tree_dir) / remote_file).exists())
 
     def test_upload_to_servergitmirror_in_index_only_mode(self):
+        shutil.rmtree('repo')  # the class-wide test files are not used here
+
         repo_section = 'repo'
         local_git_repo_path = Path(self.testdir) / 'local'
         local_git_repo = git.Repo.init(
