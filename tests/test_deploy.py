@@ -26,6 +26,11 @@ def _mock_rclone_config_file(cmd, text):  # pylint: disable=unused-argument
 class DeployTest(unittest.TestCase):
     '''fdroidserver/deploy.py'''
 
+    @classmethod
+    def setUpClass(cls):
+        # suppress "WARNING:root:unsafe permissions on 'config.yml' (should be 0600)!"
+        os.chmod(os.path.join(basedir, fdroidserver.common.CONFIG_FILE), 0o600)
+
     def setUp(self):
         os.chdir(basedir)
         self._td = mkdtemp()
