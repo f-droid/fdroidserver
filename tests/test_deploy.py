@@ -826,15 +826,10 @@ class TestServerGitMirrors(unittest.TestCase):
         )
 
         verify_repo = self.remote_git_repo.clone(Path(self.testdir) / 'verify')
-
+        self.assertIsNotNone(verify_repo.working_tree_dir)
         for filename in fake_files:
             remote_file = f"fdroid/{repo_section}/{filename}"
-
-            self.assertIsNotNone(verify_repo.working_tree_dir)
-            if verify_repo.working_tree_dir is not None:
-                self.assertTrue(
-                    (Path(verify_repo.working_tree_dir) / remote_file).exists()
-                )
+            self.assertTrue((Path(verify_repo.working_tree_dir) / remote_file).exists())
 
     def test_update_servergitmirrors_in_index_only_mode(self):
         fdroidserver.common.config["servergitmirrors"][0]["index_only"] = True
@@ -853,22 +848,14 @@ class TestServerGitMirrors(unittest.TestCase):
         )
 
         verify_repo = self.remote_git_repo.clone(Path(self.testdir) / 'verify')
-
+        self.assertIsNotNone(verify_repo.working_tree_dir)
         for filename in fdroidserver.common.INDEX_FILES:
             remote_file = f"fdroid/{repo_section}/{filename}"
-
-            self.assertIsNotNone(verify_repo.working_tree_dir)
-            if verify_repo.working_tree_dir is not None:
-                self.assertTrue(
-                    (Path(verify_repo.working_tree_dir) / remote_file).exists()
-                )
+            self.assertTrue((Path(verify_repo.working_tree_dir) / remote_file).exists())
 
         # Should not have the APK file
         remote_file = f"fdroid/{repo_section}/{fake_apk}"
-        if verify_repo.working_tree_dir is not None:
-            self.assertFalse(
-                (Path(verify_repo.working_tree_dir) / remote_file).exists()
-            )
+        self.assertFalse((Path(verify_repo.working_tree_dir) / remote_file).exists())
 
     def test_upload_to_servergitmirror_in_index_only_mode(self):
         repo_section = 'repo'
@@ -903,22 +890,14 @@ class TestServerGitMirrors(unittest.TestCase):
         )
 
         verify_repo = self.remote_git_repo.clone(Path(self.testdir) / 'verify')
-
+        self.assertIsNotNone(verify_repo.working_tree_dir)
         for filename in fdroidserver.common.INDEX_FILES:
             remote_file = f"fdroid/{repo_section}/{filename}"
-
-            self.assertIsNotNone(verify_repo.working_tree_dir)
-            if verify_repo.working_tree_dir is not None:
-                self.assertTrue(
-                    (Path(verify_repo.working_tree_dir) / remote_file).exists()
-                )
+            self.assertTrue((Path(verify_repo.working_tree_dir) / remote_file).exists())
 
         # Should not have the APK file
         remote_file = f"fdroid/{repo_section}/{fake_apk}"
-        if verify_repo.working_tree_dir is not None:
-            self.assertFalse(
-                (Path(verify_repo.working_tree_dir) / remote_file).exists()
-            )
+        self.assertFalse((Path(verify_repo.working_tree_dir) / remote_file).exists())
 
 
 class GitHubReleasesTest(unittest.TestCase):
