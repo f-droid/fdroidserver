@@ -780,7 +780,11 @@ class DeployTest(unittest.TestCase):
                 name, fdroidserver.deploy.REMOTE_HOSTNAME_REGEX.sub(r'\1', remote_url)
             )
 
-    def test_update_servergitmirrors(self):
+
+class TestServerGitMirrors(unittest.TestCase):
+    def setUp(self):
+        fdroidserver.deploy.USER_RCLONE_CONF = False
+
         # setup parameters for this test run
         fdroidserver.common.options = mock.Mock()
         fdroidserver.common.options.identity_file = None
@@ -788,20 +792,26 @@ class DeployTest(unittest.TestCase):
         fdroidserver.common.options.verbose = False
         fdroidserver.common.options.quiet = True
 
+        self._td = mkdtemp()
+        self.testdir = self._td.name
         os.chdir(self.testdir)
-
-        repo_section = 'repo'
-        initial_branch = fdroidserver.deploy.GIT_BRANCH
 
         remote_repo = Path(self.testdir) / 'remote'
         remote_repo.mkdir(parents=True)
-        remote_git_repo = git.Repo.init(
-            remote_repo, initial_branch=initial_branch, bare=True
+        self.remote_git_repo = git.Repo.init(
+            remote_repo, initial_branch=fdroidserver.deploy.GIT_BRANCH, bare=True
         )
+
         fdroidserver.common.get_config()
         fdroidserver.common.config["servergitmirrors"] = [{"url": str(remote_repo)}]
 
-        os.chdir(self.testdir)
+    def tearDown(self):
+        fdroidserver.common.config = None
+        fdroidserver.common.options = None
+        self._td.cleanup()
+
+    def test_update_servergitmirrors(self):
+        repo_section = 'repo'
         repo = Path('repo')
         repo.mkdir(parents=True)
         fake_apk = 'Sym.apk'
@@ -815,9 +825,7 @@ class DeployTest(unittest.TestCase):
             fdroidserver.common.config["servergitmirrors"], repo_section
         )
 
-        verify_repo = remote_git_repo.clone(
-            Path(self.testdir) / 'verify',
-        )
+        verify_repo = self.remote_git_repo.clone(Path(self.testdir) / 'verify')
 
         for filename in fake_files:
             remote_file = f"fdroid/{repo_section}/{filename}"
@@ -829,28 +837,8 @@ class DeployTest(unittest.TestCase):
                 )
 
     def test_update_servergitmirrors_in_index_only_mode(self):
-        # setup parameters for this test run
-        fdroidserver.common.options = mock.Mock()
-        fdroidserver.common.options.identity_file = None
-        fdroidserver.common.options.no_keep_git_mirror_archive = False
-        fdroidserver.common.options.verbose = False
-        fdroidserver.common.options.quiet = True
-
-        os.chdir(self.testdir)
-
+        fdroidserver.common.config["servergitmirrors"][0]["index_only"] = True
         repo_section = 'repo'
-        initial_branch = fdroidserver.deploy.GIT_BRANCH
-
-        remote_repo = Path(self.testdir) / 'remote'
-        remote_repo.mkdir(parents=True)
-        remote_git_repo = git.Repo.init(
-            remote_repo, initial_branch=initial_branch, bare=True
-        )
-        fdroidserver.common.config["servergitmirrors"] = [
-            {"url": str(remote_repo), "index_only": True}
-        ]
-
-        os.chdir(self.testdir)
         repo = Path('repo')
         repo.mkdir(parents=True)
         fake_apk = 'Sym.apk'
@@ -864,9 +852,7 @@ class DeployTest(unittest.TestCase):
             fdroidserver.common.config["servergitmirrors"], repo_section
         )
 
-        verify_repo = remote_git_repo.clone(
-            Path(self.testdir) / 'verify',
-        )
+        verify_repo = self.remote_git_repo.clone(Path(self.testdir) / 'verify')
 
         for filename in fdroidserver.common.INDEX_FILES:
             remote_file = f"fdroid/{repo_section}/{filename}"
@@ -885,22 +871,10 @@ class DeployTest(unittest.TestCase):
             )
 
     def test_upload_to_servergitmirror_in_index_only_mode(self):
-        # setup parameters for this test run
-        fdroidserver.common.options = mock.Mock()
-        fdroidserver.common.options.identity_file = None
-        fdroidserver.common.options.no_keep_git_mirror_archive = False
-        fdroidserver.common.options.verbose = False
-        fdroidserver.common.options.quiet = True
-        fdroidserver.common.options.identity_file = None
-
         repo_section = 'repo'
-        initial_branch = fdroidserver.deploy.GIT_BRANCH
-
-        os.chdir(self.testdir)
-
         local_git_repo_path = Path(self.testdir) / 'local'
         local_git_repo = git.Repo.init(
-            local_git_repo_path, initial_branch=initial_branch
+            local_git_repo_path, initial_branch=fdroidserver.deploy.GIT_BRANCH
         )
 
         fdroid_dir = local_git_repo_path / 'fdroid'
@@ -913,13 +887,7 @@ class DeployTest(unittest.TestCase):
             with fake_file.open('w') as fp:
                 fp.write('not a real one, but has the right filename')
 
-        # The remote repo must be a bare repo to allow being pushed to
-        remote_git_repo_dir = Path(self.testdir) / 'remote'
-        remote_git_repo = git.Repo.init(
-            remote_git_repo_dir, initial_branch=initial_branch, bare=True
-        )
-
-        mirror_config = {"url": str(remote_git_repo_dir), "index_only": True}
+        mirror_config = {"url": str(self.remote_git_repo.git_dir), "index_only": True}
         enabled_remotes = []
         ssh_cmd = 'ssh -oBatchMode=yes'
         fdroidserver.deploy.upload_to_servergitmirror(
@@ -934,9 +902,7 @@ class DeployTest(unittest.TestCase):
             progress=git.RemoteProgress(),
         )
 
-        verify_repo = remote_git_repo.clone(
-            Path(self.testdir) / 'verify',
-        )
+        verify_repo = self.remote_git_repo.clone(Path(self.testdir) / 'verify')
 
         for filename in fdroidserver.common.INDEX_FILES:
             remote_file = f"fdroid/{repo_section}/{filename}"
