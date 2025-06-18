@@ -177,7 +177,9 @@ def _ssh_key_from_debug_keystore(keystore: Optional[str] = None) -> str:
     return ssh_private_key_file
 
 
-def get_repo_base_url(clone_url: str, repo_git_base: str, force_type: Optional[str] = None) -> str:
+def get_repo_base_url(
+    clone_url: str, repo_git_base: str, force_type: Optional[str] = None
+) -> str:
     """Generate the base URL for the F-Droid repository.
 
     Parameters
@@ -324,19 +326,27 @@ def main():
             # we are in GitLab CI
             repo_git_base = os.getenv('CI_PROJECT_PATH') + NIGHTLY
             clone_url = os.getenv('CI_PROJECT_URL') + NIGHTLY
-            repo_base = get_repo_base_url(clone_url, repo_git_base, force_type='gitlab.com')
+            repo_base = get_repo_base_url(
+                clone_url, repo_git_base, force_type='gitlab.com'
+            )
             servergitmirror = 'git@' + urlparse(clone_url).netloc + ':' + repo_git_base
-            deploy_key_url = clone_url + '/-/settings/repository#js-deploy-keys-settings'
+            deploy_key_url = (
+                f'{clone_url}/-/settings/repository#js-deploy-keys-settings'
+            )
             git_user_name = os.getenv('GITLAB_USER_NAME')
             git_user_email = os.getenv('GITLAB_USER_EMAIL')
         elif 'TRAVIS_REPO_SLUG' in os.environ:
             # we are in Travis CI
             repo_git_base = os.getenv('TRAVIS_REPO_SLUG') + NIGHTLY
             clone_url = 'https://github.com/' + repo_git_base
-            repo_base = get_repo_base_url(clone_url, repo_git_base, force_type='github.com')
+            repo_base = get_repo_base_url(
+                clone_url, repo_git_base, force_type='github.com'
+            )
             servergitmirror = 'git@github.com:' + repo_git_base
-            deploy_key_url = ('https://github.com/' + repo_git_base + '/settings/keys'
-                              + '\nhttps://developer.github.com/v3/guides/managing-deploy-keys/#deploy-keys')
+            deploy_key_url = (
+                f'https://github.com/{repo_git_base}/settings/keys'
+                + '\nhttps://developer.github.com/v3/guides/managing-deploy-keys/#deploy-keys'
+            )
             git_user_name = repo_git_base
             git_user_email = os.getenv('USER') + '@' + platform.node()
         elif (
@@ -345,23 +355,35 @@ def main():
             and 'CIRCLE_PROJECT_REPONAME' in os.environ
         ):
             # we are in Circle CI
-            repo_git_base = (os.getenv('CIRCLE_PROJECT_USERNAME')
-                             + '/' + os.getenv('CIRCLE_PROJECT_REPONAME') + NIGHTLY)
+            repo_git_base = (
+                os.getenv('CIRCLE_PROJECT_USERNAME')
+                + '/'
+                + os.getenv('CIRCLE_PROJECT_REPONAME')
+                + NIGHTLY
+            )
             clone_url = os.getenv('CIRCLE_REPOSITORY_URL') + NIGHTLY
-            repo_base = get_repo_base_url(clone_url, repo_git_base, force_type='github.com')
+            repo_base = get_repo_base_url(
+                clone_url, repo_git_base, force_type='github.com'
+            )
             servergitmirror = 'git@' + urlparse(clone_url).netloc + ':' + repo_git_base
-            deploy_key_url = ('https://github.com/' + repo_git_base + '/settings/keys'
-                              + '\nhttps://developer.github.com/v3/guides/managing-deploy-keys/#deploy-keys')
+            deploy_key_url = (
+                f'https://github.com/{repo_git_base}/settings/keys'
+                + '\nhttps://developer.github.com/v3/guides/managing-deploy-keys/#deploy-keys'
+            )
             git_user_name = os.getenv('CIRCLE_USERNAME')
             git_user_email = git_user_name + '@' + platform.node()
         elif 'GITHUB_ACTIONS' in os.environ:
             # we are in Github actions
-            repo_git_base = (os.getenv('GITHUB_REPOSITORY') + NIGHTLY)
-            clone_url = (os.getenv('GITHUB_SERVER_URL') + '/' + repo_git_base)
-            repo_base = get_repo_base_url(clone_url, repo_git_base, force_type='github.com')
+            repo_git_base = os.getenv('GITHUB_REPOSITORY') + NIGHTLY
+            clone_url = os.getenv('GITHUB_SERVER_URL') + '/' + repo_git_base
+            repo_base = get_repo_base_url(
+                clone_url, repo_git_base, force_type='github.com'
+            )
             servergitmirror = 'git@' + urlparse(clone_url).netloc + ':' + repo_git_base
-            deploy_key_url = ('https://github.com/' + repo_git_base + '/settings/keys'
-                              + '\nhttps://developer.github.com/v3/guides/managing-deploy-keys/#deploy-keys')
+            deploy_key_url = (
+                f'https://github.com/{repo_git_base}/settings/keys'
+                + '\nhttps://developer.github.com/v3/guides/managing-deploy-keys/#deploy-keys'
+            )
             git_user_name = os.getenv('GITHUB_ACTOR')
             git_user_email = git_user_name + '@' + platform.node()
         else:
@@ -395,9 +417,13 @@ You can use it with the [F-Droid](https://f-droid.org/) Android app.
 
 [![{repo_url}]({repo_url}/icons/icon.png)](https://fdroid.link/#{repo_url})
 
-Last updated: {date}'''.format(repo_git_base=repo_git_base,
-                               repo_url=repo_url,
-                               date=datetime.datetime.now(datetime.timezone.utc).strftime('%Y-%m-%d %H:%M:%S UTC'))
+Last updated: {date}'''.format(
+            repo_git_base=repo_git_base,
+            repo_url=repo_url,
+            date=datetime.datetime.now(datetime.timezone.utc).strftime(
+                '%Y-%m-%d %H:%M:%S UTC'
+            ),
+        )
         with open(readme_path, 'w') as fp:
             fp.write(readme)
         mirror_git_repo.git.add(all=True)
@@ -458,10 +484,9 @@ Last updated: {date}'''.format(repo_git_base=repo_git_base,
         common.assert_config_keystore(config)
 
         logging.debug(
-            _('Run over {cibase} to find -debug.apk. and skip repo_basedir {repo_basedir}').format(
-                cibase=cibase,
-                repo_basedir=repo_basedir
-            )
+            _(
+                'Run over {cibase} to find -debug.apk. and skip repo_basedir {repo_basedir}'
+            ).format(cibase=cibase, repo_basedir=repo_basedir)
         )
 
         for root, dirs, files in os.walk(cibase):
@@ -549,10 +574,16 @@ Last updated: {date}'''.format(repo_git_base=repo_git_base,
             if not os.path.exists(androiddir):
                 os.mkdir(androiddir)
                 logging.info(_('created {path}').format(path=androiddir))
-            logging.error(_('{path} does not exist!  Create it by running:').format(path=options.keystore)
-                          + '\n    keytool -genkey -v -keystore ' + options.keystore + ' -storepass android \\'
-                          + '\n     -alias androiddebugkey -keypass android -keyalg RSA -keysize 2048 -validity 10000 \\'
-                          + '\n     -dname "CN=Android Debug,O=Android,C=US"')
+            logging.error(
+                _('{path} does not exist!  Create it by running:').format(
+                    path=options.keystore
+                )
+                + '\n    keytool -genkey -v -keystore '
+                + options.keystore
+                + ' -storepass android \\'
+                + '\n     -alias androiddebugkey -keypass android -keyalg RSA -keysize 2048 -validity 10000 \\'
+                + '\n     -dname "CN=Android Debug,O=Android,C=US"'
+            )
             sys.exit(1)
         ssh_dir = os.path.join(os.getenv('HOME'), '.ssh')
         privkey = _ssh_key_from_debug_keystore(options.keystore)
