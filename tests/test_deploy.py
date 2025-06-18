@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import configparser
+import logging
 import os
 import shutil
 import tempfile
@@ -86,17 +87,17 @@ class DeployTest(unittest.TestCase):
         self.assertTrue(dest_apk1.is_file())
 
     def test_update_serverwebroots_url_does_not_end_with_fdroid(self):
-        with self.assertRaises(SystemExit):
+        with self.assertRaises(SystemExit), self.assertLogs(level=logging.ERROR):
             fdroidserver.deploy.update_serverwebroots([{'url': 'url'}], 'repo')
 
     def test_update_serverwebroots_bad_ssh_url(self):
-        with self.assertRaises(SystemExit):
+        with self.assertRaises(SystemExit), self.assertLogs(level=logging.ERROR):
             fdroidserver.deploy.update_serverwebroots(
                 [{'url': 'f@b.ar::/path/to/fdroid'}], 'repo'
             )
 
     def test_update_serverwebroots_unsupported_ssh_url(self):
-        with self.assertRaises(SystemExit):
+        with self.assertRaises(SystemExit), self.assertLogs(level=logging.ERROR):
             fdroidserver.deploy.update_serverwebroots([{'url': 'ssh://nope'}], 'repo')
 
     @unittest.skipUnless(shutil.which('rclone'), 'requires rclone')
