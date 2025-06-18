@@ -21,6 +21,7 @@ import base64
 import datetime
 import git
 import hashlib
+import inspect
 import logging
 import os
 import paramiko
@@ -176,7 +177,9 @@ def _ssh_key_from_debug_keystore(keystore: Optional[str] = None) -> str:
     return ssh_private_key_file
 
 
-def get_repo_base_url(clone_url: str, repo_git_base: str, force_type: Optional[str] = None) -> str:
+def get_repo_base_url(
+    clone_url: str, repo_git_base: str, force_type: Optional[str] = None
+) -> str:
     """Generate the base URL for the F-Droid repository.
 
     Parameters
@@ -201,6 +204,41 @@ def get_repo_base_url(clone_url: str, repo_git_base: str, force_type: Optional[s
         return 'https://raw.githubusercontent.com/%s/master/fdroid' % repo_git_base
     print(_('ERROR: unsupported git host "%s", patches welcome!') % force_type)
     sys.exit(1)
+
+
+def clone_git_repo(clone_url, git_mirror_path):
+    """Clone a git repo into the given path, failing if a password is required.
+
+    If GitPython's safe mode is present, this will use that.  Otherwise,
+    this includes a very limited version of the safe mode just to ensure
+    this won't hang on password prompts.
+
+    https://github.com/gitpython-developers/GitPython/pull/2029
+
+    """
+    logging.debug(_('cloning {url}').format(url=clone_url))
+    try:
+        sig = inspect.signature(git.Repo.clone_from)
+        if 'safe' in sig.parameters:
+            git.Repo.clone_from(clone_url, git_mirror_path, safe=True)
+        else:
+            git.Repo.clone_from(
+                clone_url,
+                git_mirror_path,
+                env={
+                    'GIT_ASKPASS': '/bin/true',
+                    'SSH_ASKPASS': '/bin/true',
+                    'GIT_USERNAME': 'u',
+                    'GIT_PASSWORD': 'p',
+                    'GIT_HTTP_USERNAME': 'u',
+                    'GIT_HTTP_PASSWORD': 'p',
+                    'GIT_SSH': '/bin/false',  # for git < 2.3
+                    'GIT_TERMINAL_PROMPT': '0',
+                },
+            )
+    except git.exc.GitCommandError as e:
+        logging.warning(_('WARNING: only public git repos are supported!'))
+        raise VCSException(f'git clone {clone_url} failed:', str(e)) from e
 
 
 def main():
@@ -288,19 +326,27 @@ def main():
             # we are in GitLab CI
             repo_git_base = os.getenv('CI_PROJECT_PATH') + NIGHTLY
             clone_url = os.getenv('CI_PROJECT_URL') + NIGHTLY
-            repo_base = get_repo_base_url(clone_url, repo_git_base, force_type='gitlab.com')
+            repo_base = get_repo_base_url(
+                clone_url, repo_git_base, force_type='gitlab.com'
+            )
             servergitmirror = 'git@' + urlparse(clone_url).netloc + ':' + repo_git_base
-            deploy_key_url = clone_url + '/-/settings/repository#js-deploy-keys-settings'
+            deploy_key_url = (
+                f'{clone_url}/-/settings/repository#js-deploy-keys-settings'
+            )
             git_user_name = os.getenv('GITLAB_USER_NAME')
             git_user_email = os.getenv('GITLAB_USER_EMAIL')
         elif 'TRAVIS_REPO_SLUG' in os.environ:
             # we are in Travis CI
             repo_git_base = os.getenv('TRAVIS_REPO_SLUG') + NIGHTLY
             clone_url = 'https://github.com/' + repo_git_base
-            repo_base = get_repo_base_url(clone_url, repo_git_base, force_type='github.com')
+            repo_base = get_repo_base_url(
+                clone_url, repo_git_base, force_type='github.com'
+            )
             servergitmirror = 'git@github.com:' + repo_git_base
-            deploy_key_url = ('https://github.com/' + repo_git_base + '/settings/keys'
-                              + '\nhttps://developer.github.com/v3/guides/managing-deploy-keys/#deploy-keys')
+            deploy_key_url = (
+                f'https://github.com/{repo_git_base}/settings/keys'
+                + '\nhttps://developer.github.com/v3/guides/managing-deploy-keys/#deploy-keys'
+            )
             git_user_name = repo_git_base
             git_user_email = os.getenv('USER') + '@' + platform.node()
         elif (
@@ -309,23 +355,35 @@ def main():
             and 'CIRCLE_PROJECT_REPONAME' in os.environ
         ):
             # we are in Circle CI
-            repo_git_base = (os.getenv('CIRCLE_PROJECT_USERNAME')
-                             + '/' + os.getenv('CIRCLE_PROJECT_REPONAME') + NIGHTLY)
+            repo_git_base = (
+                os.getenv('CIRCLE_PROJECT_USERNAME')
+                + '/'
+                + os.getenv('CIRCLE_PROJECT_REPONAME')
+                + NIGHTLY
+            )
             clone_url = os.getenv('CIRCLE_REPOSITORY_URL') + NIGHTLY
-            repo_base = get_repo_base_url(clone_url, repo_git_base, force_type='github.com')
+            repo_base = get_repo_base_url(
+                clone_url, repo_git_base, force_type='github.com'
+            )
             servergitmirror = 'git@' + urlparse(clone_url).netloc + ':' + repo_git_base
-            deploy_key_url = ('https://github.com/' + repo_git_base + '/settings/keys'
-                              + '\nhttps://developer.github.com/v3/guides/managing-deploy-keys/#deploy-keys')
+            deploy_key_url = (
+                f'https://github.com/{repo_git_base}/settings/keys'
+                + '\nhttps://developer.github.com/v3/guides/managing-deploy-keys/#deploy-keys'
+            )
             git_user_name = os.getenv('CIRCLE_USERNAME')
             git_user_email = git_user_name + '@' + platform.node()
         elif 'GITHUB_ACTIONS' in os.environ:
             # we are in Github actions
-            repo_git_base = (os.getenv('GITHUB_REPOSITORY') + NIGHTLY)
-            clone_url = (os.getenv('GITHUB_SERVER_URL') + '/' + repo_git_base)
-            repo_base = get_repo_base_url(clone_url, repo_git_base, force_type='github.com')
+            repo_git_base = os.getenv('GITHUB_REPOSITORY') + NIGHTLY
+            clone_url = os.getenv('GITHUB_SERVER_URL') + '/' + repo_git_base
+            repo_base = get_repo_base_url(
+                clone_url, repo_git_base, force_type='github.com'
+            )
             servergitmirror = 'git@' + urlparse(clone_url).netloc + ':' + repo_git_base
-            deploy_key_url = ('https://github.com/' + repo_git_base + '/settings/keys'
-                              + '\nhttps://developer.github.com/v3/guides/managing-deploy-keys/#deploy-keys')
+            deploy_key_url = (
+                f'https://github.com/{repo_git_base}/settings/keys'
+                + '\nhttps://developer.github.com/v3/guides/managing-deploy-keys/#deploy-keys'
+            )
             git_user_name = os.getenv('GITHUB_ACTOR')
             git_user_email = git_user_name + '@' + platform.node()
         else:
@@ -338,12 +396,7 @@ def main():
         git_mirror_repodir = os.path.join(git_mirror_fdroiddir, 'repo')
         git_mirror_metadatadir = os.path.join(git_mirror_fdroiddir, 'metadata')
         if not os.path.isdir(git_mirror_repodir):
-            logging.debug(_('cloning {url}').format(url=clone_url))
-            vcs = common.getvcs('git', clone_url, git_mirror_path)
-            p = vcs.git(['clone', '--', vcs.remote, str(vcs.local)])
-            if p.returncode != 0:
-                print('WARNING: only public git repos are supported!')
-                raise VCSException('git clone %s failed:' % clone_url, p.output)
+            clone_git_repo(clone_url, git_mirror_repodir)
         if not os.path.isdir(git_mirror_repodir):
             os.makedirs(git_mirror_repodir, mode=0o755)
 
@@ -364,9 +417,13 @@ You can use it with the [F-Droid](https://f-droid.org/) Android app.
 
 [![{repo_url}]({repo_url}/icons/icon.png)](https://fdroid.link/#{repo_url})
 
-Last updated: {date}'''.format(repo_git_base=repo_git_base,
-                               repo_url=repo_url,
-                               date=datetime.datetime.now(datetime.timezone.utc).strftime('%Y-%m-%d %H:%M:%S UTC'))
+Last updated: {date}'''.format(
+            repo_git_base=repo_git_base,
+            repo_url=repo_url,
+            date=datetime.datetime.now(datetime.timezone.utc).strftime(
+                '%Y-%m-%d %H:%M:%S UTC'
+            ),
+        )
         with open(readme_path, 'w') as fp:
             fp.write(readme)
         mirror_git_repo.git.add(all=True)
@@ -427,10 +484,9 @@ Last updated: {date}'''.format(repo_git_base=repo_git_base,
         common.assert_config_keystore(config)
 
         logging.debug(
-            _('Run over {cibase} to find -debug.apk. and skip repo_basedir {repo_basedir}').format(
-                cibase=cibase,
-                repo_basedir=repo_basedir
-            )
+            _(
+                'Run over {cibase} to find -debug.apk. and skip repo_basedir {repo_basedir}'
+            ).format(cibase=cibase, repo_basedir=repo_basedir)
         )
 
         for root, dirs, files in os.walk(cibase):
@@ -518,10 +574,16 @@ Last updated: {date}'''.format(repo_git_base=repo_git_base,
             if not os.path.exists(androiddir):
                 os.mkdir(androiddir)
                 logging.info(_('created {path}').format(path=androiddir))
-            logging.error(_('{path} does not exist!  Create it by running:').format(path=options.keystore)
-                          + '\n    keytool -genkey -v -keystore ' + options.keystore + ' -storepass android \\'
-                          + '\n     -alias androiddebugkey -keypass android -keyalg RSA -keysize 2048 -validity 10000 \\'
-                          + '\n     -dname "CN=Android Debug,O=Android,C=US"')
+            logging.error(
+                _('{path} does not exist!  Create it by running:').format(
+                    path=options.keystore
+                )
+                + '\n    keytool -genkey -v -keystore '
+                + options.keystore
+                + ' -storepass android \\'
+                + '\n     -alias androiddebugkey -keypass android -keyalg RSA -keysize 2048 -validity 10000 \\'
+                + '\n     -dname "CN=Android Debug,O=Android,C=US"'
+            )
             sys.exit(1)
         ssh_dir = os.path.join(os.getenv('HOME'), '.ssh')
         privkey = _ssh_key_from_debug_keystore(options.keystore)
