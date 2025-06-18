@@ -6,21 +6,21 @@
 # Adrià Martín <adriamartinmor@gmail.com>, 2024.
 # unmes <jordi.guiu.pujols@gmail.com>, 2024.
 # Joan Pujolar <joan.pujolar@gmail.com>, 2024.
-# Ecron <ecron_89@hotmail.com>, 2024.
+# Ecron <ecron_89@hotmail.com>, 2024, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 2.1-273-g54e84d87\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2025-03-25 11:36+0100\n"
-"PO-Revision-Date: 2025-01-30 12:31+0000\n"
-"Last-Translator: pitroig <ona@riseup.net>\n"
+"PO-Revision-Date: 2025-05-16 16:36+0000\n"
+"Last-Translator: Ecron <ecron_89@hotmail.com>\n"
 "Language-Team: Catalan <https://hosted.weblate.org/projects/f-droid/fdroidserver/ca/>\n"
 "Language: ca\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.10-dev\n"
+"X-Generator: Weblate 5.12-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -46,7 +46,7 @@ msgstr "\"%s/\" no té cap fitxer de metadades coincidents!"
 
 #: ../fdroidserver/index.py
 msgid "\"isPrimary\" key should not be added to mirrors!"
-msgstr ""
+msgstr "La clau «isPrimary» no s'hauria d'afegir a les rèpliques!"
 
 #: ../fdroidserver/index.py
 #, python-brace-format
@@ -307,7 +307,7 @@ msgstr "Sí automàtic a totes les demandes."
 #: ../fdroidserver/index.py
 #, python-brace-format
 msgid "Bad entry type \"{mirrortype}\" in mirrors config: {mirror}"
-msgstr "Tipus d'entrada incorrecta \"{mirrortype}\" a la configuració de miralls: {mirror}"
+msgstr "Tipus d'entrada incorrecta «{mirrortype}» a la configuració de les rèpliques: {mirror}"
 
 #: ../fdroidserver/mirror.py
 msgid "Base URL to mirror, can include the index signing key using the query string: ?fingerprint="
@@ -485,9 +485,9 @@ msgid "Creating \"{path}\" for configuring s3cmd."
 msgstr "S'està creant \"{path}\" per configurar s3cmd."
 
 #: ../fdroidserver/common.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Creating empty {config_file}"
-msgstr "S'està llegint '{config_file}'"
+msgstr "S'està creant un «{config_file}» buit"
 
 #: ../fdroidserver/publish.py
 msgid "Creating log directory"
@@ -535,7 +535,7 @@ msgstr "S'està suprimint l'arxiu, el dipòsit és massa gran ({size} màxim {li
 #: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "Deleting git-mirror history, repo is too big ({size} max {limit})"
-msgstr "S'està suprimint l'historial del mirall de git, el dipòsit és massa gran ({size} màxim {limit})"
+msgstr "S'està suprimint l'historial git-mirror, el dipòsit és massa gran ({size}, màxim {limit})"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -601,7 +601,7 @@ msgstr "No usis les sumes de verificació \"rsync\""
 
 #: ../fdroidserver/install.py
 msgid "Download F-Droid.apk using mirrors that leak less to the network"
-msgstr "Baixeu l'F-Droid.apk amb els miralls que filtren menys dades a la xarxa"
+msgstr "Baixeu l'F-Droid.apk amb les rèpliques que filtren menys dades a la xarxa"
 
 #: ../fdroidserver/__main__.py
 msgid "Download complete mirrors of small repos"
@@ -657,12 +657,12 @@ msgstr "ERROR: {key} a {path} no és \"arxiu\" o \"dipòsit\"!"
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "ERROR: {key} not a valid key!"
-msgstr ""
+msgstr "ERROR: {key} no és una clau vàlida!"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "ERROR: {key}'s value should be of type {t}!"
-msgstr ""
+msgstr "ERROR: el valor de {key} hauria de ser del tipus {t}!"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
@@ -689,9 +689,9 @@ msgid "Environment variable {var} from {configname} is not set!"
 msgstr "La variable d'entorn {var} de {configname} no està establerta!"
 
 #: ../fdroidserver/common.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Environment variable {{env: {var}}} is not set!"
-msgstr "La variable d'entorn {var} de {configname} no està establerta!"
+msgstr "La variable d'entorn {{env: {var}}} no està establerta!"
 
 #: ../fdroidserver/deploy.py
 msgid "Error deploying 'github_releases', {} not present. (You might need to run `fdroid update` first.)"
@@ -933,9 +933,9 @@ msgid "Ignoring bad element in manifest: %s"
 msgstr "S'ignorarà l'element incorrecte al manifest: %s"
 
 #: ../fdroidserver/common.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Ignoring deprecated {oldfile}, use {newfile}!"
-msgstr "{oldfile} és obsolet, utilitzeu {newfile}"
+msgstr "S'ignorarà el {oldfile} obsolet, utilitzeu {newfile}!"
 
 #: ../fdroidserver/index.py
 msgid "Ignoring package without metadata: "
@@ -956,11 +956,11 @@ msgstr "Inclou els fitxers .asc de signatura PGP a la rèplica"
 
 #: ../fdroidserver/mirror.py
 msgid "Include the build logs in the mirror"
-msgstr "Inclou els registres de construcció al mirall"
+msgstr "Inclou els registres de construcció en la rèplica"
 
 #: ../fdroidserver/mirror.py
 msgid "Include the source tarballs in the mirror"
-msgstr "Inclou els arxius tar d'origen al mirall"
+msgstr "Inclou els fitxers tarball del codi font en la rèplica"
 
 #: ../fdroidserver/metadata.py
 #, python-format
@@ -1143,7 +1143,7 @@ msgstr "S'ha arribat a la profunditat màxima de recursivitat en el fitxer ZIP: 
 #: ../fdroidserver/index.py
 #, python-brace-format
 msgid "Mirror config for {url} contains \"isPrimary\" key!"
-msgstr ""
+msgstr "La configuració de la rèplica per a {url} conté la clau «isPrimary»!"
 
 #: ../fdroidserver/mirror.py
 msgid "Mirror the full repo and archive, all file types."
@@ -1287,7 +1287,7 @@ msgstr "El nom del paquet de l'OBB no coincideix amb un APK compatible:"
 
 #: ../fdroidserver/deploy.py
 msgid "Offline machine, skipping git mirror generation until `fdroid deploy`"
-msgstr "Màquina fora de línia, s'ometrà la generació del mirall git fins al `fdroid deploy`"
+msgstr "Màquina fora de línia, s'ometrà la generació de la rèplica git fins al `fdroid deploy`"
 
 #: ../fdroidserver/deploy.py
 msgid "One of the 'github_releases' config items is missing the 'packageNames' value. skipping ..."
@@ -1310,7 +1310,7 @@ msgstr "Només s'admeten PNG i JPEG per als gràfics, s'ha trobat: {path}"
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
 #: ../fdroidserver/common.py
 msgid "Only accepts a single key \"env\""
-msgstr ""
+msgstr "Només accepta una clau única «env»"
 
 #: ../fdroidserver/checkupdates.py
 msgid "Only process apps with auto-updates"
@@ -1471,7 +1471,7 @@ msgstr "Actualitza i cau les regles de l'escàner i les signatures de la xarxa"
 #: ../fdroidserver/publish.py
 #, python-brace-format
 msgid "Refusing to sign '{path}', file exists in both {dir1} and {dir2} folder."
-msgstr ""
+msgstr "No se signarà «{path}», el fitxer existeix a les dues carpetes {dir1} i {dir2}."
 
 #: ../fdroidserver/verify.py
 msgid "Remove source tarball and any APKs if successfully verified."
@@ -1699,7 +1699,7 @@ msgstr "Mode de prova: posa la sortida només al directori tmp, i sempre constru
 
 #: ../fdroidserver/index.py
 msgid "The \"qrcode\" Python package is not installed (e.g. apt-get install python3-qrcode)!"
-msgstr ""
+msgstr "No s'ha instal·lat el paquet de Python «qrcode» (p. ex. apt-get install python3-qrcode)!"
 
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
 #: ../fdroidserver/update.py
@@ -2322,12 +2322,12 @@ msgstr "local_copy_dir ha de ser directori, no un fitxer!"
 #: ../fdroidserver/index.py
 #, python-format
 msgid "mirror '%s' does not end with 'fdroid'!"
-msgstr "el mirall '%s' no acaba amb 'fdroid'!"
+msgstr "La rèplica «%s» no acaba amb «fdroid»!"
 
 #: ../fdroidserver/index.py
 #, python-brace-format
 msgid "mirrors set twice, in config.yml and {path}!"
-msgstr "miralls establerts dues vegades, a config.yml i {path}!"
+msgstr "rèpliques establertes dues vegades, a config.yml i {path}!"
 
 #: /usr/lib/python3.11/argparse.py
 msgid "mutually exclusive arguments must be optional"
@@ -2597,7 +2597,7 @@ msgstr "{name} \"{section}/icons/{path}\" no existeix! Comproveu \"config.yml\".
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "{path1} is a duplicate of {path2}, remove one!"
-msgstr ""
+msgstr "{path1} és un duplicat de {path2}, elimineu-ne un!"
 
 #: ../fdroidserver/import_subcommand.py
 #, python-brace-format

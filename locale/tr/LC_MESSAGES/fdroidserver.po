@@ -5,13 +5,15 @@
 # Oğuz Ersen <oguz@ersen.moe>, 2022, 2023, 2024.
 # Bai <batuhanakkurt000@gmail.com>, 2023.
 # "M. Fatih Uluçam" <mulucam@gmail.com>, 2025.
+# Nuri KÜÇÜKLER <enatsek@gmail.com>, 2025.
+# Bora Atıcı <boratici.acc@gmail.com>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2025-03-25 11:36+0100\n"
-"PO-Revision-Date: 2025-05-05 19:03+0000\n"
-"Last-Translator: \"M. Fatih Uluçam\" <mulucam@gmail.com>\n"
+"PO-Revision-Date: 2025-05-26 22:01+0000\n"
+"Last-Translator: Bora Atıcı <boratici.acc@gmail.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/f-droid/fdroidserver/tr/>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
@@ -44,7 +46,7 @@ msgstr "\"%s/\" eşleşen üst veri dosyasına sahip değil!"
 
 #: ../fdroidserver/index.py
 msgid "\"isPrimary\" key should not be added to mirrors!"
-msgstr ""
+msgstr "\"isPrimary\" anahtarı yansılara eklenmemelidir!"
 
 #: ../fdroidserver/index.py
 #, python-brace-format
@@ -296,11 +298,11 @@ msgstr "UpdateCheckMode ile AutoUpdateMode: HTTP bir desene sahip olmalıdır."
 
 #: ../fdroidserver/install.py
 msgid "Automatic no to all prompts."
-msgstr ""
+msgstr "Bütün sorulara otomatik olarak hayır."
 
 #: ../fdroidserver/install.py
 msgid "Automatic yes to all prompts."
-msgstr ""
+msgstr "Bütün sorulara otomatik olarak evet."
 
 #: ../fdroidserver/index.py
 #, python-brace-format
@@ -397,7 +399,7 @@ msgstr "Temiz güncelleme - önbellekleri kullanmaz, tüm APKları yeniden işle
 
 #: ../fdroidserver/common.py
 msgid "Color the log output"
-msgstr ""
+msgstr "Günlük çıktısını renklendir"
 
 #: ../fdroidserver/import_subcommand.py
 msgid "Comma separated list of categories."
@@ -414,7 +416,7 @@ msgstr "Değişiklikleri işle"
 
 #: ../fdroidserver/checkupdates.py
 msgid "Commit changes, push, then make a merge request"
-msgstr ""
+msgstr "Değişiklikleri uygula, yükle ve bir birleştirme isteği yap"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
@@ -483,9 +485,9 @@ msgid "Creating \"{path}\" for configuring s3cmd."
 msgstr "s3cmd yapılandırması için \"{path}\" oluşturuluyor."
 
 #: ../fdroidserver/common.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Creating empty {config_file}"
-msgstr "'{config_file}' okunuyor"
+msgstr "Boş {config_file} oluşturuluyor"
 
 #: ../fdroidserver/publish.py
 msgid "Creating log directory"
@@ -599,7 +601,7 @@ msgstr "Rsync sağlama toplamlarını kullanma"
 
 #: ../fdroidserver/install.py
 msgid "Download F-Droid.apk using mirrors that leak less to the network"
-msgstr ""
+msgstr "F-Droid.apk'yı ağa az bilgi sızdıracak şekilde indir"
 
 #: ../fdroidserver/__main__.py
 msgid "Download complete mirrors of small repos"
@@ -655,12 +657,12 @@ msgstr "HATA: {path} içindeki {key} \"archive\" veya \"repo\" değil!"
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "ERROR: {key} not a valid key!"
-msgstr ""
+msgstr "HATA: {key} geçerli bir anahtar değil!"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "ERROR: {key}'s value should be of type {t}!"
-msgstr ""
+msgstr "Hata: {key} anahtarının değeri {t} tipinde olmalı!"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
@@ -687,9 +689,9 @@ msgid "Environment variable {var} from {configname} is not set!"
 msgstr "{configname} içinden {var} ortam değişkeni ayarlı değil!"
 
 #: ../fdroidserver/common.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Environment variable {{env: {var}}} is not set!"
-msgstr "{configname} içinden {var} ortam değişkeni ayarlı değil!"
+msgstr "Ortam değişkeni {{env: {var}}} ayarlanmadı!"
 
 #: ../fdroidserver/deploy.py
 msgid "Error deploying 'github_releases', {} not present. (You might need to run `fdroid update` first.)"
@@ -713,7 +715,7 @@ msgstr "APK'lardan imzaları ayıkla"
 
 #: ../fdroidserver/install.py
 msgid "F-Droid.apk could not be downloaded from any known source!"
-msgstr ""
+msgstr "F-Droid.apk bilinen kaynakların hiç birinden indirilemedi!"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -931,9 +933,9 @@ msgid "Ignoring bad element in manifest: %s"
 msgstr "Manifestteki hatalı öğe yok sayılıyor: %s"
 
 #: ../fdroidserver/common.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Ignoring deprecated {oldfile}, use {newfile}!"
-msgstr "{oldfile} kullanımdan kaldırıldı, {newfile} kullanın"
+msgstr "{oldfile} kullanımdan kaldırıldı, {newfile} kullanın!"
 
 #: ../fdroidserver/index.py
 msgid "Ignoring package without metadata: "
@@ -1141,7 +1143,7 @@ msgstr "ZIP dosyasında azami özyineleme derinliğine ulaşıldı: %s"
 #: ../fdroidserver/index.py
 #, python-brace-format
 msgid "Mirror config for {url} contains \"isPrimary\" key!"
-msgstr ""
+msgstr "{url} için yansı yapılandırması \"isPrimary\" anahtarını içeriyor!"
 
 #: ../fdroidserver/mirror.py
 msgid "Mirror the full repo and archive, all file types."
@@ -1174,7 +1176,7 @@ msgstr "Bağlı aygıt bulunamadı"
 
 #: ../fdroidserver/install.py
 msgid "No devices found for `adb install`! Please plug one in."
-msgstr ""
+msgstr "`adb install` için aygıt bulunamadı! Lütfen bir tane takın."
 
 #: ../fdroidserver/index.py
 msgid "No fingerprint in URL."
@@ -1308,7 +1310,7 @@ msgstr "Grafikler için yalnızca PNG ve JPEG desteklenir, bulunan: {path}"
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
 #: ../fdroidserver/common.py
 msgid "Only accepts a single key \"env\""
-msgstr ""
+msgstr "Sadece bir tane anahtar \"env\" kabul edilir"
 
 #: ../fdroidserver/checkupdates.py
 msgid "Only process apps with auto-updates"
@@ -1378,7 +1380,7 @@ msgstr "Kolay kopyala yapıştır için gizli değişkeni terminale yaz"
 #: ../fdroidserver/install.py
 #, python-brace-format
 msgid "Privacy mode was enabled based on your locale ({country_code})."
-msgstr ""
+msgstr "Yerel ayarınız ({country_code}) baz alınarak gizlilik kipi etkinleştirildi."
 
 #: ../fdroidserver/scanner.py
 #, python-format
@@ -1469,11 +1471,11 @@ msgstr "Tarayıcı kurallarını ve imzalarını ağdan yenile ve önbelleğe al
 #: ../fdroidserver/publish.py
 #, python-brace-format
 msgid "Refusing to sign '{path}', file exists in both {dir1} and {dir2} folder."
-msgstr ""
+msgstr "'{path}' imzalanması reddedildi, dosya hem {dir1} hem de {dir2} dizininde yer alıyor."
 
 #: ../fdroidserver/verify.py
 msgid "Remove source tarball and any APKs if successfully verified."
-msgstr ""
+msgstr "Başarıyla doğrulanmışsa, kaynak sıkıştırılmış dosyayı ve var olan bütün APK'ları kaldır."
 
 #: ../fdroidserver/common.py
 msgid "Removing specified files"
@@ -1504,7 +1506,7 @@ msgstr "Çıkışı uyarılara ve hatalara kısıtla"
 #: ../fdroidserver/net.py
 #, python-format
 msgid "Retrying failed download: %s"
-msgstr ""
+msgstr "Başarısız indirme tekrar deneniyor: %s"
 
 #: ../fdroidserver/__main__.py
 msgid "Rewrite all the metadata files"
@@ -1573,7 +1575,7 @@ msgstr[1] "Tarayıcı {} sorun buldu"
 
 #: ../fdroidserver/scanner.py
 msgid "Scanning APK for extra signing blocks."
-msgstr ""
+msgstr "APK'daki ekstra imzalama blokları taranıyor."
 
 #: ../fdroidserver/scanner.py
 msgid "Scanning APK with dexdump for known non-free classes."
@@ -1697,7 +1699,7 @@ msgstr "Sınama kipi - çıkışı sadece tmp dizinine koy, ve her zaman inşa e
 
 #: ../fdroidserver/index.py
 msgid "The \"qrcode\" Python package is not installed (e.g. apt-get install python3-qrcode)!"
-msgstr ""
+msgstr "\"qrcode\" Python paketi kurulu değil (yüklemek için: apt-get install python3-qrcode)!"
 
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
 #: ../fdroidserver/update.py
@@ -2001,7 +2003,7 @@ msgstr "İndeks imzası doğrulanıyor:"
 #: ../fdroidserver/install.py
 #, python-brace-format
 msgid "Verifying package {path} with apksigner."
-msgstr ""
+msgstr "{path} paketi apksigner ile doğrulanıyor."
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
@@ -2014,7 +2016,7 @@ msgstr "Olası üst veri hataları hakkında uyar"
 
 #: ../fdroidserver/scanner.py
 msgid "WebAssembly binary file"
-msgstr ""
+msgstr "WebAssembly ikilik dosyası"
 
 #: ../fdroidserver/update.py
 msgid "When configured for signed indexes, create only unsigned indexes at this stage"
@@ -2030,11 +2032,11 @@ msgstr "İmzalama veya doğrulama başarısız olduğunda, bir hata koduyla çı
 
 #: ../fdroidserver/install.py
 msgid "Would you like to download and install F-Droid.apk via adb? (YES/no)"
-msgstr ""
+msgstr "F-Droid.apk'nın adb aracılığıyla indirilmesini ve yüklenmesini ister misiniz? (EVET/hayır)"
 
 #: ../fdroidserver/install.py
 msgid "Would you like to download the app(s) from f-droid.org? (YES/no)"
-msgstr ""
+msgstr "Uygulamaları f-droid.org adresinden indirmek ister misiniz? (EVET/hayır)"
 
 #: ../fdroidserver/init.py
 msgid "X.509 'Distinguished Name' used when generating keys"
@@ -2051,7 +2053,7 @@ msgstr "ZIP dosya arşivi"
 #: ../fdroidserver/install.py
 #, python-brace-format
 msgid "adb reports {serial} is \"{status}\"!"
-msgstr ""
+msgstr "adb {serial} için {status} durumunu veriyor!"
 
 #: ../fdroidserver/nightly.py
 #, python-brace-format
@@ -2468,7 +2470,7 @@ msgstr "şu argümanlar gerekli: %s"
 
 #: ../fdroidserver/install.py
 msgid "true"
-msgstr ""
+msgstr "doğru"
 
 #: /usr/lib/python3.11/argparse.py
 #, python-format
@@ -2505,7 +2507,7 @@ msgstr "virustotal.com hızı sınırlıyor, yeniden deneme bekleniyor..."
 
 #: ../fdroidserver/install.py
 msgid "yes"
-msgstr ""
+msgstr "evet"
 
 #: ../fdroidserver/publish.py
 #, python-brace-format
@@ -2595,7 +2597,7 @@ msgstr "{name} \"{section}/icons/{path}\" yok! config.yml içinde düzeltin."
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "{path1} is a duplicate of {path2}, remove one!"
-msgstr ""
+msgstr "{path1}, {path2} 'in bir kopyasıdır, birini kaldırın!"
 
 #: ../fdroidserver/import_subcommand.py
 #, python-brace-format
@@ -2620,7 +2622,7 @@ msgstr "{path} virustotal tarafından {count} defa işaretlendi:"
 #: ../fdroidserver/install.py
 #, python-brace-format
 msgid "{path} has the wrong fingerprint ({fingerprint})!"
-msgstr ""
+msgstr "{path} yanlış {fingerprint} parmak izine sahip!"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
