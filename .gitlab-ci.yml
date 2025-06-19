@@ -734,7 +734,9 @@ pages:
   artifacts:
     paths:
       - public
-  needs: ["Build documentation"]
+  needs:
+    - job: "Build documentation"
+      optional: true
   rules:
     - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'  # only publish pages on default (master) branch
 
