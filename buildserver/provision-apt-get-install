@@ -104,6 +104,7 @@ apt-get upgrade
 apt-get update || apt-get update
 
 packages="
+ androguard/bookworm-backports
  apksigner
  default-jdk-headless
  default-jre-headless
