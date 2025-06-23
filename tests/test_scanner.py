@@ -74,6 +74,7 @@ class ScannerTest(unittest.TestCase):
             'com.jens.automation2': 3,
             'firebase-suspect': 1,
             'org.mozilla.rocket': 2,
+            'org.piepmeyer.gauguin': 1,
             'org.tasks': 3,
             'realm': 1,
             'se.manyver': 3,
