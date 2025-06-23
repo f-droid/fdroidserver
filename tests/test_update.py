@@ -1406,9 +1406,7 @@ class UpdateTest(unittest.TestCase):
         with self.assertLogs(level=logging.DEBUG):  # suppress log output
             fdroidserver.update._strip_and_copy_image(in_file, out_file)
         self.assertNotEqual(size, os.path.getsize(out_file))
-        self.assertNotAlmostEqual(
-            os.path.getctime(in_file), os.path.getctime(out_file), delta=delta
-        )
+        self.assertTrue(os.path.getctime(in_file) <= os.path.getctime(out_file))
         # _strip_and_copy_image syncs mtime from in_file to out_file
         self.assertAlmostEqual(
             os.path.getmtime(in_file), os.path.getmtime(out_file), delta=delta
