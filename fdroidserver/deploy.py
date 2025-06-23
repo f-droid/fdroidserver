@@ -617,6 +617,13 @@ def update_servergitmirrors(servergitmirrors, repo_section):
     For history, there is the archive section, and there is the binary
     transparency log.
 
+    This will attempt to use the existing remote branch so that it does
+    not have to push all of the files in the repo each time.  Old setups
+    or runs of `fdroid nightly` might use the "master" branch.  For the
+    "index only" mode, it will recreate the branch from scratch each
+    time since usually all the files are changed.  In any case, the
+    index files are small compared to the full repo.
+
     """
     from clint.textui import progress
 
@@ -687,7 +694,7 @@ def update_servergitmirrors(servergitmirrors, repo_section):
             if is_index_only:
                 local_branch_name = 'index_only'
             else:
-                local_branch_name = 'full'
+                local_branch_name = GIT_BRANCH
             if local_branch_name in repo.heads:
                 repo.git.switch(local_branch_name)
             else:
