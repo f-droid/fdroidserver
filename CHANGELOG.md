@@ -4,6 +4,41 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 
+## [2.4.1] - 2025-06-23
+
+### Added
+
+* build: Clearer error messages when working with Git.
+* verify: generate <appid>.json files that list all reports
+  https://gitlab.com/fdroid/fdroidserver/-/merge_requests/1632
+
+### Fixed
+
+* deploy: use master branch when working complete git-mirror repo
+  https://gitlab.com/fdroid/fdroidserver/-/merge_requests/1666
+* update: use ctime/mtime to control _strip_and_copy_image runs
+  https://gitlab.com/fdroid/fdroidserver/-/merge_requests/1665
+* update: If categories.yml only has icon:, then add name:
+  https://gitlab.com/fdroid/fdroidserver/-/merge_requests/1659
+* update: fix handling of Triple-T 1.0.0 graphics
+  https://gitlab.com/fdroid/fdroidserver/-/merge_requests/1652
+* update: never execute any VCS e.g. git
+  https://gitlab.com/fdroid/fdroidserver/-/merge_requests/1630
+* config: lazyload environment variables in config.yml
+  https://gitlab.com/fdroid/fdroidserver/-/merge_requests/1645
+* config: make localized name/description/icon optional
+  https://gitlab.com/fdroid/fdroidserver/-/merge_requests/1649
+* lint: add repo_key_sha256 to list of valid config keys
+  https://gitlab.com/fdroid/fdroidserver/-/merge_requests/1643
+* build: calculate all combinations of gradle flavors
+  https://gitlab.com/fdroid/fdroidserver/-/merge_requests/1638
+* build: set SOURCE_DATE_EPOCH from app's git otherwise fdroiddata metadata file
+  https://gitlab.com/fdroid/fdroidserver/-/merge_requests/1653
+* Sync translations for all supported languages: ca cs de fr ga ja pl pt pt_BR
+  pt_PT ru sq tr uk zh_Hans
+
+### Removed
+
 ## [2.4.0] - 2025-03-25
 
 ### Added
