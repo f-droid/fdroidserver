@@ -2218,8 +2218,7 @@ SUSS_DEFAULT = r'''{
         "https://www.android.com/gms/"
       ],
       "gradle_signatures": [
-        "com.google.gms(?!.google-services)",
-        "com.google.android.gms(?!.oss-licenses-plugin)",
+        "com.google.android.gms(?!.(oss-licenses-plugin|strict-version-matcher-plugin))",
         "com.google.android.ump",
         "androidx.core:core-google-shortcuts",
         "androidx.credentials:credentials-play-services-auth",
@@ -2235,7 +2234,19 @@ SUSS_DEFAULT = r'''{
         "com.yayandroid:locationmanager",
         "(?<!org.microg.gms:)play-services",
         "xyz.belvi.mobilevision:barcodescanner",
-        "com.google.api-client:google-api-client-android"
+        "com.google.api-client:google-api-client-android",
+        "com.google.maps.android:android-maps-utils",
+        "com.github.budowski:android-maps-utils",
+        "com.microsoft.identity:common",
+        "com.microsoft.identity.client:msal"
+      ],
+      "gradle_signatures_negative_examples": [
+        "com.google.android.gms.oss-licenses-plugin",
+        "com.google.android.gms.strict-version-matcher-plugin"
+      ],
+      "gradle_signatures_positive_examples": [
+        "com.google.android.gms:play-services-base",
+        "com.google.android.gms:play-services-oss-licenses"
       ],
       "license": "NonFree",
       "name": "Google Mobile Services"
@@ -2935,6 +2946,16 @@ SUSS_DEFAULT = r'''{
       "license": "NonFree",
       "name": "Pushy"
     },
+    "org.gradle.toolchains.foojay-resolver-convention": {
+      "documentation": [
+        "https://github.com/gradle/foojay-toolchains"
+      ],
+      "gradle_signatures": [
+        "org.gradle.toolchains.foojay-resolver"
+      ],
+      "license": "Apache-2.0",
+      "name": "Foojay Toolchains Plugin"
+    },
     "org.mariuszgromada.math": {
       "code_signatures": [
         "org/mariuszgromada/math/mxparser/parsertokens/SyntaxStringBuilder",
@@ -2967,7 +2988,7 @@ SUSS_DEFAULT = r'''{
       "license": "NonFree"
     }
   },
-  "timestamp": 1733823271.362948,
+  "timestamp": 1747829076.702502,
   "version": 1,
-  "last_updated": 1742401014.503398
+  "last_updated": 1750710966.431471
 }'''
