@@ -559,18 +559,18 @@ def upload_to_servergitmirror(
     logging.info('Mirroring to: ' + remote_url)
 
     if is_index_only:
+        logging.debug(_('Committing index files to git mirror'))
         files_to_upload = _get_index_file_paths(
             os.path.join(local_repo.working_tree_dir, 'fdroid', repo_section)
         )
         files_to_upload = _remove_missing_files(files_to_upload)
         local_repo.index.add(files_to_upload)
+        local_repo.index.commit("servergitmirrors: index-only in git-mirror")
     else:
         # sadly index.add don't allow the --all parameter
-        logging.debug('Adding all files to git mirror')
+        logging.debug(_('Adding all files to git mirror'))
         local_repo.git.add(all=True)
-
-    logging.debug('Committing files into git mirror')
-    local_repo.index.commit("fdroidserver git-mirror")
+        local_repo.index.commit("servergitmirrors: in git-mirror")
 
     # only deploy to GitLab Artifacts if too big for GitLab Pages
     if (
