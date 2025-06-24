@@ -19,6 +19,7 @@
 
 import base64
 import datetime
+import glob
 import hashlib
 import inspect
 import logging
@@ -406,6 +407,8 @@ def main():
         git_mirror_metadatadir = os.path.join(git_mirror_fdroiddir, 'metadata')
         if not os.path.isdir(git_mirror_repodir):
             clone_git_repo(clone_url, git_mirror_path)
+            for f in glob.glob(f'{git_mirror_repodir}/*.apk'):
+                shutil.copy2(f, repodir)
         if not os.path.isdir(git_mirror_repodir):
             os.makedirs(git_mirror_repodir, mode=0o755)
         if os.path.exists('LICENSE'):
