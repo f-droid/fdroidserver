@@ -14,20 +14,21 @@
 # Jaime Marquínez Ferrándiz <weblate@jregistros.fastmail.net>, 2022.
 # gallegonovato <fran-carro@hotmail.es>, 2022, 2023, 2024.
 # Nicolás Pérez <ccnicolasperez@gmail.com>, 2025.
+# Swyter <swyterzone@gmail.com>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2025-03-25 11:36+0100\n"
-"PO-Revision-Date: 2025-03-16 22:47+0000\n"
-"Last-Translator: Nicolás Pérez <ccnicolasperez@gmail.com>\n"
+"PO-Revision-Date: 2025-06-24 11:02+0000\n"
+"Last-Translator: Swyter <swyterzone@gmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/f-droid/fdroidserver/es/>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.11-dev\n"
+"X-Generator: Weblate 5.13-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -492,9 +493,9 @@ msgid "Creating \"{path}\" for configuring s3cmd."
 msgstr "Creando \"{path}\" para configurar s3cmd."
 
 #: ../fdroidserver/common.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Creating empty {config_file}"
-msgstr "Leyendo '{config_file}'"
+msgstr "Creando el archivo vacío {config_file}"
 
 #: ../fdroidserver/publish.py
 msgid "Creating log directory"
@@ -1811,7 +1812,7 @@ msgstr "Entrada desconocida {key} en {configname}"
 
 #: ../fdroidserver/__main__.py
 msgid "Unknown exception found!"
-msgstr "¡Se encontró una excepción desconocida!"
+msgstr "Se ha producido una excepción desconocida"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
@@ -1993,7 +1994,7 @@ msgstr "Usando s3cmd para sincronizar con: {url}"
 
 #: ../fdroidserver/__main__.py
 msgid "Valid commands are:"
-msgstr "Los comandos válidos son:"
+msgstr "Las órdenes válidas son:"
 
 #: ../fdroidserver/verify.py
 msgid "Verify against locally cached copy rather than redownloading."

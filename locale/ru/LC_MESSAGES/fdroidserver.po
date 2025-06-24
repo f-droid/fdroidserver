@@ -16,20 +16,21 @@
 # gfbdrgng <hnaofegnp@hldrive.com>, 2024.
 # neverender <audiolunaire@getgoogleoff.me>, 2024.
 # Dmitry <dmitrydmitry761@gmail.com>, 2024.
+# Artyom Rybakov <rib.artem@gmail.com>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 1.0.0-95-gd7af22b\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2025-03-25 11:36+0100\n"
-"PO-Revision-Date: 2025-03-27 19:35+0000\n"
-"Last-Translator: Andrey <andrey@mailbox.org>\n"
+"PO-Revision-Date: 2025-06-24 10:15+0000\n"
+"Last-Translator: Artyom Rybakov <rib.artem@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/f-droid/fdroidserver/ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 5.11-dev\n"
+"X-Generator: Weblate 5.13-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -55,7 +56,7 @@ msgstr "У \"%s/\" нет соответствующего файла метад
 
 #: ../fdroidserver/index.py
 msgid "\"isPrimary\" key should not be added to mirrors!"
-msgstr ""
+msgstr "Ключ \"IsPrimary\" не следует добавлять в зеркала!"
 
 #: ../fdroidserver/index.py
 #, python-brace-format
@@ -672,7 +673,7 @@ msgstr "ОШИБКА: {key} недействительный ключ!"
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "ERROR: {key}'s value should be of type {t}!"
-msgstr ""
+msgstr "ОШИБКА: значение {key} должно быть типа {t}!"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
@@ -699,9 +700,9 @@ msgid "Environment variable {var} from {configname} is not set!"
 msgstr "Переменная среды {var} из {configname} не установлена!"
 
 #: ../fdroidserver/common.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Environment variable {{env: {var}}} is not set!"
-msgstr "Переменная среды {var} из {configname} не установлена!"
+msgstr "Переменная среды {{env: {var}}} не установлена!"
 
 #: ../fdroidserver/deploy.py
 msgid "Error deploying 'github_releases', {} not present. (You might need to run `fdroid update` first.)"
@@ -943,9 +944,9 @@ msgid "Ignoring bad element in manifest: %s"
 msgstr "Проигнорировано: плохой элемент в манифесте: %s"
 
 #: ../fdroidserver/common.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Ignoring deprecated {oldfile}, use {newfile}!"
-msgstr "{oldfile} признан устаревшим; используйте {newfile}"
+msgstr "Устаревший {oldfile} игнорируется, используйте {newfile}!"
 
 #: ../fdroidserver/index.py
 msgid "Ignoring package without metadata: "
@@ -1153,7 +1154,7 @@ msgstr "Достигнута максимальная глубина рекур�
 #: ../fdroidserver/index.py
 #, python-brace-format
 msgid "Mirror config for {url} contains \"isPrimary\" key!"
-msgstr ""
+msgstr "Конфигурация зеркала для {url} содержит ключ \"IsPrimary\"!"
 
 #: ../fdroidserver/mirror.py
 msgid "Mirror the full repo and archive, all file types."
@@ -1320,7 +1321,7 @@ msgstr "Допускаются изображения только в форма
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
 #: ../fdroidserver/common.py
 msgid "Only accepts a single key \"env\""
-msgstr ""
+msgstr "Принимает только один ключ \"env\""
 
 #: ../fdroidserver/checkupdates.py
 msgid "Only process apps with auto-updates"
@@ -1481,7 +1482,7 @@ msgstr "Обновление и кэширование правил и сигн�
 #: ../fdroidserver/publish.py
 #, python-brace-format
 msgid "Refusing to sign '{path}', file exists in both {dir1} and {dir2} folder."
-msgstr ""
+msgstr "Отказываюсь подписывать '{path}', файл существует как в папке {dir1}, так и в папке {dir2}."
 
 #: ../fdroidserver/verify.py
 msgid "Remove source tarball and any APKs if successfully verified."
@@ -1710,7 +1711,7 @@ msgstr "Тестовый режим. Все собранное попадает 
 
 #: ../fdroidserver/index.py
 msgid "The \"qrcode\" Python package is not installed (e.g. apt-get install python3-qrcode)!"
-msgstr ""
+msgstr "Пакет Python \"qrcode\" не установлен (например, apt-get install python3-qrcode)!"
 
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
 #: ../fdroidserver/update.py
@@ -2611,7 +2612,7 @@ msgstr "{name}: \"{section}/icons/{path}\" не существует! Попра
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "{path1} is a duplicate of {path2}, remove one!"
-msgstr ""
+msgstr "{path1} дублирует {path2}, удалите один!"
 
 #: ../fdroidserver/import_subcommand.py
 #, python-brace-format
