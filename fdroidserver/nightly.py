@@ -396,9 +396,11 @@ def main():
         git_mirror_repodir = os.path.join(git_mirror_fdroiddir, 'repo')
         git_mirror_metadatadir = os.path.join(git_mirror_fdroiddir, 'metadata')
         if not os.path.isdir(git_mirror_repodir):
-            clone_git_repo(clone_url, git_mirror_repodir)
+            clone_git_repo(clone_url, git_mirror_path)
         if not os.path.isdir(git_mirror_repodir):
             os.makedirs(git_mirror_repodir, mode=0o755)
+        if os.path.exists('LICENSE'):
+            shutil.copy2('LICENSE', git_mirror_path)
 
         mirror_git_repo = git.Repo.init(git_mirror_path)
         writer = mirror_git_repo.config_writer()
