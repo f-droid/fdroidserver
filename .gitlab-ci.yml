@@ -512,6 +512,9 @@ fdroid build:
         - fdroidserver/net.py
         - fdroidserver/scanner.py
         - fdroidserver/vmtools.py
+        # for the docker: job which depends on this one
+        - makebuildserver
+        - buildserver/*
   cache:
     key: "$CI_JOB_NAME"
     paths:
