@@ -399,6 +399,8 @@ def main():
             clone_git_repo(clone_url, git_mirror_repodir)
         if not os.path.isdir(git_mirror_repodir):
             os.makedirs(git_mirror_repodir, mode=0o755)
+        if os.path.exists('LICENSE'):
+            shutil.copy2('LICENSE', git_mirror_path)
 
         mirror_git_repo = git.Repo.init(git_mirror_path)
         writer = mirror_git_repo.config_writer()
