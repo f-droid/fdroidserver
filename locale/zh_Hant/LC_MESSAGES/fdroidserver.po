@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2025-03-25 11:36+0100\n"
+"POT-Creation-Date: 2025-06-25 09:52+0200\n"
 "PO-Revision-Date: 2024-11-26 15:16+0000\n"
 "Last-Translator: Peter Dave Hello <hsu@peterdavehello.org>\n"
 "Language-Team: Chinese (Traditional Han script) <https://hosted.weblate.org/projects/f-droid/fdroidserver/zh_Hant/>\n"
@@ -361,6 +361,11 @@ msgstr "無法自動更新沒有 CurrentVersionCode 的應用程式"
 msgid "Can't build due to {} error while scanning"
 msgid_plural "Can't build due to {} errors while scanning"
 msgstr[0] "掃描時由於 {} 出錯，無法進行編譯"
+
+#: ../fdroidserver/common.py
+#, fuzzy, python-brace-format
+msgid "Cannot read {path}: {error}"
+msgstr "讀取 {path} 失敗：錯誤訊息{error}"
 
 #: ../fdroidserver/rewritemeta.py
 #, python-brace-format
@@ -1509,6 +1514,11 @@ msgstr "正在移除 {path}\""
 msgid "Rename APK files that do not match package.name_123.apk"
 msgstr "為不符合 package.name_123.apk 格式的 APK 檔案更名"
 
+#: ../fdroidserver/common.py
+#, python-brace-format
+msgid "RepoType {type} is deprecated, please switch to git."
+msgstr ""
+
 #: ../fdroidserver/nightly.py
 #, python-brace-format
 msgid "Resigning {apkfilename} with provided debug.keystore"
@@ -2044,6 +2054,10 @@ msgstr "正在使用 apksigner 驗證套件 {path}。"
 #, fuzzy, python-brace-format
 msgid "VirusTotal API key cannot upload files larger than 32MB, use {url} to upload {path}."
 msgstr "VirusTotal API key 無法上傳大於 32MB 的檔案， 選擇使用 {url} 來上傳檔案 {path} 。"
+
+#: ../fdroidserver/nightly.py
+msgid "WARNING: only public git repos are supported!"
+msgstr ""
 
 #: ../fdroidserver/__main__.py
 msgid "Warn about possible metadata errors"

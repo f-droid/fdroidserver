@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 2.1b0\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2025-03-25 11:36+0100\n"
+"POT-Creation-Date: 2025-06-25 09:52+0200\n"
 "PO-Revision-Date: 2024-12-30 22:00+0000\n"
 "Last-Translator: Reno Tx <renotx@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Serbian <https://hosted.weblate.org/projects/f-droid/fdroidserver/sr/>\n"
@@ -360,6 +360,11 @@ msgid_plural "Can't build due to {} errors while scanning"
 msgstr[0] "Не може се изградити због {} грешке приликом скенирања"
 msgstr[1] "Не може се изградити због {} грешке приликом скенирања"
 msgstr[2] "Не може се изградити због {} грешака приликом скенирања"
+
+#: ../fdroidserver/common.py
+#, fuzzy, python-brace-format
+msgid "Cannot read {path}: {error}"
+msgstr "Није успело читање {path}: {error}"
 
 #: ../fdroidserver/rewritemeta.py
 #, python-brace-format
@@ -1488,6 +1493,11 @@ msgstr "Уклањање {path}"
 msgid "Rename APK files that do not match package.name_123.apk"
 msgstr "Преименујте APK фајлове који не одговарају package.name_123.apk"
 
+#: ../fdroidserver/common.py
+#, python-brace-format
+msgid "RepoType {type} is deprecated, please switch to git."
+msgstr ""
+
 #: ../fdroidserver/nightly.py
 #, python-brace-format
 msgid "Resigning {apkfilename} with provided debug.keystore"
@@ -2008,6 +2018,10 @@ msgstr "Провера пакета {path} са apksigner."
 #, python-brace-format
 msgid "VirusTotal API key cannot upload files larger than 32MB, use {url} to upload {path}."
 msgstr "VirusTotal API кључ не може отпремити датотеке веће од 32MB, користи {url} за отпремање {path}."
+
+#: ../fdroidserver/nightly.py
+msgid "WARNING: only public git repos are supported!"
+msgstr ""
 
 #: ../fdroidserver/__main__.py
 msgid "Warn about possible metadata errors"

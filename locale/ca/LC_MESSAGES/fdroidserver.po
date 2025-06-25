@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 2.1-273-g54e84d87\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2025-03-25 11:36+0100\n"
+"POT-Creation-Date: 2025-06-25 09:52+0200\n"
 "PO-Revision-Date: 2025-05-16 16:36+0000\n"
 "Last-Translator: Ecron <ecron_89@hotmail.com>\n"
 "Language-Team: Catalan <https://hosted.weblate.org/projects/f-droid/fdroidserver/ca/>\n"
@@ -362,6 +362,11 @@ msgid "Can't build due to {} error while scanning"
 msgid_plural "Can't build due to {} errors while scanning"
 msgstr[0] "No es pot construir a causa d'un error {} en escanejar"
 msgstr[1] "No es pot construir a causa d'errors {} en escanejar"
+
+#: ../fdroidserver/common.py
+#, fuzzy, python-brace-format
+msgid "Cannot read {path}: {error}"
+msgstr "No s'ha pogut llegir {path}: {error}"
 
 #: ../fdroidserver/rewritemeta.py
 #, python-brace-format
@@ -1490,6 +1495,11 @@ msgstr "S'està suprimint {path}\""
 msgid "Rename APK files that do not match package.name_123.apk"
 msgstr "Canvia el nom dels fitxers APK que no coincideixin amb package.name_123.apk"
 
+#: ../fdroidserver/common.py
+#, python-brace-format
+msgid "RepoType {type} is deprecated, please switch to git."
+msgstr ""
+
 #: ../fdroidserver/nightly.py
 #, python-brace-format
 msgid "Resigning {apkfilename} with provided debug.keystore"
@@ -2009,6 +2019,10 @@ msgstr "S'està verificant el paquet {path} l'apksigner."
 #, python-brace-format
 msgid "VirusTotal API key cannot upload files larger than 32MB, use {url} to upload {path}."
 msgstr "La clau de l'API VirusTotal no pot pujar fitxers més grans de 32 MB, utilitzeu {url} per pujar {path}."
+
+#: ../fdroidserver/nightly.py
+msgid "WARNING: only public git repos are supported!"
+msgstr ""
 
 #: ../fdroidserver/__main__.py
 msgid "Warn about possible metadata errors"

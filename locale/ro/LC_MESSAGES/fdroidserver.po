@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 2.0a5-27-gf24eae0f\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2025-03-25 11:36+0100\n"
+"POT-Creation-Date: 2025-06-25 09:52+0200\n"
 "PO-Revision-Date: 2024-12-02 17:00+0000\n"
 "Last-Translator: Licaon Kter <licaon.kter@protonmail.com>\n"
 "Language-Team: Romanian <https://hosted.weblate.org/projects/f-droid/fdroidserver/ro/>\n"
@@ -361,6 +361,11 @@ msgid_plural "Can't build due to {} errors while scanning"
 msgstr[0] "Nu se poate construi din cauza unei erori {} în timpul scanării"
 msgstr[1] "Nu se poate construi din cauza erorilor {} în timpul scanării"
 msgstr[2] "Nu se poate construi din cauza erorilor {} în timpul scanării"
+
+#: ../fdroidserver/common.py
+#, fuzzy, python-brace-format
+msgid "Cannot read {path}: {error}"
+msgstr "A eșuat citirea {path}: {error}"
 
 #: ../fdroidserver/rewritemeta.py
 #, python-brace-format
@@ -1489,6 +1494,11 @@ msgstr "Eliminarea lui {path}\""
 msgid "Rename APK files that do not match package.name_123.apk"
 msgstr "Redenumiți fișierele APK care nu se potrivesc cu package.name_123.apk"
 
+#: ../fdroidserver/common.py
+#, python-brace-format
+msgid "RepoType {type} is deprecated, please switch to git."
+msgstr ""
+
 #: ../fdroidserver/nightly.py
 #, python-brace-format
 msgid "Resigning {apkfilename} with provided debug.keystore"
@@ -2010,6 +2020,10 @@ msgstr ""
 #, python-brace-format
 msgid "VirusTotal API key cannot upload files larger than 32MB, use {url} to upload {path}."
 msgstr "VirusTotal API key nu poate încărca fișiere mai mari de 32MB, utilizați {url} pentru a încărca {path}."
+
+#: ../fdroidserver/nightly.py
+msgid "WARNING: only public git repos are supported!"
+msgstr ""
 
 #: ../fdroidserver/__main__.py
 msgid "Warn about possible metadata errors"

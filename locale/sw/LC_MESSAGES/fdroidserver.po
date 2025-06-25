@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 2.3a1\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2025-03-25 11:36+0100\n"
+"POT-Creation-Date: 2025-06-25 09:52+0200\n"
 "PO-Revision-Date: 2024-09-08 11:09+0000\n"
 "Last-Translator: abelbiwott-dev <abelbiwott@outlook.com>\n"
 "Language-Team: Swahili <https://hosted.weblate.org/projects/f-droid/fdroidserver/sw/>\n"
@@ -358,6 +358,11 @@ msgid "Can't build due to {} error while scanning"
 msgid_plural "Can't build due to {} errors while scanning"
 msgstr[0] "Haiwezi kujenga kutokana na kosa la {} wakati wa uchanganuzi"
 msgstr[1] "Haiwezi kujenga kutokana na makosa ya {} wakati wa uchanganuzi"
+
+#: ../fdroidserver/common.py
+#, fuzzy, python-brace-format
+msgid "Cannot read {path}: {error}"
+msgstr "Imeshindwa kusoma {path}: {error}"
 
 #: ../fdroidserver/rewritemeta.py
 #, python-brace-format
@@ -1486,6 +1491,11 @@ msgstr "Kuondoa {path}\""
 msgid "Rename APK files that do not match package.name_123.apk"
 msgstr "Badilisha jina la faili za APK ambazo hazilingani na package.name_123.apk"
 
+#: ../fdroidserver/common.py
+#, python-brace-format
+msgid "RepoType {type} is deprecated, please switch to git."
+msgstr ""
+
 #: ../fdroidserver/nightly.py
 #, python-brace-format
 msgid "Resigning {apkfilename} with provided debug.keystore"
@@ -2006,6 +2016,10 @@ msgstr ""
 #, python-brace-format
 msgid "VirusTotal API key cannot upload files larger than 32MB, use {url} to upload {path}."
 msgstr "Ufunguo wa API ya VirusTotal haiwezi kupakia faili zaidi ya 32MB, tumia {url} kupakia {path}."
+
+#: ../fdroidserver/nightly.py
+msgid "WARNING: only public git repos are supported!"
+msgstr ""
 
 #: ../fdroidserver/__main__.py
 msgid "Warn about possible metadata errors"

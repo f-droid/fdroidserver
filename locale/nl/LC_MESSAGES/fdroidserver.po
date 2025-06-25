@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 1.1-680-ge1d3de71\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2025-03-25 11:36+0100\n"
+"POT-Creation-Date: 2025-06-25 09:52+0200\n"
 "PO-Revision-Date: 2024-01-03 09:07+0000\n"
 "Last-Translator: Issa1553 <fairfull.playing@gmail.com>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/f-droid/fdroidserver/nl/>\n"
@@ -360,6 +360,11 @@ msgid "Can't build due to {} error while scanning"
 msgid_plural "Can't build due to {} errors while scanning"
 msgstr[0] ""
 msgstr[1] ""
+
+#: ../fdroidserver/common.py
+#, python-brace-format
+msgid "Cannot read {path}: {error}"
+msgstr ""
 
 #: ../fdroidserver/rewritemeta.py
 #, python-brace-format
@@ -1486,6 +1491,11 @@ msgstr ""
 msgid "Rename APK files that do not match package.name_123.apk"
 msgstr "Hernoem APK-bestanden die niet overeenkomen met pakket.naam_123.apk"
 
+#: ../fdroidserver/common.py
+#, python-brace-format
+msgid "RepoType {type} is deprecated, please switch to git."
+msgstr ""
+
 #: ../fdroidserver/nightly.py
 #, python-brace-format
 msgid "Resigning {apkfilename} with provided debug.keystore"
@@ -1997,6 +2007,10 @@ msgstr ""
 #: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "VirusTotal API key cannot upload files larger than 32MB, use {url} to upload {path}."
+msgstr ""
+
+#: ../fdroidserver/nightly.py
+msgid "WARNING: only public git repos are supported!"
 msgstr ""
 
 #: ../fdroidserver/__main__.py

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 2.1-273-g54e84d87\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2025-03-25 11:36+0100\n"
+"POT-Creation-Date: 2025-06-25 09:52+0200\n"
 "PO-Revision-Date: 2025-01-20 14:04+0000\n"
 "Last-Translator: Hans-Christoph Steiner <hans@guardianproject.info>\n"
 "Language-Team: Tamil <https://hosted.weblate.org/projects/f-droid/fdroidserver/ta/>\n"
@@ -359,6 +359,11 @@ msgid "Can't build due to {} error while scanning"
 msgid_plural "Can't build due to {} errors while scanning"
 msgstr[0] "ச்கேன் செய்யும் போது {} பிழை காரணமாக உருவாக்க முடியாது"
 msgstr[1] "ச்கேன் செய்யும் போது {} பிழைகள் காரணமாக உருவாக்க முடியாது"
+
+#: ../fdroidserver/common.py
+#, fuzzy, python-brace-format
+msgid "Cannot read {path}: {error}"
+msgstr "தோல்வியுற்ற வாசிப்பு {path}: {error}"
 
 #: ../fdroidserver/rewritemeta.py
 #, python-brace-format
@@ -1487,6 +1492,11 @@ msgstr "{path} \"ஐ நீக்குதல்"
 msgid "Rename APK files that do not match package.name_123.apk"
 msgstr "தொகுப்புடன் பொருந்தாத APK கோப்புகளை மறுபெயரிடுங்கள். NAME_123.APK"
 
+#: ../fdroidserver/common.py
+#, python-brace-format
+msgid "RepoType {type} is deprecated, please switch to git."
+msgstr ""
+
 #: ../fdroidserver/nightly.py
 #, python-brace-format
 msgid "Resigning {apkfilename} with provided debug.keystore"
@@ -2006,6 +2016,10 @@ msgstr "Apksigner உடன் தொகுப்பு {path} ஐ சரிப�
 #, python-brace-format
 msgid "VirusTotal API key cannot upload files larger than 32MB, use {url} to upload {path}."
 msgstr "வைரச்டோட்டல் பநிஇ விசையை 32MB ஐ விட பெரிய கோப்புகளை பதிவேற்ற முடியாது, {path} பதிவேற்ற {url} ஐப் பயன்படுத்தவும்."
+
+#: ../fdroidserver/nightly.py
+msgid "WARNING: only public git repos are supported!"
+msgstr ""
 
 #: ../fdroidserver/__main__.py
 msgid "Warn about possible metadata errors"

@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 2.3a1-162-gfbb3cc59\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2025-03-25 11:36+0100\n"
+"POT-Creation-Date: 2025-06-25 09:52+0200\n"
 "PO-Revision-Date: 2025-03-27 19:35+0000\n"
 "Last-Translator: Aindriú Mac Giolla Eoin <aindriu80@gmail.com>\n"
 "Language-Team: Irish <https://hosted.weblate.org/projects/f-droid/fdroidserver/ga/>\n"
@@ -359,6 +359,11 @@ msgstr[1] "Ní féidir tógáil de bharr {} earráidí agus an scanadh"
 msgstr[2] "Ní féidir tógáil de bharr {} earráidí agus an scanadh"
 msgstr[3] "Ní féidir tógáil de bharr {} earráidí agus an scanadh"
 msgstr[4] "Ní féidir tógáil de bharr {} earráidí agus an scanadh"
+
+#: ../fdroidserver/common.py
+#, fuzzy, python-brace-format
+msgid "Cannot read {path}: {error}"
+msgstr "Theip ar léamh {path}: {error}"
 
 #: ../fdroidserver/rewritemeta.py
 #, python-brace-format
@@ -1487,6 +1492,11 @@ msgstr "Ag baint {path}\""
 msgid "Rename APK files that do not match package.name_123.apk"
 msgstr "Athainmnigh comhaid APK nach bhfuil comhoiriúnach package.name_123.apk"
 
+#: ../fdroidserver/common.py
+#, python-brace-format
+msgid "RepoType {type} is deprecated, please switch to git."
+msgstr ""
+
 #: ../fdroidserver/nightly.py
 #, python-brace-format
 msgid "Resigning {apkfilename} with provided debug.keystore"
@@ -2009,6 +2019,10 @@ msgstr "Pacáiste {path} á fhíorú le apksigner."
 #, python-brace-format
 msgid "VirusTotal API key cannot upload files larger than 32MB, use {url} to upload {path}."
 msgstr "Ní féidir le heochair API VirusTotal comhaid níos mó ná 32MB a uaslódáil, úsáid {url} chun {path} a uaslódáil."
+
+#: ../fdroidserver/nightly.py
+msgid "WARNING: only public git repos are supported!"
+msgstr ""
 
 #: ../fdroidserver/__main__.py
 msgid "Warn about possible metadata errors"
