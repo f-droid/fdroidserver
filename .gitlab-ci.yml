@@ -443,7 +443,7 @@ macOS:
     - brew install --cask android-commandlinetools temurin  # temurin is a JDK
 
     # test suite dependencies
-    - brew install dash bash coreutils gnu-sed
+    - brew install bash coreutils gnu-sed
     # TODO port tests/run-tests to POSIX and gsed, it has a couple GNU-isms like du --bytes
     - export PATH="$(brew --prefix fdroidserver)/libexec/bin:$(brew --prefix coreutils)/libexec/gnubin:$PATH"
 
