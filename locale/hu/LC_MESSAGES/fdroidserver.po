@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 1.0.6-70-g54bc858\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2025-03-25 11:36+0100\n"
+"POT-Creation-Date: 2025-06-25 09:52+0200\n"
 "PO-Revision-Date: 2024-04-10 13:33+0000\n"
 "Last-Translator: Hans-Christoph Steiner <hans@guardianproject.info>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/f-droid/fdroidserver/hu/>\n"
@@ -358,6 +358,11 @@ msgid "Can't build due to {} error while scanning"
 msgid_plural "Can't build due to {} errors while scanning"
 msgstr[0] "Nem lehet összeállítani, mert {} hiba történt az átvizsgáláskor"
 msgstr[1] "Nem lehet összeállítani, mert {} hiba történt az átvizsgáláskor"
+
+#: ../fdroidserver/common.py
+#, fuzzy, python-brace-format
+msgid "Cannot read {path}: {error}"
+msgstr "A(z) {path} olvasása sikertelen: {error}"
 
 #: ../fdroidserver/rewritemeta.py
 #, python-brace-format
@@ -1494,6 +1499,11 @@ msgstr ""
 msgid "Rename APK files that do not match package.name_123.apk"
 msgstr "Azon APK fájlok átnevezése, melyek nem illeszkednek a csomag.név_123.apk mintára"
 
+#: ../fdroidserver/common.py
+#, python-brace-format
+msgid "RepoType {type} is deprecated, please switch to git."
+msgstr ""
+
 #: ../fdroidserver/nightly.py
 #, python-brace-format
 msgid "Resigning {apkfilename} with provided debug.keystore"
@@ -2009,6 +2019,10 @@ msgstr ""
 #: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "VirusTotal API key cannot upload files larger than 32MB, use {url} to upload {path}."
+msgstr ""
+
+#: ../fdroidserver/nightly.py
+msgid "WARNING: only public git repos are supported!"
 msgstr ""
 
 #: ../fdroidserver/__main__.py

@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 1.0.0-95-gd7af22b\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2025-03-25 11:36+0100\n"
+"POT-Creation-Date: 2025-06-25 09:52+0200\n"
 "PO-Revision-Date: 2025-06-24 10:15+0000\n"
 "Last-Translator: Artyom Rybakov <rib.artem@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/f-droid/fdroidserver/ru/>\n"
@@ -373,6 +373,11 @@ msgid_plural "Can't build due to {} errors while scanning"
 msgstr[0] "Запустить сборку невозможно из-за {} ошибки во время сканирования данных"
 msgstr[1] "Запустить сборку невозможно из-за {} ошибок во время сканирования данных"
 msgstr[2] "Запустить сборку невозможно из-за {} ошибок во время сканирования данных"
+
+#: ../fdroidserver/common.py
+#, fuzzy, python-brace-format
+msgid "Cannot read {path}: {error}"
+msgstr "Не удалось распознать {path}: {error}"
 
 #: ../fdroidserver/rewritemeta.py
 #, python-brace-format
@@ -1501,6 +1506,11 @@ msgstr "Удаление {path}\""
 msgid "Rename APK files that do not match package.name_123.apk"
 msgstr "Переименовать все APK файлы, не соответствующие шаблону \"название.пакета_123.apk\""
 
+#: ../fdroidserver/common.py
+#, python-brace-format
+msgid "RepoType {type} is deprecated, please switch to git."
+msgstr ""
+
 #: ../fdroidserver/nightly.py
 #, python-brace-format
 msgid "Resigning {apkfilename} with provided debug.keystore"
@@ -2021,6 +2031,10 @@ msgstr "Проверка пакета {path} с помощью apksigner."
 #, python-brace-format
 msgid "VirusTotal API key cannot upload files larger than 32MB, use {url} to upload {path}."
 msgstr "Через API VirusTotal нельзя загрузить файлы больше 32MB, загрузите {path} на {url} самостоятельно."
+
+#: ../fdroidserver/nightly.py
+msgid "WARNING: only public git repos are supported!"
+msgstr ""
 
 #: ../fdroidserver/__main__.py
 msgid "Warn about possible metadata errors"
