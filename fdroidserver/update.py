@@ -20,6 +20,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import argparse
+import filecmp
 import sys
 import os
 import shutil
@@ -1460,19 +1461,18 @@ def insert_localized_ios_app_metadata(apps_with_packages):
         fdroidserver.update.copy_ios_screenshots_to_repo(screenshots, package_name)
 
         # lookup icons, copy them and put them into app
-        icon_path = _get_ipa_icon(Path('build') / package_name)
+        icon_src = _get_ipa_icon(Path('build') / package_name)
         icon_dest = Path('repo') / package_name / 'icon.png'  # for now just assume png
-        icon_stat = os.stat(icon_path)
         app['iconv2'] = {
             DEFAULT_LOCALE: {
                 'name': str(icon_dest).lstrip('repo'),
                 'sha256': common.sha256sum(icon_dest),
-                'size': icon_stat.st_size,
+                'size': os.path.getsize(icon_src),
             }
         }
-        if not icon_dest.exists():
+        if not icon_dest.exists() or not filecmp.cmp(icon_src, icon_dest):
             icon_dest.parent.mkdir(parents=True, exist_ok=True)
-            shutil.copy(icon_path, icon_dest)
+            shutil.copy2(icon_src, icon_dest)
 
 
 def scan_repo_files(apkcache, repodir, knownapks, use_date_from_file=False):

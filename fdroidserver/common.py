@@ -55,6 +55,7 @@ environment variable to include.
 import copy
 import difflib
 from typing import List
+import filecmp
 import git
 import glob
 import io
@@ -812,7 +813,10 @@ def load_localized_config(name, repodir):
                         icons_dir = os.path.join(repodir, 'icons')
                         if not os.path.exists(icons_dir):
                             os.makedirs(icons_dir, exist_ok=True)
-                        shutil.copy(os.path.join("config", value), icons_dir)
+                        src = os.path.join("config", value)
+                        dest = os.path.join(icons_dir, os.path.basename(src))
+                        if not os.path.exists(dest) or not filecmp.cmp(src, dest):
+                            shutil.copy2(src, dest)
                         ret[afname][key][locale] = file_entry(
                             os.path.join(icons_dir, value)
                         )
