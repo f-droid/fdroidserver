@@ -20,6 +20,7 @@ include examples/template.yml
 include examples/Vagrantfile.yaml
 include gradlew-fdroid
 include LICENSE
+include locale/ba/LC_MESSAGES/fdroidserver.po
 include locale/bo/LC_MESSAGES/fdroidserver.po
 include locale/ca/LC_MESSAGES/fdroidserver.po
 include locale/cs/LC_MESSAGES/fdroidserver.po
