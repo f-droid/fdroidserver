@@ -786,6 +786,53 @@ class DeployTest(unittest.TestCase):
                 name, fdroidserver.deploy.REMOTE_HOSTNAME_REGEX.sub(r'\1', remote_url)
             )
 
+    @mock.patch.dict(os.environ, clear=True)
+    def test_get_commit_author_no_config(self):
+        os.environ['HOME'] = self.testdir
+        git_repo = git.Repo.init(self.testdir)
+        self.assertEqual(
+            git.Actor('servergitmirrors', 'fdroid@deploy'),
+            fdroidserver.deploy._get_commit_author(git_repo),
+        )
+
+    @mock.patch.dict(os.environ, clear=True)
+    def test_get_commit_author_repo_config(self):
+        os.environ['HOME'] = self.testdir
+        git_repo = git.Repo.init(self.testdir)
+        user_name = 'Foo Bar'
+        user_email = 'foo@bar.com'
+        with git_repo.config_writer() as cw:
+            cw.set_value('user', 'name', user_name)
+            cw.set_value('user', 'email', user_email)
+        self.assertEqual(
+            git.Actor(user_name, user_email),
+            fdroidserver.deploy._get_commit_author(git_repo),
+        )
+
+    @mock.patch.dict(os.environ, clear=True)
+    def test_get_commit_author_repo_config_name_only(self):
+        os.environ['HOME'] = self.testdir
+        git_repo = git.Repo.init(self.testdir)
+        user_name = 'Foo Bar'
+        with git_repo.config_writer() as cw:
+            cw.set_value('user', 'name', user_name)
+        self.assertEqual(
+            git.Actor(user_name, 'fdroid@deploy'),
+            fdroidserver.deploy._get_commit_author(git_repo),
+        )
+
+    @mock.patch.dict(os.environ, clear=True)
+    def test_get_commit_author_repo_config_email_only(self):
+        os.environ['HOME'] = self.testdir
+        git_repo = git.Repo.init(self.testdir)
+        user_email = 'foo@bar.com'
+        with git_repo.config_writer() as cw:
+            cw.set_value('user', 'email', user_email)
+        self.assertEqual(
+            git.Actor('servergitmirrors', user_email),
+            fdroidserver.deploy._get_commit_author(git_repo),
+        )
+
 
 class TestServerGitMirrors(unittest.TestCase):
     def setUp(self):

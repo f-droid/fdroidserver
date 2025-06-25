@@ -532,6 +532,20 @@ def update_servergitmirrors(servergitmirrors, repo_section):
             progressbar.done()
 
 
+def _get_commit_author(git_repo):
+    """If the author is set locally, use it, otherwise use static info."""
+    ret = {'name': 'servergitmirrors', 'email': 'fdroid@deploy'}
+    with git_repo.config_reader() as cr:
+        for option in ('name', 'email'):
+            try:
+                value = cr.get_value('user', option)
+            except (configparser.NoSectionError, configparser.NoOptionError):
+                value = os.getenv(f'GITLAB_USER_{option.upper()}')
+            if value:
+                ret[option] = value
+    return git.Actor(ret['name'], ret['email'])
+
+
 def upload_to_servergitmirror(
     mirror_config: Dict[str, str],
     local_repo: Repo,
@@ -565,12 +579,17 @@ def upload_to_servergitmirror(
         )
         files_to_upload = _remove_missing_files(files_to_upload)
         local_repo.index.add(files_to_upload)
-        local_repo.index.commit("servergitmirrors: index-only in git-mirror")
+        local_repo.index.commit(
+            "servergitmirrors: index-only in git-mirror",
+            author=_get_commit_author(local_repo),
+        )
     else:
         # sadly index.add don't allow the --all parameter
         logging.debug(_('Adding all files to git mirror'))
         local_repo.git.add(all=True)
-        local_repo.index.commit("servergitmirrors: in git-mirror")
+        local_repo.index.commit(
+            "servergitmirrors: in git-mirror", author=_get_commit_author(local_repo)
+        )
 
     # only deploy to GitLab Artifacts if too big for GitLab Pages
     if (
