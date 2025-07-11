@@ -346,7 +346,7 @@ APK is called F-Droid Privileged Extension.</desc>
 		<tracker>https://github.com/miguelvps/PoliteDroid/issues</tracker>
 		<marketversion>1.5</marketversion>
 		<marketvercode>6</marketvercode>
-		<antifeatures>KnownVuln,NoSourceSince,NonFreeAssets,NonFreeNet,UpstreamNonFree</antifeatures>
+		<antifeatures>KnownVuln,NoSourceSince,NonFreeAssets,NonFreeNet</antifeatures>
 		<package>
 			<version>1.5</version>
 			<versioncode>6</versioncode>

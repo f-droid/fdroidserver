@@ -510,7 +510,7 @@ class LintAntiFeaturesTest(unittest.TestCase):
 
     def test_check_antiFeatures(self):
         app = fdroidserver.metadata.App()
-        app['AntiFeatures'] = ['Ads', 'UpstreamNonFree']
+        app['AntiFeatures'] = ['Ads', 'Tracking']
         self.assertEqual([], list(fdroidserver.lint.check_antiFeatures(app)))
 
     def test_check_antiFeatures_fails_one(self):

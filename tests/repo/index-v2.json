@@ -453,49 +453,6 @@
           "ro": "Urmărire",
           "zh-rCN": "跟踪用户"
         }
-      },
-      "UpstreamNonFree": {
-        "description": {
-          "de": "Der Originalcode ist nicht völlig quelloffen",
-          "en-US": "The upstream source code is not entirely Free",
-          "fa": "کد مبدأ بالادستی کاملاً آزاد نیست",
-          "ro": "Codul sursa originar nu este în totalitatea lui software liber",
-          "zh-rCN": "上游源代码不是完全自由的"
-        },
-        "icon": {
-          "de": {
-            "name": "/icons/ic_antifeature_upstreamnonfree.xml",
-            "sha256": "06a9af843ff56ecd7a270f98c0b19b3154edf3ffa854e6d50a84ef00d0ce1a86",
-            "size": 1442
-          },
-          "en-US": {
-            "name": "/icons/ic_antifeature_upstreamnonfree.xml",
-            "sha256": "06a9af843ff56ecd7a270f98c0b19b3154edf3ffa854e6d50a84ef00d0ce1a86",
-            "size": 1442
-          },
-          "fa": {
-            "name": "/icons/ic_antifeature_upstreamnonfree.xml",
-            "sha256": "06a9af843ff56ecd7a270f98c0b19b3154edf3ffa854e6d50a84ef00d0ce1a86",
-            "size": 1442
-          },
-          "ro": {
-            "name": "/icons/ic_antifeature_upstreamnonfree.xml",
-            "sha256": "06a9af843ff56ecd7a270f98c0b19b3154edf3ffa854e6d50a84ef00d0ce1a86",
-            "size": 1442
-          },
-          "zh-rCN": {
-            "name": "/icons/ic_antifeature_upstreamnonfree.xml",
-            "sha256": "06a9af843ff56ecd7a270f98c0b19b3154edf3ffa854e6d50a84ef00d0ce1a86",
-            "size": 1442
-          }
-        },
-        "name": {
-          "de": "Originalcode nicht-quelloffen",
-          "en-US": "Upstream Non-Free",
-          "fa": "بالادست ناآزاد",
-          "ro": "Surse ne-libere",
-          "zh-rCN": "上游代码非自由"
-        }
       }
     },
     "categories": {
@@ -627,8 +584,7 @@
               "en-US": "1.5"
             },
             "NonFreeAssets": {},
-            "NonFreeNet": {},
-            "UpstreamNonFree": {}
+            "NonFreeNet": {}
           }
         },
         "5bdbfa071cca4b8d05ced41d6b28763595d6e8096cca5bbf0f9253c9a2622e5d": {
@@ -756,8 +712,7 @@
               "en-US": "1.5"
             },
             "NonFreeAssets": {},
-            "NonFreeNet": {},
-            "UpstreamNonFree": {}
+            "NonFreeNet": {}
           }
         }
       }

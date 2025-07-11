@@ -40,7 +40,6 @@ class RewriteMetaTest(unittest.TestCase):
                 'target': 'android-10',
                 'antifeatures': {
                     'KnownVuln': {},
-                    'UpstreamNonFree': {},
                     'NonFreeAssets': {},
                 },
             },

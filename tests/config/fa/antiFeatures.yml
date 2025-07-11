@@ -37,7 +37,3 @@ Tracking:
   description: این کاره، فعّالیتتان را ردیابی و گزارش می‌کند
   icon: ic_antifeature_tracking.xml
   name: ردیابی
-UpstreamNonFree:
-  description: کد مبدأ بالادستی کاملاً آزاد نیست
-  icon: ic_antifeature_upstreamnonfree.xml
-  name: بالادست ناآزاد

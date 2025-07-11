@@ -39,7 +39,3 @@ Tracking:
   description: This app tracks and reports your activity
   icon: ic_antifeature_tracking.xml
   name: Tracking
-UpstreamNonFree:
-  description: The upstream source code is not entirely Free
-  icon: ic_antifeature_upstreamnonfree.xml
-  name: Upstream Non-Free

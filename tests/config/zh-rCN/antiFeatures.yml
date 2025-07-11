@@ -37,7 +37,3 @@ Tracking:
   description: 此应用会记录并报告你的活动
   icon: ic_antifeature_tracking.xml
   name: 跟踪用户
-UpstreamNonFree:
-  description: 上游源代码不是完全自由的
-  icon: ic_antifeature_upstreamnonfree.xml
-  name: 上游代码非自由
