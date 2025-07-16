@@ -467,35 +467,20 @@ macOS:
 
 
 gradle:
-  image: debian:bookworm-slim
-  rules:
-    - if: "$PERSONAL_ACCESS_TOKEN"
+  image: debian:trixie-slim
   <<: *apt-template
-  variables:
-    GIT_DEPTH: 1000
+  rules:
+    - changes:
+        - .gitlab-ci.yml
+        - gradlew-fdroid
+        - makebuildserver
   script:
     - apt-get install
           ca-certificates
           git
-          openssh-client
-          python3-bs4
           python3-colorama
-          python3-git
-          python3-gitlab
           python3-packaging
           python3-requests
-    # if this is a merge request fork, then only check if relevant files changed
-    - if [ "$CI_PROJECT_NAMESPACE" != "fdroid" ]; then
-        set -x;
-        git fetch https://gitlab.com/fdroid/fdroidserver.git;
-        for f in `git diff --name-only --diff-filter=d FETCH_HEAD...HEAD`; do
-           test "$f" == "makebuildserver" && export CHANGED="$f $CHANGED";
-           test "$f" == "gradlew-fdroid" && export CHANGED="$f $CHANGED";
-        done;
-        test -z "$CHANGED" && exit;
-        echo $CHANGED;
-        set +x;
-      fi
     - ./tests/gradle-release-checksums.py
 
 
