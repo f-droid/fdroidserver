@@ -1167,7 +1167,7 @@ def insert_localized_app_metadata(apps):
     https://f-droid.org/en/docs/All_About_Descriptions_Graphics_and_Screenshots/#in-the-apps-build-metadata-in-an-fdroiddata-collection
     """
     sourcedirs = glob.glob(os.path.join('build', '[A-Za-z]*', 'src', '[A-Za-z]*', 'fastlane', 'metadata', 'android', '[a-z][a-z]*'))
-    sourcedirs += glob.glob(os.path.join('build', '[A-Za-z]*', 'fastlane', 'metadata', 'android', '[a-z][a-z]*'))
+    sourcedirs += glob.glob(os.path.join('build', '[A-Za-z]*', '**', 'fastlane', 'metadata', 'android', '[a-z][a-z]*'), recursive=True)
     sourcedirs += glob.glob(os.path.join('build', '[A-Za-z]*', 'metadata', '[a-z][a-z]*'))
     sourcedirs += glob.glob(os.path.join('metadata', '[A-Za-z]*', '[a-z][a-z]*'))
 
@@ -1183,20 +1183,34 @@ def insert_localized_app_metadata(apps):
             locale = segments[-1]
             destdir = os.path.join('repo', packageName, locale)
 
+            builds = apps.get(packageName, {}).get('Builds', [])
+            found_in_subdir = (
+                builds
+                and len(segments) > 7
+                and segments[-4] == "fastlane"
+                and segments[-3] == "metadata"
+                and segments[-2] == "android"
+                and '/'.join(segments[2:-4]) == builds[-1].get('subdir')
+            )
+
             # flavors specified in build receipt
             build_flavors = []
-            if (
-                apps[packageName]
-                and len(apps[packageName].get('Builds', [])) > 0
-                and 'gradle' in apps[packageName]['Builds'][-1]
-                and apps[packageName]['Builds'][-1]['gradle'] != ['yes']
-            ):
+            if builds and 'gradle' in builds[-1] and builds[-1]['gradle'] != ['yes']:
                 build_flavors = common.calculate_gradle_flavor_combination(
-                    apps[packageName]['Builds'][-1]['gradle']
+                    builds[-1]['gradle']
                 )
 
-            if len(segments) >= 5 and segments[4] == "fastlane" and segments[3] not in build_flavors:
-                logging.debug("ignoring due to wrong flavor")
+            if (
+                not found_in_subdir
+                and len(segments) >= 5
+                and segments[4] == "fastlane"
+                and segments[3] not in build_flavors
+            ):
+                logging.debug(
+                    'Not scanning "{dir}" with unknown subdir or gradle flavor "{value}"'.format(
+                        dir=os.path.relpath(root), value=segments[3]
+                    )
+                )
                 continue
 
             for f in files:
@@ -1234,9 +1248,7 @@ def insert_localized_app_metadata(apps):
                     try:
                         versionCode = int(base)
                         locale = segments[-2]
-                        if versionCode in [
-                            a["versionCode"] for a in apps[packageName]["Builds"]
-                        ]:
+                        if versionCode in [b["versionCode"] for b in builds]:
                             _set_localized_text_entry(
                                 apps[packageName],
                                 locale,

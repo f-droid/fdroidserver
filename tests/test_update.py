@@ -253,6 +253,75 @@ class UpdateTest(unittest.TestCase):
         fdroidserver.update.insert_localized_app_metadata(apps)
         self.assertEqual('42', apps[app.id]['localized']['en-US']['whatsNew'])
 
+    def test_fastlane_with_subdir(self):
+        """Test if fastlane in simple one-level subdir is found."""
+        os.chdir(self.testdir)
+        config = dict()
+        fdroidserver.common.fill_config_defaults(config)
+        fdroidserver.update.config = config
+
+        app = fdroidserver.metadata.App()
+        app.id = 'com.example.app'
+        build_dir = f'build/{app.id}'
+        flavor = 'flavor'
+        subdir = 'subproject'
+        apps = {app.id: app}
+        build = fdroidserver.metadata.Build()
+        build.versionCode = 42
+        build.gradle = [flavor]
+        build.subdir = subdir
+        app['Builds'] = [build]
+
+        first_value = 'first'
+        first_dir = Path(f'{build_dir}/src/{flavor}/fastlane/metadata/android/en-US')
+        first_dir.mkdir(parents=True)
+        (first_dir / 'title.txt').write_text(first_value)
+        fdroidserver.update.insert_localized_app_metadata(apps)
+        self.assertEqual(first_value, apps[app.id]['localized']['en-US']['name'])
+
+        second_value = 'second'
+        second_dir = Path(f'{build_dir}/{subdir}/fastlane/metadata/android/en-US')
+        second_dir.mkdir(parents=True)
+        (second_dir / 'title.txt').write_text(second_value)
+        fdroidserver.update.insert_localized_app_metadata(apps)
+        self.assertEqual(second_value, apps[app.id]['localized']['en-US']['name'])
+
+    def test_fastlane_with_multi_level_subdir(self):
+        """Test if fastlane in multi-level subdir is found."""
+        os.chdir(self.testdir)
+        config = dict()
+        fdroidserver.common.fill_config_defaults(config)
+        fdroidserver.update.config = config
+
+        app = fdroidserver.metadata.App()
+        app.id = 'org.videolan.vlc'
+        build_dir = f'build/{app.id}'
+        subdir = 'application/app'
+        apps = {app.id: app}
+        build = fdroidserver.metadata.Build()
+        build.versionCode = 42
+        build.gradle = ['yes']
+        build.subdir = subdir
+        app['Builds'] = [build]
+
+        first_value = 'first'
+        first_dir = Path(f'{build_dir}/{subdir}/fastlane/metadata/android/en-US')
+        first_dir.mkdir(parents=True)
+        (first_dir / 'title.txt').write_text(first_value)
+        fdroidserver.update.insert_localized_app_metadata(apps)
+        self.assertEqual(first_value, apps[app.id]['localized']['en-US']['name'])
+
+        # I'm not sure that it is correct behavior for this path to
+        # override the above path, but it is how it is working now. It
+        # seems to me it should be the other way around, but that is
+        # really hard to implement using the current algorithm.
+        second_value = 'second'
+        second_dir = Path(f'{build_dir}/fastlane/metadata/android/en-US')
+        second_dir.mkdir(parents=True)
+        (second_dir / 'title.txt').write_text(second_value)
+        fdroidserver.update.insert_localized_app_metadata(apps)
+        self.assertEqual(second_value, apps[app.id]['localized']['en-US']['name'])
+
     def test_name_title_scraping(self):
         """metadata file --> fdroiddata localized files --> fastlane/triple-t in app source --> APK"""
         shutil.copytree(basedir, self.testdir, dirs_exist_ok=True)
