@@ -62,32 +62,6 @@ for version in sorted(versions.keys()):
 with open('makebuildserver', 'w') as fp:
     fp.write(makebuildserver_current)
 
-# write out update to gradlew-fdroid
-with open('gradlew-fdroid') as fp:
-    gradlew_fdroid = fp.read()
-current = ''
-get_sha_pat = re.compile(r""" +'([0-9][0-9.]+[0-9])'\)\s+echo '([0-9a-f]{64})' ;;\n""")
-for m in get_sha_pat.finditer(gradlew_fdroid):
-    current += m.group()
-    checksum = m.group(2)
-    if checksum != versions[m.group(1)]:
-        print(Fore.RED
-              + 'ERROR: checksum mismatch:', checksum, versions[m.group(1)]
-              + Style.RESET_ALL)
-        errors += 1
-new = ''
-for version in sorted(versions.keys(), key=Version):
-    sha256 = versions[version]
-    spaces = ''
-    for i in range(6 - len(version)):
-        spaces += ' '
-    new += """        '%s')%s echo '%s' ;;\n""" % (version, spaces, sha256)
-gradlew_fdroid = gradlew_fdroid.replace(current, new)
-plugin_v = ' '.join(sorted(versions.keys(), key=Version, reverse=True))
-plugin_v_pat = re.compile(r'\nplugin_v=\(([0-9. ]+)\)')
-with open('gradlew-fdroid', 'w') as fp:
-    fp.write(plugin_v_pat.sub('\nplugin_v=(%s)' % plugin_v, gradlew_fdroid))
-
 p = subprocess.run(['git', '--no-pager', 'diff'])
 errors += p.returncode
 sys.exit(errors)

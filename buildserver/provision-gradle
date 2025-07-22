@@ -25,7 +25,12 @@ fi
 chmod -R a+rX /opt/gradle
 
 test -e /opt/gradle/bin || mkdir -p /opt/gradle/bin
-ln -fs /home/vagrant/fdroidserver/gradlew-fdroid /opt/gradle/bin/gradle
+git clone --depth 1 https://gitlab.com/fdroid/gradlew-fdroid.git /home/vagrant/gradlew-fdroid/
+chmod 0755 /home/vagrant/gradlew-fdroid/gradlew-fdroid
+chmod -R u+rwX,a+rX,go-w /home/vagrant/gradlew-fdroid/
+ln -fs /home/vagrant/gradlew-fdroid/gradlew-fdroid /opt/gradle/bin/gradle
+ln -fs /home/vagrant/gradlew-fdroid/gradlew-fdroid /usr/local/bin/
+
 chown -h vagrant:vagrant /opt/gradle/bin/gradle
 chown vagrant:vagrant /opt/gradle/versions
 chmod 0755 /opt/gradle/versions

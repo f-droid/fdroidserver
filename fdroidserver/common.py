@@ -184,7 +184,7 @@ default_config = {
     'scan_binary': False,
     'ant': "ant",
     'mvn3': "mvn",
-    'gradle': os.path.join(FDROID_PATH, 'gradlew-fdroid'),
+    'gradle': shutil.which('gradlew-fdroid'),
     'sync_from_local_copy_dir': False,
     'allow_disabled_algorithms': False,
     'keep_when_not_allowed': False,
