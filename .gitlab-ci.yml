@@ -765,12 +765,12 @@ docker:
 
 # PUBLISH is the signing server.  It has a very minimal manual setup.
 PUBLISH:
-  image: debian:bullseye-backports
+  image: debian:bookworm-backports
   <<: *python-rules-changes
   script:
     - apt-get update
     - apt-get -qy upgrade
-    - apt-get -qy install --no-install-recommends -t bullseye-backports
+    - apt-get -qy install --no-install-recommends -t bookworm-backports
         androguard
         apksigner
         curl
