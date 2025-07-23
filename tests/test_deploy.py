@@ -32,9 +32,10 @@ class DeployTest(unittest.TestCase):
         self.testdir = self._td.name
 
         fdroidserver.common.options = mock.Mock()
-        fdroidserver.deploy.config = {}
+        fdroidserver.common.get_config()
 
     def tearDown(self):
+        fdroidserver.common.config = None
         self._td.cleanup()
 
     def test_update_serverwebroots_bad_None(self):
@@ -64,7 +65,6 @@ class DeployTest(unittest.TestCase):
 
         # setup parameters for this test run
         fdroidserver.common.options.identity_file = None
-        fdroidserver.deploy.config['make_current_version_link'] = False
 
         dest_apk0 = url0 / fake_apk
         dest_apk1 = url1 / fake_apk
@@ -120,9 +120,9 @@ class DeployTest(unittest.TestCase):
 
         # setup parameters for this test run
         awsbucket = 'test_bucket_folder'
-        fdroidserver.deploy.config['awsbucket'] = awsbucket
-        fdroidserver.deploy.config['rclone_config'] = 'test-local-config'
-        fdroidserver.deploy.config['path_to_custom_rclone_config'] = str(rclone_file)
+        fdroidserver.common.config['awsbucket'] = awsbucket
+        fdroidserver.common.config['rclone_config'] = 'test-local-config'
+        fdroidserver.common.config['path_to_custom_rclone_config'] = str(rclone_file)
         fdroidserver.common.options = VerboseFalseOptions
 
         # write out destination path
@@ -163,9 +163,9 @@ class DeployTest(unittest.TestCase):
 
         # setup parameters for this test run
         awsbucket = 'test_bucket_folder'
-        fdroidserver.deploy.config['awsbucket'] = awsbucket
-        fdroidserver.deploy.config['rclone_config'] = 'test-local-config'
-        fdroidserver.deploy.config['path_to_custom_rclone_config'] = str(rclone_file)
+        fdroidserver.common.config['awsbucket'] = awsbucket
+        fdroidserver.common.config['rclone_config'] = 'test-local-config'
+        fdroidserver.common.config['path_to_custom_rclone_config'] = str(rclone_file)
         fdroidserver.common.options = VerboseFalseOptions
 
         # write out destination path
@@ -224,7 +224,7 @@ class DeployTest(unittest.TestCase):
             return 0
 
         mock_call.side_effect = _mock_subprocess_call
-        fdroidserver.deploy.config = {'awsbucket': awsbucket}
+        fdroidserver.common.config = {'awsbucket': awsbucket}
         fdroidserver.deploy.update_remote_storage_with_rclone('repo', awsbucket)
         mock_call.assert_called()
 
@@ -243,7 +243,7 @@ class DeployTest(unittest.TestCase):
 
         mock_call.side_effect = _mock_subprocess_call
 
-        fdroidserver.deploy.config = {'awsbucket': awsbucket}
+        fdroidserver.common.config = {'awsbucket': awsbucket}
         fdroidserver.deploy.update_remote_storage_with_rclone('repo', awsbucket)
         self.maxDiff = None
         self.assertEqual(
@@ -262,7 +262,6 @@ class DeployTest(unittest.TestCase):
     @mock.patch('subprocess.check_output', _mock_rclone_config_file)
     @mock.patch('subprocess.call')
     def test_update_remote_storage_with_rclone_mock_rclone_config(self, mock_call):
-        awsbucket = 'test_bucket_folder'
         self.last_cmd = None
 
         def _mock_subprocess_call(cmd):
@@ -271,10 +270,9 @@ class DeployTest(unittest.TestCase):
 
         mock_call.side_effect = _mock_subprocess_call
 
-        fdroidserver.deploy.config = {
-            'awsbucket': awsbucket,
-            'rclone_config': 'test_local_config',
-        }
+        awsbucket = 'test_bucket_folder'
+        fdroidserver.common.config['awsbucket'] = awsbucket
+        fdroidserver.common.config['rclone_config'] = 'test_local_config'
         fdroidserver.deploy.update_remote_storage_with_rclone('repo', awsbucket)
         self.maxDiff = None
         self.assertEqual(
@@ -304,8 +302,8 @@ class DeployTest(unittest.TestCase):
         Path('rclone.conf').write_text('placeholder, contents ignored')
 
         awsbucket = 'test_bucket_folder'
-        fdroidserver.deploy.config['awsbucket'] = awsbucket
-        fdroidserver.deploy.config['rclone_config'] = config_name
+        fdroidserver.common.config['awsbucket'] = awsbucket
+        fdroidserver.common.config['rclone_config'] = config_name
         fdroidserver.deploy.update_remote_storage_with_rclone('repo', awsbucket)
         self.maxDiff = None
         self.assertEqual(
@@ -339,7 +337,6 @@ class DeployTest(unittest.TestCase):
         fdroidserver.common.options = mock.Mock()
         fdroidserver.common.options.identity_file = None
         fdroidserver.common.options.identity_file = None
-        fdroidserver.deploy.config['make_current_version_link'] = False
 
         dest_apk = Path(url) / fake_apk
         dest_index = Path(url) / fake_index
@@ -366,7 +363,6 @@ class DeployTest(unittest.TestCase):
         # setup parameters for this test run
         fdroidserver.common.options = mock.Mock()
         fdroidserver.common.options.identity_file = None
-        fdroidserver.deploy.config['make_current_version_link'] = False
 
         dest_apk = Path(url) / fake_apk
         dest_index = Path(url) / fake_index
@@ -396,7 +392,7 @@ class DeployTest(unittest.TestCase):
         fdroidserver.common.options.verbose = False
         fdroidserver.common.options.quiet = True
         fdroidserver.common.options.index_only = False
-        fdroidserver.deploy.config = {'make_current_version_link': True}
+        fdroidserver.common.config['make_current_version_link'] = True
         url = "example.com:/var/www/fdroid"
         repo_section = 'repo'
 
@@ -504,7 +500,7 @@ class DeployTest(unittest.TestCase):
         fdroidserver.common.options.verbose = False
         fdroidserver.common.options.quiet = True
         fdroidserver.common.options.identity_file = None
-        fdroidserver.deploy.config['make_current_version_link'] = True
+        fdroidserver.common.config['make_current_version_link'] = True
         url = "example.com:/var/www/fdroid"
         repo_section = 'repo'
 
@@ -603,7 +599,7 @@ class DeployTest(unittest.TestCase):
         fdroidserver.common.options.quiet = False
         fdroidserver.common.options.identity_file = None
         fdroidserver.common.options.index_only = False
-        fdroidserver.deploy.config = {'identity_file': './id_rsa'}
+        fdroidserver.common.config = {'identity_file': './id_rsa'}
         url = "example.com:/var/www/fdroid"
         repo_section = 'archive'
 
@@ -623,7 +619,7 @@ class DeployTest(unittest.TestCase):
                         '--verbose',
                         '-e',
                         'ssh -oBatchMode=yes -oIdentitiesOnly=yes -i '
-                        + fdroidserver.deploy.config['identity_file'],
+                        + fdroidserver.common.config['identity_file'],
                         '--exclude',
                         'archive/altstore-index.json',
                         '--exclude',
@@ -669,7 +665,7 @@ class DeployTest(unittest.TestCase):
                         '--verbose',
                         '-e',
                         'ssh -oBatchMode=yes -oIdentitiesOnly=yes -i '
-                        + fdroidserver.deploy.config['identity_file'],
+                        + fdroidserver.common.config['identity_file'],
                         'archive',
                         url,
                     ],
@@ -690,8 +686,7 @@ class DeployTest(unittest.TestCase):
         fdroidserver.common.options.verbose = True
         fdroidserver.common.options.quiet = False
         fdroidserver.common.options.identity_file = None
-        fdroidserver.deploy.config['identity_file'] = './id_rsa'
-        fdroidserver.deploy.config['make_current_version_link'] = False
+        fdroidserver.common.config['identity_file'] = './id_rsa'
         url = "example.com:/var/www/fdroid"
         repo_section = 'archive'
 
@@ -711,7 +706,7 @@ class DeployTest(unittest.TestCase):
                         '--verbose',
                         '-e',
                         'ssh -oBatchMode=yes -oIdentitiesOnly=yes -i '
-                        + fdroidserver.deploy.config['identity_file'],
+                        + fdroidserver.common.config['identity_file'],
                         'archive/altstore-index.json',
                         'archive/altstore-index.json.asc',
                         'archive/entry.jar',
@@ -741,7 +736,7 @@ class DeployTest(unittest.TestCase):
                         '--verbose',
                         '-e',
                         'ssh -oBatchMode=yes -oIdentitiesOnly=yes -i '
-                        + fdroidserver.deploy.config['identity_file'],
+                        + fdroidserver.common.config['identity_file'],
                         "example.com:/var/www/fdroid/archive/",
                     ],
                 )
@@ -793,10 +788,6 @@ class DeployTest(unittest.TestCase):
         fdroidserver.common.options.verbose = False
         fdroidserver.common.options.quiet = True
 
-        config = {}
-        fdroidserver.common.fill_config_defaults(config)
-        fdroidserver.deploy.config = config
-
         os.chdir(self.testdir)
 
         repo_section = 'repo'
@@ -807,7 +798,8 @@ class DeployTest(unittest.TestCase):
         remote_git_repo = git.Repo.init(
             remote_repo, initial_branch=initial_branch, bare=True
         )
-        fdroidserver.deploy.config["servergitmirrors"] = [{"url": str(remote_repo)}]
+        fdroidserver.common.get_config()
+        fdroidserver.common.config["servergitmirrors"] = [{"url": str(remote_repo)}]
 
         os.chdir(self.testdir)
         repo = Path('repo')
@@ -820,7 +812,7 @@ class DeployTest(unittest.TestCase):
                 fp.write('not a real one, but has the right filename')
 
         fdroidserver.deploy.update_servergitmirrors(
-            fdroidserver.deploy.config["servergitmirrors"], repo_section
+            fdroidserver.common.config["servergitmirrors"], repo_section
         )
 
         verify_repo = remote_git_repo.clone(
@@ -844,10 +836,6 @@ class DeployTest(unittest.TestCase):
         fdroidserver.common.options.verbose = False
         fdroidserver.common.options.quiet = True
 
-        config = {}
-        fdroidserver.common.fill_config_defaults(config)
-        fdroidserver.deploy.config = config
-
         os.chdir(self.testdir)
 
         repo_section = 'repo'
@@ -858,7 +846,7 @@ class DeployTest(unittest.TestCase):
         remote_git_repo = git.Repo.init(
             remote_repo, initial_branch=initial_branch, bare=True
         )
-        fdroidserver.deploy.config["servergitmirrors"] = [
+        fdroidserver.common.config["servergitmirrors"] = [
             {"url": str(remote_repo), "index_only": True}
         ]
 
@@ -873,7 +861,7 @@ class DeployTest(unittest.TestCase):
                 fp.write('not a real one, but has the right filename')
 
         fdroidserver.deploy.update_servergitmirrors(
-            fdroidserver.deploy.config["servergitmirrors"], repo_section
+            fdroidserver.common.config["servergitmirrors"], repo_section
         )
 
         verify_repo = remote_git_repo.clone(
@@ -904,10 +892,6 @@ class DeployTest(unittest.TestCase):
         fdroidserver.common.options.verbose = False
         fdroidserver.common.options.quiet = True
         fdroidserver.common.options.identity_file = None
-
-        config = {}
-        fdroidserver.common.fill_config_defaults(config)
-        fdroidserver.deploy.config = config
 
         repo_section = 'repo'
         initial_branch = fdroidserver.deploy.GIT_BRANCH

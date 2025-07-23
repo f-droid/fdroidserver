@@ -40,7 +40,6 @@ import fdroidserver.github
 from . import _, common, index
 from .exception import FDroidException
 
-config = None
 start_timestamp = time.gmtime()
 
 GIT_BRANCH = 'master'
@@ -144,6 +143,7 @@ def update_remote_storage_with_rclone(
     """
     logging.debug(_('Using rclone to sync to "{name}"').format(name=awsbucket))
 
+    config = common.get_config()
     rclone_config = config.get('rclone_config', [])
     if rclone_config and isinstance(rclone_config, str):
         rclone_config = [rclone_config]
@@ -271,6 +271,7 @@ def update_serverwebroot(serverwebroot, repo_section):
     has a low resolution timestamp
 
     """
+    config = common.get_config()
     try:
         subprocess.run(['rsync', '--version'], capture_output=True, check=True)
     except Exception as e:
@@ -431,6 +432,7 @@ def update_servergitmirrors(servergitmirrors, repo_section):
     """
     from clint.textui import progress
 
+    config = common.get_config()
     if config.get('local_copy_dir') and not config.get('sync_from_local_copy_dir'):
         logging.debug(
             _('Offline machine, skipping git mirror generation until `fdroid deploy`')
@@ -1029,8 +1031,6 @@ def upload_to_github_releases_repo(repo_conf, release_infos, global_gh_token):
 
 
 def main():
-    global config
-
     parser = ArgumentParser()
     common.setup_global_opts(parser)
     parser.add_argument(
