@@ -370,6 +370,11 @@ def get_cache():
                 v['antiFeatures'] = {k: {} for k in sorted(v['antiFeatures'])}
         if 'added' in v:
             v['added'] = datetime.fromtimestamp(v['added'], tz=timezone.utc)
+        if v.get('srcname') and not v.get('srcnameSha256'):
+            f = f'archive/{v["srcname"]}'
+            if not os.path.exists(f):
+                f = f'repo/{v["srcname"]}'
+            v['srcnameSha256'] = common.sha256sum(f)
 
     return apkcache
 
@@ -1570,8 +1575,10 @@ def scan_repo_files(apkcache, repodir, knownapks, use_date_from_file=False):
                 repo_file['packageName'] = m.group(1)
                 repo_file['versionCode'] = int(m.group(2))
             srcfilename = name + b'_src.tar.gz'
-            if os.path.exists(os.path.join(repodir, srcfilename)):
+            srcpath = os.path.join(repodir, srcfilename)
+            if os.path.exists(srcpath):
                 repo_file['srcname'] = srcfilename.decode()
+                repo_file['srcnameSha256'] = common.sha256sum(srcpath.decode())
             repo_file['size'] = stat.st_size
 
             apkcache[name_utf8] = repo_file
@@ -1989,8 +1996,10 @@ def process_apk(apkcache, apkfilename, repodir, knownapks, use_date_from_apk=Fal
 
         apk['apkName'] = apkfilename
         srcfilename = apkfilename[:-4] + "_src.tar.gz"
-        if os.path.exists(os.path.join(repodir, srcfilename)):
+        srcpath = os.path.join(repodir, srcfilename)
+        if os.path.exists(srcpath):
             apk['srcname'] = srcfilename
+            apk['srcnameSha256'] = common.sha256sum(srcpath)
 
         # verify the jar signature is correct, allow deprecated
         # algorithms only if the APK is in the archive.
