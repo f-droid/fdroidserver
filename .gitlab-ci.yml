@@ -220,21 +220,6 @@ ubuntu_jammy_pip:
     - LANGUAGE='de' fdroid --help | grep 'Gültige Befehle sind'
 
 
-# The gradlew-fdroid tests are isolated from the rest of the test
-# suite, so they run as their own job.
-gradlew-fdroid:
-  image: debian:bookworm-slim
-  <<: *apt-template
-  rules:
-    - changes:
-        - .gitlab-ci.yml
-        - gradlew-fdroid
-        - tests/test_gradlew-fdroid
-  script:
-    - apt-get install ca-certificates curl default-jdk-headless unzip
-    - ./tests/test_gradlew-fdroid
-
-
 # Run all the various linters and static analysis tools.
 hooks/pre-commit:
   stage: lint
@@ -294,11 +279,9 @@ shellcheck:
   rules:
     - changes:
         - .gitlab-ci.yml
-        - gradlew-fdroid
         - hooks/install-hooks.sh
         - hooks/pre-commit
         - tests/run-tests
-        - tests/test_gradlew-fdroid
   <<: *apt-template
   script:
     - apt-get install shellcheck
@@ -307,10 +290,6 @@ shellcheck:
         hooks/install-hooks.sh
         hooks/pre-commit
         tests/run-tests
-    # TODO make the gradlew things pass the standard above
-    - shellcheck --severity=error --color
-        gradlew-fdroid
-        tests/test_gradlew-fdroid
 
 # Check all the dependencies in Debian to mirror production.  CVEs are
 # generally fixed in the latest versions in pip/pypi.org, so it isn't
@@ -468,7 +447,7 @@ macOS:
 
     - echo "macOS sticks with bash 3.x because of licenses, so avoid new bash syntax"
     - /bin/bash --version
-    - /bin/bash -n gradlew-fdroid tests/run-tests
+    - /bin/bash -n tests/run-tests
 
     # test fdroidserver from git with current package's dependencies
     - fdroid="$(brew --prefix fdroidserver)/libexec/bin/python3 $PWD/fdroid" ./tests/run-tests
@@ -480,7 +459,6 @@ gradle:
   rules:
     - changes:
         - .gitlab-ci.yml
-        - gradlew-fdroid
         - makebuildserver
   script:
     - apt-get install
@@ -542,6 +520,8 @@ fdroid build:
           env TERM=$TERM
           env HOME=$home_vagrant
           fdroid"
+
+    - git -C $home_vagrant/gradlew-fdroid pull
 
     - chown -R vagrant $home_vagrant
     - chown -R vagrant $fdroidserver/.git
