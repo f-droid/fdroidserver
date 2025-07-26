@@ -1148,6 +1148,7 @@ def insert_localized_app_metadata(apps):
 
     metadata/<locale>/
     fastlane/metadata/android/<locale>/
+    <subdir>/fastlane/metadata/android/<locale>/
     src/<buildFlavor>/fastlane/metadata/android/<locale>/
 
     ...as well as the /metadata/<packageName>/<locale> directory.
@@ -1186,7 +1187,7 @@ def insert_localized_app_metadata(apps):
             builds = apps.get(packageName, {}).get('Builds', [])
             found_in_subdir = (
                 builds
-                and len(segments) > 7
+                and len(segments) > 6
                 and segments[-4] == "fastlane"
                 and segments[-3] == "metadata"
                 and segments[-2] == "android"
@@ -1199,12 +1200,18 @@ def insert_localized_app_metadata(apps):
                 build_flavors = common.calculate_gradle_flavor_combination(
                     builds[-1]['gradle']
                 )
+            found_in_flavor = (
+                len(segments) > 7
+                and segments[2] == 'src'
+                and segments[4] == "fastlane"
+                and segments[3] in build_flavors
+            )
 
             if (
                 not found_in_subdir
-                and len(segments) >= 5
-                and segments[4] == "fastlane"
-                and segments[3] not in build_flavors
+                and not found_in_flavor
+                and segments[0] == 'build'
+                and segments[2] not in ('metadata', 'fastlane')
             ):
                 logging.debug(
                     'Not scanning "{dir}" with unknown subdir or gradle flavor "{value}"'.format(

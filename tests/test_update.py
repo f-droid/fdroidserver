@@ -286,6 +286,44 @@ class UpdateTest(unittest.TestCase):
         fdroidserver.update.insert_localized_app_metadata(apps)
         self.assertEqual(second_value, apps[app.id]['localized']['en-US']['name'])
 
+    def test_fastlane_with_schildichat(self):
+        """Test if fastlane is found in this tangle of dirs and symlinks.
+
+        https://github.com/SchildiChat/schildichat-android-next/tree/sc_v0.10.3-ex_25_6_2
+        """
+        os.chdir(self.testdir)
+        config = dict()
+        fdroidserver.common.fill_config_defaults(config)
+        fdroidserver.update.config = config
+
+        app = fdroidserver.metadata.App()
+        app.id = 'chat.schildi.android'
+        build_dir = f'build/{app.id}'
+        flavors = ['fdroid', 'sc', 'default']
+        subdir = 'app'
+        apps = {app.id: app}
+        build = fdroidserver.metadata.Build()
+        build.versionCode = 42
+        build.gradle = flavors
+        build.subdir = subdir
+        app['Builds'] = [build]
+
+        wrong_value = 'wrong'
+        wrong_dir = Path(f'{build_dir}/upstream_infra/fastlane/metadata/android/en-US')
+        wrong_dir.mkdir(parents=True)
+        (wrong_dir / 'title.txt').write_text(wrong_value)
+
+        right_value = 'right'
+        right_dir = Path(f'{build_dir}/metadata/en-US')
+        right_dir.mkdir(parents=True)
+        (right_dir / 'title.txt').write_text(right_value)
+        _fastlane = Path('.fastlane/metadata')
+        _fastlane.mkdir(parents=True)
+        os.symlink('../../metadata', _fastlane / 'android')
+        os.symlink('.fastlane', 'fastlane')
+        fdroidserver.update.insert_localized_app_metadata(apps)
+        self.assertEqual(right_value, apps[app.id]['localized']['en-US']['name'])
+
     def test_fastlane_with_multi_level_subdir(self):
         """Test if fastlane in multi-level subdir is found."""
         os.chdir(self.testdir)
