@@ -2733,17 +2733,17 @@ def getpaths_map(build_dir, globpaths):
         paths[p] = [r[len(str(build_dir)) + 1:] for r in glob.glob(full_path)]
         if not paths[p]:
             not_found_paths.append(p)
+    return paths, not_found_paths
+
+
+def getpaths(build_dir, globpaths):
+    """Extend via globbing the paths from a field and return them as a set."""
+    paths_map, not_found_paths = getpaths_map(build_dir, globpaths)
     if not_found_paths:
         raise FDroidException(
             "Some glob paths did not match any files/dirs:\n"
             + "\n".join(not_found_paths)
         )
-    return paths
-
-
-def getpaths(build_dir, globpaths):
-    """Extend via globbing the paths from a field and return them as a set."""
-    paths_map = getpaths_map(build_dir, globpaths)
     paths = set()
     for k, v in paths_map.items():
         for p in v:
