@@ -68,9 +68,18 @@ import struct
 import sys
 import zipfile
 import zlib
-
 from collections import namedtuple
-from typing import Any, BinaryIO, Callable, Dict, Iterable, Iterator, Optional, Tuple, Union
+from typing import (
+    Any,
+    BinaryIO,
+    Callable,
+    Dict,
+    Iterable,
+    Iterator,
+    Optional,
+    Tuple,
+    Union,
+)
 
 __version__ = "1.1.1"
 NAME = "apksigcopier"

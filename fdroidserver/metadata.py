@@ -18,19 +18,19 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from pathlib import Path
-import math
-import platform
-import os
-import re
 import logging
-import ruamel.yaml
+import math
+import os
+import platform
+import re
 from collections import OrderedDict
+from pathlib import Path
 
-from . import common
-from . import _
-from .exception import MetaDataException
+import ruamel.yaml
+
+from . import _, common
 from ._yaml import yaml
+from .exception import MetaDataException
 
 srclibs = None
 warnings_action = None

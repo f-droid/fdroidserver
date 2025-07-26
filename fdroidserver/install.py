@@ -17,24 +17,21 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import sys
-import os
 import glob
 import locale
 import logging
+import os
+import sys
 import termios
 import tty
-
-import defusedxml.ElementTree as XMLElementTree
-
 from argparse import ArgumentParser, BooleanOptionalAction
 from pathlib import Path
 from urllib.parse import urlencode, urlparse, urlunparse
 
-from . import _
-from . import common, github, index, net
-from .exception import FDroidException
+import defusedxml.ElementTree as XMLElementTree
 
+from . import _, common, github, index, net
+from .exception import FDroidException
 
 DEFAULT_IPFS_GATEWAYS = ("https://gateway.ipfs.io/ipfs/",)
 MAVEN_CENTRAL_MIRRORS = [

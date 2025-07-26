@@ -4,6 +4,7 @@
 #
 
 from argparse import ArgumentParser
+
 from fdroidserver import common, index
 
 fdroid_summary = 'export the keystore in standard PEM format'

@@ -19,16 +19,15 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import glob
+import logging
 import os
 import re
 import shutil
 import socket
 import sys
 from argparse import ArgumentParser
-import logging
 
-from . import _
-from . import common
+from . import _, common
 from .exception import FDroidException
 
 config = {}

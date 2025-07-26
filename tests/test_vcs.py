@@ -7,7 +7,8 @@ from git import Repo
 
 import fdroidserver.common
 import fdroidserver.metadata
-from .shared_test_code import mkdtemp, VerboseFalseOptions
+
+from .shared_test_code import VerboseFalseOptions, mkdtemp
 
 
 class VCSTest(unittest.TestCase):

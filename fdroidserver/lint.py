@@ -24,8 +24,9 @@ import urllib.parse
 from argparse import ArgumentParser
 from pathlib import Path
 
-from . import _, common, metadata, rewritemeta
 from fdroidserver._yaml import yaml
+
+from . import _, common, metadata, rewritemeta
 
 config = None
 

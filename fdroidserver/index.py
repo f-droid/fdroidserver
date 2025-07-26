@@ -30,6 +30,7 @@ these installed on the signing server.
 
 """
 
+import calendar
 import collections
 import hashlib
 import json
@@ -41,19 +42,26 @@ import sys
 import tempfile
 import urllib.parse
 import zipfile
-import calendar
 from binascii import hexlify, unhexlify
 from datetime import datetime, timezone
 from pathlib import Path
 from xml.dom.minidom import Document
 
-from . import _
-from . import common
-from . import metadata
-from . import signindex
-from fdroidserver.common import ANTIFEATURES_CONFIG_NAME, CATEGORIES_CONFIG_NAME, CONFIG_CONFIG_NAME, MIRRORS_CONFIG_NAME, RELEASECHANNELS_CONFIG_NAME, DEFAULT_LOCALE, FDroidPopen, FDroidPopenBytes, load_publish_signer_fingerprints
 from fdroidserver._yaml import yaml
+from fdroidserver.common import (
+    ANTIFEATURES_CONFIG_NAME,
+    CATEGORIES_CONFIG_NAME,
+    CONFIG_CONFIG_NAME,
+    DEFAULT_LOCALE,
+    MIRRORS_CONFIG_NAME,
+    RELEASECHANNELS_CONFIG_NAME,
+    FDroidPopen,
+    FDroidPopenBytes,
+    load_publish_signer_fingerprints,
+)
 from fdroidserver.exception import FDroidException, VerificationException
+
+from . import _, common, metadata, signindex
 
 
 def make(apps, apks, repodir, archive):

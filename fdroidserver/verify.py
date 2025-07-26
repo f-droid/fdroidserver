@@ -16,18 +16,17 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import sys
-import os
 import glob
 import json
 import logging
-import requests
+import os
+import sys
 from argparse import ArgumentParser
 from collections import OrderedDict
 
-from . import _
-from . import common
-from . import net
+import requests
+
+from . import _, common, net
 from .exception import FDroidException
 
 config = None
@@ -58,8 +57,8 @@ def _add_diffoscope_info(d):
         ]
         d['diffoscope']['External-Tools-Required'] = external_tools
 
-        from diffoscope.tools import OS_NAMES, get_current_os
         from diffoscope.external_tools import EXTERNAL_TOOLS
+        from diffoscope.tools import OS_NAMES, get_current_os
 
         current_os = get_current_os()
         os_list = [current_os] if (current_os in OS_NAMES) else iter(OS_NAMES)

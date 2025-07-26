@@ -13,10 +13,10 @@ import git
 import requests
 import yaml
 
-from .shared_test_code import TmpCwd, mkdtemp, VerboseFalseOptions
-
 import fdroidserver
 import fdroidserver.import_subcommand
+
+from .shared_test_code import TmpCwd, VerboseFalseOptions, mkdtemp
 
 basedir = Path(__file__).parent
 logging.basicConfig(level=logging.DEBUG)

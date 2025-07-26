@@ -5,10 +5,11 @@
 import collections
 import os
 import re
-import requests
-import requests_cache
 import sys
 import tempfile
+
+import requests
+import requests_cache
 
 
 def main():

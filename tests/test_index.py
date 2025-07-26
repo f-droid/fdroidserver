@@ -3,21 +3,22 @@
 import copy
 import datetime
 import glob
-import os
-import unittest
-from pathlib import Path
-import yaml
-import zipfile
-from unittest.mock import patch
-import requests
-import tempfile
 import json
+import os
 import shutil
+import tempfile
+import unittest
+import zipfile
+from pathlib import Path
+from unittest.mock import patch
+
+import requests
+import yaml
 
 import fdroidserver
 from fdroidserver import common, index, publish, signindex, update
-from .shared_test_code import GP_FINGERPRINT, TmpCwd, mkdtemp
 
+from .shared_test_code import GP_FINGERPRINT, TmpCwd, mkdtemp
 
 basedir = Path(__file__).parent
 

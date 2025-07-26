@@ -21,10 +21,11 @@ import copy
 import logging
 import os
 import random
-import requests
 import tempfile
 import time
 import urllib
+
+import requests
 import urllib3
 from requests.adapters import HTTPAdapter, Retry
 

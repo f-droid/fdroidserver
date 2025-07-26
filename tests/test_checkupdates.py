@@ -1,18 +1,18 @@
 #!/usr/bin/env python3
 
-import git
 import os
 import platform
 import shutil
 import tempfile
 import time
 import unittest
-from unittest import mock
 from pathlib import Path
+from unittest import mock
+
+import git
 
 import fdroidserver
 import fdroidserver.checkupdates
-
 
 basedir = Path(__file__).parent
 

@@ -4,12 +4,12 @@
 # that run in the buildserver setup.  It is not really maintained, but
 # is still here as a kind of reference.
 
+import inspect
+import logging
 import os
 import sys
-import logging
-import textwrap
 import tempfile
-import inspect
+import textwrap
 from argparse import ArgumentParser
 
 localmodule = os.path.realpath(

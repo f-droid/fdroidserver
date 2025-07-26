@@ -1,13 +1,14 @@
 #!/usr/bin/env python3
 
 import os
-import unittest
 import tempfile
 import textwrap
+import unittest
 from pathlib import Path
 from unittest import mock
 
 from fdroidserver import metadata, rewritemeta
+
 from .shared_test_code import TmpCwd, mkdtemp
 
 basedir = Path(__file__).parent

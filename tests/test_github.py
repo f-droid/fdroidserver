@@ -3,8 +3,9 @@
 import unittest
 import unittest.mock
 
-from .shared_test_code import mock_urlopen
 import fdroidserver
+
+from .shared_test_code import mock_urlopen
 
 
 class GithubApiTest(unittest.TestCase):

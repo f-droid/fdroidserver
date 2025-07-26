@@ -6,10 +6,10 @@ import shutil
 import subprocess
 import tempfile
 import unittest
-
-from fdroidserver import apksigcopier, common, exception, signindex, update
 from pathlib import Path
 from unittest.mock import patch
+
+from fdroidserver import apksigcopier, common, exception, signindex, update
 
 
 class Options:

@@ -6,6 +6,7 @@
 # This is used in update.has_known_vulnerability()
 
 import re
+
 import requests
 
 # this list was generated using:

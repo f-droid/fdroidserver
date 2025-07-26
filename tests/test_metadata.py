@@ -4,22 +4,23 @@ import copy
 import io
 import os
 import random
-import ruamel.yaml
 import shutil
-import unittest
 import tempfile
 import textwrap
+import unittest
 from collections import OrderedDict
 from pathlib import Path
 from unittest import mock
 
+import ruamel.yaml
+
 import fdroidserver
 from fdroidserver import metadata
-from fdroidserver.exception import MetaDataException
-from fdroidserver.common import DEFAULT_LOCALE
 from fdroidserver._yaml import yaml
-from .shared_test_code import TmpCwd, mkdtemp
+from fdroidserver.common import DEFAULT_LOCALE
+from fdroidserver.exception import MetaDataException
 
+from .shared_test_code import TmpCwd, mkdtemp
 
 basedir = Path(__file__).parent
 

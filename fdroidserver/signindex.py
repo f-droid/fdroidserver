@@ -17,15 +17,13 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import json
+import logging
 import os
 import time
 import zipfile
 from argparse import ArgumentParser
-import logging
 
-from . import _
-from . import common
-from . import metadata
+from . import _, common, metadata
 from .exception import FDroidException
 
 config = None

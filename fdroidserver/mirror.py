@@ -7,13 +7,10 @@ import posixpath
 import socket
 import subprocess
 import sys
-from argparse import ArgumentParser
 import urllib.parse
+from argparse import ArgumentParser
 
-from . import _
-from . import common
-from . import index
-from . import update
+from . import _, common, index, update
 
 
 def _run_wget(path, urls, verbose=False):
@@ -133,6 +130,7 @@ def main():
             import io
             import json
             import zipfile
+
             from . import net
 
             url = _append_to_url_path(section, 'index-v1.jar')

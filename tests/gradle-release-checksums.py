@@ -2,12 +2,12 @@
 
 import os
 import re
-import requests
 import subprocess
 import sys
+
+import requests
 from colorama import Fore, Style
 from packaging.version import Version
-
 
 checksums = None
 versions = dict()

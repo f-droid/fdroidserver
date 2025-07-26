@@ -6,14 +6,15 @@ import sys
 import tempfile
 import textwrap
 import unittest
-import yaml
 from pathlib import Path
 from unittest import mock
 
-from .shared_test_code import TmpCwd, mkdtemp
+import yaml
 
 import fdroidserver.build
 import fdroidserver.common
+
+from .shared_test_code import TmpCwd, mkdtemp
 
 
 class FakeProcess:

@@ -19,25 +19,25 @@
 
 import base64
 import datetime
-import git
 import hashlib
 import inspect
 import logging
 import os
-import paramiko
 import platform
 import shutil
 import ssl
 import subprocess
 import sys
 import tempfile
-import yaml
-from urllib.parse import urlparse
 from argparse import ArgumentParser
 from typing import Optional
+from urllib.parse import urlparse
 
-from . import _
-from . import common
+import git
+import paramiko
+import yaml
+
+from . import _, common
 from .exception import VCSException
 
 # hard coded defaults for Android ~/.android/debug.keystore files

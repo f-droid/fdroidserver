@@ -17,16 +17,14 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from argparse import ArgumentParser
-import logging
 import io
-import tempfile
+import logging
 import shutil
+import tempfile
+from argparse import ArgumentParser
 from pathlib import Path
 
-from . import _
-from . import common
-from . import metadata
+from . import _, common, metadata
 
 config = None
 

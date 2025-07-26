@@ -16,16 +16,16 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from os.path import isdir, isfile, basename, abspath, expanduser
-import os
 import json
+import logging
+import os
 import shutil
 import subprocess
 import textwrap
-import logging
-from .common import FDroidException
-
 import threading
+from os.path import abspath, basename, expanduser, isdir, isfile
+
+from .common import FDroidException
 
 lock = threading.Lock()
 

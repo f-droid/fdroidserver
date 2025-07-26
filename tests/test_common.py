@@ -1,40 +1,44 @@
 #!/usr/bin/env python3
 
 import difflib
-import git
 import glob
+import gzip
 import importlib
 import json
 import logging
 import os
 import re
-import ruamel.yaml
 import shutil
 import subprocess
 import sys
 import tempfile
+import textwrap
 import time
 import unittest
-import textwrap
-import gzip
 from argparse import ArgumentParser
 from datetime import datetime, timezone
-from zipfile import BadZipFile, ZipFile
-from unittest import mock
 from pathlib import Path
+from unittest import mock
+from zipfile import BadZipFile, ZipFile
 
+import git
+import ruamel.yaml
 
 import fdroidserver
-import fdroidserver.signindex
 import fdroidserver.common
 import fdroidserver.metadata
-from .shared_test_code import TmpCwd, mkdtemp, mkdir_testfiles
+import fdroidserver.signindex
+from fdroidserver._yaml import config_dump, yaml, yaml_dumper
 from fdroidserver.common import ANTIFEATURES_CONFIG_NAME, CATEGORIES_CONFIG_NAME
-from fdroidserver._yaml import yaml, yaml_dumper, config_dump
-from fdroidserver.exception import FDroidException, VCSException,\
-    MetaDataException, VerificationException
+from fdroidserver.exception import (
+    FDroidException,
+    MetaDataException,
+    VCSException,
+    VerificationException,
+)
 from fdroidserver.looseversion import LooseVersion
 
+from .shared_test_code import TmpCwd, mkdir_testfiles, mkdtemp
 
 basedir = Path(__file__).parent
 
@@ -2415,8 +2419,9 @@ class CommonTest(SetUpTearDownMixin, unittest.TestCase):
     @mock.patch('sdkmanager._generate_package_xml', lambda a, b, c: None)
     def test_auto_install_ndk_mock_dl(self):
         """Test NDK installs by actually calling sdkmanager"""
-        import sdkmanager
         import importlib.metadata
+
+        import sdkmanager
 
         sdkmanager_version = LooseVersion(importlib.metadata.version('sdkmanager'))
         if sdkmanager_version < LooseVersion('0.6.4'):

@@ -8,6 +8,7 @@
 import argparse
 import os
 import pprint
+
 from fdroidserver import _, common, metadata
 
 fdroid_summary = 'prepare the srclibs for `fdroid build --on-server`'
