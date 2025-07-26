@@ -28,8 +28,8 @@ Example
 
 import os
 import sys
-import time
 import threading
+import time
 
 
 class Tail(object):

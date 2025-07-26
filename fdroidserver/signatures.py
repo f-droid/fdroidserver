@@ -15,15 +15,13 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+import logging
+import os
+import re
+import sys
 from argparse import ArgumentParser
 
-import re
-import os
-import sys
-import logging
-
-from . import _
-from . import common
+from . import _, common
 from .exception import FDroidException
 
 

@@ -16,28 +16,28 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import sys
 import glob
 import hashlib
 import json
+import logging
 import os
+import pathlib
 import re
+import shutil
 import subprocess
+import sys
 import time
 import urllib
-from typing import Dict, List
-from git import Repo
-import yaml
 from argparse import ArgumentParser
-import logging
-import pathlib
-import shutil
+from typing import Dict, List
+
 import git
+import yaml
+from git import Repo
+
 import fdroidserver.github
 
-from . import _
-from . import common
-from . import index
+from . import _, common, index
 from .exception import FDroidException
 
 config = None
@@ -349,8 +349,8 @@ def update_awsbucket_libcloud(repo_section, is_index_only=False):
     import libcloud.security
 
     libcloud.security.VERIFY_SSL_CERT = True
-    from libcloud.storage.types import Provider, ContainerDoesNotExistError
     from libcloud.storage.providers import get_driver
+    from libcloud.storage.types import ContainerDoesNotExistError, Provider
 
     if not config.get('awsaccesskeyid') or not config.get('awssecretkey'):
         raise FDroidException(
@@ -854,8 +854,9 @@ def upload_to_android_observatory(repo_section):
 def upload_apk_to_android_observatory(path):
     # depend on requests and lxml only if users enable AO
     import requests
-    from . import net
     from lxml.html import fromstring
+
+    from . import net
 
     apkfilename = os.path.basename(path)
     r = requests.post(

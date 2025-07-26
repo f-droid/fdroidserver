@@ -2,16 +2,17 @@
 
 import os
 import random
-import requests
 import socket
 import tempfile
 import threading
 import time
 import unittest
+from pathlib import Path
 from unittest.mock import MagicMock, patch
 
+import requests
+
 from fdroidserver import net
-from pathlib import Path
 
 
 class RetryServer:

@@ -15,17 +15,15 @@ import os
 import pathlib
 import shutil
 import sys
-import unittest
 import tempfile
+import unittest
 from unittest import mock
 
-from fdroidserver import publish
-from fdroidserver import common
-from fdroidserver import metadata
-from fdroidserver import signatures
+from fdroidserver import common, metadata, publish, signatures
 from fdroidserver._yaml import yaml
 from fdroidserver.exception import FDroidException
-from .shared_test_code import mkdtemp, VerboseFalseOptions
+
+from .shared_test_code import VerboseFalseOptions, mkdtemp
 
 basedir = pathlib.Path(__file__).parent
 

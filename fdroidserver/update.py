@@ -20,26 +20,27 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import argparse
+import copy
 import filecmp
-import sys
-import os
-import shutil
 import glob
-import logging
-import re
-import socket
-import warnings
-import zipfile
 import hashlib
 import json
+import logging
+import os
+import re
+import shutil
+import socket
+import sys
 import time
-import yaml
-import copy
+import warnings
+import zipfile
+from argparse import ArgumentParser
+from datetime import datetime, timezone
+from pathlib import Path
+
 import asn1crypto.cms
 import defusedxml.ElementTree as ElementTree
-from datetime import datetime, timezone
-from argparse import ArgumentParser
-from pathlib import Path
+import yaml
 
 try:
     from yaml import CSafeLoader as SafeLoader
@@ -49,14 +50,13 @@ except ImportError:
 import collections
 from binascii import hexlify
 
-from . import _
-from . import common
-from . import metadata
-from .common import DEFAULT_LOCALE
-from .exception import BuildException, FDroidException, VerificationException
+from PIL import Image, PngImagePlugin
+
 import fdroidserver.index
 
-from PIL import Image, PngImagePlugin
+from . import _, common, metadata
+from .common import DEFAULT_LOCALE
+from .exception import BuildException, FDroidException, VerificationException
 
 if hasattr(Image, 'DecompressionBombWarning'):
     warnings.simplefilter('error', Image.DecompressionBombWarning)

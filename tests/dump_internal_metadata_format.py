@@ -25,7 +25,6 @@ import sys
 from argparse import ArgumentParser
 
 import git
-
 import yaml
 
 localmodule = os.path.realpath(

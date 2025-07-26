@@ -4,6 +4,7 @@
 
 import os
 from argparse import ArgumentParser
+
 from fdroidserver import common
 from fdroidserver.common import FDroidPopen
 from fdroidserver.exception import BuildException

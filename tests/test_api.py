@@ -8,8 +8,8 @@ from unittest import mock
 
 import fdroidserver
 from fdroidserver import common, signindex
-from .shared_test_code import GP_FINGERPRINT, mkdtemp
 
+from .shared_test_code import GP_FINGERPRINT, mkdtemp
 
 basedir = Path(__file__).parent
 

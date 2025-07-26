@@ -18,6 +18,7 @@ except ModuleNotFoundError:
     from androguard.core.apk import get_apkid
 
 from fdroidserver._yaml import yaml, yaml_dumper
+
 from .shared_test_code import mkdir_testfiles
 
 # TODO: port generic tests that use index.xml to index-v2 (test that

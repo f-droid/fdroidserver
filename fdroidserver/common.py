@@ -52,54 +52,58 @@ environment variable to include.
 
 """
 
+import ast
+import base64
 import copy
 import difflib
-from typing import List
 import filecmp
-import git
 import glob
+import gzip
+import hashlib
 import io
 import itertools
+import json
+import logging
+import operator
 import os
-import sys
 import re
-import ast
-import gzip
 import shutil
+import socket
 import stat
 import subprocess
-import time
-import operator
-import logging
-import hashlib
-import socket
-import base64
-import zipfile
+import sys
 import tempfile
-import json
-from pathlib import Path
-
-import defusedxml.ElementTree as XMLElementTree
-
+import time
+import zipfile
 from argparse import BooleanOptionalAction
-from asn1crypto import cms
 from base64 import urlsafe_b64encode
 from binascii import hexlify
 from datetime import datetime, timedelta, timezone
+from pathlib import Path
 from queue import Queue
+from typing import List
 from urllib.parse import urlparse, urlsplit, urlunparse
 from zipfile import ZipFile
 
+import defusedxml.ElementTree as XMLElementTree
+import git
+from asn1crypto import cms
+
 import fdroidserver.metadata
 from fdroidserver import _
-from fdroidserver._yaml import yaml, config_dump
-from fdroidserver.exception import FDroidException, VCSException, NoSubmodulesException, \
-    BuildException, VerificationException, MetaDataException
-from .asynchronousfilereader import AsynchronousFileReader
-from .looseversion import LooseVersion
+from fdroidserver._yaml import config_dump, yaml
+from fdroidserver.exception import (
+    BuildException,
+    FDroidException,
+    MetaDataException,
+    NoSubmodulesException,
+    VCSException,
+    VerificationException,
+)
 
 from . import apksigcopier, common
-
+from .asynchronousfilereader import AsynchronousFileReader
+from .looseversion import LooseVersion
 
 # The path to this fdroidserver distribution
 FDROID_PATH = os.path.realpath(os.path.join(os.path.dirname(__file__), '..'))
@@ -2904,9 +2908,9 @@ def is_debuggable_or_testOnly(apkfile):
         return False
     try:
         # these were moved in androguard 4.0
-        from androguard.core.axml import AXMLParser, format_value, START_TAG
+        from androguard.core.axml import START_TAG, AXMLParser, format_value
     except ImportError:
-        from androguard.core.bytecodes.axml import AXMLParser, format_value, START_TAG
+        from androguard.core.bytecodes.axml import START_TAG, AXMLParser, format_value
     _androguard_logging_level()
 
     with ZipFile(apkfile) as apk:
@@ -2978,9 +2982,23 @@ def get_apk_id_androguard(apkfile):
 
     try:
         # these were moved in androguard 4.0
-        from androguard.core.axml import AXMLParser, format_value, START_TAG, END_TAG, TEXT, END_DOCUMENT
+        from androguard.core.axml import (
+            END_DOCUMENT,
+            END_TAG,
+            START_TAG,
+            TEXT,
+            AXMLParser,
+            format_value,
+        )
     except ImportError:
-        from androguard.core.bytecodes.axml import AXMLParser, format_value, START_TAG, END_TAG, TEXT, END_DOCUMENT
+        from androguard.core.bytecodes.axml import (
+            END_DOCUMENT,
+            END_TAG,
+            START_TAG,
+            TEXT,
+            AXMLParser,
+            format_value,
+        )
     _androguard_logging_level()
 
     appid = None

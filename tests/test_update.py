@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
 import copy
-import git
 import glob
 import hashlib
 import json
@@ -12,15 +11,17 @@ import shutil
 import string
 import subprocess
 import sys
+import textwrap
 import time
 import unittest
-import yaml
 import zipfile
-import textwrap
 from binascii import hexlify
 from datetime import datetime
 from pathlib import Path
 from unittest import mock
+
+import git
+import yaml
 
 try:
     # these were moved in androguard 4.0
@@ -44,15 +45,16 @@ except ImportError:
     except ImportError:
         from yaml import Loader as FullLoader
 
+from PIL import PngImagePlugin
+
 import fdroidserver.common
 import fdroidserver.exception
 import fdroidserver.metadata
 import fdroidserver.update
 from fdroidserver.common import CATEGORIES_CONFIG_NAME
 from fdroidserver.looseversion import LooseVersion
-from .shared_test_code import TmpCwd, mkdtemp
-from PIL import PngImagePlugin
 
+from .shared_test_code import TmpCwd, mkdtemp
 
 DONATION_FIELDS = ('Donate', 'Liberapay', 'OpenCollective')
 

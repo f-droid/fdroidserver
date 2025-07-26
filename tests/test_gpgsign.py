@@ -5,10 +5,10 @@ import os
 import shutil
 import tempfile
 import unittest
-
-from fdroidserver import common, gpgsign
 from pathlib import Path
 from unittest.mock import MagicMock, patch
+
+from fdroidserver import common, gpgsign
 
 basedir = Path(__file__).parent
 

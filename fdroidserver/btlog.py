@@ -28,22 +28,21 @@
 # the F-Droid client.
 
 import collections
-import defusedxml.minidom
-import git
 import glob
-import os
 import json
 import logging
-import requests
+import os
 import shutil
 import tempfile
 import zipfile
 from argparse import ArgumentParser
 from typing import Optional
 
-from . import _
-from . import common
-from . import deploy
+import defusedxml.minidom
+import git
+import requests
+
+from . import _, common, deploy
 from .exception import FDroidException
 
 

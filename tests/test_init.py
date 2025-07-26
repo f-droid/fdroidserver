@@ -8,6 +8,7 @@ import unittest
 
 import fdroidserver.common
 import fdroidserver.init
+
 from .shared_test_code import mkdtemp
 
 basedir = pathlib.Path(__file__).parent

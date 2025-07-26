@@ -2,13 +2,13 @@
 #
 # add completed translations from weblate to MANIFEST.in
 
-import git
 import json
 import os
 import re
-import requests
 import subprocess
 
+import git
+import requests
 
 projectbasedir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 localedir = os.path.join(projectbasedir, 'locale')

@@ -18,31 +18,27 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import os
-import shutil
+import argparse
 import glob
-import subprocess
+import logging
+import os
 import posixpath
 import re
+import shutil
+import subprocess
 import tarfile
-import threading
-import traceback
-import time
-import requests
 import tempfile
-import argparse
-import logging
+import threading
+import time
+import traceback
 from gettext import ngettext
 from pathlib import Path
 
-from . import _
-from . import common
-from . import net
-from . import metadata
-from . import scanner
-from . import vmtools
+import requests
+
+from . import _, common, metadata, net, scanner, vmtools
 from .common import FDroidPopen
-from .exception import FDroidException, BuildException, VCSException
+from .exception import BuildException, FDroidException, VCSException
 
 try:
     import paramiko

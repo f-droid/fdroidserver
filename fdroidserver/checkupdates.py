@@ -19,28 +19,30 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import configparser
-import git
+import copy
+import logging
 import os
 import re
-import urllib.request
-import urllib.error
-import time
 import subprocess
 import sys
-from argparse import ArgumentParser
+import time
 import traceback
-import logging
-import copy
+import urllib.error
 import urllib.parse
+import urllib.request
+from argparse import ArgumentParser
 from pathlib import Path
 from typing import Optional
 
-from . import _
-from . import common
-from . import metadata
-from . import net
-from .exception import VCSException, NoSubmodulesException, FDroidException, MetaDataException
+import git
 
+from . import _, common, metadata, net
+from .exception import (
+    FDroidException,
+    MetaDataException,
+    NoSubmodulesException,
+    VCSException,
+)
 
 # https://gitlab.com/fdroid/checkupdates-runner/-/blob/1861899262a62a4ed08fa24e5449c0368dfb7617/.gitlab-ci.yml#L36
 BOT_EMAIL = 'fdroidci@bubu1.eu'

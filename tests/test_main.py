@@ -2,12 +2,13 @@
 
 import os
 import pkgutil
+import tempfile
 import textwrap
 import unittest
-import tempfile
 from unittest import mock
 
 import fdroidserver.__main__
+
 from .shared_test_code import TmpCwd, TmpPyPath
 
 

@@ -18,20 +18,20 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import re
-import sys
+import importlib.metadata
+import logging
 import os
 import pkgutil
-import logging
-import importlib.metadata
-
-import git
-import fdroidserver.common
-import fdroidserver.metadata
-from fdroidserver import _
+import re
+import sys
 from argparse import ArgumentError
 from collections import OrderedDict
 
+import git
+
+import fdroidserver.common
+import fdroidserver.metadata
+from fdroidserver import _
 
 COMMANDS = OrderedDict([
     ("build", _("Build a package from source")),

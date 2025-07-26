@@ -9,12 +9,12 @@ import unittest
 from pathlib import Path
 from unittest import mock
 
-from .shared_test_code import mkdtemp
-
 import fdroidserver.common
 import fdroidserver.lint
 import fdroidserver.metadata
 from fdroidserver._yaml import config_dump
+
+from .shared_test_code import mkdtemp
 
 basedir = Path(__file__).parent
 

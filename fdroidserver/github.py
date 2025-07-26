@@ -18,8 +18,8 @@
 
 import json
 import pathlib
-import urllib.request
 import urllib.parse
+import urllib.request
 
 
 class GithubApi:

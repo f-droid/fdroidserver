@@ -28,23 +28,21 @@ mostly reports success by moving an APK from unsigned/ to repo/
 
 """
 
-import sys
+import glob
+import hashlib
+import json
+import logging
 import os
 import re
 import shutil
-import glob
-import hashlib
-from argparse import ArgumentParser
-from collections import OrderedDict
-import logging
-from gettext import ngettext
-import json
+import sys
 import time
 import zipfile
+from argparse import ArgumentParser
+from collections import OrderedDict
+from gettext import ngettext
 
-from . import _
-from . import common
-from . import metadata
+from . import _, common, metadata
 from .common import FDroidPopen
 from .exception import BuildException, FDroidException
 

@@ -6,8 +6,9 @@ import sys
 import unittest
 from tempfile import TemporaryDirectory
 
-from .shared_test_code import TmpCwd
 from fdroidserver import common, signatures
+
+from .shared_test_code import TmpCwd
 
 basedir = os.path.dirname(__file__)
 

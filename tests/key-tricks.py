@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 
 import os
-import fdroidserver
 import shutil
 import sys
+
+import fdroidserver
 from fdroidserver import common, nightly
 
 if os.getenv('CI') is None:
