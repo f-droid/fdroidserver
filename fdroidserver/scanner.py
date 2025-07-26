@@ -750,8 +750,12 @@ def scan_source(build_dir, build=metadata.Build(), json_per_build=None):
         ]
     ]
 
-    scanignore = common.getpaths_map(build_dir, build.scanignore)
-    scandelete = common.getpaths_map(build_dir, build.scandelete)
+    scanignore, scanignore_not_found_paths = common.getpaths_map(
+        build_dir, build.scanignore
+    )
+    scandelete, scandelete_not_found_paths = common.getpaths_map(
+        build_dir, build.scandelete
+    )
 
     scanignore_worked = set()
     scandelete_worked = set()
@@ -1109,10 +1113,18 @@ def scan_source(build_dir, build=metadata.Build(), json_per_build=None):
                         json_per_build,
                     )
 
+    for p in scanignore_not_found_paths:
+        logging.error(_("Non-exist scanignore path: %s") % p)
+        count += 1
+
     for p in scanignore:
         if p not in scanignore_worked:
             logging.error(_('Unused scanignore path: %s') % p)
             count += 1
+
+    for p in scandelete_not_found_paths:
+        logging.error(_("Non-exist scandelete path: %s") % p)
+        count += 1
 
     for p in scandelete:
         if p not in scandelete_worked:
