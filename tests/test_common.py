@@ -2784,7 +2784,6 @@ class CommonTest(SetUpTearDownMixin, unittest.TestCase):
                 'NonFreeDep',
                 'NonFreeNet',
                 'Tracking',
-                'UpstreamNonFree',
             ],
             list(antiFeatures.keys()),
         )

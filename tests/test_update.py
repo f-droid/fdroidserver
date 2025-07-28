@@ -1375,7 +1375,7 @@ class UpdateTest(unittest.TestCase):
             if apk['packageName'] == 'com.politedroid' and apk['versionCode'] == 3:
                 antiFeatures = apk.get('antiFeatures')
                 self.assertTrue('KnownVuln' in antiFeatures)
-                self.assertEqual(3, len(antiFeatures))
+                self.assertEqual(2, len(antiFeatures))
                 foundtest = True
         self.assertTrue(foundtest)
 

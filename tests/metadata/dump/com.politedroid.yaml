@@ -19,7 +19,6 @@ Builds:
   antifeatures:
     KnownVuln: {}
     NonFreeAssets: {}
-    UpstreamNonFree: {}
   binary: null
   build: ''
   buildjni: []
@@ -127,7 +126,6 @@ Builds:
   antifeatures:
     KnownVuln: {}
     NonFreeAssets: {}
-    UpstreamNonFree: {}
   binary: null
   build: ''
   buildjni: []

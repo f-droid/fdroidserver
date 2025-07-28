@@ -38,7 +38,3 @@ Tracking:
   description: Diese App verfolgt und versendet Ihre Aktivitäten
   icon: ic_antifeature_tracking.xml
   name: Tracking
-UpstreamNonFree:
-  description: Der Originalcode ist nicht völlig quelloffen
-  icon: ic_antifeature_upstreamnonfree.xml
-  name: Originalcode nicht-quelloffen

@@ -38,7 +38,3 @@ Tracking:
   description: Aplicația îți înregistrează și raportează activitatea undeva
   icon: ic_antifeature_tracking.xml
   name: Urmărire
-UpstreamNonFree:
-  description: Codul sursa originar nu este în totalitatea lui software liber
-  icon: ic_antifeature_upstreamnonfree.xml
-  name: Surse ne-libere

@@ -22,7 +22,6 @@ Builds:
     target: android-10
     antifeatures:
       - KnownVuln
-      - UpstreamNonFree
       - NonFreeAssets
 
   - versionName: '1.3'
@@ -43,7 +42,6 @@ Builds:
       - yes
     antifeatures:
       - KnownVuln
-      - UpstreamNonFree
       - NonFreeAssets
 
 ArchivePolicy: 4 versions

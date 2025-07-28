@@ -672,7 +672,7 @@ class MetadataTest(unittest.TestCase):
         """Definitions in .yml files should override the localized versions."""
         app = metadata.parse_metadata('metadata/app.with.special.build.params.yml')
 
-        self.assertEqual(app['AntiFeatures'], {'UpstreamNonFree': {}})
+        self.assertEqual(app['AntiFeatures'], {'Tracking': {}})
 
         self.assertEqual(49, app['Builds'][-3]['versionCode'])
         self.assertEqual(
@@ -961,7 +961,6 @@ class MetadataTest(unittest.TestCase):
                   - versionCode: 123
                     antifeatures:
                       - KnownVuln
-                      - UpstreamNonFree
                       - NonFreeAssets
                 """
             )
@@ -972,11 +971,7 @@ class MetadataTest(unittest.TestCase):
                 'AntiFeatures': {'Ads': {}},
                 'Builds': [
                     {
-                        'antifeatures': {
-                            'KnownVuln': {},
-                            'NonFreeAssets': {},
-                            'UpstreamNonFree': {},
-                        },
+                        'antifeatures': {'KnownVuln': {}, 'NonFreeAssets': {}},
                         'versionCode': 123,
                     }
                 ],
@@ -997,7 +992,7 @@ class MetadataTest(unittest.TestCase):
                         es: 2nd
                         az: zero
                         en-US: first
-                      UpstreamNonFree:
+                      Tracking:
                       NonFreeAssets:
                 AntiFeatures:
                   NonFreeDep:
@@ -1019,7 +1014,7 @@ class MetadataTest(unittest.TestCase):
                         'antifeatures': {
                             'KnownVuln': {'az': 'zero', 'en-US': 'first', 'es': '2nd'},
                             'NonFreeAssets': {},
-                            'UpstreamNonFree': {},
+                            'Tracking': {},
                         },
                         'versionCode': 123,
                     }
@@ -1873,7 +1868,6 @@ class MetadataTest(unittest.TestCase):
                     antifeatures:
                       - KnownVuln
                       - NonFreeAssets
-                      - UpstreamNonFree
 
                 ArchivePolicy: 4
                 AutoUpdateMode: Version v%v

@@ -1,5 +1,5 @@
 AntiFeatures:
-  - UpstreamNonFree
+  - Tracking
 Categories:
   - System
 License: GPL-3.0-only
