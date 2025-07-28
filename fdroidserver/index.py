@@ -595,7 +595,10 @@ def convert_version(version, app, repodir):
         ver["file"]["ipfsCIDv1"] = ipfsCIDv1
 
     if "srcname" in version:
-        ver["src"] = common.file_entry(os.path.join(repodir, version["srcname"]))
+        ver["src"] = common.file_entry(
+            os.path.join(repodir, version["srcname"]),
+            version["srcnameSha256"],
+        )
 
     if "obbMainFile" in version:
         ver["obbMainFile"] = common.file_entry(
@@ -964,7 +967,7 @@ def make_v1(apps, packages, repodir, repodict, requestsdict, signer_fingerprints
         for k, v in sorted(package.items()):
             if not v:
                 continue
-            if k in ('icon', 'icons', 'icons_src', 'ipfsCIDv1', 'name'):
+            if k in ('icon', 'icons', 'icons_src', 'ipfsCIDv1', 'name', 'srcnameSha256'):
                 continue
             if k == 'antiFeatures':
                 d[k] = sorted(v.keys())
