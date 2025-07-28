@@ -14,7 +14,10 @@ rootpaths = [
 
 localedir = None
 for rootpath in rootpaths:
-    if len(glob.glob(os.path.join(rootpath, 'locale', '*', 'LC_MESSAGES', 'fdroidserver.mo'))) > 0:
+    found_mo = glob.glob(
+        os.path.join(rootpath, 'locale', '*', 'LC_MESSAGES', 'fdroidserver.mo')
+    )
+    if len(found_mo) > 0:
         localedir = os.path.join(rootpath, 'locale')
         break
 
