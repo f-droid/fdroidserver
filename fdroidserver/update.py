@@ -374,7 +374,8 @@ def get_cache():
             f = f'archive/{v["srcname"]}'
             if not os.path.exists(f):
                 f = f'repo/{v["srcname"]}'
-            v['srcnameSha256'] = common.sha256sum(f)
+            if os.path.exists(f):
+                v['srcnameSha256'] = common.sha256sum(f)
 
     return apkcache
 
