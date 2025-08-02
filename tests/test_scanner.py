@@ -176,6 +176,7 @@ class ScannerTest(unittest.TestCase):
             ('source-files/com.lolo.io.onelist/', 1),
             ('source-files/catalog.test/', 3),
             ('source-files/org.piepmeyer.gauguin/', 1),
+            ('source-files/com.infomaniak.mail/', 2),
         ]
 
         for root, count in test_files:

@@ -71,11 +71,8 @@ SCANNER_CACHE_VERSION = 1
 DEFAULT_CATALOG_PREFIX_REGEX = re.compile(
     r'''defaultLibrariesExtensionName\s*=\s*['"](\w+)['"]'''
 )
-GRADLE_KTS_CATALOG_FILE_REGEX = re.compile(
-    r'''create\("(\w+)"\)\s*\{[^}]*from\(files\(['"]([^"]+)['"]\)\)'''
-)
 GRADLE_CATALOG_FILE_REGEX = re.compile(
-    r'''(\w+)\s*\{[^}]*from\(files\(['"]([^"]+)['"]\)\)'''
+    r'''(?:create\()?['"]?(\w+)['"]?\)?\s*\{[^}]*from\(files\(['"]([^"]+)['"]\)\)'''
 )
 VERSION_CATALOG_REGEX = re.compile(r'versionCatalogs\s*\{')
 
@@ -225,21 +222,18 @@ def get_catalogs(root: str) -> dict[str, GradleVersionCatalog]:
     groovy_file = root / "settings.gradle"
     kotlin_file = root / "settings.gradle.kts"
     if groovy_file.is_file():
-        s = groovy_file.read_text(encoding="utf-8")
-        version_catalogs_m = VERSION_CATALOG_REGEX.search(s)
-        if version_catalogs_m:
-            start = version_catalogs_m.end()
-            end = find_block_end(s, start)
-            catalog_files_m = GRADLE_CATALOG_FILE_REGEX.finditer(s, start, end)
+        gradle_file = groovy_file
     elif kotlin_file.is_file():
-        s = kotlin_file.read_text(encoding="utf-8")
-        version_catalogs_m = VERSION_CATALOG_REGEX.search(s)
-        if version_catalogs_m:
-            start = version_catalogs_m.end()
-            end = find_block_end(s, start)
-            catalog_files_m = GRADLE_KTS_CATALOG_FILE_REGEX.finditer(s, start, end)
+        gradle_file = kotlin_file
     else:
         return {}
+
+    s = gradle_file.read_text(encoding="utf-8")
+    version_catalogs_m = VERSION_CATALOG_REGEX.search(s)
+    if version_catalogs_m:
+        start = version_catalogs_m.end()
+        end = find_block_end(s, start)
+        catalog_files_m = GRADLE_CATALOG_FILE_REGEX.finditer(s, start, end)
 
     m_default = DEFAULT_CATALOG_PREFIX_REGEX.search(s)
     if m_default:
