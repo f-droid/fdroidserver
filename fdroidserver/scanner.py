@@ -189,7 +189,9 @@ class GradleVersionCatalog:
     def get_coordinate(self, accessor: str) -> list[str]:
         """Get the Gradle coordinate from the catalog with an accessor."""
         if accessor.startswith("plugins."):
-            return [self.plugins.get(accessor[8:], "")]
+            return [
+                self.plugins.get(accessor[8:].removesuffix(".asLibraryDependency"), "")
+            ]
         if accessor.startswith("bundles."):
             return self.bundles.get(accessor[8:], [])
         return [self.libraries.get(accessor, "")]
