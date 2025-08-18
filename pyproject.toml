@@ -30,7 +30,6 @@ force-exclude = '''(
   | examples/fdroid_exportkeystore\.py
   | examples/fdroid_fetchsrclibs\.py
   | examples/fdroid_nitrokeyimport\.py
-  | fdroidserver/__init__\.py
   | fdroidserver/__main__\.py
   | fdroidserver/apksigcopier\.py
   | fdroidserver/looseversion\.py
