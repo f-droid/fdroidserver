@@ -616,7 +616,7 @@ def checkupdates_app(app: metadata.App, auto: bool, make_commit: bool = False) -
                 newbuilds = copy.deepcopy(builds[-len(vercodes):])
 
                 # These are either built-in or invalid in newer system versions
-                bookworm_blocklist = [
+                trixie_blocklist = [
                     'apt-get install -y openjdk-11-jdk',
                     'apt-get install openjdk-11-jdk-headless',
                     'apt-get install -y openjdk-11-jdk-headless',
@@ -625,14 +625,23 @@ def checkupdates_app(app: metadata.App, auto: bool, make_commit: bool = False) -
                     'apt-get install -y openjdk-17-jdk',
                     'apt-get install openjdk-17-jdk-headless',
                     'apt-get install -y openjdk-17-jdk-headless',
+                    'apt-get install -y -t trixie openjdk-17-jdk-headless',
+                    'apt-get install -t trixie openjdk-21-jdk-headless',
+                    'apt-get install -y openjdk-21-jdk-headless',
+                    'apt-get install -y -t sid openjdk-21-jdk-headless',
+                    'apt-get install -y -t trixie openjdk-21-jdk-headless',
+                    'apt-get install -y -t trixie openjdk-22-jdk-headless',
+                    'apt-get install -y -t trixie openjdk-23-jdk-headless',
+                    'echo "deb http://deb.debian.org/debian trixie main" > /etc/apt/sources.list.d/trixie.list',
+                    'echo "deb https://deb.debian.org/debian trixie main" > /etc/apt/sources.list.d/trixie.list',
                     'update-alternatives --auto java',
                     'update-java-alternatives -a',
                 ]
 
                 for build in newbuilds:
                     if "sudo" in build:
-                        if any("openjdk-11" in line for line in build["sudo"]) or any("openjdk-17" in line for line in build["sudo"]):
-                            build["sudo"] = [line for line in build["sudo"] if line not in bookworm_blocklist]
+                        if any("openjdk-11" in line for line in build["sudo"]) or any("openjdk-17" in line for line in build["sudo"]) or any("openjdk-21" in line for line in build["sudo"]):
+                            build["sudo"] = [line for line in build["sudo"] if line not in trixie_blocklist]
                         if build["sudo"] == ['apt-get update']:
                             build["sudo"] = ''
 
