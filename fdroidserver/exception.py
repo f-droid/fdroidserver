@@ -35,6 +35,10 @@ class VCSException(FDroidException):
     pass
 
 
+class NoVersionCodeException(FDroidException):
+    pass
+
+
 class NoSubmodulesException(VCSException):
     pass
 

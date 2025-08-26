@@ -56,7 +56,7 @@ import fdroidserver.index
 
 from . import _, common, metadata
 from .common import DEFAULT_LOCALE
-from .exception import BuildException, FDroidException, VerificationException
+from .exception import BuildException, FDroidException, NoVersionCodeException, VerificationException
 
 if hasattr(Image, 'DecompressionBombWarning'):
     warnings.simplefilter('error', Image.DecompressionBombWarning)
@@ -1801,6 +1801,7 @@ def scan_apk_androguard(apk, apkfile):
 
     xml = apkobject.get_android_manifest_xml()
     androidmanifest_xml = apkobject.xml['AndroidManifest.xml']
+
     if len(xml.nsmap) > 0:
         # one of them surely will be the Android one, or its corrupt
         xmlns = common.XMLNS_ANDROID
@@ -1810,8 +1811,12 @@ def scan_apk_androguard(apk, apkfile):
         xmlns = '{}'
 
     vcstr = androidmanifest_xml.get(xmlns + 'versionCode')
+    logging.debug("Version Code: %r (%s)" % (vcstr, apkfile))
 
-    if vcstr.startswith('0x'):
+    if not vcstr:
+        raise NoVersionCodeException(_("APK file {path} does not have a version code "
+                                       "in its manifest").format(path=apkfile))
+    elif vcstr.startswith('0x'):
         apk['versionCode'] = int(vcstr, 16)
     else:
         apk['versionCode'] = int(vcstr)
@@ -1957,6 +1962,10 @@ def process_apk(apkcache, apkfilename, repodir, knownapks, use_date_from_apk=Fal
             apk = scan_apk(apkfile)
         except BuildException:
             logging.warning(_("Skipping '{apkfilename}' with invalid signature!")
+                            .format(apkfilename=apkfilename))
+            return True, None, False
+        except NoVersionCodeException:
+            logging.warning(_("Skipping '{apkfilename}' without versionCode!")
                             .format(apkfilename=apkfilename))
             return True, None, False
 
