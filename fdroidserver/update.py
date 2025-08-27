@@ -511,7 +511,7 @@ def insert_obbs(repodir, apps, apks):
             obbWarnDelete(f, _('OBB filename must start with "main." or "patch.":'))
             continue
         if not re.match(r'^-?[0-9]+$', chunks[1]):
-            obbWarnDelete(f, _('The OBB version code must come after "{name}.":')
+            obbWarnDelete(f, _('The OBB versionCode must come after "{name}.":')
                           .format(name=chunks[0]))
             continue
         versionCode = int(chunks[1])
@@ -550,7 +550,7 @@ VERSION_STRING_RE = re.compile(r'^([0-9]+)\.([0-9]+)\.([0-9]+)$')
 
 def version_string_to_int(version):
     """
-    Convert sermver version designation to version code.
+    Convert semantic version designation to versionCode.
 
     Approximately convert a [Major].[Minor].[Patch] version string
     consisting of numeric characters (0-9) and periods to a number. The
@@ -2322,7 +2322,7 @@ def archive_old_apks(apps, apks, archapks, repodir, archivedir, defaultkeepversi
                         continue
                 apkList.append(apk)
 
-        # Sort the apk list by version code. First is highest/newest.
+        # Sort the apk list by versionCode. First is highest/newest.
         sorted_list = sorted(apkList, key=lambda apk: apk['versionCode'], reverse=True)
         if currentVersionApk:
             # Insert apk which corresponds to currentVersion at the front

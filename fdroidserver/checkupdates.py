@@ -93,7 +93,7 @@ def check_http(app: metadata.App) -> tuple[Optional[str], Optional[int]]:
 
     m = re.search(codeex, page)
     if not m:
-        raise FDroidException("No RE match for version code")
+        raise FDroidException("No RE match for versionCode")
     vercode = common.version_code_string_to_int(m.group(1).strip())
 
     if urlver != '.':
@@ -213,7 +213,7 @@ def check_tags(app: metadata.App, pattern: str) -> tuple[str, int, str]:
             if codeex:
                 m = re.search(codeex, filecontent)
                 if not m:
-                    logging.debug(f"UpdateCheckData regex {codeex} for version code"
+                    logging.debug(f"UpdateCheckData regex {codeex} for versionCode"
                                   f" has no match in tag {tag}")
                     continue
 

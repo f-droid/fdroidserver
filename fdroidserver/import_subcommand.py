@@ -354,7 +354,7 @@ def main():
         if not versionName:
             logging.warning(_('Could not find latest version name'))
         if not versionCode:
-            logging.warning(_('Could not find latest version code'))
+            logging.warning(_('Could not find latest versionCode'))
     else:
         raise FDroidException(_("No gradle project could be found. Specify --subdir?"))
 
