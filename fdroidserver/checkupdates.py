@@ -233,7 +233,7 @@ def check_tags(app: metadata.App, pattern: str) -> tuple[str, int, str]:
             if verex:
                 m = re.search(verex, filecontent)
                 if not m:
-                    logging.debug(f"UpdateCheckData regex {verex} for version name"
+                    logging.debug(f"UpdateCheckData regex {verex} for versionName"
                                   f" has no match in tag {tag}")
                     continue
 

@@ -2211,7 +2211,7 @@ def parse_androidmanifests(paths, app):
                                 version = matches
 
                             else:
-                                # If build.gradle contains applicationNameSuffix add it to the end of version name
+                                # If build.gradle contains applicationNameSuffix add it to the end of versionName
                                 matches = vnssearch_g(line)
                                 if matches and temp_version_name:
                                     name_suffix = matches.group(2)
@@ -2294,7 +2294,7 @@ def parse_androidmanifests(paths, app):
         logging.debug("..got package={0}, version={1}, vercode={2}"
                       .format(package, version, vercode))
 
-        # Always grab the package name and version name in case they are not
+        # Always grab the package name and versionName in case they are not
         # together with the highest versionCode
         if max_package is None and package is not None:
             max_package = package
@@ -2610,7 +2610,7 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
 
     # Insert versionCode and number into the manifest if necessary
     if build.forceversion:
-        logging.info("Changing the version name")
+        logging.info("Changing the versionName")
         for path in manifest_paths(root_dir, flavors):
             if not os.path.isfile(path):
                 continue
@@ -2950,7 +2950,7 @@ def get_apk_id(apkfile):
     -------
     appid
     versionCode
-    version name
+    versionName
 
     """
     try:
