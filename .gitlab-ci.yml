@@ -263,7 +263,7 @@ ubuntu_jammy_pip:
 # Run all the various linters and static analysis tools.
 hooks/pre-commit:
   stage: lint
-  image: debian:bookworm-slim
+  image: debian:trixie-slim
   variables:
     LANG: C.UTF-8
   script:
@@ -285,7 +285,7 @@ hooks/pre-commit:
     - ./hooks/pre-commit
 
 bandit:
-  image: debian:bookworm-slim
+  image: debian:trixie-slim
   <<: *python-rules-changes
   <<: *apt-template
   script:
@@ -295,7 +295,7 @@ bandit:
 
 pylint:
   stage: lint
-  image: debian:bookworm-slim
+  image: debian:trixie-slim
   <<: *python-rules-changes
   <<: *apt-template
   script:
@@ -315,7 +315,7 @@ pylint:
 
 shellcheck:
   stage: lint
-  image: debian:bookworm-slim
+  image: debian:trixie-slim
   rules:
     - changes:
         - .gitlab-ci.yml
@@ -354,7 +354,7 @@ pip-audit:
 # so important to scan that kind of install in CI.
 # https://docs.safetycli.com/safety-docs/installation/gitlab
 safety:
-  image: debian:bookworm-slim
+  image: debian:trixie-slim
   rules:
     - if: $SAFETY_API_KEY
       changes:
@@ -380,7 +380,7 @@ safety:
 # TODO tests/*/*/*.yaml are not covered
 yamllint:
   stage: lint
-  image: debian:bookworm-slim
+  image: debian:trixie-slim
   rules:
     - changes:
         - .gitlab-ci.yml
@@ -409,7 +409,7 @@ yamllint:
 
 locales:
   stage: lint
-  image: debian:bookworm-slim
+  image: debian:trixie-slim
   variables:
     LANG: C.UTF-8
   script:
@@ -591,7 +591,7 @@ fdroid build:
 # fdroiddata because that one is known to work, and this is a CI job,
 # so it should be isolated from the normal churn of fdroiddata.
 plugin_fetchsrclibs:
-  image: debian:bookworm-slim
+  image: debian:trixie-slim
   <<: *apt-template
   rules:
     - changes:
@@ -635,7 +635,7 @@ plugin_fetchsrclibs:
 
 # test a full update and deploy cycle to gitlab.com
 servergitmirrors:
-  image: debian:bookworm-slim
+  image: debian:trixie-slim
   <<: *apt-template
   rules:
     - if: $CI_COMMIT_BRANCH == "master" && $CI_PROJECT_PATH == "fdroid/fdroidserver"
@@ -679,12 +679,12 @@ servergitmirrors:
     - diff repo/index-v1.jar index-v1.jar
 
 Build documentation:
-  image: debian:bookworm-slim
+  image: debian:trixie-slim
   <<: *python-rules-changes
   <<: *apt-template
   script:
     - apt-get install make python3-sphinx python3-numpydoc python3-pydata-sphinx-theme pydocstyle fdroidserver
-    - apt purge fdroidserver
+    - apt-get purge fdroidserver
     # ignore vendored files
     - pydocstyle --verbose --match='(?!apksigcopier|looseversion|setup|test_).*\.py' fdroidserver
     - cd docs
@@ -783,7 +783,7 @@ docker:
     - cd buildserver
     - docker build -t $TEST_IMAGE --build-arg GIT_REV_PARSE_HEAD=$(git rev-parse HEAD) .
     - docker tag $TEST_IMAGE $RELEASE_IMAGE
-    - docker tag $TEST_IMAGE ${RELEASE_IMAGE}-bookworm
+    - docker tag $TEST_IMAGE ${RELEASE_IMAGE}-trixie
     - echo $CI_JOB_TOKEN | docker login -u gitlab-ci-token --password-stdin registry.gitlab.com
     # This avoids filling up gitlab.com free tier accounts with unused docker images.
     - if test -z "$FDROID_PUSH_DOCKER_IMAGE"; then
@@ -793,7 +793,7 @@ docker:
           exit 0;
       fi
     - docker push $RELEASE_IMAGE
-    - docker push $RELEASE_IMAGE-bookworm
+    - docker push $RELEASE_IMAGE-trixie
 
 
 # PUBLISH is the signing server.  It has a very minimal manual setup.
