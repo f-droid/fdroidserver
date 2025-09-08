@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 2.3a1\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2025-03-25 11:36+0100\n"
+"POT-Creation-Date: 2025-06-25 09:52+0200\n"
 "PO-Revision-Date: 2025-03-26 10:00+0000\n"
 "Last-Translator: Edgars Andersons <Edgars+Weblate@gaitenis.id.lv>\n"
 "Language-Team: Latvian <https://hosted.weblate.org/projects/f-droid/fdroidserver/lv/>\n"
@@ -353,6 +353,11 @@ msgid "Can't build due to {} error while scanning"
 msgid_plural "Can't build due to {} errors while scanning"
 msgstr[0] ""
 msgstr[1] ""
+
+#: ../fdroidserver/common.py
+#, python-brace-format
+msgid "Cannot read {path}: {error}"
+msgstr ""
 
 #: ../fdroidserver/rewritemeta.py
 #, python-brace-format
@@ -1479,6 +1484,11 @@ msgstr ""
 msgid "Rename APK files that do not match package.name_123.apk"
 msgstr ""
 
+#: ../fdroidserver/common.py
+#, python-brace-format
+msgid "RepoType {type} is deprecated, please switch to git."
+msgstr ""
+
 #: ../fdroidserver/nightly.py
 #, python-brace-format
 msgid "Resigning {apkfilename} with provided debug.keystore"
@@ -1991,6 +2001,10 @@ msgstr "Pārbauda pakotni {path} ar apksigner."
 #, python-brace-format
 msgid "VirusTotal API key cannot upload files larger than 32MB, use {url} to upload {path}."
 msgstr "VirusTotal API atslēga nevar augšupielādēt datnes, kas ir lielākas par 32 MB. Jāizmanto {url}, lai augšupielādētu {path}."
+
+#: ../fdroidserver/nightly.py
+msgid "WARNING: only public git repos are supported!"
+msgstr ""
 
 #: ../fdroidserver/__main__.py
 msgid "Warn about possible metadata errors"
