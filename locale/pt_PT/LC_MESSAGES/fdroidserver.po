@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2025-06-25 09:52+0200\n"
-"PO-Revision-Date: 2025-05-30 07:19+0000\n"
+"PO-Revision-Date: 2025-07-14 08:01+0000\n"
 "Last-Translator: ssantos <ssantos@web.de>\n"
 "Language-Team: Portuguese (Portugal) <https://hosted.weblate.org/projects/f-droid/fdroidserver/pt_PT/>\n"
 "Language: pt_PT\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.12-dev\n"
+"X-Generator: Weblate 5.13-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -364,9 +364,9 @@ msgstr[0] "Não é possível construir devido a erro {} durante a digitalizaçã
 msgstr[1] "Não é possível construir devido a erros {} durante a digitalização"
 
 #: ../fdroidserver/common.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Cannot read {path}: {error}"
-msgstr "Falha de leitura {path}: {error}"
+msgstr "Não é possível ler {path}: {error}"
 
 #: ../fdroidserver/rewritemeta.py
 #, python-brace-format
@@ -1498,7 +1498,7 @@ msgstr "Renomear todos os ficheiros APKs que não correspondem com package.name_
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "RepoType {type} is deprecated, please switch to git."
-msgstr ""
+msgstr "O RepoType {type} é depreciado, por favor mude para git."
 
 #: ../fdroidserver/nightly.py
 #, python-brace-format
@@ -2022,7 +2022,7 @@ msgstr "A chave VirusTotal API não pode enviar ficheiros maiores que 32MB, use 
 
 #: ../fdroidserver/nightly.py
 msgid "WARNING: only public git repos are supported!"
-msgstr ""
+msgstr "ALERTA: há apoio somente para repositórios de git públicos!"
 
 #: ../fdroidserver/__main__.py
 msgid "Warn about possible metadata errors"
