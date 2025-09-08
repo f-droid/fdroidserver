@@ -9,20 +9,21 @@
 # Fjuro <fjuro@alius.cz>, 2024.
 # Jakub Boukal <www.bagr@gmail.com>, 2024.
 # Fjuro <fjuro@users.noreply.hosted.weblate.org>, 2025.
+# ikanakova <ikanakova@users.noreply.hosted.weblate.org>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 1.0.0-95-gd7af22b\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2025-06-25 09:52+0200\n"
-"PO-Revision-Date: 2025-03-26 10:00+0000\n"
-"Last-Translator: Fjuro <fjuro@users.noreply.hosted.weblate.org>\n"
+"PO-Revision-Date: 2025-06-26 06:55+0000\n"
+"Last-Translator: ikanakova <ikanakova@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/f-droid/fdroidserver/cs/>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=((n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2);\n"
-"X-Generator: Weblate 5.11-dev\n"
+"X-Generator: Weblate 5.13-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -1501,7 +1502,7 @@ msgstr "Přejmenovat soubory APK, které se neshodují s package.name_123.apk"
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "RepoType {type} is deprecated, please switch to git."
-msgstr ""
+msgstr "RepoType {type} je zastaralý, přejděte prosím na git."
 
 #: ../fdroidserver/nightly.py
 #, python-brace-format
@@ -2026,7 +2027,7 @@ msgstr "Klíč API VirusTotal neumožňuje nahrávání souborů větších než
 
 #: ../fdroidserver/nightly.py
 msgid "WARNING: only public git repos are supported!"
-msgstr ""
+msgstr "POZOR: podporovány jsou pouze veřejné repozitáře git!"
 
 #: ../fdroidserver/__main__.py
 msgid "Warn about possible metadata errors"
