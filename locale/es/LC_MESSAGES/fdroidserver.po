@@ -16,13 +16,14 @@
 # Nicolás Pérez <ccnicolasperez@gmail.com>, 2025.
 # Swyter <swyterzone@gmail.com>, 2025.
 # emma peel <emma.peel@riseup.net>, 2025.
+# BIENESTAR NARANJOS <bienestarnaranjos@gmail.com>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2025-06-25 09:52+0200\n"
 "PO-Revision-Date: 2025-09-01 12:01+0000\n"
-"Last-Translator: Swyter <swyterzone@gmail.com>\n"
+"Last-Translator: BIENESTAR NARANJOS <bienestarnaranjos@gmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/f-droid/fdroidserver/es/>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
@@ -1507,7 +1508,7 @@ msgstr "Cambiar el nombre de archivos APK que no coinciden con el formato packag
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "RepoType {type} is deprecated, please switch to git."
-msgstr ""
+msgstr "RepoType {type} está obsoleto, cámbiese a git."
 
 #: ../fdroidserver/nightly.py
 #, python-brace-format
@@ -1718,7 +1719,7 @@ msgstr "Modo de prueba: ponga la salida solo en el directorio tmp y siga desarro
 
 #: ../fdroidserver/index.py
 msgid "The \"qrcode\" Python package is not installed (e.g. apt-get install python3-qrcode)!"
-msgstr ""
+msgstr "¡El paquete Python \"qrcode\" no está instalado (por ejemplo, apt-get install python3-qrcode)!"
 
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
 #: ../fdroidserver/update.py
@@ -2031,7 +2032,7 @@ msgstr "La clave de API de VirusTotal no puede subir archivos mayores de 32MB. U
 
 #: ../fdroidserver/nightly.py
 msgid "WARNING: only public git repos are supported!"
-msgstr ""
+msgstr "ADVERTENCIA: ¡solo se admiten repositorios git públicos!"
 
 #: ../fdroidserver/__main__.py
 msgid "Warn about possible metadata errors"
