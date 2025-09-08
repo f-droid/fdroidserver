@@ -40,7 +40,7 @@ msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2025-06-25 09:52+0200\n"
-"PO-Revision-Date: 2025-03-26 10:00+0000\n"
+"PO-Revision-Date: 2025-06-26 06:55+0000\n"
 "Last-Translator: 大王叫我来巡山 <hamburger2048@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/projects/f-droid/fdroidserver/zh_Hans/>\n"
 "Language: zh_Hans\n"
@@ -48,7 +48,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.11-dev\n"
+"X-Generator: Weblate 5.13-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -391,9 +391,9 @@ msgid_plural "Can't build due to {} errors while scanning"
 msgstr[0] "因扫描时的{}错误而无法构建"
 
 #: ../fdroidserver/common.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Cannot read {path}: {error}"
-msgstr "读取 {path} 失败：{error}"
+msgstr "无法读取 {path} ：{error}"
 
 #: ../fdroidserver/rewritemeta.py
 #, python-brace-format
@@ -1525,7 +1525,7 @@ msgstr "重命名文件名不符合 package.name_123.apk 的 APK 文件"
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "RepoType {type} is deprecated, please switch to git."
-msgstr ""
+msgstr "存储库类型 {type} 被废弃，请切换到 git。"
 
 #: ../fdroidserver/nightly.py
 #, python-brace-format
@@ -2048,7 +2048,7 @@ msgstr "VirusTotal 的 API 密钥无法用于上传大于 32MB 的文件，请�
 
 #: ../fdroidserver/nightly.py
 msgid "WARNING: only public git repos are supported!"
-msgstr ""
+msgstr "警告：只支持公开 git 存储库！"
 
 #: ../fdroidserver/__main__.py
 msgid "Warn about possible metadata errors"
