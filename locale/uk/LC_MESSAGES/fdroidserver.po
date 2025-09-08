@@ -13,20 +13,21 @@
 # Nazar <balaraz@tuta.io>, 2024.
 # Максим Горпиніч <mgorpinic2005@gmail.com>, 2024.
 # Максим Горпиніч <maksimgorpinic2005a@gmail.com>, 2025.
+# Максим Горпиніч <maksimgorpinic4@gmail.com>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2025-06-25 09:52+0200\n"
-"PO-Revision-Date: 2025-03-27 19:35+0000\n"
-"Last-Translator: Ihor Hordiichuk <igor_ck@outlook.com>\n"
+"PO-Revision-Date: 2025-06-25 10:32+0000\n"
+"Last-Translator: Максим Горпиніч <maksimgorpinic4@gmail.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/f-droid/fdroidserver/uk/>\n"
 "Language: uk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 5.11-dev\n"
+"X-Generator: Weblate 5.13-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -371,9 +372,9 @@ msgstr[1] "Неможливо створити через {} помилки пі
 msgstr[2] "Неможливо створити через {} помилок під час сканування"
 
 #: ../fdroidserver/common.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Cannot read {path}: {error}"
-msgstr "Не вдалося розпізнати {path}: {error}"
+msgstr "Не можу читати {path}: {error}"
 
 #: ../fdroidserver/rewritemeta.py
 #, python-brace-format
@@ -1505,7 +1506,7 @@ msgstr "Перейменування файлів APK, які не відпов�
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "RepoType {type} is deprecated, please switch to git."
-msgstr ""
+msgstr "RepoType {type} застарів, будь ласка, перейдіть на git."
 
 #: ../fdroidserver/nightly.py
 #, python-brace-format
@@ -2030,7 +2031,7 @@ msgstr "Ключ API VirusTotal не може завантажити файли,
 
 #: ../fdroidserver/nightly.py
 msgid "WARNING: only public git repos are supported!"
-msgstr ""
+msgstr "ПОПЕРЕДЖЕННЯ: підтримуються лише публічні git-репозиторії!"
 
 #: ../fdroidserver/__main__.py
 msgid "Warn about possible metadata errors"
