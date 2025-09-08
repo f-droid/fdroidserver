@@ -20,15 +20,15 @@ msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2025-06-25 09:52+0200\n"
-"PO-Revision-Date: 2025-03-26 10:00+0000\n"
-"Last-Translator: Igor Rückert <igorruckert@yahoo.com.br>\n"
+"PO-Revision-Date: 2025-06-26 06:55+0000\n"
+"Last-Translator: LucasMZ <git@lucasmz.dev>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/f-droid/fdroidserver/pt_BR/>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.11-dev\n"
+"X-Generator: Weblate 5.13-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -372,9 +372,9 @@ msgstr[0] "Não é possível criar devido a {} erro durante a digitalização"
 msgstr[1] "Não é possível criar devido a {} erros durante a digitalização"
 
 #: ../fdroidserver/common.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Cannot read {path}: {error}"
-msgstr "Falha ao ler {path}: {error}"
+msgstr "Não foi possível ler {path}: {error}"
 
 #: ../fdroidserver/rewritemeta.py
 #, python-brace-format
@@ -1506,7 +1506,7 @@ msgstr "Renomeia arquivos APK que não correspondem a pacote.nome_123.apk"
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "RepoType {type} is deprecated, please switch to git."
-msgstr ""
+msgstr "O RepoType de {type} está depreciado, por favor, migre para o Git."
 
 #: ../fdroidserver/nightly.py
 #, python-brace-format
@@ -2030,7 +2030,7 @@ msgstr "A chave API do VirusTotal não pode carregar arquivos maiores que 32MB, 
 
 #: ../fdroidserver/nightly.py
 msgid "WARNING: only public git repos are supported!"
-msgstr ""
+msgstr "ALERTA: há suporte somente a repositórios git públicos!"
 
 #: ../fdroidserver/__main__.py
 msgid "Warn about possible metadata errors"
