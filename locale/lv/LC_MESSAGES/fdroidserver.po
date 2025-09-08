@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fdroidserver 2.3a1\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2025-06-25 09:52+0200\n"
-"PO-Revision-Date: 2025-03-26 10:00+0000\n"
+"PO-Revision-Date: 2025-06-28 05:20+0000\n"
 "Last-Translator: Edgars Andersons <Edgars+Weblate@gaitenis.id.lv>\n"
 "Language-Team: Latvian <https://hosted.weblate.org/projects/f-droid/fdroidserver/lv/>\n"
 "Language: lv\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n % 10 == 0 || n % 100 >= 11 && n % 100 <= 19) ? 0 : ((n % 10 == 1 && n % 100 != 11) ? 1 : 2);\n"
-"X-Generator: Weblate 5.11-dev\n"
+"X-Generator: Weblate 5.13-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -357,18 +357,18 @@ msgstr[1] ""
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Cannot read {path}: {error}"
-msgstr ""
+msgstr "Nevar nolasīt {path}: {error}"
 
 #: ../fdroidserver/rewritemeta.py
 #, python-brace-format
 msgid "Cannot rewrite \"{path}\""
-msgstr ""
+msgstr "Nevar pārrakstīt \"{path}\""
 
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vname
 #: ../fdroidserver/lint.py
 #, python-format
 msgid "Categories '%s' is not valid"
-msgstr ""
+msgstr "Kategorija '%s' nav derīga"
 
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vname
 #: ../fdroidserver/lint.py
@@ -1487,20 +1487,20 @@ msgstr ""
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "RepoType {type} is deprecated, please switch to git."
-msgstr ""
+msgstr "RepoType {type} ir novecojis, lūgums pārslēgties uz git."
 
 #: ../fdroidserver/nightly.py
 #, python-brace-format
 msgid "Resigning {apkfilename} with provided debug.keystore"
-msgstr ""
+msgstr "Atkārtoti paraksta {apkfilename} ar norādīto debug.keystore"
 
 #: ../fdroidserver/update.py
 msgid "Resize all the icons exceeding the max pixel size and exit"
-msgstr ""
+msgstr "Samazināt visas ikonas, kas pārsniedz pieļaujamo izmēru pikseļos un iziet"
 
 #: ../fdroidserver/common.py
 msgid "Restrict output to warnings and errors"
-msgstr ""
+msgstr "Ierobežot izvadi līdz brīdinājumiem un kļūdām"
 
 #: ../fdroidserver/net.py
 #, python-format
@@ -2004,7 +2004,7 @@ msgstr "VirusTotal API atslēga nevar augšupielādēt datnes, kas ir lielākas 
 
 #: ../fdroidserver/nightly.py
 msgid "WARNING: only public git repos are supported!"
-msgstr ""
+msgstr "BRĪDINĀJUMS: tiek atbalstītas tikai publiskas git glabātavas."
 
 #: ../fdroidserver/__main__.py
 msgid "Warn about possible metadata errors"
@@ -2154,8 +2154,9 @@ msgstr ""
 #, python-format
 msgid "conflicting option string: %s"
 msgid_plural "conflicting option strings: %s"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "nesaderīgas iespēju virknes: %s"
+msgstr[1] "nesaderīga iespēju virkne: %s"
+msgstr[2] "nesaderīgas iespēju virknes: %s"
 
 #: /usr/lib/python3.11/argparse.py
 #, python-format
@@ -2509,8 +2510,9 @@ msgstr "jā"
 #, python-brace-format
 msgid "{0} app, {1} key aliases"
 msgid_plural "{0} apps, {1} key aliases"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{0} lietotņu, {1} atslēgu aizstājvārdi"
+msgstr[1] "{0} lietotne, {1} atslēgu aizstājvārdi"
+msgstr[2] "{0} lietotnes, {1} atslēgu aizstājvārdi"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -2673,11 +2675,13 @@ msgstr ""
 #: ../fdroidserver/build.py
 msgid "{} build failed"
 msgid_plural "{} builds failed"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Neizdevās {} būvējumi"
+msgstr[1] "Neizdevās {} būvējums"
+msgstr[2] "Neizdevās {} būvējumi"
 
 #: ../fdroidserver/build.py
 msgid "{} build succeeded"
 msgid_plural "{} builds succeeded"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{} sekmīgu būvējumu"
+msgstr[1] "{} sekmīgs būvējums"
+msgstr[2] "{} sekmīgi būvējumi"
