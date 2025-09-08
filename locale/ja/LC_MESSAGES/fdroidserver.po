@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: fdroidserver 0.8-224-g4b0ade7\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2025-06-25 09:52+0200\n"
-"PO-Revision-Date: 2025-04-30 04:07+0000\n"
+"PO-Revision-Date: 2025-08-26 00:02+0000\n"
 "Last-Translator: Liner Seven <linour7gmekiblo@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/f-droid/fdroidserver/ja/>\n"
 "Language: ja\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.12-dev\n"
+"X-Generator: Weblate 5.13\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -308,7 +308,7 @@ msgstr "正しくないエントリーの種類「{mirrortype}」がミラーの
 
 #: ../fdroidserver/mirror.py
 msgid "Base URL to mirror, can include the index signing key using the query string: ?fingerprint="
-msgstr "ミラーのベースURLにはクエリーの文字列 ?fingerprint= を使ってインデックスの署名鍵を含めることができます。"
+msgstr "ミラーのベースURLには、次のクエリ文字列を使用してインデックス署名キーを含めることができます: ?fingerprint="
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
@@ -360,9 +360,9 @@ msgid_plural "Can't build due to {} errors while scanning"
 msgstr[0] "スキャン時に{}個のエラーが発生したためビルドできません"
 
 #: ../fdroidserver/common.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Cannot read {path}: {error}"
-msgstr "{path}を読み込めませんでした：{error}"
+msgstr "{error}:{path}を読み込めませんでした"
 
 #: ../fdroidserver/rewritemeta.py
 #, python-brace-format
@@ -696,7 +696,7 @@ msgstr "環境変数{{env: {var}}}が未設定です！"
 
 #: ../fdroidserver/deploy.py
 msgid "Error deploying 'github_releases', {} not present. (You might need to run `fdroid update` first.)"
-msgstr "「github_releases」を設定する際にエラーが発生しました。{}がありません（まず`fdroid update`を実行する必要があるかもしれません）。"
+msgstr "「github_releases」を設定する際にエラーが発生しました。{}がありません（まず`fdroid update`を実行する必要があるかもしれません。）"
 
 #: ../fdroidserver/import_subcommand.py
 msgid "Error while getting repo address"
@@ -1494,7 +1494,7 @@ msgstr "package.name_123.apkに合致しないAPKファイルの名前を変更"
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "RepoType {type} is deprecated, please switch to git."
-msgstr ""
+msgstr "RepoType {type}は非推奨、gitへ移行願います。"
 
 #: ../fdroidserver/nightly.py
 #, python-brace-format
@@ -1771,7 +1771,7 @@ msgstr ""
 "また、署名用の鍵も併せて設定することを推奨します（一時的な署名鍵が自動的に生成されている可能性があります）。\n"
 "\n"
 "詳細については、https://f-droid.org/docs/Setup_an_F-Droid_App_Repo\n"
-"または https://f-droid.org/docs/Signing_Process をご覧ください。"
+"または https://f-droid.org/docs/Signing_Process をご覧ください"
 
 #: ../fdroidserver/deploy.py
 msgid "To use awsbucket, awssecretkey and awsaccesskeyid must also be set in config.yml!"
@@ -2017,7 +2017,7 @@ msgstr "VirusTotalのAPI鍵は32メガバイトより大きいファイルをア
 
 #: ../fdroidserver/nightly.py
 msgid "WARNING: only public git repos are supported!"
-msgstr ""
+msgstr "警告: 公開されているgitリポジトリだけサポートされています!"
 
 #: ../fdroidserver/__main__.py
 msgid "Warn about possible metadata errors"
@@ -2573,7 +2573,7 @@ msgstr "{appid}：ビルドが指定されていません。現在のソース�
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "{appid}: {field} must be a '{type}', but it is a '{fieldtype}!'"
-msgstr "{appid}：{field}には「{fieldtype}」ではなく「{type}」を指定してください！"
+msgstr "{appid}：{field}には '{fieldtype}' ではなく'{type}' を指定してください!"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
