@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: fdroidserver 2.1-273-g54e84d87\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2025-06-25 09:52+0200\n"
-"PO-Revision-Date: 2025-05-16 16:36+0000\n"
+"PO-Revision-Date: 2025-06-26 06:55+0000\n"
 "Last-Translator: Ecron <ecron_89@hotmail.com>\n"
 "Language-Team: Catalan <https://hosted.weblate.org/projects/f-droid/fdroidserver/ca/>\n"
 "Language: ca\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.12-dev\n"
+"X-Generator: Weblate 5.13-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -364,7 +364,7 @@ msgstr[0] "No es pot construir a causa d'un error {} en escanejar"
 msgstr[1] "No es pot construir a causa d'errors {} en escanejar"
 
 #: ../fdroidserver/common.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Cannot read {path}: {error}"
 msgstr "No s'ha pogut llegir {path}: {error}"
 
@@ -1498,7 +1498,7 @@ msgstr "Canvia el nom dels fitxers APK que no coincideixin amb package.name_123.
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "RepoType {type} is deprecated, please switch to git."
-msgstr ""
+msgstr "RepoType {type} ja no és compatible, canvieu a git."
 
 #: ../fdroidserver/nightly.py
 #, python-brace-format
@@ -2022,7 +2022,7 @@ msgstr "La clau de l'API VirusTotal no pot pujar fitxers més grans de 32 MB, ut
 
 #: ../fdroidserver/nightly.py
 msgid "WARNING: only public git repos are supported!"
-msgstr ""
+msgstr "Avís: només són compatibles els repositoris públics git."
 
 #: ../fdroidserver/__main__.py
 msgid "Warn about possible metadata errors"
