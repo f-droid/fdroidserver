@@ -10,13 +10,14 @@
 # Jakub Boukal <www.bagr@gmail.com>, 2024.
 # Fjuro <fjuro@users.noreply.hosted.weblate.org>, 2025.
 # ikanakova <ikanakova@users.noreply.hosted.weblate.org>, 2025.
+# Fjuro <git@alius.cz>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 1.0.0-95-gd7af22b\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2025-06-25 09:52+0200\n"
-"PO-Revision-Date: 2025-06-26 06:55+0000\n"
-"Last-Translator: ikanakova <ikanakova@users.noreply.hosted.weblate.org>\n"
+"PO-Revision-Date: 2025-06-28 05:20+0000\n"
+"Last-Translator: Fjuro <git@alius.cz>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/f-droid/fdroidserver/cs/>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
@@ -368,7 +369,7 @@ msgstr[1] "Nelze sestavit kvůli {} chybám při skenování"
 msgstr[2] "Nelze sestavit kvůli {} chybám při skenování"
 
 #: ../fdroidserver/common.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Cannot read {path}: {error}"
 msgstr "Chyba při čtení {path}: {error}"
 
