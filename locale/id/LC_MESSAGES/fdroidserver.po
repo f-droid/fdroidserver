@@ -4,13 +4,14 @@
 # Reza Almanda <rezaalmanda27@gmail.com>, 2021.
 # whenwesober <naomi16i_1298q@cikuh.com>, 2021.
 # Doctorredits_here <alkaf.alkaf2018@tutamail.com>, 2024.
+# Taufik Adi Wicaksono <taufikadi.wicaksono@tutamail.com>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 1.1-680-ge1d3de71\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2025-03-25 11:36+0100\n"
-"PO-Revision-Date: 2025-05-07 03:44+0000\n"
-"Last-Translator: signz signotorez <signotorez@gmail.com>\n"
+"PO-Revision-Date: 2025-05-07 18:46+0000\n"
+"Last-Translator: Taufik Adi Wicaksono <taufikadi.wicaksono@tutamail.com>\n"
 "Language-Team: Indonesian <https://hosted.weblate.org/projects/f-droid/fdroidserver/id/>\n"
 "Language: id\n"
 "MIME-Version: 1.0\n"
@@ -43,7 +44,7 @@ msgstr "\"%s/\" tidak ada kesesuaian pada berkas metadata!"
 
 #: ../fdroidserver/index.py
 msgid "\"isPrimary\" key should not be added to mirrors!"
-msgstr ""
+msgstr "Kunci \"isPrimary\" tidak boleh ditambahkan ke pencerminan!"
 
 #: ../fdroidserver/index.py
 #, python-brace-format
@@ -83,7 +84,7 @@ msgstr "\"{url}\" URL tudak valid!"
 #: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "%(prog)s: error: %(message)s\n"
-msgstr "%(prog)s: error: %(message)s\n"
+msgstr "%(prog)s: galat: %(message)s\n"
 
 #: ../fdroidserver/publish.py
 #, python-format
@@ -170,7 +171,7 @@ msgstr "'{value}' bukan {field} yang valid, seharusnya {pattern}"
 
 #: ../fdroidserver/checkupdates.py
 msgid "--merge-request only runs on a single appid!"
-msgstr ""
+msgstr "--merge-request hanya berjalan pada appid tunggal!"
 
 #: ../fdroidserver/checkupdates.py
 #, python-brace-format
@@ -274,56 +275,57 @@ msgstr "Aplikasi memiliki NoSource Since atau ArchivePolicy \"0 versi\" atau 0 t
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "App is in '{repo}' but has a link to {url}"
-msgstr ""
+msgstr "App ada di dalam '{repo}' namun memiliki tautan ke {url}"
 
 #: ../fdroidserver/lint.py
 msgid "App version has binary but does not have corresponding AllowedAPKSigningKeys to pin certificate."
-msgstr ""
+msgstr "Versi aplikasi memiliki biner tetapi tidak memiliki AllowedAPKSigningKeys yang sesuai untuk menyematkan sertifikat."
 
 #: ../fdroidserver/lint.py
+#, fuzzy
 msgid "Appending .git is not necessary"
-msgstr ""
+msgstr "Menambahkan .git tidak diperlukan"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Archiving {apkfilename} with invalid signature!"
-msgstr ""
+msgstr "Mengarsipkan {apkfilename} dengan tanda tangan yang tidak valid!"
 
 #: ../fdroidserver/lint.py
 msgid "AutoUpdateMode with UpdateCheckMode: HTTP must have a pattern."
-msgstr ""
+msgstr "AutoUpdateMode dengan UpdateCheckMode: HTTP harus memiliki pola."
 
 #: ../fdroidserver/install.py
 msgid "Automatic no to all prompts."
-msgstr ""
+msgstr "Otomatis tidak untuk semua permintaan."
 
 #: ../fdroidserver/install.py
 msgid "Automatic yes to all prompts."
-msgstr ""
+msgstr "Otomatis ya untuk semua permintaan."
 
 #: ../fdroidserver/index.py
 #, python-brace-format
 msgid "Bad entry type \"{mirrortype}\" in mirrors config: {mirror}"
-msgstr ""
+msgstr "Tipe entri yang buruk \"{mirrortype}\" dalam konfigurasi pencerminan: {mirror}"
 
 #: ../fdroidserver/mirror.py
 msgid "Base URL to mirror, can include the index signing key using the query string: ?fingerprint="
-msgstr ""
+msgstr "URL dasar untuk pencerminan, dapat menyertakan kunci penandatanganan indeks menggunakan string query: ?fingerprint="
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "Branch '{branch}' used as commit in build '{versionName}'"
-msgstr ""
+msgstr "Cabang '{branch}' digunakan sebagai commit dalam penyusunan '{versionName}'"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "Branch '{branch}' used as commit in srclib '{srclib}'"
-msgstr ""
+msgstr "Cabang '{branch}' digunakan sebagai commit di srclib '{srclib}'"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Broken symlink: {path}"
-msgstr ""
+msgstr "symlink rusak: {path}"
 
 #: ../fdroidserver/__main__.py
 msgid "Build a package from source"
@@ -531,7 +533,7 @@ msgstr ""
 #: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "Deleting git-mirror history, repo is too big ({size} max {limit})"
-msgstr ""
+msgstr "Menghapus riwayat git-mirror, repositori terlalu besar ({size} maks {limit})"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -597,11 +599,11 @@ msgstr ""
 
 #: ../fdroidserver/install.py
 msgid "Download F-Droid.apk using mirrors that leak less to the network"
-msgstr ""
+msgstr "Unduh F-Droid.apk menggunakan cerminan dengan kebocoran informasi yang rendah ke jaringan."
 
 #: ../fdroidserver/__main__.py
 msgid "Download complete mirrors of small repos"
-msgstr ""
+msgstr "Unduh cerminan lengkap dari repositori kecil"
 
 #: ../fdroidserver/common.py
 msgid "Downloading the repository already failed once, not trying again."
@@ -620,7 +622,7 @@ msgstr ""
 #: ../fdroidserver/index.py
 #, python-format
 msgid "Duplicate entry \"%s\" in mirrors config!"
-msgstr ""
+msgstr "Gandakan entri \"%s\" dalam konfigurasi pencerminan!"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
@@ -904,7 +906,7 @@ msgstr ""
 
 #: ../fdroidserver/deploy.py
 msgid "If a git mirror gets to big, allow the archive to be deleted"
-msgstr ""
+msgstr "Jika cerminan git membengkak, izinkan arsip untuk dihapus"
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
@@ -946,15 +948,15 @@ msgstr ""
 
 #: ../fdroidserver/mirror.py
 msgid "Include the PGP signature .asc files in the mirror"
-msgstr ""
+msgstr "Sertakan berkas .asc tanda tangan PGP di dalam pencerminan"
 
 #: ../fdroidserver/mirror.py
 msgid "Include the build logs in the mirror"
-msgstr ""
+msgstr "Sertakan log penyusunan di dalam pencerminan"
 
 #: ../fdroidserver/mirror.py
 msgid "Include the source tarballs in the mirror"
-msgstr ""
+msgstr "Sertakan sumber tarrball di dalam pencerminan"
 
 #: ../fdroidserver/metadata.py
 #, python-format
@@ -1123,7 +1125,7 @@ msgstr ""
 
 #: ../fdroidserver/index.py
 msgid "Malformed repository mirrors."
-msgstr ""
+msgstr "Pencerminan repositori cacat."
 
 #: ../fdroidserver/deploy.py
 msgid "Malformed serverwebroot line:"
@@ -1137,11 +1139,11 @@ msgstr ""
 #: ../fdroidserver/index.py
 #, python-brace-format
 msgid "Mirror config for {url} contains \"isPrimary\" key!"
-msgstr ""
+msgstr "Konfigurasi pencerminan untuk {url} mengandung kunci \"isPrimary\"!"
 
 #: ../fdroidserver/mirror.py
 msgid "Mirror the full repo and archive, all file types."
-msgstr ""
+msgstr "Cerminan repositori dan arsip lengkap, semua tipe berkas."
 
 #: ../fdroidserver/gpgsign.py
 msgid "Missing output directory"
@@ -1281,7 +1283,7 @@ msgstr ""
 
 #: ../fdroidserver/deploy.py
 msgid "Offline machine, skipping git mirror generation until `fdroid deploy`"
-msgstr ""
+msgstr "Mesin di luar jaringan, lewati pembuatan cerminan git hingga 'fdroid deploy'"
 
 #: ../fdroidserver/deploy.py
 msgid "One of the 'github_releases' config items is missing the 'packageNames' value. skipping ..."
@@ -1611,7 +1613,7 @@ msgstr "Tandai dan tempatkan paket ke dalam repo"
 
 #: ../fdroidserver/__main__.py
 msgid "Sign indexes created using update --nosign"
-msgstr "Tanda tangani indeks yang dibuat menggunakan update --nosign"
+msgstr "Indeks tanda yang dibuat menggunakan pembaruan --nosign"
 
 #: ../fdroidserver/build.py
 msgid "Skip scanning the source code for binaries and other problems"
@@ -1625,7 +1627,7 @@ msgstr ""
 #: ../fdroidserver/deploy.py ../fdroidserver/index.py
 #, python-format
 msgid "Skipping GitLab Pages mirror because the repo is too large (>%.2fGB)!"
-msgstr ""
+msgstr "Melewati cerminan Halaman Gitlab karena repositori terlalu besar (>%.2fGB)!"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -1706,7 +1708,7 @@ msgstr ""
 
 #: ../fdroidserver/mirror.py
 msgid "The directory to write the mirror to"
-msgstr ""
+msgstr "Direktori untuk menulis pencerminan"
 
 #: ../fdroidserver/nightly.py
 msgid "The file to be included in the repo (path or glob)"
@@ -1731,7 +1733,7 @@ msgstr ""
 
 #: ../fdroidserver/mirror.py
 msgid "This command should never be used to mirror f-droid.org! A full copy requires more than 600GB."
-msgstr ""
+msgstr "Perintah ini sebaiknya jangan digunakan untuk pencerminan f-droid.org! Salinan penuh membutuhkan lebih dari 600GB."
 
 #: ../fdroidserver/common.py
 msgid "This is a repository of apps to be used with F-Droid. Applications in this repository are either official binaries built by the original application developers, or are binaries built from source by the admin of f-droid.org using the tools on https://gitlab.com/fdroid."
@@ -2306,12 +2308,12 @@ msgstr ""
 #: ../fdroidserver/index.py
 #, python-format
 msgid "mirror '%s' does not end with 'fdroid'!"
-msgstr ""
+msgstr "Cerminan '%s' tidak diakhiri dengan 'fdroid'!"
 
 #: ../fdroidserver/index.py
 #, python-brace-format
 msgid "mirrors set twice, in config.yml and {path}!"
-msgstr ""
+msgstr "Cerminan disetel dua kali, di config.yml dan {path}!"
 
 #: /usr/lib/python3.11/argparse.py
 msgid "mutually exclusive arguments must be optional"
@@ -2350,9 +2352,8 @@ msgid "only accepts strings, lists, and tuples"
 msgstr ""
 
 #: /usr/lib/python3.11/argparse.py
-#, fuzzy
 msgid "options"
-msgstr "Opsi"
+msgstr "opsi"
 
 #: ../fdroidserver/nightly.py
 #, python-brace-format
@@ -2614,9 +2615,9 @@ msgid "{path} is not \"key: value\" dict, but a {datatype}!"
 msgstr ""
 
 #: ../fdroidserver/common.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{path} is not a standard config file!"
-msgstr "'sdk_path' belum diatur di config.yml!"
+msgstr "{path} bukan pengaturan berkas standar!"
 
 #: ../fdroidserver/index.py
 #, python-brace-format
