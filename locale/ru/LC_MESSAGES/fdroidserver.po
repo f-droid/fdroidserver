@@ -22,7 +22,7 @@ msgstr ""
 "Project-Id-Version: fdroidserver 1.0.0-95-gd7af22b\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2025-06-25 09:52+0200\n"
-"PO-Revision-Date: 2025-06-24 10:15+0000\n"
+"PO-Revision-Date: 2025-09-03 09:01+0000\n"
 "Last-Translator: Artyom Rybakov <rib.artem@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/f-droid/fdroidserver/ru/>\n"
 "Language: ru\n"
@@ -30,7 +30,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 5.13-dev\n"
+"X-Generator: Weblate 5.13.1-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -375,9 +375,9 @@ msgstr[1] "Запустить сборку невозможно из-за {} о�
 msgstr[2] "Запустить сборку невозможно из-за {} ошибок во время сканирования данных"
 
 #: ../fdroidserver/common.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Cannot read {path}: {error}"
-msgstr "Не удалось распознать {path}: {error}"
+msgstr "Не удалось прочитать {path}: {error}"
 
 #: ../fdroidserver/rewritemeta.py
 #, python-brace-format
@@ -1509,7 +1509,7 @@ msgstr "Переименовать все APK файлы, не соответс�
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "RepoType {type} is deprecated, please switch to git."
-msgstr ""
+msgstr "RepoType {type} устарел, пожалуйста, переключитесь на git."
 
 #: ../fdroidserver/nightly.py
 #, python-brace-format
@@ -2034,7 +2034,7 @@ msgstr "Через API VirusTotal нельзя загрузить файлы б�
 
 #: ../fdroidserver/nightly.py
 msgid "WARNING: only public git repos are supported!"
-msgstr ""
+msgstr "ВНИМАНИЕ: поддерживаются только публичные git-репозитории!"
 
 #: ../fdroidserver/__main__.py
 msgid "Warn about possible metadata errors"
