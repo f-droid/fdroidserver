@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: fdroidserver 2.1b0\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2025-06-25 09:52+0200\n"
-"PO-Revision-Date: 2025-07-12 18:39+0000\n"
-"Last-Translator: ginger-co <ginger_co@outlook.com>\n"
+"PO-Revision-Date: 2025-07-17 08:46+0000\n"
+"Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: Hebrew <https://hosted.weblate.org/projects/f-droid/fdroidserver/he/>\n"
 "Language: he\n"
 "MIME-Version: 1.0\n"
@@ -20,13 +20,12 @@ msgstr ""
 "X-Generator: Weblate 5.13-dev\n"
 
 #: ../fdroidserver/nightly.py
-#, fuzzy
 msgid ""
 "\n"
 "SSH public key to be used as deploy key:"
 msgstr ""
 "\n"
-"SSH public key to be used as deploy key:"
+"מפתח SSH ציבורי לשימוש כמפתח הטמעה:"
 
 #: ../fdroidserver/nightly.py
 #, python-brace-format
@@ -35,16 +34,16 @@ msgid ""
 "{path} encoded for the DEBUG_KEYSTORE secret variable:"
 msgstr ""
 "\n"
-"{path} מקודד עבור DEBUG_KEYSTORE משתנה סודי:"
+"{path} מקודד עבור המשתנה הסודי DEBUG_KEYSTORE:"
 
 #: ../fdroidserver/lint.py
 #, python-format
 msgid "\"%s/\" has no matching metadata file!"
-msgstr "ל\"%s\" אין קובץ metadata תואם!"
+msgstr "ל־„‎%s/‎” אין קובץ metadata תואם!"
 
 #: ../fdroidserver/index.py
 msgid "\"isPrimary\" key should not be added to mirrors!"
-msgstr "לא צריך להוסיף מפתח \"isPrimary\" ל־mirrors!"
+msgstr "אין להוסיף מפתח „isPrimary” לאתרי מראה!"
 
 #: ../fdroidserver/index.py
 #, python-brace-format
@@ -54,32 +53,32 @@ msgstr "\"local_copy_dir\" {path} לא קיים!"
 #: ../fdroidserver/install.py
 #, python-brace-format
 msgid "\"{apkfilename}\" is already installed on {dev}."
-msgstr "\"{apkfilename}\" כבר מותקן על {dev}."
+msgstr "„{apkfilename}” כבר מותקן על {dev}."
 
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "\"{path}\" contains recent {name} ({version})"
-msgstr "\"{path}\" מכיל {name} ({version}) שאירע לאחרונה"
+msgstr "„{path}” מכיל {name} ({version}) עדכני"
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "\"{path}\" exists but s3cmd is not installed!"
-msgstr "\"{path}\" נמצא אבל s3cmd לא מותקן!"
+msgstr "„{path}” נמצא אבל s3cmd לא מותקן!"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "\"{path}\" is not a supported file format (use: metadata/*.yml)"
-msgstr "\"{path}\" לא סוג קובץ נתמך (use: metadata/*.yml)"
+msgstr "„{path}” אינו סוג קובץ נתמך (שימוש: metadata/*.yml)"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "\"{path}\" is signed by a key that is not allowed:"
-msgstr "\"{path}\" חתום ע\"י מפתח אסור:"
+msgstr "„{path}” חתום ע״י מפתח אסור:"
 
 #: ../fdroidserver/import_subcommand.py
 #, python-brace-format
 msgid "\"{url}\" is not a valid URL!"
-msgstr "\"{url}\" הוא URL לא תקין!"
+msgstr "„{url}” היא כתובת לא תקינה!"
 
 #: /usr/lib/python3.11/argparse.py
 #, python-format
@@ -89,12 +88,12 @@ msgstr "%(prog)s: שגיאה: %(message)s\n"
 #: ../fdroidserver/publish.py
 #, python-format
 msgid "%d APKs failed to be signed or verified!"
-msgstr "%d APKs נכשל בחתימה ואימות!"
+msgstr "החתימה והאימות של %d מחבילות ה־APK נכשלו!"
 
 #: ../fdroidserver/scanner.py
 #, python-format
 msgid "%d problems found"
-msgstr "%d בעיה נמצאה"
+msgstr "נמצאו %d בעיות"
 
 #: /usr/lib/python3.11/argparse.py
 #, python-format
@@ -109,7 +108,7 @@ msgstr "%s לא יצר מילון!"
 #: ../fdroidserver/signindex.py
 #, python-format
 msgid "%s has bad SHA-256: %s"
-msgstr "ל־%s יש SHA-256 רע: %s"
+msgstr "ל־%s יש SHA-256 פגום: %s"
 
 #: ../fdroidserver/lint.py
 #, python-format
@@ -118,66 +117,65 @@ msgstr "%s אינו שדה בנייה מקובל"
 
 #: ../fdroidserver/common.py
 msgid "'keypass' not found in config.yml!"
-msgstr "'keypass' לא נמצא ב־config.yml!"
+msgstr "‚keypass’ לא נמצא ב־config.yml!"
 
 #: ../fdroidserver/common.py
 msgid "'keystore' is NONE and 'smartcardoptions' is blank!"
-msgstr "'keystore' הוא NONE ו־'smartcardoptions' הוא ריק!"
+msgstr "‚keystore’ הוא NONE ו־‚smartcardoptions’ ריק!"
 
 #: ../fdroidserver/common.py
 msgid "'keystore' not found in config.yml!"
-msgstr "'keystore' לא נמצא ב־config.yml!"
+msgstr "‚keystore’ לא נמצא ב־config.yml!"
 
 #: ../fdroidserver/common.py
 msgid "'keystorepass' not found in config.yml!"
-msgstr "'keystorepass' לא נמצא ב־config.yml!"
+msgstr "‚keystorepass’ לא נמצא ב־config.yml!"
 
 #: ../fdroidserver/common.py
 msgid "'repo_keyalias' not found in config.yml!"
-msgstr "'repo_keyalias' לא נמצא ב־config.yml!"
+msgstr "‚repo_keyalias’ לא נמצא ב־config.yml!"
 
 #: /usr/lib/python3.11/argparse.py
-#, fuzzy
 msgid "'required' is an invalid argument for positionals"
-msgstr "'required' is an invalid argument for positionals"
+msgstr "‚required’ הוא ארגומנט שגוי לתלויי מקום"
 
 #: ../fdroidserver/common.py
 msgid "'sdk_path' not set in config.yml!"
-msgstr "'sdk_path' לא מוגדר ב־config.yml!"
+msgstr "‚sdk_path’ לא מוגדר ב־config.yml!"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "'{aapt}' is too old, fdroid requires build-tools-{version} or newer!"
-msgstr "'{aapt}' ישן מדי, fdroid דורש build-tools-{version} או חדש יותר!"
+msgstr "‚{aapt}’ ישן מדי, fdroid דורש build-tools-{version} ומעלה!"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "'{path}' failed to execute!"
-msgstr "'{path}' נכשל בביצוע!"
+msgstr "ההרצה של ‚{path}’ נכשלה!"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "'{path}' has invalid format, it should be a dictionary!"
-msgstr "'{path}' פורמט לא חוקי, צריך להיות מילון!"
+msgstr "‚{path}’ בתסדיר שגוי, הוא צריך להיות מילון!"
 
 #: ../fdroidserver/lint.py ../fdroidserver/metadata.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "'{value}' is not a valid {field} in {appid}. Regex pattern: {pattern}"
-msgstr "'{value}' הוא {field} לא חוקי ב־{appid}. תבנית רג'קס: {pattern}"
+msgstr "‚{value}’ הוא {field} שגוי ב־{appid}. תבנית ביטוי רגולרי: {pattern}"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "'{value}' is not a valid {field}, should be {pattern}"
-msgstr "'{value}' הוא {field} לא חוקי, צריך להיות {pattern}"
+msgstr "‚{value}’ הוא {field} שגוי, צריך להיות {pattern}"
 
 #: ../fdroidserver/checkupdates.py
 msgid "--merge-request only runs on a single appid!"
-msgstr "--merge-request עובד רק על appid יחיד!"
+msgstr "‎--merge-request עובד רק על appid יחיד!"
 
 #: ../fdroidserver/checkupdates.py
 #, python-brace-format
 msgid "...checkupdate failed for {appid} : {error}"
-msgstr "...checkupdate נכשל עבור {appid} : {error}"
+msgstr "…checkupdate נכשל עבור {appid} : {error}"
 
 #: /usr/lib/python3.11/argparse.py
 msgid ".__call__() not defined"
@@ -185,28 +183,28 @@ msgstr "‎.__call__()‎ לא מוגדר"
 
 #: ../fdroidserver/lint.py
 msgid "/issues is missing"
-msgstr ""
+msgstr "‎/issues (סוגיות) חסר"
 
 #: ../fdroidserver/mirror.py
 msgid "A URL is required as an argument!"
-msgstr ""
+msgstr "יש לציין כתובת כארגומנט!"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "APK signatures have different certificates in {path}:"
-msgstr ""
+msgstr "לחתימות ה־APK יש אישורים שונים ב־{path}:"
 
 #: ../fdroidserver/__main__.py
 msgid "Add PGP signatures using GnuPG for packages in repo"
-msgstr ""
+msgstr "הוספת חתימות PGP באמצעות GnuPG לחבילות במאגר"
 
 #: ../fdroidserver/update.py
 msgid "Add a repo signing key to an unsigned repo"
-msgstr ""
+msgstr "הוספת מפתח חתימת מאגר למאגר לא חתום"
 
 #: ../fdroidserver/update.py
 msgid "Add skeleton metadata files for APKs that are missing them"
-msgstr ""
+msgstr "הוספת שלד קובצי נתוני על (metadata) לחבילות APK שחסר להן"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -223,7 +221,7 @@ msgstr ""
 
 #: ../fdroidserver/import_subcommand.py
 msgid "Allows a different revision (or git branch) to be specified for the initial import"
-msgstr "מאפשר תיקון שונה (או ענף git) להיות מוגדר עבור הייבוא הראשוני"
+msgstr "מאפשר הגדרת מהדורה (או ענף git) שונה עבור הייבוא הראשוני"
 
 #: ../fdroidserver/mirror.py
 msgid "Also mirror the full archive section"
@@ -239,16 +237,16 @@ msgstr ""
 
 #: ../fdroidserver/scanner.py
 msgid "Android APK file"
-msgstr "קובץ APK של אנדרואיד"
+msgstr "קובץ APK של Android"
 
 #: ../fdroidserver/scanner.py
 msgid "Android DEX code"
-msgstr "קוד DEX של אנדרואיד"
+msgstr "קוד DEX של Android"
 
 #: ../fdroidserver/init.py
 #, python-brace-format
 msgid "Android SDK not found at {path}!"
-msgstr "לא נמצא SDK של אנדרואיד ב־{path}!"
+msgstr "לא נמצא SDK של Android ב־{path}!"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -529,7 +527,7 @@ msgstr ""
 
 #: ../fdroidserver/update.py
 msgid "Delete APKs and/or OBBs without metadata from the repo"
-msgstr "מחיקת קובצי APK ו/או OBB ללא נתוני העל מהמאגר"
+msgstr "מחיקת קובצי APK ו/או OBB ללא נתוני על מהמאגר"
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
@@ -1557,7 +1555,7 @@ msgstr ""
 
 #: ../fdroidserver/__main__.py
 msgid "Scan the source code of a package"
-msgstr "סרוק את קוד המקור של חבילה"
+msgstr "סריקת קוד המקור של חבילה"
 
 #: ../fdroidserver/scanner.py
 #, python-brace-format
@@ -1621,7 +1619,7 @@ msgstr ""
 
 #: ../fdroidserver/__main__.py
 msgid "Sign and place packages in the repo"
-msgstr "חתימה והגדרת חבילות במאגר"
+msgstr "חתימה והצבת חבילות במאגר"
 
 #: ../fdroidserver/__main__.py
 msgid "Sign indexes created using update --nosign"
@@ -1986,7 +1984,7 @@ msgstr ""
 
 #: ../fdroidserver/__main__.py
 msgid "Valid commands are:"
-msgstr "פקודות תקינות:"
+msgstr "פקודות תקפות:"
 
 #: ../fdroidserver/verify.py
 msgid "Verify against locally cached copy rather than redownloading."
@@ -2072,7 +2070,7 @@ msgstr ""
 #: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "ambiguous option: %(option)s could match %(matches)s"
-msgstr "אפשרות מעורפלת: %(option)s יכול להתאים ל־%(matches)s"
+msgstr "אפשרות מעורפלת: %(option)s יכול להיות גם %(matches)s"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -2321,7 +2319,7 @@ msgstr ""
 
 #: ../fdroidserver/deploy.py
 msgid "local_copy_dir must be directory, not a file!"
-msgstr ""
+msgstr "local_copy_dir (תיקיית עותק מקומי) חייבת להיות תיקייה, לא קובץ!"
 
 #: ../fdroidserver/index.py
 #, python-format
@@ -2380,7 +2378,7 @@ msgstr ""
 
 #: /usr/lib/python3.11/argparse.py
 msgid "positional arguments"
-msgstr "משתני מיקום"
+msgstr "ארגומנטים תלויי מקום"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -2470,7 +2468,7 @@ msgstr ""
 #: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "the following arguments are required: %s"
-msgstr "נחוצים המשתנים הבאים: %s"
+msgstr "הארגומנטים הבאים נחוצים: %s"
 
 #: ../fdroidserver/install.py
 msgid "true"
@@ -2479,7 +2477,7 @@ msgstr ""
 #: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "unexpected option string: %s"
-msgstr "אפשרות בלתי צפויה: %s"
+msgstr "מחרוזת אפשרות מפתיעה: %s"
 
 #: /usr/lib/python3.11/argparse.py
 #, python-format
@@ -2489,12 +2487,12 @@ msgstr ""
 #: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "unrecognized arguments: %s"
-msgstr "משתנים לא מזוהים: %s"
+msgstr "ארגומנטים לא מזוהים: %s"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "unsafe permissions on '{config_file}' (should be 0600)!"
-msgstr "הרשאה לא בטוחה על '{config_file}' (צריך להיות 0600)!"
+msgstr "ההרשאה של ‚{config_file}’ מפוקפקת (צריכה להיות 0600)!"
 
 #: ../fdroidserver/__main__.py /usr/lib/python3.11/argparse.py
 msgid "usage: "
@@ -2511,7 +2509,7 @@ msgstr ""
 
 #: ../fdroidserver/install.py
 msgid "yes"
-msgstr ""
+msgstr "כן"
 
 #: ../fdroidserver/publish.py
 #, python-brace-format
@@ -2636,27 +2634,27 @@ msgstr ""
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "{path} is not a standard config file!"
-msgstr ""
+msgstr "{path} איננו קובץ הגדרות תקני!"
 
 #: ../fdroidserver/index.py
 #, python-brace-format
 msgid "{path} is not list, but a {datatype}!"
-msgstr ""
+msgstr "{path} איננה רשימה, אלא {datatype}!"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "{path} is not {expected_type}, but a {datatype}!"
-msgstr ""
+msgstr "{path} אינו {expected_type}, אלא {datatype}!"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "{path} is zero size!"
-msgstr ""
+msgstr "{path} הוא בגודל אפס!"
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "{path} more than 200MB, manually upload: {url}"
-msgstr ""
+msgstr "{path} יותר מ־200 מ״ב, להעלות ידנית: {url}"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
@@ -2666,7 +2664,7 @@ msgstr ""
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "{path}: {error}"
-msgstr ""
+msgstr "{path}: {error}"
 
 #: ../fdroidserver/mirror.py
 #, python-brace-format
@@ -2676,7 +2674,7 @@ msgstr ""
 #: ../fdroidserver/import_subcommand.py
 #, python-brace-format
 msgid "{url} does not start with \"http\"!"
-msgstr ""
+msgstr "{url} לא נפתח ב־„http”!"
 
 #: ../fdroidserver/build.py
 msgid "{} build failed"
