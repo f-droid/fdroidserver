@@ -3,13 +3,14 @@
 # Leviatansan21 <jorgeivanponcehernandez@yahoo.co.jp>, 2020.
 # Hans-Christoph Steiner <hans@guardianproject.info>, 2020.
 # BIENESTAR NARANJOS <bienestarnaranjos@gmail.com>, 2025.
+# Jacob Guzmán Calderón <jacobguzman1207@gmail.com>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 1.0.6-349-g907c04ea\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2025-06-25 09:52+0200\n"
-"PO-Revision-Date: 2025-09-01 12:01+0000\n"
-"Last-Translator: BIENESTAR NARANJOS <bienestarnaranjos@gmail.com>\n"
+"PO-Revision-Date: 2025-09-03 09:01+0000\n"
+"Last-Translator: Jacob Guzmán Calderón <jacobguzman1207@gmail.com>\n"
 "Language-Team: Spanish (Mexico) <https://hosted.weblate.org/projects/f-droid/fdroidserver/es_MX/>\n"
 "Language: es_MX\n"
 "MIME-Version: 1.0\n"
@@ -174,7 +175,7 @@ msgstr ""
 
 #: /usr/lib/python3.11/argparse.py
 msgid ".__call__() not defined"
-msgstr ""
+msgstr ".__call__() no definida"
 
 #: ../fdroidserver/lint.py
 msgid "/issues is missing"
@@ -322,7 +323,7 @@ msgstr ""
 
 #: ../fdroidserver/__main__.py
 msgid "Build a package from source"
-msgstr ""
+msgstr "Crear un paquete desde la fuente"
 
 #: ../fdroidserver/build.py
 msgid "Build all applications available"
@@ -383,7 +384,7 @@ msgstr ""
 
 #: ../fdroidserver/__main__.py
 msgid "Check for updates to applications"
-msgstr ""
+msgstr "Buscar actualizaciones de aplicaciones"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -526,7 +527,7 @@ msgstr "DEBUG_KEYSTORE no está establecido o el valor está incompleto"
 
 #: ../fdroidserver/update.py
 msgid "Delete APKs and/or OBBs without metadata from the repo"
-msgstr ""
+msgstr "Borrar del repositorio archivos APK y/o OBB sin metadatos"
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
