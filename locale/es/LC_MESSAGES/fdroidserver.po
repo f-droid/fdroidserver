@@ -20,7 +20,7 @@ msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2025-06-25 09:52+0200\n"
-"PO-Revision-Date: 2025-06-24 11:02+0000\n"
+"PO-Revision-Date: 2025-06-26 06:55+0000\n"
 "Last-Translator: Swyter <swyterzone@gmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/f-droid/fdroidserver/es/>\n"
 "Language: es\n"
@@ -372,9 +372,9 @@ msgstr[0] "No se puede construir debido al error {} mientras se comprobaba"
 msgstr[1] "No se puede construir debido a los errores {} mientras se comprobaba"
 
 #: ../fdroidserver/common.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Cannot read {path}: {error}"
-msgstr "Fallo al leer {path}: {error}"
+msgstr "Hubo un fallo al leer {path}: {error}"
 
 #: ../fdroidserver/rewritemeta.py
 #, python-brace-format
@@ -702,9 +702,9 @@ msgid "Environment variable {var} from {configname} is not set!"
 msgstr "¡La variable de entorno {var} de {configname} no tiene valor asignado!"
 
 #: ../fdroidserver/common.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Environment variable {{env: {var}}} is not set!"
-msgstr "¡La variable de entorno {var} de {configname} no tiene valor asignado!"
+msgstr "La variable de entorno {{env: {var}}} no tiene un valor asignado"
 
 #: ../fdroidserver/deploy.py
 msgid "Error deploying 'github_releases', {} not present. (You might need to run `fdroid update` first.)"
@@ -946,9 +946,9 @@ msgid "Ignoring bad element in manifest: %s"
 msgstr "Ignorar el elemento incorrecto en el manifiesto: %s"
 
 #: ../fdroidserver/common.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Ignoring deprecated {oldfile}, use {newfile}!"
-msgstr "{oldfile} está obsoleto, use {newfile}"
+msgstr "{oldfile} está obsoleto, utiliza {newfile}"
 
 #: ../fdroidserver/index.py
 msgid "Ignoring package without metadata: "
@@ -2619,7 +2619,7 @@ msgstr "¡{name} \"{section}/icons/{path}\" no existe! Corrijalo en config.yml."
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "{path1} is a duplicate of {path2}, remove one!"
-msgstr ""
+msgstr "{path1} es igual a {path2}, quita uno."
 
 #: ../fdroidserver/import_subcommand.py
 #, python-brace-format
