@@ -27,7 +27,7 @@ msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2025-06-25 09:52+0200\n"
-"PO-Revision-Date: 2025-04-29 10:16+0000\n"
+"PO-Revision-Date: 2025-08-23 08:02+0000\n"
 "Last-Translator: VfBFan <drop0815@posteo.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/f-droid/fdroidserver/de/>\n"
 "Language: de\n"
@@ -35,7 +35,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.12-dev\n"
+"X-Generator: Weblate 5.13\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -379,9 +379,9 @@ msgstr[0] "Kann nicht erstellt werden, da {} Fehler beim Prüfen aufgetreten ist
 msgstr[1] "Kann nicht erstellt werden, da {} Fehler beim Prüfen aufgetreten sind"
 
 #: ../fdroidserver/common.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Cannot read {path}: {error}"
-msgstr "Lesen von {path} fehlgeschlagen: {error}"
+msgstr "{path} kann nicht gelesen werden: {error}"
 
 #: ../fdroidserver/rewritemeta.py
 #, python-brace-format
@@ -555,7 +555,7 @@ msgstr "Lösche Archiv, Repository ist zu groß ({size} max {limit})"
 #: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "Deleting git-mirror history, repo is too big ({size} max {limit})"
-msgstr "Git-Mirror-Verlauf löschen, Repository ist zu groß ({size} max {limit})"
+msgstr "Git-Spiegelserver-Verlauf löschen, Repository ist zu groß ({size} max {limit})"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -592,7 +592,7 @@ msgstr "Nicht 'disable:' zu den erzeugten Erstellungseinträgen hinzufügen"
 
 #: ../fdroidserver/nightly.py
 msgid "Do not deploy the new files to the repo"
-msgstr "Verteilen Sie die neuen Dateien nicht in das Repo"
+msgstr "Die neuen Dateien nicht im Repository bereitstellen"
 
 #: ../fdroidserver/mirror.py
 #, python-brace-format
@@ -625,7 +625,7 @@ msgstr "F-Droid.apk über Spiegelserver herunterladen, die weniger Datenlecks in
 
 #: ../fdroidserver/__main__.py
 msgid "Download complete mirrors of small repos"
-msgstr "Komplette Spiegel von kleinen Paketquellen herunterladen"
+msgstr "Komplette Spiegelserver von kleinen Repositorys herunterladen"
 
 #: ../fdroidserver/common.py
 msgid "Downloading the repository already failed once, not trying again."
@@ -930,7 +930,7 @@ msgstr "HTTPS muss bei Subversion-URLs verwendet werden!"
 
 #: ../fdroidserver/deploy.py
 msgid "If a git mirror gets to big, allow the archive to be deleted"
-msgstr "Wenn ein Git-Mirror zu groß wird, erlaube dem Archiv gelöscht zu werden"
+msgstr "Wenn ein Git-Spiegelserver zu groß wird, das Löschen des Archivs erlauben"
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
@@ -1513,7 +1513,7 @@ msgstr "APK-Dateien umbenennen, die nicht dem Muster „package.name_123.apk“ 
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "RepoType {type} is deprecated, please switch to git."
-msgstr ""
+msgstr "RepoType {type} ist veraltet, bitte zu Git wechseln."
 
 #: ../fdroidserver/nightly.py
 #, python-brace-format
@@ -2037,7 +2037,7 @@ msgstr "VirusTotal-API-Schlüssel kann nicht Dateien größer 32MB hochladen, ve
 
 #: ../fdroidserver/nightly.py
 msgid "WARNING: only public git repos are supported!"
-msgstr ""
+msgstr "WARNUNG: Es werden nur öffentliche Git-Repositorys unterstützt!"
 
 #: ../fdroidserver/__main__.py
 msgid "Warn about possible metadata errors"
