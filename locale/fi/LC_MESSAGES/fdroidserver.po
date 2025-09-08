@@ -4,20 +4,21 @@
 # Kaantaja <ufdbvgoljrjkrkyyub@ianvvn.com>, 2021.
 # Ricky Tigg <ricky.tigg@gmail.com>, 2025.
 # Midrielen <jimitoivo.jaakkola@outlook.com>, 2025.
+# mestari <mestari037@protonmail.com>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 2.0a0-62-gc63c4b3d\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2025-06-25 09:52+0200\n"
-"PO-Revision-Date: 2025-07-19 22:02+0000\n"
-"Last-Translator: Midrielen <jimitoivo.jaakkola@outlook.com>\n"
+"PO-Revision-Date: 2025-08-21 14:01+0000\n"
+"Last-Translator: mestari <mestari037@protonmail.com>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/f-droid/fdroidserver/fi/>\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.13-dev\n"
+"X-Generator: Weblate 5.13\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -1976,7 +1977,7 @@ msgstr ""
 #: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "Using s3cmd to sync with: {url}"
-msgstr ""
+msgstr "Synkronointi s3cmd:llä: {url}"
 
 #: ../fdroidserver/__main__.py
 msgid "Valid commands are:"
@@ -2018,7 +2019,7 @@ msgstr ""
 
 #: ../fdroidserver/update.py
 msgid "When configured for signed indexes, create only unsigned indexes at this stage"
-msgstr ""
+msgstr "Kun konfiguroidaan allekirjoitettuja hakemistoja varten, luo tässä vaihessa vain allekirjoittamattomia hakemistoja"
 
 #: ../fdroidserver/lint.py
 msgid "When linting the entire repository yamllint is disabled by default. This option forces yamllint regardless."
