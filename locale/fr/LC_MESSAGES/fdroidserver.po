@@ -31,7 +31,7 @@
 # translator <kvb@tuta.io>, 2022.
 # Julien Maulny <julien.maulny@protonmail.com>, 2022.
 # Translator <kvb@tuta.io>, 2022, 2023.
-# Ldm Public <ldmpub@gmail.com>, 2022, 2023, 2024.
+# Ldm Public <ldmpub@gmail.com>, 2022, 2023, 2024, 2025.
 # TopFox <Arnaud.Savary@etu.unige.ch>, 2022.
 # John Donne <akheron@zaclys.net>, 2022, 2023.
 # Deleted User <noreply+22825@weblate.org>, 2023.
@@ -49,15 +49,15 @@ msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2025-06-25 09:52+0200\n"
-"PO-Revision-Date: 2025-06-28 05:20+0000\n"
-"Last-Translator: Mickaël Binos <mickaelbinos@outlook.com>\n"
+"PO-Revision-Date: 2025-08-31 05:02+0000\n"
+"Last-Translator: Ldm Public <ldmpub@gmail.com>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/f-droid/fdroidserver/fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.13-dev\n"
+"X-Generator: Weblate 5.13.1-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -870,7 +870,7 @@ msgstr "Plusieurs fichiers de bloc de signature JAR trouvé à {path}"
 
 #: ../fdroidserver/common.py
 msgid "Found multiple Signer Certificates!"
-msgstr "Plusieurs certificats de signatures ont été trouvés !"
+msgstr "Plusieurs certificats de signature ont étés trouvés !"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
