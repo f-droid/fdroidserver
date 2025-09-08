@@ -15,20 +15,21 @@
 # gallegonovato <fran-carro@hotmail.es>, 2022, 2023, 2024.
 # Nicolás Pérez <ccnicolasperez@gmail.com>, 2025.
 # Swyter <swyterzone@gmail.com>, 2025.
+# emma peel <emma.peel@riseup.net>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2025-06-25 09:52+0200\n"
-"PO-Revision-Date: 2025-06-26 06:55+0000\n"
-"Last-Translator: Swyter <swyterzone@gmail.com>\n"
+"PO-Revision-Date: 2025-08-31 05:02+0000\n"
+"Last-Translator: emma peel <emma.peel@riseup.net>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/f-droid/fdroidserver/es/>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.13-dev\n"
+"X-Generator: Weblate 5.13.1-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -54,7 +55,7 @@ msgstr "¡\"%s/\" no tiene su correspondiente fichero de metadatos!"
 
 #: ../fdroidserver/index.py
 msgid "\"isPrimary\" key should not be added to mirrors!"
-msgstr ""
+msgstr "¡la clave \"isPrimary\" no se debe poner en los mirrors!"
 
 #: ../fdroidserver/index.py
 #, python-brace-format
@@ -132,7 +133,7 @@ msgstr "¡'keypass' no encontrado en config.yml!"
 
 #: ../fdroidserver/common.py
 msgid "'keystore' is NONE and 'smartcardoptions' is blank!"
-msgstr "¡\"keystore\" es NONE y \"smartcardoptions\" está vacío!"
+msgstr "'keystore' no existe and 'smartcardoptions' esta vacío!"
 
 #: ../fdroidserver/common.py
 msgid "'keystore' not found in config.yml!"
@@ -670,12 +671,12 @@ msgstr "ERROR: ¡{key} en {path} no es un \"archivo\" o un \"repositorio\"!"
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "ERROR: {key} not a valid key!"
-msgstr ""
+msgstr "ERROR: ¡{key} no es una clave válida!"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "ERROR: {key}'s value should be of type {t}!"
-msgstr ""
+msgstr "ERROR: ¡el valor de {key} debe ser del tipo {t}!"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
@@ -1156,7 +1157,7 @@ msgstr "Se alcanzó el máximo en el archivo ZIP: %s"
 #: ../fdroidserver/index.py
 #, python-brace-format
 msgid "Mirror config for {url} contains \"isPrimary\" key!"
-msgstr ""
+msgstr "¡La configuración de mirror para {url} contiene la clave \"isPrimary\"!"
 
 #: ../fdroidserver/mirror.py
 msgid "Mirror the full repo and archive, all file types."
@@ -1323,7 +1324,7 @@ msgstr "Sólo PNG y JPEG son compatibles con los gráficos, encontrados: {path}"
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
 #: ../fdroidserver/common.py
 msgid "Only accepts a single key \"env\""
-msgstr ""
+msgstr "Sólo acepta una clave \"env\""
 
 #: ../fdroidserver/checkupdates.py
 msgid "Only process apps with auto-updates"
@@ -1484,7 +1485,7 @@ msgstr "Actualización y almacenamiento en caché de las reglas y firmas del esc
 #: ../fdroidserver/publish.py
 #, python-brace-format
 msgid "Refusing to sign '{path}', file exists in both {dir1} and {dir2} folder."
-msgstr ""
+msgstr "Imposible firmar '{path}', el archivo existe en los directorios {dir1} y {dir2}."
 
 #: ../fdroidserver/verify.py
 msgid "Remove source tarball and any APKs if successfully verified."
