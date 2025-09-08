@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: fdroidserver 2.3a1-162-gfbb3cc59\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2025-06-25 09:52+0200\n"
-"PO-Revision-Date: 2025-03-27 19:35+0000\n"
+"PO-Revision-Date: 2025-06-28 05:20+0000\n"
 "Last-Translator: Aindriú Mac Giolla Eoin <aindriu80@gmail.com>\n"
 "Language-Team: Irish <https://hosted.weblate.org/projects/f-droid/fdroidserver/ga/>\n"
 "Language: ga\n"
@@ -14,7 +14,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=5; plural=n==1 ? 0 : n==2 ? 1 : (n>2 && n<7) ? 2 :(n>6 && n<11) ? 3 : 4;\n"
-"X-Generator: Weblate 5.11-dev\n"
+"X-Generator: Weblate 5.13-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -361,9 +361,9 @@ msgstr[3] "Ní féidir tógáil de bharr {} earráidí agus an scanadh"
 msgstr[4] "Ní féidir tógáil de bharr {} earráidí agus an scanadh"
 
 #: ../fdroidserver/common.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Cannot read {path}: {error}"
-msgstr "Theip ar léamh {path}: {error}"
+msgstr "Ní féidir {path} a léamh: {error}"
 
 #: ../fdroidserver/rewritemeta.py
 #, python-brace-format
@@ -1495,7 +1495,7 @@ msgstr "Athainmnigh comhaid APK nach bhfuil comhoiriúnach package.name_123.apk"
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "RepoType {type} is deprecated, please switch to git."
-msgstr ""
+msgstr "Tá RepoType {type} imithe i léig, aistrigh go git le do thoil."
 
 #: ../fdroidserver/nightly.py
 #, python-brace-format
@@ -2022,7 +2022,7 @@ msgstr "Ní féidir le heochair API VirusTotal comhaid níos mó ná 32MB a uasl
 
 #: ../fdroidserver/nightly.py
 msgid "WARNING: only public git repos are supported!"
-msgstr ""
+msgstr "RABHADH: ní thacaítear ach le stórtha git poiblí!"
 
 #: ../fdroidserver/__main__.py
 msgid "Warn about possible metadata errors"
