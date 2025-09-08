@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: fdroidserver 1.0.0-95-gd7af22b\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2025-06-25 09:52+0200\n"
-"PO-Revision-Date: 2025-06-24 12:05+0000\n"
+"PO-Revision-Date: 2025-06-28 05:20+0000\n"
 "Last-Translator: WaldiS <sto@tutanota.de>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/f-droid/fdroidserver/pl/>\n"
 "Language: pl\n"
@@ -364,9 +364,9 @@ msgstr[1] "Nie można zbudować z powodu błędów {} podczas skanowania"
 msgstr[2] "Nie można zbudować z powodu błędów {} podczas skanowania"
 
 #: ../fdroidserver/common.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Cannot read {path}: {error}"
-msgstr "Błąd odczytu {path}: {error}"
+msgstr "Nie można odczytać {path}: {error}"
 
 #: ../fdroidserver/rewritemeta.py
 #, python-brace-format
@@ -1498,7 +1498,7 @@ msgstr "Zmień nazwy plików APK, które nie pasują do pliku package.name_123.a
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "RepoType {type} is deprecated, please switch to git."
-msgstr ""
+msgstr "RepoType {type} jest przestarzały, proszę przełączyć się na git."
 
 #: ../fdroidserver/nightly.py
 #, python-brace-format
@@ -2023,7 +2023,7 @@ msgstr "Klucz VirusTotal API nie może przesyłać plików większych niż 32 MB
 
 #: ../fdroidserver/nightly.py
 msgid "WARNING: only public git repos are supported!"
-msgstr ""
+msgstr "OSTRZEŻENIE: obsługiwane są tylko publiczne repozytoria git!"
 
 #: ../fdroidserver/__main__.py
 msgid "Warn about possible metadata errors"
