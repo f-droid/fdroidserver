@@ -236,7 +236,7 @@ def clone_git_repo(clone_url, git_mirror_path):
                     'GIT_TERMINAL_PROMPT': '0',
                 },
             )
-    except git.exc.GitCommandError as e:
+    except git.GitCommandError as e:
         logging.warning(_('WARNING: only public git repos are supported!'))
         raise VCSException(f'git clone {clone_url} failed:', str(e)) from e
 
