@@ -1098,7 +1098,7 @@ def get_metadata_files(vercodes):
     Parameters
     ----------
     vercodes
-        version codes as returned by read_pkg_args()
+        versionCodes as returned by read_pkg_args()
 
     Returns
     -------
@@ -2211,7 +2211,7 @@ def parse_androidmanifests(paths, app):
                                 version = matches
 
                             else:
-                                # If build.gradle contains applicationNameSuffix add it to the end of version name
+                                # If build.gradle contains applicationNameSuffix add it to the end of versionName
                                 matches = vnssearch_g(line)
                                 if matches and temp_version_name:
                                     name_suffix = matches.group(2)
@@ -2294,8 +2294,8 @@ def parse_androidmanifests(paths, app):
         logging.debug("..got package={0}, version={1}, vercode={2}"
                       .format(package, version, vercode))
 
-        # Always grab the package name and version name in case they are not
-        # together with the highest version code
+        # Always grab the package name and versionName in case they are not
+        # together with the highest versionCode
         if max_package is None and package is not None:
             max_package = package
         if max_version is None and version is not None:
@@ -2608,9 +2608,9 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
     # Remove forced debuggable flags
     remove_debuggable_flags(root_dir)
 
-    # Insert version code and number into the manifest if necessary
+    # Insert versionCode and number into the manifest if necessary
     if build.forceversion:
-        logging.info("Changing the version name")
+        logging.info("Changing the versionName")
         for path in manifest_paths(root_dir, flavors):
             if not os.path.isfile(path):
                 continue
@@ -2624,7 +2624,7 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
                             path)
 
     if build.forcevercode:
-        logging.info("Changing the version code")
+        logging.info("Changing the versionCode")
         for path in manifest_paths(root_dir, flavors):
             if not path.is_file():
                 continue
@@ -2949,8 +2949,8 @@ def get_apk_id(apkfile):
     Returns
     -------
     appid
-    version code
-    version name
+    versionCode
+    versionName
 
     """
     try:
@@ -3564,7 +3564,7 @@ def metadata_find_signing_files(appid, vercode):
     appid
         app id string
     vercode
-        app version code
+        app versionCode
 
     Returns
     -------
@@ -4426,7 +4426,7 @@ def string_is_integer(string):
 
 
 def version_code_string_to_int(vercode):
-    """Convert an version code string of any base into an int."""
+    """Convert an versionCode string of any base into an int."""
     # TODO: Python 3.6 allows underscores in numeric literals
     vercode = vercode.replace('_', '')
     try:

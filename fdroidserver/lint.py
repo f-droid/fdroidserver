@@ -372,7 +372,7 @@ def check_update_check_data_int(app):  # noqa: D403
         # codeex can be empty as well
         if codeex and not versioncode_check_pattern.search(codeex):
             yield _(
-                f'UpdateCheckData must match the version code as integer (\\d or [0-9]): {codeex}'
+                f'UpdateCheckData must match the versionCode as integer (\\d or [0-9]): {codeex}'
             )
 
 
