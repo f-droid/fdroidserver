@@ -691,11 +691,15 @@ def get_last_build_from_app(app: metadata.App) -> metadata.Build:
 
 
 def get_upstream_main_branch(git_repo):
-    if len(git_repo.remotes.upstream.refs) == 1:
-        return git_repo.remotes.upstream.refs[0].name
-    for name in ('main', 'master'):
-        if name in git_repo.remotes.upstream.refs:
-            return f'upstream/{name}'
+    refs = list()
+    for ref in git_repo.remotes.upstream.refs:
+        if ref.name != 'upstream/HEAD':
+            refs.append(ref.name)
+    if len(refs) == 1:
+        return refs[0]
+    for name in ('upstream/main', 'upstream/master'):
+        if name in refs:
+            return name
     try:
         with git_repo.config_reader() as reader:
             return 'upstream/%s' % reader.get_value('init', 'defaultBranch')
