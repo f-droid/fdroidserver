@@ -691,10 +691,7 @@ def read_config():
     for configname in confignames_to_delete:
         del config[configname]
 
-    if any(
-        k in config and config.get(k)
-        for k in ["awssecretkey", "keystorepass", "keypass"]
-    ):
+    if any(k in config and config.get(k) for k in ["keystorepass", "keypass"]):
         st = os.stat(CONFIG_FILE)
         if st.st_mode & stat.S_IRWXG or st.st_mode & stat.S_IRWXO:
             logging.warning(

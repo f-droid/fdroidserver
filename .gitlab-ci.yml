@@ -186,6 +186,42 @@ ubuntu_lts_ppa:
     - ./run-tests
 
 
+# Test to see how rclone works with S3
+test_deploy_to_s3_with_rclone:
+  image: debian:bookworm-slim
+  <<: *apt-template
+  services:
+    - name: docker:dind
+      command: ["--tls=false"]
+  variables:
+    DOCKER_HOST: "tcp://docker:2375"
+    DOCKER_DRIVER: overlay2
+    DOCKER_TLS_CERTDIR: ""
+  before_script:
+    # ensure minio is up before executing tests
+    - apt-get update
+    - apt-get install -y
+        androguard
+        apksigner
+        curl
+        docker.io
+        git
+        python3-venv
+        rclone
+    - python3 -m venv --system-site-packages test-venv
+    - . test-venv/bin/activate
+    - pip install testcontainers[minio]
+    - pip install .
+  script:
+    - python3 -m unittest -k test_update_remote_storage_with_rclone --verbose
+  rules:
+    - changes:
+        - .gitlab-ci.yml
+        - fdroidserver/deploy.py
+        - tests/test_deploy.py
+        - tests/test_integration.py
+
+
 # Test using Ubuntu/jammy LTS (supported til April, 2027) with depends
 # from pypi and sdkmanager.  The venv is used to isolate the dist
 # tarball generation environment from the clean install environment.
