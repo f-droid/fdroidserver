@@ -288,6 +288,39 @@ class DeployTest(unittest.TestCase):
             ],
         )
 
+    @mock.patch('subprocess.check_output', _mock_rclone_config_file)
+    @mock.patch('subprocess.call')
+    def test_update_remote_storage_with_rclone_mock_default_user_path(self, mock_call):
+        self.last_cmd = None
+
+        def _mock_subprocess_call(cmd):
+            self.last_cmd = cmd
+            return 0
+
+        mock_call.side_effect = _mock_subprocess_call
+
+        os.chdir(self.testdir)
+        config_name = 'test_local_config'
+        Path('rclone.conf').write_text('placeholder, contents ignored')
+
+        awsbucket = 'test_bucket_folder'
+        fdroidserver.deploy.config['awsbucket'] = awsbucket
+        fdroidserver.deploy.config['rclone_config'] = config_name
+        fdroidserver.deploy.update_remote_storage_with_rclone('repo', awsbucket)
+        self.maxDiff = None
+        self.assertEqual(
+            self.last_cmd,
+            [
+                'rclone',
+                'sync',
+                '--delete-after',
+                '--config',
+                fdroidserver.deploy.EMBEDDED_RCLONE_CONF,
+                'repo',
+                f'{config_name}:{awsbucket}/fdroid/repo',
+            ],
+        )
+
     def test_update_serverwebroot(self):
         """rsync works with file paths, so this test uses paths for the URLs"""
         os.chdir(self.testdir)
