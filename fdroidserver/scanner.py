@@ -729,7 +729,7 @@ def scan_source(build_dir, build=metadata.Build(), json_per_build=None):
             'www.jitpack.io',
             'repo.maven.apache.org/maven2',
             'oss.jfrog.org/artifactory/oss-snapshot-local',
-            'central.sonatype.com/repository/maven-snapshots/',
+            'central.sonatype.com/repository/maven-snapshots',
             'oss.sonatype.org/content/repositories/snapshots',
             'oss.sonatype.org/content/repositories/releases',
             'oss.sonatype.org/content/groups/public',
