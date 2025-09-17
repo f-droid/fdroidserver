@@ -16,8 +16,8 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import configparser
 import glob
-import hashlib
 import json
 import logging
 import os
@@ -47,9 +47,6 @@ GIT_BRANCH = 'master'
 
 BINARY_TRANSPARENCY_DIR = 'binary_transparency'
 
-AUTO_S3CFG = '.fdroid-deploy-s3cfg'
-USER_S3CFG = 's3cfg'
-USER_RCLONE_CONF = None
 REMOTE_HOSTNAME_REGEX = re.compile(r'\W*\w+\W+(\w+).*')
 
 
@@ -98,356 +95,145 @@ def _remove_missing_files(files: List[str]) -> List[str]:
     return existing
 
 
+def _generate_rclone_include_pattern(files):
+    """Generate a pattern for rclone's --include flag (https://rclone.org/filtering/)."""
+    return "{" + ",".join(sorted(set(files))) + "}"
+
+
 def update_awsbucket(repo_section, is_index_only=False, verbose=False, quiet=False):
-    """Upload the contents of the directory `repo_section` (including subdirectories) to the AWS S3 "bucket".
+    """Sync the directory `repo_section` (including subdirectories) to AWS S3 US East.
 
-    The contents of that subdir of the
-    bucket will first be deleted.
+    This is a shim function for public API compatibility.
 
-    Requires AWS credentials set in config.yml: awsaccesskeyid, awssecretkey
+    Requires AWS credentials set as environment variables:
+    https://rclone.org/s3/#authentication
+
     """
-    logging.debug(
-        f'''Syncing "{repo_section}" to Amazon S3 bucket "{config['awsbucket']}"'''
-    )
-
-    if common.set_command_in_config('s3cmd') and common.set_command_in_config('rclone'):
-        logging.info(
-            'Both rclone and s3cmd are installed. Checking config.yml for preference.'
-        )
-        if config['s3cmd'] is not True and config['rclone'] is not True:
-            logging.warning(
-                'No syncing tool set in config.yml!. Defaulting to using s3cmd'
-            )
-            update_awsbucket_s3cmd(repo_section, is_index_only)
-        if config['s3cmd'] is True and config['rclone'] is True:
-            logging.warning(
-                'Both syncing tools set in config.yml!. Defaulting to using s3cmd'
-            )
-            update_awsbucket_s3cmd(repo_section, is_index_only)
-        if config['s3cmd'] is True and config['rclone'] is not True:
-            update_awsbucket_s3cmd(repo_section, is_index_only)
-        if config['rclone'] is True and config['s3cmd'] is not True:
-            update_remote_storage_with_rclone(
-                repo_section, is_index_only, verbose, quiet
-            )
-
-    elif common.set_command_in_config('s3cmd'):
-        update_awsbucket_s3cmd(repo_section, is_index_only)
-    elif common.set_command_in_config('rclone'):
-        update_remote_storage_with_rclone(repo_section, is_index_only, verbose, quiet)
-    else:
-        update_awsbucket_libcloud(repo_section, is_index_only)
-
-
-def update_awsbucket_s3cmd(repo_section, is_index_only=False):
-    """Upload using the CLI tool s3cmd, which provides rsync-like sync.
-
-    The upload is done in multiple passes to reduce the chance of
-    interfering with an existing client-server interaction.  In the
-    first pass, only new files are uploaded.  In the second pass,
-    changed files are uploaded, overwriting what is on the server.  On
-    the third/last pass, the indexes are uploaded, and any removed
-    files are deleted from the server.  The last pass is the only pass
-    to use a full MD5 checksum of all files to detect changes.
-    """
-    logging.debug(_('Using s3cmd to sync with: {url}').format(url=config['awsbucket']))
-
-    if os.path.exists(USER_S3CFG):
-        logging.info(_('Using "{path}" for configuring s3cmd.').format(path=USER_S3CFG))
-        configfilename = USER_S3CFG
-    else:
-        fd = os.open(AUTO_S3CFG, os.O_CREAT | os.O_TRUNC | os.O_WRONLY, 0o600)
-        logging.debug(
-            _('Creating "{path}" for configuring s3cmd.').format(path=AUTO_S3CFG)
-        )
-        os.write(fd, '[default]\n'.encode('utf-8'))
-        os.write(
-            fd, ('access_key = ' + config['awsaccesskeyid'] + '\n').encode('utf-8')
-        )
-        os.write(fd, ('secret_key = ' + config['awssecretkey'] + '\n').encode('utf-8'))
-        os.close(fd)
-        configfilename = AUTO_S3CFG
-
-    s3bucketurl = 's3://' + config['awsbucket']
-    s3cmd = [config['s3cmd'], '--config=' + configfilename]
-    if subprocess.call(s3cmd + ['info', s3bucketurl]) != 0:
-        logging.warning(_('Creating new S3 bucket: {url}').format(url=s3bucketurl))
-        if subprocess.call(s3cmd + ['mb', s3bucketurl]) != 0:
-            logging.error(
-                _('Failed to create S3 bucket: {url}').format(url=s3bucketurl)
-            )
-            raise FDroidException()
-
-    s3cmd_sync = s3cmd + ['sync', '--acl-public']
-    options = common.get_options()
-    if options and options.verbose:
-        s3cmd_sync += ['--verbose']
-    if options and options.quiet:
-        s3cmd_sync += ['--quiet']
-
-    s3url = s3bucketurl + '/fdroid/'
-
-    logging.debug(
-        _('s3cmd sync indexes {path} to {url} and delete').format(
-            path=repo_section, url=s3url
-        )
-    )
-
-    if is_index_only:
-        logging.debug(
-            _('s3cmd syncs indexes from {path} to {url} and deletes removed').format(
-                path=repo_section, url=s3url
-            )
-        )
-        sync_indexes_flags = []
-        sync_indexes_flags.extend(_get_index_includes(repo_section))
-        sync_indexes_flags.append('--delete-removed')
-        sync_indexes_flags.append('--delete-after')
-        if options.no_checksum:
-            sync_indexes_flags.append('--no-check-md5')
-        else:
-            sync_indexes_flags.append('--check-md5')
-        returncode = subprocess.call(
-            s3cmd_sync + sync_indexes_flags + [repo_section, s3url]
-        )
-        if returncode != 0:
-            raise FDroidException()
-    else:
-        logging.debug('s3cmd sync new files in ' + repo_section + ' to ' + s3url)
-        logging.debug(_('Running first pass with MD5 checking disabled'))
-        excludes = _get_index_excludes(repo_section)
-        returncode = subprocess.call(
-            s3cmd_sync
-            + excludes
-            + ['--no-check-md5', '--skip-existing', repo_section, s3url]
-        )
-        if returncode != 0:
-            raise FDroidException()
-        logging.debug('s3cmd sync all files in ' + repo_section + ' to ' + s3url)
-        returncode = subprocess.call(
-            s3cmd_sync + excludes + ['--no-check-md5', repo_section, s3url]
-        )
-        if returncode != 0:
-            raise FDroidException()
-
-        logging.debug(
-            _('s3cmd sync indexes {path} to {url} and delete').format(
-                path=repo_section, url=s3url
-            )
-        )
-        s3cmd_sync.append('--delete-removed')
-        s3cmd_sync.append('--delete-after')
-        if options.no_checksum:
-            s3cmd_sync.append('--no-check-md5')
-        else:
-            s3cmd_sync.append('--check-md5')
-        if subprocess.call(s3cmd_sync + [repo_section, s3url]) != 0:
-            raise FDroidException()
+    update_remote_storage_with_rclone(repo_section, is_index_only, verbose, quiet)
 
 
 def update_remote_storage_with_rclone(
-    repo_section, is_index_only=False, verbose=False, quiet=False
+    repo_section, awsbucket, is_index_only=False, verbose=False, quiet=False
 ):
-    """
-    Upload fdroid repo folder to remote storage using rclone sync.
+    """Sync the directory `repo_section` (including subdirectories) to configed cloud services.
 
     Rclone sync can send the files to any supported remote storage
-    service once without numerous polling.
-    If remote storage is s3 e.g aws s3, wasabi, filebase then path will be
-    bucket_name/fdroid/repo where bucket_name will be an s3 bucket
-    If remote storage is storage drive/sftp e.g google drive, rsync.net
-    the new path will be bucket_name/fdroid/repo where bucket_name
-    will be a folder
+    service once without numerous polling.  If remote storage is S3 e.g
+    AWS S3, Wasabi, Filebase, etc, then path will be
+    bucket_name/fdroid/repo where bucket_name will be an S3 bucket. If
+    remote storage is storage drive/sftp e.g google drive, rsync.net the
+    new path will be bucket_name/fdroid/repo where bucket_name will be a
+    folder
 
-    Better than the s3cmd command as it does the syncing in one command
-    Check https://rclone.org/docs/#config-config-file (optional config file)
+    See https://rclone.org/docs/#config-config-file
+
+    rclone filtering works differently than rsync.  For example,
+    "--include" implies "--exclude **" at the end of an rclone internal
+    filter list.
+
     """
-    logging.debug(_('Using rclone to sync with: {url}').format(url=config['awsbucket']))
+    logging.debug(_('Using rclone to sync to "{name}"').format(name=awsbucket))
 
-    if config.get('path_to_custom_rclone_config') is not None:
-        USER_RCLONE_CONF = config['path_to_custom_rclone_config']
-        if os.path.exists(USER_RCLONE_CONF):
-            logging.info("'path_to_custom_rclone_config' found in config.yml")
-            logging.info(
-                _('Using "{path}" for syncing with remote storage.').format(
-                    path=USER_RCLONE_CONF
+    rclone_config = config.get('rclone_config', [])
+    if rclone_config and isinstance(rclone_config, str):
+        rclone_config = [rclone_config]
+
+    path = config.get('path_to_custom_rclone_config')
+    if path:
+        if not os.path.exists(path):
+            logging.error(
+                _('path_to_custom_rclone_config: "{path}" does not exist!').format(
+                    path=path
                 )
             )
-            configfilename = USER_RCLONE_CONF
-        else:
-            logging.info('Custom configuration not found.')
-            logging.info(
-                'Using default configuration at {}'.format(
-                    subprocess.check_output(['rclone', 'config', 'file'], text=True)
-                )
-            )
-            configfilename = None
+            sys.exit(1)
+        configfilename = path
     else:
-        logging.warning("'path_to_custom_rclone_config' not found in config.yml")
-        logging.info('Custom configuration not found.')
-        logging.info(
-            'Using default configuration at {}'.format(
-                subprocess.check_output(['rclone', 'config', 'file'], text=True)
-            )
-        )
         configfilename = None
+        output = subprocess.check_output(['rclone', 'config', 'file'], text=True)
+        default_config_path = output.split('\n')[-2]
+        if os.path.exists(default_config_path):
+            path = default_config_path
+    if path:
+        logging.info(_('Using "{path}" for rclone config.').format(path=path))
 
     upload_dir = 'fdroid/' + repo_section
 
-    if not config.get('rclone_config') or not config.get('awsbucket'):
-        raise FDroidException(
-            _('To use rclone, rclone_config and awsbucket must be set in config.yml!')
-        )
-
-    if is_index_only:
-        sources = _get_index_file_paths(repo_section)
-        sources = _remove_missing_files(sources)
-    else:
-        sources = [repo_section]
-
-    if isinstance(config['rclone_config'], str):
-        rclone_config = [config['rclone_config']]
-    else:
-        rclone_config = config['rclone_config']
-
-    for source in sources:
-        for remote_config in rclone_config:
-            complete_remote_path = f'{remote_config}:{config["awsbucket"]}/{upload_dir}'
-            rclone_sync_command = ['rclone', 'sync', source, complete_remote_path]
-
-            if verbose:
-                rclone_sync_command += ['--verbose']
-            elif quiet:
-                rclone_sync_command += ['--quiet']
-
-            if configfilename:
-                rclone_sync_command += ['--config=' + configfilename]
-
-            logging.debug(
-                "rclone sync all files in " + source + ' to ' + complete_remote_path
-            )
-
-            if subprocess.call(rclone_sync_command) != 0:
-                raise FDroidException()
-
-
-def update_awsbucket_libcloud(repo_section, is_index_only=False):
-    """No summary.
-
-    Upload the contents of the directory `repo_section` (including
-    subdirectories) to the AWS S3 "bucket".
-
-    The contents of that subdir of the
-    bucket will first be deleted.
-
-    Requires AWS credentials set in config.yml: awsaccesskeyid, awssecretkey
-    """
-    logging.debug(
-        _('using Apache libcloud to sync with {url}').format(url=config['awsbucket'])
-    )
-
-    import libcloud.security
-
-    libcloud.security.VERIFY_SSL_CERT = True
-    from libcloud.storage.providers import get_driver
-    from libcloud.storage.types import ContainerDoesNotExistError, Provider
-
-    if not config.get('awsaccesskeyid') or not config.get('awssecretkey'):
-        raise FDroidException(
-            _(
-                'To use awsbucket, awssecretkey and awsaccesskeyid must also be set in config.yml!'
-            )
-        )
-    awsbucket = config['awsbucket']
-
-    if os.path.exists(USER_S3CFG):
-        raise FDroidException(
-            _('"{path}" exists but s3cmd is not installed!').format(path=USER_S3CFG)
-        )
-
-    cls = get_driver(Provider.S3)
-    driver = cls(config['awsaccesskeyid'], config['awssecretkey'])
-    try:
-        container = driver.get_container(container_name=awsbucket)
-    except ContainerDoesNotExistError:
-        container = driver.create_container(container_name=awsbucket)
-        logging.info(_('Created new container "{name}"').format(name=container.name))
-
-    upload_dir = 'fdroid/' + repo_section
-    objs = dict()
-    for obj in container.list_objects():
-        if obj.name.startswith(upload_dir + '/'):
-            objs[obj.name] = obj
-
-    if is_index_only:
-        index_files = [
-            f"{os.getcwd()}/{name}" for name in _get_index_file_paths(repo_section)
-        ]
-        files_to_upload = [
-            os.path.join(root, name)
-            for root, dirs, files in os.walk(os.path.join(os.getcwd(), repo_section))
-            for name in files
-        ]
-        files_to_upload = list(set(files_to_upload) & set(index_files))
-        files_to_upload = _remove_missing_files(files_to_upload)
-
-    else:
-        files_to_upload = [
-            os.path.join(root, name)
-            for root, dirs, files in os.walk(os.path.join(os.getcwd(), repo_section))
-            for name in files
-        ]
-
-    for file_to_upload in files_to_upload:
-        upload = False
-        object_name = 'fdroid/' + os.path.relpath(file_to_upload, os.getcwd())
-        if object_name not in objs:
-            upload = True
-        else:
-            obj = objs.pop(object_name)
-            if obj.size != os.path.getsize(file_to_upload):
-                upload = True
-            else:
-                # if the sizes match, then compare by MD5
-                md5 = hashlib.md5()  # nosec AWS uses MD5
-                with open(file_to_upload, 'rb') as f:
-                    while True:
-                        data = f.read(8192)
-                        if not data:
-                            break
-                        md5.update(data)
-                if obj.hash != md5.hexdigest():
-                    s3url = 's3://' + awsbucket + '/' + obj.name
-                    logging.info(' deleting ' + s3url)
-                    if not driver.delete_object(obj):
-                        logging.warning('Could not delete ' + s3url)
-                    upload = True
-
-        if upload:
-            logging.debug(' uploading "' + file_to_upload + '"...')
-            extra = {'acl': 'public-read'}
-            if file_to_upload.endswith('.sig'):
-                extra['content_type'] = 'application/pgp-signature'
-            elif file_to_upload.endswith('.asc'):
-                extra['content_type'] = 'application/pgp-signature'
-            path = os.path.relpath(file_to_upload)
-            logging.info(f' uploading {path} to s3://{awsbucket}/{object_name}')
-            with open(file_to_upload, 'rb') as iterator:
-                obj = driver.upload_object_via_stream(
-                    iterator=iterator,
-                    container=container,
-                    object_name=object_name,
-                    extra=extra,
+    if not rclone_config:
+        env = os.environ
+        # Check both canonical and backup names, but only tell user about canonical.
+        if not env.get("AWS_SECRET_ACCESS_KEY") and not env.get("AWS_SECRET_KEY"):
+            raise FDroidException(
+                _(
+                    """"AWS_SECRET_ACCESS_KEY" must be set as an environmental variable!"""
                 )
-    # delete the remnants in the bucket, they do not exist locally
-    while objs:
-        object_name, obj = objs.popitem()
-        s3url = 's3://' + awsbucket + '/' + object_name
-        if object_name.startswith(upload_dir):
-            logging.warning(' deleting ' + s3url)
-            driver.delete_object(obj)
+            )
+        if not env.get("AWS_ACCESS_KEY_ID") and not env.get('AWS_ACCESS_KEY'):
+            raise FDroidException(
+                _(""""AWS_ACCESS_KEY_ID" must be set as an environmental variable!""")
+            )
+
+        default_remote = "AWS-S3-US-East-1"
+        env_rclone_config = configparser.ConfigParser()
+        env_rclone_config.add_section(default_remote)
+        env_rclone_config.set(
+            default_remote,
+            '; = This file is auto-generated by fdroid deploy, do not edit!',
+            '',
+        )
+        env_rclone_config.set(default_remote, "type", "s3")
+        env_rclone_config.set(default_remote, "provider", "AWS")
+        env_rclone_config.set(default_remote, "region", "us-east-1")
+        env_rclone_config.set(default_remote, "env_auth", "true")
+
+        configfilename = ".fdroid-deploy-rclone.conf"
+        with open(configfilename, "w", encoding="utf-8") as autoconfigfile:
+            env_rclone_config.write(autoconfigfile)
+        rclone_config = [default_remote]
+
+    rclone_sync_command = ['rclone', 'sync', '--delete-after']
+    if configfilename:
+        rclone_sync_command += ['--config', configfilename]
+
+    if verbose:
+        rclone_sync_command += ['--verbose']
+    elif quiet:
+        rclone_sync_command += ['--quiet']
+
+    # TODO copying update_serverwebroot rsync algo
+    for remote_config in rclone_config:
+        complete_remote_path = f'{remote_config}:{awsbucket}/{upload_dir}'
+        logging.info(f'rclone sync to {complete_remote_path}')
+        if is_index_only:
+            index_only_files = common.INDEX_FILES + ['diff/*.*']
+            include_pattern = _generate_rclone_include_pattern(index_only_files)
+            cmd = rclone_sync_command + [
+                '--include',
+                include_pattern,
+                '--delete-excluded',
+                repo_section,
+                complete_remote_path,
+            ]
+            logging.info(cmd)
+            if subprocess.call(cmd) != 0:
+                raise FDroidException()
         else:
-            logging.info(' skipping ' + s3url)
+            cmd = (
+                rclone_sync_command
+                + _get_index_excludes(repo_section)
+                + [
+                    repo_section,
+                    complete_remote_path,
+                ]
+            )
+            if subprocess.call(cmd) != 0:
+                raise FDroidException()
+            cmd = rclone_sync_command + [
+                repo_section,
+                complete_remote_path,
+            ]
+            if subprocess.call(cmd) != 0:
+                raise FDroidException()
 
 
 def update_serverwebroot(serverwebroot, repo_section):
@@ -1342,8 +1128,11 @@ def main():
             # update_servergitmirrors will take care of multiple mirrors so don't need a foreach
             update_servergitmirrors(config['servergitmirrors'], repo_section)
         if config.get('awsbucket'):
+            awsbucket = config['awsbucket']
             index_only = config.get('awsbucket_index_only')
-            update_awsbucket(repo_section, index_only, options.verbose, options.quiet)
+            update_remote_storage_with_rclone(
+                repo_section, awsbucket, index_only, options.verbose, options.quiet
+            )
         if config.get('androidobservatory'):
             upload_to_android_observatory(repo_section)
         if config.get('virustotal_apikey'):

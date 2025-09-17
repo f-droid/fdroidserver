@@ -15,6 +15,12 @@ import fdroidserver
 from .shared_test_code import TmpCwd, VerboseFalseOptions, mkdtemp
 
 basedir = Path(__file__).parent
+FILES = basedir
+
+
+def _mock_rclone_config_file(cmd, text):  # pylint: disable=unused-argument
+    """Mock output from rclone 1.60.1 but with nonexistent conf file."""
+    return "Configuration file doesn't exist, but rclone will use this path:\n/nonexistent/rclone.conf\n"
 
 
 class DeployTest(unittest.TestCase):
@@ -27,7 +33,6 @@ class DeployTest(unittest.TestCase):
 
         fdroidserver.common.options = mock.Mock()
         fdroidserver.deploy.config = {}
-        fdroidserver.deploy.USER_RCLONE_CONF = False
 
     def tearDown(self):
         self._td.cleanup()
@@ -89,7 +94,7 @@ class DeployTest(unittest.TestCase):
         with self.assertRaises(SystemExit):
             fdroidserver.deploy.update_serverwebroots([{'url': 'ssh://nope'}], 'repo')
 
-    @unittest.skipUnless(shutil.which('rclone'), '/usr/bin/rclone')
+    @unittest.skipUnless(shutil.which('rclone'), 'requires rclone')
     def test_update_remote_storage_with_rclone(self):
         os.chdir(self.testdir)
         repo = Path('repo')
@@ -114,26 +119,25 @@ class DeployTest(unittest.TestCase):
             rclone_config.write(configfile)
 
         # setup parameters for this test run
-        fdroidserver.deploy.config['awsbucket'] = 'test_bucket_folder'
-        fdroidserver.deploy.config['rclone'] = True
+        awsbucket = 'test_bucket_folder'
+        fdroidserver.deploy.config['awsbucket'] = awsbucket
         fdroidserver.deploy.config['rclone_config'] = 'test-local-config'
         fdroidserver.deploy.config['path_to_custom_rclone_config'] = str(rclone_file)
         fdroidserver.common.options = VerboseFalseOptions
 
         # write out destination path
-        destination = Path('test_bucket_folder/fdroid')
+        destination = Path(f'{awsbucket}/fdroid')
         destination.mkdir(parents=True, exist_ok=True)
         dest_apk = Path(destination) / fake_apk
         dest_index = Path(destination) / fake_index
         self.assertFalse(dest_apk.is_file())
         self.assertFalse(dest_index.is_file())
         repo_section = str(repo)
-        # fdroidserver.deploy.USER_RCLONE_CONF = str(rclone_file)
-        fdroidserver.deploy.update_remote_storage_with_rclone(repo_section)
+        fdroidserver.deploy.update_remote_storage_with_rclone(repo_section, awsbucket)
         self.assertTrue(dest_apk.is_file())
         self.assertTrue(dest_index.is_file())
 
-    @unittest.skipUnless(shutil.which('rclone'), '/usr/bin/rclone')
+    @unittest.skipUnless(shutil.which('rclone'), 'requires rclone')
     def test_update_remote_storage_with_rclone_in_index_only_mode(self):
         os.chdir(self.testdir)
         repo = Path('repo')
@@ -158,51 +162,131 @@ class DeployTest(unittest.TestCase):
             rclone_config.write(configfile)
 
         # setup parameters for this test run
-        fdroidserver.deploy.config['awsbucket'] = 'test_bucket_folder'
-        fdroidserver.deploy.config['rclone'] = True
+        awsbucket = 'test_bucket_folder'
+        fdroidserver.deploy.config['awsbucket'] = awsbucket
         fdroidserver.deploy.config['rclone_config'] = 'test-local-config'
         fdroidserver.deploy.config['path_to_custom_rclone_config'] = str(rclone_file)
         fdroidserver.common.options = VerboseFalseOptions
 
         # write out destination path
-        destination = Path('test_bucket_folder/fdroid')
+        destination = Path(f'{awsbucket}/fdroid')
         destination.mkdir(parents=True, exist_ok=True)
         dest_apk = Path(destination) / fake_apk
         dest_index = Path(destination) / fake_index
         self.assertFalse(dest_apk.is_file())
         self.assertFalse(dest_index.is_file())
         repo_section = str(repo)
-        # fdroidserver.deploy.USER_RCLONE_CONF = str(rclone_file)
         fdroidserver.deploy.update_remote_storage_with_rclone(
-            repo_section, is_index_only=True
+            repo_section, awsbucket, is_index_only=True
         )
         self.assertFalse(dest_apk.is_file())
         self.assertTrue(dest_index.is_file())
 
+    @mock.patch.dict(os.environ, {'PATH': os.getenv('PATH')}, clear=True)
+    @mock.patch('subprocess.check_output', _mock_rclone_config_file)
+    def test_update_remote_storage_with_rclone_awsbucket_no_env_vars(self):
+        with self.assertRaises(fdroidserver.exception.FDroidException):
+            fdroidserver.deploy.update_remote_storage_with_rclone('repo', 'foobucket')
+
+    @mock.patch.dict(os.environ, {'PATH': os.getenv('PATH')}, clear=True)
+    @mock.patch('subprocess.check_output', _mock_rclone_config_file)
+    def test_update_remote_storage_with_rclone_awsbucket_no_AWS_SECRET_ACCESS_KEY(self):
+        os.environ['AWS_ACCESS_KEY_ID'] = 'accesskey'
+        with self.assertRaises(fdroidserver.exception.FDroidException):
+            fdroidserver.deploy.update_remote_storage_with_rclone('repo', 'foobucket')
+
+    @mock.patch.dict(os.environ, {'PATH': os.getenv('PATH')}, clear=True)
+    @mock.patch('subprocess.check_output', _mock_rclone_config_file)
+    def test_update_remote_storage_with_rclone_awsbucket_no_AWS_ACCESS_KEY_ID(self):
+        os.environ['AWS_SECRET_ACCESS_KEY'] = 'secrets'  # nosec B105
+        with self.assertRaises(fdroidserver.exception.FDroidException):
+            fdroidserver.deploy.update_remote_storage_with_rclone('repo', 'foobucket')
+
+    @mock.patch.dict(os.environ, {'PATH': os.getenv('PATH')}, clear=True)
+    @mock.patch('subprocess.check_output', _mock_rclone_config_file)
     @mock.patch('subprocess.call')
-    @mock.patch('subprocess.check_output', lambda cmd, text: '/path/to/rclone.conf')
-    def test_update_remote_storage_with_rclone_mock(self, mock_call):
+    def test_update_remote_storage_with_rclone_awsbucket_env_vars(self, mock_call):
+        awsbucket = 'test_bucket_folder'
+        os.environ['AWS_ACCESS_KEY_ID'] = 'accesskey'
+        os.environ['AWS_SECRET_ACCESS_KEY'] = 'secrets'  # nosec B105
+
         def _mock_subprocess_call(cmd):
             self.assertEqual(
-                cmd,
+                cmd[:5],
                 [
                     'rclone',
                     'sync',
-                    'repo',
-                    'test_local_config:test_bucket_folder/fdroid/repo',
+                    '--delete-after',
+                    '--config',
+                    '.fdroid-deploy-rclone.conf',
                 ],
             )
             return 0
 
         mock_call.side_effect = _mock_subprocess_call
+        fdroidserver.deploy.config = {'awsbucket': awsbucket}
+        fdroidserver.deploy.update_remote_storage_with_rclone('repo', awsbucket)
+        mock_call.assert_called()
+
+    @mock.patch.dict(os.environ, {'PATH': os.getenv('PATH')}, clear=True)
+    @mock.patch('subprocess.check_output', _mock_rclone_config_file)
+    @mock.patch('subprocess.call')
+    def test_update_remote_storage_with_rclone_mock_awsbucket(self, mock_call):
+        awsbucket = 'test_bucket_folder'
+        os.environ['AWS_ACCESS_KEY_ID'] = 'accesskey'
+        os.environ['AWS_SECRET_ACCESS_KEY'] = 'secrets'  # nosec B105
+        self.last_cmd = None
+
+        def _mock_subprocess_call(cmd):
+            self.last_cmd = cmd
+            return 0
+
+        mock_call.side_effect = _mock_subprocess_call
+
+        fdroidserver.deploy.config = {'awsbucket': awsbucket}
+        fdroidserver.deploy.update_remote_storage_with_rclone('repo', awsbucket)
+        self.maxDiff = None
+        self.assertEqual(
+            self.last_cmd,
+            [
+                'rclone',
+                'sync',
+                '--delete-after',
+                '--config',
+                '.fdroid-deploy-rclone.conf',
+                'repo',
+                f'AWS-S3-US-East-1:{awsbucket}/fdroid/repo',
+            ],
+        )
+
+    @mock.patch('subprocess.check_output', _mock_rclone_config_file)
+    @mock.patch('subprocess.call')
+    def test_update_remote_storage_with_rclone_mock_rclone_config(self, mock_call):
+        awsbucket = 'test_bucket_folder'
+        self.last_cmd = None
+
+        def _mock_subprocess_call(cmd):
+            self.last_cmd = cmd
+            return 0
+
+        mock_call.side_effect = _mock_subprocess_call
 
         fdroidserver.deploy.config = {
-            'awsbucket': 'test_bucket_folder',
-            'rclone': True,
+            'awsbucket': awsbucket,
             'rclone_config': 'test_local_config',
         }
-        fdroidserver.deploy.update_remote_storage_with_rclone('repo')
-        mock_call.assert_called_once()
+        fdroidserver.deploy.update_remote_storage_with_rclone('repo', awsbucket)
+        self.maxDiff = None
+        self.assertEqual(
+            self.last_cmd,
+            [
+                'rclone',
+                'sync',
+                '--delete-after',
+                'repo',
+                'test_local_config:test_bucket_folder/fdroid/repo',
+            ],
+        )
 
     def test_update_serverwebroot(self):
         """rsync works with file paths, so this test uses paths for the URLs"""
@@ -667,399 +751,6 @@ class DeployTest(unittest.TestCase):
             self.assertEqual(
                 name, fdroidserver.deploy.REMOTE_HOSTNAME_REGEX.sub(r'\1', remote_url)
             )
-
-    def test_update_awsbucket_s3cmd(self):
-        # setup parameters for this test run
-        fdroidserver.common.options = mock.Mock()
-        fdroidserver.common.options.no_checksum = True
-        fdroidserver.common.options.verbose = False
-        fdroidserver.common.options.quiet = True
-
-        config = {}
-        fdroidserver.common.fill_config_defaults(config)
-        fdroidserver.deploy.config = config
-        fdroidserver.deploy.config["awsbucket"] = "bucket"
-        fdroidserver.deploy.config["awsaccesskeyid"] = "accesskeyid"
-        fdroidserver.deploy.config["awssecretkey"] = "secretkey"
-        fdroidserver.deploy.config["s3cmd"] = "s3cmd"
-
-        repo_section = 'repo'
-
-        # setup function for asserting subprocess.call invocations
-        call_iteration = 0
-
-        def update_awsbucket_s3cmd_call(cmd):
-            nonlocal call_iteration
-            if call_iteration == 0:
-                self.assertListEqual(
-                    cmd,
-                    [
-                        's3cmd',
-                        f"--config={fdroidserver.deploy.AUTO_S3CFG}",
-                        'info',
-                        f"s3://{fdroidserver.deploy.config['awsbucket']}",
-                    ],
-                )
-            elif call_iteration == 1:
-                self.assertListEqual(
-                    cmd,
-                    [
-                        's3cmd',
-                        f"--config={fdroidserver.deploy.AUTO_S3CFG}",
-                        'sync',
-                        '--acl-public',
-                        '--quiet',
-                        '--exclude',
-                        'repo/altstore-index.json',
-                        '--exclude',
-                        'repo/altstore-index.json.asc',
-                        '--exclude',
-                        'repo/entry.jar',
-                        '--exclude',
-                        'repo/entry.json',
-                        '--exclude',
-                        'repo/entry.json.asc',
-                        '--exclude',
-                        'repo/index-v1.jar',
-                        '--exclude',
-                        'repo/index-v1.json',
-                        '--exclude',
-                        'repo/index-v1.json.asc',
-                        '--exclude',
-                        'repo/index-v2.json',
-                        '--exclude',
-                        'repo/index-v2.json.asc',
-                        '--exclude',
-                        'repo/index.css',
-                        '--exclude',
-                        'repo/index.html',
-                        '--exclude',
-                        'repo/index.jar',
-                        '--exclude',
-                        'repo/index.png',
-                        '--exclude',
-                        'repo/index.xml',
-                        '--exclude',
-                        'repo/signer-index.jar',
-                        '--exclude',
-                        'repo/signer-index.json',
-                        '--exclude',
-                        'repo/signer-index.json.asc',
-                        '--no-check-md5',
-                        '--skip-existing',
-                        repo_section,
-                        f"s3://{fdroidserver.deploy.config['awsbucket']}/fdroid/",
-                    ],
-                )
-            elif call_iteration == 2:
-                self.assertListEqual(
-                    cmd,
-                    [
-                        's3cmd',
-                        f"--config={fdroidserver.deploy.AUTO_S3CFG}",
-                        'sync',
-                        '--acl-public',
-                        '--quiet',
-                        '--exclude',
-                        'repo/altstore-index.json',
-                        '--exclude',
-                        'repo/altstore-index.json.asc',
-                        '--exclude',
-                        'repo/entry.jar',
-                        '--exclude',
-                        'repo/entry.json',
-                        '--exclude',
-                        'repo/entry.json.asc',
-                        '--exclude',
-                        'repo/index-v1.jar',
-                        '--exclude',
-                        'repo/index-v1.json',
-                        '--exclude',
-                        'repo/index-v1.json.asc',
-                        '--exclude',
-                        'repo/index-v2.json',
-                        '--exclude',
-                        'repo/index-v2.json.asc',
-                        '--exclude',
-                        'repo/index.css',
-                        '--exclude',
-                        'repo/index.html',
-                        '--exclude',
-                        'repo/index.jar',
-                        '--exclude',
-                        'repo/index.png',
-                        '--exclude',
-                        'repo/index.xml',
-                        '--exclude',
-                        'repo/signer-index.jar',
-                        '--exclude',
-                        'repo/signer-index.json',
-                        '--exclude',
-                        'repo/signer-index.json.asc',
-                        '--no-check-md5',
-                        repo_section,
-                        f"s3://{fdroidserver.deploy.config['awsbucket']}/fdroid/",
-                    ],
-                )
-            elif call_iteration == 3:
-                self.assertListEqual(
-                    cmd,
-                    [
-                        's3cmd',
-                        f"--config={fdroidserver.deploy.AUTO_S3CFG}",
-                        'sync',
-                        '--acl-public',
-                        '--quiet',
-                        '--delete-removed',
-                        '--delete-after',
-                        '--no-check-md5',
-                        repo_section,
-                        f"s3://{fdroidserver.deploy.config['awsbucket']}/fdroid/",
-                    ],
-                )
-            else:
-                self.fail('unexpected subprocess.call invocation')
-            call_iteration += 1
-            return 0
-
-        with tempfile.TemporaryDirectory() as tmpdir, TmpCwd(tmpdir):
-            os.mkdir('repo')
-            os.symlink('repo/com.example.sym.apk', 'Sym.apk')
-            os.symlink('repo/com.example.sym.apk.asc', 'Sym.apk.asc')
-            os.symlink('repo/com.example.sym.apk.sig', 'Sym.apk.sig')
-            with mock.patch('subprocess.call', side_effect=update_awsbucket_s3cmd_call):
-                fdroidserver.deploy.update_awsbucket_s3cmd(repo_section)
-        self.assertEqual(call_iteration, 4, 'expected 4 invocations of subprocess.call')
-
-    def test_update_awsbucket_s3cmd_in_index_only_mode(self):
-        # setup parameters for this test run
-        fdroidserver.common.options = mock.Mock()
-        fdroidserver.common.options.no_checksum = True
-        fdroidserver.common.options.verbose = False
-        fdroidserver.common.options.quiet = True
-
-        config = {}
-        fdroidserver.common.fill_config_defaults(config)
-        fdroidserver.deploy.config = config
-        fdroidserver.deploy.config["awsbucket"] = "bucket"
-        fdroidserver.deploy.config["awsaccesskeyid"] = "accesskeyid"
-        fdroidserver.deploy.config["awssecretkey"] = "secretkey"
-        fdroidserver.deploy.config["s3cmd"] = "s3cmd"
-
-        repo_section = 'repo'
-
-        # setup function for asserting subprocess.call invocations
-        call_iteration = 0
-
-        def update_awsbucket_s3cmd_call(cmd):
-            nonlocal call_iteration
-            if call_iteration == 0:
-                self.assertListEqual(
-                    cmd,
-                    [
-                        's3cmd',
-                        f"--config={fdroidserver.deploy.AUTO_S3CFG}",
-                        'info',
-                        f"s3://{fdroidserver.deploy.config['awsbucket']}",
-                    ],
-                )
-            elif call_iteration == 1:
-                self.assertListEqual(
-                    cmd,
-                    [
-                        's3cmd',
-                        f"--config={fdroidserver.deploy.AUTO_S3CFG}",
-                        'sync',
-                        '--acl-public',
-                        '--quiet',
-                        '--include',
-                        'repo/altstore-index.json',
-                        '--include',
-                        'repo/altstore-index.json.asc',
-                        '--include',
-                        'repo/entry.jar',
-                        '--include',
-                        'repo/entry.json',
-                        '--include',
-                        'repo/entry.json.asc',
-                        '--include',
-                        'repo/index-v1.jar',
-                        '--include',
-                        'repo/index-v1.json',
-                        '--include',
-                        'repo/index-v1.json.asc',
-                        '--include',
-                        'repo/index-v2.json',
-                        '--include',
-                        'repo/index-v2.json.asc',
-                        '--include',
-                        'repo/index.css',
-                        '--include',
-                        'repo/index.html',
-                        '--include',
-                        'repo/index.jar',
-                        '--include',
-                        'repo/index.png',
-                        '--include',
-                        'repo/index.xml',
-                        '--include',
-                        'repo/signer-index.jar',
-                        '--include',
-                        'repo/signer-index.json',
-                        '--include',
-                        'repo/signer-index.json.asc',
-                        '--delete-removed',
-                        '--delete-after',
-                        '--no-check-md5',
-                        repo_section,
-                        f"s3://{fdroidserver.deploy.config['awsbucket']}/fdroid/",
-                    ],
-                )
-            else:
-                self.fail('unexpected subprocess.call invocation')
-            call_iteration += 1
-            return 0
-
-        with tempfile.TemporaryDirectory() as tmpdir, TmpCwd(tmpdir):
-            os.mkdir('repo')
-            os.symlink('repo/com.example.sym.apk', 'Sym.apk')
-            os.symlink('repo/com.example.sym.apk.asc', 'Sym.apk.asc')
-            os.symlink('repo/com.example.sym.apk.sig', 'Sym.apk.sig')
-            with mock.patch('subprocess.call', side_effect=update_awsbucket_s3cmd_call):
-                fdroidserver.deploy.update_awsbucket_s3cmd(
-                    repo_section, is_index_only=True
-                )
-        self.assertEqual(call_iteration, 2, 'expected 2 invocations of subprocess.call')
-
-    def test_update_awsbucket_libcloud(self):
-        from libcloud.storage.base import Container
-
-        # setup parameters for this test run
-        fdroidserver.common.options = mock.Mock()
-        fdroidserver.common.options.no_checksum = True
-        fdroidserver.common.options.verbose = False
-        fdroidserver.common.options.quiet = True
-
-        config = {}
-        fdroidserver.common.fill_config_defaults(config)
-        fdroidserver.deploy.config = config
-        fdroidserver.deploy.config["awsbucket"] = "bucket"
-        fdroidserver.deploy.config["awsaccesskeyid"] = "accesskeyid"
-        fdroidserver.deploy.config["awssecretkey"] = "secretkey"
-        fdroidserver.deploy.config["s3cmd"] = "s3cmd"
-
-        repo_section = 'repo'
-
-        os.chdir(self.testdir)
-        repo = Path('repo')
-        repo.mkdir(parents=True)
-        fake_apk = repo / 'Sym.apk'
-        with fake_apk.open('w') as fp:
-            fp.write('not an APK, but has the right filename')
-        fake_index = repo / fdroidserver.common.INDEX_FILES[0]
-        with fake_index.open('w') as fp:
-            fp.write('not an index, but has the right filename')
-
-        with mock.patch(
-            'libcloud.storage.drivers.s3.S3StorageDriver'
-        ) as mock_driver_class:
-            mock_driver = mock_driver_class.return_value
-            mock_container = mock.MagicMock(spec=Container)
-            mock_container.list_objects.return_value = [
-                mock.MagicMock(name='Sym.apk'),
-                mock.MagicMock(name=fdroidserver.common.INDEX_FILES[0]),
-            ]
-
-            mock_driver.get_container.return_value = mock_container
-            mock_driver.upload_object_via_stream.return_value = None
-
-            fdroidserver.deploy.update_awsbucket_libcloud(repo_section)
-
-            mock_driver.get_container.assert_called_once_with(
-                container_name=fdroidserver.deploy.config["awsbucket"]
-            )
-            mock_container.list_objects.assert_called_once_with()
-            files_to_upload = [
-                'fdroid/repo/Sym.apk',
-                f"fdroid/repo/{fdroidserver.common.INDEX_FILES[0]}",
-            ]
-            calls = [
-                mock.call(
-                    iterator=mock.ANY,
-                    container=mock_container,
-                    object_name=file,
-                    extra={'acl': 'public-read'},
-                )
-                for file in files_to_upload
-            ]
-            mock_driver.upload_object_via_stream.assert_has_calls(calls, any_order=True)
-            self.assertEqual(mock_driver.upload_object_via_stream.call_count, 2)
-
-    def test_update_awsbucket_libcloud_in_index_only_mode(self):
-        from libcloud.storage.base import Container
-
-        # setup parameters for this test run
-        fdroidserver.common.options = mock.Mock()
-        fdroidserver.common.options.no_checksum = True
-        fdroidserver.common.options.verbose = False
-        fdroidserver.common.options.quiet = True
-
-        config = {}
-        fdroidserver.common.fill_config_defaults(config)
-        fdroidserver.deploy.config = config
-        fdroidserver.deploy.config["awsbucket"] = "bucket"
-        fdroidserver.deploy.config["awsaccesskeyid"] = "accesskeyid"
-        fdroidserver.deploy.config["awssecretkey"] = "secretkey"
-        fdroidserver.deploy.config["s3cmd"] = "s3cmd"
-
-        repo_section = 'repo'
-
-        os.chdir(self.testdir)
-        repo = Path('repo')
-        repo.mkdir(parents=True)
-        fake_apk = repo / 'Sym.apk'
-        with fake_apk.open('w') as fp:
-            fp.write('not an APK, but has the right filename')
-        fake_index = repo / fdroidserver.common.INDEX_FILES[0]
-        with fake_index.open('w') as fp:
-            fp.write('not an index, but has the right filename')
-
-        with mock.patch(
-            'libcloud.storage.drivers.s3.S3StorageDriver'
-        ) as mock_driver_class:
-            mock_driver = mock_driver_class.return_value
-            mock_container = mock.MagicMock(spec=Container)
-            mock_container.list_objects.return_value = [
-                mock.MagicMock(name='Sym.apk'),
-                mock.MagicMock(name=fdroidserver.common.INDEX_FILES[0]),
-            ]
-
-            mock_driver.get_container.return_value = mock_container
-            mock_driver.upload_object_via_stream.return_value = None
-
-            fdroidserver.deploy.update_awsbucket_libcloud(
-                repo_section, is_index_only=True
-            )
-
-            mock_driver.get_container.assert_called_once_with(
-                container_name=fdroidserver.deploy.config["awsbucket"]
-            )
-            mock_container.list_objects.assert_called_once_with()
-            files_to_upload = [f"fdroid/repo/{fdroidserver.common.INDEX_FILES[0]}"]
-            calls = [
-                mock.call(
-                    iterator=mock.ANY,
-                    container=mock_container,
-                    object_name=file,
-                    extra={'acl': 'public-read'},
-                )
-                for file in files_to_upload
-            ]
-            mock_driver.upload_object_via_stream.assert_has_calls(
-                calls,
-                any_order=False,
-            )
-            self.assertEqual(mock_driver.upload_object_via_stream.call_count, 1)
 
     def test_update_servergitmirrors(self):
         # setup parameters for this test run

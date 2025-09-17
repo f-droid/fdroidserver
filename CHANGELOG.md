@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 
+## [2.5.0] - NEXT
+
+### Removed
+
+* deploy: `awsaccesskeyid:` and `awssecretkey:` config items removed, use the
+  standard env vars: `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY`.
+
 ## [2.4.2] - 2025-06-24
 
 ### Fixed

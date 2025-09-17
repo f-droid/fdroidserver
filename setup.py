@@ -101,7 +101,6 @@ setup(
         'oscrypto',
         'paramiko',
         'Pillow',
-        'apache-libcloud >= 0.14.1',
         'puremagic',
         'pycountry ; sys_platform=="darwin"',
         'python-vagrant',
@@ -123,7 +122,7 @@ setup(
             'pycountry',
             'python-magic',
         ],
-        'test': ['pyjks', 'html5print'],
+        'test': ['pyjks', 'html5print', 'testcontainers[minio]'],
         'docs': [
             'sphinx',
             'numpydoc',

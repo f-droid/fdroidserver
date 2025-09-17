@@ -305,70 +305,33 @@
 #
 # sync_from_local_copy_dir: true
 
+# To deploy to an AWS S3 "bucket" in the US East region, set the
+# bucket name in the config, then set the environment variables
+# AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY using the values from
+# the AWS Management Console. See
+# https://rclone.org/s3/#authentication
+#
+# awsbucket: myawsfdroidbucket
 
-# To upload the repo to an Amazon S3 bucket using `fdroid deploy'
-# . rclone, s3cmd and apache libcloud are the available options.
-# If rclone and s3cmd are not installed, apache libcloud is used.
-# To use apache libcloud, add the following options to this file
-# (config.yml)
+
+# For extended options for syncing to cloud drive and object store
+# services, `fdroid deploy' wraps Rclone. Rclone is a full featured
+# sync tool for a huge variety of cloud services. Set up your services
+# using `rclone config`, then specify each config name to deploy the
+# awsbucket: to.  Using rclone_config: overrides the default AWS S3 US
+# East setup, and will only sync to the services actually specified.
 #
-# awsbucket: myawsfdroid
-# awsaccesskeyid: SEE0CHAITHEIMAUR2USA
-# awssecretkey: {env: awssecretkey}
-#
-# In case s3cmd is installed and rclone is not installed,
-# s3cmd will be the preferred sync option.
-# It will delete and recreate the whole fdroid directory each time.
-# To customize how s3cmd interacts with the cloud
-# provider, create a 's3cfg' file next to this file (config.yml), and
-# those settings will be used instead of any 'aws' variable below.
-# Secrets can be fetched from environment variables to ensure that
-# they are not leaked as part of this file.
-#
-# awsbucket: myawsfdroid
-# awsaccesskeyid: SEE0CHAITHEIMAUR2USA
-# awssecretkey: {env: awssecretkey}
-#
-# In case rclone is installed and s3cmd is not installed,
-# rclone will be the preferred sync option.
-# It will sync the local folders with remote folders without
-# deleting anything in one go.
-# To ensure success, install rclone as per
-# the instructions at https://rclone.org/install/ and also configure for
-# object storage services as detailed at https://rclone.org/s3/#configuration
-# By default rclone uses the configuration file at ~/.config/rclone/rclone.conf
-# To specify a custom configuration file, please add the full path to the
-# configuration file as below
+# awsbucket: myawsfdroidbucket
+# rclone_config:
+#   - aws-sample-config
+#   - rclone-supported-service-config
+
+
+# By default Rclone uses the user's default configuration file at
+# ~/.config/rclone/rclone.conf To specify a custom configuration file,
+# please add the full path to the configuration file as below.
 #
 # path_to_custom_rclone_config: /home/mycomputer/somedir/example.conf
-#
-# This setting will ignore the default rclone config found at
-# ~/.config/rclone/rclone.conf
-#
-# Please note that rclone_config can be assigned a string or list
-#
-# awsbucket: myawsfdroid
-# rclone_config: aws-sample-config
-#
-# or
-#
-# awsbucket: myawsfdroid
-# rclone_config: [aws-sample-config, rclone-supported-service-config]
-#
-# In case both rclone and s3cmd are installed, the preferred sync
-# tool can be specified in this file (config.yml)
-# if s3cmd is preferred, set it as below
-#
-# s3cmd: true
-#
-# if rclone is preferred, set it as below
-#
-# rclone: true
-#
-# Please note that only one can be set to true at any time
-# Also, in the event that both s3cmd and rclone are installed
-# and both are missing from the config.yml file, the preferred
-# tool will be s3cmd.
 
 
 # If you want to force 'fdroid server' to use a non-standard serverwebroot.
