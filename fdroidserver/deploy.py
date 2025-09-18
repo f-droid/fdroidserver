@@ -156,6 +156,8 @@ def update_remote_storage_with_rclone(
     elif os.path.exists(EMBEDDED_RCLONE_CONF):
         path = EMBEDDED_RCLONE_CONF  # in this case, only for display
         configfilename = EMBEDDED_RCLONE_CONF
+        if not rclone_config:
+            raise FDroidException(_("'rclone_config' must be set in config.yml!"))
     else:
         configfilename = None
         output = subprocess.check_output(['rclone', 'config', 'file'], text=True)
