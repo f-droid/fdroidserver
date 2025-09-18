@@ -49,6 +49,8 @@ BINARY_TRANSPARENCY_DIR = 'binary_transparency'
 
 REMOTE_HOSTNAME_REGEX = re.compile(r'\W*\w+\W+(\w+).*')
 
+EMBEDDED_RCLONE_CONF = 'rclone.conf'
+
 
 def _get_index_file_paths(base_dir):
     """Return the list of files to be synced last, since they finalize the deploy.
@@ -131,6 +133,9 @@ def update_remote_storage_with_rclone(
     "--include" implies "--exclude **" at the end of an rclone internal
     filter list.
 
+    If rclone.conf is in the root of the repo, then it will be preferred
+    over the rclone default config paths.
+
     """
     logging.debug(_('Using rclone to sync to "{name}"').format(name=awsbucket))
 
@@ -148,6 +153,11 @@ def update_remote_storage_with_rclone(
             )
             sys.exit(1)
         configfilename = path
+    elif os.path.exists(EMBEDDED_RCLONE_CONF):
+        path = EMBEDDED_RCLONE_CONF  # in this case, only for display
+        configfilename = EMBEDDED_RCLONE_CONF
+        if not rclone_config:
+            raise FDroidException(_("'rclone_config' must be set in config.yml!"))
     else:
         configfilename = None
         output = subprocess.check_output(['rclone', 'config', 'file'], text=True)
