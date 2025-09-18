@@ -165,6 +165,9 @@ class ScannerTest(unittest.TestCase):
                 'com.google.firebase:firebase-crash:1.1.1',
                 'com.google.firebase:firebase-core:2.2.2',
             ],
+            'plugins.androidApplication.asLibraryDependency': [
+                'com.android.application:8.12.0'
+            ],
         }
         with open('source-files/catalog.test/gradle/libs.versions.toml', 'rb') as f:
             catalog = fdroidserver.scanner.GradleVersionCatalog(tomllib.load(f))
@@ -176,6 +179,7 @@ class ScannerTest(unittest.TestCase):
             ('source-files/com.lolo.io.onelist/', 1),
             ('source-files/catalog.test/', 3),
             ('source-files/org.piepmeyer.gauguin/', 1),
+            ('source-files/com.infomaniak.mail/', 2),
         ]
 
         for root, count in test_files:
@@ -353,11 +357,15 @@ class ScannerTest(unittest.TestCase):
 
         with mock.patch('fdroidserver.common.replace_build_vars', wraps=make_fake_apk):
             with mock.patch('fdroidserver.common.get_native_code', return_value='x86'):
-                with mock.patch(
-                    'fdroidserver.common.get_apk_id',
-                    return_value=(app.id, build.versionCode, build.versionName),
-                ), mock.patch(
-                    'fdroidserver.common.get_source_date_epoch', lambda f: '1234567890'
+                with (
+                    mock.patch(
+                        'fdroidserver.common.get_apk_id',
+                        return_value=(app.id, build.versionCode, build.versionName),
+                    ),
+                    mock.patch(
+                        'fdroidserver.common.get_source_date_epoch',
+                        lambda f: '1234567890',
+                    ),
                 ):
                     with mock.patch(
                         'fdroidserver.common.is_debuggable_or_testOnly',
@@ -671,15 +679,19 @@ class Test_SignatureDataController(unittest.TestCase):
         func_lfc = mock.Mock()
         func_vd = mock.Mock()
         func_clu = mock.Mock()
-        with mock.patch(
-            'fdroidserver.scanner.SignatureDataController.load_from_cache',
-            func_lfc,
-        ), mock.patch(
-            'fdroidserver.scanner.SignatureDataController.verify_data',
-            func_vd,
-        ), mock.patch(
-            'fdroidserver.scanner.SignatureDataController.check_last_updated',
-            func_clu,
+        with (
+            mock.patch(
+                'fdroidserver.scanner.SignatureDataController.load_from_cache',
+                func_lfc,
+            ),
+            mock.patch(
+                'fdroidserver.scanner.SignatureDataController.verify_data',
+                func_vd,
+            ),
+            mock.patch(
+                'fdroidserver.scanner.SignatureDataController.check_last_updated',
+                func_clu,
+            ),
         ):
             sdc.load()
         func_lfc.assert_called_once_with()
@@ -694,12 +706,15 @@ class Test_SignatureDataController(unittest.TestCase):
             side_effect=fdroidserver.scanner.SignatureDataCacheMissException
         )
         func_lfd = mock.Mock()
-        with mock.patch(
-            'fdroidserver.scanner.SignatureDataController.load_from_cache',
-            func_lfc,
-        ), mock.patch(
-            'fdroidserver.scanner.SignatureDataController.load_from_defaults',
-            func_lfd,
+        with (
+            mock.patch(
+                'fdroidserver.scanner.SignatureDataController.load_from_cache',
+                func_lfc,
+            ),
+            mock.patch(
+                'fdroidserver.scanner.SignatureDataController.load_from_defaults',
+                func_lfd,
+            ),
         ):
             sdc.load()
         func_lfc.assert_called_once_with()
@@ -716,21 +731,27 @@ class Test_SignatureDataController(unittest.TestCase):
         )
         func_fsfw = mock.Mock()
         func_wtc = mock.Mock()
-        with mock.patch(
-            'fdroidserver.scanner.SignatureDataController.load_from_cache',
-            func_lfc,
-        ), mock.patch(
-            'fdroidserver.scanner.SignatureDataController.verify_data',
-            func_vd,
-        ), mock.patch(
-            'fdroidserver.scanner.SignatureDataController.check_last_updated',
-            func_clu,
-        ), mock.patch(
-            'fdroidserver.scanner.SignatureDataController.fetch_signatures_from_web',
-            func_fsfw,
-        ), mock.patch(
-            'fdroidserver.scanner.SignatureDataController.write_to_cache',
-            func_wtc,
+        with (
+            mock.patch(
+                'fdroidserver.scanner.SignatureDataController.load_from_cache',
+                func_lfc,
+            ),
+            mock.patch(
+                'fdroidserver.scanner.SignatureDataController.verify_data',
+                func_vd,
+            ),
+            mock.patch(
+                'fdroidserver.scanner.SignatureDataController.check_last_updated',
+                func_clu,
+            ),
+            mock.patch(
+                'fdroidserver.scanner.SignatureDataController.fetch_signatures_from_web',
+                func_fsfw,
+            ),
+            mock.patch(
+                'fdroidserver.scanner.SignatureDataController.write_to_cache',
+                func_wtc,
+            ),
         ):
             sdc.load()
         func_lfc.assert_called_once_with()
@@ -751,18 +772,23 @@ class Test_SignatureDataController(unittest.TestCase):
         )
         func_fsfw = mock.Mock()
         func_wtc = mock.Mock()
-        with mock.patch(
-            'fdroidserver.scanner.SignatureDataController.load_from_cache',
-            func_lfc,
-        ), mock.patch(
-            'fdroidserver.scanner.SignatureDataController.load_from_defaults',
-            func_lfd,
-        ), mock.patch(
-            'fdroidserver.scanner.SignatureDataController.fetch_signatures_from_web',
-            func_fsfw,
-        ), mock.patch(
-            'fdroidserver.scanner.SignatureDataController.write_to_cache',
-            func_wtc,
+        with (
+            mock.patch(
+                'fdroidserver.scanner.SignatureDataController.load_from_cache',
+                func_lfc,
+            ),
+            mock.patch(
+                'fdroidserver.scanner.SignatureDataController.load_from_defaults',
+                func_lfd,
+            ),
+            mock.patch(
+                'fdroidserver.scanner.SignatureDataController.fetch_signatures_from_web',
+                func_fsfw,
+            ),
+            mock.patch(
+                'fdroidserver.scanner.SignatureDataController.write_to_cache',
+                func_wtc,
+            ),
         ):
             sdc.load()
         func_lfc.assert_called_once_with()
@@ -781,9 +807,12 @@ class Test_SignatureDataController(unittest.TestCase):
         )
         sdc.data = {"mocked": "data"}
 
-        with mock.patch("builtins.open", open_func), mock.patch(
-            "fdroidserver.scanner._scanner_cachedir",
-            return_value=pathlib.Path('.'),
+        with (
+            mock.patch("builtins.open", open_func),
+            mock.patch(
+                "fdroidserver.scanner._scanner_cachedir",
+                return_value=pathlib.Path('.'),
+            ),
         ):
             sdc.write_to_cache()
 

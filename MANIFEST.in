@@ -757,6 +757,9 @@ include tests/source-files/com.anpmech.launcher/settings.gradle
 include tests/source-files/com.github.jameshnsears.quoteunquote/build.gradle
 include tests/source-files/com.github.shadowsocks/core/build.gradle.kts
 include tests/source-files/com.github.shadowsocks/mobile/build.gradle.kts
+include tests/source-files/com.infomaniak.mail/Core/gradle/core.versions.toml
+include tests/source-files/com.infomaniak.mail/gradle/libs.versions.toml
+include tests/source-files/com.infomaniak.mail/settings.gradle
 include tests/source-files/com.integreight.onesheeld/build.gradle
 include tests/source-files/com.integreight.onesheeld/gradle/wrapper/gradle-wrapper.properties
 include tests/source-files/com.integreight.onesheeld/localeapi/build.gradle
