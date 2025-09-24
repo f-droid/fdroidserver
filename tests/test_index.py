@@ -705,7 +705,7 @@ class IndexTest(unittest.TestCase):
         self.assertEqual(
             repodict['mirrors'],
             [
-                {'isPrimary': True, 'url': 'https://MyFirstFDroidRepo.org/fdroid/repo'},
+                {'isPrimary': True, 'url': 'https://example.com/fdroid/repo'},
                 {'url': 'http://foobarfoobarfoobar.onion/fdroid/repo'},
                 {'url': 'https://foo.bar/fdroid/repo'},
             ],

@@ -1965,44 +1965,44 @@ class CommonTest(SetUpTearDownMixin, unittest.TestCase):
         fdroidserver.common.write_config_file(
             textwrap.dedent(
                 """\
-                repo_url: https://MyFirstFDroidRepo.org/fdroid/repo
-                archive_url: https://MyFirstFDroidRepo.org/fdroid/archive
+                repo_url: https://example.com/fdroid/repo
+                archive_url: https://example.com/fdroid/archive
                 """
             )
         )
         config = fdroidserver.common.read_config()
         self.assertEqual(
-            'https://MyFirstFDroidRepo.org/fdroid/repo', config.get('repo_url')
+            'https://example.com/fdroid/repo', config.get('repo_url')
         )
         self.assertEqual(
-            'https://MyFirstFDroidRepo.org/fdroid/archive', config.get('archive_url')
+            'https://example.com/fdroid/archive', config.get('archive_url')
         )
 
     def test_config_repo_url_extra_slash(self):
         """repo_url ends in /repo, archive_url ends in /archive."""
         os.chdir(self.testdir)
-        fdroidserver.common.write_config_file('repo_url: https://MyFirstFDroidRepo.org/fdroid/repo/')
+        fdroidserver.common.write_config_file('repo_url: https://example.com/fdroid/repo/')
         with self.assertRaises(FDroidException):
             fdroidserver.common.read_config()
 
     def test_config_repo_url_not_repo(self):
         """repo_url ends in /repo, archive_url ends in /archive."""
         os.chdir(self.testdir)
-        fdroidserver.common.write_config_file('repo_url: https://MyFirstFDroidRepo.org/fdroid/foo')
+        fdroidserver.common.write_config_file('repo_url: https://example.com/fdroid/foo')
         with self.assertRaises(FDroidException):
             fdroidserver.common.read_config()
 
     def test_config_archive_url_extra_slash(self):
         """repo_url ends in /repo, archive_url ends in /archive."""
         os.chdir(self.testdir)
-        fdroidserver.common.write_config_file('archive_url: https://MyFirstFDroidRepo.org/fdroid/archive/')
+        fdroidserver.common.write_config_file('archive_url: https://example.com/fdroid/archive/')
         with self.assertRaises(FDroidException):
             fdroidserver.common.read_config()
 
     def test_config_archive_url_not_repo(self):
         """repo_url ends in /repo, archive_url ends in /archive."""
         os.chdir(self.testdir)
-        fdroidserver.common.write_config_file('archive_url: https://MyFirstFDroidRepo.org/fdroid/foo')
+        fdroidserver.common.write_config_file('archive_url: https://example.com/fdroid/foo')
         with self.assertRaises(FDroidException):
             fdroidserver.common.read_config()
 
