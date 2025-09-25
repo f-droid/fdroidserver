@@ -5,7 +5,6 @@ import platform
 import re
 import shlex
 import shutil
-import stat
 import subprocess
 import sys
 import threading
@@ -43,8 +42,13 @@ common.find_apksigner(conf)
 USE_APKSIGNER = "apksigner" in conf
 
 
-def docker_socket_exists(path="/var/run/docker.sock"):
-    return os.path.exists(path) and stat.S_ISSOCK(os.stat(path).st_mode)
+def docker_exists():
+    try:
+        subprocess.check_output(["docker", "info"])
+    except Exception:
+        return False
+    else:
+        return True
 
 
 @unittest.skipIf(sys.byteorder == 'big', 'androguard is not ported to big-endian')
@@ -1565,8 +1569,11 @@ class IntegrationTest(unittest.TestCase):
         )
         self.assertIn("CurrentVersionCode: 1", Path("metadata/fake.yml").read_text())
 
-    @unittest.skipUnless(docker_socket_exists(), "Docker is not available")
+    @unittest.skipUnless(docker_exists(), "Docker is not available")
     def test_update_remote_storage_with_rclone_and_minio(self):
+        # This test shows how an entire repo can be deployed using rclone.
+        # To avoid multiple files being copied in the repo since the repo
+        # directory can change, only two files are used.
         try:
             from testcontainers.minio import MinioContainer
         except ImportError:
@@ -1621,7 +1628,7 @@ class IntegrationTest(unittest.TestCase):
             {'fdroid/repo/SpeedoMeterApp.main_1.apk', 'fdroid/repo/index-v2.json'},
         )
 
-    @unittest.skipUnless(docker_socket_exists(), "Docker is not available")
+    @unittest.skipUnless(docker_exists(), "Docker is not available")
     def test_update_remote_storage_with_rclone_and_minio_in_index_only_mode(self):
         try:
             from testcontainers.minio import MinioContainer
@@ -1638,8 +1645,7 @@ class IntegrationTest(unittest.TestCase):
             repo_section = 'repo'
             repo = Path(repo_section)
             repo.mkdir(parents=True, exist_ok=True)
-            shutil.copy(basedir / 'SpeedoMeterApp.main_1.apk', repo)
-            shutil.copy(basedir / 'repo/index-v2.json', repo)
+            shutil.copytree(basedir / repo, repo, dirs_exist_ok=True)
 
             # write out config for test use
             rclone_config = configparser.ConfigParser()
@@ -1674,4 +1680,12 @@ class IntegrationTest(unittest.TestCase):
             # check if apk and index file are available
             bucket_content = client.list_objects('test-bucket', recursive=True)
             files_in_bucket = {obj.object_name for obj in bucket_content}
-        self.assertEqual(files_in_bucket, {'fdroid/repo/index-v2.json'})
+        self.assertEqual(
+            files_in_bucket,
+            {
+                'fdroid/repo/index-v2.json',
+                'fdroid/repo/index.xml',
+                'fdroid/repo/entry.json',
+                'fdroid/repo/index-v1.json',
+            },
+        )
