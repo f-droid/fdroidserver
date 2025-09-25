@@ -115,7 +115,12 @@ def update_awsbucket(repo_section, is_index_only=False, verbose=False, quiet=Fal
 
 
 def update_remote_storage_with_rclone(
-    repo_section, awsbucket, is_index_only=False, verbose=False, quiet=False
+    repo_section,
+    awsbucket,
+    is_index_only=False,
+    verbose=False,
+    quiet=False,
+    checksum=False,
 ):
     """Sync the directory `repo_section` (including subdirectories) to configed cloud services.
 
@@ -204,6 +209,9 @@ def update_remote_storage_with_rclone(
     rclone_sync_command = ['rclone', 'sync', '--delete-after']
     if configfilename:
         rclone_sync_command += ['--config', configfilename]
+
+    if checksum:
+        rclone_sync_command.append('--checksum')
 
     if verbose:
         rclone_sync_command += ['--verbose']
@@ -1141,7 +1149,12 @@ def main():
             awsbucket = config['awsbucket']
             index_only = config.get('awsbucket_index_only')
             update_remote_storage_with_rclone(
-                repo_section, awsbucket, index_only, options.verbose, options.quiet
+                repo_section,
+                awsbucket,
+                index_only,
+                options.verbose,
+                options.quiet,
+                not options.no_checksum,
             )
         if config.get('androidobservatory'):
             upload_to_android_observatory(repo_section)
