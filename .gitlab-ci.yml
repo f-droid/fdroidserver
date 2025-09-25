@@ -190,6 +190,8 @@ ubuntu_lts_ppa:
 test_deploy_to_s3_with_rclone:
   image: debian:bookworm-slim
   <<: *apt-template
+  tags:
+    - saas-linux-small-amd64  # the shared runners are known to support Docker.
   services:
     - name: docker:dind
       command: ["--tls=false"]
@@ -208,6 +210,8 @@ test_deploy_to_s3_with_rclone:
         git
         python3-venv
         rclone
+    # This job requires working docker but will silently fail if docker is not available
+    - docker info
     - python3 -m venv --system-site-packages test-venv
     - . test-venv/bin/activate
     - pip install testcontainers[minio]
