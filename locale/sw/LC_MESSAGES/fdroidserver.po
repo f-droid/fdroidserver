@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 2.3a1\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2025-06-25 09:52+0200\n"
+"POT-Creation-Date: 2025-09-29 14:29+0200\n"
 "PO-Revision-Date: 2024-09-08 11:09+0000\n"
 "Last-Translator: abelbiwott-dev <abelbiwott@outlook.com>\n"
 "Language-Team: Swahili <https://hosted.weblate.org/projects/f-droid/fdroidserver/sw/>\n"
@@ -39,6 +39,14 @@ msgstr ""
 #, python-format
 msgid "\"%s/\" has no matching metadata file!"
 msgstr "\"%s/\" haina faili ya metadata inayolingana!"
+
+#: ../fdroidserver/deploy.py
+msgid "\"AWS_ACCESS_KEY_ID\" must be set as an environmental variable!"
+msgstr ""
+
+#: ../fdroidserver/deploy.py
+msgid "\"AWS_SECRET_ACCESS_KEY\" must be set as an environmental variable!"
+msgstr ""
 
 #: ../fdroidserver/index.py
 msgid "\"isPrimary\" key should not be added to mirrors!"
@@ -130,6 +138,11 @@ msgstr "'keystore' haipatikani kwenye config.yml!"
 msgid "'keystorepass' not found in config.yml!"
 msgstr "'keystorepass' haipatikani kwenye config.yml!"
 
+#: ../fdroidserver/deploy.py
+#, fuzzy
+msgid "'rclone_config' must be set in config.yml!"
+msgstr "Ili kutumia awsbucket, awssecretkey na awsaccesskeiid lazima pia iwekwe katika config.yml!"
+
 #: ../fdroidserver/common.py
 msgid "'repo_keyalias' not found in config.yml!"
 msgstr "'repo_keyalias' haipatikani kwenye config.yml!"
@@ -188,6 +201,11 @@ msgstr "/issues haipo"
 msgid "A URL is required as an argument!"
 msgstr "URL inahitajika kama hoja!"
 
+#: ../fdroidserver/update.py
+#, python-brace-format
+msgid "APK file {path} does not have a version code in its manifest"
+msgstr ""
+
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "APK signatures have different certificates in {path}:"
@@ -204,6 +222,10 @@ msgstr "Ongeza kitufe cha kusaini ghala kwenye ghala ambayo haijatiwa saini"
 #: ../fdroidserver/update.py
 msgid "Add skeleton metadata files for APKs that are missing them"
 msgstr "Ongeza faili za metadata za kiunzi za APK ambazo hazina"
+
+#: ../fdroidserver/deploy.py
+msgid "Adding all files to git mirror"
+msgstr ""
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -419,6 +441,10 @@ msgstr "Fanya mabadiliko"
 msgid "Commit changes, push, then make a merge request"
 msgstr ""
 
+#: ../fdroidserver/deploy.py
+msgid "Committing index files to git mirror"
+msgstr ""
+
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Conflicting \"{field}\" definitions between .yml and localized files:"
@@ -441,6 +467,16 @@ msgstr "Haikuweza kupata msimbo wa toleo wa hivi karibuni"
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vname
 #: ../fdroidserver/import_subcommand.py
 msgid "Could not find latest version name"
+msgstr "Haikuweza kupata jina la toleo la hivi karibuni"
+
+#: ../fdroidserver/import_subcommand.py
+#, fuzzy
+msgid "Could not find latest versionCode"
+msgstr "Haikuweza kupata msimbo wa toleo wa hivi karibuni"
+
+#: ../fdroidserver/import_subcommand.py
+#, fuzzy
+msgid "Could not find latest versionName"
 msgstr "Haikuweza kupata jina la toleo la hivi karibuni"
 
 #: ../fdroidserver/update.py
@@ -683,6 +719,11 @@ msgid ""
 msgstr ""
 "Ingiza njia ya SDK ya Android (%s) hapa:\n"
 "> "
+
+#: ../fdroidserver/nightly.py
+#, fuzzy, python-brace-format
+msgid "Environment variable \"{name}\" has an empty value!"
+msgstr "Vigezo vya mazingira {var} kutoka {configname} haijawekwa!"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -1256,6 +1297,16 @@ msgstr "Hakuna saraka isiyotiwa saini - hakuna la kufanya"
 msgid "No version information could be found."
 msgstr "Hakuna taarifa ya toleo iliyoweza kupatikana."
 
+#: ../fdroidserver/scanner.py
+#, fuzzy, python-format
+msgid "Non-exist scandelete path: %s"
+msgstr "Njia ya scandelete isiyotumika: %s"
+
+#: ../fdroidserver/scanner.py
+#, fuzzy, python-format
+msgid "Non-exist scanignore path: %s"
+msgstr "Njia ya scanignore isiyotumika: %s"
+
 #: ../fdroidserver/common.py
 msgid "Not a valid size definition: \"{}\""
 msgstr "Sio ufafanuzi halali wa ukubwa: \"{}\""
@@ -1635,6 +1686,11 @@ msgstr "Ruka kuchanganua msimbo wa chanzo kwa binari na tatizo zingine"
 msgid "Skipping '{apkfilename}' with invalid signature!"
 msgstr "Kuruka '{apkfilename}' iliyo na saini batili!"
 
+#: ../fdroidserver/update.py
+#, fuzzy, python-brace-format
+msgid "Skipping '{apkfilename}' without versionCode!"
+msgstr "Kuruka '{apkfilename}' iliyo na saini batili!"
+
 #: ../fdroidserver/deploy.py ../fdroidserver/index.py
 #, python-format
 msgid "Skipping GitLab Pages mirror because the repo is too large (>%.2fGB)!"
@@ -1711,6 +1767,11 @@ msgstr ""
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "The OBB version code must come after \"{name}.\":"
+msgstr "Msimbo wa toleo la OBB lazima ije baada ya \"{name}.\":"
+
+#: ../fdroidserver/update.py
+#, fuzzy, python-brace-format
+msgid "The OBB versionCode must come after \"{name}.\":"
 msgstr "Msimbo wa toleo la OBB lazima ije baada ya \"{name}.\":"
 
 #: ../fdroidserver/btlog.py
@@ -1901,6 +1962,11 @@ msgid "UpdateCheckData must match the version code as integer (\\d or [0-9]): {c
 msgstr "UpdateCheckData lazima ilingane na msimbo wa toleo kama nambari kamili (\\d or [0-9]): {codeex}"
 
 #: ../fdroidserver/lint.py
+#, fuzzy, python-brace-format
+msgid "UpdateCheckData must match the versionCode as integer (\\d or [0-9]): {codeex}"
+msgstr "UpdateCheckData lazima ilingane na msimbo wa toleo kama nambari kamili (\\d or [0-9]): {codeex}"
+
+#: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "UpdateCheckData must use HTTPS URL: {url}"
 msgstr "UpdateCheckData lazima itumie URL ya HTTPS: {url}"
@@ -1952,6 +2018,11 @@ msgstr "Kutumia \"{path}\" kusanidi s3cmd."
 
 #: ../fdroidserver/deploy.py
 #, fuzzy, python-brace-format
+msgid "Using \"{path}\" for rclone config."
+msgstr "Kutumia \"{path}\" kusanidi s3cmd."
+
+#: ../fdroidserver/deploy.py
+#, fuzzy, python-brace-format
 msgid "Using \"{path}\" for syncing with remote storage."
 msgstr "Kutumia \"{path}\" kusanidi s3cmd."
 
@@ -1980,6 +2051,11 @@ msgstr "Kutumia kamusi tupu badala ya maudhui ya {path}!"
 #, python-brace-format
 msgid "Using existing keystore \"{path}\""
 msgstr "Kutumia keystore iliyopo \"{path}\""
+
+#: ../fdroidserver/deploy.py
+#, fuzzy, python-brace-format
+msgid "Using rclone to sync to \"{name}\""
+msgstr "Kutumia s3cmd kusawazisha na: {url}"
 
 #: ../fdroidserver/deploy.py
 #, fuzzy, python-brace-format
@@ -2384,6 +2460,11 @@ msgstr "uchaguzi"
 #, python-brace-format
 msgid "overwriting existing {path}"
 msgstr "inaandika upya {path} iliyopo"
+
+#: ../fdroidserver/deploy.py
+#, fuzzy, python-brace-format
+msgid "path_to_custom_rclone_config: \"{path}\" does not exist!"
+msgstr "Saraka ya mzizi ya local_copy_dir \"{path}\" haipo!"
 
 #: /usr/lib/python3.11/argparse.py
 msgid "positional arguments"

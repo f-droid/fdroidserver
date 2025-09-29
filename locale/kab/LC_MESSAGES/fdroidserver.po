@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2025-06-25 09:52+0200\n"
+"POT-Creation-Date: 2025-09-29 14:29+0200\n"
 "PO-Revision-Date: 2021-01-15 13:25+0000\n"
 "Last-Translator: R_SACI <rgebbid@gmail.com>\n"
 "Language-Team: Kabyle <https://hosted.weblate.org/projects/f-droid/fdroidserver/kab/>\n"
@@ -34,6 +34,14 @@ msgstr ""
 #: ../fdroidserver/lint.py
 #, python-format
 msgid "\"%s/\" has no matching metadata file!"
+msgstr ""
+
+#: ../fdroidserver/deploy.py
+msgid "\"AWS_ACCESS_KEY_ID\" must be set as an environmental variable!"
+msgstr ""
+
+#: ../fdroidserver/deploy.py
+msgid "\"AWS_SECRET_ACCESS_KEY\" must be set as an environmental variable!"
 msgstr ""
 
 #: ../fdroidserver/index.py
@@ -126,6 +134,11 @@ msgstr "'keystore' ulac-it di config.yml!"
 msgid "'keystorepass' not found in config.yml!"
 msgstr "'keystorepass' ulac-it di config.yml!"
 
+#: ../fdroidserver/deploy.py
+#, fuzzy
+msgid "'rclone_config' must be set in config.yml!"
+msgstr "'sdk_path' ur yettwasbadu ara 'config.yml'!"
+
 #: ../fdroidserver/common.py
 msgid "'repo_keyalias' not found in config.yml!"
 msgstr "'repo_keyalias' ulac-it deg config.yml!"
@@ -184,6 +197,11 @@ msgstr ""
 msgid "A URL is required as an argument!"
 msgstr ""
 
+#: ../fdroidserver/update.py
+#, python-brace-format
+msgid "APK file {path} does not have a version code in its manifest"
+msgstr ""
+
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "APK signatures have different certificates in {path}:"
@@ -199,6 +217,10 @@ msgstr ""
 
 #: ../fdroidserver/update.py
 msgid "Add skeleton metadata files for APKs that are missing them"
+msgstr ""
+
+#: ../fdroidserver/deploy.py
+msgid "Adding all files to git mirror"
 msgstr ""
 
 #: ../fdroidserver/update.py
@@ -415,6 +437,10 @@ msgstr "Azen ibeddilen"
 msgid "Commit changes, push, then make a merge request"
 msgstr ""
 
+#: ../fdroidserver/deploy.py
+msgid "Committing index files to git mirror"
+msgstr ""
+
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Conflicting \"{field}\" definitions between .yml and localized files:"
@@ -437,6 +463,16 @@ msgstr ""
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vname
 #: ../fdroidserver/import_subcommand.py
 msgid "Could not find latest version name"
+msgstr "Ur izmir ara ad d-yaf isem n lqem aneggaru"
+
+#: ../fdroidserver/import_subcommand.py
+#, fuzzy
+msgid "Could not find latest versionCode"
+msgstr "Ur izmir ara ad d-yaf isem n lqem aneggaru"
+
+#: ../fdroidserver/import_subcommand.py
+#, fuzzy
+msgid "Could not find latest versionName"
 msgstr "Ur izmir ara ad d-yaf isem n lqem aneggaru"
 
 #: ../fdroidserver/update.py
@@ -677,6 +713,11 @@ msgstr ""
 msgid ""
 "Enter the path to the Android SDK (%s) here:\n"
 "> "
+msgstr ""
+
+#: ../fdroidserver/nightly.py
+#, python-brace-format
+msgid "Environment variable \"{name}\" has an empty value!"
 msgstr ""
 
 #: ../fdroidserver/common.py
@@ -1252,6 +1293,16 @@ msgstr ""
 msgid "No version information could be found."
 msgstr ""
 
+#: ../fdroidserver/scanner.py
+#, python-format
+msgid "Non-exist scandelete path: %s"
+msgstr ""
+
+#: ../fdroidserver/scanner.py
+#, python-format
+msgid "Non-exist scanignore path: %s"
+msgstr ""
+
 #: ../fdroidserver/common.py
 msgid "Not a valid size definition: \"{}\""
 msgstr ""
@@ -1631,6 +1682,11 @@ msgstr ""
 msgid "Skipping '{apkfilename}' with invalid signature!"
 msgstr ""
 
+#: ../fdroidserver/update.py
+#, python-brace-format
+msgid "Skipping '{apkfilename}' without versionCode!"
+msgstr ""
+
 #: ../fdroidserver/deploy.py ../fdroidserver/index.py
 #, python-format
 msgid "Skipping GitLab Pages mirror because the repo is too large (>%.2fGB)!"
@@ -1707,6 +1763,11 @@ msgstr ""
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "The OBB version code must come after \"{name}.\":"
+msgstr ""
+
+#: ../fdroidserver/update.py
+#, python-brace-format
+msgid "The OBB versionCode must come after \"{name}.\":"
 msgstr ""
 
 #: ../fdroidserver/btlog.py
@@ -1890,6 +1951,11 @@ msgstr ""
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
+msgid "UpdateCheckData must match the versionCode as integer (\\d or [0-9]): {codeex}"
+msgstr ""
+
+#: ../fdroidserver/lint.py
+#, python-brace-format
 msgid "UpdateCheckData must use HTTPS URL: {url}"
 msgstr ""
 
@@ -1940,6 +2006,11 @@ msgstr ""
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
+msgid "Using \"{path}\" for rclone config."
+msgstr ""
+
+#: ../fdroidserver/deploy.py
+#, python-brace-format
 msgid "Using \"{path}\" for syncing with remote storage."
 msgstr ""
 
@@ -1968,6 +2039,11 @@ msgstr ""
 #, python-brace-format
 msgid "Using existing keystore \"{path}\""
 msgstr "Aseqdec n tqeffalt n uḥraz \"{path}\""
+
+#: ../fdroidserver/deploy.py
+#, python-brace-format
+msgid "Using rclone to sync to \"{name}\""
+msgstr ""
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
@@ -2372,6 +2448,11 @@ msgstr "Tixtiṛiyin"
 #: ../fdroidserver/nightly.py
 #, python-brace-format
 msgid "overwriting existing {path}"
+msgstr ""
+
+#: ../fdroidserver/deploy.py
+#, python-brace-format
+msgid "path_to_custom_rclone_config: \"{path}\" does not exist!"
 msgstr ""
 
 #: /usr/lib/python3.11/argparse.py

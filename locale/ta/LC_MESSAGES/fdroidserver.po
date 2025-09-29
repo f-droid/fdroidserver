@@ -2,22 +2,22 @@
 # This file is put in the public domain.
 # K.B.Dharun Krishna <kbdharunkrishna@gmail.com>, 2022.
 # Naveen <naveen.sakthivel@tutanota.com>, 2024.
-# தமிழ்நேரம் <anishprabu.t@gmail.com>, 2024.
+# தமிழ்நேரம் <anishprabu.t@gmail.com>, 2024, 2025.
 # Hans-Christoph Steiner <hans@guardianproject.info>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 2.1-273-g54e84d87\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2025-06-25 09:52+0200\n"
-"PO-Revision-Date: 2025-01-20 14:04+0000\n"
-"Last-Translator: Hans-Christoph Steiner <hans@guardianproject.info>\n"
+"POT-Creation-Date: 2025-09-29 14:29+0200\n"
+"PO-Revision-Date: 2025-07-09 20:14+0000\n"
+"Last-Translator: தமிழ்நேரம் <anishprabu.t@gmail.com>\n"
 "Language-Team: Tamil <https://hosted.weblate.org/projects/f-droid/fdroidserver/ta/>\n"
 "Language: ta\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.10-dev\n"
+"X-Generator: Weblate 5.13-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -41,9 +41,17 @@ msgstr ""
 msgid "\"%s/\" has no matching metadata file!"
 msgstr "\"%s/\" க்கு பொருந்தக்கூடிய மேனிலை தரவு கோப்பு இல்லை!"
 
+#: ../fdroidserver/deploy.py
+msgid "\"AWS_ACCESS_KEY_ID\" must be set as an environmental variable!"
+msgstr ""
+
+#: ../fdroidserver/deploy.py
+msgid "\"AWS_SECRET_ACCESS_KEY\" must be set as an environmental variable!"
+msgstr ""
+
 #: ../fdroidserver/index.py
 msgid "\"isPrimary\" key should not be added to mirrors!"
-msgstr ""
+msgstr "\"இச்ப்ரைமரி\" விசையை கண்ணாடியில் சேர்க்கக்கூடாது!"
 
 #: ../fdroidserver/index.py
 #, python-brace-format
@@ -131,6 +139,11 @@ msgstr "'கீச்டோர்' config.yml இல் காணப்படவ
 msgid "'keystorepass' not found in config.yml!"
 msgstr "'கீச்டோர்பாச்' config.yml இல் காணப்படவில்லை!"
 
+#: ../fdroidserver/deploy.py
+#, fuzzy
+msgid "'rclone_config' must be set in config.yml!"
+msgstr "RCLONE ஐப் பயன்படுத்த, RCLONE_CONFIG மற்றும் AWSBUCKET ஆகியவை config.yml இல் அமைக்கப்பட வேண்டும்!"
+
 #: ../fdroidserver/common.py
 msgid "'repo_keyalias' not found in config.yml!"
 msgstr "config.yml இல் 'ரெப்போ_காலியாச்' காணப்படவில்லை!"
@@ -189,6 +202,11 @@ msgstr "/சிக்கல்கள் இல்லை"
 msgid "A URL is required as an argument!"
 msgstr "ஒரு வாதமாக ஒரு முகவரி தேவை!"
 
+#: ../fdroidserver/update.py
+#, python-brace-format
+msgid "APK file {path} does not have a version code in its manifest"
+msgstr ""
+
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "APK signatures have different certificates in {path}:"
@@ -205,6 +223,10 @@ msgstr "கையொப்பமிடாத ரெப்போவுக்க�
 #: ../fdroidserver/update.py
 msgid "Add skeleton metadata files for APKs that are missing them"
 msgstr "காணாமல் போன APK களுக்கு எலும்புக்கூடு மேனிலை தரவு கோப்புகளைச் சேர்க்கவும்"
+
+#: ../fdroidserver/deploy.py
+msgid "Adding all files to git mirror"
+msgstr ""
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -361,9 +383,9 @@ msgstr[0] "ச்கேன் செய்யும் போது {} பிழ
 msgstr[1] "ச்கேன் செய்யும் போது {} பிழைகள் காரணமாக உருவாக்க முடியாது"
 
 #: ../fdroidserver/common.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Cannot read {path}: {error}"
-msgstr "தோல்வியுற்ற வாசிப்பு {path}: {error}"
+msgstr "படிக்க முடியவில்லை {path}: {error}"
 
 #: ../fdroidserver/rewritemeta.py
 #, python-brace-format
@@ -420,6 +442,10 @@ msgstr "மாற்றங்களைச் செய்யுங்கள்"
 msgid "Commit changes, push, then make a merge request"
 msgstr "மாற்றங்களைச் செய்யுங்கள், தள்ளுங்கள், பின்னர் ஒன்றிணைக்கும் கோரிக்கையை உருவாக்குங்கள்"
 
+#: ../fdroidserver/deploy.py
+msgid "Committing index files to git mirror"
+msgstr ""
+
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Conflicting \"{field}\" definitions between .yml and localized files:"
@@ -442,6 +468,16 @@ msgstr "அண்மைக் கால பதிப்பு குறியீ
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vname
 #: ../fdroidserver/import_subcommand.py
 msgid "Could not find latest version name"
+msgstr "அண்மைக் கால பதிப்பு பெயரைக் கண்டுபிடிக்க முடியவில்லை"
+
+#: ../fdroidserver/import_subcommand.py
+#, fuzzy
+msgid "Could not find latest versionCode"
+msgstr "அண்மைக் கால பதிப்பு குறியீட்டைக் கண்டுபிடிக்க முடியவில்லை"
+
+#: ../fdroidserver/import_subcommand.py
+#, fuzzy
+msgid "Could not find latest versionName"
 msgstr "அண்மைக் கால பதிப்பு பெயரைக் கண்டுபிடிக்க முடியவில்லை"
 
 #: ../fdroidserver/update.py
@@ -487,9 +523,9 @@ msgid "Creating \"{path}\" for configuring s3cmd."
 msgstr "S3CMD ஐ கட்டமைக்க \"{path}\" ஐ உருவாக்குதல்."
 
 #: ../fdroidserver/common.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Creating empty {config_file}"
-msgstr "'{config_file}'"
+msgstr "வெற்று {config_file} உருவாக்குகிறது"
 
 #: ../fdroidserver/publish.py
 msgid "Creating log directory"
@@ -659,12 +695,12 @@ msgstr "பிழை: {path} இல் {key} என்பது \"காப்�
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "ERROR: {key} not a valid key!"
-msgstr ""
+msgstr "பிழை: {key} செல்லுபடியாகும் விசை அல்ல!"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "ERROR: {key}'s value should be of type {t}!"
-msgstr ""
+msgstr "பிழை: {key} இன் மதிப்பு {t} வகை இருக்க வேண்டும்!"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
@@ -685,15 +721,20 @@ msgstr ""
 "ஆண்ட்ராய்டு SDK (%s) க்கு பாதையை இங்கே உள்ளிடவும்:\n"
 " > "
 
+#: ../fdroidserver/nightly.py
+#, fuzzy, python-brace-format
+msgid "Environment variable \"{name}\" has an empty value!"
+msgstr "சூழல் மாறி {{env: {var}}} அமைக்கப்படவில்லை!"
+
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Environment variable {var} from {configname} is not set!"
 msgstr "{configname} இருந்து இலிருந்து சுற்றுச்சூழல் மாறி {var} அமைக்கப்படவில்லை!"
 
 #: ../fdroidserver/common.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Environment variable {{env: {var}}} is not set!"
-msgstr "{configname} இருந்து இலிருந்து சுற்றுச்சூழல் மாறி {var} அமைக்கப்படவில்லை!"
+msgstr "சூழல் மாறி {{env: {var}}} அமைக்கப்படவில்லை!"
 
 #: ../fdroidserver/deploy.py
 msgid "Error deploying 'github_releases', {} not present. (You might need to run `fdroid update` first.)"
@@ -935,9 +976,9 @@ msgid "Ignoring bad element in manifest: %s"
 msgstr "வெளிப்படையான மோசமான உறுப்பை புறக்கணித்தல்: %s"
 
 #: ../fdroidserver/common.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Ignoring deprecated {oldfile}, use {newfile}!"
-msgstr "{oldfile} நீக்கப்பட்டது, {newfile} ஐப் பயன்படுத்தவும்"
+msgstr "{oldfile} தவிர்க்கப்பட்டது, {newfile} ஐப் பயன்படுத்தவும்!"
 
 #: ../fdroidserver/index.py
 msgid "Ignoring package without metadata: "
@@ -1145,7 +1186,7 @@ msgstr "சிப் கோப்பில் அதிகபட்ச மறு
 #: ../fdroidserver/index.py
 #, python-brace-format
 msgid "Mirror config for {url} contains \"isPrimary\" key!"
-msgstr ""
+msgstr "{url} க்கான மிரர் கட்டமைப்பு \"isprimary\" விசையைக் கொண்டுள்ளது!"
 
 #: ../fdroidserver/mirror.py
 msgid "Mirror the full repo and archive, all file types."
@@ -1241,9 +1282,9 @@ msgid "No such package: %s"
 msgstr "அத்தகைய தொகுப்பு இல்லை: %s"
 
 #: ../fdroidserver/common.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "No such versionCode {versionCode} for app {appid}"
-msgstr "பயன்பாட்டிற்கு அத்தகைய பதிப்பு குறியீடு பதிப்பு குறியீடு {versionCode}"
+msgstr "பயன்பாட்டிற்கு {appid} அத்தகைய பதிப்புக் குறியீடு {versionCode}"
 
 #: ../fdroidserver/checkupdates.py
 msgid "No tags found"
@@ -1256,6 +1297,16 @@ msgstr "கையொப்பமிடாத அடைவு இல்லை - �
 #: ../fdroidserver/__main__.py
 msgid "No version information could be found."
 msgstr "பதிப்பு தகவல்களைக் காண முடியவில்லை."
+
+#: ../fdroidserver/scanner.py
+#, fuzzy, python-format
+msgid "Non-exist scandelete path: %s"
+msgstr "பயன்படுத்தப்படாத ச்கேண்டிலெட் பாதை: %s"
+
+#: ../fdroidserver/scanner.py
+#, fuzzy, python-format
+msgid "Non-exist scanignore path: %s"
+msgstr "பயன்படுத்தப்படாத ச்கேனிக்னர் பாதை: %s"
 
 #: ../fdroidserver/common.py
 msgid "Not a valid size definition: \"{}\""
@@ -1275,9 +1326,9 @@ msgid "Now set these in config.yml:"
 msgstr "இப்போது இவற்றை config.yml இல் அமைக்கவும்:"
 
 #: ../fdroidserver/update.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "OBB file has newer versionCode({integer}) than any APK:"
-msgstr "OBB கோப்பில் எந்த APK ஐ விட புதிய பதிப்பு குறியீடு ({முழு எண்) உள்ளது:"
+msgstr "OBB கோப்பில் எந்த APK ஐ விடப் புதிய பதிப்புக் குறியீடு ({integer}) உள்ளது:"
 
 #: ../fdroidserver/update.py
 msgid "OBB filename must start with \"main.\" or \"patch.\":"
@@ -1312,7 +1363,7 @@ msgstr "கிராபிக்ச் மற்றும் காணப்ப�
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
 #: ../fdroidserver/common.py
 msgid "Only accepts a single key \"env\""
-msgstr ""
+msgstr "\"ENV\" என்ற ஒற்றை விசையை மட்டுமே ஏற்றுக்கொள்கிறது"
 
 #: ../fdroidserver/checkupdates.py
 msgid "Only process apps with auto-updates"
@@ -1341,9 +1392,9 @@ msgid "Overall license of the project."
 msgstr "திட்டத்தின் ஒட்டுமொத்த உரிமம்."
 
 #: ../fdroidserver/index.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Overriding blank versionName in {apkfilename} from metadata: {version}"
-msgstr "மெட்டாடேட்டாவிலிருந்து {apkfilename} இல் வெற்று பதிப்பு பெயர்:{version}"
+msgstr "மெட்டாடேட்டாவிலிருந்து {apkfilename} இல் வெற்று பதிப்புப் பெயர்மேல் எழுதுதல்:{version}"
 
 #: ../fdroidserver/import_subcommand.py
 #, python-brace-format
@@ -1473,7 +1524,7 @@ msgstr "நெட்வொர்க்கிலிருந்து ச்க�
 #: ../fdroidserver/publish.py
 #, python-brace-format
 msgid "Refusing to sign '{path}', file exists in both {dir1} and {dir2} folder."
-msgstr ""
+msgstr "'{path}' கையொப்பமிட மறுத்து, கோப்பு {dir1} மற்றும் {dir2} கோப்புறை இரண்டிலும் உள்ளது."
 
 #: ../fdroidserver/verify.py
 msgid "Remove source tarball and any APKs if successfully verified."
@@ -1495,7 +1546,7 @@ msgstr "தொகுப்புடன் பொருந்தாத APK கோ
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "RepoType {type} is deprecated, please switch to git."
-msgstr ""
+msgstr "{type} நீக்கப்பட்டது, தயவுசெய்து GIT க்கு மாறவும்."
 
 #: ../fdroidserver/nightly.py
 #, python-brace-format
@@ -1547,9 +1598,9 @@ msgid "Running wget in {path}"
 msgstr "{path} இல் wget ஐ இயக்குகிறது"
 
 #: ../fdroidserver/index.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "SHA-256 of {url} does not match entry!"
-msgstr "{url} of இன் SHA-256 நுழைவு பொருந்தவில்லை!"
+msgstr "{url} இன் SHA-256 நுழைவு பொருந்தவில்லை!"
 
 #: ../fdroidserver/build.py
 msgid "Scan the resulting APK(s) for known non-free classes."
@@ -1636,6 +1687,11 @@ msgstr "பைனரிகள் மற்றும் பிற சிக்க
 msgid "Skipping '{apkfilename}' with invalid signature!"
 msgstr "தவறான கையொப்பத்துடன் '{apkfilename}' ஐத் தவிர்ப்பது!"
 
+#: ../fdroidserver/update.py
+#, fuzzy, python-brace-format
+msgid "Skipping '{apkfilename}' without versionCode!"
+msgstr "தவறான கையொப்பத்துடன் '{apkfilename}' ஐத் தவிர்ப்பது!"
+
 #: ../fdroidserver/deploy.py ../fdroidserver/index.py
 #, python-format
 msgid "Skipping GitLab Pages mirror because the repo is too large (>%.2fGB)!"
@@ -1706,12 +1762,17 @@ msgstr "சோதனை பயன்முறை - வெளியீடு ஏ�
 
 #: ../fdroidserver/index.py
 msgid "The \"qrcode\" Python package is not installed (e.g. apt-get install python3-qrcode)!"
-msgstr ""
+msgstr "\"QRCode\" பைதான் தொகுப்பு நிறுவப்படவில்லை (எ.கா. apt-get install python3-qrcode)!"
 
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "The OBB version code must come after \"{name}.\":"
+msgstr "OBB பதிப்பு குறியீடு \"{name}\" க்குப் பிறகு வர வேண்டும்.::::"
+
+#: ../fdroidserver/update.py
+#, fuzzy, python-brace-format
+msgid "The OBB versionCode must come after \"{name}.\":"
 msgstr "OBB பதிப்பு குறியீடு \"{name}\" க்குப் பிறகு வர வேண்டும்.::::"
 
 #: ../fdroidserver/btlog.py
@@ -1814,9 +1875,9 @@ msgid "Unknown exception found!"
 msgstr "அறியப்படாத விதிவிலக்கு கண்டறியப்பட்டது!"
 
 #: ../fdroidserver/lint.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Unknown file '{filename}' in build '{versionName}'"
-msgstr "அறியப்படாத கோப்பு '{filename}'"
+msgstr "அறியப்படாத கோப்பு '{filename}' இந்தக் கட்டமைப்பில் '{versionName}'"
 
 #: ../fdroidserver/metadata.py
 #, python-format
@@ -1901,6 +1962,11 @@ msgid "UpdateCheckData must match the version code as integer (\\d or [0-9]): {c
 msgstr "UpdateCheckData பதிப்பு குறியீட்டை முழு எண் (\\ டி அல்லது [0-9]) உடன் பொருத்த வேண்டும்: {codeex}"
 
 #: ../fdroidserver/lint.py
+#, fuzzy, python-brace-format
+msgid "UpdateCheckData must match the versionCode as integer (\\d or [0-9]): {codeex}"
+msgstr "UpdateCheckData பதிப்பு குறியீட்டை முழு எண் (\\ டி அல்லது [0-9]) உடன் பொருத்த வேண்டும்: {codeex}"
+
+#: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "UpdateCheckData must use HTTPS URL: {url}"
 msgstr "UpdateCheckData https முகவரி ஐப் பயன்படுத்த வேண்டும்: {url}"
@@ -1951,6 +2017,11 @@ msgid "Using \"{path}\" for configuring s3cmd."
 msgstr "Using \"{path}\" க்கு configuring s3cmd."
 
 #: ../fdroidserver/deploy.py
+#, fuzzy, python-brace-format
+msgid "Using \"{path}\" for rclone config."
+msgstr "Using \"{path}\" க்கு configuring s3cmd."
+
+#: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "Using \"{path}\" for syncing with remote storage."
 msgstr "Using \"{path}\" க்கு syncing with remote storage."
@@ -1972,14 +2043,19 @@ msgid "Using Java's jarsigner, not recommended for verifying APKs! Use apksigner
 msgstr "சாவாவின் சார்சிக்னரைப் பயன்படுத்துதல், APKS ஐ சரிபார்க்க பரிந்துரைக்கப்படவில்லை! Apksigner ஐப் பயன்படுத்தவும்"
 
 #: ../fdroidserver/metadata.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Using blank dictionary instead of contents of {path}!"
-msgstr "{பாதை of இன் உள்ளடக்கங்களுக்கு பதிலாக வெற்று அகராதியைப் பயன்படுத்துதல்!"
+msgstr "{path} இன் உள்ளடக்கங்களுக்குப் பதிலாக வெற்று அகராதியைப் பயன்படுத்துதல்!"
 
 #: ../fdroidserver/init.py
 #, python-brace-format
 msgid "Using existing keystore \"{path}\""
 msgstr "இருக்கும் கீச்டோர் \"{path}\" ஐப் பயன்படுத்துதல்"
+
+#: ../fdroidserver/deploy.py
+#, fuzzy, python-brace-format
+msgid "Using rclone to sync to \"{name}\""
+msgstr "Using rclone பெறுநர் sync with: {url}"
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
@@ -2019,7 +2095,7 @@ msgstr "வைரச்டோட்டல் பநிஇ விசையை 32M
 
 #: ../fdroidserver/nightly.py
 msgid "WARNING: only public git repos are supported!"
-msgstr ""
+msgstr "எச்சரிக்கை: பொது அறிவிலி களஞ்சியங்கள் மட்டுமே ஆதரிக்கப்படுகின்றன!"
 
 #: ../fdroidserver/__main__.py
 msgid "Warn about possible metadata errors"
@@ -2084,7 +2160,7 @@ msgstr "தெளிவற்ற விருப்பம்: %(option)s %(match
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "apksigner in build-tools;{version} passes APKs with invalid v3 signatures, ignoring."
-msgstr ""
+msgstr "பில்ட்-டூல்களில் apksigner; {version} புறக்கணித்து, தவறான வி 3 கையொப்பங்களுடன் APKS ஐ அனுப்புகிறது."
 
 #: ../fdroidserver/common.py
 msgid "apksigner not found! Cannot sign or verify modern APKs"
@@ -2385,6 +2461,11 @@ msgstr "விருப்பங்கள்"
 msgid "overwriting existing {path}"
 msgstr "இருக்கும் {path} ஐ மேலெழுதும்"
 
+#: ../fdroidserver/deploy.py
+#, fuzzy, python-brace-format
+msgid "path_to_custom_rclone_config: \"{path}\" does not exist!"
+msgstr "லோக்கல்_கோபி_டிர் \"{path}\" க்கான ரூட் டிர் இல்லை!"
+
 #: /usr/lib/python3.11/argparse.py
 msgid "positional arguments"
 msgstr "நிலை வாதங்கள்"
@@ -2508,9 +2589,9 @@ msgid "usage: "
 msgstr "பயன்பாடு: "
 
 #: ../fdroidserver/deploy.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "using Apache libcloud to sync with {url}"
-msgstr "{url} both உடன் ஒத்திசைக்க அப்பாச்சி லிப்குட்டைப் பயன்படுத்துதல்"
+msgstr "{url} உடன் ஒத்திசைக்க அப்பாச்சி லிப்குட்டைப் பயன்படுத்துதல்"
 
 #: ../fdroidserver/deploy.py
 msgid "virustotal.com is rate limiting, waiting to retry..."
@@ -2608,7 +2689,7 @@ msgstr "{name} \"{section}/ஐகான்கள்/{path}\" இல்லை! \"
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "{path1} is a duplicate of {path2}, remove one!"
-msgstr ""
+msgstr "{path1} என்பது {path2} இன் நகல், ஒன்றை அகற்று!"
 
 #: ../fdroidserver/import_subcommand.py
 #, python-brace-format

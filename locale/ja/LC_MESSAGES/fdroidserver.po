@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.8-224-g4b0ade7\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2025-06-25 09:52+0200\n"
-"PO-Revision-Date: 2025-04-30 04:07+0000\n"
+"POT-Creation-Date: 2025-09-29 14:29+0200\n"
+"PO-Revision-Date: 2025-08-26 00:02+0000\n"
 "Last-Translator: Liner Seven <linour7gmekiblo@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/f-droid/fdroidserver/ja/>\n"
 "Language: ja\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.12-dev\n"
+"X-Generator: Weblate 5.13\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -40,6 +40,14 @@ msgstr ""
 #, python-format
 msgid "\"%s/\" has no matching metadata file!"
 msgstr "「\"%s/」に合致するメタデータのファイルはありません！"
+
+#: ../fdroidserver/deploy.py
+msgid "\"AWS_ACCESS_KEY_ID\" must be set as an environmental variable!"
+msgstr ""
+
+#: ../fdroidserver/deploy.py
+msgid "\"AWS_SECRET_ACCESS_KEY\" must be set as an environmental variable!"
+msgstr ""
 
 #: ../fdroidserver/index.py
 msgid "\"isPrimary\" key should not be added to mirrors!"
@@ -131,6 +139,11 @@ msgstr "「keystore」がconfig.ymlにありません！"
 msgid "'keystorepass' not found in config.yml!"
 msgstr "「keystorepass」がconfig.ymlにありません！"
 
+#: ../fdroidserver/deploy.py
+#, fuzzy
+msgid "'rclone_config' must be set in config.yml!"
+msgstr "rcloneを使用するには、rclone_configとawsbucketをconfig.ymlに設定する必要があります！"
+
 #: ../fdroidserver/common.py
 msgid "'repo_keyalias' not found in config.yml!"
 msgstr "「repo_keyalias」がconfig.ymlにありません！"
@@ -189,6 +202,11 @@ msgstr "/issuesがありません"
 msgid "A URL is required as an argument!"
 msgstr "URLを引数として指定してください！"
 
+#: ../fdroidserver/update.py
+#, python-brace-format
+msgid "APK file {path} does not have a version code in its manifest"
+msgstr ""
+
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "APK signatures have different certificates in {path}:"
@@ -205,6 +223,10 @@ msgstr "署名されていないリポジトリに、リポジトリの署名鍵
 #: ../fdroidserver/update.py
 msgid "Add skeleton metadata files for APKs that are missing them"
 msgstr "メタデータが存在しないAPKにテンプレートのメタデータを追加"
+
+#: ../fdroidserver/deploy.py
+msgid "Adding all files to git mirror"
+msgstr ""
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -308,7 +330,7 @@ msgstr "正しくないエントリーの種類「{mirrortype}」がミラーの
 
 #: ../fdroidserver/mirror.py
 msgid "Base URL to mirror, can include the index signing key using the query string: ?fingerprint="
-msgstr "ミラーのベースURLにはクエリーの文字列 ?fingerprint= を使ってインデックスの署名鍵を含めることができます。"
+msgstr "ミラーのベースURLには、次のクエリ文字列を使用してインデックス署名キーを含めることができます: ?fingerprint="
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
@@ -360,9 +382,9 @@ msgid_plural "Can't build due to {} errors while scanning"
 msgstr[0] "スキャン時に{}個のエラーが発生したためビルドできません"
 
 #: ../fdroidserver/common.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Cannot read {path}: {error}"
-msgstr "{path}を読み込めませんでした：{error}"
+msgstr "{error}:{path}を読み込めませんでした"
 
 #: ../fdroidserver/rewritemeta.py
 #, python-brace-format
@@ -419,6 +441,10 @@ msgstr "変更をcommit"
 msgid "Commit changes, push, then make a merge request"
 msgstr "変更をコミット、プッシュしてから、マージリクエストを作成してください"
 
+#: ../fdroidserver/deploy.py
+msgid "Committing index files to git mirror"
+msgstr ""
+
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Conflicting \"{field}\" definitions between .yml and localized files:"
@@ -441,6 +467,16 @@ msgstr "最新のバージョンコードが見つかりませんでした"
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vname
 #: ../fdroidserver/import_subcommand.py
 msgid "Could not find latest version name"
+msgstr "最新のバージョン名が見つかりませんでした"
+
+#: ../fdroidserver/import_subcommand.py
+#, fuzzy
+msgid "Could not find latest versionCode"
+msgstr "最新のバージョンコードが見つかりませんでした"
+
+#: ../fdroidserver/import_subcommand.py
+#, fuzzy
+msgid "Could not find latest versionName"
 msgstr "最新のバージョン名が見つかりませんでした"
 
 #: ../fdroidserver/update.py
@@ -684,6 +720,11 @@ msgstr ""
 "ここにAndroidのSDK（%s）のパスを入力してください：\n"
 "> "
 
+#: ../fdroidserver/nightly.py
+#, fuzzy, python-brace-format
+msgid "Environment variable \"{name}\" has an empty value!"
+msgstr "環境変数{{env: {var}}}が未設定です！"
+
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Environment variable {var} from {configname} is not set!"
@@ -696,7 +737,7 @@ msgstr "環境変数{{env: {var}}}が未設定です！"
 
 #: ../fdroidserver/deploy.py
 msgid "Error deploying 'github_releases', {} not present. (You might need to run `fdroid update` first.)"
-msgstr "「github_releases」を設定する際にエラーが発生しました。{}がありません（まず`fdroid update`を実行する必要があるかもしれません）。"
+msgstr "「github_releases」を設定する際にエラーが発生しました。{}がありません（まず`fdroid update`を実行する必要があるかもしれません。）"
 
 #: ../fdroidserver/import_subcommand.py
 msgid "Error while getting repo address"
@@ -1256,6 +1297,16 @@ msgstr "署名されていないディレクトリーがありません - 何も
 msgid "No version information could be found."
 msgstr "バージョンの情報が見つかりませんでした。"
 
+#: ../fdroidserver/scanner.py
+#, fuzzy, python-format
+msgid "Non-exist scandelete path: %s"
+msgstr "使われていないscandeleteのパス：%s"
+
+#: ../fdroidserver/scanner.py
+#, fuzzy, python-format
+msgid "Non-exist scanignore path: %s"
+msgstr "使われていないscanignoreのパス：%s"
+
 #: ../fdroidserver/common.py
 msgid "Not a valid size definition: \"{}\""
 msgstr "正しいサイズの定義ではありません：「{}」"
@@ -1494,7 +1545,7 @@ msgstr "package.name_123.apkに合致しないAPKファイルの名前を変更"
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "RepoType {type} is deprecated, please switch to git."
-msgstr ""
+msgstr "RepoType {type}は非推奨、gitへ移行願います。"
 
 #: ../fdroidserver/nightly.py
 #, python-brace-format
@@ -1634,6 +1685,11 @@ msgstr "バイナリーやその他の問題が無いかどうかに関するソ
 msgid "Skipping '{apkfilename}' with invalid signature!"
 msgstr "正しくない署名がある「{apkfilename}」をスキップします！"
 
+#: ../fdroidserver/update.py
+#, fuzzy, python-brace-format
+msgid "Skipping '{apkfilename}' without versionCode!"
+msgstr "正しくない署名がある「{apkfilename}」をスキップします！"
+
 #: ../fdroidserver/deploy.py ../fdroidserver/index.py
 #, python-format
 msgid "Skipping GitLab Pages mirror because the repo is too large (>%.2fGB)!"
@@ -1712,6 +1768,11 @@ msgstr "\"qrcode\"のPythonパッケージが未導入です( 例えば apt-get 
 msgid "The OBB version code must come after \"{name}.\":"
 msgstr "OBBのバージョンコードは「{name}」の後に設定してください："
 
+#: ../fdroidserver/update.py
+#, fuzzy, python-brace-format
+msgid "The OBB versionCode must come after \"{name}.\":"
+msgstr "OBBのバージョンコードは「{name}」の後に設定してください："
+
 #: ../fdroidserver/btlog.py
 msgid "The base URL for the repo to log (default: https://f-droid.org)"
 msgstr "ログを記録するリポジトリのベースとなるURL（既定：https://f-droid.org）"
@@ -1771,7 +1832,7 @@ msgstr ""
 "また、署名用の鍵も併せて設定することを推奨します（一時的な署名鍵が自動的に生成されている可能性があります）。\n"
 "\n"
 "詳細については、https://f-droid.org/docs/Setup_an_F-Droid_App_Repo\n"
-"または https://f-droid.org/docs/Signing_Process をご覧ください。"
+"または https://f-droid.org/docs/Signing_Process をご覧ください"
 
 #: ../fdroidserver/deploy.py
 msgid "To use awsbucket, awssecretkey and awsaccesskeyid must also be set in config.yml!"
@@ -1899,6 +1960,11 @@ msgid "UpdateCheckData must match the version code as integer (\\d or [0-9]): {c
 msgstr "UpdateCheckDataは整数（\\d または [0-9]）のバージョンコードに合致する必要があります：{codeex}"
 
 #: ../fdroidserver/lint.py
+#, fuzzy, python-brace-format
+msgid "UpdateCheckData must match the versionCode as integer (\\d or [0-9]): {codeex}"
+msgstr "UpdateCheckDataは整数（\\d または [0-9]）のバージョンコードに合致する必要があります：{codeex}"
+
+#: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "UpdateCheckData must use HTTPS URL: {url}"
 msgstr "UpdateCheckDataにはHTTPSのURLを指定してください：{url}"
@@ -1949,6 +2015,11 @@ msgid "Using \"{path}\" for configuring s3cmd."
 msgstr "「{path}」をs3cmdの設定に使用。"
 
 #: ../fdroidserver/deploy.py
+#, fuzzy, python-brace-format
+msgid "Using \"{path}\" for rclone config."
+msgstr "「{path}」をs3cmdの設定に使用。"
+
+#: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "Using \"{path}\" for syncing with remote storage."
 msgstr "「{path}」を遠隔ストレージとの同期に使用。"
@@ -1978,6 +2049,11 @@ msgstr "{path}の内容の代わりに空の辞書を使用します！"
 #, python-brace-format
 msgid "Using existing keystore \"{path}\""
 msgstr "\"{path}\"にある既存のキーストアを使用"
+
+#: ../fdroidserver/deploy.py
+#, fuzzy, python-brace-format
+msgid "Using rclone to sync to \"{name}\""
+msgstr "Rcloneを使って {url} と同期"
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
@@ -2017,7 +2093,7 @@ msgstr "VirusTotalのAPI鍵は32メガバイトより大きいファイルをア
 
 #: ../fdroidserver/nightly.py
 msgid "WARNING: only public git repos are supported!"
-msgstr ""
+msgstr "警告: 公開されているgitリポジトリだけサポートされています!"
 
 #: ../fdroidserver/__main__.py
 msgid "Warn about possible metadata errors"
@@ -2381,6 +2457,11 @@ msgstr "オプション"
 msgid "overwriting existing {path}"
 msgstr "既存の{path}を上書きします"
 
+#: ../fdroidserver/deploy.py
+#, fuzzy, python-brace-format
+msgid "path_to_custom_rclone_config: \"{path}\" does not exist!"
+msgstr "Local_copy_dir \"{path}\" のルートディレクトリーは存在しません！"
+
 #: /usr/lib/python3.11/argparse.py
 msgid "positional arguments"
 msgstr "位置に関する引数"
@@ -2573,7 +2654,7 @@ msgstr "{appid}：ビルドが指定されていません。現在のソース�
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "{appid}: {field} must be a '{type}', but it is a '{fieldtype}!'"
-msgstr "{appid}：{field}には「{fieldtype}」ではなく「{type}」を指定してください！"
+msgstr "{appid}：{field}には '{fieldtype}' ではなく'{type}' を指定してください!"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format

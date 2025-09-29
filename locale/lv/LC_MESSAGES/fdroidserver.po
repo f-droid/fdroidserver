@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 2.3a1\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2025-03-25 11:36+0100\n"
-"PO-Revision-Date: 2025-03-21 08:46+0000\n"
+"POT-Creation-Date: 2025-09-29 14:29+0200\n"
+"PO-Revision-Date: 2025-06-28 05:20+0000\n"
 "Last-Translator: Edgars Andersons <Edgars+Weblate@gaitenis.id.lv>\n"
 "Language-Team: Latvian <https://hosted.weblate.org/projects/f-droid/fdroidserver/lv/>\n"
 "Language: lv\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n % 10 == 0 || n % 100 >= 11 && n % 100 <= 19) ? 0 : ((n % 10 == 1 && n % 100 != 11) ? 1 : 2);\n"
-"X-Generator: Weblate 5.11-dev\n"
+"X-Generator: Weblate 5.13-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -33,6 +33,14 @@ msgstr ""
 #: ../fdroidserver/lint.py
 #, python-format
 msgid "\"%s/\" has no matching metadata file!"
+msgstr ""
+
+#: ../fdroidserver/deploy.py
+msgid "\"AWS_ACCESS_KEY_ID\" must be set as an environmental variable!"
+msgstr ""
+
+#: ../fdroidserver/deploy.py
+msgid "\"AWS_SECRET_ACCESS_KEY\" must be set as an environmental variable!"
 msgstr ""
 
 #: ../fdroidserver/index.py
@@ -125,6 +133,10 @@ msgstr ""
 msgid "'keystorepass' not found in config.yml!"
 msgstr ""
 
+#: ../fdroidserver/deploy.py
+msgid "'rclone_config' must be set in config.yml!"
+msgstr ""
+
 #: ../fdroidserver/common.py
 msgid "'repo_keyalias' not found in config.yml!"
 msgstr ""
@@ -183,6 +195,11 @@ msgstr ""
 msgid "A URL is required as an argument!"
 msgstr ""
 
+#: ../fdroidserver/update.py
+#, python-brace-format
+msgid "APK file {path} does not have a version code in its manifest"
+msgstr ""
+
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "APK signatures have different certificates in {path}:"
@@ -198,6 +215,10 @@ msgstr ""
 
 #: ../fdroidserver/update.py
 msgid "Add skeleton metadata files for APKs that are missing them"
+msgstr ""
+
+#: ../fdroidserver/deploy.py
+msgid "Adding all files to git mirror"
 msgstr ""
 
 #: ../fdroidserver/update.py
@@ -354,16 +375,21 @@ msgid_plural "Can't build due to {} errors while scanning"
 msgstr[0] ""
 msgstr[1] ""
 
+#: ../fdroidserver/common.py
+#, python-brace-format
+msgid "Cannot read {path}: {error}"
+msgstr "Nevar nolasīt {path}: {error}"
+
 #: ../fdroidserver/rewritemeta.py
 #, python-brace-format
 msgid "Cannot rewrite \"{path}\""
-msgstr ""
+msgstr "Nevar pārrakstīt \"{path}\""
 
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vname
 #: ../fdroidserver/lint.py
 #, python-format
 msgid "Categories '%s' is not valid"
-msgstr ""
+msgstr "Kategorija '%s' nav derīga"
 
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vname
 #: ../fdroidserver/lint.py
@@ -409,6 +435,10 @@ msgstr "Iesūtīt izmaiņas"
 msgid "Commit changes, push, then make a merge request"
 msgstr "Jāiesūta izmaiņas, jāaizgādā tās, tad jāizveido izmaiņu pieprasījums"
 
+#: ../fdroidserver/deploy.py
+msgid "Committing index files to git mirror"
+msgstr ""
+
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Conflicting \"{field}\" definitions between .yml and localized files:"
@@ -431,6 +461,14 @@ msgstr ""
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vname
 #: ../fdroidserver/import_subcommand.py
 msgid "Could not find latest version name"
+msgstr ""
+
+#: ../fdroidserver/import_subcommand.py
+msgid "Could not find latest versionCode"
+msgstr ""
+
+#: ../fdroidserver/import_subcommand.py
+msgid "Could not find latest versionName"
 msgstr ""
 
 #: ../fdroidserver/update.py
@@ -671,6 +709,11 @@ msgid ""
 "Enter the path to the Android SDK (%s) here:\n"
 "> "
 msgstr ""
+
+#: ../fdroidserver/nightly.py
+#, fuzzy, python-brace-format
+msgid "Environment variable \"{name}\" has an empty value!"
+msgstr "Vides mainīgais {{env: {var}}} nav iestatīts."
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -1244,6 +1287,16 @@ msgstr ""
 msgid "No version information could be found."
 msgstr ""
 
+#: ../fdroidserver/scanner.py
+#, python-format
+msgid "Non-exist scandelete path: %s"
+msgstr ""
+
+#: ../fdroidserver/scanner.py
+#, python-format
+msgid "Non-exist scanignore path: %s"
+msgstr ""
+
 #: ../fdroidserver/common.py
 msgid "Not a valid size definition: \"{}\""
 msgstr ""
@@ -1460,7 +1513,7 @@ msgstr ""
 #: ../fdroidserver/publish.py
 #, python-brace-format
 msgid "Refusing to sign '{path}', file exists in both {dir1} and {dir2} folder."
-msgstr ""
+msgstr "Atsakās parakstīt '{path}', datne pastāv gan mapē {dir1}, gan {dir2}."
 
 #: ../fdroidserver/verify.py
 msgid "Remove source tarball and any APKs if successfully verified."
@@ -1479,18 +1532,23 @@ msgstr ""
 msgid "Rename APK files that do not match package.name_123.apk"
 msgstr ""
 
+#: ../fdroidserver/common.py
+#, python-brace-format
+msgid "RepoType {type} is deprecated, please switch to git."
+msgstr "RepoType {type} ir novecojis, lūgums pārslēgties uz git."
+
 #: ../fdroidserver/nightly.py
 #, python-brace-format
 msgid "Resigning {apkfilename} with provided debug.keystore"
-msgstr ""
+msgstr "Atkārtoti paraksta {apkfilename} ar norādīto debug.keystore"
 
 #: ../fdroidserver/update.py
 msgid "Resize all the icons exceeding the max pixel size and exit"
-msgstr ""
+msgstr "Samazināt visas ikonas, kas pārsniedz pieļaujamo izmēru pikseļos un iziet"
 
 #: ../fdroidserver/common.py
 msgid "Restrict output to warnings and errors"
-msgstr ""
+msgstr "Ierobežot izvadi līdz brīdinājumiem un kļūdām"
 
 #: ../fdroidserver/net.py
 #, python-format
@@ -1618,6 +1676,11 @@ msgstr ""
 msgid "Skipping '{apkfilename}' with invalid signature!"
 msgstr ""
 
+#: ../fdroidserver/update.py
+#, python-brace-format
+msgid "Skipping '{apkfilename}' without versionCode!"
+msgstr ""
+
 #: ../fdroidserver/deploy.py ../fdroidserver/index.py
 #, python-format
 msgid "Skipping GitLab Pages mirror because the repo is too large (>%.2fGB)!"
@@ -1694,6 +1757,11 @@ msgstr "Python pakotne \"qrcode\" nav uzstādīta (piemēram, `apt-get install p
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "The OBB version code must come after \"{name}.\":"
+msgstr ""
+
+#: ../fdroidserver/update.py
+#, python-brace-format
+msgid "The OBB versionCode must come after \"{name}.\":"
 msgstr ""
 
 #: ../fdroidserver/btlog.py
@@ -1877,6 +1945,11 @@ msgstr ""
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
+msgid "UpdateCheckData must match the versionCode as integer (\\d or [0-9]): {codeex}"
+msgstr ""
+
+#: ../fdroidserver/lint.py
+#, python-brace-format
 msgid "UpdateCheckData must use HTTPS URL: {url}"
 msgstr ""
 
@@ -1927,6 +2000,11 @@ msgstr ""
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
+msgid "Using \"{path}\" for rclone config."
+msgstr ""
+
+#: ../fdroidserver/deploy.py
+#, python-brace-format
 msgid "Using \"{path}\" for syncing with remote storage."
 msgstr ""
 
@@ -1954,6 +2032,11 @@ msgstr ""
 #: ../fdroidserver/init.py
 #, python-brace-format
 msgid "Using existing keystore \"{path}\""
+msgstr ""
+
+#: ../fdroidserver/deploy.py
+#, python-brace-format
+msgid "Using rclone to sync to \"{name}\""
 msgstr ""
 
 #: ../fdroidserver/deploy.py
@@ -1991,6 +2074,10 @@ msgstr "Pārbauda pakotni {path} ar apksigner."
 #, python-brace-format
 msgid "VirusTotal API key cannot upload files larger than 32MB, use {url} to upload {path}."
 msgstr "VirusTotal API atslēga nevar augšupielādēt datnes, kas ir lielākas par 32 MB. Jāizmanto {url}, lai augšupielādētu {path}."
+
+#: ../fdroidserver/nightly.py
+msgid "WARNING: only public git repos are supported!"
+msgstr "BRĪDINĀJUMS: tiek atbalstītas tikai publiskas git glabātavas."
 
 #: ../fdroidserver/__main__.py
 msgid "Warn about possible metadata errors"
@@ -2140,8 +2227,9 @@ msgstr ""
 #, python-format
 msgid "conflicting option string: %s"
 msgid_plural "conflicting option strings: %s"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "nesaderīgas iespēju virknes: %s"
+msgstr[1] "nesaderīga iespēju virkne: %s"
+msgstr[2] "nesaderīgas iespēju virknes: %s"
 
 #: /usr/lib/python3.11/argparse.py
 #, python-format
@@ -2356,6 +2444,11 @@ msgstr ""
 msgid "overwriting existing {path}"
 msgstr ""
 
+#: ../fdroidserver/deploy.py
+#, python-brace-format
+msgid "path_to_custom_rclone_config: \"{path}\" does not exist!"
+msgstr ""
+
 #: /usr/lib/python3.11/argparse.py
 msgid "positional arguments"
 msgstr ""
@@ -2495,8 +2588,9 @@ msgstr "jā"
 #, python-brace-format
 msgid "{0} app, {1} key aliases"
 msgid_plural "{0} apps, {1} key aliases"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{0} lietotņu, {1} atslēgu aizstājvārdi"
+msgstr[1] "{0} lietotne, {1} atslēgu aizstājvārdi"
+msgstr[2] "{0} lietotnes, {1} atslēgu aizstājvārdi"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -2659,11 +2753,13 @@ msgstr ""
 #: ../fdroidserver/build.py
 msgid "{} build failed"
 msgid_plural "{} builds failed"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Neizdevās {} būvējumi"
+msgstr[1] "Neizdevās {} būvējums"
+msgstr[2] "Neizdevās {} būvējumi"
 
 #: ../fdroidserver/build.py
 msgid "{} build succeeded"
 msgid_plural "{} builds succeeded"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{} sekmīgu būvējumu"
+msgstr[1] "{} sekmīgs būvējums"
+msgstr[2] "{} sekmīgi būvējumi"

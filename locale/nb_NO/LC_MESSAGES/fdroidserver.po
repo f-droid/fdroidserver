@@ -3,29 +3,29 @@
 # Allan Nordhøy <epost@anotheragency.no>, 2020, 2021, 2022.
 # Hans-Christoph Steiner <hans@guardianproject.info>, 2020, 2022.
 # mondstern <mondstern@snopyta.org>, 2021.
+# Telaneo <post@telaneo.net>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.8-74-ga380b9f\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2025-06-25 09:52+0200\n"
-"PO-Revision-Date: 2022-09-06 14:30+0000\n"
-"Last-Translator: Hans-Christoph Steiner <hans@guardianproject.info>\n"
+"POT-Creation-Date: 2025-09-29 14:29+0200\n"
+"PO-Revision-Date: 2025-09-08 19:43+0000\n"
+"Last-Translator: Telaneo <post@telaneo.net>\n"
 "Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects/f-droid/fdroidserver/nb_NO/>\n"
 "Language: nb_NO\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.14.1-dev\n"
+"X-Generator: Weblate 5.14-dev\n"
 
 #: ../fdroidserver/nightly.py
-#, fuzzy
 msgid ""
 "\n"
 "SSH public key to be used as deploy key:"
 msgstr ""
 "\n"
-"Offentlig SSH-nøkkel å bruke som utrullingsnøkkel:"
+"Offentlig SSH-nøkkel som skal brukes som utrullingsnøkkel:"
 
 #: ../fdroidserver/nightly.py
 #, python-brace-format
@@ -41,19 +41,27 @@ msgstr ""
 msgid "\"%s/\" has no matching metadata file!"
 msgstr "\"%s/\" har ingen samsvarende metadatafil!"
 
-#: ../fdroidserver/index.py
-msgid "\"isPrimary\" key should not be added to mirrors!"
+#: ../fdroidserver/deploy.py
+msgid "\"AWS_ACCESS_KEY_ID\" must be set as an environmental variable!"
+msgstr ""
+
+#: ../fdroidserver/deploy.py
+msgid "\"AWS_SECRET_ACCESS_KEY\" must be set as an environmental variable!"
 msgstr ""
 
 #: ../fdroidserver/index.py
-#, fuzzy, python-brace-format
+msgid "\"isPrimary\" key should not be added to mirrors!"
+msgstr "«isPrimary»-nøkkelen skal ikke legges til speil!"
+
+#: ../fdroidserver/index.py
+#, python-brace-format
 msgid "\"local_copy_dir\" {path} does not exist!"
-msgstr "Rotmappen for local_copy_dir \"{path}\" finnes ikke."
+msgstr "«local_copy_dir» {path} finnes ikke!"
 
 #: ../fdroidserver/install.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "\"{apkfilename}\" is already installed on {dev}."
-msgstr "'{apkfilename}' er allerede installert på {dev}."
+msgstr "«{apkfilename}» er allerede installert på {dev}."
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -73,7 +81,7 @@ msgstr "\"{path}\" er ikke et støttet filformat. (bruk: metadata/*.yml)"
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "\"{path}\" is signed by a key that is not allowed:"
-msgstr ""
+msgstr "«{path}» er signert med en nøkkel som ikke er tillatt:"
 
 #: ../fdroidserver/import_subcommand.py
 #, python-brace-format
@@ -130,6 +138,11 @@ msgstr "'keystore' ble ikke funnet i config.yml!"
 #: ../fdroidserver/common.py
 msgid "'keystorepass' not found in config.yml!"
 msgstr "'keystorepass' ble ikke funnet i config.yml!"
+
+#: ../fdroidserver/deploy.py
+#, fuzzy
+msgid "'rclone_config' must be set in config.yml!"
+msgstr "For å bruke AWS-spann, må \"awssecretkey\" og \"awsaccesskeyid\" også være satt i config.yml."
 
 #: ../fdroidserver/common.py
 msgid "'repo_keyalias' not found in config.yml!"
@@ -192,6 +205,11 @@ msgstr "/issues mangler"
 msgid "A URL is required as an argument!"
 msgstr "valg -%s krever et argument"
 
+#: ../fdroidserver/update.py
+#, python-brace-format
+msgid "APK file {path} does not have a version code in its manifest"
+msgstr ""
+
 #: ../fdroidserver/common.py
 #, fuzzy, python-brace-format
 msgid "APK signatures have different certificates in {path}:"
@@ -208,6 +226,10 @@ msgstr "Legg til pakkebrønnssigneringsnøkkel for usignert repo"
 #: ../fdroidserver/update.py
 msgid "Add skeleton metadata files for APKs that are missing them"
 msgstr "Legg til skjelettmetadatafiler for APK-er som ikke har dem"
+
+#: ../fdroidserver/deploy.py
+msgid "Adding all files to git mirror"
+msgstr ""
 
 #: ../fdroidserver/update.py
 #, fuzzy, python-brace-format
@@ -426,6 +448,10 @@ msgstr "Send inn endringer"
 msgid "Commit changes, push, then make a merge request"
 msgstr ""
 
+#: ../fdroidserver/deploy.py
+msgid "Committing index files to git mirror"
+msgstr ""
+
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Conflicting \"{field}\" definitions between .yml and localized files:"
@@ -450,6 +476,16 @@ msgstr "Fant ikke seneste versjonskode"
 #: ../fdroidserver/import_subcommand.py
 #, fuzzy
 msgid "Could not find latest version name"
+msgstr "Fant ikke seneste versjonsnavn"
+
+#: ../fdroidserver/import_subcommand.py
+#, fuzzy
+msgid "Could not find latest versionCode"
+msgstr "Fant ikke seneste versjonskode"
+
+#: ../fdroidserver/import_subcommand.py
+#, fuzzy
+msgid "Could not find latest versionName"
 msgstr "Fant ikke seneste versjonsnavn"
 
 #: ../fdroidserver/update.py
@@ -701,6 +737,11 @@ msgid ""
 msgstr ""
 "Skriv inn stien til Android SDK (%s) her:\n"
 "> "
+
+#: ../fdroidserver/nightly.py
+#, fuzzy, python-brace-format
+msgid "Environment variable \"{name}\" has an empty value!"
+msgstr "Miljøvariabelen {var} fra {configname} er ikke satt!"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -1298,6 +1339,16 @@ msgstr "Ingen usignert mappe - ingenting å gjøre"
 msgid "No version information could be found."
 msgstr "ingen versjonsinfo funnet!"
 
+#: ../fdroidserver/scanner.py
+#, fuzzy, python-format
+msgid "Non-exist scandelete path: %s"
+msgstr "Ubrukt fil i %s"
+
+#: ../fdroidserver/scanner.py
+#, fuzzy, python-format
+msgid "Non-exist scanignore path: %s"
+msgstr "Ubrukt fil i %s"
+
 #: ../fdroidserver/common.py
 msgid "Not a valid size definition: \"{}\""
 msgstr "Ikke en gyldig størrelsesdefinisjon: «{}»"
@@ -1690,6 +1741,11 @@ msgstr "Hopp over skanning av kildekoden for binærfiler og andre problemer"
 msgid "Skipping '{apkfilename}' with invalid signature!"
 msgstr "Hopper over '{apkfilename}' med ugyldig signatur."
 
+#: ../fdroidserver/update.py
+#, fuzzy, python-brace-format
+msgid "Skipping '{apkfilename}' without versionCode!"
+msgstr "Hopper over '{apkfilename}' med ugyldig signatur."
+
 #: ../fdroidserver/deploy.py ../fdroidserver/index.py
 #, fuzzy, python-format
 msgid "Skipping GitLab Pages mirror because the repo is too large (>%.2fGB)!"
@@ -1768,6 +1824,11 @@ msgstr ""
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "The OBB version code must come after \"{name}.\":"
+msgstr "OBB-versjonskoden må komme etter \"{name}.\":"
+
+#: ../fdroidserver/update.py
+#, fuzzy, python-brace-format
+msgid "The OBB versionCode must come after \"{name}.\":"
 msgstr "OBB-versjonskoden må komme etter \"{name}.\":"
 
 #: ../fdroidserver/btlog.py
@@ -1959,6 +2020,11 @@ msgstr ""
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
+msgid "UpdateCheckData must match the versionCode as integer (\\d or [0-9]): {codeex}"
+msgstr ""
+
+#: ../fdroidserver/lint.py
+#, python-brace-format
 msgid "UpdateCheckData must use HTTPS URL: {url}"
 msgstr "UpdateCheckData må bruke HTTPS-nettadresse: {url}"
 
@@ -2011,6 +2077,11 @@ msgstr "Bruker \"{path}\" for oppsett av s3cmd."
 
 #: ../fdroidserver/deploy.py
 #, fuzzy, python-brace-format
+msgid "Using \"{path}\" for rclone config."
+msgstr "Bruker \"{path}\" for oppsett av s3cmd."
+
+#: ../fdroidserver/deploy.py
+#, fuzzy, python-brace-format
 msgid "Using \"{path}\" for syncing with remote storage."
 msgstr "Bruker \"{path}\" for oppsett av s3cmd."
 
@@ -2043,6 +2114,11 @@ msgstr ""
 #, fuzzy, python-brace-format
 msgid "Using existing keystore \"{path}\""
 msgstr "Bruker eksisterende nøkkellager \"{path}\"."
+
+#: ../fdroidserver/deploy.py
+#, fuzzy, python-brace-format
+msgid "Using rclone to sync to \"{name}\""
+msgstr "Bruk s3cmd til å synkronisere med: {url}"
 
 #: ../fdroidserver/deploy.py
 #, fuzzy, python-brace-format
@@ -2142,7 +2218,7 @@ msgid "adding to {name}: {path}"
 msgstr "legger til i {name}: {path}"
 
 #: /usr/lib/python3.11/argparse.py
-#, fuzzy, python-format
+#, python-format
 msgid "ambiguous option: %(option)s could match %(matches)s"
 msgstr "tvetydig valg: %(option)s kan passe overens med %(matches)s"
 
@@ -2464,6 +2540,11 @@ msgstr "Valg"
 #, python-brace-format
 msgid "overwriting existing {path}"
 msgstr "overskriver eksisterende {path}"
+
+#: ../fdroidserver/deploy.py
+#, fuzzy, python-brace-format
+msgid "path_to_custom_rclone_config: \"{path}\" does not exist!"
+msgstr "Rotmappen for local_copy_dir \"{path}\" finnes ikke."
 
 #: /usr/lib/python3.11/argparse.py
 msgid "positional arguments"

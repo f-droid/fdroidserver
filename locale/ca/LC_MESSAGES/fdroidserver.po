@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 2.1-273-g54e84d87\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2025-06-25 09:52+0200\n"
-"PO-Revision-Date: 2025-05-16 16:36+0000\n"
+"POT-Creation-Date: 2025-09-29 14:29+0200\n"
+"PO-Revision-Date: 2025-06-26 06:55+0000\n"
 "Last-Translator: Ecron <ecron_89@hotmail.com>\n"
 "Language-Team: Catalan <https://hosted.weblate.org/projects/f-droid/fdroidserver/ca/>\n"
 "Language: ca\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.12-dev\n"
+"X-Generator: Weblate 5.13-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -43,6 +43,14 @@ msgstr ""
 #, python-format
 msgid "\"%s/\" has no matching metadata file!"
 msgstr "\"%s/\" no té cap fitxer de metadades coincidents!"
+
+#: ../fdroidserver/deploy.py
+msgid "\"AWS_ACCESS_KEY_ID\" must be set as an environmental variable!"
+msgstr ""
+
+#: ../fdroidserver/deploy.py
+msgid "\"AWS_SECRET_ACCESS_KEY\" must be set as an environmental variable!"
+msgstr ""
 
 #: ../fdroidserver/index.py
 msgid "\"isPrimary\" key should not be added to mirrors!"
@@ -134,6 +142,11 @@ msgstr "'keystore' no s'ha trobat a config.yml!"
 msgid "'keystorepass' not found in config.yml!"
 msgstr "'keystorepass' no s'ha trobat a config.yml!"
 
+#: ../fdroidserver/deploy.py
+#, fuzzy
+msgid "'rclone_config' must be set in config.yml!"
+msgstr "Per utilitzar rclone, rclone_config i awsbucket s'han d'establir a config.yml!"
+
 #: ../fdroidserver/common.py
 msgid "'repo_keyalias' not found in config.yml!"
 msgstr "'repo_keyalias' no s'ha trobat a config.yml!"
@@ -192,6 +205,11 @@ msgstr "Falta /issues"
 msgid "A URL is required as an argument!"
 msgstr "Cal que l'argument sigui un URL!"
 
+#: ../fdroidserver/update.py
+#, python-brace-format
+msgid "APK file {path} does not have a version code in its manifest"
+msgstr ""
+
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "APK signatures have different certificates in {path}:"
@@ -208,6 +226,10 @@ msgstr "Afegiu una clau de firma a un dipòsit sense signar"
 #: ../fdroidserver/update.py
 msgid "Add skeleton metadata files for APKs that are missing them"
 msgstr "Afegiu els fitxers d'esquelet per a APKs que no en tinguin"
+
+#: ../fdroidserver/deploy.py
+msgid "Adding all files to git mirror"
+msgstr ""
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -364,7 +386,7 @@ msgstr[0] "No es pot construir a causa d'un error {} en escanejar"
 msgstr[1] "No es pot construir a causa d'errors {} en escanejar"
 
 #: ../fdroidserver/common.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Cannot read {path}: {error}"
 msgstr "No s'ha pogut llegir {path}: {error}"
 
@@ -423,6 +445,10 @@ msgstr "Publicar els canvis"
 msgid "Commit changes, push, then make a merge request"
 msgstr "Sancioneu els canvis, publiqueu-los i després feu una sol·licitud de fusió"
 
+#: ../fdroidserver/deploy.py
+msgid "Committing index files to git mirror"
+msgstr ""
+
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Conflicting \"{field}\" definitions between .yml and localized files:"
@@ -445,6 +471,16 @@ msgstr "No s'ha pogut trobar el codi de versió més recent"
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vname
 #: ../fdroidserver/import_subcommand.py
 msgid "Could not find latest version name"
+msgstr "No s'ha pogut trobar el codi de versió més recent"
+
+#: ../fdroidserver/import_subcommand.py
+#, fuzzy
+msgid "Could not find latest versionCode"
+msgstr "No s'ha pogut trobar el codi de versió més recent"
+
+#: ../fdroidserver/import_subcommand.py
+#, fuzzy
+msgid "Could not find latest versionName"
 msgstr "No s'ha pogut trobar el codi de versió més recent"
 
 #: ../fdroidserver/update.py
@@ -687,6 +723,11 @@ msgid ""
 msgstr ""
 "Introduïu aquí el camí cap a l'SDK d'Android (%s):\n"
 "> "
+
+#: ../fdroidserver/nightly.py
+#, fuzzy, python-brace-format
+msgid "Environment variable \"{name}\" has an empty value!"
+msgstr "La variable d'entorn {{env: {var}}} no està establerta!"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -1260,6 +1301,16 @@ msgstr "No hi ha cap directori sense signar - res a fer"
 msgid "No version information could be found."
 msgstr "No s'ha pogut trobar cap informació de versió."
 
+#: ../fdroidserver/scanner.py
+#, fuzzy, python-format
+msgid "Non-exist scandelete path: %s"
+msgstr "Camí de l'escandelete no utilitzat: %s"
+
+#: ../fdroidserver/scanner.py
+#, fuzzy, python-format
+msgid "Non-exist scanignore path: %s"
+msgstr "Camí de scanignore no utilitzat: %s"
+
 #: ../fdroidserver/common.py
 msgid "Not a valid size definition: \"{}\""
 msgstr "Definició de mida no vàlida: \"{}\""
@@ -1498,7 +1549,7 @@ msgstr "Canvia el nom dels fitxers APK que no coincideixin amb package.name_123.
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "RepoType {type} is deprecated, please switch to git."
-msgstr ""
+msgstr "RepoType {type} ja no és compatible, canvieu a git."
 
 #: ../fdroidserver/nightly.py
 #, python-brace-format
@@ -1639,6 +1690,11 @@ msgstr "Omet l'escaneig del codi font pels binaris i altres problemes"
 msgid "Skipping '{apkfilename}' with invalid signature!"
 msgstr "S'està saltant \"{apkfilename}\" amb una signatura no vàlida!"
 
+#: ../fdroidserver/update.py
+#, fuzzy, python-brace-format
+msgid "Skipping '{apkfilename}' without versionCode!"
+msgstr "S'està saltant \"{apkfilename}\" amb una signatura no vàlida!"
+
 #: ../fdroidserver/deploy.py ../fdroidserver/index.py
 #, python-format
 msgid "Skipping GitLab Pages mirror because the repo is too large (>%.2fGB)!"
@@ -1715,6 +1771,11 @@ msgstr "No s'ha instal·lat el paquet de Python «qrcode» (p. ex. apt-get insta
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "The OBB version code must come after \"{name}.\":"
+msgstr "El codi de la versió de l'OBB ha de venir després de \"{name}.\":"
+
+#: ../fdroidserver/update.py
+#, fuzzy, python-brace-format
+msgid "The OBB versionCode must come after \"{name}.\":"
 msgstr "El codi de la versió de l'OBB ha de venir després de \"{name}.\":"
 
 #: ../fdroidserver/btlog.py
@@ -1904,6 +1965,11 @@ msgid "UpdateCheckData must match the version code as integer (\\d or [0-9]): {c
 msgstr "UpdateCheckData ha de coincidir amb el codi de versió com a enter (\\d o [0-9]): {codeex}"
 
 #: ../fdroidserver/lint.py
+#, fuzzy, python-brace-format
+msgid "UpdateCheckData must match the versionCode as integer (\\d or [0-9]): {codeex}"
+msgstr "UpdateCheckData ha de coincidir amb el codi de versió com a enter (\\d o [0-9]): {codeex}"
+
+#: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "UpdateCheckData must use HTTPS URL: {url}"
 msgstr "UpdateCheckData ha d'utilitzar l'URL HTTPS: {url}"
@@ -1954,6 +2020,11 @@ msgid "Using \"{path}\" for configuring s3cmd."
 msgstr "S'està utilitzant \"{path}\" per configurar s3cmd."
 
 #: ../fdroidserver/deploy.py
+#, fuzzy, python-brace-format
+msgid "Using \"{path}\" for rclone config."
+msgstr "S'està utilitzant \"{path}\" per configurar s3cmd."
+
+#: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "Using \"{path}\" for syncing with remote storage."
 msgstr "S'està utilitzant \"{path}\" per a sincronitzar amb l'emmagatzematge remot."
@@ -1983,6 +2054,11 @@ msgstr "S'està utilitzant un diccionari en blanc en lloc del contingut de {path
 #, python-brace-format
 msgid "Using existing keystore \"{path}\""
 msgstr "S'està utilitzant l'espai de claus existent \"{path}\""
+
+#: ../fdroidserver/deploy.py
+#, fuzzy, python-brace-format
+msgid "Using rclone to sync to \"{name}\""
+msgstr "S'està utilitzant el rclone per a sincronitzar-lo: {url}"
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
@@ -2022,7 +2098,7 @@ msgstr "La clau de l'API VirusTotal no pot pujar fitxers més grans de 32 MB, ut
 
 #: ../fdroidserver/nightly.py
 msgid "WARNING: only public git repos are supported!"
-msgstr ""
+msgstr "Avís: només són compatibles els repositoris públics git."
 
 #: ../fdroidserver/__main__.py
 msgid "Warn about possible metadata errors"
@@ -2387,6 +2463,11 @@ msgstr "opcions"
 #, python-brace-format
 msgid "overwriting existing {path}"
 msgstr "s'està sobreescrivint {path}"
+
+#: ../fdroidserver/deploy.py
+#, fuzzy, python-brace-format
+msgid "path_to_custom_rclone_config: \"{path}\" does not exist!"
+msgstr "El directori arrel per a local_copy_dir \"{path}\" no existeix!"
 
 #: /usr/lib/python3.11/argparse.py
 msgid "positional arguments"

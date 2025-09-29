@@ -15,20 +15,22 @@
 # gallegonovato <fran-carro@hotmail.es>, 2022, 2023, 2024.
 # Nicolás Pérez <ccnicolasperez@gmail.com>, 2025.
 # Swyter <swyterzone@gmail.com>, 2025.
+# emma peel <emma.peel@riseup.net>, 2025.
+# BIENESTAR NARANJOS <bienestarnaranjos@gmail.com>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2025-06-25 09:52+0200\n"
-"PO-Revision-Date: 2025-06-24 11:02+0000\n"
-"Last-Translator: Swyter <swyterzone@gmail.com>\n"
+"POT-Creation-Date: 2025-09-29 14:29+0200\n"
+"PO-Revision-Date: 2025-09-01 12:01+0000\n"
+"Last-Translator: BIENESTAR NARANJOS <bienestarnaranjos@gmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/f-droid/fdroidserver/es/>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.13-dev\n"
+"X-Generator: Weblate 5.13.1-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -52,9 +54,17 @@ msgstr ""
 msgid "\"%s/\" has no matching metadata file!"
 msgstr "¡\"%s/\" no tiene su correspondiente fichero de metadatos!"
 
+#: ../fdroidserver/deploy.py
+msgid "\"AWS_ACCESS_KEY_ID\" must be set as an environmental variable!"
+msgstr ""
+
+#: ../fdroidserver/deploy.py
+msgid "\"AWS_SECRET_ACCESS_KEY\" must be set as an environmental variable!"
+msgstr ""
+
 #: ../fdroidserver/index.py
 msgid "\"isPrimary\" key should not be added to mirrors!"
-msgstr ""
+msgstr "¡la clave \"isPrimary\" no se debe poner en los mirrors!"
 
 #: ../fdroidserver/index.py
 #, python-brace-format
@@ -132,7 +142,7 @@ msgstr "¡'keypass' no encontrado en config.yml!"
 
 #: ../fdroidserver/common.py
 msgid "'keystore' is NONE and 'smartcardoptions' is blank!"
-msgstr "¡\"keystore\" es NONE y \"smartcardoptions\" está vacío!"
+msgstr "'keystore' no existe and 'smartcardoptions' esta vacío!"
 
 #: ../fdroidserver/common.py
 msgid "'keystore' not found in config.yml!"
@@ -141,6 +151,11 @@ msgstr "¡'keystore' no encontrado en config.yml!"
 #: ../fdroidserver/common.py
 msgid "'keystorepass' not found in config.yml!"
 msgstr "¡'keystorepass' no encontrado en config.yml!"
+
+#: ../fdroidserver/deploy.py
+#, fuzzy
+msgid "'rclone_config' must be set in config.yml!"
+msgstr "¡Para utilizar rclone, rclone_config y awsbucket deben estar configurados en config.yml!"
 
 #: ../fdroidserver/common.py
 msgid "'repo_keyalias' not found in config.yml!"
@@ -200,6 +215,11 @@ msgstr "no se encuentra /issues"
 msgid "A URL is required as an argument!"
 msgstr "¡Se requiere una URL como argumento!"
 
+#: ../fdroidserver/update.py
+#, python-brace-format
+msgid "APK file {path} does not have a version code in its manifest"
+msgstr ""
+
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "APK signatures have different certificates in {path}:"
@@ -216,6 +236,10 @@ msgstr "Cree una clave de firmado para un repositorio sin firmar"
 #: ../fdroidserver/update.py
 msgid "Add skeleton metadata files for APKs that are missing them"
 msgstr "Agregar archivos con esqueleto de metadats para las aplicaciones que no los tienen"
+
+#: ../fdroidserver/deploy.py
+msgid "Adding all files to git mirror"
+msgstr ""
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -372,9 +396,9 @@ msgstr[0] "No se puede construir debido al error {} mientras se comprobaba"
 msgstr[1] "No se puede construir debido a los errores {} mientras se comprobaba"
 
 #: ../fdroidserver/common.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Cannot read {path}: {error}"
-msgstr "Fallo al leer {path}: {error}"
+msgstr "Hubo un fallo al leer {path}: {error}"
 
 #: ../fdroidserver/rewritemeta.py
 #, python-brace-format
@@ -431,6 +455,10 @@ msgstr "Aplicar cambios"
 msgid "Commit changes, push, then make a merge request"
 msgstr "Confirmar los cambios, empujar, a continuación, hacer una solicitud de fusión"
 
+#: ../fdroidserver/deploy.py
+msgid "Committing index files to git mirror"
+msgstr ""
+
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Conflicting \"{field}\" definitions between .yml and localized files:"
@@ -453,6 +481,16 @@ msgstr "No se pudo encontrar el último código de versión"
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vname
 #: ../fdroidserver/import_subcommand.py
 msgid "Could not find latest version name"
+msgstr "No se pudo encontrar el último nombre de versión"
+
+#: ../fdroidserver/import_subcommand.py
+#, fuzzy
+msgid "Could not find latest versionCode"
+msgstr "No se pudo encontrar el último código de versión"
+
+#: ../fdroidserver/import_subcommand.py
+#, fuzzy
+msgid "Could not find latest versionName"
 msgstr "No se pudo encontrar el último nombre de versión"
 
 #: ../fdroidserver/update.py
@@ -670,12 +708,12 @@ msgstr "ERROR: ¡{key} en {path} no es un \"archivo\" o un \"repositorio\"!"
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "ERROR: {key} not a valid key!"
-msgstr ""
+msgstr "ERROR: ¡{key} no es una clave válida!"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "ERROR: {key}'s value should be of type {t}!"
-msgstr ""
+msgstr "ERROR: ¡el valor de {key} debe ser del tipo {t}!"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
@@ -696,15 +734,20 @@ msgstr ""
 "Introduzca la ruta a Android SDK (%s) aquí:\n"
 "> "
 
+#: ../fdroidserver/nightly.py
+#, fuzzy, python-brace-format
+msgid "Environment variable \"{name}\" has an empty value!"
+msgstr "La variable de entorno {{env: {var}}} no tiene un valor asignado"
+
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Environment variable {var} from {configname} is not set!"
 msgstr "¡La variable de entorno {var} de {configname} no tiene valor asignado!"
 
 #: ../fdroidserver/common.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Environment variable {{env: {var}}} is not set!"
-msgstr "¡La variable de entorno {var} de {configname} no tiene valor asignado!"
+msgstr "La variable de entorno {{env: {var}}} no tiene un valor asignado"
 
 #: ../fdroidserver/deploy.py
 msgid "Error deploying 'github_releases', {} not present. (You might need to run `fdroid update` first.)"
@@ -946,9 +989,9 @@ msgid "Ignoring bad element in manifest: %s"
 msgstr "Ignorar el elemento incorrecto en el manifiesto: %s"
 
 #: ../fdroidserver/common.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Ignoring deprecated {oldfile}, use {newfile}!"
-msgstr "{oldfile} está obsoleto, use {newfile}"
+msgstr "{oldfile} está obsoleto, utiliza {newfile}"
 
 #: ../fdroidserver/index.py
 msgid "Ignoring package without metadata: "
@@ -1156,7 +1199,7 @@ msgstr "Se alcanzó el máximo en el archivo ZIP: %s"
 #: ../fdroidserver/index.py
 #, python-brace-format
 msgid "Mirror config for {url} contains \"isPrimary\" key!"
-msgstr ""
+msgstr "¡La configuración de mirror para {url} contiene la clave \"isPrimary\"!"
 
 #: ../fdroidserver/mirror.py
 msgid "Mirror the full repo and archive, all file types."
@@ -1268,6 +1311,16 @@ msgstr "No hay directorio sin firma - nada que hacer"
 msgid "No version information could be found."
 msgstr "No se ha podido encontrar información sobre la versión."
 
+#: ../fdroidserver/scanner.py
+#, fuzzy, python-format
+msgid "Non-exist scandelete path: %s"
+msgstr "Ruta scandelete sin uso: %s"
+
+#: ../fdroidserver/scanner.py
+#, fuzzy, python-format
+msgid "Non-exist scanignore path: %s"
+msgstr "Ruta scanignore sin uso: %s"
+
 #: ../fdroidserver/common.py
 msgid "Not a valid size definition: \"{}\""
 msgstr "No es una definición válida del tamaño: \"{}\""
@@ -1323,7 +1376,7 @@ msgstr "Sólo PNG y JPEG son compatibles con los gráficos, encontrados: {path}"
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
 #: ../fdroidserver/common.py
 msgid "Only accepts a single key \"env\""
-msgstr ""
+msgstr "Sólo acepta una clave \"env\""
 
 #: ../fdroidserver/checkupdates.py
 msgid "Only process apps with auto-updates"
@@ -1484,7 +1537,7 @@ msgstr "Actualización y almacenamiento en caché de las reglas y firmas del esc
 #: ../fdroidserver/publish.py
 #, python-brace-format
 msgid "Refusing to sign '{path}', file exists in both {dir1} and {dir2} folder."
-msgstr ""
+msgstr "No se pudo firmar '{path}', el archivo ya existe en las carpetas {dir1} y {dir2}."
 
 #: ../fdroidserver/verify.py
 msgid "Remove source tarball and any APKs if successfully verified."
@@ -1506,7 +1559,7 @@ msgstr "Cambiar el nombre de archivos APK que no coinciden con el formato packag
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "RepoType {type} is deprecated, please switch to git."
-msgstr ""
+msgstr "RepoType {type} está obsoleto, cámbiese a git."
 
 #: ../fdroidserver/nightly.py
 #, python-brace-format
@@ -1647,6 +1700,11 @@ msgstr "Omitir el escaneo del código fuente por problemas binarios u otros prob
 msgid "Skipping '{apkfilename}' with invalid signature!"
 msgstr "¡Ignorando '{apkfilename}' por firma no válida!"
 
+#: ../fdroidserver/update.py
+#, fuzzy, python-brace-format
+msgid "Skipping '{apkfilename}' without versionCode!"
+msgstr "¡Ignorando '{apkfilename}' por firma no válida!"
+
 #: ../fdroidserver/deploy.py ../fdroidserver/index.py
 #, python-format
 msgid "Skipping GitLab Pages mirror because the repo is too large (>%.2fGB)!"
@@ -1717,12 +1775,17 @@ msgstr "Modo de prueba: ponga la salida solo en el directorio tmp y siga desarro
 
 #: ../fdroidserver/index.py
 msgid "The \"qrcode\" Python package is not installed (e.g. apt-get install python3-qrcode)!"
-msgstr ""
+msgstr "¡El paquete Python \"qrcode\" no está instalado (por ejemplo, apt-get install python3-qrcode)!"
 
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "The OBB version code must come after \"{name}.\":"
+msgstr "El código de versión OBB tiene que venir tras \"{name}.\":"
+
+#: ../fdroidserver/update.py
+#, fuzzy, python-brace-format
+msgid "The OBB versionCode must come after \"{name}.\":"
 msgstr "El código de versión OBB tiene que venir tras \"{name}.\":"
 
 #: ../fdroidserver/btlog.py
@@ -1912,6 +1975,11 @@ msgid "UpdateCheckData must match the version code as integer (\\d or [0-9]): {c
 msgstr "UpdateCheckData debe coincidir con el código de la versión como entero (\\d o [0-9]): {codeex}"
 
 #: ../fdroidserver/lint.py
+#, fuzzy, python-brace-format
+msgid "UpdateCheckData must match the versionCode as integer (\\d or [0-9]): {codeex}"
+msgstr "UpdateCheckData debe coincidir con el código de la versión como entero (\\d o [0-9]): {codeex}"
+
+#: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "UpdateCheckData must use HTTPS URL: {url}"
 msgstr "UpdateCheckData tiene que usar una URL HTTPS: {url}"
@@ -1962,6 +2030,11 @@ msgid "Using \"{path}\" for configuring s3cmd."
 msgstr "Usando \"{path}\" para configurar s3cmd."
 
 #: ../fdroidserver/deploy.py
+#, fuzzy, python-brace-format
+msgid "Using \"{path}\" for rclone config."
+msgstr "Usando \"{path}\" para configurar s3cmd."
+
+#: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "Using \"{path}\" for syncing with remote storage."
 msgstr "Usando \"{path}\" para sincronizar con almacenamiento remoto."
@@ -1991,6 +2064,11 @@ msgstr "¡Usando un diccionario en blanco en lugar del contenido de la {path}!"
 #, python-brace-format
 msgid "Using existing keystore \"{path}\""
 msgstr "Usando almacén de claves existente \"{path}\""
+
+#: ../fdroidserver/deploy.py
+#, fuzzy, python-brace-format
+msgid "Using rclone to sync to \"{name}\""
+msgstr "Usando rclone para sincronizar con: {url}"
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
@@ -2030,7 +2108,7 @@ msgstr "La clave de API de VirusTotal no puede subir archivos mayores de 32MB. U
 
 #: ../fdroidserver/nightly.py
 msgid "WARNING: only public git repos are supported!"
-msgstr ""
+msgstr "ADVERTENCIA: ¡solo se admiten repositorios git públicos!"
 
 #: ../fdroidserver/__main__.py
 msgid "Warn about possible metadata errors"
@@ -2396,6 +2474,11 @@ msgstr "opciones"
 msgid "overwriting existing {path}"
 msgstr "sobrescribiendo {path} existente"
 
+#: ../fdroidserver/deploy.py
+#, fuzzy, python-brace-format
+msgid "path_to_custom_rclone_config: \"{path}\" does not exist!"
+msgstr "¡El directorio raíz para local_copy_dir \"{path}\" no existe!"
+
 #: /usr/lib/python3.11/argparse.py
 msgid "positional arguments"
 msgstr "argumentos posicionales"
@@ -2619,7 +2702,7 @@ msgstr "¡{name} \"{section}/icons/{path}\" no existe! Corrijalo en config.yml."
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "{path1} is a duplicate of {path2}, remove one!"
-msgstr ""
+msgstr "{path1} es igual a {path2}, quita uno."
 
 #: ../fdroidserver/import_subcommand.py
 #, python-brace-format

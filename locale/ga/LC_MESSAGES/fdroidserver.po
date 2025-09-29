@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 2.3a1-162-gfbb3cc59\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2025-06-25 09:52+0200\n"
-"PO-Revision-Date: 2025-03-27 19:35+0000\n"
+"POT-Creation-Date: 2025-09-29 14:29+0200\n"
+"PO-Revision-Date: 2025-06-28 05:20+0000\n"
 "Last-Translator: Aindriú Mac Giolla Eoin <aindriu80@gmail.com>\n"
 "Language-Team: Irish <https://hosted.weblate.org/projects/f-droid/fdroidserver/ga/>\n"
 "Language: ga\n"
@@ -14,7 +14,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=5; plural=n==1 ? 0 : n==2 ? 1 : (n>2 && n<7) ? 2 :(n>6 && n<11) ? 3 : 4;\n"
-"X-Generator: Weblate 5.11-dev\n"
+"X-Generator: Weblate 5.13-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -37,6 +37,14 @@ msgstr ""
 #, python-format
 msgid "\"%s/\" has no matching metadata file!"
 msgstr "Níl aon chomhad meiteashonraí meaitseála ag \"%s/\"!"
+
+#: ../fdroidserver/deploy.py
+msgid "\"AWS_ACCESS_KEY_ID\" must be set as an environmental variable!"
+msgstr ""
+
+#: ../fdroidserver/deploy.py
+msgid "\"AWS_SECRET_ACCESS_KEY\" must be set as an environmental variable!"
+msgstr ""
 
 #: ../fdroidserver/index.py
 msgid "\"isPrimary\" key should not be added to mirrors!"
@@ -128,6 +136,11 @@ msgstr "Níl 'keystore' le fáil i config.yml!"
 msgid "'keystorepass' not found in config.yml!"
 msgstr "Níl 'keystorepass' le fáil i config.yml!"
 
+#: ../fdroidserver/deploy.py
+#, fuzzy
+msgid "'rclone_config' must be set in config.yml!"
+msgstr "Chun rclone a úsáid, ní mór rclone_config agus awsbucket a shocrú i config.yml!"
+
 #: ../fdroidserver/common.py
 msgid "'repo_keyalias' not found in config.yml!"
 msgstr "Níl 'repo_keyalias' le fáil sa config.yml!"
@@ -186,6 +199,11 @@ msgstr "/tá saincheisteanna ar iarraidh"
 msgid "A URL is required as an argument!"
 msgstr "Tá URL ag teastáil mar argóint!"
 
+#: ../fdroidserver/update.py
+#, python-brace-format
+msgid "APK file {path} does not have a version code in its manifest"
+msgstr ""
+
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "APK signatures have different certificates in {path}:"
@@ -202,6 +220,10 @@ msgstr "Cuir eochair sínithe repo le repo gan síniú"
 #: ../fdroidserver/update.py
 msgid "Add skeleton metadata files for APKs that are missing them"
 msgstr "Cuir comhaid mheiteashonraí cnámharlaigh le haghaidh APKs atá in easnamh orthu"
+
+#: ../fdroidserver/deploy.py
+msgid "Adding all files to git mirror"
+msgstr ""
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -361,9 +383,9 @@ msgstr[3] "Ní féidir tógáil de bharr {} earráidí agus an scanadh"
 msgstr[4] "Ní féidir tógáil de bharr {} earráidí agus an scanadh"
 
 #: ../fdroidserver/common.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Cannot read {path}: {error}"
-msgstr "Theip ar léamh {path}: {error}"
+msgstr "Ní féidir {path} a léamh: {error}"
 
 #: ../fdroidserver/rewritemeta.py
 #, python-brace-format
@@ -420,6 +442,10 @@ msgstr "Cuir athruithe i bhfeidhm"
 msgid "Commit changes, push, then make a merge request"
 msgstr "Déan athruithe, brúigh, ansin déan iarratas cumaisc"
 
+#: ../fdroidserver/deploy.py
+msgid "Committing index files to git mirror"
+msgstr ""
+
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Conflicting \"{field}\" definitions between .yml and localized files:"
@@ -442,6 +468,16 @@ msgstr "Níorbh fhéidir an cód leagain is déanaí a aimsiú"
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vname
 #: ../fdroidserver/import_subcommand.py
 msgid "Could not find latest version name"
+msgstr "Níorbh fhéidir ainm an leagain is déanaí a aimsiú"
+
+#: ../fdroidserver/import_subcommand.py
+#, fuzzy
+msgid "Could not find latest versionCode"
+msgstr "Níorbh fhéidir an cód leagain is déanaí a aimsiú"
+
+#: ../fdroidserver/import_subcommand.py
+#, fuzzy
+msgid "Could not find latest versionName"
 msgstr "Níorbh fhéidir ainm an leagain is déanaí a aimsiú"
 
 #: ../fdroidserver/update.py
@@ -684,6 +720,11 @@ msgid ""
 msgstr ""
 "Cuir isteach an chonair go dtí an SDK Android (%s) anseo:\n"
 "> "
+
+#: ../fdroidserver/nightly.py
+#, fuzzy, python-brace-format
+msgid "Environment variable \"{name}\" has an empty value!"
+msgstr "Níl athróg timpeallachta {{env: {var}}} socraithe!"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -1257,6 +1298,16 @@ msgstr "Gan chomhadlann gan síniú - níl aon rud le déanamh"
 msgid "No version information could be found."
 msgstr "Níorbh fhéidir aon eolas faoin leagan a aimsiú."
 
+#: ../fdroidserver/scanner.py
+#, fuzzy, python-format
+msgid "Non-exist scandelete path: %s"
+msgstr "Conair scanta neamhúsáidte: %s"
+
+#: ../fdroidserver/scanner.py
+#, fuzzy, python-format
+msgid "Non-exist scanignore path: %s"
+msgstr "Conair scanignore neamhúsáidte: %s"
+
 #: ../fdroidserver/common.py
 msgid "Not a valid size definition: \"{}\""
 msgstr "Ní sainmhíniú bailí méide é: \"{}\""
@@ -1495,7 +1546,7 @@ msgstr "Athainmnigh comhaid APK nach bhfuil comhoiriúnach package.name_123.apk"
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "RepoType {type} is deprecated, please switch to git."
-msgstr ""
+msgstr "Tá RepoType {type} imithe i léig, aistrigh go git le do thoil."
 
 #: ../fdroidserver/nightly.py
 #, python-brace-format
@@ -1639,6 +1690,11 @@ msgstr "Scipeáil scanadh an cód foinse do binaries agus fadhbanna eile"
 msgid "Skipping '{apkfilename}' with invalid signature!"
 msgstr "Scipeáil '{apkfilename}' le síniú neamhbhailí!"
 
+#: ../fdroidserver/update.py
+#, fuzzy, python-brace-format
+msgid "Skipping '{apkfilename}' without versionCode!"
+msgstr "Scipeáil '{apkfilename}' le síniú neamhbhailí!"
+
 #: ../fdroidserver/deploy.py ../fdroidserver/index.py
 #, python-format
 msgid "Skipping GitLab Pages mirror because the repo is too large (>%.2fGB)!"
@@ -1715,6 +1771,11 @@ msgstr "Níl an pacáiste Python \"qrcode\" suiteáilte (m.sh. apt-get install p
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "The OBB version code must come after \"{name}.\":"
+msgstr "Ní mór don chód leagan OBB teacht i ndiaidh \"{name}.\":"
+
+#: ../fdroidserver/update.py
+#, fuzzy, python-brace-format
+msgid "The OBB versionCode must come after \"{name}.\":"
 msgstr "Ní mór don chód leagan OBB teacht i ndiaidh \"{name}.\":"
 
 #: ../fdroidserver/btlog.py
@@ -1904,6 +1965,11 @@ msgid "UpdateCheckData must match the version code as integer (\\d or [0-9]): {c
 msgstr "Ní mór do UpdateCheckData an cód leagain a mheaitseáil mar slánuimhir (\\d nó [0-9]): {codeex}"
 
 #: ../fdroidserver/lint.py
+#, fuzzy, python-brace-format
+msgid "UpdateCheckData must match the versionCode as integer (\\d or [0-9]): {codeex}"
+msgstr "Ní mór do UpdateCheckData an cód leagain a mheaitseáil mar slánuimhir (\\d nó [0-9]): {codeex}"
+
+#: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "UpdateCheckData must use HTTPS URL: {url}"
 msgstr "Ní mór do UpdateCheckData URL HTTPS a úsáid: {url}"
@@ -1954,6 +2020,11 @@ msgid "Using \"{path}\" for configuring s3cmd."
 msgstr "Ag baint úsáide as \"{path}\" chun s3cmd a chumrú."
 
 #: ../fdroidserver/deploy.py
+#, fuzzy, python-brace-format
+msgid "Using \"{path}\" for rclone config."
+msgstr "Ag baint úsáide as \"{path}\" chun s3cmd a chumrú."
+
+#: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "Using \"{path}\" for syncing with remote storage."
 msgstr "Ag baint úsáide as \"{path}\" chun sioncronú le cianstóráil."
@@ -1983,6 +2054,11 @@ msgstr "Ag baint úsáide as foclóir bán in ionad ábhar {path}!"
 #, python-brace-format
 msgid "Using existing keystore \"{path}\""
 msgstr "Ag baint úsáide as keystore atá ann cheana \"{path}\""
+
+#: ../fdroidserver/deploy.py
+#, fuzzy, python-brace-format
+msgid "Using rclone to sync to \"{name}\""
+msgstr "Ag baint úsáide as rclone chun sioncronú le: {url}"
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
@@ -2022,7 +2098,7 @@ msgstr "Ní féidir le heochair API VirusTotal comhaid níos mó ná 32MB a uasl
 
 #: ../fdroidserver/nightly.py
 msgid "WARNING: only public git repos are supported!"
-msgstr ""
+msgstr "RABHADH: ní thacaítear ach le stórtha git poiblí!"
 
 #: ../fdroidserver/__main__.py
 msgid "Warn about possible metadata errors"
@@ -2393,6 +2469,11 @@ msgstr "roghanna"
 #, python-brace-format
 msgid "overwriting existing {path}"
 msgstr "overwriting atá ann cheana {path}"
+
+#: ../fdroidserver/deploy.py
+#, fuzzy, python-brace-format
+msgid "path_to_custom_rclone_config: \"{path}\" does not exist!"
+msgstr "Níl an dir fréimhe do local_copy_dir \"{path}\" ann!"
 
 #: /usr/lib/python3.11/argparse.py
 msgid "positional arguments"

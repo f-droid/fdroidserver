@@ -2,14 +2,14 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # Mostafa Ahangarha <ahangarha@gmail.com>, 2020.
-# Danial Behzadi <dani.behzi@ubuntu.com>, 2021, 2024.
+# Danial Behzadi <dani.behzi@ubuntu.com>, 2021, 2024, 2025.
 # HM <goodlinuxuser@chmail.ir>, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2025-06-25 09:52+0200\n"
-"PO-Revision-Date: 2024-11-26 15:16+0000\n"
+"POT-Creation-Date: 2025-09-29 14:29+0200\n"
+"PO-Revision-Date: 2025-07-28 14:19+0000\n"
 "Last-Translator: Danial Behzadi <dani.behzi@ubuntu.com>\n"
 "Language-Team: Persian <https://hosted.weblate.org/projects/f-droid/fdroidserver/fa/>\n"
 "Language: fa\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.9-dev\n"
+"X-Generator: Weblate 5.13-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -35,6 +35,14 @@ msgstr ""
 #: ../fdroidserver/lint.py
 #, python-format
 msgid "\"%s/\" has no matching metadata file!"
+msgstr ""
+
+#: ../fdroidserver/deploy.py
+msgid "\"AWS_ACCESS_KEY_ID\" must be set as an environmental variable!"
+msgstr ""
+
+#: ../fdroidserver/deploy.py
+msgid "\"AWS_SECRET_ACCESS_KEY\" must be set as an environmental variable!"
 msgstr ""
 
 #: ../fdroidserver/index.py
@@ -127,6 +135,11 @@ msgstr "keystore در config.yml پیدا نشد!"
 msgid "'keystorepass' not found in config.yml!"
 msgstr "keystorepass در config.yml پیدا نشد!"
 
+#: ../fdroidserver/deploy.py
+#, fuzzy
+msgid "'rclone_config' must be set in config.yml!"
+msgstr "sdk_path در config.yml تنظیم نشده!"
+
 #: ../fdroidserver/common.py
 msgid "'repo_keyalias' not found in config.yml!"
 msgstr "repo_keyalias در config.yml پیدا نشد!"
@@ -185,6 +198,11 @@ msgstr "‪/issues‬ موجود نیست"
 msgid "A URL is required as an argument!"
 msgstr ""
 
+#: ../fdroidserver/update.py
+#, python-brace-format
+msgid "APK file {path} does not have a version code in its manifest"
+msgstr ""
+
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "APK signatures have different certificates in {path}:"
@@ -200,6 +218,10 @@ msgstr ""
 
 #: ../fdroidserver/update.py
 msgid "Add skeleton metadata files for APKs that are missing them"
+msgstr ""
+
+#: ../fdroidserver/deploy.py
+msgid "Adding all files to git mirror"
 msgstr ""
 
 #: ../fdroidserver/update.py
@@ -416,6 +438,10 @@ msgstr "ثبت دگرگونی‌ها"
 msgid "Commit changes, push, then make a merge request"
 msgstr ""
 
+#: ../fdroidserver/deploy.py
+msgid "Committing index files to git mirror"
+msgstr ""
+
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Conflicting \"{field}\" definitions between .yml and localized files:"
@@ -438,6 +464,14 @@ msgstr ""
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vname
 #: ../fdroidserver/import_subcommand.py
 msgid "Could not find latest version name"
+msgstr ""
+
+#: ../fdroidserver/import_subcommand.py
+msgid "Could not find latest versionCode"
+msgstr ""
+
+#: ../fdroidserver/import_subcommand.py
+msgid "Could not find latest versionName"
 msgstr ""
 
 #: ../fdroidserver/update.py
@@ -677,6 +711,11 @@ msgstr ""
 msgid ""
 "Enter the path to the Android SDK (%s) here:\n"
 "> "
+msgstr ""
+
+#: ../fdroidserver/nightly.py
+#, python-brace-format
+msgid "Environment variable \"{name}\" has an empty value!"
 msgstr ""
 
 #: ../fdroidserver/common.py
@@ -1251,6 +1290,16 @@ msgstr ""
 msgid "No version information could be found."
 msgstr ""
 
+#: ../fdroidserver/scanner.py
+#, python-format
+msgid "Non-exist scandelete path: %s"
+msgstr ""
+
+#: ../fdroidserver/scanner.py
+#, python-format
+msgid "Non-exist scanignore path: %s"
+msgstr ""
+
 #: ../fdroidserver/common.py
 msgid "Not a valid size definition: \"{}\""
 msgstr ""
@@ -1438,7 +1487,7 @@ msgstr "آغاز سریع مخزنی جدید"
 
 #: ../fdroidserver/__main__.py
 msgid "Read all the metadata files and exit"
-msgstr ""
+msgstr "خواندن همهٔ پرونده‌های فراداده و خروج"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -1630,6 +1679,11 @@ msgstr ""
 msgid "Skipping '{apkfilename}' with invalid signature!"
 msgstr ""
 
+#: ../fdroidserver/update.py
+#, python-brace-format
+msgid "Skipping '{apkfilename}' without versionCode!"
+msgstr ""
+
 #: ../fdroidserver/deploy.py ../fdroidserver/index.py
 #, python-format
 msgid "Skipping GitLab Pages mirror because the repo is too large (>%.2fGB)!"
@@ -1706,6 +1760,11 @@ msgstr ""
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "The OBB version code must come after \"{name}.\":"
+msgstr ""
+
+#: ../fdroidserver/update.py
+#, python-brace-format
+msgid "The OBB versionCode must come after \"{name}.\":"
 msgstr ""
 
 #: ../fdroidserver/btlog.py
@@ -1889,6 +1948,11 @@ msgstr ""
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
+msgid "UpdateCheckData must match the versionCode as integer (\\d or [0-9]): {codeex}"
+msgstr ""
+
+#: ../fdroidserver/lint.py
+#, python-brace-format
 msgid "UpdateCheckData must use HTTPS URL: {url}"
 msgstr ""
 
@@ -1939,6 +2003,11 @@ msgstr ""
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
+msgid "Using \"{path}\" for rclone config."
+msgstr ""
+
+#: ../fdroidserver/deploy.py
+#, python-brace-format
 msgid "Using \"{path}\" for syncing with remote storage."
 msgstr ""
 
@@ -1966,6 +2035,11 @@ msgstr ""
 #: ../fdroidserver/init.py
 #, python-brace-format
 msgid "Using existing keystore \"{path}\""
+msgstr ""
+
+#: ../fdroidserver/deploy.py
+#, python-brace-format
+msgid "Using rclone to sync to \"{name}\""
 msgstr ""
 
 #: ../fdroidserver/deploy.py
@@ -2371,6 +2445,11 @@ msgstr "گزینه‌ها"
 #, python-brace-format
 msgid "overwriting existing {path}"
 msgstr "پایمالی {path} موجود"
+
+#: ../fdroidserver/deploy.py
+#, fuzzy, python-brace-format
+msgid "path_to_custom_rclone_config: \"{path}\" does not exist!"
+msgstr "{path} ‏local_copy_dir وجود ندارد!"
 
 #: /usr/lib/python3.11/argparse.py
 msgid "positional arguments"

@@ -7,20 +7,21 @@
 # "M. Fatih Uluçam" <mulucam@gmail.com>, 2025.
 # Nuri KÜÇÜKLER <enatsek@gmail.com>, 2025.
 # Bora Atıcı <boratici.acc@gmail.com>, 2025.
+# Akif <akifvar5067@gmail.com>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2025-06-25 09:52+0200\n"
-"PO-Revision-Date: 2025-05-26 22:01+0000\n"
-"Last-Translator: Bora Atıcı <boratici.acc@gmail.com>\n"
+"POT-Creation-Date: 2025-09-29 14:29+0200\n"
+"PO-Revision-Date: 2025-07-21 11:42+0000\n"
+"Last-Translator: Akif <akifvar5067@gmail.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/f-droid/fdroidserver/tr/>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.12-dev\n"
+"X-Generator: Weblate 5.13-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -43,6 +44,14 @@ msgstr ""
 #, python-format
 msgid "\"%s/\" has no matching metadata file!"
 msgstr "\"%s/\" eşleşen üst veri dosyasına sahip değil!"
+
+#: ../fdroidserver/deploy.py
+msgid "\"AWS_ACCESS_KEY_ID\" must be set as an environmental variable!"
+msgstr ""
+
+#: ../fdroidserver/deploy.py
+msgid "\"AWS_SECRET_ACCESS_KEY\" must be set as an environmental variable!"
+msgstr ""
 
 #: ../fdroidserver/index.py
 msgid "\"isPrimary\" key should not be added to mirrors!"
@@ -134,6 +143,11 @@ msgstr "'keystore' config.yml içinde bulunamadı!"
 msgid "'keystorepass' not found in config.yml!"
 msgstr "'keystorepass' config.yml içinde bulunamadı!"
 
+#: ../fdroidserver/deploy.py
+#, fuzzy
+msgid "'rclone_config' must be set in config.yml!"
+msgstr "rclone kullanmak için, rclone_config ve awsbucket config.yml içinde ayarlanmalı!"
+
 #: ../fdroidserver/common.py
 msgid "'repo_keyalias' not found in config.yml!"
 msgstr "'repo_keyalias' config.yml içinde bulunamadı!"
@@ -192,6 +206,11 @@ msgstr "/issues eksik"
 msgid "A URL is required as an argument!"
 msgstr "Bir URL, argüman olarak gereklidir!"
 
+#: ../fdroidserver/update.py
+#, python-brace-format
+msgid "APK file {path} does not have a version code in its manifest"
+msgstr ""
+
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "APK signatures have different certificates in {path}:"
@@ -208,6 +227,10 @@ msgstr "İmzalanmamış bir depoya, depo imzalama anahtarı ekleyin"
 #: ../fdroidserver/update.py
 msgid "Add skeleton metadata files for APKs that are missing them"
 msgstr "İskelet üst veri dosyaları olmayan APK'lar için onları ekle"
+
+#: ../fdroidserver/deploy.py
+msgid "Adding all files to git mirror"
+msgstr ""
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -364,7 +387,7 @@ msgstr[0] "Tarama sırasında {} hata nedeniyle inşa edilemiyor"
 msgstr[1] "Tarama sırasında {} hata nedeniyle inşa edilemiyor"
 
 #: ../fdroidserver/common.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Cannot read {path}: {error}"
 msgstr "{path} okunamadı: {error}"
 
@@ -423,6 +446,10 @@ msgstr "Değişiklikleri işle"
 msgid "Commit changes, push, then make a merge request"
 msgstr "Değişiklikleri uygula, yükle ve bir birleştirme isteği yap"
 
+#: ../fdroidserver/deploy.py
+msgid "Committing index files to git mirror"
+msgstr ""
+
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Conflicting \"{field}\" definitions between .yml and localized files:"
@@ -445,6 +472,16 @@ msgstr "Son sürüm kodu bulunamadı"
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vname
 #: ../fdroidserver/import_subcommand.py
 msgid "Could not find latest version name"
+msgstr "Son sürüm adı bulunamadı"
+
+#: ../fdroidserver/import_subcommand.py
+#, fuzzy
+msgid "Could not find latest versionCode"
+msgstr "Son sürüm kodu bulunamadı"
+
+#: ../fdroidserver/import_subcommand.py
+#, fuzzy
+msgid "Could not find latest versionName"
 msgstr "Son sürüm adı bulunamadı"
 
 #: ../fdroidserver/update.py
@@ -687,6 +724,11 @@ msgid ""
 msgstr ""
 "Android SDK (%s) konumunu buraya girin:\n"
 "> "
+
+#: ../fdroidserver/nightly.py
+#, fuzzy, python-brace-format
+msgid "Environment variable \"{name}\" has an empty value!"
+msgstr "Ortam değişkeni {{env: {var}}} ayarlanmadı!"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -1260,6 +1302,16 @@ msgstr "İmzalanmamış dizin yok - yapılacak işlem yok"
 msgid "No version information could be found."
 msgstr "Sürüm bilgisi bulunamadı."
 
+#: ../fdroidserver/scanner.py
+#, fuzzy, python-format
+msgid "Non-exist scandelete path: %s"
+msgstr "Kullanılmayan scandelete yolu: %s"
+
+#: ../fdroidserver/scanner.py
+#, fuzzy, python-format
+msgid "Non-exist scanignore path: %s"
+msgstr "Kullanılmayan scanignore yolu: %s"
+
 #: ../fdroidserver/common.py
 msgid "Not a valid size definition: \"{}\""
 msgstr "Geçerli bir boyut tanımı değil: \"{}\""
@@ -1639,6 +1691,11 @@ msgstr "Kaynak kodu, çalıştırılabilir dosyalar ve diğer sorunlar için tar
 msgid "Skipping '{apkfilename}' with invalid signature!"
 msgstr "Geçersiz imzalı '{apkfilename}' atlanıyor!"
 
+#: ../fdroidserver/update.py
+#, fuzzy, python-brace-format
+msgid "Skipping '{apkfilename}' without versionCode!"
+msgstr "Geçersiz imzalı '{apkfilename}' atlanıyor!"
+
 #: ../fdroidserver/deploy.py ../fdroidserver/index.py
 #, python-format
 msgid "Skipping GitLab Pages mirror because the repo is too large (>%.2fGB)!"
@@ -1715,6 +1772,11 @@ msgstr "\"qrcode\" Python paketi kurulu değil (yüklemek için: apt-get install
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "The OBB version code must come after \"{name}.\":"
+msgstr "OBB sürüm kodu \"{name}.\" adından sonra gelmelidir:"
+
+#: ../fdroidserver/update.py
+#, fuzzy, python-brace-format
+msgid "The OBB versionCode must come after \"{name}.\":"
 msgstr "OBB sürüm kodu \"{name}.\" adından sonra gelmelidir:"
 
 #: ../fdroidserver/btlog.py
@@ -1904,6 +1966,11 @@ msgid "UpdateCheckData must match the version code as integer (\\d or [0-9]): {c
 msgstr "UpdateCheckData tam sayı olarak sürüm koduyla eşleşmelidir (\\d veya [0-9]): {codeex}"
 
 #: ../fdroidserver/lint.py
+#, fuzzy, python-brace-format
+msgid "UpdateCheckData must match the versionCode as integer (\\d or [0-9]): {codeex}"
+msgstr "UpdateCheckData tam sayı olarak sürüm koduyla eşleşmelidir (\\d veya [0-9]): {codeex}"
+
+#: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "UpdateCheckData must use HTTPS URL: {url}"
 msgstr "UpdateCheckData, HTTPS URL'sini kullanmalıdır: {url}"
@@ -1954,6 +2021,11 @@ msgid "Using \"{path}\" for configuring s3cmd."
 msgstr "s3cmd yapılandırması için \"{path}\" kullanılıyor."
 
 #: ../fdroidserver/deploy.py
+#, fuzzy, python-brace-format
+msgid "Using \"{path}\" for rclone config."
+msgstr "s3cmd yapılandırması için \"{path}\" kullanılıyor."
+
+#: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "Using \"{path}\" for syncing with remote storage."
 msgstr "Uzak depolama ile eşitlemek için \"{path}\" kullanılıyor."
@@ -1983,6 +2055,11 @@ msgstr "{path} içeriği yerine boş sözlük kullanılıyor!"
 #, python-brace-format
 msgid "Using existing keystore \"{path}\""
 msgstr "Var olan anahtar deposu \"{path}\" kullanılıyor"
+
+#: ../fdroidserver/deploy.py
+#, fuzzy, python-brace-format
+msgid "Using rclone to sync to \"{name}\""
+msgstr "{url} ile eşitleme için rclone kullanılıyor"
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
@@ -2022,7 +2099,7 @@ msgstr "VirusTotal API anahtarı 32MB'den büyük dosyaları yükleyemiyor, {pat
 
 #: ../fdroidserver/nightly.py
 msgid "WARNING: only public git repos are supported!"
-msgstr ""
+msgstr "UYARI: yanlızca git depoları desteklenmektedir!"
 
 #: ../fdroidserver/__main__.py
 msgid "Warn about possible metadata errors"
@@ -2387,6 +2464,11 @@ msgstr "seçenekler"
 #, python-brace-format
 msgid "overwriting existing {path}"
 msgstr "var olan {path} üzerine yazılıyor"
+
+#: ../fdroidserver/deploy.py
+#, fuzzy, python-brace-format
+msgid "path_to_custom_rclone_config: \"{path}\" does not exist!"
+msgstr "local_copy_dir \"{path}\" için kök dizini yok!"
 
 #: /usr/lib/python3.11/argparse.py
 msgid "positional arguments"

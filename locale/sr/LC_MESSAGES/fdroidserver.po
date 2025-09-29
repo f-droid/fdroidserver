@@ -1,6 +1,6 @@
 # SOME DESCRIPTIVE TITLE.
 # This file is put in the public domain.
-# Саша Петровић <salepetronije@gmail.com>, 2022.
+# Саша Петровић <salepetronije@gmail.com>, 2022, 2025.
 # Đorđe Vasiljević <djordje.vasiljevich@gmail.com>, 2022.
 # Reno Tx <renotx@users.noreply.hosted.weblate.org>, 2024.
 # Hans-Christoph Steiner <hans@guardianproject.info>, 2024.
@@ -8,16 +8,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 2.1b0\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2025-06-25 09:52+0200\n"
-"PO-Revision-Date: 2024-12-30 22:00+0000\n"
-"Last-Translator: Reno Tx <renotx@users.noreply.hosted.weblate.org>\n"
+"POT-Creation-Date: 2025-09-29 14:29+0200\n"
+"PO-Revision-Date: 2025-07-12 18:39+0000\n"
+"Last-Translator: Саша Петровић <salepetronije@gmail.com>\n"
 "Language-Team: Serbian <https://hosted.weblate.org/projects/f-droid/fdroidserver/sr/>\n"
 "Language: sr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 5.10-dev\n"
+"X-Generator: Weblate 5.13-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -41,9 +41,17 @@ msgstr ""
 msgid "\"%s/\" has no matching metadata file!"
 msgstr "Датотека метаподатака за „%s/“ не постоји!"
 
+#: ../fdroidserver/deploy.py
+msgid "\"AWS_ACCESS_KEY_ID\" must be set as an environmental variable!"
+msgstr ""
+
+#: ../fdroidserver/deploy.py
+msgid "\"AWS_SECRET_ACCESS_KEY\" must be set as an environmental variable!"
+msgstr ""
+
 #: ../fdroidserver/index.py
 msgid "\"isPrimary\" key should not be added to mirrors!"
-msgstr ""
+msgstr "Кључ „isPrimary“ не би требало да буде додат одразима складишта!"
 
 #: ../fdroidserver/index.py
 #, python-brace-format
@@ -131,6 +139,11 @@ msgstr "'keystore' није пронађен у config.yml!"
 msgid "'keystorepass' not found in config.yml!"
 msgstr "'keystorepass' није пронађен у config.yml!"
 
+#: ../fdroidserver/deploy.py
+#, fuzzy
+msgid "'rclone_config' must be set in config.yml!"
+msgstr "Да бисте користили rclone, rclone_config и awsbucket морају бити подешени у config.yml!"
+
 #: ../fdroidserver/common.py
 msgid "'repo_keyalias' not found in config.yml!"
 msgstr "'repo_keyalias' није пронађен у config.yml!"
@@ -189,6 +202,11 @@ msgstr "/issues недостаје"
 msgid "A URL is required as an argument!"
 msgstr "Потребан је URL као аргумент!"
 
+#: ../fdroidserver/update.py
+#, python-brace-format
+msgid "APK file {path} does not have a version code in its manifest"
+msgstr ""
+
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "APK signatures have different certificates in {path}:"
@@ -205,6 +223,10 @@ msgstr "Додајте кључ за потписивање репо-а у не�
 #: ../fdroidserver/update.py
 msgid "Add skeleton metadata files for APKs that are missing them"
 msgstr "Додај метафајлове скелета за APK-ове који их немају"
+
+#: ../fdroidserver/deploy.py
+msgid "Adding all files to git mirror"
+msgstr ""
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -421,6 +443,10 @@ msgstr "Потврди измене"
 msgid "Commit changes, push, then make a merge request"
 msgstr "Уређивање промена, пуш, затим направите захтев за спајање"
 
+#: ../fdroidserver/deploy.py
+msgid "Committing index files to git mirror"
+msgstr ""
+
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Conflicting \"{field}\" definitions between .yml and localized files:"
@@ -443,6 +469,16 @@ msgstr "Није могуће пронаћи најновији верзијск
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vname
 #: ../fdroidserver/import_subcommand.py
 msgid "Could not find latest version name"
+msgstr "Није могуће пронаћи назив најновије верзије"
+
+#: ../fdroidserver/import_subcommand.py
+#, fuzzy
+msgid "Could not find latest versionCode"
+msgstr "Није могуће пронаћи најновији верзијски код"
+
+#: ../fdroidserver/import_subcommand.py
+#, fuzzy
+msgid "Could not find latest versionName"
 msgstr "Није могуће пронаћи назив најновије верзије"
 
 #: ../fdroidserver/update.py
@@ -488,9 +524,9 @@ msgid "Creating \"{path}\" for configuring s3cmd."
 msgstr "Креирање \"{path}\" за конфигурацију s3cmd."
 
 #: ../fdroidserver/common.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Creating empty {config_file}"
-msgstr "Читање '{config_file}'"
+msgstr "Стварам празну '{config_file}'"
 
 #: ../fdroidserver/publish.py
 msgid "Creating log directory"
@@ -660,12 +696,12 @@ msgstr "ERROR: {key} у {path} није \"archive\" или \"repo\"!"
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "ERROR: {key} not a valid key!"
-msgstr ""
+msgstr "ГРЕШКА: {key} није исправан кључ!"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "ERROR: {key}'s value should be of type {t}!"
-msgstr ""
+msgstr "ГРЕШКА: вредност {key} би требала бити врсте {t}!"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
@@ -686,15 +722,20 @@ msgstr ""
 "Унесите путању до Android SDK (%s) овде:\n"
 "> "
 
+#: ../fdroidserver/nightly.py
+#, fuzzy, python-brace-format
+msgid "Environment variable \"{name}\" has an empty value!"
+msgstr "Променљива окружења {{env: {var}}} није постављена!"
+
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Environment variable {var} from {configname} is not set!"
 msgstr "Еколошка променљива {var} из {configname} није подешена!"
 
 #: ../fdroidserver/common.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Environment variable {{env: {var}}} is not set!"
-msgstr "Еколошка променљива {var} из {configname} није подешена!"
+msgstr "Променљива окружења {{env: {var}}} није постављена!"
 
 #: ../fdroidserver/deploy.py
 msgid "Error deploying 'github_releases', {} not present. (You might need to run `fdroid update` first.)"
@@ -936,9 +977,9 @@ msgid "Ignoring bad element in manifest: %s"
 msgstr "Игнорисање лошег елемента у манифесту: %s"
 
 #: ../fdroidserver/common.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Ignoring deprecated {oldfile}, use {newfile}!"
-msgstr "{oldfile} је застарео, користите {newfile}"
+msgstr "Занемарујем застарело {oldfile}, користим {newfile}!"
 
 #: ../fdroidserver/index.py
 msgid "Ignoring package without metadata: "
@@ -1146,7 +1187,7 @@ msgstr "Достигнута максимална дубина рекурзиј�
 #: ../fdroidserver/index.py
 #, python-brace-format
 msgid "Mirror config for {url} contains \"isPrimary\" key!"
-msgstr ""
+msgstr "Поставке одраза за {url} садрже кључ „јеГлавни“!"
 
 #: ../fdroidserver/mirror.py
 msgid "Mirror the full repo and archive, all file types."
@@ -1258,6 +1299,16 @@ msgstr "Нема непотписаног каталога - ништа не т�
 msgid "No version information could be found."
 msgstr "Није пронађена информација о верзији."
 
+#: ../fdroidserver/scanner.py
+#, fuzzy, python-format
+msgid "Non-exist scandelete path: %s"
+msgstr "Некоришћена путања за брисање скенирања: %s"
+
+#: ../fdroidserver/scanner.py
+#, fuzzy, python-format
+msgid "Non-exist scanignore path: %s"
+msgstr "Некоришћена путања за игнорисање скенирања: %s"
+
 #: ../fdroidserver/common.py
 msgid "Not a valid size definition: \"{}\""
 msgstr "Није важећа дефиниција величине: \"{}\""
@@ -1313,7 +1364,7 @@ msgstr "Само PNG и JPEG су подржани за графику, нађе
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
 #: ../fdroidserver/common.py
 msgid "Only accepts a single key \"env\""
-msgstr ""
+msgstr "Прихвата само јединачни кључ „env“"
 
 #: ../fdroidserver/checkupdates.py
 msgid "Only process apps with auto-updates"
@@ -1474,7 +1525,7 @@ msgstr "Освежите и кеширајте правила и потписе 
 #: ../fdroidserver/publish.py
 #, python-brace-format
 msgid "Refusing to sign '{path}', file exists in both {dir1} and {dir2} folder."
-msgstr ""
+msgstr "Одбијам писање „{path}“, датотека постоји у оба омота, {dir1} и {dir2}."
 
 #: ../fdroidserver/verify.py
 msgid "Remove source tarball and any APKs if successfully verified."
@@ -1496,7 +1547,7 @@ msgstr "Преименујте APK фајлове који не одговара
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "RepoType {type} is deprecated, please switch to git."
-msgstr ""
+msgstr "Врста складишта {type} је застарела, молим, пређите на гит."
 
 #: ../fdroidserver/nightly.py
 #, python-brace-format
@@ -1638,6 +1689,11 @@ msgstr "Прескочи скенирање изворног кода за би�
 msgid "Skipping '{apkfilename}' with invalid signature!"
 msgstr "Пропуштање '{apkfilename}' са неважећим потписом!"
 
+#: ../fdroidserver/update.py
+#, fuzzy, python-brace-format
+msgid "Skipping '{apkfilename}' without versionCode!"
+msgstr "Пропуштање '{apkfilename}' са неважећим потписом!"
+
 #: ../fdroidserver/deploy.py ../fdroidserver/index.py
 #, python-format
 msgid "Skipping GitLab Pages mirror because the repo is too large (>%.2fGB)!"
@@ -1708,12 +1764,17 @@ msgstr "Тест режим - стави излаз у tmp директориј�
 
 #: ../fdroidserver/index.py
 msgid "The \"qrcode\" Python package is not installed (e.g. apt-get install python3-qrcode)!"
-msgstr ""
+msgstr "Питонов пакет „qrcode“ није уграђен (тј. apt-get install python3-qrcode)!"
 
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "The OBB version code must come after \"{name}.\":"
+msgstr "Код верзије OBB мора бити након \"{name}.\":"
+
+#: ../fdroidserver/update.py
+#, fuzzy, python-brace-format
+msgid "The OBB versionCode must come after \"{name}.\":"
 msgstr "Код верзије OBB мора бити након \"{name}.\":"
 
 #: ../fdroidserver/btlog.py
@@ -1903,6 +1964,11 @@ msgid "UpdateCheckData must match the version code as integer (\\d or [0-9]): {c
 msgstr "UpdateCheckData мора одговарати верзионом коду као цео број (\\d или [0-9]): {codeex}"
 
 #: ../fdroidserver/lint.py
+#, fuzzy, python-brace-format
+msgid "UpdateCheckData must match the versionCode as integer (\\d or [0-9]): {codeex}"
+msgstr "UpdateCheckData мора одговарати верзионом коду као цео број (\\d или [0-9]): {codeex}"
+
+#: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "UpdateCheckData must use HTTPS URL: {url}"
 msgstr "UpdateCheckData мора користити HTTPS URL: {url}"
@@ -1953,6 +2019,11 @@ msgid "Using \"{path}\" for configuring s3cmd."
 msgstr "Користим \"{path}\" за конфигурисање s3cmd."
 
 #: ../fdroidserver/deploy.py
+#, fuzzy, python-brace-format
+msgid "Using \"{path}\" for rclone config."
+msgstr "Користим \"{path}\" за конфигурисање s3cmd."
+
+#: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "Using \"{path}\" for syncing with remote storage."
 msgstr "Користим \"{path}\" за синхронизацију са удаљеним складиштем."
@@ -1982,6 +2053,11 @@ msgstr "Коришћење празног речника уместо садрж
 #, python-brace-format
 msgid "Using existing keystore \"{path}\""
 msgstr "Користим постојећи keystore \"{path}\""
+
+#: ../fdroidserver/deploy.py
+#, fuzzy, python-brace-format
+msgid "Using rclone to sync to \"{name}\""
+msgstr "Користим rclone за синхронизацију са: {url}"
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
@@ -2021,7 +2097,7 @@ msgstr "VirusTotal API кључ не може отпремити датотек�
 
 #: ../fdroidserver/nightly.py
 msgid "WARNING: only public git repos are supported!"
-msgstr ""
+msgstr "УПОЗОРЕЊЕ: само јавна складишта гита су подржана!"
 
 #: ../fdroidserver/__main__.py
 msgid "Warn about possible metadata errors"
@@ -2086,7 +2162,7 @@ msgstr "нејасна опција: %(option)s може одговарати %(
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "apksigner in build-tools;{version} passes APKs with invalid v3 signatures, ignoring."
-msgstr ""
+msgstr "Потписник у прибору градње;{version} пушта АПК-ове са неисправним потписима в3, занемарујем."
 
 #: ../fdroidserver/common.py
 msgid "apksigner not found! Cannot sign or verify modern APKs"
@@ -2389,6 +2465,11 @@ msgstr "опције"
 msgid "overwriting existing {path}"
 msgstr "преписивање постојећег {path}"
 
+#: ../fdroidserver/deploy.py
+#, fuzzy, python-brace-format
+msgid "path_to_custom_rclone_config: \"{path}\" does not exist!"
+msgstr "Коренски директоријум за local_copy_dir \"{path}\" не постоји!"
+
 #: /usr/lib/python3.11/argparse.py
 msgid "positional arguments"
 msgstr "позициони аргументи"
@@ -2613,7 +2694,7 @@ msgstr "{name} \"{section}/icons/{path}\" не постоји! Проверит�
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "{path1} is a duplicate of {path2}, remove one!"
-msgstr ""
+msgstr "{path1} је удвостручено {path2}, уклоните једно!"
 
 #: ../fdroidserver/import_subcommand.py
 #, python-brace-format
