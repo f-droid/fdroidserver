@@ -156,7 +156,7 @@ def main():
                     ).git.describe(always=True, tags=True)
                 )
                 sys.exit(0)
-            except git.exc.InvalidGitRepositoryError:
+            except git.InvalidGitRepositoryError:
                 print(_('No version information could be found.'))
                 sys.exit(1)
         else:

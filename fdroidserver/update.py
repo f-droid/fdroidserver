@@ -2466,16 +2466,18 @@ def create_metadata_from_template(apk):
 
 
 def read_added_date_from_all_apks(apps, apks):
-    """No summary.
+    """Read the "added" date from all packages.
 
-    Added dates come from the repo/index-v2.json file but are
-    read when scanning apks and thus need to be applied form apk
-    level to app level for _all_ apps and not only from non-archived
-    ones
+    Added dates come from index-v2.json file but are read when scanning
+    APKs and thus need to be applied from package-level to app-level for
+    _all_ apps and not only from non-archived ones.
 
     TODO: read the added dates directly from index-v2.json instead of
           going through apks that way it also works for for repos that
-          don't keep an archive of apks.
+          don't keep an archive of APKs.
+
+    https://gitlab.com/fdroid/wiki/-/wikis/PackageDateHandling
+
     """
     for appid, app in apps.items():
         for apk in apks:

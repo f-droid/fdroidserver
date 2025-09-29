@@ -40,7 +40,6 @@ import fdroidserver.github
 from . import _, common, index
 from .exception import FDroidException
 
-config = None
 start_timestamp = time.gmtime()
 
 GIT_BRANCH = 'master'
@@ -144,6 +143,7 @@ def update_remote_storage_with_rclone(
     """
     logging.debug(_('Using rclone to sync to "{name}"').format(name=awsbucket))
 
+    config = common.get_config()
     rclone_config = config.get('rclone_config', [])
     if rclone_config and isinstance(rclone_config, str):
         rclone_config = [rclone_config]
@@ -271,6 +271,7 @@ def update_serverwebroot(serverwebroot, repo_section):
     has a low resolution timestamp
 
     """
+    config = common.get_config()
     try:
         subprocess.run(['rsync', '--version'], capture_output=True, check=True)
     except Exception as e:
@@ -431,6 +432,7 @@ def update_servergitmirrors(servergitmirrors, repo_section):
     """
     from clint.textui import progress
 
+    config = common.get_config()
     if config.get('local_copy_dir') and not config.get('sync_from_local_copy_dir'):
         logging.debug(
             _('Offline machine, skipping git mirror generation until `fdroid deploy`')
@@ -530,6 +532,20 @@ def update_servergitmirrors(servergitmirrors, repo_section):
             progressbar.done()
 
 
+def _get_commit_author(git_repo):
+    """If the author is set locally, use it, otherwise use static info."""
+    ret = {'name': 'servergitmirrors', 'email': 'fdroid@deploy'}
+    with git_repo.config_reader() as cr:
+        for option in ('name', 'email'):
+            try:
+                value = cr.get_value('user', option)
+            except (configparser.NoSectionError, configparser.NoOptionError):
+                value = os.getenv(f'GITLAB_USER_{option.upper()}')
+            if value:
+                ret[option] = value
+    return git.Actor(ret['name'], ret['email'])
+
+
 def upload_to_servergitmirror(
     mirror_config: Dict[str, str],
     local_repo: Repo,
@@ -557,18 +573,23 @@ def upload_to_servergitmirror(
     logging.info('Mirroring to: ' + remote_url)
 
     if is_index_only:
+        logging.debug(_('Committing index files to git mirror'))
         files_to_upload = _get_index_file_paths(
             os.path.join(local_repo.working_tree_dir, 'fdroid', repo_section)
         )
         files_to_upload = _remove_missing_files(files_to_upload)
         local_repo.index.add(files_to_upload)
+        local_repo.index.commit(
+            "servergitmirrors: index-only in git-mirror",
+            author=_get_commit_author(local_repo),
+        )
     else:
         # sadly index.add don't allow the --all parameter
-        logging.debug('Adding all files to git mirror')
+        logging.debug(_('Adding all files to git mirror'))
         local_repo.git.add(all=True)
-
-    logging.debug('Committing files into git mirror')
-    local_repo.index.commit("fdroidserver git-mirror")
+        local_repo.index.commit(
+            "servergitmirrors: in git-mirror", author=_get_commit_author(local_repo)
+        )
 
     # only deploy to GitLab Artifacts if too big for GitLab Pages
     if (
@@ -1029,8 +1050,6 @@ def upload_to_github_releases_repo(repo_conf, release_infos, global_gh_token):
 
 
 def main():
-    global config
-
     parser = ArgumentParser()
     common.setup_global_opts(parser)
     parser.add_argument(

@@ -75,7 +75,6 @@ class IntegrationTest(unittest.TestCase):
         self.testdir = mkdir_testfiles(WORKSPACE, self)
         self.tmp_repo_root = self.testdir / "fdroid"
         self.tmp_repo_root.mkdir(parents=True)
-        deploy.config = {}
         os.chdir(self.tmp_repo_root)
 
     def tearDown(self):
@@ -1611,10 +1610,11 @@ class IntegrationTest(unittest.TestCase):
                 rclone_config.write(configfile)
 
             # set up config for run
+            common.get_config()
             awsbucket = "test-bucket"
-            deploy.config['awsbucket'] = awsbucket
-            deploy.config['rclone_config'] = "test-minio-config"
-            deploy.config['path_to_custom_rclone_config'] = str(rclone_file)
+            common.config['awsbucket'] = awsbucket
+            common.config['rclone_config'] = "test-minio-config"
+            common.config['path_to_custom_rclone_config'] = str(rclone_file)
             common.options = VerboseFalseOptions
 
             # call function
@@ -1667,9 +1667,9 @@ class IntegrationTest(unittest.TestCase):
 
             # set up config for run
             awsbucket = "test-bucket"
-            deploy.config['awsbucket'] = awsbucket
-            deploy.config['rclone_config'] = "test-minio-config"
-            deploy.config['path_to_custom_rclone_config'] = str(rclone_file)
+            common.config['awsbucket'] = awsbucket
+            common.config['rclone_config'] = "test-minio-config"
+            common.config['path_to_custom_rclone_config'] = str(rclone_file)
             common.options = VerboseFalseOptions
 
             # call function
