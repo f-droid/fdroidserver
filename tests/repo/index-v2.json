@@ -9,15 +9,15 @@
     "icon": {
       "en-US": {
         "name": "/icons/icon.png",
-        "sha256": "b1f27fa87f8cabca50cdcd462a0f500d79d883b965a498d0e49eea560b39be1f",
-        "size": 715
+        "sha256": "53ca92e52a933733d2abcf6545f86c8eab56013524dc03ce9f5ea08488d62651",
+        "size": 700
       }
     },
-    "address": "https://MyFirstFDroidRepo.org/fdroid/repo",
+    "address": "https://example.com/fdroid/repo",
     "mirrors": [
       {
         "isPrimary": true,
-        "url": "https://MyFirstFDroidRepo.org/fdroid/repo"
+        "url": "https://example.com/fdroid/repo"
       },
       {
         "url": "http://foobarfoobarfoobar.onion/fdroid/repo"

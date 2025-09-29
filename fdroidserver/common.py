@@ -209,7 +209,7 @@ default_config = {
         'whatsNew': 500,
     },
     'keyaliases': {},
-    'repo_url': "https://MyFirstFDroidRepo.org/fdroid/repo",
+    'repo_url': "https://example.com/fdroid/repo",
     'repo_name': "My First F-Droid Repo Demo",
     'repo_icon': "icon.png",
     'repo_description': _("""This is a repository of apps to be used with F-Droid. Applications in this repository are either official binaries built by the original application developers, or are binaries built from source by the admin of f-droid.org using the tools on https://gitlab.com/fdroid."""),  # type: ignore
