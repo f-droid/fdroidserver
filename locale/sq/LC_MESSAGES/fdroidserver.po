@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 1.0.6-349-g907c04ea\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2025-06-25 09:52+0200\n"
+"POT-Creation-Date: 2025-09-29 14:29+0200\n"
 "PO-Revision-Date: 2025-03-26 21:33+0000\n"
 "Last-Translator: Besnik Bleta <besnik@programeshqip.org>\n"
 "Language-Team: Albanian <https://hosted.weblate.org/projects/f-droid/fdroidserver/sq/>\n"
@@ -38,6 +38,14 @@ msgstr ""
 #, python-format
 msgid "\"%s/\" has no matching metadata file!"
 msgstr "“%s/”\" s’ka kartelë tejtëdhënash me përputhje!"
+
+#: ../fdroidserver/deploy.py
+msgid "\"AWS_ACCESS_KEY_ID\" must be set as an environmental variable!"
+msgstr ""
+
+#: ../fdroidserver/deploy.py
+msgid "\"AWS_SECRET_ACCESS_KEY\" must be set as an environmental variable!"
+msgstr ""
 
 #: ../fdroidserver/index.py
 msgid "\"isPrimary\" key should not be added to mirrors!"
@@ -129,6 +137,11 @@ msgstr "S’u gjet 'keystore' në config.yml!"
 msgid "'keystorepass' not found in config.yml!"
 msgstr "S’u gjet 'keystorepass' te config.yml!"
 
+#: ../fdroidserver/deploy.py
+#, fuzzy
+msgid "'rclone_config' must be set in config.yml!"
+msgstr "Që të përdorni rclone, rclone_config dhe awsbucket duhen ujdisur te config.yml!"
+
 #: ../fdroidserver/common.py
 msgid "'repo_keyalias' not found in config.yml!"
 msgstr "S’u gjet 'repo_keyalias' te config.yml!"
@@ -187,6 +200,11 @@ msgstr "/issues mungon"
 msgid "A URL is required as an argument!"
 msgstr "Lypset një URL si argument!"
 
+#: ../fdroidserver/update.py
+#, python-brace-format
+msgid "APK file {path} does not have a version code in its manifest"
+msgstr ""
+
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "APK signatures have different certificates in {path}:"
@@ -203,6 +221,10 @@ msgstr "Shtoni te një depo e panënshkruar një kyç nënshkrimi depoje"
 #: ../fdroidserver/update.py
 msgid "Add skeleton metadata files for APKs that are missing them"
 msgstr "Shtoni kartela tejtëdhënash skeleton për APK ku mungojnë të tilla"
+
+#: ../fdroidserver/deploy.py
+msgid "Adding all files to git mirror"
+msgstr ""
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -418,6 +440,10 @@ msgstr "Depozito ndryshimet"
 msgid "Commit changes, push, then make a merge request"
 msgstr "Parashtro ndryshimet, depozitoji, mandej bëj një kërkesë për përzierje"
 
+#: ../fdroidserver/deploy.py
+msgid "Committing index files to git mirror"
+msgstr ""
+
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Conflicting \"{field}\" definitions between .yml and localized files:"
@@ -440,6 +466,16 @@ msgstr "S’u gjet dot kod i versionit më të ri"
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vname
 #: ../fdroidserver/import_subcommand.py
 msgid "Could not find latest version name"
+msgstr "S’u gjet dot emër i versionit më të ri"
+
+#: ../fdroidserver/import_subcommand.py
+#, fuzzy
+msgid "Could not find latest versionCode"
+msgstr "S’u gjet dot kod i versionit më të ri"
+
+#: ../fdroidserver/import_subcommand.py
+#, fuzzy
+msgid "Could not find latest versionName"
 msgstr "S’u gjet dot emër i versionit më të ri"
 
 #: ../fdroidserver/update.py
@@ -682,6 +718,11 @@ msgid ""
 msgstr ""
 "Jepni shtegun për te Android SDK (%s) këtu:\n"
 "> "
+
+#: ../fdroidserver/nightly.py
+#, fuzzy, python-brace-format
+msgid "Environment variable \"{name}\" has an empty value!"
+msgstr "S’është ujdisur ndryshore {{env: {var}}}!"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -1255,6 +1296,16 @@ msgstr "S’ka drejtori të panënshkruar - s’ka ç’bëhet"
 msgid "No version information could be found."
 msgstr "S’u gjetën hollësi versioni."
 
+#: ../fdroidserver/scanner.py
+#, fuzzy, python-format
+msgid "Non-exist scandelete path: %s"
+msgstr "Shteg scandelete i papërdorur: %s"
+
+#: ../fdroidserver/scanner.py
+#, fuzzy, python-format
+msgid "Non-exist scanignore path: %s"
+msgstr "Shteg scanignore i papërdorur: %s"
+
 #: ../fdroidserver/common.py
 msgid "Not a valid size definition: \"{}\""
 msgstr "Përkufizim jo i vlefshëm për madhësinë: “{}”"
@@ -1634,6 +1685,11 @@ msgstr "Anashkalo skanimin e kodit burim për dyorë dhe probleme të tjera"
 msgid "Skipping '{apkfilename}' with invalid signature!"
 msgstr "Po anashkalohet '{apkfilename}' me nënshkrim i pavlefshëm!"
 
+#: ../fdroidserver/update.py
+#, fuzzy, python-brace-format
+msgid "Skipping '{apkfilename}' without versionCode!"
+msgstr "Po anashkalohet '{apkfilename}' me nënshkrim i pavlefshëm!"
+
 #: ../fdroidserver/deploy.py ../fdroidserver/index.py
 #, python-format
 msgid "Skipping GitLab Pages mirror because the repo is too large (>%.2fGB)!"
@@ -1710,6 +1766,11 @@ msgstr "Paketa Python “qrcode” s’është e instaluar (p.sh., apt-get insta
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "The OBB version code must come after \"{name}.\":"
+msgstr "Kodi për versionin OBB duhet të vijë pas “{name}.”:"
+
+#: ../fdroidserver/update.py
+#, fuzzy, python-brace-format
+msgid "The OBB versionCode must come after \"{name}.\":"
 msgstr "Kodi për versionin OBB duhet të vijë pas “{name}.”:"
 
 #: ../fdroidserver/btlog.py
@@ -1900,6 +1961,11 @@ msgid "UpdateCheckData must match the version code as integer (\\d or [0-9]): {c
 msgstr "UpdateCheckData duhet të përputhet me kodin e versionit si numër i plotë (\\d, ose [0-9]): {codeex}"
 
 #: ../fdroidserver/lint.py
+#, fuzzy, python-brace-format
+msgid "UpdateCheckData must match the versionCode as integer (\\d or [0-9]): {codeex}"
+msgstr "UpdateCheckData duhet të përputhet me kodin e versionit si numër i plotë (\\d, ose [0-9]): {codeex}"
+
+#: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "UpdateCheckData must use HTTPS URL: {url}"
 msgstr "UpdateCheckData duhet të përdorë URL HTTPS: {url}"
@@ -1950,6 +2016,11 @@ msgid "Using \"{path}\" for configuring s3cmd."
 msgstr "Po përdoret “{path}” për formësim të s3cmd."
 
 #: ../fdroidserver/deploy.py
+#, fuzzy, python-brace-format
+msgid "Using \"{path}\" for rclone config."
+msgstr "Po përdoret “{path}” për formësim të s3cmd."
+
+#: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "Using \"{path}\" for syncing with remote storage."
 msgstr "Po përdoret “{path}” për njëkohësim me depozitë të largët."
@@ -1979,6 +2050,11 @@ msgstr "Po përdoret fjalor i zbrazët, në vend se lënda e {path}!"
 #, python-brace-format
 msgid "Using existing keystore \"{path}\""
 msgstr "Po përdoret depo ekzistuese kyçesh “{path}”"
+
+#: ../fdroidserver/deploy.py
+#, fuzzy, python-brace-format
+msgid "Using rclone to sync to \"{name}\""
+msgstr "Po përdoret rclone për njëkohësim me: {url}"
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
@@ -2383,6 +2459,11 @@ msgstr "mundësi"
 #, python-brace-format
 msgid "overwriting existing {path}"
 msgstr "po mbishkruhet {path} ekzistues"
+
+#: ../fdroidserver/deploy.py
+#, fuzzy, python-brace-format
+msgid "path_to_custom_rclone_config: \"{path}\" does not exist!"
+msgstr "Drejtoria rrënjë për local_copy_dir “{path}” s’ekziston!"
 
 #: /usr/lib/python3.11/argparse.py
 msgid "positional arguments"

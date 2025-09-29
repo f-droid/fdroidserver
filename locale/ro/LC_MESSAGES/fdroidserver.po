@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 2.0a5-27-gf24eae0f\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2025-06-25 09:52+0200\n"
+"POT-Creation-Date: 2025-09-29 14:29+0200\n"
 "PO-Revision-Date: 2024-12-02 17:00+0000\n"
 "Last-Translator: Licaon Kter <licaon.kter@protonmail.com>\n"
 "Language-Team: Romanian <https://hosted.weblate.org/projects/f-droid/fdroidserver/ro/>\n"
@@ -41,6 +41,14 @@ msgstr ""
 #, python-format
 msgid "\"%s/\" has no matching metadata file!"
 msgstr "\"%s/\" nu are un fișier de metadate corespunzător!"
+
+#: ../fdroidserver/deploy.py
+msgid "\"AWS_ACCESS_KEY_ID\" must be set as an environmental variable!"
+msgstr ""
+
+#: ../fdroidserver/deploy.py
+msgid "\"AWS_SECRET_ACCESS_KEY\" must be set as an environmental variable!"
+msgstr ""
 
 #: ../fdroidserver/index.py
 msgid "\"isPrimary\" key should not be added to mirrors!"
@@ -132,6 +140,11 @@ msgstr "'keystore' nu a fost găsit în config.yml!"
 msgid "'keystorepass' not found in config.yml!"
 msgstr "'keystorepass' nu se găsește în config.yml!"
 
+#: ../fdroidserver/deploy.py
+#, fuzzy
+msgid "'rclone_config' must be set in config.yml!"
+msgstr "Pentru a utiliza awsbucket, awssecretkey și awsaccesskeyid trebuie să fie de asemenea setate în config.yml!"
+
 #: ../fdroidserver/common.py
 msgid "'repo_keyalias' not found in config.yml!"
 msgstr "'repo_keyalias' nu se găsește în config.yml!"
@@ -190,6 +203,11 @@ msgstr "/problemele lipsesc"
 msgid "A URL is required as an argument!"
 msgstr "Un URL este necesar ca argument!"
 
+#: ../fdroidserver/update.py
+#, python-brace-format
+msgid "APK file {path} does not have a version code in its manifest"
+msgstr ""
+
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "APK signatures have different certificates in {path}:"
@@ -206,6 +224,10 @@ msgstr "Adăugați o cheie de semnare repo la un depozit nesemnat"
 #: ../fdroidserver/update.py
 msgid "Add skeleton metadata files for APKs that are missing them"
 msgstr "Adăugați fișiere de metadate schelet pentru APK-urile care le lipsesc"
+
+#: ../fdroidserver/deploy.py
+msgid "Adding all files to git mirror"
+msgstr ""
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -422,6 +444,10 @@ msgstr "Efectuați modificări"
 msgid "Commit changes, push, then make a merge request"
 msgstr ""
 
+#: ../fdroidserver/deploy.py
+msgid "Committing index files to git mirror"
+msgstr ""
+
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Conflicting \"{field}\" definitions between .yml and localized files:"
@@ -444,6 +470,16 @@ msgstr "Nu a putut găsi codul ultimei versiuni"
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vname
 #: ../fdroidserver/import_subcommand.py
 msgid "Could not find latest version name"
+msgstr "Nu a putut găsi numele celei mai recente versiuni"
+
+#: ../fdroidserver/import_subcommand.py
+#, fuzzy
+msgid "Could not find latest versionCode"
+msgstr "Nu a putut găsi codul ultimei versiuni"
+
+#: ../fdroidserver/import_subcommand.py
+#, fuzzy
+msgid "Could not find latest versionName"
 msgstr "Nu a putut găsi numele celei mai recente versiuni"
 
 #: ../fdroidserver/update.py
@@ -686,6 +722,11 @@ msgid ""
 msgstr ""
 "Introduceți aici calea către Android SDK (%s):\n"
 "> "
+
+#: ../fdroidserver/nightly.py
+#, fuzzy, python-brace-format
+msgid "Environment variable \"{name}\" has an empty value!"
+msgstr "Variabila de mediu {var} din {configname} nu este setată!"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -1259,6 +1300,16 @@ msgstr "Niciun director nesemnat - nimic de făcut"
 msgid "No version information could be found."
 msgstr "Nu s-au găsit informații despre versiune."
 
+#: ../fdroidserver/scanner.py
+#, fuzzy, python-format
+msgid "Non-exist scandelete path: %s"
+msgstr "Calea de scanare a ștergerii neutilizată: %s"
+
+#: ../fdroidserver/scanner.py
+#, fuzzy, python-format
+msgid "Non-exist scanignore path: %s"
+msgstr "Cale de scanare neutilizată: %s"
+
 #: ../fdroidserver/common.py
 msgid "Not a valid size definition: \"{}\""
 msgstr "Nu este o definiție valabilă a dimensiunii: \"{}\""
@@ -1639,6 +1690,11 @@ msgstr "Treceți peste scanarea codului sursă pentru binare și alte probleme"
 msgid "Skipping '{apkfilename}' with invalid signature!"
 msgstr "Ignorarea '{apkfilename}' cu semnătură invalidă!"
 
+#: ../fdroidserver/update.py
+#, fuzzy, python-brace-format
+msgid "Skipping '{apkfilename}' without versionCode!"
+msgstr "Ignorarea '{apkfilename}' cu semnătură invalidă!"
+
 #: ../fdroidserver/deploy.py ../fdroidserver/index.py
 #, python-format
 msgid "Skipping GitLab Pages mirror because the repo is too large (>%.2fGB)!"
@@ -1715,6 +1771,11 @@ msgstr ""
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "The OBB version code must come after \"{name}.\":"
+msgstr "Codul versiunii OBB trebuie să apară după \"{name}.\":"
+
+#: ../fdroidserver/update.py
+#, fuzzy, python-brace-format
+msgid "The OBB versionCode must come after \"{name}.\":"
 msgstr "Codul versiunii OBB trebuie să apară după \"{name}.\":"
 
 #: ../fdroidserver/btlog.py
@@ -1905,6 +1966,11 @@ msgid "UpdateCheckData must match the version code as integer (\\d or [0-9]): {c
 msgstr "UpdateCheckData trebuie să corespundă codului versiunii ca număr întreg (\\d sau [0-9]): {codeex}"
 
 #: ../fdroidserver/lint.py
+#, fuzzy, python-brace-format
+msgid "UpdateCheckData must match the versionCode as integer (\\d or [0-9]): {codeex}"
+msgstr "UpdateCheckData trebuie să corespundă codului versiunii ca număr întreg (\\d sau [0-9]): {codeex}"
+
+#: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "UpdateCheckData must use HTTPS URL: {url}"
 msgstr "UpdateCheckData trebuie să utilizeze un URL HTTPS: {url}"
@@ -1956,6 +2022,11 @@ msgstr "Utilizarea \"{path}\" pentru configurarea s3cmd."
 
 #: ../fdroidserver/deploy.py
 #, fuzzy, python-brace-format
+msgid "Using \"{path}\" for rclone config."
+msgstr "Utilizarea \"{path}\" pentru configurarea s3cmd."
+
+#: ../fdroidserver/deploy.py
+#, fuzzy, python-brace-format
 msgid "Using \"{path}\" for syncing with remote storage."
 msgstr "Utilizarea \"{path}\" pentru configurarea s3cmd."
 
@@ -1984,6 +2055,11 @@ msgstr "Utilizarea dicționarului gol în loc de conținutul lui {path}!"
 #, python-brace-format
 msgid "Using existing keystore \"{path}\""
 msgstr "Utilizarea keystore-ului existent \"{path}\""
+
+#: ../fdroidserver/deploy.py
+#, fuzzy, python-brace-format
+msgid "Using rclone to sync to \"{name}\""
+msgstr "Folosind s3cmd pentru a sincroniza cu: {url}"
 
 #: ../fdroidserver/deploy.py
 #, fuzzy, python-brace-format
@@ -2390,6 +2466,11 @@ msgstr "opțiuni"
 #, python-brace-format
 msgid "overwriting existing {path}"
 msgstr "suprascriere {path} existent"
+
+#: ../fdroidserver/deploy.py
+#, fuzzy, python-brace-format
+msgid "path_to_custom_rclone_config: \"{path}\" does not exist!"
+msgstr "Directorul root pentru local_copy_dir \"{path}\" nu există!"
 
 #: /usr/lib/python3.11/argparse.py
 msgid "positional arguments"

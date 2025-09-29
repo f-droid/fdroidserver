@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 1.0.0-95-gd7af22b\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2025-06-25 09:52+0200\n"
+"POT-Creation-Date: 2025-09-29 14:29+0200\n"
 "PO-Revision-Date: 2025-09-03 09:01+0000\n"
 "Last-Translator: Artyom Rybakov <rib.artem@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/f-droid/fdroidserver/ru/>\n"
@@ -53,6 +53,14 @@ msgstr ""
 #, python-format
 msgid "\"%s/\" has no matching metadata file!"
 msgstr "У \"%s/\" нет соответствующего файла метаданных!"
+
+#: ../fdroidserver/deploy.py
+msgid "\"AWS_ACCESS_KEY_ID\" must be set as an environmental variable!"
+msgstr ""
+
+#: ../fdroidserver/deploy.py
+msgid "\"AWS_SECRET_ACCESS_KEY\" must be set as an environmental variable!"
+msgstr ""
 
 #: ../fdroidserver/index.py
 msgid "\"isPrimary\" key should not be added to mirrors!"
@@ -144,6 +152,11 @@ msgstr "'keystore' не найден в config.yml!"
 msgid "'keystorepass' not found in config.yml!"
 msgstr "'keystorepass' не найден в config.yml!"
 
+#: ../fdroidserver/deploy.py
+#, fuzzy
+msgid "'rclone_config' must be set in config.yml!"
+msgstr "Чтобы использовать rclone, в config.yml должны быть заданы rclone_config и awsbucket!"
+
 #: ../fdroidserver/common.py
 msgid "'repo_keyalias' not found in config.yml!"
 msgstr "'repo_keyalias' не найден в config.yml!"
@@ -202,6 +215,11 @@ msgstr "Не хватает /issues"
 msgid "A URL is required as an argument!"
 msgstr "В качестве аргумента нужен URL-адрес!"
 
+#: ../fdroidserver/update.py
+#, python-brace-format
+msgid "APK file {path} does not have a version code in its manifest"
+msgstr ""
+
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "APK signatures have different certificates in {path}:"
@@ -218,6 +236,10 @@ msgstr "Добавлять ключ для подписи в неподписа�
 #: ../fdroidserver/update.py
 msgid "Add skeleton metadata files for APKs that are missing them"
 msgstr "Добавлять основные файлы метаданных в APK, если они там отсутствуют"
+
+#: ../fdroidserver/deploy.py
+msgid "Adding all files to git mirror"
+msgstr ""
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -434,6 +456,10 @@ msgstr "Зафиксировать изменения (commit)"
 msgid "Commit changes, push, then make a merge request"
 msgstr "Зафиксировать изменения (commit), отправить (push) их в удаленный репозиторий, и затем создать запрос на слияние"
 
+#: ../fdroidserver/deploy.py
+msgid "Committing index files to git mirror"
+msgstr ""
+
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Conflicting \"{field}\" definitions between .yml and localized files:"
@@ -456,6 +482,16 @@ msgstr "Не удалось найти последнюю версию прил�
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vname
 #: ../fdroidserver/import_subcommand.py
 msgid "Could not find latest version name"
+msgstr "Не удалось найти название последней версии"
+
+#: ../fdroidserver/import_subcommand.py
+#, fuzzy
+msgid "Could not find latest versionCode"
+msgstr "Не удалось найти последнюю версию приложения (versionCode)"
+
+#: ../fdroidserver/import_subcommand.py
+#, fuzzy
+msgid "Could not find latest versionName"
 msgstr "Не удалось найти название последней версии"
 
 #: ../fdroidserver/update.py
@@ -698,6 +734,11 @@ msgid ""
 msgstr ""
 "Укажите путь к Android SDK (%s): \n"
 "> "
+
+#: ../fdroidserver/nightly.py
+#, fuzzy, python-brace-format
+msgid "Environment variable \"{name}\" has an empty value!"
+msgstr "Переменная среды {{env: {var}}} не установлена!"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -1271,6 +1312,16 @@ msgstr "Директории с неподписанными данными не
 msgid "No version information could be found."
 msgstr "Информацию о версии найти не удалось."
 
+#: ../fdroidserver/scanner.py
+#, fuzzy, python-format
+msgid "Non-exist scandelete path: %s"
+msgstr "Неиспользованный scandelete-путь: %s"
+
+#: ../fdroidserver/scanner.py
+#, fuzzy, python-format
+msgid "Non-exist scanignore path: %s"
+msgstr "Неиспользованный scanignore-путь: %s"
+
 #: ../fdroidserver/common.py
 msgid "Not a valid size definition: \"{}\""
 msgstr "Неверное определение размера: \"{}\""
@@ -1651,6 +1702,11 @@ msgstr "Пропустить сканирование исходного код�
 msgid "Skipping '{apkfilename}' with invalid signature!"
 msgstr "Неверная подпись '{apkfilename}', пропустить!"
 
+#: ../fdroidserver/update.py
+#, fuzzy, python-brace-format
+msgid "Skipping '{apkfilename}' without versionCode!"
+msgstr "Неверная подпись '{apkfilename}', пропустить!"
+
 #: ../fdroidserver/deploy.py ../fdroidserver/index.py
 #, python-format
 msgid "Skipping GitLab Pages mirror because the repo is too large (>%.2fGB)!"
@@ -1727,6 +1783,11 @@ msgstr "Пакет Python \"qrcode\" не установлен (например
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "The OBB version code must come after \"{name}.\":"
+msgstr "Внутрення версия приложения из OBB файла должна следовать после \"{name}.\":"
+
+#: ../fdroidserver/update.py
+#, fuzzy, python-brace-format
+msgid "The OBB versionCode must come after \"{name}.\":"
 msgstr "Внутрення версия приложения из OBB файла должна следовать после \"{name}.\":"
 
 #: ../fdroidserver/btlog.py
@@ -1916,6 +1977,11 @@ msgid "UpdateCheckData must match the version code as integer (\\d or [0-9]): {c
 msgstr "UpdateCheckData должен соответствовать коду версии как целое число (\\d или [0-9]): {codeex}"
 
 #: ../fdroidserver/lint.py
+#, fuzzy, python-brace-format
+msgid "UpdateCheckData must match the versionCode as integer (\\d or [0-9]): {codeex}"
+msgstr "UpdateCheckData должен соответствовать коду версии как целое число (\\d или [0-9]): {codeex}"
+
+#: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "UpdateCheckData must use HTTPS URL: {url}"
 msgstr "URL-адрес в UpdateCheckData должен начинаться с HTTPS: {url}"
@@ -1966,6 +2032,11 @@ msgid "Using \"{path}\" for configuring s3cmd."
 msgstr "Для конфигурации s3cmd используется \"{path}\"."
 
 #: ../fdroidserver/deploy.py
+#, fuzzy, python-brace-format
+msgid "Using \"{path}\" for rclone config."
+msgstr "Для конфигурации s3cmd используется \"{path}\"."
+
+#: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "Using \"{path}\" for syncing with remote storage."
 msgstr "Для синхронизации с удаленным хранилищем используется путь \"{path}\"."
@@ -1995,6 +2066,11 @@ msgstr "Использование пустого словаря вместо с
 #, python-brace-format
 msgid "Using existing keystore \"{path}\""
 msgstr "Используются ключи из \"{path}\""
+
+#: ../fdroidserver/deploy.py
+#, fuzzy, python-brace-format
+msgid "Using rclone to sync to \"{name}\""
+msgstr "Используется rclone для синхронизации с: {url}"
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
@@ -2401,6 +2477,11 @@ msgstr "параметры"
 #, python-brace-format
 msgid "overwriting existing {path}"
 msgstr "перезапись существующего пути {path}"
+
+#: ../fdroidserver/deploy.py
+#, fuzzy, python-brace-format
+msgid "path_to_custom_rclone_config: \"{path}\" does not exist!"
+msgstr "Корневой директории для local_copy_dir \"{path}\" нет!"
 
 #: /usr/lib/python3.11/argparse.py
 msgid "positional arguments"

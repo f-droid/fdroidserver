@@ -22,7 +22,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2025-06-25 09:52+0200\n"
+"POT-Creation-Date: 2025-09-29 14:29+0200\n"
 "PO-Revision-Date: 2025-03-20 16:21+0000\n"
 "Last-Translator: Champ0999 <champ0999@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/f-droid/fdroidserver/it/>\n"
@@ -54,6 +54,14 @@ msgstr ""
 #, python-format
 msgid "\"%s/\" has no matching metadata file!"
 msgstr "\"%s/\" non ha un file di metadati corrispondente!"
+
+#: ../fdroidserver/deploy.py
+msgid "\"AWS_ACCESS_KEY_ID\" must be set as an environmental variable!"
+msgstr ""
+
+#: ../fdroidserver/deploy.py
+msgid "\"AWS_SECRET_ACCESS_KEY\" must be set as an environmental variable!"
+msgstr ""
 
 #: ../fdroidserver/index.py
 msgid "\"isPrimary\" key should not be added to mirrors!"
@@ -145,6 +153,11 @@ msgstr "\"keystore\" non trovato in config.yml!"
 msgid "'keystorepass' not found in config.yml!"
 msgstr "\"keystorepass\" non trovato in config.yml!"
 
+#: ../fdroidserver/deploy.py
+#, fuzzy
+msgid "'rclone_config' must be set in config.yml!"
+msgstr "Per usare awsbucket, awssecretkey e awsaccesskeyid devono essere impostati anche in config.yml!"
+
 #: ../fdroidserver/common.py
 msgid "'repo_keyalias' not found in config.yml!"
 msgstr "\"repo_keyalias\" non trovato in config.yml!"
@@ -203,6 +216,11 @@ msgstr "/issues è mancante"
 msgid "A URL is required as an argument!"
 msgstr "È richiesto un URL come argomento!"
 
+#: ../fdroidserver/update.py
+#, python-brace-format
+msgid "APK file {path} does not have a version code in its manifest"
+msgstr ""
+
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "APK signatures have different certificates in {path}:"
@@ -219,6 +237,10 @@ msgstr "Aggiungi una chiave di firma ad un repository non firmato"
 #: ../fdroidserver/update.py
 msgid "Add skeleton metadata files for APKs that are missing them"
 msgstr "Aggiungi i file scheletro di metadata agli APK che sono senza"
+
+#: ../fdroidserver/deploy.py
+msgid "Adding all files to git mirror"
+msgstr ""
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -435,6 +457,10 @@ msgstr "Cambiamenti del commit"
 msgid "Commit changes, push, then make a merge request"
 msgstr ""
 
+#: ../fdroidserver/deploy.py
+msgid "Committing index files to git mirror"
+msgstr ""
+
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Conflicting \"{field}\" definitions between .yml and localized files:"
@@ -457,6 +483,16 @@ msgstr "Impossibile trovare il codice della versione più recente"
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vname
 #: ../fdroidserver/import_subcommand.py
 msgid "Could not find latest version name"
+msgstr "Impossibile trovare il nome della versione più recente"
+
+#: ../fdroidserver/import_subcommand.py
+#, fuzzy
+msgid "Could not find latest versionCode"
+msgstr "Impossibile trovare il codice della versione più recente"
+
+#: ../fdroidserver/import_subcommand.py
+#, fuzzy
+msgid "Could not find latest versionName"
 msgstr "Impossibile trovare il nome della versione più recente"
 
 #: ../fdroidserver/update.py
@@ -699,6 +735,11 @@ msgid ""
 msgstr ""
 "Inserisci qui il percorso dell'Android SDK (%s):\n"
 "> "
+
+#: ../fdroidserver/nightly.py
+#, fuzzy, python-brace-format
+msgid "Environment variable \"{name}\" has an empty value!"
+msgstr "La variabile d'ambiente {var} da {configname} non è impostata!"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -1273,6 +1314,16 @@ msgstr "Nessuna directory non firmata - niente da fare"
 msgid "No version information could be found."
 msgstr "Nessuna informazione sulla versione trovata."
 
+#: ../fdroidserver/scanner.py
+#, fuzzy, python-format
+msgid "Non-exist scandelete path: %s"
+msgstr "Percorso scandelete non utilizzato: %s"
+
+#: ../fdroidserver/scanner.py
+#, fuzzy, python-format
+msgid "Non-exist scanignore path: %s"
+msgstr "Percorso scanignore non utilizzato: %s"
+
 #: ../fdroidserver/common.py
 msgid "Not a valid size definition: \"{}\""
 msgstr "Definizione di dimensione non valida: \"{}\""
@@ -1653,6 +1704,11 @@ msgstr "Salta la scansione del codice sorgente per i binari e altri problemi"
 msgid "Skipping '{apkfilename}' with invalid signature!"
 msgstr "Saltare '{apkfilename} con firma non valida!"
 
+#: ../fdroidserver/update.py
+#, fuzzy, python-brace-format
+msgid "Skipping '{apkfilename}' without versionCode!"
+msgstr "Saltare '{apkfilename} con firma non valida!"
+
 #: ../fdroidserver/deploy.py ../fdroidserver/index.py
 #, python-format
 msgid "Skipping GitLab Pages mirror because the repo is too large (>%.2fGB)!"
@@ -1729,6 +1785,11 @@ msgstr ""
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "The OBB version code must come after \"{name}.\":"
+msgstr "Il codice della versione OBB deve venire dopo \"{name}\":"
+
+#: ../fdroidserver/update.py
+#, fuzzy, python-brace-format
+msgid "The OBB versionCode must come after \"{name}.\":"
 msgstr "Il codice della versione OBB deve venire dopo \"{name}\":"
 
 #: ../fdroidserver/btlog.py
@@ -1920,6 +1981,11 @@ msgid "UpdateCheckData must match the version code as integer (\\d or [0-9]): {c
 msgstr "UpdateCheckData deve corrispondere al codice di versione come intero (\\d o [0-9]): {codeex}"
 
 #: ../fdroidserver/lint.py
+#, fuzzy, python-brace-format
+msgid "UpdateCheckData must match the versionCode as integer (\\d or [0-9]): {codeex}"
+msgstr "UpdateCheckData deve corrispondere al codice di versione come intero (\\d o [0-9]): {codeex}"
+
+#: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "UpdateCheckData must use HTTPS URL: {url}"
 msgstr "UpdateCheckData deve usare l'URL HTTPS: {url}"
@@ -1972,6 +2038,11 @@ msgstr "Usare \"{path}\" per configurare s3cmd."
 
 #: ../fdroidserver/deploy.py
 #, fuzzy, python-brace-format
+msgid "Using \"{path}\" for rclone config."
+msgstr "Usare \"{path}\" per configurare s3cmd."
+
+#: ../fdroidserver/deploy.py
+#, fuzzy, python-brace-format
 msgid "Using \"{path}\" for syncing with remote storage."
 msgstr "Usare \"{path}\" per configurare s3cmd."
 
@@ -2001,6 +2072,11 @@ msgstr "Utilizzo di un dizionario vuoto al posto del contenuto di {path}!"
 #, python-brace-format
 msgid "Using existing keystore \"{path}\""
 msgstr "Utilizzando il keystore esistente \"{path}\""
+
+#: ../fdroidserver/deploy.py
+#, fuzzy, python-brace-format
+msgid "Using rclone to sync to \"{name}\""
+msgstr "Utilizzando s3cmd per sincronizzare con: {url}"
 
 #: ../fdroidserver/deploy.py
 #, fuzzy, python-brace-format
@@ -2406,6 +2482,11 @@ msgstr "opzioni"
 #, python-brace-format
 msgid "overwriting existing {path}"
 msgstr "sovrascrivendo il {path} esistente"
+
+#: ../fdroidserver/deploy.py
+#, fuzzy, python-brace-format
+msgid "path_to_custom_rclone_config: \"{path}\" does not exist!"
+msgstr "La directory principale per local_copy_dir \"{path}\" non esiste!"
 
 #: /usr/lib/python3.11/argparse.py
 msgid "positional arguments"

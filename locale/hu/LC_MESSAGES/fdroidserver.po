@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 1.0.6-70-g54bc858\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2025-06-25 09:52+0200\n"
+"POT-Creation-Date: 2025-09-29 14:29+0200\n"
 "PO-Revision-Date: 2024-04-10 13:33+0000\n"
 "Last-Translator: Hans-Christoph Steiner <hans@guardianproject.info>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/f-droid/fdroidserver/hu/>\n"
@@ -39,6 +39,14 @@ msgstr ""
 #, python-format
 msgid "\"%s/\" has no matching metadata file!"
 msgstr "A(z) „%s/” nem rendelkezik megfelelő metaadatfájllal."
+
+#: ../fdroidserver/deploy.py
+msgid "\"AWS_ACCESS_KEY_ID\" must be set as an environmental variable!"
+msgstr ""
+
+#: ../fdroidserver/deploy.py
+msgid "\"AWS_SECRET_ACCESS_KEY\" must be set as an environmental variable!"
+msgstr ""
 
 #: ../fdroidserver/index.py
 msgid "\"isPrimary\" key should not be added to mirrors!"
@@ -130,6 +138,11 @@ msgstr "A „keystore” nem található a config.yml fájlban."
 msgid "'keystorepass' not found in config.yml!"
 msgstr "A „keystorepass” nem található a config.yml fájlban."
 
+#: ../fdroidserver/deploy.py
+#, fuzzy
+msgid "'rclone_config' must be set in config.yml!"
+msgstr "Az „sdk_path” nincs megadva a „config.yml” fájlban."
+
 #: ../fdroidserver/common.py
 msgid "'repo_keyalias' not found in config.yml!"
 msgstr "A „repo_keyalias” nem található a config.yml fájlban."
@@ -188,6 +201,11 @@ msgstr "a /issues hiányzik"
 msgid "A URL is required as an argument!"
 msgstr "Az URL argumentumként megadása szükséges."
 
+#: ../fdroidserver/update.py
+#, python-brace-format
+msgid "APK file {path} does not have a version code in its manifest"
+msgstr ""
+
 #: ../fdroidserver/common.py
 #, fuzzy, python-brace-format
 msgid "APK signatures have different certificates in {path}:"
@@ -204,6 +222,10 @@ msgstr "Tároló aláírási kulcs hozzáadása a nem aláírt tárolóhoz"
 #: ../fdroidserver/update.py
 msgid "Add skeleton metadata files for APKs that are missing them"
 msgstr "Metaadatfájl-vázak hozzáadása azon APK-khoz, melyeknél hiányoznak"
+
+#: ../fdroidserver/deploy.py
+msgid "Adding all files to git mirror"
+msgstr ""
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -419,6 +441,10 @@ msgstr "Változások véglegesítése"
 msgid "Commit changes, push, then make a merge request"
 msgstr ""
 
+#: ../fdroidserver/deploy.py
+msgid "Committing index files to git mirror"
+msgstr ""
+
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Conflicting \"{field}\" definitions between .yml and localized files:"
@@ -441,6 +467,16 @@ msgstr "A legfrissebb verzió kódja nem található"
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vname
 #: ../fdroidserver/import_subcommand.py
 msgid "Could not find latest version name"
+msgstr "A legfrissebb verzió neve nem található"
+
+#: ../fdroidserver/import_subcommand.py
+#, fuzzy
+msgid "Could not find latest versionCode"
+msgstr "A legfrissebb verzió kódja nem található"
+
+#: ../fdroidserver/import_subcommand.py
+#, fuzzy
+msgid "Could not find latest versionName"
 msgstr "A legfrissebb verzió neve nem található"
 
 #: ../fdroidserver/update.py
@@ -684,6 +720,11 @@ msgid ""
 msgstr ""
 "Adja meg az Android SDK (%s) elérési útját itt:\n"
 "> "
+
+#: ../fdroidserver/nightly.py
+#, fuzzy, python-brace-format
+msgid "Environment variable \"{name}\" has an empty value!"
+msgstr "A(z) {configname} konfigurációból származó {var} környezeti változó nincs beállítva!"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -1263,6 +1304,16 @@ msgstr "Nincs aláíratlan könyvtár – nincs teendő"
 msgid "No version information could be found."
 msgstr "Nem található információ."
 
+#: ../fdroidserver/scanner.py
+#, python-format
+msgid "Non-exist scandelete path: %s"
+msgstr ""
+
+#: ../fdroidserver/scanner.py
+#, python-format
+msgid "Non-exist scanignore path: %s"
+msgstr ""
+
 #: ../fdroidserver/common.py
 msgid "Not a valid size definition: \"{}\""
 msgstr "Nem érvényes méretmegadás: „{}”"
@@ -1644,6 +1695,11 @@ msgstr "A forráskód binárisok és egyéb problémák miatti átvizsgálásán
 msgid "Skipping '{apkfilename}' with invalid signature!"
 msgstr "Az érvénytelen aláírású „{apkfilename}” kihagyása!"
 
+#: ../fdroidserver/update.py
+#, fuzzy, python-brace-format
+msgid "Skipping '{apkfilename}' without versionCode!"
+msgstr "Az érvénytelen aláírású „{apkfilename}” kihagyása!"
+
 #: ../fdroidserver/deploy.py ../fdroidserver/index.py
 #, python-format
 msgid "Skipping GitLab Pages mirror because the repo is too large (>%.2fGB)!"
@@ -1720,6 +1776,11 @@ msgstr ""
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "The OBB version code must come after \"{name}.\":"
+msgstr ""
+
+#: ../fdroidserver/update.py
+#, python-brace-format
+msgid "The OBB versionCode must come after \"{name}.\":"
 msgstr ""
 
 #: ../fdroidserver/btlog.py
@@ -1906,6 +1967,11 @@ msgstr ""
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
+msgid "UpdateCheckData must match the versionCode as integer (\\d or [0-9]): {codeex}"
+msgstr ""
+
+#: ../fdroidserver/lint.py
+#, python-brace-format
 msgid "UpdateCheckData must use HTTPS URL: {url}"
 msgstr ""
 
@@ -1955,6 +2021,11 @@ msgid "Using \"{path}\" for configuring s3cmd."
 msgstr ""
 
 #: ../fdroidserver/deploy.py
+#, fuzzy, python-brace-format
+msgid "Using \"{path}\" for rclone config."
+msgstr "„{path}” létrehozása a s3cmd beállításához."
+
+#: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "Using \"{path}\" for syncing with remote storage."
 msgstr ""
@@ -1983,6 +2054,11 @@ msgstr ""
 #: ../fdroidserver/init.py
 #, python-brace-format
 msgid "Using existing keystore \"{path}\""
+msgstr ""
+
+#: ../fdroidserver/deploy.py
+#, python-brace-format
+msgid "Using rclone to sync to \"{name}\""
 msgstr ""
 
 #: ../fdroidserver/deploy.py
@@ -2390,6 +2466,11 @@ msgstr "Beállítások"
 #, python-brace-format
 msgid "overwriting existing {path}"
 msgstr ""
+
+#: ../fdroidserver/deploy.py
+#, fuzzy, python-brace-format
+msgid "path_to_custom_rclone_config: \"{path}\" does not exist!"
+msgstr "\"local_copy_dir\" {path} nem létezik!"
 
 #: /usr/lib/python3.11/argparse.py
 msgid "positional arguments"
