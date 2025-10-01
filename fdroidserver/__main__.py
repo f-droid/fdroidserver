@@ -55,6 +55,18 @@ COMMANDS = OrderedDict([
     ("mirror", _("Download complete mirrors of small repos")),
 ])
 
+# The list of subcommands that are not advertised as public api,
+# intended for the use-case of breaking down builds into atomic steps.
+#
+# For the build automation, there will be lots of subcommands that are
+# meant to run in scripted environments.  They are not intended for
+# interactive use.  Although they sometimes might be useful
+# interactively, they might also sometimes be dangerous to run
+# interactively because they rely on the presense of a VM/container,
+# modify the local environment, or even run things as root.
+COMMANDS_INTERNAL = [
+]
+
 
 def print_help(available_plugins=None):
     print(_("usage: ") + _("fdroid [<command>] [-h|--help|--version|<args>]"))
@@ -136,7 +148,12 @@ def main():
         sys.exit(0)
 
     command = sys.argv[1]
-    if command not in COMMANDS and command not in available_plugins:
+    command_not_found = (
+        command not in COMMANDS
+        and command not in COMMANDS_INTERNAL
+        and command not in available_plugins
+    )
+    if command_not_found:
         if command in ('-h', '--help'):
             print_help(available_plugins=available_plugins)
             sys.exit(0)
@@ -186,7 +203,7 @@ def main():
     sys.argv[0] += ' ' + command
 
     del sys.argv[1]
-    if command in COMMANDS.keys():
+    if command in COMMANDS.keys() or command in COMMANDS_INTERNAL:
         # import is named import_subcommand internally b/c import is reserved by Python
         command = 'import_subcommand' if command == 'import' else command
         mod = __import__('fdroidserver.' + command, None, None, [command])

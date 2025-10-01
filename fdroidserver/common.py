@@ -1046,6 +1046,27 @@ def get_local_metadata_files():
     return glob.glob('.fdroid.[a-jl-z]*[a-rt-z]')
 
 
+def split_pkg_arg(appid_versionCode_pair):
+    """Split 'appid:versionCode' pair into 2 separate values safely.
+
+    :raises ValueError: if argument is not parseable
+    :return: (appid, versionCode) tuple with the 2 parsed values
+    """
+    tokens = appid_versionCode_pair.split(":")
+    if len(tokens) != 2:
+        raise ValueError(
+            _("'{}' is not a valid pair of the form appId:versionCode pair").format(
+                appid_versionCode_pair
+            )
+        )
+    if not is_valid_package_name(tokens[0]):
+        raise ValueError(
+            _("'{}' does not start with a valid appId").format(appid_versionCode_pair)
+        )
+    versionCode = version_code_string_to_int(tokens[1])
+    return tokens[0], versionCode
+
+
 def read_pkg_args(appid_versionCode_pairs, allow_version_codes=False):
     """No summary.
 
