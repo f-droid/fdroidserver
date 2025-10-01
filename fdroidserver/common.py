@@ -183,7 +183,7 @@ def get_default_cachedir():
     removed.
 
     """
-    appname = __name__.split('.')[0]
+    appname = __name__.split('.', maxsplit=1)[0]
     try:
         import platformdirs
 
