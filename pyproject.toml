@@ -99,6 +99,9 @@ confidence = ["HIGH", "INFERENCE"]
 disable = [
   "broad-exception-caught",
   "broad-exception-raised",
+  "global-statement",
+  "global-variable-not-assigned",
+  "global-variable-undefined",
   "invalid-name",
   "missing-class-docstring",
   "missing-function-docstring",
@@ -107,6 +110,8 @@ disable = [
   "no-else-raise",
   "no-else-return",
   "subprocess-run-check",
+  "too-many-positional-arguments",
+  "unspecified-encoding",
   "use-dict-literal",
 ]
 
