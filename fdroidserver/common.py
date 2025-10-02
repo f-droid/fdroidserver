@@ -82,7 +82,7 @@ from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from queue import Queue
 from typing import List
-from urllib.parse import urlparse, urlsplit, urlunparse
+from urllib.parse import urlparse, urlsplit, urlunparse, unquote
 from zipfile import ZipFile
 
 import defusedxml.ElementTree as XMLElementTree
@@ -1301,6 +1301,16 @@ def get_source_date_epoch(build_dir):
         if (data_dir / '.git').exists() and (data_dir / metadatapath).exists():
             repo = git.repo.Repo(data_dir)
             return repo.git.log('-n1', '--pretty=%ct', '--', metadatapath)
+
+
+def get_container_name(appid, vercode):
+    """Return unique name for associating a build with a container or VM."""
+    return f'{appid}_{vercode}'
+
+
+def get_pod_name(appid, vercode):
+    """Return unique name for associating a build with a Podman "pod"."""
+    return f'{get_container_name(appid, vercode)}_pod'
 
 
 def get_build_dir(app):
@@ -5056,3 +5066,74 @@ FDROIDORG_MIRRORS = [
 FDROIDORG_FINGERPRINT = (
     '43238D512C1E5EB2D6569F4A3AFBF5523418B82E0A3ED1552770ABB9A9C9CCAB'
 )
+
+
+def get_podman_client():
+    """Return an instance of podman-py to work with Podman.
+
+    This assumes that it will use the default local UNIX Domain Socket
+    to connect to the Podman service.  The preferred setup is to first
+    do `systemctl --user start podman.socket` to keep the Podman UNIX
+    socket running all the time.  If the socket is not present, this
+    will automatically start the service, which has a default five
+    second timeout.  After the timeout, it shuts itself down.  This is
+    done outside of systemd so it will work where systemd is not
+    installed.  The systemd socket calls the same command anyway.
+
+    https://docs.podman.io/en/latest/markdown/podman-system-service.1.html
+
+    """
+    import podman
+
+    client = podman.PodmanClient()
+    url = client.api.base_url
+    socket_path = unquote(url.netloc)
+    if not os.path.exists(socket_path):
+        logging.info(f'Starting podman system service at {socket_path}')
+        subprocess.Popen(
+            ['podman', 'system', 'service'],
+            close_fds=True,
+        )
+        retried = 0
+        while not os.path.exists(socket_path):
+            time.sleep(0.1)
+            retried += 1
+            if retried > 100:  # wait for ten seconds
+                break
+    if not client.ping():
+        path = f'{url.scheme}://{unquote(url.netloc)}'
+        logging.error(f'No Podman service found at {path}!')
+        sys.exit(1)
+    return client
+
+
+PODMAN_BUILDSERVER_IMAGE = 'registry.gitlab.com/fdroid/fdroidserver:buildserver'
+
+
+def get_podman_container(appid, vercode):
+    """Singleton getter, since podman-py is just an interface to the podman daemon singleton."""
+    container_name = get_container_name(appid, vercode)
+    client = get_podman_client()
+    ret = None
+    for c in client.containers.list(all=True):
+        if c.name == container_name:
+            ret = c
+            break
+    client.close()
+    if ret is None:
+        raise BuildException(f'Container for {appid}:{vercode} not found!')
+    if PODMAN_BUILDSERVER_IMAGE not in ret.image.tags:
+        raise BuildException(
+            f'Container for {appid}:{vercode} has wrong image: {ret.image}'
+        )
+    return ret
+
+
+def get_vagrantfile_path(appid, vercode):
+    """Return the path for the unique VM for a given build.
+
+    Vagrant doesn't support ':' in VM names, so this uses '_' instead.
+    Plus filesystems are often grumpy about using `:` in paths.
+
+    """
+    return Path('tmp/buildserver', get_container_name(appid, vercode), 'Vagrantfile')
