@@ -5183,6 +5183,23 @@ def get_vagrantfile_path(appid, vercode):
 
 def vagrant_exec(appid, vercode, command):
     """Execute a command in the Vagrant VM via ssh."""
+    vagrantfile = get_vagrantfile_path(appid, vercode)
+    to_stdin = shlex.join(command)
+    p = subprocess.run(
+        [
+            'vagrant',
+            'ssh',
+            '-c',
+            'bash',
+        ],
+        input=to_stdin,
+        text=True,
+        cwd=vagrantfile.parent,
+    )
+    if p.returncode != 0:
+        raise subprocess.CalledProcessError(
+            p.returncode, f"{to_stdin} | {' '.join(p.args)}"
+        )
 
 
 def vagrant_destroy(appid, vercode):
