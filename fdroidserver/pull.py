@@ -33,6 +33,7 @@ Since this is an internal command, the strings are not localized.
 import os
 import sys
 import logging
+import subprocess
 import tarfile
 import tempfile
 import traceback
@@ -59,6 +60,22 @@ def podman_pull(appid, vercode, path):
 
 def vagrant_pull(appid, vercode, path):
     """Pull the path from the Vagrant VM."""
+    vagrantfile = common.get_vagrantfile_path(appid, vercode)
+    path_in_vm = os.path.join(common.BUILD_HOME, path)
+
+    vagrantbin = common.get_vagrant_bin_path()
+    rsyncbin = common.get_rsync_bin_path()
+
+    with common.TmpVagrantSshConf(vagrantbin, vagrantfile.parent) as ssh_config_file:
+        cmd = [
+            rsyncbin,
+            '-av',
+            '-e',
+            f'ssh -F {ssh_config_file}',
+            f'default:{path_in_vm}',
+            './unsigned',
+        ]
+        subprocess.check_call(cmd)
 
 
 def make_file_list(appid, vercode):
