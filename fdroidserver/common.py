@@ -5213,3 +5213,43 @@ def vagrant_destroy(appid, vercode):
         v.destroy()
     if vagrantfile.parent.exists():
         shutil.rmtree(vagrantfile.parent, ignore_errors=True)
+
+
+def get_vagrant_bin_path():
+    p = shutil.which("vagrant")
+    if p is None:
+        raise Exception(
+            "'vagrant' not found, make sure it's installed and added to your path"
+        )
+    return p
+
+
+def get_rsync_bin_path():
+    p = shutil.which("rsync")
+    if p is None:
+        raise Exception(
+            "'rsync' not found, make sure it's installed and added to your path"
+        )
+    return p
+
+
+class TmpVagrantSshConf:
+    """Context manager for getting access to a ssh config of a vagrant VM in form of a temp file."""
+
+    def __init__(self, vagrant_bin_path, vagrant_vm_dir):
+        self.vagrant_bin_path = vagrant_bin_path
+        self.vagrant_vm_dir = vagrant_vm_dir
+
+    def __enter__(self):
+        self.ssh_config_tf = tempfile.NamedTemporaryFile('wt', encoding="utf8")
+        self.ssh_config_tf.write(
+            subprocess.check_output(
+                [self.vagrant_bin_path, 'ssh-config'],
+                cwd=self.vagrant_vm_dir,
+            ).decode('utf8')
+        )
+        self.ssh_config_tf.flush()
+        return self.ssh_config_tf.name
+
+    def __exit__(self, exc_type, exc_value, traceback):
+        self.ssh_config_tf.close()

@@ -32,6 +32,7 @@ Since this is an internal command, the strings are not localized.
 
 import logging
 import os
+import subprocess
 import sys
 import tarfile
 import tempfile
@@ -99,7 +100,24 @@ def podman_push(paths, appid, vercode, as_root=False):
 
 def vagrant_push(paths, appid, vercode):
     """Push files into a build specific vagrant VM."""
-    # TODO implement with `vagrant ssh` and rsync?
+    vagrantbin = common.get_vagrant_bin_path()
+    rsyncbin = common.get_rsync_bin_path()
+
+    vagrantfile = common.get_vagrantfile_path(appid, vercode)
+    with common.TmpVagrantSshConf(vagrantbin, vagrantfile.parent) as ssh_config_file:
+        for path in paths:
+            cmd = [
+                rsyncbin,
+                '-av',
+                '--relative',
+                '-e',
+                f'ssh -F {ssh_config_file}',
+                path,
+                'default:{}'.format(common.BUILD_HOME),
+            ]
+            subprocess.check_call(
+                cmd,
+            )
 
 
 # TODO split out shared code into _podman.py, _vagrant.py, etc
