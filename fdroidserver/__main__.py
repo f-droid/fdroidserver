@@ -67,6 +67,7 @@ COMMANDS = OrderedDict([
 COMMANDS_INTERNAL = [
     "destroy",
     "exec",
+    "push",
     "up",
 ]
 

@@ -4,10 +4,10 @@
 #
 # Copyright (C) 2010-2016, Ciaran Gultnieks, ciaran@ciarang.com
 # Copyright (C) 2013-2017, Daniel Martí <mvdan@mvdan.cc>
-# Copyright (C) 2013-2021, Hans-Christoph Steiner <hans@eds.org>
+# Copyright (C) 2013-2025, Hans-Christoph Steiner <hans@eds.org>
 # Copyright (C) 2017-2018, Torsten Grote <t@grobox.de>
 # Copyright (C) 2017, tobiasKaminsky <tobias@kaminsky.me>
-# Copyright (C) 2017-2021, Michael Pöhn <michael.poehn@fsfe.org>
+# Copyright (C) 2017-2025, Michael Pöhn <michael.poehn@fsfe.org>
 # Copyright (C) 2017,2021, mimi89999 <michel@lebihan.pl>
 # Copyright (C) 2019-2021, Jochen Sprickerhof <git@jochen.sprickerhof.de>
 # Copyright (C) 2021, Felix C. Stegerman <flx@obfusk.net>
