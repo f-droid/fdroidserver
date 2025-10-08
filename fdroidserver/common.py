@@ -5137,3 +5137,15 @@ def get_vagrantfile_path(appid, vercode):
 
     """
     return Path('tmp/buildserver', get_container_name(appid, vercode), 'Vagrantfile')
+
+
+def vagrant_destroy(appid, vercode):
+    import vagrant
+
+    vagrantfile = get_vagrantfile_path(appid, vercode)
+    if vagrantfile.is_file():
+        logging.info(f"Destroying Vagrant buildserver VM ({appid}:{vercode})")
+        v = vagrant.Vagrant(vagrantfile.parent)
+        v.destroy()
+    if vagrantfile.parent.exists():
+        shutil.rmtree(vagrantfile.parent, ignore_errors=True)

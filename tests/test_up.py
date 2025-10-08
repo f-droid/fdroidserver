@@ -3,6 +3,7 @@
 import importlib
 import os
 import shutil
+import time
 import unittest
 
 from pathlib import Path
@@ -125,3 +126,19 @@ class Up_run_vagrant(UpTest):
         up.run_vagrant(APPID, VERCODE, 1, 1)
         vagrant_up.assert_called_once()
         self.assertTrue((Path(self.testdir) / self.vagrantdir).exists())
+
+    @mock.patch('vagrant.Vagrant.up')
+    @mock.patch('vagrant.Vagrant.destroy')
+    @mock.patch('vagrant.Vagrant.box_list')
+    def test_existing(self, box_list, vagrant_destroy, vagrant_up):
+        "This should never reuse an existing VM."
+        box_list.return_value = self.box_list_return
+        up.run_vagrant(APPID, VERCODE, 1, 1)
+        vagrantfile = self.vagrantdir / 'Vagrantfile'
+        ctime = os.path.getctime(vagrantfile)
+        vagrant_up.assert_called_once()
+
+        time.sleep(0.01)  # ensure reliable failure when testing ctime
+        up.run_vagrant(APPID, VERCODE, 1, 1)
+        vagrant_destroy.assert_called_once()
+        self.assertNotEqual(ctime, os.path.getctime(vagrantfile))

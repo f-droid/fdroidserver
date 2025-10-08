@@ -102,6 +102,9 @@ def run_vagrant(appid, vercode, cpus, memory):
 
     vagrantfile = common.get_vagrantfile_path(appid, vercode)
 
+    # cleanup potentially still existsing vagrant VMs/dirs
+    common.vagrant_destroy(appid, vercode)
+
     # start new dedicated buildserver vagrant vm from scratch
     vagrantfile.parent.mkdir(exist_ok=True, parents=True)
     vagrantfile.write_text(
