@@ -66,6 +66,7 @@ COMMANDS = OrderedDict([
 # modify the local environment, or even run things as root.
 COMMANDS_INTERNAL = [
     "destroy",
+    "exec",
     "up",
 ]
 

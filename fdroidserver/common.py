@@ -67,6 +67,7 @@ import logging
 import operator
 import os
 import re
+import shlex
 import shutil
 import socket
 import stat
@@ -109,6 +110,11 @@ from .looseversion import LooseVersion
 FDROID_PATH = os.path.realpath(os.path.join(os.path.dirname(__file__), '..'))
 
 SUPPORTED_VIRT_CONTAINER_TYPES = ('podman', 'vagrant')
+
+# The path to the homedir where apps are built in the container/VM.
+BUILD_HOME = '/home/vagrant'
+# Username inside of build containers/VMs used for runing builds.
+BUILD_USER = 'vagrant'
 
 # There needs to be a default, and this is the most common for software.
 DEFAULT_LOCALE = 'en-US'
@@ -5129,6 +5135,42 @@ def get_podman_container(appid, vercode):
     return ret
 
 
+def inside_exec(appid, vercode, command, virt_container_type):
+    """Execute the command inside of the VM for the build."""
+    if virt_container_type == 'vagrant':
+        return vagrant_exec(appid, vercode, command)
+    elif virt_container_type == 'podman':
+        return podman_exec(appid, vercode, command)
+    else:
+        raise Exception(
+            f"'{virt_container_type}' not supported, currently supported: vagrant, podman"
+        )
+
+
+def podman_exec(appid, vercode, command):
+    """Execute the command inside of a podman container for the build."""
+    container_name = get_container_name(appid, vercode)
+    to_stdin = shlex.join(command)
+    p = subprocess.run(
+        [
+            'podman',
+            'exec',
+            '--interactive',
+            '--user=vagrant',
+            f'--workdir={BUILD_HOME}',
+            container_name,
+        ]
+        + ['/bin/bash', '-e', '-l', '-x'],  # the shell that runs the command
+        input=to_stdin,
+        text=True,
+        stderr=subprocess.STDOUT,
+    )
+    if p.returncode != 0:
+        raise subprocess.CalledProcessError(
+            p.returncode, f"{to_stdin} | {' '.join(p.args)}"
+        )
+
+
 def get_vagrantfile_path(appid, vercode):
     """Return the path for the unique VM for a given build.
 
@@ -5137,6 +5179,10 @@ def get_vagrantfile_path(appid, vercode):
 
     """
     return Path('tmp/buildserver', get_container_name(appid, vercode), 'Vagrantfile')
+
+
+def vagrant_exec(appid, vercode, command):
+    """Execute a command in the Vagrant VM via ssh."""
 
 
 def vagrant_destroy(appid, vercode):
