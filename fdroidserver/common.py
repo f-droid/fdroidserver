@@ -1236,6 +1236,10 @@ def get_src_tarball_name(appid, versionCode):
     return f"{appid}_{versionCode}_src.tar.gz"
 
 
+def get_metadatapath(appid):
+    return f'metadata/{appid}.yml'
+
+
 def get_source_date_epoch(build_dir):
     """Return timestamp suitable for the SOURCE_DATE_EPOCH variable.
 
@@ -1249,10 +1253,10 @@ def get_source_date_epoch(build_dir):
         build_dir = Path(build_dir)
         appid = build_dir.name
         data_dir = build_dir.parent.parent
-        metadata_file = f'metadata/{appid}.yml'
-        if (data_dir / '.git').exists() and (data_dir / metadata_file).exists():
+        metadatapath = get_metadatapath(appid)
+        if (data_dir / '.git').exists() and (data_dir / metadatapath).exists():
             repo = git.repo.Repo(data_dir)
-            return repo.git.log('-n1', '--pretty=%ct', '--', metadata_file)
+            return repo.git.log('-n1', '--pretty=%ct', '--', metadatapath)
 
 
 def get_build_dir(app):
