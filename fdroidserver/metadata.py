@@ -3,7 +3,8 @@
 # metadata.py - part of the FDroid server tools
 # Copyright (C) 2013, Ciaran Gultnieks, ciaran@ciarang.com
 # Copyright (C) 2013-2014 Daniel Martí <mvdan@mvdan.cc>
-# Copyright (C) 2017-2018 Michael Pöhn <michael.poehn@fsfe.org>
+# Copyright (C) 2014-2025 Hans-Christoph Steiner <hans@eds.org>
+# Copyright (C) 2017-2025 Michael Pöhn <michael.poehn@fsfe.org>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as published by
@@ -597,6 +598,54 @@ def read_metadata(appid_to_vercode={}, sort_by_time=False):
         apps[app.id] = app
 
     return apps
+
+
+def get_single_build(appid, versionCode):
+    """Read 1 single metadata file from the file system + 1 singled out build.
+
+    Parameters
+    ----------
+    appid
+        Application ID app to be loaded (e.g. 'org.fdroid.fdroid')
+    versionCode
+        Android versionCode of the build to be returned
+
+    Returns
+    -------
+    Tuple
+        A tuple of (app, build) dictionaries, containing the paired data from
+        the metadata file.
+
+    Raises
+    ------
+    MetaDataException
+        If parsing or selecting the requested version fails.
+    """
+    metadatapath = common.get_metadatapath(appid)
+    apps = read_metadata({appid: versionCode})
+    if len(apps) != 1 or appid not in apps:
+        raise MetaDataException(
+            _("Could not read {path} for {appid_versionCode}").format(
+                path=metadatapath, appid_versionCode=f"{appid}:{versionCode}"
+            )
+        )
+    builds = apps[appid].get("Builds")
+    if not builds:
+        raise MetaDataException(
+            _("{path} has no '{fieldname}'").format(
+                path=metadatapath, fieldname='Builds:'
+            )
+        )
+    for build in builds:
+        if build.get('versionCode') == versionCode:
+            return apps[appid], build
+    raise MetaDataException(
+        _("Did not find '{versionCode}' in '{fieldname}' of {path}").format(
+            versionCode=f"versionCode: {versionCode}",
+            fieldname='Builds:',
+            path=metadatapath,
+        )
+    )
 
 
 def parse_metadata(metadatapath):

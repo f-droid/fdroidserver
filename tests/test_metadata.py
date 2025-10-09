@@ -18,7 +18,7 @@ import fdroidserver
 from fdroidserver import metadata
 from fdroidserver._yaml import yaml
 from fdroidserver.common import DEFAULT_LOCALE
-from fdroidserver.exception import MetaDataException
+from fdroidserver.exception import FDroidException, MetaDataException
 
 from .shared_test_code import TmpCwd, mkdtemp
 
@@ -232,6 +232,55 @@ class MetadataTest(unittest.TestCase):
         # errors are printed when .yml overrides localized
         logging_error.assert_called()
         self.assertEqual(3, len(logging_error.call_args_list))
+
+    def test_get_single_build(self):
+        """Test if this can successfully return an app and a build"""
+        os.chdir(self.testdir)
+        appid = 'one.build'
+        versionCode = 1234567890
+        metadatapath = Path(fdroidserver.common.get_metadatapath(appid))
+        metadatapath.parent.mkdir()
+        metadatapath.write_text(f'Name: One\nBuilds:\n - versionCode: {versionCode}\n')
+        app, build = metadata.get_single_build(appid, versionCode)
+        self.assertEqual(app.id, appid)
+        self.assertEqual(build.versionCode, versionCode)
+
+    def test_get_single_build_no_metadatapath(self):
+        """Test if the right error is thrown if no matching metadatapath found."""
+        os.chdir(self.testdir)
+        appid = 'does.not.exist'
+        versionCode = 1234567890
+        with self.assertLogs(level='DEBUG') as logs:
+            with self.assertRaises(FDroidException):
+                metadata.get_single_build(appid, versionCode)
+            self.assertIn(appid, logs.output[0])
+            self.assertNotIn(str(versionCode), logs.output[0])
+
+    def test_get_single_build_no_builds(self):
+        """Test if the right error is thrown if Builds: field found."""
+        os.chdir(self.testdir)
+        appid = 'no.builds'
+        versionCode = 1234567890
+        metadatapath = Path(fdroidserver.common.get_metadatapath(appid))
+        metadatapath.parent.mkdir()
+        metadatapath.write_text('Name: No Builds\n')
+        with self.assertRaises(MetaDataException) as e:
+            metadata.get_single_build(appid, versionCode)
+        self.assertIn(appid, e.exception.value)
+        self.assertNotIn(str(versionCode), e.exception.value)
+
+    def test_get_single_build_no_match(self):
+        """Test if the right error is thrown if Builds: field found."""
+        os.chdir(self.testdir)
+        appid = 'no.builds'
+        versionCode = 1234567890
+        metadatapath = Path(fdroidserver.common.get_metadatapath(appid))
+        metadatapath.parent.mkdir()
+        metadatapath.write_text('Name: No Builds\nBuilds: [{versionCode: 0}]\n')
+        with self.assertRaises(MetaDataException) as e:
+            metadata.get_single_build(appid, versionCode)
+        self.assertIn(appid, e.exception.value)
+        self.assertIn(str(versionCode), e.exception.value)
 
     @mock.patch('git.Repo', mock.Mock())
     def test_metadata_overrides_dot_fdroid_yml(self):
