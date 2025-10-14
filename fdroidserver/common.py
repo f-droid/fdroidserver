@@ -5135,28 +5135,29 @@ def get_podman_container(appid, vercode):
     return ret
 
 
-def inside_exec(appid, vercode, command, virt_container_type):
+def inside_exec(appid, vercode, command, virt_container_type, as_root=False):
     """Execute the command inside of the VM for the build."""
     if virt_container_type == 'vagrant':
-        return vagrant_exec(appid, vercode, command)
+        return vagrant_exec(appid, vercode, command, as_root)
     elif virt_container_type == 'podman':
-        return podman_exec(appid, vercode, command)
+        return podman_exec(appid, vercode, command, as_root)
     else:
         raise Exception(
             f"'{virt_container_type}' not supported, currently supported: vagrant, podman"
         )
 
 
-def podman_exec(appid, vercode, command):
+def podman_exec(appid, vercode, command, as_root=False):
     """Execute the command inside of a podman container for the build."""
     container_name = get_container_name(appid, vercode)
     to_stdin = shlex.join(command)
+    user = 'root' if as_root else BUILD_USER
     p = subprocess.run(
         [
             'podman',
             'exec',
             '--interactive',
-            '--user=vagrant',
+            f'--user={user}',
             f'--workdir={BUILD_HOME}',
             container_name,
         ]
@@ -5181,7 +5182,7 @@ def get_vagrantfile_path(appid, vercode):
     return Path('tmp/buildserver', get_container_name(appid, vercode), 'Vagrantfile')
 
 
-def vagrant_exec(appid, vercode, command):
+def vagrant_exec(appid, vercode, command, as_root=False):
     """Execute a command in the Vagrant VM via ssh."""
     vagrantfile = get_vagrantfile_path(appid, vercode)
     to_stdin = shlex.join(command)
@@ -5190,7 +5191,7 @@ def vagrant_exec(appid, vercode, command):
             'vagrant',
             'ssh',
             '-c',
-            'bash',
+            'sudo bash' if as_root else 'bash',
         ],
         input=to_stdin,
         text=True,

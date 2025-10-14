@@ -2,6 +2,7 @@
 #
 # exec.py - part of the FDroid server tools
 # Copyright (C) 2024-2025, Hans-Christoph Steiner <hans@eds.org>
+# Copyright (C) 2024-2025, Michael Pöhn <michael@poehn.at>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as published by
@@ -34,6 +35,12 @@ def main():
     parser = ArgumentParser(
         description="Run a subcommand in the buildserver container/box."
     )
+    parser.add_argument(
+        '--as-root',
+        default=False,
+        action='store_true',
+        help="run command inside of container/VM as root user",
+    )
     common.setup_global_opts(parser)
     common.setup_virt_container_type_opts(parser)
     parser.add_argument(
@@ -53,6 +60,7 @@ def main():
             vercode,
             options.COMMAND,
             common.get_virt_container_type(options),
+            options.as_root,
         )
     except Exception as e:
         if options.verbose:
