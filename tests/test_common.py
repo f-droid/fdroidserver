@@ -3651,3 +3651,57 @@ class GetHeadCommitIdTest(unittest.TestCase):
         git_repo.git.add(all=True)
         git_repo.index.commit("add code")
         self.assertIsNotNone(fdroidserver.common.get_head_commit_id(git_repo))
+
+
+class VirtContainerTypeTest(unittest.TestCase):
+    """Test the logic for choosing which VM/container system to use."""
+
+    def setUp(self):
+        self._td = mkdtemp()
+        self.testdir = self._td.name
+        os.chdir(self.testdir)
+        fdroidserver.common.config = None
+        fdroidserver.common.options = None
+        # self.options represents the output of argparse.parser()
+        self.options = mock.Mock()
+        self.options.virt_container_type = None
+
+    def tearDown(self):
+        os.chdir(basedir)
+        self._td.cleanup()
+
+    def test_get_virt_container_type_unset(self):
+        with self.assertLogs(level=logging.ERROR) as logs:
+            with self.assertRaises(SystemExit):
+                fdroidserver.common.get_virt_container_type(self.options)
+            self.assertIn('virt_container_type', logs.output[0])
+
+    def test_get_virt_container_type_config(self):
+        testvalue = 'podman'
+        Path('config.yml').write_text(f'virt_container_type: {testvalue}\n')
+        self.assertEqual(
+            testvalue, fdroidserver.common.get_virt_container_type(self.options)
+        )
+
+    def test_get_virt_container_type_options(self):
+        testvalue = 'podman'
+        self.options.virt_container_type = testvalue
+        self.assertEqual(
+            testvalue, fdroidserver.common.get_virt_container_type(self.options)
+        )
+
+    def test_get_virt_container_type_options_override_config(self):
+        testvalue = 'podman'
+        self.options.virt_container_type = testvalue
+        Path('config.yml').write_text('virt_container_type: vagrant\n')
+        self.assertEqual(
+            testvalue, fdroidserver.common.get_virt_container_type(self.options)
+        )
+
+    def test_get_virt_container_type_config_bad_value(self):
+        testvalue = 'doesnotexist'
+        Path('config.yml').write_text(f'virt_container_type: {testvalue}\n')
+        with self.assertLogs(level=logging.ERROR) as logs:
+            with self.assertRaises(SystemExit):
+                fdroidserver.common.get_virt_container_type(self.options)
+            self.assertIn(testvalue, logs.output[0])

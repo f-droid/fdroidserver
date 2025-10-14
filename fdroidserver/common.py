@@ -108,6 +108,8 @@ from .looseversion import LooseVersion
 # The path to this fdroidserver distribution
 FDROID_PATH = os.path.realpath(os.path.join(os.path.dirname(__file__), '..'))
 
+SUPPORTED_VIRT_CONTAINER_TYPES = ('podman', 'vagrant')
+
 # There needs to be a default, and this is the most common for software.
 DEFAULT_LOCALE = 'en-US'
 
@@ -278,6 +280,27 @@ def setup_global_opts(parser):
         default=None,
         help=_("Color the log output"),
     )
+
+
+def setup_virt_container_type_opts(parser):
+    parser.add_argument(
+        "--virt-container-type",
+        choices=SUPPORTED_VIRT_CONTAINER_TYPES,
+        help="Set the VM/container type used by the build process.",
+    )
+
+
+def get_virt_container_type(options):
+    if options.virt_container_type:
+        return options.virt_container_type
+    vct = get_config().get('virt_container_type')
+    if vct not in SUPPORTED_VIRT_CONTAINER_TYPES:
+        supported = ', '.join(sorted(SUPPORTED_VIRT_CONTAINER_TYPES))
+        logging.error(
+            f"'virt_container_type: {vct}' not supported, try: {supported}"
+        )
+        sys.exit(1)
+    return vct
 
 
 class ColorFormatter(logging.Formatter):
