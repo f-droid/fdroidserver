@@ -73,6 +73,7 @@ COMMANDS_INTERNAL = [
     "make_source_tarball",
     "prepare_source",
     "pull",
+    "pull_verify",
     "push",
     "schedule_verify",
     "up",
