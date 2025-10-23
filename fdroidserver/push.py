@@ -140,7 +140,9 @@ def make_file_list(appid, vercode):
     app, build = metadata.get_single_build(appid, vercode)
 
     for lib in build.srclibs:
-        srclib = common.getsrclib(lib, 'build/srclib', basepath=True, prepare=False)
+        srclib = common.getsrclib(
+            lib, 'build/srclib', basepath=True, prepare=False, preponly=True
+        )
         if srclib:
             # srclib metadata file
             files.append(f"srclibs/{srclib[0]}.yml")
