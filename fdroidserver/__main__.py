@@ -69,6 +69,7 @@ COMMANDS_INTERNAL = [
     "exec",
     "pull",
     "push",
+    "schedule_verify",
     "up",
 ]
 
