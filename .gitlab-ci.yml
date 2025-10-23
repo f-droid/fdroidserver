@@ -852,3 +852,24 @@ PUBLISH:
     - fdroid gpgsign --verbose
     - fdroid signindex --verbose
     - rsync --stats repo/* $serverwebroot/
+
+
+# This tests the `podman system service` auto-starting and other general podman things.
+podman system service:
+  rules:
+    - changes:
+        - .gitlab-ci.yml
+        - fdroidserver/up.py
+        - tests/test_up.py
+  image: debian:trixie-slim
+  <<: *apt-template
+  script:
+    - apt-get install
+        python3-asn1crypto
+        python3-defusedxml
+        python3-git
+        python3-pillow
+        python3-podman
+        python3-ruamel.yaml
+        python3-yaml
+    - python3 -m unittest tests/test_up.py --verbose

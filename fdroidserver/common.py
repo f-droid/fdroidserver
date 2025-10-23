@@ -4,10 +4,10 @@
 #
 # Copyright (C) 2010-2016, Ciaran Gultnieks, ciaran@ciarang.com
 # Copyright (C) 2013-2017, Daniel Martí <mvdan@mvdan.cc>
-# Copyright (C) 2013-2021, Hans-Christoph Steiner <hans@eds.org>
+# Copyright (C) 2013-2025, Hans-Christoph Steiner <hans@eds.org>
 # Copyright (C) 2017-2018, Torsten Grote <t@grobox.de>
 # Copyright (C) 2017, tobiasKaminsky <tobias@kaminsky.me>
-# Copyright (C) 2017-2021, Michael Pöhn <michael.poehn@fsfe.org>
+# Copyright (C) 2017-2025, Michael Pöhn <michael.poehn@fsfe.org>
 # Copyright (C) 2017,2021, mimi89999 <michel@lebihan.pl>
 # Copyright (C) 2019-2021, Jochen Sprickerhof <git@jochen.sprickerhof.de>
 # Copyright (C) 2021, Felix C. Stegerman <flx@obfusk.net>
@@ -67,6 +67,7 @@ import logging
 import operator
 import os
 import re
+import shlex
 import shutil
 import socket
 import stat
@@ -82,7 +83,7 @@ from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from queue import Queue
 from typing import List
-from urllib.parse import urlparse, urlsplit, urlunparse
+from urllib.parse import urlparse, urlsplit, urlunparse, unquote
 from zipfile import ZipFile
 
 import defusedxml.ElementTree as XMLElementTree
@@ -107,6 +108,13 @@ from .looseversion import LooseVersion
 
 # The path to this fdroidserver distribution
 FDROID_PATH = os.path.realpath(os.path.join(os.path.dirname(__file__), '..'))
+
+SUPPORTED_VIRT_CONTAINER_TYPES = ('podman', 'vagrant')
+
+# The path to the homedir where apps are built in the container/VM.
+BUILD_HOME = '/home/vagrant'
+# Username inside of build containers/VMs used for runing builds.
+BUILD_USER = 'vagrant'
 
 # There needs to be a default, and this is the most common for software.
 DEFAULT_LOCALE = 'en-US'
@@ -278,6 +286,27 @@ def setup_global_opts(parser):
         default=None,
         help=_("Color the log output"),
     )
+
+
+def setup_virt_container_type_opts(parser):
+    parser.add_argument(
+        "--virt-container-type",
+        choices=SUPPORTED_VIRT_CONTAINER_TYPES,
+        help="Set the VM/container type used by the build process.",
+    )
+
+
+def get_virt_container_type(options):
+    if options.virt_container_type:
+        return options.virt_container_type
+    vct = get_config().get('virt_container_type')
+    if vct not in SUPPORTED_VIRT_CONTAINER_TYPES:
+        supported = ', '.join(sorted(SUPPORTED_VIRT_CONTAINER_TYPES))
+        logging.error(
+            f"'virt_container_type: {vct}' not supported, try: {supported}"
+        )
+        sys.exit(1)
+    return vct
 
 
 class ColorFormatter(logging.Formatter):
@@ -1046,6 +1075,27 @@ def get_local_metadata_files():
     return glob.glob('.fdroid.[a-jl-z]*[a-rt-z]')
 
 
+def split_pkg_arg(appid_versionCode_pair):
+    """Split 'appid:versionCode' pair into 2 separate values safely.
+
+    :raises ValueError: if argument is not parseable
+    :return: (appid, versionCode) tuple with the 2 parsed values
+    """
+    tokens = appid_versionCode_pair.split(":")
+    if len(tokens) != 2:
+        raise ValueError(
+            _("'{}' is not a valid pair of the form appId:versionCode pair").format(
+                appid_versionCode_pair
+            )
+        )
+    if not is_valid_package_name(tokens[0]):
+        raise ValueError(
+            _("'{}' does not start with a valid appId").format(appid_versionCode_pair)
+        )
+    versionCode = version_code_string_to_int(tokens[1])
+    return tokens[0], versionCode
+
+
 def read_pkg_args(appid_versionCode_pairs, allow_version_codes=False):
     """No summary.
 
@@ -1257,6 +1307,16 @@ def get_source_date_epoch(build_dir):
         if (data_dir / '.git').exists() and (data_dir / metadatapath).exists():
             repo = git.repo.Repo(data_dir)
             return repo.git.log('-n1', '--pretty=%ct', '--', metadatapath)
+
+
+def get_container_name(appid, vercode):
+    """Return unique name for associating a build with a container or VM."""
+    return f'{appid}_{vercode}'
+
+
+def get_pod_name(appid, vercode):
+    """Return unique name for associating a build with a Podman "pod"."""
+    return f'{get_container_name(appid, vercode)}_pod'
 
 
 def get_build_dir(app):
@@ -5012,3 +5072,184 @@ FDROIDORG_MIRRORS = [
 FDROIDORG_FINGERPRINT = (
     '43238D512C1E5EB2D6569F4A3AFBF5523418B82E0A3ED1552770ABB9A9C9CCAB'
 )
+
+
+def get_podman_client():
+    """Return an instance of podman-py to work with Podman.
+
+    This assumes that it will use the default local UNIX Domain Socket
+    to connect to the Podman service.  The preferred setup is to first
+    do `systemctl --user start podman.socket` to keep the Podman UNIX
+    socket running all the time.  If the socket is not present, this
+    will automatically start the service, which has a default five
+    second timeout.  After the timeout, it shuts itself down.  This is
+    done outside of systemd so it will work where systemd is not
+    installed.  The systemd socket calls the same command anyway.
+
+    https://docs.podman.io/en/latest/markdown/podman-system-service.1.html
+
+    """
+    import podman
+
+    client = podman.PodmanClient()
+    url = client.api.base_url
+    socket_path = unquote(url.netloc)
+    if not os.path.exists(socket_path):
+        logging.info(f'Starting podman system service at {socket_path}')
+        subprocess.Popen(
+            ['podman', 'system', 'service'],
+            close_fds=True,
+        )
+        retried = 0
+        while not os.path.exists(socket_path):
+            time.sleep(0.1)
+            retried += 1
+            if retried > 100:  # wait for ten seconds
+                break
+    if not client.ping():
+        path = f'{url.scheme}://{unquote(url.netloc)}'
+        logging.error(f'No Podman service found at {path}!')
+        sys.exit(1)
+    return client
+
+
+PODMAN_BUILDSERVER_IMAGE = 'registry.gitlab.com/fdroid/fdroidserver:buildserver'
+
+
+def get_podman_container(appid, vercode):
+    """Singleton getter, since podman-py is just an interface to the podman daemon singleton."""
+    container_name = get_container_name(appid, vercode)
+    client = get_podman_client()
+    ret = None
+    for c in client.containers.list(all=True):
+        if c.name == container_name:
+            ret = c
+            break
+    client.close()
+    if ret is None:
+        raise BuildException(f'Container for {appid}:{vercode} not found!')
+    if PODMAN_BUILDSERVER_IMAGE not in ret.image.tags:
+        raise BuildException(
+            f'Container for {appid}:{vercode} has wrong image: {ret.image}'
+        )
+    return ret
+
+
+def inside_exec(appid, vercode, command, virt_container_type, as_root=False):
+    """Execute the command inside of the VM for the build."""
+    if virt_container_type == 'vagrant':
+        return vagrant_exec(appid, vercode, command, as_root)
+    elif virt_container_type == 'podman':
+        return podman_exec(appid, vercode, command, as_root)
+    else:
+        raise Exception(
+            f"'{virt_container_type}' not supported, currently supported: vagrant, podman"
+        )
+
+
+def podman_exec(appid, vercode, command, as_root=False):
+    """Execute the command inside of a podman container for the build."""
+    container_name = get_container_name(appid, vercode)
+    to_stdin = shlex.join(command)
+    user = 'root' if as_root else BUILD_USER
+    p = subprocess.run(
+        [
+            'podman',
+            'exec',
+            '--interactive',
+            f'--user={user}',
+            f'--workdir={BUILD_HOME}',
+            container_name,
+        ]
+        + ['/bin/bash', '-e', '-l', '-x'],  # the shell that runs the command
+        input=to_stdin,
+        text=True,
+        stderr=subprocess.STDOUT,
+    )
+    if p.returncode != 0:
+        raise subprocess.CalledProcessError(
+            p.returncode, f"{to_stdin} | {' '.join(p.args)}"
+        )
+
+
+def get_vagrantfile_path(appid, vercode):
+    """Return the path for the unique VM for a given build.
+
+    Vagrant doesn't support ':' in VM names, so this uses '_' instead.
+    Plus filesystems are often grumpy about using `:` in paths.
+
+    """
+    return Path('tmp/buildserver', get_container_name(appid, vercode), 'Vagrantfile')
+
+
+def vagrant_exec(appid, vercode, command, as_root=False):
+    """Execute a command in the Vagrant VM via ssh."""
+    vagrantfile = get_vagrantfile_path(appid, vercode)
+    to_stdin = shlex.join(command)
+    p = subprocess.run(
+        [
+            'vagrant',
+            'ssh',
+            '-c',
+            'sudo bash' if as_root else 'bash',
+        ],
+        input=to_stdin,
+        text=True,
+        cwd=vagrantfile.parent,
+    )
+    if p.returncode != 0:
+        raise subprocess.CalledProcessError(
+            p.returncode, f"{to_stdin} | {' '.join(p.args)}"
+        )
+
+
+def vagrant_destroy(appid, vercode):
+    import vagrant
+
+    vagrantfile = get_vagrantfile_path(appid, vercode)
+    if vagrantfile.is_file():
+        logging.info(f"Destroying Vagrant buildserver VM ({appid}:{vercode})")
+        v = vagrant.Vagrant(vagrantfile.parent)
+        v.destroy()
+    if vagrantfile.parent.exists():
+        shutil.rmtree(vagrantfile.parent, ignore_errors=True)
+
+
+def get_vagrant_bin_path():
+    p = shutil.which("vagrant")
+    if p is None:
+        raise Exception(
+            "'vagrant' not found, make sure it's installed and added to your path"
+        )
+    return p
+
+
+def get_rsync_bin_path():
+    p = shutil.which("rsync")
+    if p is None:
+        raise Exception(
+            "'rsync' not found, make sure it's installed and added to your path"
+        )
+    return p
+
+
+class TmpVagrantSshConf:
+    """Context manager for getting access to a ssh config of a vagrant VM in form of a temp file."""
+
+    def __init__(self, vagrant_bin_path, vagrant_vm_dir):
+        self.vagrant_bin_path = vagrant_bin_path
+        self.vagrant_vm_dir = vagrant_vm_dir
+
+    def __enter__(self):
+        self.ssh_config_tf = tempfile.NamedTemporaryFile('wt', encoding="utf8")
+        self.ssh_config_tf.write(
+            subprocess.check_output(
+                [self.vagrant_bin_path, 'ssh-config'],
+                cwd=self.vagrant_vm_dir,
+            ).decode('utf8')
+        )
+        self.ssh_config_tf.flush()
+        return self.ssh_config_tf.name
+
+    def __exit__(self, exc_type, exc_value, traceback):
+        self.ssh_config_tf.close()

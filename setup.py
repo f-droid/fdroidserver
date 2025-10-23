@@ -122,6 +122,7 @@ setup(
             'pycountry',
             'python-magic',
         ],
+        'podman': ['podman'],
         'test': ['pyjks', 'html5print', 'testcontainers[minio]'],
         'docs': [
             'sphinx',

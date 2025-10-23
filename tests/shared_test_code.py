@@ -29,6 +29,11 @@ class VerboseFalseOptions:
     verbose = False
 
 
+APPID = 'com.example'
+VERCODE = 123
+APPID_VERCODE = f'{APPID}:{VERCODE}'
+
+
 class TmpCwd:
     """Context-manager for temporarily changing the current working directory."""
 
