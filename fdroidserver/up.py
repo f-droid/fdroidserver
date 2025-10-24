@@ -30,6 +30,7 @@ Since this is an internal command, the strings are not localized.
 """
 
 import logging
+import os
 import sys
 import textwrap
 import traceback
@@ -39,7 +40,7 @@ from . import common
 from .exception import BuildException
 
 
-def run_podman(appid, vercode):
+def run_podman(appid, vercode, cpus=None, memory=None):
     """Create a Podman container env isolated for a single app build.
 
     This creates a Podman "pod", which is like an isolated box to
@@ -51,6 +52,8 @@ def run_podman(appid, vercode):
 
     The container is set up with an interactive bash process to keep
     the container running.
+
+    The CPU configuration assumes a Linux kernel.
 
     """
     container_name = common.get_container_name(appid, vercode)
@@ -70,6 +73,10 @@ def run_podman(appid, vercode):
             logging.warning(f'Pod {pod_name} exists, removing!')
             p.remove(force=True)
 
+    if cpus:
+        # TODO implement some kind of CPU weighting
+        logging.warning('--cpus is currently ignored by the Podman setup')
+
     pod = client.pods.create(pod_name)
     container = client.containers.create(
         image,
@@ -79,6 +86,7 @@ def run_podman(appid, vercode):
         detach=True,
         remove=True,
         stdin_open=True,
+        mem_limit=memory,
     )
     pod.start()
     pod.reload()
@@ -132,11 +140,39 @@ def run_vagrant(appid, vercode, cpus, memory):
     v.up()
 
 
+def get_virt_cpus_opt(cpus):
+    """Read options and deduce number of requested CPUs for build VM.
+
+    If no CPU count is configured, calculate a reasonable default value.
+
+    """
+    if cpus:
+        return cpus
+    cpu_cnt = os.cpu_count()
+    if cpu_cnt < 8:
+        return max(1, int(0.5 * cpu_cnt))
+    # use a quarter of available CPUs if there
+    return 2 + int(0.25 * cpu_cnt)
+
+
+def get_virt_memory_opt(memory):
+    """Read VM memory size in GB from options or return default.
+
+    Defaults to 6 GB (minimum to build org.fdroid.fdroid in 2025).
+
+    """
+    if memory:
+        return memory
+    return 6144
+
+
 def up_wrapper(appid, vercode, virt_container_type, cpus=None, memory=None):
+    cpus = get_virt_cpus_opt(cpus)
+    memory = get_virt_memory_opt(memory)
     if virt_container_type == 'vagrant':
         run_vagrant(appid, vercode, cpus, memory)
     elif virt_container_type == 'podman':
-        run_podman(appid, vercode)
+        run_podman(appid, vercode, cpus, memory)
 
 
 def main():
@@ -170,6 +206,8 @@ def main():
             appid,
             vercode,
             common.get_virt_container_type(options),
+            cpus=options.cpus,
+            memory=options.memory,
         )
     except Exception as e:
         if options.verbose:
