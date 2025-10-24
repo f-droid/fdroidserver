@@ -31,6 +31,7 @@ Since this is an internal command, the strings are not localized.
 
 import logging
 import os
+import re
 import sys
 import textwrap
 import traceback
@@ -107,6 +108,7 @@ def run_vagrant(appid, vercode, cpus, memory):
         raise BuildException(
             f"vagrant memory setting required, '{memory}' not a valid value!"
         )
+    memory = int(memory / 1024**2)  # libvirt.memory expects a value in MiB
 
     vagrantfile = common.get_vagrantfile_path(appid, vercode)
 
@@ -156,14 +158,19 @@ def get_virt_cpus_opt(cpus):
 
 
 def get_virt_memory_opt(memory):
-    """Read VM memory size in GB from options or return default.
+    """Return binary VM memory size from or default value in bytes.
+
+    Since this is for memory, this only converts using power-of-two
+    binary forms. For example, GB is forced to GiB.
 
     Defaults to 6 GB (minimum to build org.fdroid.fdroid in 2025).
 
     """
-    if memory:
-        return memory
-    return 6144
+    if not memory:
+        memory = '6144MiB'
+    return common.parse_human_readable_size(
+        re.sub(r'([KMGT])B$', r'\1iB', str(memory), re.IGNORECASE)
+    )
 
 
 def up_wrapper(appid, vercode, virt_container_type, cpus=None, memory=None):
@@ -187,14 +194,12 @@ def main():
     )
     parser.add_argument(
         "--cpus",
-        default=None,
         type=int,
         help="How many CPUs the Vagrant VM should be allocated.",
     )
     parser.add_argument(
         "--memory",
-        default=None,
-        type=int,
+        type=common.parse_human_readable_size,
         help="How many MB of RAM the Vagrant VM should be allocated.",
     )
     options = common.parse_args(parser)

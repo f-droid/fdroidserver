@@ -142,3 +142,25 @@ class Up_run_vagrant(UpTest):
         up.run_vagrant(APPID, VERCODE, 1, 1)
         vagrant_destroy.assert_called_once()
         self.assertNotEqual(ctime, os.path.getctime(vagrantfile))
+
+
+class Up_options(UpTest):
+    def test_get_virt_memory_opt_default(self):
+        self.assertEqual(up.get_virt_memory_opt(None), 6 * 1024**3)
+
+    def test_get_virt_memory_opt_int(self):
+        testvalue = 1234567890
+        self.assertEqual(up.get_virt_memory_opt(testvalue), testvalue)
+
+    def test_get_virt_memory_opt_str_int(self):
+        testvalue = 1234567890
+        self.assertEqual(up.get_virt_memory_opt(str(testvalue)), testvalue)
+
+    def test_get_virt_memory_opt_str_upper(self):
+        self.assertEqual(up.get_virt_memory_opt('1GB'), 1024**3)
+
+    def test_get_virt_memory_opt_str_lower(self):
+        self.assertEqual(up.get_virt_memory_opt('1tib'), 1024**4)
+
+    def test_get_virt_memory_opt_str_mixed(self):
+        self.assertEqual(up.get_virt_memory_opt('1MiB'), 1024**2)
