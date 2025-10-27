@@ -69,6 +69,7 @@ COMMANDS_INTERNAL = [
     "destroy",
     "exec",
     "install_ndk",
+    "make_source_tarball",
     "prepare_source",
     "pull",
     "push",
