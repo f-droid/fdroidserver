@@ -145,6 +145,16 @@ class Up_run_vagrant(UpTest):
 
 
 class Up_options(UpTest):
+    def test_get_virt_cpus_opt_default(self):
+        self.assertTrue(up.get_virt_cpus_opt(None) > 0)
+
+    def test_get_virt_cpus_opt_too_small(self):
+        self.assertTrue(up.get_virt_cpus_opt(0.1) > 0)
+
+    def test_get_virt_cpus_opt_too_big(self):
+        with self.assertLogs():
+            self.assertEqual(up.get_virt_cpus_opt(99999999), os.cpu_count())
+
     def test_get_virt_memory_opt_default(self):
         self.assertEqual(up.get_virt_memory_opt(None), 6 * 1024**3)
 

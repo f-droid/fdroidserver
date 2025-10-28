@@ -148,13 +148,16 @@ def get_virt_cpus_opt(cpus):
     If no CPU count is configured, calculate a reasonable default value.
 
     """
-    if cpus:
-        return cpus
     cpu_cnt = os.cpu_count()
-    if cpu_cnt < 8:
-        return max(1, int(0.5 * cpu_cnt))
-    # use a quarter of available CPUs if there
-    return 2 + int(0.25 * cpu_cnt)
+    if not cpus:
+        if cpu_cnt < 8:
+            cpus = max(1, int(0.5 * cpu_cnt))
+        else:
+            # use a quarter of available CPUs if there
+            cpus = 2 + int(0.25 * cpu_cnt)
+    if min(cpus, cpu_cnt) != cpus:
+        logging.warning(f'Capping {cpus} CPUs to how many are available ({cpu_cnt}).')
+    return min(cpus, cpu_cnt)
 
 
 def get_virt_memory_opt(memory):
