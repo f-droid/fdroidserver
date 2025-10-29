@@ -30,6 +30,8 @@ Since this is an internal command, the strings are not localized.
 """
 
 import logging
+import os
+import re
 import sys
 import textwrap
 import traceback
@@ -39,7 +41,7 @@ from . import common
 from .exception import BuildException
 
 
-def run_podman(appid, vercode):
+def run_podman(appid, vercode, cpus=None, memory=None):
     """Create a Podman container env isolated for a single app build.
 
     This creates a Podman "pod", which is like an isolated box to
@@ -51,6 +53,8 @@ def run_podman(appid, vercode):
 
     The container is set up with an interactive bash process to keep
     the container running.
+
+    The CPU configuration assumes a Linux kernel.
 
     """
     container_name = common.get_container_name(appid, vercode)
@@ -70,6 +74,10 @@ def run_podman(appid, vercode):
             logging.warning(f'Pod {pod_name} exists, removing!')
             p.remove(force=True)
 
+    if cpus:
+        # TODO implement some kind of CPU weighting
+        logging.warning('--cpus is currently ignored by the Podman setup')
+
     pod = client.pods.create(pod_name)
     container = client.containers.create(
         image,
@@ -79,6 +87,7 @@ def run_podman(appid, vercode):
         detach=True,
         remove=True,
         stdin_open=True,
+        mem_limit=memory,
     )
     pod.start()
     pod.reload()
@@ -99,6 +108,7 @@ def run_vagrant(appid, vercode, cpus, memory):
         raise BuildException(
             f"vagrant memory setting required, '{memory}' not a valid value!"
         )
+    memory = int(memory / 1024**2)  # libvirt.memory expects a value in MiB
 
     vagrantfile = common.get_vagrantfile_path(appid, vercode)
 
@@ -132,11 +142,47 @@ def run_vagrant(appid, vercode, cpus, memory):
     v.up()
 
 
+def get_virt_cpus_opt(cpus):
+    """Read options and deduce number of requested CPUs for build VM.
+
+    If no CPU count is configured, calculate a reasonable default value.
+
+    """
+    cpu_cnt = os.cpu_count()
+    if not cpus:
+        if cpu_cnt < 8:
+            cpus = max(1, int(0.5 * cpu_cnt))
+        else:
+            # use a quarter of available CPUs if there
+            cpus = 2 + int(0.25 * cpu_cnt)
+    if min(cpus, cpu_cnt) != cpus:
+        logging.warning(f'Capping {cpus} CPUs to how many are available ({cpu_cnt}).')
+    return min(cpus, cpu_cnt)
+
+
+def get_virt_memory_opt(memory):
+    """Return binary VM memory size from or default value in bytes.
+
+    Since this is for memory, this only converts using power-of-two
+    binary forms. For example, GB is forced to GiB.
+
+    Defaults to 6 GB (minimum to build org.fdroid.fdroid in 2025).
+
+    """
+    if not memory:
+        memory = '6144MiB'
+    return common.parse_human_readable_size(
+        re.sub(r'([KMGT])B$', r'\1iB', str(memory), re.IGNORECASE)
+    )
+
+
 def up_wrapper(appid, vercode, virt_container_type, cpus=None, memory=None):
+    cpus = get_virt_cpus_opt(cpus)
+    memory = get_virt_memory_opt(memory)
     if virt_container_type == 'vagrant':
         run_vagrant(appid, vercode, cpus, memory)
     elif virt_container_type == 'podman':
-        run_podman(appid, vercode)
+        run_podman(appid, vercode, cpus, memory)
 
 
 def main():
@@ -151,14 +197,12 @@ def main():
     )
     parser.add_argument(
         "--cpus",
-        default=None,
         type=int,
         help="How many CPUs the Vagrant VM should be allocated.",
     )
     parser.add_argument(
         "--memory",
-        default=None,
-        type=int,
+        type=common.parse_human_readable_size,
         help="How many MB of RAM the Vagrant VM should be allocated.",
     )
     options = common.parse_args(parser)
@@ -170,6 +214,8 @@ def main():
             appid,
             vercode,
             common.get_virt_container_type(options),
+            cpus=options.cpus,
+            memory=options.memory,
         )
     except Exception as e:
         if options.verbose:
