@@ -65,8 +65,12 @@ COMMANDS = OrderedDict([
 # interactively because they rely on the presense of a VM/container,
 # modify the local environment, or even run things as root.
 COMMANDS_INTERNAL = [
+    "build_local_run",
     "destroy",
     "exec",
+    "install_ndk",
+    "make_source_tarball",
+    "prepare_source",
     "pull",
     "push",
     "schedule_verify",
