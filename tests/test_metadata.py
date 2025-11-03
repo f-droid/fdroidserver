@@ -588,6 +588,16 @@ class MetadataTest(unittest.TestCase):
                 allappids.append(appid)
             self.assertEqual(randomlist, allappids)
 
+    def test_read_metadata_enabled_only(self):
+        os.chdir(self.testdir)
+        metadatadir = Path('metadata')
+        metadatadir.mkdir()
+        (metadatadir / 'active.yml').write_text('Repo: https://foo.bar/baz.git\n')
+        (metadatadir / 'noRepo.yml').write_text('AutoName: ancient app entry\n')
+        (metadatadir / 'disabled.yml').write_text('Repo: https://b.gg\nDisabled: bad\n')
+        allapps = fdroidserver.metadata.read_metadata(enabled_only=True)
+        self.assertEqual(['active'], sorted(allapps.keys()))
+
     def test_parse_yaml_metadata_0size_file(self):
         self.assertEqual(dict(), metadata.parse_yaml_metadata(_get_mock_mf('')))
 

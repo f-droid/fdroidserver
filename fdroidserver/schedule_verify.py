@@ -74,11 +74,11 @@ def get_versions(
 
 def get_scheduled(versions):
     """Get versions that need to be built and there is local build metadata for it."""
-    apps = metadata.read_metadata()
+    apps = metadata.read_metadata(sort_by_time=True, enabled_only=True)
     schedule = []
     for version in versions:
         app = apps.get(version['applicationId'])
-        if app and not app.get("Disabled"):
+        if app:
             for build in app.get("Builds", []):
                 versionCode = build['versionCode']
                 if versionCode == version['versionCode'] and not build.get("disable"):

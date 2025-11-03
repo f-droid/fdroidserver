@@ -546,7 +546,7 @@ def read_srclibs():
         srclibs[metadatapath.stem] = parse_yaml_srclib(metadatapath)
 
 
-def read_metadata(appid_to_vercode={}, sort_by_time=False):
+def read_metadata(appid_to_vercode={}, sort_by_time=False, enabled_only=False):
     """Return a list of App instances sorted newest first.
 
     This reads all of the metadata files in a 'data' repository, then
@@ -554,7 +554,16 @@ def read_metadata(appid_to_vercode={}, sort_by_time=False):
     sorted based on creation time, newest first.  Most of the time,
     the newer files are the most interesting.
 
-    appid_to_vercode is a dict with appids a keys and versionCodes as values.
+    Parameters
+    ----------
+    appid_to_vercode
+        Dict of apps to return with appids a keys and versionCodes as values.
+    sort_by_time
+        Sort the returned selection of apps by time of last modification.
+    enabled_only
+        Only return an app instance if the app is considered enabled,
+        e.g. has a source code repository URL, is not marked as
+        disabled, etc.
 
     """
     # Always read the srclibs before the apps, since they can use a srlib as
@@ -596,7 +605,8 @@ def read_metadata(appid_to_vercode={}, sort_by_time=False):
             )
         app = parse_metadata(metadatapath)
         check_metadata(app)
-        apps[app.id] = app
+        if not enabled_only or (app.get('Repo') and not app.get('Disabled')):
+            apps[app.id] = app
 
     return apps
 
