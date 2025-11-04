@@ -68,6 +68,7 @@ COMMANDS_INTERNAL = [
     "build_local_run",
     "destroy",
     "exec",
+    "execute_sudo",
     "install_ndk",
     "make_source_tarball",
     "prepare_source",
