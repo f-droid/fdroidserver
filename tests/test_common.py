@@ -4183,3 +4183,22 @@ class TestApkfileIsV1SignedOnly(unittest.TestCase):
     def test_v1_v2_v3(self):
         path = str(Path(__file__).absolute().parent / 'apk.embedded_1.apk')
         self.assertFalse(fdroidserver.common.apkfile_is_v1_signed_only(path))
+
+
+class TestGetCacheDir(unittest.TestCase):
+    def test_config(self):
+        with mkdtemp() as tmp:
+            fdroidserver.common.config = {'cachedir': tmp}
+            d = fdroidserver.common.get_cachedir()
+            self.assertEqual(tmp, str(d))
+
+    def test_no_config(self):
+        d = fdroidserver.common.get_cachedir()
+        self.assertTrue(d.is_dir())
+
+    def test_bad_config(self):
+        testname = '/this/does/not/exist'
+        fdroidserver.common.config = {'cachedir': testname}
+        d = fdroidserver.common.get_cachedir()
+        self.assertTrue(d.is_dir())
+        self.assertNotEqual(testname, d)

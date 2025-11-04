@@ -122,7 +122,7 @@ def download_using_mirrors(mirrors, local_filename=None):
         if filename:
             local_filename = os.path.join(common.get_cachedir(), filename)
         else:
-            local_filename = tempfile.mkstemp(prefix='fdroid-')
+            local_filename = tempfile.mkstemp(prefix='fdroid-download-')[1]
 
     timeouts = (2, 10, 100)
     last_exception = None

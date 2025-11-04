@@ -8,7 +8,7 @@ import threading
 import time
 import unittest
 from pathlib import Path
-from unittest.mock import MagicMock, patch
+from unittest.mock import MagicMock, Mock, patch
 
 import requests
 
@@ -154,3 +154,14 @@ class NetTest(unittest.TestCase):
         with self.assertRaises(requests.exceptions.ConnectionError):
             net.download_using_mirrors(['http://localhost:%d/' % server.port])
         server.stop()
+
+    @patch.dict(os.environ, clear=True)
+    @patch('requests.get')
+    def test_download_using_mirrors_local_filename(self, requests_get):
+        response = Mock()
+        response.status_code = 200
+        response.iter_content.return_value = iter([b'chunk'])
+        requests_get.return_value = response
+        f = net.download_using_mirrors(['https://example.com/'])
+        self.assertTrue(os.path.exists(f))
+        requests_get.assert_called_once()
