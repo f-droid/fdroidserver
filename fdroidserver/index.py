@@ -1934,19 +1934,28 @@ def download_repo_index_v2(url_str, etag=None, verify_fingerprint=True, timeout=
         path = url.path.rstrip('/')
     url = urllib.parse.SplitResult(url.scheme, url.netloc, path, '', '')
 
+    entry_file = None
+    index_file = None
     mirrors = common.get_mirrors(url, 'entry.jar')
-    f = net.download_using_mirrors(mirrors)
-    entry, public_key, fingerprint = get_index_from_jar(f, fingerprint)
+    try:
+        entry_file = net.download_using_mirrors(mirrors)
+        entry, public_key, fingerprint = get_index_from_jar(entry_file, fingerprint)
 
-    sha256 = entry['index']['sha256']
-    mirrors = common.get_mirrors(url, entry['index']['name'][1:])
-    f = net.download_using_mirrors(mirrors)
-    with open(f, 'rb') as fp:
-        index = fp.read()
+        sha256 = entry['index']['sha256']
+        mirrors = common.get_mirrors(url, entry['index']['name'][1:])
+        index_file = net.download_using_mirrors(mirrors)
+        with open(index_file, 'rb') as fp:
+            index = fp.read()
+    finally:
+        for f in entry_file, index_file:
+            if f and os.path.exists(f):
+                os.remove(f)
+
     if sha256 != hashlib.sha256(index).hexdigest():
         raise VerificationException(
             _("SHA-256 of {url} does not match entry!").format(url=url)
         )
+
     return json.loads(index), None
 
 

@@ -179,16 +179,22 @@ class IndexTest(SetUpTearDownMixin, unittest.TestCase):
             self.assertEqual(index_url, ilist[1])  # etag item used to return URL
 
     @patch('fdroidserver.net.download_using_mirrors')
-    def test_download_repo_index_v2(self, mock_download_using_mirrors):
-        mock_download_using_mirrors.side_effect = lambda mirrors: os.path.join(
-            self.testdir, 'repo', os.path.basename(mirrors[0]['url'])
-        )
+    def test_download_repo_index_v2_urls(self, mock_download_using_mirrors):
+        def _mock_download_using_mirrors(mirrors):
+            shutil.copy('tmp/entry.jar', 'repo')
+            shutil.copy('tmp/index-v2.json', 'repo')
+            return os.path.join(
+                self.testdir, 'repo', os.path.basename(mirrors[0]['url'])
+            )
+
+        mock_download_using_mirrors.side_effect = _mock_download_using_mirrors
         os.chdir(self.testdir)
         common.config['keystore'] = os.path.join(basedir, 'keystore.jks')
         os.mkdir('repo')
-        shutil.copy(basedir / 'repo' / 'entry.json', 'repo')
-        shutil.copy(basedir / 'repo' / 'index-v2.json', 'repo')
-        signindex.sign_index('repo', 'entry.json')
+        os.mkdir('tmp')
+        shutil.copy(basedir / 'repo' / 'entry.json', 'tmp')
+        shutil.copy(basedir / 'repo' / 'index-v2.json', 'tmp')
+        signindex.sign_index('tmp', 'entry.json')
         repo_url = 'https://fake.url/fdroid/repo'
         entry_url = 'https://fake.url/fdroid/repo/entry.jar'
         index_url = 'https://fake.url/fdroid/repo/index-v2.json'
@@ -200,6 +206,23 @@ class IndexTest(SetUpTearDownMixin, unittest.TestCase):
             self.assertEqual(
                 'My First F-Droid Repo Demo', data['repo']['name']['en-US']
             )
+
+    @patch('fdroidserver.net.download_using_mirrors')
+    def test_download_repo_index_v2_clean_tmp(self, mock_download_using_mirrors):
+        """Test wheter download_repo_index_v2 cleaned up its tmp files."""
+        mock_download_using_mirrors.side_effect = lambda mirrors: os.path.join(
+            self.testdir, 'tmp', os.path.basename(mirrors[0]['url'])
+        )
+        os.chdir(self.testdir)
+        common.config['keystore'] = os.path.join(basedir, 'keystore.jks')
+        os.mkdir('tmp')
+        shutil.copy(basedir / 'repo' / 'entry.json', 'tmp')
+        shutil.copy(basedir / 'repo' / 'index-v2.json', 'tmp')
+        signindex.sign_index('tmp', 'entry.json')
+        url = 'https://fake.url/fdroid/repo/entry.jar'
+        index.download_repo_index_v2(url, verify_fingerprint=False)
+        self.assertFalse(os.path.exists('tmp/entry.jar'))
+        self.assertFalse(os.path.exists('tmp/index-v2.json'))
 
     @patch('fdroidserver.net.download_using_mirrors')
     def test_download_repo_index_v2_bad_fingerprint(self, mock_download_using_mirrors):

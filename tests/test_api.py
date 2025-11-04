@@ -78,15 +78,22 @@ class ApiTest(unittest.TestCase):
     @mock.patch('fdroidserver.net.download_using_mirrors')
     def test_download_repo_index_v2(self, mock_download_using_mirrors):
         """Basically a copy of IndexTest.test_download_repo_index_v2"""
-        mock_download_using_mirrors.side_effect = lambda mirrors: os.path.join(
-            self.testdir, 'repo', os.path.basename(mirrors[0]['url'])
-        )
+
+        def _mock_download_using_mirrors(mirrors):
+            shutil.copy('tmp/entry.jar', 'repo')
+            shutil.copy('tmp/index-v2.json', 'repo')
+            return os.path.join(
+                self.testdir, 'repo', os.path.basename(mirrors[0]['url'])
+            )
+
+        mock_download_using_mirrors.side_effect = _mock_download_using_mirrors
         os.chdir(self.testdir)
         common.config['keystore'] = os.path.join(basedir, 'keystore.jks')
         os.mkdir('repo')
-        shutil.copy(basedir / 'repo' / 'entry.json', 'repo')
-        shutil.copy(basedir / 'repo' / 'index-v2.json', 'repo')
-        signindex.sign_index('repo', 'entry.json')
+        os.mkdir('tmp')
+        shutil.copy(basedir / 'repo' / 'entry.json', 'tmp')
+        shutil.copy(basedir / 'repo' / 'index-v2.json', 'tmp')
+        signindex.sign_index('tmp', 'entry.json')
         repo_url = 'https://fake.url/fdroid/repo'
         entry_url = 'https://fake.url/fdroid/repo/entry.jar'
         index_url = 'https://fake.url/fdroid/repo/index-v2.json'
