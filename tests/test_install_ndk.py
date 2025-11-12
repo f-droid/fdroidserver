@@ -50,7 +50,7 @@ class InstallNdk_wrapper(InstallNdkTest):
         auto_install_ndk.assert_not_called()
 
 
-@mock.patch('sys.argv', ['fdroid ndk', APPID_VERCODE])
+@mock.patch('sys.argv', ['fdroid install_ndk', APPID_VERCODE])
 @mock.patch('sdkmanager.build_package_list', lambda use_net: None)
 @mock.patch('sdkmanager.install')
 class InstallNdk_main(InstallNdkTest):
