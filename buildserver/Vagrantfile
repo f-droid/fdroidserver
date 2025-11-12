@@ -94,6 +94,11 @@ Vagrant.configure("2") do |config|
     resize2fs /dev/vda1
   SHELL
 
+  # some builds need to track a lot of files
+  config.vm.provision "shell", inline: <<-SHELL
+    echo "fs.inotify.max_user_watches=9524288" > /etc/sysctl.d/90-fs.inotify.max_user_watches.conf
+  SHELL
+
   config.vm.provision "shell", name: "setup-env-vars", path: "setup-env-vars",
     args: ["/opt/android-sdk"]
   config.vm.provision "shell", name: "apt-get-install", path: "provision-apt-get-install",
