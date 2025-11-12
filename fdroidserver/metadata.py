@@ -326,6 +326,7 @@ class Build(dict):
         ndk = self.ndk
         if isinstance(ndk, list):
             ndk = self.ndk[0]
+        common.init_ndk_paths()
         path = common.config['ndk_paths'].get(ndk)
         if path and not isinstance(path, str):
             raise TypeError('NDK path is not string')

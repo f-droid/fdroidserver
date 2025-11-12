@@ -818,6 +818,9 @@ include tests/source-files/lockfile.test/rust/subdir/Cargo.lock
 include tests/source-files/lockfile.test/rust/subdir/Cargo.toml
 include tests/source-files/lockfile.test/rust/subdir/subdir/subdir/Cargo.toml
 include tests/source-files/lockfile.test/rust/subdir2/Cargo.toml
+include tests/source-files/ndk/11.1.2683735/source.properties
+include tests/source-files/ndk/29.0.14033849/source.properties
+include tests/source-files/ndk/29.0.14206865/source.properties
 include tests/source-files/open-keychain/open-keychain/build.gradle
 include tests/source-files/open-keychain/open-keychain/OpenKeychain/build.gradle
 include tests/source-files/org.mozilla.rocket/app/build.gradle
