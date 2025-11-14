@@ -30,8 +30,6 @@ class CheckupdatesTest(unittest.TestCase):
         self.testdir.cleanup()
 
     def test_autoupdatemode_no_suffix(self):
-        fdroidserver.checkupdates.config = {}
-
         app = fdroidserver.metadata.App()
         app.id = 'loop.starts.shooting'
         app.metadatapath = 'metadata/' + app.id + '.yml'
@@ -69,8 +67,6 @@ class CheckupdatesTest(unittest.TestCase):
         self.assertEqual(build.commit, '1.1.9')
 
     def test_autoupdatemode_suffix(self):
-        fdroidserver.checkupdates.config = {}
-
         app = fdroidserver.metadata.App()
         app.id = 'loop.starts.shooting'
         app.metadatapath = 'metadata/' + app.id + '.yml'
@@ -96,8 +92,6 @@ class CheckupdatesTest(unittest.TestCase):
         self.assertEqual(build.commit, 'v1.1.9_10109')
 
     def test_autoupdate_multi_variants(self):
-        fdroidserver.checkupdates.config = {}
-
         app = fdroidserver.metadata.App()
         app.id = 'loop.starts.shooting'
         app.metadatapath = 'metadata/' + app.id + '.yml'
@@ -144,8 +138,6 @@ class CheckupdatesTest(unittest.TestCase):
         self.assertEqual(app.CurrentVersionCode, 101093)
 
     def test_checkupdates_app_http(self):
-        fdroidserver.checkupdates.config = {}
-
         app = fdroidserver.metadata.App()
         app.id = 'loop.starts.shooting'
         app.metadatapath = 'metadata/' + app.id + '.yml'
@@ -170,8 +162,6 @@ class CheckupdatesTest(unittest.TestCase):
                 wrmock.assert_called_with(app.metadatapath, app)
 
     def test_checkupdates_app_tags(self):
-        fdroidserver.checkupdates.config = {}
-
         app = fdroidserver.metadata.App()
         app.id = 'loop.starts.shooting'
         app.metadatapath = 'metadata/' + app.id + '.yml'
@@ -414,6 +404,8 @@ class CheckupdatesTest(unittest.TestCase):
 
     def test_push_commits_verbose(self):
         class Options:
+            """Fake the argparse options."""
+
             verbose = True
 
         fdroidserver.checkupdates.options = Options
@@ -465,7 +457,7 @@ class CheckupdatesTest(unittest.TestCase):
             self.assertNotEqual(return_code, 0)
             raise fdroidserver.exception.FDroidException('sys.exit() ran')
 
-        def _read_metadata(a=None, b=None):
+        def _read_metadata(_a=None, _b=None):
             raise StopIteration('read_metadata() ran, test is successful')
 
         appid = 'com.example'

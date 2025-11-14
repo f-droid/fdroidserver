@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-"""Check for updates to applications."""
 #
 # checkupdates.py - part of the FDroid server tools
 # Copyright (C) 2010-2015, Ciaran Gultnieks, ciaran@ciarang.com
@@ -17,6 +16,8 @@
 #
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+"""Check for updates to applications."""
 
 import configparser
 import copy
@@ -597,7 +598,7 @@ def checkupdates_app(app: metadata.App, auto: bool, commit: bool = False) -> Non
             raise MetaDataException(
                 _("Can't auto-update app with no CurrentVersionCode")
             )
-        elif mode in ('None', 'Static'):
+        if mode in ('None', 'Static'):
             pass
         elif mode.startswith('Version'):
             pattern = mode[8:]
@@ -686,8 +687,7 @@ def get_last_build_from_app(app: metadata.App) -> metadata.Build:
     """Get the last build entry of an app."""
     if app.get('Builds'):
         return app['Builds'][-1]
-    else:
-        return metadata.Build()
+    return metadata.Build()
 
 
 def get_upstream_main_branch(git_repo):
@@ -845,8 +845,8 @@ def push_commits(branch_name='checkupdates'):
             raise FDroidException(
                 f'{remote.url} push failed: {pushinfo.flags} {pushinfo.summary}'
             )
-        else:
-            logging.info(remote.url + ': ' + pushinfo.summary)
+
+        logging.info(remote.url + ': ' + pushinfo.summary)
 
 
 def prune_empty_appid_branches(git_repo=None, main_branch='main'):
@@ -879,19 +879,10 @@ def status_update_json(processed: list, failed: dict) -> None:
     common.write_status_json(output)
 
 
-config = None
 start_timestamp = time.gmtime()
 
 
 def main():
-    """Check for updates for one or more apps.
-
-    The behaviour of this function is influenced by the configuration file as
-    well as command line parameters.
-    """
-    global config
-
-    # Parse command line...
     parser = ArgumentParser()
     common.setup_global_opts(parser)
     parser.add_argument("appid", nargs='*', help=_("application ID of file to operate on"))
@@ -909,7 +900,7 @@ def main():
     options = common.parse_args(parser)
     metadata.warnings_action = options.W
 
-    config = common.read_config()
+    common.read_config()  # only needed for functions from fdroidserver
 
     if not options.allow_dirty:
         status = subprocess.check_output(['git', 'status', '--porcelain'])
@@ -924,7 +915,7 @@ def main():
     apps = common.read_app_args(options.appid)
 
     processed = []
-    failed = dict()
+    failed = {}
     exit_code = 0
     for appid, app in apps.items():
 
