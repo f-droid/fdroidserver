@@ -26,7 +26,6 @@ import os
 import re
 import subprocess
 import sys
-import time
 import traceback
 import urllib.error
 import urllib.parse
@@ -868,20 +867,6 @@ def prune_empty_appid_branches(git_repo=None, main_branch='main'):
                     remote.push(':%s' % ref.remote_head, force=True)  # rm remote branch
 
 
-def status_update_json(processed: list, failed: dict) -> None:
-    """Output a JSON file with metadata about this run."""
-    logging.debug(_('Outputting JSON'))
-    output = common.setup_status_output(start_timestamp)
-    if processed:
-        output['processed'] = processed
-    if failed:
-        output['failed'] = failed
-    common.write_status_json(output)
-
-
-start_timestamp = time.gmtime()
-
-
 def main():
     parser = ArgumentParser()
     common.setup_global_opts(parser)
@@ -950,7 +935,6 @@ def main():
         push_commits()
         prune_empty_appid_branches()
 
-    status_update_json(processed, failed)
     sys.exit(exit_code)
 
 
