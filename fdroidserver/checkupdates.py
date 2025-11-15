@@ -885,8 +885,6 @@ def main():
     options = common.parse_args(parser)
     metadata.warnings_action = options.W
 
-    common.read_config()  # only needed for functions from fdroidserver
-
     if not options.allow_dirty:
         status = subprocess.check_output(['git', 'status', '--porcelain'])
         if status:
