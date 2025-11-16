@@ -138,6 +138,23 @@ class MetadataTest(unittest.TestCase):
                 'ltc1q7euacwhn6ef99vcfa57mute92q572aqsc4c2j5', 'fake.app.id'
             )
         )
+        self.assertIsNone(
+            validator.check('LYnHPyAsMZ77DiHTbP4gJATc2xugbkRpzq', 'fake.app.id')
+        )
+        self.assertIsNone(
+            validator.check('MEp2J2AGxN6PaN44GdDH4Hh1H7SEVKqygt', 'fake.app.id')
+        )
+        self.assertIsNone(
+            validator.check(
+                'ltc1q8ls9ygtr2pkms8fav88ly4zz0rq9g6ck8g3z8c', 'fake.app.id'
+            )
+        )
+        self.assertIsNone(
+            validator.check(
+                'ltc1pgdn5w8ctc0r4c738vzh7730rhxepw2ggx0ud9alsfjkz0v6zpkss9w4qaq',
+                'fake.app.id',
+            )
+        )
 
         # some invalid addresses (various special use/testnet addresses, invalid chars)
         self.assertRaises(
