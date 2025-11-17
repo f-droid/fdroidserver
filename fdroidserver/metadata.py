@@ -425,11 +425,11 @@ valuetypes = {
                    ["AuthorEmail"]),
 
     FieldValidator("Bitcoin address",
-                   r'^(bc1|[13])[a-zA-HJ-NP-Z0-9]{25,39}$',
+                   r'^([13][a-km-zA-HJ-NP-Z1-9]{25,34}|bc1[02-9ac-hj-np-z]{39,59})$',
                    ["Bitcoin"]),
 
     FieldValidator("Litecoin address",
-                   r'^([LM3][a-km-zA-HJ-NP-Z1-9]{26,33}|ltc1[ac-hj-np-z0-9]{39,59})$',
+                   r'^([LM3][a-km-zA-HJ-NP-Z1-9]{26,33}|ltc1[02-9ac-hj-np-z]{39,59})$',
                    ["Litecoin"]),
 
     FieldValidator("Repo Type",

@@ -78,6 +78,12 @@ class MetadataTest(unittest.TestCase):
         self.assertIsNone(
             validator.check('bc1qar0srrr7xrkvr5lr43lrdnwrre5rgtrzrf5rrq', 'fake.app.id')
         )
+        self.assertIsNone(
+            validator.check(
+                'bc1pyp5jy62x5lnjg9tm4p89xxk6mlrr0uphgp0z2vrgm2r5zd6xta3qw67uv6',
+                'fake.app.id',
+            )
+        )
 
         # some invalid addresses
         self.assertRaises(
@@ -125,7 +131,7 @@ class MetadataTest(unittest.TestCase):
                 break
         self.assertIsNotNone(validator, "could not find 'Litecoin address' validator")
 
-        # some valid addresses (L, M, 3, segwit)
+        # some valid addresses (L, M, 3, segwit, taproot)
         self.assertIsNone(
             validator.check('LgeGrrrrJAxyXprrPrrBrrX5Qrrrrrrrrd', 'fake.app.id')
         )
