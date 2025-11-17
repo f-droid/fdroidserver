@@ -493,23 +493,6 @@ macOS:
     - fdroid="$(brew --prefix fdroidserver)/libexec/bin/python3 $PWD/fdroid" ./tests/run-tests
 
 
-gradle:
-  image: debian:trixie-slim
-  <<: *apt-template
-  rules:
-    - changes:
-        - .gitlab-ci.yml
-        - makebuildserver
-  script:
-    - apt-get install
-          ca-certificates
-          git
-          python3-colorama
-          python3-packaging
-          python3-requests
-    - ./tests/gradle-release-checksums.py
-
-
 # Run an actual build in a simple, faked version of the buildserver guest VM.
 fdroid build:
   image: registry.gitlab.com/fdroid/fdroidserver:buildserver

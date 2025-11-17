@@ -2,38 +2,10 @@
 
 set -ex
 
-
-# version compare magic
-vergte() {
-    printf '%s\n%s' "$1" "$2" | sort -C -V -r
-}
-
-test -e /opt/gradle/versions || mkdir -p /opt/gradle/versions
-cd /opt/gradle/versions
-
-glob="/vagrant/cache/gradle-*.zip"
-if compgen -G $glob; then # test if glob matches anything
-    f=$(ls -1 --sort=version --group-directories-first $glob | tail -1)
-    ver=`echo $f | sed 's,.*gradle-\([0-9][0-9.]*\).*\.zip,\1,'`
-    # only use versions greater or equal 2.2.1
-    if vergte $ver 2.2.1 && [ ! -d /opt/gradle/versions/${ver} ]; then
-        unzip -qq $f
-        mv gradle-${ver} /opt/gradle/versions/${ver}
-    fi
-fi
-
-chmod -R a+rX /opt/gradle
-
-test -e /opt/gradle/bin || mkdir -p /opt/gradle/bin
 git clone --depth 1 https://gitlab.com/fdroid/gradlew-fdroid.git /home/vagrant/gradlew-fdroid/
 chmod 0755 /home/vagrant/gradlew-fdroid/gradlew-fdroid
 chmod -R u+rwX,a+rX,go-w /home/vagrant/gradlew-fdroid/
-ln -fs /home/vagrant/gradlew-fdroid/gradlew-fdroid /opt/gradle/bin/gradle
 ln -fs /home/vagrant/gradlew-fdroid/gradlew-fdroid /usr/local/bin/
-
-chown -h vagrant:vagrant /opt/gradle/bin/gradle
-chown vagrant:vagrant /opt/gradle/versions
-chmod 0755 /opt/gradle/versions
 
 GRADLE_HOME=/home/vagrant/.gradle
 test -d $GRADLE_HOME/ || mkdir $GRADLE_HOME/
