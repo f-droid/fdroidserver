@@ -176,7 +176,6 @@ def init_build(app, build, config):
             cmd,
             cwd=root_dir,
             envs={
-                "GRADLE_VERSION_DIR": config['gradle_version_dir'],
                 "CACHEDIR": config['cachedir'],
             },
         )
@@ -420,7 +419,6 @@ def execute_build(app, build, config, gradletasks):
             cmd,
             cwd=root_dir,
             envs={
-                "GRADLE_VERSION_DIR": config['gradle_version_dir'],
                 "CACHEDIR": config['cachedir'],
             },
         )
@@ -588,7 +586,7 @@ def execute_postbuild(app, build, src):
 
         if p.returncode != 0:
             raise exception.BuildException(
-                "Error running postbuild command for " f"{app.id}:{build.versionName}",
+                f"Error running postbuild command for {app.id}:{build.versionName}",
                 p.output,
             )
 

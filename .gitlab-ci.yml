@@ -59,7 +59,7 @@ metadata_v0:
   image: registry.gitlab.com/fdroid/fdroidserver:buildserver
   variables:
     GIT_DEPTH: 1000
-    RELEASE_COMMIT_ID: 91b5c85a7c0124afa91b3cac976390e837de8262  # after switching to `git rev-parse`
+    RELEASE_COMMIT_ID: d172d991803b27ad5213d11b5a737e5cb9e5fc3a  # after switching to `git rev-parse`
   script:
     - git fetch https://gitlab.com/fdroid/fdroidserver.git $RELEASE_COMMIT_ID
     - cd tests
@@ -491,23 +491,6 @@ macOS:
 
     # test fdroidserver from git with current package's dependencies
     - fdroid="$(brew --prefix fdroidserver)/libexec/bin/python3 $PWD/fdroid" ./tests/run-tests
-
-
-gradle:
-  image: debian:trixie-slim
-  <<: *apt-template
-  rules:
-    - changes:
-        - .gitlab-ci.yml
-        - makebuildserver
-  script:
-    - apt-get install
-          ca-certificates
-          git
-          python3-colorama
-          python3-packaging
-          python3-requests
-    - ./tests/gradle-release-checksums.py
 
 
 # Run an actual build in a simple, faked version of the buildserver guest VM.

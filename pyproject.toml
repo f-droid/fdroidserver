@@ -42,7 +42,6 @@ force-exclude = '''(
   | fdroidserver/vmtools\.py
   | tests/config\.py
   | tests/extra/manual-vmtools-test\.py
-  | tests/gradle-release-checksums\.py
   | tests/openssl-version-check-test\.py
   | tests/valid-package-names/test\.py
   | tests/test_common\.py

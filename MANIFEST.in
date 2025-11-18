@@ -18,7 +18,6 @@ include examples/opensc-fdroid.cfg
 include examples/public-read-only-s3-bucket-policy.json
 include examples/template.yml
 include examples/Vagrantfile.yaml
-include gradlew-fdroid
 include LICENSE
 include locale/ba/LC_MESSAGES/fdroidserver.po
 include locale/bo/LC_MESSAGES/fdroidserver.po
@@ -586,7 +585,6 @@ include tests/gnupghome/random_seed
 include tests/gnupghome/secring.gpg
 include tests/gnupghome/trustdb.gpg
 include tests/gradle-maven-blocks.yaml
-include tests/gradle-release-checksums.py
 include tests/IsMD5Disabled.java
 include tests/issue-1128-min-sdk-30-poc.apk
 include tests/issue-1128-poc1.apk
@@ -860,7 +858,6 @@ include tests/test_checkupdates.py
 include tests/test_common.py
 include tests/test_deploy.py
 include tests/test_exception.py
-include tests/test_gradlew-fdroid
 include tests/test_import_subcommand.py
 include tests/test_index.py
 include tests/test_init.py

@@ -1,22 +1,21 @@
 #!/usr/bin/env python3
 
-import os
-import re
-import requests
-import stat
-import sys
-import shutil
-import subprocess
-import vagrant
 import hashlib
-import yaml
 import json
 import logging
-from clint.textui import progress
+import os
+import re
+import shutil
+import stat
+import subprocess
+import sys
 from optparse import OptionParser
+
+import vagrant
+import yaml
+
 import fdroidserver.tail
 import fdroidserver.vmtools
-
 
 parser = OptionParser()
 parser.add_option('-v', '--verbose', action="count", dest='verbosity', default=1,
@@ -26,11 +25,6 @@ parser.add_option("-c", "--clean", action="store_true", default=False,
                   help="Build from scratch, rather than attempting to update the existing server")
 parser.add_option('--skip-box-verification', action="store_true", default=False,
                   help="""Skip verifying the downloaded base box.""")
-parser.add_option('--skip-cache-update', action="store_true", default=False,
-                  help="""Skip downloading and checking cache."""
-                       """This assumes that the cache is already downloaded completely.""")
-parser.add_option('--copy-caches-from-host', action="store_true", default=False,
-                  help="""Copy gradle and pip caches into the buildserver VM""")
 parser.add_option('--keep-box-file', action="store_true", default=False,
                   help="""Box file will not be deleted after adding it to box storage"""
                        """ (KVM-only).""")
@@ -114,13 +108,6 @@ if config['vm_provider'] == 'libvirt':
         tmp = os.path.dirname(tmp)
     logging.debug('cache dir %s is accessible for libvirt vm.', config['cachedir'])
 
-CACHE_FILES = [
-    ('https://services.gradle.org/distributions/gradle-6.8.3-bin.zip',
-     '7faa7198769f872826c8ef4f1450f839ec27f0b4d5d1e51bade63667cbccd205'),
-    ('https://services.gradle.org/distributions/gradle-7.0.2-bin.zip',
-     '0e46229820205440b48a5501122002842b82886e76af35f0f3a069243dca4b3c'),
-]
-
 
 def sha256_for_file(path):
     with open(path, 'rb') as f:
@@ -159,64 +146,6 @@ def run_via_vagrant_ssh(v, cmdlist):
     v._run_vagrant_command(['ssh', '-c', cmd])
 
 
-def update_cache(cachedir):
-    count_files = 0
-    for srcurl, shasum in CACHE_FILES:
-        filename = os.path.basename(srcurl)
-        local_filename = os.path.join(cachedir, filename)
-        count_files = count_files + 1
-        if os.path.exists(local_filename):
-            if sha256_for_file(local_filename) == shasum:
-                logging.info("\t...shasum verified for '{filename}'\t({filecounter} of {filesum} files)".format(filename=local_filename, filecounter=count_files, filesum=len(CACHE_FILES)))
-                continue
-            local_length = os.path.getsize(local_filename)
-        else:
-            local_length = -1
-
-        resume_header = {}
-        download = True
-
-        try:
-            r = requests.head(srcurl, allow_redirects=True, timeout=60)
-            if r.status_code == 200:
-                content_length = int(r.headers.get('content-length'))
-            else:
-                content_length = local_length  # skip the download
-        except requests.exceptions.RequestException as e:
-            content_length = local_length  # skip the download
-            logging.warn('%s', e)
-
-        if local_length == content_length:
-            download = False
-        elif local_length > content_length:
-            logging.info('deleting corrupt file from cache: %s', local_filename)
-            os.remove(local_filename)
-            logging.info("Downloading %s to cache", filename)
-        elif local_length > -1 and local_length < content_length:
-            logging.info("Resuming download of %s", local_filename)
-            resume_header = {'Range': 'bytes=%d-%d' % (local_length, content_length)}
-        else:
-            logging.info("Downloading %s to cache", filename)
-
-        if download:
-            r = requests.get(srcurl, headers=resume_header, stream=True,
-                             allow_redirects=True, timeout=60)
-            content_length = int(r.headers.get('content-length'))
-            with open(local_filename, 'ab') as f:
-                for chunk in progress.bar(r.iter_content(chunk_size=65536),
-                                          expected_size=(content_length / 65536) + 1):
-                    if chunk:  # filter out keep-alive new chunks
-                        f.write(chunk)
-
-        v = sha256_for_file(local_filename)
-        if v == shasum:
-            logging.info("\t...shasum verified for '{filename}'\t({filecounter} of {filesum} files)".format(filename=local_filename, filecounter=count_files, filesum=len(CACHE_FILES)))
-        else:
-            logging.critical("Invalid shasum of '%s' detected for %s", v, local_filename)
-            os.remove(local_filename)
-            sys.exit(1)
-
-
 def debug_log_vagrant_vm(vm_dir, config):
     if options.verbosity >= 3:
         _vagrant_dir = os.path.join(vm_dir, '.vagrant')
@@ -235,11 +164,6 @@ def debug_log_vagrant_vm(vm_dir, config):
 
 def main():
     global config, tail
-
-    if options.skip_cache_update:
-        logging.info('skipping cache update and verification...')
-    else:
-        update_cache(config['cachedir'])
 
     # use VirtualBox software virtualization if hardware is not available,
     # like if this is being run in kvm or some other VM platform, like
@@ -330,35 +254,6 @@ def main():
         debug_log_vagrant_vm(serverdir, config)
         logging.error("'vagrant up' failed. Consult %s", logfilename)
         sys.exit(1)
-
-    if options.copy_caches_from_host:
-        ssh_config = v.ssh_config()
-        user = re.search(r'User ([^ \n]+)', ssh_config).group(1)
-        hostname = re.search(r'HostName ([^ \n]+)', ssh_config).group(1)
-        port = re.search(r'Port ([0-9]+)', ssh_config).group(1)
-        key = re.search(r'IdentityFile ([^ \n]+)', ssh_config).group(1)
-
-        for d in ('.m2', '.gradle/caches', '.gradle/wrapper', '.pip_download_cache'):
-            fullpath = os.path.join(os.getenv('HOME'), d)
-            os.system('date')
-            print('rsyncing', fullpath, 'into VM')
-            if os.path.isdir(fullpath):
-                ssh_command = ' '.join(('ssh -i {0} -p {1}'.format(key, port),
-                                        '-o StrictHostKeyChecking=no',
-                                        '-o UserKnownHostsFile=/dev/null',
-                                        '-o LogLevel=FATAL',
-                                        '-o IdentitiesOnly=yes',
-                                        '-o PasswordAuthentication=no'))
-                # TODO vagrant 1.5+ provides `vagrant rsync`
-                run_via_vagrant_ssh(v, ['cd ~ && test -d', d, '|| mkdir -p', d])
-                subprocess.call(['rsync', '-ax', '--delete', '-e',
-                                 ssh_command,
-                                 fullpath + '/',
-                                 user + '@' + hostname + ':~/' + d + '/'])
-
-        # this file changes every time but should not be cached
-        run_via_vagrant_ssh(v, ['rm', '-f', '~/.gradle/caches/modules-2/modules-2.lock'])
-        run_via_vagrant_ssh(v, ['rm', '-fr', '~/.gradle/caches/*/plugin-resolution/'])
 
     logging.info("Stopping build server VM")
     v.halt()

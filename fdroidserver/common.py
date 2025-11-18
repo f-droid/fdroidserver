@@ -504,8 +504,6 @@ def fill_config_defaults(thisconfig):
 
     if 'cachedir_scanner' not in thisconfig:
         thisconfig['cachedir_scanner'] = str(Path(thisconfig['cachedir']) / 'scanner')
-    if 'gradle_version_dir' not in thisconfig:
-        thisconfig['gradle_version_dir'] = str(Path(thisconfig['cachedir']) / 'gradle')
 
 
 def get_config():
