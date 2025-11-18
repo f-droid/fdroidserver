@@ -133,11 +133,11 @@ def push_wrapper(paths, appid, vercode, virt_container_type):
 
 def make_file_list(appid, vercode):
     """Assemble list of files/folders that go into this specific build."""
-    files = [f'build/{appid}', f'metadata/{appid}.yml']
+    app, build = metadata.get_single_build(appid, vercode)
+    files = [str(common.get_build_dir(app)), f'metadata/{appid}.yml']
     app_dir = f'metadata/{appid}'
     if Path(app_dir).exists():
         files.append(app_dir)
-    app, build = metadata.get_single_build(appid, vercode)
 
     for lib in build.srclibs:
         srclib = common.getsrclib(
