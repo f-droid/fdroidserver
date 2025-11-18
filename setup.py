@@ -55,9 +55,6 @@ def get_data_files():
     data_files.append(
         ('share/doc/fdroidserver/examples', re.findall(r'include (examples/.*)', data))
     )
-    data_files.append(
-        ('share/doc/fdroidserver/examples', ['buildserver/config.buildserver.yml'])
-    )
 
     for d in re.findall(r'include (locale/.*)/fdroidserver\.po', data):
         data_files.append(('share/' + d, [d + '/fdroidserver.mo']))

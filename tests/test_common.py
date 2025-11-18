@@ -2145,15 +2145,6 @@ class CommonTest(SetUpTearDownMixin, unittest.TestCase):
         config = {'sdk_path': self.testdir}
         self.assertFalse(fdroidserver.common.test_sdk_exists(config))
 
-    def test_loading_config_buildserver_yml(self):
-        """Smoke check to make sure this file is properly parsed"""
-        os.chdir(self.testdir)
-        shutil.copy(
-            os.path.join(basedir, '..', 'buildserver', 'config.buildserver.yml'),
-            fdroidserver.common.CONFIG_FILE,
-        )
-        fdroidserver.common.read_config()
-
     @mock.patch.dict(os.environ, {'PATH': os.getenv('PATH')}, clear=True)
     def test_config_with_env_string(self):
         """Test whether env works in keys with string values."""
