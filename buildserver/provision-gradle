@@ -6,6 +6,7 @@ git clone --depth 1 https://gitlab.com/fdroid/gradlew-fdroid.git /home/vagrant/g
 chmod 0755 /home/vagrant/gradlew-fdroid/gradlew-fdroid
 chmod -R u+rwX,a+rX,go-w /home/vagrant/gradlew-fdroid/
 ln -fs /home/vagrant/gradlew-fdroid/gradlew-fdroid /usr/local/bin/
+ln -fs /home/vagrant/gradlew-fdroid/gradlew-fdroid /usr/local/bin/gradle
 
 GRADLE_HOME=/home/vagrant/.gradle
 test -d $GRADLE_HOME/ || mkdir $GRADLE_HOME/
