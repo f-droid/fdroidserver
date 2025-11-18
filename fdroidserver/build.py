@@ -548,7 +548,7 @@ def build_local(app, build, vcs, build_dir, output_dir, log_dir, srclib_dir, ext
             cmd += ['-P' + kv for kv in build.gradleprops]
 
         cmd += ['clean']
-        p = FDroidPopen(cmd, cwd=root_dir, envs={"CACHEDIR": config['cachedir']})
+        p = FDroidPopen(cmd, cwd=root_dir)
 
     elif bmethod == 'ant':
         logging.info("Cleaning Ant project...")
@@ -701,7 +701,7 @@ def build_local(app, build, vcs, build_dir, output_dir, log_dir, srclib_dir, ext
 
         cmd += gradletasks
 
-        p = FDroidPopen(cmd, cwd=root_dir, envs={"CACHEDIR": config['cachedir']})
+        p = FDroidPopen(cmd, cwd=root_dir)
 
     elif bmethod == 'ant':
         logging.info("Building Ant project...")
