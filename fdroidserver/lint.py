@@ -161,10 +161,6 @@ regex_checks = {
         ),
     ],
     'Changelog': http_checks,
-    'Author Name': [
-        (re.compile(r'^\s'), _("Unnecessary leading space")),
-        (re.compile(r'.*\s$'), _("Unnecessary trailing space")),
-    ],
     'Summary': [
         (
             re.compile(r'.*\b(free software|open source)\b.*', re.IGNORECASE),
@@ -178,8 +174,6 @@ regex_checks = {
             _("No need to specify that the app is for Android"),
         ),
         (re.compile(r'.*[a-z0-9][.!?]( |$)'), _("Punctuation should be avoided")),
-        (re.compile(r'^\s'), _("Unnecessary leading space")),
-        (re.compile(r'.*\s$'), _("Unnecessary trailing space")),
     ],
     'Description': https_enforcings
     + http_url_shorteners
@@ -189,8 +183,6 @@ regex_checks = {
             re.compile(r'https://f-droid.org/[a-z][a-z](_[A-Za-z]{2,4})?/'),
             _("Locale included in f-droid.org URL"),
         ),
-        (re.compile(r'^\s'), _("Unnecessary leading space")),
-        (re.compile(r'.*\s$'), _("Unnecessary trailing space")),
         (
             re.compile(
                 r'.*<(applet|base|body|button|embed|form|head|html|iframe|img|input|link|object|picture|script|source|style|svg|video).*',
