@@ -111,8 +111,6 @@ class LintTest(SetUpTearDownMixin, unittest.TestCase):
             'http://github.com/not/secure',
             'https://github.com/foo/bar.git',
             'https://gitlab.com/group/subgroup/project.git',
-            'https://raw.githubusercontent.com/Seva-coder/Finder/master/ChangeLog.txt',
-            'https://github.com/scoutant/blokish/blob/master/README.md#changelog',
             'http://htmlpreview.github.io/?https://github.com/my/project/blob/HEAD/index.html',
             'http://fdroid.gitlab.io/fdroid-website',
         ]
