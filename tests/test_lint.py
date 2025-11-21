@@ -594,7 +594,7 @@ class LintAntiFeaturesTest(unittest.TestCase):
         self.assertEqual(1, len(list(fdroidserver.lint.check_antiFeatures(app))))
 
 
-class ConfigYmlTest(LintTest):
+class ConfigYmlTest(SetUpTearDownMixin, unittest.TestCase):
     """Test data formats used in config.yml.
 
     lint.py uses print() and not logging so hacks are used to control
