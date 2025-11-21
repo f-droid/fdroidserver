@@ -123,6 +123,63 @@ class LintTest(SetUpTearDownMixin, unittest.TestCase):
                 logging.debug(warn)
             self.assertTrue(anywarns, url + " does not fail lint!")
 
+    def test_check_repo_git_good(self):
+        app = {'RepoType': 'git'}
+        good_git_urls = [
+            'https://github.com/Matteljay/mastermindy-android',
+            'https://gitlab.com/origin/master.git',
+            'https://gitlab.com/group/subgroup/masterthing',
+            'https://git.ieval.ro/?p=fonbot.git;a=blob;f=Changes;hb=HEAD',
+        ]
+
+        anywarns = False
+        for url in good_git_urls:
+            app['Repo'] = url
+            for warn in fdroidserver.lint.check_repo(app):
+                anywarns = True
+                logging.debug(warn)
+        self.assertFalse(anywarns)
+
+    def test_check_repo_git_bad(self):
+        app = {'RepoType': 'git'}
+        bad_urls = ['github.com/my/proj', 'http://github.com/not/secure']
+        for url in bad_urls:
+            anywarns = False
+            app['Repo'] = url
+            for warn in fdroidserver.lint.check_repo(app):
+                anywarns = True
+            self.assertTrue(anywarns, url + " does not fail lint!")
+
+    def test_check_repo_srclib_good(self):
+        os.chdir(self.testdir)
+        testname = 'wireguard-tools'
+        testfile = Path(f'srclibs/{testname}.yml')
+        testfile.parent.mkdir()
+        testfile.write_text('test')
+        app = {'RepoType': 'srclib', 'Repo': testname}
+        anywarns = False
+        for warn in fdroidserver.lint.check_repo(app):
+            anywarns = True
+            logging.debug(warn)
+        self.assertFalse(anywarns)
+
+    def test_check_repo_srclib_file_missing(self):
+        os.chdir(self.testdir)
+        app = {'RepoType': 'srclib', 'Repo': 'nosrclibsymlfile'}
+        for warn in fdroidserver.lint.check_repo(app):
+            anywarns = True
+        self.assertTrue(anywarns)
+
+    def test_check_repo_srclib_bad(self):
+        bad_urls = ['github.com/my/proj', 'https://github.com/not/secure']
+        for url in bad_urls:
+            anywarns = False
+            app = {'RepoType': 'srclib', 'Repo': url}
+            for warn in fdroidserver.lint.check_repo(app):
+                anywarns = True
+                logging.debug(warn)
+            self.assertTrue(anywarns, f"{url} does not fail lint!")
+
     def test_check_app_field_types(self):
         config = dict()
         fdroidserver.common.fill_config_defaults(config)

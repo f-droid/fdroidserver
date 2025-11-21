@@ -142,7 +142,6 @@ http_checks = (
 regex_checks = {
     'WebSite': http_checks,
     'SourceCode': http_checks,
-    'Repo': https_enforcings,
     'UpdateCheckMode': https_enforcings,
     'IssueTracker': http_checks
     + [
@@ -821,6 +820,24 @@ def check_certificate_pinned_binaries(app):
             return
 
 
+REPO_GIT_URL = re.compile(r'^https://.*')
+REPO_SRCLIB_URL = re.compile(r'^[^/@]+$')
+
+
+def check_repo(app):
+    """Check Repo: has acceptable URLs."""
+    repo = app['Repo']
+    if app['RepoType'] == 'git' and not REPO_GIT_URL.match(repo):
+        yield _('Repo: git URLs must use https://')
+    if app['RepoType'] == 'srclib':
+        m = REPO_SRCLIB_URL.match(repo)
+        if not m:
+            yield _('Repo: srclib URLs must be only a srclib name, not a path or URL.')
+        srclib = f'srclibs/{repo}.yml'
+        if not Path(srclib).exists():
+            yield _('Repo: srclib URLs must be the name of an existing srclib!')
+
+
 def lint_config(arg):
     path = Path(arg)
     passed = True
@@ -1062,6 +1079,7 @@ def lint_metadata(options):
             check_updates_expected,
             check_updates_ucm_http_aum_pattern,
             check_certificate_pinned_binaries,
+            check_repo,
         ]
 
         for check_func in app_check_funcs:
