@@ -188,7 +188,7 @@ ubuntu_lts_ppa:
 
 # Test to see how rclone works with S3
 test_deploy_to_s3_with_rclone:
-  image: debian:bookworm-slim
+  image: debian:trixie-slim
   <<: *apt-template
   tags:
     - saas-linux-small-amd64  # the shared runners are known to support Docker.
