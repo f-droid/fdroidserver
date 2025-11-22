@@ -1743,6 +1743,7 @@ class vcs_git(vcs):
         p = FDroidPopen(['git', 'clean', '-dffx'], cwd=self.local, output=False)
         if p.returncode != 0:
             raise VCSException(_("Git clean failed"), p.output)
+        logging.info(f'commit: {rev} (SHA1: {get_head_commit_id(self.local)})')
 
     def initsubmodules(self):
         self.checkrepo()
