@@ -1835,19 +1835,16 @@ class CommonTest(SetUpTearDownMixin, unittest.TestCase):
 
         vcs = mock.Mock()
         skm = mock.Mock()
-        dfm = mock.Mock()
 
         with tempfile.TemporaryDirectory() as tmpdir, TmpCwd(tmpdir):
             os.makedirs(os.path.join('srclib', 'ACRA'))
             with mock.patch('fdroidserver.common.getvcs', return_value=vcs):
                 with mock.patch('fdroidserver.common.remove_signing_keys', skm):
-                    with mock.patch('fdroidserver.common.remove_debuggable_flags', dfm):
-                        ret = fdroidserver.common.getsrclib('ACRA@acra-4.6.2', 'srclib')
-                        self.assertEqual(vcs.srclib, ('ACRA', None, 'srclib/ACRA'))
-                        vcs.gotorevision.assert_called_once_with('acra-4.6.2', True)
-                        skm.assert_called_once_with('srclib/ACRA')
-                        dfm.assert_called_once_with('srclib/ACRA')
-                        self.assertEqual(ret, ('ACRA', None, 'srclib/ACRA'))
+                    ret = fdroidserver.common.getsrclib('ACRA@acra-4.6.2', 'srclib')
+                    self.assertEqual(vcs.srclib, ('ACRA', None, 'srclib/ACRA'))
+                    vcs.gotorevision.assert_called_once_with('acra-4.6.2', True)
+                    skm.assert_called_once_with('srclib/ACRA')
+                    self.assertEqual(ret, ('ACRA', None, 'srclib/ACRA'))
 
     def test_run_yamllint_wellformed(self):
         try:
