@@ -28,8 +28,6 @@ from fdroidserver._yaml import yaml
 
 from . import _, common, metadata, rewritemeta
 
-config = None
-
 
 def enforce_https(domain):
     return (
@@ -295,11 +293,11 @@ def load_categories_config():
     global CATEGORIES_KEYS
     k = common.CATEGORIES_CONFIG_NAME
     if not CATEGORIES_KEYS:
-        if config and k in config:
-            CATEGORIES_KEYS = config[k]
+        if common.config and k in common.config:
+            CATEGORIES_KEYS = common.config[k]
         else:
-            config[k] = common.load_localized_config(k, 'repo')
-            CATEGORIES_KEYS = list(config[k].keys())
+            common.config[k] = common.load_localized_config(k, 'repo')
+            CATEGORIES_KEYS = list(common.config[k].keys())
 
 
 def check_regexes(app):
@@ -385,7 +383,7 @@ def check_ucm_tags(app):
 
 
 def check_char_limits(app):
-    limits = config['char_limits']
+    limits = common.config['char_limits']
 
     if len(app.Summary) > limits['summary']:
         yield _("Summary of length {length} is over the {limit} char limit").format(
@@ -565,8 +563,8 @@ def check_license_tag(app):
     e.g. `lint_licenses: ` or `lint_licenses: []`
 
     """
-    if 'lint_licenses' in config:
-        lint_licenses = config['lint_licenses']
+    if 'lint_licenses' in common.config:
+        lint_licenses = common.config['lint_licenses']
         if lint_licenses is None:
             return
     else:
@@ -717,7 +715,6 @@ def check_antiFeatures(app):
 def check_for_unsupported_metadata_files(basedir=""):
     """Check whether any non-metadata files are in metadata/."""
     basedir = Path(basedir)
-    global config
 
     if not (basedir / 'metadata').exists():
         return False
@@ -944,9 +941,6 @@ def lint_config(arg):
 
 
 def main():
-    global config
-
-    # Parse command line...
     parser = ArgumentParser()
     common.setup_global_opts(parser)
     parser.add_argument(
@@ -972,7 +966,7 @@ def main():
     options = common.parse_args(parser)
     metadata.warnings_action = options.W
 
-    config = common.read_config()
+    common.get_config()
     load_antiFeatures_config()
     load_categories_config()
 

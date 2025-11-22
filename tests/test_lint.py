@@ -25,7 +25,6 @@ class SetUpTearDownMixin:
     def setUp(self):
         os.chdir(basedir)
         fdroidserver.common.config = None
-        fdroidserver.lint.config = None
         fdroidserver.lint.CATEGORIES_KEYS = None
         self._td = mkdtemp()
         self.testdir = self._td.name
@@ -62,7 +61,6 @@ class LintTest(SetUpTearDownMixin, unittest.TestCase):
         config = dict()
         fdroidserver.common.fill_config_defaults(config)
         fdroidserver.common.config = config
-        fdroidserver.lint.config = config
 
         app = {
             'Name': 'Bad App',
@@ -80,7 +78,6 @@ class LintTest(SetUpTearDownMixin, unittest.TestCase):
         config = dict()
         fdroidserver.common.fill_config_defaults(config)
         fdroidserver.common.config = config
-        fdroidserver.lint.config = config
 
         app = {
             'Name': 'My App',
@@ -184,7 +181,6 @@ class LintTest(SetUpTearDownMixin, unittest.TestCase):
         config = dict()
         fdroidserver.common.fill_config_defaults(config)
         fdroidserver.common.config = config
-        fdroidserver.lint.config = config
 
         app = fdroidserver.metadata.App()
         app.id = 'fake.app'
@@ -238,7 +234,6 @@ class LintTest(SetUpTearDownMixin, unittest.TestCase):
         config = dict()
         fdroidserver.common.fill_config_defaults(config)
         fdroidserver.common.config = config
-        fdroidserver.lint.config = config
 
         app = fdroidserver.metadata.App()
         app.Name = 'Bad App'
@@ -284,7 +279,6 @@ class LintTest(SetUpTearDownMixin, unittest.TestCase):
         config = dict()
         fdroidserver.common.fill_config_defaults(config)
         fdroidserver.common.config = config
-        fdroidserver.lint.config = config
 
         app = fdroidserver.metadata.App()
         app.License = "GPL-3.0-or-later"
@@ -299,7 +293,6 @@ class LintTest(SetUpTearDownMixin, unittest.TestCase):
         config = dict()
         fdroidserver.common.fill_config_defaults(config)
         fdroidserver.common.config = config
-        fdroidserver.lint.config = config
 
         app = fdroidserver.metadata.App()
         app.License = "Adobe-2006"
@@ -314,7 +307,6 @@ class LintTest(SetUpTearDownMixin, unittest.TestCase):
         config = dict()
         fdroidserver.common.fill_config_defaults(config)
         fdroidserver.common.config = config
-        fdroidserver.lint.config = config
         config['lint_licenses'] = ['fancy-license', 'GPL-3.0-or-later']
 
         app = fdroidserver.metadata.App()
@@ -330,7 +322,6 @@ class LintTest(SetUpTearDownMixin, unittest.TestCase):
         config = dict()
         fdroidserver.common.fill_config_defaults(config)
         fdroidserver.common.config = config
-        fdroidserver.lint.config = config
         config['lint_licenses'] = ['fancy-license', 'GPL-3.0-or-later']
 
         app = fdroidserver.metadata.App()
@@ -346,7 +337,6 @@ class LintTest(SetUpTearDownMixin, unittest.TestCase):
         config = dict()
         fdroidserver.common.fill_config_defaults(config)
         fdroidserver.common.config = config
-        fdroidserver.lint.config = config
         config['lint_licenses'] = []
 
         app = fdroidserver.metadata.App()
@@ -362,7 +352,6 @@ class LintTest(SetUpTearDownMixin, unittest.TestCase):
         config = dict()
         fdroidserver.common.fill_config_defaults(config)
         fdroidserver.common.config = config
-        fdroidserver.lint.config = config
         config['lint_licenses'] = None
 
         app = fdroidserver.metadata.App()
@@ -375,7 +364,7 @@ class LintTest(SetUpTearDownMixin, unittest.TestCase):
         self.assertFalse(anywarns)
 
     def test_check_categories_in_config(self):
-        fdroidserver.lint.config = {
+        fdroidserver.common.config = {
             fdroidserver.common.CATEGORIES_CONFIG_NAME: ['InConfig']
         }
         fdroidserver.lint.load_categories_config()
@@ -383,19 +372,19 @@ class LintTest(SetUpTearDownMixin, unittest.TestCase):
         self.assertEqual(0, len(list(fdroidserver.lint.check_categories(app))))
 
     def test_check_categories_not_in_config(self):
-        fdroidserver.lint.config = dict()
+        fdroidserver.common.config = dict()
         fdroidserver.lint.load_categories_config()
         app = fdroidserver.metadata.App({'Categories': ['NotInConfig']})
         self.assertEqual(1, len(list(fdroidserver.lint.check_categories(app))))
 
     def test_check_categories_empty_is_error(self):
-        fdroidserver.lint.config = {fdroidserver.common.CATEGORIES_CONFIG_NAME: []}
+        fdroidserver.common.config = {fdroidserver.common.CATEGORIES_CONFIG_NAME: []}
         fdroidserver.lint.load_categories_config()
         app = fdroidserver.metadata.App({'Categories': ['something']})
         self.assertEqual(1, len(list(fdroidserver.lint.check_categories(app))))
 
     def test_check_categories_old_hardcoded_not_defined(self):
-        fdroidserver.lint.config = {
+        fdroidserver.common.config = {
             fdroidserver.common.CATEGORIES_CONFIG_NAME: ['foo', 'bar']
         }
         fdroidserver.lint.load_categories_config()
@@ -406,7 +395,7 @@ class LintTest(SetUpTearDownMixin, unittest.TestCase):
         """In config.yml, categories is a list."""
         os.chdir(self.testdir)
         fdroidserver.common.write_config_file('categories: [foo, bar]\n')
-        fdroidserver.lint.config = fdroidserver.common.read_config()
+        fdroidserver.common.read_config()
         fdroidserver.lint.load_categories_config()
         self.assertEqual(fdroidserver.lint.CATEGORIES_KEYS, ['foo', 'bar'])
         app = fdroidserver.metadata.App({'Categories': ['bar']})
@@ -417,7 +406,7 @@ class LintTest(SetUpTearDownMixin, unittest.TestCase):
         os.chdir(self.testdir)
         os.mkdir('config')
         Path('config/categories.yml').write_text('{foo: {name: foo}, bar: {name: bar}}')
-        fdroidserver.lint.config = fdroidserver.common.read_config()
+        fdroidserver.common.read_config()
         fdroidserver.lint.load_categories_config()
         self.assertEqual(fdroidserver.lint.CATEGORIES_KEYS, ['foo', 'bar'])
         app = fdroidserver.metadata.App({'Categories': ['bar']})
