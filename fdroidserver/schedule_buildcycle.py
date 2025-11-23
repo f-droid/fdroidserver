@@ -37,7 +37,8 @@ DEFAULT_BUILD_TIMEOUT = 7200
 
 
 def get_web_index(index_v2_url="https://f-droid.org/repo/index-v2.json"):
-    with urllib.request.urlopen(index_v2_url) as response:
+    # this is only used for filtering scheduler output
+    with urllib.request.urlopen(index_v2_url) as response:  # nosec B310
         raw = response.read().decode('utf-8')
         return json.loads(raw)
 

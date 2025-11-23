@@ -56,7 +56,8 @@ def send_to_buildbot(
     if not bb_bin:
         raise Exception("'buildbot' not found, make sure it's installed correctly")
 
-    passwd_path = Path('/tmp/fdroid-buildbot-sendchange/passwd')
+    # just following a requirement sepcified by @eighthave's here
+    passwd_path = Path('/tmp/fdroid-buildbot-sendchange/passwd')  # nosec B108
     if not passwd_path.is_file():
         raise FileNotFoundError(
             f"'{passwd_path}' not found (file is managed by fdroid buildbot master)"
