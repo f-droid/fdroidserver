@@ -177,6 +177,77 @@ class LintTest(SetUpTearDownMixin, unittest.TestCase):
                 logging.debug(warn)
             self.assertTrue(anywarns, f"{url} does not fail lint!")
 
+    def test_check_regexes_binaries(self):
+        app = fdroidserver.metadata.App()
+        app.Binaries = 'https://example.com/%v.apk'
+        for warn in fdroidserver.lint.check_regexes(app):
+            self.fail()
+
+    def test_check_regexes_binaries_http(self):
+        app = fdroidserver.metadata.App()
+        app.Binaries = 'http://example.com/%v.apk'
+        for warn in fdroidserver.lint.check_regexes(app):
+            self.assertIn('https://', warn)
+            anywarns = True
+        self.assertTrue(anywarns)
+
+    def test_check_regexes_binaries_shortener(self):
+        app = fdroidserver.metadata.App()
+        app.Binaries = 'https://bit.ly/%v.apk'
+        for warn in fdroidserver.lint.check_regexes(app):
+            self.assertIn('bit.ly', warn)
+            anywarns = True
+        self.assertTrue(anywarns)
+
+    def test_check_regexes_binaries_both(self):
+        app = fdroidserver.metadata.App()
+        app.Binaries = 'http://bit.ly/%v.apk'
+        warns = list(fdroidserver.lint.check_regexes(app))
+        for warn in warns:
+            self.assertIn('bit.ly', warn)
+        self.assertEqual(2, len(warns))
+
+    def test_check_regexes_binary(self):
+        app = fdroidserver.metadata.App()
+        build = fdroidserver.metadata.Build()
+        build.binary = 'https://example.com/%v.apk'
+        app['Builds'] = [build]
+        for warn in fdroidserver.lint.check_builds(app):
+            self.fail()
+
+    def test_check_regexes_binary_http(self):
+        app = fdroidserver.metadata.App()
+        build = fdroidserver.metadata.Build()
+        build.binary = 'http://example.com/%v.apk'
+        build.versionCode = 123
+        app['Builds'] = [build]
+        for warn in fdroidserver.lint.check_builds(app):
+            self.assertIn('https://', warn)
+            anywarns = True
+        self.assertTrue(anywarns)
+
+    def test_check_regexes_binary_shortener(self):
+        app = fdroidserver.metadata.App()
+        build = fdroidserver.metadata.Build()
+        build.binary = 'https://bit.ly/%v.apk'
+        build.versionCode = 123
+        app['Builds'] = [build]
+        for warn in fdroidserver.lint.check_builds(app):
+            self.assertIn('bit.ly', warn)
+            anywarns = True
+        self.assertTrue(anywarns)
+
+    def test_check_regexes_binary_both(self):
+        app = fdroidserver.metadata.App()
+        build = fdroidserver.metadata.Build()
+        build.binary = 'http://bit.ly/%v.apk'
+        build.versionCode = 123
+        app['Builds'] = [build]
+        warns = list(fdroidserver.lint.check_builds(app))
+        for warn in warns:
+            self.assertIn('bit.ly', warn)
+        self.assertEqual(2, len(warns))
+
     def test_check_app_field_types(self):
         config = dict()
         fdroidserver.common.fill_config_defaults(config)

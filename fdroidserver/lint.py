@@ -137,7 +137,15 @@ http_checks = (
     ]
 )
 
+require_https = [
+    (
+        re.compile(r'^(?!https://)[^/]+'),
+        _("URL must start with https://"),
+    )
+]
+
 regex_checks = {
+    'Binaries': http_url_shorteners + require_https,
     'WebSite': http_checks,
     'SourceCode': http_checks,
     'UpdateCheckMode': https_enforcings,
@@ -505,6 +513,11 @@ def check_builds(app):
         for key in build.keys():
             if key not in supported_flags:
                 yield _('%s is not an accepted build field') % key
+        v = build.get('binary')
+        if v:
+            for m, r in http_url_shorteners + require_https:
+                if m.match(v):
+                    yield f":{build.versionCode} 'binary: {v}' {r}"
 
 
 def check_files_dir(app):
