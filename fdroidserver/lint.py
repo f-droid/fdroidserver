@@ -473,18 +473,6 @@ def check_duplicates(app):
         seenlines.add(line)
 
 
-desc_url = re.compile(r'(^|[^[])\[([^ ]+)( |\]|$)')
-
-
-def check_mediawiki_links(app):
-    wholedesc = ' '.join(app.Description)
-    for um in desc_url.finditer(wholedesc):
-        url = um.group(1)
-        for m, r in http_checks:
-            if m.match(url):
-                yield _("URL {url} in Description: {error}").format(url=url, error=r)
-
-
 def check_builds(app):
     supported_flags = set(metadata.build_flags)
     # needed for YAML and JSON
@@ -1063,7 +1051,6 @@ def lint_metadata(options):
             check_empty_fields,
             check_categories,
             check_duplicates,
-            check_mediawiki_links,
             check_builds,
             check_files_dir,
             check_format,
