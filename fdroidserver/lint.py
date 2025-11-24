@@ -539,11 +539,6 @@ def check_files_dir(app):
         yield _("Unused file at %s") % (dir_path / name)
 
 
-def check_format(app):
-    if common.options.format and not rewritemeta.proper_format(app):
-        yield _("Run rewritemeta to fix formatting")
-
-
 def check_license_tag(app):
     """Ensure all license tags contain only valid/approved values.
 
@@ -1053,7 +1048,6 @@ def lint_metadata(options):
             check_duplicates,
             check_builds,
             check_files_dir,
-            check_format,
             check_license_tag,
             check_current_version_code,
             check_updates_expected,
@@ -1066,6 +1060,10 @@ def lint_metadata(options):
             for warn in check_func(app):
                 anywarns = True
                 print("%s: %s" % (appid, warn))
+
+        if options.format and not rewritemeta.proper_format(app):
+            print("%s: %s" % (appid, _("Run rewritemeta to fix formatting")))
+            anywarns = True
 
     return not anywarns
 
