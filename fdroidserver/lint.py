@@ -154,7 +154,8 @@ regex_checks = {
         (re.compile(r'.*github\.com/[^/]+/[^/]+/*$'), _("/issues is missing")),
         (re.compile(r'.*gitlab\.com/[^/]+/[^/]+/*$'), _("/issues is missing")),
     ],
-    'Donate': http_checks
+    'Donate': http_url_shorteners
+    + require_https
     + [
         (
             re.compile(r'.*liberapay\.com'),

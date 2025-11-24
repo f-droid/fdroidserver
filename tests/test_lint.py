@@ -177,6 +177,20 @@ class LintTest(SetUpTearDownMixin, unittest.TestCase):
                 logging.debug(warn)
             self.assertTrue(anywarns, f"{url} does not fail lint!")
 
+    def test_check_regexes_donate(self):
+        app = fdroidserver.metadata.App()
+        app.Donate = 'https://example.com/donate/'
+        for warn in fdroidserver.lint.check_regexes(app):
+            self.fail()
+
+    def test_check_regexes_donate_both(self):
+        app = fdroidserver.metadata.App()
+        app.Donate = 'http://bit.ly/givememoney/'
+        warns = list(fdroidserver.lint.check_regexes(app))
+        for warn in warns:
+            self.assertIn('bit.ly', warn)
+        self.assertEqual(2, len(warns))
+
     def test_check_regexes_binaries(self):
         app = fdroidserver.metadata.App()
         app.Binaries = 'https://example.com/%v.apk'
