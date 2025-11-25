@@ -28,8 +28,6 @@ from fdroidserver._yaml import yaml
 
 from . import _, common, metadata, rewritemeta
 
-config = None
-
 
 def enforce_https(domain):
     return (
@@ -136,21 +134,12 @@ http_checks = (
             re.compile(r'^https://(github|gitlab)\.com(/[^/]+){2,3}\.git'),
             _("Appending .git is not necessary"),
         ),
-        (
-            re.compile(
-                r'^https://[^/]*(github|gitlab|bitbucket|rawgit|githubusercontent)\.[a-zA-Z]+/([^/]+/){2,3}(master|main)/'
-            ),
-            _(
-                "Use /HEAD instead of /master or /main to point at a file in the default branch"
-            ),
-        ),
     ]
 )
 
 regex_checks = {
     'WebSite': http_checks,
     'SourceCode': http_checks,
-    'Repo': https_enforcings,
     'UpdateCheckMode': https_enforcings,
     'IssueTracker': http_checks
     + [
@@ -169,10 +158,6 @@ regex_checks = {
         ),
     ],
     'Changelog': http_checks,
-    'Author Name': [
-        (re.compile(r'^\s'), _("Unnecessary leading space")),
-        (re.compile(r'.*\s$'), _("Unnecessary trailing space")),
-    ],
     'Summary': [
         (
             re.compile(r'.*\b(free software|open source)\b.*', re.IGNORECASE),
@@ -186,19 +171,14 @@ regex_checks = {
             _("No need to specify that the app is for Android"),
         ),
         (re.compile(r'.*[a-z0-9][.!?]( |$)'), _("Punctuation should be avoided")),
-        (re.compile(r'^\s'), _("Unnecessary leading space")),
-        (re.compile(r'.*\s$'), _("Unnecessary trailing space")),
     ],
     'Description': https_enforcings
     + http_url_shorteners
     + [
-        (re.compile(r'\s*[*#][^ .]'), _("Invalid bulleted list")),
         (
             re.compile(r'https://f-droid.org/[a-z][a-z](_[A-Za-z]{2,4})?/'),
             _("Locale included in f-droid.org URL"),
         ),
-        (re.compile(r'^\s'), _("Unnecessary leading space")),
-        (re.compile(r'.*\s$'), _("Unnecessary trailing space")),
         (
             re.compile(
                 r'.*<(applet|base|body|button|embed|form|head|html|iframe|img|input|link|object|picture|script|source|style|svg|video).*',
@@ -313,11 +293,11 @@ def load_categories_config():
     global CATEGORIES_KEYS
     k = common.CATEGORIES_CONFIG_NAME
     if not CATEGORIES_KEYS:
-        if config and k in config:
-            CATEGORIES_KEYS = config[k]
+        if common.config and k in common.config:
+            CATEGORIES_KEYS = common.config[k]
         else:
-            config[k] = common.load_localized_config(k, 'repo')
-            CATEGORIES_KEYS = list(config[k].keys())
+            common.config[k] = common.load_localized_config(k, 'repo')
+            CATEGORIES_KEYS = list(common.config[k].keys())
 
 
 def check_regexes(app):
@@ -403,7 +383,7 @@ def check_ucm_tags(app):
 
 
 def check_char_limits(app):
-    limits = config['char_limits']
+    limits = common.config['char_limits']
 
     if len(app.Summary) > limits['summary']:
         yield _("Summary of length {length} is over the {limit} char limit").format(
@@ -493,18 +473,6 @@ def check_duplicates(app):
         seenlines.add(line)
 
 
-desc_url = re.compile(r'(^|[^[])\[([^ ]+)( |\]|$)')
-
-
-def check_mediawiki_links(app):
-    wholedesc = ' '.join(app.Description)
-    for um in desc_url.finditer(wholedesc):
-        url = um.group(1)
-        for m, r in http_checks:
-            if m.match(url):
-                yield _("URL {url} in Description: {error}").format(url=url, error=r)
-
-
 def check_builds(app):
     supported_flags = set(metadata.build_flags)
     # needed for YAML and JSON
@@ -571,11 +539,6 @@ def check_files_dir(app):
         yield _("Unused file at %s") % (dir_path / name)
 
 
-def check_format(app):
-    if common.options.format and not rewritemeta.proper_format(app):
-        yield _("Run rewritemeta to fix formatting")
-
-
 def check_license_tag(app):
     """Ensure all license tags contain only valid/approved values.
 
@@ -583,8 +546,8 @@ def check_license_tag(app):
     e.g. `lint_licenses: ` or `lint_licenses: []`
 
     """
-    if 'lint_licenses' in config:
-        lint_licenses = config['lint_licenses']
+    if 'lint_licenses' in common.config:
+        lint_licenses = common.config['lint_licenses']
         if lint_licenses is None:
             return
     else:
@@ -735,7 +698,6 @@ def check_antiFeatures(app):
 def check_for_unsupported_metadata_files(basedir=""):
     """Check whether any non-metadata files are in metadata/."""
     basedir = Path(basedir)
-    global config
 
     if not (basedir / 'metadata').exists():
         return False
@@ -835,6 +797,24 @@ def check_certificate_pinned_binaries(app):
                 'App version has binary but does not have corresponding AllowedAPKSigningKeys to pin certificate.'
             )
             return
+
+
+REPO_GIT_URL = re.compile(r'^https://.*')
+REPO_SRCLIB_URL = re.compile(r'^[^/@]+$')
+
+
+def check_repo(app):
+    """Check Repo: has acceptable URLs."""
+    repo = app['Repo']
+    if app['RepoType'] == 'git' and not REPO_GIT_URL.match(repo):
+        yield _('Repo: git URLs must use https://')
+    if app['RepoType'] == 'srclib':
+        m = REPO_SRCLIB_URL.match(repo)
+        if not m:
+            yield _('Repo: srclib URLs must be only a srclib name, not a path or URL.')
+        srclib = f'srclibs/{repo}.yml'
+        if not Path(srclib).exists():
+            yield _('Repo: srclib URLs must be the name of an existing srclib!')
 
 
 def lint_config(arg):
@@ -944,9 +924,6 @@ def lint_config(arg):
 
 
 def main():
-    global config
-
-    # Parse command line...
     parser = ArgumentParser()
     common.setup_global_opts(parser)
     parser.add_argument(
@@ -972,7 +949,7 @@ def main():
     options = common.parse_args(parser)
     metadata.warnings_action = options.W
 
-    config = common.read_config()
+    common.get_config()
     load_antiFeatures_config()
     load_categories_config()
 
@@ -1069,21 +1046,24 @@ def lint_metadata(options):
             check_empty_fields,
             check_categories,
             check_duplicates,
-            check_mediawiki_links,
             check_builds,
             check_files_dir,
-            check_format,
             check_license_tag,
             check_current_version_code,
             check_updates_expected,
             check_updates_ucm_http_aum_pattern,
             check_certificate_pinned_binaries,
+            check_repo,
         ]
 
         for check_func in app_check_funcs:
             for warn in check_func(app):
                 anywarns = True
                 print("%s: %s" % (appid, warn))
+
+        if options.format and not rewritemeta.proper_format(app):
+            print("%s: %s" % (appid, _("Run rewritemeta to fix formatting")))
+            anywarns = True
 
     return not anywarns
 

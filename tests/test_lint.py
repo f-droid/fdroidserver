@@ -25,7 +25,6 @@ class SetUpTearDownMixin:
     def setUp(self):
         os.chdir(basedir)
         fdroidserver.common.config = None
-        fdroidserver.lint.config = None
         fdroidserver.lint.CATEGORIES_KEYS = None
         self._td = mkdtemp()
         self.testdir = self._td.name
@@ -62,7 +61,6 @@ class LintTest(SetUpTearDownMixin, unittest.TestCase):
         config = dict()
         fdroidserver.common.fill_config_defaults(config)
         fdroidserver.common.config = config
-        fdroidserver.lint.config = config
 
         app = {
             'Name': 'Bad App',
@@ -80,7 +78,6 @@ class LintTest(SetUpTearDownMixin, unittest.TestCase):
         config = dict()
         fdroidserver.common.fill_config_defaults(config)
         fdroidserver.common.config = config
-        fdroidserver.lint.config = config
 
         app = {
             'Name': 'My App',
@@ -111,8 +108,6 @@ class LintTest(SetUpTearDownMixin, unittest.TestCase):
             'http://github.com/not/secure',
             'https://github.com/foo/bar.git',
             'https://gitlab.com/group/subgroup/project.git',
-            'https://raw.githubusercontent.com/Seva-coder/Finder/master/ChangeLog.txt',
-            'https://github.com/scoutant/blokish/blob/master/README.md#changelog',
             'http://htmlpreview.github.io/?https://github.com/my/project/blob/HEAD/index.html',
             'http://fdroid.gitlab.io/fdroid-website',
         ]
@@ -125,11 +120,67 @@ class LintTest(SetUpTearDownMixin, unittest.TestCase):
                 logging.debug(warn)
             self.assertTrue(anywarns, url + " does not fail lint!")
 
+    def test_check_repo_git_good(self):
+        app = {'RepoType': 'git'}
+        good_git_urls = [
+            'https://github.com/Matteljay/mastermindy-android',
+            'https://gitlab.com/origin/master.git',
+            'https://gitlab.com/group/subgroup/masterthing',
+            'https://git.ieval.ro/?p=fonbot.git;a=blob;f=Changes;hb=HEAD',
+        ]
+
+        anywarns = False
+        for url in good_git_urls:
+            app['Repo'] = url
+            for warn in fdroidserver.lint.check_repo(app):
+                anywarns = True
+                logging.debug(warn)
+        self.assertFalse(anywarns)
+
+    def test_check_repo_git_bad(self):
+        app = {'RepoType': 'git'}
+        bad_urls = ['github.com/my/proj', 'http://github.com/not/secure']
+        for url in bad_urls:
+            anywarns = False
+            app['Repo'] = url
+            for warn in fdroidserver.lint.check_repo(app):
+                anywarns = True
+            self.assertTrue(anywarns, url + " does not fail lint!")
+
+    def test_check_repo_srclib_good(self):
+        os.chdir(self.testdir)
+        testname = 'wireguard-tools'
+        testfile = Path(f'srclibs/{testname}.yml')
+        testfile.parent.mkdir()
+        testfile.write_text('test')
+        app = {'RepoType': 'srclib', 'Repo': testname}
+        anywarns = False
+        for warn in fdroidserver.lint.check_repo(app):
+            anywarns = True
+            logging.debug(warn)
+        self.assertFalse(anywarns)
+
+    def test_check_repo_srclib_file_missing(self):
+        os.chdir(self.testdir)
+        app = {'RepoType': 'srclib', 'Repo': 'nosrclibsymlfile'}
+        for warn in fdroidserver.lint.check_repo(app):
+            anywarns = True
+        self.assertTrue(anywarns)
+
+    def test_check_repo_srclib_bad(self):
+        bad_urls = ['github.com/my/proj', 'https://github.com/not/secure']
+        for url in bad_urls:
+            anywarns = False
+            app = {'RepoType': 'srclib', 'Repo': url}
+            for warn in fdroidserver.lint.check_repo(app):
+                anywarns = True
+                logging.debug(warn)
+            self.assertTrue(anywarns, f"{url} does not fail lint!")
+
     def test_check_app_field_types(self):
         config = dict()
         fdroidserver.common.fill_config_defaults(config)
         fdroidserver.common.config = config
-        fdroidserver.lint.config = config
 
         app = fdroidserver.metadata.App()
         app.id = 'fake.app'
@@ -183,7 +234,6 @@ class LintTest(SetUpTearDownMixin, unittest.TestCase):
         config = dict()
         fdroidserver.common.fill_config_defaults(config)
         fdroidserver.common.config = config
-        fdroidserver.lint.config = config
 
         app = fdroidserver.metadata.App()
         app.Name = 'Bad App'
@@ -229,7 +279,6 @@ class LintTest(SetUpTearDownMixin, unittest.TestCase):
         config = dict()
         fdroidserver.common.fill_config_defaults(config)
         fdroidserver.common.config = config
-        fdroidserver.lint.config = config
 
         app = fdroidserver.metadata.App()
         app.License = "GPL-3.0-or-later"
@@ -244,7 +293,6 @@ class LintTest(SetUpTearDownMixin, unittest.TestCase):
         config = dict()
         fdroidserver.common.fill_config_defaults(config)
         fdroidserver.common.config = config
-        fdroidserver.lint.config = config
 
         app = fdroidserver.metadata.App()
         app.License = "Adobe-2006"
@@ -259,7 +307,6 @@ class LintTest(SetUpTearDownMixin, unittest.TestCase):
         config = dict()
         fdroidserver.common.fill_config_defaults(config)
         fdroidserver.common.config = config
-        fdroidserver.lint.config = config
         config['lint_licenses'] = ['fancy-license', 'GPL-3.0-or-later']
 
         app = fdroidserver.metadata.App()
@@ -275,7 +322,6 @@ class LintTest(SetUpTearDownMixin, unittest.TestCase):
         config = dict()
         fdroidserver.common.fill_config_defaults(config)
         fdroidserver.common.config = config
-        fdroidserver.lint.config = config
         config['lint_licenses'] = ['fancy-license', 'GPL-3.0-or-later']
 
         app = fdroidserver.metadata.App()
@@ -291,7 +337,6 @@ class LintTest(SetUpTearDownMixin, unittest.TestCase):
         config = dict()
         fdroidserver.common.fill_config_defaults(config)
         fdroidserver.common.config = config
-        fdroidserver.lint.config = config
         config['lint_licenses'] = []
 
         app = fdroidserver.metadata.App()
@@ -307,7 +352,6 @@ class LintTest(SetUpTearDownMixin, unittest.TestCase):
         config = dict()
         fdroidserver.common.fill_config_defaults(config)
         fdroidserver.common.config = config
-        fdroidserver.lint.config = config
         config['lint_licenses'] = None
 
         app = fdroidserver.metadata.App()
@@ -320,7 +364,7 @@ class LintTest(SetUpTearDownMixin, unittest.TestCase):
         self.assertFalse(anywarns)
 
     def test_check_categories_in_config(self):
-        fdroidserver.lint.config = {
+        fdroidserver.common.config = {
             fdroidserver.common.CATEGORIES_CONFIG_NAME: ['InConfig']
         }
         fdroidserver.lint.load_categories_config()
@@ -328,19 +372,19 @@ class LintTest(SetUpTearDownMixin, unittest.TestCase):
         self.assertEqual(0, len(list(fdroidserver.lint.check_categories(app))))
 
     def test_check_categories_not_in_config(self):
-        fdroidserver.lint.config = dict()
+        fdroidserver.common.config = dict()
         fdroidserver.lint.load_categories_config()
         app = fdroidserver.metadata.App({'Categories': ['NotInConfig']})
         self.assertEqual(1, len(list(fdroidserver.lint.check_categories(app))))
 
     def test_check_categories_empty_is_error(self):
-        fdroidserver.lint.config = {fdroidserver.common.CATEGORIES_CONFIG_NAME: []}
+        fdroidserver.common.config = {fdroidserver.common.CATEGORIES_CONFIG_NAME: []}
         fdroidserver.lint.load_categories_config()
         app = fdroidserver.metadata.App({'Categories': ['something']})
         self.assertEqual(1, len(list(fdroidserver.lint.check_categories(app))))
 
     def test_check_categories_old_hardcoded_not_defined(self):
-        fdroidserver.lint.config = {
+        fdroidserver.common.config = {
             fdroidserver.common.CATEGORIES_CONFIG_NAME: ['foo', 'bar']
         }
         fdroidserver.lint.load_categories_config()
@@ -351,7 +395,7 @@ class LintTest(SetUpTearDownMixin, unittest.TestCase):
         """In config.yml, categories is a list."""
         os.chdir(self.testdir)
         fdroidserver.common.write_config_file('categories: [foo, bar]\n')
-        fdroidserver.lint.config = fdroidserver.common.read_config()
+        fdroidserver.common.read_config()
         fdroidserver.lint.load_categories_config()
         self.assertEqual(fdroidserver.lint.CATEGORIES_KEYS, ['foo', 'bar'])
         app = fdroidserver.metadata.App({'Categories': ['bar']})
@@ -362,7 +406,7 @@ class LintTest(SetUpTearDownMixin, unittest.TestCase):
         os.chdir(self.testdir)
         os.mkdir('config')
         Path('config/categories.yml').write_text('{foo: {name: foo}, bar: {name: bar}}')
-        fdroidserver.lint.config = fdroidserver.common.read_config()
+        fdroidserver.common.read_config()
         fdroidserver.lint.load_categories_config()
         self.assertEqual(fdroidserver.lint.CATEGORIES_KEYS, ['foo', 'bar'])
         app = fdroidserver.metadata.App({'Categories': ['bar']})
@@ -539,7 +583,7 @@ class LintAntiFeaturesTest(unittest.TestCase):
         self.assertEqual(1, len(list(fdroidserver.lint.check_antiFeatures(app))))
 
 
-class ConfigYmlTest(LintTest):
+class ConfigYmlTest(SetUpTearDownMixin, unittest.TestCase):
     """Test data formats used in config.yml.
 
     lint.py uses print() and not logging so hacks are used to control
