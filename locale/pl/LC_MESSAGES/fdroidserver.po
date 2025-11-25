@@ -2487,8 +2487,8 @@ msgstr "brakujący podpis binarnego pliku odniesienia"
 
 #: ../fdroidserver/signatures.py
 #, python-brace-format
-msgid "refuse downloading via insecure HTTP connection (use HTTPS or specify --no-https-check): {apkfilename}"
-msgstr "odmów pobierania przez niezabezpieczone połączenie HTTP (użyj HTTPS lub określ --no-https-check): {apkfilename}"
+msgid "refuse downloading via insecure HTTP connection (use HTTPS or specify --no-check-https): {apkfilename}"
+msgstr "odmów pobierania przez niezabezpieczone połączenie HTTP (użyj HTTPS lub określ --no-check-https): {apkfilename}"
 
 #: ../fdroidserver/index.py
 #, python-format

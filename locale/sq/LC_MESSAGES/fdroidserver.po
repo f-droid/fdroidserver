@@ -2480,8 +2480,8 @@ msgstr "dyorit të refrencës i mungon nënshkrimi"
 
 #: ../fdroidserver/signatures.py
 #, python-brace-format
-msgid "refuse downloading via insecure HTTP connection (use HTTPS or specify --no-https-check): {apkfilename}"
-msgstr "refuzo shkarkim përmes lidhjeje HTTP të pasigurt (përdorni HTTPS ose specifikoni --no-https-check): {apkfilename}"
+msgid "refuse downloading via insecure HTTP connection (use HTTPS or specify --no-check-https): {apkfilename}"
+msgstr "refuzo shkarkim përmes lidhjeje HTTP të pasigurt (përdorni HTTPS ose specifikoni --no-check-https): {apkfilename}"
 
 #: ../fdroidserver/index.py
 #, python-format

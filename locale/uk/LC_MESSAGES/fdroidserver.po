@@ -2495,8 +2495,8 @@ msgstr "еталонний двійковий файл з відсутнім п�
 
 #: ../fdroidserver/signatures.py
 #, python-brace-format
-msgid "refuse downloading via insecure HTTP connection (use HTTPS or specify --no-https-check): {apkfilename}"
-msgstr "відмовитись від завантаження через небезпечне з'єднання HTTP (користати HTTPS чи вказати --no-https-check): {apkfilename}"
+msgid "refuse downloading via insecure HTTP connection (use HTTPS or specify --no-check-https): {apkfilename}"
+msgstr "відмовитись від завантаження через небезпечне з'єднання HTTP (користати HTTPS чи вказати --no-check-https): {apkfilename}"
 
 #: ../fdroidserver/index.py
 #, python-format

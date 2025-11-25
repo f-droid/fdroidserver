@@ -2497,8 +2497,8 @@ msgstr ""
 
 #: ../fdroidserver/signatures.py
 #, python-brace-format
-msgid "refuse downloading via insecure HTTP connection (use HTTPS or specify --no-https-check): {apkfilename}"
-msgstr "བདེ་ཆགས་མེད་པའི་HTTPMམཐུད་ཀ་རྒྱུད་དེ་ཕབ་བཤུས་ངོས་ལེན་མེད། (HTTPS བེད་སྤྱོད་དང་ཡང་ན་དམིགས་སྟོན་། --no-https-check){apkfilename}"
+msgid "refuse downloading via insecure HTTP connection (use HTTPS or specify --no-check-https): {apkfilename}"
+msgstr "བདེ་ཆགས་མེད་པའི་HTTPMམཐུད་ཀ་རྒྱུད་དེ་ཕབ་བཤུས་ངོས་ལེན་མེད། (HTTPS བེད་སྤྱོད་དང་ཡང་ན་དམིགས་སྟོན་། --no-check-https){apkfilename}"
 
 #: ../fdroidserver/index.py
 #, python-format

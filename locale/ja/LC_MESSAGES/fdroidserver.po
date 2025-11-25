@@ -2477,8 +2477,8 @@ msgstr "参照バイナリーに署名がありません"
 
 #: ../fdroidserver/signatures.py
 #, python-brace-format
-msgid "refuse downloading via insecure HTTP connection (use HTTPS or specify --no-https-check): {apkfilename}"
-msgstr "安全でないHTTP接続によるダウンロードを拒否（HTTPSを使うか--no-https-checkを指定してください）：{apkfilename}"
+msgid "refuse downloading via insecure HTTP connection (use HTTPS or specify --no-check-https): {apkfilename}"
+msgstr "安全でないHTTP接続によるダウンロードを拒否（HTTPSを使うか--no-check-httpsを指定してください）：{apkfilename}"
 
 #: ../fdroidserver/index.py
 #, python-format

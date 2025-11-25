@@ -82,7 +82,7 @@ def extract(options):
                     logging.warning(
                         _(
                             'refuse downloading via insecure HTTP connection '
-                            '(use HTTPS or specify --no-https-check): {apkfilename}'
+                            '(use HTTPS or specify --no-check-https): {apkfilename}'
                         ).format(apkfilename=apk)
                     )
         except FDroidException as e:

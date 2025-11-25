@@ -2492,8 +2492,8 @@ msgstr "chybějící podpis v referenčním binárním souboru"
 
 #: ../fdroidserver/signatures.py
 #, python-brace-format
-msgid "refuse downloading via insecure HTTP connection (use HTTPS or specify --no-https-check): {apkfilename}"
-msgstr "odmítnout stahování přes nezabezpečené spojení HTTP (použijte HTTPS nebo upřesněte --no-https-check): {apkfilename}"
+msgid "refuse downloading via insecure HTTP connection (use HTTPS or specify --no-check-https): {apkfilename}"
+msgstr "odmítnout stahování přes nezabezpečené spojení HTTP (použijte HTTPS nebo upřesněte --no-check-https): {apkfilename}"
 
 #: ../fdroidserver/index.py
 #, python-format

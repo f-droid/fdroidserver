@@ -2481,7 +2481,7 @@ msgstr "குறிப்பு பைனரி காணாமல் போன
 
 #: ../fdroidserver/signatures.py
 #, python-brace-format
-msgid "refuse downloading via insecure HTTP connection (use HTTPS or specify --no-https-check): {apkfilename}"
+msgid "refuse downloading via insecure HTTP connection (use HTTPS or specify --no-check-https): {apkfilename}"
 msgstr "பாதுகாப்பற்ற HTTP இணைப்பு வழியாக பதிவிறக்குவதை மறுக்கவும் (https ஐப் பயன்படுத்தவும் அல்லது-no-https-check ஐக் குறிப்பிடவும்): {apkfilename}"
 
 #: ../fdroidserver/index.py

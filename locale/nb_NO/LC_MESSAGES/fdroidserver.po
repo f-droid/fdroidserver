@@ -2561,8 +2561,8 @@ msgstr ""
 
 #: ../fdroidserver/signatures.py
 #, fuzzy, python-brace-format
-msgid "refuse downloading via insecure HTTP connection (use HTTPS or specify --no-https-check): {apkfilename}"
-msgstr "nekt nedlasting via usikker HTTP-tilkobling (bruk HTTPS eller angi --no-https-check): {apkfilename}"
+msgid "refuse downloading via insecure HTTP connection (use HTTPS or specify --no-check-https): {apkfilename}"
+msgstr "nekt nedlasting via usikker HTTP-tilkobling (bruk HTTPS eller angi --no-check-https): {apkfilename}"
 
 #: ../fdroidserver/index.py
 #, python-format
