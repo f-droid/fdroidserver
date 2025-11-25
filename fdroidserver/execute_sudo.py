@@ -31,6 +31,8 @@ https://f-droid.org/docs/Build_Metadata_Reference/#build_sudo
 
 import argparse
 import logging
+import sys
+import traceback
 
 from fdroidserver import common, metadata
 
@@ -108,17 +110,24 @@ def main():
     options = common.parse_args(parser)
     common.set_console_logging(options.verbose)
 
-    appid, vercode = common.split_pkg_arg(options.__dict__['APPID:VERCODE'])
+    try:
+        appid, vercode = common.split_pkg_arg(options.__dict__['APPID:VERCODE'])
 
-    _ignored, build = metadata.get_single_build(appid, vercode)
-    virt_container_type = common.get_virt_container_type(options)
+        _ignored, build = metadata.get_single_build(appid, vercode)
+        virt_container_type = common.get_virt_container_type(options)
 
-    execute_sudo_wrapper(
-        appid,
-        vercode,
-        virt_container_type,
-        build,
-    )
+        execute_sudo_wrapper(
+            appid,
+            vercode,
+            virt_container_type,
+            build,
+        )
+    except Exception as e:
+        if options.verbose:
+            logging.error(traceback.format_exc())
+        else:
+            logging.error(e)
+        sys.exit(1)
 
 
 if __name__ == "__main__":
