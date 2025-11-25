@@ -68,7 +68,9 @@ def extract(options):
                         from . import net
 
                         tmp_apk = os.path.join(tmp_dir, 'signed.apk')
-                        net.download_file(apk, tmp_apk)
+                        net.download_file(
+                            apk, tmp_apk, https_only=not options.no_check_https
+                        )
                         sigdir = extract_signature(tmp_apk)
                         logging.info(
                             _(
