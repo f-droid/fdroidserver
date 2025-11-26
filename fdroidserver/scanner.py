@@ -659,7 +659,7 @@ def _get_tool():
     return scanner._SCANNER_TOOL
 
 
-def scan_binary(apkfile):
+def scan_binary(apkfile, allow_debuggable=False):
     """Scan output of dexdump for known non-free classes."""
     logging.info(_('Scanning APK with dexdump for known non-free classes.'))
     result = get_embedded_classes(apkfile)
@@ -673,6 +673,14 @@ def scan_binary(apkfile):
             if regexp.match(classname):
                 logging.debug("Problem: found class '%s'" % classname)
                 problems += 1
+
+    if common.is_debuggable_or_testOnly(apkfile):
+        msg = f"{apkfile}: debuggable or testOnly set in AndroidManifest.xml"
+        if allow_debuggable:
+            logging.debug(msg)
+        else:
+            logging.error(msg)
+            problems += 1
 
     logging.info(_('Scanning APK for extra signing blocks.'))
     a = common.get_androguard_APK(str(apkfile))
@@ -1142,6 +1150,12 @@ def main():
         help=_("application ID with optional versionCode in the form APPID[:VERCODE]"),
     )
     parser.add_argument(
+        "--allow-debuggable",
+        action="store_true",
+        default=False,
+        help=_("Do not throw an error on APKs with the debuggable flag set."),
+    )
+    parser.add_argument(
         "-f",
         "--force",
         action="store_true",
@@ -1185,7 +1199,7 @@ def main():
     appids = []
     for apk in options.appid:
         if os.path.isfile(apk):
-            count = scanner.scan_binary(apk)
+            count = scanner.scan_binary(apk, options.allow_debuggable)
             if count > 0:
                 logging.warning(
                     _('Scanner found {count} problems in {apk}').format(
