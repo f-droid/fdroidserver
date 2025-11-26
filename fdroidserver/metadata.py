@@ -1302,6 +1302,23 @@ def _app_to_yaml(app):
     return cm
 
 
+def remove_blank_flags_from_builds(builds):
+    """Remove unset entries from Builds so they are not written out."""
+    if not builds:
+        return list()
+    newbuilds = list()
+    for build in builds:
+        new = dict()
+        for k in build_flags:
+            v = build.get(k)
+            # 0 is valid value, it should not be stripped
+            if v is None or v is False or v == '' or v == dict() or v == list():
+                continue
+            new[k] = v
+        newbuilds.append(new)
+    return newbuilds
+
+
 def write_yaml(mf, app):
     """Write metadata in yaml format.
 
@@ -1318,6 +1335,10 @@ def write_yaml(mf, app):
       app metadata to written to the YAML file
 
     """
+    builds = remove_blank_flags_from_builds(app.get('Builds'))
+    if builds:
+        app['Builds'] = builds
+
     _del_duplicated_NoSourceSince(app)
     yaml_app = _app_to_yaml(app)
     yamlmf = ruamel.yaml.YAML(typ='rt')

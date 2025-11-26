@@ -23,6 +23,7 @@ import shutil
 import tempfile
 from argparse import ArgumentParser
 from pathlib import Path
+import sys
 
 from . import _, common, metadata
 
@@ -41,23 +42,6 @@ def proper_format(app):
     return content == cur_content
 
 
-def remove_blank_flags_from_builds(builds):
-    """Remove unset entries from Builds so they are not written out."""
-    if not builds:
-        return list()
-    newbuilds = list()
-    for build in builds:
-        new = dict()
-        for k in metadata.build_flags:
-            v = build.get(k)
-            # 0 is valid value, it should not be stripped
-            if v is None or v is False or v == '' or v == dict() or v == list():
-                continue
-            new[k] = v
-        newbuilds.append(new)
-    return newbuilds
-
-
 def main():
     global config
 
@@ -71,6 +55,13 @@ def main():
         help=_("List files that would be reformatted (dry run)"),
     )
     parser.add_argument(
+        "-s",
+        "--stdin",
+        action="store_true",
+        default=False,
+        help=_("Format file from stdin and output the result to stdout"),
+    )
+    parser.add_argument(
         "appid", nargs='*', help=_("application ID of file to operate on")
     )
     metadata.add_metadata_arguments(parser)
@@ -78,6 +69,12 @@ def main():
     metadata.warnings_action = options.W
 
     config = common.read_config()
+
+    if options.stdin:
+        app = metadata.parse_yaml_metadata(sys.stdin)
+        metadata.write_yaml(sys.stdout, app)
+        logging.debug(_("Finished"))
+        return
 
     apps = common.read_app_args(options.appid)
 
@@ -93,11 +90,6 @@ def main():
             if not proper_format(app):
                 print(path)
             continue
-
-        # TODO these should be moved to metadata.write_yaml()
-        builds = remove_blank_flags_from_builds(app.get('Builds'))
-        if builds:
-            app['Builds'] = builds
 
         # rewrite to temporary file before overwriting existing
         # file in case there's a bug in write_metadata
