@@ -172,13 +172,7 @@ def init_build(app, build, config):
             cmd += ['-P' + kv for kv in build.gradleprops]
 
         cmd += ['clean']
-        p = common.FDroidPopen(
-            cmd,
-            cwd=root_dir,
-            envs={
-                "CACHEDIR": config['cachedir'],
-            },
-        )
+        p = common.FDroidPopen(cmd, cwd=root_dir)
 
     elif bmethod == 'ant':
         logging.info("Cleaning Ant project...")
@@ -415,13 +409,7 @@ def execute_build(app, build, config, gradletasks):
 
         cmd += gradletasks
 
-        p = common.FDroidPopen(
-            cmd,
-            cwd=root_dir,
-            envs={
-                "CACHEDIR": config['cachedir'],
-            },
-        )
+        p = common.FDroidPopen(cmd, cwd=root_dir)
 
     elif bmethod == 'ant':
         logging.info("Building Ant project...")

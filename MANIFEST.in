@@ -1,4 +1,3 @@
-include buildserver/config.buildserver.yml
 include buildserver/provision-android-ndk
 include buildserver/provision-android-sdk
 include buildserver/provision-apt-get-install

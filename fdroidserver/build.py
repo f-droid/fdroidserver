@@ -155,10 +155,6 @@ def build_server(app, build, vcs, build_dir, output_dir, log_dir, force):
         send_dir(os.path.join(serverpath))
         ftp.chdir(homedir)
 
-        ftp.put(os.path.join(serverpath, '..', 'buildserver',
-                             'config.buildserver.yml'), 'config.yml')
-        ftp.chmod('config.yml', 0o600)
-
         # Copy over the ID (head commit hash) of the fdroidserver in use...
         with open(os.path.join(os.getcwd(), 'tmp', 'fdroidserverid'), 'wb') as fp:
             fp.write(subprocess.check_output(['git', 'rev-parse', 'HEAD'],
@@ -548,7 +544,7 @@ def build_local(app, build, vcs, build_dir, output_dir, log_dir, srclib_dir, ext
             cmd += ['-P' + kv for kv in build.gradleprops]
 
         cmd += ['clean']
-        p = FDroidPopen(cmd, cwd=root_dir, envs={"CACHEDIR": config['cachedir']})
+        p = FDroidPopen(cmd, cwd=root_dir)
 
     elif bmethod == 'ant':
         logging.info("Cleaning Ant project...")
@@ -701,7 +697,7 @@ def build_local(app, build, vcs, build_dir, output_dir, log_dir, srclib_dir, ext
 
         cmd += gradletasks
 
-        p = FDroidPopen(cmd, cwd=root_dir, envs={"CACHEDIR": config['cachedir']})
+        p = FDroidPopen(cmd, cwd=root_dir)
 
     elif bmethod == 'ant':
         logging.info("Building Ant project...")
