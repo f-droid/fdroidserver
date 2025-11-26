@@ -2175,16 +2175,6 @@ def ant_subprojects(root_dir):
     return subprojects
 
 
-def remove_debuggable_flags(root_dir):
-    # Remove forced debuggable flags
-    logging.debug("Removing debuggable flags from %s" % root_dir)
-    for root, dirs, files in os.walk(root_dir):
-        if 'AndroidManifest.xml' in files and os.path.isfile(os.path.join(root, 'AndroidManifest.xml')):
-            regsub_file(r'android:debuggable="[^"]*"',
-                        '',
-                        os.path.join(root, 'AndroidManifest.xml'))
-
-
 vcsearch_g = re.compile(r'''\b[Vv]ersionCode\s*=?\s*["'(]*([0-9][0-9_]*)["')]*''').search
 vnsearch_g = re.compile(r'''\b[Vv]ersionName\s*=?\s*\(?(["'])((?:(?=(\\?))\3.)*?)\1''').search
 vnssearch_g = re.compile(r'''\b[Vv]ersionNameSuffix\s*=?\s*(["'])((?:(?=(\\?))\3.)*?)\1''').search
@@ -2551,7 +2541,6 @@ def getsrclib(spec, srclib_dir, basepath=False,
         libdir = sdir
 
     remove_signing_keys(sdir)
-    remove_debuggable_flags(sdir)
 
     if prepare:
 
@@ -2715,9 +2704,6 @@ def prepare_source(vcs, app, build, build_dir, srclib_dir, extlib_dir, onserver=
             regsub_file(r'compileSdkVersion[ =]+[0-9]+',
                         r'compileSdkVersion %s' % n,
                         gradlefile)
-
-    # Remove forced debuggable flags
-    remove_debuggable_flags(root_dir)
 
     # Insert versionCode and number into the manifest if necessary
     if build.forceversion:
