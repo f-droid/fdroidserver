@@ -61,8 +61,8 @@ https_enforcings = [
 
 def forbid_shortener(domain):
     return (
-        re.compile(r'https?://[^/]*' + re.escape(domain) + r'/.*'),
-        _("URL shorteners should not be used"),
+        re.compile(r'https?://([^.]*\.)?' + re.escape(domain) + r'/.*'),
+        _("URL shorteners should not be used ({domain})").format(domain=domain),
     )
 
 

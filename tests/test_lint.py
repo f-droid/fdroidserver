@@ -705,3 +705,40 @@ class ConfigYmlTest(SetUpTearDownMixin, unittest.TestCase):
             )
         )
         self.assertFalse(fdroidserver.lint.lint_config(self.config_yml))
+
+
+class HttpUrlShorteners(unittest.TestCase):
+    def _exec_checks(self, text):
+        for check, msg in fdroidserver.lint.http_url_shorteners:
+            if check.match(text):
+                yield f'{text} {check} {msg}'
+
+    def test_avoid_domain_confusion(self):
+        good_urls = [
+            'https://github.com/Matteljay/mastermindy-android',
+            'https://gitlab.com/origin/master.git',
+            'https://gitlab.com/group/subgroup/masterthing',
+            'https://git.ieval.ro/?p=fonbot.git;a=blob;f=Changes;hb=HEAD',
+            'https://silkevicious.codeberg.page/fediphoto-lineage.html',
+            'https://mental-math.codeberg.page/',
+            'http://imshyam.me/mintube/',
+            'http://trikita.co/',
+        ]
+
+        for url in good_urls:
+            anywarns = False
+            for warn in self._exec_checks(url):
+                anywarns = True
+            self.assertFalse(anywarns, f"{url} should be valid.")
+
+    def test_warn_on_shorteners(self):
+        bad_urls = [
+            'https://sub.tr.im/test',
+            'https://tr.im/misproyectos',
+        ]
+
+        for url in bad_urls:
+            anywarns = False
+            for warn in self._exec_checks(url):
+                anywarns = True
+            self.assertTrue(anywarns, f"Should warn on {url}")
