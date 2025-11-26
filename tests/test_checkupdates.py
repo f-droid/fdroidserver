@@ -12,7 +12,7 @@ from unittest import mock
 import git
 
 import fdroidserver
-import fdroidserver.checkupdates
+from fdroidserver import checkupdates
 
 basedir = Path(__file__).parent
 
@@ -30,8 +30,6 @@ class CheckupdatesTest(unittest.TestCase):
         self.testdir.cleanup()
 
     def test_autoupdatemode_no_suffix(self):
-        fdroidserver.checkupdates.config = {}
-
         app = fdroidserver.metadata.App()
         app.id = 'loop.starts.shooting'
         app.metadatapath = 'metadata/' + app.id + '.yml'
@@ -50,7 +48,7 @@ class CheckupdatesTest(unittest.TestCase):
         ):
             with mock.patch('fdroidserver.metadata.write_metadata', mock.Mock()):
                 with mock.patch('subprocess.call', lambda cmd: 0):
-                    fdroidserver.checkupdates.checkupdates_app(app, auto=True)
+                    checkupdates.checkupdates_app(app, auto=True)
 
         build = app['Builds'][-1]
         self.assertEqual(build.versionName, '1.1.9')
@@ -62,15 +60,13 @@ class CheckupdatesTest(unittest.TestCase):
             with mock.patch('fdroidserver.metadata.write_metadata', mock.Mock()):
                 with mock.patch('subprocess.call', lambda cmd: 0):
                     with self.assertRaises(fdroidserver.exception.FDroidException):
-                        fdroidserver.checkupdates.checkupdates_app(app, auto=True)
+                        checkupdates.checkupdates_app(app, auto=True)
 
         build = app['Builds'][-1]
         self.assertEqual(build.versionName, '1.1.9')
         self.assertEqual(build.commit, '1.1.9')
 
     def test_autoupdatemode_suffix(self):
-        fdroidserver.checkupdates.config = {}
-
         app = fdroidserver.metadata.App()
         app.id = 'loop.starts.shooting'
         app.metadatapath = 'metadata/' + app.id + '.yml'
@@ -89,15 +85,13 @@ class CheckupdatesTest(unittest.TestCase):
         ):
             with mock.patch('fdroidserver.metadata.write_metadata', mock.Mock()):
                 with mock.patch('subprocess.call', lambda cmd: 0):
-                    fdroidserver.checkupdates.checkupdates_app(app, auto=True)
+                    checkupdates.checkupdates_app(app, auto=True)
 
         build = app['Builds'][-1]
         self.assertEqual(build.versionName, '1.1.9.10109-fdroid')
         self.assertEqual(build.commit, 'v1.1.9_10109')
 
     def test_autoupdate_multi_variants(self):
-        fdroidserver.checkupdates.config = {}
-
         app = fdroidserver.metadata.App()
         app.id = 'loop.starts.shooting'
         app.metadatapath = 'metadata/' + app.id + '.yml'
@@ -128,7 +122,7 @@ class CheckupdatesTest(unittest.TestCase):
         ):
             with mock.patch('fdroidserver.metadata.write_metadata', mock.Mock()):
                 with mock.patch('subprocess.call', lambda cmd: 0):
-                    fdroidserver.checkupdates.checkupdates_app(app, auto=True)
+                    checkupdates.checkupdates_app(app, auto=True)
 
         build = app['Builds'][-2]
         self.assertEqual(build.versionName, '1.1.9')
@@ -144,8 +138,6 @@ class CheckupdatesTest(unittest.TestCase):
         self.assertEqual(app.CurrentVersionCode, 101093)
 
     def test_checkupdates_app_http(self):
-        fdroidserver.checkupdates.config = {}
-
         app = fdroidserver.metadata.App()
         app.id = 'loop.starts.shooting'
         app.metadatapath = 'metadata/' + app.id + '.yml'
@@ -157,7 +149,7 @@ class CheckupdatesTest(unittest.TestCase):
             'fdroidserver.checkupdates.check_http', lambda app: (None, 'bla')
         ):
             with self.assertRaises(fdroidserver.exception.FDroidException):
-                fdroidserver.checkupdates.checkupdates_app(app, auto=True)
+                checkupdates.checkupdates_app(app, auto=True)
 
         with mock.patch(
             'fdroidserver.checkupdates.check_http', lambda app: ('1.1.9', 10109)
@@ -166,12 +158,10 @@ class CheckupdatesTest(unittest.TestCase):
                 'fdroidserver.metadata.write_metadata', mock.Mock()
             ) as wrmock:
                 with mock.patch('subprocess.call', lambda cmd: 0):
-                    fdroidserver.checkupdates.checkupdates_app(app, auto=True)
+                    checkupdates.checkupdates_app(app, auto=True)
                 wrmock.assert_called_with(app.metadatapath, app)
 
     def test_checkupdates_app_tags(self):
-        fdroidserver.checkupdates.config = {}
-
         app = fdroidserver.metadata.App()
         app.id = 'loop.starts.shooting'
         app.metadatapath = 'metadata/' + app.id + '.yml'
@@ -190,7 +180,7 @@ class CheckupdatesTest(unittest.TestCase):
             lambda app, pattern: (None, 'bla', None),
         ):
             with self.assertRaises(fdroidserver.exception.FDroidException):
-                fdroidserver.checkupdates.checkupdates_app(app, auto=True)
+                checkupdates.checkupdates_app(app, auto=True)
 
         with mock.patch(
             'fdroidserver.checkupdates.check_tags',
@@ -198,7 +188,7 @@ class CheckupdatesTest(unittest.TestCase):
         ):
             with mock.patch('fdroidserver.metadata.write_metadata', mock.Mock()):
                 with mock.patch('subprocess.call', lambda cmd: 0):
-                    fdroidserver.checkupdates.checkupdates_app(app, auto=True)
+                    checkupdates.checkupdates_app(app, auto=True)
 
         build = app['Builds'][-1]
         self.assertEqual(build.versionName, '1.1.9')
@@ -216,7 +206,7 @@ class CheckupdatesTest(unittest.TestCase):
         respmock = mock.Mock()
         respmock.read = lambda: 'v1.1.9\nc10109'.encode('utf-8')
         with mock.patch('urllib.request.urlopen', lambda a, b, c: respmock):
-            vername, vercode = fdroidserver.checkupdates.check_http(app)
+            vername, vercode = checkupdates.check_http(app)
         self.assertEqual(vername, '1.1.9')
         self.assertEqual(vercode, 10109)
 
@@ -228,7 +218,7 @@ class CheckupdatesTest(unittest.TestCase):
             app.UpdateCheckData = faked + '|ignored|' + faked + '|ignored'
             app.metadatapath = 'metadata/' + app.id + '.yml'
             with self.assertRaises(fdroidserver.exception.FDroidException):
-                fdroidserver.checkupdates.check_http(app)
+                checkupdates.check_http(app)
 
     def test_check_http_ignore(self):
         app = fdroidserver.metadata.App()
@@ -242,7 +232,7 @@ class CheckupdatesTest(unittest.TestCase):
         respmock = mock.Mock()
         respmock.read = lambda: 'v1.1.9-beta\nc10109'.encode('utf-8')
         with mock.patch('urllib.request.urlopen', lambda a, b, c: respmock):
-            vername, vercode = fdroidserver.checkupdates.check_http(app)
+            vername, vercode = checkupdates.check_http(app)
         self.assertEqual(vername, None)
 
     def test_check_tags_data(self):
@@ -263,7 +253,7 @@ class CheckupdatesTest(unittest.TestCase):
         ):
             _ignored  # silence the linters
             mock_path.is_file.return_falue = True
-            vername, vercode, _tag = fdroidserver.checkupdates.check_tags(app, None)
+            vername, vercode, _tag = checkupdates.check_tags(app, None)
         self.assertEqual(vername, '1.1.9')
         self.assertEqual(vercode, 10109)
 
@@ -275,7 +265,7 @@ class CheckupdatesTest(unittest.TestCase):
         ):
             _ignored  # silence the linters
             mock_path.is_file.return_falue = True
-            vername, vercode, _tag = fdroidserver.checkupdates.check_tags(app, None)
+            vername, vercode, _tag = checkupdates.check_tags(app, None)
         self.assertEqual(vername, '1.1.0')
         self.assertEqual(vercode, 10109)
 
@@ -287,7 +277,7 @@ class CheckupdatesTest(unittest.TestCase):
         ):
             _ignored  # silence the linters
             mock_path.is_file.return_falue = True
-            vername, vercode, _tag = fdroidserver.checkupdates.check_tags(app, None)
+            vername, vercode, _tag = checkupdates.check_tags(app, None)
         self.assertEqual(vername, '1.1.9')
         self.assertEqual(vercode, 10109)
 
@@ -300,21 +290,21 @@ class CheckupdatesTest(unittest.TestCase):
         ):
             _ignored  # silence the linters
             mock_path.is_file.return_falue = True
-            vername, vercode, _tag = fdroidserver.checkupdates.check_tags(app, None)
+            vername, vercode, _tag = checkupdates.check_tags(app, None)
         self.assertEqual(vername, '1.1.0')
         self.assertEqual(vercode, 10109)
 
         app.UpdateCheckData = r'|\+(\d+)||Android-([\d.]+)'
         vcs.latesttags.return_value = ['Android-1.1.0+1']
         with mock.patch('fdroidserver.common.getvcs', return_value=vcs):
-            vername, vercode, _tag = fdroidserver.checkupdates.check_tags(app, None)
+            vername, vercode, _tag = checkupdates.check_tags(app, None)
         self.assertEqual(vername, '1.1.0')
         self.assertEqual(vercode, 1)
 
         app.UpdateCheckData = '|||'
         vcs.latesttags.return_value = ['2']
         with mock.patch('fdroidserver.common.getvcs', return_value=vcs):
-            vername, vercode, _tag = fdroidserver.checkupdates.check_tags(app, None)
+            vername, vercode, _tag = checkupdates.check_tags(app, None)
         self.assertEqual(vername, '2')
         self.assertEqual(vercode, 2)
 
@@ -364,17 +354,17 @@ class CheckupdatesTest(unittest.TestCase):
         git_repo.remotes.origin.push(appid)
 
         # reset local branch and there should be differences
-        upstream_main = fdroidserver.checkupdates.get_upstream_main_branch(git_repo)
+        upstream_main = checkupdates.get_upstream_main_branch(git_repo)
         git_repo.git.reset(upstream_main)
         self.assertTrue(
-            fdroidserver.checkupdates.get_changes_versus_ref(
+            checkupdates.get_changes_versus_ref(
                 git_repo, f'origin/{appid}', metadata_file
             )
         )
         # make new commit that matches the previous, different commit, no diff
         _make_commit_new_app(git_repo, metadata_file)
         self.assertFalse(
-            fdroidserver.checkupdates.get_changes_versus_ref(
+            checkupdates.get_changes_versus_ref(
                 git_repo, f'origin/{appid}', metadata_file
             )
         )
@@ -386,7 +376,7 @@ class CheckupdatesTest(unittest.TestCase):
         self.assertEqual(git_repo.head, upstream_repo.head)
         self.assertEqual(origin_repo.head, upstream_repo.head)
         # pretend that checkupdates ran but didn't create any new commits
-        fdroidserver.checkupdates.push_commits()
+        checkupdates.push_commits()
 
         appid = 'org.adaway'
         self.assertNotIn(appid, git_repo.branches)
@@ -406,7 +396,7 @@ class CheckupdatesTest(unittest.TestCase):
         git_repo.index.commit('changed ' + appid)
 
         # and push the new commit to the dynamic branch
-        fdroidserver.checkupdates.push_commits()
+        checkupdates.push_commits()
         self.assertIn(appid, git_repo.branches)
         self.assertIn(appid, git_repo.remotes.origin.refs)
         self.assertNotIn('checkupdates', git_repo.branches)
@@ -414,9 +404,11 @@ class CheckupdatesTest(unittest.TestCase):
 
     def test_push_commits_verbose(self):
         class Options:
+            """Fake the argparse options."""
+
             verbose = True
 
-        fdroidserver.checkupdates.options = Options
+        checkupdates.options = Options
         repos = self._get_test_git_repos()
         git_repo = repos[0]
         git_repo.remotes.origin.push(git_repo.active_branch)
@@ -435,7 +427,7 @@ class CheckupdatesTest(unittest.TestCase):
         git_repo.index.commit('changed ' + appid)
 
         # and push the new commit to the dynamic branch
-        fdroidserver.checkupdates.push_commits()
+        checkupdates.push_commits()
         self.assertIn(appid, git_repo.branches)
         self.assertIn(appid, git_repo.remotes.origin.refs)
 
@@ -453,7 +445,7 @@ class CheckupdatesTest(unittest.TestCase):
         self.assertIn(appid, origin_repo.branches)
         self.assertIn(appid, git_repo.remotes.origin.refs)
         self.assertNotIn(appid, git_repo.remotes.upstream.refs)
-        fdroidserver.checkupdates.prune_empty_appid_branches()
+        checkupdates.prune_empty_appid_branches()
         self.assertNotIn(appid, origin_repo.branches)
         self.assertNotIn(appid, git_repo.remotes.origin.refs)
         self.assertNotIn(appid, git_repo.remotes.upstream.refs)
@@ -465,7 +457,7 @@ class CheckupdatesTest(unittest.TestCase):
             self.assertNotEqual(return_code, 0)
             raise fdroidserver.exception.FDroidException('sys.exit() ran')
 
-        def _read_metadata(a=None, b=None):
+        def _read_metadata(_a=None, _b=None):
             raise StopIteration('read_metadata() ran, test is successful')
 
         appid = 'com.example'
@@ -482,13 +474,13 @@ class CheckupdatesTest(unittest.TestCase):
 
         with mock.patch('sys.argv', ['fdroid checkupdates', '--merge-request']):
             with self.assertRaises(fdroidserver.exception.FDroidException):
-                fdroidserver.checkupdates.main()
+                checkupdates.main()
         sys_exit.assert_called()
 
         sys_exit.reset_mock()
         with mock.patch('sys.argv', ['fdroid checkupdates', '--merge-request', appid]):
             with self.assertRaises(StopIteration):
-                fdroidserver.checkupdates.main()
+                checkupdates.main()
         sys_exit.assert_not_called()
 
     @unittest.skipIf(
@@ -505,7 +497,7 @@ class CheckupdatesTest(unittest.TestCase):
         git_repo.index.commit("all files")
         git_repo.create_remote('upstream', os.getcwd()).fetch()
 
-        branch = fdroidserver.checkupdates.get_upstream_main_branch(git_repo)
+        branch = checkupdates.get_upstream_main_branch(git_repo)
         self.assertEqual(
             f'upstream/{testvalue}',
             branch,
@@ -525,7 +517,7 @@ class CheckupdatesTest(unittest.TestCase):
         git_repo.git.branch('somethingelse')  # make another remote branch
         git_repo.create_remote('upstream', os.getcwd()).fetch()
 
-        branch = fdroidserver.checkupdates.get_upstream_main_branch(git_repo)
+        branch = checkupdates.get_upstream_main_branch(git_repo)
         self.assertEqual(
             f'upstream/{testvalue}',
             branch,
@@ -543,7 +535,7 @@ class CheckupdatesTest(unittest.TestCase):
         git_repo.create_remote('origin', os.getcwd()).fetch()
         git_repo.create_remote('upstream', os.getcwd()).fetch()
         self.assertNotIn(appid, git_repo.heads)
-        fdroidserver.checkupdates.checkout_appid_branch(appid)
+        checkupdates.checkout_appid_branch(appid)
         self.assertIn(appid, git_repo.heads)
 
     def test_checkout_appid_branch_exists(self):
@@ -565,7 +557,7 @@ class CheckupdatesTest(unittest.TestCase):
         git_repo.create_remote('upstream', upstream_dir).fetch()
 
         self.assertNotIn(appid, git_repo.heads)
-        fdroidserver.checkupdates.checkout_appid_branch(appid)
+        checkupdates.checkout_appid_branch(appid)
         self.assertIn(appid, git_repo.heads)
 
     def test_checkout_appid_branch_skip_bot_commit(self):
@@ -593,18 +585,18 @@ class CheckupdatesTest(unittest.TestCase):
         # fake checkupdates-bot commit
         Path(f'metadata/{appid}.yml').write_text('AutoName: Example\n')
         with git_repo.config_writer() as cw:
-            cw.set_value('user', 'email', fdroidserver.checkupdates.BOT_EMAIL)
+            cw.set_value('user', 'email', checkupdates.BOT_EMAIL)
         git_repo.git.add(all=True)
         git_repo.index.commit("Example")
 
         # set up starting from remote branch
         git_repo.remotes.origin.push(appid)
-        upstream_main = fdroidserver.checkupdates.get_upstream_main_branch(git_repo)
+        upstream_main = checkupdates.get_upstream_main_branch(git_repo)
         git_repo.git.checkout(upstream_main.split('/')[1])
         git_repo.delete_head(appid, force=True)
 
         self.assertTrue(
-            fdroidserver.checkupdates.checkout_appid_branch(appid),
+            checkupdates.checkout_appid_branch(appid),
             'This should have been true since there are only bot commits.',
         )
 
@@ -631,7 +623,7 @@ class CheckupdatesTest(unittest.TestCase):
         git_repo.git.checkout(appid)
 
         with git_repo.config_writer() as cw:
-            cw.set_value('user', 'email', fdroidserver.checkupdates.BOT_EMAIL)
+            cw.set_value('user', 'email', checkupdates.BOT_EMAIL)
 
         # fake checkupdates-bot commit
         Path(f'metadata/{appid}.yml').write_text('AutoName: Example\n')
@@ -647,11 +639,11 @@ class CheckupdatesTest(unittest.TestCase):
 
         # set up starting from remote branch
         git_repo.remotes.origin.push(appid)
-        upstream_main = fdroidserver.checkupdates.get_upstream_main_branch(git_repo)
+        upstream_main = checkupdates.get_upstream_main_branch(git_repo)
         git_repo.git.reset(upstream_main.split('/')[1])
 
         self.assertFalse(
-            fdroidserver.checkupdates.checkout_appid_branch(appid),
+            checkupdates.checkout_appid_branch(appid),
             'This should have been false since there are human edits.',
         )
 
@@ -692,7 +684,7 @@ class CheckupdatesTest(unittest.TestCase):
 
         self.assertNotIn(appid, git_repo.heads)
         with mock.patch('sys.argv', ['fdroid checkupdates', '--merge-request', appid]):
-            fdroidserver.checkupdates.main()
+            checkupdates.main()
         push.assert_called_once()
         sys_exit.assert_called_once()
         self.assertIn(appid, git_repo.heads)
@@ -704,4 +696,4 @@ class CheckupdatesTest(unittest.TestCase):
         self.assertEqual(git_repo.head, upstream_repo.head)
         self.assertEqual(origin_repo.head, upstream_repo.head)
         # pretend that checkupdates ran but didn't create any new commits
-        fdroidserver.checkupdates.push_commits('')
+        checkupdates.push_commits('')
