@@ -77,7 +77,9 @@ COMMANDS_INTERNAL = [
     "pull",
     "pull_verify",
     "push",
+    "schedule_buildcycle",
     "schedule_verify",
+    "send_buildcycle",
     "up",
 ]
 
