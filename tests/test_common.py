@@ -3660,10 +3660,9 @@ class VirtContainerTypeTest(unittest.TestCase):
         self._td.cleanup()
 
     def test_get_virt_container_type_unset(self):
-        with self.assertLogs(level=logging.ERROR) as logs:
-            with self.assertRaises(SystemExit):
-                fdroidserver.common.get_virt_container_type(self.options)
-            self.assertIn('virt_container_type', logs.output[0])
+        with self.assertRaises(ValueError) as e:
+            fdroidserver.common.get_virt_container_type(self.options)
+            self.assertIn('virt_container_type', str(e))
 
     def test_get_virt_container_type_config(self):
         testvalue = 'podman'
@@ -3690,10 +3689,9 @@ class VirtContainerTypeTest(unittest.TestCase):
     def test_get_virt_container_type_config_bad_value(self):
         testvalue = 'doesnotexist'
         Path('config.yml').write_text(f'virt_container_type: {testvalue}\n')
-        with self.assertLogs(level=logging.ERROR) as logs:
-            with self.assertRaises(SystemExit):
-                fdroidserver.common.get_virt_container_type(self.options)
-            self.assertIn(testvalue, logs.output[0])
+        with self.assertRaises(ValueError) as e:
+            fdroidserver.common.get_virt_container_type(self.options)
+            self.assertIn(testvalue, str(e))
 
 
 class ParseNdkTest(unittest.TestCase):

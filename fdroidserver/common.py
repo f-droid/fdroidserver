@@ -302,10 +302,9 @@ def get_virt_container_type(options):
     vct = get_config().get('virt_container_type')
     if vct not in SUPPORTED_VIRT_CONTAINER_TYPES:
         supported = ', '.join(sorted(SUPPORTED_VIRT_CONTAINER_TYPES))
-        logging.error(
+        raise ValueError(
             f"'virt_container_type: {vct}' not supported, try: {supported}"
         )
-        sys.exit(1)
     return vct
 
 
