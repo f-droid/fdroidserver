@@ -38,7 +38,7 @@ def enforce_https(domain):
     )
 
 
-https_enforcings = [
+HTTPS_ENFORCINGS = [
     enforce_https('github.com'),
     enforce_https('gitlab.com'),
     enforce_https('bitbucket.org'),
@@ -66,7 +66,7 @@ def forbid_shortener(domain):
     )
 
 
-http_url_shorteners = [
+HTTP_URL_SHORTENERS = [
     forbid_shortener('1url.com'),
     forbid_shortener('adf.ly'),
     forbid_shortener('bc.vc'),
@@ -122,9 +122,9 @@ http_url_shorteners = [
     forbid_shortener('➡.ws'),
 ]
 
-http_checks = (
-    https_enforcings
-    + http_url_shorteners
+HTTP_CHECKS = (
+    HTTPS_ENFORCINGS
+    + HTTP_URL_SHORTENERS
     + [
         (
             re.compile(r'^(?!https?://)[^/]+'),
@@ -137,25 +137,25 @@ http_checks = (
     ]
 )
 
-require_https = [
+REQUIRE_HTTPS = [
     (
         re.compile(r'^(?!https://)[^/]+'),
         _("URL must start with https://"),
     )
 ]
 
-regex_checks = {
-    'Binaries': http_url_shorteners + require_https,
-    'WebSite': http_checks,
-    'SourceCode': http_checks,
-    'UpdateCheckMode': https_enforcings,
-    'IssueTracker': http_checks
+REGEX_CHECKS = {
+    'Binaries': HTTP_URL_SHORTENERS + REQUIRE_HTTPS,
+    'WebSite': HTTP_CHECKS,
+    'SourceCode': HTTP_CHECKS,
+    'UpdateCheckMode': HTTPS_ENFORCINGS,
+    'IssueTracker': HTTP_CHECKS
     + [
         (re.compile(r'.*github\.com/[^/]+/[^/]+/*$'), _("/issues is missing")),
         (re.compile(r'.*gitlab\.com/[^/]+/[^/]+/*$'), _("/issues is missing")),
     ],
-    'Donate': http_url_shorteners
-    + require_https
+    'Donate': HTTP_URL_SHORTENERS
+    + REQUIRE_HTTPS
     + [
         (
             re.compile(r'.*liberapay\.com'),
@@ -166,7 +166,7 @@ regex_checks = {
             _("OpenCollective donation methods belong in the OpenCollective: field"),
         ),
     ],
-    'Changelog': http_checks,
+    'Changelog': HTTP_CHECKS,
     'Summary': [
         (
             re.compile(r'.*\b(free software|open source)\b.*', re.IGNORECASE),
@@ -181,8 +181,8 @@ regex_checks = {
         ),
         (re.compile(r'.*[a-z0-9][.!?]( |$)'), _("Punctuation should be avoided")),
     ],
-    'Description': https_enforcings
-    + http_url_shorteners
+    'Description': HTTPS_ENFORCINGS
+    + HTTP_URL_SHORTENERS
     + [
         (
             re.compile(r'https://f-droid.org/[a-z][a-z](_[A-Za-z]{2,4})?/'),
@@ -203,12 +203,12 @@ regex_checks = {
 }
 
 # config keys that are currently ignored by lint, but could be supported.
-ignore_config_keys = (
+IGNORE_CONFIG_KEYS = (
     'github_releases',
     'java_paths',
 )
 
-bool_keys = (
+BOOL_KEYS = (
     'allow_disabled_algorithms',
     'androidobservatory',
     'build_server_always',
@@ -222,7 +222,7 @@ bool_keys = (
     'sync_from_local_copy_dir',
 )
 
-check_config_keys = (
+CHECK_CONFIG_KEYS = (
     'ant',
     'apk_signing_key_block_list',
     'archive',
@@ -278,9 +278,9 @@ check_config_keys = (
     'virustotal_apikey',
 )
 
-locale_pattern = re.compile(r"[a-z]{2,3}(-([A-Z][a-zA-Z]+|\d+|[a-z]+))*")
+LOCALE_PATTERN = re.compile(r"[a-z]{2,3}(-([A-Z][a-zA-Z]+|\d+|[a-z]+))*")
 
-versioncode_check_pattern = re.compile(r"(\\d|\[(0-9|\\d)_?(a-fA-F)?])[+]")
+VERSIONCODE_CHECK_PATTERN = re.compile(r"(\\d|\[(0-9|\\d)_?(a-fA-F)?])[+]")
 
 ANTIFEATURES_KEYS = None
 ANTIFEATURES_PATTERN = None
@@ -310,7 +310,7 @@ def load_categories_config():
 
 
 def check_regexes(app):
-    for f, checks in regex_checks.items():
+    for f, checks in REGEX_CHECKS.items():
         for m, r in checks:
             v = app.get(f)
             t = metadata.fieldtype(f)
@@ -356,7 +356,7 @@ def check_update_check_data_int(app):  # noqa: D403
     if app.UpdateCheckData:
         urlcode, codeex, urlver, verex = app.UpdateCheckData.split('|')
         # codeex can be empty as well
-        if codeex and not versioncode_check_pattern.search(codeex):
+        if codeex and not VERSIONCODE_CHECK_PATTERN.search(codeex):
             yield _(
                 f'UpdateCheckData must match the versionCode as integer (\\d or [0-9]): {codeex}'
             )
@@ -429,11 +429,11 @@ def check_useless_fields(app):
         yield _("UpdateCheckName is set to the known application ID, it can be removed")
 
 
-filling_ucms = re.compile(r'^(Tags.*|RepoManifest.*)')
+FILLING_UCMS = re.compile(r'^(Tags.*|RepoManifest.*)')
 
 
 def check_checkupdates_ran(app):
-    if filling_ucms.match(app.UpdateCheckMode):
+    if FILLING_UCMS.match(app.UpdateCheckMode):
         if not app.AutoName and not app.CurrentVersion and app.CurrentVersionCode == 0:
             yield _(
                 "UpdateCheckMode is set but it looks like checkupdates hasn't been run yet."
@@ -517,7 +517,7 @@ def check_builds(app):
                 yield _('%s is not an accepted build field') % key
         v = build.get('binary')
         if v:
-            for m, r in http_url_shorteners + require_https:
+            for m, r in HTTP_URL_SHORTENERS + REQUIRE_HTTPS:
                 if m.match(v):
                     yield f":{build.versionCode} 'binary: {v}' {r}"
 
@@ -530,7 +530,7 @@ def check_files_dir(app):
     for path in dir_path.iterdir():
         name = path.name
         if not (
-            path.is_file() or name == 'signatures' or locale_pattern.fullmatch(name)
+            path.is_file() or name == 'signatures' or LOCALE_PATTERN.fullmatch(name)
         ):
             yield _("Found non-file at %s") % path
             continue
@@ -549,7 +549,7 @@ def check_files_dir(app):
                 used.add(fname)
 
     for name in files.difference(used):
-        if locale_pattern.fullmatch(name):
+        if LOCALE_PATTERN.fullmatch(name):
             continue
         yield _("Unused file at %s") % (dir_path / name)
 
@@ -872,8 +872,8 @@ def lint_config(arg):
                     msg += _('Did you mean {code}?').format(code=', '.join(sorted(m)))
                 print(msg)
     elif path.name == config_name and path.parent.name != 'config':
-        valid_keys = set(tuple(common.default_config) + bool_keys + check_config_keys)
-        for key in ignore_config_keys:
+        valid_keys = set(tuple(common.default_config) + BOOL_KEYS + CHECK_CONFIG_KEYS)
+        for key in IGNORE_CONFIG_KEYS:
             if key in valid_keys:
                 valid_keys.remove(key)
         for key in data:
@@ -887,7 +887,7 @@ def lint_config(arg):
                 print(msg)
                 continue
 
-            if key in bool_keys:
+            if key in BOOL_KEYS:
                 t = bool
             else:
                 t = type(common.default_config.get(key, ""))

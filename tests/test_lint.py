@@ -749,8 +749,8 @@ class ConfigYmlTest(SetUpTearDownMixin, unittest.TestCase):
     @mock.patch('builtins.print', mock.Mock())  # hide error message
     def test_config_yml_bad_value_for_all_keys(self):
         """Check all config keys with a bad value."""
-        for key in fdroidserver.lint.check_config_keys:
-            if key in fdroidserver.lint.bool_keys:
+        for key in fdroidserver.lint.CHECK_CONFIG_KEYS:
+            if key in fdroidserver.lint.BOOL_KEYS:
                 value = 'foobar'
             else:
                 value = 'false'
@@ -794,7 +794,7 @@ class ConfigYmlTest(SetUpTearDownMixin, unittest.TestCase):
 
 class HttpUrlShorteners(unittest.TestCase):
     def _exec_checks(self, text):
-        for check, msg in fdroidserver.lint.http_url_shorteners:
+        for check, msg in fdroidserver.lint.HTTP_URL_SHORTENERS:
             if check.match(text):
                 yield f'{text} {check} {msg}'
 
