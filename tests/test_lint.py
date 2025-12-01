@@ -819,7 +819,9 @@ class HttpUrlShorteners(unittest.TestCase):
     def test_warn_on_shorteners(self):
         bad_urls = [
             'https://sub.tr.im/test',
+            'https://t.cn/zRTdGks',
             'https://tr.im/misproyectos',
+            'https://ynews.page.link/mkotV',
         ]
 
         for url in bad_urls:
