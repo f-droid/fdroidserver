@@ -177,6 +177,91 @@ class LintTest(SetUpTearDownMixin, unittest.TestCase):
                 logging.debug(warn)
             self.assertTrue(anywarns, f"{url} does not fail lint!")
 
+    def test_check_regexes_donate(self):
+        app = fdroidserver.metadata.App()
+        app.Donate = 'https://example.com/donate/'
+        for warn in fdroidserver.lint.check_regexes(app):
+            self.fail()
+
+    def test_check_regexes_donate_both(self):
+        app = fdroidserver.metadata.App()
+        app.Donate = 'http://bit.ly/givememoney/'
+        warns = list(fdroidserver.lint.check_regexes(app))
+        for warn in warns:
+            self.assertIn('bit.ly', warn)
+        self.assertEqual(2, len(warns))
+
+    def test_check_regexes_binaries(self):
+        app = fdroidserver.metadata.App()
+        app.Binaries = 'https://example.com/%v.apk'
+        for warn in fdroidserver.lint.check_regexes(app):
+            self.fail()
+
+    def test_check_regexes_binaries_http(self):
+        app = fdroidserver.metadata.App()
+        app.Binaries = 'http://example.com/%v.apk'
+        for warn in fdroidserver.lint.check_regexes(app):
+            self.assertIn('https://', warn)
+            anywarns = True
+        self.assertTrue(anywarns)
+
+    def test_check_regexes_binaries_shortener(self):
+        app = fdroidserver.metadata.App()
+        app.Binaries = 'https://bit.ly/%v.apk'
+        for warn in fdroidserver.lint.check_regexes(app):
+            self.assertIn('bit.ly', warn)
+            anywarns = True
+        self.assertTrue(anywarns)
+
+    def test_check_regexes_binaries_both(self):
+        app = fdroidserver.metadata.App()
+        app.Binaries = 'http://bit.ly/%v.apk'
+        warns = list(fdroidserver.lint.check_regexes(app))
+        for warn in warns:
+            self.assertIn('bit.ly', warn)
+        self.assertEqual(2, len(warns))
+
+    def test_check_regexes_binary(self):
+        app = fdroidserver.metadata.App()
+        build = fdroidserver.metadata.Build()
+        build.binary = 'https://example.com/%v.apk'
+        app['Builds'] = [build]
+        for warn in fdroidserver.lint.check_builds(app):
+            self.fail()
+
+    def test_check_regexes_binary_http(self):
+        app = fdroidserver.metadata.App()
+        build = fdroidserver.metadata.Build()
+        build.binary = 'http://example.com/%v.apk'
+        build.versionCode = 123
+        app['Builds'] = [build]
+        for warn in fdroidserver.lint.check_builds(app):
+            self.assertIn('https://', warn)
+            anywarns = True
+        self.assertTrue(anywarns)
+
+    def test_check_regexes_binary_shortener(self):
+        app = fdroidserver.metadata.App()
+        build = fdroidserver.metadata.Build()
+        build.binary = 'https://bit.ly/%v.apk'
+        build.versionCode = 123
+        app['Builds'] = [build]
+        for warn in fdroidserver.lint.check_builds(app):
+            self.assertIn('bit.ly', warn)
+            anywarns = True
+        self.assertTrue(anywarns)
+
+    def test_check_regexes_binary_both(self):
+        app = fdroidserver.metadata.App()
+        build = fdroidserver.metadata.Build()
+        build.binary = 'http://bit.ly/%v.apk'
+        build.versionCode = 123
+        app['Builds'] = [build]
+        warns = list(fdroidserver.lint.check_builds(app))
+        for warn in warns:
+            self.assertIn('bit.ly', warn)
+        self.assertEqual(2, len(warns))
+
     def test_check_app_field_types(self):
         config = dict()
         fdroidserver.common.fill_config_defaults(config)
@@ -664,8 +749,8 @@ class ConfigYmlTest(SetUpTearDownMixin, unittest.TestCase):
     @mock.patch('builtins.print', mock.Mock())  # hide error message
     def test_config_yml_bad_value_for_all_keys(self):
         """Check all config keys with a bad value."""
-        for key in fdroidserver.lint.check_config_keys:
-            if key in fdroidserver.lint.bool_keys:
+        for key in fdroidserver.lint.CHECK_CONFIG_KEYS:
+            if key in fdroidserver.lint.BOOL_KEYS:
                 value = 'foobar'
             else:
                 value = 'false'
@@ -705,3 +790,42 @@ class ConfigYmlTest(SetUpTearDownMixin, unittest.TestCase):
             )
         )
         self.assertFalse(fdroidserver.lint.lint_config(self.config_yml))
+
+
+class HttpUrlShorteners(unittest.TestCase):
+    def _exec_checks(self, text):
+        for check, msg in fdroidserver.lint.HTTP_URL_SHORTENERS:
+            if check.match(text):
+                yield f'{text} {check} {msg}'
+
+    def test_avoid_domain_confusion(self):
+        good_urls = [
+            'https://github.com/Matteljay/mastermindy-android',
+            'https://gitlab.com/origin/master.git',
+            'https://gitlab.com/group/subgroup/masterthing',
+            'https://git.ieval.ro/?p=fonbot.git;a=blob;f=Changes;hb=HEAD',
+            'https://silkevicious.codeberg.page/fediphoto-lineage.html',
+            'https://mental-math.codeberg.page/',
+            'http://imshyam.me/mintube/',
+            'http://trikita.co/',
+        ]
+
+        for url in good_urls:
+            anywarns = False
+            for warn in self._exec_checks(url):
+                anywarns = True
+            self.assertFalse(anywarns, f"{url} should be valid.")
+
+    def test_warn_on_shorteners(self):
+        bad_urls = [
+            'https://sub.tr.im/test',
+            'https://t.cn/zRTdGks',
+            'https://tr.im/misproyectos',
+            'https://ynews.page.link/mkotV',
+        ]
+
+        for url in bad_urls:
+            anywarns = False
+            for warn in self._exec_checks(url):
+                anywarns = True
+            self.assertTrue(anywarns, f"Should warn on {url}")
