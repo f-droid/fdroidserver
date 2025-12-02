@@ -22,7 +22,6 @@
 import logging
 import math
 import os
-import platform
 import re
 from collections import OrderedDict
 from pathlib import Path
@@ -475,13 +474,6 @@ def parse_yaml_srclib(metadatapath):
     with metadatapath.open("r", encoding="utf-8") as f:
         try:
             data = yaml.load(f)
-            if type(data) is not dict:
-                if platform.system() == 'Windows':
-                    # Handle symlink on Windows
-                    symlink = metadatapath.parent / metadatapath.read_text(encoding='utf-8')
-                    if symlink.is_file():
-                        with symlink.open("r", encoding="utf-8") as s:
-                            data = yaml.load(s)
             if type(data) is not dict:
                 raise ruamel.yaml.YAMLError(
                     _('{file} is blank or corrupt!').format(file=metadatapath)
