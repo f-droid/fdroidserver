@@ -741,6 +741,15 @@ def make_v2(apps, packages, repodir, repodict, requestsdict, signer_fingerprints
             return d
         raise TypeError(repr(obj) + " is not JSON serializable")
 
+    def _v2_json_dump(output, fp):
+        json.dump(
+            output,
+            fp,
+            default=_index_encoder_default,
+            ensure_ascii=False,
+            indent=2 if common.options.pretty else None,
+        )
+
     output = collections.OrderedDict()
     output["repo"] = v2_repo(repodict, repodir, archive)
     if requestsdict and (requestsdict["install"] or requestsdict["uninstall"]):
@@ -806,17 +815,11 @@ def make_v2(apps, packages, repodir, repodict, requestsdict, signer_fingerprints
     json_name = 'index-v2.json'
     index_file = os.path.join(repodir, json_name)
     with open(index_file, "w", encoding="utf-8") as fp:
-        if common.options.pretty:
-            json.dump(output, fp, default=_index_encoder_default, indent=2, ensure_ascii=False)
-        else:
-            json.dump(output, fp, default=_index_encoder_default, ensure_ascii=False)
+        _v2_json_dump(output, fp)
 
     json_name = "tmp/{}_{}.json".format(repodir, convert_datetime(repodict["timestamp"]))
     with open(json_name, "w", encoding="utf-8") as fp:
-        if common.options.pretty:
-            json.dump(output, fp, default=_index_encoder_default, indent=2, ensure_ascii=False)
-        else:
-            json.dump(output, fp, default=_index_encoder_default, ensure_ascii=False)
+        _v2_json_dump(output, fp)
 
     entry["index"] = common.file_entry(index_file)
     entry["index"]["numPackages"] = len(output.get("packages", []))
@@ -840,10 +843,7 @@ def make_v2(apps, packages, repodir, repodict, requestsdict, signer_fingerprints
         if not os.path.exists(os.path.join(repodir, "diff")):
             os.makedirs(os.path.join(repodir, "diff"))
         with open(diff_file, "w", encoding="utf-8") as fp:
-            if common.options.pretty:
-                json.dump(diff, fp, default=_index_encoder_default, indent=2, ensure_ascii=False)
-            else:
-                json.dump(diff, fp, default=_index_encoder_default, ensure_ascii=False)
+            _v2_json_dump(diff, fp)
 
         entry["diffs"][old["repo"]["timestamp"]] = common.file_entry(diff_file)
         entry["diffs"][old["repo"]["timestamp"]]["numPackages"] = len(diff.get("packages", []))
@@ -851,10 +851,7 @@ def make_v2(apps, packages, repodir, repodict, requestsdict, signer_fingerprints
     json_name = "entry.json"
     index_file = os.path.join(repodir, json_name)
     with open(index_file, "w", encoding="utf-8") as fp:
-        if common.options.pretty:
-            json.dump(entry, fp, default=_index_encoder_default, indent=2, ensure_ascii=False)
-        else:
-            json.dump(entry, fp, default=_index_encoder_default, ensure_ascii=False)
+        _v2_json_dump(entry, fp)
 
     if common.options.nosign:
         _copy_to_local_copy_dir(repodir, index_file)
