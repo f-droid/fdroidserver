@@ -406,6 +406,7 @@ class FieldValidator:
 
 
 # Generic value types
+# fmt: off
 valuetypes = {
     FieldValidator("Liberapay",
                    VALID_USERNAME_REGEX,
@@ -451,6 +452,7 @@ valuetypes = {
                    r"^(Tags|Tags .+|RepoManifest|RepoManifest/.+|HTTP|Static|None)$",
                    ["UpdateCheckMode"])
 }
+# fmt: on
 
 
 # Check an app's metadata information for integrity errors
@@ -479,11 +481,14 @@ def parse_yaml_srclib(metadatapath):
                     _('{file} is blank or corrupt!').format(file=metadatapath)
                 )
         except ruamel.yaml.YAMLError as e:
-            _warn_or_exception(_("Invalid srclib metadata: could not "
-                                 "parse '{file}'")
-                               .format(file=metadatapath) + '\n'
-                               + common.run_yamllint(metadatapath, indent=4),
-                               cause=e)
+            _warn_or_exception(
+                _("Invalid srclib metadata: could not parse '{file}'").format(
+                    file=metadatapath
+                )
+                + '\n'
+                + common.run_yamllint(metadatapath, indent=4),
+                cause=e,
+            )
             return thisinfo
 
     for key in data:
@@ -775,8 +780,10 @@ def parse_yaml_metadata(mf):
                 path=mf.name
             )
         )
-        logging.error(_('Using blank dictionary instead of contents of {path}!').format(
-            path=mf.name)
+        logging.error(
+            _('Using blank dictionary instead of contents of {path}!').format(
+                path=mf.name
+            )
         )
         yamldata = dict()
 
