@@ -925,4 +925,6 @@ class Test_main(unittest.TestCase):
 
             self.exit_func.assert_not_called()
             self.read_app_args_func.assert_not_called()
-            self.scan_binary_func.assert_called_once_with('local.application.apk')
+            self.scan_binary_func.assert_called_once_with(
+                'local.application.apk', False
+            )
