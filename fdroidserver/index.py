@@ -817,7 +817,7 @@ def make_v2(apps, packages, repodir, repodict, requestsdict, signer_fingerprints
     with open(index_file, "w", encoding="utf-8") as fp:
         _v2_json_dump(output, fp)
 
-    json_name = "tmp/{}_{}.json".format(repodir, convert_datetime(repodict["timestamp"]))
+    json_name = f"""tmp/{repodir}_{convert_datetime(repodict["timestamp"])}.json"""
     with open(json_name, "w", encoding="utf-8") as fp:
         _v2_json_dump(output, fp)
 
