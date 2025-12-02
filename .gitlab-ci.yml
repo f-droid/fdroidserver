@@ -428,7 +428,7 @@ locales:
 
 black:
   stage: lint
-  image: debian:bookworm-slim
+  image: debian:trixie-slim
   <<: *apt-template
   script:
     - apt-get install black
