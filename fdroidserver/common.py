@@ -915,8 +915,11 @@ def assert_config_keystore(config):
         nosigningkey = True
         logging.critical(_("'keypass' not found in config.yml!"))
     if nosigningkey:
-        raise FDroidException("This command requires a signing key, "
-                              + "you can create one using: fdroid update --create-key")
+        raise FDroidException(
+            _(
+                "This command requires a signing key, you can create one using: fdroid update --create-key"
+            )
+        )
 
 
 def find_apksigner(config):
