@@ -111,6 +111,11 @@ def px_to_dpi(px):
     return (int(px) * 160) / 48
 
 
+def get_old_icon_filename(appid, versionCode):
+    """Old pattern that uses a "." instead of "_" as separator."""
+    return f"{appid}.{versionCode}.png"
+
+
 def get_icon_dir(repodir, density):
     if density in ('0', '65534'):
         return os.path.join(repodir, "icons")
@@ -226,9 +231,7 @@ def delete_disabled_builds(apps, apkcache, repodirs):
             if not build.disable:
                 continue
             apkfilename = common.get_release_filename(app, build)
-            iconfilename = "%s.%s.png" % (
-                appid,
-                build.versionCode)
+            iconfilename = get_old_icon_filename(appid, build.versionCode)
             for repodir in repodirs:
                 files = [
                     os.path.join(repodir, apkfilename),
@@ -2046,7 +2049,7 @@ def process_apk(apkcache, apkfilename, repodir, knownapks, use_date_from_apk=Fal
                                 .format(apkfilename=apkfile) + str(e))
 
         # extract icons from APK zip file
-        iconfilename = "%s.%s.png" % (apk['packageName'], apk['versionCode'])
+        iconfilename = get_old_icon_filename(apk['packageName'], apk['versionCode'])
         try:
             empty_densities = extract_apk_icons(iconfilename, apk, apkzip, repodir)
         finally:

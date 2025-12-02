@@ -1746,6 +1746,18 @@ class UpdateTest(unittest.TestCase):
         self.assertIsNotNone(fdroidserver.update.sanitize_funding_yml_entry(' WhyIncludeWhitespace '))
         self.assertIsNotNone(fdroidserver.update.sanitize_funding_yml_entry(['first', 'second']))
 
+    def test_get_old_icon_filename_int(self):
+        self.assertEqual(
+            'com.example.21.png',
+            fdroidserver.update.get_old_icon_filename('com.example', 21),
+        )
+
+    def test_get_old_icon_filename_str(self):
+        self.assertEqual(
+            'com.example.21.png',
+            fdroidserver.update.get_old_icon_filename('com.example', '21'),
+        )
+
     def test_set_localized_text_entry(self):
         os.chdir(self.testdir)
         config = dict()
