@@ -1614,32 +1614,6 @@ class CommonTest(SetUpTearDownMixin, unittest.TestCase):
             diff = list(difflib.unified_diff(a, b, fromfile, f))
             self.assertEqual(0, len(diff), 'This file should not have been modified:\n' + ''.join(diff))
 
-    def test_calculate_math_string(self):
-        self.assertEqual(1234,
-                         fdroidserver.common.calculate_math_string('1234'))
-        self.assertEqual((1 + 1) * 2,
-                         fdroidserver.common.calculate_math_string('(1 + 1) * 2'))
-        self.assertEqual((1 - 1) * 2 + 3 * 1 - 1,
-                         fdroidserver.common.calculate_math_string('(1 - 1) * 2 + 3 * 1 - 1'))
-        self.assertEqual(0 - 12345,
-                         fdroidserver.common.calculate_math_string('0 - 12345'))
-        self.assertEqual(0xffff,
-                         fdroidserver.common.calculate_math_string('0xffff'))
-        self.assertEqual(0xcafe * 123,
-                         fdroidserver.common.calculate_math_string('0xcafe * 123'))
-        self.assertEqual(-1,
-                         fdroidserver.common.calculate_math_string('-1'))
-        with self.assertRaises(SyntaxError):
-            fdroidserver.common.calculate_math_string('__import__("urllib")')
-        with self.assertRaises(SyntaxError):
-            fdroidserver.common.calculate_math_string('self')
-        with self.assertRaises(SyntaxError):
-            fdroidserver.common.calculate_math_string('Ox9()')
-        with self.assertRaises(SyntaxError):
-            fdroidserver.common.calculate_math_string('1+1; print(1)')
-        with self.assertRaises(SyntaxError):
-            fdroidserver.common.calculate_math_string('1-1 # no comment')
-
     def test_calculate_IPFS_cid_with_no_tool(self):
         fdroidserver.common.config = {'ipfs_cid': None}
         self.assertIsNone(fdroidserver.common.calculate_IPFS_cid('urzip.apk'))
@@ -3743,3 +3717,66 @@ class ParseNdkTest(unittest.TestCase):
         build = fdroidserver.metadata.Build()
         build.ndk = testvalue
         self.assertEqual(build.ndk_path(), f'{sdk_path}/ndk/{testvalue}')
+
+
+class CalculateMathStringTest(unittest.TestCase):
+    def test_calculate_math_string_int(self):
+        self.assertEqual(
+            1234,
+            fdroidserver.common.calculate_math_string('1234'),
+        )
+
+    def test_calculate_math_string_simple_math(self):
+        self.assertEqual(
+            (1 + 1) * 2,
+            fdroidserver.common.calculate_math_string('(1 + 1) * 2'),
+        )
+
+    def test_calculate_math_string_order_of_ops(self):
+        self.assertEqual(
+            (1 - 1) * 2 + 3 * 1 - 1,
+            fdroidserver.common.calculate_math_string('(1 - 1) * 2 + 3 * 1 - 1'),
+        )
+
+    def test_calculate_math_string_substraction(self):
+        self.assertEqual(
+            0 - 12345, fdroidserver.common.calculate_math_string('0 - 12345')
+        )
+
+    def test_calculate_math_string_hex(self):
+        self.assertEqual(
+            0xFFFF,
+            fdroidserver.common.calculate_math_string('0xffff'),
+        )
+
+    def test_calculate_math_string_hex_multiply(self):
+        self.assertEqual(
+            0xCAFE * 123,
+            fdroidserver.common.calculate_math_string('0xcafe * 123'),
+        )
+
+    def test_calculate_math_string_negative(self):
+        self.assertEqual(
+            -1,
+            fdroidserver.common.calculate_math_string('-1'),
+        )
+
+    def test_calculate_math_string_error_import(self):
+        with self.assertRaises(SyntaxError):
+            fdroidserver.common.calculate_math_string('__import__("urllib")')
+
+    def test_calculate_math_string_error_self(self):
+        with self.assertRaises(SyntaxError):
+            fdroidserver.common.calculate_math_string('self')
+
+    def test_calculate_math_string_error_bad_math(self):
+        with self.assertRaises(SyntaxError):
+            fdroidserver.common.calculate_math_string('Ox9()')
+
+    def test_calculate_math_string_error_print(self):
+        with self.assertRaises(SyntaxError):
+            fdroidserver.common.calculate_math_string('1+1; print(1)')
+
+    def test_calculate_math_string_error_comment(self):
+        with self.assertRaises(SyntaxError):
+            fdroidserver.common.calculate_math_string('1-1 # no comment')
