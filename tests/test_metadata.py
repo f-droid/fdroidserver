@@ -251,6 +251,10 @@ class MetadataTest(unittest.TestCase):
             fp.write('OpenCollective: test')
         metadata.parse_metadata(yml)  # should not throw an exception
 
+    @unittest.skipIf(
+        ruamel.yaml.version_info > (0, 17, 21),
+        "TODO https://gitlab.com/fdroid/fdroidserver/-/issues/1138",
+    )
     @mock.patch('git.Repo', mock.Mock())
     @mock.patch('logging.error')
     def test_rewrite_yaml_fakeotaupdate(self, logging_error):
@@ -301,6 +305,10 @@ class MetadataTest(unittest.TestCase):
                 (Path('metadata-rewrite-yml') / file_name).read_text(encoding='utf-8'),
             )
 
+    @unittest.skipIf(
+        ruamel.yaml.version_info > (0, 17, 21),
+        "TODO https://gitlab.com/fdroid/fdroidserver/-/issues/1138",
+    )
     @mock.patch('git.Repo', mock.Mock())
     def test_rewrite_yaml_special_build_params(self):
         """Test rewriting a plain YAML metadata file without localized files."""
