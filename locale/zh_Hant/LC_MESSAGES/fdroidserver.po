@@ -2534,8 +2534,8 @@ msgstr "參考二進位檔缺少簽章"
 
 #: ../fdroidserver/signatures.py
 #, python-brace-format
-msgid "refuse downloading via insecure HTTP connection (use HTTPS or specify --no-https-check): {apkfilename}"
-msgstr "拒絕透過不安全的 HTTP 連線下載 (使用 HTTPS 或指明 --no-https-check): {apkfilename}"
+msgid "refuse downloading via insecure HTTP connection (use HTTPS or specify --no-check-https): {apkfilename}"
+msgstr "拒絕透過不安全的 HTTP 連線下載 (使用 HTTPS 或指明 --no-check-https): {apkfilename}"
 
 #: ../fdroidserver/index.py
 #, fuzzy, python-format

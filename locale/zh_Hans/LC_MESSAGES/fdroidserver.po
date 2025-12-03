@@ -2508,8 +2508,8 @@ msgstr "参考二进制缺少签名"
 
 #: ../fdroidserver/signatures.py
 #, python-brace-format
-msgid "refuse downloading via insecure HTTP connection (use HTTPS or specify --no-https-check): {apkfilename}"
-msgstr "拒绝通过不安全的 HTTP 连接下载（使用 HTTPS 或指定 --no-https-check）: {apkfilename}"
+msgid "refuse downloading via insecure HTTP connection (use HTTPS or specify --no-check-https): {apkfilename}"
+msgstr "拒绝通过不安全的 HTTP 连接下载（使用 HTTPS 或指定 --no-check-https）: {apkfilename}"
 
 #: ../fdroidserver/index.py
 #, python-format

@@ -2478,8 +2478,8 @@ msgstr "өлгө бинарҙың имзаһы юҡ"
 
 #: ../fdroidserver/signatures.py
 #, python-brace-format
-msgid "refuse downloading via insecure HTTP connection (use HTTPS or specify --no-https-check): {apkfilename}"
-msgstr "хәүефһеҙ булмаған HTTP тоташыуы аша йөкләүҙән баш тартыу (HTTPS ҡулланығыҙ йәки --no-https-check күрһәтегеҙ): {apkfilename}"
+msgid "refuse downloading via insecure HTTP connection (use HTTPS or specify --no-check-https): {apkfilename}"
+msgstr "хәүефһеҙ булмаған HTTP тоташыуы аша йөкләүҙән баш тартыу (HTTPS ҡулланығыҙ йәки --no-check-https күрһәтегеҙ): {apkfilename}"
 
 #: ../fdroidserver/index.py
 #, python-format

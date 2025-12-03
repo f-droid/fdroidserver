@@ -36,7 +36,14 @@ logger = logging.getLogger(__name__)
 HEADERS = {'User-Agent': 'F-Droid'}
 
 
-def download_file(url, local_filename=None, dldir='tmp', retries=3, backoff_factor=0.1):
+def download_file(
+    url,
+    local_filename=None,
+    dldir='tmp',
+    retries=3,
+    backoff_factor=0.1,
+    https_only=True,
+):
     """Try hard to download the file, including retrying on failures.
 
     This has two retry cycles, one inside of the requests session, the
@@ -55,11 +62,16 @@ def download_file(url, local_filename=None, dldir='tmp', retries=3, backoff_fact
         if retries:
             max_retries = Retry(total=retries - i, backoff_factor=backoff_factor)
             adapter = HTTPAdapter(max_retries=max_retries)
-            session = requests.Session()
-            session.mount('http://', adapter)
-            session.mount('https://', adapter)
         else:
-            session = requests
+            adapter = HTTPAdapter()
+        session = requests.Session()
+        session.mount('https://', adapter)
+        if https_only:
+            for k in session.adapters:
+                if k != 'https://':
+                    del session.adapters[k]
+        else:
+            session.mount('http://', adapter)
         # the stream=True parameter keeps memory usage low
         r = session.get(
             url, stream=True, allow_redirects=True, headers=HEADERS, timeout=300

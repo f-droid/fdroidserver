@@ -2490,8 +2490,8 @@ msgstr "tagairt dénártha síniú ar iarraidh"
 
 #: ../fdroidserver/signatures.py
 #, python-brace-format
-msgid "refuse downloading via insecure HTTP connection (use HTTPS or specify --no-https-check): {apkfilename}"
-msgstr "diúltú íoslódáil trí nasc HTTP neamhchinnte (úsáid HTTPS nó sonraigh --no-https-check): {apkfilename}"
+msgid "refuse downloading via insecure HTTP connection (use HTTPS or specify --no-check-https): {apkfilename}"
+msgstr "diúltú íoslódáil trí nasc HTTP neamhchinnte (úsáid HTTPS nó sonraigh --no-check-https): {apkfilename}"
 
 #: ../fdroidserver/index.py
 #, python-format

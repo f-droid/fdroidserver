@@ -2498,8 +2498,8 @@ msgstr "эталонный двоичный файл с отсутствующе
 
 #: ../fdroidserver/signatures.py
 #, python-brace-format
-msgid "refuse downloading via insecure HTTP connection (use HTTPS or specify --no-https-check): {apkfilename}"
-msgstr "использовать для загрузки небезопасное HTTP-соединение не стоит (пользуйтесь HTTPS или укажите --no-https-check): {apkfilename}"
+msgid "refuse downloading via insecure HTTP connection (use HTTPS or specify --no-check-https): {apkfilename}"
+msgstr "использовать для загрузки небезопасное HTTP-соединение не стоит (пользуйтесь HTTPS или укажите --no-check-https): {apkfilename}"
 
 #: ../fdroidserver/index.py
 #, python-format

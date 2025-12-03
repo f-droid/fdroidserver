@@ -84,7 +84,7 @@ class NetTest(unittest.TestCase):
     def tearDown(self):
         self.tempdir.cleanup()
 
-    @patch('requests.get')
+    @patch('requests.Session.get')
     def test_download_file_url_parsing(self, requests_get):
         # pylint: disable=unused-argument
         def _get(url, stream, allow_redirects, headers, timeout):
@@ -105,9 +105,19 @@ class NetTest(unittest.TestCase):
         self.assertEqual('tmp/com.downloader.aegis-3175421.apk', f)
 
     @patch.dict(os.environ, clear=True)
+    def test_download_file_no_http(self):
+        with self.assertRaises(requests.exceptions.InvalidSchema):
+            net.download_file('http://neverssl.com/repo/entry.jar')
+
+    @patch.dict(os.environ, clear=True)
+    def test_download_file_no_git(self):
+        with self.assertRaises(requests.exceptions.InvalidSchema):
+            net.download_file('git://github.com/')
+
+    @patch.dict(os.environ, clear=True)
     def test_download_file_retries(self):
         server = RetryServer()
-        f = net.download_file('http://localhost:%d/f.txt' % server.port)
+        f = net.download_file(f'http://localhost:{server.port}/f.txt', https_only=False)
         # strip the HTTP headers and compare the reply
         self.assertEqual(server.reply.split(b'\n\n')[1], Path(f).read_bytes())
         server.stop()
@@ -117,7 +127,7 @@ class NetTest(unittest.TestCase):
         """The retry logic should eventually exit with an error."""
         server = RetryServer(failures=5)
         with self.assertRaises(requests.exceptions.ConnectionError):
-            net.download_file('http://localhost:%d/f.txt' % server.port)
+            net.download_file(f'http://localhost:{server.port}/f.txt', https_only=False)
         server.stop()
 
     @unittest.skipIf(os.getenv('CI'), 'FIXME this fails mysteriously only in GitLab CI')

@@ -2485,8 +2485,8 @@ msgstr "referans ikili eksik imza"
 
 #: ../fdroidserver/signatures.py
 #, python-brace-format
-msgid "refuse downloading via insecure HTTP connection (use HTTPS or specify --no-https-check): {apkfilename}"
-msgstr "güvensiz HTTP bağlantısı ile indirmeyi reddet (HTTPS kullanın veya --no-https-check belirtin): {apkfilename}"
+msgid "refuse downloading via insecure HTTP connection (use HTTPS or specify --no-check-https): {apkfilename}"
+msgstr "güvensiz HTTP bağlantısı ile indirmeyi reddet (HTTPS kullanın veya --no-check-https belirtin): {apkfilename}"
 
 #: ../fdroidserver/index.py
 #, python-format

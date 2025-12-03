@@ -2523,8 +2523,8 @@ msgstr "signature manquante du fichier binaire de référence"
 
 #: ../fdroidserver/signatures.py
 #, python-brace-format
-msgid "refuse downloading via insecure HTTP connection (use HTTPS or specify --no-https-check): {apkfilename}"
-msgstr "refuser le téléchargement via une connexion HTTP non sécurisée (utilisez HTTPS ou précisez --no-https-check) : {apkfilename}"
+msgid "refuse downloading via insecure HTTP connection (use HTTPS or specify --no-check-https): {apkfilename}"
+msgstr "refuser le téléchargement via une connexion HTTP non sécurisée (utilisez HTTPS ou précisez --no-check-https) : {apkfilename}"
 
 #: ../fdroidserver/index.py
 #, python-format
