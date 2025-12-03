@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
 import os
-import platform
 import shutil
 import tempfile
 import time
@@ -17,6 +16,10 @@ from fdroidserver import checkupdates
 basedir = Path(__file__).parent
 
 
+@unittest.skipUnless(
+    os.path.exists('/usr/bin/dpkg'),  # easy test for "Debian-ish"
+    'checkupdates is only ever run in production on Debian.',
+)
 class CheckupdatesTest(unittest.TestCase):
     '''fdroidserver/checkupdates.py'''
 
@@ -483,10 +486,6 @@ class CheckupdatesTest(unittest.TestCase):
                 checkupdates.main()
         sys_exit.assert_not_called()
 
-    @unittest.skipIf(
-        platform.system() == 'Darwin',
-        'It is difficult to configure the base system for this test.',
-    )
     def test_get_upstream_main_branch(self):
         os.chdir(self.testdir.name)
         testvalue = 'foo'
