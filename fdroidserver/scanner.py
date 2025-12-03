@@ -966,11 +966,10 @@ def scan_source(build_dir, build=metadata.Build(), json_per_build=None):
 
             path_in_build_dir = os.path.relpath(filepath, build_dir)
 
-            if not os.access(filepath, os.R_OK):
+            st_mode = os.stat(filepath).st_mode
+            if not os.access(filepath, os.R_OK) or not st_mode & stat.S_IRUSR:
                 count += handleproblem(
-                    _("suspicious permissions {st_mode:o}").format(
-                        st_mode=os.stat(filepath).st_mode
-                    ),
+                    _("suspicious permissions {st_mode:o}").format(st_mode=st_mode),
                     path_in_build_dir,
                     filepath,
                     json_per_build,
