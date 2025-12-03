@@ -4658,8 +4658,8 @@ def calculate_math_string(expr):
     }
 
     def execute_ast(node):
-        if isinstance(node, ast.Num):  # <number>
-            return node.n
+        if isinstance(node, ast.Constant):  # <number>
+            return node.value
         elif isinstance(node, ast.BinOp):  # <left> <operator> <right>
             return ops[type(node.op)](execute_ast(node.left),
                                       execute_ast(node.right))
