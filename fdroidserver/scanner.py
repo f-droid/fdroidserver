@@ -20,6 +20,7 @@ import itertools
 import json
 import logging
 import os
+import stat
 import re
 import sys
 import traceback
@@ -830,6 +831,12 @@ def scan_source(build_dir, build=metadata.Build(), json_per_build=None):
             # This can happen if we find multiple problems in one file that is setup for scandelete
             # I.e. build.gradle files containig multiple unknown maven repos.
             pass
+        except PermissionError:
+            os.chmod(
+                filepath,
+                os.stat(filepath).st_mode | stat.S_IWUSR | stat.S_IWGRP | stat.S_IWOTH,
+            )
+            os.remove(filepath)
         return 0
 
     def warnproblem(what, path_in_build_dir, json_per_build):
@@ -959,7 +966,15 @@ def scan_source(build_dir, build=metadata.Build(), json_per_build=None):
 
             path_in_build_dir = os.path.relpath(filepath, build_dir)
 
-            if curfile in ('gradle-wrapper.jar', 'gradlew', 'gradlew.bat'):
+            st_mode = os.stat(filepath).st_mode
+            if not os.access(filepath, os.R_OK) or not st_mode & stat.S_IRUSR:
+                count += handleproblem(
+                    _("suspicious permissions {st_mode:o}").format(st_mode=st_mode),
+                    path_in_build_dir,
+                    filepath,
+                    json_per_build,
+                )
+            elif curfile in ('gradle-wrapper.jar', 'gradlew', 'gradlew.bat'):
                 removeproblem(curfile, path_in_build_dir, filepath, json_per_build)
             elif curfile.endswith('.apk'):
                 removeproblem(
