@@ -425,10 +425,6 @@ def _getappname(app: metadata.App) -> str:
     return common.get_app_display_name(app)
 
 
-def _getcvname(app: metadata.App) -> str:
-    return '%s (%s)' % (app.CurrentVersion, app.CurrentVersionCode)
-
-
 def fetch_autoname(app: metadata.App, tag: str) -> Optional[str]:
     """Fetch AutoName.
 
@@ -587,9 +583,8 @@ def checkupdates_app(app: metadata.App, auto: bool, commit: bool = False) -> Non
 
     if updating:
         name = _getappname(app)
-        ver = _getcvname(app)
-        logging.info('...updating to version %s' % ver)
-        commitmsg = 'Update CurrentVersion of %s to %s' % (name, ver)
+        logging.info('...updating to version %d' % app.CurrentVersionCode)
+        commitmsg = 'Update CurrentVersionCode of %s to %d' % (name, app.CurrentVersionCode)
 
     if auto:
         mode = app.AutoUpdateMode
@@ -651,22 +646,23 @@ def checkupdates_app(app: metadata.App, auto: bool, commit: bool = False) -> Non
                 for b, v in zip(newbuilds, vercodes):
                     b.disable = False
                     b.versionCode = v
-                    b.versionName = app.CurrentVersion + suffix.replace(
-                        '%c', str(v)
-                    )
-                    logging.info("...auto-generating build for " + b.versionName)
+                    if b.versionName and app.CurrentVersion:
+                        b.versionName = app.CurrentVersion + suffix.replace(
+                            '%c', str(v)
+                        )
+                    logging.info("...auto-generating build for " + str(b.versionCode))
                     if tag:
                         b.commit = tag
                     else:
-                        commit = pattern.replace('%v', app.CurrentVersion)
+                        if app.CurrentVersion:
+                            commit = pattern.replace('%v', app.CurrentVersion)
                         commit = commit.replace('%c', str(v))
                         b.commit = commit
 
                 app['Builds'].extend(newbuilds)
 
                 name = _getappname(app)
-                ver = _getcvname(app)
-                commitmsg = "Update %s to %s" % (name, ver)
+                commitmsg = "Update %s to %s" % (name, app.CurrentVersionCode)
         else:
             raise MetaDataException(
                 _('Invalid AutoUpdateMode: {mode}').format(mode=mode)

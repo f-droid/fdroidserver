@@ -348,11 +348,9 @@ def main():
     paths = get_all_gradle_and_manifests(tmp_importer_dir)
     gradle_subdir = get_gradle_subdir(tmp_importer_dir, paths)
     if paths:
-        versionName, versionCode, appid = common.parse_androidmanifests(paths, app)
+        _ignored, versionCode, appid = common.parse_androidmanifests(paths, app)
         if not appid:
             raise FDroidException(_("Couldn't find Application ID"))
-        if not versionName:
-            logging.warning(_('Could not find latest versionName'))
         if not versionCode:
             logging.warning(_('Could not find latest versionCode'))
     else:
@@ -363,8 +361,6 @@ def main():
         raise FDroidException(_('Package "{appid}" already exists').format(appid=appid))
 
     # Create a build line...
-    build.versionName = versionName or 'Unknown'
-    app.CurrentVersion = build.versionName
     build.versionCode = versionCode or 0
     app.CurrentVersionCode = build.versionCode
     if options.subdir:
