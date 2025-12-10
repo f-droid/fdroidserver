@@ -386,6 +386,8 @@ yamllint:
         - .gitlab-ci.yml
         - .safety-policy.yml
         - .yamllint
+        - '*/*.yaml'
+        - '*/*.yml'
         - tests/*.yml
         - tests/*/*.yml
         - tests/*/*/.*.yml
@@ -398,6 +400,8 @@ yamllint:
         .gitlab-ci.yml
         .safety-policy.yml
         .yamllint
+        */*.yaml
+        */*.yml
         tests/*.yml
         tests/*/*.yml
         tests/*/*/.*.yml
