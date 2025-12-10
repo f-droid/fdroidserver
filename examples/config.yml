@@ -3,6 +3,7 @@
 # your system configuration.
 
 # Custom path to the Android SDK, defaults to $ANDROID_HOME
+#
 # sdk_path: $ANDROID_HOME
 
 # Paths to installed versions of the Android NDK.  This will be
@@ -22,23 +23,29 @@
 
 # Directory to store downloaded tools in (i.e. gradle versions)
 # By default, these are stored in ~/.cache/fdroidserver
+#
 # cachedir: cache
 
 # Specify paths to each major Java release that you want to support
+#
 # java_paths:
 #   8: /usr/lib/jvm/java-8-openjdk
 
 # Command or path to binary for running Ant
+#
 # ant: ant
 
 # Command or path to binary for running maven 3
+#
 # mvn3: mvn
 
 # Command or path to binary for running Gradle
 # Defaults to using an internal gradle wrapper (gradlew-fdroid).
+#
 # gradle: gradle
 
 # Always scan the APKs produced by `fdroid build` for known non-free classes
+#
 # scan_binary: true
 
 # Set the maximum age (in days) of an index that a client should accept from
@@ -46,9 +53,10 @@
 # functionality. If you do set this to a non-zero value, you need to ensure
 # that your index is updated much more frequently than the specified interval.
 # The same policy is applied to the archive repo, if there is one.
+#
 # repo_maxage: 0
 
-# Canonical URL of the repositoy, needs to end in /repo. Is is used to identity
+# Canonical URL of the repository, needs to end in /repo. Is is used to identity
 # the repo in the client, as well.
 # repo_url: https://example.com/fdroid/repo
 #
@@ -102,27 +110,33 @@
 # https://f-droid.org. For certain situations, it is better to make a repo
 # that is made up of APKs only from a single app. For example, an automated
 # build server that publishes nightly builds.
+#
 # per_app_repos: true
 
 # `fdroid update` will create a link to the current version of a given app.
 # This provides a static path to the current APK. To disable the creation of
 # this link, uncomment this:
+#
 # make_current_version_link: false
 
 # By default, the "current version" link will be based on the "Name" of the
 # app from the metadata. You can change it to use a different field from the
 # metadata here:
+#
 # current_version_name_source: packageName
 
 # Optionally, override home directory for gpg
+#
 # gpghome: /home/fdroid/somewhere/else/.gnupg
 
 # The ID of a GPG key for making detached signatures for APKs. Optional.
+#
 # gpgkey: 1DBA2E89
 
 # The key (from the keystore defined below) to be used for signing the
 # repository itself. This is the same name you would give to keytool or
 # jarsigner using -alias. (Not needed in an unsigned repository).
+#
 # repo_keyalias: fdroidrepo
 
 # Optionally, the public key for the key defined by repo_keyalias above can
@@ -130,6 +144,7 @@
 # will be retrieved from the keystore when needed. However, specifying it
 # manually can allow some processing to take place without access to the
 # keystore.
+#
 # repo_pubkey: ...
 
 # The keystore to use for release keys when building. This needs to be
@@ -138,10 +153,12 @@
 # configure F-Droid to use a smartcard, set the keystore file using the keyword
 # "NONE" (i.e. keystore: "NONE"). That makes Java find the keystore on the
 # smartcard based on 'smartcardoptions' below.
+#
 # keystore: ~/.local/share/fdroidserver/keystore.jks
 
 # You should not need to change these at all, unless you have a very
 # customized setup for using smartcards in Java with keytool/jarsigner
+#
 # smartcardoptions: |
 #   -storetype PKCS11 -providerName SunPKCS11-OpenSC
 #   -providerClass sun.security.pkcs11.SunPKCS11
@@ -151,14 +168,17 @@
 # different than the keypass below, it can be OK to store the password in this
 # file for real use. But in general, sensitive passwords should not be stored
 # in text files!
+#
 # keystorepass: password1
 
 # The password for keys - the same is used for each auto-generated key as well
 # as for the repository key. You should not normally store this password in a
 # file since it is a sensitive password.
+#
 # keypass: password2
 
 # The distinguished name used for all keys.
+#
 # keydname: CN=Birdman, OU=Cell, O=Alcatraz, L=Alcatraz, S=California, C=US
 
 # Use this to override the auto-generated key aliases with specific ones
@@ -172,7 +192,6 @@
 #
 # keyaliases:
 #   com.example.another.plugin: "@com.example.another"
-
 
 # The full path to the root of the repository. It must be specified in
 # rsync/ssh format for a remote host/path. This is used for syncing a locally
@@ -192,7 +211,6 @@
 # serverwebroot:
 #   - url: 'me@b.az:/srv/fdroid'
 #     index_only: true
-
 
 # When running fdroid processes on a remote server, it is possible to
 # publish extra information about the status.  Each fdroid sub-command
@@ -218,7 +236,6 @@
 #   - url: https://github.com/user/repo
 #   - url: https://gitlab.com/user/repo
 #     index_only: true
-
 
 # These settings allow using `fdroid deploy` for publishing APK files from
 # your repository to GitHub Releases. (You should also run `fdroid update`
@@ -248,7 +265,6 @@
 #   - projectUrl: https://github.com/example/app
 #     packageNames: com.example.app
 #     token: {env: GITHUB_TOKEN_EXAMPLE}
-
 
 # Most git hosting services have hard size limits for each git repo.
 # `fdroid deploy` will delete the git history when the git mirror repo
@@ -281,11 +297,9 @@
 # standalone YAML file in the optional configuration directory.  In
 # that case, mirrors: should be removed from this file (config.yml).
 
-
 # optionally specify which identity file to use when using rsync or git over SSH
 #
 # identity_file: ~/.ssh/fdroid_id_rsa
-
 
 # If you are running the repo signing process on a completely offline machine,
 # which provides the best security, then you can specify a folder to sync the
@@ -296,7 +310,6 @@
 # with serverwebroot.
 #
 # local_copy_dir: /media/MyUSBThumbDrive/fdroid
-
 
 # If you are using local_copy_dir on an offline build/signing server, once the
 # thumb drive has been plugged into the online machine, it will need to be
@@ -333,7 +346,6 @@
 #
 # path_to_custom_rclone_config: /home/mycomputer/somedir/example.conf
 
-
 # If you want to force 'fdroid server' to use a non-standard serverwebroot.
 # This will allow you to have 'serverwebroot' entries which do not end in
 # '/fdroid'. (Please note that some client features expect repository URLs
@@ -341,11 +353,9 @@
 #
 # nonstandardwebroot: false
 
-
 # If you want to upload the release APK file to androidobservatory.org
 #
 # androidobservatory: false
-
 
 # If you want to upload the release APK file to virustotal.com
 # You have to enter your profile apikey to enable the upload.
@@ -356,20 +366,22 @@
 #
 # virustotal_apikey: {env: virustotal_apikey}
 
-
 # Keep a log of all generated index files in a git repo to provide a
 # "binary transparency" log for anyone to check the history of the
 # binaries that are published.  This is in the form of a "git remote",
 # which this machine where `fdroid update` is run has already been
 # configured to allow push access (e.g. ssh key, username/password, etc)
+#
 # binary_transparency_remote: git@gitlab.com:fdroid/binary-transparency-log.git
 
 # Set this to true to always use a build server. This saves specifying the
 # --server option on dedicated secure build server hosts.
+#
 # build_server_always: true
 
 # Limit in number of characters that fields can take up
 # Only the fields listed here are supported, defaults shown
+#
 # char_limits:
 #   author: 256
 #   name: 50
@@ -414,7 +426,7 @@
 # it's configured to only use F-Droids official SUSS collection. We have
 # support for these special collections:
 #  * 'exodus' - official exodus-privacy.org signatures
-#  * 'etip' - exodus privacy investigation platfrom community contributed
+#  * 'etip' - exodus privacy investigation platform community contributed
 #           signatures
 #  * 'suss' - official F-Droid: Suspicious or Unwanted Software Signatures
 # You can also configure scanner to use custom collections of signatures here.

@@ -10,18 +10,21 @@
 # cachedir: buildserver/cache
 
 # To specify which Debian mirror the build server VM should use, by
-# default it uses http.debian.net, which auto-detects which is the
+# default it uses https://deb.debian.org/debian/, which auto-detects which is the
 # best mirror to use.
 #
 # debian_mirror: https://debian.osuosl.org/debian/
 
 # The amount of RAM the build server will have (default: 2048)
+#
 # memory: 3584
 
-# The number of CPUs the build server will have
-# cpus: 1
+# The number of CPUs the build server will have (default: 1)
+#
+# cpus: 2
 
 # Debian package proxy server - if you have one
+#
 # aptproxy: http://192.168.0.19:8000
 
 # If this is running on an older machine or on a virtualized system,
