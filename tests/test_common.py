@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import base64
 import difflib
 import glob
 import gzip
@@ -3780,3 +3781,66 @@ class CalculateMathStringTest(unittest.TestCase):
     def test_calculate_math_string_error_comment(self):
         with self.assertRaises(SyntaxError):
             fdroidserver.common.calculate_math_string('1-1 # no comment')
+
+
+class BuildVarsTest(unittest.TestCase):
+    def setUp(self):
+        self.build = fdroidserver.metadata.Build()
+        self.build.commit = 'deadcafebeef'
+        self.build.versionCode = 1
+
+    def test_replace_build_vars_empty(self):
+        testvalue = ''
+        self.assertEqual(
+            testvalue,
+            fdroidserver.common.replace_build_vars(testvalue, self.build),
+        )
+
+    def test_replace_build_vars_random(self):
+        length = 1024
+        testvalue = base64.b64encode(os.urandom(length)).decode('utf-8')[:length]
+        self.assertEqual(
+            testvalue,
+            fdroidserver.common.replace_build_vars(testvalue, self.build),
+        )
+
+    def test_replace_build_vars_non_var(self):
+        testvalue = '$$NOTANFDROIDVAR$$'
+        self.assertEqual(
+            testvalue,
+            fdroidserver.common.replace_build_vars(testvalue, self.build),
+        )
+
+    def test_replace_build_vars_commit(self):
+        testvalue = '$$COMMIT$$'
+        self.assertEqual(
+            self.build.commit,
+            fdroidserver.common.replace_build_vars(testvalue, self.build),
+        )
+
+    def test_replace_build_vars_versionCode(self):
+        testvalue = '$$VERCODE$$'
+        self.assertEqual(
+            str(self.build.versionCode),
+            fdroidserver.common.replace_build_vars(testvalue, self.build),
+        )
+
+    def test_replace_build_vars_versionName(self):
+        self.build.versionName = 'v1.0'
+        testvalue = '$$VERSION$$'
+        self.assertEqual(
+            self.build.versionName,
+            fdroidserver.common.replace_build_vars(testvalue, self.build),
+        )
+
+    def test_replace_build_vars_all(self):
+        self.build.versionName = 'v1.0'
+        testvalue = '$$COMMIT$$-$$VERCODE$$-$$VERSION$$'
+        self.assertEqual(
+            f'{self.build.commit}-{self.build.versionCode}-{self.build.versionName}',
+            fdroidserver.common.replace_build_vars(testvalue, self.build),
+        )
+
+    def test_replace_build_vars_no_versionName(self):
+        with self.assertRaises(fdroidserver.exception.MetaDataException):
+            fdroidserver.common.replace_build_vars('$$VERSION$$', self.build),
