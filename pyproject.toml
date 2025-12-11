@@ -125,3 +125,22 @@ max-line-length = 88
 
 [tool.ruff.format]
 quote-style = "preserve"
+exclude = [
+   "docs/source/conf.py",
+   "examples/fdroid_export_keystore_to_nitrokey.py",
+   "examples/fdroid_exportkeystore.py",
+   "examples/fdroid_fetchsrclibs.py",
+   "examples/fdroid_nitrokeyimport.py",
+   "fdroidserver/__main__.py",
+   "fdroidserver/apksigcopier.py",
+   "fdroidserver/looseversion.py",
+   "fdroidserver/build.py",
+   "fdroidserver/checkupdates.py",
+   "fdroidserver/vmtools.py",
+   "tests/config.py",
+   "tests/extra/manual-vmtools-test.py",
+   "tests/openssl-version-check-test.py",
+   "tests/valid-package-names/test.py",
+   "tests/test_common.py",
+   "tests/test_update.py",
+]
