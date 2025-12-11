@@ -19,7 +19,7 @@ ignore = "E123,E203,E402,E501,W503"
 
 [tool.black]
 skip-string-normalization = true
-target-version = ["py38"]
+target-version = ["py39"]
 include = '(^fdroid|\.pyi?)$'
 # These files will never be included in black runs.  To run black on
 # one of thes files, remove it from this list.

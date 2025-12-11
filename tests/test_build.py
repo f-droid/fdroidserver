@@ -279,9 +279,11 @@ class BuildTest(unittest.TestCase):
     @mock.patch('sdkmanager.build_package_list', lambda use_net: None)
     def test_build_local_ndk(self):
         """Test if `fdroid build` detects installed NDKs and auto-installs when missing"""
-        with tempfile.TemporaryDirectory() as testdir, TmpCwd(
-            testdir
-        ), tempfile.TemporaryDirectory() as sdk_path:
+        with (
+            tempfile.TemporaryDirectory() as testdir,
+            TmpCwd(testdir),
+            tempfile.TemporaryDirectory() as sdk_path,
+        ):
             config = {'ndk_paths': {}, 'sdk_path': sdk_path}
             fdroidserver.common.config = config
             fdroidserver.build.config = config
@@ -315,26 +317,33 @@ class BuildTest(unittest.TestCase):
                     fp.write('Pkg.Revision = %s\n' % ndk_version)
 
             # use "as _ignored" just to make a pretty layout
-            with mock.patch(
-                'fdroidserver.common.replace_build_vars', wraps=make_fake_apk
-            ) as _ignored, mock.patch(
-                'fdroidserver.common.get_native_code', return_value='x86'
-            ) as _ignored, mock.patch(
-                'fdroidserver.common.get_apk_id',
-                return_value=(app.id, build.versionCode, build.versionName),
-            ) as _ignored, mock.patch(
-                'fdroidserver.common.sha256sum',
-                return_value='ad7ce5467e18d40050dc51b8e7affc3e635c85bd8c59be62de32352328ed467e',
-            ) as _ignored, mock.patch(
-                'fdroidserver.common.is_debuggable_or_testOnly',
-                return_value=False,
-            ) as _ignored, mock.patch(
-                'fdroidserver.build.FDroidPopen', FakeProcess
-            ) as _ignored, mock.patch(
-                'sdkmanager.install', wraps=fake_sdkmanager_install
-            ) as _ignored, mock.patch(
-                'fdroidserver.common.get_source_date_epoch', lambda f: '1234567890'
-            ) as _ignored:
+            with (
+                mock.patch(
+                    'fdroidserver.common.replace_build_vars', wraps=make_fake_apk
+                ) as _ignored,
+                mock.patch(
+                    'fdroidserver.common.get_native_code', return_value='x86'
+                ) as _ignored,
+                mock.patch(
+                    'fdroidserver.common.get_apk_id',
+                    return_value=(app.id, build.versionCode, build.versionName),
+                ) as _ignored,
+                mock.patch(
+                    'fdroidserver.common.sha256sum',
+                    return_value='ad7ce5467e18d40050dc51b8e7affc3e635c85bd8c59be62de32352328ed467e',
+                ) as _ignored,
+                mock.patch(
+                    'fdroidserver.common.is_debuggable_or_testOnly',
+                    return_value=False,
+                ) as _ignored,
+                mock.patch('fdroidserver.build.FDroidPopen', FakeProcess) as _ignored,
+                mock.patch(
+                    'sdkmanager.install', wraps=fake_sdkmanager_install
+                ) as _ignored,
+                mock.patch(
+                    'fdroidserver.common.get_source_date_epoch', lambda f: '1234567890'
+                ) as _ignored,
+            ):
                 _ignored  # silence the linters
                 with self.assertRaises(
                     fdroidserver.exception.FDroidException,
@@ -389,9 +398,11 @@ class BuildTest(unittest.TestCase):
     )
     def test_build_local_ndk_some_installed(self):
         """Test if `fdroid build` detects installed NDKs and auto-installs when missing"""
-        with tempfile.TemporaryDirectory() as testdir, TmpCwd(
-            testdir
-        ), tempfile.TemporaryDirectory() as sdk_path:
+        with (
+            tempfile.TemporaryDirectory() as testdir,
+            TmpCwd(testdir),
+            tempfile.TemporaryDirectory() as sdk_path,
+        ):
             ndk_r24 = os.path.join(sdk_path, 'ndk', '24.0.8215888')
             os.makedirs(ndk_r24)
             with open(os.path.join(ndk_r24, 'source.properties'), 'w') as fp:
@@ -429,14 +440,18 @@ class BuildTest(unittest.TestCase):
                     fp.write('Pkg.Revision = %s\n' % ndk_version)
 
             # use "as _ignored" just to make a pretty layout
-            with mock.patch(
-                'fdroidserver.common.replace_build_vars', wraps=make_fake_apk
-            ) as _ignored, mock.patch(
-                'fdroidserver.common.get_apk_id',
-                return_value=(app.id, build.versionCode, build.versionName),
-            ) as _ignored, mock.patch(
-                'sdkmanager.install', wraps=fake_sdkmanager_install
-            ) as _ignored:
+            with (
+                mock.patch(
+                    'fdroidserver.common.replace_build_vars', wraps=make_fake_apk
+                ) as _ignored,
+                mock.patch(
+                    'fdroidserver.common.get_apk_id',
+                    return_value=(app.id, build.versionCode, build.versionName),
+                ) as _ignored,
+                mock.patch(
+                    'sdkmanager.install', wraps=fake_sdkmanager_install
+                ) as _ignored,
+            ):
                 _ignored  # silence the linters
                 self.assertFalse(ndk_dir.exists())
                 self.assertFalse('r21e' in config['ndk_paths'])
@@ -639,19 +654,18 @@ class BuildTest(unittest.TestCase):
         test_compare_file = os.path.join(
             'tmp', 'binaries', '%s_%d.binary.apk' % (appid, build['versionCode'])
         )
-        with mock.patch(
-            'fdroidserver.common.force_exit', lambda *args: None
-        ) as a, mock.patch(
-            'fdroidserver.common.get_android_tools_version_log', lambda: 'fake'
-        ) as b, mock.patch(
-            'fdroidserver.common.FDroidPopen', FakeProcess
-        ) as c, mock.patch(
-            'fdroidserver.build.FDroidPopen', FakeProcess
-        ) as d, mock.patch(
-            'fdroidserver.build.trybuild', lambda *args: True
-        ) as e, mock.patch(
-            'fdroidserver.net.download_file', lambda *args, **kwargs: None
-        ) as f:
+        with (
+            mock.patch('fdroidserver.common.force_exit', lambda *args: None) as a,
+            mock.patch(
+                'fdroidserver.common.get_android_tools_version_log', lambda: 'fake'
+            ) as b,
+            mock.patch('fdroidserver.common.FDroidPopen', FakeProcess) as c,
+            mock.patch('fdroidserver.build.FDroidPopen', FakeProcess) as d,
+            mock.patch('fdroidserver.build.trybuild', lambda *args: True) as e,
+            mock.patch(
+                'fdroidserver.net.download_file', lambda *args, **kwargs: None
+            ) as f,
+        ):
             a, b, c, d, e, f  # silence linters' "unused" warnings
 
             with mock.patch('sys.argv', ['fdroid build', appid]):
@@ -732,31 +746,33 @@ class BuildTest(unittest.TestCase):
         test_compare_file = os.path.join(
             'tmp', 'binaries', '%s_%d.binary.apk' % (appid, build['versionCode'])
         )
-        with mock.patch(
-            'fdroidserver.common.force_exit', lambda *args: None
-        ) as a, mock.patch(
-            'fdroidserver.common.get_android_tools_version_log', lambda: 'fake'
-        ) as b, mock.patch(
-            'fdroidserver.common.FDroidPopen', FakeProcess
-        ) as c, mock.patch(
-            'fdroidserver.build.FDroidPopen', FakeProcess
-        ) as d, mock.patch(
-            'fdroidserver.build.trybuild', lambda *args: True
-        ) as e, mock.patch(
-            'fdroidserver.net.download_file', lambda *args, **kwargs: None
-        ) as f:
+        with (
+            mock.patch('fdroidserver.common.force_exit', lambda *args: None) as a,
+            mock.patch(
+                'fdroidserver.common.get_android_tools_version_log', lambda: 'fake'
+            ) as b,
+            mock.patch('fdroidserver.common.FDroidPopen', FakeProcess) as c,
+            mock.patch('fdroidserver.build.FDroidPopen', FakeProcess) as d,
+            mock.patch('fdroidserver.build.trybuild', lambda *args: True) as e,
+            mock.patch(
+                'fdroidserver.net.download_file', lambda *args, **kwargs: None
+            ) as f,
+        ):
             a, b, c, d, e, f  # silence linters' "unused" warnings
 
             with mock.patch('sys.argv', ['fdroid build', appid]):
                 # successful comparison, successful signer
                 open(production_result, 'w').close()
                 open(production_compare_file, 'w').close()
-                with mock.patch(
-                    'fdroidserver.common.verify_apks', lambda *args: None
-                ) as g, mock.patch(
-                    'fdroidserver.common.apk_signer_fingerprint',
-                    lambda *args: expected_key,
-                ) as h:
+                with (
+                    mock.patch(
+                        'fdroidserver.common.verify_apks', lambda *args: None
+                    ) as g,
+                    mock.patch(
+                        'fdroidserver.common.apk_signer_fingerprint',
+                        lambda *args: expected_key,
+                    ) as h,
+                ):
                     g, h
                     fdroidserver.build.main()
                 self.assertTrue(os.path.exists(production_result))
@@ -764,12 +780,15 @@ class BuildTest(unittest.TestCase):
                 # successful comparison, failed signer
                 open(production_result, 'w').close()
                 open(production_compare_file, 'w').close()
-                with mock.patch(
-                    'fdroidserver.common.verify_apks', lambda *args: None
-                ) as g, mock.patch(
-                    'fdroidserver.common.apk_signer_fingerprint',
-                    lambda *args: bogus_key,
-                ) as h:
+                with (
+                    mock.patch(
+                        'fdroidserver.common.verify_apks', lambda *args: None
+                    ) as g,
+                    mock.patch(
+                        'fdroidserver.common.apk_signer_fingerprint',
+                        lambda *args: bogus_key,
+                    ) as h,
+                ):
                     g, h
                     fdroidserver.build.main()
                 self.assertFalse(os.path.exists(production_result))
@@ -788,12 +807,15 @@ class BuildTest(unittest.TestCase):
                 # successful comparison, successful signer
                 open(test_result, 'w').close()
                 open(test_compare_file, 'w').close()
-                with mock.patch(
-                    'fdroidserver.common.verify_apks', lambda *args: None
-                ) as g, mock.patch(
-                    'fdroidserver.common.apk_signer_fingerprint',
-                    lambda *args: expected_key,
-                ) as h:
+                with (
+                    mock.patch(
+                        'fdroidserver.common.verify_apks', lambda *args: None
+                    ) as g,
+                    mock.patch(
+                        'fdroidserver.common.apk_signer_fingerprint',
+                        lambda *args: expected_key,
+                    ) as h,
+                ):
                     g, h
                     fdroidserver.build.main()
                 self.assertTrue(os.path.exists(test_result))
@@ -803,12 +825,15 @@ class BuildTest(unittest.TestCase):
                 # successful comparison, failed signer
                 open(test_result, 'w').close()
                 open(test_compare_file, 'w').close()
-                with mock.patch(
-                    'fdroidserver.common.verify_apks', lambda *args: None
-                ) as g, mock.patch(
-                    'fdroidserver.common.apk_signer_fingerprint',
-                    lambda *args: bogus_key,
-                ) as h:
+                with (
+                    mock.patch(
+                        'fdroidserver.common.verify_apks', lambda *args: None
+                    ) as g,
+                    mock.patch(
+                        'fdroidserver.common.apk_signer_fingerprint',
+                        lambda *args: bogus_key,
+                    ) as h,
+                ):
                     g, h
                     fdroidserver.build.main()
                 self.assertTrue(os.path.exists(test_result))

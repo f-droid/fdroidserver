@@ -130,13 +130,15 @@ class ImportTest(unittest.TestCase):
                 shutil.copytree(basedir / 'source-files' / appid, tmp_importer)
 
                 app = fdroidserver.import_subcommand.get_app_from_url(url)
-                with mock.patch(
-                    'fdroidserver.common.getvcs',
-                    lambda a, b, c: fdroidserver.common.vcs(url, testdir),
-                ), mock.patch(
-                    'fdroidserver.common.vcs.gotorevision', lambda s, rev: None
-                ), mock.patch(
-                    'shutil.rmtree', lambda a, onerror=None: None
+                with (
+                    mock.patch(
+                        'fdroidserver.common.getvcs',
+                        lambda a, b, c: fdroidserver.common.vcs(url, testdir),
+                    ),
+                    mock.patch(
+                        'fdroidserver.common.vcs.gotorevision', lambda s, rev: None
+                    ),
+                    mock.patch('shutil.rmtree', lambda a, onerror=None: None),
                 ):
                     build_dir = fdroidserver.import_subcommand.clone_to_tmp_dir(app)
                 self.assertEqual('git', app.RepoType)
