@@ -56,11 +56,16 @@ import fdroidserver.index
 
 from . import _, common, metadata
 from .common import DEFAULT_LOCALE
-from .exception import BuildException, FDroidException, NoVersionCodeException, VerificationException
+from .exception import (
+    BuildException,
+    FDroidException,
+    NoVersionCodeException,
+    VerificationException,
+)
 
 if hasattr(Image, 'DecompressionBombWarning'):
     warnings.simplefilter('error', Image.DecompressionBombWarning)
-Image.MAX_IMAGE_PIXELS = 0xffffff  # 4096x4096
+Image.MAX_IMAGE_PIXELS = 0xFFFFFF  # 4096x4096
 
 METADATA_VERSION = 20002
 
@@ -87,18 +92,23 @@ screen_resolutions = {
     "tvdpi": '213',
     "undefineddpi": '-1',
     "anydpi": '65534',
-    "nodpi": '65535'
+    "nodpi": '65535',
 }
 
 all_screen_densities = ['0'] + screen_densities
 
 UsesPermission = collections.namedtuple('UsesPermission', ['name', 'maxSdkVersion'])
-UsesPermissionSdk23 = collections.namedtuple('UsesPermissionSdk23', ['name', 'maxSdkVersion'])
+UsesPermissionSdk23 = collections.namedtuple('UsesPermissionSdk23', ['name', 'maxSdkVersion'])  # fmt: skip
 
 ALLOWED_EXTENSIONS = ('png', 'jpg', 'jpeg')
 GRAPHIC_NAMES = ('featureGraphic', 'icon', 'promoGraphic', 'tvBanner')
-SCREENSHOT_DIRS = ('phoneScreenshots', 'sevenInchScreenshots',
-                   'tenInchScreenshots', 'tvScreenshots', 'wearScreenshots')
+SCREENSHOT_DIRS = (
+    'phoneScreenshots',
+    'sevenInchScreenshots',
+    'tenInchScreenshots',
+    'tvScreenshots',
+    'wearScreenshots',
+)
 
 BLANK_PNG_INFO = PngImagePlugin.PngInfo()
 
@@ -109,6 +119,11 @@ def dpi_to_px(density):
 
 def px_to_dpi(px):
     return (int(px) * 160) / 48
+
+
+def get_old_icon_filename(appid, versionCode):
+    """Old pattern that uses a "." instead of "_" as separator."""
+    return f"{appid}.{versionCode}.png"
 
 
 def get_icon_dir(repodir, density):
@@ -129,9 +144,11 @@ def get_all_icon_dirs(repodir):
 
 
 def disabled_algorithms_allowed():
-    return ((options is not None and options.allow_disabled_algorithms)
-            or (config is not None and config['allow_disabled_algorithms'])
-            or common.default_config['allow_disabled_algorithms'])
+    return (
+        (options is not None and options.allow_disabled_algorithms)
+        or (config is not None and config['allow_disabled_algorithms'])
+        or common.default_config['allow_disabled_algorithms']
+    )
 
 
 def status_update_json(output, apps, apks):
@@ -226,9 +243,7 @@ def delete_disabled_builds(apps, apkcache, repodirs):
             if not build.disable:
                 continue
             apkfilename = common.get_release_filename(app, build)
-            iconfilename = "%s.%s.png" % (
-                appid,
-                build.versionCode)
+            iconfilename = get_old_icon_filename(appid, build.versionCode)
             for repodir in repodirs:
                 files = [
                     os.path.join(repodir, apkfilename),
@@ -246,6 +261,8 @@ def delete_disabled_builds(apps, apkcache, repodirs):
             if apkfilename in apkcache:
                 del apkcache[apkfilename]
 
+
+# fmt: off
 
 def resize_icon(iconpath, density):
 
@@ -494,6 +511,7 @@ def insert_obbs(repodir, apps, apks):
     apks
       current information on all APKs
     """
+
     def obbWarnDelete(f, msg):
         logging.warning(msg + ' ' + f)
         if options.delete_unknown:
@@ -533,7 +551,7 @@ def insert_obbs(repodir, apps, apks):
         obbs.append((packagename, versionCode, obbfile, obbsha256))
 
     for apk in apks:
-        for (packagename, versionCode, obbfile, obbsha256) in sorted(obbs, reverse=True):
+        for packagename, versionCode, obbfile, obbsha256 in sorted(obbs, reverse=True):
             if versionCode <= apk['versionCode'] and packagename == apk['packageName']:
                 if obbfile.startswith('main.') and 'obbMainFile' not in apk:
                     apk['obbMainFile'] = obbfile
@@ -661,7 +679,7 @@ def parse_ipa(ipa_path, file_size, sha256):
                     for entitlement in mopro.get('Entitlements', {}).keys():
                         if entitlement not in [
                             "com.app.developer.team-identifier",
-                            'application-identifier'
+                            'application-identifier',
                         ]:
                             ipa["ipa_entitlements"].add(entitlement)
     return ipa
@@ -826,7 +844,9 @@ def _strip_and_copy_image(in_file, outpath):
         if os.path.islink(in_file):
             logging.warning(_("Broken symlink: {path}").format(path=in_file))
         else:
-            logging.warning(_("File disappeared while processing it: {path}").format(path=in_file))
+            logging.warning(
+                _("File disappeared while processing it: {path}").format(path=in_file)
+            )
         return
 
     if os.path.isdir(outpath):
@@ -859,11 +879,16 @@ def _strip_and_copy_image(in_file, outpath):
             out_image.putdata(data)
             out_image.save(out_file, "JPEG", optimize=True)
         except Exception as e:
-            logging.error(_("Failed copying {path}: {error}".format(path=in_file, error=e)))
+            logging.error(
+                _("Failed copying {path}: {error}".format(path=in_file, error=e))
+            )
             return
     else:
-        raise FDroidException(_('Unsupported file type "{extension}" for repo graphic')
-                              .format(extension=extension))
+        raise FDroidException(
+            _('Unsupported file type "{extension}" for repo graphic').format(
+                extension=extension
+            )
+        )
     stat_result = os.stat(in_file)
     os.utime(out_file, times=(stat_result.st_atime, stat_result.st_mtime))
 
@@ -873,7 +898,7 @@ def _get_base_hash_extension(f):
     base, extension = common.get_extension(f)
     sha256_index = base.find('_')
     if sha256_index > 0:
-        return base[:sha256_index], base[sha256_index + 1:], extension
+        return base[:sha256_index], base[sha256_index + 1 :], extension
     return base, None, extension
 
 
@@ -893,7 +918,9 @@ def sanitize_funding_yml_entry(entry):
     except (TypeError, ValueError):
         return
     if len(entry) > 2048:
-        logging.warning(_('Ignoring FUNDING.yml entry longer than 2048: %s') % entry[:2048])
+        logging.warning(
+            _('Ignoring FUNDING.yml entry longer than 2048: %s') % entry[:2048]
+        )
         return
     if '\n' in entry:
         return
@@ -939,8 +966,11 @@ def insert_funding_yml_donation_links(apps):
                 with open(f) as fp:
                     data = yaml.load(fp, Loader=SafeLoader)
             except yaml.YAMLError as e:
-                logging.error(_('Found bad funding file "{path}" for "{name}":')
-                              .format(path=f, name=packageName))
+                logging.error(
+                    _('Found bad funding file "{path}" for "{name}":').format(
+                        path=f, name=packageName
+                    )
+                )
                 logging.error(e)
             if not data or type(data) != dict:
                 continue
@@ -965,7 +995,7 @@ def insert_funding_yml_donation_links(apps):
                     'community_bridge',
                     'ko_fi',
                     'issuehunt',
-                    'buy_me_a_coffee'
+                    'buy_me_a_coffee',
                 ):
                     v = data.get(k)
                     if not v:
@@ -978,7 +1008,9 @@ def insert_funding_yml_donation_links(apps):
                     elif k in ('community_bridge', 'lfx_crowdfunding'):
                         s = sanitize_funding_yml_name(v)
                         if s:
-                            app['Donate'] = 'https://crowdfunding.lfx.linuxfoundation.org/projects/' + s
+                            app['Donate'] = (
+                                f'https://crowdfunding.lfx.linuxfoundation.org/projects/{s}'
+                            )
                             break
                     elif k == 'github':
                         s = sanitize_funding_yml_name(v)
@@ -1185,7 +1217,9 @@ def insert_localized_app_metadata(apps):
             segments = root.split('/')
             packageName = segments[1]
             if packageName not in apps:
-                logging.debug(packageName + ' does not have app metadata, skipping l18n scan.')
+                logging.debug(
+                    packageName + ' does not have app metadata, skipping l18n scan.'
+                )
                 continue
             locale = segments[-1]
             destdir = os.path.join('repo', packageName, locale)
@@ -1360,7 +1394,9 @@ def ingest_screenshots_from_repo_dir(apps):
                     apps[packageName]["screenshots"][newKey][locale] = []
                 apps[packageName]["screenshots"][newKey][locale].append(common.file_entry(f))
             else:
-                logging.warning(_('Unsupported graphics file found: {path}').format(path=f))
+                logging.warning(
+                    _('Unsupported graphics file found: {path}').format(path=f)
+                )
 
 
 LANG_CODE = re.compile(r'^[a-z]{2}([-_][A-Z][a-zA-Z]{1,3})?$')
@@ -1405,6 +1441,9 @@ def parse_ios_screenshot_name(path):
     return ("phoneScreenshots", 'unknown', 'unknown')
 
 
+# fmt: on
+
+
 def discover_ios_screenshots(fastlane_dir):
     """Traverse git checkouts in build dir, search for fastlane-screenshots and put findings into a dict."""
     fastlane_screenshot_dir = fastlane_dir / 'screenshots'
@@ -1419,7 +1458,9 @@ def discover_ios_screenshots(fastlane_dir):
                 fifo_ios = {}
                 for screenshot in lang_sdir.iterdir():
                     if screenshot.suffix[1:] in ALLOWED_EXTENSIONS:
-                        screenshot_type, idevice_name, ios_name = parse_ios_screenshot_name(screenshot)
+                        screenshot_type, idevice_name, ios_name = (
+                            parse_ios_screenshot_name(screenshot)
+                        )
 
                         # since there is no easy mapping here, we're just
                         # resorting to fifo here, so ieg. if there's 2
@@ -1432,7 +1473,10 @@ def discover_ios_screenshots(fastlane_dir):
                             fifo_idevice[screenshot_type] = idevice_name
                             fifo_ios[screenshot_type] = ios_name
 
-                        if fifo_idevice[screenshot_type] == idevice_name and fifo_ios[screenshot_type] == ios_name:
+                        if (
+                            fifo_idevice[screenshot_type] == idevice_name
+                            and fifo_ios[screenshot_type] == ios_name
+                        ):
                             if screenshot_type not in screenshots[locale]:
                                 screenshots[locale][screenshot_type] = []
                             screenshots[locale][screenshot_type].append(screenshot)
@@ -1456,7 +1500,6 @@ def copy_ios_screenshots_to_repo(screenshots, package_name):
 
 
 def insert_localized_ios_app_metadata(apps_with_packages):
-
     if not any(Path('repo').glob('*.ipa')):
         # no IPA files present in repo, nothing to do here, exiting early
         return
@@ -1468,7 +1511,7 @@ def insert_localized_ios_app_metadata(apps_with_packages):
             continue
 
         fastlane_dir = Path('build', package_name, 'fastlane')
-        fastlane_meta_dir = (fastlane_dir / "metadata")
+        fastlane_meta_dir = fastlane_dir / "metadata"
 
         if fastlane_meta_dir.is_dir():
             for lang_dir in fastlane_meta_dir.iterdir():
@@ -1530,8 +1573,9 @@ def scan_repo_files(apkcache, repodir, knownapks, use_date_from_file=False):
         filename = os.path.join(repodir, name)
         name_utf8 = name.decode()
         if filename.endswith(b'_src.tar.gz'):
-            logging.debug(_('skipping source tarball: {path}')
-                          .format(path=filename.decode()))
+            logging.debug(
+                _('skipping source tarball: {path}').format(path=filename.decode())
+            )
             continue
 
         # skip all other files generated by fdroidserver
@@ -1540,8 +1584,7 @@ def scan_repo_files(apkcache, repodir, knownapks, use_date_from_file=False):
 
         stat = os.stat(filename)
         if stat.st_size == 0:
-            raise FDroidException(_('{path} is zero size!')
-                                  .format(path=filename))
+            raise FDroidException(_('{path} is zero size!').format(path=filename))
 
         # load file infos from cache if not stale
         shasum = common.sha256sum(filename)
@@ -1549,12 +1592,16 @@ def scan_repo_files(apkcache, repodir, knownapks, use_date_from_file=False):
         if name_utf8 in apkcache:
             repo_file = apkcache[name_utf8]
             if repo_file.get('hash') == shasum:
-                logging.debug(_("Reading {apkfilename} from cache")
-                              .format(apkfilename=name_utf8))
+                logging.debug(
+                    _("Reading {apkfilename} from cache").format(apkfilename=name_utf8)
+                )
                 usecache = True
             else:
-                logging.debug(_("Ignoring stale cache data for {apkfilename}")
-                              .format(apkfilename=name_utf8))
+                logging.debug(
+                    _("Ignoring stale cache data for {apkfilename}").format(
+                        apkfilename=name_utf8
+                    )
+                )
 
         # scan file if info wasn't in cache
         if not usecache:
@@ -1640,11 +1687,17 @@ def scan_apk(apk_file, require_signature=True):
     scan_apk_androguard(apk, apk_file)
 
     if not common.is_valid_package_name(apk['packageName']):
-        raise BuildException(_("{appid} from {path} is not a valid Java Package Name!")
-                             .format(appid=apk['packageName'], path=apk_file))
+        raise BuildException(
+            _("{appid} from {path} is not a valid Java Package Name!").format(
+                appid=apk['packageName'], path=apk_file
+            )
+        )
     elif not common.is_strict_application_id(apk['packageName']):
-        logging.warning(_("{appid} from {path} is not a valid Android application ID!")
-                        .format(appid=apk['packageName'], path=apk_file))
+        logging.warning(
+            _("{appid} from {path} is not a valid Android application ID!").format(
+                appid=apk['packageName'], path=apk_file
+            )
+        )
 
     # Get the signature, or rather the signing key fingerprints
     logging.debug('Getting signature of {0}'.format(os.path.basename(apk_file)))
@@ -1662,7 +1715,11 @@ def scan_apk(apk_file, require_signature=True):
     apk['size'] = os.path.getsize(apk_file)
 
     if 'minSdkVersion' not in apk:
-        logging.warning(_("No minimum SDK version found in {0}, using default (3).").format(apk_file))
+        logging.warning(
+            _("No minimum SDK version found in {0}, using default (3).").format(
+                apk_file
+            )
+        )
         apk['minSdkVersion'] = 3  # aapt defaults to 3 as the min
 
     # Check for known vulnerabilities
@@ -1672,6 +1729,8 @@ def scan_apk(apk_file, require_signature=True):
 
     return apk
 
+
+# fmt: off
 
 def _get_apk_icons_src(apkfile, icon_name):
     """Extract the paths to the app icon in all available densities.
@@ -1782,19 +1841,27 @@ def scan_apk_androguard(apk, apkfile):
         else:
             if options.delete_unknown:
                 if os.path.exists(apkfile):
-                    logging.error(_("Failed to get APK information, deleting {path}")
-                                  .format(path=apkfile))
+                    logging.error(
+                        _("Failed to get APK information, deleting {path}").format(
+                            path=apkfile
+                        )
+                    )
                     os.remove(apkfile)
                 else:
-                    logging.error(_("Could not find {path} to remove it")
-                                  .format(path=apkfile))
+                    logging.error(
+                        _("Could not find {path} to remove it").format(path=apkfile)
+                    )
             else:
-                logging.error(_("Failed to get APK information, skipping {path}")
-                              .format(path=apkfile))
+                logging.error(
+                    _("Failed to get APK information, skipping {path}").format(
+                        path=apkfile
+                    )
+                )
             raise BuildException(_("Invalid APK"))
     except (FileNotFoundError, ValueError, zipfile.BadZipFile) as e:
-        logging.error(_("Could not open APK {path} for analysis: ").format(path=apkfile)
-                      + str(e))
+        logging.error(
+            _("Could not open APK {path} for analysis: ").format(path=apkfile) + str(e)
+        )
         raise BuildException(_("Invalid APK")) from e
 
     apk['packageName'] = apkobject.get_package()
@@ -1814,16 +1881,20 @@ def scan_apk_androguard(apk, apkfile):
     logging.debug("Version Code: %r (%s)" % (vcstr, apkfile))
 
     if not vcstr:
-        raise NoVersionCodeException(_("APK file {path} does not have a version code "
-                                       "in its manifest").format(path=apkfile))
+        raise NoVersionCodeException(
+            _("APK file {path} does not have a version code in its manifest").format(
+                path=apkfile
+            )
+        )
     elif vcstr.startswith('0x'):
         apk['versionCode'] = int(vcstr, 16)
     else:
         apk['versionCode'] = int(vcstr)
     apk['name'] = apkobject.get_app_name()
 
-    apk['versionName'] = common.ensure_final_value(apk['packageName'], arsc,
-                                                   androidmanifest_xml.get(xmlns + 'versionName'))
+    apk['versionName'] = common.ensure_final_value(
+        apk['packageName'], arsc, androidmanifest_xml.get(xmlns + 'versionName')
+    )
 
     minSdkVersion = _sanitize_sdk_version(apkobject.get_min_sdk_version())
     if minSdkVersion is not None:
@@ -1870,10 +1941,7 @@ def scan_apk_androguard(apk, apkfile):
         permission = UsesPermission(str(name), maxSdkVersion)
         apk['uses-permission'].append(permission)
     for name, maxSdkVersion in apkobject.get_uses_implied_permission_list():
-        permission = UsesPermission(
-            name,
-            maxSdkVersion
-        )
+        permission = UsesPermission(name, maxSdkVersion)
         apk['uses-permission'].append(permission)
 
     for item in xml.findall('uses-permission-sdk-23'):
@@ -1948,12 +2016,16 @@ def process_apk(apkcache, apkfilename, repodir, knownapks, use_date_from_apk=Fal
         apk = apkcache[apkfilename]
         stat = os.stat(apkfile)
         if apk.get('size') == stat.st_size and stat.st_mtime < cache_timestamp:
-            logging.debug(_("Reading {apkfilename} from cache")
-                          .format(apkfilename=apkfilename))
+            logging.debug(
+                _("Reading {apkfilename} from cache").format(apkfilename=apkfilename)
+            )
             usecache = True
         else:
-            logging.debug(_("Ignoring stale cache data for {apkfilename}")
-                          .format(apkfilename=apkfilename))
+            logging.debug(
+                _("Ignoring stale cache data for {apkfilename}").format(
+                    apkfilename=apkfilename
+                )
+            )
 
     if not usecache:
         logging.debug(_("Processing {apkfilename}").format(apkfilename=apkfilename))
@@ -1961,12 +2033,18 @@ def process_apk(apkcache, apkfilename, repodir, knownapks, use_date_from_apk=Fal
         try:
             apk = scan_apk(apkfile)
         except BuildException:
-            logging.warning(_("Skipping '{apkfilename}' with invalid signature!")
-                            .format(apkfilename=apkfilename))
+            logging.warning(
+                _("Skipping '{apkfilename}' with invalid signature!").format(
+                    apkfilename=apkfilename
+                )
+            )
             return True, None, False
         except NoVersionCodeException:
-            logging.warning(_("Skipping '{apkfilename}' without versionCode!")
-                            .format(apkfilename=apkfilename))
+            logging.warning(
+                _("Skipping '{apkfilename}' without versionCode!").format(
+                    apkfilename=apkfilename
+                )
+            )
             return True, None, False
 
         if apps:
@@ -2002,7 +2080,7 @@ def process_apk(apkcache, apkfilename, repodir, knownapks, use_date_from_apk=Fal
                 else:
                     os.rename(apkfile, std_short_name)
                     apkfile = std_short_name
-                apkfilename = apkfile[len(repodir) + 1:]
+                apkfilename = apkfile[len(repodir) + 1 :]
 
         apk['apkName'] = apkfilename
         srcfilename = apkfilename[:-4] + "_src.tar.gz"
@@ -2046,7 +2124,7 @@ def process_apk(apkcache, apkfilename, repodir, knownapks, use_date_from_apk=Fal
                                 .format(apkfilename=apkfile) + str(e))
 
         # extract icons from APK zip file
-        iconfilename = "%s.%s.png" % (apk['packageName'], apk['versionCode'])
+        iconfilename = get_old_icon_filename(apk['packageName'], apk['versionCode'])
         try:
             empty_densities = extract_apk_icons(iconfilename, apk, apkzip, repodir)
         finally:
@@ -2106,7 +2184,7 @@ def process_apks(apkcache, repodir, knownapks, use_date_from_apk=False, apps=Non
 
     apks = []
     for apkfile in sorted(glob.glob(os.path.join(repodir, '*.apk'))):
-        apkfilename = apkfile[len(repodir) + 1:]
+        apkfilename = apkfile[len(repodir) + 1 :]
         ada = disabled_algorithms_allowed()
         (skip, apk, cachethis) = process_apk(apkcache, apkfilename, repodir, knownapks,
                                              use_date_from_apk, ada, True, apps, cache_timestamp)
@@ -2264,7 +2342,7 @@ def fill_missing_icon_densities(empty_densities, icon_filename, apk, repo_dir):
 
         shutil.copyfile(
             os.path.join(get_icon_dir(repo_dir, last_density), icon_filename),
-            os.path.join(get_icon_dir(repo_dir, density), icon_filename)
+            os.path.join(get_icon_dir(repo_dir, density), icon_filename),
         )
         empty_densities.remove(density)
 
@@ -2363,6 +2441,7 @@ def archive_old_apks(apps, apks, archapks, repodir, archivedir, defaultkeepversi
 
 def move_apk_between_sections(from_dir, to_dir, apk):
     """Move an APK from repo to archive or vice versa."""
+
     def _move_file(from_dir, to_dir, filename, ignore_missing):
         from_path = os.path.join(from_dir, filename)
         if ignore_missing and not os.path.exists(from_path):
@@ -2457,12 +2536,20 @@ def create_metadata_from_template(apk):
         if 'name' in apk and apk['name'] != '':
             app['Name'] = apk['name']
         else:
-            logging.warning(_('{appid} does not have a name! Using application ID instead.')
-                            .format(appid=apk['packageName']))
+            logging.warning(
+                _('{appid} does not have a name! Using application ID instead.').format(
+                    appid=apk['packageName']
+                )
+            )
             app['Name'] = apk['packageName']
         with open(os.path.join('metadata', apk['packageName'] + '.yml'), 'w') as f:
             yaml.dump(app, f, default_flow_style=False)
-    logging.info(_("Generated skeleton metadata for {appid}").format(appid=apk['packageName']))
+    logging.info(
+        _("Generated skeleton metadata for {appid}").format(appid=apk['packageName'])
+    )
+
+
+# fmt: on
 
 
 def read_added_date_from_all_apks(apps, apks):
@@ -2616,28 +2703,73 @@ def main():
     # Parse command line...
     parser = ArgumentParser()
     common.setup_global_opts(parser)
-    parser.add_argument("--create-key", action="store_true", default=False,
-                        help=_("Add a repo signing key to an unsigned repo"))
-    parser.add_argument("-c", "--create-metadata", action="store_true", default=False,
-                        help=_("Add skeleton metadata files for APKs that are missing them"))
-    parser.add_argument("--delete-unknown", action="store_true", default=False,
-                        help=_("Delete APKs and/or OBBs without metadata from the repo"))
-    parser.add_argument("-I", "--icons", action="store_true", default=False,
-                        help=_("Resize all the icons exceeding the max pixel size and exit"))
-    parser.add_argument("-w", "--wiki", default=False, action="store_true",
-                        help=argparse.SUPPRESS)
-    parser.add_argument("--pretty", action="store_true", default=False,
-                        help=_("Produce human-readable XML/JSON for index files"))
-    parser.add_argument("--clean", action="store_true", default=False,
-                        help=_("Clean update - don't uses caches, reprocess all APKs"))
-    parser.add_argument("--nosign", action="store_true", default=False,
-                        help=_("When configured for signed indexes, create only unsigned indexes at this stage"))
-    parser.add_argument("--use-date-from-apk", action="store_true", default=False,
-                        help=_("Use date from APK instead of current time for newly added APKs"))
-    parser.add_argument("--rename-apks", action="store_true", default=False,
-                        help=_("Rename APK files that do not match package.name_123.apk"))
-    parser.add_argument("--allow-disabled-algorithms", action="store_true", default=False,
-                        help=_("Include APKs that are signed with disabled algorithms like MD5"))
+    parser.add_argument(
+        "--create-key",
+        action="store_true",
+        default=False,
+        help=_("Add a repo signing key to an unsigned repo"),
+    )
+    parser.add_argument(
+        "-c",
+        "--create-metadata",
+        action="store_true",
+        default=False,
+        help=_("Add skeleton metadata files for APKs that are missing them"),
+    )
+    parser.add_argument(
+        "--delete-unknown",
+        action="store_true",
+        default=False,
+        help=_("Delete APKs and/or OBBs without metadata from the repo"),
+    )
+    parser.add_argument(
+        "-I",
+        "--icons",
+        action="store_true",
+        default=False,
+        help=_("Resize all the icons exceeding the max pixel size and exit"),
+    )
+    parser.add_argument(
+        "-w", "--wiki", default=False, action="store_true", help=argparse.SUPPRESS
+    )
+    parser.add_argument(
+        "--pretty",
+        action="store_true",
+        default=False,
+        help=_("Produce human-readable XML/JSON for index files"),
+    )
+    parser.add_argument(
+        "--clean",
+        action="store_true",
+        default=False,
+        help=_("Clean update - don't uses caches, reprocess all APKs"),
+    )
+    parser.add_argument(
+        "--nosign",
+        action="store_true",
+        default=False,
+        help=_(
+            "When configured for signed indexes, create only unsigned indexes at this stage"
+        ),
+    )
+    parser.add_argument(
+        "--use-date-from-apk",
+        action="store_true",
+        default=False,
+        help=_("Use date from APK instead of current time for newly added APKs"),
+    )
+    parser.add_argument(
+        "--rename-apks",
+        action="store_true",
+        default=False,
+        help=_("Rename APK files that do not match package.name_123.apk"),
+    )
+    parser.add_argument(
+        "--allow-disabled-algorithms",
+        action="store_true",
+        default=False,
+        help=_("Include APKs that are signed with disabled algorithms like MD5"),
+    )
     metadata.add_metadata_arguments(parser)
     options = common.parse_args(parser)
     metadata.warnings_action = options.W
@@ -2645,9 +2777,10 @@ def main():
     config = common.read_config()
     status_output = common.setup_status_output(start_timestamp)
 
-    if not (('jarsigner' in config or 'apksigner' in config)
-            and 'keytool' in config):
-        raise FDroidException(_('Java JDK not found! Install in standard location or set java_paths!'))
+    if not (('jarsigner' in config or 'apksigner' in config) and 'keytool' in config):
+        raise FDroidException(
+            _('Java JDK not found! Install in standard location or set java_paths!')
+        )
 
     repodirs = ['repo']
     if config['archive_older'] != 0:
@@ -2666,13 +2799,18 @@ def main():
     for k in ['repo_icon', 'archive_icon']:
         if k in config:
             if not os.path.exists(config[k]):
-                logging.warning(_('{name} "{section}/icons/{path}" does not exist! Check "config.yml".')
-                                .format(name=k, section=k.split('_')[0], path=config[k]))
+                logging.warning(
+                    _(
+                        '{name} "{section}/icons/{path}" does not exist! Check "config.yml".'
+                    ).format(name=k, section=k.split('_')[0], path=config[k])
+                )
 
     # if the user asks to create a keystore, do it now, reusing whatever it can
     if options.create_key:
         if os.path.exists(config['keystore']):
-            logging.critical(_("Cowardily refusing to overwrite existing signing key setup!"))
+            logging.critical(
+                _("Cowardily refusing to overwrite existing signing key setup!")
+            )
             logging.critical("\t'" + config['keystore'] + "'")
             sys.exit(1)
 
@@ -2711,18 +2849,27 @@ def main():
 
     # Scan all apks in the main repo
     output_status_stage(status_output, 'process_apks')
-    apks, cachechanged = process_apks(apkcache, repodirs[0], knownapks,
-                                      options.use_date_from_apk, apps, cache_timestamp)
+    apks, cachechanged = process_apks(
+        apkcache,
+        repodirs[0],
+        knownapks,
+        options.use_date_from_apk,
+        apps,
+        cache_timestamp,
+    )
 
     output_status_stage(status_output, 'scan_repo_files')
-    files, fcachechanged = scan_repo_files(apkcache, repodirs[0], knownapks,
-                                           options.use_date_from_apk)
+    files, fcachechanged = scan_repo_files(
+        apkcache, repodirs[0], knownapks, options.use_date_from_apk
+    )
     cachechanged = cachechanged or fcachechanged
     apks += files
 
     ipas, icachechanged = scan_repo_for_ipas(apkcache, repodirs[0], knownapks)
     cachechanged = cachechanged or icachechanged
     apks += ipas
+
+    # fmt: off
 
     output_status_stage(status_output, 'remove_apks')
     appid_has_apks = set()
@@ -2837,7 +2984,9 @@ def main():
             if os.path.isdir(repodir):
                 fdroidserver.index.make(app_dict, apks, repodir, False)
             else:
-                logging.info(_('Skipping index generation for {appid}').format(appid=appid))
+                logging.info(
+                    _('Skipping index generation for {appid}').format(appid=appid)
+                )
         return
 
     # Make the index for the main repo...
@@ -2846,6 +2995,7 @@ def main():
     git_remote = config.get('binary_transparency_remote')
     if git_remote or os.path.isdir(os.path.join('binary_transparency', '.git')):
         from . import btlog
+
         output_status_stage(status_output, 'make_binary_transparency_log')
         btlog.make_binary_transparency_log(repodirs)
 

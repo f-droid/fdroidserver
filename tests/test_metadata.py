@@ -309,7 +309,9 @@ class MetadataTest(unittest.TestCase):
     def test_metadata_overrides_dot_fdroid_yml(self):
         """Fields in metadata files should override anything in .fdroid.yml."""
         app = metadata.parse_metadata('metadata/info.guardianproject.urzip.yml')
-        self.assertEqual(app['Summary'], '一个实用工具，获取已安装在您的设备上的应用的有关信息')
+        self.assertEqual(
+            app['Summary'], '一个实用工具，获取已安装在您的设备上的应用的有关信息'
+        )
 
     def test_dot_fdroid_yml_works_without_git(self):
         """Parsing should work if .fdroid.yml is present and it is not a git repo."""
@@ -487,9 +489,9 @@ class MetadataTest(unittest.TestCase):
         yamldata = dict()
         metadata.post_parse_yaml_metadata(yamldata)
 
-        yamldata[
-            'AllowedAPKSigningKeys'
-        ] = 'c03dac71394d6c26766f1b04d3e31cfcac5d03b55d8aa40cc9b9fa6b74354c66'
+        yamldata['AllowedAPKSigningKeys'] = (
+            'c03dac71394d6c26766f1b04d3e31cfcac5d03b55d8aa40cc9b9fa6b74354c66'
+        )
         metadata.post_parse_yaml_metadata(yamldata)
 
     def test_post_parse_yaml_metadata_ArchivePolicy_int(self):
@@ -2076,7 +2078,7 @@ class MetadataTest(unittest.TestCase):
         self.assertEqual(
             metadata._format_stringmap('🔥', 'test', {'NonFree': {}, 'Ads': {'en': ''}}),
             ['Ads', 'NonFree'],
-        )
+        )  # fmt: skip
 
     def test_format_stringmap_three_list(self):
         self.assertEqual(

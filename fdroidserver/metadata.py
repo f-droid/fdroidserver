@@ -22,7 +22,6 @@
 import logging
 import math
 import os
-import platform
 import re
 from collections import OrderedDict
 from pathlib import Path
@@ -407,6 +406,7 @@ class FieldValidator:
 
 
 # Generic value types
+# fmt: off
 valuetypes = {
     FieldValidator("Liberapay",
                    VALID_USERNAME_REGEX,
@@ -452,6 +452,7 @@ valuetypes = {
                    r"^(Tags|Tags .+|RepoManifest|RepoManifest/.+|HTTP|Static|None)$",
                    ["UpdateCheckMode"])
 }
+# fmt: on
 
 
 # Check an app's metadata information for integrity errors
@@ -476,22 +477,18 @@ def parse_yaml_srclib(metadatapath):
         try:
             data = yaml.load(f)
             if type(data) is not dict:
-                if platform.system() == 'Windows':
-                    # Handle symlink on Windows
-                    symlink = metadatapath.parent / metadatapath.read_text(encoding='utf-8')
-                    if symlink.is_file():
-                        with symlink.open("r", encoding="utf-8") as s:
-                            data = yaml.load(s)
-            if type(data) is not dict:
                 raise ruamel.yaml.YAMLError(
                     _('{file} is blank or corrupt!').format(file=metadatapath)
                 )
         except ruamel.yaml.YAMLError as e:
-            _warn_or_exception(_("Invalid srclib metadata: could not "
-                                 "parse '{file}'")
-                               .format(file=metadatapath) + '\n'
-                               + common.run_yamllint(metadatapath, indent=4),
-                               cause=e)
+            _warn_or_exception(
+                _("Invalid srclib metadata: could not parse '{file}'").format(
+                    file=metadatapath
+                )
+                + '\n'
+                + common.run_yamllint(metadatapath, indent=4),
+                cause=e,
+            )
             return thisinfo
 
     for key in data:
@@ -783,8 +780,10 @@ def parse_yaml_metadata(mf):
                 path=mf.name
             )
         )
-        logging.error(_('Using blank dictionary instead of contents of {path}!').format(
-            path=mf.name)
+        logging.error(
+            _('Using blank dictionary instead of contents of {path}!').format(
+                path=mf.name
+            )
         )
         yamldata = dict()
 

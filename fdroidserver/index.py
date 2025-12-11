@@ -88,7 +88,9 @@ def make(apps, apks, repodir, archive):
         common.assert_config_keystore(common.config)
 
     # Historically the index has been sorted by App Name, so we enforce this ordering here
-    sortedids = sorted(apps, key=lambda appid: common.get_app_display_name(apps[appid]).upper())
+    sortedids = sorted(
+        apps, key=lambda appid: common.get_app_display_name(apps[appid]).upper()
+    )
     sortedapps = collections.OrderedDict()
     for appid in sortedids:
         sortedapps[appid] = apps[appid]
@@ -102,21 +104,29 @@ def make(apps, apks, repodir, archive):
 
     if archive:
         repodict['name'] = common.config['archive_name']
-        repodict['icon'] = common.config.get('archive_icon', common.default_config['repo_icon'])
+        repodict['icon'] = common.config.get(
+            'archive_icon', common.default_config['repo_icon']
+        )
         repodict['description'] = common.config['archive_description']
-        archive_url = common.config.get('archive_url', common.config['repo_url'][:-4] + 'archive')
+        archive_url = common.config.get(
+            'archive_url', common.config['repo_url'][:-4] + 'archive'
+        )
         repodict['address'] = archive_url
         if 'archive_web_base_url' in common.config:
             repodict["webBaseUrl"] = common.config['archive_web_base_url']
         repo_section = os.path.basename(urllib.parse.urlparse(archive_url).path)
     else:
         repodict['name'] = common.config['repo_name']
-        repodict['icon'] = common.config.get('repo_icon', common.default_config['repo_icon'])
+        repodict['icon'] = common.config.get(
+            'repo_icon', common.default_config['repo_icon']
+        )
         repodict['address'] = common.config['repo_url']
         if 'repo_web_base_url' in common.config:
             repodict["webBaseUrl"] = common.config['repo_web_base_url']
         repodict['description'] = common.config['repo_description']
-        repo_section = os.path.basename(urllib.parse.urlparse(common.config['repo_url']).path)
+        repo_section = os.path.basename(
+            urllib.parse.urlparse(common.config['repo_url']).path
+        )
 
     add_mirrors_to_repodict(repo_section, repodict)
 
@@ -161,7 +171,9 @@ def _should_file_be_generated(path, magic_string):
 
 def make_website(apps, repodir, repodict):
     # do not change this string, as it will break updates for files with older versions of this string
-    autogenerate_comment = "auto-generated - fdroid index updates will overwrite this file"
+    autogenerate_comment = (
+        "auto-generated - fdroid index updates will overwrite this file"
+    )
 
     if not os.path.exists(repodir):
         os.makedirs(repodir)
@@ -183,7 +195,8 @@ def make_website(apps, repodir, repodict):
             name = repodict["name"]
             description = repodict["description"]
             icon = repodict["icon"]
-            f.write("""<!-- {autogenerate_comment} -->
+            f.write(
+                """<!-- {autogenerate_comment} -->
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
   <head>
@@ -239,20 +252,24 @@ def make_website(apps, repodir, repodict):
     </div>
   </body>
 </html>
-""".format(autogenerate_comment=autogenerate_comment,
+""".format(
+                    autogenerate_comment=autogenerate_comment,
                     description=description,
                     fingerprint=repo_pubkey_fingerprint,
                     icon=icon,
                     link=link,
                     link_fingerprinted=link_fingerprinted,
                     name=name,
-                    number_of_apps=str(len(apps))))
+                    number_of_apps=str(len(apps)),
+                )
+            )
 
     css_file = os.path.join(repodir, "index.css")
     if _should_file_be_generated(css_file, autogenerate_comment):
         with open(css_file, "w") as f:
             # this auto generated comment was not included via .format(), as python seems to have problems with css files in combination with .format()
-            f.write("""/* auto-generated - fdroid index updates will overwrite this file */
+            f.write(
+                """/* auto-generated - fdroid index updates will overwrite this file */
 BODY {
   font-family         : Arial, Helvetica, Sans-Serif;
   color               : #0000ee;
@@ -479,7 +496,8 @@ fieldset select, fieldset input, #reposelect select, #reposelect input {
     float               : left;
     line-height         : 1.5em;
   }
-}""")
+}"""
+            )
 
 
 def dict_diff(source, target):
@@ -545,7 +563,11 @@ def package_metadata(app, repodir):
         if element in app and app[element]:
             meta[element_new] = {DEFAULT_LOCALE: convert_datetime(app[element])}
         elif "localized" in app:
-            localized = {k: v[element_new] for k, v in app["localized"].items() if element_new in v}
+            localized = {
+                k: v[element_new]
+                for k, v in app["localized"].items()
+                if element_new in v
+            }
             if localized:
                 meta[element_new] = localized
 
@@ -639,13 +661,13 @@ def convert_version(version, app, repodir):
             manifest["usesSdk"]["targetSdkVersion"] = version["targetSdkVersion"]
         else:
             # https://developer.android.com/guide/topics/manifest/uses-sdk-element.html#target
-            manifest["usesSdk"]["targetSdkVersion"] = manifest["usesSdk"]["minSdkVersion"]
+            manifest["usesSdk"]["targetSdkVersion"] = manifest["usesSdk"]["minSdkVersion"]  # fmt: skip
 
     if "signer" in version:
         manifest["signer"] = {"sha256": [version["signer"]]}
 
     for element in ("uses-permission", "uses-permission-sdk-23"):
-        en = element.replace("uses-permission", "usesPermission").replace("-sdk-23", "Sdk23")
+        en = element.replace("uses-permission", "usesPermission").replace("-sdk-23", "Sdk23")  # fmt: skip
         if element in version and version[element]:
             manifest[en] = []
             for perm in version[element]:
@@ -671,7 +693,9 @@ def convert_version(version, app, repodir):
 
     if len(builds) > 0 and version["versionCode"] == builds[-1]["versionCode"]:
         if "localized" in app:
-            localized = {k: v["whatsNew"] for k, v in app["localized"].items() if "whatsNew" in v}
+            localized = {
+                k: v["whatsNew"] for k, v in app["localized"].items() if "whatsNew" in v
+            }
             if localized:
                 ver["whatsNew"] = localized
 
@@ -725,8 +749,9 @@ def v2_repo(repodict, repodir, archive):
     return repo
 
 
-def make_v2(apps, packages, repodir, repodict, requestsdict, signer_fingerprints, archive):
-
+def make_v2(
+    apps, packages, repodir, repodict, requestsdict, signer_fingerprints, archive
+):
     def _index_encoder_default(obj):
         if isinstance(obj, set):
             return sorted(list(obj))
@@ -740,6 +765,15 @@ def make_v2(apps, packages, repodir, repodict, requestsdict, signer_fingerprints
                 d[key] = obj[key]
             return d
         raise TypeError(repr(obj) + " is not JSON serializable")
+
+    def _v2_json_dump(output, fp):
+        json.dump(
+            output,
+            fp,
+            default=_index_encoder_default,
+            ensure_ascii=False,
+            indent=2 if common.options.pretty else None,
+        )
 
     output = collections.OrderedDict()
     output["repo"] = v2_repo(repodict, repodir, archive)
@@ -762,8 +796,11 @@ def make_v2(apps, packages, repodir, repodict, requestsdict, signer_fingerprints
             for build in app.get('Builds', []):
                 if build['versionCode'] == package['versionCode']:
                     versionName = build.get('versionName')
-                    logging.info(_('Overriding blank versionName in {apkfilename} from metadata: {version}')
-                                 .format(apkfilename=package['apkName'], version=versionName))
+                    logging.info(
+                        _(
+                            'Overriding blank versionName in {apkfilename} from metadata: {version}'
+                        ).format(apkfilename=package['apkName'], version=versionName)
+                    )
                     package['versionName'] = versionName
                     break
         if packageName in output_packages:
@@ -779,7 +816,7 @@ def make_v2(apps, packages, repodir, repodict, requestsdict, signer_fingerprints
 
             packagelist["versions"] = {}
 
-        packagelist["versions"][package["hash"]] = convert_version(package, apps[packageName], repodir)
+        packagelist["versions"][package["hash"]] = convert_version(package, apps[packageName], repodir)  # fmt: skip
 
     if categories_used_by_apps and not output['repo'].get(CATEGORIES_CONFIG_NAME):
         output['repo'][CATEGORIES_CONFIG_NAME] = dict()
@@ -788,7 +825,9 @@ def make_v2(apps, packages, repodir, repodict, requestsdict, signer_fingerprints
         if category not in output['repo'][CATEGORIES_CONFIG_NAME]:
             output['repo'][CATEGORIES_CONFIG_NAME][category] = dict()
         if 'name' not in output['repo'][CATEGORIES_CONFIG_NAME][category]:
-            output['repo'][CATEGORIES_CONFIG_NAME][category]['name'] = {DEFAULT_LOCALE: category}
+            output['repo'][CATEGORIES_CONFIG_NAME][category]['name'] = {
+                DEFAULT_LOCALE: category
+            }
     # do not include defined categories if no apps use them
     for category in list(output['repo'].get(CATEGORIES_CONFIG_NAME, list())):
         if category not in categories_used_by_apps:
@@ -806,17 +845,11 @@ def make_v2(apps, packages, repodir, repodict, requestsdict, signer_fingerprints
     json_name = 'index-v2.json'
     index_file = os.path.join(repodir, json_name)
     with open(index_file, "w", encoding="utf-8") as fp:
-        if common.options.pretty:
-            json.dump(output, fp, default=_index_encoder_default, indent=2, ensure_ascii=False)
-        else:
-            json.dump(output, fp, default=_index_encoder_default, ensure_ascii=False)
+        _v2_json_dump(output, fp)
 
-    json_name = "tmp/{}_{}.json".format(repodir, convert_datetime(repodict["timestamp"]))
+    json_name = f"""tmp/{repodir}_{convert_datetime(repodict["timestamp"])}.json"""
     with open(json_name, "w", encoding="utf-8") as fp:
-        if common.options.pretty:
-            json.dump(output, fp, default=_index_encoder_default, indent=2, ensure_ascii=False)
-        else:
-            json.dump(output, fp, default=_index_encoder_default, ensure_ascii=False)
+        _v2_json_dump(output, fp)
 
     entry["index"] = common.file_entry(index_file)
     entry["index"]["numPackages"] = len(output.get("packages", []))
@@ -840,32 +873,27 @@ def make_v2(apps, packages, repodir, repodict, requestsdict, signer_fingerprints
         if not os.path.exists(os.path.join(repodir, "diff")):
             os.makedirs(os.path.join(repodir, "diff"))
         with open(diff_file, "w", encoding="utf-8") as fp:
-            if common.options.pretty:
-                json.dump(diff, fp, default=_index_encoder_default, indent=2, ensure_ascii=False)
-            else:
-                json.dump(diff, fp, default=_index_encoder_default, ensure_ascii=False)
+            _v2_json_dump(diff, fp)
 
         entry["diffs"][old["repo"]["timestamp"]] = common.file_entry(diff_file)
-        entry["diffs"][old["repo"]["timestamp"]]["numPackages"] = len(diff.get("packages", []))
+        entry["diffs"][old["repo"]["timestamp"]]["numPackages"] = len(diff.get("packages", []))  # fmt: skip
 
     json_name = "entry.json"
     index_file = os.path.join(repodir, json_name)
     with open(index_file, "w", encoding="utf-8") as fp:
-        if common.options.pretty:
-            json.dump(entry, fp, default=_index_encoder_default, indent=2, ensure_ascii=False)
-        else:
-            json.dump(entry, fp, default=_index_encoder_default, ensure_ascii=False)
+        _v2_json_dump(entry, fp)
 
     if common.options.nosign:
         _copy_to_local_copy_dir(repodir, index_file)
-        logging.debug(_('index-v2 must have a signature, use `fdroid signindex` to create it!'))
+        logging.debug(
+            _('index-v2 must have a signature, use `fdroid signindex` to create it!')
+        )
     else:
         signindex.config = common.config
         signindex.sign_index(repodir, json_name)
 
 
 def make_v1(apps, packages, repodir, repodict, requestsdict, signer_fingerprints):
-
     def _index_encoder_default(obj):
         if isinstance(obj, set):
             return sorted(list(obj))
@@ -904,17 +932,37 @@ def make_v1(apps, packages, repodir, repodict, requestsdict, signer_fingerprints
         for k, v in sorted(app_dict.items()):
             if not v:
                 continue
-            if k in ('Builds', 'metadatapath',
-                     'ArchivePolicy', 'AutoName', 'AutoUpdateMode', 'MaintainerNotes',
-                     'Provides', 'Repo', 'RepoType', 'RequiresRoot',
-                     'UpdateCheckData', 'UpdateCheckIgnore', 'UpdateCheckMode',
-                     'UpdateCheckName', 'NoSourceSince', 'VercodeOperation',
-                     'summary', 'description', 'promoGraphic', 'screenshots', 'whatsNew',
-                     'featureGraphic', 'iconv2', 'tvBanner',
-                     ):
+            if k in (
+                'ArchivePolicy',
+                'AutoName',
+                'AutoUpdateMode',
+                'Builds',
+                'MaintainerNotes',
+                'NoSourceSince',
+                'Provides',
+                'Repo',
+                'RepoType',
+                'RequiresRoot',
+                'UpdateCheckData',
+                'UpdateCheckIgnore',
+                'UpdateCheckMode',
+                'UpdateCheckName',
+                'VercodeOperation',
+                'description',
+                'featureGraphic',
+                'iconv2',
+                'metadatapath',
+                'promoGraphic',
+                'screenshots',
+                'summary',
+                'tvBanner',
+                'whatsNew',
+            ):
                 continue
 
             # name things after the App class fields in fdroidclient
+            # fmt: off
+            # TODO remove fmt: off when TODO comments are removed
             if k == 'id':
                 k = 'packageName'
             elif k == 'CurrentVersionCode':  # TODO make SuggestedVersionCode the canonical name
@@ -925,6 +973,8 @@ def make_v1(apps, packages, repodir, repodict, requestsdict, signer_fingerprints
             else:
                 k = k[:1].lower() + k[1:]
             d[k] = v
+            # TODO remove fmt: on when TODO comments above are removed
+            # fmt: on
 
     # establish sort order in lists, sets, and localized dicts
     for app_dict in output['apps']:
@@ -953,8 +1003,11 @@ def make_v1(apps, packages, repodir, repodict, requestsdict, signer_fingerprints
             for build in app.get('Builds', []):
                 if build['versionCode'] == package['versionCode']:
                     versionName = build.get('versionName')
-                    logging.info(_('Overriding blank versionName in {apkfilename} from metadata: {version}')
-                                 .format(apkfilename=package['apkName'], version=versionName))
+                    logging.info(
+                        _(
+                            'Overriding blank versionName in {apkfilename} from metadata: {version}'
+                        ).format(apkfilename=package['apkName'], version=versionName)
+                    )
                     package['versionName'] = versionName
                     break
         if packageName in output_packages:
@@ -967,7 +1020,14 @@ def make_v1(apps, packages, repodir, repodict, requestsdict, signer_fingerprints
         for k, v in sorted(package.items()):
             if not v:
                 continue
-            if k in ('icon', 'icons', 'icons_src', 'ipfsCIDv1', 'name', 'srcnameSha256'):
+            if k in (
+                'icon',
+                'icons',
+                'icons_src',
+                'ipfsCIDv1',
+                'name',
+                'srcnameSha256',
+            ):
                 continue
             if k == 'antiFeatures':
                 d[k] = sorted(v.keys())
@@ -984,7 +1044,9 @@ def make_v1(apps, packages, repodir, repodict, requestsdict, signer_fingerprints
 
     if common.options.nosign:
         _copy_to_local_copy_dir(repodir, index_file)
-        logging.debug(_('index-v1 must have a signature, use `fdroid signindex` to create it!'))
+        logging.debug(
+            _('index-v1 must have a signature, use `fdroid signindex` to create it!')
+        )
     else:
         signindex.config = common.config
         signindex.sign_index(repodir, json_name)
@@ -998,8 +1060,9 @@ def _copy_to_local_copy_dir(repodir, f):
             os.mkdir(destdir)
         shutil.copy2(f, destdir, follow_symlinks=False)
     elif local_copy_dir:
-        raise FDroidException(_('"local_copy_dir" {path} does not exist!')
-                              .format(path=local_copy_dir))
+        raise FDroidException(
+            _('"local_copy_dir" {path} does not exist!').format(path=local_copy_dir)
+        )
 
 
 def sort_package_versions(packages, signer_fingerprints):
@@ -1176,8 +1239,9 @@ def make_v0(apps, apks, repodir, repodict, requestsdict, signer_fingerprints):
         if app.icon:
             addElement('icon', app.icon, doc, apel)
 
-        addElementCheckLocalized('desc', app, 'Description', doc, apel,
-                                 'No description available')
+        addElementCheckLocalized(
+            'desc', app, 'Description', doc, apel, 'No description available'
+        )
 
         addElement('license', app.License, doc, apel)
         if app.Categories:
@@ -1221,17 +1285,21 @@ def make_v0(apps, apks, repodir, repodict, requestsdict, signer_fingerprints):
             addElementNonEmpty('antifeatures', ','.join(afout), doc, apel)
 
         # Check for duplicates - they will make the client unhappy...
+        # fmt: off
         for i in range(len(apklist) - 1):
             first = apklist[i]
             second = apklist[i + 1]
-            if first['versionCode'] == second['versionCode'] \
-               and first['sig'] == second['sig']:
+            if (
+                first['versionCode'] == second['versionCode']
+                and first['sig'] == second['sig']
+            ):
                 if first['hash'] == second['hash']:
                     raise FDroidException('"{0}/{1}" and "{0}/{2}" are exact duplicates!'.format(
                         repodir, first['apkName'], second['apkName']))
                 else:
                     raise FDroidException('duplicates: "{0}/{1}" - "{0}/{2}"'.format(
                         repodir, first['apkName'], second['apkName']))
+        # fmt: on
 
         current_version_code = 0
         current_version_file = None
@@ -1268,20 +1336,15 @@ def make_v0(apps, apks, repodir, repodict, requestsdict, signer_fingerprints):
             apkel.appendChild(hashel)
 
             addElement('size', str(apk['size']), doc, apkel)
-            addElementIfInApk('sdkver', apk,
-                              'minSdkVersion', doc, apkel)
-            addElementIfInApk('targetSdkVersion', apk,
-                              'targetSdkVersion', doc, apkel)
-            addElementIfInApk('maxsdkver', apk,
-                              'maxSdkVersion', doc, apkel)
-            addElementIfInApk('obbMainFile', apk,
-                              'obbMainFile', doc, apkel)
-            addElementIfInApk('obbMainFileSha256', apk,
-                              'obbMainFileSha256', doc, apkel)
-            addElementIfInApk('obbPatchFile', apk,
-                              'obbPatchFile', doc, apkel)
-            addElementIfInApk('obbPatchFileSha256', apk,
-                              'obbPatchFileSha256', doc, apkel)
+            addElementIfInApk('sdkver', apk, 'minSdkVersion', doc, apkel)
+            addElementIfInApk('targetSdkVersion', apk, 'targetSdkVersion', doc, apkel)
+            addElementIfInApk('maxsdkver', apk, 'maxSdkVersion', doc, apkel)
+            addElementIfInApk('obbMainFile', apk, 'obbMainFile', doc, apkel)
+            addElementIfInApk('obbMainFileSha256', apk, 'obbMainFileSha256', doc, apkel)
+            addElementIfInApk('obbPatchFile', apk, 'obbPatchFile', doc, apkel)
+            addElementIfInApk(
+                'obbPatchFileSha256', apk, 'obbPatchFileSha256', doc, apkel
+            )
             if 'added' in apk:
                 addElement('added', apk['added'].strftime('%Y-%m-%d'), doc, apkel)
 
@@ -1295,7 +1358,7 @@ def make_v0(apps, apks, repodir, repodict, requestsdict, signer_fingerprints):
                     if perm_name.startswith("android.permission."):
                         perm_name = perm_name[19:]
                     old_permissions.add(perm_name)
-                addElementNonEmpty('permissions', ','.join(sorted(old_permissions)), doc, apkel)
+                addElementNonEmpty('permissions', ','.join(sorted(old_permissions)), doc, apkel)  # fmt: skip
 
                 for permission in sorted_permissions:
                     permel = doc.createElement('uses-permission')
@@ -1306,16 +1369,18 @@ def make_v0(apps, apks, repodir, repodict, requestsdict, signer_fingerprints):
                 for permission_sdk_23 in sorted(apk['uses-permission-sdk-23']):
                     permel = doc.createElement('uses-permission-sdk-23')
                     if permission_sdk_23[1] is not None:
-                        permel.setAttribute('maxSdkVersion', '%d' % permission_sdk_23[1])
+                        permel.setAttribute('maxSdkVersion', '%d' % permission_sdk_23[1])  # fmt: skip
                         apkel.appendChild(permel)
                     permel.setAttribute('name', permission_sdk_23[0])
                 if 'nativecode' in apk:
-                    addElement('nativecode', ','.join(sorted(apk['nativecode'])), doc, apkel)
-                addElementNonEmpty('features', ','.join(sorted(apk['features'])), doc, apkel)
+                    addElement('nativecode', ','.join(sorted(apk['nativecode'])), doc, apkel)  # fmt: skip
+                addElementNonEmpty('features', ','.join(sorted(apk['features'])), doc, apkel)  # fmt: skip
 
-        if current_version_file is not None \
-                and common.config['make_current_version_link'] \
-                and repodir == 'repo':  # only create these
+        if (
+            current_version_file is not None
+            and common.config['make_current_version_link']
+            and repodir == 'repo'
+        ):  # only create these
             namefield = common.config['current_version_name_source']
             name = app.get(namefield)
             if not name and namefield == 'Name':
@@ -1323,8 +1388,8 @@ def make_v0(apps, apks, repodir, repodict, requestsdict, signer_fingerprints):
             if not name:
                 name = app.id
             sanitized_name = re.sub(b'''[ '"&%?+=/]''', b'', str(name).encode('utf-8'))
-            apklinkname = sanitized_name + os.path.splitext(current_version_file)[1].encode('utf-8')
-            current_version_path = os.path.join(repodir, current_version_file).encode('utf-8', 'surrogateescape')
+            apklinkname = sanitized_name + os.path.splitext(current_version_file)[1].encode('utf-8')  # fmt: skip
+            current_version_path = os.path.join(repodir, current_version_file).encode('utf-8', 'surrogateescape')  # fmt: skip
             if os.path.islink(apklinkname):
                 os.remove(apklinkname)
             os.symlink(current_version_path, apklinkname)
@@ -1368,9 +1433,9 @@ def make_v0(apps, apks, repodir, repodict, requestsdict, signer_fingerprints):
     with open(os.path.join(repodir, 'index.xml'), 'wb') as f:
         f.write(output)
 
-    if 'repo_keyalias' in common.config \
-       or (common.options.nosign and 'repo_pubkey' in common.config):
-
+    if 'repo_keyalias' in common.config or (
+        common.options.nosign and 'repo_pubkey' in common.config
+    ):
         if common.options.nosign:
             logging.info(_("Creating unsigned index in preparation for signing"))
         else:
@@ -1401,8 +1466,10 @@ def make_v0(apps, apks, repodir, repodict, requestsdict, signer_fingerprints):
     if os.path.exists(repo_icon):
         shutil.copyfile(common.config['repo_icon'], iconfilename)
     else:
-        logging.warning(_('repo_icon "repo/icons/%s" does not exist, generating placeholder.')
-                        % repo_icon)
+        logging.warning(
+            _('repo_icon "repo/icons/%s" does not exist, generating placeholder.')
+            % repo_icon
+        )
         os.makedirs(os.path.dirname(iconfilename), exist_ok=True)
         try:
             import qrcode
@@ -1415,8 +1482,9 @@ def make_v0(apps, apks, repodir, repodict, requestsdict, signer_fingerprints):
                 )
             ) from e
         except Exception:
-            exampleicon = os.path.join(common.get_examples_dir(),
-                                       common.default_config['repo_icon'])
+            exampleicon = os.path.join(
+                common.get_examples_dir(), common.default_config['repo_icon']
+            )
             shutil.copy(exampleicon, iconfilename)
 
 
@@ -1431,14 +1499,26 @@ def extract_pubkey():
     if 'repo_pubkey' in common.config:
         pubkey = unhexlify(common.config['repo_pubkey'])
     elif 'keystorepass' in common.config:
-        env_vars = {'LC_ALL': 'C.UTF-8',
-                    'FDROID_KEY_STORE_PASS': common.config['keystorepass']}
-        p = FDroidPopenBytes([common.config['keytool'], '-exportcert',
-                              '-alias', common.config['repo_keyalias'],
-                              '-keystore', common.config['keystore'],
-                              '-storepass:env', 'FDROID_KEY_STORE_PASS']
-                             + list(common.config['smartcardoptions']),
-                             envs=env_vars, output=False, stderr_to_stdout=False)
+        env_vars = {
+            'LC_ALL': 'C.UTF-8',
+            'FDROID_KEY_STORE_PASS': common.config['keystorepass'],
+        }
+        p = FDroidPopenBytes(
+            [
+                common.config['keytool'],
+                '-exportcert',
+                '-alias',
+                common.config['repo_keyalias'],
+                '-keystore',
+                common.config['keystore'],
+                '-storepass:env',
+                'FDROID_KEY_STORE_PASS',
+            ]
+            + list(common.config['smartcardoptions']),
+            envs=env_vars,
+            output=False,
+            stderr_to_stdout=False,
+        )
         if p.returncode != 0 or len(p.output) < 20:
             msg = "Failed to get repo pubkey!"
             if common.config['keystore'] == 'NONE':
@@ -1446,7 +1526,9 @@ def extract_pubkey():
             raise FDroidException(msg)
         pubkey = p.output
     else:
-        raise FDroidException(_('Neither "repo_pubkey" nor "keystorepass" set in config.yml'))
+        raise FDroidException(
+            _('Neither "repo_pubkey" nor "keystorepass" set in config.yml')
+        )
 
     repo_pubkey_fingerprint = common.get_cert_fingerprint(pubkey)
     return hexlify(pubkey), repo_pubkey_fingerprint
@@ -1518,9 +1600,7 @@ def add_mirrors_to_repodict(repo_section, repodict):
         mirrors.append(mirror)
         if mirror['url'] in urls:
             mirrorcheckfailed = True
-            logging.error(
-                _('Duplicate entry "%s" in mirrors config!') % mirror['url']
-            )
+            logging.error(_('Duplicate entry "%s" in mirrors config!') % mirror['url'])
         urls.add(mirror['url'])
     for mirror in common.config.get('servergitmirrors', []):
         for url in get_mirror_service_urls(mirror):
@@ -1686,7 +1766,9 @@ def download_repo_index_v1(url_str, etag=None, verify_fingerprint=True, timeout=
     else:
         path = url.path.rstrip('/')
 
-    url = urllib.parse.SplitResult(url.scheme, url.netloc, path + '/index-v1.jar', '', '')
+    url = urllib.parse.SplitResult(
+        url.scheme, url.netloc, path + '/index-v1.jar', '', ''
+    )
     download, new_etag = net.http_get(url.geturl(), etag, timeout)
 
     if download is None:
@@ -1822,7 +1904,9 @@ def get_public_key_from_jar(jar):
     if len(certs) < 1:
         raise VerificationException(_("Found no signing certificates for repository."))
     if len(certs) > 1:
-        raise VerificationException(_("Found multiple signing certificates for repository."))
+        raise VerificationException(
+            _("Found multiple signing certificates for repository.")
+        )
 
     # extract public key from certificate
     public_key = common.get_certificate(jar.read(certs[0]))
@@ -1845,7 +1929,6 @@ def make_altstore(apps, apks, config, repodir, pretty=False):
     indent = 2 if pretty else None
     # for now alt-store support is english only
     for lang in ['en']:
-
         # prepare minimal altstore index
         idx = {
             'name': config['repo_name'],

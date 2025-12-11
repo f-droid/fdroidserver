@@ -35,10 +35,6 @@ force-exclude = '''(
   | fdroidserver/looseversion\.py
   | fdroidserver/build\.py
   | fdroidserver/checkupdates\.py
-  | fdroidserver/common\.py
-  | fdroidserver/index\.py
-  | fdroidserver/metadata\.py
-  | fdroidserver/update\.py
   | fdroidserver/vmtools\.py
   | tests/config\.py
   | tests/extra/manual-vmtools-test\.py

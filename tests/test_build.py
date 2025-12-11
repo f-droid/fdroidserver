@@ -613,9 +613,9 @@ class BuildTest(unittest.TestCase):
         with open(metadata_file) as fp:
             app = fdroidserver.metadata.App(yaml.safe_load(fp))
         app['RepoType'] = 'git'
-        app[
-            'Binaries'
-        ] = 'https://example.com/fdroid/repo/info.guardianproject.checkey_%v.apk'
+        app['Binaries'] = (
+            'https://example.com/fdroid/repo/info.guardianproject.checkey_%v.apk'
+        )
         build = fdroidserver.metadata.Build(
             {
                 'versionCode': 123,
@@ -703,9 +703,9 @@ class BuildTest(unittest.TestCase):
         with open(metadata_file) as fp:
             app = fdroidserver.metadata.App(yaml.safe_load(fp))
         app['RepoType'] = 'git'
-        app[
-            'Binaries'
-        ] = 'https://example.com/fdroid/repo/info.guardianproject.checkey_%v.apk'
+        app['Binaries'] = (
+            'https://example.com/fdroid/repo/info.guardianproject.checkey_%v.apk'
+        )
         build = fdroidserver.metadata.Build(
             {
                 'versionCode': 123,

@@ -205,9 +205,9 @@ class PublishTest(unittest.TestCase):
         publish.config['keystorepass'] = '123456'
         publish.config['keypass'] = '654321'
         publish.config['keystore'] = "keystore.jks"
-        publish.config[
-            'keydname'
-        ] = 'CN=Birdman, OU=Cell, O=Alcatraz, L=Alcatraz, S=CA, C=US'
+        publish.config['keydname'] = (
+            'CN=Birdman, OU=Cell, O=Alcatraz, L=Alcatraz, S=CA, C=US'
+        )
         os.chdir(self.testdir)
         keystore = jks.KeyStore.new("jks", [])
         keystore.save(publish.config['keystore'], publish.config['keystorepass'])
