@@ -249,10 +249,12 @@ class CheckupdatesTest(unittest.TestCase):
 
         vcs = mock.Mock()
         vcs.latesttags.return_value = ['1.1.9', '1.1.8']
-        with mock.patch(
-            'pathlib.Path.read_text', lambda a: 'v1.1.9\nc10109'
-        ) as _ignored, mock.patch.object(Path, 'is_file') as mock_path, mock.patch(
-            'fdroidserver.common.getvcs', return_value=vcs
+        with (
+            mock.patch(
+                'pathlib.Path.read_text', lambda a: 'v1.1.9\nc10109'
+            ) as _ignored,
+            mock.patch.object(Path, 'is_file') as mock_path,
+            mock.patch('fdroidserver.common.getvcs', return_value=vcs),
         ):
             _ignored  # silence the linters
             mock_path.is_file.return_falue = True
@@ -261,10 +263,12 @@ class CheckupdatesTest(unittest.TestCase):
         self.assertEqual(vercode, 10109)
 
         app.UpdateCheckData = r'b.txt|c(.*)|.|v(.*)'
-        with mock.patch(
-            'pathlib.Path.read_text', lambda a: 'v1.1.0\nc10109'
-        ) as _ignored, mock.patch.object(Path, 'is_file') as mock_path, mock.patch(
-            'fdroidserver.common.getvcs', return_value=vcs
+        with (
+            mock.patch(
+                'pathlib.Path.read_text', lambda a: 'v1.1.0\nc10109'
+            ) as _ignored,
+            mock.patch.object(Path, 'is_file') as mock_path,
+            mock.patch('fdroidserver.common.getvcs', return_value=vcs),
         ):
             _ignored  # silence the linters
             mock_path.is_file.return_falue = True
@@ -273,10 +277,12 @@ class CheckupdatesTest(unittest.TestCase):
         self.assertEqual(vercode, 10109)
 
         app.UpdateCheckData = r'b.txt|c(.*)||'
-        with mock.patch(
-            'pathlib.Path.read_text', lambda a: 'v1.1.9\nc10109'
-        ) as _ignored, mock.patch.object(Path, 'is_file') as mock_path, mock.patch(
-            'fdroidserver.common.getvcs', return_value=vcs
+        with (
+            mock.patch(
+                'pathlib.Path.read_text', lambda a: 'v1.1.9\nc10109'
+            ) as _ignored,
+            mock.patch.object(Path, 'is_file') as mock_path,
+            mock.patch('fdroidserver.common.getvcs', return_value=vcs),
         ):
             _ignored  # silence the linters
             mock_path.is_file.return_falue = True
@@ -286,10 +292,12 @@ class CheckupdatesTest(unittest.TestCase):
 
         vcs.latesttags.return_value = ['Android-1.1.0', '1.1.8']
         app.UpdateCheckData = r'b.txt|c(.*)||Android-([\d.]+)'
-        with mock.patch(
-            'pathlib.Path.read_text', lambda a: 'v1.1.9\nc10109'
-        ) as _ignored, mock.patch.object(Path, 'is_file') as mock_path, mock.patch(
-            'fdroidserver.common.getvcs', return_value=vcs
+        with (
+            mock.patch(
+                'pathlib.Path.read_text', lambda a: 'v1.1.9\nc10109'
+            ) as _ignored,
+            mock.patch.object(Path, 'is_file') as mock_path,
+            mock.patch('fdroidserver.common.getvcs', return_value=vcs),
         ):
             _ignored  # silence the linters
             mock_path.is_file.return_falue = True

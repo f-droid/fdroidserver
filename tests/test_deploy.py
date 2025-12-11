@@ -1085,11 +1085,13 @@ class GitHubReleasesTest(unittest.TestCase):
 
         fri_mock = unittest.mock.Mock(return_value="fri_result")
         urr_mock = unittest.mock.Mock()
-        with unittest.mock.patch(
-            "fdroidserver.deploy.find_release_infos", fri_mock
-        ), unittest.mock.patch(
-            "fdroidserver.deploy.upload_to_github_releases_repo", urr_mock
-        ), tempfile.TemporaryDirectory() as tmpdir:
+        with (
+            unittest.mock.patch("fdroidserver.deploy.find_release_infos", fri_mock),
+            unittest.mock.patch(
+                "fdroidserver.deploy.upload_to_github_releases_repo", urr_mock
+            ),
+            tempfile.TemporaryDirectory() as tmpdir,
+        ):
             with open(Path(tmpdir) / "index-v2.json", "w") as f:
                 f.write("")
 

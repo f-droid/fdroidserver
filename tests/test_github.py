@@ -108,10 +108,13 @@ class GithubApiTest(unittest.TestCase):
         api = fdroidserver.github.GithubApi('faketoken', 'fakerepopath')
         uomock = mock_urlopen()
 
-        with unittest.mock.patch(
-            'fdroidserver.github.open',
-            unittest.mock.mock_open(read_data=b"fake_content"),
-        ), unittest.mock.patch("urllib.request.urlopen", uomock):
+        with (
+            unittest.mock.patch(
+                'fdroidserver.github.open',
+                unittest.mock.mock_open(read_data=b"fake_content"),
+            ),
+            unittest.mock.patch("urllib.request.urlopen", uomock),
+        ):
             success = api._create_release_asset('fake_id', 'fake_file')
 
         self.assertTrue(success)
