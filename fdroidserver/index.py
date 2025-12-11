@@ -796,12 +796,15 @@ def make_v2(
             for build in app.get('Builds', []):
                 if build['versionCode'] == package['versionCode']:
                     versionName = build.get('versionName')
-                    logging.info(
-                        _(
-                            'Overriding blank versionName in {apkfilename} from metadata: {version}'
-                        ).format(apkfilename=package['apkName'], version=versionName)
-                    )
-                    package['versionName'] = versionName
+                    if versionName:
+                        logging.info(
+                            _(
+                                'Overriding blank versionName in {apkfilename} from metadata: {version}'
+                            ).format(
+                                apkfilename=package['apkName'], version=versionName
+                            )
+                        )
+                        package['versionName'] = versionName
                     break
         if packageName in output_packages:
             packagelist = output_packages[packageName]
@@ -1003,12 +1006,15 @@ def make_v1(apps, packages, repodir, repodict, requestsdict, signer_fingerprints
             for build in app.get('Builds', []):
                 if build['versionCode'] == package['versionCode']:
                     versionName = build.get('versionName')
-                    logging.info(
-                        _(
-                            'Overriding blank versionName in {apkfilename} from metadata: {version}'
-                        ).format(apkfilename=package['apkName'], version=versionName)
-                    )
-                    package['versionName'] = versionName
+                    if versionName:
+                        logging.info(
+                            _(
+                                'Overriding blank versionName in {apkfilename} from metadata: {version}'
+                            ).format(
+                                apkfilename=package['apkName'], version=versionName
+                            )
+                        )
+                        package['versionName'] = versionName
                     break
         if packageName in output_packages:
             packagelist = output_packages[packageName]

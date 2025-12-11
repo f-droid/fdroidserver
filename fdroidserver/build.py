@@ -277,7 +277,7 @@ def build_server(app, build, vcs, build_dir, output_dir, log_dir, force):
                 message = "Timeout exceeded! Build VM force-stopped for {0}:{1}"
             else:
                 message = "Build.py failed on server for {0}:{1}"
-            raise BuildException(message.format(app.id, build.versionName),
+            raise BuildException(message.format(app.id, build.versionCode),
                                  str(output, 'utf-8', 'replace'))
 
         # Retreive logs...
@@ -304,7 +304,7 @@ def build_server(app, build, vcs, build_dir, output_dir, log_dir, force):
         except Exception as exc:
             raise BuildException(
                 "Build failed for {0}:{1} - missing output files".format(
-                    app.id, build.versionName), str(output, 'utf-8', 'replace')) from exc
+                    app.id, build.versionCode), str(output, 'utf-8', 'replace')) from exc
         ftp.close()
 
     finally:
@@ -480,18 +480,18 @@ def build_local(app, build, vcs, build_dir, output_dir, log_dir, srclib_dir, ext
             p = FDroidPopen(['sudo', 'DEBIAN_FRONTEND=noninteractive',
                              'bash', '-e', '-u', '-o', 'pipefail', '-x', '-c', '; '.join(build.sudo)])
             if p.returncode != 0:
-                raise BuildException("Error running sudo command for %s:%s" %
-                                     (app.id, build.versionName), p.output)
+                raise BuildException("Error running sudo command for %s:%d" %
+                                     (app.id, build.versionCode), p.output)
 
         p = FDroidPopen(['sudo', 'passwd', '--lock', 'root'])
         if p.returncode != 0:
-            raise BuildException("Error locking root account for %s:%s" %
-                                 (app.id, build.versionName), p.output)
+            raise BuildException("Error locking root account for %s:%d" %
+                                 (app.id, build.versionCode), p.output)
 
         p = FDroidPopen(['sudo', 'SUDO_FORCE_REMOVE=yes', 'dpkg', '--purge', 'sudo'])
         if p.returncode != 0:
-            raise BuildException("Error removing sudo for %s:%s" %
-                                 (app.id, build.versionName), p.output)
+            raise BuildException("Error removing sudo for %s:%d" %
+                                 (app.id, build.versionCode), p.output)
 
         log_path = os.path.join(log_dir,
                                 common.get_toolsversion_logname(app, build))
@@ -499,8 +499,8 @@ def build_local(app, build, vcs, build_dir, output_dir, log_dir, srclib_dir, ext
             f.write(common.get_android_tools_version_log())
     else:
         if build.sudo:
-            logging.warning('%s:%s runs this on the buildserver with sudo:\n\t%s\nThese commands were skipped because fdroid build is not running on a dedicated build server.'
-                            % (app.id, build.versionName, build.sudo))
+            logging.warning('%s:%d runs this on the buildserver with sudo:\n\t%s\nThese commands were skipped because fdroid build is not running on a dedicated build server.'
+                            % (app.id, build.versionCode, build.sudo))
 
     # Prepare the source code...
     root_dir, srclibpaths = common.prepare_source(vcs, app, build,
@@ -551,8 +551,8 @@ def build_local(app, build, vcs, build_dir, output_dir, log_dir, srclib_dir, ext
         p = FDroidPopen(['ant', 'clean'], cwd=root_dir)
 
     if p is not None and p.returncode != 0:
-        raise BuildException("Error cleaning %s:%s" %
-                             (app.id, build.versionName), p.output)
+        raise BuildException("Error cleaning %s:%d" %
+                             (app.id, build.versionCode), p.output)
 
     for root, dirs, files in os.walk(build_dir):
 
@@ -629,8 +629,8 @@ def build_local(app, build, vcs, build_dir, output_dir, log_dir, srclib_dir, ext
         p = FDroidPopen(['bash', '-e', '-u', '-o', 'pipefail', '-x', '-c', cmd], cwd=root_dir)
 
         if p.returncode != 0:
-            raise BuildException("Error running build command for %s:%s" %
-                                 (app.id, build.versionName), p.output)
+            raise BuildException("Error running build command for %s:%d" %
+                                 (app.id, build.versionCode), p.output)
 
     # Build native stuff if required...
     if build.buildjni and build.buildjni != ['no']:
@@ -658,7 +658,7 @@ def build_local(app, build, vcs, build_dir, output_dir, log_dir, srclib_dir, ext
                 del manifest_text
             p = FDroidPopen(cmd, cwd=os.path.join(root_dir, d))
             if p.returncode != 0:
-                raise BuildException("NDK build failed for %s:%s" % (app.id, build.versionName), p.output)
+                raise BuildException("NDK build failed for %s:%d" % (app.id, build.versionCode), p.output)
 
     p = None
     # Build the release...
@@ -716,10 +716,8 @@ def build_local(app, build, vcs, build_dir, output_dir, log_dir, srclib_dir, ext
         commit_id = build.commit
 
     if p is not None and p.returncode != 0:
-        raise BuildException("Build failed for %s:%s@%s" % (app.id, build.versionName, commit_id),
+        raise BuildException("Build failed for %s:%d@%s" % (app.id, build.versionCode, commit_id),
                              p.output)
-    logging.info("Successfully built version {versionName} of {appid} from {commit_id}"
-                 .format(versionName=build.versionName, appid=app.id, commit_id=commit_id))
 
     omethod = build.output_method()
     if omethod == 'maven':
@@ -820,13 +818,15 @@ def build_local(app, build, vcs, build_dir, output_dir, log_dir, srclib_dir, ext
         raise BuildException("Unsigned APK is not at expected location of " + src)
 
     if common.get_file_extension(src) == 'apk':
-        vercode, version = get_metadata_from_apk(app, build, src)
-        if version != build.versionName or vercode != build.versionCode:
-            raise BuildException(("Unexpected version/version code in output;"
-                                  " APK: '%s' / '%d', "
-                                  " Expected: '%s' / '%d'")
-                                 % (version, vercode, build.versionName,
-                                    build.versionCode))
+        versionCode, _ignored = get_metadata_from_apk(app, build, src)
+        if versionCode != build.versionCode:
+            raise BuildException(("Unexpected versionCode in output;"
+                                  " APK: '%d', "
+                                  " Expected: '%d'")
+                                 % (versionCode, build.versionCode))
+
+        logging.info(f"Successfully built {app.id}:{versionCode} from {commit_id}")
+
         if (options.scan_binary or config.get('scan_binary')) and not options.skipscan:
             if scanner.scan_binary(src):
                 raise BuildException("Found blocklisted packages in final apk!")
@@ -914,8 +914,7 @@ def trybuild(app, build, build_dir, output_dir, log_dir, also_check_dir,
     if build.disable and not options.force:
         return False
 
-    logging.info("Building version %s (%s) of %s" % (
-        build.versionName, build.versionCode, app.id))
+    logging.info(f"Building {app.id}:{build.versionCode}")
 
     if server:
         # When using server mode, still keep a local cache of the repo, by
@@ -1309,8 +1308,8 @@ def main():
                 tstamp = time.strftime("%Y-%m-%d %H:%M:%SZ", time.gmtime())
                 with open(os.path.join(log_dir, appid + '.log'), 'a+') as f:
                     f.write('\n\n============================================================\n')
-                    f.write('versionCode: %s\nversionName: %s\ncommit: %s\n' %
-                            (build.versionCode, build.versionName, build.commit))
+                    f.write('versionCode: %s\ncommit: %s\n' %
+                            (build.versionCode, build.commit))
                     f.write('Build completed at '
                             + tstamp + '\n')
                     f.write('\n' + tools_version_log + '\n')

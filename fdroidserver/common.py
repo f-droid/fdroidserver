@@ -2714,8 +2714,7 @@ def prepare_source(
         )
         if p.returncode != 0:
             raise BuildException(
-                "Error running init command for %s:%s" % (app.id, build.versionName),
-                p.output,
+                f"Error running init command for {app.id}:{build.versionCode}", p.output
             )
 
     # Apply patches if any
@@ -2811,6 +2810,9 @@ def prepare_source(
 
     # Insert versionCode and number into the manifest if necessary
     if build.forceversion:
+        if not build.versionName:
+            raise MetaDataException(_("forceversion requires versionName to be set"))
+
         logging.info("Changing the versionName")
         for path in manifest_paths(root_dir, flavors):
             if not os.path.isfile(path):
@@ -2895,8 +2897,10 @@ def prepare_source(
             ['bash', '-e', '-u', '-o', 'pipefail', '-x', '-c', '--', cmd], cwd=root_dir
         )
         if p.returncode != 0:
-            raise BuildException("Error running prebuild command for %s:%s" %
-                                 (app.id, build.versionName), p.output)
+            raise BuildException(
+                f"Error running prebuild command for {app.id}:{build.versionCode}",
+                p.output,
+            )
 
     # Generate (or update) the ant build file, build.xml...
     if build.build_method() == 'ant' and build.androidupdate != ['no']:
@@ -3532,8 +3536,16 @@ def set_FDroidPopen_env(app=None, build=None):
 
 def replace_build_vars(cmd, build):
     cmd = cmd.replace('$$COMMIT$$', build.commit)
-    cmd = cmd.replace('$$VERSION$$', build.versionName)
     cmd = cmd.replace('$$VERCODE$$', str(build.versionCode))
+
+    version_tag = '$$VERSION$$'
+    if build.get('versionName'):
+        cmd = cmd.replace(version_tag, build.versionName)
+    elif version_tag in cmd:
+        raise MetaDataException(
+            _("{tag} requires versionName to be set").format(tag=version_tag)
+        )
+
     return cmd
 
 

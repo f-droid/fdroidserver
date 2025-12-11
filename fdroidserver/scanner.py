@@ -1285,12 +1285,12 @@ def main():
 
                 if build.disable and not options.force:
                     logging.info(
-                        "...skipping version %s - %s"
-                        % (build.versionName, build.get('disable', build.commit[1:]))
+                        "...skipping versionCode %s - %s"
+                        % (build.versionCode, build.get('disable', build.commit[1:]))
                     )
                     continue
 
-                logging.info("...scanning version " + build.versionName)
+                logging.info("...scanning versionCode " + build.versionCode)
                 # Prepare the source code...
                 common.prepare_source(
                     vcs, app, build, build_dir, srclib_dir, extlib_dir, False
