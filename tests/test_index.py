@@ -453,6 +453,21 @@ class IndexTest(unittest.TestCase):
         self.assertTrue(os.path.isdir(repo_icons_dir))
         self.assertEqual(test_value, copied_path.read_text())
 
+    def test_copy_repo_icon_skipped_if_exists(self):
+        os.chdir(self.testdir)
+        test_value = 'test'
+        default_repo_icon = common.default_config['repo_icon']
+        repo_icon = Path('repo/icons') / default_repo_icon
+        repo_icon.parent.mkdir(parents=True)
+        repo_icon.write_text(test_value)
+        archive_icon = Path('archive/icons') / default_repo_icon
+        archive_icon.parent.mkdir(parents=True)
+        archive_icon.write_text(test_value)
+        Path(default_repo_icon).write_text('this should not be copied')
+        index.copy_repo_icon('repo')
+        self.assertEqual(test_value, repo_icon.read_text())
+        self.assertEqual(test_value, archive_icon.read_text())
+
     def test_make_v0(self):
         os.chdir(self.testdir)
         os.mkdir('metadata')

@@ -102,11 +102,10 @@ def make(apps, apks, repodir, archive):
     if common.config['repo_maxage'] != 0:
         repodict['maxage'] = common.config['repo_maxage']
 
+    repo_icon = common.config.get('repo_icon', common.default_config['repo_icon'])
     if archive:
         repodict['name'] = common.config['archive_name']
-        repodict['icon'] = common.config.get(
-            'archive_icon', common.default_config['repo_icon']
-        )
+        repodict['icon'] = repo_icon
         repodict['description'] = common.config['archive_description']
         archive_url = common.config.get(
             'archive_url', common.config['repo_url'][:-4] + 'archive'
@@ -117,9 +116,7 @@ def make(apps, apks, repodir, archive):
         repo_section = os.path.basename(urllib.parse.urlparse(archive_url).path)
     else:
         repodict['name'] = common.config['repo_name']
-        repodict['icon'] = common.config.get(
-            'repo_icon', common.default_config['repo_icon']
-        )
+        repodict['icon'] = repo_icon
         repodict['address'] = common.config['repo_url']
         if 'repo_web_base_url' in common.config:
             repodict["webBaseUrl"] = common.config['repo_web_base_url']
@@ -1469,9 +1466,7 @@ def make_v0(apps, apks, repodir, repodict, requestsdict, signer_fingerprints):
 
 def copy_repo_icon(repodir):
     icon_dir = os.path.join(repodir, 'icons')
-    repo_icon = os.path.basename(
-        common.config.get('repo_icon', common.default_config['repo_icon'])
-    )
+    repo_icon = common.config.get('repo_icon', common.default_config['repo_icon'])
     icon_path = os.path.join(icon_dir, repo_icon)
     if not os.path.exists(icon_path):
         os.makedirs(icon_dir, exist_ok=True)
