@@ -497,14 +497,15 @@ class IndexTest(unittest.TestCase):
         apk = {
             'hash': 'dbbdd7deadb038862f426b71efe4a64df8c3edf25d669e935f349510e16f65db',
             'hashType': 'sha256',
-            'uses-permission': [['android.permission.WAKE_LOCK', None]],
-            'uses-permission-sdk-23': [],
             'features': [],
             'icons_src': {
                 '160': 'res/drawable/ic_coffee_on.xml',
                 '-1': 'res/drawable/ic_coffee_on.xml',
             },
             'icons': {'160': 'info.zwanenburg.caffeinetile.4.xml'},
+            'manifest': {
+                'usesPermission': [{'name': 'android.permission.WAKE_LOCK'}],
+            },
             'antiFeatures': ['KnownVuln'],
             'packageName': 'info.zwanenburg.caffeinetile',
             'versionCode': 4,

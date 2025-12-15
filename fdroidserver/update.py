@@ -98,9 +98,6 @@ screen_resolutions = {
 
 all_screen_densities = ['0'] + screen_densities
 
-UsesPermission = collections.namedtuple('UsesPermission', ['name', 'maxSdkVersion'])
-UsesPermissionSdk23 = collections.namedtuple('UsesPermissionSdk23', ['name', 'maxSdkVersion'])  # fmt: skip
-
 ALLOWED_EXTENSIONS = ('png', 'jpg', 'jpeg')
 GRAPHIC_NAMES = ('featureGraphic', 'icon', 'promoGraphic', 'tvBanner')
 SCREENSHOT_DIRS = (
@@ -1674,8 +1671,6 @@ def scan_apk(apk_file, require_signature=True):
     apk = {
         'hash': common.sha256sum(apk_file),
         'hashType': 'sha256',
-        'uses-permission': [],
-        'uses-permission-sdk-23': [],
         'features': [],
         'icons_src': {},
         'icons': {},
@@ -1834,6 +1829,18 @@ def _sanitize_sdk_version(value):
     return None
 
 
+def _uses_permission(name=None, maxSdkVersion=None):
+    """<uses-permission> entries have a name and optional maxSdkVersion."""
+    if not name:
+        logging.error(_('Ignoring bad element in manifest: %s') % name)
+        return dict()
+    d = {"name": str(name)}
+    maxSdkVersion = _sanitize_sdk_version(maxSdkVersion)
+    if maxSdkVersion:
+        d["maxSdkVersion"] = maxSdkVersion
+    return d
+
+
 def scan_apk_androguard(apk, apkfile):
     try:
         apkobject = common.get_androguard_APK(apkfile)
@@ -1864,6 +1871,9 @@ def scan_apk_androguard(apk, apkfile):
             _("Could not open APK {path} for analysis: ").format(path=apkfile) + str(e)
         )
         raise BuildException(_("Invalid APK")) from e
+
+    manifest = dict()
+    apk['manifest'] = manifest
 
     apk['packageName'] = apkobject.get_package()
 
@@ -1938,12 +1948,13 @@ def scan_apk_androguard(apk, apkfile):
             )
             continue
         maxSdkVersion = item.attrib.get(xmlns + 'maxSdkVersion')
-        maxSdkVersion = int(maxSdkVersion) if maxSdkVersion else None
-        permission = UsesPermission(str(name), maxSdkVersion)
-        apk['uses-permission'].append(permission)
+        if 'usesPermission' not in manifest:
+            manifest['usesPermission'] = list()
+        manifest['usesPermission'].append(_uses_permission(name, maxSdkVersion))
     for name, maxSdkVersion in apkobject.get_uses_implied_permission_list():
-        permission = UsesPermission(name, maxSdkVersion)
-        apk['uses-permission'].append(permission)
+        if 'usesPermission' not in manifest:
+            manifest['usesPermission'] = list()
+        manifest['usesPermission'].append(_uses_permission(name, maxSdkVersion))
 
     for item in xml.findall('uses-permission-sdk-23'):
         name = item.attrib.get(xmlns + 'name')
@@ -1953,10 +1964,10 @@ def scan_apk_androguard(apk, apkfile):
                 % ElementTree.tostring(item).decode()
             )
             continue
+        if 'usesPermissionSdk23' not in manifest:
+            manifest['usesPermissionSdk23'] = list()
         maxSdkVersion = item.attrib.get(xmlns + 'maxSdkVersion')
-        maxSdkVersion = int(maxSdkVersion) if maxSdkVersion else None
-        permission_sdk_23 = UsesPermissionSdk23(str(name), maxSdkVersion)
-        apk['uses-permission-sdk-23'].append(permission_sdk_23)
+        manifest['usesPermissionSdk23'].append(_uses_permission(name, maxSdkVersion))
 
     for item in xml.findall('uses-feature'):
         feature = str(item.attrib.get(xmlns + 'name', ''))

@@ -35,17 +35,6 @@ try:
 except ImportError:
     from yaml import SafeLoader
 
-try:
-    from yaml import CFullLoader as FullLoader
-except ImportError:
-    try:
-        # FullLoader is available from PyYaml 5.1+, as we don't load user
-        # controlled data here, it's okay to fall back the unsafe older
-        # Loader
-        from yaml import FullLoader
-    except ImportError:
-        from yaml import Loader as FullLoader
-
 from PIL import PngImagePlugin
 
 import fdroidserver.common
@@ -855,6 +844,36 @@ class UpdateTest(unittest.TestCase):
         apks, cachechanged = fdroidserver.update.process_apks({}, 'repo', knownapks)
         fdroidserver.update.apply_info_from_latest_apk(apps, apks)
 
+    def test_uses_permission_empty(self):
+        self.assertEqual({}, fdroidserver.update._uses_permission())
+
+    def test_uses_permission_name_only(self):
+        self.assertEqual({'name': 'B'}, fdroidserver.update._uses_permission('B'))
+
+    def test_uses_permission_maxSdkVersion_None(self):
+        self.assertEqual(
+            {'name': 'foo'},
+            fdroidserver.update._uses_permission('foo', None),
+        )
+
+    def test_uses_permission_both(self):
+        self.assertEqual(
+            {'name': 'foo', 'maxSdkVersion': 12},
+            fdroidserver.update._uses_permission('foo', 12),
+        )
+
+    def test_uses_permission_str_maxSdkVersion(self):
+        self.assertEqual(
+            {'name': 'foo', 'maxSdkVersion': 35},
+            fdroidserver.update._uses_permission('foo', '35'),
+        )
+
+    def test_uses_permission_bad_maxSdkVersion(self):
+        self.assertEqual(
+            {'name': 'foo'},
+            fdroidserver.update._uses_permission('foo', '12z'),
+        )
+
     def test_scan_apk(self):
         config = dict()
         fdroidserver.common.fill_config_defaults(config)
@@ -938,8 +957,17 @@ class UpdateTest(unittest.TestCase):
         self.maxDiff = None
         expected = {
             'icons': {},
-            'icons_src': {'-1': 'res/drawable/ic_launcher.png',
-                          '160': 'res/drawable/ic_launcher.png'},
+            'icons_src': {
+                '-1': 'res/drawable/ic_launcher.png',
+                '160': 'res/drawable/ic_launcher.png',
+            },
+            'manifest': {
+                'usesPermission': [
+                    {'name': 'android.permission.WRITE_EXTERNAL_STORAGE'},
+                    {'name': 'android.permission.READ_PHONE_STATE'},
+                    {'name': 'android.permission.READ_EXTERNAL_STORAGE'},
+                ],
+            },
             'name': 'No minSdkVersion or targetSdkVersion',
             'signer': '32a23624c201b949f085996ba5ed53d40f703aca4989476949cae891022e0ed6',
             'hashType': 'sha256',
@@ -949,18 +977,9 @@ class UpdateTest(unittest.TestCase):
             'size': 14102,
             'sig': 'b4964fd759edaa54e65bb476d0276880',
             'versionName': '1.2-fake',
-            'uses-permission-sdk-23': [],
             'hash': 'e2e1dc1d550df2b5bc383860139207258645b5540abeccd305ed8b2cb6459d2c',
             'versionCode': 987,
             'minSdkVersion': 3,
-            'uses-permission': [
-                fdroidserver.update.UsesPermission(name='android.permission.WRITE_EXTERNAL_STORAGE',
-                                                   maxSdkVersion=None),
-                fdroidserver.update.UsesPermission(name='android.permission.READ_PHONE_STATE',
-                                                   maxSdkVersion=None),
-                fdroidserver.update.UsesPermission(name='android.permission.READ_EXTERNAL_STORAGE',
-                                                   maxSdkVersion=None),
-            ],
         }
         if config.get('ipfs_cid'):
             expected['ipfsCIDv1'] = 'bafybeidwxseoagnew3gtlasttqovl7ciuwxaud5a5p4a5pzpbrfcfj2gaa'
@@ -1104,17 +1123,8 @@ class UpdateTest(unittest.TestCase):
             #     yaml.add_representer(fdroidserver.metadata.Build, _build_yaml_representer)
             #     yaml.dump(apk, f, default_flow_style=False)
 
-            # CFullLoader doesn't always work
-            # https://github.com/yaml/pyyaml/issues/266#issuecomment-559116876
-            TestLoader = FullLoader
-            try:
-                testyaml = '- !!python/object/new:fdroidserver.update.UsesPermission\n  - test\n  - null'
-                from_yaml = yaml.load(testyaml, Loader=TestLoader)  # nosec B506
-            except yaml.constructor.ConstructorError:
-                from yaml import UnsafeLoader as TestLoader
-
             with open(savepath, 'r') as f:
-                from_yaml = yaml.load(f, Loader=TestLoader)  # nosec B506
+                from_yaml = yaml.safe_load(f)
             self.maxDiff = None
             if not config.get('ipfs_cid'):
                 del from_yaml['ipfsCIDv1']  # handle when ipfs_cid is not installed
@@ -1896,8 +1906,6 @@ class UpdateTest(unittest.TestCase):
             """Create an empty apk metadata object."""
             apk = {}
             apk['apkName'] = apkName
-            apk['uses-permission'] = []
-            apk['uses-permission-sdk-23'] = []
             apk['features'] = []
             apk['icons_src'] = {}
             return apk
@@ -1907,26 +1915,19 @@ class UpdateTest(unittest.TestCase):
                 'org.dyndns.fules.ck_20.apk',
                 {
                     'apkName': 'org.dyndns.fules.ck_20.apk',
-                    'uses-permission': [
-                        fdroidserver.update.UsesPermission(
-                            name='android.permission.BIND_INPUT_METHOD',
-                            maxSdkVersion=None,
-                        ),
-                        fdroidserver.update.UsesPermission(
-                            name='android.permission.READ_EXTERNAL_STORAGE',
-                            maxSdkVersion=None,
-                        ),
-                        fdroidserver.update.UsesPermission(
-                            name='android.permission.VIBRATE', maxSdkVersion=None
-                        ),
-                    ],
-                    'uses-permission-sdk-23': [],
                     'features': [],
                     'icons_src': {
                         '240': 'res/drawable-hdpi-v4/icon_launcher.png',
                         '120': 'res/drawable-ldpi-v4/icon_launcher.png',
                         '160': 'res/drawable-mdpi-v4/icon_launcher.png',
                         '-1': 'res/drawable-mdpi-v4/icon_launcher.png',
+                    },
+                    'manifest': {
+                        'usesPermission': [
+                            {'name': 'android.permission.BIND_INPUT_METHOD'},
+                            {'name': 'android.permission.READ_EXTERNAL_STORAGE'},
+                            {'name': 'android.permission.VIBRATE'},
+                        ],
                     },
                     'packageName': 'org.dyndns.fules.ck',
                     'versionCode': 20,

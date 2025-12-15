@@ -632,8 +632,7 @@ def convert_version(version, app, repodir):
             version["obbPatchFileSha256"],
         )
 
-    ver["manifest"] = manifest = {}
-
+    manifest = version.get("manifest", dict())
     for element in (
         "nativecode",
         "versionName",
@@ -664,15 +663,29 @@ def convert_version(version, app, repodir):
     if "signer" in version:
         manifest["signer"] = {"sha256": [version["signer"]]}
 
-    for element in ("uses-permission", "uses-permission-sdk-23"):
-        en = element.replace("uses-permission", "usesPermission").replace("-sdk-23", "Sdk23")  # fmt: skip
-        if element in version and version[element]:
-            manifest[en] = []
-            for perm in version[element]:
-                if perm[1]:
-                    manifest[en].append({"name": perm[0], "maxSdkVersion": perm[1]})
-                else:
-                    manifest[en].append({"name": perm[0]})
+    # The manifest entry was unfortunately not alpha-sorted, so this
+    # is required to maintain the existing sort order to minimize
+    # diffs in the index-v2.json.  TODO index-v3 should sort everything.
+    if ver["file"]['name'].endswith('.apk'):
+        ver['manifest'] = dict()
+        for k in (
+            "nativecode",
+            "versionName",
+            "maxSdkVersion",
+            "versionCode",
+            "features",
+            "minSdkVersion",
+            "targetSdkVersion",
+            "usesSdk",
+            "signer",
+            "usesPermission",
+            "usesPermissionSdk23",
+        ):
+            v = manifest.get(k)
+            if v is not None:
+                ver['manifest'][k] = v
+    else:  # new file types get sorted
+        ver['manifest'] = dict(sorted(manifest.items()))
 
     # index-v2 has only per-version antifeatures, not per package.
     antiFeatures = app.get('AntiFeatures', {}).copy()
@@ -1020,7 +1033,6 @@ def make_v1(apps, packages, repodir, repodict, requestsdict, signer_fingerprints
             packagelist = []
             output_packages[packageName] = packagelist
         d = collections.OrderedDict()
-        packagelist.append(d)
         for k, v in sorted(package.items()):
             if not v:
                 continue
@@ -1036,7 +1048,24 @@ def make_v1(apps, packages, repodir, repodict, requestsdict, signer_fingerprints
             if k == 'antiFeatures':
                 d[k] = sorted(v.keys())
                 continue
+            if k == 'manifest':
+                for mk, mv in v.items():
+                    if not mv:
+                        continue
+
+                    if mk == 'usesPermission':
+                        up_list = list()
+                        for p in mv:
+                            up_list.append((p['name'], p.get('maxSdkVersion')))
+                        d['uses-permission'] = up_list
+                    elif mk == 'usesPermissionSdk23':
+                        ups23_list = list()
+                        for p in mv:
+                            ups23_list.append((p['name'], p.get('maxSdkVersion')))
+                        d['uses-permission-sdk-23'] = ups23_list
+                continue
             d[k] = v
+        packagelist.append(dict(sorted(d.items())))
 
     json_name = 'index-v1.json'
     index_file = os.path.join(repodir, json_name)
@@ -1355,27 +1384,34 @@ def make_v0(apps, apks, repodir, repodict, requestsdict, signer_fingerprints):
             if file_extension == 'apk':  # sig is required for APKs, but only APKs
                 addElement('sig', apk['sig'], doc, apkel)
 
+                manifest = apk.get('manifest', dict())
                 old_permissions = set()
-                sorted_permissions = sorted(apk['uses-permission'])
+                sorted_permissions = sorted(
+                    manifest.get('usesPermission', list()),
+                    key=lambda u: u['name'],
+                )
                 for perm in sorted_permissions:
-                    perm_name = perm[0]
+                    perm_name = perm['name']
                     if perm_name.startswith("android.permission."):
                         perm_name = perm_name[19:]
                     old_permissions.add(perm_name)
                 addElementNonEmpty('permissions', ','.join(sorted(old_permissions)), doc, apkel)  # fmt: skip
 
-                for permission in sorted_permissions:
+                for perm in sorted_permissions:
                     permel = doc.createElement('uses-permission')
-                    if permission[1] is not None:
-                        permel.setAttribute('maxSdkVersion', '%d' % permission[1])
+                    if perm.get('maxSdkVersion') is not None:
+                        permel.setAttribute('maxSdkVersion', str(perm['maxSdkVersion']))
                         apkel.appendChild(permel)
-                    permel.setAttribute('name', permission[0])
-                for permission_sdk_23 in sorted(apk['uses-permission-sdk-23']):
+                    permel.setAttribute('name', perm['name'])
+                for p23 in sorted(
+                    manifest.get('usesPermissionSdk23', list()),
+                    key=lambda u: u['name'],
+                ):
                     permel = doc.createElement('uses-permission-sdk-23')
-                    if permission_sdk_23[1] is not None:
-                        permel.setAttribute('maxSdkVersion', '%d' % permission_sdk_23[1])  # fmt: skip
+                    if p23.get('maxSdkVersion') is not None:
+                        permel.setAttribute('maxSdkVersion', str(p23['maxSdkVersion']))
                         apkel.appendChild(permel)
-                    permel.setAttribute('name', permission_sdk_23[0])
+                    permel.setAttribute('name', p23['name'])
                 if 'nativecode' in apk:
                     addElement('nativecode', ','.join(sorted(apk['nativecode'])), doc, apkel)  # fmt: skip
                 addElementNonEmpty('features', ','.join(sorted(apk['features'])), doc, apkel)  # fmt: skip
