@@ -648,6 +648,11 @@ def checkupdates_app(app: metadata.App, auto: bool, make_commit: bool = False) -
                         b.commit = tag
                     else:
                         if '%v' in pattern:
+                            if not app.CurrentVersion:
+                                logging.error(
+                                    '"%v" in AutoUpdateMode requires CurrentVersion is set!'
+                                )
+                                return
                             commit = pattern.replace('%v', app.CurrentVersion)
                         else:
                             commit = pattern
