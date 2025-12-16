@@ -504,7 +504,7 @@ def operate_vercode(operation: str, vercode: int) -> int:
     return vercode
 
 
-def checkupdates_app(app: metadata.App, auto: bool, commit: bool = False) -> None:
+def checkupdates_app(app: metadata.App, auto: bool, make_commit: bool = False) -> None:
     """Check for new versions and updated name of a single app.
 
     Also write back changes to the metadata file and create a Git commit if
@@ -673,7 +673,7 @@ def checkupdates_app(app: metadata.App, auto: bool, commit: bool = False) -> Non
 
     if commitmsg:
         metadata.write_metadata(app.metadatapath, app)
-        if commit:
+        if make_commit:
             logging.info("Commiting update for " + app.metadatapath)
             gitcmd = ["git", "commit", "-m", commitmsg]
             gitcmd.extend(["--", app.metadatapath])
