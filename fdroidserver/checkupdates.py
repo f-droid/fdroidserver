@@ -647,8 +647,10 @@ def checkupdates_app(app: metadata.App, auto: bool, make_commit: bool = False) -
                     if tag:
                         b.commit = tag
                     else:
-                        if app.CurrentVersion:
+                        if '%v' in pattern:
                             commit = pattern.replace('%v', app.CurrentVersion)
+                        else:
+                            commit = pattern
                         commit = commit.replace('%c', str(v))
                         b.commit = commit
 
