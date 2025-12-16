@@ -146,11 +146,10 @@ def check_tags(app: metadata.App, pattern: str) -> tuple[str, int, str]:
     :exc:`~fdroidserver.exception.FDroidException`
         If no matching tags or no information whatsoever could be found.
     """
+    build_dir = common.get_build_dir(app)
     if app.RepoType == 'srclib':
-        build_dir = Path('build/srclib') / app.Repo
         repotype = common.getsrclibvcs(app.Repo)
     else:
-        build_dir = Path('build') / app.id
         repotype = app.RepoType
 
     if repotype not in ('git', 'git-svn', 'hg', 'bzr'):
@@ -268,12 +267,6 @@ def check_tags(app: metadata.App, pattern: str) -> tuple[str, int, str]:
                     appid=app.id, tag=tags[0], version=hver
                 )
             )
-        try:
-            commit = vcs.getref(htag)
-            if commit:
-                return (hver, hcode, commit)
-        except VCSException:
-            pass
         return (hver, hcode, htag)
     raise FDroidException(_("Couldn't find any version information"))
 
@@ -658,6 +651,16 @@ def checkupdates_app(app: metadata.App, auto: bool, commit: bool = False) -> Non
                             commit = pattern.replace('%v', app.CurrentVersion)
                         commit = commit.replace('%c', str(v))
                         b.commit = commit
+
+                    try:
+                        build_dir = common.get_build_dir(app)
+                        vcs = common.getvcs(app.RepoType, app.Repo, build_dir)
+                        commit = vcs.getref(b.commit)
+                        if commit:
+                            logging.info(f"...found {commit} for {b.commit}")
+                            b.commit = commit
+                    except VCSException:
+                        pass
 
                 app['Builds'].extend(newbuilds)
 
