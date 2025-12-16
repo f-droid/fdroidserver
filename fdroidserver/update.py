@@ -2796,17 +2796,17 @@ def main():
         options.clean = True
 
     # check that icons exist now, rather than fail at the end of `fdroid update`
-    for k in ['repo_icon', 'archive_icon']:
-        if k in config:
-            icon_dir = os.path.join(k.split('_')[0], 'icons')
-            repo_icon = os.path.basename(common.config.get(k, ''))
-            icon_path = os.path.join(icon_dir, repo_icon)
-            if not os.path.exists(icon_path):
-                logging.warning(
-                    _(
-                        '{name} "{repo_icon}" does not exist in "{icon_dir}/"! Check "config.yml".'
-                    ).format(name=k, icon_dir=icon_dir, repo_icon=repo_icon)
-                )
+    icon_key = 'repo_icon'
+    if icon_key in config:
+        icon_dir = os.path.join(repodirs[0], 'icons')
+        repo_icon = os.path.basename(config.get(icon_key, ''))
+        icon_path = os.path.join(icon_dir, repo_icon)
+        if not os.path.exists(icon_path):
+            logging.warning(
+                _(
+                    '{name} "{repo_icon}" does not exist in "{icon_dir}/"! Check "config.yml".'
+                ).format(name=icon_key, icon_dir=icon_dir, repo_icon=repo_icon)
+            )
 
     # if the user asks to create a keystore, do it now, reusing whatever it can
     if options.create_key:

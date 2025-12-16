@@ -710,6 +710,14 @@ def read_config():
         if not config['archive_url'].endswith('/archive'):
             raise FDroidException(_('archive_url needs to end with /archive'))
 
+    repo_icon = config.get('repo_icon', '')
+    if '/' in repo_icon:
+        raise FDroidException(
+            _('repo_icon should be a filename ({name}), not a path!').format(
+                name=os.path.basename(repo_icon)
+            )
+        )
+
     confignames_to_delete = set()
     for configname, dictvalue in config.items():
         if configname == 'java_paths':

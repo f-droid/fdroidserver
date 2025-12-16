@@ -414,6 +414,8 @@ class IndexTest(unittest.TestCase):
         requestsdict = {'install': [], 'uninstall': []}
         common.config['repo_pubkey'] = 'ffffffffffffffffffffffffffffffffff'
         index.make_v0({}, [], 'repo', repodict, requestsdict, {})
+        with self.assertLogs():
+            index.copy_repo_icon('repo')
         self.assertTrue(os.path.isdir(repo_icons_dir))
         self.assertTrue(
             os.path.exists(
@@ -421,6 +423,50 @@ class IndexTest(unittest.TestCase):
             )
         )
         self.assertTrue(os.path.exists(os.path.join('repo', 'index.xml')))
+
+    def test_generate_repo_icon(self):
+        os.chdir(self.testdir)
+        os.mkdir('repo')
+        repo_icons_dir = os.path.join('repo', 'icons')
+        generated_path = os.path.join(
+            repo_icons_dir, common.default_config['repo_icon']
+        )
+        self.assertFalse(os.path.isdir(repo_icons_dir))
+        self.assertFalse(os.path.exists(generated_path))
+        with self.assertLogs():
+            index.copy_repo_icon('repo')
+        self.assertTrue(os.path.isdir(repo_icons_dir))
+        self.assertTrue(os.path.exists(generated_path))
+
+    def test_copy_repo_icon(self):
+        os.chdir(self.testdir)
+        os.mkdir('repo')
+        repo_icons_dir = Path('repo/icons')
+        self.assertFalse(os.path.isdir(repo_icons_dir))
+        common.config['repo_icon'] = 'test_icon.png'
+        test_value = 'test'
+        Path(common.config['repo_icon']).write_text(test_value)
+        copied_path = repo_icons_dir / os.path.basename(common.config['repo_icon'])
+        self.assertFalse(os.path.isdir(repo_icons_dir))
+        self.assertFalse(os.path.exists(copied_path))
+        index.copy_repo_icon('repo')
+        self.assertTrue(os.path.isdir(repo_icons_dir))
+        self.assertEqual(test_value, copied_path.read_text())
+
+    def test_copy_repo_icon_skipped_if_exists(self):
+        os.chdir(self.testdir)
+        test_value = 'test'
+        default_repo_icon = common.default_config['repo_icon']
+        repo_icon = Path('repo/icons') / default_repo_icon
+        repo_icon.parent.mkdir(parents=True)
+        repo_icon.write_text(test_value)
+        archive_icon = Path('archive/icons') / default_repo_icon
+        archive_icon.parent.mkdir(parents=True)
+        archive_icon.write_text(test_value)
+        Path(default_repo_icon).write_text('this should not be copied')
+        index.copy_repo_icon('repo')
+        self.assertEqual(test_value, repo_icon.read_text())
+        self.assertEqual(test_value, archive_icon.read_text())
 
     def test_make_v0(self):
         os.chdir(self.testdir)
@@ -477,6 +523,8 @@ class IndexTest(unittest.TestCase):
         common.config['repo_pubkey'] = 'ffffffffffffffffffffffffffffffffff'
         common.config['make_current_version_link'] = True
         index.make_v0(apps, [apk], 'repo', repodict, requestsdict, {})
+        with self.assertLogs():
+            index.copy_repo_icon('repo')
         self.assertTrue(os.path.isdir(repo_icons_dir))
         self.assertTrue(
             os.path.exists(

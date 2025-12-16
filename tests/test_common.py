@@ -2904,6 +2904,24 @@ class CommonTest(SetUpTearDownMixin, unittest.TestCase):
             fdroidserver.common.read_config()['serverwebroot'],
         )
 
+    def test_config_errors_ends_with_repo(self):
+        os.chdir(self.testdir)
+        fdroidserver.common.write_config_file("""repo_url: https://foo.com/fdroid""")
+        with self.assertRaises(FDroidException):
+            fdroidserver.common.read_config()
+
+    def test_config_errors_ends_with_archive(self):
+        os.chdir(self.testdir)
+        fdroidserver.common.write_config_file("""archive_url: https://foo.com/fdroid/repo""")
+        with self.assertRaises(FDroidException):
+            fdroidserver.common.read_config()
+
+    def test_config_errors_repo_icon(self):
+        os.chdir(self.testdir)
+        fdroidserver.common.write_config_file("""repo_icon: /path/to/icon.png""")
+        with self.assertRaises(FDroidException):
+            fdroidserver.common.read_config()
+
     @mock.patch.dict(os.environ, {'PATH': os.getenv('PATH')}, clear=True)
     def test_config_serverwebroot_list_of_dicts_env(self):
         os.chdir(self.testdir)
