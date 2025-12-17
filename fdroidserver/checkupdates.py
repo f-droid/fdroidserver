@@ -146,11 +146,10 @@ def check_tags(app: metadata.App, pattern: str) -> tuple[str, int, str]:
     :exc:`~fdroidserver.exception.FDroidException`
         If no matching tags or no information whatsoever could be found.
     """
+    build_dir = common.get_build_dir(app)
     if app.RepoType == 'srclib':
-        build_dir = Path('build/srclib') / app.Repo
         repotype = common.getsrclibvcs(app.Repo)
     else:
-        build_dir = Path('build') / app.id
         repotype = app.RepoType
 
     if repotype not in ('git', 'git-svn', 'hg', 'bzr'):
@@ -268,12 +267,6 @@ def check_tags(app: metadata.App, pattern: str) -> tuple[str, int, str]:
                     appid=app.id, tag=tags[0], version=hver
                 )
             )
-        try:
-            commit = vcs.getref(htag)
-            if commit:
-                return (hver, hcode, commit)
-        except VCSException:
-            pass
         return (hver, hcode, htag)
     raise FDroidException(_("Couldn't find any version information"))
 
@@ -511,7 +504,7 @@ def operate_vercode(operation: str, vercode: int) -> int:
     return vercode
 
 
-def checkupdates_app(app: metadata.App, auto: bool, commit: bool = False) -> None:
+def checkupdates_app(app: metadata.App, auto: bool, make_commit: bool = False) -> None:
     """Check for new versions and updated name of a single app.
 
     Also write back changes to the metadata file and create a Git commit if
@@ -654,10 +647,27 @@ def checkupdates_app(app: metadata.App, auto: bool, commit: bool = False) -> Non
                     if tag:
                         b.commit = tag
                     else:
-                        if app.CurrentVersion:
+                        if '%v' in pattern:
+                            if not app.CurrentVersion:
+                                logging.error(
+                                    '"%v" in AutoUpdateMode requires CurrentVersion is set!'
+                                )
+                                return
                             commit = pattern.replace('%v', app.CurrentVersion)
+                        else:
+                            commit = pattern
                         commit = commit.replace('%c', str(v))
                         b.commit = commit
+
+                    try:
+                        build_dir = common.get_build_dir(app)
+                        vcs = common.getvcs(app.RepoType, app.Repo, build_dir)
+                        commit = vcs.getref(b.commit)
+                        if commit:
+                            logging.info(f"...found {commit} for {b.commit}")
+                            b.commit = commit
+                    except VCSException:
+                        pass
 
                 app['Builds'].extend(newbuilds)
 
@@ -670,7 +680,7 @@ def checkupdates_app(app: metadata.App, auto: bool, commit: bool = False) -> Non
 
     if commitmsg:
         metadata.write_metadata(app.metadatapath, app)
-        if commit:
+        if make_commit:
             logging.info("Commiting update for " + app.metadatapath)
             gitcmd = ["git", "commit", "-m", commitmsg]
             gitcmd.extend(["--", app.metadatapath])
