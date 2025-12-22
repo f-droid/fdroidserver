@@ -20,8 +20,8 @@ import itertools
 import json
 import logging
 import os
-import stat
 import re
+import stat
 import sys
 import traceback
 import urllib.parse
@@ -284,7 +284,7 @@ def get_gradle_compile_commands_without_catalog(build):
 
 def get_gradle_compile_commands_with_catalog(build, prefix):
     return [
-        re.compile(rf'\s*{c}.*\s*\(?{prefix}\.([a-z0-9.]+)', re.IGNORECASE)
+        re.compile(rf"""\s*\S*{c}\S*\s*\(?{prefix}\.([a-z0-9.]+)""", re.IGNORECASE)
         for c in get_gradle_compile_commands(build)
     ]
 
@@ -1290,7 +1290,7 @@ def main():
                     )
                     continue
 
-                logging.info("...scanning versionCode " + build.versionCode)
+                logging.info(f"...scanning versionCode {build.versionCode}")
                 # Prepare the source code...
                 common.prepare_source(
                     vcs, app, build, build_dir, srclib_dir, extlib_dir, False

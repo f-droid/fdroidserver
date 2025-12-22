@@ -6,4 +6,5 @@ plugins {
 
 dependencies {
     implementation(libs.plugins.androidApplication.asLibraryDependency)
+    "playImplementation"(libs.firebase.core)
 }

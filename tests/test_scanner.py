@@ -81,6 +81,31 @@ class ScannerTest(SetUpTearDownMixin, unittest.TestCase):
         super().setUp()
         fdroidserver.scanner.ScannerTool.refresh_allowed = False
 
+    def test_looping_through_builds(self):
+        """Exercises some of main() to get some coverage."""
+        appid = "com.example"
+        with (
+            tempfile.TemporaryDirectory() as tmpdir,
+            TmpCwd(tmpdir),
+            mock.patch("sys.argv", ["fdroid scanner", appid]),
+            mock.patch(
+                "fdroidserver.common.prepare_source", lambda v, a, b, d, s, e, r: None
+            ),
+        ):
+            os.mkdir("metadata")
+            pathlib.Path(f"metadata/{appid}.yml").write_text(
+                textwrap.dedent(
+                    """
+                    RepoType: git
+                    Builds:
+                      - versionCode: 1
+                        commit: v1.0
+                    """
+                )
+            )
+            fdroidserver.scanner.main()
+            self.assertTrue(os.path.exists("build"))
+
     def test_scan_source_files(self):
         fdroidserver.common.options = mock.Mock()
         fdroidserver.common.options.json = False
@@ -99,7 +124,7 @@ class ScannerTest(SetUpTearDownMixin, unittest.TestCase):
             'se.manyver': 3,
             'lockfile.test': 1,
             'com.lolo.io.onelist': 6,
-            'catalog.test': 22,
+            'catalog.test': 23,
         }
         for d in (basedir / 'source-files').iterdir():
             build = fdroidserver.metadata.Build()
