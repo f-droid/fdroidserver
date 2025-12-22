@@ -632,6 +632,7 @@ def checkupdates_app(app: metadata.App, auto: bool, make_commit: bool = False) -
                     'apt-get install -y -t trixie openjdk-21-jdk-headless',
                     'apt-get install -y -t trixie openjdk-22-jdk-headless',
                     'apt-get install -y -t trixie openjdk-23-jdk-headless',
+                    'apt-get install -y -t trixie openjdk-25-jdk-headless',
                     'echo "deb http://deb.debian.org/debian trixie main" > /etc/apt/sources.list.d/trixie.list',
                     'echo "deb https://deb.debian.org/debian trixie main" > /etc/apt/sources.list.d/trixie.list',
                     'update-alternatives --auto java',

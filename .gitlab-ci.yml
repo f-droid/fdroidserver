@@ -371,8 +371,11 @@ safety:
         python3-biplist
         python3-pip
         python3-pycountry
+        python3-venv
     - $pip install --break-system-packages .
 
+    - python3 -m venv --system-site-packages env
+    - . env/bin/activate
     - $pip install --break-system-packages safety
     - python3 -m safety --key "$SAFETY_API_KEY" --stage cicd scan
 
@@ -609,13 +612,12 @@ plugin_fetchsrclibs:
         python3-pil
         python3-pip
         python3-pycparser
+        python3-setuptools
         python3-venv
     - python3 -m venv --system-site-packages env
     - . env/bin/activate
     - export PATH="$CI_PROJECT_DIR:$PATH"
     - export PYTHONPATH="$CI_PROJECT_DIR/examples"
-    # workaround https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1003252
-    - export SETUPTOOLS_USE_DISTUTILS=stdlib
     - $pip install -e .
     - fdroid | grep fetchsrclibs
 
@@ -660,7 +662,6 @@ servergitmirrors:
     - python3 -m venv --system-site-packages env
     - . env/bin/activate
     - export PYTHONPATH=`pwd`
-    - export SETUPTOOLS_USE_DISTUTILS=stdlib  # https://github.com/pypa/setuptools/issues/2956
     - $pip install -e .
     - mkdir /root/.ssh/
     - ./tests/key-tricks.py
