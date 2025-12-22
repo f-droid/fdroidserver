@@ -1290,7 +1290,7 @@ def main():
                     )
                     continue
 
-                logging.info("...scanning versionCode " + build.versionCode)
+                logging.info(f"...scanning versionCode {build.versionCode}")
                 # Prepare the source code...
                 common.prepare_source(
                     vcs, app, build, build_dir, srclib_dir, extlib_dir, False
