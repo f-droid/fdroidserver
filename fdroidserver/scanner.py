@@ -277,14 +277,14 @@ def get_gradle_compile_commands(build):
 
 def get_gradle_compile_commands_without_catalog(build):
     return [
-        re.compile(rf'''\s*{c}.*\s*\(?['"].*['"]''', re.IGNORECASE)
+        re.compile(rf'''\s*['"]?{c}.*\s*\(?['"].*['"]''', re.IGNORECASE)
         for c in get_gradle_compile_commands(build)
     ]
 
 
 def get_gradle_compile_commands_with_catalog(build, prefix):
     return [
-        re.compile(rf'\s*{c}.*\s*\(?{prefix}\.([a-z0-9.]+)', re.IGNORECASE)
+        re.compile(rf'''\s*['"]?{c}.*\s*\(?{prefix}\.([a-z0-9.]+)''', re.IGNORECASE)
         for c in get_gradle_compile_commands(build)
     ]
 

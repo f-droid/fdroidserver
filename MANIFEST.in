@@ -805,6 +805,7 @@ include tests/source-files/firebase-allowlisted/build.gradle
 include tests/source-files/firebase-suspect/app/build.gradle
 include tests/source-files/firebase-suspect/build.gradle
 include tests/source-files/flavor.test/build.gradle
+include tests/source-files/flavor.test/build.gradle.kts
 include tests/source-files/info.guardianproject.ripple/build.gradle
 include tests/source-files/lockfile.test/flutter/.dart_tool/flutter_gen/pubspec.yaml
 include tests/source-files/lockfile.test/flutter/pubspec.lock
