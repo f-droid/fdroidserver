@@ -124,7 +124,7 @@ class ScannerTest(SetUpTearDownMixin, unittest.TestCase):
             'se.manyver': 3,
             'lockfile.test': 1,
             'com.lolo.io.onelist': 6,
-            'catalog.test': 23,
+            'catalog.test': 22,
         }
         for d in (basedir / 'source-files').iterdir():
             build = fdroidserver.metadata.Build()
