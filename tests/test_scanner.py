@@ -125,6 +125,7 @@ class ScannerTest(SetUpTearDownMixin, unittest.TestCase):
             'lockfile.test': 1,
             'com.lolo.io.onelist': 6,
             'catalog.test': 22,
+            'flavor.test': 4,
         }
         for d in (basedir / 'source-files').iterdir():
             build = fdroidserver.metadata.Build()
@@ -137,6 +138,29 @@ class ScannerTest(SetUpTearDownMixin, unittest.TestCase):
                     fatal_problems = fdroidserver.scanner.scan_source(d, build)
             self.assertEqual(
                 should, fatal_problems, f'{d} should have {should} errors!'
+            )
+
+    def test_scan_source_files_with_flavor(self):
+        fdroidserver.common.options = mock.Mock()
+        fdroidserver.common.options.json = False
+        flavors = [
+            (['yes'], 4),
+            (['gplay'], 8),
+            (['foss'], 4),
+            (['dev'], 4),
+            (['gplay', 'dev'], 12),
+            (['gplay', 'prod'], 12),
+        ]
+        for flavor in flavors:
+            build = fdroidserver.metadata.Build()
+            build.gradle = flavor[0]
+            should = flavor[1]
+            with self.assertLogs(level=logging.ERROR):
+                fatal_problems = fdroidserver.scanner.scan_source(
+                    basedir / 'source-files/flavor.test', build
+                )
+            self.assertEqual(
+                should, fatal_problems, f'{flavor} should have {should} errors!'
             )
 
     def test_get_gradle_compile_commands_without_catalog(self):

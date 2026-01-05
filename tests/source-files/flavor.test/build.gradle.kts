@@ -1,0 +1,15 @@
+dependenies {
+    /// dependencies for app building
+    fossImplementation("com.android.support:multidex:1.0.2")
+    implementation("com.google.android.gms:play-services-ads:1.2.1")
+    devImplementation("com.github.nextcloud:android-library:master-SNAPSHOT") // use always latest master
+    implementation("com.android.support:support-v4:${supportLibraryVersion}")
+    prodImplementation("com.android.support:design:${supportLibraryVersion}")
+    "gplayImplementation"("com.google.android.gms:play-services-ads:1.2.1")
+    implementation("com.android.support:appcompat-v7:${supportLibraryVersion}")
+    gplayProdImplementation("com.google.android.gms:play-services-ads:${supportLibraryVersion}")
+    implementation("com.android.support:exifinterface:${supportLibraryVersion}")
+    fossDevImplementation("com.github.tobiasKaminsky:android-floating-action-button:1.10.2")
+    "gplayDevImplementation"("com.google.android.gms:play-services-ads:v2.0.0")
+    fossProdImplementation("com.google.code.findbugs:annotations:2.0.1")
+}
