@@ -25,13 +25,14 @@
 # Silikonmann <silvan.goeth@gmail.com>, 2025.
 # Ettore Atalan <atalanttore@googlemail.com>, 2025.
 # GunChleoc <fios@foramnagaidhlig.net>, 2025.
+# Luca Schwan <luca@ehrenschwan.dev>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2025-09-29 14:29+0200\n"
 "PO-Revision-Date: 2025-10-12 05:15+0000\n"
-"Last-Translator: GunChleoc <fios@foramnagaidhlig.net>\n"
+"Last-Translator: Luca Schwan <luca@ehrenschwan.dev>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/f-droid/fdroidserver/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -246,7 +247,7 @@ msgstr "Füge eine Metadaten-Vorlage für APKs hinzu, die keine haben"
 
 #: ../fdroidserver/deploy.py
 msgid "Adding all files to git mirror"
-msgstr ""
+msgstr "Fügt alle Dateien zum git mirror hinzu"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -464,7 +465,7 @@ msgstr "Änderungen committen, pushen und dann eine Merge-Anfrage stellen"
 
 #: ../fdroidserver/deploy.py
 msgid "Committing index files to git mirror"
-msgstr ""
+msgstr "Comittet Index Dateien zum Git Mirror"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
