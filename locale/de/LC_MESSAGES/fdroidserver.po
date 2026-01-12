@@ -31,15 +31,15 @@ msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2025-09-29 14:29+0200\n"
-"PO-Revision-Date: 2025-10-12 05:15+0000\n"
-"Last-Translator: Luca Schwan <luca@ehrenschwan.dev>\n"
+"PO-Revision-Date: 2025-12-04 08:24+0000\n"
+"Last-Translator: VfBFan <drop0815@posteo.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/f-droid/fdroidserver/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.14-dev\n"
+"X-Generator: Weblate 5.15-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -492,14 +492,12 @@ msgid "Could not find latest version name"
 msgstr "Neuester Versionsname konnte nicht gefunden werden"
 
 #: ../fdroidserver/import_subcommand.py
-#, fuzzy
 msgid "Could not find latest versionCode"
-msgstr "Neuester Versionscode konnte nicht gefunden werden"
+msgstr "Neuester versionCode konnte nicht gefunden werden"
 
 #: ../fdroidserver/import_subcommand.py
-#, fuzzy
 msgid "Could not find latest versionName"
-msgstr "Neuester Versionsname konnte nicht gefunden werden"
+msgstr "Neuester versionName konnte nicht gefunden werden"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -1320,14 +1318,14 @@ msgid "No version information could be found."
 msgstr "Es konnten keine Versionsinformation gefunden werden."
 
 #: ../fdroidserver/scanner.py
-#, fuzzy, python-format
+#, python-format
 msgid "Non-exist scandelete path: %s"
-msgstr "Nicht verwendeter „scandelete“-Pfad: %s"
+msgstr "Nicht existierender „scandelete“-Pfad: %s"
 
 #: ../fdroidserver/scanner.py
-#, fuzzy, python-format
+#, python-format
 msgid "Non-exist scanignore path: %s"
-msgstr "Nicht verwendeter „scanignore“-Pfad: %s"
+msgstr "Nicht existierender „scanignore“-Pfad: %s"
 
 #: ../fdroidserver/common.py
 msgid "Not a valid size definition: \"{}\""
@@ -1709,9 +1707,9 @@ msgid "Skipping '{apkfilename}' with invalid signature!"
 msgstr "Überspringen von '{apkfilename}' mit ungültiger Signatur!"
 
 #: ../fdroidserver/update.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Skipping '{apkfilename}' without versionCode!"
-msgstr "Überspringen von '{apkfilename}' mit ungültiger Signatur!"
+msgstr "Überspringen von '{apkfilename}' ohne versionCode!"
 
 #: ../fdroidserver/deploy.py ../fdroidserver/index.py
 #, python-format
@@ -1792,9 +1790,9 @@ msgid "The OBB version code must come after \"{name}.\":"
 msgstr "Der OBB-Versionscode muss nach \"{name}.\" stehen:"
 
 #: ../fdroidserver/update.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The OBB versionCode must come after \"{name}.\":"
-msgstr "Der OBB-Versionscode muss nach \"{name}.\" stehen:"
+msgstr "Der OBB-versionCode muss nach \"{name}.\" stehen:"
 
 #: ../fdroidserver/btlog.py
 msgid "The base URL for the repo to log (default: https://f-droid.org)"
@@ -1983,9 +1981,9 @@ msgid "UpdateCheckData must match the version code as integer (\\d or [0-9]): {c
 msgstr "UpdateCheckData muss mit dem Versionscode als Ganzzahl (\\d oder [0-9]) übereinstimmen: {codeex}"
 
 #: ../fdroidserver/lint.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "UpdateCheckData must match the versionCode as integer (\\d or [0-9]): {codeex}"
-msgstr "UpdateCheckData muss mit dem Versionscode als Ganzzahl (\\d oder [0-9]) übereinstimmen: {codeex}"
+msgstr "UpdateCheckData muss mit dem versionCode als Ganzzahl (\\d oder [0-9]) übereinstimmen: {codeex}"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
@@ -2038,9 +2036,9 @@ msgid "Using \"{path}\" for configuring s3cmd."
 msgstr "Verwende \"{path}\" zur Konfiguration von s3cmd."
 
 #: ../fdroidserver/deploy.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Using \"{path}\" for rclone config."
-msgstr "Verwende \"{path}\" zur Konfiguration von s3cmd."
+msgstr "Verwende \"{path}\" zur Konfiguration von rclone."
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
@@ -2483,9 +2481,9 @@ msgid "overwriting existing {path}"
 msgstr "überschreiben des vorhandenen {path}"
 
 #: ../fdroidserver/deploy.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "path_to_custom_rclone_config: \"{path}\" does not exist!"
-msgstr "Das Wurzelverzeichnis für local_copy_dir \"{path}\" existiert nicht!"
+msgstr "path_to_custom_rclone_config: \"{path}\" existiert nicht!"
 
 #: /usr/lib/python3.11/argparse.py
 msgid "positional arguments"
@@ -2503,7 +2501,7 @@ msgstr "Referenz-Binärdatei fehlt Signatur"
 #: ../fdroidserver/signatures.py
 #, python-brace-format
 msgid "refuse downloading via insecure HTTP connection (use HTTPS or specify --no-check-https): {apkfilename}"
-msgstr "Download über ungesicherte HTTP-Verbindung verweigert (verwenden Sie HTTPS oder geben Sie --no-check-https an): {apkfilename}"
+msgstr "Download über ungesicherte HTTP-Verbindung verweigert (HTTPS verwenden oder --no-check-https angeben): {apkfilename}"
 
 #: ../fdroidserver/index.py
 #, python-format
