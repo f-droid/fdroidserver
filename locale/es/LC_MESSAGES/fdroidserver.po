@@ -23,8 +23,8 @@ msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2025-09-29 14:29+0200\n"
-"PO-Revision-Date: 2025-11-15 18:51+0000\n"
-"Last-Translator: Francisco Serrador <fserrador@gmail.com>\n"
+"PO-Revision-Date: 2025-11-16 20:09+0000\n"
+"Last-Translator: Swyter <swyterzone@gmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/f-droid/fdroidserver/es/>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
@@ -155,15 +155,15 @@ msgstr "¡'keystorepass' no encontrado en config.yml!"
 
 #: ../fdroidserver/deploy.py
 msgid "'rclone_config' must be set in config.yml!"
-msgstr "¡'rclone_config' debe estar configurados en config.yml!"
+msgstr "¡«rclone_config» tiene que configurarse en config.yml!"
 
 #: ../fdroidserver/common.py
 msgid "'repo_keyalias' not found in config.yml!"
-msgstr "¡'repo_keyalias' no encontrado en config.yml!"
+msgstr "¡«repo_keyalias» no se ha encontrado en config.yml!"
 
 #: /usr/lib/python3.11/argparse.py
 msgid "'required' is an invalid argument for positionals"
-msgstr "'required' es un argumento inválido para posicionales"
+msgstr "«required» no es un argumento posicional reconocido"
 
 #: ../fdroidserver/common.py
 msgid "'sdk_path' not set in config.yml!"
@@ -457,7 +457,7 @@ msgstr "Confirmar los cambios, empujar, a continuación, hacer una solicitud de 
 
 #: ../fdroidserver/deploy.py
 msgid "Committing index files to git mirror"
-msgstr "Efectuando archivos índice para espejo git"
+msgstr "Enviando archivos índice al espejo git"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
@@ -735,7 +735,7 @@ msgstr ""
 #: ../fdroidserver/nightly.py
 #, python-brace-format
 msgid "Environment variable \"{name}\" has an empty value!"
-msgstr "¡La variable de entorno «{name}» tiene un valor vacío!"
+msgstr "¡La variable de entorno «{name}» no tiene un valor asignado!"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -1312,12 +1312,12 @@ msgstr "No se ha podido encontrar información sobre la versión."
 #: ../fdroidserver/scanner.py
 #, python-format
 msgid "Non-exist scandelete path: %s"
-msgstr "Ruta scandelete sin existencia: %s"
+msgstr "La ruta a scandelete no existe: %s"
 
 #: ../fdroidserver/scanner.py
 #, python-format
 msgid "Non-exist scanignore path: %s"
-msgstr "Ruta scanignore sin existencia: %s"
+msgstr "La ruta scanignore no existe: %s"
 
 #: ../fdroidserver/common.py
 msgid "Not a valid size definition: \"{}\""
@@ -1701,7 +1701,7 @@ msgstr "¡Ignorando '{apkfilename}' por firma no válida!"
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Skipping '{apkfilename}' without versionCode!"
-msgstr "¡Se descarta '{apkfilename}' sin versionCode!"
+msgstr "¡Ignorando «{apkfilename}», que no tiene versionCode!"
 
 #: ../fdroidserver/deploy.py ../fdroidserver/index.py
 #, python-format
@@ -2066,12 +2066,12 @@ msgstr "Usando almacén de claves existente \"{path}\""
 #: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "Using rclone to sync to \"{name}\""
-msgstr "Utilizar rclone para sincronizar a «{name}»"
+msgstr "Utilizando rclone para sincronizar con «{name}»"
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "Using rclone to sync with: {url}"
-msgstr "Usando rclone para sincronizar con: {url}"
+msgstr "Utilizando rclone para sincronizar con: {url}"
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
