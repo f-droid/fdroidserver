@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: fdroidserver 1.0.0-95-gd7af22b\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2025-09-29 14:29+0200\n"
-"PO-Revision-Date: 2025-03-17 21:44+0000\n"
+"PO-Revision-Date: 2025-12-31 14:01+0000\n"
 "Last-Translator: Kristoffer Grundström <swedishsailfishosuser@tutanota.com>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/f-droid/fdroidserver/sv/>\n"
 "Language: sv\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.11-dev\n"
+"X-Generator: Weblate 5.15.1\n"
 
 msgid ""
 "\n"
@@ -648,7 +648,7 @@ msgid "File disappeared while processing it: {path}"
 msgstr ""
 
 msgid "Finished"
-msgstr ""
+msgstr "Klar"
 
 msgid "Forbidden HTML tags"
 msgstr "Förbjudna HTML-taggar"
@@ -796,7 +796,7 @@ msgid "Including metadata from {path}"
 msgstr ""
 
 msgid "Initialising submodules"
-msgstr ""
+msgstr "Initialiserar undermoduler"
 
 msgid "Install all signed applications available"
 msgstr ""
@@ -1126,11 +1126,11 @@ msgid "Problem with xml at '{path}'"
 msgstr ""
 
 msgid "Process auto-updates"
-msgstr ""
+msgstr "Behandla automatiska uppdateringar"
 
 #, python-brace-format
 msgid "Processing {apkfilename}"
-msgstr ""
+msgstr "Behandlar {apkfilename}"
 
 #, python-brace-format
 msgid "Processing {appid}"
@@ -1989,7 +1989,7 @@ msgid "the following arguments are required: %s"
 msgstr "följande argument krävs: %s"
 
 msgid "true"
-msgstr ""
+msgstr "sant"
 
 #, python-format
 msgid "unexpected option string: %s"
