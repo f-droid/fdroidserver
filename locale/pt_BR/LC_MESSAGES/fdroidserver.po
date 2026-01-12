@@ -21,7 +21,7 @@ msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2025-09-29 14:29+0200\n"
-"PO-Revision-Date: 2025-10-28 03:02+0000\n"
+"PO-Revision-Date: 2025-12-15 21:32+0000\n"
 "Last-Translator: F Bausch <florian+weblate@fbausch.de>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/f-droid/fdroidserver/pt_BR/>\n"
 "Language: pt_BR\n"
@@ -29,7 +29,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.14.1-dev\n"
+"X-Generator: Weblate 5.15.1-dev\n"
 
 msgid ""
 "\n"
@@ -1614,9 +1614,9 @@ msgstr "Usando um dicionário em branco em vez do conteúdo de {path}!"
 msgid "Using existing keystore \"{path}\""
 msgstr "Utilizando armazenamento de chave existente \"{path}\""
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Using rclone to sync to \"{name}\""
-msgstr "Usando rclone para sincronizar com: {url}"
+msgstr "Usando rclone para sincronizar com: \"{name}\""
 
 #, python-brace-format
 msgid "Using rclone to sync with: {url}"
