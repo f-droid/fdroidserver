@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2025-09-29 14:29+0200\n"
-"PO-Revision-Date: 2025-07-14 08:01+0000\n"
+"PO-Revision-Date: 2025-10-20 04:50+0000\n"
 "Last-Translator: ssantos <ssantos@web.de>\n"
 "Language-Team: Portuguese (Portugal) <https://hosted.weblate.org/projects/f-droid/fdroidserver/pt_PT/>\n"
 "Language: pt_PT\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.13-dev\n"
+"X-Generator: Weblate 5.14-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -46,11 +46,11 @@ msgstr "\"%s/\" não tem ficheiro de metadados correspondente!"
 
 #: ../fdroidserver/deploy.py
 msgid "\"AWS_ACCESS_KEY_ID\" must be set as an environmental variable!"
-msgstr ""
+msgstr "\"AWS_ACCESS_KEY_ID\" deve estar configurada como uma variável do ambiente!"
 
 #: ../fdroidserver/deploy.py
 msgid "\"AWS_SECRET_ACCESS_KEY\" must be set as an environmental variable!"
-msgstr ""
+msgstr "\"AWS_SECRET_ACCESS_KEY\" deve estar configurada como uma variável do ambiente!"
 
 #: ../fdroidserver/index.py
 msgid "\"isPrimary\" key should not be added to mirrors!"
@@ -208,7 +208,7 @@ msgstr "Uma URL é necessária como um argumento!"
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "APK file {path} does not have a version code in its manifest"
-msgstr ""
+msgstr "O ficheiro APK {path} não tem um código de versão no seu manifesto"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -229,7 +229,7 @@ msgstr "Adicionar ficheiros de metadados de esqueleto para APKs que estão falta
 
 #: ../fdroidserver/deploy.py
 msgid "Adding all files to git mirror"
-msgstr ""
+msgstr "A adicionar todos os ficheiros ao espelho git"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -447,7 +447,7 @@ msgstr "Confirme as alterações, envie e faça um pedido de fusão"
 
 #: ../fdroidserver/deploy.py
 msgid "Committing index files to git mirror"
-msgstr ""
+msgstr "Cometer ficheiros de índice para o espelho git"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
@@ -725,9 +725,9 @@ msgstr ""
 "> "
 
 #: ../fdroidserver/nightly.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Environment variable \"{name}\" has an empty value!"
-msgstr "A variável de ambiente {{env: {var} não está definida!"
+msgstr "A variável ambiente \"{name}\" tem um valor vazio!"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -2056,9 +2056,9 @@ msgid "Using existing keystore \"{path}\""
 msgstr "Utilizando armazenamento de chave existente \"{path}\""
 
 #: ../fdroidserver/deploy.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Using rclone to sync to \"{name}\""
-msgstr "A usar rclone para sincronizar com: {url}"
+msgstr "A usar rclone para sincronizar com \"{name}\""
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format

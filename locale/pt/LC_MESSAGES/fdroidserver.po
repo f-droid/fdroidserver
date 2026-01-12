@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: fdroidserver 1.1-680-ge1d3de71\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2025-09-29 14:29+0200\n"
-"PO-Revision-Date: 2025-07-14 08:01+0000\n"
+"PO-Revision-Date: 2025-10-08 13:09+0000\n"
 "Last-Translator: ssantos <ssantos@web.de>\n"
 "Language-Team: Portuguese <https://hosted.weblate.org/projects/f-droid/fdroidserver/pt/>\n"
 "Language: pt\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.13-dev\n"
+"X-Generator: Weblate 5.14-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -44,11 +44,11 @@ msgstr "\"%s/\" não tem ficheiro de metadados correspondente!"
 
 #: ../fdroidserver/deploy.py
 msgid "\"AWS_ACCESS_KEY_ID\" must be set as an environmental variable!"
-msgstr ""
+msgstr "\"AWS_ACCESS_KEY_ID\" deve estar configurada como uma variável do ambiente!"
 
 #: ../fdroidserver/deploy.py
 msgid "\"AWS_SECRET_ACCESS_KEY\" must be set as an environmental variable!"
-msgstr ""
+msgstr "\"AWS_SECRET_ACCESS_KEY\" deve estar configurada como uma variável do ambiente!"
 
 #: ../fdroidserver/index.py
 msgid "\"isPrimary\" key should not be added to mirrors!"
@@ -141,9 +141,8 @@ msgid "'keystorepass' not found in config.yml!"
 msgstr "'keystorepass' não encontrada em config.yml!"
 
 #: ../fdroidserver/deploy.py
-#, fuzzy
 msgid "'rclone_config' must be set in config.yml!"
-msgstr "Para usar rclone, rclone_config e awsbucket também devem ser definidos no config.yml!"
+msgstr "'rclone_config' deve ser configurado em config.yml!"
 
 #: ../fdroidserver/common.py
 msgid "'repo_keyalias' not found in config.yml!"
@@ -206,7 +205,7 @@ msgstr "Uma URL é necessária como um argumento!"
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "APK file {path} does not have a version code in its manifest"
-msgstr ""
+msgstr "O ficheiro APK {path} não tem um código de versão no seu manifesto"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -227,7 +226,7 @@ msgstr "Adicionar ficheiros de metadados de esqueleto para APKs que estão falta
 
 #: ../fdroidserver/deploy.py
 msgid "Adding all files to git mirror"
-msgstr ""
+msgstr "A adicionar todos os ficheiros ao espelho git"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -444,8 +443,9 @@ msgid "Commit changes, push, then make a merge request"
 msgstr "Confirme as alterações, envie e faça um pedido de fusão"
 
 #: ../fdroidserver/deploy.py
+#, fuzzy
 msgid "Committing index files to git mirror"
-msgstr ""
+msgstr "A commitir ficheiros de índice para o espelho git"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
