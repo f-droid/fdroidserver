@@ -6,20 +6,21 @@
 # Hans-Christoph Steiner <hans@guardianproject.info>, 2021, 2024.
 # Agnieszka C <aga_04@o2.pl>, 2021, 2022, 2023, 2024.
 # Eryk Michalak <gnu.ewm@protonmail.com>, 2024.
+# Daniel Wuzetka <32z2tcp8@anonaddy.me>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 1.0.0-95-gd7af22b\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2025-09-29 14:29+0200\n"
-"PO-Revision-Date: 2025-06-28 05:20+0000\n"
-"Last-Translator: WaldiS <sto@tutanota.de>\n"
+"PO-Revision-Date: 2025-10-16 08:08+0000\n"
+"Last-Translator: Daniel Wuzetka <32z2tcp8@anonaddy.me>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/f-droid/fdroidserver/pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 5.13-dev\n"
+"X-Generator: Weblate 5.14-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -49,7 +50,7 @@ msgstr ""
 
 #: ../fdroidserver/deploy.py
 msgid "\"AWS_SECRET_ACCESS_KEY\" must be set as an environmental variable!"
-msgstr ""
+msgstr "„AWS_SECRET_ACCESS_KEY” musi być ustawiony jako zmienna środowiskowa!"
 
 #: ../fdroidserver/index.py
 msgid "\"isPrimary\" key should not be added to mirrors!"
@@ -207,7 +208,7 @@ msgstr "Adres URL jest wymagany jako argument!"
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "APK file {path} does not have a version code in its manifest"
-msgstr ""
+msgstr "Plik APK {path} nie zawiera wersji kodu w swoim manifeście"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -228,7 +229,7 @@ msgstr "Dodaj pliki metadanych szkieletu dla pakietów APK, które ich nie zawie
 
 #: ../fdroidserver/deploy.py
 msgid "Adding all files to git mirror"
-msgstr ""
+msgstr "Dodawanie wszystkich plików do git mirror"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -447,7 +448,7 @@ msgstr "Zatwierdź zmiany, wypchnij, a następnie utwórz żądanie scalenia"
 
 #: ../fdroidserver/deploy.py
 msgid "Committing index files to git mirror"
-msgstr ""
+msgstr "Przesyłanie plików indeksowych do git mirror"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
