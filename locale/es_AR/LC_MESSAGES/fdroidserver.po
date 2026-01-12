@@ -7,13 +7,14 @@
 # Lilian Sosa <liliancsosa@gmail.com>, 2021.
 # Germe the fur star <FOSSgerme.deb@tuta.io>, 2021.
 # Chadow <83732118+Chadowo@users.noreply.github.com>, 2025.
+# Ramiro Cambareri Becche <ramiroc1926@gmail.com>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2025-09-29 14:29+0200\n"
-"PO-Revision-Date: 2025-10-01 15:02+0000\n"
-"Last-Translator: Chadow <83732118+Chadowo@users.noreply.github.com>\n"
+"PO-Revision-Date: 2025-10-21 00:19+0000\n"
+"Last-Translator: Ramiro Cambareri Becche <ramiroc1926@gmail.com>\n"
 "Language-Team: Spanish (Argentina) <https://hosted.weblate.org/projects/f-droid/fdroidserver/es_AR/>\n"
 "Language: es_AR\n"
 "MIME-Version: 1.0\n"
@@ -23,7 +24,6 @@ msgstr ""
 "X-Generator: Weblate 5.14-dev\n"
 
 #: ../fdroidserver/nightly.py
-#, fuzzy
 msgid ""
 "\n"
 "SSH public key to be used as deploy key:"
@@ -32,16 +32,16 @@ msgstr ""
 "Clave pública SSH que se usará como clave de despliegue:"
 
 #: ../fdroidserver/nightly.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "\n"
 "{path} encoded for the DEBUG_KEYSTORE secret variable:"
 msgstr ""
 "\n"
-"{path} codificada para la variable secreta DEBUG_KEYSTORE:"
+"{path} codificado para la variable secreta DEBUG_KEYSTORE:"
 
 #: ../fdroidserver/lint.py
-#, fuzzy, python-format
+#, python-format
 msgid "\"%s/\" has no matching metadata file!"
 msgstr "¡\"%s/\" no tiene su correspondiente fichero de metadatos!"
 
@@ -59,12 +59,12 @@ msgid "\"isPrimary\" key should not be added to mirrors!"
 msgstr "¡la clave \"isPrimary\" no se debe poner en los mirrors!"
 
 #: ../fdroidserver/index.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "\"local_copy_dir\" {path} does not exist!"
 msgstr "¡El directorio raíz para local_copy_dir \"{path}\" no existe!"
 
 #: ../fdroidserver/install.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "\"{apkfilename}\" is already installed on {dev}."
 msgstr "\"{apkfilename}\" ya está instalado en {dev}."
 
@@ -2595,7 +2595,7 @@ msgid "unrecognized arguments: %s"
 msgstr "argumentos no reconocidos: %s"
 
 #: ../fdroidserver/common.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "unsafe permissions on '{config_file}' (should be 0600)!"
 msgstr "permisos inseguros en '{config_file}' (¡debería ser 0600)!"
 
