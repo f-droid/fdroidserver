@@ -1,12 +1,12 @@
 # SOME DESCRIPTIVE TITLE.
 # This file is put in the public domain.
-# Bård Sigurd Møller <git@bsmoller.no>, 2024.
+# Bård Sigurd Møller <git@bsmoller.no>, 2024, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 2.3.0-3-g4ba7b5c9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2025-09-29 14:29+0200\n"
-"PO-Revision-Date: 2024-11-26 10:54+0000\n"
+"PO-Revision-Date: 2025-11-01 10:51+0000\n"
 "Last-Translator: Bård Sigurd Møller <git@bsmoller.no>\n"
 "Language-Team: Norwegian Nynorsk <https://hosted.weblate.org/projects/f-droid/fdroidserver/nn/>\n"
 "Language: nn\n"
@@ -14,7 +14,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.9-dev\n"
+"X-Generator: Weblate 5.14.1-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -99,7 +99,7 @@ msgstr ""
 #: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "%r is not callable"
-msgstr ""
+msgstr "%r kan ikkje kallast"
 
 #: ../fdroidserver/signindex.py
 #, python-format
@@ -184,7 +184,7 @@ msgstr ""
 
 #: /usr/lib/python3.11/argparse.py
 msgid ".__call__() not defined"
-msgstr ""
+msgstr ".__call__() er ikkje definert"
 
 #: ../fdroidserver/lint.py
 msgid "/issues is missing"
@@ -341,7 +341,7 @@ msgstr ""
 
 #: ../fdroidserver/__main__.py
 msgid "Build a package from source"
-msgstr ""
+msgstr "Bygg ein pakke frå kjelda"
 
 #: ../fdroidserver/build.py
 msgid "Build all applications available"
@@ -402,7 +402,7 @@ msgstr ""
 
 #: ../fdroidserver/__main__.py
 msgid "Check for updates to applications"
-msgstr ""
+msgstr "Sjekk etter oppdateringar for applikasjonane"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -553,7 +553,7 @@ msgstr ""
 
 #: ../fdroidserver/update.py
 msgid "Delete APKs and/or OBBs without metadata from the repo"
-msgstr ""
+msgstr "Slett APKar og/eller OBBar utan metadata frå pakkebrønnen"
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
@@ -1853,7 +1853,7 @@ msgstr ""
 
 #: ../fdroidserver/__main__.py
 msgid "Unknown exception found!"
-msgstr ""
+msgstr "Ukjend unntakk er funne!"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
@@ -2050,7 +2050,7 @@ msgstr ""
 
 #: ../fdroidserver/__main__.py
 msgid "Valid commands are:"
-msgstr ""
+msgstr "Gyldige kommandoar er:"
 
 #: ../fdroidserver/verify.py
 msgid "Verify against locally cached copy rather than redownloading."
@@ -2504,7 +2504,7 @@ msgstr ""
 
 #: /usr/lib/python3.11/argparse.py
 msgid "show this help message and exit"
-msgstr ""
+msgstr "Vis denne hjelpemeldinga og lukk"
 
 #: ../fdroidserver/signatures.py
 msgid "signed APK, either a file-path or HTTPS URL."
@@ -2567,7 +2567,7 @@ msgstr ""
 
 #: ../fdroidserver/__main__.py /usr/lib/python3.11/argparse.py
 msgid "usage: "
-msgstr ""
+msgstr "bruk: "
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
