@@ -1,6 +1,6 @@
 # SOME DESCRIPTIVE TITLE.
 # This file is put in the public domain.
-# Balázs Meskó <meskobalazs@mailbox.org>, 2020, 2021.
+# Balázs Meskó <meskobalazs@mailbox.org>, 2020, 2021, 2026.
 # Hans-Christoph Steiner <hans@guardianproject.info>, 2020, 2021, 2022, 2024.
 # KissPandur <zoltankiss.web@gmail.com>, 2022.
 # Dani Nagy <nagydani.m.k@gmail.com>, 2025.
@@ -10,8 +10,8 @@ msgstr ""
 "Project-Id-Version: fdroidserver 1.0.6-70-g54bc858\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2025-09-29 14:29+0200\n"
-"PO-Revision-Date: 2025-12-27 05:00+0000\n"
-"Last-Translator: Péter Reszegi <rpetya1704@gmail.com>\n"
+"PO-Revision-Date: 2026-01-09 11:01+0000\n"
+"Last-Translator: Balázs Meskó <meskobalazs@mailbox.org>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/f-droid/fdroidserver/hu/>\n"
 "Language: hu\n"
 "MIME-Version: 1.0\n"
@@ -1210,7 +1210,7 @@ msgid "Removing {path}\""
 msgstr ""
 
 msgid "Rename APK files that do not match package.name_123.apk"
-msgstr "Azon APK fájlok átnevezése, melyek nem illeszkednek a csomag.név_123.apk mintára"
+msgstr "Azon APK-fájlok átnevezése, melyek nem illeszkednek a csomag.név_123.apk mintára"
 
 #, python-brace-format
 msgid "RepoType {type} is deprecated, please switch to git."
@@ -1527,7 +1527,7 @@ msgid "Update repo information for new packages"
 msgstr "Tárolóinformációk frissítése az új csomagoknál"
 
 msgid "Update the binary transparency log for a URL"
-msgstr "A bináris átláthatósági napló frissítése az URL-nél"
+msgstr "A bináris átláthatósági napló frissítése a webcímnél"
 
 #, python-brace-format
 msgid "UpdateCheckData has invalid URL: {url}"
