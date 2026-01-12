@@ -33,7 +33,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2025-09-29 14:29+0200\n"
 "PO-Revision-Date: 2025-12-31 14:01+0000\n"
-"Last-Translator: marzzzello <anmeldezeugs@top-email.net>\n"
+"Last-Translator: Ceeee <marius.romanus@gmx.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/f-droid/fdroidserver/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -1727,7 +1727,7 @@ msgstr "archive_url muss mit /archive enden"
 
 #, python-format
 msgid "argument \"-\" with mode %r"
-msgstr "Argument \"-\" mit Modus %r"
+msgstr "Argument \"-\" im Modus %r"
 
 #, python-format
 msgid "argument %(argument_name)s: %(message)s"
@@ -2083,7 +2083,7 @@ msgstr "{appid} hat sowohl APKs als auch Dateien: {files}"
 
 #, python-brace-format
 msgid "{appid} is missing {name}"
-msgstr "{appid} fehlt {name}"
+msgstr "{name} fehlt für {appid}"
 
 #, python-brace-format
 msgid "{appid}: Unknown extlib {path} in build '{versionName}'"
