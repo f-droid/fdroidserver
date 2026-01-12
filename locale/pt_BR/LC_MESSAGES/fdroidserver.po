@@ -8,7 +8,7 @@
 # The Cats <philosoph@snopyta.org>, 2020.
 # Eduardo Rodrigues <edu.rodrigues2580@gmail.com>, 2021.
 # Flavio F. M. <flavius_androiduser@protonmail.com>, 2022.
-# The Cats <philosoph@danwin1210.de>, 2023.
+# The Cats <philosoph@danwin1210.de>, 2023, 2025.
 # lucasmz-dev <git@lucasmz.dev>, 2024.
 # Jose Delvani <delvani.eletricista@gmail.com>, 2024.
 # Jose Delvani <jsdelvani@users.noreply.hosted.weblate.org>, 2024.
@@ -20,15 +20,15 @@ msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2025-09-29 14:29+0200\n"
-"PO-Revision-Date: 2025-10-02 09:09+0000\n"
-"Last-Translator: LucasMZ <git@lucasmz.dev>\n"
+"PO-Revision-Date: 2025-10-26 21:02+0000\n"
+"Last-Translator: The Cats <philosoph@danwin1210.de>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/f-droid/fdroidserver/pt_BR/>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.14-dev\n"
+"X-Generator: Weblate 5.14.1-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -215,7 +215,7 @@ msgstr "Uma URL é necessária como um argumento!"
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "APK file {path} does not have a version code in its manifest"
-msgstr ""
+msgstr "O arquivo APK {path} não tem um código de versão no seu manifesto"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -236,7 +236,7 @@ msgstr "Adicionar arquivos de metadados de esqueleto para APKs que estão faltan
 
 #: ../fdroidserver/deploy.py
 msgid "Adding all files to git mirror"
-msgstr ""
+msgstr "Adicionando todos os arquivos ao espelho git"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
