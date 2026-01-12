@@ -3,7 +3,7 @@
 # Oliver <websites@posteo.de>, 2020.
 # Fynn Godau <fynngodau@mailbox.org>, 2020.
 # melusine <melusine@mailbox.org>, 2020.
-# marzzzello <anmeldezeugs@top-email.net>, 2020, 2022.
+# marzzzello <anmeldezeugs@top-email.net>, 2020, 2022, 2025.
 # Hans-Christoph Steiner <hans@guardianproject.info>, 2020, 2021.
 # Predatorix Phoenix <predatorix@web.de>, 2021.
 # cheese1 <cheese@nosuchhost.net>, 2021.
@@ -33,7 +33,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2025-09-29 14:29+0200\n"
 "PO-Revision-Date: 2025-12-31 14:01+0000\n"
-"Last-Translator: VfBFan <drop0815@posteo.de>\n"
+"Last-Translator: marzzzello <anmeldezeugs@top-email.net>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/f-droid/fdroidserver/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -870,7 +870,7 @@ msgstr "Ungültiger Name für die veröffentlichte Datei: %s"
 
 #, python-brace-format
 msgid "Invalid ndk: entry in build: \"{ndk}\""
-msgstr "Ungültiger ndk: Eintrag in Build: \"{ndk}\""
+msgstr "Ungültiges ndk: Eintrag in build: \"{ndk}\""
 
 #, python-brace-format
 msgid "Invalid redirect to non-HTTPS: {before} -> {after} "
