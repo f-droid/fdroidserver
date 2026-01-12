@@ -40,7 +40,7 @@ msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2025-09-29 14:29+0200\n"
-"PO-Revision-Date: 2025-06-26 06:55+0000\n"
+"PO-Revision-Date: 2025-10-01 15:02+0000\n"
 "Last-Translator: 大王叫我来巡山 <hamburger2048@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/projects/f-droid/fdroidserver/zh_Hans/>\n"
 "Language: zh_Hans\n"
@@ -48,7 +48,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.13-dev\n"
+"X-Generator: Weblate 5.14-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -74,11 +74,11 @@ msgstr "\"%s/\" 没有与之匹配的元数据文件!"
 
 #: ../fdroidserver/deploy.py
 msgid "\"AWS_ACCESS_KEY_ID\" must be set as an environmental variable!"
-msgstr ""
+msgstr "\"AWS_ACCESS_KEY_ID\" 必须设为环境变量！"
 
 #: ../fdroidserver/deploy.py
 msgid "\"AWS_SECRET_ACCESS_KEY\" must be set as an environmental variable!"
-msgstr ""
+msgstr "\"AWS_SECRET_ACCESS_KEY\" 必须设为环境变量！"
 
 #: ../fdroidserver/index.py
 msgid "\"isPrimary\" key should not be added to mirrors!"
@@ -171,9 +171,8 @@ msgid "'keystorepass' not found in config.yml!"
 msgstr "config.yml 中找不到 'keystorepass'!"
 
 #: ../fdroidserver/deploy.py
-#, fuzzy
 msgid "'rclone_config' must be set in config.yml!"
-msgstr "要使用 rclone，必须在 config.yml 中设置 rclone_config 和 awsbucket！"
+msgstr "config.yml 中必须设置 'rclone_config' ！"
 
 #: ../fdroidserver/common.py
 msgid "'repo_keyalias' not found in config.yml!"
@@ -236,7 +235,7 @@ msgstr "需要有一个链接作为参数!"
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "APK file {path} does not have a version code in its manifest"
-msgstr ""
+msgstr "APK 文件 {path} 在其清单文件中没有版本码"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -257,7 +256,7 @@ msgstr "为缺少主干元数据文件的 APK 添加这些文件"
 
 #: ../fdroidserver/deploy.py
 msgid "Adding all files to git mirror"
-msgstr ""
+msgstr "添加所有文件到 git 镜像"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -474,7 +473,7 @@ msgstr "提交改动、推动，然后提出合并请求"
 
 #: ../fdroidserver/deploy.py
 msgid "Committing index files to git mirror"
-msgstr ""
+msgstr "提交索引文件到 git 镜像"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
@@ -501,12 +500,10 @@ msgid "Could not find latest version name"
 msgstr "找不到最新的版本名"
 
 #: ../fdroidserver/import_subcommand.py
-#, fuzzy
 msgid "Could not find latest versionCode"
 msgstr "找不到最新版本代码"
 
 #: ../fdroidserver/import_subcommand.py
-#, fuzzy
 msgid "Could not find latest versionName"
 msgstr "找不到最新的版本名"
 
@@ -752,9 +749,9 @@ msgstr ""
 "> "
 
 #: ../fdroidserver/nightly.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Environment variable \"{name}\" has an empty value!"
-msgstr "没有设置环境变量 {{env: {var}}} ！"
+msgstr "环境变量“{name}”值为空！"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -1329,14 +1326,14 @@ msgid "No version information could be found."
 msgstr "找不到版本信息。"
 
 #: ../fdroidserver/scanner.py
-#, fuzzy, python-format
+#, python-format
 msgid "Non-exist scandelete path: %s"
-msgstr "未使用的扫描删除路径： %s"
+msgstr "不存在的扫描删除路径： %s"
 
 #: ../fdroidserver/scanner.py
-#, fuzzy, python-format
+#, python-format
 msgid "Non-exist scanignore path: %s"
-msgstr "未使用的扫描忽略路径： %s"
+msgstr "不存在的扫描忽略路径： %s"
 
 #: ../fdroidserver/common.py
 msgid "Not a valid size definition: \"{}\""
@@ -1717,9 +1714,9 @@ msgid "Skipping '{apkfilename}' with invalid signature!"
 msgstr "跳过签名无效的“{apkfilename}”！"
 
 #: ../fdroidserver/update.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Skipping '{apkfilename}' without versionCode!"
-msgstr "跳过签名无效的“{apkfilename}”！"
+msgstr "跳过签无版本码的“{apkfilename}”！"
 
 #: ../fdroidserver/deploy.py ../fdroidserver/index.py
 #, python-format
@@ -1800,9 +1797,9 @@ msgid "The OBB version code must come after \"{name}.\":"
 msgstr "OBB 版本号必须位于“{name}”之后："
 
 #: ../fdroidserver/update.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The OBB versionCode must come after \"{name}.\":"
-msgstr "OBB 版本号必须位于“{name}”之后："
+msgstr "OBB 版本码必须位于“{name}”之后："
 
 #: ../fdroidserver/btlog.py
 msgid "The base URL for the repo to log (default: https://f-droid.org)"
@@ -1991,7 +1988,7 @@ msgid "UpdateCheckData must match the version code as integer (\\d or [0-9]): {c
 msgstr "UpdateCheckData 必须以整数（\\d 或 [0-9]）的形式匹配版本代码：{codeex}"
 
 #: ../fdroidserver/lint.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "UpdateCheckData must match the versionCode as integer (\\d or [0-9]): {codeex}"
 msgstr "UpdateCheckData 必须以整数（\\d 或 [0-9]）的形式匹配版本代码：{codeex}"
 
@@ -2046,9 +2043,9 @@ msgid "Using \"{path}\" for configuring s3cmd."
 msgstr "使用“{path}”配置 s3cmd。"
 
 #: ../fdroidserver/deploy.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Using \"{path}\" for rclone config."
-msgstr "使用“{path}”配置 s3cmd。"
+msgstr "使用“{path}”配置 rclone。"
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
@@ -2082,9 +2079,9 @@ msgid "Using existing keystore \"{path}\""
 msgstr "使用现有密钥库“{path}”"
 
 #: ../fdroidserver/deploy.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Using rclone to sync to \"{name}\""
-msgstr "使用 rclone 进行同步：{url}"
+msgstr "使用 rclone 同步到“{name}”"
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
@@ -2489,9 +2486,9 @@ msgid "overwriting existing {path}"
 msgstr "正在覆盖现有{path}"
 
 #: ../fdroidserver/deploy.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "path_to_custom_rclone_config: \"{path}\" does not exist!"
-msgstr "local_copy_dir“{path}”的根目录不存在！"
+msgstr "path_to_custom_rclone_config: \"{path}\" 不存在！"
 
 #: /usr/lib/python3.11/argparse.py
 msgid "positional arguments"
