@@ -23,13 +23,14 @@
 # VfBFan <VfBFan@users.noreply.hosted.weblate.org>, 2024.
 # Maxi <maxitendo01@proton.me>, 2024.
 # Silikonmann <silvan.goeth@gmail.com>, 2025.
+# Ettore Atalan <atalanttore@googlemail.com>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2025-09-29 14:29+0200\n"
-"PO-Revision-Date: 2025-10-03 18:01+0000\n"
-"Last-Translator: Silikonmann <silvan.goeth@gmail.com>\n"
+"PO-Revision-Date: 2025-10-03 18:02+0000\n"
+"Last-Translator: Ettore Atalan <atalanttore@googlemail.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/f-droid/fdroidserver/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -62,11 +63,11 @@ msgstr "\"%s/\" besitzt keine zugehörige Metadaten-Datei!"
 
 #: ../fdroidserver/deploy.py
 msgid "\"AWS_ACCESS_KEY_ID\" must be set as an environmental variable!"
-msgstr ""
+msgstr "„AWS_ACCESS_KEY_ID“ muss als Umgebungsvariable festgelegt werden!"
 
 #: ../fdroidserver/deploy.py
 msgid "\"AWS_SECRET_ACCESS_KEY\" must be set as an environmental variable!"
-msgstr ""
+msgstr "„AWS_SECRET_ACCESS_KEY“ muss als Umgebungsvariable festgelegt werden!"
 
 #: ../fdroidserver/index.py
 msgid "\"isPrimary\" key should not be added to mirrors!"
@@ -159,9 +160,8 @@ msgid "'keystorepass' not found in config.yml!"
 msgstr "'keystorepass' nicht in config.yml vorhanden!"
 
 #: ../fdroidserver/deploy.py
-#, fuzzy
 msgid "'rclone_config' must be set in config.yml!"
-msgstr "Um rclone zu benutzen, müssen rclone_config und awsbucket auch in der config.yml gesetzt sein!"
+msgstr "'rclone_config' muss in config.yml festgelegt werden!"
 
 #: ../fdroidserver/common.py
 msgid "'repo_keyalias' not found in config.yml!"
@@ -224,7 +224,7 @@ msgstr "Als Argument wird eine URL benötigt!"
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "APK file {path} does not have a version code in its manifest"
-msgstr ""
+msgstr "Die APK-Datei {path} enthält keinen Versionscode in ihrem Manifest"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
