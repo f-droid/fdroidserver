@@ -18,20 +18,21 @@
 # coronabond <coronabond@airmail.cc>, 2023.
 # Random <random-r@users.noreply.hosted.weblate.org>, 2023, 2024.
 # Champ0999 <champ0999@users.noreply.hosted.weblate.org>, 2025.
+# Francesco Di Vi <francescodv@tutamail.com>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2025-09-29 14:29+0200\n"
-"PO-Revision-Date: 2025-03-20 16:21+0000\n"
-"Last-Translator: Champ0999 <champ0999@users.noreply.hosted.weblate.org>\n"
+"PO-Revision-Date: 2025-10-03 18:02+0000\n"
+"Last-Translator: Francesco Di Vi <francescodv@tutamail.com>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/f-droid/fdroidserver/it/>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.11-dev\n"
+"X-Generator: Weblate 5.14-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -56,16 +57,19 @@ msgid "\"%s/\" has no matching metadata file!"
 msgstr "\"%s/\" non ha un file di metadati corrispondente!"
 
 #: ../fdroidserver/deploy.py
+#, fuzzy
 msgid "\"AWS_ACCESS_KEY_ID\" must be set as an environmental variable!"
-msgstr ""
+msgstr "\"AWS_ACCESS_KEY_ID\" deve essere impostato come una variabile di ambiente!"
 
 #: ../fdroidserver/deploy.py
+#, fuzzy
 msgid "\"AWS_SECRET_ACCESS_KEY\" must be set as an environmental variable!"
-msgstr ""
+msgstr "\"AWS_ACCESS_KEY_ID\" deve essere impostato come una variabile di ambiente!"
 
 #: ../fdroidserver/index.py
+#, fuzzy
 msgid "\"isPrimary\" key should not be added to mirrors!"
-msgstr ""
+msgstr "la chiave \"isPrimary\" non deve essere aggiunta ai mirror!"
 
 #: ../fdroidserver/index.py
 #, python-brace-format
@@ -108,9 +112,9 @@ msgid "%(prog)s: error: %(message)s\n"
 msgstr "%(prog)s: errore: %(message)s\n"
 
 #: ../fdroidserver/publish.py
-#, python-format
+#, fuzzy, python-format
 msgid "%d APKs failed to be signed or verified!"
-msgstr ""
+msgstr "Impossibile firmare o verificare gli APK %d"
 
 #: ../fdroidserver/scanner.py
 #, python-format
@@ -196,8 +200,9 @@ msgid "'{value}' is not a valid {field}, should be {pattern}"
 msgstr "\"{value}\" non è un {field} valido, dovrebbe essere {pattern}"
 
 #: ../fdroidserver/checkupdates.py
+#, fuzzy
 msgid "--merge-request only runs on a single appid!"
-msgstr ""
+msgstr "--merge-request funziona solo su una singola appid!"
 
 #: ../fdroidserver/checkupdates.py
 #, python-brace-format
@@ -217,14 +222,14 @@ msgid "A URL is required as an argument!"
 msgstr "È richiesto un URL come argomento!"
 
 #: ../fdroidserver/update.py
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "APK file {path} does not have a version code in its manifest"
-msgstr ""
+msgstr "Il file APK {path} non ha una versione codice nel suo manifesto"
 
 #: ../fdroidserver/common.py
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "APK signatures have different certificates in {path}:"
-msgstr ""
+msgstr "Le firme APK hanno differenti certificati in {path}"
 
 #: ../fdroidserver/__main__.py
 msgid "Add PGP signatures using GnuPG for packages in repo"
@@ -239,8 +244,9 @@ msgid "Add skeleton metadata files for APKs that are missing them"
 msgstr "Aggiungi i file scheletro di metadata agli APK che sono senza"
 
 #: ../fdroidserver/deploy.py
+#, fuzzy
 msgid "Adding all files to git mirror"
-msgstr ""
+msgstr "Aggiungi tutti i file al git mirror"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -331,12 +337,14 @@ msgid "AutoUpdateMode with UpdateCheckMode: HTTP must have a pattern."
 msgstr "AutoUpdateMode con UpdateCheckMode: HTTP deve avere uno schema."
 
 #: ../fdroidserver/install.py
+#, fuzzy
 msgid "Automatic no to all prompts."
-msgstr ""
+msgstr "\"No\" automatico a tutti i prompt."
 
 #: ../fdroidserver/install.py
+#, fuzzy
 msgid "Automatic yes to all prompts."
-msgstr ""
+msgstr "\"Sì\" automatico a tutti i prompt."
 
 #: ../fdroidserver/index.py
 #, python-brace-format
@@ -421,7 +429,7 @@ msgstr "Le categorie non sono impostate"
 #: ../fdroidserver/index.py
 #, python-brace-format
 msgid "Category \"{category}\" defined but not used for any apps!"
-msgstr ""
+msgstr "Categoria \"{category}\" definita ma non usata da alcuna app!"
 
 #: ../fdroidserver/__main__.py
 msgid "Check for updates to applications"
@@ -437,8 +445,9 @@ msgid "Clean update - don't uses caches, reprocess all APKs"
 msgstr "Aggiornamento pulito - non usa cache, riprocessa tutti gli APK"
 
 #: ../fdroidserver/common.py
+#, fuzzy
 msgid "Color the log output"
-msgstr ""
+msgstr "Colora l'uscita log"
 
 #: ../fdroidserver/import_subcommand.py
 msgid "Comma separated list of categories."
@@ -612,12 +621,12 @@ msgstr "La descrizione di lunghezza {length} supera il limite di {limit} caratte
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Did you mean config/{name}.yml?"
-msgstr ""
+msgstr "Intendevi config/{name}.yml?"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "Did you mean {code}?"
-msgstr ""
+msgstr "Intendevi {code}?"
 
 #: ../fdroidserver/import_subcommand.py
 msgid "Do not add 'disable:' to the generated build entries"
@@ -653,8 +662,9 @@ msgid "Don't use rsync checksums"
 msgstr "Non usare checksum rsync"
 
 #: ../fdroidserver/install.py
+#, fuzzy
 msgid "Download F-Droid.apk using mirrors that leak less to the network"
-msgstr ""
+msgstr "Scarica F-Droid.apk usando mirror che si connettono meno alla rete"
 
 #: ../fdroidserver/__main__.py
 msgid "Download complete mirrors of small repos"
@@ -703,14 +713,14 @@ msgid "ERROR: unsupported git host \"%s\", patches welcome!"
 msgstr "ERRORE: host git \"%s\" non supportato, le patch sono benvenute!"
 
 #: ../fdroidserver/lint.py
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "ERROR: {key} in {path} is not \"archive\" or \"repo\"!"
-msgstr ""
+msgstr "ERRORE: {key} su {path} non è un \"archivio\" o una \"repo\"!"
 
 #: ../fdroidserver/lint.py
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "ERROR: {key} not a valid key!"
-msgstr ""
+msgstr "ERRORE: {key} non è una chiave valida!"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
@@ -773,7 +783,7 @@ msgstr "Estrai le firme dagli APK"
 
 #: ../fdroidserver/install.py
 msgid "F-Droid.apk could not be downloaded from any known source!"
-msgstr ""
+msgstr "F-Droid.apk non può essere scaricato da qualisiasi sorgente conosciuta!"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
