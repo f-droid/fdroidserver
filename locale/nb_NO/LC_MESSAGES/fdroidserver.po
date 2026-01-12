@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: fdroidserver 0.8-74-ga380b9f\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2025-09-29 14:29+0200\n"
-"PO-Revision-Date: 2025-09-08 19:43+0000\n"
+"PO-Revision-Date: 2025-10-28 03:02+0000\n"
 "Last-Translator: Telaneo <post@telaneo.net>\n"
 "Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects/f-droid/fdroidserver/nb_NO/>\n"
 "Language: nb_NO\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.14-dev\n"
+"X-Generator: Weblate 5.14.1-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -43,11 +43,11 @@ msgstr "\"%s/\" har ingen samsvarende metadatafil!"
 
 #: ../fdroidserver/deploy.py
 msgid "\"AWS_ACCESS_KEY_ID\" must be set as an environmental variable!"
-msgstr ""
+msgstr "«AWS_ACCESS_KEY_ID» må være satt som et miljøvariabel!"
 
 #: ../fdroidserver/deploy.py
 msgid "\"AWS_SECRET_ACCESS_KEY\" must be set as an environmental variable!"
-msgstr ""
+msgstr "«AWS_SECRET_ACCESS_KEY» må være satt som et miljøvariabel!"
 
 #: ../fdroidserver/index.py
 msgid "\"isPrimary\" key should not be added to mirrors!"
@@ -96,7 +96,7 @@ msgstr "%(prog)s: feil: %(message)s\n"
 #: ../fdroidserver/publish.py
 #, python-format
 msgid "%d APKs failed to be signed or verified!"
-msgstr ""
+msgstr "%d APK-er er ikke signert eller verifisert!"
 
 #: ../fdroidserver/scanner.py
 #, python-format
@@ -116,7 +116,7 @@ msgstr ""
 #: ../fdroidserver/signindex.py
 #, python-format
 msgid "%s has bad SHA-256: %s"
-msgstr ""
+msgstr "%s har en dårlig SHA-256-hash: %s"
 
 #: ../fdroidserver/lint.py
 #, python-format
@@ -140,23 +140,20 @@ msgid "'keystorepass' not found in config.yml!"
 msgstr "'keystorepass' ble ikke funnet i config.yml!"
 
 #: ../fdroidserver/deploy.py
-#, fuzzy
 msgid "'rclone_config' must be set in config.yml!"
-msgstr "For å bruke AWS-spann, må \"awssecretkey\" og \"awsaccesskeyid\" også være satt i config.yml."
+msgstr "«rclone_config» må være satt i config.yml!"
 
 #: ../fdroidserver/common.py
 msgid "'repo_keyalias' not found in config.yml!"
 msgstr "'repo_keyalias' ble ikke funnet i config.yml!"
 
 #: /usr/lib/python3.11/argparse.py
-#, fuzzy
 msgid "'required' is an invalid argument for positionals"
-msgstr "'required' er et ugyldig argument for posisjonsinfo"
+msgstr "«required» er et ugyldig argument for posisjonsinfo"
 
 #: ../fdroidserver/common.py
-#, fuzzy
 msgid "'sdk_path' not set in config.yml!"
-msgstr "'sdk_path' ble ikke funnet i config.yml!"
+msgstr "«sdk_path» er ikke satt i config.yml!"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -171,7 +168,7 @@ msgstr "\"{path}\" klarte ikke å kjøre."
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "'{path}' has invalid format, it should be a dictionary!"
-msgstr ""
+msgstr "«{path}» er ikke formatert riktig, det burde være en ordbok!"
 
 #: ../fdroidserver/lint.py ../fdroidserver/metadata.py
 #, python-brace-format
@@ -179,16 +176,16 @@ msgid "'{value}' is not a valid {field} in {appid}. Regex pattern: {pattern}"
 msgstr "\"{value}\" er ikke et gyldig {field} i {appid}. Mønster for regulært uttrykk: {pattern}"
 
 #: ../fdroidserver/metadata.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "'{value}' is not a valid {field}, should be {pattern}"
-msgstr "\"{value}\" er ikke et gyldig {field} i {appid}. Mønster for regulært uttrykk: {pattern}"
+msgstr "«{value}» er ikke et gyldig {field}, burde være {pattern}"
 
 #: ../fdroidserver/checkupdates.py
 msgid "--merge-request only runs on a single appid!"
-msgstr ""
+msgstr "--merge-request kjører bare på en enkelt appid!"
 
 #: ../fdroidserver/checkupdates.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "...checkupdate failed for {appid} : {error}"
 msgstr "…oppdateringssjekk mislyktes for {appid}: {error}"
 
@@ -201,9 +198,8 @@ msgid "/issues is missing"
 msgstr "/issues mangler"
 
 #: ../fdroidserver/mirror.py
-#, fuzzy
 msgid "A URL is required as an argument!"
-msgstr "valg -%s krever et argument"
+msgstr "En URL må gis som argument!"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -265,9 +261,8 @@ msgid "Android APK file"
 msgstr "APK-fil for Android"
 
 #: ../fdroidserver/scanner.py
-#, fuzzy
 msgid "Android DEX code"
-msgstr "Fant ingen Android-SDK."
+msgstr "Android DEX-kode"
 
 #: ../fdroidserver/init.py
 #, python-brace-format
