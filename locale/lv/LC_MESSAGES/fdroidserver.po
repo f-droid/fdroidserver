@@ -2,20 +2,21 @@
 # This file is put in the public domain.
 # "Coool (github.com/Coool)" <coool@mail.lv>, 2024.
 # Edgars Andersons <Edgars+Weblate@gaitenis.id.lv>, 2024, 2025.
+# MrFoX <rinalds.lapsa09@gmail.com>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 2.3a1\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2025-09-29 14:29+0200\n"
-"PO-Revision-Date: 2025-06-28 05:20+0000\n"
-"Last-Translator: Edgars Andersons <Edgars+Weblate@gaitenis.id.lv>\n"
+"PO-Revision-Date: 2025-10-24 20:03+0000\n"
+"Last-Translator: MrFoX <rinalds.lapsa09@gmail.com>\n"
 "Language-Team: Latvian <https://hosted.weblate.org/projects/f-droid/fdroidserver/lv/>\n"
 "Language: lv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n % 10 == 0 || n % 100 >= 11 && n % 100 <= 19) ? 0 : ((n % 10 == 1 && n % 100 != 11) ? 1 : 2);\n"
-"X-Generator: Weblate 5.13-dev\n"
+"X-Generator: Weblate 5.14.1-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -342,7 +343,7 @@ msgstr ""
 
 #: ../fdroidserver/__main__.py
 msgid "Build a package from source"
-msgstr ""
+msgstr "Izveidot pakotni no pirmavota"
 
 #: ../fdroidserver/build.py
 msgid "Build all applications available"
@@ -403,7 +404,7 @@ msgstr ""
 
 #: ../fdroidserver/__main__.py
 msgid "Check for updates to applications"
-msgstr ""
+msgstr "Pārbaudīt lietotņu atjauninājumus"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -425,7 +426,7 @@ msgstr "Ar komatu atdalītu kategoriju saraksts."
 #: ../fdroidserver/__main__.py
 #, python-format
 msgid "Command '%s' not recognised.\n"
-msgstr ""
+msgstr "Komanda '%s' nav atpazīta.\n"
 
 #: ../fdroidserver/checkupdates.py
 msgid "Commit changes"
@@ -554,7 +555,7 @@ msgstr "DEBUG_KEYSTORE nav iestatīts vai vērtība ir nepilnīga"
 
 #: ../fdroidserver/update.py
 msgid "Delete APKs and/or OBBs without metadata from the repo"
-msgstr ""
+msgstr "Dzēst APK un/vai OBB failus bez metadatiem no krātuves"
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
@@ -1028,7 +1029,7 @@ msgstr ""
 
 #: ../fdroidserver/__main__.py
 msgid "Interact with the repo HTTP server"
-msgstr ""
+msgstr "Mijiedarboties ar repozitorija HTTP serveri"
 
 #: ../fdroidserver/update.py
 msgid "Invalid APK"
@@ -1480,11 +1481,11 @@ msgstr ""
 
 #: ../fdroidserver/__main__.py
 msgid "Quickly start a new repository"
-msgstr ""
+msgstr "Ātri izveidot jaunu krātuvi"
 
 #: ../fdroidserver/__main__.py
 msgid "Read all the metadata files and exit"
-msgstr ""
+msgstr "Izlasīt visus metadatu failus un iziet"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -1530,7 +1531,7 @@ msgstr ""
 
 #: ../fdroidserver/update.py
 msgid "Rename APK files that do not match package.name_123.apk"
-msgstr ""
+msgstr "Pārdēvē APK failus, kuri neatbilst formātam pakotne.nosaukums_123.apk"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -1557,7 +1558,7 @@ msgstr "Atkārtoti mēģina neizdevušos lejupielādi: %s"
 
 #: ../fdroidserver/__main__.py
 msgid "Rewrite all the metadata files"
-msgstr ""
+msgstr "Pārrakstīt visus metadatu failus"
 
 #: ../fdroidserver/rewritemeta.py
 #, python-brace-format
@@ -1597,7 +1598,7 @@ msgstr ""
 
 #: ../fdroidserver/__main__.py
 msgid "Scan the source code of a package"
-msgstr ""
+msgstr "Skenēt pakotnes pirmkodu"
 
 #: ../fdroidserver/scanner.py
 #, python-brace-format
@@ -1661,11 +1662,11 @@ msgstr ""
 
 #: ../fdroidserver/__main__.py
 msgid "Sign and place packages in the repo"
-msgstr ""
+msgstr "Parakstīt un ievietot pakotnes repozitorijā"
 
 #: ../fdroidserver/__main__.py
 msgid "Sign indexes created using update --nosign"
-msgstr ""
+msgstr "Zīmju indeksi izveidoti, izmantojot update -- nosign"
 
 #: ../fdroidserver/build.py
 msgid "Skip scanning the source code for binaries and other problems"
@@ -1854,7 +1855,7 @@ msgstr ""
 
 #: ../fdroidserver/__main__.py
 msgid "Unknown exception found!"
-msgstr ""
+msgstr "Atrasta nezināma problēma!"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
@@ -1926,7 +1927,7 @@ msgstr ""
 
 #: ../fdroidserver/__main__.py
 msgid "Update repo information for new packages"
-msgstr ""
+msgstr "Atjaunināt repozitorija informāciju jaunām pakotnēm"
 
 #: ../fdroidserver/__main__.py
 msgid "Update the binary transparency log for a URL"
@@ -2051,7 +2052,7 @@ msgstr ""
 
 #: ../fdroidserver/__main__.py
 msgid "Valid commands are:"
-msgstr ""
+msgstr "Derīgas komandas ir:"
 
 #: ../fdroidserver/verify.py
 msgid "Verify against locally cached copy rather than redownloading."
@@ -2506,7 +2507,7 @@ msgstr ""
 
 #: /usr/lib/python3.11/argparse.py
 msgid "show this help message and exit"
-msgstr ""
+msgstr "parādīt šo palīdzības ziņojumu un iziet"
 
 #: ../fdroidserver/signatures.py
 msgid "signed APK, either a file-path or HTTPS URL."
@@ -2569,7 +2570,7 @@ msgstr ""
 
 #: ../fdroidserver/__main__.py /usr/lib/python3.11/argparse.py
 msgid "usage: "
-msgstr ""
+msgstr "lietojums: "
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
