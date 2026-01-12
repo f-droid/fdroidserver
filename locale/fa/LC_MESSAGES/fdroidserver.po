@@ -11,7 +11,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2025-09-29 14:29+0200\n"
 "PO-Revision-Date: 2025-10-24 20:02+0000\n"
-"Last-Translator: Shiba <theonlyshiba.ir@gmail.com>\n"
+"Last-Translator: Danial Behzadi <dani.behzi@ubuntu.com>\n"
 "Language-Team: Persian <https://hosted.weblate.org/projects/f-droid/fdroidserver/fa/>\n"
 "Language: fa\n"
 "MIME-Version: 1.0\n"
@@ -1561,7 +1561,7 @@ msgstr ""
 
 #: ../fdroidserver/__main__.py
 msgid "Rewrite all the metadata files"
-msgstr "بازنویسی تمامی فایل های متادیتا"
+msgstr "نوشتن دوبارهٔ همهٔ پرونده‌های فراداده"
 
 #: ../fdroidserver/rewritemeta.py
 #, python-brace-format
@@ -1601,7 +1601,7 @@ msgstr ""
 
 #: ../fdroidserver/__main__.py
 msgid "Scan the source code of a package"
-msgstr "اسکن برای سورس کد هر بسته"
+msgstr "پویش کد مبدأ هر بسته"
 
 #: ../fdroidserver/scanner.py
 #, python-brace-format
@@ -1665,7 +1665,7 @@ msgstr ""
 
 #: ../fdroidserver/__main__.py
 msgid "Sign and place packages in the repo"
-msgstr "امضا و جایگذاری بسته ها در ریپازیتوری"
+msgstr "امضا و گذاشتن بسته‌ها در مخزن"
 
 #: ../fdroidserver/__main__.py
 msgid "Sign indexes created using update --nosign"
@@ -1930,7 +1930,7 @@ msgstr ""
 
 #: ../fdroidserver/__main__.py
 msgid "Update repo information for new packages"
-msgstr "بروزرسانی اطلاعات ریپازیتوری برای بسته های جدید"
+msgstr "به‌روز رسانی اطّلاعات بسته‌های جدید در مخزن"
 
 #: ../fdroidserver/__main__.py
 msgid "Update the binary transparency log for a URL"
@@ -2085,7 +2085,7 @@ msgstr ""
 
 #: ../fdroidserver/__main__.py
 msgid "Warn about possible metadata errors"
-msgstr "هشدار درباره ارور های ممکن درباره متادیتا›"
+msgstr "هشدار دربارهٔ خطاهای ممکن فراداده"
 
 #: ../fdroidserver/scanner.py
 msgid "WebAssembly binary file"
@@ -2544,7 +2544,7 @@ msgstr ""
 #: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "the following arguments are required: %s"
-msgstr "این ارگومان ها لازم هستن: %s"
+msgstr "این آرگومان‌ها لازمند: %s"
 
 #: ../fdroidserver/install.py
 msgid "true"
