@@ -24,13 +24,14 @@
 # Maxi <maxitendo01@proton.me>, 2024.
 # Silikonmann <silvan.goeth@gmail.com>, 2025.
 # Ettore Atalan <atalanttore@googlemail.com>, 2025.
+# GunChleoc <fios@foramnagaidhlig.net>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2025-09-29 14:29+0200\n"
-"PO-Revision-Date: 2025-10-03 18:02+0000\n"
-"Last-Translator: Ettore Atalan <atalanttore@googlemail.com>\n"
+"PO-Revision-Date: 2025-10-12 05:15+0000\n"
+"Last-Translator: GunChleoc <fios@foramnagaidhlig.net>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/f-droid/fdroidserver/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -2072,9 +2073,9 @@ msgid "Using existing keystore \"{path}\""
 msgstr "Verwende vorhandenen Schlüsselspeicher \"{path}\""
 
 #: ../fdroidserver/deploy.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Using rclone to sync to \"{name}\""
-msgstr "Verwende rclone zum Synchronisieren mit: {url}"
+msgstr "Verwende rclone zum Synchronisieren mit: \"{name}\""
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
