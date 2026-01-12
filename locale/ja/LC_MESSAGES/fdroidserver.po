@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: fdroidserver 0.8-224-g4b0ade7\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2025-09-29 14:29+0200\n"
-"PO-Revision-Date: 2025-08-26 00:02+0000\n"
+"PO-Revision-Date: 2025-09-30 14:02+0000\n"
 "Last-Translator: Liner Seven <linour7gmekiblo@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/f-droid/fdroidserver/ja/>\n"
 "Language: ja\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.13\n"
+"X-Generator: Weblate 5.14-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -43,11 +43,11 @@ msgstr "「\"%s/」に合致するメタデータのファイルはありませ�
 
 #: ../fdroidserver/deploy.py
 msgid "\"AWS_ACCESS_KEY_ID\" must be set as an environmental variable!"
-msgstr ""
+msgstr "\"AWS_ACCESS_KEY_ID\" は環境変数として設定する必要があります!"
 
 #: ../fdroidserver/deploy.py
 msgid "\"AWS_SECRET_ACCESS_KEY\" must be set as an environmental variable!"
-msgstr ""
+msgstr "\"AWS_SECRET_ACCESS_KEY\"は環境変数として設定する必要があります!"
 
 #: ../fdroidserver/index.py
 msgid "\"isPrimary\" key should not be added to mirrors!"
@@ -140,9 +140,8 @@ msgid "'keystorepass' not found in config.yml!"
 msgstr "「keystorepass」がconfig.ymlにありません！"
 
 #: ../fdroidserver/deploy.py
-#, fuzzy
 msgid "'rclone_config' must be set in config.yml!"
-msgstr "rcloneを使用するには、rclone_configとawsbucketをconfig.ymlに設定する必要があります！"
+msgstr "'rclone_config' は config.yml で設定する必要があります!"
 
 #: ../fdroidserver/common.py
 msgid "'repo_keyalias' not found in config.yml!"
@@ -205,7 +204,7 @@ msgstr "URLを引数として指定してください！"
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "APK file {path} does not have a version code in its manifest"
-msgstr ""
+msgstr "APKファイル {path} のマニフェストにバージョンコードが含まれていません"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -226,7 +225,7 @@ msgstr "メタデータが存在しないAPKにテンプレートのメタデー
 
 #: ../fdroidserver/deploy.py
 msgid "Adding all files to git mirror"
-msgstr ""
+msgstr "git ミラーに全てのファイルを追加しています"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -443,7 +442,7 @@ msgstr "変更をコミット、プッシュしてから、マージリクエス
 
 #: ../fdroidserver/deploy.py
 msgid "Committing index files to git mirror"
-msgstr ""
+msgstr "git ミラーのインデックスファイルをコミットしています"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
@@ -470,12 +469,10 @@ msgid "Could not find latest version name"
 msgstr "最新のバージョン名が見つかりませんでした"
 
 #: ../fdroidserver/import_subcommand.py
-#, fuzzy
 msgid "Could not find latest versionCode"
 msgstr "最新のバージョンコードが見つかりませんでした"
 
 #: ../fdroidserver/import_subcommand.py
-#, fuzzy
 msgid "Could not find latest versionName"
 msgstr "最新のバージョン名が見つかりませんでした"
 
@@ -721,9 +718,9 @@ msgstr ""
 "> "
 
 #: ../fdroidserver/nightly.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Environment variable \"{name}\" has an empty value!"
-msgstr "環境変数{{env: {var}}}が未設定です！"
+msgstr "環境変数 \"{name}\" の値が未設定です!"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -1298,14 +1295,14 @@ msgid "No version information could be found."
 msgstr "バージョンの情報が見つかりませんでした。"
 
 #: ../fdroidserver/scanner.py
-#, fuzzy, python-format
+#, python-format
 msgid "Non-exist scandelete path: %s"
-msgstr "使われていないscandeleteのパス：%s"
+msgstr "存在しないscandeleteのパス: %s"
 
 #: ../fdroidserver/scanner.py
-#, fuzzy, python-format
+#, python-format
 msgid "Non-exist scanignore path: %s"
-msgstr "使われていないscanignoreのパス：%s"
+msgstr "存在しないscanignoreのパス: %s"
 
 #: ../fdroidserver/common.py
 msgid "Not a valid size definition: \"{}\""
@@ -1686,9 +1683,9 @@ msgid "Skipping '{apkfilename}' with invalid signature!"
 msgstr "正しくない署名がある「{apkfilename}」をスキップします！"
 
 #: ../fdroidserver/update.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Skipping '{apkfilename}' without versionCode!"
-msgstr "正しくない署名がある「{apkfilename}」をスキップします！"
+msgstr "versionCodeの無い '{apkfilename}' をスキップします!"
 
 #: ../fdroidserver/deploy.py ../fdroidserver/index.py
 #, python-format
@@ -1769,9 +1766,9 @@ msgid "The OBB version code must come after \"{name}.\":"
 msgstr "OBBのバージョンコードは「{name}」の後に設定してください："
 
 #: ../fdroidserver/update.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The OBB versionCode must come after \"{name}.\":"
-msgstr "OBBのバージョンコードは「{name}」の後に設定してください："
+msgstr "OBBのバージョンコードは \"{name}.\"の後へ設定してください:"
 
 #: ../fdroidserver/btlog.py
 msgid "The base URL for the repo to log (default: https://f-droid.org)"
@@ -1960,9 +1957,9 @@ msgid "UpdateCheckData must match the version code as integer (\\d or [0-9]): {c
 msgstr "UpdateCheckDataは整数（\\d または [0-9]）のバージョンコードに合致する必要があります：{codeex}"
 
 #: ../fdroidserver/lint.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "UpdateCheckData must match the versionCode as integer (\\d or [0-9]): {codeex}"
-msgstr "UpdateCheckDataは整数（\\d または [0-9]）のバージョンコードに合致する必要があります：{codeex}"
+msgstr "UpdateCheckDataは整数 (\\d か [0-9]) のversionCodeに合致する必要があります: {codeex}"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
@@ -2015,9 +2012,9 @@ msgid "Using \"{path}\" for configuring s3cmd."
 msgstr "「{path}」をs3cmdの設定に使用。"
 
 #: ../fdroidserver/deploy.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Using \"{path}\" for rclone config."
-msgstr "「{path}」をs3cmdの設定に使用。"
+msgstr "rclone設定に\"{path}\"を使用する。"
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
@@ -2051,9 +2048,9 @@ msgid "Using existing keystore \"{path}\""
 msgstr "\"{path}\"にある既存のキーストアを使用"
 
 #: ../fdroidserver/deploy.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Using rclone to sync to \"{name}\""
-msgstr "Rcloneを使って {url} と同期"
+msgstr "rcloneを使用して \"{name}\"と同期する"
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
@@ -2458,9 +2455,9 @@ msgid "overwriting existing {path}"
 msgstr "既存の{path}を上書きします"
 
 #: ../fdroidserver/deploy.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "path_to_custom_rclone_config: \"{path}\" does not exist!"
-msgstr "Local_copy_dir \"{path}\" のルートディレクトリーは存在しません！"
+msgstr "path_to_custom_rclone_config: \"{path}\" は存在しません!"
 
 #: /usr/lib/python3.11/argparse.py
 msgid "positional arguments"
