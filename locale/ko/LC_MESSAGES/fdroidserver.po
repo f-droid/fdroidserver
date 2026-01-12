@@ -3,20 +3,21 @@
 # Hans-Christoph Steiner <hans@guardianproject.info>, 2020, 2021, 2022, 2024.
 # Myeongjin Lee <aranet100@gmail.com>, 2021.
 # Cxnfl1ct <wind0wso2o2@naver.com>, 2024.
+# 안세훈 <on9686@gmail.com>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.8-135-g16dd6d28\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2025-09-29 14:29+0200\n"
-"PO-Revision-Date: 2024-09-06 14:57+0000\n"
-"Last-Translator: Cxnfl1ct <wind0wso2o2@naver.com>\n"
+"PO-Revision-Date: 2025-10-02 09:09+0000\n"
+"Last-Translator: 안세훈 <on9686@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/f-droid/fdroidserver/ko/>\n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.8-dev\n"
+"X-Generator: Weblate 5.14-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -2041,9 +2042,9 @@ msgid "Using existing keystore \"{path}\""
 msgstr "기존 키스토어 \"{path}\"를 사용 중"
 
 #: ../fdroidserver/deploy.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Using rclone to sync to \"{name}\""
-msgstr "다음과 동기화하는 데 s3cmd 사용: {url}"
+msgstr "rclone을 사용하여 \"{name}\" 동기화"
 
 #: ../fdroidserver/deploy.py
 #, fuzzy, python-brace-format
@@ -2709,9 +2710,9 @@ msgid "{path} is not \"key: value\" dict, but a {datatype}!"
 msgstr ""
 
 #: ../fdroidserver/common.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{path} is not a standard config file!"
-msgstr "'sdk_path'가 config.yml에서 설정되어 있지 않습니다!"
+msgstr "{path}은(는) 표준 설정 파일이 아닙니다!"
 
 #: ../fdroidserver/index.py
 #, python-brace-format
