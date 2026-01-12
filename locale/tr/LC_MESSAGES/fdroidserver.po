@@ -2,7 +2,7 @@
 # Copyright (C) YEAR Free Software Foundation, Inc.
 # Oğuz Ersen <oguzersen@protonmail.com>, 2020, 2021, 2022.
 # Orhan <orya@pm.me>, 2021.
-# Oğuz Ersen <oguz@ersen.moe>, 2022, 2023, 2024.
+# Oğuz Ersen <oguz@ersen.moe>, 2022, 2023, 2024, 2025.
 # Bai <batuhanakkurt000@gmail.com>, 2023.
 # "M. Fatih Uluçam" <mulucam@gmail.com>, 2025.
 # Nuri KÜÇÜKLER <enatsek@gmail.com>, 2025.
@@ -13,15 +13,15 @@ msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2025-09-29 14:29+0200\n"
-"PO-Revision-Date: 2025-07-21 11:42+0000\n"
-"Last-Translator: Akif <akifvar5067@gmail.com>\n"
+"PO-Revision-Date: 2025-10-12 05:15+0000\n"
+"Last-Translator: Oğuz Ersen <oguz@ersen.moe>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/f-droid/fdroidserver/tr/>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.13-dev\n"
+"X-Generator: Weblate 5.14-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -47,11 +47,11 @@ msgstr "\"%s/\" eşleşen üst veri dosyasına sahip değil!"
 
 #: ../fdroidserver/deploy.py
 msgid "\"AWS_ACCESS_KEY_ID\" must be set as an environmental variable!"
-msgstr ""
+msgstr "\"AWS_ACCESS_KEY_ID\" bir ortam değişkeni olarak ayarlanmalıdır!"
 
 #: ../fdroidserver/deploy.py
 msgid "\"AWS_SECRET_ACCESS_KEY\" must be set as an environmental variable!"
-msgstr ""
+msgstr "\"AWS_SECRET_ACCESS_KEY\" bir ortam değişkeni olarak ayarlanmalıdır!"
 
 #: ../fdroidserver/index.py
 msgid "\"isPrimary\" key should not be added to mirrors!"
@@ -144,9 +144,8 @@ msgid "'keystorepass' not found in config.yml!"
 msgstr "'keystorepass' config.yml içinde bulunamadı!"
 
 #: ../fdroidserver/deploy.py
-#, fuzzy
 msgid "'rclone_config' must be set in config.yml!"
-msgstr "rclone kullanmak için, rclone_config ve awsbucket config.yml içinde ayarlanmalı!"
+msgstr "'rclone_config' config.yml içinde ayarlanmalıdır!"
 
 #: ../fdroidserver/common.py
 msgid "'repo_keyalias' not found in config.yml!"
@@ -209,7 +208,7 @@ msgstr "Bir URL, argüman olarak gereklidir!"
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "APK file {path} does not have a version code in its manifest"
-msgstr ""
+msgstr "APK dosyası {path} bildiriminde sürüm kodu bulunmuyor"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -230,7 +229,7 @@ msgstr "İskelet üst veri dosyaları olmayan APK'lar için onları ekle"
 
 #: ../fdroidserver/deploy.py
 msgid "Adding all files to git mirror"
-msgstr ""
+msgstr "Tüm dosyalar git yansısına ekleniyor"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -448,7 +447,7 @@ msgstr "Değişiklikleri uygula, yükle ve bir birleştirme isteği yap"
 
 #: ../fdroidserver/deploy.py
 msgid "Committing index files to git mirror"
-msgstr ""
+msgstr "Dizin dosyaları git yansısına işleniyor"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
@@ -475,14 +474,12 @@ msgid "Could not find latest version name"
 msgstr "Son sürüm adı bulunamadı"
 
 #: ../fdroidserver/import_subcommand.py
-#, fuzzy
 msgid "Could not find latest versionCode"
-msgstr "Son sürüm kodu bulunamadı"
+msgstr "Son versionCode bulunamadı"
 
 #: ../fdroidserver/import_subcommand.py
-#, fuzzy
 msgid "Could not find latest versionName"
-msgstr "Son sürüm adı bulunamadı"
+msgstr "Son versionName bulunamadı"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -726,9 +723,9 @@ msgstr ""
 "> "
 
 #: ../fdroidserver/nightly.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Environment variable \"{name}\" has an empty value!"
-msgstr "Ortam değişkeni {{env: {var}}} ayarlanmadı!"
+msgstr "\"{name}\" ortam değişkeninin değeri boş!"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -1303,14 +1300,14 @@ msgid "No version information could be found."
 msgstr "Sürüm bilgisi bulunamadı."
 
 #: ../fdroidserver/scanner.py
-#, fuzzy, python-format
+#, python-format
 msgid "Non-exist scandelete path: %s"
-msgstr "Kullanılmayan scandelete yolu: %s"
+msgstr "Var olmayan scandelete yolu: %s"
 
 #: ../fdroidserver/scanner.py
-#, fuzzy, python-format
+#, python-format
 msgid "Non-exist scanignore path: %s"
-msgstr "Kullanılmayan scanignore yolu: %s"
+msgstr "Var olmayan scanignore yolu: %s"
 
 #: ../fdroidserver/common.py
 msgid "Not a valid size definition: \"{}\""
@@ -1550,7 +1547,7 @@ msgstr "paket.adı_123.apk örüntüsüyle eşleşmeyen tüm APK dosyalarını y
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "RepoType {type} is deprecated, please switch to git."
-msgstr ""
+msgstr "RepoType {type} kullanımdan kaldırıldı, lütfen git'e geçin."
 
 #: ../fdroidserver/nightly.py
 #, python-brace-format
@@ -1692,9 +1689,9 @@ msgid "Skipping '{apkfilename}' with invalid signature!"
 msgstr "Geçersiz imzalı '{apkfilename}' atlanıyor!"
 
 #: ../fdroidserver/update.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Skipping '{apkfilename}' without versionCode!"
-msgstr "Geçersiz imzalı '{apkfilename}' atlanıyor!"
+msgstr "versionCode olmayan '{apkfilename}' atlanıyor!"
 
 #: ../fdroidserver/deploy.py ../fdroidserver/index.py
 #, python-format
@@ -1775,9 +1772,9 @@ msgid "The OBB version code must come after \"{name}.\":"
 msgstr "OBB sürüm kodu \"{name}.\" adından sonra gelmelidir:"
 
 #: ../fdroidserver/update.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The OBB versionCode must come after \"{name}.\":"
-msgstr "OBB sürüm kodu \"{name}.\" adından sonra gelmelidir:"
+msgstr "OBB versionCode \"{name}.\" adından sonra gelmelidir:"
 
 #: ../fdroidserver/btlog.py
 msgid "The base URL for the repo to log (default: https://f-droid.org)"
@@ -1966,9 +1963,9 @@ msgid "UpdateCheckData must match the version code as integer (\\d or [0-9]): {c
 msgstr "UpdateCheckData tam sayı olarak sürüm koduyla eşleşmelidir (\\d veya [0-9]): {codeex}"
 
 #: ../fdroidserver/lint.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "UpdateCheckData must match the versionCode as integer (\\d or [0-9]): {codeex}"
-msgstr "UpdateCheckData tam sayı olarak sürüm koduyla eşleşmelidir (\\d veya [0-9]): {codeex}"
+msgstr "UpdateCheckData tam sayı olarak versionCode ile eşleşmelidir (\\d veya [0-9]): {codeex}"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
@@ -2021,9 +2018,9 @@ msgid "Using \"{path}\" for configuring s3cmd."
 msgstr "s3cmd yapılandırması için \"{path}\" kullanılıyor."
 
 #: ../fdroidserver/deploy.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Using \"{path}\" for rclone config."
-msgstr "s3cmd yapılandırması için \"{path}\" kullanılıyor."
+msgstr "rclone yapılandırması için \"{path}\" kullanılıyor."
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
@@ -2057,9 +2054,9 @@ msgid "Using existing keystore \"{path}\""
 msgstr "Var olan anahtar deposu \"{path}\" kullanılıyor"
 
 #: ../fdroidserver/deploy.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Using rclone to sync to \"{name}\""
-msgstr "{url} ile eşitleme için rclone kullanılıyor"
+msgstr "\"{name}\"ile eşitleme için rclone kullanılıyor"
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
@@ -2164,7 +2161,7 @@ msgstr "belirsiz şeçenek: %(option)s ile %(matches)s eşleşebilir"
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "apksigner in build-tools;{version} passes APKs with invalid v3 signatures, ignoring."
-msgstr ""
+msgstr "build-tools;{version} içindeki apksigner, geçersiz v3 imzaları olan APK'ları geçirir, yok sayılıyor."
 
 #: ../fdroidserver/common.py
 msgid "apksigner not found! Cannot sign or verify modern APKs"
@@ -2466,9 +2463,9 @@ msgid "overwriting existing {path}"
 msgstr "var olan {path} üzerine yazılıyor"
 
 #: ../fdroidserver/deploy.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "path_to_custom_rclone_config: \"{path}\" does not exist!"
-msgstr "local_copy_dir \"{path}\" için kök dizini yok!"
+msgstr "path_to_custom_rclone_config: \"{path}\" yok!"
 
 #: /usr/lib/python3.11/argparse.py
 msgid "positional arguments"
