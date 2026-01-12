@@ -20,7 +20,7 @@ msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2025-09-29 14:29+0200\n"
-"PO-Revision-Date: 2025-06-26 06:55+0000\n"
+"PO-Revision-Date: 2025-10-02 09:09+0000\n"
 "Last-Translator: LucasMZ <git@lucasmz.dev>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/f-droid/fdroidserver/pt_BR/>\n"
 "Language: pt_BR\n"
@@ -28,7 +28,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.13-dev\n"
+"X-Generator: Weblate 5.14-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -54,11 +54,11 @@ msgstr "\"%s/\" não tem arquivo de metadados correspondente!"
 
 #: ../fdroidserver/deploy.py
 msgid "\"AWS_ACCESS_KEY_ID\" must be set as an environmental variable!"
-msgstr ""
+msgstr "\"AWS_ACCESS_KEY_ID\" deve estar configurada como uma variável do ambiente!"
 
 #: ../fdroidserver/deploy.py
 msgid "\"AWS_SECRET_ACCESS_KEY\" must be set as an environmental variable!"
-msgstr ""
+msgstr "\"AWS_SECRET_ACCESS_KEY\" deve estar configurada como uma variável do ambiente!"
 
 #: ../fdroidserver/index.py
 msgid "\"isPrimary\" key should not be added to mirrors!"
@@ -151,9 +151,8 @@ msgid "'keystorepass' not found in config.yml!"
 msgstr "'keystorepass' não encontrada em config.yml!"
 
 #: ../fdroidserver/deploy.py
-#, fuzzy
 msgid "'rclone_config' must be set in config.yml!"
-msgstr "Para usar rclone, rclone_config e awsbucket devem ser configurados em config.yml!"
+msgstr "'rclone_config' deve ser configurado em config.yml!"
 
 #: ../fdroidserver/common.py
 msgid "'repo_keyalias' not found in config.yml!"
