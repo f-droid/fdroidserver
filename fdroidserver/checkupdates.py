@@ -811,6 +811,7 @@ def push_commits(branch_name='checkupdates'):
     push_options = [
         'merge_request.create',
         'merge_request.remove_source_branch',
+        'merge_request.squash',
         'merge_request.title=bot: ' + git_repo.branches[branch_name].commit.summary,
         'merge_request.description='
         + '~%s checkupdates-bot run %s' % (branch_name, os.getenv('CI_JOB_URL')),
