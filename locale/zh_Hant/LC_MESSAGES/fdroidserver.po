@@ -7,20 +7,21 @@
 # Stiffen <wchen01@fisher.edu>, 2021.
 # hugoalh <hugoalh@users.noreply.hosted.weblate.org>, 2024.
 # Peter Dave Hello <hsu@peterdavehello.org>, 2024.
+# Stevezxc <stevezxc@qq.com>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2025-09-29 14:29+0200\n"
-"PO-Revision-Date: 2024-11-26 15:16+0000\n"
-"Last-Translator: Peter Dave Hello <hsu@peterdavehello.org>\n"
+"PO-Revision-Date: 2025-12-31 14:01+0000\n"
+"Last-Translator: Stevezxc <stevezxc@qq.com>\n"
 "Language-Team: Chinese (Traditional Han script) <https://hosted.weblate.org/projects/f-droid/fdroidserver/zh_Hant/>\n"
 "Language: zh_Hant\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.9-dev\n"
+"X-Generator: Weblate 5.15.1\n"
 
 msgid ""
 "\n"
@@ -42,13 +43,13 @@ msgid "\"%s/\" has no matching metadata file!"
 msgstr "\"%s 1/\" 沒有符合的中介資料檔案！"
 
 msgid "\"AWS_ACCESS_KEY_ID\" must be set as an environmental variable!"
-msgstr ""
+msgstr "\"AWS_ACCESS_KEY_ID\" 必須設定為環境變數！"
 
 msgid "\"AWS_SECRET_ACCESS_KEY\" must be set as an environmental variable!"
-msgstr ""
+msgstr "\"AWS_SECRET_ACCESS_KEY\" 必須設定為環境變數！"
 
 msgid "\"isPrimary\" key should not be added to mirrors!"
-msgstr ""
+msgstr "\"isPrimary\" 鍵不應添加至鏡像！"
 
 #, python-brace-format
 msgid "\"local_copy_dir\" {path} does not exist!"
@@ -152,7 +153,7 @@ msgid "'{value}' is not a valid {field}, should be {pattern}"
 msgstr "「{value}」不是有效的 {field}，應該為 {pattern}"
 
 msgid "--merge-request only runs on a single appid!"
-msgstr ""
+msgstr "--merge-request 僅在單一 appid 上執行！"
 
 #, python-brace-format
 msgid "...checkupdate failed for {appid} : {error}"
@@ -169,7 +170,7 @@ msgstr "需要 URL 作為參數！"
 
 #, python-brace-format
 msgid "APK file {path} does not have a version code in its manifest"
-msgstr ""
+msgstr "APK 檔案 {path} 的清單檔案中未包含版本代碼"
 
 #, python-brace-format
 msgid "APK signatures have different certificates in {path}:"
