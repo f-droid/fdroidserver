@@ -4,20 +4,21 @@
 # Hans-Christoph Steiner <hans@guardianproject.info>, 2020, 2021, 2022, 2024.
 # KissPandur <zoltankiss.web@gmail.com>, 2022.
 # Dani Nagy <nagydani.m.k@gmail.com>, 2025.
+# Péter Reszegi <rpetya1704@gmail.com>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 1.0.6-70-g54bc858\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2025-09-29 14:29+0200\n"
-"PO-Revision-Date: 2025-11-26 11:34+0000\n"
-"Last-Translator: Dani Nagy <nagydani.m.k@gmail.com>\n"
+"PO-Revision-Date: 2025-12-27 05:00+0000\n"
+"Last-Translator: Péter Reszegi <rpetya1704@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/f-droid/fdroidserver/hu/>\n"
 "Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.15-dev\n"
+"X-Generator: Weblate 5.15.1\n"
 
 msgid ""
 "\n"
@@ -42,7 +43,7 @@ msgid "\"AWS_ACCESS_KEY_ID\" must be set as an environmental variable!"
 msgstr "Az \"AWS_ACCESS_KEY_ID\"-t környezeti változóként kell beállítani!"
 
 msgid "\"AWS_SECRET_ACCESS_KEY\" must be set as an environmental variable!"
-msgstr ""
+msgstr "Az „AWS_SECRET_ACCESS_KEY” értéknek környezeti változóként kell beállítva lennie!"
 
 msgid "\"isPrimary\" key should not be added to mirrors!"
 msgstr ""
