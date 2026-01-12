@@ -33,7 +33,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2025-09-29 14:29+0200\n"
 "PO-Revision-Date: 2025-12-31 14:01+0000\n"
-"Last-Translator: full name <hosted-weblate.5w160@dralias.com>\n"
+"Last-Translator: VfBFan <drop0815@posteo.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/f-droid/fdroidserver/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -59,7 +59,7 @@ msgstr ""
 
 #, python-format
 msgid "\"%s/\" has no matching metadata file!"
-msgstr "\"%s/\" besitzt keine zugehörige Metadaten-Datei!"
+msgstr "\"%s/\" besitzt keine zugehörige Metadatendatei!"
 
 msgid "\"AWS_ACCESS_KEY_ID\" must be set as an environmental variable!"
 msgstr "„AWS_ACCESS_KEY_ID“ muss als Umgebungsvariable festgelegt werden!"
@@ -195,16 +195,16 @@ msgid "APK signatures have different certificates in {path}:"
 msgstr "APK-Signaturen haben verschiedene Zertifikate in {path}:"
 
 msgid "Add PGP signatures using GnuPG for packages in repo"
-msgstr "GnuPG PGP-Signaturen für Programmpakete in der Paketquelle hinzufügen"
+msgstr "PGP-Signaturen mit GnuPG für Pakete im Repository hinzufügen"
 
 msgid "Add a repo signing key to an unsigned repo"
-msgstr "Füge einen Repository-Signierschlüssel zu einem unsignierten Repository hinzu"
+msgstr "Einem nicht signierten Repo einen Repo-Signierschlüssel hinzufügen"
 
 msgid "Add skeleton metadata files for APKs that are missing them"
-msgstr "Füge eine Metadaten-Vorlage für APKs hinzu, die keine haben"
+msgstr "Eine Metadatenvorlage für APKs hinzufügen, bei denen diese fehlt"
 
 msgid "Adding all files to git mirror"
-msgstr "Fügt alle Dateien zum git mirror hinzu"
+msgstr "Alle Dateien zum Git-Spiegelserver hinzufügen"
 
 #, python-brace-format
 msgid "Adding new repo for only {name}"
@@ -214,7 +214,7 @@ msgid "Alias of the repo signing key in the keystore"
 msgstr "Pseudonym des Repository-Signierchlüssels im Schlüsselspeicher"
 
 msgid "AllowedAPKSigningKeys missing but reference binary supplied"
-msgstr "AllowedAPKSigningKeys fehlen aber Referenz-Binärdatei geliefert"
+msgstr "AllowedAPKSigningKeys fehlen, aber Referenz-Binärdatei vorhanden"
 
 msgid "Allows a different revision (or git branch) to be specified for the initial import"
 msgstr "Ermöglicht die Bestimmung unterschiedlicher Überarbeitungen (oder Git-Zweige) für den Erstimport"
@@ -251,7 +251,7 @@ msgid "Android SDK tool {cmd} not found!"
 msgstr "Android-SDK-Tool {cmd} nicht gefunden!"
 
 msgid "App has Binaries but does not have corresponding AllowedAPKSigningKeys to pin certificate."
-msgstr "App besitzt Binärdateien aber keine entsprechenden AllowedAPKSigningKeys, um Zertifikat zu verankern."
+msgstr "App enthält Binärdateien, aber keine entsprechenden AllowedAPKSigningKeys, um das Zertifikat zu verankern."
 
 msgid "App has NoSourceSince or ArchivePolicy \"0 versions\" or 0 but AutoUpdateMode or UpdateCheckMode are not None"
 msgstr "App hat NoSourceSince oder ArchivePolicy \"0 versions\" oder 0, aber AutoUpdateMode oder UpdateCheckMode sind nicht None"
@@ -261,7 +261,7 @@ msgid "App is in '{repo}' but has a link to {url}"
 msgstr "App befindet sich in '{repo}', enthält aber einen Verweis auf {url}"
 
 msgid "App version has binary but does not have corresponding AllowedAPKSigningKeys to pin certificate."
-msgstr "App-Version besitzt Binärdateien aber keine entsprechenden AllowedAPKSigningKeys, um Zertifikat zu verankern."
+msgstr "App-Version enthält Binärdateien, aber keine entsprechenden AllowedAPKSigningKeys, um Zertifikat zu verankern."
 
 msgid "Appending .git is not necessary"
 msgstr "Das Anhängen von .git ist nicht notwendig"
@@ -373,7 +373,7 @@ msgid "Commit changes, push, then make a merge request"
 msgstr "Änderungen committen, pushen und dann eine Merge-Anfrage stellen"
 
 msgid "Committing index files to git mirror"
-msgstr "Comittet Index Dateien zum Git Mirror"
+msgstr "Indexdateien an Git-Spiegelserver committen"
 
 #, python-brace-format
 msgid "Conflicting \"{field}\" definitions between .yml and localized files:"
@@ -406,24 +406,24 @@ msgstr "{path} konnte nicht gefunden werden, um ihn zu entfernen"
 
 #, python-brace-format
 msgid "Could not open APK {path} for analysis: "
-msgstr "Konnte APK-Datei {path} nicht für Analyse öffnen "
+msgstr "APK {path} konnte nicht zur Analyse geöffnet werden: "
 
 #, python-brace-format
 msgid "Could not parse size \"{size}\", wrong type \"{type}\""
-msgstr "Konnte Größe \"{size}\" nicht parsen, falscher Typ \"{type}\""
+msgstr "Größe \"{size}\" konnte nicht analysiert werden, falscher Typ \"{type}\""
 
 #. Translators: https://developer.android.com/build/configure-app-module#set-application-id
 msgid "Couldn't find Application ID"
-msgstr "Anwendungs-ID wurde nicht gefunden"
+msgstr "Anwendungs-ID konnte nicht gefunden werden"
 
 msgid "Couldn't find any version information"
-msgstr "Versionsinformationen konnten nicht gefunden werden"
+msgstr "Es konnten keine Versionsinformationen gefunden werden"
 
 msgid "Couldn't find package ID"
-msgstr "Konnte Paket-ID nicht finden"
+msgstr "Paket-ID konnte nicht gefunden werden"
 
 msgid "Cowardily refusing to overwrite existing signing key setup!"
-msgstr "Es ist ungehörig, bestehende Signaturschlüssel-Einstellungen zu überschreiben!"
+msgstr "Es ist ungehörig, bestehende Signierschlüssel-Einstellungen zu überschreiben!"
 
 #, python-brace-format
 msgid "Created new container \"{name}\""
@@ -435,23 +435,23 @@ msgstr "\"{path}\" für die Konfiguration von S3cmd wird erstellt."
 
 #, python-brace-format
 msgid "Creating empty {config_file}"
-msgstr "Erstelle leere {config_file}"
+msgstr "Leere {config_file} wird erstellt"
 
 msgid "Creating log directory"
-msgstr "Erstelle Logverzeichnis"
+msgstr "Logverzeichnis wird erstellt"
 
 #, python-brace-format
 msgid "Creating new S3 bucket: {url}"
 msgstr "Neuer S3-Bucket wird erstellt: {url}"
 
 msgid "Creating output directory"
-msgstr "Erstelle Ausgabeverzeichnis"
+msgstr "Ausgabeverzeichnis wird erstellt"
 
 msgid "Creating signed index with this key (SHA256):"
 msgstr "Signierter Index wird mit diesem Schlüssel (SHA256) erstellt:"
 
 msgid "Creating temporary directory"
-msgstr "Erstelle temporäres Verzeichnis"
+msgstr "Temporäres Verzeichnis wird erstellt"
 
 msgid "Creating unsigned index in preparation for signing"
 msgstr "Unsignierter Index zur Vorbereitung der Signierung wird erstellt"
@@ -468,15 +468,15 @@ msgstr "APKs und/oder OBBs ohne Metadaten aus dem Repository löschen"
 
 #, python-brace-format
 msgid "Deleting archive, repo is too big ({size} max {limit})"
-msgstr "Lösche Archiv, Repository ist zu groß ({size} max {limit})"
+msgstr "Archiv wird gelöscht, Repository ist zu groß ({size} max {limit})"
 
 #, python-brace-format
 msgid "Deleting git-mirror history, repo is too big ({size} max {limit})"
-msgstr "Git-Spiegelserver-Verlauf löschen, Repository ist zu groß ({size} max {limit})"
+msgstr "Git-Spiegelserver-Verlauf wird gelöscht, Repository ist zu groß ({size} max {limit})"
 
 #, python-brace-format
 msgid "Deleting unknown file: {path}"
-msgstr "Lösche unbekannte Datei: {path}"
+msgstr "Unbekannte Datei wird gelöscht: {path}"
 
 #, python-format
 msgid "Description '%s' is just the app's summary"
@@ -511,7 +511,7 @@ msgid "Do not prompt for Android SDK path, just fail"
 msgstr "Android-SDK-Pfad nicht abfragen, einfach überspringen"
 
 msgid "Do not remove the private keys generated from the keystore"
-msgstr "Entfernen Sie die vom Schlüsselspeicher erzeugten privaten Schlüssel nicht"
+msgstr "Die aus dem Schlüsselspeicher erzeugten privaten Schlüssel nicht entfernen"
 
 msgid "Don't create a source tarball, useful when testing a build"
 msgstr "Keinen Tarball vom Quellcode erstellen, nützlich bei Test eines Builds"
@@ -529,7 +529,7 @@ msgid "Download complete mirrors of small repos"
 msgstr "Komplette Spiegelserver von kleinen Repositorys herunterladen"
 
 msgid "Downloading the repository already failed once, not trying again."
-msgstr "Herunterladen des Repositorys bereits einmal fehlgeschlagen, versuche es nicht nochmal."
+msgstr "Das Herunterladen des Repositorys ist bereits einmal fehlgeschlagen, es wird kein weiterer Versuch unternommen."
 
 #, python-brace-format
 msgid "Downloading {url} failed. {error}"
@@ -586,7 +586,7 @@ msgid ""
 "Enter the path to the Android SDK (%s) here:\n"
 "> "
 msgstr ""
-"Geben Sie hier den Pfad zum Android-SDK (%s) ein:\n"
+"Hier den Pfad zum Android-SDK (%s) eingeben:\n"
 "> "
 
 #, python-brace-format
@@ -611,7 +611,7 @@ msgid "Exit with a non-zero code if problems were found"
 msgstr "Mit einem von Null verschiedenen Code beenden, falls Probleme auftreten"
 
 msgid "Extract application metadata from a source repository"
-msgstr "Extrahieren von Anwendungsmetadaten aus einem Quell-Repository"
+msgstr "Extrahieren von Anwendungsmetadaten aus einem Quellrepository"
 
 msgid "Extract signatures from APKs"
 msgstr "Signaturen aus APKs extrahieren"
@@ -667,7 +667,7 @@ msgstr "Signaturen für '{apkfilename} '-> '{sigdir}' abgerufen"
 
 #, python-brace-format
 msgid "File disappeared while processing it: {path}"
-msgstr "Datei verschwand während der Verarbeitung: {path}"
+msgstr "Datei während der Verarbeitung verschwunden: {path}"
 
 msgid "Finished"
 msgstr "Fertiggestellt"
@@ -676,14 +676,14 @@ msgid "Forbidden HTML tags"
 msgstr "Verbotene HTML-Befehle"
 
 msgid "Force build of disabled apps, and carries on regardless of scan problems. Only allowed in test mode."
-msgstr "Erstellung deaktivierter Apps erzwingen und ungeachtet von Scan-Problemen ausüben. Nur im Testmodus erlaubt."
+msgstr "Erzwingt das Erstellen deaktivierter Apps und fährt unabhängig von Scan-Problemen fort. Nur im Testmodus zulässig."
 
 #, python-brace-format
 msgid "Force halting build after {0} sec timeout!"
 msgstr "Erzwingt das Anhalten des Builds nach {0} Sek. Zeitüberschreitung!"
 
 msgid "Force scan of disabled apps and builds."
-msgstr "Scannen von deaktivierten Anwendungen und Builds erzwingen."
+msgstr "Erzwingt das Scannen von deaktivierten Apps und Builds."
 
 #, python-brace-format
 msgid "Found \"{path}\" graphic without metadata for app \"{name}\"!"
@@ -691,7 +691,7 @@ msgstr "Grafik \"{path}\" ohne Metadaten für App \"{name}\" gefunden!"
 
 #, python-brace-format
 msgid "Found bad funding file \"{path}\" for \"{name}\":"
-msgstr "Schlechte Finanzierungsdatei \"{path}\" für \"{name}\" gefunden:"
+msgstr "Fehlerhafte Funding-Datei \"{path}\" für \"{name}\" gefunden:"
 
 msgid "Found invalid appids in arguments"
 msgstr "Ungültige App-IDs in Argumenten gefunden"
@@ -708,7 +708,7 @@ msgstr "Mehrere Signaturzertifikate für das Repository gefunden!"
 
 #, python-brace-format
 msgid "Found multiple metadata files for {appid}"
-msgstr "Mehrere Metadaten-Dateien für {appid} gefunden"
+msgstr "Mehrere Metadatendateien für {appid} gefunden"
 
 msgid "Found multiple signing certificates for repository."
 msgstr "Mehrere Signaturzertifikate für das Repository gefunden."
@@ -722,7 +722,7 @@ msgstr "Ungültige Datei bei %s gefunden"
 
 #, python-brace-format
 msgid "Found {apkfilename} at {url}"
-msgstr "{apkfilename} gefunden auf {url}"
+msgstr "{apkfilename} unter {url} gefunden"
 
 #, python-brace-format
 msgid "Found {count} problems in {filename}"
@@ -780,34 +780,34 @@ msgstr "'{field}' in '{metapath}' Metadaten wird ignoriert, da es veraltet ist."
 
 #, python-format
 msgid "Ignoring FUNDING.yml entry longer than 2048: %s"
-msgstr "Ignoriere FUNDING.yml-Einträge länger als 2048: %s"
+msgstr "FUNDING.yml-Einträge länger als 2048 ignorieren: %s"
 
 #, python-format
 msgid "Ignoring bad element in manifest: %s"
-msgstr "Ignoriere schlechtes Element im Manifest: %s"
+msgstr "Fehlerhaftes Element im Manifest ignorieren: %s"
 
 #, python-brace-format
 msgid "Ignoring deprecated {oldfile}, use {newfile}!"
-msgstr "Ignoriere veraltete {oldfile}, benutze {newfile}!"
+msgstr "Veraltete {oldfile} ignorieren, {newfile} verwenden!"
 
 msgid "Ignoring package without metadata: "
-msgstr "Ignoriere Paket ohne Metadaten: "
+msgstr "Paket ohne Metadaten ignorieren: "
 
 #, python-brace-format
 msgid "Ignoring stale cache data for {apkfilename}"
-msgstr "Ignoriere veraltete Cachedaten für {apkfilename}"
+msgstr "Veraltete Cachedaten für {apkfilename} ignorieren"
 
 msgid "Include APKs that are signed with disabled algorithms like MD5"
 msgstr "APKs einschließen, die mit untauglichen Algorithmen wie MD5 signiert sind"
 
 msgid "Include the PGP signature .asc files in the mirror"
-msgstr "Einbinden der .asc-PGP-Signaturdateien in den Spiegelserver"
+msgstr "Die .asc-PGP-Signaturdateien in den Spiegelserver einbinden"
 
 msgid "Include the build logs in the mirror"
-msgstr "Einbinden der Build-Protokolle in den Spiegelserver"
+msgstr "Die Build-Protokolle in den Spiegelserver einbinden"
 
 msgid "Include the source tarballs in the mirror"
-msgstr "Einbinden der Quellen-Tarballs in den Spiegelserver"
+msgstr "Die Quellen-Tarballs in den Spiegelserver einbinden"
 
 #, python-format
 msgid "Including metadata from %s@%s"
@@ -818,7 +818,7 @@ msgid "Including metadata from {path}"
 msgstr "Einschließlich der Metadaten von {path}"
 
 msgid "Initialising submodules"
-msgstr "Initialisiere Submodule"
+msgstr "Submodule initialisieren"
 
 msgid "Install all signed applications available"
 msgstr "Alle verfügbaren, signierten Anwendungen installieren"
@@ -828,11 +828,11 @@ msgstr "Erstellte Programmpakete auf Geräten installieren"
 
 #, python-format
 msgid "Installing %s..."
-msgstr "Installiere %s …"
+msgstr "%s wird installiert …"
 
 #, python-brace-format
 msgid "Installing '{apkfilename}' on {dev}..."
-msgstr "Installiere '{apkfilename}' auf {dev} …"
+msgstr "'{apkfilename}' wird auf {dev} installiert …"
 
 msgid "Interact with the repo HTTP server"
 msgstr "Mit dem HTTP-Server des Repository kommunizieren"
@@ -897,19 +897,19 @@ msgid "JAR signature verified: {path}"
 msgstr "JAR-Signatur verifiziert: {path}"
 
 msgid "Java JAR file"
-msgstr "Java JAR-Datei"
+msgstr "Java-JAR-Datei"
 
 msgid "Java JDK not found! Install in standard location or set java_paths!"
-msgstr "Java JDK nicht gefunden! Installieren Sie es in einem Standardordner oder setzen Sie java_paths!"
+msgstr "Java-JDK nicht gefunden! Im Standardordner installieren oder java_paths festlegen!"
 
 msgid "Java compiled class"
 msgstr "Java-kompilierte Klasse"
 
 msgid "Java jarsigner not found! Install in standard location or set java_paths!"
-msgstr "Java jarsigner nicht gefunden! Installieren Sie es in einem Standardordner oder setzen Sie java_paths!"
+msgstr "Java jarsigner nicht gefunden! Im Standardordner installieren oder java_paths festlegen!"
 
 msgid "Javascript in HTML src attributes"
-msgstr "Javascript in HTML src-Attributen"
+msgstr "Javascript in HTML-src-Attributen"
 
 #, python-brace-format
 msgid "Keeping failed build \"{apkfilename}\""
@@ -952,13 +952,13 @@ msgid "Mirror config for {url} contains \"isPrimary\" key!"
 msgstr "Spiegelserver-Konfiguration für {url} enthält \"isPrimary\"-Schlüssel!"
 
 msgid "Mirror the full repo and archive, all file types."
-msgstr "Spiegeln Sie die komplette Paketquelle und das Archiv, inklusive aller Dateitypen."
+msgstr "Das gesamte Repo und Archiv spiegeln, inklusive aller Dateitypen."
 
 msgid "Missing output directory"
 msgstr "Fehlendes Ausgabeverzeichnis"
 
 msgid "Moving Anti-Features declarations to localized files:"
-msgstr "Verschiebe Anti-Feature-Deklarationen in lokalisierte Dateien:"
+msgstr "Anti-Feature-Deklarationen in lokalisierte Dateien verschieben:"
 
 msgid "Neither \"repo_pubkey\" nor \"keystorepass\" set in config.yml"
 msgstr "Weder \"repo_pubkey\" noch \"keystorepass\" in config.yml gesetzt"
@@ -974,7 +974,7 @@ msgid "No attached devices found"
 msgstr "Keine angeschlossenen Geräte gefunden"
 
 msgid "No devices found for `adb install`! Please plug one in."
-msgstr "Keine Geräte für `adb install` gefunden! Bitte schließen Sie eines an."
+msgstr "Keine Geräte für `adb install` gefunden! Bitte eines anschließen."
 
 msgid "No fingerprint in URL."
 msgstr "Kein Fingerabdruck in der URL."
@@ -996,13 +996,13 @@ msgid "No minimum SDK version found in {0}, using default (3)."
 msgstr "Keine Mindest-SDK-Version in {0} gefunden, Standard (3) verwendet."
 
 msgid "No need to specify that the app is Free Software"
-msgstr "Sie müssen nicht angeben, dass die App Freie Software ist"
+msgstr "Es muss nicht angegeben werden, dass die App Freie Software ist"
 
 msgid "No need to specify that the app is for Android"
-msgstr "Sie müssen nicht angeben, dass die App für Android ist"
+msgstr "Es muss nicht angegeben werden, dass die App für Android ist"
 
 msgid "No option set! Edit your config.yml to set at least one of these:"
-msgstr "Keine Option gesetzt! Bearbeiten Sie Ihre config.yml, um mindestens eine davon zu setzen:"
+msgstr "Keine Option gesetzt! Die config.yml bearbeiten, um mindestens eine davon zu setzen:"
 
 msgid "No packages specified"
 msgstr "Keine Pakete angegeben"
@@ -1054,7 +1054,7 @@ msgid "Nothing to do for {appid}."
 msgstr "Keine zu erledigenden Aufgaben für {appid}."
 
 msgid "Now set these in config.yml:"
-msgstr "Legen Sie diese nun in der config.yml fest:"
+msgstr "Diese nun in der config.yml festlegen:"
 
 #, python-brace-format
 msgid "OBB file has newer versionCode({integer}) than any APK:"
@@ -1067,16 +1067,16 @@ msgid "OBB's packagename does not match a supported APK:"
 msgstr "Der OBB-Packetname stimmt mit keinem unterstützten APK überein:"
 
 msgid "Offline machine, skipping git mirror generation until `fdroid deploy`"
-msgstr "Maschine offline, überspringe git-Spiegelgeneration bis `fdroid deploy`"
+msgstr "Maschine offline, Git-Spiegelserver-Generierung bis `fdroid deploy` überspringen"
 
 msgid "One of the 'github_releases' config items is missing the 'packageNames' value. skipping ..."
-msgstr "Einem der Konfigurationselemente von 'github_releases' fehlt der Wert 'packageNames'. Überspringe …"
+msgstr "Einem der Konfigurationselemente von 'github_releases' fehlt der Wert 'packageNames'. Wird übersprungen …"
 
 msgid "One of the 'github_releases' config items is missing the 'projectUrl' value. skipping ..."
-msgstr "Einem der Konfigurationselemente von 'github_releases' fehlt der Wert 'projectUrl'. Überspringe …"
+msgstr "Einem der Konfigurationselemente von 'github_releases' fehlt der Wert 'projectUrl'. Wird übersprungen …"
 
 msgid "One of the 'github_releases' config items is missing the 'token' value. skipping ..."
-msgstr "Einem der Konfigurationselemente von 'github_releases' fehlt der Wert 'token'. Überspringe …"
+msgstr "Einem der Konfigurationselemente von 'github_releases' fehlt der Wert 'token'. Wird übersprungen …"
 
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
 #, python-brace-format
@@ -1103,7 +1103,7 @@ msgid "Outputting JSON"
 msgstr "JSON ausgeben"
 
 msgid "Overall license of the project."
-msgstr "Gesamt-Lizenz des Projekts."
+msgstr "Gesamtlizenz des Projekts."
 
 #, python-brace-format
 msgid "Overriding blank versionName in {apkfilename} from metadata: {version}"
@@ -1115,7 +1115,7 @@ msgstr "Paket \"{appid}\" existiert bereits"
 
 #, python-brace-format
 msgid "Parsing manifest at '{path}'"
-msgstr "Analysiere Manifest bei '{path}'"
+msgstr "Analysieren des Manifests unter {path}"
 
 msgid "Password required with username"
 msgstr "Passwort mit Benutzername benötigt"
@@ -1152,14 +1152,14 @@ msgstr "Aktualisierungen automatisch ausführen"
 
 #, python-brace-format
 msgid "Processing {apkfilename}"
-msgstr "Verarbeite {apkfilename}"
+msgstr "{apkfilename} wird verarbeitet"
 
 #, python-brace-format
 msgid "Processing {appid}"
-msgstr "Verarbeite {appid}"
+msgstr "{appid} wird verarbeitet"
 
 msgid "Produce human-readable XML/JSON for index files"
-msgstr "Erstelle menschenlesbares XML/JSON für Indexdateien"
+msgstr "Menschenlesbares XML/JSON für Indexdateien erstellen"
 
 msgid "Project URL to import from."
 msgstr "Projekt-Adresse, von der importiert werden soll."
@@ -1172,24 +1172,24 @@ msgstr "Anmeldung an diesem Git-Repository durchführen"
 
 #, python-brace-format
 msgid "Pushing binary transparency log to {url}"
-msgstr "Binäres Transparenz-Log nach {url} pushen"
+msgstr "Binäres Transparenz-Log an {url} pushen"
 
 msgid "Pushing to remote server failed!"
 msgstr "Pushen zum Remote-Server fehlgeschlagen!"
 
 #, python-brace-format
 msgid "Pushing to {url}"
-msgstr "Pushen auf {url}"
+msgstr "An {url} pushen"
 
 msgid "Quickly start a new repository"
 msgstr "Schnellstart eines neuen Repositorys"
 
 msgid "Read all the metadata files and exit"
-msgstr "Alle Metadaten-Dateien betrachten und beenden"
+msgstr "Alle Metadatendateien betrachten und beenden"
 
 #, python-brace-format
 msgid "Reading '{config_file}'"
-msgstr "Lese '{config_file}'"
+msgstr "'{config_file}' wird gelesen"
 
 #, python-brace-format
 msgid "Reading packageName/versionCode/versionName failed, APK invalid: '{apkfilename}'"
@@ -1201,7 +1201,7 @@ msgstr "Lesen von packageName/versionCode/versionName fehlgeschlagen,APK ungült
 
 #, python-brace-format
 msgid "Reading {apkfilename} from cache"
-msgstr "Lese {apkfilename} aus dem Cache"
+msgstr "{apkfilename} wird aus dem Cache gelesen"
 
 msgid "Refresh and cache scanner rules and signatures from the network"
 msgstr "Aktualisieren und Zwischenspeichern von Scannerregeln und Signaturen aus dem Netzwerk"
@@ -1214,11 +1214,11 @@ msgid "Remove source tarball and any APKs if successfully verified."
 msgstr "Den Quell-Tarball und alle APKs entfernen, wenn sie erfolgreich verifiziert wurden."
 
 msgid "Removing specified files"
-msgstr "Entferne angegebene Dateien"
+msgstr "Angegebene Dateien werden entfernt"
 
 #, python-brace-format
 msgid "Removing {path}\""
-msgstr "Entferne {path}\""
+msgstr "\"{path}\" wird entfernt"
 
 msgid "Rename APK files that do not match package.name_123.apk"
 msgstr "APK-Dateien umbenennen, die nicht dem Muster „package.name_123.apk“ entsprechen"
@@ -1242,14 +1242,14 @@ msgid "Retrying failed download: %s"
 msgstr "Wiederholung des fehlgeschlagenen Downloads: %s"
 
 msgid "Rewrite all the metadata files"
-msgstr "Alle Metadaten-Dateien neu schreiben"
+msgstr "Alle Metadatendateien neu schreiben"
 
 #, python-brace-format
 msgid "Rewriting '{appid}'"
-msgstr "Schreibe '{appid}' neu"
+msgstr "'{appid}' wird neu geschrieben"
 
 msgid "Run on git repo that has uncommitted changes"
-msgstr "Auf Git Repo, das nicht committete Änderungen hat, laufen lassen"
+msgstr "Auf Git-Repo ausführen, das nicht committete Änderungen enthält"
 
 #, python-brace-format
 msgid "Run over {cibase} to find -debug.apk. and skip repo_basedir {repo_basedir}"
@@ -1277,20 +1277,20 @@ msgstr "Quellcode eines Programmpakets durchsuchen"
 
 #, python-brace-format
 msgid "Scanner found {count} problems in {apk}"
-msgstr "Scanner fand {count} Probleme in {apk}"
+msgstr "Scanner hat {count} Probleme in {apk} gefunden"
 
 #, python-brace-format
 msgid "Scanner found {count} problems in {appid}:"
-msgstr "Scanner fand {count} Probleme in {appid}:"
+msgstr "Scanner hat {count} Probleme in {appid} gefunden:"
 
 #, python-brace-format
 msgid "Scanner found {count} problems in {appid}:{versionCode}:"
-msgstr "Scanner fand {count} Probleme in {appid}:{versionCode}:"
+msgstr "Scanner hat {count} Probleme in :{appid}:{versionCode} gefunden:"
 
 msgid "Scanner found {} problem"
 msgid_plural "Scanner found {} problems"
-msgstr[0] "Scanner fand {count} Problem"
-msgstr[1] "Scanner fand {count} Probleme"
+msgstr[0] "Scanner hat {count} Problem gefunden"
+msgstr[1] "Scanner hat {count} Probleme gefunden"
 
 msgid "Scanning APK for extra signing blocks."
 msgstr "APK auf zusätzliche Signierblöcke scannen."
@@ -1303,14 +1303,14 @@ msgid "Set NDK {release} ({version}) up"
 msgstr "NDK {release} ({version}) einrichten"
 
 msgid "Set clock to that time using:"
-msgstr "Einstellen der Uhr auf diese Zeit mit:"
+msgstr "Uhr auf diese Zeit einstellen mit:"
 
 msgid "Set maximum releases in repo before older ones are archived"
-msgstr "Setze maximale Veröffentlichungen im Repo, bevor ältere archiviert werden"
+msgstr "Maximale Veröffentlichungen im Repo festlegen, bevor ältere archiviert werden"
 
 #, python-brace-format
 msgid "Set open file limit to {integer}"
-msgstr "Setzen des Limits für geöffnete Dateien auf {integer}"
+msgstr "Limit für geöffnete Dateien auf {integer} festlegen"
 
 msgid "Set up an app build for a nightly build repo"
 msgstr "Ein App-Build für einen nightly Build-Repo einrichten"
@@ -1320,7 +1320,7 @@ msgstr "Das Setzen des Limits für geöffnete Dateien ist fehlgeschlagen: "
 
 #, python-brace-format
 msgid "Setting {0} sec timeout for this build"
-msgstr "Stelle einen {0} Sek timeout für diesen Build ein"
+msgstr "Zeitlimit von {0} Sekunden für diesen Build festlegen"
 
 msgid "Sign and place packages in the repo"
 msgstr "Programmpakete in Paketquelle signieren und einstellen"
@@ -1329,27 +1329,27 @@ msgid "Sign indexes created using update --nosign"
 msgstr "Erstellte Indizes durch Verwendung von „update --nosign“ signieren"
 
 msgid "Skip scanning the source code for binaries and other problems"
-msgstr "Durchsuchen des Quellcodes nach Binärdateien und anderen Problemen überspringen"
+msgstr "Das Durchsuchen des Quellcodes nach Binärdateien und anderen Problemen überspringen"
 
 #, python-brace-format
 msgid "Skipping '{apkfilename}' with invalid signature!"
-msgstr "Überspringen von '{apkfilename}' mit ungültiger Signatur!"
+msgstr "'{apkfilename}' mit ungültiger Signatur wird übersprungen!"
 
 #, python-brace-format
 msgid "Skipping '{apkfilename}' without versionCode!"
-msgstr "Überspringen von '{apkfilename}' ohne versionCode!"
+msgstr "'{apkfilename}' ohne versionCode wird übersprungen!"
 
 #, python-format
 msgid "Skipping GitLab Pages mirror because the repo is too large (>%.2fGB)!"
-msgstr "Überspringe GitLab-Pages-Spiegelserver, da das Repo zu groß ist (>%.2f GB)!"
+msgstr "GitLab-Pages-Spiegelserver wird übersprungen, da das Repo zu groß ist (> %.2f GB)!"
 
 #, python-brace-format
 msgid "Skipping index generation for {appid}"
-msgstr "Überspringe Indexerzeugung für {appid}"
+msgstr "Indexerzeugung für {appid} wird übersprungen"
 
 #, python-brace-format
 msgid "Skipping {apkfilename} with invalid signature!"
-msgstr "Überspringe '{apkfilename}' mit ungültiger Signatur!"
+msgstr "{apkfilename} mit ungültiger Signatur wird übersprungen!"
 
 #, python-brace-format
 msgid "Skipping {appid}: disabled"
@@ -1362,14 +1362,14 @@ msgid "Specify an identity file to provide to SSH for rsyncing"
 msgstr "Eine Identitätsdatei bestimmen, die bei Re-Synchronisation an SSH übergeben wird"
 
 msgid "Specify which debug keystore file to use."
-msgstr "Geben Sie an, welche Debug Keystore-Datei verwendet werden soll."
+msgstr "Angeben, welche Debug Keystore-Datei verwendet werden soll."
 
 msgid "Spew out even more information than normal"
-msgstr "Mehr Informationen als gewöhnlich ausspucken"
+msgstr "Noch mehr Informationen als sonst ausgeben"
 
 #, python-brace-format
 msgid "Stripping mystery signature from {apkfilename}"
-msgstr "Entferne mysteriöse Signatur aus {apkfilename}"
+msgstr "Geheime Signatur aus {apkfilename} wird entfernt"
 
 #, python-format
 msgid "Summary '%s' is just the app's name"
@@ -1493,7 +1493,7 @@ msgstr "Unbekanntes Metadatenformat: %s"
 
 #, python-brace-format
 msgid "Unknown metadata format: {path} (use: *.yml)"
-msgstr "Unbekanntes Metadaten-Format: {path} (benutze: *.yml)"
+msgstr "Unbekanntes Metadatenformat: {path} (benutze: *.yml)"
 
 msgid "Unknown version of aapt, might cause problems: "
 msgstr "Unbekannte Version von aapt, könnte Probleme verursachen: "
@@ -1573,67 +1573,67 @@ msgstr "UpdateCheckName ist auf eine bekannte App-ID gesetzt, sie kann entfernt 
 
 #, python-brace-format
 msgid "Uploading {apkfilename} to androidobservatory.org"
-msgstr "Lade {apkfilename} auf androidobservatory.org hoch"
+msgstr "{apkfilename} wird auf androidobservatory.org hochgeladen"
 
 #, python-brace-format
 msgid "Uploading {apkfilename} to virustotal"
-msgstr "Lade {apkfilename} auf VirusTotal hoch"
+msgstr "{apkfilename} wird auf VirusTotal hochgeladen"
 
 msgid "Use /HEAD instead of /master or /main to point at a file in the default branch"
-msgstr "Verwende /HEAD anstelle von /master oder /main, um auf eine Datei im Hauptzweig zu verweisen"
+msgstr "/HEAD anstelle von /master oder /main verwenden, um auf eine Datei im Hauptzweig zu verweisen"
 
 msgid "Use `fdroid update -c` to create it."
-msgstr "Verwende `fdroid update -c` zum Erstellen."
+msgstr "`fdroid update -c` zum Erstellen verwenden."
 
 msgid "Use build server"
-msgstr "Verwende Buildserver"
+msgstr "Buildserver verwenden"
 
 msgid "Use date from APK instead of current time for newly added APKs"
-msgstr "Verwende APK-Datum statt der aktuellen Zeit für neu hinzugefügte APKs"
+msgstr "Für neu hinzugefügte APKs das Datum aus der APK anstelle der aktuellen Uhrzeit verwenden"
 
 #, python-brace-format
 msgid "Using \"{path}\" for configuring s3cmd."
-msgstr "Verwende \"{path}\" zur Konfiguration von s3cmd."
+msgstr "\"{path}\" zum Konfigurieren von s3cmd verwenden."
 
 #, python-brace-format
 msgid "Using \"{path}\" for rclone config."
-msgstr "Verwende \"{path}\" zur Konfiguration von rclone."
+msgstr "\"{path}\" zum Konfigurieren von rclone verwenden."
 
 #, python-brace-format
 msgid "Using \"{path}\" for syncing with remote storage."
-msgstr "Verwende „{path}“ zur Synchronisation mit Remote-Speicher."
+msgstr "„{path}“ zur Synchronisation mit Remote-Speicher verwenden."
 
 msgid "Using APK Signature v2"
-msgstr "Verwende APK-Signatur v2"
+msgstr "APK-Signatur v2 verwenden"
 
 msgid "Using APK Signature v3"
-msgstr "Verwende APK-Signatur v3"
+msgstr "APK-Signatur v3 verwenden"
 
 msgid "Using JAR Signature"
-msgstr "Verwende JAR-Signatur"
+msgstr "JAR-Signatur verwenden"
 
 msgid "Using Java's jarsigner, not recommended for verifying APKs! Use apksigner"
-msgstr "Von Java jarsigner zur Verifikation von APKs wird abgeraten! Verwenden Sie apksigner"
+msgstr "Von Java-jarsigner zur Verifikation von APKs wird abgeraten! Bitte apksigner verwenden"
 
 #, python-brace-format
 msgid "Using blank dictionary instead of contents of {path}!"
-msgstr "Verwende leeres Verzeichnis statt der Inhalte von {path}!"
+msgstr "Leeres Verzeichnis statt des Inhalts von {path} verwenden!"
 
 #, python-brace-format
 msgid "Using existing keystore \"{path}\""
-msgstr "Verwende vorhandenen Schlüsselspeicher \"{path}\""
+msgstr "Vorhandenen Schlüsselspeicher \"{path}\" verwenden"
 
 #, python-brace-format
 msgid "Using rclone to sync to \"{name}\""
-msgstr "Verwende rclone zum Synchronisieren mit: \"{name}\""
+msgstr "rclone zum Synchronisieren mit \"{name}\" verwenden"
 
 #, python-brace-format
 msgid "Using rclone to sync with: {url}"
-msgstr "Verwende rclone zum Synchronisieren mit: {url}"
+msgstr "rclone zum Synchronisieren verwenden mit: {url}"
 
 #, python-brace-format
 msgid "Using s3cmd to sync with: {url}"
-msgstr "Verwende s3cmd zum Synchronisieren mit: {url}"
+msgstr "s3cmd zum Synchronisieren verwenden mit: {url}"
 
 msgid "Valid commands are:"
 msgstr "Gültige Befehle sind:"
@@ -1659,7 +1659,7 @@ msgid "WARNING: only public git repos are supported!"
 msgstr "WARNUNG: Es werden nur öffentliche Git-Repositorys unterstützt!"
 
 msgid "Warn about possible metadata errors"
-msgstr "Vor möglichen Metadaten-Fehlern warnen"
+msgstr "Vor möglichen Metadatenfehlern warnen"
 
 msgid "WebAssembly binary file"
 msgstr "WebAssembly-Binärdatei"
@@ -1748,7 +1748,7 @@ msgstr "Nicht-HTTPS-URL kann nicht geöffnet werden: '{};"
 
 #, python-brace-format
 msgid "cannot find required srclibs: \"{path}\""
-msgstr "Konnte die benötigten srclibs nicht finden: \"{path}\""
+msgstr "konnte die benötigten srclibs nicht finden: \"{path}\""
 
 msgid "cannot have multiple subparser arguments"
 msgstr "Mehrere Subparser-Argumente sind unzulässig"
@@ -1762,7 +1762,7 @@ msgstr "Kann das Update nicht veröffentlichen. Ist der Deploy-Schlüssel gesetz
 
 #, python-brace-format
 msgid "cloning {url}"
-msgstr "Klone {url}"
+msgstr "{url} wird geklont"
 
 msgid "commands from plugin modules:"
 msgstr "Befehle aus den PlugIn-Modulen:"
@@ -1848,20 +1848,20 @@ msgid "force metadata errors (default) to be warnings, or to be ignored."
 msgstr "Erzwingen, dass Metadatenfehler (Standard) als Warnung ausgegeben oder ignoriert werden."
 
 msgid "git svn clone failed"
-msgstr "git svn Klonen fehlgeschlagen"
+msgstr "git svn clone fehlgeschlagen"
 
 msgid "gzip file archive"
-msgstr "gzip Dateiarchiv"
+msgstr "gzip-Dateiarchiv"
 
 #, python-format
 msgid "ignored explicit argument %r"
 msgstr "Ausdrückliches Argument %r ignoriert"
 
 msgid "index-v1 must have a signature, use `fdroid signindex` to create it!"
-msgstr "index-v1 muß eine Signatur haben, verwenden Sie `fdroid signindex` um sie zu erzeugen!"
+msgstr "index-v1 muß eine Signatur haben, `fdroid signindex` verwenden, um sie zu erstellen!"
 
 msgid "index-v2 must have a signature, use `fdroid signindex` to create it!"
-msgstr "index-v2 muss eine Signatur haben, verwenden Sie `fdroid signindex`, um sie zu erstellen!"
+msgstr "index-v2 muss eine Signatur haben, `fdroid signindex`verwenden, um sie zu erstellen!"
 
 #, python-format
 msgid "invalid %(type)s value: %(value)r"
@@ -1888,13 +1888,13 @@ msgstr "Neuestes Build-Rezept ist neuer: alter Vercode={old}, neuer Vercode={new
 
 #, python-brace-format
 msgid "local_copy_dir does not end with \"fdroid\", perhaps you meant: \"{path}\""
-msgstr "local_copy_dir endet nicht auf \"fdroid\", meinten Sie stattdessen: \"{path}\""
+msgstr "local_copy_dir endet nicht auf \"fdroid\", vielleicht meinten Sie stattdessen: \"{path}\""
 
 msgid "local_copy_dir must be an absolute path!"
-msgstr "local_copy_dir muß eine absolute Pfadangabe sein!"
+msgstr "local_copy_dir muss eine absolute Pfadangabe sein!"
 
 msgid "local_copy_dir must be directory, not a file!"
-msgstr "local_copy_dir muß ein Verzeichnis sein, keine Datei!"
+msgstr "local_copy_dir muss ein Verzeichnis sein, keine Datei!"
 
 #, python-format
 msgid "mirror '%s' does not end with 'fdroid'!"
@@ -1937,7 +1937,7 @@ msgstr "Optionen"
 
 #, python-brace-format
 msgid "overwriting existing {path}"
-msgstr "überschreiben des vorhandenen {path}"
+msgstr "vorhandenen {path} überschreiben"
 
 #, python-brace-format
 msgid "path_to_custom_rclone_config: \"{path}\" does not exist!"
@@ -2000,7 +2000,7 @@ msgstr "Überspringen des Deployens von vollständigen Build-Logs: nicht in der 
 
 #, python-brace-format
 msgid "skipping source tarball: {path}"
-msgstr "Überspringe Quell-Tarball: {path}"
+msgstr "Quell-Tarball wird übersprungen: {path}"
 
 msgid "srclibs missing name and/or @"
 msgstr "Srclibs-Name fehlt und/oder @"
@@ -2040,7 +2040,7 @@ msgstr "Syntax: "
 
 #, python-brace-format
 msgid "using Apache libcloud to sync with {url}"
-msgstr "Verwende Apache libcloud zur Synchronisation mit {url}"
+msgstr "Apache libcloud zur Synchronisation mit {url} verwenden"
 
 msgid "virustotal.com is rate limiting, waiting to retry..."
 msgstr "virustotal.com limitiert die Zugriffe, warte auf Wiederholung …"
