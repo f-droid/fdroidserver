@@ -6,7 +6,7 @@
 # Filip Klopec <filipklopec@gmail.com>, 2022.
 # Fjuro <ifjuro@proton.me>, 2022, 2023.
 # Daniel Hejduk <jellymail@protonmail.com>, 2023.
-# Fjuro <fjuro@alius.cz>, 2024.
+# Fjuro <fjuro@alius.cz>, 2024, 2025.
 # Jakub Boukal <www.bagr@gmail.com>, 2024.
 # Fjuro <fjuro@users.noreply.hosted.weblate.org>, 2025.
 # ikanakova <ikanakova@users.noreply.hosted.weblate.org>, 2025.
@@ -16,15 +16,15 @@ msgstr ""
 "Project-Id-Version: fdroidserver 1.0.0-95-gd7af22b\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2025-09-29 14:29+0200\n"
-"PO-Revision-Date: 2025-06-28 05:20+0000\n"
-"Last-Translator: Fjuro <git@alius.cz>\n"
+"PO-Revision-Date: 2025-09-30 14:02+0000\n"
+"Last-Translator: Fjuro <fjuro@alius.cz>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/f-droid/fdroidserver/cs/>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=((n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2);\n"
-"X-Generator: Weblate 5.13-dev\n"
+"X-Generator: Weblate 5.14-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -50,11 +50,11 @@ msgstr "„%s/“ nemá žádný odpovídající soubor metadat!"
 
 #: ../fdroidserver/deploy.py
 msgid "\"AWS_ACCESS_KEY_ID\" must be set as an environmental variable!"
-msgstr ""
+msgstr "„AWS_ACCESS_KEY_ID“ musí být nastaveno jako proměnná prostředí!"
 
 #: ../fdroidserver/deploy.py
 msgid "\"AWS_SECRET_ACCESS_KEY\" must be set as an environmental variable!"
-msgstr ""
+msgstr "„AWS_SECRET_ACCESS_KEY“ musí být nastaveno jako proměnná prostředí!"
 
 #: ../fdroidserver/index.py
 msgid "\"isPrimary\" key should not be added to mirrors!"
@@ -147,9 +147,8 @@ msgid "'keystorepass' not found in config.yml!"
 msgstr "„keystorepass“ nebyl nalezen v souboru config.yml!"
 
 #: ../fdroidserver/deploy.py
-#, fuzzy
 msgid "'rclone_config' must be set in config.yml!"
-msgstr "Chcete-li používat rclone, musí být v souboru config.yml nastaven rclone_config a awsbucket!"
+msgstr "„rclone_config“ musí být nastaven v souboru config.yml!"
 
 #: ../fdroidserver/common.py
 msgid "'repo_keyalias' not found in config.yml!"
@@ -212,7 +211,7 @@ msgstr "Jako argument je vyžadována adresa URL!"
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "APK file {path} does not have a version code in its manifest"
-msgstr ""
+msgstr "Cesta k souboru APK {path} nemá ve svém manifestu kód verze"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -233,7 +232,7 @@ msgstr "Přidat souborů metadat kostry pro soubory APK, u kterých chybí"
 
 #: ../fdroidserver/deploy.py
 msgid "Adding all files to git mirror"
-msgstr ""
+msgstr "Přidávání všech souborů do zrcadla git"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -452,7 +451,7 @@ msgstr "Commitněte změny, proveďte a push a poté vytvořte žádost o slouč
 
 #: ../fdroidserver/deploy.py
 msgid "Committing index files to git mirror"
-msgstr ""
+msgstr "Odesílání indexových souborů do zrcadla git"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
@@ -479,14 +478,12 @@ msgid "Could not find latest version name"
 msgstr "Nepodařilo se najít název poslední verze"
 
 #: ../fdroidserver/import_subcommand.py
-#, fuzzy
 msgid "Could not find latest versionCode"
-msgstr "Nepodařilo se najít kód poslední verze"
+msgstr "Nepodařilo se najít versionCode"
 
 #: ../fdroidserver/import_subcommand.py
-#, fuzzy
 msgid "Could not find latest versionName"
-msgstr "Nepodařilo se najít název poslední verze"
+msgstr "Nepodařilo se najít poslední versionName"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -730,9 +727,9 @@ msgstr ""
 "> "
 
 #: ../fdroidserver/nightly.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Environment variable \"{name}\" has an empty value!"
-msgstr "Proměnná prostředí {{env: {var}}} není nastavena!"
+msgstr "Proměnná prostředí „{name}“ má prázdnou hodnotu!"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -1307,14 +1304,14 @@ msgid "No version information could be found."
 msgstr "Nenalezeny žádné informace o verzi."
 
 #: ../fdroidserver/scanner.py
-#, fuzzy, python-format
+#, python-format
 msgid "Non-exist scandelete path: %s"
-msgstr "Nepoužitá cesta scandelete: %s"
+msgstr "Neexistující cesta scandelete: %s"
 
 #: ../fdroidserver/scanner.py
-#, fuzzy, python-format
+#, python-format
 msgid "Non-exist scanignore path: %s"
-msgstr "Nepoužitá cesta scanignore: %s"
+msgstr "Neexistující cesta scanignore: %s"
 
 #: ../fdroidserver/common.py
 msgid "Not a valid size definition: \"{}\""
@@ -1697,9 +1694,9 @@ msgid "Skipping '{apkfilename}' with invalid signature!"
 msgstr "Přeskakování „{apkfilename}“ s neplatným podpisem!"
 
 #: ../fdroidserver/update.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Skipping '{apkfilename}' without versionCode!"
-msgstr "Přeskakování „{apkfilename}“ s neplatným podpisem!"
+msgstr "Přeskakuji „{apkfilename}“ bez versionCode!"
 
 #: ../fdroidserver/deploy.py ../fdroidserver/index.py
 #, python-format
@@ -1780,9 +1777,9 @@ msgid "The OBB version code must come after \"{name}.\":"
 msgstr "Kód verze OBB musí být uveden za „{name}.“:"
 
 #: ../fdroidserver/update.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The OBB versionCode must come after \"{name}.\":"
-msgstr "Kód verze OBB musí být uveden za „{name}.“:"
+msgstr "OBB versionCode musí být uveden za „{name}.“:"
 
 #: ../fdroidserver/btlog.py
 msgid "The base URL for the repo to log (default: https://f-droid.org)"
@@ -1971,9 +1968,9 @@ msgid "UpdateCheckData must match the version code as integer (\\d or [0-9]): {c
 msgstr "UpdateCheckData musí odpovídat kódu verze jako celému číslu (\\d nebo [0-9]): {codeex}"
 
 #: ../fdroidserver/lint.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "UpdateCheckData must match the versionCode as integer (\\d or [0-9]): {codeex}"
-msgstr "UpdateCheckData musí odpovídat kódu verze jako celému číslu (\\d nebo [0-9]): {codeex}"
+msgstr "UpdateCheckData musí odpovídat versionCode jako celému číslu (\\d nebo [0-9]): {codeex}"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
@@ -2026,9 +2023,9 @@ msgid "Using \"{path}\" for configuring s3cmd."
 msgstr "Používám „{path}“ pro konfiguraci s3cmd."
 
 #: ../fdroidserver/deploy.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Using \"{path}\" for rclone config."
-msgstr "Používám „{path}“ pro konfiguraci s3cmd."
+msgstr "Používám „{path}“ pro konfiguraci rclone."
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
@@ -2062,9 +2059,9 @@ msgid "Using existing keystore \"{path}\""
 msgstr "Používám existující keystore „{path}“"
 
 #: ../fdroidserver/deploy.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Using rclone to sync to \"{name}\""
-msgstr "Používám rclone pro synchronizaci s: {url}"
+msgstr "Používám rclone pro synchronizaci s „{name}“"
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
@@ -2473,9 +2470,9 @@ msgid "overwriting existing {path}"
 msgstr "přepisování existující {path}"
 
 #: ../fdroidserver/deploy.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "path_to_custom_rclone_config: \"{path}\" does not exist!"
-msgstr "Kořenový adresář pro local_copy_dir „{path}“ neexistuje!"
+msgstr "cesta_k_vlastnimu_konfiguracnimu_souboru_rclone: „{path}“ neexistuje!"
 
 #: /usr/lib/python3.11/argparse.py
 msgid "positional arguments"
