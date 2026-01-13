@@ -30,7 +30,7 @@
 # zhiqi <lzqlzq21@gmail.com>, 2023.
 # David Jiang <david.jiang2024@gmail.com>, 2023.
 # ALoLo_527 <ALoLo@users.noreply.hosted.weblate.org>, 2024.
-# 大王叫我来巡山 <hamburger2048@users.noreply.hosted.weblate.org>, 2024, 2025.
+# 大王叫我来巡山 <hamburger2048@users.noreply.hosted.weblate.org>, 2024, 2025, 2026.
 # chumoer <k17733196511@gmail.com>, 2024.
 # Wang <wang@plasma.ac.cn>, 2024.
 # Lily Chou <lily-develop@outlook.com>, 2024.
@@ -40,7 +40,7 @@ msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2026-01-13 11:22+0100\n"
-"PO-Revision-Date: 2025-10-01 15:02+0000\n"
+"PO-Revision-Date: 2026-01-13 13:03+0000\n"
 "Last-Translator: 大王叫我来巡山 <hamburger2048@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/projects/f-droid/fdroidserver/zh_Hans/>\n"
 "Language: zh_Hans\n"
@@ -48,7 +48,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.14-dev\n"
+"X-Generator: Weblate 5.15.2-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -212,13 +212,12 @@ msgid "'{value}' is not a valid {field}, should be {pattern}"
 msgstr "'{value}' 不是有效 {field}，应为 {pattern}"
 
 #: ../fdroidserver/common.py
-#, fuzzy
 msgid "'{}' does not start with a valid applicationId"
-msgstr "{appid} 没有名字！ 使用 application ID 代替."
+msgstr "'{}' 未以有效 applicationId 开头"
 
 #: ../fdroidserver/common.py
 msgid "'{}' is not a valid pair of applicationId:versionCode"
-msgstr ""
+msgstr "'{}' 非有效 applicationId:versionCode 对"
 
 #: ../fdroidserver/checkupdates.py
 msgid "--merge-request only runs on a single appid!"
@@ -372,9 +371,9 @@ msgid "Base URL to mirror, can include the index signing key using the query str
 msgstr "镜像的基本链接可以使用此请求参数包含索引签名键: ?fingerprint="
 
 #: ../fdroidserver/lint.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Branch '{branch}' used as commit in build '{versionCode}'"
-msgstr "分支 '{branch}' 在构建 '{versionName}' 时被用作相应的提交"
+msgstr "分支 '{branch}' 在 build '{versionCode}' 中被用作提交"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
@@ -537,9 +536,9 @@ msgid "Could not parse size \"{size}\", wrong type \"{type}\""
 msgstr "无法解析大小 \"{size}\", 错误类型 \"{type}\""
 
 #: ../fdroidserver/metadata.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Could not read {path} for {appid_versionCode}"
-msgstr "找不到最新版本代码"
+msgstr "无法读取 {appid_versionCode} 的 {path}"
 
 #. Translators: https://developer.android.com/build/configure-app-module#set-application-id
 #: ../fdroidserver/import_subcommand.py
@@ -643,7 +642,7 @@ msgstr "简介长度 {length} 超过 {limit} 字限制"
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Did not find '{versionCode}' in '{fieldname}' of {path}"
-msgstr ""
+msgstr "未找到 '{versionCode}'，查找范围为 {path} 的 '{fieldname}'"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -678,7 +677,7 @@ msgstr "不要从密钥库删除已生成的私钥"
 
 #: ../fdroidserver/scanner.py
 msgid "Do not throw an error on APKs with the debuggable flag set."
-msgstr ""
+msgstr "不对设置了可调试标记的 APK 文件抛出错误。"
 
 #: ../fdroidserver/build.py
 msgid "Don't create a source tarball, useful when testing a build"
@@ -903,7 +902,7 @@ msgstr "强制扫描已禁用的应用和内部版本。"
 
 #: ../fdroidserver/rewritemeta.py
 msgid "Format file from stdin and output the result to stdout"
-msgstr ""
+msgstr "调整来自 stdin 的文件的格式并输出接过到 stdout"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -1604,15 +1603,15 @@ msgstr "重命名文件名不符合 package.name_123.apk 的 APK 文件"
 
 #: ../fdroidserver/lint.py
 msgid "Repo: git URLs must use https://"
-msgstr ""
+msgstr "存储库： git URL 必须使用 https://"
 
 #: ../fdroidserver/lint.py
 msgid "Repo: srclib URLs must be only a srclib name, not a path or URL."
-msgstr ""
+msgstr "存储库： srclib URL 必须只是一个 srclib 名称，而非路径或 URL。"
 
 #: ../fdroidserver/lint.py
 msgid "Repo: srclib URLs must be the name of an existing srclib!"
-msgstr ""
+msgstr "存储库：srclib URL 必须是现有 srclib 的名称！"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -1728,9 +1727,9 @@ msgid "Set open file limit to {integer}"
 msgstr "将打开文件限制设置为 {integer}"
 
 #: ../fdroidserver/common.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Set up NDK {release} ({revision})"
-msgstr "设置 NDK {release} ({version})"
+msgstr "设置 NDK {release} ({revision})"
 
 #: ../fdroidserver/__main__.py
 msgid "Set up an app build for a nightly build repo"
@@ -1881,7 +1880,7 @@ msgstr "这些是已从主存储库存档的应用。"
 
 #: ../fdroidserver/common.py
 msgid "This command requires a signing key, you can create one using: fdroid update --create-key"
-msgstr ""
+msgstr "此命令需要签名密钥，创建方法：fdroid update --create-key"
 
 #: ../fdroidserver/mirror.py
 msgid "This command should never be used to mirror f-droid.org! A full copy requires more than 600GB."
@@ -1924,9 +1923,8 @@ msgid "To use rclone, rclone_config and awsbucket must be set in config.yml!"
 msgstr "要使用 rclone，必须在 config.yml 中设置 rclone_config 和 awsbucket！"
 
 #: ../fdroidserver/lint.py
-#, fuzzy
 msgid "URL must start with https://"
-msgstr "网址必须以 https:// 或 http:// 开头"
+msgstr "网址必须以 https:// 开头"
 
 #: ../fdroidserver/lint.py
 msgid "URL must start with https:// or http://"
@@ -1937,9 +1935,9 @@ msgid "URL shorteners should not be used"
 msgstr "不应使用 URL 缩短器"
 
 #: ../fdroidserver/lint.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "URL shorteners should not be used ({domain})"
-msgstr "不应使用 URL 缩短器"
+msgstr "不应使用 URL 缩短器（{domain}）"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
@@ -1964,9 +1962,9 @@ msgid "Unknown exception found!"
 msgstr "发生未知异常！"
 
 #: ../fdroidserver/lint.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Unknown file '{filename}' in build '{versionCode}'"
-msgstr "在构建版本 '{versionName}' 中出现了未知文件 '{filename}'"
+msgstr "build '{versionCode}' 中出现了未知文件 '{filename}'"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
@@ -2437,7 +2435,7 @@ msgstr "将元数据错误（默认）强制设为警告，或忽略。"
 
 #: ../fdroidserver/common.py
 msgid "forceversion requires versionName to be set"
-msgstr ""
+msgstr "forceversion 要求设置 versionName"
 
 #: ../fdroidserver/common.py
 msgid "git svn clone failed"
@@ -2586,14 +2584,14 @@ msgid "repo_icon \"repo/icons/%s\" does not exist, generating placeholder."
 msgstr "repo_icon \"repo/icons/%s\" 不存在，正在生成占位符。"
 
 #: ../fdroidserver/index.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "repo_icon \"{repo_icon}\" does not exist in \"{icon_dir}\", generating placeholder."
-msgstr "repo_icon \"repo/icons/%s\" 不存在，正在生成占位符。"
+msgstr "repo_icon \"{repo_icon}\" 在 \"{icon_dir}\" 中不存在，正在生成占位符。"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "repo_icon should be a filename ({name}), not a path!"
-msgstr ""
+msgstr "repo_icon 应为文件名 ({name})，不是路径！"
 
 #: ../fdroidserver/common.py
 msgid "repo_url needs to end with /repo"
@@ -2664,7 +2662,7 @@ msgstr "所提供的参考二进制已允许签名者 {signer}"
 #: ../fdroidserver/scanner.py
 #, python-brace-format
 msgid "suspicious permissions {st_mode:o}"
-msgstr ""
+msgstr "可疑权限 {st_mode:o}"
 
 #: /usr/lib/python3.11/argparse.py
 #, python-format
@@ -2710,7 +2708,7 @@ msgstr "virustotal.com正在限制速率，等待重试..."
 
 #: ../fdroidserver/install.py
 msgid "yes"
-msgstr "yes"
+msgstr "是"
 
 #: ../fdroidserver/publish.py
 #, python-brace-format
@@ -2757,9 +2755,9 @@ msgid "{appid} is missing {name}"
 msgstr "{appid}缺失了{name}"
 
 #: ../fdroidserver/lint.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{appid}: Unknown extlib {path} in build '{versionCode}'"
-msgstr "{appid}：在构建版本‘{versionName}’时在{path}中遇到了未知的extlib"
+msgstr "{appid}：build '{versionCode}' 中的未知 extlib {path}"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
@@ -2797,9 +2795,9 @@ msgid "{file} is blank or corrupt!"
 msgstr "{file} 是空的或已损坏！"
 
 #: ../fdroidserver/update.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{name} \"{repo_icon}\" does not exist in \"{icon_dir}/\"! Check \"config.yml\"."
-msgstr "{name}的“{section}/icons/{path}”不存在！请检查配置文件“config.yml”。"
+msgstr "{name} \"{repo_icon}\" 不存在于\"{icon_dir}/\" 中！检查 \"config.yml\"。"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -2834,7 +2832,7 @@ msgstr "{path}被virustotal标记了{count}次："
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "{path} has no '{fieldname}'"
-msgstr ""
+msgstr "{path} 没有 '{fieldname}'"
 
 #: ../fdroidserver/install.py
 #, python-brace-format
@@ -2884,7 +2882,7 @@ msgstr "{path}：{error}"
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "{tag} requires versionName to be set"
-msgstr ""
+msgstr "{tag} 要求设置 versionName"
 
 #: ../fdroidserver/mirror.py
 #, python-brace-format
