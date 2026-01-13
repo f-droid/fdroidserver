@@ -72,6 +72,7 @@ def main():
 
     if options.stdin:
         app = metadata.parse_yaml_metadata(sys.stdin)
+        app["id"] = "stdin"
         metadata.write_yaml(sys.stdout, app)
         logging.debug(_("Finished"))
         return
