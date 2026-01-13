@@ -1,12 +1,12 @@
 # SOME DESCRIPTIVE TITLE.
 # This file is put in the public domain.
-# Aindriú Mac Giolla Eoin <aindriu80@gmail.com>, 2024, 2025.
+# Aindriú Mac Giolla Eoin <aindriu80@gmail.com>, 2024, 2025, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 2.3a1-162-gfbb3cc59\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2026-01-13 11:22+0100\n"
-"PO-Revision-Date: 2025-09-30 14:02+0000\n"
+"PO-Revision-Date: 2026-01-13 16:26+0000\n"
 "Last-Translator: Aindriú Mac Giolla Eoin <aindriu80@gmail.com>\n"
 "Language-Team: Irish <https://hosted.weblate.org/projects/f-droid/fdroidserver/ga/>\n"
 "Language: ga\n"
@@ -14,7 +14,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=5; plural=n==1 ? 0 : n==2 ? 1 : (n>2 && n<7) ? 2 :(n>6 && n<11) ? 3 : 4;\n"
-"X-Generator: Weblate 5.14-dev\n"
+"X-Generator: Weblate 5.15.2-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -178,13 +178,12 @@ msgid "'{value}' is not a valid {field}, should be {pattern}"
 msgstr "Ní '{field} bailí é '{value}', ba chóir go mbeadh {pattern}"
 
 #: ../fdroidserver/common.py
-#, fuzzy
 msgid "'{}' does not start with a valid applicationId"
-msgstr "Níl ainm ar {appid}! Ag baint úsáide as ID iarratais ina ionad."
+msgstr "Ní thosaíonn '{}' le feidhmchlár-aitheantas bailí"
 
 #: ../fdroidserver/common.py
 msgid "'{}' is not a valid pair of applicationId:versionCode"
-msgstr ""
+msgstr "Ní péire bailí de applicationId:versionCode é '{}'"
 
 #: ../fdroidserver/checkupdates.py
 msgid "--merge-request only runs on a single appid!"
@@ -338,9 +337,9 @@ msgid "Base URL to mirror, can include the index signing key using the query str
 msgstr "Bun-URL le scáthán, is féidir an eochair sínithe innéacs a áireamh ag baint úsáide as teaghrán an iarratais: ?fingerprint="
 
 #: ../fdroidserver/lint.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Branch '{branch}' used as commit in build '{versionCode}'"
-msgstr "Brainse '{branch}' a úsáidtear mar gheall ar thógáil '{versionName}'"
+msgstr "Brainse '{branch}' in úsáid mar thiomantas sa tógáil '{versionCode}'"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
@@ -507,9 +506,9 @@ msgid "Could not parse size \"{size}\", wrong type \"{type}\""
 msgstr "Níorbh fhéidir méid \"{size}\" a pharsáil, cineál mícheart \"{type}\""
 
 #: ../fdroidserver/metadata.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Could not read {path} for {appid_versionCode}"
-msgstr "Níorbh fhéidir an Cód Leagan is déanaí a aimsiú"
+msgstr "Níorbh fhéidir {path} a léamh le haghaidh {appid_versionCode}"
 
 #. Translators: https://developer.android.com/build/configure-app-module#set-application-id
 #: ../fdroidserver/import_subcommand.py
@@ -613,7 +612,7 @@ msgstr "Tá cur síos ar fhad {length} os cionn na teorann char {limit}"
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Did not find '{versionCode}' in '{fieldname}' of {path}"
-msgstr ""
+msgstr "Níor aimsíodh '{versionCode}' i '{fieldname}' de {path}"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -648,7 +647,7 @@ msgstr "Ná bain na heochracha príobháideacha a ghintear ón siopa eochrach"
 
 #: ../fdroidserver/scanner.py
 msgid "Do not throw an error on APKs with the debuggable flag set."
-msgstr ""
+msgstr "Ná caith earráid ar APKanna leis an mbratach dífhabhtaithe socraithe."
 
 #: ../fdroidserver/build.py
 msgid "Don't create a source tarball, useful when testing a build"
@@ -873,7 +872,7 @@ msgstr "Fórsa scanadh apps faoi mhíchumas agus tógann."
 
 #: ../fdroidserver/rewritemeta.py
 msgid "Format file from stdin and output the result to stdout"
-msgstr ""
+msgstr "Formáidigh an comhad ó stdin agus cuir an toradh chuig stdout"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -1574,15 +1573,15 @@ msgstr "Athainmnigh comhaid APK nach bhfuil comhoiriúnach package.name_123.apk"
 
 #: ../fdroidserver/lint.py
 msgid "Repo: git URLs must use https://"
-msgstr ""
+msgstr "Stór: ní mór do URLanna git https:// a úsáid"
 
 #: ../fdroidserver/lint.py
 msgid "Repo: srclib URLs must be only a srclib name, not a path or URL."
-msgstr ""
+msgstr "Stór: ní mór URLanna srclib a bheith ina n-ainm srclib amháin, ní ina gcosán ná ina URL."
 
 #: ../fdroidserver/lint.py
 msgid "Repo: srclib URLs must be the name of an existing srclib!"
-msgstr ""
+msgstr "Stór: ní mór URLanna srclib a bheith ina n-ainm ar srclib atá ann cheana féin!"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -1702,9 +1701,9 @@ msgid "Set open file limit to {integer}"
 msgstr "Socraigh teorainn oscailte comhaid go {integer}"
 
 #: ../fdroidserver/common.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Set up NDK {release} ({revision})"
-msgstr "Socraigh NDK {release} ({version}) suas"
+msgstr "Socraigh NDK {release} ({revision})"
 
 #: ../fdroidserver/__main__.py
 msgid "Set up an app build for a nightly build repo"
@@ -1855,7 +1854,7 @@ msgstr "Is iad seo na feidhmchláir atá curtha i gcartlann ón bpríomh-repo."
 
 #: ../fdroidserver/common.py
 msgid "This command requires a signing key, you can create one using: fdroid update --create-key"
-msgstr ""
+msgstr "Éilíonn an t-ordú seo eochair shínithe, is féidir leat ceann a chruthú ag baint úsáide as: fdroid update --create-key"
 
 #: ../fdroidserver/mirror.py
 msgid "This command should never be used to mirror f-droid.org! A full copy requires more than 600GB."
@@ -1898,9 +1897,8 @@ msgid "To use rclone, rclone_config and awsbucket must be set in config.yml!"
 msgstr "Chun rclone a úsáid, ní mór rclone_config agus awsbucket a shocrú i config.yml!"
 
 #: ../fdroidserver/lint.py
-#, fuzzy
 msgid "URL must start with https://"
-msgstr "Ní mór URL tosú le https:// nó http://"
+msgstr "Ní mór don URL tosú le https://"
 
 #: ../fdroidserver/lint.py
 msgid "URL must start with https:// or http://"
@@ -1911,9 +1909,9 @@ msgid "URL shorteners should not be used"
 msgstr "Níor chóir giorraithe URL a úsáid"
 
 #: ../fdroidserver/lint.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "URL shorteners should not be used ({domain})"
-msgstr "Níor chóir giorraithe URL a úsáid"
+msgstr "Níor cheart giorraitheoirí URL a úsáid ({domain})"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
@@ -1938,9 +1936,9 @@ msgid "Unknown exception found!"
 msgstr "Aimsíodh eisceacht anaithnid!"
 
 #: ../fdroidserver/lint.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Unknown file '{filename}' in build '{versionCode}'"
-msgstr "Comhad anaithnid '{filename}' in build '{versionName}'"
+msgstr "Comhad anaithnid '{filename}' sa leagan '{versionCode}'"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
@@ -2419,7 +2417,7 @@ msgstr "bhfeidhm earráidí meiteashonraí (réamhshocrú) a bheith ina rabhaidh
 
 #: ../fdroidserver/common.py
 msgid "forceversion requires versionName to be set"
-msgstr ""
+msgstr "Éilíonn forceversion go socrófar versionName"
 
 #: ../fdroidserver/common.py
 msgid "git svn clone failed"
@@ -2568,14 +2566,14 @@ msgid "repo_icon \"repo/icons/%s\" does not exist, generating placeholder."
 msgstr "repo_icon níl \"repo/icons/%s\" ann, rud a ghineann sealbhóir áite."
 
 #: ../fdroidserver/index.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "repo_icon \"{repo_icon}\" does not exist in \"{icon_dir}\", generating placeholder."
-msgstr "repo_icon níl \"repo/icons/%s\" ann, rud a ghineann sealbhóir áite."
+msgstr "Níl repo_icon \"{repo_icon}\" ann i \"{icon_dir}\", ag giniúint áitchoinneálaí."
 
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "repo_icon should be a filename ({name}), not a path!"
-msgstr ""
+msgstr "Ba chóir go mbeadh repo_icon ina ainm comhaid ({name}), ní ina chonair!"
 
 #: ../fdroidserver/common.py
 msgid "repo_url needs to end with /repo"
@@ -2646,7 +2644,7 @@ msgstr "tá dénártha tagartha soláthraithe ceadaithe signer {signer}"
 #: ../fdroidserver/scanner.py
 #, python-brace-format
 msgid "suspicious permissions {st_mode:o}"
-msgstr ""
+msgstr "ceadanna amhrasacha {st_mode:o}"
 
 #: /usr/lib/python3.11/argparse.py
 #, python-format
@@ -2743,9 +2741,9 @@ msgid "{appid} is missing {name}"
 msgstr "Tá {appid} ar iarraidh {name}"
 
 #: ../fdroidserver/lint.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{appid}: Unknown extlib {path} in build '{versionCode}'"
-msgstr "{appid}: Extlib {path} anaithnid i dtógáil '{versionName}'"
+msgstr "{appid}: Extlib anaithnid {path} sa tógáil '{versionCode}'"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
@@ -2783,9 +2781,9 @@ msgid "{file} is blank or corrupt!"
 msgstr "Tá {file} bán nó truaillithe!"
 
 #: ../fdroidserver/update.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{name} \"{repo_icon}\" does not exist in \"{icon_dir}/\"! Check \"config.yml\"."
-msgstr "{name} Níl \"{section}/icons/{path}\" ann! Seiceáil \"config.yml\"."
+msgstr "Níl {name} \"{repo_icon}\" le fáil i \"{icon_dir}/\"! Seiceáil \"config.yml\"."
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -2820,7 +2818,7 @@ msgstr "{path} curtha faoi bhratach ag virustotal {count} times:"
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "{path} has no '{fieldname}'"
-msgstr ""
+msgstr "Níl '{fieldname}' ag {path}"
 
 #: ../fdroidserver/install.py
 #, python-brace-format
@@ -2870,7 +2868,7 @@ msgstr "{path}: {error}"
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "{tag} requires versionName to be set"
-msgstr ""
+msgstr "Éilíonn {tag} go socrófar versionName"
 
 #: ../fdroidserver/mirror.py
 #, python-brace-format
