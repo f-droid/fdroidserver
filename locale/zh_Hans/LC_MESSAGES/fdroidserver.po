@@ -40,7 +40,7 @@ msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2025-09-29 14:29+0200\n"
-"PO-Revision-Date: 2025-06-26 06:55+0000\n"
+"PO-Revision-Date: 2025-10-01 15:02+0000\n"
 "Last-Translator: 大王叫我来巡山 <hamburger2048@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/projects/f-droid/fdroidserver/zh_Hans/>\n"
 "Language: zh_Hans\n"
@@ -48,9 +48,8 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.13-dev\n"
+"X-Generator: Weblate 5.14-dev\n"
 
-#: ../fdroidserver/nightly.py
 msgid ""
 "\n"
 "SSH public key to be used as deploy key:"
@@ -58,7 +57,6 @@ msgstr ""
 "\n"
 "用作布署密钥的 SSH 公钥:"
 
-#: ../fdroidserver/nightly.py
 #, python-brace-format
 msgid ""
 "\n"
@@ -67,682 +65,529 @@ msgstr ""
 "\n"
 "编码的 DEBUG_KEYSTORE {path} 秘密变量:"
 
-#: ../fdroidserver/lint.py
 #, python-format
 msgid "\"%s/\" has no matching metadata file!"
 msgstr "\"%s/\" 没有与之匹配的元数据文件!"
 
-#: ../fdroidserver/deploy.py
 msgid "\"AWS_ACCESS_KEY_ID\" must be set as an environmental variable!"
-msgstr ""
+msgstr "\"AWS_ACCESS_KEY_ID\" 必须设为环境变量！"
 
-#: ../fdroidserver/deploy.py
 msgid "\"AWS_SECRET_ACCESS_KEY\" must be set as an environmental variable!"
-msgstr ""
+msgstr "\"AWS_SECRET_ACCESS_KEY\" 必须设为环境变量！"
 
-#: ../fdroidserver/index.py
 msgid "\"isPrimary\" key should not be added to mirrors!"
 msgstr "\"isPrimary\" 密钥不应被添加到镜像！"
 
-#: ../fdroidserver/index.py
 #, python-brace-format
 msgid "\"local_copy_dir\" {path} does not exist!"
 msgstr "\"local_copy_dir\" {path} 不存在！"
 
-#: ../fdroidserver/install.py
 #, python-brace-format
 msgid "\"{apkfilename}\" is already installed on {dev}."
 msgstr "'{apkfilename}' 已安装在 {dev} 上."
 
-#: ../fdroidserver/update.py
 #, python-brace-format
 msgid "\"{path}\" contains recent {name} ({version})"
 msgstr "\"{path}\" 包含近期的 {name} ({version})"
 
-#: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "\"{path}\" exists but s3cmd is not installed!"
 msgstr "\"{path}\" 存在, 但 s3cmd 未安装!"
 
-#: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "\"{path}\" is not a supported file format (use: metadata/*.yml)"
 msgstr "\"{path}\" 不是受支持的文件格式（请用：metadata/*.yml）"
 
-#: ../fdroidserver/update.py
 #, python-brace-format
 msgid "\"{path}\" is signed by a key that is not allowed:"
 msgstr "\"{path}\" 由不允许的密钥所签署："
 
-#: ../fdroidserver/import_subcommand.py
 #, python-brace-format
 msgid "\"{url}\" is not a valid URL!"
 msgstr "\"{url}\" 不是有效的链接!"
 
-#: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "%(prog)s: error: %(message)s\n"
 msgstr "%(prog)s：错误：%(message)s\n"
 
-#: ../fdroidserver/publish.py
 #, python-format
 msgid "%d APKs failed to be signed or verified!"
 msgstr "%d 个 APK 无法签名或验证！"
 
-#: ../fdroidserver/scanner.py
 #, python-format
 msgid "%d problems found"
 msgstr "发现 %d 个问题"
 
-#: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "%r is not callable"
 msgstr "%r 不可调用"
 
-#: ../fdroidserver/signindex.py
 #, python-format
 msgid "%s did not produce a dict!"
 msgstr "%s 未能产生字典！"
 
-#: ../fdroidserver/signindex.py
 #, python-format
 msgid "%s has bad SHA-256: %s"
 msgstr "%s 的 SHA-256 值不正确：%s"
 
-#: ../fdroidserver/lint.py
 #, python-format
 msgid "%s is not an accepted build field"
 msgstr "%s 不是一个被接受的构建字段"
 
-#: ../fdroidserver/common.py
 msgid "'keypass' not found in config.yml!"
 msgstr "config.yml 中找不到 'keypass'!"
 
-#: ../fdroidserver/common.py
 msgid "'keystore' is NONE and 'smartcardoptions' is blank!"
 msgstr "'keystore' 没有赋值, 'smartcardoptions' 为空 !"
 
-#: ../fdroidserver/common.py
 msgid "'keystore' not found in config.yml!"
 msgstr "config.yml 中找不到 'keystore'!"
 
-#: ../fdroidserver/common.py
 msgid "'keystorepass' not found in config.yml!"
 msgstr "config.yml 中找不到 'keystorepass'!"
 
-#: ../fdroidserver/deploy.py
-#, fuzzy
 msgid "'rclone_config' must be set in config.yml!"
-msgstr "要使用 rclone，必须在 config.yml 中设置 rclone_config 和 awsbucket！"
+msgstr "config.yml 中必须设置 'rclone_config' ！"
 
-#: ../fdroidserver/common.py
 msgid "'repo_keyalias' not found in config.yml!"
 msgstr "config.yml 中找不到 'repo_keyalias'!"
 
-#: /usr/lib/python3.11/argparse.py
 msgid "'required' is an invalid argument for positionals"
 msgstr "'required' 是位置的无效参数"
 
-#: ../fdroidserver/common.py
 msgid "'sdk_path' not set in config.yml!"
 msgstr "未在 config.yml 中设置 'sdk_path'!"
 
-#: ../fdroidserver/common.py
 #, python-brace-format
 msgid "'{aapt}' is too old, fdroid requires build-tools-{version} or newer!"
 msgstr "'{aapt}' 太旧, F-Droid 需要 build-tools-{version} 或更新的版本!"
 
-#: ../fdroidserver/common.py
 #, python-brace-format
 msgid "'{path}' failed to execute!"
 msgstr "'{path}' 执行失败!"
 
-#: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "'{path}' has invalid format, it should be a dictionary!"
 msgstr "'{path}' 是无效格式, 它应该是字典!"
 
-#: ../fdroidserver/lint.py ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "'{value}' is not a valid {field} in {appid}. Regex pattern: {pattern}"
 msgstr "'{value}' 不是 {appid} 之有效 {field}. 正则表达式: {pattern}"
 
-#: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "'{value}' is not a valid {field}, should be {pattern}"
 msgstr "'{value}' 不是有效 {field}，应为 {pattern}"
 
-#: ../fdroidserver/checkupdates.py
 msgid "--merge-request only runs on a single appid!"
 msgstr "--merge-request 只运行在单个 appid 上！"
 
-#: ../fdroidserver/checkupdates.py
 #, python-brace-format
 msgid "...checkupdate failed for {appid} : {error}"
 msgstr "…为 {appid} 检查更新失败: {error}"
 
-#: /usr/lib/python3.11/argparse.py
 msgid ".__call__() not defined"
 msgstr ".__call__() 未定义"
 
-#: ../fdroidserver/lint.py
 msgid "/issues is missing"
 msgstr "路径缺少 /issues ( 译者注: 此处仅支持 github 或 gitlab 之 issues 链接 )"
 
-#: ../fdroidserver/mirror.py
 msgid "A URL is required as an argument!"
 msgstr "需要有一个链接作为参数!"
 
-#: ../fdroidserver/update.py
 #, python-brace-format
 msgid "APK file {path} does not have a version code in its manifest"
-msgstr ""
+msgstr "APK 文件 {path} 在其清单文件中没有版本码"
 
-#: ../fdroidserver/common.py
 #, python-brace-format
 msgid "APK signatures have different certificates in {path}:"
 msgstr "APK 签名在 {path} 中有不同的证书："
 
-#: ../fdroidserver/__main__.py
 msgid "Add PGP signatures using GnuPG for packages in repo"
 msgstr "使用 GnuPG 为存储库之软件包添加 PGP 签名"
 
-#: ../fdroidserver/update.py
 msgid "Add a repo signing key to an unsigned repo"
 msgstr "添加存储库签名密钥到未签名的存储库"
 
-#: ../fdroidserver/update.py
 msgid "Add skeleton metadata files for APKs that are missing them"
 msgstr "为缺少主干元数据文件的 APK 添加这些文件"
 
-#: ../fdroidserver/deploy.py
 msgid "Adding all files to git mirror"
-msgstr ""
+msgstr "添加所有文件到 git 镜像"
 
-#: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Adding new repo for only {name}"
 msgstr "仅为 {name} 添加新存储库"
 
-#: ../fdroidserver/init.py
 msgid "Alias of the repo signing key in the keystore"
 msgstr "密钥库中存储库签名密钥的别名"
 
-#: ../fdroidserver/build.py
 msgid "AllowedAPKSigningKeys missing but reference binary supplied"
 msgstr "缺少 AllowedAPKSigningKeys，但提供了参考二进制文件"
 
-#: ../fdroidserver/import_subcommand.py
 msgid "Allows a different revision (or git branch) to be specified for the initial import"
 msgstr "可让运行初始导入时指定不同修订 ( 或 git 分支 )"
 
-#: ../fdroidserver/mirror.py
 msgid "Also mirror the full archive section"
 msgstr "同时对存档部分完整镜像"
 
-#: ../fdroidserver/lint.py
 msgid "Also warn about formatting issues, like rewritemeta -l"
 msgstr "同时警告格式问题, 如同 rewritemeta -l"
 
-#: ../fdroidserver/scanner.py
 msgid "Android AAR library"
 msgstr "Android AAR 库"
 
-#: ../fdroidserver/scanner.py
 msgid "Android APK file"
 msgstr "Android APK 文件"
 
-#: ../fdroidserver/scanner.py
 msgid "Android DEX code"
 msgstr "Android DEX 代码"
 
-#: ../fdroidserver/init.py
 #, python-brace-format
 msgid "Android SDK not found at {path}!"
 msgstr "未在 {path} 中找到 Android SDK!"
 
-#: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Android SDK path '{path}' does not exist!"
 msgstr "Android SDK 路径 {path} 不存在!"
 
-#: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Android SDK path '{path}' is not a directory!"
 msgstr "Android SDK 路径 '{path}' 不是目录!"
 
-#: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Android SDK tool {cmd} not found!"
 msgstr "没找到 Android SDK 工具 {cmd}！"
 
-#: ../fdroidserver/lint.py
 msgid "App has Binaries but does not have corresponding AllowedAPKSigningKeys to pin certificate."
 msgstr "应用具有二进制文件，但没有相应的AllowedAPKSigningKeys 来固定证书。"
 
-#: ../fdroidserver/lint.py
 msgid "App has NoSourceSince or ArchivePolicy \"0 versions\" or 0 but AutoUpdateMode or UpdateCheckMode are not None"
 msgstr "APK 有 NoSourceSince 或 ArchivePolicy \"0 versions\" 或 0 但 AutoUpdateMode 或 UpdateCheckMode 不是 None"
 
-#: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "App is in '{repo}' but has a link to {url}"
 msgstr "应用 在 '{repo}' 中, 但有一个链接到 {url}"
 
-#: ../fdroidserver/lint.py
 msgid "App version has binary but does not have corresponding AllowedAPKSigningKeys to pin certificate."
 msgstr "应用版本具有二进制文件，但没有相应的 AllowedAPKSigningKeys 来固定证书。"
 
-#: ../fdroidserver/lint.py
 msgid "Appending .git is not necessary"
 msgstr "不需要附加 .git"
 
-#: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Archiving {apkfilename} with invalid signature!"
 msgstr "正使用无效签名归档 {apkfilename}!"
 
-#: ../fdroidserver/lint.py
 msgid "AutoUpdateMode with UpdateCheckMode: HTTP must have a pattern."
 msgstr "AutoUpdateMode 和 UpdateCheckMode：HTTP 必须有一个模式。"
 
-#: ../fdroidserver/install.py
 msgid "Automatic no to all prompts."
 msgstr "对所有提示自动回复 no。"
 
-#: ../fdroidserver/install.py
 msgid "Automatic yes to all prompts."
 msgstr "对所有提示自动回复 yes。"
 
-#: ../fdroidserver/index.py
 #, python-brace-format
 msgid "Bad entry type \"{mirrortype}\" in mirrors config: {mirror}"
 msgstr "镜像配置中的错误条目类型“{mirrortype}”：{mirror}"
 
-#: ../fdroidserver/mirror.py
 msgid "Base URL to mirror, can include the index signing key using the query string: ?fingerprint="
 msgstr "镜像的基本链接可以使用此请求参数包含索引签名键: ?fingerprint="
 
-#: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "Branch '{branch}' used as commit in build '{versionName}'"
 msgstr "分支 '{branch}' 在构建 '{versionName}' 时被用作相应的提交"
 
-#: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "Branch '{branch}' used as commit in srclib '{srclib}'"
 msgstr "分支 '{branch}' 在源码库 '{srclib}' 里被用作相应的提交"
 
-#: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Broken symlink: {path}"
 msgstr "断开的符号链接: {path}"
 
-#: ../fdroidserver/__main__.py
 msgid "Build a package from source"
 msgstr "从源代码构建安装包"
 
-#: ../fdroidserver/build.py
 msgid "Build all applications available"
 msgstr "构建全部可用应用"
 
-#: ../fdroidserver/lint.py
 msgid "Build generated by `fdroid import` - remove disable line once ready"
 msgstr "由 'fdroid import' 生成的构建 - 一旦准备就绪将删除禁用行"
 
-#: ../fdroidserver/checkupdates.py
 msgid "Build metadata git repo has uncommited changes!"
 msgstr "构建元数据 git 存储库包含未提交的更改!"
 
-#: ../fdroidserver/build.py
 msgid "Build only the latest version of each package"
 msgstr "仅编译每个应用的最新版本"
 
-#: ../fdroidserver/init.py
 #, python-format
 msgid "Built repo based in \"%s\" with this config:"
 msgstr "使用此配置并基于 \"%s\" 的构建存储库："
 
-#: ../fdroidserver/checkupdates.py
 msgid "Can't auto-update app with no CurrentVersionCode"
 msgstr "在没有CurrentVersionCode的情况下不能自动更新应用"
 
-#: ../fdroidserver/build.py
 msgid "Can't build due to {} error while scanning"
 msgid_plural "Can't build due to {} errors while scanning"
 msgstr[0] "因扫描时的{}错误而无法构建"
 
-#: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Cannot read {path}: {error}"
 msgstr "无法读取 {path} ：{error}"
 
-#: ../fdroidserver/rewritemeta.py
 #, python-brace-format
 msgid "Cannot rewrite \"{path}\""
 msgstr "无法重写 {path}"
 
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vname
-#: ../fdroidserver/lint.py
 #, python-format
 msgid "Categories '%s' is not valid"
 msgstr "类别 '%s' 无效"
 
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vname
-#: ../fdroidserver/lint.py
 msgid "Categories are not set"
 msgstr "没有设置类别"
 
-#: ../fdroidserver/index.py
 #, python-brace-format
 msgid "Category \"{category}\" defined but not used for any apps!"
 msgstr "类别“{category}”已定义，但未被用于任何应用！"
 
-#: ../fdroidserver/__main__.py
 msgid "Check for updates to applications"
 msgstr "检查应用的更新"
 
-#: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Checking archiving for {appid} - apks:{integer}, keepversions:{keep}, archapks:{arch}"
 msgstr "正为 {appid} 检查存档: 安装包: {integer}, 保留版本数: {keep}, 架构安装包: {arch}"
 
-#: ../fdroidserver/update.py
 msgid "Clean update - don't uses caches, reprocess all APKs"
 msgstr "干净的更新 - 不使用缓存，重新处理全部 APK 文件"
 
-#: ../fdroidserver/common.py
 msgid "Color the log output"
 msgstr "给日志输出添加颜色"
 
-#: ../fdroidserver/import_subcommand.py
 msgid "Comma separated list of categories."
 msgstr "逗号分割的目录列表。"
 
-#: ../fdroidserver/__main__.py
 #, python-format
 msgid "Command '%s' not recognised.\n"
 msgstr "无法识别命令 '%s'。\n"
 
-#: ../fdroidserver/checkupdates.py
 msgid "Commit changes"
 msgstr "提交更改"
 
-#: ../fdroidserver/checkupdates.py
 msgid "Commit changes, push, then make a merge request"
 msgstr "提交改动、推动，然后提出合并请求"
 
-#: ../fdroidserver/deploy.py
 msgid "Committing index files to git mirror"
-msgstr ""
+msgstr "提交索引文件到 git 镜像"
 
-#: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Conflicting \"{field}\" definitions between .yml and localized files:"
 msgstr ".yml 和本地化文件之间的“{field}”定义冲突："
 
-#: ../fdroidserver/__main__.py
 msgid "Conflicting arguments: '--verbose' and '--quiet' can not be specified at the same time."
 msgstr "冲突的参数: '--verbose' 和 '--quiet' 不能被同时使用."
 
-#: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Could not find '{command}' on your system"
 msgstr "在您的系统中无法找到 '{command}'"
 
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
-#: ../fdroidserver/import_subcommand.py
 msgid "Could not find latest version code"
 msgstr "找不到最新版本代码"
 
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vname
-#: ../fdroidserver/import_subcommand.py
 msgid "Could not find latest version name"
 msgstr "找不到最新的版本名"
 
-#: ../fdroidserver/import_subcommand.py
-#, fuzzy
 msgid "Could not find latest versionCode"
 msgstr "找不到最新版本代码"
 
-#: ../fdroidserver/import_subcommand.py
-#, fuzzy
 msgid "Could not find latest versionName"
 msgstr "找不到最新的版本名"
 
-#: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Could not find {path} to remove it"
 msgstr "找不到 {path} 以移除"
 
-#: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Could not open APK {path} for analysis: "
 msgstr "无法打开 apk 文件 {path} 用于分析: "
 
-#: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Could not parse size \"{size}\", wrong type \"{type}\""
 msgstr "无法解析大小 \"{size}\", 错误类型 \"{type}\""
 
 #. Translators: https://developer.android.com/build/configure-app-module#set-application-id
-#: ../fdroidserver/import_subcommand.py
 msgid "Couldn't find Application ID"
 msgstr "找不到应用ID"
 
-#: ../fdroidserver/checkupdates.py
 msgid "Couldn't find any version information"
 msgstr "无法找到任何的版本信息"
 
-#: ../fdroidserver/checkupdates.py
 msgid "Couldn't find package ID"
 msgstr "找不到安装包 ID"
 
-#: ../fdroidserver/update.py
 msgid "Cowardily refusing to overwrite existing signing key setup!"
 msgstr "拒绝覆盖现有的签署密钥设置!"
 
-#: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "Created new container \"{name}\""
 msgstr "创建新容器 \"{name}\""
 
-#: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "Creating \"{path}\" for configuring s3cmd."
 msgstr "创建用于配置 s3cmd 的 \"{path}\"。"
 
-#: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Creating empty {config_file}"
 msgstr "正在创建空的 {config_file} 文件"
 
-#: ../fdroidserver/publish.py
 msgid "Creating log directory"
 msgstr "创建日志目录"
 
-#: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "Creating new S3 bucket: {url}"
 msgstr "创建新的 S3 存储桶：{url}"
 
-#: ../fdroidserver/publish.py
 msgid "Creating output directory"
 msgstr "创建输出目录"
 
-#: ../fdroidserver/index.py
 msgid "Creating signed index with this key (SHA256):"
 msgstr "使用此密钥 (SHA256) 创建签名索引："
 
-#: ../fdroidserver/publish.py ../fdroidserver/verify.py
 msgid "Creating temporary directory"
 msgstr "创建临时目录"
 
-#: ../fdroidserver/index.py
 msgid "Creating unsigned index in preparation for signing"
 msgstr "创建未签名的索引以准备签名"
 
-#: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "CurrentVersionCode {cv} is less than oldest build entry {versionCode}"
 msgstr "当前版本代码 {cv} 小于最旧的构建 {versionCode}"
 
-#: ../fdroidserver/nightly.py
 msgid "DEBUG_KEYSTORE is not set or the value is incomplete"
 msgstr "DEBUG_KEYSTORE 未被设置或不完整"
 
-#: ../fdroidserver/update.py
 msgid "Delete APKs and/or OBBs without metadata from the repo"
 msgstr "从存储库中删除没有元数据的 APK 和 OBB"
 
-#: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "Deleting archive, repo is too big ({size} max {limit})"
 msgstr "存储库过大，将删除存档（大小 {size}，限制 {limit}）"
 
-#: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "Deleting git-mirror history, repo is too big ({size} max {limit})"
 msgstr "存储库过大，将删除镜像历史（大小 {size}，限制 {limit}）"
 
-#: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Deleting unknown file: {path}"
 msgstr "删除未知文件： {path}"
 
-#: ../fdroidserver/lint.py
 #, python-format
 msgid "Description '%s' is just the app's summary"
 msgstr "简介“%s”与应用的概括文字相同"
 
-#: ../fdroidserver/lint.py
 msgid "Description has a duplicate line"
 msgstr "简介有重复行"
 
-#: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "Description of length {length} is over the {limit} char limit"
 msgstr "简介长度 {length} 超过 {limit} 字限制"
 
-#: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Did you mean config/{name}.yml?"
 msgstr "您是指 config/{name}.yml 吗？"
 
-#: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "Did you mean {code}?"
 msgstr "您是指 {code} 吗？"
 
-#: ../fdroidserver/import_subcommand.py
 msgid "Do not add 'disable:' to the generated build entries"
 msgstr "不要给生成的构建项添加 'disable:'"
 
-#: ../fdroidserver/nightly.py
 msgid "Do not deploy the new files to the repo"
 msgstr "不要给这个仓库部署新文件"
 
-#: ../fdroidserver/mirror.py
 #, python-brace-format
 msgid "Do not include \"{path}\" in URL!"
 msgstr "不要在链接中包含“{path}”！"
 
-#: ../fdroidserver/init.py
 msgid "Do not prompt for Android SDK path, just fail"
 msgstr "不提示输入 Android SDK 路径，仅显示失败"
 
-#: ../fdroidserver/nightly.py
 msgid "Do not remove the private keys generated from the keystore"
 msgstr "不要从密钥库删除已生成的私钥"
 
-#: ../fdroidserver/build.py
 msgid "Don't create a source tarball, useful when testing a build"
 msgstr "不创建源码 tarball 文件，便于内部版本测试"
 
-#: ../fdroidserver/build.py
 msgid "Don't refresh the repository, useful when testing a build with no internet connection"
 msgstr "不刷新资源库，便于没有互联网时的内部版本测试"
 
-#: ../fdroidserver/deploy.py ../fdroidserver/nightly.py
 msgid "Don't use rsync checksums"
 msgstr "请勿使用 rsync 校验和"
 
-#: ../fdroidserver/install.py
 msgid "Download F-Droid.apk using mirrors that leak less to the network"
 msgstr "使用向网络泄露较少信息的镜像下载 F-Droid apk"
 
-#: ../fdroidserver/__main__.py
 msgid "Download complete mirrors of small repos"
 msgstr "下载小型仓库的完整镜像"
 
-#: ../fdroidserver/common.py
 msgid "Downloading the repository already failed once, not trying again."
 msgstr "下载仓库已经失败了一次，不再尝试。"
 
-#: ../fdroidserver/verify.py
 #, python-brace-format
 msgid "Downloading {url} failed. {error}"
 msgstr "{url} 下载失败。{error}"
 
-#: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Duplicate Anti-Feature declaration at {path} was ignored!"
 msgstr "{path} 处的重复负面特征声明被忽略！"
 
-#: ../fdroidserver/index.py
 #, python-format
 msgid "Duplicate entry \"%s\" in mirrors config!"
 msgstr "镜像配置中的重复条目“%s”！"
 
-#: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "Duplicate link in '{field}': {url}"
 msgstr "“{field}”中有重复的链接：{url}"
 
-#: ../fdroidserver/common.py
 #, python-format
 msgid "ERROR: %(message)s"
 msgstr "错误：%(message)s"
 
-#: ../fdroidserver/__main__.py
 msgid "ERROR: The \"server\" subcommand has been removed, use \"deploy\"!"
 msgstr "错误：\"server\" 子命令已被删除，请使用 \"deploy\"！"
 
-#: ../fdroidserver/nightly.py
 msgid "ERROR: unsupported CI type, patches welcome!"
 msgstr "错误：不支持的 CI 类型，欢迎提交补丁添加支持！"
 
-#: ../fdroidserver/nightly.py
 #, python-format
 msgid "ERROR: unsupported git host \"%s\", patches welcome!"
 msgstr "错误：不支持的 git 主机类型 \"%s\"，欢迎提交补丁添加支持！"
 
-#: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "ERROR: {key} in {path} is not \"archive\" or \"repo\"!"
 msgstr "错误: {path}中的{key}不是“archive”或“repo”！"
 
-#: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "ERROR: {key} not a valid key!"
 msgstr "错误：{key} 不是有效的密钥！"
 
-#: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "ERROR: {key}'s value should be of type {t}!"
 msgstr "错误：{key} 的值的类型应为 {t}！"
 
-#: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "ERROR: {key}:{subkey} in {path} is not in allowed keys: {allowed_keys}!"
 msgstr "错误: {path}中的{key}:{subkey}不再被允许的值的范围内: {allowed_keys}！"
 
-#: ../fdroidserver/__main__.py
 #, python-brace-format
 msgid "Encoding is set to '{enc}' fdroid might run into encoding issues. Please set it to 'UTF-8' for best results."
 msgstr "编码被设置为“{enc}”，可能会导致 fdroid 出现编码问题。为了最佳效果，请将其更改为“UTF-8”。"
 
-#: ../fdroidserver/init.py
 #, python-format
 msgid ""
 "Enter the path to the Android SDK (%s) here:\n"
@@ -751,1102 +596,852 @@ msgstr ""
 "请在此处输入 Android SDK（%s）的路径：\n"
 "> "
 
-#: ../fdroidserver/nightly.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Environment variable \"{name}\" has an empty value!"
-msgstr "没有设置环境变量 {{env: {var}}} ！"
+msgstr "环境变量“{name}”值为空！"
 
-#: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Environment variable {var} from {configname} is not set!"
 msgstr "没有设置 {configname} 中的环境变量 {var}！"
 
-#: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Environment variable {{env: {var}}} is not set!"
 msgstr "没有设置环境变量 {{env: {var}}} ！"
 
-#: ../fdroidserver/deploy.py
 msgid "Error deploying 'github_releases', {} not present. (You might need to run `fdroid update` first.)"
 msgstr "部署'github_releases'错误，{}没有出现。(你可能需要先运行`fdroid update`)"
 
-#: ../fdroidserver/import_subcommand.py
 msgid "Error while getting repo address"
 msgstr "获取存储库地址时出错"
 
-#: ../fdroidserver/scanner.py
 msgid "Exit with a non-zero code if problems were found"
 msgstr "如果发现问题，则以非零代码退出"
 
-#: ../fdroidserver/__main__.py
 msgid "Extract application metadata from a source repository"
 msgstr "从源存储库中提取应用元数据"
 
-#: ../fdroidserver/__main__.py
 msgid "Extract signatures from APKs"
 msgstr "从 APK 中提取签名"
 
-#: ../fdroidserver/install.py
 msgid "F-Droid.apk could not be downloaded from any known source!"
 msgstr "无法从任何已知的来源下载 F-Droid apk！"
 
-#: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Failed copying {path}: {error}"
 msgstr "复制 {path} 失败：{error}"
 
-#: ../fdroidserver/signatures.py
 #, python-brace-format
 msgid "Failed fetching signatures for '{apkfilename}': {error}"
 msgstr "获取 '{apkfilename}' 的签名时出错：{error}"
 
-#: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Failed reading {path}: {error}"
 msgstr "读取 {path} 失败：{error}"
 
-#: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Failed resizing {path}: {error}"
 msgstr "缩放 {path} 失败：{error}"
 
-#: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "Failed to create S3 bucket: {url}"
 msgstr "创建亚马逊简易储存服务失败：{url}"
 
-#: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Failed to get APK information, deleting {path}"
 msgstr "获取 APK 信息失败，正在删除 {path}"
 
-#: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Failed to get APK information, skipping {path}"
 msgstr "获取APK信息失败，跳过{path}"
 
-#: ../fdroidserver/update.py
 msgid "Failed to get APK signing key fingerprint"
 msgstr "未能获取APK签名密钥指纹"
 
-#: ../fdroidserver/install.py
 #, python-brace-format
 msgid "Failed to install '{apkfilename}' on {dev}: {error}"
 msgstr "无法在 {dev} 上安装 '{apkfilename}'：{error}"
 
-#: ../fdroidserver/common.py
 msgid "Failed to sign application"
 msgstr "未能对应用进行签名"
 
-#: ../fdroidserver/build.py
 #, python-brace-format
 msgid "Fetched buildserverid from VM: {buildserverid}"
 msgstr "从虚拟机获取了buildserverid：{buildserverid}"
 
-#: ../fdroidserver/signatures.py
 #, python-brace-format
 msgid "Fetched signatures for '{apkfilename}' -> '{sigdir}'"
 msgstr "获取了'{apkfilename}'的签名-> '{sigdir}'"
 
-#: ../fdroidserver/update.py
 #, python-brace-format
 msgid "File disappeared while processing it: {path}"
 msgstr "文件在处理时消失： {path}"
 
-#: ../fdroidserver/build.py ../fdroidserver/install.py
-#: ../fdroidserver/rewritemeta.py ../fdroidserver/scanner.py
-#: ../fdroidserver/update.py
 msgid "Finished"
 msgstr "已完成"
 
-#: ../fdroidserver/lint.py
 msgid "Forbidden HTML tags"
 msgstr "禁止的HTML标签"
 
-#: ../fdroidserver/build.py
 msgid "Force build of disabled apps, and carries on regardless of scan problems. Only allowed in test mode."
 msgstr "强制编译已禁用应用，忽略扫描出错。仅用于测试模式。"
 
-#: ../fdroidserver/build.py
 #, python-brace-format
 msgid "Force halting build after {0} sec timeout!"
 msgstr "在{0}秒超时后强制停止构建!"
 
-#: ../fdroidserver/scanner.py
 msgid "Force scan of disabled apps and builds."
 msgstr "强制扫描已禁用的应用和内部版本。"
 
-#: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Found \"{path}\" graphic without metadata for app \"{name}\"!"
 msgstr "为应用“{name}”找到了没有元数据的“{path}”图形！"
 
-#: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Found bad funding file \"{path}\" for \"{name}\":"
 msgstr "为“{name}”找到了错误的资金文件“{path}”："
 
-#: ../fdroidserver/common.py
 msgid "Found invalid appids in arguments"
 msgstr "在参数中发现无效的appids"
 
-#: ../fdroidserver/common.py
 msgid "Found invalid versionCodes for some apps"
 msgstr "发现某些应用的版本代码无效"
 
-#: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Found multiple JAR Signature Block Files in {path}"
 msgstr "在{path}中发现多个JAR签名块文件"
 
-#: ../fdroidserver/common.py
 msgid "Found multiple Signer Certificates!"
 msgstr "找到了多个签署者证书！"
 
-#: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Found multiple metadata files for {appid}"
 msgstr "找到多个 {appid} 的元数据文件"
 
-#: ../fdroidserver/index.py
 msgid "Found multiple signing certificates for repository."
 msgstr "发现存储库的多个签名证书。"
 
-#: ../fdroidserver/index.py
 msgid "Found no signing certificates for repository."
 msgstr "未找到存储库的签名证书。"
 
-#: ../fdroidserver/lint.py
 #, python-format
 msgid "Found non-file at %s"
 msgstr "在%s处发现非文件"
 
-#: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "Found {apkfilename} at {url}"
 msgstr "在{url}发现{apkfilename}"
 
-#: ../fdroidserver/scanner.py
 #, python-brace-format
 msgid "Found {count} problems in {filename}"
 msgstr "发现了 {count} 个问题，扫描对象 {filename}"
 
-#: ../fdroidserver/scanner.py
 #, python-brace-format
 msgid "Found {count} warnings in {filename}"
 msgstr "发现了 {count} 个警告，扫描对象 {filename}"
 
-#: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Generated skeleton metadata for {appid}"
 msgstr "已生成 {appid} 的主干元数据"
 
-#: ../fdroidserver/common.py
 #, python-format
 msgid "Git checkout of '%s' failed"
 msgstr "'%s' 的 Git 签出失败"
 
-#: ../fdroidserver/common.py
 msgid "Git clean failed"
 msgstr "Git clean 失败"
 
-#: ../fdroidserver/common.py
 msgid "Git fetch failed"
 msgstr "Git fetch 失败"
 
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
-#: ../fdroidserver/common.py
 #, python-format
 msgid "Git remote set-head failed: \"%s\""
 msgstr "Git remote set-head 失败：\"%s\""
 
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
-#: ../fdroidserver/common.py
 msgid "Git reset failed"
 msgstr "Git reset 失败"
 
-#: ../fdroidserver/common.py
 msgid "Git submodule deinit failed"
 msgstr "Git 子模块去初始化失败"
 
-#: ../fdroidserver/common.py
 msgid "Git submodule sync failed"
 msgstr "Git 子模块同步失败"
 
-#: ../fdroidserver/common.py
 msgid "Git submodule update failed"
 msgstr "Git 子模块更新失败"
 
-#: ../fdroidserver/common.py
 msgid "HTTPS must be used with Subversion URLs!"
 msgstr "HTTPS 必须与 Subversion URL 一起使用！"
 
-#: ../fdroidserver/deploy.py
 msgid "If a git mirror gets to big, allow the archive to be deleted"
 msgstr "如果 git 镜像变大，允许删除存档"
 
-#: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "If this upload fails, try manually uploading to {url}"
 msgstr "如果此上传失败，请尝试手动上传到 {url}"
 
-#: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Ignoring '{field}' in '{metapath}' metadata because it is deprecated."
 msgstr "忽略“{metapath}”元数据中的“{field}”，因为它已被弃用。"
 
-#: ../fdroidserver/update.py
 #, python-format
 msgid "Ignoring FUNDING.yml entry longer than 2048: %s"
 msgstr "忽略超过 2048 的 FUNDING.yml 条目：%s"
 
-#: ../fdroidserver/update.py
 #, python-format
 msgid "Ignoring bad element in manifest: %s"
 msgstr "忽略清单中的错误元素： %s"
 
-#: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Ignoring deprecated {oldfile}, use {newfile}!"
 msgstr "正在忽略已弃用的 {oldfile} 文件，请使用 {newfile}！"
 
-#: ../fdroidserver/index.py
 msgid "Ignoring package without metadata: "
 msgstr "忽略没有元数据的包： "
 
-#: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Ignoring stale cache data for {apkfilename}"
 msgstr "忽略 {apkfilename} 的过时缓存数据"
 
-#: ../fdroidserver/update.py
 msgid "Include APKs that are signed with disabled algorithms like MD5"
 msgstr "包括使用已禁用的算法（如 MD5）签名的 APK"
 
-#: ../fdroidserver/mirror.py
 msgid "Include the PGP signature .asc files in the mirror"
 msgstr "在镜像中包含 PGP 签名 .asc 文件"
 
-#: ../fdroidserver/mirror.py
 msgid "Include the build logs in the mirror"
 msgstr "在镜像中包含构建日志"
 
-#: ../fdroidserver/mirror.py
 msgid "Include the source tarballs in the mirror"
 msgstr "在镜像中包含源 tarball"
 
-#: ../fdroidserver/metadata.py
 #, python-format
 msgid "Including metadata from %s@%s"
 msgstr "包括来自 %s@%s 的元数据"
 
-#: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Including metadata from {path}"
 msgstr "包含来自 {path} 的元数据"
 
-#: ../fdroidserver/common.py
 msgid "Initialising submodules"
 msgstr "初始化子模块"
 
-#: ../fdroidserver/install.py
 msgid "Install all signed applications available"
 msgstr "安装全部可用的已签名应用"
 
-#: ../fdroidserver/__main__.py
 msgid "Install built packages on devices"
 msgstr "在设备上安装生成的安装包"
 
-#: ../fdroidserver/install.py
 #, python-format
 msgid "Installing %s..."
 msgstr "正在安装 %s..."
 
-#: ../fdroidserver/install.py
 #, python-brace-format
 msgid "Installing '{apkfilename}' on {dev}..."
 msgstr "在 {dev} 上安装“{apkfilename}”..."
 
-#: ../fdroidserver/__main__.py
 msgid "Interact with the repo HTTP server"
 msgstr "与存储库 HTTP 服务器互动"
 
-#: ../fdroidserver/update.py
 msgid "Invalid APK"
 msgstr "无效的 APK"
 
-#: ../fdroidserver/checkupdates.py
 #, python-brace-format
 msgid "Invalid AutoUpdateMode: {mode}"
 msgstr "无效的 AutoUpdateMode： {mode}"
 
-#: ../fdroidserver/checkupdates.py
 #, python-brace-format
 msgid "Invalid UpdateCheckMode: {mode}"
 msgstr "无效的 UpdateCheckMode：{mode}"
 
-#: ../fdroidserver/checkupdates.py
 #, python-brace-format
 msgid "Invalid VercodeOperation: {field}"
 msgstr "无效的 VercodeOperation：{field}"
 
-#: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "Invalid VercodeOperation: {invalid_ops}"
 msgstr "无效的 VercodeOperation：{invalid_ops}"
 
 #. Translators: https://developer.android.com/build/configure-app-module#set-application-id
-#: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Invalid application ID {appid}"
 msgstr "无效的应用 ID {appid}"
 
-#: ../fdroidserver/lint.py
 msgid "Invalid bulleted list"
 msgstr "无效的项目符号列表"
 
-#: ../fdroidserver/common.py
 #, python-format
 msgid "Invalid name for published file: %s"
 msgstr "已发布文件的名称无效： %s"
 
-#: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Invalid ndk: entry in build: \"{ndk}\""
 msgstr "ndk 无效：构建中的条目：“{ndk}”"
 
-#: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Invalid redirect to non-HTTPS: {before} -> {after} "
 msgstr "无效的重定向至非 HTTPS： {before} -> {after} "
 
-#: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Invalid scrlib metadata: '{file}' does not exist"
 msgstr "无效的scrlib元数据：'{file}'不存在"
 
-#: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Invalid srclib metadata: could not parse '{file}'"
 msgstr "无效的 srclib 元数据：无法解析“{file}”"
 
-#: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Invalid srclib metadata: unknown key '{key}' in '{file}'"
 msgstr "无效的 srclib 元数据：“{file}”中的未知键“{key}”"
 
-#: ../fdroidserver/common.py
 #, python-brace-format
 msgid "JAR signature failed to verify: {path}"
 msgstr "无法验证 JAR 签名：{path}"
 
-#: ../fdroidserver/common.py
 #, python-brace-format
 msgid "JAR signature verified: {path}"
 msgstr "已验证的 JAR 签名：{path}"
 
-#: ../fdroidserver/scanner.py
 msgid "Java JAR file"
 msgstr "Java JAR 文件"
 
-#: ../fdroidserver/mirror.py ../fdroidserver/publish.py
-#: ../fdroidserver/update.py
 msgid "Java JDK not found! Install in standard location or set java_paths!"
 msgstr "未找到 Java JDK！安装在标准位置或设置java_paths！"
 
-#: ../fdroidserver/scanner.py
 msgid "Java compiled class"
 msgstr "Java 编译类"
 
-#: ../fdroidserver/signindex.py
 msgid "Java jarsigner not found! Install in standard location or set java_paths!"
 msgstr "未找到 Java jarsigner！安装在标准位置或设置java_paths！"
 
-#: ../fdroidserver/lint.py
 msgid "Javascript in HTML src attributes"
 msgstr "HTML src 属性中的 Javascript"
 
-#: ../fdroidserver/build.py
 #, python-brace-format
 msgid "Keeping failed build \"{apkfilename}\""
 msgstr "保持失败的生成“{apkfilename}”"
 
-#: ../fdroidserver/init.py
 msgid "Keystore for signing key:\t"
 msgstr "签名密钥的密钥库:\t"
 
-#: ../fdroidserver/lint.py
 msgid "Known debug key is used in AllowedAPKSigningKeys: "
 msgstr "AllowedAPKSigningKeys 中使用的已知调试密钥： "
 
-#: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "Last used commit '{commit}' looks like a tag, but UpdateCheckMode is '{ucm}'"
 msgstr "最后使用的提交 '{commit}' 看起来像一个标签，但 UpdateCheckMode 是 '{ucm}'"
 
-#: ../fdroidserver/lint.py
 msgid "Liberapay donation methods belong in the Liberapay: field"
 msgstr "Liberapay 捐赠方式属于 Liberapay: 字段"
 
-#: ../fdroidserver/rewritemeta.py
 msgid "List files that would be reformatted (dry run)"
 msgstr "列出将被重新设定格式的文件 (dry run)"
 
-#: ../fdroidserver/lint.py
 msgid "Locale included in f-droid.org URL"
 msgstr "包含在 f-droid.org URL 中的区域设置"
 
-#: ../fdroidserver/build.py
 msgid "Make the build stop on exceptions"
 msgstr "异常时中止编译"
 
-#: ../fdroidserver/index.py
 msgid "Malformed repository mirrors."
 msgstr "格式错误的存储库镜像。"
 
-#: ../fdroidserver/deploy.py
 msgid "Malformed serverwebroot line:"
 msgstr "格式错误的服务器网络根行："
 
-#: ../fdroidserver/scanner.py
 #, python-format
 msgid "Max recursion depth in ZIP file reached: %s"
 msgstr "达到 ZIP 文件中的最大递归深度：%s"
 
-#: ../fdroidserver/index.py
 #, python-brace-format
 msgid "Mirror config for {url} contains \"isPrimary\" key!"
 msgstr "{url} 的镜像配置包含 \"isPrimary\" 密钥！"
 
-#: ../fdroidserver/mirror.py
 msgid "Mirror the full repo and archive, all file types."
 msgstr "镜像完整存储库和存档，所有文件类型。"
 
-#: ../fdroidserver/gpgsign.py
 msgid "Missing output directory"
 msgstr "缺少输出目录"
 
-#: ../fdroidserver/metadata.py
 msgid "Moving Anti-Features declarations to localized files:"
 msgstr "将负面特征声明移动到本地化文件："
 
-#: ../fdroidserver/index.py
 msgid "Neither \"repo_pubkey\" nor \"keystorepass\" set in config.yml"
 msgstr "config.yml 中既没有设置“repo_pubkey”也没有设置“keystorepass”"
 
-#: ../fdroidserver/verify.py
 #, python-format
 msgid "No APK for package: %s"
 msgstr "没有 APK 安装包： %s"
 
-#: ../fdroidserver/common.py
 msgid "No Android SDK found!"
 msgstr "未找到 Android SDK！"
 
-#: ../fdroidserver/install.py
 msgid "No attached devices found"
 msgstr "未找到连接的设备"
 
-#: ../fdroidserver/install.py
 msgid "No devices found for `adb install`! Please plug one in."
 msgstr "没有找到 `adb install` 设备！请插入一台设备。"
 
-#: ../fdroidserver/index.py
 msgid "No fingerprint in URL."
 msgstr "URL 中没有指纹。"
 
-#: ../fdroidserver/common.py
 msgid "No git submodules available"
 msgstr "没有可用的 git 子模块"
 
-#: ../fdroidserver/import_subcommand.py
 msgid "No gradle project could be found. Specify --subdir?"
 msgstr "找不到任何 gradle 项目。指定 --subdir？"
 
-#: ../fdroidserver/import_subcommand.py
 msgid "No information found."
 msgstr "未找到任何信息。"
 
-#: ../fdroidserver/checkupdates.py
 msgid "No matching tags found"
 msgstr "未找到匹配的标签"
 
-#: ../fdroidserver/update.py
 #, python-brace-format
 msgid "No minimum SDK version found in {0}, using default (3)."
 msgstr "在 {0} 中找不到最低 SDK 版本，使用默认值 （3）。"
 
-#: ../fdroidserver/lint.py
 msgid "No need to specify that the app is Free Software"
 msgstr "不需要说明该应用是自由软件"
 
-#: ../fdroidserver/lint.py
 msgid "No need to specify that the app is for Android"
 msgstr "不需要说明该应用是用于安卓的"
 
-#: ../fdroidserver/deploy.py
 msgid "No option set! Edit your config.yml to set at least one of these:"
 msgstr "未设置选项！编辑您的 config.yml 以设置以下至少一个："
 
-#: ../fdroidserver/common.py
 msgid "No packages specified"
 msgstr "未指定包"
 
-#: ../fdroidserver/install.py
 #, python-format
 msgid "No signed APK available for %s"
 msgstr "%s 没有可用的签名 APK"
 
-#: ../fdroidserver/install.py
 msgid "No signed output directory - nothing to do"
 msgstr "无签名输出目录 - 无任何操作"
 
-#: ../fdroidserver/common.py
 #, python-brace-format
 msgid "No signing certificates found in {path}"
 msgstr "在 {path} 中找不到签名证书"
 
-#: ../fdroidserver/common.py
 #, python-format
 msgid "No such package: %s"
 msgstr "没有这样的包：%s"
 
-#: ../fdroidserver/common.py
 #, python-brace-format
 msgid "No such versionCode {versionCode} for app {appid}"
 msgstr "应用 {appid} 没有此类版本代码 {versionCode}"
 
-#: ../fdroidserver/checkupdates.py
 msgid "No tags found"
 msgstr "未找到标签"
 
-#: ../fdroidserver/publish.py ../fdroidserver/verify.py
 msgid "No unsigned directory - nothing to do"
 msgstr "没有未签名的目录 - 无操作"
 
-#: ../fdroidserver/__main__.py
 msgid "No version information could be found."
 msgstr "找不到版本信息。"
 
-#: ../fdroidserver/scanner.py
-#, fuzzy, python-format
+#, python-format
 msgid "Non-exist scandelete path: %s"
-msgstr "未使用的扫描删除路径： %s"
+msgstr "不存在的扫描删除路径： %s"
 
-#: ../fdroidserver/scanner.py
-#, fuzzy, python-format
+#, python-format
 msgid "Non-exist scanignore path: %s"
-msgstr "未使用的扫描忽略路径： %s"
+msgstr "不存在的扫描忽略路径： %s"
 
-#: ../fdroidserver/common.py
 msgid "Not a valid size definition: \"{}\""
 msgstr "不是有效的大小定义：“{}”"
 
-#: ../fdroidserver/signindex.py
 msgid "Nothing to do"
 msgstr "无操作"
 
-#: ../fdroidserver/checkupdates.py
 #, python-brace-format
 msgid "Nothing to do for {appid}."
 msgstr "对 {appid} 无任何可操作。"
 
-#: ../fdroidserver/init.py
 msgid "Now set these in config.yml:"
 msgstr "现在在 config.yml 中设置这些："
 
-#: ../fdroidserver/update.py
 #, python-brace-format
 msgid "OBB file has newer versionCode({integer}) than any APK:"
 msgstr "OBB 文件的版本代码（{integer}）比任何 APK 都要新："
 
-#: ../fdroidserver/update.py
 msgid "OBB filename must start with \"main.\" or \"patch.\":"
 msgstr "OBB 文件名必须以“main.”或“patch.”开头："
 
-#: ../fdroidserver/update.py
 msgid "OBB's packagename does not match a supported APK:"
 msgstr "OBB 的软件包名称与受支持的 APK 不匹配："
 
-#: ../fdroidserver/deploy.py
 msgid "Offline machine, skipping git mirror generation until `fdroid deploy`"
 msgstr "脱机计算机，跳过 git 镜像生成直到 `fdroid deploy`"
 
-#: ../fdroidserver/deploy.py
 msgid "One of the 'github_releases' config items is missing the 'packageNames' value. skipping ..."
 msgstr "其中一个 'github_releases'配置项缺失'packageNames'值。跳过..."
 
-#: ../fdroidserver/deploy.py
 msgid "One of the 'github_releases' config items is missing the 'projectUrl' value. skipping ..."
 msgstr "其中一个 'github_releases'配置项缺失'projectUrl'值。跳过..."
 
-#: ../fdroidserver/deploy.py
 msgid "One of the 'github_releases' config items is missing the 'token' value. skipping ..."
 msgstr "其中一个 'github_releases'配置项缺失'token'值。跳过..."
 
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
-#: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Only PNG and JPEG are supported for graphics, found: {path}"
 msgstr "图形仅支持 PNG 和 JPEG，发现：{path}"
 
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
-#: ../fdroidserver/common.py
 msgid "Only accepts a single key \"env\""
 msgstr "只接受单一密钥 “env\""
 
-#: ../fdroidserver/checkupdates.py
 msgid "Only process apps with auto-updates"
 msgstr "仅处理使用自动更新的应用"
 
-#: ../fdroidserver/lint.py
 msgid "OpenCollective donation methods belong in the OpenCollective: field"
 msgstr "OpenCollective 捐赠方法属于 OpenCollective: 字段"
 
-#: ../fdroidserver/verify.py
 msgid "Output JSON report to file named after APK."
 msgstr "将 JSON 报告输出到以 APK 命名的文件。"
 
-#: ../fdroidserver/scanner.py
 msgid "Output JSON to stdout."
 msgstr "将 JSON 输出到标准输出。"
 
-#: ../fdroidserver/checkupdates.py ../fdroidserver/gpgsign.py
-#: ../fdroidserver/publish.py ../fdroidserver/signindex.py
-#: ../fdroidserver/update.py
 msgid "Outputting JSON"
 msgstr "输出 JSON"
 
-#: ../fdroidserver/import_subcommand.py
 msgid "Overall license of the project."
 msgstr "项目总体许可证。"
 
-#: ../fdroidserver/index.py
 #, python-brace-format
 msgid "Overriding blank versionName in {apkfilename} from metadata: {version}"
 msgstr "从元数据覆盖 {apkfilename} 中的空白版本名称：{version}"
 
-#: ../fdroidserver/import_subcommand.py
 #, python-brace-format
 msgid "Package \"{appid}\" already exists"
 msgstr "包“{appid}”已经存在"
 
-#: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Parsing manifest at '{path}'"
 msgstr "在“{path}”处解析清单"
 
-#: ../fdroidserver/common.py
 msgid "Password required with username"
 msgstr "需要密码和用户名"
 
-#: ../fdroidserver/import_subcommand.py
 msgid "Path to main Android project subdirectory, if not in root."
 msgstr "主Android项目子目录的路径(如果不是根目录)."
 
-#: ../fdroidserver/init.py
 msgid "Path to the Android SDK (sometimes set in ANDROID_HOME)"
 msgstr "Android SDK 路径（有时在 ANDROID_HOME 中设置）"
 
-#: ../fdroidserver/btlog.py
 msgid "Path to the git repo to use as the log"
 msgstr "使用的 git 资源库路径在日志上"
 
-#: ../fdroidserver/init.py
 msgid "Path to the keystore for the repo signing key"
 msgstr "资源库签名密钥的密钥存储(keystore)路径"
 
-#: ../fdroidserver/nightly.py
 msgid "Print the secret variable to the terminal for easy copy/paste"
 msgstr "将秘密变量打印到终端以便于复制/粘贴"
 
-#: ../fdroidserver/install.py
 #, python-brace-format
 msgid "Privacy mode was enabled based on your locale ({country_code})."
 msgstr "根据你的语言环境（{country_code}）启用了隐私模式。"
 
-#: ../fdroidserver/scanner.py
 #, python-format
 msgid "Problem with ZIP file: %s, error %s"
 msgstr "ZIP 文件问题：%s，错误 %s"
 
-#: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Problem with xml at '{path}'"
 msgstr "'{path}' 处的 xml 问题"
 
-#: ../fdroidserver/checkupdates.py
 msgid "Process auto-updates"
 msgstr "处理自动更新"
 
-#: ../fdroidserver/publish.py ../fdroidserver/update.py
 #, python-brace-format
 msgid "Processing {apkfilename}"
 msgstr "处理 {apkfilename}"
 
-#: ../fdroidserver/checkupdates.py ../fdroidserver/scanner.py
 #, python-brace-format
 msgid "Processing {appid}"
 msgstr "处理 {appid}"
 
-#: ../fdroidserver/update.py
 msgid "Produce human-readable XML/JSON for index files"
 msgstr "为索引文件生成人类可读的XML/JSON"
 
-#: ../fdroidserver/import_subcommand.py
 msgid "Project URL to import from."
 msgstr "项目 URL 导入位置。"
 
-#: ../fdroidserver/lint.py
 msgid "Punctuation should be avoided"
 msgstr "应避免使用标点符号"
 
-#: ../fdroidserver/btlog.py
 msgid "Push the log to this git remote repository"
 msgstr "拖送日志至 git 远程资源库"
 
-#: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "Pushing binary transparency log to {url}"
 msgstr "正推送二进制文件透明日志到{url}"
 
-#: ../fdroidserver/deploy.py
 msgid "Pushing to remote server failed!"
 msgstr "推送到远程服务器失败了！"
 
-#: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "Pushing to {url}"
 msgstr "正在推送至 {url}"
 
-#: ../fdroidserver/__main__.py
 msgid "Quickly start a new repository"
 msgstr "快速新建存储库"
 
-#: ../fdroidserver/__main__.py
 msgid "Read all the metadata files and exit"
 msgstr "读取全部元数据文件并退出"
 
-#: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Reading '{config_file}'"
 msgstr "读取 '{config_file}'"
 
-#: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Reading packageName/versionCode/versionName failed, APK invalid: '{apkfilename}'"
 msgstr "读取 packageName/versionCode/versionName 失败，APK 无效：'{apkfilename}'"
 
-#: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Reading packageName/versionCode/versionName failed,APK invalid: '{apkfilename}'"
 msgstr "读取 packageName/versionCode/versionName 失败，APK 无效：'{apkfilename}'"
 
-#: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Reading {apkfilename} from cache"
 msgstr "从缓存读取 {apkfilename}"
 
-#: ../fdroidserver/build.py
 msgid "Refresh and cache scanner rules and signatures from the network"
 msgstr "刷新和缓存来自网络的扫描程序规则和签名"
 
-#: ../fdroidserver/publish.py
 #, python-brace-format
 msgid "Refusing to sign '{path}', file exists in both {dir1} and {dir2} folder."
 msgstr "拒绝签署 '{path}'，文件同时存在于文件夹 {dir1} 和 {dir2}。"
 
-#: ../fdroidserver/verify.py
 msgid "Remove source tarball and any APKs if successfully verified."
 msgstr "若验证成功删除源 tarball 和任何 APK 文件。"
 
-#: ../fdroidserver/common.py
 msgid "Removing specified files"
 msgstr "删除指定文件"
 
-#: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Removing {path}\""
 msgstr "删除 {path}\""
 
-#: ../fdroidserver/update.py
 msgid "Rename APK files that do not match package.name_123.apk"
 msgstr "重命名文件名不符合 package.name_123.apk 的 APK 文件"
 
-#: ../fdroidserver/common.py
 #, python-brace-format
 msgid "RepoType {type} is deprecated, please switch to git."
 msgstr "存储库类型 {type} 被废弃，请切换到 git。"
 
-#: ../fdroidserver/nightly.py
 #, python-brace-format
 msgid "Resigning {apkfilename} with provided debug.keystore"
 msgstr "使用提供的 debug.keystore 重签名 {apkfilename}"
 
-#: ../fdroidserver/update.py
 msgid "Resize all the icons exceeding the max pixel size and exit"
 msgstr "对超过像素大小上限的全部图标进行尺寸调整，然后退出"
 
-#: ../fdroidserver/common.py
 msgid "Restrict output to warnings and errors"
 msgstr "仅输出警告和出错信息"
 
-#: ../fdroidserver/net.py
 #, python-format
 msgid "Retrying failed download: %s"
 msgstr "正在重试失败的下载：%s"
 
-#: ../fdroidserver/__main__.py
 msgid "Rewrite all the metadata files"
 msgstr "重写所有元数据文件"
 
-#: ../fdroidserver/rewritemeta.py
 #, python-brace-format
 msgid "Rewriting '{appid}'"
 msgstr "重写 '{appid}'"
 
-#: ../fdroidserver/checkupdates.py
 msgid "Run on git repo that has uncommitted changes"
 msgstr "在具有未提交更改的 git 存储库上运行"
 
-#: ../fdroidserver/nightly.py
 #, python-brace-format
 msgid "Run over {cibase} to find -debug.apk. and skip repo_basedir {repo_basedir}"
 msgstr "在{cibase}中挨个寻找 -debug.apk，并跳过了仓库目录{repo_basedir}"
 
-#: ../fdroidserver/lint.py
 msgid "Run rewritemeta to fix formatting"
 msgstr "运行“重写元数据”(rewritemeta)修复格式"
 
-#: ../fdroidserver/deploy.py
 msgid "Running first pass with MD5 checking disabled"
 msgstr "禁用 MD5 检查并运行第一遍"
 
-#: ../fdroidserver/mirror.py
 #, python-brace-format
 msgid "Running wget in {path}"
 msgstr "在 {path} 中运行 wget"
 
-#: ../fdroidserver/index.py
 #, python-brace-format
 msgid "SHA-256 of {url} does not match entry!"
 msgstr "{url} 的 SHA-256 与条目不匹配！"
 
-#: ../fdroidserver/build.py
 msgid "Scan the resulting APK(s) for known non-free classes."
 msgstr "扫描产生的 APK(s) 是否有已知的非自由类。"
 
-#: ../fdroidserver/__main__.py
 msgid "Scan the source code of a package"
 msgstr "扫描一个应用的源代码"
 
-#: ../fdroidserver/scanner.py
 #, python-brace-format
 msgid "Scanner found {count} problems in {apk}"
 msgstr "扫描仪发现了 {count} 个问题，扫描对象 {apk}"
 
-#: ../fdroidserver/scanner.py
 #, python-brace-format
 msgid "Scanner found {count} problems in {appid}:"
 msgstr "扫描仪在 {appid} 中发现 {count} 个问题："
 
-#: ../fdroidserver/scanner.py
 #, python-brace-format
 msgid "Scanner found {count} problems in {appid}:{versionCode}:"
 msgstr "扫描仪在 {appid}:{versionCode} 中发现 {count} 个问题："
 
-#: ../fdroidserver/build.py
 msgid "Scanner found {} problem"
 msgid_plural "Scanner found {} problems"
 msgstr[0] "扫描仪发现 {} 个问题"
 
-#: ../fdroidserver/scanner.py
 msgid "Scanning APK for extra signing blocks."
 msgstr "正在扫描 APK 是否有额外的签名块。"
 
-#: ../fdroidserver/scanner.py
 msgid "Scanning APK with dexdump for known non-free classes."
 msgstr "使用 dexdump 扫描 APK 以查找已知的非自由类。"
 
-#: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Set NDK {release} ({version}) up"
 msgstr "设置 NDK {release} ({version})"
 
-#: ../fdroidserver/common.py
 msgid "Set clock to that time using:"
 msgstr "使用以下方法将时钟设置为该时间："
 
-#: ../fdroidserver/nightly.py
 msgid "Set maximum releases in repo before older ones are archived"
 msgstr "在存档旧版本之前，在存储库中设置最大版本数"
 
-#: ../fdroidserver/build.py
 #, python-brace-format
 msgid "Set open file limit to {integer}"
 msgstr "将打开文件限制设置为 {integer}"
 
-#: ../fdroidserver/__main__.py
 msgid "Set up an app build for a nightly build repo"
 msgstr "为每日构建存储库设置应用构建"
 
-#: ../fdroidserver/build.py
 msgid "Setting open file limit failed: "
 msgstr "设置打开文件限制失败： "
 
-#: ../fdroidserver/build.py
 #, python-brace-format
 msgid "Setting {0} sec timeout for this build"
 msgstr "为此构建设置 {0} 秒超时"
 
-#: ../fdroidserver/__main__.py
 msgid "Sign and place packages in the repo"
 msgstr "对包进行签名并将其加入存储库"
 
-#: ../fdroidserver/__main__.py
 msgid "Sign indexes created using update --nosign"
 msgstr "签名使用 update --nosign 创建的索引"
 
-#: ../fdroidserver/build.py
 msgid "Skip scanning the source code for binaries and other problems"
 msgstr "跳过二进制源码扫描和其他问题"
 
-#: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Skipping '{apkfilename}' with invalid signature!"
 msgstr "跳过签名无效的“{apkfilename}”！"
 
-#: ../fdroidserver/update.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Skipping '{apkfilename}' without versionCode!"
-msgstr "跳过签名无效的“{apkfilename}”！"
+msgstr "跳过签无版本码的“{apkfilename}”！"
 
-#: ../fdroidserver/deploy.py ../fdroidserver/index.py
 #, python-format
 msgid "Skipping GitLab Pages mirror because the repo is too large (>%.2fGB)!"
 msgstr "跳过 GitLab 页面镜像，因为存储库太大（> %.2fGB）！"
 
-#: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Skipping index generation for {appid}"
 msgstr "跳过 {appid} 的索引生成"
 
-#: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Skipping {apkfilename} with invalid signature!"
 msgstr "跳过 {apkfilename} ，签名无效！"
 
-#: ../fdroidserver/scanner.py
 #, python-brace-format
 msgid "Skipping {appid}: disabled"
 msgstr "正在跳过 {appid}：已禁用"
 
-#: ../fdroidserver/deploy.py
 msgid "Specify a local folder to sync the repo to"
 msgstr "指定资源库同步的本地文件夹"
 
-#: ../fdroidserver/deploy.py
 msgid "Specify an identity file to provide to SSH for rsyncing"
 msgstr "指定 rsync 同步时 SSH 所用的标识文件"
 
-#: ../fdroidserver/nightly.py
 msgid "Specify which debug keystore file to use."
 msgstr "指定要使用的调试密钥库文件。"
 
-#: ../fdroidserver/common.py
 msgid "Spew out even more information than normal"
 msgstr "比一般情况输出更多的信息"
 
-#: ../fdroidserver/nightly.py
 #, python-brace-format
 msgid "Stripping mystery signature from {apkfilename}"
 msgstr "从 {apkfilename} 中剥离神秘签名"
 
-#: ../fdroidserver/lint.py
 #, python-format
 msgid "Summary '%s' is just the app's name"
 msgstr "摘要“%s”只是应用的名称"
 
-#: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "Summary of length {length} is over the {limit} char limit"
 msgstr "长度摘要 {length} 超过 {limit} 字符限制"
 
-#: ../fdroidserver/common.py
 #, python-brace-format
 msgid "System clock is older than date in {path}!"
 msgstr "系统时钟早于 {path} 中的日期！"
 
-#: ../fdroidserver/checkupdates.py
 msgid "Tags update mode only works for git, hg, bzr and git-svn repositories currently"
 msgstr "标签更新模式目前仅适用于 git、hg、bzr 和 git-svn 存储库"
 
-#: ../fdroidserver/checkupdates.py
 msgid "Tags update mode used in git-svn, but the repo was not set up with tags"
 msgstr "git-svn 中使用的标记更新模式，但未使用标记设置存储库"
 
-#: ../fdroidserver/build.py
 msgid "Test mode - put output in the tmp directory only, and always build, even if the output already exists."
 msgstr "测试模式：仅将输出保存至 tmp 目录，即使输出已存在，仍然编译。"
 
-#: ../fdroidserver/index.py
 msgid "The \"qrcode\" Python package is not installed (e.g. apt-get install python3-qrcode)!"
 msgstr "\"qrcode\" Python 包未安装 （如 apt-get install python3-qrcode）！"
 
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
-#: ../fdroidserver/update.py
 #, python-brace-format
 msgid "The OBB version code must come after \"{name}.\":"
 msgstr "OBB 版本号必须位于“{name}”之后："
 
-#: ../fdroidserver/update.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The OBB versionCode must come after \"{name}.\":"
-msgstr "OBB 版本号必须位于“{name}”之后："
+msgstr "OBB 版本码必须位于“{name}”之后："
 
-#: ../fdroidserver/btlog.py
 msgid "The base URL for the repo to log (default: https://f-droid.org)"
 msgstr "资源库基 URL的日志（默认为 https://f-droid.org）"
 
-#: ../fdroidserver/mirror.py
 msgid "The directory to write the mirror to"
 msgstr "写入镜像的目录"
 
-#: ../fdroidserver/nightly.py
 msgid "The file to be included in the repo (path or glob)"
 msgstr "要包含在存储库中的文件（path 或 glob）"
 
-#: ../fdroidserver/index.py
 msgid "The repository's fingerprint does not match."
 msgstr "存储库的指纹不匹配。"
 
-#: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "The root dir for local_copy_dir \"{path}\" does not exist!"
 msgstr "local_copy_dir“{path}”的根目录不存在！"
 
-#: ../fdroidserver/publish.py
 msgid "There is a keyalias collision - publishing halted"
 msgstr "存在密钥别名冲突 - 发布已停止"
 
-#: ../fdroidserver/common.py
 msgid "These are the apps that have been archived from the main repo."
 msgstr "这些是已从主存储库存档的应用。"
 
-#: ../fdroidserver/mirror.py
 msgid "This command should never be used to mirror f-droid.org! A full copy requires more than 600GB."
 msgstr "此命令永远不应该被用来镜像 f-droid.org！完整的拷贝需要至少 600GB。"
 
-#: ../fdroidserver/common.py
 msgid "This is a repository of apps to be used with F-Droid. Applications in this repository are either official binaries built by the original application developers, or are binaries built from source by the admin of f-droid.org using the tools on https://gitlab.com/fdroid."
 msgstr "这是一个与F-Droid一起使用的应用的存储库。这个存储库中的应用要么是原应用开发者构建的官方二进制文件，要么是 f-droid.org 的管理员使用 https://gitlab.com/fdroid 上的工具从源代码构建而来的二进制文件。"
 
-#: ../fdroidserver/import_subcommand.py
 #, python-format
 msgid "This repo already has local metadata: %s"
 msgstr "此存储库已具有本地元数据：%s"
 
-#: ../fdroidserver/init.py
 #, python-format
 msgid ""
 "To complete the setup, add your APKs to \"%s\"\n"
@@ -1865,939 +1460,734 @@ msgstr ""
 "更多信息： https://f-droid.org/docs/Setup_an_F-Droid_App_Repo\n"
 "和 https://f-droid.org/docs/Signing_Process"
 
-#: ../fdroidserver/deploy.py
 msgid "To use awsbucket, awssecretkey and awsaccesskeyid must also be set in config.yml!"
 msgstr "要使用 awsbucket，还必须在 config.yml 中设置 awssecretkey 和 awsaccesskeyid！"
 
-#: ../fdroidserver/deploy.py
 msgid "To use rclone, rclone_config and awsbucket must be set in config.yml!"
 msgstr "要使用 rclone，必须在 config.yml 中设置 rclone_config 和 awsbucket！"
 
-#: ../fdroidserver/lint.py
 msgid "URL must start with https:// or http://"
 msgstr "网址必须以 https:// 或 http:// 开头"
 
-#: ../fdroidserver/lint.py
 msgid "URL shorteners should not be used"
 msgstr "不应使用 URL 缩短器"
 
-#: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "URL {url} in Description: {error}"
 msgstr "描述中的网址 {url}：{error}"
 
-#: ../fdroidserver/lint.py
 msgid "Unexpected license tag \"{}\"! Only use FSF or OSI approved tags from https://spdx.org/license-list"
 msgstr "意外的许可证标签“{}”！仅使用来自 https://spdx.org/license-list 的 FSF 或 OSI 批准的标签"
 
-#: ../fdroidserver/lint.py
 msgid "Unexpected license tag \"{}\"! Only use license tags configured in your config file"
 msgstr "意外的许可证标签“{}”！仅使用配置文件中配置的许可证标记"
 
-#: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Unknown entry {key} in {configname}"
 msgstr "{configname} 中的未知条目 {key}"
 
-#: ../fdroidserver/__main__.py
 msgid "Unknown exception found!"
 msgstr "发生未知异常！"
 
-#: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "Unknown file '{filename}' in build '{versionName}'"
 msgstr "在构建版本 '{versionName}' 中出现了未知文件 '{filename}'"
 
-#: ../fdroidserver/metadata.py
 #, python-format
 msgid "Unknown metadata format: %s"
 msgstr "未知元数据格式：%s"
 
-#: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Unknown metadata format: {path} (use: *.yml)"
 msgstr "未知元数据格式：{path} (使用:*.yml)"
 
-#: ../fdroidserver/common.py
 msgid "Unknown version of aapt, might cause problems: "
 msgstr "未知版本的 aapt，可能会导致问题： "
 
-#: ../fdroidserver/lint.py
 msgid "Unnecessary leading space"
 msgstr "不必要的前置空格"
 
-#: ../fdroidserver/lint.py
 msgid "Unnecessary trailing space"
 msgstr "不必要的尾随空格"
 
-#: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Unrecognised app field '{fieldname}' in '{path}'"
 msgstr "'{path}' 中存在无法识别的应用栏目 '{fieldname}'"
 
-#: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Unrecognised build flag '{build_flag}' in '{path}'"
 msgstr "'{path}' 中有无法识别的构建 flag '{build_flag}'"
 
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
-#: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Unsupported file type \"{extension}\" for repo graphic"
 msgstr "存储库图形不支持的文件类型“{extension}”"
 
-#: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Unsupported graphics file found: {path}"
 msgstr "发现不支持的图形文件：{path}"
 
-#: ../fdroidserver/lint.py
 #, python-format
 msgid "Unused extlib at %s"
 msgstr "%s 处未使用的扩展库"
 
-#: ../fdroidserver/lint.py
 #, python-format
 msgid "Unused file at %s"
 msgstr "%s 处未使用的文件"
 
-#: ../fdroidserver/scanner.py
 #, python-format
 msgid "Unused scandelete path: %s"
 msgstr "未使用的扫描删除路径： %s"
 
-#: ../fdroidserver/scanner.py
 #, python-format
 msgid "Unused scanignore path: %s"
 msgstr "未使用的扫描忽略路径： %s"
 
-#: ../fdroidserver/__main__.py
 msgid "Update repo information for new packages"
 msgstr "更新新包的存储库信息"
 
-#: ../fdroidserver/__main__.py
 msgid "Update the binary transparency log for a URL"
 msgstr "更新 URL 的二进制透明度日志"
 
-#: ../fdroidserver/checkupdates.py
 #, python-brace-format
 msgid "UpdateCheckData has invalid URL: {url}"
 msgstr "UpdateCheckData 具有无效的 URL：{url}"
 
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
-#: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "UpdateCheckData must match the version code as integer (\\d or [0-9]): {codeex}"
 msgstr "UpdateCheckData 必须以整数（\\d 或 [0-9]）的形式匹配版本代码：{codeex}"
 
-#: ../fdroidserver/lint.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "UpdateCheckData must match the versionCode as integer (\\d or [0-9]): {codeex}"
 msgstr "UpdateCheckData 必须以整数（\\d 或 [0-9]）的形式匹配版本代码：{codeex}"
 
-#: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "UpdateCheckData must use HTTPS URL: {url}"
 msgstr "UpdateCheckData必须使用HTTPS URL:{url}"
 
-#: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "UpdateCheckData not a valid URL: {url}"
 msgstr "UpdateCheckData 不是有效的网址：{url}"
 
-#: ../fdroidserver/lint.py
 msgid "UpdateCheckMode is set but it looks like checkupdates hasn't been run yet."
 msgstr "UpdateCheckMode 已设置，但看起来尚未运行检查更新。"
 
 #. Translators: https://developer.android.com/build/configure-app-module#set-application-id
-#: ../fdroidserver/lint.py
 msgid "UpdateCheckName is set to the known application ID, it can be removed"
 msgstr "UpdateCheckName 已设置为已知的应用 ID，可以将其删除"
 
-#: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "Uploading {apkfilename} to androidobservatory.org"
 msgstr "上传 {apkfilename} 到 androidobservatory.org"
 
-#: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "Uploading {apkfilename} to virustotal"
 msgstr "上传 {apkfilename} 到 virustotal"
 
-#: ../fdroidserver/lint.py
 msgid "Use /HEAD instead of /master or /main to point at a file in the default branch"
 msgstr "使用 /HEAD 而不是 /master 或 /main 来指向默认分支中的文件"
 
-#: ../fdroidserver/update.py
 msgid "Use `fdroid update -c` to create it."
 msgstr "使用 `fdroid update -c` 命令以创建它。"
 
-#: ../fdroidserver/build.py
 msgid "Use build server"
 msgstr "使用编译服务器"
 
-#: ../fdroidserver/update.py
 msgid "Use date from APK instead of current time for newly added APKs"
 msgstr "对于新添加的 APK 文件，使用来自 APK 文件的时间，而非当前时间"
 
-#: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "Using \"{path}\" for configuring s3cmd."
 msgstr "使用“{path}”配置 s3cmd。"
 
-#: ../fdroidserver/deploy.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Using \"{path}\" for rclone config."
-msgstr "使用“{path}”配置 s3cmd。"
+msgstr "使用“{path}”配置 rclone。"
 
-#: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "Using \"{path}\" for syncing with remote storage."
 msgstr "使用 \"{path}\" 用于和远程存储同步。"
 
-#: ../fdroidserver/common.py
 msgid "Using APK Signature v2"
 msgstr "使用 APK 签名 v2"
 
-#: ../fdroidserver/common.py
 msgid "Using APK Signature v3"
 msgstr "使用 APK 签名 v3"
 
-#: ../fdroidserver/common.py
 msgid "Using JAR Signature"
 msgstr "使用 JAR 签名"
 
-#: ../fdroidserver/common.py
 msgid "Using Java's jarsigner, not recommended for verifying APKs! Use apksigner"
 msgstr "不建议使用 Java 的 jar 签名器来验证 APK！使用 apk 签名器"
 
-#: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Using blank dictionary instead of contents of {path}!"
 msgstr "使用空白字典而不是 {path} 的内容！"
 
-#: ../fdroidserver/init.py
 #, python-brace-format
 msgid "Using existing keystore \"{path}\""
 msgstr "使用现有密钥库“{path}”"
 
-#: ../fdroidserver/deploy.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Using rclone to sync to \"{name}\""
-msgstr "使用 rclone 进行同步：{url}"
+msgstr "使用 rclone 同步到“{name}”"
 
-#: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "Using rclone to sync with: {url}"
 msgstr "使用 rclone 进行同步：{url}"
 
-#: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "Using s3cmd to sync with: {url}"
 msgstr "正使用 s3cmd 与 {url} 同步"
 
-#: ../fdroidserver/__main__.py
 msgid "Valid commands are:"
 msgstr "有效的命令为："
 
-#: ../fdroidserver/verify.py
 msgid "Verify against locally cached copy rather than redownloading."
 msgstr "和本地缓存的副本进行验证，而不是重新下载。"
 
-#: ../fdroidserver/__main__.py
 msgid "Verify the integrity of downloaded packages"
 msgstr "验证已下载包的完整性"
 
-#: ../fdroidserver/index.py
 msgid "Verifying index signature:"
 msgstr "验证目录签名中："
 
-#: ../fdroidserver/install.py
 #, python-brace-format
 msgid "Verifying package {path} with apksigner."
 msgstr "使用 apksigner 验证包 {path}。"
 
-#: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "VirusTotal API key cannot upload files larger than 32MB, use {url} to upload {path}."
 msgstr "VirusTotal 的 API 密钥无法用于上传大于 32MB 的文件，请使用 {url} 上传 {path}。"
 
-#: ../fdroidserver/nightly.py
 msgid "WARNING: only public git repos are supported!"
 msgstr "警告：只支持公开 git 存储库！"
 
-#: ../fdroidserver/__main__.py
 msgid "Warn about possible metadata errors"
 msgstr "警告元数据中可能存在的错误"
 
-#: ../fdroidserver/scanner.py
 msgid "WebAssembly binary file"
 msgstr "WebAssembly 二进制文件"
 
-#: ../fdroidserver/update.py
 msgid "When configured for signed indexes, create only unsigned indexes at this stage"
 msgstr "如果已配置为使用签名索引，该阶段仅创建未签名索引"
 
-#: ../fdroidserver/lint.py
 msgid "When linting the entire repository yamllint is disabled by default. This option forces yamllint regardless."
 msgstr "对整个版本库进行 lint 时，默认禁用 yamllint。 无论如何，该选项都会强制 yamllint。"
 
-#: ../fdroidserver/publish.py
 msgid "When signing or verifying fails, exit with an error code."
 msgstr "签名或验证失败时，退出并显示错误代码。"
 
-#: ../fdroidserver/install.py
 msgid "Would you like to download and install F-Droid.apk via adb? (YES/no)"
 msgstr "你要通过 adb 下载并安装 F-Droid apk 吗？(YES/no)"
 
-#: ../fdroidserver/install.py
 msgid "Would you like to download the app(s) from f-droid.org? (YES/no)"
 msgstr "你要从 f-droid 下载应用吗？(YES/no)"
 
-#: ../fdroidserver/init.py
 msgid "X.509 'Distinguished Name' used when generating keys"
 msgstr "生成密钥时使用了X.509 ‘可识别名’"
 
-#: ../fdroidserver/common.py
 msgid "You can use ANDROID_HOME to set the path to your SDK, i.e.:"
 msgstr "您可以使用 ANDROID_HOME 设置 SDK 的路径，也就是说："
 
-#: ../fdroidserver/scanner.py
 msgid "ZIP file archive"
 msgstr "ZIP 压缩包"
 
-#: ../fdroidserver/install.py
 #, python-brace-format
 msgid "adb reports {serial} is \"{status}\"!"
 msgstr "adb 报告 {serial} 为 \"{status}\"状态！"
 
-#: ../fdroidserver/nightly.py
 #, python-brace-format
 msgid "adding IdentityFile to {path}"
 msgstr "将 IdentityFile 添加到 {path}"
 
-#: ../fdroidserver/update.py
 #, python-brace-format
 msgid "adding to {name}: {path}"
 msgstr "添加到 {name}： {path}"
 
-#: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "ambiguous option: %(option)s could match %(matches)s"
 msgstr "模糊的选项：%(option)s 可以相配 %(matches)s"
 
-#: ../fdroidserver/common.py
 #, python-brace-format
 msgid "apksigner in build-tools;{version} passes APKs with invalid v3 signatures, ignoring."
 msgstr "{version} 版本 build-tools 中的 apksigner 不处理带无效 v3 签名的 APK 文件，忽略中。"
 
-#: ../fdroidserver/common.py
 msgid "apksigner not found! Cannot sign or verify modern APKs"
 msgstr "找不到 APK 签名器！无法对新式 APK 进行签名或验证"
 
-#: ../fdroidserver/common.py
 msgid "apksigner not found, it's required for signing!"
 msgstr "找不到 APK 签名器，这是签名所必需的！"
 
 #. Translators: https://developer.android.com/build/configure-app-module#set-application-id
-#: ../fdroidserver/checkupdates.py ../fdroidserver/lint.py
-#: ../fdroidserver/rewritemeta.py
 msgid "application ID of file to operate on"
 msgstr "要操作的文件的应用ID"
 
 #. Translators: https://developer.android.com/build/configure-app-module#set-application-id
-#: ../fdroidserver/build.py ../fdroidserver/install.py
-#: ../fdroidserver/publish.py ../fdroidserver/scanner.py
-#: ../fdroidserver/verify.py
 msgid "application ID with optional versionCode in the form APPID[:VERCODE]"
 msgstr "带APPID[:VERCODE]格式可选的versionCode的应用 ID"
 
-#: ../fdroidserver/common.py
 msgid "archive_url needs to end with /archive"
 msgstr "archive_url 需要以 /archive 结尾"
 
-#: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "argument \"-\" with mode %r"
 msgstr "参数 “-” 带有模式 %r"
 
-#: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "argument %(argument_name)s: %(message)s"
 msgstr "参数 %(argument_name)s：%(message)s"
 
-#: ../fdroidserver/nightly.py
 msgid "attempting bare SSH connection to test deploy key:"
 msgstr "尝试使用裸 SSH 连接测试部署密钥："
 
-#: ../fdroidserver/common.py
 msgid "can not parse scrlib spec (not a string): '{}'"
 msgstr "无法解析 scrlib 规范（不是字符串）：“{}”"
 
-#: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "can't open '%(filename)s': %(error)s"
 msgstr "无法打开 '%(filename)s'：%(error)s"
 
-#: ../fdroidserver/scanner.py
 msgid "can't open non-https url: '{};"
 msgstr "无法打开非 HTTPS URL： '{};"
 
-#: ../fdroidserver/build.py
 #, python-brace-format
 msgid "cannot find required srclibs: \"{path}\""
 msgstr "找不到所需的源库：“{path}”"
 
-#: /usr/lib/python3.11/argparse.py
 msgid "cannot have multiple subparser arguments"
 msgstr "不能有多个子解析器参数"
 
-#: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "cannot merge actions - two groups are named %r"
 msgstr "无法合并操作 - 两个组被命名为 %r"
 
-#: ../fdroidserver/nightly.py
 msgid "cannot publish update, did you set the deploy key?"
 msgstr "无法发布更新，是否设置了部署密钥？"
 
-#: ../fdroidserver/nightly.py
 #, python-brace-format
 msgid "cloning {url}"
 msgstr "正在克隆 {url}"
 
-#: ../fdroidserver/__main__.py
 msgid "commands from plugin modules:"
 msgstr "来自插件模块的命令："
 
-#: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "conflicting option string: %s"
 msgid_plural "conflicting option strings: %s"
 msgstr[0] "有冲突的选项字串：%s"
 
-#: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "conflicting subparser alias: %s"
 msgstr "有冲突的子解析器别名：%s"
 
-#: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "conflicting subparser: %s"
 msgstr "有冲突的子解析器：%s"
 
-#: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "could not parse '{path}'"
 msgstr "无法解析 '{path}'"
 
-#: ../fdroidserver/common.py
 msgid "could not parse srclib spec (no name specified): '{}'"
 msgstr "无法解析 srclib 规范 (未指定名称): '{}'"
 
-#: ../fdroidserver/common.py
 msgid "could not parse srclib spec (no ref specified): '{}'"
 msgstr "无法解析 srclib 规范 (未指定 ref): '{}'"
 
-#: ../fdroidserver/nightly.py
 #, python-brace-format
 msgid "created {path}"
 msgstr "已创建 {path}"
 
-#: ../fdroidserver/checkupdates.py
 #, python-brace-format
 msgid "current version is newer: old vercode={old}, new vercode={new}"
 msgstr "当前版本较新：旧的 vercode={old}，新的 vercode={new}"
 
-#: ../fdroidserver/update.py
 #, python-brace-format
 msgid "deleting: repo/{apkfilename}"
 msgstr "正在删除：repo/{apkfilename}"
 
-#: ../fdroidserver/scanner.py
 msgid "dependency file without lock"
 msgstr "没有锁的依赖文件"
 
-#: ../fdroidserver/common.py
 #, python-brace-format
 msgid "deployed process log {path} to {dest}"
 msgstr "已部署进程日志 {path} 到 {dest}"
 
-#: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "dest= is required for options like %r"
 msgstr "对于像 %r 这样的选项，dest= 是必需的"
 
-#: ../fdroidserver/scanner.py
 msgid "downloading '{}'"
 msgstr "正在下载 '{}'"
 
-#: ../fdroidserver/scanner.py
 msgid "downloading scanner signatures from '{}' failed"
 msgstr "从 '{}' 下载扫描仪特征失败了"
 
-#: ../fdroidserver/scanner.py
 msgid "executable binary, possibly code"
 msgstr "可执行二进制文件，可能是代码"
 
-#: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "expected %s argument"
 msgid_plural "expected %s arguments"
 msgstr[0] "预期的 %s 个参数"
 
-#: /usr/lib/python3.11/argparse.py
 msgid "expected at least one argument"
 msgstr "预期至少有一个参数"
 
-#: /usr/lib/python3.11/argparse.py
 msgid "expected at most one argument"
 msgstr "预期最多有一个参数"
 
-#: /usr/lib/python3.11/argparse.py
 msgid "expected one argument"
 msgstr "预期的一个参数"
 
-#: ../fdroidserver/__main__.py
 msgid "fdroid [<command>] [-h|--help|--version|<args>]"
 msgstr "用法：fdroid [-h|--help|--version] <command> [<args>]"
 
-#: ../fdroidserver/scanner.py
 msgid "fetch the latest version of signatures from the web"
 msgstr "从网络获取最新版本的签名"
 
-#: ../fdroidserver/metadata.py
 msgid "force metadata errors (default) to be warnings, or to be ignored."
 msgstr "将元数据错误（默认）强制设为警告，或忽略。"
 
-#: ../fdroidserver/common.py
 msgid "git svn clone failed"
 msgstr "git svn 克隆失败"
 
-#: ../fdroidserver/scanner.py
 msgid "gzip file archive"
 msgstr "gzip 压缩包"
 
-#: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "ignored explicit argument %r"
 msgstr "被忽略的显式参数 %r"
 
-#: ../fdroidserver/index.py
 msgid "index-v1 must have a signature, use `fdroid signindex` to create it!"
 msgstr "index-v1 必须有签名，使用 `fdroid signindex` 命令创建它！"
 
-#: ../fdroidserver/index.py
 msgid "index-v2 must have a signature, use `fdroid signindex` to create it!"
 msgstr "index-v2 必须有签名，使用 `fdroid signindex` 命令创建它！"
 
-#: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "invalid %(type)s value: %(value)r"
 msgstr "无效 %(type)s 值: %(value)r"
 
-#: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "invalid choice: %(value)r (choose from %(choices)s)"
 msgstr "无效选项：%(value)r (选取自 %(choices)s)"
 
-#: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "invalid conflict_resolution value: %r"
 msgstr "冲突解决值无效: %r"
 
-#: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "invalid option string %(option)r: must start with a character %(prefix_chars)r"
 msgstr "无效选项字符串 %(option)r: 必须以字符 %(prefix_chars)r 开头"
 
-#: ../fdroidserver/common.py
 msgid "ipfs_cid not found, skipping CIDv1 generation"
 msgstr "未找到 ipfs_cid，跳过 CIDv1 生成"
 
-#: ../fdroidserver/checkupdates.py
 #, python-brace-format
 msgid "latest build recipe is newer: old vercode={old}, new vercode={new}"
 msgstr "最新的构建配方较新：旧的验证码={old}，新的验证码={new}"
 
-#: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "local_copy_dir does not end with \"fdroid\", perhaps you meant: \"{path}\""
 msgstr "local_copy_dir未以“ fdroid”结尾，也许你指的是：“ {path}”"
 
-#: ../fdroidserver/deploy.py
 msgid "local_copy_dir must be an absolute path!"
 msgstr "local_copy_dir必须为绝对路径！"
 
-#: ../fdroidserver/deploy.py
 msgid "local_copy_dir must be directory, not a file!"
 msgstr "local_copy_dir必须是目录，不能是文件！"
 
-#: ../fdroidserver/index.py
 #, python-format
 msgid "mirror '%s' does not end with 'fdroid'!"
 msgstr "镜像 '%s' 不以 'fdroid'结尾!"
 
-#: ../fdroidserver/index.py
 #, python-brace-format
 msgid "mirrors set twice, in config.yml and {path}!"
 msgstr "设置了两次镜像，分别在 config.xml 和 {path} 中!"
 
-#: /usr/lib/python3.11/argparse.py
 msgid "mutually exclusive arguments must be optional"
 msgstr "相互排斥的参数必须是可选的"
 
-#: ../fdroidserver/scanner.py
 #, python-brace-format
 msgid "next {name} cache update due in {time}"
 msgstr "下次 {name} 缓存更新将在 {time} 内完成"
 
-#: ../fdroidserver/mirror.py
 #, python-brace-format
 msgid "no \"icon\" in {appid}"
 msgstr "{appid} 中没有 \"图标\""
 
-#: ../fdroidserver/signatures.py
 msgid "no APK supplied"
 msgstr "未提供 APK"
 
-#: ../fdroidserver/checkupdates.py
 msgid "no version information found"
 msgstr "没有找到版本信息"
 
-#: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "not allowed with argument %s"
 msgstr "不允许使用参数 %s"
 
-#: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "one of the arguments %s is required"
 msgstr "其中一个参数 %s 是必需的"
 
-#: ../fdroidserver/common.py ../fdroidserver/index.py
 msgid "only accepts strings, lists, and tuples"
 msgstr "只接受字符串、列表和元组"
 
-#: /usr/lib/python3.11/argparse.py
 msgid "options"
 msgstr "选项"
 
-#: ../fdroidserver/nightly.py
 #, python-brace-format
 msgid "overwriting existing {path}"
 msgstr "正在覆盖现有{path}"
 
-#: ../fdroidserver/deploy.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "path_to_custom_rclone_config: \"{path}\" does not exist!"
-msgstr "local_copy_dir“{path}”的根目录不存在！"
+msgstr "path_to_custom_rclone_config: \"{path}\" 不存在！"
 
-#: /usr/lib/python3.11/argparse.py
 msgid "positional arguments"
 msgstr "位置参数"
 
-#: ../fdroidserver/common.py
 #, python-brace-format
 msgid "process log deploy {path} to {dest} failed!"
 msgstr "进程日志将 {path} 部署到 {dest} 失败！"
 
-#: ../fdroidserver/build.py
 msgid "reference binary missing signature"
 msgstr "参考二进制缺少签名"
 
-#: ../fdroidserver/signatures.py
 #, python-brace-format
 msgid "refuse downloading via insecure HTTP connection (use HTTPS or specify --no-check-https): {apkfilename}"
 msgstr "拒绝通过不安全的 HTTP 连接下载（使用 HTTPS 或指定 --no-check-https）: {apkfilename}"
 
-#: ../fdroidserver/index.py
 #, python-format
 msgid "repo_icon \"repo/icons/%s\" does not exist, generating placeholder."
 msgstr "repo_icon \"repo/icons/%s\" 不存在，正在生成占位符。"
 
-#: ../fdroidserver/common.py
 msgid "repo_url needs to end with /repo"
 msgstr "repo_url 需以 /repo 结尾"
 
-#: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "rsync is missing or broken: {error}"
 msgstr "rsync 丢失或损坏： {error}"
 
-#: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "s3cmd sync indexes {path} to {url} and delete"
 msgstr "s3cmd 同步索引 {path} 至 {url} 并删除"
 
-#: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "s3cmd syncs indexes from {path} to {url} and deletes removed"
 msgstr "s3cmd 将索引从 {path} 同步至 {url} 并删除已下架的"
 
-#: ../fdroidserver/scanner.py
 #, python-brace-format
 msgid "scanner cache is malformed! You can clear it with: '{clear}'"
 msgstr "扫描仪缓存畸形！ 您可以使用他: '{clear}'"
 
-#: ../fdroidserver/deploy.py
 msgid "serverwebroot: path does not end with \"fdroid\", perhaps you meant one of these:"
 msgstr "serverwebroot：路径没有以 \"fdroid\"结尾，可能你想表达的是这些当中的一个："
 
-#: ../fdroidserver/scanner.py
 msgid "shared library"
 msgstr "共享库"
 
-#: /usr/lib/python3.11/argparse.py
 msgid "show this help message and exit"
 msgstr "显示本帮助信息并退出"
 
-#: ../fdroidserver/signatures.py
 msgid "signed APK, either a file-path or HTTPS URL."
 msgstr "签名的 APK、文件路径或 HTTPS URL。"
 
-#: ../fdroidserver/common.py
 msgid "skip deploying full build logs: log content is empty"
 msgstr "跳过部署完整的构建日志：日志内容为空"
 
-#: ../fdroidserver/common.py
 msgid "skip deploying full build logs: not enabled in config"
 msgstr "跳过部署完整的构建日志：配置中未启用"
 
-#: ../fdroidserver/update.py
 #, python-brace-format
 msgid "skipping source tarball: {path}"
 msgstr "跳过源代码压缩包：{path}"
 
-#: ../fdroidserver/lint.py
 msgid "srclibs missing name and/or @"
 msgstr "srclibs 缺少名称和/或 @"
 
-#: ../fdroidserver/scanner.py
 msgid "static library"
 msgstr "静态库"
 
-#: ../fdroidserver/build.py
 #, python-brace-format
 msgid "supplied reference binary has allowed signer {signer}"
 msgstr "所提供的参考二进制已允许签名者 {signer}"
 
-#: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "the following arguments are required: %s"
 msgstr "需要此下参数：%s"
 
-#: ../fdroidserver/install.py
 msgid "true"
 msgstr "true"
 
-#: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "unexpected option string: %s"
 msgstr "未预期的选项字符串：%s"
 
-#: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "unknown parser %(parser_name)r (choices: %(choices)s)"
 msgstr "未知解析器 %(parser_name)r (选择: %(choices)s)"
 
-#: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "unrecognized arguments: %s"
 msgstr "未识别的参数：%s"
 
-#: ../fdroidserver/common.py
 #, python-brace-format
 msgid "unsafe permissions on '{config_file}' (should be 0600)!"
 msgstr "{config_file} 的文件权限不安全 ( 应该设为0600 ) !"
 
-#: ../fdroidserver/__main__.py /usr/lib/python3.11/argparse.py
 msgid "usage: "
 msgstr "用法: "
 
-#: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "using Apache libcloud to sync with {url}"
 msgstr "正在用Apache libcloud同步{url}"
 
-#: ../fdroidserver/deploy.py
 msgid "virustotal.com is rate limiting, waiting to retry..."
 msgstr "virustotal.com正在限制速率，等待重试..."
 
-#: ../fdroidserver/install.py
 msgid "yes"
 msgstr "yes"
 
-#: ../fdroidserver/publish.py
 #, python-brace-format
 msgid "{0} app, {1} key aliases"
 msgid_plural "{0} apps, {1} key aliases"
 msgstr[0] "{0} 应用, {1} 主要别名"
 
-#: ../fdroidserver/update.py
 #, python-brace-format
 msgid "{apkfilename} ({appid}) has no metadata!"
 msgstr "{apkfilename} ({appid})没有元数据！"
 
 #. Translators: https://developer.android.com/build/configure-app-module#set-application-id
-#: ../fdroidserver/update.py
 #, python-brace-format
 msgid "{apkfilename}'s AndroidManifest.xml has a bad date: "
 msgstr "{apkfilename}的 AndroidManifest.xml 有一个无效的日期: "
 
 #. Translators: https://developer.android.com/build/configure-app-module#set-application-id
-#: ../fdroidserver/update.py
 #, python-brace-format
 msgid "{appid} does not have a name! Using application ID instead."
 msgstr "{appid} 没有名字！ 使用 application ID 代替."
 
 #. Translators: https://developer.android.com/build/configure-app-module#set-application-id
-#: ../fdroidserver/update.py
 #, python-brace-format
 msgid "{appid} from {path} is not a valid Android application ID!"
 msgstr "{appid}来自{path}不是一个有效的Android应用ID！"
 
-#: ../fdroidserver/metadata.py ../fdroidserver/update.py
 #, python-brace-format
 msgid "{appid} from {path} is not a valid Java Package Name!"
 msgstr "{appid}来自{path}不是一个有效的Java安装包名称！"
 
-#: ../fdroidserver/update.py
 #, python-brace-format
 msgid "{appid} has both APKs and files: {files}"
 msgstr "{appid}有两个apk文件：{files}"
 
-#: ../fdroidserver/mirror.py
 #, python-brace-format
 msgid "{appid} is missing {name}"
 msgstr "{appid}缺失了{name}"
 
-#: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "{appid}: Unknown extlib {path} in build '{versionName}'"
 msgstr "{appid}：在构建版本‘{versionName}’时在{path}中遇到了未知的extlib"
 
-#: ../fdroidserver/scanner.py
 #, python-brace-format
 msgid "{appid}: no builds specified, running on current source state"
 msgstr "{appid}: 没有指定构建，在当前源码状态下运行"
 
-#: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "{appid}: {field} must be a '{type}', but it is a '{fieldtype}!'"
 msgstr "{appid}：{field}必须为‘{type}’，但它是‘{fieldtype}！’"
 
-#: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "{appid}: {field} must be a '{type}', but it is a '{fieldtype}'!"
 msgstr "{appid}：{field}必须为‘{type}’，但它是‘{fieldtype}’！"
 
-#: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "{build_flag} must be an integer, found: {value}"
 msgstr "{build_flag}变量必须为整型，但是找到了{value}"
 
-#: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "{build_flag} must be list or string, found: {value}"
 msgstr "{build_flag}变量必须为列表或字符串，但是找到了{value}"
 
-#: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "{file} is blank or corrupt!"
 msgstr "{file} 是空的或已损坏！"
 
-#: ../fdroidserver/update.py
 #, python-brace-format
 msgid "{name} \"{section}/icons/{path}\" does not exist! Check \"config.yml\"."
 msgstr "{name}的“{section}/icons/{path}”不存在！请检查配置文件“config.yml”。"
 
-#: ../fdroidserver/update.py
 #, python-brace-format
 msgid "{path1} is a duplicate of {path2}, remove one!"
 msgstr "{path1} 与 {path2} 重复，请删除一个！"
 
-#: ../fdroidserver/import_subcommand.py
 #, python-brace-format
 msgid "{path} already exists, ignoring import results!"
 msgstr "{path} 已经存在，忽略导入的结果！"
 
-#: ../fdroidserver/nightly.py
 #, python-brace-format
 msgid "{path} does not exist!  Create it by running:"
 msgstr "{path} 不存在！通过运行以下命令创建它："
 
-#: ../fdroidserver/update.py
 #, python-brace-format
 msgid "{path} has bad file signature \"{pattern}\", possible Janus exploit!"
 msgstr "{path}有损坏的签名“{pattern}”，也许是Janus的漏洞！"
 
-#: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "{path} has been flagged by virustotal {count} times:"
 msgstr "{path}被virustotal标记了{count}次："
 
-#: ../fdroidserver/install.py
 #, python-brace-format
 msgid "{path} has the wrong fingerprint ({fingerprint})!"
 msgstr "{path} 有错误的指纹 ({fingerprint})！"
 
-#: ../fdroidserver/common.py
 #, python-brace-format
 msgid "{path} is not \"key: value\" dict, but a {datatype}!"
 msgstr "{path}不是“键：值”模式，而是一个{datatype}！"
 
-#: ../fdroidserver/common.py
 #, python-brace-format
 msgid "{path} is not a standard config file!"
 msgstr "{path} 不是标准的配置文件！"
 
-#: ../fdroidserver/index.py
 #, python-brace-format
 msgid "{path} is not list, but a {datatype}!"
 msgstr "{path} 不是list，而是 {datatype}!"
 
-#: ../fdroidserver/common.py
 #, python-brace-format
 msgid "{path} is not {expected_type}, but a {datatype}!"
 msgstr "{path} 不是 {expected_type} 而是 {datatype}!"
 
-#: ../fdroidserver/update.py
 #, python-brace-format
 msgid "{path} is zero size!"
 msgstr "{path}的大小为零！"
 
-#: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "{path} more than 200MB, manually upload: {url}"
 msgstr "{path}的大小超过200MB，请手动上传：{url}"
 
-#: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "{path}: \"{code}\" is not a valid ISO_3166-1 alpha-2 country code!"
 msgstr "{path}: \"{code}\" 不是有效的ISO_3166-1 alpha-2国家代码！"
 
-#: ../fdroidserver/update.py
 #, python-brace-format
 msgid "{path}: {error}"
 msgstr "{path}：{error}"
 
-#: ../fdroidserver/mirror.py
 #, python-brace-format
 msgid "{url} does not end with \"fdroid\", check the URL path!"
 msgstr "{url}不是以“fdroid”结尾的，请检查链接路径！"
 
-#: ../fdroidserver/import_subcommand.py
 #, python-brace-format
 msgid "{url} does not start with \"http\"!"
 msgstr "{url}不是以“http”为开头！"
 
-#: ../fdroidserver/build.py
 msgid "{} build failed"
 msgid_plural "{} builds failed"
 msgstr[0] "{} 构建失败"
 
-#: ../fdroidserver/build.py
 msgid "{} build succeeded"
 msgid_plural "{} builds succeeded"
 msgstr[0] "{} 构建成功"
