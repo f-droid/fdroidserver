@@ -39,7 +39,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2026-01-13 11:22+0100\n"
+"POT-Creation-Date: 2026-01-13 11:31+0100\n"
 "PO-Revision-Date: 2026-01-13 13:03+0000\n"
 "Last-Translator: 大王叫我来巡山 <hamburger2048@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/projects/f-droid/fdroidserver/zh_Hans/>\n"
@@ -1877,6 +1877,14 @@ msgstr "存在密钥别名冲突 - 发布已停止"
 #: ../fdroidserver/common.py
 msgid "These are the apps that have been archived from the main repo."
 msgstr "这些是已从主存储库存档的应用。"
+
+#: ../fdroidserver/update.py
+msgid "This app contains a known security vulnerability"
+msgstr ""
+
+#: ../fdroidserver/update.py
+msgid "This app has a weak security signature"
+msgstr ""
 
 #: ../fdroidserver/common.py
 msgid "This command requires a signing key, you can create one using: fdroid update --create-key"

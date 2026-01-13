@@ -5,9 +5,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: fdroidserver 2.4.2-328-gd6ad6b17\n"
+"Project-Id-Version: fdroidserver 2.4.2-331-g30c6a6c3\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2026-01-13 11:22+0100\n"
+"POT-Creation-Date: 2026-01-13 11:31+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1839,6 +1839,14 @@ msgstr ""
 
 #: ../fdroidserver/common.py
 msgid "These are the apps that have been archived from the main repo."
+msgstr ""
+
+#: ../fdroidserver/update.py
+msgid "This app contains a known security vulnerability"
+msgstr ""
+
+#: ../fdroidserver/update.py
+msgid "This app has a weak security signature"
 msgstr ""
 
 #: ../fdroidserver/common.py

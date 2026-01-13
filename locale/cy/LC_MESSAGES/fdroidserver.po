@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 2.0a5-27-gf24eae0f\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2026-01-13 11:22+0100\n"
+"POT-Creation-Date: 2026-01-13 11:31+0100\n"
 "PO-Revision-Date: 2021-01-16 21:23+0000\n"
 "Last-Translator: Aled Powell <aled@aledpowell.cymru>\n"
 "Language-Team: Welsh <https://hosted.weblate.org/projects/f-droid/fdroidserver/cy/>\n"
@@ -1847,6 +1847,14 @@ msgstr ""
 #: ../fdroidserver/common.py
 msgid "These are the apps that have been archived from the main repo."
 msgstr ""
+
+#: ../fdroidserver/update.py
+msgid "This app contains a known security vulnerability"
+msgstr "Mae'r ap hwn yn cynnwys gwendid diogelwch hysbys"
+
+#: ../fdroidserver/update.py
+msgid "This app has a weak security signature"
+msgstr "Mae gan yr ap hwn llofnod diogelwch wan"
 
 #: ../fdroidserver/common.py
 msgid "This command requires a signing key, you can create one using: fdroid update --create-key"

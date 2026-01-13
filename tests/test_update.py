@@ -1229,6 +1229,41 @@ class UpdateTest(unittest.TestCase):
         self.assertIsNone(apk)
         self.assertFalse(cachechanged)
 
+    @mock.patch('fdroidserver.common.verify_apk_signature', lambda a: False)
+    @mock.patch('fdroidserver.update.extract_apk_icons', lambda i, a, p, r: [])
+    @mock.patch(
+        'fdroidserver.update.fill_missing_icon_densities', lambda e, i, a, r: None
+    )
+    def test_process_apk_automatically_added_antifeatures(self):
+        """Test when an APK in the archive has a deprecated signing algorithm."""
+        os.chdir(self.testdir)
+        os.mkdir('archive')
+        apk = 'org.bitbucket.tickytacky.mirrormirror_4.apk'
+        shutil.copy(basedir / apk, 'archive')
+
+        config = dict()
+        fdroidserver.common.fill_config_defaults(config)
+        config['allow_disabled_algorithms'] = True
+        if 'apksigner' in config:
+            del config['apksigner']  # apksigner considers MD5 signatures valid
+        fdroidserver.common.config = config
+        fdroidserver.update.config = config
+        fdroidserver.common.options = Options
+        fdroidserver.update.options = fdroidserver.common.options
+        fdroidserver.update.options.delete_unknown = False
+
+        knownapks = fdroidserver.common.KnownApks()
+        (skip, apk, cachechanged) = fdroidserver.update.process_apk(
+            {}, apk, 'archive', knownapks, False
+        )
+        self.assertFalse(skip)
+        self.assertTrue(cachechanged)
+        self.assertEqual(['DisabledAlgorithm', 'KnownVuln'], list(apk['antiFeatures']))
+        da = apk['antiFeatures']['DisabledAlgorithm']
+        if 'ro' in da:
+            # translations only available if compiled locally: make -C locale compile
+            self.assertNotEqual(da['en-US'], da['ro'])
+
     def test_get_apks_without_allowed_signatures(self):
         """Test when no AllowedAPKSigningKeys is specified"""
         os.chdir(self.testdir)
@@ -2477,3 +2512,23 @@ class TestParseFromPbxproj(unittest.TestCase):
                 "ASSETCATALOG_COMPILER_APPICON_NAME"
             )
             self.assertEqual(v, "MyIcon")
+
+
+@unittest.skipUnless(
+    glob.glob('locale/*/LC_MESSAGES/fdroidserver.mo'), 'locales need to be compiled'
+)
+class GetTextTest(unittest.TestCase):
+    def test_fill_reason(self):
+        msg = 'Finished'  # an arbitrary string that is definitely translated
+        d = fdroidserver.update._fill_reason(msg)
+
+        # more than one locale
+        self.assertTrue(len(d) > 1)
+
+        # at least one non-English value
+        non_english = False
+        for v in d.values():
+            if v != msg:
+                non_english = True
+                break
+        self.assertTrue(non_english)

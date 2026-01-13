@@ -22,6 +22,7 @@
 import argparse
 import copy
 import filecmp
+import gettext
 import glob
 import hashlib
 import json
@@ -1976,6 +1977,22 @@ def scan_apk_androguard(apk, apkfile):
             apk['features'].append(feature)
 
 
+_DISABLED_ALGORITHM_REASON = None
+_KNOWN_VULN_REASON = None
+
+
+def _fill_reason(msg):
+    d = {DEFAULT_LOCALE: msg}
+    domain = gettext.textdomain()
+    localedir = gettext.bindtextdomain(domain)
+    for f in glob.glob(f'{localedir}/*/LC_MESSAGES/{domain}.mo'):
+        language = f.split('/')[-3]
+        t = gettext.translation(domain, localedir, [language])
+        info = t.info()
+        d[info['language']] = t.gettext(msg)
+    return d
+
+
 def process_apk(apkcache, apkfilename, repodir, knownapks, use_date_from_apk=False,
                 allow_disabled_algorithms=False, archive_bad_sig=False, apps=None, cache_timestamp=0):
     """Process the apk with the given filename in the given repo directory.
@@ -2006,7 +2023,10 @@ def process_apk(apkcache, apkfilename, repodir, knownapks, use_date_from_apk=Fal
     -------
     (skip, apk, cachechanged) where skip is a boolean indicating whether to skip this apk,
       apk is the scanned apk information, and cachechanged is True if the apkcache got changed.
+
     """
+    global _DISABLED_ALGORITHM_REASON, _KNOWN_VULN_REASON
+
     apk = {}
     apkfile = os.path.join(repodir, apkfilename)
 
@@ -2096,7 +2116,23 @@ def process_apk(apkcache, apkfilename, repodir, knownapks, use_date_from_apk=Fal
             if repodir == 'archive' or allow_disabled_algorithms:
                 try:
                     common.verify_deprecated_jar_signature(apkfile)
-                    apk['antiFeatures'].update(['KnownVuln', 'DisabledAlgorithm'])  # TODO
+
+                    antiFeatures = apk['antiFeatures']
+                    if 'DisabledAlgorithm' not in antiFeatures:
+                        if _DISABLED_ALGORITHM_REASON is None:
+                            reason = 'This app has a weak security signature'
+                            _DISABLED_ALGORITHM_REASON = _fill_reason(reason)
+                            # feed to gettext for translation
+                            _('This app has a weak security signature')
+                        antiFeatures['DisabledAlgorithm'] = _DISABLED_ALGORITHM_REASON
+
+                    if 'KnownVuln' not in antiFeatures:
+                        if _KNOWN_VULN_REASON is None:
+                            reason = 'This app contains a known security vulnerability'
+                            _KNOWN_VULN_REASON = _fill_reason(reason)
+                            # feed to gettext for translation
+                            _('This app contains a known security vulnerability')
+                        antiFeatures['KnownVuln'] = _KNOWN_VULN_REASON
                 except VerificationException:
                     skipapk = True
             else:
