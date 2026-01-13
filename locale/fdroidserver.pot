@@ -5,9 +5,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: fdroidserver 2.4.2-120-g93cdae43\n"
+"Project-Id-Version: fdroidserver 2.4.2-328-gd6ad6b17\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2025-09-29 14:29+0200\n"
+"POT-Creation-Date: 2026-01-13 11:22+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -174,6 +174,14 @@ msgstr ""
 msgid "'{value}' is not a valid {field}, should be {pattern}"
 msgstr ""
 
+#: ../fdroidserver/common.py
+msgid "'{}' does not start with a valid applicationId"
+msgstr ""
+
+#: ../fdroidserver/common.py
+msgid "'{}' is not a valid pair of applicationId:versionCode"
+msgstr ""
+
 #: ../fdroidserver/checkupdates.py
 msgid "--merge-request only runs on a single appid!"
 msgstr ""
@@ -323,6 +331,11 @@ msgstr ""
 
 #: ../fdroidserver/mirror.py
 msgid "Base URL to mirror, can include the index signing key using the query string: ?fingerprint="
+msgstr ""
+
+#: ../fdroidserver/lint.py
+#, python-brace-format
+msgid "Branch '{branch}' used as commit in build '{versionCode}'"
 msgstr ""
 
 #: ../fdroidserver/lint.py
@@ -486,6 +499,11 @@ msgstr ""
 msgid "Could not parse size \"{size}\", wrong type \"{type}\""
 msgstr ""
 
+#: ../fdroidserver/metadata.py
+#, python-brace-format
+msgid "Could not read {path} for {appid_versionCode}"
+msgstr ""
+
 #. Translators: https://developer.android.com/build/configure-app-module#set-application-id
 #: ../fdroidserver/import_subcommand.py
 msgid "Couldn't find Application ID"
@@ -585,6 +603,11 @@ msgstr ""
 msgid "Description of length {length} is over the {limit} char limit"
 msgstr ""
 
+#: ../fdroidserver/metadata.py
+#, python-brace-format
+msgid "Did not find '{versionCode}' in '{fieldname}' of {path}"
+msgstr ""
+
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Did you mean config/{name}.yml?"
@@ -614,6 +637,10 @@ msgstr ""
 
 #: ../fdroidserver/nightly.py
 msgid "Do not remove the private keys generated from the keystore"
+msgstr ""
+
+#: ../fdroidserver/scanner.py
+msgid "Do not throw an error on APKs with the debuggable flag set."
 msgstr ""
 
 #: ../fdroidserver/build.py
@@ -833,6 +860,10 @@ msgstr ""
 
 #: ../fdroidserver/scanner.py
 msgid "Force scan of disabled apps and builds."
+msgstr ""
+
+#: ../fdroidserver/rewritemeta.py
+msgid "Format file from stdin and output the result to stdout"
 msgstr ""
 
 #: ../fdroidserver/update.py
@@ -1532,6 +1563,18 @@ msgstr ""
 msgid "Rename APK files that do not match package.name_123.apk"
 msgstr ""
 
+#: ../fdroidserver/lint.py
+msgid "Repo: git URLs must use https://"
+msgstr ""
+
+#: ../fdroidserver/lint.py
+msgid "Repo: srclib URLs must be only a srclib name, not a path or URL."
+msgstr ""
+
+#: ../fdroidserver/lint.py
+msgid "Repo: srclib URLs must be the name of an existing srclib!"
+msgstr ""
+
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "RepoType {type} is deprecated, please switch to git."
@@ -1644,6 +1687,11 @@ msgstr ""
 #: ../fdroidserver/build.py
 #, python-brace-format
 msgid "Set open file limit to {integer}"
+msgstr ""
+
+#: ../fdroidserver/common.py
+#, python-brace-format
+msgid "Set up NDK {release} ({revision})"
 msgstr ""
 
 #: ../fdroidserver/__main__.py
@@ -1793,6 +1841,10 @@ msgstr ""
 msgid "These are the apps that have been archived from the main repo."
 msgstr ""
 
+#: ../fdroidserver/common.py
+msgid "This command requires a signing key, you can create one using: fdroid update --create-key"
+msgstr ""
+
 #: ../fdroidserver/mirror.py
 msgid "This command should never be used to mirror f-droid.org! A full copy requires more than 600GB."
 msgstr ""
@@ -1827,11 +1879,20 @@ msgid "To use rclone, rclone_config and awsbucket must be set in config.yml!"
 msgstr ""
 
 #: ../fdroidserver/lint.py
+msgid "URL must start with https://"
+msgstr ""
+
+#: ../fdroidserver/lint.py
 msgid "URL must start with https:// or http://"
 msgstr ""
 
 #: ../fdroidserver/lint.py
 msgid "URL shorteners should not be used"
+msgstr ""
+
+#: ../fdroidserver/lint.py
+#, python-brace-format
+msgid "URL shorteners should not be used ({domain})"
 msgstr ""
 
 #: ../fdroidserver/lint.py
@@ -1854,6 +1915,11 @@ msgstr ""
 
 #: ../fdroidserver/__main__.py
 msgid "Unknown exception found!"
+msgstr ""
+
+#: ../fdroidserver/lint.py
+#, python-brace-format
+msgid "Unknown file '{filename}' in build '{versionCode}'"
 msgstr ""
 
 #: ../fdroidserver/lint.py
@@ -2326,6 +2392,10 @@ msgid "force metadata errors (default) to be warnings, or to be ignored."
 msgstr ""
 
 #: ../fdroidserver/common.py
+msgid "forceversion requires versionName to be set"
+msgstr ""
+
+#: ../fdroidserver/common.py
 msgid "git svn clone failed"
 msgstr ""
 
@@ -2471,6 +2541,16 @@ msgstr ""
 msgid "repo_icon \"repo/icons/%s\" does not exist, generating placeholder."
 msgstr ""
 
+#: ../fdroidserver/index.py
+#, python-brace-format
+msgid "repo_icon \"{repo_icon}\" does not exist in \"{icon_dir}\", generating placeholder."
+msgstr ""
+
+#: ../fdroidserver/common.py
+#, python-brace-format
+msgid "repo_icon should be a filename ({name}), not a path!"
+msgstr ""
+
 #: ../fdroidserver/common.py
 msgid "repo_url needs to end with /repo"
 msgstr ""
@@ -2535,6 +2615,11 @@ msgstr ""
 #: ../fdroidserver/build.py
 #, python-brace-format
 msgid "supplied reference binary has allowed signer {signer}"
+msgstr ""
+
+#: ../fdroidserver/scanner.py
+#, python-brace-format
+msgid "suspicious permissions {st_mode:o}"
 msgstr ""
 
 #: /usr/lib/python3.11/argparse.py
@@ -2630,6 +2715,11 @@ msgstr ""
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
+msgid "{appid}: Unknown extlib {path} in build '{versionCode}'"
+msgstr ""
+
+#: ../fdroidserver/lint.py
+#, python-brace-format
 msgid "{appid}: Unknown extlib {path} in build '{versionName}'"
 msgstr ""
 
@@ -2665,6 +2755,11 @@ msgstr ""
 
 #: ../fdroidserver/update.py
 #, python-brace-format
+msgid "{name} \"{repo_icon}\" does not exist in \"{icon_dir}/\"! Check \"config.yml\"."
+msgstr ""
+
+#: ../fdroidserver/update.py
+#, python-brace-format
 msgid "{name} \"{section}/icons/{path}\" does not exist! Check \"config.yml\"."
 msgstr ""
 
@@ -2691,6 +2786,11 @@ msgstr ""
 #: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "{path} has been flagged by virustotal {count} times:"
+msgstr ""
+
+#: ../fdroidserver/metadata.py
+#, python-brace-format
+msgid "{path} has no '{fieldname}'"
 msgstr ""
 
 #: ../fdroidserver/install.py
@@ -2736,6 +2836,11 @@ msgstr ""
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "{path}: {error}"
+msgstr ""
+
+#: ../fdroidserver/common.py
+#, python-brace-format
+msgid "{tag} requires versionName to be set"
 msgstr ""
 
 #: ../fdroidserver/mirror.py
