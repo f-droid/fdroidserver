@@ -33,7 +33,7 @@ import subprocess
 
 from pathlib import Path
 
-from fdroidserver import _, common, schedule_buildcycle
+from fdroidserver import common, schedule_buildcycle
 
 
 def send_to_buildbot(
@@ -149,9 +149,7 @@ def send_buildcycle_wrapper(
 def main():
     """CLI entry point."""
     parser = argparse.ArgumentParser(
-        description=_(
-            "send change notifications to buildbot for kicking off app builds"
-        ),
+        description="send change notifications to buildbot for kicking off app builds",
     )
     common.setup_global_opts(parser)
     parser.add_argument(
@@ -173,7 +171,7 @@ def main():
     parser.add_argument(
         "APPID:VERCODE",
         nargs="*",
-        help=_("app id and version code tuple 'APPID:VERCODE'"),
+        help="app id and version code tuple 'APPID:VERCODE'",
     )
     options = common.parse_args(parser)
 

@@ -26,7 +26,7 @@ import logging
 import argparse
 import traceback
 
-from fdroidserver import _, common, metadata
+from fdroidserver import common, metadata
 
 start_timestamp = time.gmtime()
 
@@ -128,7 +128,7 @@ def schedule_buildcycle_wrapper(limit=None, offset=None, published_only=False):
 
 def main():
     parser = argparse.ArgumentParser(
-        description=_("""print not yet built apps in JSON fromat to STDOUT"""),
+        description="""print not yet built apps in JSON fromat to STDOUT""",
     )
     parser.add_argument(
         "--pretty",
