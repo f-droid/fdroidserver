@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.8-224-g4b0ade7\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2026-01-13 11:22+0100\n"
+"POT-Creation-Date: 2026-01-13 11:31+0100\n"
 "PO-Revision-Date: 2025-09-30 14:02+0000\n"
 "Last-Translator: Liner Seven <linour7gmekiblo@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/f-droid/fdroidserver/ja/>\n"
@@ -1847,6 +1847,14 @@ msgstr "キーエイリアスが衝突しています - 公開作業は中止し
 #: ../fdroidserver/common.py
 msgid "These are the apps that have been archived from the main repo."
 msgstr "これらは、メインリポジトリからアーカイブされたアプリです。"
+
+#: ../fdroidserver/update.py
+msgid "This app contains a known security vulnerability"
+msgstr "このアプリは既知のセキュリティ脆弱性が含まれています"
+
+#: ../fdroidserver/update.py
+msgid "This app has a weak security signature"
+msgstr "このアプリは弱いセキュリティ署名を使用しています"
 
 #: ../fdroidserver/common.py
 msgid "This command requires a signing key, you can create one using: fdroid update --create-key"

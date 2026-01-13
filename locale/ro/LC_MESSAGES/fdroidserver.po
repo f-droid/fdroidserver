@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 2.0a5-27-gf24eae0f\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2026-01-13 11:22+0100\n"
+"POT-Creation-Date: 2026-01-13 11:31+0100\n"
 "PO-Revision-Date: 2024-12-02 17:00+0000\n"
 "Last-Translator: Licaon Kter <licaon.kter@protonmail.com>\n"
 "Language-Team: Romanian <https://hosted.weblate.org/projects/f-droid/fdroidserver/ro/>\n"
@@ -1855,6 +1855,14 @@ msgstr "Există o coliziune keyalias - publicarea a fost oprită"
 #: ../fdroidserver/common.py
 msgid "These are the apps that have been archived from the main repo."
 msgstr "Acestea sunt aplicațiile care au fost arhivate din depozitul principal."
+
+#: ../fdroidserver/update.py
+msgid "This app contains a known security vulnerability"
+msgstr "Aplicația conține o vulnerabilitate de securitate cunoscută"
+
+#: ../fdroidserver/update.py
+msgid "This app has a weak security signature"
+msgstr "Aplicația are o semnătură slab securizată"
 
 #: ../fdroidserver/common.py
 msgid "This command requires a signing key, you can create one using: fdroid update --create-key"

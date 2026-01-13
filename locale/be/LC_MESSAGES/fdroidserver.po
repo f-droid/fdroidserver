@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 2.2.1-143-g1a5ee449\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2026-01-13 11:22+0100\n"
+"POT-Creation-Date: 2026-01-13 11:31+0100\n"
 "PO-Revision-Date: 2024-01-21 00:08+0000\n"
 "Last-Translator: flac <flac_twin@keemail.me>\n"
 "Language-Team: Belarusian <https://hosted.weblate.org/projects/f-droid/fdroidserver/be/>\n"
@@ -1844,6 +1844,14 @@ msgstr ""
 #: ../fdroidserver/common.py
 msgid "These are the apps that have been archived from the main repo."
 msgstr ""
+
+#: ../fdroidserver/update.py
+msgid "This app contains a known security vulnerability"
+msgstr "Гэтая праграма змяшчае вядомую ўразлівасць бяспекі"
+
+#: ../fdroidserver/update.py
+msgid "This app has a weak security signature"
+msgstr "Гэтая праграма мае слабы подпіс бяспекі"
 
 #: ../fdroidserver/common.py
 msgid "This command requires a signing key, you can create one using: fdroid update --create-key"

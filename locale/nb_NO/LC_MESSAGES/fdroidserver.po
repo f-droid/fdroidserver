@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.8-74-ga380b9f\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2026-01-13 11:22+0100\n"
+"POT-Creation-Date: 2026-01-13 11:31+0100\n"
 "PO-Revision-Date: 2025-10-28 03:02+0000\n"
 "Last-Translator: Telaneo <post@telaneo.net>\n"
 "Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects/f-droid/fdroidserver/nb_NO/>\n"
@@ -1902,6 +1902,14 @@ msgstr "Nøkkelaliaskollisjon - offentliggjøring stanset"
 
 #: ../fdroidserver/common.py
 msgid "These are the apps that have been archived from the main repo."
+msgstr ""
+
+#: ../fdroidserver/update.py
+msgid "This app contains a known security vulnerability"
+msgstr ""
+
+#: ../fdroidserver/update.py
+msgid "This app has a weak security signature"
 msgstr ""
 
 #: ../fdroidserver/common.py

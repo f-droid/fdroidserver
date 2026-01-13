@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 2.3a1\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2026-01-13 11:22+0100\n"
+"POT-Creation-Date: 2026-01-13 11:31+0100\n"
 "PO-Revision-Date: 2024-09-08 11:09+0000\n"
 "Last-Translator: abelbiwott-dev <abelbiwott@outlook.com>\n"
 "Language-Team: Swahili <https://hosted.weblate.org/projects/f-droid/fdroidserver/sw/>\n"
@@ -1851,6 +1851,14 @@ msgstr "Kuna mgongano wa keyalias - uchapishaji umesitishwa"
 #: ../fdroidserver/common.py
 msgid "These are the apps that have been archived from the main repo."
 msgstr "Hizi ndizo apu zilizohifadhiwa kwenye kumbukumbu kutoka kwa ghala kuu."
+
+#: ../fdroidserver/update.py
+msgid "This app contains a known security vulnerability"
+msgstr "Apu hii ina kasoro ya usalama inayojulikana"
+
+#: ../fdroidserver/update.py
+msgid "This app has a weak security signature"
+msgstr "Apu hii ina sahihi dhaifu ya usalama"
 
 #: ../fdroidserver/common.py
 msgid "This command requires a signing key, you can create one using: fdroid update --create-key"

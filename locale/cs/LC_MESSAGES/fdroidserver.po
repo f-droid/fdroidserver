@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 1.0.0-95-gd7af22b\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2026-01-13 11:22+0100\n"
+"POT-Creation-Date: 2026-01-13 11:31+0100\n"
 "PO-Revision-Date: 2026-01-13 14:54+0000\n"
 "Last-Translator: Fjuro <fjuro@alius.cz>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/f-droid/fdroidserver/cs/>\n"
@@ -1857,6 +1857,14 @@ msgstr "Došlo ke kolizi keyalias – publikování zastaveno"
 #: ../fdroidserver/common.py
 msgid "These are the apps that have been archived from the main repo."
 msgstr "Aplikace, které byly archivovány z hlavního repozitáře."
+
+#: ../fdroidserver/update.py
+msgid "This app contains a known security vulnerability"
+msgstr ""
+
+#: ../fdroidserver/update.py
+msgid "This app has a weak security signature"
+msgstr ""
 
 #: ../fdroidserver/common.py
 msgid "This command requires a signing key, you can create one using: fdroid update --create-key"
