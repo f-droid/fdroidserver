@@ -1740,7 +1740,7 @@ msgstr "Définition de la limite de fichiers ouverts à {integer}"
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Set up NDK {release} ({revision})"
-msgstr "Configurer NDK {version} ({revision})"
+msgstr "Configurer NDK {release} ({revision})"
 
 #: ../fdroidserver/__main__.py
 msgid "Set up an app build for a nightly build repo"
