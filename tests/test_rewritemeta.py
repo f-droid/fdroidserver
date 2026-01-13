@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import io
 import os
 import tempfile
 import textwrap
@@ -118,3 +119,13 @@ class RewriteMetaTest(unittest.TestCase):
                     '''
                 ),
             )
+
+    @mock.patch('sys.argv', ['fdroid', 'rewritemeta', '--stdin'])
+    @mock.patch('sys.stdout', new_callable=io.StringIO)
+    @mock.patch('sys.stdin', io.StringIO('UpdateCheckMode: None\nAutoUpdateMode: None'))
+    def test_rewrite_from_stdin(self, stdout):
+        rewritemeta.main()
+
+        self.assertEqual(
+            stdout.getvalue(), '\nAutoUpdateMode: None\nUpdateCheckMode: None\n'
+        )
