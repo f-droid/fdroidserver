@@ -14,13 +14,13 @@
 # Максим Горпиніч <mgorpinic2005@gmail.com>, 2024.
 # Максим Горпиніч <maksimgorpinic2005a@gmail.com>, 2025.
 # Максим Горпиніч <maksimgorpinic4@gmail.com>, 2025.
-# Максим Горпиніч <gorpinicmaksim0@gmail.com>, 2025.
+# Максим Горпиніч <gorpinicmaksim0@gmail.com>, 2025, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2026-01-13 11:22+0100\n"
-"PO-Revision-Date: 2025-09-30 14:02+0000\n"
+"PO-Revision-Date: 2026-01-13 17:31+0000\n"
 "Last-Translator: Максим Горпиніч <gorpinicmaksim0@gmail.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/f-droid/fdroidserver/uk/>\n"
 "Language: uk\n"
@@ -28,7 +28,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 5.14-dev\n"
+"X-Generator: Weblate 5.15.2-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -192,13 +192,12 @@ msgid "'{value}' is not a valid {field}, should be {pattern}"
 msgstr "'{value}' не є дійсним {field}, має бути {pattern}"
 
 #: ../fdroidserver/common.py
-#, fuzzy
 msgid "'{}' does not start with a valid applicationId"
-msgstr "{appid} не має назви! Застосовуватиметься ID застосунку."
+msgstr "'{}' не починається з дійсного ідентифікатора програми"
 
 #: ../fdroidserver/common.py
 msgid "'{}' is not a valid pair of applicationId:versionCode"
-msgstr ""
+msgstr "'{}' не є дійсною парою applicationId:versionCode"
 
 #: ../fdroidserver/checkupdates.py
 msgid "--merge-request only runs on a single appid!"
@@ -352,9 +351,9 @@ msgid "Base URL to mirror, can include the index signing key using the query str
 msgstr "Базова URL-адреса для дзеркала може містити ключ підпису індексу за допомогою рядка запиту: ?fingerprint="
 
 #: ../fdroidserver/lint.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Branch '{branch}' used as commit in build '{versionCode}'"
-msgstr "Гілка \"{branch}\" використовується як подання до збірки '{versionName}'"
+msgstr "Гілка '{branch}' використовується як коміт у збірці '{versionCode}'"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
@@ -519,9 +518,9 @@ msgid "Could not parse size \"{size}\", wrong type \"{type}\""
 msgstr "Не вдалося проаналізувати розмір \"{size}\", неправильний тип \"{type}\""
 
 #: ../fdroidserver/metadata.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Could not read {path} for {appid_versionCode}"
-msgstr "Не вдалося знайти останню версіюCode"
+msgstr "Не вдалося прочитати {path} для {appid_versionCode}"
 
 #. Translators: https://developer.android.com/build/configure-app-module#set-application-id
 #: ../fdroidserver/import_subcommand.py
@@ -625,7 +624,7 @@ msgstr "Довжина опису {length} перевищує ліміт {limit}
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Did not find '{versionCode}' in '{fieldname}' of {path}"
-msgstr ""
+msgstr "Не знайдено '{versionCode}' у '{fieldname}' з {path}"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -660,7 +659,7 @@ msgstr "Не вилучайте приватні ключі, утворені у
 
 #: ../fdroidserver/scanner.py
 msgid "Do not throw an error on APKs with the debuggable flag set."
-msgstr ""
+msgstr "Не викидати помилку для APK-файлів із встановленим прапорцем налагодження."
 
 #: ../fdroidserver/build.py
 msgid "Don't create a source tarball, useful when testing a build"
@@ -885,7 +884,7 @@ msgstr "Примусово сканувати вимкнені застосун�
 
 #: ../fdroidserver/rewritemeta.py
 msgid "Format file from stdin and output the result to stdout"
-msgstr ""
+msgstr "Форматування файлу зі stdin та виведення результату на stdout"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -1586,15 +1585,15 @@ msgstr "Перейменування файлів APK, які не відпов�
 
 #: ../fdroidserver/lint.py
 msgid "Repo: git URLs must use https://"
-msgstr ""
+msgstr "Репозиторій: URL-адреси git повинні використовувати https://"
 
 #: ../fdroidserver/lint.py
 msgid "Repo: srclib URLs must be only a srclib name, not a path or URL."
-msgstr ""
+msgstr "Репозиторій: URL-адреси srclib мають бути лише іменем srclib, а не шляхом чи URL-адресою."
 
 #: ../fdroidserver/lint.py
 msgid "Repo: srclib URLs must be the name of an existing srclib!"
-msgstr ""
+msgstr "Репозиторій: URL-адреси srclib мають бути іменами існуючих srclib!"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -1712,9 +1711,9 @@ msgid "Set open file limit to {integer}"
 msgstr "Встановити обмеження відкритого файлу на {integer}"
 
 #: ../fdroidserver/common.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Set up NDK {release} ({revision})"
-msgstr "Установити NDK {release} ({version})"
+msgstr "Налаштування NDK {release} ({revision})"
 
 #: ../fdroidserver/__main__.py
 msgid "Set up an app build for a nightly build repo"
@@ -1865,7 +1864,7 @@ msgstr "Ці застосунки, заархівовано з основног�
 
 #: ../fdroidserver/common.py
 msgid "This command requires a signing key, you can create one using: fdroid update --create-key"
-msgstr ""
+msgstr "Ця команда вимагає ключа підпису, ви можете створити його за допомогою: fdroid update --create-key"
 
 #: ../fdroidserver/mirror.py
 msgid "This command should never be used to mirror f-droid.org! A full copy requires more than 600GB."
@@ -1908,9 +1907,8 @@ msgid "To use rclone, rclone_config and awsbucket must be set in config.yml!"
 msgstr "Для використання rclone у файлі config.yml мають бути встановлені параметри rclone_config та awsbucket!"
 
 #: ../fdroidserver/lint.py
-#, fuzzy
 msgid "URL must start with https://"
-msgstr "URL-адреса має починатися з https:// або http://"
+msgstr "URL-адреса має починатися з https://"
 
 #: ../fdroidserver/lint.py
 msgid "URL must start with https:// or http://"
@@ -1921,9 +1919,9 @@ msgid "URL shorteners should not be used"
 msgstr "Вкорочувачі URL-адрес не варто використовувати"
 
 #: ../fdroidserver/lint.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "URL shorteners should not be used ({domain})"
-msgstr "Вкорочувачі URL-адрес не варто використовувати"
+msgstr "Не слід використовувати скорочувачі URL-адрес ({domain})"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
@@ -1948,9 +1946,9 @@ msgid "Unknown exception found!"
 msgstr "Виявлено невідому виняткову ситуацію!"
 
 #: ../fdroidserver/lint.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Unknown file '{filename}' in build '{versionCode}'"
-msgstr "Невідомий файл '{filename}' в збірці '{versionName}'"
+msgstr "Невідомий файл '{filename}' у збірці '{versionCode}'"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
@@ -2425,7 +2423,7 @@ msgstr "показувати помилки метаданих (типово), �
 
 #: ../fdroidserver/common.py
 msgid "forceversion requires versionName to be set"
-msgstr ""
+msgstr "forceversion вимагає встановлення versionName"
 
 #: ../fdroidserver/common.py
 msgid "git svn clone failed"
@@ -2574,14 +2572,14 @@ msgid "repo_icon \"repo/icons/%s\" does not exist, generating placeholder."
 msgstr "repo_icon \"repo/icons/%s\" не існує, створення заповнювача."
 
 #: ../fdroidserver/index.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "repo_icon \"{repo_icon}\" does not exist in \"{icon_dir}\", generating placeholder."
-msgstr "repo_icon \"repo/icons/%s\" не існує, створення заповнювача."
+msgstr "repo_icon \"{repo_icon}\" не існує в \"{icon_dir}\", створюється заповнювач."
 
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "repo_icon should be a filename ({name}), not a path!"
-msgstr ""
+msgstr "repo_icon має бути іменем файлу ({name}), а не шляхом!"
 
 #: ../fdroidserver/common.py
 msgid "repo_url needs to end with /repo"
@@ -2652,7 +2650,7 @@ msgstr "наданий еталонний двійковий файл дозво
 #: ../fdroidserver/scanner.py
 #, python-brace-format
 msgid "suspicious permissions {st_mode:o}"
-msgstr ""
+msgstr "підозрілі дозволи {st_mode:o}"
 
 #: /usr/lib/python3.11/argparse.py
 #, python-format
@@ -2747,9 +2745,9 @@ msgid "{appid} is missing {name}"
 msgstr "У {appid} немає {name}"
 
 #: ../fdroidserver/lint.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{appid}: Unknown extlib {path} in build '{versionCode}'"
-msgstr "{appid}: Невідомий extlib {path} у збірці '{versionName}'"
+msgstr "{appid}: Невідомий extlib {path} у збірці '{versionCode}'"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
@@ -2787,9 +2785,9 @@ msgid "{file} is blank or corrupt!"
 msgstr "{file} порожній або пошкоджений!"
 
 #: ../fdroidserver/update.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{name} \"{repo_icon}\" does not exist in \"{icon_dir}/\"! Check \"config.yml\"."
-msgstr "{name} \"{section}/icons/{path}\" не існує! Виправте його в \"config.yml\"."
+msgstr "{name} \"{repo_icon}\" не існує в \"{icon_dir}/\"! Перевірте \"config.yml\"."
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -2824,7 +2822,7 @@ msgstr "{path} було позначено virustotal {count} разів:"
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "{path} has no '{fieldname}'"
-msgstr ""
+msgstr "{path} не має '{fieldname}'"
 
 #: ../fdroidserver/install.py
 #, python-brace-format
@@ -2874,7 +2872,7 @@ msgstr "{path}: {error}"
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "{tag} requires versionName to be set"
-msgstr ""
+msgstr "{tag} вимагає встановлення versionName"
 
 #: ../fdroidserver/mirror.py
 #, python-brace-format

@@ -6,7 +6,7 @@
 # Filip Klopec <filipklopec@gmail.com>, 2022.
 # Fjuro <ifjuro@proton.me>, 2022, 2023.
 # Daniel Hejduk <jellymail@protonmail.com>, 2023.
-# Fjuro <fjuro@alius.cz>, 2024, 2025.
+# Fjuro <fjuro@alius.cz>, 2024, 2025, 2026.
 # Jakub Boukal <www.bagr@gmail.com>, 2024.
 # Fjuro <fjuro@users.noreply.hosted.weblate.org>, 2025.
 # ikanakova <ikanakova@users.noreply.hosted.weblate.org>, 2025.
@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: fdroidserver 1.0.0-95-gd7af22b\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2026-01-13 11:22+0100\n"
-"PO-Revision-Date: 2025-09-30 14:02+0000\n"
+"PO-Revision-Date: 2026-01-13 14:54+0000\n"
 "Last-Translator: Fjuro <fjuro@alius.cz>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/f-droid/fdroidserver/cs/>\n"
 "Language: cs\n"
@@ -24,7 +24,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=((n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2);\n"
-"X-Generator: Weblate 5.14-dev\n"
+"X-Generator: Weblate 5.15.2-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -188,13 +188,12 @@ msgid "'{value}' is not a valid {field}, should be {pattern}"
 msgstr "„{value}“ není platný {field}, měl by to být {pattern}"
 
 #: ../fdroidserver/common.py
-#, fuzzy
 msgid "'{}' does not start with a valid applicationId"
-msgstr "{appid} nemá název! Používám ID aplikace."
+msgstr "„{}“ nezačíná platným applicationId"
 
 #: ../fdroidserver/common.py
 msgid "'{}' is not a valid pair of applicationId:versionCode"
-msgstr ""
+msgstr "„{}“ není platným párem applicationId:versionCode"
 
 #: ../fdroidserver/checkupdates.py
 msgid "--merge-request only runs on a single appid!"
@@ -348,9 +347,9 @@ msgid "Base URL to mirror, can include the index signing key using the query str
 msgstr "Základní adresa URL pro zrcadlení, může obsahovat klíč pro podepisování indexu pomocí řetězce dotazu: ?fingerprint="
 
 #: ../fdroidserver/lint.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Branch '{branch}' used as commit in build '{versionCode}'"
-msgstr "Větev „{branch}“ použitá jako revize v sestavení „{versionName}“"
+msgstr "Větev „{branch}“ použitá jako revize v sestavení „{versionCode}“"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
@@ -515,9 +514,9 @@ msgid "Could not parse size \"{size}\", wrong type \"{type}\""
 msgstr "Nepodařilo se parsovat velikost „{size}“, nesprávný typ „{type}“"
 
 #: ../fdroidserver/metadata.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Could not read {path} for {appid_versionCode}"
-msgstr "Nepodařilo se najít versionCode"
+msgstr "Nepodařilo se přečíst {path} pro {appid_versionCode}"
 
 #. Translators: https://developer.android.com/build/configure-app-module#set-application-id
 #: ../fdroidserver/import_subcommand.py
@@ -621,7 +620,7 @@ msgstr "Popis délky {length} přesahuje limit {limit} znaků"
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Did not find '{versionCode}' in '{fieldname}' of {path}"
-msgstr ""
+msgstr "Kód „{versionCode}“ nebyl nalezen v „{fieldname}“ cesty {path}"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -656,7 +655,7 @@ msgstr "Nemazat soukromé klíče vygenerované z keystore"
 
 #: ../fdroidserver/scanner.py
 msgid "Do not throw an error on APKs with the debuggable flag set."
-msgstr ""
+msgstr "Nezobrazovat chybu u souborů APK s nastaveným ladicím příznakem."
 
 #: ../fdroidserver/build.py
 msgid "Don't create a source tarball, useful when testing a build"
@@ -881,7 +880,7 @@ msgstr "Vynutit kontrolu zakázaných aplikací a sestavení."
 
 #: ../fdroidserver/rewritemeta.py
 msgid "Format file from stdin and output the result to stdout"
-msgstr ""
+msgstr "Formátovat soubor z stdin a odeslat výstup na stdout"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -1582,15 +1581,15 @@ msgstr "Přejmenovat soubory APK, které se neshodují s package.name_123.apk"
 
 #: ../fdroidserver/lint.py
 msgid "Repo: git URLs must use https://"
-msgstr ""
+msgstr "Repozitář: adresy gitu musejí používat https://"
 
 #: ../fdroidserver/lint.py
 msgid "Repo: srclib URLs must be only a srclib name, not a path or URL."
-msgstr ""
+msgstr "Repozitář: adresy srclib musejí být pouze název srclib, ne cesta nebo adresa URL."
 
 #: ../fdroidserver/lint.py
 msgid "Repo: srclib URLs must be the name of an existing srclib!"
-msgstr ""
+msgstr "Repozitář: adresy srclib musejí být názvem existující srclib!"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -1708,9 +1707,9 @@ msgid "Set open file limit to {integer}"
 msgstr "Nastavit limit otevřených souborů na {integer}"
 
 #: ../fdroidserver/common.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Set up NDK {release} ({revision})"
-msgstr "Nastavit NDK {release} ({version})"
+msgstr "Nastavit NDK {release} ({revision})"
 
 #: ../fdroidserver/__main__.py
 msgid "Set up an app build for a nightly build repo"
@@ -1861,7 +1860,7 @@ msgstr "Aplikace, které byly archivovány z hlavního repozitáře."
 
 #: ../fdroidserver/common.py
 msgid "This command requires a signing key, you can create one using: fdroid update --create-key"
-msgstr ""
+msgstr "Tento příkaz vyžaduje podpisový klíč, můžete jej vytvořit příkazem fdroid update --create-key"
 
 #: ../fdroidserver/mirror.py
 msgid "This command should never be used to mirror f-droid.org! A full copy requires more than 600GB."
@@ -1904,9 +1903,8 @@ msgid "To use rclone, rclone_config and awsbucket must be set in config.yml!"
 msgstr "Chcete-li používat rclone, musí být v souboru config.yml nastaven rclone_config a awsbucket!"
 
 #: ../fdroidserver/lint.py
-#, fuzzy
 msgid "URL must start with https://"
-msgstr "URL musí začínat s https:// nebo http://"
+msgstr "URL musí začínat na https://"
 
 #: ../fdroidserver/lint.py
 msgid "URL must start with https:// or http://"
@@ -1917,9 +1915,9 @@ msgid "URL shorteners should not be used"
 msgstr "Zkracovače URL by neměly být používány"
 
 #: ../fdroidserver/lint.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "URL shorteners should not be used ({domain})"
-msgstr "Zkracovače URL by neměly být používány"
+msgstr "Zkracovače URL by neměly být používány ({domain})"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
@@ -1944,9 +1942,9 @@ msgid "Unknown exception found!"
 msgstr "Došlo k neznámé chybě!"
 
 #: ../fdroidserver/lint.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Unknown file '{filename}' in build '{versionCode}'"
-msgstr "Neznámý soubor „{filename}“ v sestavení „{versionName}“"
+msgstr "Neznámý soubor „{filename}“ v sestavení „{versionCode}“"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
@@ -2421,7 +2419,7 @@ msgstr "vynutit, aby chyby metadat (výchozí) byly varování nebo byly ignorov
 
 #: ../fdroidserver/common.py
 msgid "forceversion requires versionName to be set"
-msgstr ""
+msgstr "forceversion vyžaduje nastavené versionName"
 
 #: ../fdroidserver/common.py
 msgid "git svn clone failed"
@@ -2570,14 +2568,14 @@ msgid "repo_icon \"repo/icons/%s\" does not exist, generating placeholder."
 msgstr "repo_icon „repo/icons/%s“ neexistuje, generování placeholderu."
 
 #: ../fdroidserver/index.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "repo_icon \"{repo_icon}\" does not exist in \"{icon_dir}\", generating placeholder."
-msgstr "repo_icon „repo/icons/%s“ neexistuje, generování placeholderu."
+msgstr "repo_icon „{repo_icon}“ neexistuje v „{icon_dir}“, generování placeholderu."
 
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "repo_icon should be a filename ({name}), not a path!"
-msgstr ""
+msgstr "repo_icon by měl být název souboru ({name}), ne cesta!"
 
 #: ../fdroidserver/common.py
 msgid "repo_url needs to end with /repo"
@@ -2648,7 +2646,7 @@ msgstr "dodaný referenční binární soubor umožnil podepisujícího {signer}
 #: ../fdroidserver/scanner.py
 #, python-brace-format
 msgid "suspicious permissions {st_mode:o}"
-msgstr ""
+msgstr "podezřelá oprávnění {st_mode:o}"
 
 #: /usr/lib/python3.11/argparse.py
 #, python-format
@@ -2743,9 +2741,9 @@ msgid "{appid} is missing {name}"
 msgstr "{appid} chybí {name}"
 
 #: ../fdroidserver/lint.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{appid}: Unknown extlib {path} in build '{versionCode}'"
-msgstr "{appid}: Neznámá extlib {path} v sestavení „{versionName}“"
+msgstr "{appid}: Neznámá extlib {path} v sestavení „{versionCode}“"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
@@ -2783,9 +2781,9 @@ msgid "{file} is blank or corrupt!"
 msgstr "{file} je prázdný nebo poškozený!"
 
 #: ../fdroidserver/update.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{name} \"{repo_icon}\" does not exist in \"{icon_dir}/\"! Check \"config.yml\"."
-msgstr "{name} „{section}/icons/{path}“ neexistuje! Zkontrolujte „config.yml“."
+msgstr "{name} „{repo_icon}“ neexistuje v „{icon_dir}“! Zkontrolujte „config.yml“."
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -2820,7 +2818,7 @@ msgstr "{path} byl označen službou VirusTotal {count}krát:"
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "{path} has no '{fieldname}'"
-msgstr ""
+msgstr "{path} nemá žádné pole „{fieldname}“"
 
 #: ../fdroidserver/install.py
 #, python-brace-format
@@ -2870,7 +2868,7 @@ msgstr "{path}: {error}"
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "{tag} requires versionName to be set"
-msgstr ""
+msgstr "{tag} vyžaduje nastavené versionName"
 
 #: ../fdroidserver/mirror.py
 #, python-brace-format
