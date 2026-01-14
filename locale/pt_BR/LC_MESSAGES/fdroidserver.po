@@ -14,22 +14,22 @@
 # Jose Delvani <jsdelvani@users.noreply.hosted.weblate.org>, 2024.
 # LucasMZ <git@lucasmz.dev>, 2024, 2025.
 # dedakir923 <dedakir923@exoular.com>, 2024.
-# Igor Rückert <igorruckert@yahoo.com.br>, 2025.
+# Igor Rückert <igorruckert@yahoo.com.br>, 2025, 2026.
 # F Bausch <florian+weblate@fbausch.de>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2026-01-13 11:31+0100\n"
-"PO-Revision-Date: 2025-12-15 21:32+0000\n"
-"Last-Translator: F Bausch <florian+weblate@fbausch.de>\n"
+"PO-Revision-Date: 2026-01-14 04:45+0000\n"
+"Last-Translator: Igor Rückert <igorruckert@yahoo.com.br>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/f-droid/fdroidserver/pt_BR/>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.15.1-dev\n"
+"X-Generator: Weblate 5.15.2-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -193,13 +193,12 @@ msgid "'{value}' is not a valid {field}, should be {pattern}"
 msgstr "'{value}' não é um {field} válido, deveria ser {pattern}"
 
 #: ../fdroidserver/common.py
-#, fuzzy
 msgid "'{}' does not start with a valid applicationId"
-msgstr "{appid} não tem um nome! Usando o ID do applicativo em vez disso."
+msgstr "'{}' não inicia com um applicationId válido"
 
 #: ../fdroidserver/common.py
 msgid "'{}' is not a valid pair of applicationId:versionCode"
-msgstr ""
+msgstr "'{}' não é um par applicationId:versionCode válido"
 
 #: ../fdroidserver/checkupdates.py
 msgid "--merge-request only runs on a single appid!"
@@ -353,14 +352,14 @@ msgid "Base URL to mirror, can include the index signing key using the query str
 msgstr "URL base para espelhar, pode incluir a chave de assinatura de índice usando a string de consulta:? Fingerprint ="
 
 #: ../fdroidserver/lint.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Branch '{branch}' used as commit in build '{versionCode}'"
-msgstr "Filial '{branch} 1' usada como commit no build '{versionName} 2'"
+msgstr "Filial '{branch}' usada como commit no build '{versionCode}'"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "Branch '{branch}' used as commit in build '{versionName}'"
-msgstr "Filial '{branch} 1' usada como commit no build '{versionName} 2'"
+msgstr "Filial '{branch}' usada como commit no build '{versionName}'"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
@@ -469,7 +468,7 @@ msgstr "Fazer commit das mudanças, push, e então faça uma merge request"
 
 #: ../fdroidserver/deploy.py
 msgid "Committing index files to git mirror"
-msgstr ""
+msgstr "Confirmando o envio dos arquivos de índice para o espelho do git"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
@@ -496,14 +495,12 @@ msgid "Could not find latest version name"
 msgstr "Não foi possível encontrar o nome da versão mais recente"
 
 #: ../fdroidserver/import_subcommand.py
-#, fuzzy
 msgid "Could not find latest versionCode"
-msgstr "Não foi possível encontrar o código da versão mais recente"
+msgstr "Não foi possível encontrar o versionCode mais recente"
 
 #: ../fdroidserver/import_subcommand.py
-#, fuzzy
 msgid "Could not find latest versionName"
-msgstr "Não foi possível encontrar o nome da versão mais recente"
+msgstr "Não foi possível encontrar o versionName mais recente"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -521,9 +518,9 @@ msgid "Could not parse size \"{size}\", wrong type \"{type}\""
 msgstr "Não foi possível analisar o tamanho \"{size}\", tipo incorreto \"{type}\""
 
 #: ../fdroidserver/metadata.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Could not read {path} for {appid_versionCode}"
-msgstr "Não foi possível encontrar o código da versão mais recente"
+msgstr "Não foi possível ler {path} para {appid_versionCode}"
 
 #. Translators: https://developer.android.com/build/configure-app-module#set-application-id
 #: ../fdroidserver/import_subcommand.py
@@ -627,7 +624,7 @@ msgstr "A descrição de tamanho {length} está acima do limite de {limit} carac
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Did not find '{versionCode}' in '{fieldname}' of {path}"
-msgstr ""
+msgstr "Não foi encontrado '{versionCode}' em '{fieldname}' de {path}"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -662,7 +659,7 @@ msgstr "Não remova as chaves privadas geradas do keystore"
 
 #: ../fdroidserver/scanner.py
 msgid "Do not throw an error on APKs with the debuggable flag set."
-msgstr ""
+msgstr "Não apresente um erro em APKs com a flag de depuração ativada."
 
 #: ../fdroidserver/build.py
 msgid "Don't create a source tarball, useful when testing a build"
@@ -887,7 +884,7 @@ msgstr "Força varredura de aplicativos e compilações desativadas."
 
 #: ../fdroidserver/rewritemeta.py
 msgid "Format file from stdin and output the result to stdout"
-msgstr ""
+msgstr "Formate o arquivo a partir da entrada padrão (stdin) e envie o resultado para a saída padrão (stdout)"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -1342,14 +1339,14 @@ msgid "No version information could be found."
 msgstr "Não foi possível encontrar informações sobre a versão."
 
 #: ../fdroidserver/scanner.py
-#, fuzzy, python-format
+#, python-format
 msgid "Non-exist scandelete path: %s"
-msgstr "Caminho scandelete não usado: %s"
+msgstr "Caminho scandelete não existente: %s"
 
 #: ../fdroidserver/scanner.py
-#, fuzzy, python-format
+#, python-format
 msgid "Non-exist scanignore path: %s"
-msgstr "Caminho scanignore não usado: %s"
+msgstr "Caminho scanignore não existente: %s"
 
 #: ../fdroidserver/common.py
 msgid "Not a valid size definition: \"{}\""
@@ -1588,15 +1585,15 @@ msgstr "Renomeia arquivos APK que não correspondem a pacote.nome_123.apk"
 
 #: ../fdroidserver/lint.py
 msgid "Repo: git URLs must use https://"
-msgstr ""
+msgstr "Repo: URLS do git precisam usar https://"
 
 #: ../fdroidserver/lint.py
 msgid "Repo: srclib URLs must be only a srclib name, not a path or URL."
-msgstr ""
+msgstr "Repo: URLS srclib devem ser apenas um nome scrlib, não um caminho ou URL."
 
 #: ../fdroidserver/lint.py
 msgid "Repo: srclib URLs must be the name of an existing srclib!"
-msgstr ""
+msgstr "Repo: URLs srclib devem ser o nome de um scrlib existente!"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -1713,9 +1710,9 @@ msgid "Set open file limit to {integer}"
 msgstr "Defina o limite de arquivos abertos para {integer}"
 
 #: ../fdroidserver/common.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Set up NDK {release} ({revision})"
-msgstr "Defina NDK {release} ({version}) para cima"
+msgstr "Definir NDK {release} ({revision})"
 
 #: ../fdroidserver/__main__.py
 msgid "Set up an app build for a nightly build repo"
@@ -1748,9 +1745,9 @@ msgid "Skipping '{apkfilename}' with invalid signature!"
 msgstr "Ignorando '{apkfilename}' com assinatura inválida!"
 
 #: ../fdroidserver/update.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Skipping '{apkfilename}' without versionCode!"
-msgstr "Ignorando '{apkfilename}' com assinatura inválida!"
+msgstr "Ignorando '{apkfilename}' sem versionCode!"
 
 #: ../fdroidserver/deploy.py ../fdroidserver/index.py
 #, python-format
@@ -1831,9 +1828,9 @@ msgid "The OBB version code must come after \"{name}.\":"
 msgstr "O código da versão do OBB deve vir depois de \"{name}.\":"
 
 #: ../fdroidserver/update.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The OBB versionCode must come after \"{name}.\":"
-msgstr "O código da versão do OBB deve vir depois de \"{name}.\":"
+msgstr "O versionCode do OBB deve vir depois de \"{name}.\":"
 
 #: ../fdroidserver/btlog.py
 msgid "The base URL for the repo to log (default: https://f-droid.org)"
@@ -1874,7 +1871,7 @@ msgstr "Este app tem uma assinatura de segurança fraca"
 
 #: ../fdroidserver/common.py
 msgid "This command requires a signing key, you can create one using: fdroid update --create-key"
-msgstr ""
+msgstr "Este comando requer uma chave de assinatura. Você pode criar uma usando: fdroid update --create-key"
 
 #: ../fdroidserver/mirror.py
 msgid "This command should never be used to mirror f-droid.org! A full copy requires more than 600GB."
@@ -1917,9 +1914,8 @@ msgid "To use rclone, rclone_config and awsbucket must be set in config.yml!"
 msgstr "Para usar rclone, rclone_config e awsbucket devem ser configurados em config.yml!"
 
 #: ../fdroidserver/lint.py
-#, fuzzy
 msgid "URL must start with https://"
-msgstr "A URL deve começar com https:// ou http://"
+msgstr "O URL deve começar com https://"
 
 #: ../fdroidserver/lint.py
 msgid "URL must start with https:// or http://"
@@ -1930,9 +1926,9 @@ msgid "URL shorteners should not be used"
 msgstr "Encurtadores de URL não devem ser usados"
 
 #: ../fdroidserver/lint.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "URL shorteners should not be used ({domain})"
-msgstr "Encurtadores de URL não devem ser usados"
+msgstr "Encurtadores de URL não devem ser usados ({domain})"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
@@ -1957,9 +1953,9 @@ msgid "Unknown exception found!"
 msgstr "Exceção desconhecida encontrada!"
 
 #: ../fdroidserver/lint.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Unknown file '{filename}' in build '{versionCode}'"
-msgstr "Arquivo desconhecido '{filename}' na compilação '{versionName}'"
+msgstr "Arquivo desconhecido '{filename}' na compilação '{versionCode}'"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
@@ -2049,9 +2045,9 @@ msgid "UpdateCheckData must match the version code as integer (\\d or [0-9]): {c
 msgstr "UpdateCheckData deve corresponder ao código da versão como número inteiro (\\d ou [0-9]): {codeex}"
 
 #: ../fdroidserver/lint.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "UpdateCheckData must match the versionCode as integer (\\d or [0-9]): {codeex}"
-msgstr "UpdateCheckData deve corresponder ao código da versão como número inteiro (\\d ou [0-9]): {codeex}"
+msgstr "UpdateCheckData deve corresponder ao versionCode como número inteiro (\\d ou [0-9]): {codeex}"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
@@ -2104,9 +2100,9 @@ msgid "Using \"{path}\" for configuring s3cmd."
 msgstr "Usando \"{path}\" para configurar s3cmd."
 
 #: ../fdroidserver/deploy.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Using \"{path}\" for rclone config."
-msgstr "Usando \"{path}\" para configurar s3cmd."
+msgstr "Usando \"{path}\" para configurar rclone."
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
@@ -2432,7 +2428,7 @@ msgstr "Forçar os erros de metadados (padrão) para serem avisos, ou para serem
 
 #: ../fdroidserver/common.py
 msgid "forceversion requires versionName to be set"
-msgstr ""
+msgstr "forceversion necessita que versionName esteja definido"
 
 #: ../fdroidserver/common.py
 msgid "git svn clone failed"
@@ -2553,9 +2549,9 @@ msgid "overwriting existing {path}"
 msgstr "sobrescrevendo {path} existente"
 
 #: ../fdroidserver/deploy.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "path_to_custom_rclone_config: \"{path}\" does not exist!"
-msgstr "O diretório raiz para local_copy_dir \"{path}\" não existe!"
+msgstr "path_to_custom_rclone_config: \"{path}\" não existe!"
 
 #: /usr/lib/python3.11/argparse.py
 msgid "positional arguments"
@@ -2581,14 +2577,14 @@ msgid "repo_icon \"repo/icons/%s\" does not exist, generating placeholder."
 msgstr "repo_icon \"repo/icons/%s\" não existe, gerando um espaço reservado."
 
 #: ../fdroidserver/index.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "repo_icon \"{repo_icon}\" does not exist in \"{icon_dir}\", generating placeholder."
-msgstr "repo_icon \"repo/icons/%s\" não existe, gerando um espaço reservado."
+msgstr "repo_icon \"{repo_icon}\" não existe em \"{icon_dir}\", gerando um espaço reservado."
 
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "repo_icon should be a filename ({name}), not a path!"
-msgstr ""
+msgstr "repo_icon deve ser um nome de arquivo ({name}), não um caminho!"
 
 #: ../fdroidserver/common.py
 msgid "repo_url needs to end with /repo"
@@ -2659,7 +2655,7 @@ msgstr "o binário de referência fornecido autorizou o signatário {signer}"
 #: ../fdroidserver/scanner.py
 #, python-brace-format
 msgid "suspicious permissions {st_mode:o}"
-msgstr ""
+msgstr "permissões suspeitas {st_mode:o}"
 
 #: /usr/lib/python3.11/argparse.py
 #, python-format
@@ -2753,9 +2749,9 @@ msgid "{appid} is missing {name}"
 msgstr "{appid} tem falta de {name}"
 
 #: ../fdroidserver/lint.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{appid}: Unknown extlib {path} in build '{versionCode}'"
-msgstr "{appid}: extlib {path} desconhecido na compilação '{versionName}'"
+msgstr "{appid}: extlib {path} desconhecido na compilação '{versionCode}'"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
@@ -2793,9 +2789,9 @@ msgid "{file} is blank or corrupt!"
 msgstr "o {file} está vazio ou está corrompido!"
 
 #: ../fdroidserver/update.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{name} \"{repo_icon}\" does not exist in \"{icon_dir}/\"! Check \"config.yml\"."
-msgstr "{name} \"{section}/icons/{path}\" não existe! Corrija-o no \"config.yml\"."
+msgstr "{name} \"{repo_icon}\" não existe em \"{icon_dir}\"! Verifique o arquivo \"config.yml\"."
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -2830,7 +2826,7 @@ msgstr "{path} foi sinalizado pelo virustotal {count} vezes:"
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "{path} has no '{fieldname}'"
-msgstr ""
+msgstr "{path} não possui '{fieldname}'"
 
 #: ../fdroidserver/install.py
 #, python-brace-format
@@ -2880,7 +2876,7 @@ msgstr "Falha ao copiar {path}: {error}"
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "{tag} requires versionName to be set"
-msgstr ""
+msgstr "{tag} necessita que versionName esteja definido"
 
 #: ../fdroidserver/mirror.py
 #, python-brace-format

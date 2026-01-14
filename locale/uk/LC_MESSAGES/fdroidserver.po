@@ -1864,11 +1864,11 @@ msgstr "Ці застосунки, заархівовано з основног�
 
 #: ../fdroidserver/update.py
 msgid "This app contains a known security vulnerability"
-msgstr ""
+msgstr "Цей застосунок містить знану вразливість безпеки"
 
 #: ../fdroidserver/update.py
 msgid "This app has a weak security signature"
-msgstr ""
+msgstr "Цей застосунок має слабкий підпис безпеки"
 
 #: ../fdroidserver/common.py
 msgid "This command requires a signing key, you can create one using: fdroid update --create-key"

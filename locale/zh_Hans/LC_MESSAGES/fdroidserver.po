@@ -1880,11 +1880,11 @@ msgstr "这些是已从主存储库存档的应用。"
 
 #: ../fdroidserver/update.py
 msgid "This app contains a known security vulnerability"
-msgstr ""
+msgstr "此应用包含已知的安全漏洞"
 
 #: ../fdroidserver/update.py
 msgid "This app has a weak security signature"
-msgstr ""
+msgstr "此应用的安全签名较弱"
 
 #: ../fdroidserver/common.py
 msgid "This command requires a signing key, you can create one using: fdroid update --create-key"

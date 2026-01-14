@@ -1891,11 +1891,11 @@ msgstr "Voici les applications qui ont été archivées à partir du dépôt pri
 
 #: ../fdroidserver/update.py
 msgid "This app contains a known security vulnerability"
-msgstr ""
+msgstr "Cette application possède une vulnérabilité de sécurité connue"
 
 #: ../fdroidserver/update.py
 msgid "This app has a weak security signature"
-msgstr ""
+msgstr "La signature de sécurité de cette application est faible"
 
 #: ../fdroidserver/common.py
 msgid "This command requires a signing key, you can create one using: fdroid update --create-key"

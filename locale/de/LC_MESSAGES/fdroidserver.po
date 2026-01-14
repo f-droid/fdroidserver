@@ -1874,11 +1874,11 @@ msgstr "Dies sind die Apps, die aus dem Hauptrepository archiviert wurden."
 
 #: ../fdroidserver/update.py
 msgid "This app contains a known security vulnerability"
-msgstr ""
+msgstr "Diese App enthält eine bekannte Sicherheitslücke"
 
 #: ../fdroidserver/update.py
 msgid "This app has a weak security signature"
-msgstr ""
+msgstr "Diese App hat eine schwache Sicherheitssignatur"
 
 #: ../fdroidserver/common.py
 msgid "This command requires a signing key, you can create one using: fdroid update --create-key"

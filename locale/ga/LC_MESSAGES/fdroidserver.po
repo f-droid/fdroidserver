@@ -1854,11 +1854,11 @@ msgstr "Is iad seo na feidhmchláir atá curtha i gcartlann ón bpríomh-repo."
 
 #: ../fdroidserver/update.py
 msgid "This app contains a known security vulnerability"
-msgstr ""
+msgstr "Tá leochaileacht slándála aitheanta san aip seo"
 
 #: ../fdroidserver/update.py
 msgid "This app has a weak security signature"
-msgstr ""
+msgstr "Tá síniú slándála lag ag an bhfeidhmchlár seo"
 
 #: ../fdroidserver/common.py
 msgid "This command requires a signing key, you can create one using: fdroid update --create-key"

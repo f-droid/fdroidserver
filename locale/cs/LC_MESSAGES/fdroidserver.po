@@ -1860,11 +1860,11 @@ msgstr "Aplikace, které byly archivovány z hlavního repozitáře."
 
 #: ../fdroidserver/update.py
 msgid "This app contains a known security vulnerability"
-msgstr ""
+msgstr "Tato aplikace má známou zranitelnost v zabezpečení"
 
 #: ../fdroidserver/update.py
 msgid "This app has a weak security signature"
-msgstr ""
+msgstr "Tato aplikace má slabý bezpečnostní podpis"
 
 #: ../fdroidserver/common.py
 msgid "This command requires a signing key, you can create one using: fdroid update --create-key"
