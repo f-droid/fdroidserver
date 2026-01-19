@@ -4959,6 +4959,7 @@ YAML_LINT_CONFIG = {
     'rules': {
         'document-start': 'disable',
         'line-length': 'disable',
+        'trailing-spaces': 'disable',
         'truthy': 'disable',
     },
 }
