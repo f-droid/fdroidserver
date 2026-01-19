@@ -1246,9 +1246,7 @@ def main():
 
         if app.Disabled and not options.force:
             logging.info(_("Skipping {appid}: disabled").format(appid=appid))
-            json_per_appid['disabled'] = MessageStore().infos.append(
-                'Skipping: disabled'
-            )
+            json_per_appid['disabled'] = MessageStore().infos + ['Skipping: disabled']
             continue
 
         try:

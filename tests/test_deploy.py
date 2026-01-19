@@ -1079,7 +1079,7 @@ class GitHubReleasesTest(unittest.TestCase):
             {
                 "projectUrl": "https://github.com/custom/app",
                 "packageNames": ["more.custom.app"],
-                "token": "custom_token",
+                "token": "custom_token",  # nosec B105
             },
         ]
 
@@ -1121,7 +1121,7 @@ class GitHubReleasesTest(unittest.TestCase):
                     {
                         "projectUrl": "https://github.com/custom/app",
                         "packageNames": ["more.custom.app"],
-                        "token": "custom_token",
+                        "token": "custom_token",  # nosec B105
                     },
                     "fri_result",
                     "fake_global_token",

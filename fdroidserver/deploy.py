@@ -998,7 +998,7 @@ def upload_to_github_releases_repo(repo_conf, release_infos, global_gh_token):
         )
         return
     conf_package_names = repo_conf.get("packageNames", [])
-    if type(conf_package_names) == str:
+    if type(conf_package_names) is str:
         conf_package_names = [conf_package_names]
     if not conf_package_names:
         logging.warning(

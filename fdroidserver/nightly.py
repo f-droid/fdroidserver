@@ -230,9 +230,9 @@ def clone_git_repo(clone_url, git_mirror_path):
                     'GIT_ASKPASS': '/bin/true',
                     'SSH_ASKPASS': '/bin/true',
                     'GIT_USERNAME': 'u',
-                    'GIT_PASSWORD': 'p',
+                    'GIT_PASSWORD': 'p',  # nosec B105
                     'GIT_HTTP_USERNAME': 'u',
-                    'GIT_HTTP_PASSWORD': 'p',
+                    'GIT_HTTP_PASSWORD': 'p',  # nosec B105
                     'GIT_SSH': '/bin/false',  # for git < 2.3
                     'GIT_TERMINAL_PROMPT': '0',
                 },

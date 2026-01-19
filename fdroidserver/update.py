@@ -973,7 +973,7 @@ def insert_funding_yml_donation_links(apps):
                     )
                 )
                 logging.error(e)
-            if not data or type(data) != dict:
+            if not data or type(data) is not dict:
                 continue
             if not app.get('Liberapay') and 'liberapay' in data:
                 s = sanitize_funding_yml_name(data['liberapay'])
@@ -1420,9 +1420,9 @@ def parse_ios_screenshot_name(path):
     s = path.stem.split('@')
     if len(s) >= 2:
         if "iphone" in s[0].lower():
-            return ("phoneScreenshots", s[0].strip(), ('@'.join(s[1:])).split('-')[0].strip())
+            return ("phoneScreenshots", s[0].strip(), ('@'.join(s[1:])).split('-', maxsplit=1)[0].strip())
         elif "ipad" in s[0].lower():
-            return ("tenInchScreenshots", s[0].strip(), ('@'.join(s[1:])).split('-')[0].strip())
+            return ("tenInchScreenshots", s[0].strip(), ('@'.join(s[1:])).split('-', maxsplit=1)[0].strip())
     else:
         fragments = path.stem.lower().split("_")
         device = "unknown"
