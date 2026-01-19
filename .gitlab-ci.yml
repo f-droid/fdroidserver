@@ -663,7 +663,7 @@ servergitmirrors:
     - . env/bin/activate
     - export PYTHONPATH=`pwd`
     - $pip install -e .
-    - mkdir /root/.ssh/
+    - mkdir -p /root/.ssh/
     - ./tests/key-tricks.py
     - ssh-keyscan gitlab.com >> /root/.ssh/known_hosts
     - test -d /tmp/fdroid/repo || mkdir -p /tmp/fdroid/repo
