@@ -2360,7 +2360,7 @@ def lint_config(arg):
                 if type(data[key]) not in (str, list, dict):
                     passed = False
                     show_error = True
-            elif type(data[key]) != t:
+            elif type(data[key]) is not t:
                 passed = False
                 show_error = True
             if show_error:

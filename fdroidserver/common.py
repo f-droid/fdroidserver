@@ -904,7 +904,7 @@ def parse_human_readable_size(size):
     try:
         return int(float(size))
     except (ValueError, TypeError) as exc:
-        if type(size) != str:
+        if type(size) is not str:
             raise ValueError(
                 _('Could not parse size "{size}", wrong type "{type}"').format(
                     size=size, type=type(size)
@@ -2516,7 +2516,7 @@ def is_strict_application_id(name):
 
 def parse_srclib_spec(spec):
 
-    if type(spec) != str:
+    if type(spec) is not str:
         raise MetaDataException(
             _("can not parse scrlib spec (not a string): '{}'").format(spec)
         )

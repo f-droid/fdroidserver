@@ -390,7 +390,7 @@ class FieldValidator:
     def check(self, v, appid):
         if not v:
             return
-        if type(v) == list:
+        if type(v) is list:
             values = v
         else:
             values = [v]
