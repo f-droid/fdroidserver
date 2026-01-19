@@ -103,7 +103,7 @@ setup(
         'python-vagrant',
         'PyYAML',
         'qrcode',
-        'ruamel.yaml >= 0.15, < 0.17.22',
+        'ruamel.yaml >= 0.17.22',
         'requests >= 2.5.2, != 2.11.0, != 2.12.2, != 2.18.0',
         'sdkmanager >= 0.6.4',
         'yamllint',
