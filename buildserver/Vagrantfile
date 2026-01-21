@@ -35,7 +35,7 @@ Vagrant.configure("2") do |config|
     config.cache.enable :chef
   end
 
-  config.vm.box = "debian/testing64"
+  config.vm.box = "debian/trixie64"
 
   if not configfile.has_key? "vm_provider" or configfile["vm_provider"] == "virtualbox"
     # default to VirtualBox if not set
