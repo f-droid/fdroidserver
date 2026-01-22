@@ -6,6 +6,7 @@ import hashlib
 import json
 import logging
 import os
+import platform
 import random
 import shutil
 import string
@@ -1260,7 +1261,7 @@ class UpdateTest(unittest.TestCase):
         self.assertTrue(cachechanged)
         self.assertEqual(['DisabledAlgorithm', 'KnownVuln'], list(apk['antiFeatures']))
         da = apk['antiFeatures']['DisabledAlgorithm']
-        if 'ro' in da:
+        if 'ro' in da and platform.system() != 'Darwin':
             # translations only available if compiled locally: make -C locale compile
             self.assertNotEqual(da['en-US'], da['ro'])
 

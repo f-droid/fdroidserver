@@ -143,6 +143,7 @@ debian_testing:
         git
         gnupg
         ipfs-cid
+        python3-babel
         python3-biplist
         python3-defusedxml
         python3-libcloud
@@ -152,6 +153,7 @@ debian_testing:
     - python3 -c 'import fdroidserver'
     - python3 -c 'import androguard'
     - python3 -c 'import sdkmanager'
+    - ./setup.py compile_catalog
     - cd tests
     - ./run-tests
 
@@ -663,7 +665,7 @@ servergitmirrors:
     - . env/bin/activate
     - export PYTHONPATH=`pwd`
     - $pip install -e .
-    - mkdir /root/.ssh/
+    - mkdir -p /root/.ssh/
     - ./tests/key-tricks.py
     - ssh-keyscan gitlab.com >> /root/.ssh/known_hosts
     - test -d /tmp/fdroid/repo || mkdir -p /tmp/fdroid/repo
