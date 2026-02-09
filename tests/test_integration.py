@@ -246,7 +246,7 @@ class IntegrationTest(unittest.TestCase):
             self.fdroid_cmd + ["scanner", "org.fdroid.ci.test.app", "--verbose"]
         )
 
-    @unittest.skipUnless(shutil.which("gpg"), "requires command line gpg")
+    @unittest.skipUnless(shutil.which("gpg-agent"), "requires gpg-agent for gpg")
     def test_copy_repo_generate_java_gpg_keys_update_and_gpgsign(self):
         """Needs tricks to make gpg-agent run in a test harness."""
         self.fdroid_init_with_prebuilt_keystore()
