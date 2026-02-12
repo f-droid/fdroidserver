@@ -433,7 +433,7 @@ valuetypes = {
                    ["Litecoin"]),
 
     FieldValidator("Repo Type",
-                   r'^(git|git-svn|svn|hg|bzr|srclib)$',
+                   r'^(git|git-svn|hg|srclib)$',
                    ["RepoType"]),
 
     FieldValidator("Binaries",

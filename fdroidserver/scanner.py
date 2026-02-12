@@ -947,7 +947,7 @@ def scan_source(build_dir, build=metadata.Build(), json_per_build=None):
     # Iterate through all files in the source code
     for root, dirs, files in os.walk(build_dir, topdown=True):
         # It's topdown, so checking the basename is enough
-        for ignoredir in ('.hg', '.git', '.svn', '.bzr'):
+        for ignoredir in ('.hg', '.git'):
             if ignoredir in dirs:
                 dirs.remove(ignoredir)
 

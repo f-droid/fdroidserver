@@ -1546,14 +1546,10 @@ def getvcs(vcstype, remote, local):
         return vcs_gitsvn(remote, local)
     if vcstype == 'hg':
         return vcs_hg(remote, local)
-    if vcstype == 'bzr':
-        return vcs_bzr(remote, local)
     if vcstype == 'srclib':
         if str(local) != os.path.join('build', 'srclib', str(remote)):
             raise VCSException("Error: srclib paths are hard-coded!")
         return getsrclib(remote, os.path.join('build', 'srclib'), raw=True)
-    if vcstype == 'svn':
-        raise VCSException("Deprecated vcs type 'svn' - please use 'git-svn' instead")
     raise VCSException("Invalid vcs type " + vcstype)
 
 
@@ -2082,48 +2078,6 @@ class vcs_hg(vcs):
     def _gettags(self):
         p = FDroidPopen(['hg', 'tags', '-q'], cwd=self.local, output=False)
         return p.output.splitlines()[1:]
-
-
-class vcs_bzr(vcs):
-
-    def repotype(self):
-        return 'bzr'
-
-    def clientversioncmd(self):
-        return ['bzr', '--version']
-
-    def bzr(self, args, envs=dict(), cwd=None, output=True):
-        """Prevent bzr from ever using SSH to avoid security vulns."""
-        envs.update({
-            'BZR_SSH': 'false',
-        })
-        return FDroidPopen(['bzr', ] + args, envs=envs, cwd=cwd, output=output)
-
-    def gotorevisionx(self, rev):
-        if not os.path.exists(self.local):
-            p = self.bzr(['branch', self.remote, str(self.local)], output=False)
-            if p.returncode != 0:
-                self.clone_failed = True
-                raise VCSException("Bzr branch failed", p.output)
-        else:
-            p = self.bzr(['clean-tree', '--force', '--unknown', '--ignored'], cwd=self.local, output=False)
-            if p.returncode != 0:
-                raise VCSException("Bzr revert failed", p.output)
-            if not self.refreshed:
-                p = self.bzr(['pull'], cwd=self.local, output=False)
-                if p.returncode != 0:
-                    raise VCSException("Bzr update failed", p.output)
-                self.refreshed = True
-
-        revargs = list(['-r', rev] if rev else [])
-        p = self.bzr(['revert'] + revargs, cwd=self.local, output=False)
-        if p.returncode != 0:
-            raise VCSException("Bzr revert of '%s' failed" % rev, p.output)
-
-    def _gettags(self):
-        p = self.bzr(['tags'], cwd=self.local, output=False)
-        return [tag.split('   ')[0].strip() for tag in
-                p.output.splitlines()]
 # fmt: on
 
 
