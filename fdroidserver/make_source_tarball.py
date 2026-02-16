@@ -65,8 +65,9 @@ def main():
     options = common.parse_args(parser)
 
     try:
-        appid, versionCode = common.split_pkg_arg(options.APPID_VERCODE)
-        make_source_tarball(metadata.get_single_build(appid, versionCode))
+        appid, versionCode = common.split_pkg_arg(options.__dict__['APPID:VERCODE'])
+        app, build = metadata.get_single_build(appid, versionCode)
+        make_source_tarball(app, build)
     except Exception as e:
         if options.verbose:
             traceback.print_exc()
