@@ -49,7 +49,7 @@ def make_source_tarball(app, build, output_dir=pathlib.Path('unsigned')):
     tarball = tarfile.open(os.path.join(output_dir, tarname), "w:gz")
 
     def tarexc(t):
-        return None if any(t.name.endswith(s) for s in ['.git', '.hg']) else t
+        return None if os.path.basename(t.name) == '.git' else t
 
     tarball.add(build_dir, tarname, filter=tarexc)
     tarball.close()

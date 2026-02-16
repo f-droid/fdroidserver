@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import os
+import tarfile
 import unittest
 
 from pathlib import Path
@@ -29,11 +30,40 @@ class MakeSourceTarball(MakeSourceTarballTest):
         self.app = metadata.App()
         self.app.id = APPID
         self.app.Builds.append(self.build)
-        os.mkdir('build')
-        os.mkdir(f'build/{self.app.id}')
+        self.build_dir = Path(f'build/{self.app.id}')
+        self.build_dir.parent.mkdir()
+        self.build_dir.mkdir()
 
     def test_empty(self):
         make_source_tarball.make_source_tarball(self.app, self.build)
+
+    def test_one_file(self):
+        testfile = 'testfile'
+        (self.build_dir / testfile).write_text(testfile)
+        make_source_tarball.make_source_tarball(self.app, self.build)
+        tarname = common.get_src_tarball_name(APPID, VERCODE)
+        with tarfile.open(f'unsigned/{tarname}', "r:gz") as tar:
+            tarinfos = [tarinfo for tarinfo in tar]
+        self.assertEqual(f'{tarname}', tarinfos[0].name)
+        self.assertTrue(tarinfos[0].isdir())
+        self.assertEqual(f'{tarname}/{testfile}', tarinfos[1].name)
+        self.assertTrue(tarinfos[1].isreg())
+
+    def test_ignore_git(self):
+        testfile = 'testfile'
+        (self.build_dir / testfile).write_text(testfile)
+        git_dir = self.build_dir / '.git'
+        git_dir.mkdir()
+        (git_dir / 'config').write_text('# this is just a test')
+        make_source_tarball.make_source_tarball(self.app, self.build)
+        tarname = common.get_src_tarball_name(APPID, VERCODE)
+        with tarfile.open(f'unsigned/{tarname}', "r:gz") as tar:
+            tarinfos = [tarinfo for tarinfo in tar]
+        self.assertEqual(2, len(tarinfos))
+        self.assertEqual(f'{tarname}', tarinfos[0].name)
+        self.assertTrue(tarinfos[0].isdir())
+        self.assertEqual(f'{tarname}/{testfile}', tarinfos[1].name)
+        self.assertTrue(tarinfos[1].isreg())
 
 
 @mock.patch('sys.argv', ['fdroid make_source_tarball', APPID_VERCODE])
