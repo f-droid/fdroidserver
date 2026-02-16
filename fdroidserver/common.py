@@ -1561,17 +1561,6 @@ def getsrclibvcs(name):
 
 class vcs:
     def __init__(self, remote, local):
-        # svn, git-svn and bzr may require auth
-        self.username = None
-        if self.repotype() in ('git-svn', 'bzr'):
-            if '@' in remote:
-                if self.repotype == 'git-svn':
-                    raise VCSException("Authentication is not supported for git-svn")
-                self.username, remote = remote.split('@')
-                if ':' not in self.username:
-                    raise VCSException(_("Password required with username"))
-                self.username, self.password = self.username.split(':')
-
         self.remote = remote
         self.local = local
         self.clone_failed = False
@@ -1870,6 +1859,10 @@ class vcs_git(vcs):
 
 
 class vcs_gitsvn(vcs):
+    def __init__(self, remote, local):
+        if '@' in remote:
+            raise VCSException("Authentication is not supported for git-svn")
+        super().__init__(remote, local)
 
     def repotype(self):
         return 'git-svn'

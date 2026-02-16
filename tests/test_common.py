@@ -449,6 +449,12 @@ class CommonTest(SetUpTearDownMixin, unittest.TestCase):
         vcs1 = fdroidserver.common.getvcs('git', git_url, gitrepo)
         vcs1.gotorevision('0.3', refresh=False)
 
+    def test_getvcs_svn_auth_error(self):
+        with self.assertRaises(VCSException):
+            fdroidserver.common.getvcs(
+                'git-svn', 'https://user@svn.code.sf.net/p/foo/code/trunk', self.testdir
+            )
+
     def test_setup_vcs_srclib(self):
         app = fdroidserver.metadata.App(
             {
