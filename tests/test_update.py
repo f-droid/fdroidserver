@@ -2241,6 +2241,22 @@ class UpdateTest(unittest.TestCase):
             index['repo'][CATEGORIES_CONFIG_NAME],
         )
 
+    def test_get_icon_dir_hdpi_density(self):
+        repodir = 'repo'
+        density = fdroidserver.update.screen_resolutions['hdpi']
+        self.assertEqual(
+            f'{repodir}/icons-{density}',
+            fdroidserver.update.get_icon_dir(repodir, density),
+        )
+
+    def test_get_icon_dir_anydpi_density(self):
+        repodir = 'repo'
+        density = fdroidserver.update.screen_resolutions['anydpi']
+        self.assertEqual(
+            f'{repodir}/icons',
+            fdroidserver.update.get_icon_dir(repodir, density),
+        )
+
 
 class TestGetApkIconsSrc(unittest.TestCase):
     def get_apk_icons_src(self, apkfile, appid):
