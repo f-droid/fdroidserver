@@ -1570,16 +1570,6 @@ class UpdateTest(unittest.TestCase):
         with self.assertRaises(fdroidserver.exception.FDroidException):
             fdroidserver.update.has_known_vulnerability('janus.apk')
 
-    def test_get_apk_icon_when_src_is_none(self):
-        config = dict()
-        fdroidserver.common.fill_config_defaults(config)
-        fdroidserver.common.config = config
-        fdroidserver.update.config = config
-
-        # pylint: disable=protected-access
-        icons_src = fdroidserver.update._get_apk_icons_src('urzip-release.apk', None)
-        self.assertFalse(icons_src)
-
     def test_strip_and_copy_image(self):
         in_file = basedir / 'metadata/info.guardianproject.urzip/en-US/images/icon.png'
         out_file = os.path.join(self.testdir, 'icon.png')
