@@ -193,6 +193,12 @@
 # keyaliases:
 #   com.example.another.plugin: "@com.example.another"
 
+# It is possible to include the IP addresses of repos and mirrors in
+# the index file.  Enabling this requires network access and will
+# cause DNS lookups to happen every time `fdroid update` is run.
+#
+# include_dns_lookups: true
+
 # The full path to the root of the repository. It must be specified in
 # rsync/ssh format for a remote host/path. This is used for syncing a locally
 # generated repo to the server that is it hosted on. It must end in the
