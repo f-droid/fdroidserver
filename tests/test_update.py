@@ -61,9 +61,8 @@ class Options:
     verbose = False
 
 
-@unittest.skipIf(sys.byteorder == 'big', 'androguard is not ported to big-endian')
-class UpdateTest(unittest.TestCase):
-    '''fdroid update'''
+class SetUpTearDownMixin:
+    """A mixin with no tests in it for shared setUp and tearDown."""
 
     def setUp(self):
         os.chdir(basedir)
@@ -77,6 +76,9 @@ class UpdateTest(unittest.TestCase):
         os.chdir(basedir)
         self._td.cleanup()
 
+
+@unittest.skipIf(sys.byteorder == 'big', 'androguard is not ported to big-endian')
+class UpdateTest(SetUpTearDownMixin, unittest.TestCase):
     def test_insert_store_metadata(self):
         os.chdir(self.testdir)
 
@@ -2257,6 +2259,151 @@ class UpdateTest(unittest.TestCase):
             f'{repodir}/icons',
             fdroidserver.update.get_icon_dir(repodir, density),
         )
+
+
+class TestExtractApkIcons(SetUpTearDownMixin, unittest.TestCase):
+    def setUp(self):
+        super().setUp()
+        os.chdir(self.testdir)
+        repodir = 'repo'
+        os.mkdir(repodir)
+        for icon_dir in fdroidserver.update.get_all_icon_dirs(repodir):
+            if not os.path.exists(icon_dir):
+                os.mkdir(icon_dir)
+
+    def extract_apk_icons(self, apkfile, appid, versionCode=1):
+        apkobject = fdroidserver.common.get_androguard_APK(apkfile)
+        arsc = apkobject.get_android_resources()
+        icons_src = fdroidserver.update._get_apk_icons_src(apkfile, apkobject, arsc)
+        apk = {
+            'icons_src': icons_src,
+            'icons': {},
+            'packageName': appid,
+            'versionCode': versionCode,
+        }
+        self.filename = fdroidserver.update.get_old_icon_filename(
+            apk['packageName'], apk['versionCode']
+        )
+        with zipfile.ZipFile(apkfile) as apkzip:
+            empty_densities = fdroidserver.update.extract_apk_icons(
+                self.filename, apk, apkzip, 'repo'
+            )
+        self.apk = apk
+        return empty_densities
+
+    def test_extract_apk_icons_urzip(self):
+        apkfile = basedir / 'urzip.apk'
+        appid = 'info.guardianproject.urzip'
+        empty_densities = self.extract_apk_icons(apkfile, appid)
+        self.assertEqual(['65534', '640', '480', '320', '240', '160'], empty_densities)
+        self.assertEqual(1413, os.path.getsize(f'repo/icons-120/{self.filename}'))
+        for density in empty_densities:
+            self.assertFalse(os.path.exists(f'repo/icons-{density}/{self.filename}'))
+
+    def test_extract_apk_icons_mirrormirror(self):
+        appid = 'org.bitbucket.tickytacky.mirrormirror'
+        apkfile = basedir / f'{appid}_4.apk'
+        empty_densities = self.extract_apk_icons(apkfile, appid)
+        self.assertEqual(['65534', '640', '480', '320', '240', '120'], empty_densities)
+        self.assertEqual(91, os.path.getsize(f'repo/icons-160/{self.filename}'))
+        for density in empty_densities:
+            self.assertFalse(os.path.exists(f'repo/icons-{density}/{self.filename}'))
+
+    def test_extract_apk_icons_fules_ck(self):
+        appid = 'org.dyndns.fules.ck'
+        apkfile = basedir / f'{appid}_20.apk'
+        empty_densities = self.extract_apk_icons(apkfile, appid)
+        self.assertEqual(['65534', '640', '480', '320'], empty_densities)
+        self.assertEqual(1430, os.path.getsize(f'repo/icons-120/{self.filename}'))
+        self.assertEqual(2120, os.path.getsize(f'repo/icons-160/{self.filename}'))
+        self.assertEqual(3942, os.path.getsize(f'repo/icons-240/{self.filename}'))
+        for density in empty_densities:
+            self.assertFalse(os.path.exists(f'repo/icons-{density}/{self.filename}'))
+
+    def test_extract_apk_icons_fallingblocks(self):
+        """Test example made with Godot Engine."""
+        appid = 'org.sajeg.fallingblocks'
+        apkfile = basedir / f'{appid}_3.apk'
+        empty_densities = self.extract_apk_icons(apkfile, appid)
+        self.assertEqual(['65534', '480', '320', '240', '160', '120'], empty_densities)
+        self.assertEqual(6793, os.path.getsize(f'repo/icons-640/{self.filename}'))
+        for density in empty_densities:
+            self.assertFalse(os.path.exists(f'repo/icons-{density}/{self.filename}'))
+
+    def test_extract_apk_icons_org_maxsdkversion(self):
+        appid = 'org.maxsdkversion'
+        apkfile = basedir / f'repo/{appid}_4.apk'
+        empty_densities = self.extract_apk_icons(apkfile, appid)
+        self.assertEqual(['65534', '640', '480', '320', '240', '120'], empty_densities)
+        self.assertEqual(91, os.path.getsize(f'repo/icons-160/{self.filename}'))
+        for density in empty_densities:
+            self.assertFalse(os.path.exists(f'repo/icons-{density}/{self.filename}'))
+
+    def test_extract_apk_icons_souch_smsbypass(self):
+        appid = 'souch.smsbypass'
+        apkfile = basedir / f'repo/{appid}_9.apk'
+        empty_densities = self.extract_apk_icons(apkfile, appid)
+        self.assertEqual(['65534', '640', '120'], empty_densities)
+        self.assertEqual(1558, os.path.getsize(f'repo/icons-160/{self.filename}'))
+        self.assertEqual(3615, os.path.getsize(f'repo/icons-320/{self.filename}'))
+        self.assertEqual(5874, os.path.getsize(f'repo/icons-480/{self.filename}'))
+        for density in empty_densities:
+            self.assertFalse(os.path.exists(f'repo/icons-{density}/{self.filename}'))
+
+    def test_extract_apk_icons_SpeedoMeterApp_main(self):
+        """Test an APK with no icons."""
+        appid = 'SpeedoMeterApp.main'
+        apkfile = basedir / f'{appid}_1.apk'
+        empty_densities = self.extract_apk_icons(apkfile, appid)
+        self.assertEqual(fdroidserver.update.screen_densities, empty_densities)
+        self.assertFalse(os.path.exists(f'repo/icons/{self.filename}'))
+        for density in empty_densities:
+            self.assertFalse(os.path.exists(f'repo/icons-{density}/{self.filename}'))
+
+    def test_extract_apk_icons_info_zwanenburg_caffeinetile(self):
+        """Test an APK with no PNG or WebP, only XML."""
+        appid = 'info.zwanenburg.caffeinetile'
+        apkfile = basedir / f'repo/{appid}_4.apk'
+        empty_densities = self.extract_apk_icons(apkfile, appid)
+        self.assertEqual(fdroidserver.update.screen_densities, empty_densities)
+        self.assertFalse(os.path.exists(f'repo/icons/{self.filename}'))
+        for density in empty_densities:
+            self.assertFalse(os.path.exists(f'repo/icons-{density}/{self.filename}'))
+
+    def test_extract_apk_icons_rsynced(self):
+        """Test based on current production by rsyncing the key files.
+
+        To get the APKs:
+        rsync -axv --max-size=125k "ftp.fau.de::fdroid/repo/{appid}*.apk" ../f-droid.org/fdroid/repo/
+
+        Then just get all of the extracted icons, they are small:
+        rsync -axv "ftp.fau.de::fdroid/repo/icons*" ../f-droid.org/fdroid/repo/
+
+        """
+        production = basedir / '../../f-droid.org/fdroid/repo'
+        if not production.exists():
+            self.skipTest(f'No files rsynced to {production}')
+        for apkfile in sorted(production.glob('*.apk')):
+            appid, versionCode = apkfile.stem.rsplit('_', 1)
+            iconname = fdroidserver.update.get_old_icon_filename(appid, versionCode)
+            icon_glob = f'icons*/{iconname}'
+
+            prod_icons = dict()
+            for icon in sorted(production.glob(icon_glob)):
+                prod_icons[str(icon.relative_to(production))] = icon.stat().st_size
+
+            empty_densities = self.extract_apk_icons(apkfile, appid, versionCode)
+            fdroidserver.update.fill_missing_icon_densities(
+                empty_densities, self.filename, self.apk, 'repo'
+            )
+            repo_dir = Path(self.testdir) / 'repo'
+            test_icons = dict()
+            for icon in repo_dir.glob(icon_glob):
+                test_icons[str(icon.relative_to(repo_dir))] = icon.stat().st_size
+            # skip if the production algorithm has worse results, like
+            # it didn't extract, or has fewer icons
+            if prod_icons and len(test_icons) <= len(prod_icons):
+                self.assertEqual(prod_icons.keys(), test_icons.keys(), self.filename)
 
 
 class TestGetApkIconsSrc(unittest.TestCase):
