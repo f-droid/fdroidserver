@@ -97,9 +97,8 @@ screen_resolutions = {
     "tvdpi": 213,
     "anydpi": 65534,
     "nodpi": 65535,
+    "default": 0,
 }
-
-all_screen_densities = [0] + screen_densities
 
 ALLOWED_EXTENSIONS = ('png', 'jpg', 'jpeg')
 GRAPHIC_NAMES = ('featureGraphic', 'icon', 'promoGraphic', 'tvBanner')
@@ -185,11 +184,6 @@ def get_icon_dir(repodir, density):
 
 def get_icon_dirs(repodir):
     for density in screen_densities:
-        yield get_icon_dir(repodir, density)
-
-
-def get_all_icon_dirs(repodir):
-    for density in all_screen_densities:
         yield get_icon_dir(repodir, density)
 
 
@@ -300,9 +294,8 @@ def delete_disabled_builds(apps, apkcache, repodirs):
                     os.path.join(repodir, apkfilename + '.asc'),
                     os.path.join(repodir, apkfilename[:-4] + "_src.tar.gz"),
                 ]
-                for density in all_screen_densities:
-                    repo_dir = get_icon_dir(repodir, density)
-                    files.append(os.path.join(repo_dir, iconfilename))
+                for icon_dir in get_icon_dirs(repodir):
+                    files.append(os.path.join(icon_dir, iconfilename))
 
                 for f in files:
                     if os.path.exists(f):
@@ -2268,7 +2261,7 @@ def process_apks(apkcache, repodir, package_added_cache, use_date_from_apk=False
     """
     cachechanged = False
 
-    for icon_dir in get_all_icon_dirs(repodir):
+    for icon_dir in get_icon_dirs(repodir):
         if os.path.exists(icon_dir):
             if options is not None and options.clean:
                 shutil.rmtree(icon_dir)
@@ -2555,7 +2548,7 @@ def move_apk_between_sections(from_dir, to_dir, apk):
     _move_file(from_dir, to_dir, filename + '.asc', True)
     _move_file(from_dir, to_dir, filename + '.idsig', True)
     _move_file(from_dir, to_dir, filename[:-4] + '.log.gz', True)
-    for density in all_screen_densities:
+    for density in screen_densities:
         from_icon_dir = get_icon_dir(from_dir, density)
         to_icon_dir = get_icon_dir(to_dir, density)
         default = get_old_icon_filename(apk['packageName'], apk['versionCode'])

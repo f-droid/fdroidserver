@@ -1109,7 +1109,7 @@ class UpdateTest(SetUpTearDownMixin, unittest.TestCase):
         fdroidserver.update.options.clean = True
         fdroidserver.update.options.delete_unknown = True
 
-        for icon_dir in fdroidserver.update.get_all_icon_dirs('repo'):
+        for icon_dir in fdroidserver.update.get_icon_dirs('repo'):
             if not os.path.exists(icon_dir):
                 os.makedirs(icon_dir)
 
@@ -2260,6 +2260,15 @@ class UpdateTest(SetUpTearDownMixin, unittest.TestCase):
             fdroidserver.update.get_icon_dir(repodir, density),
         )
 
+    def test_get_icon_dir_0(self):
+        """Test the very old "default" case."""
+        density = fdroidserver.update.screen_resolutions['default']
+        repodir = 'repo'
+        self.assertEqual(
+            f'{repodir}/icons',
+            fdroidserver.update.get_icon_dir(repodir, density),
+        )
+
 
 class TestExtractApkIcons(SetUpTearDownMixin, unittest.TestCase):
     def setUp(self):
@@ -2267,7 +2276,7 @@ class TestExtractApkIcons(SetUpTearDownMixin, unittest.TestCase):
         os.chdir(self.testdir)
         repodir = 'repo'
         os.mkdir(repodir)
-        for icon_dir in fdroidserver.update.get_all_icon_dirs(repodir):
+        for icon_dir in fdroidserver.update.get_icon_dirs(repodir):
             if not os.path.exists(icon_dir):
                 os.mkdir(icon_dir)
 
