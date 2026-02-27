@@ -2206,13 +2206,13 @@ def process_apk(apkcache, apkfilename, repodir, package_added_cache, use_date_fr
                                 .format(apkfilename=apkfilename))
             return True, None, False
 
-        # extract icons from APK zip file
-        iconfilename = get_old_icon_filename(apk['packageName'], apk['versionCode'])
-        with zipfile.ZipFile(apkfile, 'r') as apkzip:
-            empty_densities = extract_apk_icons(iconfilename, apk, apkzip, repodir)
-
-        # resize existing icons for densities missing in the APK
-        fill_missing_icon_densities(empty_densities, iconfilename, apk, repodir)
+        # Do not extract icons in archive, they have not been used there
+        # in a very long time, if ever. And if so, only in specific cases.
+        if repodir == 'repo':
+            iconfilename = get_old_icon_filename(apk['packageName'], apk['versionCode'])
+            with zipfile.ZipFile(apkfile, 'r') as apkzip:
+                empty_densities = extract_apk_icons(iconfilename, apk, apkzip, repodir)
+                fill_missing_icon_densities(empty_densities, iconfilename, apk, repodir)
 
         apk['added'] = package_added_cache.get(apkfile, use_date_from_apk)
 
