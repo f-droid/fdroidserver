@@ -79,7 +79,7 @@ import zipfile
 from argparse import BooleanOptionalAction
 from base64 import urlsafe_b64encode
 from binascii import hexlify
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, timezone
 from pathlib import Path
 from queue import Queue
 from typing import List
@@ -2892,23 +2892,6 @@ def getpaths(build_dir, globpaths):
 
 def natural_key(s):
     return [int(sp) if sp.isdigit() else sp for sp in re.split(r'(\d+)', s)]
-
-
-def check_system_clock(dt_obj, path):
-    """Check if system clock is updated based on provided date.
-
-    If an APK has files newer than the system time, suggest updating
-    the system clock.  This is useful for offline systems, used for
-    signing, which do not have another source of clock sync info. It
-    has to be more than 24 hours newer because ZIP/APK files do not
-    store timezone info
-
-    """
-    checkdt = dt_obj - timedelta(1)
-    if datetime.today() < checkdt:
-        logging.warning(_('System clock is older than date in {path}!').format(path=path)
-                        + '\n' + _('Set clock to that time using:') + '\n'
-                        + 'sudo date -s "' + str(dt_obj) + '"')
 
 
 def get_file_extension(filename):

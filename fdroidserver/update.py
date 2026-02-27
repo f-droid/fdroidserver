@@ -36,7 +36,6 @@ import time
 import warnings
 import zipfile
 from argparse import ArgumentParser
-from datetime import datetime
 from pathlib import Path
 
 import asn1crypto.cms
@@ -2207,23 +2206,10 @@ def process_apk(apkcache, apkfilename, repodir, package_added_cache, use_date_fr
                                 .format(apkfilename=apkfilename))
             return True, None, False
 
-        apkzip = zipfile.ZipFile(apkfile, 'r')
-
-        manifest = apkzip.getinfo('AndroidManifest.xml')
-        # 1980-0-0 means zeroed out, any other invalid date should trigger a warning
-        if (1980, 0, 0) != manifest.date_time[0:3]:
-            try:
-                common.check_system_clock(datetime(*manifest.date_time), apkfilename)
-            except ValueError as e:
-                logging.warning(_("{apkfilename}'s AndroidManifest.xml has a bad date: ")
-                                .format(apkfilename=apkfile) + str(e))
-
         # extract icons from APK zip file
         iconfilename = get_old_icon_filename(apk['packageName'], apk['versionCode'])
-        try:
+        with zipfile.ZipFile(apkfile, 'r') as apkzip:
             empty_densities = extract_apk_icons(iconfilename, apk, apkzip, repodir)
-        finally:
-            apkzip.close()  # ensure that APK zip file gets closed
 
         # resize existing icons for densities missing in the APK
         fill_missing_icon_densities(empty_densities, iconfilename, apk, repodir)
