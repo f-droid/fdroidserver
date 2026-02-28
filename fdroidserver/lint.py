@@ -1158,6 +1158,7 @@ HTTP_URL_SHORTENERS = [
     forbid_shortener('sfty.io'),
     forbid_shortener('sgq.io'),
     forbid_shortener('shar.as'),
+    forbid_shortener('share.google'),
     forbid_shortener('shiny.link'),
     forbid_shortener('shln.me'),
     forbid_shortener('sho.pe'),
