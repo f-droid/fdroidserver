@@ -1865,6 +1865,54 @@ class MetadataTest(unittest.TestCase):
             },
         )
 
+    def test_read_srclibs_with_unknown_RepoType(self):
+        """Ensure everything parses when support for a RepoType is removed.
+
+        metadata files must use an active RepoType: but srclibs only
+        need to use an active RepoType: if they are being actively used,
+        e.g. `fdroid build`.  This makes it easier to deprecate RepoTypes.
+
+        """
+        os.chdir(self.testdir)
+        srclib = 'unsupported'
+        sf = Path(f'srclibs/{srclib}.yml')
+        sf.parent.mkdir()
+        sf.write_text(
+            textwrap.dedent(
+                f'''
+            RepoType: {srclib}
+            Repo: foo://foo.host/repo
+            '''
+            )
+        )
+        appid = 'com.example'
+        mf = Path(f'metadata/{appid}.yml')
+        mf.parent.mkdir()
+        mf.write_text(
+            textwrap.dedent(
+                f'''
+            Builds:
+              - versionCode: 1
+                srclibs: {srclib}
+            '''
+            )
+        )
+
+        fdroidserver.metadata.srclibs = None
+        apps = fdroidserver.metadata.read_metadata()
+        self.assertEqual(apps[appid]['Builds'][0]['srclibs'], [srclib])
+        self.assertDictEqual(
+            fdroidserver.metadata.srclibs,
+            {
+                srclib: {
+                    'RepoType': srclib,
+                    'Repo': 'foo://foo.host/repo',
+                    'Prepare': None,
+                    'Subdir': None,
+                },
+            },
+        )
+
     def test_build_ndk_path(self):
         with tempfile.TemporaryDirectory(prefix='android-sdk-') as sdk_path:
             config = {'ndk_paths': {}, 'sdk_path': sdk_path}

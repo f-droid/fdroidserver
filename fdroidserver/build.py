@@ -616,7 +616,7 @@ def build_local(app, build, vcs, build_dir, output_dir, log_dir, srclib_dir, ext
         tarball = tarfile.open(os.path.join(tmp_dir, tarname), "w:gz")
 
         def tarexc(t):
-            return None if any(t.name.endswith(s) for s in ['.svn', '.git', '.hg', '.bzr']) else t
+            return None if any(t.name.endswith(s) for s in ['.git', '.hg']) else t
         tarball.add(build_dir, tarname, filter=tarexc)
         tarball.close()
 
