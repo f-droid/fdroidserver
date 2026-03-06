@@ -152,8 +152,8 @@ def check_tags(app: metadata.App, pattern: str) -> tuple[str, int, str]:
     else:
         repotype = app.RepoType
 
-    if repotype not in ('git', 'git-svn', 'hg'):
-        raise MetaDataException(_('Tags update mode only works for git, hg, bzr and git-svn repositories currently'))
+    if repotype != "git":
+        raise MetaDataException(_('Tags update mode only works for git repositories currently'))
 
     if repotype == 'git-svn' and ';' not in app.Repo:
         raise MetaDataException(_('Tags update mode used in git-svn, but the repo was not set up with tags'))
@@ -312,8 +312,6 @@ def check_repomanifest(app: metadata.App, branch: Optional[str] = None) -> tuple
             branch = 'origin/' + branch
         vcs.gotorevision(branch)
     elif repotype == 'git-svn':
-        vcs.gotorevision(branch)
-    elif repotype == 'hg':
         vcs.gotorevision(branch)
 
     last_build = get_last_build_from_app(app)
