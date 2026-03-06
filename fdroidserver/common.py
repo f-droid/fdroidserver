@@ -1544,8 +1544,6 @@ def getvcs(vcstype, remote, local):
     )
     if vcstype == 'git-svn':
         return vcs_gitsvn(remote, local)
-    if vcstype == 'hg':
-        return vcs_hg(remote, local)
     if vcstype == 'srclib':
         if str(local) != os.path.join('build', 'srclib', str(remote)):
             raise VCSException("Error: srclib paths are hard-coded!")
@@ -2032,45 +2030,6 @@ class vcs_gitsvn(vcs):
         return p.output.strip()
 
 
-class vcs_hg(vcs):
-
-    def repotype(self):
-        return 'hg'
-
-    def clientversioncmd(self):
-        return ['hg', '--version']
-
-    def gotorevisionx(self, rev):
-        if not os.path.exists(self.local):
-            p = FDroidPopen(['hg', 'clone', '--ssh', '/bin/false', '--', self.remote, str(self.local)],
-                            output=False)
-            if p.returncode != 0:
-                self.clone_failed = True
-                raise VCSException("Hg clone failed", p.output)
-        else:
-            p = FDroidPopen(['hg', 'status', '-uiS'], cwd=self.local, output=False)
-            if p.returncode != 0:
-                raise VCSException("Hg status failed", p.output)
-            for line in p.output.splitlines():
-                if not line.startswith('? ') and not line.startswith('I '):
-                    raise VCSException("Unexpected output from hg status -uS: " + line)
-                FDroidPopen(['rm', '-rf', '--', line[2:]], cwd=self.local, output=False)
-            if not self.refreshed:
-                p = FDroidPopen(['hg', 'pull', '--ssh', '/bin/false'], cwd=self.local, output=False)
-                if p.returncode != 0:
-                    raise VCSException("Hg pull failed", p.output)
-                self.refreshed = True
-
-        rev = rev or 'default'
-        if not rev:
-            return
-        p = FDroidPopen(['hg', 'update', '-C', '--', rev], cwd=self.local, output=False)
-        if p.returncode != 0:
-            raise VCSException("Hg checkout of '%s' failed" % rev, p.output)
-
-    def _gettags(self):
-        p = FDroidPopen(['hg', 'tags', '-q'], cwd=self.local, output=False)
-        return p.output.splitlines()[1:]
 # fmt: on
 
 
