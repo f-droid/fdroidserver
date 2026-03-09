@@ -1,7 +1,9 @@
 antiFeatures: {}
-features: []
-hash: 897486e1f857c6c0ee32ccbad0e1b8cd82f6d0e65a44a23f13f852d2b63a18c8
-hashType: sha256
+file:
+  name: org.dyndns.fules.ck_20.apk
+  sha256: 897486e1f857c6c0ee32ccbad0e1b8cd82f6d0e65a44a23f13f852d2b63a18c8
+  size: 132453
+  ipfsCIDv1: bafybeifijmr5ygvfvig4vzbmdc3ysj6m46ddohaol4vgp4qoyooqpc27zu
 icon: org.dyndns.fules.ck.20.png
 icons:
   '0': org.dyndns.fules.ck.20.png
@@ -13,32 +15,27 @@ icons_src:
   '120': res/drawable-ldpi-v4/icon_launcher.png
   '160': res/drawable-mdpi-v4/icon_launcher.png
   '240': res/drawable-hdpi-v4/icon_launcher.png
-ipfsCIDv1: bafybeifijmr5ygvfvig4vzbmdc3ysj6m46ddohaol4vgp4qoyooqpc27zu
-minSdkVersion: 7
+manifest:
+  nativecode:
+    - arm64-v8a
+    - armeabi
+    - armeabi-v7a
+    - mips
+    - mips64
+    - x86
+    - x86_64
+  signer:
+    sha256:
+      - 9326a2cc1a2f148202bc7837a0af3b81200bd37fd359c9e13a2296a71d342056
+  usesPermission:
+    - name: android.permission.BIND_INPUT_METHOD
+    - name: android.permission.READ_EXTERNAL_STORAGE
+    - name: android.permission.VIBRATE
+  usesSdk:
+    minSdkVersion: 7
+    targetSdkVersion: 8
+  versionName: v1.6pre2
 name: Compass Keyboard
-nativecode:
-- arm64-v8a
-- armeabi
-- armeabi-v7a
-- mips
-- mips64
-- x86
-- x86_64
 packageName: org.dyndns.fules.ck
 sig: 9bf7a6a67f95688daec75eab4b1436ac
-signer: 9326a2cc1a2f148202bc7837a0af3b81200bd37fd359c9e13a2296a71d342056
-size: 132453
-targetSdkVersion: 8
-uses-permission:
-- !!python/object/new:fdroidserver.update.UsesPermission
-  - android.permission.BIND_INPUT_METHOD
-  - null
-- !!python/object/new:fdroidserver.update.UsesPermission
-  - android.permission.READ_EXTERNAL_STORAGE
-  - null
-- !!python/object/new:fdroidserver.update.UsesPermission
-  - android.permission.VIBRATE
-  - null
-uses-permission-sdk-23: []
 versionCode: 20
-versionName: v1.6pre2

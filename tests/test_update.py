@@ -17,7 +17,6 @@ import time
 import unittest
 import zipfile
 from binascii import hexlify
-from datetime import datetime
 from pathlib import Path
 from unittest import mock
 
@@ -34,17 +33,6 @@ try:
     from yaml import CSafeLoader as SafeLoader
 except ImportError:
     from yaml import SafeLoader
-
-try:
-    from yaml import CFullLoader as FullLoader
-except ImportError:
-    try:
-        # FullLoader is available from PyYaml 5.1+, as we don't load user
-        # controlled data here, it's okay to fall back the unsafe older
-        # Loader
-        from yaml import FullLoader
-    except ImportError:
-        from yaml import Loader as FullLoader
 
 from PIL import PngImagePlugin
 
@@ -378,8 +366,8 @@ class UpdateTest(unittest.TestCase):
 
         apps = fdroidserver.metadata.read_metadata()
         apps['info.guardianproject.urzip']['CurrentVersionCode'] = 100
-        knownapks = fdroidserver.common.KnownApks()
-        apks, cachechanged = fdroidserver.update.process_apks({}, 'repo', knownapks, False)
+        package_added_cache = fdroidserver.update.PackageAddedCache()
+        apks, cachechanged = fdroidserver.update.process_apks({}, 'repo', package_added_cache, False)
         fdroidserver.update.insert_localized_app_metadata(apps)
         fdroidserver.update.ingest_screenshots_from_repo_dir(apps)
         fdroidserver.update.apply_info_from_latest_apk(apps, apks)
@@ -465,8 +453,8 @@ class UpdateTest(unittest.TestCase):
         fdroidserver.update.options.delete_unknown = True
 
         apps = fdroidserver.metadata.read_metadata()
-        knownapks = fdroidserver.common.KnownApks()
-        apks, cachechanged = fdroidserver.update.process_apks({}, 'repo', knownapks, False)
+        package_added_cache = fdroidserver.update.PackageAddedCache()
+        apks, cachechanged = fdroidserver.update.process_apks({}, 'repo', package_added_cache, False)
 
         appid = 'info.guardianproject.checkey'
         testapps = {appid: copy.copy(apps[appid])}
@@ -732,21 +720,25 @@ class UpdateTest(unittest.TestCase):
         fdroidserver.update.options.delete_unknown = True
 
         apps = fdroidserver.metadata.read_metadata()
-        knownapks = fdroidserver.common.KnownApks()
-        apks, cachechanged = fdroidserver.update.process_apks({}, 'repo', knownapks, False)
+        package_added_cache = fdroidserver.update.PackageAddedCache()
+        apks, cachechanged = fdroidserver.update.process_apks({}, 'repo', package_added_cache, False)
         self.assertEqual(len(apks), 18)
         apk = apks[1]
+        manifest = apk['manifest']
+        usesSdk = manifest['usesSdk']
         self.assertEqual(apk['packageName'], 'com.politedroid')
         self.assertEqual(apk['versionCode'], 3)
-        self.assertEqual(apk['minSdkVersion'], 3)
-        self.assertIsNone(apk.get('targetSdkVersion'))
-        self.assertFalse('maxSdkVersion' in apk)
+        self.assertEqual(usesSdk['minSdkVersion'], 3)
+        self.assertIsNone(usesSdk.get('targetSdkVersion'))
+        self.assertFalse('maxSdkVersion' in manifest)
         apk = apks[8]
+        manifest = apk['manifest']
+        usesSdk = manifest['usesSdk']
         self.assertEqual(apk['packageName'], 'obb.main.oldversion')
         self.assertEqual(apk['versionCode'], 1444412523)
-        self.assertEqual(apk['minSdkVersion'], 4)
-        self.assertEqual(apk['targetSdkVersion'], 18)
-        self.assertFalse('maxSdkVersion' in apk)
+        self.assertEqual(usesSdk['minSdkVersion'], 4)
+        self.assertEqual(usesSdk['targetSdkVersion'], 18)
+        self.assertFalse('maxSdkVersion' in manifest)
 
         fdroidserver.update.insert_obbs('repo', apps, apks)
         for apk in apks:
@@ -786,13 +778,13 @@ class UpdateTest(unittest.TestCase):
         fdroidserver.update.options.delete_unknown = True
 
         fdroidserver.metadata.read_metadata()
-        knownapks = fdroidserver.common.KnownApks()
+        package_added_cache = fdroidserver.update.PackageAddedCache()
         apkcache = fdroidserver.update.get_cache()
         self.assertEqual(2, len(apkcache))
         self.assertEqual(fdroidserver.update.METADATA_VERSION, apkcache["METADATA_VERSION"])
         self.assertEqual(fdroidserver.update.options.allow_disabled_algorithms,
                          apkcache['allow_disabled_algorithms'])
-        apks, cachechanged = fdroidserver.update.process_apks(apkcache, 'repo', knownapks, False)
+        apks, cachechanged = fdroidserver.update.process_apks(apkcache, 'repo', package_added_cache, False)
         fdroidserver.update.write_cache(apkcache)
 
         fdroidserver.update.options.clean = False
@@ -815,17 +807,22 @@ class UpdateTest(unittest.TestCase):
         os.mkdir('repo')
         filename = 'Norway_bouvet_europe_2.obf.zip'
         shutil.copy(basedir / filename, 'repo')
-        knownapks = fdroidserver.common.KnownApks()
-        files, fcachechanged = fdroidserver.update.scan_repo_files(dict(), 'repo', knownapks, False)
+        package_added_cache = fdroidserver.update.PackageAddedCache()
+        files, fcachechanged = fdroidserver.update.scan_repo_files(
+            dict(), 'repo', package_added_cache, False
+        )
         self.assertTrue(fcachechanged)
 
         info = files[0]
-        self.assertEqual(filename, info['apkName'])
-        self.assertEqual(datetime, type(info['added']))
-        self.assertEqual(os.path.getsize(os.path.join('repo', filename)), info['size'])
+        self.assertEqual(filename, info['file']['name'])
+        self.assertEqual(int, type(info['added']))
+        self.assertEqual(
+            os.path.getsize(os.path.join('repo', filename)),
+            info['file']['size'],
+        )
         self.assertEqual(
             '531190bdbc07e77d5577249949106f32dac7f62d38d66d66c3ae058be53a729d',
-            info['hash'],
+            info['file']['sha256'],
         )
 
     def test_read_added_date_from_all_apks(self):
@@ -837,8 +834,8 @@ class UpdateTest(unittest.TestCase):
         fdroidserver.update.config = config
         fdroidserver.common.options = Options
         apps = fdroidserver.metadata.read_metadata()
-        knownapks = fdroidserver.common.KnownApks()
-        apks, cachechanged = fdroidserver.update.process_apks({}, 'repo', knownapks)
+        package_added_cache = fdroidserver.update.PackageAddedCache()
+        apks, cachechanged = fdroidserver.update.process_apks({}, 'repo', package_added_cache)
         fdroidserver.update.read_added_date_from_all_apks(apps, apks)
 
     def test_apply_info_from_latest_apk(self):
@@ -851,135 +848,193 @@ class UpdateTest(unittest.TestCase):
         fdroidserver.common.options = Options
         fdroidserver.update.options = fdroidserver.common.options
         apps = fdroidserver.metadata.read_metadata()
-        knownapks = fdroidserver.common.KnownApks()
-        apks, cachechanged = fdroidserver.update.process_apks({}, 'repo', knownapks)
+        package_added_cache = fdroidserver.update.PackageAddedCache()
+        apks, cachechanged = fdroidserver.update.process_apks({}, 'repo', package_added_cache)
         fdroidserver.update.apply_info_from_latest_apk(apps, apks)
 
-    def test_scan_apk(self):
+    def test_uses_permission_empty(self):
+        self.assertEqual({}, fdroidserver.update._uses_permission())
+
+    def test_uses_permission_name_only(self):
+        self.assertEqual({'name': 'B'}, fdroidserver.update._uses_permission('B'))
+
+    def test_uses_permission_maxSdkVersion_None(self):
+        self.assertEqual(
+            {'name': 'foo'},
+            fdroidserver.update._uses_permission('foo', None),
+        )
+
+    def test_uses_permission_both(self):
+        self.assertEqual(
+            {'name': 'foo', 'maxSdkVersion': 12},
+            fdroidserver.update._uses_permission('foo', 12),
+        )
+
+    def test_uses_permission_str_maxSdkVersion(self):
+        self.assertEqual(
+            {'name': 'foo', 'maxSdkVersion': 35},
+            fdroidserver.update._uses_permission('foo', '35'),
+        )
+
+    def test_uses_permission_bad_maxSdkVersion(self):
+        self.assertEqual(
+            {'name': 'foo'},
+            fdroidserver.update._uses_permission('foo', '12z'),
+        )
+
+    def test_scan_apk_v2_only(self):
         config = dict()
         fdroidserver.common.fill_config_defaults(config)
         fdroidserver.common.config = config
-        fdroidserver.update.config = config
-        os.chdir(basedir)
+        if 'apksigner' not in fdroidserver.common.config:
+            self.skipTest(
+                'skipping v2-only test since apksigner cannot be found',
+            )
+        apk_info = fdroidserver.update.scan_apk('v2.only.sig_2.apk')
+        self.assertIsNone(apk_info['manifest'].get('maxSdkVersion'))
+        self.assertEqual(apk_info['manifest']['versionName'], 'v2-only')
+        self.assertEqual(apk_info.get('versionCode'), 2)
 
-        if 'apksigner' in config:
-            apk_info = fdroidserver.update.scan_apk('v2.only.sig_2.apk')
-            self.assertIsNone(apk_info.get('maxSdkVersion'))
-            self.assertEqual(apk_info.get('versionName'), 'v2-only')
-            self.assertEqual(apk_info.get('versionCode'), 2)
-        else:
-            print('WARNING: skipping v2-only test since apksigner cannot be found')
+    def test_scan_apk_v1_v2(self):
         apk_info = fdroidserver.update.scan_apk('repo/v1.v2.sig_1020.apk')
-        self.assertIsNone(apk_info.get('maxSdkVersion'))
-        self.assertEqual(apk_info.get('versionName'), 'v1+2')
+        self.assertIsNone(apk_info['manifest'].get('maxSdkVersion'))
+        self.assertEqual(apk_info['manifest']['versionName'], 'v1+2')
         self.assertEqual(apk_info.get('versionCode'), 1020)
 
+    def test_scan_apk_no_maxSdkVersion(self):
         apk_info = fdroidserver.update.scan_apk('repo/souch.smsbypass_9.apk')
-        self.assertIsNone(apk_info.get('maxSdkVersion'))
-        self.assertEqual(apk_info.get('versionName'), '0.9')
+        self.assertIsNone(apk_info['manifest'].get('maxSdkVersion'))
+        self.assertEqual(apk_info['manifest']['versionName'], '0.9')
 
+    def test_scan_apk_features(self):
         apk_info = fdroidserver.update.scan_apk('repo/duplicate.permisssions_9999999.apk')
-        self.assertEqual(apk_info.get('versionName'), '')
+        self.assertEqual(apk_info['manifest']['versionName'], '')
         self.assertEqual(apk_info['icons_src'], {'160': 'res/drawable/ic_launcher.png',
                                                  '-1': 'res/drawable/ic_launcher.png'})
+        self.assertEqual(
+            apk_info['manifest']['features'],
+            [{'name': 'android.hardware.telephony'}],
+        )
 
+    def test_scan_apk_lots_of_data(self):
         apk_info = fdroidserver.update.scan_apk('org.dyndns.fules.ck_20.apk')
         self.assertEqual(apk_info['icons_src'], {'240': 'res/drawable-hdpi-v4/icon_launcher.png',
                                                  '120': 'res/drawable-ldpi-v4/icon_launcher.png',
                                                  '160': 'res/drawable-mdpi-v4/icon_launcher.png',
                                                  '-1': 'res/drawable-mdpi-v4/icon_launcher.png'})
         self.assertEqual(apk_info['icons'], {})
-        self.assertEqual(apk_info['features'], [])
         self.assertEqual(apk_info['antiFeatures'], dict())
-        self.assertEqual(apk_info['versionName'], 'v1.6pre2')
-        self.assertEqual(apk_info['hash'],
-                         '897486e1f857c6c0ee32ccbad0e1b8cd82f6d0e65a44a23f13f852d2b63a18c8')
+        self.assertEqual(apk_info['manifest']['versionName'], 'v1.6pre2')
+        self.assertEqual(
+            apk_info['file'],
+            {
+                'name': 'org.dyndns.fules.ck_20.apk',
+                'sha256': '897486e1f857c6c0ee32ccbad0e1b8cd82f6d0e65a44a23f13f852d2b63a18c8',
+                'size': 132453,
+            }
+        )
         self.assertEqual(apk_info['packageName'], 'org.dyndns.fules.ck')
         self.assertEqual(apk_info['versionCode'], 20)
-        self.assertEqual(apk_info['size'], 132453)
-        self.assertEqual(apk_info['nativecode'],
-                         ['arm64-v8a', 'armeabi', 'armeabi-v7a', 'mips', 'mips64', 'x86', 'x86_64'])
-        self.assertEqual(apk_info['minSdkVersion'], 7)
+        self.assertEqual(
+            apk_info['manifest']['nativecode'],
+            ['arm64-v8a', 'armeabi', 'armeabi-v7a', 'mips', 'mips64', 'x86', 'x86_64'],
+        )
+        self.assertEqual(apk_info['manifest']['usesSdk']['minSdkVersion'], 7)
         self.assertEqual(apk_info['sig'], '9bf7a6a67f95688daec75eab4b1436ac')
-        self.assertEqual(apk_info['hashType'], 'sha256')
-        self.assertEqual(apk_info['targetSdkVersion'], 8)
+        self.assertEqual(apk_info['manifest']['usesSdk']['targetSdkVersion'], 8)
 
+    def test_scan_apk_two_icons(self):
         apk_info = fdroidserver.update.scan_apk('org.bitbucket.tickytacky.mirrormirror_4.apk')
-        self.assertEqual(apk_info.get('versionName'), '1.0.3')
+        self.assertEqual(apk_info['manifest']['versionName'], '1.0.3')
         self.assertEqual(apk_info['icons_src'], {'160': 'res/drawable-mdpi/mirror.png',
                                                  '-1': 'res/drawable-mdpi/mirror.png'})
 
+    def test_scan_apk_xml_icon(self):
         apk_info = fdroidserver.update.scan_apk('repo/info.zwanenburg.caffeinetile_4.apk')
-        self.assertEqual(apk_info.get('versionName'), '1.3')
+        self.assertEqual(apk_info['manifest']['versionName'], '1.3')
         self.assertEqual(apk_info['icons_src'], {})
 
+    def test_scan_apk_old_icons(self):
         apk_info = fdroidserver.update.scan_apk('repo/com.politedroid_6.apk')
-        self.assertEqual(apk_info.get('versionName'), '1.5')
+        self.assertEqual(apk_info['manifest']['versionName'], '1.5')
         self.assertEqual(apk_info['icons_src'], {'120': 'res/drawable-ldpi-v4/icon.png',
                                                  '160': 'res/drawable-mdpi-v4/icon.png',
                                                  '240': 'res/drawable-hdpi-v4/icon.png',
                                                  '320': 'res/drawable-xhdpi-v4/icon.png',
                                                  '-1': 'res/drawable-mdpi-v4/icon.png'})
 
+    def test_scan_apk_no_icons(self):
         apk_info = fdroidserver.update.scan_apk('SpeedoMeterApp.main_1.apk')
-        self.assertEqual(apk_info.get('versionName'), '1.0')
+        self.assertEqual(apk_info['manifest']['versionName'], '1.0')
         self.assertEqual(apk_info['icons_src'], {})
+
+    def test_scan_apk_maxSdkVersion(self):
+        apk_info = fdroidserver.update.scan_apk('repo/org.maxsdkversion_4.apk')
+        self.assertEqual(
+            apk_info['manifest'],
+            {
+                'features': [{'name': 'android.hardware.camera.front'}],
+                'maxSdkVersion': 25,
+                'signer': {
+                    'sha256': [
+                        '401a3a5843a3d5cebc22e6de5cb76d08eaa6797122d7fe1283df1d192e132f5e'
+                    ]
+                },
+                'usesPermission': [{'name': 'android.permission.CAMERA'}],
+                'usesSdk': {'minSdkVersion': 14, 'targetSdkVersion': 19},
+                'versionName': '1.0.3',
+            },
+        )
 
     def test_scan_apk_no_min_target(self):
         config = dict()
         fdroidserver.common.fill_config_defaults(config)
         fdroidserver.common.config = config
-        fdroidserver.update.config = config
         apk_info = fdroidserver.update.scan_apk('repo/no.min.target.sdk_987.apk')
         self.maxDiff = None
         expected = {
             'icons': {},
-            'icons_src': {'-1': 'res/drawable/ic_launcher.png',
-                          '160': 'res/drawable/ic_launcher.png'},
+            'icons_src': {
+                '-1': 'res/drawable/ic_launcher.png',
+                '160': 'res/drawable/ic_launcher.png',
+            },
+            'file': {
+                'name': 'no.min.target.sdk_987.apk',
+                'sha256': 'e2e1dc1d550df2b5bc383860139207258645b5540abeccd305ed8b2cb6459d2c',
+                'size': 14102,
+            },
+            'manifest': {
+                'signer': {
+                    'sha256': [
+                        '32a23624c201b949f085996ba5ed53d40f703aca4989476949cae891022e0ed6'
+                    ]
+                },
+                'usesPermission': [
+                    {'name': 'android.permission.WRITE_EXTERNAL_STORAGE'},
+                    {'name': 'android.permission.READ_PHONE_STATE'},
+                    {'name': 'android.permission.READ_EXTERNAL_STORAGE'},
+                ],
+                'usesSdk': {
+                    'minSdkVersion': 3,
+                },
+                'versionName': '1.2-fake',
+            },
             'name': 'No minSdkVersion or targetSdkVersion',
-            'signer': '32a23624c201b949f085996ba5ed53d40f703aca4989476949cae891022e0ed6',
-            'hashType': 'sha256',
             'packageName': 'no.min.target.sdk',
-            'features': [],
             'antiFeatures': dict(),
-            'size': 14102,
             'sig': 'b4964fd759edaa54e65bb476d0276880',
-            'versionName': '1.2-fake',
-            'uses-permission-sdk-23': [],
-            'hash': 'e2e1dc1d550df2b5bc383860139207258645b5540abeccd305ed8b2cb6459d2c',
             'versionCode': 987,
-            'minSdkVersion': 3,
-            'uses-permission': [
-                fdroidserver.update.UsesPermission(name='android.permission.WRITE_EXTERNAL_STORAGE',
-                                                   maxSdkVersion=None),
-                fdroidserver.update.UsesPermission(name='android.permission.READ_PHONE_STATE',
-                                                   maxSdkVersion=None),
-                fdroidserver.update.UsesPermission(name='android.permission.READ_EXTERNAL_STORAGE',
-                                                   maxSdkVersion=None),
-            ],
         }
         if config.get('ipfs_cid'):
-            expected['ipfsCIDv1'] = 'bafybeidwxseoagnew3gtlasttqovl7ciuwxaud5a5p4a5pzpbrfcfj2gaa'
+            expected['file']['ipfsCIDv1'] = 'bafybeidwxseoagnew3gtlasttqovl7ciuwxaud5a5p4a5pzpbrfcfj2gaa'
 
         self.assertDictEqual(apk_info, expected)
 
     def test_scan_apk_no_sig(self):
-        config = dict()
-        fdroidserver.common.fill_config_defaults(config)
-        fdroidserver.common.config = config
-        fdroidserver.update.config = config
-        os.chdir(basedir)
-        if os.path.basename(os.getcwd()) != 'tests':
-            raise Exception('This test must be run in the "tests/" subdir')
-
         with self.assertRaises(fdroidserver.exception.BuildException):
             fdroidserver.update.scan_apk('urzip-release-unsigned.apk')
 
     def test_scan_apk_bad_zip(self):
-        config = dict()
-        fdroidserver.common.fill_config_defaults(config)
-        fdroidserver.common.config = config
-        fdroidserver.update.config = config
         os.chdir(self.testdir)
         os.mkdir('repo')
         apkfile = 'repo/badzip_1.apk'
@@ -1012,10 +1067,6 @@ class UpdateTest(unittest.TestCase):
         * jar cf ../SystemWebView-repack.apk *
         """
         # reset the state, perhaps this should be in setUp()
-        config = dict()
-        fdroidserver.common.fill_config_defaults(config)
-        fdroidserver.common.config = config
-        fdroidserver.update.config = config
         with mkdtemp() as tmpdir, TmpCwd(tmpdir):
             os.mkdir('repo')
             apkfile = 'repo/SystemWebView-repack.apk'
@@ -1034,11 +1085,6 @@ class UpdateTest(unittest.TestCase):
         <uses-permission xmlns:n1="android" n1:name="android.permission.VIBRATE"/>
 
         """
-        # reset the state, perhaps this should be in setUp()
-        config = dict()
-        fdroidserver.common.fill_config_defaults(config)
-        fdroidserver.common.config = config
-        fdroidserver.update.config = config
         with mkdtemp() as tmpdir, TmpCwd(tmpdir):
             os.mkdir('repo')
             apkfile = 'repo/org.sajeg.fallingblocks_3.apk'
@@ -1071,16 +1117,15 @@ class UpdateTest(unittest.TestCase):
             if not os.path.exists(icon_dir):
                 os.makedirs(icon_dir)
 
-        knownapks = fdroidserver.common.KnownApks()
-        apkList = ['../urzip.apk', '../org.dyndns.fules.ck_20.apk']
+        package_added_cache = fdroidserver.update.PackageAddedCache()
+        apkList = ['../urzip.apk', '../org.dyndns.fules.ck_20.apk', 'org.maxsdkversion_4.apk']
 
         for apkName in apkList:
-            _, apk, cachechanged = fdroidserver.update.process_apk({}, apkName, 'repo', knownapks,
+            _, apk, cachechanged = fdroidserver.update.process_apk({}, apkName, 'repo', package_added_cache,
                                                                    False)
             # Don't care about the date added to the repo and relative apkName
-            self.assertEqual(datetime, type(apk['added']))
+            self.assertEqual(int, type(apk['added']))
             del apk['added']
-            del apk['apkName']
 
             # ensure that icons have been extracted properly
             if apkName == '../urzip.apk':
@@ -1100,20 +1145,11 @@ class UpdateTest(unittest.TestCase):
             #     yaml.add_representer(fdroidserver.metadata.Build, _build_yaml_representer)
             #     yaml.dump(apk, f, default_flow_style=False)
 
-            # CFullLoader doesn't always work
-            # https://github.com/yaml/pyyaml/issues/266#issuecomment-559116876
-            TestLoader = FullLoader
-            try:
-                testyaml = '- !!python/object/new:fdroidserver.update.UsesPermission\n  - test\n  - null'
-                from_yaml = yaml.load(testyaml, Loader=TestLoader)  # nosec B506
-            except yaml.constructor.ConstructorError:
-                from yaml import UnsafeLoader as TestLoader
-
             with open(savepath, 'r') as f:
-                from_yaml = yaml.load(f, Loader=TestLoader)  # nosec B506
+                from_yaml = yaml.safe_load(f)
             self.maxDiff = None
             if not config.get('ipfs_cid'):
-                del from_yaml['ipfsCIDv1']  # handle when ipfs_cid is not installed
+                del from_yaml['file']['ipfsCIDv1']  # when ipfs_cid is not installed
             self.assertEqual(apk, from_yaml)
 
     def test_process_apk_signed_by_disabled_algorithms(self):
@@ -1131,14 +1167,14 @@ class UpdateTest(unittest.TestCase):
         fdroidserver.update.options.verbose = True
         fdroidserver.update.options.delete_unknown = True
 
-        knownapks = fdroidserver.common.KnownApks()
+        package_added_cache = fdroidserver.update.PackageAddedCache()
 
         with mkdtemp() as tmptestsdir, TmpCwd(tmptestsdir):
             os.mkdir('repo')
             os.mkdir('archive')
             # setup the repo, create icons dirs, etc.
-            fdroidserver.update.process_apks({}, 'repo', knownapks)
-            fdroidserver.update.process_apks({}, 'archive', knownapks)
+            fdroidserver.update.process_apks({}, 'repo', package_added_cache)
+            fdroidserver.update.process_apks({}, 'archive', package_added_cache)
 
             disabledsigs = ['org.bitbucket.tickytacky.mirrormirror_2.apk']
             for apkName in disabledsigs:
@@ -1146,7 +1182,7 @@ class UpdateTest(unittest.TestCase):
                             os.path.join(tmptestsdir, 'repo'))
 
                 skip, apk, cachechanged = fdroidserver.update.process_apk({}, apkName, 'repo',
-                                                                          knownapks,
+                                                                          package_added_cache,
                                                                           allow_disabled_algorithms=True,
                                                                           archive_bad_sig=False)
                 self.assertFalse(skip)
@@ -1169,7 +1205,7 @@ class UpdateTest(unittest.TestCase):
                 # that has MD5 listed in jdk.jar.disabledAlgorithms in java.security
                 # https://blogs.oracle.com/java-platform-group/oracle-jre-will-no-longer-trust-md5-signed-code-by-default
                 skip, apk, cachechanged = fdroidserver.update.process_apk({}, apkName, 'repo',
-                                                                          knownapks,
+                                                                          package_added_cache,
                                                                           allow_disabled_algorithms=False,
                                                                           archive_bad_sig=True)
                 self.assertTrue(skip)
@@ -1179,7 +1215,7 @@ class UpdateTest(unittest.TestCase):
                 self.assertFalse(os.path.exists(os.path.join('repo', apkName)))
 
                 skip, apk, cachechanged = fdroidserver.update.process_apk({}, apkName, 'archive',
-                                                                          knownapks,
+                                                                          package_added_cache,
                                                                           allow_disabled_algorithms=False,
                                                                           archive_bad_sig=False)
                 self.assertFalse(skip)
@@ -1201,7 +1237,7 @@ class UpdateTest(unittest.TestCase):
                             os.path.join(self.testdir, 'repo'))
 
                 skip, apk, cachechanged = fdroidserver.update.process_apk({}, apkName, 'repo',
-                                                                          knownapks,
+                                                                          package_added_cache,
                                                                           allow_disabled_algorithms=False,
                                                                           archive_bad_sig=False)
                 self.assertTrue(skip)
@@ -1221,10 +1257,11 @@ class UpdateTest(unittest.TestCase):
         fdroidserver.update.options = fdroidserver.common.options
         fdroidserver.update.options.delete_unknown = False
 
-        knownapks = fdroidserver.common.KnownApks()
+        package_added_cache = fdroidserver.update.PackageAddedCache()
         apk = 'fake.ota.update_1234.zip'  # this is not an APK, scanning should fail
-        (skip, apk, cachechanged) = fdroidserver.update.process_apk({}, apk, 'repo', knownapks,
-                                                                    False)
+        (skip, apk, cachechanged) = fdroidserver.update.process_apk(
+            {}, apk, 'repo', package_added_cache, False
+        )
 
         self.assertTrue(skip)
         self.assertIsNone(apk)
@@ -1253,9 +1290,9 @@ class UpdateTest(unittest.TestCase):
         fdroidserver.update.options = fdroidserver.common.options
         fdroidserver.update.options.delete_unknown = False
 
-        knownapks = fdroidserver.common.KnownApks()
+        package_added_cache = fdroidserver.update.PackageAddedCache()
         (skip, apk, cachechanged) = fdroidserver.update.process_apk(
-            {}, apk, 'archive', knownapks, False
+            {}, apk, 'archive', package_added_cache, False
         )
         self.assertFalse(skip)
         self.assertTrue(cachechanged)
@@ -1264,6 +1301,37 @@ class UpdateTest(unittest.TestCase):
         if 'ro' in da and platform.system() != 'Darwin':
             # translations only available if compiled locally: make -C locale compile
             self.assertNotEqual(da['en-US'], da['ro'])
+
+    def test_PackageAddedCache_get(self):
+        """Test that added dates are being fetched from the index.
+
+        There are more related tests in tests/test_integration.py.
+
+        """
+        package_added_cache = fdroidserver.update.PackageAddedCache()
+        package_added_cache.now = 1234567890
+        for filename in package_added_cache.versions:
+            package_added_cache.get(filename)
+        for added in package_added_cache.versions.values():
+            self.assertNotEqual(added, package_added_cache.now)
+
+    def test_PackageAddedCache_get_new(self):
+        """Test that new added dates work, and are not replaced later.
+
+        There are more related tests in tests/test_integration.py.
+
+        """
+        package_added_cache = fdroidserver.update.PackageAddedCache()
+        package_added_cache.now = 1234567890
+        fake_apk = 'fake.apk'
+        package_added_cache.get(fake_apk)
+        for apk, added in package_added_cache.versions.items():
+            if apk == fake_apk:
+                self.assertEqual(added, package_added_cache.now)
+            else:
+                self.assertNotEqual(added, package_added_cache.now)
+        package_added_cache.get(fake_apk)
+        self.assertEqual(package_added_cache.versions[fake_apk], package_added_cache.now)
 
     def test_get_apks_without_allowed_signatures(self):
         """Test when no AllowedAPKSigningKeys is specified"""
@@ -1276,8 +1344,8 @@ class UpdateTest(unittest.TestCase):
         fdroidserver.update.options = fdroidserver.common.options
 
         app = fdroidserver.metadata.App()
-        knownapks = fdroidserver.common.KnownApks()
-        apks, cachechanged = fdroidserver.update.process_apks({}, 'repo', knownapks)
+        package_added_cache = fdroidserver.update.PackageAddedCache()
+        apks, cachechanged = fdroidserver.update.process_apks({}, 'repo', package_added_cache)
         apkfile = 'v1.v2.sig_1020.apk'
         self.assertIn(
             apkfile,
@@ -1285,7 +1353,7 @@ class UpdateTest(unittest.TestCase):
             f'{apkfile} was archived or otherwise removed from "repo"',
         )
         (skip, apk, cachechanged) = fdroidserver.update.process_apk(
-            {}, apkfile, 'repo', knownapks, False
+            {}, apkfile, 'repo', package_added_cache, False
         )
 
         r = fdroidserver.update.get_apks_without_allowed_signatures(app, apk)
@@ -1306,11 +1374,11 @@ class UpdateTest(unittest.TestCase):
                 'AllowedAPKSigningKeys': '32a23624c201b949f085996ba5ed53d40f703aca4989476949cae891022e0ed6'
             }
         )
-        knownapks = fdroidserver.common.KnownApks()
-        apks, cachechanged = fdroidserver.update.process_apks({}, 'repo', knownapks)
+        package_added_cache = fdroidserver.update.PackageAddedCache()
+        apks, cachechanged = fdroidserver.update.process_apks({}, 'repo', package_added_cache)
         apkfile = 'v1.v2.sig_1020.apk'
         (skip, apk, cachechanged) = fdroidserver.update.process_apk(
-            {}, apkfile, 'repo', knownapks, False
+            {}, apkfile, 'repo', package_added_cache, False
         )
 
         r = fdroidserver.update.get_apks_without_allowed_signatures(app, apk)
@@ -1331,11 +1399,11 @@ class UpdateTest(unittest.TestCase):
                 'AllowedAPKSigningKeys': 'fa4edeadfa4edeadfa4edeadfa4edeadfa4edeadfa4edeadfa4edeadfa4edead'
             }
         )
-        knownapks = fdroidserver.common.KnownApks()
-        apks, cachechanged = fdroidserver.update.process_apks({}, 'repo', knownapks)
+        package_added_cache = fdroidserver.update.PackageAddedCache()
+        apks, cachechanged = fdroidserver.update.process_apks({}, 'repo', package_added_cache)
         apkfile = 'v1.v2.sig_1020.apk'
         (skip, apk, cachechanged) = fdroidserver.update.process_apk(
-            {}, apkfile, 'repo', knownapks, False
+            {}, apkfile, 'repo', package_added_cache, False
         )
 
         r = fdroidserver.update.get_apks_without_allowed_signatures(app, apk)
@@ -1402,8 +1470,8 @@ class UpdateTest(unittest.TestCase):
         fdroidserver.update.options.delete_unknown = True
 
         apps = fdroidserver.metadata.read_metadata()
-        knownapks = fdroidserver.common.KnownApks()
-        apks, cachechanged = fdroidserver.update.process_apks({}, 'repo', knownapks, False)
+        package_added_cache = fdroidserver.update.PackageAddedCache()
+        apks, cachechanged = fdroidserver.update.process_apks({}, 'repo', package_added_cache, False)
         fdroidserver.update.translate_per_build_anti_features(apps, apks)
         self.assertEqual(len(apks), 18)
         foundtest = False
@@ -1431,8 +1499,8 @@ class UpdateTest(unittest.TestCase):
         fdroidserver.update.options = fdroidserver.common.options
         fdroidserver.update.options.clean = True
 
-        knownapks = fdroidserver.common.KnownApks()
-        apks, cachechanged = fdroidserver.update.process_apks({}, 'repo', knownapks, False)
+        package_added_cache = fdroidserver.update.PackageAddedCache()
+        apks, cachechanged = fdroidserver.update.process_apks({}, 'repo', package_added_cache, False)
         self.assertEqual(1, len(apks))
         apk = apks[0]
 
@@ -1890,55 +1958,56 @@ class UpdateTest(unittest.TestCase):
 
         def _create_apkmetadata_object(apkName):
             """Create an empty apk metadata object."""
-            apk = {}
-            apk['apkName'] = apkName
-            apk['uses-permission'] = []
-            apk['uses-permission-sdk-23'] = []
-            apk['features'] = []
-            apk['icons_src'] = {}
+            apk = {
+                'file': {
+                    'name': apkName,
+                },
+                'icons_src': {},
+            }
             return apk
 
         apkList = [
             (
                 'org.dyndns.fules.ck_20.apk',
                 {
-                    'apkName': 'org.dyndns.fules.ck_20.apk',
-                    'uses-permission': [
-                        fdroidserver.update.UsesPermission(
-                            name='android.permission.BIND_INPUT_METHOD',
-                            maxSdkVersion=None,
-                        ),
-                        fdroidserver.update.UsesPermission(
-                            name='android.permission.READ_EXTERNAL_STORAGE',
-                            maxSdkVersion=None,
-                        ),
-                        fdroidserver.update.UsesPermission(
-                            name='android.permission.VIBRATE', maxSdkVersion=None
-                        ),
-                    ],
-                    'uses-permission-sdk-23': [],
-                    'features': [],
+                    'file': {
+                        'name': 'org.dyndns.fules.ck_20.apk',
+                    },
                     'icons_src': {
                         '240': 'res/drawable-hdpi-v4/icon_launcher.png',
                         '120': 'res/drawable-ldpi-v4/icon_launcher.png',
                         '160': 'res/drawable-mdpi-v4/icon_launcher.png',
                         '-1': 'res/drawable-mdpi-v4/icon_launcher.png',
                     },
+                    'manifest': {
+                        'nativecode': [
+                            'arm64-v8a',
+                            'armeabi',
+                            'armeabi-v7a',
+                            'mips',
+                            'mips64',
+                            'x86',
+                            'x86_64',
+                        ],
+                        'signer': {
+                            'sha256': [
+                                '9326a2cc1a2f148202bc7837a0af3b81200bd37fd359c9e13a2296a71d342056'
+                            ]
+                        },
+                        'usesPermission': [
+                            {'name': 'android.permission.BIND_INPUT_METHOD'},
+                            {'name': 'android.permission.READ_EXTERNAL_STORAGE'},
+                            {'name': 'android.permission.VIBRATE'},
+                        ],
+                        'usesSdk': {
+                            'minSdkVersion': 7,
+                            'targetSdkVersion': 8,
+                        },
+                        'versionName': 'v1.6pre2',
+                    },
                     'packageName': 'org.dyndns.fules.ck',
                     'versionCode': 20,
-                    'versionName': 'v1.6pre2',
-                    'minSdkVersion': 7,
                     'name': 'Compass Keyboard',
-                    'targetSdkVersion': 8,
-                    'nativecode': [
-                        'arm64-v8a',
-                        'armeabi',
-                        'armeabi-v7a',
-                        'mips',
-                        'mips64',
-                        'x86',
-                        'x86_64',
-                    ],
                 },
             )
         ]
@@ -1975,8 +2044,8 @@ class UpdateTest(unittest.TestCase):
         build.disable = "disabled"
         app['Builds'] = [build]
 
-        knownapks = fdroidserver.common.KnownApks()
-        apks, cachechanged = fdroidserver.update.process_apks({}, 'repo', knownapks, False, apps)
+        package_added_cache = fdroidserver.update.PackageAddedCache()
+        apks, cachechanged = fdroidserver.update.process_apks({}, 'repo', package_added_cache, False, apps)
         self.assertEqual([], apks)
 
     def test_archive_old_apks_ArchivePolicy_0(self):
@@ -2197,13 +2266,16 @@ class TestParseIpa(unittest.TestCase):
         self.assertDictEqual(
             result,
             {
-                'apkName': 'com.fake.IpaApp_1000000000001.ipa',
-                'hash': 'fake_sha',
-                'hashType': 'sha256',
+                'file': {
+                    'name': 'com.fake.IpaApp_1000000000001.ipa',
+                    'sha256': 'fake_sha',
+                    'size': 'fake_size',
+                },
                 'packageName': 'org.onionshare.OnionShare',
-                'size': 'fake_size',
                 'versionCode': 1000000000001,
-                'versionName': '1.0.1',
+                'manifest': {
+                    'versionName': '1.0.1',
+                },
                 'ipa_DTPlatformVersion': '16.4',
                 'ipa_MinimumOSVersion': '15.0',
                 'ipa_entitlements': set(),
@@ -2270,7 +2342,7 @@ class TestScanRepoForIpas(unittest.TestCase):
 
             apkcache = mock.MagicMock()
             repodir = "repo"
-            knownapks = mock.MagicMock()
+            package_added_cache = mock.MagicMock()
 
             def mocked_parse(p, s, c):
                 # pylint: disable=unused-argument
@@ -2278,7 +2350,7 @@ class TestScanRepoForIpas(unittest.TestCase):
 
             with mock.patch('fdroidserver.update.parse_ipa', mocked_parse):
                 ipas, checkchanged = fdroidserver.update.scan_repo_for_ipas(
-                    apkcache, repodir, knownapks
+                    apkcache, repodir, package_added_cache
                 )
 
             self.assertEqual(checkchanged, True)
@@ -2294,12 +2366,14 @@ class TestScanRepoForIpas(unittest.TestCase):
             self.assertTrue('xyz' in apkcache_setter_package_name)
             self.assertEqual(apkcache.__setitem__.call_count, 2)
 
-            knownapks.recordapk.call_count = 2
+            package_added_cache.get.call_count = 2
             self.assertTrue(
-                unittest.mock.call('abc.Def_123.ipa') in knownapks.recordapk.mock_calls
+                unittest.mock.call('repo/abc.Def_123.ipa')
+                in package_added_cache.get.mock_calls
             )
             self.assertTrue(
-                unittest.mock.call('xyz.XXX_123.ipa') in knownapks.recordapk.mock_calls
+                unittest.mock.call('repo/xyz.XXX_123.ipa')
+                in package_added_cache.get.mock_calls
             )
 
 

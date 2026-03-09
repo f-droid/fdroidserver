@@ -1,4 +1,5 @@
 import configparser
+import json
 import itertools
 import os
 import platform
@@ -9,7 +10,7 @@ import subprocess
 import sys
 import threading
 import unittest
-from datetime import datetime, timezone
+from datetime import datetime
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
@@ -755,6 +756,7 @@ class IntegrationTest(unittest.TestCase):
         self.assertNotIn("info.guardianproject.urzip_100_b4964fd.apk", index_xml)
 
     def test_for_added_date_being_set_correctly_for_repo_and_archive(self):
+        """'added' timestamps should come from the cached index-v2.json."""
         self.fdroid_init_with_prebuilt_keystore()
         self.update_yaml(common.CONFIG_FILE, {"archive_older": 3})
         Path("metadata").mkdir()
@@ -769,14 +771,29 @@ class IntegrationTest(unittest.TestCase):
         self.update_yaml("metadata/com.politedroid.yml", {"ArchivePolicy": 1})
 
         self.assert_run(self.fdroid_cmd + ["update", "--pretty", "--nosign"])
-        timestamp = int(datetime(2017, 6, 23, tzinfo=timezone.utc).timestamp()) * 1000
-        index_v1_json = Path("repo/index-v1.json").read_text()
-        self.assertIn(f'"added": {timestamp}', index_v1_json)
-        # the archive will have the added timestamp for the app and for the apk,
-        # both need to be there
-        with open("archive/index-v1.json") as f:
-            count = sum(1 for line in f if f'"added": {timestamp}' in line)
-        self.assertEqual(count, 2)
+        timestamp = 1498176000000  # value cached in repo/index-v2.json
+        index_v1_json = json.loads(Path("repo/index-v1.json").read_text())
+        self.assertEqual(timestamp, index_v1_json['apps'][0]['added'])
+        self.assertEqual(
+            timestamp, index_v1_json['packages']['com.politedroid'][0]['added']
+        )
+        # Since there is no archive/index-v2.json, a cached 'added'
+        # value cannot be loaded from it. Therefore, the archive APK's
+        # 'added' value is "now" which is newer than 'timestamp',
+        # which was loaded from repo/index-v2.json.
+        archive_json = json.loads(Path("archive/index-v1.json").read_text())
+        self.assertEqual(
+            index_v1_json['apps'][0]['added'],
+            archive_json['apps'][0]['added'],
+        )
+        self.assertEqual(
+            archive_json['apps'][0]['lastUpdated'],
+            archive_json['packages']['com.politedroid'][0]['added'],
+        )
+        self.assertEqual(
+            archive_json['apps'][0]['lastUpdated'],
+            index_v1_json['apps'][0]['lastUpdated'],
+        )
 
     def test_whatsnew_from_fastlane_without_cvc_set(self):
         self.fdroid_init_with_prebuilt_keystore()

@@ -30,7 +30,6 @@ these installed on the signing server.
 
 """
 
-import calendar
 import collections
 import hashlib
 import json
@@ -42,8 +41,9 @@ import sys
 import tempfile
 import urllib.parse
 import zipfile
+
 from binascii import hexlify, unhexlify
-from datetime import datetime, timezone
+from datetime import datetime
 from pathlib import Path
 from xml.dom.minidom import Document
 
@@ -96,7 +96,7 @@ def make(apps, apks, repodir, archive):
         sortedapps[appid] = apps[appid]
 
     repodict = collections.OrderedDict()
-    repodict['timestamp'] = datetime.now(timezone.utc)
+    repodict['timestamp'] = common.epoch_millis_now()
     repodict['version'] = METADATA_VERSION
 
     if common.config['repo_maxage'] != 0:
@@ -513,12 +513,17 @@ def dict_diff(source, target):
     return result
 
 
-def convert_datetime(obj):
-    if isinstance(obj, datetime):
-        # Java prefers milliseconds
-        # we also need to account for time zone/daylight saving time
-        return int(calendar.timegm(obj.timetuple()) * 1000)
-    return obj
+def datetime_from_millis(millis):
+    """Convert epoch milliseconds to datetime instance.
+
+    This is the format returned by Java's System.currentTimeMillis().
+
+    Parameters
+    ----------
+    millis
+      Java-style integer time since UNIX epoch in milliseconds
+    """
+    return datetime.utcfromtimestamp(millis / 1000)
 
 
 def package_metadata(app, repodir):
@@ -549,7 +554,7 @@ def package_metadata(app, repodir):
     ):
         if element in app and app[element]:
             element_new = element[:1].lower() + element[1:]
-            meta[element_new] = convert_datetime(app[element])
+            meta[element_new] = app[element]
 
     for element in (
         "Name",
@@ -559,7 +564,7 @@ def package_metadata(app, repodir):
     ):
         element_new = element[:1].lower() + element[1:]
         if element in app and app[element]:
-            meta[element_new] = {DEFAULT_LOCALE: convert_datetime(app[element])}
+            meta[element_new] = {DEFAULT_LOCALE: app[element]}
         elif "localized" in app:
             localized = {
                 k: v[element_new]
@@ -598,17 +603,11 @@ def convert_version(version, app, repodir):
     metadata file.
 
     """
-    ver = {}
-    if "added" in version:
-        ver["added"] = convert_datetime(version["added"])
-    else:
-        ver["added"] = 0
-
-    ver["file"] = {
-        "name": "/{}".format(version["apkName"]),
-        version["hashType"]: version["hash"],
-        "size": version["size"],
+    ver = {
+        "added": version["added"],
+        "file": version["file"],
     }
+    ver["file"]["name"] = f'/{version["file"]["name"]}'  # TODO remove for index-v3
 
     ipfsCIDv1 = version.get("ipfsCIDv1")
     if ipfsCIDv1:
@@ -632,47 +631,38 @@ def convert_version(version, app, repodir):
             version["obbPatchFileSha256"],
         )
 
-    ver["manifest"] = manifest = {}
-
-    for element in (
-        "nativecode",
-        "versionName",
-        "maxSdkVersion",
-    ):
-        if element in version:
-            manifest[element] = version[element]
+    manifest = version.get("manifest", dict())
 
     if "versionCode" in version:
         manifest["versionCode"] = version["versionCode"]
 
-    if "features" in version and version["features"]:
-        manifest["features"] = features = []
-        for feature in version["features"]:
-            # TODO get version from manifest, default (0) is omitted
-            # features.append({"name": feature, "version": 1})
-            features.append({"name": feature})
+    # If targetSdkVersion not set, the default value equals that given to minSdkVersion
+    # https://developer.android.com/guide/topics/manifest/uses-sdk-element.html#target
+    usesSdk = manifest.get('usesSdk', dict())
+    if not usesSdk.get('targetSdkVersion') and 'minSdkVersion' in usesSdk:
+        usesSdk["targetSdkVersion"] = usesSdk['minSdkVersion']
 
-    if "minSdkVersion" in version:
-        manifest["usesSdk"] = {}
-        manifest["usesSdk"]["minSdkVersion"] = version["minSdkVersion"]
-        if "targetSdkVersion" in version:
-            manifest["usesSdk"]["targetSdkVersion"] = version["targetSdkVersion"]
-        else:
-            # https://developer.android.com/guide/topics/manifest/uses-sdk-element.html#target
-            manifest["usesSdk"]["targetSdkVersion"] = manifest["usesSdk"]["minSdkVersion"]  # fmt: skip
-
-    if "signer" in version:
-        manifest["signer"] = {"sha256": [version["signer"]]}
-
-    for element in ("uses-permission", "uses-permission-sdk-23"):
-        en = element.replace("uses-permission", "usesPermission").replace("-sdk-23", "Sdk23")  # fmt: skip
-        if element in version and version[element]:
-            manifest[en] = []
-            for perm in version[element]:
-                if perm[1]:
-                    manifest[en].append({"name": perm[0], "maxSdkVersion": perm[1]})
-                else:
-                    manifest[en].append({"name": perm[0]})
+    # The manifest entry was unfortunately not alpha-sorted, so this
+    # is required to maintain the existing sort order to minimize
+    # diffs in the index-v2.json.  TODO index-v3 should sort everything.
+    if ver["file"]['name'].endswith('.apk'):
+        ver['manifest'] = dict()
+        for k in (
+            "nativecode",
+            "versionName",
+            "maxSdkVersion",
+            "versionCode",
+            "features",
+            "usesSdk",
+            "signer",
+            "usesPermission",
+            "usesPermissionSdk23",
+        ):
+            v = manifest.get(k)
+            if v is not None:
+                ver['manifest'][k] = v
+    else:  # new file types get sorted
+        ver['manifest'] = dict(sorted(manifest.items()))
 
     # index-v2 has only per-version antifeatures, not per package.
     antiFeatures = app.get('AntiFeatures', {}).copy()
@@ -753,10 +743,6 @@ def make_v2(
     def _index_encoder_default(obj):
         if isinstance(obj, set):
             return sorted(list(obj))
-        if isinstance(obj, datetime):
-            # Java prefers milliseconds
-            # we also need to account for time zone/daylight saving time
-            return int(calendar.timegm(obj.timetuple()) * 1000)
         if isinstance(obj, dict):
             d = collections.OrderedDict()
             for key in sorted(obj.keys()):
@@ -789,7 +775,8 @@ def make_v2(
         if packageName not in apps:
             logging.info(_('Ignoring package without metadata: ') + package['apkName'])
             continue
-        if not package.get('versionName'):
+        manifest = package['manifest']
+        if not manifest.get('versionName'):
             app = apps[packageName]
             for build in app.get('Builds', []):
                 if build['versionCode'] == package['versionCode']:
@@ -802,7 +789,7 @@ def make_v2(
                                 apkfilename=package['apkName'], version=versionName
                             )
                         )
-                        package['versionName'] = versionName
+                        manifest['versionName'] = versionName
                     break
         if packageName in output_packages:
             packagelist = output_packages[packageName]
@@ -812,12 +799,15 @@ def make_v2(
             app = apps[packageName]
             categories_used_by_apps.update(app.get('Categories', []))
             packagelist["metadata"] = package_metadata(app, repodir)
-            if "signer" in package:
-                packagelist["metadata"]["preferredSigner"] = package["signer"]
+            mani = package["manifest"]
+            if "signer" in mani:
+                packagelist["metadata"]["preferredSigner"] = mani["signer"]["sha256"][0]
 
             packagelist["versions"] = {}
 
-        packagelist["versions"][package["hash"]] = convert_version(package, apps[packageName], repodir)  # fmt: skip
+        packagelist["versions"][package["file"]["sha256"]] = convert_version(
+            package, apps[packageName], repodir
+        )
 
     if categories_used_by_apps and not output['repo'].get(CATEGORIES_CONFIG_NAME):
         output['repo'][CATEGORIES_CONFIG_NAME] = dict()
@@ -848,7 +838,7 @@ def make_v2(
     with open(index_file, "w", encoding="utf-8") as fp:
         _v2_json_dump(output, fp)
 
-    json_name = f"""tmp/{repodir}_{convert_datetime(repodict["timestamp"])}.json"""
+    json_name = f"""tmp/{repodir}_{repodict["timestamp"]}.json"""
     with open(json_name, "w", encoding="utf-8") as fp:
         _v2_json_dump(output, fp)
 
@@ -894,14 +884,20 @@ def make_v2(
         signindex.sign_index(repodir, json_name)
 
 
+def _get_sorted_name_list_from_dict(l_of_d):
+    """Return a sorted list of strings from a index-v2 list of dicts."""
+    if not l_of_d:
+        return list()
+    name_list = list()
+    for d in l_of_d:
+        name_list.append(d['name'])
+    return sorted(name_list)
+
+
 def make_v1(apps, packages, repodir, repodict, requestsdict, signer_fingerprints):
     def _index_encoder_default(obj):
         if isinstance(obj, set):
             return sorted(list(obj))
-        if isinstance(obj, datetime):
-            # Java prefers milliseconds
-            # we also need to account for time zone/daylight saving time
-            return int(calendar.timegm(obj.timetuple()) * 1000)
         if isinstance(obj, dict):
             d = collections.OrderedDict()
             for key in sorted(obj.keys()):
@@ -996,10 +992,18 @@ def make_v1(apps, packages, repodir, repodict, requestsdict, signer_fingerprints
     output['packages'] = output_packages
     for package in packages:
         packageName = package['packageName']
+        file_d = package['file']
+        package['apkName'] = file_d['name']
+        package['hash'] = file_d['sha256']
+        package['hashType'] = 'sha256'
+        package['size'] = file_d['size']
+        signer = package['manifest'].get('signer', dict()).get('sha256', list())
+        if signer:
+            package['signer'] = signer[0]
         if packageName not in apps:
             logging.info(_('Ignoring package without metadata: ') + package['apkName'])
             continue
-        if not package.get('versionName'):
+        if not package['manifest'].get('versionName'):
             app = apps[packageName]
             for build in app.get('Builds', []):
                 if build['versionCode'] == package['versionCode']:
@@ -1020,7 +1024,6 @@ def make_v1(apps, packages, repodir, repodict, requestsdict, signer_fingerprints
             packagelist = []
             output_packages[packageName] = packagelist
         d = collections.OrderedDict()
-        packagelist.append(d)
         for k, v in sorted(package.items()):
             if not v:
                 continue
@@ -1036,7 +1039,35 @@ def make_v1(apps, packages, repodir, repodict, requestsdict, signer_fingerprints
             if k == 'antiFeatures':
                 d[k] = sorted(v.keys())
                 continue
+            if k == 'manifest':
+                for mk, mv in v.items():
+                    if not mv:
+                        continue
+
+                    if mk == 'features':
+                        d[mk] = _get_sorted_name_list_from_dict(mv)
+                    elif mk in ('maxSdkVersion', 'versionName'):
+                        d[mk] = mv
+                    elif mk == 'usesPermission':
+                        up_list = list()
+                        for p in mv:
+                            up_list.append((p['name'], p.get('maxSdkVersion')))
+                        d['uses-permission'] = up_list
+                    elif mk == 'usesPermissionSdk23':
+                        ups23_list = list()
+                        for p in mv:
+                            ups23_list.append((p['name'], p.get('maxSdkVersion')))
+                        d['uses-permission-sdk-23'] = ups23_list
+                    elif mk == 'usesSdk':
+                        for usk, usv in mv.items():
+                            d[usk] = usv
+                continue
             d[k] = v
+        newd = dict()
+        for k, v in sorted(d.items()):
+            if k != 'file':
+                newd[k] = v
+        packagelist.append(newd)
 
     json_name = 'index-v1.json'
     index_file = os.path.join(repodir, json_name)
@@ -1088,7 +1119,11 @@ def sort_package_versions(packages, signer_fingerprints):
     def v1_sort_keys(package):
         packageName = package.get('packageName', None)
 
-        signer = package.get('signer', None)
+        signers = package['manifest'].get('signer', dict()).get('sha256', list())
+        if signers:
+            signer = signers[0]
+        else:
+            signer = None
 
         dev_signer = common.metadata_find_developer_signature(packageName)
         group = GROUP_OTHER_SIGNED
@@ -1172,7 +1207,9 @@ def make_v0(apps, apks, repodir, repodict, requestsdict, signer_fingerprints):
     repoel.setAttribute("name", repodict['name'])
     pubkey, repo_pubkey_fingerprint = extract_pubkey()
     repoel.setAttribute("pubkey", pubkey.decode('utf-8'))
-    repoel.setAttribute("timestamp", '%d' % repodict['timestamp'].timestamp())
+    repoel.setAttribute(
+        "timestamp", '%d' % datetime_from_millis(repodict['timestamp']).timestamp()
+    )
     repoel.setAttribute("url", repodict['address'])
     repoel.setAttribute("version", str(repodict['version']))
 
@@ -1233,9 +1270,11 @@ def make_v0(apps, apks, repodir, repodict, requestsdict, signer_fingerprints):
 
         addElement('id', app.id, doc, apel)
         if app.added:
-            addElement('added', app.added.strftime('%Y-%m-%d'), doc, apel)
+            added = datetime_from_millis(app.added)
+            addElement('added', added.strftime('%Y-%m-%d'), doc, apel)
         if app.lastUpdated:
-            addElement('lastupdated', app.lastUpdated.strftime('%Y-%m-%d'), doc, apel)
+            lastUpdated = datetime_from_millis(app.lastUpdated)
+            addElement('lastupdated', lastUpdated.strftime('%Y-%m-%d'), doc, apel)
 
         addElementCheckLocalized('name', app, 'Name', doc, apel, name_from_apk)
         addElementCheckLocalized('summary', app, 'Summary', doc, apel)
@@ -1297,9 +1336,12 @@ def make_v0(apps, apks, repodir, repodict, requestsdict, signer_fingerprints):
                 first['versionCode'] == second['versionCode']
                 and first['sig'] == second['sig']
             ):
-                if first['hash'] == second['hash']:
-                    raise FDroidException('"{0}/{1}" and "{0}/{2}" are exact duplicates!'.format(
-                        repodir, first['apkName'], second['apkName']))
+                if first['file']['sha256'] == second['file']['sha256']:
+                    raise FDroidException(
+                        '"{0}/{1}" and "{0}/{2}" are exact duplicates!'.format(
+                            repodir, first['file']['name'], second['file']['name']
+                        )
+                    )
                 else:
                     raise FDroidException('duplicates: "{0}/{1}" - "{0}/{2}"'.format(
                         repodir, first['apkName'], second['apkName']))
@@ -1308,17 +1350,19 @@ def make_v0(apps, apks, repodir, repodict, requestsdict, signer_fingerprints):
         current_version_code = 0
         current_version_file = None
         for apk in apklist:
-            file_extension = common.get_file_extension(apk['apkName'])
+            file_extension = common.get_file_extension(apk['file']['name'])
+            manifest = apk.get('manifest', dict())
+            usesSdk = manifest.get('usesSdk', dict())
             # find the APK for the "Current Version"
             if current_version_code < app.CurrentVersionCode:
-                current_version_file = apk['apkName']
+                current_version_file = apk['file']['name']
             if current_version_code < apk['versionCode']:
                 current_version_code = apk['versionCode']
 
             apkel = doc.createElement("package")
             apel.appendChild(apkel)
 
-            versionName = apk.get('versionName')
+            versionName = manifest.get('versionName')
             if not versionName:
                 for build in app.get('Builds', []):
                     if (
@@ -1331,18 +1375,20 @@ def make_v0(apps, apks, repodir, repodict, requestsdict, signer_fingerprints):
                 addElement('version', versionName, doc, apkel)
 
             addElement('versioncode', str(apk['versionCode']), doc, apkel)
-            addElement('apkname', apk['apkName'], doc, apkel)
+            addElement('apkname', apk['file']['name'], doc, apkel)
             addElementIfInApk('srcname', apk, 'srcname', doc, apkel)
 
             hashel = doc.createElement("hash")
             hashel.setAttribute('type', 'sha256')
-            hashel.appendChild(doc.createTextNode(apk['hash']))
+            hashel.appendChild(doc.createTextNode(apk['file']['sha256']))
             apkel.appendChild(hashel)
 
-            addElement('size', str(apk['size']), doc, apkel)
-            addElementIfInApk('sdkver', apk, 'minSdkVersion', doc, apkel)
-            addElementIfInApk('targetSdkVersion', apk, 'targetSdkVersion', doc, apkel)
-            addElementIfInApk('maxsdkver', apk, 'maxSdkVersion', doc, apkel)
+            addElement('size', str(apk['file']['size']), doc, apkel)
+            addElementIfInApk('sdkver', usesSdk, 'minSdkVersion', doc, apkel)
+            addElementIfInApk(
+                'targetSdkVersion', usesSdk, 'targetSdkVersion', doc, apkel
+            )
+            addElementIfInApk('maxsdkver', manifest, 'maxSdkVersion', doc, apkel)
             addElementIfInApk('obbMainFile', apk, 'obbMainFile', doc, apkel)
             addElementIfInApk('obbMainFileSha256', apk, 'obbMainFileSha256', doc, apkel)
             addElementIfInApk('obbPatchFile', apk, 'obbPatchFile', doc, apkel)
@@ -1350,35 +1396,51 @@ def make_v0(apps, apks, repodir, repodict, requestsdict, signer_fingerprints):
                 'obbPatchFileSha256', apk, 'obbPatchFileSha256', doc, apkel
             )
             if 'added' in apk:
-                addElement('added', apk['added'].strftime('%Y-%m-%d'), doc, apkel)
+                added = datetime_from_millis(apk['added'])
+                addElement('added', added.strftime('%Y-%m-%d'), doc, apkel)
 
             if file_extension == 'apk':  # sig is required for APKs, but only APKs
                 addElement('sig', apk['sig'], doc, apkel)
 
                 old_permissions = set()
-                sorted_permissions = sorted(apk['uses-permission'])
+                sorted_permissions = sorted(
+                    manifest.get('usesPermission', list()),
+                    key=lambda u: u['name'],
+                )
                 for perm in sorted_permissions:
-                    perm_name = perm[0]
+                    perm_name = perm['name']
                     if perm_name.startswith("android.permission."):
                         perm_name = perm_name[19:]
                     old_permissions.add(perm_name)
                 addElementNonEmpty('permissions', ','.join(sorted(old_permissions)), doc, apkel)  # fmt: skip
 
-                for permission in sorted_permissions:
+                for perm in sorted_permissions:
                     permel = doc.createElement('uses-permission')
-                    if permission[1] is not None:
-                        permel.setAttribute('maxSdkVersion', '%d' % permission[1])
+                    if perm.get('maxSdkVersion') is not None:
+                        permel.setAttribute('maxSdkVersion', str(perm['maxSdkVersion']))
                         apkel.appendChild(permel)
-                    permel.setAttribute('name', permission[0])
-                for permission_sdk_23 in sorted(apk['uses-permission-sdk-23']):
+                    permel.setAttribute('name', perm['name'])
+                for p23 in sorted(
+                    manifest.get('usesPermissionSdk23', list()),
+                    key=lambda u: u['name'],
+                ):
                     permel = doc.createElement('uses-permission-sdk-23')
-                    if permission_sdk_23[1] is not None:
-                        permel.setAttribute('maxSdkVersion', '%d' % permission_sdk_23[1])  # fmt: skip
+                    if p23.get('maxSdkVersion') is not None:
+                        permel.setAttribute('maxSdkVersion', str(p23['maxSdkVersion']))
                         apkel.appendChild(permel)
-                    permel.setAttribute('name', permission_sdk_23[0])
-                if 'nativecode' in apk:
-                    addElement('nativecode', ','.join(sorted(apk['nativecode'])), doc, apkel)  # fmt: skip
-                addElementNonEmpty('features', ','.join(sorted(apk['features'])), doc, apkel)  # fmt: skip
+                    permel.setAttribute('name', p23['name'])
+                addElementNonEmpty(
+                    'nativecode',
+                    ','.join(sorted(manifest.get('nativecode', list()))),
+                    doc,
+                    apkel,
+                )
+                addElementNonEmpty(
+                    'features',
+                    ','.join(_get_sorted_name_list_from_dict(manifest.get('features'))),
+                    doc,
+                    apkel,
+                )
 
         if (
             current_version_file is not None
@@ -1991,13 +2053,13 @@ def make_altstore(apps, apks, config, repodir, pretty=False):
 
             # populate 'versions'
             for apk in apks:
-                last4 = apk.get('apkName', '').lower()[-4:]
-                if apk['packageName'] == packageName and last4 == '.ipa':
+                file_extension = common.get_file_extension(apk['file']['name'])
+                if apk['packageName'] == packageName and file_extension == 'ipa':
                     v = {
-                        "version": apk["versionName"],
-                        "date": apk["added"].isoformat(),
-                        "downloadURL": f"{config['repo_url']}/{apk['apkName']}",
-                        "size": apk['size'],
+                        "version": apk["manifest"]["versionName"],
+                        "date": datetime_from_millis(apk["added"]).isoformat(),
+                        "downloadURL": f"{config['repo_url']}/{apk['file']['name']}",
+                        "size": apk['file']['size'],
                     }
 
                     # v['localizedDescription'] maybe what's new text?

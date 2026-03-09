@@ -100,6 +100,111 @@ class CommonTest(SetUpTearDownMixin, unittest.TestCase):
                 yaml.load(fp),
             )
 
+    def test_config_yaml_1_2(self):
+        """Config YAML should follow YAML 1.2 types.
+
+        https://yaml.org/spec/1.2.2/#1032-tag-resolution
+
+        """
+        os.chdir(self.testdir)
+        yaml12file = Path('YAML 1.2.yml')
+        text = textwrap.dedent(
+            """\
+            - null
+            - true
+            - True
+            - FALSE
+            - FAlse
+            - on
+            - Yes
+            - OFF
+            - no
+            - 23.1
+            - 42
+        """
+        )
+        yaml12file.write_text(text, encoding='utf-8')
+        with yaml12file.open() as fp:
+            config = yaml.load(fp)
+        self.assertEqual(
+            [None, True, True, False, 'FAlse', 'on', 'Yes', 'OFF', 'no', 23.1, 42],
+            config,
+        )
+
+    def test_config_yaml_convert_to_1_2(self):
+        """Config YAML should be dumped as clean YAML 1.2."""
+        os.chdir(self.testdir)
+        yaml12file = Path('YAML 1.2.yml')
+        text = textwrap.dedent(
+            """\
+            - null
+            - True
+            - False
+            - FALse
+            - on
+            - yes
+            - OFF
+            - No
+            - -42.042
+            - 1234
+        """
+        )
+        yaml12file.write_text(text, encoding='utf-8')
+        with yaml12file.open() as fp:
+            config = yaml.load(fp)
+        self.assertEqual(
+            [None, True, False, 'FALse', 'on', 'yes', 'OFF', 'No', -42.042, 1234],
+            config,
+        )
+        self.assertEqual(
+            textwrap.dedent(
+                """\
+            - 
+            - true
+            - false
+            - FALse
+            - on
+            - yes
+            - OFF
+            - No
+            - -42.042
+            - 1234
+        """
+            ),
+            config_dump(config),
+        )
+
+    def test_config_yaml_1_2_roundtrip(self):
+        """Config YAML should support roundtrip with clean YAML 1.2 input."""
+        os.chdir(self.testdir)
+        yaml12file = Path('YAML 1.2.yml')
+        text = textwrap.dedent(
+            """\
+            list:
+            - 
+            - true
+            - false
+            - on
+            - OFF
+            - no
+            - 23.1
+            - 42
+            mirrors:
+            - url: https://foo.com
+            """
+        )
+        yaml12file.write_text(text, encoding='utf-8')
+        with yaml12file.open() as fp:
+            config = yaml.load(fp)
+        self.assertEqual(
+            {
+                'list': [None, True, False, 'on', 'OFF', 'no', 23.1, 42],
+                'mirrors': [{'url': 'https://foo.com'}],
+            },
+            config,
+        )
+        self.assertEqual(text, config_dump(config))
+
     def test_parse_human_readable_size(self):
         for k, v in (
             (9827, 9827),
@@ -3005,37 +3110,6 @@ class CommonTest(SetUpTearDownMixin, unittest.TestCase):
             [{'url': s}], fdroidserver.common.parse_list_of_dicts(mirrors)
         )
 
-    def test_KnownApks_recordapk(self):
-        """Test that added dates are being fetched from the index.
-
-        There are more related tests in tests/run-tests.
-
-        """
-        now = datetime.now(timezone.utc)
-        knownapks = fdroidserver.common.KnownApks()
-        for apkName in knownapks.apks:
-            knownapks.recordapk(apkName, default_date=now)
-        for added in knownapks.apks.values():
-            self.assertNotEqual(added, now)
-
-    def test_KnownApks_recordapk_new(self):
-        """Test that new added dates work, and are not replaced later.
-
-        There are more related tests in tests/run-tests.
-
-        """
-        now = datetime.now(timezone.utc)
-        knownapks = fdroidserver.common.KnownApks()
-        fake_apk = 'fake.apk'
-        knownapks.recordapk(fake_apk, default_date=now)
-        for apk, added in knownapks.apks.items():
-            if apk == fake_apk:
-                self.assertEqual(added, now)
-            else:
-                self.assertNotEqual(added, now)
-        knownapks.recordapk(fake_apk, default_date=datetime.now(timezone.utc))
-        self.assertEqual(knownapks.apks[fake_apk], now)
-
     def test_get_mirrors_fdroidorg(self):
         mirrors = fdroidserver.common.get_mirrors(
             'https://f-droid.org/repo', 'entry.jar'
@@ -3192,7 +3266,7 @@ APKS_WITH_JAR_SIGNATURES = (
     ),
     (
         'repo/duplicate.permisssions_9999999.apk',
-        '659e1fd284549f70d13fb02c620100e27eeea3420558cce62b0f5d4cf2b77d84',
+        '1355ae301394f6ce0a21976bacde65d5fbed48b96518121f52f45a31829cee76',
     ),
     (
         'repo/info.zwanenburg.caffeinetile_4.apk',

@@ -36,7 +36,7 @@ import time
 import warnings
 import zipfile
 from argparse import ArgumentParser
-from datetime import datetime, timezone
+from datetime import datetime
 from pathlib import Path
 
 import asn1crypto.cms
@@ -68,7 +68,7 @@ if hasattr(Image, 'DecompressionBombWarning'):
     warnings.simplefilter('error', Image.DecompressionBombWarning)
 Image.MAX_IMAGE_PIXELS = 0xFFFFFF  # 4096x4096
 
-METADATA_VERSION = 20002
+METADATA_VERSION = 30000
 
 # less than the valid range of versionCode, i.e. Java's Integer.MIN_VALUE
 UNSET_VERSION_CODE = -0x100000000
@@ -98,9 +98,6 @@ screen_resolutions = {
 
 all_screen_densities = ['0'] + screen_densities
 
-UsesPermission = collections.namedtuple('UsesPermission', ['name', 'maxSdkVersion'])
-UsesPermissionSdk23 = collections.namedtuple('UsesPermissionSdk23', ['name', 'maxSdkVersion'])  # fmt: skip
-
 ALLOWED_EXTENSIONS = ('png', 'jpg', 'jpeg')
 GRAPHIC_NAMES = ('featureGraphic', 'icon', 'promoGraphic', 'tvBanner')
 SCREENSHOT_DIRS = (
@@ -112,6 +109,55 @@ SCREENSHOT_DIRS = (
 )
 
 BLANK_PNG_INFO = PngImagePlugin.PngInfo()
+
+
+class PackageAddedCache:
+    """Store/fetch the added timestamp of packages.
+
+    This uses a cached value for "now" that is set once to avoid
+    preferencing apps based on any particular sort, like alpha sort of
+    file name or Application ID.  This way all new apps in a single
+    run get the same "added" time.
+
+    """
+
+    def __init__(self, use_date_from_file=False):
+        """Load filename/date info about previously seen Versions."""
+        self.now = common.epoch_millis_now()
+        self.use_date_from_file = use_date_from_file
+        self.versions = {}
+        for part in ('repo', 'archive'):
+            path = os.path.join(part, 'index-v2.json')
+            if os.path.isfile(path):
+                with open(path, 'r', encoding='utf-8') as f:
+                    index = json.load(f)
+                    for appid, data in index["packages"].items():
+                        for version in data["versions"].values():
+                            vpath = os.path.join(
+                                part,
+                                version["file"]["name"][1:],
+                            )
+                            self.versions[vpath] = version["added"]
+
+    def get(self, vpath, use_date_from_file=False):  # TODO do this based on sha256
+        """Get 'added' time, set current time as 'added' if file is new.
+
+        Parameters
+        ----------
+        vpath
+          path to file that is being added to the index
+
+        Returns
+        -------
+        int
+          timestamp as Java milliseconds since UNIX epoch
+        """
+        if vpath not in self.versions:
+            if use_date_from_file or self.use_date_from_file:
+                self.versions[vpath] = int(os.stat(vpath).st_mtime * 1000)
+            else:
+                self.versions[vpath] = self.now
+        return self.versions[vpath]
 
 
 def dpi_to_px(density):
@@ -386,8 +432,6 @@ def get_cache():
         if 'antiFeatures' in v:
             if not isinstance(v['antiFeatures'], dict):
                 v['antiFeatures'] = {k: {} for k in sorted(v['antiFeatures'])}
-        if 'added' in v:
-            v['added'] = datetime.fromtimestamp(v['added'], tz=timezone.utc)
         if v.get('srcname') and not v.get('srcnameSha256'):
             f = f'archive/{v["srcname"]}'
             if not os.path.exists(f):
@@ -403,8 +447,6 @@ def write_cache(apkcache):
         def default(self, obj):
             if isinstance(obj, set):
                 return list(obj)
-            elif isinstance(obj, datetime):
-                return obj.timestamp()
             return super().default(obj)
 
     apkcachefile = get_cache_file()
@@ -642,10 +684,11 @@ def parse_ipa(ipa_path, file_size, sha256):
     import biplist
 
     ipa = {
-        "apkName": os.path.basename(ipa_path),
-        "hash": sha256,
-        "hashType": "sha256",
-        "size": file_size,
+        "file": {
+            "name": os.path.basename(ipa_path),
+            "sha256": sha256,
+            "size": file_size,
+        },
         "ipa_entitlements": set(),
         "ipa_permissions": {},
     }
@@ -659,7 +702,7 @@ def parse_ipa(ipa_path, file_size, sha256):
                     ipa["packageName"] = plist["CFBundleIdentifier"]
                     # https://developer.apple.com/documentation/bundleresources/information_property_list/cfbundleshortversionstring
                     ipa["versionCode"] = version_string_to_int(plist["CFBundleShortVersionString"])
-                    ipa["versionName"] = plist["CFBundleShortVersionString"]
+                    ipa["manifest"] = {"versionName": plist["CFBundleShortVersionString"]}
                     ipa["ipa_MinimumOSVersion"] = plist['MinimumOSVersion']
                     ipa["ipa_DTPlatformVersion"] = plist['DTPlatformVersion']
                     for ipap in IPA_PERMISSIONS:
@@ -686,7 +729,7 @@ def parse_ipa(ipa_path, file_size, sha256):
     return ipa
 
 
-def scan_repo_for_ipas(apkcache, repodir, knownapks):
+def scan_repo_for_ipas(apkcache, repodir, package_added_cache):
     """Scan for IPA files in a given repo directory.
 
     Parameters
@@ -695,7 +738,7 @@ def scan_repo_for_ipas(apkcache, repodir, knownapks):
       cache dictionary containting cached file infos from previous runs
     repodir
       repo directory to scan
-    knownapks
+    package_added_cache
       list of all known files, as per metadata.read_metadata
 
     Returns
@@ -717,14 +760,12 @@ def scan_repo_for_ipas(apkcache, repodir, knownapks):
         sha256 = common.sha256sum(ipa_path)
         ipa = apkcache.get(ipa_name, {})
 
-        if ipa.get('hash') != sha256:
+        if ipa['file']['sha256'] != sha256:
             ipa = fdroidserver.update.parse_ipa(ipa_path, file_size, sha256)
             apkcache[ipa_name] = ipa
             cachechanged = True
 
-        added = knownapks.recordapk(ipa_name)
-        if added:
-            ipa['added'] = added
+        ipa['added'] = package_added_cache.get(ipa_path)
 
         ipas.append(ipa)
 
@@ -1544,7 +1585,7 @@ def insert_localized_ios_app_metadata(apps_with_packages):
             shutil.copy2(icon_src, icon_dest)
 
 
-def scan_repo_files(apkcache, repodir, knownapks, use_date_from_file=False):
+def scan_repo_files(apkcache, repodir, package_added_cache, use_date_from_file=False):
     """Scan a repo for all files with an extension except APK/OBB/IPA.
 
     This allows putting all kinds of files into repostories. E.g. Media Files,
@@ -1556,14 +1597,13 @@ def scan_repo_files(apkcache, repodir, knownapks, use_date_from_file=False):
       current cached info about all repo files
     repodir
       repo directory to scan
-    knownapks
+    package_added_cache
       list of all known files, as per metadata.read_metadata
     use_date_from_file
       use date from file (instead of current date) for newly added files
     """
     cachechanged = False
     repo_files = []
-    repodir = repodir.encode()
     for name in os.listdir(repodir):
         # skip files based on file extensions, that are handled elsewhere
         file_extension = common.get_file_extension(name)
@@ -1572,11 +1612,8 @@ def scan_repo_files(apkcache, repodir, knownapks, use_date_from_file=False):
 
         # skip source tarballs generated by fdroidserver
         filename = os.path.join(repodir, name)
-        name_utf8 = name.decode()
-        if filename.endswith(b'_src.tar.gz'):
-            logging.debug(
-                _('skipping source tarball: {path}').format(path=filename.decode())
-            )
+        if filename.endswith('_src.tar.gz'):
+            logging.debug(_('skipping source tarball: {path}').format(path=filename))
             continue
 
         # skip all other files generated by fdroidserver
@@ -1590,68 +1627,59 @@ def scan_repo_files(apkcache, repodir, knownapks, use_date_from_file=False):
         # load file infos from cache if not stale
         shasum = common.sha256sum(filename)
         usecache = False
-        if name_utf8 in apkcache:
-            repo_file = apkcache[name_utf8]
-            if repo_file.get('hash') == shasum:
+        if name in apkcache:
+            repo_file = apkcache[name]
+            if repo_file['file']['sha256'] == shasum:
                 logging.debug(
-                    _("Reading {apkfilename} from cache").format(apkfilename=name_utf8)
+                    _("Reading {apkfilename} from cache").format(apkfilename=name)
                 )
                 usecache = True
             else:
                 logging.debug(
                     _("Ignoring stale cache data for {apkfilename}").format(
-                        apkfilename=name_utf8
+                        apkfilename=name
                     )
                 )
 
         # scan file if info wasn't in cache
         if not usecache:
-            logging.debug(_("Processing {apkfilename}").format(apkfilename=name_utf8))
+            logging.debug(_("Processing {apkfilename}").format(apkfilename=name))
             repo_file = collections.OrderedDict()
-            repo_file['name'] = os.path.splitext(name_utf8)[0]
-            # TODO rename apkname globally to something more generic
-            repo_file['apkName'] = name_utf8
-            repo_file['hash'] = shasum
-            repo_file['hashType'] = 'sha256'
-            repo_file['ipfsCIDv1'] = common.calculate_IPFS_cid(name_utf8)
+            repo_file['name'] = os.path.splitext(name)[0]
+            repo_file['file'] = {
+                "name": name,
+                "sha256": shasum,
+                'size': stat.st_size,
+            }
+            ipfsCIDv1 = common.calculate_IPFS_cid(name)
+            if ipfsCIDv1:
+                repo_file['file']['ipfsCIDv1'] = ipfsCIDv1
             repo_file['versionCode'] = 0
-            repo_file['versionName'] = shasum[0:7]
+            repo_file['manifest'] = {'versionName': shasum[0:7]}
             # the static ID is the SHA256 unless it is set in the metadata
             repo_file['packageName'] = shasum
 
-            m = common.STANDARD_FILE_NAME_REGEX.match(name_utf8)
+            m = common.STANDARD_FILE_NAME_REGEX.match(name)
             if m:
                 repo_file['packageName'] = m.group(1)
                 repo_file['versionCode'] = int(m.group(2))
-            srcfilename = name + b'_src.tar.gz'
+            srcfilename = name + '_src.tar.gz'
             srcpath = os.path.join(repodir, srcfilename)
             if os.path.exists(srcpath):
-                repo_file['srcname'] = srcfilename.decode()
-                repo_file['srcnameSha256'] = common.sha256sum(srcpath.decode())
-            repo_file['size'] = stat.st_size
+                repo_file['srcname'] = srcfilename
+                repo_file['srcnameSha256'] = common.sha256sum(srcpath)
 
-            apkcache[name_utf8] = repo_file
+            apkcache[name] = repo_file
             cachechanged = True
 
-        if use_date_from_file:
-            timestamp = stat.st_ctime
-            default_date_param = datetime.fromtimestamp(timestamp, tz=timezone.utc)
-        else:
-            default_date_param = None
-
-        # Record in knownapks, getting the added date at the same time..
-        added = knownapks.recordapk(
-            repo_file['apkName'], default_date=default_date_param
-        )
-        if added:
-            repo_file['added'] = added
+        repo_file['added'] = package_added_cache.get(filename, use_date_from_file)
 
         repo_files.append(repo_file)
 
     return repo_files, cachechanged
 
 
-def scan_apk(apk_file, require_signature=True):
+def scan_apk(apk_file):
     """Scan an APK file and returns dictionary with metadata of the APK.
 
     Attention: This does *not* verify that the APK signature is correct.
@@ -1660,8 +1688,6 @@ def scan_apk(apk_file, require_signature=True):
     ----------
     apk_file
       The (ideally absolute) path to the APK file
-    require_signature
-      Raise an exception is there is no valid signature. Default to True.
 
     Raises
     ------
@@ -1672,18 +1698,18 @@ def scan_apk(apk_file, require_signature=True):
     A dict containing APK metadata
     """
     apk = {
-        'hash': common.sha256sum(apk_file),
-        'hashType': 'sha256',
-        'uses-permission': [],
-        'uses-permission-sdk-23': [],
-        'features': [],
+        'file': {
+            'name': os.path.basename(apk_file),
+            'sha256': common.sha256sum(apk_file),
+            'size': os.path.getsize(apk_file),
+        },
         'icons_src': {},
         'icons': {},
         'antiFeatures': {},
     }
     ipfsCIDv1 = common.calculate_IPFS_cid(apk_file)
     if ipfsCIDv1:
-        apk['ipfsCIDv1'] = ipfsCIDv1
+        apk['file']['ipfsCIDv1'] = ipfsCIDv1
 
     scan_apk_androguard(apk, apk_file)
 
@@ -1703,25 +1729,8 @@ def scan_apk(apk_file, require_signature=True):
     # Get the signature, or rather the signing key fingerprints
     logging.debug('Getting signature of {0}'.format(os.path.basename(apk_file)))
     apk['sig'] = getsig(apk_file)
-    if require_signature:
-        if not apk['sig']:
-            raise BuildException(_("Failed to get APK signing key fingerprint"))
-        apk['signer'] = common.apk_signer_fingerprint(
-            os.path.join(os.getcwd(), apk_file)
-        )
-        if not apk.get('signer'):
-            raise BuildException(_("Failed to get APK signing key fingerprint"))
-
-    # Get size of the APK
-    apk['size'] = os.path.getsize(apk_file)
-
-    if 'minSdkVersion' not in apk:
-        logging.warning(
-            _("No minimum SDK version found in {0}, using default (3).").format(
-                apk_file
-            )
-        )
-        apk['minSdkVersion'] = 3  # aapt defaults to 3 as the min
+    if not apk['sig']:
+        raise BuildException(_("Failed to get APK signing key fingerprint"))
 
     # Check for known vulnerabilities
     hkv = has_known_vulnerability(apk_file)
@@ -1834,7 +1843,28 @@ def _sanitize_sdk_version(value):
     return None
 
 
+def _uses_permission(name=None, maxSdkVersion=None):
+    """<uses-permission> entries have a name and optional maxSdkVersion."""
+    if not name:
+        logging.error(_('Ignoring bad element in manifest: %s') % name)
+        return dict()
+    d = {"name": str(name)}
+    maxSdkVersion = _sanitize_sdk_version(maxSdkVersion)
+    if maxSdkVersion:
+        d["maxSdkVersion"] = maxSdkVersion
+    return d
+
+
 def scan_apk_androguard(apk, apkfile):
+    """Parse an APK file for essential information and the signer fingerprint.
+
+    These are some of the core bits of information parsed here:
+    * https://developer.android.com/guide/topics/manifest/manifest-element
+    * https://developer.android.com/guide/topics/manifest/uses-feature-element
+    * https://developer.android.com/guide/topics/manifest/uses-permission-element
+    * https://developer.android.com/guide/topics/manifest/uses-sdk-element
+
+    """
     try:
         apkobject = common.get_androguard_APK(apkfile)
         if apkobject.is_valid_APK():
@@ -1865,6 +1895,14 @@ def scan_apk_androguard(apk, apkfile):
         )
         raise BuildException(_("Invalid APK")) from e
 
+    signer = common.apk_signer_fingerprint(apkfile)
+    if not signer:
+        raise BuildException(_("Failed to get APK signing key fingerprint"))
+
+    usesSdk = dict()
+    manifest = {'signer': {'sha256': [signer]}, 'usesSdk': usesSdk}
+    apk['manifest'] = manifest
+
     apk['packageName'] = apkobject.get_package()
 
     xml = apkobject.get_android_manifest_xml()
@@ -1893,21 +1931,29 @@ def scan_apk_androguard(apk, apkfile):
         apk['versionCode'] = int(vcstr)
     apk['name'] = apkobject.get_app_name()
 
-    apk['versionName'] = common.ensure_final_value(
+    manifest['versionName'] = common.ensure_final_value(
         apk['packageName'], arsc, androidmanifest_xml.get(xmlns + 'versionName')
     )
 
     minSdkVersion = _sanitize_sdk_version(apkobject.get_min_sdk_version())
     if minSdkVersion is not None:
-        apk['minSdkVersion'] = minSdkVersion
+        usesSdk['minSdkVersion'] = minSdkVersion
+    else:
+        usesSdk['minSdkVersion'] = 3  # aapt defaults to 3 as the min
+        logging.warning(
+            _("No minimum SDK version found in {0}, using default (3).").format(
+                apkfile
+            )
+        )
 
     targetSdkVersion = _sanitize_sdk_version(apkobject.get_target_sdk_version())
     if targetSdkVersion is not None:
-        apk['targetSdkVersion'] = targetSdkVersion
+        usesSdk['targetSdkVersion'] = targetSdkVersion
 
     maxSdkVersion = _sanitize_sdk_version(apkobject.get_max_sdk_version())
     if maxSdkVersion is not None:
-        apk['maxSdkVersion'] = maxSdkVersion
+        # mistakenly put in 'manifest' in index-v2, TODO move to useSdk for index-v3
+        manifest['maxSdkVersion'] = maxSdkVersion
 
     icon_id_str = apkobject.get_attribute_value("application", "icon")
     if icon_id_str:
@@ -1926,8 +1972,8 @@ def scan_apk_androguard(apk, apkfile):
     arch_re = re.compile("^lib/(.*)/.*$")
     arch = set([arch_re.match(file).group(1) for file in apkobject.get_files() if arch_re.match(file)])
     if len(arch) >= 1:
-        apk['nativecode'] = []
-        apk['nativecode'].extend(sorted(list(arch)))
+        manifest['nativecode'] = []
+        manifest['nativecode'].extend(sorted(list(arch)))
 
     for item in xml.findall('uses-permission'):
         name = item.attrib.get(xmlns + 'name')
@@ -1938,12 +1984,13 @@ def scan_apk_androguard(apk, apkfile):
             )
             continue
         maxSdkVersion = item.attrib.get(xmlns + 'maxSdkVersion')
-        maxSdkVersion = int(maxSdkVersion) if maxSdkVersion else None
-        permission = UsesPermission(str(name), maxSdkVersion)
-        apk['uses-permission'].append(permission)
+        if 'usesPermission' not in manifest:
+            manifest['usesPermission'] = list()
+        manifest['usesPermission'].append(_uses_permission(name, maxSdkVersion))
     for name, maxSdkVersion in apkobject.get_uses_implied_permission_list():
-        permission = UsesPermission(name, maxSdkVersion)
-        apk['uses-permission'].append(permission)
+        if 'usesPermission' not in manifest:
+            manifest['usesPermission'] = list()
+        manifest['usesPermission'].append(_uses_permission(name, maxSdkVersion))
 
     for item in xml.findall('uses-permission-sdk-23'):
         name = item.attrib.get(xmlns + 'name')
@@ -1953,10 +2000,10 @@ def scan_apk_androguard(apk, apkfile):
                 % ElementTree.tostring(item).decode()
             )
             continue
+        if 'usesPermissionSdk23' not in manifest:
+            manifest['usesPermissionSdk23'] = list()
         maxSdkVersion = item.attrib.get(xmlns + 'maxSdkVersion')
-        maxSdkVersion = int(maxSdkVersion) if maxSdkVersion else None
-        permission_sdk_23 = UsesPermissionSdk23(str(name), maxSdkVersion)
-        apk['uses-permission-sdk-23'].append(permission_sdk_23)
+        manifest['usesPermissionSdk23'].append(_uses_permission(name, maxSdkVersion))
 
     for item in xml.findall('uses-feature'):
         feature = str(item.attrib.get(xmlns + 'name', ''))
@@ -1971,10 +2018,12 @@ def scan_apk_androguard(apk, apkfile):
             'android.hardware.screen.landscape',
         ):
             if feature.startswith("android.feature."):
-                feature = feature[16:]
+                feature = feature[16:]  # TODO delete this madness in index-v3
         required = item.attrib.get(xmlns + 'required')
         if required is None or required == 'true':
-            apk['features'].append(feature)
+            if 'features' not in apk:
+                manifest['features'] = list()
+            manifest['features'].append({'name': feature})
 
 
 _DISABLED_ALGORITHM_REASON = None
@@ -1993,7 +2042,7 @@ def _fill_reason(msg):
     return d
 
 
-def process_apk(apkcache, apkfilename, repodir, knownapks, use_date_from_apk=False,
+def process_apk(apkcache, apkfilename, repodir, package_added_cache, use_date_from_apk=False,
                 allow_disabled_algorithms=False, archive_bad_sig=False, apps=None, cache_timestamp=0):
     """Process the apk with the given filename in the given repo directory.
 
@@ -2007,8 +2056,8 @@ def process_apk(apkcache, apkfilename, repodir, knownapks, use_date_from_apk=Fal
       the filename of the apk to scan
     repodir
       repo directory to scan
-    knownapks
-      known apks info
+    package_added_cache
+      list of all known files, as per metadata.read_metadata
     use_date_from_apk
       use date from APK (instead of current date) for newly added APKs
     allow_disabled_algorithms
@@ -2035,7 +2084,7 @@ def process_apk(apkcache, apkfilename, repodir, knownapks, use_date_from_apk=Fal
     if apkfilename in apkcache:
         apk = apkcache[apkfilename]
         stat = os.stat(apkfile)
-        if apk.get('size') == stat.st_size and stat.st_mtime < cache_timestamp:
+        if apk['file']['size'] == stat.st_size and stat.st_mtime < cache_timestamp:
             logging.debug(
                 _("Reading {apkfilename} from cache").format(apkfilename=apkfilename)
             )
@@ -2101,8 +2150,8 @@ def process_apk(apkcache, apkfilename, repodir, knownapks, use_date_from_apk=Fal
                     os.rename(apkfile, std_short_name)
                     apkfile = std_short_name
                 apkfilename = apkfile[len(repodir) + 1 :]
+                apk['file']['name'] = apkfilename
 
-        apk['apkName'] = apkfilename
         srcfilename = apkfilename[:-4] + "_src.tar.gz"
         srcpath = os.path.join(repodir, srcfilename)
         if os.path.exists(srcpath):
@@ -2169,15 +2218,7 @@ def process_apk(apkcache, apkfilename, repodir, knownapks, use_date_from_apk=Fal
         # resize existing icons for densities missing in the APK
         fill_missing_icon_densities(empty_densities, iconfilename, apk, repodir)
 
-        if use_date_from_apk:
-            default_date_param = datetime.fromtimestamp(os.stat(apkfile).st_mtime, tz=timezone.utc)
-        else:
-            default_date_param = None
-
-        # Record in known apks, getting the added date at the same time..
-        added = knownapks.recordapk(apk['apkName'], default_date=default_date_param)
-        if added:
-            apk['added'] = added
+        apk['added'] = package_added_cache.get(apkfile, use_date_from_apk)
 
         apkcache[apkfilename] = apk
         cachechanged = True
@@ -2185,7 +2226,7 @@ def process_apk(apkcache, apkfilename, repodir, knownapks, use_date_from_apk=Fal
     return False, apk, cachechanged
 
 
-def process_apks(apkcache, repodir, knownapks, use_date_from_apk=False, apps=None, cache_timestamp=0):
+def process_apks(apkcache, repodir, package_added_cache, use_date_from_apk=False, apps=None, cache_timestamp=0):
     """Process the apks in the given repo directory.
 
     This also extracts the icons.
@@ -2196,8 +2237,8 @@ def process_apks(apkcache, repodir, knownapks, use_date_from_apk=False, apps=Non
       current apk cache information
     repodir
       repo directory to scan
-    knownapks
-     b known apks info
+    package_added_cache
+      list of all known files, as per metadata.read_metadata
     use_date_from_apk
       use date from APK (instead of current date) for newly added APKs
     cache_timestamp
@@ -2222,7 +2263,7 @@ def process_apks(apkcache, repodir, knownapks, use_date_from_apk=False, apps=Non
     for apkfile in sorted(glob.glob(os.path.join(repodir, '*.apk'))):
         apkfilename = apkfile[len(repodir) + 1 :]
         ada = disabled_algorithms_allowed()
-        (skip, apk, cachethis) = process_apk(apkcache, apkfilename, repodir, knownapks,
+        (skip, apk, cachethis) = process_apk(apkcache, apkfilename, repodir, package_added_cache,
                                              use_date_from_apk, ada, True, apps, cache_timestamp)
         if skip:
             continue
@@ -2490,11 +2531,12 @@ def move_apk_between_sections(from_dir, to_dir, apk):
     if from_dir == to_dir:
         return
 
-    logging.info("Moving %s from %s to %s" % (apk['apkName'], from_dir, to_dir))
-    _move_file(from_dir, to_dir, apk['apkName'], False)
-    _move_file(from_dir, to_dir, apk['apkName'] + '.asc', True)
-    _move_file(from_dir, to_dir, apk['apkName'] + '.idsig', True)
-    _move_file(from_dir, to_dir, apk['apkName'][:-4] + '.log.gz', True)
+    filename = apk['file']['name']
+    logging.info("Moving %s from %s to %s" % (filename, from_dir, to_dir))
+    _move_file(from_dir, to_dir, filename, False)
+    _move_file(from_dir, to_dir, filename + '.asc', True)
+    _move_file(from_dir, to_dir, filename + '.idsig', True)
+    _move_file(from_dir, to_dir, filename[:-4] + '.log.gz', True)
     for density in all_screen_densities:
         from_icon_dir = get_icon_dir(from_dir, density)
         to_icon_dir = get_icon_dir(to_dir, density)
@@ -2518,7 +2560,7 @@ def add_apks_to_per_app_repos(repodir, apks):
             logging.info(_('Adding new repo for only {name}').format(name=apk['packageName']))
             os.makedirs(apk['per_app_icons'])
 
-        apkpath = os.path.join(repodir, apk['apkName'])
+        apkpath = os.path.join(repodir, apk['file']['name'])
         shutil.copy(apkpath, apk['per_app_repo'])
         apksigpath = apkpath + '.sig'
         if os.path.exists(apksigpath):
@@ -2691,8 +2733,9 @@ def get_apks_without_allowed_signatures(app, apk):
     allowed_signer_keys = app.get('AllowedAPKSigningKeys', [])
     if not allowed_signer_keys:
         return
-    if apk['signer'] not in allowed_signer_keys:
-        return apk['apkName']
+    for sha256 in apk['manifest']['signer']['sha256']:
+        if sha256 not in allowed_signer_keys:
+            return apk['file']['name']
 
 
 def prepare_apps(apps, apks, repodir):
@@ -2876,7 +2919,7 @@ def main():
     apps = metadata.read_metadata()
 
     # Read known apks data (will be updated and written back when we've finished)
-    knownapks = common.KnownApks()
+    package_added_cache = PackageAddedCache(options.use_date_from_apk)
 
     # Get APK cache
     apkcache = get_cache()
@@ -2891,20 +2934,18 @@ def main():
     apks, cachechanged = process_apks(
         apkcache,
         repodirs[0],
-        knownapks,
+        package_added_cache,
         options.use_date_from_apk,
         apps,
         cache_timestamp,
     )
 
     output_status_stage(status_output, 'scan_repo_files')
-    files, fcachechanged = scan_repo_files(
-        apkcache, repodirs[0], knownapks, options.use_date_from_apk
-    )
+    files, fcachechanged = scan_repo_files(apkcache, repodirs[0], package_added_cache)
     cachechanged = cachechanged or fcachechanged
     apks += files
 
-    ipas, icachechanged = scan_repo_for_ipas(apkcache, repodirs[0], knownapks)
+    ipas, icachechanged = scan_repo_for_ipas(apkcache, repodirs[0], package_added_cache)
     cachechanged = cachechanged or icachechanged
     apks += ipas
 
@@ -2917,16 +2958,16 @@ def main():
     errors = 0
     remove_apks = []
     for apk in apks:
-        sha256 = apk['hash']
+        sha256 = apk['file']['sha256']
         if sha256 in sha256_has_files:
             errors += 1
             for path2 in sha256_has_files[sha256]:
                 logging.error(
                     _('{path1} is a duplicate of {path2}, remove one!').format(
-                        path1=apk["apkName"], path2=path2
+                        path1=apk["file"]["name"], path2=path2
                     )
                 )
-        sha256_has_files[sha256].append(apk['apkName'])
+        sha256_has_files[sha256].append(apk['file']['name'])
         to_remove = get_apks_without_allowed_signatures(apps.get(apk['packageName']), apk)
         if to_remove:
             remove_apks.append(apk)
@@ -2935,7 +2976,7 @@ def main():
                     path=to_remove
                 )
                 + '\n'
-                + apk['signer']
+                + '\n'.join(apk['manifest']['signer']['sha256'])
             )
             if options.delete_unknown:
                 for d in repodirs:
@@ -2944,7 +2985,8 @@ def main():
                         logging.warning(_('Removing {path}"').format(path=path))
                         path.unlink()
 
-        if apk['apkName'].endswith('.apk'):
+        apkfilename = apk['file']['name']
+        if apkfilename.endswith('.apk'):
             appid_has_apks.add(apk['packageName'])
         else:
             appid_has_repo_files.add(apk['packageName'])
@@ -2954,11 +2996,11 @@ def main():
                 apps = metadata.read_metadata()
             else:
                 msg = _("{apkfilename} ({appid}) has no metadata!") \
-                    .format(apkfilename=apk['apkName'], appid=apk['packageName'])
+                    .format(apkfilename=apkfilename, appid=apk['packageName'])
                 if options.delete_unknown:
                     logging.warning(msg + '\n\t' + _("deleting: repo/{apkfilename}")
-                                    .format(apkfilename=apk['apkName']))
-                    rmf = os.path.join(repodirs[0], apk['apkName'])
+                                    .format(apkfilename=apkfilename))
+                    rmf = os.path.join(repodirs[0], apkfilename)
                     if not os.path.exists(rmf):
                         logging.error(_("Could not find {path} to remove it").format(path=rmf))
                     else:
@@ -2983,7 +3025,7 @@ def main():
 
     # Scan the archive repo for apks as well
     if len(repodirs) > 1:
-        archapks, cc = process_apks(apkcache, repodirs[1], knownapks,
+        archapks, cc = process_apks(apkcache, repodirs[1], package_added_cache,
                                     options.use_date_from_apk, apps, cache_timestamp)
         if cc:
             cachechanged = True

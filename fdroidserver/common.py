@@ -2903,48 +2903,6 @@ def check_system_clock(dt_obj, path):
                         + 'sudo date -s "' + str(dt_obj) + '"')
 
 
-class KnownApks:
-    """Permanent store of existing APKs with the date they were added.
-
-    This is currently the only way to permanently store the "updated"
-    date of APKs.
-    """
-
-    def __init__(self):
-        """Load filename/date info about previously seen APKs.
-
-        Since the appid and date strings both will never have spaces,
-        this is parsed as a list from the end to allow the filename to
-        have any combo of spaces.
-        """
-        self.apks = {}
-        for part in ('repo', 'archive'):
-            path = os.path.join(part, 'index-v2.json')
-            if os.path.isfile(path):
-                with open(path, 'r', encoding='utf-8') as f:
-                    index = json.load(f)
-                    for appid, data in index["packages"].items():
-                        for version in data["versions"].values():
-                            filename = version["file"]["name"][1:]
-                            date = datetime.fromtimestamp(version["added"] // 1000, tz=timezone.utc)
-                            self.apks[filename] = date
-
-    def recordapk(self, apkName, default_date=None):
-        """
-        Record an APK (if it's new, otherwise does nothing).
-
-        Returns
-        -------
-        datetime
-          the date it was added as a datetime instance.
-        """
-        if apkName not in self.apks:
-            if default_date is None:
-                default_date = datetime.now(timezone.utc)
-            self.apks[apkName] = default_date
-        return self.apks[apkName]
-
-
 def get_file_extension(filename):
     """Get the normalized file extension, can be blank string but never None."""
     if isinstance(filename, bytes):

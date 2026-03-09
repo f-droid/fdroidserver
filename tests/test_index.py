@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
 import copy
-import datetime
 import glob
 import json
 import os
@@ -246,116 +245,216 @@ class IndexTest(unittest.TestCase):
             {
                 'packageName': 'org.smssecure.smssecure',
                 'apkName': 'org.smssecure.smssecure_134.apk',
-                'signer': 'b33a601a9da97c82e6eb121eb6b90adab561f396602ec4dc8b0019fb587e2af6',
+                'manifest': {
+                    'signer': {
+                        'sha256': [
+                            'b33a601a9da97c82e6eb121eb6b90adab561f396602ec4dc8b0019fb587e2af6',
+                        ]
+                    },
+                },
                 'versionCode': 134,
             },
             {
                 'packageName': 'org.smssecure.smssecure',
                 'apkName': 'org.smssecure.smssecure_134_b30bb97.apk',
-                'signer': 'b30bb971af0d134866e158ec748fcd553df97c150f58b0a963190bbafbeb0868',
+                'manifest': {
+                    'signer': {
+                        'sha256': [
+                            'b30bb971af0d134866e158ec748fcd553df97c150f58b0a963190bbafbeb0868',
+                        ]
+                    },
+                },
                 'versionCode': 134,
             },
             {
-                'packageName': 'b075b32b4ef1e8a869e00edb136bd48e34a0382b85ced8628f164d1199584e4e'
+                'manifest': {'versionName': 'b075b32b'},
+                'packageName': 'b075b32b4ef1e8a869e00edb136bd48e34a0382b85ced8628f164d1199584e4e',
             },
             {
-                'packageName': '43af70d1aca437c2f9974c4634cc5abe45bdc4d5d71529ac4e553488d3bb3ff6'
+                'manifest': {'versionName': '43af70d1'},
+                'packageName': '43af70d1aca437c2f9974c4634cc5abe45bdc4d5d71529ac4e553488d3bb3ff6',
             },
             {
                 'packageName': 'org.smssecure.smssecure',
                 'apkName': 'org.smssecure.smssecure_135_b30bb97.apk',
-                'signer': 'b30bb971af0d134866e158ec748fcd553df97c150f58b0a963190bbafbeb0868',
+                'manifest': {
+                    'signer': {
+                        'sha256': [
+                            'b30bb971af0d134866e158ec748fcd553df97c150f58b0a963190bbafbeb0868',
+                        ]
+                    },
+                },
                 'versionCode': 135,
             },
             {
                 'packageName': 'org.smssecure.smssecure',
                 'apkName': 'org.smssecure.smssecure_135.apk',
-                'signer': 'b33a601a9da97c82e6eb121eb6b90adab561f396602ec4dc8b0019fb587e2af6',
+                'manifest': {
+                    'signer': {
+                        'sha256': [
+                            'b33a601a9da97c82e6eb121eb6b90adab561f396602ec4dc8b0019fb587e2af6',
+                        ]
+                    },
+                },
                 'versionCode': 135,
             },
             {
                 'packageName': 'org.smssecure.smssecure',
                 'apkName': 'org.smssecure.smssecure_133.apk',
-                'signer': 'b33a601a9da97c82e6eb121eb6b90adab561f396602ec4dc8b0019fb587e2af6',
+                'manifest': {
+                    'signer': {
+                        'sha256': [
+                            'b33a601a9da97c82e6eb121eb6b90adab561f396602ec4dc8b0019fb587e2af6',
+                        ]
+                    },
+                },
                 'versionCode': 133,
             },
             {
                 'packageName': 'org.smssecure.smssecure',
                 'apkName': 'smssecure-weird-version.apk',
-                'signer': '99ff99ff99ff99ff99ff99ff99ff99ff99ff99ff99ff99ff99ff99ff99ff99ff',
+                'manifest': {
+                    'signer': {
+                        'sha256': [
+                            '99ff99ff99ff99ff99ff99ff99ff99ff99ff99ff99ff99ff99ff99ff99ff99ff',
+                        ]
+                    },
+                },
                 'versionCode': 133,
             },
             {
                 'packageName': 'org.smssecure.smssecure',
                 'apkName': 'smssecure-custom.apk',
-                'signer': '1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef',
+                'manifest': {
+                    'signer': {
+                        'sha256': [
+                            '1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef',
+                        ]
+                    },
+                },
                 'versionCode': 133,
             },
             {
                 'packageName': 'org.smssecure.smssecure',
                 'apkName': 'smssecure-new-custom.apk',
-                'signer': '1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef',
+                'manifest': {
+                    'signer': {
+                        'sha256': [
+                            '1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef',
+                        ]
+                    },
+                },
                 'versionCode': 135,
             },
         ]
 
         o = [
             {
-                'packageName': '43af70d1aca437c2f9974c4634cc5abe45bdc4d5d71529ac4e553488d3bb3ff6'
+                'manifest': {'versionName': '43af70d1'},
+                'packageName': '43af70d1aca437c2f9974c4634cc5abe45bdc4d5d71529ac4e553488d3bb3ff6',
             },
             {
-                'packageName': 'b075b32b4ef1e8a869e00edb136bd48e34a0382b85ced8628f164d1199584e4e'
+                'manifest': {'versionName': 'b075b32b'},
+                'packageName': 'b075b32b4ef1e8a869e00edb136bd48e34a0382b85ced8628f164d1199584e4e',
             },
             # app test data
             # # packages with reproducible developer signature
             {
                 'packageName': 'org.smssecure.smssecure',
                 'apkName': 'org.smssecure.smssecure_135_b30bb97.apk',
-                'signer': 'b30bb971af0d134866e158ec748fcd553df97c150f58b0a963190bbafbeb0868',
+                'manifest': {
+                    'signer': {
+                        'sha256': [
+                            'b30bb971af0d134866e158ec748fcd553df97c150f58b0a963190bbafbeb0868',
+                        ]
+                    },
+                },
                 'versionCode': 135,
             },
             {
                 'packageName': 'org.smssecure.smssecure',
                 'apkName': 'org.smssecure.smssecure_134_b30bb97.apk',
-                'signer': 'b30bb971af0d134866e158ec748fcd553df97c150f58b0a963190bbafbeb0868',
+                'manifest': {
+                    'signer': {
+                        'sha256': [
+                            'b30bb971af0d134866e158ec748fcd553df97c150f58b0a963190bbafbeb0868',
+                        ]
+                    },
+                },
                 'versionCode': 134,
             },
             # # packages build and signed by fdroid
             {
                 'packageName': 'org.smssecure.smssecure',
                 'apkName': 'org.smssecure.smssecure_135.apk',
-                'signer': 'b33a601a9da97c82e6eb121eb6b90adab561f396602ec4dc8b0019fb587e2af6',
+                'manifest': {
+                    'signer': {
+                        'sha256': [
+                            'b33a601a9da97c82e6eb121eb6b90adab561f396602ec4dc8b0019fb587e2af6',
+                        ]
+                    },
+                },
                 'versionCode': 135,
             },
             {
                 'packageName': 'org.smssecure.smssecure',
                 'apkName': 'org.smssecure.smssecure_134.apk',
-                'signer': 'b33a601a9da97c82e6eb121eb6b90adab561f396602ec4dc8b0019fb587e2af6',
+                'manifest': {
+                    'signer': {
+                        'sha256': [
+                            'b33a601a9da97c82e6eb121eb6b90adab561f396602ec4dc8b0019fb587e2af6',
+                        ]
+                    },
+                },
                 'versionCode': 134,
             },
             {
                 'packageName': 'org.smssecure.smssecure',
                 'apkName': 'org.smssecure.smssecure_133.apk',
-                'signer': 'b33a601a9da97c82e6eb121eb6b90adab561f396602ec4dc8b0019fb587e2af6',
+                'manifest': {
+                    'signer': {
+                        'sha256': [
+                            'b33a601a9da97c82e6eb121eb6b90adab561f396602ec4dc8b0019fb587e2af6',
+                        ]
+                    },
+                },
                 'versionCode': 133,
             },
             # # packages signed with unkown keys
             {
                 'packageName': 'org.smssecure.smssecure',
                 'apkName': 'smssecure-new-custom.apk',
-                'signer': '1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef',
+                'manifest': {
+                    'signer': {
+                        'sha256': [
+                            '1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef',
+                        ]
+                    },
+                },
                 'versionCode': 135,
             },
             {
                 'packageName': 'org.smssecure.smssecure',
                 'apkName': 'smssecure-custom.apk',
-                'signer': '1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef',
+                'manifest': {
+                    'signer': {
+                        'sha256': [
+                            '1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef',
+                        ]
+                    },
+                },
                 'versionCode': 133,
             },
             {
                 'packageName': 'org.smssecure.smssecure',
                 'apkName': 'smssecure-weird-version.apk',
-                'signer': '99ff99ff99ff99ff99ff99ff99ff99ff99ff99ff99ff99ff99ff99ff99ff99ff',
+                'manifest': {
+                    'signer': {
+                        'sha256': [
+                            '99ff99ff99ff99ff99ff99ff99ff99ff99ff99ff99ff99ff99ff99ff99ff99ff'
+                        ],
+                    },
+                },
                 'versionCode': 133,
             },
         ]
@@ -408,7 +507,7 @@ class IndexTest(unittest.TestCase):
             'description': 'This is just a test',
             'icon': 'blahblah',
             'name': 'test',
-            'timestamp': datetime.datetime.now(),
+            'timestamp': common.epoch_millis_now(),
             'version': 12,
         }
         requestsdict = {'install': [], 'uninstall': []}
@@ -486,7 +585,7 @@ class IndexTest(unittest.TestCase):
                 {'url': 'http://two/fdroid/repo'},
             ],
             'name': 'test',
-            'timestamp': datetime.datetime.now(),
+            'timestamp': common.epoch_millis_now(),
             'version': 12,
         }
         app = fdroidserver.metadata.parse_metadata(metadatafile)
@@ -495,16 +594,20 @@ class IndexTest(unittest.TestCase):
         apps = {app.id: app}
         orig_apps = copy.deepcopy(apps)
         apk = {
-            'hash': 'dbbdd7deadb038862f426b71efe4a64df8c3edf25d669e935f349510e16f65db',
-            'hashType': 'sha256',
-            'uses-permission': [['android.permission.WAKE_LOCK', None]],
-            'uses-permission-sdk-23': [],
+            "file": {
+                'name': 'info.zwanenburg.caffeinetile_4.apk',
+                'sha256': 'dbbdd7deadb038862f426b71efe4a64df8c3edf25d669e935f349510e16f65db',
+                'size': 11740,
+            },
             'features': [],
             'icons_src': {
                 '160': 'res/drawable/ic_coffee_on.xml',
                 '-1': 'res/drawable/ic_coffee_on.xml',
             },
             'icons': {'160': 'info.zwanenburg.caffeinetile.4.xml'},
+            'manifest': {
+                'usesPermission': [{'name': 'android.permission.WAKE_LOCK'}],
+            },
             'antiFeatures': ['KnownVuln'],
             'packageName': 'info.zwanenburg.caffeinetile',
             'versionCode': 4,
@@ -514,10 +617,8 @@ class IndexTest(unittest.TestCase):
             'targetSdkVersion': 25,
             'sig': '03f9b2f848d22fd1d8d1331e8b1b486d',
             'signer': '51cfa5c8a743833ad89acf81cb755936876a5c8b8eca54d1ffdcec0cdca25d0e',
-            'size': 11740,
-            'apkName': 'info.zwanenburg.caffeinetile_4.apk',
             'icon': 'info.zwanenburg.caffeinetile.4.xml',
-            'added': datetime.datetime.fromtimestamp(1539122400),
+            'added': 1539122400000,
         }
         requestsdict = {'install': [], 'uninstall': []}
         common.config['repo_pubkey'] = 'ffffffffffffffffffffffffffffffffff'
@@ -552,7 +653,7 @@ class IndexTest(unittest.TestCase):
             'description': 'This is just a test',
             'icon': 'blahblah',
             'name': 'test',
-            'timestamp': datetime.datetime.now(),
+            'timestamp': common.epoch_millis_now(),
             'version': 12,
         }
         requestsdict = {'install': [], 'uninstall': []}
@@ -664,7 +765,7 @@ class IndexTest(unittest.TestCase):
             'description': 'This is just a test',
             'icon': 'blahblah',
             'name': 'test',
-            'timestamp': datetime.datetime.now(),
+            'timestamp': common.epoch_millis_now(),
             'version': 12,
         }
 
@@ -698,11 +799,10 @@ class IndexTest(unittest.TestCase):
             {
                 'packageName': 'org.smssecure.smssecure',
                 'apkName': 'smssecure-custom.fake',
-                'signer': None,
+                'manifest': {'signer': {'sha256': None}},
                 'versionCode': 11111,
             }
         ]
-
         index.sort_package_versions(i, common.load_publish_signer_fingerprints())
 
     def test_package_metadata(self):
@@ -874,6 +974,26 @@ class IndexTest(unittest.TestCase):
         with self.assertRaises(fdroidserver.exception.FDroidException):
             index.add_mirrors_to_repodict('repo', repodict)
 
+    def test_get_sorted_name_list_from_dict(self):
+        self.assertEqual(
+            ['bar', 'foo'],
+            fdroidserver.index._get_sorted_name_list_from_dict(
+                [{'name': 'foo'}, {'name': 'bar', 'max': 123}]
+            ),
+        )
+
+    def test_get_sorted_name_list_from_dict_none(self):
+        self.assertEqual(
+            [],
+            fdroidserver.index._get_sorted_name_list_from_dict(None),
+        )
+
+    def test_get_sorted_name_list_from_dict_empty(self):
+        self.assertEqual(
+            [],
+            fdroidserver.index._get_sorted_name_list_from_dict(list()),
+        )
+
 
 class AltstoreIndexTest(unittest.TestCase):
     def test_make_altstore(self):
@@ -889,10 +1009,14 @@ class AltstoreIndexTest(unittest.TestCase):
         apks = [
             {
                 "packageName": "app.fake",
-                "apkName": "app.fake_123.ipa",
-                "versionName": "v123",
-                "added": datetime.datetime(2000, 2, 2, 2, 2, 2),
-                "size": 123,
+                "file": {
+                    "name": "app.fake_123.ipa",
+                    "size": 123,
+                },
+                "manifest": {
+                    "versionName": "v123",
+                },
+                "added": 949456922000,
                 "ipa_MinimumOSVersion": "10.0",
                 "ipa_DTPlatformVersion": "12.0",
                 "ipa_permissions": [
