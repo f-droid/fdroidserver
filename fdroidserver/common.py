@@ -1544,6 +1544,8 @@ def getvcs(vcstype, remote, local):
     )
     if vcstype == 'git-svn':
         return vcs_gitsvn(remote, local)
+    if vcstype == 'hg':
+        return vcs(remote, local)  # placeholder until all RepoType: hg apps are removed
     if vcstype == 'srclib':
         if str(local) != os.path.join('build', 'srclib', str(remote)):
             raise VCSException("Error: srclib paths are hard-coded!")
