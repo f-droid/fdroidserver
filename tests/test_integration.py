@@ -1706,3 +1706,17 @@ class IntegrationTest(unittest.TestCase):
                 'fdroid/repo/index-v1.json',
             },
         )
+
+    def test_dns_in_index_v2(self):
+        self.fdroid_init_with_prebuilt_keystore()
+        self.update_yaml(
+            common.CONFIG_FILE,
+            {"include_dns_lookups": True, "mirrors": ["https://f-droid.org/fdroid"]},
+        )
+        self.assert_run(self.fdroid_cmd + ["update", "--pretty", "--nosign"])
+        with open('repo/index-v2.json') as fp:
+            data = json.load(fp)
+        self.assertIsNotNone(data['repo'].get('dnsA'))
+        self.assertIsNotNone(data['repo'].get('dnsAAAA'))
+        self.assertIsNotNone(data['repo']['mirrors'][0].get('dnsA'))
+        self.assertIsNotNone(data['repo']['mirrors'][0].get('dnsAAAA'))

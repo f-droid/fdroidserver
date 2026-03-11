@@ -28,7 +28,20 @@ class Options:
     verbose = False
 
 
-class IndexTest(unittest.TestCase):
+class SetUpTearDownMixin:
+    """A mixin with no tests in it for shared setUp and tearDown."""
+
+    def setUp(self):
+        common.config = None
+        self._td = mkdtemp()
+        self.testdir = self._td.name
+
+    def tearDown(self):
+        common.config = None
+        self._td.cleanup()
+
+
+class IndexTest(SetUpTearDownMixin, unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         # TODO something should remove cls.index_v1_jar, but it was
@@ -38,6 +51,7 @@ class IndexTest(unittest.TestCase):
         cls.index_v1_jar = basedir / 'repo' / 'index-v1.jar'
 
     def setUp(self):
+        super().setUp()
         (basedir / common.CONFIG_FILE).chmod(0o600)
         os.chdir(basedir)  # so read_config() can find config.yml
 
@@ -48,12 +62,6 @@ class IndexTest(unittest.TestCase):
         common.config = config
         signindex.config = config
         update.config = config
-
-        self._td = mkdtemp()
-        self.testdir = self._td.name
-
-    def tearDown(self):
-        self._td.cleanup()
 
     def _sign_test_index_v1_jar(self):
         if not self.index_v1_jar.exists():
@@ -1088,3 +1096,30 @@ class AltstoreIndexTest(unittest.TestCase):
                     },
                     json.load(f),
                 )
+
+
+class DnsCacheTest(SetUpTearDownMixin, unittest.TestCase):
+
+    url = 'https://f-droid.org/repo/entry.jar'
+
+    def test_defaults_to_no_dns(self):
+        self.assertFalse(index.get_dnsa_results(self.url))
+        self.assertFalse(index.get_dnsaaaa_results(self.url))
+
+    def test_f_droid_org_a(self):
+        common.config = {'include_dns_lookups': True}
+        self.assertTrue(index.get_dnsa_results(self.url))
+
+    def test_f_droid_org_aaaa(self):
+        common.config = {'include_dns_lookups': True}
+        self.assertTrue(index.get_dnsaaaa_results(self.url))
+
+    def test_no_A_duplicates(self):
+        common.config = {'include_dns_lookups': True}
+        a = index.get_dnsa_results(self.url)
+        self.assertEqual(a, sorted(set(a)))
+
+    def test_no_AAAA_duplicates(self):
+        common.config = {'include_dns_lookups': True}
+        aaaa = index.get_dnsaaaa_results(self.url)
+        self.assertEqual(aaaa, sorted(set(aaaa)))
