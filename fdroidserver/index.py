@@ -37,6 +37,7 @@ import logging
 import os
 import re
 import shutil
+import socket
 import sys
 import tempfile
 import urllib.parse
@@ -111,6 +112,15 @@ def make(apps, apks, repodir, archive):
             'archive_url', common.config['repo_url'][:-4] + 'archive'
         )
         repodict['address'] = archive_url
+
+        # do dns lookup and store results for later use
+        ip4_array = get_dnsa_results(archive_url)
+        if len(ip4_array) > 0:
+            repodict['dnsA'] = ip4_array
+        ip6_array = get_dnsaaaa_results(archive_url)
+        if len(ip6_array) > 0:
+            repodict['dnsAAAA'] = ip6_array
+
         if 'archive_web_base_url' in common.config:
             repodict["webBaseUrl"] = common.config['archive_web_base_url']
         repo_section = os.path.basename(urllib.parse.urlparse(archive_url).path)
@@ -118,6 +128,15 @@ def make(apps, apks, repodir, archive):
         repodict['name'] = common.config['repo_name']
         repodict['icon'] = repo_icon
         repodict['address'] = common.config['repo_url']
+
+        # do dns lookup and store results for later use
+        ip4_array = get_dnsa_results(common.config['repo_url'])
+        if len(ip4_array) > 0:
+            repodict['dnsA'] = ip4_array
+        ip6_array = get_dnsaaaa_results(common.config['repo_url'])
+        if len(ip6_array) > 0:
+            repodict['dnsAAAA'] = ip6_array
+
         if 'repo_web_base_url' in common.config:
             repodict["webBaseUrl"] = common.config['repo_web_base_url']
         repodict['description'] = common.config['repo_description']
@@ -156,6 +175,30 @@ def make(apps, apks, repodir, archive):
         repodir,
         pretty=common.options.pretty,
     )
+
+
+def get_dnsa_results(url):
+    return get_dns_results(url, socket.AF_INET)
+
+
+def get_dnsaaaa_results(url):
+    return get_dns_results(url, socket.AF_INET6)
+
+
+def get_dns_results(url, inet_type):
+    ip_array = set()
+    if not common.config or not common.config.get('include_dns_lookups'):
+        return ip_array
+    try:
+        dns_results = socket.getaddrinfo(urllib.parse.urlparse(url).hostname, 443)
+        for result in dns_results:
+            socket_address = result[4]
+            ip_address = socket_address[0]
+            if result[0] == inet_type:
+                ip_array.add(ip_address)
+    except Exception as e:
+        logging.warning('Failed to get DNS results for ' + url + " " + str(e))
+    return sorted(ip_array)
 
 
 def _should_file_be_generated(path, magic_string):
@@ -715,10 +758,9 @@ def v2_repo(repodict, repodir, archive):
             repo["icon"] = localized_config["icon"]
 
     repo["address"] = repodict["address"]
-    if "mirrors" in repodict:
-        repo["mirrors"] = repodict["mirrors"]
-    if "webBaseUrl" in repodict:
-        repo["webBaseUrl"] = repodict["webBaseUrl"]
+    for key in 'dnsA', 'dnsAAAA', 'mirrors', 'webBaseUrl':
+        if key in repodict:
+            repo[key] = repodict[key]
 
     repo["timestamp"] = repodict["timestamp"]
 
@@ -1685,6 +1727,15 @@ def add_mirrors_to_repodict(repo_section, repodict):
     found_primary = False
     errors = 0
     for mirror in mirrors:
+
+        # do dns lookup to store results for later use
+        ip4_array = get_dnsa_results(mirror['url'])
+        if len(ip4_array) > 0:
+            repodict['dnsA'] = ip4_array
+        ip6_array = get_dnsaaaa_results(mirror['url'])
+        if len(ip6_array) > 0:
+            repodict['dnsAAAA'] = ip6_array
+
         if canonical_url == mirror['url']:
             found_primary = True
             mirror['isPrimary'] = True
@@ -1706,7 +1757,12 @@ def add_mirrors_to_repodict(repo_section, repodict):
         raise FDroidException(_('"isPrimary" key should not be added to mirrors!'))
 
     if repodict['mirrors'] and not found_primary:
-        repodict['mirrors'].insert(0, {'isPrimary': True, 'url': repodict['address']})
+        primary = {'isPrimary': True, 'url': repodict['address']}
+        if 'dnsA' in repodict:
+            primary['dnsA'] = repodict['dnsA']
+        if 'dnsAAAA' in repodict:
+            primary['dnsAAAA'] = repodict['dnsAAAA']
+        repodict['mirrors'].insert(0, primary)
 
 
 def get_mirror_service_urls(mirror):
