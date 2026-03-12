@@ -16,6 +16,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import os
+import socket
 import sys
 import tempfile
 import unittest
@@ -91,3 +92,15 @@ def mock_urlopen(status=200, body=None):
     resp.read.return_value = body
     resp.__enter__.return_value = resp
     return unittest.mock.Mock(return_value=resp)
+
+
+def supports_ipv6():
+    if not socket.has_ipv6:
+        return False
+    try:
+        for result in socket.getaddrinfo('f-droid.org', 443):
+            if result[0] == socket.AF_INET6:
+                return True
+    except Exception as e:
+        print('Failed to get DNS results for test URL: ' + str(e))
+    return False
