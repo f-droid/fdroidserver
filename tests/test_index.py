@@ -767,6 +767,12 @@ class IndexTest(SetUpTearDownMixin, unittest.TestCase):
         self.assertTrue(os.path.exists(os.path.join('repo', 'index-v1.json')))
         self.assertEqual(orig_apps, apps, "apps was modified when building the index")
 
+        index_v1_json = json.loads(Path("repo/index-v1.json").read_text())
+        self.assertEqual(
+            apk['manifest']['nativecode'],
+            index_v1_json['packages']['org.dyndns.fules.ck'][0]['nativecode'],
+        )
+
     def test_make_v1_with_mirrors(self):
         os.chdir(self.testdir)
         os.mkdir('repo')
