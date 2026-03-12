@@ -683,6 +683,90 @@ class IndexTest(SetUpTearDownMixin, unittest.TestCase):
         self.assertTrue(os.path.exists(os.path.join('repo', 'index_unsigned.jar')))
         self.assertFalse(os.path.exists(os.path.join('repo', 'index.jar')))
 
+    def test_make_v1(self):
+        os.chdir(self.testdir)
+        os.mkdir('metadata')
+        os.mkdir('repo')
+        metadatafile = 'metadata/org.dyndns.fules.ck.yml'
+        shutil.copy(os.path.join(basedir, metadatafile), metadatafile)
+        repo_icons_dir = os.path.join('repo', 'icons')
+        self.assertFalse(os.path.isdir(repo_icons_dir))
+        repodict = {
+            'address': 'https://example.com/fdroid/repo',
+            'description': 'This is just a test',
+            'icon': 'blahblah',
+            'mirrors': [
+                {'isPrimary': True, 'url': 'https://example.com/fdroid/repo'},
+                {'extra': 'data', 'url': 'http://one/fdroid/repo'},
+                {'url': 'http://two/fdroid/repo'},
+            ],
+            'name': 'test',
+            'timestamp': common.epoch_millis_now(),
+            'version': 12,
+        }
+        app = fdroidserver.metadata.parse_metadata(metadatafile)
+        app['icon'] = 'org.dyndns.fules.ck.20.xml'
+        app['CurrentVersionCode'] = 20
+        apps = {app.id: app}
+        orig_apps = copy.deepcopy(apps)
+        apk = {
+            'file': {
+                'name': 'org.dyndns.fules.ck_20.apk',
+                'sha256': '897486e1f857c6c0ee32ccbad0e1b8cd82f6d0e65a44a23f13f852d2b63a18c8',
+                'size': 132453,
+            },
+            'icons_src': {
+                '240': 'res/drawable-hdpi-v4/icon_launcher.png',
+                '120': 'res/drawable-ldpi-v4/icon_launcher.png',
+                '160': 'res/drawable-mdpi-v4/icon_launcher.png',
+                '-1': 'res/drawable-mdpi-v4/icon_launcher.png',
+            },
+            'manifest': {
+                'nativecode': [
+                    'arm64-v8a',
+                    'armeabi',
+                    'armeabi-v7a',
+                    'mips',
+                    'mips64',
+                    'x86',
+                    'x86_64',
+                ],
+                'signer': {
+                    'sha256': [
+                        '9326a2cc1a2f148202bc7837a0af3b81200bd37fd359c9e13a2296a71d342056'
+                    ]
+                },
+                'usesPermission': [
+                    {'name': 'android.permission.BIND_INPUT_METHOD'},
+                    {'name': 'android.permission.READ_EXTERNAL_STORAGE'},
+                    {'name': 'android.permission.VIBRATE'},
+                ],
+                'usesSdk': {
+                    'minSdkVersion': 7,
+                    'targetSdkVersion': 8,
+                },
+                'versionName': 'v1.6pre2',
+            },
+            'packageName': 'org.dyndns.fules.ck',
+            'versionCode': 20,
+            'name': 'Compass Keyboard',
+        }
+        requestsdict = {'install': [], 'uninstall': []}
+        common.config['repo_pubkey'] = 'ffffffffffffffffffffffffffffffffff'
+        common.config['make_current_version_link'] = True
+        index.make_v1(apps, [apk], 'repo', repodict, requestsdict, {})
+        with self.assertLogs():
+            index.copy_repo_icon('repo')
+        self.assertTrue(os.path.isdir(repo_icons_dir))
+        self.assertTrue(
+            os.path.exists(
+                os.path.join(repo_icons_dir, common.default_config['repo_icon'])
+            )
+        )
+
+        self.assertTrue(os.path.exists(os.path.join('repo', 'index-v1.json')))
+        self.assertEqual(orig_apps, apps, "apps was modified when building the index")
+
     def test_make_v1_with_mirrors(self):
         os.chdir(self.testdir)
         os.mkdir('repo')

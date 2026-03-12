@@ -1,0 +1,52 @@
+Categories:
+  - Keyboard & IME
+  - Writing
+License: BSD-3-Clause
+SourceCode: https://github.com/gsimon75/compass-keyboard
+IssueTracker: https://github.com/gsimon75/compass-keyboard/issues
+Changelog: https://github.com/gsimon75/compass-keyboard/blob/HEAD/Changelog
+
+AutoName: Compass Keyboard
+Description: |-
+  CompassKeyboard's main goal is to enable entering any character (including
+  international characters and symbols of computer languages as well) with the
+  same layouts. Default layouts support Latin- and Cyrillic-based and Greek
+  character sets: user-definable external layouts are supported as well. For
+  entering a plain character just swipe a key to some direction: for entering some
+  accented ones, do a big swipe across the whole keyboard. Depending on the
+  direction of the big swipe, you can choose different sets of accenting. For
+  choosing a different layout, do a big swipe from the top-left corner of the
+  keyboard across to bottom-down, and choose a layout from L0 to L6 (L0:Latin,
+  L1:Cyrillic, L2:Greek, L3-L6:Custom). To get a visual feedback about the symbol
+  you are about to enter, visit the entries 'Feedback/Normal feedback' and
+  'Feedback/Password feedback' in the Settings menu, and choose either Toast or
+  Highlight.
+
+RepoType: git
+Repo: https://github.com/gsimon75/compass-keyboard
+
+Builds:
+  - versionName: v1.3
+    versionCode: 16
+    commit: '19'
+    target: android-8
+
+  - versionName: v1.4
+    versionCode: 17
+    commit: '29'
+
+  - versionName: v1.5
+    versionCode: 19
+    commit: '37'
+
+  - versionName: v1.6pre2
+    versionCode: 20
+    commit: ab13259fc3437a9254854d45bb64f0ce64151137
+    buildjni:
+      - yes
+    ndk: r12b
+
+AutoUpdateMode: None
+UpdateCheckMode: RepoManifest
+CurrentVersion: v1.6pre2
+CurrentVersionCode: 20

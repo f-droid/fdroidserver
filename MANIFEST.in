@@ -636,6 +636,7 @@ include tests/metadata/obb.main.oldversion.yml
 include tests/metadata/obb.main.twoversions.yml
 include tests/metadata/obb.mainpatch.current.yml
 include tests/metadata/org.adaway.yml
+include tests/metadata/org.dyndns.fules.ck.yml
 include tests/metadata/org.fdroid.ci.test.app.yml
 include tests/metadata/org.fdroid.fdroid.yml
 include tests/metadata/org.maxsdkversion.yml
