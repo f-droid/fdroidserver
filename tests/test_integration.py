@@ -250,6 +250,7 @@ class IntegrationTest(unittest.TestCase):
     @unittest.skipUnless(
         (
             (shutil.which("gpg-agent") is not None)
+            and platform.system() == 'Linux'
             and (platform.freedesktop_os_release()['ID'] != 'fedora')
         ),
         "requires Debian compatible gpg-agent built for gpg",
