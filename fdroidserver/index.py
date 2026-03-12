@@ -1038,6 +1038,9 @@ def make_v1(apps, packages, repodir, repodict, requestsdict, signer_fingerprints
         package['apkName'] = file_d['name']
         package['hash'] = file_d['sha256']
         package['hashType'] = 'sha256'
+        nativecode = package['manifest'].get('nativecode', list())
+        if nativecode:
+            package['nativecode'] = nativecode
         package['size'] = file_d['size']
         signer = package['manifest'].get('signer', dict()).get('sha256', list())
         if signer:
