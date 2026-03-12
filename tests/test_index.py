@@ -17,7 +17,7 @@ import yaml
 import fdroidserver
 from fdroidserver import common, index, publish, signindex, update
 
-from .shared_test_code import GP_FINGERPRINT, TmpCwd, mkdtemp
+from .shared_test_code import GP_FINGERPRINT, TmpCwd, mkdtemp, supports_ipv6
 
 basedir = Path(__file__).parent
 
@@ -1200,6 +1200,7 @@ class DnsCacheTest(SetUpTearDownMixin, unittest.TestCase):
         common.config = {'include_dns_lookups': True}
         self.assertTrue(index.get_dnsa_results(self.url))
 
+    @unittest.skipUnless(supports_ipv6(), "Test requires working IPv6 to run")
     def test_f_droid_org_aaaa(self):
         common.config = {'include_dns_lookups': True}
         self.assertTrue(index.get_dnsaaaa_results(self.url))
@@ -1209,6 +1210,7 @@ class DnsCacheTest(SetUpTearDownMixin, unittest.TestCase):
         a = index.get_dnsa_results(self.url)
         self.assertEqual(a, sorted(set(a)))
 
+    @unittest.skipUnless(supports_ipv6(), "Test requires working IPv6 to run")
     def test_no_AAAA_duplicates(self):
         common.config = {'include_dns_lookups': True}
         aaaa = index.get_dnsaaaa_results(self.url)

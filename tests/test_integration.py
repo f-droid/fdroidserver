@@ -21,7 +21,7 @@ except ModuleNotFoundError:
 
 from fdroidserver._yaml import yaml, yaml_dumper
 
-from .shared_test_code import mkdir_testfiles, VerboseFalseOptions
+from .shared_test_code import mkdir_testfiles, supports_ipv6, VerboseFalseOptions
 
 # TODO: port generic tests that use index.xml to index-v2 (test that
 #       explicitly test index-v0 should still use index.xml)
@@ -1723,6 +1723,7 @@ class IntegrationTest(unittest.TestCase):
         with open('repo/index-v2.json') as fp:
             data = json.load(fp)
         self.assertIsNotNone(data['repo'].get('dnsA'))
-        self.assertIsNotNone(data['repo'].get('dnsAAAA'))
         self.assertIsNotNone(data['repo']['mirrors'][0].get('dnsA'))
-        self.assertIsNotNone(data['repo']['mirrors'][0].get('dnsAAAA'))
+        if supports_ipv6():
+            self.assertIsNotNone(data['repo'].get('dnsAAAA'))
+            self.assertIsNotNone(data['repo']['mirrors'][0].get('dnsAAAA'))
