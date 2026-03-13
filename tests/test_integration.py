@@ -1718,13 +1718,12 @@ class IntegrationTest(unittest.TestCase):
         self.fdroid_init_with_prebuilt_keystore()
         self.update_yaml(
             common.CONFIG_FILE,
-            {"include_dns_lookups": True, "mirrors": ["https://f-droid.org/fdroid"]},
+            {"include_dns_lookups": True, "mirrors": ["https://ftp.fau.de/fdroid"]},
         )
         self.assert_run(self.fdroid_cmd + ["update", "--pretty", "--nosign"])
         with open('repo/index-v2.json') as fp:
             data = json.load(fp)
-        self.assertIsNotNone(data['repo'].get('dnsA'))
-        self.assertIsNotNone(data['repo']['mirrors'][0].get('dnsA'))
-        if supports_ipv6():
-            self.assertIsNotNone(data['repo'].get('dnsAAAA'))
-            self.assertIsNotNone(data['repo']['mirrors'][0].get('dnsAAAA'))
+        for mirror in data['repo']['mirrors']:
+            self.assertIsNotNone(mirror['dnsA'])
+            if supports_ipv6():
+                self.assertIsNotNone(mirror['dnsAAAA'])
