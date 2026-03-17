@@ -974,7 +974,12 @@ def scan_source(build_dir, build=metadata.Build(), json_per_build=None):
                     filepath,
                     json_per_build,
                 )
-            elif curfile in ('gradle-wrapper.jar', 'gradlew', 'gradlew.bat'):
+            elif curfile in (
+                'gradle-wrapper.jar',
+                'gradlew',
+                'gradlew.bat',
+                'gradle-daemon-jvm.properties',
+            ):
                 removeproblem(curfile, path_in_build_dir, filepath, json_per_build)
             elif curfile.endswith('.apk'):
                 removeproblem(

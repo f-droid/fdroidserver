@@ -302,7 +302,12 @@ class ScannerTest(SetUpTearDownMixin, unittest.TestCase):
             'static.a',
             'src/test/resources/classes.dex',
         ]
-        remove = ['gradle-wrapper.jar', 'gradlew', 'gradlew.bat']
+        remove = [
+            'gradle-wrapper.jar',
+            'gradlew',
+            'gradlew.bat',
+            'gradle-daemon-jvm.properties',
+        ]
         os.makedirs('src/test/resources', exist_ok=True)
         for f in keep + remove:
             with open(f, 'w') as fp:
