@@ -1,0 +1,13 @@
+# Preambel / Meta
+
+This is an issue intended for https://gitlab.com/fdroid/fdroidserver.
+Gitlab requries phone and credit card information when one simply wants to bring ideas to open source projects.
+
+I suggest moving to some truly open platform such as https://codeberg.org/.
+
+# Issue
+
+IzzyOnDroid (https://gitlab.com/IzzyOnDroid/repo/-/blob/master/lib/README.md) uses additional checks.
+These enhance security and privacy of the provided apps and could be integrated into F-Droid.
+
+For more information, see https://www.kuketz-blog.de/android-apps-auf-dem-seziertisch-eine-vertiefte-betrachtung/ (German).
