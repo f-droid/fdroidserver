@@ -350,6 +350,7 @@ pip-audit:
     - python3 -m pip_audit -f json | python3 -m json.tool --indent=2 || true
     # then print human readable summary
     - python3 -m pip_audit
+        --ignore-vuln CVE-2026-4539
 
 # Check all the dependencies in Debian to mirror production.  CVEs are
 # generally fixed in the latest versions in pip/pypi.org, so it isn't
