@@ -526,8 +526,6 @@ def build_local(app, build, vcs, build_dir, output_dir, log_dir, srclib_dir, ext
 
     elif bmethod == 'gradle':
 
-        logging.info("Cleaning Gradle project...")
-
         if build.preassemble:
             gradletasks += build.preassemble
 
@@ -542,12 +540,6 @@ def build_local(app, build, vcs, build_dir, output_dir, log_dir, srclib_dir, ext
         if not config['gradle']:
             logging.error("Gradle is not found. Please config the gradle path.")
             common.force_exit(1)
-        cmd = [config['gradle']]
-        if build.gradleprops:
-            cmd += ['-P' + kv for kv in build.gradleprops]
-
-        cmd += ['clean']
-        p = FDroidPopen(cmd, cwd=root_dir)
 
     elif bmethod == 'ant':
         logging.info("Cleaning Ant project...")

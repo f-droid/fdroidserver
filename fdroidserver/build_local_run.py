@@ -158,22 +158,12 @@ def init_build(app, build, config):
         p = common.FDroidPopen(cmd, cwd=maven_dir)
 
     elif bmethod == 'gradle':
-        logging.info("Cleaning Gradle project...")
-
         if build.preassemble:
             gradletasks += build.preassemble
 
         flavours_cmd = get_flavours_cmd(build)
 
         gradletasks += ['assemble' + flavours_cmd + 'Release']
-
-        cmd = [config['gradle']]
-        if build.gradleprops:
-            cmd += ['-P' + kv for kv in build.gradleprops]
-
-        cmd += ['clean']
-        p = common.FDroidPopen(cmd, cwd=root_dir)
-
     elif bmethod == 'ant':
         logging.info("Cleaning Ant project...")
         p = common.FDroidPopen(['ant', 'clean'], cwd=root_dir)
