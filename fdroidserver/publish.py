@@ -471,7 +471,7 @@ def main():
     if failed:
         logging.error(_('%d APKs failed to be signed or verified!') % failed)
         if options.error_on_failed:
-            sys.exit(failed)
+            sys.exit(1)
 
 
 if __name__ == "__main__":
