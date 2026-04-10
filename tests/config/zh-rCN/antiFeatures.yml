@@ -10,10 +10,6 @@ KnownVuln:
   description: 此应用包含已知的安全漏洞
   icon: ic_antifeature_knownvuln.xml
   name: 含有已知漏洞
-NSFW:
-  description: 此应用包含不应宣扬或随处可见的内容
-  icon: ic_antifeature_nsfw.xml
-  name: NSFW
 NoSourceSince:
   icon: ic_antifeature_nosourcesince.xml
   name: 源代码不再可用，无法更新。

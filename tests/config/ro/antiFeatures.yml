@@ -10,11 +10,6 @@ KnownVuln:
   description: Aplicația conține o vulnerabilitate de securitate cunoscută
   icon: ic_antifeature_knownvuln.xml
   name: Vulnerabilitate cunoscută
-NSFW:
-  description: Această aplicație conține conținut care nu ar trebui să fie făcut public
-    sau vizibil peste tot
-  icon: ic_antifeature_nsfw.xml
-  name: NSFW
 NoSourceSince:
   icon: ic_antifeature_nosourcesince.xml
   name: Codul sursă nu mai este disponibil, nu mai există posibilitatea de a actualiza.

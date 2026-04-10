@@ -559,7 +559,6 @@ include tests/config/ic_antifeature_nonfreeassets.xml
 include tests/config/ic_antifeature_nonfreedep.xml
 include tests/config/ic_antifeature_nonfreenet.xml
 include tests/config/ic_antifeature_nosourcesince.xml
-include tests/config/ic_antifeature_nsfw.xml
 include tests/config/ic_antifeature_tracking.xml
 include tests/config/ic_antifeature_upstreamnonfree.xml
 include tests/config/ro/antiFeatures.yml
