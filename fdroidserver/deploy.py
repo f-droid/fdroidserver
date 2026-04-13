@@ -430,7 +430,7 @@ def update_servergitmirrors(servergitmirrors, repo_section):
     index files are small compared to the full repo.
 
     """
-    from clint.textui import progress
+    from progress.bar import IncrementalBar
 
     config = common.get_config()
     if config.get('local_copy_dir') and not config.get('sync_from_local_copy_dir'):
@@ -479,12 +479,12 @@ def update_servergitmirrors(servergitmirrors, repo_section):
             ssh_cmd += ' -oIdentitiesOnly=yes -i "%s"' % config['identity_file']
 
         if options.verbose:
-            progressbar = progress.Bar()
+            progressbar = IncrementalBar('Progress', suffix='%(percent)d%%')
 
             class MyProgressPrinter(git.RemoteProgress):
                 def update(self, op_code, current, maximum=None, message=None):
-                    if isinstance(maximum, float):
-                        progressbar.show(current, maximum)
+                    if isinstance(maximum, float) and (maximum > 0):
+                        progressbar.goto(round((current / maximum) * 100))
 
             progress = MyProgressPrinter()
         else:
@@ -529,7 +529,7 @@ def update_servergitmirrors(servergitmirrors, repo_section):
                 progress=progress,
             )
         if progress:
-            progressbar.done()
+            progressbar.finish()
 
 
 def _get_commit_author(git_repo):
