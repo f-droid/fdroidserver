@@ -3021,7 +3021,7 @@ def main():
                 )
             )
     if errors:
-        sys.exit(errors)
+        sys.exit(1)
 
     # Scan the archive repo for apks as well
     if len(repodirs) > 1:
