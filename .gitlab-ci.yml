@@ -492,7 +492,7 @@ fedora_latest:
     - dnf -y install --nobest --allowerasing *.rpm
     - ./setup.py sdist
     - useradd -m -c "test account" --password "fakepassword"  testuser
-    - su testuser --login --command "cd `pwd`; $pip install --user dist/fdroidserver-*.tar.gz; $pip install --user clint; $pip install --user git+https://github.com/wbond/oscrypto.git@1547f535001ba568b239b8797465536759c742a3"
+    - su testuser --login --command "cd `pwd`; $pip install --user dist/fdroidserver-*.tar.gz; $pip install --user git+https://github.com/wbond/oscrypto.git@1547f535001ba568b239b8797465536759c742a3"
     - export OPENSSL_ENABLE_SHA1_SIGNATURES=1
     - export OPENSSL_ENABLE_MD5_VERIFY=1
     - test -e ~testuser/.local/share/locale/de/LC_MESSAGES/fdroidserver.mo
