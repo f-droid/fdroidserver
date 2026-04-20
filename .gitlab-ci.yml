@@ -136,20 +136,13 @@ debian_testing:
   script:
     - apt-get install
         aapt
-        androguard
-        apksigner
         dexdump
         fdroidserver
         git
         gnupg
         ipfs-cid
         python3-babel
-        python3-biplist
-        python3-defusedxml
-        python3-libcloud
-        python3-pycountry
         python3-setuptools
-        sdkmanager
     - python3 -c 'import fdroidserver'
     - python3 -c 'import androguard'
     - python3 -c 'import sdkmanager'
