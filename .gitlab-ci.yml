@@ -176,10 +176,7 @@ ubuntu_lts_ppa:
         dexdump
         fdroidserver
         git
-        python3-biplist
-        python3-pycountry
         python3-setuptools
-        sdkmanager
 
     # Test things work with a default branch other than 'master'
     - git config --global init.defaultBranch thisisnotmasterormain
