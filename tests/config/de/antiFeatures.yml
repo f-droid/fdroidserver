@@ -10,11 +10,6 @@ KnownVuln:
   description: Diese App enthält eine bekannte Sicherheitslücke
   icon: ic_antifeature_knownvuln.xml
   name: Bekannte Sicherheitslücke
-NSFW:
-  description: Diese App enthält Inhalte, die nicht überall veröffentlicht oder sichtbar
-    sein sollten
-  icon: ic_antifeature_nsfw.xml
-  name: NSFW
 NoSourceSince:
   icon: ic_antifeature_nosourcesince.xml
   name: Der Quellcode ist nicht mehr erhältlich, keine Aktualisierungen möglich.

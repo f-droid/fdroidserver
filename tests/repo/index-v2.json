@@ -157,49 +157,6 @@
           "zh-rCN": "含有已知漏洞"
         }
       },
-      "NSFW": {
-        "description": {
-          "de": "Diese App enthält Inhalte, die nicht überall veröffentlicht oder sichtbar sein sollten",
-          "en-US": "This app contains content that should not be publicized or visible everywhere",
-          "fa": "این کاره محتوایی دارد که نباید عمومی شده یا همه‌حا نمایان باشد",
-          "ro": "Această aplicație conține conținut care nu ar trebui să fie făcut public sau vizibil peste tot",
-          "zh-rCN": "此应用包含不应宣扬或随处可见的内容"
-        },
-        "icon": {
-          "de": {
-            "name": "/icons/ic_antifeature_nsfw.xml",
-            "sha256": "acab2a7a846700529cd7f2b7a7980f7d04a291f22db8434f3e966f7350ed1465",
-            "size": 871
-          },
-          "en-US": {
-            "name": "/icons/ic_antifeature_nsfw.xml",
-            "sha256": "acab2a7a846700529cd7f2b7a7980f7d04a291f22db8434f3e966f7350ed1465",
-            "size": 871
-          },
-          "fa": {
-            "name": "/icons/ic_antifeature_nsfw.xml",
-            "sha256": "acab2a7a846700529cd7f2b7a7980f7d04a291f22db8434f3e966f7350ed1465",
-            "size": 871
-          },
-          "ro": {
-            "name": "/icons/ic_antifeature_nsfw.xml",
-            "sha256": "acab2a7a846700529cd7f2b7a7980f7d04a291f22db8434f3e966f7350ed1465",
-            "size": 871
-          },
-          "zh-rCN": {
-            "name": "/icons/ic_antifeature_nsfw.xml",
-            "sha256": "acab2a7a846700529cd7f2b7a7980f7d04a291f22db8434f3e966f7350ed1465",
-            "size": 871
-          }
-        },
-        "name": {
-          "de": "NSFW",
-          "en-US": "NSFW",
-          "fa": "NSFW",
-          "ro": "NSFW",
-          "zh-rCN": "NSFW"
-        }
-      },
       "NoSourceSince": {
         "description": {
           "en-US": "The source code is no longer available, no updates possible."

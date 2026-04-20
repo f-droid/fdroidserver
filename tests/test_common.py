@@ -2852,7 +2852,6 @@ class CommonTest(SetUpTearDownMixin, unittest.TestCase):
                 'Ads',
                 'DisabledAlgorithm',
                 'KnownVuln',
-                'NSFW',
                 'NoSourceSince',
                 'NonFreeAdd',
                 'NonFreeAssets',

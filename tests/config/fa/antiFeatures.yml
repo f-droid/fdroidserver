@@ -10,10 +10,6 @@ KnownVuln:
   description: این کاره، آسیب‌پذیری امنیتی شناخته‌شده‌ای دارد
   icon: ic_antifeature_knownvuln.xml
   name: آسیب‌پذیری شناخته
-NSFW:
-  description: این کاره محتوایی دارد که نباید عمومی شده یا همه‌حا نمایان باشد
-  icon: ic_antifeature_nsfw.xml
-  name: NSFW
 NoSourceSince:
   icon: ic_antifeature_nosourcesince.xml
   name: کد مبدأ دیگر در دسترس نیست. به‌روز رسانی ناممکن است.
