@@ -176,6 +176,7 @@ ubuntu_lts_ppa:
         dexdump
         fdroidserver
         git
+        python3-progress
         python3-setuptools
 
     # Test things work with a default branch other than 'master'
