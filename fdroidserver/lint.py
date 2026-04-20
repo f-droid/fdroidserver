@@ -2454,13 +2454,13 @@ def main():
                 failed += 1
         # an empty list of appids means check all apps, avoid that if files were given
         if not options.appid:
-            sys.exit(failed)
+            sys.exit(failed != 0)
 
     if not lint_metadata(options):
         failed += 1
 
     if failed:
-        sys.exit(failed)
+        sys.exit(1)
 
 
 def lint_metadata(options):

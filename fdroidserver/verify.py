@@ -306,7 +306,7 @@ def main():
         logging.info("{0} successfully verified".format(verified))
     if notverified > 0:
         logging.info("{0} NOT verified".format(notverified))
-    sys.exit(notverified)
+    sys.exit(notverified != 0)
 
 
 if __name__ == "__main__":
