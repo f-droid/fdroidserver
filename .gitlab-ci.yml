@@ -142,6 +142,7 @@ debian_testing:
         gnupg
         ipfs-cid
         python3-babel
+        python3-progress
         python3-setuptools
     - python3 -c 'import fdroidserver'
     - python3 -c 'import androguard'
