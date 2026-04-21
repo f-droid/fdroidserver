@@ -136,20 +136,14 @@ debian_testing:
   script:
     - apt-get install
         aapt
-        androguard
-        apksigner
         dexdump
         fdroidserver
         git
         gnupg
         ipfs-cid
         python3-babel
-        python3-biplist
-        python3-defusedxml
-        python3-libcloud
-        python3-pycountry
+        python3-progress
         python3-setuptools
-        sdkmanager
     - python3 -c 'import fdroidserver'
     - python3 -c 'import androguard'
     - python3 -c 'import sdkmanager'
@@ -176,10 +170,8 @@ ubuntu_lts_ppa:
         dexdump
         fdroidserver
         git
-        python3-biplist
-        python3-pycountry
+        python3-progress
         python3-setuptools
-        sdkmanager
 
     # Test things work with a default branch other than 'master'
     - git config --global init.defaultBranch thisisnotmasterormain
@@ -494,7 +486,7 @@ fedora_latest:
     - dnf -y install --nobest --allowerasing *.rpm
     - ./setup.py sdist
     - useradd -m -c "test account" --password "fakepassword"  testuser
-    - su testuser --login --command "cd `pwd`; $pip install --user dist/fdroidserver-*.tar.gz; $pip install --user clint; $pip install --user git+https://github.com/wbond/oscrypto.git@1547f535001ba568b239b8797465536759c742a3"
+    - su testuser --login --command "cd `pwd`; $pip install --user dist/fdroidserver-*.tar.gz; $pip install --user git+https://github.com/wbond/oscrypto.git@1547f535001ba568b239b8797465536759c742a3"
     - export OPENSSL_ENABLE_SHA1_SIGNATURES=1
     - export OPENSSL_ENABLE_MD5_VERIFY=1
     - test -e ~testuser/.local/share/locale/de/LC_MESSAGES/fdroidserver.mo
@@ -546,6 +538,9 @@ macOS:
     - echo "macOS sticks with bash 3.x because of licenses, so avoid new bash syntax"
     - /bin/bash --version
     - /bin/bash -n tests/run-tests
+
+    # TODO remove the packages below once they are included in the Homebrew package
+    - $(brew --prefix fdroidserver)/libexec/bin/python3 -m pip install progress
 
     # test fdroidserver from git with current package's dependencies
     - fdroid="$(brew --prefix fdroidserver)/libexec/bin/python3 $PWD/fdroid" ./tests/run-tests
