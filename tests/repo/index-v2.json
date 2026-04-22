@@ -415,9 +415,11 @@
     "categories": {
       "Time": {
         "name": {
+          "de": "Zeit",
           "en-US": "Time"
         },
         "description": {
+          "de": "Apps die deine Zeit stehlen",
           "en-US": "Apps that steal your time"
         }
       },
