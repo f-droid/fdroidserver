@@ -2380,7 +2380,7 @@ def lint_config(arg):
                     )
                 )
             allowed_keys = ['name']
-            if path.name in [config_name, antifeatures_name]:
+            if path.name in [config_name, categories_name, antifeatures_name]:
                 allowed_keys.append('description')
             # only for source strings currently
             if path.parent.name == 'config':
