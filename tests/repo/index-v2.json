@@ -416,6 +416,9 @@
       "Time": {
         "name": {
           "en-US": "Time"
+        },
+        "description": {
+          "en-US": "Apps that steal your time"
         }
       },
       "Development": {
