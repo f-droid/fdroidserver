@@ -165,8 +165,6 @@ def check_tags(app: metadata.App, pattern: str) -> tuple[str, int, str]:
 
     last_build = get_last_build_from_app(app)
 
-    try_init_submodules(app, last_build, vcs)
-
     htag = None
     hver = None
     hcode = 0
@@ -193,6 +191,7 @@ def check_tags(app: metadata.App, pattern: str) -> tuple[str, int, str]:
 
     for tag in tags:
         logging.debug("Check tag: '{0}'".format(tag))
+        vcs.deinitsubmodules()
         vcs.gotorevision(tag)
         try_init_submodules(app, last_build, vcs)
 
