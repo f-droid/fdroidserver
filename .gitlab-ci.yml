@@ -777,6 +777,10 @@ pages:
   image: alpine:latest
   stage: deploy
   script:
+    - if ! test -d docs/build/html; then
+          printf "\x1b[93mThe 'Build documentation' job did not run, skipping deploy.\x1b[0m\n";
+          exit 0;
+      fi
     - cp docs/build/html public -r  # GL Pages needs the files in a directory named "public"
   artifacts:
     paths:
