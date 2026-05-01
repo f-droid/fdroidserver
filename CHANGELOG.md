@@ -11,6 +11,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 * deploy: `awsaccesskeyid:` and `awssecretkey:` config items removed, use the
   standard env vars: `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY`.
 
+## [2.4.4] - 2026-05-01
+
+* Fixed tests to work with _sdkmanager_ v0.7.x
+
+## [2.4.3] - 2025-12-04
+
+### Fixed
+
+* Support Python 3.14 and fix tests on macOS
+  https://gitlab.com/fdroid/fdroidserver/-/merge_requests/1751
+
 ## [2.4.2] - 2025-06-24
 
 ### Fixed
