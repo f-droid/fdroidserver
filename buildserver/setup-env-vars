@@ -18,9 +18,6 @@ echo 'export LC_ALL=C.UTF-8' >> $bsenv
 
 chmod 0644 $bsenv
 
-#patch CVE-2026-31431 until Debian is ready
-echo "install algif_aead /bin/false" > /etc/modprobe.d/disable-algif.conf
-
 # make sure that SSH never hangs at a password or key prompt
 mkdir -p /etc/ssh/ssh_config.d/
 cat << EOF >> /etc/ssh/ssh_config.d/fdroid
