@@ -2505,10 +2505,18 @@ class CommonTest(SetUpTearDownMixin, unittest.TestCase):
         build = fdroidserver.metadata.Build()
         url = 'https://dl.google.com/android/repository/android-ndk-r24-linux.zip'
         path = sdkmanager.get_cachedir() / os.path.basename(url)
-        sdkmanager.packages = {
-            ('ndk', '24.0.8215888'): url,
-            ('ndk', 'r24'): url,
-        }
+        sdkmanager._process_checksums(
+            {
+                "https://dl.google.com/android/repository/android-ndk-r24-linux.zip": [
+                    {
+                        "sha1": "eceb18f147282eb93615eff1ad84a9d3962fbb31",
+                        "sha256": "caac638f060347c9aae994e718ba00bb18413498d8e0ad4e12e1482964032997",
+                        "sha512": "f316487172c7dbe9381297ba2e78a42f3458cc3cc0440045a043dd1abc88ecb3ba41325863d02b744dbb700c1ca6525c4ae07f3a1daa1c3dbfcfa161ae83c2ce",
+                        "source.properties": "Pkg.Desc = Android NDK\nPkg.Revision = 24.0.8215888\n",
+                    }
+                ],
+            }
+        )
         build.ndk = 'r24'
         firstrun = mock.Mock()
         with mock.patch('sdkmanager.download_file', firstrun):
