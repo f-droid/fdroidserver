@@ -55,6 +55,8 @@ Components: main
 Signed-By: /usr/share/keyrings/debian-archive-keyring.pgp
 EOF
 
+echo grub-pc grub-pc/install_devices multiselect /dev/vda | debconf-set-selections
+
 apt-get update || apt-get update
 
 # purge things that might come from the base box, but we don't want
