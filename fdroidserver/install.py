@@ -222,7 +222,7 @@ def devices():
     """Get the list of device serials for use with adb commands."""
     p = common.SdkToolsPopen(['adb', "devices"])
     if p.returncode != 0:
-        raise FDroidException("An error occured when finding devices: %s" % p.output)
+        raise FDroidException("An error occurred when finding devices: %s" % p.output)
     serials = list()
     for line in p.output.splitlines():
         columns = line.strip().split("\t", maxsplit=1)

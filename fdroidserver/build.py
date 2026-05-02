@@ -1032,8 +1032,8 @@ def main():
         has been found, there are no apps to process, downloading binaries for
         checking the reproducibility of a built binary failed, the built binary
         is different from supplied reference binary, the reference binary is
-        signed with a different signing key than expected, a VCS error occured
-        while building an app or a different error occured while building an
+        signed with a different signing key than expected, a VCS error occurred
+        while building an app or a different error occurred while building an
         app.
     """
     global options, config, buildserverid, fdroidserverid

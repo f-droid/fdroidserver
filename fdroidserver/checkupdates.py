@@ -430,7 +430,7 @@ def fetch_autoname(app: metadata.App, tag: str) -> Optional[str]:
     -------
     commitmsg
         Commit message about the name change.  None in case checking for the
-        name is disabled, a VCSException occured or no name could be found.
+        name is disabled, a VCSException occurred or no name could be found.
     """
     if not app.RepoType or app.UpdateCheckMode in ('None', 'Static') \
        or app.UpdateCheckName == "Ignore":
