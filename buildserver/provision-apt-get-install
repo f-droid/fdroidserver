@@ -115,6 +115,10 @@ apt-get upgrade
 # again after upgrade in case of keyring changes
 apt-get update || apt-get update
 
+# make sure everything is upgraded
+apt-get upgrade --download-only
+apt-get upgrade
+
 packages="
  androguard/trixie-backports
  apksigner
