@@ -109,15 +109,11 @@ purge="
 rm -rf /var/run/dbus /var/log/unattended-upgrades
 apt-get purge $purge
 
-apt-get upgrade --download-only
-apt-get upgrade
+apt-get dist-upgrade --download-only
+apt-get dist-upgrade
 
 # again after upgrade in case of keyring changes
 apt-get update || apt-get update
-
-# make sure everything is upgraded
-apt-get upgrade --download-only
-apt-get upgrade
 
 packages="
  androguard/trixie-backports
