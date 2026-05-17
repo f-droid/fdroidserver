@@ -17,20 +17,21 @@
 # neverender <audiolunaire@getgoogleoff.me>, 2024.
 # Dmitry <dmitrydmitry761@gmail.com>, 2024.
 # Artyom Rybakov <rib.artem@gmail.com>, 2025.
+# Дмитрий Михирев <bizdelnick@gmail.com>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 1.0.0-95-gd7af22b\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2026-01-13 11:31+0100\n"
-"PO-Revision-Date: 2025-10-05 04:02+0000\n"
-"Last-Translator: Golubev Alexander <fatzer2@gmail.com>\n"
+"PO-Revision-Date: 2026-01-20 23:02+0000\n"
+"Last-Translator: Дмитрий Михирев <bizdelnick@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/f-droid/fdroidserver/ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 5.14-dev\n"
+"X-Generator: Weblate 5.16-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -56,15 +57,15 @@ msgstr "У \"%s/\" нет соответствующего файла метад
 
 #: ../fdroidserver/deploy.py
 msgid "\"AWS_ACCESS_KEY_ID\" must be set as an environmental variable!"
-msgstr "Должна быть установлена переменная среды \"AWS_ACCESS_KEY_ID\"!"
+msgstr "Должна быть установлена переменная окружения \"AWS_ACCESS_KEY_ID\"!"
 
 #: ../fdroidserver/deploy.py
 msgid "\"AWS_SECRET_ACCESS_KEY\" must be set as an environmental variable!"
-msgstr "Должна быть установлена переменная среды \"AWS_SECRET_ACCESS_KEY\"!"
+msgstr "Должна быть установлена переменная окружения \"AWS_SECRET_ACCESS_KEY\"!"
 
 #: ../fdroidserver/index.py
 msgid "\"isPrimary\" key should not be added to mirrors!"
-msgstr "Ключ \"IsPrimary\" не следует добавлять в зеркала!"
+msgstr "Ключ \"isPrimary\" не следует добавлять в зеркала!"
 
 #: ../fdroidserver/index.py
 #, python-brace-format
@@ -74,7 +75,7 @@ msgstr "\"local_copy_dir\" {path} не существует!"
 #: ../fdroidserver/install.py
 #, python-brace-format
 msgid "\"{apkfilename}\" is already installed on {dev}."
-msgstr "'{apkfilename}' уже установлен на {dev}."
+msgstr "\"{apkfilename}\" уже установлен на {dev}."
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -84,7 +85,7 @@ msgstr "в пути \"{path}\" последние имя {name} и версия 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "\"{path}\" exists but s3cmd is not installed!"
-msgstr "путь \"{path}\" существует, но s3cmd клиент не установлен!"
+msgstr "путь \"{path}\" существует, но клиент s3cmd не установлен!"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
