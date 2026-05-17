@@ -5,50 +5,59 @@
 # BIENESTAR NARANJOS <bienestarnaranjos@gmail.com>, 2025.
 # Jacob Guzmán Calderón <jacobguzman1207@gmail.com>, 2025.
 # Gerardo Hernandez <gerahrz789@gmail.com>, 2026.
+# Sergio Granadoz <granadozsergio42@gmail.com>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 1.0.6-349-g907c04ea\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2026-01-13 11:31+0100\n"
-"PO-Revision-Date: 2026-02-08 14:30+0000\n"
-"Last-Translator: Gerardo Hernandez <gerahrz789@gmail.com>\n"
+"PO-Revision-Date: 2026-05-07 01:15+0000\n"
+"Last-Translator: Sergio Granadoz <granadozsergio42@gmail.com>\n"
 "Language-Team: Spanish (Mexico) <https://hosted.weblate.org/projects/f-droid/fdroidserver/es_MX/>\n"
 "Language: es_MX\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.16-dev\n"
+"X-Generator: Weblate 5.17.1\n"
 
 #: ../fdroidserver/nightly.py
+#, fuzzy
 msgid ""
 "\n"
 "SSH public key to be used as deploy key:"
 msgstr ""
+"\n"
+"SSH public key to be used as deploy key:"
 
 #: ../fdroidserver/nightly.py
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid ""
 "\n"
 "{path} encoded for the DEBUG_KEYSTORE secret variable:"
 msgstr ""
+"\n"
+"{path} encoded for the DEBUG_KEYSTORE secret variable:"
 
 #: ../fdroidserver/lint.py
-#, python-format
+#, fuzzy, python-format
 msgid "\"%s/\" has no matching metadata file!"
-msgstr ""
+msgstr "\"%s/\" has no matching metadata file!"
 
 #: ../fdroidserver/deploy.py
+#, fuzzy
 msgid "\"AWS_ACCESS_KEY_ID\" must be set as an environmental variable!"
-msgstr ""
+msgstr "\"AWS_ACCESS_KEY_ID\" must be set as an environmental variable!"
 
 #: ../fdroidserver/deploy.py
+#, fuzzy
 msgid "\"AWS_SECRET_ACCESS_KEY\" must be set as an environmental variable!"
-msgstr ""
+msgstr "\"AWS_SECRET_ACCESS_KEY\" must be set as an environmental variable!"
 
 #: ../fdroidserver/index.py
+#, fuzzy
 msgid "\"isPrimary\" key should not be added to mirrors!"
-msgstr ""
+msgstr "\"isPrimary\" key should not be added to mirrors!"
 
 #: ../fdroidserver/index.py
 #, python-brace-format
@@ -86,9 +95,9 @@ msgid "\"{url}\" is not a valid URL!"
 msgstr ""
 
 #: /usr/lib/python3.11/argparse.py
-#, python-format
+#, fuzzy, python-format
 msgid "%(prog)s: error: %(message)s\n"
-msgstr "%(prog)s: error: %(message)s\n"
+msgstr "%(prog)s: error: %(mensaje)s\n"
 
 #: ../fdroidserver/publish.py
 #, python-format
@@ -101,9 +110,9 @@ msgid "%d problems found"
 msgstr ""
 
 #: /usr/lib/python3.11/argparse.py
-#, python-format
+#, fuzzy, python-format
 msgid "%r is not callable"
-msgstr "%r no es ejecutable"
+msgstr "%r is not callable"
 
 #: ../fdroidserver/signindex.py
 #, python-format
@@ -195,8 +204,9 @@ msgid "...checkupdate failed for {appid} : {error}"
 msgstr ""
 
 #: /usr/lib/python3.11/argparse.py
+#, fuzzy
 msgid ".__call__() not defined"
-msgstr ".__call__() no definida"
+msgstr ".__call__() not defined"
 
 #: ../fdroidserver/lint.py
 msgid "/issues is missing"
@@ -357,8 +367,9 @@ msgid "Broken symlink: {path}"
 msgstr ""
 
 #: ../fdroidserver/__main__.py
+#, fuzzy
 msgid "Build a package from source"
-msgstr "Crear un paquete desde la fuente"
+msgstr "Construir un paquete de fuente"
 
 #: ../fdroidserver/build.py
 msgid "Build all applications available"
@@ -418,8 +429,9 @@ msgid "Category \"{category}\" defined but not used for any apps!"
 msgstr ""
 
 #: ../fdroidserver/__main__.py
+#, fuzzy
 msgid "Check for updates to applications"
-msgstr "Buscar actualizaciones de aplicaciones"
+msgstr "Check for updates to applications"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -439,9 +451,9 @@ msgid "Comma separated list of categories."
 msgstr "Lista de categorías separadas por comas."
 
 #: ../fdroidserver/__main__.py
-#, python-format
+#, fuzzy, python-format
 msgid "Command '%s' not recognised.\n"
-msgstr "El comando '%s' no fue reconocido\n"
+msgstr "Command '%s' not recognised.\n"
 
 #: ../fdroidserver/checkupdates.py
 msgid "Commit changes"
@@ -580,8 +592,9 @@ msgid "DEBUG_KEYSTORE is not set or the value is incomplete"
 msgstr "DEBUG_KEYSTORE no está establecido o el valor está incompleto"
 
 #: ../fdroidserver/update.py
+#, fuzzy
 msgid "Delete APKs and/or OBBs without metadata from the repo"
-msgstr "Borrar del repositorio archivos APK y/o OBB sin metadatos"
+msgstr "Delete APKs and/or OBBs without metadata from the repo"
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
@@ -1054,7 +1067,7 @@ msgstr ""
 
 #: ../fdroidserver/__main__.py
 msgid "Install built packages on devices"
-msgstr ""
+msgstr "Instalar paquetes realizados en dispositivos"
 
 #: ../fdroidserver/install.py
 #, python-format
@@ -1067,8 +1080,9 @@ msgid "Installing '{apkfilename}' on {dev}..."
 msgstr ""
 
 #: ../fdroidserver/__main__.py
+#, fuzzy
 msgid "Interact with the repo HTTP server"
-msgstr ""
+msgstr "Interact with the repo HTTP server"
 
 #: ../fdroidserver/update.py
 msgid "Invalid APK"
@@ -1519,12 +1533,14 @@ msgid "Pushing to {url}"
 msgstr ""
 
 #: ../fdroidserver/__main__.py
+#, fuzzy
 msgid "Quickly start a new repository"
-msgstr ""
+msgstr "Quickly start a new repository"
 
 #: ../fdroidserver/__main__.py
+#, fuzzy
 msgid "Read all the metadata files and exit"
-msgstr ""
+msgstr "Read all the metadata files and exit"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -1569,8 +1585,9 @@ msgid "Removing {path}\""
 msgstr ""
 
 #: ../fdroidserver/update.py
+#, fuzzy
 msgid "Rename APK files that do not match package.name_123.apk"
-msgstr ""
+msgstr "Rename APK files that do not match package.name_123.apk"
 
 #: ../fdroidserver/lint.py
 msgid "Repo: git URLs must use https://"
@@ -1608,8 +1625,9 @@ msgid "Retrying failed download: %s"
 msgstr ""
 
 #: ../fdroidserver/__main__.py
+#, fuzzy
 msgid "Rewrite all the metadata files"
-msgstr ""
+msgstr "Rewrite all the metadata files"
 
 #: ../fdroidserver/rewritemeta.py
 #, python-brace-format
@@ -1648,8 +1666,9 @@ msgid "Scan the resulting APK(s) for known non-free classes."
 msgstr ""
 
 #: ../fdroidserver/__main__.py
+#, fuzzy
 msgid "Scan the source code of a package"
-msgstr ""
+msgstr "Scan the source code of a package"
 
 #: ../fdroidserver/scanner.py
 #, python-brace-format
@@ -1717,12 +1736,14 @@ msgid "Setting {0} sec timeout for this build"
 msgstr ""
 
 #: ../fdroidserver/__main__.py
+#, fuzzy
 msgid "Sign and place packages in the repo"
-msgstr ""
+msgstr "Sign and place packages in the repo"
 
 #: ../fdroidserver/__main__.py
+#, fuzzy
 msgid "Sign indexes created using update --nosign"
-msgstr ""
+msgstr "Sign indexes created using update --nosign"
 
 #: ../fdroidserver/build.py
 msgid "Skip scanning the source code for binaries and other problems"
@@ -1931,8 +1952,9 @@ msgid "Unknown entry {key} in {configname}"
 msgstr ""
 
 #: ../fdroidserver/__main__.py
+#, fuzzy
 msgid "Unknown exception found!"
-msgstr "¿Algo salió mal!"
+msgstr "Unknown exception found!"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
@@ -2008,12 +2030,14 @@ msgid "Unused scanignore path: %s"
 msgstr ""
 
 #: ../fdroidserver/__main__.py
+#, fuzzy
 msgid "Update repo information for new packages"
-msgstr ""
+msgstr "Update repo information for new packages"
 
 #: ../fdroidserver/__main__.py
+#, fuzzy
 msgid "Update the binary transparency log for a URL"
-msgstr ""
+msgstr "Update the binary transparency log for a URL"
 
 #: ../fdroidserver/checkupdates.py
 #, python-brace-format
@@ -2133,16 +2157,18 @@ msgid "Using s3cmd to sync with: {url}"
 msgstr ""
 
 #: ../fdroidserver/__main__.py
+#, fuzzy
 msgid "Valid commands are:"
-msgstr "Comandos Válidos:"
+msgstr "Valid commands are:"
 
 #: ../fdroidserver/verify.py
 msgid "Verify against locally cached copy rather than redownloading."
 msgstr ""
 
 #: ../fdroidserver/__main__.py
+#, fuzzy
 msgid "Verify the integrity of downloaded packages"
-msgstr ""
+msgstr "Verify the integrity of downloaded packages"
 
 #: ../fdroidserver/index.py
 msgid "Verifying index signature:"
@@ -2163,8 +2189,9 @@ msgid "WARNING: only public git repos are supported!"
 msgstr ""
 
 #: ../fdroidserver/__main__.py
+#, fuzzy
 msgid "Warn about possible metadata errors"
-msgstr ""
+msgstr "Warn about possible metadata errors"
 
 #: ../fdroidserver/scanner.py
 msgid "WebAssembly binary file"
@@ -2218,9 +2245,9 @@ msgid "adding to {name}: {path}"
 msgstr ""
 
 #: /usr/lib/python3.11/argparse.py
-#, python-format
+#, fuzzy, python-format
 msgid "ambiguous option: %(option)s could match %(matches)s"
-msgstr ""
+msgstr "ambiguous option: %(option)s could match %(matches)s"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -2537,8 +2564,9 @@ msgid "path_to_custom_rclone_config: \"{path}\" does not exist!"
 msgstr ""
 
 #: /usr/lib/python3.11/argparse.py
+#, fuzzy
 msgid "positional arguments"
-msgstr ""
+msgstr "positional arguments"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -2602,8 +2630,9 @@ msgid "shared library"
 msgstr ""
 
 #: /usr/lib/python3.11/argparse.py
+#, fuzzy
 msgid "show this help message and exit"
-msgstr "Mostrar este mensaje de ayuda y salir"
+msgstr "show this help message and exit"
 
 #: ../fdroidserver/signatures.py
 msgid "signed APK, either a file-path or HTTPS URL."
@@ -2670,8 +2699,9 @@ msgid "unsafe permissions on '{config_file}' (should be 0600)!"
 msgstr ""
 
 #: ../fdroidserver/__main__.py /usr/lib/python3.11/argparse.py
+#, fuzzy
 msgid "usage: "
-msgstr "uso: "
+msgstr "usage: "
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
