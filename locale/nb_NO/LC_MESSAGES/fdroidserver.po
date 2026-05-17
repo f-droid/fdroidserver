@@ -3,13 +3,13 @@
 # Allan Nordhøy <epost@anotheragency.no>, 2020, 2021, 2022.
 # Hans-Christoph Steiner <hans@guardianproject.info>, 2020, 2022.
 # mondstern <mondstern@snopyta.org>, 2021.
-# Telaneo <post@telaneo.net>, 2025.
+# Telaneo <post@telaneo.net>, 2025, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.8-74-ga380b9f\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2026-01-13 11:31+0100\n"
-"PO-Revision-Date: 2025-10-28 03:02+0000\n"
+"PO-Revision-Date: 2026-03-06 14:35+0000\n"
 "Last-Translator: Telaneo <post@telaneo.net>\n"
 "Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects/f-droid/fdroidserver/nb_NO/>\n"
 "Language: nb_NO\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.14.1-dev\n"
+"X-Generator: Weblate 5.17-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -111,7 +111,7 @@ msgstr "%r kan ikke kalles"
 #: ../fdroidserver/signindex.py
 #, python-format
 msgid "%s did not produce a dict!"
-msgstr ""
+msgstr "%s produserte ikke en ordbok!"
 
 #: ../fdroidserver/signindex.py
 #, python-format
@@ -181,9 +181,8 @@ msgid "'{value}' is not a valid {field}, should be {pattern}"
 msgstr "«{value}» er ikke et gyldig {field}, burde være {pattern}"
 
 #: ../fdroidserver/common.py
-#, fuzzy
 msgid "'{}' does not start with a valid applicationId"
-msgstr "{appid} mangler navn. Bruker pakkenavn istedenfor."
+msgstr "'{}' begynner ikke med en gyldig applikasjons-ID"
 
 #: ../fdroidserver/common.py
 msgid "'{}' is not a valid pair of applicationId:versionCode"
@@ -216,9 +215,9 @@ msgid "APK file {path} does not have a version code in its manifest"
 msgstr ""
 
 #: ../fdroidserver/common.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "APK signatures have different certificates in {path}:"
-msgstr "Ingen signeringssertifikater funnet i {path}"
+msgstr "APK-signaturene har andre sertifikater i {path}:"
 
 #: ../fdroidserver/__main__.py
 msgid "Add PGP signatures using GnuPG for packages in repo"
@@ -234,10 +233,10 @@ msgstr "Legg til skjelettmetadatafiler for APK-er som ikke har dem"
 
 #: ../fdroidserver/deploy.py
 msgid "Adding all files to git mirror"
-msgstr ""
+msgstr "Legger til alle filer til git-speilet"
 
 #: ../fdroidserver/update.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Adding new repo for only {name}"
 msgstr "Legger til ny pakkebrønn kun for {name}"
 
@@ -289,7 +288,7 @@ msgid "Android SDK path '{path}' is not a directory!"
 msgstr "Android SDK-stien '{path}' er ikke ei mappe."
 
 #: ../fdroidserver/common.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Android SDK tool {cmd} not found!"
 msgstr "Fant ikke Android-SDK-verktøyet {cmd}!"
 
@@ -325,11 +324,11 @@ msgstr ""
 
 #: ../fdroidserver/install.py
 msgid "Automatic no to all prompts."
-msgstr ""
+msgstr "Automatisk nei til alle spørsmål."
 
 #: ../fdroidserver/install.py
 msgid "Automatic yes to all prompts."
-msgstr ""
+msgstr "Automatisk ja til alle spørsmål."
 
 #: ../fdroidserver/index.py
 #, python-brace-format
