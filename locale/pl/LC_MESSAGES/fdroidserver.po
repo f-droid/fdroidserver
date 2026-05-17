@@ -9,13 +9,14 @@
 # Daniel Wuzetka <32z2tcp8@anonaddy.me>, 2025.
 # Kuba <weblate.undercut450@passmail.net>, 2025.
 # Wiesław Fijołek <percival@users.noreply.hosted.weblate.org>, 2026.
+# Andrzej Stachera <Jackheisen@proton.me>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 1.0.0-95-gd7af22b\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2026-01-13 11:31+0100\n"
-"PO-Revision-Date: 2026-03-11 11:05+0000\n"
-"Last-Translator: Agnieszka C <aga_04@o2.pl>\n"
+"PO-Revision-Date: 2026-03-11 16:18+0000\n"
+"Last-Translator: Andrzej Stachera <Jackheisen@proton.me>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/f-droid/fdroidserver/pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
@@ -145,9 +146,8 @@ msgid "'keystorepass' not found in config.yml!"
 msgstr "'keystorepass' nie znaleziono w config.yml!"
 
 #: ../fdroidserver/deploy.py
-#, fuzzy
 msgid "'rclone_config' must be set in config.yml!"
-msgstr "Aby używać rclone, rclone_config i awsbucket muszą być one również ustawione w config.yml!"
+msgstr "'rclone_config' musi być ustawiony w pliku config.yml!"
 
 #: ../fdroidserver/common.py
 msgid "'repo_keyalias' not found in config.yml!"
@@ -187,9 +187,8 @@ msgid "'{value}' is not a valid {field}, should be {pattern}"
 msgstr "'{value}' nie jest prawidłowym {field}, powinno być {pattern}"
 
 #: ../fdroidserver/common.py
-#, fuzzy
 msgid "'{}' does not start with a valid applicationId"
-msgstr "{appid} nie ma nazwy! Zamiast tego używam identyfikatora aplikacji."
+msgstr "'{}' nie zaczyna się od prawidłowego applicationID"
 
 #: ../fdroidserver/common.py
 msgid "'{}' is not a valid pair of applicationId:versionCode"
