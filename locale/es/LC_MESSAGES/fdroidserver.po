@@ -14,7 +14,7 @@
 # Jaime Marquínez Ferrándiz <weblate@jregistros.fastmail.net>, 2022.
 # gallegonovato <fran-carro@hotmail.es>, 2022, 2023, 2024.
 # Nicolás Pérez <ccnicolasperez@gmail.com>, 2025.
-# Swyter <swyterzone@gmail.com>, 2025.
+# Swyter <swyterzone@gmail.com>, 2025, 2026.
 # emma peel <emma.peel@riseup.net>, 2025.
 # BIENESTAR NARANJOS <bienestarnaranjos@gmail.com>, 2025.
 # Francisco Serrador <fserrador@gmail.com>, 2025.
@@ -25,7 +25,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2026-01-13 11:31+0100\n"
 "PO-Revision-Date: 2026-02-03 17:01+0000\n"
-"Last-Translator: Nicolás Pérez <nicoperez241@proton.me>\n"
+"Last-Translator: Swyter <swyterzone@gmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/f-droid/fdroidserver/es/>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
@@ -661,9 +661,8 @@ msgid "Do not remove the private keys generated from the keystore"
 msgstr "No elimine las claves privadas generadas del almacén de claves"
 
 #: ../fdroidserver/scanner.py
-#, fuzzy
 msgid "Do not throw an error on APKs with the debuggable flag set."
-msgstr "No tire un error en APKs con el flag depurable puesto."
+msgstr "No mostrar errores en APKs marcados como depurables."
 
 #: ../fdroidserver/build.py
 msgid "Don't create a source tarball, useful when testing a build"
