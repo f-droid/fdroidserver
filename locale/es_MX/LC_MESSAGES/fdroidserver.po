@@ -4,20 +4,21 @@
 # Hans-Christoph Steiner <hans@guardianproject.info>, 2020.
 # BIENESTAR NARANJOS <bienestarnaranjos@gmail.com>, 2025.
 # Jacob Guzmán Calderón <jacobguzman1207@gmail.com>, 2025.
+# Gerardo Hernandez <gerahrz789@gmail.com>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 1.0.6-349-g907c04ea\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2026-01-13 11:31+0100\n"
-"PO-Revision-Date: 2025-09-03 09:01+0000\n"
-"Last-Translator: Jacob Guzmán Calderón <jacobguzman1207@gmail.com>\n"
+"PO-Revision-Date: 2026-02-08 14:30+0000\n"
+"Last-Translator: Gerardo Hernandez <gerahrz789@gmail.com>\n"
 "Language-Team: Spanish (Mexico) <https://hosted.weblate.org/projects/f-droid/fdroidserver/es_MX/>\n"
 "Language: es_MX\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.13.1-dev\n"
+"X-Generator: Weblate 5.16-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -986,7 +987,7 @@ msgstr ""
 #: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "If this upload fails, try manually uploading to {url}"
-msgstr ""
+msgstr "Si la carga falla, intente subirlo de manera manual a {url}"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
@@ -1045,7 +1046,7 @@ msgstr ""
 
 #: ../fdroidserver/common.py
 msgid "Initialising submodules"
-msgstr ""
+msgstr "Inicializando sub-modulos"
 
 #: ../fdroidserver/install.py
 msgid "Install all signed applications available"
