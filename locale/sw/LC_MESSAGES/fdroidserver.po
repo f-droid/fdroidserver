@@ -11,7 +11,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2026-01-13 11:31+0100\n"
 "PO-Revision-Date: 2026-03-09 09:44+0000\n"
-"Last-Translator: Steve Solomon <stevenyasimi01@gmail.com>\n"
+"Last-Translator: Ashley Tsuma <tsumaashley@gmail.com>\n"
 "Language-Team: Swahili <https://hosted.weblate.org/projects/f-droid/fdroidserver/sw/>\n"
 "Language: sw\n"
 "MIME-Version: 1.0\n"
@@ -438,7 +438,7 @@ msgstr "Sasisho safi - usitumie cache, chakata tena APK zote"
 
 #: ../fdroidserver/common.py
 msgid "Color the log output"
-msgstr ""
+msgstr "Paka Rangi pato la kumbukumbu"
 
 #: ../fdroidserver/import_subcommand.py
 msgid "Comma separated list of categories."
@@ -455,7 +455,7 @@ msgstr "Fanya mabadiliko"
 
 #: ../fdroidserver/checkupdates.py
 msgid "Commit changes, push, then make a merge request"
-msgstr ""
+msgstr "Fanya mabadiliko, sukuma, kisha fanya ombi la kuunganisha"
 
 #: ../fdroidserver/deploy.py
 msgid "Committing index files to git mirror"
@@ -617,7 +617,7 @@ msgstr "Maelezo ya urefu {length} iko juu ya {limit} kikomo cha char"
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Did not find '{versionCode}' in '{fieldname}' of {path}"
-msgstr ""
+msgstr "Sikupata '{versionCode}' katika '{fieldname}' ya {path}"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -1396,7 +1396,7 @@ msgstr "PNG na JPEG pekee zinakubalika katika mchoro, zimepata: {path}"
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
 #: ../fdroidserver/common.py
 msgid "Only accepts a single key \"env\""
-msgstr ""
+msgstr "Inakubali ufunguo mmoja tu \"env\""
 
 #: ../fdroidserver/checkupdates.py
 msgid "Only process apps with auto-updates"
@@ -1557,7 +1557,7 @@ msgstr "Onyesha upya na uweke kwenye hifadhi ya muda kanuni za skana na sahihi k
 #: ../fdroidserver/publish.py
 #, python-brace-format
 msgid "Refusing to sign '{path}', file exists in both {dir1} and {dir2} folder."
-msgstr ""
+msgstr "Kwa kukataa kusaini '{path}', faili ipo katika folda ya {dir1} na {dir2}."
 
 #: ../fdroidserver/verify.py
 msgid "Remove source tarball and any APKs if successfully verified."
@@ -1578,20 +1578,20 @@ msgstr "Badilisha jina la faili za APK ambazo hazilingani na package.name_123.ap
 
 #: ../fdroidserver/lint.py
 msgid "Repo: git URLs must use https://"
-msgstr ""
+msgstr "Repo: URL za git lazima zitumie https://"
 
 #: ../fdroidserver/lint.py
 msgid "Repo: srclib URLs must be only a srclib name, not a path or URL."
-msgstr ""
+msgstr "Repo: URL za srclib lazima ziwe jina la srclib pekee, si njia au URL."
 
 #: ../fdroidserver/lint.py
 msgid "Repo: srclib URLs must be the name of an existing srclib!"
-msgstr ""
+msgstr "Repo: URL za srclib lazima ziwe jina la srclib iliyopo!"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "RepoType {type} is deprecated, please switch to git."
-msgstr ""
+msgstr "RepoType {type} imeacha kutumika, tafadhali badilisha hadi git."
 
 #: ../fdroidserver/nightly.py
 #, python-brace-format
@@ -1609,7 +1609,7 @@ msgstr "Zuia pato iwe onyo na hitilafu"
 #: ../fdroidserver/net.py
 #, python-format
 msgid "Retrying failed download: %s"
-msgstr ""
+msgstr "Kujaribu tena hakukufaulu kupakua: %s"
 
 #: ../fdroidserver/__main__.py
 msgid "Rewrite all the metadata files"
