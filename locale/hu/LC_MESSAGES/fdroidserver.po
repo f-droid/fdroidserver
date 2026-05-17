@@ -6,20 +6,21 @@
 # Dani Nagy <nagydani.m.k@gmail.com>, 2025.
 # Péter Reszegi <rpetya1704@gmail.com>, 2025.
 # Romhányi-Kakucska Viktor <viktor@romhanyi.dev>, 2026.
+# -J- <heyj0e@tuta.io>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 1.0.6-70-g54bc858\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2026-01-13 11:31+0100\n"
-"PO-Revision-Date: 2026-02-25 14:38+0000\n"
-"Last-Translator: Romhányi-Kakucska Viktor <viktor@romhanyi.dev>\n"
+"PO-Revision-Date: 2026-03-19 17:56+0000\n"
+"Last-Translator: -J- <heyj0e@tuta.io>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/f-droid/fdroidserver/hu/>\n"
 "Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.16.1-dev\n"
+"X-Generator: Weblate 5.17-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -53,7 +54,7 @@ msgstr "Az „AWS_SECRET_ACCESS_KEY” értéknek környezeti változóként kel
 
 #: ../fdroidserver/index.py
 msgid "\"isPrimary\" key should not be added to mirrors!"
-msgstr ""
+msgstr "Az „isPrimary” kulcsot nem szabad hozzáadni a kiszolgálótükrökhöz!"
 
 #: ../fdroidserver/index.py
 #, python-brace-format
