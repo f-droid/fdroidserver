@@ -10,13 +10,14 @@
 # Kuba <weblate.undercut450@passmail.net>, 2025.
 # Wiesław Fijołek <percival@users.noreply.hosted.weblate.org>, 2026.
 # Andrzej Stachera <Jackheisen@proton.me>, 2026.
+# Grzegorz Szymaszek <gszymaszek@short.pl>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 1.0.0-95-gd7af22b\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2026-01-13 11:31+0100\n"
-"PO-Revision-Date: 2026-03-11 16:18+0000\n"
-"Last-Translator: Andrzej Stachera <Jackheisen@proton.me>\n"
+"PO-Revision-Date: 2026-04-06 23:32+0000\n"
+"Last-Translator: Grzegorz Szymaszek <gszymaszek@short.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/f-droid/fdroidserver/pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
@@ -346,9 +347,9 @@ msgid "Base URL to mirror, can include the index signing key using the query str
 msgstr "Bazowy adres URL do serwera lustrzanego, może zawierać klucz do podpisywania indeksu za pomocą łańcucha zapytania: ?fingerprint="
 
 #: ../fdroidserver/lint.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Branch '{branch}' used as commit in build '{versionCode}'"
-msgstr "Oddział '{branch}' używany jako commit w kompilacji '{versionName}'"
+msgstr "Gałąź „{branch}” użyta jako zapis w kompilacji „{versionCode}”"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
@@ -490,14 +491,12 @@ msgid "Could not find latest version name"
 msgstr "Nie można odnaleźć nazwy najnowszej wersji"
 
 #: ../fdroidserver/import_subcommand.py
-#, fuzzy
 msgid "Could not find latest versionCode"
-msgstr "Nie można znaleźć najnowszej wersji kodu"
+msgstr "Nie można znaleźć najnowszego versionCode"
 
 #: ../fdroidserver/import_subcommand.py
-#, fuzzy
 msgid "Could not find latest versionName"
-msgstr "Nie można odnaleźć nazwy najnowszej wersji"
+msgstr "Nie można odnaleźć najnowszego versionName"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -515,9 +514,9 @@ msgid "Could not parse size \"{size}\", wrong type \"{type}\""
 msgstr "Nie można przeanalizować rozmiaru \"{size}\", nieprawidłowy typ \"{type}\""
 
 #: ../fdroidserver/metadata.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Could not read {path} for {appid_versionCode}"
-msgstr "Nie można znaleźć najnowszej wersji kodu"
+msgstr "Nie można odczytać {path} dla {appid_versionCode}"
 
 #. Translators: https://developer.android.com/build/configure-app-module#set-application-id
 #: ../fdroidserver/import_subcommand.py
