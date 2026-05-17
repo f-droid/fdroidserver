@@ -4,20 +4,21 @@
 # abelbiwott-dev <abelbiwott@outlook.com>, 2024.
 # paul mayero <pmmayero@gmail.com>, 2024.
 # Steve Solomon <stevenyasimi01@gmail.com>, 2026.
+# Ashley Tsuma <tsumaashley@gmail.com>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 2.3a1\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2026-01-13 11:31+0100\n"
-"PO-Revision-Date: 2026-02-25 14:38+0000\n"
-"Last-Translator: Steve Solomon <stevenyasimi01@gmail.com>\n"
+"PO-Revision-Date: 2026-03-02 17:24+0000\n"
+"Last-Translator: Ashley Tsuma <tsumaashley@gmail.com>\n"
 "Language-Team: Swahili <https://hosted.weblate.org/projects/f-droid/fdroidserver/sw/>\n"
 "Language: sw\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.16.1-dev\n"
+"X-Generator: Weblate 5.17-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -43,11 +44,11 @@ msgstr "\"%s/\" haina faili ya metadata inayolingana!"
 
 #: ../fdroidserver/deploy.py
 msgid "\"AWS_ACCESS_KEY_ID\" must be set as an environmental variable!"
-msgstr ""
+msgstr "\"AWS_ACCESS_KEY_ID\" lazima iwekwe kama kigezo cha mazingira!"
 
 #: ../fdroidserver/deploy.py
 msgid "\"AWS_SECRET_ACCESS_KEY\" must be set as an environmental variable!"
-msgstr ""
+msgstr "\"AWS_SECRET_ACCESS_KEY\" lazima iwekwe kama kigezo cha mazingira!"
 
 #: ../fdroidserver/index.py
 msgid "\"isPrimary\" key should not be added to mirrors!"
@@ -214,7 +215,7 @@ msgstr "URL inahitajika kama hoja!"
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "APK file {path} does not have a version code in its manifest"
-msgstr ""
+msgstr "Faili ya APK {path} haina msimbo wa toleo katika faili yake ya maelezo"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -235,7 +236,7 @@ msgstr "Ongeza faili za metadata za kiunzi za APK ambazo hazina"
 
 #: ../fdroidserver/deploy.py
 msgid "Adding all files to git mirror"
-msgstr ""
+msgstr "Kuongeza faili zote kwenye kioo cha git"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
