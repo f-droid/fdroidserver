@@ -40,7 +40,7 @@ msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2026-01-13 11:31+0100\n"
-"PO-Revision-Date: 2026-01-13 13:03+0000\n"
+"PO-Revision-Date: 2026-05-12 05:58+0000\n"
 "Last-Translator: 大王叫我来巡山 <hamburger2048@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/projects/f-droid/fdroidserver/zh_Hans/>\n"
 "Language: zh_Hans\n"
@@ -48,7 +48,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.15.2-dev\n"
+"X-Generator: Weblate 2026.5-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -329,7 +329,7 @@ msgstr "应用具有二进制文件，但没有相应的AllowedAPKSigningKeys �
 
 #: ../fdroidserver/lint.py
 msgid "App has NoSourceSince or ArchivePolicy \"0 versions\" or 0 but AutoUpdateMode or UpdateCheckMode are not None"
-msgstr "APK 有 NoSourceSince 或 ArchivePolicy \"0 versions\" 或 0 但 AutoUpdateMode 或 UpdateCheckMode 不是 None"
+msgstr "应用有 NoSourceSince 或 ArchivePolicy \"0 versions\" 或 0 但 AutoUpdateMode 或 UpdateCheckMode 不是 None"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
@@ -2268,7 +2268,7 @@ msgstr "找不到 APK 签名器！无法对新式 APK 进行签名或验证"
 
 #: ../fdroidserver/common.py
 msgid "apksigner not found, it's required for signing!"
-msgstr "找不到 APK 签名器，这是签名所必需的！"
+msgstr "找不到 apksigner，这是签名所必需的！"
 
 #. Translators: https://developer.android.com/build/configure-app-module#set-application-id
 #: ../fdroidserver/checkupdates.py ../fdroidserver/lint.py
@@ -2427,7 +2427,7 @@ msgstr "预期最多有一个参数"
 
 #: /usr/lib/python3.11/argparse.py
 msgid "expected one argument"
-msgstr "预期的一个参数"
+msgstr "预期一个参数"
 
 #: ../fdroidserver/__main__.py
 msgid "fdroid [<command>] [-h|--help|--version|<args>]"
