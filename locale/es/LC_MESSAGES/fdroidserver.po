@@ -24,8 +24,8 @@ msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2026-01-13 11:31+0100\n"
-"PO-Revision-Date: 2026-02-03 17:01+0000\n"
-"Last-Translator: Swyter <swyterzone@gmail.com>\n"
+"PO-Revision-Date: 2026-02-08 14:30+0000\n"
+"Last-Translator: Nicolás Pérez <nicoperez241@proton.me>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/f-droid/fdroidserver/es/>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
@@ -2431,7 +2431,7 @@ msgstr "forzar que los errores en metadatos sean avisos, o que se ignoren (valor
 
 #: ../fdroidserver/common.py
 msgid "forceversion requires versionName to be set"
-msgstr ""
+msgstr "forceversion requiere que versionName sea establecido"
 
 #: ../fdroidserver/common.py
 msgid "git svn clone failed"
@@ -2580,14 +2580,14 @@ msgid "repo_icon \"repo/icons/%s\" does not exist, generating placeholder."
 msgstr "repo_icon \"repo/icons/%s\" no existe, generando placeholder."
 
 #: ../fdroidserver/index.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "repo_icon \"{repo_icon}\" does not exist in \"{icon_dir}\", generating placeholder."
-msgstr "repo_icon \"repo/icons/%s\" no existe, generando placeholder."
+msgstr "repo_icon \"{repo_icon}\" no existe en \"{icon_dir}\", generando placeholder."
 
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "repo_icon should be a filename ({name}), not a path!"
-msgstr ""
+msgstr "repo_icon debe ser un nombre de archivo ({name}), no una ruta!"
 
 #: ../fdroidserver/common.py
 msgid "repo_url needs to end with /repo"
@@ -2658,7 +2658,7 @@ msgstr "el archivo binario de referencia ha proporcionado autorización al firma
 #: ../fdroidserver/scanner.py
 #, python-brace-format
 msgid "suspicious permissions {st_mode:o}"
-msgstr ""
+msgstr "permisos sospechosos {st_mode:o}"
 
 #: /usr/lib/python3.11/argparse.py
 #, python-format
@@ -2752,9 +2752,9 @@ msgid "{appid} is missing {name}"
 msgstr "{appid} no tiene {name}"
 
 #: ../fdroidserver/lint.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{appid}: Unknown extlib {path} in build '{versionCode}'"
-msgstr "{appid}: extlib {path} desconocido en la compilación '{versionName}'"
+msgstr "{appid}: extlib {path} desconocido en la compilación '{versionCode}'"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
@@ -2792,9 +2792,9 @@ msgid "{file} is blank or corrupt!"
 msgstr "¡{file} está vacío o corrupto!"
 
 #: ../fdroidserver/update.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{name} \"{repo_icon}\" does not exist in \"{icon_dir}/\"! Check \"config.yml\"."
-msgstr "¡{name} \"{section}/icons/{path}\" no existe! Corrijalo en config.yml."
+msgstr "¡{name} \"{repo_icon} no existe en \"{icon_dir}\"! Corrijalo en \"config.yml\"."
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -2829,7 +2829,7 @@ msgstr "{path} ha sido marcado por virustotal {count} veces:"
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "{path} has no '{fieldname}'"
-msgstr ""
+msgstr "{path} no tiene '{fieldname}'"
 
 #: ../fdroidserver/install.py
 #, python-brace-format
@@ -2879,7 +2879,7 @@ msgstr "{path}: {error}"
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "{tag} requires versionName to be set"
-msgstr ""
+msgstr "{tag} requiere que versionName sea establecido"
 
 #: ../fdroidserver/mirror.py
 #, python-brace-format
