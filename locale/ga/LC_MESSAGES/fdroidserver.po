@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: fdroidserver 2.3a1-162-gfbb3cc59\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2026-01-13 11:31+0100\n"
-"PO-Revision-Date: 2026-01-13 16:26+0000\n"
+"PO-Revision-Date: 2026-01-25 13:07+0000\n"
 "Last-Translator: Aindriú Mac Giolla Eoin <aindriu80@gmail.com>\n"
 "Language-Team: Irish <https://hosted.weblate.org/projects/f-droid/fdroidserver/ga/>\n"
 "Language: ga\n"
@@ -14,7 +14,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=5; plural=n==1 ? 0 : n==2 ? 1 : (n>2 && n<7) ? 2 :(n>6 && n<11) ? 3 : 4;\n"
-"X-Generator: Weblate 5.15.2-dev\n"
+"X-Generator: Weblate 5.16-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -2442,11 +2442,11 @@ msgstr "neamhaird ar argóint fhollasach %r"
 
 #: ../fdroidserver/index.py
 msgid "index-v1 must have a signature, use `fdroid signindex` to create it!"
-msgstr "Ní mór síniú a bheith ag Innéacs-V1, bain úsáid as 'FDROID Signindex' chun é a chruthú!"
+msgstr "Caithfidh síniú a bheith ag index-v1, bain úsáid as `fdroid signindex` chun é a chruthú!"
 
 #: ../fdroidserver/index.py
 msgid "index-v2 must have a signature, use `fdroid signindex` to create it!"
-msgstr "Ní mór síniú a bheith ag Innéacs-V2, bain úsáid as 'FDROID Signindex' chun é a chruthú!"
+msgstr "Caithfidh síniú a bheith ag index-v2, bain úsáid as `fdroid signindex` chun é a chruthú!"
 
 #: /usr/lib/python3.11/argparse.py
 #, python-format
