@@ -3,20 +3,21 @@
 # Test Account <ta2464666@gmail.com>, 2024.
 # abelbiwott-dev <abelbiwott@outlook.com>, 2024.
 # paul mayero <pmmayero@gmail.com>, 2024.
+# Steve Solomon <stevenyasimi01@gmail.com>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 2.3a1\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2026-01-13 11:31+0100\n"
-"PO-Revision-Date: 2024-09-08 11:09+0000\n"
-"Last-Translator: abelbiwott-dev <abelbiwott@outlook.com>\n"
+"PO-Revision-Date: 2026-02-25 14:38+0000\n"
+"Last-Translator: Steve Solomon <stevenyasimi01@gmail.com>\n"
 "Language-Team: Swahili <https://hosted.weblate.org/projects/f-droid/fdroidserver/sw/>\n"
 "Language: sw\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.8-dev\n"
+"X-Generator: Weblate 5.16.1-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -50,7 +51,7 @@ msgstr ""
 
 #: ../fdroidserver/index.py
 msgid "\"isPrimary\" key should not be added to mirrors!"
-msgstr ""
+msgstr "ufunguo \"isPrimary\"  haupaswi kuongezwa kwenye mirrors"
 
 #: ../fdroidserver/index.py
 #, python-brace-format
@@ -722,7 +723,7 @@ msgstr ""
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "ERROR: {key} not a valid key!"
-msgstr ""
+msgstr "HITILAFU: {key} si ufunguo halali!"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
