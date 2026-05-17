@@ -10,8 +10,8 @@ msgstr ""
 "Project-Id-Version: fdroidserver 2.3a1\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2026-01-13 11:31+0100\n"
-"PO-Revision-Date: 2026-03-04 10:09+0000\n"
-"Last-Translator: Ashley Tsuma <tsumaashley@gmail.com>\n"
+"PO-Revision-Date: 2026-03-09 09:44+0000\n"
+"Last-Translator: Steve Solomon <stevenyasimi01@gmail.com>\n"
 "Language-Team: Swahili <https://hosted.weblate.org/projects/f-droid/fdroidserver/sw/>\n"
 "Language: sw\n"
 "MIME-Version: 1.0\n"
@@ -327,11 +327,11 @@ msgstr "AutoUpdateMode na UpdateCheckMode: HTTP lazima iwe na mpangilio."
 
 #: ../fdroidserver/install.py
 msgid "Automatic no to all prompts."
-msgstr ""
+msgstr "Hapana kiotomatiki kwa madirisha yote ya kuthibitisha."
 
 #: ../fdroidserver/install.py
 msgid "Automatic yes to all prompts."
-msgstr ""
+msgstr "Ndiyo kiotomatiki kwa madirisha yote ya kuthibitisha."
 
 #: ../fdroidserver/index.py
 #, python-brace-format
@@ -767,7 +767,7 @@ msgstr "Vigezo vya mazingira {var} kutoka {configname} haijawekwa!"
 
 #: ../fdroidserver/deploy.py
 msgid "Error deploying 'github_releases', {} not present. (You might need to run `fdroid update` first.)"
-msgstr ""
+msgstr "Hitilafu wakati wa kusambaza 'github_releases', {} haipo. (Huenda unahitaji kuendesha `fdroid update` kwanza.)"
 
 #: ../fdroidserver/import_subcommand.py
 msgid "Error while getting repo address"
@@ -1252,7 +1252,7 @@ msgstr "Hakuna vifaa vilivyoambatanishwa vimepatikana"
 
 #: ../fdroidserver/install.py
 msgid "No devices found for `adb install`! Please plug one in."
-msgstr ""
+msgstr "Hakuna vifaa vilivyopatikana kwa adb install! Tafadhali unganisha kifaa."
 
 #: ../fdroidserver/index.py
 msgid "No fingerprint in URL."
@@ -1466,7 +1466,7 @@ msgstr "Chapisha kigezo hicho cha siri kwa kidirisha cha amri kwa urahisi wa kun
 #: ../fdroidserver/install.py
 #, python-brace-format
 msgid "Privacy mode was enabled based on your locale ({country_code})."
-msgstr ""
+msgstr "Hali ya faragha imewashwa kulingana na eneo lako ({country_code})."
 
 #: ../fdroidserver/scanner.py
 #, python-format
@@ -1561,7 +1561,7 @@ msgstr ""
 
 #: ../fdroidserver/verify.py
 msgid "Remove source tarball and any APKs if successfully verified."
-msgstr ""
+msgstr "Ondoa tarball na APK zozote ikiwa zimethibitishwa kwa mafanikio."
 
 #: ../fdroidserver/common.py
 msgid "Removing specified files"
@@ -2201,7 +2201,7 @@ msgstr ""
 
 #: ../fdroidserver/install.py
 msgid "Would you like to download the app(s) from f-droid.org? (YES/no)"
-msgstr ""
+msgstr "Je, ungependa kupakua programu kutoka f-droid.org? (NDIYO/hapana)"
 
 #: ../fdroidserver/init.py
 msgid "X.509 'Distinguished Name' used when generating keys"
@@ -2218,7 +2218,7 @@ msgstr "kumbukumbu ya faili ya ZIP"
 #: ../fdroidserver/install.py
 #, python-brace-format
 msgid "adb reports {serial} is \"{status}\"!"
-msgstr ""
+msgstr "adb inaripoti {serial} ni \"{status}\"!"
 
 #: ../fdroidserver/nightly.py
 #, python-brace-format
@@ -2650,7 +2650,7 @@ msgstr "binari ya rejeleo lililowasilishwa imeruhusu signer {signer}"
 #: ../fdroidserver/scanner.py
 #, python-brace-format
 msgid "suspicious permissions {st_mode:o}"
-msgstr ""
+msgstr "Ruhusa zinazotia shaka {st_mode:o}"
 
 #: /usr/lib/python3.11/argparse.py
 #, python-format
@@ -2659,7 +2659,7 @@ msgstr "hoja zifuatazo zinahitajika: %s"
 
 #: ../fdroidserver/install.py
 msgid "true"
-msgstr ""
+msgstr "kweli"
 
 #: /usr/lib/python3.11/argparse.py
 #, python-format
@@ -2696,7 +2696,7 @@ msgstr "virustotal.com inapunguza kiwango, inangojea kujaribu tena..."
 
 #: ../fdroidserver/install.py
 msgid "yes"
-msgstr ""
+msgstr "ndiyo"
 
 #: ../fdroidserver/publish.py
 #, python-brace-format
@@ -2796,7 +2796,7 @@ msgstr "{name} \"{section}/icons/{path}\" haipo! Angalia \"config.yml\"."
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "{path1} is a duplicate of {path2}, remove one!"
-msgstr ""
+msgstr "{path1} ni nakala ya {path2}, ondoa moja!"
 
 #: ../fdroidserver/import_subcommand.py
 #, python-brace-format
@@ -2821,7 +2821,7 @@ msgstr "{path} imealamishwa na virustotal mara {count}:"
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "{path} has no '{fieldname}'"
-msgstr ""
+msgstr "{path} haina '{fieldname}'"
 
 #: ../fdroidserver/install.py
 #, python-brace-format
@@ -2871,7 +2871,7 @@ msgstr "{path}: {error}"
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "{tag} requires versionName to be set"
-msgstr ""
+msgstr "{tag} inahitaji versionName iwe imewekwa"
 
 #: ../fdroidserver/mirror.py
 #, python-brace-format
