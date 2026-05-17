@@ -32,7 +32,7 @@ msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2026-01-13 11:31+0100\n"
-"PO-Revision-Date: 2026-01-13 13:20+0000\n"
+"PO-Revision-Date: 2026-02-05 16:01+0000\n"
 "Last-Translator: VfBFan <drop0815@posteo.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/f-droid/fdroidserver/de/>\n"
 "Language: de\n"
@@ -40,7 +40,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.15.2-dev\n"
+"X-Generator: Weblate 5.16-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -493,7 +493,7 @@ msgstr "Widersprüchliche Argumente: '--verbose' und '--quiet' können nicht gle
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Could not find '{command}' on your system"
-msgstr "'{command}' konnte auf Ihrem System nicht gefunden werden"
+msgstr "'{command}' konnte auf deinem System nicht gefunden werden"
 
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
 #: ../fdroidserver/import_subcommand.py
@@ -640,12 +640,12 @@ msgstr "'{versionCode} wurde in '{fieldname}' von {path} nicht gefunden"
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Did you mean config/{name}.yml?"
-msgstr "Meinten Sie config/{name}.yml?"
+msgstr "Meintest du config/{name}.yml?"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "Did you mean {code}?"
-msgstr "Meinten Sie {code}?"
+msgstr "Meintest du {code}?"
 
 #: ../fdroidserver/import_subcommand.py
 msgid "Do not add 'disable:' to the generated build entries"
@@ -757,7 +757,7 @@ msgstr "FEHLER: {key}:{subkey} in {path} ist keiner der erlaubten Schlüssel: {a
 #: ../fdroidserver/__main__.py
 #, python-brace-format
 msgid "Encoding is set to '{enc}' fdroid might run into encoding issues. Please set it to 'UTF-8' for best results."
-msgstr "Die Kodierung ist auf '{enc}' gesetzt. Dies könnte zu Kodierungsproblemen führen. Bitte setze sie auf ''UTF-8'' für beste Ergebnisse."
+msgstr "Die Kodierung ist auf '{enc}' gesetzt. Dies könnte zu Kodierungsproblemen führen. Bitte setze sie auf 'UTF-8' für beste Ergebnisse."
 
 #: ../fdroidserver/init.py
 #, python-format
@@ -785,7 +785,7 @@ msgstr "Umgebungsvariable {{env: {var}}} ist nicht gesetzt!"
 
 #: ../fdroidserver/deploy.py
 msgid "Error deploying 'github_releases', {} not present. (You might need to run `fdroid update` first.)"
-msgstr "Fehler beim Bereitstellen von 'github_releases', {} nicht vorhanden. (Sie müssen zuerst `fdroid update` ausführen.)"
+msgstr "Fehler beim Bereitstellen von 'github_releases', {} nicht vorhanden. (Du musst zuerst `fdroid update` ausführen.)"
 
 #: ../fdroidserver/import_subcommand.py
 msgid "Error while getting repo address"
@@ -1009,7 +1009,7 @@ msgstr "Wenn ein Git-Spiegelserver zu groß wird, das Löschen des Archivs erlau
 #: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "If this upload fails, try manually uploading to {url}"
-msgstr "Wenn das Hochladen fehlschlägt, versuchen Sie ihn manuell auf {url} hochzuladen"
+msgstr "Wenn das Hochladen fehlschlägt, versuche manuell auf {url} hochzuladen"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
@@ -1484,7 +1484,7 @@ msgstr "Drucken der geheimen Variable in das Terminal zum einfachen Kopieren/Ein
 #: ../fdroidserver/install.py
 #, python-brace-format
 msgid "Privacy mode was enabled based on your locale ({country_code})."
-msgstr "Der Datenschutzmodus wurde auf der Grundlage Ihres Gebietsschemas ({country_code}) aktiviert."
+msgstr "Der Datenschutzmodus wurde auf der Grundlage deines Gebietsschemas ({country_code}) aktiviert."
 
 #: ../fdroidserver/scanner.py
 #, python-format
@@ -1790,7 +1790,7 @@ msgstr "Eine Identitätsdatei bestimmen, die bei Re-Synchronisation an SSH über
 
 #: ../fdroidserver/nightly.py
 msgid "Specify which debug keystore file to use."
-msgstr "Angeben, welche Debug Keystore-Datei verwendet werden soll."
+msgstr "Angeben, welche Schlüsselspeicherdatei verwendet werden soll."
 
 #: ../fdroidserver/common.py
 msgid "Spew out even more information than normal"
@@ -1908,9 +1908,9 @@ msgid ""
 "For more info: https://f-droid.org/docs/Setup_an_F-Droid_App_Repo\n"
 "and https://f-droid.org/docs/Signing_Process"
 msgstr ""
-"Um die Einrichtung abzuschließen, fügen Sie Ihre APKs zu \"%s\"\n"
-"und führen Sie dann \"fdroid update -c; fdroid update\" aus.  Vielleicht möchten Sie auch\n"
-"\"config.yml\" bearbeiten, um die URL, den Repo-Namen und mehr festzulegen.  Sie sollten auch\n"
+"Um die Einrichtung abzuschließen, füge deine APKs zu \"%s\" hinzu\n"
+"und führe dann \"fdroid update -c; fdroid update\" aus.  Vielleicht möchtest du auch\n"
+"\"config.yml\" bearbeiten, um die URL, den Repo-Namen und mehr festzulegen.  Du solltest auch\n"
 "einen Signierschlüssel einrichten (ein temporärer Schlüssel könnte automatisch generiert worden sein).\n"
 "\n"
 "Für weitere Informationen: https://f-droid.org/docs/Setup_an_F-Droid_App_Repo\n"
@@ -1948,7 +1948,7 @@ msgstr "URL {url} in der Beschreibung: {error}"
 
 #: ../fdroidserver/lint.py
 msgid "Unexpected license tag \"{}\"! Only use FSF or OSI approved tags from https://spdx.org/license-list"
-msgstr "Ungültiges Lizenz-Tag \"{}\"! Verwenden Sie nur Kennzeichen von https://spdx.org/license-list, die von FSF oder OSI anerkannt sind"
+msgstr "Ungültiges Lizenz-Tag \"{}\"! Verwende nur Kennzeichen von https://spdx.org/license-list, die von FSF oder OSI anerkannt sind"
 
 #: ../fdroidserver/lint.py
 msgid "Unexpected license tag \"{}\"! Only use license tags configured in your config file"
@@ -2213,11 +2213,11 @@ msgstr "Wenn das Signieren oder Verifizieren fehlschlägt, wird der Vorgang mit 
 
 #: ../fdroidserver/install.py
 msgid "Would you like to download and install F-Droid.apk via adb? (YES/no)"
-msgstr "Möchten Sie F-Droid.apk über adb herunterladen und installieren? (JA/nein)"
+msgstr "Möchtest du F-Droid.apk über adb herunterladen und installieren? (JA/nein)"
 
 #: ../fdroidserver/install.py
 msgid "Would you like to download the app(s) from f-droid.org? (YES/no)"
-msgstr "Möchten Sie die App(s) von f-droid.org herunterladen? (JA/nein)"
+msgstr "Möchtest du die App(s) von f-droid.org herunterladen? (JA/nein)"
 
 #: ../fdroidserver/init.py
 msgid "X.509 'Distinguished Name' used when generating keys"
@@ -2225,7 +2225,7 @@ msgstr "X.509 'Distinguished Name' zum Erzeugen von Schlüsseln"
 
 #: ../fdroidserver/common.py
 msgid "You can use ANDROID_HOME to set the path to your SDK, i.e.:"
-msgstr "Sie können ANDROID_HOME verwenden, um den Pfad zu Ihrem SDK zu setzen, z. B.:"
+msgstr "Du kannst ANDROID_HOME verwenden, um den Pfad zu deinem SDK zu setzen, z. B.:"
 
 #: ../fdroidserver/scanner.py
 msgid "ZIP file archive"
@@ -2470,7 +2470,7 @@ msgstr "Ungültige(r) %(type)s mit Wert: %(value)r"
 #: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "invalid choice: %(value)r (choose from %(choices)s)"
-msgstr "Ungültige Auswahl: %(value)r (Wählen Sie aus %(choices)s)"
+msgstr "Ungültige Auswahl: %(value)r (Wähle aus %(choices)s)"
 
 #: /usr/lib/python3.11/argparse.py
 #, python-format
@@ -2494,7 +2494,7 @@ msgstr "Neuestes Build-Rezept ist neuer: alter Vercode={old}, neuer Vercode={new
 #: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "local_copy_dir does not end with \"fdroid\", perhaps you meant: \"{path}\""
-msgstr "local_copy_dir endet nicht auf \"fdroid\", vielleicht meinten Sie stattdessen: \"{path}\""
+msgstr "local_copy_dir endet nicht auf \"fdroid\", vielleicht meintest du stattdessen: \"{path}\""
 
 #: ../fdroidserver/deploy.py
 msgid "local_copy_dir must be an absolute path!"
@@ -2619,11 +2619,11 @@ msgstr "s3cmd synchronisiert Indizes von {path} nach {url} und löscht entfernte
 #: ../fdroidserver/scanner.py
 #, python-brace-format
 msgid "scanner cache is malformed! You can clear it with: '{clear}'"
-msgstr "Der Scanner-Cache ist fehlerhaft! Sie können ihn löschen mit: '{clear}'"
+msgstr "Der Scanner-Cache ist fehlerhaft! Du kannst ihn löschen mit: '{clear}'"
 
 #: ../fdroidserver/deploy.py
 msgid "serverwebroot: path does not end with \"fdroid\", perhaps you meant one of these:"
-msgstr "serverwebroot: Der Pfad endet nicht mit \"fdroid\", vielleicht meinten Sie einen dieser Pfade:"
+msgstr "serverwebroot: Der Pfad endet nicht mit \"fdroid\", vielleicht meintest du einen dieser Pfade:"
 
 #: ../fdroidserver/scanner.py
 msgid "shared library"
@@ -2812,7 +2812,7 @@ msgstr "{name} \"{section}/icons/{path}\" existiert nicht! \"config.yml\" überp
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "{path1} is a duplicate of {path2}, remove one!"
-msgstr "{path1} ist ein Duplikat von {path2}, entfernen Sie eines!"
+msgstr "{path1} ist ein Duplikat von {path2}, entferne eines!"
 
 #: ../fdroidserver/import_subcommand.py
 #, python-brace-format
@@ -2892,7 +2892,7 @@ msgstr "{tag} erfordert die Angabe von versionName"
 #: ../fdroidserver/mirror.py
 #, python-brace-format
 msgid "{url} does not end with \"fdroid\", check the URL path!"
-msgstr "{url} endet nicht mit \"fdroid\", überprüfen Sie den URL-Pfad!"
+msgstr "{url} endet nicht mit \"fdroid\", überprüfe den URL-Pfad!"
 
 #: ../fdroidserver/import_subcommand.py
 #, python-brace-format
