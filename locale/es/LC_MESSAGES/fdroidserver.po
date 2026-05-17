@@ -18,20 +18,21 @@
 # emma peel <emma.peel@riseup.net>, 2025.
 # BIENESTAR NARANJOS <bienestarnaranjos@gmail.com>, 2025.
 # Francisco Serrador <fserrador@gmail.com>, 2025.
+# Nicolás Pérez <nicoperez241@proton.me>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2026-01-13 11:31+0100\n"
-"PO-Revision-Date: 2025-11-16 20:09+0000\n"
-"Last-Translator: Swyter <swyterzone@gmail.com>\n"
+"PO-Revision-Date: 2026-02-03 17:01+0000\n"
+"Last-Translator: Nicolás Pérez <nicoperez241@proton.me>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/f-droid/fdroidserver/es/>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.15-dev\n"
+"X-Generator: Weblate 5.16-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -195,13 +196,12 @@ msgid "'{value}' is not a valid {field}, should be {pattern}"
 msgstr "'{value}' no es un {field} válido, debería ser {pattern}"
 
 #: ../fdroidserver/common.py
-#, fuzzy
 msgid "'{}' does not start with a valid applicationId"
-msgstr "¡{appid} no tiene nombre! Usando su identificador."
+msgstr "'{}' no comienza con un applicationId valido"
 
 #: ../fdroidserver/common.py
 msgid "'{}' is not a valid pair of applicationId:versionCode"
-msgstr ""
+msgstr "'{}' no es un par valido de applicationId:versionCode"
 
 #: ../fdroidserver/checkupdates.py
 msgid "--merge-request only runs on a single appid!"
@@ -355,9 +355,9 @@ msgid "Base URL to mirror, can include the index signing key using the query str
 msgstr "URL base para replicar, puede incluir la clave de firma del índice usando la cadena de consulta: ?fingerprint="
 
 #: ../fdroidserver/lint.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Branch '{branch}' used as commit in build '{versionCode}'"
-msgstr "Rama '{branch}' usada como \"commit\" en el build '{versionName}'"
+msgstr "Rama '{branch}' usada como \"commit\" en la compilación '{versionCode}'"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
@@ -521,9 +521,9 @@ msgid "Could not parse size \"{size}\", wrong type \"{type}\""
 msgstr "No se puede procesar el tamaño \"{size}\", tipo erróneo \"{type}\""
 
 #: ../fdroidserver/metadata.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Could not read {path} for {appid_versionCode}"
-msgstr "No se pudo encontrar el último versionCode"
+msgstr "No se pudo leer {path} para {appid_versionCode}"
 
 #. Translators: https://developer.android.com/build/configure-app-module#set-application-id
 #: ../fdroidserver/import_subcommand.py
@@ -627,7 +627,7 @@ msgstr "La descripción de longitud {length} supera el límite de caracteres, {l
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Did not find '{versionCode}' in '{fieldname}' of {path}"
-msgstr ""
+msgstr "No se pudo encontrar '{versionCode}' en '{fieldname}' de {path}"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -661,8 +661,9 @@ msgid "Do not remove the private keys generated from the keystore"
 msgstr "No elimine las claves privadas generadas del almacén de claves"
 
 #: ../fdroidserver/scanner.py
+#, fuzzy
 msgid "Do not throw an error on APKs with the debuggable flag set."
-msgstr ""
+msgstr "No tire un error en APKs con el flag depurable puesto."
 
 #: ../fdroidserver/build.py
 msgid "Don't create a source tarball, useful when testing a build"
@@ -887,7 +888,7 @@ msgstr "Forzar el escaneo de aplicaciones y compilaciones deshabilitadas."
 
 #: ../fdroidserver/rewritemeta.py
 msgid "Format file from stdin and output the result to stdout"
-msgstr ""
+msgstr "Formatear el archivo de stdin y sacar el resultado a stdout"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -1588,15 +1589,15 @@ msgstr "Cambiar el nombre de archivos APK que no coinciden con el formato packag
 
 #: ../fdroidserver/lint.py
 msgid "Repo: git URLs must use https://"
-msgstr ""
+msgstr "Repositorio: las URLs de git deben utilizar https://"
 
 #: ../fdroidserver/lint.py
 msgid "Repo: srclib URLs must be only a srclib name, not a path or URL."
-msgstr ""
+msgstr "Repositorio: las URLs de scrlib solo deben tener un nombre scrlib, no una ruta o URL."
 
 #: ../fdroidserver/lint.py
 msgid "Repo: srclib URLs must be the name of an existing srclib!"
-msgstr ""
+msgstr "Repositorio: ¡Las URLs scrlib deben tener el nombre de un scrlib existente!"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -1713,9 +1714,9 @@ msgid "Set open file limit to {integer}"
 msgstr "Establecer el límite de ficheros abiertos a {integer}"
 
 #: ../fdroidserver/common.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Set up NDK {release} ({revision})"
-msgstr "Configurar el NDK de {release} ({version}) arriba"
+msgstr "Configurar el NDK de {release} ({revision}) arriba"
 
 #: ../fdroidserver/__main__.py
 msgid "Set up an app build for a nightly build repo"
@@ -1874,7 +1875,7 @@ msgstr "Esta aplicación tiene una firma de seguridad débil"
 
 #: ../fdroidserver/common.py
 msgid "This command requires a signing key, you can create one using: fdroid update --create-key"
-msgstr ""
+msgstr "Este comando requiere una clave de firma, puedes crear una usando: fdroid update --create-key"
 
 #: ../fdroidserver/mirror.py
 msgid "This command should never be used to mirror f-droid.org! A full copy requires more than 600GB."
@@ -1917,9 +1918,8 @@ msgid "To use rclone, rclone_config and awsbucket must be set in config.yml!"
 msgstr "¡Para utilizar rclone, rclone_config y awsbucket deben estar configurados en config.yml!"
 
 #: ../fdroidserver/lint.py
-#, fuzzy
 msgid "URL must start with https://"
-msgstr "La URL debe comenzar con https:// o http://"
+msgstr "La URL debe comenzar con https://"
 
 #: ../fdroidserver/lint.py
 msgid "URL must start with https:// or http://"
@@ -1930,9 +1930,9 @@ msgid "URL shorteners should not be used"
 msgstr "Acortadores de URL no deben ser utilizados"
 
 #: ../fdroidserver/lint.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "URL shorteners should not be used ({domain})"
-msgstr "Acortadores de URL no deben ser utilizados"
+msgstr "Los acortadores de URL no deben ser utilizados ({domain})"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
@@ -1957,9 +1957,9 @@ msgid "Unknown exception found!"
 msgstr "Se ha producido una excepción desconocida"
 
 #: ../fdroidserver/lint.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Unknown file '{filename}' in build '{versionCode}'"
-msgstr "Fichero '{filename}' desconocido en compilación '{versionName}'"
+msgstr "Fichero '{filename}' desconocido en compilación '{versionCode}'"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
