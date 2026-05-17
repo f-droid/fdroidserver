@@ -8,7 +8,7 @@
 # Daniel Hejduk <jellymail@protonmail.com>, 2023.
 # Fjuro <fjuro@alius.cz>, 2024, 2025, 2026.
 # Jakub Boukal <www.bagr@gmail.com>, 2024.
-# Fjuro <fjuro@users.noreply.hosted.weblate.org>, 2025.
+# Fjuro <fjuro@users.noreply.hosted.weblate.org>, 2025, 2026.
 # ikanakova <ikanakova@users.noreply.hosted.weblate.org>, 2025.
 # Fjuro <git@alius.cz>, 2025.
 msgid ""
@@ -16,15 +16,15 @@ msgstr ""
 "Project-Id-Version: fdroidserver 1.0.0-95-gd7af22b\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2026-01-13 11:31+0100\n"
-"PO-Revision-Date: 2026-01-13 14:54+0000\n"
-"Last-Translator: Fjuro <fjuro@alius.cz>\n"
+"PO-Revision-Date: 2026-03-05 15:09+0000\n"
+"Last-Translator: Fjuro <fjuro@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/f-droid/fdroidserver/cs/>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=((n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2);\n"
-"X-Generator: Weblate 5.15.2-dev\n"
+"X-Generator: Weblate 5.17-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -1860,7 +1860,7 @@ msgstr "Aplikace, které byly archivovány z hlavního repozitáře."
 
 #: ../fdroidserver/update.py
 msgid "This app contains a known security vulnerability"
-msgstr "Tato aplikace má známou zranitelnost v zabezpečení"
+msgstr "Tato aplikace má známou bezpečnostní zranitelnost"
 
 #: ../fdroidserver/update.py
 msgid "This app has a weak security signature"
