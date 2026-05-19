@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 2.0a5-27-gf24eae0f\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2026-01-13 11:31+0100\n"
+"POT-Creation-Date: 2026-05-19 17:44+0200\n"
 "PO-Revision-Date: 2024-12-02 17:00+0000\n"
 "Last-Translator: Licaon Kter <licaon.kter@protonmail.com>\n"
 "Language-Team: Romanian <https://hosted.weblate.org/projects/f-droid/fdroidserver/ro/>\n"
@@ -36,6 +36,11 @@ msgid ""
 msgstr ""
 "\n"
 "{path} codificată pentru variabila secretă DEBUG_KEYSTORE:"
+
+#: /usr/lib/python3.13/argparse.py
+#, python-format
+msgid " (default: %(default)s)"
+msgstr ""
 
 #: ../fdroidserver/lint.py
 #, python-format
@@ -64,6 +69,11 @@ msgstr "\"local_copy_dir\" {path} nu există!"
 msgid "\"{apkfilename}\" is already installed on {dev}."
 msgstr "\"{apkfilename}\" este deja instalat pe {dev}."
 
+#: ../fdroidserver/signindex.py
+#, fuzzy, python-brace-format
+msgid "\"{name}\" has bad SHA-256: {sha256}"
+msgstr "%s are un SHA-256 greșit: %s"
+
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "\"{path}\" contains recent {name} ({version})"
@@ -89,9 +99,19 @@ msgstr "\"{path}\" este semnat de o cheie care nu este permisă:"
 msgid "\"{url}\" is not a valid URL!"
 msgstr "\"{url}\" nu este un URL valid!"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.13/argparse.py
+#, python-format
+msgid "%(heading)s:"
+msgstr ""
+
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "%(prog)s: error: %(message)s\n"
+msgstr "%(prog)s: eroare: %(message)s\n"
+
+#: /usr/lib/python3.13/argparse.py
+#, fuzzy, python-format
+msgid "%(prog)s: warning: %(message)s\n"
 msgstr "%(prog)s: eroare: %(message)s\n"
 
 #: ../fdroidserver/publish.py
@@ -104,7 +124,7 @@ msgstr "%d fișiere APK nu au putut fi semnate sau verificate!"
 msgid "%d problems found"
 msgstr "%d probleme găsite"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "%r is not callable"
 msgstr "%r nu este apelabil"
@@ -149,7 +169,7 @@ msgstr "Pentru a utiliza awsbucket, awssecretkey și awsaccesskeyid trebuie să 
 msgid "'repo_keyalias' not found in config.yml!"
 msgstr "'repo_keyalias' nu se găsește în config.yml!"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 msgid "'required' is an invalid argument for positionals"
 msgstr "'required' este un argument invalid pentru poziționale"
 
@@ -200,7 +220,7 @@ msgstr ""
 msgid "...checkupdate failed for {appid} : {error}"
 msgstr "...checkupdate a eșuat pentru {appid} : {error}"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 msgid ".__call__() not defined"
 msgstr ".__call__() nu este definit"
 
@@ -1470,6 +1490,11 @@ msgid "Privacy mode was enabled based on your locale ({country_code})."
 msgstr ""
 
 #: ../fdroidserver/scanner.py
+#, fuzzy, python-brace-format
+msgid "Problem with ZIP file \"{apkfile}\": {error}"
+msgstr "Problema cu fișierul ZIP: %s, eroare %s"
+
+#: ../fdroidserver/scanner.py
 #, python-format
 msgid "Problem with ZIP file: %s, error %s"
 msgstr "Problema cu fișierul ZIP: %s, eroare %s"
@@ -1799,6 +1824,11 @@ msgstr "Rezumat al lungimii {length} depășește limita de caractere {limit} ch
 #, python-brace-format
 msgid "System clock is older than date in {path}!"
 msgstr "Ceasul sistemului este mai vechi decât data din {path}!"
+
+#: ../fdroidserver/checkupdates.py
+#, fuzzy
+msgid "Tags update mode only works for git repositories currently"
+msgstr "Modul de actualizare a etichetelor funcționează doar pentru depozitele git, hg, bzr și git-svn în prezent"
 
 #: ../fdroidserver/checkupdates.py
 msgid "Tags update mode only works for git, hg, bzr and git-svn repositories currently"
@@ -2232,7 +2262,7 @@ msgstr "adăugând IdentityFile la {path}"
 msgid "adding to {name}: {path}"
 msgstr "adăugând la {name}: {path}"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "ambiguous option: %(option)s could match %(matches)s"
 msgstr "opțiune ambiguă: %(option)s ar putea corespunde cu %(matches)s"
@@ -2267,15 +2297,20 @@ msgstr "ID-ul aplicației cu versionCode opțional sub forma APPID[:VERCODE]"
 msgid "archive_url needs to end with /archive"
 msgstr "archive_url trebuie să se termine cu /archive"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "argument \"-\" with mode %r"
 msgstr "argumentul \"-\" cu modul %r"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "argument %(argument_name)s: %(message)s"
 msgstr "argument %(argument_name)s: %(message)s"
+
+#: /usr/lib/python3.13/argparse.py
+#, python-format
+msgid "argument '%(argument_name)s' is deprecated"
+msgstr ""
 
 #: ../fdroidserver/nightly.py
 msgid "attempting bare SSH connection to test deploy key:"
@@ -2285,7 +2320,7 @@ msgstr "încercând o conexiune SSH goală pentru a testa cheia de implementare:
 msgid "can not parse scrlib spec (not a string): '{}'"
 msgstr "nu poate analiza specificația scrlib (not a string): '{}'"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "can't open '%(filename)s': %(error)s"
 msgstr "nu se poate deschide '%(filename)s': %(error)s"
@@ -2299,11 +2334,11 @@ msgstr "nu se poate deschide un URL non-https: '{};"
 msgid "cannot find required srclibs: \"{path}\""
 msgstr "nu poate găsi srclibs necesare: \"{path}\""
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 msgid "cannot have multiple subparser arguments"
 msgstr "nu poate avea mai multe argumente subparser"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "cannot merge actions - two groups are named %r"
 msgstr "nu poate fuziona acțiuni - două grupuri se numesc %r"
@@ -2317,11 +2352,16 @@ msgstr "nu poate publica actualizarea, ați setat cheia de implementare?"
 msgid "cloning {url}"
 msgstr "clonarea {url}"
 
+#: /usr/lib/python3.13/argparse.py
+#, python-format
+msgid "command '%(parser_name)s' is deprecated"
+msgstr ""
+
 #: ../fdroidserver/__main__.py
 msgid "commands from plugin modules:"
 msgstr "comenzi din modulele plugin:"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "conflicting option string: %s"
 msgid_plural "conflicting option strings: %s"
@@ -2329,12 +2369,12 @@ msgstr[0] "șir de opțiuni conflictuale: %s"
 msgstr[1] "șiruri de opțiuni conflictuale: %s"
 msgstr[2] "șiruri de opțiuni conflictuale: %s"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "conflicting subparser alias: %s"
 msgstr "șir de alias conflictual: %s"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "conflicting subparser: %s"
 msgstr "șir de opțiuni conflictuale: %s"
@@ -2376,7 +2416,7 @@ msgstr ""
 msgid "deployed process log {path} to {dest}"
 msgstr "a implementat jurnalul de proces {path} la {dest}"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "dest= is required for options like %r"
 msgstr "dest= este necesar pentru opțiuni precum %r"
@@ -2393,7 +2433,7 @@ msgstr "descărcarea semnăturilor de scaner de la '{}' a eșuat"
 msgid "executable binary, possibly code"
 msgstr "binar executabil, eventual cod"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "expected %s argument"
 msgid_plural "expected %s arguments"
@@ -2401,15 +2441,15 @@ msgstr[0] "argument %s așteptat"
 msgstr[1] "argumente %s așteptate"
 msgstr[2] "argumente %s așteptate"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 msgid "expected at least one argument"
 msgstr "se așteaptă cel puțin un argument"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 msgid "expected at most one argument"
 msgstr "se așteaptă cel mult un argument"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 msgid "expected one argument"
 msgstr "se așteaptă un singur argument"
 
@@ -2437,7 +2477,7 @@ msgstr "git svn clone a eșuat"
 msgid "gzip file archive"
 msgstr "Arhiva de fișiere gzip"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "ignored explicit argument %r"
 msgstr "a ignorat argumentul explicit %r"
@@ -2450,22 +2490,22 @@ msgstr "index-v1 trebuie să aibă o semnătură, folosiți `fdroid signindex` p
 msgid "index-v2 must have a signature, use `fdroid signindex` to create it!"
 msgstr "index-v2 trebuie să aibă o semnătură, folosiți `fdroid signindex` pentru a o crea!"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "invalid %(type)s value: %(value)r"
 msgstr "invalid %(type)s valoare: %(value)r"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "invalid choice: %(value)r (choose from %(choices)s)"
 msgstr "alegere invalidă: %(value)r (alege din %(choices)s)"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "invalid conflict_resolution value: %r"
 msgstr "valoare invalidă a rezoluției_conflictului: %r"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "invalid option string %(option)r: must start with a character %(prefix_chars)r"
 msgstr "șir de opțiuni invalid %(option)r: trebuie să înceapă cu un caracter %(prefix_chars)r"
@@ -2502,7 +2542,7 @@ msgstr "oglinda '%s' nu se termină cu 'fdroid'!"
 msgid "mirrors set twice, in config.yml and {path}!"
 msgstr "servere de rezervă duplicat, în config.yml și {path}!"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 msgid "mutually exclusive arguments must be optional"
 msgstr "argumentele care se exclud reciproc trebuie să fie opționale"
 
@@ -2524,12 +2564,12 @@ msgstr "nici un APK furnizat"
 msgid "no version information found"
 msgstr "nu s-au găsit informații despre versiune"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "not allowed with argument %s"
 msgstr "nu este permis cu argumentul %s"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "one of the arguments %s is required"
 msgstr "unul dintre argumentele %s este necesar"
@@ -2538,7 +2578,12 @@ msgstr "unul dintre argumentele %s este necesar"
 msgid "only accepts strings, lists, and tuples"
 msgstr "acceptă doar șiruri de caractere, liste și tupluri"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.13/argparse.py
+#, python-format
+msgid "option '%(option)s' is deprecated"
+msgstr ""
+
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 msgid "options"
 msgstr "opțiuni"
 
@@ -2552,7 +2597,7 @@ msgstr "suprascriere {path} existent"
 msgid "path_to_custom_rclone_config: \"{path}\" does not exist!"
 msgstr "Directorul root pentru local_copy_dir \"{path}\" nu există!"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 msgid "positional arguments"
 msgstr "argumente poziționale"
 
@@ -2617,7 +2662,11 @@ msgstr "serverwebroot: calea nu se termină cu \"fdroid\", poate că v-ați refe
 msgid "shared library"
 msgstr "bibliotecă partajată"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.13/argparse.py
+msgid "show program's version number and exit"
+msgstr ""
+
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 msgid "show this help message and exit"
 msgstr "arată acest mesaj de ajutor și iese"
 
@@ -2646,6 +2695,10 @@ msgstr "srclibs lipsește numele și/sau @"
 msgid "static library"
 msgstr "bibliotecă statică"
 
+#: /usr/lib/python3.13/argparse.py
+msgid "subcommands"
+msgstr ""
+
 #: ../fdroidserver/build.py
 #, python-brace-format
 msgid "supplied reference binary has allowed signer {signer}"
@@ -2656,7 +2709,7 @@ msgstr "binare de referință furnizate au permis semnatarului {signer}"
 msgid "suspicious permissions {st_mode:o}"
 msgstr ""
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "the following arguments are required: %s"
 msgstr "sunt necesare următoarele argumente: %s"
@@ -2665,17 +2718,17 @@ msgstr "sunt necesare următoarele argumente: %s"
 msgid "true"
 msgstr "adevărat"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "unexpected option string: %s"
 msgstr "șir de opțiuni neașteptate: %s"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "unknown parser %(parser_name)r (choices: %(choices)s)"
 msgstr "parser necunoscut %(parser_name)r (choices: %(choices)s)"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "unrecognized arguments: %s"
 msgstr "argumente nerecunoscute: %s"
@@ -2686,6 +2739,7 @@ msgid "unsafe permissions on '{config_file}' (should be 0600)!"
 msgstr "permisiuni nesigure pe '{config_file}' (ar trebui să fie 0600)!"
 
 #: ../fdroidserver/__main__.py /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.13/argparse.py
 msgid "usage: "
 msgstr "utilizare: "
 

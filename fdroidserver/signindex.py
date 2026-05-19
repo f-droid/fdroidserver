@@ -142,7 +142,7 @@ def sign_index(repodir, json_name):
             sha256 = common.sha256sum(index_file)
             if sha256 != data['index']['sha256']:
                 raise FDroidException(
-                    _('%s has bad SHA-256: %s') % (index_file, sha256)
+                    _('"{name}" has bad SHA-256: {sha256}').format(**data['index'])
                 )
             with open(index_file) as fp:
                 index = json.load(fp)

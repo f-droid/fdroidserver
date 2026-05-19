@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 1.0.6-349-g907c04ea\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2026-01-13 11:31+0100\n"
+"POT-Creation-Date: 2026-05-19 17:44+0200\n"
 "PO-Revision-Date: 2026-05-08 09:11+0000\n"
 "Last-Translator: Besnik Bleta <besnik@programeshqip.org>\n"
 "Language-Team: Albanian <https://hosted.weblate.org/projects/f-droid/fdroidserver/sq/>\n"
@@ -34,6 +34,11 @@ msgid ""
 msgstr ""
 "\n"
 "{path} i koduar për ndryshoren e fshehtë DEBUG_KEYSTORE:"
+
+#: /usr/lib/python3.13/argparse.py
+#, python-format
+msgid " (default: %(default)s)"
+msgstr ""
 
 #: ../fdroidserver/lint.py
 #, python-format
@@ -62,6 +67,11 @@ msgstr "“local_copy_dir” {path} s’ekziston!"
 msgid "\"{apkfilename}\" is already installed on {dev}."
 msgstr "'{apkfilename}' është tashmë e instaluar në {dev}."
 
+#: ../fdroidserver/signindex.py
+#, fuzzy, python-brace-format
+msgid "\"{name}\" has bad SHA-256: {sha256}"
+msgstr "%s ka SHA-256 të gabuar: %s"
+
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "\"{path}\" contains recent {name} ({version})"
@@ -87,9 +97,19 @@ msgstr "“{path}” është nënshkruar me një kyç që s’lejohet:"
 msgid "\"{url}\" is not a valid URL!"
 msgstr "“{url}” s’është URL e vlefshme!"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.13/argparse.py
+#, python-format
+msgid "%(heading)s:"
+msgstr ""
+
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "%(prog)s: error: %(message)s\n"
+msgstr "%(prog)s: gabim: %(message)s\n"
+
+#: /usr/lib/python3.13/argparse.py
+#, fuzzy, python-format
+msgid "%(prog)s: warning: %(message)s\n"
 msgstr "%(prog)s: gabim: %(message)s\n"
 
 #: ../fdroidserver/publish.py
@@ -102,7 +122,7 @@ msgstr "S’u arrit të nënshkruhen ose verifikohen %d APK!"
 msgid "%d problems found"
 msgstr "U gjetën %d probleme"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "%r is not callable"
 msgstr "%r s’mund të thirret"
@@ -146,7 +166,7 @@ msgstr "'rclone_config' duhet ujdisur te config.yml!"
 msgid "'repo_keyalias' not found in config.yml!"
 msgstr "S’u gjet 'repo_keyalias' te config.yml!"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 msgid "'required' is an invalid argument for positionals"
 msgstr "'required' është argument i pavlefshëm për pozicionalë"
 
@@ -196,7 +216,7 @@ msgstr "--merge-request xhiron vetëm me një appid!"
 msgid "...checkupdate failed for {appid} : {error}"
 msgstr "…checkupdate dështoi për {appid} : {error}"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 msgid ".__call__() not defined"
 msgstr ".__call__() e pacaktuar"
 
@@ -1463,6 +1483,11 @@ msgid "Privacy mode was enabled based on your locale ({country_code})."
 msgstr "Mënyra “Privatësi” qe aktivizuar bazuar në vendoren tuaj ({country_code})."
 
 #: ../fdroidserver/scanner.py
+#, fuzzy, python-brace-format
+msgid "Problem with ZIP file \"{apkfile}\": {error}"
+msgstr "Problem me kartelën ZIP: %s, gabim %s"
+
+#: ../fdroidserver/scanner.py
 #, python-format
 msgid "Problem with ZIP file: %s, error %s"
 msgstr "Problem me kartelën ZIP: %s, gabim %s"
@@ -1791,6 +1816,11 @@ msgstr "Përmbledhja me gjatësi {length} është mbi kufirin prej {limit} shenj
 #, python-brace-format
 msgid "System clock is older than date in {path}!"
 msgstr "Ora e sistemit është më herët se sa data në {path}!"
+
+#: ../fdroidserver/checkupdates.py
+#, fuzzy
+msgid "Tags update mode only works for git repositories currently"
+msgstr "Aktualisht, mënyra “tags update” funksionon vetëm për depo git, hg, bzr dhe git-svn"
 
 #: ../fdroidserver/checkupdates.py
 msgid "Tags update mode only works for git, hg, bzr and git-svn repositories currently"
@@ -2223,7 +2253,7 @@ msgstr "po shtohet IdentityFile te {path}"
 msgid "adding to {name}: {path}"
 msgstr "po shtohet te {name}: {path}"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "ambiguous option: %(option)s could match %(matches)s"
 msgstr "mundësi e dykuptimtë: %(option)s mund të përputhej me %(matches)s"
@@ -2258,15 +2288,20 @@ msgstr "ID aplikacioni me versionCode opsional në formën APPID[:VERCODE]"
 msgid "archive_url needs to end with /archive"
 msgstr "archive_url lypset të përfundojë me /archive"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "argument \"-\" with mode %r"
 msgstr "argument “-” me mënyrën %r"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "argument %(argument_name)s: %(message)s"
 msgstr "argument %(argument_name)s: %(message)s"
+
+#: /usr/lib/python3.13/argparse.py
+#, python-format
+msgid "argument '%(argument_name)s' is deprecated"
+msgstr ""
 
 #: ../fdroidserver/nightly.py
 msgid "attempting bare SSH connection to test deploy key:"
@@ -2276,7 +2311,7 @@ msgstr "po tentohet lidhje SSH e zhveshur, për të testuar kyç sendërtimesh:"
 msgid "can not parse scrlib spec (not a string): '{}'"
 msgstr "s’përtyp dot specifikim scrlib (s’është një varg): '{}'"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "can't open '%(filename)s': %(error)s"
 msgstr "s’hapet dot '%(filename)s': %(error)s"
@@ -2290,11 +2325,11 @@ msgstr "s’mund të hapet url jo https: '{};"
 msgid "cannot find required srclibs: \"{path}\""
 msgstr "s’gjenden dot srclibs të domosdoshme: “{path}”"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 msgid "cannot have multiple subparser arguments"
 msgstr "s’mund të kihen argumente të shumtë për subparser"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "cannot merge actions - two groups are named %r"
 msgstr "s’mund të përzihen veprimet - ka dy grupe të quajtur %r"
@@ -2308,23 +2343,28 @@ msgstr "s’mund të botohet përditësim, e ujdisët kyçin e sendërtimit?"
 msgid "cloning {url}"
 msgstr "po klonohet {url}"
 
+#: /usr/lib/python3.13/argparse.py
+#, python-format
+msgid "command '%(parser_name)s' is deprecated"
+msgstr ""
+
 #: ../fdroidserver/__main__.py
 msgid "commands from plugin modules:"
 msgstr "urdhra prej modulesh shtojce:"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "conflicting option string: %s"
 msgid_plural "conflicting option strings: %s"
 msgstr[0] "varg mundësie me përplasje: %s"
 msgstr[1] "vargje mundësish me përplasje: %s"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "conflicting subparser alias: %s"
 msgstr ""
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "conflicting subparser: %s"
 msgstr ""
@@ -2366,7 +2406,7 @@ msgstr "kartelë varësie pa kyç"
 msgid "deployed process log {path} to {dest}"
 msgstr ""
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "dest= is required for options like %r"
 msgstr "dest= është e domosdoshme për mundësi si %r"
@@ -2383,22 +2423,22 @@ msgstr "dështoi shkarkimi i nënshkrimeve të kontrollorit prej “{}”"
 msgid "executable binary, possibly code"
 msgstr "dyor i ekzekutueshëm, ka gjasa të jetë kod"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "expected %s argument"
 msgid_plural "expected %s arguments"
 msgstr[0] "pritej %s argument"
 msgstr[1] "priteshin %s argumente"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 msgid "expected at least one argument"
 msgstr "pritej e pakta një argument"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 msgid "expected at most one argument"
 msgstr "pritej e shumta një argument"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 msgid "expected one argument"
 msgstr "pritej një argument"
 
@@ -2426,7 +2466,7 @@ msgstr "veprimi “git svn clone” dështoi"
 msgid "gzip file archive"
 msgstr "Arkiv gzip kartelash"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "ignored explicit argument %r"
 msgstr "u shpërfill argumenti eksplicit %r"
@@ -2439,22 +2479,22 @@ msgstr "index-v1 duhet të ketë një nënshkrim, përdorni `fdroid signindex` p
 msgid "index-v2 must have a signature, use `fdroid signindex` to create it!"
 msgstr "index-v2 duhet të ketë një nënshkrim, përdorni `fdroid signindex` për ta krijuar!"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "invalid %(type)s value: %(value)r"
 msgstr "vlerë %(type)s e pavlefshme: %(value)r"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "invalid choice: %(value)r (choose from %(choices)s)"
 msgstr "zgjedhje e pavlefshme: %(value)r (zgjidhni nga %(choices)s)"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "invalid conflict_resolution value: %r"
 msgstr "vlerë e pavlefshme conflict_resolution: %r"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "invalid option string %(option)r: must start with a character %(prefix_chars)r"
 msgstr "varg i pavlefshëm mundësie %(option)r: duhet të fillojë me një shenjë %(prefix_chars)r"
@@ -2491,7 +2531,7 @@ msgstr "pasqyra '%s' s’përfundon me 'fdroid'!"
 msgid "mirrors set twice, in config.yml and {path}!"
 msgstr "pasqyra të ujdisura dy herë, te config.yml dhe {path}!"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 msgid "mutually exclusive arguments must be optional"
 msgstr "argumentet që përjashtojnë njëri-tjetrin duhet të jenë opsionalë"
 
@@ -2513,12 +2553,12 @@ msgstr "s’u dha APK"
 msgid "no version information found"
 msgstr "s’u gjetën hollësi versioni"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "not allowed with argument %s"
 msgstr "e palejuar me argumentin %s"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "one of the arguments %s is required"
 msgstr "një nga argumentet %s është i domosdoshëm"
@@ -2527,7 +2567,12 @@ msgstr "një nga argumentet %s është i domosdoshëm"
 msgid "only accepts strings, lists, and tuples"
 msgstr "prano vetëm vargje, lista dhe dyshe"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.13/argparse.py
+#, python-format
+msgid "option '%(option)s' is deprecated"
+msgstr ""
+
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 msgid "options"
 msgstr "mundësi"
 
@@ -2541,7 +2586,7 @@ msgstr "po mbishkruhet {path} ekzistues"
 msgid "path_to_custom_rclone_config: \"{path}\" does not exist!"
 msgstr "path_to_custom_rclone_config: \"{path}\" s’ekziston!"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 msgid "positional arguments"
 msgstr "argumente pozicionalë"
 
@@ -2606,7 +2651,11 @@ msgstr "serverwebroot: shtegu nuk mbaron me “fdroid”, ndoshta kishit në men
 msgid "shared library"
 msgstr "librari e përbashkët"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.13/argparse.py
+msgid "show program's version number and exit"
+msgstr ""
+
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 msgid "show this help message and exit"
 msgstr "shfaq këtë mesazh ndihme dhe dil"
 
@@ -2635,6 +2684,10 @@ msgstr "srclibs-it i mungon emër dhe/ose @"
 msgid "static library"
 msgstr "librari statike"
 
+#: /usr/lib/python3.13/argparse.py
+msgid "subcommands"
+msgstr ""
+
 #: ../fdroidserver/build.py
 #, python-brace-format
 msgid "supplied reference binary has allowed signer {signer}"
@@ -2645,7 +2698,7 @@ msgstr ""
 msgid "suspicious permissions {st_mode:o}"
 msgstr "leje të dyshimta {st_mode:o}"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "the following arguments are required: %s"
 msgstr "argumentet vijuese janë të domosdoshëm: %s"
@@ -2654,17 +2707,17 @@ msgstr "argumentet vijuese janë të domosdoshëm: %s"
 msgid "true"
 msgstr ""
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "unexpected option string: %s"
 msgstr "varg i papritur mundësie: %s"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "unknown parser %(parser_name)r (choices: %(choices)s)"
 msgstr "përtypës i panjohur %(parser_name)r (choices: %(choices)s)"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "unrecognized arguments: %s"
 msgstr "argumente të papranuar: %s"
@@ -2675,6 +2728,7 @@ msgid "unsafe permissions on '{config_file}' (should be 0600)!"
 msgstr "leje jo të parrezikshme mbi '{config_file}' (duhet të ishin 0600)!"
 
 #: ../fdroidserver/__main__.py /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.13/argparse.py
 msgid "usage: "
 msgstr "përdorimi: "
 

@@ -16,21 +16,22 @@
 # gfbdrgng <hnaofegnp@hldrive.com>, 2024.
 # neverender <audiolunaire@getgoogleoff.me>, 2024.
 # Dmitry <dmitrydmitry761@gmail.com>, 2024.
-# Artyom Rybakov <rib.artem@gmail.com>, 2025.
+# Artyom Rybakov <rib.artem@gmail.com>, 2025, 2026.
+# Дмитрий Михирев <bizdelnick@gmail.com>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 1.0.0-95-gd7af22b\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2026-01-13 11:31+0100\n"
-"PO-Revision-Date: 2025-10-05 04:02+0000\n"
-"Last-Translator: Golubev Alexander <fatzer2@gmail.com>\n"
+"POT-Creation-Date: 2026-05-19 17:44+0200\n"
+"PO-Revision-Date: 2026-01-26 04:46+0000\n"
+"Last-Translator: Artyom Rybakov <rib.artem@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/f-droid/fdroidserver/ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 5.14-dev\n"
+"X-Generator: Weblate 5.16-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -49,6 +50,11 @@ msgstr ""
 "\n"
 "{path} закодирован в скрытую переменную DEBUG_KEYSTORE:"
 
+#: /usr/lib/python3.13/argparse.py
+#, python-format
+msgid " (default: %(default)s)"
+msgstr ""
+
 #: ../fdroidserver/lint.py
 #, python-format
 msgid "\"%s/\" has no matching metadata file!"
@@ -56,15 +62,15 @@ msgstr "У \"%s/\" нет соответствующего файла метад
 
 #: ../fdroidserver/deploy.py
 msgid "\"AWS_ACCESS_KEY_ID\" must be set as an environmental variable!"
-msgstr "Должна быть установлена переменная среды \"AWS_ACCESS_KEY_ID\"!"
+msgstr "Должна быть установлена переменная окружения \"AWS_ACCESS_KEY_ID\"!"
 
 #: ../fdroidserver/deploy.py
 msgid "\"AWS_SECRET_ACCESS_KEY\" must be set as an environmental variable!"
-msgstr "Должна быть установлена переменная среды \"AWS_SECRET_ACCESS_KEY\"!"
+msgstr "Должна быть установлена переменная окружения \"AWS_SECRET_ACCESS_KEY\"!"
 
 #: ../fdroidserver/index.py
 msgid "\"isPrimary\" key should not be added to mirrors!"
-msgstr "Ключ \"IsPrimary\" не следует добавлять в зеркала!"
+msgstr "Ключ \"isPrimary\" не следует добавлять в зеркала!"
 
 #: ../fdroidserver/index.py
 #, python-brace-format
@@ -74,7 +80,12 @@ msgstr "\"local_copy_dir\" {path} не существует!"
 #: ../fdroidserver/install.py
 #, python-brace-format
 msgid "\"{apkfilename}\" is already installed on {dev}."
-msgstr "'{apkfilename}' уже установлен на {dev}."
+msgstr "\"{apkfilename}\" уже установлен на {dev}."
+
+#: ../fdroidserver/signindex.py
+#, fuzzy, python-brace-format
+msgid "\"{name}\" has bad SHA-256: {sha256}"
+msgstr "%s имеет неверный SHA-256: %s"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -84,7 +95,7 @@ msgstr "в пути \"{path}\" последние имя {name} и версия 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "\"{path}\" exists but s3cmd is not installed!"
-msgstr "путь \"{path}\" существует, но s3cmd клиент не установлен!"
+msgstr "путь \"{path}\" существует, но клиент s3cmd не установлен!"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
@@ -101,9 +112,19 @@ msgstr "\"{path}\" подписан ключом, который не разре
 msgid "\"{url}\" is not a valid URL!"
 msgstr "\"{url}\" — не корректный URL!"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.13/argparse.py
+#, python-format
+msgid "%(heading)s:"
+msgstr ""
+
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "%(prog)s: error: %(message)s\n"
+msgstr "%(prog)s: ошибка: %(message)s\n"
+
+#: /usr/lib/python3.13/argparse.py
+#, fuzzy, python-format
+msgid "%(prog)s: warning: %(message)s\n"
 msgstr "%(prog)s: ошибка: %(message)s\n"
 
 #: ../fdroidserver/publish.py
@@ -116,7 +137,7 @@ msgstr "%d APK не удалось подписать или проверить!
 msgid "%d problems found"
 msgstr "%d ошибок найдено"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "%r is not callable"
 msgstr "к %r нельзя обратиться"
@@ -160,7 +181,7 @@ msgstr "'rclone_config' должен быть задан в config.yml!"
 msgid "'repo_keyalias' not found in config.yml!"
 msgstr "'repo_keyalias' не найден в config.yml!"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 msgid "'required' is an invalid argument for positionals"
 msgstr "'required' не годится в качестве позиционного аргумента"
 
@@ -194,13 +215,12 @@ msgid "'{value}' is not a valid {field}, should be {pattern}"
 msgstr "'{value}' не является допустимым {field}, должно быть {pattern}"
 
 #: ../fdroidserver/common.py
-#, fuzzy
 msgid "'{}' does not start with a valid applicationId"
-msgstr "У {appid} нет имени! Будет использовано ID приложения."
+msgstr "'{}' не начинается с действительного applicationId"
 
 #: ../fdroidserver/common.py
 msgid "'{}' is not a valid pair of applicationId:versionCode"
-msgstr ""
+msgstr "'{}' не является допустимой парой applicationId:versionCode"
 
 #: ../fdroidserver/checkupdates.py
 msgid "--merge-request only runs on a single appid!"
@@ -211,7 +231,7 @@ msgstr "--merge-request работает только с одним appid!"
 msgid "...checkupdate failed for {appid} : {error}"
 msgstr "...checkupdate для {appid} завершился ошибкой: {error}"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 msgid ".__call__() not defined"
 msgstr ".__call__() не определен"
 
@@ -354,9 +374,9 @@ msgid "Base URL to mirror, can include the index signing key using the query str
 msgstr "Основной URL-адрес зеркала может содержать ключ для подписывания индекса (добавьте запрос \"?fingerprint=\")"
 
 #: ../fdroidserver/lint.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Branch '{branch}' used as commit in build '{versionCode}'"
-msgstr "Ветка '{branch}' вошла в билд '{versionName}' как коммит"
+msgstr "Ветка '{branch}' использована в качестве коммита в сборке '{versionCode}'"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
@@ -521,9 +541,9 @@ msgid "Could not parse size \"{size}\", wrong type \"{type}\""
 msgstr "Не удалось разобрать размер «{size}», неверный тип «{type}»"
 
 #: ../fdroidserver/metadata.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Could not read {path} for {appid_versionCode}"
-msgstr "Не удалось найти номер последний версии (versionCode)"
+msgstr "Не удалось прочитать {path} для {appid_versionCode}"
 
 #. Translators: https://developer.android.com/build/configure-app-module#set-application-id
 #: ../fdroidserver/import_subcommand.py
@@ -627,7 +647,7 @@ msgstr "Описание {length} превышает лимит по колич�
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Did not find '{versionCode}' in '{fieldname}' of {path}"
-msgstr ""
+msgstr "Не удалось найти '{versionCode}' в '{fieldname}' по пути {path}"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -1479,6 +1499,11 @@ msgid "Privacy mode was enabled based on your locale ({country_code})."
 msgstr "Режим конфиденциальности был включен в соответствии с вашей локалью ({country_code})."
 
 #: ../fdroidserver/scanner.py
+#, fuzzy, python-brace-format
+msgid "Problem with ZIP file \"{apkfile}\": {error}"
+msgstr "Проблема с файлом ZIP: %s, ошибка %s"
+
+#: ../fdroidserver/scanner.py
 #, python-format
 msgid "Problem with ZIP file: %s, error %s"
 msgstr "Проблема с файлом ZIP: %s, ошибка %s"
@@ -1808,6 +1833,11 @@ msgstr "Короткое описание приложения ({length} зна�
 #, python-brace-format
 msgid "System clock is older than date in {path}!"
 msgstr "Системное время отстает от date в {path}!"
+
+#: ../fdroidserver/checkupdates.py
+#, fuzzy
+msgid "Tags update mode only works for git repositories currently"
+msgstr "Режим обновления тегов в настоящее время работает только для репозиториев git, hg, bzr и git-svn"
 
 #: ../fdroidserver/checkupdates.py
 msgid "Tags update mode only works for git, hg, bzr and git-svn repositories currently"
@@ -2240,7 +2270,7 @@ msgstr "добавление IdentiyFile в {path}"
 msgid "adding to {name}: {path}"
 msgstr "добавление в {name}:{path}"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "ambiguous option: %(option)s could match %(matches)s"
 msgstr "неоднозначный выбор: %(option)s совпадает с %(matches)s"
@@ -2275,15 +2305,20 @@ msgstr "ID приложения и внутренняя версия прило�
 msgid "archive_url needs to end with /archive"
 msgstr "archive_url должен оканчиваться «/archive»"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "argument \"-\" with mode %r"
 msgstr "аргумент \"-\" c режимом %r"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "argument %(argument_name)s: %(message)s"
 msgstr "аргумент %(argument_name)s: %(message)s"
+
+#: /usr/lib/python3.13/argparse.py
+#, python-format
+msgid "argument '%(argument_name)s' is deprecated"
+msgstr ""
 
 #: ../fdroidserver/nightly.py
 msgid "attempting bare SSH connection to test deploy key:"
@@ -2293,7 +2328,7 @@ msgstr "попытка установить голое SSH-соединение 
 msgid "can not parse scrlib spec (not a string): '{}'"
 msgstr "не удалось разобрать спецификацию scrlib (не является строкой): '{}'"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "can't open '%(filename)s': %(error)s"
 msgstr "не удается открыть '%(filename)s': %(error)s"
@@ -2307,11 +2342,11 @@ msgstr "не удалось открыть не-https url: '{};"
 msgid "cannot find required srclibs: \"{path}\""
 msgstr "не удалось найти необходимые srclibs: {path}"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 msgid "cannot have multiple subparser arguments"
 msgstr "у субпарсера должен быть только один аргумент"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "cannot merge actions - two groups are named %r"
 msgstr "не получается объединить действия: указаны две группы %r"
@@ -2325,11 +2360,16 @@ msgstr "не получается опубликовать обновление.
 msgid "cloning {url}"
 msgstr "клонирование {url}"
 
+#: /usr/lib/python3.13/argparse.py
+#, python-format
+msgid "command '%(parser_name)s' is deprecated"
+msgstr ""
+
 #: ../fdroidserver/__main__.py
 msgid "commands from plugin modules:"
 msgstr "Команды из подключаемых модулей:"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "conflicting option string: %s"
 msgid_plural "conflicting option strings: %s"
@@ -2337,12 +2377,12 @@ msgstr[0] "конфликтующая строка: %s"
 msgstr[1] "кофликтующие строки: %s"
 msgstr[2] "конфликтующих строк: %s"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "conflicting subparser alias: %s"
 msgstr "конфликтный псевдоним субпарсера: %s"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "conflicting subparser: %s"
 msgstr "конфликтный субпарсер:%s"
@@ -2384,7 +2424,7 @@ msgstr "файл зависимостей без блокировки"
 msgid "deployed process log {path} to {dest}"
 msgstr "лог {path} загружен на {dest}"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "dest= is required for options like %r"
 msgstr "для параметра %r необходимо указать dest="
@@ -2401,7 +2441,7 @@ msgstr "не удалось загрузить подписи сканера с 
 msgid "executable binary, possibly code"
 msgstr "исполняемый бинарный файл, возможно код"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "expected %s argument"
 msgid_plural "expected %s arguments"
@@ -2409,15 +2449,15 @@ msgstr[0] "необходимо указать %s аргумент"
 msgstr[1] "необходимо указать %s аргумента"
 msgstr[2] "необходимо указать %s аргументов"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 msgid "expected at least one argument"
 msgstr "необходимо указать хотя бы один аргумент"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 msgid "expected at most one argument"
 msgstr "можно указать только один аргумент"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 msgid "expected one argument"
 msgstr "можно указать только один аргумент"
 
@@ -2445,7 +2485,7 @@ msgstr "команда git svn clone не выполнена"
 msgid "gzip file archive"
 msgstr "архив gzip"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "ignored explicit argument %r"
 msgstr "указанный аргумент %r проигнорирован"
@@ -2458,22 +2498,22 @@ msgstr "index-v1 должен быть подписан, сделайте это
 msgid "index-v2 must have a signature, use `fdroid signindex` to create it!"
 msgstr "index-v2 должен быть подписан, сделайте это с помощью `fdroid signindex`!"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "invalid %(type)s value: %(value)r"
 msgstr "неверное %(type)s значение: %(value)r"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "invalid choice: %(value)r (choose from %(choices)s)"
 msgstr "неверный выбор: %(value)r (следует выбрать из %(choices)s)"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "invalid conflict_resolution value: %r"
 msgstr "неверное значение conflict_resolution: %r"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "invalid option string %(option)r: must start with a character %(prefix_chars)r"
 msgstr "неверный синтаксис в строке параметра %(option)r: она должна начинаться с символа %(prefix_chars)r"
@@ -2510,7 +2550,7 @@ msgstr "адрес зеркала '%s' должен заканчиваться '
 msgid "mirrors set twice, in config.yml and {path}!"
 msgstr "Зеркала установлены дважды, в config.yml и {path}!"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 msgid "mutually exclusive arguments must be optional"
 msgstr "взаимоисключающие аргументы не должны быть обязательными"
 
@@ -2532,12 +2572,12 @@ msgstr "APK файл не указан"
 msgid "no version information found"
 msgstr "информация о версии не найдена"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "not allowed with argument %s"
 msgstr "недопустимо с аргументом %s"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "one of the arguments %s is required"
 msgstr "необходимо указать хотя бы один аргумент из списка %s"
@@ -2546,7 +2586,12 @@ msgstr "необходимо указать хотя бы один аргуме�
 msgid "only accepts strings, lists, and tuples"
 msgstr "принимает строки, списки и туплы"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.13/argparse.py
+#, python-format
+msgid "option '%(option)s' is deprecated"
+msgstr ""
+
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 msgid "options"
 msgstr "параметры"
 
@@ -2560,7 +2605,7 @@ msgstr "перезапись существующего пути {path}"
 msgid "path_to_custom_rclone_config: \"{path}\" does not exist!"
 msgstr "path_to_custom_rclone_config: \"{path}\" не существует!"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 msgid "positional arguments"
 msgstr "позиционные аргументы"
 
@@ -2625,7 +2670,11 @@ msgstr "serverwebroot: путь не заканчивается на \"fdroid\",
 msgid "shared library"
 msgstr "разделяемая библиотека"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.13/argparse.py
+msgid "show program's version number and exit"
+msgstr ""
+
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 msgid "show this help message and exit"
 msgstr "показать это справочное сообщение и выйти"
 
@@ -2654,6 +2703,10 @@ msgstr "библиотеки srclib: имя отсутствует или не �
 msgid "static library"
 msgstr "статическая библиотека"
 
+#: /usr/lib/python3.13/argparse.py
+msgid "subcommands"
+msgstr ""
+
 #: ../fdroidserver/build.py
 #, python-brace-format
 msgid "supplied reference binary has allowed signer {signer}"
@@ -2664,7 +2717,7 @@ msgstr "предоставленный эталонный двоичный фа�
 msgid "suspicious permissions {st_mode:o}"
 msgstr ""
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "the following arguments are required: %s"
 msgstr "требуются аргументы: %s"
@@ -2673,17 +2726,17 @@ msgstr "требуются аргументы: %s"
 msgid "true"
 msgstr "истина"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "unexpected option string: %s"
 msgstr "неизвестная строка параметра: %s"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "unknown parser %(parser_name)r (choices: %(choices)s)"
 msgstr "неизвестный парсер %(parser_name)r (следует выбрать из %(choices)s)"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "unrecognized arguments: %s"
 msgstr "неизвестные аргументы: %s"
@@ -2694,6 +2747,7 @@ msgid "unsafe permissions on '{config_file}' (should be 0600)!"
 msgstr "небезопасные права доступа к файлу '{config_file}' (должны быть 0600)!"
 
 #: ../fdroidserver/__main__.py /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.13/argparse.py
 msgid "usage: "
 msgstr "использование: "
 
