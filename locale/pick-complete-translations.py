@@ -74,7 +74,16 @@ for locale in active:
         reverse=True,
     ):
         print(f'{locale}: git cherry-pick', commit)
-        repo.git.cherry_pick(commit)
+        try:
+            repo.git.cherry_pick(commit)
+        except git.exc.GitCommandError as e:
+            for line in repo.git.status(porcelain=True).splitlines():
+                status, path = line.split()
+                if status == 'UU':
+                    print('Resetting conflict:', path)
+                    repo.git.reset('--', path)
+                    repo.git.checkout('--', path)
+                    repo.git.cherry_pick('--continue')
 
 with open(manifest_file, 'a') as fp:
     for line in manifest_lines:
