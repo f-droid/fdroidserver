@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 2.3a1-162-gfbb3cc59\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2026-01-13 11:31+0100\n"
+"POT-Creation-Date: 2026-05-19 17:44+0200\n"
 "PO-Revision-Date: 2026-01-25 13:07+0000\n"
 "Last-Translator: Aindriú Mac Giolla Eoin <aindriu80@gmail.com>\n"
 "Language-Team: Irish <https://hosted.weblate.org/projects/f-droid/fdroidserver/ga/>\n"
@@ -32,6 +32,11 @@ msgid ""
 msgstr ""
 "\n"
 "{path} ionchódaithe don athróg rúnda DEBUG_KEYSTORE:"
+
+#: /usr/lib/python3.13/argparse.py
+#, python-format
+msgid " (default: %(default)s)"
+msgstr ""
 
 #: ../fdroidserver/lint.py
 #, python-format
@@ -60,6 +65,11 @@ msgstr "Níl \"local_copy_dir\" {path} ann!"
 msgid "\"{apkfilename}\" is already installed on {dev}."
 msgstr "Tá \"{apkfilename}\" suiteáilte cheana féin ar {dev}."
 
+#: ../fdroidserver/signindex.py
+#, fuzzy, python-brace-format
+msgid "\"{name}\" has bad SHA-256: {sha256}"
+msgstr "Tá droch-SHA-256 ag %s: %s"
+
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "\"{path}\" contains recent {name} ({version})"
@@ -85,9 +95,19 @@ msgstr "Tá \"{path}\" sínithe ag eochair nach bhfuil ceadaithe:"
 msgid "\"{url}\" is not a valid URL!"
 msgstr "Ní URL bailí é \"{url}\"!"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.13/argparse.py
+#, python-format
+msgid "%(heading)s:"
+msgstr ""
+
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "%(prog)s: error: %(message)s\n"
+msgstr "%(prog)s: earráid: %(message)s\n"
+
+#: /usr/lib/python3.13/argparse.py
+#, fuzzy, python-format
+msgid "%(prog)s: warning: %(message)s\n"
 msgstr "%(prog)s: earráid: %(message)s\n"
 
 #: ../fdroidserver/publish.py
@@ -100,7 +120,7 @@ msgstr "Theip ar %d APKs a shíniú nó a fhíorú!"
 msgid "%d problems found"
 msgstr "Aimsíodh %d fadhbanna"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "%r is not callable"
 msgstr "Níl %r inghlaoite"
@@ -144,7 +164,7 @@ msgstr "Ní mór 'rclone_config' a shocrú i config.yml!"
 msgid "'repo_keyalias' not found in config.yml!"
 msgstr "Níl 'repo_keyalias' le fáil sa config.yml!"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 msgid "'required' is an invalid argument for positionals"
 msgstr "Is argóint neamhbhailí é 'riachtanach' do shuíomhanna"
 
@@ -194,7 +214,7 @@ msgstr "Ní ritheann --merge-request ach ar aip amháin!"
 msgid "...checkupdate failed for {appid} : {error}"
 msgstr "... theip ar checkupdate le haghaidh {appid} : {error}"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 msgid ".__call__() not defined"
 msgstr ".__call__() gan sainmhíniú"
 
@@ -1464,6 +1484,11 @@ msgid "Privacy mode was enabled based on your locale ({country_code})."
 msgstr "Cumasaíodh mód príobháideachta bunaithe ar do logán ({country_code})."
 
 #: ../fdroidserver/scanner.py
+#, fuzzy, python-brace-format
+msgid "Problem with ZIP file \"{apkfile}\": {error}"
+msgstr "Fadhb le comhad ZIP: %s, earráid %s"
+
+#: ../fdroidserver/scanner.py
 #, python-format
 msgid "Problem with ZIP file: %s, error %s"
 msgstr "Fadhb le comhad ZIP: %s, earráid %s"
@@ -1795,6 +1820,11 @@ msgstr "Tá achoimre ar fhad {length} os cionn na teorann char {limit}"
 #, python-brace-format
 msgid "System clock is older than date in {path}!"
 msgstr "Tá clog an chórais níos sine ná an dáta i {path}!"
+
+#: ../fdroidserver/checkupdates.py
+#, fuzzy
+msgid "Tags update mode only works for git repositories currently"
+msgstr "Ní oibríonn mód nuashonraithe clibeanna ach amháin le haghaidh stórtha git, hg, bzr agus git-svn faoi láthair"
 
 #: ../fdroidserver/checkupdates.py
 msgid "Tags update mode only works for git, hg, bzr and git-svn repositories currently"
@@ -2226,7 +2256,7 @@ msgstr "IdentityFile á chur le {path}"
 msgid "adding to {name}: {path}"
 msgstr "ag cur le {name}: {path}"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "ambiguous option: %(option)s could match %(matches)s"
 msgstr "Rogha dhébhríoch: D'fhéadfadh %(option)s %(matches)s a mheaitseáil"
@@ -2261,14 +2291,19 @@ msgstr "ID iarratais le leagan roghnachCode san fhoirm APPID[:VERCODE]"
 msgid "archive_url needs to end with /archive"
 msgstr "Caithfidh archive_url deireadh a chur le /cartlann"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "argument \"-\" with mode %r"
 msgstr "argóint \"-\" le mód %r"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "argument %(argument_name)s: %(message)s"
+msgstr "argóint %(argument_name)s: %(message)s"
+
+#: /usr/lib/python3.13/argparse.py
+#, fuzzy, python-format
+msgid "argument '%(argument_name)s' is deprecated"
 msgstr "argóint %(argument_name)s: %(message)s"
 
 #: ../fdroidserver/nightly.py
@@ -2279,7 +2314,7 @@ msgstr "ag iarraidh nasc SSH lom chun eochair imscaradh tástála:"
 msgid "can not parse scrlib spec (not a string): '{}'"
 msgstr "ní féidir spec scrlib a pharsáil (ní teaghrán): '{}'"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "can't open '%(filename)s': %(error)s"
 msgstr "ní féidir '%(filename)s' a oscailt: %(error)s"
@@ -2293,11 +2328,11 @@ msgstr "ní féidir url neamh-https a oscailt: '{};"
 msgid "cannot find required srclibs: \"{path}\""
 msgstr "ní féidir srclibs riachtanacha a aimsiú: \"{path}\""
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 msgid "cannot have multiple subparser arguments"
 msgstr "ní féidir argóintí éagsúla subparser a bheith acu"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "cannot merge actions - two groups are named %r"
 msgstr "ní féidir gníomhartha a chumasc - ainmnítear %r ar dhá ghrúpa"
@@ -2311,11 +2346,16 @@ msgstr "Ní féidir nuashonrú a fhoilsiú, ar shocraigh tú an eochair imlonnai
 msgid "cloning {url}"
 msgstr "clónáil {url}"
 
+#: /usr/lib/python3.13/argparse.py
+#, python-format
+msgid "command '%(parser_name)s' is deprecated"
+msgstr ""
+
 #: ../fdroidserver/__main__.py
 msgid "commands from plugin modules:"
 msgstr "orduithe ó mhodúil bhreiseáin:"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "conflicting option string: %s"
 msgid_plural "conflicting option strings: %s"
@@ -2325,12 +2365,12 @@ msgstr[2] "teaghráin roghanna contrártha: %s"
 msgstr[3] "teaghráin roghanna contrártha: %s"
 msgstr[4] "teaghráin roghanna contrártha: %s"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "conflicting subparser alias: %s"
 msgstr "ailias fo-pharsála contrártha: %s"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "conflicting subparser: %s"
 msgstr "fopharsálaí contrártha: %s"
@@ -2372,7 +2412,7 @@ msgstr "comhad spleáchais gan ghlas"
 msgid "deployed process log {path} to {dest}"
 msgstr "loga próiseas imlonnaithe {path} go {dest}"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "dest= is required for options like %r"
 msgstr "dest= ag teastáil le haghaidh roghanna cosúil le %r"
@@ -2389,7 +2429,7 @@ msgstr "Theip ar shínithe scanóirí a íosluchtú ó '{}'"
 msgid "executable binary, possibly code"
 msgstr "dénártha inrite, cód b'fhéidir"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "expected %s argument"
 msgid_plural "expected %s arguments"
@@ -2399,15 +2439,15 @@ msgstr[2] "bhíothas ag súil le %s argóint"
 msgstr[3] "bhíothas ag súil le %s argóint"
 msgstr[4] "bhíothas ag súil le %s argóint"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 msgid "expected at least one argument"
 msgstr "bhíothas ag súil le hargóint amháin ar a laghad"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 msgid "expected at most one argument"
 msgstr "bhíothas ag súil le hargóint amháin ar a mhéad"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 msgid "expected one argument"
 msgstr "bhíothas ag súil le hargóint amháin"
 
@@ -2435,7 +2475,7 @@ msgstr "theip ar chlón git svn"
 msgid "gzip file archive"
 msgstr "Cartlann Comhad Gzip"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "ignored explicit argument %r"
 msgstr "neamhaird ar argóint fhollasach %r"
@@ -2448,22 +2488,22 @@ msgstr "Caithfidh síniú a bheith ag index-v1, bain úsáid as `fdroid signinde
 msgid "index-v2 must have a signature, use `fdroid signindex` to create it!"
 msgstr "Caithfidh síniú a bheith ag index-v2, bain úsáid as `fdroid signindex` chun é a chruthú!"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "invalid %(type)s value: %(value)r"
 msgstr "luach neamhbhailí %(type)s: %(value)r"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "invalid choice: %(value)r (choose from %(choices)s)"
 msgstr "rogha neamhbhailí: %(value)r (roghnaigh ó %(choices)s)"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "invalid conflict_resolution value: %r"
 msgstr "Luach conflict_resolution neamhbhailí:%r"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "invalid option string %(option)r: must start with a character %(prefix_chars)r"
 msgstr "teaghrán neamhbhailí roghanna %(option)r: ní mór tosú le carachtar %(prefix_chars)r"
@@ -2500,7 +2540,7 @@ msgstr "ní chríochnaíonn scáthán '%s' le 'fdroid'!"
 msgid "mirrors set twice, in config.yml and {path}!"
 msgstr "scátháin leagtha faoi dhó, i config.yml agus {path}!"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 msgid "mutually exclusive arguments must be optional"
 msgstr "ní mór argóintí comheisiacha a bheith roghnach"
 
@@ -2522,12 +2562,12 @@ msgstr "níor soláthraíodh aon APK"
 msgid "no version information found"
 msgstr "Níor aimsíodh aon eolas leagain"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "not allowed with argument %s"
 msgstr "ní cheadaítear le hargóint %s"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "one of the arguments %s is required"
 msgstr "tá ceann de na hargóintí %s ag teastáil"
@@ -2536,7 +2576,12 @@ msgstr "tá ceann de na hargóintí %s ag teastáil"
 msgid "only accepts strings, lists, and tuples"
 msgstr "ní ghlacann ach teaghráin, liostaí, agus tuples"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.13/argparse.py
+#, python-format
+msgid "option '%(option)s' is deprecated"
+msgstr ""
+
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 msgid "options"
 msgstr "roghanna"
 
@@ -2550,7 +2595,7 @@ msgstr "overwriting atá ann cheana {path}"
 msgid "path_to_custom_rclone_config: \"{path}\" does not exist!"
 msgstr "path_to_custom_rclone_config: Níl \"{path}\" ann!"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 msgid "positional arguments"
 msgstr "argóintí suímh"
 
@@ -2615,7 +2660,11 @@ msgstr "serverwebroot: ní chríochnaíonn cosán le \"fdroid\", b'fhéidir gur 
 msgid "shared library"
 msgstr "leabharlann chomhroinnte"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.13/argparse.py
+msgid "show program's version number and exit"
+msgstr ""
+
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 msgid "show this help message and exit"
 msgstr "Taispeáin an teachtaireacht chabhrach seo agus scoir"
 
@@ -2644,6 +2693,10 @@ msgstr "srclibs ainm ar iarraidh agus / nó @"
 msgid "static library"
 msgstr "Leabharlann statach"
 
+#: /usr/lib/python3.13/argparse.py
+msgid "subcommands"
+msgstr ""
+
 #: ../fdroidserver/build.py
 #, python-brace-format
 msgid "supplied reference binary has allowed signer {signer}"
@@ -2654,7 +2707,7 @@ msgstr "tá dénártha tagartha soláthraithe ceadaithe signer {signer}"
 msgid "suspicious permissions {st_mode:o}"
 msgstr "ceadanna amhrasacha {st_mode:o}"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "the following arguments are required: %s"
 msgstr "Tá na hargóintí seo a leanas ag teastáil: %s"
@@ -2663,17 +2716,17 @@ msgstr "Tá na hargóintí seo a leanas ag teastáil: %s"
 msgid "true"
 msgstr "fíor"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "unexpected option string: %s"
 msgstr "teaghrán rogha gan choinne: %s"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "unknown parser %(parser_name)r (choices: %(choices)s)"
 msgstr "parsálaí anaithnid %(parser_name)r (roghanna: %(choices)s)"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "unrecognized arguments: %s"
 msgstr "argóintí neamhaitheanta: %s"
@@ -2684,6 +2737,7 @@ msgid "unsafe permissions on '{config_file}' (should be 0600)!"
 msgstr "ceadanna neamhshábháilte ar '{config_file}' (ba chóir go mbeadh 0600)!"
 
 #: ../fdroidserver/__main__.py /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.13/argparse.py
 msgid "usage: "
 msgstr "úsáid: "
 

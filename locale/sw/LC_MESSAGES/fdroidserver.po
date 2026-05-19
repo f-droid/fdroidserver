@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 2.3a1\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2026-01-13 11:31+0100\n"
+"POT-Creation-Date: 2026-05-19 17:44+0200\n"
 "PO-Revision-Date: 2026-03-09 09:44+0000\n"
 "Last-Translator: Ashley Tsuma <tsumaashley@gmail.com>\n"
 "Language-Team: Swahili <https://hosted.weblate.org/projects/f-droid/fdroidserver/sw/>\n"
@@ -36,6 +36,11 @@ msgid ""
 msgstr ""
 "\n"
 "{path} iliyosimbwa kwa utofauti wa siri wa DEBUG_KEYSTORE:"
+
+#: /usr/lib/python3.13/argparse.py
+#, python-format
+msgid " (default: %(default)s)"
+msgstr ""
 
 #: ../fdroidserver/lint.py
 #, python-format
@@ -64,6 +69,11 @@ msgstr "\"local_copy_dir\" {path} haipo!"
 msgid "\"{apkfilename}\" is already installed on {dev}."
 msgstr "Tayari \"{apkfilename}\" imesakinishwa kwenye {dev}."
 
+#: ../fdroidserver/signindex.py
+#, fuzzy, python-brace-format
+msgid "\"{name}\" has bad SHA-256: {sha256}"
+msgstr "%s ina SHA-256 mbaya: %s"
+
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "\"{path}\" contains recent {name} ({version})"
@@ -89,9 +99,19 @@ msgstr "\"{path}\" imetiwa saini na ufunguo ambao hauruhusiwi:"
 msgid "\"{url}\" is not a valid URL!"
 msgstr "\"{url}\" si URL halali!"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.13/argparse.py
+#, python-format
+msgid "%(heading)s:"
+msgstr ""
+
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "%(prog)s: error: %(message)s\n"
+msgstr "%(prog)s: kasoro: %(message)s\n"
+
+#: /usr/lib/python3.13/argparse.py
+#, fuzzy, python-format
+msgid "%(prog)s: warning: %(message)s\n"
 msgstr "%(prog)s: kasoro: %(message)s\n"
 
 #: ../fdroidserver/publish.py
@@ -104,7 +124,7 @@ msgstr "APK %d hazijatiwa saini au kuthibitishwa!"
 msgid "%d problems found"
 msgstr "%d matatizo yamepatikana"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "%r is not callable"
 msgstr "%r haiwezi kuitwa"
@@ -149,7 +169,7 @@ msgstr "Ili kutumia awsbucket, awssecretkey na awsaccesskeiid lazima pia iwekwe 
 msgid "'repo_keyalias' not found in config.yml!"
 msgstr "'repo_keyalias' haipatikani kwenye config.yml!"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 msgid "'required' is an invalid argument for positionals"
 msgstr "\"required\" ni hoja batili kwa vipengee vya nafasi"
 
@@ -200,7 +220,7 @@ msgstr "--merge-request inatumika na appid moja tu!"
 msgid "...checkupdate failed for {appid} : {error}"
 msgstr "...sasisho la ukaguzi limeshindwa la{appid} : {error}"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 msgid ".__call__() not defined"
 msgstr ".__call__() haijafafanuliwa"
 
@@ -1469,6 +1489,11 @@ msgid "Privacy mode was enabled based on your locale ({country_code})."
 msgstr "Hali ya faragha imewashwa kulingana na eneo lako ({country_code})."
 
 #: ../fdroidserver/scanner.py
+#, fuzzy, python-brace-format
+msgid "Problem with ZIP file \"{apkfile}\": {error}"
+msgstr "Tatizo na faili ya ZIP:%s, hitilafu %s"
+
+#: ../fdroidserver/scanner.py
 #, python-format
 msgid "Problem with ZIP file: %s, error %s"
 msgstr "Tatizo na faili ya ZIP:%s, hitilafu %s"
@@ -1797,6 +1822,11 @@ msgstr "Muhtasari wa urefu {length} ni juu ya {limit} kikomo cha char"
 #, python-brace-format
 msgid "System clock is older than date in {path}!"
 msgstr "Saa ya mfumo ni mzee kuliko tarehe katika {path}!"
+
+#: ../fdroidserver/checkupdates.py
+#, fuzzy
+msgid "Tags update mode only works for git repositories currently"
+msgstr "Modi ya sasisho la tagi inafanya kazi tu kwa ghala za git,hg, bzr na git-svn kwa sasa"
 
 #: ../fdroidserver/checkupdates.py
 msgid "Tags update mode only works for git, hg, bzr and git-svn repositories currently"
@@ -2230,7 +2260,7 @@ msgstr "Inaongeza IdentityFile kwa {path}"
 msgid "adding to {name}: {path}"
 msgstr "Inaongeza kwa {name}: {path}"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "ambiguous option: %(option)s could match %(matches)s"
 msgstr "chaguo lisiloeleweka: %(option)s linaweza kulingana na %(matches)s"
@@ -2265,14 +2295,19 @@ msgstr "Kitambulisho cha apu yenye versionCode iliyo ya hiari katika fomu APPID[
 msgid "archive_url needs to end with /archive"
 msgstr "archive_url inahitaji kumalizia na /archive"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "argument \"-\" with mode %r"
 msgstr "hoja \"-\" na modi %r"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "argument %(argument_name)s: %(message)s"
+msgstr "hoja %(argument_name)s: %(message)s"
+
+#: /usr/lib/python3.13/argparse.py
+#, fuzzy, python-format
+msgid "argument '%(argument_name)s' is deprecated"
 msgstr "hoja %(argument_name)s: %(message)s"
 
 #: ../fdroidserver/nightly.py
@@ -2283,7 +2318,7 @@ msgstr "inajaribu uhusiano wa SSH ulio tupu ili kujaribu ufunguo wa kupeleka:"
 msgid "can not parse scrlib spec (not a string): '{}'"
 msgstr "Haiwezi kuchanganua speci ya scrlib (sio kamba): '{}'"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "can't open '%(filename)s': %(error)s"
 msgstr "Haiwezi kufungua '%(filename)s':%(error)s"
@@ -2297,11 +2332,11 @@ msgstr "Haiwezi kufungua URL isiyo ya https: '{};"
 msgid "cannot find required srclibs: \"{path}\""
 msgstr "Haiwezi kupata srclibs inayohitajika: \"{path}\""
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 msgid "cannot have multiple subparser arguments"
 msgstr "Haiwezi kuwa na hoja za subparser nyingi"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "cannot merge actions - two groups are named %r"
 msgstr "Haiwezi kuunganisha vitendo - vikundi viwili vimepewa jina %r"
@@ -2315,23 +2350,28 @@ msgstr "Haiwezi kuchapisha sasisho, je, uliseti ufunguo wa kupeleka?"
 msgid "cloning {url}"
 msgstr "kukaririsha {url}"
 
+#: /usr/lib/python3.13/argparse.py
+#, python-format
+msgid "command '%(parser_name)s' is deprecated"
+msgstr ""
+
 #: ../fdroidserver/__main__.py
 msgid "commands from plugin modules:"
 msgstr "amri kutoka kwa kiunzi huru cha programu-jalizi:"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "conflicting option string: %s"
 msgid_plural "conflicting option strings: %s"
 msgstr[0] "kamba ya chaguo inayokinzana: %s"
 msgstr[1] "kamba za chaguo zinazokinzana: %s"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "conflicting subparser alias: %s"
 msgstr "lakabu la subparser inayokinzana: %s"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "conflicting subparser: %s"
 msgstr "subparser inayokinzana: %s"
@@ -2373,7 +2413,7 @@ msgstr ""
 msgid "deployed process log {path} to {dest}"
 msgstr "logi ya mchakato uliosambazwa {path} hadi {dest}"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "dest= is required for options like %r"
 msgstr "dest= inahitajika kwa chaguo kama %r"
@@ -2390,22 +2430,22 @@ msgstr "Inapakua sahihi za skena kutoka '{}' imefeli"
 msgid "executable binary, possibly code"
 msgstr "binari inayoweza kutekelezwa, ikiwezekana msimbo"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "expected %s argument"
 msgid_plural "expected %s arguments"
 msgstr[0] "hoja %s iliyotarajiwa"
 msgstr[1] "hoja %s zilizotarajiwa"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 msgid "expected at least one argument"
 msgstr "ilitarajia angalau hoja moja"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 msgid "expected at most one argument"
 msgstr "Imetarajiwa isiwe zaidi ya hoja moja"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 msgid "expected one argument"
 msgstr "Ilitarajia hoja moja"
 
@@ -2433,7 +2473,7 @@ msgstr "svn clone ya git ilifeli"
 msgid "gzip file archive"
 msgstr "kumbukumbu ya faili ya gzip"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "ignored explicit argument %r"
 msgstr "Ilipuuza hoja ya dhahiri %r"
@@ -2446,22 +2486,22 @@ msgstr "index-v1 lazima iwe na saini, tumia `fdroid signindex` kuiunda!"
 msgid "index-v2 must have a signature, use `fdroid signindex` to create it!"
 msgstr "index-v2 lazima iwe na saini, tumia `fdroid signindex` kuiunda!"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "invalid %(type)s value: %(value)r"
 msgstr "Thamani batili ya %(type)s: %(value)r"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "invalid choice: %(value)r (choose from %(choices)s)"
 msgstr "chaguo iliyo batili: %(value)r (chagua kutoka %(choices)s)"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "invalid conflict_resolution value: %r"
 msgstr "thamani ya conflict_resolution iliyo batili: %r"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "invalid option string %(option)r: must start with a character %(prefix_chars)r"
 msgstr "kamba ya chaguo iliyo batili %(option)r: lazima ianze na char %(prefix_chars)r"
@@ -2498,7 +2538,7 @@ msgstr "kioo %s haikwishia na 'fdroid'!"
 msgid "mirrors set twice, in config.yml and {path}!"
 msgstr "vioo vimesetiwa mara mbili, katika config.yml na {path}!"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 msgid "mutually exclusive arguments must be optional"
 msgstr "Hoja zinazokinzana lazima ziwe za hiari"
 
@@ -2520,12 +2560,12 @@ msgstr "hakuna APK iliyowasilishwa"
 msgid "no version information found"
 msgstr "hakuna maelezo ya toleo zimepatikana"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "not allowed with argument %s"
 msgstr "haikubaliki na hoja %s"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "one of the arguments %s is required"
 msgstr "moja ya hoja %s inahitajika"
@@ -2534,7 +2574,12 @@ msgstr "moja ya hoja %s inahitajika"
 msgid "only accepts strings, lists, and tuples"
 msgstr "inakubali pekee kamba, orodha, na jozi"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.13/argparse.py
+#, python-format
+msgid "option '%(option)s' is deprecated"
+msgstr ""
+
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 msgid "options"
 msgstr "uchaguzi"
 
@@ -2548,7 +2593,7 @@ msgstr "inaandika upya {path} iliyopo"
 msgid "path_to_custom_rclone_config: \"{path}\" does not exist!"
 msgstr "Saraka ya mzizi ya local_copy_dir \"{path}\" haipo!"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 msgid "positional arguments"
 msgstr "hoja ya msimamo"
 
@@ -2613,7 +2658,11 @@ msgstr "serverwebroot: njia haikamiliki na \"fdroid\", labda ulimaanisha moja ka
 msgid "shared library"
 msgstr "maktaba inayoshirikishwa"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.13/argparse.py
+msgid "show program's version number and exit"
+msgstr ""
+
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 msgid "show this help message and exit"
 msgstr "onyesha ujumbe huu wa usaidizi na uondoke"
 
@@ -2642,6 +2691,10 @@ msgstr "srclibs inakosa jina na/au @"
 msgid "static library"
 msgstr "maktaba tuli"
 
+#: /usr/lib/python3.13/argparse.py
+msgid "subcommands"
+msgstr ""
+
 #: ../fdroidserver/build.py
 #, python-brace-format
 msgid "supplied reference binary has allowed signer {signer}"
@@ -2652,7 +2705,7 @@ msgstr "binari ya rejeleo lililowasilishwa imeruhusu signer {signer}"
 msgid "suspicious permissions {st_mode:o}"
 msgstr "Ruhusa zinazotia shaka {st_mode:o}"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "the following arguments are required: %s"
 msgstr "hoja zifuatazo zinahitajika: %s"
@@ -2661,17 +2714,17 @@ msgstr "hoja zifuatazo zinahitajika: %s"
 msgid "true"
 msgstr "kweli"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "unexpected option string: %s"
 msgstr "Chaguo lisilotarajiwa: %s"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "unknown parser %(parser_name)r (choices: %(choices)s)"
 msgstr "kichanganuzi isiyojulikana %(parser_name)r (chaguo: %(choices)s)"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "unrecognized arguments: %s"
 msgstr "hoja zisizotambulika: %s"
@@ -2682,6 +2735,7 @@ msgid "unsafe permissions on '{config_file}' (should be 0600)!"
 msgstr "ruhusa zisizo salama kwenye '{config_file}' (inapaswa kuwa 0600)!"
 
 #: ../fdroidserver/__main__.py /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.13/argparse.py
 msgid "usage: "
 msgstr "matumizi: "
 

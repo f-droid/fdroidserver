@@ -39,7 +39,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2026-01-13 11:31+0100\n"
+"POT-Creation-Date: 2026-05-19 17:44+0200\n"
 "PO-Revision-Date: 2026-05-12 05:58+0000\n"
 "Last-Translator: 大王叫我来巡山 <hamburger2048@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/projects/f-droid/fdroidserver/zh_Hans/>\n"
@@ -66,6 +66,11 @@ msgid ""
 msgstr ""
 "\n"
 "编码的 DEBUG_KEYSTORE {path} 秘密变量:"
+
+#: /usr/lib/python3.13/argparse.py
+#, python-format
+msgid " (default: %(default)s)"
+msgstr ""
 
 #: ../fdroidserver/lint.py
 #, python-format
@@ -94,6 +99,11 @@ msgstr "\"local_copy_dir\" {path} 不存在！"
 msgid "\"{apkfilename}\" is already installed on {dev}."
 msgstr "'{apkfilename}' 已安装在 {dev} 上."
 
+#: ../fdroidserver/signindex.py
+#, fuzzy, python-brace-format
+msgid "\"{name}\" has bad SHA-256: {sha256}"
+msgstr "%s 的 SHA-256 值不正确：%s"
+
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "\"{path}\" contains recent {name} ({version})"
@@ -119,9 +129,19 @@ msgstr "\"{path}\" 由不允许的密钥所签署："
 msgid "\"{url}\" is not a valid URL!"
 msgstr "\"{url}\" 不是有效的链接!"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.13/argparse.py
+#, python-format
+msgid "%(heading)s:"
+msgstr ""
+
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "%(prog)s: error: %(message)s\n"
+msgstr "%(prog)s：错误：%(message)s\n"
+
+#: /usr/lib/python3.13/argparse.py
+#, fuzzy, python-format
+msgid "%(prog)s: warning: %(message)s\n"
 msgstr "%(prog)s：错误：%(message)s\n"
 
 #: ../fdroidserver/publish.py
@@ -134,7 +154,7 @@ msgstr "%d 个 APK 无法签名或验证！"
 msgid "%d problems found"
 msgstr "发现 %d 个问题"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "%r is not callable"
 msgstr "%r 不可调用"
@@ -178,7 +198,7 @@ msgstr "config.yml 中必须设置 'rclone_config' ！"
 msgid "'repo_keyalias' not found in config.yml!"
 msgstr "config.yml 中找不到 'repo_keyalias'!"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 msgid "'required' is an invalid argument for positionals"
 msgstr "'required' 是位置的无效参数"
 
@@ -228,7 +248,7 @@ msgstr "--merge-request 只运行在单个 appid 上！"
 msgid "...checkupdate failed for {appid} : {error}"
 msgstr "…为 {appid} 检查更新失败: {error}"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 msgid ".__call__() not defined"
 msgstr ".__call__() 未定义"
 
@@ -1494,6 +1514,11 @@ msgid "Privacy mode was enabled based on your locale ({country_code})."
 msgstr "根据你的语言环境（{country_code}）启用了隐私模式。"
 
 #: ../fdroidserver/scanner.py
+#, fuzzy, python-brace-format
+msgid "Problem with ZIP file \"{apkfile}\": {error}"
+msgstr "ZIP 文件问题：%s，错误 %s"
+
+#: ../fdroidserver/scanner.py
 #, python-format
 msgid "Problem with ZIP file: %s, error %s"
 msgstr "ZIP 文件问题：%s，错误 %s"
@@ -1821,6 +1846,11 @@ msgstr "长度摘要 {length} 超过 {limit} 字符限制"
 #, python-brace-format
 msgid "System clock is older than date in {path}!"
 msgstr "系统时钟早于 {path} 中的日期！"
+
+#: ../fdroidserver/checkupdates.py
+#, fuzzy
+msgid "Tags update mode only works for git repositories currently"
+msgstr "标签更新模式目前仅适用于 git、hg、bzr 和 git-svn 存储库"
 
 #: ../fdroidserver/checkupdates.py
 msgid "Tags update mode only works for git, hg, bzr and git-svn repositories currently"
@@ -2252,7 +2282,7 @@ msgstr "将 IdentityFile 添加到 {path}"
 msgid "adding to {name}: {path}"
 msgstr "添加到 {name}： {path}"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "ambiguous option: %(option)s could match %(matches)s"
 msgstr "模糊的选项：%(option)s 可以相配 %(matches)s"
@@ -2287,14 +2317,19 @@ msgstr "带APPID[:VERCODE]格式可选的versionCode的应用 ID"
 msgid "archive_url needs to end with /archive"
 msgstr "archive_url 需要以 /archive 结尾"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "argument \"-\" with mode %r"
 msgstr "参数 “-” 带有模式 %r"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "argument %(argument_name)s: %(message)s"
+msgstr "参数 %(argument_name)s：%(message)s"
+
+#: /usr/lib/python3.13/argparse.py
+#, fuzzy, python-format
+msgid "argument '%(argument_name)s' is deprecated"
 msgstr "参数 %(argument_name)s：%(message)s"
 
 #: ../fdroidserver/nightly.py
@@ -2305,7 +2340,7 @@ msgstr "尝试使用裸 SSH 连接测试部署密钥："
 msgid "can not parse scrlib spec (not a string): '{}'"
 msgstr "无法解析 scrlib 规范（不是字符串）：“{}”"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "can't open '%(filename)s': %(error)s"
 msgstr "无法打开 '%(filename)s'：%(error)s"
@@ -2319,11 +2354,11 @@ msgstr "无法打开非 HTTPS URL： '{};"
 msgid "cannot find required srclibs: \"{path}\""
 msgstr "找不到所需的源库：“{path}”"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 msgid "cannot have multiple subparser arguments"
 msgstr "不能有多个子解析器参数"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "cannot merge actions - two groups are named %r"
 msgstr "无法合并操作 - 两个组被命名为 %r"
@@ -2337,22 +2372,27 @@ msgstr "无法发布更新，是否设置了部署密钥？"
 msgid "cloning {url}"
 msgstr "正在克隆 {url}"
 
+#: /usr/lib/python3.13/argparse.py
+#, python-format
+msgid "command '%(parser_name)s' is deprecated"
+msgstr ""
+
 #: ../fdroidserver/__main__.py
 msgid "commands from plugin modules:"
 msgstr "来自插件模块的命令："
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "conflicting option string: %s"
 msgid_plural "conflicting option strings: %s"
 msgstr[0] "有冲突的选项字串：%s"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "conflicting subparser alias: %s"
 msgstr "有冲突的子解析器别名：%s"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "conflicting subparser: %s"
 msgstr "有冲突的子解析器：%s"
@@ -2394,7 +2434,7 @@ msgstr "没有锁的依赖文件"
 msgid "deployed process log {path} to {dest}"
 msgstr "已部署进程日志 {path} 到 {dest}"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "dest= is required for options like %r"
 msgstr "对于像 %r 这样的选项，dest= 是必需的"
@@ -2411,21 +2451,21 @@ msgstr "从 '{}' 下载扫描仪特征失败了"
 msgid "executable binary, possibly code"
 msgstr "可执行二进制文件，可能是代码"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "expected %s argument"
 msgid_plural "expected %s arguments"
 msgstr[0] "预期的 %s 个参数"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 msgid "expected at least one argument"
 msgstr "预期至少有一个参数"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 msgid "expected at most one argument"
 msgstr "预期最多有一个参数"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 msgid "expected one argument"
 msgstr "预期一个参数"
 
@@ -2453,7 +2493,7 @@ msgstr "git svn 克隆失败"
 msgid "gzip file archive"
 msgstr "gzip 压缩包"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "ignored explicit argument %r"
 msgstr "被忽略的显式参数 %r"
@@ -2466,22 +2506,22 @@ msgstr "index-v1 必须有签名，使用 `fdroid signindex` 命令创建它！"
 msgid "index-v2 must have a signature, use `fdroid signindex` to create it!"
 msgstr "index-v2 必须有签名，使用 `fdroid signindex` 命令创建它！"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "invalid %(type)s value: %(value)r"
 msgstr "无效 %(type)s 值: %(value)r"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "invalid choice: %(value)r (choose from %(choices)s)"
 msgstr "无效选项：%(value)r (选取自 %(choices)s)"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "invalid conflict_resolution value: %r"
 msgstr "冲突解决值无效: %r"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "invalid option string %(option)r: must start with a character %(prefix_chars)r"
 msgstr "无效选项字符串 %(option)r: 必须以字符 %(prefix_chars)r 开头"
@@ -2518,7 +2558,7 @@ msgstr "镜像 '%s' 不以 'fdroid'结尾!"
 msgid "mirrors set twice, in config.yml and {path}!"
 msgstr "设置了两次镜像，分别在 config.xml 和 {path} 中!"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 msgid "mutually exclusive arguments must be optional"
 msgstr "相互排斥的参数必须是可选的"
 
@@ -2540,12 +2580,12 @@ msgstr "未提供 APK"
 msgid "no version information found"
 msgstr "没有找到版本信息"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "not allowed with argument %s"
 msgstr "不允许使用参数 %s"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "one of the arguments %s is required"
 msgstr "其中一个参数 %s 是必需的"
@@ -2554,7 +2594,12 @@ msgstr "其中一个参数 %s 是必需的"
 msgid "only accepts strings, lists, and tuples"
 msgstr "只接受字符串、列表和元组"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.13/argparse.py
+#, python-format
+msgid "option '%(option)s' is deprecated"
+msgstr ""
+
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 msgid "options"
 msgstr "选项"
 
@@ -2568,7 +2613,7 @@ msgstr "正在覆盖现有{path}"
 msgid "path_to_custom_rclone_config: \"{path}\" does not exist!"
 msgstr "path_to_custom_rclone_config: \"{path}\" 不存在！"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 msgid "positional arguments"
 msgstr "位置参数"
 
@@ -2633,7 +2678,11 @@ msgstr "serverwebroot：路径没有以 \"fdroid\"结尾，可能你想表达的
 msgid "shared library"
 msgstr "共享库"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.13/argparse.py
+msgid "show program's version number and exit"
+msgstr ""
+
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 msgid "show this help message and exit"
 msgstr "显示本帮助信息并退出"
 
@@ -2662,6 +2711,10 @@ msgstr "srclibs 缺少名称和/或 @"
 msgid "static library"
 msgstr "静态库"
 
+#: /usr/lib/python3.13/argparse.py
+msgid "subcommands"
+msgstr ""
+
 #: ../fdroidserver/build.py
 #, python-brace-format
 msgid "supplied reference binary has allowed signer {signer}"
@@ -2672,7 +2725,7 @@ msgstr "所提供的参考二进制已允许签名者 {signer}"
 msgid "suspicious permissions {st_mode:o}"
 msgstr "可疑权限 {st_mode:o}"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "the following arguments are required: %s"
 msgstr "需要此下参数：%s"
@@ -2681,17 +2734,17 @@ msgstr "需要此下参数：%s"
 msgid "true"
 msgstr "true"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "unexpected option string: %s"
 msgstr "未预期的选项字符串：%s"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "unknown parser %(parser_name)r (choices: %(choices)s)"
 msgstr "未知解析器 %(parser_name)r (选择: %(choices)s)"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "unrecognized arguments: %s"
 msgstr "未识别的参数：%s"
@@ -2702,6 +2755,7 @@ msgid "unsafe permissions on '{config_file}' (should be 0600)!"
 msgstr "{config_file} 的文件权限不安全 ( 应该设为0600 ) !"
 
 #: ../fdroidserver/__main__.py /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.13/argparse.py
 msgid "usage: "
 msgstr "用法: "
 

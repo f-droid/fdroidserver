@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 2.1-273-g54e84d87\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2026-01-13 11:31+0100\n"
+"POT-Creation-Date: 2026-05-19 17:44+0200\n"
 "PO-Revision-Date: 2026-04-30 15:09+0000\n"
 "Last-Translator: Ecron <ecron_89@hotmail.com>\n"
 "Language-Team: Catalan <https://hosted.weblate.org/projects/f-droid/fdroidserver/ca/>\n"
@@ -38,6 +38,11 @@ msgid ""
 msgstr ""
 "\n"
 "{path} codificat per a la variable secreta DEBUG_KEYSTORE:"
+
+#: /usr/lib/python3.13/argparse.py
+#, python-format
+msgid " (default: %(default)s)"
+msgstr ""
 
 #: ../fdroidserver/lint.py
 #, python-format
@@ -66,6 +71,11 @@ msgstr "\"local_copy_dir\" {path} no existeix!"
 msgid "\"{apkfilename}\" is already installed on {dev}."
 msgstr "\"{apkfilename}\" ja està instal·lat en {dev}."
 
+#: ../fdroidserver/signindex.py
+#, fuzzy, python-brace-format
+msgid "\"{name}\" has bad SHA-256: {sha256}"
+msgstr "%s té un SHA-256 dolent: %s"
+
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "\"{path}\" contains recent {name} ({version})"
@@ -91,9 +101,19 @@ msgstr "\"{path}\" està signat per una clau que no està permesa:"
 msgid "\"{url}\" is not a valid URL!"
 msgstr "\"{url}\" no és un URL vàlid!"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.13/argparse.py
+#, python-format
+msgid "%(heading)s:"
+msgstr ""
+
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "%(prog)s: error: %(message)s\n"
+msgstr "%(prog)s: errada: %(message)s\n"
+
+#: /usr/lib/python3.13/argparse.py
+#, fuzzy, python-format
+msgid "%(prog)s: warning: %(message)s\n"
 msgstr "%(prog)s: errada: %(message)s\n"
 
 #: ../fdroidserver/publish.py
@@ -106,7 +126,7 @@ msgstr "%d APKs no han pogut ser signats o verificats."
 msgid "%d problems found"
 msgstr "%d problemes trobats"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "%r is not callable"
 msgstr "no es pot cridar a %r"
@@ -150,7 +170,7 @@ msgstr "Cal definir «rclone_config» al config.yml!"
 msgid "'repo_keyalias' not found in config.yml!"
 msgstr "'repo_keyalias' no s'ha trobat a config.yml!"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 msgid "'required' is an invalid argument for positionals"
 msgstr "\"obligatori\" és un argument no vàlid per a posicionals"
 
@@ -200,7 +220,7 @@ msgstr "--merge-request només funciona amb un sol ID d'aplicació!"
 msgid "...checkupdate failed for {appid} : {error}"
 msgstr "...ha fallat la comprovació de {appid} : {error}"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 msgid ".__call__() not defined"
 msgstr ".__call__() no definida"
 
@@ -1467,6 +1487,11 @@ msgid "Privacy mode was enabled based on your locale ({country_code})."
 msgstr "El mode privat s'ha habilitat d'acord amb el vostre codi regional ({country_code})."
 
 #: ../fdroidserver/scanner.py
+#, fuzzy, python-brace-format
+msgid "Problem with ZIP file \"{apkfile}\": {error}"
+msgstr "Problema amb el fitxer ZIP: %s, error %s"
+
+#: ../fdroidserver/scanner.py
 #, python-format
 msgid "Problem with ZIP file: %s, error %s"
 msgstr "Problema amb el fitxer ZIP: %s, error %s"
@@ -1795,6 +1820,11 @@ msgstr "El resum de la longitud {length} és superior al límit de {limit} carà
 #, python-brace-format
 msgid "System clock is older than date in {path}!"
 msgstr "El rellotge del sistema és més antic que la data a {path}!"
+
+#: ../fdroidserver/checkupdates.py
+#, fuzzy
+msgid "Tags update mode only works for git repositories currently"
+msgstr "El mode d'actualització de les etiquetes només funciona per als dipòsits git, hg, bzr i git-svn actualment"
 
 #: ../fdroidserver/checkupdates.py
 msgid "Tags update mode only works for git, hg, bzr and git-svn repositories currently"
@@ -2226,7 +2256,7 @@ msgstr "s'està afegint el fitxer d'identitat a {path}"
 msgid "adding to {name}: {path}"
 msgstr "s'està afegint a {name}: {path}"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "ambiguous option: %(option)s could match %(matches)s"
 msgstr "opció ambigua: %(option)s podria correspondre amb %(matches)s"
@@ -2261,14 +2291,19 @@ msgstr "ID de l'aplicació amb versió opcionalCode en el formulari APPID[:VERCO
 msgid "archive_url needs to end with /archive"
 msgstr "archive_url necessita acabar amb /archive"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "argument \"-\" with mode %r"
 msgstr "argument \"-\" amb mode %r"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "argument %(argument_name)s: %(message)s"
+msgstr "argument %(argument_name)s: %(message)s"
+
+#: /usr/lib/python3.13/argparse.py
+#, fuzzy, python-format
+msgid "argument '%(argument_name)s' is deprecated"
 msgstr "argument %(argument_name)s: %(message)s"
 
 #: ../fdroidserver/nightly.py
@@ -2279,7 +2314,7 @@ msgstr "s'està provant la connexió SSH per comprovar la clau de desplegament:"
 msgid "can not parse scrlib spec (not a string): '{}'"
 msgstr "no es pot analitzar l'especificació de la «scrlib» (no és una cadena): '{}'"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "can't open '%(filename)s': %(error)s"
 msgstr "no es pot obrir '%(filename)s': %(error)s"
@@ -2293,11 +2328,11 @@ msgstr "no es pot obrir l'URL no-https: '{};"
 msgid "cannot find required srclibs: \"{path}\""
 msgstr "no s'han pogut trobar els srclibs requerits: \"{path}\""
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 msgid "cannot have multiple subparser arguments"
 msgstr "no es poden tenir múltiples arguments de subanalitzador"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "cannot merge actions - two groups are named %r"
 msgstr "no es poden fusionar les accions - dos grups s'anomenen %r"
@@ -2311,23 +2346,28 @@ msgstr "no es pot publicar l'actualització. Heu establert la clau de desplegame
 msgid "cloning {url}"
 msgstr "s'està clonant {url}"
 
+#: /usr/lib/python3.13/argparse.py
+#, python-format
+msgid "command '%(parser_name)s' is deprecated"
+msgstr ""
+
 #: ../fdroidserver/__main__.py
 msgid "commands from plugin modules:"
 msgstr "ordres dels mòduls del connector:"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "conflicting option string: %s"
 msgid_plural "conflicting option strings: %s"
 msgstr[0] "cadena d'opció conflictiva: %s"
 msgstr[1] "cadenes d'opció conflictiva: %s"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "conflicting subparser alias: %s"
 msgstr "àlies de subanalitzador conflictiu: %s"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "conflicting subparser: %s"
 msgstr "subanalitzador conflictiu: %s"
@@ -2369,7 +2409,7 @@ msgstr "fitxer de dependència sense blocatge"
 msgid "deployed process log {path} to {dest}"
 msgstr "s'ha desplegat el registre de procés {path} a {dest}"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "dest= is required for options like %r"
 msgstr "dest= és obligatori per opcions com %r"
@@ -2386,22 +2426,22 @@ msgstr "ha fallat la baixada de signatures de l'escàner des de '{}'"
 msgid "executable binary, possibly code"
 msgstr "binari executable, possiblement codi"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "expected %s argument"
 msgid_plural "expected %s arguments"
 msgstr[0] "s'esperava l'argument %s"
 msgstr[1] "s'esperaven els arguments %s"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 msgid "expected at least one argument"
 msgstr "s'esperava almenys un argument"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 msgid "expected at most one argument"
 msgstr "s'esperava com a màxim un argument"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 msgid "expected one argument"
 msgstr "s'esperava un argument"
 
@@ -2429,7 +2469,7 @@ msgstr "Ha fallat el clon de «git svn»"
 msgid "gzip file archive"
 msgstr "arxiu de fitxers gzip"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "ignored explicit argument %r"
 msgstr "s'ha ignorat l'argument explícit %r"
@@ -2442,22 +2482,22 @@ msgstr "index-v1 ha de tenir una signatura, utilitzeu `fdroid signindex` per a c
 msgid "index-v2 must have a signature, use `fdroid signindex` to create it!"
 msgstr "index-v2 ha de tenir una signatura, utilitzeu `fdroid signindex`per a crear-la!"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "invalid %(type)s value: %(value)r"
 msgstr "valor %(type)s no vàlid: %(value)r"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "invalid choice: %(value)r (choose from %(choices)s)"
 msgstr "elecció no vàlida: %(value)r (trieu de %(choices)s)"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "invalid conflict_resolution value: %r"
 msgstr "el valor conflict_resolution no és vàlid: %r"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "invalid option string %(option)r: must start with a character %(prefix_chars)r"
 msgstr "cadena d'opció no vàlida %(option)r: ha de començar amb un caràcter %(prefix_chars)r"
@@ -2494,7 +2534,7 @@ msgstr "La rèplica «%s» no acaba amb «fdroid»!"
 msgid "mirrors set twice, in config.yml and {path}!"
 msgstr "rèpliques establertes dues vegades, a config.yml i {path}!"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 msgid "mutually exclusive arguments must be optional"
 msgstr "els arguments mútuament excloents han de ser opcionals"
 
@@ -2516,12 +2556,12 @@ msgstr "no s'ha subministrat cap APK"
 msgid "no version information found"
 msgstr "no s'ha trobat cap informació de versió"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "not allowed with argument %s"
 msgstr "no està permès amb l'argument %s"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "one of the arguments %s is required"
 msgstr "es requereix un dels arguments %s"
@@ -2530,7 +2570,12 @@ msgstr "es requereix un dels arguments %s"
 msgid "only accepts strings, lists, and tuples"
 msgstr "només accepta cadenes, llistes i tuples"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.13/argparse.py
+#, python-format
+msgid "option '%(option)s' is deprecated"
+msgstr ""
+
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 msgid "options"
 msgstr "opcions"
 
@@ -2544,7 +2589,7 @@ msgstr "s'està sobreescrivint {path}"
 msgid "path_to_custom_rclone_config: \"{path}\" does not exist!"
 msgstr "path_to_custom_rclone_config: «{path}» no existeix!"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 msgid "positional arguments"
 msgstr "arguments posicionals"
 
@@ -2609,7 +2654,11 @@ msgstr "serverwebroot: el camí no acaba amb \"fdroid\", potser volíeu dir una 
 msgid "shared library"
 msgstr "biblioteca compartida"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.13/argparse.py
+msgid "show program's version number and exit"
+msgstr ""
+
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 msgid "show this help message and exit"
 msgstr "mostra aquest missatge d'ajuda i surt"
 
@@ -2638,6 +2687,10 @@ msgstr "manca el nom i/o @ de srclibs"
 msgid "static library"
 msgstr "biblioteca estàtica"
 
+#: /usr/lib/python3.13/argparse.py
+msgid "subcommands"
+msgstr ""
+
 #: ../fdroidserver/build.py
 #, python-brace-format
 msgid "supplied reference binary has allowed signer {signer}"
@@ -2648,7 +2701,7 @@ msgstr "el binari de referència proporcionat ha permès el signant {signer}"
 msgid "suspicious permissions {st_mode:o}"
 msgstr "permisos sospitosos {st_mode:o}"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "the following arguments are required: %s"
 msgstr "els arguments següents són obligatoris: %s"
@@ -2657,17 +2710,17 @@ msgstr "els arguments següents són obligatoris: %s"
 msgid "true"
 msgstr "vertader"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "unexpected option string: %s"
 msgstr "cadena d'opcions inesperada: %s"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "unknown parser %(parser_name)r (choices: %(choices)s)"
 msgstr "analitzador desconegut %(parser_name)r (opcions: %(choices)s)"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "unrecognized arguments: %s"
 msgstr "arguments desconeguts: %s"
@@ -2678,6 +2731,7 @@ msgid "unsafe permissions on '{config_file}' (should be 0600)!"
 msgstr "permisos a «{config_file}» insegurs (hauria de ser 0600)!"
 
 #: ../fdroidserver/__main__.py /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.13/argparse.py
 msgid "usage: "
 msgstr "us: "
 

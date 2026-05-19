@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 1.0.6-70-g54bc858\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2026-01-13 11:31+0100\n"
+"POT-Creation-Date: 2026-05-19 17:44+0200\n"
 "PO-Revision-Date: 2026-03-19 17:56+0000\n"
 "Last-Translator: -J- <heyj0e@tuta.io>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/f-droid/fdroidserver/hu/>\n"
@@ -38,6 +38,11 @@ msgid ""
 msgstr ""
 "\n"
 "A(z) „{path}” kódolva a DEBUG_KEYSTORE titkos változóhoz:"
+
+#: /usr/lib/python3.13/argparse.py
+#, python-format
+msgid " (default: %(default)s)"
+msgstr ""
 
 #: ../fdroidserver/lint.py
 #, python-format
@@ -66,6 +71,11 @@ msgstr "\"local_copy_dir\" {path} nem létezik!"
 msgid "\"{apkfilename}\" is already installed on {dev}."
 msgstr "A(z) „{apkfilename}” már telepítve van ezen: {dev}."
 
+#: ../fdroidserver/signindex.py
+#, python-brace-format
+msgid "\"{name}\" has bad SHA-256: {sha256}"
+msgstr ""
+
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "\"{path}\" contains recent {name} ({version})"
@@ -91,9 +101,19 @@ msgstr "\"{path}\" kulccsal aláírt és így nem engedélyezett:"
 msgid "\"{url}\" is not a valid URL!"
 msgstr "A(z) „{url}” nem érvényes URL!"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.13/argparse.py
+#, python-format
+msgid "%(heading)s:"
+msgstr ""
+
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "%(prog)s: error: %(message)s\n"
+msgstr "%(prog)s: hiba: %(message)s\n"
+
+#: /usr/lib/python3.13/argparse.py
+#, fuzzy, python-format
+msgid "%(prog)s: warning: %(message)s\n"
 msgstr "%(prog)s: hiba: %(message)s\n"
 
 #: ../fdroidserver/publish.py
@@ -106,7 +126,7 @@ msgstr ""
 msgid "%d problems found"
 msgstr "%d probléma található"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "%r is not callable"
 msgstr "A(z) %r nem hívható"
@@ -151,7 +171,7 @@ msgstr "Az „sdk_path” nincs megadva a „config.yml” fájlban."
 msgid "'repo_keyalias' not found in config.yml!"
 msgstr "A „repo_keyalias” nem található a config.yml fájlban."
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 msgid "'required' is an invalid argument for positionals"
 msgstr "A „required” argumentum érvénytelen argumentum pozicionális paraméterek esetén"
 
@@ -201,7 +221,7 @@ msgstr ""
 msgid "...checkupdate failed for {appid} : {error}"
 msgstr "…checkupdate sikertelen ennél: {appid} : {error}"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 msgid ".__call__() not defined"
 msgstr ".__call__() nincs definiálva"
 
@@ -1477,6 +1497,11 @@ msgid "Privacy mode was enabled based on your locale ({country_code})."
 msgstr ""
 
 #: ../fdroidserver/scanner.py
+#, python-brace-format
+msgid "Problem with ZIP file \"{apkfile}\": {error}"
+msgstr ""
+
+#: ../fdroidserver/scanner.py
 #, python-format
 msgid "Problem with ZIP file: %s, error %s"
 msgstr ""
@@ -1807,6 +1832,10 @@ msgstr "A {length} hossza meghaladja a {limit} karakterkorlátot"
 #, python-brace-format
 msgid "System clock is older than date in {path}!"
 msgstr "A rendszer órája régebbi, mint a {path} fájl dátuma!"
+
+#: ../fdroidserver/checkupdates.py
+msgid "Tags update mode only works for git repositories currently"
+msgstr ""
 
 #: ../fdroidserver/checkupdates.py
 msgid "Tags update mode only works for git, hg, bzr and git-svn repositories currently"
@@ -2234,7 +2263,7 @@ msgstr "IdentityFile hozzáadása a {path} útvonalhoz"
 msgid "adding to {name}: {path}"
 msgstr "hozzáadás a {name}: {path}"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "ambiguous option: %(option)s could match %(matches)s"
 msgstr "nem egyértelmű kapcsoló: %(option)s, ezekre illeszkedhet: %(matches)s"
@@ -2269,14 +2298,19 @@ msgstr ""
 msgid "archive_url needs to end with /archive"
 msgstr ""
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "argument \"-\" with mode %r"
 msgstr "argumentum \"-\" %r móddal"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "argument %(argument_name)s: %(message)s"
+msgstr ""
+
+#: /usr/lib/python3.13/argparse.py
+#, python-format
+msgid "argument '%(argument_name)s' is deprecated"
 msgstr ""
 
 #: ../fdroidserver/nightly.py
@@ -2287,7 +2321,7 @@ msgstr ""
 msgid "can not parse scrlib spec (not a string): '{}'"
 msgstr ""
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "can't open '%(filename)s': %(error)s"
 msgstr "„%(filename)s” nem nyitható meg: %(error)s"
@@ -2301,11 +2335,11 @@ msgstr ""
 msgid "cannot find required srclibs: \"{path}\""
 msgstr ""
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 msgid "cannot have multiple subparser arguments"
 msgstr "nem lehet több alelemző argumentuma"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "cannot merge actions - two groups are named %r"
 msgstr "nem lehet egyesíteni a műveleteket - két csoport neve %r"
@@ -2319,23 +2353,28 @@ msgstr "Nem lehet közzétenni a frissítést. Beállította a telepítési kulc
 msgid "cloning {url}"
 msgstr "klónozás {url}"
 
+#: /usr/lib/python3.13/argparse.py
+#, python-format
+msgid "command '%(parser_name)s' is deprecated"
+msgstr ""
+
 #: ../fdroidserver/__main__.py
 msgid "commands from plugin modules:"
 msgstr ""
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "conflicting option string: %s"
 msgid_plural "conflicting option strings: %s"
 msgstr[0] "ellentmondó opció: %s"
 msgstr[1] "ellentmondó opciók: %s"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "conflicting subparser alias: %s"
 msgstr ""
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "conflicting subparser: %s"
 msgstr ""
@@ -2377,7 +2416,7 @@ msgstr ""
 msgid "deployed process log {path} to {dest}"
 msgstr ""
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "dest= is required for options like %r"
 msgstr "A dest= szükséges olyan opciókhoz, mint a %r"
@@ -2394,22 +2433,22 @@ msgstr ""
 msgid "executable binary, possibly code"
 msgstr ""
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "expected %s argument"
 msgid_plural "expected %s arguments"
 msgstr[0] "elvárt %s argumentum"
 msgstr[1] "elvárt %s argumentumok"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 msgid "expected at least one argument"
 msgstr "elvárt legalább egy argumentumot"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 msgid "expected at most one argument"
 msgstr "elvárt maximum egy argumentumot"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 msgid "expected one argument"
 msgstr "elvárt egy argumentumot"
 
@@ -2437,7 +2476,7 @@ msgstr "git svn klónozás meghiúsult"
 msgid "gzip file archive"
 msgstr ""
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "ignored explicit argument %r"
 msgstr "a(z) %r. explicit argumentum mellőzése"
@@ -2451,22 +2490,22 @@ msgstr "az index-v1-nek kell legyen aláírása, használja az „fdroid signind
 msgid "index-v2 must have a signature, use `fdroid signindex` to create it!"
 msgstr "az index-v1-nek kell legyen aláírása, használja az `fdroid signindex` parancsot a létrehozásához!"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "invalid %(type)s value: %(value)r"
 msgstr "érvénytelen %(type)s érték: %(value)r"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "invalid choice: %(value)r (choose from %(choices)s)"
 msgstr "érvénytelen választás: %(value)r (válasszon a %(choices)s közül)"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "invalid conflict_resolution value: %r"
 msgstr "érvénytelen conflict_resolution érték: %r"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "invalid option string %(option)r: must start with a character %(prefix_chars)r"
 msgstr "érvénytelen opció karakterlánc %(option)r: %(prefix_chars)r karakterrel kell kezdődnie"
@@ -2503,7 +2542,7 @@ msgstr "A „%s” tükör nem végződik „fdroid”-dal!"
 msgid "mirrors set twice, in config.yml and {path}!"
 msgstr "Most adja meg ezeket a config.yml fájlban:"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 msgid "mutually exclusive arguments must be optional"
 msgstr "a kölcsönösen kizáró argumentumoknak opcionálisnak kell lenniük"
 
@@ -2525,12 +2564,12 @@ msgstr "nincs APK szolgáltatva"
 msgid "no version information found"
 msgstr ""
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "not allowed with argument %s"
 msgstr "nem engedélyezett az %s argumentummal"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "one of the arguments %s is required"
 msgstr "az egyik argumentum %s szükséges"
@@ -2539,7 +2578,12 @@ msgstr "az egyik argumentum %s szükséges"
 msgid "only accepts strings, lists, and tuples"
 msgstr "csak karakterláncokat, listákat és tuple-okat fogad el"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.13/argparse.py
+#, python-format
+msgid "option '%(option)s' is deprecated"
+msgstr ""
+
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, fuzzy
 msgid "options"
 msgstr "Beállítások"
@@ -2554,7 +2598,7 @@ msgstr "a meglévő {path} felülírása"
 msgid "path_to_custom_rclone_config: \"{path}\" does not exist!"
 msgstr "\"local_copy_dir\" {path} nem létezik!"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 msgid "positional arguments"
 msgstr "pozicionális argumentumok"
 
@@ -2619,7 +2663,11 @@ msgstr ""
 msgid "shared library"
 msgstr ""
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.13/argparse.py
+msgid "show program's version number and exit"
+msgstr ""
+
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 msgid "show this help message and exit"
 msgstr "ezen üzenet kiírása és kilépés"
 
@@ -2648,6 +2696,10 @@ msgstr ""
 msgid "static library"
 msgstr ""
 
+#: /usr/lib/python3.13/argparse.py
+msgid "subcommands"
+msgstr ""
+
 #: ../fdroidserver/build.py
 #, python-brace-format
 msgid "supplied reference binary has allowed signer {signer}"
@@ -2658,7 +2710,7 @@ msgstr ""
 msgid "suspicious permissions {st_mode:o}"
 msgstr ""
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "the following arguments are required: %s"
 msgstr "a következő argumentumok szükségesek: %s"
@@ -2667,17 +2719,17 @@ msgstr "a következő argumentumok szükségesek: %s"
 msgid "true"
 msgstr ""
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "unexpected option string: %s"
 msgstr "váratlan kapcsoló karakterlánc: %s"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "unknown parser %(parser_name)r (choices: %(choices)s)"
 msgstr ""
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "unrecognized arguments: %s"
 msgstr "nem felismert argumentumok: %s"
@@ -2688,6 +2740,7 @@ msgid "unsafe permissions on '{config_file}' (should be 0600)!"
 msgstr "nem biztonságos jogosultságok ennél: „{config_file}” (0600-nak kellene lennie)!"
 
 #: ../fdroidserver/__main__.py /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.13/argparse.py
 msgid "usage: "
 msgstr "használat: "
 

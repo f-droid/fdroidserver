@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2026-01-13 11:31+0100\n"
+"POT-Creation-Date: 2026-05-19 17:44+0200\n"
 "PO-Revision-Date: 2026-02-26 16:09+0000\n"
 "Last-Translator: Cabbar Hayıroğlu <halil48efe@gmail.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/f-droid/fdroidserver/tr/>\n"
@@ -40,6 +40,11 @@ msgid ""
 msgstr ""
 "\n"
 "DEBUG_KEYSTORE gizli değişkeni için kodlanmış {path}:"
+
+#: /usr/lib/python3.13/argparse.py
+#, python-format
+msgid " (default: %(default)s)"
+msgstr ""
 
 #: ../fdroidserver/lint.py
 #, python-format
@@ -68,6 +73,11 @@ msgstr "\"local_copy_dir\" {path} mevcut değil!"
 msgid "\"{apkfilename}\" is already installed on {dev}."
 msgstr "\"{apkfilename}\" zaten {dev} üzerinde kurulu."
 
+#: ../fdroidserver/signindex.py
+#, fuzzy, python-brace-format
+msgid "\"{name}\" has bad SHA-256: {sha256}"
+msgstr "%s bozuk SHA-256'ya sahip: %s"
+
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "\"{path}\" contains recent {name} ({version})"
@@ -93,9 +103,19 @@ msgstr "\"{path}\", izin verilmeyen bir anahtarla imzalandı:"
 msgid "\"{url}\" is not a valid URL!"
 msgstr "\"{url}\" geçerli bir URL değil!"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.13/argparse.py
+#, python-format
+msgid "%(heading)s:"
+msgstr ""
+
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "%(prog)s: error: %(message)s\n"
+msgstr "%(prog)s: hata: %(message)s\n"
+
+#: /usr/lib/python3.13/argparse.py
+#, fuzzy, python-format
+msgid "%(prog)s: warning: %(message)s\n"
 msgstr "%(prog)s: hata: %(message)s\n"
 
 #: ../fdroidserver/publish.py
@@ -108,7 +128,7 @@ msgstr "%d APK imzalanamadı veya doğrulanamadı!"
 msgid "%d problems found"
 msgstr "%d sorun bulundu"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "%r is not callable"
 msgstr "%r çağrılabilir değil"
@@ -152,7 +172,7 @@ msgstr "'rclone_config' config.yml içinde ayarlanmalıdır!"
 msgid "'repo_keyalias' not found in config.yml!"
 msgstr "'repo_keyalias' config.yml içinde bulunamadı!"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 msgid "'required' is an invalid argument for positionals"
 msgstr "'required' positionals için geçersiz bir argüman"
 
@@ -202,7 +222,7 @@ msgstr "--merge-request yalnızca tek bir uygulama kimliğinde çalışır!"
 msgid "...checkupdate failed for {appid} : {error}"
 msgstr ".. .checkupdate {appid} için başarısız oldu: {error}"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 msgid ".__call__() not defined"
 msgstr ".__call__() tanımlı değil"
 
@@ -1469,6 +1489,11 @@ msgid "Privacy mode was enabled based on your locale ({country_code})."
 msgstr "Yerel ayarınız ({country_code}) baz alınarak gizlilik kipi etkinleştirildi."
 
 #: ../fdroidserver/scanner.py
+#, fuzzy, python-brace-format
+msgid "Problem with ZIP file \"{apkfile}\": {error}"
+msgstr "ZIP dosyası ile ilgili sorun: %s, hata %s"
+
+#: ../fdroidserver/scanner.py
 #, python-format
 msgid "Problem with ZIP file: %s, error %s"
 msgstr "ZIP dosyası ile ilgili sorun: %s, hata %s"
@@ -1797,6 +1822,11 @@ msgstr "{length} uzunluğundaki özet, {limit} karakter sınırının üstünde"
 #, python-brace-format
 msgid "System clock is older than date in {path}!"
 msgstr "Sistem saati {path} konumundaki tarihten daha eski!"
+
+#: ../fdroidserver/checkupdates.py
+#, fuzzy
+msgid "Tags update mode only works for git repositories currently"
+msgstr "Etiket güncelleme modu şu anda yalnızca git, hg, bzr ve git-svn depoları için çalışıyor"
 
 #: ../fdroidserver/checkupdates.py
 msgid "Tags update mode only works for git, hg, bzr and git-svn repositories currently"
@@ -2228,7 +2258,7 @@ msgstr "IdentityFile {path} konumuna ekleniyor"
 msgid "adding to {name}: {path}"
 msgstr "{name} adına ekleniyor: {path}"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "ambiguous option: %(option)s could match %(matches)s"
 msgstr "belirsiz şeçenek: %(option)s ile %(matches)s eşleşebilir"
@@ -2263,14 +2293,19 @@ msgstr "UYGULAMA_KİMLİĞİ[:SÜRÜM_KODU] biçiminde isteğe bağlı versionCo
 msgid "archive_url needs to end with /archive"
 msgstr "archive_url'nin /archive ile bitmesi gerekiyor"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "argument \"-\" with mode %r"
 msgstr "%r kipiyle \"-\" argümanı"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "argument %(argument_name)s: %(message)s"
+msgstr "argüman %(argument_name)s: %(message)s"
+
+#: /usr/lib/python3.13/argparse.py
+#, fuzzy, python-format
+msgid "argument '%(argument_name)s' is deprecated"
 msgstr "argüman %(argument_name)s: %(message)s"
 
 #: ../fdroidserver/nightly.py
@@ -2281,7 +2316,7 @@ msgstr "Dağıtım anahtarını sınamak için çıplak SSH bağlantısı deneni
 msgid "can not parse scrlib spec (not a string): '{}'"
 msgstr "scrlib belirtimi ayrıştırılamıyor (bir dizge değil): '{}'"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "can't open '%(filename)s': %(error)s"
 msgstr "'%(filename)s' açılamıyor: %(error)s"
@@ -2295,11 +2330,11 @@ msgstr "https olmayan url açılamıyor: '{};"
 msgid "cannot find required srclibs: \"{path}\""
 msgstr "gerekli srclibs bulunamıyor: \"{path}\""
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 msgid "cannot have multiple subparser arguments"
 msgstr "birden çok alt-ayrıştırıcı argümanı verilemez"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "cannot merge actions - two groups are named %r"
 msgstr "eylemler birleştirilemiyor - %r adlı iki grup"
@@ -2313,23 +2348,28 @@ msgstr "güncelleme yayımlanamıyor, dağıtım anahtarını ayarladınız mı?
 msgid "cloning {url}"
 msgstr "{url} klonlanıyor"
 
+#: /usr/lib/python3.13/argparse.py
+#, python-format
+msgid "command '%(parser_name)s' is deprecated"
+msgstr ""
+
 #: ../fdroidserver/__main__.py
 msgid "commands from plugin modules:"
 msgstr "eklenti modüllerinden komutlar:"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "conflicting option string: %s"
 msgid_plural "conflicting option strings: %s"
 msgstr[0] "çakışan seçenek satırı: %s"
 msgstr[1] "çakışan seçenek satırları: %s"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "conflicting subparser alias: %s"
 msgstr "çakışan alt ayrıştırıcı takma adı: %s"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "conflicting subparser: %s"
 msgstr "çakışan alt ayrıştırıcı: %s"
@@ -2371,7 +2411,7 @@ msgstr "kilitsiz bağımlılık dosyası"
 msgid "deployed process log {path} to {dest}"
 msgstr "{path} işlem günlüğü {dest}'e dağıtıldı"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "dest= is required for options like %r"
 msgstr "dest= %r gibi seçenekler için gerekli"
@@ -2388,22 +2428,22 @@ msgstr "'{}' tarayıcı imzalarının indirilmesi başarısız oldu"
 msgid "executable binary, possibly code"
 msgstr "çalıştırılabilir ikili dosya, muhtemelen kod"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "expected %s argument"
 msgid_plural "expected %s arguments"
 msgstr[0] "beklenen %s argümandı"
 msgstr[1] "beklenen %s argümandı"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 msgid "expected at least one argument"
 msgstr "beklenen en az bir argümandı"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 msgid "expected at most one argument"
 msgstr "beklenen en çok bir argümandı"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 msgid "expected one argument"
 msgstr "beklenen bir argümandı"
 
@@ -2431,7 +2471,7 @@ msgstr "git svn clone başarısız"
 msgid "gzip file archive"
 msgstr "gzip dosya arşivi"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "ignored explicit argument %r"
 msgstr "açık argüman %r yok sayıldı"
@@ -2444,22 +2484,22 @@ msgstr "index-v1 bir imzaya sahip olmalı, oluşturmak için `fdroid signindex` 
 msgid "index-v2 must have a signature, use `fdroid signindex` to create it!"
 msgstr "index-v2 bir imzaya sahip olmalı, oluşturmak için `fdroid signindex` kullanın!"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "invalid %(type)s value: %(value)r"
 msgstr "geçersiz %(type)s değeri: %(value)r"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "invalid choice: %(value)r (choose from %(choices)s)"
 msgstr "geçersiz seçim: %(value)r (%(choices)s içinden seçin)"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "invalid conflict_resolution value: %r"
 msgstr "geçersiz conflict_resolution değeri: %r"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "invalid option string %(option)r: must start with a character %(prefix_chars)r"
 msgstr "geçersiz seçenek satırı %(option)r: %(prefix_chars)r karakteri ile başlamalı"
@@ -2496,7 +2536,7 @@ msgstr "Yansıma '%s' 'fdroid' ile bitmiyor!"
 msgid "mirrors set twice, in config.yml and {path}!"
 msgstr "yansı iki defa ayarlandı, config.yml ve {path} içinde!"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 msgid "mutually exclusive arguments must be optional"
 msgstr "birbirinden bağımsız argümanlar isteğe bağlı olmalıdır"
 
@@ -2518,12 +2558,12 @@ msgstr "APK sağlanmadı"
 msgid "no version information found"
 msgstr "sürüm bilgisi bulunamadı"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "not allowed with argument %s"
 msgstr "argüman %s ile izin verilmez"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "one of the arguments %s is required"
 msgstr "%s argümanlarından biri gerekli"
@@ -2532,7 +2572,12 @@ msgstr "%s argümanlarından biri gerekli"
 msgid "only accepts strings, lists, and tuples"
 msgstr "yalnızca dizgileri, listeleri ve demetleri (tuple) kabul eder"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.13/argparse.py
+#, python-format
+msgid "option '%(option)s' is deprecated"
+msgstr ""
+
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 msgid "options"
 msgstr "seçenekler"
 
@@ -2546,7 +2591,7 @@ msgstr "var olan {path} üzerine yazılıyor"
 msgid "path_to_custom_rclone_config: \"{path}\" does not exist!"
 msgstr "path_to_custom_rclone_config: \"{path}\" yok!"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 msgid "positional arguments"
 msgstr "konumsal argümanlar"
 
@@ -2611,7 +2656,11 @@ msgstr "serverwebroot: yol \"fdroid\" ile sonlanmıyor, belki de bunlardan birin
 msgid "shared library"
 msgstr "paylaşımlı kütüphane"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.13/argparse.py
+msgid "show program's version number and exit"
+msgstr ""
+
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 msgid "show this help message and exit"
 msgstr "bu yardım yazısını göster ve çık"
 
@@ -2640,6 +2689,10 @@ msgstr "srclibs'de ad ve/veya @ eksik"
 msgid "static library"
 msgstr "statik kütüphane"
 
+#: /usr/lib/python3.13/argparse.py
+msgid "subcommands"
+msgstr ""
+
 #: ../fdroidserver/build.py
 #, python-brace-format
 msgid "supplied reference binary has allowed signer {signer}"
@@ -2650,7 +2703,7 @@ msgstr "sağlanan referans ikilisi {signer} imzalayana izin verdi"
 msgid "suspicious permissions {st_mode:o}"
 msgstr "şüpheli izinler {st_mode:o}"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "the following arguments are required: %s"
 msgstr "şu argümanlar gerekli: %s"
@@ -2659,17 +2712,17 @@ msgstr "şu argümanlar gerekli: %s"
 msgid "true"
 msgstr "doğru"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "unexpected option string: %s"
 msgstr "beklenmeyen seçenek satırı: %s"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "unknown parser %(parser_name)r (choices: %(choices)s)"
 msgstr "bilinmeyen ayrıştırıcı %(parser_name)r (seçenekler: %(choices)s)"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "unrecognized arguments: %s"
 msgstr "tanınmayan argümanlar: %s"
@@ -2680,6 +2733,7 @@ msgid "unsafe permissions on '{config_file}' (should be 0600)!"
 msgstr "'{config_file}' üzerinde güvenli olmayan izinler (0600 olmalı)!"
 
 #: ../fdroidserver/__main__.py /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.13/argparse.py
 msgid "usage: "
 msgstr "kullanım: "
 
