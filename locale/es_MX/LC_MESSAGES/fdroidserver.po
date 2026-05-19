@@ -97,7 +97,7 @@ msgstr ""
 #: /usr/lib/python3.11/argparse.py
 #, fuzzy, python-format
 msgid "%(prog)s: error: %(message)s\n"
-msgstr "%(prog)s: error: %(mensaje)s\n"
+msgstr "%(prog)s: error: %(message)s\n"
 
 #: ../fdroidserver/publish.py
 #, python-format

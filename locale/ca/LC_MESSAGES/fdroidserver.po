@@ -1703,7 +1703,7 @@ msgstr "Estableix el límit de fitxer obert a {integer}"
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Set up NDK {release} ({revision})"
-msgstr "Estableix NDK {release} ({version}) cap amunt"
+msgstr "Estableix NDK {release} ({revision}) cap amunt"
 
 #: ../fdroidserver/__main__.py
 msgid "Set up an app build for a nightly build repo"
