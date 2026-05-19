@@ -2405,6 +2405,32 @@ class TestExtractApkIcons(SetUpTearDownMixin, unittest.TestCase):
             if prod_icons and len(test_icons) <= len(prod_icons):
                 self.assertEqual(prod_icons.keys(), test_icons.keys(), self.filename)
 
+    def test_move_apk_between_sections(self):
+        """Test when moving an APK that the extracted icons follow."""
+        appid = 'com.politedroid'
+        versionCode = 3
+        apkfile = f'repo/{appid}_{versionCode}.apk'
+        shutil.copy(basedir / apkfile, apkfile)
+        empty_densities = self.extract_apk_icons(apkfile, appid, versionCode)
+        fdroidserver.update.fill_missing_icon_densities(
+            empty_densities, self.filename, self.apk, 'repo'
+        )
+        self.apk['file'] = {'name': os.path.basename(apkfile)}
+        fdroidserver.update.move_apk_between_sections('repo', 'archive', self.apk)
+        self.assertEqual([], sorted(glob.glob('repo/icons*/*.png')))
+        self.assertEqual(
+            [
+                'archive/icons-120/com.politedroid.3.png',
+                'archive/icons-160/com.politedroid.3.png',
+                'archive/icons-240/com.politedroid.3.png',
+                'archive/icons-320/com.politedroid.3.png',
+                'archive/icons-480/com.politedroid.3.png',
+                'archive/icons-640/com.politedroid.3.png',
+                'archive/icons/com.politedroid.3.png',
+            ],
+            sorted(glob.glob('archive/icons*/*.png')),
+        )
+
 
 class TestGetApkIconsSrc(unittest.TestCase):
     def get_apk_icons_src(self, apkfile):
