@@ -31,6 +31,7 @@ include locale/it/LC_MESSAGES/fdroidserver.po
 include locale/ja/LC_MESSAGES/fdroidserver.po
 include locale/ko/LC_MESSAGES/fdroidserver.po
 include locale/nb_NO/LC_MESSAGES/fdroidserver.po
+include locale/nl/LC_MESSAGES/fdroidserver.po
 include locale/pl/LC_MESSAGES/fdroidserver.po
 include locale/pt/LC_MESSAGES/fdroidserver.po
 include locale/pt_BR/LC_MESSAGES/fdroidserver.po
