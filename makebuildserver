@@ -42,11 +42,11 @@ logging.basicConfig(format=logformat, level=loglevel)
 tail = None
 
 BASEBOX_DEFAULT = 'debian/trixie64'
-BASEBOX_VERSION_DEFAULT = "13.20260121.1"
+BASEBOX_VERSION_DEFAULT = "13.20260519.1"
 BASEBOX_CHECKSUMS = {
-    "13.20260121.1": {
+    "13.20260519.1": {
         "libvirt": {
-            "box.img": "b57d141904251816feada26260b2d523e705811952b15afd9516af6207ed9a23",
+            "box.img": "57f9d4139f5d2b1abb683da5e32b585933ed8a4115c6538289dc665765801b07",
             "metadata.json": "20dc0268a79410dbf01c7e544ba5138f6f695a298b53c56c87a25f68c5031173",
             "Vagrantfile": "f9c6fcbb47a4d0d33eb066859c8e87efd642287a638bd7da69a9e7a6f25fec47",
         },
