@@ -2301,9 +2301,9 @@ msgid "argument %(argument_name)s: %(message)s"
 msgstr "%(argument_name)s аргументы: %(message)s"
 
 #: /usr/lib/python3.13/argparse.py
-#, fuzzy, python-format
+#, python-format
 msgid "argument '%(argument_name)s' is deprecated"
-msgstr "%(argument_name)s аргументы: %(message)s"
+msgstr ""
 
 #: ../fdroidserver/nightly.py
 msgid "attempting bare SSH connection to test deploy key:"
