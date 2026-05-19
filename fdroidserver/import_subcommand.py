@@ -127,9 +127,9 @@ def getrepofrompage(url: str) -> tuple[Optional[str], str]:
     Returns
     -------
     repotype_or_none
-        The found repository type or None if an error occured.
+        The found repository type or None if an error occurred.
     address_or_reason
-        The address to the found repository or the reason if an error occured.
+        The address to the found repository or the reason if an error occurred.
 
     """
     if not url.startswith('http'):
