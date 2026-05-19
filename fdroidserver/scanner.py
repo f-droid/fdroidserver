@@ -329,7 +329,11 @@ def get_embedded_classes(apkfile, depth=0):
                         set(re.findall(r'[A-Z]+((?:\w+\/)+\w+)', run.output))
                     )
     except zipfile.BadZipFile as ex:
-        return {_('Problem with ZIP file: %s, error %s') % (apkfile, ex)}
+        return {
+            _('Problem with ZIP file "{apkfile}": {error}').format(
+                apkfile=apkfile, error=ex
+            )
+        }
 
     return classes
 
