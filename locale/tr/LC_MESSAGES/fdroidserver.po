@@ -83,11 +83,6 @@ msgstr "%s bozuk SHA-256'ya sahip: %s"
 msgid "\"{path}\" contains recent {name} ({version})"
 msgstr "\"{path}\" en son {name} ({version}) içeriyor"
 
-#: ../fdroidserver/deploy.py
-#, python-brace-format
-msgid "\"{path}\" exists but s3cmd is not installed!"
-msgstr "\"{path}\" var ancak s3cmd kurulu değil!"
-
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "\"{path}\" is not a supported file format (use: metadata/*.yml)"
@@ -137,11 +132,6 @@ msgstr "%r çağrılabilir değil"
 #, python-format
 msgid "%s did not produce a dict!"
 msgstr "%s bir sözlük üretmedi!"
-
-#: ../fdroidserver/signindex.py
-#, python-format
-msgid "%s has bad SHA-256: %s"
-msgstr "%s bozuk SHA-256'ya sahip: %s"
 
 #: ../fdroidserver/lint.py
 #, python-format
@@ -371,11 +361,6 @@ msgstr "'{branch}' dalı, '{versionCode}' derlemesinde işleme olarak kullanıld
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
-msgid "Branch '{branch}' used as commit in build '{versionName}'"
-msgstr "Dal '{branch}' inşa '{versionName}' içinde işleme olarak kullanıldı"
-
-#: ../fdroidserver/lint.py
-#, python-brace-format
 msgid "Branch '{branch}' used as commit in srclib '{srclib}'"
 msgstr "Srclib '{srclib}' içine işleme için dal '{branch}' kullanıldı"
 
@@ -497,23 +482,9 @@ msgstr "Çakışan argümanlar: '--verbose' ve '--quiet' aynı anda belirtilemez
 msgid "Could not find '{command}' on your system"
 msgstr "'{command}' sisteminizde bulunamadı"
 
-#. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
-#: ../fdroidserver/import_subcommand.py
-msgid "Could not find latest version code"
-msgstr "Son sürüm kodu bulunamadı"
-
-#. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vname
-#: ../fdroidserver/import_subcommand.py
-msgid "Could not find latest version name"
-msgstr "Son sürüm adı bulunamadı"
-
 #: ../fdroidserver/import_subcommand.py
 msgid "Could not find latest versionCode"
 msgstr "Son versionCode bulunamadı"
-
-#: ../fdroidserver/import_subcommand.py
-msgid "Could not find latest versionName"
-msgstr "Son versionName bulunamadı"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -552,16 +523,6 @@ msgstr "Paket ID bulunamadı"
 msgid "Cowardily refusing to overwrite existing signing key setup!"
 msgstr "Var olan imza anahtarı kurulumunun üzerine yazma korkakça reddediliyor!"
 
-#: ../fdroidserver/deploy.py
-#, python-brace-format
-msgid "Created new container \"{name}\""
-msgstr "Yeni kapsayıcı \"{name}\" oluşturuldu"
-
-#: ../fdroidserver/deploy.py
-#, python-brace-format
-msgid "Creating \"{path}\" for configuring s3cmd."
-msgstr "s3cmd yapılandırması için \"{path}\" oluşturuluyor."
-
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Creating empty {config_file}"
@@ -570,11 +531,6 @@ msgstr "Boş {config_file} oluşturuluyor"
 #: ../fdroidserver/publish.py
 msgid "Creating log directory"
 msgstr "Günlük dizini oluşturuluyor"
-
-#: ../fdroidserver/deploy.py
-#, python-brace-format
-msgid "Creating new S3 bucket: {url}"
-msgstr "Yeni S3 kovası oluşturuluyor: {url}"
 
 #: ../fdroidserver/publish.py
 msgid "Creating output directory"
@@ -828,11 +784,6 @@ msgstr "{path} okunamadı: {error}"
 #, python-brace-format
 msgid "Failed resizing {path}: {error}"
 msgstr "{path} yeniden boyutlandırılamadı: {error}"
-
-#: ../fdroidserver/deploy.py
-#, python-brace-format
-msgid "Failed to create S3 bucket: {url}"
-msgstr "S3 kovası oluşturulamadı: {url}"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -1123,10 +1074,6 @@ msgstr "Geçersiz VercodeOperation: {invalid_ops}"
 #, python-brace-format
 msgid "Invalid application ID {appid}"
 msgstr "Geçersiz uygulama kimliği {appid}"
-
-#: ../fdroidserver/lint.py
-msgid "Invalid bulleted list"
-msgstr "Geçersiz madde imli liste"
 
 #: ../fdroidserver/common.py
 #, python-format
@@ -1459,10 +1406,6 @@ msgstr "\"{appid}\" paketi zaten var"
 msgid "Parsing manifest at '{path}'"
 msgstr "'{path}' konumundaki bildirim ayrıştırılıyor"
 
-#: ../fdroidserver/common.py
-msgid "Password required with username"
-msgstr "Kullanıcı adıyla parola gerekli"
-
 #: ../fdroidserver/import_subcommand.py
 msgid "Path to main Android project subdirectory, if not in root."
 msgstr "Kökte değilse, ana Android proje alt dizininin konumu."
@@ -1489,14 +1432,9 @@ msgid "Privacy mode was enabled based on your locale ({country_code})."
 msgstr "Yerel ayarınız ({country_code}) baz alınarak gizlilik kipi etkinleştirildi."
 
 #: ../fdroidserver/scanner.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Problem with ZIP file \"{apkfile}\": {error}"
-msgstr "ZIP dosyası ile ilgili sorun: %s, hata %s"
-
-#: ../fdroidserver/scanner.py
-#, python-format
-msgid "Problem with ZIP file: %s, error %s"
-msgstr "ZIP dosyası ile ilgili sorun: %s, hata %s"
+msgstr ""
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -1658,10 +1596,6 @@ msgstr "-debug.apk'yı bulmak için {cibase} üzerinden çalıştırın ve {repo
 msgid "Run rewritemeta to fix formatting"
 msgstr "Biçimlemeyi düzeltmek için rewritemeta çalıştır"
 
-#: ../fdroidserver/deploy.py
-msgid "Running first pass with MD5 checking disabled"
-msgstr "İlk geçiş MD5 doğrulama olmadan çalıştırılıyor"
-
 #: ../fdroidserver/mirror.py
 #, python-brace-format
 msgid "Running wget in {path}"
@@ -1708,11 +1642,6 @@ msgstr "APK'daki ekstra imzalama blokları taranıyor."
 #: ../fdroidserver/scanner.py
 msgid "Scanning APK with dexdump for known non-free classes."
 msgstr "Bilinen özgür olmayan sınıflar için dexdump ile APK taranıyor."
-
-#: ../fdroidserver/common.py
-#, python-brace-format
-msgid "Set NDK {release} ({version}) up"
-msgstr "NDK {release} ({version}) kuruldu"
 
 #: ../fdroidserver/common.py
 msgid "Set clock to that time using:"
@@ -1829,10 +1758,6 @@ msgid "Tags update mode only works for git repositories currently"
 msgstr "Etiket güncelleme modu şu anda yalnızca git, hg, bzr ve git-svn depoları için çalışıyor"
 
 #: ../fdroidserver/checkupdates.py
-msgid "Tags update mode only works for git, hg, bzr and git-svn repositories currently"
-msgstr "Etiket güncelleme modu şu anda yalnızca git, hg, bzr ve git-svn depoları için çalışıyor"
-
-#: ../fdroidserver/checkupdates.py
 msgid "Tags update mode used in git-svn, but the repo was not set up with tags"
 msgstr "git-svn'de etiket güncelleme modu kullanıldı, ancak depo etiketlerle ayarlanmadı"
 
@@ -1843,12 +1768,6 @@ msgstr "Sınama kipi - çıkışı sadece tmp dizinine koy, ve her zaman inşa e
 #: ../fdroidserver/index.py
 msgid "The \"qrcode\" Python package is not installed (e.g. apt-get install python3-qrcode)!"
 msgstr "\"qrcode\" Python paketi kurulu değil (yüklemek için: apt-get install python3-qrcode)!"
-
-#. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
-#: ../fdroidserver/update.py
-#, python-brace-format
-msgid "The OBB version code must come after \"{name}.\":"
-msgstr "OBB sürüm kodu \"{name}.\" adından sonra gelmelidir:"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -1928,14 +1847,6 @@ msgstr ""
 "Daha fazla bilgi için: https://f-droid.org/docs/Setup_an_F-Droid_App_Repo\n"
 "ve https://f-droid.org/docs/Signing_Process"
 
-#: ../fdroidserver/deploy.py
-msgid "To use awsbucket, awssecretkey and awsaccesskeyid must also be set in config.yml!"
-msgstr "Awsbucket kullanmak için, awssecretkey ve awsaccesskeyid de config.yml içinde ayarlanmalı!"
-
-#: ../fdroidserver/deploy.py
-msgid "To use rclone, rclone_config and awsbucket must be set in config.yml!"
-msgstr "rclone kullanmak için, rclone_config ve awsbucket config.yml içinde ayarlanmalı!"
-
 #: ../fdroidserver/lint.py
 msgid "URL must start with https://"
 msgstr "Bağlantı mutlaka https:// ile başlamalı"
@@ -1945,18 +1856,9 @@ msgid "URL must start with https:// or http://"
 msgstr "URL https:// veya http:// ile başlamalı"
 
 #: ../fdroidserver/lint.py
-msgid "URL shorteners should not be used"
-msgstr "URL kısaltıcılar kullanılmamalı"
-
-#: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "URL shorteners should not be used ({domain})"
 msgstr "Bağlantı kısaltıcıları kullanılmamalı ({domain})"
-
-#: ../fdroidserver/lint.py
-#, python-brace-format
-msgid "URL {url} in Description: {error}"
-msgstr "Açıklamada URL {url}: {error}"
 
 #: ../fdroidserver/lint.py
 msgid "Unexpected license tag \"{}\"! Only use FSF or OSI approved tags from https://spdx.org/license-list"
@@ -1980,11 +1882,6 @@ msgstr "Bilinmeyen istisna bulundu!"
 msgid "Unknown file '{filename}' in build '{versionCode}'"
 msgstr "'{versionCode}' derlemesinde '{filename}' adlı bilinmeyen dosya"
 
-#: ../fdroidserver/lint.py
-#, python-brace-format
-msgid "Unknown file '{filename}' in build '{versionName}'"
-msgstr "İnşa '{versionName}' içinde bilinmeyen dosya '{filename}'"
-
 #: ../fdroidserver/metadata.py
 #, python-format
 msgid "Unknown metadata format: %s"
@@ -1998,14 +1895,6 @@ msgstr "Bilinmeyen üst veri biçimi: {path} (şunu kullanın: *.yml)"
 #: ../fdroidserver/common.py
 msgid "Unknown version of aapt, might cause problems: "
 msgstr "aapt'nin bilinmeyen sürümü, soruna neden olabilir: "
-
-#: ../fdroidserver/lint.py
-msgid "Unnecessary leading space"
-msgstr "Gereksiz ön boşluk"
-
-#: ../fdroidserver/lint.py
-msgid "Unnecessary trailing space"
-msgstr "Gereksiz son boşluk"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
@@ -2061,17 +1950,6 @@ msgstr "Bir URL için çalıştırılabilir şeffaflık günlüğünü güncelle
 msgid "UpdateCheckData has invalid URL: {url}"
 msgstr "UpdateCheckData geçersiz URL'ye sahip: {url}"
 
-#. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
-#: ../fdroidserver/lint.py
-#, python-brace-format
-msgid "UpdateCheckData must match the version code as integer (\\d or [0-9]): {codeex}"
-msgstr "UpdateCheckData tam sayı olarak sürüm koduyla eşleşmelidir (\\d veya [0-9]): {codeex}"
-
-#: ../fdroidserver/lint.py
-#, python-brace-format
-msgid "UpdateCheckData must match the versionCode as integer (\\d or [0-9]): {codeex}"
-msgstr "UpdateCheckData tam sayı olarak versionCode ile eşleşmelidir (\\d veya [0-9]): {codeex}"
-
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "UpdateCheckData must use HTTPS URL: {url}"
@@ -2101,10 +1979,6 @@ msgstr "{apkfilename}, androidobservatory.org'a yükleniyor"
 msgid "Uploading {apkfilename} to virustotal"
 msgstr "{apkfilename} virustotal'e yükleniyor"
 
-#: ../fdroidserver/lint.py
-msgid "Use /HEAD instead of /master or /main to point at a file in the default branch"
-msgstr "Öntanımlı daldaki bir dosyaya işaret etmek için /master veya /main yerine /HEAD kullanın"
-
 #: ../fdroidserver/update.py
 msgid "Use `fdroid update -c` to create it."
 msgstr "Onu oluşturmak için `fdroid update -c` kullanın."
@@ -2119,18 +1993,8 @@ msgstr "Yeni eklenen APKlar için o anki zaman yerine APK'daki tarihi kullan"
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
-msgid "Using \"{path}\" for configuring s3cmd."
-msgstr "s3cmd yapılandırması için \"{path}\" kullanılıyor."
-
-#: ../fdroidserver/deploy.py
-#, python-brace-format
 msgid "Using \"{path}\" for rclone config."
 msgstr "rclone yapılandırması için \"{path}\" kullanılıyor."
-
-#: ../fdroidserver/deploy.py
-#, python-brace-format
-msgid "Using \"{path}\" for syncing with remote storage."
-msgstr "Uzak depolama ile eşitlemek için \"{path}\" kullanılıyor."
 
 #: ../fdroidserver/common.py
 msgid "Using APK Signature v2"
@@ -2162,16 +2026,6 @@ msgstr "Var olan anahtar deposu \"{path}\" kullanılıyor"
 #, python-brace-format
 msgid "Using rclone to sync to \"{name}\""
 msgstr "\"{name}\"ile eşitleme için rclone kullanılıyor"
-
-#: ../fdroidserver/deploy.py
-#, python-brace-format
-msgid "Using rclone to sync with: {url}"
-msgstr "{url} ile eşitleme için rclone kullanılıyor"
-
-#: ../fdroidserver/deploy.py
-#, python-brace-format
-msgid "Using s3cmd to sync with: {url}"
-msgstr "{url} ile eşitleme için s3cmd kullanılıyor"
 
 #: ../fdroidserver/__main__.py
 msgid "Valid commands are:"
@@ -2610,11 +2464,6 @@ msgid "refuse downloading via insecure HTTP connection (use HTTPS or specify --n
 msgstr "güvensiz HTTP bağlantısı ile indirmeyi reddet (HTTPS kullanın veya --no-check-https belirtin): {apkfilename}"
 
 #: ../fdroidserver/index.py
-#, python-format
-msgid "repo_icon \"repo/icons/%s\" does not exist, generating placeholder."
-msgstr "repo_icon \"repo/icons/%s\" yok, yer tutucu oluşturuyor."
-
-#: ../fdroidserver/index.py
 #, python-brace-format
 msgid "repo_icon \"{repo_icon}\" does not exist in \"{icon_dir}\", generating placeholder."
 msgstr "\"{icon_dir}\" dizininde \"{repo_icon}\" adlı repo_icon mevcut değil, yer tutucu oluşturuluyor."
@@ -2632,16 +2481,6 @@ msgstr "repo_url'nin /repo ile bitmesi gerekiyor"
 #, python-brace-format
 msgid "rsync is missing or broken: {error}"
 msgstr "rsync eksik veya bozuk: {error}"
-
-#: ../fdroidserver/deploy.py
-#, python-brace-format
-msgid "s3cmd sync indexes {path} to {url} and delete"
-msgstr "s3cmd sync {path} konumunu {url} adresine indeksler ve siler"
-
-#: ../fdroidserver/deploy.py
-#, python-brace-format
-msgid "s3cmd syncs indexes from {path} to {url} and deletes removed"
-msgstr "s3cmd {path} ile {url} arasındaki dizinleri indeksler ve kaldırılanları siler"
 
 #: ../fdroidserver/scanner.py
 #, python-brace-format
@@ -2738,11 +2577,6 @@ msgid "usage: "
 msgstr "kullanım: "
 
 #: ../fdroidserver/deploy.py
-#, python-brace-format
-msgid "using Apache libcloud to sync with {url}"
-msgstr "{url} ile eşitleme için Apache libcloud kullanılıyor"
-
-#: ../fdroidserver/deploy.py
 msgid "virustotal.com is rate limiting, waiting to retry..."
 msgstr "virustotal.com hızı sınırlıyor, yeniden deneme bekleniyor..."
 
@@ -2800,11 +2634,6 @@ msgstr "{appid} içinde {name} eksik"
 msgid "{appid}: Unknown extlib {path} in build '{versionCode}'"
 msgstr "{appid}: '{versionCode}' derlemesinde bilinmeyen extlib {path}"
 
-#: ../fdroidserver/lint.py
-#, python-brace-format
-msgid "{appid}: Unknown extlib {path} in build '{versionName}'"
-msgstr "{appid}: İnşa '{versionName}' içinde bilinmeyen extlib {path}"
-
 #: ../fdroidserver/scanner.py
 #, python-brace-format
 msgid "{appid}: no builds specified, running on current source state"
@@ -2839,11 +2668,6 @@ msgstr "{file} boş veya bozuk!"
 #, python-brace-format
 msgid "{name} \"{repo_icon}\" does not exist in \"{icon_dir}/\"! Check \"config.yml\"."
 msgstr "{name} \"{repo_icon}\" \"{icon_dir}/\" dizininde mevcut değil! \"config.yml\" dosyasını kontrol edin."
-
-#: ../fdroidserver/update.py
-#, python-brace-format
-msgid "{name} \"{section}/icons/{path}\" does not exist! Check \"config.yml\"."
-msgstr "{name} \"{section}/icons/{path}\" yok! config.yml içinde düzeltin."
 
 #: ../fdroidserver/update.py
 #, python-brace-format

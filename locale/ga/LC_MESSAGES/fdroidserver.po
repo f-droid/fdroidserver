@@ -75,11 +75,6 @@ msgstr "Tá droch-SHA-256 ag %s: %s"
 msgid "\"{path}\" contains recent {name} ({version})"
 msgstr "Tá \"{path}\" le déanaí {name} ({version})"
 
-#: ../fdroidserver/deploy.py
-#, python-brace-format
-msgid "\"{path}\" exists but s3cmd is not installed!"
-msgstr "Tá \"{path}\" ann ach níl s3cmd suiteáilte!"
-
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "\"{path}\" is not a supported file format (use: metadata/*.yml)"
@@ -129,11 +124,6 @@ msgstr "Níl %r inghlaoite"
 #, python-format
 msgid "%s did not produce a dict!"
 msgstr "Níor tháirg %s deachtú!"
-
-#: ../fdroidserver/signindex.py
-#, python-format
-msgid "%s has bad SHA-256: %s"
-msgstr "Tá droch-SHA-256 ag %s: %s"
 
 #: ../fdroidserver/lint.py
 #, python-format
@@ -363,11 +353,6 @@ msgstr "Brainse '{branch}' in úsáid mar thiomantas sa tógáil '{versionCode}'
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
-msgid "Branch '{branch}' used as commit in build '{versionName}'"
-msgstr "Brainse '{branch}' a úsáidtear mar gheall ar thógáil '{versionName}'"
-
-#: ../fdroidserver/lint.py
-#, python-brace-format
 msgid "Branch '{branch}' used as commit in srclib '{srclib}'"
 msgstr "Brainse '{branch}' a úsáidtear mar chimire sa srclib '{srclib}'"
 
@@ -492,23 +477,9 @@ msgstr "Argóintí contrártha: ní féidir '--verbose' agus '--quiet' a shonrú
 msgid "Could not find '{command}' on your system"
 msgstr "Níorbh fhéidir '{command}' a aimsiú ar do chóras"
 
-#. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
-#: ../fdroidserver/import_subcommand.py
-msgid "Could not find latest version code"
-msgstr "Níorbh fhéidir an cód leagain is déanaí a aimsiú"
-
-#. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vname
-#: ../fdroidserver/import_subcommand.py
-msgid "Could not find latest version name"
-msgstr "Níorbh fhéidir ainm an leagain is déanaí a aimsiú"
-
 #: ../fdroidserver/import_subcommand.py
 msgid "Could not find latest versionCode"
 msgstr "Níorbh fhéidir an Cód Leagan is déanaí a aimsiú"
-
-#: ../fdroidserver/import_subcommand.py
-msgid "Could not find latest versionName"
-msgstr "Níorbh fhéidir an leagan is déanaí a aimsiú Ainm"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -547,16 +518,6 @@ msgstr "Níorbh fhéidir aitheantas an phacáiste a aimsiú"
 msgid "Cowardily refusing to overwrite existing signing key setup!"
 msgstr "Cowardily diúltú a overwrite thus eochair síniú atá ann cheana féin!"
 
-#: ../fdroidserver/deploy.py
-#, python-brace-format
-msgid "Created new container \"{name}\""
-msgstr "Cruthaíodh coimeádán nua \"{name}\""
-
-#: ../fdroidserver/deploy.py
-#, python-brace-format
-msgid "Creating \"{path}\" for configuring s3cmd."
-msgstr "Ag cruthú \"{path}\" chun s3cmd a chumrú."
-
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Creating empty {config_file}"
@@ -565,11 +526,6 @@ msgstr "{config_file} folamh á chruthú"
 #: ../fdroidserver/publish.py
 msgid "Creating log directory"
 msgstr "Comhadlann logála á cruthú"
-
-#: ../fdroidserver/deploy.py
-#, python-brace-format
-msgid "Creating new S3 bucket: {url}"
-msgstr "Buicéad nua S3 á chruthú: {url}"
 
 #: ../fdroidserver/publish.py
 msgid "Creating output directory"
@@ -823,11 +779,6 @@ msgstr "Theip ar léamh {path}: {error}"
 #, python-brace-format
 msgid "Failed resizing {path}: {error}"
 msgstr "Theip ar athrú {path}: {error}"
-
-#: ../fdroidserver/deploy.py
-#, python-brace-format
-msgid "Failed to create S3 bucket: {url}"
-msgstr "Theip ar bhuicéad S3 a chruthú: {url}"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -1118,10 +1069,6 @@ msgstr "VercodeOperation neamhbhailí: {invalid_ops}"
 #, python-brace-format
 msgid "Invalid application ID {appid}"
 msgstr "Aitheantas neamhbhailí feidhmchláir {appid}"
-
-#: ../fdroidserver/lint.py
-msgid "Invalid bulleted list"
-msgstr "Liosta neamhbhailí le hurchair"
 
 #: ../fdroidserver/common.py
 #, python-format
@@ -1454,10 +1401,6 @@ msgstr "Tá pacáiste \"{appid}\" ann cheana"
 msgid "Parsing manifest at '{path}'"
 msgstr "Léiriú parsála ag '{path}'"
 
-#: ../fdroidserver/common.py
-msgid "Password required with username"
-msgstr "Pasfhocal de dhíth le hainm úsáideora"
-
 #: ../fdroidserver/import_subcommand.py
 msgid "Path to main Android project subdirectory, if not in root."
 msgstr "Conair chuig príomhchomhadlann tionscadail Android, más rud é nach bhfuil sé i bhfréamh."
@@ -1486,11 +1429,6 @@ msgstr "Cumasaíodh mód príobháideachta bunaithe ar do logán ({country_code}
 #: ../fdroidserver/scanner.py
 #, fuzzy, python-brace-format
 msgid "Problem with ZIP file \"{apkfile}\": {error}"
-msgstr "Fadhb le comhad ZIP: %s, earráid %s"
-
-#: ../fdroidserver/scanner.py
-#, python-format
-msgid "Problem with ZIP file: %s, error %s"
 msgstr "Fadhb le comhad ZIP: %s, earráid %s"
 
 #: ../fdroidserver/common.py
@@ -1653,10 +1591,6 @@ msgstr "Rith thar {cibase} chun -debug.apk a aimsiú. agus scipeáil repo_basedi
 msgid "Run rewritemeta to fix formatting"
 msgstr "Rith rewritemeta chun formáidiú a shocrú"
 
-#: ../fdroidserver/deploy.py
-msgid "Running first pass with MD5 checking disabled"
-msgstr "Ag rith an chéad phas le MD5 seiceáil faoi mhíchumas"
-
 #: ../fdroidserver/mirror.py
 #, python-brace-format
 msgid "Running wget in {path}"
@@ -1706,11 +1640,6 @@ msgstr "Scanadh APK le haghaidh bloic sínithe breise."
 #: ../fdroidserver/scanner.py
 msgid "Scanning APK with dexdump for known non-free classes."
 msgstr "Scanadh APK le dexdump do ranganna neamh-saor in aisce ar a dtugtar."
-
-#: ../fdroidserver/common.py
-#, python-brace-format
-msgid "Set NDK {release} ({version}) up"
-msgstr "Socraigh NDK {release} ({version}) suas"
 
 #: ../fdroidserver/common.py
 msgid "Set clock to that time using:"
@@ -1827,10 +1756,6 @@ msgid "Tags update mode only works for git repositories currently"
 msgstr "Ní oibríonn mód nuashonraithe clibeanna ach amháin le haghaidh stórtha git, hg, bzr agus git-svn faoi láthair"
 
 #: ../fdroidserver/checkupdates.py
-msgid "Tags update mode only works for git, hg, bzr and git-svn repositories currently"
-msgstr "Ní oibríonn mód nuashonraithe clibeanna ach amháin le haghaidh stórtha git, hg, bzr agus git-svn faoi láthair"
-
-#: ../fdroidserver/checkupdates.py
 msgid "Tags update mode used in git-svn, but the repo was not set up with tags"
 msgstr "Clibeanna cothrom le dáta modh a úsáidtear i git-svn, ach ní raibh an repo ar bun le clibeanna"
 
@@ -1841,12 +1766,6 @@ msgstr "Modh tástála - aschur a chur san eolaire tmp amháin, agus a thógáil
 #: ../fdroidserver/index.py
 msgid "The \"qrcode\" Python package is not installed (e.g. apt-get install python3-qrcode)!"
 msgstr "Níl an pacáiste Python \"qrcode\" suiteáilte (m.sh. apt-get install python3-qrcode)!"
-
-#. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
-#: ../fdroidserver/update.py
-#, python-brace-format
-msgid "The OBB version code must come after \"{name}.\":"
-msgstr "Ní mór don chód leagan OBB teacht i ndiaidh \"{name}.\":"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -1926,14 +1845,6 @@ msgstr ""
 "Tuilleadh eolais: https://f-droid.org/docs/Setup_an_F-Droid_App_Repo\n"
 "agus https://f-droid.org/docs/Signing_Process"
 
-#: ../fdroidserver/deploy.py
-msgid "To use awsbucket, awssecretkey and awsaccesskeyid must also be set in config.yml!"
-msgstr "Chun awsbucket a úsáid, ní mór awssecretkey agus awsaccesskeyid a shocrú i config.yml freisin!"
-
-#: ../fdroidserver/deploy.py
-msgid "To use rclone, rclone_config and awsbucket must be set in config.yml!"
-msgstr "Chun rclone a úsáid, ní mór rclone_config agus awsbucket a shocrú i config.yml!"
-
 #: ../fdroidserver/lint.py
 msgid "URL must start with https://"
 msgstr "Ní mór don URL tosú le https://"
@@ -1943,18 +1854,9 @@ msgid "URL must start with https:// or http://"
 msgstr "Ní mór URL tosú le https:// nó http://"
 
 #: ../fdroidserver/lint.py
-msgid "URL shorteners should not be used"
-msgstr "Níor chóir giorraithe URL a úsáid"
-
-#: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "URL shorteners should not be used ({domain})"
 msgstr "Níor cheart giorraitheoirí URL a úsáid ({domain})"
-
-#: ../fdroidserver/lint.py
-#, python-brace-format
-msgid "URL {url} in Description: {error}"
-msgstr "URL {url} in Description: {error}"
 
 #: ../fdroidserver/lint.py
 msgid "Unexpected license tag \"{}\"! Only use FSF or OSI approved tags from https://spdx.org/license-list"
@@ -1978,11 +1880,6 @@ msgstr "Aimsíodh eisceacht anaithnid!"
 msgid "Unknown file '{filename}' in build '{versionCode}'"
 msgstr "Comhad anaithnid '{filename}' sa leagan '{versionCode}'"
 
-#: ../fdroidserver/lint.py
-#, python-brace-format
-msgid "Unknown file '{filename}' in build '{versionName}'"
-msgstr "Comhad anaithnid '{filename}' in build '{versionName}'"
-
 #: ../fdroidserver/metadata.py
 #, python-format
 msgid "Unknown metadata format: %s"
@@ -1996,14 +1893,6 @@ msgstr "Formáid mheiteashonraí anaithnid: {path} (úsáid: *.yml)"
 #: ../fdroidserver/common.py
 msgid "Unknown version of aapt, might cause problems: "
 msgstr "Leagan anaithnid de aapt, d'fhéadfadh fadhbanna a chruthú: "
-
-#: ../fdroidserver/lint.py
-msgid "Unnecessary leading space"
-msgstr "Spás tosaigh gan ghá"
-
-#: ../fdroidserver/lint.py
-msgid "Unnecessary trailing space"
-msgstr "Spás rianaithe gan ghá"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
@@ -2059,17 +1948,6 @@ msgstr "Nuashonraigh an logchomhad trédhearcachta dénártha le haghaidh URL"
 msgid "UpdateCheckData has invalid URL: {url}"
 msgstr "Tá URL neamhbhailí ag UpdateCheckData: {url}"
 
-#. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
-#: ../fdroidserver/lint.py
-#, python-brace-format
-msgid "UpdateCheckData must match the version code as integer (\\d or [0-9]): {codeex}"
-msgstr "Ní mór do UpdateCheckData an cód leagain a mheaitseáil mar slánuimhir (\\d nó [0-9]): {codeex}"
-
-#: ../fdroidserver/lint.py
-#, python-brace-format
-msgid "UpdateCheckData must match the versionCode as integer (\\d or [0-9]): {codeex}"
-msgstr "Ní mór don UpdateCheckData an leaganCode a mheaitseáil mar shlánuimhir (\\d nó [0-9]): {codeex}"
-
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "UpdateCheckData must use HTTPS URL: {url}"
@@ -2099,10 +1977,6 @@ msgstr "{apkfilename} á uaslódáil chuig androidobservatory.org"
 msgid "Uploading {apkfilename} to virustotal"
 msgstr "{apkfilename} á uaslódáil chuig virustotal"
 
-#: ../fdroidserver/lint.py
-msgid "Use /HEAD instead of /master or /main to point at a file in the default branch"
-msgstr "Úsáid / HEAD in ionad / máistir nó / príomh go pointe ag comhad sa bhrainse réamhshocraithe"
-
 #: ../fdroidserver/update.py
 msgid "Use `fdroid update -c` to create it."
 msgstr "Bain úsáid as 'nuashonrú fdroid -c' chun é a chruthú."
@@ -2117,18 +1991,8 @@ msgstr "Dáta úsáide ó APK in ionad an ama reatha le haghaidh APKs nua-bhreis
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
-msgid "Using \"{path}\" for configuring s3cmd."
-msgstr "Ag baint úsáide as \"{path}\" chun s3cmd a chumrú."
-
-#: ../fdroidserver/deploy.py
-#, python-brace-format
 msgid "Using \"{path}\" for rclone config."
 msgstr "Ag baint úsáide as \"{path}\" le haghaidh cumraíochta rclone."
-
-#: ../fdroidserver/deploy.py
-#, python-brace-format
-msgid "Using \"{path}\" for syncing with remote storage."
-msgstr "Ag baint úsáide as \"{path}\" chun sioncronú le cianstóráil."
 
 #: ../fdroidserver/common.py
 msgid "Using APK Signature v2"
@@ -2160,16 +2024,6 @@ msgstr "Ag baint úsáide as keystore atá ann cheana \"{path}\""
 #, python-brace-format
 msgid "Using rclone to sync to \"{name}\""
 msgstr "Ag baint úsáide as rclone chun sioncrónú le \"{name}\""
-
-#: ../fdroidserver/deploy.py
-#, python-brace-format
-msgid "Using rclone to sync with: {url}"
-msgstr "Ag baint úsáide as rclone chun sioncronú le: {url}"
-
-#: ../fdroidserver/deploy.py
-#, python-brace-format
-msgid "Using s3cmd to sync with: {url}"
-msgstr "Ag baint úsáide as s3cmd chun sioncronú le: {url}"
 
 #: ../fdroidserver/__main__.py
 msgid "Valid commands are:"
@@ -2614,11 +2468,6 @@ msgid "refuse downloading via insecure HTTP connection (use HTTPS or specify --n
 msgstr "diúltú íoslódáil trí nasc HTTP neamhchinnte (úsáid HTTPS nó sonraigh --no-check-https): {apkfilename}"
 
 #: ../fdroidserver/index.py
-#, python-format
-msgid "repo_icon \"repo/icons/%s\" does not exist, generating placeholder."
-msgstr "repo_icon níl \"repo/icons/%s\" ann, rud a ghineann sealbhóir áite."
-
-#: ../fdroidserver/index.py
 #, python-brace-format
 msgid "repo_icon \"{repo_icon}\" does not exist in \"{icon_dir}\", generating placeholder."
 msgstr "Níl repo_icon \"{repo_icon}\" ann i \"{icon_dir}\", ag giniúint áitchoinneálaí."
@@ -2636,16 +2485,6 @@ msgstr "Caithfidh repo_url deireadh a chur le / repo"
 #, python-brace-format
 msgid "rsync is missing or broken: {error}"
 msgstr "rsync ar iarraidh nó briste: {error}"
-
-#: ../fdroidserver/deploy.py
-#, python-brace-format
-msgid "s3cmd sync indexes {path} to {url} and delete"
-msgstr "innéacsanna sioncronaithe s3cmd {path} go {url} agus scrios"
-
-#: ../fdroidserver/deploy.py
-#, python-brace-format
-msgid "s3cmd syncs indexes from {path} to {url} and deletes removed"
-msgstr "sioncrónaíonn s3cmd innéacsanna ó {path} go {url} agus scriosann sé bainte"
 
 #: ../fdroidserver/scanner.py
 #, python-brace-format
@@ -2742,11 +2581,6 @@ msgid "usage: "
 msgstr "úsáid: "
 
 #: ../fdroidserver/deploy.py
-#, python-brace-format
-msgid "using Apache libcloud to sync with {url}"
-msgstr "ag baint úsáide as Apache libcloud chun sioncronú le {url}"
-
-#: ../fdroidserver/deploy.py
 msgid "virustotal.com is rate limiting, waiting to retry..."
 msgstr "Tá virustotal.com ag teorannú ráta, ag fanacht le triail a bhaint as ..."
 
@@ -2807,11 +2641,6 @@ msgstr "Tá {appid} ar iarraidh {name}"
 msgid "{appid}: Unknown extlib {path} in build '{versionCode}'"
 msgstr "{appid}: Extlib anaithnid {path} sa tógáil '{versionCode}'"
 
-#: ../fdroidserver/lint.py
-#, python-brace-format
-msgid "{appid}: Unknown extlib {path} in build '{versionName}'"
-msgstr "{appid}: Extlib {path} anaithnid i dtógáil '{versionName}'"
-
 #: ../fdroidserver/scanner.py
 #, python-brace-format
 msgid "{appid}: no builds specified, running on current source state"
@@ -2846,11 +2675,6 @@ msgstr "Tá {file} bán nó truaillithe!"
 #, python-brace-format
 msgid "{name} \"{repo_icon}\" does not exist in \"{icon_dir}/\"! Check \"config.yml\"."
 msgstr "Níl {name} \"{repo_icon}\" le fáil i \"{icon_dir}/\"! Seiceáil \"config.yml\"."
-
-#: ../fdroidserver/update.py
-#, python-brace-format
-msgid "{name} \"{section}/icons/{path}\" does not exist! Check \"config.yml\"."
-msgstr "{name} Níl \"{section}/icons/{path}\" ann! Seiceáil \"config.yml\"."
 
 #: ../fdroidserver/update.py
 #, python-brace-format
