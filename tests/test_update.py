@@ -2238,7 +2238,7 @@ class UpdateTest(SetUpTearDownMixin, unittest.TestCase):
 
     def test_get_icon_dir_hdpi_density(self):
         repodir = 'repo'
-        density = fdroidserver.update.screen_resolutions['hdpi']
+        density = fdroidserver.update.SCREEN_RESOLUTIONS.hdpi
         self.assertEqual(
             f'{repodir}/icons-{density}',
             fdroidserver.update.get_icon_dir(repodir, density),
@@ -2246,7 +2246,7 @@ class UpdateTest(SetUpTearDownMixin, unittest.TestCase):
 
     def test_get_icon_dir_anydpi_density(self):
         repodir = 'repo'
-        density = fdroidserver.update.screen_resolutions['anydpi']
+        density = fdroidserver.update.SCREEN_RESOLUTIONS.anydpi
         self.assertEqual(
             f'{repodir}/icons',
             fdroidserver.update.get_icon_dir(repodir, density),
@@ -2254,7 +2254,7 @@ class UpdateTest(SetUpTearDownMixin, unittest.TestCase):
 
     def test_get_icon_dir_nodpi(self):
         repodir = 'repo'
-        density = fdroidserver.update.screen_resolutions['nodpi']
+        density = fdroidserver.update.SCREEN_RESOLUTIONS.nodpi
         self.assertEqual(
             f'{repodir}/icons',
             fdroidserver.update.get_icon_dir(repodir, density),
@@ -2262,7 +2262,7 @@ class UpdateTest(SetUpTearDownMixin, unittest.TestCase):
 
     def test_get_icon_dir_0(self):
         """Test the very old "default" case."""
-        density = fdroidserver.update.screen_resolutions['default']
+        density = fdroidserver.update.SCREEN_RESOLUTIONS.default
         repodir = 'repo'
         self.assertEqual(
             f'{repodir}/icons',

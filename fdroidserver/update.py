@@ -21,6 +21,7 @@
 
 import argparse
 import copy
+import enum
 import filecmp
 import gettext
 import glob
@@ -84,20 +85,27 @@ APK_PERMISSION_PAT = re.compile(r".*name='([^']*)'(?:.*maxSdkVersion='([^']*)')?
 APK_FEATURE_PAT = re.compile(".*name='([^']*)'.*")
 
 SCREEN_DENSITIES = [65534, 640, 480, 320, 240, 160, 120]
+
+
 # resolutions must end with 'dpi'
 # https://android.googlesource.com/platform/tools/base/+/refs/tags/studio-2025.3.4/build-system/aaptcompiler/src/main/java/com/android/aaptcompiler/android/ResTableConfig.kt#372
-screen_resolutions = {
-    "xxxhdpi": 640,
-    "xxhdpi": 480,
-    "xhdpi": 320,
-    "hdpi": 240,
-    "mdpi": 160,
-    "ldpi": 120,
-    "tvdpi": 213,
-    "anydpi": 65534,
-    "nodpi": 65535,
-    "default": 0,
-}
+@enum.unique
+class SCREEN_RESOLUTIONS(enum.IntEnum):
+    xxxhdpi = 640
+    xxhdpi = 480
+    xhdpi = 320
+    hdpi = 240
+    mdpi = 160
+    ldpi = 120
+    tvdpi = 213
+    anydpi = 65534
+    nodpi = 65535
+    default = 0
+
+    def get(key):
+        """Look up int values using string keys; don't throw KeyError on bad key."""
+        return SCREEN_RESOLUTIONS.__dict__.get(key)
+
 
 ALLOWED_EXTENSIONS = ('png', 'jpg', 'jpeg')
 GRAPHIC_NAMES = ('featureGraphic', 'icon', 'promoGraphic', 'tvBanner')
@@ -175,7 +183,11 @@ def get_old_icon_filename(appid, versionCode):
 
 
 def get_icon_dir(repodir, density):
-    if density in (0, 65534, 65535):
+    if density in (
+        SCREEN_RESOLUTIONS.default,
+        SCREEN_RESOLUTIONS.anydpi,
+        SCREEN_RESOLUTIONS.nodpi,
+    ):
         return os.path.join(repodir, "icons")
     else:
         return os.path.join(repodir, "icons-%d" % density)
@@ -1778,7 +1790,7 @@ def _get_apk_icons_src(apkfile, apkobject, arsc):
                 for name in names_in_zip:
                     m = res_name_re.match(name)
                     if m:
-                        density = screen_resolutions.get(m.group(2))
+                        density = SCREEN_RESOLUTIONS.get(m.group(2))
                         if density is not None:
                             icons_src[density] = m.group()
 
@@ -2324,10 +2336,10 @@ def extract_apk_icons(icon_filename, apk, apkzip, repo_dir):
             empty_densities.append(density)
 
     non_dpi_case = None
-    if 0 in apk['icons_src']:
-        non_dpi_case = 0
-    elif 65535 in apk['icons_src']:
-        non_dpi_case = 65535
+    if SCREEN_RESOLUTIONS.default in apk['icons_src']:
+        non_dpi_case = SCREEN_RESOLUTIONS.default
+    elif SCREEN_RESOLUTIONS.nodpi in apk['icons_src']:
+        non_dpi_case = SCREEN_RESOLUTIONS.nodpi
 
     # move image based on DPI from measuring the image size
     if non_dpi_case is not None:
@@ -2375,7 +2387,7 @@ def fill_missing_icon_densities(empty_densities, icon_filename, apk, repo_dir):
     # First try resizing down to not lose quality
     last_density = None
     for density in SCREEN_DENSITIES:
-        if density == 65534:  # not possible to generate 'anydpi' from other densities
+        if density == SCREEN_RESOLUTIONS.anydpi:  # cannot generate from other density
             continue
         if density not in empty_densities:
             last_density = density
