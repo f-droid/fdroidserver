@@ -911,7 +911,7 @@ class UpdateTest(SetUpTearDownMixin, unittest.TestCase):
     def test_scan_apk_features(self):
         apk_info = fdroidserver.update.scan_apk('repo/duplicate.permisssions_9999999.apk')
         self.assertEqual(apk_info['manifest']['versionName'], '')
-        self.assertEqual(apk_info['icons_src'], {'0': 'res/drawable/ic_launcher.png'})
+        self.assertEqual(apk_info['icons_src'], {0: 'res/drawable/ic_launcher.png'})
 
         self.assertEqual(
             apk_info['manifest']['features'],
@@ -920,9 +920,9 @@ class UpdateTest(SetUpTearDownMixin, unittest.TestCase):
 
     def test_scan_apk_lots_of_data(self):
         apk_info = fdroidserver.update.scan_apk('org.dyndns.fules.ck_20.apk')
-        self.assertEqual(apk_info['icons_src'], {'240': 'res/drawable-hdpi-v4/icon_launcher.png',
-                                                 '120': 'res/drawable-ldpi-v4/icon_launcher.png',
-                                                 '160': 'res/drawable-mdpi-v4/icon_launcher.png'})
+        self.assertEqual(apk_info['icons_src'], {240: 'res/drawable-hdpi-v4/icon_launcher.png',
+                                                 120: 'res/drawable-ldpi-v4/icon_launcher.png',
+                                                 160: 'res/drawable-mdpi-v4/icon_launcher.png'})
         self.assertEqual(apk_info['icons'], {})
         self.assertEqual(apk_info['antiFeatures'], dict())
         self.assertEqual(apk_info['manifest']['versionName'], 'v1.6pre2')
@@ -947,7 +947,7 @@ class UpdateTest(SetUpTearDownMixin, unittest.TestCase):
     def test_scan_apk_two_icons(self):
         apk_info = fdroidserver.update.scan_apk('org.bitbucket.tickytacky.mirrormirror_4.apk')
         self.assertEqual(apk_info['manifest']['versionName'], '1.0.3')
-        self.assertEqual(apk_info['icons_src'], {'160': 'res/drawable-mdpi/mirror.png'})
+        self.assertEqual(apk_info['icons_src'], {160: 'res/drawable-mdpi/mirror.png'})
 
     def test_scan_apk_xml_icon(self):
         apk_info = fdroidserver.update.scan_apk('repo/info.zwanenburg.caffeinetile_4.apk')
@@ -957,10 +957,10 @@ class UpdateTest(SetUpTearDownMixin, unittest.TestCase):
     def test_scan_apk_old_icons(self):
         apk_info = fdroidserver.update.scan_apk('repo/com.politedroid_6.apk')
         self.assertEqual(apk_info['manifest']['versionName'], '1.5')
-        self.assertEqual(apk_info['icons_src'], {'120': 'res/drawable-ldpi-v4/icon.png',
-                                                 '160': 'res/drawable-mdpi-v4/icon.png',
-                                                 '240': 'res/drawable-hdpi-v4/icon.png',
-                                                 '320': 'res/drawable-xhdpi-v4/icon.png'})
+        self.assertEqual(apk_info['icons_src'], {120: 'res/drawable-ldpi-v4/icon.png',
+                                                 160: 'res/drawable-mdpi-v4/icon.png',
+                                                 240: 'res/drawable-hdpi-v4/icon.png',
+                                                 320: 'res/drawable-xhdpi-v4/icon.png'})
 
     def test_scan_apk_no_icons(self):
         apk_info = fdroidserver.update.scan_apk('SpeedoMeterApp.main_1.apk')
@@ -993,7 +993,7 @@ class UpdateTest(SetUpTearDownMixin, unittest.TestCase):
         self.maxDiff = None
         expected = {
             'icons': {},
-            'icons_src': {'0': 'res/drawable/ic_launcher.png'},
+            'icons_src': {0: 'res/drawable/ic_launcher.png'},
             'file': {
                 'name': 'no.min.target.sdk_987.apk',
                 'sha256': 'e2e1dc1d550df2b5bc383860139207258645b5540abeccd305ed8b2cb6459d2c',
@@ -1960,9 +1960,9 @@ class UpdateTest(SetUpTearDownMixin, unittest.TestCase):
                         'name': 'org.dyndns.fules.ck_20.apk',
                     },
                     'icons_src': {
-                        '240': 'res/drawable-hdpi-v4/icon_launcher.png',
-                        '120': 'res/drawable-ldpi-v4/icon_launcher.png',
-                        '160': 'res/drawable-mdpi-v4/icon_launcher.png',
+                        240: 'res/drawable-hdpi-v4/icon_launcher.png',
+                        120: 'res/drawable-ldpi-v4/icon_launcher.png',
+                        160: 'res/drawable-mdpi-v4/icon_launcher.png',
                     },
                     'manifest': {
                         'nativecode': [
@@ -2295,7 +2295,7 @@ class TestExtractApkIcons(SetUpTearDownMixin, unittest.TestCase):
         apkfile = basedir / 'urzip.apk'
         appid = 'info.guardianproject.urzip'
         empty_densities = self.extract_apk_icons(apkfile, appid)
-        self.assertEqual(['65534', '640', '480', '320', '240', '160'], empty_densities)
+        self.assertEqual([65534, 640, 480, 320, 240, 160], empty_densities)
         self.assertEqual(1413, os.path.getsize(f'repo/icons-120/{self.filename}'))
         for density in empty_densities:
             self.assertFalse(os.path.exists(f'repo/icons-{density}/{self.filename}'))
@@ -2304,7 +2304,7 @@ class TestExtractApkIcons(SetUpTearDownMixin, unittest.TestCase):
         appid = 'org.bitbucket.tickytacky.mirrormirror'
         apkfile = basedir / f'{appid}_4.apk'
         empty_densities = self.extract_apk_icons(apkfile, appid)
-        self.assertEqual(['65534', '640', '480', '320', '240', '120'], empty_densities)
+        self.assertEqual([65534, 640, 480, 320, 240, 120], empty_densities)
         self.assertEqual(91, os.path.getsize(f'repo/icons-160/{self.filename}'))
         for density in empty_densities:
             self.assertFalse(os.path.exists(f'repo/icons-{density}/{self.filename}'))
@@ -2313,7 +2313,7 @@ class TestExtractApkIcons(SetUpTearDownMixin, unittest.TestCase):
         appid = 'org.dyndns.fules.ck'
         apkfile = basedir / f'{appid}_20.apk'
         empty_densities = self.extract_apk_icons(apkfile, appid)
-        self.assertEqual(['65534', '640', '480', '320'], empty_densities)
+        self.assertEqual([65534, 640, 480, 320], empty_densities)
         self.assertEqual(1430, os.path.getsize(f'repo/icons-120/{self.filename}'))
         self.assertEqual(2120, os.path.getsize(f'repo/icons-160/{self.filename}'))
         self.assertEqual(3942, os.path.getsize(f'repo/icons-240/{self.filename}'))
@@ -2325,7 +2325,7 @@ class TestExtractApkIcons(SetUpTearDownMixin, unittest.TestCase):
         appid = 'org.sajeg.fallingblocks'
         apkfile = basedir / f'{appid}_3.apk'
         empty_densities = self.extract_apk_icons(apkfile, appid)
-        self.assertEqual(['65534', '480', '320', '240', '160', '120'], empty_densities)
+        self.assertEqual([65534, 480, 320, 240, 160, 120], empty_densities)
         self.assertEqual(6793, os.path.getsize(f'repo/icons-640/{self.filename}'))
         for density in empty_densities:
             self.assertFalse(os.path.exists(f'repo/icons-{density}/{self.filename}'))
@@ -2334,7 +2334,7 @@ class TestExtractApkIcons(SetUpTearDownMixin, unittest.TestCase):
         appid = 'org.maxsdkversion'
         apkfile = basedir / f'repo/{appid}_4.apk'
         empty_densities = self.extract_apk_icons(apkfile, appid)
-        self.assertEqual(['65534', '640', '480', '320', '240', '120'], empty_densities)
+        self.assertEqual([65534, 640, 480, 320, 240, 120], empty_densities)
         self.assertEqual(91, os.path.getsize(f'repo/icons-160/{self.filename}'))
         for density in empty_densities:
             self.assertFalse(os.path.exists(f'repo/icons-{density}/{self.filename}'))
@@ -2343,7 +2343,7 @@ class TestExtractApkIcons(SetUpTearDownMixin, unittest.TestCase):
         appid = 'souch.smsbypass'
         apkfile = basedir / f'repo/{appid}_9.apk'
         empty_densities = self.extract_apk_icons(apkfile, appid)
-        self.assertEqual(['65534', '640', '120'], empty_densities)
+        self.assertEqual([65534, 640, 120], empty_densities)
         self.assertEqual(1558, os.path.getsize(f'repo/icons-160/{self.filename}'))
         self.assertEqual(3615, os.path.getsize(f'repo/icons-320/{self.filename}'))
         self.assertEqual(5874, os.path.getsize(f'repo/icons-480/{self.filename}'))
@@ -2414,14 +2414,14 @@ class TestGetApkIconsSrc(unittest.TestCase):
 
     def test_get_apk_icons_src_urzip(self):
         self.assertEqual(
-            {'0': 'res/drawable/ic_launcher.png'},
+            {0: 'res/drawable/ic_launcher.png'},
             self.get_apk_icons_src(basedir / 'urzip.apk'),
         )
 
     def test_get_apk_icons_src_mirrormirror(self):
         appid = 'org.bitbucket.tickytacky.mirrormirror'
         self.assertEqual(
-            {'160': 'res/drawable-mdpi/mirror.png'},
+            {160: 'res/drawable-mdpi/mirror.png'},
             self.get_apk_icons_src(basedir / f'{appid}_4.apk'),
         )
 
@@ -2429,9 +2429,9 @@ class TestGetApkIconsSrc(unittest.TestCase):
         appid = 'org.dyndns.fules.ck'
         self.assertEqual(
             {
-                '120': 'res/drawable-ldpi-v4/icon_launcher.png',
-                '160': 'res/drawable-mdpi-v4/icon_launcher.png',
-                '240': 'res/drawable-hdpi-v4/icon_launcher.png',
+                120: 'res/drawable-ldpi-v4/icon_launcher.png',
+                160: 'res/drawable-mdpi-v4/icon_launcher.png',
+                240: 'res/drawable-hdpi-v4/icon_launcher.png',
             },
             self.get_apk_icons_src(basedir / f'{appid}_20.apk'),
         )
@@ -2448,7 +2448,7 @@ class TestGetApkIconsSrc(unittest.TestCase):
         """Test example made with Godot Engine."""
         appid = 'org.sajeg.fallingblocks'
         self.assertEqual(
-            {'0': 'res/mipmap/icon.png'},
+            {0: 'res/mipmap/icon.png'},
             self.get_apk_icons_src(basedir / f'{appid}_3.apk'),
         )
 
@@ -2464,10 +2464,10 @@ class TestGetApkIconsSrc(unittest.TestCase):
         appid = 'com.politedroid'
         self.assertEqual(
             {
-                '120': 'res/drawable-ldpi/icon.png',
-                '160': 'res/drawable-mdpi/icon.png',
-                '240': 'res/drawable-hdpi/icon.png',
-                '320': 'res/drawable-xhdpi/icon.png',
+                120: 'res/drawable-ldpi/icon.png',
+                160: 'res/drawable-mdpi/icon.png',
+                240: 'res/drawable-hdpi/icon.png',
+                320: 'res/drawable-xhdpi/icon.png',
             },
             self.get_apk_icons_src(basedir / f'repo/{appid}_3.apk'),
         )
@@ -2476,10 +2476,10 @@ class TestGetApkIconsSrc(unittest.TestCase):
         appid = 'com.politedroid'
         self.assertEqual(
             {
-                '120': 'res/drawable-ldpi-v4/icon.png',
-                '160': 'res/drawable-mdpi-v4/icon.png',
-                '240': 'res/drawable-hdpi-v4/icon.png',
-                '320': 'res/drawable-xhdpi-v4/icon.png',
+                120: 'res/drawable-ldpi-v4/icon.png',
+                160: 'res/drawable-mdpi-v4/icon.png',
+                240: 'res/drawable-hdpi-v4/icon.png',
+                320: 'res/drawable-xhdpi-v4/icon.png',
             },
             self.get_apk_icons_src(basedir / f'repo/{appid}_6.apk'),
         )
@@ -2487,7 +2487,7 @@ class TestGetApkIconsSrc(unittest.TestCase):
     def test_get_apk_icons_src_duplicate_permisssions(self):
         appid = 'duplicate.permisssions'
         self.assertEqual(
-            {'0': 'res/drawable/ic_launcher.png'},
+            {0: 'res/drawable/ic_launcher.png'},
             self.get_apk_icons_src(basedir / f'repo/{appid}_9999999.apk'),
         )
 
@@ -2502,7 +2502,7 @@ class TestGetApkIconsSrc(unittest.TestCase):
     def test_get_apk_icons_src_org_maxsdkversion(self):
         appid = 'org.maxsdkversion'
         self.assertEqual(
-            {'160': 'res/drawable-mdpi-v4/mirror.png'},
+            {160: 'res/drawable-mdpi-v4/mirror.png'},
             self.get_apk_icons_src(basedir / f'repo/{appid}_4.apk'),
         )
 
@@ -2510,11 +2510,11 @@ class TestGetApkIconsSrc(unittest.TestCase):
         appid = 'souch.smsbypass'
         self.assertEqual(
             {
-                '160': 'res/drawable-mdpi-v4/ic_launcher.png',
-                '213': 'res/drawable-tvdpi-v4/ic_launcher.png',
-                '240': 'res/drawable-hdpi-v4/ic_launcher.png',
-                '320': 'res/drawable-xhdpi-v4/ic_launcher.png',
-                '480': 'res/drawable-xxhdpi-v4/ic_launcher.png',
+                160: 'res/drawable-mdpi-v4/ic_launcher.png',
+                213: 'res/drawable-tvdpi-v4/ic_launcher.png',
+                240: 'res/drawable-hdpi-v4/ic_launcher.png',
+                320: 'res/drawable-xhdpi-v4/ic_launcher.png',
+                480: 'res/drawable-xxhdpi-v4/ic_launcher.png',
             },
             self.get_apk_icons_src(basedir / f'repo/{appid}_9.apk'),
         )

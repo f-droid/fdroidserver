@@ -84,22 +84,22 @@ APK_SDK_VERSION_PAT = re.compile(".*'([0-9]*)'.*")
 APK_PERMISSION_PAT = re.compile(r".*name='([^']*)'(?:.*maxSdkVersion='([^']*)')?.*")
 APK_FEATURE_PAT = re.compile(".*name='([^']*)'.*")
 
-screen_densities = ['65534', '640', '480', '320', '240', '160', '120']
+screen_densities = [65534, 640, 480, 320, 240, 160, 120]
 # resolutions must end with 'dpi'
 # https://android.googlesource.com/platform/tools/base/+/refs/tags/studio-2025.3.4/build-system/aaptcompiler/src/main/java/com/android/aaptcompiler/android/ResTableConfig.kt#372
 screen_resolutions = {
-    "xxxhdpi": '640',
-    "xxhdpi": '480',
-    "xhdpi": '320',
-    "hdpi": '240',
-    "mdpi": '160',
-    "ldpi": '120',
-    "tvdpi": '213',
-    "anydpi": '65534',
-    "nodpi": '65535',
+    "xxxhdpi": 640,
+    "xxhdpi": 480,
+    "xhdpi": 320,
+    "hdpi": 240,
+    "mdpi": 160,
+    "ldpi": 120,
+    "tvdpi": 213,
+    "anydpi": 65534,
+    "nodpi": 65535,
 }
 
-all_screen_densities = ['0'] + screen_densities
+all_screen_densities = [0] + screen_densities
 
 ALLOWED_EXTENSIONS = ('png', 'jpg', 'jpeg')
 GRAPHIC_NAMES = ('featureGraphic', 'icon', 'promoGraphic', 'tvBanner')
@@ -164,7 +164,7 @@ class PackageAddedCache:
 
 
 def dpi_to_px(density):
-    return (int(density) * 48) / 160
+    return (density * 48) / 160
 
 
 def px_to_dpi(px):
@@ -177,10 +177,10 @@ def get_old_icon_filename(appid, versionCode):
 
 
 def get_icon_dir(repodir, density):
-    if density in ('0', '65534', '65535'):
+    if density in (0, 65534, 65535):
         return os.path.join(repodir, "icons")
     else:
-        return os.path.join(repodir, "icons-%s" % density)
+        return os.path.join(repodir, "icons-%d" % density)
 
 
 def get_icon_dirs(repodir):
@@ -1774,7 +1774,7 @@ def _get_apk_icons_src(apkfile, apkobject, arsc):
                 # check it actually exists in the ZIP, some
                 # toolkits do strange things, like Godot Engine.
                 continue
-            icons_src[str(density)] = path
+            icons_src[density] = path
         if not icons_src:
             # no PNGs found, use the XML icon name
             app_icon = apkobject.get_app_icon()
@@ -2345,13 +2345,13 @@ def extract_apk_icons(icon_filename, apk, apkzip, repo_dir):
             empty_densities.append(density)
 
     non_dpi_case = None
-    if '0' in apk['icons_src']:
-        non_dpi_case = '0'
-    elif '65535' in apk['icons_src']:
-        non_dpi_case = '65535'
+    if 0 in apk['icons_src']:
+        non_dpi_case = 0
+    elif 65535 in apk['icons_src']:
+        non_dpi_case = 65535
 
     # move image based on DPI from measuring the image size
-    if non_dpi_case:
+    if non_dpi_case is not None:
         icon_src = apk['icons_src'][non_dpi_case]
         icon_path = os.path.join(get_icon_dir(repo_dir, non_dpi_case), icon_filename)
         with open(icon_path, 'wb') as f:
@@ -2363,7 +2363,7 @@ def extract_apk_icons(icon_filename, apk, apkzip, repo_dir):
             for density in screen_densities:
                 if density in apk['icons']:
                     break
-                if density == screen_densities[-1] or dpi >= int(density):
+                if density == screen_densities[-1] or dpi >= density:
                     apk['icons'][density] = icon_filename
                     shutil.move(icon_path,
                                 os.path.join(get_icon_dir(repo_dir, density), icon_filename))
@@ -2396,7 +2396,7 @@ def fill_missing_icon_densities(empty_densities, icon_filename, apk, repo_dir):
     # First try resizing down to not lose quality
     last_density = None
     for density in screen_densities:
-        if density == '65534':  # not possible to generate 'anydpi' from other densities
+        if density == 65534:  # not possible to generate 'anydpi' from other densities
             continue
         if density not in empty_densities:
             last_density = density
@@ -2447,10 +2447,10 @@ def fill_missing_icon_densities(empty_densities, icon_filename, apk, repo_dir):
         resize_icon(icon_dest, density)
 
     # Copy from icons-mdpi to icons since mdpi is the baseline density
-    baseline = os.path.join(get_icon_dir(repo_dir, '160'), icon_filename)
+    baseline = os.path.join(get_icon_dir(repo_dir, 160), icon_filename)
     if os.path.isfile(baseline):
-        apk['icons']['0'] = icon_filename
-        shutil.copyfile(baseline, os.path.join(get_icon_dir(repo_dir, '0'), icon_filename))
+        apk['icons'][0] = icon_filename
+        shutil.copyfile(baseline, os.path.join(get_icon_dir(repo_dir, 0), icon_filename))
 
 
 def apply_info_from_latest_apk(apps, apks):

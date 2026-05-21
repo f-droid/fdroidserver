@@ -6,14 +6,14 @@ file:
   ipfsCIDv1: bafybeifijmr5ygvfvig4vzbmdc3ysj6m46ddohaol4vgp4qoyooqpc27zu
 icon: org.dyndns.fules.ck.20.png
 icons:
-  '0': org.dyndns.fules.ck.20.png
-  '120': org.dyndns.fules.ck.20.png
-  '160': org.dyndns.fules.ck.20.png
-  '240': org.dyndns.fules.ck.20.png
+  0: org.dyndns.fules.ck.20.png
+  120: org.dyndns.fules.ck.20.png
+  160: org.dyndns.fules.ck.20.png
+  240: org.dyndns.fules.ck.20.png
 icons_src:
-  '120': res/drawable-ldpi-v4/icon_launcher.png
-  '160': res/drawable-mdpi-v4/icon_launcher.png
-  '240': res/drawable-hdpi-v4/icon_launcher.png
+  120: res/drawable-ldpi-v4/icon_launcher.png
+  160: res/drawable-mdpi-v4/icon_launcher.png
+  240: res/drawable-hdpi-v4/icon_launcher.png
 manifest:
   nativecode:
     - arm64-v8a
