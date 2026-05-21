@@ -1128,7 +1128,7 @@ class UpdateTest(SetUpTearDownMixin, unittest.TestCase):
                 self.assertEqual(apk['icon'], 'info.guardianproject.urzip.100.png')
             if apkName == '../org.dyndns.fules.ck_20.apk':
                 self.assertEqual(apk['icon'], 'org.dyndns.fules.ck.20.png')
-            for density in fdroidserver.update.screen_densities:
+            for density in fdroidserver.update.SCREEN_DENSITIES:
                 icon_path = os.path.join(
                     fdroidserver.update.get_icon_dir('repo', density), apk['icon']
                 )
@@ -1221,7 +1221,7 @@ class UpdateTest(SetUpTearDownMixin, unittest.TestCase):
                 self.assertFalse(os.path.exists(os.path.join('repo', apkName)))
 
                 # ensure that icons have been moved to the archive as well
-                for density in fdroidserver.update.screen_densities:
+                for density in fdroidserver.update.SCREEN_DENSITIES:
                     icon_path = os.path.join(fdroidserver.update.get_icon_dir('archive', density),
                                              apk['icon'])
                     self.assertTrue(os.path.isfile(icon_path))
@@ -2364,7 +2364,7 @@ class TestExtractApkIcons(SetUpTearDownMixin, unittest.TestCase):
         appid = 'SpeedoMeterApp.main'
         apkfile = basedir / f'{appid}_1.apk'
         empty_densities = self.extract_apk_icons(apkfile, appid)
-        self.assertEqual(fdroidserver.update.screen_densities, empty_densities)
+        self.assertEqual(fdroidserver.update.SCREEN_DENSITIES, empty_densities)
         self.assertFalse(os.path.exists(f'repo/icons/{self.filename}'))
         for density in empty_densities:
             self.assertFalse(os.path.exists(f'repo/icons-{density}/{self.filename}'))
@@ -2374,7 +2374,7 @@ class TestExtractApkIcons(SetUpTearDownMixin, unittest.TestCase):
         appid = 'info.zwanenburg.caffeinetile'
         apkfile = basedir / f'repo/{appid}_4.apk'
         empty_densities = self.extract_apk_icons(apkfile, appid)
-        self.assertEqual(fdroidserver.update.screen_densities, empty_densities)
+        self.assertEqual(fdroidserver.update.SCREEN_DENSITIES, empty_densities)
         self.assertFalse(os.path.exists(f'repo/icons/{self.filename}'))
         for density in empty_densities:
             self.assertFalse(os.path.exists(f'repo/icons-{density}/{self.filename}'))

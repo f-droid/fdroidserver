@@ -83,7 +83,7 @@ APK_SDK_VERSION_PAT = re.compile(".*'([0-9]*)'.*")
 APK_PERMISSION_PAT = re.compile(r".*name='([^']*)'(?:.*maxSdkVersion='([^']*)')?.*")
 APK_FEATURE_PAT = re.compile(".*name='([^']*)'.*")
 
-screen_densities = [65534, 640, 480, 320, 240, 160, 120]
+SCREEN_DENSITIES = [65534, 640, 480, 320, 240, 160, 120]
 # resolutions must end with 'dpi'
 # https://android.googlesource.com/platform/tools/base/+/refs/tags/studio-2025.3.4/build-system/aaptcompiler/src/main/java/com/android/aaptcompiler/android/ResTableConfig.kt#372
 screen_resolutions = {
@@ -182,7 +182,7 @@ def get_icon_dir(repodir, density):
 
 
 def get_icon_dirs(repodir):
-    for density in screen_densities:
+    for density in SCREEN_DENSITIES:
         yield get_icon_dir(repodir, density)
 
 
@@ -342,7 +342,7 @@ def resize_all_icons(repodirs):
       the repo directories to process
     """
     for repodir in repodirs:
-        for density in screen_densities:
+        for density in SCREEN_DENSITIES:
             icon_dir = get_icon_dir(repodir, density)
             icon_glob = os.path.join(icon_dir, '*.png')
             for iconpath in glob.glob(icon_glob):
@@ -2302,7 +2302,7 @@ def extract_apk_icons(icon_filename, apk, apkzip, repo_dir):
 
     """
     empty_densities = []
-    for density in screen_densities:
+    for density in SCREEN_DENSITIES:
         if density not in apk['icons_src']:
             empty_densities.append(density)
             continue
@@ -2339,10 +2339,10 @@ def extract_apk_icons(icon_filename, apk, apkzip, repo_dir):
         try:
             im = Image.open(icon_path)
             dpi = px_to_dpi(im.size[0])
-            for density in screen_densities:
+            for density in SCREEN_DENSITIES:
                 if density in apk['icons']:
                     break
-                if density == screen_densities[-1] or dpi >= density:
+                if density == SCREEN_DENSITIES[-1] or dpi >= density:
                     apk['icons'][density] = icon_filename
                     shutil.move(icon_path,
                                 os.path.join(get_icon_dir(repo_dir, density), icon_filename))
@@ -2374,7 +2374,7 @@ def fill_missing_icon_densities(empty_densities, icon_filename, apk, repo_dir):
     """
     # First try resizing down to not lose quality
     last_density = None
-    for density in screen_densities:
+    for density in SCREEN_DENSITIES:
         if density == 65534:  # not possible to generate 'anydpi' from other densities
             continue
         if density not in empty_densities:
@@ -2405,7 +2405,7 @@ def fill_missing_icon_densities(empty_densities, icon_filename, apk, repo_dir):
 
     # Then just copy from the highest resolution available
     last_density = None
-    for density in reversed(screen_densities):
+    for density in reversed(SCREEN_DENSITIES):
         if density not in empty_densities:
             last_density = density
             continue
@@ -2420,7 +2420,7 @@ def fill_missing_icon_densities(empty_densities, icon_filename, apk, repo_dir):
         empty_densities.remove(density)
 
     # If any of the icons are too big, then size them down.
-    for density in screen_densities:
+    for density in SCREEN_DENSITIES:
         icon_dir = get_icon_dir(repo_dir, density)
         icon_dest = os.path.join(icon_dir, icon_filename)
         resize_icon(icon_dest, density)
@@ -2534,7 +2534,7 @@ def move_apk_between_sections(from_dir, to_dir, apk):
     _move_file(from_dir, to_dir, filename + '.asc', True)
     _move_file(from_dir, to_dir, filename + '.idsig', True)
     _move_file(from_dir, to_dir, filename[:-4] + '.log.gz', True)
-    for density in screen_densities:
+    for density in SCREEN_DENSITIES:
         from_icon_dir = get_icon_dir(from_dir, density)
         to_icon_dir = get_icon_dir(to_dir, density)
         default = get_old_icon_filename(apk['packageName'], apk['versionCode'])
