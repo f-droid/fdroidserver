@@ -86,6 +86,7 @@ APK_FEATURE_PAT = re.compile(".*name='([^']*)'.*")
 
 screen_densities = ['65534', '640', '480', '320', '240', '160', '120']
 # resolutions must end with 'dpi'
+# https://android.googlesource.com/platform/tools/base/+/refs/tags/studio-2025.3.4/build-system/aaptcompiler/src/main/java/com/android/aaptcompiler/android/ResTableConfig.kt#372
 screen_resolutions = {
     "xxxhdpi": '640',
     "xxhdpi": '480',
@@ -94,7 +95,6 @@ screen_resolutions = {
     "mdpi": '160',
     "ldpi": '120',
     "tvdpi": '213',
-    "undefineddpi": '-1',
     "anydpi": '65534',
     "nodpi": '65535',
 }
