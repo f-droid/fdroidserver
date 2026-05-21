@@ -909,8 +909,8 @@ class UpdateTest(unittest.TestCase):
     def test_scan_apk_features(self):
         apk_info = fdroidserver.update.scan_apk('repo/duplicate.permisssions_9999999.apk')
         self.assertEqual(apk_info['manifest']['versionName'], '')
-        self.assertEqual(apk_info['icons_src'], {'160': 'res/drawable/ic_launcher.png',
-                                                 '-1': 'res/drawable/ic_launcher.png'})
+        self.assertEqual(apk_info['icons_src'], {'0': 'res/drawable/ic_launcher.png'})
+
         self.assertEqual(
             apk_info['manifest']['features'],
             [{'name': 'android.hardware.telephony'}],
@@ -920,8 +920,7 @@ class UpdateTest(unittest.TestCase):
         apk_info = fdroidserver.update.scan_apk('org.dyndns.fules.ck_20.apk')
         self.assertEqual(apk_info['icons_src'], {'240': 'res/drawable-hdpi-v4/icon_launcher.png',
                                                  '120': 'res/drawable-ldpi-v4/icon_launcher.png',
-                                                 '160': 'res/drawable-mdpi-v4/icon_launcher.png',
-                                                 '-1': 'res/drawable-mdpi-v4/icon_launcher.png'})
+                                                 '160': 'res/drawable-mdpi-v4/icon_launcher.png'})
         self.assertEqual(apk_info['icons'], {})
         self.assertEqual(apk_info['antiFeatures'], dict())
         self.assertEqual(apk_info['manifest']['versionName'], 'v1.6pre2')
@@ -946,8 +945,7 @@ class UpdateTest(unittest.TestCase):
     def test_scan_apk_two_icons(self):
         apk_info = fdroidserver.update.scan_apk('org.bitbucket.tickytacky.mirrormirror_4.apk')
         self.assertEqual(apk_info['manifest']['versionName'], '1.0.3')
-        self.assertEqual(apk_info['icons_src'], {'160': 'res/drawable-mdpi/mirror.png',
-                                                 '-1': 'res/drawable-mdpi/mirror.png'})
+        self.assertEqual(apk_info['icons_src'], {'160': 'res/drawable-mdpi/mirror.png'})
 
     def test_scan_apk_xml_icon(self):
         apk_info = fdroidserver.update.scan_apk('repo/info.zwanenburg.caffeinetile_4.apk')
@@ -960,8 +958,7 @@ class UpdateTest(unittest.TestCase):
         self.assertEqual(apk_info['icons_src'], {'120': 'res/drawable-ldpi-v4/icon.png',
                                                  '160': 'res/drawable-mdpi-v4/icon.png',
                                                  '240': 'res/drawable-hdpi-v4/icon.png',
-                                                 '320': 'res/drawable-xhdpi-v4/icon.png',
-                                                 '-1': 'res/drawable-mdpi-v4/icon.png'})
+                                                 '320': 'res/drawable-xhdpi-v4/icon.png'})
 
     def test_scan_apk_no_icons(self):
         apk_info = fdroidserver.update.scan_apk('SpeedoMeterApp.main_1.apk')
@@ -994,10 +991,7 @@ class UpdateTest(unittest.TestCase):
         self.maxDiff = None
         expected = {
             'icons': {},
-            'icons_src': {
-                '-1': 'res/drawable/ic_launcher.png',
-                '160': 'res/drawable/ic_launcher.png',
-            },
+            'icons_src': {'0': 'res/drawable/ic_launcher.png'},
             'file': {
                 'name': 'no.min.target.sdk_987.apk',
                 'sha256': 'e2e1dc1d550df2b5bc383860139207258645b5540abeccd305ed8b2cb6459d2c',
@@ -1967,7 +1961,6 @@ class UpdateTest(unittest.TestCase):
                         '240': 'res/drawable-hdpi-v4/icon_launcher.png',
                         '120': 'res/drawable-ldpi-v4/icon_launcher.png',
                         '160': 'res/drawable-mdpi-v4/icon_launcher.png',
-                        '-1': 'res/drawable-mdpi-v4/icon_launcher.png',
                     },
                     'manifest': {
                         'nativecode': [
@@ -2257,110 +2250,126 @@ class UpdateTest(unittest.TestCase):
             fdroidserver.update.get_icon_dir(repodir, density),
         )
 
+    def test_get_icon_dir_nodpi(self):
+        repodir = 'repo'
+        density = fdroidserver.update.screen_resolutions['nodpi']
+        self.assertEqual(
+            f'{repodir}/icons',
+            fdroidserver.update.get_icon_dir(repodir, density),
+        )
+
 
 class TestGetApkIconsSrc(unittest.TestCase):
-    def get_apk_icons_src(self, apkfile, appid):
+    def get_apk_icons_src(self, apkfile):
         apkobject = fdroidserver.common.get_androguard_APK(apkfile)
         arsc = apkobject.get_android_resources()
-        return fdroidserver.update._get_apk_icons_src(apkfile, apkobject, arsc, appid)
+        return fdroidserver.update._get_apk_icons_src(apkfile, apkobject, arsc)
 
     def test_get_apk_icons_src_urzip(self):
         self.assertEqual(
-            {
-                '-1': 'res/drawable/ic_launcher.png',
-                '160': 'res/drawable/ic_launcher.png',
-            },
-            self.get_apk_icons_src(basedir / 'urzip.apk', 'info.guardianproject.urzip'),
+            {'0': 'res/drawable/ic_launcher.png'},
+            self.get_apk_icons_src(basedir / 'urzip.apk'),
         )
 
     def test_get_apk_icons_src_mirrormirror(self):
         appid = 'org.bitbucket.tickytacky.mirrormirror'
         self.assertEqual(
-            {
-                '-1': 'res/drawable-mdpi/mirror.png',
-                '160': 'res/drawable-mdpi/mirror.png',
-            },
-            self.get_apk_icons_src(basedir / f'{appid}_4.apk', appid),
+            {'160': 'res/drawable-mdpi/mirror.png'},
+            self.get_apk_icons_src(basedir / f'{appid}_4.apk'),
         )
 
     def test_get_apk_icons_src_fules_ck(self):
         appid = 'org.dyndns.fules.ck'
         self.assertEqual(
             {
-                '-1': 'res/drawable-mdpi-v4/icon_launcher.png',
                 '120': 'res/drawable-ldpi-v4/icon_launcher.png',
                 '160': 'res/drawable-mdpi-v4/icon_launcher.png',
                 '240': 'res/drawable-hdpi-v4/icon_launcher.png',
             },
-            self.get_apk_icons_src(basedir / f'{appid}_20.apk', appid),
+            self.get_apk_icons_src(basedir / f'{appid}_20.apk'),
+        )
+
+    def test_get_apk_icons_src_SpeedoMeterApp_main(self):
+        """Test handling APK with no icon set."""
+        appid = 'SpeedoMeterApp.main'
+        self.assertEqual(
+            {},
+            self.get_apk_icons_src(basedir / f'{appid}_1.apk'),
+        )
+
+    def test_get_apk_icons_src_fallingblocks(self):
+        """Test example made with Godot Engine."""
+        appid = 'org.sajeg.fallingblocks'
+        self.assertEqual(
+            {'0': 'res/mipmap/icon.png'},
+            self.get_apk_icons_src(basedir / f'{appid}_3.apk'),
+        )
+
+    def test_get_apk_icons_src_com_example_test_helloworld(self):
+        """Test APK with no apparent icon, but some similarly named files."""
+        appid = 'com.example.test.helloworld'
+        self.assertEqual(
+            {},
+            self.get_apk_icons_src(basedir / f'repo/{appid}_1.apk'),
         )
 
     def test_get_apk_icons_src_com_politedroid_3(self):
         appid = 'com.politedroid'
         self.assertEqual(
             {
-                '-1': 'res/drawable-mdpi/icon.png',
                 '120': 'res/drawable-ldpi/icon.png',
                 '160': 'res/drawable-mdpi/icon.png',
                 '240': 'res/drawable-hdpi/icon.png',
                 '320': 'res/drawable-xhdpi/icon.png',
             },
-            self.get_apk_icons_src(basedir / f'repo/{appid}_3.apk', appid),
+            self.get_apk_icons_src(basedir / f'repo/{appid}_3.apk'),
         )
 
     def test_get_apk_icons_src_com_politedroid_6(self):
         appid = 'com.politedroid'
         self.assertEqual(
             {
-                '-1': 'res/drawable-mdpi-v4/icon.png',
                 '120': 'res/drawable-ldpi-v4/icon.png',
                 '160': 'res/drawable-mdpi-v4/icon.png',
                 '240': 'res/drawable-hdpi-v4/icon.png',
                 '320': 'res/drawable-xhdpi-v4/icon.png',
             },
-            self.get_apk_icons_src(basedir / f'repo/{appid}_6.apk', appid),
+            self.get_apk_icons_src(basedir / f'repo/{appid}_6.apk'),
         )
 
     def test_get_apk_icons_src_duplicate_permisssions(self):
         appid = 'duplicate.permisssions'
         self.assertEqual(
-            {
-                '-1': 'res/drawable/ic_launcher.png',
-                '160': 'res/drawable/ic_launcher.png',
-            },
-            self.get_apk_icons_src(basedir / f'repo/{appid}_9999999.apk', appid),
+            {'0': 'res/drawable/ic_launcher.png'},
+            self.get_apk_icons_src(basedir / f'repo/{appid}_9999999.apk'),
         )
 
     def test_get_apk_icons_src_info_zwanenburg_caffeinetile(self):
         """Test an APK with no PNG or WebP, only XML."""
         appid = 'info.zwanenburg.caffeinetile'
         self.assertEqual(
-            {},
-            self.get_apk_icons_src(basedir / f'repo/{appid}_4.apk', appid),
+            dict(),
+            self.get_apk_icons_src(basedir / f'repo/{appid}_4.apk'),
         )
 
     def test_get_apk_icons_src_org_maxsdkversion(self):
         appid = 'org.maxsdkversion'
         self.assertEqual(
-            {
-                '-1': 'res/drawable-mdpi-v4/mirror.png',
-                '160': 'res/drawable-mdpi-v4/mirror.png',
-            },
-            self.get_apk_icons_src(basedir / f'repo/{appid}_4.apk', appid),
+            {'160': 'res/drawable-mdpi-v4/mirror.png'},
+            self.get_apk_icons_src(basedir / f'repo/{appid}_4.apk'),
         )
 
     def test_get_apk_icons_src_souch_smsbypass(self):
         appid = 'souch.smsbypass'
         self.assertEqual(
             {
-                '-1': 'res/drawable-mdpi-v4/ic_launcher.png',
                 '160': 'res/drawable-mdpi-v4/ic_launcher.png',
                 '213': 'res/drawable-tvdpi-v4/ic_launcher.png',
                 '240': 'res/drawable-hdpi-v4/ic_launcher.png',
                 '320': 'res/drawable-xhdpi-v4/ic_launcher.png',
                 '480': 'res/drawable-xxhdpi-v4/ic_launcher.png',
             },
-            self.get_apk_icons_src(basedir / f'repo/{appid}_9.apk', appid),
+            self.get_apk_icons_src(basedir / f'repo/{appid}_9.apk'),
         )
 
 

@@ -7,10 +7,9 @@ file:
 icon: info.guardianproject.urzip.100.png
 icons:
   '0': info.guardianproject.urzip.100.png
-  '160': info.guardianproject.urzip.100.png
+  '120': info.guardianproject.urzip.100.png
 icons_src:
-  '-1': res/drawable/ic_launcher.png
-  '160': res/drawable/ic_launcher.png
+  '0': res/drawable/ic_launcher.png
 manifest:
   signer:
     sha256:

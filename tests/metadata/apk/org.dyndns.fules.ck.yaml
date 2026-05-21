@@ -11,7 +11,6 @@ icons:
   '160': org.dyndns.fules.ck.20.png
   '240': org.dyndns.fules.ck.20.png
 icons_src:
-  '-1': res/drawable-mdpi-v4/icon_launcher.png
   '120': res/drawable-ldpi-v4/icon_launcher.png
   '160': res/drawable-mdpi-v4/icon_launcher.png
   '240': res/drawable-hdpi-v4/icon_launcher.png

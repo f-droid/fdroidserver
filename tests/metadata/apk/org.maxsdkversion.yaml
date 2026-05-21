@@ -9,7 +9,6 @@ icons:
   '0': org.maxsdkversion.4.png
   '160': org.maxsdkversion.4.png
 icons_src:
-  '-1': res/drawable-mdpi-v4/mirror.png
   '160': res/drawable-mdpi-v4/mirror.png
 manifest:
   features:
