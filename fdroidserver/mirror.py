@@ -168,10 +168,6 @@ def main():
             )
         )
 
-    icondirs = ['icons']
-    for density in update.screen_densities:
-        icondirs.append('icons-' + density)
-
     if options.output_dir:
         basedir = options.output_dir
     else:
@@ -193,7 +189,7 @@ def main():
 
         os.makedirs(sectiondir, exist_ok=True)
         os.chdir(sectiondir)
-        for icondir in icondirs:
+        for icondir in update.get_icon_dirs(section):
             os.makedirs(os.path.join(sectiondir, icondir), exist_ok=True)
 
         for packageName, packageList in data['packages'].items():
@@ -259,16 +255,17 @@ def main():
                 )
                 continue
             icon = app['icon']
-            for icondir in icondirs:
-                url = _append_to_url_path(section, icondir, icon)
+            for icondir in update.get_icon_dirs(section):
+                url = _append_to_url_path(icondir, icon)
                 if icondir not in urls:
                     urls[icondir] = []
                 urls[icondir].append(url)
 
-        for icondir in icondirs:
+        for icondir in update.get_icon_dirs(section):
+            print(icondir, 'icondir in urls', icondir in urls, sep='\t')
             if icondir in urls:
                 _run_wget(
-                    os.path.join(basedir, section, icondir),
+                    os.path.join(basedir, icondir),
                     urls[icondir],
                     options.verbose,
                 )

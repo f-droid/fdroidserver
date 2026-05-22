@@ -12,16 +12,16 @@ rootpaths = [
     os.path.join(sys.prefix, 'share'),
 ]
 
-localedir = None
+LOCALEDIR = None
 for rootpath in rootpaths:
     found_mo = glob.glob(
         os.path.join(rootpath, 'locale', '*', 'LC_MESSAGES', 'fdroidserver.mo')
     )
     if len(found_mo) > 0:
-        localedir = os.path.join(rootpath, 'locale')
+        LOCALEDIR = os.path.join(rootpath, 'locale')
         break
 
-gettext.bindtextdomain('fdroidserver', localedir)
+gettext.bindtextdomain('fdroidserver', LOCALEDIR)
 gettext.textdomain('fdroidserver')
 _ = gettext.gettext
 
