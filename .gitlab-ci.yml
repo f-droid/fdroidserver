@@ -229,7 +229,7 @@ ubuntu_jammy_pip:
   image: ubuntu:jammy
   <<: *apt-template
   script:
-    - apt-get install git default-jdk-headless python3-pip python3-venv rsync
+    - apt-get install git default-jdk-headless python3-pip python3-venv rsync wget
 
     # setup venv to act as release build machine
     - python3 -m venv sdist-env

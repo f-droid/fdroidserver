@@ -1441,28 +1441,31 @@ class IntegrationTest(unittest.TestCase):
         httpd = ThreadingHTTPServer(("127.0.0.1", 0), RequestHandler)
         threading.Thread(target=httpd.serve_forever).start()
 
-        os.chdir(self.tmp_repo_root)
-        host, port = httpd.socket.getsockname()
-        url, output_dir = f"http://{host}:{port}/", Path(f"{host}:{port}")
-        self.assert_run(self.fdroid_cmd + ["mirror", url])
-        self.assertTrue((output_dir / "repo/souch.smsbypass_9.apk").is_file())
-        self.assertTrue((output_dir / "repo/icons-640/souch.smsbypass.9.png").is_file())
-        # the index shouldn't be saved unless it was verified
-        self.assertFalse((output_dir / "repo/index-v1.jar").exists())
-        self.assert_run_fail(
-            self.fdroid_cmd + ["mirror", f"{url}?fingerprint=asdfasdf"]
-        )
-        self.assertFalse((output_dir / "repo/index-v1.jar").exists())
-        self.assert_run(
-            self.fdroid_cmd
-            + [
-                "mirror",
-                f"{url}?fingerprint=F49AF3F11EFDDF20DFFD70F5E3117B9976674167ADCA280E6B1932A0601B26F6",
-            ],
-        )
-        self.assertTrue((output_dir / "repo/index-v1.jar").is_file())
-
-        httpd.shutdown()
+        try:
+            os.chdir(self.tmp_repo_root)
+            host, port = httpd.socket.getsockname()
+            url, output_dir = f"http://{host}:{port}/", Path(f"{host}:{port}")
+            self.assert_run(self.fdroid_cmd + ["mirror", url])
+            self.assertTrue((output_dir / "repo/souch.smsbypass_9.apk").is_file())
+            self.assertTrue(
+                (output_dir / "repo/icons-640/souch.smsbypass.9.png").is_file()
+            )
+            # the index shouldn't be saved unless it was verified
+            self.assertFalse((output_dir / "repo/index-v1.jar").exists())
+            self.assert_run_fail(
+                self.fdroid_cmd + ["mirror", f"{url}?fingerprint=asdfasdf"]
+            )
+            self.assertFalse((output_dir / "repo/index-v1.jar").exists())
+            self.assert_run(
+                self.fdroid_cmd
+                + [
+                    "mirror",
+                    f"{url}?fingerprint=F49AF3F11EFDDF20DFFD70F5E3117B9976674167ADCA280E6B1932A0601B26F6",
+                ],
+            )
+            self.assertTrue((output_dir / "repo/index-v1.jar").is_file())
+        finally:
+            httpd.shutdown()
 
     def test_recovering_from_broken_git_submodules(self):
         Path("foo").mkdir()
