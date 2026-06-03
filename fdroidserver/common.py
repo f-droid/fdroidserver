@@ -3504,23 +3504,22 @@ def get_first_signer_certificate(apkpath):
     .(RSA|DSA|EC) against the corresponding signature file .SF
     https://android.googlesource.com/platform/tools/apksig/+/refs/tags/android-13.0.0_r3/src/main/java/com/android/apksig/internal/apk/v1/V1SchemeVerifier.java#280
 
-    NoOverwriteDict is a workaround for:
-    https://github.com/androguard/androguard/issues/1030
-
     Lots more discusion here:
     https://gitlab.com/fdroid/fdroidserver/-/issues/1128
 
     """
-
-    class NoOverwriteDict(dict):
-        def __setitem__(self, k, v):
-            if k not in self:
-                super().__setitem__(k, v)
-
     cert_encoded = None
     found_certs = []
     apkobject = get_androguard_APK(apkpath)
-    apkobject._v2_blocks = NoOverwriteDict()
+    if isinstance(apkobject._v2_blocks, dict):
+        # Fixed in Androguard v4.1.4. NoOverwriteDict is a workaround for:
+        # https://github.com/androguard/androguard/issues/1030
+        class NoOverwriteDict(dict):
+            def __setitem__(self, k, v):
+                if k not in self:
+                    super().__setitem__(k, v)
+
+        apkobject._v2_blocks = NoOverwriteDict()
     certs_v3 = apkobject.get_certificates_der_v3()
     if certs_v3:
         cert_v3 = certs_v3[0]
