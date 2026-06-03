@@ -2448,6 +2448,199 @@ class CommonTest(SetUpTearDownMixin, unittest.TestCase):
             fdroidserver.common.metadata_find_developer_signing_files(appid, vc),
         )
 
+    # APK Signing Block format constants (see Android docs links below).
+    # Kept in the tests rather than fdroidserver.common because runtime
+    # certificate extraction goes through androguard; this oracle exists
+    # only to cross-check androguard's parser against the on-disk block.
+    # https://source.android.com/docs/security/features/apksigning/v2
+    # https://source.android.com/docs/security/features/apksigning/v3
+    _APK_SIG_BLOCK_MAGIC = b'APK Sig Block 42'
+    _APK_SIG_BLOCK_ID_V2 = 0x7109871A
+    _APK_SIG_BLOCK_ID_V3 = 0xF05368C0
+
+    @staticmethod
+    def _build_apk_signing_block(cert_der):
+        """Construct a minimal APK Signing Block carrying one v2 signer with cert."""
+        import struct
+
+        certs_section = struct.pack('<I', len(cert_der)) + cert_der
+        signed_data = (
+            struct.pack('<I', 0)  # digests
+            + struct.pack('<I', len(certs_section))
+            + certs_section
+            + struct.pack('<I', 0)  # additional attributes
+        )
+        signer = (
+            struct.pack('<I', len(signed_data)) + signed_data
+            + struct.pack('<I', 0)  # signatures
+            + struct.pack('<I', 0)  # public key
+        )
+        signers = struct.pack('<I', len(signer)) + signer
+        v2_value = struct.pack('<I', len(signers)) + signers
+        pair_len = 4 + len(v2_value)  # u32 id + value
+        pair = (
+            struct.pack('<Q', pair_len)
+            + struct.pack('<I', CommonTest._APK_SIG_BLOCK_ID_V2)
+            + v2_value
+        )
+        leading_size = len(pair) + 8 + 16  # pairs + trailing size + magic
+        return (
+            struct.pack('<Q', leading_size)
+            + pair
+            + struct.pack('<Q', leading_size)
+            + CommonTest._APK_SIG_BLOCK_MAGIC
+        )
+
+    @staticmethod
+    def _oracle_read_length_prefixed(buf, off):
+        if len(buf) - off < 4:
+            raise ValueError('truncated length prefix')
+        n = int.from_bytes(buf[off:off + 4], 'little')
+        end = off + 4 + n
+        if end > len(buf):
+            raise ValueError('truncated slice')
+        return buf[off + 4:end], end
+
+    @classmethod
+    def _oracle_first_cert_from_signer_block(cls, value):
+        signers, _ = cls._oracle_read_length_prefixed(value, 0)
+        signer, _ = cls._oracle_read_length_prefixed(signers, 0)
+        signed_data, _ = cls._oracle_read_length_prefixed(signer, 0)
+        _digests, off = cls._oracle_read_length_prefixed(signed_data, 0)
+        certs, _ = cls._oracle_read_length_prefixed(signed_data, off)
+        cert, _ = cls._oracle_read_length_prefixed(certs, 0)
+        return cert
+
+    @classmethod
+    def _oracle_get_certificate_from_apk_signing_block(cls, block_path):
+        """Parse a raw APK Signing Block file and return first signer's first cert (DER).
+
+        Independent oracle used to cross-check androguard's parser; not used
+        at runtime by fdroidserver itself.
+        """
+        with open(block_path, 'rb') as f:
+            block = f.read()
+        if len(block) < 32 or not block.endswith(cls._APK_SIG_BLOCK_MAGIC):
+            raise ValueError('not an APK Signing Block')
+        declared_size = int.from_bytes(block[0:8], 'little')
+        if declared_size + 8 != len(block):
+            raise ValueError('size mismatch')
+        pairs_end = len(block) - 24
+        v2_value = v3_value = None
+        p = 8
+        while p < pairs_end:
+            if pairs_end - p < 12:
+                raise ValueError('truncated ID-value pair')
+            pair_len = int.from_bytes(block[p:p + 8], 'little')
+            if pair_len < 4 or p + 8 + pair_len > pairs_end:
+                raise ValueError('invalid ID-value pair length')
+            pair_id = int.from_bytes(block[p + 8:p + 12], 'little')
+            if pair_id == cls._APK_SIG_BLOCK_ID_V3:
+                v3_value = block[p + 12:p + 8 + pair_len]
+                break
+            if pair_id == cls._APK_SIG_BLOCK_ID_V2:
+                v2_value = block[p + 12:p + 8 + pair_len]
+            p += 8 + pair_len
+        value = v3_value if v3_value is not None else v2_value
+        if value is None:
+            raise ValueError('no v2/v3 block')
+        return cls._oracle_first_cert_from_signer_block(value)
+
+    def test_oracle_get_certificate_from_apk_signing_block(self):
+        import hashlib
+
+        cert_der = b'fake-x509-cert-bytes-' + bytes(range(64))
+        block = self._build_apk_signing_block(cert_der)
+        with tempfile.NamedTemporaryFile(delete=False) as fh:
+            fh.write(block)
+            block_path = fh.name
+        try:
+            extracted = self._oracle_get_certificate_from_apk_signing_block(
+                block_path
+            )
+            self.assertEqual(cert_der, extracted)
+            self.assertEqual(
+                hashlib.sha256(cert_der).hexdigest(),
+                fdroidserver.common.signer_fingerprint(extracted),
+            )
+        finally:
+            os.unlink(block_path)
+
+    def test_oracle_get_certificate_from_apk_signing_block_invalid(self):
+        with tempfile.NamedTemporaryFile(delete=False) as fh:
+            fh.write(b'not an APK Signing Block')
+            bogus = fh.name
+        try:
+            with self.assertRaises(ValueError):
+                self._oracle_get_certificate_from_apk_signing_block(bogus)
+        finally:
+            os.unlink(bogus)
+
+    @unittest.skipIf(sys.byteorder == 'big', 'androguard is not ported to big-endian')
+    def test_signer_cert_matches_signing_block_oracle(self):
+        """The cert fdroidserver caches must match an independent block parser.
+
+        Cross-check ``get_first_signer_certificate`` (the production androguard
+        wrapper, with the issue #1030 ``NoOverwriteDict`` workaround) against
+        the standalone APK Signing Block oracle parser. Bypassing the wrapper
+        and calling ``get_certificates_der_v3()`` / ``_v2()`` directly is
+        fragile across androguard versions: e.g. androguard 3.4.0a1 returns
+        the wrong signer for ``issue-1128-poc2.apk`` without the workaround.
+
+        Uses ``issue-1128-poc2.apk`` (v3-only, no META-INF) since the other
+        v2/v3-only fixtures carry partial META-INF that apksigcopier rejects.
+        """
+        apk = 'issue-1128-poc2.apk'
+        apkpath = os.path.join(basedir, apk)
+        outdir = os.path.join(self.testdir, apk[:-4])
+        os.mkdir(outdir)
+        fdroidserver.common.apk_extract_signatures(apkpath, outdir)
+        block_path = os.path.join(outdir, 'APKSigningBlock')
+        self.assertTrue(os.path.isfile(block_path))
+        oracle_cert = self._oracle_get_certificate_from_apk_signing_block(
+            block_path
+        )
+        wrapper_cert = fdroidserver.common.get_first_signer_certificate(apkpath)
+        self.assertEqual(wrapper_cert, oracle_cert)
+        with open(os.path.join(outdir, 'signer-certificate.der'), 'rb') as f:
+            self.assertEqual(f.read(), oracle_cert)
+
+    def test_metadata_find_signing_files_v2_only(self):
+        """v2/v3-only sigdir (APKSigningBlock + offset + signer-certificate.der, no v1 META-INF)."""
+        cert_der = b'v2-only-cert-' + bytes(range(64))
+        block = self._build_apk_signing_block(cert_der)
+        appid = 'com.example.v2only'
+        vc = '42'
+        with tempfile.TemporaryDirectory() as tmpdir, TmpCwd(tmpdir):
+            sigdir = os.path.join('metadata', appid, 'signatures', vc)
+            os.makedirs(sigdir)
+            block_path = os.path.join(sigdir, 'APKSigningBlock')
+            offset_path = os.path.join(sigdir, 'APKSigningBlockOffset')
+            der_path = os.path.join(sigdir, 'signer-certificate.der')
+            with open(block_path, 'wb') as fh:
+                fh.write(block)
+            with open(offset_path, 'w') as fh:
+                fh.write('1234')
+            with open(der_path, 'wb') as fh:
+                fh.write(cert_der)
+
+            self.assertEqual(
+                [(None, None, None, (block_path, offset_path))],
+                fdroidserver.common.metadata_find_signing_files(appid, vc),
+            )
+            self.assertEqual(
+                (None, None, None, (block_path, offset_path)),
+                fdroidserver.common.metadata_find_developer_signing_files(
+                    appid, vc
+                ),
+            )
+            import hashlib
+
+            self.assertEqual(
+                hashlib.sha256(cert_der).hexdigest(),
+                fdroidserver.common.metadata_find_developer_signature(appid, vc),
+            )
+
     @mock.patch('sdkmanager.build_package_list', lambda use_net: None)
     def test_auto_install_ndk(self):
         """Test all possible field data types for build.ndk"""

@@ -3642,6 +3642,12 @@ def metadata_find_developer_signature(appid, vercode=None):
         for signature_block_file in signature_block_files:
             with open(signature_block_file, 'rb') as f:
                 return signer_fingerprint(get_certificate(f.read()))
+        # No v1 (JAR) signature: fall back to the cached developer certificate
+        # written by apk_extract_signatures for v2/v3-only sigdirs.
+        # See https://gitlab.com/fdroid/fdroidserver/-/issues/1065
+        signer_cert_der = Path(sigdir) / 'signer-certificate.der'
+        if signer_cert_der.is_file():
+            return signer_fingerprint(signer_cert_der.read_bytes())
     return None
 
 
@@ -3688,6 +3694,14 @@ def metadata_find_signing_files(appid, vercode):
             manifest = os.path.join(sigdir, 'MANIFEST.MF')
             if os.path.isfile(manifest):
                 ret.append((signature_block_file, signature_file, manifest, v2_files))
+    if not ret and v2_files is not None and os.path.isfile(
+        os.path.join(sigdir, 'signer-certificate.der')
+    ):
+        # APK is v2/v3-signed only (no v1 META-INF). The APKSigningBlock plus
+        # the cached signer-certificate.der are needed; a sigdir missing signer-certificate.der
+        # is treated as no signing entry so partial state never reaches publish.
+        # See https://gitlab.com/fdroid/fdroidserver/-/issues/1065
+        ret.append((None, None, None, v2_files))
     return ret
 
 
@@ -3767,7 +3781,7 @@ def apk_strip_v1_signatures(signed_apk, strip_manifest=False):
                             out_apk.writestr(ClonedZipInfo(info), buf)
 
 
-def apk_implant_signatures(apkpath, outpath, manifest):
+def apk_implant_signatures(apkpath, outpath, sigdir):
     """Implant a signature from metadata into an APK.
 
     Note: this changes there supplied APK in place. So copy it if you
@@ -3779,6 +3793,9 @@ def apk_implant_signatures(apkpath, outpath, manifest):
         location of the unsigned apk
     outpath
         location of the output apk
+    sigdir
+        path to the metadata signature directory containing the v1 META-INF
+        files and/or the APK Signing Block to graft.
 
     References
     ----------
@@ -3787,7 +3804,6 @@ def apk_implant_signatures(apkpath, outpath, manifest):
     * https://source.android.com/security/apksigning/v3
 
     """
-    sigdir = os.path.dirname(manifest)  # FIXME
     apksigcopier.do_patch(sigdir, apkpath, outpath, v1_only=None,
                           exclude=apksigcopier.exclude_meta)
 
@@ -3810,6 +3826,21 @@ def apk_extract_signatures(apkpath, outdir):
 
     """
     apksigcopier.do_extract(apkpath, outdir, v1_only=None)
+    # For v2/v3-only APKs (no v1 META-INF) the developer fingerprint can no
+    # longer be read from a .RSA/.DSA/.EC file, so cache the first signer's
+    # certificate (DER) via get_first_signer_certificate alongside the block.
+    # See https://gitlab.com/fdroid/fdroidserver/-/issues/1065
+    has_v2_block = os.path.isfile(os.path.join(outdir, 'APKSigningBlock'))
+    has_v1_sig = any(
+        glob.glob(os.path.join(outdir, '*.' + ext)) for ext in ('RSA', 'DSA', 'EC')
+    )
+    if has_v2_block and not has_v1_sig:
+        cert = get_first_signer_certificate(apkpath)
+        if cert is None:
+            raise FDroidException(
+                _('No v2/v3 certificate found in {path}').format(path=apkpath)
+            )
+        Path(os.path.join(outdir, 'signer-certificate.der')).write_bytes(cert)
 
 
 def get_min_sdk_version(apk):

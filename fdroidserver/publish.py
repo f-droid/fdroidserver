@@ -421,16 +421,21 @@ def main():
                 # metadata. This means we're going to prepare both a locally
                 # signed APK and a version signed with the developers key.
 
-                signature_file, _ignored, manifest, v2_files = signingfiles
-
-                with open(signature_file, 'rb') as f:
-                    devfp = common.signer_fingerprint_short(
-                        common.get_certificate(f.read())
-                    )
+                signature_block_file, _ignored, _manifest, v2_files = signingfiles
+                sigdir = common.metadata_get_sigdir(appid, vercode)
+                if signature_block_file is not None:
+                    with open(signature_block_file, 'rb') as f:
+                        cert = common.get_certificate(f.read())
+                else:
+                    with open(
+                        os.path.join(sigdir, 'signer-certificate.der'), 'rb'
+                    ) as f:
+                        cert = f.read()
+                devfp = common.signer_fingerprint_short(cert)
                 devsigned = '{}_{}_{}.apk'.format(appid, vercode, devfp)
                 devsignedtmp = os.path.join(tmp_dir, devsigned)
 
-                common.apk_implant_signatures(apkfile, devsignedtmp, manifest=manifest)
+                common.apk_implant_signatures(apkfile, devsignedtmp, sigdir)
                 if common.verify_apk_signature(devsignedtmp):
                     shutil.move(devsignedtmp, os.path.join(output_dir, devsigned))
                 else:
