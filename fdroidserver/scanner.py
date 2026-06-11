@@ -690,7 +690,13 @@ def scan_binary(apkfile, allow_debuggable=False):
     logging.info(_('Scanning APK for extra signing blocks.'))
     a = common.get_androguard_APK(str(apkfile))
     a.parse_v2_v3_signature()
-    for b in a._v2_blocks:
+
+    v2_block_ids = (
+        a._v2_blocks.keys()
+        if isinstance(a._v2_blocks, dict)
+        else [b.id for b in a._v2_blocks]
+    )
+    for b in v2_block_ids:
         if b in APK_SIGNING_BLOCK_IDS:
             logging.debug(
                 f"Problem: found extra signing block '{APK_SIGNING_BLOCK_IDS[b]}'"
