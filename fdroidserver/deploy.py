@@ -27,7 +27,6 @@ import shutil
 import subprocess
 import sys
 import time
-import urllib
 from argparse import ArgumentParser
 from typing import Dict, List
 
@@ -765,46 +764,46 @@ def upload_apk_to_virustotal(
     repofilename = os.path.join('repo', apkName)
     logging.info('Checking if ' + repofilename + ' is on virustotal')
 
-    headers = {"User-Agent": "F-Droid"}
+    headers = {"User-Agent": "F-Droid", 'x-apikey': virustotal_apikey}
     if 'headers' in kwargs:
         for k, v in kwargs['headers'].items():
             headers[k] = v
 
-    apikey = {
-        'apikey': virustotal_apikey,
-        'resource': hash,
-    }
     needs_file_upload = False
     while True:
-        report_url = (
-            'https://www.virustotal.com/vtapi/v2/file/report?'
-            + urllib.parse.urlencode(apikey)
-        )
+        report_url = f'https://www.virustotal.com/api/v3/files/{hash}'
         r = requests.get(report_url, headers=headers, timeout=300)
         if r.status_code == 200:
-            response = r.json()
-            if response['response_code'] == 0:
-                needs_file_upload = True
-            else:
-                response['filename'] = apkName
-                response['packageName'] = packageName
-                response['versionCode'] = versionCode
-                if kwargs.get('versionName'):
-                    response['versionName'] = kwargs.get('versionName')
-                with open(outputfilename, 'w') as fp:
-                    json.dump(response, fp, indent=2, sort_keys=True)
+            data = r.json()['data']
+            data['filename'] = apkName
+            data['packageName'] = packageName
+            data['versionCode'] = versionCode
+            versionName = kwargs.get('versionName')
+            if versionName:
+                data['versionName'] = versionName
 
-            if response.get('positives', 0) > 0:
-                logging.warning(
-                    _('{path} has been flagged by virustotal {count} times:').format(
-                        path=repofilename, count=response['positives']
-                    ),
-                    +'\n\t' + response['permalink'],
-                )
+            with open(outputfilename, 'w') as fp:
+                json.dump(data, fp, indent=2, sort_keys=True)
+
+            stats = data.get('last_analysis_stats')
+            if stats:
+                for k in ('failure', 'malicious', 'suspicious'):
+                    logging.warning(
+                        _(
+                            '{path} has been flagged in VirusTotal as "{name}" {count} times:'
+                        ).format(path=repofilename, name=k, count=stats[k])
+                        + '\n\t'
+                        + f'https://www.virustotal.com/gui/file/{hash}/detection',
+                    )
             break
-        if r.status_code == 204:
+        if r.status_code == 404:
+            needs_file_upload = True
+            break
+        if r.status_code == 429:
             logging.warning(_('virustotal.com is rate limiting, waiting to retry...'))
-            time.sleep(30)  # wait for public API rate limiting
+            time.sleep(60)  # wait for public API rate limiting
+            continue
+        r.raise_for_status()
 
     upload_url = None
     if needs_file_upload:
@@ -819,13 +818,10 @@ def upload_apk_to_virustotal(
             )
         elif size > 32000000:
             # VirusTotal API requires fetching a URL to upload bigger files
-            query_url = (
-                'https://www.virustotal.com/vtapi/v2/file/scan/upload_url?'
-                + urllib.parse.urlencode(apikey)
-            )
+            query_url = 'https://www.virustotal.com/api/v3/files/upload_url'
             r = requests.get(query_url, headers=headers, timeout=300)
             if r.status_code == 200:
-                upload_url = r.json().get('upload_url')
+                upload_url = r.json().get('data')
             elif r.status_code == 403:
                 logging.error(
                     _(
@@ -836,7 +832,7 @@ def upload_apk_to_virustotal(
             else:
                 r.raise_for_status()
         else:
-            upload_url = 'https://www.virustotal.com/vtapi/v2/file/scan'
+            upload_url = 'https://www.virustotal.com/api/v3/files'
 
     if upload_url:
         logging.info(
@@ -844,7 +840,6 @@ def upload_apk_to_virustotal(
         )
         r = requests.post(
             upload_url,
-            data=apikey,
             headers=headers,
             files={'file': (apkName, open(repofilename, 'rb'))},
             timeout=300,
@@ -855,8 +850,6 @@ def upload_apk_to_virustotal(
             )
         )
         r.raise_for_status()
-        response = r.json()
-        logging.info(response['verbose_msg'] + " " + response['permalink'])
 
     return outputfilename
 
