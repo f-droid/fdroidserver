@@ -1992,6 +1992,54 @@ def check_builds(app):
                     yield f":{build.versionCode} 'binary: {v}' {r}"
 
 
+# `git clone ...` in a build step: external sources belong in a srclib.
+GIT_CLONE_REGEX = re.compile(r'\bgit\s+clone\b')
+# `cd somedir && ...` or `cd somedir; ...` changing directory inline: use
+# pushd/popd or separate list entries.  Anchored to the start of the command so
+# that `$(cd ...)` command substitution and `cd` inside `for`/`while`/`if`
+# compound statements are not matched.
+CD_CHAIN_REGEX = re.compile(r'^\s*cd\s+\S+\s*(?:&&|;)')
+# `(cd foo && ...)` subshell used to change directory: use pushd/popd instead.
+# The negative lookbehind avoids matching `$(cd ...)` command substitution.
+SUBSHELL_CD_REGEX = re.compile(r'(?<!\$)\(\s*cd\s')
+# Build flags whose values are shell scripts (lists of commands).
+BUILD_SCRIPT_FLAGS = ('sudo', 'init', 'prebuild', 'build', 'postbuild')
+
+
+def check_build_script_antipatterns(app):
+    """Warn about shell anti-patterns in the build script flags.
+
+    These mirror recurring manual review feedback: external repos should be
+    added as a srclib rather than `git clone`d in a build step, multiple
+    commands should be separate list entries rather than chained with `&&` or
+    `;`, and directory changes should use pushd/popd rather than a subshell.
+    """
+    for build in app.get('Builds', []):
+        if build.disable:
+            continue
+        for flag in BUILD_SCRIPT_FLAGS:
+            commands = build.get(flag) or []
+            if isinstance(commands, str):
+                commands = [commands]
+            for command in commands:
+                if GIT_CLONE_REGEX.search(command):
+                    yield _(
+                        "'git clone' in '{flag}' of build '{versionCode}'; "
+                        "add the repo as a srclib instead"
+                    ).format(flag=flag, versionCode=build.versionCode)
+                if CD_CHAIN_REGEX.search(command):
+                    yield _(
+                        "'cd ... &&' or 'cd ...;' in '{flag}' of build "
+                        "'{versionCode}'; use pushd/popd or separate list "
+                        "entries instead"
+                    ).format(flag=flag, versionCode=build.versionCode)
+                if SUBSHELL_CD_REGEX.search(command):
+                    yield _(
+                        "subshell '(cd ...)' in '{flag}' of build '{versionCode}'; "
+                        "use pushd/popd instead"
+                    ).format(flag=flag, versionCode=build.versionCode)
+
+
 def check_files_dir(app):
     dir_path = Path('metadata') / app.id
     if not dir_path.is_dir():
@@ -2532,6 +2580,7 @@ def lint_metadata(options):
             check_categories,
             check_duplicates,
             check_builds,
+            check_build_script_antipatterns,
             check_files_dir,
             check_license_tag,
             check_current_version_code,
