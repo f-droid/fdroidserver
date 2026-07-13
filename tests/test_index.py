@@ -892,6 +892,34 @@ class IndexTest(SetUpTearDownMixin, unittest.TestCase):
             self.maxDiff = None
             self.assertEqual(css, pretty_css)
 
+    def test_make_website_does_not_change_existing(self):
+        """Test that make_website does not replace manually created index setup."""
+        os.chdir(self.testdir)
+        os.mkdir('metadata')
+        os.mkdir('repo')
+        testvalue = 'placeholder'
+        html = Path('repo/index.html')
+        html.write_text(testvalue)
+        css = Path('repo/index.css')
+        css.write_text(testvalue)
+
+        repodict = {
+            'address': 'https://example.com/fdroid/repo',
+            'description': 'This is just a test',
+            'icon': 'blahblah',
+            'name': 'test',
+            'timestamp': common.epoch_millis_now(),
+            'version': 12,
+        }
+
+        common.config['repo_pubkey'] = 'ffffffffffffffffffffffffffffffffff'
+
+        index.make_website([], "repo", repodict)
+        self.assertEqual(testvalue, html.read_text())
+        self.assertEqual(testvalue, css.read_text())
+        # Since there isn't a pre-existing index.png, it shouldn't have been created
+        self.assertFalse(Path('repo/index.png').exists())
+
     def test_sort_package_versions_with_invalid(self):
         i = [
             {
