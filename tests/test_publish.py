@@ -17,6 +17,7 @@ import shutil
 import sys
 import unittest
 import tempfile
+import zlib
 from unittest import mock
 
 from fdroidserver import publish
@@ -260,6 +261,10 @@ class PublishTest(unittest.TestCase):
                 self.assertEqual(publish.config['keytool'], data['keytool'])
 
     @unittest.skipIf(sys.byteorder == 'big', 'androguard is not ported to big-endian')
+    @unittest.skipIf(
+        hasattr(zlib, 'ZLIBNG_VERSION') or (sys.version_info[1] >= 14),
+        'https://gitlab.com/fdroid/fdroidserver/-/work_items/1354',
+    )
     def test_sign_then_implant_signature(self):
         os.chdir(self.testdir)
 
