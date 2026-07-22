@@ -18,6 +18,7 @@ import sys
 import tempfile
 import textwrap
 import unittest
+import zlib
 from unittest import mock
 
 from fdroidserver import common, metadata, publish, signatures
@@ -261,7 +262,7 @@ class PublishTest(unittest.TestCase):
 
     @unittest.skipIf(sys.byteorder == 'big', 'androguard is not ported to big-endian')
     @unittest.skipIf(
-        'ID=fedora' in pathlib.Path('/etc/os-release').read_text(),
+        hasattr(zlib, 'ZLIBNG_VERSION') or (sys.version_info[1] >= 14),
         'https://gitlab.com/fdroid/fdroidserver/-/work_items/1354',
     )
     def test_sign_then_implant_signature(self):
