@@ -44,7 +44,7 @@ import urllib.parse
 import zipfile
 
 from binascii import hexlify, unhexlify
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from xml.dom.minidom import Document
 
@@ -548,7 +548,7 @@ def datetime_from_millis(millis):
     millis
       Java-style integer time since UNIX epoch in milliseconds
     """
-    return datetime.utcfromtimestamp(millis / 1000)
+    return datetime.fromtimestamp(millis / 1000, timezone.utc)
 
 
 def package_metadata(app, repodir):
@@ -2098,7 +2098,9 @@ def make_altstore(apps, apks, config, repodir, pretty=False):
                 if apk['packageName'] == packageName and file_extension == 'ipa':
                     v = {
                         "version": apk["manifest"]["versionName"],
-                        "date": datetime_from_millis(apk["added"]).isoformat(),
+                        "date": datetime_from_millis(apk["added"])
+                        .replace(tzinfo=None)
+                        .isoformat(),
                         "downloadURL": f"{config['repo_url']}/{apk['file']['name']}",
                         "size": apk['file']['size'],
                     }
