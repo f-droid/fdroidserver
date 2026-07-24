@@ -155,7 +155,9 @@ class IntegrationTest(unittest.TestCase):
         (path / "build-tools/34.0.0").mkdir(parents=True)
         (path / "build-tools/34.0.0/aapt").touch()
 
-    def fdroid_init_with_prebuilt_keystore(self, keystore_path=FILES / "keystore.jks"):
+    def fdroid_init_with_prebuilt_keystore(
+        self, keystore_path=FILES / "keystore.jks", placeholder_icon=True
+    ):
         self.assert_run(
             self.fdroid_cmd
             + ["init", "--keystore", keystore_path, "--repo-keyalias", "sova"]
@@ -167,6 +169,12 @@ class IntegrationTest(unittest.TestCase):
                 "keypass": "r9aquRHYoI8+dYz6jKrLntQ5/NJNASFBacJh7Jv2BlI=",
             },
         )
+
+        if placeholder_icon:
+            # silence warnings
+            icon = Path('repo/icons/icon.png')
+            icon.parent.mkdir()
+            icon.write_text('placeholder')
 
     @unittest.skipUnless(USE_APKSIGNER, "requires apksigner")
     def test_run_process_when_building_and_signing_are_on_separate_machines(self):
@@ -272,7 +280,7 @@ class IntegrationTest(unittest.TestCase):
     )
     def test_copy_repo_generate_java_gpg_keys_update_and_gpgsign(self):
         """Needs tricks to make gpg-agent run in a test harness."""
-        self.fdroid_init_with_prebuilt_keystore()
+        self.fdroid_init_with_prebuilt_keystore(placeholder_icon=False)
         shutil.copytree(FILES / "repo", "repo", dirs_exist_ok=True)
         for dir in ["config", "metadata"]:
             shutil.copytree(FILES / dir, dir)

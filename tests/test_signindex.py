@@ -121,6 +121,11 @@ class SignindexTest(unittest.TestCase):
         if common.find_apksigner({}) is None:  # TODO remove me for buildserver-bullseye
             self.skipTest('SKIPPING test_signindex, apksigner not installed!')
         os.mkdir('archive')
+        # silence warnings
+        icon = Path('repo/icons/icon.png')
+        icon.parent.mkdir()
+        icon.write_text('placeholder')
+
         metadata = Path('metadata')
         metadata.mkdir()
         with (metadata / 'info.guardianproject.urzip.yml').open('w') as fp:
