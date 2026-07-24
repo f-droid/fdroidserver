@@ -60,7 +60,6 @@ class IndexTest(SetUpTearDownMixin, unittest.TestCase):
         config = common.read_config()
         config['jarsigner'] = common.find_sdk_tools_cmd('jarsigner')
         common.config = config
-        signindex.config = config
         update.config = config
 
     def _sign_test_index_v1_jar(self):
@@ -185,7 +184,7 @@ class IndexTest(SetUpTearDownMixin, unittest.TestCase):
             self.testdir, 'repo', os.path.basename(mirrors[0]['url'])
         )
         os.chdir(self.testdir)
-        signindex.config['keystore'] = os.path.join(basedir, 'keystore.jks')
+        common.config['keystore'] = os.path.join(basedir, 'keystore.jks')
         os.mkdir('repo')
         shutil.copy(basedir / 'repo' / 'entry.json', 'repo')
         shutil.copy(basedir / 'repo' / 'index-v2.json', 'repo')
@@ -208,7 +207,7 @@ class IndexTest(SetUpTearDownMixin, unittest.TestCase):
             self.testdir, 'repo', os.path.basename(mirrors[0]['url'])
         )
         os.chdir(self.testdir)
-        signindex.config['keystore'] = os.path.join(basedir, 'keystore.jks')
+        common.config['keystore'] = os.path.join(basedir, 'keystore.jks')
         os.mkdir('repo')
         shutil.copy(basedir / 'repo' / 'entry.json', 'repo')
         shutil.copy(basedir / 'repo' / 'index-v2.json', 'repo')
@@ -239,7 +238,7 @@ class IndexTest(SetUpTearDownMixin, unittest.TestCase):
 
         mock_download_using_mirrors.side_effect = download_using_mirrors_def
         os.chdir(self.testdir)
-        signindex.config['keystore'] = os.path.join(basedir, 'keystore.jks')
+        common.config['keystore'] = os.path.join(basedir, 'keystore.jks')
         os.mkdir('repo')
         shutil.copy(basedir / 'repo' / 'entry.json', 'repo')
         shutil.copy(basedir / 'repo' / 'index-v2.json', 'repo')

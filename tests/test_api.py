@@ -33,7 +33,6 @@ class ApiTest(unittest.TestCase):
         config = common.read_config()
         config['jarsigner'] = common.find_sdk_tools_cmd('jarsigner')
         common.config = config
-        signindex.config = config
 
     def tearDown(self):
         self._td.cleanup()
@@ -83,7 +82,7 @@ class ApiTest(unittest.TestCase):
             self.testdir, 'repo', os.path.basename(mirrors[0]['url'])
         )
         os.chdir(self.testdir)
-        signindex.config['keystore'] = os.path.join(basedir, 'keystore.jks')
+        common.config['keystore'] = os.path.join(basedir, 'keystore.jks')
         os.mkdir('repo')
         shutil.copy(basedir / 'repo' / 'entry.json', 'repo')
         shutil.copy(basedir / 'repo' / 'index-v2.json', 'repo')

@@ -904,7 +904,6 @@ def make_v2(
             _('index-v2 must have a signature, use `fdroid signindex` to create it!')
         )
     else:
-        signindex.config = common.config
         signindex.sign_index(repodir, json_name)
 
 
@@ -1114,7 +1113,6 @@ def make_v1(apps, packages, repodir, repodict, requestsdict, signer_fingerprints
             _('index-v1 must have a signature, use `fdroid signindex` to create it!')
         )
     else:
-        signindex.config = common.config
         signindex.sign_index(repodir, json_name)
 
 
@@ -1553,7 +1551,6 @@ def make_v0(apps, apks, repodir, repodict, requestsdict, signer_fingerprints):
             if os.path.exists(signed):
                 os.remove(signed)
         else:
-            signindex.config = common.config
             signindex.sign_jar(signed, use_old_algs=True)
 
 
