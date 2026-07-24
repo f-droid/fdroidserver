@@ -199,7 +199,7 @@ def main():
 
         unsigned = os.path.join(output_dir, 'index_unsigned.jar')
         if os.path.exists(unsigned):
-            sign_jar(unsigned)
+            sign_jar(unsigned, use_old_algs=True)
             index_jar = os.path.join(output_dir, 'index.jar')
             os.rename(unsigned, index_jar)
             logging.info('Signed index in ' + output_dir)
