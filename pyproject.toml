@@ -26,7 +26,7 @@ skip-string-normalization = true
 target-version = ["py39"]
 include = '(^fdroid|\.pyi?)$'
 # These files will never be included in black runs.  To run black on
-# one of thes files, remove it from this list.
+# one of these files, remove it from this list.
 force-exclude = '''(
   \.direnv|\.eggs|\.git|\.hg|\.mypy_cache|\.nox|\.svn|\.tox|\.venv|venv|_build|buck-out|build|dist|__pypackages__
   | docs/source/conf\.py
