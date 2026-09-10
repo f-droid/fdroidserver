@@ -59,7 +59,7 @@ metadata_v0:
   image: registry.gitlab.com/fdroid/fdroidserver:buildserver
   variables:
     GIT_DEPTH: 1000
-    RELEASE_COMMIT_ID: d172d991803b27ad5213d11b5a737e5cb9e5fc3a  # after switching to `git rev-parse`
+    RELEASE_COMMIT_ID: 3cbbe81055e5e03a1644cc5a2f3149c5783d83d5  # after switching to `git rev-parse`
   script:
     - apt update -yyq && apt install -yyq yq
     - git fetch https://gitlab.com/fdroid/fdroidserver.git $RELEASE_COMMIT_ID
