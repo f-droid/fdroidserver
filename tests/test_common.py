@@ -620,7 +620,6 @@ class CommonTest(SetUpTearDownMixin, unittest.TestCase):
         config = fdroidserver.common.read_config()
         config['jarsigner'] = fdroidserver.common.find_sdk_tools_cmd('jarsigner')
         fdroidserver.common.config = config
-        fdroidserver.signindex.config = config
 
         sourcedir = os.path.join(basedir, 'signindex')
         for f in ('testy.jar', 'guardianproject.jar'):
@@ -686,7 +685,6 @@ class CommonTest(SetUpTearDownMixin, unittest.TestCase):
         config['keystorepass'] = 'r9aquRHYoI8+dYz6jKrLntQ5/NJNASFBacJh7Jv2BlI='
         config['keypass'] = 'r9aquRHYoI8+dYz6jKrLntQ5/NJNASFBacJh7Jv2BlI='
         fdroidserver.common.config = config
-        fdroidserver.signindex.config = config
         repo_dir = Path(self.testdir) / 'repo'
         repo_dir.mkdir()
         shutil.copy('repo/entry.json', repo_dir)
@@ -1024,7 +1022,6 @@ class CommonTest(SetUpTearDownMixin, unittest.TestCase):
         config['keypass'] = 'r9aquRHYoI8+dYz6jKrLntQ5/NJNASFBacJh7Jv2BlI='
         config['keystore'] = os.path.join(basedir, 'keystore.jks')
         fdroidserver.common.config = config
-        fdroidserver.signindex.config = config
 
         unsigned = os.path.join(self.testdir, 'urzip-release-unsigned.apk')
         signed = os.path.join(self.testdir, 'urzip-release.apk')
@@ -1095,7 +1092,6 @@ class CommonTest(SetUpTearDownMixin, unittest.TestCase):
         config['keypass'] = 'r9aquRHYoI8+dYz6jKrLntQ5/NJNASFBacJh7Jv2BlI='
         config['keystore'] = os.path.join(basedir, 'keystore.jks')
         fdroidserver.common.config = config
-        fdroidserver.signindex.config = config
 
         unsigned = os.path.join(self.testdir, 'urzip-release-unsigned.apk')
         signed = os.path.join(self.testdir, 'urzip-release.apk')
@@ -1119,7 +1115,6 @@ class CommonTest(SetUpTearDownMixin, unittest.TestCase):
         config['keypass'] = 'r9aquRHYoI8+dYz6jKrLntQ5/NJNASFBacJh7Jv2BlI='
         config['keystore'] = os.path.join(basedir, 'keystore.jks')
         fdroidserver.common.config = config
-        fdroidserver.signindex.config = config
 
         unsigned = os.path.join(self.testdir, 'urzip-release-unsigned.apk')
         signed = os.path.join(self.testdir, 'urzip-release.apk')
@@ -1148,7 +1143,6 @@ class CommonTest(SetUpTearDownMixin, unittest.TestCase):
         config['keypass'] = 'r9aquRHYoI8+dYz6jKrLntQ5/NJNASFBacJh7Jv2BlI='
         config['keystore'] = os.path.join(basedir, 'keystore.jks')
         fdroidserver.common.config = config
-        fdroidserver.signindex.config = config
 
         os.chdir(self.testdir)
         os.mkdir('unsigned')

@@ -44,7 +44,7 @@ import urllib.parse
 import zipfile
 
 from binascii import hexlify, unhexlify
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from xml.dom.minidom import Document
 
@@ -548,7 +548,7 @@ def datetime_from_millis(millis):
     millis
       Java-style integer time since UNIX epoch in milliseconds
     """
-    return datetime.utcfromtimestamp(millis / 1000)
+    return datetime.fromtimestamp(millis / 1000, timezone.utc)
 
 
 def package_metadata(app, repodir):
@@ -904,7 +904,6 @@ def make_v2(
             _('index-v2 must have a signature, use `fdroid signindex` to create it!')
         )
     else:
-        signindex.config = common.config
         signindex.sign_index(repodir, json_name)
 
 
@@ -1114,7 +1113,6 @@ def make_v1(apps, packages, repodir, repodict, requestsdict, signer_fingerprints
             _('index-v1 must have a signature, use `fdroid signindex` to create it!')
         )
     else:
-        signindex.config = common.config
         signindex.sign_index(repodir, json_name)
 
 
@@ -1553,7 +1551,6 @@ def make_v0(apps, apks, repodir, repodict, requestsdict, signer_fingerprints):
             if os.path.exists(signed):
                 os.remove(signed)
         else:
-            signindex.config = common.config
             signindex.sign_jar(signed, use_old_algs=True)
 
 
@@ -2098,7 +2095,9 @@ def make_altstore(apps, apks, config, repodir, pretty=False):
                 if apk['packageName'] == packageName and file_extension == 'ipa':
                     v = {
                         "version": apk["manifest"]["versionName"],
-                        "date": datetime_from_millis(apk["added"]).isoformat(),
+                        "date": datetime_from_millis(apk["added"])
+                        .replace(tzinfo=None)
+                        .isoformat(),
                         "downloadURL": f"{config['repo_url']}/{apk['file']['name']}",
                         "size": apk['file']['size'],
                     }

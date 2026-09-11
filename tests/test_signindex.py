@@ -117,10 +117,18 @@ class SignindexTest(unittest.TestCase):
             signindex.sign_index(self.repodir, 'entry.json')
         self.assertFalse((self.repodir / 'entry.jar').exists())
 
-    def test_signindex(self):
-        if common.find_apksigner({}) is None:  # TODO remove me for buildserver-bullseye
+    @patch('fdroidserver.index.make_website', lambda a, b, c: None)
+    def test_signindex_main(self):
+        if 'apksigner' not in common.config:
             self.skipTest('SKIPPING test_signindex, apksigner not installed!')
-        os.mkdir('archive')
+
+        # silence warnings
+        icon = Path('repo/icons/icon.png')
+        icon.parent.mkdir()
+        icon.write_text('placeholder')
+        # if repo/index.html is in place, then the 'qrcode' module should not be needed
+        Path('repo/index.html').write_text('placeholder')
+
         metadata = Path('metadata')
         metadata.mkdir()
         with (metadata / 'info.guardianproject.urzip.yml').open('w') as fp:
@@ -136,12 +144,11 @@ class SignindexTest(unittest.TestCase):
             'index.jar',
             'index.xml',
         ):
-            for section in (Path('repo'), Path('archive')):
-                path = section / f
-                self.assertFalse(path.exists(), '%s should not exist yet!' % path)
-                index_files.append(path)
+            path = Path('repo') / f
+            self.assertFalse(path.exists(), '%s should not exist yet!' % path)
+            index_files.append(path)
         common.options = Options
-        with patch('sys.argv', ['fdroid update']):
+        with patch('sys.argv', ['fdroid update', '--nosign']):
             update.main()
         with patch('sys.argv', ['fdroid signindex', '--verbose']):
             signindex.main()

@@ -155,7 +155,9 @@ class IntegrationTest(unittest.TestCase):
         (path / "build-tools/34.0.0").mkdir(parents=True)
         (path / "build-tools/34.0.0/aapt").touch()
 
-    def fdroid_init_with_prebuilt_keystore(self, keystore_path=FILES / "keystore.jks"):
+    def fdroid_init_with_prebuilt_keystore(
+        self, keystore_path=FILES / "keystore.jks", placeholder_icon=True
+    ):
         self.assert_run(
             self.fdroid_cmd
             + ["init", "--keystore", keystore_path, "--repo-keyalias", "sova"]
@@ -167,6 +169,12 @@ class IntegrationTest(unittest.TestCase):
                 "keypass": "r9aquRHYoI8+dYz6jKrLntQ5/NJNASFBacJh7Jv2BlI=",
             },
         )
+
+        if placeholder_icon:
+            # silence warnings
+            icon = Path('repo/icons/icon.png')
+            icon.parent.mkdir()
+            icon.write_text('placeholder')
 
     @unittest.skipUnless(USE_APKSIGNER, "requires apksigner")
     def test_run_process_when_building_and_signing_are_on_separate_machines(self):
@@ -247,6 +255,21 @@ class IntegrationTest(unittest.TestCase):
             self.fdroid_cmd + ["scanner", "org.fdroid.ci.test.app", "--verbose"]
         )
 
+    def test_timestamps_in_indexes_match(self):
+        """All indexes should have the same timestamp."""
+        os.chdir(self.tmp_repo_root)
+        self.fdroid_init_with_prebuilt_keystore()
+        self.assert_run(self.fdroid_cmd + ["update", "--pretty", "--nosign"])
+
+        index_xml = Path("repo/index.xml").read_text()
+        v0_timestamp = re.search(r'timestamp="(\d+)"', index_xml).group(1)
+        index_v1_json = Path("repo/index-v1.json").read_text()
+        v1_timestamp = re.search(r'"timestamp": (\d+)', index_v1_json).group(1)[:-3]
+        self.assertEqual(v0_timestamp, v1_timestamp)
+        index_v2_json = Path("repo/index-v1.json").read_text()
+        v2_timestamp = re.search(r'"timestamp": (\d+)', index_v2_json).group(1)[:-3]
+        self.assertEqual(v1_timestamp, v2_timestamp)
+
     @unittest.skipUnless(
         (
             (shutil.which("gpg-agent") is not None)
@@ -257,7 +280,7 @@ class IntegrationTest(unittest.TestCase):
     )
     def test_copy_repo_generate_java_gpg_keys_update_and_gpgsign(self):
         """Needs tricks to make gpg-agent run in a test harness."""
-        self.fdroid_init_with_prebuilt_keystore()
+        self.fdroid_init_with_prebuilt_keystore(placeholder_icon=False)
         shutil.copytree(FILES / "repo", "repo", dirs_exist_ok=True)
         for dir in ["config", "metadata"]:
             shutil.copytree(FILES / dir, dir)
@@ -306,9 +329,6 @@ class IntegrationTest(unittest.TestCase):
         self.assertFalse(Path("repo/index.xml.asc").exists())
 
         index_v1_json = Path("repo/index-v1.json").read_text()
-        v0_timestamp = re.search(r'timestamp="(\d+)"', index_xml).group(1)
-        v1_timestamp = re.search(r'"timestamp": (\d+)', index_v1_json).group(1)[:-3]
-        self.assertEqual(v0_timestamp, v1_timestamp)
 
         # we can't easily reproduce the timestamps for things, so just hardcode them
         index_xml = re.sub(r'timestamp="\d+"', 'timestamp="1676634233"', index_xml)
