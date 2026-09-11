@@ -1424,19 +1424,33 @@ def setup_status_output(start_timestamp):
     }
     if os.path.isdir('.git'):
         git_repo = git.repo.Repo(os.getcwd())
+        deleted = git_repo.git().ls_files(deleted=True).split()
+        modified = [
+            i
+            for i in git_repo.git().ls_files(modified=True).split()
+            if i not in deleted
+        ]
         output['fdroiddata'] = {
             'commitId': get_head_commit_id(git_repo),
             'isDirty': git_repo.is_dirty(),
-            'modifiedFiles': git_repo.git().ls_files(modified=True).split(),
+            'deletedFiles': deleted,
+            'modifiedFiles': modified,
             'untrackedFiles': git_repo.untracked_files,
         }
     fdroidserver_dir = os.path.dirname(sys.argv[0])
     if os.path.isdir(os.path.join(fdroidserver_dir, '.git')):
         git_repo = git.repo.Repo(fdroidserver_dir)
+        deleted = git_repo.git().ls_files(deleted=True).split()
+        modified = [
+            i
+            for i in git_repo.git().ls_files(modified=True).split()
+            if i not in deleted
+        ]
         output['fdroidserver'] = {
             'commitId': get_head_commit_id(git_repo),
             'isDirty': git_repo.is_dirty(),
-            'modifiedFiles': git_repo.git().ls_files(modified=True).split(),
+            'deletedFiles': deleted,
+            'modifiedFiles': modified,
             'untrackedFiles': git_repo.untracked_files,
         }
     etc_issue_net = '/etc/issue.net'
