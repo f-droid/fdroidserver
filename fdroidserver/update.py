@@ -2586,7 +2586,8 @@ def move_apk_between_sections(from_dir, to_dir, apk):
         from_icon_dir = get_icon_dir(from_dir, density)
         to_icon_dir = get_icon_dir(to_dir, density)
         default = get_old_icon_filename(apk['packageName'], apk['versionCode'])
-        _move_file(from_icon_dir, to_icon_dir, apk['icons'].get(density, default), True)
+        if 'icons' in apk:
+            _move_file(from_icon_dir, to_icon_dir, apk['icons'].get(density, default), True)
     if 'srcname' in apk:
         _move_file(from_dir, to_dir, apk['srcname'], False)
         _move_file(from_dir, to_dir, apk['srcname'] + '.asc', True)
