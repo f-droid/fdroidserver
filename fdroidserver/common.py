@@ -3413,7 +3413,11 @@ def set_FDroidPopen_env(app=None, build=None):
         env['LANG'] = 'en_US.UTF-8'
 
     if app:
-        env['SOURCE_DATE_EPOCH'] = get_source_date_epoch(get_build_dir(app))
+        source_date_epoch = get_source_date_epoch(get_build_dir(app))
+        if source_date_epoch is not None:
+            env['SOURCE_DATE_EPOCH'] = str(source_date_epoch)
+        elif 'SOURCE_DATE_EPOCH' in env:
+            del env['SOURCE_DATE_EPOCH']
     if build is not None:
         path = build.ndk_path()
         paths = orig_path.split(os.pathsep)

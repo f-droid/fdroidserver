@@ -3399,6 +3399,15 @@ class CommonTest(SetUpTearDownMixin, unittest.TestCase):
         p = fdroidserver.common.FDroidPopen(['printenv', 'SOURCE_DATE_EPOCH'])
         self.assertEqual(int(p.output), int(now.timestamp()))
 
+    @mock.patch.dict(os.environ, {'PATH': os.getenv('PATH')}, clear=True)
+    def test_set_FDroidPopen_env_with_app_no_scm(self):
+        """Test SOURCE_DATE_EPOCH in FDroidPopen when build_dir has no git/scm repo."""
+        os.chdir(self.testdir)
+        app = fdroidserver.metadata.App()
+        app.id = 'com.example.noscm'
+        fdroidserver.common.set_FDroidPopen_env(app)
+        self.assertNotIn('SOURCE_DATE_EPOCH', fdroidserver.common.env)
+
     def test_calculate_gradle_flavor_combination(self):
         flavors = ['aa', 'BB', 'δδ']
         combinations = ['aaBBΔδ', 'aaBB', 'aaΔδ', 'aa', 'BBΔδ', 'BB', 'δδ', '']
