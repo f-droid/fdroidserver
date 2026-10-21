@@ -19,20 +19,21 @@
 # BIENESTAR NARANJOS <bienestarnaranjos@gmail.com>, 2025.
 # Francisco Serrador <fserrador@gmail.com>, 2025.
 # Nicolás Pérez <nicoperez241@proton.me>, 2026.
+# Luis Fernando Illapa <moxb@outlook.es>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2026-05-19 20:45+0200\n"
-"PO-Revision-Date: 2026-05-20 14:16+0000\n"
-"Last-Translator: Hans-Christoph Steiner <hans@guardianproject.info>\n"
+"PO-Revision-Date: 2026-06-24 00:01+0000\n"
+"Last-Translator: Luis Fernando Illapa <moxb@outlook.es>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/f-droid/fdroidserver/es/>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2026.6.dev0\n"
+"X-Generator: Weblate 2026.7.dev0\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -52,9 +53,9 @@ msgstr ""
 "{path} codificada para la variable secreta DEBUG_KEYSTORE:"
 
 #: /usr/lib/python3.13/argparse.py
-#, python-format
+#, fuzzy, python-format
 msgid " (default: %(default)s)"
-msgstr ""
+msgstr " (por defecto: %(default)s)"
 
 #: ../fdroidserver/lint.py
 #, python-format
@@ -111,7 +112,7 @@ msgstr "\"{url}\" no es una URL válida!"
 #: /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "%(heading)s:"
-msgstr ""
+msgstr "%(heading)s:"
 
 #: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
@@ -119,9 +120,9 @@ msgid "%(prog)s: error: %(message)s\n"
 msgstr "%(prog)s: error: %(message)s\n"
 
 #: /usr/lib/python3.13/argparse.py
-#, fuzzy, python-format
+#, python-format
 msgid "%(prog)s: warning: %(message)s\n"
-msgstr "%(prog)s: error: %(message)s\n"
+msgstr "%(prog)s: advertencia: %(message)s\n"
 
 #: ../fdroidserver/publish.py
 #, python-format
@@ -2170,7 +2171,7 @@ msgstr "argumento %(argument_name)s: %(message)s"
 #: /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "argument '%(argument_name)s' is deprecated"
-msgstr ""
+msgstr "argumento '%(argument_name)s' está obsoleto"
 
 #: ../fdroidserver/nightly.py
 msgid "attempting bare SSH connection to test deploy key:"
@@ -2215,7 +2216,7 @@ msgstr "clonando {url}"
 #: /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "command '%(parser_name)s' is deprecated"
-msgstr ""
+msgstr "comando '%(parser_name)s' está obsoleto"
 
 #: ../fdroidserver/__main__.py
 msgid "commands from plugin modules:"
@@ -2439,7 +2440,7 @@ msgstr "solo acepta cadenas, listas, y tuplas"
 #: /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "option '%(option)s' is deprecated"
-msgstr ""
+msgstr "opción %(option)s está obsoleta"
 
 #: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 msgid "options"
@@ -2507,7 +2508,7 @@ msgstr "biblioteca compartida"
 
 #: /usr/lib/python3.13/argparse.py
 msgid "show program's version number and exit"
-msgstr ""
+msgstr "mostrar la versión del programa y salir"
 
 #: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 msgid "show this help message and exit"
@@ -2540,7 +2541,7 @@ msgstr "biblioteca estática"
 
 #: /usr/lib/python3.13/argparse.py
 msgid "subcommands"
-msgstr ""
+msgstr "subcomandos"
 
 #: ../fdroidserver/build.py
 #, python-brace-format
