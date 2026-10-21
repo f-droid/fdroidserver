@@ -1,6 +1,6 @@
 # SOME DESCRIPTIVE TITLE.
 # This file is put in the public domain.
-# Andi Chandler <andi@gowling.com>, 2025.
+# Andi Chandler <andi@gowling.com>, 2025, 2026.
 # Ismail Choudhury <ismailchoudhury33@gmail.com>, 2025.
 # "DB L." <deblm@tutamail.com>, 2025.
 msgid ""
@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: fdroidserver 2.4.0\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2026-01-13 11:31+0100\n"
-"PO-Revision-Date: 2025-12-15 21:32+0000\n"
+"PO-Revision-Date: 2026-04-10 04:43+0000\n"
 "Last-Translator: Andi Chandler <andi@gowling.com>\n"
 "Language-Team: English (United Kingdom) <https://hosted.weblate.org/projects/f-droid/fdroidserver/en_GB/>\n"
 "Language: en_GB\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.15.1-dev\n"
+"X-Generator: Weblate 5.17-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -46,46 +46,46 @@ msgstr "\"AWS_ACCESS_KEY_ID\" must be set as an environmental variable!"
 
 #: ../fdroidserver/deploy.py
 msgid "\"AWS_SECRET_ACCESS_KEY\" must be set as an environmental variable!"
-msgstr ""
+msgstr "\"AWS_SECRET_ACCESS_KEY\" must be set as an environmental variable!"
 
 #: ../fdroidserver/index.py
 msgid "\"isPrimary\" key should not be added to mirrors!"
-msgstr ""
+msgstr "\"isPrimary\" key should not be added to mirrors!"
 
 #: ../fdroidserver/index.py
 #, python-brace-format
 msgid "\"local_copy_dir\" {path} does not exist!"
-msgstr ""
+msgstr "\"local_copy_dir\" {path} does not exist!"
 
 #: ../fdroidserver/install.py
 #, python-brace-format
 msgid "\"{apkfilename}\" is already installed on {dev}."
-msgstr ""
+msgstr "\"{apkfilename}\" is already installed on {dev}."
 
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "\"{path}\" contains recent {name} ({version})"
-msgstr ""
+msgstr "\"{path}\" contains recent {name} ({version})"
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "\"{path}\" exists but s3cmd is not installed!"
-msgstr ""
+msgstr "\"{path}\" exists but s3cmd is not installed!"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "\"{path}\" is not a supported file format (use: metadata/*.yml)"
-msgstr ""
+msgstr "\"{path}\" is not a supported file format (use: metadata/*.yml)"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "\"{path}\" is signed by a key that is not allowed:"
-msgstr ""
+msgstr "\"{path}\" is signed by a key that is not allowed:"
 
 #: ../fdroidserver/import_subcommand.py
 #, python-brace-format
 msgid "\"{url}\" is not a valid URL!"
-msgstr ""
+msgstr "\"{url}\" is not a valid URL!"
 
 #: /usr/lib/python3.11/argparse.py
 #, python-format
@@ -95,7 +95,7 @@ msgstr "%(prog)s: error: %(message)s\n"
 #: ../fdroidserver/publish.py
 #, python-format
 msgid "%d APKs failed to be signed or verified!"
-msgstr ""
+msgstr "%d APKs failed to be signed or verified!"
 
 #: ../fdroidserver/scanner.py
 #, python-format
