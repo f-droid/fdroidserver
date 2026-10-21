@@ -12,8 +12,8 @@ msgstr ""
 "Project-Id-Version: fdroidserver 1.1-680-ge1d3de71\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2026-01-13 11:31+0100\n"
-"PO-Revision-Date: 2026-01-20 23:01+0000\n"
-"Last-Translator: StarSkyGeminid <akungithubku@gmail.com>\n"
+"PO-Revision-Date: 2026-01-27 18:15+0000\n"
+"Last-Translator: cyberboh <cybermay686@gmail.com>\n"
 "Language-Team: Indonesian <https://hosted.weblate.org/projects/f-droid/fdroidserver/id/>\n"
 "Language: id\n"
 "MIME-Version: 1.0\n"
@@ -343,9 +343,9 @@ msgid "Base URL to mirror, can include the index signing key using the query str
 msgstr "URL dasar untuk pencerminan, dapat menyertakan kunci penandatanganan indeks menggunakan string query: ?fingerprint="
 
 #: ../fdroidserver/lint.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Branch '{branch}' used as commit in build '{versionCode}'"
-msgstr "Cabang '{branch}' digunakan sebagai commit dalam penyusunan '{versionName}'"
+msgstr "Cabang '{branch}' digunakan sebagai commit dalam penyusunan '{versionCode}'"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
@@ -453,9 +453,8 @@ msgid "Commit changes"
 msgstr "Simpan perubahan"
 
 #: ../fdroidserver/checkupdates.py
-#, fuzzy
 msgid "Commit changes, push, then make a merge request"
-msgstr "Lakukan commit perubahan, push, lalu buat permintaan menggabungkan"
+msgstr "Commit perubahan, push, lalu buat permintaan penggabungan"
 
 #: ../fdroidserver/deploy.py
 msgid "Committing index files to git mirror"
@@ -478,12 +477,12 @@ msgstr "Tidak dapat menemukan ‘{command}’ di sistem Anda"
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
 #: ../fdroidserver/import_subcommand.py
 msgid "Could not find latest version code"
-msgstr ""
+msgstr "Tidak dapat menemukan kode versi terbaru"
 
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vname
 #: ../fdroidserver/import_subcommand.py
 msgid "Could not find latest version name"
-msgstr ""
+msgstr "Tidak dapat menemukan kode versi terbaru"
 
 #: ../fdroidserver/import_subcommand.py
 msgid "Could not find latest versionCode"
