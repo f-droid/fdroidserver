@@ -3,21 +3,21 @@
 # bobwww <noambro199@gmail.com>, 2022.
 # Yaron Shahrabani <sh.yaron@gmail.com>, 2022, 2023, 2024, 2025.
 # elid <shopisrael12@gmail.com>, 2025.
-# ginger-co <ginger_co@outlook.com>, 2025.
+# ginger-co <ginger_co@outlook.com>, 2025, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 2.1b0\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2026-01-13 11:31+0100\n"
-"PO-Revision-Date: 2025-07-17 08:46+0000\n"
-"Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
+"PO-Revision-Date: 2026-01-20 23:02+0000\n"
+"Last-Translator: ginger-co <ginger_co@outlook.com>\n"
 "Language-Team: Hebrew <https://hosted.weblate.org/projects/f-droid/fdroidserver/he/>\n"
 "Language: he\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n == 1) ? 0 : ((n == 2) ? 1 : ((n > 10 && n % 10 == 0) ? 2 : 3));\n"
-"X-Generator: Weblate 5.13-dev\n"
+"X-Generator: Weblate 5.16-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -43,11 +43,11 @@ msgstr "ל־„‎%s/‎” אין קובץ metadata תואם!"
 
 #: ../fdroidserver/deploy.py
 msgid "\"AWS_ACCESS_KEY_ID\" must be set as an environmental variable!"
-msgstr ""
+msgstr "\"AWS_ACCESS_KEY_ID\" יש להגדיר כמשתנה סביבה!"
 
 #: ../fdroidserver/deploy.py
 msgid "\"AWS_SECRET_ACCESS_KEY\" must be set as an environmental variable!"
-msgstr ""
+msgstr "\"AWS_SECRET_ACCESS_KEY\" יש להגדיר כמשתנה סביבה!"
 
 #: ../fdroidserver/index.py
 msgid "\"isPrimary\" key should not be added to mirrors!"
@@ -140,9 +140,8 @@ msgid "'keystorepass' not found in config.yml!"
 msgstr "‚keystorepass’ לא נמצא ב־config.yml!"
 
 #: ../fdroidserver/deploy.py
-#, fuzzy
 msgid "'rclone_config' must be set in config.yml!"
-msgstr "‚sdk_path’ לא מוגדר ב־config.yml!"
+msgstr "'rclone_config' צריך להיות מוגדר ב־ config.yml!"
 
 #: ../fdroidserver/common.py
 msgid "'repo_keyalias' not found in config.yml!"
@@ -182,13 +181,12 @@ msgid "'{value}' is not a valid {field}, should be {pattern}"
 msgstr "‚{value}’ הוא {field} שגוי, צריך להיות {pattern}"
 
 #: ../fdroidserver/common.py
-#, fuzzy
 msgid "'{}' does not start with a valid applicationId"
-msgstr "{url} לא נפתח ב־„http”!"
+msgstr "'{}' לא מתחיל עם applicationId תקין"
 
 #: ../fdroidserver/common.py
 msgid "'{}' is not a valid pair of applicationId:versionCode"
-msgstr ""
+msgstr "'{}' לא זוג תקין של applicationId:versionCode"
 
 #: ../fdroidserver/checkupdates.py
 msgid "--merge-request only runs on a single appid!"
@@ -214,7 +212,7 @@ msgstr "יש לציין כתובת כארגומנט!"
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "APK file {path} does not have a version code in its manifest"
-msgstr ""
+msgstr "קובץ ה־APK בנתיב {path} לא מכיל קוד גרסה במניפסט שלו"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -235,12 +233,12 @@ msgstr "הוספת שלד קובצי נתוני על (metadata) לחבילות A
 
 #: ../fdroidserver/deploy.py
 msgid "Adding all files to git mirror"
-msgstr ""
+msgstr "הוספת כל הקבצים לאתר מראה של git"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Adding new repo for only {name}"
-msgstr ""
+msgstr "הוספת מאגר חדש רק ל־{name}"
 
 #: ../fdroidserver/init.py
 msgid "Alias of the repo signing key in the keystore"
