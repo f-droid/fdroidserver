@@ -19,13 +19,14 @@
 # Igor Padoim <igorpadoim@gmail.com>, 2026.
 # Matheus <souzamatheus@users.noreply.hosted.weblate.org>, 2026.
 # William Weber Berrutti <wwberrutti@protonmail.ch>, 2026.
+# F Bausch <fbausch@users.noreply.hosted.weblate.org>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2026-05-19 20:45+0200\n"
-"PO-Revision-Date: 2026-07-22 09:37+0000\n"
-"Last-Translator: William Weber Berrutti <wwberrutti@protonmail.ch>\n"
+"PO-Revision-Date: 2026-07-23 11:01+0000\n"
+"Last-Translator: F Bausch <fbausch@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/f-droid/fdroidserver/pt_BR/>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
@@ -111,7 +112,7 @@ msgstr "\"{url}\" não é uma URL válida!"
 #: /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "%(heading)s:"
-msgstr ""
+msgstr "%(heading)s:"
 
 #: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
@@ -2170,7 +2171,7 @@ msgstr "argumento %(argument_name)s: %(message)s"
 #: /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "argument '%(argument_name)s' is deprecated"
-msgstr ""
+msgstr "argumento '%(argument_name)s' é obsoleto"
 
 #: ../fdroidserver/nightly.py
 msgid "attempting bare SSH connection to test deploy key:"
@@ -2215,7 +2216,7 @@ msgstr "clonagem {url}"
 #: /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "command '%(parser_name)s' is deprecated"
-msgstr ""
+msgstr "commando '%(parser_name)s' é obsoleto"
 
 #: ../fdroidserver/__main__.py
 msgid "commands from plugin modules:"
@@ -2439,7 +2440,7 @@ msgstr "apenas aceita cadeias, listas e tuplos"
 #: /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "option '%(option)s' is deprecated"
-msgstr ""
+msgstr "opção '%(option)s' é obsoleta"
 
 #: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 msgid "options"
@@ -2540,7 +2541,7 @@ msgstr "biblioteca estática"
 
 #: /usr/lib/python3.13/argparse.py
 msgid "subcommands"
-msgstr ""
+msgstr "subcomandos"
 
 #: ../fdroidserver/build.py
 #, python-brace-format
