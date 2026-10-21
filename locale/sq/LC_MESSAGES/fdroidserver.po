@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: fdroidserver 1.0.6-349-g907c04ea\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2026-05-19 20:45+0200\n"
-"PO-Revision-Date: 2026-05-20 14:16+0000\n"
-"Last-Translator: Hans-Christoph Steiner <hans@guardianproject.info>\n"
+"PO-Revision-Date: 2026-05-22 09:11+0000\n"
+"Last-Translator: Besnik Bleta <besnik@programeshqip.org>\n"
 "Language-Team: Albanian <https://hosted.weblate.org/projects/f-droid/fdroidserver/sq/>\n"
 "Language: sq\n"
 "MIME-Version: 1.0\n"
@@ -38,7 +38,7 @@ msgstr ""
 #: /usr/lib/python3.13/argparse.py
 #, python-format
 msgid " (default: %(default)s)"
-msgstr ""
+msgstr " (parazgjedhje: %(default)s)"
 
 #: ../fdroidserver/lint.py
 #, python-format
@@ -70,7 +70,7 @@ msgstr "'{apkfilename}' është tashmë e instaluar në {dev}."
 #: ../fdroidserver/signindex.py
 #, python-brace-format
 msgid "\"{name}\" has bad SHA-256: {sha256}"
-msgstr "\"{name}\" ka SHA-256 të gabuar: {sha256}"
+msgstr "“{name}” ka SHA-256 të gabuar: {sha256}"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -95,7 +95,7 @@ msgstr "“{url}” s’është URL e vlefshme!"
 #: /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "%(heading)s:"
-msgstr ""
+msgstr "%(heading)s:"
 
 #: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
@@ -103,9 +103,9 @@ msgid "%(prog)s: error: %(message)s\n"
 msgstr "%(prog)s: gabim: %(message)s\n"
 
 #: /usr/lib/python3.13/argparse.py
-#, fuzzy, python-format
+#, python-format
 msgid "%(prog)s: warning: %(message)s\n"
-msgstr "%(prog)s: gabim: %(message)s\n"
+msgstr "%(prog)s: kujdes: %(message)s\n"
 
 #: ../fdroidserver/publish.py
 #, python-format
@@ -1428,7 +1428,7 @@ msgstr "Mënyra “Privatësi” qe aktivizuar bazuar në vendoren tuaj ({countr
 #: ../fdroidserver/scanner.py
 #, python-brace-format
 msgid "Problem with ZIP file \"{apkfile}\": {error}"
-msgstr "Problem me kartelën ZIP: \"{apkfile}\": {error}"
+msgstr "Problem me kartelën ZIP “{apkfile}”: {error}"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -1653,7 +1653,7 @@ msgstr "Si kufi hapjeje kartele cakto {integer}"
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Set up NDK {release} ({revision})"
-msgstr ""
+msgstr "Ujdisni NDK {release} ({revision})"
 
 #: ../fdroidserver/__main__.py
 msgid "Set up an app build for a nightly build repo"
@@ -1747,9 +1747,8 @@ msgid "System clock is older than date in {path}!"
 msgstr "Ora e sistemit është më herët se sa data në {path}!"
 
 #: ../fdroidserver/checkupdates.py
-#, fuzzy
 msgid "Tags update mode only works for git repositories currently"
-msgstr "Aktualisht, mënyra “tags update” funksionon vetëm për depo git, hg, bzr dhe git-svn"
+msgstr "Aktualisht, mënyra “tags update” funksionon vetëm për depo git"
 
 #: ../fdroidserver/checkupdates.py
 msgid "Tags update mode used in git-svn, but the repo was not set up with tags"
@@ -2155,7 +2154,7 @@ msgstr "argument %(argument_name)s: %(message)s"
 #: /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "argument '%(argument_name)s' is deprecated"
-msgstr ""
+msgstr "argumenti '%(argument_name)s' është nxjerrë nga përdorimi"
 
 #: ../fdroidserver/nightly.py
 msgid "attempting bare SSH connection to test deploy key:"
@@ -2200,7 +2199,7 @@ msgstr "po klonohet {url}"
 #: /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "command '%(parser_name)s' is deprecated"
-msgstr ""
+msgstr "urdhri '%(parser_name)s' është nxjerrë nga përdorimi"
 
 #: ../fdroidserver/__main__.py
 msgid "commands from plugin modules:"
@@ -2424,7 +2423,7 @@ msgstr "prano vetëm vargje, lista dhe dyshe"
 #: /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "option '%(option)s' is deprecated"
-msgstr ""
+msgstr "mundësia '%(option)s' është nxjerrë nga përdorimi"
 
 #: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 msgid "options"
@@ -2492,7 +2491,7 @@ msgstr "librari e përbashkët"
 
 #: /usr/lib/python3.13/argparse.py
 msgid "show program's version number and exit"
-msgstr ""
+msgstr "shfaq numër versioni programi dhe dil"
 
 #: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 msgid "show this help message and exit"
@@ -2525,7 +2524,7 @@ msgstr "librari statike"
 
 #: /usr/lib/python3.13/argparse.py
 msgid "subcommands"
-msgstr ""
+msgstr "nënurdhra"
 
 #: ../fdroidserver/build.py
 #, python-brace-format
