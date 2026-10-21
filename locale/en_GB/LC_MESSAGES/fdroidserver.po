@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 2.4.0\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2026-05-19 20:45+0200\n"
+"POT-Creation-Date: 2026-10-21 18:02+0200\n"
 "PO-Revision-Date: 2026-05-31 08:27+0000\n"
 "Last-Translator: Hosted Weblate user 150744 <wheresalice@users.noreply.hosted.weblate.org>\n"
 "Language-Team: English (United Kingdom) <https://hosted.weblate.org/projects/f-droid/fdroidserver/en_GB/>\n"
@@ -959,6 +959,11 @@ msgstr "If a git mirror gets to big, allow the archive to be deleted"
 msgid "If this upload fails, try manually uploading to {url}"
 msgstr "If this upload fails, try manually uploading to {url}"
 
+#: ../fdroidserver/update.py
+#, python-brace-format
+msgid "Ignoring \"{path}\": symlink points outside the app source"
+msgstr ""
+
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Ignoring '{field}' in '{metapath}' metadata because it is deprecated."
@@ -1288,6 +1293,11 @@ msgstr "No tags found"
 #: ../fdroidserver/publish.py ../fdroidserver/verify.py
 msgid "No unsigned directory - nothing to do"
 msgstr "No unsigned directory - nothing to do"
+
+#: ../fdroidserver/common.py
+#, fuzzy, python-brace-format
+msgid "No v2/v3 certificate found in {path}"
+msgstr "No signing certificates found in {path}"
 
 #: ../fdroidserver/__main__.py
 msgid "No version information could be found."
@@ -2688,6 +2698,11 @@ msgstr "{path} has bad file signature \"{pattern}\", possible Janus exploit!"
 msgid "{path} has been flagged by virustotal {count} times:"
 msgstr "{path} has been flagged by virustotal {count} times:"
 
+#: ../fdroidserver/deploy.py
+#, fuzzy, python-brace-format
+msgid "{path} has been flagged in VirusTotal as \"{name}\" {count} times:"
+msgstr "{path} has been flagged by virustotal {count} times:"
+
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "{path} has no '{fieldname}'"
@@ -2764,7 +2779,3 @@ msgid "{} build succeeded"
 msgid_plural "{} builds succeeded"
 msgstr[0] "{} build succeeded"
 msgstr[1] "{} builds succeeded"
-
-#, python-brace-format
-#~ msgid "\"{path}\" exists but s3cmd is not installed!"
-#~ msgstr "\"{path}\" exists but s3cmd is not installed!"

@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2026-05-19 20:45+0200\n"
+"POT-Creation-Date: 2026-10-21 18:02+0200\n"
 "PO-Revision-Date: 2026-07-24 23:48+0000\n"
 "Last-Translator: Oğuz Ersen <oguz@ersen.moe>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/f-droid/fdroidserver/tr/>\n"
@@ -966,6 +966,11 @@ msgstr "Git yansısı çok büyük olursa, arşivin silinmesine izin ver"
 msgid "If this upload fails, try manually uploading to {url}"
 msgstr "Bu yükleme başarısız olursa, {url} adresine elle yüklemeyi deneyin"
 
+#: ../fdroidserver/update.py
+#, python-brace-format
+msgid "Ignoring \"{path}\": symlink points outside the app source"
+msgstr ""
+
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Ignoring '{field}' in '{metapath}' metadata because it is deprecated."
@@ -1295,6 +1300,11 @@ msgstr "Etiket bulunamadı"
 #: ../fdroidserver/publish.py ../fdroidserver/verify.py
 msgid "No unsigned directory - nothing to do"
 msgstr "İmzalanmamış dizin yok - yapılacak işlem yok"
+
+#: ../fdroidserver/common.py
+#, fuzzy, python-brace-format
+msgid "No v2/v3 certificate found in {path}"
+msgstr "{path} içinde imzalama sertifikaları bulunamadı"
 
 #: ../fdroidserver/__main__.py
 msgid "No version information could be found."
@@ -2693,6 +2703,11 @@ msgstr "{path} konumunun bozuk imzası \"{pattern}\" var, olası Janus istismar�
 #: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "{path} has been flagged by virustotal {count} times:"
+msgstr "{path} virustotal tarafından {count} defa işaretlendi:"
+
+#: ../fdroidserver/deploy.py
+#, fuzzy, python-brace-format
+msgid "{path} has been flagged in VirusTotal as \"{name}\" {count} times:"
 msgstr "{path} virustotal tarafından {count} defa işaretlendi:"
 
 #: ../fdroidserver/metadata.py

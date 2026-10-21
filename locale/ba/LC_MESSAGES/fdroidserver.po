@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 2.4.0\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2026-05-19 20:45+0200\n"
+"POT-Creation-Date: 2026-10-21 18:02+0200\n"
 "PO-Revision-Date: 2026-05-20 14:16+0000\n"
 "Last-Translator: Hans-Christoph Steiner <hans@guardianproject.info>\n"
 "Language-Team: Bashkir <https://hosted.weblate.org/projects/f-droid/fdroidserver/ba/>\n"
@@ -960,6 +960,11 @@ msgstr "git көҙгөһө бигерәк ҙурайып китһә, архив�
 msgid "If this upload fails, try manually uploading to {url}"
 msgstr "Был йөкмәү уңышһыҙ булһа, {url} адресына ҡулдан йөкмәп ҡарағыҙ"
 
+#: ../fdroidserver/update.py
+#, python-brace-format
+msgid "Ignoring \"{path}\": symlink points outside the app source"
+msgstr ""
+
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Ignoring '{field}' in '{metapath}' metadata because it is deprecated."
@@ -1289,6 +1294,11 @@ msgstr "Тегтар табылманы"
 #: ../fdroidserver/publish.py ../fdroidserver/verify.py
 msgid "No unsigned directory - nothing to do"
 msgstr "Тамғаланмаған каталог юҡ — эшләр нәмә юҡ"
+
+#: ../fdroidserver/common.py
+#, fuzzy, python-brace-format
+msgid "No v2/v3 certificate found in {path}"
+msgstr "{path} эсендә имзалау сертификаттары табылманы"
 
 #: ../fdroidserver/__main__.py
 msgid "No version information could be found."
@@ -2689,6 +2699,11 @@ msgstr "{path} файлының имзаһы дөрөҫ түгел \"{pattern}\"
 #: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "{path} has been flagged by virustotal {count} times:"
+msgstr "{path} virustotal тарафынан {count} тапҡыр билдәләнгән:"
+
+#: ../fdroidserver/deploy.py
+#, fuzzy, python-brace-format
+msgid "{path} has been flagged in VirusTotal as \"{name}\" {count} times:"
 msgstr "{path} virustotal тарафынан {count} тапҡыр билдәләнгән:"
 
 #: ../fdroidserver/metadata.py

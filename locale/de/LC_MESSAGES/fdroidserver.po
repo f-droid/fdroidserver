@@ -32,7 +32,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2026-05-19 20:45+0200\n"
+"POT-Creation-Date: 2026-10-21 18:02+0200\n"
 "PO-Revision-Date: 2026-05-20 14:16+0000\n"
 "Last-Translator: VfBFan <vfbfan@users.noreply.hosted.weblate.org>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/f-droid/fdroidserver/de/>\n"
@@ -983,6 +983,11 @@ msgstr "Wenn ein Git-Spiegelserver zu groß wird, das Löschen des Archivs erlau
 msgid "If this upload fails, try manually uploading to {url}"
 msgstr "Wenn das Hochladen fehlschlägt, versuche manuell auf {url} hochzuladen"
 
+#: ../fdroidserver/update.py
+#, python-brace-format
+msgid "Ignoring \"{path}\": symlink points outside the app source"
+msgstr ""
+
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Ignoring '{field}' in '{metapath}' metadata because it is deprecated."
@@ -1312,6 +1317,11 @@ msgstr "Keine Tags gefunden"
 #: ../fdroidserver/publish.py ../fdroidserver/verify.py
 msgid "No unsigned directory - nothing to do"
 msgstr "Kein unsigniertes Verzeichnis – nichts zu tun"
+
+#: ../fdroidserver/common.py
+#, fuzzy, python-brace-format
+msgid "No v2/v3 certificate found in {path}"
+msgstr "Keine Signaturzertifikate in {path} gefunden"
 
 #: ../fdroidserver/__main__.py
 msgid "No version information could be found."
@@ -2710,6 +2720,11 @@ msgstr "{path} hat falsche Dateisignatur \"{pattern}\", möglicher Janus-Exploit
 #: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "{path} has been flagged by virustotal {count} times:"
+msgstr "{path} wurde von virustotal {count} Mal markiert:"
+
+#: ../fdroidserver/deploy.py
+#, fuzzy, python-brace-format
+msgid "{path} has been flagged in VirusTotal as \"{name}\" {count} times:"
 msgstr "{path} wurde von virustotal {count} Mal markiert:"
 
 #: ../fdroidserver/metadata.py

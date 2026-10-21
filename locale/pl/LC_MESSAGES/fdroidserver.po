@@ -17,7 +17,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 1.0.0-95-gd7af22b\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2026-05-19 20:45+0200\n"
+"POT-Creation-Date: 2026-10-21 18:02+0200\n"
 "PO-Revision-Date: 2026-07-06 01:33+0000\n"
 "Last-Translator: Kot IT <aiom.poczta@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/f-droid/fdroidserver/pl/>\n"
@@ -969,6 +969,11 @@ msgstr "Jeśli serwer lustrzany git stanie się Duży, Zezwól na usunięcie arc
 msgid "If this upload fails, try manually uploading to {url}"
 msgstr "Jeśli przesyłanie się nie uda, spróbuj przesłać ręcznie do {url}"
 
+#: ../fdroidserver/update.py
+#, python-brace-format
+msgid "Ignoring \"{path}\": symlink points outside the app source"
+msgstr ""
+
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Ignoring '{field}' in '{metapath}' metadata because it is deprecated."
@@ -1298,6 +1303,11 @@ msgstr "Nie znaleziono tagów"
 #: ../fdroidserver/publish.py ../fdroidserver/verify.py
 msgid "No unsigned directory - nothing to do"
 msgstr "Brak katalogu bez podpisu - nic nie można zrobić"
+
+#: ../fdroidserver/common.py
+#, fuzzy, python-brace-format
+msgid "No v2/v3 certificate found in {path}"
+msgstr "Nie znaleziono certyfikatów do podpisu w {path}"
 
 #: ../fdroidserver/__main__.py
 msgid "No version information could be found."
@@ -2700,6 +2710,11 @@ msgstr "{path} ma zły podpis pliku \"{pattern}\", możliwe wykorzystanie Janusa
 #: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "{path} has been flagged by virustotal {count} times:"
+msgstr "{path} została oznaczona przez virustotal {count} razy:"
+
+#: ../fdroidserver/deploy.py
+#, fuzzy, python-brace-format
+msgid "{path} has been flagged in VirusTotal as \"{name}\" {count} times:"
 msgstr "{path} została oznaczona przez virustotal {count} razy:"
 
 #: ../fdroidserver/metadata.py

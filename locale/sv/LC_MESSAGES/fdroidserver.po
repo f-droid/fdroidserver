@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 1.0.0-95-gd7af22b\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2026-05-19 20:45+0200\n"
+"POT-Creation-Date: 2026-10-21 18:02+0200\n"
 "PO-Revision-Date: 2026-09-10 19:30+0000\n"
 "Last-Translator: Daniel Nylander <yeagersthlm@gmail.com>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/f-droid/fdroidserver/sv/>\n"
@@ -964,6 +964,11 @@ msgstr "Om en Git-spegel blir för stor, tillåt att arkivet tas bort"
 msgid "If this upload fails, try manually uploading to {url}"
 msgstr "Om denna uppladdning misslyckas, försök ladda upp manuellt till {url}"
 
+#: ../fdroidserver/update.py
+#, python-brace-format
+msgid "Ignoring \"{path}\": symlink points outside the app source"
+msgstr ""
+
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Ignoring '{field}' in '{metapath}' metadata because it is deprecated."
@@ -1293,6 +1298,11 @@ msgstr "Inga taggar hittades"
 #: ../fdroidserver/publish.py ../fdroidserver/verify.py
 msgid "No unsigned directory - nothing to do"
 msgstr "Ingen osignerad katalog – inget att göra"
+
+#: ../fdroidserver/common.py
+#, fuzzy, python-brace-format
+msgid "No v2/v3 certificate found in {path}"
+msgstr "Inga signeringscertifikat hittades i {path}"
 
 #: ../fdroidserver/__main__.py
 msgid "No version information could be found."
@@ -2693,6 +2703,11 @@ msgstr "{path} har felaktig filsignatur ”{pattern}”, möjlig Janus-exploater
 msgid "{path} has been flagged by virustotal {count} times:"
 msgstr "{path} har flaggats av VirusTotal {count} gånger:"
 
+#: ../fdroidserver/deploy.py
+#, fuzzy, python-brace-format
+msgid "{path} has been flagged in VirusTotal as \"{name}\" {count} times:"
+msgstr "{path} har flaggats av VirusTotal {count} gånger:"
+
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "{path} has no '{fieldname}'"
@@ -2769,14 +2784,3 @@ msgid "{} build succeeded"
 msgid_plural "{} builds succeeded"
 msgstr[0] "{} byggnationen lyckades"
 msgstr[1] "{} byggnationerna lyckades"
-
-#, python-brace-format
-#~ msgid "\"{path}\" exists but s3cmd is not installed!"
-#~ msgstr "\"{path}\" finns, men s3cmd är inte installerat!"
-
-#, python-format
-#~ msgid "%s has bad SHA-256: %s"
-#~ msgstr "%s har felaktig SHA-256: %s"
-
-#~ msgid "Invalid bulleted list"
-#~ msgstr "Ogiltig punktlista"

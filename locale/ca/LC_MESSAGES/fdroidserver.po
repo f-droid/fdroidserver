@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 2.1-273-g54e84d87\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2026-05-19 20:45+0200\n"
+"POT-Creation-Date: 2026-10-21 18:02+0200\n"
 "PO-Revision-Date: 2026-10-05 20:47+0000\n"
 "Last-Translator: Ra Niwe <paco@riviere.cat>\n"
 "Language-Team: Catalan <https://hosted.weblate.org/projects/f-droid/fdroidserver/ca/>\n"
@@ -964,6 +964,11 @@ msgstr "Si una rèplica de git es fa gran, permet que l'arxiu se suprimeixi"
 msgid "If this upload fails, try manually uploading to {url}"
 msgstr "Si aquesta pujada falla, proveu de pujar manualment a {url}"
 
+#: ../fdroidserver/update.py
+#, python-brace-format
+msgid "Ignoring \"{path}\": symlink points outside the app source"
+msgstr ""
+
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Ignoring '{field}' in '{metapath}' metadata because it is deprecated."
@@ -1293,6 +1298,11 @@ msgstr "No s'ha trobat cap etiqueta"
 #: ../fdroidserver/publish.py ../fdroidserver/verify.py
 msgid "No unsigned directory - nothing to do"
 msgstr "No hi ha cap directori sense signar - res a fer"
+
+#: ../fdroidserver/common.py
+#, fuzzy, python-brace-format
+msgid "No v2/v3 certificate found in {path}"
+msgstr "No s'ha trobat cap certificat de signatura a {path}"
 
 #: ../fdroidserver/__main__.py
 msgid "No version information could be found."
@@ -2691,6 +2701,11 @@ msgstr "{path} té una signatura de fitxer incorrecta \"{pattern}\", possible Ja
 #: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "{path} has been flagged by virustotal {count} times:"
+msgstr "{path} ha estat marcat pel virustotal {count} vegades:"
+
+#: ../fdroidserver/deploy.py
+#, fuzzy, python-brace-format
+msgid "{path} has been flagged in VirusTotal as \"{name}\" {count} times:"
 msgstr "{path} ha estat marcat pel virustotal {count} vegades:"
 
 #: ../fdroidserver/metadata.py
