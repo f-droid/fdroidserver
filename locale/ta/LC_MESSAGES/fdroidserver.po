@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 2.1-273-g54e84d87\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2026-01-13 11:31+0100\n"
+"POT-Creation-Date: 2026-05-19 17:44+0200\n"
 "PO-Revision-Date: 2025-07-09 20:14+0000\n"
 "Last-Translator: தமிழ்நேரம் <anishprabu.t@gmail.com>\n"
 "Language-Team: Tamil <https://hosted.weblate.org/projects/f-droid/fdroidserver/ta/>\n"
@@ -35,6 +35,11 @@ msgid ""
 msgstr ""
 "\n"
 "{path} பிழைத்திருத்த_கிச்டோர் ரகசிய மாறிக்குக் குறியாக்கம் செய்யப்பட்டுள்ளது:"
+
+#: /usr/lib/python3.13/argparse.py
+#, python-format
+msgid " (default: %(default)s)"
+msgstr ""
 
 #: ../fdroidserver/lint.py
 #, python-format
@@ -63,6 +68,11 @@ msgstr "\"local_copy_dir\" {path} இல்லை!"
 msgid "\"{apkfilename}\" is already installed on {dev}."
 msgstr "\"{apkfilename}\" ஏற்கனவே {dev} இல் நிறுவப்பட்டுள்ளது."
 
+#: ../fdroidserver/signindex.py
+#, python-brace-format
+msgid "\"{name}\" has bad SHA-256: {sha256}"
+msgstr ""
+
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "\"{path}\" contains recent {name} ({version})"
@@ -88,10 +98,20 @@ msgstr "\"{path}\" அனுமதிக்கப்படாத ஒரு வ�
 msgid "\"{url}\" is not a valid URL!"
 msgstr "\"{url}\" சரியான முகவரி அல்ல!"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.13/argparse.py
+#, python-format
+msgid "%(heading)s:"
+msgstr ""
+
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "%(prog)s: error: %(message)s\n"
 msgstr "%(prog)s: பிழை: %(message)s\n"
+
+#: /usr/lib/python3.13/argparse.py
+#, python-format
+msgid "%(prog)s: warning: %(message)s\n"
+msgstr ""
 
 #: ../fdroidserver/publish.py
 #, python-format
@@ -103,7 +123,7 @@ msgstr "%d apks கையொப்பமிடவோ சரிபார்க்
 msgid "%d problems found"
 msgstr "%d சிக்கல்கள் காணப்படுகின்றன"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "%r is not callable"
 msgstr "%r அழைக்க முடியாது"
@@ -148,7 +168,7 @@ msgstr "RCLONE ஐப் பயன்படுத்த, RCLONE_CONFIG மற்
 msgid "'repo_keyalias' not found in config.yml!"
 msgstr "config.yml இல் 'ரெப்போ_காலியாச்' காணப்படவில்லை!"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 msgid "'required' is an invalid argument for positionals"
 msgstr "'தேவை' என்பது நிலைப்பாடுகளுக்கு தவறான வாதமாகும்"
 
@@ -199,7 +219,7 @@ msgstr "-மெர்ச்-கோருதல் ஒரு பயன்பா�
 msgid "...checkupdate failed for {appid} : {error}"
 msgstr "... {appid}: {error} க்கு செக்அப்டேட் தோல்வியுற்றது"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 msgid ".__call__() not defined"
 msgstr ".__ அழைப்பு __ () வரையறுக்கப்படவில்லை"
 
@@ -1468,6 +1488,11 @@ msgid "Privacy mode was enabled based on your locale ({country_code})."
 msgstr "உங்கள் இருப்பிடத்தின் அடிப்படையில் தனியுரிமை பயன்முறை இயக்கப்பட்டது ({country_code})."
 
 #: ../fdroidserver/scanner.py
+#, python-brace-format
+msgid "Problem with ZIP file \"{apkfile}\": {error}"
+msgstr ""
+
+#: ../fdroidserver/scanner.py
 #, python-format
 msgid "Problem with ZIP file: %s, error %s"
 msgstr "சிப் கோப்பில் சிக்கல்: %s, பிழை %s"
@@ -1796,6 +1821,10 @@ msgstr "நீளத்தின் சுருக்கம் {length} {limit}
 #, python-brace-format
 msgid "System clock is older than date in {path}!"
 msgstr "கணினி கடிகாரம் {path} இல் தேதியை விட பழையது!"
+
+#: ../fdroidserver/checkupdates.py
+msgid "Tags update mode only works for git repositories currently"
+msgstr ""
 
 #: ../fdroidserver/checkupdates.py
 msgid "Tags update mode only works for git, hg, bzr and git-svn repositories currently"
@@ -2228,7 +2257,7 @@ msgstr "{path} க்கு அடையாள கோப்பைச் சே�
 msgid "adding to {name}: {path}"
 msgstr "{name}: {path} உடன் சேர்க்கிறது"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "ambiguous option: %(option)s could match %(matches)s"
 msgstr "தெளிவற்ற விருப்பம்: %(option)s %(matches)s உடன் பொருந்தக்கூடும்"
@@ -2263,15 +2292,20 @@ msgstr "Appid [: VERCODE] படிவத்தில் விருப்ப �
 msgid "archive_url needs to end with /archive"
 msgstr "காப்பகம்_ஆர்ல் /காப்பகத்துடன் முடிவடைய வேண்டும்"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "argument \"-\" with mode %r"
 msgstr "உரையாடல் \"-\" பயன்முறையுடன் %r"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "argument %(argument_name)s: %(message)s"
 msgstr "உரையாடல் %(argument_name)s: %(message)s"
+
+#: /usr/lib/python3.13/argparse.py
+#, python-format
+msgid "argument '%(argument_name)s' is deprecated"
+msgstr ""
 
 #: ../fdroidserver/nightly.py
 msgid "attempting bare SSH connection to test deploy key:"
@@ -2281,7 +2315,7 @@ msgstr "சோதனை வரிசைப்படுத்துவதற்�
 msgid "can not parse scrlib spec (not a string): '{}'"
 msgstr "ச்க்ர்லிப் ச்பெக்கை அலச முடியாது (ஒரு சரம் அல்ல): '{}'"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "can't open '%(filename)s': %(error)s"
 msgstr "' %(error)s கள்' ஐ திறக்க முடியாது: %(filename)s"
@@ -2295,11 +2329,11 @@ msgstr "HTTPS அல்லாத முகவரி ஐ திறக்க ம�
 msgid "cannot find required srclibs: \"{path}\""
 msgstr "தேவையான SRCLIBS ஐக் கண்டுபிடிக்க முடியவில்லை: \"{path}\""
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 msgid "cannot have multiple subparser arguments"
 msgstr "பல சப் பார்சர் வாதங்கள் இருக்க முடியாது"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "cannot merge actions - two groups are named %r"
 msgstr "செயல்களை ஒன்றிணைக்க முடியாது - இரண்டு குழுக்களுக்கு %r என்று பெயரிடப்பட்டுள்ளது"
@@ -2313,23 +2347,28 @@ msgstr "புதுப்பிப்பை வெளியிட முடி�
 msgid "cloning {url}"
 msgstr "குளோனிங் {url}"
 
+#: /usr/lib/python3.13/argparse.py
+#, python-format
+msgid "command '%(parser_name)s' is deprecated"
+msgstr ""
+
 #: ../fdroidserver/__main__.py
 msgid "commands from plugin modules:"
 msgstr "சொருகி தொகுதிகளிலிருந்து கட்டளைகள்:"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "conflicting option string: %s"
 msgid_plural "conflicting option strings: %s"
 msgstr[0] "முரண்பட்ட விருப்ப சரம்: %s"
 msgstr[1] "முரண்பட்ட விருப்ப சரங்கள்: %s"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "conflicting subparser alias: %s"
 msgstr "முரண்பட்ட சப் பார்சர் மாற்றுப்பெயர்: %s"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "conflicting subparser: %s"
 msgstr "முரண்பட்ட சப்சர்: %s"
@@ -2371,7 +2410,7 @@ msgstr "பூட்டு இல்லாமல் சார்பு கோப
 msgid "deployed process log {path} to {dest}"
 msgstr "பயன்படுத்தப்பட்ட செயல்முறை பதிவு {path} முதல் {dest} வரை"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "dest= is required for options like %r"
 msgstr "%r போன்ற விருப்பங்களுக்கு DEST = தேவை"
@@ -2388,22 +2427,22 @@ msgstr "'{}' இலிருந்து ச்கேனர் கையொப�
 msgid "executable binary, possibly code"
 msgstr "இயங்கக்கூடிய பைனரி, ஒருவேளை குறியீடு"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "expected %s argument"
 msgid_plural "expected %s arguments"
 msgstr[0] "எதிர்பார்க்கப்படும் %s உரையாடல்"
 msgstr[1] "எதிர்பார்க்கப்படும் %s வாதங்கள்"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 msgid "expected at least one argument"
 msgstr "குறைந்தது ஒரு வாதத்தை எதிர்பார்க்கலாம்"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 msgid "expected at most one argument"
 msgstr "பெரும்பாலான ஒரு வாதத்தில் எதிர்பார்க்கப்படுகிறது"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 msgid "expected one argument"
 msgstr "ஒரு வாதத்தை எதிர்பார்க்கலாம்"
 
@@ -2431,7 +2470,7 @@ msgstr "அறிவிலி எச்.வி.என் நகலி தோல�
 msgid "gzip file archive"
 msgstr "GZIP கோப்பு காப்பகம்"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "ignored explicit argument %r"
 msgstr "புறக்கணிக்கப்பட்ட வெளிப்படையான உரையாடல் %r"
@@ -2444,22 +2483,22 @@ msgstr "Index-V1 ஒரு கையொப்பத்தைக் கொண்�
 msgid "index-v2 must have a signature, use `fdroid signindex` to create it!"
 msgstr "Index-V2 ஒரு கையொப்பத்தைக் கொண்டிருக்க வேண்டும், அதை உருவாக்க `fdroid சிக்னின்டெக்ச்` ஐப் பயன்படுத்தவும்!"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "invalid %(type)s value: %(value)r"
 msgstr "தவறான %(type)s மதிப்பு: %(value)r"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "invalid choice: %(value)r (choose from %(choices)s)"
 msgstr "தவறான தேர்வு: %(value)r ஆர் ( %(choices)s இலிருந்து தேர்வு செய்யவும்)"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "invalid conflict_resolution value: %r"
 msgstr "தவறான மோதல்_ -ரசல் மதிப்பு: %r"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "invalid option string %(option)r: must start with a character %(prefix_chars)r"
 msgstr "தவறான விருப்பத்தேர்வு சரம் %(option)r ஆர்: ஒரு எழுத்துக்குறி %(prefix_chars)r ஆர் உடன் தொடங்க வேண்டும்"
@@ -2496,7 +2535,7 @@ msgstr "கண்ணாடியின் '%s' 'fdroid' உடன் முட�
 msgid "mirrors set twice, in config.yml and {path}!"
 msgstr "கண்ணாடிகள் இரண்டு முறை அமைக்கப்பட்டன, config.yml மற்றும் {path}!"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 msgid "mutually exclusive arguments must be optional"
 msgstr "பரச்பர வாதங்கள் விருப்பமாக இருக்க வேண்டும்"
 
@@ -2518,12 +2557,12 @@ msgstr "APK வழங்கப்படவில்லை"
 msgid "no version information found"
 msgstr "பதிப்பு தகவல்கள் எதுவும் கிடைக்கவில்லை"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "not allowed with argument %s"
 msgstr "உரையாடல் %s உடன் அனுமதிக்கப்படவில்லை"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "one of the arguments %s is required"
 msgstr "%s வாதங்களில் ஒன்று தேவை"
@@ -2532,7 +2571,12 @@ msgstr "%s வாதங்களில் ஒன்று தேவை"
 msgid "only accepts strings, lists, and tuples"
 msgstr "சரங்கள், பட்டியல்கள் மற்றும் டூப்பிள்களை மட்டுமே ஏற்றுக்கொள்கிறது"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.13/argparse.py
+#, python-format
+msgid "option '%(option)s' is deprecated"
+msgstr ""
+
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 msgid "options"
 msgstr "விருப்பங்கள்"
 
@@ -2546,7 +2590,7 @@ msgstr "இருக்கும் {path} ஐ மேலெழுதும்"
 msgid "path_to_custom_rclone_config: \"{path}\" does not exist!"
 msgstr "லோக்கல்_கோபி_டிர் \"{path}\" க்கான ரூட் டிர் இல்லை!"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 msgid "positional arguments"
 msgstr "நிலை வாதங்கள்"
 
@@ -2611,7 +2655,11 @@ msgstr "ServerWebroot: பாதை \"fdroid\" உடன் முடிவட�
 msgid "shared library"
 msgstr "பகிரப்பட்ட நூலகம்"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.13/argparse.py
+msgid "show program's version number and exit"
+msgstr ""
+
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 msgid "show this help message and exit"
 msgstr "இந்த உதவி செய்தியை காட்டிவிட்டு வெளியேறு"
 
@@ -2640,6 +2688,10 @@ msgstr "Srclibs பெயர் காணவில்லை மற்றும�
 msgid "static library"
 msgstr "நிலையான நூலகம்"
 
+#: /usr/lib/python3.13/argparse.py
+msgid "subcommands"
+msgstr ""
+
 #: ../fdroidserver/build.py
 #, python-brace-format
 msgid "supplied reference binary has allowed signer {signer}"
@@ -2650,7 +2702,7 @@ msgstr "வழங்கப்பட்ட குறிப்பு பைனர�
 msgid "suspicious permissions {st_mode:o}"
 msgstr ""
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "the following arguments are required: %s"
 msgstr "பின்வரும் வாதங்கள் தேவை: %s"
@@ -2659,17 +2711,17 @@ msgstr "பின்வரும் வாதங்கள் தேவை: %s"
 msgid "true"
 msgstr "உண்மை"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "unexpected option string: %s"
 msgstr "எதிர்பாராத விருப்ப சரம்: %s"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "unknown parser %(parser_name)r (choices: %(choices)s)"
 msgstr "அறியப்படாத பாகுபடுத்தி %(parser_name)r (தேர்வுகள்: %(choices)s)"
 
-#: /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "unrecognized arguments: %s"
 msgstr "அங்கீகரிக்கப்படாத வாதங்கள்: %s"
@@ -2680,6 +2732,7 @@ msgid "unsafe permissions on '{config_file}' (should be 0600)!"
 msgstr "'{config_file}' இல் பாதுகாப்பற்ற அனுமதிகள் (0600 ஆக இருக்க வேண்டும்)!"
 
 #: ../fdroidserver/__main__.py /usr/lib/python3.11/argparse.py
+#: /usr/lib/python3.13/argparse.py
 msgid "usage: "
 msgstr "பயன்பாடு: "
 
