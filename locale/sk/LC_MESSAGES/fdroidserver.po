@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: fdroidserver 1.0.6-349-g907c04ea\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2026-05-19 20:45+0200\n"
-"PO-Revision-Date: 2026-04-15 19:09+0000\n"
+"PO-Revision-Date: 2026-07-03 06:54+0000\n"
 "Last-Translator: Milan <mobrcian@hotmail.com>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/f-droid/fdroidserver/sk/>\n"
 "Language: sk\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=((n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2);\n"
-"X-Generator: Weblate 5.17.1-dev\n"
+"X-Generator: Weblate 2026.7.1.dev0\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -1857,7 +1857,7 @@ msgstr ""
 
 #: ../fdroidserver/__main__.py
 msgid "Unknown exception found!"
-msgstr "Bola zistená neznáma výnimka!"
+msgstr "Nájdená neznáma výnimka!"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
