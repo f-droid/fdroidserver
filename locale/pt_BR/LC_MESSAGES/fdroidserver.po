@@ -17,13 +17,14 @@
 # Igor Rückert <igorruckert@yahoo.com.br>, 2025, 2026.
 # F Bausch <florian+weblate@fbausch.de>, 2025.
 # Igor Padoim <igorpadoim@gmail.com>, 2026.
+# Matheus <souzamatheus@users.noreply.hosted.weblate.org>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2026-05-19 20:45+0200\n"
-"PO-Revision-Date: 2026-06-13 02:01+0000\n"
-"Last-Translator: Igor Padoim <igorpadoim@gmail.com>\n"
+"PO-Revision-Date: 2026-06-24 00:01+0000\n"
+"Last-Translator: Matheus <souzamatheus@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/f-droid/fdroidserver/pt_BR/>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
@@ -117,9 +118,9 @@ msgid "%(prog)s: error: %(message)s\n"
 msgstr "%(prog)s: erro: %(message)s\n"
 
 #: /usr/lib/python3.13/argparse.py
-#, fuzzy, python-format
+#, python-format
 msgid "%(prog)s: warning: %(message)s\n"
-msgstr "%(prog)s: erro: %(message)s\n"
+msgstr "%(prog)s: erro: %(mensagem)s\n"
 
 #: ../fdroidserver/publish.py
 #, python-format
