@@ -1,7 +1,7 @@
 # SOME DESCRIPTIVE TITLE.
 # This file is put in the public domain.
 # bobwww <noambro199@gmail.com>, 2022.
-# Yaron Shahrabani <sh.yaron@gmail.com>, 2022, 2023, 2024, 2025.
+# Yaron Shahrabani <sh.yaron@gmail.com>, 2022, 2023, 2024, 2025, 2026.
 # elid <shopisrael12@gmail.com>, 2025.
 # ginger-co <ginger_co@outlook.com>, 2025, 2026.
 msgid ""
@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: fdroidserver 2.1b0\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2026-01-13 11:31+0100\n"
-"PO-Revision-Date: 2026-01-20 23:02+0000\n"
-"Last-Translator: ginger-co <ginger_co@outlook.com>\n"
+"PO-Revision-Date: 2026-02-09 07:16+0000\n"
+"Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: Hebrew <https://hosted.weblate.org/projects/f-droid/fdroidserver/he/>\n"
 "Language: he\n"
 "MIME-Version: 1.0\n"
@@ -238,15 +238,15 @@ msgstr "הוספת כל הקבצים לאתר מראה של git"
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Adding new repo for only {name}"
-msgstr "הוספת מאגר חדש רק ל־{name}"
+msgstr "נוסף מאגר חדש רק ל־{name}"
 
 #: ../fdroidserver/init.py
 msgid "Alias of the repo signing key in the keystore"
-msgstr ""
+msgstr "כינוי מפתח החתימה על המאגר במאגר המפתחות"
 
 #: ../fdroidserver/build.py
 msgid "AllowedAPKSigningKeys missing but reference binary supplied"
-msgstr ""
+msgstr "AllowedAPKSigningKeys חסר אבל סופק בינרי לסימוכין"
 
 #: ../fdroidserver/import_subcommand.py
 msgid "Allows a different revision (or git branch) to be specified for the initial import"
@@ -1893,9 +1893,8 @@ msgid "To use rclone, rclone_config and awsbucket must be set in config.yml!"
 msgstr ""
 
 #: ../fdroidserver/lint.py
-#, fuzzy
 msgid "URL must start with https://"
-msgstr "{url} לא נפתח ב־„http”!"
+msgstr "כתובת אמורה להיפתח ב־https://‎"
 
 #: ../fdroidserver/lint.py
 msgid "URL must start with https:// or http://"
