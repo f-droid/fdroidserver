@@ -18,20 +18,21 @@
 # Dmitry <dmitrydmitry761@gmail.com>, 2024.
 # Artyom Rybakov <rib.artem@gmail.com>, 2025, 2026.
 # Дмитрий Михирев <bizdelnick@gmail.com>, 2026.
+# Maxim Proskurnya <max@pin2.me>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 1.0.0-95-gd7af22b\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2026-05-19 20:45+0200\n"
-"PO-Revision-Date: 2026-05-21 06:27+0000\n"
-"Last-Translator: Andrey <andrey@mailbox.org>\n"
+"PO-Revision-Date: 2026-06-08 19:44+0000\n"
+"Last-Translator: Maxim Proskurnya <max@pin2.me>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/f-droid/fdroidserver/ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 2026.6.dev0\n"
+"X-Generator: Weblate 2026.6\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -519,7 +520,7 @@ msgstr "Не удалось прочитать {path} для {appid_versionCode}
 #. Translators: https://developer.android.com/build/configure-app-module#set-application-id
 #: ../fdroidserver/import_subcommand.py
 msgid "Couldn't find Application ID"
-msgstr "Не удалось найти Application ID"
+msgstr "Не удалось найти идентификатор приложения"
 
 #: ../fdroidserver/checkupdates.py
 msgid "Couldn't find any version information"
@@ -527,7 +528,7 @@ msgstr "Не удалось найти никакой информации о в
 
 #: ../fdroidserver/checkupdates.py
 msgid "Couldn't find package ID"
-msgstr "Не удалось найти package ID"
+msgstr "Не удалось найти идентификатор пакета"
 
 #: ../fdroidserver/update.py
 msgid "Cowardily refusing to overwrite existing signing key setup!"
@@ -598,7 +599,7 @@ msgstr "В описании встречаются одинаковые стро
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "Description of length {length} is over the {limit} char limit"
-msgstr "Описание {length} превышает лимит по количеству знаков {limit}"
+msgstr "Количество знаков в описании — {length}. Это больше, чем лимит {limit}."
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
