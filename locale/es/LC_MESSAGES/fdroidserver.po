@@ -20,13 +20,14 @@
 # Francisco Serrador <fserrador@gmail.com>, 2025.
 # Nicolás Pérez <nicoperez241@proton.me>, 2026.
 # Luis Fernando Illapa <moxb@outlook.es>, 2026.
+# Juan M Sevilla <jumase@disroot.org>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2026-05-19 20:45+0200\n"
-"PO-Revision-Date: 2026-06-24 00:01+0000\n"
-"Last-Translator: Luis Fernando Illapa <moxb@outlook.es>\n"
+"PO-Revision-Date: 2026-06-29 20:01+0000\n"
+"Last-Translator: Juan M Sevilla <jumase@disroot.org>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/f-droid/fdroidserver/es/>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
@@ -53,7 +54,7 @@ msgstr ""
 "{path} codificada para la variable secreta DEBUG_KEYSTORE:"
 
 #: /usr/lib/python3.13/argparse.py
-#, fuzzy, python-format
+#, python-format
 msgid " (default: %(default)s)"
 msgstr " (por defecto: %(default)s)"
 
@@ -1764,9 +1765,8 @@ msgid "System clock is older than date in {path}!"
 msgstr "¡El fecha del sistema es anterior a la de {path}!"
 
 #: ../fdroidserver/checkupdates.py
-#, fuzzy
 msgid "Tags update mode only works for git repositories currently"
-msgstr "El modo de actualización de etiquetas actualmente solo funciona para repositorios de git, hg, bzr y git-svn"
+msgstr "El modo de actualización de etiquetas actualmente solo funciona para repositorios de git"
 
 #: ../fdroidserver/checkupdates.py
 msgid "Tags update mode used in git-svn, but the repo was not set up with tags"
