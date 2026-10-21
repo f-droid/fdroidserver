@@ -15,7 +15,7 @@
 # gallegonovato <fran-carro@hotmail.es>, 2022, 2023, 2024.
 # Nicolás Pérez <ccnicolasperez@gmail.com>, 2025.
 # Swyter <swyterzone@gmail.com>, 2025, 2026.
-# emma peel <emma.peel@riseup.net>, 2025.
+# emma peel <emma.peel@riseup.net>, 2025, 2026.
 # BIENESTAR NARANJOS <bienestarnaranjos@gmail.com>, 2025.
 # Francisco Serrador <fserrador@gmail.com>, 2025.
 # Nicolás Pérez <nicoperez241@proton.me>, 2026.
@@ -26,15 +26,15 @@ msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2026-05-19 20:45+0200\n"
-"PO-Revision-Date: 2026-06-29 20:01+0000\n"
-"Last-Translator: Juan M Sevilla <jumase@disroot.org>\n"
+"PO-Revision-Date: 2026-08-24 00:52+0000\n"
+"Last-Translator: emma peel <emma.peel@riseup.net>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/f-droid/fdroidserver/es/>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2026.7.dev0\n"
+"X-Generator: Weblate 2026.9.dev0\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -217,7 +217,7 @@ msgstr "'{}' no es un par valido de applicationId:versionCode"
 
 #: ../fdroidserver/checkupdates.py
 msgid "--merge-request only runs on a single appid!"
-msgstr "¡--merge-request solo se ejecuta en un único ID de aplicación!"
+msgstr "¡--merge-request se ejecuta en un único ID de aplicación!"
 
 #: ../fdroidserver/checkupdates.py
 #, python-brace-format
