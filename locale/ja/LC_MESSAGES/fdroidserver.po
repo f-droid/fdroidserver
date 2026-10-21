@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.8-224-g4b0ade7\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2026-05-19 20:45+0200\n"
+"POT-Creation-Date: 2026-10-21 18:02+0200\n"
 "PO-Revision-Date: 2026-06-11 01:01+0000\n"
 "Last-Translator: Liner Seven <linour7gmekiblo@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/f-droid/fdroidserver/ja/>\n"
@@ -959,6 +959,11 @@ msgstr "gitのミラーが大きくなった場合に、アーカイブの削除
 msgid "If this upload fails, try manually uploading to {url}"
 msgstr "このアップロードを行えなかった場合は、手動で{url}にアップロードしてみてください"
 
+#: ../fdroidserver/update.py
+#, python-brace-format
+msgid "Ignoring \"{path}\": symlink points outside the app source"
+msgstr ""
+
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Ignoring '{field}' in '{metapath}' metadata because it is deprecated."
@@ -1288,6 +1293,11 @@ msgstr "タグが見つかりません"
 #: ../fdroidserver/publish.py ../fdroidserver/verify.py
 msgid "No unsigned directory - nothing to do"
 msgstr "署名されていないディレクトリーがありません - 何も実行しません"
+
+#: ../fdroidserver/common.py
+#, fuzzy, python-brace-format
+msgid "No v2/v3 certificate found in {path}"
+msgstr "{path}で署名用の証明書が見つかりません"
 
 #: ../fdroidserver/__main__.py
 msgid "No version information could be found."
@@ -2682,6 +2692,11 @@ msgstr "{path}のファイル署名「{pattern}」は正しくありません。
 #: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "{path} has been flagged by virustotal {count} times:"
+msgstr "{path}はvirustotalにより{count}回マークされました。"
+
+#: ../fdroidserver/deploy.py
+#, fuzzy, python-brace-format
+msgid "{path} has been flagged in VirusTotal as \"{name}\" {count} times:"
 msgstr "{path}はvirustotalにより{count}回マークされました。"
 
 #: ../fdroidserver/metadata.py

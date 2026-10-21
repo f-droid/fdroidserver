@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 1.1-680-ge1d3de71\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2026-05-19 20:45+0200\n"
+"POT-Creation-Date: 2026-10-21 18:02+0200\n"
 "PO-Revision-Date: 2026-06-02 11:01+0000\n"
 "Last-Translator: Hosted Weblate user 152666 <jobjuhh@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/f-droid/fdroidserver/nl/>\n"
@@ -961,6 +961,11 @@ msgstr "Als een git mirror te groot wordt, sta dan toe dat het archief wordt ver
 msgid "If this upload fails, try manually uploading to {url}"
 msgstr "Als deze upload mislukt, probeer dan handmatig te uploaden naar {url}"
 
+#: ../fdroidserver/update.py
+#, python-brace-format
+msgid "Ignoring \"{path}\": symlink points outside the app source"
+msgstr ""
+
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Ignoring '{field}' in '{metapath}' metadata because it is deprecated."
@@ -1290,6 +1295,11 @@ msgstr "Geen labels gevonden"
 #: ../fdroidserver/publish.py ../fdroidserver/verify.py
 msgid "No unsigned directory - nothing to do"
 msgstr "Geen ongetekende map - niets om te doen"
+
+#: ../fdroidserver/common.py
+#, fuzzy, python-brace-format
+msgid "No v2/v3 certificate found in {path}"
+msgstr "Geen tekencertificaten gevonden in {path}"
 
 #: ../fdroidserver/__main__.py
 msgid "No version information could be found."
@@ -2688,6 +2698,11 @@ msgstr "{path} heeft een vekeerde bestandshandtekening \"{pattern}\", mogelijke 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "{path} has been flagged by virustotal {count} times:"
+msgstr "{path} is {count} keer door virustotal gelabeld:"
+
+#: ../fdroidserver/deploy.py
+#, fuzzy, python-brace-format
+msgid "{path} has been flagged in VirusTotal as \"{name}\" {count} times:"
 msgstr "{path} is {count} keer door virustotal gelabeld:"
 
 #: ../fdroidserver/metadata.py

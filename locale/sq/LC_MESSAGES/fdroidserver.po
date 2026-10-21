@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 1.0.6-349-g907c04ea\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2026-05-19 20:45+0200\n"
+"POT-Creation-Date: 2026-10-21 18:02+0200\n"
 "PO-Revision-Date: 2026-05-22 09:11+0000\n"
 "Last-Translator: Besnik Bleta <besnik@programeshqip.org>\n"
 "Language-Team: Albanian <https://hosted.weblate.org/projects/f-droid/fdroidserver/sq/>\n"
@@ -958,6 +958,11 @@ msgstr "Nëse një pasqyrë git bëhet shumë e madhe, lejoje arkivin të fshihe
 msgid "If this upload fails, try manually uploading to {url}"
 msgstr "Nëse ky ngarkim dështon, provoni ta ngarkoni dorazi te {url}"
 
+#: ../fdroidserver/update.py
+#, python-brace-format
+msgid "Ignoring \"{path}\": symlink points outside the app source"
+msgstr ""
+
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Ignoring '{field}' in '{metapath}' metadata because it is deprecated."
@@ -1287,6 +1292,11 @@ msgstr "S’u gjetën etiketa"
 #: ../fdroidserver/publish.py ../fdroidserver/verify.py
 msgid "No unsigned directory - nothing to do"
 msgstr "S’ka drejtori të panënshkruar - s’ka ç’bëhet"
+
+#: ../fdroidserver/common.py
+#, fuzzy, python-brace-format
+msgid "No v2/v3 certificate found in {path}"
+msgstr "S’u gjetën dëshmi nënshkrimi te {path}"
 
 #: ../fdroidserver/__main__.py
 msgid "No version information could be found."
@@ -2686,6 +2696,11 @@ msgstr "{path} ka “{pattern}” të gabuar nënshkrimi kartele, ka gjasa të j
 #: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "{path} has been flagged by virustotal {count} times:"
+msgstr "për {path} ka {count} herë sinjalizime nga virustotal:"
+
+#: ../fdroidserver/deploy.py
+#, fuzzy, python-brace-format
+msgid "{path} has been flagged in VirusTotal as \"{name}\" {count} times:"
 msgstr "për {path} ka {count} herë sinjalizime nga virustotal:"
 
 #: ../fdroidserver/metadata.py

@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2026-05-19 20:45+0200\n"
+"POT-Creation-Date: 2026-10-21 18:02+0200\n"
 "PO-Revision-Date: 2026-05-20 14:16+0000\n"
 "Last-Translator: Hans-Christoph Steiner <hans@guardianproject.info>\n"
 "Language-Team: Tibetan <https://hosted.weblate.org/projects/f-droid/fdroidserver/bo/>\n"
@@ -965,6 +965,11 @@ msgstr ""
 msgid "If this upload fails, try manually uploading to {url}"
 msgstr ""
 
+#: ../fdroidserver/update.py
+#, python-brace-format
+msgid "Ignoring \"{path}\": symlink points outside the app source"
+msgstr ""
+
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Ignoring '{field}' in '{metapath}' metadata because it is deprecated."
@@ -1299,6 +1304,11 @@ msgstr "ཟུར་སྣོན་ཡོ་བྱད་རྙེད་མ་ས
 #: ../fdroidserver/publish.py ../fdroidserver/verify.py
 msgid "No unsigned directory - nothing to do"
 msgstr "མིང་རྟགས་མ་བཀོད་པའི་ཕྱོགས་དེབ་མིན་འདུག-བྱ་རྒྱུ་གང་ཡང་མེད།"
+
+#: ../fdroidserver/common.py
+#, fuzzy, python-brace-format
+msgid "No v2/v3 certificate found in {path}"
+msgstr "{path}མིང་རྟགས་བཀོད་པའི་ཆོག་མཆན་ལག་ཁྱེར་འདིའི་ནང་རྙེད་མ་སོང་།"
 
 #: ../fdroidserver/__main__.py
 #, fuzzy
@@ -2701,6 +2711,11 @@ msgstr ""
 #: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "{path} has been flagged by virustotal {count} times:"
+msgstr ""
+
+#: ../fdroidserver/deploy.py
+#, python-brace-format
+msgid "{path} has been flagged in VirusTotal as \"{name}\" {count} times:"
 msgstr ""
 
 #: ../fdroidserver/metadata.py

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 2.3a1-162-gfbb3cc59\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2026-05-19 20:45+0200\n"
+"POT-Creation-Date: 2026-10-21 18:02+0200\n"
 "PO-Revision-Date: 2026-05-22 09:11+0000\n"
 "Last-Translator: Aindriú Mac Giolla Eoin <aindriu80@gmail.com>\n"
 "Language-Team: Irish <https://hosted.weblate.org/projects/f-droid/fdroidserver/ga/>\n"
@@ -960,6 +960,11 @@ msgstr "Má éiríonn scáthán git mór, lig don chartlann a scriosadh"
 msgid "If this upload fails, try manually uploading to {url}"
 msgstr "Má theipeann ar an uaslódáil seo, déan iarracht uaslódáil de láimh chuig {url}"
 
+#: ../fdroidserver/update.py
+#, python-brace-format
+msgid "Ignoring \"{path}\": symlink points outside the app source"
+msgstr ""
+
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Ignoring '{field}' in '{metapath}' metadata because it is deprecated."
@@ -1289,6 +1294,11 @@ msgstr "Níor aimsíodh clibeanna ar bith"
 #: ../fdroidserver/publish.py ../fdroidserver/verify.py
 msgid "No unsigned directory - nothing to do"
 msgstr "Gan chomhadlann gan síniú - níl aon rud le déanamh"
+
+#: ../fdroidserver/common.py
+#, fuzzy, python-brace-format
+msgid "No v2/v3 certificate found in {path}"
+msgstr "Níor aimsíodh aon deimhnithe sínithe i {path}"
 
 #: ../fdroidserver/__main__.py
 msgid "No version information could be found."
@@ -2699,6 +2709,11 @@ msgstr "{path} Tá síniú comhad dona \"{pattern}\", is féidir Janus leas a bh
 #: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "{path} has been flagged by virustotal {count} times:"
+msgstr "{path} curtha faoi bhratach ag virustotal {count} times:"
+
+#: ../fdroidserver/deploy.py
+#, fuzzy, python-brace-format
+msgid "{path} has been flagged in VirusTotal as \"{name}\" {count} times:"
 msgstr "{path} curtha faoi bhratach ag virustotal {count} times:"
 
 #: ../fdroidserver/metadata.py

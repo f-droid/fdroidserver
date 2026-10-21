@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.8-74-ga380b9f\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2026-05-19 20:45+0200\n"
+"POT-Creation-Date: 2026-10-21 18:02+0200\n"
 "PO-Revision-Date: 2026-10-21 02:51+0000\n"
 "Last-Translator: Telaneo <telaneo@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects/f-droid/fdroidserver/nb/>\n"
@@ -980,6 +980,11 @@ msgstr "Hvis en Git-avspeiling blir for stor, tillat sletting av arkivet"
 msgid "If this upload fails, try manually uploading to {url}"
 msgstr "Hvis opplasting mislykkes kan du prøve å laste opp manuelt til {url}"
 
+#: ../fdroidserver/update.py
+#, python-brace-format
+msgid "Ignoring \"{path}\": symlink points outside the app source"
+msgstr ""
+
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Ignoring '{field}' in '{metapath}' metadata because it is deprecated."
@@ -1323,6 +1328,11 @@ msgstr "Fant ingen tilknyttede enheter"
 #: ../fdroidserver/publish.py ../fdroidserver/verify.py
 msgid "No unsigned directory - nothing to do"
 msgstr "Ingen usignert mappe - ingenting å gjøre"
+
+#: ../fdroidserver/common.py
+#, fuzzy, python-brace-format
+msgid "No v2/v3 certificate found in {path}"
+msgstr "Ingen signeringssertifikater funnet i {path}"
 
 #: ../fdroidserver/__main__.py
 #, fuzzy
@@ -2761,6 +2771,11 @@ msgstr "{path} har feilaktig filsignatur \"{pattern}\", mulig Janus-utnyttelse."
 #: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "{path} has been flagged by virustotal {count} times:"
+msgstr ""
+
+#: ../fdroidserver/deploy.py
+#, python-brace-format
+msgid "{path} has been flagged in VirusTotal as \"{name}\" {count} times:"
 msgstr ""
 
 #: ../fdroidserver/metadata.py

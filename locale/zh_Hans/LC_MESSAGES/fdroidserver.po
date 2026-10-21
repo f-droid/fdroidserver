@@ -39,7 +39,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2026-05-19 20:45+0200\n"
+"POT-Creation-Date: 2026-10-21 18:02+0200\n"
 "PO-Revision-Date: 2026-05-20 14:16+0000\n"
 "Last-Translator: 大王叫我来巡山 <hamburger2048@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/projects/f-droid/fdroidserver/zh_Hans/>\n"
@@ -989,6 +989,11 @@ msgstr "如果 git 镜像变大，允许删除存档"
 msgid "If this upload fails, try manually uploading to {url}"
 msgstr "如果此上传失败，请尝试手动上传到 {url}"
 
+#: ../fdroidserver/update.py
+#, python-brace-format
+msgid "Ignoring \"{path}\": symlink points outside the app source"
+msgstr ""
+
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Ignoring '{field}' in '{metapath}' metadata because it is deprecated."
@@ -1318,6 +1323,11 @@ msgstr "未找到标签"
 #: ../fdroidserver/publish.py ../fdroidserver/verify.py
 msgid "No unsigned directory - nothing to do"
 msgstr "没有未签名的目录 - 无操作"
+
+#: ../fdroidserver/common.py
+#, fuzzy, python-brace-format
+msgid "No v2/v3 certificate found in {path}"
+msgstr "在 {path} 中找不到签名证书"
 
 #: ../fdroidserver/__main__.py
 msgid "No version information could be found."
@@ -2712,6 +2722,11 @@ msgstr "{path}有损坏的签名“{pattern}”，也许是Janus的漏洞！"
 #: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "{path} has been flagged by virustotal {count} times:"
+msgstr "{path}被virustotal标记了{count}次："
+
+#: ../fdroidserver/deploy.py
+#, fuzzy, python-brace-format
+msgid "{path} has been flagged in VirusTotal as \"{name}\" {count} times:"
 msgstr "{path}被virustotal标记了{count}次："
 
 #: ../fdroidserver/metadata.py

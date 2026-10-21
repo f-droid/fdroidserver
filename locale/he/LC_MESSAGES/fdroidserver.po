@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 2.1b0\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2026-05-19 20:45+0200\n"
+"POT-Creation-Date: 2026-10-21 18:02+0200\n"
 "PO-Revision-Date: 2026-09-28 08:51+0000\n"
 "Last-Translator: Idan <idan062@gmail.com>\n"
 "Language-Team: Hebrew <https://hosted.weblate.org/projects/f-droid/fdroidserver/he/>\n"
@@ -962,6 +962,11 @@ msgstr "אם אתר מראה של git גדל יותר מדי, לאפשר את מ
 msgid "If this upload fails, try manually uploading to {url}"
 msgstr "אם ההעלאה הזאת נכשלת, אפשר לנסות להעלות ידנית אל {url}"
 
+#: ../fdroidserver/update.py
+#, python-brace-format
+msgid "Ignoring \"{path}\": symlink points outside the app source"
+msgstr ""
+
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Ignoring '{field}' in '{metapath}' metadata because it is deprecated."
@@ -1291,6 +1296,11 @@ msgstr "לא נמצאו תגיות"
 #: ../fdroidserver/publish.py ../fdroidserver/verify.py
 msgid "No unsigned directory - nothing to do"
 msgstr "אין תיקייה לא חתומה - אין מה לעשות"
+
+#: ../fdroidserver/common.py
+#, fuzzy, python-brace-format
+msgid "No v2/v3 certificate found in {path}"
+msgstr "לא נמצאו אישורי חתימה ב־{path}"
 
 #: ../fdroidserver/__main__.py
 msgid "No version information could be found."
@@ -2699,6 +2709,11 @@ msgstr "ל־{path} יש חתימת קובץ פגומה \"{pattern}\", ייתכן
 msgid "{path} has been flagged by virustotal {count} times:"
 msgstr "{path} סומן על ידי virustotal‏ {count} פעמים:"
 
+#: ../fdroidserver/deploy.py
+#, fuzzy, python-brace-format
+msgid "{path} has been flagged in VirusTotal as \"{name}\" {count} times:"
+msgstr "{path} סומן על ידי virustotal‏ {count} פעמים:"
+
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "{path} has no '{fieldname}'"
@@ -2779,11 +2794,3 @@ msgstr[0] "{} בנייה הצליחה"
 msgstr[1] "{} בניות הצליחו"
 msgstr[2] "{} בניות הצליחו"
 msgstr[3] "{} בניות הצליחו"
-
-#, python-brace-format
-#~ msgid "\"{path}\" exists but s3cmd is not installed!"
-#~ msgstr "„{path}” נמצא אבל s3cmd לא מותקן!"
-
-#, python-format
-#~ msgid "%s has bad SHA-256: %s"
-#~ msgstr "ל־%s יש SHA-256 פגום: %s"

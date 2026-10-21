@@ -23,7 +23,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 1.0.0-95-gd7af22b\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2026-05-19 20:45+0200\n"
+"POT-Creation-Date: 2026-10-21 18:02+0200\n"
 "PO-Revision-Date: 2026-06-08 19:44+0000\n"
 "Last-Translator: Andrey <andrey@mailbox.org>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/f-droid/fdroidserver/ru/>\n"
@@ -975,6 +975,11 @@ msgstr "Разрешить удаление архива, когда git-зер�
 msgid "If this upload fails, try manually uploading to {url}"
 msgstr "Если эта загрузка не удалась, попробуйте вручную загрузить на {url}"
 
+#: ../fdroidserver/update.py
+#, python-brace-format
+msgid "Ignoring \"{path}\": symlink points outside the app source"
+msgstr ""
+
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Ignoring '{field}' in '{metapath}' metadata because it is deprecated."
@@ -1304,6 +1309,11 @@ msgstr "Теги не найдены"
 #: ../fdroidserver/publish.py ../fdroidserver/verify.py
 msgid "No unsigned directory - nothing to do"
 msgstr "Директории с неподписанными данными не существует. До новых встреч"
+
+#: ../fdroidserver/common.py
+#, fuzzy, python-brace-format
+msgid "No v2/v3 certificate found in {path}"
+msgstr "В {path} не обнаружены сертификаты для подписывания"
 
 #: ../fdroidserver/__main__.py
 msgid "No version information could be found."
@@ -2706,6 +2716,11 @@ msgstr "{path}: неверная подпись \"{pattern}\". Выглядит 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "{path} has been flagged by virustotal {count} times:"
+msgstr "{path} был отмечен virustotal {count} раз:"
+
+#: ../fdroidserver/deploy.py
+#, fuzzy, python-brace-format
+msgid "{path} has been flagged in VirusTotal as \"{name}\" {count} times:"
 msgstr "{path} был отмечен virustotal {count} раз:"
 
 #: ../fdroidserver/metadata.py

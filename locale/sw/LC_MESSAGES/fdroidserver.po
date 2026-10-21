@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 2.3a1\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2026-05-19 20:45+0200\n"
+"POT-Creation-Date: 2026-10-21 18:02+0200\n"
 "PO-Revision-Date: 2026-03-09 09:44+0000\n"
 "Last-Translator: Ashley Tsuma <tsumaashley@gmail.com>\n"
 "Language-Team: Swahili <https://hosted.weblate.org/projects/f-droid/fdroidserver/sw/>\n"
@@ -963,6 +963,11 @@ msgstr "Ikiwa kioo cha git kinakua kikubwa, ruhusu kumbukumbu ifutwe"
 msgid "If this upload fails, try manually uploading to {url}"
 msgstr "Ikiwa kupakia hii inafeli, jaribu kupakia mwenyewe kwa {url}"
 
+#: ../fdroidserver/update.py
+#, python-brace-format
+msgid "Ignoring \"{path}\": symlink points outside the app source"
+msgstr ""
+
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Ignoring '{field}' in '{metapath}' metadata because it is deprecated."
@@ -1292,6 +1297,11 @@ msgstr "Hakuna vishikozo vilivyopatikana"
 #: ../fdroidserver/publish.py ../fdroidserver/verify.py
 msgid "No unsigned directory - nothing to do"
 msgstr "Hakuna saraka isiyotiwa saini - hakuna la kufanya"
+
+#: ../fdroidserver/common.py
+#, fuzzy, python-brace-format
+msgid "No v2/v3 certificate found in {path}"
+msgstr "Hakuna vyeti vya kusaini vimepatikana katika {path}"
 
 #: ../fdroidserver/__main__.py
 msgid "No version information could be found."
@@ -2692,6 +2702,11 @@ msgstr "{path} ina saini mbaya ya faili \"{pattern}\", Uwezekano wa kunyonywa la
 #: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "{path} has been flagged by virustotal {count} times:"
+msgstr "{path} imealamishwa na virustotal mara {count}:"
+
+#: ../fdroidserver/deploy.py
+#, fuzzy, python-brace-format
+msgid "{path} has been flagged in VirusTotal as \"{name}\" {count} times:"
 msgstr "{path} imealamishwa na virustotal mara {count}:"
 
 #: ../fdroidserver/metadata.py

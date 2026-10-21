@@ -26,7 +26,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2026-05-19 20:45+0200\n"
+"POT-Creation-Date: 2026-10-21 18:02+0200\n"
 "PO-Revision-Date: 2026-09-25 19:01+0000\n"
 "Last-Translator: The Cats <philosoph@danwin1210.de>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/f-droid/fdroidserver/pt_BR/>\n"
@@ -977,6 +977,11 @@ msgstr "Se um espelho git ficar muito grande, permite que o arquivo seja excluí
 msgid "If this upload fails, try manually uploading to {url}"
 msgstr "Se o upload falhar, tente fazer o upload manualmente para {url}"
 
+#: ../fdroidserver/update.py
+#, python-brace-format
+msgid "Ignoring \"{path}\": symlink points outside the app source"
+msgstr ""
+
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Ignoring '{field}' in '{metapath}' metadata because it is deprecated."
@@ -1306,6 +1311,11 @@ msgstr "Nenhuma etiqueta encontrada"
 #: ../fdroidserver/publish.py ../fdroidserver/verify.py
 msgid "No unsigned directory - nothing to do"
 msgstr "Nenhum diretório não assinado - nada a fazer"
+
+#: ../fdroidserver/common.py
+#, fuzzy, python-brace-format
+msgid "No v2/v3 certificate found in {path}"
+msgstr "Nenhum certificado de assinatura encontrado em {path}"
 
 #: ../fdroidserver/__main__.py
 msgid "No version information could be found."
@@ -2704,6 +2714,11 @@ msgstr "{path} tem uma má assinatura de arquivo \"{pattern}\", um exploração 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "{path} has been flagged by virustotal {count} times:"
+msgstr "{path} foi sinalizado pelo virustotal {count} vezes:"
+
+#: ../fdroidserver/deploy.py
+#, fuzzy, python-brace-format
+msgid "{path} has been flagged in VirusTotal as \"{name}\" {count} times:"
 msgstr "{path} foi sinalizado pelo virustotal {count} vezes:"
 
 #: ../fdroidserver/metadata.py
