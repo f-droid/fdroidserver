@@ -1,7 +1,7 @@
 # SOME DESCRIPTIVE TITLE.
 # This file is put in the public domain.
 # Balázs Meskó <meskobalazs@mailbox.org>, 2020, 2021, 2026.
-# Hans-Christoph Steiner <hans@guardianproject.info>, 2020, 2021, 2022, 2024.
+# Hans-Christoph Steiner <hans@guardianproject.info>, 2020, 2021, 2022, 2024, 2026.
 # KissPandur <zoltankiss.web@gmail.com>, 2022.
 # Dani Nagy <nagydani.m.k@gmail.com>, 2025.
 # Péter Reszegi <rpetya1704@gmail.com>, 2025.
@@ -12,15 +12,15 @@ msgstr ""
 "Project-Id-Version: fdroidserver 1.0.6-70-g54bc858\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2026-05-19 20:45+0200\n"
-"PO-Revision-Date: 2026-03-19 17:56+0000\n"
-"Last-Translator: -J- <heyj0e@tuta.io>\n"
+"PO-Revision-Date: 2026-05-20 14:16+0000\n"
+"Last-Translator: Hans-Christoph Steiner <hans@guardianproject.info>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/f-droid/fdroidserver/hu/>\n"
 "Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.17-dev\n"
+"X-Generator: Weblate 2026.6.dev0\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -354,9 +354,9 @@ msgid "Base URL to mirror, can include the index signing key using the query str
 msgstr "A tükrözendő alap URL, tartalmazhatja az index aláírókulcsát a lekérdezésben: ?fingerprint="
 
 #: ../fdroidserver/lint.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Branch '{branch}' used as commit in build '{versionCode}'"
-msgstr "A(z) „{branch}” ág véglegesítésként használva a(z) „{versionName}” összeállításnál"
+msgstr "A(z) „{branch}” ág véglegesítésként használva a(z) „{versionCode}” összeállításnál"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format

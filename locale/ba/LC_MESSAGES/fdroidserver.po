@@ -1,20 +1,21 @@
 # SOME DESCRIPTIVE TITLE.
 # This file is put in the public domain.
 # Zulfar <mzulfar20@gmail.com>, 2025.
+# Hans-Christoph Steiner <hans@guardianproject.info>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 2.4.0\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2026-05-19 20:45+0200\n"
-"PO-Revision-Date: 2025-06-22 06:50+0000\n"
-"Last-Translator: Zulfar <mzulfar20@gmail.com>\n"
+"PO-Revision-Date: 2026-05-20 14:16+0000\n"
+"Last-Translator: Hans-Christoph Steiner <hans@guardianproject.info>\n"
 "Language-Team: Bashkir <https://hosted.weblate.org/projects/f-droid/fdroidserver/ba/>\n"
 "Language: ba\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.13-dev\n"
+"X-Generator: Weblate 2026.6.dev0\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -66,9 +67,9 @@ msgid "\"{apkfilename}\" is already installed on {dev}."
 msgstr "\"{apkfilename}\" {dev} ҡоролмаһында инде ҡуйылған."
 
 #: ../fdroidserver/signindex.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "\"{name}\" has bad SHA-256: {sha256}"
-msgstr "%s файлының SHA-256 суммаһы дөрөҫ түгел: %s"
+msgstr "\"{name}\" файлының SHA-256 суммаһы дөрөҫ түгел: \"{sha256}\""
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -349,9 +350,9 @@ msgid "Base URL to mirror, can include the index signing key using the query str
 msgstr "Көҙгө яһау өсөн төп URL, һорау юлы аша индекс имзалау асҡысын ҡушырға мөмкин: ?fingerprint="
 
 #: ../fdroidserver/lint.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Branch '{branch}' used as commit in build '{versionCode}'"
-msgstr "'{versionName}' йыйылмаһында '{branch}' ботағы коммит булараҡ ҡулланылған"
+msgstr "'{versionCode}' йыйылмаһында '{branch}' ботағы коммит булараҡ ҡулланылған"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
@@ -1652,9 +1653,9 @@ msgid "Set open file limit to {integer}"
 msgstr "Асыҡ файлдар сикләүен {integer} итеп ҡуйыу"
 
 #: ../fdroidserver/common.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Set up NDK {release} ({revision})"
-msgstr "NDK {release} ({version}) көйләнде"
+msgstr "NDK {release} ({revision}) көйләнде"
 
 #: ../fdroidserver/__main__.py
 msgid "Set up an app build for a nightly build repo"
@@ -1874,9 +1875,9 @@ msgid "Unknown exception found!"
 msgstr "Билдәһеҙ хата табылды!"
 
 #: ../fdroidserver/lint.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Unknown file '{filename}' in build '{versionCode}'"
-msgstr "'{versionName}' йыйылмаһында билдәһеҙ '{filename}' файлы"
+msgstr "'{versionCode}' йыйылмаһында билдәһеҙ '{filename}' файлы"
 
 #: ../fdroidserver/metadata.py
 #, python-format
@@ -2021,7 +2022,7 @@ msgstr "Инде булған \"{path}\" асҡыстар һаҡлағысы ҡ�
 #: ../fdroidserver/deploy.py
 #, fuzzy, python-brace-format
 msgid "Using rclone to sync to \"{name}\""
-msgstr "Синхронлаштырыу өсөн rclone ҡулланыла: {url}"
+msgstr "Синхронлаштырыу өсөн rclone ҡулланыла: {name}"
 
 #: ../fdroidserver/__main__.py
 msgid "Valid commands are:"
@@ -2626,9 +2627,9 @@ msgid "{appid} is missing {name}"
 msgstr "{appid}-та {name} юҡ"
 
 #: ../fdroidserver/lint.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{appid}: Unknown extlib {path} in build '{versionCode}'"
-msgstr "{appid}: '{versionName}' йыйылмаһында билдәһеҙ extlib {path}"
+msgstr "{appid}: '{versionCode}' йыйылмаһында билдәһеҙ extlib {path}"
 
 #: ../fdroidserver/scanner.py
 #, python-brace-format

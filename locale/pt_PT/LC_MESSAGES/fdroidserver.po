@@ -3,7 +3,7 @@
 # This file is distributed under the same license as the PACKAGE package.
 # Manuela Silva <mmsrs@sky.com>, 2020.
 # ssantos <ssantos@web.de>, 2020, 2021, 2022, 2023, 2024, 2025.
-# Hans-Christoph Steiner <hans@guardianproject.info>, 2020, 2022, 2024.
+# Hans-Christoph Steiner <hans@guardianproject.info>, 2020, 2022, 2024, 2026.
 # Peter J. Mello <admin@petermello.net>, 2021.
 # Fat Potato <mjwany48@gmail.com>, 2024.
 # Hugo Carvalho <hugokarvalho@hotmail.com>, 2024.
@@ -13,8 +13,8 @@ msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2026-05-19 20:45+0200\n"
-"PO-Revision-Date: 2026-05-17 14:11+0000\n"
-"Last-Translator: Shin Kurogane Silva <ZeroXUnknown@proton.me>\n"
+"PO-Revision-Date: 2026-05-20 14:16+0000\n"
+"Last-Translator: Hans-Christoph Steiner <hans@guardianproject.info>\n"
 "Language-Team: Portuguese (Portugal) <https://hosted.weblate.org/projects/f-droid/fdroidserver/pt_PT/>\n"
 "Language: pt_PT\n"
 "MIME-Version: 1.0\n"
@@ -73,9 +73,9 @@ msgid "\"{apkfilename}\" is already installed on {dev}."
 msgstr "'{apkfilename}' já está instalado no {dev}."
 
 #: ../fdroidserver/signindex.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "\"{name}\" has bad SHA-256: {sha256}"
-msgstr "%s tem um SHA-256 ruim: %s"
+msgstr "\"{name}\" tem um SHA-256 ruim: {sha256}"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -357,9 +357,9 @@ msgid "Base URL to mirror, can include the index signing key using the query str
 msgstr "URL base para espelhar, pode incluir a chave de assinatura de índice usando a cadeia de consulta: ?fingerprint ="
 
 #: ../fdroidserver/lint.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Branch '{branch}' used as commit in build '{versionCode}'"
-msgstr "Filial '{branch} 1' usada como commit no build '{versionName} 2'"
+msgstr "Filial '{branch}' usada como commit no build '{versionCode}'"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
@@ -1435,9 +1435,9 @@ msgid "Privacy mode was enabled based on your locale ({country_code})."
 msgstr "O modo de privacidade foi ativado com base na sua localização ({country_code})."
 
 #: ../fdroidserver/scanner.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Problem with ZIP file \"{apkfile}\": {error}"
-msgstr "Problema com o ficheiro ZIP: %s, erro %s"
+msgstr "Problema com o ficheiro ZIP: \"{apkfile}\": {error}"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -1660,9 +1660,9 @@ msgid "Set open file limit to {integer}"
 msgstr "Definir o limite de ficheiros abertos para {integer}"
 
 #: ../fdroidserver/common.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Set up NDK {release} ({revision})"
-msgstr "Definir NDK {release} ({version}) para cima"
+msgstr "Definir NDK {release} ({revision}) para cima"
 
 #: ../fdroidserver/__main__.py
 msgid "Set up an app build for a nightly build repo"
@@ -1882,9 +1882,9 @@ msgid "Unknown exception found!"
 msgstr "Exceção desconhecida!"
 
 #: ../fdroidserver/lint.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Unknown file '{filename}' in build '{versionCode}'"
-msgstr "Ficheiro desconhecido '{filename}' na compilação '{versionName}'"
+msgstr "Ficheiro desconhecido '{filename}' na compilação '{versionCode}'"
 
 #: ../fdroidserver/metadata.py
 #, python-format
@@ -2634,9 +2634,9 @@ msgid "{appid} is missing {name}"
 msgstr "{appid} tem falta de {name}"
 
 #: ../fdroidserver/lint.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{appid}: Unknown extlib {path} in build '{versionCode}'"
-msgstr "{appid}: extlib {path} desconhecido na compilação '{versionName}'"
+msgstr "{appid}: extlib {path} desconhecido na compilação '{versionCode}'"
 
 #: ../fdroidserver/scanner.py
 #, python-brace-format

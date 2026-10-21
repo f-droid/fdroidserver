@@ -1,7 +1,7 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR Free Software Foundation, Inc.
 # Allan Nordhøy <epost@anotheragency.no>, 2020, 2021, 2022.
-# Hans-Christoph Steiner <hans@guardianproject.info>, 2020, 2022.
+# Hans-Christoph Steiner <hans@guardianproject.info>, 2020, 2022, 2026.
 # mondstern <mondstern@snopyta.org>, 2021.
 # Telaneo <post@telaneo.net>, 2025, 2026.
 msgid ""
@@ -9,15 +9,15 @@ msgstr ""
 "Project-Id-Version: fdroidserver 0.8-74-ga380b9f\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2026-05-19 20:45+0200\n"
-"PO-Revision-Date: 2026-03-06 14:35+0000\n"
-"Last-Translator: Telaneo <post@telaneo.net>\n"
+"PO-Revision-Date: 2026-05-20 14:16+0000\n"
+"Last-Translator: Hans-Christoph Steiner <hans@guardianproject.info>\n"
 "Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects/f-droid/fdroidserver/nb_NO/>\n"
 "Language: nb_NO\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.17-dev\n"
+"X-Generator: Weblate 2026.6.dev0\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -69,9 +69,9 @@ msgid "\"{apkfilename}\" is already installed on {dev}."
 msgstr "«{apkfilename}» er allerede installert på {dev}."
 
 #: ../fdroidserver/signindex.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "\"{name}\" has bad SHA-256: {sha256}"
-msgstr "%s har en dårlig SHA-256-hash: %s"
+msgstr "\"{name}\" har en dårlig SHA-256-hash: {sha256}"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -350,9 +350,9 @@ msgid "Base URL to mirror, can include the index signing key using the query str
 msgstr "Grunnettadresse å speile, kan inkludere indekssigneringsnøkkelen ved bruk av spørreingsstrengen: ?fingerpring="
 
 #: ../fdroidserver/lint.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Branch '{branch}' used as commit in build '{versionCode}'"
-msgstr "Forgrening '{branch}' brukt som innsendelse i bygg '{versionName}'"
+msgstr "Forgrening '{branch}' brukt som innsendelse i bygg '{versionCode}'"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
@@ -1083,9 +1083,9 @@ msgid "Invalid VercodeOperation: {field}"
 msgstr "Ugyldig VercodeOperation: {field}"
 
 #: ../fdroidserver/lint.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Invalid VercodeOperation: {invalid_ops}"
-msgstr "Ugyldig VercodeOperation: {field}"
+msgstr "Ugyldig VercodeOperation: {invalid_ops}"
 
 #. Translators: https://developer.android.com/build/configure-app-module#set-application-id
 #: ../fdroidserver/common.py
@@ -1655,9 +1655,9 @@ msgid "Scan the source code of a package"
 msgstr "Skann kildekoden til en pakke"
 
 #: ../fdroidserver/scanner.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Scanner found {count} problems in {apk}"
-msgstr "Skanner fant {count} problemer i {appid}:"
+msgstr "Skanner fant {count} problemer i {apk}:"
 
 #: ../fdroidserver/scanner.py
 #, fuzzy, python-brace-format
@@ -1919,9 +1919,9 @@ msgid "Unknown exception found!"
 msgstr "Ukjent unntak møtt!"
 
 #: ../fdroidserver/lint.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Unknown file '{filename}' in build '{versionCode}'"
-msgstr "Ukjent fil \"{filename}\" i bygg \"{versionName}\"."
+msgstr "Ukjent fil \"{filename}\" i bygg \"{versionCode}\"."
 
 #: ../fdroidserver/metadata.py
 #, python-format
@@ -2072,7 +2072,7 @@ msgstr "Bruker eksisterende nøkkellager \"{path}\"."
 #: ../fdroidserver/deploy.py
 #, fuzzy, python-brace-format
 msgid "Using rclone to sync to \"{name}\""
-msgstr "Bruk s3cmd til å synkronisere med: {url}"
+msgstr "Bruk rclone til å synkronisere med: {name}"
 
 #: ../fdroidserver/__main__.py
 msgid "Valid commands are:"
@@ -2700,7 +2700,7 @@ msgstr "{appid} mangler {name}."
 #: ../fdroidserver/lint.py
 #, fuzzy, python-brace-format
 msgid "{appid}: Unknown extlib {path} in build '{versionCode}'"
-msgstr "{appid}: Ukjent extlib {path} i bygg \"{versionName}\""
+msgstr "{appid}: Ukjent extlib {path} i bygg \"{versionCode}\""
 
 #: ../fdroidserver/scanner.py
 #, fuzzy, python-brace-format

@@ -10,13 +10,14 @@
 # Elyas Rahimi <elyas.rahimi.4.28@gmail.com>, 2026.
 # Estakisha <sanadie4023@gmail.com>, 2026.
 # Basheer Radman <ba2014sheer@gmail.com>, 2026.
+# Hans-Christoph Steiner <hans@guardianproject.info>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 2.1-273-g54e84d87\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2026-05-19 20:45+0200\n"
-"PO-Revision-Date: 2026-05-19 19:06+0000\n"
-"Last-Translator: Basheer Radman <ba2014sheer@gmail.com>\n"
+"PO-Revision-Date: 2026-05-20 14:16+0000\n"
+"Last-Translator: Hans-Christoph Steiner <hans@guardianproject.info>\n"
 "Language-Team: Arabic <https://hosted.weblate.org/projects/f-droid/fdroidserver/ar/>\n"
 "Language: ar\n"
 "MIME-Version: 1.0\n"
@@ -187,7 +188,7 @@ msgid "'{path}' has invalid format, it should be a dictionary!"
 msgstr "'{path}' له تنسيق غير صالح، يجب أن يكون قاموسًا!"
 
 #: ../fdroidserver/lint.py ../fdroidserver/metadata.py
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "'{value}' is not a valid {field} in {appid}. Regex pattern: {pattern}"
 msgstr "'{value}' ليس حقلاً صالحاً في {appid}. نمط التعبير النمطي هو: {pattern}"
 
