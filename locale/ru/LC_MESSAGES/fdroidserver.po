@@ -25,7 +25,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2026-05-19 20:45+0200\n"
 "PO-Revision-Date: 2026-06-08 19:44+0000\n"
-"Last-Translator: Maxim Proskurnya <max@pin2.me>\n"
+"Last-Translator: Andrey <andrey@mailbox.org>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/f-droid/fdroidserver/ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
@@ -54,7 +54,7 @@ msgstr ""
 #: /usr/lib/python3.13/argparse.py
 #, python-format
 msgid " (default: %(default)s)"
-msgstr ""
+msgstr " (по умолчанию: %(default)s)"
 
 #: ../fdroidserver/lint.py
 #, python-format
@@ -111,7 +111,7 @@ msgstr "\"{url}\" — не корректный URL!"
 #: /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "%(heading)s:"
-msgstr ""
+msgstr "%(heading)s:"
 
 #: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
@@ -119,9 +119,9 @@ msgid "%(prog)s: error: %(message)s\n"
 msgstr "%(prog)s: ошибка: %(message)s\n"
 
 #: /usr/lib/python3.13/argparse.py
-#, fuzzy, python-format
+#, python-format
 msgid "%(prog)s: warning: %(message)s\n"
-msgstr "%(prog)s: ошибка: %(message)s\n"
+msgstr "%(prog)s: предупреждение: %(message)s\n"
 
 #: ../fdroidserver/publish.py
 #, python-format
@@ -381,7 +381,7 @@ msgstr "Неработающая символическая ссылка: {path}
 
 #: ../fdroidserver/__main__.py
 msgid "Build a package from source"
-msgstr "Собрать пакет из исходников"
+msgstr "Сборка пакета из исходного кода"
 
 #: ../fdroidserver/build.py
 msgid "Build all applications available"
@@ -599,7 +599,7 @@ msgstr "В описании встречаются одинаковые стро
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "Description of length {length} is over the {limit} char limit"
-msgstr "Количество знаков в описании — {length}. Это больше, чем лимит {limit}."
+msgstr "Количество знаков в описании — {length}. Это больше, чем лимит {limit}"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
@@ -639,7 +639,7 @@ msgstr "Не удалять сгенерированные приватные к
 
 #: ../fdroidserver/scanner.py
 msgid "Do not throw an error on APKs with the debuggable flag set."
-msgstr ""
+msgstr "Не выдавать ошибку для APK-файлов с установленным флагом отладки."
 
 #: ../fdroidserver/build.py
 msgid "Don't create a source tarball, useful when testing a build"
@@ -859,7 +859,7 @@ msgstr "Принудительно сканировать отключенные
 
 #: ../fdroidserver/rewritemeta.py
 msgid "Format file from stdin and output the result to stdout"
-msgstr ""
+msgstr "Форматирование файла из stdin и вывод результата на stdout"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -943,7 +943,7 @@ msgstr "Не удалось получить данные из репозито�
 #: ../fdroidserver/common.py
 #, python-format
 msgid "Git remote set-head failed: \"%s\""
-msgstr "Не удалось настроить HEAD для удаленного репозитория (git remote set-head): \"%s\""
+msgstr "Не удалось определить ветку по умолчанию для удаленного репозитория Git: \"%s\""
 
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
 #: ../fdroidserver/common.py
@@ -1552,15 +1552,15 @@ msgstr "Переименовать все APK файлы, не соответс�
 
 #: ../fdroidserver/lint.py
 msgid "Repo: git URLs must use https://"
-msgstr ""
+msgstr "Репозиторий: URL Git должны начинаться с https://"
 
 #: ../fdroidserver/lint.py
 msgid "Repo: srclib URLs must be only a srclib name, not a path or URL."
-msgstr ""
+msgstr "Репозиторий: URL srclib должны содержать только имя srclib, а не путь или URL."
 
 #: ../fdroidserver/lint.py
 msgid "Repo: srclib URLs must be the name of an existing srclib!"
-msgstr ""
+msgstr "Репозиторий: URL srclib должны соответствовать названиям существующих библиотек srclib!"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -1765,9 +1765,8 @@ msgid "System clock is older than date in {path}!"
 msgstr "Системное время отстает от date в {path}!"
 
 #: ../fdroidserver/checkupdates.py
-#, fuzzy
 msgid "Tags update mode only works for git repositories currently"
-msgstr "Режим обновления тегов в настоящее время работает только для репозиториев git, hg, bzr и git-svn"
+msgstr "Режим обновления тегов в настоящее время работает только для репозиториев git"
 
 #: ../fdroidserver/checkupdates.py
 msgid "Tags update mode used in git-svn, but the repo was not set up with tags"
@@ -1825,7 +1824,7 @@ msgstr "Это приложение имеет слабую сигнатуру �
 
 #: ../fdroidserver/common.py
 msgid "This command requires a signing key, you can create one using: fdroid update --create-key"
-msgstr ""
+msgstr "Для выполнения этой команды требуется ключ подписи. Его можно создать с помощью команды: fdroid update --create-key"
 
 #: ../fdroidserver/mirror.py
 msgid "This command should never be used to mirror f-droid.org! A full copy requires more than 600GB."
@@ -1833,7 +1832,7 @@ msgstr "Эта команда никогда не должна использо�
 
 #: ../fdroidserver/common.py
 msgid "This is a repository of apps to be used with F-Droid. Applications in this repository are either official binaries built by the original application developers, or are binaries built from source by the admin of f-droid.org using the tools on https://gitlab.com/fdroid."
-msgstr "Это репозиторий приложений, предназначенных для использования в FDroid. Приложения в этом репозитории являются либо официальными бинарными файлами, созданными разработчиками оригинального приложения, либо бинарными файлами, созданными f-droid.org из исходного кода с помощью инструментов на https://gitlab.com/fdroid."
+msgstr "Это репозиторий приложений для использования с F-Droid. Приложения в этом репозитории представляют собой либо официальные бинарные файлы, скомпилированные разработчиками приложений, либо бинарные файлы, скомпилированные из исходного кода администратором сайта f-droid.org с помощью инструментов, доступных на https:/gitlab.com/fdroid."
 
 #: ../fdroidserver/import_subcommand.py
 #, python-format
@@ -1860,18 +1859,17 @@ msgstr ""
 "и https://f-droid.org/docs/Signing_Process"
 
 #: ../fdroidserver/lint.py
-#, fuzzy
 msgid "URL must start with https://"
-msgstr "URL должна начинаться с https:// или http://"
+msgstr "URL должен начинаться с https://"
 
 #: ../fdroidserver/lint.py
 msgid "URL must start with https:// or http://"
 msgstr "URL должна начинаться с https:// или http://"
 
 #: ../fdroidserver/lint.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "URL shorteners should not be used ({domain})"
-msgstr "URL-адреса сокращать нельзя"
+msgstr "Не следует использовать сервисы сокращения URL ({domain})"
 
 #: ../fdroidserver/lint.py
 msgid "Unexpected license tag \"{}\"! Only use FSF or OSI approved tags from https://spdx.org/license-list"
@@ -1888,7 +1886,7 @@ msgstr "Неизвестная запись {key} в {configname}"
 
 #: ../fdroidserver/__main__.py
 msgid "Unknown exception found!"
-msgstr "Произошла неизвестная ошибка!"
+msgstr "Обнаружено неизвестное исключение!"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
@@ -1907,7 +1905,7 @@ msgstr "Неизвестный формат метаданных: {path} (исп
 
 #: ../fdroidserver/common.py
 msgid "Unknown version of aapt, might cause problems: "
-msgstr "Неизвестная версия AAPT. Это может сломать сборку: "
+msgstr "Неизвестная версия aapt может вызвать проблемы: "
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
@@ -2173,7 +2171,7 @@ msgstr "аргумент %(argument_name)s: %(message)s"
 #: /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "argument '%(argument_name)s' is deprecated"
-msgstr ""
+msgstr "аргумент '%(argument_name)s' устарел"
 
 #: ../fdroidserver/nightly.py
 msgid "attempting bare SSH connection to test deploy key:"
@@ -2218,7 +2216,7 @@ msgstr "клонирование {url}"
 #: /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "command '%(parser_name)s' is deprecated"
-msgstr ""
+msgstr "команда '%(parser_name)s' устарела"
 
 #: ../fdroidserver/__main__.py
 msgid "commands from plugin modules:"
@@ -2330,7 +2328,7 @@ msgstr "принудительно обрабатывать ошибки как 
 
 #: ../fdroidserver/common.py
 msgid "forceversion requires versionName to be set"
-msgstr ""
+msgstr "Для параметра forceversion необходимо указать значение versionName"
 
 #: ../fdroidserver/common.py
 msgid "git svn clone failed"
@@ -2444,7 +2442,7 @@ msgstr "принимает строки, списки и туплы"
 #: /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "option '%(option)s' is deprecated"
-msgstr ""
+msgstr "опция '%(option)s' устарела"
 
 #: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 msgid "options"
@@ -2479,14 +2477,14 @@ msgid "refuse downloading via insecure HTTP connection (use HTTPS or specify --n
 msgstr "использовать для загрузки небезопасное HTTP-соединение не стоит (пользуйтесь HTTPS или укажите --no-check-https): {apkfilename}"
 
 #: ../fdroidserver/index.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "repo_icon \"{repo_icon}\" does not exist in \"{icon_dir}\", generating placeholder."
-msgstr "значок репозитория (repo_icon) 'repo/icons/%s' не существует, генерируется суррогат."
+msgstr "Значок \"{repo_icon}\" отсутствует в папке \"{icon_dir}\", создается плейсхолдер."
 
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "repo_icon should be a filename ({name}), not a path!"
-msgstr ""
+msgstr "repo_icon должен быть названием файла ({name}), а не путем!"
 
 #: ../fdroidserver/common.py
 msgid "repo_url needs to end with /repo"
@@ -2512,7 +2510,7 @@ msgstr "разделяемая библиотека"
 
 #: /usr/lib/python3.13/argparse.py
 msgid "show program's version number and exit"
-msgstr ""
+msgstr "отобразить номер версии программы и завершить работу"
 
 #: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 msgid "show this help message and exit"
@@ -2545,7 +2543,7 @@ msgstr "статическая библиотека"
 
 #: /usr/lib/python3.13/argparse.py
 msgid "subcommands"
-msgstr ""
+msgstr "подкоманды"
 
 #: ../fdroidserver/build.py
 #, python-brace-format
@@ -2555,7 +2553,7 @@ msgstr "предоставленный эталонный двоичный фа�
 #: ../fdroidserver/scanner.py
 #, python-brace-format
 msgid "suspicious permissions {st_mode:o}"
-msgstr ""
+msgstr "подозрительные разрешения {st_mode:o}"
 
 #: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
@@ -2646,9 +2644,9 @@ msgid "{appid} is missing {name}"
 msgstr "В {appid} нет {name}"
 
 #: ../fdroidserver/lint.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{appid}: Unknown extlib {path} in build '{versionCode}'"
-msgstr "{appid}: неизвестная внешняя библиотека {path} в сборке '{versionCode}'"
+msgstr "{appid}: Неизвестная библиотека расширения {path} в сборке \"{versionCode}\""
 
 #: ../fdroidserver/scanner.py
 #, python-brace-format
@@ -2681,9 +2679,9 @@ msgid "{file} is blank or corrupt!"
 msgstr "{file} пустой или поврежденный!"
 
 #: ../fdroidserver/update.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{name} \"{repo_icon}\" does not exist in \"{icon_dir}/\"! Check \"config.yml\"."
-msgstr "{name}: \"{section}/icons/{path}\" не существует! Поправьте свой \"config.yml\"."
+msgstr "{name} \"{repo_icon}\" отсутствует в \"{icon_dir}/\"! Проверьте \"config.yml\"."
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -2713,7 +2711,7 @@ msgstr "{path} был отмечен virustotal {count} раз:"
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "{path} has no '{fieldname}'"
-msgstr ""
+msgstr "{path} не имеет '{fieldname}'"
 
 #: ../fdroidserver/install.py
 #, python-brace-format
@@ -2763,7 +2761,7 @@ msgstr "{path}: {error}"
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "{tag} requires versionName to be set"
-msgstr ""
+msgstr "{tag} требует, чтобы был указан параметр versionName"
 
 #: ../fdroidserver/mirror.py
 #, python-brace-format
