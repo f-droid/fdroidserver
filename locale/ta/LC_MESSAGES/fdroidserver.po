@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 2.1-273-g54e84d87\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2026-05-19 17:44+0200\n"
+"POT-Creation-Date: 2026-05-19 20:45+0200\n"
 "PO-Revision-Date: 2025-07-09 20:14+0000\n"
 "Last-Translator: தமிழ்நேரம் <anishprabu.t@gmail.com>\n"
 "Language-Team: Tamil <https://hosted.weblate.org/projects/f-droid/fdroidserver/ta/>\n"
@@ -78,11 +78,6 @@ msgstr ""
 msgid "\"{path}\" contains recent {name} ({version})"
 msgstr "\"{path}\" அண்மைக் கால {name} ({version})"
 
-#: ../fdroidserver/deploy.py
-#, python-brace-format
-msgid "\"{path}\" exists but s3cmd is not installed!"
-msgstr "\"{path}\" உள்ளது, ஆனால் S3CMD நிறுவப்படவில்லை!"
-
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "\"{path}\" is not a supported file format (use: metadata/*.yml)"
@@ -132,11 +127,6 @@ msgstr "%r அழைக்க முடியாது"
 #, python-format
 msgid "%s did not produce a dict!"
 msgstr "%s ஒரு கட்டளையை உருவாக்கவில்லை!"
-
-#: ../fdroidserver/signindex.py
-#, python-format
-msgid "%s has bad SHA-256: %s"
-msgstr "%s மோசமான SHA-256: %s"
 
 #: ../fdroidserver/lint.py
 #, python-format
@@ -368,11 +358,6 @@ msgstr "கிளை '{branch}' '{versionName}'கட்டமைப்பில
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
-msgid "Branch '{branch}' used as commit in build '{versionName}'"
-msgstr "கிளை '{branch}' '{versionName}'கட்டமைப்பில் உறுதிமொழியாக பயன்படுத்தப்படுகிறது"
-
-#: ../fdroidserver/lint.py
-#, python-brace-format
 msgid "Branch '{branch}' used as commit in srclib '{srclib}'"
 msgstr "கிளை '{branch}' '{srclib}'இல் உறுதிமொழியாக பயன்படுத்தப்படுகிறது"
 
@@ -494,25 +479,10 @@ msgstr "முரண்பட்ட வாதங்கள்: '--verbose' மற
 msgid "Could not find '{command}' on your system"
 msgstr "உங்கள் கணினியில் '{command}' கண்டுபிடிக்க முடியவில்லை"
 
-#. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
-#: ../fdroidserver/import_subcommand.py
-msgid "Could not find latest version code"
-msgstr "அண்மைக் கால பதிப்பு குறியீட்டைக் கண்டுபிடிக்க முடியவில்லை"
-
-#. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vname
-#: ../fdroidserver/import_subcommand.py
-msgid "Could not find latest version name"
-msgstr "அண்மைக் கால பதிப்பு பெயரைக் கண்டுபிடிக்க முடியவில்லை"
-
 #: ../fdroidserver/import_subcommand.py
 #, fuzzy
 msgid "Could not find latest versionCode"
 msgstr "அண்மைக் கால பதிப்பு குறியீட்டைக் கண்டுபிடிக்க முடியவில்லை"
-
-#: ../fdroidserver/import_subcommand.py
-#, fuzzy
-msgid "Could not find latest versionName"
-msgstr "அண்மைக் கால பதிப்பு பெயரைக் கண்டுபிடிக்க முடியவில்லை"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -551,16 +521,6 @@ msgstr "தொகுப்பு ஐடியைக் கண்டுபிட�
 msgid "Cowardily refusing to overwrite existing signing key setup!"
 msgstr "ஏற்கனவே கையொப்பமிடும் விசை அமைப்பை மேலெழுத மறுக்கிறது!"
 
-#: ../fdroidserver/deploy.py
-#, python-brace-format
-msgid "Created new container \"{name}\""
-msgstr "புதிய கொள்கலனை உருவாக்கியது \"{name}\""
-
-#: ../fdroidserver/deploy.py
-#, python-brace-format
-msgid "Creating \"{path}\" for configuring s3cmd."
-msgstr "S3CMD ஐ கட்டமைக்க \"{path}\" ஐ உருவாக்குதல்."
-
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Creating empty {config_file}"
@@ -569,11 +529,6 @@ msgstr "வெற்று {config_file} உருவாக்குகிறத
 #: ../fdroidserver/publish.py
 msgid "Creating log directory"
 msgstr "பதிவு கோப்பகத்தை உருவாக்குதல்"
-
-#: ../fdroidserver/deploy.py
-#, python-brace-format
-msgid "Creating new S3 bucket: {url}"
-msgstr "புதிய எச் 3 வாளியை உருவாக்குதல்: {url}"
 
 #: ../fdroidserver/publish.py
 msgid "Creating output directory"
@@ -827,11 +782,6 @@ msgstr "தோல்வியுற்ற வாசிப்பு {path}: {erro
 #, python-brace-format
 msgid "Failed resizing {path}: {error}"
 msgstr "மறுஅளவு தோல்வியுற்றது {path}: {error}"
-
-#: ../fdroidserver/deploy.py
-#, python-brace-format
-msgid "Failed to create S3 bucket: {url}"
-msgstr "S3 வாளியை உருவாக்குவதில் தோல்வி: {url}"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -1122,10 +1072,6 @@ msgstr "தவறான VERCODEOPERATION: {invalid_ops}"
 #, python-brace-format
 msgid "Invalid application ID {appid}"
 msgstr "தவறான பயன்பாட்டு ஐடி {appid}"
-
-#: ../fdroidserver/lint.py
-msgid "Invalid bulleted list"
-msgstr "தவறான புல்லட் பட்டியல்"
 
 #: ../fdroidserver/common.py
 #, python-format
@@ -1458,10 +1404,6 @@ msgstr "தொகுப்பு \"{appid}\" ஏற்கனவே உள்ள�
 msgid "Parsing manifest at '{path}'"
 msgstr "'{path}' இல் மேனிஃபெச்டை பாகுபடுத்துதல்"
 
-#: ../fdroidserver/common.py
-msgid "Password required with username"
-msgstr "பயனர்பெயருடன் கடவுச்சொல் தேவை"
-
 #: ../fdroidserver/import_subcommand.py
 msgid "Path to main Android project subdirectory, if not in root."
 msgstr "முதன்மையான ஆண்ட்ராய்டு திட்ட துணை அடைவுக்கான பாதை, வேரில் இல்லையென்றால்."
@@ -1491,11 +1433,6 @@ msgstr "உங்கள் இருப்பிடத்தின் அடி�
 #, python-brace-format
 msgid "Problem with ZIP file \"{apkfile}\": {error}"
 msgstr ""
-
-#: ../fdroidserver/scanner.py
-#, python-format
-msgid "Problem with ZIP file: %s, error %s"
-msgstr "சிப் கோப்பில் சிக்கல்: %s, பிழை %s"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -1657,10 +1594,6 @@ msgstr "-Debug.apk ஐக் கண்டுபிடிக்க {cibase}க்
 msgid "Run rewritemeta to fix formatting"
 msgstr "வடிவமைப்பை சரிசெய்ய மீண்டும் எழுதுங்கள்"
 
-#: ../fdroidserver/deploy.py
-msgid "Running first pass with MD5 checking disabled"
-msgstr "MD5 உடன் முதல் மொழி இயக்குகிறது"
-
 #: ../fdroidserver/mirror.py
 #, python-brace-format
 msgid "Running wget in {path}"
@@ -1707,11 +1640,6 @@ msgstr "கூடுதல் கையொப்பமிடும் தொக�
 #: ../fdroidserver/scanner.py
 msgid "Scanning APK with dexdump for known non-free classes."
 msgstr "அறியப்படாத இல்லாத வகுப்புகளுக்கு டெக்ச்டம்புடன் APK ஐ ச்கேன் செய்கிறது."
-
-#: ../fdroidserver/common.py
-#, python-brace-format
-msgid "Set NDK {release} ({version}) up"
-msgstr "NDK {release} ({version}) மேலே அமைக்கவும்"
 
 #: ../fdroidserver/common.py
 msgid "Set clock to that time using:"
@@ -1827,10 +1755,6 @@ msgid "Tags update mode only works for git repositories currently"
 msgstr ""
 
 #: ../fdroidserver/checkupdates.py
-msgid "Tags update mode only works for git, hg, bzr and git-svn repositories currently"
-msgstr "குறிச்சொற்கள் புதுப்பிப்பு பயன்முறை தற்போது git, Hg, BZR மற்றும் GIT-SVN களஞ்சியங்களுக்கு மட்டுமே வேலை செய்கிறது"
-
-#: ../fdroidserver/checkupdates.py
 msgid "Tags update mode used in git-svn, but the repo was not set up with tags"
 msgstr "குறிச்சொற்கள் git-svn இல் பயன்படுத்தப்படும் புதுப்பிப்பு பயன்முறை, ஆனால் ரெப்போ குறிச்சொற்களுடன் அமைக்கப்படவில்லை"
 
@@ -1841,12 +1765,6 @@ msgstr "சோதனை பயன்முறை - வெளியீடு ஏ�
 #: ../fdroidserver/index.py
 msgid "The \"qrcode\" Python package is not installed (e.g. apt-get install python3-qrcode)!"
 msgstr "\"QRCode\" பைதான் தொகுப்பு நிறுவப்படவில்லை (எ.கா. apt-get install python3-qrcode)!"
-
-#. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
-#: ../fdroidserver/update.py
-#, python-brace-format
-msgid "The OBB version code must come after \"{name}.\":"
-msgstr "OBB பதிப்பு குறியீடு \"{name}\" க்குப் பிறகு வர வேண்டும்.::::"
 
 #: ../fdroidserver/update.py
 #, fuzzy, python-brace-format
@@ -1926,14 +1844,6 @@ msgstr ""
 " மேலும் தகவலுக்கு: https://f-droid.org/docs/setup_an_f-droid_app_repo\n"
 " மற்றும் https://f-droid.org/docs/signing_process"
 
-#: ../fdroidserver/deploy.py
-msgid "To use awsbucket, awssecretkey and awsaccesskeyid must also be set in config.yml!"
-msgstr "AWSBUCKET, AWSSECRETKEY மற்றும் AWSACCESSKEYID ஐப் பயன்படுத்தவும் config.yml இல் அமைக்கப்பட வேண்டும்!"
-
-#: ../fdroidserver/deploy.py
-msgid "To use rclone, rclone_config and awsbucket must be set in config.yml!"
-msgstr "RCLONE ஐப் பயன்படுத்த, RCLONE_CONFIG மற்றும் AWSBUCKET ஆகியவை config.yml இல் அமைக்கப்பட வேண்டும்!"
-
 #: ../fdroidserver/lint.py
 #, fuzzy
 msgid "URL must start with https://"
@@ -1944,18 +1854,9 @@ msgid "URL must start with https:// or http://"
 msgstr "முகவரி https: // அல்லது http: // உடன் தொடங்க வேண்டும்"
 
 #: ../fdroidserver/lint.py
-msgid "URL shorteners should not be used"
-msgstr "முகவரி சுருக்கங்கள் பயன்படுத்தப்படக்கூடாது"
-
-#: ../fdroidserver/lint.py
 #, fuzzy, python-brace-format
 msgid "URL shorteners should not be used ({domain})"
 msgstr "முகவரி சுருக்கங்கள் பயன்படுத்தப்படக்கூடாது"
-
-#: ../fdroidserver/lint.py
-#, python-brace-format
-msgid "URL {url} in Description: {error}"
-msgstr "விளக்கத்தில் முகவரி {url}: {error}"
 
 #: ../fdroidserver/lint.py
 msgid "Unexpected license tag \"{}\"! Only use FSF or OSI approved tags from https://spdx.org/license-list"
@@ -1979,11 +1880,6 @@ msgstr "அறியப்படாத விதிவிலக்கு கண�
 msgid "Unknown file '{filename}' in build '{versionCode}'"
 msgstr "அறியப்படாத கோப்பு '{filename}' இந்தக் கட்டமைப்பில் '{versionName}'"
 
-#: ../fdroidserver/lint.py
-#, python-brace-format
-msgid "Unknown file '{filename}' in build '{versionName}'"
-msgstr "அறியப்படாத கோப்பு '{filename}' இந்தக் கட்டமைப்பில் '{versionName}'"
-
 #: ../fdroidserver/metadata.py
 #, python-format
 msgid "Unknown metadata format: %s"
@@ -1997,14 +1893,6 @@ msgstr "அறியப்படாத மேனிலை தரவு வடி
 #: ../fdroidserver/common.py
 msgid "Unknown version of aapt, might cause problems: "
 msgstr "AAPT இன் அறியப்படாத பதிப்பு, சிக்கல்களை ஏற்படுத்தக்கூடும்: "
-
-#: ../fdroidserver/lint.py
-msgid "Unnecessary leading space"
-msgstr "தேவையற்ற முன்னணி இடம்"
-
-#: ../fdroidserver/lint.py
-msgid "Unnecessary trailing space"
-msgstr "தேவையற்ற பின்தங்கிய இடம்"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
@@ -2060,17 +1948,6 @@ msgstr "முகவரி க்கான பைனரி வெளிப்ப
 msgid "UpdateCheckData has invalid URL: {url}"
 msgstr "UpdateCheckData இல் தவறான முகவரி உள்ளது: {url}"
 
-#. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
-#: ../fdroidserver/lint.py
-#, python-brace-format
-msgid "UpdateCheckData must match the version code as integer (\\d or [0-9]): {codeex}"
-msgstr "UpdateCheckData பதிப்பு குறியீட்டை முழு எண் (\\ டி அல்லது [0-9]) உடன் பொருத்த வேண்டும்: {codeex}"
-
-#: ../fdroidserver/lint.py
-#, fuzzy, python-brace-format
-msgid "UpdateCheckData must match the versionCode as integer (\\d or [0-9]): {codeex}"
-msgstr "UpdateCheckData பதிப்பு குறியீட்டை முழு எண் (\\ டி அல்லது [0-9]) உடன் பொருத்த வேண்டும்: {codeex}"
-
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "UpdateCheckData must use HTTPS URL: {url}"
@@ -2100,10 +1977,6 @@ msgstr "Uploading {apkfilename} பெறுநர் androidobservatory.org"
 msgid "Uploading {apkfilename} to virustotal"
 msgstr "Uploading {apkfilename} பெறுநர் virustotal"
 
-#: ../fdroidserver/lint.py
-msgid "Use /HEAD instead of /master or /main to point at a file in the default branch"
-msgstr "Use /HEAD instead of /master or /main பெறுநர் புள்ளியம் at a கோப்பு in the இயல்புநிலை branch"
-
 #: ../fdroidserver/update.py
 msgid "Use `fdroid update -c` to create it."
 msgstr "Use `fdroid புதுப்பிப்பு -c` பெறுநர் create it."
@@ -2117,19 +1990,9 @@ msgid "Use date from APK instead of current time for newly added APKs"
 msgstr "Use திகதி இருந்து APK instead of மின்னோட்ட்ம், ஓட்டம் time க்கு newly added APKs"
 
 #: ../fdroidserver/deploy.py
-#, python-brace-format
-msgid "Using \"{path}\" for configuring s3cmd."
-msgstr "Using \"{path}\" க்கு configuring s3cmd."
-
-#: ../fdroidserver/deploy.py
 #, fuzzy, python-brace-format
 msgid "Using \"{path}\" for rclone config."
 msgstr "Using \"{path}\" க்கு configuring s3cmd."
-
-#: ../fdroidserver/deploy.py
-#, python-brace-format
-msgid "Using \"{path}\" for syncing with remote storage."
-msgstr "Using \"{path}\" க்கு syncing with remote storage."
 
 #: ../fdroidserver/common.py
 msgid "Using APK Signature v2"
@@ -2161,16 +2024,6 @@ msgstr "இருக்கும் கீச்டோர் \"{path}\" ஐப�
 #, fuzzy, python-brace-format
 msgid "Using rclone to sync to \"{name}\""
 msgstr "Using rclone பெறுநர் sync with: {url}"
-
-#: ../fdroidserver/deploy.py
-#, python-brace-format
-msgid "Using rclone to sync with: {url}"
-msgstr "Using rclone பெறுநர் sync with: {url}"
-
-#: ../fdroidserver/deploy.py
-#, python-brace-format
-msgid "Using s3cmd to sync with: {url}"
-msgstr "Using s3cmd பெறுநர் sync with: {url}"
 
 #: ../fdroidserver/__main__.py
 msgid "Valid commands are:"
@@ -2609,11 +2462,6 @@ msgid "refuse downloading via insecure HTTP connection (use HTTPS or specify --n
 msgstr "பாதுகாப்பற்ற HTTP இணைப்பு வழியாக பதிவிறக்குவதை மறுக்கவும் (https ஐப் பயன்படுத்தவும் அல்லது-no-https-check ஐக் குறிப்பிடவும்): {apkfilename}"
 
 #: ../fdroidserver/index.py
-#, python-format
-msgid "repo_icon \"repo/icons/%s\" does not exist, generating placeholder."
-msgstr "ரெப்போ_கான் \"ரெப்போ/ஐகான்கள்/%s\" இல்லை, ஒதுக்கீட்டு ஒதுக்கிடத்தை உருவாக்குகிறது."
-
-#: ../fdroidserver/index.py
 #, fuzzy, python-brace-format
 msgid "repo_icon \"{repo_icon}\" does not exist in \"{icon_dir}\", generating placeholder."
 msgstr "ரெப்போ_கான் \"ரெப்போ/ஐகான்கள்/%s\" இல்லை, ஒதுக்கீட்டு ஒதுக்கிடத்தை உருவாக்குகிறது."
@@ -2631,16 +2479,6 @@ msgstr "ரெப்போ_ஆர்ல் /ரெப்போவுடன் �
 #, python-brace-format
 msgid "rsync is missing or broken: {error}"
 msgstr "RSYNC காணவில்லை அல்லது உடைந்தது: {error}"
-
-#: ../fdroidserver/deploy.py
-#, python-brace-format
-msgid "s3cmd sync indexes {path} to {url} and delete"
-msgstr "S3CMD ஒத்திசைவு குறியீடுகள் {path} முதல் {url} மற்றும் நீக்கு"
-
-#: ../fdroidserver/deploy.py
-#, python-brace-format
-msgid "s3cmd syncs indexes from {path} to {url} and deletes removed"
-msgstr "S3CMD ஒத்திசைவு குறியீடுகளை {path} முதல் {url} வரை ஒத்திசைத்து நீக்கப்பட்டது"
 
 #: ../fdroidserver/scanner.py
 #, python-brace-format
@@ -2737,11 +2575,6 @@ msgid "usage: "
 msgstr "பயன்பாடு: "
 
 #: ../fdroidserver/deploy.py
-#, python-brace-format
-msgid "using Apache libcloud to sync with {url}"
-msgstr "{url} உடன் ஒத்திசைக்க அப்பாச்சி லிப்குட்டைப் பயன்படுத்துதல்"
-
-#: ../fdroidserver/deploy.py
 msgid "virustotal.com is rate limiting, waiting to retry..."
 msgstr "wirustotal.com என்பது விகிதத்தைக் கட்டுப்படுத்துகிறது, மீண்டும் முயற்சிக்க காத்திருக்கிறது ..."
 
@@ -2799,11 +2632,6 @@ msgstr "{appid} காணவில்லை {name}"
 msgid "{appid}: Unknown extlib {path} in build '{versionCode}'"
 msgstr "{appid}: அறியப்படாத எக்ச்ட்லிப் {path} உருவாக்க '{versionName}'"
 
-#: ../fdroidserver/lint.py
-#, python-brace-format
-msgid "{appid}: Unknown extlib {path} in build '{versionName}'"
-msgstr "{appid}: அறியப்படாத எக்ச்ட்லிப் {path} உருவாக்க '{versionName}'"
-
 #: ../fdroidserver/scanner.py
 #, python-brace-format
 msgid "{appid}: no builds specified, running on current source state"
@@ -2837,11 +2665,6 @@ msgstr "{file} வெற்று அல்லது ஊழல் நிறை�
 #: ../fdroidserver/update.py
 #, fuzzy, python-brace-format
 msgid "{name} \"{repo_icon}\" does not exist in \"{icon_dir}/\"! Check \"config.yml\"."
-msgstr "{name} \"{section}/ஐகான்கள்/{path}\" இல்லை! \"Config.yml\" ஐ சரிபார்க்கவும்."
-
-#: ../fdroidserver/update.py
-#, python-brace-format
-msgid "{name} \"{section}/icons/{path}\" does not exist! Check \"config.yml\"."
 msgstr "{name} \"{section}/ஐகான்கள்/{path}\" இல்லை! \"Config.yml\" ஐ சரிபார்க்கவும்."
 
 #: ../fdroidserver/update.py
@@ -2945,3 +2768,139 @@ msgid "{} build succeeded"
 msgid_plural "{} builds succeeded"
 msgstr[0] "{} உருவாக்கம் செய் பெற்றது"
 msgstr[1] "{} கட்டடங்கள் செய் பெற்றன"
+
+#, python-brace-format
+#~ msgid "\"{path}\" exists but s3cmd is not installed!"
+#~ msgstr "\"{path}\" உள்ளது, ஆனால் S3CMD நிறுவப்படவில்லை!"
+
+#, python-format
+#~ msgid "%s has bad SHA-256: %s"
+#~ msgstr "%s மோசமான SHA-256: %s"
+
+#, python-brace-format
+#~ msgid "Branch '{branch}' used as commit in build '{versionName}'"
+#~ msgstr "கிளை '{branch}' '{versionName}'கட்டமைப்பில் உறுதிமொழியாக பயன்படுத்தப்படுகிறது"
+
+#~ msgid "Could not find latest version code"
+#~ msgstr "அண்மைக் கால பதிப்பு குறியீட்டைக் கண்டுபிடிக்க முடியவில்லை"
+
+#~ msgid "Could not find latest version name"
+#~ msgstr "அண்மைக் கால பதிப்பு பெயரைக் கண்டுபிடிக்க முடியவில்லை"
+
+#, fuzzy
+#~ msgid "Could not find latest versionName"
+#~ msgstr "அண்மைக் கால பதிப்பு பெயரைக் கண்டுபிடிக்க முடியவில்லை"
+
+#, python-brace-format
+#~ msgid "Created new container \"{name}\""
+#~ msgstr "புதிய கொள்கலனை உருவாக்கியது \"{name}\""
+
+#, python-brace-format
+#~ msgid "Creating \"{path}\" for configuring s3cmd."
+#~ msgstr "S3CMD ஐ கட்டமைக்க \"{path}\" ஐ உருவாக்குதல்."
+
+#, python-brace-format
+#~ msgid "Creating new S3 bucket: {url}"
+#~ msgstr "புதிய எச் 3 வாளியை உருவாக்குதல்: {url}"
+
+#, python-brace-format
+#~ msgid "Failed to create S3 bucket: {url}"
+#~ msgstr "S3 வாளியை உருவாக்குவதில் தோல்வி: {url}"
+
+#~ msgid "Invalid bulleted list"
+#~ msgstr "தவறான புல்லட் பட்டியல்"
+
+#~ msgid "Password required with username"
+#~ msgstr "பயனர்பெயருடன் கடவுச்சொல் தேவை"
+
+#, python-format
+#~ msgid "Problem with ZIP file: %s, error %s"
+#~ msgstr "சிப் கோப்பில் சிக்கல்: %s, பிழை %s"
+
+#~ msgid "Running first pass with MD5 checking disabled"
+#~ msgstr "MD5 உடன் முதல் மொழி இயக்குகிறது"
+
+#, python-brace-format
+#~ msgid "Set NDK {release} ({version}) up"
+#~ msgstr "NDK {release} ({version}) மேலே அமைக்கவும்"
+
+#~ msgid "Tags update mode only works for git, hg, bzr and git-svn repositories currently"
+#~ msgstr "குறிச்சொற்கள் புதுப்பிப்பு பயன்முறை தற்போது git, Hg, BZR மற்றும் GIT-SVN களஞ்சியங்களுக்கு மட்டுமே வேலை செய்கிறது"
+
+#, python-brace-format
+#~ msgid "The OBB version code must come after \"{name}.\":"
+#~ msgstr "OBB பதிப்பு குறியீடு \"{name}\" க்குப் பிறகு வர வேண்டும்.::::"
+
+#~ msgid "To use awsbucket, awssecretkey and awsaccesskeyid must also be set in config.yml!"
+#~ msgstr "AWSBUCKET, AWSSECRETKEY மற்றும் AWSACCESSKEYID ஐப் பயன்படுத்தவும் config.yml இல் அமைக்கப்பட வேண்டும்!"
+
+#~ msgid "To use rclone, rclone_config and awsbucket must be set in config.yml!"
+#~ msgstr "RCLONE ஐப் பயன்படுத்த, RCLONE_CONFIG மற்றும் AWSBUCKET ஆகியவை config.yml இல் அமைக்கப்பட வேண்டும்!"
+
+#~ msgid "URL shorteners should not be used"
+#~ msgstr "முகவரி சுருக்கங்கள் பயன்படுத்தப்படக்கூடாது"
+
+#, python-brace-format
+#~ msgid "URL {url} in Description: {error}"
+#~ msgstr "விளக்கத்தில் முகவரி {url}: {error}"
+
+#, python-brace-format
+#~ msgid "Unknown file '{filename}' in build '{versionName}'"
+#~ msgstr "அறியப்படாத கோப்பு '{filename}' இந்தக் கட்டமைப்பில் '{versionName}'"
+
+#~ msgid "Unnecessary leading space"
+#~ msgstr "தேவையற்ற முன்னணி இடம்"
+
+#~ msgid "Unnecessary trailing space"
+#~ msgstr "தேவையற்ற பின்தங்கிய இடம்"
+
+#, python-brace-format
+#~ msgid "UpdateCheckData must match the version code as integer (\\d or [0-9]): {codeex}"
+#~ msgstr "UpdateCheckData பதிப்பு குறியீட்டை முழு எண் (\\ டி அல்லது [0-9]) உடன் பொருத்த வேண்டும்: {codeex}"
+
+#, fuzzy, python-brace-format
+#~ msgid "UpdateCheckData must match the versionCode as integer (\\d or [0-9]): {codeex}"
+#~ msgstr "UpdateCheckData பதிப்பு குறியீட்டை முழு எண் (\\ டி அல்லது [0-9]) உடன் பொருத்த வேண்டும்: {codeex}"
+
+#~ msgid "Use /HEAD instead of /master or /main to point at a file in the default branch"
+#~ msgstr "Use /HEAD instead of /master or /main பெறுநர் புள்ளியம் at a கோப்பு in the இயல்புநிலை branch"
+
+#, python-brace-format
+#~ msgid "Using \"{path}\" for configuring s3cmd."
+#~ msgstr "Using \"{path}\" க்கு configuring s3cmd."
+
+#, python-brace-format
+#~ msgid "Using \"{path}\" for syncing with remote storage."
+#~ msgstr "Using \"{path}\" க்கு syncing with remote storage."
+
+#, python-brace-format
+#~ msgid "Using rclone to sync with: {url}"
+#~ msgstr "Using rclone பெறுநர் sync with: {url}"
+
+#, python-brace-format
+#~ msgid "Using s3cmd to sync with: {url}"
+#~ msgstr "Using s3cmd பெறுநர் sync with: {url}"
+
+#, python-format
+#~ msgid "repo_icon \"repo/icons/%s\" does not exist, generating placeholder."
+#~ msgstr "ரெப்போ_கான் \"ரெப்போ/ஐகான்கள்/%s\" இல்லை, ஒதுக்கீட்டு ஒதுக்கிடத்தை உருவாக்குகிறது."
+
+#, python-brace-format
+#~ msgid "s3cmd sync indexes {path} to {url} and delete"
+#~ msgstr "S3CMD ஒத்திசைவு குறியீடுகள் {path} முதல் {url} மற்றும் நீக்கு"
+
+#, python-brace-format
+#~ msgid "s3cmd syncs indexes from {path} to {url} and deletes removed"
+#~ msgstr "S3CMD ஒத்திசைவு குறியீடுகளை {path} முதல் {url} வரை ஒத்திசைத்து நீக்கப்பட்டது"
+
+#, python-brace-format
+#~ msgid "using Apache libcloud to sync with {url}"
+#~ msgstr "{url} உடன் ஒத்திசைக்க அப்பாச்சி லிப்குட்டைப் பயன்படுத்துதல்"
+
+#, python-brace-format
+#~ msgid "{appid}: Unknown extlib {path} in build '{versionName}'"
+#~ msgstr "{appid}: அறியப்படாத எக்ச்ட்லிப் {path} உருவாக்க '{versionName}'"
+
+#, python-brace-format
+#~ msgid "{name} \"{section}/icons/{path}\" does not exist! Check \"config.yml\"."
+#~ msgstr "{name} \"{section}/ஐகான்கள்/{path}\" இல்லை! \"Config.yml\" ஐ சரிபார்க்கவும்."

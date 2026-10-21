@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2026-05-19 17:44+0200\n"
+"POT-Creation-Date: 2026-05-19 20:45+0200\n"
 "PO-Revision-Date: 2025-10-21 00:19+0000\n"
 "Last-Translator: Ramiro Cambareri Becche <ramiroc1926@gmail.com>\n"
 "Language-Team: Spanish (Argentina) <https://hosted.weblate.org/projects/f-droid/fdroidserver/es_AR/>\n"
@@ -83,11 +83,6 @@ msgstr ""
 msgid "\"{path}\" contains recent {name} ({version})"
 msgstr "\"{path}\" contiene {name} ({version}) reciente"
 
-#: ../fdroidserver/deploy.py
-#, fuzzy, python-brace-format
-msgid "\"{path}\" exists but s3cmd is not installed!"
-msgstr "\"{path}\" existe pero ¡s3cmd no está instalado!"
-
 #: ../fdroidserver/lint.py
 #, fuzzy, python-brace-format
 msgid "\"{path}\" is not a supported file format (use: metadata/*.yml)"
@@ -136,11 +131,6 @@ msgstr "no se puede llamar a %r"
 #: ../fdroidserver/signindex.py
 #, python-format
 msgid "%s did not produce a dict!"
-msgstr ""
-
-#: ../fdroidserver/signindex.py
-#, python-format
-msgid "%s has bad SHA-256: %s"
 msgstr ""
 
 #: ../fdroidserver/lint.py
@@ -374,11 +364,6 @@ msgstr "Rama {branch} fue publicada en la versión {versionName}"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
-msgid "Branch '{branch}' used as commit in build '{versionName}'"
-msgstr "Rama {branch} fue publicada en la versión {versionName}"
-
-#: ../fdroidserver/lint.py
-#, python-brace-format
 msgid "Branch '{branch}' used as commit in srclib '{srclib}'"
 msgstr ""
 
@@ -500,26 +485,9 @@ msgstr ""
 msgid "Could not find '{command}' on your system"
 msgstr ""
 
-#. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
-#: ../fdroidserver/import_subcommand.py
-#, fuzzy
-msgid "Could not find latest version code"
-msgstr "Empaquetado con la ultima versión de cada paquete"
-
-#. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vname
-#: ../fdroidserver/import_subcommand.py
-#, fuzzy
-msgid "Could not find latest version name"
-msgstr "Empaquetado con la ultima versión de cada paquete"
-
 #: ../fdroidserver/import_subcommand.py
 #, fuzzy
 msgid "Could not find latest versionCode"
-msgstr "Empaquetado con la ultima versión de cada paquete"
-
-#: ../fdroidserver/import_subcommand.py
-#, fuzzy
-msgid "Could not find latest versionName"
 msgstr "Empaquetado con la ultima versión de cada paquete"
 
 #: ../fdroidserver/update.py
@@ -561,16 +529,6 @@ msgstr ""
 msgid "Cowardily refusing to overwrite existing signing key setup!"
 msgstr ""
 
-#: ../fdroidserver/deploy.py
-#, python-brace-format
-msgid "Created new container \"{name}\""
-msgstr ""
-
-#: ../fdroidserver/deploy.py
-#, python-brace-format
-msgid "Creating \"{path}\" for configuring s3cmd."
-msgstr ""
-
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Creating empty {config_file}"
@@ -578,11 +536,6 @@ msgstr ""
 
 #: ../fdroidserver/publish.py
 msgid "Creating log directory"
-msgstr ""
-
-#: ../fdroidserver/deploy.py
-#, python-brace-format
-msgid "Creating new S3 bucket: {url}"
 msgstr ""
 
 #: ../fdroidserver/publish.py
@@ -834,11 +787,6 @@ msgstr ""
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Failed resizing {path}: {error}"
-msgstr ""
-
-#: ../fdroidserver/deploy.py
-#, python-brace-format
-msgid "Failed to create S3 bucket: {url}"
 msgstr ""
 
 #: ../fdroidserver/update.py
@@ -1129,10 +1077,6 @@ msgstr ""
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Invalid application ID {appid}"
-msgstr ""
-
-#: ../fdroidserver/lint.py
-msgid "Invalid bulleted list"
 msgstr ""
 
 #: ../fdroidserver/common.py
@@ -1469,10 +1413,6 @@ msgstr ""
 msgid "Parsing manifest at '{path}'"
 msgstr ""
 
-#: ../fdroidserver/common.py
-msgid "Password required with username"
-msgstr ""
-
 #: ../fdroidserver/import_subcommand.py
 #, fuzzy
 msgid "Path to main Android project subdirectory, if not in root."
@@ -1502,11 +1442,6 @@ msgstr ""
 #: ../fdroidserver/scanner.py
 #, python-brace-format
 msgid "Problem with ZIP file \"{apkfile}\": {error}"
-msgstr ""
-
-#: ../fdroidserver/scanner.py
-#, python-format
-msgid "Problem with ZIP file: %s, error %s"
 msgstr ""
 
 #: ../fdroidserver/common.py
@@ -1670,10 +1605,6 @@ msgstr ""
 msgid "Run rewritemeta to fix formatting"
 msgstr ""
 
-#: ../fdroidserver/deploy.py
-msgid "Running first pass with MD5 checking disabled"
-msgstr ""
-
 #: ../fdroidserver/mirror.py
 #, python-brace-format
 msgid "Running wget in {path}"
@@ -1719,11 +1650,6 @@ msgstr ""
 
 #: ../fdroidserver/scanner.py
 msgid "Scanning APK with dexdump for known non-free classes."
-msgstr ""
-
-#: ../fdroidserver/common.py
-#, python-brace-format
-msgid "Set NDK {release} ({version}) up"
 msgstr ""
 
 #: ../fdroidserver/common.py
@@ -1840,10 +1766,6 @@ msgid "Tags update mode only works for git repositories currently"
 msgstr ""
 
 #: ../fdroidserver/checkupdates.py
-msgid "Tags update mode only works for git, hg, bzr and git-svn repositories currently"
-msgstr ""
-
-#: ../fdroidserver/checkupdates.py
 msgid "Tags update mode used in git-svn, but the repo was not set up with tags"
 msgstr ""
 
@@ -1853,12 +1775,6 @@ msgstr "Modo prueba - pone la salida solo en el directorio temporal, y siempre c
 
 #: ../fdroidserver/index.py
 msgid "The \"qrcode\" Python package is not installed (e.g. apt-get install python3-qrcode)!"
-msgstr ""
-
-#. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
-#: ../fdroidserver/update.py
-#, python-brace-format
-msgid "The OBB version code must come after \"{name}.\":"
 msgstr ""
 
 #: ../fdroidserver/update.py
@@ -1932,14 +1848,6 @@ msgid ""
 "and https://f-droid.org/docs/Signing_Process"
 msgstr ""
 
-#: ../fdroidserver/deploy.py
-msgid "To use awsbucket, awssecretkey and awsaccesskeyid must also be set in config.yml!"
-msgstr ""
-
-#: ../fdroidserver/deploy.py
-msgid "To use rclone, rclone_config and awsbucket must be set in config.yml!"
-msgstr ""
-
 #: ../fdroidserver/lint.py
 msgid "URL must start with https://"
 msgstr ""
@@ -1949,17 +1857,8 @@ msgid "URL must start with https:// or http://"
 msgstr ""
 
 #: ../fdroidserver/lint.py
-msgid "URL shorteners should not be used"
-msgstr ""
-
-#: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "URL shorteners should not be used ({domain})"
-msgstr ""
-
-#: ../fdroidserver/lint.py
-#, python-brace-format
-msgid "URL {url} in Description: {error}"
 msgstr ""
 
 #: ../fdroidserver/lint.py
@@ -1984,11 +1883,6 @@ msgstr "¡Se encontró una excepción desconocida!"
 msgid "Unknown file '{filename}' in build '{versionCode}'"
 msgstr "Archivando {apkfilename} con una firma invalida!"
 
-#: ../fdroidserver/lint.py
-#, python-brace-format
-msgid "Unknown file '{filename}' in build '{versionName}'"
-msgstr ""
-
 #: ../fdroidserver/metadata.py
 #, python-format
 msgid "Unknown metadata format: %s"
@@ -2001,14 +1895,6 @@ msgstr ""
 
 #: ../fdroidserver/common.py
 msgid "Unknown version of aapt, might cause problems: "
-msgstr ""
-
-#: ../fdroidserver/lint.py
-msgid "Unnecessary leading space"
-msgstr ""
-
-#: ../fdroidserver/lint.py
-msgid "Unnecessary trailing space"
 msgstr ""
 
 #: ../fdroidserver/metadata.py
@@ -2065,17 +1951,6 @@ msgstr "Actualizar el registro de transparencia binario de un URL"
 msgid "UpdateCheckData has invalid URL: {url}"
 msgstr ""
 
-#. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
-#: ../fdroidserver/lint.py
-#, python-brace-format
-msgid "UpdateCheckData must match the version code as integer (\\d or [0-9]): {codeex}"
-msgstr ""
-
-#: ../fdroidserver/lint.py
-#, python-brace-format
-msgid "UpdateCheckData must match the versionCode as integer (\\d or [0-9]): {codeex}"
-msgstr ""
-
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "UpdateCheckData must use HTTPS URL: {url}"
@@ -2105,10 +1980,6 @@ msgstr ""
 msgid "Uploading {apkfilename} to virustotal"
 msgstr ""
 
-#: ../fdroidserver/lint.py
-msgid "Use /HEAD instead of /master or /main to point at a file in the default branch"
-msgstr ""
-
 #: ../fdroidserver/update.py
 msgid "Use `fdroid update -c` to create it."
 msgstr ""
@@ -2123,17 +1994,7 @@ msgstr "Utilizar la fecha del APK en vez de la actual para los APKs nuevos que s
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
-msgid "Using \"{path}\" for configuring s3cmd."
-msgstr ""
-
-#: ../fdroidserver/deploy.py
-#, python-brace-format
 msgid "Using \"{path}\" for rclone config."
-msgstr ""
-
-#: ../fdroidserver/deploy.py
-#, python-brace-format
-msgid "Using \"{path}\" for syncing with remote storage."
 msgstr ""
 
 #: ../fdroidserver/common.py
@@ -2166,16 +2027,6 @@ msgstr ""
 #, fuzzy, python-brace-format
 msgid "Using rclone to sync to \"{name}\""
 msgstr "usando libcloud de Apache para sincronizar con {url}"
-
-#: ../fdroidserver/deploy.py
-#, fuzzy, python-brace-format
-msgid "Using rclone to sync with: {url}"
-msgstr "usando libcloud de Apache para sincronizar con {url}"
-
-#: ../fdroidserver/deploy.py
-#, python-brace-format
-msgid "Using s3cmd to sync with: {url}"
-msgstr ""
 
 #: ../fdroidserver/__main__.py
 msgid "Valid commands are:"
@@ -2621,11 +2472,6 @@ msgid "refuse downloading via insecure HTTP connection (use HTTPS or specify --n
 msgstr ""
 
 #: ../fdroidserver/index.py
-#, python-format
-msgid "repo_icon \"repo/icons/%s\" does not exist, generating placeholder."
-msgstr ""
-
-#: ../fdroidserver/index.py
 #, python-brace-format
 msgid "repo_icon \"{repo_icon}\" does not exist in \"{icon_dir}\", generating placeholder."
 msgstr ""
@@ -2642,16 +2488,6 @@ msgstr ""
 #: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "rsync is missing or broken: {error}"
-msgstr ""
-
-#: ../fdroidserver/deploy.py
-#, python-brace-format
-msgid "s3cmd sync indexes {path} to {url} and delete"
-msgstr ""
-
-#: ../fdroidserver/deploy.py
-#, python-brace-format
-msgid "s3cmd syncs indexes from {path} to {url} and deletes removed"
 msgstr ""
 
 #: ../fdroidserver/scanner.py
@@ -2750,11 +2586,6 @@ msgid "usage: "
 msgstr "uso: "
 
 #: ../fdroidserver/deploy.py
-#, python-brace-format
-msgid "using Apache libcloud to sync with {url}"
-msgstr "usando libcloud de Apache para sincronizar con {url}"
-
-#: ../fdroidserver/deploy.py
 msgid "virustotal.com is rate limiting, waiting to retry..."
 msgstr ""
 
@@ -2812,11 +2643,6 @@ msgstr ""
 msgid "{appid}: Unknown extlib {path} in build '{versionCode}'"
 msgstr ""
 
-#: ../fdroidserver/lint.py
-#, python-brace-format
-msgid "{appid}: Unknown extlib {path} in build '{versionName}'"
-msgstr ""
-
 #: ../fdroidserver/scanner.py
 #, python-brace-format
 msgid "{appid}: no builds specified, running on current source state"
@@ -2850,11 +2676,6 @@ msgstr ""
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "{name} \"{repo_icon}\" does not exist in \"{icon_dir}/\"! Check \"config.yml\"."
-msgstr ""
-
-#: ../fdroidserver/update.py
-#, python-brace-format
-msgid "{name} \"{section}/icons/{path}\" does not exist! Check \"config.yml\"."
 msgstr ""
 
 #: ../fdroidserver/update.py
@@ -2958,3 +2779,31 @@ msgid "{} build succeeded"
 msgid_plural "{} builds succeeded"
 msgstr[0] ""
 msgstr[1] ""
+
+#, fuzzy, python-brace-format
+#~ msgid "\"{path}\" exists but s3cmd is not installed!"
+#~ msgstr "\"{path}\" existe pero ¡s3cmd no está instalado!"
+
+#, python-brace-format
+#~ msgid "Branch '{branch}' used as commit in build '{versionName}'"
+#~ msgstr "Rama {branch} fue publicada en la versión {versionName}"
+
+#, fuzzy
+#~ msgid "Could not find latest version code"
+#~ msgstr "Empaquetado con la ultima versión de cada paquete"
+
+#, fuzzy
+#~ msgid "Could not find latest version name"
+#~ msgstr "Empaquetado con la ultima versión de cada paquete"
+
+#, fuzzy
+#~ msgid "Could not find latest versionName"
+#~ msgstr "Empaquetado con la ultima versión de cada paquete"
+
+#, fuzzy, python-brace-format
+#~ msgid "Using rclone to sync with: {url}"
+#~ msgstr "usando libcloud de Apache para sincronizar con {url}"
+
+#, python-brace-format
+#~ msgid "using Apache libcloud to sync with {url}"
+#~ msgstr "usando libcloud de Apache para sincronizar con {url}"
