@@ -20,13 +20,14 @@
 # Matheus <souzamatheus@users.noreply.hosted.weblate.org>, 2026.
 # William Weber Berrutti <wwberrutti@protonmail.ch>, 2026.
 # F Bausch <fbausch@users.noreply.hosted.weblate.org>, 2026.
+# Thales Follador de Oliveira <thalesfollador@gmail.com>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2026-05-19 20:45+0200\n"
-"PO-Revision-Date: 2026-07-23 11:01+0000\n"
-"Last-Translator: F Bausch <fbausch@users.noreply.hosted.weblate.org>\n"
+"PO-Revision-Date: 2026-07-30 22:01+0000\n"
+"Last-Translator: Thales Follador de Oliveira <thalesfollador@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/f-droid/fdroidserver/pt_BR/>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
@@ -2508,7 +2509,7 @@ msgstr "biblioteca compartilhada"
 
 #: /usr/lib/python3.13/argparse.py
 msgid "show program's version number and exit"
-msgstr ""
+msgstr "mostrar número da versão do programa e sair"
 
 #: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 msgid "show this help message and exit"
