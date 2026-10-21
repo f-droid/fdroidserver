@@ -5,22 +5,22 @@
 # whenwesober <naomi16i_1298q@cikuh.com>, 2021.
 # Doctorredits_here <alkaf.alkaf2018@tutamail.com>, 2024.
 # Taufik Adi Wicaksono <taufikadi.wicaksono@tutamail.com>, 2025.
-# StarSkyGeminid <akungithubku@gmail.com>, 2025.
+# StarSkyGeminid <akungithubku@gmail.com>, 2025, 2026.
 # cyberboh <cybermay686@gmail.com>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 1.1-680-ge1d3de71\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2026-01-13 11:31+0100\n"
-"PO-Revision-Date: 2026-01-10 10:54+0000\n"
-"Last-Translator: cyberboh <cybermay686@gmail.com>\n"
+"PO-Revision-Date: 2026-01-20 23:01+0000\n"
+"Last-Translator: StarSkyGeminid <akungithubku@gmail.com>\n"
 "Language-Team: Indonesian <https://hosted.weblate.org/projects/f-droid/fdroidserver/id/>\n"
 "Language: id\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.15.1\n"
+"X-Generator: Weblate 5.16-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -185,11 +185,11 @@ msgstr "'{value}' bukan {field} yang valid, seharusnya {pattern}"
 
 #: ../fdroidserver/common.py
 msgid "'{}' does not start with a valid applicationId"
-msgstr ""
+msgstr "'{}' tidak dimulai dengan applicationId yang valid"
 
 #: ../fdroidserver/common.py
 msgid "'{}' is not a valid pair of applicationId:versionCode"
-msgstr ""
+msgstr "'{}' bukan pasangan yang valid dari applicationId:versionCode"
 
 #: ../fdroidserver/checkupdates.py
 msgid "--merge-request only runs on a single appid!"
@@ -385,7 +385,7 @@ msgstr "Hanya bangun versi terbaru dari setiap paket"
 #: ../fdroidserver/init.py
 #, python-format
 msgid "Built repo based in \"%s\" with this config:"
-msgstr ""
+msgstr "Repositori yang dibangun di “%s” dengan konfigurasi berikut:"
 
 #: ../fdroidserver/checkupdates.py
 msgid "Can't auto-update app with no CurrentVersionCode"
@@ -399,28 +399,28 @@ msgstr[0] "Tidak dapat membangun karena kesalahan {} saat pemindaian"
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Cannot read {path}: {error}"
-msgstr ""
+msgstr "Tidak dapat membaca {path}: {error}"
 
 #: ../fdroidserver/rewritemeta.py
 #, python-brace-format
 msgid "Cannot rewrite \"{path}\""
-msgstr ""
+msgstr "Tidak dapat mengganti “{path}”"
 
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vname
 #: ../fdroidserver/lint.py
 #, python-format
 msgid "Categories '%s' is not valid"
-msgstr ""
+msgstr "Kategori ‘%s’ tidak valid"
 
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vname
 #: ../fdroidserver/lint.py
 msgid "Categories are not set"
-msgstr ""
+msgstr "Kategori tidak diatur"
 
 #: ../fdroidserver/index.py
 #, python-brace-format
 msgid "Category \"{category}\" defined but not used for any apps!"
-msgstr ""
+msgstr "Kategori “{category}” telah didefinisikan tetapi tidak digunakan untuk aplikasi apa pun!"
 
 #: ../fdroidserver/__main__.py
 msgid "Check for updates to applications"
@@ -429,19 +429,19 @@ msgstr "Periksa pembaruan pada aplikasi"
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Checking archiving for {appid} - apks:{integer}, keepversions:{keep}, archapks:{arch}"
-msgstr ""
+msgstr "Memeriksa arsip untuk {appid} - apks:{integer}, keepversions:{keep}, archapks:{arch}"
 
 #: ../fdroidserver/update.py
 msgid "Clean update - don't uses caches, reprocess all APKs"
-msgstr ""
+msgstr "Pembaruan bersih - jangan gunakan cache, olah ulang semua APK"
 
 #: ../fdroidserver/common.py
 msgid "Color the log output"
-msgstr ""
+msgstr "Warnai keluaran log"
 
 #: ../fdroidserver/import_subcommand.py
 msgid "Comma separated list of categories."
-msgstr ""
+msgstr "Daftar kategori yang dipisahkan dengan koma."
 
 #: ../fdroidserver/__main__.py
 #, python-format
@@ -450,29 +450,30 @@ msgstr "Perintah '%s' tidak dikenal.\n"
 
 #: ../fdroidserver/checkupdates.py
 msgid "Commit changes"
-msgstr ""
+msgstr "Simpan perubahan"
 
 #: ../fdroidserver/checkupdates.py
+#, fuzzy
 msgid "Commit changes, push, then make a merge request"
-msgstr ""
+msgstr "Lakukan commit perubahan, push, lalu buat permintaan menggabungkan"
 
 #: ../fdroidserver/deploy.py
 msgid "Committing index files to git mirror"
-msgstr ""
+msgstr "Menyimpan berkas indeks ke cermin Git"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Conflicting \"{field}\" definitions between .yml and localized files:"
-msgstr ""
+msgstr "Definisi “{field}” yang bertentangan antara berkas .yml dan berkas terjemahan:"
 
 #: ../fdroidserver/__main__.py
 msgid "Conflicting arguments: '--verbose' and '--quiet' can not be specified at the same time."
-msgstr ""
+msgstr "Argumen yang bertentangan: ‘--verbose’ dan ‘--quiet’ tidak dapat ditentukan secara bersamaan."
 
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Could not find '{command}' on your system"
-msgstr ""
+msgstr "Tidak dapat menemukan ‘{command}’ di sistem Anda"
 
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
 #: ../fdroidserver/import_subcommand.py
@@ -766,33 +767,33 @@ msgstr ""
 
 #: ../fdroidserver/import_subcommand.py
 msgid "Error while getting repo address"
-msgstr ""
+msgstr "Kesalahan saat mengambil alamat repositori"
 
 #: ../fdroidserver/scanner.py
 msgid "Exit with a non-zero code if problems were found"
-msgstr ""
+msgstr "Keluar dengan kode non-nol jika ditemukan masalah"
 
 #: ../fdroidserver/__main__.py
 msgid "Extract application metadata from a source repository"
-msgstr ""
+msgstr "Ekstrak metadata aplikasi dari repositori sumber"
 
 #: ../fdroidserver/__main__.py
 msgid "Extract signatures from APKs"
-msgstr ""
+msgstr "Ekstrak tanda tangan dari APK"
 
 #: ../fdroidserver/install.py
 msgid "F-Droid.apk could not be downloaded from any known source!"
-msgstr ""
+msgstr "F-Droid.apk tidak dapat diunduh dari sumber mana pun yang diketahui!"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Failed copying {path}: {error}"
-msgstr ""
+msgstr "Gagal menyalin {path}: {error}"
 
 #: ../fdroidserver/signatures.py
 #, python-brace-format
 msgid "Failed fetching signatures for '{apkfilename}': {error}"
-msgstr ""
+msgstr "Gagal mengambil tanda tangan untuk ‘{apkfilename}’: {error}"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -851,24 +852,24 @@ msgstr ""
 #: ../fdroidserver/rewritemeta.py ../fdroidserver/scanner.py
 #: ../fdroidserver/update.py
 msgid "Finished"
-msgstr ""
+msgstr "Selesai"
 
 #: ../fdroidserver/lint.py
 msgid "Forbidden HTML tags"
-msgstr ""
+msgstr "Tag HTML yang dilarang"
 
 #: ../fdroidserver/build.py
 msgid "Force build of disabled apps, and carries on regardless of scan problems. Only allowed in test mode."
-msgstr ""
+msgstr "Memaksa pembuatan aplikasi yang dinonaktifkan, dan terus berjalan meskipun ada masalah pemindaian. Hanya diizinkan dalam mode uji coba."
 
 #: ../fdroidserver/build.py
 #, python-brace-format
 msgid "Force halting build after {0} sec timeout!"
-msgstr ""
+msgstr "Pemberhentian paksa proses pembangunan setelah waktu tunggu {0} detik!"
 
 #: ../fdroidserver/scanner.py
 msgid "Force scan of disabled apps and builds."
-msgstr ""
+msgstr "Pindai paksa aplikasi dan build yang dinonaktifkan."
 
 #: ../fdroidserver/rewritemeta.py
 msgid "Format file from stdin and output the result to stdout"
