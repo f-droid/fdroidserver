@@ -3,20 +3,21 @@
 # Oymate <dhruboadittya96@gmail.com>, 2021.
 # Arnesh Basu <basuarnesh080@gmail.com>, 2026.
 # Debojit Santra <debojitsantra48@gmail.com>, 2026.
+# Ishan Basak <ishanbasaki7@gmail.com>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 1.0.6-70-g54bc858\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2026-01-13 11:31+0100\n"
-"PO-Revision-Date: 2026-04-07 20:28+0000\n"
-"Last-Translator: Debojit Santra <debojitsantra48@gmail.com>\n"
+"PO-Revision-Date: 2026-04-21 14:39+0000\n"
+"Last-Translator: Ishan Basak <ishanbasaki7@gmail.com>\n"
 "Language-Team: Bengali <https://hosted.weblate.org/projects/f-droid/fdroidserver/bn/>\n"
 "Language: bn\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.17-dev\n"
+"X-Generator: Weblate 5.17.1-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -2595,7 +2596,7 @@ msgstr ""
 
 #: /usr/lib/python3.11/argparse.py
 msgid "show this help message and exit"
-msgstr ""
+msgstr "এই সহায়তা বার্তাটি দেখান এবং প্রস্থান করুন"
 
 #: ../fdroidserver/signatures.py
 msgid "signed APK, either a file-path or HTTPS URL."
