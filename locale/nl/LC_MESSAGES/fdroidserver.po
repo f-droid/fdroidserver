@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: fdroidserver 1.1-680-ge1d3de71\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2026-05-19 20:45+0200\n"
-"PO-Revision-Date: 2026-05-12 20:19+0000\n"
+"PO-Revision-Date: 2026-05-20 14:16+0000\n"
 "Last-Translator: Watchman89 <rplatte@hotmail.nl>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/f-droid/fdroidserver/nl/>\n"
 "Language: nl\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2026.5-dev\n"
+"X-Generator: Weblate 2026.6.dev0\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -40,7 +40,7 @@ msgstr ""
 #: /usr/lib/python3.13/argparse.py
 #, python-format
 msgid " (default: %(default)s)"
-msgstr ""
+msgstr " (standaard: %(default)s)"
 
 #: ../fdroidserver/lint.py
 #, python-format
@@ -70,9 +70,9 @@ msgid "\"{apkfilename}\" is already installed on {dev}."
 msgstr "\"{apkfilename}\" is al geïnstalleerd op {dev}."
 
 #: ../fdroidserver/signindex.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "\"{name}\" has bad SHA-256: {sha256}"
-msgstr "%s heeft slechte SHA-256: %s"
+msgstr "\"{name}\" heeft slechte SHA-256: {sha256}"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -97,7 +97,7 @@ msgstr "\"{url}\" is geen geldige URL!"
 #: /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "%(heading)s:"
-msgstr ""
+msgstr "%(heading)s:"
 
 #: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
@@ -105,9 +105,9 @@ msgid "%(prog)s: error: %(message)s\n"
 msgstr "%(prog)s: fout: %(message)s\n"
 
 #: /usr/lib/python3.13/argparse.py
-#, fuzzy, python-format
+#, python-format
 msgid "%(prog)s: warning: %(message)s\n"
-msgstr "%(prog)s: fout: %(message)s\n"
+msgstr "%(prog)s: waarschuwing: %(message)s\n"
 
 #: ../fdroidserver/publish.py
 #, python-format
@@ -1428,9 +1428,9 @@ msgid "Privacy mode was enabled based on your locale ({country_code})."
 msgstr "Privacy-modus was geactiveerd op basis van uw localizatie ({country_code})."
 
 #: ../fdroidserver/scanner.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Problem with ZIP file \"{apkfile}\": {error}"
-msgstr "Probleem met ZIP bestand: %s, fout %s"
+msgstr "Probleem met ZIP bestand: \"{apkfile}\": {error}"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -1749,9 +1749,8 @@ msgid "System clock is older than date in {path}!"
 msgstr "Systeemklok is ouder dan de datum in {path}!"
 
 #: ../fdroidserver/checkupdates.py
-#, fuzzy
 msgid "Tags update mode only works for git repositories currently"
-msgstr "Label update modus werkt momenteel alleen voor git, hg, bzr en git-svn databanken"
+msgstr "Label update modus werkt momenteel alleen voor git databanken"
 
 #: ../fdroidserver/checkupdates.py
 msgid "Tags update mode used in git-svn, but the repo was not set up with tags"
@@ -2156,7 +2155,7 @@ msgstr "argument %(argument_name)s: %(message)s"
 #: /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "argument '%(argument_name)s' is deprecated"
-msgstr ""
+msgstr "argument '%(argument_name)s' is verouderd"
 
 #: ../fdroidserver/nightly.py
 msgid "attempting bare SSH connection to test deploy key:"
@@ -2201,7 +2200,7 @@ msgstr "{url} wordt gekloond"
 #: /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "command '%(parser_name)s' is deprecated"
-msgstr ""
+msgstr "commando '%(parser_name)s' is verouderd"
 
 #: ../fdroidserver/__main__.py
 msgid "commands from plugin modules:"
@@ -2425,7 +2424,7 @@ msgstr "accepteert alleen reeksen, lijsten en tuples"
 #: /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "option '%(option)s' is deprecated"
-msgstr ""
+msgstr "optie '%(option)s' is verouderd"
 
 #: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 msgid "options"
@@ -2493,7 +2492,7 @@ msgstr "gedeelde library"
 
 #: /usr/lib/python3.13/argparse.py
 msgid "show program's version number and exit"
-msgstr ""
+msgstr "toon het versienummer van het programma en sluit af"
 
 #: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 msgid "show this help message and exit"
@@ -2526,7 +2525,7 @@ msgstr "statische library"
 
 #: /usr/lib/python3.13/argparse.py
 msgid "subcommands"
-msgstr ""
+msgstr "subcommando's"
 
 #: ../fdroidserver/build.py
 #, python-brace-format
