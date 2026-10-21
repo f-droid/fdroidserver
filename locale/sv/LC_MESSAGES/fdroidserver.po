@@ -6,20 +6,21 @@
 # Kristoffer Grundström <swedishsailfishosuser@tutanota.com>, 2021, 2024, 2025.
 # "P.O" <rasmusson.mikael@protonmail.com>, 2023.
 # Marcus skoding <ggd7cnc9m@mozmail.com>, 2025.
+# Daniel Wiik <d.wiik@outlook.com>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 1.0.0-95-gd7af22b\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2026-01-13 11:31+0100\n"
-"PO-Revision-Date: 2025-12-31 14:01+0000\n"
-"Last-Translator: Kristoffer Grundström <swedishsailfishosuser@tutanota.com>\n"
+"PO-Revision-Date: 2026-02-08 14:30+0000\n"
+"Last-Translator: Daniel Wiik <d.wiik@outlook.com>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/f-droid/fdroidserver/sv/>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.15.1\n"
+"X-Generator: Weblate 5.16-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -45,7 +46,7 @@ msgstr "\"%s/\" har ingen matchande meta-datafil!"
 
 #: ../fdroidserver/deploy.py
 msgid "\"AWS_ACCESS_KEY_ID\" must be set as an environmental variable!"
-msgstr ""
+msgstr "\"AWS_ACCESS_KEY_ID\" måste ställas in som en miljövariabel!"
 
 #: ../fdroidserver/deploy.py
 msgid "\"AWS_SECRET_ACCESS_KEY\" must be set as an environmental variable!"
@@ -53,7 +54,7 @@ msgstr ""
 
 #: ../fdroidserver/index.py
 msgid "\"isPrimary\" key should not be added to mirrors!"
-msgstr ""
+msgstr "\"isPrimary\" -nyckeln ska inte läggas till i speglar!"
 
 #: ../fdroidserver/index.py
 #, python-brace-format
@@ -142,9 +143,8 @@ msgid "'keystorepass' not found in config.yml!"
 msgstr "'keystorepass' hittades inte i config.yml!"
 
 #: ../fdroidserver/deploy.py
-#, fuzzy
 msgid "'rclone_config' must be set in config.yml!"
-msgstr "'sdk_path' är inte inställt i config.yml!"
+msgstr "'rclone_config' måste ställas in i config.yml!"
 
 #: ../fdroidserver/common.py
 msgid "'repo_keyalias' not found in config.yml!"
