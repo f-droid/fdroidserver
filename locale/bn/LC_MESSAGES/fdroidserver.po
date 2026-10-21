@@ -2,13 +2,14 @@
 # This file is put in the public domain.
 # Oymate <dhruboadittya96@gmail.com>, 2021.
 # Arnesh Basu <basuarnesh080@gmail.com>, 2026.
+# Debojit Santra <debojitsantra48@gmail.com>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 1.0.6-70-g54bc858\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2026-01-13 11:31+0100\n"
-"PO-Revision-Date: 2026-04-06 23:32+0000\n"
-"Last-Translator: Arnesh Basu <basuarnesh080@gmail.com>\n"
+"PO-Revision-Date: 2026-04-07 20:28+0000\n"
+"Last-Translator: Debojit Santra <debojitsantra48@gmail.com>\n"
 "Language-Team: Bengali <https://hosted.weblate.org/projects/f-droid/fdroidserver/bn/>\n"
 "Language: bn\n"
 "MIME-Version: 1.0\n"
@@ -416,7 +417,7 @@ msgstr ""
 
 #: ../fdroidserver/__main__.py
 msgid "Check for updates to applications"
-msgstr ""
+msgstr "অ্যাপ্লিেশন গুলির কোনো আপডেট আছে কিনা দেখুন"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
