@@ -13,15 +13,15 @@ msgstr ""
 "Project-Id-Version: fdroidserver 2.1-273-g54e84d87\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2026-05-19 20:45+0200\n"
-"PO-Revision-Date: 2026-05-20 14:16+0000\n"
-"Last-Translator: Hans-Christoph Steiner <hans@guardianproject.info>\n"
+"PO-Revision-Date: 2026-09-17 23:05+0000\n"
+"Last-Translator: Ecron <ecron_89@hotmail.com>\n"
 "Language-Team: Catalan <https://hosted.weblate.org/projects/f-droid/fdroidserver/ca/>\n"
 "Language: ca\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2026.6.dev0\n"
+"X-Generator: Weblate 2026.10.dev0\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -43,7 +43,7 @@ msgstr ""
 #: /usr/lib/python3.13/argparse.py
 #, python-format
 msgid " (default: %(default)s)"
-msgstr ""
+msgstr " (predefinit: %(default)s)"
 
 #: ../fdroidserver/lint.py
 #, python-format
@@ -100,7 +100,7 @@ msgstr "\"{url}\" no és un URL vàlid!"
 #: /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "%(heading)s:"
-msgstr ""
+msgstr "%(heading)s:"
 
 #: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
@@ -108,9 +108,9 @@ msgid "%(prog)s: error: %(message)s\n"
 msgstr "%(prog)s: errada: %(message)s\n"
 
 #: /usr/lib/python3.13/argparse.py
-#, fuzzy, python-format
+#, python-format
 msgid "%(prog)s: warning: %(message)s\n"
-msgstr "%(prog)s: errada: %(message)s\n"
+msgstr "%(prog)s: avís: %(message)s\n"
 
 #: ../fdroidserver/publish.py
 #, python-format
@@ -308,7 +308,7 @@ msgstr "No s'ha trobat l'eina Android SDK {cmd}!"
 
 #: ../fdroidserver/lint.py
 msgid "App has Binaries but does not have corresponding AllowedAPKSigningKeys to pin certificate."
-msgstr "L'aplicació té binaris però no té el corresponent certificat AllowedAPKSigningKeys per fixar."
+msgstr "L'aplicació té binaris però no té el corresponent certificat AllowedAPKSigningKeys per a fixar."
 
 #: ../fdroidserver/lint.py
 msgid "App has NoSourceSince or ArchivePolicy \"0 versions\" or 0 but AutoUpdateMode or UpdateCheckMode are not None"
@@ -321,7 +321,7 @@ msgstr "L'aplicació és a '{repo}', però té un enllaç a {url}"
 
 #: ../fdroidserver/lint.py
 msgid "App version has binary but does not have corresponding AllowedAPKSigningKeys to pin certificate."
-msgstr "La versió de l'aplicació té binari, però no té el corresponent certificat AllowedAPKSigningKeys per fixar."
+msgstr "La versió de l'aplicació té binari, però no té el corresponent certificat AllowedAPKSigningKeys per a fixar."
 
 #: ../fdroidserver/lint.py
 msgid "Appending .git is not necessary"
@@ -615,11 +615,11 @@ msgstr "No despleguis els fitxers nous al dipòsit"
 #: ../fdroidserver/mirror.py
 #, python-brace-format
 msgid "Do not include \"{path}\" in URL!"
-msgstr "No incloeu \"{path}\" a l'URL!"
+msgstr "No inclogueu \"{path}\" a l'URL!"
 
 #: ../fdroidserver/init.py
 msgid "Do not prompt for Android SDK path, just fail"
-msgstr "No preguntis pel camí de l'SDK de l'Android, simplement falla"
+msgstr "No pregunteu pel camí de l'SDK de l'Android, simplement falla"
 
 #: ../fdroidserver/nightly.py
 msgid "Do not remove the private keys generated from the keystore"
@@ -1752,9 +1752,8 @@ msgid "System clock is older than date in {path}!"
 msgstr "El rellotge del sistema és més antic que la data a {path}!"
 
 #: ../fdroidserver/checkupdates.py
-#, fuzzy
 msgid "Tags update mode only works for git repositories currently"
-msgstr "El mode d'actualització de les etiquetes només funciona per als dipòsits git, hg, bzr i git-svn actualment"
+msgstr "El mode d'actualització de les etiquetes només funciona per als dipòsits git, actualment"
 
 #: ../fdroidserver/checkupdates.py
 msgid "Tags update mode used in git-svn, but the repo was not set up with tags"
@@ -2090,7 +2089,7 @@ msgstr "X.509 'Nom distint' utilitzat en generar claus"
 
 #: ../fdroidserver/common.py
 msgid "You can use ANDROID_HOME to set the path to your SDK, i.e.:"
-msgstr "Podeu utilitzar ANDROID_HOME per establir el camí al vostre SDK, és a dir:"
+msgstr "Podeu utilitzar ANDROID_HOME per a establir el camí al vostre SDK, és a dir:"
 
 #: ../fdroidserver/scanner.py
 msgid "ZIP file archive"
@@ -2127,7 +2126,7 @@ msgstr "No s'ha trobat l'apksigner! No es poden signar o verificar els APK moder
 
 #: ../fdroidserver/common.py
 msgid "apksigner not found, it's required for signing!"
-msgstr "No s'ha trobat l'apksigner, és necessari per signar!"
+msgstr "No s'ha trobat l'apksigner, és necessari per a signar!"
 
 #. Translators: https://developer.android.com/build/configure-app-module#set-application-id
 #: ../fdroidserver/checkupdates.py ../fdroidserver/lint.py
@@ -2159,11 +2158,11 @@ msgstr "argument %(argument_name)s: %(message)s"
 #: /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "argument '%(argument_name)s' is deprecated"
-msgstr ""
+msgstr "L'argument «%(argument_name)s» és obsolet"
 
 #: ../fdroidserver/nightly.py
 msgid "attempting bare SSH connection to test deploy key:"
-msgstr "s'està provant la connexió SSH per comprovar la clau de desplegament:"
+msgstr "s'està provant la connexió SSH per a comprovar la clau de desplegament:"
 
 #: ../fdroidserver/common.py
 msgid "can not parse scrlib spec (not a string): '{}'"
@@ -2204,7 +2203,7 @@ msgstr "s'està clonant {url}"
 #: /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "command '%(parser_name)s' is deprecated"
-msgstr ""
+msgstr "L'ordre «%(parser_name)s» és obsoleta"
 
 #: ../fdroidserver/__main__.py
 msgid "commands from plugin modules:"
@@ -2428,7 +2427,7 @@ msgstr "només accepta cadenes, llistes i tuples"
 #: /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "option '%(option)s' is deprecated"
-msgstr ""
+msgstr "L'opció «%(option)s» és obsoleta"
 
 #: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 msgid "options"
@@ -2496,7 +2495,7 @@ msgstr "biblioteca compartida"
 
 #: /usr/lib/python3.13/argparse.py
 msgid "show program's version number and exit"
-msgstr ""
+msgstr "mostra el número de la versió del programa i surt"
 
 #: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 msgid "show this help message and exit"
@@ -2529,7 +2528,7 @@ msgstr "biblioteca estàtica"
 
 #: /usr/lib/python3.13/argparse.py
 msgid "subcommands"
-msgstr ""
+msgstr "subordres"
 
 #: ../fdroidserver/build.py
 #, python-brace-format
@@ -2573,7 +2572,7 @@ msgstr "permisos a «{config_file}» insegurs (hauria de ser 0600)!"
 #: ../fdroidserver/__main__.py /usr/lib/python3.11/argparse.py
 #: /usr/lib/python3.13/argparse.py
 msgid "usage: "
-msgstr "us: "
+msgstr "ús: "
 
 #: ../fdroidserver/deploy.py
 msgid "virustotal.com is rate limiting, waiting to retry..."
