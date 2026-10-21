@@ -11,13 +11,14 @@
 # Wiesław Fijołek <percival@users.noreply.hosted.weblate.org>, 2026.
 # Andrzej Stachera <Jackheisen@proton.me>, 2026.
 # Grzegorz Szymaszek <gszymaszek@short.pl>, 2026.
+# Joanna Szymaszek <joszymaszek@short.pl>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 1.0.0-95-gd7af22b\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2026-05-19 20:45+0200\n"
-"PO-Revision-Date: 2026-06-17 16:10+0000\n"
-"Last-Translator: WaldiS <sto@tutanota.de>\n"
+"PO-Revision-Date: 2026-06-30 22:31+0000\n"
+"Last-Translator: Joanna Szymaszek <joszymaszek@short.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/f-droid/fdroidserver/pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
@@ -111,9 +112,9 @@ msgid "%(prog)s: error: %(message)s\n"
 msgstr "%(prog)s: błąd: %(message)s\n"
 
 #: /usr/lib/python3.13/argparse.py
-#, fuzzy, python-format
+#, python-format
 msgid "%(prog)s: warning: %(message)s\n"
-msgstr "%(prog)s: błąd: %(message)s\n"
+msgstr "%(prog)s: ostrzeżenie: %(message)s\n"
 
 #: ../fdroidserver/publish.py
 #, python-format
@@ -1852,9 +1853,8 @@ msgstr ""
 "i https://f-droid.org/docs/Signing_Process"
 
 #: ../fdroidserver/lint.py
-#, fuzzy
 msgid "URL must start with https://"
-msgstr "Adres URL musi rozpoczynać się od https:// lub http://"
+msgstr "Adres URL musi rozpoczynać się od https://"
 
 #: ../fdroidserver/lint.py
 msgid "URL must start with https:// or http://"
@@ -2028,9 +2028,9 @@ msgid "Using existing keystore \"{path}\""
 msgstr "Korzystanie z istniejącego magazynu kluczy \"{path}\""
 
 #: ../fdroidserver/deploy.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Using rclone to sync to \"{name}\""
-msgstr "Używanie rclone do synchronizacji z: {name}"
+msgstr "Używanie rclone do synchronizacji do „{name}”"
 
 #: ../fdroidserver/__main__.py
 msgid "Valid commands are:"
@@ -2436,7 +2436,7 @@ msgstr "akceptuje tylko łańcuchy, listy i krotki"
 #: /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "option '%(option)s' is deprecated"
-msgstr ""
+msgstr "opcja „%(option)s” jest przestarzała"
 
 #: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 msgid "options"
