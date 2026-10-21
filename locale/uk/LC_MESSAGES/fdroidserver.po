@@ -2,7 +2,7 @@
 # Copyright (C) YEAR Free Software Foundation, Inc.
 # Hans-Christoph Steiner <hans@guardianproject.info>, 2020, 2026.
 # ihor_ck <igor_ck@outlook.com>, 2020.
-# Ihor Hordiichuk <igor_ck@outlook.com>, 2020, 2021, 2022, 2023, 2024, 2025.
+# Ihor Hordiichuk <igor_ck@outlook.com>, 2020, 2021, 2022, 2023, 2024, 2025, 2026.
 # Tymofij Lytvynenko <till.svit@gmail.com>, 2021.
 # DankXylese <dankxylese@slapmywang.com>, 2021.
 # Dan <denqwerta@gmail.com>, 2022.
@@ -21,15 +21,15 @@ msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2026-05-19 20:45+0200\n"
-"PO-Revision-Date: 2026-07-20 14:51+0000\n"
-"Last-Translator: Шмат Кави <koristuvachua@gmail.com>\n"
+"PO-Revision-Date: 2026-09-17 14:52+0000\n"
+"Last-Translator: Ihor Hordiichuk <igor_ck@outlook.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/f-droid/fdroidserver/uk/>\n"
 "Language: uk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 2026.8.dev0\n"
+"X-Generator: Weblate 2026.10.dev0\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -108,7 +108,7 @@ msgstr "\"{url}\" є недійсною URL-адресою!"
 #: /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "%(heading)s:"
-msgstr ""
+msgstr "%(heading)s:"
 
 #: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
@@ -1256,7 +1256,7 @@ msgstr "У {0} не знайдено мінімальної версії SDK, у
 
 #: ../fdroidserver/lint.py
 msgid "No need to specify that the app is Free Software"
-msgstr "Не має потреби вказувати, що застосунок є вільним ПЗ"
+msgstr "Вказувати, що застосунок є вільним ПЗ, не обов'язково"
 
 #: ../fdroidserver/lint.py
 msgid "No need to specify that the app is for Android"
@@ -1442,7 +1442,7 @@ msgstr "Режим конфіденційності було ввімкнено 
 #: ../fdroidserver/scanner.py
 #, python-brace-format
 msgid "Problem with ZIP file \"{apkfile}\": {error}"
-msgstr "Проблема з ZIP файлом: \"{apkfile}\": {error}"
+msgstr "Проблема з файлом ZIP: \"{apkfile}\": {error}"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -1829,7 +1829,7 @@ msgstr "Цю команду ніколи не слід використовув�
 
 #: ../fdroidserver/common.py
 msgid "This is a repository of apps to be used with F-Droid. Applications in this repository are either official binaries built by the original application developers, or are binaries built from source by the admin of f-droid.org using the tools on https://gitlab.com/fdroid."
-msgstr "Цей репозиторій застосунків для використання з FDroid. Застосунки в цьому репозиторії — це або офіційні двійкові файли, побудовані розробниками оригінального застосунку, або двійкові файли, побудовані з джерела f-droid.org за допомогою інструментів з https://gitlab.com/fdroid."
+msgstr "Це репозиторій застосунків для використання з F-Droid. Застосунки в цьому репозиторії — це або офіційні двійкові файли, створені розробниками оригінального застосунку, або двійкові файли, створені адміністраторами f-droid.org за допомогою інструментів з https://gitlab.com/fdroid."
 
 #: ../fdroidserver/import_subcommand.py
 #, python-format
