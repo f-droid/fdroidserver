@@ -4,20 +4,21 @@
 # fresh <fresh190@protonmail.com>, 2020, 2021.
 # Michalis <michalisntovas@yahoo.gr>, 2021.
 # ΣΤΑΥΡΟΣ ΔΑΛΙΑΚΟΠΟΥΛΟΣ <stavros.daliakopoulos@gmail.com>, 2024.
+# Jim Kats <jim-kats@hotmail.com>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 2.0a0-62-gc63c4b3d\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2026-01-13 11:31+0100\n"
-"PO-Revision-Date: 2024-05-10 13:24+0000\n"
-"Last-Translator: ΣΤΑΥΡΟΣ ΔΑΛΙΑΚΟΠΟΥΛΟΣ <stavros.daliakopoulos@gmail.com>\n"
+"PO-Revision-Date: 2026-03-01 05:09+0000\n"
+"Last-Translator: Jim Kats <jim-kats@hotmail.com>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/f-droid/fdroidserver/el/>\n"
 "Language: el\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.5.4\n"
+"X-Generator: Weblate 5.16.1-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -2115,14 +2116,14 @@ msgid "Using existing keystore \"{path}\""
 msgstr ""
 
 #: ../fdroidserver/deploy.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Using rclone to sync to \"{name}\""
-msgstr "χρήση Apache libcloud για συγχρονισμό με {url}"
+msgstr "Χρήση rclone για συγχρονισμό στο \"{name}\""
 
 #: ../fdroidserver/deploy.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Using rclone to sync with: {url}"
-msgstr "χρήση Apache libcloud για συγχρονισμό με {url}"
+msgstr "Χρήση rclone για συγχρονισμό με: {url}"
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
@@ -2519,9 +2520,8 @@ msgid "only accepts strings, lists, and tuples"
 msgstr ""
 
 #: /usr/lib/python3.11/argparse.py
-#, fuzzy
 msgid "options"
-msgstr "Επιλογές"
+msgstr "επιλογές"
 
 #: ../fdroidserver/nightly.py
 #, python-brace-format
