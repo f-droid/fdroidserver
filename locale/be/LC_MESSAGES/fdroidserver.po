@@ -2,20 +2,21 @@
 # This file is put in the public domain.
 # Макар Разин <makarrazin14@gmail.com>, 2023.
 # flac <flac_twin@keemail.me>, 2024.
+# Vaviorki <mildspiders+weblate@proton.me>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 2.2.1-143-g1a5ee449\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2026-01-13 11:31+0100\n"
-"PO-Revision-Date: 2024-01-21 00:08+0000\n"
-"Last-Translator: flac <flac_twin@keemail.me>\n"
+"PO-Revision-Date: 2026-04-21 00:18+0000\n"
+"Last-Translator: Vaviorki <mildspiders+weblate@proton.me>\n"
 "Language-Team: Belarusian <https://hosted.weblate.org/projects/f-droid/fdroidserver/be/>\n"
 "Language: be\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 5.4-dev\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Generator: Weblate 5.17.1-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -41,50 +42,50 @@ msgstr "\"%s/\" не супадае з файлам метаданных!"
 
 #: ../fdroidserver/deploy.py
 msgid "\"AWS_ACCESS_KEY_ID\" must be set as an environmental variable!"
-msgstr ""
+msgstr "\"AWS_ACCESS_KEY_ID\" мусіць быць зададзены як зменная асяроддзя!"
 
 #: ../fdroidserver/deploy.py
 msgid "\"AWS_SECRET_ACCESS_KEY\" must be set as an environmental variable!"
-msgstr ""
+msgstr "\"AWS_SECRET_ACCESS_KEY\" мусіць быць зададзены як зменная асяроддзя!"
 
 #: ../fdroidserver/index.py
 msgid "\"isPrimary\" key should not be added to mirrors!"
-msgstr ""
+msgstr "Ключ \"isPrimary\" мусіць быць дададзены да люстэрак!"
 
 #: ../fdroidserver/index.py
 #, python-brace-format
 msgid "\"local_copy_dir\" {path} does not exist!"
-msgstr ""
+msgstr "\"local_copy_dir\" {path} не існуе!"
 
 #: ../fdroidserver/install.py
 #, python-brace-format
 msgid "\"{apkfilename}\" is already installed on {dev}."
-msgstr ""
+msgstr "\"{apkfilename}\" ужо ўсталяваны на {dev}."
 
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "\"{path}\" contains recent {name} ({version})"
-msgstr ""
+msgstr "\"{path}\" утрымлівае найнавейшую {name} ({version})"
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "\"{path}\" exists but s3cmd is not installed!"
-msgstr ""
+msgstr "\"{path}\" існуе але s3cmd не ўсталяваны!"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "\"{path}\" is not a supported file format (use: metadata/*.yml)"
-msgstr ""
+msgstr "\"{path}\" мае фармат які не падтрымліваецца (скарыстайце: metadata/*.yml)"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "\"{path}\" is signed by a key that is not allowed:"
-msgstr ""
+msgstr "\"{path}\" падпісаны ключом які не дазволены:"
 
 #: ../fdroidserver/import_subcommand.py
 #, python-brace-format
 msgid "\"{url}\" is not a valid URL!"
-msgstr ""
+msgstr "\"{url}\" няправільны URL!"
 
 #: /usr/lib/python3.11/argparse.py
 #, python-format
@@ -94,12 +95,12 @@ msgstr "%(prog)s: памылка: %(message)s\n"
 #: ../fdroidserver/publish.py
 #, python-format
 msgid "%d APKs failed to be signed or verified!"
-msgstr ""
+msgstr "%d не ўдалося падпісаць альбо праверыць гэтыя APK !"
 
 #: ../fdroidserver/scanner.py
 #, python-format
 msgid "%d problems found"
-msgstr ""
+msgstr "%d праблем знойдзена"
 
 #: /usr/lib/python3.11/argparse.py
 #, python-format
@@ -109,91 +110,91 @@ msgstr "%r нельга выклікаць"
 #: ../fdroidserver/signindex.py
 #, python-format
 msgid "%s did not produce a dict!"
-msgstr ""
+msgstr "%s не стварае слоўнік (dict) !"
 
 #: ../fdroidserver/signindex.py
 #, python-format
 msgid "%s has bad SHA-256: %s"
-msgstr ""
+msgstr "%s мае дрэнны SHA-256: %s"
 
 #: ../fdroidserver/lint.py
 #, python-format
 msgid "%s is not an accepted build field"
-msgstr ""
+msgstr "%s не з'яўляецца прымальным полем зборкі"
 
 #: ../fdroidserver/common.py
 msgid "'keypass' not found in config.yml!"
-msgstr ""
+msgstr "'keypass' ня знойдзены ў config.yml!"
 
 #: ../fdroidserver/common.py
 msgid "'keystore' is NONE and 'smartcardoptions' is blank!"
-msgstr ""
+msgstr "'keystore' мае значэнне NONE і 'smartcardoptions' пустыя!"
 
 #: ../fdroidserver/common.py
 msgid "'keystore' not found in config.yml!"
-msgstr ""
+msgstr "'keystore' ня знойдзены ў config.yml!"
 
 #: ../fdroidserver/common.py
 msgid "'keystorepass' not found in config.yml!"
-msgstr ""
+msgstr "'keystorepass' ня знойдзены ў config.yml!"
 
 #: ../fdroidserver/deploy.py
 msgid "'rclone_config' must be set in config.yml!"
-msgstr ""
+msgstr "'rclone_config' мусіць быць зададзены ў config.yml!"
 
 #: ../fdroidserver/common.py
 msgid "'repo_keyalias' not found in config.yml!"
-msgstr ""
+msgstr "'repo_keyalias' ня знойдзены ў config.yml!"
 
 #: /usr/lib/python3.11/argparse.py
 msgid "'required' is an invalid argument for positionals"
-msgstr ""
+msgstr "'required' - няправільны аргумент для пазіцый"
 
 #: ../fdroidserver/common.py
 msgid "'sdk_path' not set in config.yml!"
-msgstr ""
+msgstr "'sdk_path' не зададзена ў config.yml!"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "'{aapt}' is too old, fdroid requires build-tools-{version} or newer!"
-msgstr ""
+msgstr "'{aapt}' занадта стары, fdroid патрабуе build-tools-{version} альбо навейшы!"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "'{path}' failed to execute!"
-msgstr ""
+msgstr "'{path}' ня змог выканацца!"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "'{path}' has invalid format, it should be a dictionary!"
-msgstr ""
+msgstr "'{path}' мае няправільны фармат, павінен быць слоўнік!"
 
 #: ../fdroidserver/lint.py ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "'{value}' is not a valid {field} in {appid}. Regex pattern: {pattern}"
-msgstr ""
+msgstr "'{value}' не з'яўляецца правільным {field} у {appid}. Узор regex: {pattern}"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "'{value}' is not a valid {field}, should be {pattern}"
-msgstr ""
+msgstr "'{value}' не з'яўляецца правільным {field}, мусіць быць {pattern}"
 
 #: ../fdroidserver/common.py
 msgid "'{}' does not start with a valid applicationId"
-msgstr ""
+msgstr "'{}' не пачынаецца з правільнага applicationId"
 
 #: ../fdroidserver/common.py
 msgid "'{}' is not a valid pair of applicationId:versionCode"
-msgstr ""
+msgstr "'{}' - несапраўдная пара applicationId:versionCode"
 
 #: ../fdroidserver/checkupdates.py
 msgid "--merge-request only runs on a single appid!"
-msgstr ""
+msgstr "--merge-request запускаецца толькі з адным appid!"
 
 #: ../fdroidserver/checkupdates.py
 #, python-brace-format
 msgid "...checkupdate failed for {appid} : {error}"
-msgstr ""
+msgstr "...checkupdate ня ўдаўся для {appid} : {error}"
 
 #: /usr/lib/python3.11/argparse.py
 msgid ".__call__() not defined"
@@ -201,11 +202,11 @@ msgstr ".__call__() не вызначана"
 
 #: ../fdroidserver/lint.py
 msgid "/issues is missing"
-msgstr ""
+msgstr "/issues адсутнічае"
 
 #: ../fdroidserver/mirror.py
 msgid "A URL is required as an argument!"
-msgstr ""
+msgstr "Неабходны URL як аргумент!"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
