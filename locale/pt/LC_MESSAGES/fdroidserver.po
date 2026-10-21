@@ -5,12 +5,13 @@
 # Eduardo Rodrigues <edu.rodrigues2580@gmail.com>, 2021.
 # SC <lalocas@protonmail.com>, 2022.
 # Hugo Carvalho <hugokarvalho@hotmail.com>, 2024.
+# Hans-Christoph Steiner <hans@guardianproject.info>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 1.1-680-ge1d3de71\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2026-05-19 17:44+0200\n"
-"PO-Revision-Date: 2026-05-15 14:12+0000\n"
+"POT-Creation-Date: 2026-05-19 20:45+0200\n"
+"PO-Revision-Date: 2026-07-24 23:48+0000\n"
 "Last-Translator: ssantos <ssantos@web.de>\n"
 "Language-Team: Portuguese <https://hosted.weblate.org/projects/f-droid/fdroidserver/pt/>\n"
 "Language: pt\n"
@@ -18,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 2026.5.dev0\n"
+"X-Generator: Weblate 2026.8.dev0\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -40,7 +41,7 @@ msgstr ""
 #: /usr/lib/python3.13/argparse.py
 #, python-format
 msgid " (default: %(default)s)"
-msgstr ""
+msgstr " (predefinição: %(default)s)"
 
 #: ../fdroidserver/lint.py
 #, python-format
@@ -70,9 +71,9 @@ msgid "\"{apkfilename}\" is already installed on {dev}."
 msgstr "'{apkfilename}' já está instalado no {dev}."
 
 #: ../fdroidserver/signindex.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "\"{name}\" has bad SHA-256: {sha256}"
-msgstr "%s tem um SHA-256 ruim: %s"
+msgstr "\"{name}\" tem um SHA-256 ruim: {sha256}"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -97,7 +98,7 @@ msgstr "\"{url}\" não é uma URL válida!"
 #: /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "%(heading)s:"
-msgstr ""
+msgstr "%(heading)s:"
 
 #: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
@@ -105,9 +106,9 @@ msgid "%(prog)s: error: %(message)s\n"
 msgstr "%(prog)s: erro: %(message)s\n"
 
 #: /usr/lib/python3.13/argparse.py
-#, fuzzy, python-format
+#, python-format
 msgid "%(prog)s: warning: %(message)s\n"
-msgstr "%(prog)s: erro: %(message)s\n"
+msgstr "%(prog)s: aviso: %(message)s\n"
 
 #: ../fdroidserver/publish.py
 #, python-format
@@ -1428,9 +1429,9 @@ msgid "Privacy mode was enabled based on your locale ({country_code})."
 msgstr "O modo de privacidade foi ativado com base na sua localização ({country_code})."
 
 #: ../fdroidserver/scanner.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Problem with ZIP file \"{apkfile}\": {error}"
-msgstr "Problema com o ficheiro ZIP: %s, erro %s"
+msgstr "Problema com o ficheiro ZIP: \"{apkfile}\": {error}"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -2156,7 +2157,7 @@ msgstr "argumento %(argument_name)s: %(message)s"
 #: /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "argument '%(argument_name)s' is deprecated"
-msgstr ""
+msgstr "o argumento '%(argument_name)s' é obsoleto"
 
 #: ../fdroidserver/nightly.py
 msgid "attempting bare SSH connection to test deploy key:"
@@ -2201,7 +2202,7 @@ msgstr "clonagem {url}"
 #: /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "command '%(parser_name)s' is deprecated"
-msgstr ""
+msgstr "o commando '%(parser_name)s' é obsoleto"
 
 #: ../fdroidserver/__main__.py
 msgid "commands from plugin modules:"
@@ -2425,7 +2426,7 @@ msgstr "apenas aceita cadeias, listas e tuplos"
 #: /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "option '%(option)s' is deprecated"
-msgstr ""
+msgstr "a opção '%(option)s' é depreciada"
 
 #: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 msgid "options"
@@ -2493,7 +2494,7 @@ msgstr "biblioteca partilhada"
 
 #: /usr/lib/python3.13/argparse.py
 msgid "show program's version number and exit"
-msgstr ""
+msgstr "mostrar versão do programa e sair"
 
 #: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 msgid "show this help message and exit"
@@ -2526,7 +2527,7 @@ msgstr "biblioteca estática"
 
 #: /usr/lib/python3.13/argparse.py
 msgid "subcommands"
-msgstr ""
+msgstr "subcomandos"
 
 #: ../fdroidserver/build.py
 #, python-brace-format

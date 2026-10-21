@@ -37,7 +37,7 @@
 # Deleted User <noreply+22825@weblate.org>, 2023.
 # Christopher Forzy <christopher.forzy@ecomail.fr>, 2024.
 # Phantomwise <phantomwise67@protonmail.com>, 2024.
-# Sylvain Pichon <service@spichon.fr>, 2024.
+# Sylvain Pichon <service@spichon.fr>, 2024, 2026.
 # Sylvain Pichon <Sp_@users.noreply.hosted.weblate.org>, 2024.
 # Lzebulon <lzebulon@crans.org>, 2024.
 # Armand Camponovo <contact@camarm.dev>, 2024.
@@ -48,8 +48,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2026-05-19 17:44+0200\n"
-"PO-Revision-Date: 2026-02-23 18:09+0000\n"
+"POT-Creation-Date: 2026-05-19 20:45+0200\n"
+"PO-Revision-Date: 2026-08-11 09:44+0000\n"
 "Last-Translator: Ldm Public <ldmpub@gmail.com>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/f-droid/fdroidserver/fr/>\n"
 "Language: fr\n"
@@ -57,7 +57,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.16.1-dev\n"
+"X-Generator: Weblate 2026.9.dev0\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -79,7 +79,7 @@ msgstr ""
 #: /usr/lib/python3.13/argparse.py
 #, python-format
 msgid " (default: %(default)s)"
-msgstr ""
+msgstr " par défaut : %(default)s)"
 
 #: ../fdroidserver/lint.py
 #, python-format
@@ -109,9 +109,9 @@ msgid "\"{apkfilename}\" is already installed on {dev}."
 msgstr "«{apkfilename}» est déjà installé sur {dev}."
 
 #: ../fdroidserver/signindex.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "\"{name}\" has bad SHA-256: {sha256}"
-msgstr "%s a un mauvais SHA-256 : %s"
+msgstr "\"{name}\" a un mauvais SHA-256 : {sha256}"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -136,7 +136,7 @@ msgstr "\"{url}\" n'est pas une URL valide !"
 #: /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "%(heading)s:"
-msgstr ""
+msgstr "%(heading)s :"
 
 #: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
@@ -144,7 +144,7 @@ msgid "%(prog)s: error: %(message)s\n"
 msgstr "%(prog)s : erreur : %(message)s\n"
 
 #: /usr/lib/python3.13/argparse.py
-#, fuzzy, python-format
+#, python-format
 msgid "%(prog)s: warning: %(message)s\n"
 msgstr "%(prog)s : erreur : %(message)s\n"
 
@@ -730,7 +730,7 @@ msgstr "ERREUR : hébergeur git « %s » non supporté, les corrections sont 
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "ERROR: {key} in {path} is not \"archive\" or \"repo\"!"
-msgstr "ERREUR : {key} dans {path} n'est pas \"archive\" ou \"repo\"."
+msgstr "ERREUR : {key} dans {path} ne vaut ni « archive » ni « repo »."
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
@@ -774,7 +774,7 @@ msgstr "La variable d'environnent {var} de {configname} n'est pas configurée !"
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Environment variable {{env: {var}}} is not set!"
-msgstr "La variable d'environnement {{env: {var}}} n'est pas configurée !"
+msgstr "La variable d'environnement {{env: {var}}} n'est pas définie !"
 
 #: ../fdroidserver/deploy.py
 msgid "Error deploying 'github_releases', {} not present. (You might need to run `fdroid update` first.)"
@@ -1467,9 +1467,9 @@ msgid "Privacy mode was enabled based on your locale ({country_code})."
 msgstr "Le mode de confidentialité a été activé, dû à votre localisation ({country_code})."
 
 #: ../fdroidserver/scanner.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Problem with ZIP file \"{apkfile}\": {error}"
-msgstr "Problème avec le fichier ZIP : %s, erreur %s"
+msgstr "Problème avec le fichier ZIP \"{apkfile}\" : {error}"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -1550,7 +1550,7 @@ msgstr "Lecture de {apkfilename} à partir du cache"
 
 #: ../fdroidserver/build.py
 msgid "Refresh and cache scanner rules and signatures from the network"
-msgstr "Actualisation et mise en cache des règles et signature à partir du réseau."
+msgstr "Actualiser et mettre en cache les règles et les signatures du scanner à partir du réseau"
 
 #: ../fdroidserver/publish.py
 #, python-brace-format
@@ -1788,9 +1788,8 @@ msgid "System clock is older than date in {path}!"
 msgstr "L'horloge système est plus âgée que la date dans {path} !"
 
 #: ../fdroidserver/checkupdates.py
-#, fuzzy
 msgid "Tags update mode only works for git repositories currently"
-msgstr "Le mode de mise à jour par étiquettes fonctionne seulement pour les dépôts git, hg, bzr et git-svn pour le moment"
+msgstr "Le mode de mise à jour par étiquettes fonctionne seulement pour les dépôts git pour le moment"
 
 #: ../fdroidserver/checkupdates.py
 msgid "Tags update mode used in git-svn, but the repo was not set up with tags"
@@ -1856,7 +1855,7 @@ msgstr "Cette commande ne devrait jamais être utilisée pour copier f-droid.org
 
 #: ../fdroidserver/common.py
 msgid "This is a repository of apps to be used with F-Droid. Applications in this repository are either official binaries built by the original application developers, or are binaries built from source by the admin of f-droid.org using the tools on https://gitlab.com/fdroid."
-msgstr "Ceci est un dépôt d’applications à utiliser avec FDroid. Les applications publiées dans ce dépôt sont soit les binaires officiels compilés par les développeurs de ces applications, soit celles compilées par f-droid.org à partir des sources en utilisant les outils disponibles sur https://gitlab.com/fdroid."
+msgstr "Il s'agit d'un référentiel d'applications destinées à être utilisées avec F-Droid. Les applications présentes dans ce référentiel sont soit des binaires officiels compilés par les développeurs d'origine, soit des binaires compilés à partir du code source par l'administrateur de f-droid.org à l'aide des outils disponibles sur https://gitlab.com/fdroid."
 
 #: ../fdroidserver/import_subcommand.py
 #, python-format
@@ -2157,7 +2156,7 @@ msgstr "option ambiguë : %(option)s peut correspondre à %(matches)s"
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "apksigner in build-tools;{version} passes APKs with invalid v3 signatures, ignoring."
-msgstr "apksigner dans build-tools;{version} transmet les APK avec des signatures v3 non valides, en les ignorant."
+msgstr "apksigner dans build-tools ; {version} accepte les APK comportant des signatures v3 non valides, en les ignorant."
 
 #: ../fdroidserver/common.py
 msgid "apksigner not found! Cannot sign or verify modern APKs"
@@ -2197,7 +2196,7 @@ msgstr "argument %(argument_name)s : %(message)s"
 #: /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "argument '%(argument_name)s' is deprecated"
-msgstr ""
+msgstr "L'argument '%(argument_name)s' est déconseillé"
 
 #: ../fdroidserver/nightly.py
 msgid "attempting bare SSH connection to test deploy key:"
@@ -2242,7 +2241,7 @@ msgstr "clonage de {url}"
 #: /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "command '%(parser_name)s' is deprecated"
-msgstr ""
+msgstr "La commande '%(parser_name)s' est déconseillée"
 
 #: ../fdroidserver/__main__.py
 msgid "commands from plugin modules:"
@@ -2360,7 +2359,7 @@ msgstr "git svn clone a échoué"
 
 #: ../fdroidserver/scanner.py
 msgid "gzip file archive"
-msgstr "archive GZIP"
+msgstr "archive de fichiers gzip"
 
 #: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
@@ -2466,7 +2465,7 @@ msgstr "accepte uniquement les chaînes de caractères, listes et tuples"
 #: /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "option '%(option)s' is deprecated"
-msgstr ""
+msgstr "L'option '%(option)s' est déconseillée"
 
 #: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 msgid "options"
@@ -2534,7 +2533,7 @@ msgstr "bibliothèque partagée"
 
 #: /usr/lib/python3.13/argparse.py
 msgid "show program's version number and exit"
-msgstr ""
+msgstr "Afficher le numéro de version du programme et quitter"
 
 #: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 msgid "show this help message and exit"
@@ -2567,7 +2566,7 @@ msgstr "librairie statique"
 
 #: /usr/lib/python3.13/argparse.py
 msgid "subcommands"
-msgstr ""
+msgstr "Sous-commandes"
 
 #: ../fdroidserver/build.py
 #, python-brace-format
@@ -2744,7 +2743,7 @@ msgstr "{path} a la mauvaise empreinte ({fingerprint}) !"
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "{path} is not \"key: value\" dict, but a {datatype}!"
-msgstr "{path} n'est pas un dictionnaire \"key: value\" mais un {datatype}."
+msgstr "{path} n'est pas un dictionnaire de type « clé: valeur », mais un {datatype}."
 
 #: ../fdroidserver/common.py
 #, python-brace-format

@@ -1,8 +1,8 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR Free Software Foundation, Inc.
-# Hans-Christoph Steiner <hans@guardianproject.info>, 2020.
+# Hans-Christoph Steiner <hans@guardianproject.info>, 2020, 2026.
 # ihor_ck <igor_ck@outlook.com>, 2020.
-# Ihor Hordiichuk <igor_ck@outlook.com>, 2020, 2021, 2022, 2023, 2024, 2025.
+# Ihor Hordiichuk <igor_ck@outlook.com>, 2020, 2021, 2022, 2023, 2024, 2025, 2026.
 # Tymofij Lytvynenko <till.svit@gmail.com>, 2021.
 # DankXylese <dankxylese@slapmywang.com>, 2021.
 # Dan <denqwerta@gmail.com>, 2022.
@@ -15,20 +15,21 @@
 # Максим Горпиніч <maksimgorpinic2005a@gmail.com>, 2025.
 # Максим Горпиніч <maksimgorpinic4@gmail.com>, 2025.
 # Максим Горпиніч <gorpinicmaksim0@gmail.com>, 2025, 2026.
+# Шмат Кави <koristuvachua@gmail.com>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 0.9\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
-"POT-Creation-Date: 2026-05-19 17:44+0200\n"
-"PO-Revision-Date: 2026-01-13 17:31+0000\n"
-"Last-Translator: Максим Горпиніч <gorpinicmaksim0@gmail.com>\n"
+"POT-Creation-Date: 2026-05-19 20:45+0200\n"
+"PO-Revision-Date: 2026-09-17 14:52+0000\n"
+"Last-Translator: Ihor Hordiichuk <igor_ck@outlook.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/f-droid/fdroidserver/uk/>\n"
 "Language: uk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 5.15.2-dev\n"
+"X-Generator: Weblate 2026.10.dev0\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -50,7 +51,7 @@ msgstr ""
 #: /usr/lib/python3.13/argparse.py
 #, python-format
 msgid " (default: %(default)s)"
-msgstr ""
+msgstr " (усталено: %(default)s)"
 
 #: ../fdroidserver/lint.py
 #, python-format
@@ -80,9 +81,9 @@ msgid "\"{apkfilename}\" is already installed on {dev}."
 msgstr "\"{apkfilename}\" вже встановлено на {dev}."
 
 #: ../fdroidserver/signindex.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "\"{name}\" has bad SHA-256: {sha256}"
-msgstr "%s має неправильний SHA-256: %s"
+msgstr "{name} має неправильний SHA-256: {sha256}"
 
 #: ../fdroidserver/update.py
 #, python-brace-format
@@ -107,7 +108,7 @@ msgstr "\"{url}\" є недійсною URL-адресою!"
 #: /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "%(heading)s:"
-msgstr ""
+msgstr "%(heading)s:"
 
 #: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
@@ -115,9 +116,9 @@ msgid "%(prog)s: error: %(message)s\n"
 msgstr "%(prog)s: помилка: %(message)s\n"
 
 #: /usr/lib/python3.13/argparse.py
-#, fuzzy, python-format
+#, python-format
 msgid "%(prog)s: warning: %(message)s\n"
-msgstr "%(prog)s: помилка: %(message)s\n"
+msgstr "%(prog)s: попередження: %(message)s\n"
 
 #: ../fdroidserver/publish.py
 #, python-format
@@ -1255,7 +1256,7 @@ msgstr "У {0} не знайдено мінімальної версії SDK, у
 
 #: ../fdroidserver/lint.py
 msgid "No need to specify that the app is Free Software"
-msgstr "Не має потреби вказувати, що застосунок є вільним ПЗ"
+msgstr "Вказувати, що застосунок є вільним ПЗ, не обов'язково"
 
 #: ../fdroidserver/lint.py
 msgid "No need to specify that the app is for Android"
@@ -1439,9 +1440,9 @@ msgid "Privacy mode was enabled based on your locale ({country_code})."
 msgstr "Режим конфіденційності було ввімкнено на основі вашої мови ({country_code})."
 
 #: ../fdroidserver/scanner.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Problem with ZIP file \"{apkfile}\": {error}"
-msgstr "Проблема з ZIP файлом: %s, помилка %s"
+msgstr "Проблема з файлом ZIP: \"{apkfile}\": {error}"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -1761,9 +1762,8 @@ msgid "System clock is older than date in {path}!"
 msgstr "Системний годинник відстає від date в {path}!"
 
 #: ../fdroidserver/checkupdates.py
-#, fuzzy
 msgid "Tags update mode only works for git repositories currently"
-msgstr "Режим оновлення тегів наразі працює лише для репозиторіїв git, hg, bzr та git-svn"
+msgstr "Режим оновлення тегів наразі працює лише для репозиторіїв git"
 
 #: ../fdroidserver/checkupdates.py
 msgid "Tags update mode used in git-svn, but the repo was not set up with tags"
@@ -1829,7 +1829,7 @@ msgstr "Цю команду ніколи не слід використовув�
 
 #: ../fdroidserver/common.py
 msgid "This is a repository of apps to be used with F-Droid. Applications in this repository are either official binaries built by the original application developers, or are binaries built from source by the admin of f-droid.org using the tools on https://gitlab.com/fdroid."
-msgstr "Цей репозиторій застосунків для використання з FDroid. Застосунки в цьому репозиторії — це або офіційні двійкові файли, побудовані розробниками оригінального застосунку, або двійкові файли, побудовані з джерела f-droid.org за допомогою інструментів з https://gitlab.com/fdroid."
+msgstr "Це репозиторій застосунків для використання з F-Droid. Застосунки в цьому репозиторії — це або офіційні двійкові файли, створені розробниками оригінального застосунку, або двійкові файли, створені адміністраторами f-droid.org за допомогою інструментів з https://gitlab.com/fdroid."
 
 #: ../fdroidserver/import_subcommand.py
 #, python-format
@@ -2168,7 +2168,7 @@ msgstr "аргумент %(argument_name)s: %(message)s"
 #: /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "argument '%(argument_name)s' is deprecated"
-msgstr ""
+msgstr "змінна '%(argument_name)s' застаріла"
 
 #: ../fdroidserver/nightly.py
 msgid "attempting bare SSH connection to test deploy key:"
@@ -2213,7 +2213,7 @@ msgstr "клонування {url}"
 #: /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "command '%(parser_name)s' is deprecated"
-msgstr ""
+msgstr "команда '%(parser_name)s' застаріла"
 
 #: ../fdroidserver/__main__.py
 msgid "commands from plugin modules:"
@@ -2439,7 +2439,7 @@ msgstr "приймає лише рядки, списки та кортежі"
 #: /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "option '%(option)s' is deprecated"
-msgstr ""
+msgstr "опція '%(option)s' застаріла"
 
 #: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 msgid "options"
@@ -2507,7 +2507,7 @@ msgstr "спільна бібліотека"
 
 #: /usr/lib/python3.13/argparse.py
 msgid "show program's version number and exit"
-msgstr ""
+msgstr "показати номер версії програми та вийти"
 
 #: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 msgid "show this help message and exit"
@@ -2540,7 +2540,7 @@ msgstr "статична бібліотека"
 
 #: /usr/lib/python3.13/argparse.py
 msgid "subcommands"
-msgstr ""
+msgstr "підкоманди"
 
 #: ../fdroidserver/build.py
 #, python-brace-format
