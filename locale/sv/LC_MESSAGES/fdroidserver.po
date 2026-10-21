@@ -3,7 +3,7 @@
 # Hans-Christoph Steiner <hans@guardianproject.info>, 2020.
 # Elias Mårtenson <elias@dhsdevelopments.com>, 2021.
 # Joel A <joeax910@student.liu.se>, 2021.
-# Kristoffer Grundström <swedishsailfishosuser@tutanota.com>, 2021, 2024, 2025.
+# Kristoffer Grundström <swedishsailfishosuser@tutanota.com>, 2021, 2024, 2025, 2026.
 # "P.O" <rasmusson.mikael@protonmail.com>, 2023.
 # Marcus skoding <ggd7cnc9m@mozmail.com>, 2025.
 # Daniel Wiik <d.wiik@outlook.com>, 2026.
@@ -12,15 +12,15 @@ msgstr ""
 "Project-Id-Version: fdroidserver 1.0.0-95-gd7af22b\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2026-01-13 11:31+0100\n"
-"PO-Revision-Date: 2026-02-08 14:30+0000\n"
-"Last-Translator: Daniel Wiik <d.wiik@outlook.com>\n"
+"PO-Revision-Date: 2026-03-10 11:12+0000\n"
+"Last-Translator: Kristoffer Grundström <swedishsailfishosuser@tutanota.com>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/f-droid/fdroidserver/sv/>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.16-dev\n"
+"X-Generator: Weblate 5.17-dev\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -547,7 +547,7 @@ msgstr "Läser '{config_file}'"
 
 #: ../fdroidserver/publish.py
 msgid "Creating log directory"
-msgstr ""
+msgstr "Skapar logg-katalog"
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
@@ -564,7 +564,7 @@ msgstr ""
 
 #: ../fdroidserver/publish.py ../fdroidserver/verify.py
 msgid "Creating temporary directory"
-msgstr ""
+msgstr "Skapar en tillfällig katalog"
 
 #: ../fdroidserver/index.py
 msgid "Creating unsigned index in preparation for signing"
@@ -947,11 +947,11 @@ msgstr ""
 
 #: ../fdroidserver/common.py
 msgid "Git clean failed"
-msgstr ""
+msgstr "Git-rensningen misslyckades"
 
 #: ../fdroidserver/common.py
 msgid "Git fetch failed"
-msgstr ""
+msgstr "Git-hämtningen misslyckades"
 
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
 #: ../fdroidserver/common.py
@@ -962,7 +962,7 @@ msgstr ""
 #. Translators: https://developer.android.com/guide/topics/manifest/manifest-element.html#vcode
 #: ../fdroidserver/common.py
 msgid "Git reset failed"
-msgstr ""
+msgstr "Git-återställningen misslyckades"
 
 #: ../fdroidserver/common.py
 msgid "Git submodule deinit failed"
@@ -1102,7 +1102,7 @@ msgstr ""
 
 #: ../fdroidserver/lint.py
 msgid "Invalid bulleted list"
-msgstr ""
+msgstr "Ogiltig punktlista"
 
 #: ../fdroidserver/common.py
 #, python-format
@@ -1223,7 +1223,7 @@ msgstr ""
 
 #: ../fdroidserver/gpgsign.py
 msgid "Missing output directory"
-msgstr ""
+msgstr "Katalog för utmatning saknas"
 
 #: ../fdroidserver/metadata.py
 msgid "Moving Anti-Features declarations to localized files:"
@@ -2070,7 +2070,7 @@ msgstr ""
 
 #: ../fdroidserver/build.py
 msgid "Use build server"
-msgstr ""
+msgstr "Använd bygg-server"
 
 #: ../fdroidserver/update.py
 msgid "Use date from APK instead of current time for newly added APKs"
@@ -2260,7 +2260,7 @@ msgstr ""
 #: /usr/lib/python3.11/argparse.py
 #, python-format
 msgid "argument %(argument_name)s: %(message)s"
-msgstr ""
+msgstr "argument %(argument_name)s: %(message)s"
 
 #: ../fdroidserver/nightly.py
 msgid "attempting bare SSH connection to test deploy key:"
@@ -2381,8 +2381,8 @@ msgstr ""
 #, python-format
 msgid "expected %s argument"
 msgid_plural "expected %s arguments"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "argumentet %s förväntades"
+msgstr[1] "argumenten %s förväntades"
 
 #: /usr/lib/python3.11/argparse.py
 msgid "expected at least one argument"
@@ -2398,7 +2398,7 @@ msgstr "ett argument förväntades"
 
 #: ../fdroidserver/__main__.py
 msgid "fdroid [<command>] [-h|--help|--version|<args>]"
-msgstr ""
+msgstr "fdroid [<kommando>] [-h|--help|--version|<argument>]"
 
 #: ../fdroidserver/scanner.py
 msgid "fetch the latest version of signatures from the web"
@@ -2522,9 +2522,8 @@ msgid "only accepts strings, lists, and tuples"
 msgstr ""
 
 #: /usr/lib/python3.11/argparse.py
-#, fuzzy
 msgid "options"
-msgstr "Alternativ"
+msgstr "alternativ"
 
 #: ../fdroidserver/nightly.py
 #, python-brace-format
@@ -2880,5 +2879,5 @@ msgstr[1] ""
 #: ../fdroidserver/build.py
 msgid "{} build succeeded"
 msgid_plural "{} builds succeeded"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{} byggnationen lyckades"
+msgstr[1] "{} byggnationerna lyckades"
