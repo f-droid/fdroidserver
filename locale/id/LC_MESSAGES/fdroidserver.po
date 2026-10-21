@@ -7,20 +7,21 @@
 # Taufik Adi Wicaksono <taufikadi.wicaksono@tutamail.com>, 2025.
 # StarSkyGeminid <akungithubku@gmail.com>, 2025, 2026.
 # cyberboh <cybermay686@gmail.com>, 2026.
+# Doctorredits_here <182783629+doctorreditshere@users.noreply.github.com>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: fdroidserver 1.1-680-ge1d3de71\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2026-05-19 20:45+0200\n"
-"PO-Revision-Date: 2026-02-19 17:09+0000\n"
-"Last-Translator: StarSkyGeminid <akungithubku@gmail.com>\n"
+"PO-Revision-Date: 2026-06-17 05:01+0000\n"
+"Last-Translator: Doctorredits_here <182783629+doctorreditshere@users.noreply.github.com>\n"
 "Language-Team: Indonesian <https://hosted.weblate.org/projects/f-droid/fdroidserver/id/>\n"
 "Language: id\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.16.1-dev\n"
+"X-Generator: Weblate 2026.7.dev0\n"
 
 #: ../fdroidserver/nightly.py
 msgid ""
@@ -42,7 +43,7 @@ msgstr ""
 #: /usr/lib/python3.13/argparse.py
 #, python-format
 msgid " (default: %(default)s)"
-msgstr ""
+msgstr " (Bawaan: %(bawaan)s)"
 
 #: ../fdroidserver/lint.py
 #, python-format
@@ -517,9 +518,8 @@ msgid "Couldn't find package ID"
 msgstr "Tidak dapat menemukan ID paket"
 
 #: ../fdroidserver/update.py
-#, fuzzy
 msgid "Cowardily refusing to overwrite existing signing key setup!"
-msgstr "Sangat menolak untuk menulis kembali pengaturan kunci penandatangan yang ada!"
+msgstr "Pengecut menolak untuk menimpa pengaturan kunci penandatanganan yang ada!"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
@@ -553,7 +553,7 @@ msgstr "CurrentVersionCode {cv} lebih kecil dari entri build lama {versionCode}"
 
 #: ../fdroidserver/nightly.py
 msgid "DEBUG_KEYSTORE is not set or the value is incomplete"
-msgstr ""
+msgstr "DEBUG_KEYSTORE tidak diatur atau nilainya tidak lengkap"
 
 #: ../fdroidserver/update.py
 msgid "Delete APKs and/or OBBs without metadata from the repo"
@@ -562,7 +562,7 @@ msgstr "Hapus APK dan/atau OBB tanpa metada dari repo"
 #: ../fdroidserver/deploy.py
 #, python-brace-format
 msgid "Deleting archive, repo is too big ({size} max {limit})"
-msgstr ""
+msgstr "Menghapus arsip, repo terlalu besar ({size} max {limit})"
 
 #: ../fdroidserver/deploy.py
 #, python-brace-format
@@ -572,73 +572,73 @@ msgstr "Menghapus riwayat git-mirror, repositori terlalu besar ({size} maks {lim
 #: ../fdroidserver/update.py
 #, python-brace-format
 msgid "Deleting unknown file: {path}"
-msgstr ""
+msgstr "menghapus file yang tidak diketahui: {path}"
 
 #: ../fdroidserver/lint.py
 #, python-format
 msgid "Description '%s' is just the app's summary"
-msgstr ""
+msgstr "Deskripsi '%s' hanyalah ringkasan aplikasi"
 
 #: ../fdroidserver/lint.py
 msgid "Description has a duplicate line"
-msgstr ""
+msgstr "Deskripsi memiliki garis duplikat"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "Description of length {length} is over the {limit} char limit"
-msgstr ""
+msgstr "Deskripsi panjang {length} ialah diatas {limit} batas char"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Did not find '{versionCode}' in '{fieldname}' of {path}"
-msgstr ""
+msgstr "Tidak menemukan '{versionCode}' di '{fieldname}' dari {path}"
 
 #: ../fdroidserver/common.py
 #, python-brace-format
 msgid "Did you mean config/{name}.yml?"
-msgstr ""
+msgstr "Maksudmu config/{name}.yml?"
 
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "Did you mean {code}?"
-msgstr ""
+msgstr "Maksudmu {code}?"
 
 #: ../fdroidserver/import_subcommand.py
 msgid "Do not add 'disable:' to the generated build entries"
-msgstr ""
+msgstr "jangan menambahkan 'cacat:' ke entri build yang dihasilkan"
 
 #: ../fdroidserver/nightly.py
 msgid "Do not deploy the new files to the repo"
-msgstr ""
+msgstr "Jangan menyebarkan file baru ke repo"
 
 #: ../fdroidserver/mirror.py
 #, python-brace-format
 msgid "Do not include \"{path}\" in URL!"
-msgstr ""
+msgstr "Jangan termasuk \"{path}\" di URL!"
 
 #: ../fdroidserver/init.py
 msgid "Do not prompt for Android SDK path, just fail"
-msgstr ""
+msgstr "Jangan meminta untuk jalur SDK Android, gagal saja"
 
 #: ../fdroidserver/nightly.py
 msgid "Do not remove the private keys generated from the keystore"
-msgstr ""
+msgstr "Jangan menghapus kunci pribadi yang dihasilkan dari keystore"
 
 #: ../fdroidserver/scanner.py
 msgid "Do not throw an error on APKs with the debuggable flag set."
-msgstr ""
+msgstr "Jangan melemparkan kesalahan pada APK dengan set bendera yang dapat didebuggable."
 
 #: ../fdroidserver/build.py
 msgid "Don't create a source tarball, useful when testing a build"
-msgstr ""
+msgstr "Jangan membuat tarball sumber, berguna saat menguji build"
 
 #: ../fdroidserver/build.py
 msgid "Don't refresh the repository, useful when testing a build with no internet connection"
-msgstr ""
+msgstr "Jangan menyegarkan repositori, berguna saat menguji build tanpa koneksi internet"
 
 #: ../fdroidserver/deploy.py ../fdroidserver/nightly.py
 msgid "Don't use rsync checksums"
-msgstr ""
+msgstr "Jangan gunakan checksums ssync"
 
 #: ../fdroidserver/install.py
 msgid "Download F-Droid.apk using mirrors that leak less to the network"
@@ -650,17 +650,17 @@ msgstr "Unduh cerminan lengkap dari repositori kecil"
 
 #: ../fdroidserver/common.py
 msgid "Downloading the repository already failed once, not trying again."
-msgstr ""
+msgstr "Mengunduh repositori sudah gagal sekali, tidak mencoba lagi."
 
 #: ../fdroidserver/verify.py
 #, python-brace-format
 msgid "Downloading {url} failed. {error}"
-msgstr ""
+msgstr "Mengunduh {url} gagal. {error}"
 
 #: ../fdroidserver/metadata.py
 #, python-brace-format
 msgid "Duplicate Anti-Feature declaration at {path} was ignored!"
-msgstr ""
+msgstr "Deklarasi Anti-Fitur Duplikat di {path} diabaikan!"
 
 #: ../fdroidserver/index.py
 #, python-format
@@ -670,16 +670,16 @@ msgstr "Gandakan entri \"%s\" dalam konfigurasi pencerminan!"
 #: ../fdroidserver/lint.py
 #, python-brace-format
 msgid "Duplicate link in '{field}': {url}"
-msgstr ""
+msgstr "link duplikat di '{field}': {url}"
 
 #: ../fdroidserver/common.py
 #, python-format
 msgid "ERROR: %(message)s"
-msgstr ""
+msgstr "KESALAHAN: %(message)s"
 
 #: ../fdroidserver/__main__.py
 msgid "ERROR: The \"server\" subcommand has been removed, use \"deploy\"!"
-msgstr ""
+msgstr "Kesalahan: Subkomman \"server\" telah dihapus, gunakan \"menyebarkan\"!"
 
 #: ../fdroidserver/nightly.py
 msgid "ERROR: unsupported CI type, patches welcome!"
