@@ -7,8 +7,8 @@ msgstr ""
 "Project-Id-Version: fdroidserver 2.3a1-162-gfbb3cc59\n"
 "Report-Msgid-Bugs-To: https://gitlab.com/fdroid/fdroidserver/issues\n"
 "POT-Creation-Date: 2026-05-19 20:45+0200\n"
-"PO-Revision-Date: 2026-05-20 14:16+0000\n"
-"Last-Translator: Hans-Christoph Steiner <hans@guardianproject.info>\n"
+"PO-Revision-Date: 2026-05-22 09:11+0000\n"
+"Last-Translator: Aindriú Mac Giolla Eoin <aindriu80@gmail.com>\n"
 "Language-Team: Irish <https://hosted.weblate.org/projects/f-droid/fdroidserver/ga/>\n"
 "Language: ga\n"
 "MIME-Version: 1.0\n"
@@ -37,7 +37,7 @@ msgstr ""
 #: /usr/lib/python3.13/argparse.py
 #, python-format
 msgid " (default: %(default)s)"
-msgstr ""
+msgstr " (réamhshocrú: %(default)s)"
 
 #: ../fdroidserver/lint.py
 #, python-format
@@ -94,7 +94,7 @@ msgstr "Ní URL bailí é \"{url}\"!"
 #: /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "%(heading)s:"
-msgstr ""
+msgstr "%(heading)s:"
 
 #: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 #, python-format
@@ -102,9 +102,9 @@ msgid "%(prog)s: error: %(message)s\n"
 msgstr "%(prog)s: earráid: %(message)s\n"
 
 #: /usr/lib/python3.13/argparse.py
-#, fuzzy, python-format
+#, python-format
 msgid "%(prog)s: warning: %(message)s\n"
-msgstr "%(prog)s: earráid: %(message)s\n"
+msgstr "%(prog)s: rabhadh: %(message)s\n"
 
 #: ../fdroidserver/publish.py
 #, python-format
@@ -1752,9 +1752,8 @@ msgid "System clock is older than date in {path}!"
 msgstr "Tá clog an chórais níos sine ná an dáta i {path}!"
 
 #: ../fdroidserver/checkupdates.py
-#, fuzzy
 msgid "Tags update mode only works for git repositories currently"
-msgstr "Ní oibríonn mód nuashonraithe clibeanna ach amháin le haghaidh stórtha git, hg, bzr agus git-svn faoi láthair"
+msgstr "Ní oibríonn mód nuashonraithe clibeanna ach amháin le haghaidh stórtha git faoi láthair"
 
 #: ../fdroidserver/checkupdates.py
 msgid "Tags update mode used in git-svn, but the repo was not set up with tags"
@@ -2159,7 +2158,7 @@ msgstr "argóint %(argument_name)s: %(message)s"
 #: /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "argument '%(argument_name)s' is deprecated"
-msgstr ""
+msgstr "Tá an argóint '%(argument_name)s' imithe i léig"
 
 #: ../fdroidserver/nightly.py
 msgid "attempting bare SSH connection to test deploy key:"
@@ -2204,7 +2203,7 @@ msgstr "clónáil {url}"
 #: /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "command '%(parser_name)s' is deprecated"
-msgstr ""
+msgstr "Tá an t-ordú '%(parser_name)s' imithe i léig"
 
 #: ../fdroidserver/__main__.py
 msgid "commands from plugin modules:"
@@ -2434,7 +2433,7 @@ msgstr "ní ghlacann ach teaghráin, liostaí, agus tuples"
 #: /usr/lib/python3.13/argparse.py
 #, python-format
 msgid "option '%(option)s' is deprecated"
-msgstr ""
+msgstr "Tá an rogha '%(option)s' imithe i léig"
 
 #: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 msgid "options"
@@ -2502,7 +2501,7 @@ msgstr "leabharlann chomhroinnte"
 
 #: /usr/lib/python3.13/argparse.py
 msgid "show program's version number and exit"
-msgstr ""
+msgstr "taispeáin uimhir leagan an chláir agus scoir"
 
 #: /usr/lib/python3.11/argparse.py /usr/lib/python3.13/argparse.py
 msgid "show this help message and exit"
@@ -2535,7 +2534,7 @@ msgstr "Leabharlann statach"
 
 #: /usr/lib/python3.13/argparse.py
 msgid "subcommands"
-msgstr ""
+msgstr "fo-orduithe"
 
 #: ../fdroidserver/build.py
 #, python-brace-format
