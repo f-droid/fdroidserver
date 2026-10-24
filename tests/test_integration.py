@@ -1621,10 +1621,10 @@ class IntegrationTest(unittest.TestCase):
         # To avoid multiple files being copied in the repo since the repo
         # directory can change, only two files are used.
         try:
-            from testcontainers.minio import MinioContainer
+            from testcontainers.community.minio import MinioContainer
         except ImportError:
             self.skipTest('Requires testcontainers.minio to run')
-        with MinioContainer(image="quay.io/minio/minio:latest") as minio:
+        with MinioContainer(image="quay.io/minio/aistor/minio:RELEASE.2026-09-19T17-05-25Z") as minio:
             # Set up minio bukcet
             client = minio.get_client()
             client.make_bucket('test-bucket')
@@ -1678,10 +1678,10 @@ class IntegrationTest(unittest.TestCase):
     @unittest.skipUnless(docker_exists(), "Docker is not available")
     def test_update_remote_storage_with_rclone_and_minio_in_index_only_mode(self):
         try:
-            from testcontainers.minio import MinioContainer
+            from testcontainers.community.minio import MinioContainer
         except ImportError:
             self.skipTest('Requires testcontainers.minio to run')
-        with MinioContainer(image="quay.io/minio/minio:latest") as minio:
+        with MinioContainer(image="quay.io/minio/aistor/minio:RELEASE.2026-09-19T17-05-25Z") as minio:
             # Set up minio bukcet
             client = minio.get_client()
             client.make_bucket('test-bucket')
