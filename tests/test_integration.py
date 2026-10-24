@@ -1624,9 +1624,7 @@ class IntegrationTest(unittest.TestCase):
             from testcontainers.community.minio import MinioContainer
         except ImportError:
             self.skipTest('Requires testcontainers.minio to run')
-        with MinioContainer(
-            image="pgsty/minio:latest"
-        ) as minio:
+        with MinioContainer(image="pgsty/minio:latest") as minio:
             # Set up minio bukcet
             client = minio.get_client()
             client.make_bucket('test-bucket')
@@ -1683,9 +1681,7 @@ class IntegrationTest(unittest.TestCase):
             from testcontainers.community.minio import MinioContainer
         except ImportError:
             self.skipTest('Requires testcontainers.minio to run')
-        with MinioContainer(
-            image="pgsty/minio:latest"
-        ) as minio:
+        with MinioContainer(image="pgsty/minio:latest") as minio:
             # Set up minio bukcet
             client = minio.get_client()
             client.make_bucket('test-bucket')
