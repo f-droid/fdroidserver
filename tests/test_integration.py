@@ -1625,7 +1625,7 @@ class IntegrationTest(unittest.TestCase):
         except ImportError:
             self.skipTest('Requires testcontainers.minio to run')
         with MinioContainer(
-            image="quay.io/minio/aistor/minio:RELEASE.2026-09-19T17-05-25Z"
+            image="pgsty/minio:latest"
         ) as minio:
             # Set up minio bukcet
             client = minio.get_client()
@@ -1684,7 +1684,7 @@ class IntegrationTest(unittest.TestCase):
         except ImportError:
             self.skipTest('Requires testcontainers.minio to run')
         with MinioContainer(
-            image="quay.io/minio/aistor/minio:RELEASE.2026-09-19T17-05-25Z"
+            image="pgsty/minio:latest"
         ) as minio:
             # Set up minio bukcet
             client = minio.get_client()
