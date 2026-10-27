@@ -552,7 +552,7 @@ def get_cachedir():
     if cachedir and os.path.exists(cachedir):
         return Path(cachedir)
     else:
-        return Path(tempfile.mkdtemp())
+        return Path(tempfile.mkdtemp(prefix='fdroid-cachedir-'))
 
 
 def regsub_file(pattern, repl, path):

@@ -335,7 +335,11 @@ class CommonTest(SetUpTearDownMixin, unittest.TestCase):
             )
 
         # these are set NOT debuggable
-        testfiles = 'urzip-release.apk', 'urzip-release-unsigned.apk', 'v2.only.sig_2.apk'
+        testfiles = (
+            'urzip-release.apk',
+            'urzip-release-unsigned.apk',
+            'v2.only.sig_2.apk',
+        )
         for apkfile in testfiles:
             self.assertFalse(
                 fdroidserver.common.is_debuggable_or_testOnly(apkfile),
@@ -408,6 +412,8 @@ class CommonTest(SetUpTearDownMixin, unittest.TestCase):
                 fdroidserver.common.is_strict_application_id(name),
                 "{0} should not be a strict application id".format(name),
             )
+
+    # fmt: off
 
     def test_prepare_sources(self):
         testint = 99999999
@@ -1926,6 +1932,8 @@ class CommonTest(SetUpTearDownMixin, unittest.TestCase):
                     skm.assert_called_once_with('srclib/ACRA')
                     self.assertEqual(ret, ('ACRA', None, 'srclib/ACRA'))
 
+    # fmt: on
+
     def test_run_yamllint_wellformed(self):
         try:
             import yamllint.config
@@ -2048,9 +2056,7 @@ class CommonTest(SetUpTearDownMixin, unittest.TestCase):
             )
         )
         config = fdroidserver.common.read_config()
-        self.assertEqual(
-            'https://example.com/fdroid/repo', config.get('repo_url')
-        )
+        self.assertEqual('https://example.com/fdroid/repo', config.get('repo_url'))
         self.assertEqual(
             'https://example.com/fdroid/archive', config.get('archive_url')
         )
@@ -2058,28 +2064,36 @@ class CommonTest(SetUpTearDownMixin, unittest.TestCase):
     def test_config_repo_url_extra_slash(self):
         """repo_url ends in /repo, archive_url ends in /archive."""
         os.chdir(self.testdir)
-        fdroidserver.common.write_config_file('repo_url: https://example.com/fdroid/repo/')
+        fdroidserver.common.write_config_file(
+            'repo_url: https://example.com/fdroid/repo/'
+        )
         with self.assertRaises(FDroidException):
             fdroidserver.common.read_config()
 
     def test_config_repo_url_not_repo(self):
         """repo_url ends in /repo, archive_url ends in /archive."""
         os.chdir(self.testdir)
-        fdroidserver.common.write_config_file('repo_url: https://example.com/fdroid/foo')
+        fdroidserver.common.write_config_file(
+            'repo_url: https://example.com/fdroid/foo'
+        )
         with self.assertRaises(FDroidException):
             fdroidserver.common.read_config()
 
     def test_config_archive_url_extra_slash(self):
         """repo_url ends in /repo, archive_url ends in /archive."""
         os.chdir(self.testdir)
-        fdroidserver.common.write_config_file('archive_url: https://example.com/fdroid/archive/')
+        fdroidserver.common.write_config_file(
+            'archive_url: https://example.com/fdroid/archive/'
+        )
         with self.assertRaises(FDroidException):
             fdroidserver.common.read_config()
 
     def test_config_archive_url_not_repo(self):
         """repo_url ends in /repo, archive_url ends in /archive."""
         os.chdir(self.testdir)
-        fdroidserver.common.write_config_file('archive_url: https://example.com/fdroid/foo')
+        fdroidserver.common.write_config_file(
+            'archive_url: https://example.com/fdroid/foo'
+        )
         with self.assertRaises(FDroidException):
             fdroidserver.common.read_config()
 
@@ -2138,10 +2152,20 @@ class CommonTest(SetUpTearDownMixin, unittest.TestCase):
             config['gpghome']
 
         self.assertEqual(config.get('gpghome', 'gpg'), 'gpg')
-        os.environ.update({key: f"{key}supersecret" for key in ["serverwebroot", "mirror1", "mirror2", "keystorepass"]})
+        os.environ.update(
+            {
+                key: f"{key}supersecret"
+                for key in ["serverwebroot", "mirror1", "mirror2", "keystorepass"]
+            }
+        )
         self.assertEqual(config['keystorepass'], 'keystorepasssupersecret')
-        self.assertEqual(config['serverwebroot'], [{'url': 'serverwebrootsupersecret/'}])
-        self.assertEqual(config['servergitmirrors'], [{'url': 'mirror1supersecret'}, {'url': 'mirror2supersecret'}])
+        self.assertEqual(
+            config['serverwebroot'], [{'url': 'serverwebrootsupersecret/'}]
+        )
+        self.assertEqual(
+            config['servergitmirrors'],
+            [{'url': 'mirror1supersecret'}, {'url': 'mirror2supersecret'}],
+        )
 
     @mock.patch.dict(os.environ, {'PATH': os.getenv('PATH')}, clear=True)
     def test_config_lazy_load_env_vars_not_set(self):
@@ -2277,42 +2301,47 @@ class CommonTest(SetUpTearDownMixin, unittest.TestCase):
         with open(os.path.join('repo', 'status', 'running.json')) as fp:
             data = json.load(fp)
         self.assertTrue(os.path.exists('.git'))
-        self.assertIsNotNone(re.match(r'[0-9a-f]{40}', data['fdroiddata']['commitId']),
-                             'Must be a valid git SHA1 commit ID!')
+        self.assertIsNotNone(
+            re.match(r'[0-9a-f]{40}', data['fdroiddata']['commitId']),
+            'Must be a valid git SHA1 commit ID!',
+        )
         self.assertFalse(data['fdroiddata']['isDirty'])
         self.assertEqual(fakecmd, data['commandLine'])
 
-        self.assertEqual([],
-                         data['fdroiddata']['untrackedFiles'])
+        self.assertEqual([], data['fdroiddata']['untrackedFiles'])
         dirtyfile = 'dirtyfile'
         with open(dirtyfile, 'w', encoding='utf-8') as fp:
             fp.write('this is just a test')
         with open(file_in_git, 'a', encoding='utf-8') as fp:
             fp.write('\nappend some stuff')
-        self.assertEqual([],
-                         data['fdroiddata']['modifiedFiles'])
+        self.assertEqual([], data['fdroiddata']['modifiedFiles'])
         fdroidserver.common.setup_status_output(start_timestamp)
         with open(os.path.join('repo', 'status', 'running.json')) as fp:
             data = json.load(fp)
         self.assertTrue(data['fdroiddata']['isDirty'])
-        self.assertEqual([file_in_git],
-                         data['fdroiddata']['modifiedFiles'])
-        self.assertEqual([dirtyfile, 'repo/status/running.json'],
-                         data['fdroiddata']['untrackedFiles'])
+        self.assertEqual([file_in_git], data['fdroiddata']['modifiedFiles'])
+        self.assertEqual(
+            [dirtyfile, 'repo/status/running.json'],
+            data['fdroiddata']['untrackedFiles'],
+        )
 
     def test_get_app_display_name(self):
         testvalue = 'WIN!'
         for app in [
-                {'Name': testvalue},
-                {'AutoName': testvalue},
-                {'id': testvalue},
-                {'id': 'a', 'localized': {'de-AT': {'name': testvalue}}},
-                {'id': 'a', 'localized': {
+            {'Name': testvalue},
+            {'AutoName': testvalue},
+            {'id': testvalue},
+            {'id': 'a', 'localized': {'de-AT': {'name': testvalue}}},
+            {
+                'id': 'a',
+                'localized': {
                     'de-AT': {'name': 'nope'},
                     'en-US': {'name': testvalue},
-                }},
-                {'AutoName': 'ignore me', 'Name': testvalue, 'id': 'nope'},
-                {'AutoName': testvalue, 'id': 'nope'}]:
+                },
+            },
+            {'AutoName': 'ignore me', 'Name': testvalue, 'id': 'nope'},
+            {'AutoName': testvalue, 'id': 'nope'},
+        ]:
             self.assertEqual(testvalue, fdroidserver.common.get_app_display_name(app))
 
     @mock.patch.dict(os.environ, {'PATH': os.getenv('PATH')}, clear=True)
@@ -2403,9 +2432,9 @@ class CommonTest(SetUpTearDownMixin, unittest.TestCase):
     def test_read_pkg_args_errors(self):
         allow_vercodes = True
         with self.assertRaises(FDroidException):
-            fdroidserver.common.read_pkg_args(['org.fdroid.fdroid:'], allow_vercodes),
+            fdroidserver.common.read_pkg_args(['org.fdroid.fdroid:'], allow_vercodes)
         with self.assertRaises(FDroidException):
-            fdroidserver.common.read_pkg_args(['org.fdroid.fdroid:foo'], allow_vercodes),
+            fdroidserver.common.read_pkg_args(['org.fdroid.fdroid:foo'], allow_vercodes)
 
     def test_apk_strip_v1_signatures(self):
         before = os.path.join(basedir, 'no_targetsdk_minsdk1_unsigned.apk')
@@ -2465,7 +2494,8 @@ class CommonTest(SetUpTearDownMixin, unittest.TestCase):
             + struct.pack('<I', 0)  # additional attributes
         )
         signer = (
-            struct.pack('<I', len(signed_data)) + signed_data
+            struct.pack('<I', len(signed_data))
+            + signed_data
             + struct.pack('<I', 0)  # signatures
             + struct.pack('<I', 0)  # public key
         )
@@ -2489,11 +2519,11 @@ class CommonTest(SetUpTearDownMixin, unittest.TestCase):
     def _oracle_read_length_prefixed(buf, off):
         if len(buf) - off < 4:
             raise ValueError('truncated length prefix')
-        n = int.from_bytes(buf[off:off + 4], 'little')
+        n = int.from_bytes(buf[off : off + 4], 'little')
         end = off + 4 + n
         if end > len(buf):
             raise ValueError('truncated slice')
-        return buf[off + 4:end], end
+        return buf[off + 4 : end], end
 
     @classmethod
     def _oracle_first_cert_from_signer_block(cls, value):
@@ -2525,15 +2555,15 @@ class CommonTest(SetUpTearDownMixin, unittest.TestCase):
         while p < pairs_end:
             if pairs_end - p < 12:
                 raise ValueError('truncated ID-value pair')
-            pair_len = int.from_bytes(block[p:p + 8], 'little')
+            pair_len = int.from_bytes(block[p : p + 8], 'little')
             if pair_len < 4 or p + 8 + pair_len > pairs_end:
                 raise ValueError('invalid ID-value pair length')
-            pair_id = int.from_bytes(block[p + 8:p + 12], 'little')
+            pair_id = int.from_bytes(block[p + 8 : p + 12], 'little')
             if pair_id == cls._APK_SIG_BLOCK_ID_V3:
-                v3_value = block[p + 12:p + 8 + pair_len]
+                v3_value = block[p + 12 : p + 8 + pair_len]
                 break
             if pair_id == cls._APK_SIG_BLOCK_ID_V2:
-                v2_value = block[p + 12:p + 8 + pair_len]
+                v2_value = block[p + 12 : p + 8 + pair_len]
             p += 8 + pair_len
         value = v3_value if v3_value is not None else v2_value
         if value is None:
@@ -2549,9 +2579,7 @@ class CommonTest(SetUpTearDownMixin, unittest.TestCase):
             fh.write(block)
             block_path = fh.name
         try:
-            extracted = self._oracle_get_certificate_from_apk_signing_block(
-                block_path
-            )
+            extracted = self._oracle_get_certificate_from_apk_signing_block(block_path)
             self.assertEqual(cert_der, extracted)
             self.assertEqual(
                 hashlib.sha256(cert_der).hexdigest(),
@@ -2591,9 +2619,7 @@ class CommonTest(SetUpTearDownMixin, unittest.TestCase):
         fdroidserver.common.apk_extract_signatures(apkpath, outdir)
         block_path = os.path.join(outdir, 'APKSigningBlock')
         self.assertTrue(os.path.isfile(block_path))
-        oracle_cert = self._oracle_get_certificate_from_apk_signing_block(
-            block_path
-        )
+        oracle_cert = self._oracle_get_certificate_from_apk_signing_block(block_path)
         wrapper_cert = fdroidserver.common.get_first_signer_certificate(apkpath)
         self.assertEqual(wrapper_cert, oracle_cert)
         with open(os.path.join(outdir, 'signer-certificate.der'), 'rb') as f:
@@ -2624,9 +2650,7 @@ class CommonTest(SetUpTearDownMixin, unittest.TestCase):
             )
             self.assertEqual(
                 (None, None, None, (block_path, offset_path)),
-                fdroidserver.common.metadata_find_developer_signing_files(
-                    appid, vc
-                ),
+                fdroidserver.common.metadata_find_developer_signing_files(appid, vc),
             )
             import hashlib
 
@@ -2769,10 +2793,7 @@ class CommonTest(SetUpTearDownMixin, unittest.TestCase):
             jdk = os.path.dirname(os.path.dirname(f))
             if not os.path.islink(jdk):
                 java_paths.append(jdk)
-        self.assertEqual(
-            len(java_paths),
-            len(config['java_paths'])
-        )
+        self.assertEqual(len(java_paths), len(config['java_paths']))
         for f in config['java_paths'].values():
             self.assertTrue(f in java_paths)
             self.assertTrue(isinstance(f, str))  # paths in config must be str
@@ -2792,7 +2813,7 @@ class CommonTest(SetUpTearDownMixin, unittest.TestCase):
         """All paths in config must be strings, and never pathlib.Path instances"""
         fdroidserver.common.config = {
             'sdk_path': 'ignored',
-            'ndk_paths': {'r21d': Path('/opt/android-sdk/ndk/r21d')}
+            'ndk_paths': {'r21d': Path('/opt/android-sdk/ndk/r21d')},
         }
         build = fdroidserver.metadata.Build()
         build.ndk = 'r21d'
@@ -2822,7 +2843,7 @@ class CommonTest(SetUpTearDownMixin, unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmpdir, TmpCwd(tmpdir):
             repo = git.Repo.init(Path.cwd())
             f = Path("test")
-            date = 10 ** 9
+            date = 10**9
             for tag in tags:
                 date += 1
                 f.write_text(tag)
@@ -3233,7 +3254,9 @@ class CommonTest(SetUpTearDownMixin, unittest.TestCase):
 
     def test_config_errors_ends_with_archive(self):
         os.chdir(self.testdir)
-        fdroidserver.common.write_config_file("""archive_url: https://foo.com/fdroid/repo""")
+        fdroidserver.common.write_config_file(
+            """archive_url: https://foo.com/fdroid/repo"""
+        )
         with self.assertRaises(FDroidException):
             fdroidserver.common.read_config()
 
@@ -3281,23 +3304,17 @@ class CommonTest(SetUpTearDownMixin, unittest.TestCase):
     def test_parse_list_of_dicts_str(self):
         s = 'foo@example.com:/var/www'
         mirrors = yaml.load("""'%s'""" % s)
-        self.assertEqual(
-            [{'url': s}], fdroidserver.common.parse_list_of_dicts(mirrors)
-        )
+        self.assertEqual([{'url': s}], fdroidserver.common.parse_list_of_dicts(mirrors))
 
     def test_parse_list_of_dicts_list(self):
         s = 'foo@example.com:/var/www'
         mirrors = yaml.load("""- '%s'""" % s)
-        self.assertEqual(
-            [{'url': s}], fdroidserver.common.parse_list_of_dicts(mirrors)
-        )
+        self.assertEqual([{'url': s}], fdroidserver.common.parse_list_of_dicts(mirrors))
 
     def test_parse_list_of_dicts_dict(self):
         s = 'foo@example.com:/var/www'
         mirrors = yaml.load("""- url: '%s'""" % s)
-        self.assertEqual(
-            [{'url': s}], fdroidserver.common.parse_list_of_dicts(mirrors)
-        )
+        self.assertEqual([{'url': s}], fdroidserver.common.parse_list_of_dicts(mirrors))
 
     @mock.patch.dict(os.environ, {'PATH': os.getenv('PATH'), 'foo': 'bar'}, clear=True)
     def test_parse_list_of_dicts_env_str(self):
@@ -3309,16 +3326,12 @@ class CommonTest(SetUpTearDownMixin, unittest.TestCase):
     def test_parse_list_of_dicts_env_list(self):
         s = 'foo@example.com:/var/www'
         mirrors = yaml.load("""- '%s'""" % s)
-        self.assertEqual(
-            [{'url': s}], fdroidserver.common.parse_list_of_dicts(mirrors)
-        )
+        self.assertEqual([{'url': s}], fdroidserver.common.parse_list_of_dicts(mirrors))
 
     def test_parse_list_of_dicts_env_dict(self):
         s = 'foo@example.com:/var/www'
         mirrors = yaml.load("""- url: '%s'""" % s)
-        self.assertEqual(
-            [{'url': s}], fdroidserver.common.parse_list_of_dicts(mirrors)
-        )
+        self.assertEqual([{'url': s}], fdroidserver.common.parse_list_of_dicts(mirrors))
 
     def test_get_mirrors_fdroidorg(self):
         mirrors = fdroidserver.common.get_mirrors(
@@ -3411,7 +3424,10 @@ class CommonTest(SetUpTearDownMixin, unittest.TestCase):
     def test_calculate_gradle_flavor_combination(self):
         flavors = ['aa', 'BB', 'δδ']
         combinations = ['aaBBΔδ', 'aaBB', 'aaΔδ', 'aa', 'BBΔδ', 'BB', 'δδ', '']
-        self.assertEqual(fdroidserver.common.calculate_gradle_flavor_combination(flavors), combinations)
+        self.assertEqual(
+            fdroidserver.common.calculate_gradle_flavor_combination(flavors),
+            combinations,
+        )
 
 
 APKS_WITH_JAR_SIGNATURES = (
@@ -4183,3 +4199,22 @@ class TestApkfileIsV1SignedOnly(unittest.TestCase):
     def test_v1_v2_v3(self):
         path = str(Path(__file__).absolute().parent / 'apk.embedded_1.apk')
         self.assertFalse(fdroidserver.common.apkfile_is_v1_signed_only(path))
+
+
+class TestGetCacheDir(unittest.TestCase):
+    def test_config(self):
+        with mkdtemp() as tmp:
+            fdroidserver.common.config = {'cachedir': tmp}
+            d = fdroidserver.common.get_cachedir()
+            self.assertEqual(tmp, str(d))
+
+    def test_no_config(self):
+        d = fdroidserver.common.get_cachedir()
+        self.assertTrue(d.is_dir())
+
+    def test_bad_config(self):
+        testname = '/this/does/not/exist'
+        fdroidserver.common.config = {'cachedir': testname}
+        d = fdroidserver.common.get_cachedir()
+        self.assertTrue(d.is_dir())
+        self.assertNotEqual(testname, d)

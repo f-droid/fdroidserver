@@ -44,7 +44,6 @@ force-exclude = '''(
   | tests/extra/manual-vmtools-test\.py
   | tests/openssl-version-check-test\.py
   | tests/valid-package-names/test\.py
-  | tests/test_common\.py
   | tests/test_update\.py
 )$'''
 
