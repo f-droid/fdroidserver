@@ -246,19 +246,26 @@ class BuildTest(unittest.TestCase):
         vcs = mock.Mock()
 
         build.maven = 'yes@..'
-        fdroidserver.build.build_local(
-            app,
-            build,
-            vcs,
-            build_dir=self.testdir,
-            output_dir=self.testdir,
-            log_dir=os.getcwd(),
-            srclib_dir=None,
-            extlib_dir=None,
-            tmp_dir=None,
-            force=False,
-            onserver=True,
-            refresh=False,
+        with self.assertLogs(level='INFO') as cm:
+            fdroidserver.build.build_local(
+                app,
+                build,
+                vcs,
+                build_dir=self.testdir,
+                output_dir=self.testdir,
+                log_dir=os.getcwd(),
+                srclib_dir=None,
+                extlib_dir=None,
+                tmp_dir=None,
+                force=False,
+                onserver=True,
+                refresh=False,
+            )
+        expected_sha = fdroidserver.common.sha256sum(
+            os.path.join(self.testdir, 'target', 'no.apk')
+        )
+        self.assertTrue(
+            any(f'SHA-256 of no.apk: {expected_sha}' in msg for msg in cm.output)
         )
 
         build.maven = 'yes'

@@ -653,6 +653,7 @@ def validate_build_artifacts(app, build, src):
                 )
                 % (version, vercode, build.versionName, build.versionCode)
             )
+        logging.info(f"SHA-256 of {os.path.basename(src)}: {common.sha256sum(src)}")
 
 
 def move_build_output(app, build, src, output_dir="unsigned"):
