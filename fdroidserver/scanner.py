@@ -57,7 +57,7 @@ class MessageStore:
 
 
 MAVEN_URL_REGEX = re.compile(
-    r"""\smaven\s*(?:{.*?(?:setUrl|url)|\(\s*(?:url)?)\s*=?\s*(?:uri|URI|Uri\.create)?\(?\s*["']?([^\s"']+)["']?[^})]*[)}]""",
+    r"""\s(?:maven|ivy)\s*(?:{.*?(?:setUrl|url)|\(\s*(?:url)?)\s*=?\s*(?:uri|URI|Uri\.create)?\(?\s*["']?([^\s"']+)["']?[^})]*[)}]""",
     re.DOTALL,
 )
 

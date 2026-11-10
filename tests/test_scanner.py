@@ -126,6 +126,7 @@ class ScannerTest(SetUpTearDownMixin, unittest.TestCase):
             'com.lolo.io.onelist': 6,
             'catalog.test': 22,
             'flavor.test': 4,
+            'osmandapp': 1,
         }
         for d in (basedir / 'source-files').iterdir():
             build = fdroidserver.metadata.Build()
