@@ -262,6 +262,87 @@ class LintTest(SetUpTearDownMixin, unittest.TestCase):
             self.assertIn('bit.ly', warn)
         self.assertEqual(2, len(warns))
 
+    def test_check_build_script_antipatterns_clean(self):
+        app = fdroidserver.metadata.App()
+        build = fdroidserver.metadata.Build()
+        build.versionCode = 1
+        build.sudo = ['apt-get update', 'apt-get install -y make']
+        build.prebuild = ['sed -i -e "/foo/d" build.gradle']
+        build.build = ['pushd app', 'gradle assembleRelease', 'popd']
+        app['Builds'] = [build]
+        self.assertEqual(
+            [], list(fdroidserver.lint.check_build_script_antipatterns(app))
+        )
+
+    def test_check_build_script_antipatterns_git_clone(self):
+        app = fdroidserver.metadata.App()
+        build = fdroidserver.metadata.Build()
+        build.versionCode = 1
+        build.prebuild = ['git clone https://example.com/lib.git']
+        app['Builds'] = [build]
+        warns = list(fdroidserver.lint.check_build_script_antipatterns(app))
+        self.assertEqual(1, len(warns))
+        self.assertIn('srclib', warns[0])
+
+    def test_check_build_script_antipatterns_cd_chain(self):
+        app = fdroidserver.metadata.App()
+        build = fdroidserver.metadata.Build()
+        build.versionCode = 1
+        build.build = [
+            'cd app && gradle assembleRelease',
+            'cd ../yggdrasil; make',
+        ]
+        app['Builds'] = [build]
+        warns = list(fdroidserver.lint.check_build_script_antipatterns(app))
+        self.assertEqual(2, len(warns))
+        for w in warns:
+            self.assertIn('pushd', w)
+
+    def test_check_build_script_antipatterns_loop_ampersand_ok(self):
+        """`&&` or `cd ...;` inside a loop/conditional must not be flagged."""
+        app = fdroidserver.metadata.App()
+        build = fdroidserver.metadata.Build()
+        build.versionCode = 1
+        build.build = [
+            'for i in 1 2 3; do make && break; done',
+            'for d in a b; do cd "$d"; make; cd -; done',
+        ]
+        app['Builds'] = [build]
+        self.assertEqual(
+            [], list(fdroidserver.lint.check_build_script_antipatterns(app))
+        )
+
+    def test_check_build_script_antipatterns_subshell_cd(self):
+        app = fdroidserver.metadata.App()
+        build = fdroidserver.metadata.Build()
+        build.versionCode = 1
+        build.build = ['(cd app; gradle assembleRelease)']
+        app['Builds'] = [build]
+        warns = list(fdroidserver.lint.check_build_script_antipatterns(app))
+        self.assertEqual(1, len(warns))
+        self.assertIn('pushd', warns[0])
+
+    def test_check_build_script_antipatterns_command_substitution_ok(self):
+        """`$(...)` command substitution must not be flagged as a subshell."""
+        app = fdroidserver.metadata.App()
+        build = fdroidserver.metadata.Build()
+        build.versionCode = 1
+        build.prebuild = ['export V=$(cd app; cat version.txt)']
+        app['Builds'] = [build]
+        warns = list(fdroidserver.lint.check_build_script_antipatterns(app))
+        self.assertEqual([], [w for w in warns if 'pushd' in w])
+
+    def test_check_build_script_antipatterns_disabled_build_skipped(self):
+        app = fdroidserver.metadata.App()
+        build = fdroidserver.metadata.Build()
+        build.versionCode = 1
+        build.disable = 'broken'
+        build.build = ['git clone https://example.com/lib.git && make']
+        app['Builds'] = [build]
+        self.assertEqual(
+            [], list(fdroidserver.lint.check_build_script_antipatterns(app))
+        )
+
     def test_check_app_field_types(self):
         config = dict()
         fdroidserver.common.fill_config_defaults(config)
