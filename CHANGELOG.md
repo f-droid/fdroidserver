@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 
+## [2.4.6] - 2026-11-25
+
+* zlib-ng's non-determinism breaks implanting APK sigs, skip test when affected
+  https://gitlab.com/fdroid/fdroidserver/-/merge_requests/1850
+* scanner: fix when using androguard 4.1.4
+  https://gitlab.com/fdroid/fdroidserver/-/merge_requests/1836
+
 ## [2.4.5] - 2026-06-03
 
 * Fixed crash when using Androguard v4.1.4+
