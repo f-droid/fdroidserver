@@ -825,6 +825,7 @@ def build_local(app, build, vcs, build_dir, output_dir, log_dir, srclib_dir, ext
                                  % (versionCode, build.versionCode))
 
         logging.info(f"Successfully built {app.id}:{versionCode} from {commit_id}")
+        logging.info(f"SHA-256 of {os.path.basename(src)}: {common.sha256sum(src)}")
 
         if (options.scan_binary or config.get('scan_binary')) and not options.skipscan:
             if scanner.scan_binary(src):
